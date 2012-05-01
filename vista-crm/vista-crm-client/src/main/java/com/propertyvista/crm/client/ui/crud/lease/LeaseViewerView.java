@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -22,6 +22,7 @@ import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.propertyvista.crm.client.ui.crud.lease.common.LeaseViewerPresenterBase;
 import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.financial.PaymentRecord;
+import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.dto.ApplicationUserDTO;
 import com.propertyvista.dto.BillDTO;
 import com.propertyvista.dto.LeaseDTO;
@@ -33,6 +34,8 @@ public interface LeaseViewerView extends IViewerView<LeaseDTO> {
         IListerView.Presenter<BillDTO> getBillListerPresenter();
 
         IListerView.Presenter<PaymentRecord> getPaymentListerPresenter();
+
+        IListerView.Presenter<LeaseAdjustment> getLeaseAdjustmentListerPresenter();
 
         void startBilling();
 
@@ -53,6 +56,8 @@ public interface LeaseViewerView extends IViewerView<LeaseDTO> {
     IListerView<BillDTO> getBillListerView();
 
     IListerView<PaymentRecord> getPaymentListerView();
+
+    IListerView<LeaseAdjustment> getLeaseAdjustmentListerView();
 
     void reportSendMailActionResult(String message);
 }

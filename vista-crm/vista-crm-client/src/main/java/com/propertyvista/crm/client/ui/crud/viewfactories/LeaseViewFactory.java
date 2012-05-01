@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -16,6 +16,8 @@ package com.propertyvista.crm.client.ui.crud.viewfactories;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.site.client.ui.crud.IView;
 
+import com.propertyvista.crm.client.ui.crud.billing.adjustments.LeaseAdjustmentListerView;
+import com.propertyvista.crm.client.ui.crud.billing.adjustments.LeaseAdjustmentListerViewImpl;
 import com.propertyvista.crm.client.ui.crud.billing.bill.BillViewerView;
 import com.propertyvista.crm.client.ui.crud.billing.bill.BillViewerViewImpl;
 import com.propertyvista.crm.client.ui.crud.lease.LeaseEditorView;
@@ -56,6 +58,9 @@ public class LeaseViewFactory extends ViewFactoryBase {
 
             } else if (BillViewerView.class.equals(type)) {
                 map.put(type, new BillViewerViewImpl());
+
+            } else if (LeaseAdjustmentListerView.class.equals(type)) {
+                map.put(type, new LeaseAdjustmentListerViewImpl());
             }
         }
         @SuppressWarnings("unchecked")

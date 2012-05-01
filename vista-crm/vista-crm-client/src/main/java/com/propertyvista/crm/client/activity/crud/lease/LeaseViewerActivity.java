@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -39,10 +39,12 @@ import com.propertyvista.crm.client.ui.crud.lease.LeaseViewerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.LeaseViewFactory;
 import com.propertyvista.crm.rpc.services.billing.BillCrudService;
 import com.propertyvista.crm.rpc.services.billing.BillingExecutionService;
+import com.propertyvista.crm.rpc.services.billing.LeaseAdjustmentCrudService;
 import com.propertyvista.crm.rpc.services.billing.PaymentCrudService;
 import com.propertyvista.crm.rpc.services.lease.LeaseCrudService;
 import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.financial.PaymentRecord;
+import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.dto.ApplicationUserDTO;
 import com.propertyvista.dto.BillDTO;
 import com.propertyvista.dto.LeaseDTO;
@@ -55,6 +57,8 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
 
     private final IListerView.Presenter<PaymentRecord> paymentLister;
 
+    private final IListerView.Presenter<LeaseAdjustment> leaseAdjustmentLister;
+
     private LeaseDTO currentValue;
 
     @SuppressWarnings("unchecked")
@@ -66,6 +70,9 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
 
         paymentLister = new ListerActivityBase<PaymentRecord>(place, ((LeaseViewerView) view).getPaymentListerView(),
                 (AbstractCrudService<PaymentRecord>) GWT.create(PaymentCrudService.class), PaymentRecord.class);
+
+        leaseAdjustmentLister = new ListerActivityBase<LeaseAdjustment>(place, ((LeaseViewerView) view).getLeaseAdjustmentListerView(),
+                (AbstractCrudService<LeaseAdjustment>) GWT.create(LeaseAdjustmentCrudService.class), LeaseAdjustment.class);
     }
 
     @Override
@@ -79,11 +86,17 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
     }
 
     @Override
+    public Presenter<LeaseAdjustment> getLeaseAdjustmentListerPresenter() {
+        return leaseAdjustmentLister;
+    }
+
+    @Override
     protected void onPopulateSuccess(LeaseDTO result) {
         super.onPopulateSuccess(result);
 
         populateBills(currentValue = result);
         populatePayments(result);
+        populateLeaseAdjustments(result);
     }
 
     protected void populateBills(LeaseDTO result) {
@@ -101,6 +114,15 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
         paymentLister.setPreDefinedFilters(preDefinedFilters);
         paymentLister.setParent(result.billingAccount().getPrimaryKey());
         paymentLister.populate();
+    }
+
+    protected void populateLeaseAdjustments(LeaseDTO result) {
+        List<Criterion> preDefinedFilters = new ArrayList<Criterion>();
+        preDefinedFilters.add(PropertyCriterion.eq(EntityFactory.getEntityPrototype(LeaseAdjustment.class).billingAccount().id(), result.billingAccount()
+                .getPrimaryKey()));
+        leaseAdjustmentLister.setPreDefinedFilters(preDefinedFilters);
+        leaseAdjustmentLister.setParent(result.billingAccount().getPrimaryKey());
+        leaseAdjustmentLister.populate();
     }
 
     // Actions:

@@ -42,6 +42,7 @@ import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
 import com.propertyvista.common.client.ui.validators.DateInPeriodValidation;
 import com.propertyvista.common.client.ui.validators.StartEndDateValidation;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
+import com.propertyvista.crm.client.ui.crud.billing.adjustments.LeaseAdjustmentLister;
 import com.propertyvista.crm.client.ui.crud.billing.bill.BillLister;
 import com.propertyvista.crm.client.ui.crud.billing.payment.PaymentLister;
 import com.propertyvista.crm.rpc.CrmSiteMap;
@@ -51,6 +52,7 @@ import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.CompletionType;
 import com.propertyvista.domain.tenant.lease.Lease.Status;
+import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.dto.ApplicationUserDTO;
 import com.propertyvista.dto.BillDTO;
 import com.propertyvista.dto.LeaseDTO;
@@ -62,6 +64,8 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
     private final IListerView<BillDTO> billLister;
 
     private final IListerView<PaymentRecord> paymentLister;
+
+    private final IListerView<LeaseAdjustment> adjustmentLister;
 
     private final Button sendMail;
 
@@ -84,6 +88,8 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
         billLister = new ListerInternalViewImplBase<BillDTO>(new BillLister());
 
         paymentLister = new ListerInternalViewImplBase<PaymentRecord>(new PaymentLister());
+
+        adjustmentLister = new ListerInternalViewImplBase<LeaseAdjustment>(new LeaseAdjustmentLister());
 
         //set main form here:
         setForm(new LeaseEditorForm(true));
@@ -221,6 +227,11 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
         return paymentLister;
     }
 
+    @Override
+    public IListerView<LeaseAdjustment> getLeaseAdjustmentListerView() {
+        return adjustmentLister;
+    }
+
     private abstract class TermLeaseBox extends OkCancelDialog {
 
         private final CompletionType action;
@@ -356,4 +367,5 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
     public void reportSendMailActionResult(String message) {
         MessageDialog.info(message);
     }
+
 }

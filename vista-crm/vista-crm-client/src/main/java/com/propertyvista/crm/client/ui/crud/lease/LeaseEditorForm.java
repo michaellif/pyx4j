@@ -40,6 +40,8 @@ public class LeaseEditorForm extends LeaseEditorFormBase<LeaseDTO> {
         createCommonContent();
 
         if (!VistaTODO.removedForProduction) {
+            tabPanel.add(isEditable() ? new HTML() : ((LeaseViewerView) getParentView()).getLeaseAdjustmentListerView().asWidget(), i18n.tr("Adjustments"));
+            tabPanel.setLastTabDisabled(isEditable());
             tabPanel.add(isEditable() ? new HTML() : ((LeaseViewerView) getParentView()).getBillListerView().asWidget(), i18n.tr("Bills"));
             tabPanel.setLastTabDisabled(isEditable());
             tabPanel.add(isEditable() ? new HTML() : ((LeaseViewerView) getParentView()).getPaymentListerView().asWidget(), i18n.tr("Payments"));

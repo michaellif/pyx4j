@@ -28,6 +28,7 @@ import com.propertyvista.crm.client.activity.AccountViewerActivity;
 import com.propertyvista.crm.client.activity.AlertActivity;
 import com.propertyvista.crm.client.activity.MessageActivity;
 import com.propertyvista.crm.client.activity.crud.billing.BillViewerActivity;
+import com.propertyvista.crm.client.activity.crud.billing.LeaseAdjustmentListerActivity;
 import com.propertyvista.crm.client.activity.crud.billing.PaymentEditorActivity;
 import com.propertyvista.crm.client.activity.crud.billing.PaymentListerActivity;
 import com.propertyvista.crm.client.activity.crud.billing.PaymentViewerActivity;
@@ -817,6 +818,13 @@ public class MainActivityMapper implements AppActivityMapper {
                             break;
                         case viewer:
                             activity = new IdAssignmentPolicyViewerActivity(crudPlace);
+                            break;
+                        }
+
+                    } else if (place instanceof CrmSiteMap.Settings.Policies.LeaseAdjustment) {
+                        switch (crudPlace.getType()) {
+                        case lister:
+                            activity = new LeaseAdjustmentListerActivity(crudPlace);
                             break;
                         }
                         // Reports:
