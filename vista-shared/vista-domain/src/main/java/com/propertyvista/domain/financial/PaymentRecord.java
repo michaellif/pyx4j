@@ -134,6 +134,10 @@ public interface PaymentRecord extends IEntity {
 
     IPrimitive<PaymentStatus> paymentStatus();
 
+    IPrimitive<String> transactionErrorMessage();
+
+    IPrimitive<String> transactionAuthorizationNumber();
+
     IPrimitive<String> notes();
 
     // internals:

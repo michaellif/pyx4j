@@ -30,15 +30,11 @@ public interface PaymentFacade {
      */
     PaymentRecord processPayment(PaymentRecord payment);
 
-    PaymentRecord updateCheck(PaymentRecord paymentStub);
+    PaymentRecord cancel(PaymentRecord paymentStub);
 
-    PaymentRecord processCheck(PaymentRecord paymentStub);
+    PaymentRecord clear(PaymentRecord paymentStub);
 
-    PaymentRecord cancelCheck(PaymentRecord paymentStub);
-
-    PaymentRecord clearCheck(PaymentRecord paymentStub);
-
-    PaymentRecord rejectCheck(PaymentRecord paymentStub);
+    PaymentRecord reject(PaymentRecord paymentStub);
 
     // TODO Gap: Make Refunds
 

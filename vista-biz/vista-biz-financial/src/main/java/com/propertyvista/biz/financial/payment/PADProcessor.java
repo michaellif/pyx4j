@@ -7,26 +7,17 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-02-13
+ * Created on May 2, 2012
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.payment;
+package com.propertyvista.biz.financial.payment;
 
-import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.i18n.annotations.I18n;
+import com.propertyvista.domain.financial.PaymentRecord;
 
-@Transient
-@I18n(strategy = I18n.I18nStrategy.IgnoreAll)
-public interface PaymentRequest extends IEntity {
+public class PADProcessor {
 
-    PaymentInstrument paymentInstrument();
+    static void queuePayment(PaymentRecord payment) {
 
-    //TODO change to BigDecimal
-    IPrimitive<Float> amount();
-
-    IPrimitive<String> referenceNumber();
-
+    }
 }

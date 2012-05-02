@@ -35,6 +35,7 @@ import com.pyx4j.essentials.server.preloader.DataGenerator;
 
 import com.propertyvista.domain.company.Portfolio;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
+import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.FeatureItemType;
 import com.propertyvista.domain.financial.offering.ProductCatalog;
@@ -123,6 +124,25 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
         }
         Persistence.service().persist(managements);
 
+        MerchantAccount merchantAccount = EntityFactory.create(MerchantAccount.class);
+        { // Test for VladL
+            MerchantAccount merchantAccount1 = EntityFactory.create(MerchantAccount.class);
+            merchantAccount1.active().setValue(Boolean.TRUE);
+            merchantAccount1.merchantTerminalId().setValue("BIRCHWT1");
+            merchantAccount1.bankId().setValue("002");
+            merchantAccount1.branchTransitNumber().setValue("00750");
+            merchantAccount1.accountNumber().setValue("01234567");
+            Persistence.service().persist(merchantAccount1);
+        }
+        {
+            merchantAccount.active().setValue(Boolean.TRUE);
+            merchantAccount.merchantTerminalId().setValue("BIRCHWTT");
+            merchantAccount.bankId().setValue("001");
+            merchantAccount.branchTransitNumber().setValue("00550");
+            merchantAccount.accountNumber().setValue("12345678");
+            Persistence.service().persist(merchantAccount);
+        }
+
         // create some portfolios:
         List<Portfolio> portfolios = new Vector<Portfolio>();
         for (String pname : new String[] { "GTA", "East region", "West region" }) {
@@ -158,6 +178,8 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
 
             // Service Catalog:
             productCatalogGenerator.createProductCatalog(building.productCatalog());
+
+            building.merchantAccounts().add(merchantAccount);
 
             //Media
             if (this.getParameter(VistaDataPreloaderParameter.attachMedia) != Boolean.FALSE) {

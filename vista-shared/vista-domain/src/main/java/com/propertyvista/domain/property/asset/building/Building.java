@@ -16,6 +16,7 @@ package com.propertyvista.domain.property.asset.building;
 import java.util.Date;
 
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.CascadeType;
 import com.pyx4j.entity.annotations.ColumnId;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
@@ -130,12 +131,12 @@ public interface Building extends PolicyNode, NotesAndAttachmentsNode {
 //    @Detached(level = AttachLevel.Detached)
     IList<BuildingAmenity> amenities();
 
+    @JoinTable(value = BuildingMerchantAccount.class, cascade = CascadeType.PERSIST)
+    @Detached
+    ISet<MerchantAccount> merchantAccounts();
+
     // ----------------------------------------------------
     // parent <-> child relationship:
-
-    @JoinTable(BuildingMerchantAccount.class)
-    @Detached
-    MerchantAccount merchantAccount();
 
     @Owned
     @Detached(level = AttachLevel.Detached)
