@@ -96,7 +96,7 @@ public class RDBUtils implements Closeable {
 
     public void setConnectionNamespace(String connectionNamespace) {
         this.connectionNamespace = connectionNamespace;
-        if (connection != null) {
+        if ((connection != null) && (connectionProvider.getDialect().isMultitenantSeparateSchemas())) {
             String sql = connectionProvider.getDialect().sqlChangeConnectionNamespace(connectionNamespace);
             try {
                 if (sql == null) {
@@ -112,6 +112,12 @@ public class RDBUtils implements Closeable {
 
     @Override
     public void close() {
+        try {
+            // Correction for connection validation infrastructure in C3P0
+        } catch (Throwable e) {
+            log.error("Error reseting connection namespace", e);
+        }
+        setConnectionNamespace(null);
         SQLUtils.closeQuietly(connection);
         connection = null;
         connectionProvider.dispose();
