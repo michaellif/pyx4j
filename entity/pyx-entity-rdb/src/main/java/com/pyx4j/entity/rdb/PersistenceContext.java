@@ -216,6 +216,14 @@ public class PersistenceContext {
             if (isExplicitTransaction() && uncommittedChanges) {
                 log.error("There are uncommitted changes in Database. {}", uncommittedChangesFrom);
             }
+            try {
+                // Correction for connection validation infrastructure in C3P0
+                if (connectionProvider.getDialect().isMultitenantSeparateSchemas()) {
+                    setConnectionNamespace(null);
+                }
+            } catch (Throwable e) {
+                log.error("Error reseting connection namespace", e);
+            }
             SQLUtils.closeQuietly(connection);
             connection = null;
             if (isExplicitTransaction() && uncommittedChanges) {
