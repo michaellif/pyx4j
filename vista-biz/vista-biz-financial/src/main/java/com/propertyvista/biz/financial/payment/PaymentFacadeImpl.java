@@ -62,6 +62,7 @@ public class PaymentFacadeImpl implements PaymentFacade {
             throw new IllegalArgumentException("Not implemented");
         case Echeck:
             Persistence.service().merge(payment);
+            ServerSideFactory.create(ARFacade.class).postPayment(payment);
             PADProcessor.queuePayment(payment);
         case EFT:
             payment.paymentStatus().setValue(PaymentRecord.PaymentStatus.Received);
