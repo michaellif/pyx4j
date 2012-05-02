@@ -48,7 +48,6 @@ public class ReservDnsNameRequestHandler extends AbstractRequestHandler<ReserveD
         ReservedPmcNames resDnsName = EntityFactory.create(ReservedPmcNames.class);
         resDnsName.dnsName().setValue(dnsName);
         resDnsName.onboardingAccountId().setValue(request.onboardingAccountId().getValue());
-        response.requestId().setValue(request.requestId().getValue());
         Persistence.service().persist(resDnsName);
         Persistence.service().commit();
 

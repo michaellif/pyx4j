@@ -50,7 +50,6 @@ public class OnboardingUserAuthenticationRequestHandler extends AbstractRequestH
 
         OnboardingUserAuthenticationResponseIO response = EntityFactory.create(OnboardingUserAuthenticationResponseIO.class);
         response.success().setValue(Boolean.TRUE);
-        response.requestId().setValue(request.requestId().getValue());
 
         String email = PasswordEncryptor.normalizeEmailAddress(request.email().getValue());
         AbstractAntiBot.assertLogin(email, new Pair<String, String>(request.captcha().challenge().getValue(), request.captcha().response().getValue()));

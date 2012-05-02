@@ -52,7 +52,7 @@ public class CreateOnboardingUserRequestHandler extends AbstractRequestHandler<C
 
         ResponseIO response = EntityFactory.create(ResponseIO.class);
         response.success().setValue(Boolean.TRUE);
-        response.requestId().setValue(request.requestId().getValue());
+
         return response;
     }
 }
