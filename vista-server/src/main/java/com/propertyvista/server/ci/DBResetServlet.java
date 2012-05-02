@@ -242,6 +242,7 @@ public class DBResetServlet extends HttpServlet {
                             buf.insert(0, "Processing total time: " + TimeUtils.secSince(start) + "\n");
                         } catch (Throwable t) {
                             log.error("", t);
+                            Persistence.service().rollback();
                             throw new Error(t);
                         } finally {
                             Mail.getMailService().setDisabled(false);
