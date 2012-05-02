@@ -21,6 +21,7 @@ import com.pyx4j.entity.shared.AttachLevel;
 import com.propertyvista.biz.tenant.CustomerFacade;
 import com.propertyvista.crm.rpc.services.customer.GuarantorCrudService;
 import com.propertyvista.domain.tenant.Guarantor;
+import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.dto.GuarantorDTO;
 
 public class GuarantorCrudServiceImpl extends AbstractCrudServiceDtoImpl<Guarantor, GuarantorDTO> implements GuarantorCrudService {
@@ -50,6 +51,7 @@ public class GuarantorCrudServiceImpl extends AbstractCrudServiceDtoImpl<Guarant
     @Override
     protected void persist(Guarantor entity, GuarantorDTO dto) {
         ServerSideFactory.create(CustomerFacade.class).persistCustomer(entity.customer());
+        entity.role().setValue(LeaseParticipant.Role.Guarantor);
         super.persist(entity, dto);
     }
 }
