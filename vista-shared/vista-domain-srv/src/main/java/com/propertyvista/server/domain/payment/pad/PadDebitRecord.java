@@ -14,16 +14,7 @@
 package com.propertyvista.server.domain.payment.pad;
 
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
 
-/**
- * e-Cheque or PAD (pre-authorized debit transactions) / EFT Batch payments
- * 
- * @see http://jira.birchwoodsoftwaregroup.com/wiki/display/VISTA/Caledon
- * @see http://jira.birchwoodsoftwaregroup.com/wiki/download/attachments/4587553/CCS-PAD-File-Specifications.pdf
- */
-public interface PadFile extends IEntity {
-
-    IList<PadBatch> batches();
+public interface PadDebitRecord extends IEntity {
 
 }

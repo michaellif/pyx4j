@@ -29,6 +29,7 @@ import com.propertyvista.domain.tenant.Customer;
 
 public interface PaymentMethod extends IEntity {
 
+    // TODO use Tenant
     @Detached
     @ReadOnly
     Customer tenant();
@@ -41,14 +42,20 @@ public interface PaymentMethod extends IEntity {
     @MemberColumn(name = "paymentType")
     IPrimitive<PaymentType> type();
 
+    @Owned
+    PaymentMethodDetails details();
+
     @Caption(name = "eCheque")
     @Owned
+    @Deprecated
     EcheckInfo echeck();
 
     @Owned
+    @Deprecated
     CreditCardInfo creditCard();
 
     @Owned
+    @Deprecated
     InteracInfo interac();
 
     // Billing Address:

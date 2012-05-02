@@ -13,6 +13,10 @@
  */
 package com.propertyvista.server.domain.payment.pad;
 
-public interface PadBatch {
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
 
+public interface PadBatch extends IEntity {
+
+    IList<PadDebitRecord> records();
 }

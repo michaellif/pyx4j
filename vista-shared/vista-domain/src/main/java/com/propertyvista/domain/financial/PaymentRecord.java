@@ -36,6 +36,8 @@ import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.shared.I18nEnum;
 
+import com.propertyvista.domain.payment.PaymentMethod;
+
 /**
  * 
  * Actual payment record. {@link com.propertyvista.domain.financial.billing.InvoicePayment} captures payment portion for particular charge (in future version)
@@ -48,6 +50,8 @@ import com.pyx4j.i18n.shared.I18nEnum;
 public interface PaymentRecord extends IEntity {
 
     @I18n
+    // Use PaymentType
+    @Deprecated
     enum Type {
 
         Cash,
@@ -78,9 +82,11 @@ public interface PaymentRecord extends IEntity {
     @I18n
     enum PaymentStatus {
 
-        Received,
+        Submitted,
 
-        Posted,
+        Processing,
+
+        Received,
 
         Rejected,
 
@@ -110,6 +116,9 @@ public interface PaymentRecord extends IEntity {
      */
     IPrimitive<LogicalDate> targetDate();
 
+    /**
+     * TODO Add action to change this filed to Facade
+     */
     IPrimitive<LogicalDate> depositDate();
 
     @NotNull
@@ -117,11 +126,15 @@ public interface PaymentRecord extends IEntity {
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> amount();
 
+    PaymentMethod paymentMethod();
+
     @NotNull
     @MemberColumn(name = "paymentType")
     IPrimitive<Type> type();
 
     IPrimitive<PaymentStatus> paymentStatus();
+
+    IPrimitive<String> notes();
 
     // internals:
     interface OrderId extends ColumnId {

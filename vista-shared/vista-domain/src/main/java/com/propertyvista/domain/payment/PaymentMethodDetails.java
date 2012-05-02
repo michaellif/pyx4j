@@ -7,23 +7,20 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Feb 29, 2012
+ * Created on May 1, 2012
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.server.domain.payment.pad;
+package com.propertyvista.domain.payment;
 
+import com.pyx4j.entity.annotations.AbstractEntity;
+import com.pyx4j.entity.annotations.Inheritance;
+import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
 
-/**
- * e-Cheque or PAD (pre-authorized debit transactions) / EFT Batch payments
- * 
- * @see http://jira.birchwoodsoftwaregroup.com/wiki/display/VISTA/Caledon
- * @see http://jira.birchwoodsoftwaregroup.com/wiki/download/attachments/4587553/CCS-PAD-File-Specifications.pdf
- */
-public interface PadFile extends IEntity {
-
-    IList<PadBatch> batches();
+@AbstractEntity
+@Inheritance(strategy = Inheritance.InheritanceStrategy.SINGLE_TABLE)
+@Table(prefix = "payment")
+public interface PaymentMethodDetails extends IEntity {
 
 }

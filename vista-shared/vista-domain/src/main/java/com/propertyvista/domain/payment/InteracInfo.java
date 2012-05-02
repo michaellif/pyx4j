@@ -13,18 +13,26 @@
  */
 package com.propertyvista.domain.payment;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.annotations.Caption;
-import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.shared.IPrimitive;
 
-public interface InteracInfo extends IEntity {
+@DiscriminatorValue("InteracInfo")
+public interface InteracInfo extends PaymentMethodDetails {
+
+    //TODO
+    IPrimitive<Key> incommingInteracTrasaction();
 
     @Caption(name = "Bank Number")
+    @Deprecated
     IPrimitive<String> bankNo();
 
     @Caption(name = "Transit Number")
+    @Deprecated
     IPrimitive<String> transitNo();
 
     @Caption(name = "Account Number")
+    @Deprecated
     IPrimitive<String> accountNo();
 }

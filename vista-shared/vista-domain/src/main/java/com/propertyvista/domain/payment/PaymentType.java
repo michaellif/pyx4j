@@ -13,19 +13,34 @@
  */
 package com.propertyvista.domain.payment;
 
+import java.util.EnumSet;
+
 import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.shared.I18nEnum;
 
 public enum PaymentType {
 
+    Cash,
+
+    // TODO move to en_CA translation
+    @Translate("Cheque")
+    Check,
+
     @Translate("eCheque")
     Echeck,
 
+    EFT,
+
+    CreditCard,
+
+    @Deprecated
     Visa,
 
     @Translate("MasterCard")
+    @Deprecated
     MasterCard,
 
+    @Deprecated
     Discover,
 
     Interac;
@@ -33,6 +48,14 @@ public enum PaymentType {
     @Override
     public String toString() {
         return I18nEnum.toString(this);
+    }
+
+    public static EnumSet<PaymentType> avalableInPortal() {
+        return EnumSet.of(Echeck, CreditCard, Interac);
+    }
+
+    public static EnumSet<PaymentType> avalableInCrm() {
+        return EnumSet.of(Cash, Check, Echeck, CreditCard);
     }
 
 }

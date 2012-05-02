@@ -14,14 +14,17 @@
 package com.propertyvista.domain.payment;
 
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.validator.NotNull;
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
-public interface EcheckInfo extends IEntity {
+@Table(prefix = "payment")
+@DiscriminatorValue("EcheckInfo")
+public interface EcheckInfo extends PaymentMethodDetails {
 
     @I18n
     public enum AccountType {
@@ -34,15 +37,18 @@ public interface EcheckInfo extends IEntity {
         }
     }
 
+    // No need for Caledon
     @NotNull
     IPrimitive<String> nameOnAccount();
 
     @NotNull
     IPrimitive<AccountType> accountType();
 
+    // Need bankId for Caledon
     @NotNull
     IPrimitive<String> bankName();
 
+    // Looks like branchTransitNumber
     @NotNull
     @Caption(name = "Routing Number")
     IPrimitive<Integer> routingNo();
@@ -51,6 +57,7 @@ public interface EcheckInfo extends IEntity {
     @Caption(name = "Account Number")
     IPrimitive<Integer> accountNo();
 
+    // No need for Caledon
     @NotNull
     @Caption(name = "Cheque Number")
     IPrimitive<Integer> checkNo();

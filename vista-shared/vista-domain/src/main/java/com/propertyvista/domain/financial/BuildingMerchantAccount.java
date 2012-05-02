@@ -7,12 +7,20 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Feb 29, 2012
+ * Created on May 1, 2012
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.server.domain.payment.pad;
+package com.propertyvista.domain.financial;
 
-public interface PadRecord {
+import com.pyx4j.entity.shared.IEntity;
+
+import com.propertyvista.domain.property.asset.building.Building;
+
+public interface BuildingMerchantAccount extends IEntity {
+
+    MerchantAccount merchantAccount();
+
+    Building building();
 
 }

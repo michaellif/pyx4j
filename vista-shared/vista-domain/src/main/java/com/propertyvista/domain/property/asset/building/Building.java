@@ -41,6 +41,8 @@ import com.pyx4j.entity.shared.ISet;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.dashboard.gadgets.arrears.ArrearsSummary;
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitTurnoverStats;
+import com.propertyvista.domain.financial.BuildingMerchantAccount;
+import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.financial.offering.ProductCatalog;
 import com.propertyvista.domain.marketing.Marketing;
 import com.propertyvista.domain.media.Media;
@@ -130,6 +132,11 @@ public interface Building extends PolicyNode, NotesAndAttachmentsNode {
 
     // ----------------------------------------------------
     // parent <-> child relationship:
+
+    @JoinTable(BuildingMerchantAccount.class)
+    @Detached
+    MerchantAccount merchantAccount();
+
     @Owned
     @Detached(level = AttachLevel.Detached)
     ISet<Floorplan> _Floorplans();
