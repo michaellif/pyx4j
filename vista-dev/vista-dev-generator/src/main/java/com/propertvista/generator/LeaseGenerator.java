@@ -37,7 +37,6 @@ import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
-import com.propertyvista.domain.tenant.lease.LeaseParticipant.Role;
 import com.propertyvista.misc.VistaDevPreloadConfig;
 
 public class LeaseGenerator extends DataGenerator {
@@ -103,6 +102,7 @@ public class LeaseGenerator extends DataGenerator {
         guarantor.customer().set(customerGenerator.createCustomer());
         guarantor.screening().set(screeningGenerator.createScreening());
         guarantor.customer()._PersonScreenings().add(guarantor.screening());
+        guarantor.role().setValue(LeaseParticipant.Role.Guarantor);
         guarantor.relationship().setValue(RandomUtil.randomEnum(PersonRelationship.class));
         guarantor.tenant().set(mainTenant);
         lease.version().guarantors().add(guarantor);

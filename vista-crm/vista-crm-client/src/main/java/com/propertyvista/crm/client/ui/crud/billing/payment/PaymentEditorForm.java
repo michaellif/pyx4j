@@ -17,7 +17,6 @@ import java.util.Collection;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.forms.client.ui.CNumberLabel;
 import com.pyx4j.forms.client.ui.CRadioGroupEnum;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
@@ -66,16 +65,7 @@ public class PaymentEditorForm extends CrmEntityForm<PaymentRecordDTO> {
             @Override
             protected AbstractEntitySelectorDialog<LeaseParticipant> getSelectorDialog() {
                 return new EntitySelectorListDialog<LeaseParticipant>(i18n.tr("Select Tenant/Guarantor To Pay"), false, PaymentEditorForm.this.getValue()
-                        .participants(), new EntitySelectorListDialog.Formatter<LeaseParticipant>() {
-                    @Override
-                    public String format(LeaseParticipant entity) {
-                        return SimpleMessageFormat.format(//@formatter:off
-                                "{0}, {1}",
-                                entity.customer().person().name().getStringView(),
-                                entity.role().getStringView()
-                        );//@formatter:on
-                    }
-                }) {
+                        .participants()) {
 
                     @Override
                     public boolean onClickOk() {
