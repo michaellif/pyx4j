@@ -31,7 +31,6 @@ public interface PaymentMethodDTO extends CreditCardInfo {
     @EmbeddedEntity
     AddressStructured billingAddress();
 
-    @EmbeddedEntity
     @Editor(type = EditorType.phone)
     IPrimitive<String> phone();
 
