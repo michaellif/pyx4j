@@ -119,6 +119,7 @@ public abstract class EntityDtoBinder<DBO extends IEntity, DTO extends IEntity> 
     }
 
     protected final <F extends IEntity, S extends F, D extends F> void bind(Class<F> fragmentClass, S dto, D dbo) {
+        addBinding(new Binding(dto.getMember(IEntity.PRIMARY_KEY), dbo.getMember(IEntity.PRIMARY_KEY), null));
         for (String memberName : EntityFactory.getEntityMeta(fragmentClass).getMemberNames()) {
             addBinding(new Binding(dto.getMember(memberName), dbo.getMember(memberName), null));
         }
