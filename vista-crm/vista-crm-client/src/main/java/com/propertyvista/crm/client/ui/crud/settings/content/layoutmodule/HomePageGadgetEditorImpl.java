@@ -17,8 +17,8 @@ import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.site.HomePageGadget;
 
-public class LayoutModuleEditorImpl extends CrmEditorViewImplBase<HomePageGadget> implements LayoutModuleEditor {
-    public LayoutModuleEditorImpl() {
-        super(CrmSiteMap.Settings.HomePageModules.class, new LayoutModuleEditorForm());
+public class HomePageGadgetEditorImpl extends CrmEditorViewImplBase<HomePageGadget> implements HomePageGadgetEditor {
+    public HomePageGadgetEditorImpl() {
+        super(CrmSiteMap.Settings.HomePageModules.class, new HomePageGadgetEditorForm());
     }
 }

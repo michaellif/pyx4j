@@ -112,13 +112,7 @@ public class SiteEditorForm extends CrmEntityForm<SiteDescriptorDTO> {
         main.setWidget(row++, 0, inject(proto().socialLinks(), new SocialLinkFolder(isEditable())));
 
         // home page gadgets
-        FormFlexPanel gadgetPanel = new FormFlexPanel();
-//        gadgetPanel.setH1(row, 0, 1, proto().homePageGadgetsNarrow().getMeta().getCaption(), createAddNewItemLink());
-        gadgetPanel.setH1(row++, 0, 2, "Home Page Gadgets", createAddNewItemLink());
-        gadgetPanel.setWidget(row, 0, inject(proto().homePageGadgetsNarrow(), new LayoutModuleFolder(isEditable())));
-        gadgetPanel.setWidget(row, 1, inject(proto().homePageGadgetsWide(), new LayoutModuleFolder(isEditable())));
-        gadgetPanel.getRowFormatter().setVerticalAlign(row++, HasVerticalAlignment.ALIGN_TOP);
-        main.setWidget(row++, 0, gadgetPanel);
+        main.setWidget(row++, 0, createGadgetPanel());
 
         main.setH1(row++, 0, 1, proto().childPages().getMeta().getCaption());
         main.setWidget(row++, 0, inject(proto().childPages(), new SitePageDescriptorFolder(this)));
@@ -126,22 +120,30 @@ public class SiteEditorForm extends CrmEntityForm<SiteDescriptorDTO> {
         return new CrmScrollPanel(main);
     }
 
-    private Widget createAddNewItemLink() {
+    private Widget createGadgetPanel() {
+        FormFlexPanel gadgetPanel = new FormFlexPanel();
+        int row = 0;
+
+        Widget addNewItem = null;
         if (isEditable()) {
-            return new HTML();
+            addNewItem = new HTML();
+        } else {
+            Anchor addNewItemLink = new Anchor(i18n.tr("Add New Gadget"));
+            addNewItemLink.getElement().getStyle().setProperty("lineHeight", "2em");
+            addNewItemLink.addClickHandler(new ClickHandler() {
+                @Override
+                public void onClick(ClickEvent event) {
+                    HomePageGadget newItem = EntityFactory.create(HomePageGadget.class);
+                    AppSite.getPlaceController().goTo(AppPlaceEntityMapper.resolvePlace(HomePageGadget.class).formNewItemPlace(newItem));
+                }
+            });
+            addNewItem = addNewItemLink;
         }
-
-        Anchor addNewItem = new Anchor(i18n.tr("Add New Gadget"));
-        addNewItem.getElement().getStyle().setProperty("lineHeight", "2em");
-        addNewItem.addClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                HomePageGadget newItem = EntityFactory.create(HomePageGadget.class);
-                AppSite.getPlaceController().goTo(AppPlaceEntityMapper.resolvePlace(HomePageGadget.class).formNewItemPlace(newItem));
-            }
-        });
-
-        return addNewItem;
+        gadgetPanel.setH1(row++, 0, 2, i18n.tr("Home Page Gadgets"), addNewItem);
+        gadgetPanel.setWidget(row, 0, inject(proto().homePageGadgetsNarrow(), new HomePageGadgetFolder(isEditable())));
+        gadgetPanel.setWidget(row, 1, inject(proto().homePageGadgetsWide(), new HomePageGadgetFolder(isEditable())));
+        gadgetPanel.getRowFormatter().setVerticalAlign(row++, HasVerticalAlignment.ALIGN_TOP);
+        return gadgetPanel;
     }
 
     private Widget createTestimonialsTab() {

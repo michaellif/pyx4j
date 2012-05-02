@@ -13,12 +13,21 @@
  */
 package com.propertyvista.crm.client.ui.crud.settings.content.layoutmodule;
 
-import com.pyx4j.site.client.ui.crud.form.IEditorView;
+import com.pyx4j.commons.Key;
+import com.pyx4j.site.client.ui.crud.form.IViewerView;
 
 import com.propertyvista.domain.site.HomePageGadget;
 
-public interface LayoutModuleEditor extends IEditorView<HomePageGadget> {
+public interface HomePageGadgetViewer extends IViewerView<HomePageGadget> {
 
-    interface Presenter extends IEditorView.Presenter {
+    interface Presenter extends IViewerView.Presenter {
+
+        void viewModule(Key id);
+
+        void editNew(Key parentId);
     }
+
+    void viewModule(Key id);
+
+    void newModule(Key parentId);
 }

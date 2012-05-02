@@ -19,19 +19,19 @@ import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.site.HomePageGadget;
 
-public class LayoutModuleViewerImpl extends CrmViewerViewImplBase<HomePageGadget> implements LayoutModuleViewer {
+public class HomePageGadgetViewerImpl extends CrmViewerViewImplBase<HomePageGadget> implements HomePageGadgetViewer {
 
-    public LayoutModuleViewerImpl() {
-        super(CrmSiteMap.Settings.HomePageModules.class, new LayoutModuleEditorForm(true));
+    public HomePageGadgetViewerImpl() {
+        super(CrmSiteMap.Settings.HomePageModules.class, new HomePageGadgetEditorForm(true));
     }
 
     @Override
     public void viewModule(Key id) {
-        ((LayoutModuleViewer.Presenter) getPresenter()).viewModule(id);
+        ((HomePageGadgetViewer.Presenter) getPresenter()).viewModule(id);
     }
 
     @Override
     public void newModule(Key parentId) {
-        ((LayoutModuleViewer.Presenter) getPresenter()).editNew(parentId);
+        ((HomePageGadgetViewer.Presenter) getPresenter()).editNew(parentId);
     }
 }

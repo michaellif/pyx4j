@@ -7,27 +7,26 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2012-04-26
+ * Created on Apr 27, 2012
  * @author stanp
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.settings.content.layoutmodule;
+package com.propertyvista.crm.server.services;
 
-import com.pyx4j.commons.Key;
-import com.pyx4j.site.client.ui.crud.form.IViewerView;
+import com.pyx4j.entity.server.AbstractCrudServiceImpl;
 
+import com.propertyvista.crm.rpc.services.HomePageGadgetCrudService;
 import com.propertyvista.domain.site.HomePageGadget;
 
-public interface LayoutModuleViewer extends IViewerView<HomePageGadget> {
+public class HomePageGadgetCrudServiceImpl extends AbstractCrudServiceImpl<HomePageGadget> implements HomePageGadgetCrudService {
 
-    interface Presenter extends IViewerView.Presenter {
-
-        void viewModule(Key id);
-
-        void editNew(Key parentId);
+    public HomePageGadgetCrudServiceImpl() {
+        super(HomePageGadget.class);
     }
 
-    void viewModule(Key id);
+    @Override
+    protected void bind() {
+        bindCompleateDBO();
+    }
 
-    void newModule(Key parentId);
 }

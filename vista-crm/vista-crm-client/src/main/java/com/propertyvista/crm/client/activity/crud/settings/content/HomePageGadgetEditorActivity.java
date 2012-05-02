@@ -21,16 +21,16 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
-import com.propertyvista.crm.client.ui.crud.settings.content.layoutmodule.LayoutModuleEditor;
+import com.propertyvista.crm.client.ui.crud.settings.content.layoutmodule.HomePageGadgetEditor;
 import com.propertyvista.crm.client.ui.crud.viewfactories.SettingsViewFactory;
-import com.propertyvista.crm.rpc.services.LayoutModuleCrudService;
+import com.propertyvista.crm.rpc.services.HomePageGadgetCrudService;
 import com.propertyvista.domain.site.HomePageGadget;
 
-public class LayoutModuleEditorActivity extends EditorActivityBase<HomePageGadget> implements LayoutModuleEditor.Presenter {
+public class HomePageGadgetEditorActivity extends EditorActivityBase<HomePageGadget> implements HomePageGadgetEditor.Presenter {
 
     @SuppressWarnings("unchecked")
-    public LayoutModuleEditorActivity(CrudAppPlace place) {
-        super(place, SettingsViewFactory.instance(LayoutModuleEditor.class), (AbstractCrudService<HomePageGadget>) GWT.create(LayoutModuleCrudService.class),
+    public HomePageGadgetEditorActivity(CrudAppPlace place) {
+        super(place, SettingsViewFactory.instance(HomePageGadgetEditor.class), (AbstractCrudService<HomePageGadget>) GWT.create(HomePageGadgetCrudService.class),
                 HomePageGadget.class);
     }
 

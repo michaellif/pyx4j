@@ -22,10 +22,10 @@ import com.propertyvista.crm.client.ui.crud.billing.payment.PaymentListerView;
 import com.propertyvista.crm.client.ui.crud.billing.payment.PaymentListerViewImpl;
 import com.propertyvista.crm.client.ui.crud.billing.payment.PaymentViewerView;
 import com.propertyvista.crm.client.ui.crud.billing.payment.PaymentViewerViewImpl;
-import com.propertyvista.crm.client.ui.crud.settings.content.layoutmodule.LayoutModuleEditor;
-import com.propertyvista.crm.client.ui.crud.settings.content.layoutmodule.LayoutModuleEditorImpl;
-import com.propertyvista.crm.client.ui.crud.settings.content.layoutmodule.LayoutModuleViewer;
-import com.propertyvista.crm.client.ui.crud.settings.content.layoutmodule.LayoutModuleViewerImpl;
+import com.propertyvista.crm.client.ui.crud.settings.content.layoutmodule.HomePageGadgetEditor;
+import com.propertyvista.crm.client.ui.crud.settings.content.layoutmodule.HomePageGadgetEditorImpl;
+import com.propertyvista.crm.client.ui.crud.settings.content.layoutmodule.HomePageGadgetViewer;
+import com.propertyvista.crm.client.ui.crud.settings.content.layoutmodule.HomePageGadgetViewerImpl;
 import com.propertyvista.crm.client.ui.crud.settings.content.page.PageEditor;
 import com.propertyvista.crm.client.ui.crud.settings.content.page.PageEditorImpl;
 import com.propertyvista.crm.client.ui.crud.settings.content.page.PageViewer;
@@ -83,10 +83,10 @@ public class SettingsViewFactory extends ViewFactoryBase {
             } else if (PageEditor.class.equals(type)) {
                 map.put(type, new PageEditorImpl());
 
-            } else if (LayoutModuleViewer.class.equals(type)) {
-                map.put(type, new LayoutModuleViewerImpl());
-            } else if (LayoutModuleEditor.class.equals(type)) {
-                map.put(type, new LayoutModuleEditorImpl());
+            } else if (HomePageGadgetViewer.class.equals(type)) {
+                map.put(type, new HomePageGadgetViewerImpl());
+            } else if (HomePageGadgetEditor.class.equals(type)) {
+                map.put(type, new HomePageGadgetEditorImpl());
 
             } else if (ProductDictionaryView.class.equals(type)) {
                 map.put(type, new ProductDictionaryViewImpl());

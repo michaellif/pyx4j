@@ -33,9 +33,9 @@ import com.pyx4j.site.client.AppSite;
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.domain.site.HomePageGadget;
 
-public class LayoutModuleFolder extends VistaTableFolder<HomePageGadget> {
+public class HomePageGadgetFolder extends VistaTableFolder<HomePageGadget> {
 
-    public LayoutModuleFolder(boolean editable) {
+    public HomePageGadgetFolder(boolean editable) {
         super(HomePageGadget.class, editable);
         setAddable(false);
     }
@@ -65,14 +65,14 @@ public class LayoutModuleFolder extends VistaTableFolder<HomePageGadget> {
     @Override
     public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof HomePageGadget) {
-            return new LayoutModuleItemEditor();
+            return new HomePageGadgetItemEditor();
         }
         return super.create(member);
     }
 
-    private class LayoutModuleItemEditor extends CEntityFolderRowEditor<HomePageGadget> {
+    private class HomePageGadgetItemEditor extends CEntityFolderRowEditor<HomePageGadget> {
 
-        public LayoutModuleItemEditor() {
+        public HomePageGadgetItemEditor() {
             super(HomePageGadget.class, columns());
         }
 

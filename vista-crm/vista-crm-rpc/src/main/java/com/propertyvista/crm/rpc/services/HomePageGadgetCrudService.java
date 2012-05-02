@@ -17,5 +17,5 @@ import com.pyx4j.entity.rpc.AbstractCrudService;
 
 import com.propertyvista.domain.site.HomePageGadget;
 
-public interface LayoutModuleCrudService extends AbstractCrudService<HomePageGadget> {
+public interface HomePageGadgetCrudService extends AbstractCrudService<HomePageGadget> {
 }

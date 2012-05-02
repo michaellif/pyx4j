@@ -100,8 +100,8 @@ import com.propertyvista.crm.client.activity.crud.organisation.PortfolioViewerAc
 import com.propertyvista.crm.client.activity.crud.organisation.VendorEditorActivity;
 import com.propertyvista.crm.client.activity.crud.organisation.VendorListerActivity;
 import com.propertyvista.crm.client.activity.crud.organisation.VendorViewerActivity;
-import com.propertyvista.crm.client.activity.crud.settings.content.LayoutModuleEditorActivity;
-import com.propertyvista.crm.client.activity.crud.settings.content.LayoutModuleViewerActivity;
+import com.propertyvista.crm.client.activity.crud.settings.content.HomePageGadgetEditorActivity;
+import com.propertyvista.crm.client.activity.crud.settings.content.HomePageGadgetViewerActivity;
 import com.propertyvista.crm.client.activity.crud.settings.content.PageEditorActivity;
 import com.propertyvista.crm.client.activity.crud.settings.content.PageViewerActivity;
 import com.propertyvista.crm.client.activity.crud.settings.content.SiteActivity;
@@ -598,10 +598,10 @@ public class MainActivityMapper implements AppActivityMapper {
                     } else if (place instanceof CrmSiteMap.Settings.HomePageModules) {
                         switch (crudPlace.getType()) {
                         case editor:
-                            activity = new LayoutModuleEditorActivity(crudPlace);
+                            activity = new HomePageGadgetEditorActivity(crudPlace);
                             break;
                         case viewer:
-                            activity = new LayoutModuleViewerActivity(crudPlace);
+                            activity = new HomePageGadgetViewerActivity(crudPlace);
                             break;
                         }
 

@@ -21,13 +21,13 @@ import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.domain.site.HomePageGadget;
 
-public class LayoutModuleEditorForm extends CrmEntityForm<HomePageGadget> {
+public class HomePageGadgetEditorForm extends CrmEntityForm<HomePageGadget> {
 
-    public LayoutModuleEditorForm() {
+    public HomePageGadgetEditorForm() {
         this(false);
     }
 
-    public LayoutModuleEditorForm(boolean viewMode) {
+    public HomePageGadgetEditorForm(boolean viewMode) {
         super(HomePageGadget.class, viewMode);
     }
 

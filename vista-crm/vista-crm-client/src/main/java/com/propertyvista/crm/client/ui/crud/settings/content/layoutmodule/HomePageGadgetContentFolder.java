@@ -42,15 +42,15 @@ import com.propertyvista.domain.site.AvailableLocale;
 import com.propertyvista.domain.site.PageContent;
 import com.propertyvista.domain.site.PageDescriptor;
 
-class LayoutModuleContentFolder extends VistaBoxFolder<PageContent> {
+class HomePageGadgetContentFolder extends VistaBoxFolder<PageContent> {
 
-    private static final I18n i18n = I18n.get(LayoutModuleContentFolder.class);
+    private static final I18n i18n = I18n.get(HomePageGadgetContentFolder.class);
 
     private final CEntityEditor<PageDescriptor> parent;
 
     private final Set<AvailableLocale> usedLocales = new HashSet<AvailableLocale>();
 
-    public LayoutModuleContentFolder(CEntityEditor<PageDescriptor> parent) {
+    public HomePageGadgetContentFolder(CEntityEditor<PageDescriptor> parent) {
         super(PageContent.class, parent.isEditable());
         this.parent = parent;
         this.addValueChangeHandler(new ValueChangeHandler<IList<PageContent>>() {
@@ -80,7 +80,7 @@ class LayoutModuleContentFolder extends VistaBoxFolder<PageContent> {
             public void onValueChange(ValueChangeEvent<AvailableLocale> event) {
                 PageContent item = EntityFactory.create(PageContent.class);
                 item.locale().set(event.getValue());
-                LayoutModuleContentFolder.super.addItem(item);
+                HomePageGadgetContentFolder.super.addItem(item);
             }
         }).show();
     }
