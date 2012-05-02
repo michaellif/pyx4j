@@ -38,6 +38,7 @@ import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.PersonRelationship;
 import com.propertyvista.domain.tenant.PersonScreening;
 import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.dto.LeaseDTO;
 
 public class GuarantorInLeaseFolder extends VistaBoxFolder<Guarantor> {
@@ -64,11 +65,12 @@ public class GuarantorInLeaseFolder extends VistaBoxFolder<Guarantor> {
                             return false;
                         } else {
                             for (Customer tenant : getSelectedItems()) {
-                                Guarantor newTenantInLease = EntityFactory.create(Guarantor.class);
-                                newTenantInLease.leaseV().setPrimaryKey(lease.getValue().version().getPrimaryKey());
-                                newTenantInLease.customer().set(tenant);
-                                newTenantInLease.relationship().setValue(PersonRelationship.Other); // just not leave it empty - it's mandatory field!
-                                addItem(newTenantInLease);
+                                Guarantor newGuarantorInLease = EntityFactory.create(Guarantor.class);
+                                newGuarantorInLease.leaseV().setPrimaryKey(lease.getValue().version().getPrimaryKey());
+                                newGuarantorInLease.customer().set(tenant);
+                                newGuarantorInLease.role().setValue(LeaseParticipant.Role.Guarantor);
+                                newGuarantorInLease.relationship().setValue(PersonRelationship.Other); // just not leave it empty - it's mandatory field!
+                                addItem(newGuarantorInLease);
                             }
                             return true;
                         }
