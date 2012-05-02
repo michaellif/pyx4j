@@ -17,6 +17,8 @@ import com.propertyvista.domain.financial.PaymentRecord;
 
 public interface PaymentFacade {
 
+    PaymentRecord persistPayment(PaymentRecord payment);
+
     /**
      * Cash: automatically -> Received (AR. Posted)
      * Check: Submitted, -> by targetDate Processing (AR. Posted), -> Received or Rejected (AR. Reject)
@@ -26,7 +28,7 @@ public interface PaymentFacade {
      * EFT: automatically -> Received (AR. Posted)
      * 
      */
-    PaymentRecord submitPayment(PaymentRecord payment);
+    PaymentRecord processPayment(PaymentRecord payment);
 
     PaymentRecord updateCheck(PaymentRecord paymentStub);
 
