@@ -22,13 +22,11 @@ import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.billing.payment.PaymentViewerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.SettingsViewFactory;
 import com.propertyvista.crm.rpc.services.billing.PaymentCrudService;
-import com.propertyvista.domain.financial.PaymentRecord;
+import com.propertyvista.dto.PaymentRecordDTO;
 
-public class PaymentViewerActivity extends CrmViewerActivity<PaymentRecord> {
+public class PaymentViewerActivity extends CrmViewerActivity<PaymentRecordDTO> {
 
     public PaymentViewerActivity(Place place) {
-        super(place, SettingsViewFactory.instance(PaymentViewerView.class),
-
-        GWT.<AbstractCrudService<PaymentRecord>> create(PaymentCrudService.class));
+        super(place, SettingsViewFactory.instance(PaymentViewerView.class), GWT.<AbstractCrudService<PaymentRecordDTO>> create(PaymentCrudService.class));
     }
 }

@@ -50,12 +50,12 @@ public class TenantPaymentMethodCrudServiceImpl extends AbstractCrudServiceImpl<
 
     @Override
     protected void enhanceListCriteria(EntityListCriteria<PaymentMethod> dbCriteria, EntityListCriteria<PaymentMethod> dtoCriteria) {
-        dbCriteria.add(PropertyCriterion.eq(dbCriteria.proto().tenant(), TenantAppContext.getCurrentUserTenant()));
+        dbCriteria.add(PropertyCriterion.eq(dbCriteria.proto().leaseParticipant(), TenantAppContext.getCurrentUserTenant()));
     }
 
     @Override
     protected void persist(PaymentMethod entity, PaymentMethod dto) {
-        entity.tenant().set(TenantAppContext.getCurrentUserTenant());
+        entity.leaseParticipant().set(TenantAppContext.getCurrentUserTenant());
         String ccn = entity.creditCard().number().getValue().trim();
         entity.creditCard().numberRefference().setValue(ccn.substring(ccn.length() - 4));
         Persistence.service().persist(entity);

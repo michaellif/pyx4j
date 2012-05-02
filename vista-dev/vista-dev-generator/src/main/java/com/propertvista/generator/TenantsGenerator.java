@@ -69,7 +69,7 @@ public class TenantsGenerator {
             m.creditCard().numberRefference().setValue(CommonsStringUtils.d00(RandomUtil.randomInt(99)) + CommonsStringUtils.d00(RandomUtil.randomInt(99)));
             m.creditCard().name().setValue(tenant.person().name().getStringView());
             m.creditCard().expiryDate().setValue(RandomUtil.randomLogicalDate(2012, 2015));
-            m.tenant().set(tenant);
+            m.leaseParticipant().set(tenant);
             l.add(m);
         }
 

@@ -25,19 +25,18 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.contact.AddressStructured;
-import com.propertyvista.domain.tenant.Customer;
+import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 
 public interface PaymentMethod extends IEntity {
 
-    // TODO use Tenant
     @Detached
     @ReadOnly
-    Customer tenant();
+    LeaseParticipant leaseParticipant();
 
     @MemberColumn(name = "prim")
     IPrimitive<Boolean> primary();
 
-    @Caption(name = "Payment Types")
+    @Caption(name = "Payment Type")
     @Editor(type = EditorType.radiogroup)
     @MemberColumn(name = "paymentType")
     IPrimitive<PaymentType> type();

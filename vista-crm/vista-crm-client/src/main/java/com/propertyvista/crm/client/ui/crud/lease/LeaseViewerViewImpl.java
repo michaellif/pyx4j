@@ -48,7 +48,6 @@ import com.propertyvista.crm.client.ui.crud.billing.payment.PaymentLister;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.selections.version.LeaseVersionService;
 import com.propertyvista.domain.communication.EmailTemplateType;
-import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.CompletionType;
 import com.propertyvista.domain.tenant.lease.Lease.Status;
@@ -56,6 +55,7 @@ import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.dto.ApplicationUserDTO;
 import com.propertyvista.dto.BillDTO;
 import com.propertyvista.dto.LeaseDTO;
+import com.propertyvista.dto.PaymentRecordDTO;
 
 public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> implements LeaseViewerView {
 
@@ -63,7 +63,7 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
 
     private final IListerView<BillDTO> billLister;
 
-    private final IListerView<PaymentRecord> paymentLister;
+    private final IListerView<PaymentRecordDTO> paymentLister;
 
     private final IListerView<LeaseAdjustment> adjustmentLister;
 
@@ -87,7 +87,7 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
 
         billLister = new ListerInternalViewImplBase<BillDTO>(new BillLister());
 
-        paymentLister = new ListerInternalViewImplBase<PaymentRecord>(new PaymentLister());
+        paymentLister = new ListerInternalViewImplBase<PaymentRecordDTO>(new PaymentLister());
 
         adjustmentLister = new ListerInternalViewImplBase<LeaseAdjustment>(new LeaseAdjustmentLister());
 
@@ -223,7 +223,7 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
     }
 
     @Override
-    public IListerView<PaymentRecord> getPaymentListerView() {
+    public IListerView<PaymentRecordDTO> getPaymentListerView() {
         return paymentLister;
     }
 

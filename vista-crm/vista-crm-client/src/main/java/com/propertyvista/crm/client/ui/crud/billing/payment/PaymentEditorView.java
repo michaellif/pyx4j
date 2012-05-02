@@ -15,8 +15,8 @@ package com.propertyvista.crm.client.ui.crud.billing.payment;
 
 import com.pyx4j.site.client.ui.crud.form.IEditorView;
 
-import com.propertyvista.domain.financial.PaymentRecord;
+import com.propertyvista.dto.PaymentRecordDTO;
 
-public interface PaymentEditorView extends IEditorView<PaymentRecord> {
+public interface PaymentEditorView extends IEditorView<PaymentRecordDTO> {
 
 }

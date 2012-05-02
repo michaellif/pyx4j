@@ -229,7 +229,6 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
         Vector<ApplicationUserDTO> users = new Vector<ApplicationUserDTO>();
 
         Persistence.service().retrieve(lease.version().tenants());
-
         for (Tenant tenant : lease.version().tenants()) {
             Persistence.service().retrieve(tenant);
             switch (tenant.role().getValue()) {

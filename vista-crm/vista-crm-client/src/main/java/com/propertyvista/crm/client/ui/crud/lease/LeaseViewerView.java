@@ -21,11 +21,11 @@ import com.pyx4j.site.client.ui.crud.lister.IListerView;
 
 import com.propertyvista.crm.client.ui.crud.lease.common.LeaseViewerPresenterBase;
 import com.propertyvista.domain.communication.EmailTemplateType;
-import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.dto.ApplicationUserDTO;
 import com.propertyvista.dto.BillDTO;
 import com.propertyvista.dto.LeaseDTO;
+import com.propertyvista.dto.PaymentRecordDTO;
 
 public interface LeaseViewerView extends IViewerView<LeaseDTO> {
 
@@ -33,7 +33,7 @@ public interface LeaseViewerView extends IViewerView<LeaseDTO> {
 
         IListerView.Presenter<BillDTO> getBillListerPresenter();
 
-        IListerView.Presenter<PaymentRecord> getPaymentListerPresenter();
+        IListerView.Presenter<PaymentRecordDTO> getPaymentListerPresenter();
 
         IListerView.Presenter<LeaseAdjustment> getLeaseAdjustmentListerPresenter();
 
@@ -55,7 +55,7 @@ public interface LeaseViewerView extends IViewerView<LeaseDTO> {
 
     IListerView<BillDTO> getBillListerView();
 
-    IListerView<PaymentRecord> getPaymentListerView();
+    IListerView<PaymentRecordDTO> getPaymentListerView();
 
     IListerView<LeaseAdjustment> getLeaseAdjustmentListerView();
 

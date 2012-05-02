@@ -35,7 +35,6 @@ import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.payment.PaymentMethod;
-import com.propertyvista.domain.payment.PaymentType;
 
 /**
  * 
@@ -67,16 +66,16 @@ public interface PaymentRecord extends IEntity {
         }
     };
 
-    @Override
-    @Indexed
-    @ToString
-    IPrimitive<Key> id();
-
     @Owner
     @ReadOnly
     @Detached
     @JoinColumn
     BillingAccount billingAccount();
+
+    @Override
+    @Indexed
+    @ToString
+    IPrimitive<Key> id();
 
     IPrimitive<LogicalDate> receivedDate();
 
@@ -97,15 +96,13 @@ public interface PaymentRecord extends IEntity {
 
     PaymentMethod paymentMethod();
 
-    @NotNull
-    IPrimitive<PaymentType> paymentType();
-
     IPrimitive<PaymentStatus> paymentStatus();
 
     IPrimitive<String> transactionErrorMessage();
 
     IPrimitive<String> transactionAuthorizationNumber();
 
+    @Editor(type = EditorType.textarea)
     IPrimitive<String> notes();
 
     // internals:

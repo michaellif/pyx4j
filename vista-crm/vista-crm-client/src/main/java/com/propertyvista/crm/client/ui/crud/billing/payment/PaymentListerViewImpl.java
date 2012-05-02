@@ -15,9 +15,9 @@ package com.propertyvista.crm.client.ui.crud.billing.payment;
 
 import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.domain.financial.PaymentRecord;
+import com.propertyvista.dto.PaymentRecordDTO;
 
-public class PaymentListerViewImpl extends CrmListerViewImplBase<PaymentRecord> implements PaymentListerView {
+public class PaymentListerViewImpl extends CrmListerViewImplBase<PaymentRecordDTO> implements PaymentListerView {
 
     public PaymentListerViewImpl() {
         super(CrmSiteMap.Tenants.Payment.class);

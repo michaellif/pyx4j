@@ -14,23 +14,29 @@
 package com.propertyvista.crm.client.ui.crud.billing.payment;
 
 import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 
-import com.propertyvista.domain.financial.PaymentRecord;
+import com.propertyvista.dto.PaymentRecordDTO;
 
-public class PaymentLister extends ListerBase<PaymentRecord> {
+public class PaymentLister extends ListerBase<PaymentRecordDTO> {
+
+    private static final I18n i18n = I18n.get(PaymentLister.class);
 
     public PaymentLister() {
-        super(PaymentRecord.class, false, true);
+        super(PaymentRecordDTO.class, false, true);
         getDataTablePanel().getDataTable().setHasCheckboxColumn(false);
 
         setColumnDescriptors(//@formatter:off
             new MemberColumnDescriptor.Builder(proto().id()).build(),
-            new MemberColumnDescriptor.Builder(proto().receivedDate()).build(),
-            new MemberColumnDescriptor.Builder(proto().depositDate()).build(),
+            new MemberColumnDescriptor.Builder(proto().leaseParticipant().leaseParticipant().customer().id()).columnTitle(i18n.tr("Tenant Id")).build(),
+            new MemberColumnDescriptor.Builder(proto().leaseParticipant().leaseParticipant().customer().person().name()).build(),
             new MemberColumnDescriptor.Builder(proto().amount()).build(),
-            new MemberColumnDescriptor.Builder(proto().paymentType()).build(),
-            new MemberColumnDescriptor.Builder(proto().paymentStatus(), false).build()
+            new MemberColumnDescriptor.Builder(proto().paymentMethod().type()).build(),
+            new MemberColumnDescriptor.Builder(proto().receivedDate()).build(),
+            new MemberColumnDescriptor.Builder(proto().targetDate()).build(),
+            new MemberColumnDescriptor.Builder(proto().paymentStatus()).build(),
+            new MemberColumnDescriptor.Builder(proto().paymentMethod().type()).build()
         );//@formatter:on
     }
 }

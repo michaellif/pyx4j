@@ -19,6 +19,7 @@ import javax.xml.bind.annotation.XmlType;
 
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.ToString;
@@ -37,6 +38,7 @@ import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 
 @ToStringFormat("{0} - {1}{2,choice,null#|!null#, {2}}")
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
+@DiscriminatorValue("Tenant")
 public interface Tenant extends LeaseParticipant {
 
     @I18n

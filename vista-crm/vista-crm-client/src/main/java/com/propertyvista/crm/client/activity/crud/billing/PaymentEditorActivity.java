@@ -14,26 +14,32 @@
 package com.propertyvista.crm.client.activity.crud.billing;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.ui.crud.billing.payment.PaymentEditorView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.SettingsViewFactory;
 import com.propertyvista.crm.rpc.services.billing.PaymentCrudService;
-import com.propertyvista.domain.financial.PaymentRecord;
+import com.propertyvista.dto.PaymentRecordDTO;
 
-public class PaymentEditorActivity extends EditorActivityBase<PaymentRecord> {
+public class PaymentEditorActivity extends EditorActivityBase<PaymentRecordDTO> {
 
     public PaymentEditorActivity(CrudAppPlace place) {
-        super(place,
-
-        SettingsViewFactory.instance(PaymentEditorView.class),
-
-        GWT.<AbstractCrudService<PaymentRecord>> create(PaymentCrudService.class),
-
-        PaymentRecord.class);
+        super(place, SettingsViewFactory.instance(PaymentEditorView.class), GWT.<AbstractCrudService<PaymentRecordDTO>> create(PaymentCrudService.class),
+                PaymentRecordDTO.class);
     }
 
+    @Override
+    protected void createNewEntity(final AsyncCallback<PaymentRecordDTO> callback) {
+        ((PaymentCrudService) getService()).initNewEntity(new DefaultAsyncCallback<PaymentRecordDTO>() {
+            @Override
+            public void onSuccess(PaymentRecordDTO result) {
+                callback.onSuccess(result);
+            }
+        }, parentID);
+    }
 }
