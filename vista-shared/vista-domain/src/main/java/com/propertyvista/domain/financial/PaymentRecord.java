@@ -24,7 +24,6 @@ import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
-import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
@@ -33,10 +32,10 @@ import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
-import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.payment.PaymentMethod;
+import com.propertyvista.domain.payment.PaymentType;
 
 /**
  * 
@@ -48,36 +47,6 @@ import com.propertyvista.domain.payment.PaymentMethod;
  * @author Alexs
  */
 public interface PaymentRecord extends IEntity {
-
-    @I18n
-    // Use PaymentType
-    @Deprecated
-    enum Type {
-
-        Cash,
-
-        @Translate("Cheque")
-        Check,
-
-        @Translate("eCheque")
-        Echeck,
-
-        Visa,
-
-        @Translate("MasterCard")
-        MasterCard,
-
-        Discover,
-
-        Interac,
-
-        Other;
-
-        @Override
-        public String toString() {
-            return I18nEnum.toString(this);
-        }
-    };
 
     @I18n
     enum PaymentStatus {
@@ -129,8 +98,7 @@ public interface PaymentRecord extends IEntity {
     PaymentMethod paymentMethod();
 
     @NotNull
-    @MemberColumn(name = "paymentType")
-    IPrimitive<Type> type();
+    IPrimitive<PaymentType> paymentType();
 
     IPrimitive<PaymentStatus> paymentStatus();
 

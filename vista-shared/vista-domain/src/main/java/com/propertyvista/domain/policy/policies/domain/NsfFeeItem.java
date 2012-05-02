@@ -29,7 +29,7 @@ import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.financial.PaymentRecord;
+import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.policy.policies.LeaseBillingPolicy;
 
 public interface NsfFeeItem extends IEntity {
@@ -43,7 +43,7 @@ public interface NsfFeeItem extends IEntity {
 
     @NotNull
     @ToString(index = 0)
-    IPrimitive<PaymentRecord.Type> paymentType();
+    IPrimitive<PaymentType> paymentType();
 
     @NotNull
     @ToString(index = 1)

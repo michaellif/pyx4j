@@ -32,7 +32,7 @@ import com.pyx4j.widgets.client.dialog.OkCancelOption;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedEditorForm;
-import com.propertyvista.domain.financial.PaymentRecord;
+import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.policy.dto.LeaseBillingPolicyDTO;
 import com.propertyvista.domain.policy.policies.domain.NsfFeeItem;
 
@@ -130,7 +130,7 @@ public class LeaseBillingPolicyEditorForm extends PolicyDTOTabPanelBasedEditorFo
 
         @Override
         protected void addItem() {
-            EnumSet<PaymentRecord.Type> values = EnumSet.allOf(PaymentRecord.Type.class);
+            EnumSet<PaymentType> values = EnumSet.allOf(PaymentType.class);
             for (NsfFeeItem item : getValue()) {
                 if (values.contains(item.paymentType().getValue())) {
                     values.remove(item.paymentType().getValue());
@@ -147,9 +147,9 @@ public class LeaseBillingPolicyEditorForm extends PolicyDTOTabPanelBasedEditorFo
             }.show();
         }
 
-        private abstract class SelectNsfFeeTypeDialog extends SelectEnumDialog<PaymentRecord.Type> implements OkCancelOption {
+        private abstract class SelectNsfFeeTypeDialog extends SelectEnumDialog<PaymentType> implements OkCancelOption {
 
-            public SelectNsfFeeTypeDialog(EnumSet<PaymentRecord.Type> values) {
+            public SelectNsfFeeTypeDialog(EnumSet<PaymentType> values) {
                 super(i18n.tr("Select Payment Type"), values);
             }
 
