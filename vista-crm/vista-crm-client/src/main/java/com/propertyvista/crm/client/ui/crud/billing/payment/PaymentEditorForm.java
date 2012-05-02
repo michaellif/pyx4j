@@ -13,10 +13,13 @@
  */
 package com.propertyvista.crm.client.ui.crud.billing.payment;
 
+import java.util.Collection;
+
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.forms.client.ui.CNumberLabel;
+import com.pyx4j.forms.client.ui.CRadioGroupEnum;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
@@ -24,10 +27,12 @@ import com.pyx4j.site.client.ui.crud.misc.CEntitySelectorHyperlink;
 import com.pyx4j.site.client.ui.dialogs.AbstractEntitySelectorDialog;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
 import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.widgets.client.RadioGroup;
 
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
-import com.propertyvista.dto.ApplicationUserDTO;
+import com.propertyvista.domain.payment.PaymentType;
+import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.dto.PaymentRecordDTO;
 
 public class PaymentEditorForm extends CrmEntityForm<PaymentRecordDTO> {
@@ -52,22 +57,22 @@ public class PaymentEditorForm extends CrmEntityForm<PaymentRecordDTO> {
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().unitNumber()), 15).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseId()), 10).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseStatus()), 10).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseParticipant(), new CEntitySelectorHyperlink<ApplicationUserDTO>() {
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseParticipant(), new CEntitySelectorHyperlink<LeaseParticipant>() {
             @Override
             protected AppPlace getTargetPlace() {
                 return AppPlaceEntityMapper.resolvePlace(getValue().getInstanceValueClass(), getValue().getPrimaryKey());
             }
 
             @Override
-            protected AbstractEntitySelectorDialog<ApplicationUserDTO> getSelectorDialog() {
-                return new EntitySelectorListDialog<ApplicationUserDTO>(i18n.tr("Select Tenant/Guarantor To Pay"), false, PaymentEditorForm.this.getValue()
-                        .participants(), new EntitySelectorListDialog.Formatter<ApplicationUserDTO>() {
+            protected AbstractEntitySelectorDialog<LeaseParticipant> getSelectorDialog() {
+                return new EntitySelectorListDialog<LeaseParticipant>(i18n.tr("Select Tenant/Guarantor To Pay"), false, PaymentEditorForm.this.getValue()
+                        .participants(), new EntitySelectorListDialog.Formatter<LeaseParticipant>() {
                     @Override
-                    public String format(ApplicationUserDTO entity) {
+                    public String format(LeaseParticipant entity) {
                         return SimpleMessageFormat.format(//@formatter:off
                                 "{0}, {1}",
-                                entity.leaseParticipant().customer().person().name().getStringView(),
-                                entity.userType().getStringView()
+                                entity.customer().person().name().getStringView(),
+                                entity.role().getStringView()
                         );//@formatter:on
                     }
                 }) {
@@ -90,6 +95,13 @@ public class PaymentEditorForm extends CrmEntityForm<PaymentRecordDTO> {
                 };
             }
         }), 25).build());
+        main.setWidget(++row, 0,
+                new DecoratorBuilder(inject(proto().paymentType(), new CRadioGroupEnum<PaymentType>(PaymentType.class, RadioGroup.Layout.HORISONTAL) {
+                    @Override
+                    public Collection<PaymentType> getOptions() {
+                        return PaymentType.avalableInCrm();
+                    }
+                }), 25).build());
 
         row = -1;
         main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().amount()), 10).build());
@@ -97,8 +109,8 @@ public class PaymentEditorForm extends CrmEntityForm<PaymentRecordDTO> {
         main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().targetDate()), 10).build());
         main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().depositDate()), 10).build());
         main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().paymentStatus()), 10).build());
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().transactionErrorMessage()), 20).build());
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().transactionAuthorizationNumber()), 20).build());
+//        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().transactionErrorMessage()), 20).build());
+//        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().transactionAuthorizationNumber()), 20).build());
         main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().notes()), 25).build());
 
         // tweak UI:
@@ -109,8 +121,8 @@ public class PaymentEditorForm extends CrmEntityForm<PaymentRecordDTO> {
         get(proto().leaseStatus()).setViewable(true);
 
         get(proto().paymentStatus()).setViewable(true);
-        get(proto().transactionErrorMessage()).setViewable(true);
-        get(proto().transactionAuthorizationNumber()).setViewable(true);
+//        get(proto().transactionErrorMessage()).setViewable(true);
+//        get(proto().transactionAuthorizationNumber()).setViewable(true);
 
         main.getColumnFormatter().setWidth(0, "50%");
         main.getColumnFormatter().setWidth(1, "50%");
@@ -123,7 +135,7 @@ public class PaymentEditorForm extends CrmEntityForm<PaymentRecordDTO> {
         super.onPopulate();
 
         get(proto().id()).setVisible(!getValue().id().isNull());
-        get(proto().transactionAuthorizationNumber()).setVisible(!getValue().id().isNull());
-        get(proto().transactionErrorMessage()).setVisible(!getValue().id().isNull());
+//        get(proto().transactionAuthorizationNumber()).setVisible(!getValue().transactionAuthorizationNumber().isNull());
+//        get(proto().transactionErrorMessage()).setVisible(!getValue().transactionErrorMessage().isNull());
     }
 }

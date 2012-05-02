@@ -48,6 +48,7 @@ import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
+import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 
 // TODO enhance the test base to allow test cases with multiple buildings
 public class UnitTurnoverAnalysisManagerTestBase {
@@ -139,7 +140,7 @@ public class UnitTurnoverAnalysisManagerTestBase {
         tenantInLease.leaseV().set(lease.version());
         tenantInLease.customer().set(tenant);
         tenantInLease.orderInLease().setValue(1);
-        tenantInLease.role().setValue(Tenant.Role.Applicant);
+        tenantInLease.role().setValue(LeaseParticipant.Role.Applicant);
         lease.version().tenants().add(tenantInLease);
         Persistence.secureSave(lease);
 

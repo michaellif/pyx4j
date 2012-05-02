@@ -25,11 +25,12 @@ import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
 
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.tenant.Tenant;
-import com.propertyvista.domain.tenant.Tenant.Role;
 import com.propertyvista.domain.tenant.lease.Deposit.RepaymentMode;
 import com.propertyvista.domain.tenant.lease.Deposit.ValueType;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
+import com.propertyvista.domain.tenant.lease.LeaseParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseParticipant.Role;
 
 public class LeaseDataModel {
 
@@ -84,7 +85,7 @@ public class LeaseDataModel {
     private void addTenants() {
         Tenant tenantInLease = EntityFactory.create(Tenant.class);
         tenantInLease.customer().set(tenantDataModel.getTenant());
-        tenantInLease.role().setValue(Role.Applicant);
+        tenantInLease.role().setValue(LeaseParticipant.Role.Applicant);
         lease.version().tenants().add(tenantInLease);
     }
 

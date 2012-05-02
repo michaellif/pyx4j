@@ -28,10 +28,8 @@ import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.Tenant;
-import com.propertyvista.domain.tenant.Tenant.Role;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.dto.ApplicationUserDTO;
-import com.propertyvista.dto.ApplicationUserDTO.ApplicationUser;
+import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.dto.PaymentRecordDTO;
 
 public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRecord, PaymentRecordDTO> implements PaymentCrudService {
@@ -51,6 +49,8 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
         enhanceListRetrieved(entity, dto);
 
         dto.participants().addAll(retrieveUsers(dto.billingAccount().lease()));
+
+        dto.paymentType().set(dto.paymentMethod().type());
     }
 
     @Override
@@ -61,20 +61,22 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
         Persistence.service().retrieve(dto.billingAccount().lease());
         Persistence.service().retrieve(dto.billingAccount().lease().unit());
         Persistence.service().retrieve(dto.billingAccount().lease().unit().belongsTo());
-        Persistence.service().retrieve(dto.paymentMethod().leaseParticipant());
 
         dto.propertyCode().set(dto.billingAccount().lease().unit().belongsTo().propertyCode());
         dto.unitNumber().set(dto.billingAccount().lease().unit().info().number());
         dto.leaseId().set(dto.billingAccount().lease().leaseId());
         dto.leaseStatus().set(dto.billingAccount().lease().version().status());
 
-        dto.leaseParticipant().leaseParticipant().set(dto.paymentMethod().leaseParticipant());
+        Persistence.service().retrieve(dto.paymentMethod().leaseParticipant());
+        dto.leaseParticipant().set(dto.paymentMethod().leaseParticipant());
     }
 
     @Override
     protected void persist(PaymentRecord entity, PaymentRecordDTO dto) {
 
-        entity.paymentMethod().leaseParticipant().set(dto.leaseParticipant().leaseParticipant());
+        entity.paymentMethod().leaseParticipant().set(dto.leaseParticipant());
+        entity.paymentMethod().type().set(dto.paymentType());
+
         Persistence.service().persist(entity.paymentMethod());
         super.persist(entity, dto);
     }
@@ -100,8 +102,8 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
         callback.onSuccess(dto);
     }
 
-    private List<ApplicationUserDTO> retrieveUsers(Lease lease) {
-        List<ApplicationUserDTO> users = new LinkedList<ApplicationUserDTO>();
+    private List<LeaseParticipant> retrieveUsers(Lease lease) {
+        List<LeaseParticipant> users = new LinkedList<LeaseParticipant>();
 
         Persistence.service().retrieve(lease.version().tenants());
         for (Tenant tenant : lease.version().tenants()) {
@@ -109,23 +111,13 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
             switch (tenant.role().getValue()) {
             case Applicant:
             case CoApplicant:
-                ApplicationUserDTO user = EntityFactory.create(ApplicationUserDTO.class);
-                user.leaseParticipant().set(tenant);
-                user.userType().setValue(tenant.role().getValue() == Role.Applicant ? ApplicationUser.Applicant : ApplicationUser.CoApplicant);
-
-                users.add(user);
+                users.add(tenant);
             }
         }
 
         Persistence.service().retrieve(lease.version().guarantors());
         for (Guarantor guarantor : lease.version().guarantors()) {
-            Persistence.service().retrieve(guarantor);
-            ApplicationUserDTO user = EntityFactory.create(ApplicationUserDTO.class);
-
-            user.leaseParticipant().set(guarantor);
-            user.userType().setValue(ApplicationUser.Guarantor);
-
-            users.add(user);
+            users.add(guarantor);
         }
 
         return users;

@@ -24,6 +24,7 @@ import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.commons.TimeUtils;
 
 import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.portal.domain.ptapp.Charges;
 import com.propertyvista.portal.domain.ptapp.TenantCharge;
 import com.propertyvista.portal.rpc.ptapp.ChargesSharedCalculation;
@@ -39,10 +40,10 @@ public class ChargesServerCalculation extends ChargesSharedCalculation {
         }
 
         //@see http://jira.birchwoodsoftwaregroup.com/browse/VISTA-235
-        if (tenant.role().getValue() == Tenant.Role.Applicant) {
+        if (tenant.role().getValue() == LeaseParticipant.Role.Applicant) {
             return true;
         }
-        if (tenant.role().getValue() == Tenant.Role.Dependent) {
+        if (tenant.role().getValue() == LeaseParticipant.Role.Dependent) {
             return false;
         }
         return TimeUtils.isOlderThan(tenant.customer().person().birthDate().getValue(), 18);
@@ -119,7 +120,7 @@ public class ChargesServerCalculation extends ChargesSharedCalculation {
     private static void resetPaymentSplitCharges(Charges charges, List<Tenant> tenants) {
         charges.paymentSplitCharges().charges().clear();
         for (Tenant tenant : tenants) {
-            Tenant.Role status = tenant.role().getValue();
+            LeaseParticipant.Role status = tenant.role().getValue();
             log.debug("Going to reset payment splits for tenant {} of age {}", tenant.relationship().getValue(), tenant.customer().person().birthDate()
                     .getValue());
 
@@ -129,7 +130,7 @@ public class ChargesServerCalculation extends ChargesSharedCalculation {
             }
 
             int percentage = 0;
-            if (status == Tenant.Role.Applicant) {
+            if (status == LeaseParticipant.Role.Applicant) {
                 percentage = 100;
             }
             TenantCharge tenantCharge = com.propertyvista.portal.domain.util.DomainUtil.createTenantCharge(percentage, new BigDecimal(0));

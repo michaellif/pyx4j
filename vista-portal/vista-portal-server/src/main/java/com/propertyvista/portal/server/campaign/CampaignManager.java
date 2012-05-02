@@ -27,6 +27,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.callfire.CallFire;
 import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.portal.rpc.ptapp.dto.TenantInLeaseListDTO;
 import com.propertyvista.server.common.security.DevelopmentSecurity;
 import com.propertyvista.server.domain.CampaignHistory;
@@ -39,16 +40,16 @@ public class CampaignManager {
 
     public static void fireEvent(CampaignTrigger trigger, TenantInLeaseListDTO tenants) {
         for (Tenant tenantInfo : tenants.tenants()) {
-            Tenant.Role status = tenantInfo.role().getValue();
+            LeaseParticipant.Role status = tenantInfo.role().getValue();
 
             switch (trigger) {
             case ApplicationCompleated:
-                if (Tenant.Role.Applicant.equals(status)) {
+                if (LeaseParticipant.Role.Applicant.equals(status)) {
                     fireEvent(trigger, tenantInfo);
                 }
                 break;
             default:
-                if (Tenant.Role.Applicant.equals(status) || Tenant.Role.CoApplicant.equals(status)) {
+                if (LeaseParticipant.Role.Applicant.equals(status) || LeaseParticipant.Role.CoApplicant.equals(status)) {
                     fireEvent(trigger, tenantInfo);
                 }
             }

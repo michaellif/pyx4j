@@ -35,7 +35,8 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.common.client.ui.decorations.DecorationUtils;
 import com.propertyvista.domain.person.Name;
-import com.propertyvista.domain.tenant.Tenant.Role;
+import com.propertyvista.domain.tenant.lease.LeaseParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseParticipant.Role;
 import com.propertyvista.portal.domain.ptapp.TenantCharge;
 
 public class ChargeSplitListFolder extends VistaTableFolder<TenantCharge> {
@@ -79,7 +80,7 @@ public class ChargeSplitListFolder extends VistaTableFolder<TenantCharge> {
             public ValidationFailure isValid(CComponent<IList<TenantCharge>, ?> component, IList<TenantCharge> value) {
                 int totalPrc = 0;
                 for (TenantCharge charge : value) {
-                    if (charge.tenant().role().getValue() == Role.Applicant) {
+                    if (charge.tenant().role().getValue() == LeaseParticipant.Role.Applicant) {
                         continue; // Ignore main applicant, since it is read-only!
                     }
                     Integer p = charge.tenant().percentage().getValue();
@@ -129,7 +130,7 @@ public class ChargeSplitListFolder extends VistaTableFolder<TenantCharge> {
         @Override
         protected void propagateValue(TenantCharge entity, boolean fireEvent, boolean populate) {
             super.propagateValue(entity, fireEvent, populate);
-            if ((getValue().tenant().role().getValue() == Role.Applicant)) {
+            if ((getValue().tenant().role().getValue() == LeaseParticipant.Role.Applicant)) {
                 get(proto().tenant().percentage()).setEditable(false);
                 get(proto().tenant().percentage()).setViewable(true);
             }

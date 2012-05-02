@@ -57,6 +57,7 @@ import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
+import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.domain.tenant.ptapp.MasterOnlineApplication;
 import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
 import com.propertyvista.portal.rpc.DeploymentConsts;
@@ -545,7 +546,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
         Persistence.service().persist(tenant);
         mainAplt = EntityFactory.create(Tenant.class);
         mainAplt.customer().set(tenant);
-        mainAplt.role().setValue(Tenant.Role.Applicant);
+        mainAplt.role().setValue(LeaseParticipant.Role.Applicant);
         mainAplt.leaseV().set(lease.version());
         Persistence.service().persist(mainAplt);
 
@@ -558,7 +559,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
         Persistence.service().persist(tenant);
         coAplt = EntityFactory.create(Tenant.class);
         coAplt.customer().set(tenant);
-        coAplt.role().setValue(Tenant.Role.CoApplicant);
+        coAplt.role().setValue(LeaseParticipant.Role.CoApplicant);
         coAplt.application().set(mainApp);
         coAplt.leaseV().set(lease.version());
         Persistence.service().persist(coAplt);

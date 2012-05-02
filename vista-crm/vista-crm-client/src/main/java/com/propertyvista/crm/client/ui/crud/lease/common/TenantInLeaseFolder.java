@@ -45,7 +45,8 @@ import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.PersonRelationship;
 import com.propertyvista.domain.tenant.PersonScreening;
 import com.propertyvista.domain.tenant.Tenant;
-import com.propertyvista.domain.tenant.Tenant.Role;
+import com.propertyvista.domain.tenant.lease.LeaseParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseParticipant.Role;
 import com.propertyvista.domain.util.ValidationUtils;
 import com.propertyvista.dto.LeaseDTO;
 
@@ -77,7 +78,7 @@ public class TenantInLeaseFolder extends VistaBoxFolder<Tenant> {
                                 newTenantInLease.leaseV().setPrimaryKey(lease.getValue().version().getPrimaryKey());
                                 newTenantInLease.customer().set(tenant);
                                 if (!isApplicantPresent()) {
-                                    newTenantInLease.role().setValue(Role.Applicant);
+                                    newTenantInLease.role().setValue(LeaseParticipant.Role.Applicant);
                                     newTenantInLease.relationship().setValue(PersonRelationship.Other); // just not leave it empty - it's mandatory field!
                                 }
                                 addItem(newTenantInLease);
@@ -99,7 +100,7 @@ public class TenantInLeaseFolder extends VistaBoxFolder<Tenant> {
 
     private boolean isApplicantPresent() {
         for (Tenant til : getValue()) {
-            if (til.role().getValue() == Role.Applicant) {
+            if (til.role().getValue() == LeaseParticipant.Role.Applicant) {
                 return true;
             }
         }
@@ -124,11 +125,11 @@ public class TenantInLeaseFolder extends VistaBoxFolder<Tenant> {
                     boolean applicant = false;
                     for (Tenant item : value) {
                         if (applicant) {
-                            if (item.role().getValue() == Role.Applicant) {
+                            if (item.role().getValue() == LeaseParticipant.Role.Applicant) {
                                 return new ValidationFailure(i18n.tr("Just one applicant could be selected!"));
                             }
                         } else {
-                            applicant = (item.role().getValue() == Role.Applicant);
+                            applicant = (item.role().getValue() == LeaseParticipant.Role.Applicant);
                         }
                     }
                 }
@@ -176,7 +177,7 @@ public class TenantInLeaseFolder extends VistaBoxFolder<Tenant> {
             left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().sex()), 7).build());
             left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().birthDate()), 9).build());
 
-            left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().role(), new CComboBox<Role>()), 15).build());
+            left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().role(), new CComboBox<LeaseParticipant.Role>()), 15).build());
             left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().relationship()), 15).build());
             left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().percentage()), 5).build());
             left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().screening()), 9).customLabel(i18n.tr("Use Screening From")).build());
@@ -189,10 +190,10 @@ public class TenantInLeaseFolder extends VistaBoxFolder<Tenant> {
             right.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().workPhone()), 15).build());
 
             if (isEditable()) {
-                ((CComboBox<Role>) get(proto().role())).addValueChangeHandler(new ValueChangeHandler<Tenant.Role>() {
+                ((CComboBox<LeaseParticipant.Role>) get(proto().role())).addValueChangeHandler(new ValueChangeHandler<LeaseParticipant.Role>() {
                     @Override
-                    public void onValueChange(ValueChangeEvent<Role> event) {
-                        get(proto().relationship()).setVisible(event.getValue() != Role.Applicant);
+                    public void onValueChange(ValueChangeEvent<LeaseParticipant.Role> event) {
+                        get(proto().relationship()).setVisible(event.getValue() != LeaseParticipant.Role.Applicant);
                     }
                 });
             }
@@ -214,16 +215,16 @@ public class TenantInLeaseFolder extends VistaBoxFolder<Tenant> {
 
             get(proto().customer().person().email()).setMandatory(!getValue().customer().user().isNull());
 
-            boolean applicant = (getValue().role().getValue() == Role.Applicant);
+            boolean applicant = (getValue().role().getValue() == LeaseParticipant.Role.Applicant);
             if (applicant) {
                 get(proto().role()).setViewable(true);
                 get(proto().relationship()).setVisible(false);
             } else if (isEditable()) {
-                Collection<Tenant.Role> roles = EnumSet.allOf(Tenant.Role.class);
+                Collection<LeaseParticipant.Role> roles = EnumSet.allOf(LeaseParticipant.Role.class);
                 if (getValue().role().getValue() != null) { // if not new entity creation...
-                    roles.remove(Tenant.Role.Applicant);
+                    roles.remove(LeaseParticipant.Role.Applicant);
                 }
-                ((CComboBox<Role>) get(proto().role())).setOptions(roles);
+                ((CComboBox<LeaseParticipant.Role>) get(proto().role())).setOptions(roles);
             }
 
             if (!applicant && !getValue().customer().person().birthDate().isNull()) {
@@ -259,7 +260,7 @@ public class TenantInLeaseFolder extends VistaBoxFolder<Tenant> {
         }
 
         private void setMandatoryDependant() {
-            get(proto().role()).setValue(Tenant.Role.Dependent);
+            get(proto().role()).setValue(LeaseParticipant.Role.Dependent);
             get(proto().role()).setEditable(false);
         }
     }

@@ -60,7 +60,7 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
 
         for (Tenant tenant : masterOnlineApplication.leaseApplication().lease().version().tenants()) {
             Persistence.service().retrieve(tenant);
-            if (Tenant.Role.Applicant == tenant.role().getValue()) {
+            if (LeaseParticipant.Role.Applicant == tenant.role().getValue()) {
                 if (tenant.customer().user().isNull()) {
                     throw new UserRuntimeException(i18n.tr("Primary applicant must have an e-mail to start Online Application."));
                 }
@@ -262,7 +262,7 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
     private void inviteCoApplicants(Lease lease) {
         Persistence.service().retrieve(lease.version().tenants());
         for (Tenant tenant : lease.version().tenants()) {
-            if ((tenant.role().getValue() == Tenant.Role.CoApplicant && (!tenant.takeOwnership().isBooleanTrue()))) {
+            if ((tenant.role().getValue() == LeaseParticipant.Role.CoApplicant && (!tenant.takeOwnership().isBooleanTrue()))) {
                 if (tenant.customer().user().isNull()) {
                     throw new UserRuntimeException(i18n.tr("Co-Applicant must have an e-mail to start Online Application."));
                 }

@@ -33,6 +33,7 @@ import com.propertyvista.domain.tenant.lead.Lead;
 import com.propertyvista.domain.tenant.lead.Lead.Status;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
+import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 
 public class LeadFacadeImpl implements LeadFacade {
 
@@ -95,7 +96,7 @@ public class LeadFacadeImpl implements LeadFacade {
 
             Tenant tenantInLease = EntityFactory.create(Tenant.class);
             tenantInLease.customer().set(customer);
-            tenantInLease.role().setValue(asApplicant ? Tenant.Role.Applicant : Tenant.Role.CoApplicant);
+            tenantInLease.role().setValue(asApplicant ? LeaseParticipant.Role.Applicant : LeaseParticipant.Role.CoApplicant);
             lease.version().tenants().add(tenantInLease);
             asApplicant = false;
         }

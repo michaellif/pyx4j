@@ -13,12 +13,17 @@
  */
 package com.propertyvista.domain.tenant.lease;
 
+import java.io.Serializable;
+
+import javax.xml.bind.annotation.XmlType;
+
 import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.Inheritance;
 import com.pyx4j.entity.annotations.JoinColumn;
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
@@ -26,6 +31,9 @@ import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.annotations.I18n;
+import com.pyx4j.i18n.annotations.Translate;
+import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.PersonScreening;
@@ -35,10 +43,34 @@ import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
 @AbstractEntity
 public interface LeaseParticipant extends IEntity {
 
+    @I18n
+    @XmlType(name = "TenantRole")
+    public static enum Role implements Serializable {
+
+        Applicant,
+
+        @Translate("Co-Applicant")
+        CoApplicant,
+
+        Dependent,
+
+        Guarantor;
+
+        @Override
+        public String toString() {
+            return I18nEnum.toString(this);
+        }
+    }
+
     @NotNull
     @ReadOnly
     @ToString(index = 0)
     Customer customer();
+
+    @NotNull
+    @ToString(index = 1)
+    @MemberColumn(name = "participantRole")
+    IPrimitive<Role> role();
 
     @Owner
     @NotNull

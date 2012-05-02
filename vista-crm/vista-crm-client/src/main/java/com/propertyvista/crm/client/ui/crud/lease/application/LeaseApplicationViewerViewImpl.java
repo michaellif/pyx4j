@@ -91,12 +91,13 @@ public class LeaseApplicationViewerViewImpl extends CrmViewerViewImplBase<LeaseA
                     public void onSuccess(List<ApplicationUserDTO> result) {
                         new EntitySelectorListDialog<ApplicationUserDTO>(i18n.tr("Select Tenants/Guarantors To Send An Invitation To"), true, result,
                                 new EntitySelectorListDialog.Formatter<ApplicationUserDTO>() {
+
                                     @Override
                                     public String format(ApplicationUserDTO entity) {
                                         return SimpleMessageFormat.format(//@formatter:off
                                             "{0}, {1}",
                                             entity.leaseParticipant().customer().person().name().getStringView(),
-                                            entity.userType().getStringView()
+                                            entity.role().getStringView()
                                     );//@formatter:on
                                     }
                                 }) {
@@ -131,12 +132,13 @@ public class LeaseApplicationViewerViewImpl extends CrmViewerViewImplBase<LeaseA
                     public void onSuccess(List<ApplicationUserDTO> result) {
                         new EntitySelectorListDialog<ApplicationUserDTO>(i18n.tr("Select Tenants/Guarantors To Check"), true, result,
                                 new EntitySelectorListDialog.Formatter<ApplicationUserDTO>() {
+
                                     @Override
                                     public String format(ApplicationUserDTO entity) {
                                         return SimpleMessageFormat.format(//@formatter:off
                                                 "{0}, {1}",
                                                 entity.leaseParticipant().customer().person().name().getStringView(),
-                                                entity.userType().getStringView()
+                                                entity.role().getStringView()
                                         );//@formatter:on
                                     }
                                 }) {
@@ -193,7 +195,7 @@ public class LeaseApplicationViewerViewImpl extends CrmViewerViewImplBase<LeaseA
                                             return SimpleMessageFormat.format(//@formatter:off
                                                     "{0}, {1}",
                                                     entity.leaseParticipant().customer().person().name().getStringView(),
-                                                    entity.userType().getStringView()
+                                                    entity.role().getStringView()
                                             );//@formatter:on
                                         }
                                     }) {

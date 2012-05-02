@@ -35,14 +35,13 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.Tenant;
-import com.propertyvista.domain.tenant.Tenant.Role;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.ExecutionType;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
+import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.dto.ApplicationUserDTO;
-import com.propertyvista.dto.ApplicationUserDTO.ApplicationUser;
 import com.propertyvista.dto.LeaseApplicationDTO;
 import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.server.common.charges.PriceCalculationHelpers;
@@ -236,7 +235,7 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
             case CoApplicant:
                 ApplicationUserDTO user = EntityFactory.create(ApplicationUserDTO.class);
                 user.leaseParticipant().set(tenant);
-                user.userType().setValue(tenant.role().getValue() == Role.Applicant ? ApplicationUser.Applicant : ApplicationUser.CoApplicant);
+                user.role().set(tenant.role());
 
                 users.add(user);
             }
@@ -248,7 +247,7 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
             ApplicationUserDTO user = EntityFactory.create(ApplicationUserDTO.class);
 
             user.leaseParticipant().set(guarantor);
-            user.userType().setValue(ApplicationUser.Guarantor);
+            user.role().setValue(LeaseParticipant.Role.Guarantor);
 
             users.add(user);
         }

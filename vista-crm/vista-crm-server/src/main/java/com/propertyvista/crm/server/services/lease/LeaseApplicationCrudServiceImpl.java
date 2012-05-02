@@ -33,8 +33,9 @@ import com.propertyvista.crm.rpc.services.lease.LeaseApplicationCrudService;
 import com.propertyvista.crm.server.util.CrmAppContext;
 import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.Tenant;
-import com.propertyvista.domain.tenant.Tenant.Role;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.LeaseParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseParticipant.Role;
 import com.propertyvista.dto.ApplicationUserDTO;
 import com.propertyvista.dto.LeaseApplicationDTO;
 import com.propertyvista.dto.TenantFinancialDTO;
@@ -87,10 +88,10 @@ public class LeaseApplicationCrudServiceImpl extends LeaseCrudServiceBaseImpl<Le
             Persistence.service().retrieve(tenant);
             Persistence.service().retrieve(tenant.screening(), AttachLevel.ToStringMembers);
 
-            if (tenant.role().getValue() == Role.Applicant) {
+            if (tenant.role().getValue() == LeaseParticipant.Role.Applicant) {
                 dto.mainApplicant().set(tenant.customer());
                 dto.numberOfApplicants().setValue(dto.numberOfApplicants().getValue() + 1);
-            } else if (tenant.role().getValue() == Role.CoApplicant) {
+            } else if (tenant.role().getValue() == LeaseParticipant.Role.CoApplicant) {
                 dto.numberOfApplicants().setValue(dto.numberOfApplicants().getValue() + 1);
             }
         }
@@ -122,9 +123,9 @@ public class LeaseApplicationCrudServiceImpl extends LeaseCrudServiceBaseImpl<Le
         for (ApplicationUserDTO user : users) {
             if (user.leaseParticipant().isInstanceOf(Tenant.class)) {
                 Tenant tenant = user.leaseParticipant().duplicate(Tenant.class);
-                if (tenant.role().getValue() == Role.Applicant) {
+                if (tenant.role().getValue() == LeaseParticipant.Role.Applicant) {
                     commFacade.sendApplicantApplicationInvitation(tenant);
-                } else if (tenant.role().getValue() == Role.CoApplicant) {
+                } else if (tenant.role().getValue() == LeaseParticipant.Role.CoApplicant) {
                     commFacade.sendCoApplicantApplicationInvitation(tenant);
                 } else {
                     throw new Error("It's unknown what to do with tenant role " + tenant.role().getValue() + " in this context");

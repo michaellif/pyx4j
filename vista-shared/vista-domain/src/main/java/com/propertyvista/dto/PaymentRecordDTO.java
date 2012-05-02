@@ -13,13 +13,18 @@
  */
 package com.propertyvista.dto;
 
+import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.ExtendsDBO;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.financial.PaymentRecord;
+import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.tenant.lease.Lease.Status;
+import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 
 @Transient
 @ExtendsDBO
@@ -33,7 +38,11 @@ public interface PaymentRecordDTO extends PaymentRecord {
 
     IPrimitive<Status> leaseStatus();
 
-    ApplicationUserDTO leaseParticipant();
+    LeaseParticipant leaseParticipant();
 
-    IList<ApplicationUserDTO> participants();
+    IList<LeaseParticipant> participants();
+
+    @Caption(name = "Payment Method")
+    @Editor(type = EditorType.radiogroup)
+    IPrimitive<PaymentType> paymentType();
 }

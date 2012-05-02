@@ -34,9 +34,10 @@ import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.PersonRelationship;
 import com.propertyvista.domain.tenant.PersonScreening;
 import com.propertyvista.domain.tenant.Tenant;
-import com.propertyvista.domain.tenant.Tenant.Role;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.LeaseParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseParticipant.Role;
 import com.propertyvista.misc.VistaDevPreloadConfig;
 
 public class LeaseGenerator extends DataGenerator {
@@ -94,7 +95,7 @@ public class LeaseGenerator extends DataGenerator {
         mainTenant.customer().emergencyContacts().addAll(customerGenerator.createEmergencyContacts());
         mainTenant.customer()._PersonScreenings().add(screeningGenerator.createScreening());
         mainTenant.screening().set(mainTenant.customer()._PersonScreenings().iterator().next());
-        mainTenant.role().setValue(Role.Applicant);
+        mainTenant.role().setValue(LeaseParticipant.Role.Applicant);
         mainTenant.percentage().setValue(100);
         lease.version().tenants().add(mainTenant);
 
@@ -114,7 +115,7 @@ public class LeaseGenerator extends DataGenerator {
             tenant.screening().set(screeningGenerator.createScreening());
             tenant.customer()._PersonScreenings().add(tenant.screening());
 
-            tenant.role().setValue(RandomUtil.random(EnumSet.of(Tenant.Role.CoApplicant, Tenant.Role.Dependent)));
+            tenant.role().setValue(RandomUtil.random(EnumSet.of(LeaseParticipant.Role.CoApplicant, LeaseParticipant.Role.Dependent)));
             tenant.percentage().setValue(100);
             tenant.relationship().setValue(RandomUtil.randomEnum(PersonRelationship.class));
             tenant.takeOwnership().setValue(RandomUtil.randomBoolean());

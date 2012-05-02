@@ -33,6 +33,7 @@ import com.propertyvista.domain.security.VistaCustomerBehavior;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.domain.tenant.ptapp.ApplicationWizardStep;
 import com.propertyvista.domain.tenant.ptapp.ApplicationWizardSubstep;
 import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
@@ -53,7 +54,7 @@ public class ApplicationProgressMgr {
 
         if (SecurityController.checkBehavior(VistaCustomerBehavior.ProspectiveApplicant)) {
             //@see http://jira.birchwoodsoftwaregroup.com/browse/VISTA-235
-            if (tenant.role().getValue() == Tenant.Role.Applicant) {
+            if (tenant.role().getValue() == LeaseParticipant.Role.Applicant) {
                 return true;
             }
             if (!tenant.takeOwnership().isBooleanTrue()) {

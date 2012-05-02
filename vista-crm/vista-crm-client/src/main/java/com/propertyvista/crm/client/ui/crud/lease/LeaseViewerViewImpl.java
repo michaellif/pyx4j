@@ -320,7 +320,7 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
                     return SimpleMessageFormat.format(//@formatter:off
                             "{0}, {1}",
                             entity.leaseParticipant().customer().person().name().getStringView(),
-                            entity.userType().getStringView()
+                            entity.role().getStringView()
                     );//@formatter:on
                 }
             });

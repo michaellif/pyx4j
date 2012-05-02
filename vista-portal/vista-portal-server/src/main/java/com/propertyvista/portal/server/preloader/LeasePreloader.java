@@ -27,6 +27,7 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.portal.server.preloader.util.AptUnitSource;
 import com.propertyvista.portal.server.preloader.util.BaseVistaDevDataPreloader;
 import com.propertyvista.portal.server.preloader.util.LeaseLifecycleSim;
@@ -114,7 +115,7 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
                     String email2 = DemoData.UserType.PCOAPPLICANT.getEmail(i + 1);
                     tenant.customer().person().email().setValue(email2);
 
-                    tenant.role().setValue(Tenant.Role.CoApplicant);
+                    tenant.role().setValue(LeaseParticipant.Role.CoApplicant);
                     tenant.takeOwnership().setValue(false);
                 }
             } else if (i == DemoData.UserType.PTENANT.getDefaultMax()) {
