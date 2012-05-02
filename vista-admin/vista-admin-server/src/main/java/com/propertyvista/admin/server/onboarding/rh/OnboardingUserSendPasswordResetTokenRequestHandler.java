@@ -48,6 +48,7 @@ public class OnboardingUserSendPasswordResetTokenRequestHandler extends Abstract
 
         ResponseIO response = EntityFactory.create(ResponseIO.class);
         response.success().setValue(Boolean.TRUE);
+        response.requestId().setValue(request.requestId().getValue());
 
         AbstractAntiBot.assertCaptcha(new Pair<String, String>(request.captcha().challenge().getValue(), request.captcha().response().getValue()));
 

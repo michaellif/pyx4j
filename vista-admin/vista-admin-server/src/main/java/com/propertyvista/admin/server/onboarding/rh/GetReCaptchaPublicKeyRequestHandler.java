@@ -39,6 +39,7 @@ public class GetReCaptchaPublicKeyRequestHandler extends AbstractRequestHandler<
         GetReCaptchaPublicKeyResponseIO response = EntityFactory.create(GetReCaptchaPublicKeyResponseIO.class);
         response.success().setValue(Boolean.TRUE);
         response.reCaptchaPublicKey().setValue(((EssentialsServerSideConfiguration) ServerSideConfiguration.instance()).getReCaptchaPublicKey());
+        response.requestId().setValue(request.requestId().getValue());
 
         return response;
     }

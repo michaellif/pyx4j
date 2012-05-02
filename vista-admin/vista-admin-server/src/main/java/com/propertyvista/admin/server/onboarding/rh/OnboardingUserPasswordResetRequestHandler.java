@@ -53,6 +53,7 @@ public class OnboardingUserPasswordResetRequestHandler extends AbstractRequestHa
     public ResponseIO execute(OnboardingUserPasswordResetRequestIO request) {
         OnboardingUserAuthenticationResponseIO response = EntityFactory.create(OnboardingUserAuthenticationResponseIO.class);
         response.success().setValue(Boolean.TRUE);
+        response.requestId().setValue(request.requestId().getValue());
 
         AccessKey.TokenParser token = new AccessKey.TokenParser(request.token().getValue());
         String email = PasswordEncryptor.normalizeEmailAddress(token.email);

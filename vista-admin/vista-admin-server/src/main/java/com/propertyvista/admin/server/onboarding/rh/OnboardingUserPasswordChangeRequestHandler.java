@@ -48,6 +48,7 @@ public class OnboardingUserPasswordChangeRequestHandler extends AbstractRequestH
     @Override
     public ResponseIO execute(OnboardingUserPasswordChangeRequestIO request) {
         ResponseIO response = EntityFactory.create(ResponseIO.class);
+        response.requestId().setValue(request.requestId().getValue());
 
         String email = PasswordEncryptor.normalizeEmailAddress(request.email().getValue());
         AbstractAntiBot.assertLogin(email, null);
