@@ -21,7 +21,6 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.ui.CTextArea;
 import com.pyx4j.i18n.shared.I18n;
@@ -36,7 +35,7 @@ import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.dto.LeaseApplicationActionDTO;
 import com.propertyvista.crm.rpc.dto.LeaseApplicationActionDTO.Action;
 import com.propertyvista.domain.tenant.lease.LeaseApplication.Status;
-import com.propertyvista.dto.ApplicationUserDTO;
+import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.dto.LeaseApplicationDTO;
 
 public class LeaseApplicationViewerViewImpl extends CrmViewerViewImplBase<LeaseApplicationDTO> implements LeaseApplicationViewerView {
@@ -86,21 +85,10 @@ public class LeaseApplicationViewerViewImpl extends CrmViewerViewImplBase<LeaseA
         inviteAction = new Button(INVITE, new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                ((LeaseApplicationViewerView.Presenter) presenter).retrieveUsers(new DefaultAsyncCallback<List<ApplicationUserDTO>>() {
+                ((LeaseApplicationViewerView.Presenter) presenter).retrieveUsers(new DefaultAsyncCallback<List<LeaseParticipant>>() {
                     @Override
-                    public void onSuccess(List<ApplicationUserDTO> result) {
-                        new EntitySelectorListDialog<ApplicationUserDTO>(i18n.tr("Select Tenants/Guarantors To Send An Invitation To"), true, result,
-                                new EntitySelectorListDialog.Formatter<ApplicationUserDTO>() {
-
-                                    @Override
-                                    public String format(ApplicationUserDTO entity) {
-                                        return SimpleMessageFormat.format(//@formatter:off
-                                            "{0}, {1}",
-                                            entity.leaseParticipant().customer().person().name().getStringView(),
-                                            entity.role().getStringView()
-                                    );//@formatter:on
-                                    }
-                                }) {
+                    public void onSuccess(List<LeaseParticipant> result) {
+                        new EntitySelectorListDialog<LeaseParticipant>(i18n.tr("Select Tenants/Guarantors To Send An Invitation To"), true, result) {
 
                             @Override
                             public boolean onClickOk() {
@@ -127,21 +115,10 @@ public class LeaseApplicationViewerViewImpl extends CrmViewerViewImplBase<LeaseA
         checkAction = new Button(i18n.tr("Credit Check"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                ((LeaseApplicationViewerView.Presenter) presenter).retrieveUsers(new DefaultAsyncCallback<List<ApplicationUserDTO>>() {
+                ((LeaseApplicationViewerView.Presenter) presenter).retrieveUsers(new DefaultAsyncCallback<List<LeaseParticipant>>() {
                     @Override
-                    public void onSuccess(List<ApplicationUserDTO> result) {
-                        new EntitySelectorListDialog<ApplicationUserDTO>(i18n.tr("Select Tenants/Guarantors To Check"), true, result,
-                                new EntitySelectorListDialog.Formatter<ApplicationUserDTO>() {
-
-                                    @Override
-                                    public String format(ApplicationUserDTO entity) {
-                                        return SimpleMessageFormat.format(//@formatter:off
-                                                "{0}, {1}",
-                                                entity.leaseParticipant().customer().person().name().getStringView(),
-                                                entity.role().getStringView()
-                                        );//@formatter:on
-                                    }
-                                }) {
+                    public void onSuccess(List<LeaseParticipant> result) {
+                        new EntitySelectorListDialog<LeaseParticipant>(i18n.tr("Select Tenants/Guarantors To Check"), true, result) {
 
                             @Override
                             public boolean onClickOk() {
@@ -185,20 +162,10 @@ public class LeaseApplicationViewerViewImpl extends CrmViewerViewImplBase<LeaseA
             moreInfoAction = new Button(MORE_INFO, new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
-                    ((LeaseApplicationViewerView.Presenter) presenter).retrieveUsers(new DefaultAsyncCallback<List<ApplicationUserDTO>>() {
+                    ((LeaseApplicationViewerView.Presenter) presenter).retrieveUsers(new DefaultAsyncCallback<List<LeaseParticipant>>() {
                         @Override
-                        public void onSuccess(List<ApplicationUserDTO> result) {
-                            new EntitySelectorListDialog<ApplicationUserDTO>(i18n.tr("Select Tenants/Guarantors To Acquire Info"), true, result,
-                                    new EntitySelectorListDialog.Formatter<ApplicationUserDTO>() {
-                                        @Override
-                                        public String format(ApplicationUserDTO entity) {
-                                            return SimpleMessageFormat.format(//@formatter:off
-                                                    "{0}, {1}",
-                                                    entity.leaseParticipant().customer().person().name().getStringView(),
-                                                    entity.role().getStringView()
-                                            );//@formatter:on
-                                        }
-                                    }) {
+                        public void onSuccess(List<LeaseParticipant> result) {
+                            new EntitySelectorListDialog<LeaseParticipant>(i18n.tr("Select Tenants/Guarantors To Acquire Info"), true, result) {
 
                                 @Override
                                 public boolean onClickOk() {

@@ -19,7 +19,7 @@ import com.pyx4j.site.client.ui.crud.form.IViewerView;
 
 import com.propertyvista.crm.client.ui.crud.lease.common.LeaseViewerPresenterBase;
 import com.propertyvista.crm.rpc.dto.LeaseApplicationActionDTO;
-import com.propertyvista.dto.ApplicationUserDTO;
+import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.dto.LeaseApplicationDTO;
 
 public interface LeaseApplicationViewerView extends IViewerView<LeaseApplicationDTO> {
@@ -28,7 +28,7 @@ public interface LeaseApplicationViewerView extends IViewerView<LeaseApplication
 
         void startOnlineApplication();
 
-        void inviteUsers(List<ApplicationUserDTO> users);
+        void inviteUsers(List<LeaseParticipant> users);
 
         void applicationAction(LeaseApplicationActionDTO action);
     }

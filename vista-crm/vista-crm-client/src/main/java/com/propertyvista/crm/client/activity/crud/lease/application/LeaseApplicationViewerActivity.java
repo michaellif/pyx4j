@@ -30,7 +30,7 @@ import com.propertyvista.crm.client.ui.crud.viewfactories.LeaseViewFactory;
 import com.propertyvista.crm.rpc.dto.LeaseApplicationActionDTO;
 import com.propertyvista.crm.rpc.dto.LeaseApplicationActionDTO.Action;
 import com.propertyvista.crm.rpc.services.lease.LeaseApplicationCrudService;
-import com.propertyvista.dto.ApplicationUserDTO;
+import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.dto.LeaseApplicationDTO;
 
 public class LeaseApplicationViewerActivity extends LeaseViewerActivityBase<LeaseApplicationDTO> implements LeaseApplicationViewerView.Presenter {
@@ -58,14 +58,14 @@ public class LeaseApplicationViewerActivity extends LeaseViewerActivityBase<Leas
     }
 
     @Override
-    public void inviteUsers(List<ApplicationUserDTO> users) {
+    public void inviteUsers(List<LeaseParticipant> users) {
         ((LeaseApplicationCrudService) service).inviteUsers(new DefaultAsyncCallback<String>() {
             @Override
             public void onSuccess(String message) {
                 populate();
                 ((LeaseApplicationViewerView) view).reportInviteUsersActionResult(message);
             }
-        }, entityId, new Vector<ApplicationUserDTO>(users));
+        }, entityId, new Vector<LeaseParticipant>(users));
     }
 
     @Override

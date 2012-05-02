@@ -23,7 +23,7 @@ import com.pyx4j.entity.rpc.AbstractVersionedCrudService;
 
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.BillableItem;
-import com.propertyvista.dto.ApplicationUserDTO;
+import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.dto.LeaseDTO;
 
 public interface LeaseCrudServiceBase<DTO extends LeaseDTO> extends AbstractVersionedCrudService<DTO> {
@@ -32,5 +32,5 @@ public interface LeaseCrudServiceBase<DTO extends LeaseDTO> extends AbstractVers
 
     void calculateChargeItemAdjustments(AsyncCallback<BigDecimal> callback, BillableItem item);
 
-    void retrieveUsers(AsyncCallback<Vector<ApplicationUserDTO>> callback, Key entityId);
+    void retrieveUsers(AsyncCallback<Vector<LeaseParticipant>> callback, Key entityId);
 }

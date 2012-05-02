@@ -22,7 +22,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.domain.communication.EmailTemplateType;
-import com.propertyvista.dto.ApplicationUserDTO;
+import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.dto.LeaseDTO;
 
 public interface LeaseCrudService extends LeaseCrudServiceBase<LeaseDTO> {
@@ -40,7 +40,7 @@ public interface LeaseCrudService extends LeaseCrudServiceBase<LeaseDTO> {
     /**
      * <code>callback</code> returns a message that should be display to the users (i.e. e-mails were send successfully);
      */
-    void sendMail(AsyncCallback<String> callback, Key entityId, Vector<ApplicationUserDTO> users, EmailTemplateType emailType);
+    void sendMail(AsyncCallback<String> callback, Key entityId, Vector<LeaseParticipant> users, EmailTemplateType emailType);
 
     void activate(AsyncCallback<VoidSerializable> callback, Key entityId);
 }

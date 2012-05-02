@@ -35,8 +35,6 @@ import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
-import com.propertyvista.domain.tenant.lease.LeaseParticipant.Role;
-import com.propertyvista.dto.ApplicationUserDTO;
 import com.propertyvista.dto.LeaseApplicationDTO;
 import com.propertyvista.dto.TenantFinancialDTO;
 import com.propertyvista.dto.TenantInfoDTO;
@@ -98,31 +96,31 @@ public class LeaseApplicationCrudServiceImpl extends LeaseCrudServiceBaseImpl<Le
     }
 
     @Override
-    public void inviteUsers(AsyncCallback<String> callback, Key entityId, Vector<ApplicationUserDTO> users) {
+    public void inviteUsers(AsyncCallback<String> callback, Key entityId, Vector<LeaseParticipant> users) {
         CommunicationFacade commFacade = ServerSideFactory.create(CommunicationFacade.class);
         if (users.isEmpty()) {
             throw new UserRuntimeException(i18n.tr("No users to send invitation"));
         }
 
         // check that we can send the e-mail before we actually try to send email
-        for (ApplicationUserDTO user : users) {
+        for (LeaseParticipant user : users) {
             // check that all lease participants have an associated user entity (email)            
-            if (user.leaseParticipant().customer().user().isNull()) {
-                throw new UserRuntimeException(i18n.tr("Failed to invite users, email of lease participant {0} was not found", user.leaseParticipant()
-                        .customer().person().name().getStringView()));
+            if (user.customer().user().isNull()) {
+                throw new UserRuntimeException(i18n.tr("Failed to invite users, email of lease participant {0} was not found", user.customer().person().name()
+                        .getStringView()));
             }
 
             // check that selected guarantors/co-applicants have online-applications
-            if (user.leaseParticipant().application().isNull()) {
+            if (user.application().isNull()) {
                 throw new UserRuntimeException(
                         i18n.tr("Failed to invite users, application invitation for {0} can be sent only after the main applicant will have finished his own applicaiton",
-                                user.leaseParticipant().customer().person().name().getStringView()));
+                                user.customer().person().name().getStringView()));
             }
         }
 
-        for (ApplicationUserDTO user : users) {
-            if (user.leaseParticipant().isInstanceOf(Tenant.class)) {
-                Tenant tenant = user.leaseParticipant().duplicate(Tenant.class);
+        for (LeaseParticipant user : users) {
+            if (user.isInstanceOf(Tenant.class)) {
+                Tenant tenant = user.duplicate(Tenant.class);
                 if (tenant.role().getValue() == LeaseParticipant.Role.Applicant) {
                     commFacade.sendApplicantApplicationInvitation(tenant);
                 } else if (tenant.role().getValue() == LeaseParticipant.Role.CoApplicant) {
@@ -130,8 +128,8 @@ public class LeaseApplicationCrudServiceImpl extends LeaseCrudServiceBaseImpl<Le
                 } else {
                     throw new Error("It's unknown what to do with tenant role " + tenant.role().getValue() + " in this context");
                 }
-            } else if (user.leaseParticipant().isInstanceOf(Guarantor.class)) {
-                Guarantor guarantor = user.leaseParticipant().duplicate(Guarantor.class);
+            } else if (user.isInstanceOf(Guarantor.class)) {
+                Guarantor guarantor = user.duplicate(Guarantor.class);
                 commFacade.sendGuarantorApplicationInvitation(guarantor);
             }
         }

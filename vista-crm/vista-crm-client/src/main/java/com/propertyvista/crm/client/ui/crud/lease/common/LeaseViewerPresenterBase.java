@@ -17,9 +17,9 @@ import java.util.List;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.propertyvista.dto.ApplicationUserDTO;
+import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 
 public interface LeaseViewerPresenterBase {
 
-    void retrieveUsers(AsyncCallback<List<ApplicationUserDTO>> callback);
+    void retrieveUsers(AsyncCallback<List<LeaseParticipant>> callback);
 }

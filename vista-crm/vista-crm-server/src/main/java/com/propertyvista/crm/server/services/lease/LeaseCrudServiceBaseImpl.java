@@ -41,7 +41,6 @@ import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.ExecutionTyp
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
-import com.propertyvista.dto.ApplicationUserDTO;
 import com.propertyvista.dto.LeaseApplicationDTO;
 import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.server.common.charges.PriceCalculationHelpers;
@@ -219,13 +218,13 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
     }
 
     @Override
-    public void retrieveUsers(AsyncCallback<Vector<ApplicationUserDTO>> callback, Key entityId) {
+    public void retrieveUsers(AsyncCallback<Vector<LeaseParticipant>> callback, Key entityId) {
         Lease lease = Persistence.service().retrieve(dboClass, (isApplication ? entityId.asDraftKey() : entityId));
         if ((lease == null) || (lease.isNull())) {
             throw new RuntimeException("Entity '" + EntityFactory.getEntityMeta(dboClass).getCaption() + "' " + entityId + " NotFound");
         }
 
-        Vector<ApplicationUserDTO> users = new Vector<ApplicationUserDTO>();
+        Vector<LeaseParticipant> users = new Vector<LeaseParticipant>();
 
         Persistence.service().retrieve(lease.version().tenants());
         for (Tenant tenant : lease.version().tenants()) {
@@ -233,23 +232,13 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
             switch (tenant.role().getValue()) {
             case Applicant:
             case CoApplicant:
-                ApplicationUserDTO user = EntityFactory.create(ApplicationUserDTO.class);
-                user.leaseParticipant().set(tenant);
-                user.role().set(tenant.role());
-
-                users.add(user);
+                users.add(tenant);
             }
         }
 
         Persistence.service().retrieve(lease.version().guarantors());
         for (Guarantor guarantor : lease.version().guarantors()) {
-            Persistence.service().retrieve(guarantor);
-            ApplicationUserDTO user = EntityFactory.create(ApplicationUserDTO.class);
-
-            user.leaseParticipant().set(guarantor);
-            user.role().setValue(LeaseParticipant.Role.Guarantor);
-
-            users.add(user);
+            users.add(guarantor);
         }
 
         callback.onSuccess(users);

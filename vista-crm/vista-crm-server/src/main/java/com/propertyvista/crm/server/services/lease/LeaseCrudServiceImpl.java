@@ -40,8 +40,8 @@ import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.CompletionType;
+import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.domain.tenant.ptapp.MasterOnlineApplication;
-import com.propertyvista.dto.ApplicationUserDTO;
 import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.dto.TransactionHistoryDTO;
 import com.propertyvista.misc.VistaTODO;
@@ -98,7 +98,7 @@ public class LeaseCrudServiceImpl extends LeaseCrudServiceBaseImpl<LeaseDTO> imp
     }
 
     @Override
-    public void sendMail(AsyncCallback<String> callback, Key entityId, Vector<ApplicationUserDTO> users, EmailTemplateType emailType) {
+    public void sendMail(AsyncCallback<String> callback, Key entityId, Vector<LeaseParticipant> users, EmailTemplateType emailType) {
         Lease lease = Persistence.service().retrieve(dboClass, entityId.asCurrentKey());
         if ((lease == null) || (lease.isNull())) {
             throw new RuntimeException("Entity '" + EntityFactory.getEntityMeta(dboClass).getCaption() + "' " + entityId + " NotFound");
@@ -114,17 +114,17 @@ public class LeaseCrudServiceImpl extends LeaseCrudServiceBaseImpl<LeaseDTO> imp
         Persistence.service().retrieve(app);
 
         // check that all lease participants have an associated user entity (email)
-        for (ApplicationUserDTO user : users) {
-            if (user.leaseParticipant().customer().user().isNull()) {
-                throw new UserRuntimeException(i18n.tr("''Send Email'' operation failed, email of lease participant {0} was not found", user.leaseParticipant()
-                        .customer().person().name().getStringView()));
+        for (LeaseParticipant user : users) {
+            if (user.customer().user().isNull()) {
+                throw new UserRuntimeException(i18n.tr("''Send Email'' operation failed, email of lease participant {0} was not found", user.customer()
+                        .person().name().getStringView()));
             }
         }
 
         if (emailType == EmailTemplateType.TenantInvitation) {
             // check that selected users can be used for this template
-            for (ApplicationUserDTO user : users) {
-                if (user.leaseParticipant().isInstanceOf(Guarantor.class)) {
+            for (LeaseParticipant user : users) {
+                if (user.isInstanceOf(Guarantor.class)) {
                     throw new UserRuntimeException(i18n.tr(
                             "''Send Mail'' operation failed: can''t send \"{0}\" for Guarantor. Please re-send e-mail for all valid recipients.",
                             EmailTemplateType.TenantInvitation));
@@ -133,9 +133,9 @@ public class LeaseCrudServiceImpl extends LeaseCrudServiceBaseImpl<LeaseDTO> imp
 
             // send e-mails
             CommunicationFacade commFacade = ServerSideFactory.create(CommunicationFacade.class);
-            for (ApplicationUserDTO user : users) {
-                if (user.leaseParticipant().isInstanceOf(Tenant.class)) {
-                    Tenant tenant = user.leaseParticipant().duplicate(Tenant.class);
+            for (LeaseParticipant user : users) {
+                if (user.isInstanceOf(Tenant.class)) {
+                    Tenant tenant = user.duplicate(Tenant.class);
                     commFacade.sendTenantInvitation(tenant);
                 }
             }

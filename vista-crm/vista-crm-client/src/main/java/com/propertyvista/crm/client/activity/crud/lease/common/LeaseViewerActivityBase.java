@@ -26,7 +26,7 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.ui.crud.lease.common.LeaseViewerPresenterBase;
 import com.propertyvista.crm.rpc.services.lease.LeaseCrudServiceBase;
-import com.propertyvista.dto.ApplicationUserDTO;
+import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.dto.LeaseDTO;
 
 public abstract class LeaseViewerActivityBase<DTO extends LeaseDTO> extends ViewerActivityBase<DTO> implements LeaseViewerPresenterBase {
@@ -36,10 +36,10 @@ public abstract class LeaseViewerActivityBase<DTO extends LeaseDTO> extends View
     }
 
     @Override
-    public void retrieveUsers(final AsyncCallback<List<ApplicationUserDTO>> callback) {
-        ((LeaseCrudServiceBase<DTO>) service).retrieveUsers(new DefaultAsyncCallback<Vector<ApplicationUserDTO>>() {
+    public void retrieveUsers(final AsyncCallback<List<LeaseParticipant>> callback) {
+        ((LeaseCrudServiceBase<DTO>) service).retrieveUsers(new DefaultAsyncCallback<Vector<LeaseParticipant>>() {
             @Override
-            public void onSuccess(Vector<ApplicationUserDTO> result) {
+            public void onSuccess(Vector<LeaseParticipant> result) {
                 callback.onSuccess(result);
             }
         }, entityId);

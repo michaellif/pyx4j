@@ -25,7 +25,6 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
@@ -52,7 +51,7 @@ import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.CompletionType;
 import com.propertyvista.domain.tenant.lease.Lease.Status;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
-import com.propertyvista.dto.ApplicationUserDTO;
+import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.dto.BillDTO;
 import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.dto.PaymentRecordDTO;
@@ -98,9 +97,9 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
         sendMail = new Button(i18n.tr("Send Mail..."), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                ((LeaseViewerView.Presenter) presenter).retrieveUsers(new DefaultAsyncCallback<List<ApplicationUserDTO>>() {
+                ((LeaseViewerView.Presenter) presenter).retrieveUsers(new DefaultAsyncCallback<List<LeaseParticipant>>() {
                     @Override
-                    public void onSuccess(List<ApplicationUserDTO> result) {
+                    public void onSuccess(List<LeaseParticipant> result) {
                         new SendMailBox(result) {
                             @Override
                             public boolean onClickOk() {
@@ -309,27 +308,17 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
         }
     }
 
-    private abstract class SendMailBox extends EntitySelectorListDialog<ApplicationUserDTO> {
+    private abstract class SendMailBox extends EntitySelectorListDialog<LeaseParticipant> {
 
         private CComboBox<EmailTemplateType> emailType;
 
-        public SendMailBox(List<ApplicationUserDTO> applicationUsers) {
-            super(i18n.tr("Send Mail"), true, applicationUsers, new EntitySelectorListDialog.Formatter<ApplicationUserDTO>() {
-                @Override
-                public String format(ApplicationUserDTO entity) {
-                    return SimpleMessageFormat.format(//@formatter:off
-                            "{0}, {1}",
-                            entity.leaseParticipant().customer().person().name().getStringView(),
-                            entity.role().getStringView()
-                    );//@formatter:on
-                }
-            });
-
+        public SendMailBox(List<LeaseParticipant> applicationUsers) {
+            super(i18n.tr("Send Mail"), true, applicationUsers);
             getOkButton().setText(i18n.tr("Send"));
         }
 
         @Override
-        protected Widget initBody(boolean isMultiselectAllowed, List<ApplicationUserDTO> data) {
+        protected Widget initBody(boolean isMultiselectAllowed, List<LeaseParticipant> data) {
             VerticalPanel body = new VerticalPanel();
             body.add(new HTML(i18n.tr("Select Tenants:")));
             body.add(super.initBody(isMultiselectAllowed, data));

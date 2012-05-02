@@ -21,7 +21,7 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.crm.rpc.dto.LeaseApplicationActionDTO;
-import com.propertyvista.dto.ApplicationUserDTO;
+import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.dto.LeaseApplicationDTO;
 
 public interface LeaseApplicationCrudService extends LeaseCrudServiceBase<LeaseApplicationDTO> {
@@ -31,7 +31,7 @@ public interface LeaseApplicationCrudService extends LeaseCrudServiceBase<LeaseA
     /**
      * callback returns a message that should be passed to the users.
      */
-    void inviteUsers(AsyncCallback<String> callback, Key entityId, Vector<ApplicationUserDTO> users);
+    void inviteUsers(AsyncCallback<String> callback, Key entityId, Vector<LeaseParticipant> users);
 
     void applicationAction(AsyncCallback<VoidSerializable> callback, LeaseApplicationActionDTO actionDTO);
 }
