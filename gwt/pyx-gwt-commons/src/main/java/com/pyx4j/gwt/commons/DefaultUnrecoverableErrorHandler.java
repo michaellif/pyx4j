@@ -87,6 +87,7 @@ public abstract class DefaultUnrecoverableErrorHandler implements UnrecoverableE
                 break;
             case 12007:
             case 12029:
+            case 12152:
                 showInternetConnectionError();
                 break;
             default:
