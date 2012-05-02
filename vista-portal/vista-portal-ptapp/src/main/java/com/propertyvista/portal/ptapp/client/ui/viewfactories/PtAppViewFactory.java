@@ -25,6 +25,7 @@ import com.propertyvista.common.client.ui.components.security.PasswordChangeView
 import com.propertyvista.common.client.ui.components.security.PasswordResetView;
 import com.propertyvista.common.client.ui.components.security.PasswordResetViewImpl;
 import com.propertyvista.common.client.viewfactories.ViewFactoryBase;
+import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.portal.ptapp.client.ui.ApplicationSelectionView;
 import com.propertyvista.portal.ptapp.client.ui.ApplicationSelectionViewImpl;
 import com.propertyvista.portal.ptapp.client.ui.ApplicationStatusView;
@@ -48,6 +49,8 @@ import com.propertyvista.portal.ptapp.client.ui.TopRightActionsView;
 import com.propertyvista.portal.ptapp.client.ui.TopRightActionsViewImpl;
 import com.propertyvista.portal.ptapp.client.ui.UserMessageView;
 import com.propertyvista.portal.ptapp.client.ui.UserMessageViewImpl;
+import com.propertyvista.portal.ptapp.client.ui.steps.welcomewizard.welcome.WelcomeView;
+import com.propertyvista.portal.ptapp.client.ui.steps.welcomewizard.welcome.WelcomeViewImpl;
 
 public class PtAppViewFactory extends ViewFactoryBase {
 
@@ -93,6 +96,12 @@ public class PtAppViewFactory extends ViewFactoryBase {
             } else if (PasswordChangeView.class.equals(type)) {
                 map.put(type, new PasswordChangeViewImpl());
 
+            }
+
+            if (VistaTODO.enableWelcomeWizardDemoMode) {
+                if (WelcomeView.class.equals(type)) {
+                    map.put(type, new WelcomeViewImpl());
+                }
             }
 
         }

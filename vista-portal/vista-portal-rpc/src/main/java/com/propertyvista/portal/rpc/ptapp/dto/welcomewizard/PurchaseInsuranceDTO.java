@@ -22,7 +22,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
-import com.propertyvista.domain.payment.PaymentMethod;
+import com.propertyvista.domain.tenant.ptapp.DigitalSignature;
 import com.propertyvista.portal.rpc.ptapp.dto.LegalTermsDescriptorDTO;
 
 @Transient
@@ -101,7 +101,12 @@ public interface PurchaseInsuranceDTO extends IEntity {
     // Personal Disclaimer
     IList<LegalTermsDescriptorDTO> personalDisclaimerTerms();
 
+    // Digital Signature
+    IList<DigitalSignature> digitalSignatures();
+
     @EmbeddedEntity
-    PaymentMethod paymentMethod();
+    InsurancePaymentMethodDTO paymentMethod();
+
+    IList<LegalTermsDescriptorDTO> agreementLegalBlurbAndPreAuthorizationAgreeement();
 
 }

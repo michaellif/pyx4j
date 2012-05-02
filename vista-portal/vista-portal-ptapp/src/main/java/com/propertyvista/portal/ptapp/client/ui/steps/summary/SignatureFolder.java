@@ -81,16 +81,16 @@ public class SignatureFolder extends VistaBoxFolder<DigitalSignature> {
             FormFlexPanel main = new FormFlexPanel();
 
             int row = -1;
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().person().name(), new CEntityLabel<Name>()), 25).build());
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().fullName()), 25).build());
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().person().name(), new CEntityLabel<Name>()), 10).build());
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().fullName()), 10).build());
             if (editable) {
                 get(proto().fullName()).inheritViewable(false); // always not viewable!
                 get(proto().fullName()).inheritEditable(false); // control state later in populate...
             }
 
             row = -1;
-            main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().ipAddress()), 20).build());
-            main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().timestamp()), 20).build());
+            main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().ipAddress()), 10).build());
+            main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().timestamp()), 10).build());
 
             main.setStyleName(DEFAULT_STYLE_PREFIX);
             return main;

@@ -37,15 +37,19 @@ public class MoveInScheduleForm extends CEntityDecoratableEditor<MoveInScheduleD
         get(proto().reserveElevator()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
             public void onValueChange(ValueChangeEvent<Boolean> event) {
-                get(proto().elevatorReserveFrom()).setVisible(event.getValue());
-                get(proto().elevatorReserveTo()).setVisible(event.getValue());
+                get(proto().elevatorDay()).setVisible(event.getValue());
+                get(proto().elevatorSchedule()).setVisible(event.getValue());
             }
         });
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().elevatorReserveFrom()), 10).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().elevatorReserveTo()), 10).build());
-        get(proto().elevatorReserveFrom()).setVisible(false);
-        get(proto().elevatorReserveTo()).setVisible(false);
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().elevatorDay()), 10).build());
+        content.setWidget(++row, 0, inject(proto().elevatorSchedule(), new ScheduleFolder()));
+
+        get(proto().elevatorDay()).setVisible(false);
+        get(proto().elevatorSchedule()).setVisible(false);
+
+//        get(proto().elevatorReserveFrom()).setVisible(false);
+//        get(proto().elevatorReserveTo()).setVisible(false);
+
         return content;
     }
-
 }

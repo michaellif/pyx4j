@@ -13,16 +13,20 @@
  */
 package com.propertyvista.portal.server.ptapp.services.steps.welcomewizard;
 
+import java.util.Date;
+
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.server.contexts.Context;
 
-import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.policy.policies.domain.LegalTermsContent;
+import com.propertyvista.domain.tenant.ptapp.DigitalSignature;
 import com.propertyvista.portal.domain.ptapp.IAgree;
 import com.propertyvista.portal.rpc.ptapp.dto.LegalTermsDescriptorDTO;
 import com.propertyvista.portal.rpc.ptapp.dto.welcomewizard.InsuranceDTO;
+import com.propertyvista.portal.rpc.ptapp.dto.welcomewizard.InsurancePaymentMethodDTO.PaymentMethod;
 import com.propertyvista.portal.rpc.ptapp.services.steps.welcomewizard.InsuranceService;
 
 public class InsuranceServiceImpl implements InsuranceService {
@@ -51,24 +55,39 @@ public class InsuranceServiceImpl implements InsuranceService {
               "</ol>";
     //@formatter:on
 
+    private final static String AGREEMENT_LEGAL_BLURB_AND_PRE_AUTHORIZATION_AGREEMENT =//@formatter:off
+            "TBD";
+    //@formatter:on
+
     @Override
     public void retrieve(AsyncCallback<InsuranceDTO> callback, Key tenantId) {
         InsuranceDTO insurance = EntityFactory.create(InsuranceDTO.class);
-        insurance.purchaseInsurance().paymentMethod().type().setValue(PaymentType.Echeck);
+        insurance.purchaseInsurance().paymentMethod().paymentMethod().setValue(PaymentMethod.Visa);
 
         LegalTermsDescriptorDTO personalDisclaimerDescriptor = EntityFactory.create(LegalTermsDescriptorDTO.class);
         LegalTermsContent personalDisclaimerContent = EntityFactory.create(LegalTermsContent.class);
         personalDisclaimerContent.content().setValue(PERSONAL_DISCLAIMER);
-        personalDisclaimerContent.localizedCaption().setValue("Terms");
+        personalDisclaimerContent.localizedCaption().setValue("Personal Disclaimer");
         personalDisclaimerDescriptor.content().set(personalDisclaimerContent);
 
         IAgree agreeHolder = EntityFactory.create(IAgree.class);
-        agreeHolder.person().set(WelcomeWizardDemoData.applicantsPerson());
+        agreeHolder.person().set(WelcomeWizardDemoData.applicantsCustomer().person().duplicate());
         personalDisclaimerDescriptor.agrees().add(agreeHolder);
 
         insurance.purchaseInsurance().personalDisclaimerTerms().add(personalDisclaimerDescriptor);
 
+        DigitalSignature signature = insurance.purchaseInsurance().digitalSignatures().$();
+        signature.ipAddress().setValue(Context.getRequestRemoteAddr());
+        signature.timestamp().setValue(new Date());
+        signature.person().set(WelcomeWizardDemoData.applicantsCustomer());
+        insurance.purchaseInsurance().digitalSignatures().add(signature);
+
+        LegalTermsDescriptorDTO agreement = insurance.purchaseInsurance().agreementLegalBlurbAndPreAuthorizationAgreeement().$();
+        agreement.content().content().setValue(AGREEMENT_LEGAL_BLURB_AND_PRE_AUTHORIZATION_AGREEMENT);
+        agreement.content().localizedCaption().setValue("AGREEMENT LEGAL BLURB AND PRE-AUTHORIZATION AGREEMENT");
+
         insurance.existingInsurance().documents().add(insurance.existingInsurance().documents().$());
+
         callback.onSuccess(insurance);
     }
 

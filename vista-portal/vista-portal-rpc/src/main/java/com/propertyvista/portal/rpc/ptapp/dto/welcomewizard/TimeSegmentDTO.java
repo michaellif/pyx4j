@@ -7,7 +7,7 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Apr 16, 2012
+ * Created on May 2, 2012
  * @author ArtyomB
  * @version $Id$
  */
@@ -15,33 +15,26 @@ package com.propertyvista.portal.rpc.ptapp.dto.welcomewizard;
 
 import java.sql.Time;
 
-import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.annotations.Caption;
-import com.pyx4j.entity.annotations.Editor;
-import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.annotations.I18n;
+import com.pyx4j.i18n.annotations.I18n.I18nStrategy;
 
 @Transient
-public interface MoveInScheduleDTO extends IEntity {
+public interface TimeSegmentDTO extends IEntity {
 
-    IPrimitive<LogicalDate> moveInDay();
+    @I18n(strategy = I18nStrategy.IgnoreThis)
+    public enum Status {
 
-    IPrimitive<Boolean> reserveElevator();
+        busy, free, booked
 
-    /** Only for UI */
-    @Caption(name = "From")
-    @Editor(type = EditorType.timepicker)
-    IPrimitive<Time> elevatorReserveFrom();
+    }
 
-    /** Only for UI */
-    @Caption(name = "To")
-    @Editor(type = EditorType.timepicker)
-    IPrimitive<Time> elevatorReserveTo();
+    IPrimitive<Time> start();
 
-    IPrimitive<LogicalDate> elevatorDay();
+    IPrimitive<Time> end();
 
-    IList<TimeSegmentDTO> elevatorSchedule();
+    IPrimitive<Status> status();
+
 }

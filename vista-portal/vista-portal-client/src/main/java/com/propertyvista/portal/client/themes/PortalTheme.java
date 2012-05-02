@@ -32,6 +32,7 @@ import com.propertyvista.common.client.theme.HorizontalAlignCenterMixin;
 import com.propertyvista.common.client.theme.NewPaymentMethodEditorTheme;
 import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.domain.site.SiteDescriptor.Skin;
+import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.portal.client.ui.PortalScreen;
 import com.propertyvista.portal.client.ui.maps.PropertiesMapWidget;
 
@@ -154,6 +155,9 @@ public class PortalTheme extends VistaTheme {
         initSiteViewStyles();
         initPropertyMarkerStyle();
 
+        if (VistaTODO.enableWelcomeWizardDemoMode) {
+            initElevatorScheduleTheme();
+        }
     }
 
     protected void initSiteViewStyles() {
@@ -244,4 +248,9 @@ public class PortalTheme extends VistaTheme {
 
     }
 
+    private void initElevatorScheduleTheme() {
+        if (VistaTODO.enableWelcomeWizardDemoMode) {
+            // TODO 
+        }
+    }
 }

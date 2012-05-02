@@ -39,6 +39,7 @@ import com.propertyvista.portal.ptapp.client.activity.steps.TenantsActivity;
 import com.propertyvista.portal.ptapp.client.activity.steps.welcomewizard.InsuranceActivity;
 import com.propertyvista.portal.ptapp.client.activity.steps.welcomewizard.LeaseReviewActivity;
 import com.propertyvista.portal.ptapp.client.activity.steps.welcomewizard.MoveInScheduleActivity;
+import com.propertyvista.portal.ptapp.client.activity.steps.welcomewizard.WelcomeActivity;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 
 public class ContentActivityMapper implements ActivityMapper {
@@ -94,6 +95,8 @@ public class ContentActivityMapper implements ActivityMapper {
                 return new InsuranceActivity(appPlace);
             } else if (place instanceof PtSiteMap.WelcomeWizard.Completion) {
                 return new com.propertyvista.portal.ptapp.client.activity.steps.welcomewizard.CompletionActivity(appPlace);
+            } else if (place instanceof PtSiteMap.WelcomeWizard.WelcomePlace) {
+                return new WelcomeActivity();
             }
         }
 

@@ -7,20 +7,22 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Apr 13, 2012
+ * Created on May 1, 2012
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.portal.rpc.ptapp.dto.welcomewizard;
+package com.propertyvista.portal.ptapp.client.ui.steps.welcomewizard.welcome;
 
-import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
+import com.google.gwt.user.client.ui.IsWidget;
 
-import com.propertyvista.portal.rpc.ptapp.dto.LegalTermsDescriptorDTO;
+public interface WelcomeView extends IsWidget {
 
-@Transient
-public interface LeaseReviewDTO extends IEntity {
+    public interface Presenter {
 
-    IList<LegalTermsDescriptorDTO> leaseAgreementTerms();
+        void startTheWizard();
+
+    }
+
+    void setPresenter(Presenter welcomeActivity);
+
 }

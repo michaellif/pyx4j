@@ -13,6 +13,8 @@
  */
 package com.propertyvista.portal.ptapp.client.ui.steps.welcomewizard.insurance;
 
+import static com.propertyvista.portal.ptapp.client.ui.steps.welcomewizard.insurance.Utils.formatMoney;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -36,8 +38,10 @@ import com.pyx4j.forms.client.validators.ValidationFailure;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
-import com.propertyvista.common.client.ui.components.c.NewPaymentMethodForm;
+import com.propertyvista.portal.ptapp.client.resources.welcomewizard.WelcomeWizardResources;
 import com.propertyvista.portal.ptapp.client.ui.steps.summary.LeaseTemsFolder;
+import com.propertyvista.portal.ptapp.client.ui.steps.summary.SignatureFolder;
+import com.propertyvista.portal.ptapp.client.ui.steps.welcomewizard.reviewlease.LeaseTermsFolder;
 import com.propertyvista.portal.rpc.ptapp.dto.welcomewizard.ExistingInsurance;
 import com.propertyvista.portal.rpc.ptapp.dto.welcomewizard.InsuranceDTO;
 import com.propertyvista.portal.rpc.ptapp.dto.welcomewizard.PurchaseInsuranceDTO;
@@ -45,11 +49,6 @@ import com.propertyvista.portal.rpc.ptapp.dto.welcomewizard.PurchaseInsuranceDTO
 public class InsuranceForm extends CEntityDecoratableEditor<InsuranceDTO> {
 
     private final static I18n i18n = I18n.get(InsuranceForm.class);
-
-    private final static String WHY_WE_NEED_INSURANCE_EXPLANATION = ""
-            + "As per your agreement, you must have Tenant Insurance with a minimum liability of $x,xxx,xxx. "
-            + "For your convenience, we have teamed up with TenantSure to provide you your Tenant insurance. "
-            + "Please answer the following Questions in order for TenantSure to provide you with the best insurance rate.";
 
     private final static Integer[] PERSONAL_CONTENTS_LIMITS_OPTIONS = { 10000, 12000, 14000, 16000, 18000, 20000, 22000, 24000, 26000, 28000, 30000, 35000,
             40000, 50000, 60000 };
@@ -84,53 +83,24 @@ public class InsuranceForm extends CEntityDecoratableEditor<InsuranceDTO> {
         content.setWidget(++row, 0, inject(proto().purchaseInsurance(), new PurchaseInsuranceForm()));
 
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().alreadyHaveInsurance())).build());
+        content.getFlexCellFormatter().getElement(row, 0).getStyle().setPaddingTop(3, Unit.EM);
+        get(proto().alreadyHaveInsurance()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+
+            @Override
+            public void onValueChange(ValueChangeEvent<Boolean> event) {
+                PurchaseInsuranceForm form = (PurchaseInsuranceForm) get(proto().purchaseInsurance());
+                form.setEnabled(event.getValue() != true);
+                form.setQuoteTotalPanelVisibility(event.getValue() != true);
+            }
+        });
         content.setWidget(++row, 0, inject(proto().existingInsurance(), new ExistingInsuranceForm()));
 
         return content;
     }
 
-    public static String formatMoney(Integer value) {
-        assert value >= 0;
-        if (value == 0) {
-            return "No";
-        } else {
-            StringBuilder formatted = new StringBuilder();
-            formatted.append('$');
-            String stringValue = String.valueOf(value);
-            for (int i = 0; i < stringValue.length(); ++i) {
-                if (i != 0 & ((stringValue.length() - i) % 3 == 0)) {
-                    formatted.append(",");
-                }
-                formatted.append(stringValue.charAt(i));
-            }
-            return formatted.toString();
-        }
-    }
+    public class PurchaseInsuranceForm extends CEntityDecoratableEditor<PurchaseInsuranceDTO> {
 
-    public static String formatMoney(BigDecimal money) {
-        assert money.compareTo(BigDecimal.ZERO) >= 0;
-        if (money.equals(BigDecimal.ZERO)) {
-            return "No";
-        } else {
-            String[] stringValue = money.toPlainString().split("\\.");
-            StringBuilder formatted = new StringBuilder();
-            formatted.append("$");
-            for (int a = 0; a < stringValue.length; ++a) {
-                for (int i = 0; i < stringValue[a].length(); ++i) {
-                    if (((stringValue[a].length() - i) % 3 == 0) & i != 0) {
-                        formatted.append(",");
-                    }
-                    formatted.append(stringValue[a].charAt(i));
-                }
-                if (a == 0) {
-                    formatted.append(".");
-                }
-            }
-            return formatted.toString();
-        }
-    }
-
-    public static class PurchaseInsuranceForm extends CEntityDecoratableEditor<PurchaseInsuranceDTO> {
+        private VerticalPanel quoteTotalPanel;
 
         public PurchaseInsuranceForm() {
             super(PurchaseInsuranceDTO.class);
@@ -138,12 +108,13 @@ public class InsuranceForm extends CEntityDecoratableEditor<InsuranceDTO> {
 
         @Override
         public IsWidget createContent() {
-
             FormFlexPanel content = new FormFlexPanel();
+            content.getColumnFormatter().setWidth(0, "50%");
+            content.getColumnFormatter().setWidth(1, "50%");
 
             FormFlexPanel insuranceTerms = new FormFlexPanel();
             int row = -1;
-            insuranceTerms.setWidget(++row, 0, new HTML(WHY_WE_NEED_INSURANCE_EXPLANATION));
+            insuranceTerms.setWidget(++row, 0, new HTML(WelcomeWizardResources.INSTANCE.insuranceReasonExplanation().getText()));
             insuranceTerms.setH1(++row, 0, 1, i18n.tr("Coverage"));
             insuranceTerms.setH2(++row, 0, 1, i18n.tr("Personal Contents"));
             insuranceTerms.setWidget(++row, 0,
@@ -188,18 +159,23 @@ public class InsuranceForm extends CEntityDecoratableEditor<InsuranceDTO> {
             insuranceTerms.setH2(++row, 0, 1, i18n.tr("Personal Disclaimer"));
             insuranceTerms.setWidget(++row, 0, inject(proto().personalDisclaimerTerms(), new LeaseTemsFolder(true)));
 
-            // payment 
-            insuranceTerms.setWidget(++row, 0, inject(proto().paymentMethod(), new NewPaymentMethodForm()));
+            insuranceTerms.setWidget(++row, 0, inject(proto().digitalSignatures(), new SignatureFolder(true)));
+            insuranceTerms.getFlexCellFormatter().setColSpan(row, 0, 2);
+
+            insuranceTerms.setWidget(++row, 0, inject(proto().paymentMethod(), new InsurancePaymentMethodForm()));
+            insuranceTerms.setWidget(++row, 0, inject(proto().agreementLegalBlurbAndPreAuthorizationAgreeement(), new LeaseTermsFolder(true)));
 
             content.setWidget(0, 0, new ScrollPanel(insuranceTerms));
-            content.getFlexCellFormatter().setWidth(0, 0, "50%");
 
-            VerticalPanel quoteTotalPanel = new VerticalPanel();
+            quoteTotalPanel = new VerticalPanel();
             quoteTotalPanel.setWidth("20em");
             quoteTotalPanel.getElement().getStyle().setPosition(Position.FIXED);
             quoteTotalPanel.getElement().getStyle().setTop(50, Unit.PCT);
             quoteTotalPanel.getElement().getStyle().setRight(0, Unit.PCT);
             quoteTotalPanel.getElement().getStyle().setBackgroundColor("#FFFFFF");
+            quoteTotalPanel.getElement().getStyle().setProperty("borderStyle", "outset");
+            quoteTotalPanel.getElement().getStyle().setBorderColor("#000000");
+            quoteTotalPanel.getElement().getStyle().setBorderWidth(1, Unit.PX);
 
             {
                 quoteTotalPanel.add(new DecoratorBuilder(inject(proto().monthlyInsurancePremium()), 10).build());
@@ -212,6 +188,10 @@ public class InsuranceForm extends CEntityDecoratableEditor<InsuranceDTO> {
             content.setWidget(0, 1, quoteTotalPanel);
 
             return content;
+        }
+
+        public void setQuoteTotalPanelVisibility(boolean isVisible) {
+            quoteTotalPanel.setVisible(isVisible);
         }
 
         private BigDecimal premium() {
