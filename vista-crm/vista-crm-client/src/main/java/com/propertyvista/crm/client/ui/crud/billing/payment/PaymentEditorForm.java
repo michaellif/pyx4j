@@ -14,9 +14,13 @@
 package com.propertyvista.crm.client.ui.crud.billing.payment;
 
 import java.util.Collection;
+import java.util.EnumSet;
 
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CNumberLabel;
 import com.pyx4j.forms.client.ui.CRadioGroupEnum;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
@@ -33,6 +37,7 @@ import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.dto.PaymentRecordDTO;
+import com.propertyvista.dto.PaymentRecordDTO.PaymentSelect;
 
 public class PaymentEditorForm extends CrmEntityForm<PaymentRecordDTO> {
 
@@ -85,6 +90,8 @@ public class PaymentEditorForm extends CrmEntityForm<PaymentRecordDTO> {
                 };
             }
         }), 25).build());
+
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().paymentSelect(), new CComboBox<PaymentSelect>()), 10).build());
         main.setWidget(++row, 0,
                 new DecoratorBuilder(inject(proto().paymentType(), new CRadioGroupEnum<PaymentType>(PaymentType.class, RadioGroup.Layout.HORISONTAL) {
                     @Override
@@ -113,6 +120,14 @@ public class PaymentEditorForm extends CrmEntityForm<PaymentRecordDTO> {
         get(proto().paymentStatus()).setViewable(true);
 //        get(proto().transactionErrorMessage()).setViewable(true);
 //        get(proto().transactionAuthorizationNumber()).setViewable(true);
+
+        ((CComboBox<PaymentSelect>) get(proto().paymentSelect())).setOptions(EnumSet.allOf(PaymentSelect.class));
+        get(proto().paymentSelect()).addValueChangeHandler(new ValueChangeHandler<PaymentSelect>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<PaymentSelect> event) {
+                get(proto().paymentType()).setVisible(event.getValue() == PaymentSelect.New);
+            }
+        });
 
         main.getColumnFormatter().setWidth(0, "50%");
         main.getColumnFormatter().setWidth(1, "50%");

@@ -18,8 +18,11 @@ import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.ExtendsDBO;
 import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.annotations.I18n;
+import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.payment.PaymentType;
@@ -30,6 +33,19 @@ import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 @ExtendsDBO
 public interface PaymentRecordDTO extends PaymentRecord {
 
+    @I18n
+    enum PaymentSelect {
+
+        New,
+
+        Existing;
+
+        @Override
+        public String toString() {
+            return I18nEnum.toString(this);
+        }
+    };
+
     IPrimitive<String> propertyCode();
 
     IPrimitive<String> unitNumber();
@@ -38,10 +54,15 @@ public interface PaymentRecordDTO extends PaymentRecord {
 
     IPrimitive<Status> leaseStatus();
 
+    @NotNull
     LeaseParticipant leaseParticipant();
 
     IList<LeaseParticipant> participants();
 
+    @NotNull
+    IPrimitive<PaymentSelect> paymentSelect();
+
+    @NotNull
     @Caption(name = "Payment Method")
     @Editor(type = EditorType.radiogroup)
     IPrimitive<PaymentType> paymentType();

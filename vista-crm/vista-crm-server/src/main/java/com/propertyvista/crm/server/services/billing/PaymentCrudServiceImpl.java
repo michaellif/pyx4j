@@ -31,6 +31,7 @@ import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.dto.PaymentRecordDTO;
+import com.propertyvista.dto.PaymentRecordDTO.PaymentSelect;
 
 public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRecord, PaymentRecordDTO> implements PaymentCrudService {
 
@@ -51,6 +52,8 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
         dto.participants().addAll(retrieveUsers(dto.billingAccount().lease()));
 
         dto.paymentType().set(dto.paymentMethod().type());
+
+        dto.paymentSelect().setValue(PaymentSelect.New);
     }
 
     @Override
