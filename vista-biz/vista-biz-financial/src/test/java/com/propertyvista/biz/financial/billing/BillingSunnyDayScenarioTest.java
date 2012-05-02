@@ -20,8 +20,11 @@
  */
 package com.propertyvista.biz.financial.billing;
 
+import com.pyx4j.config.server.ServerSideFactory;
+
 import com.propertyvista.biz.financial.FinancialTestBase;
 import com.propertyvista.biz.financial.SysDateManager;
+import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.AdjustmentType;
@@ -64,7 +67,7 @@ public class BillingSunnyDayScenarioTest extends FinancialTestBase {
 
         //==================== RUN 1 ======================//
 
-        SysDateManager.setSysDate("18-Mar-2011");
+        SysDateManager.setSysDate("17-Mar-2011");
         setLeaseStatus(Lease.Status.Approved);
 
         Bill bill = runBilling(true, true);
@@ -86,11 +89,12 @@ public class BillingSunnyDayScenarioTest extends FinancialTestBase {
         totalDueAmount("1463.04");
         // @formatter:on
 
-        receiveAndPostPayment("19-Mar-2011", "1463.04");
-
         //==================== RUN 2 ======================//
 
         SysDateManager.setSysDate("18-Mar-2011");
+
+        receiveAndPostPayment("18-Mar-2011", "1463.04");
+
         setLeaseStatus(Lease.Status.Active);
 
         bill = runBilling(true, true);
@@ -103,7 +107,7 @@ public class BillingSunnyDayScenarioTest extends FinancialTestBase {
         billingPeriodStartDate("1-Apr-2011").
         billingPeriodEndDate("30-Apr-2011").
         numOfProductCharges(5).
-        paymentReceivedAmount("1463.04").
+        paymentReceivedAmount("-1463.04").
         serviceCharge("905.30").
         recurringFeatureCharges("136.67").
         oneTimeFeatureCharges("0.00").
@@ -131,7 +135,7 @@ public class BillingSunnyDayScenarioTest extends FinancialTestBase {
         billingPeriodStartDate("1-May-2011").
         billingPeriodEndDate("31-May-2011").
         numOfProductCharges(7).
-        paymentReceivedAmount("1167.01").
+        paymentReceivedAmount("-1167.01").
         serviceCharge("905.30").
         recurringFeatureCharges("188.00").
         oneTimeFeatureCharges("200.00").
@@ -160,7 +164,7 @@ public class BillingSunnyDayScenarioTest extends FinancialTestBase {
         billingPeriodStartDate("1-June-2011").
         billingPeriodEndDate("30-June-2011").
         numOfProductCharges(6).
-        paymentReceivedAmount("1448.50").
+        paymentReceivedAmount("-1448.50").
         serviceCharge("905.30").
         recurringFeatureCharges("188.00").
         oneTimeFeatureCharges("100.00").
@@ -187,7 +191,7 @@ public class BillingSunnyDayScenarioTest extends FinancialTestBase {
         billingPeriodStartDate("1-Jul-2011").
         billingPeriodEndDate("31-Jul-2011").
         numOfProductCharges(5).
-        paymentReceivedAmount("1086.50").
+        paymentReceivedAmount("-1086.50").
         serviceCharge("905.30").
         recurringFeatureCharges("188.00").
         oneTimeFeatureCharges("0.00").
@@ -211,7 +215,7 @@ public class BillingSunnyDayScenarioTest extends FinancialTestBase {
         billingPeriodStartDate("01-Aug-2011").
         billingPeriodEndDate("03-Aug-2011").
         numOfProductCharges(5).
-        paymentReceivedAmount("1154.50").
+        paymentReceivedAmount("-1154.50").
         serviceCharge("87.61").
         recurringFeatureCharges("18.19").
         oneTimeFeatureCharges("0.00").
@@ -237,6 +241,8 @@ public class BillingSunnyDayScenarioTest extends FinancialTestBase {
         billingPeriodStartDate(null).
         billingPeriodEndDate(null);
         // @formatter:on
+
+        printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
 
     }
 

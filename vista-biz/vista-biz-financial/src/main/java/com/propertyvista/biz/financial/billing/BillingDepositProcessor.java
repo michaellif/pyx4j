@@ -111,8 +111,8 @@ public class BillingDepositProcessor extends AbstractProcessor {
 
     private void attachDepositRefund(InvoiceDepositRefund depositRefund) {
         billing.getNextPeriodBill().lineItems().add(depositRefund);
-        billing.getNextPeriodBill().paymentReceivedAmount()
-                .setValue(billing.getNextPeriodBill().depositRefundAmount().getValue().add(depositRefund.amount().getValue()));
+        billing.getNextPeriodBill().depositRefundAmount()
+                .setValue(billing.getNextPeriodBill().depositRefundAmount().getValue().add(depositRefund.amount().getValue().negate()));
     }
 
 }

@@ -20,6 +20,7 @@
  */
 package com.propertyvista.biz.financial.billing;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -33,6 +34,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.biz.financial.SysDateManager;
+import com.propertyvista.biz.financial.ar.ARException;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.ar.ARTransactionManager;
 import com.propertyvista.domain.financial.BillingAccount;
@@ -167,7 +169,9 @@ public class BillingLifecycle {
         Persistence.service().retrieve(bill.lineItems());
         List<InvoiceLineItem> lineItems = bill.lineItems();
         for (InvoiceLineItem invoiceLineItem : lineItems) {
-            ServerSideFactory.create(ARFacade.class).postInvoiceLineItem(invoiceLineItem);
+            if (invoiceLineItem.postDate().isNull() && !invoiceLineItem.amount().getValue().equals(new BigDecimal("0.00"))) {
+                ServerSideFactory.create(ARFacade.class).postInvoiceLineItem(invoiceLineItem);
+            }
         }
     }
 

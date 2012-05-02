@@ -221,6 +221,8 @@ public class BillingProductChargeProcessor extends AbstractProcessor {
 
         calculateTax(charge);
 
+        charge.description().setValue(charge.chargeSubLineItem().billableItem().item().description().getStringView());
+
         return charge;
     }
 

@@ -32,7 +32,7 @@ public class ARPaymentProcessor extends AbstractProcessor {
 
         InvoicePayment payment = EntityFactory.create(InvoicePayment.class);
         payment.paymentRecord().set(paymentRecord);
-        payment.amount().setValue(paymentRecord.amount().getValue());
+        payment.amount().setValue(paymentRecord.amount().getValue().negate());
         payment.billingAccount().set(paymentRecord.billingAccount());
 
         payment.description().setValue(i18n.tr("Payment Received - Thank You"));
@@ -48,7 +48,6 @@ public class ARPaymentProcessor extends AbstractProcessor {
     }
 
     void rejectPayment(PaymentRecord payment) {
-        payment.paymentStatus().setValue(PaymentRecord.PaymentStatus.Rejected);
 
         //TODO Add InvoicePaymentBackOut creation and InvoiceNSFDebit
 

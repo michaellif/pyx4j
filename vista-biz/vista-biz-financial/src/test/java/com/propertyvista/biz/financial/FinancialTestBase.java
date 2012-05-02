@@ -20,9 +20,12 @@
  */
 package com.propertyvista.biz.financial;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.math.BigDecimal;
 
 import com.pyx4j.commons.LogicalDate;
@@ -31,6 +34,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
 import com.pyx4j.essentials.server.dev.DataDump;
+import com.pyx4j.gwt.server.IOUtils;
 
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.billing.BillingFacade;
@@ -47,6 +51,7 @@ import com.propertyvista.biz.financial.preload.TenantDataModel;
 import com.propertyvista.config.tests.VistaDBTestBase;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.Bill;
+import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.Feature.Type;
 import com.propertyvista.domain.financial.offering.ProductItem;
@@ -60,6 +65,7 @@ import com.propertyvista.domain.tenant.lease.Deposit.ValueType;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustmentReason;
+import com.propertyvista.dto.TransactionHistoryDTO;
 
 public abstract class FinancialTestBase extends VistaDBTestBase {
 
@@ -140,6 +146,10 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         }
 
         return bill;
+    }
+
+    protected void printTransactionHistory(TransactionHistoryDTO transactionHistory) {
+        TransactionHistoryPrinter.printTransactionHistory(transactionHistory, transactionHistoryFileName(transactionHistory, getClass().getSimpleName()));
     }
 
     protected void setLeaseConditions(String leaseDateFrom, String leaseDateTo, Integer billingPeriodStartDate) {
@@ -376,7 +386,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
 
     protected static String billFileName(Bill bill, String prefix) {
         String ext = ".pdf";
-        File dir = new File("target", "reports-dump");
+        File dir = new File("target", "bills-dump");
         if (!dir.exists()) {
             if (!dir.mkdirs()) {
                 throw new Error("Can't create directory " + dir.getAbsolutePath());
@@ -388,6 +398,18 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
                 throw new Error("Can't delete file " + file.getAbsolutePath());
             }
         }
+        return file.getAbsolutePath();
+    }
+
+    protected static String transactionHistoryFileName(TransactionHistoryDTO transactionHistory, String prefix) {
+        String ext = ".txt";
+        File dir = new File("target", "transaction-history-dump");
+        if (!dir.exists()) {
+            if (!dir.mkdirs()) {
+                throw new Error("Can't create directory " + dir.getAbsolutePath());
+            }
+        }
+        File file = new File(dir, prefix + "-" + transactionHistory.issueDate().getValue() + ext);
         return file.getAbsolutePath();
     }
 }

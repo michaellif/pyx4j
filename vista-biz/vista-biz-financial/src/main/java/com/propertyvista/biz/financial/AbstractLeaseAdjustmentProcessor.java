@@ -31,7 +31,7 @@ public class AbstractLeaseAdjustmentProcessor extends AbstractProcessor {
         InvoiceAccountCharge charge = EntityFactory.create(InvoiceAccountCharge.class);
 
         charge.billingAccount().set(adjustment.billingAccount());
-        charge.amount().setValue(adjustment.amount().getValue().negate());
+        charge.amount().setValue(adjustment.amount().getValue());
         charge.adjustment().set(adjustment);
         charge.targetDate().setValue(adjustment.targetDate().getValue());
         charge.description().setValue(adjustment.reason().name().getValue());

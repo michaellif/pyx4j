@@ -33,7 +33,11 @@ public class ARTransactionManager {
 
     static void postInvoiceLineItem(InvoiceLineItem invoiceLineItem) {
         if (!invoiceLineItem.postDate().isNull()) {
-            return;
+            throw new ARException("The LineItem is already posted");
+        }
+
+        if (invoiceLineItem.amount().getValue().equals(new BigDecimal("0.00"))) {
+            throw new ARException("The LineItem has 0 value");
         }
 
         invoiceLineItem.postDate().setValue(new LogicalDate(SysDateManager.getSysDate()));
@@ -59,14 +63,6 @@ public class ARTransactionManager {
 
     }
 
-//    for (DebitCreditLink link : invoiceCredit.debitLinks()) {
-//        invoiceCredit.outstandingCredit().setValue(invoiceCredit.outstandingCredit().getValue().subtract(link.amount().getValue()));
-//    }
-//
-//    for (DebitCreditLink link : invoiceDebit.creditLinks()) {
-//        invoiceDebit.outstandingDebit().setValue(invoiceDebit.outstandingDebit().getValue().subtract(link.amount().getValue()));
-//    }
-
     static TransactionHistoryDTO getTransactionHistory(BillingAccount billingAccount) {
         return getTransactionHistory(billingAccount, null);
     }
@@ -75,11 +71,16 @@ public class ARTransactionManager {
         TransactionHistoryDTO th = EntityFactory.create(TransactionHistoryDTO.class);
         EntityQueryCriteria<InvoiceLineItem> criteria = EntityQueryCriteria.create(InvoiceLineItem.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().billingAccount(), billingAccount));
+        criteria.add(PropertyCriterion.isNotNull(criteria.proto().postDate()));
         if (fromDate != null) {
             criteria.add(PropertyCriterion.ge(criteria.proto().postDate(), fromDate));
         }
+        criteria.asc(criteria.proto().postDate());
+
         List<InvoiceLineItem> lineItems = Persistence.service().query(criteria);
         th.lineItems().addAll(lineItems);
+        th.fromDate().setValue(fromDate);
+        th.issueDate().setValue(new LogicalDate(SysDateManager.getSysDate()));
         return th;
     }
 
@@ -87,6 +88,8 @@ public class ARTransactionManager {
         EntityQueryCriteria<InvoiceDebit> criteria = EntityQueryCriteria.create(InvoiceDebit.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().billingAccount(), billingAccount));
         criteria.add(PropertyCriterion.ne(criteria.proto().outstandingDebit(), new BigDecimal("0.00")));
+        criteria.add(PropertyCriterion.isNotNull(criteria.proto().postDate()));
+        criteria.asc(criteria.proto().postDate());
         List<InvoiceDebit> lineItems = Persistence.service().query(criteria);
         return lineItems;
     }
@@ -95,6 +98,8 @@ public class ARTransactionManager {
         EntityQueryCriteria<InvoiceCredit> criteria = EntityQueryCriteria.create(InvoiceCredit.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().billingAccount(), billingAccount));
         criteria.add(PropertyCriterion.ne(criteria.proto().outstandingCredit(), new BigDecimal("0.00")));
+        criteria.add(PropertyCriterion.isNotNull(criteria.proto().postDate()));
+        criteria.asc(criteria.proto().postDate());
         List<InvoiceCredit> lineItems = Persistence.service().query(criteria);
         return lineItems;
     }

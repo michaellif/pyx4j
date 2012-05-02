@@ -109,8 +109,8 @@ class Billing {
 
     private void calculateTotals() {
         nextPeriodBill.pastDueAmount().setValue(
-                nextPeriodBill.balanceForwardAmount().getValue().subtract(nextPeriodBill.paymentReceivedAmount().getValue())
-                        .subtract(nextPeriodBill.immediateAdjustments().getValue()).subtract(nextPeriodBill.depositRefundAmount().getValue()));
+                nextPeriodBill.balanceForwardAmount().getValue().add(nextPeriodBill.paymentReceivedAmount().getValue())
+                        .add(nextPeriodBill.immediateAdjustments().getValue()).add(nextPeriodBill.depositRefundAmount().getValue()));
 
         nextPeriodBill.currentAmount().setValue(
                 nextPeriodBill.pastDueAmount().getValue().add(nextPeriodBill.serviceCharge().getValue())

@@ -47,19 +47,8 @@ public class ARSunnyDayScenarioTest extends FinancialTestBase {
     public void testScenario() {
 
         setLeaseConditions("23-Mar-2011", "03-Aug-2011", 1);
-        addServiceAdjustment("-25", AdjustmentType.monetary, ExecutionType.inLease);
-
-        BillableItem parking1 = addParking();
-        addFeatureAdjustment(parking1.uid().getValue(), "-10", AdjustmentType.monetary, ExecutionType.inLease);
-
-        BillableItem parking2 = addParking("23-Apr-2011", "03-Aug-2011");
-        addFeatureAdjustment(parking2.uid().getValue(), "-10", AdjustmentType.monetary, ExecutionType.inLease);
-
-        BillableItem locker1 = addLocker();
-        addFeatureAdjustment(locker1.uid().getValue(), "-0.2", AdjustmentType.percentage, ExecutionType.inLease);
-
-        BillableItem pet1 = addPet();
-        addFeatureAdjustment(pet1.uid().getValue(), "-1", AdjustmentType.percentage, ExecutionType.inLease);
+        addParking();
+        addParking("23-Apr-2011", "03-Aug-2011");
 
         //==================== RUN 1 ======================//
 
@@ -70,18 +59,18 @@ public class ARSunnyDayScenarioTest extends FinancialTestBase {
 
         // @formatter:off
         new TransactionHistoryTester(retrieveLease().billingAccount()).
-        lineItemSize(8).
-        notCoveredDebitLineItemSize(5).
+        lineItemSize(3).
+        notCoveredDebitLineItemSize(3).
         notConsumedCreditInvoiceItemSize(0);
         // @formatter:on
 
-        receiveAndPostPayment("19-Mar-2011", "1000.00");
+        receiveAndPostPayment("22-Mar-2011", "1000.00");
 
         // @formatter:off
-        new TransactionHistoryTester(retrieveLease().billingAccount()).
-        lineItemSize(9).
-        notCoveredDebitLineItemSize(2).
-        notConsumedCreditInvoiceItemSize(0);
+//        new TransactionHistoryTester(retrieveLease().billingAccount()).
+//        lineItemSize(5).
+//        notCoveredDebitLineItemSize(1).
+//        notConsumedCreditInvoiceItemSize(0);
         // @formatter:on
 
         //==================== RUN 2 ======================//
@@ -144,6 +133,8 @@ public class ARSunnyDayScenarioTest extends FinancialTestBase {
         setLeaseStatus(Lease.Status.Completed);
 
         runBilling(true, false);
+
+        printTransactionHistory(ARTransactionManager.getTransactionHistory(retrieveLease().billingAccount()));
 
     }
 
