@@ -15,6 +15,8 @@ package com.propertyvista.pmsite.server.panels;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -29,7 +31,9 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import com.pyx4j.config.shared.ApplicationMode;
 
 import com.propertyvista.domain.ref.City;
+import com.propertyvista.domain.site.AvailableLocale;
 import com.propertyvista.domain.site.SocialLink.SocialSite;
+import com.propertyvista.pmsite.server.PMSiteContentManager;
 import com.propertyvista.pmsite.server.PMSiteWebRequest;
 import com.propertyvista.pmsite.server.pages.AptListPage;
 
@@ -40,29 +44,38 @@ public class FooterPanel extends Panel {
     public FooterPanel() {
         super("footer");
 
-        add(new ListView<City>("footer_locations_city", ((PMSiteWebRequest) getRequest()).getContentManager().getCities()) {
-            private static final long serialVersionUID = 1L;
+        final AvailableLocale siteLocale = ((PMSiteWebRequest) getRequest()).getSiteLocale();
+        final PMSiteContentManager cm = ((PMSiteWebRequest) getRequest()).getContentManager();
+        WebMarkupContainer footerLocations = new WebMarkupContainer("footer_locations");
+        List<City> cities = cm.getCities();
+        if (cities != null && cities.size() > 0) {
+            footerLocations.add(new ListView<City>("footer_locations_city", cities) {
+                private static final long serialVersionUID = 1L;
 
-            @Override
-            protected void populateItem(ListItem<City> item) {
-                City city = item.getModelObject();
-                String _city = city.name().getValue();
-                String _prov = city.province().name().getValue();
-                String _prov2 = city.province().code().getValue();
-                if (_city != null && _prov != null && _prov2 != null) {
-                    PageParameters params = new PageParameters();
-                    params.add("city", _city);
-                    params.add("province", _prov);
-                    params.add("searchType", "city");
-                    BookmarkablePageLink<?> link = new BookmarkablePageLink<Void>("link", AptListPage.class, params);
-                    link.add(new Label("city", _city + " (" + _prov2 + ")"));
-                    item.add(link);
+                @Override
+                protected void populateItem(ListItem<City> item) {
+                    City city = item.getModelObject();
+                    String _city = city.name().getValue();
+                    String _prov = city.province().name().getValue();
+                    String _prov2 = city.province().code().getValue();
+                    if (_city != null && _prov != null && _prov2 != null) {
+                        PageParameters params = new PageParameters();
+                        params.add("city", _city);
+                        params.add("province", _prov);
+                        params.add("searchType", "city");
+                        BookmarkablePageLink<?> link = new BookmarkablePageLink<Void>("link", AptListPage.class, params);
+                        link.add(new Label("city", _city + " (" + _prov2 + ")"));
+                        item.add(link);
+                    }
                 }
-            }
-        });
+            });
+        } else {
+            footerLocations.setVisible(false);
+        }
+        add(footerLocations);
 
         WebMarkupContainer footerSocial = new WebMarkupContainer("footer_social");
-        final java.util.Map<SocialSite, String> socialLinks = ((PMSiteWebRequest) getRequest()).getContentManager().getSocialLinks();
+        final Map<SocialSite, String> socialLinks = cm.getSocialLinks();
         if (socialLinks != null && socialLinks.size() > 0) {
             footerSocial.add(new ListView<SocialSite>("social_link", new ArrayList<SocialSite>(socialLinks.keySet())) {
                 private static final long serialVersionUID = 1L;
@@ -78,23 +91,21 @@ public class FooterPanel extends Panel {
         }
         add(footerSocial);
 
-        add(new ListView<NavigationItem>("footer_link", ((PMSiteWebRequest) getRequest()).getContentManager().getFooterNavigItems()) {
+        add(new ListView<NavigationItem>("footer_link", cm.getFooterNavigItems()) {
             private static final long serialVersionUID = 1L;
 
             @Override
             protected void populateItem(ListItem<NavigationItem> item) {
                 NavigationItem navItem = item.getModelObject();
                 BookmarkablePageLink<?> link = new BookmarkablePageLink<Void>("link", navItem.getDestination(), navItem.getPageParameters());
-                link.add(new Label("caption", ((PMSiteWebRequest) getRequest()).getContentManager().getCaption(navItem.getPageDescriptor(),
-                        ((PMSiteWebRequest) getRequest()).getSiteLocale())));
+                link.add(new Label("caption", cm.getCaption(navItem.getPageDescriptor(), siteLocale)));
                 item.add(link);
             }
         });
 
         add(new LocalePanel("locale"));
 
-        Label copy = new Label("footer_legal", ((PMSiteWebRequest) getRequest()).getContentManager().getCopyrightInfo(
-                ((PMSiteWebRequest) getRequest()).getSiteLocale()));
+        Label copy = new Label("footer_legal", cm.getCopyrightInfo(siteLocale));
         if (ApplicationMode.isDevelopment()) {
             copy.setDefaultModelObject(copy.getDefaultModelObjectAsString() + "<br/>" + new Date());
             copy.setEscapeModelStrings(false);

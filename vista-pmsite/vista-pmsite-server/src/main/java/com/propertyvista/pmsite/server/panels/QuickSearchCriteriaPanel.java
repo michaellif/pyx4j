@@ -13,21 +13,30 @@
  */
 package com.propertyvista.pmsite.server.panels;
 
+import java.util.List;
+
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.StatelessForm;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import com.pyx4j.entity.server.pojo.IPojo;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.pmsite.server.PMSiteApplication;
+import com.propertyvista.pmsite.server.PMSiteContentManager;
+import com.propertyvista.pmsite.server.PMSiteWebRequest;
 import com.propertyvista.pmsite.server.model.PageParamsUtil;
 import com.propertyvista.pmsite.server.model.WicketUtils.CompoundIEntityModel;
+import com.propertyvista.pmsite.server.pages.AptDetailsPage;
 import com.propertyvista.pmsite.server.pages.AptListPage;
 import com.propertyvista.portal.rpc.portal.PropertySearchCriteria;
 import com.propertyvista.portal.rpc.portal.PropertySearchCriteria.BedroomChoice;
+import com.propertyvista.portal.server.portal.PropertyFinder;
 
 //http://www.google.com/codesearch#o92Uy7_Jjpw/base/openqrm-3.5.2/src/base/java/main/code/com/qlusters/qrm/web/wicket/markup/&type=cs
 public class QuickSearchCriteriaPanel extends Panel {
@@ -74,6 +83,17 @@ public class QuickSearchCriteriaPanel extends Panel {
             criteria.bedsRange().setValue(null);
         }
 
-        setResponsePage(AptListPage.class, PageParamsUtil.convertToPageParameters(criteria));
+        PMSiteContentManager cm = ((PMSiteWebRequest) getRequest()).getContentManager();
+        if (cm.isAptListEnabled()) {
+            setResponsePage(AptListPage.class, PageParamsUtil.convertToPageParameters(criteria));
+        } else {
+            // This mode is intended for single building PMCs, so we only show the first available building
+            String propCode = "";
+            List<Building> searchResult = PropertyFinder.getPropertyList(criteria);
+            if (searchResult != null && searchResult.size() > 0) {
+                propCode = searchResult.get(0).propertyCode().getValue();
+            }
+            setResponsePage(AptDetailsPage.class, new PageParameters().set(PMSiteApplication.ParamNameBuilding, propCode));
+        }
     }
 }

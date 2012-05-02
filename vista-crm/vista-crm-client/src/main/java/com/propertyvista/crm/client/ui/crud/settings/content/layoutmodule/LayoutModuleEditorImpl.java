@@ -7,29 +7,18 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Apr 19, 2012
+ * Created on 2012-04-26
  * @author stanp
  * @version $Id$
  */
-package com.propertyvista.domain.site;
+package com.propertyvista.crm.client.ui.crud.settings.content.layoutmodule;
 
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
+import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.domain.site.HomePageGadget;
 
-public interface LayoutModule extends IEntity {
-    public enum ModuleType {
-        news, testimonials, featured, custom
+public class LayoutModuleEditorImpl extends CrmEditorViewImplBase<HomePageGadget> implements LayoutModuleEditor {
+    public LayoutModuleEditorImpl() {
+        super(CrmSiteMap.Settings.HomePageModules.class, new LayoutModuleEditorForm());
     }
-
-    public enum LayoutArea {
-        narrow, wide
-    }
-
-    IPrimitive<ModuleType> moduleType();
-
-    IPrimitive<LayoutArea> layoutArea();
-
-    IPrimitive<String> name();
-
-    IPrimitive<String> content();
 }

@@ -17,20 +17,29 @@ import java.util.Collection;
 import java.util.EnumSet;
 
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.config.shared.ApplicationMode;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.AppPlaceEntityMapper;
+import com.pyx4j.site.client.AppSite;
+import com.pyx4j.widgets.client.Anchor;
 
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.crm.client.themes.CrmTheme;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
+import com.propertyvista.domain.site.HomePageGadget;
 import com.propertyvista.domain.site.SiteDescriptor;
 import com.propertyvista.dto.SiteDescriptorDTO;
 
@@ -81,6 +90,8 @@ public class SiteEditorForm extends CrmEntityForm<SiteDescriptorDTO> {
             }
             ((CComboBox<SiteDescriptor.Skin>) skinComp).setOptions(skinOpt);
         }
+        main.setWidget(row++, 0, new DecoratorBuilder(inject(proto().enableMapView()), 10).build());
+        main.setWidget(row++, 0, new DecoratorBuilder(inject(proto().enableBuildingDetails()), 10).build());
 
         main.setH1(row++, 0, 1, proto().locales().getMeta().getCaption());
         main.setWidget(row++, 0, inject(proto().locales(), new AvailableLocaleFolder(isEditable())));
@@ -100,13 +111,37 @@ public class SiteEditorForm extends CrmEntityForm<SiteDescriptorDTO> {
         main.setH1(row++, 0, 1, proto().socialLinks().getMeta().getCaption());
         main.setWidget(row++, 0, inject(proto().socialLinks(), new SocialLinkFolder(isEditable())));
 
-        main.setH1(row++, 0, 1, proto().homepageModules().getMeta().getCaption());
-        main.setWidget(row++, 0, inject(proto().homepageModules(), new LayoutModuleFolder(isEditable())));
+        // home page gadgets
+        FormFlexPanel gadgetPanel = new FormFlexPanel();
+//        gadgetPanel.setH1(row, 0, 1, proto().homePageGadgetsNarrow().getMeta().getCaption(), createAddNewItemLink());
+        gadgetPanel.setH1(row++, 0, 2, "Home Page Gadgets", createAddNewItemLink());
+        gadgetPanel.setWidget(row, 0, inject(proto().homePageGadgetsNarrow(), new LayoutModuleFolder(isEditable())));
+        gadgetPanel.setWidget(row, 1, inject(proto().homePageGadgetsWide(), new LayoutModuleFolder(isEditable())));
+        gadgetPanel.getRowFormatter().setVerticalAlign(row++, HasVerticalAlignment.ALIGN_TOP);
+        main.setWidget(row++, 0, gadgetPanel);
 
         main.setH1(row++, 0, 1, proto().childPages().getMeta().getCaption());
         main.setWidget(row++, 0, inject(proto().childPages(), new SitePageDescriptorFolder(this)));
 
         return new CrmScrollPanel(main);
+    }
+
+    private Widget createAddNewItemLink() {
+        if (isEditable()) {
+            return new HTML();
+        }
+
+        Anchor addNewItem = new Anchor(i18n.tr("Add New Gadget"));
+        addNewItem.getElement().getStyle().setProperty("lineHeight", "2em");
+        addNewItem.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                HomePageGadget newItem = EntityFactory.create(HomePageGadget.class);
+                AppSite.getPlaceController().goTo(AppPlaceEntityMapper.resolvePlace(HomePageGadget.class).formNewItemPlace(newItem));
+            }
+        });
+
+        return addNewItem;
     }
 
     private Widget createTestimonialsTab() {

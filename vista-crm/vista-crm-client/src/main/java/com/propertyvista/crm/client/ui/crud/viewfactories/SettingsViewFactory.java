@@ -22,6 +22,10 @@ import com.propertyvista.crm.client.ui.crud.billing.payment.PaymentListerView;
 import com.propertyvista.crm.client.ui.crud.billing.payment.PaymentListerViewImpl;
 import com.propertyvista.crm.client.ui.crud.billing.payment.PaymentViewerView;
 import com.propertyvista.crm.client.ui.crud.billing.payment.PaymentViewerViewImpl;
+import com.propertyvista.crm.client.ui.crud.settings.content.layoutmodule.LayoutModuleEditor;
+import com.propertyvista.crm.client.ui.crud.settings.content.layoutmodule.LayoutModuleEditorImpl;
+import com.propertyvista.crm.client.ui.crud.settings.content.layoutmodule.LayoutModuleViewer;
+import com.propertyvista.crm.client.ui.crud.settings.content.layoutmodule.LayoutModuleViewerImpl;
 import com.propertyvista.crm.client.ui.crud.settings.content.page.PageEditor;
 import com.propertyvista.crm.client.ui.crud.settings.content.page.PageEditorImpl;
 import com.propertyvista.crm.client.ui.crud.settings.content.page.PageViewer;
@@ -78,6 +82,11 @@ public class SettingsViewFactory extends ViewFactoryBase {
                 map.put(type, new PageViewerImpl());
             } else if (PageEditor.class.equals(type)) {
                 map.put(type, new PageEditorImpl());
+
+            } else if (LayoutModuleViewer.class.equals(type)) {
+                map.put(type, new LayoutModuleViewerImpl());
+            } else if (LayoutModuleEditor.class.equals(type)) {
+                map.put(type, new LayoutModuleEditorImpl());
 
             } else if (ProductDictionaryView.class.equals(type)) {
                 map.put(type, new ProductDictionaryViewImpl());

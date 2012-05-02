@@ -39,6 +39,7 @@ import com.propertyvista.domain.media.Media;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.ref.City;
 import com.propertyvista.domain.site.AvailableLocale;
+import com.propertyvista.domain.site.HomePageGadget;
 import com.propertyvista.domain.site.HtmlContent;
 import com.propertyvista.domain.site.News;
 import com.propertyvista.domain.site.PageCaption;
@@ -120,6 +121,22 @@ public class PMSiteContentManager implements Serializable {
             descriptor._path().add(parent);
             createPath(descriptor);
         }
+    }
+
+    public List<HomePageGadget> getNarrowModules() {
+        return siteDescriptor.homePageGadgetsNarrow();
+    }
+
+    public List<HomePageGadget> getWideModules() {
+        return siteDescriptor.homePageGadgetsWide();
+    }
+
+    public boolean isMapEnabled() {
+        return siteDescriptor.enableMapView().getValue();
+    }
+
+    public boolean isAptListEnabled() {
+        return siteDescriptor.enableBuildingDetails().getValue();
     }
 
     public List<AvailableLocale> getAllAvailableLocale() {

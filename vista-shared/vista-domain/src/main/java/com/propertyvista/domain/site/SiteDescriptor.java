@@ -70,6 +70,10 @@ public interface SiteDescriptor extends Descriptor {
     @Caption(name = "Resident Portal Skin")
     IPrimitive<Skin> skin();
 
+    IPrimitive<Boolean> enableMapView();
+
+    IPrimitive<Boolean> enableBuildingDetails();
+
     @Owned
     SitePalette sitePalette();
 
@@ -89,7 +93,10 @@ public interface SiteDescriptor extends Descriptor {
     IList<SocialLink> socialLinks();
 
     @Owned
-    IList<LayoutModule> homepageModules();
+    IList<HomePageGadget> homePageGadgetsNarrow();
+
+    @Owned
+    IList<HomePageGadget> homePageGadgetsWide();
 
     @Owned
     @I18n(strategy = I18n.I18nStrategy.IgnoreThis)

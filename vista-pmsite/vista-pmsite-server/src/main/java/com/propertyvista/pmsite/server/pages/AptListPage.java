@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
@@ -44,6 +45,7 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
 import com.propertyvista.pmsite.server.PMSiteApplication;
 import com.propertyvista.pmsite.server.PMSiteClientPreferences;
+import com.propertyvista.pmsite.server.PMSiteContentManager;
 import com.propertyvista.pmsite.server.PMSiteWebRequest;
 import com.propertyvista.pmsite.server.model.PageParamsUtil;
 import com.propertyvista.pmsite.server.model.WicketUtils.AttributeClassModifier;
@@ -105,6 +107,19 @@ public class AptListPage extends BasePage {
         if (criteria.searchType().getValue() == null) {
             criteria.searchType().setValue(PropertySearchCriteria.SearchType.city);
         }
+        List<Building> searchResult = PropertyFinder.getPropertyList(criteria);
+        PMSiteContentManager cm = ((PMSiteWebRequest) getRequest()).getContentManager();
+
+        // if AptList is not enabled redirect to AptDetails
+        if (!cm.isAptListEnabled()) {
+            // This mode is intended for single building PMCs, so we only show the first available building
+            String propCode = "";
+            if (searchResult != null && searchResult.size() > 0) {
+                propCode = searchResult.get(0).propertyCode().getValue();
+            }
+            throw new RestartResponseException(AptDetailsPage.class, new PageParameters().set(PMSiteApplication.ParamNameBuilding, propCode));
+        }
+
         final CompoundIEntityModel<PropertySearchCriteria> model = new CompoundIEntityModel<PropertySearchCriteria>(criteria);
 
         final StatelessForm<IPojo<PropertySearchCriteria>> form = new StatelessForm<IPojo<PropertySearchCriteria>>("advancedSearchCriteriaForm", model) {
@@ -128,9 +143,8 @@ public class AptListPage extends BasePage {
             return;
         }
         ViewMode viewMode = ViewMode.map;
-        List<Building> searchResult = PropertyFinder.getPropertyList(criteria);
         if (searchResult != null && searchResult.size() > 0) {
-            if (SystemMaintenance.getExternalConnectionsState().equals(SystemState.Online)) {
+            if (cm.isMapEnabled() && SystemMaintenance.getExternalConnectionsState().equals(SystemState.Online)) {
                 // check view mode - Map/List
                 if (PMSiteClientPreferences.getClientPref("aptListMode") == null) {
                     PMSiteClientPreferences.setClientPref("aptListMode", ViewMode.map.name());

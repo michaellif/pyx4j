@@ -423,6 +423,11 @@ public class CrmSiteMap implements SiteMap {
         public static class Page extends CRMCrudAppPlace {
         }
 
+        @PlaceProperties(caption = "Home Page Modules")
+        @NavigationItem(navigLabel = "Home Page Modules")
+        public static class HomePageModules extends CRMCrudAppPlace {
+        }
+
         @PlaceProperties(caption = "Tax")
         @NavigationItem(navigLabel = "Taxes")
         public static class Tax extends CRMCrudAppPlace {

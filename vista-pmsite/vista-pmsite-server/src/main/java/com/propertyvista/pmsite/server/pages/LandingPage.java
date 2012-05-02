@@ -16,15 +16,19 @@ package com.propertyvista.pmsite.server.pages;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.list.ListItem;
+import org.apache.wicket.markup.html.list.ListView;
 
 import templates.TemplateResources;
 
 import com.propertyvista.domain.site.AvailableLocale;
+import com.propertyvista.domain.site.HomePageGadget;
 import com.propertyvista.domain.site.SiteImageResource;
 import com.propertyvista.pmsite.server.PMSiteClientPreferences;
 import com.propertyvista.pmsite.server.PMSiteContentManager;
 import com.propertyvista.pmsite.server.PMSiteWebRequest;
 import com.propertyvista.pmsite.server.model.WicketUtils.VolatileTemplateResourceReference;
+import com.propertyvista.pmsite.server.panels.CustomModulePanel;
 import com.propertyvista.pmsite.server.panels.NewsPanel;
 import com.propertyvista.pmsite.server.panels.PromoPanel;
 import com.propertyvista.pmsite.server.panels.QuickSearchCriteriaPanel;
@@ -52,9 +56,44 @@ public class LandingPage extends BasePage {
             bannerImg.add(AttributeModifier.replace("style", "background-image:url(" + PMSiteContentManager.getSiteImageResourceUrl(banner) + ")"));
         }
         add(bannerImg);
-        add(new NewsPanel("newsPanel"));
-        add(new PromoPanel("promoPanel"));
-        add(new TestimPanel("testimPanel"));
+        ListView<HomePageGadget> narrowPanel = new ListView<HomePageGadget>("narrowBox", cm.getNarrowModules()) {
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            protected void populateItem(ListItem<HomePageGadget> item) {
+                HomePageGadget module = item.getModelObject();
+                switch (module.moduleType().getValue()) {
+                case news:
+                    item.add(new NewsPanel("narrowBoxContent"));
+                    break;
+                case custom:
+                    item.add(new CustomModulePanel("narrowBoxContent", module));
+                    break;
+                }
+            }
+        };
+        add(narrowPanel);
+
+        ListView<HomePageGadget> widePanel = new ListView<HomePageGadget>("wideBox", cm.getWideModules()) {
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            protected void populateItem(ListItem<HomePageGadget> item) {
+                HomePageGadget module = item.getModelObject();
+                switch (module.moduleType().getValue()) {
+                case featured:
+                    item.add(new PromoPanel("wideBoxContent"));
+                    break;
+                case testimonials:
+                    item.add(new TestimPanel("wideBoxContent"));
+                    break;
+                case custom:
+                    item.add(new CustomModulePanel("wideBoxContent", module));
+                    break;
+                }
+            }
+        };
+        add(widePanel);
     }
 
     @Override

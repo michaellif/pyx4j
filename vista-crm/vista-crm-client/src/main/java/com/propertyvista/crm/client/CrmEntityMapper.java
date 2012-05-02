@@ -61,6 +61,7 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.AptUnitItem;
 import com.propertyvista.domain.property.vendor.Vendor;
 import com.propertyvista.domain.security.CrmRole;
+import com.propertyvista.domain.site.HomePageGadget;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.PersonScreening;
@@ -129,6 +130,8 @@ public class CrmEntityMapper {
         AppPlaceEntityMapper.register(LeaseAdjustmentReason.class, CrmSiteMap.Settings.LeaseAdjustmentReason.class, defaultImage);
         AppPlaceEntityMapper.register(ServiceItemType.class, CrmSiteMap.Settings.ServiceItemType.class, defaultImage);
         AppPlaceEntityMapper.register(Tax.class, CrmSiteMap.Settings.Tax.class, defaultImage);
+
+        AppPlaceEntityMapper.register(HomePageGadget.class, CrmSiteMap.Settings.HomePageModules.class, defaultImage);
 
         AppPlaceEntityMapper.register(DashboardMetadata.class, CrmSiteMap.Dashboard.Edit.class, defaultImage);
         // TODO add report place mapping here
