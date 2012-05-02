@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.annotations.validator.NotNull;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.meta.EntityMeta;
@@ -80,6 +81,7 @@ class OnboardingProcessor {
             try {
                 rm.responses().add(execute(request));
             } catch (Throwable e) {
+                Persistence.service().rollback();
                 log.error("Error", e);
                 ResponseIO response = EntityFactory.create(ResponseIO.class);
                 response.success().setValue(Boolean.FALSE);
