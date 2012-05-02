@@ -52,8 +52,7 @@ public class VistaNamespaceResolver implements NamespaceResolver {
     @Override
     public String getNamespace(HttpServletRequest httprequest) {
         if (httprequest.getServletPath() != null) {
-            if ((httprequest.getServletPath().startsWith("/" + DeploymentConsts.ADMIN_URL) || httprequest.getServletPath().startsWith("/public/onboarding") || httprequest
-                    .getServletPath().startsWith("/o/openid"))) {
+            if ((httprequest.getServletPath().startsWith("/" + DeploymentConsts.ADMIN_URL) || httprequest.getServletPath().startsWith("/public/onboarding"))) {
                 return Pmc.adminNamespace;
             }
             if (httprequest.getServletPath().startsWith("/public/schema") || httprequest.getServletPath().startsWith("/public/status")) {
@@ -121,7 +120,6 @@ public class VistaNamespaceResolver implements NamespaceResolver {
         }
 
         if (pmcNamespace == null) {
-
             if (httprequest.getServletPath() != null) {
                 if (httprequest.getServletPath().startsWith("/o/db-reset")) {
                     return demoNamespace;
