@@ -20,7 +20,7 @@ import com.propertyvista.domain.policy.dto.LeaseAdjustmentPolicyDTO;
 public class LeaseAdjustmentPolicyEditorViewImpl extends CrmEditorViewImplBase<LeaseAdjustmentPolicyDTO> implements LeaseAdjustmentPolicyEditorView {
 
     public LeaseAdjustmentPolicyEditorViewImpl() {
-        super(CrmSiteMap.Settings.Policies.LeaseAdjustment.class);
+        super(CrmSiteMap.Settings.Policies.LeaseAdjustmentPolicy.class);
         setForm(new LeaseAdjustmentPolicyEditorForm());
     }
 }

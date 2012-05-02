@@ -28,7 +28,9 @@ import com.propertyvista.crm.client.activity.AccountViewerActivity;
 import com.propertyvista.crm.client.activity.AlertActivity;
 import com.propertyvista.crm.client.activity.MessageActivity;
 import com.propertyvista.crm.client.activity.crud.billing.BillViewerActivity;
+import com.propertyvista.crm.client.activity.crud.billing.LeaseAdjustmentEditorActivity;
 import com.propertyvista.crm.client.activity.crud.billing.LeaseAdjustmentListerActivity;
+import com.propertyvista.crm.client.activity.crud.billing.LeaseAdjustmentViewerActivity;
 import com.propertyvista.crm.client.activity.crud.billing.PaymentEditorActivity;
 import com.propertyvista.crm.client.activity.crud.billing.PaymentListerActivity;
 import com.propertyvista.crm.client.activity.crud.billing.PaymentViewerActivity;
@@ -454,6 +456,20 @@ public class MainActivityMapper implements AppActivityMapper {
                             break;
                         }
 
+                    } else if (place instanceof CrmSiteMap.Tenants.LeaseAdjustment) {
+                        switch (crudPlace.getType()) {
+                        case editor:
+                            activity = new LeaseAdjustmentEditorActivity(crudPlace);
+                            break;
+                        case viewer:
+                            activity = new LeaseAdjustmentViewerActivity(crudPlace);
+                            break;
+                        case lister:
+                            activity = new LeaseAdjustmentListerActivity(crudPlace);
+                            break;
+
+                        }
+
                     } else if (place instanceof CrmSiteMap.Tenants.Lease) {
                         switch (crudPlace.getType()) {
                         case editor:
@@ -771,7 +787,7 @@ public class MainActivityMapper implements AppActivityMapper {
                             break;
                         }
 
-                    } else if (place instanceof CrmSiteMap.Settings.Policies.LeaseAdjustment) {
+                    } else if (place instanceof CrmSiteMap.Settings.Policies.LeaseAdjustmentPolicy) {
                         switch (crudPlace.getType()) {
                         case lister:
                             activity = new LeaseAdjustmentPolicyListerActivity(crudPlace);
@@ -833,12 +849,6 @@ public class MainActivityMapper implements AppActivityMapper {
                             break;
                         }
 
-                    } else if (place instanceof CrmSiteMap.Settings.Policies.LeaseAdjustment) {
-                        switch (crudPlace.getType()) {
-                        case lister:
-                            activity = new LeaseAdjustmentListerActivity(crudPlace);
-                            break;
-                        }
                         // Reports:
                     } else if (place instanceof CrmSiteMap.Report.Management) {
                         activity = new ReportManagementActivity(place);

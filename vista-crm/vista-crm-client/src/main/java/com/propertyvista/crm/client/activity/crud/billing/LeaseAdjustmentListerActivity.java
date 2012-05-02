@@ -20,14 +20,14 @@ import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.site.client.activity.crud.ListerActivityBase;
 
 import com.propertyvista.crm.client.ui.crud.billing.adjustments.LeaseAdjustmentListerView;
-import com.propertyvista.crm.client.ui.crud.viewfactories.SettingsViewFactory;
+import com.propertyvista.crm.client.ui.crud.viewfactories.LeaseViewFactory;
 import com.propertyvista.crm.rpc.services.billing.LeaseAdjustmentCrudService;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 
 public class LeaseAdjustmentListerActivity extends ListerActivityBase<LeaseAdjustment> {
 
     public LeaseAdjustmentListerActivity(Place place) {
-        super(place, SettingsViewFactory.instance(LeaseAdjustmentListerView.class), GWT
+        super(place, LeaseViewFactory.instance(LeaseAdjustmentListerView.class), GWT
                 .<AbstractListService<LeaseAdjustment>> create(LeaseAdjustmentCrudService.class), LeaseAdjustment.class);
     }
 

@@ -195,6 +195,12 @@ public class CrmSiteMap implements SiteMap {
         public static class Payment extends CRMCrudAppPlace {
         }
 
+        @PlaceProperties(caption = "Lease Adjustments")
+        @NavigationItem(navigLabel = "Lease Adjustments")
+        public static class LeaseAdjustment extends CRMCrudAppPlace {
+
+        }
+
         public static class EquifaxResult extends CRMCrudAppPlace {
         }
 
@@ -355,9 +361,9 @@ public class CrmSiteMap implements SiteMap {
 //
 //            }
 
-            @PlaceProperties(caption = "Adjustment Taxes")
-            @NavigationItem(navigLabel = "Adjustment Taxes")
-            public static class LeaseAdjustment extends CRMCrudAppPlace {
+            @PlaceProperties(caption = "Adjustment Policies")
+            @NavigationItem(navigLabel = "Adjustment Policies")
+            public static class LeaseAdjustmentPolicy extends CRMCrudAppPlace {
 
             }
 

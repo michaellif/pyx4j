@@ -16,12 +16,6 @@ package com.propertyvista.crm.client.ui.crud.viewfactories;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.site.client.ui.crud.IView;
 
-import com.propertyvista.crm.client.ui.crud.billing.payment.PaymentEditorView;
-import com.propertyvista.crm.client.ui.crud.billing.payment.PaymentEditorViewImpl;
-import com.propertyvista.crm.client.ui.crud.billing.payment.PaymentListerView;
-import com.propertyvista.crm.client.ui.crud.billing.payment.PaymentListerViewImpl;
-import com.propertyvista.crm.client.ui.crud.billing.payment.PaymentViewerView;
-import com.propertyvista.crm.client.ui.crud.billing.payment.PaymentViewerViewImpl;
 import com.propertyvista.crm.client.ui.crud.settings.content.layoutmodule.HomePageGadgetEditor;
 import com.propertyvista.crm.client.ui.crud.settings.content.layoutmodule.HomePageGadgetEditorImpl;
 import com.propertyvista.crm.client.ui.crud.settings.content.layoutmodule.HomePageGadgetViewer;
@@ -129,12 +123,6 @@ public class SettingsViewFactory extends ViewFactoryBase {
             } else if (LeaseAdjustmentReasonViewerView.class.equals(type)) {
                 map.put(type, new LeaseAdjustmentReasonViewerViewImpl());
 
-            } else if (PaymentListerView.class.equals(type)) {
-                map.put(type, new PaymentListerViewImpl());
-            } else if (PaymentEditorView.class.equals(type)) {
-                map.put(type, new PaymentEditorViewImpl());
-            } else if (PaymentViewerView.class.equals(type)) {
-                map.put(type, new PaymentViewerViewImpl());
             }
         }
         @SuppressWarnings("unchecked")

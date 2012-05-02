@@ -7,20 +7,19 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-09
+ * Created on 2011-05-24
  * @author Vlad
  * @version $Id$
  */
 package com.propertyvista.crm.client.ui.crud.billing.adjustments;
 
-import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
+import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 
-public class LeaseAdjustmentListerViewImpl extends CrmListerViewImplBase<LeaseAdjustment> implements LeaseAdjustmentListerView {
+public class LeaseAdjustmentViewerViewImpl extends CrmViewerViewImplBase<LeaseAdjustment> implements LeaseAdjustmentViewerView {
 
-    public LeaseAdjustmentListerViewImpl() {
-        super(CrmSiteMap.Settings.Policies.LeaseAdjustmentPolicy.class);
-        setLister(new LeaseAdjustmentLister());
+    public LeaseAdjustmentViewerViewImpl() {
+        super(CrmSiteMap.Tenants.LeaseAdjustment.class, new LeaseAdjustmentEditorForm(true));
     }
 }
