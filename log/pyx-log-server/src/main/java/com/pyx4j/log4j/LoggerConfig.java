@@ -25,6 +25,7 @@ import java.util.Map;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.MDC;
+import org.apache.log4j.MDC50486;
 
 import com.pyx4j.commons.CommonsStringUtils;
 
@@ -85,6 +86,17 @@ public class LoggerConfig {
     public static void mdcRemove(String key) {
         try {
             MDC.remove(key);
+        } catch (NoClassDefFoundError ignore) {
+        }
+    }
+
+    /**
+     * https://issues.apache.org/bugzilla/show_bug.cgi?id=50486
+     */
+    public static void mdcClear() {
+        try {
+            MDC.clear();
+            MDC50486.remove();
         } catch (NoClassDefFoundError ignore) {
         }
     }

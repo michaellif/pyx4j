@@ -139,6 +139,7 @@ public class Lifecycle {
         Context.remove();
         NamespaceManager.remove();
         I18nManager.removeThreadLocale();
+        LoggerConfig.mdcClear();
     }
 
     public static void endRpcRequest() {
