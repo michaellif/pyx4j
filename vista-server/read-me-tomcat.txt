@@ -25,3 +25,9 @@ Create mail-credentials.properties  in tomcat home.
                 </server>
 
   mvn -P deploy,deploy-target-local,deploy-db-reset
+
+--
+To configure Tomcat to support remote debugging?
+  Add this to potions (ON A SEPARATE LINEs)
+  -Xdebug
+  -Xrunjdwp:transport=dt_socket,address=8000,server=y,suspend=n

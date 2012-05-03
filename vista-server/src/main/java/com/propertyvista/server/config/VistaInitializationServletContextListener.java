@@ -15,21 +15,33 @@ package com.propertyvista.server.config;
 
 import javax.servlet.ServletContextEvent;
 
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.essentials.server.dev.DevSession;
 import com.pyx4j.quartz.SchedulerHelper;
+import com.pyx4j.server.contexts.Lifecycle;
 
 public class VistaInitializationServletContextListener extends com.pyx4j.entity.server.servlet.InitializationServletContextListener {
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
-        super.contextInitialized(sce);
-        SchedulerHelper.init();
+        try {
+            super.contextInitialized(sce);
+            Persistence.service();
+            SchedulerHelper.init();
+        } finally {
+            Lifecycle.endContext();
+        }
     }
 
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
-        SchedulerHelper.shutdown();
-        DevSession.cleanup();
+        try {
+            SchedulerHelper.shutdown();
+            DevSession.cleanup();
+        } finally {
+            Lifecycle.endContext();
+        }
+
         try {
             // Avoid Tomcat redeploy warnings
             Thread.sleep(1000);
