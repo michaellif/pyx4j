@@ -19,6 +19,7 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.CEntityEditor;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
@@ -48,6 +49,8 @@ public class PaymentMethodEditor extends CEntityDecoratableEditor<PaymentMethod>
 
     private CEntityEditor<AddressStructured> billingAddress;
 
+    private Widget billingAddressHeader;
+
     public PaymentMethodEditor() {
         super(PaymentMethod.class);
     }
@@ -68,10 +71,11 @@ public class PaymentMethodEditor extends CEntityDecoratableEditor<PaymentMethod>
             }
         }), 25).build());
 
-        main.setH2(++row, 0, 1, proto().details().getMeta().getCaption());
+        main.setH3(++row, 0, 1, proto().details().getMeta().getCaption());
         main.setWidget(++row, 0, paymentDetailsHolder);
 
-        main.setH2(++row, 0, 1, proto().billingAddress().getMeta().getCaption());
+        main.setH3(++row, 0, 1, proto().billingAddress().getMeta().getCaption());
+        billingAddressHeader = main.getWidget(row, 0);
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().sameAsCurrent()), 5).build());
         main.setWidget(++row, 0, inject(proto().billingAddress(), billingAddress = new AddressStructuredEditor(true)));
 
@@ -117,24 +121,28 @@ public class PaymentMethodEditor extends CEntityDecoratableEditor<PaymentMethod>
             if (details.getInstanceValueClass() != CashInfo.class) {
                 details.set(EntityFactory.create(CashInfo.class));
             }
+            setBillingAddressVisible(false);
             break;
         case Check:
             editor = new CheckInfoEditor();
             if (details.getInstanceValueClass() != CheckInfo.class) {
                 details.set(EntityFactory.create(CheckInfo.class));
             }
+            setBillingAddressVisible(true);
             break;
         case Echeck:
             editor = new EcheckInfoEditor();
             if (details.getInstanceValueClass() != EcheckInfo.class) {
                 details.set(EntityFactory.create(EcheckInfo.class));
             }
+            setBillingAddressVisible(true);
             break;
         case CreditCard:
             editor = new CreditCardInfoEditor();
             if (details.getInstanceValueClass() != CreditCardInfo.class) {
                 details.set(EntityFactory.create(CreditCardInfo.class));
             }
+            setBillingAddressVisible(true);
             break;
         }
 
@@ -144,7 +152,7 @@ public class PaymentMethodEditor extends CEntityDecoratableEditor<PaymentMethod>
             }
             this.inject(proto().details(), editor);
             editor.populate(details.cast());
-            
+
             paymentDetailsHolder.setWidget(editor);
         }
     }
@@ -155,6 +163,16 @@ public class PaymentMethodEditor extends CEntityDecoratableEditor<PaymentMethod>
 
     public boolean isTypeSelectionVisible() {
         return get(proto().type()).isVisible();
+    }
+
+    public void setBillingAddressVisible(boolean visible) {
+        get(proto().billingAddress()).setVisible(visible);
+        get(proto().sameAsCurrent()).setVisible(visible);
+        billingAddressHeader.setVisible(visible);
+    }
+
+    public boolean isBillingAddressVisible() {
+        return get(proto().billingAddress()).isVisible();
     }
 
     public void onBillingAddressSameAsCurrentOne(boolean set, CComponent<AddressStructured, ?> comp) {
