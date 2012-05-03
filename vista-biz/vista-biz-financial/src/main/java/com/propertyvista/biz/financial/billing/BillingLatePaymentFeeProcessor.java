@@ -7,15 +7,22 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Apr 30, 2012
+ * Created on Feb 25, 2012
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.domain.financial.billing;
+package com.propertyvista.biz.financial.billing;
 
-import com.pyx4j.entity.annotations.DiscriminatorValue;
+public class BillingLatePaymentFeeProcessor {
 
-@DiscriminatorValue("NSFDebit")
-public interface InvoiceNSFDebit extends InvoiceDebit {
+    private final Billing billing;
+
+    BillingLatePaymentFeeProcessor(Billing billing) {
+        this.billing = billing;
+    }
+
+    void createInitialBalanceRecord() {
+        //TODO
+    }
 
 }

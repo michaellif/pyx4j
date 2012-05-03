@@ -14,7 +14,9 @@
 package com.propertyvista.biz.financial.billing;
 
 import com.propertyvista.domain.financial.billing.Bill;
+import com.propertyvista.domain.financial.billing.InvoiceNSF;
 import com.propertyvista.domain.financial.billing.InvoicePayment;
+import com.propertyvista.domain.financial.billing.InvoicePaymentBackOut;
 
 public class BillingPaymentProcessor {
 
@@ -24,9 +26,18 @@ public class BillingPaymentProcessor {
         this.billing = billing;
     }
 
-    void attachPayments() {
+    void attachPaymentRecords() {
         for (InvoicePayment payment : BillingUtils.getLineItemsForType(billing.getNextPeriodBill().billingAccount().interimLineItems(), InvoicePayment.class)) {
             attachPayment(payment);
+        }
+
+        for (InvoicePaymentBackOut paymentBackOut : BillingUtils.getLineItemsForType(billing.getNextPeriodBill().billingAccount().interimLineItems(),
+                InvoicePaymentBackOut.class)) {
+            attachPaymentBackOut(paymentBackOut);
+        }
+
+        for (InvoiceNSF nsf : BillingUtils.getLineItemsForType(billing.getNextPeriodBill().billingAccount().interimLineItems(), InvoiceNSF.class)) {
+            attachNSF(nsf);
         }
     }
 
@@ -36,4 +47,15 @@ public class BillingPaymentProcessor {
         bill.paymentReceivedAmount().setValue(bill.paymentReceivedAmount().getValue().add(payment.amount().getValue()));
     }
 
+    private void attachPaymentBackOut(InvoicePaymentBackOut paymentBackOut) {
+        Bill bill = billing.getNextPeriodBill();
+        bill.lineItems().add(paymentBackOut);
+        bill.paymentReceivedAmount().setValue(bill.paymentReceivedAmount().getValue().subtract(paymentBackOut.amount().getValue()));
+    }
+
+    private void attachNSF(InvoiceNSF nsf) {
+        Bill bill = billing.getNextPeriodBill();
+        bill.lineItems().add(nsf);
+        // bill..setValue(bill.paymentReceivedAmount().getValue().subtract(paymentBackOut.amount().getValue()));
+    }
 }

@@ -92,8 +92,9 @@ public class BillingUtils {
         dto.onetimeFeatureChargeLineItems().total().set(bill.oneTimeFeatureCharges());
         dto.depositLineItems().total().set(bill.depositAmount());
         dto.depositRefundLineItems().total().set(bill.depositRefundAmount());
-        dto.immediateAdjustmentLineItems().total().set(bill.immediateAdjustments());
-        dto.pendingAdjustmentLineItems().total().set(bill.totalAdjustments());
+        dto.immediateAdjustmentLineItems().total().set(bill.immediateLeaseAdjustments());
+        dto.pendingAdjustmentLineItems().total().set(bill.pendingLeaseAdjustments());
+        //TODO
 //        dto.withdrawalLineItems().total().set(bill.withdrawalAmount());
 //        dto.rejectedPaymentLineItems().total().set(bill.paymentRejectedAmount());
         dto.paymentLineItems().total().set(bill.paymentReceivedAmount());
@@ -110,6 +111,7 @@ public class BillingUtils {
                 } else if (ProductType.oneTimeFeature.equals(prodType)) {
                     dto.onetimeFeatureChargeLineItems().lineItems().add(charge);
                 }
+                //TODO
                 //} else if (lineItem instanceof InvoiceProductCredit) {
                 // Credit(s)
             } else if (lineItem instanceof InvoiceDeposit) {

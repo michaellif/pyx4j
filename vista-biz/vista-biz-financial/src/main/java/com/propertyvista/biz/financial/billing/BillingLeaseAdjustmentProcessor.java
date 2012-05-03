@@ -99,14 +99,14 @@ public class BillingLeaseAdjustmentProcessor extends AbstractLeaseAdjustmentProc
 
     private void addCharge(InvoiceAccountCharge charge) {
         Bill bill = billing.getNextPeriodBill();
-        bill.totalAdjustments().setValue(bill.totalAdjustments().getValue().add(charge.amount().getValue()));
+        bill.pendingLeaseAdjustments().setValue(bill.pendingLeaseAdjustments().getValue().add(charge.amount().getValue()));
         bill.lineItems().add(charge);
         bill.taxes().setValue(bill.taxes().getValue().add(charge.taxTotal().getValue()));
     }
 
     private void addCredit(InvoiceAccountCredit credit) {
         Bill bill = billing.getNextPeriodBill();
-        bill.totalAdjustments().setValue(bill.totalAdjustments().getValue().add(credit.amount().getValue()));
+        bill.pendingLeaseAdjustments().setValue(bill.pendingLeaseAdjustments().getValue().add(credit.amount().getValue()));
         bill.lineItems().add(credit);
     }
 }

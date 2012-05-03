@@ -49,7 +49,7 @@ public class ARPaymentProcessor extends AbstractProcessor {
 
     void rejectPayment(PaymentRecord payment) {
 
-        //TODO Add InvoicePaymentBackOut creation and InvoiceNSFDebit
+        //TODO Add InvoicePaymentBackOut creation and InvoiceNSF
 
         Persistence.service().persist(payment);
     }

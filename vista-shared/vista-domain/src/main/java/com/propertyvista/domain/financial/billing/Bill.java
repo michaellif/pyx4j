@@ -129,7 +129,7 @@ public interface Bill extends IEntity {
 
     IPrimitive<BigDecimal> depositRefundAmount();
 
-    IPrimitive<BigDecimal> immediateAdjustments();
+    IPrimitive<BigDecimal> immediateLeaseAdjustments();
 
     /**
      * pastDueAmount = previousBalanceAmount + paymentReceivedAmount + depositRefundAmount +
@@ -143,12 +143,7 @@ public interface Bill extends IEntity {
 
     IPrimitive<BigDecimal> oneTimeFeatureCharges();
 
-    /**
-     * 
-     * It includes all feature/service adjustments as well as lease adjustments
-     * 
-     */
-    IPrimitive<BigDecimal> totalAdjustments();
+    IPrimitive<BigDecimal> pendingLeaseAdjustments();
 
     IPrimitive<BigDecimal> depositAmount();
 

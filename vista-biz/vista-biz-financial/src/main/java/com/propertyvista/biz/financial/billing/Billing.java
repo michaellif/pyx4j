@@ -79,8 +79,8 @@ class Billing {
         nextPeriodBill.paymentReceivedAmount().setValue(new BigDecimal(0));
         nextPeriodBill.recurringFeatureCharges().setValue(new BigDecimal(0));
         nextPeriodBill.oneTimeFeatureCharges().setValue(new BigDecimal(0));
-        nextPeriodBill.totalAdjustments().setValue(new BigDecimal(0));
-        nextPeriodBill.immediateAdjustments().setValue(new BigDecimal(0));
+        nextPeriodBill.pendingLeaseAdjustments().setValue(new BigDecimal(0));
+        nextPeriodBill.immediateLeaseAdjustments().setValue(new BigDecimal(0));
         nextPeriodBill.depositRefundAmount().setValue(new BigDecimal(0));
         nextPeriodBill.taxes().setValue(new BigDecimal(0));
         nextPeriodBill.depositAmount().setValue(new BigDecimal(0));
@@ -92,7 +92,7 @@ class Billing {
         leaseAdjustmentProcessor.createPendingLeaseAdjustments();
         leaseAdjustmentProcessor.attachImmediateLeaseAdjustments();
 
-        paymentProcessor.attachPayments();
+        paymentProcessor.attachPaymentRecords();
 
         calculateTotals();
 
@@ -110,12 +110,12 @@ class Billing {
     private void calculateTotals() {
         nextPeriodBill.pastDueAmount().setValue(
                 nextPeriodBill.balanceForwardAmount().getValue().add(nextPeriodBill.paymentReceivedAmount().getValue())
-                        .add(nextPeriodBill.immediateAdjustments().getValue()).add(nextPeriodBill.depositRefundAmount().getValue()));
+                        .add(nextPeriodBill.immediateLeaseAdjustments().getValue()).add(nextPeriodBill.depositRefundAmount().getValue()));
 
         nextPeriodBill.currentAmount().setValue(
                 nextPeriodBill.pastDueAmount().getValue().add(nextPeriodBill.serviceCharge().getValue())
                         .add(nextPeriodBill.recurringFeatureCharges().getValue()).add(nextPeriodBill.oneTimeFeatureCharges().getValue())
-                        .add(nextPeriodBill.totalAdjustments().getValue()).add(nextPeriodBill.depositAmount().getValue()));
+                        .add(nextPeriodBill.pendingLeaseAdjustments().getValue()).add(nextPeriodBill.depositAmount().getValue()));
 
         nextPeriodBill.totalDueAmount().setValue(nextPeriodBill.currentAmount().getValue().add(nextPeriodBill.taxes().getValue()));
     }
