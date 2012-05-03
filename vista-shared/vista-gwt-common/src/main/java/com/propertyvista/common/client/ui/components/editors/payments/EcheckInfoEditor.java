@@ -39,8 +39,6 @@ public class EcheckInfoEditor extends CEntityDecoratableEditor<EcheckInfo> {
         FormFlexPanel panel = new FormFlexPanel();
 
         int row = -1;
-        panel.setH3(++row, 0, 1, i18n.tr("EcheckInfo Data"));
-
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().nameOnAccount()), 30).build());
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().accountType()), 10).build());
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().bankName()), 20).build());

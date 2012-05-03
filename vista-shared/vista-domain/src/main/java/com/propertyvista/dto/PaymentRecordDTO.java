@@ -13,9 +13,6 @@
  */
 package com.propertyvista.dto;
 
-import com.pyx4j.entity.annotations.Caption;
-import com.pyx4j.entity.annotations.Editor;
-import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.ExtendsDBO;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
@@ -25,7 +22,6 @@ import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.financial.PaymentRecord;
-import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.tenant.lease.Lease.Status;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 
@@ -38,7 +34,7 @@ public interface PaymentRecordDTO extends PaymentRecord {
 
         New,
 
-        Existing;
+        Profiled;
 
         @Override
         public String toString() {
@@ -61,9 +57,4 @@ public interface PaymentRecordDTO extends PaymentRecord {
 
     @NotNull
     IPrimitive<PaymentSelect> paymentSelect();
-
-    @NotNull
-    @Caption(name = "Payment Method")
-    @Editor(type = EditorType.radiogroup)
-    IPrimitive<PaymentType> paymentType();
 }

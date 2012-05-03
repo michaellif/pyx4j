@@ -54,8 +54,6 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
 
         dto.participants().addAll(retrieveUsers(dto.billingAccount().lease()));
 
-        dto.paymentType().set(dto.paymentMethod().type());
-
         dto.paymentSelect().setValue(PaymentSelect.New);
     }
 
@@ -81,7 +79,6 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
     protected void persist(PaymentRecord entity, PaymentRecordDTO dto) {
 
         entity.paymentMethod().leaseParticipant().set(dto.leaseParticipant());
-        entity.paymentMethod().type().set(dto.paymentType());
 
         Persistence.service().persist(entity.paymentMethod());
         super.persist(entity, dto);
@@ -108,7 +105,6 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
         // some default values:
         dto.paymentStatus().setValue(PaymentStatus.Submitted);
         dto.paymentSelect().setValue(PaymentSelect.New);
-        dto.paymentType().setValue(PaymentType.Echeck);
         dto.receivedDate().setValue(new LogicalDate());
 
         dto.paymentMethod().type().setValue(PaymentType.Echeck);
