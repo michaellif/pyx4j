@@ -127,7 +127,14 @@ public class CaledonPadFileWriter {
     }
 
     private void writeDebitRecord(PadDebitRecord record) throws IOException {
-
+        // Record Type
+        writer.append("D").append(",");
+        writer.append(record.clientId().getStringView()).append(",");
+        writer.append(formatAmount(record.amount().getValue())).append(",");
+        writer.append(record.bankId().getStringView()).append(",");
+        writer.append(record.branchTransitNumber().getStringView()).append(",");
+        writer.append(record.accountNumber().getStringView()).append(",");
+        writer.append(record.transactionId().getStringView());
     }
 
     private CharSequence formatAmount(BigDecimal value) {
