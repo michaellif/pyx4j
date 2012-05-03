@@ -19,7 +19,7 @@ import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.shared.IPrimitive;
 
 @DiscriminatorValue("InteracInfo")
-public interface InteracInfo extends PaymentMethodDetails {
+public interface InteracInfo extends PaymentDetails {
 
     //TODO
     IPrimitive<Key> incommingInteracTrasaction();

@@ -19,6 +19,7 @@ import java.util.List;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -26,6 +27,8 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.propertyvista.crm.rpc.services.billing.PaymentCrudService;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
+import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
+import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -101,6 +104,14 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
         dto.leaseId().set(billingAccount.lease().leaseId());
         dto.leaseStatus().set(billingAccount.lease().version().status());
         dto.participants().addAll(retrieveUsers(billingAccount.lease()));
+
+        // some default values:
+        dto.paymentStatus().setValue(PaymentStatus.Submitted);
+        dto.paymentSelect().setValue(PaymentSelect.New);
+        dto.paymentType().setValue(PaymentType.Echeck);
+        dto.receivedDate().setValue(new LogicalDate());
+
+        dto.paymentMethod().type().setValue(PaymentType.Echeck);
 
         callback.onSuccess(dto);
     }

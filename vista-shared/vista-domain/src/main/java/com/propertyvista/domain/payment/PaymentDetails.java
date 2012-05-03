@@ -21,6 +21,6 @@ import com.pyx4j.entity.shared.IEntity;
 @AbstractEntity
 @Inheritance(strategy = Inheritance.InheritanceStrategy.SINGLE_TABLE)
 @Table(prefix = "payment")
-public interface PaymentMethodDetails extends IEntity {
+public interface PaymentDetails extends IEntity {
 
 }

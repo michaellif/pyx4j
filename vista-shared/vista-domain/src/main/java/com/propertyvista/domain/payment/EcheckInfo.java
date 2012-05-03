@@ -24,7 +24,7 @@ import com.pyx4j.i18n.shared.I18nEnum;
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
 @Table(prefix = "payment")
 @DiscriminatorValue("EcheckInfo")
-public interface EcheckInfo extends PaymentMethodDetails {
+public interface EcheckInfo extends PaymentDetails {
 
     @I18n
     public enum AccountType {

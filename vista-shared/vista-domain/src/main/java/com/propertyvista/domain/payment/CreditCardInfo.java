@@ -26,7 +26,7 @@ import com.pyx4j.i18n.annotations.I18n;
 
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
 @DiscriminatorValue("CreditCard")
-public interface CreditCardInfo extends PaymentMethodDetails {
+public interface CreditCardInfo extends PaymentDetails {
 
     @NotNull
     @Caption(name = "Card Number")

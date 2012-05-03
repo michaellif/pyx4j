@@ -19,7 +19,10 @@ import java.util.EnumSet;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.SimplePanel;
 
+import com.pyx4j.entity.client.CEntityEditor;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CNumberLabel;
 import com.pyx4j.forms.client.ui.CRadioGroupEnum;
@@ -32,8 +35,11 @@ import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.RadioGroup;
 
+import com.propertyvista.common.client.ui.components.editors.payments.EcheckInfoEditor;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
+import com.propertyvista.domain.payment.EcheckInfo;
+import com.propertyvista.domain.payment.PaymentDetails;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.dto.PaymentRecordDTO;
@@ -42,6 +48,8 @@ import com.propertyvista.dto.PaymentRecordDTO.PaymentSelect;
 public class PaymentEditorForm extends CrmEntityForm<PaymentRecordDTO> {
 
     private static final I18n i18n = I18n.get(PaymentEditorForm.class);
+
+    private final SimplePanel paymentMethodPanel = new SimplePanel();
 
     public PaymentEditorForm() {
         this(false);
@@ -55,13 +63,23 @@ public class PaymentEditorForm extends CrmEntityForm<PaymentRecordDTO> {
     public IsWidget createContent() {
         FormFlexPanel main = new FormFlexPanel();
 
+        main.setWidget(0, 0, createDetailsPanel());
+        main.setHR(1, 0, 1);
+        main.setWidget(2, 0, paymentMethodPanel);
+
+        return new CrmScrollPanel(main);
+    }
+
+    private IsWidget createDetailsPanel() {
+        FormFlexPanel panel = new FormFlexPanel();
+
         int row = -1;
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().id(), new CNumberLabel()), 10).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().propertyCode()), 15).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().unitNumber()), 15).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseId()), 10).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseStatus()), 10).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseParticipant(), new CEntitySelectorHyperlink<LeaseParticipant>() {
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().id(), new CNumberLabel()), 10).build());
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().propertyCode()), 15).build());
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().unitNumber()), 15).build());
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseId()), 10).build());
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseStatus()), 10).build());
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseParticipant(), new CEntitySelectorHyperlink<LeaseParticipant>() {
             @Override
             protected AppPlace getTargetPlace() {
                 return AppPlaceEntityMapper.resolvePlace(getValue().getInstanceValueClass(), getValue().getPrimaryKey());
@@ -91,8 +109,8 @@ public class PaymentEditorForm extends CrmEntityForm<PaymentRecordDTO> {
             }
         }), 25).build());
 
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().paymentSelect(), new CComboBox<PaymentSelect>()), 10).build());
-        main.setWidget(++row, 0,
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().paymentSelect(), new CComboBox<PaymentSelect>()), 10).build());
+        panel.setWidget(++row, 0,
                 new DecoratorBuilder(inject(proto().paymentType(), new CRadioGroupEnum<PaymentType>(PaymentType.class, RadioGroup.Layout.HORISONTAL) {
                     @Override
                     public Collection<PaymentType> getOptions() {
@@ -101,14 +119,14 @@ public class PaymentEditorForm extends CrmEntityForm<PaymentRecordDTO> {
                 }), 25).build());
 
         row = -1;
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().amount()), 10).build());
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().receivedDate()), 10).build());
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().targetDate()), 10).build());
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().depositDate()), 10).build());
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().paymentStatus()), 10).build());
+        panel.setWidget(++row, 1, new DecoratorBuilder(inject(proto().amount()), 10).build());
+        panel.setWidget(++row, 1, new DecoratorBuilder(inject(proto().receivedDate()), 10).build());
+        panel.setWidget(++row, 1, new DecoratorBuilder(inject(proto().targetDate()), 10).build());
+        panel.setWidget(++row, 1, new DecoratorBuilder(inject(proto().depositDate()), 10).build());
+        panel.setWidget(++row, 1, new DecoratorBuilder(inject(proto().paymentStatus()), 10).build());
 //        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().transactionErrorMessage()), 20).build());
 //        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().transactionAuthorizationNumber()), 20).build());
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().notes()), 25).build());
+        panel.setWidget(++row, 1, new DecoratorBuilder(inject(proto().notes()), 25).build());
 
         // tweak UI:
         get(proto().id()).setViewable(true);
@@ -129,10 +147,16 @@ public class PaymentEditorForm extends CrmEntityForm<PaymentRecordDTO> {
             }
         });
 
-        main.getColumnFormatter().setWidth(0, "50%");
-        main.getColumnFormatter().setWidth(1, "50%");
+        get(proto().paymentType()).addValueChangeHandler(new ValueChangeHandler<PaymentType>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<PaymentType> event) {
+                selectPaymentMethodEditor();
+            }
+        });
 
-        return new CrmScrollPanel(main);
+        panel.getColumnFormatter().setWidth(0, "50%");
+        panel.getColumnFormatter().setWidth(1, "50%");
+        return panel;
     }
 
     @Override
@@ -142,5 +166,31 @@ public class PaymentEditorForm extends CrmEntityForm<PaymentRecordDTO> {
         get(proto().id()).setVisible(!getValue().id().isNull());
 //        get(proto().transactionAuthorizationNumber()).setVisible(!getValue().transactionAuthorizationNumber().isNull());
 //        get(proto().transactionErrorMessage()).setVisible(!getValue().transactionErrorMessage().isNull());
+
+        selectPaymentMethodEditor();
+    }
+
+    private void selectPaymentMethodEditor() {
+        CEntityEditor editor = null;
+        PaymentDetails details = getValue().paymentMethod().details();
+
+        // add extraData editor if necessary:
+        switch (getValue().paymentMethod().type().getValue()) {
+        case Echeck:
+            editor = new EcheckInfoEditor();
+            if (details.isNull()) {
+                details.set(EntityFactory.create(EcheckInfo.class));
+            }
+            break;
+        }
+
+        if (editor != null) {
+            if (this.contains(proto().paymentMethod().details())) {
+                this.unbind(proto().paymentMethod().details());
+            }
+            this.inject(proto().paymentMethod().details(), editor);
+            editor.populate(details.cast());
+            paymentMethodPanel.setWidget(editor);
+        }
     }
 }
