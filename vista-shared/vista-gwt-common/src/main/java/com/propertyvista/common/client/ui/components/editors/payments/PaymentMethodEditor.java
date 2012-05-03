@@ -165,6 +165,8 @@ public class PaymentMethodEditor extends CEntityDecoratableEditor<PaymentMethod>
         }
     }
 
+    // some UI tuning mechanics for client:
+
     public void setTypeSelectionVisible(boolean visible) {
         get(proto().type()).setVisible(visible);
     }
@@ -181,6 +183,22 @@ public class PaymentMethodEditor extends CEntityDecoratableEditor<PaymentMethod>
 
     public boolean isBillingAddressVisible() {
         return get(proto().billingAddress()).isVisible();
+    }
+
+    public void setBillingAddressAsCurrentVisible(boolean visible) {
+        get(proto().sameAsCurrent()).setVisible(visible);
+    }
+
+    public boolean isBillingAddressAsCurrentVisible() {
+        return get(proto().sameAsCurrent()).isVisible();
+    }
+
+    public void setBillingAddressAsCurrentEnabled(boolean visible) {
+        get(proto().sameAsCurrent()).setEnabled(visible);
+    }
+
+    public boolean isBillingAddressAsCurrentEnabled() {
+        return get(proto().sameAsCurrent()).isEnabled();
     }
 
     public void onBillingAddressSameAsCurrentOne(boolean set, CComponent<AddressStructured, ?> comp) {

@@ -146,6 +146,14 @@ public class PaymentEditorForm extends CrmEntityForm<PaymentRecordDTO> {
 //        get(proto().transactionErrorMessage()).setViewable(true);
 //        get(proto().transactionAuthorizationNumber()).setViewable(true);
 
+        get(proto().leaseParticipant()).addValueChangeHandler(new ValueChangeHandler<LeaseParticipant>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<LeaseParticipant> event) {
+                get(proto().paymentSelect()).setEnabled(!event.getValue().isNull());
+                paymentMethodEditor.setBillingAddressAsCurrentEnabled(!event.getValue().isNull());
+            }
+        });
+
         get(proto().paymentSelect()).addValueChangeHandler(new ValueChangeHandler<PaymentSelect>() {
             @Override
             public void onValueChange(ValueChangeEvent<PaymentSelect> event) {
@@ -176,6 +184,8 @@ public class PaymentEditorForm extends CrmEntityForm<PaymentRecordDTO> {
 
         get(proto().id()).setVisible(!getValue().id().isNull());
         get(proto().paymentSelect()).setVisible(!isViewable());
+        get(proto().paymentSelect()).setEnabled(getValue().leaseParticipant().getValue() != null);
+        paymentMethodEditor.setBillingAddressAsCurrentEnabled(getValue().leaseParticipant().getValue() != null);
 //        get(proto().transactionAuthorizationNumber()).setVisible(!getValue().transactionAuthorizationNumber().isNull());
 //        get(proto().transactionErrorMessage()).setVisible(!getValue().transactionErrorMessage().isNull());
     }
