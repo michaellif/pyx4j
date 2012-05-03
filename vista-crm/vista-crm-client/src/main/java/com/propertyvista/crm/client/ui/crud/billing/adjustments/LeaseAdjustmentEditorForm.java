@@ -17,10 +17,16 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CNumberLabel;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.site.client.AppPlaceEntityMapper;
+import com.pyx4j.site.client.ui.crud.misc.CEntitySelectorHyperlink;
+import com.pyx4j.site.client.ui.dialogs.AbstractEntitySelectorDialog;
+import com.pyx4j.site.rpc.AppPlace;
 
+import com.propertyvista.crm.client.ui.components.boxes.LeaseAdjustmentReasonSelectorDialog;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
+import com.propertyvista.domain.tenant.lease.LeaseAdjustmentReason;
 
 public class LeaseAdjustmentEditorForm extends CrmEntityForm<LeaseAdjustment> {
 
@@ -47,7 +53,25 @@ public class LeaseAdjustmentEditorForm extends CrmEntityForm<LeaseAdjustment> {
         row = 0;
         main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().targetDate()), 10).build());
         main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().tax()), 10).build());
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().reason()), 25).build());
+        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().reason(), new CEntitySelectorHyperlink<LeaseAdjustmentReason>() {
+            @Override
+            protected AppPlace getTargetPlace() {
+                return AppPlaceEntityMapper.resolvePlace(LeaseAdjustmentReason.class, getValue().getPrimaryKey());
+            }
+
+            @Override
+            protected AbstractEntitySelectorDialog<LeaseAdjustmentReason> getSelectorDialog() {
+                return new LeaseAdjustmentReasonSelectorDialog() {
+                    @Override
+                    public boolean onClickOk() {
+                        if (!getSelectedItems().isEmpty()) {
+                            get(LeaseAdjustmentEditorForm.this.proto().reason()).setValue(getSelectedItems().get(0));
+                        }
+                        return !getSelectedItems().isEmpty();
+                    }
+                };
+            }
+        }), 25).build());
         main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().executionType()), 10).build());
         main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().createdWhen()), 10).build());
         return new CrmScrollPanel(main);
