@@ -55,11 +55,11 @@ public interface EcheckInfo extends PaymentDetails {
 
     @NotNull
     @Caption(name = "Account Number")
-    IPrimitive<Integer> accountNo();
+    IPrimitive<String> accountNo();
 
     // No need for Caledon
     @NotNull
     @Caption(name = "Cheque Number")
-    IPrimitive<Integer> checkNo();
+    IPrimitive<String> checkNo();
 
 }
