@@ -104,7 +104,7 @@ public class PaymentMethodEditor extends CEntityDecoratableEditor<PaymentMethod>
 
     @Override
     protected void propagateValue(PaymentMethod value, boolean fireEvent, boolean populate) {
-        selectPaymentDetailsEditor(null);
+        selectPaymentDetailsEditor(value != null ? value.type().getValue() : null);
     }
 
     @Override
@@ -112,8 +112,6 @@ public class PaymentMethodEditor extends CEntityDecoratableEditor<PaymentMethod>
         super.onPopulate();
 
         get(proto().sameAsCurrent()).setVisible(!isViewable());
-
-        selectPaymentDetailsEditor(getValue().type().getValue());
     }
 
     public void selectPaymentDetailsEditor(PaymentType type) {
@@ -123,49 +121,47 @@ public class PaymentMethodEditor extends CEntityDecoratableEditor<PaymentMethod>
             paymentDetailsHolder.setWidget(null);
         }
 
-        if (type == null) {
-            return; // special, 'reset' case!.. 
-        }
+        if (type != null) {
+            CEntityEditor editor = null;
+            PaymentDetails details = (getValue() != null ? getValue().details() : null);
 
-        CEntityEditor editor = null;
-        PaymentDetails details = (getValue() != null ? getValue().details() : null);
+            switch (type) {
+            case Cash:
+                editor = new CashInfoEditor();
+                if (details.getInstanceValueClass() != CashInfo.class) {
+                    details.set(EntityFactory.create(CashInfo.class));
+                }
+                setBillingAddressVisible(false);
+                break;
+            case Check:
+                editor = new CheckInfoEditor();
+                if (details.getInstanceValueClass() != CheckInfo.class) {
+                    details.set(EntityFactory.create(CheckInfo.class));
+                }
+                setBillingAddressVisible(true);
+                break;
+            case Echeck:
+                editor = new EcheckInfoEditor();
+                if (details.getInstanceValueClass() != EcheckInfo.class) {
+                    details.set(EntityFactory.create(EcheckInfo.class));
+                }
+                setBillingAddressVisible(true);
+                break;
+            case CreditCard:
+                editor = new CreditCardInfoEditor();
+                if (details.getInstanceValueClass() != CreditCardInfo.class) {
+                    details.set(EntityFactory.create(CreditCardInfo.class));
+                }
+                setBillingAddressVisible(true);
+                break;
+            }
 
-        switch (type) {
-        case Cash:
-            editor = new CashInfoEditor();
-            if (details.getInstanceValueClass() != CashInfo.class) {
-                details.set(EntityFactory.create(CashInfo.class));
-            }
-            setBillingAddressVisible(false);
-            break;
-        case Check:
-            editor = new CheckInfoEditor();
-            if (details.getInstanceValueClass() != CheckInfo.class) {
-                details.set(EntityFactory.create(CheckInfo.class));
-            }
-            setBillingAddressVisible(true);
-            break;
-        case Echeck:
-            editor = new EcheckInfoEditor();
-            if (details.getInstanceValueClass() != EcheckInfo.class) {
-                details.set(EntityFactory.create(EcheckInfo.class));
-            }
-            setBillingAddressVisible(true);
-            break;
-        case CreditCard:
-            editor = new CreditCardInfoEditor();
-            if (details.getInstanceValueClass() != CreditCardInfo.class) {
-                details.set(EntityFactory.create(CreditCardInfo.class));
-            }
-            setBillingAddressVisible(true);
-            break;
-        }
+            if (editor != null) {
+                this.inject(proto().details(), editor);
+                editor.populate(details.cast());
 
-        if (editor != null) {
-            this.inject(proto().details(), editor);
-            editor.populate(details.cast());
-
-            paymentDetailsHolder.setWidget(editor);
+                paymentDetailsHolder.setWidget(editor);
+            }
         }
     }
 
