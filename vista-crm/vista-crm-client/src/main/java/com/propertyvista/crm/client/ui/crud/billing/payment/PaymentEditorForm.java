@@ -47,19 +47,16 @@ public class PaymentEditorForm extends CrmEntityForm<PaymentRecordDTO> {
     private final PaymentMethodEditor paymentMethodEditor = new PaymentMethodEditor() {
         @Override
         public void onBillingAddressSameAsCurrentOne(boolean set, final CComponent<AddressStructured, ?> comp) {
-            final AddressStructured currentValue = comp.getValue();
             if (set) {
                 ((PaymentEditorView.Presenter) ((PaymentEditorView) getParentView()).getPresenter()).getCurrentAddress(
                         new DefaultAsyncCallback<AddressStructured>() {
                             @Override
                             public void onSuccess(AddressStructured result) {
-                                currentValue.set(result);
-                                comp.populate(currentValue);
+                                comp.populate(result);
                             }
                         }, PaymentEditorForm.this.getValue().leaseParticipant());
             } else {
-                currentValue.set(EntityFactory.create(AddressStructured.class));
-                comp.populate(currentValue);
+                comp.populate(EntityFactory.create(AddressStructured.class));
             }
         }
     };
