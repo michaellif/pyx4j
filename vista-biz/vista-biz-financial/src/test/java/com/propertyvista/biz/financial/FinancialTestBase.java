@@ -20,12 +20,9 @@
  */
 package com.propertyvista.biz.financial;
 
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.math.BigDecimal;
 
 import com.pyx4j.commons.LogicalDate;
@@ -34,7 +31,6 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
 import com.pyx4j.essentials.server.dev.DataDump;
-import com.pyx4j.gwt.server.IOUtils;
 
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.billing.BillingFacade;
@@ -51,7 +47,6 @@ import com.propertyvista.biz.financial.preload.TenantDataModel;
 import com.propertyvista.config.tests.VistaDBTestBase;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.Bill;
-import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.Feature.Type;
 import com.propertyvista.domain.financial.offering.ProductItem;
@@ -153,7 +148,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
     }
 
     protected void setLeaseConditions(String leaseDateFrom, String leaseDateTo, Integer billingPeriodStartDate) {
-        Lease lease = retrieveLease();
+        Lease lease = retrieveLeaseForEdit();
 
         lease.leaseFrom().setValue(FinancialTestsUtils.getDate(leaseDateFrom));
         lease.leaseTo().setValue(FinancialTestsUtils.getDate(leaseDateTo));
@@ -167,7 +162,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
     }
 
     protected void setLeaseStatus(Lease.Status status) {
-        Lease lease = retrieveLease();
+        Lease lease = retrieveLeaseForEdit();
 
         lease.version().status().setValue(status);
 
@@ -178,8 +173,10 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
     }
 
     protected Lease retrieveLease() {
-        // TODO with VladS
-        //return Persistence.service().retrieve(Lease.class, leaseDataModel.getLeaseKey());
+        return Persistence.service().retrieve(Lease.class, leaseDataModel.getLeaseKey());
+    }
+
+    protected Lease retrieveLeaseForEdit() {
         return Persistence.retrieveDraft(Lease.class, leaseDataModel.getLeaseKey());
     }
 
@@ -214,7 +211,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
     }
 
     protected void changeBillableItem(String billableItemId, String effectiveDate, String expirationDate) {
-        Lease lease = retrieveLease();
+        Lease lease = retrieveLeaseForEdit();
 
         BillableItem billableItem = findBillableItem(billableItemId, lease);
 
@@ -236,7 +233,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
     }
 
     private BillableItem addBillableItem(Feature.Type featureType, LogicalDate effectiveDate, LogicalDate expirationDate) {
-        Lease lease = retrieveLease();
+        Lease lease = retrieveLeaseForEdit();
 
         ProductItem serviceItem = leaseDataModel.getServiceItem();
         Service.ServiceV service = serviceItem.product().cast();
@@ -259,7 +256,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
     }
 
     protected void setDeposit(String billableItemId, String value, ValueType valueType, RepaymentMode repaymentMode) {
-        Lease lease = retrieveLease();
+        Lease lease = retrieveLeaseForEdit();
         BillableItem billableItem = findBillableItem(billableItemId, lease);
         billableItem.deposit().depositAmount().setValue(new BigDecimal(value));
         billableItem.deposit().valueType().setValue(valueType);
@@ -292,6 +289,10 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
 
         Lease lease = Persistence.service().retrieve(Lease.class, leaseDataModel.getLeaseKey());
         BillableItem actualBillableItem = findBillableItem(billableItemId, lease);
+
+        if (actualBillableItem == null) {
+            System.out.println("++++++++++");
+        }
 
         BillableItemAdjustment adjustment = EntityFactory.create(BillableItemAdjustment.class);
         adjustment.effectiveDate().setValue(new LogicalDate(lease.leaseFrom().getValue()));

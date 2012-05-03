@@ -77,7 +77,7 @@ public class ARCreditDebitLinkManager {
 
             DebitCreditLink link = EntityFactory.create(DebitCreditLink.class);
 
-            if (debit.outstandingDebit().getValue().compareTo(credit.outstandingCredit().getValue()) > 0) {
+            if (debit.outstandingDebit().getValue().compareTo(credit.outstandingCredit().getValue().negate()) > 0) {
                 link.amount().setValue(credit.outstandingCredit().getValue());
 
                 debit.outstandingDebit().setValue(debit.outstandingDebit().getValue().add(credit.outstandingCredit().getValue()));
@@ -120,7 +120,7 @@ public class ARCreditDebitLinkManager {
 
             DebitCreditLink link = EntityFactory.create(DebitCreditLink.class);
 
-            if (credit.outstandingCredit().getValue().compareTo(debit.outstandingDebit().getValue()) > 0) {
+            if (credit.outstandingCredit().getValue().negate().compareTo(debit.outstandingDebit().getValue()) > 0) {
                 link.amount().setValue(debit.outstandingDebit().getValue());
 
                 credit.outstandingCredit().setValue(credit.outstandingCredit().getValue().add(debit.outstandingDebit().getValue()));
