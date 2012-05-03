@@ -377,8 +377,10 @@ public class EntityGraph {
         applyRecursivelyAllObjects(copy, new ApplyMethod() {
             @Override
             public boolean apply(IEntity entity) {
-                if (entity == copy || entity.getMeta().isOwnedRelationships()) {
-                    entity.setPrimaryKey(null);
+                if ((entity == copy || entity.getMeta().isOwnedRelationships())) {
+                    if (entity.getPrimaryKey() != null) {
+                        entity.setPrimaryKey(null);
+                    }
                     return true;
                 } else {
                     return false;
