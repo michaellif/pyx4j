@@ -145,6 +145,7 @@ public class ConnectionProvider {
         while (drivers.hasMoreElements()) {
             drvCopy.add(drivers.nextElement());
         }
+        int count = 0;
         for (Driver d : drvCopy) {
             if (d.getClass().getClassLoader() != ConnectionProvider.class.getClassLoader()) {
                 log.debug("do not deregister {}", d.getClass().getName());
@@ -156,9 +157,13 @@ public class ConnectionProvider {
                 if ("oracle.jdbc.OracleDriver".equals(d.getClass().getName())) {
                     deregisterOracleDiagnosabilityMBean();
                 }
+                count++;
             } catch (Throwable e) {
                 log.error("deregister error", e);
             }
+        }
+        if (count == 0) {
+            log.warn("filed to find jdbc driver to deregister");
         }
     }
 

@@ -77,6 +77,8 @@ public class PersistenceServicesFactory {
             } finally {
                 instance = null;
             }
+        } else {
+            log.debug("PersistenceService was never initialized");
         }
     }
 }

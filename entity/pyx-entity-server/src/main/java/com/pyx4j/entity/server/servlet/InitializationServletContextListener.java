@@ -55,7 +55,8 @@ public class InitializationServletContextListener implements ServletContextListe
                     String configContextName = getContextName(servletContext);
                     LoggerConfig.setContextName(configContextName);
                     ServerSideConfiguration defaultConfig = (ServerSideConfiguration) Class.forName(configClass).newInstance();
-                    ServerSideConfiguration.setInstance(defaultConfig.selectInstanceByContextName(servletContext, configContextName));
+                    ServerSideConfiguration selectedConfig = defaultConfig.selectInstanceByContextName(servletContext, configContextName);
+                    ServerSideConfiguration.setInstance(selectedConfig);
                 } catch (Throwable e) {
                     Logger log = LoggerFactory.getLogger(InitializationServletContextListener.class);
                     log.error("ServerSideConfiguration creation error", e);
@@ -70,6 +71,7 @@ public class InitializationServletContextListener implements ServletContextListe
             log.debug("ServerInfo {}", servletContext.getServerInfo());
             log.debug("Java Servlet API {} {}", servletContext.getMajorVersion(), servletContext.getMinorVersion());
             log.debug("ServletContext {} {}", servletContext.getContextPath(), servletContext.getServletContextName());
+            log.debug("ServerSideConfiguration {}", ServerSideConfiguration.instance().getClass());
             ServerSideConfiguration.logSystemProperties();
 
             EntityImplGenerator.generate(ServerSideConfiguration.instance().getEnvironmentType() == EnvironmentType.GAESandbox);
@@ -102,7 +104,7 @@ public class InitializationServletContextListener implements ServletContextListe
     public void contextDestroyed(ServletContextEvent sce) {
         PersistenceServicesFactory.deregister();
         EntityImplGenerator.release();
+        LoggerFactory.getLogger(InitializationServletContextListener.class).info("contextDestroyed");
         LoggerConfig.shutdown();
     }
-
 }
