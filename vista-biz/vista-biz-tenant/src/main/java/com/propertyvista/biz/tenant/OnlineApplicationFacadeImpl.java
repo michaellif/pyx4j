@@ -327,11 +327,9 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
         List<ApplicationWizardStep> progress = new Vector<ApplicationWizardStep>();
         if (VistaTODO.enableWelcomeWizardDemoMode) {
             for (Class<? extends AppPlace> place : Arrays.<Class<? extends AppPlace>> asList(//@formatter:off
-                        PtSiteMap.WelcomeWizard.ReviewLease.class,
-                        PtSiteMap.WelcomeWizard.MoveInSchedule.class,
+                        PtSiteMap.WelcomeWizard.ReviewLease.class,                        
                         PtSiteMap.WelcomeWizard.Insurance.class,
-                        PtSiteMap.WelcomeWizard.Completion.class
-                        
+                        PtSiteMap.WelcomeWizard.MoveInSchedule.class
                     )) {//@formatter:on
                 progress.add(createWizardStep(place, ApplicationWizardStep.Status.notVisited));
             }

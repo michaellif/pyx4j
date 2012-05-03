@@ -34,6 +34,7 @@ import com.propertyvista.domain.tenant.ptapp.ApplicationWizardStep;
 import com.propertyvista.domain.tenant.ptapp.ApplicationWizardSubstep;
 import com.propertyvista.domain.tenant.ptapp.MasterOnlineApplication;
 import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
+import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.portal.rpc.ptapp.services.ApplicationService;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
 import com.propertyvista.portal.server.ptapp.services.util.ApplicationProgressMgr;
@@ -176,6 +177,10 @@ public class ApplicationServiceImpl extends ApplicationEntityServiceImpl impleme
 
     private void onStepCompleted(OnlineApplication application, ApplicationWizardStep currentStep) {
         boolean isEndOfTheWizard = (application.steps().indexOf(currentStep) + 1 == application.steps().size() - 1);
+        if (VistaTODO.enableWelcomeWizardDemoMode) {
+            // We want to eliminate completion view as a Step..
+            isEndOfTheWizard = (application.steps().indexOf(currentStep) == application.steps().size() - 1);
+        }
         if (isEndOfTheWizard) {
             ServerSideFactory.create(OnlineApplicationFacade.class).submitOnlineApplication(application);
 

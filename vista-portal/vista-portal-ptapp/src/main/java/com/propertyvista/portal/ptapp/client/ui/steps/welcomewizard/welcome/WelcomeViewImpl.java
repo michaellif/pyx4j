@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.ptapp.client.ui.steps.welcomewizard.welcome;
 
+import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -93,14 +94,25 @@ public class WelcomeViewImpl implements WelcomeView {
         startPanel.setWidth("100%");
         startPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 
-        startPanel.add(new HTML(new SafeHtmlBuilder().appendEscaped(i18n.tr("Let's Get Started!")).toSafeHtml().asString()));
-        startPanel.add(new Button(i18n.tr("Start"), new ClickHandler() {
+        HTML letsGetStartedLabel = new HTML(new SafeHtmlBuilder().appendEscaped(i18n.tr("Let's Get Started!")).toSafeHtml().asString());
+        letsGetStartedLabel.getElement().getStyle().setFontSize(40, Unit.PX);
+        letsGetStartedLabel.getElement().getStyle().setFontWeight(FontWeight.BOLD);
+        letsGetStartedLabel.getElement().getStyle().setPaddingBottom(20, Unit.PX);
+        startPanel.add(letsGetStartedLabel);
+
+        Button startButton = new Button(i18n.tr("START"), new ClickHandler() {
 
             @Override
             public void onClick(ClickEvent event) {
                 WelcomeViewImpl.this.presenter.startTheWizard();
             }
-        }));
+
+        });
+
+        startButton.getElement().getStyle().setFontSize(15, Unit.PX);
+        startButton.getElement().getStyle().setFontWeight(FontWeight.BOLD);
+        startPanel.add(startButton);
+
         return startPanel;
     }
 }

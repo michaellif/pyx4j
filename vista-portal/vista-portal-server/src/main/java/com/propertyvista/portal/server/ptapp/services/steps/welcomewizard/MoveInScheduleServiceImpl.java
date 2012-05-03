@@ -37,8 +37,8 @@ public class MoveInScheduleServiceImpl implements MoveInScheduleService {
         MoveInScheduleDTO moveInSchedule = EntityFactory.create(MoveInScheduleDTO.class);
 
         moveInSchedule.moveInDay().setValue(WelcomeWizardDemoData.leaseStart());
-        moveInSchedule.elevatorDay().setValue(WelcomeWizardDemoData.leaseStart());
-        moveInSchedule.elevatorSchedule().addAll(createRandomElevatorSchedule(moveInSchedule.elevatorDay().getValue()));
+        moveInSchedule.elevatorSchedule().schedule().addAll(createRandomElevatorSchedule(moveInSchedule.moveInDay().getValue()));
+        moveInSchedule.elevatorSchedule().scheduleDate().setValue(moveInSchedule.moveInDay().getValue());
         callback.onSuccess(moveInSchedule);
     }
 

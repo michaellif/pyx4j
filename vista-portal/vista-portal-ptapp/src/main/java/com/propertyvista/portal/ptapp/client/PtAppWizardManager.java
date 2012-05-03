@@ -31,10 +31,11 @@ import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.domain.security.VistaCustomerBehavior;
-import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
 import com.propertyvista.domain.tenant.ptapp.ApplicationWizardStep;
 import com.propertyvista.domain.tenant.ptapp.ApplicationWizardStep.Status;
 import com.propertyvista.domain.tenant.ptapp.ApplicationWizardSubstep;
+import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
+import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 import com.propertyvista.portal.rpc.ptapp.services.ApplicationService;
 
@@ -111,7 +112,11 @@ public class PtAppWizardManager {
 
     public void isPlaceNavigable(final AppPlace targetPlace, final AsyncCallback<Boolean> callback) {
         if (application != null) {
-            callback.onSuccess(isStepNavigable(targetPlace));
+            if (VistaTODO.enableWelcomeWizardDemoMode && targetPlace instanceof PtSiteMap.WelcomeWizard.Completion) {
+                callback.onSuccess(true);
+            } else {
+                callback.onSuccess(isStepNavigable(targetPlace));
+            }
         } else {
             applicationService.getApplication(new DefaultAsyncCallback<OnlineApplication>() {
                 @Override
@@ -173,6 +178,10 @@ public class PtAppWizardManager {
                 return;
             }
         }
-        callback.onFailure(new UnrecoverableClientError("Application Wizard doesn't have 'latest' step"));
+        if (VistaTODO.enableWelcomeWizardDemoMode) {
+            callback.onSuccess(new PtSiteMap.WelcomeWizard.Completion());
+        } else {
+            callback.onFailure(new UnrecoverableClientError("Application Wizard doesn't have 'latest' step"));
+        }
     }
 }

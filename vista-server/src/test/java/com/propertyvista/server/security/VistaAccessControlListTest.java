@@ -41,6 +41,7 @@ import com.propertyvista.domain.security.VistaCustomerBehavior;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
 import com.propertyvista.dto.TenantFinancialDTO;
+import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.portal.domain.ptapp.Charges;
 import com.propertyvista.portal.domain.ptapp.PaymentInformation;
 import com.propertyvista.portal.domain.ptapp.Summary;
@@ -88,19 +89,21 @@ public class VistaAccessControlListTest {
 
     @Test
     public void publicServicePermissions() {
-        TestLifecycle.beginRequest();
-        assertPermission(false, ApplicationService.class);
-        assertPermission(false, ApartmentService.class);
-        assertPermission(false, TenantService.class);
-        assertPermission(false, TenantInfoService.class);
-        assertPermission(false, TenantFinancialService.class);
-        assertPermission(false, ChargesService.class);
-        assertPermission(false, SummaryService.class);
-        assertPermission(false, PaymentService.class);
+        if (!VistaTODO.enableWelcomeWizardDemoMode) {
+            TestLifecycle.beginRequest();
+            assertPermission(false, ApplicationService.class);
+            assertPermission(false, ApartmentService.class);
+            assertPermission(false, TenantService.class);
+            assertPermission(false, TenantInfoService.class);
+            assertPermission(false, TenantFinancialService.class);
+            assertPermission(false, ChargesService.class);
+            assertPermission(false, SummaryService.class);
+            assertPermission(false, PaymentService.class);
 
-        assertPermission(false, ApplicationStatusService.class);
+            assertPermission(false, ApplicationStatusService.class);
 
-        TestLifecycle.endRequest();
+            TestLifecycle.endRequest();
+        }
     }
 
     @Test
@@ -121,20 +124,22 @@ public class VistaAccessControlListTest {
 
     @Test
     public void prospectiveSubmittedTenantServicePermissions() {
-        TestLifecycle.testSession(null, VistaCustomerBehavior.ProspectiveSubmitted);
-        TestLifecycle.beginRequest();
-        assertPermission(true, ApplicationService.class);
-        assertPermission(false, ApartmentService.class);
-        assertPermission(false, TenantService.class);
-        assertPermission(false, TenantInfoService.class);
-        assertPermission(false, TenantFinancialService.class);
-        assertPermission(false, ChargesService.class);
-        assertPermission(false, PaymentService.class);
+        if (!VistaTODO.enableWelcomeWizardDemoMode) {
+            TestLifecycle.testSession(null, VistaCustomerBehavior.ProspectiveSubmitted);
+            TestLifecycle.beginRequest();
+            assertPermission(true, ApplicationService.class);
+            assertPermission(false, ApartmentService.class);
+            assertPermission(false, TenantService.class);
+            assertPermission(false, TenantInfoService.class);
+            assertPermission(false, TenantFinancialService.class);
+            assertPermission(false, ChargesService.class);
+            assertPermission(false, PaymentService.class);
 
-        assertPermission(true, SummaryService.class);
-        assertPermission(true, ApplicationStatusService.class);
+            assertPermission(true, SummaryService.class);
+            assertPermission(true, ApplicationStatusService.class);
 
-        TestLifecycle.endRequest();
+            TestLifecycle.endRequest();
+        }
     }
 
     void assertEntityPermission(boolean expected, Class<? extends IEntity> entityClass, OnlineApplication application) {
@@ -155,15 +160,17 @@ public class VistaAccessControlListTest {
 
     @Test
     public void publicApplicationEntityInstanceAccess() {
-        TestLifecycle.beginRequest();
+        if (!VistaTODO.enableWelcomeWizardDemoMode) {
+            TestLifecycle.beginRequest();
 
-        assertEntityPermission(false, ApplicationDocumentFile.class, null);
-        assertEntityPermission(false, TenantInLeaseListDTO.class, null);
-        assertEntityPermission(false, Tenant.class, null);
-        assertEntityPermission(false, TenantFinancialDTO.class, null);
-        assertEntityPermission(false, Charges.class, null);
-        assertEntityPermission(false, Summary.class, null);
-        assertEntityPermission(false, PaymentInformation.class, null);
+            assertEntityPermission(false, ApplicationDocumentFile.class, null);
+            assertEntityPermission(false, TenantInLeaseListDTO.class, null);
+            assertEntityPermission(false, Tenant.class, null);
+            assertEntityPermission(false, TenantFinancialDTO.class, null);
+            assertEntityPermission(false, Charges.class, null);
+            assertEntityPermission(false, Summary.class, null);
+            assertEntityPermission(false, PaymentInformation.class, null);
+        }
     }
 
     @Test

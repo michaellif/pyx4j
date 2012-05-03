@@ -13,6 +13,8 @@
  */
 package com.propertyvista.portal.ptapp.client.themes;
 
+import java.util.List;
+
 import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.commons.css.Selector;
 import com.pyx4j.commons.css.Style;
@@ -29,6 +31,7 @@ import com.pyx4j.widgets.client.dialog.DefaultDialogTheme;
 import com.propertyvista.common.client.theme.HorizontalAlignCenterMixin;
 import com.propertyvista.common.client.theme.NewPaymentMethodEditorTheme;
 import com.propertyvista.common.client.theme.VistaTheme;
+import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.portal.ptapp.client.resources.PortalImages;
 import com.propertyvista.portal.ptapp.client.ui.CaptionViewImpl;
 import com.propertyvista.portal.ptapp.client.ui.MainNavigViewImpl;
@@ -74,6 +77,28 @@ public class PtAppTheme extends VistaTheme {
         initSummaryStepViewStyles();
         initPaymentStepViewStyles();
         initMenuBarStyles();
+        if (VistaTODO.enableWelcomeWizardDemoMode) {
+            initWizardDemoFont();
+        }
+
+    }
+
+    private void initWizardDemoFont() {
+        List<Style> styles = getStyles(".gwt-HTML");
+        String fonts = "\"Comic Sans MS\", Arial";
+        for (Style style : styles) {
+            style.addProperty("font-family", fonts);
+        }
+        if (styles.isEmpty()) {
+            Style style = new Style(".gwt-HTML");
+            style.addProperty("font-family", fonts);
+            addStyle(style);
+        }
+        {
+            Style style = new Style("body");
+            style.addProperty("font-family", fonts);
+            addStyle(style);
+        }
 
     }
 
