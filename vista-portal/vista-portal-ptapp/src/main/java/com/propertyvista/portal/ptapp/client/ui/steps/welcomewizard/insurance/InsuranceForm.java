@@ -174,6 +174,7 @@ public class InsuranceForm extends CEntityDecoratableEditor<InsuranceDTO> {
             quoteTotalPanel.getElement().getStyle().setRight(0, Unit.PCT);
             quoteTotalPanel.getElement().getStyle().setBackgroundColor("#FFFFFF");
             quoteTotalPanel.getElement().getStyle().setProperty("borderStyle", "outset");
+            quoteTotalPanel.getElement().getStyle().setProperty("borderRadius", "5px");
             quoteTotalPanel.getElement().getStyle().setBorderColor("#000000");
             quoteTotalPanel.getElement().getStyle().setBorderWidth(1, Unit.PX);
 

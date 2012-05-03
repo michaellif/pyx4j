@@ -47,7 +47,7 @@ public class LogoViewImpl extends SimplePanel implements LogoView {
             logoPanel.setWidth("100%");
             if (SecurityController.checkAnyBehavior(VistaBasicBehavior.ProspectiveApp)) {
                 HTML daysLeftCountdown = new HTML(
-                        "<div style='color:#E6E6E6;float:left;'><div style='border-style:outset;border-width:1px;text-align:center;font-size:1.5em;font-weight:bold;width:2.5em;line-height:2.5em;margin:auto;vertical-align:center'>15</div><div style='margin:auto;text-align:center;'>Days Until Move-In Date</div></div>");
+                        "<div style='color:#E6E6E6;float:left;'><div style='border-style:outset;border-width:1px;border-radius:0.5em;text-align:center;font-size:1.5em;font-weight:bold;width:2.5em;line-height:2.5em;margin:auto;vertical-align:center'>15</div><div style='margin:auto;text-align:center;'>Days Until Move-In Date</div></div>");
                 daysLeftCountdown.getElement().getStyle().setPosition(Position.ABSOLUTE);
                 daysLeftCountdown.getElement().getStyle().setTop(5, Unit.PCT);
                 daysLeftCountdown.getElement().getStyle().setLeft(10, Unit.PX);

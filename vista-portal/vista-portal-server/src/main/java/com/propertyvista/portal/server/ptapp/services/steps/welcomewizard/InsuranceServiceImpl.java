@@ -85,7 +85,7 @@ public class InsuranceServiceImpl implements InsuranceService {
         LegalTermsDescriptorDTO agreement = insurance.purchaseInsurance().agreementLegalBlurbAndPreAuthorizationAgreeement().$();
         agreement.content().content().setValue(AGREEMENT_LEGAL_BLURB_AND_PRE_AUTHORIZATION_AGREEMENT);
         agreement.content().localizedCaption().setValue("AGREEMENT LEGAL BLURB AND PRE-AUTHORIZATION AGREEMENT");
-
+        insurance.purchaseInsurance().agreementLegalBlurbAndPreAuthorizationAgreeement().add(agreement);
         insurance.existingInsurance().documents().add(insurance.existingInsurance().documents().$());
 
         callback.onSuccess(insurance);
