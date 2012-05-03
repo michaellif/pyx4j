@@ -35,6 +35,7 @@ import com.propertyvista.common.client.ui.components.editors.payments.PaymentMet
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.dto.PaymentRecordDTO;
 import com.propertyvista.dto.PaymentRecordDTO.PaymentSelect;
@@ -153,7 +154,17 @@ public class PaymentEditorForm extends CrmEntityForm<PaymentRecordDTO> {
             public void onValueChange(ValueChangeEvent<PaymentSelect> event) {
                 paymentMethodEditor.setTypeSelectionVisible(event.getValue() == PaymentSelect.New);
 
-                // TODO: for Profiled payment  - retrieve it somewhere and setup the paymentMethodEditor
+                if (event.getValue() == PaymentSelect.Profiled) {
+                    final PaymentMethod currentValue = paymentMethodEditor.getValue();
+                    ((PaymentEditorView.Presenter) ((PaymentEditorView) getParentView()).getPresenter()).getProfiledPaymentMethod(
+                            new DefaultAsyncCallback<PaymentMethod>() {
+                                @Override
+                                public void onSuccess(PaymentMethod result) {
+                                    currentValue.set(result);
+                                    paymentMethodEditor.populate(currentValue);
+                                }
+                            }, PaymentEditorForm.this.getValue().leaseParticipant());
+                }
             }
         });
 

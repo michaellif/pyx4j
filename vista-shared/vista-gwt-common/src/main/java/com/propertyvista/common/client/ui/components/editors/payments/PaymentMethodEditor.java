@@ -103,6 +103,11 @@ public class PaymentMethodEditor extends CEntityDecoratableEditor<PaymentMethod>
     }
 
     @Override
+    protected void propagateValue(PaymentMethod value, boolean fireEvent, boolean populate) {
+        selectPaymentDetailsEditor(null);
+    }
+
+    @Override
     protected void onPopulate() {
         super.onPopulate();
 
@@ -112,8 +117,18 @@ public class PaymentMethodEditor extends CEntityDecoratableEditor<PaymentMethod>
     }
 
     public void selectPaymentDetailsEditor(PaymentType type) {
+
+        if (this.contains(proto().details())) {
+            this.unbind(proto().details());
+            paymentDetailsHolder.setWidget(null);
+        }
+
+        if (type == null) {
+            return; // special, 'reset' case!.. 
+        }
+
         CEntityEditor editor = null;
-        PaymentDetails details = getValue().details();
+        PaymentDetails details = (getValue() != null ? getValue().details() : null);
 
         switch (type) {
         case Cash:
@@ -147,9 +162,6 @@ public class PaymentMethodEditor extends CEntityDecoratableEditor<PaymentMethod>
         }
 
         if (editor != null) {
-            if (this.contains(proto().details())) {
-                this.unbind(proto().details());
-            }
             this.inject(proto().details(), editor);
             editor.populate(details.cast());
 

@@ -31,6 +31,8 @@ import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
+import com.propertyvista.domain.payment.CashInfo;
+import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.Tenant;
@@ -127,6 +129,23 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
         callback.onSuccess((AddressStructured) (payer.screening().isNull() ? EntityFactory.create(AddressStructured.class) : payer.screening().currentAddress()
                 .detach()));
     }
+
+    @Override
+    public void getProfiledPaymentMethod(AsyncCallback<PaymentMethod> callback, LeaseParticipant payer) {
+        Persistence.service().retrieve(payer);
+        if ((payer == null) || (payer.isNull())) {
+            throw new RuntimeException("Entity '" + EntityFactory.getEntityMeta(LeaseParticipant.class).getCaption() + "' " + payer.getPrimaryKey()
+                    + " NotFound");
+        }
+
+        PaymentMethod method = EntityFactory.create(PaymentMethod.class);
+        method.details().set(EntityFactory.create(CashInfo.class));
+        method.type().setValue(PaymentType.Cash);
+
+        callback.onSuccess(method);
+    }
+
+    // Payment operations:
 
     @Override
     public void processPayment(AsyncCallback<PaymentRecordDTO> callback, Key entityId) {

@@ -25,6 +25,7 @@ import com.propertyvista.crm.client.ui.crud.billing.payment.PaymentEditorView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.LeaseViewFactory;
 import com.propertyvista.crm.rpc.services.billing.PaymentCrudService;
 import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.dto.PaymentRecordDTO;
 
@@ -50,6 +51,16 @@ public class PaymentEditorActivity extends EditorActivityBase<PaymentRecordDTO> 
         ((PaymentCrudService) getService()).getCurrentAddress(new DefaultAsyncCallback<AddressStructured>() {
             @Override
             public void onSuccess(AddressStructured result) {
+                callback.onSuccess(result);
+            }
+        }, (LeaseParticipant) payer.createIdentityStub());
+    }
+
+    @Override
+    public void getProfiledPaymentMethod(final AsyncCallback<PaymentMethod> callback, LeaseParticipant payer) {
+        ((PaymentCrudService) getService()).getProfiledPaymentMethod(new DefaultAsyncCallback<PaymentMethod>() {
+            @Override
+            public void onSuccess(PaymentMethod result) {
                 callback.onSuccess(result);
             }
         }, (LeaseParticipant) payer.createIdentityStub());
