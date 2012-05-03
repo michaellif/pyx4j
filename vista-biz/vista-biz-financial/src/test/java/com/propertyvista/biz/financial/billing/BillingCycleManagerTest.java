@@ -24,7 +24,7 @@ import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.financial.billing.BillingRun;
 import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
 
-public class BillingCycleMangerTest extends VistaDBTestBase {
+public class BillingCycleManagerTest extends VistaDBTestBase {
 
     public void testBillingPeriodStartDate() throws ParseException {
         BillingRun billingRun = createFirstBillingRun(FinancialTestsUtils.getDate("23-Feb-2012"), null, false);
