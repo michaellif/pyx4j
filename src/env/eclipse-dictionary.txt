@@ -161,3 +161,4 @@ floorplan
 versioned
 hyperlink
 equifax
+editable

@@ -13,8 +13,24 @@
  */
 package com.propertyvista.server.domain.payment.pad;
 
-import com.pyx4j.entity.shared.IEntity;
+import java.math.BigDecimal;
 
+import com.pyx4j.entity.annotations.JoinColumn;
+import com.pyx4j.entity.annotations.Owner;
+import com.pyx4j.entity.annotations.Table;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.annotations.I18n;
+
+import com.propertyvista.domain.VistaNamespace;
+
+@Table(namespace = VistaNamespace.adminNamespace)
+@I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 public interface PadDebitRecord extends IEntity {
 
+    @Owner
+    @JoinColumn
+    PadBatch padBatch();
+
+    IPrimitive<BigDecimal> amount();
 }

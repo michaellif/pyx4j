@@ -13,8 +13,19 @@
  */
 package com.propertyvista.server.domain.payment.pad;
 
+import java.util.Date;
+
+import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.Table;
+import com.pyx4j.entity.annotations.Timestamp;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.annotations.I18n;
+
+import com.propertyvista.domain.VistaNamespace;
 
 /**
  * e-Cheque or PAD (pre-authorized debit transactions) / EFT Batch payments
@@ -22,8 +33,32 @@ import com.pyx4j.entity.shared.IList;
  * @see http://jira.birchwoodsoftwaregroup.com/wiki/display/VISTA/Caledon
  * @see http://jira.birchwoodsoftwaregroup.com/wiki/download/attachments/4587553/CCS-PAD-File-Specifications.pdf
  */
+@Table(namespace = VistaNamespace.adminNamespace)
+@I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 public interface PadFile extends IEntity {
 
+    public enum PadFileStatus {
+
+        Creating,
+
+        Sent,
+
+        Received,
+
+        Procesed;
+
+    };
+
+    IPrimitive<PadFileStatus> sent();
+
+    @Owned
+    @Detached(level = AttachLevel.Detached)
     IList<PadBatch> batches();
+
+    @Timestamp(Timestamp.Update.Created)
+    IPrimitive<Date> created();
+
+    @Timestamp(Timestamp.Update.Updated)
+    IPrimitive<Date> updated();
 
 }

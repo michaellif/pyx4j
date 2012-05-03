@@ -42,4 +42,10 @@ public interface MerchantAccount extends IEntity {
     @ToString
     IPrimitive<String> accountNumber();
 
+    // filed editable by CRM
+
+    /**
+     * Description to appear on client's statement. Typically a merchant's business name.
+     */
+    IPrimitive<String> chargeDescription();
 }

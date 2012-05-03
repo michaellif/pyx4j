@@ -14,6 +14,7 @@
 package com.propertyvista.domain.financial;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
@@ -27,6 +28,7 @@ import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
+import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
@@ -111,4 +113,7 @@ public interface PaymentRecord extends IEntity {
 
     @OrderColumn(OrderId.class)
     IPrimitive<Integer> orderInParent();
+
+    @Timestamp(Timestamp.Update.Updated)
+    IPrimitive<Date> updated();
 }

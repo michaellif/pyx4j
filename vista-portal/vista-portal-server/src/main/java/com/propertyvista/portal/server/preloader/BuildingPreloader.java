@@ -132,6 +132,9 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
             merchantAccount1.bankId().setValue("002");
             merchantAccount1.branchTransitNumber().setValue("00750");
             merchantAccount1.accountNumber().setValue("01234567");
+
+            merchantAccount1.chargeDescription().setValue("Pay for Vista1");
+
             Persistence.service().persist(merchantAccount1);
         }
         {
@@ -140,6 +143,7 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
             merchantAccount.bankId().setValue("001");
             merchantAccount.branchTransitNumber().setValue("00550");
             merchantAccount.accountNumber().setValue("12345678");
+            merchantAccount.chargeDescription().setValue("Pay for Vista2");
             Persistence.service().persist(merchantAccount);
         }
 
