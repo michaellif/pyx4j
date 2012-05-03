@@ -26,6 +26,7 @@ import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.admin.server.onboarding.rhf.AbstractRequestHandler;
 import com.propertyvista.domain.financial.MerchantAccount;
+import com.propertyvista.onboarding.BankAccountInfo;
 import com.propertyvista.onboarding.ResponseIO;
 import com.propertyvista.onboarding.UpdateBankAccountInfoRequestIO;
 import com.propertyvista.server.domain.admin.Pmc;
@@ -58,33 +59,45 @@ public class UpdateBankAccountInfoRequestHandler extends AbstractRequestHandler<
         Pmc pmc = pmcs.get(0);
         NamespaceManager.setNamespace(pmc.namespace().getValue());
 
-        // Check if account exists already.
-        EntityQueryCriteria<MerchantAccount> crmerch = EntityQueryCriteria.create(MerchantAccount.class);
-        crmerch.add(PropertyCriterion.eq(crmerch.proto().onboardingMerchantAccountId(), request.onboardingAccountId().getValue()));
-        crmerch.add(PropertyCriterion.eq(crmerch.proto().bankId(), request.bankId().getValue()));
-        crmerch.add(PropertyCriterion.eq(crmerch.proto().branchTransitNumber(), request.branchTransitNumber().getValue()));
-        crmerch.add(PropertyCriterion.eq(crmerch.proto().accountNumber(), request.accountNumber().getValue()));
+        try {
+            for (BankAccountInfo acc : request.accounts()) {
 
-        List<MerchantAccount> accs = Persistence.service().query(crmerch);
+                // Check if account exists already.
+                EntityQueryCriteria<MerchantAccount> crmerch = EntityQueryCriteria.create(MerchantAccount.class);
+                crmerch.add(PropertyCriterion.eq(crmerch.proto().onboardingMerchantAccountId(), request.onboardingAccountId().getValue()));
+                crmerch.add(PropertyCriterion.eq(crmerch.proto().bankId(), acc.bankId().getValue()));
+                crmerch.add(PropertyCriterion.eq(crmerch.proto().branchTransitNumber(), acc.branchTransitNumber().getValue()));
+                crmerch.add(PropertyCriterion.eq(crmerch.proto().accountNumber(), acc.accountNumber().getValue()));
 
-        MerchantAccount acc = null;
-        if (accs.size() != 1) {
-            acc = EntityFactory.create(MerchantAccount.class);
+                List<MerchantAccount> accs = Persistence.service().query(crmerch);
 
-            acc.bankId().setValue(request.bankId().getValue());
-            acc.branchTransitNumber().setValue(request.branchTransitNumber().getValue());
-            acc.accountNumber().setValue(request.accountNumber().getValue());
-            acc.merchantTerminalId().setValue(request.onboardingAccountId().getValue());
-        } else {
-            acc = accs.get(0);
+                MerchantAccount macc = null;
+                if (accs.size() != 1) {
+                    macc = EntityFactory.create(MerchantAccount.class);
+
+                    macc.bankId().setValue(acc.bankId().getValue());
+                    macc.branchTransitNumber().setValue(acc.branchTransitNumber().getValue());
+                    macc.accountNumber().setValue(acc.accountNumber().getValue());
+                } else {
+                    macc = accs.get(0);
+                }
+
+                macc.merchantTerminalId().setValue(acc.terminalId().getValue());
+
+                Persistence.service().persist(macc);
+            }
+
+            Persistence.service().commit();
+
+            return response;
+        } catch (Throwable e) {
+            log.debug(e.getMessage());
+            Persistence.service().rollback();
+
+            response.success().setValue(Boolean.FALSE);
+
+            return response;
         }
-
-        acc.merchantTerminalId().setValue(request.merchantTerminalId().getValue());
-
-        Persistence.service().persist(acc);
-        Persistence.service().commit();
-
-        return response;
 
     }
 }

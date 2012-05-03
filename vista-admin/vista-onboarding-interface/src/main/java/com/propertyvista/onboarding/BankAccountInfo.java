@@ -7,19 +7,30 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on May 1, 2012
+ * Created on May 2, 2012
  * @author igor
  * @version $Id$
  */
 package com.propertyvista.onboarding;
 
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.annotations.validator.NotNull;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
 @Transient
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
-public interface UpdateBankAccountInfoRequestIO extends RequestIO {
+public interface BankAccountInfo extends IEntity {
 
-    IList<BankAccountInfo> accounts();
+    IPrimitive<String> terminalId();
+
+    @NotNull
+    IPrimitive<String> bankId();
+
+    @NotNull
+    IPrimitive<String> branchTransitNumber();
+
+    @NotNull
+    IPrimitive<String> accountNumber();
 }
