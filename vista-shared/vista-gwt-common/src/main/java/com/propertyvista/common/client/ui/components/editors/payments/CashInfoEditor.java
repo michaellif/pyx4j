@@ -20,18 +20,18 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
-import com.propertyvista.domain.payment.EcheckInfo;
+import com.propertyvista.domain.payment.CashInfo;
 
-public class EcheckInfoEditor extends CEntityDecoratableEditor<EcheckInfo> {
+public class CashInfoEditor extends CEntityDecoratableEditor<CashInfo> {
 
-    private static final I18n i18n = I18n.get(EcheckInfoEditor.class);
+    private static final I18n i18n = I18n.get(CashInfoEditor.class);
 
-    public EcheckInfoEditor() {
-        super(EcheckInfo.class);
+    public CashInfoEditor() {
+        super(CashInfo.class);
     }
 
-    public EcheckInfoEditor(IEditableComponentFactory factory) {
-        super(EcheckInfo.class, factory);
+    public CashInfoEditor(IEditableComponentFactory factory) {
+        super(CashInfo.class, factory);
     }
 
     @Override
@@ -39,12 +39,8 @@ public class EcheckInfoEditor extends CEntityDecoratableEditor<EcheckInfo> {
         FormFlexPanel panel = new FormFlexPanel();
 
         int row = -1;
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().accountType()), 10).build());
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().nameOn()), 30).build());
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().bankName()), 20).build());
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().routingNo()), 10).build());
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().accountNo()), 10).build());
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().checkNo()), 10).build());
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().amount()), 15).build());
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billsCount()), 10).build());
 
         return panel;
     }

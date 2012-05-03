@@ -214,7 +214,7 @@ public class NewPaymentMethodForm extends CEntityDecoratableEditor<PaymentMethod
             public IsWidget createContent() {
                 FlowPanel panel = new FlowPanel();
 
-                panel.add(new InnerPanelWidgetDecorator(inject(proto().nameOnAccount())));
+                panel.add(new InnerPanelWidgetDecorator(inject(proto().nameOn())));
                 panel.add(new InnerPanelWidgetDecorator(inject(proto().accountType())));
                 panel.add(new InnerPanelWidgetDecorator(inject(proto().bankName())));
 
@@ -243,7 +243,7 @@ public class NewPaymentMethodForm extends CEntityDecoratableEditor<PaymentMethod
                 FlowPanel panel = new FlowPanel();
                 panel.add(new InnerPanelWidgetDecorator(inject(proto().number())));
                 panel.add(new InnerPanelWidgetDecorator(inject(proto().expiryDate())));
-                panel.add(new InnerPanelWidgetDecorator(inject(proto().name())));
+                panel.add(new InnerPanelWidgetDecorator(inject(proto().nameOn())));
                 panel.add(new InnerPanelWidgetDecorator(inject(proto().securityCode())));
 //                panel.add(new InnerPanelWidgetDecorator(inject(proto().bankPhone())));
                 return panel;

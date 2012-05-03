@@ -20,18 +20,18 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
-import com.propertyvista.domain.payment.EcheckInfo;
+import com.propertyvista.domain.payment.CreditCardInfo;
 
-public class EcheckInfoEditor extends CEntityDecoratableEditor<EcheckInfo> {
+public class CreditCardInfoEditor extends CEntityDecoratableEditor<CreditCardInfo> {
 
-    private static final I18n i18n = I18n.get(EcheckInfoEditor.class);
+    private static final I18n i18n = I18n.get(CreditCardInfoEditor.class);
 
-    public EcheckInfoEditor() {
-        super(EcheckInfo.class);
+    public CreditCardInfoEditor() {
+        super(CreditCardInfo.class);
     }
 
-    public EcheckInfoEditor(IEditableComponentFactory factory) {
-        super(EcheckInfo.class, factory);
+    public CreditCardInfoEditor(IEditableComponentFactory factory) {
+        super(CreditCardInfo.class, factory);
     }
 
     @Override
@@ -39,12 +39,10 @@ public class EcheckInfoEditor extends CEntityDecoratableEditor<EcheckInfo> {
         FormFlexPanel panel = new FormFlexPanel();
 
         int row = -1;
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().accountType()), 10).build());
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().nameOn()), 30).build());
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().bankName()), 20).build());
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().routingNo()), 10).build());
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().accountNo()), 10).build());
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().checkNo()), 10).build());
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().number()), 20).build());
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().expiryDate()), 20).build());
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().securityCode()), 5).build());
 
         return panel;
     }

@@ -20,18 +20,18 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
-import com.propertyvista.domain.payment.EcheckInfo;
+import com.propertyvista.domain.payment.CheckInfo;
 
-public class EcheckInfoEditor extends CEntityDecoratableEditor<EcheckInfo> {
+public class CheckInfoEditor extends CEntityDecoratableEditor<CheckInfo> {
 
-    private static final I18n i18n = I18n.get(EcheckInfoEditor.class);
+    private static final I18n i18n = I18n.get(CheckInfoEditor.class);
 
-    public EcheckInfoEditor() {
-        super(EcheckInfo.class);
+    public CheckInfoEditor() {
+        super(CheckInfo.class);
     }
 
-    public EcheckInfoEditor(IEditableComponentFactory factory) {
-        super(EcheckInfo.class, factory);
+    public CheckInfoEditor(IEditableComponentFactory factory) {
+        super(CheckInfo.class, factory);
     }
 
     @Override
@@ -39,12 +39,13 @@ public class EcheckInfoEditor extends CEntityDecoratableEditor<EcheckInfo> {
         FormFlexPanel panel = new FormFlexPanel();
 
         int row = -1;
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().accountType()), 10).build());
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().nameOn()), 30).build());
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().bankName()), 20).build());
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().routingNo()), 10).build());
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().accountNo()), 10).build());
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().checkNo()), 10).build());
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().accountType()), 10).build());
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().checkNo()), 5).build());
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().transitNo()), 10).build());
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().institutionNo()), 5).build());
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().accountNo()), 15).build());
 
         return panel;
     }

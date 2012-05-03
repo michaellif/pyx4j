@@ -13,6 +13,8 @@
  */
 package com.propertyvista.domain.payment;
 
+import java.math.BigDecimal;
+
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Table;
@@ -22,33 +24,13 @@ import com.pyx4j.i18n.annotations.I18n;
 
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
 @Table(prefix = "payment")
-@DiscriminatorValue("EcheckInfo")
-public interface EcheckInfo extends PaymentDetails {
-
-    // No need for Caledon
-    @NotNull
-    @Caption(name = "Name On Account")
-    IPrimitive<String> nameOn();
+@DiscriminatorValue("CashInfo")
+public interface CashInfo extends PaymentDetails {
 
     @NotNull
-    IPrimitive<AccountType> accountType();
+    @Caption(name = "Total Amount")
+    IPrimitive<BigDecimal> amount();
 
-    // Need bankId for Caledon
-    @NotNull
-    IPrimitive<String> bankName();
-
-    // Looks like branchTransitNumber
-    @NotNull
-    @Caption(name = "Routing Number")
-    IPrimitive<Integer> routingNo();
-
-    @NotNull
-    @Caption(name = "Account Number")
-    IPrimitive<String> accountNo();
-
-    // No need for Caledon
-    @NotNull
-    @Caption(name = "Cheque Number")
-    IPrimitive<String> checkNo();
-
+    @Caption(name = "Banknoutes Count")
+    IPrimitive<BigDecimal> billsCount();
 }

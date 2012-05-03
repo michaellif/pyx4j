@@ -169,7 +169,7 @@ public class InsurancePaymentMethodForm extends CEntityDecoratableEditor<Insuran
                 FlowPanel panel = new FlowPanel();
                 panel.add(new InnerPanelWidgetDecorator(inject(proto().number())));
                 panel.add(new InnerPanelWidgetDecorator(inject(proto().expiryDate())));
-                panel.add(new InnerPanelWidgetDecorator(inject(proto().name())));
+                panel.add(new InnerPanelWidgetDecorator(inject(proto().nameOn())));
                 panel.add(new InnerPanelWidgetDecorator(inject(proto().securityCode())));
 //                panel.add(new InnerPanelWidgetDecorator(inject(proto().bankPhone())));
                 return panel;

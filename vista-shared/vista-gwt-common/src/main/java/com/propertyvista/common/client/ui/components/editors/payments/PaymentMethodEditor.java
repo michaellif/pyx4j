@@ -32,6 +32,9 @@ import com.pyx4j.widgets.client.RadioGroup;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
 import com.propertyvista.common.client.ui.components.editors.AddressStructuredEditor;
 import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.payment.CashInfo;
+import com.propertyvista.domain.payment.CheckInfo;
+import com.propertyvista.domain.payment.CreditCardInfo;
 import com.propertyvista.domain.payment.EcheckInfo;
 import com.propertyvista.domain.payment.PaymentDetails;
 import com.propertyvista.domain.payment.PaymentMethod;
@@ -108,12 +111,29 @@ public class PaymentMethodEditor extends CEntityDecoratableEditor<PaymentMethod>
         CEntityEditor editor = null;
         PaymentDetails details = getValue().details();
 
-        // add extraData editor if necessary:
         switch (type) {
+        case Cash:
+            editor = new CashInfoEditor();
+            if (details.getInstanceValueClass() != CashInfo.class) {
+                details.set(EntityFactory.create(CashInfo.class));
+            }
+            break;
+        case Check:
+            editor = new CheckInfoEditor();
+            if (details.getInstanceValueClass() != CheckInfo.class) {
+                details.set(EntityFactory.create(CheckInfo.class));
+            }
+            break;
         case Echeck:
             editor = new EcheckInfoEditor();
             if (details.getInstanceValueClass() != EcheckInfo.class) {
                 details.set(EntityFactory.create(EcheckInfo.class));
+            }
+            break;
+        case CreditCard:
+            editor = new CreditCardInfoEditor();
+            if (details.getInstanceValueClass() != CreditCardInfo.class) {
+                details.set(EntityFactory.create(CreditCardInfo.class));
             }
             break;
         }
@@ -124,6 +144,7 @@ public class PaymentMethodEditor extends CEntityDecoratableEditor<PaymentMethod>
             }
             this.inject(proto().details(), editor);
             editor.populate(details.cast());
+            
             paymentDetailsHolder.setWidget(editor);
         }
     }

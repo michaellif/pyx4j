@@ -22,33 +22,32 @@ import com.pyx4j.i18n.annotations.I18n;
 
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
 @Table(prefix = "payment")
-@DiscriminatorValue("EcheckInfo")
-public interface EcheckInfo extends PaymentDetails {
+@DiscriminatorValue("CheckInfo")
+public interface CheckInfo extends PaymentDetails {
 
-    // No need for Caledon
     @NotNull
-    @Caption(name = "Name On Account")
+    @Caption(name = "Name On Check")
     IPrimitive<String> nameOn();
+
+    @NotNull
+    IPrimitive<String> bankName();
 
     @NotNull
     IPrimitive<AccountType> accountType();
 
-    // Need bankId for Caledon
     @NotNull
-    IPrimitive<String> bankName();
+    @Caption(name = "Cheque Number")
+    IPrimitive<Integer> checkNo();
 
-    // Looks like branchTransitNumber
     @NotNull
-    @Caption(name = "Routing Number")
-    IPrimitive<Integer> routingNo();
+    @Caption(name = "Bank Transit Number")
+    IPrimitive<Integer> transitNo();
+
+    @NotNull
+    @Caption(name = "Institution Number")
+    IPrimitive<Integer> institutionNo();
 
     @NotNull
     @Caption(name = "Account Number")
-    IPrimitive<String> accountNo();
-
-    // No need for Caledon
-    @NotNull
-    @Caption(name = "Cheque Number")
-    IPrimitive<String> checkNo();
-
+    IPrimitive<Integer> accountNo();
 }

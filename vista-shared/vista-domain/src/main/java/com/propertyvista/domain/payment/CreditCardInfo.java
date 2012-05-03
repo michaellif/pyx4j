@@ -51,7 +51,7 @@ public interface CreditCardInfo extends PaymentDetails {
 
     @NotNull
     @Caption(name = "Name On Card")
-    IPrimitive<String> name();
+    IPrimitive<String> nameOn();
 
     IPrimitive<String> bankPhone();
 }
