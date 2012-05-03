@@ -13,6 +13,7 @@
  */
 package com.propertyvista.domain.financial;
 
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.RpcTransient;
 import com.pyx4j.entity.annotations.ToString;
@@ -45,7 +46,8 @@ public interface MerchantAccount extends IEntity {
     // filed editable by CRM
 
     /**
-     * Description to appear on client's statement. Typically a merchant's business name.
+     * Caledon: Description to appear on client's statement. Typically a merchant's business name.
      */
+    @Caption(description = "Description to appear on client's statement. Typically a merchant's business name.")
     IPrimitive<String> chargeDescription();
 }
