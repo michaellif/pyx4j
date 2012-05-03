@@ -422,7 +422,7 @@ public class TableModel {
                 }
                 if (member.isOwnerColumn() && childEntity.isNull() && member.getMemberMeta().getAnnotation(NotNull.class) != null) {
                     log.error("Saving empty owner reference {}\n{}\n", childEntity, Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
-                    throw new Error("Saving empty owner reference " + childEntity.getDebugExceptionInfoString());
+                    throw new Error("Trying to save child entity with undefined owner; " + childEntity.getDebugExceptionInfoString());
                 }
                 parameterIndex += member.getValueAdapter().bindValue(persistenceContext, stmt, parameterIndex, childEntity);
             } else {
