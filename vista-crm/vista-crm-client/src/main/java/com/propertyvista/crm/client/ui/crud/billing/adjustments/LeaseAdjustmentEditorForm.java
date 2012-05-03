@@ -15,7 +15,6 @@ package com.propertyvista.crm.client.ui.crud.billing.adjustments;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.forms.client.ui.CNumberLabel;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.ui.crud.misc.CEntitySelectorHyperlink;
@@ -43,17 +42,8 @@ public class LeaseAdjustmentEditorForm extends CrmEntityForm<LeaseAdjustment> {
         FormFlexPanel main = new FormFlexPanel();
 
         int row = -1;
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().id(), new CNumberLabel()), 10).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().receivedDate()), 10).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().amount()), 10).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().description()), 10).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().updated()), 10).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().createdBy()), 10).build());
 
-        row = 0;
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().targetDate()), 10).build());
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().tax()), 10).build());
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().reason(), new CEntitySelectorHyperlink<LeaseAdjustmentReason>() {
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().reason(), new CEntitySelectorHyperlink<LeaseAdjustmentReason>() {
             @Override
             protected AppPlace getTargetPlace() {
                 return AppPlaceEntityMapper.resolvePlace(LeaseAdjustmentReason.class, getValue().getPrimaryKey());
@@ -72,15 +62,26 @@ public class LeaseAdjustmentEditorForm extends CrmEntityForm<LeaseAdjustment> {
                 };
             }
         }), 25).build());
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().executionType()), 10).build());
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().createdWhen()), 10).build());
+        main.getFlexCellFormatter().setColSpan(row, 0, 2);
+
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().amount()), 10).build());
+        main.setWidget(row, 1, new DecoratorBuilder(inject(proto().tax()), 10).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().executionType()), 10).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().receivedDate()), 10).build());
+        main.setWidget(row, 1, new DecoratorBuilder(inject(proto().targetDate()), 10).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().description()), 25).build());
+        main.getFlexCellFormatter().setColSpan(row, 0, 2);
+
+        if (!isEditable()) {
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().createdWhen()), 10).build());
+            main.setWidget(row, 1, new DecoratorBuilder(inject(proto().updated()), 10).build());
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().createdBy()), 10).build());
+        }
         return new CrmScrollPanel(main);
     }
 
     @Override
     protected void onPopulate() {
         super.onPopulate();
-
-        get(proto().id()).setVisible(!getValue().id().isNull());
     }
 }

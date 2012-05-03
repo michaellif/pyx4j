@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -28,7 +28,6 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.crm.rpc.services.lease.LeaseCrudServiceBase;
 import com.propertyvista.crm.server.util.CrmAppContext;
-import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -39,7 +38,6 @@ import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.ExecutionType;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.dto.LeaseApplicationDTO;
 import com.propertyvista.dto.LeaseDTO;
@@ -139,8 +137,6 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
             updateAdjustments(ci);
         }
 
-        // Lease Financial Adjustments:
-        updateAdjustments(lease.billingAccount());
     }
 
     private void updateAdjustments(BillableItem item) {
@@ -152,15 +148,6 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
             // correct adjustment expiration date:
             if (ExecutionType.oneTime == adj.executionType().getValue()) {
                 adj.expirationDate().setValue(null);
-            }
-        }
-    }
-
-    private void updateAdjustments(BillingAccount billingAccount) {
-        for (LeaseAdjustment adj : billingAccount.adjustments()) {
-            // set creator:
-            if (adj.createdWhen().isNull()) {
-                adj.createdBy().set(CrmAppContext.getCurrentUserEmployee());
             }
         }
     }
@@ -191,8 +178,8 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
             }
             Persistence.service().retrieve(item.version().concessions());
         }
-//      
-//  Currently not used here:        
+//
+//  Currently not used here:
 //
 //        EntityQueryCriteria<Feature> featureCriteria = EntityQueryCriteria.create(Feature.class);
 //        featureCriteria.add(PropertyCriterion.eq(featureCriteria.proto().catalog(), building.serviceCatalog()));
