@@ -19,4 +19,15 @@ import com.propertyvista.dto.PaymentRecordDTO;
 
 public interface PaymentViewerView extends IViewerView<PaymentRecordDTO> {
 
+    interface Presenter extends IViewerView.Presenter {
+
+        void processPayment();
+
+        void clearPayment();
+
+        void rejectPayment();
+
+        void cancelPayment();
+    }
+
 }

@@ -17,6 +17,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
 
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.billing.payment.PaymentViewerView;
@@ -28,5 +29,45 @@ public class PaymentViewerActivity extends CrmViewerActivity<PaymentRecordDTO> i
 
     public PaymentViewerActivity(Place place) {
         super(place, LeaseViewFactory.instance(PaymentViewerView.class), GWT.<AbstractCrudService<PaymentRecordDTO>> create(PaymentCrudService.class));
+    }
+
+    @Override
+    public void processPayment() {
+        ((PaymentCrudService) service).processPayment(new DefaultAsyncCallback<PaymentRecordDTO>() {
+            @Override
+            public void onSuccess(PaymentRecordDTO result) {
+                view.populate(result);
+            }
+        }, entityId);
+    }
+
+    @Override
+    public void clearPayment() {
+        ((PaymentCrudService) service).clearPayment(new DefaultAsyncCallback<PaymentRecordDTO>() {
+            @Override
+            public void onSuccess(PaymentRecordDTO result) {
+                view.populate(result);
+            }
+        }, entityId);
+    }
+
+    @Override
+    public void rejectPayment() {
+        ((PaymentCrudService) service).rejectPayment(new DefaultAsyncCallback<PaymentRecordDTO>() {
+            @Override
+            public void onSuccess(PaymentRecordDTO result) {
+                view.populate(result);
+            }
+        }, entityId);
+    }
+
+    @Override
+    public void cancelPayment() {
+        ((PaymentCrudService) service).cancelPayment(new DefaultAsyncCallback<PaymentRecordDTO>() {
+            @Override
+            public void onSuccess(PaymentRecordDTO result) {
+                view.populate(result);
+            }
+        }, entityId);
     }
 }

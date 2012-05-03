@@ -20,10 +20,12 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 
+import com.propertyvista.biz.financial.payment.PaymentFacade;
 import com.propertyvista.crm.rpc.services.billing.PaymentCrudService;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.financial.BillingAccount;
@@ -126,6 +128,54 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
                 .detach()));
     }
 
+    @Override
+    public void processPayment(AsyncCallback<PaymentRecordDTO> callback, Key entityId) {
+        PaymentRecord paymentRecord = Persistence.service().retrieve(PaymentRecord.class, entityId);
+        if ((paymentRecord == null) || (paymentRecord.isNull())) {
+            throw new RuntimeException("Entity '" + EntityFactory.getEntityMeta(BillingAccount.class).getCaption() + "' " + entityId + " NotFound");
+        }
+
+        Persistence.secureSave(ServerSideFactory.create(PaymentFacade.class).processPayment(paymentRecord));
+        Persistence.service().commit();
+        retrieve(callback, entityId, RetrieveTraget.View);
+    }
+
+    @Override
+    public void clearPayment(AsyncCallback<PaymentRecordDTO> callback, Key entityId) {
+        PaymentRecord paymentRecord = Persistence.service().retrieve(PaymentRecord.class, entityId);
+        if ((paymentRecord == null) || (paymentRecord.isNull())) {
+            throw new RuntimeException("Entity '" + EntityFactory.getEntityMeta(BillingAccount.class).getCaption() + "' " + entityId + " NotFound");
+        }
+
+        Persistence.secureSave(ServerSideFactory.create(PaymentFacade.class).clear(paymentRecord));
+        Persistence.service().commit();
+        retrieve(callback, entityId, RetrieveTraget.View);
+    }
+
+    @Override
+    public void rejectPayment(AsyncCallback<PaymentRecordDTO> callback, Key entityId) {
+        PaymentRecord paymentRecord = Persistence.service().retrieve(PaymentRecord.class, entityId);
+        if ((paymentRecord == null) || (paymentRecord.isNull())) {
+            throw new RuntimeException("Entity '" + EntityFactory.getEntityMeta(BillingAccount.class).getCaption() + "' " + entityId + " NotFound");
+        }
+
+        Persistence.secureSave(ServerSideFactory.create(PaymentFacade.class).reject(paymentRecord));
+        Persistence.service().commit();
+        retrieve(callback, entityId, RetrieveTraget.View);
+    }
+
+    @Override
+    public void cancelPayment(AsyncCallback<PaymentRecordDTO> callback, Key entityId) {
+        PaymentRecord paymentRecord = Persistence.service().retrieve(PaymentRecord.class, entityId);
+        if ((paymentRecord == null) || (paymentRecord.isNull())) {
+            throw new RuntimeException("Entity '" + EntityFactory.getEntityMeta(BillingAccount.class).getCaption() + "' " + entityId + " NotFound");
+        }
+
+        Persistence.secureSave(ServerSideFactory.create(PaymentFacade.class).cancel(paymentRecord));
+        Persistence.service().commit();
+        retrieve(callback, entityId, RetrieveTraget.View);
+    }
+
     // internals:
     private List<LeaseParticipant> retrieveUsers(Lease lease) {
         List<LeaseParticipant> users = new LinkedList<LeaseParticipant>();
@@ -147,5 +197,4 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
 
         return users;
     }
-
 }

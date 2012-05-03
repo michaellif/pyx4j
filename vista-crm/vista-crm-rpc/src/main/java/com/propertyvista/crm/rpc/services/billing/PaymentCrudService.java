@@ -28,4 +28,11 @@ public interface PaymentCrudService extends AbstractCrudService<PaymentRecordDTO
 
     void getCurrentAddress(AsyncCallback<AddressStructured> callback, LeaseParticipant payer);
 
+    void processPayment(AsyncCallback<PaymentRecordDTO> callback, Key entityId);
+
+    void clearPayment(AsyncCallback<PaymentRecordDTO> callback, Key entityId);
+
+    void rejectPayment(AsyncCallback<PaymentRecordDTO> callback, Key entityId);
+
+    void cancelPayment(AsyncCallback<PaymentRecordDTO> callback, Key entityId);
 }
