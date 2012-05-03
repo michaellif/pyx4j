@@ -17,10 +17,13 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CNumberLabel;
 import com.pyx4j.forms.client.ui.CRadioGroupEnum;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.ui.crud.misc.CEntitySelectorHyperlink;
 import com.pyx4j.site.client.ui.dialogs.AbstractEntitySelectorDialog;
@@ -31,6 +34,7 @@ import com.pyx4j.widgets.client.RadioGroup;
 import com.propertyvista.common.client.ui.components.editors.payments.PaymentMethodEditor;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
+import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.dto.PaymentRecordDTO;
 import com.propertyvista.dto.PaymentRecordDTO.PaymentSelect;
@@ -39,7 +43,25 @@ public class PaymentEditorForm extends CrmEntityForm<PaymentRecordDTO> {
 
     private static final I18n i18n = I18n.get(PaymentEditorForm.class);
 
-    private final PaymentMethodEditor paymentMethodEditor = new PaymentMethodEditor();
+    private final PaymentMethodEditor paymentMethodEditor = new PaymentMethodEditor() {
+        @Override
+        public void onBillingAddressSameAsCurrentOne(boolean set, final CComponent<AddressStructured, ?> comp) {
+            final AddressStructured currentValue = comp.getValue();
+            if (set) {
+                ((PaymentEditorView.Presenter) ((PaymentEditorView) getParentView()).getPresenter()).getCurrentAddress(
+                        new DefaultAsyncCallback<AddressStructured>() {
+                            @Override
+                            public void onSuccess(AddressStructured result) {
+                                currentValue.set(result);
+                                comp.populate(currentValue);
+                            }
+                        }, PaymentEditorForm.this.getValue().leaseParticipant());
+            } else {
+                currentValue.set(EntityFactory.create(AddressStructured.class));
+                comp.populate(currentValue);
+            }
+        }
+    };
 
     public PaymentEditorForm() {
         this(false);
@@ -130,6 +152,8 @@ public class PaymentEditorForm extends CrmEntityForm<PaymentRecordDTO> {
             @Override
             public void onValueChange(ValueChangeEvent<PaymentSelect> event) {
                 paymentMethodEditor.setTypeSelectionVisible(event.getValue() == PaymentSelect.New);
+
+                // TODO: for Profiled payment  - retrieve it somewhere and setup the paymentMethodEditor
             }
         });
 
@@ -143,6 +167,7 @@ public class PaymentEditorForm extends CrmEntityForm<PaymentRecordDTO> {
         super.onPopulate();
 
         get(proto().id()).setVisible(!getValue().id().isNull());
+        get(proto().paymentSelect()).setVisible(!isViewable());
 //        get(proto().transactionAuthorizationNumber()).setVisible(!getValue().transactionAuthorizationNumber().isNull());
 //        get(proto().transactionErrorMessage()).setVisible(!getValue().transactionErrorMessage().isNull());
     }

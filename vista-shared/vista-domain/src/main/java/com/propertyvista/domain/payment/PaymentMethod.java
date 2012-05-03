@@ -42,7 +42,7 @@ public interface PaymentMethod extends IEntity {
     IPrimitive<PaymentType> type();
 
     @Owned
-    @Caption(name = "Payment Details")
+    @Caption(name = "Payment Attributes")
     PaymentDetails details();
 
     @Caption(name = "eCheque")

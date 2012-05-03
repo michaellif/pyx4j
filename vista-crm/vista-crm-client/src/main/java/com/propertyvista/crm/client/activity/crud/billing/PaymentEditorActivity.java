@@ -24,9 +24,11 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 import com.propertyvista.crm.client.ui.crud.billing.payment.PaymentEditorView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.LeaseViewFactory;
 import com.propertyvista.crm.rpc.services.billing.PaymentCrudService;
+import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.dto.PaymentRecordDTO;
 
-public class PaymentEditorActivity extends EditorActivityBase<PaymentRecordDTO> {
+public class PaymentEditorActivity extends EditorActivityBase<PaymentRecordDTO> implements PaymentEditorView.Presenter {
 
     public PaymentEditorActivity(CrudAppPlace place) {
         super(place, LeaseViewFactory.instance(PaymentEditorView.class), GWT.<AbstractCrudService<PaymentRecordDTO>> create(PaymentCrudService.class),
@@ -41,5 +43,15 @@ public class PaymentEditorActivity extends EditorActivityBase<PaymentRecordDTO> 
                 callback.onSuccess(result);
             }
         }, parentID);
+    }
+
+    @Override
+    public void getCurrentAddress(final AsyncCallback<AddressStructured> callback, LeaseParticipant payer) {
+        ((PaymentCrudService) getService()).getCurrentAddress(new DefaultAsyncCallback<AddressStructured>() {
+            @Override
+            public void onSuccess(AddressStructured result) {
+                callback.onSuccess(result);
+            }
+        }, (LeaseParticipant) payer.createIdentityStub());
     }
 }

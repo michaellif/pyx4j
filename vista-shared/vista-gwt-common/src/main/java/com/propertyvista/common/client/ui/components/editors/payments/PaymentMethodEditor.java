@@ -23,6 +23,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.pyx4j.entity.client.CEntityEditor;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CRadioGroupEnum;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -64,10 +65,10 @@ public class PaymentMethodEditor extends CEntityDecoratableEditor<PaymentMethod>
             }
         }), 25).build());
 
-        main.setH1(++row, 0, 1, proto().details().getMeta().getCaption());
+        main.setH2(++row, 0, 1, proto().details().getMeta().getCaption());
         main.setWidget(++row, 0, paymentDetailsHolder);
 
-        main.setH1(++row, 0, 1, proto().billingAddress().getMeta().getCaption());
+        main.setH2(++row, 0, 1, proto().billingAddress().getMeta().getCaption());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().sameAsCurrent()), 5).build());
         main.setWidget(++row, 0, inject(proto().billingAddress(), billingAddress = new AddressStructuredEditor(true)));
 
@@ -85,7 +86,7 @@ public class PaymentMethodEditor extends CEntityDecoratableEditor<PaymentMethod>
         get(proto().sameAsCurrent()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
             public void onValueChange(ValueChangeEvent<Boolean> event) {
-                onBillingAddressSameAsCurrentOne(event.getValue());
+                onBillingAddressSameAsCurrentOne(event.getValue(), billingAddress);
                 billingAddress.setEditable(!event.getValue());
             }
         });
@@ -97,6 +98,8 @@ public class PaymentMethodEditor extends CEntityDecoratableEditor<PaymentMethod>
     @Override
     protected void onPopulate() {
         super.onPopulate();
+
+        get(proto().sameAsCurrent()).setVisible(!isViewable());
 
         selectPaymentDetailsEditor(getValue().type().getValue());
     }
@@ -133,7 +136,7 @@ public class PaymentMethodEditor extends CEntityDecoratableEditor<PaymentMethod>
         return get(proto().type()).isVisible();
     }
 
-    public void onBillingAddressSameAsCurrentOne(boolean set) {
+    public void onBillingAddressSameAsCurrentOne(boolean set, CComponent<AddressStructured, ?> comp) {
         // Implements meaningful in derived classes...
     }
 }

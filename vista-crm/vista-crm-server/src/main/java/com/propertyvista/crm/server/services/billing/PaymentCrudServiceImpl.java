@@ -25,6 +25,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.crm.rpc.services.billing.PaymentCrudService;
+import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
@@ -112,6 +113,20 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
         callback.onSuccess(dto);
     }
 
+    @Override
+    public void getCurrentAddress(AsyncCallback<AddressStructured> callback, LeaseParticipant payer) {
+        Persistence.service().retrieve(payer);
+        if ((payer == null) || (payer.isNull())) {
+            throw new RuntimeException("Entity '" + EntityFactory.getEntityMeta(LeaseParticipant.class).getCaption() + "' " + payer.getPrimaryKey()
+                    + " NotFound");
+        }
+
+        Persistence.service().retrieve(payer.screening());
+        callback.onSuccess((AddressStructured) (payer.screening().isNull() ? EntityFactory.create(AddressStructured.class) : payer.screening().currentAddress()
+                .detach()));
+    }
+
+    // internals:
     private List<LeaseParticipant> retrieveUsers(Lease lease) {
         List<LeaseParticipant> users = new LinkedList<LeaseParticipant>();
 

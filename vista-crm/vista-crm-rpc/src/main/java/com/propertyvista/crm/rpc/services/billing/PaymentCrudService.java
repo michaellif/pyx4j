@@ -18,9 +18,14 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 
+import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.dto.PaymentRecordDTO;
 
 public interface PaymentCrudService extends AbstractCrudService<PaymentRecordDTO> {
 
     void initNewEntity(AsyncCallback<PaymentRecordDTO> callback, Key parentId);
+
+    void getCurrentAddress(AsyncCallback<AddressStructured> callback, LeaseParticipant payer);
+
 }
