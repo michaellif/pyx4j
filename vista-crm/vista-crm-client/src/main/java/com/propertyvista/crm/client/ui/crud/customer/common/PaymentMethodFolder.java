@@ -91,7 +91,7 @@ public abstract class PaymentMethodFolder extends VistaBoxFolder<PaymentMethod> 
         this.addValueValidator(new EditableValueValidator<List<PaymentMethod>>() {
             @Override
             public ValidationFailure isValid(CComponent<List<PaymentMethod>, ?> component, List<PaymentMethod> value) {
-                if (value != null) {
+                if (value != null && !value.isEmpty()) {
                     boolean primaryFound = false;
                     for (PaymentMethod item : value) {
                         if (item.isDefault().isBooleanTrue()) {
