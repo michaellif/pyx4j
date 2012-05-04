@@ -159,9 +159,12 @@ public class PaymentEditorForm extends CrmEntityForm<PaymentRecordDTO> {
                             new DefaultAsyncCallback<PaymentMethod>() {
                                 @Override
                                 public void onSuccess(PaymentMethod result) {
+                                    paymentMethodEditor.setViewable(true);
                                     paymentMethodEditor.populate(result);
                                 }
                             }, PaymentEditorForm.this.getValue().leaseParticipant());
+                } else {
+                    paymentMethodEditor.setViewable(false);
                 }
             }
         });
