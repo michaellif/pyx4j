@@ -43,9 +43,9 @@ public class LoginViewImpl extends AbstractLoginViewImpl {
         leftColumn.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.LEFT);
         leftColumn.setWidth("100%");
         setWidget(0, 0, leftColumn);
+        getFlexCellFormatter().setWidth(0, 0, "50%");
 
         if (!VistaTODO.enableWelcomeWizardDemoMode) {
-            getFlexCellFormatter().setWidth(0, 0, "50%");
             HTML requirements = new HTML(PortalResources.INSTANCE.requirements().getText());
             requirements.getElement().getStyle().setPaddingLeft(95, Unit.PX);
             requirements.getElement().getStyle().setPaddingBottom(45, Unit.PX);
