@@ -13,7 +13,11 @@
  */
 package com.propertyvista.portal.rpc.ptapp.dto.welcomewizard;
 
+import java.math.BigDecimal;
+
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
@@ -41,62 +45,76 @@ public interface PurchaseInsuranceDTO extends IEntity {
 
     // Section: Personal Contents 
     @Caption(description = "TBD")
-    IPrimitive<String> personalContentsLimit();
+    IPrimitive<BigDecimal> personalContentsLimit();
 
     @Caption(description = "TBD")
-    IPrimitive<String> propertyAwayFromPremises();
+    IPrimitive<BigDecimal> propertyAwayFromPremises();
 
     @Caption(description = "TBD")
-    IPrimitive<String> additionalLivingExpenses();
+    IPrimitive<BigDecimal> additionalLivingExpenses();
 
     // Section: Deductible (per Claim)
     @Caption(description = "TBD")
-    IPrimitive<String> deductible();
+    IPrimitive<BigDecimal> deductible();
 
     // Section: Form of Coverage
+    @Caption(description = "TBD")
     IPrimitive<FormOfCoverage> formOfCoverage();
 
     // Section: Special Limities (per Claim)
-    @Caption(name = "Jewlery & Furs")
-    IPrimitive<String> jewleryAndFurs();
+    @Caption(name = "Jewlery & Furs", description = "TBD")
+    IPrimitive<BigDecimal> jewleryAndFurs();
 
-    IPrimitive<String> bicycles();
+    @Caption(description = "TBD")
+    IPrimitive<BigDecimal> bicycles();
 
-    IPrimitive<String> personalComputers();
+    @Caption(description = "TBD")
+    IPrimitive<BigDecimal> personalComputers();
 
-    @Caption(name = "Money, Gift Cards, or Gift Certificates")
-    IPrimitive<String> moneyOrGiftGardsOrGiftCertificates();
+    @Caption(name = "Money, Gift Cards, or Gift Certificates", description = "TBD")
+    IPrimitive<BigDecimal> moneyOrGiftGardsOrGiftCertificates();
 
-    IPrimitive<String> securities();
+    @Caption(description = "TBD")
+    IPrimitive<BigDecimal> securities();
 
-    IPrimitive<String> utilityTraders();
+    @Caption(description = "TBD")
+    IPrimitive<BigDecimal> utilityTraders();
 
-    IPrimitive<String> spareAutomobileParts();
+    @Caption(description = "TBD")
+    IPrimitive<BigDecimal> spareAutomobileParts();
 
-    IPrimitive<String> coinBanknoteOrStampCollections();
+    @Caption(description = "TBD")
+    IPrimitive<BigDecimal> coinBanknoteOrStampCollections();
 
-    IPrimitive<String> collectibleCardsandComics();
+    @Caption(description = "TBD")
+    IPrimitive<BigDecimal> collectibleCardsandComics();
 
-    // Section: Additional Coverage (per Claim)    
-    IPrimitive<String> freezerFoodSpoilage();
+    // Section: Additional Coverage (per Claim)
+    @Caption(description = "TBD")
+    IPrimitive<BigDecimal> freezerFoodSpoilage();
 
-    IPrimitive<String> animalsBirdsAndFish();
+    @Caption(description = "TBD")
+    IPrimitive<BigDecimal> animalsBirdsAndFish();
 
-    IPrimitive<String> personalLiability();
+    @Caption(description = "TBD")
+    IPrimitive<BigDecimal> personalLiability();
 
     // Section: Coverage Qualification Questions
-    @Caption(name = "Do you operate any buisness from your home?")
+    @Caption(name = "Do you operate any buisness from your home?", description = "TBD")
     IPrimitive<String> homeBuiness();
 
-    @Caption(name = "How many claims have you or any other resident of your household made against a previous Tenants, Condo, or Homeowners Policy in the past 5 years?")
+    @Caption(name = "How many claims have you or any other resident of your household made against a previous Tenants, Condo, or Homeowners Policy in the past 5 years?", description = "TBD")
     IPrimitive<Integer> numOfPrevClaims();
 
-    // Section:  Quote Total (floating box with that containse the following values)
-    IPrimitive<String> monthlyInsurancePremium();
+    // Section:  Quote Total (floating box with that containse the following values)    
+    @Editor(type = EditorType.money)
+    IPrimitive<BigDecimal> monthlyInsurancePremium();
 
-    IPrimitive<String> totalCoverage();
+    @Editor(type = EditorType.money)
+    IPrimitive<BigDecimal> totalCoverage();
 
-    IPrimitive<String> totalPersonalLiability();
+    @Editor(type = EditorType.money)
+    IPrimitive<BigDecimal> totalPersonalLiability();
 
     // Personal Disclaimer
     IList<LegalTermsDescriptorDTO> personalDisclaimerTerms();

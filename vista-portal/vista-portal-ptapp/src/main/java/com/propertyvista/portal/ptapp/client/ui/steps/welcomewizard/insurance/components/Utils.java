@@ -11,11 +11,19 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.portal.ptapp.client.ui.steps.welcomewizard.insurance;
+package com.propertyvista.portal.ptapp.client.ui.steps.welcomewizard.insurance.components;
 
 import java.math.BigDecimal;
 
 public class Utils {
+
+    public static BigDecimal[] asBigDecimals(Integer... integers) {
+        BigDecimal[] bigDecimals = new BigDecimal[integers.length];
+        for (int i = 0; i < integers.length; ++i) {
+            bigDecimals[i] = new BigDecimal(integers[i]);
+        }
+        return bigDecimals;
+    }
 
     public static String formatMoney(Integer value) {
         assert value >= 0;

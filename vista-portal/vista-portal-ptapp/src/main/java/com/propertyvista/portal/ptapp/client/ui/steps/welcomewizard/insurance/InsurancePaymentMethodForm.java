@@ -40,9 +40,9 @@ import com.pyx4j.widgets.client.RadioGroup;
 import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.common.client.theme.NewPaymentMethodEditorTheme;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
-import com.propertyvista.common.client.ui.components.editors.AddressStructuredEditor;
+import com.propertyvista.common.client.ui.components.editors.AddressSimpleEditor;
 import com.propertyvista.common.client.ui.validators.CreditCardNumberValidator;
-import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.payment.CreditCardInfo;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.portal.rpc.ptapp.dto.welcomewizard.InsurancePaymentMethodDTO;
@@ -54,7 +54,7 @@ public class InsurancePaymentMethodForm extends CEntityDecoratableEditor<Insuran
 
     private FlowPanel paymentTypeImagesPanel;
 
-    private CEntityEditor<AddressStructured> billingAddress;
+    private CEntityEditor<AddressSimple> billingAddress;
 
     private final boolean twoColumns;
 
@@ -143,7 +143,7 @@ public class InsurancePaymentMethodForm extends CEntityDecoratableEditor<Insuran
             });
         }
 
-        container.setWidget(++row, 0, inject(proto().billingAddress(), billingAddress = new AddressStructuredEditor(twoColumns)));
+        container.setWidget(++row, 0, inject(proto().billingAddress(), billingAddress = new AddressSimpleEditor()));
         container.getFlexCellFormatter().setColSpan(row, 0, 3);
 
         container.setHR(++row, 0, 3);

@@ -13,6 +13,8 @@
  */
 package com.propertyvista.portal.ptapp.client.ui.steps.welcomewizard.insurance;
 
+import com.google.gwt.user.client.Command;
+
 import com.propertyvista.portal.ptapp.client.ui.steps.WizardStepViewImpl;
 import com.propertyvista.portal.rpc.ptapp.dto.welcomewizard.InsuranceDTO;
 
@@ -20,6 +22,28 @@ public class InsuranceViewImpl extends WizardStepViewImpl<InsuranceDTO, Insuranc
 
     public InsuranceViewImpl() {
         super(new InsuranceForm());
+        setActionButtonVisible(false);
+        ((InsuranceForm) getForm()).setOnPurchaseInsuranceConfirmedCommand(new Command() {
+            @Override
+            public void execute() {
+                onPurchacheInsuranceConfirmed();
+            }
+        });
+
+        ((InsuranceForm) getForm()).setOnExistingInsuranceConfirmedCommand(new Command() {
+            @Override
+            public void execute() {
+                onExistingInsuranceConfirmed();
+            }
+        });
+    }
+
+    private void onPurchacheInsuranceConfirmed() {
+        onAction();
+    }
+
+    private void onExistingInsuranceConfirmed() {
+        onAction();
     }
 
 }

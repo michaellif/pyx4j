@@ -69,19 +69,21 @@ public class LeaseTermsFolder extends VistaBoxFolder<LegalTermsDescriptorDTO> {
 
     private class LeaseTermsEditor extends CEntityDecoratableEditor<LegalTermsDescriptorDTO> {
 
+        private FormFlexPanel main;
+
         public LeaseTermsEditor() {
             super(LegalTermsDescriptorDTO.class);
         }
 
         @Override
         public IsWidget createContent() {
-            FormFlexPanel main = new FormFlexPanel();
+            main = new FormFlexPanel();
 
             int row = -1;
             CLabel content = new CLabel();
             content.setAllowHtml(true);
             ScrollPanel scroll = new ScrollPanel(inject(proto().content().content(), content).asWidget());
-            main.setWidget(++row, 0, inject(proto().content().localizedCaption(), new CLabel()));
+            main.setH2(++row, 0, 1, "");
             main.setWidget(++row, 0, scroll);
             main.setBR(++row, 0, 1);
             main.setWidget(++row, 0, inject(proto().agrees(), new AgreeFolder(editable)));
@@ -96,6 +98,12 @@ public class LeaseTermsFolder extends VistaBoxFolder<LegalTermsDescriptorDTO> {
             main.setWidth("100%");
 
             return main;
+        }
+
+        @Override
+        protected void onPopulate() {
+            super.onPopulate();
+            main.setH2(0, 0, 1, getValue().content().localizedCaption().getValue());
         }
     }
 }

@@ -24,7 +24,7 @@ import com.propertyvista.portal.ptapp.client.ui.viewfactories.WizardStepsViewFac
 import com.propertyvista.portal.rpc.ptapp.dto.welcomewizard.InsuranceDTO;
 import com.propertyvista.portal.rpc.ptapp.services.steps.welcomewizard.InsuranceService;
 
-public class InsuranceActivity extends WizardStepActivity<InsuranceDTO, InsurancePresenter> {
+public class InsuranceActivity extends WizardStepActivity<InsuranceDTO, InsurancePresenter> implements InsurancePresenter {
 
     public InsuranceActivity(AppPlace place) {
         super(WizardStepsViewFactory.instance(InsuranceView.class), InsuranceDTO.class, GWT.<InsuranceService> create(InsuranceService.class));

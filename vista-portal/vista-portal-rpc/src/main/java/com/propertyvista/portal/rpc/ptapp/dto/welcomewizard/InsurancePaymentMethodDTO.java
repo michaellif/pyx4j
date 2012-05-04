@@ -23,7 +23,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
-import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.payment.CreditCardInfo;
 
 @Transient
@@ -50,7 +50,7 @@ public interface InsurancePaymentMethodDTO extends IEntity {
     IPrimitive<Boolean> sameAsCurrent();
 
     @EmbeddedEntity
-    AddressStructured billingAddress();
+    AddressSimple billingAddress();
 
     @Editor(type = EditorType.phone)
     IPrimitive<String> phone();

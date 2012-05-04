@@ -37,8 +37,8 @@ public abstract class AddressSimpleEditorImpl<A extends AddressSimple> extends C
         FormFlexPanel main = new FormFlexPanel();
 
         int row = -1;
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().street1()), 50).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().street2()), 50).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().street1()), 25).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().street2()), 25).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().city()), 15).build());
 
         // Need local variables to avoid extended casting that make the code unreadable

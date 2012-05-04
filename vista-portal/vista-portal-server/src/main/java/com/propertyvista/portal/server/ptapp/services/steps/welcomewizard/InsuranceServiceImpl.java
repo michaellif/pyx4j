@@ -62,19 +62,27 @@ public class InsuranceServiceImpl implements InsuranceService {
     @Override
     public void retrieve(AsyncCallback<InsuranceDTO> callback, Key tenantId) {
         InsuranceDTO insurance = EntityFactory.create(InsuranceDTO.class);
+
+        // INSURANCE PURCHASE PART INITIALIZATION
         insurance.purchaseInsurance().paymentMethod().paymentMethod().setValue(PaymentMethod.Visa);
+
+        IAgree agreeHolder = EntityFactory.create(IAgree.class);
+        agreeHolder.person().set(WelcomeWizardDemoData.applicantsCustomer().person().duplicate());
 
         LegalTermsDescriptorDTO personalDisclaimerDescriptor = EntityFactory.create(LegalTermsDescriptorDTO.class);
         LegalTermsContent personalDisclaimerContent = EntityFactory.create(LegalTermsContent.class);
         personalDisclaimerContent.content().setValue(PERSONAL_DISCLAIMER);
         personalDisclaimerContent.localizedCaption().setValue("Personal Disclaimer");
         personalDisclaimerDescriptor.content().set(personalDisclaimerContent);
-
-        IAgree agreeHolder = EntityFactory.create(IAgree.class);
-        agreeHolder.person().set(WelcomeWizardDemoData.applicantsCustomer().person().duplicate());
-        personalDisclaimerDescriptor.agrees().add(agreeHolder);
+        personalDisclaimerDescriptor.agrees().add(agreeHolder.duplicate(IAgree.class));
 
         insurance.purchaseInsurance().personalDisclaimerTerms().add(personalDisclaimerDescriptor);
+
+        LegalTermsDescriptorDTO agreement = insurance.purchaseInsurance().agreementLegalBlurbAndPreAuthorizationAgreeement().$();
+        agreement.content().content().setValue(AGREEMENT_LEGAL_BLURB_AND_PRE_AUTHORIZATION_AGREEMENT);
+        agreement.content().localizedCaption().setValue("AGREEMENT LEGAL BLURB AND PRE-AUTHORIZATION AGREEMENT");
+        agreement.agrees().add(agreeHolder.duplicate(IAgree.class));
+        insurance.purchaseInsurance().agreementLegalBlurbAndPreAuthorizationAgreeement().add(agreement);
 
         DigitalSignature signature = insurance.purchaseInsurance().digitalSignatures().$();
         signature.ipAddress().setValue(Context.getRequestRemoteAddr());
@@ -82,10 +90,7 @@ public class InsuranceServiceImpl implements InsuranceService {
         signature.person().set(WelcomeWizardDemoData.applicantsCustomer());
         insurance.purchaseInsurance().digitalSignatures().add(signature);
 
-        LegalTermsDescriptorDTO agreement = insurance.purchaseInsurance().agreementLegalBlurbAndPreAuthorizationAgreeement().$();
-        agreement.content().content().setValue(AGREEMENT_LEGAL_BLURB_AND_PRE_AUTHORIZATION_AGREEMENT);
-        agreement.content().localizedCaption().setValue("AGREEMENT LEGAL BLURB AND PRE-AUTHORIZATION AGREEMENT");
-        insurance.purchaseInsurance().agreementLegalBlurbAndPreAuthorizationAgreeement().add(agreement);
+        // EXISTING INSURACE PART INTIALIZATION
         insurance.existingInsurance().documents().add(insurance.existingInsurance().documents().$());
 
         callback.onSuccess(insurance);

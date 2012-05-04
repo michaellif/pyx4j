@@ -29,6 +29,7 @@ import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.common.client.events.UserMessageEvent;
+import com.propertyvista.misc.VistaTODO;
 
 public class WizardStepViewImpl<E extends IEntity, T extends WizardStepPresenter<E>> extends FlowPanel implements WizardStepView<E, T> {
 
@@ -38,26 +39,19 @@ public class WizardStepViewImpl<E extends IEntity, T extends WizardStepPresenter
 
     private final CEntityEditor<E> form;
 
+    private final Button actionButton;
+
     public WizardStepViewImpl(final CEntityEditor<E> form) {
         this.form = form;
         form.initContent();
         add(form);
 
-        Button actionButton = new Button(actionName());
+        actionButton = new Button(actionName());
         actionButton.ensureDebugId(CrudDebugId.Crud_Save.debugId());
         actionButton.addClickHandler(new ClickHandler() {
-
             @Override
             public void onClick(ClickEvent event) {
-                AppSite.getEventBus().fireEvent(new UserMessageEvent(null, null, null));
-                form.setVisited(true);
-                if (!form.isValid()) {
-                    Window.scrollTo(0, 0);
-                    throw new UserRuntimeException(form.getValidationResults().getMessagesText(true));
-                }
-
-                doAction();
-                Window.scrollTo(0, 0);
+                onAction();
             }
         });
 
@@ -71,6 +65,18 @@ public class WizardStepViewImpl<E extends IEntity, T extends WizardStepPresenter
 
         getElement().getStyle().setMarginTop(15, Unit.PX);
         getElement().getStyle().setMarginBottom(15, Unit.PX);
+    }
+
+    protected void onAction() {
+        AppSite.getEventBus().fireEvent(new UserMessageEvent(null, null, null));
+        form.setVisited(true);
+        if (!form.isValid()) {
+            Window.scrollTo(0, 0);
+            throw new UserRuntimeException(form.getValidationResults().getMessagesText(true));
+        }
+
+        doAction();
+        Window.scrollTo(0, 0);
     }
 
     protected String actionName() {
@@ -111,5 +117,13 @@ public class WizardStepViewImpl<E extends IEntity, T extends WizardStepPresenter
 
     protected CEntityEditor<E> getForm() {
         return form;
+    }
+
+    protected void setActionButtonVisible(boolean visible) {
+        // this was created to create wizard step with buttons inside the form itself.
+        if (VistaTODO.enableWelcomeWizardDemoMode) {
+
+            actionButton.setVisible(visible);
+        }
     }
 }

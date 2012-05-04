@@ -25,6 +25,7 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.login.AbstractLoginViewImpl;
 import com.propertyvista.domain.DemoData;
+import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.portal.ptapp.client.resources.PortalImages;
 import com.propertyvista.portal.ptapp.client.resources.PortalResources;
 
@@ -42,28 +43,30 @@ public class LoginViewImpl extends AbstractLoginViewImpl {
         leftColumn.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.LEFT);
         leftColumn.setWidth("100%");
         setWidget(0, 0, leftColumn);
-        getFlexCellFormatter().setWidth(0, 0, "50%");
 
-        HTML requirements = new HTML(PortalResources.INSTANCE.requirements().getText());
-        requirements.getElement().getStyle().setPaddingLeft(95, Unit.PX);
-        requirements.getElement().getStyle().setPaddingBottom(45, Unit.PX);
+        if (!VistaTODO.enableWelcomeWizardDemoMode) {
+            getFlexCellFormatter().setWidth(0, 0, "50%");
+            HTML requirements = new HTML(PortalResources.INSTANCE.requirements().getText());
+            requirements.getElement().getStyle().setPaddingLeft(95, Unit.PX);
+            requirements.getElement().getStyle().setPaddingBottom(45, Unit.PX);
 
-        requirements.getElement().getStyle().setProperty("background", "url(" + PortalImages.INSTANCE.requirements().getURL() + ") no-repeat");
-        leftColumn.add(requirements);
+            requirements.getElement().getStyle().setProperty("background", "url(" + PortalImages.INSTANCE.requirements().getURL() + ") no-repeat");
+            leftColumn.add(requirements);
 
-        HTML time = new HTML(PortalResources.INSTANCE.time().getText());
-        time.getElement().getStyle().setPaddingLeft(95, Unit.PX);
-        time.getElement().getStyle().setPaddingBottom(45, Unit.PX);
+            HTML time = new HTML(PortalResources.INSTANCE.time().getText());
+            time.getElement().getStyle().setPaddingLeft(95, Unit.PX);
+            time.getElement().getStyle().setPaddingBottom(45, Unit.PX);
 
-        time.getElement().getStyle().setProperty("background", "url(" + PortalImages.INSTANCE.time().getURL() + ") no-repeat");
-        leftColumn.add(time);
+            time.getElement().getStyle().setProperty("background", "url(" + PortalImages.INSTANCE.time().getURL() + ") no-repeat");
+            leftColumn.add(time);
 
-        HTML dontWorry = new HTML(PortalResources.INSTANCE.dontWorry().getText());
-        dontWorry.getElement().getStyle().setPaddingLeft(95, Unit.PX);
-        dontWorry.getElement().getStyle().setPaddingBottom(45, Unit.PX);
+            HTML dontWorry = new HTML(PortalResources.INSTANCE.dontWorry().getText());
+            dontWorry.getElement().getStyle().setPaddingLeft(95, Unit.PX);
+            dontWorry.getElement().getStyle().setPaddingBottom(45, Unit.PX);
 
-        dontWorry.getElement().getStyle().setProperty("background", "url(" + PortalImages.INSTANCE.dontWorry().getURL() + ") no-repeat");
-        leftColumn.add(dontWorry);
+            dontWorry.getElement().getStyle().setProperty("background", "url(" + PortalImages.INSTANCE.dontWorry().getURL() + ") no-repeat");
+            leftColumn.add(dontWorry);
+        }
 
         FlowPanel rightColumn = new FlowPanel();
         rightColumn.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.LEFT);
@@ -71,7 +74,6 @@ public class LoginViewImpl extends AbstractLoginViewImpl {
         rightColumn.add(form);
         setWidget(0, 1, rightColumn);
         getFlexCellFormatter().setVerticalAlignment(0, 1, HasVerticalAlignment.ALIGN_TOP);
-
     }
 
     @Override
