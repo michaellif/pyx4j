@@ -14,6 +14,7 @@
 package com.propertyvista.domain.financial.billing;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Table;
@@ -56,6 +57,7 @@ public interface BillingRun extends IEntity {
     IPrimitive<LogicalDate> billingPeriodEndDate();
 
     @ReadOnly
+    @Detached
     Building building();
 
     IPrimitive<BillingRunStatus> status();
