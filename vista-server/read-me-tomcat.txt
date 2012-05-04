@@ -31,3 +31,11 @@ To configure Tomcat to support remote debugging?
   Add this to potions (ON A SEPARATE LINEs)
   -Xdebug
   -Xrunjdwp:transport=dt_socket,address=8000,server=y,suspend=n
+
+
+--
+ Build sever 'dev' deployment memory MemoryLeakPrevention
+ Even so we have JreMemoryLeakPreventionListener.driverManagerProtection http://tomcat.apache.org/tomcat-7.0-doc/config/listeners.html#JRE_Memory_Leak_Prevention_Listener_-_org.apache.catalina.core.JreMemoryLeakPreventionListener
+ On build server I removed the META-INF/services from
+   /.m2/repository/postgresql/postgresql/9.1-901-1.jdbc4/ postgresql-9.1-901-1.jdbc4.jar
+   /.m2/repository/mysql/mysql-connector-java/5.1.20/ mysql-connector-java-5.1.20.jar
