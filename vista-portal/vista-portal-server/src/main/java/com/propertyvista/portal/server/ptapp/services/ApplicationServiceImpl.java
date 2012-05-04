@@ -108,7 +108,6 @@ public class ApplicationServiceImpl extends ApplicationEntityServiceImpl impleme
         }
 
         Persistence.service().commit();
-        log.debug("Application {}", application);
         callback.onSuccess(application);
     }
 
