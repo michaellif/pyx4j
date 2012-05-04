@@ -31,7 +31,6 @@ public class Commons {
         }
 
         Persistence.service().retrieve(participant.screening());
-        callback.onSuccess((AddressStructured) (participant.screening().isNull() ? EntityFactory.create(AddressStructured.class) : participant.screening().currentAddress()
-                .detach()));
+        callback.onSuccess((AddressStructured) participant.screening().currentAddress().detach());
     }
 }

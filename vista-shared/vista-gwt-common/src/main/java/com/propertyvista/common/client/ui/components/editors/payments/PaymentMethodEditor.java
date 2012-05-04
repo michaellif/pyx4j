@@ -126,9 +126,9 @@ public class PaymentMethodEditor extends CEntityDecoratableEditor<PaymentMethod>
             paymentDetailsHolder.setWidget(null);
         }
 
-        if (type != null) {
+        if (type != null && getValue() != null) {
             CEntityEditor editor = null;
-            PaymentDetails details = (getValue() != null ? getValue().details() : null);
+            PaymentDetails details = getValue().details();
 
             switch (type) {
             case Cash:

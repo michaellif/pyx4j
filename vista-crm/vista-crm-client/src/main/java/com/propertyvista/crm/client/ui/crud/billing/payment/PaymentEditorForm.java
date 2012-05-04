@@ -131,8 +131,6 @@ public class PaymentEditorForm extends CrmEntityForm<PaymentRecordDTO> {
         panel.setWidget(++row, 1, new DecoratorBuilder(inject(proto().targetDate()), 10).build());
         panel.setWidget(++row, 1, new DecoratorBuilder(inject(proto().depositDate()), 10).build());
         panel.setWidget(++row, 1, new DecoratorBuilder(inject(proto().paymentStatus()), 10).build());
-//        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().transactionErrorMessage()), 20).build());
-//        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().transactionAuthorizationNumber()), 20).build());
         panel.setWidget(++row, 1, new DecoratorBuilder(inject(proto().notes()), 25).build());
 
         // tweak UI:
@@ -143,14 +141,12 @@ public class PaymentEditorForm extends CrmEntityForm<PaymentRecordDTO> {
         get(proto().leaseStatus()).setViewable(true);
 
         get(proto().paymentStatus()).setViewable(true);
-//        get(proto().transactionErrorMessage()).setViewable(true);
-//        get(proto().transactionAuthorizationNumber()).setViewable(true);
 
         get(proto().leaseParticipant()).addValueChangeHandler(new ValueChangeHandler<LeaseParticipant>() {
             @Override
             public void onValueChange(ValueChangeEvent<LeaseParticipant> event) {
-                get(proto().paymentSelect()).setEnabled(!event.getValue().isNull());
                 paymentMethodEditor.setBillingAddressAsCurrentEnabled(!event.getValue().isNull());
+                checkProfiledPaymentMethod();
             }
         });
 
@@ -158,15 +154,12 @@ public class PaymentEditorForm extends CrmEntityForm<PaymentRecordDTO> {
             @Override
             public void onValueChange(ValueChangeEvent<PaymentSelect> event) {
                 paymentMethodEditor.setTypeSelectionVisible(event.getValue() == PaymentSelect.New);
-
                 if (event.getValue() == PaymentSelect.Profiled) {
-                    final PaymentMethod currentValue = paymentMethodEditor.getValue();
                     ((PaymentEditorView.Presenter) ((PaymentEditorView) getParentView()).getPresenter()).getProfiledPaymentMethod(
                             new DefaultAsyncCallback<PaymentMethod>() {
                                 @Override
                                 public void onSuccess(PaymentMethod result) {
-                                    currentValue.set(result);
-                                    paymentMethodEditor.populate(currentValue);
+                                    paymentMethodEditor.populate(result);
                                 }
                             }, PaymentEditorForm.this.getValue().leaseParticipant());
                 }
@@ -184,10 +177,24 @@ public class PaymentEditorForm extends CrmEntityForm<PaymentRecordDTO> {
 
         get(proto().id()).setVisible(!getValue().id().isNull());
         get(proto().paymentSelect()).setVisible(!isViewable());
-        get(proto().paymentSelect()).setEnabled(getValue().leaseParticipant().getValue() != null);
-        paymentMethodEditor.setBillingAddressAsCurrentEnabled(getValue().leaseParticipant().getValue() != null);
-//        get(proto().transactionAuthorizationNumber()).setVisible(!getValue().transactionAuthorizationNumber().isNull());
-//        get(proto().transactionErrorMessage()).setVisible(!getValue().transactionErrorMessage().isNull());
+        paymentMethodEditor.setBillingAddressAsCurrentEnabled(!getValue().leaseParticipant().isNull());
+        checkProfiledPaymentMethod();
     }
 
+    private void checkProfiledPaymentMethod() {
+        if (getParentView() instanceof PaymentEditorView) {
+            get(proto().paymentSelect()).setValue(PaymentSelect.New, false);
+            get(proto().paymentSelect()).setEnabled(false);
+
+            if (!getValue().leaseParticipant().isNull()) {
+                ((PaymentEditorView.Presenter) ((PaymentEditorView) getParentView()).getPresenter()).getProfiledPaymentMethod(
+                        new DefaultAsyncCallback<PaymentMethod>() {
+                            @Override
+                            public void onSuccess(PaymentMethod result) {
+                                get(proto().paymentSelect()).setEnabled(result != null);
+                            }
+                        }, getValue().leaseParticipant());
+            }
+        }
+    }
 }

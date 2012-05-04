@@ -32,7 +32,6 @@ import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
-import com.propertyvista.domain.payment.CashInfo;
 import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.tenant.Guarantor;
@@ -77,6 +76,7 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
         dto.leaseId().set(dto.billingAccount().lease().leaseId());
         dto.leaseStatus().set(dto.billingAccount().lease().version().status());
 
+        Persistence.service().retrieve(dto.paymentMethod());
         Persistence.service().retrieve(dto.paymentMethod().leaseParticipant());
         dto.leaseParticipant().set(dto.paymentMethod().leaseParticipant());
     }
@@ -86,7 +86,9 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
 
         entity.paymentMethod().leaseParticipant().set(dto.leaseParticipant());
 
-        Persistence.service().persist(entity.paymentMethod());
+//        if (entity.paymentMethod().getPrimaryKey() == null) { // save new
+        Persistence.service().merge(entity.paymentMethod());
+//        }
         super.persist(entity, dto);
     }
 
@@ -131,11 +133,14 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
                     + " NotFound");
         }
 
-        PaymentMethod method = EntityFactory.create(PaymentMethod.class);
-        method.details().set(EntityFactory.create(CashInfo.class));
-        method.type().setValue(PaymentType.Cash);
-
-        callback.onSuccess(method);
+        PaymentMethod method = null;
+        Persistence.service().retrieve(payer.paymentMethods());
+        for (PaymentMethod pm : payer.paymentMethods()) {
+            if (pm.isDefault().isBooleanTrue()) {
+                method = pm;
+            }
+        }
+        callback.onSuccess(method); // null - means there is no default one!..
     }
 
     // Payment operations:
