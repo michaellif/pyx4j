@@ -105,6 +105,7 @@ public class PaymentMethodEditor extends CEntityDecoratableEditor<PaymentMethod>
     @Override
     protected void propagateValue(PaymentMethod value, boolean fireEvent, boolean populate) {
         selectPaymentDetailsEditor(value != null ? value.type().getValue() : null);
+        super.propagateValue(value, fireEvent, populate);
     }
 
     @Override

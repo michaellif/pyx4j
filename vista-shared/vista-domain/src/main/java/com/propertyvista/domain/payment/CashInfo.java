@@ -17,6 +17,9 @@ import java.math.BigDecimal;
 
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -28,9 +31,13 @@ import com.pyx4j.i18n.annotations.I18n;
 public interface CashInfo extends PaymentDetails {
 
     @NotNull
-    @Caption(name = "Total Amount")
-    IPrimitive<BigDecimal> amount();
+    @Format("#0.00")
+    @Caption(name = "Received Amount")
+    @Editor(type = EditorType.money)
+    IPrimitive<BigDecimal> receivedAmount();
 
-    @Caption(name = "Banknoutes Count")
-    IPrimitive<BigDecimal> billsCount();
+    @Format("#0.00")
+    @Caption(name = "Change Amount")
+    @Editor(type = EditorType.money)
+    IPrimitive<BigDecimal> changeAmount();
 }

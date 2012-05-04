@@ -39,8 +39,8 @@ public class CashInfoEditor extends CEntityDecoratableEditor<CashInfo> {
         FormFlexPanel panel = new FormFlexPanel();
 
         int row = -1;
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().amount()), 15).build());
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billsCount()), 10).build());
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().receivedAmount()), 15).build());
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().changeAmount()), 5).build());
 
         return panel;
     }
