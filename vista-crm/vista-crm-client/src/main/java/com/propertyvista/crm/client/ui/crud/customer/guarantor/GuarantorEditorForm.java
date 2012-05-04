@@ -18,16 +18,21 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
 
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.common.client.ui.components.editors.NameEditor;
 import com.propertyvista.common.client.ui.validators.PastDateValidation;
 import com.propertyvista.crm.client.themes.CrmTheme;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
+import com.propertyvista.crm.client.ui.crud.customer.common.PaymentMethodFolder;
 import com.propertyvista.crm.client.ui.crud.lease.common.CLeaseHyperlink;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
+import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.dto.GuarantorDTO;
 
 public class GuarantorEditorForm extends CrmEntityForm<GuarantorDTO> {
@@ -50,6 +55,7 @@ public class GuarantorEditorForm extends CrmEntityForm<GuarantorDTO> {
         tabPanel.add(createDetailsTab(), i18n.tr("Details"));
         tabPanel.add(isEditable() ? new HTML() : ((GuarantorViewerView) getParentView()).getScreeningListerView().asWidget(), i18n.tr("Screening"));
         tabPanel.setLastTabDisabled(isEditable());
+        tabPanel.add(createPaymentMethodsTab(), i18n.tr("Payment Methods"));
 
         tabPanel.setSize("100%", "100%");
         return tabPanel;
@@ -91,6 +97,29 @@ public class GuarantorEditorForm extends CrmEntityForm<GuarantorDTO> {
 
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseV(), new CLeaseHyperlink()), 35).customLabel(i18n.tr("Lease")).build());
         }
+
+        return new CrmScrollPanel(main);
+    }
+
+    private Widget createPaymentMethodsTab() {
+        FormFlexPanel main = new FormFlexPanel();
+
+        main.setWidget(0, 0, inject(proto().paymentMethods(), new PaymentMethodFolder(isEditable()) {
+            @Override
+            protected void onBillingAddressSameAsCurrentOne(boolean set, final CComponent<AddressStructured, ?> comp) {
+                if (set) {
+                    ((GuarantorEditorView.Presenter) ((GuarantorEditorView) getParentView()).getPresenter())
+                            .getCurrentAddress(new DefaultAsyncCallback<AddressStructured>() {
+                                @Override
+                                public void onSuccess(AddressStructured result) {
+                                    comp.populate(result);
+                                }
+                            });
+                } else {
+                    comp.populate(EntityFactory.create(AddressStructured.class));
+                }
+            }
+        }));
 
         return new CrmScrollPanel(main);
     }

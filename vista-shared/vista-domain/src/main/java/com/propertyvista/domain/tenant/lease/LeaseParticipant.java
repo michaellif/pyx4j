@@ -30,11 +30,13 @@ import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.shared.I18nEnum;
 
+import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.PersonScreening;
 import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
@@ -92,4 +94,6 @@ public interface LeaseParticipant extends IEntity {
     @Detached
     PersonScreening screening();
 
+    @Detached
+    IList<PaymentMethod> paymentMethods();
 }

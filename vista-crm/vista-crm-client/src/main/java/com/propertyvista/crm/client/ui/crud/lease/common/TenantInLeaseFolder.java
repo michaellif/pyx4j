@@ -13,7 +13,6 @@
  */
 package com.propertyvista.crm.client.ui.crud.lease.common;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.List;
@@ -39,18 +38,15 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
 import com.propertyvista.common.client.ui.components.editors.NameEditor;
-import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
-import com.propertyvista.crm.client.ui.components.boxes.CustomerSelectorDialog;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.PersonRelationship;
 import com.propertyvista.domain.tenant.PersonScreening;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
-import com.propertyvista.domain.tenant.lease.LeaseParticipant.Role;
 import com.propertyvista.domain.util.ValidationUtils;
 import com.propertyvista.dto.LeaseDTO;
 
-public class TenantInLeaseFolder extends VistaBoxFolder<Tenant> {
+public class TenantInLeaseFolder extends LeaseParticipantFolder<Tenant> {
 
     static final I18n i18n = I18n.get(TenantInLeaseFolder.class);
 
@@ -59,43 +55,29 @@ public class TenantInLeaseFolder extends VistaBoxFolder<Tenant> {
     public TenantInLeaseFolder(CEntityEditor<? extends LeaseDTO> parent, boolean modifiable) {
         super(Tenant.class, modifiable);
         this.lease = parent;
-        setOrderable(false);
     }
 
     @Override
-    protected void addItem() {
-        new YesNoCancelDialog(i18n.tr("Add New Tenant"), i18n.tr("Do you want to select existing Tenant?")) {
-            @Override
-            public boolean onClickYes() {
-                new CustomerSelectorDialog(retrieveExistingCustomers(getValue())) {
-                    @Override
-                    public boolean onClickOk() {
-                        if (getSelectedItems().isEmpty()) {
-                            return false;
-                        } else {
-                            for (Customer tenant : getSelectedItems()) {
-                                Tenant newTenantInLease = EntityFactory.create(Tenant.class);
-                                newTenantInLease.leaseV().setPrimaryKey(lease.getValue().version().getPrimaryKey());
-                                newTenantInLease.customer().set(tenant);
-                                if (!isApplicantPresent()) {
-                                    newTenantInLease.role().setValue(LeaseParticipant.Role.Applicant);
-                                    newTenantInLease.relationship().setValue(PersonRelationship.Other); // just not leave it empty - it's mandatory field!
-                                }
-                                addItem(newTenantInLease);
-                            }
-                            return true;
-                        }
-                    }
-                }.show();
-                return true;
-            }
+    protected String getAddItemDialogCaption() {
+        return i18n.tr("Add New Tenant");
+    }
 
-            @Override
-            public boolean onClickNo() {
-                TenantInLeaseFolder.super.addItem();
-                return true;
+    @Override
+    protected String getAddItemDialogBody() {
+        return i18n.tr("Do you want to select existing Tenant?");
+    }
+
+    @Override
+    protected void addParticipants(List<Customer> customers) {
+        for (Customer tenant : customers) {
+            Tenant newTenantInLease = EntityFactory.create(Tenant.class);
+            newTenantInLease.leaseV().setPrimaryKey(lease.getValue().version().getPrimaryKey());
+            newTenantInLease.customer().set(tenant);
+            if (!isApplicantPresent()) {
+                newTenantInLease.role().setValue(LeaseParticipant.Role.Applicant);
+                newTenantInLease.relationship().setValue(PersonRelationship.Other); // just not leave it empty - it's mandatory field!
             }
-        }.show();
+        }
     }
 
     private boolean isApplicantPresent() {
@@ -264,13 +246,4 @@ public class TenantInLeaseFolder extends VistaBoxFolder<Tenant> {
             get(proto().role()).setEditable(false);
         }
     }
-
-    private static List<Customer> retrieveExistingCustomers(List<Tenant> list) {
-        List<Customer> customers = new ArrayList<Customer>(list.size());
-        for (Tenant wrapper : list) {
-            customers.add(wrapper.customer());
-        }
-        return customers;
-    }
-
 }

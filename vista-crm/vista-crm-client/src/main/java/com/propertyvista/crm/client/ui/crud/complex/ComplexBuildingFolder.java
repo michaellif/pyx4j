@@ -27,6 +27,8 @@ import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.ValidationFailure;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
@@ -128,5 +130,29 @@ public class ComplexBuildingFolder extends VistaTableFolder<Building> {
                 }
             });
         }
+    }
+
+    @Override
+    public void addValidations() {
+        super.addValidations();
+
+        this.addValueValidator(new EditableValueValidator<List<Building>>() {
+            @Override
+            public ValidationFailure isValid(CComponent<List<Building>, ?> component, List<Building> value) {
+                if (value != null) {
+                    boolean primaryFound = false;
+                    for (Building item : value) {
+                        if (item.complexPrimary().isBooleanTrue()) {
+                            primaryFound = true;
+                            break;
+                        }
+                    }
+                    if (!primaryFound) {
+                        return new ValidationFailure(i18n.tr("Primary building should be selected"));
+                    }
+                }
+                return null;
+            }
+        });
     }
 }

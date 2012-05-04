@@ -20,12 +20,14 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationFailure;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
 
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.common.client.ui.components.editors.NameEditor;
@@ -33,8 +35,10 @@ import com.propertyvista.common.client.ui.components.folders.EmergencyContactFol
 import com.propertyvista.common.client.ui.validators.PastDateValidation;
 import com.propertyvista.crm.client.themes.CrmTheme;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
+import com.propertyvista.crm.client.ui.crud.customer.common.PaymentMethodFolder;
 import com.propertyvista.crm.client.ui.crud.lease.common.CLeaseHyperlink;
 import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
+import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.tenant.EmergencyContact;
 import com.propertyvista.dto.TenantDTO;
 
@@ -59,6 +63,7 @@ public class TenantEditorForm extends CrmEntityForm<TenantDTO> {
         tabPanel.add(createContactsTab(), i18n.tr("Contacts"));
         tabPanel.add(isEditable() ? new HTML() : ((TenantViewerView) getParentView()).getScreeningListerView().asWidget(), i18n.tr("Screening"));
         tabPanel.setLastTabDisabled(isEditable());
+        tabPanel.add(createPaymentMethodsTab(), i18n.tr("Payment Methods"));
 
         tabPanel.setSize("100%", "100%");
         return tabPanel;
@@ -113,6 +118,29 @@ public class TenantEditorForm extends CrmEntityForm<TenantDTO> {
         return new CrmScrollPanel(main);
     }
 
+    private Widget createPaymentMethodsTab() {
+        FormFlexPanel main = new FormFlexPanel();
+
+        main.setWidget(0, 0, inject(proto().paymentMethods(), new PaymentMethodFolder(isEditable()) {
+            @Override
+            protected void onBillingAddressSameAsCurrentOne(boolean set, final CComponent<AddressStructured, ?> comp) {
+                if (set) {
+                    ((TenantEditorView.Presenter) ((TenantEditorView) getParentView()).getPresenter())
+                            .getCurrentAddress(new DefaultAsyncCallback<AddressStructured>() {
+                                @Override
+                                public void onSuccess(AddressStructured result) {
+                                    comp.populate(result);
+                                }
+                            });
+                } else {
+                    comp.populate(EntityFactory.create(AddressStructured.class));
+                }
+            }
+        }));
+
+        return new CrmScrollPanel(main);
+    }
+
     @Override
     public void addValidations() {
         get(proto().customer().emergencyContacts()).addValueValidator(new EditableValueValidator<List<EmergencyContact>>() {
@@ -129,6 +157,5 @@ public class TenantEditorForm extends CrmEntityForm<TenantDTO> {
         });
 
         new PastDateValidation(get(proto().customer().person().birthDate()));
-
     }
 }

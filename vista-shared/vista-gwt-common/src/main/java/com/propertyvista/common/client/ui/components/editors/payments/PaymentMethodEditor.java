@@ -82,6 +82,10 @@ public class PaymentMethodEditor extends CEntityDecoratableEditor<PaymentMethod>
         main.setHR(++row, 0, 1);
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().phone()), 12).build());
 
+        main.setBR(++row, 0, 1);
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().isDefault())).build());
+        get(proto().isDefault()).setVisible(false);
+
         // tweak UI:
         get(proto().type()).addValueChangeHandler(new ValueChangeHandler<PaymentType>() {
             @Override
@@ -202,7 +206,16 @@ public class PaymentMethodEditor extends CEntityDecoratableEditor<PaymentMethod>
         return get(proto().sameAsCurrent()).isEnabled();
     }
 
-    public void onBillingAddressSameAsCurrentOne(boolean set, CComponent<AddressStructured, ?> comp) {
+    public void setIsDefaultVisible(boolean visible) {
+        get(proto().isDefault()).setVisible(visible);
+
+    }
+
+    public boolean isIsDefaultVisible() {
+        return get(proto().isDefault()).isVisible();
+    }
+
+    protected void onBillingAddressSameAsCurrentOne(boolean set, CComponent<AddressStructured, ?> comp) {
         // Implements meaningful in derived classes...
     }
 }

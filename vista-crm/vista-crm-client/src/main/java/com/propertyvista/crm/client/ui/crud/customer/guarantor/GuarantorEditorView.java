@@ -13,12 +13,17 @@
  */
 package com.propertyvista.crm.client.ui.crud.customer.guarantor;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
 import com.pyx4j.site.client.ui.crud.form.IEditorView;
 
+import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.dto.GuarantorDTO;
 
 public interface GuarantorEditorView extends IEditorView<GuarantorDTO> {
 
     interface Presenter extends IEditorView.Presenter {
+
+        void getCurrentAddress(AsyncCallback<AddressStructured> callback);
     }
 }

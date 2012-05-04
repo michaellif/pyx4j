@@ -13,6 +13,9 @@
  */
 package com.propertyvista.crm.server.services.customer;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
+import com.pyx4j.commons.Key;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
@@ -20,6 +23,8 @@ import com.pyx4j.entity.shared.AttachLevel;
 
 import com.propertyvista.biz.tenant.CustomerFacade;
 import com.propertyvista.crm.rpc.services.customer.GuarantorCrudService;
+import com.propertyvista.crm.server.services.Commons;
+import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.dto.GuarantorDTO;
@@ -40,6 +45,7 @@ public class GuarantorCrudServiceImpl extends AbstractCrudServiceDtoImpl<Guarant
         // load detached data:
         Persistence.service().retrieve(dto.leaseV());
         Persistence.service().retrieve(dto.leaseV().holder(), AttachLevel.ToStringMembers);
+        Persistence.service().retrieve(entity.paymentMethods());
     }
 
     @Override
@@ -52,6 +58,12 @@ public class GuarantorCrudServiceImpl extends AbstractCrudServiceDtoImpl<Guarant
     protected void persist(Guarantor entity, GuarantorDTO dto) {
         ServerSideFactory.create(CustomerFacade.class).persistCustomer(entity.customer());
         entity.role().setValue(LeaseParticipant.Role.Guarantor);
+        Persistence.service().merge(entity.paymentMethods());
         super.persist(entity, dto);
+    }
+
+    @Override
+    public void getCurrentAddress(AsyncCallback<AddressStructured> callback, Key entityId) {
+        Commons.getLeaseParticipantCurrentAddress(callback, Persistence.service().retrieve(Guarantor.class, entityId));
     }
 }

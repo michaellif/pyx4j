@@ -13,6 +13,9 @@
  */
 package com.propertyvista.crm.server.services.customer;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
+import com.pyx4j.commons.Key;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
@@ -20,6 +23,8 @@ import com.pyx4j.entity.shared.AttachLevel;
 
 import com.propertyvista.biz.tenant.CustomerFacade;
 import com.propertyvista.crm.rpc.services.customer.TenantCrudService;
+import com.propertyvista.crm.server.services.Commons;
+import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.dto.TenantDTO;
 
@@ -40,6 +45,7 @@ public class TenantCrudServiceImpl extends AbstractCrudServiceDtoImpl<Tenant, Te
         Persistence.service().retrieve(dto.customer().emergencyContacts());
         Persistence.service().retrieve(dto.leaseV());
         Persistence.service().retrieve(dto.leaseV().holder(), AttachLevel.ToStringMembers);
+        Persistence.service().retrieve(entity.paymentMethods());
     }
 
     @Override
@@ -51,6 +57,12 @@ public class TenantCrudServiceImpl extends AbstractCrudServiceDtoImpl<Tenant, Te
     @Override
     protected void persist(Tenant entity, TenantDTO in) {
         ServerSideFactory.create(CustomerFacade.class).persistCustomer(entity.customer());
+        Persistence.service().merge(entity.paymentMethods());
         super.persist(entity, in);
+    }
+
+    @Override
+    public void getCurrentAddress(AsyncCallback<AddressStructured> callback, Key entityId) {
+        Commons.getLeaseParticipantCurrentAddress(callback, Persistence.service().retrieve(Tenant.class, entityId));
     }
 }

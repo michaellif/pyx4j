@@ -13,7 +13,6 @@
  */
 package com.propertyvista.crm.client.ui.crud.lease.common;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gwt.user.client.ui.IsWidget;
@@ -31,8 +30,6 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
 import com.propertyvista.common.client.ui.components.editors.NameEditor;
-import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
-import com.propertyvista.crm.client.ui.components.boxes.CustomerSelectorDialog;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.PersonRelationship;
@@ -41,7 +38,7 @@ import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.dto.LeaseDTO;
 
-public class GuarantorInLeaseFolder extends VistaBoxFolder<Guarantor> {
+public class GuarantorInLeaseFolder extends LeaseParticipantFolder<Guarantor> {
 
     static final I18n i18n = I18n.get(GuarantorInLeaseFolder.class);
 
@@ -50,41 +47,28 @@ public class GuarantorInLeaseFolder extends VistaBoxFolder<Guarantor> {
     public GuarantorInLeaseFolder(CEntityEditor<? extends LeaseDTO> parent, boolean modifiable) {
         super(Guarantor.class, modifiable);
         this.lease = parent;
-        setOrderable(false);
     }
 
     @Override
-    protected void addItem() {
-        new YesNoCancelDialog(i18n.tr("Add New Guarantor"), i18n.tr("Do you want to select existing Guarantor?")) {
-            @Override
-            public boolean onClickYes() {
-                new CustomerSelectorDialog(retrieveExistingCustomers(getValue())) {
-                    @Override
-                    public boolean onClickOk() {
-                        if (getSelectedItems().isEmpty()) {
-                            return false;
-                        } else {
-                            for (Customer tenant : getSelectedItems()) {
-                                Guarantor newGuarantorInLease = EntityFactory.create(Guarantor.class);
-                                newGuarantorInLease.leaseV().setPrimaryKey(lease.getValue().version().getPrimaryKey());
-                                newGuarantorInLease.customer().set(tenant);
-                                newGuarantorInLease.role().setValue(LeaseParticipant.Role.Guarantor);
-                                newGuarantorInLease.relationship().setValue(PersonRelationship.Other); // just not leave it empty - it's mandatory field!
-                                addItem(newGuarantorInLease);
-                            }
-                            return true;
-                        }
-                    }
-                }.show();
-                return true;
-            }
+    protected String getAddItemDialogCaption() {
+        return i18n.tr("Add New Guarantor");
+    }
 
-            @Override
-            public boolean onClickNo() {
-                GuarantorInLeaseFolder.super.addItem();
-                return true;
-            }
-        }.show();
+    @Override
+    protected String getAddItemDialogBody() {
+        return i18n.tr("Do you want to select existing Guarantor?");
+    }
+
+    @Override
+    protected void addParticipants(List<Customer> customers) {
+        for (Customer tenant : customers) {
+            Guarantor newGuarantorInLease = EntityFactory.create(Guarantor.class);
+            newGuarantorInLease.leaseV().setPrimaryKey(lease.getValue().version().getPrimaryKey());
+            newGuarantorInLease.customer().set(tenant);
+            newGuarantorInLease.role().setValue(LeaseParticipant.Role.Guarantor);
+            newGuarantorInLease.relationship().setValue(PersonRelationship.Other); // just not leave it empty - it's mandatory field!
+            addItem(newGuarantorInLease);
+        }
     }
 
     @Override
@@ -165,13 +149,5 @@ public class GuarantorInLeaseFolder extends VistaBoxFolder<Guarantor> {
                 combo.getOptions();
             }
         }
-    }
-
-    private static List<Customer> retrieveExistingCustomers(List<Guarantor> list) {
-        List<Customer> customers = new ArrayList<Customer>(list.size());
-        for (Guarantor wrapper : list) {
-            customers.add(wrapper.customer());
-        }
-        return customers;
     }
 }

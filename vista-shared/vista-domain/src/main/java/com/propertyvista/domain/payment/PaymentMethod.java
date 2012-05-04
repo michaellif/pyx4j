@@ -66,4 +66,6 @@ public interface PaymentMethod extends IEntity {
 
     @Editor(type = EditorType.phone)
     IPrimitive<String> phone();
+
+    IPrimitive<Boolean> isDefault();
 }
