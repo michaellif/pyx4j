@@ -25,10 +25,12 @@ import com.pyx4j.geo.GeoPoint;
 
 import com.propertyvista.biz.policy.IdAssignmentFacade;
 import com.propertyvista.crm.rpc.services.building.BuildingCrudService;
+import com.propertyvista.crm.server.services.admin.MerchantAccountCrudServiceImpl;
 import com.propertyvista.domain.GeoLocation;
 import com.propertyvista.domain.GeoLocation.LatitudeType;
 import com.propertyvista.domain.GeoLocation.LongitudeType;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
+import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.FeatureItemType;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -91,6 +93,14 @@ public class BuildingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Building
                 dto.geoLocation().longitudeType().setValue(LongitudeType.East);
                 dto.geoLocation().longitude().setValue(lng);
             }
+        }
+
+        // Financial
+        if (!in.merchantAccounts().isEmpty()) {
+            Persistence.service().retrieve(in.merchantAccounts());
+            MerchantAccount oneAccount = in.merchantAccounts().iterator().next();
+            MerchantAccountCrudServiceImpl.setCalulatedFileds(oneAccount, oneAccount);
+            dto.merchantAccounts().add(oneAccount);
         }
 
     }

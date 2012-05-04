@@ -39,7 +39,7 @@ public class MerchantAccountCrudServiceImpl extends AbstractCrudServiceImpl<Merc
         dbo.chargeDescription().setValue(dto.chargeDescription().getValue());
     }
 
-    protected void setCalulatedFileds(MerchantAccount entity, MerchantAccount dto) {
+    public static void setCalulatedFileds(MerchantAccount entity, MerchantAccount dto) {
         if (entity.merchantTerminalId().isNull()) {
             dto.status().setValue(MerchantAccount.MerchantAccountStatus.NoElectronicPaymentsAllowed);
         } else {
