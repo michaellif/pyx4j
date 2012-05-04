@@ -7,7 +7,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-         <groupId>com.propertyvista</groupId>
+        <groupId>com.propertyvista</groupId>
         <artifactId>vista-shared</artifactId>
         <version>1.0.4-SNAPSHOT</version><!--vista-version-->
         <relativePath>../pom.xml</relativePath>
@@ -22,16 +22,16 @@
             <groupId>com.pyx4j</groupId>
             <artifactId>pyx-entity-shared</artifactId>
         </dependency>
-        
+
         <dependency>
             <groupId>com.pyx4j</groupId>
             <artifactId>pyx-essentials-shared</artifactId>
         </dependency>
-        
+
     </dependencies>
 
     <properties>
         <project.jar-source-4gwt>true</project.jar-source-4gwt>
     </properties>
-    
+
 </project>
