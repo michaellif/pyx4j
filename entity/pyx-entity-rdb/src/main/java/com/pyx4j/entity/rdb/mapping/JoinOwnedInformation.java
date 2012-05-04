@@ -79,7 +79,8 @@ public class JoinOwnedInformation extends JoinInformation {
                         throw new AssertionError("Duplicate orderColumn member in table " + childEntityMeta.getEntityClass().getName() + " for "
                                 + memberMeta.getFieldName() + " in " + entityMeta.getEntityClass().getName());
                     }
-                    if (jmemberMeta.getObjectClass().equals(Integer.class)) {
+
+                    if ((!jmemberMeta.getValueClass().equals(Integer.class)) && (!jmemberMeta.getFieldName().equals(IEntity.PRIMARY_KEY))) {
                         throw new AssertionError("Expected Integer orderColumn in table " + childEntityMeta.getEntityClass().getName() + " for "
                                 + memberMeta.getFieldName() + " in " + entityMeta.getEntityClass().getName());
                     }
