@@ -86,9 +86,7 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
 
         entity.paymentMethod().leaseParticipant().set(dto.leaseParticipant());
 
-//        if (entity.paymentMethod().getPrimaryKey() == null) { // save new
         Persistence.service().merge(entity.paymentMethod());
-//        }
         super.persist(entity, dto);
     }
 

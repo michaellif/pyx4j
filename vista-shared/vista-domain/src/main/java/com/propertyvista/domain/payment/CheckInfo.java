@@ -37,17 +37,17 @@ public interface CheckInfo extends PaymentDetails {
 
     @NotNull
     @Caption(name = "Cheque Number")
-    IPrimitive<Integer> checkNo();
+    IPrimitive<String> checkNo();
 
     @NotNull
     @Caption(name = "Bank Transit Number")
-    IPrimitive<Integer> transitNo();
+    IPrimitive<String> transitNo();
 
     @NotNull
     @Caption(name = "Institution Number")
-    IPrimitive<Integer> institutionNo();
+    IPrimitive<String> institutionNo();
 
     @NotNull
     @Caption(name = "Account Number")
-    IPrimitive<Integer> accountNo();
+    IPrimitive<String> accountNo();
 }

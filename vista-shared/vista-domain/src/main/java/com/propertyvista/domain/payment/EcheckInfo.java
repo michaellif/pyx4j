@@ -40,7 +40,7 @@ public interface EcheckInfo extends PaymentDetails {
     // Looks like branchTransitNumber
     @NotNull
     @Caption(name = "Routing Number")
-    IPrimitive<Integer> routingNo();
+    IPrimitive<String> routingNo();
 
     @NotNull
     @Caption(name = "Account Number")
