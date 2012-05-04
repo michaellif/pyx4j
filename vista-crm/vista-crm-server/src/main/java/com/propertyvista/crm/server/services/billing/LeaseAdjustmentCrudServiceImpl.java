@@ -16,6 +16,7 @@ package com.propertyvista.crm.server.services.billing;
 import com.pyx4j.entity.server.AbstractCrudServiceImpl;
 
 import com.propertyvista.crm.rpc.services.billing.LeaseAdjustmentCrudService;
+import com.propertyvista.crm.server.util.CrmAppContext;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 
 public class LeaseAdjustmentCrudServiceImpl extends AbstractCrudServiceImpl<LeaseAdjustment> implements LeaseAdjustmentCrudService {
@@ -27,5 +28,18 @@ public class LeaseAdjustmentCrudServiceImpl extends AbstractCrudServiceImpl<Leas
     @Override
     protected void bind() {
         bindCompleateDBO();
+    }
+
+    @Override
+    protected void persist(LeaseAdjustment dbo, LeaseAdjustment dto) {
+        updateAdjustments(dbo);
+        super.persist(dbo, dto);
+    }
+
+    private void updateAdjustments(LeaseAdjustment adj) {
+
+        if (adj.createdWhen().isNull()) {
+            adj.createdBy().set(CrmAppContext.getCurrentUserEmployee());
+        }
     }
 }
