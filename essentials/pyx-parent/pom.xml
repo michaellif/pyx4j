@@ -274,10 +274,17 @@
                 <scope>provided</scope>
             </dependency>
 
+            <!-- MemoryLeakPrevention remove META-INF/services on build server -->
             <dependency>
                 <groupId>mysql</groupId>
                 <artifactId>mysql-connector-java</artifactId>
-                <version>5.1.18</version>
+                <version>5.1.20</version>
+            </dependency>
+
+            <dependency>
+                <groupId>postgresql</groupId>
+                <artifactId>postgresql</artifactId>
+                <version>9.1-901-1.jdbc4</version>
             </dependency>
 
             <dependency>
