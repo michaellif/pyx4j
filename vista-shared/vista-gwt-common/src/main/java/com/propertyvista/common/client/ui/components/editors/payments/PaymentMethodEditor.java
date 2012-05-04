@@ -47,8 +47,6 @@ public class PaymentMethodEditor extends CEntityDecoratableEditor<PaymentMethod>
 
     private final SimplePanel paymentDetailsHolder = new SimplePanel();
 
-    private CEntityEditor<AddressStructured> billingAddress;
-
     private Widget billingAddressHeader;
 
     public PaymentMethodEditor() {
@@ -77,7 +75,7 @@ public class PaymentMethodEditor extends CEntityDecoratableEditor<PaymentMethod>
         main.setH3(++row, 0, 1, proto().billingAddress().getMeta().getCaption());
         billingAddressHeader = main.getWidget(row, 0);
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().sameAsCurrent()), 5).build());
-        main.setWidget(++row, 0, inject(proto().billingAddress(), billingAddress = new AddressStructuredEditor(true)));
+        main.setWidget(++row, 0, inject(proto().billingAddress(), new AddressStructuredEditor(true)));
 
         main.setHR(++row, 0, 1);
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().phone()), 12).build());
@@ -97,8 +95,8 @@ public class PaymentMethodEditor extends CEntityDecoratableEditor<PaymentMethod>
         get(proto().sameAsCurrent()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
             public void onValueChange(ValueChangeEvent<Boolean> event) {
-                onBillingAddressSameAsCurrentOne(event.getValue(), billingAddress);
-                billingAddress.setEditable(!event.getValue());
+                onBillingAddressSameAsCurrentOne(event.getValue(), get(proto().billingAddress()));
+                get(proto().billingAddress()).setEditable(!event.getValue());
             }
         });
 
