@@ -70,7 +70,7 @@ public class JoinOwnedInformation extends JoinInformation {
             orderColumn = orderBy.value();
         }
         MemberMeta orderMemberMeta = null;
-        for (String jmemberName : childEntityMeta.getMemberNames()) {
+        for (String jmemberName : childEntityMeta.getMemberNamesWithPk()) {
             MemberMeta jmemberMeta = childEntityMeta.getMemberMeta(jmemberName);
             if (!jmemberMeta.isTransient()) {
                 OrderColumn joinTableOrderColumn = jmemberMeta.getAnnotation(OrderColumn.class);

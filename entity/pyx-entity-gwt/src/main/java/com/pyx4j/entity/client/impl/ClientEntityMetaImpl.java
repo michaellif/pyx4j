@@ -21,6 +21,7 @@
 package com.pyx4j.entity.client.impl;
 
 import java.lang.annotation.Annotation;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -143,6 +144,13 @@ public abstract class ClientEntityMetaImpl implements EntityMeta {
             memberNames = Collections.unmodifiableList(Arrays.asList(anInstance.getMembers()));
         }
         return memberNames;
+    }
+
+    @Override
+    public List<String> getMemberNamesWithPk() {
+        List<String> l = new ArrayList<String>(getMemberNames());
+        l.add(IEntity.PRIMARY_KEY);
+        return l;
     }
 
     /**

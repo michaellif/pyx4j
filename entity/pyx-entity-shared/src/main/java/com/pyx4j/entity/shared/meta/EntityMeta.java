@@ -86,6 +86,8 @@ public interface EntityMeta {
 
     public List<String> getMemberNames();
 
+    public List<String> getMemberNamesWithPk();
+
     public MemberMeta getMemberMeta(String memberName);
 
     public MemberMeta getMemberMeta(Path path);

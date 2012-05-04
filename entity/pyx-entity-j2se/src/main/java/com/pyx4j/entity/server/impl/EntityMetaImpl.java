@@ -22,6 +22,7 @@ package com.pyx4j.entity.server.impl;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
@@ -323,6 +324,13 @@ public class EntityMetaImpl implements EntityMeta {
     public List<String> getMemberNames() {
         lazyCreateMembersNamesList();
         return memberNames;
+    }
+
+    @Override
+    public List<String> getMemberNamesWithPk() {
+        List<String> l = new ArrayList<String>(getMemberNames());
+        l.add(IEntity.PRIMARY_KEY);
+        return l;
     }
 
     @Override

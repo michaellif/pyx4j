@@ -150,7 +150,7 @@ class JoinTableInformation extends JoinInformation {
         }
 
         MemberMeta orderMemberMeta = null;
-        for (String jmemberName : joinEntityMeta.getMemberNames()) {
+        for (String jmemberName : joinEntityMeta.getMemberNamesWithPk()) {
             MemberMeta jmemberMeta = joinEntityMeta.getMemberMeta(jmemberName);
             if (!jmemberMeta.isTransient()) {
                 OrderColumn joinTableOrderColumn = jmemberMeta.getAnnotation(OrderColumn.class);
