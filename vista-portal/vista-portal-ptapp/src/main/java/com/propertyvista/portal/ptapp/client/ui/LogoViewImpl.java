@@ -23,9 +23,6 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 
-import com.pyx4j.security.shared.SecurityController;
-
-import com.propertyvista.domain.security.VistaBasicBehavior;
 import com.propertyvista.misc.VistaTODO;
 
 public class LogoViewImpl extends SimplePanel implements LogoView {
@@ -48,19 +45,16 @@ public class LogoViewImpl extends SimplePanel implements LogoView {
             logoPanel.getElement().getStyle().setTop(0, Unit.PX);
             logoPanel.getElement().getStyle().setLeft(0, Unit.PX);
 
-            if (SecurityController.checkAnyBehavior(VistaBasicBehavior.ProspectiveApp)) {
-
-                HTML daysLeftCountdown = new HTML(//@formatter:off
+            HTML daysLeftCountdown = new HTML(//@formatter:off
                         "<div style='color:#E6E6E6;float:left;'>"
                                 + " <div style='border-style:outset;border-width:1px;border-radius:0.5em;text-align:center;font-size:1.5em;font-weight:bold;width:2.5em;line-height:2.5em;margin:auto;vertical-align:center'>15</div>"
                                 + " <div style='margin:auto;text-align:center;'>Days Until Move-In Date</div>"
                                 + "</div>");//@formatter:on
 
-                daysLeftCountdown.getElement().getStyle().setPosition(Position.ABSOLUTE);
-                daysLeftCountdown.getElement().getStyle().setTop(30, Unit.PX);
-                daysLeftCountdown.getElement().getStyle().setLeft(10, Unit.PX);
-                logoPanel.add(daysLeftCountdown);
-            }
+            daysLeftCountdown.getElement().getStyle().setPosition(Position.ABSOLUTE);
+            daysLeftCountdown.getElement().getStyle().setTop(30, Unit.PX);
+            daysLeftCountdown.getElement().getStyle().setLeft(10, Unit.PX);
+            logoPanel.add(daysLeftCountdown);
 
             HTML logo = new HTML("Move-In Guide");
             logo.getElement().getStyle().setWidth(100, Unit.PCT);
