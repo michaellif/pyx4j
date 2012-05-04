@@ -69,7 +69,11 @@ public class DeepToStringStyle extends ToStringStyle {
     private static void changeIdent(int inc) {
         int l = identLevel.get().intValue();
         l += inc;
-        identLevel.set(l);
+        if (l == 0) {
+            identLevel.remove();
+        } else {
+            identLevel.set(l);
+        }
     }
 
     static void identInc() {
