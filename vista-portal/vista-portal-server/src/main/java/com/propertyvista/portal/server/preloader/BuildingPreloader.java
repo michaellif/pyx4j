@@ -127,7 +127,6 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
         MerchantAccount merchantAccount = EntityFactory.create(MerchantAccount.class);
         { // Test for VladL
             MerchantAccount merchantAccount1 = EntityFactory.create(MerchantAccount.class);
-            merchantAccount1.active().setValue(Boolean.TRUE);
             merchantAccount1.merchantTerminalId().setValue("BIRCHWT1");
             merchantAccount1.bankId().setValue("002");
             merchantAccount1.branchTransitNumber().setValue("00750");
@@ -138,7 +137,6 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
             Persistence.service().persist(merchantAccount1);
         }
         {
-            merchantAccount.active().setValue(Boolean.TRUE);
             merchantAccount.merchantTerminalId().setValue("BIRCHWTT");
             merchantAccount.bankId().setValue("001");
             merchantAccount.branchTransitNumber().setValue("00550");

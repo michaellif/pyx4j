@@ -17,12 +17,32 @@ import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.RpcTransient;
 import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.annotations.I18n;
+import com.pyx4j.i18n.shared.I18nEnum;
 
 public interface MerchantAccount extends IEntity {
 
-    IPrimitive<Boolean> active();
+    @I18n
+    enum MerchantAccountStatus {
+
+        ElectronicPaymentsAllowed,
+
+        NoElectronicPaymentsAllowed;
+
+        @Override
+        public String toString() {
+            return I18nEnum.toString(this);
+        }
+    };
+
+    /**
+     * Calculated base on terminal_id before sending it to GWT
+     */
+    @Transient
+    IPrimitive<MerchantAccountStatus> status();
 
     // aka external id for updates from onboarding
     IPrimitive<String> onboardingMerchantAccountId();

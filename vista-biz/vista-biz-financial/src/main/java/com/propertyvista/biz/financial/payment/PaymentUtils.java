@@ -35,7 +35,7 @@ class PaymentUtils {
 
         for (MerchantAccount merchantAccount : billingAccount.lease().unit().belongsTo().merchantAccounts()) {
             Persistence.service().retrieve(merchantAccount);
-            if (merchantAccount.active().isBooleanTrue() && (!merchantAccount.merchantTerminalId().isNull())) {
+            if (!merchantAccount.merchantTerminalId().isNull()) {
                 return merchantAccount;
             }
         }

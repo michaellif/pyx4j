@@ -24,6 +24,7 @@ import com.pyx4j.security.server.ServletContainerAclBuilder;
 
 import com.propertyvista.crm.rpc.services.FeedbackService;
 import com.propertyvista.crm.rpc.services.UpdateUploadService;
+import com.propertyvista.crm.rpc.services.admin.MerchantAccountCrudService;
 import com.propertyvista.crm.rpc.services.billing.BillCrudService;
 import com.propertyvista.crm.rpc.services.billing.BillingExecutionService;
 import com.propertyvista.crm.rpc.services.building.BuildingCrudService;
@@ -229,6 +230,8 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
 // - Administration:
         grant(VistaBasicBehavior.CRM, new EntityPermission(EmailTemplatesPolicy.class, EntityPermission.ALL));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(EmailTemplatesPolicyCrudService.class));
+
+        grant(VistaCrmBehavior.PropertyVistaAccountOwner, new IServiceExecutePermission(MerchantAccountCrudService.class));
 
 // - Other:
         grant(VistaBasicBehavior.CRM, new EntityPermission(Company.class, EntityPermission.ALL));
