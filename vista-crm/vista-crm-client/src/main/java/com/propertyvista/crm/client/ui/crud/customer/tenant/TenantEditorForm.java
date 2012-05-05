@@ -133,7 +133,7 @@ public class TenantEditorForm extends CrmEntityForm<TenantDTO> {
                                 }
                             });
                 } else {
-                    comp.populate(EntityFactory.create(AddressStructured.class));
+                    comp.setValue(EntityFactory.create(AddressStructured.class), false);
                 }
             }
         }));

@@ -52,7 +52,7 @@ public class PaymentEditorForm extends CrmEntityForm<PaymentRecordDTO> {
                         new DefaultAsyncCallback<AddressStructured>() {
                             @Override
                             public void onSuccess(AddressStructured result) {
-                                comp.setValue(result, false);
+                                comp.populate(result);
                             }
                         }, PaymentEditorForm.this.getValue().leaseParticipant());
             } else {

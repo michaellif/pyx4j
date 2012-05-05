@@ -116,7 +116,7 @@ public class GuarantorEditorForm extends CrmEntityForm<GuarantorDTO> {
                                 }
                             });
                 } else {
-                    comp.populate(EntityFactory.create(AddressStructured.class));
+                    comp.setValue(EntityFactory.create(AddressStructured.class), false);
                 }
             }
         }));

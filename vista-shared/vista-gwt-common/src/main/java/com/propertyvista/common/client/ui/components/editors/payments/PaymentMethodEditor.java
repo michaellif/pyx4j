@@ -115,6 +115,7 @@ public class PaymentMethodEditor extends CEntityDecoratableEditor<PaymentMethod>
         super.onPopulate();
 
         get(proto().sameAsCurrent()).setVisible(!isViewable());
+        get(proto().billingAddress()).setEditable(!getValue().sameAsCurrent().isBooleanTrue());
     }
 
     public void selectPaymentDetailsEditor(PaymentType type) {
