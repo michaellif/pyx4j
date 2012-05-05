@@ -44,6 +44,7 @@ class CreditCardProcessor {
         CreditCardInfo cc = paymentRecord.paymentMethod().details().cast();
         ccInfo.creditCardNumber().setValue(cc.number().getValue());
         ccInfo.creditCardExpiryDate().setValue(cc.expiryDate().getValue());
+        ccInfo.securityCode().setValue(cc.securityCode().getValue());
 
         request.paymentInstrument().set(ccInfo);
 
