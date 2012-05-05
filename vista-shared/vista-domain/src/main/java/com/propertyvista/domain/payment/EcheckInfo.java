@@ -15,6 +15,7 @@ package com.propertyvista.domain.payment;
 
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -30,25 +31,17 @@ public interface EcheckInfo extends PaymentDetails {
     @Caption(name = "Name On Account")
     IPrimitive<String> nameOn();
 
+    @Length(3)
     @NotNull
-    IPrimitive<AccountType> accountType();
+    IPrimitive<String> bankId();
 
-    // Need bankId for Caledon
+    @Length(5)
     @NotNull
-    IPrimitive<String> bankName();
+    IPrimitive<String> branchTransitNumber();
 
-    // Looks like branchTransitNumber
-    @NotNull
-    @Caption(name = "Routing Number")
-    IPrimitive<String> routingNo();
-
-    @NotNull
+    @Length(12)
     @Caption(name = "Account Number")
-    IPrimitive<String> accountNo();
-
-    // No need for Caledon
     @NotNull
-    @Caption(name = "Cheque Number")
-    IPrimitive<String> checkNo();
+    IPrimitive<String> accountNo();
 
 }

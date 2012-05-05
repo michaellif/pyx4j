@@ -215,20 +215,9 @@ public class NewPaymentMethodForm extends CEntityDecoratableEditor<PaymentMethod
                 FlowPanel panel = new FlowPanel();
 
                 panel.add(new InnerPanelWidgetDecorator(inject(proto().nameOn())));
-                panel.add(new InnerPanelWidgetDecorator(inject(proto().accountType())));
-                panel.add(new InnerPanelWidgetDecorator(inject(proto().bankName())));
-
-                CheckPanel checkPanel = new CheckPanel(this);
-                checkPanel.add(proto().checkNo(), 58);
-                checkPanel.add(proto().routingNo(), 85);
-                checkPanel.add(proto().accountNo(), 85);
-
-                HorizontalPanel hpanel = new HorizontalPanel();
-                hpanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
-                hpanel.add(checkPanel);
-                hpanel.setCellWidth(checkPanel, "400");
-
-                panel.add(hpanel);
+                panel.add(new InnerPanelWidgetDecorator(inject(proto().bankId())));
+                panel.add(new InnerPanelWidgetDecorator(inject(proto().branchTransitNumber())));
+                panel.add(new InnerPanelWidgetDecorator(inject(proto().accountNo())));
 
                 return panel;
             }

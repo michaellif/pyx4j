@@ -40,11 +40,9 @@ public class EcheckInfoEditor extends CEntityDecoratableEditor<EcheckInfo> {
 
         int row = -1;
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().nameOn()), 30).build());
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().bankName()), 20).build());
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().accountType()), 10).build());
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().checkNo()), 10).build());
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().routingNo()), 10).build());
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().accountNo()), 10).build());
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().bankId()), 5).build());
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().branchTransitNumber()), 20).build());
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().accountNo()), 20).build());
 
         return panel;
     }
