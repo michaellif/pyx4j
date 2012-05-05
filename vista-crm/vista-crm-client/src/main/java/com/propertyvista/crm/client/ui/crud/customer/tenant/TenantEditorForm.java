@@ -129,7 +129,7 @@ public class TenantEditorForm extends CrmEntityForm<TenantDTO> {
                             .getCurrentAddress(new DefaultAsyncCallback<AddressStructured>() {
                                 @Override
                                 public void onSuccess(AddressStructured result) {
-                                    comp.populate(result);
+                                    comp.setValue(result, false);
                                 }
                             });
                 } else {
