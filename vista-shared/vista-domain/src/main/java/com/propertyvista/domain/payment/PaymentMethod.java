@@ -21,6 +21,7 @@ import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.ReadOnly;
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
@@ -48,14 +49,17 @@ public interface PaymentMethod extends IEntity {
     @Caption(name = "eCheque")
     @Owned
     @Deprecated
+    @Transient
     EcheckInfo echeck();
 
     @Owned
     @Deprecated
+    @Transient
     CreditCardInfo creditCard();
 
     @Owned
     @Deprecated
+    @Transient
     InteracInfo interac();
 
     // Billing Address:

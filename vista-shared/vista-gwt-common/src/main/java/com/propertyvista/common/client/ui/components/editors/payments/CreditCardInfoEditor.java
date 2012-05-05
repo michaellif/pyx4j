@@ -40,6 +40,7 @@ public class CreditCardInfoEditor extends CEntityDecoratableEditor<CreditCardInf
 
         int row = -1;
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().nameOn()), 30).build());
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().cardType()), 20).build());
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().number()), 20).build());
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().expiryDate()), 20).build());
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().securityCode()), 5).build());

@@ -23,10 +23,33 @@ import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
+import com.pyx4j.i18n.annotations.Translate;
+import com.pyx4j.i18n.shared.I18nEnum;
 
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
 @DiscriminatorValue("CreditCard")
 public interface CreditCardInfo extends PaymentDetails {
+
+    public enum CreditCardType {
+
+        Visa,
+
+        @Translate("MasterCard")
+        MasterCard,
+
+        Discover;
+
+//        @Translate("American Express")
+//        Amex;
+
+        @Override
+        public String toString() {
+            return I18nEnum.toString(this);
+        }
+    }
+
+    @NotNull
+    IPrimitive<CreditCardType> cardType();
 
     @NotNull
     @Caption(name = "Card Number")
