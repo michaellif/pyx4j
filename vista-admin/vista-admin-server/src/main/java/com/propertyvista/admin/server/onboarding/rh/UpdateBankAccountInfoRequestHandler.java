@@ -82,6 +82,9 @@ public class UpdateBankAccountInfoRequestHandler extends AbstractRequestHandler<
                     macc = accs.get(0);
                 }
 
+                if (macc.chargeDescription().getValue() == null)
+                    macc.chargeDescription().setValue(pmc.name().getValue());
+
                 macc.merchantTerminalId().setValue(acc.terminalId().getValue());
 
                 Persistence.service().persist(macc);
