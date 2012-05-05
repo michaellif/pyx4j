@@ -34,9 +34,8 @@ public interface CreditCardInfo extends PaymentDetails {
     @Transient
     IPrimitive<String> number();
 
+    // Card Number fragment presented to user
     @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
-    @Deprecated
-    // TODO remove completely
     IPrimitive<String> numberRefference();
 
     @NotNull
