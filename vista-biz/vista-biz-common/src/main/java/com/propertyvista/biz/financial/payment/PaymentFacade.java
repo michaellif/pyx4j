@@ -14,8 +14,11 @@
 package com.propertyvista.biz.financial.payment;
 
 import com.propertyvista.domain.financial.PaymentRecord;
+import com.propertyvista.domain.payment.PaymentMethod;
 
 public interface PaymentFacade {
+
+    PaymentMethod persistPaymentMethod(PaymentMethod paymentMethod);
 
     PaymentRecord persistPayment(PaymentRecord payment);
 

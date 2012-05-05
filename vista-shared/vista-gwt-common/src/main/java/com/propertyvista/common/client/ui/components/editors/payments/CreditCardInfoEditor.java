@@ -13,9 +13,15 @@
  */
 package com.propertyvista.common.client.ui.components.editors.payments;
 
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
+import com.pyx4j.forms.client.events.PropertyChangeEvent;
+import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
+import com.pyx4j.forms.client.events.PropertyChangeHandler;
+import com.pyx4j.forms.client.ui.CTextComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -45,6 +51,49 @@ public class CreditCardInfoEditor extends CEntityDecoratableEditor<CreditCardInf
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().expiryDate()), 20).build());
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().securityCode()), 5).build());
 
+        get(proto().securityCode()).setVisible(isEditable());
+
         return panel;
+    }
+
+    @Override
+    protected void onPopulate() {
+        super.onPopulate();
+        updateVisibility(getValue());
+    }
+
+    private void updateVisibility(CreditCardInfo value) {
+        if (isEditable()) {
+            get(proto().number()).setMandatory(false);
+            get(proto().securityCode()).setMandatory(false);
+            if (!value.numberRefference().isNull()) {
+                ((CTextComponent<?, ?>) get(proto().number())).setWatermark(i18n.tr("XXXX-XXXX-{0}", value.numberRefference().getValue()));
+            } else {
+                ((CTextComponent<?, ?>) get(proto().number())).setWatermark(null);
+            }
+        } else {
+            get(proto().number()).setValue(i18n.tr("XXXX-XXXX-{0}", value.numberRefference().getValue()));
+        }
+    }
+
+    @Override
+    public void addValidations() {
+        this.addPropertyChangeHandler(new PropertyChangeHandler() {
+            @Override
+            public void onPropertyChange(PropertyChangeEvent event) {
+                if (event.getPropertyName() == PropertyName.editable) {
+                    get(proto().securityCode()).setVisible(isEditable());
+                }
+            }
+        });
+
+        get(proto().number()).addValueChangeHandler(new ValueChangeHandler<String>() {
+
+            @Override
+            public void onValueChange(ValueChangeEvent<String> event) {
+                get(proto().number()).setMandatory(true);
+                get(proto().securityCode()).setMandatory(true);
+            }
+        });
     }
 }

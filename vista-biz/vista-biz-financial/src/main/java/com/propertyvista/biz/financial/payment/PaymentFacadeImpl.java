@@ -20,10 +20,36 @@ import com.pyx4j.rpc.shared.UserRuntimeException;
 
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.domain.financial.PaymentRecord;
+import com.propertyvista.domain.payment.CreditCardInfo;
+import com.propertyvista.domain.payment.PaymentMethod;
 
 public class PaymentFacadeImpl implements PaymentFacade {
 
     private static final I18n i18n = I18n.get(PaymentFacadeImpl.class);
+
+    @Override
+    public PaymentMethod persistPaymentMethod(PaymentMethod paymentMethod) {
+
+        //TODO store credit cards
+        switch (paymentMethod.type().getValue()) {
+        case CreditCard:
+            CreditCardInfo cc = paymentMethod.details().cast();
+            if (!cc.number().isNull()) {
+                cc.numberRefference().setValue(last4Numbers(cc.number().getValue()));
+            }
+        }
+
+        Persistence.service().merge(paymentMethod);
+        return paymentMethod;
+    }
+
+    private String last4Numbers(String value) {
+        if (value.length() < 4) {
+            return null;
+        } else {
+            return value.substring(value.length() - 4, value.length());
+        }
+    }
 
     @Override
     public PaymentRecord persistPayment(PaymentRecord payment) {
@@ -33,6 +59,7 @@ public class PaymentFacadeImpl implements PaymentFacade {
         if (!payment.paymentStatus().getValue().equals(PaymentRecord.PaymentStatus.Submitted)) {
             throw new Error();
         }
+        persistPaymentMethod(payment.paymentMethod());
         Persistence.service().merge(payment);
         return payment;
     }
