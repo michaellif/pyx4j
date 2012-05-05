@@ -7,7 +7,7 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on May 4, 2012
+ * Created on May 5, 2012
  * @author vlads
  * @version $Id$
  */
@@ -18,26 +18,20 @@ import java.io.Serializable;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
-@I18n
-public enum ProcessType implements Serializable {
+@I18n(strategy = I18n.I18nStrategy.IgnoreAll)
+public enum ExecutionDataStatus implements Serializable {
 
-    billing,
+    NeverRan,
 
-    issuePayments,
+    Processed,
 
-    padSend,
+    Failed,
 
-    padRecive,
-
-    leaseActivation,
-
-    cleanup,
-
-    // Used for scheduler testing
-    procTest;
+    Canceled;
 
     @Override
     public String toString() {
         return I18nEnum.toString(this);
     }
+
 }

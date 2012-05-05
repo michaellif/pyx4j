@@ -44,9 +44,19 @@ public interface Process extends IEntity {
     @ReadOnly
     IPrimitive<ProcessType> processType();
 
+    /**
+     * Configuration parameters for each particular process type.
+     * // Future may not need this for today
+     */
     @ReadOnly
     @Owned(forceCreation = true)
     ProcessDetails processDetails();
+
+    @NotNull
+    IPrimitive<ProcessPmcSelectionType> populationType();
+
+    @Owned
+    IList<ProcessPmc> population();
 
     ProcessSchedule schedule();
 

@@ -7,46 +7,41 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on May 3, 2012
+ * Created on May 5, 2012
  * @author vlads
  * @version $Id$
  */
 package com.propertyvista.admin.domain.proc;
 
-import java.util.Date;
-
 import com.pyx4j.entity.annotations.Caption;
-import com.pyx4j.entity.annotations.Format;
+import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Indexed;
+import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Owner;
-import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Table;
-import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.VistaNamespace;
 
+/**
+ * TODO Rename to ExecutionPmcData after migration
+ */
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 @Table(namespace = VistaNamespace.adminNamespace)
-public interface Execution extends IEntity {
+public interface ExecutionData extends IEntity {
 
-    @ReadOnly
-    @Indexed
+    @Detached
     @Owner
-    Process process();
-
-    IPrimitive<String> pmcNamespace();
-
     @Indexed
-    IPrimitive<ExecutionStatus> status();
+    @JoinColumn
+    Execution execution();
 
-    @Timestamp(Timestamp.Update.Created)
-    @ReadOnly
-    @Format("MM/dd/yyyy h:mm a")
-    IPrimitive<Date> created();
+    IPrimitive<ExecutionDataStatus> status();
 
     @Caption(name = "Statistics")
+    @EmbeddedEntity
     ExecutionStats stats();
 }
