@@ -176,6 +176,20 @@ public abstract class CEntityEditor<E extends IEntity> extends CEntityContainer<
         super.adopt(component);
     }
 
+    /**
+     * Should not replace the Entity assigned to this component by parent.
+     */
+    @Override
+    protected E preprocessValue(E value, boolean fireEvent, boolean populate) {
+        if (populate || !isAttached()) {
+            return value;
+        } else {
+            E modelValue = getValue();
+            modelValue.set(value);
+            return modelValue;
+        }
+    }
+
     @Override
     @SuppressWarnings("unchecked")
     protected void propagateValue(E value, boolean fireEvent, boolean populate) {
