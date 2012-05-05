@@ -44,9 +44,9 @@ public class CaledonPaymentProcessor implements IPaymentProcessor {
 
             crequest.setAmount(request.amount().getValue());
             crequest.creditCardNumber = ((CCInformation) pinstrument).creditCardNumber().getValue();
-            //crequest.creditCardNumber = request.creditCardNumber().getValue();
             crequest.setExpiryDate(((CCInformation) pinstrument).creditCardExpiryDate().getValue());
-            //crequest.setExpiryDate(request.creditCardExpiryDate().getValue());
+            crequest.cvv = ((CCInformation) pinstrument).securityCode().getValue();
+
         } else if (pinstrument instanceof Token) {
             crequest = new CaledonRequestToken();
             crequest.terminalID = merchant.terminalID().getValue();
@@ -83,9 +83,8 @@ public class CaledonPaymentProcessor implements IPaymentProcessor {
         crequest.tokenAction = CaledonTokenAction.ADD.getValue();
         crequest.creditCardNumber = ccinfo.creditCardNumber().getValue();
         crequest.setExpiryDate(ccinfo.creditCardExpiryDate().getValue());
+        crequest.cvv = ccinfo.securityCode().getValue();
         crequest.tokenRef = token.description().getValue();
-        //crequest.creditCardNumber = request.creditCardNumber().getValue();
-        //crequest.setExpiryDate(request.creditCardExpiryDate().getValue());
 
         CaledonResponse cresponse = client.transaction(crequest);
 
@@ -107,6 +106,7 @@ public class CaledonPaymentProcessor implements IPaymentProcessor {
         crequest.tokenAction = CaledonTokenAction.UPDATE.getValue();
         crequest.creditCardNumber = ccinfo.creditCardNumber().getValue();
         crequest.setExpiryDate(ccinfo.creditCardExpiryDate().getValue());
+        crequest.cvv = ccinfo.securityCode().getValue();
         crequest.tokenRef = token.description().getValue();
 
         CaledonResponse cresponse = client.transaction(crequest);

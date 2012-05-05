@@ -25,6 +25,10 @@ import com.propertyvista.payment.PaymentResponse;
 public class CaledonRealTimeTest extends CaledonTestBase {
 
     static PaymentRequest createRequest(String creditCardNumber, String exp, double amount) {
+        return createRequest(creditCardNumber, exp, null, amount);
+    }
+
+    static PaymentRequest createRequest(String creditCardNumber, String exp, String securityCode, double amount) {
         PaymentRequest request = EntityFactory.create(PaymentRequest.class);
         request.referenceNumber().setValue("Test1");
         request.amount().setValue((float) amount);
@@ -45,6 +49,7 @@ public class CaledonRealTimeTest extends CaledonTestBase {
         //System.out.print("CCNUMBER=" + ((CCInformation) (request.paymentInstrument().getValue())).creditCardNumber().getValue());
         assertRealTimeSale(testMerchant, createRequest(TestData.CARD_MC1, "2015-01", 10.0), "1285");
         assertRealTimeSale(testMerchant, createRequest(TestData.CARD_MC1, "2017-09", 10.0), "0000");
+        assertRealTimeSale(testMerchant, createRequest(TestData.CARD_MC1, "2017-09", "234", 10.0), "0000");
         assertRealTimeSale(testMerchantError, createRequest(TestData.CARD_MC1, "2017-09", 10.0), "1001");
     }
 

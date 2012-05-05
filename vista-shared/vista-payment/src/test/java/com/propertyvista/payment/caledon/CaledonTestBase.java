@@ -30,6 +30,10 @@ public abstract class CaledonTestBase extends TestCase {
     static Merchant testMerchantError = createTestCaledonMerchant(TestData.TEST_TERMID_ERROR);
 
     static CCInformation createCCInformation(String creditCardNumber, String exp) {
+        return createCCInformation(creditCardNumber, exp, null);
+    }
+
+    static CCInformation createCCInformation(String creditCardNumber, String exp, String securityCode) {
 
         CCInformation ccInfo = EntityFactory.create(CCInformation.class);
 
@@ -40,6 +44,7 @@ public abstract class CaledonTestBase extends TestCase {
         } catch (Throwable e) {
             throw new Error("Invalid data");
         }
+        ccInfo.securityCode().setValue(securityCode);
 
         return ccInfo;
     }

@@ -26,4 +26,6 @@ public interface CCInformation extends IEntity, PaymentInstrument {
     IPrimitive<String> creditCardNumber();
 
     IPrimitive<LogicalDate> creditCardExpiryDate();
+
+    IPrimitive<String> securityCode();
 }

@@ -38,6 +38,17 @@ public class CaledonTokenTest extends CaledonTestBase {
         proc.deactivateToken(testMerchant, token);
     }
 
+    public void testCreateTokenWithSecurityCode() {
+        IPaymentProcessor proc = new CaledonPaymentProcessor();
+        Token token = EntityFactory.create(Token.class);
+        token.code().setValue(String.valueOf(System.currentTimeMillis()));
+        PaymentResponse pr = proc.createToken(testMerchant, super.createCCInformation(TestData.CARD_MC1, "2015-01", "1234"), token);
+        log.debug("responce code {}", pr.code().getValue());
+        assertEquals(CaledonTokenResponse.TOKEN_SUCCESS.getValue(), pr.code().getValue());
+
+        proc.deactivateToken(testMerchant, token);
+    }
+
     public void testTokenTransaction() {
         IPaymentProcessor proc = new CaledonPaymentProcessor();
         Token token = EntityFactory.create(Token.class);
