@@ -36,6 +36,7 @@ import com.google.gwt.user.rebind.ClassSourceFileComposerFactory;
 import com.google.gwt.user.rebind.SourceWriter;
 import com.google.gwt.user.rebind.rpc.RpcBlacklistCheck;
 
+import com.pyx4j.entity.annotations.GwtBlacklist;
 import com.pyx4j.entity.annotations.RpcBlacklist;
 import com.pyx4j.entity.client.AbstractClientEntityFactoryImpl;
 import com.pyx4j.entity.shared.IEntity;
@@ -83,6 +84,9 @@ public class EntityFactoryGenerator extends Generator {
             int validationErrors = 0;
             for (JClassType type : oracle.getTypes()) {
                 if (contextHelper.isInstantiabeEntity(type)) {
+                    if (type.isAnnotationPresent(GwtBlacklist.class)) {
+                        continue;
+                    }
                     cases.add(type);
                     logger.log(TreeLogger.Type.DEBUG, "Creating IEntity:" + type.getName());
 
