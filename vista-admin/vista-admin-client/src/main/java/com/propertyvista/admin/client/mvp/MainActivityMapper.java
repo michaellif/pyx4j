@@ -37,6 +37,9 @@ import com.propertyvista.admin.client.activity.crud.onboardingusers.OnboardingUs
 import com.propertyvista.admin.client.activity.crud.pmc.PmcEditorActivity;
 import com.propertyvista.admin.client.activity.crud.pmc.PmcListerActivity;
 import com.propertyvista.admin.client.activity.crud.pmc.PmcViewerActivity;
+import com.propertyvista.admin.client.activity.crud.proc.ProcessEditorActivity;
+import com.propertyvista.admin.client.activity.crud.proc.ProcessListerActivity;
+import com.propertyvista.admin.client.activity.crud.proc.ProcessViewerActivity;
 import com.propertyvista.admin.client.activity.security.PasswordChangeActivity;
 import com.propertyvista.admin.client.activity.simulation.SimulationEditorActivity;
 import com.propertyvista.admin.client.activity.simulation.SimulationViewerActivity;
@@ -69,6 +72,19 @@ public class MainActivityMapper implements AppActivityMapper {
                             break;
                         }
 
+                    } else if (place instanceof AdminSiteMap.Management.Process) {
+                        switch (crudPlace.getType()) {
+                        case editor:
+                            activity = new ProcessEditorActivity(crudPlace);
+                            break;
+                        case viewer:
+                            activity = new ProcessViewerActivity(crudPlace);
+                            break;
+                        case lister:
+                            activity = new ProcessListerActivity(crudPlace);
+                            break;
+                        }
+
                     } else if (place instanceof AdminSiteMap.Management.OnboardingUsers) {
                         switch (crudPlace.getType()) {
                         case editor:
@@ -81,7 +97,6 @@ public class MainActivityMapper implements AppActivityMapper {
                             activity = new OnboardingUserListerActivity(crudPlace);
                             break;
                         }
-
                         // - Administration:
                     } else if (place instanceof AdminSiteMap.Administration.Maintenance) {
                         switch (crudPlace.getType()) {

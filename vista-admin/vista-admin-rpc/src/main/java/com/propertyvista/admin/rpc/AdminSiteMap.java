@@ -60,7 +60,11 @@ public class AdminSiteMap implements SiteMap {
         @PlaceProperties(caption = "Onboarding Users")
         @NavigationItem(navigLabel = "Onboarding Users")
         public static class OnboardingUsers extends CrudAppPlace {
+        }
 
+        @PlaceProperties(caption = "Processes")
+        @NavigationItem(navigLabel = "Processes")
+        public static class Process extends CrudAppPlace {
         }
     }
 

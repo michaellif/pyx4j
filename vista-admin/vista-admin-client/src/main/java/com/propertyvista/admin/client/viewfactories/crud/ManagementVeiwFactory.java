@@ -28,6 +28,12 @@ import com.propertyvista.admin.client.ui.crud.pmc.PmcListerView;
 import com.propertyvista.admin.client.ui.crud.pmc.PmcListerViewImpl;
 import com.propertyvista.admin.client.ui.crud.pmc.PmcViewerView;
 import com.propertyvista.admin.client.ui.crud.pmc.PmcViewerViewImpl;
+import com.propertyvista.admin.client.ui.crud.proc.ProcessEditorView;
+import com.propertyvista.admin.client.ui.crud.proc.ProcessEditorViewImpl;
+import com.propertyvista.admin.client.ui.crud.proc.ProcessListerView;
+import com.propertyvista.admin.client.ui.crud.proc.ProcessListerViewImpl;
+import com.propertyvista.admin.client.ui.crud.proc.ProcessViewerView;
+import com.propertyvista.admin.client.ui.crud.proc.ProcessViewerViewImpl;
 
 public class ManagementVeiwFactory extends ViewFactoryBase {
 
@@ -46,7 +52,15 @@ public class ManagementVeiwFactory extends ViewFactoryBase {
                 map.put(type, new OnboardingUserEditorViewImpl());
             } else if (OnboardingUserListerView.class.equals(type)) {
                 map.put(type, new OnboardingUserListerViewImpl());
+
+            } else if (ProcessViewerView.class.equals(type)) {
+                map.put(type, new ProcessViewerViewImpl());
+            } else if (ProcessEditorView.class.equals(type)) {
+                map.put(type, new ProcessEditorViewImpl());
+            } else if (ProcessListerView.class.equals(type)) {
+                map.put(type, new ProcessListerViewImpl());
             }
+
         }
 
         @SuppressWarnings("unchecked")

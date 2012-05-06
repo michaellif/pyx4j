@@ -13,6 +13,7 @@
  */
 package com.propertyvista.admin.domain.proc;
 
+import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Inheritance;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.shared.IEntity;
@@ -23,6 +24,7 @@ import com.propertyvista.domain.VistaNamespace;
 @Inheritance(strategy = Inheritance.InheritanceStrategy.SINGLE_TABLE)
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 @Table(namespace = VistaNamespace.adminNamespace)
+@DiscriminatorValue("default")
 public interface ProcessDetails extends IEntity {
 
 }
