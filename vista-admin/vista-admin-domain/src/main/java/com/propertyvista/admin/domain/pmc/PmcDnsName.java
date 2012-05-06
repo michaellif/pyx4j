@@ -7,39 +7,59 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Apr 26, 2012
+ * Created on Mar 16, 2012
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.server.domain.admin;
+package com.propertyvista.admin.domain.pmc;
 
-import java.util.Date;
-
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.Length;
-import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Table;
-import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
+import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.VistaNamespace;
 
 @Table(prefix = "admin", namespace = VistaNamespace.adminNamespace)
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
-public interface ReservedPmcNames extends IEntity {
+public interface PmcDnsName extends IEntity {
 
+    @I18n
+    public enum DnsNameTarget {
+
+        vistaCrm,
+
+        residentPortal,
+
+        prospectPortal;
+
+        @Override
+        public String toString() {
+            return I18nEnum.toString(this);
+        }
+    }
+
+    @Length(253)
     @Indexed(uniqueConstraint = true)
     @NotNull
-    @Length(63)
     IPrimitive<String> dnsName();
 
-    @NotNull
-    IPrimitive<String> onboardingAccountId();
+    @Caption(name = "Active")
+    IPrimitive<Boolean> enabled();
 
-    @Timestamp(Timestamp.Update.Created)
-    @ReadOnly
-    IPrimitive<Date> created();
+    @NotNull
+    IPrimitive<DnsNameTarget> target();
+
+    IPrimitive<Boolean> httpsEnabled();
+
+    @Length(150)
+    IPrimitive<String> googleAPIKey();
+
+    @Length(15)
+    IPrimitive<String> googleAnalyticsId();
 }

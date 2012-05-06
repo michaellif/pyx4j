@@ -7,63 +7,39 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-06-13
+ * Created on Apr 26, 2012
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.server.domain.admin;
+package com.propertyvista.admin.domain.pmc;
 
 import java.util.Date;
 
-import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.Length;
-import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.Timestamp;
-import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
-import com.propertyvista.domain.PmcDnsName;
 import com.propertyvista.domain.VistaNamespace;
 
 @Table(prefix = "admin", namespace = VistaNamespace.adminNamespace)
-@Caption(name = "PMC")
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
-public interface Pmc extends IEntity {
+public interface ReservedPmcNames extends IEntity {
 
-    public static final String adminNamespace = VistaNamespace.adminNamespace;
-
-    @Caption(name = "Active")
-    IPrimitive<Boolean> enabled();
-
-    @NotNull
-    @ToString
-    IPrimitive<String> name();
-
-    @NotNull
-    @ReadOnly
-    @Length(63)
     @Indexed(uniqueConstraint = true)
-    IPrimitive<String> namespace();
-
     @NotNull
     @Length(63)
-    @Indexed(uniqueConstraint = true)
     IPrimitive<String> dnsName();
 
-    @Owned
-    IList<PmcDnsName> dnsNameAliases();
-
+    @NotNull
     IPrimitive<String> onboardingAccountId();
 
     @Timestamp(Timestamp.Update.Created)
     @ReadOnly
     IPrimitive<Date> created();
-
 }

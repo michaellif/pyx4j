@@ -15,9 +15,9 @@ package com.propertyvista.admin.server.services;
 
 import com.pyx4j.security.rpc.AuthenticationResponse;
 
+import com.propertyvista.admin.domain.security.AdminUserCredential;
 import com.propertyvista.admin.rpc.services.AdminPasswordResetService;
 import com.propertyvista.server.common.security.VistaPasswordResetServiceImpl;
-import com.propertyvista.server.domain.security.AdminUserCredential;
 
 public class AdminPasswordResetServiceImpl extends VistaPasswordResetServiceImpl<AdminUserCredential> implements AdminPasswordResetService {
 

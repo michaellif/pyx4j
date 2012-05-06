@@ -11,10 +11,10 @@ package com.propertyvista.admin.server.services;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 
+import com.propertyvista.admin.domain.security.OnboardingUserCredential;
 import com.propertyvista.admin.rpc.OnboardingUserDTO;
 import com.propertyvista.admin.rpc.services.OnboardingUserCrudService;
 import com.propertyvista.server.common.security.PasswordEncryptor;
-import com.propertyvista.server.domain.security.OnboardingUserCredential;
 
 public class OnboardingUserCrudServiceImpl extends AbstractCrudServiceDtoImpl<OnboardingUserCredential, OnboardingUserDTO> implements OnboardingUserCrudService {
 

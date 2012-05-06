@@ -18,11 +18,11 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
 import com.pyx4j.entity.shared.EntityFactory;
 
+import com.propertyvista.admin.domain.security.AdminUserCredential;
 import com.propertyvista.domain.DemoData;
 import com.propertyvista.domain.security.AdminUser;
 import com.propertyvista.domain.security.VistaAdminBehavior;
 import com.propertyvista.server.common.security.PasswordEncryptor;
-import com.propertyvista.server.domain.security.AdminUserCredential;
 
 class AminUsersPreloader extends AbstractDataPreloader {
 

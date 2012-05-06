@@ -26,7 +26,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.PmcDnsName;
+import com.propertyvista.admin.domain.pmc.PmcDnsName;
 import com.propertyvista.domain.person.Person;
 
 @Transient

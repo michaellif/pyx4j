@@ -25,13 +25,13 @@ import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.server.contexts.NamespaceManager;
 
+import com.propertyvista.admin.domain.pmc.Pmc;
+import com.propertyvista.admin.domain.pmc.PmcDnsName;
 import com.propertyvista.admin.rpc.PmcDTO;
 import com.propertyvista.admin.rpc.services.PmcCrudService;
 import com.propertyvista.admin.server.onboarding.PmcNameValidator;
-import com.propertyvista.domain.PmcDnsName;
 import com.propertyvista.portal.rpc.corp.PmcAccountCreationRequest;
 import com.propertyvista.portal.server.preloader.PmcCreator;
-import com.propertyvista.server.domain.admin.Pmc;
 
 public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> implements PmcCrudService {
 

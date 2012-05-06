@@ -31,7 +31,7 @@ import com.pyx4j.security.rpc.PasswordChangeRequest;
 import com.pyx4j.server.contexts.Context;
 
 import com.propertyvista.domain.security.AbstractUser;
-import com.propertyvista.server.domain.security.AbstractUserCredential;
+import com.propertyvista.domain.security.AbstractUserCredential;
 
 /**
  * Service used by User them self to change password

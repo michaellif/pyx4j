@@ -54,8 +54,8 @@ import com.pyx4j.server.contexts.Lifecycle;
 
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.security.AbstractUser;
+import com.propertyvista.domain.security.AbstractUserCredential;
 import com.propertyvista.domain.security.VistaBasicBehavior;
-import com.propertyvista.server.domain.security.AbstractUserCredential;
 
 public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E extends AbstractUserCredential<U>> extends
         com.pyx4j.security.server.AuthenticationServiceImpl {

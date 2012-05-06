@@ -14,9 +14,8 @@
 package com.propertyvista.admin.domain.proc;
 
 import com.pyx4j.entity.annotations.Detached;
-import com.pyx4j.entity.annotations.Editor;
-import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.JoinColumn;
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
@@ -25,6 +24,8 @@ import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
+
+import com.propertyvista.domain.security.AdminUser;
 
 @ToStringFormat("{0} {1}")
 public interface Notification extends IEntity {
@@ -42,9 +43,9 @@ public interface Notification extends IEntity {
     @NotNull
     IPrimitive<NotificationEvent> event();
 
-    @Editor(type = EditorType.email)
     @ToString
     @NotNull
-    IPrimitive<String> email();
+    @MemberColumn(name = "usr")
+    AdminUser user();
 
 }

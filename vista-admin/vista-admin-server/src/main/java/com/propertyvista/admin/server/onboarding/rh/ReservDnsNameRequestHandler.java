@@ -19,11 +19,11 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 
+import com.propertyvista.admin.domain.pmc.ReservedPmcNames;
 import com.propertyvista.admin.server.onboarding.PmcNameValidator;
 import com.propertyvista.admin.server.onboarding.rhf.AbstractRequestHandler;
 import com.propertyvista.onboarding.ReserveDnsNameRequestIO;
 import com.propertyvista.onboarding.ResponseIO;
-import com.propertyvista.server.domain.admin.ReservedPmcNames;
 
 public class ReservDnsNameRequestHandler extends AbstractRequestHandler<ReserveDnsNameRequestIO> {
 

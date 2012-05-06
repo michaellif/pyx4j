@@ -13,9 +13,9 @@
  */
 package com.propertyvista.admin.server.services;
 
+import com.propertyvista.admin.domain.security.OnboardingUserCredential;
 import com.propertyvista.admin.rpc.services.OnboardingUserPasswordChangeManagedService;
 import com.propertyvista.server.common.security.VistaManagedPasswordChangeServiceImpl;
-import com.propertyvista.server.domain.security.OnboardingUserCredential;
 
 public class OnboardingUserPasswordChangeManagedServiceImpl extends VistaManagedPasswordChangeServiceImpl<OnboardingUserCredential> implements
         OnboardingUserPasswordChangeManagedService {

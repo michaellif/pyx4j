@@ -22,10 +22,10 @@ import java.text.SimpleDateFormat;
 
 import com.pyx4j.config.shared.ApplicationMode;
 
+import com.propertyvista.admin.domain.payment.pad.PadBatch;
+import com.propertyvista.admin.domain.payment.pad.PadDebitRecord;
+import com.propertyvista.admin.domain.payment.pad.PadFile;
 import com.propertyvista.config.VistaDeployment;
-import com.propertyvista.server.domain.payment.pad.PadBatch;
-import com.propertyvista.server.domain.payment.pad.PadDebitRecord;
-import com.propertyvista.server.domain.payment.pad.PadFile;
 import com.propertyvista.shared.VistaSystemIdentification;
 
 public class CaledonPadFileWriter {

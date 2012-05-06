@@ -16,13 +16,13 @@ package com.propertyvista.admin.server.onboarding.rh;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 
+import com.propertyvista.admin.domain.security.OnboardingUserCredential;
 import com.propertyvista.admin.server.onboarding.rhf.AbstractRequestHandler;
 import com.propertyvista.domain.security.OnboardingUser;
 import com.propertyvista.domain.security.VistaOnboardingBehavior;
 import com.propertyvista.onboarding.CreateOnboardingUserRequestIO;
 import com.propertyvista.onboarding.ResponseIO;
 import com.propertyvista.server.common.security.PasswordEncryptor;
-import com.propertyvista.server.domain.security.OnboardingUserCredential;
 
 public class CreateOnboardingUserRequestHandler extends AbstractRequestHandler<CreateOnboardingUserRequestIO> {
 

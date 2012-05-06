@@ -26,8 +26,8 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.essentials.server.csv.CSVLoad;
 
-import com.propertyvista.server.domain.admin.Pmc;
-import com.propertyvista.server.domain.admin.ReservedPmcNames;
+import com.propertyvista.admin.domain.pmc.Pmc;
+import com.propertyvista.admin.domain.pmc.ReservedPmcNames;
 
 public class PmcNameValidator {
 

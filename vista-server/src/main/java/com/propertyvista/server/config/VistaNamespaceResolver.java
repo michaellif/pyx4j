@@ -30,9 +30,9 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.server.contexts.NamespaceManager;
 
+import com.propertyvista.admin.domain.pmc.Pmc;
 import com.propertyvista.domain.DemoData;
 import com.propertyvista.portal.rpc.DeploymentConsts;
-import com.propertyvista.server.domain.admin.Pmc;
 
 public class VistaNamespaceResolver implements NamespaceResolver {
 

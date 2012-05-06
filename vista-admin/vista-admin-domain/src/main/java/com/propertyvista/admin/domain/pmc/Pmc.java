@@ -7,57 +7,62 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Mar 16, 2012
+ * Created on 2011-06-13
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.domain;
+package com.propertyvista.admin.domain.pmc;
+
+import java.util.Date;
 
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.Length;
+import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Table;
+import com.pyx4j.entity.annotations.Timestamp;
+import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
-import com.pyx4j.i18n.shared.I18nEnum;
+
+import com.propertyvista.domain.VistaNamespace;
 
 @Table(prefix = "admin", namespace = VistaNamespace.adminNamespace)
+@Caption(name = "PMC")
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
-public interface PmcDnsName extends IEntity {
+public interface Pmc extends IEntity {
 
-    @I18n
-    public enum DnsNameTarget {
-
-        vistaCrm,
-
-        residentPortal,
-
-        prospectPortal;
-
-        @Override
-        public String toString() {
-            return I18nEnum.toString(this);
-        }
-    }
-
-    @Length(253)
-    @Indexed(uniqueConstraint = true)
-    @NotNull
-    IPrimitive<String> dnsName();
+    public static final String adminNamespace = VistaNamespace.adminNamespace;
 
     @Caption(name = "Active")
     IPrimitive<Boolean> enabled();
 
     @NotNull
-    IPrimitive<DnsNameTarget> target();
+    @ToString
+    IPrimitive<String> name();
 
-    IPrimitive<Boolean> httpsEnabled();
+    @NotNull
+    @ReadOnly
+    @Length(63)
+    @Indexed(uniqueConstraint = true)
+    IPrimitive<String> namespace();
 
-    @Length(150)
-    IPrimitive<String> googleAPIKey();
+    @NotNull
+    @Length(63)
+    @Indexed(uniqueConstraint = true)
+    IPrimitive<String> dnsName();
 
-    @Length(15)
-    IPrimitive<String> googleAnalyticsId();
+    @Owned
+    IList<PmcDnsName> dnsNameAliases();
+
+    IPrimitive<String> onboardingAccountId();
+
+    @Timestamp(Timestamp.Update.Created)
+    @ReadOnly
+    IPrimitive<Date> created();
+
 }

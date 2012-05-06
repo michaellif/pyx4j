@@ -21,8 +21,8 @@ import com.pyx4j.essentials.j2se.J2SEServiceConnector;
 import com.pyx4j.essentials.j2se.J2SEServiceConnector.Credentials;
 import com.pyx4j.server.mail.SMTPMailServiceConfig;
 
+import com.propertyvista.admin.domain.dev.DevelopmentUser;
 import com.propertyvista.server.common.security.DevelopmentSecurity;
-import com.propertyvista.server.domain.dev.DevelopmentUser;
 
 public class VistaSMTPMailServiceConfig extends SMTPMailServiceConfig {
 

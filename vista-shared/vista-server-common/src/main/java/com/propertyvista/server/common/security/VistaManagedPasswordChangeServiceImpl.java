@@ -27,7 +27,7 @@ import com.pyx4j.security.shared.SecurityViolationException;
 import com.pyx4j.server.contexts.Context;
 
 import com.propertyvista.domain.security.AbstractUser;
-import com.propertyvista.server.domain.security.AbstractUserCredential;
+import com.propertyvista.domain.security.AbstractUserCredential;
 
 /**
  * Service used by managers,administrator to administer their subordinate users.

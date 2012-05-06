@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.server.domain.security;
+package com.propertyvista.admin.domain.security;
 
 import com.pyx4j.entity.annotations.RpcBlacklist;
 import com.pyx4j.entity.annotations.Table;
@@ -19,6 +19,7 @@ import com.pyx4j.entity.shared.IPrimitiveSet;
 import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.VistaNamespace;
+import com.propertyvista.domain.security.AbstractUserCredential;
 import com.propertyvista.domain.security.AdminUser;
 import com.propertyvista.domain.security.VistaAdminBehavior;
 

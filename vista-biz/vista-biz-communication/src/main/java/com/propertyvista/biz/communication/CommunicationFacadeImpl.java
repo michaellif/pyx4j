@@ -20,6 +20,8 @@ import com.pyx4j.server.mail.Mail;
 import com.pyx4j.server.mail.MailDeliveryStatus;
 import com.pyx4j.server.mail.MailMessage;
 
+import com.propertyvista.admin.domain.security.AdminUserCredential;
+import com.propertyvista.admin.domain.security.OnboardingUserCredential;
 import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.security.AdminUser;
 import com.propertyvista.domain.security.CrmUser;
@@ -30,10 +32,8 @@ import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.server.common.security.AccessKey;
-import com.propertyvista.server.domain.security.AdminUserCredential;
 import com.propertyvista.server.domain.security.CrmUserCredential;
 import com.propertyvista.server.domain.security.CustomerUserCredential;
-import com.propertyvista.server.domain.security.OnboardingUserCredential;
 
 public class CommunicationFacadeImpl implements CommunicationFacade {
 

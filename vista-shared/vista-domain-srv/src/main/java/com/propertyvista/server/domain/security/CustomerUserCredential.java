@@ -17,6 +17,7 @@ import com.pyx4j.entity.annotations.RpcBlacklist;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.i18n.annotations.I18n;
 
+import com.propertyvista.domain.security.AbstractUserCredential;
 import com.propertyvista.domain.security.CustomerUser;
 
 @RpcBlacklist

@@ -13,9 +13,9 @@
  */
 package com.propertyvista.admin.server.services;
 
+import com.propertyvista.admin.domain.security.AdminUserCredential;
 import com.propertyvista.admin.rpc.services.AdminPasswordChangeManagedService;
 import com.propertyvista.server.common.security.VistaManagedPasswordChangeServiceImpl;
-import com.propertyvista.server.domain.security.AdminUserCredential;
 
 public class AdminPasswordChangeManagedServiceImpl extends VistaManagedPasswordChangeServiceImpl<AdminUserCredential> implements
         AdminPasswordChangeManagedService {

@@ -18,6 +18,9 @@ import com.pyx4j.essentials.rpc.deferred.DeferredProcessService;
 import com.pyx4j.rpc.shared.IServiceExecutePermission;
 import com.pyx4j.security.server.ServletContainerAclBuilder;
 
+import com.propertyvista.admin.domain.pmc.Pmc;
+import com.propertyvista.admin.domain.security.AdminUserCredential;
+import com.propertyvista.admin.domain.security.OnboardingUserCredential;
 import com.propertyvista.admin.rpc.services.AdminAuthenticationService;
 import com.propertyvista.admin.rpc.services.AdminPasswordChangeManagedService;
 import com.propertyvista.admin.rpc.services.AdminPasswordChangeUserService;
@@ -33,9 +36,6 @@ import com.propertyvista.admin.rpc.services.SimulationService;
 import com.propertyvista.admin.rpc.services.proc.ExecutionCrudService;
 import com.propertyvista.admin.rpc.services.proc.ProcessCrudService;
 import com.propertyvista.domain.security.VistaBasicBehavior;
-import com.propertyvista.server.domain.admin.Pmc;
-import com.propertyvista.server.domain.security.AdminUserCredential;
-import com.propertyvista.server.domain.security.OnboardingUserCredential;
 
 public class VistaAdminAccessControlList extends ServletContainerAclBuilder {
 

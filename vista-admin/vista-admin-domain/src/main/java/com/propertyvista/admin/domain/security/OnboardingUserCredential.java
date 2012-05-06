@@ -11,16 +11,19 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.server.domain.security;
+package com.propertyvista.admin.domain.security;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.RpcBlacklist;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
+import com.propertyvista.admin.domain.pmc.Pmc;
 import com.propertyvista.domain.VistaNamespace;
+import com.propertyvista.domain.security.AbstractUserCredential;
 import com.propertyvista.domain.security.OnboardingUser;
 import com.propertyvista.domain.security.VistaOnboardingBehavior;
 
@@ -34,7 +37,8 @@ public interface OnboardingUserCredential extends AbstractUserCredential<Onboard
     @NotNull
     IPrimitive<String> onboardingAccountId();
 
-    IPrimitive<String> pmcDnsName();
+    @ReadOnly(allowOverrideNull = true)
+    Pmc pmc();
 
     IPrimitive<Key> crmUser();
 

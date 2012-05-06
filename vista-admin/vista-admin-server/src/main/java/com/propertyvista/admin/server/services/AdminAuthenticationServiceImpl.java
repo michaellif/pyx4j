@@ -19,13 +19,13 @@ import java.util.Set;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.security.shared.Behavior;
 
+import com.propertyvista.admin.domain.security.AdminUserCredential;
 import com.propertyvista.admin.rpc.services.AdminAuthenticationService;
 import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.domain.security.AdminUser;
 import com.propertyvista.domain.security.VistaAdminBehavior;
 import com.propertyvista.domain.security.VistaBasicBehavior;
 import com.propertyvista.server.common.security.VistaAuthenticationServicesImpl;
-import com.propertyvista.server.domain.security.AdminUserCredential;
 
 public class AdminAuthenticationServiceImpl extends VistaAuthenticationServicesImpl<AdminUser, AdminUserCredential> implements AdminAuthenticationService {
 

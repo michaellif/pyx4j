@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.server.domain.payment.pad;
+package com.propertyvista.admin.domain.payment.pad;
 
 import java.math.BigDecimal;
 

@@ -33,6 +33,7 @@ import com.pyx4j.essentials.server.upload.UploadDeferredProcess;
 import com.pyx4j.essentials.server.upload.UploadServiceImpl;
 import com.pyx4j.server.contexts.NamespaceManager;
 
+import com.propertyvista.admin.domain.pmc.Pmc;
 import com.propertyvista.admin.rpc.PmcImportDTO;
 import com.propertyvista.admin.rpc.services.ImportUploadService;
 import com.propertyvista.interfaces.importer.BuildingImporter;
@@ -44,7 +45,6 @@ import com.propertyvista.interfaces.importer.model.BuildingIO;
 import com.propertyvista.interfaces.importer.model.ImportIO;
 import com.propertyvista.server.common.reference.geo.GeoLocator.Mode;
 import com.propertyvista.server.common.reference.geo.SharedGeoLocator;
-import com.propertyvista.server.domain.admin.Pmc;
 
 public class ImportUploadServiceImpl extends UploadServiceImpl<PmcImportDTO, IEntity> implements ImportUploadService {
 

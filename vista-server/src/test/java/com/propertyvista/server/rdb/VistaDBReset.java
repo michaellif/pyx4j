@@ -29,6 +29,7 @@ import com.pyx4j.server.contexts.Lifecycle;
 import com.pyx4j.server.contexts.NamespaceManager;
 import com.pyx4j.server.mail.Mail;
 
+import com.propertyvista.admin.domain.pmc.Pmc;
 import com.propertyvista.admin.server.preloader.VistaAminDataPreloaders;
 import com.propertyvista.misc.VistaDataPreloaderParameter;
 import com.propertyvista.misc.VistaDevPreloadConfig;
@@ -36,7 +37,6 @@ import com.propertyvista.server.config.VistaNamespaceResolver;
 import com.propertyvista.server.config.VistaServerSideConfiguration;
 import com.propertyvista.server.config.VistaServerSideConfigurationDev;
 import com.propertyvista.server.config.VistaServerSideConfigurationDevPostgreSQL;
-import com.propertyvista.server.domain.admin.Pmc;
 
 public class VistaDBReset {
 

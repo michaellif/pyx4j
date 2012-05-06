@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.server.domain.security;
+package com.propertyvista.domain.security;
 
 import java.util.Date;
 
@@ -25,8 +25,9 @@ import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.security.AbstractUser;
-
+/**
+ * Should be nice to move this to Server side domain package
+ */
 @AbstractEntity
 @RpcBlacklist
 public interface AbstractUserCredential<E extends AbstractUser> extends IEntity {

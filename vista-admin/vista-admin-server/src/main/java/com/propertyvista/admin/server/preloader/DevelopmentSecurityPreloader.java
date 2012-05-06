@@ -20,7 +20,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
 import com.pyx4j.essentials.server.csv.EntityCSVReciver;
 
-import com.propertyvista.server.domain.dev.DevelopmentUser;
+import com.propertyvista.admin.domain.dev.DevelopmentUser;
 
 public class DevelopmentSecurityPreloader extends AbstractDataPreloader {
 

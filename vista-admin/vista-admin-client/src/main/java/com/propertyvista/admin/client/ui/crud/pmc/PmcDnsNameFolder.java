@@ -18,8 +18,8 @@ import java.util.List;
 
 import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
 
+import com.propertyvista.admin.domain.pmc.PmcDnsName;
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
-import com.propertyvista.domain.PmcDnsName;
 
 public class PmcDnsNameFolder extends VistaTableFolder<PmcDnsName> {
 

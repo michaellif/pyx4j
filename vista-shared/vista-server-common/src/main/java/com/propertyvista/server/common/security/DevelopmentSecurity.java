@@ -19,9 +19,9 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.essentials.server.dev.DevSession;
 import com.pyx4j.server.contexts.NamespaceManager;
 
+import com.propertyvista.admin.domain.dev.DevelopmentUser;
+import com.propertyvista.admin.domain.pmc.Pmc;
 import com.propertyvista.config.SystemConfig;
-import com.propertyvista.server.domain.admin.Pmc;
-import com.propertyvista.server.domain.dev.DevelopmentUser;
 
 public class DevelopmentSecurity {
 

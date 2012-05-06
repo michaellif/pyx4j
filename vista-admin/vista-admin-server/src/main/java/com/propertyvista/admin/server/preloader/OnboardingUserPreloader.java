@@ -17,10 +17,10 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
 import com.pyx4j.entity.shared.EntityFactory;
 
+import com.propertyvista.admin.domain.security.OnboardingUserCredential;
 import com.propertyvista.domain.security.OnboardingUser;
 import com.propertyvista.domain.security.VistaOnboardingBehavior;
 import com.propertyvista.server.common.security.PasswordEncryptor;
-import com.propertyvista.server.domain.security.OnboardingUserCredential;
 
 class OnboardingUserPreloader extends AbstractDataPreloader {
 

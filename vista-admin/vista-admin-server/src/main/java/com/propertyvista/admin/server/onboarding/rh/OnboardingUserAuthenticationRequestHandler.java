@@ -28,6 +28,7 @@ import com.pyx4j.essentials.server.AbstractAntiBot;
 import com.pyx4j.essentials.server.EssentialsServerSideConfiguration;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 
+import com.propertyvista.admin.domain.security.OnboardingUserCredential;
 import com.propertyvista.admin.server.onboarding.OnboardingXMLUtils;
 import com.propertyvista.admin.server.onboarding.rhf.AbstractRequestHandler;
 import com.propertyvista.domain.security.OnboardingUser;
@@ -35,7 +36,6 @@ import com.propertyvista.onboarding.OnboardingUserAuthenticationRequestIO;
 import com.propertyvista.onboarding.OnboardingUserAuthenticationResponseIO;
 import com.propertyvista.onboarding.ResponseIO;
 import com.propertyvista.server.common.security.PasswordEncryptor;
-import com.propertyvista.server.domain.security.OnboardingUserCredential;
 
 public class OnboardingUserAuthenticationRequestHandler extends AbstractRequestHandler<OnboardingUserAuthenticationRequestIO> {
 

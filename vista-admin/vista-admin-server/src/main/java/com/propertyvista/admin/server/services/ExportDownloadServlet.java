@@ -43,13 +43,13 @@ import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.server.contexts.NamespaceManager;
 
+import com.propertyvista.admin.domain.pmc.Pmc;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.security.VistaBasicBehavior;
 import com.propertyvista.interfaces.importer.BuildingRetriever;
 import com.propertyvista.interfaces.importer.converter.MediaConfig;
 import com.propertyvista.interfaces.importer.model.ImportIO;
 import com.propertyvista.interfaces.importer.xml.ImportXMLEntityNamingConvention;
-import com.propertyvista.server.domain.admin.Pmc;
 
 @SuppressWarnings("serial")
 public class ExportDownloadServlet extends HttpServlet {

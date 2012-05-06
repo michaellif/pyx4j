@@ -22,11 +22,11 @@ import com.pyx4j.essentials.rpc.report.ReportRequest;
 import com.pyx4j.essentials.server.report.SearchReportDeferredProcess;
 import com.pyx4j.server.contexts.NamespaceManager;
 
+import com.propertyvista.admin.domain.pmc.Pmc;
 import com.propertyvista.domain.marketing.PublicVisibilityType;
 import com.propertyvista.domain.media.Media;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
-import com.propertyvista.server.domain.admin.Pmc;
 
 public class PmcDataImagesReportDeferredProcess extends SearchReportDeferredProcess<Pmc> {
 
