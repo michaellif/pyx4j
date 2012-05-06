@@ -16,11 +16,14 @@ package com.propertyvista.admin.client.ui.crud.proc;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.admin.client.ui.crud.AdminEntityForm;
 import com.propertyvista.admin.domain.proc.Process;
 
 public class ProcessEditorForm extends AdminEntityForm<Process> {
+
+    private static final I18n i18n = I18n.get(ProcessEditorForm.class);
 
     public ProcessEditorForm() {
         this(false);
@@ -32,7 +35,13 @@ public class ProcessEditorForm extends AdminEntityForm<Process> {
 
     @Override
     public IsWidget createContent() {
-        FormFlexPanel main = new FormFlexPanel();
-        return main;
+        FormFlexPanel container = new FormFlexPanel();
+        int row = -1;
+
+        container.setH2(++row, 0, 2, i18n.tr("General"));
+
+        container.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 12).build());
+
+        return container;
     }
 }
