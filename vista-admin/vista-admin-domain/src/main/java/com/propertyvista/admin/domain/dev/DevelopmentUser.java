@@ -14,6 +14,7 @@
 package com.propertyvista.admin.domain.dev;
 
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.GwtBlacklist;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -23,6 +24,7 @@ import com.propertyvista.domain.VistaNamespace;
 
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 @Table(namespace = VistaNamespace.adminNamespace)
+@GwtBlacklist
 public interface DevelopmentUser extends IEntity {
 
     IPrimitive<String> firstName();

@@ -13,6 +13,7 @@
  */
 package com.propertyvista.admin.domain.security;
 
+import com.pyx4j.entity.annotations.GwtBlacklist;
 import com.pyx4j.entity.annotations.RpcBlacklist;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.shared.IPrimitiveSet;
@@ -24,6 +25,7 @@ import com.propertyvista.domain.security.AdminUser;
 import com.propertyvista.domain.security.VistaAdminBehavior;
 
 @RpcBlacklist
+@GwtBlacklist
 @Table(primaryKeyStrategy = Table.PrimaryKeyStrategy.ASSIGNED, expands = AdminUser.class, namespace = VistaNamespace.adminNamespace)
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 public interface AdminUserCredential extends AbstractUserCredential<AdminUser> {

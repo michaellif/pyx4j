@@ -16,6 +16,7 @@ package com.propertyvista.admin.domain.payment.pad;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
+import com.pyx4j.entity.annotations.GwtBlacklist;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.OrderColumn;
@@ -33,6 +34,7 @@ import com.propertyvista.domain.financial.MerchantAccount;
 
 @Table(namespace = VistaNamespace.adminNamespace)
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
+@GwtBlacklist
 public interface PadBatch extends IEntity {
 
     @Override

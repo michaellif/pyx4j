@@ -9,4 +9,6 @@
     <source path="misc"/>
     <source path="shared"/>
     
+    <extend-configuration-property name="rpc.blacklist" value="com.propertyvista.domain.security.AbstractUserCredential" />
+    
 </module>

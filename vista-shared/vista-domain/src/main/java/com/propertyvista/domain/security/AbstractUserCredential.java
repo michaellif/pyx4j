@@ -17,6 +17,7 @@ import java.util.Date;
 
 import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.GwtBlacklist;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.RpcBlacklist;
@@ -30,6 +31,7 @@ import com.pyx4j.entity.shared.IPrimitive;
  */
 @AbstractEntity
 @RpcBlacklist
+@GwtBlacklist
 public interface AbstractUserCredential<E extends AbstractUser> extends IEntity {
 
     @Detached

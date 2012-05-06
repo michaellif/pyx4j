@@ -14,6 +14,7 @@
 package com.propertyvista.admin.domain.security;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.entity.annotations.GwtBlacklist;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.RpcBlacklist;
 import com.pyx4j.entity.annotations.Table;
@@ -28,6 +29,7 @@ import com.propertyvista.domain.security.OnboardingUser;
 import com.propertyvista.domain.security.VistaOnboardingBehavior;
 
 @RpcBlacklist
+@GwtBlacklist
 @Table(primaryKeyStrategy = Table.PrimaryKeyStrategy.ASSIGNED, expands = OnboardingUser.class, namespace = VistaNamespace.adminNamespace)
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 public interface OnboardingUserCredential extends AbstractUserCredential<OnboardingUser> {
