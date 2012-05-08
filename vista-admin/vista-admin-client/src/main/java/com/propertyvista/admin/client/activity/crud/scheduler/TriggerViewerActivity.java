@@ -21,9 +21,9 @@ import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.activity.crud.ListerActivityBase;
-import com.pyx4j.site.client.activity.crud.ViewerActivityBase;
 import com.pyx4j.site.client.ui.crud.lister.IListerView.Presenter;
 
+import com.propertyvista.admin.client.activity.crud.AdminViewerActivity;
 import com.propertyvista.admin.client.ui.crud.scheduler.trigger.TriggerViewerView;
 import com.propertyvista.admin.client.viewfactories.crud.ManagementVeiwFactory;
 import com.propertyvista.admin.domain.scheduler.Run;
@@ -31,7 +31,7 @@ import com.propertyvista.admin.domain.scheduler.Trigger;
 import com.propertyvista.admin.rpc.services.scheduler.RunCrudService;
 import com.propertyvista.admin.rpc.services.scheduler.TriggerCrudService;
 
-public class TriggerViewerActivity extends ViewerActivityBase<Trigger> implements TriggerViewerView.Presenter {
+public class TriggerViewerActivity extends AdminViewerActivity<Trigger> implements TriggerViewerView.Presenter {
 
     private final Presenter<Run> runLister;
 
