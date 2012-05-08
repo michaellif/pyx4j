@@ -29,6 +29,7 @@ import com.propertyvista.biz.financial.billing.BillingFacade;
 import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.BillingCycle;
+import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.CompletionType;
 import com.propertyvista.misc.VistaTODO;
@@ -93,6 +94,7 @@ public class LeaseLifecycleSim {
         if (lease.unit()._availableForRent().isNull()) {
             return;
         }
+
         LogicalDate reservedOn = add(max(simStart, lease.unit()._availableForRent().getValue()), rndBetween(MIN_AVAILABLE_TERM, MAX_AVAILABLE_TERM));
 
         LogicalDate leaseFrom = add(reservedOn, rndBetween(MIN_RESERVE_TIME, MAX_RESERVE_TIME));
@@ -101,7 +103,10 @@ public class LeaseLifecycleSim {
         lease.leaseFrom().setValue(leaseFrom);
         lease.leaseTo().setValue(leaseTo);
 
+        setUpBillableItemsEffectiveTime(lease);
+
         clearEvents();
+
         queueEvent(reservedOn, new Create(lease));
         queueEvent(max(leaseFrom, sub(leaseTo, rndBetween(MIN_NOTICE_TERM, MAX_NOTICE_TERM))), new Notice(lease));
         queueEvent(leaseTo, new Complete(lease));
@@ -112,6 +117,16 @@ public class LeaseLifecycleSim {
             }
         } finally {
             cleanUp();
+        }
+    }
+
+    private void setUpBillableItemsEffectiveTime(Lease lease) {
+        // TODO something more sophisticated is probably required here
+
+        lease.version().leaseProducts().serviceItem().effectiveDate().setValue(simStart);
+
+        for (BillableItem item : lease.version().leaseProducts().featureItems()) {
+            item.effectiveDate().setValue(simStart);
         }
     }
 
@@ -210,7 +225,7 @@ public class LeaseLifecycleSim {
             if (!VistaTODO.removedForProduction) {
                 if (now().before(lease.leaseTo().getValue()) & lease.version().status().getValue() != Lease.Status.Completed) {
 
-                    // TODO THIS is REALLY CREEPY part, talk to Michael about adding API to the facade that lets check when billing is allowed to run.
+                    // TODO THIS is REALLY CREEPY part, talk to Michael about adding API to the facade that lets check when billing is allowed to run **********
                     // the following code is copies the calculations inside the billing facade privates 
                     Persistence.service().retrieve(lease.billingAccount());
                     Bill lastBill = ServerSideFactory.create(BillingFacade.class).getLatestBill(lease);
@@ -224,7 +239,7 @@ public class LeaseLifecycleSim {
                     }
                     LogicalDate billingRunDay = calculateBillingRunTargetExecutionDate(lease.billingAccount().billingCycle(), new LogicalDate(
                             billingPeriodStartDate.getTime()));
-                    // CREEPY PART ENDS HERE
+                    // CREEPY PART ENDS HERE *******************************************************************************************************************
 
                     if (now().equals(billingRunDay)) {
                         BillingFacade billing = ServerSideFactory.create(BillingFacade.class);

@@ -35,15 +35,8 @@ public class ProrationUtils {
         Calendar calendarFrom = new GregorianCalendar();
         calendarFrom.setTime(from);
         int daysInMonth = calendarFrom.getActualMaximum(Calendar.DAY_OF_MONTH);
-        int monthFrom = calendarFrom.get(Calendar.MONTH);
-        int dayOfMonthFrom = calendarFrom.get(Calendar.DAY_OF_MONTH);
 
-        Calendar calendarTo = new GregorianCalendar();
-        calendarTo.setTime(to);
-        int monthTo = calendarTo.get(Calendar.MONTH);
-        int dayOfMonthTo = calendarTo.get(Calendar.DAY_OF_MONTH);
-
-        if (((monthTo - monthFrom == 0) && (dayOfMonthFrom <= dayOfMonthTo)) || ((monthTo - monthFrom == 1) && (dayOfMonthFrom > dayOfMonthTo))) {
+        if (isPeriodLengthLessThanMonth(from, to)) {
             BigDecimal proration = null;
             switch (method) {
             case Actual:
@@ -66,6 +59,13 @@ public class ProrationUtils {
             throw new BillingException("proration can't be calculated for a period more than one month, but period was defined as " + from + " - " + to);
         }
 
+    }
+
+    public static boolean isPeriodLengthLessThanMonth(LogicalDate periodStart, LogicalDate periodEnd) {
+        Calendar oneMonthSinceStart = GregorianCalendar.getInstance();
+        oneMonthSinceStart.setTime(periodStart);
+        oneMonthSinceStart.add(Calendar.MONTH, 1);
+        return periodEnd.before(oneMonthSinceStart.getTime());
     }
 
     public static int daysBetween(LogicalDate d1, LogicalDate d2) {

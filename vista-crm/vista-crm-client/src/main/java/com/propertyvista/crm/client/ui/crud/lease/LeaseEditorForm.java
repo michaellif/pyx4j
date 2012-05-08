@@ -46,8 +46,10 @@ public class LeaseEditorForm extends LeaseEditorFormBase<LeaseDTO> {
             tabPanel.setLastTabDisabled(isEditable());
             tabPanel.add(isEditable() ? new HTML() : ((LeaseViewerView) getParentView()).getPaymentListerView().asWidget(), i18n.tr("Payments"));
             tabPanel.setLastTabDisabled(isEditable());
-            tabPanel.add(isEditable() ? new HTML() : createFinancialTransactionHistoryTab(), i18n.tr("Financial Summary"));
-            tabPanel.setLastTabDisabled(isEditable());
+            if (!VistaTODO.removedForProduction) {
+                tabPanel.add(isEditable() ? new HTML() : createFinancialTransactionHistoryTab(), i18n.tr("Financial Summary"));
+                tabPanel.setLastTabDisabled(isEditable());
+            }
         }
 
         tabPanel.setSize("100%", "100%");
