@@ -45,6 +45,7 @@ public class EmergencyContactEditor extends CEntityDecoratableForm<EmergencyCont
         left.setWidget(++row, 0, inject(proto().name(), new NameEditor(i18n.tr("Person"))));
         left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().sex()), 7).build());
         left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().birthDate()), 9).build());
+        get(proto().birthDate()).setMandatory(false);
 
         FormFlexPanel right = new FormFlexPanel();
         row = -1;
