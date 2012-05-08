@@ -39,4 +39,14 @@ public class Tester {
             formatted = message + " ";
         return formatted + "expected:<" + expected + "> but was:<" + actual + ">";
     }
+
+    public static void assertTrue(String message, boolean condition) {
+        if (!(condition)) {
+            new AssertionFailedError(message);
+        }
+    }
+
+    public static void assertFalse(String message, boolean condition) {
+        assertTrue(message, !condition);
+    }
 }

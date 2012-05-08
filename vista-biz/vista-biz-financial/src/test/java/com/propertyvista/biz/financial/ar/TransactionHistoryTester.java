@@ -20,8 +20,10 @@ import com.pyx4j.commons.LogicalDate;
 
 import com.propertyvista.biz.financial.Tester;
 import com.propertyvista.domain.financial.BillingAccount;
+import com.propertyvista.domain.financial.billing.AgingBuckets;
 import com.propertyvista.domain.financial.billing.InvoiceCredit;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
+import com.propertyvista.domain.financial.billing.InvoiceDebit.DebitType;
 import com.propertyvista.dto.TransactionHistoryDTO;
 
 public class TransactionHistoryTester extends Tester {
@@ -68,24 +70,53 @@ public class TransactionHistoryTester extends Tester {
         return this;
     }
 
-    public TransactionHistoryTester agingBucketsCurrent(BigDecimal amount, int index) {
-        assertEquals("Total current amount", amount, transactionHistory.agingBuckets().get(index).current().getValue());
+    public TransactionHistoryTester agingBucketsCurrent(BigDecimal amount, DebitType debitType) {
+        AgingBuckets buckets = getAgingBucketsOfType(debitType);
+        if (buckets != null) {
+            assertEquals("Current amount", amount, buckets.current().getValue());
+        } else {
+            throw new Error("Buckets for debit type " + debitType + " don't exist");
+        }
         return this;
     }
 
-    public TransactionHistoryTester agingBuckets30(BigDecimal amount, int index) {
-        assertEquals("Total current amount", amount, transactionHistory.agingBuckets().get(index).bucket30().getValue());
+    public TransactionHistoryTester agingBuckets30(BigDecimal amount, DebitType debitType) {
+        AgingBuckets buckets = getAgingBucketsOfType(debitType);
+        if (buckets != null) {
+            assertEquals("bucket30 amount", amount, buckets.bucket30().getValue());
+        } else {
+            throw new Error("Buckets for debit type " + debitType + " don't exist");
+        }
         return this;
     }
 
-    public TransactionHistoryTester agingBuckets60(BigDecimal amount, int index) {
-        assertEquals("Total current amount", amount, transactionHistory.agingBuckets().get(index).bucket60().getValue());
+    public TransactionHistoryTester agingBuckets60(BigDecimal amount, DebitType debitType) {
+        AgingBuckets buckets = getAgingBucketsOfType(debitType);
+        if (buckets != null) {
+            assertEquals("bucket60 amount", amount, buckets.bucket60().getValue());
+        } else {
+            throw new Error("Buckets for debit type " + debitType + " don't exist");
+        }
         return this;
     }
 
-    public TransactionHistoryTester agingBuckets90(BigDecimal amount, int index) {
-        assertEquals("Total current amount", amount, transactionHistory.agingBuckets().get(index).bucket90().getValue());
+    public TransactionHistoryTester agingBuckets90(BigDecimal amount, DebitType debitType) {
+        AgingBuckets buckets = getAgingBucketsOfType(debitType);
+        if (buckets != null) {
+            assertEquals("bucket90 amount", amount, buckets.bucket90().getValue());
+        } else {
+            throw new Error("Buckets for debit type " + debitType + " don't exist");
+        }
         return this;
+    }
+
+    private AgingBuckets getAgingBucketsOfType(DebitType debitType) {
+        for (AgingBuckets buckets : transactionHistory.agingBuckets()) {
+            if (debitType == buckets.debitType().getValue()) {
+                return buckets;
+            }
+        }
+        return null;
     }
 
 }

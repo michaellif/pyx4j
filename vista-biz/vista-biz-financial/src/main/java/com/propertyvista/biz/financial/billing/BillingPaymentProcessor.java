@@ -13,12 +13,13 @@
  */
 package com.propertyvista.biz.financial.billing;
 
+import com.propertyvista.biz.financial.AbstractProcessor;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.InvoiceNSF;
 import com.propertyvista.domain.financial.billing.InvoicePayment;
 import com.propertyvista.domain.financial.billing.InvoicePaymentBackOut;
 
-public class BillingPaymentProcessor {
+public class BillingPaymentProcessor extends AbstractProcessor {
 
     private final Billing billing;
 

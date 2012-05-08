@@ -20,8 +20,11 @@
  */
 package com.propertyvista.biz.financial.ar;
 
+import java.math.BigDecimal;
+
 import com.propertyvista.biz.financial.FinancialTestBase;
 import com.propertyvista.biz.financial.SysDateManager;
+import com.propertyvista.domain.financial.billing.InvoiceDebit.DebitType;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 public class ARSunnyDayScenarioTest extends FinancialTestBase {
@@ -58,7 +61,11 @@ public class ARSunnyDayScenarioTest extends FinancialTestBase {
         new TransactionHistoryTester(retrieveLease().billingAccount()).
         lineItemSize(3).
         notCoveredDebitLineItemSize(3).
-        notConsumedCreditInvoiceItemSize(0);
+        notConsumedCreditInvoiceItemSize(0).
+        agingBucketsCurrent(new BigDecimal("1258.82"), DebitType.all).
+        agingBucketsCurrent(new BigDecimal("302.50"), DebitType.lease).
+        agingBucketsCurrent(new BigDecimal("26.02"), DebitType.parking).
+        agingBucketsCurrent(new BigDecimal("930.30"), DebitType.deposit);
         // @formatter:on
 
         receiveAndPostPayment("22-Mar-2011", "1000.00");
@@ -67,7 +74,9 @@ public class ARSunnyDayScenarioTest extends FinancialTestBase {
         new TransactionHistoryTester(retrieveLease().billingAccount()).
         lineItemSize(4).
         notCoveredDebitLineItemSize(1).
-        notConsumedCreditInvoiceItemSize(0);
+        notConsumedCreditInvoiceItemSize(0).
+        agingBucketsCurrent(new BigDecimal("258.82"), DebitType.all).
+        agingBucketsCurrent(new BigDecimal("258.82"), DebitType.deposit);
         // @formatter:on
 
         //==================== RUN 2 ======================//

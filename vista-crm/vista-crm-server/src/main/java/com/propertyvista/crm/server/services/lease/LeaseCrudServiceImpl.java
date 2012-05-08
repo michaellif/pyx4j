@@ -36,6 +36,7 @@ import com.propertyvista.domain.financial.billing.AgingBuckets;
 import com.propertyvista.domain.financial.billing.InvoiceAccountCharge;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.domain.financial.billing.InvoicePayment;
+import com.propertyvista.domain.financial.billing.InvoiceDebit.DebitType;
 import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -174,7 +175,7 @@ public class LeaseCrudServiceImpl extends LeaseCrudServiceBaseImpl<LeaseDTO> imp
             // some mockup arrears
             {
                 AgingBuckets arrears = history.agingBuckets().$();
-                arrears.label().setValue("Eggs");
+                arrears.debitType().setValue(DebitType.parking);
                 arrears.current().setValue(new BigDecimal("100.0"));
                 arrears.bucket30().setValue(new BigDecimal("11"));
                 arrears.bucket60().setValue(new BigDecimal("0"));
@@ -183,7 +184,7 @@ public class LeaseCrudServiceImpl extends LeaseCrudServiceBaseImpl<LeaseDTO> imp
             }
             {
                 AgingBuckets arrears = history.agingBuckets().$();
-                arrears.label().setValue("Bacon");
+                arrears.debitType().setValue(DebitType.locker);
                 arrears.current().setValue(new BigDecimal("0"));
                 arrears.bucket30().setValue(new BigDecimal("99"));
                 arrears.bucket60().setValue(new BigDecimal("999"));
@@ -192,7 +193,7 @@ public class LeaseCrudServiceImpl extends LeaseCrudServiceBaseImpl<LeaseDTO> imp
             }
             {
                 AgingBuckets arrears = history.agingBuckets().$();
-                arrears.label().setValue("Spam, Spam, Spam");
+                arrears.debitType().setValue(DebitType.addOn);
                 arrears.current().setValue(new BigDecimal("1"));
                 arrears.bucket30().setValue(new BigDecimal("2"));
                 arrears.bucket60().setValue(new BigDecimal("3"));

@@ -81,6 +81,8 @@ public class ARTransactionManager {
         th.lineItems().addAll(lineItems);
         th.fromDate().setValue(fromDate);
         th.issueDate().setValue(new LogicalDate(SysDateManager.getSysDate()));
+
+        th.agingBuckets().addAll(ARAgingBucketsManager.getAgingBuckets(billingAccount));
         return th;
     }
 

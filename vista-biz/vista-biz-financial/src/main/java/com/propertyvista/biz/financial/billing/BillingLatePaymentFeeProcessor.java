@@ -13,7 +13,9 @@
  */
 package com.propertyvista.biz.financial.billing;
 
-public class BillingLatePaymentFeeProcessor {
+import com.propertyvista.biz.financial.AbstractProcessor;
+
+public class BillingLatePaymentFeeProcessor extends AbstractProcessor {
 
     private final Billing billing;
 

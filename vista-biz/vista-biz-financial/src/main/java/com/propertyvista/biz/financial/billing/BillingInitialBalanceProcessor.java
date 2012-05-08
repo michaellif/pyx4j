@@ -13,7 +13,9 @@
  */
 package com.propertyvista.biz.financial.billing;
 
-public class BillingInitialBalanceProcessor {
+import com.propertyvista.biz.financial.AbstractProcessor;
+
+public class BillingInitialBalanceProcessor extends AbstractProcessor {
 
     private final Billing billing;
 
