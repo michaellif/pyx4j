@@ -173,12 +173,21 @@ public class InsurancePaymentMethodForm extends CEntityDecoratableForm<Insurance
             @Override
             public IsWidget createContent() {
                 FlowPanel panel = new FlowPanel();
-                panel.add(new InnerPanelWidgetDecorator(inject(proto().number())));
-                panel.add(new InnerPanelWidgetDecorator(inject(proto().expiryDate())));
-                panel.add(new InnerPanelWidgetDecorator(inject(proto().nameOn())));
-                panel.add(new InnerPanelWidgetDecorator(inject(proto().securityCode())));
-//                panel.add(new InnerPanelWidgetDecorator(inject(proto().bankPhone())));
+//                panel.add(new InnerPanelWidgetDecorator(inject(proto().number())));                
+//                panel.add(new InnerPanelWidgetDecorator(inject(proto().expiryDate())));
+//                panel.add(new InnerPanelWidgetDecorator(inject(proto().nameOn())));
+//                panel.add(new InnerPanelWidgetDecorator(inject(proto().securityCode())));
+////                panel.add(new InnerPanelWidgetDecorator(inject(proto().bankPhone())));
+                addNotMandatory(panel, proto().number());
+                addNotMandatory(panel, proto().expiryDate());
+                addNotMandatory(panel, proto().nameOn());
+                addNotMandatory(panel, proto().securityCode());
                 return panel;
+            }
+
+            private void addNotMandatory(FlowPanel panel, IObject<?> object) {
+                panel.add(new InnerPanelWidgetDecorator(inject(object)));
+                get(object).setMandatory(false);
             }
 
             @Override

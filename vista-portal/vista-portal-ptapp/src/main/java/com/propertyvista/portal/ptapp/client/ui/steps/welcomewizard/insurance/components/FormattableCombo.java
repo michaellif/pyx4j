@@ -29,4 +29,13 @@ public class FormattableCombo<E> extends CComboBox<E> {
         return format.format(o);
     };
 
+    @Override
+    public boolean isValuesEquals(E value1, E value2) {
+        if (value1 == null | value2 == null) {
+            return value1 == value2;
+        } else {
+            return value1.equals(value2);
+        }
+    }
+
 }

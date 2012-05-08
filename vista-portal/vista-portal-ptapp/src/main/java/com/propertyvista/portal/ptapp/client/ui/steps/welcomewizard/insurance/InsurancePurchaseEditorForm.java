@@ -16,8 +16,8 @@ package com.propertyvista.portal.ptapp.client.ui.steps.welcomewizard.insurance;
 import static com.propertyvista.portal.ptapp.client.ui.steps.welcomewizard.insurance.components.Utils.asBigDecimals;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
 import java.util.Arrays;
-import java.util.List;
 
 import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
@@ -29,13 +29,14 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.forms.client.ui.CComboBox;
+import com.pyx4j.forms.client.ui.IFormat;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.portal.ptapp.client.resources.welcomewizard.WelcomeWizardResources;
 import com.propertyvista.portal.ptapp.client.ui.steps.summary.SignatureFolder;
+import com.propertyvista.portal.ptapp.client.ui.steps.welcomewizard.insurance.components.FormattableCombo;
 import com.propertyvista.portal.ptapp.client.ui.steps.welcomewizard.insurance.components.MoneyLabeledCombo;
 import com.propertyvista.portal.ptapp.client.ui.steps.welcomewizard.reviewlease.LeaseTermsFolder;
 import com.propertyvista.portal.rpc.ptapp.dto.welcomewizard.PurchaseInsuranceDTO;
@@ -122,22 +123,16 @@ public class InsurancePurchaseEditorForm extends CEntityDecoratableForm<Purchase
         insuranceTerms.setWidget(++row, 0, new DecoratorBuilder(inject(proto().collectibleCardsAndComics(), new LimitCombo(DEFAULT_LIMITIES_OPTIONS))).build());
 
         insuranceTerms.setH2(++row, 0, 1, i18n.tr("Additional Coverage (per Claim)"));
-        insuranceTerms.setWidget(
-                ++row,
-                0,
-                new DecoratorBuilder(inject(proto().freezerFoodSpoilage(), new CoverageAmountCombo(new BigDecimal(0), new BigDecimal(500),
-                        new BigDecimal(1000), new BigDecimal(1500)))).build());
-        insuranceTerms.setWidget(
-                ++row,
-                0,
-                new DecoratorBuilder(inject(proto().animalsBirdsAndFish(), new CoverageAmountCombo(new BigDecimal(0), new BigDecimal(500),
-                        new BigDecimal(1000), new BigDecimal(1500)))).build());
         insuranceTerms.setWidget(++row, 0,
-                new DecoratorBuilder(inject(proto().personalLiability(), new CoverageAmountCombo(new BigDecimal(500000), new BigDecimal(1000000)))).build());
+                new DecoratorBuilder(inject(proto().freezerFoodSpoilage(), new CoverageAmountCombo(asBigDecimals(0, 500, 1000, 1500)))).build());
+        insuranceTerms.setWidget(++row, 0,
+                new DecoratorBuilder(inject(proto().animalsBirdsAndFish(), new CoverageAmountCombo(asBigDecimals(0, 500, 1000, 1500)))).build());
+        insuranceTerms.setWidget(++row, 0,
+                new DecoratorBuilder(inject(proto().personalLiability(), new CoverageAmountCombo(asBigDecimals(500000, 1000000)))).build());
 
         insuranceTerms.setH2(++row, 0, 1, i18n.tr("Coverage Qualification Questions"));
-        insuranceTerms.setWidget(++row, 0, new DecoratorBuilder(inject(proto().homeBuiness(), new HomeBuisnessCombo())).build());
-        insuranceTerms.setWidget(++row, 0, new DecoratorBuilder(inject(proto().numOfPrevClaims())).build());
+        insuranceTerms.setWidget(++row, 0, new DecoratorBuilder(inject(proto().homeBuiness())).build());
+        insuranceTerms.setWidget(++row, 0, new DecoratorBuilder(inject(proto().numOfPrevClaims(), new NumberOfPreviousClaimsCombo())).build());
 
         insuranceTerms.setWidget(++row, 0, inject(proto().personalDisclaimerTerms(), new LeaseTermsFolder(true)));
 
@@ -230,7 +225,7 @@ public class InsurancePurchaseEditorForm extends CEntityDecoratableForm<Purchase
     private class DeductibleCombo extends MoneyLabeledCombo {
 
         public DeductibleCombo() {
-            super("Decuctible", new BigDecimal(500), new BigDecimal(1000), new BigDecimal(2000));
+            super("Decuctible", asBigDecimals(500, 1000, 2000));
             addValueChangeHandler(summaryRecalculationRequiredHandler);
         }
     }
@@ -243,19 +238,32 @@ public class InsurancePurchaseEditorForm extends CEntityDecoratableForm<Purchase
         }
     }
 
-    private class HomeBuisnessCombo extends CComboBox<String> {
+    private class NumberOfPreviousClaimsCombo extends FormattableCombo<Integer> {
 
-        private final List<String> HOME_BUISNESS_OPTIONS = Arrays.asList(//@formatter:off
-                "Karaoke",
-                "Hair Salon",
-                "Spa",
-                "Bar",
-                "Gym"
-        );//@formatter:on
+        public NumberOfPreviousClaimsCombo() {
+            super(new IFormat<Integer>() {
 
-        public HomeBuisnessCombo() {
-            setOptions(HOME_BUISNESS_OPTIONS);
+                @Override
+                public String format(Integer value) {
+                    if (value == null || value.equals(new Integer(0))) {
+                        return "None";
+                    }
+                    if (value.equals(Integer.MAX_VALUE)) {
+                        return "More than 4";
+                    } else {
+                        return value.toString();
+                    }
+                }
+
+                @Override
+                public Integer parse(String string) throws ParseException {
+                    // TODO Auto-generated method stub
+                    return null;
+                }
+            });
+            setOptions(Arrays.asList(0, 1, 2, 3, 4, Integer.MAX_VALUE));
         }
+
     }
 
 }

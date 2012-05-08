@@ -77,29 +77,26 @@ public class PtAppTheme extends VistaTheme {
         initSummaryStepViewStyles();
         initPaymentStepViewStyles();
         initMenuBarStyles();
-        if (VistaTODO.enableWelcomeWizardDemoMode) {
-            initWizardDemoFont();
-        }
-
     }
 
     private void initWizardDemoFont() {
-        List<Style> styles = getStyles(".gwt-HTML");
-        String fonts = "\"Comic Sans MS\", Arial";
-        for (Style style : styles) {
-            style.addProperty("font-family", fonts);
+        if (VistaTODO.enableWelcomeWizardDemoMode) {
+            List<Style> styles = getStyles(".gwt-HTML");
+            String fonts = "\"Comic Sans MS\", Arial";
+            for (Style style : styles) {
+                style.addProperty("font-family", fonts);
+            }
+            if (styles.isEmpty()) {
+                Style style = new Style(".gwt-HTML");
+                style.addProperty("font-family", fonts);
+                addStyle(style);
+            }
+            {
+                Style style = new Style("body");
+                style.addProperty("font-family", fonts);
+                addStyle(style);
+            }
         }
-        if (styles.isEmpty()) {
-            Style style = new Style(".gwt-HTML");
-            style.addProperty("font-family", fonts);
-            addStyle(style);
-        }
-        {
-            Style style = new Style("body");
-            style.addProperty("font-family", fonts);
-            addStyle(style);
-        }
-
     }
 
     protected void initEntityFolderStyles() {

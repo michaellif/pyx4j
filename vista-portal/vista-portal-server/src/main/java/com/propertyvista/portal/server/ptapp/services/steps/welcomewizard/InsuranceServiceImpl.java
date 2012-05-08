@@ -14,6 +14,8 @@
 package com.propertyvista.portal.server.ptapp.services.steps.welcomewizard;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.math.MathContext;
 import java.util.Date;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -29,6 +31,7 @@ import com.propertyvista.portal.rpc.ptapp.dto.LegalTermsDescriptorDTO;
 import com.propertyvista.portal.rpc.ptapp.dto.welcomewizard.InsuranceDTO;
 import com.propertyvista.portal.rpc.ptapp.dto.welcomewizard.InsurancePaymentMethodDTO.PaymentMethod;
 import com.propertyvista.portal.rpc.ptapp.dto.welcomewizard.PurchaseInsuranceDTO.FormOfCoverage;
+import com.propertyvista.portal.rpc.ptapp.dto.welcomewizard.PurchaseInsuranceDTO.HomeBuisnessOptions;
 import com.propertyvista.portal.rpc.ptapp.services.steps.welcomewizard.InsuranceService;
 
 public class InsuranceServiceImpl implements InsuranceService {
@@ -66,27 +69,30 @@ public class InsuranceServiceImpl implements InsuranceService {
         InsuranceDTO insurance = EntityFactory.create(InsuranceDTO.class);
 
         // INSURANCE PURCHASE PART INITIALIZATION
-        insurance.purchaseInsurance().personalContentsLimit().setValue(new BigDecimal(10000));
-        insurance.purchaseInsurance().propertyAwayFromPremises().setValue(new BigDecimal(1000));
-        insurance.purchaseInsurance().additionalLivingExpenses().setValue(new BigDecimal(2000));
+        insurance.purchaseInsurance().personalContentsLimit().setValue(asMoney(28000));
+        insurance.purchaseInsurance().propertyAwayFromPremises().setValue(asMoney(6000));
+        insurance.purchaseInsurance().additionalLivingExpenses().setValue(asMoney(16000));
 
-        insurance.purchaseInsurance().deductible().setValue(new BigDecimal(500));
+        insurance.purchaseInsurance().deductible().setValue(asMoney(1000));
 
         insurance.purchaseInsurance().formOfCoverage().setValue(FormOfCoverage.basicCoverage);
 
-        insurance.purchaseInsurance().jewleryAndFurs().setValue(new BigDecimal(1000));
-        insurance.purchaseInsurance().bicycles().setValue(new BigDecimal(500));
-        insurance.purchaseInsurance().personalComputers().setValue(new BigDecimal(1000));
-        insurance.purchaseInsurance().moneyOrGiftGardsOrGiftCertificates().setValue(new BigDecimal(500));
-        insurance.purchaseInsurance().securities().setValue(new BigDecimal(500));
-        insurance.purchaseInsurance().utilityTraders().setValue(new BigDecimal(500));
-        insurance.purchaseInsurance().spareAutomobileParts().setValue(new BigDecimal(500));
-        insurance.purchaseInsurance().coinBanknoteOrStampCollections().setValue(new BigDecimal(500));
-        insurance.purchaseInsurance().collectibleCardsAndComics().setValue(new BigDecimal(500));
+        insurance.purchaseInsurance().jewleryAndFurs().setValue(asMoney(5000));
+        insurance.purchaseInsurance().bicycles().setValue(asMoney(2000));
+        insurance.purchaseInsurance().personalComputers().setValue(asMoney(6000));
+        insurance.purchaseInsurance().moneyOrGiftGardsOrGiftCertificates().setValue(asMoney(500));
+        insurance.purchaseInsurance().securities().setValue(asMoney(500));
+        insurance.purchaseInsurance().utilityTraders().setValue(asMoney(2000));
+        insurance.purchaseInsurance().spareAutomobileParts().setValue(asMoney(2000));
+        insurance.purchaseInsurance().coinBanknoteOrStampCollections().setValue(asMoney(2000));
+        insurance.purchaseInsurance().collectibleCardsAndComics().setValue(asMoney(2000));
 
-        insurance.purchaseInsurance().freezerFoodSpoilage().setValue(new BigDecimal(500));
-        insurance.purchaseInsurance().animalsBirdsAndFish().setValue(new BigDecimal(500));
-        insurance.purchaseInsurance().personalLiability().setValue(new BigDecimal(1000000));
+        insurance.purchaseInsurance().freezerFoodSpoilage().setValue(asMoney(1000));
+        insurance.purchaseInsurance().animalsBirdsAndFish().setValue(asMoney(1000));
+        insurance.purchaseInsurance().personalLiability().setValue(asMoney(1000000));
+
+        insurance.purchaseInsurance().homeBuiness().setValue(HomeBuisnessOptions.no);
+        insurance.purchaseInsurance().numOfPrevClaims().setValue(0);
 
         insurance.purchaseInsurance().paymentMethod().paymentMethod().setValue(PaymentMethod.Visa);
 
@@ -125,6 +131,10 @@ public class InsuranceServiceImpl implements InsuranceService {
     @Override
     public void save(AsyncCallback<InsuranceDTO> callback, InsuranceDTO editableEntity) {
         callback.onSuccess(editableEntity);
+    }
+
+    private static BigDecimal asMoney(Integer amount) {
+        return new BigDecimal(new BigInteger(amount.toString()), new MathContext(2));
     }
 
 }

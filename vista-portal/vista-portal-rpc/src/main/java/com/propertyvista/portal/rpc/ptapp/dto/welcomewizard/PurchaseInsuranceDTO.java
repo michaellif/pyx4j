@@ -44,6 +44,17 @@ public interface PurchaseInsuranceDTO extends IEntity {
         };
     }
 
+    @I18n
+    public enum HomeBuisnessOptions {
+
+        no, yes;
+
+        @Override
+        public String toString() {
+            return I18nEnum.toString(this);
+        }
+    }
+
     // Section: Personal Contents 
     @Caption(description = "TBD")
     @NotNull
@@ -109,7 +120,7 @@ public interface PurchaseInsuranceDTO extends IEntity {
     // Section: Coverage Qualification Questions
     @Caption(name = "Do you operate any buisness from your home?", description = "TBD")
     @NotNull
-    IPrimitive<String> homeBuiness();
+    IPrimitive<HomeBuisnessOptions> homeBuiness();
 
     @Caption(name = "How many claims have you or any other resident of your household made against a previous Tenants, Condo, or Homeowners Policy in the past 5 years?", description = "TBD")
     @NotNull

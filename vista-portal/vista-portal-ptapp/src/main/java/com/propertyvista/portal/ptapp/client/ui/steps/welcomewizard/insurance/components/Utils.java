@@ -14,13 +14,15 @@
 package com.propertyvista.portal.ptapp.client.ui.steps.welcomewizard.insurance.components;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.math.MathContext;
 
 public class Utils {
 
     public static BigDecimal[] asBigDecimals(Integer... integers) {
         BigDecimal[] bigDecimals = new BigDecimal[integers.length];
         for (int i = 0; i < integers.length; ++i) {
-            bigDecimals[i] = new BigDecimal(integers[i]);
+            bigDecimals[i] = new BigDecimal(new BigInteger(integers[i].toString()), new MathContext(2));
         }
         return bigDecimals;
     }
