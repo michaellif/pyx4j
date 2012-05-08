@@ -77,6 +77,7 @@ public class TenantInLeaseFolder extends LeaseParticipantFolder<Tenant> {
                 newTenantInLease.role().setValue(LeaseParticipant.Role.Applicant);
                 newTenantInLease.relationship().setValue(PersonRelationship.Other); // just not leave it empty - it's mandatory field!
             }
+            addItem(newTenantInLease);
         }
     }
 
