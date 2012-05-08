@@ -43,6 +43,10 @@ public interface PadFile extends IEntity {
 
         Creating,
 
+        Sending,
+
+        Error,
+
         Sent,
 
         Received,
@@ -53,9 +57,11 @@ public interface PadFile extends IEntity {
 
     IPrimitive<PadFileStatus> status();
 
-    @Owned
+    @Owned(cascade = {})
     @Detached(level = AttachLevel.Detached)
     IList<PadBatch> batches();
+
+    IPrimitive<Date> sent();
 
     @Timestamp(Timestamp.Update.Created)
     IPrimitive<Date> created();

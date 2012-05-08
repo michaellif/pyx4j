@@ -23,6 +23,7 @@ import com.pyx4j.server.contexts.NamespaceManager;
 import com.propertyvista.admin.domain.pmc.Pmc;
 import com.propertyvista.admin.domain.pmc.PmcDnsName;
 import com.propertyvista.admin.domain.pmc.PmcDnsName.DnsNameTarget;
+import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.domain.security.VistaBasicBehavior;
 import com.propertyvista.shared.VistaSystemIdentification;
 
@@ -39,7 +40,7 @@ public class VistaDeployment {
     private static Pmc getCurrentPmc() {
         final String namespace = NamespaceManager.getNamespace();
         try {
-            NamespaceManager.setNamespace(Pmc.adminNamespace);
+            NamespaceManager.setNamespace(VistaNamespace.adminNamespace);
             EntityQueryCriteria<Pmc> criteria = EntityQueryCriteria.create(Pmc.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().namespace(), namespace));
             return Persistence.service().retrieve(criteria);

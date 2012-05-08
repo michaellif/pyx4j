@@ -44,6 +44,8 @@ public interface RunData extends IEntity {
 
     IPrimitive<RunDataStatus> status();
 
+    IPrimitive<String> errorMessage();
+
     @ReadOnly
     Pmc pmc();
 

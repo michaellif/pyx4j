@@ -57,6 +57,8 @@ public interface Run extends IEntity {
     @Owned(forceCreation = true, cascade = {})
     RunStats stats();
 
+    IPrimitive<String> errorMessage();
+
     @Owned
     @Detached(level = AttachLevel.Detached)
     ISet<RunData> runData();

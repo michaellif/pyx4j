@@ -42,7 +42,7 @@ public class CaledonPadSftpClient {
         return J2SEServiceConnector.getCredentials(credentialsFile.getAbsolutePath());
     }
 
-    private void sftpPut(File file) {
+    public String sftpPut(File file) {
         Credentials credentials = getCredentials();
         JSch jsch = new JSch();
         Session session = null;
@@ -58,11 +58,14 @@ public class CaledonPadSftpClient {
             channel.cd(postDst);
             channel.put(file.getAbsolutePath(), file.getName());
 
-            log.info("SFTP file transfer completed");
+            log.info("SFTP file {} transfer completed", file.getAbsolutePath());
+            return null;
         } catch (SftpException e) {
             log.error("SFTP error", e);
+            return e.getMessage();
         } catch (JSchException e) {
             log.error("SFTP error", e);
+            return e.getMessage();
         } finally {
             if (channel != null) {
                 channel.exit();

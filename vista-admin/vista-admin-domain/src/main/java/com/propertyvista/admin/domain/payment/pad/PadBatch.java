@@ -46,7 +46,7 @@ public interface PadBatch extends IEntity {
     @JoinColumn
     PadFile padFile();
 
-    @Owned
+    @Owned(cascade = {})
     @Detached(level = AttachLevel.Detached)
     IList<PadDebitRecord> records();
 

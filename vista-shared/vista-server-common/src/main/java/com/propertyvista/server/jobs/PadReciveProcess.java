@@ -7,26 +7,27 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2012-05-07
+ * Created on 2012-05-08
  * @author vlads
  * @version $Id$
  */
 package com.propertyvista.server.jobs;
 
-import com.propertyvista.admin.domain.scheduler.PmcProcessType;
+public class PadReciveProcess implements PmcProcess {
 
-public class PmcProcessFactory {
-
-    public static PmcProcess createPmcProcess(PmcProcessType triggerType) {
-        switch (triggerType) {
-        case test:
-            return new TestPmcProcess();
-        case padSend:
-            return new PadSendProcess();
-        case padRecive:
-            return new PadReciveProcess();
-        default:
-            throw new IllegalArgumentException("Not implemented");
-        }
+    @Override
+    public boolean start() {
+        // TODO Auto-generated method stub
+        return false;
     }
+
+    @Override
+    public void executePmcJob() {
+        // TODO Auto-generated method stub
+    }
+
+    @Override
+    public void complete() {
+    }
+
 }

@@ -81,7 +81,7 @@ public class PmcProcessDispatcherJob implements Job {
     private void startAndRun(Trigger trigger) {
         EntityQueryCriteria<Run> criteria = EntityQueryCriteria.create(Run.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().trigger(), trigger));
-        criteria.add(PropertyCriterion.ne(criteria.proto().status(), RunStatus.Completed));
+        criteria.add(PropertyCriterion.in(criteria.proto().status(), RunStatus.Sleeping, RunStatus.Running));
         Run run = Persistence.service().retrieve(criteria);
         if (run != null) {
             // Need to resume run
@@ -149,8 +149,16 @@ public class PmcProcessDispatcherJob implements Job {
 
     private void executeRun(Run run) {
         PmcProcess pmcProcess = PmcProcessFactory.createPmcProcess(run.trigger().triggerType().getValue());
-        if (!pmcProcess.start()) {
-            run.status().setValue(RunStatus.Sleeping);
+        long startTimeNano = System.nanoTime();
+        try {
+            if (!pmcProcess.start()) {
+                run.status().setValue(RunStatus.Sleeping);
+                return;
+            }
+        } catch (Throwable e) {
+            log.error("pmcProcess execution error", e);
+            run.errorMessage().setValue(e.getMessage());
+            run.status().setValue(RunStatus.Failed);
             return;
         }
 
@@ -172,9 +180,7 @@ public class PmcProcessDispatcherJob implements Job {
     }
 
     private void executeOneRunData(ExecutorService executorService, final PmcProcess pmcProcess, final RunData runData) {
-
-        long startDataNano = System.nanoTime();
-
+        long startTimeNano = System.nanoTime();
         Future<Boolean> futureResult = executorService.submit(new Callable<Boolean>() {
 
             @Override
@@ -226,7 +232,7 @@ public class PmcProcessDispatcherJob implements Job {
 
         pmcProcess.complete();
 
-        long durationNano = System.nanoTime() - startDataNano;
+        long durationNano = System.nanoTime() - startTimeNano;
 
         runData.stats().totalDuration().setValue(durationNano / Consts.MSEC2NANO);
         if (!runData.stats().total().isNull()) {
@@ -236,6 +242,7 @@ public class PmcProcessDispatcherJob implements Job {
         Persistence.service().persist(runData.stats());
         if (executionException != null) {
             runData.status().setValue(RunDataStatus.Erred);
+            runData.errorMessage().setValue(executionException.getMessage());
         } else {
             runData.status().setValue(RunDataStatus.Processed);
         }
