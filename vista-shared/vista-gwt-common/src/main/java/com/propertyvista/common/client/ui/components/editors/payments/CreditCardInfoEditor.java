@@ -25,10 +25,10 @@ import com.pyx4j.forms.client.ui.CTextComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
+import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.domain.payment.CreditCardInfo;
 
-public class CreditCardInfoEditor extends CEntityDecoratableEditor<CreditCardInfo> {
+public class CreditCardInfoEditor extends CEntityDecoratableForm<CreditCardInfo> {
 
     private static final I18n i18n = I18n.get(CreditCardInfoEditor.class);
 

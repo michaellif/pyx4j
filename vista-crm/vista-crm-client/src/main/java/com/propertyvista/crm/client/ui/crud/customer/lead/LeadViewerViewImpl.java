@@ -71,12 +71,7 @@ public class LeadViewerViewImpl extends CrmViewerViewImplBase<Lead> implements L
 
                             @Override
                             public String defineWidth() {
-                                return "500px";
-                            }
-
-                            @Override
-                            public String defineHeight() {
-                                return "100px";
+                                return "40em";
                             }
                         }.show();
                     }
@@ -103,7 +98,7 @@ public class LeadViewerViewImpl extends CrmViewerViewImplBase<Lead> implements L
         appointmentLister = new ListerInternalViewImplBase<Appointment>(new AppointmentLister());
 
         // set main form here:
-        setForm(new LeadEditorForm(true));
+        setForm(new LeadForm(true));
     }
 
     @Override

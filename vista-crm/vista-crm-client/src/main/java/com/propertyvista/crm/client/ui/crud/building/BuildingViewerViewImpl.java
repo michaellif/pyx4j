@@ -38,7 +38,7 @@ import com.pyx4j.site.client.ui.crud.lister.ListerInternalViewImplBase;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
+import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.client.ui.crud.building.catalog.ConcessionLister;
 import com.propertyvista.crm.client.ui.crud.building.catalog.FeatureLister;
@@ -213,7 +213,7 @@ public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> i
 
     private abstract class RunBillDataBox extends OkCancelDialog {
 
-        private CEntityDecoratableEditor<RunBillData> content;
+        private CEntityDecoratableForm<RunBillData> content;
 
         public RunBillDataBox() {
             super(i18n.tr("Please select"));
@@ -228,7 +228,7 @@ public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> i
         protected Widget createBody(RunBillData data) {
             getOkButton().setEnabled(true);
 
-            content = new CEntityDecoratableEditor<RunBillData>(RunBillData.class) {
+            content = new CEntityDecoratableForm<RunBillData>(RunBillData.class) {
 
                 private final CComboBox<PaymentFrequency> paymentFrequency = new CComboBox<PaymentFrequency>();
                 {

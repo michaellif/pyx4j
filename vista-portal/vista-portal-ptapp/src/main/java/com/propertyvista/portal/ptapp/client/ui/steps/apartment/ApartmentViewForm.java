@@ -28,7 +28,7 @@ import com.pyx4j.security.shared.SecurityController;
 
 import com.propertyvista.common.client.policy.ClientPolicyManager;
 import com.propertyvista.common.client.ui.components.MediaUtils;
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
+import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.policy.policies.MiscPolicy;
 import com.propertyvista.domain.security.VistaCustomerBehavior;
@@ -38,7 +38,7 @@ import com.propertyvista.portal.ptapp.client.ui.components.UtilityFolder;
 import com.propertyvista.portal.rpc.portal.ImageConsts.ThumbnailSize;
 import com.propertyvista.portal.rpc.ptapp.dto.ApartmentInfoDTO;
 
-public class ApartmentViewForm extends CEntityDecoratableEditor<ApartmentInfoDTO> {
+public class ApartmentViewForm extends CEntityDecoratableForm<ApartmentInfoDTO> {
 
     static I18n i18n = I18n.get(ApartmentViewForm.class);
 

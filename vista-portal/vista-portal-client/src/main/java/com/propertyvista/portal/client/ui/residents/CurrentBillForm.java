@@ -29,7 +29,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.client.CEntityEditor;
+import com.pyx4j.entity.client.CEntityForm;
 import com.pyx4j.entity.client.CEntityViewer;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.ui.CHyperlink;
@@ -46,7 +46,7 @@ import com.propertyvista.portal.client.ui.util.Utils;
 import com.propertyvista.portal.domain.dto.BillDTO;
 import com.propertyvista.portal.domain.dto.PaymentMethodDTO;
 
-public class CurrentBillForm extends CEntityEditor<BillDTO> implements CurrentBillView {
+public class CurrentBillForm extends CEntityForm<BillDTO> implements CurrentBillView {
 
     private static final I18n i18n = I18n.get(CurrentBillForm.class);
 

@@ -28,12 +28,12 @@ import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationFailure;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
+import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.domain.GeoLocation;
 import com.propertyvista.domain.GeoLocation.LatitudeType;
 import com.propertyvista.domain.GeoLocation.LongitudeType;
 
-public class GeoLocationEditor extends CEntityDecoratableEditor<GeoLocation> {
+public class GeoLocationEditor extends CEntityDecoratableForm<GeoLocation> {
 
     private static final I18n i18n = I18n.get(GeoLocationEditor.class);
 

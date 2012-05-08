@@ -23,24 +23,28 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CRadioGroupEnum;
+import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.widgets.client.Anchor;
+import com.pyx4j.widgets.client.RadioGroup;
+import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.crm.client.themes.CrmTheme;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
-import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
-import com.propertyvista.domain.site.HomePageGadget;
 import com.propertyvista.domain.site.SiteDescriptor;
+import com.propertyvista.domain.site.gadgets.HomePageGadget;
 import com.propertyvista.dto.SiteDescriptorDTO;
 
 public class SiteEditorForm extends CrmEntityForm<SiteDescriptorDTO> {
@@ -91,7 +95,7 @@ public class SiteEditorForm extends CrmEntityForm<SiteDescriptorDTO> {
             ((CComboBox<SiteDescriptor.Skin>) skinComp).setOptions(skinOpt);
         }
         main.setWidget(row++, 0, new DecoratorBuilder(inject(proto().enableMapView()), 10).build());
-        main.setWidget(row++, 0, new DecoratorBuilder(inject(proto().enableBuildingDetails()), 10).build());
+        main.setWidget(row++, 0, new DecoratorBuilder(inject(proto().disableBuildingDetails()), 10).build());
 
         main.setH1(row++, 0, 1, proto().locales().getMeta().getCaption());
         main.setWidget(row++, 0, inject(proto().locales(), new AvailableLocaleFolder(isEditable())));
@@ -117,7 +121,36 @@ public class SiteEditorForm extends CrmEntityForm<SiteDescriptorDTO> {
         main.setH1(row++, 0, 1, proto().childPages().getMeta().getCaption());
         main.setWidget(row++, 0, inject(proto().childPages(), new SitePageDescriptorFolder(this)));
 
-        return new CrmScrollPanel(main);
+        return new ScrollPanel(main);
+    }
+
+    class GadgetSelectorDialog extends OkCancelDialog {
+        private final CRadioGroupEnum<HomePageGadget.GadgetType> gadgetType = new CRadioGroupEnum<HomePageGadget.GadgetType>(HomePageGadget.GadgetType.class,
+                RadioGroup.Layout.VERTICAL);
+
+        public GadgetSelectorDialog() {
+            super(i18n.tr("Select Gadget Type"));
+            VerticalPanel body = new VerticalPanel();
+            // type selector
+            gadgetType.setTitle(i18n.tr("Gadget Type"));
+            WidgetDecorator typeWidget = new WidgetDecorator.Builder(gadgetType).labelWidth(10).build();
+            body.add(typeWidget);
+            setBody(body);
+        }
+
+        @Override
+        public boolean onClickOk() {
+            HomePageGadget.GadgetType type = gadgetType.getValue();
+            if (type == null) {
+                return false;
+            }
+
+            HomePageGadget newItem = EntityFactory.create(HomePageGadget.class);
+            newItem.type().setValue(type);
+            AppSite.getPlaceController().goTo(AppPlaceEntityMapper.resolvePlace(HomePageGadget.class).formNewItemPlace(newItem));
+            return true;
+        }
+
     }
 
     private Widget createGadgetPanel() {
@@ -133,8 +166,7 @@ public class SiteEditorForm extends CrmEntityForm<SiteDescriptorDTO> {
             addNewItemLink.addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
-                    HomePageGadget newItem = EntityFactory.create(HomePageGadget.class);
-                    AppSite.getPlaceController().goTo(AppPlaceEntityMapper.resolvePlace(HomePageGadget.class).formNewItemPlace(newItem));
+                    new GadgetSelectorDialog().show();
                 }
             });
             addNewItem = addNewItemLink;

@@ -17,21 +17,21 @@ import com.pyx4j.commons.Key;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.domain.site.HomePageGadget;
+import com.propertyvista.domain.site.gadgets.HomePageGadget;
 
 public class HomePageGadgetViewerImpl extends CrmViewerViewImplBase<HomePageGadget> implements HomePageGadgetViewer {
 
     public HomePageGadgetViewerImpl() {
-        super(CrmSiteMap.Settings.HomePageModules.class, new HomePageGadgetEditorForm(true));
+        super(CrmSiteMap.Settings.HomePageGadgets.class, new HomePageGadgetEditorForm(true));
     }
 
     @Override
-    public void viewModule(Key id) {
-        ((HomePageGadgetViewer.Presenter) getPresenter()).viewModule(id);
+    public void viewGadget(Key id) {
+        ((HomePageGadgetViewer.Presenter) getPresenter()).viewGadget(id);
     }
 
     @Override
-    public void newModule(Key parentId) {
+    public void newGadget(Key parentId) {
         ((HomePageGadgetViewer.Presenter) getPresenter()).editNew(parentId);
     }
 }

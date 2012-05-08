@@ -21,7 +21,6 @@ public class FormattableCombo<E> extends CComboBox<E> {
     private final IFormat<E> format;
 
     public FormattableCombo(IFormat<E> format) {
-
         this.format = format;
     }
 

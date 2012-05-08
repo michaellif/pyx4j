@@ -33,14 +33,14 @@ import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
+import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.portal.ptapp.client.resources.welcomewizard.WelcomeWizardResources;
 import com.propertyvista.portal.ptapp.client.ui.steps.summary.SignatureFolder;
 import com.propertyvista.portal.ptapp.client.ui.steps.welcomewizard.insurance.components.MoneyLabeledCombo;
 import com.propertyvista.portal.ptapp.client.ui.steps.welcomewizard.reviewlease.LeaseTermsFolder;
 import com.propertyvista.portal.rpc.ptapp.dto.welcomewizard.PurchaseInsuranceDTO;
 
-public class InsurancePurchaseEditorForm extends CEntityDecoratableEditor<PurchaseInsuranceDTO> {
+public class InsurancePurchaseEditorForm extends CEntityDecoratableForm<PurchaseInsuranceDTO> {
 
     private final static BigDecimal[] PERSONAL_CONTENTS_LIMITS_OPTIONS = asBigDecimals(10000, 12000, 14000, 16000, 18000, 20000, 22000, 24000, 26000, 28000,
             30000, 35000, 40000, 50000, 60000);
@@ -66,10 +66,18 @@ public class InsurancePurchaseEditorForm extends CEntityDecoratableEditor<Purcha
 
     private VerticalPanel quoteTotalPanel;
 
-    private ValueChangeHandler<BigDecimal> summaryRecalculationRequiredHandler;
+    private final ValueChangeHandler<BigDecimal> summaryRecalculationRequiredHandler;
+
+    private FormFlexPanel insuranceTerms;
 
     public InsurancePurchaseEditorForm() {
         super(PurchaseInsuranceDTO.class);
+        this.summaryRecalculationRequiredHandler = new ValueChangeHandler<BigDecimal>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<BigDecimal> event) {
+                recalculateSummary();
+            }
+        };
     }
 
     @Override
@@ -79,13 +87,16 @@ public class InsurancePurchaseEditorForm extends CEntityDecoratableEditor<Purcha
         content.getColumnFormatter().setWidth(0, "50%");
         content.getColumnFormatter().setWidth(1, "50%");
 
-        FormFlexPanel insuranceTerms = new FormFlexPanel();
+        insuranceTerms = new FormFlexPanel();
+        insuranceTerms.setWidth("50%");
+
         int row = -1;
         insuranceTerms.setWidget(++row, 0, new HTML(WelcomeWizardResources.INSTANCE.insuranceReasonExplanation().getText()));
         insuranceTerms.setH1(++row, 0, 1, i18n.tr("Coverage"));
         insuranceTerms.setH2(++row, 0, 1, i18n.tr("Personal Contents"));
         insuranceTerms.setWidget(++row, 0,
                 new DecoratorBuilder(inject(proto().personalContentsLimit(), new CoverageAmountCombo(PERSONAL_CONTENTS_LIMITS_OPTIONS))).build());
+
         insuranceTerms.setWidget(++row, 0,
                 new DecoratorBuilder(inject(proto().propertyAwayFromPremises(), new CoverageAmountCombo(PROPERTY_AWAY_FROM_PREMISES_OPTIONS))).build());
         insuranceTerms.setWidget(++row, 0,
@@ -108,7 +119,7 @@ public class InsurancePurchaseEditorForm extends CEntityDecoratableEditor<Purcha
         insuranceTerms.setWidget(++row, 0, new DecoratorBuilder(inject(proto().spareAutomobileParts(), new LimitCombo(DEFAULT_LIMITIES_OPTIONS))).build());
         insuranceTerms.setWidget(++row, 0,
                 new DecoratorBuilder(inject(proto().coinBanknoteOrStampCollections(), new LimitCombo(DEFAULT_LIMITIES_OPTIONS))).build());
-        insuranceTerms.setWidget(++row, 0, new DecoratorBuilder(inject(proto().collectibleCardsandComics(), new LimitCombo(DEFAULT_LIMITIES_OPTIONS))).build());
+        insuranceTerms.setWidget(++row, 0, new DecoratorBuilder(inject(proto().collectibleCardsAndComics(), new LimitCombo(DEFAULT_LIMITIES_OPTIONS))).build());
 
         insuranceTerms.setH2(++row, 0, 1, i18n.tr("Additional Coverage (per Claim)"));
         insuranceTerms.setWidget(
@@ -140,9 +151,6 @@ public class InsurancePurchaseEditorForm extends CEntityDecoratableEditor<Purcha
 
         quoteTotalPanel = new VerticalPanel();
         quoteTotalPanel.setWidth("20em");
-        quoteTotalPanel.getElement().getStyle().setPosition(Position.FIXED);
-        quoteTotalPanel.getElement().getStyle().setTop(50, Unit.PCT);
-        quoteTotalPanel.getElement().getStyle().setRight(0, Unit.PCT);
         quoteTotalPanel.getElement().getStyle().setBackgroundColor("#FFFFFF");
         quoteTotalPanel.getElement().getStyle().setProperty("borderStyle", "outset");
         quoteTotalPanel.getElement().getStyle().setProperty("borderRadius", "5px");
@@ -160,6 +168,18 @@ public class InsurancePurchaseEditorForm extends CEntityDecoratableEditor<Purcha
         content.setWidget(0, 1, quoteTotalPanel);
 
         return content;
+    }
+
+    @Override
+    protected void onPopulate() {
+        super.onPopulate();
+
+        // TODO: this is kind of hack to set the quoteTotalPanel to the correct position, but it works 
+        quoteTotalPanel.getElement().getStyle().setPosition(Position.FIXED);
+        quoteTotalPanel.getElement().getStyle().setTop(50, Unit.PCT);
+        quoteTotalPanel.getElement().getStyle().setLeft(quoteTotalPanel.getElement().getAbsoluteLeft() + 10, Unit.PX);
+
+        recalculateSummary();
     }
 
     public void setQuoteTotalPanelVisibility(boolean isVisible) {
@@ -199,23 +219,11 @@ public class InsurancePurchaseEditorForm extends CEntityDecoratableEditor<Purcha
         get(proto().totalPersonalLiability()).setValue(valueOf(proto().personalLiability()));
     }
 
-    private ValueChangeHandler<BigDecimal> summaryRecalculationRequired() {
-        if (this.summaryRecalculationRequiredHandler == null) {
-            this.summaryRecalculationRequiredHandler = new ValueChangeHandler<BigDecimal>() {
-                @Override
-                public void onValueChange(ValueChangeEvent<BigDecimal> event) {
-                    recalculateSummary();
-                }
-            };
-        }
-        return summaryRecalculationRequiredHandler;
-    }
-
     private class CoverageAmountCombo extends MoneyLabeledCombo {
 
         public CoverageAmountCombo(BigDecimal... values) {
             super("Coverage", values);
-            addValueChangeHandler(summaryRecalculationRequired());
+            addValueChangeHandler(summaryRecalculationRequiredHandler);
         }
     }
 
@@ -223,7 +231,7 @@ public class InsurancePurchaseEditorForm extends CEntityDecoratableEditor<Purcha
 
         public DeductibleCombo() {
             super("Decuctible", new BigDecimal(500), new BigDecimal(1000), new BigDecimal(2000));
-            addValueChangeHandler(summaryRecalculationRequired());
+            addValueChangeHandler(summaryRecalculationRequiredHandler);
         }
     }
 
@@ -231,7 +239,7 @@ public class InsurancePurchaseEditorForm extends CEntityDecoratableEditor<Purcha
 
         public LimitCombo(BigDecimal... options) {
             super("Limit", options);
-            addValueChangeHandler(summaryRecalculationRequired());
+            addValueChangeHandler(summaryRecalculationRequiredHandler);
         }
     }
 

@@ -26,7 +26,7 @@ public class PtSiteMap implements SiteMap {
 
     public final static String STEP_ARG_NAME = "substep";
 
-    @PlaceProperties(caption = "Application Form")
+    @PlaceProperties(caption = "Welcome to Move-In Wizard")
     public static class Login extends AppPlace implements PublicPlace {
     }
 
@@ -129,7 +129,7 @@ public class PtSiteMap implements SiteMap {
         }
 
         @NavigationItem(navigLabel = "Completion")
-        @PlaceProperties(caption = "Completion")
+        @PlaceProperties(caption = "")
         public static class Completion extends AppPlace {
 
         }

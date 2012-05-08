@@ -15,7 +15,7 @@ package com.propertyvista.portal.client.ui.residents;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.entity.client.CEntityEditor;
+import com.pyx4j.entity.client.CEntityForm;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
@@ -23,7 +23,7 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.portal.domain.dto.PaymentMethodDTO;
 
-public class EditPaymentMethodForm extends CEntityEditor<PaymentMethodDTO> {
+public class EditPaymentMethodForm extends CEntityForm<PaymentMethodDTO> {
 
     private static final I18n i18n = I18n.get(EditPaymentMethodForm.class);
 

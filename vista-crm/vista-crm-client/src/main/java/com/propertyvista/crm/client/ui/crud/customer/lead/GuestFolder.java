@@ -20,7 +20,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
+import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.editors.NameEditor;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.domain.tenant.lead.Guest;
@@ -41,7 +41,7 @@ public class GuestFolder extends VistaBoxFolder<Guest> {
         return super.create(member);
     }
 
-    class GuestEditor extends CEntityDecoratableEditor<Guest> {
+    class GuestEditor extends CEntityDecoratableForm<Guest> {
 
         public GuestEditor() {
             super(Guest.class);

@@ -14,6 +14,7 @@
 package com.propertyvista.crm.client.ui.crud.organisation.vendor;
 
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.ScrollPanel;
 
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -21,7 +22,6 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.common.client.ui.components.folders.CompanyPhoneFolder;
 import com.propertyvista.common.client.ui.components.folders.EmailFolder;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
-import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.domain.property.vendor.Vendor;
 
 public class VendorEditorForm extends CrmEntityForm<Vendor> {
@@ -48,6 +48,6 @@ public class VendorEditorForm extends CrmEntityForm<Vendor> {
         main.setWidget(++row, 0, inject(proto().phones(), new CompanyPhoneFolder(isEditable())));
         main.setH1(++row, 0, 2, i18n.tr("Emails"));
         main.setWidget(++row, 0, inject(proto().emails(), new EmailFolder(isEditable())));
-        return new CrmScrollPanel(main);
+        return new ScrollPanel(main);
     }
 }

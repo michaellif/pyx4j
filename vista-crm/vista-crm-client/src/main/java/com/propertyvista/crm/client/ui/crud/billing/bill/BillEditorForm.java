@@ -14,12 +14,12 @@
 package com.propertyvista.crm.client.ui.crud.billing.bill;
 
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.ScrollPanel;
 
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
-import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.domain.financial.billing.Bill.BillStatus;
 import com.propertyvista.dto.BillDTO;
 
@@ -92,7 +92,7 @@ public class BillEditorForm extends CrmEntityForm<BillDTO> {
         main.getColumnFormatter().setWidth(0, "50%");
         main.getColumnFormatter().setWidth(1, "50%");
 
-        return new CrmScrollPanel(main);
+        return new ScrollPanel(main);
     }
 
     @Override

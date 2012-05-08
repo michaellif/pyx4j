@@ -21,7 +21,7 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.ApplicationDocumentFileUploaderFolder;
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
+import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.portal.rpc.ptapp.dto.welcomewizard.InsuranceCertificate;
 
@@ -42,7 +42,7 @@ public class InsuranceUploaderFolder extends VistaBoxFolder<InsuranceCertificate
         }
     }
 
-    private static class InsuranceCertificateDocumentEditor extends CEntityDecoratableEditor<InsuranceCertificate> {
+    private static class InsuranceCertificateDocumentEditor extends CEntityDecoratableForm<InsuranceCertificate> {
 
         public InsuranceCertificateDocumentEditor() {
             super(InsuranceCertificate.class);

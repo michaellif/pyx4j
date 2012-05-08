@@ -32,13 +32,13 @@ import com.pyx4j.forms.client.ui.CTimeField;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
+import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.portal.rpc.ptapp.dto.welcomewizard.MoveInScheduleDTO;
 import com.propertyvista.portal.rpc.ptapp.dto.welcomewizard.ScheduleDTO;
 import com.propertyvista.portal.rpc.ptapp.dto.welcomewizard.TimeSegmentDTO;
 import com.propertyvista.portal.rpc.ptapp.dto.welcomewizard.TimeSegmentDTO.Status;
 
-public class MoveInScheduleForm extends CEntityDecoratableEditor<MoveInScheduleDTO> {
+public class MoveInScheduleForm extends CEntityDecoratableForm<MoveInScheduleDTO> {
 
     private final static I18n i18n = I18n.get(MoveInScheduleForm.class);
 
@@ -51,8 +51,11 @@ public class MoveInScheduleForm extends CEntityDecoratableEditor<MoveInScheduleD
     @Override
     public IsWidget createContent() {
         FormFlexPanel content = new FormFlexPanel();
+        content.getColumnFormatter().setWidth(0, "70%");
+        content.getColumnFormatter().setWidth(1, "30%");
         int row = -1;
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().moveInDay()), 10).build());
+
         content.getFlexCellFormatter().setVerticalAlignment(0, 0, HasVerticalAlignment.ALIGN_TOP);
         message = new HTML();
         content.setWidget(++row, 0, message);

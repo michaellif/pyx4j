@@ -58,4 +58,7 @@ public enum PaymentType {
         return EnumSet.of(Cash, Check, Echeck, CreditCard);
     }
 
+    public static EnumSet<PaymentType> avalableInProfile() {
+        return EnumSet.of(Echeck, CreditCard);
+    }
 }

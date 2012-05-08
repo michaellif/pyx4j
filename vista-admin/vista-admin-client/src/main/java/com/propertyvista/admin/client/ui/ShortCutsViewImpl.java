@@ -23,13 +23,19 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.StackLayoutPanel;
+import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.css.IStyleName;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.admin.client.activity.NavigFolder;
 
 public class ShortCutsViewImpl extends StackLayoutPanel implements ShortCutsView {
+
+    public static int MAX_SHORTCUT_LENGTH = 20;
 
     public static String DEFAULT_STYLE_PREFIX = "vistaCrm_ShortCuts";
 
@@ -41,6 +47,8 @@ public class ShortCutsViewImpl extends StackLayoutPanel implements ShortCutsView
 
     private final SearchBox search;
 
+    private FlowPanel shortcutsList;
+
     public ShortCutsViewImpl() {
         super(Unit.EM);
         setStyleName(DEFAULT_STYLE_PREFIX);
@@ -51,49 +59,114 @@ public class ShortCutsViewImpl extends StackLayoutPanel implements ShortCutsView
         search.getElement().getStyle().setMarginLeft(0.33, Unit.EM);
     }
 
-    /**
-     * TODO change implementation later
-     */
-
     @Override
     public void setPresenter(final ShortCutsPresenter presenter) {
         this.presenter = presenter;
+    }
 
-        //TODO Clean for now. Implement comparizon later
+    @Override
+    public void setNavigationFolders(List<NavigFolder> folders) {
         this.clear();
+        for (NavigFolder folder : folders) {
+            FlowPanel list = new FlowPanel() {
+                @Override
+                public void insert(Widget w, int beforeIndex) {
+                    if (w instanceof ShortcutItem) {
+                        for (Widget item : getChildren()) {
+                            if (((ShortcutItem) w).equals(item)) {
+                                remove(item); // remove the same shortcut if exists...
+                                break;
+                            }
+                        }
+                    }
 
-        List<NavigFolder> folders = presenter.getNavigFolders();
-        for (NavigFolder navigFolder : folders) {
+                    super.insert(w, beforeIndex);
+                }
+            };
 
-            ScrollPanel scroll = new ScrollPanel();
+// TODO: hided in 1st version (till real implementation)            
             SimplePanel searchcontainer = new SimplePanel();
-            searchcontainer.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.SearchBar);
-            searchcontainer.setHeight("2em");
-            searchcontainer.setWidth("100%");
-//            searchcontainer.getElement().getStyle().setPaddingTop(0.4, Unit.EM);
-            //   searchcontainer.getElement().getStyle().setPaddingLeft(0.4, Unit.EM);
-            searchcontainer.add(search);
-
-            FlowPanel list = new FlowPanel();
+//            searchcontainer.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.SearchBar);
+//            searchcontainer.setHeight("2em");
+//            searchcontainer.setWidth("100%");
+//            searchcontainer.add(search);
             list.add(searchcontainer);
 
-            for (final AppPlace place : navigFolder.getNavigItems()) {
-                SimplePanel line = new SimplePanel();
-                //VS to add spacing
-                line.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Item);
-                Anchor anchor = new Anchor(presenter.getNavigLabel(place));
-                anchor.addClickHandler(new ClickHandler() {
-                    @Override
-                    public void onClick(ClickEvent event) {
-                        presenter.navigTo(place);
-                    }
-                });
-                line.setWidget(anchor);
-                list.add(line);
+            switch (folder.getType()) {
+            case Shortcuts:
+                shortcutsList = list;
+                break;
+            default:
+                for (final AppPlace place : folder.getNavigItems()) {
+                    list.insert(new NavigItem(place), 1);
+                }
             }
 
+            ScrollPanel scroll = new ScrollPanel();
             scroll.setWidget(list);
-            add(scroll, navigFolder.getTitle(), 3);
+            add(scroll, folder.getTitle(), 3);
+        }
+    }
+
+    @Override
+    public void updateShortcutFolder(CrudAppPlace place, IEntity value) {
+        if (shortcutsList != null) {
+            shortcutsList.insert(new ShortcutItem(place, value), 1);
+        }
+    }
+
+    private class NavigItem extends SimplePanel {
+
+        private final AppPlace place;
+
+        public NavigItem(AppPlace place) {
+            this(place, null);
+        }
+
+        public NavigItem(AppPlace place, IEntity value) {
+            this.place = place;
+
+            String label = null;
+            String typeLabel = AppSite.getHistoryMapper().getPlaceInfo(place).getCaption();
+            if (typeLabel.length() > MAX_SHORTCUT_LENGTH) {
+                label = "<i>" + typeLabel.substring(0, MAX_SHORTCUT_LENGTH) + "...</i>";
+            } else {
+                String viewLabel = value != null ? value.getStringView() : "";
+                viewLabel = viewLabel.length() + typeLabel.length() > MAX_SHORTCUT_LENGTH ? viewLabel.substring(0, MAX_SHORTCUT_LENGTH - typeLabel.length())
+                        + "..." : viewLabel;
+                label = "<i>" + typeLabel + ":</i> " + viewLabel;
+            }
+
+            Anchor anchor = new Anchor(label, true);
+            anchor.addClickHandler(new ClickHandler() {
+                @Override
+                public void onClick(ClickEvent event) {
+                    AppSite.getPlaceController().goTo(NavigItem.this.place);
+                }
+            });
+            anchor.setTitle(AppSite.getHistoryMapper().getPlaceInfo(place).getCaption() + (value != null ? ": " + value.getStringView() : ""));
+
+            setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Item);
+            setWidget(anchor);
+        }
+
+        public AppPlace getPlace() {
+            return place;
+        }
+    }
+
+    private class ShortcutItem extends NavigItem {
+
+        public ShortcutItem(AppPlace place, IEntity value) {
+            super(place, value);
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (getClass() == obj.getClass()) {
+                return getPlace().equals(((ShortcutItem) obj).getPlace());
+            }
+            return false;
         }
     }
 }

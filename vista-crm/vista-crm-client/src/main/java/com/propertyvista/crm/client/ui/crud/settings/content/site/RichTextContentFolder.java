@@ -18,20 +18,13 @@ import java.util.Set;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CLabel;
-import com.pyx4j.forms.client.ui.CRichTextArea;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
-import com.propertyvista.crm.client.ui.components.cms.SiteImageResourceProvider;
 import com.propertyvista.domain.site.AvailableLocale;
 import com.propertyvista.domain.site.HtmlContent;
 
@@ -75,54 +68,8 @@ public class RichTextContentFolder extends VistaBoxFolder<HtmlContent> {
     @Override
     public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof HtmlContent) {
-            return new CEntityDecoratableEditor<HtmlContent>(HtmlContent.class) {
-                @Override
-                public IsWidget createContent() {
-                    FormFlexPanel main = new FormFlexPanel();
-
-                    int row = -1;
-                    CEntityLabel<AvailableLocale> locale = new CEntityLabel<AvailableLocale>();
-                    locale.setEditable(false);
-                    main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().locale(), locale), 10).build());
-                    if (isEditable()) {
-                        CRichTextArea editor = new CRichTextArea();
-                        editor.setImageProvider(new SiteImageResourceProvider());
-                        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().html(), editor), 60).build());
-                    } else {
-                        CLabel content = new CLabel();
-                        content.setAllowHtml(true);
-                        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().html(), content), 60).build());
-                    }
-
-                    return main;
-                }
-            };
+            return new RichTextContentEditor();
         }
         return super.create(member);
-    }
-
-    class RichTextContentEditor extends CEntityDecoratableEditor<HtmlContent> {
-        public RichTextContentEditor() {
-            super(HtmlContent.class);
-        }
-
-        @Override
-        public IsWidget createContent() {
-            FormFlexPanel main = new FormFlexPanel();
-
-            int row = -1;
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().locale()), 10).build());
-            if (isEditable()) {
-                CRichTextArea editor = new CRichTextArea();
-                editor.setImageProvider(new SiteImageResourceProvider());
-                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().html(), editor), 60).build());
-            } else {
-                CLabel content = new CLabel();
-                content.setAllowHtml(true);
-                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().html(), content), 60).build());
-            }
-
-            return main;
-        }
     }
 }

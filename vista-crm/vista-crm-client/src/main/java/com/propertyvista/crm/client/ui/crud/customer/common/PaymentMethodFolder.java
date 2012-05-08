@@ -19,16 +19,19 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationFailure;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
 
 import com.propertyvista.common.client.ui.components.editors.payments.PaymentMethodEditor;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.PaymentMethod;
+import com.propertyvista.domain.payment.PaymentType;
 
 public abstract class PaymentMethodFolder extends VistaBoxFolder<PaymentMethod> {
 
@@ -36,6 +39,24 @@ public abstract class PaymentMethodFolder extends VistaBoxFolder<PaymentMethod> 
 
     public PaymentMethodFolder(boolean modifiable) {
         super(PaymentMethod.class, modifiable);
+    }
+
+    @Override
+    protected void addItem() {
+        new SelectEnumDialog<PaymentType>(i18n.tr("Select Payment Method Type"), PaymentType.avalableInProfile()) {
+            @Override
+            public boolean onClickOk() {
+                PaymentMethod pm = EntityFactory.create(PaymentMethod.class);
+                pm.type().setValue(getSelectedType());
+                addItem(pm);
+                return true;
+            }
+
+            @Override
+            public String defineWidth() {
+                return "20em";
+            }
+        }.show();
     }
 
     @Override
@@ -51,8 +72,12 @@ public abstract class PaymentMethodFolder extends VistaBoxFolder<PaymentMethod> 
         @Override
         public IsWidget createContent() {
             IsWidget w = super.createContent();
+
+            // tune-up:
+            setTypeSelectionVisible(false);
             setBillingAddressVisible(false);
             setIsDefaultVisible(true);
+
             return w;
         }
 

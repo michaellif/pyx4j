@@ -19,7 +19,7 @@ import java.util.List;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.entity.client.CEntityEditor;
+import com.pyx4j.entity.client.CEntityForm;
 import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.folder.CEntityFolder;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -30,7 +30,7 @@ import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.portal.domain.dto.PaymentMethodListDTO;
 
-public class PaymentMethodsForm extends CEntityEditor<PaymentMethodListDTO> implements PaymentMethodsView {
+public class PaymentMethodsForm extends CEntityForm<PaymentMethodListDTO> implements PaymentMethodsView {
 
     private static final I18n i18n = I18n.get(PaymentMethodsForm.class);
 

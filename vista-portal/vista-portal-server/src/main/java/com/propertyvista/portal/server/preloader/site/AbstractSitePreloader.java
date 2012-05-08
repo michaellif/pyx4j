@@ -37,7 +37,6 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.DemoData;
 import com.propertyvista.domain.site.AvailableLocale;
-import com.propertyvista.domain.site.HomePageGadget;
 import com.propertyvista.domain.site.HtmlContent;
 import com.propertyvista.domain.site.News;
 import com.propertyvista.domain.site.PageCaption;
@@ -51,6 +50,11 @@ import com.propertyvista.domain.site.SiteTitles;
 import com.propertyvista.domain.site.SocialLink;
 import com.propertyvista.domain.site.SocialLink.SocialSite;
 import com.propertyvista.domain.site.Testimonial;
+import com.propertyvista.domain.site.gadgets.CustomGadgetContent;
+import com.propertyvista.domain.site.gadgets.HomePageGadget;
+import com.propertyvista.domain.site.gadgets.NewsGadgetContent;
+import com.propertyvista.domain.site.gadgets.PromoGadgetContent;
+import com.propertyvista.domain.site.gadgets.TestimonialsGadgetContent;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.portal.server.preloader.util.AbstractVistaDataPreloader;
 import com.propertyvista.server.common.blob.BlobService;
@@ -171,22 +175,60 @@ public abstract class AbstractSitePreloader extends AbstractVistaDataPreloader {
             }
         }
 
-        // home page layout modules
+        // home page gadgets
         {
-            // news
             HomePageGadget gadget = EntityFactory.create(HomePageGadget.class);
-            gadget.moduleType().setValue(HomePageGadget.GadgetType.news);
+            gadget.status().setValue(HomePageGadget.GadgetStatus.published);
+            gadget.area().setValue(HomePageGadget.GadgetArea.narrow);
             gadget.name().setValue("News");
+            NewsGadgetContent newsContent = EntityFactory.create(NewsGadgetContent.class);
+            for (LocaleInfo li : siteLocale) {
+                final String caption = "Vancouver prices to keep rising";
+                final String content = "The Vancouver housing market may already be unaffordable for many, but there is enough demand to keep prices rising, according to a new forecast.";
+                newsContent.news().add(createNews(li.aLocale, li.i18n.tr(caption), li.i18n.tr(content), new LogicalDate(111, 03, 22)));
+            }
+
+            for (LocaleInfo li : siteLocale) {
+                final String caption = "Ottawa, Toronto defy national sales trend ... for now";
+                final String content = "Resale housing activity in August remained stable for the second consecutive month, according to new stats from The Canadian Real Estate Association, although brokers in Toronto and Ottawa benefited from an uptick in sales.";
+                newsContent.news().add(createNews(li.aLocale, li.i18n.tr(caption), li.i18n.tr(content), new LogicalDate(111, 05, 03)));
+            }
+            gadget.content().set(newsContent);
             site.homePageGadgetsNarrow().add(gadget);
-            // news
+
             gadget = EntityFactory.create(HomePageGadget.class);
-            gadget.moduleType().setValue(HomePageGadget.GadgetType.featured);
+            gadget.status().setValue(HomePageGadget.GadgetStatus.published);
+            gadget.area().setValue(HomePageGadget.GadgetArea.wide);
             gadget.name().setValue("Featured Apartments");
+            PromoGadgetContent promoContent = EntityFactory.create(PromoGadgetContent.class);
+            gadget.content().set(promoContent);
             site.homePageGadgetsWide().add(gadget);
-            // news
+
             gadget = EntityFactory.create(HomePageGadget.class);
-            gadget.moduleType().setValue(HomePageGadget.GadgetType.testimonials);
+            gadget.status().setValue(HomePageGadget.GadgetStatus.published);
+            gadget.area().setValue(HomePageGadget.GadgetArea.wide);
             gadget.name().setValue("Testimonials");
+            TestimonialsGadgetContent testimContent = EntityFactory.create(TestimonialsGadgetContent.class);
+            for (LocaleInfo li : siteLocale) {
+                final String content = "I just had the pleasure to dealing with your superintendent at my building. I just moved in three weeks ago and was greeted right away by Manolo the Building Representative. I am a very picky guy but any issue/concern I threw at Manolo, he was able to assist with right away. I had an issue with Bell and Manolo went as far as working with the cable technician directly to ensure that my apartment was functioning to my liking. You have a great staff member in Manolo and if my first month experience is a showcase of what Starlight has to offer I can only be thankful that I found this great place to call home.";
+                final String author = "Bill B., London, Ontario";
+                testimContent.testimonials().add(createTestimonial(li.aLocale, li.i18n.tr(content), li.i18n.tr(author)));
+            }
+            for (LocaleInfo li : siteLocale) {
+                final String content = "I just wanted to let you know what a great job your superintendent Sean was doing.  He recently repaired my faucet and was very professional and courteous. Not only did he come and fix the issue right away, he also gave me advice on how to avoid this from happening in the future. This building is my home, and having Starlight now taking over showed instant results.\nThank you again.";
+                final String author = "Jane L.";
+                testimContent.testimonials().add(createTestimonial(li.aLocale, li.i18n.tr(content), li.i18n.tr(author)));
+            }
+            gadget.content().set(testimContent);
+            site.homePageGadgetsWide().add(gadget);
+
+            gadget = EntityFactory.create(HomePageGadget.class);
+            gadget.status().setValue(HomePageGadget.GadgetStatus.published);
+            gadget.area().setValue(HomePageGadget.GadgetArea.wide);
+            gadget.name().setValue("Custom-1");
+            CustomGadgetContent customContent = EntityFactory.create(CustomGadgetContent.class);
+            customContent.htmlContent().html().setValue("This is my custom gadget");
+            gadget.content().set(customContent);
             site.homePageGadgetsWide().add(gadget);
         }
 
@@ -320,12 +362,12 @@ public abstract class AbstractSitePreloader extends AbstractVistaDataPreloader {
         for (LocaleInfo li : siteLocale) {
             final String content = "I just had the pleasure to dealing with your superintendent at my building. I just moved in three weeks ago and was greeted right away by Manolo the Building Representative. I am a very picky guy but any issue/concern I threw at Manolo, he was able to assist with right away. I had an issue with Bell and Manolo went as far as working with the cable technician directly to ensure that my apartment was functioning to my liking. You have a great staff member in Manolo and if my first month experience is a showcase of what Starlight has to offer I can only be thankful that I found this great place to call home.";
             final String author = "Bill B., London, Ontario";
-            Persistence.service().persist(createTestimonial(li.aLocale, li.i18n.tr(content), li.i18n.tr(author)));
+//            Persistence.service().persist(createTestimonial(li.aLocale, li.i18n.tr(content), li.i18n.tr(author)));
         }
         for (LocaleInfo li : siteLocale) {
             final String content = "I just wanted to let you know what a great job your superintendent Sean was doing.  He recently repaired my faucet and was very professional and courteous. Not only did he come and fix the issue right away, he also gave me advice on how to avoid this from happening in the future. This building is my home, and having Starlight now taking over showed instant results.\nThank you again.";
             final String author = "Jane L.";
-            Persistence.service().persist(createTestimonial(li.aLocale, li.i18n.tr(content), li.i18n.tr(author)));
+//            Persistence.service().persist(createTestimonial(li.aLocale, li.i18n.tr(content), li.i18n.tr(author)));
         }
     }
 
@@ -334,13 +376,13 @@ public abstract class AbstractSitePreloader extends AbstractVistaDataPreloader {
         for (LocaleInfo li : siteLocale) {
             final String caption = "Vancouver prices to keep rising";
             final String content = "The Vancouver housing market may already be unaffordable for many, but there is enough demand to keep prices rising, according to a new forecast.";
-            Persistence.service().persist(createNews(li.aLocale, li.i18n.tr(caption), li.i18n.tr(content), new LogicalDate(111, 03, 22)));
+//            Persistence.service().persist(createNews(li.aLocale, li.i18n.tr(caption), li.i18n.tr(content), new LogicalDate(111, 03, 22)));
         }
 
         for (LocaleInfo li : siteLocale) {
             final String caption = "Ottawa, Toronto defy national sales trend ... for now";
             final String content = "Resale housing activity in August remained stable for the second consecutive month, according to new stats from The Canadian Real Estate Association, although brokers in Toronto and Ottawa benefited from an uptick in sales.";
-            Persistence.service().persist(createNews(li.aLocale, li.i18n.tr(caption), li.i18n.tr(content), new LogicalDate(111, 05, 03)));
+//            Persistence.service().persist(createNews(li.aLocale, li.i18n.tr(caption), li.i18n.tr(content), new LogicalDate(111, 05, 03)));
         }
     }
 

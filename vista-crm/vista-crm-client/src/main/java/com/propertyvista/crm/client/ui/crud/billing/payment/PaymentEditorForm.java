@@ -13,9 +13,12 @@
  */
 package com.propertyvista.crm.client.ui.crud.billing.payment;
 
+import java.util.Collection;
+
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.ScrollPanel;
 
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.ui.CComponent;
@@ -33,9 +36,9 @@ import com.pyx4j.widgets.client.RadioGroup;
 
 import com.propertyvista.common.client.ui.components.editors.payments.PaymentMethodEditor;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
-import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.PaymentMethod;
+import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.dto.PaymentRecordDTO;
 import com.propertyvista.dto.PaymentRecordDTO.PaymentSelect;
@@ -45,6 +48,11 @@ public class PaymentEditorForm extends CrmEntityForm<PaymentRecordDTO> {
     private static final I18n i18n = I18n.get(PaymentEditorForm.class);
 
     private final PaymentMethodEditor paymentMethodEditor = new PaymentMethodEditor() {
+        @Override
+        public Collection<PaymentType> getPaymentOptions() {
+            return PaymentType.avalableInCrm();
+        }
+
         @Override
         public void onBillingAddressSameAsCurrentOne(boolean set, final CComponent<AddressStructured, ?> comp) {
             if (set) {
@@ -77,7 +85,7 @@ public class PaymentEditorForm extends CrmEntityForm<PaymentRecordDTO> {
         main.setHR(1, 0, 1);
         main.setWidget(2, 0, inject(proto().paymentMethod(), paymentMethodEditor));
 
-        return new CrmScrollPanel(main);
+        return new ScrollPanel(main);
     }
 
     private IsWidget createDetailsPanel() {
@@ -104,16 +112,6 @@ public class PaymentEditorForm extends CrmEntityForm<PaymentRecordDTO> {
                     public boolean onClickOk() {
                         get(PaymentEditorForm.this.proto().leaseParticipant()).setValue(getSelectedItems().get(0));
                         return true;
-                    }
-
-                    @Override
-                    public String defineWidth() {
-                        return "350px";
-                    }
-
-                    @Override
-                    public String defineHeight() {
-                        return "100px";
                     }
                 };
             }

@@ -38,7 +38,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ClentNavigUtils;
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
+import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.common.client.ui.validators.YouTubeVideoIdFormat;
 import com.propertyvista.common.client.ui.validators.YouTubeVideoIdValidator;
@@ -69,7 +69,7 @@ public class CrmMediaFolder extends VistaBoxFolder<Media> {
         }
     }
 
-    class CrmMediaEditor extends CEntityDecoratableEditor<Media> {
+    class CrmMediaEditor extends CEntityDecoratableForm<Media> {
 
         private Image thumbnail;
 

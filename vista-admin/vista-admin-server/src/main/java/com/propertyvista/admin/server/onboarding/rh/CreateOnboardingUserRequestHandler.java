@@ -13,16 +13,13 @@
  */
 package com.propertyvista.admin.server.onboarding.rh;
 
-import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 
-import com.propertyvista.admin.domain.security.OnboardingUserCredential;
 import com.propertyvista.admin.server.onboarding.rhf.AbstractRequestHandler;
-import com.propertyvista.domain.security.OnboardingUser;
+import com.propertyvista.admin.server.preloader.OnboardingUserPreloader;
 import com.propertyvista.domain.security.VistaOnboardingBehavior;
 import com.propertyvista.onboarding.CreateOnboardingUserRequestIO;
 import com.propertyvista.onboarding.ResponseIO;
-import com.propertyvista.server.common.security.PasswordEncryptor;
 
 public class CreateOnboardingUserRequestHandler extends AbstractRequestHandler<CreateOnboardingUserRequestIO> {
 
@@ -33,22 +30,25 @@ public class CreateOnboardingUserRequestHandler extends AbstractRequestHandler<C
     @Override
     public ResponseIO execute(CreateOnboardingUserRequestIO request) {
 
-        OnboardingUser user = EntityFactory.create(OnboardingUser.class);
-        user.name().set(request.name());
-        user.email().setValue(PasswordEncryptor.normalizeEmailAddress(request.email().getValue()));
-        Persistence.service().persist(user);
+//        OnboardingUser user = EntityFactory.create(OnboardingUser.class);
+//        user.name().set(request.name());
+//        user.email().setValue(PasswordEncryptor.normalizeEmailAddress(request.email().getValue()));
+//        Persistence.service().persist(user);
+//
+//        OnboardingUserCredential credential = EntityFactory.create(OnboardingUserCredential.class);
+//        credential.setPrimaryKey(user.getPrimaryKey());
+//
+//        credential.user().set(user);
+//        credential.credential().setValue(PasswordEncryptor.encryptPassword(request.password().getValue()));
+//        credential.enabled().setValue(Boolean.TRUE);
+//        credential.behavior().setValue(VistaOnboardingBehavior.ProspectiveClient);
+//        credential.onboardingAccountId().set(request.onboardingAccountId());
+//
+//        Persistence.service().persist(credential);
+//        Persistence.service().commit();
 
-        OnboardingUserCredential credential = EntityFactory.create(OnboardingUserCredential.class);
-        credential.setPrimaryKey(user.getPrimaryKey());
-
-        credential.user().set(user);
-        credential.credential().setValue(PasswordEncryptor.encryptPassword(request.password().getValue()));
-        credential.enabled().setValue(Boolean.TRUE);
-        credential.behavior().setValue(VistaOnboardingBehavior.ProspectiveClient);
-        credential.onboardingAccountId().set(request.onboardingAccountId());
-
-        Persistence.service().persist(credential);
-        Persistence.service().commit();
+        OnboardingUserPreloader.createOnboardingUser(request.name().getValue(), request.email().getValue(), request.password().getValue(),
+                VistaOnboardingBehavior.ProspectiveClient, request.onboardingAccountId().getValue());
 
         ResponseIO response = EntityFactory.create(ResponseIO.class);
         response.success().setValue(Boolean.TRUE);

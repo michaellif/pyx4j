@@ -17,6 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.ScrollPanel;
 
 import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.folder.CEntityFolderRowEditor;
@@ -30,7 +31,6 @@ import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.common.client.ui.decorations.VistaTableFolderDecorator;
 import com.propertyvista.crm.client.ui.components.boxes.BuildingSelectorDialog;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
-import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.domain.company.Portfolio;
 import com.propertyvista.domain.property.asset.building.Building;
 
@@ -58,7 +58,7 @@ public class PortfolioEditorForm extends CrmEntityForm<Portfolio> {
         main.setH1(++row, 0, 1, i18n.tr("Assigned Buildings"));
         main.setWidget(++row, 0, inject(proto().buildings(), new BuildingFolder()));
 
-        return new CrmScrollPanel(main);
+        return new ScrollPanel(main);
     }
 
     private class BuildingFolder extends VistaTableFolder<Building> {

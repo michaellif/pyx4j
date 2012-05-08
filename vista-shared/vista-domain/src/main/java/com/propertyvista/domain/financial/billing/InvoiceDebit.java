@@ -30,7 +30,7 @@ import com.pyx4j.entity.shared.ISet;
 public interface InvoiceDebit extends InvoiceLineItem {
 
     public enum DebitType {
-        lease, parking, pet, addOn, utility, locker, booking, deposit, accountCharge, other
+        lease, parking, pet, addOn, utility, locker, booking, deposit, accountCharge, nsf, latePayment, target, other
     }
 
     ISet<DebitCreditLink> creditLinks();

@@ -133,6 +133,11 @@ public class LeaseLister extends VersionedLister<LeaseDTO> {
         }
 
         @Override
+        public String defineWidth() {
+            return "25em";
+        }
+
+        @Override
         public boolean onClickOk() {
             balance.setVisited(true);
             if (balance.isValid()) {
@@ -146,15 +151,5 @@ public class LeaseLister extends VersionedLister<LeaseDTO> {
         public boolean onClickCancel() {
             return true;
         };
-
-        @Override
-        public String defineHeight() {
-            return "80px";
-        };
-
-        @Override
-        public String defineWidth() {
-            return "300px";
-        }
     }
 }

@@ -38,7 +38,7 @@ import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.dialog.OkDialog;
 
 import com.propertyvista.common.client.ui.components.MediaUtils;
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
+import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.crm.client.ui.components.cms.SiteImageResourceProvider;
 import com.propertyvista.domain.File;
@@ -93,7 +93,7 @@ public class PortalImageResourceFolder extends VistaBoxFolder<PortalImageResourc
         return super.create(member);
     }
 
-    class PortalImageResourceEditor extends CEntityDecoratableEditor<PortalImageResource> {
+    class PortalImageResourceEditor extends CEntityDecoratableForm<PortalImageResource> {
 
         private final SiteImageThumbnail thumb = new SiteImageThumbnail();
 

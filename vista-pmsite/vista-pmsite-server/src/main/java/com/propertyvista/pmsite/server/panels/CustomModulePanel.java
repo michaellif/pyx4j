@@ -23,17 +23,19 @@ package com.propertyvista.pmsite.server.panels;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
 
-import com.propertyvista.domain.site.HomePageGadget;
+import com.propertyvista.domain.site.gadgets.CustomGadgetContent;
+import com.propertyvista.domain.site.gadgets.HomePageGadget;
 
 public class CustomModulePanel extends Panel {
 
     private static final long serialVersionUID = 1L;
 
-    public CustomModulePanel(String id, HomePageGadget module) {
+    public CustomModulePanel(String id, HomePageGadget gadget) {
         super(id);
 
-        add(new Label("moduleTitle", module.name().getValue()));
-        add(new Label("moduleContent", module.content().getValue()).setEscapeModelStrings(false));
+        add(new Label("moduleTitle", gadget.name().getValue()));
+        CustomGadgetContent content = gadget.content().cast();
+        add(new Label("moduleContent", content.htmlContent().html().getValue()).setEscapeModelStrings(false));
     }
 
 }

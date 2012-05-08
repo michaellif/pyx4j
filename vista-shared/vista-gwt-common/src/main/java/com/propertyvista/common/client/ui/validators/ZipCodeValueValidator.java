@@ -14,7 +14,7 @@
 package com.propertyvista.common.client.ui.validators;
 
 import com.pyx4j.commons.ValidationUtils;
-import com.pyx4j.entity.client.CEntityEditor;
+import com.pyx4j.entity.client.CEntityForm;
 import com.pyx4j.entity.shared.Path;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
@@ -27,11 +27,11 @@ public class ZipCodeValueValidator implements EditableValueValidator<String> {
 
     private static final I18n i18n = I18n.get(ZipCodeValueValidator.class);
 
-    private final CEntityEditor<?> editor;
+    private final CEntityForm<?> editor;
 
     private final Path countryPath;
 
-    public ZipCodeValueValidator(CEntityEditor<?> editor, Country countryMemeberProto) {
+    public ZipCodeValueValidator(CEntityForm<?> editor, Country countryMemeberProto) {
         this.editor = editor;
         this.countryPath = countryMemeberProto.getPath();
     }

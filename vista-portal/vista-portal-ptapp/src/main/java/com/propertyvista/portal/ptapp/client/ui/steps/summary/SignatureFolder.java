@@ -27,7 +27,7 @@ import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationFailure;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
+import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.domain.person.Name;
 import com.propertyvista.domain.tenant.ptapp.DigitalSignature;
@@ -69,7 +69,7 @@ public class SignatureFolder extends VistaBoxFolder<DigitalSignature> {
         return super.create(member);
     }
 
-    private class DigitalSignatureEditor extends CEntityDecoratableEditor<DigitalSignature> {
+    private class DigitalSignatureEditor extends CEntityDecoratableForm<DigitalSignature> {
 
         public DigitalSignatureEditor() {
             super(DigitalSignature.class);

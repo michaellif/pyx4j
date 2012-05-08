@@ -41,4 +41,5 @@ public class MoneyLabeledCombo extends FormattableCombo<BigDecimal> {
         });
         setOptions(Arrays.asList(options));
     }
+
 }

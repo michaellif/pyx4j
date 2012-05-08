@@ -18,7 +18,7 @@ import com.google.gwt.dom.client.Style;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-import com.pyx4j.entity.client.CEntityEditor;
+import com.pyx4j.entity.client.CEntityForm;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.essentials.client.upload.UploadPanel;
@@ -41,7 +41,7 @@ public class UpdateUploadDialog extends VerticalPanel implements OkCancelOption,
 
     private static final I18n i18n = I18n.get(UpdateUploadDialog.class);
 
-    private final CEntityEditor<UpdateUploadDTO> form;
+    private final CEntityForm<UpdateUploadDTO> form;
 
     private final UploadPanel<UpdateUploadDTO, IEntity> uploadPanel;
 
@@ -82,7 +82,7 @@ public class UpdateUploadDialog extends VerticalPanel implements OkCancelOption,
         uploadPanel.getElement().getStyle().setMarginTop(50, Style.Unit.PX);
         uploadPanel.getElement().getStyle().setPaddingLeft(35, Style.Unit.PX);
 
-        form = new CEntityEditor<UpdateUploadDTO>(UpdateUploadDTO.class) {
+        form = new CEntityForm<UpdateUploadDTO>(UpdateUploadDTO.class) {
             @Override
             public IsWidget createContent() {
                 FormFlexPanel main = new FormFlexPanel();

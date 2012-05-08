@@ -15,6 +15,7 @@ package com.propertyvista.crm.client.ui.crud.organisation.employee;
 
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.ScrollPanel;
 
 import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.commons.Key;
@@ -32,7 +33,6 @@ import com.propertyvista.common.client.ui.validators.PastDateValidation;
 import com.propertyvista.crm.client.themes.CrmTheme;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.crud.organisation.employee.EmployeeFolder.ParentEmployeeGetter;
-import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.crm.rpc.dto.company.EmployeeDTO;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 
@@ -120,7 +120,7 @@ public class EmployeeEditorForm extends CrmEntityForm<EmployeeDTO> {
         main.setBR(++row, 0, 1);
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().description()), 50).build());
 
-        return new CrmScrollPanel(main);
+        return new ScrollPanel(main);
     }
 
     @Override
@@ -161,7 +161,7 @@ public class EmployeeEditorForm extends CrmEntityForm<EmployeeDTO> {
             }
         })));
 
-        return new CrmScrollPanel(main);
+        return new ScrollPanel(main);
     }
 
     @Override

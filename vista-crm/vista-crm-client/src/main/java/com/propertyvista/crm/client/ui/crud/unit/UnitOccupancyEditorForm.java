@@ -16,13 +16,13 @@ package com.propertyvista.crm.client.ui.crud.unit;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.ScrollPanel;
 
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.validators.StartEndDateValidation;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
-import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.Status;
 
@@ -61,7 +61,7 @@ public class UnitOccupancyEditorForm extends CrmEntityForm<AptUnitOccupancySegme
         get(proto().offMarket()).setVisible(false);
         get(proto().lease()).setVisible(false);
 
-        return new CrmScrollPanel(main);
+        return new ScrollPanel(main);
     }
 
     @Override

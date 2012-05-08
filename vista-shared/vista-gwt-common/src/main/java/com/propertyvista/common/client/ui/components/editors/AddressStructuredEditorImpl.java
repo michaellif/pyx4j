@@ -23,14 +23,14 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
+import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.validators.ProvinceContryFilters;
 import com.propertyvista.common.client.ui.validators.ZipCodeValueValidator;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.ref.Country;
 import com.propertyvista.domain.ref.Province;
 
-public abstract class AddressStructuredEditorImpl<A extends AddressStructured> extends CEntityDecoratableEditor<A> {
+public abstract class AddressStructuredEditorImpl<A extends AddressStructured> extends CEntityDecoratableForm<A> {
 
     private final boolean showUnit;
 

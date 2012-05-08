@@ -17,10 +17,10 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
+import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.domain.policy.policies.domain.LegalTermsDescriptor;
 
-public class LegalTermsEditorForm extends CEntityDecoratableEditor<LegalTermsDescriptor> {
+public class LegalTermsEditorForm extends CEntityDecoratableForm<LegalTermsDescriptor> {
 
     public LegalTermsEditorForm(boolean isEditable) {
         super(LegalTermsDescriptor.class);

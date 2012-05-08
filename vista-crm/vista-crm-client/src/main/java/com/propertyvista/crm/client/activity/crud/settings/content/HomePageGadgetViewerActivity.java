@@ -24,17 +24,18 @@ import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.settings.content.layoutmodule.HomePageGadgetViewer;
 import com.propertyvista.crm.client.ui.crud.viewfactories.SettingsViewFactory;
 import com.propertyvista.crm.rpc.services.HomePageGadgetCrudService;
-import com.propertyvista.domain.site.HomePageGadget;
+import com.propertyvista.domain.site.gadgets.HomePageGadget;
 
 public class HomePageGadgetViewerActivity extends CrmViewerActivity<HomePageGadget> implements HomePageGadgetViewer.Presenter {
 
     @SuppressWarnings("unchecked")
     public HomePageGadgetViewerActivity(Place place) {
-        super(place, SettingsViewFactory.instance(HomePageGadgetViewer.class), (AbstractCrudService<HomePageGadget>) GWT.create(HomePageGadgetCrudService.class));
+        super(place, SettingsViewFactory.instance(HomePageGadgetViewer.class), (AbstractCrudService<HomePageGadget>) GWT
+                .create(HomePageGadgetCrudService.class));
     }
 
     @Override
-    public void viewModule(Key id) {
+    public void viewGadget(Key id) {
         AppSite.getPlaceController().goTo(AppSite.getHistoryMapper().createPlace(placeClass).formViewerPlace(id));
     }
 

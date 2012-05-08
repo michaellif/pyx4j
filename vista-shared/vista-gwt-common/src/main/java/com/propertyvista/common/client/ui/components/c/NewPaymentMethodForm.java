@@ -29,7 +29,7 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.view.client.Range;
 
-import com.pyx4j.entity.client.CEntityEditor;
+import com.pyx4j.entity.client.CEntityForm;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CCheckBox;
 import com.pyx4j.forms.client.ui.CComponent;
@@ -56,13 +56,13 @@ import com.propertyvista.domain.payment.InteracInfo;
 import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 
-public class NewPaymentMethodForm extends CEntityDecoratableEditor<PaymentMethod> {
+public class NewPaymentMethodForm extends CEntityDecoratableForm<PaymentMethod> {
 
     private static final I18n i18n = I18n.get(NewPaymentMethodForm.class);
 
     private FlowPanel paymentTypeImagesPanel;
 
-    private CEntityEditor<AddressStructured> billingAddress;
+    private CEntityForm<AddressStructured> billingAddress;
 
     private final boolean twoColumns;
 
@@ -208,8 +208,8 @@ public class NewPaymentMethodForm extends CEntityDecoratableEditor<PaymentMethod
         paymentTypeImagesPanel.getWidget(index).addStyleName(NewPaymentMethodEditorTheme.StyleDependent.selected.name());
     }
 
-    private CEntityEditor<EcheckInfo> createEcheckInfoEditor() {
-        return new CEntityEditor<EcheckInfo>(EcheckInfo.class) {
+    private CEntityForm<EcheckInfo> createEcheckInfoEditor() {
+        return new CEntityForm<EcheckInfo>(EcheckInfo.class) {
             @Override
             public IsWidget createContent() {
                 FlowPanel panel = new FlowPanel();
@@ -225,8 +225,8 @@ public class NewPaymentMethodForm extends CEntityDecoratableEditor<PaymentMethod
 
     }
 
-    private CEntityEditor<CreditCardInfo> createCreditCardInfoEditor() {
-        return new CEntityEditor<CreditCardInfo>(CreditCardInfo.class) {
+    private CEntityForm<CreditCardInfo> createCreditCardInfoEditor() {
+        return new CEntityForm<CreditCardInfo>(CreditCardInfo.class) {
             @Override
             public IsWidget createContent() {
                 FlowPanel panel = new FlowPanel();
@@ -274,8 +274,8 @@ public class NewPaymentMethodForm extends CEntityDecoratableEditor<PaymentMethod
         };
     }
 
-    private CEntityEditor<InteracInfo> createInteracInfoEditor() {
-        return new CEntityEditor<InteracInfo>(InteracInfo.class) {
+    private CEntityForm<InteracInfo> createInteracInfoEditor() {
+        return new CEntityForm<InteracInfo>(InteracInfo.class) {
             @Override
             public IsWidget createContent() {
                 FlowPanel panel = new FlowPanel();
@@ -353,11 +353,11 @@ public class NewPaymentMethodForm extends CEntityDecoratableEditor<PaymentMethod
 
     class CheckPanel extends FlexTable {
 
-        CEntityEditor<EcheckInfo> entityComponent;
+        CEntityForm<EcheckInfo> entityComponent;
 
         private int index = 0;
 
-        public CheckPanel(CEntityEditor<EcheckInfo> entityComponent) {
+        public CheckPanel(CEntityForm<EcheckInfo> entityComponent) {
             this.entityComponent = entityComponent;
             setWidget(1, 0, new Image(VistaImages.INSTANCE.canadianChequeGuide()));
             getFlexCellFormatter().setColSpan(1, 0, 3);

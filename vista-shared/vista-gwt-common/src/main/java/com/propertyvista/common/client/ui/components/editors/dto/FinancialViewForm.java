@@ -29,13 +29,13 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
+import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.PersonalAssetFolder;
 import com.propertyvista.common.client.ui.components.folders.PersonalIncomeFolder;
 import com.propertyvista.domain.person.Name;
 import com.propertyvista.dto.TenantFinancialDTO;
 
-public class FinancialViewForm extends CEntityDecoratableEditor<TenantFinancialDTO> {
+public class FinancialViewForm extends CEntityDecoratableForm<TenantFinancialDTO> {
 
     static I18n i18n = I18n.get(FinancialViewForm.class);
 

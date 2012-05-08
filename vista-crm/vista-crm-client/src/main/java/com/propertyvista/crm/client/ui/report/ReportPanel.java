@@ -31,7 +31,6 @@ import com.pyx4j.widgets.client.dashboard.Reportboard;
 
 import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.client.ui.board.BoardBase;
-import com.propertyvista.crm.client.ui.board.BoardView;
 import com.propertyvista.crm.client.ui.gadgets.addgadgetdialog.GadgetDirectoryDialog;
 import com.propertyvista.domain.dashboard.DashboardMetadata.LayoutType;
 

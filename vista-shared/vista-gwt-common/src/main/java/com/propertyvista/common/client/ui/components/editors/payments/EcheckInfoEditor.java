@@ -19,10 +19,10 @@ import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
+import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.domain.payment.EcheckInfo;
 
-public class EcheckInfoEditor extends CEntityDecoratableEditor<EcheckInfo> {
+public class EcheckInfoEditor extends CEntityDecoratableForm<EcheckInfo> {
 
     private static final I18n i18n = I18n.get(EcheckInfoEditor.class);
 

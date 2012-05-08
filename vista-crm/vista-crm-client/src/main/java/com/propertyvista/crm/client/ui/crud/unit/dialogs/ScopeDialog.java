@@ -29,7 +29,7 @@ import com.pyx4j.forms.client.validators.ValidationFailure;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
+import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.crm.client.ui.crud.unit.UnitViewerView.Presenter;
 import com.propertyvista.crm.client.ui.crud.unit.dialogs.ScopingResultDTO.ScopingResult;
 
@@ -37,7 +37,7 @@ public class ScopeDialog extends OkCancelDialog {
 
     private final static I18n i18n = I18n.get(ScopeDialog.class);
 
-    private CEntityDecoratableEditor<ScopingResultDTO> form;
+    private CEntityDecoratableForm<ScopingResultDTO> form;
 
     private final Presenter presenter;
 
@@ -45,7 +45,7 @@ public class ScopeDialog extends OkCancelDialog {
         super(i18n.tr("Scoping Result"));
         this.presenter = presenter;
 
-        form = new CEntityDecoratableEditor<ScopingResultDTO>(ScopingResultDTO.class) {
+        form = new CEntityDecoratableForm<ScopingResultDTO>(ScopingResultDTO.class) {
             @Override
             public IsWidget createContent() {
                 FormFlexPanel content = new FormFlexPanel();

@@ -19,7 +19,7 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.client.CEntityEditor;
+import com.pyx4j.entity.client.CEntityForm;
 import com.pyx4j.entity.client.ui.folder.BoxFolderDecorator;
 import com.pyx4j.entity.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.entity.client.ui.folder.CEntityFolderItem;
@@ -34,7 +34,7 @@ import com.pyx4j.widgets.client.IconButton;
 import com.pyx4j.widgets.client.actionbar.Toolbar;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
+import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.client.ui.components.AnchorButton;
@@ -42,7 +42,7 @@ import com.propertyvista.domain.note.Note;
 import com.propertyvista.domain.note.NoteAttachment;
 import com.propertyvista.domain.note.NotesAndAttachments;
 
-public class NotesAndAttachmentsEditorForm extends CEntityEditor<NotesAndAttachments> {
+public class NotesAndAttachmentsEditorForm extends CEntityForm<NotesAndAttachments> {
 
     public NotesAndAttachmentsEditorForm() {
         super(NotesAndAttachments.class);
@@ -110,7 +110,7 @@ public class NotesAndAttachmentsEditorForm extends CEntityEditor<NotesAndAttachm
             super.addItem(newEntity);
         }
 
-        private static class NoteEditor extends CEntityDecoratableEditor<Note> {
+        private static class NoteEditor extends CEntityDecoratableForm<Note> {
 
             private static final I18n i18n = I18n.get(NoteEditor.class);
 
@@ -222,7 +222,7 @@ public class NotesAndAttachmentsEditorForm extends CEntityEditor<NotesAndAttachm
 
             }
 
-            private static class AttachmentEditor extends CEntityDecoratableEditor<NoteAttachment> {
+            private static class AttachmentEditor extends CEntityDecoratableForm<NoteAttachment> {
 
                 private static final I18n i18n = I18n.get(NoteAttachment.class);
 

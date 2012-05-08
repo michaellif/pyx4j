@@ -62,9 +62,9 @@ public class AdminSiteMap implements SiteMap {
         public static class OnboardingUsers extends CrudAppPlace {
         }
 
-        @PlaceProperties(caption = "Processes")
-        @NavigationItem(navigLabel = "Processes")
-        public static class Process extends CrudAppPlace {
+        @PlaceProperties(caption = "Triggers")
+        @NavigationItem(navigLabel = "Triggers")
+        public static class Trigger extends CrudAppPlace {
         }
     }
 

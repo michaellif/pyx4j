@@ -26,7 +26,6 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.crm.client.themes.CrmTheme;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
-import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.dto.ParkingDTO;
 
 public class ParkingEditorForm extends CrmEntityForm<ParkingDTO> {
@@ -50,7 +49,7 @@ public class ParkingEditorForm extends CrmEntityForm<ParkingDTO> {
         tabPanel.add(createDetailsTab(), i18n.tr("Details"));
         tabPanel.add(isEditable() ? new HTML() : new ScrollPanel(((ParkingViewerView) getParentView()).getSpotView().asWidget()), i18n.tr("Spots"));
         tabPanel.setLastTabDisabled(isEditable());
-        tabPanel.add(new CrmScrollPanel(new Label("Notes and attachments goes here... ")), i18n.tr("Notes & Attachments"));
+        tabPanel.add(new ScrollPanel(new Label("Notes and attachments goes here... ")), i18n.tr("Notes & Attachments"));
         tabPanel.setLastTabDisabled(isEditable());
 
         tabPanel.setSize("100%", "100%");
@@ -86,6 +85,6 @@ public class ParkingEditorForm extends CrmEntityForm<ParkingDTO> {
         main.getColumnFormatter().setWidth(0, "55%");
         main.getColumnFormatter().setWidth(1, "45%");
 
-        return new CrmScrollPanel(main);
+        return new ScrollPanel(main);
     }
 }

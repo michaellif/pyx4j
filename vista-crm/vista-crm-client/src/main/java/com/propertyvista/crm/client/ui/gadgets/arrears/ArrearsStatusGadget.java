@@ -33,7 +33,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
+import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.crm.client.ui.gadgets.common.AbstractGadget;
 import com.propertyvista.crm.client.ui.gadgets.common.Directory;
 import com.propertyvista.crm.client.ui.gadgets.common.GadgetInstanceBase;
@@ -146,7 +146,7 @@ public class ArrearsStatusGadget extends AbstractGadget<ArrearsStatus> {
 
         @Override
         public ISetup getSetup() {
-            return new SetupForm(new CEntityDecoratableEditor<ArrearsStatus>(ArrearsStatus.class) {
+            return new SetupForm(new CEntityDecoratableForm<ArrearsStatus>(ArrearsStatus.class) {
                 @Override
                 public IsWidget createContent() {
                     FormFlexPanel p = new FormFlexPanel();

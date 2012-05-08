@@ -37,7 +37,7 @@ import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
+import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.validators.DateInPeriodValidation;
 import com.propertyvista.common.client.ui.validators.StartEndDateValidation;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
@@ -91,7 +91,7 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
         adjustmentLister = new ListerInternalViewImplBase<LeaseAdjustment>(new LeaseAdjustmentLister());
 
         //set main form here:
-        setForm(new LeaseEditorForm(true));
+        setForm(new LeaseForm(true));
 
         // Add actions:
         sendMail = new Button(i18n.tr("Send Mail..."), new ClickHandler() {
@@ -235,7 +235,7 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
 
         private final CompletionType action;
 
-        private CEntityDecoratableEditor<LeaseDTO> content;
+        private CEntityDecoratableForm<LeaseDTO> content;
 
         public TermLeaseBox(CompletionType action) {
             super(i18n.tr("Please select"));
@@ -246,7 +246,7 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
         protected Widget createBody() {
             getOkButton().setEnabled(true);
 
-            content = new CEntityDecoratableEditor<LeaseDTO>(LeaseDTO.class) {
+            content = new CEntityDecoratableForm<LeaseDTO>(LeaseDTO.class) {
                 @Override
                 public IsWidget createContent() {
                     FormFlexPanel main = new FormFlexPanel();
@@ -339,16 +339,6 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
 
         protected EmailTemplateType getEmailType() {
             return emailType.getValue();
-        }
-
-        @Override
-        public String defineWidth() {
-            return "350px";
-        }
-
-        @Override
-        public String defineHeight() {
-            return "100px";
         }
     }
 

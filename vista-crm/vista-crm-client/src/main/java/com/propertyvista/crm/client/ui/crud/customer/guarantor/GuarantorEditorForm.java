@@ -16,6 +16,7 @@ package com.propertyvista.crm.client.ui.crud.customer.guarantor;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.shared.EntityFactory;
@@ -31,7 +32,6 @@ import com.propertyvista.crm.client.themes.CrmTheme;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.crud.customer.common.PaymentMethodFolder;
 import com.propertyvista.crm.client.ui.crud.lease.common.CLeaseHyperlink;
-import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.dto.GuarantorDTO;
 
@@ -98,7 +98,7 @@ public class GuarantorEditorForm extends CrmEntityForm<GuarantorDTO> {
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseV(), new CLeaseHyperlink()), 35).customLabel(i18n.tr("Lease")).build());
         }
 
-        return new CrmScrollPanel(main);
+        return new ScrollPanel(main);
     }
 
     private Widget createPaymentMethodsTab() {
@@ -121,7 +121,7 @@ public class GuarantorEditorForm extends CrmEntityForm<GuarantorDTO> {
             }
         }));
 
-        return new CrmScrollPanel(main);
+        return new ScrollPanel(main);
     }
 
     @Override

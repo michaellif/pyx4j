@@ -22,7 +22,7 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.client.CEntityEditor;
+import com.pyx4j.entity.client.CEntityForm;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CDateLabel;
@@ -36,7 +36,7 @@ import com.pyx4j.security.shared.SecurityController;
 
 import com.propertyvista.common.client.ui.components.IdUploaderFolder;
 import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
+import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.editors.NameEditor;
 import com.propertyvista.common.client.ui.components.editors.PriorAddressEditor;
 import com.propertyvista.common.client.ui.components.folders.EmergencyContactFolder;
@@ -49,7 +49,7 @@ import com.propertyvista.domain.tenant.EmergencyContact;
 import com.propertyvista.dto.TenantInfoDTO;
 import com.propertyvista.misc.BusinessRules;
 
-public class InfoViewForm extends CEntityDecoratableEditor<TenantInfoDTO> {
+public class InfoViewForm extends CEntityDecoratableForm<TenantInfoDTO> {
 
     private static final I18n i18n = I18n.get(InfoViewForm.class);
 
@@ -142,9 +142,9 @@ public class InfoViewForm extends CEntityDecoratableEditor<TenantInfoDTO> {
     @Override
     public void addValidations() {
         @SuppressWarnings("unchecked")
-        CEntityEditor<PriorAddress> currentAddressForm = ((CEntityEditor<PriorAddress>) get(proto().currentAddress()));
+        CEntityForm<PriorAddress> currentAddressForm = ((CEntityForm<PriorAddress>) get(proto().currentAddress()));
         @SuppressWarnings("unchecked")
-        final CEntityEditor<PriorAddress> previousAddressForm = ((CEntityEditor<PriorAddress>) get(proto().previousAddress()));
+        final CEntityForm<PriorAddress> previousAddressForm = ((CEntityForm<PriorAddress>) get(proto().previousAddress()));
         CComponent<LogicalDate, ?> c1 = currentAddressForm.get(currentAddressForm.proto().moveInDate());
         CComponent<LogicalDate, ?> c2 = currentAddressForm.get(currentAddressForm.proto().moveOutDate());
         CComponent<LogicalDate, ?> p1 = previousAddressForm.get(previousAddressForm.proto().moveInDate());

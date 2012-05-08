@@ -22,7 +22,7 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.entity.client.CEntityEditor;
+import com.pyx4j.entity.client.CEntityForm;
 import com.pyx4j.entity.client.ui.CEntityComboBox;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IList;
@@ -36,7 +36,7 @@ import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationFailure;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
+import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.editors.NameEditor;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.PersonRelationship;
@@ -50,9 +50,9 @@ public class TenantInLeaseFolder extends LeaseParticipantFolder<Tenant> {
 
     static final I18n i18n = I18n.get(TenantInLeaseFolder.class);
 
-    private final CEntityEditor<? extends LeaseDTO> lease;
+    private final CEntityForm<? extends LeaseDTO> lease;
 
-    public TenantInLeaseFolder(CEntityEditor<? extends LeaseDTO> parent, boolean modifiable) {
+    public TenantInLeaseFolder(CEntityForm<? extends LeaseDTO> parent, boolean modifiable) {
         super(Tenant.class, modifiable);
         this.lease = parent;
     }
@@ -137,7 +137,7 @@ public class TenantInLeaseFolder extends LeaseParticipantFolder<Tenant> {
         });
     }
 
-    private class TenantInLeaseEditor extends CEntityDecoratableEditor<Tenant> {
+    private class TenantInLeaseEditor extends CEntityDecoratableForm<Tenant> {
 
         public TenantInLeaseEditor() {
             super(Tenant.class);

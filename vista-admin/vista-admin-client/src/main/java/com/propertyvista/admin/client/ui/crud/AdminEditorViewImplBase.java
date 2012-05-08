@@ -81,7 +81,6 @@ public class AdminEditorViewImplBase<E extends IEntity> extends EditorViewImplBa
         addFooterToolbarItem(btnCancel);
 
         enableButtons(false);
-
     }
 
     public AdminEditorViewImplBase(Class<? extends CrudAppPlace> placeClass, CrudEntityForm<E> form) {
@@ -104,9 +103,11 @@ public class AdminEditorViewImplBase<E extends IEntity> extends EditorViewImplBa
     @Override
     public void populate(E value) {
         enableButtons(false);
-        setCaption(defaultCaption + " " + value.getStringView());
         if (EditMode.newItem.equals(mode)) {
+            setCaption(defaultCaption + " " + i18n.tr("New Item..."));
             form.setActiveTab(0);
+        } else {
+            setCaption(defaultCaption + " " + (value == null ? "" : value.getStringView()));
         }
 
         super.populate(value);

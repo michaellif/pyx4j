@@ -39,7 +39,6 @@ import com.propertyvista.domain.media.Media;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.ref.City;
 import com.propertyvista.domain.site.AvailableLocale;
-import com.propertyvista.domain.site.HomePageGadget;
 import com.propertyvista.domain.site.HtmlContent;
 import com.propertyvista.domain.site.News;
 import com.propertyvista.domain.site.PageCaption;
@@ -52,6 +51,7 @@ import com.propertyvista.domain.site.SiteTitles;
 import com.propertyvista.domain.site.SocialLink;
 import com.propertyvista.domain.site.SocialLink.SocialSite;
 import com.propertyvista.domain.site.Testimonial;
+import com.propertyvista.domain.site.gadgets.HomePageGadget;
 import com.propertyvista.pmsite.server.model.PromoDataModel;
 import com.propertyvista.pmsite.server.panels.NavigationItem;
 import com.propertyvista.portal.rpc.DeploymentConsts;
@@ -123,11 +123,11 @@ public class PMSiteContentManager implements Serializable {
         }
     }
 
-    public List<HomePageGadget> getNarrowModules() {
+    public List<HomePageGadget> getNarrowAreaGadgets() {
         return siteDescriptor.homePageGadgetsNarrow();
     }
 
-    public List<HomePageGadget> getWideModules() {
+    public List<HomePageGadget> getWideAreaGadgets() {
         return siteDescriptor.homePageGadgetsWide();
     }
 
@@ -136,7 +136,11 @@ public class PMSiteContentManager implements Serializable {
     }
 
     public boolean isAptListEnabled() {
-        return siteDescriptor.enableBuildingDetails().getValue();
+        if (siteDescriptor.disableBuildingDetails().isNull()) {
+            return true;
+        } else {
+            return !siteDescriptor.disableBuildingDetails().getValue();
+        }
     }
 
     public List<AvailableLocale> getAllAvailableLocale() {

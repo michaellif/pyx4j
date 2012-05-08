@@ -23,7 +23,7 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.client.CEntityEditor;
+import com.pyx4j.entity.client.CEntityForm;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
@@ -42,7 +42,6 @@ import com.propertyvista.common.client.ui.validators.FutureDateValidation;
 import com.propertyvista.common.client.ui.validators.PastDateValidation;
 import com.propertyvista.crm.client.themes.CrmTheme;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
-import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.domain.tenant.PersonScreening;
 import com.propertyvista.misc.BusinessRules;
@@ -104,7 +103,7 @@ public class PersonScreeningEditorForm extends CrmEntityForm<PersonScreening> {
     @Override
     public void addValidations() {
         @SuppressWarnings("unchecked")
-        CEntityEditor<PriorAddress> currentAddressForm = ((CEntityEditor<PriorAddress>) get(proto().currentAddress()));
+        CEntityForm<PriorAddress> currentAddressForm = ((CEntityForm<PriorAddress>) get(proto().currentAddress()));
 
         currentAddressForm.get(currentAddressForm.proto().moveInDate()).addValueChangeHandler(new ValueChangeHandler<LogicalDate>() {
             @Override
@@ -119,7 +118,7 @@ public class PersonScreeningEditorForm extends CrmEntityForm<PersonScreening> {
         // ------------------------------------------------------------------------------------------------        
 
         @SuppressWarnings("unchecked")
-        final CEntityEditor<PriorAddress> previousAddressForm = ((CEntityEditor<PriorAddress>) get(proto().previousAddress()));
+        final CEntityForm<PriorAddress> previousAddressForm = ((CEntityForm<PriorAddress>) get(proto().previousAddress()));
 
         new PastDateValidation(previousAddressForm.get(previousAddressForm.proto().moveInDate()));
 
@@ -165,7 +164,7 @@ public class PersonScreeningEditorForm extends CrmEntityForm<PersonScreening> {
         int row = -1;
         main.setWidget(++row, 0, inject(proto().documents(), fileUpload = new IdUploaderFolder()));
 
-        return new CrmScrollPanel(main);
+        return new ScrollPanel(main);
     }
 
     private Widget createAddressesTab() {
@@ -179,7 +178,7 @@ public class PersonScreeningEditorForm extends CrmEntityForm<PersonScreening> {
         previousAddress.setWidget(1, 0, inject(proto().previousAddress(), new PriorAddressEditor()));
         main.setWidget(++row, 0, previousAddress);
 
-        return new CrmScrollPanel(main);
+        return new ScrollPanel(main);
     }
 
     private Widget createlegalQuestionsTab() {
@@ -207,7 +206,7 @@ public class PersonScreeningEditorForm extends CrmEntityForm<PersonScreening> {
         main.setWidget(row++, 0, new DecoratorBuilder(inject(proto().legalQuestions().filedBankruptcy()), 10, 45).labelAlignment(Alignment.left)
                 .useLabelSemicolon(false).build());
 
-        return new CrmScrollPanel(main);
+        return new ScrollPanel(main);
     }
 
     private void enablePreviousAddress() {
@@ -229,6 +228,6 @@ public class PersonScreeningEditorForm extends CrmEntityForm<PersonScreening> {
 
         main.setWidget(0, 0, inject(proto().assets(), new PersonalAssetFolder(isEditable())));
 
-        return new CrmScrollPanel(main);
+        return new ScrollPanel(main);
     }
 }

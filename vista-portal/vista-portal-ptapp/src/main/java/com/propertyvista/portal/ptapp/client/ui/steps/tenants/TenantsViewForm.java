@@ -15,7 +15,7 @@ package com.propertyvista.portal.ptapp.client.ui.steps.tenants;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.entity.client.CEntityEditor;
+import com.pyx4j.entity.client.CEntityForm;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
@@ -28,7 +28,7 @@ import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactor
 import com.propertyvista.domain.security.VistaCustomerBehavior;
 import com.propertyvista.portal.rpc.ptapp.dto.TenantInApplicationListDTO;
 
-public class TenantsViewForm extends CEntityEditor<TenantInApplicationListDTO> {
+public class TenantsViewForm extends CEntityForm<TenantInApplicationListDTO> {
 
     static I18n i18n = I18n.get(TenantsViewForm.class);
 

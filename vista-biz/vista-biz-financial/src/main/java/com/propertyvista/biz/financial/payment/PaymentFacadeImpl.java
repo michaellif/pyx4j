@@ -65,9 +65,10 @@ public class PaymentFacadeImpl implements PaymentFacade {
     }
 
     @Override
-    public PaymentRecord processPayment(PaymentRecord payment) {
+    public PaymentRecord processPayment(PaymentRecord paymentStub) {
+        PaymentRecord payment = Persistence.service().retrieve(PaymentRecord.class, paymentStub.getPrimaryKey());
         if (!payment.paymentStatus().getValue().equals(PaymentRecord.PaymentStatus.Submitted)) {
-            throw new Error();
+            throw new IllegalArgumentException("paymentStatus:" + payment.paymentStatus().getValue());
         }
         payment.paymentStatus().setValue(PaymentRecord.PaymentStatus.Processing);
 
@@ -85,18 +86,20 @@ public class PaymentFacadeImpl implements PaymentFacade {
             Persistence.service().merge(payment);
             CreditCardProcessor.realTimeSale(payment);
             break;
-        case Interac:
-            throw new IllegalArgumentException("Not implemented");
         case Echeck:
             Persistence.service().merge(payment);
             ServerSideFactory.create(ARFacade.class).postPayment(payment);
-            PADProcessor.queuePayment(payment);
+            new PADProcessor().queuePayment(payment);
+            break;
         case EFT:
             payment.paymentStatus().setValue(PaymentRecord.PaymentStatus.Received);
             Persistence.service().merge(payment);
             ServerSideFactory.create(ARFacade.class).postPayment(payment);
+            break;
+        case Interac:
+            throw new IllegalArgumentException("Not implemented");
         default:
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("paymentMethod:" + payment.paymentMethod().type().getStringView());
         }
 
         return payment;
@@ -119,6 +122,13 @@ public class PaymentFacadeImpl implements PaymentFacade {
         if (!payment.paymentStatus().getValue().equals(PaymentRecord.PaymentStatus.Processing)) {
             throw new UserRuntimeException(i18n.tr("Processed payment can't be cleared"));
         }
+        switch (payment.paymentMethod().type().getValue()) {
+        case Echeck:
+        case EFT:
+        case CreditCard:
+            throw new IllegalArgumentException("Electronic PaymentMethod:" + payment.paymentMethod().type().getStringView());
+        }
+
         payment.paymentStatus().setValue(PaymentRecord.PaymentStatus.Received);
         Persistence.service().merge(payment);
         return payment;
@@ -130,6 +140,13 @@ public class PaymentFacadeImpl implements PaymentFacade {
         if (!payment.paymentStatus().getValue().equals(PaymentRecord.PaymentStatus.Processing)) {
             throw new UserRuntimeException(i18n.tr("Processed payment can't be rejected"));
         }
+        switch (payment.paymentMethod().type().getValue()) {
+        case Echeck:
+        case EFT:
+        case CreditCard:
+            throw new IllegalArgumentException("Electronic PaymentMethod:" + payment.paymentMethod().type().getStringView());
+        }
+
         payment.paymentStatus().setValue(PaymentRecord.PaymentStatus.Rejected);
         Persistence.service().merge(payment);
 

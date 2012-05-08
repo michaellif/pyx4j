@@ -14,6 +14,7 @@
 package com.propertyvista.crm.client.ui.crud.settings.financial.producttype;
 
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.ScrollPanel;
 
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
@@ -23,7 +24,6 @@ import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.crm.client.ui.components.boxes.GlCodeSelectorDialog;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
-import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.domain.financial.GlCode;
 import com.propertyvista.domain.financial.offering.FeatureItemType;
 
@@ -64,6 +64,6 @@ public class FeatureTypeEditorForm extends CrmEntityForm<FeatureItemType> {
             }
         }), 25).build());
 
-        return new CrmScrollPanel(main);
+        return new ScrollPanel(main);
     }
 }

@@ -66,12 +66,7 @@ public class ServiceLister extends VersionedLister<Service> {
 
         @Override
         public String defineWidth() {
-            return "250px";
-        }
-
-        @Override
-        public String defineHeight() {
-            return "100px";
+            return "20em";
         }
     }
 

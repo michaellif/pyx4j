@@ -142,48 +142,28 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
 
     @Override
     public void processPayment(AsyncCallback<PaymentRecordDTO> callback, Key entityId) {
-        PaymentRecord paymentRecord = Persistence.service().retrieve(PaymentRecord.class, entityId);
-        if ((paymentRecord == null) || (paymentRecord.isNull())) {
-            throw new RuntimeException("Entity '" + EntityFactory.getEntityMeta(BillingAccount.class).getCaption() + "' " + entityId + " NotFound");
-        }
-
-        Persistence.secureSave(ServerSideFactory.create(PaymentFacade.class).processPayment(paymentRecord));
+        Persistence.secureSave(ServerSideFactory.create(PaymentFacade.class).processPayment(EntityFactory.createIdentityStub(PaymentRecord.class, entityId)));
         Persistence.service().commit();
         retrieve(callback, entityId, RetrieveTraget.View);
     }
 
     @Override
     public void clearPayment(AsyncCallback<PaymentRecordDTO> callback, Key entityId) {
-        PaymentRecord paymentRecord = Persistence.service().retrieve(PaymentRecord.class, entityId);
-        if ((paymentRecord == null) || (paymentRecord.isNull())) {
-            throw new RuntimeException("Entity '" + EntityFactory.getEntityMeta(BillingAccount.class).getCaption() + "' " + entityId + " NotFound");
-        }
-
-        Persistence.secureSave(ServerSideFactory.create(PaymentFacade.class).clear(paymentRecord));
+        Persistence.secureSave(ServerSideFactory.create(PaymentFacade.class).clear(EntityFactory.createIdentityStub(PaymentRecord.class, entityId)));
         Persistence.service().commit();
         retrieve(callback, entityId, RetrieveTraget.View);
     }
 
     @Override
     public void rejectPayment(AsyncCallback<PaymentRecordDTO> callback, Key entityId) {
-        PaymentRecord paymentRecord = Persistence.service().retrieve(PaymentRecord.class, entityId);
-        if ((paymentRecord == null) || (paymentRecord.isNull())) {
-            throw new RuntimeException("Entity '" + EntityFactory.getEntityMeta(BillingAccount.class).getCaption() + "' " + entityId + " NotFound");
-        }
-
-        Persistence.secureSave(ServerSideFactory.create(PaymentFacade.class).reject(paymentRecord));
+        Persistence.secureSave(ServerSideFactory.create(PaymentFacade.class).reject(EntityFactory.createIdentityStub(PaymentRecord.class, entityId)));
         Persistence.service().commit();
         retrieve(callback, entityId, RetrieveTraget.View);
     }
 
     @Override
     public void cancelPayment(AsyncCallback<PaymentRecordDTO> callback, Key entityId) {
-        PaymentRecord paymentRecord = Persistence.service().retrieve(PaymentRecord.class, entityId);
-        if ((paymentRecord == null) || (paymentRecord.isNull())) {
-            throw new RuntimeException("Entity '" + EntityFactory.getEntityMeta(BillingAccount.class).getCaption() + "' " + entityId + " NotFound");
-        }
-
-        Persistence.secureSave(ServerSideFactory.create(PaymentFacade.class).cancel(paymentRecord));
+        Persistence.secureSave(ServerSideFactory.create(PaymentFacade.class).cancel(EntityFactory.createIdentityStub(PaymentRecord.class, entityId)));
         Persistence.service().commit();
         retrieve(callback, entityId, RetrieveTraget.View);
     }

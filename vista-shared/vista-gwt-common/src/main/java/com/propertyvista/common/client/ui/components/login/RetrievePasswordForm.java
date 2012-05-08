@@ -23,14 +23,14 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.HtmlUtils;
-import com.pyx4j.entity.client.CEntityEditor;
+import com.pyx4j.entity.client.CEntityForm;
 import com.pyx4j.forms.client.ui.CCaptcha;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.rpc.PasswordRetrievalRequest;
 
 import com.propertyvista.common.client.theme.HorizontalAlignCenterMixin;
 
-public class RetrievePasswordForm extends CEntityEditor<PasswordRetrievalRequest> {
+public class RetrievePasswordForm extends CEntityForm<PasswordRetrievalRequest> {
 
     private static final I18n i18n = I18n.get(RetrievePasswordForm.class);
 

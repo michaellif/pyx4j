@@ -27,7 +27,7 @@ import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
+import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.domain.site.AvailableLocale;
 import com.propertyvista.domain.site.SiteTitles;
@@ -77,7 +77,7 @@ class SiteTitlesFolder extends VistaBoxFolder<SiteTitles> {
         return super.create(member);
     }
 
-    class SiteTitlesEditor extends CEntityDecoratableEditor<SiteTitles> {
+    class SiteTitlesEditor extends CEntityDecoratableForm<SiteTitles> {
 
         public SiteTitlesEditor() {
             super(SiteTitles.class);

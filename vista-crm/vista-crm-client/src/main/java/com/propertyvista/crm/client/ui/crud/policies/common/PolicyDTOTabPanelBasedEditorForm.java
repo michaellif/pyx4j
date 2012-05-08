@@ -24,6 +24,7 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.CPolymorphicEntityEditorTEMP;
@@ -40,7 +41,6 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.crm.client.themes.CrmTheme;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
-import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
 import com.propertyvista.domain.policy.framework.PolicyDTOBase;
 import com.propertyvista.domain.policy.framework.PolicyNode;
@@ -80,10 +80,10 @@ public abstract class PolicyDTOTabPanelBasedEditorForm<POLICY_DTO extends Policy
         tabPanel = new VistaTabLayoutPanel(CrmTheme.defaultTabHeight, Unit.EM);
         tabPanel.setSize("100%", "100%");
 
-        tabPanel.add(new CrmScrollPanel(createScopeTab()), i18n.tr("Scope"));
+        tabPanel.add(new ScrollPanel(createScopeTab()), i18n.tr("Scope"));
 
         for (TabDescriptor d : createCustomTabPanels()) {
-            tabPanel.add(new CrmScrollPanel(d.widget), d.caption);
+            tabPanel.add(new ScrollPanel(d.widget), d.caption);
         }
 
         return tabPanel;

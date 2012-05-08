@@ -15,7 +15,11 @@ package com.propertyvista.admin.domain.pmc;
 
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Indexed;
+import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Length;
+import com.pyx4j.entity.annotations.OrderColumn;
+import com.pyx4j.entity.annotations.Owner;
+import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
@@ -43,6 +47,15 @@ public interface PmcDnsName extends IEntity {
             return I18nEnum.toString(this);
         }
     }
+
+    @ReadOnly
+    @Indexed
+    @Owner
+    @JoinColumn
+    Pmc pmc();
+
+    @OrderColumn
+    IPrimitive<Integer> odr();
 
     @Length(253)
     @Indexed(uniqueConstraint = true)

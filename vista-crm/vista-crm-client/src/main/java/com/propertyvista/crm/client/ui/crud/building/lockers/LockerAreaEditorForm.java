@@ -26,7 +26,6 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.crm.client.themes.CrmTheme;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
-import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.dto.LockerAreaDTO;
 
 public class LockerAreaEditorForm extends CrmEntityForm<LockerAreaDTO> {
@@ -50,7 +49,7 @@ public class LockerAreaEditorForm extends CrmEntityForm<LockerAreaDTO> {
         tabPanel.add(createDetailsTab(), i18n.tr("Details"));
         tabPanel.add(isEditable() ? new HTML() : new ScrollPanel(((LockerAreaViewerView) getParentView()).getLockerView().asWidget()), i18n.tr("Lockers"));
         tabPanel.setLastTabDisabled(isEditable());
-        tabPanel.add(new CrmScrollPanel(new Label("Notes and attachments goes here... ")), i18n.tr("Notes & Attachments"));
+        tabPanel.add(new ScrollPanel(new Label("Notes and attachments goes here... ")), i18n.tr("Notes & Attachments"));
         tabPanel.setLastTabDisabled(isEditable());
 
         tabPanel.setSize("100%", "100%");
@@ -85,6 +84,6 @@ public class LockerAreaEditorForm extends CrmEntityForm<LockerAreaDTO> {
         main.getColumnFormatter().setWidth(0, "55%");
         main.getColumnFormatter().setWidth(1, "45%");
 
-        return new CrmScrollPanel(main);
+        return new ScrollPanel(main);
     }
 }

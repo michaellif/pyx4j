@@ -19,6 +19,7 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.CEntityComboBox;
@@ -37,7 +38,6 @@ import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.crm.client.themes.CrmTheme;
 import com.propertyvista.crm.client.ui.components.boxes.TenantSelectorDialog;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
-import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.domain.maintenance.IssueClassification;
 import com.propertyvista.domain.maintenance.IssueElement;
 import com.propertyvista.domain.maintenance.IssueRepairSubject;
@@ -179,7 +179,7 @@ public class MaintenanceRequestEditorForm extends CrmEntityForm<MaintenanceReque
         main.getColumnFormatter().setWidth(0, "50%");
         main.getColumnFormatter().setWidth(1, "50%");
 
-        return new CrmScrollPanel(main);
+        return new ScrollPanel(main);
     }
 
     private void comboReset(CEntityComboBox<? extends IEntity> combo, PropertyCriterion crit, String title) {

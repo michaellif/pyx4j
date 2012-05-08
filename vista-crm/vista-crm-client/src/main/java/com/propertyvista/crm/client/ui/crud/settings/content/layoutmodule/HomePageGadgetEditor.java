@@ -15,7 +15,7 @@ package com.propertyvista.crm.client.ui.crud.settings.content.layoutmodule;
 
 import com.pyx4j.site.client.ui.crud.form.IEditorView;
 
-import com.propertyvista.domain.site.HomePageGadget;
+import com.propertyvista.domain.site.gadgets.HomePageGadget;
 
 public interface HomePageGadgetEditor extends IEditorView<HomePageGadget> {
 

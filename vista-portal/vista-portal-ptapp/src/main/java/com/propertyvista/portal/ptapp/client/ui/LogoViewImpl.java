@@ -41,9 +41,6 @@ public class LogoViewImpl extends SimplePanel implements LogoView {
         if (VistaTODO.enableWelcomeWizardDemoMode) {
             HorizontalPanel logoPanel = new HorizontalPanel();
             logoPanel.setWidth("100%");
-            logoPanel.getElement().getStyle().setPosition(Position.RELATIVE);
-            logoPanel.getElement().getStyle().setTop(0, Unit.PX);
-            logoPanel.getElement().getStyle().setLeft(0, Unit.PX);
 
             HTML daysLeftCountdown = new HTML(//@formatter:off
                         "<div style='color:#E6E6E6;float:left;'>"

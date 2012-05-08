@@ -16,6 +16,7 @@ package com.propertyvista.crm.client.ui.crud.customer.lead.showing;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.ScrollPanel;
 
 import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
@@ -28,7 +29,6 @@ import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.crm.client.ui.components.boxes.UnitSelectorDialog;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
-import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lead.Showing;
@@ -95,7 +95,7 @@ public class ShowingEditorForm extends CrmEntityForm<Showing> {
         main.getColumnFormatter().setWidth(0, "50%");
         main.getColumnFormatter().setWidth(1, "50%");
 
-        return new CrmScrollPanel(main);
+        return new ScrollPanel(main);
     }
 
     @Override

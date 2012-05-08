@@ -70,7 +70,7 @@ public class LeaseApplicationViewerViewImpl extends CrmViewerViewImplBase<LeaseA
         super(CrmSiteMap.Tenants.LeaseApplication.class);
 
         //set main form here:
-        setForm(new LeaseApplicationEditorForm(true));
+        setForm(new LeaseApplicationForm(true));
 
         // Actions:
 
@@ -95,16 +95,6 @@ public class LeaseApplicationViewerViewImpl extends CrmViewerViewImplBase<LeaseA
                                 ((LeaseApplicationViewerView.Presenter) presenter).inviteUsers(getSelectedItems());
                                 return true;
                             }
-
-                            @Override
-                            public String defineWidth() {
-                                return "350px";
-                            }
-
-                            @Override
-                            public String defineHeight() {
-                                return "100px";
-                            }
                         }.show();
                     }
                 });
@@ -124,16 +114,6 @@ public class LeaseApplicationViewerViewImpl extends CrmViewerViewImplBase<LeaseA
                             public boolean onClickOk() {
                                 // TODO make the credit check happen
                                 return true;
-                            }
-
-                            @Override
-                            public String defineWidth() {
-                                return "350px";
-                            }
-
-                            @Override
-                            public String defineHeight() {
-                                return "100px";
                             }
                         }.show();
                     }
@@ -171,16 +151,6 @@ public class LeaseApplicationViewerViewImpl extends CrmViewerViewImplBase<LeaseA
                                 public boolean onClickOk() {
                                     // TODO make the credit check happen
                                     return true;
-                                }
-
-                                @Override
-                                public String defineWidth() {
-                                    return "350px";
-                                }
-
-                                @Override
-                                public String defineHeight() {
-                                    return "100px";
                                 }
                             }.show();
                         }

@@ -33,7 +33,7 @@ import com.pyx4j.forms.client.ui.CDatePicker;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
+import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.crm.client.ui.board.BoardView;
 import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEvent;
 import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEventHandler;
@@ -191,7 +191,7 @@ public class AvailabilitySummaryGadget extends AbstractGadget<AvailabilitySummar
 
         @Override
         public ISetup getSetup() {
-            return new SetupForm(new CEntityDecoratableEditor<AvailabilitySummary>(AvailabilitySummary.class) {
+            return new SetupForm(new CEntityDecoratableForm<AvailabilitySummary>(AvailabilitySummary.class) {
                 @Override
                 public IsWidget createContent() {
                     FormFlexPanel p = new FormFlexPanel();

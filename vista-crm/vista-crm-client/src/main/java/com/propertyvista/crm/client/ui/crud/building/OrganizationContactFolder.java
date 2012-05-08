@@ -21,7 +21,7 @@ import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
+import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.company.OrganizationContact;
@@ -40,7 +40,7 @@ class OrganizationContactFolder extends VistaBoxFolder<OrganizationContact> {
         }
     }
 
-    static public class OrganizationContactEditor extends CEntityDecoratableEditor<OrganizationContact> {
+    static public class OrganizationContactEditor extends CEntityDecoratableForm<OrganizationContact> {
 
         public OrganizationContactEditor() {
             super(OrganizationContact.class);

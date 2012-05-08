@@ -21,7 +21,7 @@ public class LeaseApplicationEditorViewImpl extends CrmEditorViewImplBase<LeaseA
 
     public LeaseApplicationEditorViewImpl() {
         super(CrmSiteMap.Tenants.LeaseApplication.class);
-        setForm(new LeaseApplicationEditorForm());
+        setForm(new LeaseApplicationForm());
     }
 
 }

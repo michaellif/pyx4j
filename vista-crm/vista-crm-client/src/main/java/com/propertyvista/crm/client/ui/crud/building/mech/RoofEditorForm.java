@@ -13,13 +13,13 @@
  */
 package com.propertyvista.crm.client.ui.crud.building.mech;
 
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.validators.PastDateValidation;
-import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.dto.RoofDTO;
 
 public class RoofEditorForm extends MechBaseEditorForm<RoofDTO> {
@@ -46,7 +46,7 @@ public class RoofEditorForm extends MechBaseEditorForm<RoofDTO> {
         main.setH1(++row, 0, 2, i18n.tr("Extras"));
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().notes()), 57).build());
 
-        return new CrmScrollPanel(main);
+        return new ScrollPanel(main);
     }
 
     @Override

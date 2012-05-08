@@ -19,11 +19,11 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
+import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.validators.StartEndDateValidation;
 import com.propertyvista.domain.property.vendor.Contract;
 
-public class ContractEditor extends CEntityDecoratableEditor<Contract> {
+public class ContractEditor extends CEntityDecoratableForm<Contract> {
 
     public ContractEditor() {
         super(Contract.class);

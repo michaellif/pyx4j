@@ -18,9 +18,9 @@ import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.activity.crud.ViewerActivityBase;
 import com.pyx4j.site.rpc.AppPlace;
 
+import com.propertyvista.admin.client.activity.crud.AdminViewerActivity;
 import com.propertyvista.admin.client.ui.crud.onboardingusers.OnboardingUserViewerView;
 import com.propertyvista.admin.client.viewfactories.crud.ManagementVeiwFactory;
 import com.propertyvista.admin.rpc.AdminSiteMap;
@@ -28,7 +28,7 @@ import com.propertyvista.admin.rpc.OnboardingUserDTO;
 import com.propertyvista.admin.rpc.services.OnboardingUserCrudService;
 import com.propertyvista.common.client.ui.components.security.PasswordChangeView;
 
-public class OnBoardingUserViewerActivity extends ViewerActivityBase<OnboardingUserDTO> implements OnboardingUserViewerView.Presenter {
+public class OnBoardingUserViewerActivity extends AdminViewerActivity<OnboardingUserDTO> implements OnboardingUserViewerView.Presenter {
 
     public OnBoardingUserViewerActivity(Place place) {
         super(place, ManagementVeiwFactory.instance(OnboardingUserViewerView.class), GWT.<OnboardingUserCrudService> create(OnboardingUserCrudService.class));

@@ -19,7 +19,7 @@ import java.util.List;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.entity.client.CEntityEditor;
+import com.pyx4j.entity.client.CEntityForm;
 import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.folder.CEntityFolder;
 import com.pyx4j.entity.client.ui.folder.IFolderDecorator;
@@ -31,7 +31,7 @@ import com.propertyvista.common.client.ui.decorations.VistaTableFolderDecorator;
 import com.propertyvista.portal.domain.dto.BillDTO;
 import com.propertyvista.portal.domain.dto.BillListDTO;
 
-public class BillingHistoryForm extends CEntityEditor<BillListDTO> implements BillingHistoryView {
+public class BillingHistoryForm extends CEntityForm<BillListDTO> implements BillingHistoryView {
 
     private static final I18n i18n = I18n.get(BillingHistoryForm.class);
 

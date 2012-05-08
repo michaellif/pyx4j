@@ -21,7 +21,7 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.entity.client.CEntityEditor;
+import com.pyx4j.entity.client.CEntityForm;
 import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IList;
@@ -34,7 +34,7 @@ import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationFailure;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
+import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.crm.client.ui.components.cms.SiteImageResourceProvider;
 import com.propertyvista.crm.client.ui.crud.settings.content.site.AvailableLocaleSelectorDialog;
@@ -46,11 +46,11 @@ class PageContentFolder extends VistaBoxFolder<PageContent> {
 
     private static final I18n i18n = I18n.get(PageContentFolder.class);
 
-    private final CEntityEditor<PageDescriptor> parent;
+    private final CEntityForm<PageDescriptor> parent;
 
     private final Set<AvailableLocale> usedLocales = new HashSet<AvailableLocale>();
 
-    public PageContentFolder(CEntityEditor<PageDescriptor> parent) {
+    public PageContentFolder(CEntityForm<PageDescriptor> parent) {
         super(PageContent.class, parent.isEditable());
         this.parent = parent;
         this.addValueChangeHandler(new ValueChangeHandler<IList<PageContent>>() {
@@ -113,7 +113,7 @@ class PageContentFolder extends VistaBoxFolder<PageContent> {
         callback.onSuccess(newEntity);
     }
 
-    class PageContentEditor extends CEntityDecoratableEditor<PageContent> {
+    class PageContentEditor extends CEntityDecoratableForm<PageContent> {
 
         public PageContentEditor() {
             super(PageContent.class);

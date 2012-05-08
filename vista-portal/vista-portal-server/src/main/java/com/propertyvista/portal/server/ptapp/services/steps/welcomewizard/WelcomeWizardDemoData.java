@@ -17,9 +17,13 @@ import java.util.Random;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
+import com.propertyvista.domain.contact.AddressSimple;
+import com.propertyvista.domain.ref.Country;
+import com.propertyvista.domain.ref.Province;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
 
@@ -48,5 +52,26 @@ public class WelcomeWizardDemoData {
 
     public static Random rnd() {
         return RND;
+    }
+
+    public static AddressSimple applicantsAddress() {
+//        EntityQueryCriteria<PersonScreening> criteria = EntityQueryCriteria.create(PersonScreening.class);
+//        criteria.add(PropertyCriterion.eq(criteria.proto().screene(), applicantsCustomer()));
+//        PersonScreening screening = Persistence.service().retrieve(criteria);
+        AddressSimple address = EntityFactory.create(AddressSimple.class);
+        address.city().setValue("Toronto");
+        address.street1().setValue("1 Yonge Street, unit 500");
+
+        EntityQueryCriteria<Country> criteria = EntityQueryCriteria.create(Country.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().name(), "Canada"));
+        address.country().set(Persistence.service().retrieve(criteria));
+
+        EntityQueryCriteria<Province> provinceCriteria = EntityQueryCriteria.create(Province.class);
+        provinceCriteria.add(PropertyCriterion.eq(provinceCriteria.proto().name(), "Ontario"));
+        address.province().set(Persistence.service().retrieve(provinceCriteria));
+
+        address.postalCode().setValue("M2H 4Z9");
+
+        return address;
     }
 }

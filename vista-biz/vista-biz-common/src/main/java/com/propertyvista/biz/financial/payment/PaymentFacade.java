@@ -31,7 +31,7 @@ public interface PaymentFacade {
      * EFT: automatically -> Received (AR. Posted)
      * 
      */
-    PaymentRecord processPayment(PaymentRecord payment);
+    PaymentRecord processPayment(PaymentRecord paymentStub);
 
     PaymentRecord cancel(PaymentRecord paymentStub);
 

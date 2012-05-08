@@ -17,10 +17,10 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
+import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.domain.property.vendor.Vendor;
 
-public class VendorEditor extends CEntityDecoratableEditor<Vendor> {
+public class VendorEditor extends CEntityDecoratableForm<Vendor> {
 
     public VendorEditor() {
         super(Vendor.class);

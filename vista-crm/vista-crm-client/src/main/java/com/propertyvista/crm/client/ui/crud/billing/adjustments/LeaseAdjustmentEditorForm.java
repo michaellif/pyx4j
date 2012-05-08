@@ -14,6 +14,7 @@
 package com.propertyvista.crm.client.ui.crud.billing.adjustments;
 
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.ScrollPanel;
 
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
@@ -23,7 +24,6 @@ import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.crm.client.ui.components.boxes.LeaseAdjustmentReasonSelectorDialog;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
-import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustmentReason;
 
@@ -77,7 +77,7 @@ public class LeaseAdjustmentEditorForm extends CrmEntityForm<LeaseAdjustment> {
             main.setWidget(row, 1, new DecoratorBuilder(inject(proto().updated()), 10).build());
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().createdBy()), 10).build());
         }
-        return new CrmScrollPanel(main);
+        return new ScrollPanel(main);
     }
 
     @Override

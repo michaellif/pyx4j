@@ -17,12 +17,12 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
+import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.CompanyPhoneFolder;
 import com.propertyvista.common.client.ui.components.folders.EmailFolder;
 import com.propertyvista.domain.company.Company;
 
-public class CompanyEditor extends CEntityDecoratableEditor<Company> {
+public class CompanyEditor extends CEntityDecoratableForm<Company> {
 
     public CompanyEditor() {
         super(Company.class);

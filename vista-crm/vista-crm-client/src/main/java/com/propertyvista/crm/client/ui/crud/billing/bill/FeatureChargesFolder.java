@@ -27,7 +27,7 @@ import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
+import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.domain.financial.billing.InvoiceProductCharge;
@@ -55,7 +55,7 @@ public class FeatureChargesFolder extends VistaBoxFolder<InvoiceProductCharge> {
         return super.create(member);
     }
 
-    class ProductChargeEditor extends CEntityDecoratableEditor<InvoiceProductCharge> {
+    class ProductChargeEditor extends CEntityDecoratableForm<InvoiceProductCharge> {
 
         public ProductChargeEditor() {
             super(InvoiceProductCharge.class);

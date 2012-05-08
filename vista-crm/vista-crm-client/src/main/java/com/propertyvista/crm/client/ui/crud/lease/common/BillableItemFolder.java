@@ -20,7 +20,7 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.TimeUtils;
-import com.pyx4j.entity.client.CEntityEditor;
+import com.pyx4j.entity.client.CEntityForm;
 import com.pyx4j.entity.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.entity.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.entity.client.ui.folder.IFolderItemDecorator;
@@ -46,11 +46,11 @@ public class BillableItemFolder extends VistaBoxFolder<BillableItem> {
 
     private final List<BillableItem> populatedValues = new LinkedList<BillableItem>();
 
-    private final CEntityEditor<? extends LeaseDTO> lease;
+    private final CEntityForm<? extends LeaseDTO> lease;
 
     private final IEditorView<? extends LeaseDTO> leaseEditorView;
 
-    public BillableItemFolder(boolean modifyable, CEntityEditor<? extends LeaseDTO> lease, IEditorView<? extends LeaseDTO> leaseEditorView) {
+    public BillableItemFolder(boolean modifyable, CEntityForm<? extends LeaseDTO> lease, IEditorView<? extends LeaseDTO> leaseEditorView) {
         super(BillableItem.class, modifyable);
         this.lease = lease;
         this.leaseEditorView = leaseEditorView;
@@ -88,16 +88,6 @@ public class BillableItemFolder extends VistaBoxFolder<BillableItem> {
                         addItem(newItem);
                     }
                     return true;
-                }
-
-                @Override
-                public String defineWidth() {
-                    return "400px";
-                }
-
-                @Override
-                public String defineHeight() {
-                    return "200px";
                 }
             }.show();
         }

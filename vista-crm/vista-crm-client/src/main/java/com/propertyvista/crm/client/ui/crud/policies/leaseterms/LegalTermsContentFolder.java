@@ -15,7 +15,7 @@ package com.propertyvista.crm.client.ui.crud.policies.leaseterms;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.entity.client.CEntityEditor;
+import com.pyx4j.entity.client.CEntityForm;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
@@ -26,7 +26,7 @@ import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationFailure;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
+import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.crm.client.ui.components.cms.SiteImageResourceProvider;
 import com.propertyvista.domain.policy.policies.domain.LegalTermsContent;
@@ -36,9 +36,9 @@ public class LegalTermsContentFolder extends VistaBoxFolder<LegalTermsContent> {
 
     private static final I18n i18n = I18n.get(LegalTermsContentFolder.class);
 
-    private final CEntityEditor<LegalTermsDescriptor> parentForm;
+    private final CEntityForm<LegalTermsDescriptor> parentForm;
 
-    public LegalTermsContentFolder(CEntityEditor<LegalTermsDescriptor> parentForm) {
+    public LegalTermsContentFolder(CEntityForm<LegalTermsDescriptor> parentForm) {
         super(LegalTermsContent.class, parentForm.isEditable());
         this.parentForm = parentForm;
     }
@@ -67,7 +67,7 @@ public class LegalTermsContentFolder extends VistaBoxFolder<LegalTermsContent> {
         });
     }
 
-    private static class LegalTermsContentEditor extends CEntityDecoratableEditor<LegalTermsContent> {
+    private static class LegalTermsContentEditor extends CEntityDecoratableForm<LegalTermsContent> {
 
         public LegalTermsContentEditor() {
             super(LegalTermsContent.class);

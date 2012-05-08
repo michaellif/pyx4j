@@ -18,6 +18,7 @@ import java.util.List;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.shared.EntityFactory;
@@ -37,7 +38,6 @@ import com.propertyvista.crm.client.themes.CrmTheme;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.crud.customer.common.PaymentMethodFolder;
 import com.propertyvista.crm.client.ui.crud.lease.common.CLeaseHyperlink;
-import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.tenant.EmergencyContact;
 import com.propertyvista.dto.TenantDTO;
@@ -107,7 +107,7 @@ public class TenantEditorForm extends CrmEntityForm<TenantDTO> {
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().role()), 10).build());
         }
 
-        return new CrmScrollPanel(main);
+        return new ScrollPanel(main);
     }
 
     private Widget createContactsTab() {
@@ -115,7 +115,7 @@ public class TenantEditorForm extends CrmEntityForm<TenantDTO> {
 
         main.setWidget(0, 0, inject(proto().customer().emergencyContacts(), new EmergencyContactFolder(isEditable())));
 
-        return new CrmScrollPanel(main);
+        return new ScrollPanel(main);
     }
 
     private Widget createPaymentMethodsTab() {
@@ -138,7 +138,7 @@ public class TenantEditorForm extends CrmEntityForm<TenantDTO> {
             }
         }));
 
-        return new CrmScrollPanel(main);
+        return new ScrollPanel(main);
     }
 
     @Override

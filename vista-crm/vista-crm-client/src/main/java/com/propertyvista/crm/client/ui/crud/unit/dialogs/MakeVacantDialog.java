@@ -27,7 +27,7 @@ import com.pyx4j.forms.client.validators.ValidationFailure;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
+import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.crm.client.ui.crud.unit.UnitViewerView;
 import com.propertyvista.crm.client.ui.crud.unit.UnitViewerView.Presenter;
 
@@ -39,12 +39,12 @@ public class MakeVacantDialog extends OkCancelDialog {
 
     private final Presenter presenter;
 
-    private CEntityDecoratableEditor<MakeVacantDTO> form;
+    private CEntityDecoratableForm<MakeVacantDTO> form;
 
     public MakeVacantDialog(UnitViewerView.Presenter presenter, final LogicalDate minMakeVacantStartDay, final LogicalDate maxMakeVacantStartDay) {
         super(i18n.tr("Make Vacant..."));
         this.presenter = presenter;
-        this.form = new CEntityDecoratableEditor<MakeVacantDTO>(MakeVacantDTO.class) {
+        this.form = new CEntityDecoratableForm<MakeVacantDTO>(MakeVacantDTO.class) {
 
             @Override
             public IsWidget createContent() {

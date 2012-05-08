@@ -37,7 +37,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.config.shared.ApplicationMode;
-import com.pyx4j.entity.client.CEntityEditor;
+import com.pyx4j.entity.client.CEntityForm;
 import com.pyx4j.essentials.client.crud.CrudDebugId;
 import com.pyx4j.forms.client.ui.CCaptcha;
 import com.pyx4j.forms.client.ui.CHyperlink;
@@ -49,7 +49,7 @@ import com.propertyvista.common.client.theme.HorizontalAlignCenterMixin;
 import com.propertyvista.common.client.ui.components.login.AbstractLoginViewImpl.DevLoginData;
 import com.propertyvista.domain.DemoData;
 
-public class LoginForm extends CEntityEditor<AuthenticationRequest> {
+public class LoginForm extends CEntityForm<AuthenticationRequest> {
 
     private static final I18n i18n = I18n.get(LoginForm.class);
 

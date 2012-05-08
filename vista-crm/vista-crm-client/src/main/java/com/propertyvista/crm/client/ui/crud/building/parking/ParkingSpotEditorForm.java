@@ -14,11 +14,11 @@
 package com.propertyvista.crm.client.ui.crud.building.parking;
 
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.ScrollPanel;
 
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
-import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.domain.property.asset.ParkingSpot;
 
 public class ParkingSpotEditorForm extends CrmEntityForm<ParkingSpot> {
@@ -39,6 +39,6 @@ public class ParkingSpotEditorForm extends CrmEntityForm<ParkingSpot> {
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 10).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().type()), 10).build());
 
-        return new CrmScrollPanel(main);
+        return new ScrollPanel(main);
     }
 }

@@ -20,6 +20,7 @@ import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -45,20 +46,25 @@ public interface PurchaseInsuranceDTO extends IEntity {
 
     // Section: Personal Contents 
     @Caption(description = "TBD")
+    @NotNull
     IPrimitive<BigDecimal> personalContentsLimit();
 
     @Caption(description = "TBD")
+    @NotNull
     IPrimitive<BigDecimal> propertyAwayFromPremises();
 
     @Caption(description = "TBD")
+    @NotNull
     IPrimitive<BigDecimal> additionalLivingExpenses();
 
     // Section: Deductible (per Claim)
     @Caption(description = "TBD")
+    @NotNull
     IPrimitive<BigDecimal> deductible();
 
     // Section: Form of Coverage
     @Caption(description = "TBD")
+    @NotNull
     IPrimitive<FormOfCoverage> formOfCoverage();
 
     // Section: Special Limities (per Claim)
@@ -87,7 +93,7 @@ public interface PurchaseInsuranceDTO extends IEntity {
     IPrimitive<BigDecimal> coinBanknoteOrStampCollections();
 
     @Caption(description = "TBD")
-    IPrimitive<BigDecimal> collectibleCardsandComics();
+    IPrimitive<BigDecimal> collectibleCardsAndComics();
 
     // Section: Additional Coverage (per Claim)
     @Caption(description = "TBD")
@@ -97,13 +103,16 @@ public interface PurchaseInsuranceDTO extends IEntity {
     IPrimitive<BigDecimal> animalsBirdsAndFish();
 
     @Caption(description = "TBD")
+    @NotNull
     IPrimitive<BigDecimal> personalLiability();
 
     // Section: Coverage Qualification Questions
     @Caption(name = "Do you operate any buisness from your home?", description = "TBD")
+    @NotNull
     IPrimitive<String> homeBuiness();
 
     @Caption(name = "How many claims have you or any other resident of your household made against a previous Tenants, Condo, or Homeowners Policy in the past 5 years?", description = "TBD")
+    @NotNull
     IPrimitive<Integer> numOfPrevClaims();
 
     // Section:  Quote Total (floating box with that containse the following values)    

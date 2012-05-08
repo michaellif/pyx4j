@@ -611,7 +611,7 @@ public class MainActivityMapper implements AppActivityMapper {
                             break;
                         }
 
-                    } else if (place instanceof CrmSiteMap.Settings.HomePageModules) {
+                    } else if (place instanceof CrmSiteMap.Settings.HomePageGadgets) {
                         switch (crudPlace.getType()) {
                         case editor:
                             activity = new HomePageGadgetEditorActivity(crudPlace);

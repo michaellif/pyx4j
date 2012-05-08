@@ -26,7 +26,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 
 import com.propertyvista.common.client.policy.ClientPolicyManager;
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
+import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.domain.media.ApplicationDocumentFile;
 import com.propertyvista.domain.media.IdentificationDocument;
@@ -81,7 +81,7 @@ public class IdUploaderFolder extends VistaBoxFolder<IdentificationDocument> {
         }
     }
 
-    private class IdentificationDocumentEditor extends CEntityDecoratableEditor<IdentificationDocument> {
+    private class IdentificationDocumentEditor extends CEntityDecoratableForm<IdentificationDocument> {
 
         public IdentificationDocumentEditor() {
             super(IdentificationDocument.class);

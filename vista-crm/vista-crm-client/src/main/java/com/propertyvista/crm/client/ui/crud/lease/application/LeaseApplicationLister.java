@@ -109,15 +109,5 @@ public class LeaseApplicationLister extends ListerBase<LeaseApplicationDTO> {
         public boolean onClickCancel() {
             return true;
         };
-
-        @Override
-        public String defineHeight() {
-            return "100px";
-        };
-
-        @Override
-        public String defineWidth() {
-            return "300px";
-        }
     }
 }

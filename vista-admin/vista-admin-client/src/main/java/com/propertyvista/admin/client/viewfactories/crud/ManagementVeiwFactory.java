@@ -28,12 +28,12 @@ import com.propertyvista.admin.client.ui.crud.pmc.PmcListerView;
 import com.propertyvista.admin.client.ui.crud.pmc.PmcListerViewImpl;
 import com.propertyvista.admin.client.ui.crud.pmc.PmcViewerView;
 import com.propertyvista.admin.client.ui.crud.pmc.PmcViewerViewImpl;
-import com.propertyvista.admin.client.ui.crud.proc.ProcessEditorView;
-import com.propertyvista.admin.client.ui.crud.proc.ProcessEditorViewImpl;
-import com.propertyvista.admin.client.ui.crud.proc.ProcessListerView;
-import com.propertyvista.admin.client.ui.crud.proc.ProcessListerViewImpl;
-import com.propertyvista.admin.client.ui.crud.proc.ProcessViewerView;
-import com.propertyvista.admin.client.ui.crud.proc.ProcessViewerViewImpl;
+import com.propertyvista.admin.client.ui.crud.scheduler.trigger.TriggerEditorView;
+import com.propertyvista.admin.client.ui.crud.scheduler.trigger.TriggerEditorViewImpl;
+import com.propertyvista.admin.client.ui.crud.scheduler.trigger.TriggerListerView;
+import com.propertyvista.admin.client.ui.crud.scheduler.trigger.TriggerListerViewImpl;
+import com.propertyvista.admin.client.ui.crud.scheduler.trigger.TriggerViewerView;
+import com.propertyvista.admin.client.ui.crud.scheduler.trigger.TriggerViewerViewImpl;
 
 public class ManagementVeiwFactory extends ViewFactoryBase {
 
@@ -53,12 +53,12 @@ public class ManagementVeiwFactory extends ViewFactoryBase {
             } else if (OnboardingUserListerView.class.equals(type)) {
                 map.put(type, new OnboardingUserListerViewImpl());
 
-            } else if (ProcessViewerView.class.equals(type)) {
-                map.put(type, new ProcessViewerViewImpl());
-            } else if (ProcessEditorView.class.equals(type)) {
-                map.put(type, new ProcessEditorViewImpl());
-            } else if (ProcessListerView.class.equals(type)) {
-                map.put(type, new ProcessListerViewImpl());
+            } else if (TriggerViewerView.class.equals(type)) {
+                map.put(type, new TriggerViewerViewImpl());
+            } else if (TriggerEditorView.class.equals(type)) {
+                map.put(type, new TriggerEditorViewImpl());
+            } else if (TriggerListerView.class.equals(type)) {
+                map.put(type, new TriggerListerViewImpl());
             }
 
         }

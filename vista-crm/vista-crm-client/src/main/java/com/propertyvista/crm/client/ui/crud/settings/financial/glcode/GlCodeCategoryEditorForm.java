@@ -14,11 +14,11 @@
 package com.propertyvista.crm.client.ui.crud.settings.financial.glcode;
 
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.ScrollPanel;
 
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
-import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.domain.financial.GlCodeCategory;
 
 public class GlCodeCategoryEditorForm extends CrmEntityForm<GlCodeCategory> {
@@ -41,6 +41,6 @@ public class GlCodeCategoryEditorForm extends CrmEntityForm<GlCodeCategory> {
         main.setH3(row++, 0, 1, proto().glCodes().getMeta().getCaption());
         main.setWidget(row++, 0, inject(proto().glCodes(), new GlCodeFolder(isEditable())));
 
-        return new CrmScrollPanel(main);
+        return new ScrollPanel(main);
     }
 }

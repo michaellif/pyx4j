@@ -14,6 +14,7 @@
 package com.propertyvista.common.client.ui.components.editors.payments;
 
 import java.util.Collection;
+import java.util.EnumSet;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
@@ -21,7 +22,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.entity.client.CEntityEditor;
+import com.pyx4j.entity.client.CEntityForm;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.ui.CComponent;
@@ -30,7 +31,7 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.RadioGroup;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
+import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.editors.AddressStructuredEditor;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.CashInfo;
@@ -41,7 +42,7 @@ import com.propertyvista.domain.payment.PaymentDetails;
 import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 
-public class PaymentMethodEditor extends CEntityDecoratableEditor<PaymentMethod> {
+public class PaymentMethodEditor extends CEntityDecoratableForm<PaymentMethod> {
 
     private static final I18n i18n = I18n.get(PaymentMethodEditor.class);
 
@@ -65,7 +66,7 @@ public class PaymentMethodEditor extends CEntityDecoratableEditor<PaymentMethod>
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().type(), new CRadioGroupEnum<PaymentType>(PaymentType.class, RadioGroup.Layout.HORISONTAL) {
             @Override
             public Collection<PaymentType> getOptions() {
-                return PaymentType.avalableInCrm();
+                return getPaymentOptions();
             }
         }), 25).build());
 
@@ -126,7 +127,7 @@ public class PaymentMethodEditor extends CEntityDecoratableEditor<PaymentMethod>
         }
 
         if (type != null && getValue() != null) {
-            CEntityEditor editor = null;
+            CEntityForm editor = null;
             PaymentDetails details = getValue().details();
 
             switch (type) {
@@ -212,6 +213,10 @@ public class PaymentMethodEditor extends CEntityDecoratableEditor<PaymentMethod>
 
     public boolean isIsDefaultVisible() {
         return get(proto().isDefault()).isVisible();
+    }
+
+    public Collection<PaymentType> getPaymentOptions() {
+        return EnumSet.allOf(PaymentType.class);
     }
 
     protected void onBillingAddressSameAsCurrentOne(boolean set, CComponent<AddressStructured, ?> comp) {

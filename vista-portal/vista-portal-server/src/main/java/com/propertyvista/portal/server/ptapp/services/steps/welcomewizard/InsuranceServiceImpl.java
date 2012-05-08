@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.server.ptapp.services.steps.welcomewizard;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -27,6 +28,7 @@ import com.propertyvista.portal.domain.ptapp.IAgree;
 import com.propertyvista.portal.rpc.ptapp.dto.LegalTermsDescriptorDTO;
 import com.propertyvista.portal.rpc.ptapp.dto.welcomewizard.InsuranceDTO;
 import com.propertyvista.portal.rpc.ptapp.dto.welcomewizard.InsurancePaymentMethodDTO.PaymentMethod;
+import com.propertyvista.portal.rpc.ptapp.dto.welcomewizard.PurchaseInsuranceDTO.FormOfCoverage;
 import com.propertyvista.portal.rpc.ptapp.services.steps.welcomewizard.InsuranceService;
 
 public class InsuranceServiceImpl implements InsuranceService {
@@ -64,6 +66,28 @@ public class InsuranceServiceImpl implements InsuranceService {
         InsuranceDTO insurance = EntityFactory.create(InsuranceDTO.class);
 
         // INSURANCE PURCHASE PART INITIALIZATION
+        insurance.purchaseInsurance().personalContentsLimit().setValue(new BigDecimal(10000));
+        insurance.purchaseInsurance().propertyAwayFromPremises().setValue(new BigDecimal(1000));
+        insurance.purchaseInsurance().additionalLivingExpenses().setValue(new BigDecimal(2000));
+
+        insurance.purchaseInsurance().deductible().setValue(new BigDecimal(500));
+
+        insurance.purchaseInsurance().formOfCoverage().setValue(FormOfCoverage.basicCoverage);
+
+        insurance.purchaseInsurance().jewleryAndFurs().setValue(new BigDecimal(1000));
+        insurance.purchaseInsurance().bicycles().setValue(new BigDecimal(500));
+        insurance.purchaseInsurance().personalComputers().setValue(new BigDecimal(1000));
+        insurance.purchaseInsurance().moneyOrGiftGardsOrGiftCertificates().setValue(new BigDecimal(500));
+        insurance.purchaseInsurance().securities().setValue(new BigDecimal(500));
+        insurance.purchaseInsurance().utilityTraders().setValue(new BigDecimal(500));
+        insurance.purchaseInsurance().spareAutomobileParts().setValue(new BigDecimal(500));
+        insurance.purchaseInsurance().coinBanknoteOrStampCollections().setValue(new BigDecimal(500));
+        insurance.purchaseInsurance().collectibleCardsAndComics().setValue(new BigDecimal(500));
+
+        insurance.purchaseInsurance().freezerFoodSpoilage().setValue(new BigDecimal(500));
+        insurance.purchaseInsurance().animalsBirdsAndFish().setValue(new BigDecimal(500));
+        insurance.purchaseInsurance().personalLiability().setValue(new BigDecimal(1000000));
+
         insurance.purchaseInsurance().paymentMethod().paymentMethod().setValue(PaymentMethod.Visa);
 
         IAgree agreeHolder = EntityFactory.create(IAgree.class);
@@ -89,6 +113,8 @@ public class InsuranceServiceImpl implements InsuranceService {
         signature.timestamp().setValue(new Date());
         signature.person().set(WelcomeWizardDemoData.applicantsCustomer());
         insurance.purchaseInsurance().digitalSignatures().add(signature);
+
+        insurance.purchaseInsurance().paymentMethod().currentAddress().set(WelcomeWizardDemoData.applicantsAddress());
 
         // EXISTING INSURACE PART INTIALIZATION
         insurance.existingInsurance().documents().add(insurance.existingInsurance().documents().$());

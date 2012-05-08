@@ -15,6 +15,7 @@ package com.propertyvista.crm.client.ui.crud.building.catalog.service;
 
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.ScrollPanel;
 
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
@@ -23,7 +24,6 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.crm.client.themes.CrmTheme;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
-import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.domain.financial.offering.Service;
 
 public class ServiceEditorForm extends CrmEntityForm<Service> {
@@ -74,7 +74,7 @@ public class ServiceEditorForm extends CrmEntityForm<Service> {
         main.setWidget(++row, 0, inject(proto().version().items(), new ServiceItemFolder(this)));
         main.getFlexCellFormatter().setColSpan(row, 0, 2);
 
-        return new CrmScrollPanel(main);
+        return new ScrollPanel(main);
     }
 
     public IsWidget createEligibilityTab() {
@@ -87,6 +87,6 @@ public class ServiceEditorForm extends CrmEntityForm<Service> {
         main.setH1(++row, 0, 1, i18n.tr("Concessions"));
         main.setWidget(++row, 0, inject(proto().version().concessions(), new ServiceConcessionFolder(isEditable(), this)));
 
-        return new CrmScrollPanel(main);
+        return new ScrollPanel(main);
     }
 }

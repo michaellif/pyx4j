@@ -52,6 +52,9 @@ public interface InsurancePaymentMethodDTO extends IEntity {
     @EmbeddedEntity
     AddressSimple billingAddress();
 
+    @EmbeddedEntity
+    AddressSimple currentAddress();
+
     @Editor(type = EditorType.phone)
     IPrimitive<String> phone();
 

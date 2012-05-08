@@ -32,6 +32,7 @@ import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.PushButton;
 import com.google.gwt.user.client.ui.RichTextArea.Formatter;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.UIObject;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -46,11 +47,10 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.richtext.ExtendedRichTextToolbar.RichTextAction;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
+import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.crm.client.ui.components.cms.SiteImageResourceProvider;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedEditorForm;
-import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.crm.rpc.services.policies.emailtemplates.EmailTemplateManagerService;
 import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.policy.dto.EmailTemplatesPolicyDTO;
@@ -89,7 +89,7 @@ public class EmailTemplatesPolicyEditorForm extends PolicyDTOTabPanelBasedEditor
     // TODO this cannot be used because too many tabs are too wide and unable to fit in one sceen
     @Deprecated
     private TabDescriptor createEmailTemplateTab(IObject<?> template) {
-        return new TabDescriptor(new CrmScrollPanel(inject(template, new EmailTemplateEditorFolder()).asWidget()), template.getMeta().getCaption());
+        return new TabDescriptor(new ScrollPanel(inject(template, new EmailTemplateEditorFolder()).asWidget()), template.getMeta().getCaption());
     }
 
     private static class EmailTemplateEditorFolder extends VistaBoxFolder<EmailTemplate> {
@@ -124,7 +124,7 @@ public class EmailTemplatesPolicyEditorForm extends PolicyDTOTabPanelBasedEditor
             }
         }
 
-        private static class EmailTemplateEditor extends CEntityDecoratableEditor<EmailTemplate> {
+        private static class EmailTemplateEditor extends CEntityDecoratableForm<EmailTemplate> {
 
             public EmailTemplateEditor() {
                 super(EmailTemplate.class);

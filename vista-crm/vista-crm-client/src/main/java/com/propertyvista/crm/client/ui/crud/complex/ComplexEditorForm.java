@@ -18,6 +18,7 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.ValidationUtils;
@@ -31,7 +32,6 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.crm.client.themes.CrmTheme;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
-import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.dto.ComplexDTO;
 
 public class ComplexEditorForm extends CrmEntityForm<ComplexDTO> {
@@ -98,7 +98,7 @@ public class ComplexEditorForm extends CrmEntityForm<ComplexDTO> {
             })), 50).build());
         }
 
-        return new CrmScrollPanel(panel);
+        return new ScrollPanel(panel);
     }
 
     private Widget createBuildingsPanel() {
@@ -106,7 +106,7 @@ public class ComplexEditorForm extends CrmEntityForm<ComplexDTO> {
 
         panel.setWidget(0, 0, inject(proto().buildings(), new ComplexBuildingFolder(isEditable())));
 
-        return new CrmScrollPanel(panel);
+        return new ScrollPanel(panel);
     }
 
     private ComplexViewerView getParentComplexViewerView() {

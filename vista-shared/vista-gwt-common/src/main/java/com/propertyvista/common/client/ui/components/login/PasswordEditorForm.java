@@ -36,9 +36,9 @@ import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.rpc.PasswordChangeRequest;
 
 import com.propertyvista.common.client.theme.HorizontalAlignCenterMixin;
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
+import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 
-public class PasswordEditorForm extends CEntityDecoratableEditor<PasswordChangeRequest> {
+public class PasswordEditorForm extends CEntityDecoratableForm<PasswordChangeRequest> {
 
     private final static I18n i18n = I18n.get(PasswordEditorForm.class);
 

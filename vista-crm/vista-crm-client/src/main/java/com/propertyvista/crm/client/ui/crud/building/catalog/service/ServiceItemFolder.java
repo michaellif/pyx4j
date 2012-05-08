@@ -16,7 +16,7 @@ package com.propertyvista.crm.client.ui.crud.building.catalog.service;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.pyx4j.entity.client.CEntityEditor;
+import com.pyx4j.entity.client.CEntityForm;
 import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.CEntityComboBox;
 import com.pyx4j.entity.client.ui.folder.CEntityFolderRowEditor;
@@ -44,9 +44,9 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 
 class ServiceItemFolder extends VistaTableFolder<ProductItem> {
 
-    private final CEntityEditor<Service> parent;
+    private final CEntityForm<Service> parent;
 
-    public ServiceItemFolder(CEntityEditor<Service> parent) {
+    public ServiceItemFolder(CEntityForm<Service> parent) {
         super(ProductItem.class, parent.isEditable());
         this.parent = parent;
     }

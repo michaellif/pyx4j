@@ -21,7 +21,7 @@ public class LeaseEditorViewImpl extends CrmEditorViewImplBase<LeaseDTO> impleme
 
     public LeaseEditorViewImpl() {
         super(CrmSiteMap.Tenants.Lease.class);
-        setForm(new LeaseEditorForm());
+        setForm(new LeaseForm());
     }
 
 }

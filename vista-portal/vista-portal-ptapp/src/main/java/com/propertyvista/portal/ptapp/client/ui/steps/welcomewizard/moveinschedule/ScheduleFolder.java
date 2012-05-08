@@ -106,13 +106,13 @@ public class ScheduleFolder extends VistaTableFolder<TimeSegmentDTO> {
                     Style style = asWidget().getElement().getStyle();
                     switch (getValue().status().getValue()) {
                     case free:
-                        style.setBackgroundColor("#00FF00");
+                        style.setBackgroundColor("#AAFFAA");
                         break;
                     case busy:
-                        style.setBackgroundColor("#FF0000");
+                        style.setBackgroundColor("#FFAAAA");
                         break;
                     case booked:
-                        style.setBackgroundColor("#FF0000");
+                        style.setBackgroundColor("#FFAAAA");
                         break;
                     }
                 } else {

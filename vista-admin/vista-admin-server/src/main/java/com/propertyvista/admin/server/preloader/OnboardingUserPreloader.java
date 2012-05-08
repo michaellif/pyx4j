@@ -22,9 +22,10 @@ import com.propertyvista.domain.security.OnboardingUser;
 import com.propertyvista.domain.security.VistaOnboardingBehavior;
 import com.propertyvista.server.common.security.PasswordEncryptor;
 
-class OnboardingUserPreloader extends AbstractDataPreloader {
+public class OnboardingUserPreloader extends AbstractDataPreloader {
 
-    public static OnboardingUser createOnboardingUser(String name, String email, VistaOnboardingBehavior role) {
+    public static OnboardingUserCredential createOnboardingUser(String name, String email, String password, VistaOnboardingBehavior role,
+            String onboardingAccountId) {
         OnboardingUser user = EntityFactory.create(OnboardingUser.class);
         user.name().setValue(name);
         user.email().setValue(email);
@@ -35,17 +36,18 @@ class OnboardingUserPreloader extends AbstractDataPreloader {
 
         credential.user().set(user);
         credential.behavior().setValue(role);
-        credential.credential().setValue(PasswordEncryptor.encryptPassword(email));
+        credential.credential().setValue(PasswordEncryptor.encryptPassword(password));
         credential.enabled().setValue(Boolean.TRUE);
+        credential.onboardingAccountId().setValue(onboardingAccountId);
 
         Persistence.service().persist(credential);
 
-        return user;
+        return credential;
     }
 
     @Override
     public String create() {
-        createOnboardingUser("Roman Spakovych", "romans@rossul.com", VistaOnboardingBehavior.OnboardingAdministrator);
+        createOnboardingUser("Roman Spakovych", "romans@rossul.com", "romans@rossul.com", VistaOnboardingBehavior.OnboardingAdministrator, null);
         return "Created " + 1 + " OnboardingUser";
     }
 

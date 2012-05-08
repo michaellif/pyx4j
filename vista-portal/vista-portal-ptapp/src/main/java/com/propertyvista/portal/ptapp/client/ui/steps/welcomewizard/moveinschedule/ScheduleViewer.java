@@ -20,6 +20,7 @@ import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.dom.client.Style.Cursor;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
@@ -113,6 +114,12 @@ public class ScheduleViewer extends CEntityViewer<ScheduleDTO> {
         final HTML cell = new HTML(new SafeHtmlBuilder()
                 .appendEscaped(timeFormat.format(segment.start().getValue()) + " - " + timeFormat.format(segment.end().getValue())).toSafeHtml().asString());
 
+        cell.getElement().getStyle().setPaddingLeft(1, Unit.EM);
+        cell.getElement().getStyle().setPaddingRight(1, Unit.EM);
+        cell.getElement().getStyle().setProperty("borderWidth", "1px");
+        cell.getElement().getStyle().setProperty("borderStyle", "outset");
+        cell.getElement().getStyle().setProperty("borderRadius", "5px");
+
         cell.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
@@ -162,13 +169,13 @@ public class ScheduleViewer extends CEntityViewer<ScheduleDTO> {
             style.setCursor(Cursor.POINTER);
             switch (status) {
             case free:
-                style.setBackgroundColor("#00FF00");
+                style.setBackgroundColor("#DEFFBC");
                 break;
             case busy:
-                style.setBackgroundColor("#FF0000");
+                style.setBackgroundColor("#FFA7A7");
                 break;
             case booked:
-                style.setBackgroundColor("#0000FF");
+                style.setBackgroundColor("#99CCFF");
                 break;
             }
         } else {

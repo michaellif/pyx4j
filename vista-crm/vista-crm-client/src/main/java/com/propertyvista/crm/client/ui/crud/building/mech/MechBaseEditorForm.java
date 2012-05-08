@@ -15,6 +15,7 @@ package com.propertyvista.crm.client.ui.crud.building.mech;
 
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.i18n.shared.I18n;
@@ -24,7 +25,6 @@ import com.propertyvista.common.client.ui.components.editors.MaintenanceEditor;
 import com.propertyvista.common.client.ui.components.editors.WarrantyEditor;
 import com.propertyvista.crm.client.themes.CrmTheme;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
-import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.domain.property.vendor.LicensedWarrantedMaintained;
 
 public abstract class MechBaseEditorForm<E extends LicensedWarrantedMaintained> extends CrmEntityForm<E> {
@@ -66,11 +66,11 @@ public abstract class MechBaseEditorForm<E extends LicensedWarrantedMaintained> 
 
     protected Widget createWarrantyTab() {
 
-        return new CrmScrollPanel(inject(proto().warranty(), new WarrantyEditor()).asWidget());
+        return new ScrollPanel(inject(proto().warranty(), new WarrantyEditor()).asWidget());
     }
 
     protected Widget createMaintenantceTab() {
 
-        return new CrmScrollPanel(inject(proto().maintenance(), new MaintenanceEditor()).asWidget());
+        return new ScrollPanel(inject(proto().maintenance(), new MaintenanceEditor()).asWidget());
     }
 }

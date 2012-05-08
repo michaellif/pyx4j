@@ -19,11 +19,11 @@ import com.pyx4j.forms.client.ui.CCaptcha;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.security.rpc.AuthenticationRequest;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
+import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 
 @Deprecated
 // TODO replaces LoginForm with this component,  and all the buttons etc, should be created in the view
-public class AuthenticationRequestEditorForm extends CEntityDecoratableEditor<AuthenticationRequest> {
+public class AuthenticationRequestEditorForm extends CEntityDecoratableForm<AuthenticationRequest> {
 
     public AuthenticationRequestEditorForm() {
         super(AuthenticationRequest.class);

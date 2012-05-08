@@ -18,6 +18,7 @@ import java.util.List;
 
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
@@ -30,7 +31,6 @@ import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.crm.client.themes.CrmTheme;
 import com.propertyvista.crm.client.ui.components.media.CrmMediaFolder;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
-import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.domain.property.asset.FloorplanAmenity;
 import com.propertyvista.dto.FloorplanDTO;
 import com.propertyvista.portal.rpc.portal.ImageConsts.ImageTarget;
@@ -77,7 +77,7 @@ public class FloorplanEditorForm extends CrmEntityForm<FloorplanDTO> {
         int row = -1;
         main.setH1(++row, 0, 2, i18n.tr("Media Information"));
         main.setWidget(++row, 0, inject(proto().media(), new CrmMediaFolder(isEditable(), ImageTarget.Floorplan)));
-        return new CrmScrollPanel(main);
+        return new ScrollPanel(main);
     }
 
     private Widget createGeneralTab() {
@@ -106,6 +106,6 @@ public class FloorplanEditorForm extends CrmEntityForm<FloorplanDTO> {
         main.getColumnFormatter().setWidth(0, "60%");
         main.getColumnFormatter().setWidth(1, "40%");
 
-        return new CrmScrollPanel(main);
+        return new ScrollPanel(main);
     }
 }

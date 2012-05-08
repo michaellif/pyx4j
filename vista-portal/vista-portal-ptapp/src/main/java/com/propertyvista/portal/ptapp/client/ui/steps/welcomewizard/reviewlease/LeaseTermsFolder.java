@@ -26,7 +26,7 @@ import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
+import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.portal.ptapp.client.ui.steps.summary.AgreeFolder;
 import com.propertyvista.portal.rpc.ptapp.dto.LegalTermsDescriptorDTO;
@@ -67,7 +67,7 @@ public class LeaseTermsFolder extends VistaBoxFolder<LegalTermsDescriptorDTO> {
         return super.create(member);
     }
 
-    private class LeaseTermsEditor extends CEntityDecoratableEditor<LegalTermsDescriptorDTO> {
+    private class LeaseTermsEditor extends CEntityDecoratableForm<LegalTermsDescriptorDTO> {
 
         private FormFlexPanel main;
 

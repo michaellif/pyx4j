@@ -13,7 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.lease.common;
 
-import com.pyx4j.entity.client.CEntityEditor;
+import com.pyx4j.entity.client.CEntityForm;
 import com.pyx4j.entity.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.entity.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.entity.shared.IObject;
@@ -23,7 +23,7 @@ import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
-import com.propertyvista.crm.client.ui.crud.building.catalog.concession.ConcessionEditorForm;
+import com.propertyvista.crm.client.ui.crud.building.catalog.concession.ConcessionForm;
 import com.propertyvista.domain.financial.offering.Concession;
 import com.propertyvista.dto.LeaseDTO;
 
@@ -31,9 +31,9 @@ public class ConcessionFolder extends VistaBoxFolder<Concession> {
 
     private static final I18n i18n = I18n.get(ConcessionFolder.class);
 
-    private final CEntityEditor<? extends LeaseDTO> lease;
+    private final CEntityForm<? extends LeaseDTO> lease;
 
-    public ConcessionFolder(boolean modifyable, CEntityEditor<? extends LeaseDTO> lease) {
+    public ConcessionFolder(boolean modifyable, CEntityForm<? extends LeaseDTO> lease) {
         super(Concession.class, modifyable);
         this.lease = lease;
     }
@@ -41,7 +41,7 @@ public class ConcessionFolder extends VistaBoxFolder<Concession> {
     @Override
     public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof Concession) {
-            return new ConcessionEditorForm(true);
+            return new ConcessionForm(true);
         }
         return super.create(member);
     }
@@ -67,17 +67,6 @@ public class ConcessionFolder extends VistaBoxFolder<Concession> {
                     }
                     return true;
                 }
-
-                @Override
-                public String defineWidth() {
-                    return "300px";
-                }
-
-                @Override
-                public String defineHeight() {
-                    return "100px";
-                }
-
             }.show();
         }
 

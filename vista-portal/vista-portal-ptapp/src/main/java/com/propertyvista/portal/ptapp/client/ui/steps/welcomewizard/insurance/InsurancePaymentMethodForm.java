@@ -23,9 +23,8 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.view.client.Range;
 
-import com.pyx4j.entity.client.CEntityEditor;
+import com.pyx4j.entity.client.CEntityForm;
 import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.forms.client.ui.CCheckBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CMonthYearPicker;
 import com.pyx4j.forms.client.ui.CRadioGroup;
@@ -39,7 +38,7 @@ import com.pyx4j.widgets.client.RadioGroup;
 
 import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.common.client.theme.NewPaymentMethodEditorTheme;
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
+import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.editors.AddressSimpleEditor;
 import com.propertyvista.common.client.ui.validators.CreditCardNumberValidator;
 import com.propertyvista.domain.contact.AddressSimple;
@@ -48,15 +47,17 @@ import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.portal.rpc.ptapp.dto.welcomewizard.InsurancePaymentMethodDTO;
 import com.propertyvista.portal.rpc.ptapp.dto.welcomewizard.InsurancePaymentMethodDTO.PaymentMethod;
 
-public class InsurancePaymentMethodForm extends CEntityDecoratableEditor<InsurancePaymentMethodDTO> {
+public class InsurancePaymentMethodForm extends CEntityDecoratableForm<InsurancePaymentMethodDTO> {
 
     private static final I18n i18n = I18n.get(InsurancePaymentMethodForm.class);
 
     private FlowPanel paymentTypeImagesPanel;
 
-    private CEntityEditor<AddressSimple> billingAddress;
+    private CEntityForm<AddressSimple> billingAddress;
 
     private final boolean twoColumns;
+
+    private AddressSimpleEditor currentAddress;
 
     public InsurancePaymentMethodForm() {
         this(false);
@@ -132,19 +133,24 @@ public class InsurancePaymentMethodForm extends CEntityDecoratableEditor<Insuran
 
         container.getFlexCellFormatter().setColSpan(row, 0, 3);
 
-        CComponent<?, ?> comp = get(proto().sameAsCurrent());
-        if (comp instanceof CCheckBox) {
-            ((CCheckBox) comp).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
-                @Override
-                public void onValueChange(ValueChangeEvent<Boolean> event) {
-                    onBillingAddressSameAsCurrentOne(event.getValue());
-                    billingAddress.setEditable(!event.getValue());
-                }
-            });
-        }
+        get(proto().sameAsCurrent()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<Boolean> event) {
+                onBillingAddressSameAsCurrentOne(event.getValue());
+                billingAddress.setEditable(!event.getValue());
+                billingAddress.setVisible(!event.getValue());
+
+                currentAddress.setVisible(event.getValue());
+            }
+        });
 
         container.setWidget(++row, 0, inject(proto().billingAddress(), billingAddress = new AddressSimpleEditor()));
         container.getFlexCellFormatter().setColSpan(row, 0, 3);
+        container.setWidget(++row, 0, inject(proto().currentAddress(), currentAddress = new AddressSimpleEditor()));
+        container.getFlexCellFormatter().setColSpan(row, 0, 3);
+        currentAddress.inheritViewable(false);
+        currentAddress.setViewable(true);
+        currentAddress.setVisible(false);
 
         container.setHR(++row, 0, 3);
         container.setWidget(++row, 0, new DecoratorBuilder(inject(proto().phone()), 15).build());
@@ -162,8 +168,8 @@ public class InsurancePaymentMethodForm extends CEntityDecoratableEditor<Insuran
         // Implements meaningful in derived classes...
     }
 
-    private CEntityEditor<CreditCardInfo> createCreditCardInfoEditor() {
-        return new CEntityEditor<CreditCardInfo>(CreditCardInfo.class) {
+    private CEntityForm<CreditCardInfo> createCreditCardInfoEditor() {
+        return new CEntityForm<CreditCardInfo>(CreditCardInfo.class) {
             @Override
             public IsWidget createContent() {
                 FlowPanel panel = new FlowPanel();

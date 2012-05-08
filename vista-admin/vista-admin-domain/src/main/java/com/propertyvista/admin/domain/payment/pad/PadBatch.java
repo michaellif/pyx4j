@@ -50,6 +50,12 @@ public interface PadBatch extends IEntity {
     @Detached(level = AttachLevel.Detached)
     IList<PadDebitRecord> records();
 
+    @Indexed(group = { "m,1" })
+    IPrimitive<String> pmcNamespace();
+
+    @Indexed(group = { "m,2" })
+    IPrimitive<Key> merchantAccountKey();
+
     /**
      * TBD Copy of merchantAccount at the time of Batch creation
      */

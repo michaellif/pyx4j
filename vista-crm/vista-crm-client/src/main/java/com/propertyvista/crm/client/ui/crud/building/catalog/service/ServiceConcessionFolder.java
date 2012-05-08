@@ -18,7 +18,7 @@ import java.util.List;
 
 import com.google.gwt.core.client.GWT;
 
-import com.pyx4j.entity.client.CEntityEditor;
+import com.pyx4j.entity.client.CEntityForm;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.entity.client.ui.folder.BoxFolderItemDecorator;
@@ -30,7 +30,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
-import com.propertyvista.crm.client.ui.crud.building.catalog.concession.ConcessionEditorForm;
+import com.propertyvista.crm.client.ui.crud.building.catalog.concession.ConcessionForm;
 import com.propertyvista.crm.rpc.services.selections.SelectConcessionListService;
 import com.propertyvista.domain.financial.offering.Concession;
 import com.propertyvista.domain.financial.offering.Service;
@@ -39,9 +39,9 @@ class ServiceConcessionFolder extends VistaBoxFolder<Concession> {
 
     private static final I18n i18n = I18n.get(ServiceConcessionFolder.class);
 
-    private final CEntityEditor<Service> parent;
+    private final CEntityForm<Service> parent;
 
-    public ServiceConcessionFolder(boolean modifyable, CEntityEditor<Service> parent) {
+    public ServiceConcessionFolder(boolean modifyable, CEntityForm<Service> parent) {
         super(Concession.class, modifyable);
         this.parent = parent;
     }
@@ -49,7 +49,7 @@ class ServiceConcessionFolder extends VistaBoxFolder<Concession> {
     @Override
     public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof Concession) {
-            return new ConcessionEditorForm(true);
+            return new ConcessionForm(true);
         }
         return super.create(member);
 

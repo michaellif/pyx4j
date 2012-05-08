@@ -17,22 +17,19 @@ import java.util.List;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.admin.client.activity.NavigFolder;
 
 public interface ShortCutsView extends IsWidget {
-    public void setPresenter(ShortCutsPresenter presenter);
 
     public interface ShortCutsPresenter {
-        public void navigTo(AppPlace place);
-
-        public String getNavigLabel(AppPlace place);
-
-        public List<NavigFolder> getNavigFolders();
-
-        public AppPlace getWhere();
-
     }
 
+    public void setPresenter(ShortCutsPresenter presenter);
+
+    public void setNavigationFolders(List<NavigFolder> folders);
+
+    public void updateShortcutFolder(CrudAppPlace place, IEntity value);
 }

@@ -51,7 +51,7 @@ public interface PadFile extends IEntity {
 
     };
 
-    IPrimitive<PadFileStatus> sent();
+    IPrimitive<PadFileStatus> status();
 
     @Owned
     @Detached(level = AttachLevel.Detached)

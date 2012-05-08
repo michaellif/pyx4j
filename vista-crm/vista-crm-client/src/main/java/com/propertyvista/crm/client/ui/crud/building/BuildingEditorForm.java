@@ -51,7 +51,6 @@ import com.propertyvista.common.client.ui.validators.PastDateValidation;
 import com.propertyvista.crm.client.themes.CrmTheme;
 import com.propertyvista.crm.client.ui.components.media.CrmMediaFolder;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
-import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.crm.client.ui.notesandattachments.NotesAndAttachmentsEditorForm;
 import com.propertyvista.domain.policy.policies.IdAssignmentPolicy;
 import com.propertyvista.domain.policy.policies.MiscPolicy;
@@ -261,7 +260,7 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         main.getColumnFormatter().setWidth(0, "50%");
         main.getColumnFormatter().setWidth(1, "50%");
 
-        return new CrmScrollPanel(main);
+        return new ScrollPanel(main);
     }
 
     private Widget createDetailsTab() {
@@ -331,7 +330,7 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         main.getColumnFormatter().setWidth(0, "50%");
         main.getColumnFormatter().setWidth(1, "50%");
 
-        return new CrmScrollPanel(main);
+        return new ScrollPanel(main);
     }
 
     private Widget createFinancialTab() {
@@ -342,13 +341,15 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         main.setWidget(row++, 0, new DecoratorBuilder(inject(proto().financial().dateAcquired()), 9).build());
         main.setWidget(row++, 0, new DecoratorBuilder(inject(proto().financial().purchasePrice()), 10).build());
         main.setWidget(row++, 0, new DecoratorBuilder(inject(proto().financial().marketPrice()), 10).build());
+        main.setBR(row++, 0, 1);
+        main.setWidget(row++, 0, new DecoratorBuilder(inject(proto().merchantAccount()), 15).build());
 
         row = 1;
         main.setWidget(row++, 1, new DecoratorBuilder(inject(proto().financial().lastAppraisalDate()), 9).build());
         main.setWidget(row++, 1, new DecoratorBuilder(inject(proto().financial().lastAppraisalValue()), 10).build());
         main.setWidget(row++, 1, new DecoratorBuilder(inject(proto().financial().currency().name()), 10).customLabel(i18n.tr("Currency Name")).build());
 
-        return new CrmScrollPanel(main);
+        return new ScrollPanel(main);
     }
 
     private Widget createMarketingTab() {
@@ -366,7 +367,7 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
         main.setWidget(++row, 0, inject(proto().media(), new CrmMediaFolder(isEditable(), ImageTarget.Building)));
         main.getFlexCellFormatter().setColSpan(row, 0, 2);
 
-        return new CrmScrollPanel(main);
+        return new ScrollPanel(main);
     }
 
     private Widget createContactTab() {
@@ -374,7 +375,7 @@ public class BuildingEditorForm extends CrmEntityForm<BuildingDTO> {
 
         main.setWidget(0, 0, inject(proto().contacts().organizationContacts(), new OrganizationContactFolder(isEditable())));
 
-        return new CrmScrollPanel(main);
+        return new ScrollPanel(main);
     }
 
     private class PropertyPhoneFolder extends VistaTableFolder<PropertyPhone> {

@@ -38,7 +38,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.CancelOption;
 import com.pyx4j.widgets.client.dialog.Dialog;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
+import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.domain.site.SocialLink;
 import com.propertyvista.domain.site.SocialLink.SocialSite;
@@ -119,7 +119,7 @@ class SocialLinkFolder extends VistaBoxFolder<SocialLink> {
         }
     }
 
-    class SocialLinkEditor extends CEntityDecoratableEditor<SocialLink> {
+    class SocialLinkEditor extends CEntityDecoratableForm<SocialLink> {
 
         public SocialLinkEditor() {
             super(SocialLink.class);

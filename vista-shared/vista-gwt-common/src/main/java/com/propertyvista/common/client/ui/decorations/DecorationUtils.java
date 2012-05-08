@@ -19,7 +19,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.entity.client.CEntityEditor;
+import com.pyx4j.entity.client.CEntityForm;
 
 import com.propertyvista.domain.person.Person;
 
@@ -62,7 +62,7 @@ public class DecorationUtils {
     }
 
     // forms full person's name from our IPerson domain: 
-    public static FlowPanel formFullName(CEntityEditor<?> entityComp, final Person person) {
+    public static FlowPanel formFullName(CEntityForm<?> entityComp, final Person person) {
 
         FlowPanel fullname = new FlowPanel();
         fullname.add(inline(entityComp.inject(person.name().namePrefix()), "auto"));

@@ -157,16 +157,6 @@ public class LeaseBillingPolicyEditorForm extends PolicyDTOTabPanelBasedEditorFo
             public boolean onClickCancel() {
                 return true;
             };
-
-            @Override
-            public String defineHeight() {
-                return "100px";
-            };
-
-            @Override
-            public String defineWidth() {
-                return "300px";
-            }
         }
     }
 }

@@ -31,7 +31,7 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
+import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedEditorForm;
 import com.propertyvista.crm.client.ui.crud.settings.financial.tax.TaxFolder;
@@ -90,7 +90,7 @@ public class LeaseAdjustmentPolicyEditorForm extends PolicyDTOTabPanelBasedEdito
 
         // internals:
 
-        private static class LeaseAdjustmentPolicyItemEditor extends CEntityDecoratableEditor<LeaseAdjustmentPolicyItem> {
+        private static class LeaseAdjustmentPolicyItemEditor extends CEntityDecoratableForm<LeaseAdjustmentPolicyItem> {
 
             public LeaseAdjustmentPolicyItemEditor() {
                 super(LeaseAdjustmentPolicyItem.class);

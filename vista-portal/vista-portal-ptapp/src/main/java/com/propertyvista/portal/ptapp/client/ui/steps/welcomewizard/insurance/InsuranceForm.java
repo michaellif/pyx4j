@@ -26,10 +26,10 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
+import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.portal.rpc.ptapp.dto.welcomewizard.InsuranceDTO;
 
-public class InsuranceForm extends CEntityDecoratableEditor<InsuranceDTO> {
+public class InsuranceForm extends CEntityDecoratableForm<InsuranceDTO> {
 
     private final static I18n i18n = I18n.get(InsuranceForm.class);
 

@@ -56,13 +56,16 @@ public class MoveInScheduleServiceImpl implements MoveInScheduleService {
             if (i < 12) {
                 randomStatus = Status.busy;
             } else if (i < 48 - 12) {
-                randomStatus = WelcomeWizardDemoData.rnd().nextBoolean() ? Status.busy : Status.free;
+                randomStatus = WelcomeWizardDemoData.rnd().nextBoolean() & WelcomeWizardDemoData.rnd().nextBoolean() ? Status.busy : Status.free;
             } else {
                 randomStatus = Status.busy;
             }
             TimeSegmentDTO segment = createHalfHourTimeSegment(startTime, randomStatus);
-            randomSchedule.add(segment);
             startTime = segment.end().getValue();
+
+            if ((i >= 18) & (i < 36)) { // somewhere between 9:00 am and 6:00pm                
+                randomSchedule.add(segment);
+            }
         }
         return randomSchedule;
     }

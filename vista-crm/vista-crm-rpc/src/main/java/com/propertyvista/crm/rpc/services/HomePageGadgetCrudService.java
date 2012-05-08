@@ -15,7 +15,7 @@ package com.propertyvista.crm.rpc.services;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
 
-import com.propertyvista.domain.site.HomePageGadget;
+import com.propertyvista.domain.site.gadgets.HomePageGadget;
 
 public interface HomePageGadgetCrudService extends AbstractCrudService<HomePageGadget> {
 }

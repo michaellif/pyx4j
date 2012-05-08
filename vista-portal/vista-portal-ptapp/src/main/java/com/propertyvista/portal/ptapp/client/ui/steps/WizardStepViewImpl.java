@@ -21,7 +21,7 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 
-import com.pyx4j.entity.client.CEntityEditor;
+import com.pyx4j.entity.client.CEntityForm;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.essentials.client.crud.CrudDebugId;
 import com.pyx4j.i18n.shared.I18n;
@@ -37,11 +37,11 @@ public class WizardStepViewImpl<E extends IEntity, T extends WizardStepPresenter
 
     private T presenter;
 
-    private final CEntityEditor<E> form;
+    private final CEntityForm<E> form;
 
     private final Button actionButton;
 
-    public WizardStepViewImpl(final CEntityEditor<E> form) {
+    public WizardStepViewImpl(final CEntityForm<E> form) {
         this.form = form;
         form.initContent();
         add(form);
@@ -115,7 +115,7 @@ public class WizardStepViewImpl<E extends IEntity, T extends WizardStepPresenter
         return form.getValue();
     }
 
-    protected CEntityEditor<E> getForm() {
+    protected CEntityForm<E> getForm() {
         return form;
     }
 

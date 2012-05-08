@@ -45,7 +45,7 @@ public interface MerchantAccount extends IEntity {
     IPrimitive<MerchantAccountStatus> status();
 
     // aka external id for updates from onboarding
-    IPrimitive<String> onboardingMerchantAccountId();
+    IPrimitive<String> onboardingBankAccountId();
 
     @Length(8)
     @RpcTransient

@@ -14,11 +14,11 @@
 package com.propertyvista.crm.client.ui.crud.settings.financial.tax;
 
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.ScrollPanel;
 
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
-import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.domain.financial.tax.Tax;
 
 public class TaxEditorForm extends CrmEntityForm<Tax> {
@@ -41,6 +41,6 @@ public class TaxEditorForm extends CrmEntityForm<Tax> {
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().rate()), 7).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().compound()), 5).build());
 
-        return new CrmScrollPanel(main);
+        return new ScrollPanel(main);
     }
 }

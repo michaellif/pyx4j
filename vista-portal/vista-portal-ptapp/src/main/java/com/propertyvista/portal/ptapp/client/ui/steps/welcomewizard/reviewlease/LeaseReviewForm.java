@@ -17,10 +17,10 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
+import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.portal.rpc.ptapp.dto.welcomewizard.LeaseReviewDTO;
 
-public class LeaseReviewForm extends CEntityDecoratableEditor<LeaseReviewDTO> {
+public class LeaseReviewForm extends CEntityDecoratableForm<LeaseReviewDTO> {
 
     public LeaseReviewForm() {
         super(LeaseReviewDTO.class);

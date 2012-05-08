@@ -19,11 +19,11 @@ import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
+import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.domain.site.Testimonial;
 
-class TestimonialFolder extends VistaBoxFolder<Testimonial> {
+public class TestimonialFolder extends VistaBoxFolder<Testimonial> {
 
     public TestimonialFolder(boolean modifyable) {
         super(Testimonial.class, modifyable);
@@ -37,7 +37,7 @@ class TestimonialFolder extends VistaBoxFolder<Testimonial> {
         return super.create(member);
     }
 
-    class TestimonialEditor extends CEntityDecoratableEditor<Testimonial> {
+    class TestimonialEditor extends CEntityDecoratableForm<Testimonial> {
 
         public TestimonialEditor() {
             super(Testimonial.class);

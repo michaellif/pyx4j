@@ -26,14 +26,14 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
+import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.domain.maintenance.IssueClassification;
 import com.propertyvista.domain.maintenance.IssueElement;
 import com.propertyvista.domain.maintenance.IssueRepairSubject;
 import com.propertyvista.domain.maintenance.IssueSubjectDetails;
 import com.propertyvista.portal.rpc.portal.dto.MaintenanceRequestDTO;
 
-public class NewMaintenanceRequestForm extends CEntityDecoratableEditor<MaintenanceRequestDTO> {
+public class NewMaintenanceRequestForm extends CEntityDecoratableForm<MaintenanceRequestDTO> {
 
     private static final I18n i18n = I18n.get(NewMaintenanceRequestForm.class);
 

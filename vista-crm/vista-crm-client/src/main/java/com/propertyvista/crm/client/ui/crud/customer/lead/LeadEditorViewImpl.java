@@ -20,7 +20,7 @@ import com.propertyvista.domain.tenant.lead.Lead;
 public class LeadEditorViewImpl extends CrmEditorViewImplBase<Lead> implements LeadEditorView {
 
     public LeadEditorViewImpl() {
-        super(Marketing.Lead.class, new LeadEditorForm());
+        super(Marketing.Lead.class, new LeadForm());
     }
 
 }

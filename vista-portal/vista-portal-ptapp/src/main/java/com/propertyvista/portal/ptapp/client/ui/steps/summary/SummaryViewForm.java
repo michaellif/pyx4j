@@ -42,7 +42,7 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.Anchor;
 
 import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
+import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.editors.dto.FinancialViewForm;
 import com.propertyvista.common.client.ui.components.editors.dto.InfoViewForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
@@ -60,7 +60,7 @@ import com.propertyvista.portal.rpc.ptapp.dto.ApartmentInfoSummaryDTO;
 import com.propertyvista.portal.rpc.ptapp.dto.SummaryDTO;
 import com.propertyvista.portal.rpc.ptapp.services.steps.SummaryService;
 
-public class SummaryViewForm extends CEntityDecoratableEditor<SummaryDTO> {
+public class SummaryViewForm extends CEntityDecoratableForm<SummaryDTO> {
 
     private static final I18n i18n = I18n.get(SummaryViewForm.class);
 

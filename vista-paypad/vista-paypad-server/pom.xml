@@ -142,6 +142,7 @@
                 </configuration>
             </plugin>
 
+<!--
             <plugin>
                 <groupId>org.zeroturnaround</groupId>
                 <artifactId>jrebel-maven-plugin</artifactId>
@@ -153,7 +154,7 @@
                     </war>
                 </configuration>
             </plugin>
-
+-->
         </plugins>
     </build>
 

@@ -25,6 +25,8 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
+import com.propertyvista.domain.site.gadgets.HomePageGadget;
+
 @Cached
 @DiscriminatorValue("SiteDescriptor")
 public interface SiteDescriptor extends Descriptor {
@@ -72,7 +74,7 @@ public interface SiteDescriptor extends Descriptor {
 
     IPrimitive<Boolean> enableMapView();
 
-    IPrimitive<Boolean> enableBuildingDetails();
+    IPrimitive<Boolean> disableBuildingDetails();
 
     @Owned
     SitePalette sitePalette();

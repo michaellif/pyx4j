@@ -19,11 +19,9 @@ import java.util.List;
 import com.google.gwt.user.client.Command;
 
 import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
-import com.pyx4j.entity.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.entity.client.ui.folder.CEntityFolderRowEditor;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.forms.client.events.PropertyChangeEvent;
-import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.forms.client.ui.CLabel;
@@ -31,7 +29,9 @@ import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
-import com.propertyvista.domain.site.HomePageGadget;
+import com.propertyvista.domain.site.gadgets.GadgetContent;
+import com.propertyvista.domain.site.gadgets.HomePageGadget;
+import com.propertyvista.domain.site.gadgets.HomePageGadget.GadgetType;
 
 public class HomePageGadgetFolder extends VistaTableFolder<HomePageGadget> {
 
@@ -41,24 +41,24 @@ public class HomePageGadgetFolder extends VistaTableFolder<HomePageGadget> {
     }
 
     @Override
-    protected CEntityFolderItem<HomePageGadget> createItem(boolean first) {
-        final CEntityFolderItem<HomePageGadget> item = super.createItem(first);
-        item.addPropertyChangeHandler(new PropertyChangeHandler() {
-            @Override
-            public void onPropertyChange(PropertyChangeEvent event) {
-                if (item.getValue() != null) {
-                    item.setRemovable(HomePageGadget.GadgetType.custom.equals(item.getValue().moduleType().getValue()));
-                }
+    protected IList<HomePageGadget> preprocessValue(IList<HomePageGadget> value, boolean fireEvent, boolean populate) {
+        // set gadget type based on the gadget class
+        if (value != null) {
+            for (HomePageGadget gadget : value) {
+                @SuppressWarnings("unchecked")
+                GadgetType type = GadgetType.getGadgetType((Class<? extends GadgetContent>) gadget.content().getInstanceValueClass());
+                gadget.type().setValue(type);
             }
-        });
-        return item;
+        }
+        return value;
     }
 
     @Override
     public List<EntityFolderColumnDescriptor> columns() {
         ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
         columns.add(new EntityFolderColumnDescriptor(proto().name(), "25em"));
-        columns.add(new EntityFolderColumnDescriptor(proto().enabled(), "5em"));
+        columns.add(new EntityFolderColumnDescriptor(proto().type(), "10em"));
+        columns.add(new EntityFolderColumnDescriptor(proto().status(), "5em"));
         return columns;
     }
 

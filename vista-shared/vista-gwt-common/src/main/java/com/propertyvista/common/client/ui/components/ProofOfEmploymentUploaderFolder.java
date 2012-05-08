@@ -20,7 +20,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
+import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.domain.media.ProofOfEmploymentDocument;
 
@@ -42,7 +42,7 @@ public class ProofOfEmploymentUploaderFolder extends VistaBoxFolder<ProofOfEmplo
         }
     }
 
-    private class ProofOfEmploymentDocumentEditor extends CEntityDecoratableEditor<ProofOfEmploymentDocument> {
+    private class ProofOfEmploymentDocumentEditor extends CEntityDecoratableForm<ProofOfEmploymentDocument> {
 
         public ProofOfEmploymentDocumentEditor() {
             super(ProofOfEmploymentDocument.class);

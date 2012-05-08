@@ -18,11 +18,12 @@ import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.security.client.ClientContext;
-import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.admin.client.activity.ShortCutsActivity;
 
 public class ShortCutsActivityMapper implements ActivityMapper {
+
+    private final ShortCutsActivity activity = new ShortCutsActivity();
 
     public ShortCutsActivityMapper() {
     }
@@ -31,11 +32,9 @@ public class ShortCutsActivityMapper implements ActivityMapper {
     public Activity getActivity(Place place) {
 
         if (ClientContext.isAuthenticated()) {
-            return new ShortCutsActivity((AppPlace) place);
+            return activity.withPlace(place);
         } else {
             return null;
         }
-
     }
-
 }

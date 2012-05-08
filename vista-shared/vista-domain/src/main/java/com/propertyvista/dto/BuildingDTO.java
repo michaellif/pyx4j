@@ -13,12 +13,13 @@
  */
 package com.propertyvista.dto;
 
-import com.pyx4j.entity.annotations.ExtendsDBO;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
+import com.pyx4j.entity.annotations.ExtendsDBO;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IList;
 
 import com.propertyvista.domain.GeoLocation;
+import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.financial.offering.FeatureItemType;
 import com.propertyvista.domain.property.asset.building.Building;
 
@@ -30,4 +31,6 @@ public interface BuildingDTO extends Building {
 
     @EmbeddedEntity
     GeoLocation geoLocation();
+
+    MerchantAccount merchantAccount();
 }

@@ -50,7 +50,7 @@ import com.pyx4j.svg.chart.GridBasedChartConfigurator.GridType;
 import com.pyx4j.svg.chart.LineChart;
 import com.pyx4j.svg.gwt.SvgFactoryForGwt;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
+import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.crm.client.ui.board.BoardView;
 import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEvent;
 import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEventHandler;
@@ -300,7 +300,7 @@ public class TurnoverAnalysisGraphGadget extends AbstractGadget<TurnoverAnalysis
 
         @Override
         public ISetup getSetup() {
-            return new SetupForm(new CEntityDecoratableEditor<TurnoverAnalysisMetadata>(TurnoverAnalysisMetadata.class) {
+            return new SetupForm(new CEntityDecoratableForm<TurnoverAnalysisMetadata>(TurnoverAnalysisMetadata.class) {
                 @Override
                 public IsWidget createContent() {
                     FormFlexPanel p = new FormFlexPanel();

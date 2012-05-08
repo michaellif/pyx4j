@@ -19,11 +19,11 @@ import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
+import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.validators.BirthdayDateValidator;
 import com.propertyvista.domain.tenant.lease.extradata.Pet;
 
-public class PetDataEditor extends CEntityDecoratableEditor<Pet> {
+public class PetDataEditor extends CEntityDecoratableForm<Pet> {
 
     private static final I18n i18n = I18n.get(PetDataEditor.class);
 

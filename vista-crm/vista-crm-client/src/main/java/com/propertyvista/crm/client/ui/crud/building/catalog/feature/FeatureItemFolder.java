@@ -19,7 +19,7 @@ import java.util.List;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 
-import com.pyx4j.entity.client.CEntityEditor;
+import com.pyx4j.entity.client.CEntityForm;
 import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.CEntityComboBox;
 import com.pyx4j.entity.client.ui.folder.CEntityFolderRowEditor;
@@ -45,9 +45,9 @@ class FeatureItemFolder extends VistaTableFolder<ProductItem> {
 
     private static final I18n i18n = I18n.get(FeatureItemFolder.class);
 
-    private final CEntityEditor<Feature> parent;
+    private final CEntityForm<Feature> parent;
 
-    public FeatureItemFolder(CEntityEditor<Feature> parent) {
+    public FeatureItemFolder(CEntityForm<Feature> parent) {
         super(ProductItem.class, parent.isEditable());
         this.parent = parent;
     }

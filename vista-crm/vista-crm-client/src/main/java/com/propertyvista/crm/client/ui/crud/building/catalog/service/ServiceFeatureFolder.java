@@ -18,7 +18,7 @@ import java.util.List;
 
 import com.google.gwt.core.client.GWT;
 
-import com.pyx4j.entity.client.CEntityEditor;
+import com.pyx4j.entity.client.CEntityForm;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.entity.client.ui.folder.BoxFolderItemDecorator;
@@ -39,9 +39,9 @@ class ServiceFeatureFolder extends VistaBoxFolder<Feature> {
 
     private static final I18n i18n = I18n.get(ServiceFeatureFolder.class);
 
-    private final CEntityEditor<Service> parent;
+    private final CEntityForm<Service> parent;
 
-    public ServiceFeatureFolder(boolean modifyable, CEntityEditor<Service> parent) {
+    public ServiceFeatureFolder(boolean modifyable, CEntityForm<Service> parent) {
         super(Feature.class, modifyable);
         this.parent = parent;
     }

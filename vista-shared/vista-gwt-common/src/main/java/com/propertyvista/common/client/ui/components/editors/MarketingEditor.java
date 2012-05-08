@@ -23,12 +23,12 @@ import com.pyx4j.entity.client.ui.folder.IFolderDecorator;
 import com.pyx4j.entity.client.ui.folder.TableFolderDecorator;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
+import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.domain.marketing.AdvertisingBlurb;
 import com.propertyvista.domain.marketing.Marketing;
 
-public class MarketingEditor extends CEntityDecoratableEditor<Marketing> {
+public class MarketingEditor extends CEntityDecoratableForm<Marketing> {
 
     public MarketingEditor() {
         super(Marketing.class);

@@ -16,7 +16,7 @@ package com.propertyvista.crm.client.ui.crud.building;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.pyx4j.entity.client.CEntityEditor;
+import com.pyx4j.entity.client.CEntityForm;
 import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.entity.client.ui.folder.IFolderDecorator;
@@ -42,9 +42,9 @@ class UtilityFolder extends VistaTableFolder<FeatureItemType> {
         COLUMNS.add(new EntityFolderColumnDescriptor(proto.name(), "30em"));
     }
 
-    private final CEntityEditor<BuildingDTO> building;
+    private final CEntityForm<BuildingDTO> building;
 
-    public UtilityFolder(CEntityEditor<BuildingDTO> building) {
+    public UtilityFolder(CEntityForm<BuildingDTO> building) {
         super(FeatureItemType.class, building.isEditable());
         this.building = building;
     }
@@ -73,20 +73,10 @@ class UtilityFolder extends VistaTableFolder<FeatureItemType> {
                 }
                 return true;
             }
-
-            @Override
-            public String defineWidth() {
-                return "300px";
-            }
-
-            @Override
-            public String defineHeight() {
-                return "100px";
-            }
         }.show();
     }
 
-    private static List<FeatureItemType> getNotSelectedUtilities(CEntityEditor<BuildingDTO> building) {
+    private static List<FeatureItemType> getNotSelectedUtilities(CEntityForm<BuildingDTO> building) {
         List<FeatureItemType> alreadySelected = new ArrayList<FeatureItemType>();
         for (FeatureItemType item : building.getValue().productCatalog().includedUtilities()) {
             alreadySelected.add(item);

@@ -22,8 +22,10 @@ import org.apache.wicket.markup.html.list.ListView;
 import templates.TemplateResources;
 
 import com.propertyvista.domain.site.AvailableLocale;
-import com.propertyvista.domain.site.HomePageGadget;
 import com.propertyvista.domain.site.SiteImageResource;
+import com.propertyvista.domain.site.gadgets.GadgetContent;
+import com.propertyvista.domain.site.gadgets.HomePageGadget;
+import com.propertyvista.domain.site.gadgets.HomePageGadget.GadgetType;
 import com.propertyvista.pmsite.server.PMSiteClientPreferences;
 import com.propertyvista.pmsite.server.PMSiteContentManager;
 import com.propertyvista.pmsite.server.PMSiteWebRequest;
@@ -56,40 +58,48 @@ public class LandingPage extends BasePage {
             bannerImg.add(AttributeModifier.replace("style", "background-image:url(" + PMSiteContentManager.getSiteImageResourceUrl(banner) + ")"));
         }
         add(bannerImg);
-        ListView<HomePageGadget> narrowPanel = new ListView<HomePageGadget>("narrowBox", cm.getNarrowModules()) {
+        ListView<HomePageGadget> narrowPanel = new ListView<HomePageGadget>("narrowBox", cm.getNarrowAreaGadgets()) {
             private static final long serialVersionUID = 1L;
 
             @Override
             protected void populateItem(ListItem<HomePageGadget> item) {
-                HomePageGadget module = item.getModelObject();
-                switch (module.moduleType().getValue()) {
+                HomePageGadget gadget = item.getModelObject();
+                @SuppressWarnings("unchecked")
+                GadgetType type = GadgetType.getGadgetType((Class<? extends GadgetContent>) gadget.content().getInstanceValueClass());
+                switch (type) {
                 case news:
                     item.add(new NewsPanel("narrowBoxContent"));
                     break;
                 case custom:
-                    item.add(new CustomModulePanel("narrowBoxContent", module));
+                    item.add(new CustomModulePanel("narrowBoxContent", gadget));
                     break;
                 }
             }
         };
         add(narrowPanel);
 
-        ListView<HomePageGadget> widePanel = new ListView<HomePageGadget>("wideBox", cm.getWideModules()) {
+        ListView<HomePageGadget> widePanel = new ListView<HomePageGadget>("wideBox", cm.getWideAreaGadgets()) {
             private static final long serialVersionUID = 1L;
 
             @Override
             protected void populateItem(ListItem<HomePageGadget> item) {
-                HomePageGadget module = item.getModelObject();
-                switch (module.moduleType().getValue()) {
-                case featured:
-                    item.add(new PromoPanel("wideBoxContent"));
-                    break;
-                case testimonials:
-                    item.add(new TestimPanel("wideBoxContent"));
-                    break;
-                case custom:
-                    item.add(new CustomModulePanel("wideBoxContent", module));
-                    break;
+                HomePageGadget gadget = item.getModelObject();
+                @SuppressWarnings("unchecked")
+                GadgetType type = GadgetType.getGadgetType((Class<? extends GadgetContent>) gadget.content().getInstanceValueClass());
+                if (type != null) {
+                    switch (type) {
+                    case promo:
+                        item.add(new PromoPanel("wideBoxContent"));
+                        break;
+                    case testimonials:
+                        item.add(new TestimPanel("wideBoxContent"));
+                        break;
+                    case custom:
+                        item.add(new CustomModulePanel("wideBoxContent", gadget));
+                        break;
+                    }
+                } else {
+                    item.setVisible(false);
                 }
             }
         };

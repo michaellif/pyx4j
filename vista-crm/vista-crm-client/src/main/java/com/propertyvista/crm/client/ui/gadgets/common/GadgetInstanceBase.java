@@ -29,7 +29,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
+import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.crm.client.ui.board.BoardView;
 import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata.RefreshInterval;
@@ -421,9 +421,9 @@ public abstract class GadgetInstanceBase<T extends GadgetMetadata> implements IG
     }
 
     protected class SetupForm implements ISetup {
-        private final CEntityDecoratableEditor<T> form;
+        private final CEntityDecoratableForm<T> form;
 
-        public SetupForm(CEntityDecoratableEditor<T> form) {
+        public SetupForm(CEntityDecoratableForm<T> form) {
             assert form != null;
 
             this.form = form;

@@ -24,7 +24,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.client.CEntityEditor;
+import com.pyx4j.entity.client.CEntityForm;
 import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.entity.client.ui.folder.CEntityFolderRowEditor;
@@ -43,7 +43,7 @@ import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
+import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.editors.PetDataEditor;
 import com.propertyvista.common.client.ui.components.editors.VehicleDataEditor;
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
@@ -62,7 +62,7 @@ import com.propertyvista.domain.tenant.lease.extradata.Vehicle;
 import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.misc.VistaTODO;
 
-public class BillableItemEditor extends CEntityDecoratableEditor<BillableItem> {
+public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
 
     private static final I18n i18n = I18n.get(BillableItemEditor.class);
 
@@ -70,7 +70,7 @@ public class BillableItemEditor extends CEntityDecoratableEditor<BillableItem> {
 
     private final FormFlexPanel adjustmentPanel = new FormFlexPanel();
 
-    private final CEntityEditor<? extends LeaseDTO> lease;
+    private final CEntityForm<? extends LeaseDTO> lease;
 
     private final IEditorView<? extends LeaseDTO> leaseEditorView;
 
@@ -80,12 +80,12 @@ public class BillableItemEditor extends CEntityDecoratableEditor<BillableItem> {
 
     private CComponent<LogicalDate, ?> itemExpirationDateEditor;
 
-    public BillableItemEditor(CEntityEditor<? extends LeaseDTO> lease, IEditorView<? extends LeaseDTO> leaseEditorView, boolean isService) {
+    public BillableItemEditor(CEntityForm<? extends LeaseDTO> lease, IEditorView<? extends LeaseDTO> leaseEditorView, boolean isService) {
         this(lease, leaseEditorView);
         this.isService = isService;
     }
 
-    public BillableItemEditor(CEntityEditor<? extends LeaseDTO> lease, IEditorView<? extends LeaseDTO> leaseEditorView) {
+    public BillableItemEditor(CEntityForm<? extends LeaseDTO> lease, IEditorView<? extends LeaseDTO> leaseEditorView) {
         super(BillableItem.class);
         this.lease = lease;
         this.leaseEditorView = leaseEditorView;
@@ -122,16 +122,6 @@ public class BillableItemEditor extends CEntityDecoratableEditor<BillableItem> {
                         } else {
                             return false;
                         }
-                    }
-
-                    @Override
-                    public String defineHeight() {
-                        return "100px";
-                    };
-
-                    @Override
-                    public String defineWidth() {
-                        return "400px";
                     }
 
                     @Override
@@ -202,7 +192,7 @@ public class BillableItemEditor extends CEntityDecoratableEditor<BillableItem> {
                 adjustmentPanel.setVisible(true);
             }
 
-            CEntityEditor editor = null;
+            CEntityForm editor = null;
             BillableItemExtraData extraData = getValue().extraData();
 
             // add extraData editor if necessary:

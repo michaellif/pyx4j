@@ -27,12 +27,12 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.entity.client.CEntityEditor;
+import com.pyx4j.entity.client.CEntityForm;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.security.shared.SecurityController;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
+import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.ChargeLineFolder;
 import com.propertyvista.common.client.ui.decorations.DecorationUtils;
 import com.propertyvista.domain.charges.ChargeLineList;
@@ -40,7 +40,7 @@ import com.propertyvista.domain.security.VistaCustomerBehavior;
 import com.propertyvista.portal.domain.ptapp.Charges;
 import com.propertyvista.portal.rpc.ptapp.ChargesSharedCalculation;
 
-public class ChargesViewForm extends CEntityDecoratableEditor<Charges> {
+public class ChargesViewForm extends CEntityDecoratableForm<Charges> {
 
     private static final Logger log = LoggerFactory.getLogger(ChargesViewForm.class);
 
@@ -97,7 +97,7 @@ public class ChargesViewForm extends CEntityDecoratableEditor<Charges> {
         splitCharges.setVisible(getValue().paymentSplitCharges().charges().size() > 1);
     }
 
-    private static Widget createTotal(CEntityEditor<?> form, IPrimitive<BigDecimal> member) {
+    private static Widget createTotal(CEntityForm<?> form, IPrimitive<BigDecimal> member) {
         FlowPanel totalRow = new FlowPanel();
         HTML total = new HTML("<b>" + member.getMeta().getCaption() + "</b>");
         total.getElement().getStyle().setPaddingLeft(0.7, Unit.EM);
@@ -120,7 +120,7 @@ public class ChargesViewForm extends CEntityDecoratableEditor<Charges> {
      * @author ArtyomB
      * 
      */
-    private static class ChargesSubCategoryViewForm extends CEntityDecoratableEditor<ChargeLineList> {
+    private static class ChargesSubCategoryViewForm extends CEntityDecoratableForm<ChargeLineList> {
         private final String caption;
 
         public ChargesSubCategoryViewForm(String caption) {

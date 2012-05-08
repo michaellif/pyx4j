@@ -48,6 +48,14 @@ class OnboardingProcessor {
                 if ((memberMeta.isValidatorAnnotationPresent(NotNull.class)) && (member.isNull())) {
                     return new Error(member.getPath() + " is required");
                 }
+
+                if (memberMeta.getValueClass().equals(String.class)) {
+                    if ((((String) member.getValue()).length() > memberMeta.getLength())) {
+
+                        return new Error("Length of member " + member.getPath() + " is greater then required");
+                    }
+                }
+
             }
         }
         return null;

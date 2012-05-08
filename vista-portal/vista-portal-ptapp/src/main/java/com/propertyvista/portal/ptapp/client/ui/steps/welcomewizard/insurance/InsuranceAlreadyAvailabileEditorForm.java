@@ -21,10 +21,10 @@ import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationFailure;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
+import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.portal.rpc.ptapp.dto.welcomewizard.ExistingInsurance;
 
-public class InsuranceAlreadyAvailabileEditorForm extends CEntityDecoratableEditor<ExistingInsurance> {
+public class InsuranceAlreadyAvailabileEditorForm extends CEntityDecoratableForm<ExistingInsurance> {
 
     private final static I18n i18n = I18n.get(InsuranceAlreadyAvailabileEditorForm.class);
 

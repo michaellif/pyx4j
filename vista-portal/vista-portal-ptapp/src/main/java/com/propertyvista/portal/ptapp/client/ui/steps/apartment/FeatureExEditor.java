@@ -17,14 +17,14 @@ import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 
-import com.pyx4j.entity.client.CEntityEditor;
+import com.pyx4j.entity.client.CEntityForm;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CNumberLabel;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
+import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.editors.PetDataEditor;
 import com.propertyvista.common.client.ui.components.editors.VehicleDataEditor;
 import com.propertyvista.domain.financial.offering.FeatureItemType;
@@ -33,7 +33,7 @@ import com.propertyvista.domain.tenant.lease.BillableItemExtraData;
 import com.propertyvista.domain.tenant.lease.extradata.Pet;
 import com.propertyvista.domain.tenant.lease.extradata.Vehicle;
 
-class FeatureExEditor extends CEntityDecoratableEditor<BillableItem> {
+class FeatureExEditor extends CEntityDecoratableForm<BillableItem> {
 
     private static final I18n i18n = I18n.get(FeatureExEditor.class);
 
@@ -73,7 +73,7 @@ class FeatureExEditor extends CEntityDecoratableEditor<BillableItem> {
         super.onPopulate();
 
         if (!getValue().item().isEmpty()) {
-            CEntityEditor editor = null;
+            CEntityForm editor = null;
             BillableItemExtraData extraData = getValue().extraData();
 
             // add extraData editor if necessary:

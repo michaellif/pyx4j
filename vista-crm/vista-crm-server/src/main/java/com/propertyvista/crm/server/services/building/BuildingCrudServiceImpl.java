@@ -101,8 +101,8 @@ public class BuildingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Building
             MerchantAccount oneAccount = in.merchantAccounts().iterator().next();
             MerchantAccountCrudServiceImpl.setCalulatedFileds(oneAccount, oneAccount);
             dto.merchantAccounts().add(oneAccount);
+            dto.merchantAccount().set(oneAccount);
         }
-
     }
 
     @Override
@@ -137,6 +137,9 @@ public class BuildingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Building
         if (dbo.id().isNull()) {
             ServerSideFactory.create(IdAssignmentFacade.class).assignId(dbo);
         }
+
+        dbo.merchantAccounts().clear();
+        dbo.merchantAccounts().add(in.merchantAccount());
 
         Persistence.service().merge(dbo);
         PublicDataUpdater.updateIndexData(dbo);

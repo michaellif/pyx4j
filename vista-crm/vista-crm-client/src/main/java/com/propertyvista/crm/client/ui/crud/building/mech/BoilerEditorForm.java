@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.building.mech;
 
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
@@ -20,7 +21,6 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.editors.LicenseEditor;
 import com.propertyvista.common.client.ui.validators.PastDateValidation;
-import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.dto.BoilerDTO;
 
 public class BoilerEditorForm extends MechBaseEditorForm<BoilerDTO> {
@@ -62,7 +62,7 @@ public class BoilerEditorForm extends MechBaseEditorForm<BoilerDTO> {
         main.getColumnFormatter().setWidth(0, "50%");
         main.getColumnFormatter().setWidth(1, "50%");
 
-        return new CrmScrollPanel(main);
+        return new ScrollPanel(main);
     }
 
     @Override

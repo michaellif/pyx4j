@@ -37,9 +37,9 @@ import com.propertyvista.admin.client.activity.crud.onboardingusers.OnboardingUs
 import com.propertyvista.admin.client.activity.crud.pmc.PmcEditorActivity;
 import com.propertyvista.admin.client.activity.crud.pmc.PmcListerActivity;
 import com.propertyvista.admin.client.activity.crud.pmc.PmcViewerActivity;
-import com.propertyvista.admin.client.activity.crud.proc.ProcessEditorActivity;
-import com.propertyvista.admin.client.activity.crud.proc.ProcessListerActivity;
-import com.propertyvista.admin.client.activity.crud.proc.ProcessViewerActivity;
+import com.propertyvista.admin.client.activity.crud.scheduler.TriggerEditorActivity;
+import com.propertyvista.admin.client.activity.crud.scheduler.TriggerListerActivity;
+import com.propertyvista.admin.client.activity.crud.scheduler.TriggerViewerActivity;
 import com.propertyvista.admin.client.activity.security.PasswordChangeActivity;
 import com.propertyvista.admin.client.activity.simulation.SimulationEditorActivity;
 import com.propertyvista.admin.client.activity.simulation.SimulationViewerActivity;
@@ -72,16 +72,16 @@ public class MainActivityMapper implements AppActivityMapper {
                             break;
                         }
 
-                    } else if (place instanceof AdminSiteMap.Management.Process) {
+                    } else if (place instanceof AdminSiteMap.Management.Trigger) {
                         switch (crudPlace.getType()) {
                         case editor:
-                            activity = new ProcessEditorActivity(crudPlace);
+                            activity = new TriggerEditorActivity(crudPlace);
                             break;
                         case viewer:
-                            activity = new ProcessViewerActivity(crudPlace);
+                            activity = new TriggerViewerActivity(crudPlace);
                             break;
                         case lister:
-                            activity = new ProcessListerActivity(crudPlace);
+                            activity = new TriggerListerActivity(crudPlace);
                             break;
                         }
 

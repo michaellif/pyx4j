@@ -34,7 +34,7 @@ import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.RateIt;
 
 import com.propertyvista.common.client.ui.components.VistaViewersComponentFactory;
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
+import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.domain.communication.Message;
 import com.propertyvista.domain.communication.Message.MessageType;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
@@ -47,7 +47,7 @@ import com.propertyvista.portal.rpc.portal.dto.ReservationDTO;
 import com.propertyvista.portal.rpc.portal.dto.TenantDashboardDTO;
 import com.propertyvista.portal.rpc.portal.dto.TenantGeneralInfoDTO;
 
-public class DashboardForm extends CEntityDecoratableEditor<TenantDashboardDTO> implements DashboardView {
+public class DashboardForm extends CEntityDecoratableForm<TenantDashboardDTO> implements DashboardView {
 
     private static final I18n i18n = I18n.get(DashboardForm.class);
 

@@ -27,10 +27,10 @@ import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
+import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.domain.person.Name;
 
-public class NameEditor extends CEntityDecoratableEditor<Name> {
+public class NameEditor extends CEntityDecoratableForm<Name> {
 
     private final CComponent<Name, ?> viewComp;
 

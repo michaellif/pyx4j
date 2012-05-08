@@ -32,7 +32,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.site.client.ui.crud.DefaultSiteCrudPanelsTheme;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
+import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.crm.client.ui.gadgets.util.ColumnDescriptorConverter;
 import com.propertyvista.domain.dashboard.gadgets.ColumnDescriptorEntity;
 import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
@@ -224,7 +224,7 @@ public abstract class ListerGadgetInstanceBase<E extends IEntity, GADGET_TYPE ex
 
     @Override
     public ISetup getSetup() {
-        return new SetupForm(new CEntityDecoratableEditor<GADGET_TYPE>(metadataClass) {
+        return new SetupForm(new CEntityDecoratableForm<GADGET_TYPE>(metadataClass) {
             @Override
             public IsWidget createContent() {
                 FormFlexPanel p = new FormFlexPanel();

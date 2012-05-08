@@ -50,7 +50,6 @@ import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.common.client.ui.components.editors.MarketingEditor;
 import com.propertyvista.crm.client.themes.CrmTheme;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
-import com.propertyvista.crm.client.ui.decorations.CrmScrollPanel;
 import com.propertyvista.crm.rpc.services.selections.SelectFloorplanListService;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -83,7 +82,7 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
 
 // TODO Hided till further investigation:
 //        tabPanel.add(createMarketingTab(), i18n.tr("Marketing"));
-        tabPanel.add(new CrmScrollPanel(new Label("Notes and attachments goes here... ")), i18n.tr("Notes & Attachments"));
+        tabPanel.add(new ScrollPanel(new Label("Notes and attachments goes here... ")), i18n.tr("Notes & Attachments"));
 
         tabPanel.setSize("100%", "100%");
         return tabPanel;
@@ -154,7 +153,7 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
         main.getColumnFormatter().setWidth(0, "40%");
         main.getColumnFormatter().setWidth(1, "60%");
         main.getCellFormatter().setVerticalAlignment(0, 1, HasVerticalAlignment.ALIGN_TOP);
-        return new CrmScrollPanel(main);
+        return new ScrollPanel(main);
     }
 
     private Widget createMarketingTab() {
@@ -162,7 +161,7 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
 
         main.setWidget(0, 0, inject(proto().marketing(), new MarketingEditor()));
 
-        return new CrmScrollPanel(main);
+        return new ScrollPanel(main);
     }
 
     private static class BuildingBoundFloorplanSelectorDialog extends EntitySelectorTableDialog<Floorplan> {

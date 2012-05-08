@@ -17,14 +17,14 @@ import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.admin.domain.proc.ExecutionStats;
-import com.propertyvista.admin.domain.proc.ExecutionStatus;
+import com.propertyvista.admin.domain.scheduler.RunStats;
+import com.propertyvista.admin.domain.scheduler.RunStatus;
 
 @Transient
 public interface ExecutionStatusUpdateDTO extends IEntity {
 
-    IPrimitive<ExecutionStatus> status();
+    IPrimitive<RunStatus> status();
 
-    ExecutionStats stats();
+    RunStats stats();
 
 }

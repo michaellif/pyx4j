@@ -57,6 +57,7 @@ public class UpdateBankAccountInfoRequestHandler extends AbstractRequestHandler<
 
         // Switch namespace.
         Pmc pmc = pmcs.get(0);
+        // TODO See if PMC was activated e.g. namespace already exists, if not use table OboardingMerchantAccount
         NamespaceManager.setNamespace(pmc.namespace().getValue());
 
         try {
@@ -64,11 +65,7 @@ public class UpdateBankAccountInfoRequestHandler extends AbstractRequestHandler<
 
                 // Check if account exists already.
                 EntityQueryCriteria<MerchantAccount> crmerch = EntityQueryCriteria.create(MerchantAccount.class);
-                crmerch.add(PropertyCriterion.eq(crmerch.proto().onboardingMerchantAccountId(), request.onboardingAccountId().getValue()));
-                crmerch.add(PropertyCriterion.eq(crmerch.proto().bankId(), acc.bankId().getValue()));
-                crmerch.add(PropertyCriterion.eq(crmerch.proto().branchTransitNumber(), acc.branchTransitNumber().getValue()));
-                crmerch.add(PropertyCriterion.eq(crmerch.proto().accountNumber(), acc.accountNumber().getValue()));
-
+                crmerch.add(PropertyCriterion.eq(crmerch.proto().onboardingBankAccountId(), acc.onboardingBankAccountId().getValue()));
                 List<MerchantAccount> accs = Persistence.service().query(crmerch);
 
                 MerchantAccount macc = null;

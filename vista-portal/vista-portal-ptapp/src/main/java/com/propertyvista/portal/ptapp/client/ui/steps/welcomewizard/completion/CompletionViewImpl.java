@@ -26,11 +26,14 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.pyx4j.commons.HtmlUtils;
 import com.pyx4j.essentials.client.crud.CrudDebugId;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.rpc.AuthenticationService;
 import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.portal.rpc.ptapp.services.PtAuthenticationService;
+import com.propertyvista.portal.rpc.ptapp.services.steps.welcomewizard.ResetWizardService;
 
 public class CompletionViewImpl extends FlowPanel implements CompletionView {
 
@@ -40,7 +43,7 @@ public class CompletionViewImpl extends FlowPanel implements CompletionView {
 
         VerticalPanel main = new VerticalPanel();
 
-        HTML titleHtml = new HTML(HtmlUtils.h3(i18n.tr("Congratulation! You have successfully completed your application!")));
+        HTML titleHtml = new HTML(HtmlUtils.h3(i18n.tr("Congratulation! We are looking forward to have you as a tenant!")));
         main.add(titleHtml);
         main.setCellHorizontalAlignment(titleHtml, HasHorizontalAlignment.ALIGN_CENTER);
 
@@ -51,7 +54,12 @@ public class CompletionViewImpl extends FlowPanel implements CompletionView {
         logoutAction.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                ClientContext.logout((AuthenticationService) GWT.create(PtAuthenticationService.class), null);
+                GWT.<ResetWizardService> create(ResetWizardService.class).resetWizard(new DefaultAsyncCallback<VoidSerializable>() {
+                    @Override
+                    public void onSuccess(VoidSerializable result) {
+                        ClientContext.logout((AuthenticationService) GWT.create(PtAuthenticationService.class), null);
+                    }
+                });
             }
         });
         actions.add(logoutAction);

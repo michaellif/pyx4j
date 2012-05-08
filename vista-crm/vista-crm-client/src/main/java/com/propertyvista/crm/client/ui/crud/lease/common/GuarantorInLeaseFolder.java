@@ -18,7 +18,7 @@ import java.util.List;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.entity.client.CEntityEditor;
+import com.pyx4j.entity.client.CEntityForm;
 import com.pyx4j.entity.client.ui.CEntityComboBox;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
@@ -28,7 +28,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
+import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.editors.NameEditor;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.Guarantor;
@@ -42,9 +42,9 @@ public class GuarantorInLeaseFolder extends LeaseParticipantFolder<Guarantor> {
 
     static final I18n i18n = I18n.get(GuarantorInLeaseFolder.class);
 
-    private final CEntityEditor<? extends LeaseDTO> lease;
+    private final CEntityForm<? extends LeaseDTO> lease;
 
-    public GuarantorInLeaseFolder(CEntityEditor<? extends LeaseDTO> parent, boolean modifiable) {
+    public GuarantorInLeaseFolder(CEntityForm<? extends LeaseDTO> parent, boolean modifiable) {
         super(Guarantor.class, modifiable);
         this.lease = parent;
     }
@@ -79,7 +79,7 @@ public class GuarantorInLeaseFolder extends LeaseParticipantFolder<Guarantor> {
         return super.create(member);
     }
 
-    private class GuarantorInLeaseEditor extends CEntityDecoratableEditor<Guarantor> {
+    private class GuarantorInLeaseEditor extends CEntityDecoratableForm<Guarantor> {
 
         public GuarantorInLeaseEditor() {
             super(Guarantor.class);

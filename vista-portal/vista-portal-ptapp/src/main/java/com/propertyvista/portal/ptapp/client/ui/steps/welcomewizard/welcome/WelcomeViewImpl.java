@@ -27,10 +27,12 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.portal.ptapp.client.resources.PortalImages;
 import com.propertyvista.portal.ptapp.client.resources.PortalResources;
+import com.propertyvista.portal.ptapp.client.resources.welcomewizard.WelcomeWizardImages;
 import com.propertyvista.portal.ptapp.client.resources.welcomewizard.WelcomeWizardResources;
 
 public class WelcomeViewImpl implements WelcomeView {
@@ -66,11 +68,18 @@ public class WelcomeViewImpl implements WelcomeView {
         textPanel.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.LEFT);
         textPanel.setWidth("100%");
 
+        HTML congratulations = new HTML("<h2>"
+                + new SafeHtmlBuilder().appendEscaped(i18n.tr("Congratulations, {0}", ClientContext.getUserVisit().getName())).toSafeHtml().asString()
+                + "</h2>");
+        textPanel.add(congratulations);
+        congratulations.getElement().getStyle().setPaddingLeft(95, Unit.PX);
+
         HTML youHaveBeenApproved = new HTML(WelcomeWizardResources.INSTANCE.youHaveBeenApproved().getText());
         youHaveBeenApproved.getElement().getStyle().setPaddingLeft(95, Unit.PX);
         youHaveBeenApproved.getElement().getStyle().setPaddingBottom(45, Unit.PX);
 
-        youHaveBeenApproved.getElement().getStyle().setProperty("background", "url(" + PortalImages.INSTANCE.requirements().getURL() + ") no-repeat");
+        youHaveBeenApproved.getElement().getStyle()
+                .setProperty("background", "url(" + WelcomeWizardImages.INSTANCE.clipboardWithCheckbox().getURL() + ") no-repeat");
         textPanel.add(youHaveBeenApproved);
 
         HTML moveInGuidePurpose = new HTML(WelcomeWizardResources.INSTANCE.functionalityOfTheMoveInGuide().getText());
@@ -111,6 +120,17 @@ public class WelcomeViewImpl implements WelcomeView {
 
         startButton.getElement().getStyle().setFontSize(15, Unit.PX);
         startButton.getElement().getStyle().setFontWeight(FontWeight.BOLD);
+        startButton.getElement().getStyle().setMarginTop(1, Unit.EM);
+
+        startButton.getElement().getStyle().setPaddingTop(0.5, Unit.EM);
+        startButton.getElement().getStyle().setPaddingBottom(0.5, Unit.EM);
+        startButton.getElement().getStyle().setPaddingLeft(3, Unit.EM);
+        startButton.getElement().getStyle().setPaddingRight(3, Unit.EM);
+        String arrowRadius = "4em";
+        startButton.getElement().getStyle().setProperty("borderTopRightRadius", arrowRadius);
+        startButton.getElement().getStyle().setProperty("borderBottomRightRadius", arrowRadius);
+        startButton.getElement().getStyle().setProperty("borderTopLeftRadius", arrowRadius);
+        startButton.getElement().getStyle().setProperty("borderBottomLeftRadius", arrowRadius);
         startPanel.add(startButton);
 
         return startPanel;

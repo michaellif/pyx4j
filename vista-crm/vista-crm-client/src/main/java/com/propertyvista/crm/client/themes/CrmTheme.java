@@ -40,7 +40,6 @@ import com.propertyvista.crm.client.ui.ShortCutsViewImpl;
 import com.propertyvista.crm.client.ui.TopRightActionsViewImpl;
 import com.propertyvista.crm.client.ui.board.BoardBase;
 import com.propertyvista.crm.client.ui.components.AnchorButton;
-import com.propertyvista.crm.client.ui.decorations.CrmSectionSeparator;
 import com.propertyvista.crm.client.ui.gadgets.addgadgetdialog.GadgetDirectoryDialog;
 
 public class CrmTheme extends VistaTheme {
@@ -102,8 +101,6 @@ public class CrmTheme extends VistaTheme {
 
         initSearchBoxStyles();
         initButtonStylesEx();
-
-        initSectionSeparatorStyle();
 
         initDashboardView();
         initDashboardReport();
@@ -426,22 +423,6 @@ public class CrmTheme extends VistaTheme {
         style.addProperty("padding-bottom", "0.2em");
         style.addProperty("border-bottom", "2px dotted");
         style.addProperty("border-bottom-color", ThemeColors.object1, 0.15);
-        addStyle(style);
-    }
-
-    protected void initSectionSeparatorStyle() {
-        String prefix = CrmSectionSeparator.DEFAULT_STYLE_PREFIX;
-        Style style = new Style(Selector.valueOf(prefix));
-        style.addProperty("color", "#5E5E5E");
-        style.addProperty("margin", "0.2em 0 0.5em 0");
-        style.addProperty("width", "100%");
-        style.addProperty("border-top", "1px dotted #D8D8D8");
-        addStyle(style);
-
-        style = new Style(Selector.valueOf(prefix, CrmSectionSeparator.StyleSuffix.Caption));
-        style.addProperty("padding", "0.5em 1em 0.5em 1.5em");
-        style.addProperty("font-size", "1.1em");
-        style.addProperty("font-weight", "bold");
         addStyle(style);
     }
 

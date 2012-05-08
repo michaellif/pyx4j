@@ -57,7 +57,9 @@ public class VistaDBResetTest extends VistaDBTestBase {
             if (srv.isTableExists(meta.getEntityClass())) {
                 srv.dropTable(meta.getEntityClass());
             }
-            allTables.put(meta.getPersistenceName(), entityClass);
+            if (meta.getPerstableSuperClass() == null) {
+                allTables.put(meta.getPersistenceName(), entityClass);
+            }
         }
     }
 }

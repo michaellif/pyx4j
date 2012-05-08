@@ -37,7 +37,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.ClientContext;
 
 import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
+import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.c.NewPaymentMethodForm;
 import com.propertyvista.common.client.ui.components.folders.ChargeLineFolder;
 import com.propertyvista.common.client.ui.decorations.DecorationUtils;
@@ -45,7 +45,7 @@ import com.propertyvista.portal.ptapp.client.PtAppSite;
 import com.propertyvista.portal.ptapp.client.resources.PortalImages;
 import com.propertyvista.portal.rpc.ptapp.dto.PaymentInformationDTO;
 
-public class PaymentViewForm extends CEntityDecoratableEditor<PaymentInformationDTO> {
+public class PaymentViewForm extends CEntityDecoratableForm<PaymentInformationDTO> {
 
     private static final I18n i18n = I18n.get(PaymentViewForm.class);
 

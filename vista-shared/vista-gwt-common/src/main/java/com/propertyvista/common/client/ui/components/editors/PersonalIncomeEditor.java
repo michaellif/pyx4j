@@ -18,14 +18,14 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.client.CEntityEditor;
+import com.pyx4j.entity.client.CEntityForm;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.ProofOfEmploymentUploaderFolder;
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
+import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.validators.StartEndDateValidation;
 import com.propertyvista.domain.tenant.income.IEmploymentInfo;
 import com.propertyvista.domain.tenant.income.IIncomeInfo;
@@ -38,7 +38,7 @@ import com.propertyvista.domain.tenant.income.IncomeInfoStudentIncome;
 import com.propertyvista.domain.tenant.income.IncomeSource;
 import com.propertyvista.domain.tenant.income.PersonalIncome;
 
-public class PersonalIncomeEditor extends CEntityDecoratableEditor<PersonalIncome> {
+public class PersonalIncomeEditor extends CEntityDecoratableForm<PersonalIncome> {
 
     private static final I18n i18n = I18n.get(PersonalIncomeEditor.class);
 
@@ -120,14 +120,14 @@ public class PersonalIncomeEditor extends CEntityDecoratableEditor<PersonalIncom
                 break;
             default:
                 @SuppressWarnings("rawtypes")
-                CEntityEditor comp = (CEntityEditor) get(proto().otherIncomeInformation());
+                CEntityForm comp = (CEntityForm) get(proto().otherIncomeInformation());
                 comp.setVisible(true);
                 applyOtherLables(incomeSource, comp);
             }
         }
     }
 
-    private void applyOtherLables(IncomeSource incomeSource, CEntityEditor<IncomeInfoOther> comp) {
+    private void applyOtherLables(IncomeSource incomeSource, CEntityForm<IncomeInfoOther> comp) {
         switch (incomeSource) {
         case pension:
         case retired:
@@ -147,7 +147,7 @@ public class PersonalIncomeEditor extends CEntityDecoratableEditor<PersonalIncom
         }
     }
 
-    private void validationOfStartStopDates(final CEntityEditor<? extends IIncomeInfo> comp) {
+    private void validationOfStartStopDates(final CEntityForm<? extends IIncomeInfo> comp) {
         new StartEndDateValidation(comp.get(comp.proto().starts()), comp.get(comp.proto().ends()));
         comp.get(comp.proto().starts()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(comp.get(comp.proto().ends())));
         comp.get(comp.proto().ends()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(comp.get(comp.proto().starts())));
@@ -157,8 +157,8 @@ public class PersonalIncomeEditor extends CEntityDecoratableEditor<PersonalIncom
     //
     //  Incomes variants:
     //
-    private CEntityEditor<IncomeInfoEmployer> createEmployerEditor() {
-        return new CEntityDecoratableEditor<IncomeInfoEmployer>(IncomeInfoEmployer.class) {
+    private CEntityForm<IncomeInfoEmployer> createEmployerEditor() {
+        return new CEntityDecoratableForm<IncomeInfoEmployer>(IncomeInfoEmployer.class) {
 
             @Override
             public IsWidget createContent() {
@@ -195,8 +195,8 @@ public class PersonalIncomeEditor extends CEntityDecoratableEditor<PersonalIncom
         };
     }
 
-    private CEntityEditor<IncomeInfoSeasonallyEmployed> createSeasonallyEmployedEditor() {
-        return new CEntityDecoratableEditor<IncomeInfoSeasonallyEmployed>(IncomeInfoSeasonallyEmployed.class) {
+    private CEntityForm<IncomeInfoSeasonallyEmployed> createSeasonallyEmployedEditor() {
+        return new CEntityDecoratableForm<IncomeInfoSeasonallyEmployed>(IncomeInfoSeasonallyEmployed.class) {
             @Override
             public IsWidget createContent() {
                 FormFlexPanel main = new FormFlexPanel();
@@ -228,8 +228,8 @@ public class PersonalIncomeEditor extends CEntityDecoratableEditor<PersonalIncom
         };
     }
 
-    private CEntityEditor<IncomeInfoStudentIncome> createStudentIncomeEditor() {
-        return new CEntityDecoratableEditor<IncomeInfoStudentIncome>(IncomeInfoStudentIncome.class) {
+    private CEntityForm<IncomeInfoStudentIncome> createStudentIncomeEditor() {
+        return new CEntityDecoratableForm<IncomeInfoStudentIncome>(IncomeInfoStudentIncome.class) {
             @Override
             public IsWidget createContent() {
                 FormFlexPanel main = new FormFlexPanel();
@@ -261,8 +261,8 @@ public class PersonalIncomeEditor extends CEntityDecoratableEditor<PersonalIncom
         };
     }
 
-    private CEntityEditor<IncomeInfoSelfEmployed> createSelfEmployedEditor() {
-        return new CEntityDecoratableEditor<IncomeInfoSelfEmployed>(IncomeInfoSelfEmployed.class) {
+    private CEntityForm<IncomeInfoSelfEmployed> createSelfEmployedEditor() {
+        return new CEntityDecoratableForm<IncomeInfoSelfEmployed>(IncomeInfoSelfEmployed.class) {
             @Override
             public IsWidget createContent() {
                 FormFlexPanel main = new FormFlexPanel();
@@ -299,8 +299,8 @@ public class PersonalIncomeEditor extends CEntityDecoratableEditor<PersonalIncom
         };
     }
 
-    private CEntityEditor<IncomeInfoSocialServices> createSocialServicesEditor() {
-        return new CEntityDecoratableEditor<IncomeInfoSocialServices>(IncomeInfoSocialServices.class) {
+    private CEntityForm<IncomeInfoSocialServices> createSocialServicesEditor() {
+        return new CEntityDecoratableForm<IncomeInfoSocialServices>(IncomeInfoSocialServices.class) {
             @Override
             public IsWidget createContent() {
                 FormFlexPanel main = new FormFlexPanel();
@@ -332,8 +332,8 @@ public class PersonalIncomeEditor extends CEntityDecoratableEditor<PersonalIncom
         };
     }
 
-    private CEntityEditor<IncomeInfoOther> createOtherIncomeInfoEditor() {
-        return new CEntityDecoratableEditor<IncomeInfoOther>(IncomeInfoOther.class) {
+    private CEntityForm<IncomeInfoOther> createOtherIncomeInfoEditor() {
+        return new CEntityDecoratableForm<IncomeInfoOther>(IncomeInfoOther.class) {
             @Override
             public IsWidget createContent() {
                 FormFlexPanel main = new FormFlexPanel();
@@ -348,7 +348,7 @@ public class PersonalIncomeEditor extends CEntityDecoratableEditor<PersonalIncom
         };
     }
 
-    private static int injectIEmploymentInfo(FormFlexPanel main, int row, CEntityDecoratableEditor<? extends IEmploymentInfo> parent) {
+    private static int injectIEmploymentInfo(FormFlexPanel main, int row, CEntityDecoratableForm<? extends IEmploymentInfo> parent) {
         main.setH3(++row, 0, 2, i18n.tr("Employment Info"));
         main.setWidget(++row, 0, parent.new DecoratorBuilder(parent.inject(parent.proto().monthlyAmount()), 9).build());
         main.setWidget(++row, 0, parent.new DecoratorBuilder(parent.inject(parent.proto().position()), 20).build());

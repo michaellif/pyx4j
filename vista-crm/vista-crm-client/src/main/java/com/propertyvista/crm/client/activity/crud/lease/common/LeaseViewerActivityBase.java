@@ -20,16 +20,16 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.site.client.activity.crud.ViewerActivityBase;
 import com.pyx4j.site.client.ui.crud.form.IViewerView;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
+import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.lease.common.LeaseViewerPresenterBase;
 import com.propertyvista.crm.rpc.services.lease.LeaseCrudServiceBase;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.dto.LeaseDTO;
 
-public abstract class LeaseViewerActivityBase<DTO extends LeaseDTO> extends ViewerActivityBase<DTO> implements LeaseViewerPresenterBase {
+public abstract class LeaseViewerActivityBase<DTO extends LeaseDTO> extends CrmViewerActivity<DTO> implements LeaseViewerPresenterBase {
 
     public LeaseViewerActivityBase(CrudAppPlace place, IViewerView<DTO> view, AbstractCrudService<DTO> service) {
         super(place, view, service);

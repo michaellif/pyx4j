@@ -33,7 +33,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
 import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
+import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedEditorForm;
 import com.propertyvista.crm.client.ui.crud.settings.financial.tax.TaxFolder;
@@ -108,19 +108,14 @@ public class ProductTaxPolicyEditorForm extends PolicyDTOTabPanelBasedEditorForm
 
                 @Override
                 public String defineWidth() {
-                    return "200px";
-                }
-
-                @Override
-                public String defineHeight() {
-                    return "100px";
+                    return "20em";
                 }
             }.show();
         }
 
         // internals:
 
-        private static class ProductTaxPolicyItemEditor extends CEntityDecoratableEditor<ProductTaxPolicyItem> {
+        private static class ProductTaxPolicyItemEditor extends CEntityDecoratableForm<ProductTaxPolicyItem> {
 
             public ProductTaxPolicyItemEditor() {
                 super(ProductTaxPolicyItem.class);

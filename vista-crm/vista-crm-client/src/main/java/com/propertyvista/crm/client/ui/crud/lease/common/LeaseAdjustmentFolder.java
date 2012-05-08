@@ -22,7 +22,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.TimeUtils;
-import com.pyx4j.entity.client.CEntityEditor;
+import com.pyx4j.entity.client.CEntityForm;
 import com.pyx4j.entity.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.entity.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.entity.client.ui.folder.IFolderItemDecorator;
@@ -33,7 +33,7 @@ import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableEditor;
+import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
@@ -42,9 +42,9 @@ public class LeaseAdjustmentFolder extends VistaBoxFolder<LeaseAdjustment> {
 
     private final List<LeaseAdjustment> populatedValues = new LinkedList<LeaseAdjustment>();
 
-    private final CEntityEditor<? extends Lease> lease;
+    private final CEntityForm<? extends Lease> lease;
 
-    public LeaseAdjustmentFolder(boolean modifyable, CEntityEditor<? extends Lease> lease) {
+    public LeaseAdjustmentFolder(boolean modifyable, CEntityForm<? extends Lease> lease) {
         super(LeaseAdjustment.class, modifyable);
         this.lease = lease;
     }
@@ -115,7 +115,7 @@ public class LeaseAdjustmentFolder extends VistaBoxFolder<LeaseAdjustment> {
         return item;
     }
 
-    private class LeaseAdjustmentEditor extends CEntityDecoratableEditor<LeaseAdjustment> {
+    private class LeaseAdjustmentEditor extends CEntityDecoratableForm<LeaseAdjustment> {
 
         public LeaseAdjustmentEditor() {
             super(LeaseAdjustment.class);
