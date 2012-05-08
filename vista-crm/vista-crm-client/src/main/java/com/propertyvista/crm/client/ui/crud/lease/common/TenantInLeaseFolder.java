@@ -77,6 +77,7 @@ public class TenantInLeaseFolder extends LeaseParticipantFolder<Tenant> {
                 newTenantInLease.role().setValue(LeaseParticipant.Role.Applicant);
                 newTenantInLease.relationship().setValue(PersonRelationship.Other); // just not leave it empty - it's mandatory field!
             }
+            newTenantInLease.percentage().setValue(calcPercentage());
             addItem(newTenantInLease);
         }
     }
@@ -88,6 +89,14 @@ public class TenantInLeaseFolder extends LeaseParticipantFolder<Tenant> {
             }
         }
         return false;
+    }
+
+    private Integer calcPercentage() {
+        Integer prc = 100;
+        for (Tenant til : getValue()) {
+            prc -= (til.percentage().isNull() ? 0 : til.percentage().getValue());
+        }
+        return (prc > 0 ? prc : 0);
     }
 
     @Override
