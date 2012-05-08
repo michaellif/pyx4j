@@ -23,7 +23,7 @@ package com.pyx4j.entity.client;
 import com.pyx4j.entity.shared.IEntity;
 
 @Deprecated
-public abstract class CPolymorphicEntityEditorTEMP<E extends IEntity> extends CEntityEditor<E> {
+public abstract class CPolymorphicEntityEditorTEMP<E extends IEntity> extends CEntityForm<E> {
 
     public CPolymorphicEntityEditorTEMP(Class<E> clazz) {
         super(clazz);

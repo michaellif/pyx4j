@@ -74,6 +74,8 @@
     </scm>
 
     <modules>
+        <module>maven/maven-gwt-plugin</module>
+
         <module>pyx-commons</module>
 
         <module>rpc/pyx-rpc-shared</module>
@@ -145,7 +147,6 @@
         <module>svg/pyx-svg-shared</module>
         <module>svg/pyx-svg-j2se</module>
         <module>svg/pyx-svg-gwt</module>
-
 
         <module>maven/maven-password-plugin</module>
         <module>maven/maven-i18n-plugin</module>
@@ -252,6 +253,7 @@
 
         <pluginManagement>
             <plugins>
+
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
@@ -264,9 +266,21 @@
                         <argLine>-Djava.awt.headless=true -XX:MaxPermSize=64m -Xms64m -Xmx128m</argLine>
                     </configuration>
                 </plugin>
+
+                <plugin>
+                    <groupId>com.pyx4j</groupId>
+                    <artifactId>maven-gwt-plugin</artifactId>
+                    <version>${project.version}</version>
+                    <configuration>
+                        <systemProperties>
+                            <systemProperty>buildLabel</systemProperty>
+                            <systemProperty>timestamp</systemProperty>
+                        </systemProperties>
+                    </configuration>
+                </plugin>
+
             </plugins>
         </pluginManagement>
-
 
         <plugins>
 

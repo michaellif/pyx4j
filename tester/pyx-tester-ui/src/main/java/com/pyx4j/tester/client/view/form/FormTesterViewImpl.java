@@ -32,7 +32,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.commons.IDebugId;
-import com.pyx4j.entity.client.CEntityEditor;
+import com.pyx4j.entity.client.CEntityForm;
 import com.pyx4j.tester.client.domain.test.EntityI;
 import com.pyx4j.tester.client.view.form.folder.EntityIForm;
 import com.pyx4j.widgets.client.Button;
@@ -51,9 +51,9 @@ public class FormTesterViewImpl extends ScrollPanel implements FormTesterView {
 
     private final SimplePanel formPanel;
 
-    private final HashMap<TestFormType, CEntityEditor<EntityI>> map = new HashMap<TestFormType, CEntityEditor<EntityI>>();
+    private final HashMap<TestFormType, CEntityForm<EntityI>> map = new HashMap<TestFormType, CEntityForm<EntityI>>();
 
-    private CEntityEditor<EntityI> currentForm;
+    private CEntityForm<EntityI> currentForm;
 
     public enum DebugIds implements IDebugId {
         ButtonPanel, PopulateButton, CleanButton, RepopulateButton;

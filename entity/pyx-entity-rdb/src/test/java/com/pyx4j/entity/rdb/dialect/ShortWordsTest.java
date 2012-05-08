@@ -32,10 +32,10 @@ public class ShortWordsTest extends TestCase {
         shortWords.add("ARCHIVE", "ARC");
         NamingConventionOracle nc = new NamingConventionOracle(32, shortWords, true);
 
-        assertEquals("ABC_DEF", nc.makeName("ABC_DEF"));
+        assertEquals("abc_def", nc.makeName("ABC_DEF"));
 
-        assertEquals("ORG_DEPTS", nc.makeName("OrganizationDepartments"));
+        assertEquals("org_depts", nc.makeName("OrganizationDepartments"));
 
-        assertEquals("TEST_ORG_DEPTS", nc.makeName("TEST_OrganizationDepartments"));
+        assertEquals("test_org_depts", nc.makeName("TEST_OrganizationDepartments"));
     }
 }

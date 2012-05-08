@@ -91,10 +91,10 @@ public class NamingConventionOracle implements NamingConvention {
                     b.append('_');
                     wordStart = true;
                 }
-                currentWord.append(c);
+                currentWord.append(Character.toLowerCase(c));
             } else {
                 wordStart = false;
-                currentWord.append(Character.toUpperCase(c));
+                currentWord.append(c);
             }
         }
 

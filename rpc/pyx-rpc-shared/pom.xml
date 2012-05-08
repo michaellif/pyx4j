@@ -30,7 +30,7 @@
             <artifactId>pyx-i18n-shared</artifactId>
             <version>${project.version}</version>
         </dependency>
-        
+
         <dependency>
         	<groupId>com.pyx4j</groupId>
         	<artifactId>pyx-security-shared</artifactId>
@@ -42,5 +42,22 @@
     <properties>
         <project.jar-source-4gwt>true</project.jar-source-4gwt>
     </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>com.pyx4j</groupId>
+                <artifactId>maven-gwt-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>source-jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

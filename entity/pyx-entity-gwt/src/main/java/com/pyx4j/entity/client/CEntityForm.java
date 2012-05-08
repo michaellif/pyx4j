@@ -54,9 +54,9 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CTextComponent;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
 
-public abstract class CEntityEditor<E extends IEntity> extends CEntityContainer<E> {
+public abstract class CEntityForm<E extends IEntity> extends CEntityContainer<E> {
 
-    private static final Logger log = LoggerFactory.getLogger(CEntityEditor.class);
+    private static final Logger log = LoggerFactory.getLogger(CEntityForm.class);
 
     protected IEditableComponentFactory factory;
 
@@ -69,11 +69,11 @@ public abstract class CEntityEditor<E extends IEntity> extends CEntityContainer<
 
     private final Map<CComponent<?, ?>, Path> binding = new HashMap<CComponent<?, ?>, Path>();
 
-    public CEntityEditor(Class<E> clazz) {
+    public CEntityForm(Class<E> clazz) {
         this(clazz, new EntityFormComponentFactory());
     }
 
-    public CEntityEditor(Class<E> clazz, IEditableComponentFactory factory) {
+    public CEntityForm(Class<E> clazz, IEditableComponentFactory factory) {
         this.entityPrototype = EntityFactory.getEntityPrototype(clazz);
         this.factory = factory;
         setDebugIdSuffix(new StringDebugId(GWTJava5Helper.getSimpleName(clazz)));
@@ -210,8 +210,8 @@ public abstract class CEntityEditor<E extends IEntity> extends CEntityContainer<
     protected void setComponentsValue(E entity, boolean fireEvent, boolean populate) {
         if (entity == null) {
             for (CComponent component : getComponents()) {
-                if (component instanceof CEntityEditor) {
-                    ((CEntityEditor) component).reset();
+                if (component instanceof CEntityForm) {
+                    ((CEntityForm) component).reset();
                 } else {
                     component.setValue(null, fireEvent, populate);
                 }

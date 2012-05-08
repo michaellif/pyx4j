@@ -100,32 +100,10 @@
 
     <pluginRepositories>
 
-        <pluginRepository>
-            <id>pyx4j-snapshots</id>
-            <url>http://repository.pyx4j.com/maven2-snapshot</url>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-        </pluginRepository>
-
         <!-- lifecycle-mapping -->
         <pluginRepository>
             <id>pyx4j-internal</id>
             <url>http://repository.pyx4j.com/internal/maven2-internal</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-        </pluginRepository>
-
-        <pluginRepository>
-            <id>gettext-commons-site</id>
-            <url>http://gettext-commons.googlecode.com/svn/maven-repository</url>
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>
@@ -145,8 +123,6 @@
         <gwtVersion>2.4.0</gwtVersion>
         <gaeVersion>1.6.1</gaeVersion>
         <gae.version>${gaeVersion}</gae.version>
-        <pyx4jGwtVersion>0.5.7-SNAPSHOT</pyx4jGwtVersion>
-
 
         <jettyVersion>7.2.2.v20101205</jettyVersion>
 
@@ -623,12 +599,6 @@
                 </plugin>
 
                 <plugin>
-                    <groupId>com.pyx4j</groupId>
-                    <artifactId>maven-gwt-plugin</artifactId>
-                    <version>${pyx4jGwtVersion}</version>
-                </plugin>
-
-                 <plugin>
                     <groupId>net.kindleit</groupId>
                     <artifactId>maven-gae-plugin</artifactId>
                     <version>0.9.2</version>
@@ -647,12 +617,13 @@
                     </dependencies>
                 </plugin>
 
+<!--
                 <plugin>
                     <groupId>org.zeroturnaround</groupId>
                     <artifactId>jrebel-maven-plugin</artifactId>
                     <version>1.0.7</version>
                 </plugin>
-
+-->
                 <plugin>
                     <groupId>org.xnap.commons</groupId>
                     <artifactId>maven-gettext-plugin</artifactId>
@@ -903,27 +874,10 @@
                 </configuration>
             </plugin>
 
-            <plugin>
-                <groupId>com.pyx4j</groupId>
-                <artifactId>maven-gwt-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>source-jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <systemProperties>
-                        <systemProperty>buildLabel</systemProperty>
-                        <systemProperty>timestamp</systemProperty>
-                    </systemProperties>
-                </configuration>
-            </plugin>
-
         </plugins>
     </build>
 
+<!--
     <profiles>
         <profile>
             <id>developer-env</id>
@@ -946,5 +900,6 @@
             </build>
         </profile>
     </profiles>
+-->
 
 </project>

@@ -28,13 +28,13 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.entity.client.CEntityEditor;
+import com.pyx4j.entity.client.CEntityForm;
 import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.ui.CCheckBox;
 import com.pyx4j.forms.client.ui.CComponent;
 
-public class CEntityFolderRowEditor<E extends IEntity> extends CEntityEditor<E> {
+public class CEntityFolderRowEditor<E extends IEntity> extends CEntityForm<E> {
 
     protected final List<EntityFolderColumnDescriptor> columns;
 

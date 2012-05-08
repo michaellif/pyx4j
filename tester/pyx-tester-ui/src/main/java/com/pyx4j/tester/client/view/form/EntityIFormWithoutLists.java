@@ -28,7 +28,7 @@ import java.util.HashMap;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.CommonsStringUtils;
-import com.pyx4j.entity.client.CEntityEditor;
+import com.pyx4j.entity.client.CEntityForm;
 import com.pyx4j.entity.client.ui.CEntityComboBox;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.ui.CAbstractSuggestBox;
@@ -52,7 +52,7 @@ import com.pyx4j.tester.client.domain.test.EntityV;
 import com.pyx4j.tester.client.ui.TesterWidgetDecorator;
 import com.pyx4j.widgets.client.RadioGroup.Layout;
 
-public class EntityIFormWithoutLists extends CEntityEditor<EntityI> {
+public class EntityIFormWithoutLists extends CEntityForm<EntityI> {
 
     private static final I18n i18n = I18n.get(EntityIFormWithoutLists.class);
 

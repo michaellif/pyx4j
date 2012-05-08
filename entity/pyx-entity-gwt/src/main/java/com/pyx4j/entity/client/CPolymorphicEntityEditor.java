@@ -41,7 +41,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 /**
  * This component represents list of IEntities
  */
-public abstract class CPolymorphicEntityEditor<E extends IEntity> extends CEntityEditor<E> {
+public abstract class CPolymorphicEntityEditor<E extends IEntity> extends CEntityForm<E> {
 
     private static final Logger log = LoggerFactory.getLogger(CPolymorphicEntityEditor.class);
 
@@ -68,12 +68,12 @@ public abstract class CPolymorphicEntityEditor<E extends IEntity> extends CEntit
         return createDecorator();
     }
 
-    protected abstract CEntityEditor<? extends E> createItem(IDiscriminator<E> discriminator);
+    protected abstract CEntityForm<? extends E> createItem(IDiscriminator<E> discriminator);
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
-    private CEntityEditor<? extends E> createItemPrivate(IDiscriminator<E> discriminator) {
+    private CEntityForm<? extends E> createItemPrivate(IDiscriminator<E> discriminator) {
 
-        CEntityEditor<? extends E> item = createItem(discriminator);
+        CEntityForm<? extends E> item = createItem(discriminator);
 
         if (item == null) {
             throw new Error("Failed to create item for discriminator " + discriminator);
@@ -210,7 +210,7 @@ public abstract class CPolymorphicEntityEditor<E extends IEntity> extends CEntit
     protected void setComponentsValue(E value, boolean fireEvent, boolean populate) {
         for (IDiscriminator<E> discriminator : discriminators) {
             if (discriminator.getType().equals(value.getObjectClass())) {
-                CEntityEditor editor = createItemPrivate(discriminator);
+                CEntityForm editor = createItemPrivate(discriminator);
                 editor.onAdopt(this);
                 editor.populate(value);
                 container.setWidget(editor);

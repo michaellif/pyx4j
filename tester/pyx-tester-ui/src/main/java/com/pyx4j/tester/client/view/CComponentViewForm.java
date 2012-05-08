@@ -24,7 +24,7 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.entity.client.CEntityEditor;
+import com.pyx4j.entity.client.CEntityForm;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -32,7 +32,7 @@ import com.pyx4j.tester.client.domain.CComponentProperties;
 import com.pyx4j.tester.client.ui.TesterWidgetDecorator;
 import com.pyx4j.tester.client.view.form.EntityIFormWithoutLists;
 
-public class CComponentViewForm extends CEntityEditor<CComponentProperties> {
+public class CComponentViewForm extends CEntityForm<CComponentProperties> {
 
     private static final I18n i18n = I18n.get(EntityIFormWithoutLists.class);
 

@@ -107,6 +107,8 @@
                 <artifactId>maven-gwt-plugin</artifactId>
                 <executions>
                     <execution>
+                        <id>test-source-jar</id>
+                        <phase>package</phase>
                         <goals>
                             <goal>test-source-jar</goal>
                         </goals>

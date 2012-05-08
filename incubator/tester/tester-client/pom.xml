@@ -166,6 +166,13 @@
                             <draftCompile>${gwtDraftCompile}</draftCompile>
                             <compileReport>false</compileReport>
                         </configuration>
+                        <dependencies>
+                            <dependency>
+                                <groupId>com.google.gwt</groupId>
+                                <artifactId>gwt-dev</artifactId>
+                                <version>${gwtVersion}</version>
+                            </dependency>
+                        </dependencies>
                     </plugin>
 
                 </plugins>

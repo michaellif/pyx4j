@@ -32,7 +32,7 @@ public class ShortWords {
     }
 
     public void add(String word, String shortForm) {
-        words.put(word, shortForm);
+        words.put(word.toLowerCase(), shortForm.toLowerCase());
     }
 
     public String getShortForm(String word) {

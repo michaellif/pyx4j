@@ -34,7 +34,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.entity.client.CEntityContainer;
-import com.pyx4j.entity.client.CEntityEditor;
+import com.pyx4j.entity.client.CEntityForm;
 import com.pyx4j.entity.client.IDecorator;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
@@ -58,7 +58,7 @@ public abstract class CEntityFolderItem<E extends IEntity> extends CEntityContai
 
     private final List<HandlerRegistration> handlerRegistrations;
 
-    private CEntityEditor<E> editor;
+    private CEntityForm<E> editor;
 
     private final Class<E> clazz;
 
@@ -131,7 +131,7 @@ public abstract class CEntityFolderItem<E extends IEntity> extends CEntityContai
 
     @Override
     public IsWidget createContent() {
-        editor = (CEntityEditor<E>) create(EntityFactory.getEntityPrototype(clazz));
+        editor = (CEntityForm<E>) create(EntityFactory.getEntityPrototype(clazz));
         adopt(editor);
         return editor;
     }

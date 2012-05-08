@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.entity.client.CEntityEditor;
+import com.pyx4j.entity.client.CEntityForm;
 import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.folder.BoxFolderDecorator;
 import com.pyx4j.entity.client.ui.folder.BoxFolderItemDecorator;
@@ -48,7 +48,7 @@ import com.pyx4j.tester.client.images.Images;
 import com.pyx4j.tester.client.ui.TesterWidgetDecorator;
 import com.pyx4j.tester.client.view.form.EntityIIFormWithVisibilityChange;
 
-public class EntityIForm extends CEntityEditor<EntityI> {
+public class EntityIForm extends CEntityForm<EntityI> {
 
     private static final I18n i18n = I18n.get(EntityIForm.class);
 
@@ -117,7 +117,7 @@ public class EntityIForm extends CEntityEditor<EntityI> {
 
     }
 
-    static class EntityIIEditor extends CEntityEditor<EntityII> {
+    static class EntityIIEditor extends CEntityForm<EntityII> {
 
         public EntityIIEditor() {
             super(EntityII.class);
@@ -160,7 +160,7 @@ public class EntityIForm extends CEntityEditor<EntityI> {
 
     }
 
-    static class EntityIIIEditor extends CEntityEditor<EntityIII> {
+    static class EntityIIIEditor extends CEntityForm<EntityIII> {
 
         public EntityIIIEditor() {
             super(EntityIII.class);

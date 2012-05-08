@@ -43,14 +43,14 @@
             <scope>test</scope>
             <optional>true</optional>
         </dependency>
-        
+
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-jdk14</artifactId>
             <optional>true</optional>
             <scope>test</scope>
         </dependency>
-        
+
 	</dependencies>
 
     <properties>
@@ -76,7 +76,9 @@
                 <artifactId>maven-gwt-plugin</artifactId>
                 <executions>
                     <execution>
+                        <phase>package</phase>
                         <goals>
+                            <goal>source-jar</goal>
                             <goal>test-source-jar</goal>
                         </goals>
                     </execution>
