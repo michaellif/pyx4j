@@ -13,6 +13,7 @@
  */
 package com.propertyvista.payment.pad;
 
+import java.io.Closeable;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -28,7 +29,7 @@ import com.propertyvista.admin.domain.payment.pad.PadFile;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.shared.VistaSystemIdentification;
 
-public class CaledonPadFileWriter {
+public class CaledonPadFileWriter implements Closeable {
 
     private final PadFile padFile;
 
@@ -72,6 +73,7 @@ public class CaledonPadFileWriter {
 
         //Version Indicator
         writer.append("0010");
+        writer.append("\n");
     }
 
     private void writeFileTrailer(BigDecimal fileAmount, int recordsCount) throws IOException {
@@ -83,6 +85,7 @@ public class CaledonPadFileWriter {
 
         // Total value of the batch - 14 digit field with 2 implied decimal places! ($1.00 would be represented by 100). This field cannot contain a decimal or dollar ($) sign
         writer.append(formatAmount(fileAmount));
+        writer.append("\n");
     }
 
     private BigDecimal writeBatch(PadBatch padBatch) throws IOException {
@@ -112,6 +115,7 @@ public class CaledonPadFileWriter {
         writer.append(padBatch.merchantAccount().bankId().getStringView()).append(",");
         writer.append(padBatch.merchantAccount().branchTransitNumber().getStringView()).append(",");
         writer.append(padBatch.merchantAccount().accountNumber().getStringView());
+        writer.append("\n");
     }
 
     private void writeBatchTrailer(PadBatch padBatch, BigDecimal batchAmount) throws IOException {
@@ -124,6 +128,7 @@ public class CaledonPadFileWriter {
 
         // Total value of the batch - 14 digit field with 2 implied decimal places! ($1.00 would be represented by 100). This field cannot contain a decimal or dollar ($) sign
         writer.append(formatAmount(batchAmount));
+        writer.append("\n");
     }
 
     private void writeDebitRecord(PadDebitRecord record) throws IOException {
@@ -135,11 +140,18 @@ public class CaledonPadFileWriter {
         writer.append(record.branchTransitNumber().getStringView()).append(",");
         writer.append(record.accountNumber().getStringView()).append(",");
         writer.append(record.transactionId().getStringView());
+        writer.append("\n");
     }
 
     private CharSequence formatAmount(BigDecimal value) {
         BigDecimal centValue = value.multiply(new BigDecimal("100"));
         centValue.setScale(0);
         return centValue.toString();
+    }
+
+    @Override
+    public void close() throws IOException {
+        writer.flush();
+        writer.close();
     }
 }

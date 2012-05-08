@@ -27,7 +27,7 @@ import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.payment.EcheckInfo;
 
-public class PADProcessor {
+public class PadProcessor {
 
     void queuePayment(PaymentRecord paymentRecord) {
         MerchantAccount merchantAccount = PaymentUtils.retrieveMerchantAccount(paymentRecord);

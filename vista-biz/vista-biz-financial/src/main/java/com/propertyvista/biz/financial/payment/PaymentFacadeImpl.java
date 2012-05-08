@@ -89,7 +89,7 @@ public class PaymentFacadeImpl implements PaymentFacade {
         case Echeck:
             Persistence.service().merge(payment);
             ServerSideFactory.create(ARFacade.class).postPayment(payment);
-            new PADProcessor().queuePayment(payment);
+            new PadProcessor().queuePayment(payment);
             break;
         case EFT:
             payment.paymentStatus().setValue(PaymentRecord.PaymentStatus.Received);
