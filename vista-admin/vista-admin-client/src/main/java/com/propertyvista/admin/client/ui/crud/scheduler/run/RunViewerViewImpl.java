@@ -26,7 +26,7 @@ public class RunViewerViewImpl extends AdminViewerViewImplBase<Run> implements R
     private final IListerView<RunData> runDataLister;
 
     public RunViewerViewImpl() {
-        super(AdminSiteMap.Management.Run.class);
+        super(AdminSiteMap.Management.Run.class, true);
 
         runDataLister = new ListerInternalViewImplBase<RunData>(new RunDataLister());
 
