@@ -23,7 +23,7 @@ import com.propertyvista.domain.VistaNamespace;
 
 @Inheritance(strategy = Inheritance.InheritanceStrategy.SINGLE_TABLE)
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
-@Table(namespace = VistaNamespace.adminNamespace)
+@Table(prefix = "scheduler", namespace = VistaNamespace.adminNamespace)
 @DiscriminatorValue("default")
 public interface TriggerDetails extends IEntity {
 

@@ -14,12 +14,16 @@
 package com.propertyvista.admin.domain.scheduler;
 
 import com.pyx4j.entity.annotations.Format;
+import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
+import com.propertyvista.domain.VistaNamespace;
+
 @ToStringFormat("Total {0}, Processed {1}, Failed {2}, Avg {3}")
+@Table(prefix = "scheduler", namespace = VistaNamespace.adminNamespace)
 public interface RunStats extends IEntity {
 
     @ToString(index = 0)

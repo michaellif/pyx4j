@@ -13,11 +13,14 @@
  */
 package com.propertyvista.admin.domain.scheduler;
 
+import java.util.Date;
+
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
-import com.pyx4j.entity.annotations.EmbeddedEntity;
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
+import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Table;
@@ -28,11 +31,8 @@ import com.pyx4j.i18n.annotations.I18n;
 import com.propertyvista.admin.domain.pmc.Pmc;
 import com.propertyvista.domain.VistaNamespace;
 
-/**
- * TODO Rename to ExecutionPmcData after migration
- */
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
-@Table(namespace = VistaNamespace.adminNamespace)
+@Table(prefix = "scheduler", namespace = VistaNamespace.adminNamespace)
 public interface RunData extends IEntity {
 
     @Detached
@@ -47,6 +47,9 @@ public interface RunData extends IEntity {
     Pmc pmc();
 
     @Caption(name = "Statistics")
-    @EmbeddedEntity
+    @Owned(forceCreation = true, cascade = {})
     RunStats stats();
+
+    @Format("MM/dd/yyyy h:mm a")
+    IPrimitive<Date> updated();
 }

@@ -19,15 +19,18 @@ import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
+import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
+import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.domain.security.AdminUser;
 
 @ToStringFormat("{0} {1}")
+@Table(prefix = "scheduler", namespace = VistaNamespace.adminNamespace)
 public interface Notification extends IEntity {
 
     @Owner

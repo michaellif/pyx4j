@@ -35,7 +35,7 @@ import com.pyx4j.i18n.annotations.I18n;
 import com.propertyvista.domain.VistaNamespace;
 
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
-@Table(namespace = VistaNamespace.adminNamespace)
+@Table(prefix = "scheduler", namespace = VistaNamespace.adminNamespace)
 public interface Run extends IEntity {
 
     @ReadOnly
@@ -54,6 +54,7 @@ public interface Run extends IEntity {
     IPrimitive<Date> created();
 
     @Caption(name = "Statistics")
+    @Owned(forceCreation = true, cascade = {})
     RunStats stats();
 
     @Owned

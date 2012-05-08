@@ -42,7 +42,7 @@ public interface Trigger extends IEntity {
 
     @NotNull
     @ReadOnly
-    IPrimitive<TriggerType> triggerType();
+    IPrimitive<PmcProcessType> triggerType();
 
     /**
      * Configuration parameters for each particular trigger type.

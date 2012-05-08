@@ -21,15 +21,13 @@ import com.pyx4j.i18n.shared.I18nEnum;
 @I18n
 public enum RunStatus implements Serializable {
 
-    New,
-
-    Starting,
-
     Running,
 
     Sleeping,
 
-    Completed;
+    Completed,
+
+    Failed;
 
     @Override
     public String toString() {

@@ -7,33 +7,12 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on May 5, 2012
+ * Created on 2012-05-07
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.admin.domain.scheduler;
+package com.propertyvista.server.jobs;
 
-import java.io.Serializable;
-
-import com.pyx4j.i18n.annotations.I18n;
-import com.pyx4j.i18n.shared.I18nEnum;
-
-@I18n(strategy = I18n.I18nStrategy.IgnoreAll)
-public enum RunDataStatus implements Serializable {
-
-    NeverRan,
-
-    Processed,
-
-    Erred,
-
-    Failed,
-
-    Canceled;
-
-    @Override
-    public String toString() {
-        return I18nEnum.toString(this);
-    }
+public class PmcProcessContext {
 
 }

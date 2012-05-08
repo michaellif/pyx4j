@@ -28,7 +28,7 @@ import com.propertyvista.admin.domain.pmc.Pmc;
 import com.propertyvista.domain.VistaNamespace;
 
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
-@Table(namespace = VistaNamespace.adminNamespace)
+@Table(prefix = "scheduler", namespace = VistaNamespace.adminNamespace)
 public interface TriggerPmc extends IEntity {
 
     @Owner
