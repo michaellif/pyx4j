@@ -132,7 +132,7 @@ public abstract class AbstractSitePreloader extends AbstractVistaDataPreloader {
         site.sitePalette().background().setValue(background());
         site.sitePalette().foreground().setValue(foreground());
 
-        site.enableMapView().setValue(Boolean.TRUE);
+        site.disableMapView().setValue(Boolean.TRUE);
 
         {
             for (LocaleInfo li : siteLocale) {

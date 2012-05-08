@@ -132,7 +132,11 @@ public class PMSiteContentManager implements Serializable {
     }
 
     public boolean isMapEnabled() {
-        return siteDescriptor.enableMapView().getValue();
+        if (siteDescriptor.disableMapView().isNull()) {
+            return true;
+        } else {
+            return !siteDescriptor.disableMapView().getValue();
+        }
     }
 
     public boolean isAptListEnabled() {

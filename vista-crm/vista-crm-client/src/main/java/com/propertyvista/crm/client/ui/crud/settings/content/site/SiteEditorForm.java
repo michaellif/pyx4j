@@ -94,7 +94,7 @@ public class SiteEditorForm extends CrmEntityForm<SiteDescriptorDTO> {
             }
             ((CComboBox<SiteDescriptor.Skin>) skinComp).setOptions(skinOpt);
         }
-        main.setWidget(row++, 0, new DecoratorBuilder(inject(proto().enableMapView()), 10).build());
+        main.setWidget(row++, 0, new DecoratorBuilder(inject(proto().disableMapView()), 10).build());
         main.setWidget(row++, 0, new DecoratorBuilder(inject(proto().disableBuildingDetails()), 10).build());
 
         main.setH1(row++, 0, 1, proto().locales().getMeta().getCaption());

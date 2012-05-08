@@ -11,7 +11,7 @@
  * @author stanp
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.settings.content.layoutmodule;
+package com.propertyvista.crm.client.ui.crud.settings.content.gadgets;
 
 import java.util.HashMap;
 import java.util.Map;

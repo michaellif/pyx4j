@@ -16,10 +16,10 @@ package com.propertyvista.crm.client.ui.crud.viewfactories;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.site.client.ui.crud.IView;
 
-import com.propertyvista.crm.client.ui.crud.settings.content.layoutmodule.HomePageGadgetEditor;
-import com.propertyvista.crm.client.ui.crud.settings.content.layoutmodule.HomePageGadgetEditorImpl;
-import com.propertyvista.crm.client.ui.crud.settings.content.layoutmodule.HomePageGadgetViewer;
-import com.propertyvista.crm.client.ui.crud.settings.content.layoutmodule.HomePageGadgetViewerImpl;
+import com.propertyvista.crm.client.ui.crud.settings.content.gadgets.HomePageGadgetEditor;
+import com.propertyvista.crm.client.ui.crud.settings.content.gadgets.HomePageGadgetEditorImpl;
+import com.propertyvista.crm.client.ui.crud.settings.content.gadgets.HomePageGadgetViewer;
+import com.propertyvista.crm.client.ui.crud.settings.content.gadgets.HomePageGadgetViewerImpl;
 import com.propertyvista.crm.client.ui.crud.settings.content.page.PageEditor;
 import com.propertyvista.crm.client.ui.crud.settings.content.page.PageEditorImpl;
 import com.propertyvista.crm.client.ui.crud.settings.content.page.PageViewer;

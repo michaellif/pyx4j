@@ -56,7 +56,7 @@ public class HomePageGadgetCrudServiceImpl extends AbstractCrudServiceImpl<HomeP
                 site.homePageGadgetsNarrow().add(entity);
                 break;
             }
-            Persistence.service().persist(site);
+            Persistence.service().merge(site);
         } else {
             super.persist(entity, dto);
         }

@@ -61,7 +61,7 @@ public interface HomePageGadget extends IEntity {
     @NotNull
     IPrimitive<String> name();
 
-    @Owned
+    @Owned(forceCreation = true)
     GadgetContent content();
 
     @Transient
