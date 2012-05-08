@@ -16,21 +16,21 @@ package com.propertyvista.admin.client.ui.crud.scheduler.run;
 import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 
-import com.propertyvista.admin.domain.scheduler.Run;
+import com.propertyvista.admin.domain.scheduler.RunData;
 
-public class RunLister extends ListerBase<Run> {
+public class RunDataLister extends ListerBase<RunData> {
 
-    public RunLister() {
-        super(Run.class, false, false);
+    public RunDataLister() {
+        super(RunData.class, false, false);
 
         setColumnDescriptors(//@formatter:off
-                new MemberColumnDescriptor.Builder(proto().status()).build(),
-                new MemberColumnDescriptor.Builder(proto().stats().total()).build(),
-                new MemberColumnDescriptor.Builder(proto().stats().processed()).build(),
-                new MemberColumnDescriptor.Builder(proto().stats().failed()).build(),
-                new MemberColumnDescriptor.Builder(proto().stats().averageDuration()).build(),
-                new MemberColumnDescriptor.Builder(proto().stats().totalDuration()).build(),
-                new MemberColumnDescriptor.Builder(proto().stats().updateTime()).build()
+            new MemberColumnDescriptor.Builder(proto().status()).build(),
+            new MemberColumnDescriptor.Builder(proto().stats().total()).build(),
+            new MemberColumnDescriptor.Builder(proto().stats().processed()).build(),
+            new MemberColumnDescriptor.Builder(proto().stats().failed()).build(),
+            new MemberColumnDescriptor.Builder(proto().stats().averageDuration()).build(),
+            new MemberColumnDescriptor.Builder(proto().stats().totalDuration()).build(),
+            new MemberColumnDescriptor.Builder(proto().stats().updateTime()).build()
         );//@formatter:on
     }
 }

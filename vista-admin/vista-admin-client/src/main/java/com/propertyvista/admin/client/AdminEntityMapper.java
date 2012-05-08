@@ -18,6 +18,7 @@ import static com.pyx4j.site.client.AppPlaceEntityMapper.register;
 import com.google.gwt.resources.client.ImageResource;
 
 import com.propertyvista.admin.client.resources.AdminImages;
+import com.propertyvista.admin.domain.scheduler.Run;
 import com.propertyvista.admin.domain.scheduler.Trigger;
 import com.propertyvista.admin.rpc.AdminSiteMap;
 import com.propertyvista.admin.rpc.PmcDTO;
@@ -33,6 +34,7 @@ public class AdminEntityMapper {
         register(OnboardingUser.class, AdminSiteMap.Management.OnboardingUsers.class, DEFAULT_IMAGE);
         register(PmcDTO.class, AdminSiteMap.Management.PMC.class, DEFAULT_IMAGE);
         register(Trigger.class, AdminSiteMap.Management.Trigger.class, DEFAULT_IMAGE);
+        register(Run.class, AdminSiteMap.Management.Run.class, DEFAULT_IMAGE);
     }
 
 }

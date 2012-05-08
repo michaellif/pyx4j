@@ -28,6 +28,10 @@ import com.propertyvista.admin.client.ui.crud.pmc.PmcListerView;
 import com.propertyvista.admin.client.ui.crud.pmc.PmcListerViewImpl;
 import com.propertyvista.admin.client.ui.crud.pmc.PmcViewerView;
 import com.propertyvista.admin.client.ui.crud.pmc.PmcViewerViewImpl;
+import com.propertyvista.admin.client.ui.crud.scheduler.run.RunListerView;
+import com.propertyvista.admin.client.ui.crud.scheduler.run.RunListerViewImpl;
+import com.propertyvista.admin.client.ui.crud.scheduler.run.RunViewerView;
+import com.propertyvista.admin.client.ui.crud.scheduler.run.RunViewerViewImpl;
 import com.propertyvista.admin.client.ui.crud.scheduler.trigger.TriggerEditorView;
 import com.propertyvista.admin.client.ui.crud.scheduler.trigger.TriggerEditorViewImpl;
 import com.propertyvista.admin.client.ui.crud.scheduler.trigger.TriggerListerView;
@@ -59,8 +63,12 @@ public class ManagementVeiwFactory extends ViewFactoryBase {
                 map.put(type, new TriggerEditorViewImpl());
             } else if (TriggerListerView.class.equals(type)) {
                 map.put(type, new TriggerListerViewImpl());
-            }
 
+            } else if (RunViewerView.class.equals(type)) {
+                map.put(type, new RunViewerViewImpl());
+            } else if (RunListerView.class.equals(type)) {
+                map.put(type, new RunListerViewImpl());
+            }
         }
 
         @SuppressWarnings("unchecked")

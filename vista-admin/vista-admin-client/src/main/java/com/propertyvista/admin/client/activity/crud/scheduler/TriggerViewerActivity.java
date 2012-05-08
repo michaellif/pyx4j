@@ -13,25 +13,48 @@
  */
 package com.propertyvista.admin.client.activity.crud.scheduler;
 
+import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.site.client.activity.crud.ListerActivityBase;
 import com.pyx4j.site.client.activity.crud.ViewerActivityBase;
+import com.pyx4j.site.client.ui.crud.lister.IListerView.Presenter;
 
 import com.propertyvista.admin.client.ui.crud.scheduler.trigger.TriggerViewerView;
 import com.propertyvista.admin.client.viewfactories.crud.ManagementVeiwFactory;
 import com.propertyvista.admin.domain.scheduler.Run;
 import com.propertyvista.admin.domain.scheduler.Trigger;
+import com.propertyvista.admin.rpc.services.scheduler.RunCrudService;
 import com.propertyvista.admin.rpc.services.scheduler.TriggerCrudService;
 
 public class TriggerViewerActivity extends ViewerActivityBase<Trigger> implements TriggerViewerView.Presenter {
 
+    private final Presenter<Run> runLister;
+
     @SuppressWarnings("unchecked")
     public TriggerViewerActivity(Place place) {
         super(place, ManagementVeiwFactory.instance(TriggerViewerView.class), (AbstractCrudService<Trigger>) GWT.create(TriggerCrudService.class));
+
+        runLister = new ListerActivityBase<Run>(place, ((TriggerViewerView) view).getRunListerView(),
+                (AbstractCrudService<Run>) GWT.create(RunCrudService.class), Run.class);
+    }
+
+    @Override
+    protected void onPopulateSuccess(Trigger result) {
+        super.onPopulateSuccess(result);
+
+        runLister.setParent(result.getPrimaryKey());
+        runLister.populate();
+    }
+
+    @Override
+    public void onStop() {
+        ((AbstractActivity) runLister).onStop();
+        super.onStop();
     }
 
     @Override

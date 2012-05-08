@@ -13,13 +13,28 @@
  */
 package com.propertyvista.admin.client.ui.crud.scheduler.run;
 
+import com.pyx4j.site.client.ui.crud.lister.IListerView;
+import com.pyx4j.site.client.ui.crud.lister.ListerInternalViewImplBase;
+
 import com.propertyvista.admin.client.ui.crud.AdminViewerViewImplBase;
 import com.propertyvista.admin.domain.scheduler.Run;
+import com.propertyvista.admin.domain.scheduler.RunData;
 import com.propertyvista.admin.rpc.AdminSiteMap;
 
 public class RunViewerViewImpl extends AdminViewerViewImplBase<Run> implements RunViewerView {
 
+    private final IListerView<RunData> runDataLister;
+
     public RunViewerViewImpl() {
-        super(AdminSiteMap.Management.Trigger.class, new RunEditorForm(true));
+        super(AdminSiteMap.Management.Run.class);
+
+        runDataLister = new ListerInternalViewImplBase<RunData>(new RunDataLister());
+
+        setForm(new RunEditorForm(true));
+    }
+
+    @Override
+    public IListerView<RunData> getRunDataListerView() {
+        return runDataLister;
     }
 }

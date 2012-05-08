@@ -14,13 +14,15 @@
 package com.propertyvista.admin.client.ui.crud.scheduler.run;
 
 import com.pyx4j.site.client.ui.crud.form.IViewerView;
+import com.pyx4j.site.client.ui.crud.lister.IListerView;
 
 import com.propertyvista.admin.domain.scheduler.Run;
+import com.propertyvista.admin.domain.scheduler.RunData;
 
 public interface RunViewerView extends IViewerView<Run> {
 
     interface Presenter extends IViewerView.Presenter {
-
     }
 
+    IListerView<RunData> getRunDataListerView();
 }

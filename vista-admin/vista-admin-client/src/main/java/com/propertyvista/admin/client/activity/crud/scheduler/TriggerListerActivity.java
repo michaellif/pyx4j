@@ -28,8 +28,7 @@ public class TriggerListerActivity extends ListerActivityBase<Trigger> {
 
     @SuppressWarnings("unchecked")
     public TriggerListerActivity(Place place) {
-        super(place, ManagementVeiwFactory.instance(TriggerListerView.class), (AbstractCrudService<Trigger>) GWT
-                .create(TriggerCrudService.class), Trigger.class);
-
+        super(place, ManagementVeiwFactory.instance(TriggerListerView.class), (AbstractCrudService<Trigger>) GWT.create(TriggerCrudService.class),
+                Trigger.class);
     }
 }

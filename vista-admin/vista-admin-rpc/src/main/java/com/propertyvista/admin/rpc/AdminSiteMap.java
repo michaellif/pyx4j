@@ -57,14 +57,19 @@ public class AdminSiteMap implements SiteMap {
         public static class PMC extends CrudAppPlace {
         }
 
-        @PlaceProperties(caption = "Onboarding Users")
+        @PlaceProperties(caption = "Onboarding User")
         @NavigationItem(navigLabel = "Onboarding Users")
         public static class OnboardingUsers extends CrudAppPlace {
         }
 
-        @PlaceProperties(caption = "Triggers")
+        @PlaceProperties(caption = "Trigger")
         @NavigationItem(navigLabel = "Triggers")
         public static class Trigger extends CrudAppPlace {
+        }
+
+        @PlaceProperties(caption = "Run")
+        @NavigationItem(navigLabel = "Runs")
+        public static class Run extends CrudAppPlace {
         }
     }
 
@@ -79,7 +84,7 @@ public class AdminSiteMap implements SiteMap {
         }
 
         @PlaceProperties(caption = "Simulation")
-        @NavigationItem(navigLabel = "Simulation")
+        @NavigationItem(navigLabel = "Simulations")
         public static class Simulation extends CrudAppPlace {
 
             public Simulation() {
@@ -88,7 +93,7 @@ public class AdminSiteMap implements SiteMap {
 
         }
 
-        @PlaceProperties(caption = "Users")
+        @PlaceProperties(caption = "User")
         @NavigationItem(navigLabel = "Users")
         public static class AdminUsers extends CrudAppPlace {
         }
@@ -106,7 +111,7 @@ public class AdminSiteMap implements SiteMap {
     public static class Settings extends AppPlace {
     }
 
-    @NavigationItem(navigLabel = "Account")
+    @NavigationItem(navigLabel = "Accounts")
     public static class Account extends AppPlace {
     }
 }

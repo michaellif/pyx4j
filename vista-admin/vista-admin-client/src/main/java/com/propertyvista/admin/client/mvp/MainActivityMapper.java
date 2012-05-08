@@ -37,6 +37,8 @@ import com.propertyvista.admin.client.activity.crud.onboardingusers.OnboardingUs
 import com.propertyvista.admin.client.activity.crud.pmc.PmcEditorActivity;
 import com.propertyvista.admin.client.activity.crud.pmc.PmcListerActivity;
 import com.propertyvista.admin.client.activity.crud.pmc.PmcViewerActivity;
+import com.propertyvista.admin.client.activity.crud.scheduler.RunListerActivity;
+import com.propertyvista.admin.client.activity.crud.scheduler.RunViewerActivity;
 import com.propertyvista.admin.client.activity.crud.scheduler.TriggerEditorActivity;
 import com.propertyvista.admin.client.activity.crud.scheduler.TriggerListerActivity;
 import com.propertyvista.admin.client.activity.crud.scheduler.TriggerViewerActivity;
@@ -82,6 +84,16 @@ public class MainActivityMapper implements AppActivityMapper {
                             break;
                         case lister:
                             activity = new TriggerListerActivity(crudPlace);
+                            break;
+                        }
+
+                    } else if (place instanceof AdminSiteMap.Management.Run) {
+                        switch (crudPlace.getType()) {
+                        case viewer:
+                            activity = new RunViewerActivity(crudPlace);
+                            break;
+                        case lister:
+                            activity = new RunListerActivity(crudPlace);
                             break;
                         }
 
