@@ -27,8 +27,7 @@ import com.propertyvista.domain.financial.GlCodeCategory;
 public class GlCodeCategoryViewerActivity extends CrmViewerActivity<GlCodeCategory> {
 
     public GlCodeCategoryViewerActivity(Place place) {
-        super(place, SettingsViewFactory.instance(GlCodeCategoryViewerView.class),
-
-        GWT.<AbstractCrudService<GlCodeCategory>> create(GlCodeCategoryCrudService.class));
+        super(place, SettingsViewFactory.instance(GlCodeCategoryViewerView.class), GWT
+                .<AbstractCrudService<GlCodeCategory>> create(GlCodeCategoryCrudService.class));
     }
 }

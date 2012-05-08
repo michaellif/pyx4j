@@ -27,13 +27,6 @@ import com.propertyvista.domain.security.CrmRole;
 public class CrmRoleEditorActivity extends EditorActivityBase<CrmRole> {
 
     public CrmRoleEditorActivity(CrudAppPlace place) {
-        super(place,
-
-        SettingsViewFactory.instance(CrmRoleEditorView.class),
-
-        GWT.<AbstractCrudService<CrmRole>> create(CrmRoleCrudService.class),
-
-        CrmRole.class);
+        super(place, SettingsViewFactory.instance(CrmRoleEditorView.class), GWT.<AbstractCrudService<CrmRole>> create(CrmRoleCrudService.class), CrmRole.class);
     }
-
 }

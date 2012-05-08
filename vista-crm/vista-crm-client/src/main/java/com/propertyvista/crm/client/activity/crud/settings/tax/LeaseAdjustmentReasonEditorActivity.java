@@ -27,13 +27,8 @@ import com.propertyvista.domain.tenant.lease.LeaseAdjustmentReason;
 public class LeaseAdjustmentReasonEditorActivity extends EditorActivityBase<LeaseAdjustmentReason> {
 
     public LeaseAdjustmentReasonEditorActivity(CrudAppPlace place) {
-        super(place,
-
-        SettingsViewFactory.instance(LeaseAdjustmentReasonEditorView.class),
-
-        GWT.<AbstractCrudService<LeaseAdjustmentReason>> create(LeaseAdjustmentReasonCrudService.class),
-
-        LeaseAdjustmentReason.class);
+        super(place, SettingsViewFactory.instance(LeaseAdjustmentReasonEditorView.class), GWT
+                .<AbstractCrudService<LeaseAdjustmentReason>> create(LeaseAdjustmentReasonCrudService.class), LeaseAdjustmentReason.class);
     }
 
 }

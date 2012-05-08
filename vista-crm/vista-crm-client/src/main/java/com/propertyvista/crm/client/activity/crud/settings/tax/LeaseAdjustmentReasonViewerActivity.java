@@ -27,8 +27,7 @@ import com.propertyvista.domain.tenant.lease.LeaseAdjustmentReason;
 public class LeaseAdjustmentReasonViewerActivity extends CrmViewerActivity<LeaseAdjustmentReason> {
 
     public LeaseAdjustmentReasonViewerActivity(Place place) {
-        super(place, SettingsViewFactory.instance(LeaseAdjustmentReasonViewerView.class),
-
-        GWT.<AbstractCrudService<LeaseAdjustmentReason>> create(LeaseAdjustmentReasonCrudService.class));
+        super(place, SettingsViewFactory.instance(LeaseAdjustmentReasonViewerView.class), GWT
+                .<AbstractCrudService<LeaseAdjustmentReason>> create(LeaseAdjustmentReasonCrudService.class));
     }
 }

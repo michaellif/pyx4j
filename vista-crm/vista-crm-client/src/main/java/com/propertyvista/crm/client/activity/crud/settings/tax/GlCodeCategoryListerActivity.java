@@ -27,13 +27,7 @@ import com.propertyvista.domain.financial.GlCodeCategory;
 public class GlCodeCategoryListerActivity extends ListerActivityBase<GlCodeCategory> {
 
     public GlCodeCategoryListerActivity(Place place) {
-        super(place,
-
-        SettingsViewFactory.instance(GlCodeCategoryListerView.class),
-
-        GWT.<AbstractListService<GlCodeCategory>> create(GlCodeCategoryCrudService.class),
-
-        GlCodeCategory.class);
+        super(place, SettingsViewFactory.instance(GlCodeCategoryListerView.class), GWT
+                .<AbstractListService<GlCodeCategory>> create(GlCodeCategoryCrudService.class), GlCodeCategory.class);
     }
-
 }

@@ -56,6 +56,12 @@ import com.propertyvista.crm.client.ui.crud.settings.financial.tax.TaxListerView
 import com.propertyvista.crm.client.ui.crud.settings.financial.tax.TaxListerViewImpl;
 import com.propertyvista.crm.client.ui.crud.settings.financial.tax.TaxViewerView;
 import com.propertyvista.crm.client.ui.crud.settings.financial.tax.TaxViewerViewImpl;
+import com.propertyvista.crm.client.ui.crud.settings.merchantaccount.MerchantAccountEditorView;
+import com.propertyvista.crm.client.ui.crud.settings.merchantaccount.MerchantAccountEditorViewImpl;
+import com.propertyvista.crm.client.ui.crud.settings.merchantaccount.MerchantAccountListerView;
+import com.propertyvista.crm.client.ui.crud.settings.merchantaccount.MerchantAccountListerViewImpl;
+import com.propertyvista.crm.client.ui.crud.settings.merchantaccount.MerchantAccountViewerView;
+import com.propertyvista.crm.client.ui.crud.settings.merchantaccount.MerchantAccountViewerViewImpl;
 import com.propertyvista.crm.client.ui.crud.settings.role.CrmRoleEditorView;
 import com.propertyvista.crm.client.ui.crud.settings.role.CrmRoleEditorViewImpl;
 import com.propertyvista.crm.client.ui.crud.settings.role.CrmRoleListerView;
@@ -101,6 +107,13 @@ public class SettingsViewFactory extends ViewFactoryBase {
                 map.put(type, new CrmRoleEditorViewImpl());
             } else if (CrmRoleViewerView.class.equals(type)) {
                 map.put(type, new CrmRoleViewerViewImpl());
+
+            } else if (MerchantAccountListerView.class.equals(type)) {
+                map.put(type, new MerchantAccountListerViewImpl());
+            } else if (MerchantAccountEditorView.class.equals(type)) {
+                map.put(type, new MerchantAccountEditorViewImpl());
+            } else if (MerchantAccountViewerView.class.equals(type)) {
+                map.put(type, new MerchantAccountViewerViewImpl());
 
             } else if (TaxListerView.class.equals(type)) {
                 map.put(type, new TaxListerViewImpl());

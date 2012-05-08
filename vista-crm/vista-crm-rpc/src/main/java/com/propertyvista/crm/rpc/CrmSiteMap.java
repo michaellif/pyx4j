@@ -403,6 +403,11 @@ public class CrmSiteMap implements SiteMap {
         public static class UserRole extends CRMCrudAppPlace {
         }
 
+        @PlaceProperties(caption = "Merchant Account")
+        @NavigationItem(navigLabel = "Merchant Accounts")
+        public static class MerchantAccount extends CRMCrudAppPlace {
+        }
+
         @PlaceProperties(caption = "Product Dictionary")
         @NavigationItem(navigLabel = "Product Dictionary")
         public static class ProductDictionary extends CRMCrudAppPlace {

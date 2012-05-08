@@ -27,13 +27,6 @@ import com.propertyvista.domain.financial.tax.Tax;
 public class TaxListerActivity extends ListerActivityBase<Tax> {
 
     public TaxListerActivity(Place place) {
-        super(place,
-
-        SettingsViewFactory.instance(TaxListerView.class),
-
-        GWT.<AbstractListService<Tax>> create(TaxCrudService.class),
-
-        Tax.class);
+        super(place, SettingsViewFactory.instance(TaxListerView.class), GWT.<AbstractListService<Tax>> create(TaxCrudService.class), Tax.class);
     }
-
 }

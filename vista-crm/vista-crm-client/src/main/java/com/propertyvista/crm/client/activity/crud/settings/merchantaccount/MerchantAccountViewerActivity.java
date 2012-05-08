@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.client.activity.crud.settings.tax;
+package com.propertyvista.crm.client.activity.crud.settings.merchantaccount;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
@@ -19,14 +19,15 @@ import com.google.gwt.place.shared.Place;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
-import com.propertyvista.crm.client.ui.crud.settings.financial.tax.TaxViewerView;
+import com.propertyvista.crm.client.ui.crud.settings.merchantaccount.MerchantAccountViewerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.SettingsViewFactory;
-import com.propertyvista.crm.rpc.services.admin.TaxCrudService;
-import com.propertyvista.domain.financial.tax.Tax;
+import com.propertyvista.crm.rpc.services.admin.MerchantAccountCrudService;
+import com.propertyvista.domain.financial.MerchantAccount;
 
-public class TaxViewerActivity extends CrmViewerActivity<Tax> {
+public class MerchantAccountViewerActivity extends CrmViewerActivity<MerchantAccount> {
 
-    public TaxViewerActivity(Place place) {
-        super(place, SettingsViewFactory.instance(TaxViewerView.class), GWT.<AbstractCrudService<Tax>> create(TaxCrudService.class));
+    public MerchantAccountViewerActivity(Place place) {
+        super(place, SettingsViewFactory.instance(MerchantAccountViewerView.class), GWT
+                .<AbstractCrudService<MerchantAccount>> create(MerchantAccountCrudService.class));
     }
 }

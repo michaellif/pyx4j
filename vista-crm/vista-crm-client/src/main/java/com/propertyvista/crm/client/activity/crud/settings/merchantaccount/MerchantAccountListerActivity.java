@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.client.activity.crud.settings.role;
+package com.propertyvista.crm.client.activity.crud.settings.merchantaccount;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
@@ -19,14 +19,16 @@ import com.google.gwt.place.shared.Place;
 import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.site.client.activity.crud.ListerActivityBase;
 
-import com.propertyvista.crm.client.ui.crud.settings.role.CrmRoleListerView;
+import com.propertyvista.crm.client.ui.crud.settings.merchantaccount.MerchantAccountListerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.SettingsViewFactory;
-import com.propertyvista.crm.rpc.services.admin.CrmRoleCrudService;
-import com.propertyvista.domain.security.CrmRole;
+import com.propertyvista.crm.rpc.services.admin.MerchantAccountCrudService;
+import com.propertyvista.domain.financial.MerchantAccount;
 
-public class CrmRoleListerActivity extends ListerActivityBase<CrmRole> {
+public class MerchantAccountListerActivity extends ListerActivityBase<MerchantAccount> {
 
-    public CrmRoleListerActivity(Place place) {
-        super(place, SettingsViewFactory.instance(CrmRoleListerView.class), GWT.<AbstractListService<CrmRole>> create(CrmRoleCrudService.class), CrmRole.class);
+    public MerchantAccountListerActivity(Place place) {
+        super(place, SettingsViewFactory.instance(MerchantAccountListerView.class), GWT
+                .<AbstractListService<MerchantAccount>> create(MerchantAccountCrudService.class), MerchantAccount.class);
     }
+
 }

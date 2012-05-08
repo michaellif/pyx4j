@@ -27,13 +27,7 @@ import com.propertyvista.domain.tenant.lease.LeaseAdjustmentReason;
 public class LeaseAdjustmentReasonListerActivity extends ListerActivityBase<LeaseAdjustmentReason> {
 
     public LeaseAdjustmentReasonListerActivity(Place place) {
-        super(place,
-
-        SettingsViewFactory.instance(LeaseAdjustmentReasonListerView.class),
-
-        GWT.<AbstractListService<LeaseAdjustmentReason>> create(LeaseAdjustmentReasonCrudService.class),
-
-        LeaseAdjustmentReason.class);
+        super(place, SettingsViewFactory.instance(LeaseAdjustmentReasonListerView.class), GWT
+                .<AbstractListService<LeaseAdjustmentReason>> create(LeaseAdjustmentReasonCrudService.class), LeaseAdjustmentReason.class);
     }
-
 }

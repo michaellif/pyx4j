@@ -114,6 +114,9 @@ import com.propertyvista.crm.client.activity.crud.settings.dictionary.FeatureIte
 import com.propertyvista.crm.client.activity.crud.settings.dictionary.ProductDictionaryViewActivity;
 import com.propertyvista.crm.client.activity.crud.settings.dictionary.ServiceItemTypeEditorActivity;
 import com.propertyvista.crm.client.activity.crud.settings.dictionary.ServiceItemTypeViewerActivity;
+import com.propertyvista.crm.client.activity.crud.settings.merchantaccount.MerchantAccountEditorActivity;
+import com.propertyvista.crm.client.activity.crud.settings.merchantaccount.MerchantAccountListerActivity;
+import com.propertyvista.crm.client.activity.crud.settings.merchantaccount.MerchantAccountViewerActivity;
 import com.propertyvista.crm.client.activity.crud.settings.role.CrmRoleEditorActivity;
 import com.propertyvista.crm.client.activity.crud.settings.role.CrmRoleListerActivity;
 import com.propertyvista.crm.client.activity.crud.settings.role.CrmRoleViewerActivity;
@@ -651,7 +654,19 @@ public class MainActivityMapper implements AppActivityMapper {
                         case lister:
                             activity = new CrmRoleListerActivity(crudPlace);
                             break;
+                        }
 
+                    } else if (place instanceof CrmSiteMap.Settings.MerchantAccount) {
+                        switch (crudPlace.getType()) {
+                        case editor:
+                            activity = new MerchantAccountEditorActivity(crudPlace);
+                            break;
+                        case viewer:
+                            activity = new MerchantAccountViewerActivity(crudPlace);
+                            break;
+                        case lister:
+                            activity = new MerchantAccountListerActivity(crudPlace);
+                            break;
                         }
 
                     } else if (place instanceof CrmSiteMap.Settings.Tax) {
@@ -665,7 +680,6 @@ public class MainActivityMapper implements AppActivityMapper {
                         case lister:
                             activity = new TaxListerActivity(crudPlace);
                             break;
-
                         }
 
                     } else if (place instanceof CrmSiteMap.Settings.GlCodeCategory) {
@@ -679,7 +693,6 @@ public class MainActivityMapper implements AppActivityMapper {
                         case lister:
                             activity = new GlCodeCategoryListerActivity(crudPlace);
                             break;
-
                         }
 
                     } else if (place instanceof CrmSiteMap.Settings.LeaseAdjustmentReason) {
@@ -693,7 +706,6 @@ public class MainActivityMapper implements AppActivityMapper {
                         case lister:
                             activity = new LeaseAdjustmentReasonListerActivity(crudPlace);
                             break;
-
                         }
                         // - Complex:
                     } else if (place instanceof CrmSiteMap.Properties.Complex) {

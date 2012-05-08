@@ -68,6 +68,7 @@ public interface MerchantAccount extends IEntity {
     /**
      * Caledon: Description to appear on client's statement. Typically a merchant's business name.
      */
+    @Length(60)
     @Caption(description = "Description to appear on client's statement. Typically a merchant's business name.")
     IPrimitive<String> chargeDescription();
 }
