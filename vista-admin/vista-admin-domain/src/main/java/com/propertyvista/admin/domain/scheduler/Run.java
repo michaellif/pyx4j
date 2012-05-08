@@ -26,6 +26,8 @@ import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.Timestamp;
+import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -34,6 +36,7 @@ import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.VistaNamespace;
 
+@ToStringFormat("{0},{1}")
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 @Table(prefix = "scheduler", namespace = VistaNamespace.adminNamespace)
 public interface Run extends IEntity {
@@ -45,9 +48,11 @@ public interface Run extends IEntity {
     @MemberColumn(name = "trgr")
     Trigger trigger();
 
+    @ToString(index = 1)
     @Indexed
     IPrimitive<RunStatus> status();
 
+    @ToString(index = 0)
     @Timestamp(Timestamp.Update.Created)
     @ReadOnly
     @Format("MM/dd/yyyy h:mm a")
