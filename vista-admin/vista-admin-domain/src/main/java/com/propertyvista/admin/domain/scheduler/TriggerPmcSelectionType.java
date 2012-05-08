@@ -25,7 +25,9 @@ public enum TriggerPmcSelectionType implements Serializable {
 
     allPmc,
 
-    manual;
+    manual,
+
+    except;
 
     @Override
     public String toString() {

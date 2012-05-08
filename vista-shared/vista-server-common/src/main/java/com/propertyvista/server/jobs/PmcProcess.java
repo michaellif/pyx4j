@@ -13,16 +13,12 @@
  */
 package com.propertyvista.server.jobs;
 
-import com.propertyvista.admin.domain.scheduler.RunDataStatus;
-import com.propertyvista.admin.domain.scheduler.RunStats;
 
 public interface PmcProcess {
 
     boolean start();
 
-    //void executePmcJob();
-
-    RunDataStatus executePmc(RunStats stats);
+    void executePmcJob();
 
     void complete();
 

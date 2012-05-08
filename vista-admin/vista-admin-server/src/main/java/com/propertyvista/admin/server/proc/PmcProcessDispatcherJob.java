@@ -14,6 +14,7 @@
 package com.propertyvista.admin.server.proc;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -29,6 +30,7 @@ import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.commons.Consts;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.Persistence;
@@ -47,6 +49,7 @@ import com.propertyvista.admin.domain.scheduler.RunStatus;
 import com.propertyvista.admin.domain.scheduler.Trigger;
 import com.propertyvista.admin.domain.scheduler.TriggerPmc;
 import com.propertyvista.server.jobs.PmcProcess;
+import com.propertyvista.server.jobs.PmcProcessContext;
 import com.propertyvista.server.jobs.PmcProcessFactory;
 
 public class PmcProcessDispatcherJob implements Job {
@@ -116,12 +119,27 @@ public class PmcProcessDispatcherJob implements Job {
                 Persistence.service().persist(runData);
             }
             break;
+        case except:
+            HashSet<Key> except = new HashSet<Key>();
+            for (TriggerPmc triggerPmc : run.trigger().population()) {
+                except.add(triggerPmc.pmc().getPrimaryKey());
+            }
+            for (Key pmcKey : Persistence.service().queryKeys(EntityQueryCriteria.create(Pmc.class))) {
+                if (!except.contains(pmcKey)) {
+                    RunData runData = EntityFactory.create(RunData.class);
+                    runData.execution().set(run);
+                    runData.status().setValue(RunDataStatus.NeverRan);
+                    runData.pmc().setPrimaryKey(pmcKey);
+                    Persistence.service().persist(runData);
+                }
+            }
+            break;
         case manual:
             for (TriggerPmc triggerPmc : run.trigger().population()) {
                 RunData runData = EntityFactory.create(RunData.class);
                 runData.execution().set(run);
                 runData.status().setValue(RunDataStatus.NeverRan);
-                runData.pmc().setPrimaryKey(triggerPmc.getPrimaryKey());
+                runData.pmc().setPrimaryKey(triggerPmc.pmc().getPrimaryKey());
                 Persistence.service().persist(runData);
             }
             break;
@@ -140,7 +158,7 @@ public class PmcProcessDispatcherJob implements Job {
 
         EntityQueryCriteria<RunData> criteria = EntityQueryCriteria.create(RunData.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().execution(), run));
-        criteria.add(PropertyCriterion.ne(criteria.proto().status(), RunDataStatus.NeverRan));
+        criteria.add(PropertyCriterion.eq(criteria.proto().status(), RunDataStatus.NeverRan));
         ICursorIterator<RunData> it = Persistence.service().query(null, criteria, AttachLevel.Attached);
         while (it.hasNext()) {
             RunData runData = it.next();
@@ -154,52 +172,72 @@ public class PmcProcessDispatcherJob implements Job {
     }
 
     private void executeOneRunData(ExecutorService executorService, final PmcProcess pmcProcess, final RunData runData) {
-        Future<RunDataStatus> futureResult = executorService.submit(new Callable<RunDataStatus>() {
+
+        long startDataNano = System.nanoTime();
+
+        Future<Boolean> futureResult = executorService.submit(new Callable<Boolean>() {
 
             @Override
-            public RunDataStatus call() throws Exception {
+            public Boolean call() throws Exception {
                 try {
                     Lifecycle.startElevatedUserContext();
                     NamespaceManager.setNamespace(runData.pmc().namespace().getValue());
                     Persistence.service().startBackgroundProcessTransaction();
-                    return pmcProcess.executePmc(runData.stats());
+                    PmcProcessContext.setRunStats(runData.stats());
+                    pmcProcess.executePmcJob();
+                    return Boolean.TRUE;
                 } finally {
                     Persistence.service().endTransaction();
                     Lifecycle.endContext();
+                    PmcProcessContext.remove();
                 }
             }
         });
 
-        RunDataStatus result = null;
-        while (result == null) {
-            boolean compleated = false;
+        Throwable executionException = null;
+
+        boolean compleated = false;
+        long runStatsUpdateTime = 0;
+        while (!compleated) {
+
             if (futureResult.isDone()) {
                 compleated = true;
             }
 
             // Update Statistics 
-            Persistence.service().persist(runData.stats());
-            Persistence.service().commit();
+            if ((!runData.stats().updateTime().isNull()) && (runData.stats().updateTime().getValue() > runStatsUpdateTime)) {
+                runStatsUpdateTime = runData.stats().updateTime().getValue();
+                Persistence.service().persist(runData.stats());
+                Persistence.service().commit();
+            }
 
             try {
-                result = futureResult.get(15, TimeUnit.SECONDS);
+                futureResult.get(15, TimeUnit.SECONDS);
             } catch (TimeoutException e) {
                 continue;
             } catch (InterruptedException e) {
                 throw new Error(e);
             } catch (ExecutionException e) {
-                throw new Error(e);
-            }
-            if (compleated) {
+                executionException = e.getCause();
+                log.error("pmcProcess execution error", executionException);
                 break;
             }
         }
 
+        pmcProcess.complete();
+
+        long durationNano = System.nanoTime() - startDataNano;
+
+        runData.stats().totalDuration().setValue(durationNano / Consts.MSEC2NANO);
+        if (!runData.stats().total().isNull()) {
+            runData.stats().averageDuration().setValue(durationNano / (Consts.MSEC2NANO * runData.stats().total().getValue()));
+        }
+
         Persistence.service().persist(runData.stats());
-        if (result != null) {
-            runData.status().setValue(result);
-        } else {
+        if (executionException != null) {
             runData.status().setValue(RunDataStatus.Erred);
+        } else {
+            runData.status().setValue(RunDataStatus.Processed);
         }
     }
 }

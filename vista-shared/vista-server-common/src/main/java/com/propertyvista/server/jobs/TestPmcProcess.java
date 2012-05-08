@@ -15,39 +15,34 @@ package com.propertyvista.server.jobs;
 
 import java.util.Random;
 
-import com.propertyvista.admin.domain.scheduler.RunDataStatus;
-import com.propertyvista.admin.domain.scheduler.RunStats;
-
 public class TestPmcProcess implements PmcProcess {
 
     @Override
-    public RunDataStatus executePmc(RunStats stats) {
+    public boolean start() {
+        return true;
+    }
+
+    @Override
+    public void executePmcJob() {
 
         Random random = new Random();
         int max = random.nextInt(100);
 
-        stats.total().setValue((long) max);
+        PmcProcessContext.getRunStats().total().setValue((long) max);
+        PmcProcessContext.getRunStats().failed().setValue(0L);
 
         for (int i = 0; i < max; i++) {
             try {
                 Thread.sleep(100);
             } catch (InterruptedException e) {
             }
-            stats.processed().setValue((long) i);
+            PmcProcessContext.getRunStats().processed().setValue((long) i);
+            PmcProcessContext.setRunStats(PmcProcessContext.getRunStats());
         }
 
-        return RunDataStatus.Processed;
-    }
-
-    @Override
-    public boolean start() {
-        // TODO Auto-generated method stub
-        return true;
     }
 
     @Override
     public void complete() {
-        // TODO Auto-generated method stub
-
     }
 }

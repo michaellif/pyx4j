@@ -17,6 +17,7 @@ import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
@@ -41,5 +42,8 @@ public interface RunStats extends IEntity {
 
     /** This used for avg calculation **/
     IPrimitive<Long> totalDuration();
+
+    @Transient
+    IPrimitive<Long> updateTime();
 
 }
