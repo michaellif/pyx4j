@@ -105,4 +105,9 @@ public class ProductDictionaryViewActivity extends AbstractActivity implements P
     public void approveFinal() {
         // TODO Auto-generated method stub
     }
+
+    @Override
+    public void refresh() {
+        // TODO Auto-generated method stub
+    }
 }

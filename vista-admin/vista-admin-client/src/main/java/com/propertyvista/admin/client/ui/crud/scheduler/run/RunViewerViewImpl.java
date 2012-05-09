@@ -20,6 +20,7 @@ import com.propertyvista.admin.client.ui.crud.AdminViewerViewImplBase;
 import com.propertyvista.admin.domain.scheduler.Run;
 import com.propertyvista.admin.domain.scheduler.RunData;
 import com.propertyvista.admin.rpc.AdminSiteMap;
+import com.propertyvista.admin.rpc.ExecutionStatusUpdateDTO;
 
 public class RunViewerViewImpl extends AdminViewerViewImplBase<Run> implements RunViewerView {
 
@@ -36,5 +37,16 @@ public class RunViewerViewImpl extends AdminViewerViewImplBase<Run> implements R
     @Override
     public IListerView<RunData> getRunDataListerView() {
         return runDataLister;
+    }
+
+    @Override
+    public void populateExecutionState(ExecutionStatusUpdateDTO result) {
+        getForm().get(getForm().proto().status()).setValue(result.status().getValue());
+        getForm().get(getForm().proto().stats().total()).setValue(result.stats().total().getValue());
+        getForm().get(getForm().proto().stats().processed()).setValue(result.stats().processed().getValue());
+        getForm().get(getForm().proto().stats().failed()).setValue(result.stats().failed().getValue());
+        getForm().get(getForm().proto().stats().averageDuration()).setValue(result.stats().averageDuration().getValue());
+        getForm().get(getForm().proto().stats().totalDuration()).setValue(result.stats().totalDuration().getValue());
+        getForm().get(getForm().proto().stats().updateTime()).setValue(result.stats().updateTime().getValue());
     }
 }

@@ -18,6 +18,7 @@ import com.pyx4j.site.client.ui.crud.lister.IListerView;
 
 import com.propertyvista.admin.domain.scheduler.Run;
 import com.propertyvista.admin.domain.scheduler.RunData;
+import com.propertyvista.admin.rpc.ExecutionStatusUpdateDTO;
 
 public interface RunViewerView extends IViewerView<Run> {
 
@@ -25,4 +26,6 @@ public interface RunViewerView extends IViewerView<Run> {
     }
 
     IListerView<RunData> getRunDataListerView();
+
+    void populateExecutionState(ExecutionStatusUpdateDTO result);
 }

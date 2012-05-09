@@ -15,10 +15,16 @@ package com.propertyvista.server.jobs;
 
 import java.util.Random;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class TestPmcProcess implements PmcProcess {
+
+    private static final Logger log = LoggerFactory.getLogger(TestPmcProcess.class);
 
     @Override
     public boolean start() {
+        log.info("Test Job started");
         return true;
     }
 
@@ -26,7 +32,7 @@ public class TestPmcProcess implements PmcProcess {
     public void executePmcJob() {
 
         Random random = new Random();
-        int max = random.nextInt(100);
+        int max = random.nextInt(300);
 
         PmcProcessContext.getRunStats().total().setValue((long) max);
         PmcProcessContext.getRunStats().failed().setValue(0L);
@@ -44,5 +50,6 @@ public class TestPmcProcess implements PmcProcess {
 
     @Override
     public void complete() {
+        log.info("Test Job complete");
     }
 }

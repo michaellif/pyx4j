@@ -15,8 +15,9 @@ package com.propertyvista.admin.server.services.scheduler;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.AbstractCrudServiceImpl;
+import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.admin.domain.scheduler.Run;
 import com.propertyvista.admin.rpc.ExecutionStatusUpdateDTO;
@@ -34,8 +35,12 @@ public class RunCrudServiceImpl extends AbstractCrudServiceImpl<Run> implements 
     }
 
     @Override
-    public void retrieveExecutionState(AsyncCallback<ExecutionStatusUpdateDTO> callback, Key entityId) {
-        // TODO Auto-generated method stub
+    public void retrieveExecutionState(AsyncCallback<ExecutionStatusUpdateDTO> callback, Run runStub) {
+        Run run = Persistence.service().retrieve(Run.class, runStub.getPrimaryKey());
+        ExecutionStatusUpdateDTO dto = EntityFactory.create(ExecutionStatusUpdateDTO.class);
+        dto.status().setValue(run.status().getValue());
+        dto.stats().set(run.stats());
+        callback.onSuccess(dto);
     }
 
 }

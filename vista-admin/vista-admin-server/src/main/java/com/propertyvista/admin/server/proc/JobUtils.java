@@ -44,7 +44,7 @@ public class JobUtils {
         return SchedulerHelper.getScheduler().getJobDetail(getJobKey(trigger));
     }
 
-    public static void createJobDetail(com.propertyvista.admin.domain.scheduler.Trigger trigger) {
+    public static JobDetail createJobDetail(com.propertyvista.admin.domain.scheduler.Trigger trigger) {
         JobDetail job = JobBuilder.newJob(PmcProcessDispatcherJob.class).withIdentity(JobUtils.getJobKey(trigger)).storeDurably()
                 .usingJobData(PmcProcessDispatcherJob.newJobDataMap(trigger)).build();
         try {
@@ -53,11 +53,15 @@ public class JobUtils {
             log.error("Error", e);
             throw new UserRuntimeException(e.getMessage());
         }
+        return job;
     }
 
     public static void runNow(com.propertyvista.admin.domain.scheduler.Trigger trigger) {
         try {
             JobDetail jobDetail = getJobDetail(trigger);
+            if (jobDetail == null) {
+                jobDetail = createJobDetail(trigger);
+            }
             SchedulerHelper.getScheduler().scheduleJob(TriggerBuilder.newTrigger().forJob(jobDetail).startNow().build());
         } catch (SchedulerException e) {
             log.error("Error", e);

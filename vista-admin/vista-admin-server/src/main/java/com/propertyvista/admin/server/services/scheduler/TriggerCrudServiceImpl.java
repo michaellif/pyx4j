@@ -13,6 +13,8 @@
  */
 package com.propertyvista.admin.server.services.scheduler;
 
+import java.util.Date;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -75,6 +77,7 @@ public class TriggerCrudServiceImpl extends AbstractCrudServiceImpl<Trigger> imp
             throw new UserRuntimeException("The process is already running");
         }
 
+        Date startDate = new Date();
         JobUtils.runNow(triggerStub);
         // Find running Run
         long start = System.currentTimeMillis();
@@ -86,10 +89,24 @@ public class TriggerCrudServiceImpl extends AbstractCrudServiceImpl<Trigger> imp
             run = Persistence.service().retrieve(criteria);
             if (run != null) {
                 runStub = run.createIdentityStub();
+                break;
             }
-        } while ((runStub == null) && (System.currentTimeMillis() - start < 25 * Consts.SEC2MSEC));
-        callback.onSuccess(runStub);
+        } while ((System.currentTimeMillis() - start) < 10 * Consts.SEC2MSEC);
 
+        if (runStub == null) {
+            criteria = EntityQueryCriteria.create(Run.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().trigger(), triggerStub));
+            criteria.add(PropertyCriterion.ge(criteria.proto().updated(), startDate));
+            run = Persistence.service().retrieve(criteria);
+            if (run != null) {
+                runStub = run.createIdentityStub();
+            }
+        }
+
+        if (runStub == null) {
+            throw new UserRuntimeException("Can't find started run");
+        }
+        callback.onSuccess(runStub);
     }
 
 }

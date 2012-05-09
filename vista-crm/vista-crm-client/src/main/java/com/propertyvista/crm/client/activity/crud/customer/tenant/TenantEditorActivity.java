@@ -42,6 +42,6 @@ public class TenantEditorActivity extends EditorActivityBase<TenantDTO> implemen
             public void onSuccess(AddressStructured result) {
                 callback.onSuccess(result);
             }
-        }, entityID);
+        }, entityId);
     }
 }
