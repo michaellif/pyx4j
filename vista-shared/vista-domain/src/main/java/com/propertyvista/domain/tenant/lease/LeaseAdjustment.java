@@ -45,7 +45,7 @@ import com.propertyvista.domain.financial.BillingAccount;
 public interface LeaseAdjustment extends IEntity {
 
     @I18n
-    enum ExecutionType {
+    public enum ExecutionType {
         pending, immediate;
 
         @Override

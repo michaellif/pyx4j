@@ -34,6 +34,7 @@ import com.propertyvista.domain.financial.billing.InvoiceDeposit;
 import com.propertyvista.domain.financial.billing.InvoiceDepositRefund;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.domain.financial.billing.InvoicePayment;
+import com.propertyvista.domain.financial.billing.InvoicePaymentBackOut;
 import com.propertyvista.domain.financial.billing.InvoiceProductCharge;
 import com.propertyvista.domain.financial.billing.InvoiceProductCharge.ProductType;
 import com.propertyvista.domain.financial.billing.InvoiceProductCredit;
@@ -119,27 +120,24 @@ public class BillingUtils {
                 dto.depositRefundLineItems().lineItems().add(lineItem);
             } else if (lineItem instanceof InvoiceAccountCharge) {
                 LeaseAdjustment adjusment = ((InvoiceAccountCharge) lineItem).adjustment();
-                if (LeaseAdjustment.ExecutionType.immediate.equals(adjusment.reason().actionType())) {
+                if (LeaseAdjustment.ExecutionType.immediate == adjusment.executionType().getValue()) {
                     dto.immediateAccountAdjustmentLineItems().lineItems().add(lineItem);
-                } else if (LeaseAdjustment.ExecutionType.pending.equals(adjusment.reason().actionType())) {
+                } else if (LeaseAdjustment.ExecutionType.pending == adjusment.executionType().getValue()) {
                     dto.pendingAccountAdjustmentLineItems().lineItems().add(lineItem);
                 }
             } else if (lineItem instanceof InvoiceAccountCredit) {
                 LeaseAdjustment adjusment = ((InvoiceAccountCredit) lineItem).adjustment();
-                if (LeaseAdjustment.ExecutionType.immediate.equals(adjusment.reason().actionType())) {
+                if (LeaseAdjustment.ExecutionType.immediate == adjusment.executionType().getValue()) {
                     dto.immediateAccountAdjustmentLineItems().lineItems().add(lineItem);
-                } else if (LeaseAdjustment.ExecutionType.pending.equals(adjusment.reason().actionType())) {
+                } else if (LeaseAdjustment.ExecutionType.pending == adjusment.executionType().getValue()) {
                     dto.pendingAccountAdjustmentLineItems().lineItems().add(lineItem);
                 }
             } else if (lineItem instanceof InvoiceWithdrawal) {
                 dto.withdrawalLineItems().lineItems().add(lineItem);
             } else if (lineItem instanceof InvoicePayment) {
-                PaymentStatus status = ((InvoicePayment) lineItem).paymentRecord().paymentStatus().getValue();
-                if (PaymentStatus.Rejected.equals(status)) {
-                    dto.rejectedPaymentLineItems().lineItems().add(lineItem);
-                } else {
-                    dto.paymentLineItems().lineItems().add(lineItem);
-                }
+                dto.paymentLineItems().lineItems().add(lineItem);
+            } else if (lineItem instanceof InvoicePaymentBackOut) {
+                dto.rejectedPaymentLineItems().lineItems().add(lineItem);
             }
         }
     }

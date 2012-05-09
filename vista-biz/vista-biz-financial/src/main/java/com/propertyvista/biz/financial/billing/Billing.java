@@ -86,7 +86,7 @@ class Billing {
         nextPeriodBill.oneTimeFeatureCharges().setValue(new BigDecimal(0));
         nextPeriodBill.pendingAccountAdjustments().setValue(new BigDecimal(0));
         nextPeriodBill.depositAmount().setValue(new BigDecimal(0));
-        nextPeriodBill.creditAmount().setValue(new BigDecimal(0));
+        nextPeriodBill.productCreditAmount().setValue(new BigDecimal(0));
 
         nextPeriodBill.taxes().setValue(new BigDecimal(0));
 

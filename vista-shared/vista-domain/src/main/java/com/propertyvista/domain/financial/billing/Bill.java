@@ -131,6 +131,7 @@ public interface Bill extends IEntity {
 
     IPrimitive<BigDecimal> depositRefundAmount();
 
+    //immediateAccountAdjustments should include taxes
     IPrimitive<BigDecimal> immediateAccountAdjustments();
 
     IPrimitive<BigDecimal> withdrawalAmount();
@@ -151,7 +152,7 @@ public interface Bill extends IEntity {
 
     IPrimitive<BigDecimal> depositAmount();
 
-    IPrimitive<BigDecimal> creditAmount();
+    IPrimitive<BigDecimal> productCreditAmount();
 
     /**
      * currentAmount = pastDueAmount + serviceCharge + recurringFeatureCharges +
