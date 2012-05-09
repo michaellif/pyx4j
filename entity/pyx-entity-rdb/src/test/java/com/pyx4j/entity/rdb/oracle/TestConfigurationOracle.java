@@ -99,6 +99,7 @@ public class TestConfigurationOracle extends com.pyx4j.entity.rdb.cfg.Configurat
         shortWords.add("BIDIRECTIONAL", "BD");
         shortWords.add("PARENT", "PA");
         shortWords.add("CHILD", "CLD");
+        shortWords.add("STCHILD", "SCLD");
         shortWords.add("CHILDREN", "CLDN");
         shortWords.add("AUTO", "A");
         shortWords.add("INVERSED", "R");
