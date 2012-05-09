@@ -76,16 +76,26 @@ class Billing {
     private void run() {
 
         //Set accumulating fields to 0 value
+        nextPeriodBill.depositRefundAmount().setValue(new BigDecimal(0));
+        nextPeriodBill.immediateAccountAdjustments().setValue(new BigDecimal(0));
+        nextPeriodBill.withdrawalAmount().setValue(new BigDecimal(0));
+        nextPeriodBill.paymentRejectedAmount().setValue(new BigDecimal(0));
         nextPeriodBill.paymentReceivedAmount().setValue(new BigDecimal(0));
+
         nextPeriodBill.recurringFeatureCharges().setValue(new BigDecimal(0));
         nextPeriodBill.oneTimeFeatureCharges().setValue(new BigDecimal(0));
-        nextPeriodBill.pendingLeaseAdjustments().setValue(new BigDecimal(0));
-        nextPeriodBill.immediateLeaseAdjustments().setValue(new BigDecimal(0));
-        nextPeriodBill.depositRefundAmount().setValue(new BigDecimal(0));
-        nextPeriodBill.taxes().setValue(new BigDecimal(0));
+        nextPeriodBill.pendingAccountAdjustments().setValue(new BigDecimal(0));
         nextPeriodBill.depositAmount().setValue(new BigDecimal(0));
+        nextPeriodBill.creditAmount().setValue(new BigDecimal(0));
 
-        getPreviousTotals();
+        nextPeriodBill.taxes().setValue(new BigDecimal(0));
+
+        Bill lastBill = BillingLifecycle.getLatestConfirmedBill(nextPeriodBill.billingAccount().lease());
+        if (lastBill != null) {
+            nextPeriodBill.balanceForwardAmount().setValue(lastBill.totalDueAmount().getValue());
+        } else {
+            nextPeriodBill.balanceForwardAmount().setValue(new BigDecimal(0));
+        }
 
         productChargeProcessor.createCharges();
         depositProcessor.createDeposits();
@@ -98,24 +108,16 @@ class Billing {
 
     }
 
-    private void getPreviousTotals() {
-        Bill lastBill = BillingLifecycle.getLatestConfirmedBill(nextPeriodBill.billingAccount().lease());
-        if (lastBill != null) {
-            nextPeriodBill.balanceForwardAmount().setValue(lastBill.totalDueAmount().getValue());
-        } else {
-            nextPeriodBill.balanceForwardAmount().setValue(new BigDecimal(0));
-        }
-    }
-
     private void calculateTotals() {
         nextPeriodBill.pastDueAmount().setValue(
                 nextPeriodBill.balanceForwardAmount().getValue().add(nextPeriodBill.paymentReceivedAmount().getValue())
-                        .add(nextPeriodBill.immediateLeaseAdjustments().getValue()).add(nextPeriodBill.depositRefundAmount().getValue()));
+                        .add(nextPeriodBill.paymentRejectedAmount().getValue()).add(nextPeriodBill.immediateAccountAdjustments().getValue())
+                        .add(nextPeriodBill.depositRefundAmount().getValue()).add(nextPeriodBill.withdrawalAmount().getValue()));
 
         nextPeriodBill.currentAmount().setValue(
                 nextPeriodBill.pastDueAmount().getValue().add(nextPeriodBill.serviceCharge().getValue())
                         .add(nextPeriodBill.recurringFeatureCharges().getValue()).add(nextPeriodBill.oneTimeFeatureCharges().getValue())
-                        .add(nextPeriodBill.pendingLeaseAdjustments().getValue()).add(nextPeriodBill.depositAmount().getValue()));
+                        .add(nextPeriodBill.pendingAccountAdjustments().getValue()).add(nextPeriodBill.depositAmount().getValue()));
 
         nextPeriodBill.totalDueAmount().setValue(nextPeriodBill.currentAmount().getValue().add(nextPeriodBill.taxes().getValue()));
     }

@@ -24,34 +24,34 @@ import com.propertyvista.domain.tenant.lease.Lease;
 @ExtendsDBO
 public interface BillDTO extends Bill {
 
+    @Override
     Lease lease();
 
     @Caption(name = "Service Charges")
     InvoiceLineItemGroupDTO serviceChargeLineItems();
 
-    // Current Bill charges
-    @Caption(name = "Feature Charges")
+    @Caption(name = "Recurring Feature Charges")
     InvoiceLineItemGroupDTO recurringFeatureChargeLineItems();
 
     @Caption(name = "One-Time Feature Charges")
     InvoiceLineItemGroupDTO onetimeFeatureChargeLineItems();
 
-//    IList<InvoiceProductCredit> productCreditLineItems();
+    @Caption(name = "Credits")
+    InvoiceLineItemGroupDTO productCreditLineItems();
 
     @Caption(name = "Deposits")
     InvoiceLineItemGroupDTO depositLineItems();
 
-    // Last Bill charges and payments
     @Caption(name = "Deposit Refunds")
     InvoiceLineItemGroupDTO depositRefundLineItems();
 
-    //Both Debit and Credit types of Lease Adjustments
-    @Caption(name = "Immediate Adjustments")
-    InvoiceLineItemGroupDTO immediateAdjustmentLineItems();
+    //Debit and credit combined
+    @Caption(name = "Immediate Account Adjustments")
+    InvoiceLineItemGroupDTO immediateAccountAdjustmentLineItems();
 
     // Debit and credit combined
-    @Caption(name = "Pending Adjustments")
-    InvoiceLineItemGroupDTO pendingAdjustmentLineItems();
+    @Caption(name = "Pending Account Adjustments")
+    InvoiceLineItemGroupDTO pendingAccountAdjustmentLineItems();
 
     @Caption(name = "Withdrawals")
     InvoiceLineItemGroupDTO withdrawalLineItems();

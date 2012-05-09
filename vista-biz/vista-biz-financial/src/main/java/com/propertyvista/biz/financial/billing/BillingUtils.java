@@ -36,6 +36,7 @@ import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.domain.financial.billing.InvoicePayment;
 import com.propertyvista.domain.financial.billing.InvoiceProductCharge;
 import com.propertyvista.domain.financial.billing.InvoiceProductCharge.ProductType;
+import com.propertyvista.domain.financial.billing.InvoiceProductCredit;
 import com.propertyvista.domain.financial.billing.InvoiceWithdrawal;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.Product;
@@ -92,11 +93,10 @@ public class BillingUtils {
         dto.onetimeFeatureChargeLineItems().total().set(bill.oneTimeFeatureCharges());
         dto.depositLineItems().total().set(bill.depositAmount());
         dto.depositRefundLineItems().total().set(bill.depositRefundAmount());
-        dto.immediateAdjustmentLineItems().total().set(bill.immediateLeaseAdjustments());
-        dto.pendingAdjustmentLineItems().total().set(bill.pendingLeaseAdjustments());
-        //TODO
-//        dto.withdrawalLineItems().total().set(bill.withdrawalAmount());
-//        dto.rejectedPaymentLineItems().total().set(bill.paymentRejectedAmount());
+        dto.immediateAccountAdjustmentLineItems().total().set(bill.immediateAccountAdjustments());
+        dto.pendingAccountAdjustmentLineItems().total().set(bill.pendingAccountAdjustments());
+        dto.withdrawalLineItems().total().set(bill.withdrawalAmount());
+        dto.rejectedPaymentLineItems().total().set(bill.paymentRejectedAmount());
         dto.paymentLineItems().total().set(bill.paymentReceivedAmount());
         // set detail lists
         for (InvoiceLineItem lineItem : bill.lineItems()) {
@@ -111,28 +111,25 @@ public class BillingUtils {
                 } else if (ProductType.oneTimeFeature.equals(prodType)) {
                     dto.onetimeFeatureChargeLineItems().lineItems().add(charge);
                 }
-                //TODO
-                //} else if (lineItem instanceof InvoiceProductCredit) {
-                // Credit(s)
+            } else if (lineItem instanceof InvoiceProductCredit) {
+                dto.productCreditLineItems().lineItems().add(lineItem);
             } else if (lineItem instanceof InvoiceDeposit) {
                 dto.depositLineItems().lineItems().add(lineItem);
-            }
-            // *** Last Bill list values
-            else if (lineItem instanceof InvoiceDepositRefund) {
+            } else if (lineItem instanceof InvoiceDepositRefund) {
                 dto.depositRefundLineItems().lineItems().add(lineItem);
             } else if (lineItem instanceof InvoiceAccountCharge) {
                 LeaseAdjustment adjusment = ((InvoiceAccountCharge) lineItem).adjustment();
                 if (LeaseAdjustment.ExecutionType.immediate.equals(adjusment.reason().actionType())) {
-                    dto.immediateAdjustmentLineItems().lineItems().add(lineItem);
+                    dto.immediateAccountAdjustmentLineItems().lineItems().add(lineItem);
                 } else if (LeaseAdjustment.ExecutionType.pending.equals(adjusment.reason().actionType())) {
-                    dto.pendingAdjustmentLineItems().lineItems().add(lineItem);
+                    dto.pendingAccountAdjustmentLineItems().lineItems().add(lineItem);
                 }
             } else if (lineItem instanceof InvoiceAccountCredit) {
                 LeaseAdjustment adjusment = ((InvoiceAccountCredit) lineItem).adjustment();
                 if (LeaseAdjustment.ExecutionType.immediate.equals(adjusment.reason().actionType())) {
-                    dto.immediateAdjustmentLineItems().lineItems().add(lineItem);
+                    dto.immediateAccountAdjustmentLineItems().lineItems().add(lineItem);
                 } else if (LeaseAdjustment.ExecutionType.pending.equals(adjusment.reason().actionType())) {
-                    dto.pendingAdjustmentLineItems().lineItems().add(lineItem);
+                    dto.pendingAccountAdjustmentLineItems().lineItems().add(lineItem);
                 }
             } else if (lineItem instanceof InvoiceWithdrawal) {
                 dto.withdrawalLineItems().lineItems().add(lineItem);

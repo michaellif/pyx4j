@@ -11,12 +11,12 @@
 	<field name="balanceForwardAmount" class="java.math.BigDecimal"/>
 	<field name="paymentReceivedAmount" class="java.math.BigDecimal"/>
 	<field name="depositRefundAmount" class="java.math.BigDecimal"/>
-	<field name="immediateLeaseAdjustments" class="java.math.BigDecimal"/>
+	<field name="immediateAccountAdjustments" class="java.math.BigDecimal"/>
 	<field name="serviceCharge" class="java.math.BigDecimal"/>
 	<field name="recurringFeatureCharges" class="java.math.BigDecimal"/>
 	<field name="oneTimeFeatureCharges" class="java.math.BigDecimal"/>
 	<field name="depositAmount" class="java.math.BigDecimal"/>
-	<field name="pendingLeaseAdjustments" class="java.math.BigDecimal"/>
+	<field name="pendingAccountAdjustments" class="java.math.BigDecimal"/>
 	<field name="lineItems" class="com.pyx4j.entity.shared.IList"/>
 	<field name="billingPeriodStartDate" class="com.pyx4j.commons.LogicalDate"/>
 	<field name="billingRun/executionDate" class="com.pyx4j.commons.LogicalDate"/>
@@ -118,7 +118,7 @@
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="12" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["$ "+$F{immediateLeaseAdjustments}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["$ "+$F{immediateAccountAdjustments}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="0" y="7" width="281" height="20"/>

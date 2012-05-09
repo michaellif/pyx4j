@@ -70,16 +70,16 @@ public class BillEditorForm extends CrmEntityForm<BillDTO> {
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().balanceForwardAmount()), 10).build());
         main.setWidget(++row, 0, inject(proto().paymentLineItems(), new InvoiceLineItemViewer()));
         main.setWidget(++row, 0, inject(proto().depositRefundLineItems(), new InvoiceLineItemViewer()));
-        main.setWidget(++row, 0, inject(proto().immediateAdjustmentLineItems(), new InvoiceLineItemViewer()));
+        main.setWidget(++row, 0, inject(proto().immediateAccountAdjustmentLineItems(), new InvoiceLineItemViewer()));
 
         main.setH1(++row, 0, 2, i18n.tr("Current Bill"));
         main.setWidget(++row, 0, inject(proto().serviceChargeLineItems(), new InvoiceLineItemViewer()));
         main.setWidget(++row, 0, inject(proto().recurringFeatureChargeLineItems(), new InvoiceLineItemViewer()));
         main.setWidget(++row, 0, inject(proto().onetimeFeatureChargeLineItems(), new InvoiceLineItemViewer()));
-        main.setWidget(++row, 0, inject(proto().pendingAdjustmentLineItems(), new InvoiceLineItemViewer()));
+        main.setWidget(++row, 0, inject(proto().pendingAccountAdjustmentLineItems(), new InvoiceLineItemViewer()));
 
         main.setWidget(++row, 0, inject(proto().depositLineItems(), new InvoiceLineItemViewer()));
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().credits()), 10).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().creditAmount()), 10).build());
 
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().currentAmount()), 10).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().taxes()), 10).build());
