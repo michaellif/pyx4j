@@ -13,6 +13,8 @@
  */
 package com.propertyvista.crm.client.ui.crud.billing.payment;
 
+import java.util.List;
+
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.site.client.ui.crud.form.IEditorView;
@@ -28,6 +30,8 @@ public interface PaymentEditorView extends IEditorView<PaymentRecordDTO> {
 
         void getCurrentAddress(AsyncCallback<AddressStructured> callback, LeaseParticipant payer);
 
-        void getProfiledPaymentMethod(AsyncCallback<PaymentMethod> callback, LeaseParticipant payer);
+        void getDefaultPaymentMethod(AsyncCallback<PaymentMethod> callback, LeaseParticipant payer);
+
+        void getProfiledPaymentMethods(AsyncCallback<List<PaymentMethod>> callback, LeaseParticipant payer);
     }
 }

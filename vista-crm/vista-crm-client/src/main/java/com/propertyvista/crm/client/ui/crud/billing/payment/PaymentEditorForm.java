@@ -14,13 +14,16 @@
 package com.propertyvista.crm.client.ui.crud.billing.payment;
 
 import java.util.Collection;
+import java.util.List;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ScrollPanel;
 
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CNumberLabel;
 import com.pyx4j.forms.client.ui.CRadioGroupEnum;
@@ -46,6 +49,17 @@ import com.propertyvista.dto.PaymentRecordDTO.PaymentSelect;
 public class PaymentEditorForm extends CrmEntityForm<PaymentRecordDTO> {
 
     private static final I18n i18n = I18n.get(PaymentEditorForm.class);
+
+    private final CComboBox<PaymentMethod> profiledPaymentMethodsBox = new CComboBox<PaymentMethod>() {
+        @Override
+        public String getItemName(PaymentMethod o) {
+            if (o == null) {
+                return super.getItemName(o);
+            } else {
+                return o.getStringView();
+            }
+        }
+    };
 
     private final PaymentMethodEditor paymentMethodEditor = new PaymentMethodEditor() {
         @Override
@@ -120,8 +134,11 @@ public class PaymentEditorForm extends CrmEntityForm<PaymentRecordDTO> {
         panel.setWidget(
                 ++row,
                 0,
-                new DecoratorBuilder(inject(proto().paymentSelect(), new CRadioGroupEnum<PaymentSelect>(PaymentSelect.class, RadioGroup.Layout.HORISONTAL)), 10)
+                new DecoratorBuilder(inject(proto().paymentSelect(), new CRadioGroupEnum<PaymentSelect>(PaymentSelect.class, RadioGroup.Layout.HORISONTAL)), 20)
                         .build());
+
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().profiledPaymentMethod(), profiledPaymentMethodsBox), 25).build());
+        profiledPaymentMethodsBox.setMandatory(true);
 
         row = -1;
         panel.setWidget(++row, 1, new DecoratorBuilder(inject(proto().amount()), 10).build());
@@ -137,32 +154,59 @@ public class PaymentEditorForm extends CrmEntityForm<PaymentRecordDTO> {
         get(proto().unitNumber()).setViewable(true);
         get(proto().leaseId()).setViewable(true);
         get(proto().leaseStatus()).setViewable(true);
-
         get(proto().paymentStatus()).setViewable(true);
 
         get(proto().leaseParticipant()).addValueChangeHandler(new ValueChangeHandler<LeaseParticipant>() {
             @Override
             public void onValueChange(ValueChangeEvent<LeaseParticipant> event) {
+                paymentMethodEditor.reset();
                 paymentMethodEditor.setBillingAddressAsCurrentEnabled(!event.getValue().isNull());
-                checkProfiledPaymentMethod();
+                checkProfiledPaymentMethods(new DefaultAsyncCallback<List<PaymentMethod>>() {
+                    @Override
+                    public void onSuccess(List<PaymentMethod> result) {
+                        get(proto().paymentSelect()).setValue(null);
+                        get(proto().paymentSelect()).setValue(result.isEmpty() ? PaymentSelect.New : PaymentSelect.Profiled);
+                        get(proto().paymentSelect()).setVisible(!result.isEmpty());
+                    }
+                });
             }
         });
 
         get(proto().paymentSelect()).addValueChangeHandler(new ValueChangeHandler<PaymentSelect>() {
             @Override
             public void onValueChange(ValueChangeEvent<PaymentSelect> event) {
-                paymentMethodEditor.setTypeSelectionVisible(event.getValue() == PaymentSelect.New);
-                if (event.getValue() == PaymentSelect.Profiled) {
-                    ((PaymentEditorView.Presenter) ((PaymentEditorView) getParentView()).getPresenter()).getProfiledPaymentMethod(
-                            new DefaultAsyncCallback<PaymentMethod>() {
-                                @Override
-                                public void onSuccess(PaymentMethod result) {
-                                    paymentMethodEditor.setViewable(true);
-                                    paymentMethodEditor.populate(result);
-                                }
-                            }, PaymentEditorForm.this.getValue().leaseParticipant());
-                } else {
-                    paymentMethodEditor.setViewable(false);
+                paymentMethodEditor.reset();
+
+                if (event.getValue() != null) {
+                    switch (event.getValue()) {
+                    case New:
+                        paymentMethodEditor.setViewable(false);
+                        paymentMethodEditor.setTypeSelectionVisible(true);
+                        paymentMethodEditor.selectPaymentDetailsEditor(PaymentType.Echeck);
+                        paymentMethodEditor.setVisible(!getValue().leaseParticipant().isNull());
+
+                        profiledPaymentMethodsBox.setVisible(false);
+                        break;
+                    case Profiled:
+                        paymentMethodEditor.setViewable(true);
+                        paymentMethodEditor.setTypeSelectionVisible(false);
+                        paymentMethodEditor.setVisible(false);
+
+                        profiledPaymentMethodsBox.setValue(null);
+                        profiledPaymentMethodsBox.setVisible(true);
+                        break;
+                    }
+                }
+            }
+        });
+
+        profiledPaymentMethodsBox.addValueChangeHandler(new ValueChangeHandler<PaymentMethod>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<PaymentMethod> event) {
+                paymentMethodEditor.setVisible(event.getValue() != null);
+                if (event.getValue() != null) {
+                    paymentMethodEditor.setViewable(true);
+                    paymentMethodEditor.populate(event.getValue());
                 }
             }
         });
@@ -177,22 +221,37 @@ public class PaymentEditorForm extends CrmEntityForm<PaymentRecordDTO> {
         super.onPopulate();
 
         get(proto().id()).setVisible(!getValue().id().isNull());
-        get(proto().paymentSelect()).setVisible(!isViewable());
+
+        get(proto().paymentSelect()).setVisible(!isViewable() && !getValue().leaseParticipant().isNull());
+
+        profiledPaymentMethodsBox.setVisible(false);
+
+        checkProfiledPaymentMethods(null);
+
+        paymentMethodEditor.setVisible(!getValue().leaseParticipant().isNull());
         paymentMethodEditor.setBillingAddressAsCurrentEnabled(!getValue().leaseParticipant().isNull());
-        checkProfiledPaymentMethod();
     }
 
-    private void checkProfiledPaymentMethod() {
+    private void checkProfiledPaymentMethods(final AsyncCallback<List<PaymentMethod>> callback) {
         if (getParentView() instanceof PaymentEditorView) {
-            get(proto().paymentSelect()).setValue(PaymentSelect.New, false);
             get(proto().paymentSelect()).setEnabled(false);
 
+            profiledPaymentMethodsBox.setValue(null);
+            profiledPaymentMethodsBox.setOptions(null);
+
             if (!getValue().leaseParticipant().isNull()) {
-                ((PaymentEditorView.Presenter) ((PaymentEditorView) getParentView()).getPresenter()).getProfiledPaymentMethod(
-                        new DefaultAsyncCallback<PaymentMethod>() {
+                ((PaymentEditorView.Presenter) ((PaymentEditorView) getParentView()).getPresenter()).getProfiledPaymentMethods(
+                        new DefaultAsyncCallback<List<PaymentMethod>>() {
                             @Override
-                            public void onSuccess(PaymentMethod result) {
-                                get(proto().paymentSelect()).setEnabled(result != null);
+                            public void onSuccess(List<PaymentMethod> result) {
+                                get(proto().paymentSelect()).setEnabled(!result.isEmpty());
+
+                                profiledPaymentMethodsBox.setOptions(result);
+                                profiledPaymentMethodsBox.setMandatory(true);
+
+                                if (callback != null) {
+                                    callback.onSuccess(result);
+                                }
                             }
                         }, getValue().leaseParticipant());
             }

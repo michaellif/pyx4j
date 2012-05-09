@@ -64,7 +64,7 @@ public class TenantsGenerator {
             PaymentMethod m = EntityFactory.create(PaymentMethod.class);
             m.type().setValue(PaymentType.Visa);
             if (i == 0) {
-                m.primary().setValue(Boolean.TRUE);
+                m.isDefault().setValue(Boolean.TRUE);
             }
             m.creditCard().numberRefference().setValue(CommonsStringUtils.d00(RandomUtil.randomInt(99)) + CommonsStringUtils.d00(RandomUtil.randomInt(99)));
             m.creditCard().nameOn().setValue(tenant.person().name().getStringView());

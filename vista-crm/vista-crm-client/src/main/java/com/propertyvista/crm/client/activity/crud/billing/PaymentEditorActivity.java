@@ -13,6 +13,9 @@
  */
 package com.propertyvista.crm.client.activity.crud.billing;
 
+import java.util.List;
+import java.util.Vector;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -57,10 +60,20 @@ public class PaymentEditorActivity extends EditorActivityBase<PaymentRecordDTO> 
     }
 
     @Override
-    public void getProfiledPaymentMethod(final AsyncCallback<PaymentMethod> callback, LeaseParticipant payer) {
-        ((PaymentCrudService) getService()).getProfiledPaymentMethod(new DefaultAsyncCallback<PaymentMethod>() {
+    public void getDefaultPaymentMethod(final AsyncCallback<PaymentMethod> callback, LeaseParticipant payer) {
+        ((PaymentCrudService) getService()).getDefaultPaymentMethod(new DefaultAsyncCallback<PaymentMethod>() {
             @Override
             public void onSuccess(PaymentMethod result) {
+                callback.onSuccess(result);
+            }
+        }, (LeaseParticipant) payer.createIdentityStub());
+    }
+
+    @Override
+    public void getProfiledPaymentMethods(final AsyncCallback<List<PaymentMethod>> callback, LeaseParticipant payer) {
+        ((PaymentCrudService) getService()).getProfiledPaymentMethods(new DefaultAsyncCallback<Vector<PaymentMethod>>() {
+            @Override
+            public void onSuccess(Vector<PaymentMethod> result) {
                 callback.onSuccess(result);
             }
         }, (LeaseParticipant) payer.createIdentityStub());

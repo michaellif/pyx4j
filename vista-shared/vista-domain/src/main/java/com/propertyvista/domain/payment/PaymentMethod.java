@@ -21,6 +21,8 @@ import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.ReadOnly;
+import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -28,21 +30,21 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 
+@ToStringFormat("{0} - {1} {2,choice,null#|1#Default}")
 public interface PaymentMethod extends IEntity {
 
     @Detached
     @ReadOnly
     LeaseParticipant leaseParticipant();
 
-    @MemberColumn(name = "prim")
-    IPrimitive<Boolean> primary();
-
+    @ToString(index = 0)
     @Caption(name = "Payment Type")
     @Editor(type = EditorType.radiogroup)
     @MemberColumn(name = "paymentType")
     IPrimitive<PaymentType> type();
 
     @Owned
+    @ToString(index = 1)
     @Caption(name = "Payment Attributes")
     PaymentDetails details();
 
@@ -71,5 +73,6 @@ public interface PaymentMethod extends IEntity {
     @Editor(type = EditorType.phone)
     IPrimitive<String> phone();
 
+    @ToString(index = 2)
     IPrimitive<Boolean> isDefault();
 }

@@ -76,7 +76,7 @@ public class PaymentMethodsForm extends CEntityForm<PaymentMethodListDTO> implem
                 columns.add(new EntityFolderColumnDescriptor(proto().creditCard().number(), "12em"));
                 columns.add(new EntityFolderColumnDescriptor(proto().creditCard().expiryDate(), "6em"));
                 columns.add(new EntityFolderColumnDescriptor(proto().creditCard().nameOn(), "16em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().primary(), "4em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().isDefault(), "4em"));
                 return columns;
             }
 

@@ -15,6 +15,7 @@ package com.propertyvista.crm.server.services.billing;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -121,7 +122,7 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
     }
 
     @Override
-    public void getProfiledPaymentMethod(AsyncCallback<PaymentMethod> callback, LeaseParticipant payer) {
+    public void getDefaultPaymentMethod(AsyncCallback<PaymentMethod> callback, LeaseParticipant payer) {
         Persistence.service().retrieve(payer);
         if ((payer == null) || (payer.isNull())) {
             throw new RuntimeException("Entity '" + EntityFactory.getEntityMeta(LeaseParticipant.class).getCaption() + "' " + payer.getPrimaryKey()
@@ -136,6 +137,18 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
             }
         }
         callback.onSuccess(method); // null - means there is no default one!..
+    }
+
+    @Override
+    public void getProfiledPaymentMethods(AsyncCallback<Vector<PaymentMethod>> callback, LeaseParticipant payer) {
+        Persistence.service().retrieve(payer);
+        if ((payer == null) || (payer.isNull())) {
+            throw new RuntimeException("Entity '" + EntityFactory.getEntityMeta(LeaseParticipant.class).getCaption() + "' " + payer.getPrimaryKey()
+                    + " NotFound");
+        }
+
+        Persistence.service().retrieve(payer.paymentMethods());
+        callback.onSuccess(new Vector<PaymentMethod>(payer.paymentMethods()));
     }
 
     // Payment operations:

@@ -22,6 +22,7 @@ import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.financial.PaymentRecord;
+import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.domain.tenant.lease.Lease.Status;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 
@@ -57,4 +58,7 @@ public interface PaymentRecordDTO extends PaymentRecord {
 
     @NotNull
     IPrimitive<PaymentSelect> paymentSelect();
+
+    @NotNull
+    PaymentMethod profiledPaymentMethod();
 }

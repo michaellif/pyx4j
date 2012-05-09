@@ -13,6 +13,8 @@
  */
 package com.propertyvista.crm.rpc.services.billing;
 
+import java.util.Vector;
+
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
@@ -29,7 +31,9 @@ public interface PaymentCrudService extends AbstractCrudService<PaymentRecordDTO
 
     void getCurrentAddress(AsyncCallback<AddressStructured> callback, LeaseParticipant payer);
 
-    void getProfiledPaymentMethod(AsyncCallback<PaymentMethod> callback, LeaseParticipant payer);
+    void getDefaultPaymentMethod(AsyncCallback<PaymentMethod> callback, LeaseParticipant payer);
+
+    void getProfiledPaymentMethods(AsyncCallback<Vector<PaymentMethod>> callback, LeaseParticipant payer);
 
     // Payment operations:
 

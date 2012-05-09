@@ -31,17 +31,16 @@ public interface EcheckInfo extends PaymentDetails {
     @Caption(name = "Name On Account")
     IPrimitive<String> nameOn();
 
-    @Length(3)
     @NotNull
+    @Length(3)
     IPrimitive<String> bankId();
 
-    @Length(5)
     @NotNull
+    @Length(5)
     IPrimitive<String> branchTransitNumber();
 
+    @NotNull
     @Length(12)
     @Caption(name = "Account Number")
-    @NotNull
     IPrimitive<String> accountNo();
-
 }

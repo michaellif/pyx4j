@@ -19,6 +19,7 @@ import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.MemberColumn;
+import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -49,6 +50,7 @@ public interface CreditCardInfo extends PaymentDetails {
     }
 
     @NotNull
+    @ToString(index = 0)
     IPrimitive<CreditCardType> cardType();
 
     @NotNull
