@@ -21,7 +21,6 @@ import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.domain.security.VistaBasicBehavior;
 import com.propertyvista.domain.security.VistaCustomerBehavior;
-import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 
 public class PtAppPlaceDispatcher extends AbstractAppPlaceDispatcher {
@@ -50,11 +49,7 @@ public class PtAppPlaceDispatcher extends AbstractAppPlaceDispatcher {
 
     @Override
     protected void obtainDefaultAuthenticatedPlace(AsyncCallback<AppPlace> callback) {
-        if (VistaTODO.enableWelcomeWizardDemoMode) {
-            callback.onSuccess(new PtSiteMap.WelcomeWizard.WelcomePlace());
-        } else {
-            PtAppSite.getWizardManager().obtainPlace(callback);
-        }
+        PtAppSite.getWizardManager().obtainPlace(callback);
     }
 
     @Override

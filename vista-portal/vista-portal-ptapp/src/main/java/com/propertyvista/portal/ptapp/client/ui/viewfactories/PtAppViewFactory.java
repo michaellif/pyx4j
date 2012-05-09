@@ -77,7 +77,11 @@ public class PtAppViewFactory extends ViewFactoryBase {
                 map.put(type, new SecondNavigViewImpl());
 
             } else if (LoginView.class.equals(type)) {
-                map.put(type, new LoginViewImpl());
+                if (VistaTODO.enableWelcomeWizardDemoMode) {
+                    map.put(type, new WelcomeViewImpl());
+                } else {
+                    map.put(type, new LoginViewImpl());
+                }
             } else if (LoginWithTokenView.class.equals(type)) {
                 map.put(type, new LoginWithTokenViewImpl());
 

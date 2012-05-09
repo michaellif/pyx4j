@@ -13,6 +13,9 @@
  */
 package com.propertyvista.portal.ptapp.client.ui.steps.welcomewizard.welcome;
 
+import java.util.Arrays;
+import java.util.List;
+
 import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -27,29 +30,23 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.widgets.client.Button;
 
+import com.propertyvista.common.client.ui.components.login.AbstractLoginViewImpl;
+import com.propertyvista.domain.DemoData;
 import com.propertyvista.portal.ptapp.client.resources.PortalImages;
 import com.propertyvista.portal.ptapp.client.resources.PortalResources;
 import com.propertyvista.portal.ptapp.client.resources.welcomewizard.WelcomeWizardImages;
 import com.propertyvista.portal.ptapp.client.resources.welcomewizard.WelcomeWizardResources;
 
-public class WelcomeViewImpl implements WelcomeView {
+public class WelcomeViewImpl extends AbstractLoginViewImpl {
 
     private final static I18n i18n = I18n.get(WelcomeViewImpl.class);
 
-    private final FormFlexPanel panel;
-
-    private Presenter presenter;
+    private FormFlexPanel panel;
 
     public WelcomeViewImpl() {
-        panel = new FormFlexPanel();
-
-        panel.setWidget(0, 0, createTextPanel());
-        panel.getFlexCellFormatter().setWidth(0, 0, "50%");
-        panel.setWidget(0, 1, createStartPanel());
-        panel.getFlexCellFormatter().setWidth(0, 1, "50%");
+        super(i18n.tr("Login"));
 
     }
 
@@ -58,21 +55,16 @@ public class WelcomeViewImpl implements WelcomeView {
         return panel;
     }
 
-    @Override
-    public void setPresenter(Presenter welcomeActivity) {
-        this.presenter = welcomeActivity;
-    }
-
     private IsWidget createTextPanel() {
         FlowPanel textPanel = new FlowPanel();
         textPanel.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.LEFT);
         textPanel.setWidth("100%");
 
-        HTML congratulations = new HTML("<h2>"
-                + new SafeHtmlBuilder().appendEscaped(i18n.tr("Congratulations, {0}", ClientContext.getUserVisit().getName())).toSafeHtml().asString()
-                + "</h2>");
-        textPanel.add(congratulations);
-        congratulations.getElement().getStyle().setPaddingLeft(95, Unit.PX);
+////        HTML congratulations = new HTML("<h2>"
+////                + new SafeHtmlBuilder().appendEscaped(i18n.tr("Congratulations, {0}", ClientContext.getUserVisit().getName())).toSafeHtml().asString()
+////                + "</h2>");
+////        textPanel.add(congratulations);
+//        congratulations.getElement().getStyle().setPaddingLeft(95, Unit.PX);
 
         HTML youHaveBeenApproved = new HTML(WelcomeWizardResources.INSTANCE.youHaveBeenApproved().getText());
         youHaveBeenApproved.getElement().getStyle().setPaddingLeft(95, Unit.PX);
@@ -113,7 +105,7 @@ public class WelcomeViewImpl implements WelcomeView {
 
             @Override
             public void onClick(ClickEvent event) {
-                WelcomeViewImpl.this.presenter.startTheWizard();
+
             }
 
         });
@@ -131,8 +123,27 @@ public class WelcomeViewImpl implements WelcomeView {
         startButton.getElement().getStyle().setProperty("borderBottomRightRadius", arrowRadius);
         startButton.getElement().getStyle().setProperty("borderTopLeftRadius", arrowRadius);
         startButton.getElement().getStyle().setProperty("borderBottomLeftRadius", arrowRadius);
-        startPanel.add(startButton);
+
+        startPanel.add(form);
 
         return startPanel;
+    }
+
+    @Override
+    protected void createContent() {
+        panel = new FormFlexPanel();
+
+        panel.setWidget(0, 0, createTextPanel());
+        panel.getFlexCellFormatter().setWidth(0, 0, "50%");
+        panel.setWidget(0, 1, createStartPanel());
+        panel.getFlexCellFormatter().setWidth(0, 1, "50%");
+    }
+
+    @Override
+    protected List<DevLoginData> devLoginValues() {
+        return Arrays.asList(//@formatter:off
+                new DevLoginData(DemoData.UserType.PTENANT, 'Q'),
+                new DevLoginData(DemoData.UserType.PCOAPPLICANT, 'E')
+        );//@formatter:on
     }
 }
