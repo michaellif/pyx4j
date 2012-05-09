@@ -86,6 +86,8 @@ public class ARSunnyDayScenarioTest extends FinancialTestBase {
 
         runBilling(true, false);
 
+        printTransactionHistory(ARTransactionManager.getTransactionHistory(retrieveLease().billingAccount()));
+
         receiveAndPostPayment("19-Mar-2011", "1067.01");
         receiveAndPostPayment("20-Mar-2011", "100.00");
 

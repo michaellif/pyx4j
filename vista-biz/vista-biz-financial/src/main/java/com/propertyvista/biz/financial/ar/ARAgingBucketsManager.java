@@ -70,9 +70,9 @@ public class ARAgingBucketsManager {
             AgingBuckets agingBuckets = createAgingBuckets(DebitType.all);
             for (AgingBuckets typedBuckets : agingBucketsMap.values()) {
                 agingBuckets.current().setValue(agingBuckets.current().getValue().add(typedBuckets.current().getValue()));
-                agingBuckets.bucket30().setValue(agingBuckets.current().getValue().add(typedBuckets.bucket30().getValue()));
-                agingBuckets.bucket60().setValue(agingBuckets.current().getValue().add(typedBuckets.bucket60().getValue()));
-                agingBuckets.bucket90().setValue(agingBuckets.current().getValue().add(typedBuckets.bucket90().getValue()));
+                agingBuckets.bucket30().setValue(agingBuckets.bucket30().getValue().add(typedBuckets.bucket30().getValue()));
+                agingBuckets.bucket60().setValue(agingBuckets.bucket60().getValue().add(typedBuckets.bucket60().getValue()));
+                agingBuckets.bucket90().setValue(agingBuckets.bucket90().getValue().add(typedBuckets.bucket90().getValue()));
             }
             agingBucketsMap.put(DebitType.all, agingBuckets);
         }

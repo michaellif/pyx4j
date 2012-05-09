@@ -19,8 +19,10 @@ import java.io.IOException;
 
 import com.pyx4j.gwt.server.IOUtils;
 
+import com.propertyvista.domain.financial.billing.AgingBuckets;
 import com.propertyvista.domain.financial.billing.InvoiceCredit;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
+import com.propertyvista.domain.financial.billing.InvoiceDebit.DebitType;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.dto.TransactionHistoryDTO;
 
@@ -43,10 +45,28 @@ public class TransactionHistoryPrinter {
             out.write(convertToCell("Date", 14, true) + convertToCell("Description", 60, true) + convertToCell("Debits", 14, true)
                     + convertToCell("Credits", 14, true));
             out.newLine();
+
             for (InvoiceLineItem lineItem : transactionHistory.lineItems()) {
                 out.write(createLineItem(lineItem));
                 out.newLine();
             }
+
+            out.newLine();
+            out.write(convertToCell("Type", 14, true) + convertToCell("Current", 14, true) + convertToCell("30 Days", 14, true)
+                    + convertToCell("60 Days", 14, true) + convertToCell("90 Days", 14, true));
+            out.newLine();
+            AgingBuckets totalAgingBuckets = null;
+            for (AgingBuckets agingBuckets : transactionHistory.agingBuckets()) {
+                if (DebitType.all == agingBuckets.debitType().getValue()) {
+                    totalAgingBuckets = agingBuckets;
+                } else {
+                    out.write(createAgingBucketsLine(agingBuckets));
+                    out.newLine();
+                }
+            }
+
+            out.write(createAgingBucketsLine(totalAgingBuckets));
+            out.newLine();
 
             out.close();
         } catch (IOException e) {
@@ -73,6 +93,13 @@ public class TransactionHistoryPrinter {
         }
         return convertToCell(lineItem.postDate().getValue().toString(), 14, true)
                 + convertToCell(lineItem.description().isNull() ? "" : lineItem.description().getValue().toString(), 60, true) + debits + credits;
+    }
+
+    private static String createAgingBucketsLine(AgingBuckets agingBuckets) {
+        return convertToCell(agingBuckets.debitType().getValue().toString(), 14, true) + convertToCell(agingBuckets.current().getValue().toString(), 14, true)
+                + convertToCell(agingBuckets.bucket30().getValue().toString(), 14, true)
+                + convertToCell(agingBuckets.bucket60().getValue().toString(), 14, true)
+                + convertToCell(agingBuckets.bucket90().getValue().toString(), 14, true);
     }
 
     private static String convertToCell(String str, int width, boolean alignLeft) {
