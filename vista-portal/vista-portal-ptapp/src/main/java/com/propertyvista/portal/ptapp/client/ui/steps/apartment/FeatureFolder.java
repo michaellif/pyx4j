@@ -18,7 +18,6 @@ import java.util.List;
 
 import com.google.gwt.user.client.Command;
 
-import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.entity.client.ui.folder.IFolderDecorator;
@@ -84,7 +83,6 @@ public class FeatureFolder extends VistaTableFolder<BillableItem> {
                                 BillableItem newItem = EntityFactory.create(BillableItem.class);
                                 newItem.item().set(item);
                                 newItem._currentPrice().setValue(item.price().getValue());
-                                newItem.effectiveDate().setValue(new LogicalDate());
                                 addItem(newItem);
                             }
                         }

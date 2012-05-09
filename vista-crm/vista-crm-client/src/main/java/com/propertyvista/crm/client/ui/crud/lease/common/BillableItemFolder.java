@@ -84,7 +84,6 @@ public class BillableItemFolder extends VistaBoxFolder<BillableItem> {
                         BillableItem newItem = EntityFactory.create(BillableItem.class);
                         newItem.item().set(item);
                         newItem._currentPrice().setValue(item.price().getValue());
-                        newItem.effectiveDate().setValue(new LogicalDate());
                         addItem(newItem);
                     }
                     return true;

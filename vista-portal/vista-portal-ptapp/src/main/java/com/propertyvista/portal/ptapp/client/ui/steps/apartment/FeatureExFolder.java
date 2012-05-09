@@ -15,7 +15,6 @@ package com.propertyvista.portal.ptapp.client.ui.steps.apartment;
 
 import java.util.List;
 
-import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.entity.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -89,7 +88,6 @@ public class FeatureExFolder extends VistaBoxFolder<BillableItem> {
                                 BillableItem newItem = EntityFactory.create(BillableItem.class);
                                 newItem.item().set(item);
                                 newItem._currentPrice().setValue(item.price().getValue());
-                                newItem.effectiveDate().setValue(new LogicalDate());
                                 addItem(newItem);
                             }
                         }

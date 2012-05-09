@@ -169,9 +169,9 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
 
         if (!getValue().item().isEmpty()) {
             if (getValue().item().type().isInstanceOf(FeatureItemType.class)) {
-                // show effective dates:
-                get(proto().effectiveDate()).setVisible(true);
-                get(proto().expirationDate()).setVisible(true);
+                // show/hide(empty) effective dates:
+                get(proto().effectiveDate()).setVisible(isEditable() || !getValue().effectiveDate().isNull());
+                get(proto().expirationDate()).setVisible(isEditable() || !getValue().expirationDate().isNull());
 
                 if (getValue().item().type().<FeatureItemType> cast().featureType().getValue() == Feature.Type.utility) {
                     // correct folder item:

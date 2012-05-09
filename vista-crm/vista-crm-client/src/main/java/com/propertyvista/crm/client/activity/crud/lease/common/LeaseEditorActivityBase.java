@@ -19,7 +19,6 @@ import java.util.List;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
@@ -92,7 +91,6 @@ public abstract class LeaseEditorActivityBase<DTO extends LeaseDTO> extends Edit
 
             // set selected service:
             currentValue.version().leaseProducts().serviceItem().set(createBillableItem(serviceItem));
-            currentValue.version().leaseProducts().serviceItem().effectiveDate().setValue(currentValue.leaseFrom().getValue());
 
             // pre-populate utilities for the new service:
             for (ProductItem item : currentValue.selectedUtilityItems()) {
@@ -188,7 +186,6 @@ public abstract class LeaseEditorActivityBase<DTO extends LeaseDTO> extends Edit
         BillableItem newItem = EntityFactory.create(BillableItem.class);
         newItem.item().set(item);
         newItem._currentPrice().setValue(item.price().getValue());
-        newItem.effectiveDate().setValue(new LogicalDate());
         return newItem;
     }
 }
