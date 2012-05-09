@@ -235,7 +235,7 @@ public class PmcProcessDispatcherJob implements Job {
         long durationNano = System.nanoTime() - startTimeNano;
 
         runData.stats().totalDuration().setValue(durationNano / Consts.MSEC2NANO);
-        if (!runData.stats().total().isNull()) {
+        if ((!runData.stats().total().isNull()) && (runData.stats().total().getValue() != 0)) {
             runData.stats().averageDuration().setValue(durationNano / (Consts.MSEC2NANO * runData.stats().total().getValue()));
         }
 
