@@ -20,6 +20,7 @@ import com.google.gwt.place.shared.Place;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.activity.crud.ListerActivityBase;
 import com.pyx4j.site.client.ui.crud.lister.IListerView.Presenter;
 
@@ -28,6 +29,7 @@ import com.propertyvista.admin.client.ui.crud.scheduler.trigger.TriggerViewerVie
 import com.propertyvista.admin.client.viewfactories.crud.ManagementVeiwFactory;
 import com.propertyvista.admin.domain.scheduler.Run;
 import com.propertyvista.admin.domain.scheduler.Trigger;
+import com.propertyvista.admin.rpc.AdminSiteMap;
 import com.propertyvista.admin.rpc.services.scheduler.RunCrudService;
 import com.propertyvista.admin.rpc.services.scheduler.TriggerCrudService;
 
@@ -62,8 +64,8 @@ public class TriggerViewerActivity extends AdminViewerActivity<Trigger> implemen
         GWT.<TriggerCrudService> create(TriggerCrudService.class).runImmediately(new DefaultAsyncCallback<Run>() {
             @Override
             public void onSuccess(Run result) {
-                //TODO
-                System.out.println("TODO - navigate to run view");
+                AppSite.getPlaceController().goTo(
+                        AppSite.getHistoryMapper().createPlace(AdminSiteMap.Management.Run.class).formViewerPlace(result.getPrimaryKey()));
             }
         }, EntityFactory.createIdentityStub(Trigger.class, entityId));
     }
