@@ -48,6 +48,12 @@ public class CaledonPadSftpClient {
         Session session = null;
         ChannelSftp channel = null;
         try {
+
+            File knownHosts = new File(System.getProperty("user.home") + "/.ssh", "known_hosts");
+            if (knownHosts.canRead()) {
+                jsch.setKnownHosts(knownHosts.getAbsolutePath());
+            }
+
             session = jsch.getSession(credentials.email, hostProd, 22);
             session.setPassword(credentials.password);
             session.connect();
