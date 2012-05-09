@@ -50,9 +50,9 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
 
     private final Class<E> entityClass;
 
-    protected Key entityID;
+    protected Key entityId;
 
-    protected Key parentID;
+    protected Key parentId;
 
     protected String parentClass;
 
@@ -75,8 +75,8 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
         this.service = service;
         this.entityClass = entityClass;
 
-        entityID = null;
-        parentID = null;
+        entityId = null;
+        parentId = null;
         parentClass = null;
         tabIndex = -1;
 
@@ -86,22 +86,22 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
 
         String val;
         if ((val = place.getFirstArg(CrudAppPlace.ARG_NAME_ID)) != null) {
-            entityID = new Key(val);
+            entityId = new Key(val);
             // Validate argument
             try {
-                entityID.asLong();
+                entityId.asLong();
             } catch (NumberFormatException e) {
-                entityID = null;
+                entityId = null;
             }
 
         }
         if ((val = place.getFirstArg(CrudAppPlace.ARG_NAME_PARENT_ID)) != null) {
-            parentID = new Key(val);
+            parentId = new Key(val);
             // Validate argument
             try {
-                parentID.asLong();
+                parentId.asLong();
             } catch (NumberFormatException e) {
-                parentID = null;
+                parentId = null;
             }
         }
         if ((val = place.getFirstArg(CrudAppPlace.ARG_NAME_PARENT_CLASS)) != null) {
@@ -157,7 +157,7 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
                 public void onSuccess(E result) {
                     onPopulateSuccess(result);
                 }
-            }, entityID, AbstractCrudService.RetrieveTraget.Edit);
+            }, entityId, AbstractCrudService.RetrieveTraget.Edit);
         }
     }
 
@@ -169,16 +169,16 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
                 public void onSuccess(E result) {
                     onPopulateSuccess(result);
                 }
-            }, entityID, RetrieveTraget.View);
+            }, entityId, RetrieveTraget.View);
         }
     }
 
     private void setEntityParent(E entity, boolean force) {
-        if (parentID != null) {
+        if (parentId != null) {
             String ownerName = entity.getEntityMeta().getOwnerMemberName();
             if (ownerName != null) {
                 if (force || ((IEntity) entity.getMember(ownerName)).getPrimaryKey() == null) {
-                    ((IEntity) entity.getMember(ownerName)).setPrimaryKey(parentID);
+                    ((IEntity) entity.getMember(ownerName)).setPrimaryKey(parentId);
                 }
             }
         }
@@ -198,7 +198,7 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
     }
 
     protected boolean isNewEntity() {
-        return (entityID == null);
+        return (entityId == null);
     }
 
     public void onPopulateSuccess(E result) {
@@ -221,7 +221,7 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
         if (isNewEntity()) {
             AppSite.getPlaceController().goTo(AppSite.getPlaceController().getForwardedFrom());
         } else {
-            goToViewer(entityID);
+            goToViewer(entityId);
         }
     }
 

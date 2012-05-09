@@ -104,6 +104,16 @@ public class ViewerActivityBase<E extends IEntity> extends AbstractActivity impl
         }, entityId, AbstractCrudService.RetrieveTraget.View);
     }
 
+    @Override
+    public void refresh() {
+        service.retrieve(new DefaultAsyncCallback<E>() {
+            @Override
+            public void onSuccess(E result) {
+                onPopulateSuccess(result);
+            }
+        }, entityId, AbstractCrudService.RetrieveTraget.View);
+    }
+
     protected void onPopulateSuccess(E result) {
         view.populate(result);
         view.setActiveTab(tabIndex);
