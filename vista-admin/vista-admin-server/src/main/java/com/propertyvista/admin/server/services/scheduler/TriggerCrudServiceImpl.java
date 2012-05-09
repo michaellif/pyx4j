@@ -69,43 +69,42 @@ public class TriggerCrudServiceImpl extends AbstractCrudServiceImpl<Trigger> imp
 
     @Override
     public void runImmediately(AsyncCallback<Run> callback, Trigger triggerStub) {
-        EntityQueryCriteria<Run> criteria = EntityQueryCriteria.create(Run.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().trigger(), triggerStub));
-        criteria.add(PropertyCriterion.eq(criteria.proto().status(), RunStatus.Running));
-        Run run = Persistence.service().retrieve(criteria);
-        if (run != null) {
-            throw new UserRuntimeException("The process is already running");
+        {
+            EntityQueryCriteria<Run> criteria = EntityQueryCriteria.create(Run.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().trigger(), triggerStub));
+            criteria.add(PropertyCriterion.eq(criteria.proto().status(), RunStatus.Running));
+            Run existingRun = Persistence.service().retrieve(criteria);
+            if (existingRun != null) {
+                throw new UserRuntimeException("The process is already running");
+            }
         }
-
         Date startDate = new Date();
         JobUtils.runNow(triggerStub);
         // Find running Run
         long start = System.currentTimeMillis();
-        Run runStub = null;
+        Run run = null;
         do {
-            criteria = EntityQueryCriteria.create(Run.class);
+            EntityQueryCriteria<Run> criteria = EntityQueryCriteria.create(Run.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().trigger(), triggerStub));
+            criteria.add(PropertyCriterion.ge(criteria.proto().updated(), startDate));
             criteria.add(PropertyCriterion.in(criteria.proto().status(), RunStatus.Sleeping, RunStatus.Running));
             run = Persistence.service().retrieve(criteria);
             if (run != null) {
-                runStub = run.createIdentityStub();
                 break;
             }
         } while ((System.currentTimeMillis() - start) < 10 * Consts.SEC2MSEC);
 
-        if (runStub == null) {
-            criteria = EntityQueryCriteria.create(Run.class);
+        if (run == null) {
+            EntityQueryCriteria<Run> criteria = EntityQueryCriteria.create(Run.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().trigger(), triggerStub));
             criteria.add(PropertyCriterion.ge(criteria.proto().updated(), startDate));
             run = Persistence.service().retrieve(criteria);
-            if (run != null) {
-                runStub = run.createIdentityStub();
-            }
         }
 
-        if (runStub == null) {
+        if (run == null) {
             throw new UserRuntimeException("Can't find started run");
         }
+        Run runStub = run.createIdentityStub();
         callback.onSuccess(runStub);
     }
 
