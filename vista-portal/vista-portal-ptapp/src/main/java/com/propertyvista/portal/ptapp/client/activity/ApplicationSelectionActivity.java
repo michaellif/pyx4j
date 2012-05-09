@@ -29,7 +29,7 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
 import com.propertyvista.portal.ptapp.client.ui.ApplicationSelectionView;
 import com.propertyvista.portal.ptapp.client.ui.viewfactories.PtAppViewFactory;
-import com.propertyvista.portal.rpc.ptapp.dto.OnlineApplicationDTO;
+import com.propertyvista.portal.rpc.ptapp.dto.OnlineApplicationContextDTO;
 import com.propertyvista.portal.rpc.ptapp.services.ApplicationSelectionService;
 
 public class ApplicationSelectionActivity extends AbstractActivity implements ApplicationSelectionView.Presenter {
@@ -47,16 +47,16 @@ public class ApplicationSelectionActivity extends AbstractActivity implements Ap
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         panel.setWidget(view);
         view.setPresenter(this);
-        view.setApplications(new Vector<OnlineApplicationDTO>(1));
+        view.setApplications(new Vector<OnlineApplicationContextDTO>(1));
         populate();
     }
 
     @Override
     public void populate() {
-        service.getApplications(new DefaultAsyncCallback<Vector<OnlineApplicationDTO>>() {
+        service.getApplications(new DefaultAsyncCallback<Vector<OnlineApplicationContextDTO>>() {
 
             @Override
-            public void onSuccess(Vector<OnlineApplicationDTO> applications) {
+            public void onSuccess(Vector<OnlineApplicationContextDTO> applications) {
                 view.setApplications(applications);
             }
 

@@ -19,20 +19,20 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.annotations.I18n.I18nStrategy;
 
-import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.security.VistaCustomerBehavior;
 import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
 
 @Transient
-public interface OnlineApplicationDTO extends IEntity {
+public interface OnlineApplicationContextDTO extends IEntity {
 
     @I18n(strategy = I18nStrategy.IgnoreThis)
     OnlineApplication onlineApplicationIdStub();
 
     IPrimitive<VistaCustomerBehavior> role();
 
-    Building building();
+    AddressStructured address();
 
     AptUnit unit();
 

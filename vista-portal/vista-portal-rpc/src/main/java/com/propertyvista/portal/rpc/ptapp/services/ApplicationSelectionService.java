@@ -21,11 +21,11 @@ import com.pyx4j.rpc.shared.IService;
 import com.pyx4j.security.rpc.AuthenticationResponse;
 
 import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
-import com.propertyvista.portal.rpc.ptapp.dto.OnlineApplicationDTO;
+import com.propertyvista.portal.rpc.ptapp.dto.OnlineApplicationContextDTO;
 
 public interface ApplicationSelectionService extends IService {
 
-    void getApplications(AsyncCallback<Vector<OnlineApplicationDTO>> callback);
+    void getApplications(AsyncCallback<Vector<OnlineApplicationContextDTO>> callback);
 
     /** set the chosen application as a working context for the PtApp */
     void setApplicationContext(AsyncCallback<AuthenticationResponse> callback, OnlineApplication applicationStub);

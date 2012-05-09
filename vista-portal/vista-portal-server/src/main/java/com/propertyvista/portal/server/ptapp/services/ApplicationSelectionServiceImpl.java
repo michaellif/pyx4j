@@ -28,7 +28,7 @@ import com.propertyvista.biz.tenant.OnlineApplicationFacade;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
-import com.propertyvista.portal.rpc.ptapp.dto.OnlineApplicationDTO;
+import com.propertyvista.portal.rpc.ptapp.dto.OnlineApplicationContextDTO;
 import com.propertyvista.portal.rpc.ptapp.services.ApplicationSelectionService;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
 
@@ -40,21 +40,21 @@ public class ApplicationSelectionServiceImpl implements ApplicationSelectionServ
     }
 
     @Override
-    public void getApplications(AsyncCallback<Vector<OnlineApplicationDTO>> callback) {
+    public void getApplications(AsyncCallback<Vector<OnlineApplicationContextDTO>> callback) {
         OnlineApplicationFacade appFacade = ServerSideFactory.create(OnlineApplicationFacade.class);
 
         List<OnlineApplication> applications = appFacade.getOnlineApplications(PtAppContext.getCurrentUser());
-        Vector<OnlineApplicationDTO> applicationsView = new Vector<OnlineApplicationDTO>();
+        Vector<OnlineApplicationContextDTO> contextOptions = new Vector<OnlineApplicationContextDTO>();
 
         for (OnlineApplication application : applications) {
-            applicationsView.add(onlineApplicationView(application, appFacade));
+            contextOptions.add(onlineApplicationContext(application, appFacade));
         }
 
-        callback.onSuccess(applicationsView);
+        callback.onSuccess(contextOptions);
     }
 
-    private OnlineApplicationDTO onlineApplicationView(OnlineApplication application, OnlineApplicationFacade appFacade) {
-        OnlineApplicationDTO view = EntityFactory.create(OnlineApplicationDTO.class);
+    private OnlineApplicationContextDTO onlineApplicationContext(OnlineApplication application, OnlineApplicationFacade appFacade) {
+        OnlineApplicationContextDTO view = EntityFactory.create(OnlineApplicationContextDTO.class);
 
         view.onlineApplicationIdStub().set(application.createIdentityStub());
         view.role().setValue(appFacade.getOnlineApplicationBehavior(application));
@@ -63,8 +63,8 @@ public class ApplicationSelectionServiceImpl implements ApplicationSelectionServ
         view.unit().set(unit.duplicate());
         view.unit().setAttachLevel(AttachLevel.ToStringMembers);
 
-        Building building = Persistence.service().retrieve(Building.class, unit.belongsTo().getPrimaryKey(), AttachLevel.ToStringMembers);
-        view.building().set(building);
+        Building building = Persistence.service().retrieve(Building.class, unit.belongsTo().getPrimaryKey());
+        view.address().set(building.info().address().detach());
         return view;
     }
 }

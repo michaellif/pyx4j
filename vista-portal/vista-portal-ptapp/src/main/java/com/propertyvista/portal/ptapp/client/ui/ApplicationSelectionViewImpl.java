@@ -33,7 +33,7 @@ import com.pyx4j.site.client.ui.crud.lister.ListerDataSource;
 import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
-import com.propertyvista.portal.rpc.ptapp.dto.OnlineApplicationDTO;
+import com.propertyvista.portal.rpc.ptapp.dto.OnlineApplicationContextDTO;
 
 public class ApplicationSelectionViewImpl implements ApplicationSelectionView {
 
@@ -58,7 +58,7 @@ public class ApplicationSelectionViewImpl implements ApplicationSelectionView {
         final Button approveSelectionButton = new Button(i18n.tr("Continue"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                OnlineApplicationDTO selectedApplication = lister.getSelectedItem();
+                OnlineApplicationContextDTO selectedApplication = lister.getSelectedItem();
 
                 if (selectedApplication != null) {
                     presenter.selectApplication(selectedApplication.onlineApplicationIdStub().<OnlineApplication> detach());
@@ -66,9 +66,9 @@ public class ApplicationSelectionViewImpl implements ApplicationSelectionView {
             }
         });
         approveSelectionButton.setEnabled(false);
-        lister.addItemSelectionHandler(new ItemSelectionHandler<OnlineApplicationDTO>() {
+        lister.addItemSelectionHandler(new ItemSelectionHandler<OnlineApplicationContextDTO>() {
             @Override
-            public void onSelect(OnlineApplicationDTO selectedItem) {
+            public void onSelect(OnlineApplicationContextDTO selectedItem) {
                 approveSelectionButton.setEnabled(selectedItem != null);
             }
         });
@@ -86,7 +86,7 @@ public class ApplicationSelectionViewImpl implements ApplicationSelectionView {
     }
 
     @Override
-    public void setApplications(Vector<OnlineApplicationDTO> applications) {
+    public void setApplications(Vector<OnlineApplicationContextDTO> applications) {
         lister.setDataSource(new OnlineApplicationDataSource(applications));
         lister.obtain(0);
     }
@@ -96,24 +96,24 @@ public class ApplicationSelectionViewImpl implements ApplicationSelectionView {
         this.presenter = presenter;
     }
 
-    private class ApplicationsLister extends BasicLister<OnlineApplicationDTO> {
+    private class ApplicationsLister extends BasicLister<OnlineApplicationContextDTO> {
 
         public ApplicationsLister() {
-            super(OnlineApplicationDTO.class, false, false);
+            super(OnlineApplicationContextDTO.class, false, false);
             setSelectable(true);
             setColumnDescriptors(//@formatter:off
                     new MemberColumnDescriptor.Builder(proto().role()).build(),
-                    new MemberColumnDescriptor.Builder(proto().building()).build(),
+                    new MemberColumnDescriptor.Builder(proto().address()).build(),
                     new MemberColumnDescriptor.Builder(proto().unit()).build()                    
             );//@formatter:on
 
         }
     }
 
-    private static class OnlineApplicationDataSource extends ListerDataSource<OnlineApplicationDTO> {
+    private static class OnlineApplicationDataSource extends ListerDataSource<OnlineApplicationContextDTO> {
 
-        public OnlineApplicationDataSource(Vector<OnlineApplicationDTO> applications) {
-            super(OnlineApplicationDTO.class, new InMemeoryListService<OnlineApplicationDTO>(applications));
+        public OnlineApplicationDataSource(Vector<OnlineApplicationContextDTO> applications) {
+            super(OnlineApplicationContextDTO.class, new InMemeoryListService<OnlineApplicationContextDTO>(applications));
         }
 
     }
