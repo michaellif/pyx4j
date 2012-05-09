@@ -77,6 +77,11 @@ public class PtAppTheme extends VistaTheme {
         initSummaryStepViewStyles();
         initPaymentStepViewStyles();
         initMenuBarStyles();
+
+        if (VistaTODO.enableWelcomeWizardDemoMode) {
+            //initWizardDemoFont();
+            initDisclosurePanelStyles();
+        }
     }
 
     private void initWizardDemoFont() {
@@ -96,6 +101,31 @@ public class PtAppTheme extends VistaTheme {
                 style.addProperty("font-family", fonts);
                 addStyle(style);
             }
+        }
+    }
+
+    private void initDisclosurePanelStyles() {
+        if (VistaTODO.enableWelcomeWizardDemoMode) {
+            {
+                Style style = new Style(".gwt-DisclosurePanel");
+                style.addProperty("border-style", "outset");
+                style.addProperty("border-width", "1px");
+                style.addProperty("border-radius", "10px");
+                style.addProperty("padding-left", "1em");
+                style.addProperty("padding-right", "1em");
+                style.addProperty("padding-top", "5px");
+                style.addProperty("margin-bottom", "5px");
+                addStyle(style);
+            }
+            {
+                Style style = new Style(".gwt-DisclosurePanel .header");
+                style.addProperty("color", ThemeColors.object1);
+                style.addProperty("font-size", "18px");
+                style.addProperty("font-weight", "bold");
+                style.addProperty("text-decoration", "none");
+                addStyle(style);
+            }
+
         }
     }
 

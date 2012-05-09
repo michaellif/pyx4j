@@ -27,6 +27,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
+import com.propertyvista.portal.ptapp.client.resources.welcomewizard.WelcomeWizardResources;
 import com.propertyvista.portal.rpc.ptapp.dto.welcomewizard.InsuranceDTO;
 
 public class InsuranceForm extends CEntityDecoratableForm<InsuranceDTO> {
@@ -36,6 +37,8 @@ public class InsuranceForm extends CEntityDecoratableForm<InsuranceDTO> {
     private Command onPurchaseInsuranceConfirmedHandler;
 
     private Command onExistingInsuranceConfirmedHandler;
+
+    private Button existingInsuranceConfirmationButton;
 
     public InsuranceForm() {
         super(InsuranceDTO.class);
@@ -54,16 +57,16 @@ public class InsuranceForm extends CEntityDecoratableForm<InsuranceDTO> {
         FormFlexPanel content = new FormFlexPanel();
 
         int row = -1;
-        content.setWidget(++row, 0, new HTML("&nbsp")); // separator
-        content.setWidget(++row, 0, inject(proto().purchaseInsurance(), new InsurancePurchaseEditorForm()));
-        content.setWidget(++row, 0, new Button(i18n.tr("Pay and Continue"), new ClickHandler() {
+        content.setWidget(++row, 0, new HTML(WelcomeWizardResources.INSTANCE.insuranceReasonExplanation().getText()));
+        content.setWidget(++row, 0, inject(proto().purchaseInsurance(), new InsurancePurchaseEditorForm(new Command() {
+
             @Override
-            public void onClick(ClickEvent event) {
-                if (onPurchaseInsuranceConfirmedHandler != null) {
+            public void execute() {
+                if (onExistingInsuranceConfirmedHandler != null) {
                     onPurchaseInsuranceConfirmedHandler.execute();
                 }
             }
-        }));
+        })));
 
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().alreadyHaveInsurance())).build());
         content.getFlexCellFormatter().getElement(row, 0).getStyle().setPaddingTop(3, Unit.EM);
@@ -71,13 +74,22 @@ public class InsuranceForm extends CEntityDecoratableForm<InsuranceDTO> {
 
             @Override
             public void onValueChange(ValueChangeEvent<Boolean> event) {
-                InsurancePurchaseEditorForm form = (InsurancePurchaseEditorForm) get(proto().purchaseInsurance());
-                form.setEnabled(event.getValue() != true);
-                form.setQuoteTotalPanelVisibility(event.getValue() != true);
+                boolean alreadyHasInsurance = event.getValue();
+
+                InsurancePurchaseEditorForm purchaseInsuraceForm = (InsurancePurchaseEditorForm) get(proto().purchaseInsurance());
+                purchaseInsuraceForm.setVisible(!alreadyHasInsurance);
+
+//                purchaseInsuraceForm.setQuoteTotalPanelVisibility(!alreadyHasInsurance);
+
+                InsuranceAlreadyAvailabileEditorForm alreadyHasInsuranceForm = (InsuranceAlreadyAvailabileEditorForm) get(proto().existingInsurance());
+                alreadyHasInsuranceForm.setVisible(alreadyHasInsurance);
+                existingInsuranceConfirmationButton.setVisible(alreadyHasInsurance);
             }
         });
         content.setWidget(++row, 0, inject(proto().existingInsurance(), new InsuranceAlreadyAvailabileEditorForm()));
-        content.setWidget(++row, 0, new Button(i18n.tr("Save and Continue"), new ClickHandler() {
+        get(proto().existingInsurance()).setVisible(false);
+
+        content.setWidget(++row, 0, existingInsuranceConfirmationButton = new Button(i18n.tr("Save and Continue"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 if (onExistingInsuranceConfirmedHandler != null) {
@@ -85,6 +97,7 @@ public class InsuranceForm extends CEntityDecoratableForm<InsuranceDTO> {
                 }
             }
         }));
+        existingInsuranceConfirmationButton.setVisible(false);
 
         return content;
     }

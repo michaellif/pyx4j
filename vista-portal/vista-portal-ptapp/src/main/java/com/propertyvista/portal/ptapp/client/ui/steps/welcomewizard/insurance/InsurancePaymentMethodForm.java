@@ -31,8 +31,6 @@ import com.pyx4j.forms.client.ui.CRadioGroup;
 import com.pyx4j.forms.client.ui.CRadioGroupEnum;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
-import com.pyx4j.forms.client.validators.EditableValueValidator;
-import com.pyx4j.forms.client.validators.ValidationFailure;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.RadioGroup;
 
@@ -40,7 +38,6 @@ import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.common.client.theme.NewPaymentMethodEditorTheme;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.editors.AddressSimpleEditor;
-import com.propertyvista.common.client.ui.validators.CreditCardNumberValidator;
 import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.payment.CreditCardInfo;
 import com.propertyvista.domain.payment.PaymentType;
@@ -199,21 +196,21 @@ public class InsurancePaymentMethodForm extends CEntityDecoratableForm<Insurance
                     int y = 1900 + now.getYear();
                     ((CMonthYearPicker) comp).setYearRange(new Range(y, 10));
 
-                    ((CMonthYearPicker) comp).addValueValidator(new EditableValueValidator<Date>() {
-
-                        @Override
-                        public ValidationFailure isValid(CComponent<Date, ?> component, Date value) {
-                            if (value == null) {
-                                return null;
-                            } else {
-                                Date now = new Date();
-                                @SuppressWarnings("deprecation")
-                                Date thisMonth = new Date(now.getYear(), now.getMonth(), 1);
-                                return value.compareTo(thisMonth) >= 0 ? null : new ValidationFailure(i18n.tr("Card expiry should be a future date"));
-                            }
-                        }
-
-                    });
+//                    ((CMonthYearPicker) comp).addValueValidator(new EditableValueValidator<Date>() {
+//
+//                        @Override
+//                        public ValidationFailure isValid(CComponent<Date, ?> component, Date value) {
+//                            if (value == null) {
+//                                return null;
+//                            } else {
+//                                Date now = new Date();
+//                                @SuppressWarnings("deprecation")
+//                                Date thisMonth = new Date(now.getYear(), now.getMonth(), 1);
+//                                return value.compareTo(thisMonth) >= 0 ? null : new ValidationFailure(i18n.tr("Card expiry should be a future date"));
+//                            }
+//                        }
+//
+//                    });
                 }
                 return comp;
             }
@@ -221,7 +218,7 @@ public class InsurancePaymentMethodForm extends CEntityDecoratableForm<Insurance
             @Override
             public void addValidations() {
                 super.addValidations();
-                get(proto().number()).addValueValidator(new CreditCardNumberValidator());
+//                get(proto().number()).addValueValidator(new CreditCardNumberValidator());
             }
         };
     }

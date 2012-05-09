@@ -23,9 +23,8 @@ import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.entity.shared.IObject;
@@ -34,10 +33,10 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
-import com.propertyvista.portal.ptapp.client.resources.welcomewizard.WelcomeWizardResources;
 import com.propertyvista.portal.ptapp.client.ui.steps.summary.SignatureFolder;
 import com.propertyvista.portal.ptapp.client.ui.steps.welcomewizard.insurance.components.FormattableCombo;
 import com.propertyvista.portal.ptapp.client.ui.steps.welcomewizard.insurance.components.MoneyLabeledCombo;
+import com.propertyvista.portal.ptapp.client.ui.steps.welcomewizard.insurance.components.MultiDisclosurePanel;
 import com.propertyvista.portal.ptapp.client.ui.steps.welcomewizard.reviewlease.LeaseTermsFolder;
 import com.propertyvista.portal.rpc.ptapp.dto.welcomewizard.PurchaseInsuranceDTO;
 
@@ -69,9 +68,11 @@ public class InsurancePurchaseEditorForm extends CEntityDecoratableForm<Purchase
 
     private final ValueChangeHandler<BigDecimal> summaryRecalculationRequiredHandler;
 
-    private FormFlexPanel insuranceTerms;
+    private FormFlexPanel coverageTerms;
 
-    public InsurancePurchaseEditorForm() {
+    private final Command onPurchaseConfirmed;
+
+    public InsurancePurchaseEditorForm(Command onPurchaseConfirmed) {
         super(PurchaseInsuranceDTO.class);
         this.summaryRecalculationRequiredHandler = new ValueChangeHandler<BigDecimal>() {
             @Override
@@ -79,70 +80,72 @@ public class InsurancePurchaseEditorForm extends CEntityDecoratableForm<Purchase
                 recalculateSummary();
             }
         };
+        this.onPurchaseConfirmed = onPurchaseConfirmed;
     }
 
     @Override
     public IsWidget createContent() {
         FormFlexPanel content = new FormFlexPanel();
 
-        content.getColumnFormatter().setWidth(0, "50%");
+        content.getColumnFormatter().setWidth(0, "70%");
         content.getColumnFormatter().setWidth(1, "50%");
 
-        insuranceTerms = new FormFlexPanel();
-        insuranceTerms.setWidth("50%");
+        coverageTerms = new FormFlexPanel();
+        coverageTerms.setWidth("50%");
 
-        int row = -1;
-        insuranceTerms.setWidget(++row, 0, new HTML(WelcomeWizardResources.INSTANCE.insuranceReasonExplanation().getText()));
-        insuranceTerms.setH1(++row, 0, 1, i18n.tr("Coverage"));
-        insuranceTerms.setH2(++row, 0, 1, i18n.tr("Personal Contents"));
-        insuranceTerms.setWidget(++row, 0,
+        int irow = -1;
+//        insuranceTerms.setH1(++irow, 0, 1, i18n.tr("Coverage"));
+        coverageTerms.setH2(++irow, 0, 1, i18n.tr("Personal Contents"));
+        coverageTerms.setWidget(++irow, 0,
                 new DecoratorBuilder(inject(proto().personalContentsLimit(), new CoverageAmountCombo(PERSONAL_CONTENTS_LIMITS_OPTIONS))).build());
 
-        insuranceTerms.setWidget(++row, 0,
+        coverageTerms.setWidget(++irow, 0,
                 new DecoratorBuilder(inject(proto().propertyAwayFromPremises(), new CoverageAmountCombo(PROPERTY_AWAY_FROM_PREMISES_OPTIONS))).build());
-        insuranceTerms.setWidget(++row, 0,
+        coverageTerms.setWidget(++irow, 0,
                 new DecoratorBuilder(inject(proto().additionalLivingExpenses(), new CoverageAmountCombo(ADDITIONAL_LIVING_EXPENSES_OPTIONS))).build());
 
-        insuranceTerms.setH2(++row, 0, 1, i18n.tr("Decuctible (per Claim)"));
-        insuranceTerms.setWidget(++row, 0, new DecoratorBuilder(inject(proto().deductible(), new DeductibleCombo())).build());
+        coverageTerms.setH2(++irow, 0, 1, i18n.tr("Decuctible (per Claim)"));
+        coverageTerms.setWidget(++irow, 0, new DecoratorBuilder(inject(proto().deductible(), new DeductibleCombo())).build());
 
-        insuranceTerms.setH2(++row, 0, 1, i18n.tr("Form of Coverage"));
-        insuranceTerms.setWidget(++row, 0, new DecoratorBuilder(inject(proto().formOfCoverage())).build());
+        coverageTerms.setH2(++irow, 0, 1, i18n.tr("Form of Coverage"));
+        coverageTerms.setWidget(++irow, 0, new DecoratorBuilder(inject(proto().formOfCoverage())).build());
 
-        insuranceTerms.setH2(++row, 0, 1, i18n.tr("Special Limites (per Claim)"));
-        insuranceTerms.setWidget(++row, 0, new DecoratorBuilder(inject(proto().jewleryAndFurs(), new LimitCombo(JEWLERY_AND_FURS_OPTIONS))).build());
-        insuranceTerms.setWidget(++row, 0, new DecoratorBuilder(inject(proto().bicycles(), new LimitCombo(BYCICLES_OPTIONS))).build());
-        insuranceTerms.setWidget(++row, 0, new DecoratorBuilder(inject(proto().personalComputers(), new LimitCombo(PERSONAL_COMPUTERS_OPTIONS))).build());
-        insuranceTerms.setWidget(++row, 0,
+        coverageTerms.setH2(++irow, 0, 1, i18n.tr("Special Limites (per Claim)"));
+        coverageTerms.setWidget(++irow, 0, new DecoratorBuilder(inject(proto().jewleryAndFurs(), new LimitCombo(JEWLERY_AND_FURS_OPTIONS))).build());
+        coverageTerms.setWidget(++irow, 0, new DecoratorBuilder(inject(proto().bicycles(), new LimitCombo(BYCICLES_OPTIONS))).build());
+        coverageTerms.setWidget(++irow, 0, new DecoratorBuilder(inject(proto().personalComputers(), new LimitCombo(PERSONAL_COMPUTERS_OPTIONS))).build());
+        coverageTerms.setWidget(++irow, 0,
                 new DecoratorBuilder(inject(proto().moneyOrGiftGardsOrGiftCertificates(), new LimitCombo(MONEY_GIFT_CARDS_AND_CERTIFICATES_OPTIONS))).build());
-        insuranceTerms.setWidget(++row, 0, new DecoratorBuilder(inject(proto().securities(), new LimitCombo(SECURITIES_OPTIONS))).build());
-        insuranceTerms.setWidget(++row, 0, new DecoratorBuilder(inject(proto().utilityTraders(), new LimitCombo(DEFAULT_LIMITIES_OPTIONS))).build());
-        insuranceTerms.setWidget(++row, 0, new DecoratorBuilder(inject(proto().spareAutomobileParts(), new LimitCombo(DEFAULT_LIMITIES_OPTIONS))).build());
-        insuranceTerms.setWidget(++row, 0,
+        coverageTerms.setWidget(++irow, 0, new DecoratorBuilder(inject(proto().securities(), new LimitCombo(SECURITIES_OPTIONS))).build());
+        coverageTerms.setWidget(++irow, 0, new DecoratorBuilder(inject(proto().utilityTraders(), new LimitCombo(DEFAULT_LIMITIES_OPTIONS))).build());
+        coverageTerms.setWidget(++irow, 0, new DecoratorBuilder(inject(proto().spareAutomobileParts(), new LimitCombo(DEFAULT_LIMITIES_OPTIONS))).build());
+        coverageTerms.setWidget(++irow, 0,
                 new DecoratorBuilder(inject(proto().coinBanknoteOrStampCollections(), new LimitCombo(DEFAULT_LIMITIES_OPTIONS))).build());
-        insuranceTerms.setWidget(++row, 0, new DecoratorBuilder(inject(proto().collectibleCardsAndComics(), new LimitCombo(DEFAULT_LIMITIES_OPTIONS))).build());
+        coverageTerms.setWidget(++irow, 0, new DecoratorBuilder(inject(proto().collectibleCardsAndComics(), new LimitCombo(DEFAULT_LIMITIES_OPTIONS))).build());
 
-        insuranceTerms.setH2(++row, 0, 1, i18n.tr("Additional Coverage (per Claim)"));
-        insuranceTerms.setWidget(++row, 0,
+        coverageTerms.setH2(++irow, 0, 1, i18n.tr("Additional Coverage (per Claim)"));
+        coverageTerms.setWidget(++irow, 0,
                 new DecoratorBuilder(inject(proto().freezerFoodSpoilage(), new CoverageAmountCombo(asBigDecimals(0, 500, 1000, 1500)))).build());
-        insuranceTerms.setWidget(++row, 0,
+        coverageTerms.setWidget(++irow, 0,
                 new DecoratorBuilder(inject(proto().animalsBirdsAndFish(), new CoverageAmountCombo(asBigDecimals(0, 500, 1000, 1500)))).build());
-        insuranceTerms.setWidget(++row, 0,
+        coverageTerms.setWidget(++irow, 0,
                 new DecoratorBuilder(inject(proto().personalLiability(), new CoverageAmountCombo(asBigDecimals(500000, 1000000)))).build());
 
-        insuranceTerms.setH2(++row, 0, 1, i18n.tr("Coverage Qualification Questions"));
-        insuranceTerms.setWidget(++row, 0, new DecoratorBuilder(inject(proto().homeBuiness())).build());
-        insuranceTerms.setWidget(++row, 0, new DecoratorBuilder(inject(proto().numOfPrevClaims(), new NumberOfPreviousClaimsCombo())).build());
+        coverageTerms.setH2(++irow, 0, 1, i18n.tr("Coverage Qualification Questions"));
+        coverageTerms.setWidget(++irow, 0, new DecoratorBuilder(inject(proto().homeBuiness())).build());
+        coverageTerms.setWidget(++irow, 0, new DecoratorBuilder(inject(proto().numOfPrevClaims(), new NumberOfPreviousClaimsCombo())).build());
+        coverageTerms.setWidget(++irow, 0, inject(proto().digitalSignatures(), new SignatureFolder(true)));
+        coverageTerms.getFlexCellFormatter().setColSpan(irow, 0, 2);
 
-        insuranceTerms.setWidget(++row, 0, inject(proto().personalDisclaimerTerms(), new LeaseTermsFolder(true)));
+        MultiDisclosurePanel sections = new MultiDisclosurePanel();
 
-        insuranceTerms.setWidget(++row, 0, inject(proto().digitalSignatures(), new SignatureFolder(true)));
-        insuranceTerms.getFlexCellFormatter().setColSpan(row, 0, 2);
-
-        insuranceTerms.setWidget(++row, 0, inject(proto().paymentMethod(), new InsurancePaymentMethodForm()));
-        insuranceTerms.setWidget(++row, 0, inject(proto().agreementLegalBlurbAndPreAuthorizationAgreeement(), new LeaseTermsFolder(true)));
-
-        content.setWidget(0, 0, new ScrollPanel(insuranceTerms));
+        sections.add(coverageTerms, i18n.tr("Coverage Terms"));
+        sections.add(inject(proto().personalDisclaimerTerms(), new LeaseTermsFolder(true)), i18n.tr("Disclaimer"));
+        sections.add(inject(proto().paymentMethod(), new InsurancePaymentMethodForm()), i18n.tr("Payment"));
+        sections.add(inject(proto().agreementLegalBlurbAndPreAuthorizationAgreeement(), new LeaseTermsFolder(true)), i18n.tr("Agreement"),
+                i18n.tr("Pay and Continue"), onPurchaseConfirmed);
+        int row = -1;
+        content.setWidget(++row, 0, sections);
 
         quoteTotalPanel = new VerticalPanel();
         quoteTotalPanel.setWidth("20em");
