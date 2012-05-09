@@ -39,10 +39,12 @@ public class RunEditorForm extends AdminEntityForm<Run> {
         int row = -1;
 
         container.setWidget(++row, 0, new DecoratorBuilder(inject(proto().trigger()), 15).build());
+        container.setWidget(++row, 0, new DecoratorBuilder(inject(proto().trigger().triggerType()), 15).build());
         container.setWidget(++row, 0, new DecoratorBuilder(inject(proto().created()), 10).build());
         container.setWidget(++row, 0, new DecoratorBuilder(inject(proto().status()), 15).build());
+        container.setWidget(++row, 0, new DecoratorBuilder(inject(proto().errorMessage()), 25).build());
 
-        container.setH2(++row, 0, 2, i18n.tr("Statictics:"));
+        container.setH2(++row, 0, 2, i18n.tr("Statistics"));
         container.setWidget(++row, 0, new DecoratorBuilder(inject(proto().stats().total()), 10).build());
         container.setWidget(++row, 0, new DecoratorBuilder(inject(proto().stats().processed()), 10).build());
         container.setWidget(++row, 0, new DecoratorBuilder(inject(proto().stats().failed()), 10).build());
@@ -52,7 +54,7 @@ public class RunEditorForm extends AdminEntityForm<Run> {
 
         container.setWidget(++row, 0, new DecoratorBuilder(inject(proto().errorMessage()), 40).build());
 
-        container.setH2(++row, 0, 2, i18n.tr("Data:"));
+        container.setH2(++row, 0, 2, i18n.tr("Data"));
         container.setWidget(++row, 0, ((RunViewerView) getParentView()).getRunDataListerView().asWidget());
 
         return container;

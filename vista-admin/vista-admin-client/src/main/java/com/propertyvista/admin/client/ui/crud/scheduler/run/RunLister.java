@@ -30,7 +30,8 @@ public class RunLister extends ListerBase<Run> {
                 new MemberColumnDescriptor.Builder(proto().stats().failed()).build(),
                 new MemberColumnDescriptor.Builder(proto().stats().averageDuration()).build(),
                 new MemberColumnDescriptor.Builder(proto().stats().totalDuration()).build(),
-                new MemberColumnDescriptor.Builder(proto().stats().updateTime()).build()
+                new MemberColumnDescriptor.Builder(proto().created()).build(),
+                new MemberColumnDescriptor.Builder(proto().updated()).build()
         );//@formatter:on
     }
 }

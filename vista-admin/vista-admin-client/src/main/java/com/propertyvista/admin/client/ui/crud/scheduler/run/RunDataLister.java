@@ -29,9 +29,10 @@ public class RunDataLister extends ListerBase<RunData> {
             new MemberColumnDescriptor.Builder(proto().stats().total()).build(),
             new MemberColumnDescriptor.Builder(proto().stats().processed()).build(),
             new MemberColumnDescriptor.Builder(proto().stats().failed()).build(),
+            new MemberColumnDescriptor.Builder(proto().errorMessage()).build(),
             new MemberColumnDescriptor.Builder(proto().stats().averageDuration()).build(),
             new MemberColumnDescriptor.Builder(proto().stats().totalDuration()).build(),
-            new MemberColumnDescriptor.Builder(proto().stats().updateTime()).build()
+            new MemberColumnDescriptor.Builder(proto().updated()).build()
         );//@formatter:on
     }
 }

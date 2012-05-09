@@ -58,6 +58,10 @@ public interface Run extends IEntity {
     @Format("MM/dd/yyyy h:mm a")
     IPrimitive<Date> created();
 
+    @Format("MM/dd/yyyy h:mm a")
+    @Timestamp(Timestamp.Update.Updated)
+    IPrimitive<Date> updated();
+
     @Caption(name = "Statistics")
     @Owned(forceCreation = true, cascade = {})
     RunStats stats();

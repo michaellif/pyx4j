@@ -23,11 +23,15 @@ public enum PmcProcessType implements Serializable {
 
     billing,
 
-    issuePayments,
+    paymentsIssue,
 
-    padSend,
+    paymentsCreditCardSend,
 
-    padRecive,
+    paymentsPadSend,
+
+    paymentsPadRecive,
+
+    paymentsBmoRecive,
 
     leaseActivation,
 

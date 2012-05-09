@@ -18,10 +18,15 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.commons.Consts;
 import com.pyx4j.entity.server.AbstractCrudServiceImpl;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.rpc.shared.UserRuntimeException;
 
 import com.propertyvista.admin.domain.scheduler.Run;
+import com.propertyvista.admin.domain.scheduler.RunStatus;
 import com.propertyvista.admin.domain.scheduler.Trigger;
 import com.propertyvista.admin.rpc.services.scheduler.TriggerCrudService;
 import com.propertyvista.admin.server.proc.JobUtils;
@@ -62,9 +67,28 @@ public class TriggerCrudServiceImpl extends AbstractCrudServiceImpl<Trigger> imp
 
     @Override
     public void runImmediately(AsyncCallback<Run> callback, Trigger triggerStub) {
+        EntityQueryCriteria<Run> criteria = EntityQueryCriteria.create(Run.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().trigger(), triggerStub));
+        criteria.add(PropertyCriterion.eq(criteria.proto().status(), RunStatus.Running));
+        Run run = Persistence.service().retrieve(criteria);
+        if (run != null) {
+            throw new UserRuntimeException("The process is already running");
+        }
+
         JobUtils.runNow(triggerStub);
-        // TODO find running Run
-        callback.onSuccess(null);
+        // Find running Run
+        long start = System.currentTimeMillis();
+        Run runStub = null;
+        do {
+            criteria = EntityQueryCriteria.create(Run.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().trigger(), triggerStub));
+            criteria.add(PropertyCriterion.in(criteria.proto().status(), RunStatus.Sleeping, RunStatus.Running));
+            run = Persistence.service().retrieve(criteria);
+            if (run != null) {
+                runStub = run.createIdentityStub();
+            }
+        } while ((runStub == null) && (System.currentTimeMillis() - start < 25 * Consts.SEC2MSEC));
+        callback.onSuccess(runStub);
 
     }
 

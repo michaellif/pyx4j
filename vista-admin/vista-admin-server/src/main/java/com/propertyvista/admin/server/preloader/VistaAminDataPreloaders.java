@@ -21,6 +21,7 @@ public class VistaAminDataPreloaders extends DataPreloaderCollection {
     public VistaAminDataPreloaders() {
         add(new AminUsersPreloader());
         add(new OnboardingUserPreloader());
+        add(new TriggerPreloader());
         if (ApplicationMode.isDevelopment()) {
             add(new DevelopmentSecurityPreloader());
         }

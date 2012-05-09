@@ -21,9 +21,9 @@ public class PmcProcessFactory {
         switch (triggerType) {
         case test:
             return new TestPmcProcess();
-        case padSend:
+        case paymentsPadSend:
             return new PadSendProcess();
-        case padRecive:
+        case paymentsPadRecive:
             return new PadReciveProcess();
         default:
             throw new IllegalArgumentException("Not implemented");
