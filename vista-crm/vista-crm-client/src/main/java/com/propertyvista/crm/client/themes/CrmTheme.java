@@ -60,6 +60,14 @@ public class CrmTheme extends VistaTheme {
         TitleBarBreadcrumb
     }
 
+    public static enum ArrearsStyleName implements IStyleName {
+        ArrearsTitle, ArrearsCategoryEven, ArrearsCategoryOdd, ArrearsCategoryAll, ArrearsMoneyCell;
+    }
+
+    public static enum TransactionHistoryStyleName implements IStyleName {
+        TransactionsHistoryTitle, TransactionRecordEven, TransactionRecordOdd, TransactionRecordMoneyCell, TansactionHistoryColumn;
+    }
+
     public CrmTheme() {
         initStyles();
     }
@@ -110,7 +118,8 @@ public class CrmTheme extends VistaTheme {
         initMenuBarStyles();
 
         initGadgetDirectoryStyles();
-
+        initTransactionHistoryStyles();
+        initArrearsViewStyles();
     }
 
     @Override
@@ -559,6 +568,79 @@ public class CrmTheme extends VistaTheme {
         style.addProperty("text-align", "left");
         style.addProperty("font-weight", "bold");
         addStyle(style);
+    }
+
+    protected void initTransactionHistoryStyles() {
+        {
+            Style style = new Style("." + TransactionHistoryStyleName.TansactionHistoryColumn.name());
+            style.addProperty("border-right-width", "1px");
+            style.addProperty("border-right-color", ThemeColors.foreground);
+            addStyle(style);
+        }
+        {
+            Style style = new Style("." + TransactionHistoryStyleName.TransactionsHistoryTitle.name());
+            style.addProperty("font-weight", "bold");
+            style.addProperty("text-align", "center");
+            addStyle(style);
+        }
+        {
+            Style style = new Style("." + TransactionHistoryStyleName.TransactionRecordEven.name());
+            style.addProperty("background-color", ThemeColors.object1, 0.15);
+            style.addProperty("padding", "1em 2px");
+            addStyle(style);
+
+        }
+        {
+            Style style = new Style("." + TransactionHistoryStyleName.TransactionRecordOdd.name());
+            style.addProperty("background-color", ThemeColors.object1, 0.1);
+            style.addProperty("padding", "1em 2px");
+            addStyle(style);
+        }
+        {
+            Style style = new Style("." + TransactionHistoryStyleName.TransactionRecordMoneyCell.name());
+            style.addProperty("text-align", "right");
+            style.addProperty("font-family", "monospace");
+            addStyle(style);
+        }
+
+    }
+
+    protected void initArrearsViewStyles() {
+        {
+            Style style = new Style("." + ArrearsStyleName.ArrearsTitle.name());
+            style.addProperty("font-weight", "bold");
+            style.addProperty("text-align", "center");
+            addStyle(style);
+        }
+        {
+            Style style = new Style("." + ArrearsStyleName.ArrearsCategoryAll.name());
+            style.addProperty("background-color", ThemeColors.object1, 0.2);
+            style.addProperty("font-weight", "bold");
+            style.addProperty("border-weight", "bold");
+            style.addProperty("padding", "1em 2px");
+            addStyle(style);
+
+        }
+        {
+            Style style = new Style("." + ArrearsStyleName.ArrearsCategoryEven.name());
+            style.addProperty("background-color", ThemeColors.object1, 0.15);
+            style.addProperty("padding", "1em 2px");
+            addStyle(style);
+
+        }
+        {
+            Style style = new Style("." + ArrearsStyleName.ArrearsCategoryOdd.name());
+            style.addProperty("background-color", ThemeColors.object1, 0.1);
+            style.addProperty("padding", "1em 2px");
+            addStyle(style);
+        }
+        {
+            Style style = new Style("." + ArrearsStyleName.ArrearsMoneyCell);
+            style.addProperty("text-align", "right");
+            style.addProperty("font-family", "monospace");
+            addStyle(style);
+        }
+
     }
 
 }

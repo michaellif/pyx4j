@@ -15,6 +15,7 @@ package com.propertyvista.domain.financial.billing;
 
 import java.math.BigDecimal;
 
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -28,9 +29,12 @@ public interface AgingBuckets extends IEntity {
 
     IPrimitive<BigDecimal> current();
 
+    @Caption(name = "1 to 30")
     IPrimitive<BigDecimal> bucket30();
 
+    @Caption(name = "30 to 60")
     IPrimitive<BigDecimal> bucket60();
 
+    @Caption(name = "60 to 90")
     IPrimitive<BigDecimal> bucket90();
 }
