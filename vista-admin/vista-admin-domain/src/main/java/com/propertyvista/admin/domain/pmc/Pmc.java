@@ -42,6 +42,7 @@ public interface Pmc extends IEntity {
         Created, Active, Suspended
     }
 
+    @NotNull
     IPrimitive<PmcStatus> status();
 
     @NotNull

@@ -21,6 +21,8 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.cache.CacheService;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.server.contexts.NamespaceManager;
@@ -28,9 +30,12 @@ import com.pyx4j.server.contexts.NamespaceManager;
 import com.propertyvista.admin.domain.pmc.Pmc;
 import com.propertyvista.admin.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.admin.domain.pmc.PmcDnsName;
+import com.propertyvista.admin.domain.security.OnboardingUserCredential;
 import com.propertyvista.admin.rpc.PmcDTO;
 import com.propertyvista.admin.rpc.services.PmcCrudService;
 import com.propertyvista.admin.server.onboarding.PmcNameValidator;
+import com.propertyvista.admin.server.preloader.OnboardingUserPreloader;
+import com.propertyvista.domain.security.VistaOnboardingBehavior;
 import com.propertyvista.portal.rpc.corp.PmcAccountCreationRequest;
 import com.propertyvista.portal.server.preloader.PmcCreator;
 
@@ -70,6 +75,7 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
     public void create(AsyncCallback<PmcDTO> callback, PmcDTO editableEntity) {
         editableEntity.dnsName().setValue(editableEntity.dnsName().getValue().toLowerCase(Locale.ENGLISH));
         editableEntity.namespace().setValue(editableEntity.dnsName().getValue().replace('-', '_'));
+        editableEntity.status().setValue(PmcStatus.Active);
         if (!PmcNameValidator.canCreatePmcName(editableEntity.dnsName().getValue())) {
             throw new UserRuntimeException("PMC DNS name is reserved of forbidden");
         }
@@ -84,6 +90,16 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
             Persistence.service().endTransaction();
         }
 
+        EntityQueryCriteria<Pmc> criteria = EntityQueryCriteria.create(Pmc.class);
+        criteria.or(PropertyCriterion.eq(criteria.proto().dnsName(), editableEntity.dnsName().getValue()),
+                PropertyCriterion.eq(criteria.proto().namespace(), editableEntity.namespace().getValue()));
+        Pmc pmc = Persistence.service().retrieve(criteria);
+
+        OnboardingUserCredential cred = OnboardingUserPreloader.createOnboardingUser(null, editableEntity.email().getValue(), editableEntity.password()
+                .getValue(), VistaOnboardingBehavior.ProspectiveClient, null);
+
+        cred.pmc().set(pmc);
+        Persistence.service().persist(cred);
     }
 
     @Override
