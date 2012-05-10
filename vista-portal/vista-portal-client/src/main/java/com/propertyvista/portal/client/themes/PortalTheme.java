@@ -304,7 +304,7 @@ public class PortalTheme extends VistaTheme {
                 style.addProperty("font-weight", "normal");
                 style.addProperty("font-style", "normal");
                 style.addProperty("padding-left", "0em");
-                style.addProperty("padding-right", "2em");
+                style.addProperty("padding-right", "1em");
                 style.addProperty("padding-top", "0.5em");
                 style.addProperty("padding-bottom", "2em");
                 addStyle(style);

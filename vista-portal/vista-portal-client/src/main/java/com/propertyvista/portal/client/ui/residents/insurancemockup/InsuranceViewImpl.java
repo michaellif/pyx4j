@@ -13,18 +13,27 @@
  */
 package com.propertyvista.portal.client.ui.residents.insurancemockup;
 
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
-import com.propertyvista.portal.client.ui.residents.insurancemockup.forms.InsuranceForm;
+import com.propertyvista.portal.client.ui.residents.insurancemockup.components.InsuranceMessagePanel;
+import com.propertyvista.portal.client.ui.residents.insurancemockup.forms.InsuranceAlreadyAvailabileEditorForm;
+import com.propertyvista.portal.client.ui.residents.insurancemockup.forms.UnknownInsuranceForm;
+import com.propertyvista.portal.client.ui.residents.insurancemockup.resources.InsuranceMockupResources;
 import com.propertyvista.portal.rpc.portal.dto.insurancemockup.TenantInsuranceDTO;
+import com.propertyvista.portal.rpc.portal.dto.insurancemockup.TenantInsuranceDTO.InsuranceStatus;
 import com.propertyvista.portal.rpc.ptapp.dto.welcomewizard.InsuranceDTO;
 
 public class InsuranceViewImpl implements InsuranceView {
 
-    private final CEntityForm<InsuranceDTO> noInsuranceForm;
+    private final CEntityForm<InsuranceDTO> unknownInsuranceForm;
+
+    private final InsuranceAlreadyAvailabileEditorForm independantInsuranceForm;
+
+    private final FormFlexPanel independantInsurancePanel;
 
     private final FormFlexPanel viewPanel;
 
@@ -32,10 +41,23 @@ public class InsuranceViewImpl implements InsuranceView {
 
     public InsuranceViewImpl() {
 
-        noInsuranceForm = new InsuranceForm();
-        noInsuranceForm.initContent();
+        unknownInsuranceForm = new UnknownInsuranceForm();
+        unknownInsuranceForm.initContent();
+        unknownInsuranceForm.setVisible(false);
+
+        independantInsuranceForm = new InsuranceAlreadyAvailabileEditorForm();
+        independantInsuranceForm.initContent();
+        independantInsuranceForm.setVisible(false);
+        independantInsuranceForm.setViewable(true);
+        independantInsurancePanel = new FormFlexPanel();
+
+        independantInsurancePanel.setWidget(0, 0,
+                new InsuranceMessagePanel(new HTML(InsuranceMockupResources.INSTANCE.independantInsuranceMessage().getText())));
+        independantInsurancePanel.setWidget(1, 0, independantInsuranceForm);
+
         viewPanel = new FormFlexPanel();
-        viewPanel.setWidget(0, 0, noInsuranceForm);
+        viewPanel.setWidget(0, 0, unknownInsuranceForm);
+        viewPanel.setWidget(1, 0, independantInsurancePanel);
 
     }
 
@@ -50,13 +72,20 @@ public class InsuranceViewImpl implements InsuranceView {
     }
 
     @Override
-    public void populate(TenantInsuranceDTO tenantInsuranceDTO) {
+    public void populate(final TenantInsuranceDTO tenantInsuranceDTO) {
+        unknownInsuranceForm.setVisible(tenantInsuranceDTO.status().getValue() == InsuranceStatus.unknown);
+
+        independantInsuranceForm.setVisible(tenantInsuranceDTO.status().getValue() == InsuranceStatus.independant);
+        independantInsurancePanel.setVisible(tenantInsuranceDTO.status().getValue() == InsuranceStatus.independant);
+
         switch (tenantInsuranceDTO.status().getValue()) {
         case unknown:
-            noInsuranceForm.populate(tenantInsuranceDTO.newRequestInsurance().duplicate(InsuranceDTO.class));
-            noInsuranceForm.asWidget().setVisible(true);
+            unknownInsuranceForm.populate(tenantInsuranceDTO.newInsuranceRequest());
             break;
+        case independant:
+            independantInsuranceForm.populate(tenantInsuranceDTO.independant());
         }
+
     }
 
 }

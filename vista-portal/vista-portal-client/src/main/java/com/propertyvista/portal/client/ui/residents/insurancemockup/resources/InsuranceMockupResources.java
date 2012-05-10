@@ -27,6 +27,9 @@ public interface InsuranceMockupResources extends ClientBundleWithLookup {
     @Source("you-must-obtain-insurance-message.html")
     TextResource youMustObtainInsuranceMessage();
 
+    @Source("independant-insurance-message.html")
+    TextResource independantInsuranceMessage();
+
     @ImageOptions(repeatStyle = RepeatStyle.Both)
     @Source("logo-TenantSure-transparent-small.png")
     ImageResource logoTenantSure();

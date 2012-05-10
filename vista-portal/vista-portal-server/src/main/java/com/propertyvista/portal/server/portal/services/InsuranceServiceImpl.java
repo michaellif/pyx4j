@@ -16,10 +16,13 @@ package com.propertyvista.portal.server.portal.services;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.MathContext;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.server.contexts.Context;
@@ -31,6 +34,7 @@ import com.propertyvista.portal.rpc.portal.dto.insurancemockup.TenantInsuranceDT
 import com.propertyvista.portal.rpc.portal.dto.insurancemockup.TenantInsuranceDTO.InsuranceStatus;
 import com.propertyvista.portal.rpc.portal.services.InsuranceService;
 import com.propertyvista.portal.rpc.ptapp.dto.LegalTermsDescriptorDTO;
+import com.propertyvista.portal.rpc.ptapp.dto.welcomewizard.ExistingInsurance;
 import com.propertyvista.portal.rpc.ptapp.dto.welcomewizard.InsuranceDTO;
 import com.propertyvista.portal.rpc.ptapp.dto.welcomewizard.InsurancePaymentMethodDTO.PaymentMethod;
 import com.propertyvista.portal.rpc.ptapp.dto.welcomewizard.PurchaseInsuranceDTO.FormOfCoverage;
@@ -74,9 +78,27 @@ public class InsuranceServiceImpl implements InsuranceService {
 
         if (TenantAppContext.getCurrentUser().email().getValue().startsWith("t001")) {
             dto.status().setValue(InsuranceStatus.unknown);
-            dto.newRequestInsurance().set(createDefaultNewInsuranceRequestValues());
+            dto.newInsuranceRequest().set(createDefaultNewInsuranceRequestValues());
+        } else if (TenantAppContext.getCurrentUser().email().getValue().startsWith("t002")) {
+            dto.status().setValue(InsuranceStatus.independant);
+            dto.independant().set(createDefaultIndependantInsuranceValues());
         }
         callback.onSuccess(dto);
+    }
+
+    private ExistingInsurance createDefaultIndependantInsuranceValues() {
+        ExistingInsurance insurance = EntityFactory.create(ExistingInsurance.class);
+        insurance.insuranceProvider().setValue("Mockup Insurance Provider");
+        insurance.insuranceCertificateNumber().setValue("123-1235098A");
+        insurance.personalLiability().setValue(new BigDecimal("10000000"));
+        Calendar cal = GregorianCalendar.getInstance();
+        cal.setTime(new LogicalDate());
+        cal.add(Calendar.YEAR, -1);
+        insurance.insuranceStartDate().setValue(new LogicalDate(cal.getTime()));
+
+        cal.add(Calendar.YEAR, 3);
+        insurance.insuranceExpirationDate().setValue(new LogicalDate(cal.getTime()));
+        return insurance;
     }
 
     private IEntity createDefaultNewInsuranceRequestValues() {

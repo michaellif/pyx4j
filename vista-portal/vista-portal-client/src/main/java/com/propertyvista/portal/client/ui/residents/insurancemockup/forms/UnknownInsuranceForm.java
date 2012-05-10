@@ -20,24 +20,20 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
-import com.google.gwt.user.client.ui.HasVerticalAlignment;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
+import com.propertyvista.portal.client.ui.residents.insurancemockup.components.InsuranceMessagePanel;
 import com.propertyvista.portal.client.ui.residents.insurancemockup.resources.InsuranceMockupResources;
 import com.propertyvista.portal.rpc.ptapp.dto.welcomewizard.InsuranceDTO;
 
-public class InsuranceForm extends CEntityDecoratableForm<InsuranceDTO> {
+public class UnknownInsuranceForm extends CEntityDecoratableForm<InsuranceDTO> {
 
-    private final static I18n i18n = I18n.get(InsuranceForm.class);
+    private final static I18n i18n = I18n.get(UnknownInsuranceForm.class);
 
     private Command onPurchaseInsuranceConfirmedHandler;
 
@@ -45,7 +41,7 @@ public class InsuranceForm extends CEntityDecoratableForm<InsuranceDTO> {
 
     private Button existingInsuranceConfirmationButton;
 
-    public InsuranceForm() {
+    public UnknownInsuranceForm() {
         super(InsuranceDTO.class);
     }
 
@@ -63,19 +59,7 @@ public class InsuranceForm extends CEntityDecoratableForm<InsuranceDTO> {
         FormFlexPanel content = new FormFlexPanel();
         int row = -1;
 
-        HorizontalPanel obtainInsuranceMessagePanel = new HorizontalPanel();
-        VerticalPanel logoPanel = new VerticalPanel();
-        logoPanel.add(new Image(InsuranceMockupResources.INSTANCE.logoTenantSure()));
-        logoPanel.add(new Image(InsuranceMockupResources.INSTANCE.logoHighcourt()));
-        logoPanel.add(new HTML("1-888-123-4567"));
-        logoPanel.getElement().getStyle().setPadding(1, Unit.EM);
-        logoPanel.getElement().getStyle().setMargin(1, Unit.EM);
-        obtainInsuranceMessagePanel.add(logoPanel);
-        obtainInsuranceMessagePanel.setCellWidth(logoPanel, "5em");
-        obtainInsuranceMessagePanel.setCellHorizontalAlignment(logoPanel, HasHorizontalAlignment.ALIGN_CENTER);
-        obtainInsuranceMessagePanel.setCellVerticalAlignment(logoPanel, HasVerticalAlignment.ALIGN_MIDDLE);
-        obtainInsuranceMessagePanel.add(new HTML(InsuranceMockupResources.INSTANCE.youMustObtainInsuranceMessage().getText()));
-        content.setWidget(++row, 0, obtainInsuranceMessagePanel);
+        content.setWidget(++row, 0, new InsuranceMessagePanel(new HTML(InsuranceMockupResources.INSTANCE.youMustObtainInsuranceMessage().getText())));
 
         content.getRowFormatter().getElement(row).getStyle().setPaddingBottom(10, Unit.PX);
         content.setWidget(++row, 0, inject(proto().purchaseInsurance(), new InsurancePurchaseEditorForm(new Command() {

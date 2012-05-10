@@ -17,6 +17,7 @@ import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
+import com.propertyvista.portal.rpc.ptapp.dto.welcomewizard.ExistingInsurance;
 import com.propertyvista.portal.rpc.ptapp.dto.welcomewizard.InsuranceDTO;
 
 @Transient
@@ -30,5 +31,8 @@ public interface TenantInsuranceDTO extends IEntity {
 
     IPrimitive<InsuranceStatus> status();
 
-    InsuranceDTO newRequestInsurance();
+    InsuranceDTO newInsuranceRequest();
+
+    ExistingInsurance independant();
+
 }
