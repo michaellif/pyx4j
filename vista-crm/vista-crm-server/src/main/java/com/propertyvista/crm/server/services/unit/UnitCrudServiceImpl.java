@@ -30,6 +30,7 @@ import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.dto.AptUnitDTO;
 import com.propertyvista.dto.AptUnitServicePriceDTO;
 
@@ -57,6 +58,12 @@ public class UnitCrudServiceImpl extends AbstractCrudServiceDtoImpl<AptUnit, Apt
         if (!dto.marketing().isValueDetached()) { // This is not called for now cince file is detached in annotation. see comments on this filed
             Persistence.service().retrieve(dto.marketing().adBlurbs());
         }
+
+        // find corresponding lease:
+        EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().unit(), in));
+        criteria.add(PropertyCriterion.in(criteria.proto().version().status(), Lease.Status.current()));
+        dto.lease().set(Persistence.service().retrieve(criteria));
 
         Persistence.service().retrieve(dto.floorplan());
         Persistence.service().retrieve(dto.belongsTo());

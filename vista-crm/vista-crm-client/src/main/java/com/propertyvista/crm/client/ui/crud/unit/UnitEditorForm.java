@@ -35,7 +35,6 @@ import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
@@ -53,6 +52,7 @@ import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.rpc.services.selections.SelectFloorplanListService;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.dto.AptUnitDTO;
 
 public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
@@ -92,6 +92,7 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
     protected void onPopulate() {
         super.onPopulate();
 
+        get(proto().lease()).setVisible(!getValue().lease().isNull());
         get(proto()._availableForRent()).setVisible(!getValue()._availableForRent().isNull());
         get(proto().financial()._unitRent()).setVisible(!getValue().financial()._unitRent().isNull());
     }
@@ -111,16 +112,24 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
         int row = -1;
         FormFlexPanel left = new FormFlexPanel();
 
-        CComponent<?, ?> buildingComp = isEditable() ? new CEntityLabel<Building>() : new CEntityCrudHyperlink<Building>(
-                AppPlaceEntityMapper.resolvePlace(Building.class));
-        left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().belongsTo(), buildingComp), 20).build());
+        left.setWidget(
+                ++row,
+                0,
+                new DecoratorBuilder(inject(proto().belongsTo(), isEditable() ? new CEntityLabel<Building>() : new CEntityCrudHyperlink<Building>(
+                        AppPlaceEntityMapper.resolvePlace(Building.class))), 20).build());
 
-        CComponent<?, ?> floorplanComp = isEditable() ? new FloorplanSelectorHyperlink() : new CEntityLabel<Floorplan>();
-        left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().floorplan(), floorplanComp), 20).build());
+        left.setWidget(++row, 0,
+                new DecoratorBuilder(inject(proto().floorplan(), isEditable() ? new FloorplanSelectorHyperlink() : new CEntityLabel<Floorplan>()), 20).build());
         left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().info().economicStatus()), 20).build());
         left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().info().economicStatusDescription()), 20).build());
 
         left.setBR(++row, 0, 1);
+        left.setWidget(
+                ++row,
+                0,
+                new DecoratorBuilder(inject(proto().lease(),
+                        isEditable() ? new CEntityLabel<Lease>() : new CEntityCrudHyperlink<Lease>(AppPlaceEntityMapper.resolvePlace(Lease.class))), 20)
+                        .build());
         left.setWidget(++row, 0, new DecoratorBuilder(inject(proto()._availableForRent()), 9).build());
         left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().financial()._unitRent()), 7).build());
 //        left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().financial()._marketRent()), 10).build());
@@ -238,6 +247,5 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
                 }
             });
         }
-
     }
 }
