@@ -203,8 +203,12 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
     }
 
     public void onPopulateSuccess(E result) {
+        int activeTab = tabIndex;
+        if (activeTab < 0) {
+            activeTab = view.getActiveTab();
+        }
         view.populate(result);
-        view.setActiveTab(tabIndex);
+        view.setActiveTab(activeTab);
     }
 
     @Override
