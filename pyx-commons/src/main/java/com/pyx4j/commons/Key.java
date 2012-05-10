@@ -80,6 +80,18 @@ public class Key implements java.io.Serializable {
         }
     }
 
+    public boolean isDraft() {
+        return (getVersion() == VERSION_DRAFT);
+    }
+
+    public boolean isCurrent() {
+        return (getVersion() == VERSION_CURRENT);
+    }
+
+    public boolean isVersion() {
+        return !(isDraft() || isCurrent());
+    }
+
     @Override
     public String toString() {
         return value;
