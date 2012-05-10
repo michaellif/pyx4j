@@ -6,6 +6,7 @@
 ---- innodb_flush_log_at_trx_commit=2
 ---- # To store big blobs
 ---- max_allowed_packet=200M
+---- transaction-isolation = READ-COMMITTED
 
 -- initialization
 DROP USER 'vista';
