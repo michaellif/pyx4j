@@ -45,7 +45,9 @@ public class VistaNamespaceResolver implements NamespaceResolver {
 
     static {
         prodSystemDnsBase.add("residentportalsite.com");
+        prodSystemDnsBase.add("residentportalsite.ca");
         prodSystemDnsBase.add("prospectportalsite.com");
+        prodSystemDnsBase.add("prospectportalsite.ca");
         prodSystemDnsBase.add("propertyvista.com");
         prodSystemDnsBase.add("propertyvista.ca");
     }
