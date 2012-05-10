@@ -13,6 +13,7 @@
  */
 package com.propertyvista.server.domain;
 
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
@@ -22,6 +23,9 @@ public interface IdAssignmentSequence extends IEntity {
 
     IPrimitive<IdAssignmentItem.IdTarget> target();
 
+    @NotNull
     IPrimitive<Long> number();
+
+    IPrimitive<Long> maximum();
 
 }

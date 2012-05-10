@@ -14,7 +14,6 @@
 package com.propertyvista.portal.server.preloader.policy.subpreloaders;
 
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.policy.policies.IdAssignmentPolicy;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem;
@@ -23,8 +22,6 @@ import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget
 import com.propertyvista.portal.server.preloader.policy.util.AbstractPolicyPreloader;
 
 public class IdAssignmentPolicyPreloader extends AbstractPolicyPreloader<IdAssignmentPolicy> {
-
-    private final static I18n i18n = I18n.get(IdAssignmentPolicyPreloader.class);
 
     public IdAssignmentPolicyPreloader() {
         super(IdAssignmentPolicy.class);
@@ -37,6 +34,9 @@ public class IdAssignmentPolicyPreloader extends AbstractPolicyPreloader<IdAssig
         IdAssignmentItem item = null;
 
         for (IdTarget target : IdTarget.values()) {
+            if (target == IdTarget.accountNumber) {
+                continue;
+            }
             item = EntityFactory.create(IdAssignmentItem.class);
 
             item.target().setValue(target);

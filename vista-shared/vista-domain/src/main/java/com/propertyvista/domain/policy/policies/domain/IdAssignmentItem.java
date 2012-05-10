@@ -42,7 +42,9 @@ public interface IdAssignmentItem extends IEntity {
 
         tenant,
 
-        lead;
+        lead,
+
+        accountNumber;
 
         @Override
         public String toString() {
