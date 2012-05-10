@@ -198,12 +198,14 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
         if (!value.unit().isNull()) {
             CompletionType completion = value.version().completion().getValue();
 
-            sendMail.setVisible(true);
-            runBill.setVisible(status.isCurrent());
-            notice.setVisible(status == Status.Active && completion == null);
-            cancelNotice.setVisible(completion == CompletionType.Notice && status != Status.Closed);
-            evict.setVisible(status == Status.Active && completion == null);
-            cancelEvict.setVisible(completion == CompletionType.Eviction && status != Status.Closed);
+            if (value.getPrimaryKey().isCurrent()) {
+                sendMail.setVisible(true);
+                runBill.setVisible(status.isCurrent());
+                notice.setVisible(status == Status.Active && completion == null);
+                cancelNotice.setVisible(completion == CompletionType.Notice && status != Status.Closed);
+                evict.setVisible(status == Status.Active && completion == null);
+                cancelEvict.setVisible(completion == CompletionType.Eviction && status != Status.Closed);
+            }
             activate.setVisible(status == Status.Created);
         }
 
