@@ -494,6 +494,10 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
         }
     }
 
+    public void reset() {
+        populate(null);
+    }
+
     protected final void update(DATA_TYPE value) {
         if (!isValuesEquals(getValue(), value)) {
             this.value = value;

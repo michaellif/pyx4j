@@ -267,7 +267,8 @@ public abstract class CEntityForm<E extends IEntity> extends CEntityContainer<E>
         populate((E) EntityFactory.create(proto().getObjectClass()));
     }
 
-    public final void reset() {
+    @Override
+    public void reset() {
         this.origEntity = null;
         setVisited(false);
         setValue(null, false, false);

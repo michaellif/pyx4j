@@ -81,7 +81,6 @@ public class ViewerActivityBase<E extends IEntity> extends AbstractActivity impl
 
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
-        view.reset();
         view.setPresenter(this);
         populate();
         panel.setWidget(view);
@@ -91,11 +90,13 @@ public class ViewerActivityBase<E extends IEntity> extends AbstractActivity impl
     public void onStop() {
         view.storeState(view.getMemento().getCurrentPlace());
         view.reset();
+        view.setPresenter(null);
         super.onStop();
     }
 
     @Override
     public void populate() {
+        view.reset();
         service.retrieve(new DefaultAsyncCallback<E>() {
             @Override
             public void onSuccess(E result) {
