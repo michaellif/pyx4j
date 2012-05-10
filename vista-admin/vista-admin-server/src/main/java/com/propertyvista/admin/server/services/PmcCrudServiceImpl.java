@@ -85,21 +85,22 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
         try {
             Persistence.service().startBackgroundProcessTransaction();
             PmcCreator.preloadPmc(editableEntity);
+
+            EntityQueryCriteria<Pmc> criteria = EntityQueryCriteria.create(Pmc.class);
+            criteria.or(PropertyCriterion.eq(criteria.proto().dnsName(), editableEntity.dnsName().getValue()),
+                    PropertyCriterion.eq(criteria.proto().namespace(), editableEntity.namespace().getValue()));
+            Pmc pmc = Persistence.service().retrieve(criteria);
+
+            OnboardingUserCredential cred = OnboardingUserPreloader.createOnboardingUser(null, editableEntity.email().getValue(), editableEntity.password()
+                    .getValue(), VistaOnboardingBehavior.ProspectiveClient, null);
+
+            cred.pmc().set(pmc);
+            Persistence.service().persist(cred);
+
             Persistence.service().commit();
         } finally {
             Persistence.service().endTransaction();
         }
-
-        EntityQueryCriteria<Pmc> criteria = EntityQueryCriteria.create(Pmc.class);
-        criteria.or(PropertyCriterion.eq(criteria.proto().dnsName(), editableEntity.dnsName().getValue()),
-                PropertyCriterion.eq(criteria.proto().namespace(), editableEntity.namespace().getValue()));
-        Pmc pmc = Persistence.service().retrieve(criteria);
-
-        OnboardingUserCredential cred = OnboardingUserPreloader.createOnboardingUser(null, editableEntity.email().getValue(), editableEntity.password()
-                .getValue(), VistaOnboardingBehavior.ProspectiveClient, null);
-
-        cred.pmc().set(pmc);
-        Persistence.service().persist(cred);
     }
 
     @Override
