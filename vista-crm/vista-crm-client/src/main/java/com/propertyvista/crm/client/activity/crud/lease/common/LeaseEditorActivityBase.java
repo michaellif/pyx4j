@@ -21,7 +21,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.gwt.commons.UnrecoverableClientError;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 import com.pyx4j.site.client.ui.crud.form.IEditorView;
 import com.pyx4j.site.rpc.CrudAppPlace;
@@ -54,7 +54,7 @@ public abstract class LeaseEditorActivityBase<DTO extends LeaseDTO> extends Edit
 
     @Override
     public void setSelectedUnit(AptUnit selected) {
-        ((LeaseCrudServiceBase<DTO>) getService()).setSelectededUnit(new AsyncCallback<AptUnit>() {
+        ((LeaseCrudServiceBase<DTO>) getService()).setSelectededUnit(new DefaultAsyncCallback<AptUnit>() {
 
             @Override
             public void onSuccess(AptUnit unit) {
@@ -66,17 +66,12 @@ public abstract class LeaseEditorActivityBase<DTO extends LeaseDTO> extends Edit
                 clearServiceAgreement(currentValue, true);
                 fillserviceItems(currentValue);
 
-                getView().populate(currentValue);
+                populateView(currentValue);
 
                 // if there is only one service for the selected unit - pre-set it:
                 if (currentValue.selectedServiceItems().size() == 1) {
                     setSelectedService(currentValue.selectedServiceItems().get(0));
                 }
-            }
-
-            @Override
-            public void onFailure(Throwable caught) {
-                throw new UnrecoverableClientError(caught);
             }
         }, selected.getPrimaryKey());
     }
@@ -97,7 +92,7 @@ public abstract class LeaseEditorActivityBase<DTO extends LeaseDTO> extends Edit
                 currentValue.version().leaseProducts().featureItems().add(createBillableItem(item));
             }
 
-            getView().populate(currentValue);
+            populateView(currentValue);
         }
     }
 

@@ -36,7 +36,7 @@ public class PaymentViewerActivity extends CrmViewerActivity<PaymentRecordDTO> i
         ((PaymentCrudService) service).processPayment(new DefaultAsyncCallback<PaymentRecordDTO>() {
             @Override
             public void onSuccess(PaymentRecordDTO result) {
-                view.populate(result);
+                populateView(result);
             }
         }, entityId);
     }
@@ -46,7 +46,7 @@ public class PaymentViewerActivity extends CrmViewerActivity<PaymentRecordDTO> i
         ((PaymentCrudService) service).clearPayment(new DefaultAsyncCallback<PaymentRecordDTO>() {
             @Override
             public void onSuccess(PaymentRecordDTO result) {
-                view.populate(result);
+                populateView(result);
             }
         }, entityId);
     }
@@ -56,7 +56,7 @@ public class PaymentViewerActivity extends CrmViewerActivity<PaymentRecordDTO> i
         ((PaymentCrudService) service).rejectPayment(new DefaultAsyncCallback<PaymentRecordDTO>() {
             @Override
             public void onSuccess(PaymentRecordDTO result) {
-                view.populate(result);
+                populateView(result);
             }
         }, entityId);
     }
@@ -66,7 +66,7 @@ public class PaymentViewerActivity extends CrmViewerActivity<PaymentRecordDTO> i
         ((PaymentCrudService) service).cancelPayment(new DefaultAsyncCallback<PaymentRecordDTO>() {
             @Override
             public void onSuccess(PaymentRecordDTO result) {
-                view.populate(result);
+                populateView(result);
             }
         }, entityId);
     }

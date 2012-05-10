@@ -16,7 +16,6 @@ package com.propertyvista.admin.client.activity.crud.pmc;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
@@ -49,17 +48,11 @@ public class PmcViewerActivity extends AdminViewerActivity<PmcDTO> implements Pm
 
     @Override
     public void activate() {
-        ((PmcCrudService) service).activate(new AsyncCallback<PmcDTO>() {
+        ((PmcCrudService) service).activate(new DefaultAsyncCallback<PmcDTO>() {
 
             @Override
             public void onSuccess(PmcDTO result) {
-                onPopulateSuccess(result);
-            }
-
-            @Override
-            public void onFailure(Throwable caught) {
-                Window.alert("Activaet failed");
-
+                populateView(result);
             }
         }, entityId);
 
@@ -67,17 +60,11 @@ public class PmcViewerActivity extends AdminViewerActivity<PmcDTO> implements Pm
 
     @Override
     public void suspend() {
-        ((PmcCrudService) service).suspend(new AsyncCallback<PmcDTO>() {
+        ((PmcCrudService) service).suspend(new DefaultAsyncCallback<PmcDTO>() {
 
             @Override
             public void onSuccess(PmcDTO result) {
-                onPopulateSuccess(result);
-            }
-
-            @Override
-            public void onFailure(Throwable caught) {
-                Window.alert("Suspend failed");
-
+                populateView(result);
             }
         }, entityId);
     }

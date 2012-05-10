@@ -19,7 +19,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.gwt.commons.UnrecoverableClientError;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
@@ -39,8 +39,7 @@ public class LeadEditorActivity extends EditorActivityBase<Lead> implements Lead
 
     @Override
     public void setSelectedFloorplan(Floorplan selected) {
-        ((LeadCrudService) getService()).setSelectedFloorplan(new AsyncCallback<Floorplan>() {
-
+        ((LeadCrudService) getService()).setSelectedFloorplan(new DefaultAsyncCallback<Floorplan>() {
             @Override
             public void onSuccess(Floorplan item) {
                 Lead currentValue = getView().getValue().duplicate();
@@ -48,12 +47,7 @@ public class LeadEditorActivity extends EditorActivityBase<Lead> implements Lead
                 currentValue.building().set(item.building());
                 currentValue.floorplan().set(item);
 
-                getView().populate(currentValue);
-            }
-
-            @Override
-            public void onFailure(Throwable caught) {
-                throw new UnrecoverableClientError(caught);
+                populateView(currentValue);
             }
         }, selected.getPrimaryKey());
     }

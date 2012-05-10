@@ -35,11 +35,6 @@ public class ShowingEditorActivity extends EditorActivityBase<Showing> implement
     }
 
     @Override
-    public void onPopulateSuccess(Showing result) {
-        super.onPopulateSuccess(result);
-    }
-
-    @Override
     public void setSelectedUnit(AptUnit selected) {
         ((ShowingCrudService) getService()).updateValue(new AsyncCallback<AptUnit>() {
 
@@ -50,7 +45,7 @@ public class ShowingEditorActivity extends EditorActivityBase<Showing> implement
                 current.unit().set(result);
                 current.building().set(result.belongsTo());
 
-                getView().populate(current);
+                populateView(current);
             }
 
             @Override
