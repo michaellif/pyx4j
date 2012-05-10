@@ -249,5 +249,9 @@
 	border:1px solid ${contrast2_100};
 }
 
-
-
+.wideGadgetBox {
+	padding: 20px 10px;
+}
+.narrowGadgetBox {
+	padding: 20px 30px;
+}

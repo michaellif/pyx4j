@@ -44,7 +44,7 @@ public class HomePageGadgetCrudServiceImpl extends AbstractCrudServiceImpl<HomeP
 
     @Override
     protected void persist(HomePageGadget entity, HomePageGadget dto) {
-        if (dto.getPrimaryKey() == null) {
+        if (entity.getPrimaryKey() == null) {
             EntityQueryCriteria<SiteDescriptor> criteria = EntityQueryCriteria.create(SiteDescriptor.class);
             SiteDescriptor site = Persistence.service().retrieve(criteria);
             // update corresponding gadget list

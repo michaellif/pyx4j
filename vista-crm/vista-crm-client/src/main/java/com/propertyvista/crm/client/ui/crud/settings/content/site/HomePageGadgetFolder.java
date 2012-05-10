@@ -78,21 +78,18 @@ public class HomePageGadgetFolder extends VistaTableFolder<HomePageGadget> {
 
         @Override
         protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
-            if (column.getObject().equals(proto().name())) {
-                CComponent<?, ?> comp = null;
-                if (isEditable()) {
-                    comp = inject(column.getObject(), new CLabel());
-                } else {
-                    comp = inject(column.getObject(), new CHyperlink(new Command() {
-                        @Override
-                        public void execute() {
-                            AppSite.getPlaceController().goTo(AppPlaceEntityMapper.resolvePlace(HomePageGadget.class, getValue().getPrimaryKey()));
-                        }
-                    }));
-                }
-                return comp;
+            CComponent<?, ?> comp = null;
+            if (!isEditable() && column.getObject().equals(proto().name())) {
+                comp = inject(column.getObject(), new CHyperlink(new Command() {
+                    @Override
+                    public void execute() {
+                        AppSite.getPlaceController().goTo(AppPlaceEntityMapper.resolvePlace(HomePageGadget.class, getValue().getPrimaryKey()));
+                    }
+                }));
+            } else {
+                comp = inject(column.getObject(), new CLabel());
             }
-            return super.createCell(column);
+            return comp;
         }
     }
 }

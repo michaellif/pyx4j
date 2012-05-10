@@ -228,3 +228,10 @@
 	font-size:16px;
 	padding-left:10px;
 }
+
+.wideGadgetBox {
+	padding: 20px 10px;
+}
+.narrowGadgetBox {
+	padding: 20px 30px;
+}

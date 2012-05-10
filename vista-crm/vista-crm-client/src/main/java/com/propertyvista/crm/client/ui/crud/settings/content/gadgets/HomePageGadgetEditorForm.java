@@ -66,6 +66,7 @@ public class HomePageGadgetEditorForm extends CrmEntityForm<HomePageGadget> {
         main.setH1(row++, 0, 1, i18n.tr("General"));
         main.setWidget(row++, 0, new DecoratorBuilder(inject(proto().name()), 10).build());
         main.setWidget(row++, 0, new DecoratorBuilder(inject(proto().area()), 10).build());
+        main.setWidget(row++, 0, new DecoratorBuilder(inject(proto().status()), 10).build());
         main.setWidget(row++, 0, mainPanel);
 
         mainPanel.setSize("100%", "100%");
