@@ -32,11 +32,6 @@ public class ViewerViewImplBase<E extends IEntity> extends FormViewImplBase<E> i
     }
 
     @Override
-    public void reset() {
-        super.reset();
-    }
-
-    @Override
     public void setPresenter(IViewerView.Presenter presenter) {
         this.presenter = presenter;
     }

@@ -50,12 +50,6 @@ public class EditorViewImplBase<E extends IEntity> extends FormViewImplBase<E> i
     }
 
     @Override
-    public void reset() {
-        super.reset();
-        setPresenter(null);
-    }
-
-    @Override
     public boolean onSaveFail(Throwable caught) {
         return false;
     }
