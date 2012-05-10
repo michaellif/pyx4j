@@ -156,7 +156,8 @@ public class PortalTheme extends VistaTheme {
         initPropertyMarkerStyle();
 
         if (VistaTODO.enableWelcomeWizardDemoMode) {
-            initElevatorScheduleTheme();
+            initDisclosurePanelStyles();
+            initVariousDemoStuff();
         }
     }
 
@@ -253,4 +254,62 @@ public class PortalTheme extends VistaTheme {
             // TODO 
         }
     }
+
+    private void initDisclosurePanelStyles() {
+        if (VistaTODO.enableWelcomeWizardDemoMode) {
+            {
+                Style style = new Style(".gwt-DisclosurePanel");
+//                style.addProperty("border-style", "outset");
+//                style.addProperty("border-width", "1px");
+//                style.addProperty("border-radius", "10px");
+                style.addProperty("padding-left", "1em");
+                style.addProperty("padding-right", "1em");
+                style.addProperty("padding-top", "5px");
+                style.addProperty("margin-bottom", "5px");
+                style.addProperty("margin-left", "10px");
+                style.addProperty("margin-right", "10px");
+                style.addProperty("background", ThemeColors.background);
+                addStyle(style);
+            }
+            {
+                Style style = new Style(".gwt-DisclosurePanel .header");
+                style.addProperty("color", ThemeColors.object1);
+                style.addProperty("font-size", "18px");
+                style.addProperty("font-weight", "bold");
+                style.addProperty("font-style", "normal");
+                style.addProperty("background", ThemeColors.background);
+                style.addProperty("text-decoration", "none");
+                addStyle(style);
+            }
+
+        }
+    }
+
+    private void initVariousDemoStuff() {
+        if (VistaTODO.enableWelcomeWizardDemoMode) {
+            {
+                Style style = new Style(".myInsuranceMustObtainInsuranceMessageHeader");
+                style.addProperty("Color", "#AA0000");
+                style.addProperty("text-align", "center");
+                style.addProperty("font-size", "16px");
+                style.addProperty("font-weight", "bold");
+                style.addProperty("font-style", "normal");
+                style.addProperty("padding-top", "0.5em");
+                addStyle(style);
+            }
+            {
+                Style style = new Style(".myInsuranceMustObtainInsuranceMessageBody");
+                style.addProperty("text-align", "justify");
+                style.addProperty("font-size", "14px");
+                style.addProperty("font-weight", "normal");
+                style.addProperty("font-style", "normal");
+                style.addProperty("padding-left", "0em");
+                style.addProperty("padding-right", "2em");
+                style.addProperty("padding-top", "0.5em");
+                style.addProperty("padding-bottom", "2em");
+                addStyle(style);
+            }
+        }
+    }
+
 }

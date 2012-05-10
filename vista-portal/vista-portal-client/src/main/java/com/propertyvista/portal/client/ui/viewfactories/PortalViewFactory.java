@@ -23,6 +23,7 @@ import com.propertyvista.common.client.ui.components.security.PasswordChangeView
 import com.propertyvista.common.client.ui.components.security.PasswordChangeViewImpl;
 import com.propertyvista.common.client.ui.components.security.PasswordResetView;
 import com.propertyvista.common.client.ui.components.security.PasswordResetViewImpl;
+import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.portal.client.ui.CaptionView;
 import com.propertyvista.portal.client.ui.CaptionViewImpl;
 import com.propertyvista.portal.client.ui.LeaseContextSelectionView;
@@ -49,6 +50,8 @@ import com.propertyvista.portal.client.ui.residents.PaymentMethodsView;
 import com.propertyvista.portal.client.ui.residents.PaymentMethodsViewImpl;
 import com.propertyvista.portal.client.ui.residents.PersonalInfoView;
 import com.propertyvista.portal.client.ui.residents.PersonalInfoViewImpl;
+import com.propertyvista.portal.client.ui.residents.insurancemockup.InsuranceView;
+import com.propertyvista.portal.client.ui.residents.insurancemockup.InsuranceViewImpl;
 
 public class PortalViewFactory extends ViewFactoryBase {
 
@@ -88,6 +91,8 @@ public class PortalViewFactory extends ViewFactoryBase {
                 map.put(type, new PasswordChangeViewImpl());
             } else if (LeaseContextSelectionView.class.equals(type)) {
                 map.put(type, new LeaseContextSelectionViewImpl());
+            } else if (VistaTODO.enableWelcomeWizardDemoMode & InsuranceView.class.equals(type)) {
+                map.put(type, new InsuranceViewImpl());
             }
         }
 

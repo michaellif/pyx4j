@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.portal.ptapp.client.ui.steps.welcomewizard.insurance;
+package com.propertyvista.portal.client.ui.residents.insurancemockup.forms;
 
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -32,8 +32,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
-import com.propertyvista.portal.ptapp.client.resources.welcomewizard.WelcomeWizardImages;
-import com.propertyvista.portal.ptapp.client.resources.welcomewizard.WelcomeWizardResources;
+import com.propertyvista.portal.client.ui.residents.insurancemockup.resources.InsuranceMockupResources;
 import com.propertyvista.portal.rpc.ptapp.dto.welcomewizard.InsuranceDTO;
 
 public class InsuranceForm extends CEntityDecoratableForm<InsuranceDTO> {
@@ -60,14 +59,14 @@ public class InsuranceForm extends CEntityDecoratableForm<InsuranceDTO> {
 
     @Override
     public IsWidget createContent() {
-        FormFlexPanel content = new FormFlexPanel();
 
+        FormFlexPanel content = new FormFlexPanel();
         int row = -1;
 
         HorizontalPanel obtainInsuranceMessagePanel = new HorizontalPanel();
         VerticalPanel logoPanel = new VerticalPanel();
-        logoPanel.add(new Image(WelcomeWizardImages.INSTANCE.logoTenantSure()));
-        logoPanel.add(new Image(WelcomeWizardImages.INSTANCE.logoHighcourt()));
+        logoPanel.add(new Image(InsuranceMockupResources.INSTANCE.logoTenantSure()));
+        logoPanel.add(new Image(InsuranceMockupResources.INSTANCE.logoHighcourt()));
         logoPanel.add(new HTML("1-888-123-4567"));
         logoPanel.getElement().getStyle().setPadding(1, Unit.EM);
         logoPanel.getElement().getStyle().setMargin(1, Unit.EM);
@@ -75,13 +74,10 @@ public class InsuranceForm extends CEntityDecoratableForm<InsuranceDTO> {
         obtainInsuranceMessagePanel.setCellWidth(logoPanel, "5em");
         obtainInsuranceMessagePanel.setCellHorizontalAlignment(logoPanel, HasHorizontalAlignment.ALIGN_CENTER);
         obtainInsuranceMessagePanel.setCellVerticalAlignment(logoPanel, HasVerticalAlignment.ALIGN_MIDDLE);
-        HTML insuranceResaonExplanation = new HTML(WelcomeWizardResources.INSTANCE.insuranceReasonExplanation().getText());
-        obtainInsuranceMessagePanel.add(insuranceResaonExplanation);
-        obtainInsuranceMessagePanel.setCellHorizontalAlignment(insuranceResaonExplanation, HasHorizontalAlignment.ALIGN_CENTER);
-        obtainInsuranceMessagePanel.setCellVerticalAlignment(insuranceResaonExplanation, HasVerticalAlignment.ALIGN_MIDDLE);
-
+        obtainInsuranceMessagePanel.add(new HTML(InsuranceMockupResources.INSTANCE.youMustObtainInsuranceMessage().getText()));
         content.setWidget(++row, 0, obtainInsuranceMessagePanel);
 
+        content.getRowFormatter().getElement(row).getStyle().setPaddingBottom(10, Unit.PX);
         content.setWidget(++row, 0, inject(proto().purchaseInsurance(), new InsurancePurchaseEditorForm(new Command() {
 
             @Override
@@ -102,8 +98,6 @@ public class InsuranceForm extends CEntityDecoratableForm<InsuranceDTO> {
 
                 InsurancePurchaseEditorForm purchaseInsuraceForm = (InsurancePurchaseEditorForm) get(proto().purchaseInsurance());
                 purchaseInsuraceForm.setVisible(!alreadyHasInsurance);
-
-//                purchaseInsuraceForm.setQuoteTotalPanelVisibility(!alreadyHasInsurance);
 
                 InsuranceAlreadyAvailabileEditorForm alreadyHasInsuranceForm = (InsuranceAlreadyAvailabileEditorForm) get(proto().existingInsurance());
                 alreadyHasInsuranceForm.setVisible(alreadyHasInsurance);

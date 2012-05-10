@@ -90,6 +90,11 @@ public class PortalSiteMap implements SiteMap {
         public static class CurrentBill extends AppPlace {
         }
 
+        @PlaceProperties(caption = "My Insurance")
+        @NavigationItem(navigLabel = "My Insurance")
+        public static class Insurance extends AppPlace {
+
+        }
     }
 
 }

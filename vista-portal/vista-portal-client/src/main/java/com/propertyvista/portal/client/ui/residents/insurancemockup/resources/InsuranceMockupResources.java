@@ -7,32 +7,32 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on May 7, 2012
+ * Created on May 10, 2012
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.portal.ptapp.client.resources.welcomewizard;
+package com.propertyvista.portal.client.ui.residents.insurancemockup.resources;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.resources.client.ClientBundle;
+import com.google.gwt.resources.client.ClientBundleWithLookup;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.resources.client.ImageResource.ImageOptions;
 import com.google.gwt.resources.client.ImageResource.RepeatStyle;
+import com.google.gwt.resources.client.TextResource;
 
-public interface WelcomeWizardImages extends ClientBundle {
+public interface InsuranceMockupResources extends ClientBundleWithLookup {
 
-    public static final WelcomeWizardImages INSTANCE = GWT.create(WelcomeWizardImages.class);
+    public static InsuranceMockupResources INSTANCE = GWT.create(InsuranceMockupResources.class);
 
-    @ImageOptions(repeatStyle = RepeatStyle.Both)
-    @Source("clipboard-with-checkbox.png")
-    ImageResource clipboardWithCheckbox();
+    @Source("you-must-obtain-insurance-message.html")
+    TextResource youMustObtainInsuranceMessage();
 
     @ImageOptions(repeatStyle = RepeatStyle.Both)
     @Source("logo-TenantSure-transparent-small.png")
     ImageResource logoTenantSure();
 
-    @ImageOptions(repeatStyle = RepeatStyle.Both, width = 101)
-    @Source("logo-Highcourt.png")
+    @ImageOptions(repeatStyle = RepeatStyle.Both)
+    @Source("logo-Highcourt-small.png")
     ImageResource logoHighcourt();
 
 }

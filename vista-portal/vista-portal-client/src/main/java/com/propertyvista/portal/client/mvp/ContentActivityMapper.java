@@ -21,6 +21,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.site.client.activity.AppActivityMapper;
 
+import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.portal.client.activity.BillingHistoryActivity;
 import com.propertyvista.portal.client.activity.CurrentBillActivity;
 import com.propertyvista.portal.client.activity.DashboardActivity;
@@ -31,6 +32,7 @@ import com.propertyvista.portal.client.activity.NewPaymentMethodActivity;
 import com.propertyvista.portal.client.activity.PaymentMethodsActivity;
 import com.propertyvista.portal.client.activity.PersonalInfoActivity;
 import com.propertyvista.portal.client.activity.PotentialTenantActivity;
+import com.propertyvista.portal.client.activity.insurancemockup.InsuranceActivity;
 import com.propertyvista.portal.client.activity.login.LeaseContextSelectionActivity;
 import com.propertyvista.portal.client.activity.login.LoginWithTokenActivity;
 import com.propertyvista.portal.client.activity.login.PasswordResetRequestActivity;
@@ -75,6 +77,8 @@ public class ContentActivityMapper implements AppActivityMapper {
                     activity = new CurrentBillActivity(place);
                 } else if (place instanceof Residents.PaymentMethods.EditPaymentMethod) {
                     activity = new EditPaymentMethodActivity(place);
+                } else if (VistaTODO.enableWelcomeWizardDemoMode & (place instanceof PortalSiteMap.Residents.Insurance)) {
+                    activity = new InsuranceActivity();
 
                     // TODO not sure if these activities belong here 
                 } else if (place instanceof PortalSiteMap.Login) {
