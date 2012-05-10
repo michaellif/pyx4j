@@ -34,7 +34,6 @@ import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
 import com.propertyvista.domain.payment.PaymentMethod;
-import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -111,7 +110,7 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
         dto.paymentSelect().setValue(PaymentSelect.New);
         dto.receivedDate().setValue(new LogicalDate());
 
-        dto.paymentMethod().type().setValue(PaymentType.Echeck);
+//        dto.paymentMethod().type().setValue(PaymentType.Echeck);
 
         callback.onSuccess(dto);
     }

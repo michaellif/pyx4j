@@ -101,7 +101,6 @@ public class PaymentMethodEditor extends CEntityDecoratableForm<PaymentMethod> {
             }
         });
 
-        main.setWidth("100%");
         return main;
     }
 
