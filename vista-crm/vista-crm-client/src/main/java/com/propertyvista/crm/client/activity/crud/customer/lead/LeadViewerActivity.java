@@ -47,14 +47,14 @@ public class LeadViewerActivity extends CrmViewerActivity<Lead> implements LeadV
     public LeadViewerActivity(Place place) {
         super(place, MarketingViewFactory.instance(LeadViewerView.class), (AbstractCrudService<Lead>) GWT.create(LeadCrudService.class));
 
-        appointmentsLister = new ListerActivityBase<Appointment>(place, ((LeadViewerView) view).getAppointmentsListerView(),
+        appointmentsLister = new ListerActivityBase<Appointment>(place, ((LeadViewerView) getView()).getAppointmentsListerView(),
                 (AbstractCrudService<Appointment>) GWT.create(AppointmentCrudService.class), Appointment.class);
 
     }
 
     @Override
     public void getInterestedUnits(final AsyncCallback<List<AptUnit>> callback) {
-        ((LeadCrudService) service).getInterestedUnits(new DefaultAsyncCallback<Vector<AptUnit>>() {
+        ((LeadCrudService) getService()).getInterestedUnits(new DefaultAsyncCallback<Vector<AptUnit>>() {
             @Override
             public void onSuccess(Vector<AptUnit> result) {
                 callback.onSuccess(result);
@@ -64,7 +64,7 @@ public class LeadViewerActivity extends CrmViewerActivity<Lead> implements LeadV
 
     @Override
     public void convertToLease(Key unitId) {
-        ((LeadCrudService) service).convertToLease(new AsyncCallback<VoidSerializable>() {
+        ((LeadCrudService) getService()).convertToLease(new AsyncCallback<VoidSerializable>() {
             @Override
             public void onSuccess(VoidSerializable result) {
                 onLeaseConvertionSuccess();
@@ -78,11 +78,11 @@ public class LeadViewerActivity extends CrmViewerActivity<Lead> implements LeadV
     }
 
     public void onLeaseConvertionSuccess() {
-        ((LeadViewerView) view).onLeaseConvertionSuccess();
+        ((LeadViewerView) getView()).onLeaseConvertionSuccess();
     }
 
     protected void onConvertionFail(Throwable caught) {
-        if (!((LeadViewerView) view).onConvertionFail(caught)) {
+        if (!((LeadViewerView) getView()).onConvertionFail(caught)) {
             throw new UnrecoverableClientError(caught);
         }
     }
@@ -108,7 +108,7 @@ public class LeadViewerActivity extends CrmViewerActivity<Lead> implements LeadV
 
     @Override
     public void close() {
-        ((LeadCrudService) service).close(new DefaultAsyncCallback<VoidSerializable>() {
+        ((LeadCrudService) getService()).close(new DefaultAsyncCallback<VoidSerializable>() {
             @Override
             public void onSuccess(VoidSerializable result) {
                 populate();

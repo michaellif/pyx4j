@@ -37,7 +37,7 @@ public abstract class LeaseViewerActivityBase<DTO extends LeaseDTO> extends CrmV
 
     @Override
     public void retrieveUsers(final AsyncCallback<List<LeaseParticipant>> callback) {
-        ((LeaseCrudServiceBase<DTO>) service).retrieveUsers(new DefaultAsyncCallback<Vector<LeaseParticipant>>() {
+        ((LeaseCrudServiceBase<DTO>) getService()).retrieveUsers(new DefaultAsyncCallback<Vector<LeaseParticipant>>() {
             @Override
             public void onSuccess(Vector<LeaseParticipant> result) {
                 callback.onSuccess(result);

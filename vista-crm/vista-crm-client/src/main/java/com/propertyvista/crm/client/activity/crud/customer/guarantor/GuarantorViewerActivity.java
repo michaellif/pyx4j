@@ -43,7 +43,7 @@ public class GuarantorViewerActivity extends CrmViewerActivity<GuarantorDTO> imp
     public GuarantorViewerActivity(Place place) {
         super(place, CustomerViewFactory.instance(GuarantorViewerView.class), (AbstractCrudService<GuarantorDTO>) GWT.create(GuarantorCrudService.class));
 
-        screeningLister = new ListerActivityBase<PersonScreening>(place, ((GuarantorViewerView) view).getScreeningListerView(),
+        screeningLister = new ListerActivityBase<PersonScreening>(place, ((GuarantorViewerView) getView()).getScreeningListerView(),
                 (AbstractCrudService<PersonScreening>) GWT.create(PersonScreeningCrudService.class), PersonScreening.class);
     }
 

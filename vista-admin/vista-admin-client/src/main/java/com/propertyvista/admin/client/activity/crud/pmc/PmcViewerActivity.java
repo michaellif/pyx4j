@@ -37,7 +37,7 @@ public class PmcViewerActivity extends AdminViewerActivity<PmcDTO> implements Pm
 
     @Override
     public void resetCache() {
-        ((PmcCrudService) service).resetCache(new DefaultAsyncCallback<VoidSerializable>() {
+        ((PmcCrudService) getService()).resetCache(new DefaultAsyncCallback<VoidSerializable>() {
             @Override
             public void onSuccess(VoidSerializable result) {
                 Window.alert("The cache was reset successfully");
@@ -48,7 +48,7 @@ public class PmcViewerActivity extends AdminViewerActivity<PmcDTO> implements Pm
 
     @Override
     public void activate() {
-        ((PmcCrudService) service).activate(new DefaultAsyncCallback<PmcDTO>() {
+        ((PmcCrudService) getService()).activate(new DefaultAsyncCallback<PmcDTO>() {
 
             @Override
             public void onSuccess(PmcDTO result) {
@@ -60,7 +60,7 @@ public class PmcViewerActivity extends AdminViewerActivity<PmcDTO> implements Pm
 
     @Override
     public void suspend() {
-        ((PmcCrudService) service).suspend(new DefaultAsyncCallback<PmcDTO>() {
+        ((PmcCrudService) getService()).suspend(new DefaultAsyncCallback<PmcDTO>() {
 
             @Override
             public void onSuccess(PmcDTO result) {

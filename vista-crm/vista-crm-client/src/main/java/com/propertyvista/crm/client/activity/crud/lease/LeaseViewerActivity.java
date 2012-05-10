@@ -65,13 +65,13 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
     public LeaseViewerActivity(CrudAppPlace place) {
         super(place, LeaseViewFactory.instance(LeaseViewerView.class), (AbstractCrudService<LeaseDTO>) GWT.create(LeaseCrudService.class));
 
-        billLister = new ListerActivityBase<BillDTO>(place, ((LeaseViewerView) view).getBillListerView(),
+        billLister = new ListerActivityBase<BillDTO>(place, ((LeaseViewerView) getView()).getBillListerView(),
                 (AbstractCrudService<BillDTO>) GWT.create(BillCrudService.class), BillDTO.class);
 
-        paymentLister = new ListerActivityBase<PaymentRecordDTO>(place, ((LeaseViewerView) view).getPaymentListerView(),
+        paymentLister = new ListerActivityBase<PaymentRecordDTO>(place, ((LeaseViewerView) getView()).getPaymentListerView(),
                 (AbstractCrudService<PaymentRecordDTO>) GWT.create(PaymentCrudService.class), PaymentRecordDTO.class);
 
-        leaseAdjustmentLister = new ListerActivityBase<LeaseAdjustment>(place, ((LeaseViewerView) view).getLeaseAdjustmentListerView(),
+        leaseAdjustmentLister = new ListerActivityBase<LeaseAdjustment>(place, ((LeaseViewerView) getView()).getLeaseAdjustmentListerView(),
                 (AbstractCrudService<LeaseAdjustment>) GWT.create(LeaseAdjustmentCrudService.class), LeaseAdjustment.class);
     }
 
@@ -150,7 +150,7 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
 
     @Override
     public void notice(LogicalDate date, LogicalDate moveOut) {
-        ((LeaseCrudService) service).notice(new DefaultAsyncCallback<VoidSerializable>() {
+        ((LeaseCrudService) getService()).notice(new DefaultAsyncCallback<VoidSerializable>() {
             @Override
             public void onSuccess(VoidSerializable result) {
                 populate();
@@ -160,7 +160,7 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
 
     @Override
     public void cancelNotice() {
-        ((LeaseCrudService) service).cancelNotice(new DefaultAsyncCallback<VoidSerializable>() {
+        ((LeaseCrudService) getService()).cancelNotice(new DefaultAsyncCallback<VoidSerializable>() {
             @Override
             public void onSuccess(VoidSerializable result) {
                 populate();
@@ -170,7 +170,7 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
 
     @Override
     public void evict(LogicalDate date, LogicalDate moveOut) {
-        ((LeaseCrudService) service).evict(new DefaultAsyncCallback<VoidSerializable>() {
+        ((LeaseCrudService) getService()).evict(new DefaultAsyncCallback<VoidSerializable>() {
             @Override
             public void onSuccess(VoidSerializable result) {
                 populate();
@@ -180,7 +180,7 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
 
     @Override
     public void cancelEvict() {
-        ((LeaseCrudService) service).cancelEvict(new DefaultAsyncCallback<VoidSerializable>() {
+        ((LeaseCrudService) getService()).cancelEvict(new DefaultAsyncCallback<VoidSerializable>() {
             @Override
             public void onSuccess(VoidSerializable result) {
                 populate();
@@ -190,7 +190,7 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
 
     @Override
     public void activate() {
-        ((LeaseCrudService) service).activate(new DefaultAsyncCallback<VoidSerializable>() {
+        ((LeaseCrudService) getService()).activate(new DefaultAsyncCallback<VoidSerializable>() {
             @Override
             public void onSuccess(VoidSerializable result) {
                 entityId = entityId.asCurrentKey();
@@ -201,11 +201,11 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
 
     @Override
     public void sendMail(List<LeaseParticipant> users, EmailTemplateType emailType) {
-        ((LeaseCrudService) service).sendMail(new DefaultAsyncCallback<String>() {
+        ((LeaseCrudService) getService()).sendMail(new DefaultAsyncCallback<String>() {
             @Override
             public void onSuccess(String message) {
                 populate();
-                ((LeaseViewerView) view).reportSendMailActionResult(message);
+                ((LeaseViewerView) getView()).reportSendMailActionResult(message);
             }
         }, entityId, new Vector<LeaseParticipant>(users), emailType);
     }

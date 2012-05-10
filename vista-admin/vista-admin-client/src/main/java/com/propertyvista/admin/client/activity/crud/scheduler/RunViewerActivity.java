@@ -49,7 +49,7 @@ public class RunViewerActivity extends AdminViewerActivity<Run> implements RunVi
     public RunViewerActivity(Place place) {
         super(place, ManagementVeiwFactory.instance(RunViewerView.class), (AbstractCrudService<Run>) GWT.create(RunCrudService.class));
 
-        runDataLister = new ListerActivityBase<RunData>(place, ((RunViewerView) view).getRunDataListerView(),
+        runDataLister = new ListerActivityBase<RunData>(place, ((RunViewerView) getView()).getRunDataListerView(),
                 (AbstractCrudService<RunData>) GWT.create(RunDataCrudService.class), RunData.class);
 
         runCrudService = GWT.create(RunCrudService.class);
@@ -84,7 +84,7 @@ public class RunViewerActivity extends AdminViewerActivity<Run> implements RunVi
     }
 
     private void updateState(ExecutionStatusUpdateDTO result) {
-        ((RunViewerView) view).populateExecutionState(result);
+        ((RunViewerView) getView()).populateExecutionState(result);
         updateState(result.status().getValue());
     }
 

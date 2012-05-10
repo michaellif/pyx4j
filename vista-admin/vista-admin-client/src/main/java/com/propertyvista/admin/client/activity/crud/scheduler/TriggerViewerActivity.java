@@ -41,7 +41,7 @@ public class TriggerViewerActivity extends AdminViewerActivity<Trigger> implemen
     public TriggerViewerActivity(Place place) {
         super(place, ManagementVeiwFactory.instance(TriggerViewerView.class), (AbstractCrudService<Trigger>) GWT.create(TriggerCrudService.class));
 
-        runLister = new ListerActivityBase<Run>(place, ((TriggerViewerView) view).getRunListerView(),
+        runLister = new ListerActivityBase<Run>(place, ((TriggerViewerView) getView()).getRunListerView(),
                 (AbstractCrudService<Run>) GWT.create(RunCrudService.class), Run.class);
     }
 

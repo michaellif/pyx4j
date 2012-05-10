@@ -37,7 +37,7 @@ public class MaintenanceViewerActivity extends AdminViewerActivity<SystemMainten
 
     @Override
     public void resetGlobalCache() {
-        ((MaintenanceCrudService) service).resetGlobalCache(new DefaultAsyncCallback<VoidSerializable>() {
+        ((MaintenanceCrudService) getService()).resetGlobalCache(new DefaultAsyncCallback<VoidSerializable>() {
             @Override
             public void onSuccess(VoidSerializable result) {
                 Window.alert(i18n.tr("The global cache was reset successfully"));

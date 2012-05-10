@@ -33,7 +33,7 @@ public class PaymentViewerActivity extends CrmViewerActivity<PaymentRecordDTO> i
 
     @Override
     public void processPayment() {
-        ((PaymentCrudService) service).processPayment(new DefaultAsyncCallback<PaymentRecordDTO>() {
+        ((PaymentCrudService) getService()).processPayment(new DefaultAsyncCallback<PaymentRecordDTO>() {
             @Override
             public void onSuccess(PaymentRecordDTO result) {
                 populateView(result);
@@ -43,7 +43,7 @@ public class PaymentViewerActivity extends CrmViewerActivity<PaymentRecordDTO> i
 
     @Override
     public void clearPayment() {
-        ((PaymentCrudService) service).clearPayment(new DefaultAsyncCallback<PaymentRecordDTO>() {
+        ((PaymentCrudService) getService()).clearPayment(new DefaultAsyncCallback<PaymentRecordDTO>() {
             @Override
             public void onSuccess(PaymentRecordDTO result) {
                 populateView(result);
@@ -53,7 +53,7 @@ public class PaymentViewerActivity extends CrmViewerActivity<PaymentRecordDTO> i
 
     @Override
     public void rejectPayment() {
-        ((PaymentCrudService) service).rejectPayment(new DefaultAsyncCallback<PaymentRecordDTO>() {
+        ((PaymentCrudService) getService()).rejectPayment(new DefaultAsyncCallback<PaymentRecordDTO>() {
             @Override
             public void onSuccess(PaymentRecordDTO result) {
                 populateView(result);
@@ -63,7 +63,7 @@ public class PaymentViewerActivity extends CrmViewerActivity<PaymentRecordDTO> i
 
     @Override
     public void cancelPayment() {
-        ((PaymentCrudService) service).cancelPayment(new DefaultAsyncCallback<PaymentRecordDTO>() {
+        ((PaymentCrudService) getService()).cancelPayment(new DefaultAsyncCallback<PaymentRecordDTO>() {
             @Override
             public void onSuccess(PaymentRecordDTO result) {
                 populateView(result);

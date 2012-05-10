@@ -45,7 +45,7 @@ public class TenantViewerActivity extends CrmViewerActivity<TenantDTO> implement
     public TenantViewerActivity(Place place) {
         super(place, CustomerViewFactory.instance(TenantViewerView.class), (AbstractCrudService<TenantDTO>) GWT.create(TenantCrudService.class));
 
-        screeningLister = new ListerActivityBase<PersonScreening>(place, ((TenantViewerView) view).getScreeningListerView(),
+        screeningLister = new ListerActivityBase<PersonScreening>(place, ((TenantViewerView) getView()).getScreeningListerView(),
                 (AbstractCrudService<PersonScreening>) GWT.create(PersonScreeningCrudService.class), PersonScreening.class);
     }
 

@@ -39,7 +39,7 @@ public class BillViewerActivity extends CrmViewerActivity<BillDTO> implements Bi
 
     @Override
     public void confirm() {
-        ((BillCrudService) service).confirm(new DefaultAsyncCallback<BillDTO>() {
+        ((BillCrudService) getService()).confirm(new DefaultAsyncCallback<BillDTO>() {
             @Override
             public void onSuccess(BillDTO result) {
                 populateView(result);
@@ -49,7 +49,7 @@ public class BillViewerActivity extends CrmViewerActivity<BillDTO> implements Bi
 
     @Override
     public void reject(String reason) {
-        ((BillCrudService) service).reject(new DefaultAsyncCallback<BillDTO>() {
+        ((BillCrudService) getService()).reject(new DefaultAsyncCallback<BillDTO>() {
             @Override
             public void onSuccess(BillDTO result) {
                 populateView(result);

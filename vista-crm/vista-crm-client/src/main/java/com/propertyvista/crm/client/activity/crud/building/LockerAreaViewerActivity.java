@@ -37,7 +37,7 @@ public class LockerAreaViewerActivity extends CrmViewerActivity<LockerAreaDTO> i
     public LockerAreaViewerActivity(Place place) {
         super(place, BuildingViewFactory.instance(LockerAreaViewerView.class), (AbstractCrudService<LockerAreaDTO>) GWT.create(LockerAreaCrudService.class));
 
-        lockerLister = new ListerActivityBase<Locker>(place, ((LockerAreaViewerView) view).getLockerView(),
+        lockerLister = new ListerActivityBase<Locker>(place, ((LockerAreaViewerView) getView()).getLockerView(),
                 (AbstractCrudService<Locker>) GWT.create(LockerCrudService.class), Locker.class);
 
     }

@@ -47,10 +47,10 @@ public class LeaseApplicationViewerActivity extends LeaseViewerActivityBase<Leas
 
     @Override
     public void startOnlineApplication() {
-        ((LeaseApplicationCrudService) service).startOnlineApplication(new DefaultAsyncCallback<VoidSerializable>() {
+        ((LeaseApplicationCrudService) getService()).startOnlineApplication(new DefaultAsyncCallback<VoidSerializable>() {
             @Override
             public void onSuccess(VoidSerializable result) {
-                ((LeaseApplicationViewerView) view).reportStartOnlineApplicationSuccess();
+                ((LeaseApplicationViewerView) getView()).reportStartOnlineApplicationSuccess();
                 populate();
 
             }
@@ -59,18 +59,18 @@ public class LeaseApplicationViewerActivity extends LeaseViewerActivityBase<Leas
 
     @Override
     public void inviteUsers(List<LeaseParticipant> users) {
-        ((LeaseApplicationCrudService) service).inviteUsers(new DefaultAsyncCallback<String>() {
+        ((LeaseApplicationCrudService) getService()).inviteUsers(new DefaultAsyncCallback<String>() {
             @Override
             public void onSuccess(String message) {
                 populate();
-                ((LeaseApplicationViewerView) view).reportInviteUsersActionResult(message);
+                ((LeaseApplicationViewerView) getView()).reportInviteUsersActionResult(message);
             }
         }, entityId, new Vector<LeaseParticipant>(users));
     }
 
     @Override
     public void applicationAction(final LeaseApplicationActionDTO action) {
-        ((LeaseApplicationCrudService) service).applicationAction(new DefaultAsyncCallback<VoidSerializable>() {
+        ((LeaseApplicationCrudService) getService()).applicationAction(new DefaultAsyncCallback<VoidSerializable>() {
             @Override
             public void onSuccess(VoidSerializable result) {
                 if (action.action().getValue() == Action.Approve) {

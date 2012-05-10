@@ -36,11 +36,7 @@ public class ComplexViewerActivity extends CrmViewerActivity<ComplexDTO> impleme
     public ComplexViewerActivity(Place place) {
         super(place, BuildingViewFactory.instance(ComplexViewerView.class), (AbstractCrudService<ComplexDTO>) GWT.create(ComplexCrudService.class));
 
-        dashboardViewActivity = new DashboardViewActivity(getView().getDashboardView());
-    }
-
-    private ComplexViewerView getView() {
-        return (ComplexViewerView) view;
+        dashboardViewActivity = new DashboardViewActivity(((ComplexViewerView) getView()).getDashboardView());
     }
 
     @Override
@@ -52,7 +48,7 @@ public class ComplexViewerActivity extends CrmViewerActivity<ComplexDTO> impleme
     @Override
     protected void onPopulateSuccess(ComplexDTO result) {
         super.onPopulateSuccess(result);
-        getView().getDashboardView().setBuildings(result.buildings(), false);
+        ((ComplexViewerView) getView()).getDashboardView().setBuildings(result.buildings(), false);
         dashboardViewActivity.populate(result.dashboard().getPrimaryKey());
     }
 

@@ -53,10 +53,10 @@ public class UnitViewerActivity extends CrmViewerActivity<AptUnitDTO> implements
     public UnitViewerActivity(Place place) {
         super(place, UnitViewFactory.instance(UnitViewerView.class), (AbstractCrudService<AptUnitDTO>) GWT.create(UnitCrudService.class));
 
-        unitItemsLister = new ListerActivityBase<AptUnitItem>(place, ((UnitViewerView) view).getUnitItemsListerView(),
+        unitItemsLister = new ListerActivityBase<AptUnitItem>(place, ((UnitViewerView) getView()).getUnitItemsListerView(),
                 (AbstractCrudService<AptUnitItem>) GWT.create(UnitItemCrudService.class), AptUnitItem.class);
 
-        OccupanciesLister = new ListerActivityBase<AptUnitOccupancySegment>(place, ((UnitViewerView) view).getOccupanciesListerView(),
+        OccupanciesLister = new ListerActivityBase<AptUnitOccupancySegment>(place, ((UnitViewerView) getView()).getOccupanciesListerView(),
                 (AbstractCrudService<AptUnitOccupancySegment>) GWT.create(UnitOccupancyCrudService.class), AptUnitOccupancySegment.class);
 
         occupancyManagerService = GWT.create(UnitOccupancyManagerService.class);
@@ -87,7 +87,7 @@ public class UnitViewerActivity extends CrmViewerActivity<AptUnitDTO> implements
         OccupanciesLister.setParent(entityId);
         OccupanciesLister.populate();
 
-        final UnitViewerView myView = (UnitViewerView) view;
+        final UnitViewerView myView = (UnitViewerView) getView();
 
         occupancyManagerService.getMakeVacantConstraints(new DefaultAsyncCallback<MakeVacantConstraintsDTO>() {
             @Override
