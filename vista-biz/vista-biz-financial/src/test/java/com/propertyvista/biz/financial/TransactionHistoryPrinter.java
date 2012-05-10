@@ -52,8 +52,8 @@ public class TransactionHistoryPrinter {
             }
 
             out.newLine();
-            out.write(convertToCell("Type", 14, true) + convertToCell("Current", 14, true) + convertToCell("30 Days", 14, true)
-                    + convertToCell("60 Days", 14, true) + convertToCell("90 Days", 14, true));
+            out.write(convertToCell("Type", 14, true) + convertToCell("Current", 14, true) + convertToCell("1-30 Days", 14, true)
+                    + convertToCell("31-60 Days", 14, true) + convertToCell("61-90 Days", 14, true) + convertToCell("Over 90 Days", 14, true));
             out.newLine();
             AgingBuckets totalAgingBuckets = null;
             for (AgingBuckets agingBuckets : transactionHistory.agingBuckets()) {
