@@ -38,9 +38,9 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 
 public class ViewerActivityBase<E extends IEntity> extends AbstractActivity implements IViewerView.Presenter {
 
-    protected final IViewerView<E> view;
+    private final IViewerView<E> view;
 
-    protected final AbstractCrudService<E> service;
+    private final AbstractCrudService<E> service;
 
     protected Key entityId;
 
@@ -77,6 +77,14 @@ public class ViewerActivityBase<E extends IEntity> extends AbstractActivity impl
         }
 
         assert (entityId != null);
+    }
+
+    public IViewerView<E> getView() {
+        return view;
+    }
+
+    public AbstractCrudService<E> getService() {
+        return service;
     }
 
     @Override
