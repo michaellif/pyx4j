@@ -164,18 +164,22 @@ public class PmcProcessDispatcherJob implements Job {
 
         ExecutorService executorService = Executors.newSingleThreadExecutor();
 
-        EntityQueryCriteria<RunData> criteria = EntityQueryCriteria.create(RunData.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().execution(), run));
-        criteria.add(PropertyCriterion.eq(criteria.proto().status(), RunDataStatus.NeverRan));
-        ICursorIterator<RunData> it = Persistence.service().query(null, criteria, AttachLevel.Attached);
-        while (it.hasNext()) {
-            RunData runData = it.next();
-            runData.updated().setValue(new Date());
-            executeOneRunData(executorService, pmcProcess, runData);
-            Persistence.service().persist(runData);
-            Persistence.service().commit();
+        try {
+            EntityQueryCriteria<RunData> criteria = EntityQueryCriteria.create(RunData.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().execution(), run));
+            criteria.add(PropertyCriterion.eq(criteria.proto().status(), RunDataStatus.NeverRan));
+            ICursorIterator<RunData> it = Persistence.service().query(null, criteria, AttachLevel.Attached);
+            while (it.hasNext()) {
+                RunData runData = it.next();
+                runData.updated().setValue(new Date());
+                executeOneRunData(executorService, pmcProcess, runData);
+                Persistence.service().persist(runData);
+                Persistence.service().commit();
+            }
+            run.status().setValue(RunStatus.Completed);
+        } finally {
+            executorService.shutdownNow();
         }
-        run.status().setValue(RunStatus.Completed);
 
     }
 

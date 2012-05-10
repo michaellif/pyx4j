@@ -14,6 +14,7 @@
 package com.propertyvista.biz.policy;
 
 import java.security.InvalidParameterException;
+import java.util.concurrent.Callable;
 
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
@@ -32,6 +33,7 @@ import com.propertyvista.domain.tenant.lead.Lead;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.ptapp.MasterOnlineApplication;
 import com.propertyvista.server.domain.IdAssignmentSequence;
+import com.propertyvista.server.jobs.TaskRunner;
 
 public class IdAssignmentFacadeImpl implements IdAssignmentFacade {
 
@@ -97,7 +99,7 @@ public class IdAssignmentFacadeImpl implements IdAssignmentFacade {
         return targetItem.type().getValue() == IdAssignmentType.generatedNumber || targetItem.type().getValue() == IdAssignmentType.generatedAlphaNumeric;
     }
 
-    private static String getId(IdAssignmentItem.IdTarget target) {
+    private static String getId(final IdAssignmentItem.IdTarget target) {
         IdAssignmentPolicy policy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(EntityFactory.create(OrganizationPoliciesNode.class),
                 IdAssignmentPolicy.class);
 
@@ -118,28 +120,34 @@ public class IdAssignmentFacadeImpl implements IdAssignmentFacade {
             throw new InvalidParameterException("No item for target: " + target.toString());
         }
 
-        EntityQueryCriteria<IdAssignmentSequence> criteria = EntityQueryCriteria.create(IdAssignmentSequence.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().target(), target));
-        IdAssignmentSequence sequence = Persistence.service().retrieve(criteria);
+        Long nextId = TaskRunner.runAutonomousTransation(new Callable<Long>() {
+            @Override
+            public Long call() throws Exception {
+                EntityQueryCriteria<IdAssignmentSequence> criteria = EntityQueryCriteria.create(IdAssignmentSequence.class);
+                criteria.add(PropertyCriterion.eq(criteria.proto().target(), target));
+                IdAssignmentSequence sequence = Persistence.service().retrieve(criteria);
 
-        if (sequence == null) {
-            sequence = EntityFactory.create(IdAssignmentSequence.class);
-            sequence.target().setValue(target);
-            sequence.number().setValue(new Long(0));
-        }
+                if (sequence == null) {
+                    sequence = EntityFactory.create(IdAssignmentSequence.class);
+                    sequence.target().setValue(target);
+                    sequence.number().setValue(0l);
+                }
 
-        long id = sequence.number().getValue() + 1;
-        sequence.number().setValue(id);
-        Persistence.service().persist(sequence);
+                long id = sequence.number().getValue() + 1;
+                sequence.number().setValue(id);
+                Persistence.service().persist(sequence);
+                Persistence.service().commit();
+                return id;
+            }
+        });
 
         String res = "";
 
         if (targetItem.type().getValue() == IdAssignmentType.generatedNumber) {
-            res = new Long(id).toString();
+            res = new Long(nextId).toString();
         } else if (targetItem.type().getValue() == IdAssignmentType.generatedAlphaNumeric) {
             StringBuffer buf = new StringBuffer();
-            generatedAlphabetical(buf, id);
-
+            generatedAlphabetical(buf, nextId);
             res = buf.toString();
         }
 
@@ -159,6 +167,11 @@ public class IdAssignmentFacadeImpl implements IdAssignmentFacade {
         } else {
             res.append(codes[(int) mod - 1]);
         }
+    }
+
+    @Override
+    public String createAccountNumber() {
+        return AccountNumberSequence.getNextSequence();
     }
 
 }

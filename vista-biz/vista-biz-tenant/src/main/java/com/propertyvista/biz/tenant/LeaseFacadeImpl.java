@@ -72,8 +72,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
 
         ServerSideFactory.create(IdAssignmentFacade.class).assignId(lease);
 
-        // TODO use IdAssignmentFacade
-        lease.billingAccount().accountNumber().setValue(String.valueOf(System.currentTimeMillis()));
+        lease.billingAccount().accountNumber().setValue(ServerSideFactory.create(IdAssignmentFacade.class).createAccountNumber());
 
         Persistence.service().merge(lease);
 

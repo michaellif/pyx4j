@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.server.common.util;
+package com.propertyvista.biz.policy;
 
 import java.util.Random;
 

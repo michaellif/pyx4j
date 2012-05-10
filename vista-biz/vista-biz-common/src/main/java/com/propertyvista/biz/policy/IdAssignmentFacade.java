@@ -31,4 +31,6 @@ public interface IdAssignmentFacade {
 
     void assignId(Lease lease);
 
+    String createAccountNumber();
+
 }

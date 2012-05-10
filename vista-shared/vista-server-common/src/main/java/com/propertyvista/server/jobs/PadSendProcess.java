@@ -41,7 +41,7 @@ public class PadSendProcess implements PmcProcess {
         final RunStats stats = PmcProcessContext.getRunStats();
         final String namespace = NamespaceManager.getNamespace();
 
-        Boolean updated = NamespaceUtils.runInAdminNamespace(new Callable<Boolean>() {
+        Boolean updated = TaskRunner.runInAdminNamespace(new Callable<Boolean>() {
             @Override
             public Boolean call() throws Exception {
                 EntityQueryCriteria<PadDebitRecord> criteria = EntityQueryCriteria.create(PadDebitRecord.class);

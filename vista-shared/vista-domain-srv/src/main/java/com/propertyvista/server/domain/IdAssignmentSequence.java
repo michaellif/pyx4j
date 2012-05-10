@@ -28,4 +28,6 @@ public interface IdAssignmentSequence extends IEntity {
 
     IPrimitive<Long> maximum();
 
+    IPrimitive<Long> prefix();
+
 }

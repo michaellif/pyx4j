@@ -17,6 +17,8 @@ import java.math.BigDecimal;
 
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.Indexed;
+import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.OrderBy;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
@@ -50,6 +52,8 @@ public interface BillingAccount extends IEntity {
     @ReadOnly(allowOverrideNull = true)
     BillingCycle billingCycle();
 
+    @Length(14)
+    @Indexed(uniqueConstraint = true)
     IPrimitive<String> accountNumber();
 
     /**
