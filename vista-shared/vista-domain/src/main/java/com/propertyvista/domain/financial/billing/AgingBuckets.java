@@ -27,14 +27,18 @@ public interface AgingBuckets extends IEntity {
 
     IPrimitive<DebitType> debitType();
 
-    IPrimitive<BigDecimal> current();
+    IPrimitive<BigDecimal> bucketCurrent();
 
     @Caption(name = "1 to 30")
     IPrimitive<BigDecimal> bucket30();
 
-    @Caption(name = "30 to 60")
+    @Caption(name = "31 to 60")
     IPrimitive<BigDecimal> bucket60();
 
-    @Caption(name = "60 to 90")
+    @Caption(name = "61 to 90")
     IPrimitive<BigDecimal> bucket90();
+
+    @Caption(name = "91 and more")
+    IPrimitive<BigDecimal> bucketOver90();
+
 }

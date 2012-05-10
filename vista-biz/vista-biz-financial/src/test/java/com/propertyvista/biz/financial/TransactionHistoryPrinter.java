@@ -96,10 +96,12 @@ public class TransactionHistoryPrinter {
     }
 
     private static String createAgingBucketsLine(AgingBuckets agingBuckets) {
-        return convertToCell(agingBuckets.debitType().getValue().toString(), 14, true) + convertToCell(agingBuckets.current().getValue().toString(), 14, true)
+        return convertToCell(agingBuckets.debitType().getValue().toString(), 14, true)
+                + convertToCell(agingBuckets.bucketCurrent().getValue().toString(), 14, true)
                 + convertToCell(agingBuckets.bucket30().getValue().toString(), 14, true)
                 + convertToCell(agingBuckets.bucket60().getValue().toString(), 14, true)
-                + convertToCell(agingBuckets.bucket90().getValue().toString(), 14, true);
+                + convertToCell(agingBuckets.bucket90().getValue().toString(), 14, true)
+                + convertToCell(agingBuckets.bucketOver90().getValue().toString(), 14, true);
     }
 
     private static String convertToCell(String str, int width, boolean alignLeft) {

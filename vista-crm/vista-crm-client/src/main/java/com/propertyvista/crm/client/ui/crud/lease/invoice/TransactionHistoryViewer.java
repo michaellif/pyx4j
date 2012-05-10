@@ -142,7 +142,7 @@ public class TransactionHistoryViewer extends CEntityViewer<TransactionHistoryDT
 
         AgingBuckets proto = EntityFactory.getEntityPrototype(AgingBuckets.class);
         arrearsView.setHTML(row, 0, toSafeHtml(proto.debitType().getMeta().getCaption()));
-        arrearsView.setHTML(row, 1, toSafeHtml(proto.current().getMeta().getCaption()));
+        arrearsView.setHTML(row, 1, toSafeHtml(proto.bucketCurrent().getMeta().getCaption()));
         arrearsView.setHTML(row, 2, toSafeHtml(proto.bucket30().getMeta().getCaption()));
         arrearsView.setHTML(row, 3, toSafeHtml(proto.bucket60().getMeta().getCaption()));
         arrearsView.setHTML(row, 4, toSafeHtml(proto.bucket90().getMeta().getCaption()));
@@ -151,7 +151,7 @@ public class TransactionHistoryViewer extends CEntityViewer<TransactionHistoryDT
         for (AgingBuckets arrears : agingBuckets) {
             ++row;
             arrearsView.setHTML(row, 0, toSafeHtml(arrears.debitType().getStringView()));
-            arrearsView.setHTML(row, 1, toSafeHtml(arrears.current().getStringView()));
+            arrearsView.setHTML(row, 1, toSafeHtml(arrears.bucketCurrent().getStringView()));
             arrearsView.setHTML(row, 2, toSafeHtml(arrears.bucket30().getStringView()));
             arrearsView.setHTML(row, 3, toSafeHtml(arrears.bucket60().getStringView()));
             arrearsView.setHTML(row, 4, toSafeHtml(arrears.bucket90().getStringView()));

@@ -178,28 +178,31 @@ public class LeaseCrudServiceImpl extends LeaseCrudServiceBaseImpl<LeaseDTO> imp
                 {
                     AgingBuckets arrears = history.agingBuckets().$();
                     arrears.debitType().setValue(DebitType.parking);
-                    arrears.current().setValue(new BigDecimal("100.0"));
+                    arrears.bucketCurrent().setValue(new BigDecimal("100.0"));
                     arrears.bucket30().setValue(new BigDecimal("11"));
                     arrears.bucket60().setValue(new BigDecimal("0"));
                     arrears.bucket90().setValue(new BigDecimal("15"));
+                    arrears.bucketOver90().setValue(new BigDecimal("10"));
                     history.agingBuckets().add(arrears);
                 }
                 {
                     AgingBuckets arrears = history.agingBuckets().$();
                     arrears.debitType().setValue(DebitType.locker);
-                    arrears.current().setValue(new BigDecimal("0"));
+                    arrears.bucketCurrent().setValue(new BigDecimal("0"));
                     arrears.bucket30().setValue(new BigDecimal("99"));
                     arrears.bucket60().setValue(new BigDecimal("999"));
                     arrears.bucket90().setValue(new BigDecimal("9999"));
+                    arrears.bucketOver90().setValue(new BigDecimal("99999"));
                     history.agingBuckets().add(arrears);
                 }
                 {
                     AgingBuckets arrears = history.agingBuckets().$();
                     arrears.debitType().setValue(DebitType.addOn);
-                    arrears.current().setValue(new BigDecimal("1"));
+                    arrears.bucketCurrent().setValue(new BigDecimal("1"));
                     arrears.bucket30().setValue(new BigDecimal("2"));
                     arrears.bucket60().setValue(new BigDecimal("3"));
                     arrears.bucket90().setValue(new BigDecimal("4"));
+                    arrears.bucketOver90().setValue(new BigDecimal("5"));
                     history.agingBuckets().add(arrears);
                 }
 

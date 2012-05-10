@@ -56,23 +56,26 @@ public class ARAgingBucketsManager {
             AgingBuckets agingBuckets = agingBucketsMap.get(debit.debitType().getValue());
 
             if (debit.postDate().getValue().compareTo(date30) > 0) {
-                agingBuckets.current().setValue(agingBuckets.current().getValue().add(debit.outstandingDebit().getValue()));
+                agingBuckets.bucketCurrent().setValue(agingBuckets.bucketCurrent().getValue().add(debit.outstandingDebit().getValue()));
             } else if (debit.postDate().getValue().compareTo(date30) > 0 && debit.postDate().getValue().compareTo(date60) <= 0) {
                 agingBuckets.bucket30().setValue(agingBuckets.bucket30().getValue().add(debit.outstandingDebit().getValue()));
             } else if (debit.postDate().getValue().compareTo(date60) > 0 && debit.postDate().getValue().compareTo(date90) <= 0) {
                 agingBuckets.bucket60().setValue(agingBuckets.bucket60().getValue().add(debit.outstandingDebit().getValue()));
-            } else {
+            } else if (debit.postDate().getValue().compareTo(date90) > 0) {
                 agingBuckets.bucket90().setValue(agingBuckets.bucket90().getValue().add(debit.outstandingDebit().getValue()));
+            } else {
+                agingBuckets.bucketOver90().setValue(agingBuckets.bucketOver90().getValue().add(debit.outstandingDebit().getValue()));
             }
         }
 
         {
             AgingBuckets agingBuckets = createAgingBuckets(DebitType.all);
             for (AgingBuckets typedBuckets : agingBucketsMap.values()) {
-                agingBuckets.current().setValue(agingBuckets.current().getValue().add(typedBuckets.current().getValue()));
+                agingBuckets.bucketCurrent().setValue(agingBuckets.bucketCurrent().getValue().add(typedBuckets.bucketCurrent().getValue()));
                 agingBuckets.bucket30().setValue(agingBuckets.bucket30().getValue().add(typedBuckets.bucket30().getValue()));
                 agingBuckets.bucket60().setValue(agingBuckets.bucket60().getValue().add(typedBuckets.bucket60().getValue()));
                 agingBuckets.bucket90().setValue(agingBuckets.bucket90().getValue().add(typedBuckets.bucket90().getValue()));
+                agingBuckets.bucketOver90().setValue(agingBuckets.bucketOver90().getValue().add(typedBuckets.bucketOver90().getValue()));
             }
             agingBucketsMap.put(DebitType.all, agingBuckets);
         }
@@ -82,10 +85,11 @@ public class ARAgingBucketsManager {
 
     private static AgingBuckets createAgingBuckets(DebitType debitType) {
         AgingBuckets agingBuckets = EntityFactory.create(AgingBuckets.class);
-        agingBuckets.current().setValue(new BigDecimal("0.00"));
+        agingBuckets.bucketCurrent().setValue(new BigDecimal("0.00"));
         agingBuckets.bucket30().setValue(new BigDecimal("0.00"));
         agingBuckets.bucket60().setValue(new BigDecimal("0.00"));
         agingBuckets.bucket90().setValue(new BigDecimal("0.00"));
+        agingBuckets.bucketOver90().setValue(new BigDecimal("0.00"));
         agingBuckets.debitType().setValue(debitType);
         return agingBuckets;
     }

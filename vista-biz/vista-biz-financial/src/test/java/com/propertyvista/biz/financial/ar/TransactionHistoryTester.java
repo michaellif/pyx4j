@@ -73,7 +73,7 @@ public class TransactionHistoryTester extends Tester {
     public TransactionHistoryTester agingBucketsCurrent(BigDecimal amount, DebitType debitType) {
         AgingBuckets buckets = getAgingBucketsOfType(debitType);
         if (buckets != null) {
-            assertEquals("Current amount", amount, buckets.current().getValue());
+            assertEquals("Current amount", amount, buckets.bucketCurrent().getValue());
         } else {
             throw new Error("Buckets for debit type " + debitType + " don't exist");
         }
@@ -104,6 +104,16 @@ public class TransactionHistoryTester extends Tester {
         AgingBuckets buckets = getAgingBucketsOfType(debitType);
         if (buckets != null) {
             assertEquals("bucket90 amount", amount, buckets.bucket90().getValue());
+        } else {
+            throw new Error("Buckets for debit type " + debitType + " don't exist");
+        }
+        return this;
+    }
+
+    public TransactionHistoryTester agingBucketOver90(BigDecimal amount, DebitType debitType) {
+        AgingBuckets buckets = getAgingBucketsOfType(debitType);
+        if (buckets != null) {
+            assertEquals("bucketOver90 amount", amount, buckets.bucketOver90().getValue());
         } else {
             throw new Error("Buckets for debit type " + debitType + " don't exist");
         }
