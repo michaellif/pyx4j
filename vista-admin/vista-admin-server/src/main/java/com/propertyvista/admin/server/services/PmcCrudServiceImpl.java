@@ -26,6 +26,7 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.admin.domain.pmc.Pmc;
+import com.propertyvista.admin.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.admin.domain.pmc.PmcDnsName;
 import com.propertyvista.admin.rpc.PmcDTO;
 import com.propertyvista.admin.rpc.services.PmcCrudService;
@@ -41,7 +42,7 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
 
     @Override
     protected void bind() {
-        bind(dtoProto.enabled(), dboProto.enabled());
+        bind(dtoProto.status(), dboProto.status());
         bind(dtoProto.name(), dboProto.name());
         bind(dtoProto.dnsName(), dboProto.dnsName());
         bind(dtoProto.namespace(), dboProto.namespace());
@@ -96,5 +97,30 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
             NamespaceManager.setNamespace(namespace);
         }
         callback.onSuccess(null);
+    }
+
+    @Override
+    public void activate(AsyncCallback<PmcDTO> callback, Key entityId) {
+        Pmc pmc = Persistence.service().retrieve(entityClass, entityId);
+        pmc.status().setValue(PmcStatus.Active);
+        Persistence.service().persist(pmc);
+        Persistence.service().commit();
+
+        PmcDTO dtoReturn = createDTO(pmc);
+
+        callback.onSuccess(dtoReturn);
+    }
+
+    @Override
+    public void suspend(AsyncCallback<PmcDTO> callback, Key entityId) {
+        Pmc pmc = Persistence.service().retrieve(entityClass, entityId);
+        pmc.status().setValue(PmcStatus.Suspended);
+        Persistence.service().persist(pmc);
+        Persistence.service().commit();
+
+        PmcDTO dtoReturn = createDTO(pmc);
+
+        callback.onSuccess(dtoReturn);
+
     }
 }

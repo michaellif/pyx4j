@@ -30,6 +30,7 @@ import com.pyx4j.server.contexts.NamespaceManager;
 import com.pyx4j.server.mail.Mail;
 
 import com.propertyvista.admin.domain.pmc.Pmc;
+import com.propertyvista.admin.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.admin.server.preloader.VistaAminDataPreloaders;
 import com.propertyvista.misc.VistaDataPreloaderParameter;
 import com.propertyvista.misc.VistaDevPreloadConfig;
@@ -74,7 +75,7 @@ public class VistaDBReset {
             }
 
             Pmc pmc = EntityFactory.create(Pmc.class);
-            pmc.enabled().setValue(Boolean.TRUE);
+            pmc.status().setValue(PmcStatus.Active);
             pmc.name().setValue("Vista Demo");
             pmc.dnsName().setValue(VistaNamespaceResolver.demoNamespace);
             pmc.namespace().setValue(VistaNamespaceResolver.demoNamespace);

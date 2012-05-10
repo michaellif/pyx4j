@@ -31,6 +31,7 @@ import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.admin.domain.pmc.Pmc;
+import com.propertyvista.admin.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.domain.DemoData;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 
@@ -107,7 +108,7 @@ public class VistaNamespaceResolver implements NamespaceResolver {
                 Pmc pmc = Persistence.service().retrieve(criteria);
                 if (pmc != null) {
 
-                    if (!pmc.enabled().isBooleanTrue()) {
+                    if (pmc.status().getValue() != PmcStatus.Active) {
                         throw new UserRuntimeException(i18n.tr("This property management site was not activated yet"));
                     }
 

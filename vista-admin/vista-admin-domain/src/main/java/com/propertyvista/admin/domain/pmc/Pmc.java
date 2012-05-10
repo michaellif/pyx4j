@@ -38,8 +38,11 @@ public interface Pmc extends IEntity {
 
     public static final String adminNamespace = VistaNamespace.adminNamespace;
 
-    @Caption(name = "Active")
-    IPrimitive<Boolean> enabled();
+    public enum PmcStatus {
+        Created, Active, Suspended
+    }
+
+    IPrimitive<PmcStatus> status();
 
     @NotNull
     @ToString

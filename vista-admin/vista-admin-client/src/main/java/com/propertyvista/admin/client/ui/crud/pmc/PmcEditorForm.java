@@ -39,7 +39,7 @@ public class PmcEditorForm extends AdminEntityForm<PmcDTO> {
 
         int row = -1;
         main.setH1(++row, 0, 2, i18n.tr("General"));
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().enabled()), 15).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().status()), 15).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 15).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().namespace()), 15).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().dnsName()), 15).build());
@@ -49,5 +49,12 @@ public class PmcEditorForm extends AdminEntityForm<PmcDTO> {
         main.getFlexCellFormatter().setColSpan(row, 0, 2);
 
         return main;
+    }
+
+    @Override
+    protected void onPopulate() {
+        super.onPopulate();
+
+        get(proto().status()).setViewable(true);
     }
 }

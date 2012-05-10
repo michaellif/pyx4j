@@ -22,10 +22,15 @@ import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.admin.client.activity.crud.pmc.PmcViewerActivity;
 import com.propertyvista.admin.client.ui.crud.AdminViewerViewImplBase;
+import com.propertyvista.admin.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.admin.rpc.AdminSiteMap;
 import com.propertyvista.admin.rpc.PmcDTO;
 
 public class PmcViewerViewImpl extends AdminViewerViewImplBase<PmcDTO> implements PmcViewerView {
+
+    private final Button suspendBtn;
+
+    private final Button activateBtn;
 
     public PmcViewerViewImpl() {
         super(AdminSiteMap.Management.PMC.class, new PmcEditorForm(true));
@@ -62,5 +67,33 @@ public class PmcViewerViewImpl extends AdminViewerViewImplBase<PmcDTO> implement
             }
         });
         addHeaderToolbarTwoItem(resetCache);
+
+        suspendBtn = new Button("Suspend", new ClickHandler() {
+
+            @Override
+            public void onClick(ClickEvent event) {
+                ((PmcViewerActivity) presenter).suspend();
+            }
+        });
+        addHeaderToolbarTwoItem(suspendBtn);
+
+        activateBtn = new Button("Activate", new ClickHandler() {
+
+            @Override
+            public void onClick(ClickEvent event) {
+                ((PmcViewerActivity) presenter).activate();
+
+            }
+        });
+        addHeaderToolbarTwoItem(activateBtn);
     }
+
+    @Override
+    public void populate(PmcDTO value) {
+        super.populate(value);
+
+        suspendBtn.setVisible(value.status().getValue() == PmcStatus.Active);
+        activateBtn.setVisible(value.status().getValue() != PmcStatus.Active);
+    }
+
 }

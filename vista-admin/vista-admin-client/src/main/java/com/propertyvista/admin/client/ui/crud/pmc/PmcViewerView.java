@@ -22,6 +22,10 @@ public interface PmcViewerView extends IViewerView<PmcDTO> {
     interface Presenter extends IViewerView.Presenter {
 
         void resetCache();
+
+        void activate();
+
+        void suspend();
     }
 
 }

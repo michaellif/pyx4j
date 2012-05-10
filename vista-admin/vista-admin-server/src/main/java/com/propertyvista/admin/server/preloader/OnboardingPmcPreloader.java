@@ -18,6 +18,7 @@ import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.admin.domain.pmc.Pmc;
+import com.propertyvista.admin.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.admin.server.onboarding.PmcNameValidator;
 
 public class OnboardingPmcPreloader extends AbstractDataPreloader {
@@ -38,7 +39,7 @@ public class OnboardingPmcPreloader extends AbstractDataPreloader {
 //
 //        }
 
-        pmc.enabled().setValue(Boolean.TRUE);
+        pmc.status().setValue(PmcStatus.Created);
         Persistence.service().persist(pmc);
 
         return pmc;
