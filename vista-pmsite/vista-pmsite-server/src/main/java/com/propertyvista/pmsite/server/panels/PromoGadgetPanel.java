@@ -33,11 +33,11 @@ import com.propertyvista.pmsite.server.model.PromoDataModel;
 import com.propertyvista.pmsite.server.model.WicketUtils.SimpleImage;
 import com.propertyvista.pmsite.server.pages.AptDetailsPage;
 
-public class PromoPanel extends Panel {
+public class PromoGadgetPanel extends Panel {
 
     private static final long serialVersionUID = 1L;
 
-    public PromoPanel(String id) {
+    public PromoGadgetPanel(String id) {
         super(id);
 
         add(new Label("promoTitle", ((PMSiteWebRequest) getRequest()).getContentManager().getSiteTitles(((PMSiteWebRequest) getRequest()).getSiteLocale())

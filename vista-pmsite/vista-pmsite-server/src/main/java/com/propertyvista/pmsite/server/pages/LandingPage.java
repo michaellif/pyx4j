@@ -30,11 +30,11 @@ import com.propertyvista.pmsite.server.PMSiteClientPreferences;
 import com.propertyvista.pmsite.server.PMSiteContentManager;
 import com.propertyvista.pmsite.server.PMSiteWebRequest;
 import com.propertyvista.pmsite.server.model.WicketUtils.VolatileTemplateResourceReference;
-import com.propertyvista.pmsite.server.panels.CustomModulePanel;
-import com.propertyvista.pmsite.server.panels.NewsPanel;
-import com.propertyvista.pmsite.server.panels.PromoPanel;
+import com.propertyvista.pmsite.server.panels.CustomGadgetPanel;
+import com.propertyvista.pmsite.server.panels.NewsGadgetPanel;
+import com.propertyvista.pmsite.server.panels.PromoGadgetPanel;
 import com.propertyvista.pmsite.server.panels.QuickSearchCriteriaPanel;
-import com.propertyvista.pmsite.server.panels.TestimPanel;
+import com.propertyvista.pmsite.server.panels.TestimGadgetPanel;
 
 public class LandingPage extends BasePage {
 
@@ -68,10 +68,10 @@ public class LandingPage extends BasePage {
                 GadgetType type = GadgetType.getGadgetType((Class<? extends GadgetContent>) gadget.content().getInstanceValueClass());
                 switch (type) {
                 case news:
-                    item.add(new NewsPanel("narrowBoxContent"));
+                    item.add(new NewsGadgetPanel("narrowBoxContent", gadget));
                     break;
                 case custom:
-                    item.add(new CustomModulePanel("narrowBoxContent", gadget));
+                    item.add(new CustomGadgetPanel("narrowBoxContent", gadget));
                     break;
                 }
             }
@@ -89,13 +89,13 @@ public class LandingPage extends BasePage {
                 if (type != null) {
                     switch (type) {
                     case promo:
-                        item.add(new PromoPanel("wideBoxContent"));
+                        item.add(new PromoGadgetPanel("wideBoxContent"));
                         break;
                     case testimonials:
-                        item.add(new TestimPanel("wideBoxContent"));
+                        item.add(new TestimGadgetPanel("wideBoxContent", gadget));
                         break;
                     case custom:
-                        item.add(new CustomModulePanel("wideBoxContent", gadget));
+                        item.add(new CustomGadgetPanel("wideBoxContent", gadget));
                         break;
                     }
                 } else {
