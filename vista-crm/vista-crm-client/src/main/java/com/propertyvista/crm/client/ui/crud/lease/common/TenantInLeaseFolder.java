@@ -133,14 +133,18 @@ public class TenantInLeaseFolder extends LeaseParticipantFolder<Tenant> {
             @Override
             public ValidationFailure isValid(CComponent<IList<Tenant>, ?> component, IList<Tenant> value) {
                 if (value != null) {
-                    int totalPrc = 0;
-                    for (Tenant item : value) {
-                        Integer p = item.percentage().getValue();
-                        if (p != null) {
-                            totalPrc += p.intValue();
+                    if (!value.isEmpty()) {
+                        int totalPrc = 0;
+                        for (Tenant item : value) {
+                            Integer p = item.percentage().getValue();
+                            if (p != null) {
+                                totalPrc += p.intValue();
+                            }
                         }
+                        return (totalPrc == 100 ? null : new ValidationFailure(i18n.tr("Sum Of all Percentages should be equal to 100%!")));
+                    } else {
+                        return new ValidationFailure(i18n.tr("At least one Applicant should be present!"));
                     }
-                    return (totalPrc == 100 ? null : new ValidationFailure(i18n.tr("Sum Of All Percentages Should be equal to 100%")));
                 }
                 return null;
             }
