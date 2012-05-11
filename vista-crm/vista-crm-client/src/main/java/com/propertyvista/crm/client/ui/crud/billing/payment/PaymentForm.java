@@ -149,6 +149,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
         panel.setWidget(++row, 1, new DecoratorBuilder(inject(proto().targetDate()), 10).build());
         panel.setWidget(++row, 1, new DecoratorBuilder(inject(proto().depositDate()), 10).build());
         panel.setWidget(++row, 1, new DecoratorBuilder(inject(proto().paymentStatus()), 10).build());
+        panel.setBR(++row, 1, 1);
         panel.setWidget(++row, 1, new DecoratorBuilder(inject(proto().notes()), 25).build());
 
         // tweak UI:
