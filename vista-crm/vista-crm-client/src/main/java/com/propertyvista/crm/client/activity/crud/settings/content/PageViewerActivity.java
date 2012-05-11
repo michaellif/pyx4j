@@ -36,13 +36,13 @@ public class PageViewerActivity extends CrmViewerActivity<PageDescriptor> implem
 
     @Override
     public void viewChild(Key id) {
-        AppSite.getPlaceController().goTo(AppSite.getHistoryMapper().createPlace(placeClass).formViewerPlace(id));
+        AppSite.getPlaceController().goTo(AppSite.getHistoryMapper().createPlace(getPlaceClass()).formViewerPlace(id));
     }
 
     @Override
     public void editNew(Key parentid) {
         AppSite.getPlaceController().goTo(
-                AppSite.getHistoryMapper().createPlace(placeClass).formNewItemPlace(parentid)
+                AppSite.getHistoryMapper().createPlace(getPlaceClass()).formNewItemPlace(parentid)
                         .queryArg(PageEditor.Presenter.URL_PARAM_PAGE_PARENT, PageEditor.Presenter.PageParent.page.name()));
     }
 }

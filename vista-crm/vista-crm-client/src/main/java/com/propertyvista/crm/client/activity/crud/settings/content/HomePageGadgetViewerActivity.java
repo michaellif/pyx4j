@@ -36,11 +36,11 @@ public class HomePageGadgetViewerActivity extends CrmViewerActivity<HomePageGadg
 
     @Override
     public void viewGadget(Key id) {
-        AppSite.getPlaceController().goTo(AppSite.getHistoryMapper().createPlace(placeClass).formViewerPlace(id));
+        AppSite.getPlaceController().goTo(AppSite.getHistoryMapper().createPlace(getPlaceClass()).formViewerPlace(id));
     }
 
     @Override
     public void editNew(Key parentid) {
-        AppSite.getPlaceController().goTo(AppSite.getHistoryMapper().createPlace(placeClass).formNewItemPlace(parentid));
+        AppSite.getPlaceController().goTo(AppSite.getHistoryMapper().createPlace(getPlaceClass()).formNewItemPlace(parentid));
     }
 }
