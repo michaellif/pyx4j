@@ -83,7 +83,7 @@ public class VistaDeployment {
                     }
                     String protocol = "http://";
                     if (secure) {
-                        protocol = "https://";
+                        protocol = "http://";
                     }
                     return protocol + alias.dnsName().getValue();
                 }
