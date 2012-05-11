@@ -70,12 +70,13 @@ public class CaledonHttpClient {
         httpMethod.getParams().setParameter(HttpMethodParams.RETRY_HANDLER, new DefaultHttpMethodRetryHandler(0, false));
 
         if (debug) {
-            log.info("Query: {}", httpMethod.getQueryString());
+            log.debug("Query: {}", querySafeToLog(httpMethod.getQueryString()));
         }
 
         HttpClient httpClient = new HttpClient();
         ProxyConfig proxy = SystemConfig.instance().getCaledonProxy();
         if (proxy != null) {
+            log.debug("use caledon proxy {}", proxy.getHost());
             httpClient.getHostConfiguration().setProxy(proxy.getHost(), proxy.getPort());
             if (proxy.getUser() != null) {
                 Credentials proxyCreds = new UsernamePasswordCredentials(proxy.getUser(), proxy.getPassword());
@@ -102,6 +103,10 @@ public class CaledonHttpClient {
             log.error("transaction transport error", e);
             throw new PaymentProcessingException("Transport error occurs", e);
         }
+    }
+
+    private String querySafeToLog(String queryString) {
+        return queryString.replaceAll("&CARD=\\d+", "&CARD=***").replaceAll("&CVV2=\\d+", "&CVV2=***");
     }
 
     private String caledoneQueryEncoding(NameValuePair[] pairs) {
@@ -149,6 +154,7 @@ public class CaledonHttpClient {
     }
 
     private CaledonResponse buildResponse(String responseBody) {
+        log.debug("responseBody {}", responseBody);
         CaledonResponse response = new CaledonResponse();
         if (responseBody.length() == 0) {
             return response;

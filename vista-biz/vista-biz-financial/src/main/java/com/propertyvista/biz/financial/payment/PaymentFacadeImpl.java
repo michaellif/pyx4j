@@ -42,6 +42,7 @@ public class PaymentFacadeImpl implements PaymentFacade {
             if (!cc.number().isNull()) {
                 cc.numberRefference().setValue(last4Numbers(cc.number().getValue()));
                 CreditCardProcessor.persistToken(building, cc);
+                Persistence.service().merge(paymentMethod);
             }
         }
 

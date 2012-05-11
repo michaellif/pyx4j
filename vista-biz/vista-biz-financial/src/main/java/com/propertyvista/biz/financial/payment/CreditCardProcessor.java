@@ -16,6 +16,9 @@ package com.propertyvista.biz.financial.payment;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.Persistence;
@@ -39,6 +42,8 @@ import com.propertyvista.payment.caledon.CaledonPaymentProcessor;
 import com.propertyvista.shared.VistaSystemIdentification;
 
 class CreditCardProcessor {
+
+    private final static Logger log = LoggerFactory.getLogger(CreditCardProcessor.class);
 
     static void realTimeSale(PaymentRecord paymentRecord) {
         MerchantAccount account = PaymentUtils.retrieveMerchantAccount(paymentRecord);
@@ -68,12 +73,14 @@ class CreditCardProcessor {
 
         PaymentResponse response = proc.realTimeSale(merchant, request);
         if (response.code().getValue().equals("0000")) {
+            log.debug("ccTransaction accepted {}", response);
             paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Received);
             paymentRecord.transactionAuthorizationNumber().setValue(response.authorizationNumber().getValue());
             Persistence.service().merge(paymentRecord);
             Persistence.service().commit();
             ServerSideFactory.create(ARFacade.class).postPayment(paymentRecord);
         } else {
+            log.debug("ccTransaction rejected {}", response);
             paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Rejected);
             paymentRecord.transactionAuthorizationNumber().setValue(response.code().getValue());
             paymentRecord.transactionErrorMessage().setValue(response.message().getValue());

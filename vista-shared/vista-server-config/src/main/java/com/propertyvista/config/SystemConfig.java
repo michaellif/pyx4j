@@ -28,7 +28,7 @@ public class SystemConfig extends HostConfig {
     // This hosts have SSH tunnel open to dev server
     private static List<String> localCaledonProxyHost = Arrays.asList("XX-vlads-i7");
 
-    private static List<String> noCaledonProxyHost = Arrays.asList("XX-vlads-w520", "dev", "vlads-i7");
+    private static List<String> noCaledonProxyHost = Arrays.asList("XX-vlads-w520", "dev", "XX-vlads-i7");
 
     private static List<String> doxHost = Arrays.asList("XXvlads-i7", "michaellif01");
 
@@ -52,6 +52,8 @@ public class SystemConfig extends HostConfig {
         super.configure();
         if (this.getProxyConfig() != null) {
             log.info("proxy defined {}:{} ", this.getProxyConfig().getHost(), this.getProxyConfig().getPort());
+        } else {
+            log.info("proxy is not defined");
         }
     }
 
