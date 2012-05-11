@@ -13,6 +13,7 @@
  */
 package com.propertyvista.payment;
 
+import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
@@ -20,6 +21,7 @@ import com.pyx4j.i18n.annotations.I18n;
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 public interface Token extends IEntity, PaymentInstrument {
 
+    @Length(30)
     IPrimitive<String> code();
 
     IPrimitive<String> description(); //TOKEN-REF

@@ -56,7 +56,7 @@ public interface CreditCardInfo extends PaymentDetails {
     @NotNull
     @Caption(name = "Card Number")
     @MemberColumn(name = "cardNumber")
-    @Transient
+    @Transient(logTransient = true)
     IPrimitive<String> number();
 
     // Card Number fragment presented to user
@@ -70,7 +70,7 @@ public interface CreditCardInfo extends PaymentDetails {
 
     @NotNull
     @Caption(name = "Card Security Code")
-    @Transient
+    @Transient(logTransient = true)
     IPrimitive<String> securityCode();
 
     @NotNull
