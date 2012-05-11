@@ -66,15 +66,15 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
     protected void enhanceListRetrieved(PaymentRecord entity, PaymentRecordDTO dto) {
         super.enhanceListRetrieved(entity, dto);
 
-        Persistence.service().retrieve(entity.billingAccount());
-        Persistence.service().retrieve(entity.billingAccount().lease());
-        Persistence.service().retrieve(entity.billingAccount().lease().unit());
-        Persistence.service().retrieve(entity.billingAccount().lease().unit().belongsTo());
+        Persistence.service().retrieve(dto.billingAccount());
+        Persistence.service().retrieve(dto.billingAccount().lease());
+        Persistence.service().retrieve(dto.billingAccount().lease().unit());
+        Persistence.service().retrieve(dto.billingAccount().lease().unit().belongsTo());
 
-        dto.leaseId().set(entity.billingAccount().lease().leaseId());
-        dto.leaseStatus().set(entity.billingAccount().lease().version().status());
-        dto.propertyCode().set(entity.billingAccount().lease().unit().belongsTo().propertyCode());
-        dto.unitNumber().set(entity.billingAccount().lease().unit().info().number());
+        dto.leaseId().set(dto.billingAccount().lease().leaseId());
+        dto.leaseStatus().set(dto.billingAccount().lease().version().status());
+        dto.propertyCode().set(dto.billingAccount().lease().unit().belongsTo().propertyCode());
+        dto.unitNumber().set(dto.billingAccount().lease().unit().info().number());
 
         Persistence.service().retrieve(dto.paymentMethod());
         Persistence.service().retrieve(dto.paymentMethod().leaseParticipant());
