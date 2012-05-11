@@ -34,7 +34,7 @@ import com.pyx4j.site.client.ui.crud.misc.MementoImpl;
 
 public class FormViewImplBase<E extends IEntity> extends ViewImplBase implements IFormView<E> {
 
-    protected CrudEntityForm<E> form;
+    private CrudEntityForm<E> form;
 
     private final IMemento memento = new MementoImpl();
 

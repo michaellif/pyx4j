@@ -46,7 +46,7 @@ public class EditorViewImplBase<E extends IEntity> extends FormViewImplBase<E> i
 
     @Override
     public E getValue() {
-        return form.getValue();
+        return getForm().getValue();
     }
 
     @Override
@@ -56,6 +56,6 @@ public class EditorViewImplBase<E extends IEntity> extends FormViewImplBase<E> i
 
     @Override
     public boolean isDirty() {
-        return form.isDirty();
+        return getForm().isDirty();
     }
 }
