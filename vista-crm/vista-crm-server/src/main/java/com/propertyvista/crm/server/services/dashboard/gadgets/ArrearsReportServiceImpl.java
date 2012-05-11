@@ -115,7 +115,7 @@ public class ArrearsReportServiceImpl implements ArrearsReportService {
             callback.onSuccess(null);
         }
 
-        List<ArrearsDTO> allArrears = getCurrentArrears(buildingPKs, DebitType.all);
+        List<ArrearsDTO> allArrears = getCurrentArrears(buildingPKs, DebitType.total);
     }
 
     private List<ArrearsDTO> getCurrentArrears(Vector<Key> buildingPKs, DebitType all) {
