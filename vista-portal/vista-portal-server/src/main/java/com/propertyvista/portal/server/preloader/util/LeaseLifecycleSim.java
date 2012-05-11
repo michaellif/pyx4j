@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.server.preloader.util;
 
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -24,9 +25,12 @@ import java.util.Random;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.EntityFactory;
 
+import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.billing.BillingFacade;
 import com.propertyvista.biz.tenant.LeaseFacade;
+import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.tenant.lease.BillableItem;
@@ -68,6 +72,8 @@ public class LeaseLifecycleSim {
     private LogicalDate simEnd;
 
     private boolean runBilling = false;
+
+    private TenantAgent tenantAgent = new DefaultTenantAgent();
 
     private LeaseLifecycleSim() {
         this.events = new PriorityQueue<LeaseLifecycleSim.LeaseEventContainer>(10, new Comparator<LeaseEventContainer>() {
@@ -197,6 +203,8 @@ public class LeaseLifecycleSim {
             if (runBilling) {
                 queueReccurentBilling();
             }
+
+            queueTenantActions();
         }
 
         private void queueReccurentBilling() {
@@ -212,6 +220,70 @@ public class LeaseLifecycleSim {
             firstBillingDay = new LogicalDate(cal.getTime());
             queueEvent(firstBillingDay, new RunBillingRecurrent(lease));
         }
+
+        private void queueTenantActions() {
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(now());
+
+            if (cal.get(Calendar.DAY_OF_MONTH) > 15) {
+                cal.add(Calendar.MONTH, 1);
+            }
+
+            queueEvent(new LogicalDate(cal.getTime()), new TenantsAction(lease));
+        }
+    }
+
+    private class TenantsAction extends AbstractLeaseEvent {
+
+        public TenantsAction(Lease lease) {
+            super(5, lease);
+        }
+
+        @Override
+        public void exec() {
+            if (runBilling) {
+                performRandomPayment();
+            }
+            scheduleNextAction();
+        }
+
+        private void scheduleNextAction() {
+            Calendar cal = GregorianCalendar.getInstance();
+            cal.setTime(now());
+            cal.add(Calendar.MONTH, 1);
+            if (!cal.getTime().after(lease.leaseTo().getValue())) {
+                queueEvent(new LogicalDate(cal.getTime()), new TenantsAction(lease));
+            }
+        }
+
+        private void performRandomPayment() {
+
+            Bill bill = ServerSideFactory.create(BillingFacade.class).getLatestBill(lease);
+
+            if (bill != null && !bill.totalDueAmount().getValue().equals(BigDecimal.ZERO)) {
+                PaymentRecord payment = receivePayment(tenantAgent.pay(bill));
+                if (payment != null) {
+                    ServerSideFactory.create(ARFacade.class).postPayment(payment);
+                }
+            }
+        }
+
+        private PaymentRecord receivePayment(BigDecimal amount) {
+            if (amount == null) {
+                return null;
+            } else {
+                PaymentRecord paymentRecord = EntityFactory.create(PaymentRecord.class);
+                paymentRecord.receivedDate().setValue(now());
+                paymentRecord.amount().setValue(amount);
+                paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Submitted);
+                paymentRecord.billingAccount().set(lease.billingAccount());
+
+                Persistence.service().persist(paymentRecord);
+                Persistence.service().commit();
+                return paymentRecord;
+            }
+        }
+
     }
 
     private class RunBillingRecurrent extends AbstractLeaseEvent {
@@ -392,6 +464,26 @@ public class LeaseLifecycleSim {
         }
     }
 
+    public static class DefaultTenantAgent implements TenantAgent {
+
+        @Override
+        public BigDecimal pay(Bill bill) {
+            if (RND.nextDouble() < 0.66) {
+                if (RND.nextDouble() < 0.5) {
+                    // pay just a part of the bill                    
+                    BigDecimal part = new BigDecimal(RND.nextDouble());
+                    return bill.totalDueAmount().getValue().multiply(part);
+                } else {
+                    // don't pay at all
+                    return null;
+                }
+            } else {
+                // pay everything
+                return bill.totalDueAmount().getValue();
+            }
+        }
+    }
+
     public static class LeaseLifecycleSimBuilder {
 
         private final LeaseLifecycleSim leaseLifecycleSim;
@@ -409,6 +501,11 @@ public class LeaseLifecycleSim {
                 leaseLifecycleSim.simEnd = new LogicalDate();
             }
             return leaseLifecycleSim;
+        }
+
+        public LeaseLifecycleSim attachTennant(TenantAgent tenantAgent) {
+            this.leaseLifecycleSim.tenantAgent = tenantAgent;
+            return this.leaseLifecycleSim;
         }
 
         public LeaseLifecycleSimBuilder start(LogicalDate start) {

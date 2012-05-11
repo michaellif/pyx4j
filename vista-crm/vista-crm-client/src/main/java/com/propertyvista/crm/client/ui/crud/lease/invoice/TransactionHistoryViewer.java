@@ -116,8 +116,8 @@ public class TransactionHistoryViewer extends CEntityViewer<TransactionHistoryDT
                 balance = balance.add(item.amount().getValue());
             } else if (item.isInstanceOf(InvoiceCredit.class)) {
                 colAmount = COL_CREDIT;
-                amountRepresentation = "(" + NUMBER_FORMAT.format(item.amount().getValue()) + ")";
-                balance = balance.subtract(item.amount().getValue());
+                amountRepresentation = "(" + NUMBER_FORMAT.format(BigDecimal.ZERO.subtract(item.amount().getValue())) + ")";
+                balance = balance.add(item.amount().getValue());
             } else if (ApplicationMode.isDevelopment()) {
                 throw new Error("Unknown line item class " + item.getInstanceValueClass().getName());
             }

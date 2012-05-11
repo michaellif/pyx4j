@@ -13,10 +13,12 @@
  */
 package com.propertyvista.portal.server.preloader.util;
 
+import java.math.BigDecimal;
+
 import com.propertyvista.domain.financial.billing.Bill;
 
 public interface TenantAgent {
 
-    void processBill(Bill bill);
+    BigDecimal pay(Bill bill);
 
 }
