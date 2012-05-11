@@ -30,10 +30,16 @@ import com.propertyvista.domain.financial.billing.AgingBuckets;
 import com.propertyvista.domain.financial.billing.ArrearsSnapshot;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
 import com.propertyvista.domain.financial.billing.InvoiceDebit.DebitType;
+import com.propertyvista.domain.property.asset.building.Building;
 
 public class ARArrearsManager {
 
     private static ArrearsSnapshot createArrearsSnapshot(BillingAccount billingAccount) {
+        //TODO Artem
+        return null;
+    }
+
+    private static ArrearsSnapshot createArrearsSnapshot(Building building) {
         //TODO Artem
         return null;
     }
@@ -43,6 +49,19 @@ public class ARArrearsManager {
         // 1. createArrearsSnapshot for current time
         // 2. retrieve previous ArrearsSnapshot 
         // 3. compare 1 and 2 - if it is a difference persist first and update toDate of second otherwise do nothing         
+    }
+
+    static void updateArrearsHistory(Building building) {
+    }
+
+    static ArrearsSnapshot getArrearsSnapshot(BillingAccount billingAccount, LogicalDate date) {
+        //TODO Artem
+        return null;
+    }
+
+    static ArrearsSnapshot getArrearsSnapshot(Building building, LogicalDate date) {
+        //TODO Artem
+        return null;
     }
 
     static Collection<AgingBuckets> getAgingBuckets(BillingAccount billingAccount) {
