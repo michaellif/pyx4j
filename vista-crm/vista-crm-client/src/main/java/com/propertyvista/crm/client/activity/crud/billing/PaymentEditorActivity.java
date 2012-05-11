@@ -46,7 +46,7 @@ public class PaymentEditorActivity extends EditorActivityBase<PaymentRecordDTO> 
             public void onSuccess(PaymentRecordDTO result) {
                 callback.onSuccess(result);
             }
-        }, parentId);
+        }, getParentId());
     }
 
     @Override

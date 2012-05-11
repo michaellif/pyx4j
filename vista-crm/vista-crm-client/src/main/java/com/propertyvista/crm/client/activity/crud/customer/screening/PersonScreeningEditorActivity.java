@@ -40,9 +40,9 @@ public class PersonScreeningEditorActivity extends EditorActivityBase<PersonScre
     protected void createNewEntity(AsyncCallback<PersonScreening> callback) {
         PersonScreening screening = EntityFactory.create(getEntityClass());
 
-        if (Customer.class.getName().equals(parentClass)) {
+        if (Customer.class.getName().equals(getParentClassName())) {
             screening.screene().set(EntityFactory.create(Customer.class));
-        } else if (Guarantor.class.getName().equals(parentClass)) {
+        } else if (Guarantor.class.getName().equals(getParentClassName())) {
             screening.screene().set(EntityFactory.create(Guarantor.class));
         }
 
