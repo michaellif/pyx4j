@@ -28,7 +28,8 @@ public class SystemConfig extends HostConfig {
     // This hosts have SSH tunnel open to dev server
     private static List<String> localCaledonProxyHost = Arrays.asList("XX-vlads-i7");
 
-    private static List<String> noCaledonProxyHost = Arrays.asList("dev", "prod02a", "prod02b", "XX-vlads-i7", "XX-vlads-w520");
+    private static List<String> noCaledonProxyHost = Arrays.asList("dev", "dev.birchwoodsoftwaregroup.com", "prod02a", "prod02b", "XX-vlads-i7",
+            "XX-vlads-w520");
 
     private static List<String> doxHost = Arrays.asList("XXvlads-i7", "michaellif01");
 
