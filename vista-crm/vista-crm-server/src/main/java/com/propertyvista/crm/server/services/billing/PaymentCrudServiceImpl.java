@@ -57,7 +57,7 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
         super.enhanceRetrieved(entity, dto);
         enhanceListRetrieved(entity, dto);
 
-        dto.participants().addAll(retrieveUsers(entity.billingAccount().lease()));
+        dto.participants().addAll(retrieveUsers(dto.billingAccount().lease()));
 
         dto.paymentSelect().setValue(PaymentSelect.New);
     }

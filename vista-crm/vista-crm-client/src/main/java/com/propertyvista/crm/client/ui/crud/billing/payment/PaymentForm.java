@@ -50,7 +50,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
 
     private static final I18n i18n = I18n.get(PaymentForm.class);
 
-    private final CComboBox<PaymentMethod> profiledPaymentMethodsBox = new CComboBox<PaymentMethod>() {
+    private final CComboBox<PaymentMethod> profiledPaymentMethodsCombo = new CComboBox<PaymentMethod>() {
         @Override
         public String getItemName(PaymentMethod o) {
             if (o == null) {
@@ -140,8 +140,8 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
                 new DecoratorBuilder(inject(proto().paymentSelect(), new CRadioGroupEnum<PaymentSelect>(PaymentSelect.class, RadioGroup.Layout.HORISONTAL)), 20)
                         .build());
 
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().profiledPaymentMethod(), profiledPaymentMethodsBox), 25).build());
-        profiledPaymentMethodsBox.setMandatory(true);
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().profiledPaymentMethod(), profiledPaymentMethodsCombo), 25).build());
+        profiledPaymentMethodsCombo.setMandatory(true);
 
         row = -1;
         panel.setWidget(++row, 1, new DecoratorBuilder(inject(proto().amount()), 10).build());
@@ -189,22 +189,22 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
                         paymentMethodEditor.selectPaymentDetailsEditor(PaymentType.Echeck);
                         paymentMethodEditor.setVisible(!getValue().leaseParticipant().isNull());
 
-                        profiledPaymentMethodsBox.setVisible(false);
+                        profiledPaymentMethodsCombo.setVisible(false);
                         break;
                     case Profiled:
                         paymentMethodEditor.setViewable(true);
                         paymentMethodEditor.setTypeSelectionVisible(false);
                         paymentMethodEditor.setVisible(false);
 
-                        profiledPaymentMethodsBox.populate(null);
-                        profiledPaymentMethodsBox.setVisible(true);
+                        profiledPaymentMethodsCombo.populate(null);
+                        profiledPaymentMethodsCombo.setVisible(true);
                         break;
                     }
                 }
             }
         });
 
-        profiledPaymentMethodsBox.addValueChangeHandler(new ValueChangeHandler<PaymentMethod>() {
+        profiledPaymentMethodsCombo.addValueChangeHandler(new ValueChangeHandler<PaymentMethod>() {
             @Override
             public void onValueChange(ValueChangeEvent<PaymentMethod> event) {
                 paymentMethodEditor.setVisible(event.getValue() != null);
@@ -228,7 +228,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
 
         get(proto().paymentSelect()).setVisible(!isViewable() && !getValue().leaseParticipant().isNull());
 
-        profiledPaymentMethodsBox.setVisible(false);
+        profiledPaymentMethodsCombo.setVisible(false);
 
         checkProfiledPaymentMethods(null);
 
@@ -240,8 +240,8 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
         if (getParentView() instanceof PaymentEditorView) {
             get(proto().paymentSelect()).setEnabled(false);
 
-            profiledPaymentMethodsBox.populate(null);
-            profiledPaymentMethodsBox.setOptions(null);
+            profiledPaymentMethodsCombo.populate(null);
+            profiledPaymentMethodsCombo.setOptions(null);
 
             if (!getValue().leaseParticipant().isNull()) {
                 ((PaymentEditorView.Presenter) ((PaymentEditorView) getParentView()).getPresenter()).getProfiledPaymentMethods(
@@ -249,9 +249,10 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
                             @Override
                             public void onSuccess(List<PaymentMethod> result) {
                                 get(proto().paymentSelect()).setEnabled(!result.isEmpty());
+                                get(proto().paymentSelect()).setVisible(!result.isEmpty());
 
-                                profiledPaymentMethodsBox.setOptions(result);
-                                profiledPaymentMethodsBox.setMandatory(true);
+                                profiledPaymentMethodsCombo.setOptions(result);
+                                profiledPaymentMethodsCombo.setMandatory(true);
 
                                 if (callback != null) {
                                     callback.onSuccess(result);
