@@ -55,6 +55,18 @@ public class AccountNumberGenerator {
         return String.valueOf(digits);
     }
 
+    // add one more for the checksum digit
+    public static String addChecksum(String accountNumberBase) {
+        int sum = 0;
+        assert (accountNumberBase.length() == ACCOUNT_NUMBER_LENGTH) : " expected 13 characters got '" + accountNumberBase + "' " + accountNumberBase.length();
+        for (int i = 0; i < accountNumberBase.length(); ++i) {
+            int digit = Integer.valueOf(String.valueOf(accountNumberBase.charAt(i)));
+            sum += (i & 1) == 0 ? SUM_OF_DOUBLE_DIGIT[digit] : digit;
+        }
+        sum %= 10;
+        return accountNumberBase + CHAR_OF[sum == 0 ? 0 : 10 - sum];
+    }
+
     /**
      * Generator of digits of an account from right to left (less significant to most significant)
      */

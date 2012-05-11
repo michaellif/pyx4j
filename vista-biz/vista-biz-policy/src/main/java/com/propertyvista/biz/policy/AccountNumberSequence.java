@@ -13,6 +13,8 @@
  */
 package com.propertyvista.biz.policy;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.concurrent.Callable;
 
 import com.pyx4j.entity.server.Persistence;
@@ -25,9 +27,13 @@ import com.propertyvista.admin.domain.pmc.Pmc;
 import com.propertyvista.admin.domain.pmc.PmcAccountNumbers;
 import com.propertyvista.admin.domain.pmc.PmcAccountNumbers.AccountNumbersRangeType;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem;
+import com.propertyvista.domain.util.ValidationUtils;
 import com.propertyvista.server.domain.IdAssignmentSequence;
 import com.propertyvista.server.jobs.TaskRunner;
 
+/**
+ * @see http://jira.birchwoodsoftwaregroup.com/wiki/display/VISTA/Account+Numbers
+ */
 class AccountNumberSequence {
 
     static String getNextSequence() {
@@ -51,7 +57,11 @@ class AccountNumberSequence {
                 Persistence.service().persist(sequence);
                 Persistence.service().commit();
 
-                return sequence.prefix().getStringView() + sequence.number().getStringView();
+                //AccountNumbersRangeType.Small
+                NumberFormat nf = new DecimalFormat("0000");
+                String accountNumber = AccountNumberGenerator.addChecksum(sequence.prefix().getStringView() + nf.format(sequence.number().getValue()));
+                assert ValidationUtils.isCreditCardNumberValid(accountNumber) : " accountNumber '" + accountNumber + "' not valid";
+                return accountNumber;
             }
 
         });
