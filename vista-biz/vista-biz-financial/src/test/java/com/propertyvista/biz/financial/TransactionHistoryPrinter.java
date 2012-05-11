@@ -55,17 +55,12 @@ public class TransactionHistoryPrinter {
             out.write(convertToCell("Type", 14, true) + convertToCell("Current", 14, true) + convertToCell("1-30 Days", 14, true)
                     + convertToCell("31-60 Days", 14, true) + convertToCell("61-90 Days", 14, true) + convertToCell("Over 90 Days", 14, true));
             out.newLine();
-            AgingBuckets totalAgingBuckets = null;
             for (AgingBuckets agingBuckets : transactionHistory.agingBuckets()) {
-                if (DebitType.all == agingBuckets.debitType().getValue()) {
-                    totalAgingBuckets = agingBuckets;
-                } else {
-                    out.write(createAgingBucketsLine(agingBuckets));
-                    out.newLine();
-                }
+                out.write(createAgingBucketsLine(agingBuckets));
+                out.newLine();
             }
 
-            out.write(createAgingBucketsLine(totalAgingBuckets));
+            out.write(createAgingBucketsLine(transactionHistory.totalAgingBuckets()));
             out.newLine();
 
             out.close();

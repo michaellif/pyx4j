@@ -27,10 +27,23 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.propertyvista.biz.financial.SysDateManager;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.billing.AgingBuckets;
+import com.propertyvista.domain.financial.billing.ArrearsSnapshot;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
 import com.propertyvista.domain.financial.billing.InvoiceDebit.DebitType;
 
-public class ARAgingBucketsManager {
+public class ARArrearsManager {
+
+    private static ArrearsSnapshot createArrearsSnapshot(BillingAccount billingAccount) {
+        //TODO Artem
+        return null;
+    }
+
+    static void updateArrearsHistory(BillingAccount billingAccount) {
+        //TODO Artem
+        // 1. createArrearsSnapshot for current time
+        // 2. retrieve previous ArrearsSnapshot 
+        // 3. compare 1 and 2 - if it is a difference persist first and update toDate of second otherwise do nothing         
+    }
 
     static Collection<AgingBuckets> getAgingBuckets(BillingAccount billingAccount) {
 
@@ -68,19 +81,19 @@ public class ARAgingBucketsManager {
             }
         }
 
-        {
-            AgingBuckets agingBuckets = createAgingBuckets(DebitType.all);
-            for (AgingBuckets typedBuckets : agingBucketsMap.values()) {
-                agingBuckets.bucketCurrent().setValue(agingBuckets.bucketCurrent().getValue().add(typedBuckets.bucketCurrent().getValue()));
-                agingBuckets.bucket30().setValue(agingBuckets.bucket30().getValue().add(typedBuckets.bucket30().getValue()));
-                agingBuckets.bucket60().setValue(agingBuckets.bucket60().getValue().add(typedBuckets.bucket60().getValue()));
-                agingBuckets.bucket90().setValue(agingBuckets.bucket90().getValue().add(typedBuckets.bucket90().getValue()));
-                agingBuckets.bucketOver90().setValue(agingBuckets.bucketOver90().getValue().add(typedBuckets.bucketOver90().getValue()));
-            }
-            agingBucketsMap.put(DebitType.all, agingBuckets);
-        }
-
         return agingBucketsMap.values();
+    }
+
+    static AgingBuckets calculateTotalAgingBuckets(Collection<AgingBuckets> agingBucketsCollection) {
+        AgingBuckets agingBuckets = createAgingBuckets(DebitType.total);
+        for (AgingBuckets typedBuckets : agingBucketsCollection) {
+            agingBuckets.bucketCurrent().setValue(agingBuckets.bucketCurrent().getValue().add(typedBuckets.bucketCurrent().getValue()));
+            agingBuckets.bucket30().setValue(agingBuckets.bucket30().getValue().add(typedBuckets.bucket30().getValue()));
+            agingBuckets.bucket60().setValue(agingBuckets.bucket60().getValue().add(typedBuckets.bucket60().getValue()));
+            agingBuckets.bucket90().setValue(agingBuckets.bucket90().getValue().add(typedBuckets.bucket90().getValue()));
+            agingBuckets.bucketOver90().setValue(agingBuckets.bucketOver90().getValue().add(typedBuckets.bucketOver90().getValue()));
+        }
+        return agingBuckets;
     }
 
     private static AgingBuckets createAgingBuckets(DebitType debitType) {

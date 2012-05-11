@@ -14,6 +14,7 @@
 package com.propertyvista.biz.financial.ar;
 
 import java.math.BigDecimal;
+import java.util.Collection;
 import java.util.List;
 
 import com.pyx4j.commons.LogicalDate;
@@ -24,6 +25,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.biz.financial.SysDateManager;
 import com.propertyvista.domain.financial.BillingAccount;
+import com.propertyvista.domain.financial.billing.AgingBuckets;
 import com.propertyvista.domain.financial.billing.InvoiceCredit;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
@@ -82,7 +84,12 @@ public class ARTransactionManager {
         th.fromDate().setValue(fromDate);
         th.issueDate().setValue(new LogicalDate(SysDateManager.getSysDate()));
 
-        th.agingBuckets().addAll(ARAgingBucketsManager.getAgingBuckets(billingAccount));
+        Collection<AgingBuckets> agingBucketsCollection = ARArrearsManager.getAgingBuckets(billingAccount);
+
+        th.agingBuckets().addAll(agingBucketsCollection);
+
+        th.totalAgingBuckets().set(ARArrearsManager.calculateTotalAgingBuckets(agingBucketsCollection));
+
         return th;
     }
 

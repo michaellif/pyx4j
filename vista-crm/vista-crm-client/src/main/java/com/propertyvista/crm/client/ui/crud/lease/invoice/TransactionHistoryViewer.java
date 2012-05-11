@@ -58,7 +58,7 @@ public class TransactionHistoryViewer extends CEntityViewer<TransactionHistoryDT
             content.setH1(++row, 0, 1, i18n.tr("Transactions History"));
             content.setWidget(++row, 0, createLineItems(value.lineItems(), value.balanceForwardAmount().getValue()));
             content.setH1(++row, 0, 1, i18n.tr("Arrears"));
-            content.setWidget(++row, 0, createArrears(value.agingBuckets()));
+            content.setWidget(++row, 0, createArrears(value.agingBuckets(), value.totalAgingBuckets()));
 
         }
         return content;
@@ -142,19 +142,13 @@ public class TransactionHistoryViewer extends CEntityViewer<TransactionHistoryDT
         return lineItemsView;
     }
 
-    private Widget createArrears(IList<AgingBuckets> agingBuckets) {
+    private Widget createArrears(IList<AgingBuckets> agingBuckets, AgingBuckets total) {
         List<AgingBuckets> arrearsByCategory = new ArrayList<AgingBuckets>(agingBuckets);
 
         Collections.sort(arrearsByCategory, new Comparator<AgingBuckets>() {
             @Override
             public int compare(AgingBuckets arg0, AgingBuckets arg1) {
-                if (arg0.debitType().getValue() == DebitType.all) {
-                    return 1;
-                } else if (arg1.debitType().getValue() == DebitType.all) {
-                    return -1;
-                } else {
-                    return arg0.debitType().getValue().toString().compareTo(arg1.debitType().getValue().toString());
-                }
+                return arg0.debitType().getValue().toString().compareTo(arg1.debitType().getValue().toString());
             }
         });
         FormFlexPanel arrearsView = new FormFlexPanel();
@@ -165,6 +159,9 @@ public class TransactionHistoryViewer extends CEntityViewer<TransactionHistoryDT
         for (AgingBuckets arrears : arrearsByCategory) {
             drawArrears(arrears, arrearsView, ++row);
         }
+
+        drawArrears(total, arrearsView, ++row);
+
         return arrearsView;
     }
 
@@ -194,7 +191,7 @@ public class TransactionHistoryViewer extends CEntityViewer<TransactionHistoryDT
         panel.setHTML(row, 5, toSafeHtml(NUMBER_FORMAT.format(bucket.bucketOver90().getValue())));
         panel.setHTML(row, 6, toSafeHtml(NUMBER_FORMAT.format(arBalance)));
 
-        if (bucket.debitType().getValue() != DebitType.all) {
+        if (bucket.debitType().getValue() != DebitType.total) {
             panel.getRowFormatter().setStyleName(row,
                     row % 2 == 0 ? CrmTheme.ArrearsStyleName.ArrearsCategoryEven.name() : CrmTheme.ArrearsStyleName.ArrearsCategoryOdd.name());
         } else {

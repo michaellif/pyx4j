@@ -121,6 +121,9 @@ public class TransactionHistoryTester extends Tester {
     }
 
     private AgingBuckets getAgingBucketsOfType(DebitType debitType) {
+        if (DebitType.total == debitType) {
+            return transactionHistory.totalAgingBuckets();
+        }
         for (AgingBuckets buckets : transactionHistory.agingBuckets()) {
             if (debitType == buckets.debitType().getValue()) {
                 return buckets;
