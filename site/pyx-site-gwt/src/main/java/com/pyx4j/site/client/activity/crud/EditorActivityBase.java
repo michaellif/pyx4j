@@ -56,9 +56,9 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
 
     protected String parentClass;
 
-    protected int tabIndex;
+    private int tabIndex;
 
-    protected Class<? extends CrudAppPlace> placeClass;
+    private final Class<? extends CrudAppPlace> placeClass;
 
     private final CrudAppPlace place;
 
@@ -121,6 +121,10 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
 
     public Class<E> getEntityClass() {
         return entityClass;
+    }
+
+    public Class<? extends CrudAppPlace> getPlaceClass() {
+        return placeClass;
     }
 
     @Override

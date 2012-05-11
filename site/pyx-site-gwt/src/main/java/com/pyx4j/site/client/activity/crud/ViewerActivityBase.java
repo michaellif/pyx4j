@@ -43,9 +43,9 @@ public class ViewerActivityBase<E extends IEntity> extends AbstractActivity impl
 
     protected Key entityId;
 
-    protected int tabIndex;
+    private int tabIndex;
 
-    protected Class<? extends CrudAppPlace> placeClass;
+    private final Class<? extends CrudAppPlace> placeClass;
 
     public ViewerActivityBase(CrudAppPlace place, IViewerView<E> view, AbstractCrudService<E> service) {
         // development correctness checks:
@@ -79,6 +79,10 @@ public class ViewerActivityBase<E extends IEntity> extends AbstractActivity impl
 
     public AbstractCrudService<E> getService() {
         return service;
+    }
+
+    public Class<? extends CrudAppPlace> getPlaceClass() {
+        return placeClass;
     }
 
     @Override
