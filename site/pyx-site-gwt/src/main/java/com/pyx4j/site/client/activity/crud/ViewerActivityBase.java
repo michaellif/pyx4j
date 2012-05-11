@@ -22,7 +22,6 @@ package com.pyx4j.site.client.activity.crud;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
@@ -48,9 +47,8 @@ public class ViewerActivityBase<E extends IEntity> extends AbstractActivity impl
 
     protected Class<? extends CrudAppPlace> placeClass;
 
-    public ViewerActivityBase(Place place, IViewerView<E> view, AbstractCrudService<E> service) {
+    public ViewerActivityBase(CrudAppPlace place, IViewerView<E> view, AbstractCrudService<E> service) {
         // development correctness checks:
-        assert (place instanceof CrudAppPlace);
         assert (view != null);
         assert (service != null);
 
@@ -62,13 +60,13 @@ public class ViewerActivityBase<E extends IEntity> extends AbstractActivity impl
 
         view.getMemento().setCurrentPlace(place);
 
-        placeClass = ((CrudAppPlace) place).getClass();
+        placeClass = place.getClass();
 
         String val;
-        if ((val = ((CrudAppPlace) place).getFirstArg(CrudAppPlace.ARG_NAME_ID)) != null) {
+        if ((val = place.getFirstArg(CrudAppPlace.ARG_NAME_ID)) != null) {
             entityId = new Key(val);
         }
-        if ((val = ((CrudAppPlace) place).getFirstArg(CrudAppPlace.ARG_NAME_TAB_IDX)) != null) {
+        if ((val = place.getFirstArg(CrudAppPlace.ARG_NAME_TAB_IDX)) != null) {
             tabIndex = Integer.parseInt(val);
         }
 
