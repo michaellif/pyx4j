@@ -64,7 +64,6 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
 
     public EditorActivityBase(CrudAppPlace place, IEditorView<E> view, AbstractCrudService<E> service, Class<E> entityClass) {
         // development correctness checks:
-        assert (place instanceof CrudAppPlace);
         assert (view != null);
         assert (service != null);
         assert (entityClass != null);
