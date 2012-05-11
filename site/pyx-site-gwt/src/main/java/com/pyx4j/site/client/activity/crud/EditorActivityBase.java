@@ -50,17 +50,17 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
 
     private final Class<? extends CrudAppPlace> placeClass;
 
+    private final CrudAppPlace place;
+
     private final Class<E> entityClass;
 
     private Key entityId;
 
-    protected Key parentId;
+    private String parentClassName;
 
-    protected String parentClass;
+    private Key parentId;
 
     private int tabIndex;
-
-    private final CrudAppPlace place;
 
     public EditorActivityBase(CrudAppPlace place, IEditorView<E> view, AbstractCrudService<E> service, Class<E> entityClass) {
         // development correctness checks:
@@ -75,7 +75,7 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
 
         entityId = null;
         parentId = null;
-        parentClass = null;
+        parentClassName = null;
         tabIndex = -1;
 
         view.getMemento().setCurrentPlace(place);
@@ -104,7 +104,7 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
         }
         if ((val = place.getFirstArg(CrudAppPlace.ARG_NAME_PARENT_CLASS)) != null) {
             // TODO: currently we can't restore java class by it's name in GWT - so use just name instead - find the solution...
-            parentClass = val;
+            parentClassName = val;
         }
         if ((val = place.getFirstArg(CrudAppPlace.ARG_NAME_TAB_IDX)) != null) {
             tabIndex = Integer.parseInt(val);
@@ -129,6 +129,14 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
 
     public Key getEntityId() {
         return entityId;
+    }
+
+    public String getParentClassName() {
+        return parentClassName;
+    }
+
+    public Key getParentId() {
+        return parentId;
     }
 
     @Override
