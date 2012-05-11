@@ -15,6 +15,8 @@ package com.propertyvista.biz.financial.payment;
 
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 
@@ -22,24 +24,27 @@ import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.payment.CreditCardInfo;
 import com.propertyvista.domain.payment.PaymentMethod;
+import com.propertyvista.domain.payment.PaymentType;
+import com.propertyvista.domain.property.asset.building.Building;
 
 public class PaymentFacadeImpl implements PaymentFacade {
 
     private static final I18n i18n = I18n.get(PaymentFacadeImpl.class);
 
     @Override
-    public PaymentMethod persistPaymentMethod(PaymentMethod paymentMethod) {
+    public PaymentMethod persistPaymentMethod(Building building, PaymentMethod paymentMethod) {
 
-        //TODO store credit cards
-        switch (paymentMethod.type().getValue()) {
-        case CreditCard:
+        Persistence.service().merge(paymentMethod);
+
+        // store credit cards
+        if (PaymentType.CreditCard == paymentMethod.type().getValue()) {
             CreditCardInfo cc = paymentMethod.details().cast();
             if (!cc.number().isNull()) {
                 cc.numberRefference().setValue(last4Numbers(cc.number().getValue()));
+                CreditCardProcessor.persistToken(building, cc);
             }
         }
 
-        Persistence.service().merge(paymentMethod);
         return paymentMethod;
     }
 
@@ -59,7 +64,12 @@ public class PaymentFacadeImpl implements PaymentFacade {
         if (!payment.paymentStatus().getValue().equals(PaymentRecord.PaymentStatus.Submitted)) {
             throw new Error();
         }
-        persistPaymentMethod(payment.paymentMethod());
+
+        EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto()._Units().$()._Leases().$().billingAccount(), payment.billingAccount()));
+        Building building = Persistence.service().retrieve(criteria);
+
+        persistPaymentMethod(building, payment.paymentMethod());
         Persistence.service().merge(payment);
         return payment;
     }

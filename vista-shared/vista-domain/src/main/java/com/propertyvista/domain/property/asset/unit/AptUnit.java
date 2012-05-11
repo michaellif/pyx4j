@@ -23,6 +23,7 @@ import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
+import com.pyx4j.entity.annotations.JoinTable;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Timestamp;
@@ -37,6 +38,7 @@ import com.propertyvista.domain.policy.framework.PolicyNode;
 import com.propertyvista.domain.property.asset.BuildingElement;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
+import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.shared.adapters.FloorplanCountersUpdateAdapter;
 
 @DiscriminatorValue("Unit_BuildingElement")
@@ -88,4 +90,8 @@ public interface AptUnit extends BuildingElement, PolicyNode {
     @Format("MM/dd/yyyy")
     @Caption(name = "Availability")
     IPrimitive<LogicalDate> _availableForRent();
+
+    @Detached(level = AttachLevel.Detached)
+    @JoinTable(value = Lease.class)
+    ISet<Lease> _Leases();
 }

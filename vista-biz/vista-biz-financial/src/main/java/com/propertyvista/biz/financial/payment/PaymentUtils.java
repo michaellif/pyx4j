@@ -14,32 +14,39 @@
 package com.propertyvista.biz.financial.payment;
 
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 
-import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
+import com.propertyvista.domain.property.asset.building.Building;
 
 class PaymentUtils {
 
     private static final I18n i18n = I18n.get(PaymentUtils.class);
 
     static MerchantAccount retrieveMerchantAccount(PaymentRecord paymentRecord) {
-        BillingAccount billingAccount = paymentRecord.billingAccount().duplicate();
-
-        // TODO use query of BuildingMerchantAccount
-        Persistence.service().retrieve(billingAccount.lease());
-        Persistence.service().retrieve(billingAccount.lease().unit());
-        Persistence.service().retrieve(billingAccount.lease().unit().belongsTo());
-
-        for (MerchantAccount merchantAccount : billingAccount.lease().unit().belongsTo().merchantAccounts()) {
-            Persistence.service().retrieve(merchantAccount);
+        EntityQueryCriteria<MerchantAccount> criteria = EntityQueryCriteria.create(MerchantAccount.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto()._buildings().$()._Units().$()._Leases().$().billingAccount(), paymentRecord.billingAccount()));
+        for (MerchantAccount merchantAccount : Persistence.service().query(criteria)) {
             if (!merchantAccount.merchantTerminalId().isNull()) {
                 return merchantAccount;
             }
         }
         throw new UserRuntimeException(i18n.tr("No active merchantAccount found to process the payment"));
 
+    }
+
+    public static MerchantAccount retrieveMerchantAccount(Building buildingStub) {
+        EntityQueryCriteria<MerchantAccount> criteria = EntityQueryCriteria.create(MerchantAccount.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto()._buildings(), buildingStub));
+        for (MerchantAccount merchantAccount : Persistence.service().query(criteria)) {
+            if (!merchantAccount.merchantTerminalId().isNull()) {
+                return merchantAccount;
+            }
+        }
+        throw new UserRuntimeException(i18n.tr("No active merchantAccount found to process the payment"));
     }
 }

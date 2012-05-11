@@ -16,16 +16,19 @@ package com.propertyvista.biz.financial.payment;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.rpc.shared.UserRuntimeException;
 
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.payment.CreditCardInfo;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.payment.CCInformation;
 import com.propertyvista.payment.IPaymentProcessor;
 import com.propertyvista.payment.Merchant;
 import com.propertyvista.payment.PaymentRequest;
 import com.propertyvista.payment.PaymentResponse;
+import com.propertyvista.payment.Token;
 import com.propertyvista.payment.caledon.CaledonPaymentProcessor;
 
 class CreditCardProcessor {
@@ -40,13 +43,19 @@ class CreditCardProcessor {
         //TODO identify what should be there
         request.referenceNumber().setValue(paymentRecord.id().getStringView());
         request.amount().setValue(paymentRecord.amount().getValue().floatValue());
-        CCInformation ccInfo = EntityFactory.create(CCInformation.class);
         CreditCardInfo cc = paymentRecord.paymentMethod().details().cast();
-        ccInfo.creditCardNumber().setValue(cc.number().getValue());
-        ccInfo.creditCardExpiryDate().setValue(cc.expiryDate().getValue());
-        ccInfo.securityCode().setValue(cc.securityCode().getValue());
+        if (!cc.token().isNull()) {
+            Token token = EntityFactory.create(Token.class);
+            token.code().setValue(cc.token().getStringView());
+            request.paymentInstrument().set(token);
+        } else {
+            CCInformation ccInfo = EntityFactory.create(CCInformation.class);
+            ccInfo.creditCardNumber().setValue(cc.number().getValue());
+            ccInfo.creditCardExpiryDate().setValue(cc.expiryDate().getValue());
+            ccInfo.securityCode().setValue(cc.securityCode().getValue());
 
-        request.paymentInstrument().set(ccInfo);
+            request.paymentInstrument().set(ccInfo);
+        }
 
         IPaymentProcessor proc = new CaledonPaymentProcessor();
 
@@ -65,5 +74,35 @@ class CreditCardProcessor {
             Persistence.service().commit();
             ServerSideFactory.create(ARFacade.class).postPayment(paymentRecord);
         }
+    }
+
+    public static void persistToken(Building building, CreditCardInfo cc) {
+        MerchantAccount account = PaymentUtils.retrieveMerchantAccount(building);
+        Merchant merchant = EntityFactory.create(Merchant.class);
+        merchant.terminalID().setValue(account.merchantTerminalId().getValue());
+
+        CCInformation ccInfo = EntityFactory.create(CCInformation.class);
+        ccInfo.creditCardNumber().setValue(cc.number().getValue());
+        ccInfo.creditCardExpiryDate().setValue(cc.expiryDate().getValue());
+        ccInfo.securityCode().setValue(cc.securityCode().getValue());
+
+        Token token = EntityFactory.create(Token.class);
+        //TODO add PMC Id
+        token.code().setValue(System.currentTimeMillis() + cc.id().getStringView());
+
+        IPaymentProcessor proc = new CaledonPaymentProcessor();
+        PaymentResponse response;
+        if (!cc.token().isNull()) {
+            response = proc.updateToken(merchant, ccInfo, token);
+        } else {
+            response = proc.createToken(merchant, ccInfo, token);
+        }
+
+        if (response.code().getValue().equals("0000")) {
+            cc.token().setValue(token.code().getValue());
+        } else {
+            throw new UserRuntimeException(response.message().getValue());
+        }
+
     }
 }

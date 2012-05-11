@@ -14,14 +14,20 @@
 package com.propertyvista.domain.financial;
 
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.JoinTable;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.RpcTransient;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
+
+import com.propertyvista.domain.property.asset.building.Building;
 
 public interface MerchantAccount extends IEntity {
 
@@ -71,4 +77,8 @@ public interface MerchantAccount extends IEntity {
     @Length(60)
     @Caption(description = "Description to appear on client's statement. Typically a merchant's business name.")
     IPrimitive<String> chargeDescription();
+
+    @JoinTable(value = BuildingMerchantAccount.class)
+    @Detached(level = AttachLevel.Detached)
+    ISet<Building> _buildings();
 }
