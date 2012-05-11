@@ -41,11 +41,11 @@ public class ViewerActivityBase<E extends IEntity> extends AbstractActivity impl
 
     private final AbstractCrudService<E> service;
 
-    protected Key entityId;
+    private final Class<? extends CrudAppPlace> placeClass;
+
+    private Key entityId;
 
     private int tabIndex;
-
-    private final Class<? extends CrudAppPlace> placeClass;
 
     public ViewerActivityBase(CrudAppPlace place, IViewerView<E> view, AbstractCrudService<E> service) {
         // development correctness checks:
@@ -83,6 +83,14 @@ public class ViewerActivityBase<E extends IEntity> extends AbstractActivity impl
 
     public Class<? extends CrudAppPlace> getPlaceClass() {
         return placeClass;
+    }
+
+    public Key getEntityId() {
+        return entityId;
+    }
+
+    public Key setEntityIdAsCurrentKey() {
+        return entityId = entityId.asCurrentKey();
     }
 
     @Override

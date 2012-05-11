@@ -48,17 +48,17 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
 
     private final AbstractCrudService<E> service;
 
+    private final Class<? extends CrudAppPlace> placeClass;
+
     private final Class<E> entityClass;
 
-    protected Key entityId;
+    private Key entityId;
 
     protected Key parentId;
 
     protected String parentClass;
 
     private int tabIndex;
-
-    private final Class<? extends CrudAppPlace> placeClass;
 
     private final CrudAppPlace place;
 
@@ -119,12 +119,16 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
         return service;
     }
 
+    public Class<? extends CrudAppPlace> getPlaceClass() {
+        return placeClass;
+    }
+
     public Class<E> getEntityClass() {
         return entityClass;
     }
 
-    public Class<? extends CrudAppPlace> getPlaceClass() {
-        return placeClass;
+    public Key getEntityId() {
+        return entityId;
     }
 
     @Override
