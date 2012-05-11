@@ -157,7 +157,7 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
         selectVersion = new Button(i18n.tr("Select Version"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                new VersionSelectorDialog<V>(entityVersionClass, form.getValue().getPrimaryKey()) {
+                new VersionSelectorDialog<V>(entityVersionClass, getForm().getValue().getPrimaryKey()) {
                     @Override
                     public boolean onClickOk() {
                         presenter.view(getSelectedVersionId());

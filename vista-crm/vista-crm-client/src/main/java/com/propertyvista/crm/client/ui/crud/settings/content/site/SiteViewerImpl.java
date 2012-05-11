@@ -35,7 +35,7 @@ public class SiteViewerImpl extends CrmViewerViewImplBase<SiteDescriptorDTO> imp
         addHeaderToolbarTwoItem(new Button(i18n.tr("Add Child Page"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                Key valueKey = form.getValue().getPrimaryKey();
+                Key valueKey = getForm().getValue().getPrimaryKey();
                 if (valueKey != null) { // shouldn't be new unsaved value!..
                     newChild(valueKey);
                 }

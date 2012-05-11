@@ -50,9 +50,9 @@ public class CrmEditorViewImplBase<E extends IEntity> extends EditorViewImplBase
         btnApply = new Button(i18n.tr("Apply"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                form.setVisited(true);
-                if (!form.isValid()) {
-                    throw new UserRuntimeException(form.getValidationResults().getMessagesText(true));
+                getForm().setVisited(true);
+                if (!getForm().isValid()) {
+                    throw new UserRuntimeException(getForm().getValidationResults().getMessagesText(true));
                 }
                 getPresenter().apply();
             }
@@ -63,9 +63,9 @@ public class CrmEditorViewImplBase<E extends IEntity> extends EditorViewImplBase
         btnSave = new Button(i18n.tr("Save"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                form.setVisited(true);
-                if (!form.isValid()) {
-                    throw new UserRuntimeException(form.getValidationResults().getMessagesText(true));
+                getForm().setVisited(true);
+                if (!getForm().isValid()) {
+                    throw new UserRuntimeException(getForm().getValidationResults().getMessagesText(true));
                 }
                 getPresenter().save();
             }
@@ -92,7 +92,7 @@ public class CrmEditorViewImplBase<E extends IEntity> extends EditorViewImplBase
     protected void setForm(CrudEntityForm<? extends E> form) {
         super.setForm(form);
 
-        this.form.addValueChangeHandler(new ValueChangeHandler<E>() {
+        this.getForm().addValueChangeHandler(new ValueChangeHandler<E>() {
             @Override
             public void onValueChange(ValueChangeEvent<E> event) {
                 enableButtons(true);
@@ -105,7 +105,7 @@ public class CrmEditorViewImplBase<E extends IEntity> extends EditorViewImplBase
         enableButtons(false);
         if (EditMode.newItem.equals(mode)) {
             setCaption(defaultCaption + " " + i18n.tr("New Item..."));
-            form.setActiveTab(0);
+            getForm().setActiveTab(0);
         } else {
             setCaption(defaultCaption + " " + (value == null ? "" : value.getStringView()));
         }

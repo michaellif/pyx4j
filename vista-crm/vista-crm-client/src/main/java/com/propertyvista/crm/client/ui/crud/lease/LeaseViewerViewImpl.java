@@ -301,7 +301,7 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
             };
 
             content.initContent();
-            content.populate(form.getValue());
+            content.populate(getForm().getValue());
             return content.asWidget();
         }
 

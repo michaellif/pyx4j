@@ -38,7 +38,7 @@ public class PmcViewerViewImpl extends AdminViewerViewImplBase<PmcDTO> implement
         Button upload = new Button("Upload import", new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                ImportUploadDialog.show(form.getValue());
+                ImportUploadDialog.show(getForm().getValue());
             }
         });
         addHeaderToolbarTwoItem(upload.asWidget());
