@@ -14,9 +14,13 @@
 package com.propertyvista.crm.client.ui.crud.lease.invoice;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.client.ui.HTML;
@@ -42,6 +46,8 @@ import com.propertyvista.dto.TransactionHistoryDTO;
 public class TransactionHistoryViewer extends CEntityViewer<TransactionHistoryDTO> {
 
     private final static I18n i18n = I18n.get(TransactionHistoryViewer.class);
+
+    private final static NumberFormat NUMBER_FORMAT = NumberFormat.getFormat(i18n.tr("#,##0.00"));
 
     @Override
     public IsWidget createContent(TransactionHistoryDTO value) {
@@ -106,16 +112,16 @@ public class TransactionHistoryViewer extends CEntityViewer<TransactionHistoryDT
             String amountRepresentation = "error";
             if (item.isInstanceOf(InvoiceDebit.class)) {
                 colAmount = COL_DEBIT;
-                amountRepresentation = item.amount().getValue().toString();
+                amountRepresentation = NUMBER_FORMAT.format(item.amount().getValue());
                 balance = balance.add(item.amount().getValue());
             } else if (item.isInstanceOf(InvoiceCredit.class)) {
                 colAmount = COL_CREDIT;
-                amountRepresentation = "(" + item.amount().getValue().toString() + ")";
+                amountRepresentation = "(" + NUMBER_FORMAT.format(item.amount().getValue()) + ")";
                 balance = balance.subtract(item.amount().getValue());
             } else if (ApplicationMode.isDevelopment()) {
                 throw new Error("Unknown line item class " + item.getInstanceValueClass().getName());
             }
-            String balanceRespresentation = balance.toString();
+            String balanceRespresentation = NUMBER_FORMAT.format(balance);
 
             // build row
             lineItemsView.setHTML(row, COL_DATE, toSafeHtml(DateTimeFormat.getFormat(CDatePicker.defaultDateFormat).format(item.postDate().getValue())));
@@ -137,38 +143,70 @@ public class TransactionHistoryViewer extends CEntityViewer<TransactionHistoryDT
     }
 
     private Widget createArrears(IList<AgingBuckets> agingBuckets) {
+        List<AgingBuckets> arrearsByCategory = new ArrayList<AgingBuckets>(agingBuckets);
+
+        Collections.sort(arrearsByCategory, new Comparator<AgingBuckets>() {
+            @Override
+            public int compare(AgingBuckets arg0, AgingBuckets arg1) {
+                if (arg0.debitType().getValue() == DebitType.all) {
+                    return 1;
+                } else if (arg1.debitType().getValue() == DebitType.all) {
+                    return -1;
+                } else {
+                    return arg0.debitType().getValue().toString().compareTo(arg1.debitType().getValue().toString());
+                }
+            }
+        });
         FormFlexPanel arrearsView = new FormFlexPanel();
         int row = 0;
 
+        drawArrearsTableHeader(arrearsView, ++row);
+
+        for (AgingBuckets arrears : arrearsByCategory) {
+            drawArrears(arrears, arrearsView, ++row);
+        }
+        return arrearsView;
+    }
+
+    private void drawArrearsTableHeader(FormFlexPanel arrearsView, int row) {
         AgingBuckets proto = EntityFactory.getEntityPrototype(AgingBuckets.class);
         arrearsView.setHTML(row, 0, toSafeHtml(proto.debitType().getMeta().getCaption()));
         arrearsView.setHTML(row, 1, toSafeHtml(proto.bucketCurrent().getMeta().getCaption()));
         arrearsView.setHTML(row, 2, toSafeHtml(proto.bucket30().getMeta().getCaption()));
         arrearsView.setHTML(row, 3, toSafeHtml(proto.bucket60().getMeta().getCaption()));
         arrearsView.setHTML(row, 4, toSafeHtml(proto.bucket90().getMeta().getCaption()));
+        arrearsView.setHTML(row, 5, toSafeHtml(proto.bucketOver90().getMeta().getCaption()));
+        arrearsView.setHTML(row, 6, toSafeHtml(i18n.tr("AR Balance")));
         arrearsView.getRowFormatter().setStyleName(row, CrmTheme.ArrearsStyleName.ArrearsTitle.name());
 
-        for (AgingBuckets arrears : agingBuckets) {
-            ++row;
-            arrearsView.setHTML(row, 0, toSafeHtml(arrears.debitType().getStringView()));
-            arrearsView.setHTML(row, 1, toSafeHtml(arrears.bucketCurrent().getStringView()));
-            arrearsView.setHTML(row, 2, toSafeHtml(arrears.bucket30().getStringView()));
-            arrearsView.setHTML(row, 3, toSafeHtml(arrears.bucket60().getStringView()));
-            arrearsView.setHTML(row, 4, toSafeHtml(arrears.bucket90().getStringView()));
+    }
 
-            if (arrears.debitType().getValue() != DebitType.all) {
-                arrearsView.getRowFormatter().setStyleName(row,
-                        row % 2 == 0 ? CrmTheme.ArrearsStyleName.ArrearsCategoryEven.name() : CrmTheme.ArrearsStyleName.ArrearsCategoryOdd.name());
-            } else {
-                arrearsView.getRowFormatter().setStyleName(row, CrmTheme.ArrearsStyleName.ArrearsCategoryAll.name());
-            }
-            arrearsView.getFlexCellFormatter().setStyleName(row, 1, CrmTheme.ArrearsStyleName.ArrearsMoneyCell.name());
-            arrearsView.getFlexCellFormatter().setStyleName(row, 2, CrmTheme.ArrearsStyleName.ArrearsMoneyCell.name());
-            arrearsView.getFlexCellFormatter().setStyleName(row, 3, CrmTheme.ArrearsStyleName.ArrearsMoneyCell.name());
-            arrearsView.getFlexCellFormatter().setStyleName(row, 4, CrmTheme.ArrearsStyleName.ArrearsMoneyCell.name());
+    private void drawArrears(AgingBuckets bucket, FormFlexPanel panel, int row) {
 
+        BigDecimal arBalance = bucket.bucket30().getValue().add(bucket.bucket60().getValue()).add(bucket.bucket90().getValue())
+                .add(bucket.bucketOver90().getValue());
+
+        panel.setHTML(row, 0, toSafeHtml(bucket.debitType().getStringView()));
+        panel.setHTML(row, 1, toSafeHtml(NUMBER_FORMAT.format(bucket.bucketCurrent().getValue())));
+        panel.setHTML(row, 2, toSafeHtml(NUMBER_FORMAT.format(bucket.bucket30().getValue())));
+        panel.setHTML(row, 3, toSafeHtml(NUMBER_FORMAT.format(bucket.bucket60().getValue())));
+        panel.setHTML(row, 4, toSafeHtml(NUMBER_FORMAT.format(bucket.bucket90().getValue())));
+        panel.setHTML(row, 5, toSafeHtml(NUMBER_FORMAT.format(bucket.bucketOver90().getValue())));
+        panel.setHTML(row, 6, toSafeHtml(NUMBER_FORMAT.format(arBalance)));
+
+        if (bucket.debitType().getValue() != DebitType.all) {
+            panel.getRowFormatter().setStyleName(row,
+                    row % 2 == 0 ? CrmTheme.ArrearsStyleName.ArrearsCategoryEven.name() : CrmTheme.ArrearsStyleName.ArrearsCategoryOdd.name());
+        } else {
+            panel.getRowFormatter().setStyleName(row, CrmTheme.ArrearsStyleName.ArrearsCategoryAll.name());
         }
-        return arrearsView;
+        panel.getFlexCellFormatter().setStyleName(row, 1, CrmTheme.ArrearsStyleName.ArrearsMoneyCell.name());
+        panel.getFlexCellFormatter().setStyleName(row, 2, CrmTheme.ArrearsStyleName.ArrearsMoneyCell.name());
+        panel.getFlexCellFormatter().setStyleName(row, 3, CrmTheme.ArrearsStyleName.ArrearsMoneyCell.name());
+        panel.getFlexCellFormatter().setStyleName(row, 4, CrmTheme.ArrearsStyleName.ArrearsMoneyCell.name());
+        panel.getFlexCellFormatter().setStyleName(row, 5, CrmTheme.ArrearsStyleName.ArrearsMoneyCell.name());
+        panel.getFlexCellFormatter().setStyleName(row, 6, CrmTheme.ArrearsStyleName.ArrearsMoneyCell.name());
+
     }
 
     private static SafeHtml toSafeHtml(String str) {

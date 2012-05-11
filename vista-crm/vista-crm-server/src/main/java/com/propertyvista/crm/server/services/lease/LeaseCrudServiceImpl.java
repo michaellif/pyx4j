@@ -13,7 +13,6 @@
  */
 package com.propertyvista.crm.server.services.lease;
 
-import java.math.BigDecimal;
 import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -33,11 +32,6 @@ import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.crm.rpc.services.lease.LeaseCrudService;
 import com.propertyvista.domain.communication.EmailTemplateType;
-import com.propertyvista.domain.financial.billing.AgingBuckets;
-import com.propertyvista.domain.financial.billing.InvoiceAccountCharge;
-import com.propertyvista.domain.financial.billing.InvoiceDebit.DebitType;
-import com.propertyvista.domain.financial.billing.InvoiceLineItem;
-import com.propertyvista.domain.financial.billing.InvoicePayment;
 import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -46,7 +40,6 @@ import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.domain.tenant.ptapp.MasterOnlineApplication;
 import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.dto.TransactionHistoryDTO;
-import com.propertyvista.misc.VistaTODO;
 
 public class LeaseCrudServiceImpl extends LeaseCrudServiceBaseImpl<LeaseDTO> implements LeaseCrudService {
 
@@ -153,62 +146,6 @@ public class LeaseCrudServiceImpl extends LeaseCrudServiceBaseImpl<LeaseDTO> imp
     }
 
     private TransactionHistoryDTO retrieveTransactions(LeaseDTO dto) {
-        if (false) {
-            TransactionHistoryDTO history = EntityFactory.create(TransactionHistoryDTO.class);
-            if (!VistaTODO.removedForProduction) {
-                // TODO DUMMY DATA FOR TESTING THE UI
-
-                // some mockup transactions
-                for (int i = 0; i < 5; ++i) {
-                    InvoiceLineItem transaction = null;
-                    if (i % 2 == 0) {
-                        transaction = EntityFactory.create(InvoiceAccountCharge.class);
-                        transaction.description().setValue("debit #" + String.valueOf(i));
-                        transaction.amount().setValue(new BigDecimal("500.67"));
-                    } else {
-                        transaction = EntityFactory.create(InvoicePayment.class);
-                        transaction.description().setValue("credit #" + String.valueOf(i));
-                        transaction.amount().setValue(new BigDecimal("500.33"));
-                    }
-                    transaction.postDate().setValue(new LogicalDate());
-                    history.lineItems().add(transaction);
-                }
-
-                // some mockup arrears
-                {
-                    AgingBuckets arrears = history.agingBuckets().$();
-                    arrears.debitType().setValue(DebitType.parking);
-                    arrears.bucketCurrent().setValue(new BigDecimal("100.0"));
-                    arrears.bucket30().setValue(new BigDecimal("11"));
-                    arrears.bucket60().setValue(new BigDecimal("0"));
-                    arrears.bucket90().setValue(new BigDecimal("15"));
-                    arrears.bucketOver90().setValue(new BigDecimal("10"));
-                    history.agingBuckets().add(arrears);
-                }
-                {
-                    AgingBuckets arrears = history.agingBuckets().$();
-                    arrears.debitType().setValue(DebitType.locker);
-                    arrears.bucketCurrent().setValue(new BigDecimal("0"));
-                    arrears.bucket30().setValue(new BigDecimal("99"));
-                    arrears.bucket60().setValue(new BigDecimal("999"));
-                    arrears.bucket90().setValue(new BigDecimal("9999"));
-                    arrears.bucketOver90().setValue(new BigDecimal("99999"));
-                    history.agingBuckets().add(arrears);
-                }
-                {
-                    AgingBuckets arrears = history.agingBuckets().$();
-                    arrears.debitType().setValue(DebitType.addOn);
-                    arrears.bucketCurrent().setValue(new BigDecimal("1"));
-                    arrears.bucket30().setValue(new BigDecimal("2"));
-                    arrears.bucket60().setValue(new BigDecimal("3"));
-                    arrears.bucket90().setValue(new BigDecimal("4"));
-                    arrears.bucketOver90().setValue(new BigDecimal("5"));
-                    history.agingBuckets().add(arrears);
-                }
-
-            }
-
-        }
         TransactionHistoryDTO history = ServerSideFactory.create(ARFacade.class).getTransactionHistory(dto.billingAccount());
         return history;
     }

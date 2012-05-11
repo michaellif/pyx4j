@@ -27,6 +27,7 @@ public interface AgingBuckets extends IEntity {
 
     IPrimitive<DebitType> debitType();
 
+    @Caption(name = "Current")
     IPrimitive<BigDecimal> bucketCurrent();
 
     @Caption(name = "1 to 30")
