@@ -116,7 +116,7 @@ class JoinTableInformation extends JoinInformation {
             }
         }
         if (ownerMemberMeta == null) {
-            throw new AssertionError("Unmapped owner member in join table '" + joinEntityMeta.getCaption() + "' for " + memberMeta.getFieldName() + " in "
+            throw new AssertionError("Unmapped owner member in join table '" + joinEntityMeta.getCaption() + "' for '" + memberMeta.getFieldName() + "' in "
                     + entityMeta.getEntityClass().getName());
         } else {
             return ownerMemberMeta;
