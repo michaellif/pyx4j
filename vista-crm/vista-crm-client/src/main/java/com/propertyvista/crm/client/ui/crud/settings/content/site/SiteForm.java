@@ -16,32 +16,26 @@ package com.propertyvista.crm.client.ui.crud.settings.content.site;
 import java.util.Collection;
 import java.util.EnumSet;
 
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ScrollPanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CRadioGroupEnum;
-import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
+import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
 import com.pyx4j.widgets.client.Anchor;
-import com.pyx4j.widgets.client.RadioGroup;
-import com.pyx4j.widgets.client.dialog.OkCancelDialog;
+import com.pyx4j.widgets.client.dialog.OkCancelOption;
 
-import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
-import com.propertyvista.crm.client.themes.CrmTheme;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.site.SiteDescriptor;
 import com.propertyvista.domain.site.gadgets.HomePageGadget;
@@ -50,8 +44,6 @@ import com.propertyvista.dto.SiteDescriptorDTO;
 public class SiteForm extends CrmEntityForm<SiteDescriptorDTO> {
 
     private static final I18n i18n = I18n.get(SiteForm.class);
-
-    private final VistaTabLayoutPanel tabPanel = new VistaTabLayoutPanel(CrmTheme.defaultTabHeight, Unit.EM);
 
     public SiteForm() {
         this(false);
@@ -63,16 +55,6 @@ public class SiteForm extends CrmEntityForm<SiteDescriptorDTO> {
 
     @Override
     public IsWidget createContent() {
-
-        tabPanel.add(createGeneralTab(), i18n.tr("General"));
-        tabPanel.add(createTestimonialsTab(), i18n.tr("Testimonials"));
-        tabPanel.add(createNewsTab(), i18n.tr("News"));
-
-        tabPanel.setSize("100%", "100%");
-        return tabPanel;
-    }
-
-    public IsWidget createGeneralTab() {
         FormFlexPanel main = new FormFlexPanel();
 
         int row = 0;
@@ -124,23 +106,14 @@ public class SiteForm extends CrmEntityForm<SiteDescriptorDTO> {
         return new ScrollPanel(main);
     }
 
-    class GadgetSelectorDialog extends OkCancelDialog {
-        private final CRadioGroupEnum<HomePageGadget.GadgetType> gadgetType = new CRadioGroupEnum<HomePageGadget.GadgetType>(HomePageGadget.GadgetType.class,
-                RadioGroup.Layout.VERTICAL);
-
+    class GadgetSelectorDialog extends SelectEnumDialog<HomePageGadget.GadgetType> implements OkCancelOption {
         public GadgetSelectorDialog() {
-            super(i18n.tr("Select Gadget Type"));
-            VerticalPanel body = new VerticalPanel();
-            // type selector
-            gadgetType.setTitle(i18n.tr("Gadget Type"));
-            WidgetDecorator typeWidget = new WidgetDecorator.Builder(gadgetType).labelWidth(10).build();
-            body.add(typeWidget);
-            setBody(body);
+            super(i18n.tr("Select Gadget Type"), EnumSet.allOf(HomePageGadget.GadgetType.class));
         }
 
         @Override
         public boolean onClickOk() {
-            HomePageGadget.GadgetType type = gadgetType.getValue();
+            HomePageGadget.GadgetType type = getSelectedType();
             if (type == null) {
                 return false;
             }
@@ -151,6 +124,10 @@ public class SiteForm extends CrmEntityForm<SiteDescriptorDTO> {
             return true;
         }
 
+        @Override
+        public boolean onClickCancel() {
+            return true;
+        }
     }
 
     private Widget createGadgetPanel() {
@@ -176,22 +153,6 @@ public class SiteForm extends CrmEntityForm<SiteDescriptorDTO> {
         gadgetPanel.setWidget(row, 1, inject(proto().homePageGadgetsWide(), new HomePageGadgetFolder(isEditable())));
         gadgetPanel.getRowFormatter().setVerticalAlign(row++, HasVerticalAlignment.ALIGN_TOP);
         return gadgetPanel;
-    }
-
-    private Widget createTestimonialsTab() {
-        FormFlexPanel main = new FormFlexPanel();
-
-        main.setWidget(0, 0, inject(proto().testimonials(), new TestimonialFolder(isEditable())));
-
-        return new ScrollPanel(main);
-    }
-
-    private Widget createNewsTab() {
-        FormFlexPanel main = new FormFlexPanel();
-
-        main.setWidget(0, 0, inject(proto().news(), new NewsFolder(isEditable())));
-
-        return new ScrollPanel(main);
     }
 
 // TODO

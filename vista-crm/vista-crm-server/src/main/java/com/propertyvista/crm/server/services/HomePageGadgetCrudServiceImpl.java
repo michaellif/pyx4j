@@ -13,6 +13,8 @@
  */
 package com.propertyvista.crm.server.services;
 
+import java.util.Date;
+
 import com.pyx4j.entity.server.AbstractCrudServiceImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -44,9 +46,9 @@ public class HomePageGadgetCrudServiceImpl extends AbstractCrudServiceImpl<HomeP
 
     @Override
     protected void persist(HomePageGadget entity, HomePageGadget dto) {
+        EntityQueryCriteria<SiteDescriptor> criteria = EntityQueryCriteria.create(SiteDescriptor.class);
+        SiteDescriptor site = Persistence.service().retrieve(criteria);
         if (entity.getPrimaryKey() == null) {
-            EntityQueryCriteria<SiteDescriptor> criteria = EntityQueryCriteria.create(SiteDescriptor.class);
-            SiteDescriptor site = Persistence.service().retrieve(criteria);
             // update corresponding gadget list
             switch (dto.area().getValue()) {
             case wide:
@@ -60,5 +62,7 @@ public class HomePageGadgetCrudServiceImpl extends AbstractCrudServiceImpl<HomeP
         } else {
             super.persist(entity, dto);
         }
+        site._updateFlag().updated().setValue(new Date());
+        Persistence.service().merge(site._updateFlag());
     }
 }

@@ -16,6 +16,7 @@ package com.propertyvista.portal.server.preloader.site.prod;
 import java.util.Date;
 import java.util.List;
 
+import com.propertyvista.domain.site.SiteDescriptor;
 import com.propertyvista.domain.site.SiteDescriptor.Skin;
 import com.propertyvista.misc.VistaDataPreloaderParameter;
 import com.propertyvista.portal.server.preloader.site.AbstractSitePreloader;
@@ -39,11 +40,11 @@ public class ProdSitePreloader extends AbstractSitePreloader {
     }
 
     @Override
-    protected void createTestimonial(List<LocaleInfo> siteLocale) {
+    protected void createTestimonialGadget(SiteDescriptor site, List<LocaleInfo> siteLocale) {
     }
 
     @Override
-    protected void createNews(List<LocaleInfo> siteLocale) {
+    protected void createNewsGadget(SiteDescriptor site, List<LocaleInfo> siteLocale) {
     }
 
     @Override
