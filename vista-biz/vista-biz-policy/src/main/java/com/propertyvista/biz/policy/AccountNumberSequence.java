@@ -36,6 +36,8 @@ import com.propertyvista.server.jobs.TaskRunner;
  */
 class AccountNumberSequence {
 
+    private static Object sharedAccountNumbersPoolLock = new Object();
+
     static String getNextSequence() {
         return TaskRunner.runAutonomousTransation(new Callable<String>() {
             @Override
@@ -67,7 +69,7 @@ class AccountNumberSequence {
         });
     }
 
-    static void createNewSequence(final IdAssignmentSequence sequence) {
+    private static void createNewSequence(final IdAssignmentSequence sequence) {
         sequence.number().setValue(0l);
         sequence.maximum().setValue(9999l);
         final String namespace = NamespaceManager.getNamespace();
@@ -75,29 +77,30 @@ class AccountNumberSequence {
         Long newPrefix = TaskRunner.runInAdminNamespace(new Callable<Long>() {
             @Override
             public Long call() throws Exception {
-                EntityQueryCriteria<Pmc> criteria = EntityQueryCriteria.create(Pmc.class);
-                criteria.add(PropertyCriterion.eq(criteria.proto().namespace(), namespace));
-                Pmc pmc = Persistence.service().retrieve(criteria);
-
-                EntityQueryCriteria<PmcAccountNumbers> acnCriteria = EntityQueryCriteria.create(PmcAccountNumbers.class);
-                acnCriteria.add(PropertyCriterion.eq(acnCriteria.proto().pmcType(), AccountNumbersRangeType.Small));
-                acnCriteria.desc(acnCriteria.proto().accountPrefix());
-                PmcAccountNumbers maxRow = Persistence.service().retrieve(acnCriteria);
                 Long nextValue;
-                if (maxRow == null) {
-                    // initialization
-                    // 800-ppp-ppp
-                    nextValue = Long.valueOf(800000000l);
-                } else {
-                    nextValue = maxRow.accountPrefix().getValue() + 1l;
-                }
-                PmcAccountNumbers ar = EntityFactory.create(PmcAccountNumbers.class);
-                ar.pmcType().setValue(AccountNumbersRangeType.Small);
-                ar.accountPrefix().setValue(nextValue);
-                ar.pmc().set(pmc);
-                Persistence.service().persist(ar);
-                Persistence.service().commit();
+                synchronized (sharedAccountNumbersPoolLock) {
+                    EntityQueryCriteria<Pmc> criteria = EntityQueryCriteria.create(Pmc.class);
+                    criteria.add(PropertyCriterion.eq(criteria.proto().namespace(), namespace));
+                    Pmc pmc = Persistence.service().retrieve(criteria);
 
+                    EntityQueryCriteria<PmcAccountNumbers> acnCriteria = EntityQueryCriteria.create(PmcAccountNumbers.class);
+                    acnCriteria.add(PropertyCriterion.eq(acnCriteria.proto().pmcType(), AccountNumbersRangeType.Small));
+                    acnCriteria.desc(acnCriteria.proto().accountPrefix());
+                    PmcAccountNumbers maxRow = Persistence.service().retrieve(acnCriteria);
+                    if (maxRow == null) {
+                        // initialization
+                        // 800-ppp-ppp
+                        nextValue = Long.valueOf(800000000l);
+                    } else {
+                        nextValue = maxRow.accountPrefix().getValue() + 1l;
+                    }
+                    PmcAccountNumbers ar = EntityFactory.create(PmcAccountNumbers.class);
+                    ar.pmcType().setValue(AccountNumbersRangeType.Small);
+                    ar.accountPrefix().setValue(nextValue);
+                    ar.pmc().set(pmc);
+                    Persistence.service().persist(ar);
+                    Persistence.service().commit();
+                }
                 return nextValue;
             }
         });
