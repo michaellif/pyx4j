@@ -19,7 +19,7 @@ import com.propertyvista.dto.BoilerDTO;
 
 public class BoilerEditorViewImpl extends CrmEditorViewImplBase<BoilerDTO> implements BoilerEditorView {
     public BoilerEditorViewImpl() {
-        super(CrmSiteMap.Properties.Boiler.class, new BoilerEditorForm());
+        super(CrmSiteMap.Properties.Boiler.class, new BoilerForm());
     }
 
 }

@@ -21,7 +21,7 @@ public class CrmRoleViewerViewImpl extends CrmViewerViewImplBase<CrmRole> implem
 
     public CrmRoleViewerViewImpl() {
         super(CrmSiteMap.Settings.UserRole.class);
-        setForm(new CrmRoleEditorForm(true));
+        setForm(new CrmRoleForm(true));
     }
 
 }

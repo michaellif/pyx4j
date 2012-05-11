@@ -21,6 +21,6 @@ public class MerchantAccountEditorViewImpl extends CrmEditorViewImplBase<Merchan
 
     public MerchantAccountEditorViewImpl() {
         super(CrmSiteMap.Settings.MerchantAccount.class);
-        setForm(new MerchantAccountEditorForm());
+        setForm(new MerchantAccountForm());
     }
 }

@@ -24,6 +24,6 @@ public class LeaseTermsPolicyEditorViewImpl extends CrmEditorViewImplBase<LeaseT
     private static final I18n i18n = I18n.get(LeaseTermsPolicyEditorViewImpl.class);
 
     public LeaseTermsPolicyEditorViewImpl() {
-        super(CrmSiteMap.Settings.Policies.LeaseTerms.class, new LeaseTermsPolicyEditorForm());
+        super(CrmSiteMap.Settings.Policies.LeaseTerms.class, new LeaseTermsPolicyForm());
     }
 }

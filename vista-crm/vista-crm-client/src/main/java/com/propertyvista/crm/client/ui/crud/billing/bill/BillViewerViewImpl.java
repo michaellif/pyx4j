@@ -46,7 +46,7 @@ public class BillViewerViewImpl extends CrmViewerViewImplBase<BillDTO> implement
     private final Button print;
 
     public BillViewerViewImpl() {
-        super(CrmSiteMap.Tenants.Bill.class, new BillEditorForm(true), true);
+        super(CrmSiteMap.Tenants.Bill.class, new BillForm(true), true);
 
         // Add actions:
 

@@ -19,6 +19,6 @@ import com.propertyvista.domain.site.PageDescriptor;
 
 public class PageEditorImpl extends CrmEditorViewImplBase<PageDescriptor> implements PageEditor {
     public PageEditorImpl() {
-        super(CrmSiteMap.Settings.Page.class, new PageEditorForm());
+        super(CrmSiteMap.Settings.Page.class, new PageForm());
     }
 }

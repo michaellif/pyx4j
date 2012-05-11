@@ -20,6 +20,6 @@ import com.propertyvista.domain.property.asset.unit.AptUnitItem;
 public class UnitItemViewerViewImpl extends CrmViewerViewImplBase<AptUnitItem> implements UnitItemViewerView {
 
     public UnitItemViewerViewImpl() {
-        super(CrmSiteMap.Properties.UnitItem.class, new UnitItemEditorForm(true));
+        super(CrmSiteMap.Properties.UnitItem.class, new UnitItemForm(true));
     }
 }

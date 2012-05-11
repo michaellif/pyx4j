@@ -19,6 +19,6 @@ import com.propertyvista.domain.financial.GlCodeCategory;
 
 public class GlCodeCategoryEditorViewImpl extends CrmEditorViewImplBase<GlCodeCategory> implements GlCodeCategoryEditorView {
     public GlCodeCategoryEditorViewImpl() {
-        super(CrmSiteMap.Settings.GlCodeCategory.class, new GlCodeCategoryEditorForm());
+        super(CrmSiteMap.Settings.GlCodeCategory.class, new GlCodeCategoryForm());
     }
 }

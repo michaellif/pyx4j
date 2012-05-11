@@ -21,6 +21,6 @@ public class ProductTaxPolicyViewerViewImpl extends CrmViewerViewImplBase<Produc
 
     public ProductTaxPolicyViewerViewImpl() {
         super(CrmSiteMap.Settings.Policies.ProductTax.class);
-        setForm(new ProductTaxPolicyEditorForm(true));
+        setForm(new ProductTaxPolicyForm(true));
     }
 }

@@ -21,7 +21,7 @@ public class DepositPolicyEditorViewImpl extends CrmEditorViewImplBase<DepositPo
 
     public DepositPolicyEditorViewImpl() {
         super(CrmSiteMap.Settings.Policies.Deposits.class);
-        setForm(new DepositPolicyEditorForm());
+        setForm(new DepositPolicyForm());
     }
 
 }

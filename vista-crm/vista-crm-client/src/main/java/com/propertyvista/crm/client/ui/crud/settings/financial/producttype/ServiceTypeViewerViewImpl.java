@@ -20,6 +20,6 @@ import com.propertyvista.domain.financial.offering.ServiceItemType;
 public class ServiceTypeViewerViewImpl extends CrmViewerViewImplBase<ServiceItemType> implements ServiceTypeViewerView {
 
     public ServiceTypeViewerViewImpl() {
-        super(CrmSiteMap.Settings.ServiceItemType.class, new ServiceTypeEditorForm(true));
+        super(CrmSiteMap.Settings.ServiceItemType.class, new ServiceTypeForm(true));
     }
 }

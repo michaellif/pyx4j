@@ -19,6 +19,6 @@ import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 
 public class LeaseAdjustmentEditorViewImpl extends CrmEditorViewImplBase<LeaseAdjustment> implements LeaseAdjustmentEditorView {
     public LeaseAdjustmentEditorViewImpl() {
-        super(CrmSiteMap.Tenants.LeaseAdjustment.class, new LeaseAdjustmentEditorForm());
+        super(CrmSiteMap.Tenants.LeaseAdjustment.class, new LeaseAdjustmentForm());
     }
 }

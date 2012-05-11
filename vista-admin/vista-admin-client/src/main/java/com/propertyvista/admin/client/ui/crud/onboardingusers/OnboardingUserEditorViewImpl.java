@@ -21,7 +21,7 @@ public class OnboardingUserEditorViewImpl extends AdminEditorViewImplBase<Onboar
 
     public OnboardingUserEditorViewImpl() {
         super(AdminSiteMap.Management.OnboardingUsers.class);
-        setForm(new OnboardingUserEditorForm());
+        setForm(new OnboardingUserForm());
     }
 
 }

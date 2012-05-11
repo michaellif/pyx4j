@@ -83,12 +83,12 @@ public class UnknownInsuranceForm extends CEntityDecoratableForm<InsuranceDTO> {
                 InsurancePurchaseEditorForm purchaseInsuraceForm = (InsurancePurchaseEditorForm) get(proto().purchaseInsurance());
                 purchaseInsuraceForm.setVisible(!alreadyHasInsurance);
 
-                InsuranceAlreadyAvailabileEditorForm alreadyHasInsuranceForm = (InsuranceAlreadyAvailabileEditorForm) get(proto().existingInsurance());
+                InsuranceAlreadyAvailabileForm alreadyHasInsuranceForm = (InsuranceAlreadyAvailabileForm) get(proto().existingInsurance());
                 alreadyHasInsuranceForm.setVisible(alreadyHasInsurance);
                 existingInsuranceConfirmationButton.setVisible(alreadyHasInsurance);
             }
         });
-        content.setWidget(++row, 0, inject(proto().existingInsurance(), new InsuranceAlreadyAvailabileEditorForm()));
+        content.setWidget(++row, 0, inject(proto().existingInsurance(), new InsuranceAlreadyAvailabileForm()));
         get(proto().existingInsurance()).setVisible(false);
 
         content.setWidget(++row, 0, existingInsuranceConfirmationButton = new Button(i18n.tr("Save and Continue"), new ClickHandler() {

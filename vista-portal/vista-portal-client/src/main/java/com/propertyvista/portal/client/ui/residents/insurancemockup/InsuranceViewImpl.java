@@ -20,7 +20,7 @@ import com.pyx4j.entity.client.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
 import com.propertyvista.portal.client.ui.residents.insurancemockup.components.InsuranceMessagePanel;
-import com.propertyvista.portal.client.ui.residents.insurancemockup.forms.InsuranceAlreadyAvailabileEditorForm;
+import com.propertyvista.portal.client.ui.residents.insurancemockup.forms.InsuranceAlreadyAvailabileForm;
 import com.propertyvista.portal.client.ui.residents.insurancemockup.forms.TenantSureInsuranceForm;
 import com.propertyvista.portal.client.ui.residents.insurancemockup.forms.UnknownInsuranceForm;
 import com.propertyvista.portal.client.ui.residents.insurancemockup.resources.InsuranceMockupResources;
@@ -32,7 +32,7 @@ public class InsuranceViewImpl implements InsuranceView {
 
     private final CEntityForm<InsuranceDTO> unknownInsuranceForm;
 
-    private final InsuranceAlreadyAvailabileEditorForm independantInsuranceForm;
+    private final InsuranceAlreadyAvailabileForm independantInsuranceForm;
 
     private final FormFlexPanel independantInsurancePanel;
 
@@ -48,7 +48,7 @@ public class InsuranceViewImpl implements InsuranceView {
         unknownInsuranceForm.initContent();
         unknownInsuranceForm.setVisible(false);
 
-        independantInsuranceForm = new InsuranceAlreadyAvailabileEditorForm();
+        independantInsuranceForm = new InsuranceAlreadyAvailabileForm();
         independantInsuranceForm.initContent();
         independantInsuranceForm.setVisible(false);
         independantInsuranceForm.setViewable(true);

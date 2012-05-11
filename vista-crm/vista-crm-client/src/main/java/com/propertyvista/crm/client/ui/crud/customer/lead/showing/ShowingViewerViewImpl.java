@@ -20,6 +20,6 @@ import com.propertyvista.domain.tenant.lead.Showing;
 public class ShowingViewerViewImpl extends CrmViewerViewImplBase<Showing> implements ShowingViewerView {
 
     public ShowingViewerViewImpl() {
-        super(Marketing.Showing.class, new ShowingEditorForm(true));
+        super(Marketing.Showing.class, new ShowingForm(true));
     }
 }

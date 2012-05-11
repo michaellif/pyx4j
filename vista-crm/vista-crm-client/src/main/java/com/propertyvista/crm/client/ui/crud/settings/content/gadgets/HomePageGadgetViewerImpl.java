@@ -22,7 +22,7 @@ import com.propertyvista.domain.site.gadgets.HomePageGadget;
 public class HomePageGadgetViewerImpl extends CrmViewerViewImplBase<HomePageGadget> implements HomePageGadgetViewer {
 
     public HomePageGadgetViewerImpl() {
-        super(CrmSiteMap.Settings.HomePageGadgets.class, new HomePageGadgetEditorForm(true));
+        super(CrmSiteMap.Settings.HomePageGadgets.class, new HomePageGadgetForm(true));
     }
 
     @Override

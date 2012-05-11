@@ -32,7 +32,7 @@ public class AppointmentViewerViewImpl extends CrmViewerViewImplBase<Appointment
         showingsLister = new ListerInternalViewImplBase<Showing>(new ShowingLister());
 
         // set main form here:
-        setForm(new AppointmentEditorForm(true));
+        setForm(new AppointmentForm(true));
     }
 
     @Override

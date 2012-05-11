@@ -19,6 +19,6 @@ import com.propertyvista.domain.site.gadgets.HomePageGadget;
 
 public class HomePageGadgetEditorImpl extends CrmEditorViewImplBase<HomePageGadget> implements HomePageGadgetEditor {
     public HomePageGadgetEditorImpl() {
-        super(CrmSiteMap.Settings.HomePageGadgets.class, new HomePageGadgetEditorForm());
+        super(CrmSiteMap.Settings.HomePageGadgets.class, new HomePageGadgetForm());
     }
 }

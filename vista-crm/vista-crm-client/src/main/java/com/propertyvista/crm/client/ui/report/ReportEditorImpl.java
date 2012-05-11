@@ -14,12 +14,12 @@
 package com.propertyvista.crm.client.ui.report;
 
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
-import com.propertyvista.crm.client.ui.dashboard.DashboardEditorForm;
+import com.propertyvista.crm.client.ui.dashboard.DashboardForm;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 
 public class ReportEditorImpl extends CrmEditorViewImplBase<DashboardMetadata> implements ReportEditor {
     public ReportEditorImpl() {
-        super(CrmSiteMap.Report.Edit.class, new DashboardEditorForm());
+        super(CrmSiteMap.Report.Edit.class, new DashboardForm());
     }
 }

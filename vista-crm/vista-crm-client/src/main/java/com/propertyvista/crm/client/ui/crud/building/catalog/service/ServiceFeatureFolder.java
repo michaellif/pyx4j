@@ -30,7 +30,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
-import com.propertyvista.crm.client.ui.crud.building.catalog.feature.FeatureEditorForm;
+import com.propertyvista.crm.client.ui.crud.building.catalog.feature.FeatureForm;
 import com.propertyvista.crm.rpc.services.selections.SelectFeatureListService;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.Service;
@@ -49,7 +49,7 @@ class ServiceFeatureFolder extends VistaBoxFolder<Feature> {
     @Override
     public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof Feature) {
-            return new FeatureEditorForm(true);
+            return new FeatureForm(true);
         }
         return super.create(member);
     }

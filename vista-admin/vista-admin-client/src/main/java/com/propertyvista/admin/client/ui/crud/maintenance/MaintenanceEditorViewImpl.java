@@ -21,6 +21,6 @@ import com.propertyvista.admin.rpc.AdminSiteMap;
 public class MaintenanceEditorViewImpl extends AdminEditorViewImplBase<SystemMaintenanceState> implements MaintenanceEditorView {
 
     public MaintenanceEditorViewImpl() {
-        super(AdminSiteMap.Administration.Maintenance.class, new MaintenanceEditorForm());
+        super(AdminSiteMap.Administration.Maintenance.class, new MaintenanceForm());
     }
 }

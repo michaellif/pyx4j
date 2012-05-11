@@ -19,7 +19,7 @@ import com.propertyvista.domain.tenant.PersonScreening;
 
 public class PersonScreeningEditorViewImpl extends CrmEditorViewImplBase<PersonScreening> implements PersonScreeningEditorView {
     public PersonScreeningEditorViewImpl() {
-        super(CrmSiteMap.Tenants.Screening.class, new PersonScreeningEditorForm());
+        super(CrmSiteMap.Tenants.Screening.class, new PersonScreeningForm());
     }
 
 }

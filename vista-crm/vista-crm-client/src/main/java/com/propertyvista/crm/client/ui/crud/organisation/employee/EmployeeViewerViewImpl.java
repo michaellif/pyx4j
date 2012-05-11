@@ -30,7 +30,7 @@ public class EmployeeViewerViewImpl extends CrmViewerViewImplBase<EmployeeDTO> i
     private final Button passwordAction;
 
     public EmployeeViewerViewImpl() {
-        super(CrmSiteMap.Organization.Employee.class, new EmployeeEditorForm(true));
+        super(CrmSiteMap.Organization.Employee.class, new EmployeeForm(true));
 
         // Add actions:        
         passwordAction = new Button(i18n.tr("Change Password"), new ClickHandler() {

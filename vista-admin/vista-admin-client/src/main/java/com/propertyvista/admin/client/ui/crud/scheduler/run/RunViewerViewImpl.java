@@ -31,7 +31,7 @@ public class RunViewerViewImpl extends AdminViewerViewImplBase<Run> implements R
 
         runDataLister = new ListerInternalViewImplBase<RunData>(new RunDataLister());
 
-        setForm(new RunEditorForm(true));
+        setForm(new RunForm(true));
     }
 
     @Override

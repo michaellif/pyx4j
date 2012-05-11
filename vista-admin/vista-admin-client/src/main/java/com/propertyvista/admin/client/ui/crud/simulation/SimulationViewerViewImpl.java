@@ -20,7 +20,7 @@ import com.propertyvista.admin.rpc.SimulationDTO;
 public class SimulationViewerViewImpl extends AdminViewerViewImplBase<SimulationDTO> implements SimulationViewerView {
 
     public SimulationViewerViewImpl() {
-        super(AdminSiteMap.Administration.Simulation.class, new SimulationEditorForm(true));
+        super(AdminSiteMap.Administration.Simulation.class, new SimulationForm(true));
     }
 
 }

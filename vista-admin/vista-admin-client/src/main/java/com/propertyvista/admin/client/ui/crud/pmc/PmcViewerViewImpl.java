@@ -33,7 +33,7 @@ public class PmcViewerViewImpl extends AdminViewerViewImplBase<PmcDTO> implement
     private final Button activateBtn;
 
     public PmcViewerViewImpl() {
-        super(AdminSiteMap.Management.PMC.class, new PmcEditorForm(true));
+        super(AdminSiteMap.Management.PMC.class, new PmcForm(true));
 
         Button upload = new Button("Upload import", new ClickHandler() {
             @Override

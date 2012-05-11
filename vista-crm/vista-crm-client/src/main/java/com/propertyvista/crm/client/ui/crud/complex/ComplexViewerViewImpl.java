@@ -27,7 +27,7 @@ public class ComplexViewerViewImpl extends CrmViewerViewImplBase<ComplexDTO> imp
         super(CrmSiteMap.Properties.Complex.class);
 
         // set main form here:
-        setForm(new ComplexEditorForm(true));
+        setForm(new ComplexForm(true));
     }
 
     @Override

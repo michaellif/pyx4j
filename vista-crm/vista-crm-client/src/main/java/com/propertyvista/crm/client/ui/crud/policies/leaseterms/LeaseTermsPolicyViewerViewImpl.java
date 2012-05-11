@@ -21,7 +21,7 @@ public class LeaseTermsPolicyViewerViewImpl extends CrmViewerViewImplBase<LeaseT
 
     public LeaseTermsPolicyViewerViewImpl() {
         super(CrmSiteMap.Settings.Policies.LeaseTerms.class);
-        setForm(new LeaseTermsPolicyEditorForm(true));
+        setForm(new LeaseTermsPolicyForm(true));
     }
 
 }

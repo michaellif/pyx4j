@@ -21,7 +21,7 @@ public class ShowingEditorViewImpl extends CrmEditorViewImplBase<Showing> implem
 
     public ShowingEditorViewImpl() {
         super(Marketing.Showing.class);
-        setForm(new ShowingEditorForm());
+        setForm(new ShowingForm());
     }
 
 }

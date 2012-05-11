@@ -31,7 +31,7 @@ public class MaintenanceViewerViewImpl extends AdminViewerViewImplBase<SystemMai
     private final Button btnResetCache;
 
     public MaintenanceViewerViewImpl() {
-        super(AdminSiteMap.Administration.Maintenance.class, new MaintenanceEditorForm(true));
+        super(AdminSiteMap.Administration.Maintenance.class, new MaintenanceForm(true));
 
         // Add actions:
         btnResetCache = new Button(i18n.tr("Reset Global Cache"), new ClickHandler() {

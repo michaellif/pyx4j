@@ -33,11 +33,11 @@ import com.propertyvista.domain.site.PageDescriptor;
 
 class SitePageDescriptorFolder extends VistaTableFolder<PageDescriptor> {
 
-    private final SiteEditorForm parent;
+    private final SiteForm parent;
 
     private final SiteViewer viewer;
 
-    public SitePageDescriptorFolder(SiteEditorForm parent) {
+    public SitePageDescriptorFolder(SiteForm parent) {
         super(PageDescriptor.class, parent.isEditable());
         this.parent = parent;
         this.viewer = (!parent.isEditable() ? (SiteViewer) parent.getParentView() : null);

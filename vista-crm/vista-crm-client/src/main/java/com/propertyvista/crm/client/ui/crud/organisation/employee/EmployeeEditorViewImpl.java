@@ -21,6 +21,6 @@ public class EmployeeEditorViewImpl extends CrmEditorViewImplBase<EmployeeDTO> i
 
     public EmployeeEditorViewImpl() {
 
-        super(CrmSiteMap.Organization.Employee.class, new EmployeeEditorForm());
+        super(CrmSiteMap.Organization.Employee.class, new EmployeeForm());
     }
 }

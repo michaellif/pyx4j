@@ -20,6 +20,6 @@ import com.propertyvista.dto.FloorplanDTO;
 public class FloorplanEditorViewImpl extends CrmEditorViewImplBase<FloorplanDTO> implements FloorplanEditorView {
 
     public FloorplanEditorViewImpl() {
-        super(CrmSiteMap.Properties.Floorplan.class, new FloorplanEditorForm());
+        super(CrmSiteMap.Properties.Floorplan.class, new FloorplanForm());
     }
 }

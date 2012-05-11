@@ -119,7 +119,7 @@ public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> i
         billingRunLister = new ListerInternalViewImplBase<BillingRun>(new BillingRunLister());
 
         // set main form here:
-        setForm(new BuildingEditorForm(true));
+        setForm(new BuildingForm(true));
 
         runBillAction = new Button(i18n.tr("Run Bill"), new ClickHandler() {
             @Override

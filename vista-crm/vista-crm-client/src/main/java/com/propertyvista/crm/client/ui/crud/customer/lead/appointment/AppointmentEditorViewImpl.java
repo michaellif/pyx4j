@@ -20,6 +20,6 @@ import com.propertyvista.domain.tenant.lead.Appointment;
 public class AppointmentEditorViewImpl extends CrmEditorViewImplBase<Appointment> implements AppointmentEditorView {
 
     public AppointmentEditorViewImpl() {
-        super(Marketing.Appointment.class, new AppointmentEditorForm());
+        super(Marketing.Appointment.class, new AppointmentForm());
     }
 }

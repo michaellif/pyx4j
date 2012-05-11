@@ -22,6 +22,6 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
     public MaintenanceRequestViewerViewImpl() {
         super(CrmSiteMap.Tenants.MaintenanceRequest.class);
 
-        setForm(new MaintenanceRequestEditorForm(true));
+        setForm(new MaintenanceRequestForm(true));
     }
 }

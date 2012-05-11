@@ -20,7 +20,7 @@ import com.propertyvista.domain.financial.offering.FeatureItemType;
 public class FeatureTypeEditorViewImpl extends CrmEditorViewImplBase<FeatureItemType> implements FeatureTypeEditorView {
 
     public FeatureTypeEditorViewImpl() {
-        super(CrmSiteMap.Settings.FeatureItemType.class, new FeatureTypeEditorForm());
+        super(CrmSiteMap.Settings.FeatureItemType.class, new FeatureTypeForm());
     }
 
 }

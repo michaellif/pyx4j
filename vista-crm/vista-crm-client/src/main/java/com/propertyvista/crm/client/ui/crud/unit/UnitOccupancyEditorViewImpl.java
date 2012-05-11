@@ -20,6 +20,6 @@ import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySe
 public class UnitOccupancyEditorViewImpl extends CrmEditorViewImplBase<AptUnitOccupancySegment> implements UnitOccupancyEditorView {
 
     public UnitOccupancyEditorViewImpl() {
-        super(CrmSiteMap.Properties.UnitOccupancy.class, new UnitOccupancyEditorForm());
+        super(CrmSiteMap.Properties.UnitOccupancy.class, new UnitOccupancyForm());
     }
 }

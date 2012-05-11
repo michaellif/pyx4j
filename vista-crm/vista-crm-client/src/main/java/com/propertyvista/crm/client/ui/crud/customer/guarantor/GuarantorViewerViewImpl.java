@@ -41,7 +41,7 @@ public class GuarantorViewerViewImpl extends CrmViewerViewImplBase<GuarantorDTO>
         screeningLister = new ListerInternalViewImplBase<PersonScreening>(new PersonScreeningLister());
 
         //set main form here:
-        setForm(new GuarantorEditorForm(true));
+        setForm(new GuarantorForm(true));
 
         passwordAction = new Button(i18n.tr("Change Password"), new ClickHandler() {
             @Override
