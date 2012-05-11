@@ -139,7 +139,7 @@ public class UnitViewerActivity extends CrmViewerActivity<AptUnitDTO> implements
                 populate();
             }
 
-        }, entityId, type);
+        }, getEntityId(), type);
     }
 
     @Override
@@ -151,7 +151,7 @@ public class UnitViewerActivity extends CrmViewerActivity<AptUnitDTO> implements
                 populate();
             }
 
-        }, entityId, renovationEndDate);
+        }, getEntityId(), renovationEndDate);
     }
 
     @Override
@@ -163,7 +163,7 @@ public class UnitViewerActivity extends CrmViewerActivity<AptUnitDTO> implements
                 populate();
             }
 
-        }, entityId);
+        }, getEntityId());
     }
 
     @Override
@@ -175,6 +175,6 @@ public class UnitViewerActivity extends CrmViewerActivity<AptUnitDTO> implements
                 populate();
             }
 
-        }, entityId, vacantFrom);
+        }, getEntityId(), vacantFrom);
     }
 }

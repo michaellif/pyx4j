@@ -42,6 +42,6 @@ public abstract class LeaseViewerActivityBase<DTO extends LeaseDTO> extends CrmV
             public void onSuccess(Vector<LeaseParticipant> result) {
                 callback.onSuccess(result);
             }
-        }, entityId);
+        }, getEntityId());
     }
 }

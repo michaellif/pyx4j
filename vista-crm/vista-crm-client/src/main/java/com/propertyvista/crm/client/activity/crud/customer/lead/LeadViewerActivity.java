@@ -59,7 +59,7 @@ public class LeadViewerActivity extends CrmViewerActivity<Lead> implements LeadV
             public void onSuccess(Vector<AptUnit> result) {
                 callback.onSuccess(result);
             }
-        }, entityId);
+        }, getEntityId());
     }
 
     @Override
@@ -74,7 +74,7 @@ public class LeadViewerActivity extends CrmViewerActivity<Lead> implements LeadV
             public void onFailure(Throwable caught) {
                 onConvertionFail(caught);
             }
-        }, entityId, unitId);
+        }, getEntityId(), unitId);
     }
 
     public void onLeaseConvertionSuccess() {
@@ -113,6 +113,6 @@ public class LeadViewerActivity extends CrmViewerActivity<Lead> implements LeadV
             public void onSuccess(VoidSerializable result) {
                 populate();
             }
-        }, entityId);
+        }, getEntityId());
     }
 }

@@ -42,7 +42,7 @@ public class PmcViewerActivity extends AdminViewerActivity<PmcDTO> implements Pm
             public void onSuccess(VoidSerializable result) {
                 Window.alert("The cache was reset successfully");
             }
-        }, entityId);
+        }, getEntityId());
 
     }
 
@@ -54,7 +54,7 @@ public class PmcViewerActivity extends AdminViewerActivity<PmcDTO> implements Pm
             public void onSuccess(PmcDTO result) {
                 populateView(result);
             }
-        }, entityId);
+        }, getEntityId());
 
     }
 
@@ -66,6 +66,6 @@ public class PmcViewerActivity extends AdminViewerActivity<PmcDTO> implements Pm
             public void onSuccess(PmcDTO result) {
                 populateView(result);
             }
-        }, entityId);
+        }, getEntityId());
     }
 }

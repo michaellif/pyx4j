@@ -44,7 +44,7 @@ public class BillViewerActivity extends CrmViewerActivity<BillDTO> implements Bi
             public void onSuccess(BillDTO result) {
                 populateView(result);
             }
-        }, entityId);
+        }, getEntityId());
     }
 
     @Override
@@ -54,13 +54,13 @@ public class BillViewerActivity extends CrmViewerActivity<BillDTO> implements Bi
             public void onSuccess(BillDTO result) {
                 populateView(result);
             }
-        }, entityId, reason);
+        }, getEntityId(), reason);
     }
 
     @Override
     public void print() {
         EntityQueryCriteria<Bill> criteria = new EntityQueryCriteria<Bill>(Bill.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().id(), entityId));
+        criteria.add(PropertyCriterion.eq(criteria.proto().id(), getEntityId()));
         new ReportDialog("Bill", "Creating Bill...").start(GWT.<BillPrintService> create(BillPrintService.class), criteria);
     }
 }

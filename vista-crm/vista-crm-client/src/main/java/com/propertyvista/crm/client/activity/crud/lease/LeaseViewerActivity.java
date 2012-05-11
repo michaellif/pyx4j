@@ -144,7 +144,7 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
                 d.show();
                 d.startProgress(deferredCorrelationId);
             }
-        }, entityId);
+        }, getEntityId());
 
     }
 
@@ -155,7 +155,7 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
             public void onSuccess(VoidSerializable result) {
                 populate();
             }
-        }, entityId, date, moveOut);
+        }, getEntityId(), date, moveOut);
     }
 
     @Override
@@ -165,7 +165,7 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
             public void onSuccess(VoidSerializable result) {
                 populate();
             }
-        }, entityId);
+        }, getEntityId());
     }
 
     @Override
@@ -175,7 +175,7 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
             public void onSuccess(VoidSerializable result) {
                 populate();
             }
-        }, entityId, date, moveOut);
+        }, getEntityId(), date, moveOut);
     }
 
     @Override
@@ -185,7 +185,7 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
             public void onSuccess(VoidSerializable result) {
                 populate();
             }
-        }, entityId);
+        }, getEntityId());
     }
 
     @Override
@@ -193,10 +193,10 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
         ((LeaseCrudService) getService()).activate(new DefaultAsyncCallback<VoidSerializable>() {
             @Override
             public void onSuccess(VoidSerializable result) {
-                entityId = entityId.asCurrentKey();
+                setEntityIdAsCurrentKey();
                 populate();
             }
-        }, entityId);
+        }, getEntityId());
     }
 
     @Override
@@ -207,6 +207,6 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
                 populate();
                 ((LeaseViewerView) getView()).reportSendMailActionResult(message);
             }
-        }, entityId, new Vector<LeaseParticipant>(users), emailType);
+        }, getEntityId(), new Vector<LeaseParticipant>(users), emailType);
     }
 }

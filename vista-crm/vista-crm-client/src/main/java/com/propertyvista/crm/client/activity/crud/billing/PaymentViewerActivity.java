@@ -38,7 +38,7 @@ public class PaymentViewerActivity extends CrmViewerActivity<PaymentRecordDTO> i
             public void onSuccess(PaymentRecordDTO result) {
                 populateView(result);
             }
-        }, entityId);
+        }, getEntityId());
     }
 
     @Override
@@ -48,7 +48,7 @@ public class PaymentViewerActivity extends CrmViewerActivity<PaymentRecordDTO> i
             public void onSuccess(PaymentRecordDTO result) {
                 populateView(result);
             }
-        }, entityId);
+        }, getEntityId());
     }
 
     @Override
@@ -58,7 +58,7 @@ public class PaymentViewerActivity extends CrmViewerActivity<PaymentRecordDTO> i
             public void onSuccess(PaymentRecordDTO result) {
                 populateView(result);
             }
-        }, entityId);
+        }, getEntityId());
     }
 
     @Override
@@ -68,6 +68,6 @@ public class PaymentViewerActivity extends CrmViewerActivity<PaymentRecordDTO> i
             public void onSuccess(PaymentRecordDTO result) {
                 populateView(result);
             }
-        }, entityId);
+        }, getEntityId());
     }
 }

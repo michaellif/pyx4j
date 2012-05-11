@@ -67,6 +67,6 @@ public class TriggerViewerActivity extends AdminViewerActivity<Trigger> implemen
                 AppSite.getPlaceController().goTo(
                         AppSite.getHistoryMapper().createPlace(AdminSiteMap.Management.Run.class).formViewerPlace(result.getPrimaryKey()));
             }
-        }, EntityFactory.createIdentityStub(Trigger.class, entityId));
+        }, EntityFactory.createIdentityStub(Trigger.class, getEntityId()));
     }
 }

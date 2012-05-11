@@ -54,7 +54,7 @@ public class LeaseApplicationViewerActivity extends LeaseViewerActivityBase<Leas
                 populate();
 
             }
-        }, entityId);
+        }, getEntityId());
     }
 
     @Override
@@ -65,7 +65,7 @@ public class LeaseApplicationViewerActivity extends LeaseViewerActivityBase<Leas
                 populate();
                 ((LeaseApplicationViewerView) getView()).reportInviteUsersActionResult(message);
             }
-        }, entityId, new Vector<LeaseParticipant>(users));
+        }, getEntityId(), new Vector<LeaseParticipant>(users));
     }
 
     @Override
@@ -74,7 +74,7 @@ public class LeaseApplicationViewerActivity extends LeaseViewerActivityBase<Leas
             @Override
             public void onSuccess(VoidSerializable result) {
                 if (action.action().getValue() == Action.Approve) {
-                    entityId = entityId.asCurrentKey();
+                    setEntityIdAsCurrentKey();
                 }
                 populate();
             }

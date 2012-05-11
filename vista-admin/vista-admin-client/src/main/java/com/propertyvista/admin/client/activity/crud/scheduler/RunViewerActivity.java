@@ -95,7 +95,7 @@ public class RunViewerActivity extends AdminViewerActivity<Run> implements RunVi
                 updateViewTimer = new Timer() {
                     @Override
                     public void run() {
-                        runCrudService.retrieveExecutionState(actionsCallback, EntityFactory.createIdentityStub(Run.class, entityId));
+                        runCrudService.retrieveExecutionState(actionsCallback, EntityFactory.createIdentityStub(Run.class, getEntityId()));
                     }
                 };
                 updateViewTimer.scheduleRepeating(2000);

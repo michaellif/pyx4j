@@ -42,6 +42,6 @@ public class GuarantorEditorActivity extends EditorActivityBase<GuarantorDTO> im
             public void onSuccess(AddressStructured result) {
                 callback.onSuccess(result);
             }
-        }, entityId);
+        }, getEntityId());
     }
 }
