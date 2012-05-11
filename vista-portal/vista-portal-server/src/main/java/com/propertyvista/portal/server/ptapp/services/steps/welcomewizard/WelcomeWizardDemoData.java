@@ -59,8 +59,8 @@ public class WelcomeWizardDemoData {
 //        criteria.add(PropertyCriterion.eq(criteria.proto().screene(), applicantsCustomer()));
 //        PersonScreening screening = Persistence.service().retrieve(criteria);
         AddressSimple address = EntityFactory.create(AddressSimple.class);
-        address.city().setValue("Toronto");
-        address.street1().setValue("1 Yonge Street, unit 500");
+        address.city().setValue("Mississauga");
+        address.street1().setValue("201a 3026 Leibda Road");
 
         EntityQueryCriteria<Country> criteria = EntityQueryCriteria.create(Country.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().name(), "Canada"));
@@ -70,7 +70,7 @@ public class WelcomeWizardDemoData {
         provinceCriteria.add(PropertyCriterion.eq(provinceCriteria.proto().name(), "Ontario"));
         address.province().set(Persistence.service().retrieve(provinceCriteria));
 
-        address.postalCode().setValue("M2H 4Z9");
+        address.postalCode().setValue("J1K L35");
 
         return address;
     }

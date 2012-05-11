@@ -51,7 +51,7 @@ public class LogoViewImpl extends SimplePanel implements LogoView {
             daysLeftCountdown.getElement().getStyle().setPosition(Position.ABSOLUTE);
             daysLeftCountdown.getElement().getStyle().setTop(30, Unit.PX);
             daysLeftCountdown.getElement().getStyle().setLeft(10, Unit.PX);
-            logoPanel.add(daysLeftCountdown);
+//            logoPanel.add(daysLeftCountdown);
 
             HTML logo = new HTML("Move-In Guide");
             logo.getElement().getStyle().setWidth(100, Unit.PCT);
