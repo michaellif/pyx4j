@@ -34,6 +34,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 import org.apache.commons.codec.binary.Base64;
 
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.ICollection;
 import com.pyx4j.entity.shared.IEntity;
@@ -51,6 +52,8 @@ public class XMLEntityWriter {
     private boolean emitOnlyOwnedReferences = false;
 
     private boolean emitAttachLevel = false;
+
+    private boolean emitLogTransient = true;
 
     private final XMLEntityNamingConvention namingConvention;
 
@@ -143,6 +146,14 @@ public class XMLEntityWriter {
         this.emitAttachLevel = emitAttachLevel;
     }
 
+    public boolean isEmitLogTransient() {
+        return emitLogTransient;
+    }
+
+    public void setEmitLogTransient(boolean emitLogTransient) {
+        this.emitLogTransient = emitLogTransient;
+    }
+
     public void writeRoot(IEntity entity, Map<String, String> attributes) {
         VerticalGraph grapth = new VerticalGraph();
         write(entity, namingConvention.getXMLName(entity.getObjectClass()), attributes, null, grapth);
@@ -163,6 +174,12 @@ public class XMLEntityWriter {
             VerticalGraph graph) {
         if (entity.getEntityMeta().getAnnotation(XmlTransient.class) != null) {
             return;
+        }
+        if (!isEmitLogTransient()) {
+            Transient transientAnnotation = entity.getEntityMeta().getAnnotation(Transient.class);
+            if ((transientAnnotation != null) && (transientAnnotation.logTransient())) {
+                return;
+            }
         }
         Map<String, String> entityAttributes = new LinkedHashMap<String, String>();
         if (attributes != null) {
@@ -228,6 +245,13 @@ public class XMLEntityWriter {
 
             if (!emitMemeber(entity, memberName, member)) {
                 continue;
+            }
+            if (!isEmitLogTransient()) {
+                Transient transientAnnotation = memberMeta.getAnnotation(Transient.class);
+                if ((transientAnnotation != null) && (transientAnnotation.logTransient())) {
+                    xml.write(memberName, "****");
+                    continue;
+                }
             }
             switch (memberMeta.getObjectClassType()) {
             case Entity:

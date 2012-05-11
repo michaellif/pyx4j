@@ -150,6 +150,7 @@ public class DataDump {
                 XMLStringWriter xml = new XMLStringWriter(Charset.forName("UTF-8"));
                 DumpXMLEntityWriter xmlWriter = new DumpXMLEntityWriter(xml);
                 xmlWriter.setEmitAttachLevel(true);
+                xmlWriter.setEmitLogTransient(false);
                 if (item instanceof List) {
                     xml.start("list");
                     for (IEntity ent : (List<IEntity>) item) {

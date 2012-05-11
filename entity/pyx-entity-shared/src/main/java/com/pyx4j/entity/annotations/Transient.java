@@ -31,8 +31,13 @@ import java.lang.annotation.Target;
  * It is used to annotate a business Entity entity class persistence for witch is
  * implemented using special business or security logic.
  */
-@Target( { ElementType.TYPE, ElementType.METHOD })
+@Target({ ElementType.TYPE, ElementType.METHOD })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Transient {
+
+    /**
+     * Do not store this data in any log files
+     */
+    boolean logTransient() default false;
 
 }
