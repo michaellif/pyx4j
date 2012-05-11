@@ -125,7 +125,7 @@ public class PaymentMethodEditor extends CEntityDecoratableForm<PaymentMethod> {
             paymentDetailsHolder.setWidget(null);
         }
 
-        get(proto().type()).setValue(type, false);
+        get(proto().type()).populate(type);
 
         if (type != null && getValue() != null) {
             CEntityForm editor = null;
