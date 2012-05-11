@@ -20,9 +20,9 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.domain.policy.policies.domain.LegalTermsDescriptor;
 
-public class LegalTermsEditorForm extends CEntityDecoratableForm<LegalTermsDescriptor> {
+public class LegalTermsForm extends CEntityDecoratableForm<LegalTermsDescriptor> {
 
-    public LegalTermsEditorForm(boolean isEditable) {
+    public LegalTermsForm(boolean isEditable) {
         super(LegalTermsDescriptor.class);
         setEditable(isEditable);
     }

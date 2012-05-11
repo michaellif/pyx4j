@@ -42,9 +42,9 @@ import com.propertyvista.domain.note.Note;
 import com.propertyvista.domain.note.NoteAttachment;
 import com.propertyvista.domain.note.NotesAndAttachments;
 
-public class NotesAndAttachmentsEditorForm extends CEntityForm<NotesAndAttachments> {
+public class NotesAndAttachmentsForm extends CEntityForm<NotesAndAttachments> {
 
-    public NotesAndAttachmentsEditorForm() {
+    public NotesAndAttachmentsForm() {
         super(NotesAndAttachments.class);
     }
 

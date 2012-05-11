@@ -62,7 +62,7 @@ public class UnknownInsuranceForm extends CEntityDecoratableForm<InsuranceDTO> {
         content.setWidget(++row, 0, new InsuranceMessagePanel(new HTML(InsuranceMockupResources.INSTANCE.youMustObtainInsuranceMessage().getText())));
 
         content.getRowFormatter().getElement(row).getStyle().setPaddingBottom(10, Unit.PX);
-        content.setWidget(++row, 0, inject(proto().purchaseInsurance(), new InsurancePurchaseEditorForm(new Command() {
+        content.setWidget(++row, 0, inject(proto().purchaseInsurance(), new InsurancePurchaseForm(new Command() {
 
             @Override
             public void execute() {
@@ -80,7 +80,7 @@ public class UnknownInsuranceForm extends CEntityDecoratableForm<InsuranceDTO> {
             public void onValueChange(ValueChangeEvent<Boolean> event) {
                 boolean alreadyHasInsurance = event.getValue();
 
-                InsurancePurchaseEditorForm purchaseInsuraceForm = (InsurancePurchaseEditorForm) get(proto().purchaseInsurance());
+                InsurancePurchaseForm purchaseInsuraceForm = (InsurancePurchaseForm) get(proto().purchaseInsurance());
                 purchaseInsuraceForm.setVisible(!alreadyHasInsurance);
 
                 InsuranceAlreadyAvailabileForm alreadyHasInsuranceForm = (InsuranceAlreadyAvailabileForm) get(proto().existingInsurance());

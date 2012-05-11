@@ -82,7 +82,7 @@ public class InsuranceForm extends CEntityDecoratableForm<InsuranceDTO> {
 
         content.setWidget(++row, 0, obtainInsuranceMessagePanel);
 
-        content.setWidget(++row, 0, inject(proto().purchaseInsurance(), new InsurancePurchaseEditorForm(new Command() {
+        content.setWidget(++row, 0, inject(proto().purchaseInsurance(), new InsurancePurchaseForm(new Command() {
 
             @Override
             public void execute() {
@@ -100,7 +100,7 @@ public class InsuranceForm extends CEntityDecoratableForm<InsuranceDTO> {
             public void onValueChange(ValueChangeEvent<Boolean> event) {
                 boolean alreadyHasInsurance = event.getValue();
 
-                InsurancePurchaseEditorForm purchaseInsuraceForm = (InsurancePurchaseEditorForm) get(proto().purchaseInsurance());
+                InsurancePurchaseForm purchaseInsuraceForm = (InsurancePurchaseForm) get(proto().purchaseInsurance());
                 purchaseInsuraceForm.setVisible(!alreadyHasInsurance);
 
 //                purchaseInsuraceForm.setQuoteTotalPanelVisibility(!alreadyHasInsurance);

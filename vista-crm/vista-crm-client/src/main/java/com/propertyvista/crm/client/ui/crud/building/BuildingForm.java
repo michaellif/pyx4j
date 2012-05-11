@@ -51,7 +51,7 @@ import com.propertyvista.common.client.ui.validators.PastDateValidation;
 import com.propertyvista.crm.client.themes.CrmTheme;
 import com.propertyvista.crm.client.ui.components.media.CrmMediaFolder;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
-import com.propertyvista.crm.client.ui.notesandattachments.NotesAndAttachmentsEditorForm;
+import com.propertyvista.crm.client.ui.notesandattachments.NotesAndAttachmentsForm;
 import com.propertyvista.domain.policy.policies.IdAssignmentPolicy;
 import com.propertyvista.domain.policy.policies.MiscPolicy;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem;
@@ -437,7 +437,7 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         ScrollPanel content = new ScrollPanel();
         FormFlexPanel main = new FormFlexPanel();
         int row = -1;
-        main.setWidget(++row, 0, inject(proto().notesAndAttachments(), new NotesAndAttachmentsEditorForm()));
+        main.setWidget(++row, 0, inject(proto().notesAndAttachments(), new NotesAndAttachmentsForm()));
         content.setWidget(main);
         return content;
     }

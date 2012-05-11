@@ -32,7 +32,7 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.rpc.PasswordChangeRequest;
 
-import com.propertyvista.common.client.ui.components.login.PasswordEditorForm;
+import com.propertyvista.common.client.ui.components.login.PasswordForm;
 
 public class PasswordChangeViewImpl implements PasswordChangeView {
 
@@ -40,7 +40,7 @@ public class PasswordChangeViewImpl implements PasswordChangeView {
 
     private Presenter presenter;
 
-    private final PasswordEditorForm form;
+    private final PasswordForm form;
 
     private final HTML userNameLabel;
 
@@ -53,7 +53,7 @@ public class PasswordChangeViewImpl implements PasswordChangeView {
         userNameLabel = new HTML();
         content.setWidget(++row, 0, userNameLabel);
         content.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
-        form = new PasswordEditorForm(PasswordEditorForm.Type.CHANGE);
+        form = new PasswordForm(PasswordForm.Type.CHANGE);
         form.initContent();
         form.setWidth("100%");
         content.setWidget(++row, 0, form);

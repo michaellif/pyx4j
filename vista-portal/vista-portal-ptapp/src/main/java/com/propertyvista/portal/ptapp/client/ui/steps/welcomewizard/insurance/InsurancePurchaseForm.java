@@ -40,7 +40,7 @@ import com.propertyvista.portal.ptapp.client.ui.steps.welcomewizard.insurance.co
 import com.propertyvista.portal.ptapp.client.ui.steps.welcomewizard.reviewlease.LeaseTermsFolder;
 import com.propertyvista.portal.rpc.ptapp.dto.welcomewizard.PurchaseInsuranceDTO;
 
-public class InsurancePurchaseEditorForm extends CEntityDecoratableForm<PurchaseInsuranceDTO> {
+public class InsurancePurchaseForm extends CEntityDecoratableForm<PurchaseInsuranceDTO> {
 
     private final static BigDecimal[] PERSONAL_CONTENTS_LIMITS_OPTIONS = asBigDecimals(10000, 12000, 14000, 16000, 18000, 20000, 22000, 24000, 26000, 28000,
             30000, 35000, 40000, 50000, 60000);
@@ -62,7 +62,7 @@ public class InsurancePurchaseEditorForm extends CEntityDecoratableForm<Purchase
 
     private final static BigDecimal[] DEFAULT_LIMITIES_OPTIONS = asBigDecimals(500, 1000, 1500, 2000, 2500, 3000);
 
-    private final static I18n i18n = I18n.get(InsurancePurchaseEditorForm.class);
+    private final static I18n i18n = I18n.get(InsurancePurchaseForm.class);
 
     private VerticalPanel quoteTotalPanel;
 
@@ -72,7 +72,7 @@ public class InsurancePurchaseEditorForm extends CEntityDecoratableForm<Purchase
 
     private final Command onPurchaseConfirmed;
 
-    public InsurancePurchaseEditorForm(Command onPurchaseConfirmed) {
+    public InsurancePurchaseForm(Command onPurchaseConfirmed) {
         super(PurchaseInsuranceDTO.class);
         this.summaryRecalculationRequiredHandler = new ValueChangeHandler<BigDecimal>() {
             @Override

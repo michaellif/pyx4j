@@ -17,7 +17,7 @@ import com.google.gwt.user.client.ui.FlowPanel;
 
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.common.client.ui.components.login.PasswordEditorForm;
+import com.propertyvista.common.client.ui.components.login.PasswordForm;
 
 public class NewPasswordViewImpl extends FlowPanel implements NewPasswordView {
 
@@ -25,11 +25,11 @@ public class NewPasswordViewImpl extends FlowPanel implements NewPasswordView {
 
     private Presenter presenter;
 
-    private final PasswordEditorForm form;
+    private final PasswordForm form;
 
     public NewPasswordViewImpl() {
 
-        form = new PasswordEditorForm(PasswordEditorForm.Type.RESET);
+        form = new PasswordForm(PasswordForm.Type.RESET);
         // FIXME add submit button
         form.initContent();
         add(form);

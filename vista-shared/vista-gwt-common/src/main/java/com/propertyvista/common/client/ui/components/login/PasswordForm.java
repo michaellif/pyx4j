@@ -38,9 +38,9 @@ import com.pyx4j.security.rpc.PasswordChangeRequest;
 import com.propertyvista.common.client.theme.HorizontalAlignCenterMixin;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 
-public class PasswordEditorForm extends CEntityDecoratableForm<PasswordChangeRequest> {
+public class PasswordForm extends CEntityDecoratableForm<PasswordChangeRequest> {
 
-    private final static I18n i18n = I18n.get(PasswordEditorForm.class);
+    private final static I18n i18n = I18n.get(PasswordForm.class);
 
     public enum Type {
         CHANGE, RESET
@@ -52,7 +52,7 @@ public class PasswordEditorForm extends CEntityDecoratableForm<PasswordChangeReq
 
     private final DefaultPasswordStrengthRule passwordStrengthRule;
 
-    public PasswordEditorForm(Type type) {
+    public PasswordForm(Type type) {
         super(PasswordChangeRequest.class);
         this.type = type;
         this.passwordStrengthRule = new DefaultPasswordStrengthRule();

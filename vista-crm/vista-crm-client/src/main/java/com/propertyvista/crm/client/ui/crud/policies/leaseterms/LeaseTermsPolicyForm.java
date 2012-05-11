@@ -61,13 +61,13 @@ public class LeaseTermsPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseTermsP
 
     private Widget createOneTimePaymentTermsPanel() {
         FormFlexPanel container = new FormFlexPanel();
-        container.setWidget(0, 0, inject(proto().oneTimePaymentTerms(), new LegalTermsEditorForm(isEditable())));
+        container.setWidget(0, 0, inject(proto().oneTimePaymentTerms(), new LegalTermsForm(isEditable())));
         return container;
     }
 
     private Widget createRecurrentPaymentTermsPanel() {
         FormFlexPanel container = new FormFlexPanel();
-        container.setWidget(0, 0, inject(proto().recurrentPaymentTerms(), new LegalTermsEditorForm(isEditable())));
+        container.setWidget(0, 0, inject(proto().recurrentPaymentTerms(), new LegalTermsForm(isEditable())));
         return container;
     }
 
@@ -80,7 +80,7 @@ public class LeaseTermsPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseTermsP
         @Override
         public CComponent<?, ?> create(IObject<?> member) {
             if ((member instanceof LegalTermsDescriptor)) {
-                return new LegalTermsEditorForm(isEditable());
+                return new LegalTermsForm(isEditable());
             }
             return super.create(member);
         }
