@@ -37,7 +37,7 @@ public class VistaDeployment {
         return VistaSystemIdentification.valueOf(systemIdentification);
     }
 
-    private static Pmc getCurrentPmc() {
+    public static Pmc getCurrentPmc() {
         final String namespace = NamespaceManager.getNamespace();
         try {
             NamespaceManager.setNamespace(VistaNamespace.adminNamespace);

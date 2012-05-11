@@ -13,12 +13,18 @@
  */
 package com.propertyvista.biz.financial.payment;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 
+import com.propertyvista.admin.domain.pmc.Pmc;
 import com.propertyvista.biz.financial.ar.ARFacade;
+import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.payment.CreditCardInfo;
@@ -30,6 +36,7 @@ import com.propertyvista.payment.PaymentRequest;
 import com.propertyvista.payment.PaymentResponse;
 import com.propertyvista.payment.Token;
 import com.propertyvista.payment.caledon.CaledonPaymentProcessor;
+import com.propertyvista.shared.VistaSystemIdentification;
 
 class CreditCardProcessor {
 
@@ -87,8 +94,19 @@ class CreditCardProcessor {
         ccInfo.securityCode().setValue(cc.securityCode().getValue());
 
         Token token = EntityFactory.create(Token.class);
-        //TODO add PMC Id
-        token.code().setValue(System.currentTimeMillis() + cc.id().getStringView());
+        if (!cc.token().isNull()) {
+            token.code().setValue(cc.token().getValue());
+        } else {
+            //Create Unique token using PMC Id
+            Pmc pmc = VistaDeployment.getCurrentPmc();
+            String prefix;
+            if ((!ApplicationMode.isDevelopment()) && (VistaSystemIdentification.production == VistaDeployment.getSystemIdentification())) {
+                prefix = "";
+            } else {
+                prefix = "TEST" + new SimpleDateFormat("MMddHH").format(new Date());
+            }
+            token.code().setValue(prefix + pmc.id().getStringView() + "V" + cc.id().getStringView());
+        }
 
         IPaymentProcessor proc = new CaledonPaymentProcessor();
         PaymentResponse response;
