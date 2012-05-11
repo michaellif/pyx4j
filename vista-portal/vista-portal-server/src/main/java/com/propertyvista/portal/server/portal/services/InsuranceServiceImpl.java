@@ -82,6 +82,8 @@ public class InsuranceServiceImpl implements InsuranceService {
         } else if (TenantAppContext.getCurrentUser().email().getValue().startsWith("t002")) {
             dto.status().setValue(InsuranceStatus.independant);
             dto.independant().set(createDefaultIndependantInsuranceValues());
+        } else if (TenantAppContext.getCurrentUser().email().getValue().startsWith("t003")) {
+            dto.status().setValue(InsuranceStatus.tenantSure);
         }
         callback.onSuccess(dto);
     }

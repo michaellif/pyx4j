@@ -25,7 +25,7 @@ public class InsuranceLogoPanel extends VerticalPanel {
     public InsuranceLogoPanel() {
         add(new Image(InsuranceMockupResources.INSTANCE.logoTenantSure()));
         add(new Image(InsuranceMockupResources.INSTANCE.logoHighcourt()));
-        add(new HTML("1-888-123-4567"));
+        add(new HTML("1-888-1234-444"));
         getElement().getStyle().setPadding(1, Unit.EM);
         getElement().getStyle().setMargin(1, Unit.EM);
     }

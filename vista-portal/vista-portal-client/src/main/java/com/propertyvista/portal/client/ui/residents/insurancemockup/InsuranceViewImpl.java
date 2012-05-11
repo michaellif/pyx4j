@@ -21,6 +21,7 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
 import com.propertyvista.portal.client.ui.residents.insurancemockup.components.InsuranceMessagePanel;
 import com.propertyvista.portal.client.ui.residents.insurancemockup.forms.InsuranceAlreadyAvailabileEditorForm;
+import com.propertyvista.portal.client.ui.residents.insurancemockup.forms.TenantSureInsuranceForm;
 import com.propertyvista.portal.client.ui.residents.insurancemockup.forms.UnknownInsuranceForm;
 import com.propertyvista.portal.client.ui.residents.insurancemockup.resources.InsuranceMockupResources;
 import com.propertyvista.portal.rpc.portal.dto.insurancemockup.TenantInsuranceDTO;
@@ -34,6 +35,8 @@ public class InsuranceViewImpl implements InsuranceView {
     private final InsuranceAlreadyAvailabileEditorForm independantInsuranceForm;
 
     private final FormFlexPanel independantInsurancePanel;
+
+    private final TenantSureInsuranceForm tenantSureInsuranceForm;
 
     private final FormFlexPanel viewPanel;
 
@@ -55,9 +58,13 @@ public class InsuranceViewImpl implements InsuranceView {
                 new InsuranceMessagePanel(new HTML(InsuranceMockupResources.INSTANCE.independantInsuranceMessage().getText())));
         independantInsurancePanel.setWidget(1, 0, independantInsuranceForm);
 
+        tenantSureInsuranceForm = new TenantSureInsuranceForm();
+        tenantSureInsuranceForm.asWidget().setVisible(false);
+
         viewPanel = new FormFlexPanel();
         viewPanel.setWidget(0, 0, unknownInsuranceForm);
         viewPanel.setWidget(1, 0, independantInsurancePanel);
+        viewPanel.setWidget(2, 0, tenantSureInsuranceForm);
 
     }
 
@@ -78,12 +85,16 @@ public class InsuranceViewImpl implements InsuranceView {
         independantInsuranceForm.setVisible(tenantInsuranceDTO.status().getValue() == InsuranceStatus.independant);
         independantInsurancePanel.setVisible(tenantInsuranceDTO.status().getValue() == InsuranceStatus.independant);
 
+        tenantSureInsuranceForm.asWidget().setVisible(tenantInsuranceDTO.status().getValue() == InsuranceStatus.tenantSure);
+
         switch (tenantInsuranceDTO.status().getValue()) {
         case unknown:
             unknownInsuranceForm.populate(tenantInsuranceDTO.newInsuranceRequest());
             break;
         case independant:
             independantInsuranceForm.populate(tenantInsuranceDTO.independant());
+        case tenantSure:
+
         }
 
     }
