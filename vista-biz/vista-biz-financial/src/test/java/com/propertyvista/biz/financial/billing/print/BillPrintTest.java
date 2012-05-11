@@ -28,7 +28,9 @@ import com.propertyvista.domain.financial.billing.InvoiceAccountCredit;
 import com.propertyvista.domain.financial.billing.InvoiceDepositRefund;
 import com.propertyvista.domain.financial.billing.InvoicePayment;
 import com.propertyvista.domain.financial.billing.InvoicePaymentBackOut;
+import com.propertyvista.domain.financial.billing.InvoiceProductCharge;
 import com.propertyvista.domain.financial.billing.InvoiceWithdrawal;
+import com.propertyvista.domain.financial.billing.InvoiceProductCharge.ProductType;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment.ExecutionType;
 
 public class BillPrintTest extends FinancialTestBase {
@@ -114,6 +116,32 @@ public class BillPrintTest extends FinancialTestBase {
             bill.lineItems().add(payment);
 
             bill.paymentReceivedAmount().setValue(new BigDecimal("-700.00"));
+        }
+
+        {
+            InvoiceProductCharge productCharge = EntityFactory.create(InvoiceProductCharge.class);
+            productCharge.productType().setValue(ProductType.service);
+            productCharge.amount().setValue(new BigDecimal("850.00"));
+            productCharge.description().setValue("Lease");
+            bill.lineItems().add(productCharge);
+
+            bill.serviceCharge().setValue(new BigDecimal("850.00"));
+        }
+
+        {
+            InvoiceAccountCharge accountCharge = EntityFactory.create(InvoiceAccountCharge.class);
+            accountCharge.adjustment().executionType().setValue(ExecutionType.pending);
+            accountCharge.amount().setValue(new BigDecimal("150.00"));
+            accountCharge.description().setValue("Account Charge");
+            bill.lineItems().add(accountCharge);
+
+            InvoiceAccountCredit accountCredit = EntityFactory.create(InvoiceAccountCredit.class);
+            accountCredit.adjustment().executionType().setValue(ExecutionType.pending);
+            accountCredit.amount().setValue(new BigDecimal("-100.00"));
+            accountCredit.description().setValue("Account Credit");
+            bill.lineItems().add(accountCredit);
+
+            bill.immediateAccountAdjustments().setValue(new BigDecimal("50.00"));
         }
 
         bill.pastDueAmount().setValue(new BigDecimal("950.00"));
