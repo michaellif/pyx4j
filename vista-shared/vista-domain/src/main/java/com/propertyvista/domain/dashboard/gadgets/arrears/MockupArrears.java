@@ -23,7 +23,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.propertyvista.domain.dashboard.gadgets.util.ComparableComparator;
 import com.propertyvista.domain.dashboard.gadgets.util.CustomComparator;
 
-public interface Arrears extends IEntity {
+public interface MockupArrears extends IEntity {
     @Format("#0.00")
     @Caption(name = "This month")
     @Editor(type = EditorType.money)
@@ -65,7 +65,7 @@ public interface Arrears extends IEntity {
     @Editor(type = EditorType.money)
     IPrimitive<Double> prepayments();
 
-    /** {@link Arrears#arBalance()} - {@link Arrears#prepayments() } */
+    /** {@link MockupArrears#arBalance()} - {@link MockupArrears#prepayments() } */
     @Format("#0.00")
     @Caption(name = "Total Balance")
     @CustomComparator(clazz = ComparableComparator.class)

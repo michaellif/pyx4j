@@ -18,6 +18,6 @@ import com.pyx4j.entity.annotations.DiscriminatorValue;
 
 @DiscriminatorValue("ArrearsSummaryGadgetMeta")
 @Caption(name = "Arrears Summary")
-public interface ArrearsSummaryGadgetMeta extends ListerGadgetBaseMetadata {
+public interface MockArrearsSummaryGadget extends ListerGadgetBaseMetadata {
 
 }

@@ -7,32 +7,31 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-11-16
- * @author artyom
+ * Created on Mar 15, 2012
+ * @author ArtyomB
  * @version $Id$
  */
 package com.propertyvista.domain.dashboard.gadgets.arrears;
 
-import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.annotations.Detached;
-import com.pyx4j.entity.annotations.JoinColumn;
-import com.pyx4j.entity.annotations.Owner;
-import com.pyx4j.entity.annotations.ReadOnly;
-import com.pyx4j.entity.annotations.validator.NotNull;
+import java.math.BigDecimal;
+
+import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.financial.billing.AgingBuckets;
+import com.propertyvista.domain.tenant.lease.Lease;
 
-public interface ArrearsSummary extends Arrears {
+/**
+ * Represents single record of Arrears Report,
+ * 
+ */
+@Transient
+public interface ArrearsDTO extends IEntity {
 
-    @Owner
-    @NotNull
-    @ReadOnly
-    @Detached
-    @JoinColumn
-    Building belongsTo();
+    Lease lease();
 
-    IPrimitive<String> propertyCode();
+    AgingBuckets buckets();
 
-    IPrimitive<LogicalDate> statusTimestamp();
+    IPrimitive<BigDecimal> total();
 }

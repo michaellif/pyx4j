@@ -39,37 +39,37 @@ import com.propertyvista.crm.client.ui.gadgets.common.Directory;
 import com.propertyvista.crm.client.ui.gadgets.common.GadgetInstanceBase;
 import com.propertyvista.crm.client.ui.gadgets.common.IBuildingBoardGadgetInstance;
 import com.propertyvista.crm.client.ui.gadgets.common.ListerGadgetInstanceBase;
-import com.propertyvista.crm.rpc.services.dashboard.gadgets.ArrearsReportService;
-import com.propertyvista.domain.dashboard.gadgets.arrears.Arrears;
+import com.propertyvista.crm.rpc.services.dashboard.gadgets.MockupArrearsReportService;
+import com.propertyvista.domain.dashboard.gadgets.arrears.MockupArrears;
 import com.propertyvista.domain.dashboard.gadgets.arrears.MockupArrearsState;
-import com.propertyvista.domain.dashboard.gadgets.type.ArrearsStatus;
+import com.propertyvista.domain.dashboard.gadgets.type.MockupArrearsStatusGadget;
 import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
 
-public class ArrearsStatusGadget extends AbstractGadget<ArrearsStatus> {
+public class ArrearsStatusGadget extends AbstractGadget<MockupArrearsStatusGadget> {
 
     private static final I18n i18n = I18n.get(ArrearsStatusGadget.class);
 
-    private static class ArrearsStatusGadgetInstance extends ListerGadgetInstanceBase<MockupArrearsState, ArrearsStatus> implements
+    private static class ArrearsStatusGadgetInstance extends ListerGadgetInstanceBase<MockupArrearsState, MockupArrearsStatusGadget> implements
 
     IBuildingBoardGadgetInstance {
 
         private static final I18n i18n = I18n.get(ArrearsStatusGadgetInstance.class);
 
-        private final ArrearsReportService service;
+        private final MockupArrearsReportService service;
 
         private FormFlexPanel panel;
 
         private List<Key> buildings;
 
         public ArrearsStatusGadgetInstance(GadgetMetadata gmd) {
-            super(gmd, MockupArrearsState.class, ArrearsStatus.class);
-            service = GWT.create(ArrearsReportService.class);
+            super(gmd, MockupArrearsState.class, MockupArrearsStatusGadget.class);
+            service = GWT.create(MockupArrearsReportService.class);
         }
 
         @Override
-        protected ArrearsStatus createDefaultSettings(Class<ArrearsStatus> metadataClass) {
-            ArrearsStatus metadata = super.createDefaultSettings(metadataClass);
-            metadata.category().setValue(ArrearsStatus.Category.Total);
+        protected MockupArrearsStatusGadget createDefaultSettings(Class<MockupArrearsStatusGadget> metadataClass) {
+            MockupArrearsStatusGadget metadata = super.createDefaultSettings(metadataClass);
+            metadata.category().setValue(MockupArrearsStatusGadget.Category.Total);
             return metadata;
         }
 
@@ -78,7 +78,7 @@ public class ArrearsStatusGadget extends AbstractGadget<ArrearsStatus> {
             return true;
         }
 
-        private Arrears arrearsProto() {
+        private MockupArrears arrearsProto() {
             if (getMetadata().category().isNull()) {
                 return proto().totalArrears();
             }
@@ -139,14 +139,14 @@ public class ArrearsStatusGadget extends AbstractGadget<ArrearsStatus> {
         @Override
         public Widget initContentPanel() {
             panel = new FormFlexPanel();
-            panel.setH1(0, 0, 1, (getMetadata().category().getValue() != null ? getMetadata().category().getValue() : ArrearsStatus.Category.Total).toString());
+            panel.setH1(0, 0, 1, (getMetadata().category().getValue() != null ? getMetadata().category().getValue() : MockupArrearsStatusGadget.Category.Total).toString());
             panel.setWidget(1, 0, initListerWidget());
             return panel;
         }
 
         @Override
         public ISetup getSetup() {
-            return new SetupForm(new CEntityDecoratableForm<ArrearsStatus>(ArrearsStatus.class) {
+            return new SetupForm(new CEntityDecoratableForm<MockupArrearsStatusGadget>(MockupArrearsStatusGadget.class) {
                 @Override
                 public IsWidget createContent() {
                     FormFlexPanel p = new FormFlexPanel();
@@ -187,7 +187,7 @@ public class ArrearsStatusGadget extends AbstractGadget<ArrearsStatus> {
     }
 
     public ArrearsStatusGadget() {
-        super(ArrearsStatus.class);
+        super(MockupArrearsStatusGadget.class);
     }
 
     @Override
@@ -207,7 +207,7 @@ public class ArrearsStatusGadget extends AbstractGadget<ArrearsStatus> {
     }
 
     @Override
-    protected GadgetInstanceBase<ArrearsStatus> createInstance(GadgetMetadata gadgetMetadata) throws Error {
+    protected GadgetInstanceBase<MockupArrearsStatusGadget> createInstance(GadgetMetadata gadgetMetadata) throws Error {
         return new ArrearsStatusGadgetInstance(gadgetMetadata);
     }
 

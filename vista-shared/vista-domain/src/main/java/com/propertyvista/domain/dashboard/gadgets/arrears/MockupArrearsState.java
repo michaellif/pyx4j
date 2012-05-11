@@ -85,16 +85,16 @@ public interface MockupArrearsState extends IEntity {
 
     // ARREARS STATUS:
     @EmbeddedEntity
-    Arrears rentArrears();
+    MockupArrears rentArrears();
 
     @EmbeddedEntity
-    Arrears parkingArrears();
+    MockupArrears parkingArrears();
 
     @EmbeddedEntity
-    Arrears otherArrears();
+    MockupArrears otherArrears();
 
     @EmbeddedEntity
-    Arrears totalArrears();
+    MockupArrears totalArrears();
 
     @CustomComparator(clazz = ComparableComparator.class)
     IPrimitive<LegalStatus> legalStatus();

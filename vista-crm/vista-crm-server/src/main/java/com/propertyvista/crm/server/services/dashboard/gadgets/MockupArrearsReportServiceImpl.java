@@ -31,23 +31,21 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
 
-import com.propertyvista.crm.rpc.services.dashboard.gadgets.ArrearsReportService;
+import com.propertyvista.crm.rpc.services.dashboard.gadgets.MockupArrearsReportService;
 import com.propertyvista.crm.server.util.SeqUtils;
 import com.propertyvista.crm.server.util.SortingFactory;
-import com.propertyvista.domain.dashboard.gadgets.arrears.ArrearsDTO;
 import com.propertyvista.domain.dashboard.gadgets.arrears.MockupArrearsState;
 import com.propertyvista.domain.dashboard.gadgets.arrears.MockupArrearsSummary;
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitTurnoversPerIntervalDTO.AnalysisResolution;
-import com.propertyvista.domain.financial.billing.InvoiceDebit.DebitType;
 
-public class ArrearsReportServiceImpl implements ArrearsReportService {
+public class MockupArrearsReportServiceImpl implements MockupArrearsReportService {
 
     private static final SortingFactory<MockupArrearsState> SORTING_FACTORY = new SortingFactory<MockupArrearsState>(MockupArrearsState.class);
 
     @Override
-    public void arrearsList(AsyncCallback<EntitySearchResult<ArrearsDTO>> callback, Vector<Criterion> customCriteria, Vector<Key> buildingPKs,
+    public void arrearsList(AsyncCallback<EntitySearchResult<MockupArrearsState>> callback, Vector<Criterion> customCriteria, Vector<Key> buildingPKs,
             LogicalDate when, Vector<Sort> sorting, int pageNumber, int pageSize) {
-        if (false) {
+        try {
             EntityQueryCriteria<MockupArrearsState> criteria = new EntityQueryCriteria<MockupArrearsState>(MockupArrearsState.class);
             // adjust the order of results in order to select the most recent statuses
             ArrayList<Sort> sortingCriteria = new ArrayList<Sort>();
@@ -112,36 +110,29 @@ public class ArrearsReportServiceImpl implements ArrearsReportService {
             result.setData(pageData);
             result.setTotalRows(totalRows);
             result.hasMoreData(hasMoreRows);
-            callback.onSuccess(null);
+            callback.onSuccess(result);
+
+        } catch (Throwable error) {
+            callback.onFailure(new Error(error));
         }
-
-        List<ArrearsDTO> allArrears = getCurrentArrears(buildingPKs, DebitType.all);
-    }
-
-    private List<ArrearsDTO> getCurrentArrears(Vector<Key> buildingPKs, DebitType all) {
-        List<ArrearsDTO> allArrears = null;
-
-        // TODO need something like ArFacade.getAllUncoveredLeases();
-
-        return allArrears;
     }
 
     @Override
     public void summary(AsyncCallback<EntitySearchResult<MockupArrearsSummary>> callback, Vector<Key> buildingPKs, LogicalDate when, Vector<Sort> sorting,
             int pageNumber, int pageSize) {
+        try {
+            EntityQueryCriteria<MockupArrearsSummary> criteria = new EntityQueryCriteria<MockupArrearsSummary>(MockupArrearsSummary.class);
+            if (!buildingPKs.isEmpty()) {
+                criteria.add(PropertyCriterion.in(criteria.proto().belongsTo(), buildingPKs));
+            }
+            criteria.setSorts(sorting);
+            when = when != null ? when : new LogicalDate();
+            when = new LogicalDate(AnalysisResolution.Month.intervalStart(when.getTime()));
+            criteria.add(PropertyCriterion.eq(criteria.proto().statusTimestamp(), when));
 
-        EntityQueryCriteria<MockupArrearsSummary> criteria = new EntityQueryCriteria<MockupArrearsSummary>(MockupArrearsSummary.class);
-        if (!buildingPKs.isEmpty()) {
-            criteria.add(PropertyCriterion.in(criteria.proto().belongsTo(), buildingPKs));
-        }
-        criteria.setSorts(sorting);
-        when = when != null ? when : new LogicalDate();
-        when = new LogicalDate(AnalysisResolution.Month.intervalStart(when.getTime()));
-        criteria.add(PropertyCriterion.eq(criteria.proto().statusTimestamp(), when));
+            List<MockupArrearsSummary> arrearsForEachBuilding = Persistence.service().query(criteria);
 
-        List<MockupArrearsSummary> arrearsForEachBuilding = Persistence.service().query(criteria);
-
-        //@formatter:off
+            //@formatter:off
             SeqUtils.Sum<MockupArrearsSummary> sum = new SeqUtils.Sum<MockupArrearsSummary>(MockupArrearsSummary.class,                    
                     Arrays.asList(
                         criteria.proto().thisMonth().getPath(),
@@ -152,76 +143,82 @@ public class ArrearsReportServiceImpl implements ArrearsReportService {
                         criteria.proto().arBalance().getPath())
             );            
             //@formatter:on
-        MockupArrearsSummary summary = SeqUtils.foldl(sum, arrearsForEachBuilding);
+            MockupArrearsSummary summary = SeqUtils.foldl(sum, arrearsForEachBuilding);
 
-        EntitySearchResult<MockupArrearsSummary> result = new EntitySearchResult<MockupArrearsSummary>();
-        result.setData(new Vector<MockupArrearsSummary>(1));
-        result.getData().add(summary);
-        result.setTotalRows(1);
-        result.hasMoreData(false);
+            EntitySearchResult<MockupArrearsSummary> result = new EntitySearchResult<MockupArrearsSummary>();
+            result.setData(new Vector<MockupArrearsSummary>(1));
+            result.getData().add(summary);
+            result.setTotalRows(1);
+            result.hasMoreData(false);
 
-        callback.onSuccess(result);
+            callback.onSuccess(result);
 
+        } catch (Throwable error) {
+            callback.onFailure(error);
+        }
     }
 
     @Override
     public void arrearsMonthlyComparison(AsyncCallback<Vector<Vector<Double>>> callback, Vector<Key> buildingPKs, int yearsAgo) {
-        if (yearsAgo < 1) {
-            throw new Error("sorry, but you need to provide number of years that at least greater than zero");
-        }
-        final LogicalDate when = new LogicalDate();
-        final LogicalDate lastDay = new LogicalDate(AnalysisResolution.Year.intervalEnd(when.getTime()));
-        final LogicalDate firstDay = yearsAgo(yearsAgo, lastDay);
+        try {
+            if (yearsAgo < 1) {
+                throw new Error("sorry, but you need to provide number of years that at least greater than zero");
+            }
+            final LogicalDate when = new LogicalDate();
+            final LogicalDate lastDay = new LogicalDate(AnalysisResolution.Year.intervalEnd(when.getTime()));
+            final LogicalDate firstDay = yearsAgo(yearsAgo, lastDay);
 
-        EntityQueryCriteria<MockupArrearsSummary> criteria = new EntityQueryCriteria<MockupArrearsSummary>(MockupArrearsSummary.class);
-        if (!buildingPKs.isEmpty()) {
-            criteria.add(PropertyCriterion.in(criteria.proto().belongsTo(), buildingPKs));
-        }
-        //@formatter:off
+            EntityQueryCriteria<MockupArrearsSummary> criteria = new EntityQueryCriteria<MockupArrearsSummary>(MockupArrearsSummary.class);
+            if (!buildingPKs.isEmpty()) {
+                criteria.add(PropertyCriterion.in(criteria.proto().belongsTo(), buildingPKs));
+            }
+            //@formatter:off
             List<Sort> sorting = Arrays.asList(
                     new Sort(criteria.proto().statusTimestamp().getPath().toString(), false),
                     new Sort(criteria.proto().belongsTo().getPath().toString(), false));
             //@formatter:on
-        criteria.setSorts(sorting);
-        criteria.add(new PropertyCriterion(criteria.proto().statusTimestamp(), Restriction.GREATER_THAN_OR_EQUAL, firstDay));
-        criteria.add(new PropertyCriterion(criteria.proto().statusTimestamp(), Restriction.LESS_THAN, lastDay));
+            criteria.setSorts(sorting);
+            criteria.add(new PropertyCriterion(criteria.proto().statusTimestamp(), Restriction.GREATER_THAN_OR_EQUAL, firstDay));
+            criteria.add(new PropertyCriterion(criteria.proto().statusTimestamp(), Restriction.LESS_THAN, lastDay));
 
-        List<MockupArrearsSummary> buildingMonthlyArrears = Persistence.service().query(criteria);
+            List<MockupArrearsSummary> buildingMonthlyArrears = Persistence.service().query(criteria);
 
-        List<ArBalanceHolder> summariesPerEachMonth = computeSummariesPerEachMonth(buildingMonthlyArrears);
+            List<ArBalanceHolder> summariesPerEachMonth = computeSummariesPerEachMonth(buildingMonthlyArrears);
 
-        HashMap<Integer, Vector<ArBalanceHolder>> comparison = new HashMap<Integer, Vector<ArBalanceHolder>>();
-        for (int i = 0; i < 12; ++i) {
-            comparison.put(i, new Vector<ArBalanceHolder>());
-        }
-        for (ArBalanceHolder monthlyArrears : summariesPerEachMonth) {
-            comparison.get(monthlyArrears.timestamp.getMonth()).add(monthlyArrears);
-        }
+            HashMap<Integer, Vector<ArBalanceHolder>> comparison = new HashMap<Integer, Vector<ArBalanceHolder>>();
+            for (int i = 0; i < 12; ++i) {
+                comparison.put(i, new Vector<ArBalanceHolder>());
+            }
+            for (ArBalanceHolder monthlyArrears : summariesPerEachMonth) {
+                comparison.get(monthlyArrears.timestamp.getMonth()).add(monthlyArrears);
+            }
 
-        // prepare the result: if by some accident data for some months is missing, fill in the blanks with NAN values
-        // also: we don't have to send the dates to the server because the date marks are implied by the result
-        Vector<Vector<Double>> result = new Vector<Vector<Double>>();
-        for (Vector<ArBalanceHolder> monthlyComparison : comparison.values()) {
-            Vector<Double> monthlyComparisonResult = new Vector<Double>();
-            int prevYear = firstDay.getYear();
+            // prepare the result: if by some accident data for some months is missing, fill in the blanks with NAN values
+            // also: we don't have to send the dates to the server because the date marks are implied by the result
+            Vector<Vector<Double>> result = new Vector<Vector<Double>>();
+            for (Vector<ArBalanceHolder> monthlyComparison : comparison.values()) {
+                Vector<Double> monthlyComparisonResult = new Vector<Double>();
+                int prevYear = firstDay.getYear();
 
-            for (ArBalanceHolder balanceHolder : monthlyComparison) {
-                int diff = balanceHolder.timestamp.getYear() - prevYear;
+                for (ArBalanceHolder balanceHolder : monthlyComparison) {
+                    int diff = balanceHolder.timestamp.getYear() - prevYear;
+                    while (diff-- > 1) {
+                        monthlyComparisonResult.add(Double.NaN);
+                    }
+                    monthlyComparisonResult.add(balanceHolder.balance);
+                    prevYear = balanceHolder.timestamp.getYear();
+                }
+                int diff = lastDay.getYear() - prevYear;
                 while (diff-- > 1) {
                     monthlyComparisonResult.add(Double.NaN);
                 }
-                monthlyComparisonResult.add(balanceHolder.balance);
-                prevYear = balanceHolder.timestamp.getYear();
+                result.add(monthlyComparisonResult);
             }
-            int diff = lastDay.getYear() - prevYear;
-            while (diff-- > 1) {
-                monthlyComparisonResult.add(Double.NaN);
-            }
-            result.add(monthlyComparisonResult);
+
+            callback.onSuccess(result);
+        } catch (Throwable error) {
+            callback.onFailure(error);
         }
-
-        callback.onSuccess(result);
-
     }
 
     @SuppressWarnings("deprecation")

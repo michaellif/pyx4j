@@ -40,7 +40,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.ISet;
 
 import com.propertyvista.domain.dashboard.DashboardMetadata;
-import com.propertyvista.domain.dashboard.gadgets.arrears.ArrearsSummary;
+import com.propertyvista.domain.dashboard.gadgets.arrears.MockupArrearsSummary;
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitTurnoverStats;
 import com.propertyvista.domain.financial.BuildingMerchantAccount;
 import com.propertyvista.domain.financial.MerchantAccount;
@@ -168,7 +168,7 @@ public interface Building extends PolicyNode, NotesAndAttachmentsNode {
 
     @Owned
     @Detached(level = AttachLevel.Detached)
-    ISet<ArrearsSummary> _ArrearsSummaries();
+    ISet<MockupArrearsSummary> _ArrearsSummaries();
 
     @Owned
     @Detached(level = AttachLevel.Detached)

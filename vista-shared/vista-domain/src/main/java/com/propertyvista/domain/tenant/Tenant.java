@@ -25,7 +25,6 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.i18n.annotations.I18n;
 
-import com.propertyvista.domain.dashboard.gadgets.arrears.ArrearsState;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 
@@ -52,7 +51,4 @@ public interface Tenant extends LeaseParticipant {
     @Detached(level = AttachLevel.Detached)
     ISet<MaintenanceRequest> _MaintenanceRequests();
 
-    @Owned
-    @Detached(level = AttachLevel.Detached)
-    ISet<ArrearsState> _ArrearsState();
 }

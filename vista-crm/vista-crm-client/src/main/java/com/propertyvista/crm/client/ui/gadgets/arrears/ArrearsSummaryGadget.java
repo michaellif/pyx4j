@@ -35,27 +35,27 @@ import com.propertyvista.crm.client.ui.gadgets.common.Directory;
 import com.propertyvista.crm.client.ui.gadgets.common.GadgetInstanceBase;
 import com.propertyvista.crm.client.ui.gadgets.common.IBuildingBoardGadgetInstance;
 import com.propertyvista.crm.client.ui.gadgets.common.ListerGadgetInstanceBase;
-import com.propertyvista.crm.rpc.services.dashboard.gadgets.ArrearsReportService;
-import com.propertyvista.domain.dashboard.gadgets.arrears.ArrearsSummary;
-import com.propertyvista.domain.dashboard.gadgets.type.ArrearsSummaryGadgetMeta;
+import com.propertyvista.crm.rpc.services.dashboard.gadgets.MockupArrearsReportService;
+import com.propertyvista.domain.dashboard.gadgets.arrears.MockupArrearsSummary;
+import com.propertyvista.domain.dashboard.gadgets.type.MockArrearsSummaryGadget;
 import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
 
-public class ArrearsSummaryGadget extends AbstractGadget<ArrearsSummaryGadgetMeta> {
+public class ArrearsSummaryGadget extends AbstractGadget<MockArrearsSummaryGadget> {
 
     private static final I18n i18n = I18n.get(ArrearsSummaryGadget.class);
 
-    private static class ArrearsSummaryGadgetImpl extends ListerGadgetInstanceBase<ArrearsSummary, ArrearsSummaryGadgetMeta> implements
+    private static class ArrearsSummaryGadgetImpl extends ListerGadgetInstanceBase<MockupArrearsSummary, MockArrearsSummaryGadget> implements
             IBuildingBoardGadgetInstance {
 
         private static final I18n i18n = I18n.get(ArrearsSummaryGadgetImpl.class);
 
-        ArrearsReportService service;
+        MockupArrearsReportService service;
 
         private List<Key> buildings;
 
         public ArrearsSummaryGadgetImpl(GadgetMetadata gmd) {
-            super(gmd, ArrearsSummary.class, ArrearsSummaryGadgetMeta.class);
-            service = GWT.create(ArrearsReportService.class);
+            super(gmd, MockupArrearsSummary.class, MockArrearsSummaryGadget.class);
+            service = GWT.create(MockupArrearsReportService.class);
         }
 
         @Override
@@ -73,9 +73,9 @@ public class ArrearsSummaryGadget extends AbstractGadget<ArrearsSummaryGadgetMet
         @Override
         public void populatePage(final int pageNumber) {
             if (buildings != null) {
-                service.summary(new AsyncCallback<EntitySearchResult<ArrearsSummary>>() {
+                service.summary(new AsyncCallback<EntitySearchResult<MockupArrearsSummary>>() {
                     @Override
-                    public void onSuccess(EntitySearchResult<ArrearsSummary> result) {
+                    public void onSuccess(EntitySearchResult<MockupArrearsSummary> result) {
                         setPageData(result.getData(), pageNumber, result.getTotalRows(), result.hasMoreData());
                         populateSucceded();
                     }
@@ -86,7 +86,7 @@ public class ArrearsSummaryGadget extends AbstractGadget<ArrearsSummaryGadgetMet
                     }
                 }, new Vector<Key>(buildings), getStatusDate(), new Vector<Sort>(getSorting()), getPageNumber(), getPageSize());
             } else {
-                setPageData(new ArrayList<ArrearsSummary>(1), 0, 0, false);
+                setPageData(new ArrayList<MockupArrearsSummary>(1), 0, 0, false);
                 populateSucceded();
             }
         }
@@ -108,7 +108,7 @@ public class ArrearsSummaryGadget extends AbstractGadget<ArrearsSummaryGadgetMet
     }
 
     public ArrearsSummaryGadget() {
-        super(ArrearsSummaryGadgetMeta.class);
+        super(MockArrearsSummaryGadget.class);
     }
 
     @Override
@@ -127,7 +127,7 @@ public class ArrearsSummaryGadget extends AbstractGadget<ArrearsSummaryGadgetMet
     }
 
     @Override
-    protected GadgetInstanceBase<ArrearsSummaryGadgetMeta> createInstance(GadgetMetadata gadgetMetadata) throws Error {
+    protected GadgetInstanceBase<MockArrearsSummaryGadget> createInstance(GadgetMetadata gadgetMetadata) throws Error {
         return new ArrearsSummaryGadgetImpl(gadgetMetadata);
     }
 }

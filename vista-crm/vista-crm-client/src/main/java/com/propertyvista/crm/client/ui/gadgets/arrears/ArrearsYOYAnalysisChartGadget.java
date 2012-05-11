@@ -45,15 +45,15 @@ import com.propertyvista.crm.client.ui.gadgets.common.AbstractGadget;
 import com.propertyvista.crm.client.ui.gadgets.common.Directory;
 import com.propertyvista.crm.client.ui.gadgets.common.GadgetInstanceBase;
 import com.propertyvista.crm.client.ui.gadgets.common.IBuildingBoardGadgetInstance;
-import com.propertyvista.crm.rpc.services.dashboard.gadgets.ArrearsReportService;
-import com.propertyvista.domain.dashboard.gadgets.type.ArrearsYOYAnalysisChart;
+import com.propertyvista.crm.rpc.services.dashboard.gadgets.MockupArrearsReportService;
+import com.propertyvista.domain.dashboard.gadgets.type.MockupArrearsYOYAnalysisChartGadget;
 import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
 
-public class ArrearsYOYAnalysisChartGadget extends AbstractGadget<ArrearsYOYAnalysisChart> {
+public class ArrearsYOYAnalysisChartGadget extends AbstractGadget<MockupArrearsYOYAnalysisChartGadget> {
 
     private static final I18n i18n = I18n.get(ArrearsYOYAnalysisChartGadget.class);
 
-    public static class ArrearsYOYAnalysisChartGadgetImpl extends GadgetInstanceBase<ArrearsYOYAnalysisChart> implements IBuildingBoardGadgetInstance {
+    public static class ArrearsYOYAnalysisChartGadgetImpl extends GadgetInstanceBase<MockupArrearsYOYAnalysisChartGadget> implements IBuildingBoardGadgetInstance {
 
         private static final I18n i18n = I18n.get(ArrearsYOYAnalysisChartGadgetImpl.class);
 
@@ -67,15 +67,15 @@ public class ArrearsYOYAnalysisChartGadget extends AbstractGadget<ArrearsYOYAnal
 
         private LayoutPanel graph;
 
-        private final ArrearsReportService service;
+        private final MockupArrearsReportService service;
 
         private Vector<Vector<Double>> data;
 
         private final SvgFactoryForGwt factory;
 
         public ArrearsYOYAnalysisChartGadgetImpl(GadgetMetadata gmd) {
-            super(gmd, ArrearsYOYAnalysisChart.class);
-            service = GWT.create(ArrearsReportService.class);
+            super(gmd, MockupArrearsYOYAnalysisChartGadget.class);
+            service = GWT.create(MockupArrearsReportService.class);
             data = null;
             factory = new SvgFactoryForGwt();
             setDefaultPopulator(new Populator() {
@@ -206,7 +206,7 @@ public class ArrearsYOYAnalysisChartGadget extends AbstractGadget<ArrearsYOYAnal
     }
 
     public ArrearsYOYAnalysisChartGadget() {
-        super(ArrearsYOYAnalysisChart.class);
+        super(MockupArrearsYOYAnalysisChartGadget.class);
     }
 
     @Override
@@ -225,7 +225,7 @@ public class ArrearsYOYAnalysisChartGadget extends AbstractGadget<ArrearsYOYAnal
     }
 
     @Override
-    protected GadgetInstanceBase<ArrearsYOYAnalysisChart> createInstance(GadgetMetadata gadgetMetadata) throws Error {
+    protected GadgetInstanceBase<MockupArrearsYOYAnalysisChartGadget> createInstance(GadgetMetadata gadgetMetadata) throws Error {
         return new ArrearsYOYAnalysisChartGadgetImpl(gadgetMetadata);
     }
 }
