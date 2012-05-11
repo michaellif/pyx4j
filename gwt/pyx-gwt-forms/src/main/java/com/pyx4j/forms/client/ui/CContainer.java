@@ -58,6 +58,18 @@ public abstract class CContainer<DATA_TYPE, WIDGET_TYPE extends Widget & INative
 
     public abstract Collection<? extends CComponent<?, ?>> getComponents();
 
+    protected abstract void setComponentsValue(DATA_TYPE value, boolean fireEvent, boolean populate);
+
+    @Override
+    protected void propagateValue(DATA_TYPE value, boolean fireEvent, boolean populate) {
+        super.propagateValue(value, fireEvent, populate);
+        setComponentsValue(value, fireEvent, populate);
+    }
+
+    protected <T> void updateContainer(CComponent<T, ?> component, T value) {
+
+    }
+
     @SuppressWarnings({ "unchecked", "rawtypes" })
     public void adopt(final CComponent<?, ?> component) {
 

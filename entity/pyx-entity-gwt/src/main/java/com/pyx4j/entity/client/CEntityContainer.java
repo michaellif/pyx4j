@@ -42,8 +42,6 @@ public abstract class CEntityContainer<E extends IObject<?>> extends CContainer<
 
     public abstract IsWidget createContent();
 
-    protected abstract void setComponentsValue(E value, boolean fireEvent, boolean populate);
-
     protected IDecorator<? extends CEntityContainer<?>> createDecorator() {
         return null;
     }
@@ -107,12 +105,6 @@ public abstract class CEntityContainer<E extends IObject<?>> extends CContainer<
     @Override
     public void onAbandon() {
         super.onAbandon();
-    }
-
-    @Override
-    protected void propagateValue(E value, boolean fireEvent, boolean populate) {
-        super.propagateValue(value, fireEvent, populate);
-        setComponentsValue(value, fireEvent, populate);
     }
 
     public void addValidations() {

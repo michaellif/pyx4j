@@ -154,7 +154,6 @@ public abstract class CEntityForm<E extends IEntity> extends CEntityContainer<E>
 
     @Override
     public void adopt(CComponent<?, ?> component) {
-        component.addValueChangeHandler(new ValuePropagationHandler());
         IObject<?> member = proto().getMember(binding.get(component));
         MemberMeta mm = member.getMeta();
         if (mm.isValidatorAnnotationPresent(NotNull.class)) {
@@ -399,42 +398,36 @@ public abstract class CEntityForm<E extends IEntity> extends CEntityContainer<E>
         return super.toString() + "; dirty=" + isDirty();
     }
 
-    @SuppressWarnings("rawtypes")
-    private class ValuePropagationHandler implements ValueChangeHandler {
-
-        @Override
-        public void onValueChange(ValueChangeEvent event) {
-            if (event.getSource() instanceof CPolymorphicEntityEditorTEMP) {
-                Path memberPath = binding.get(event.getSource());
-                if ((memberPath != null) && (getValue() != null)) {
-                    Object value = event.getValue();
-                    if (value instanceof IEntity) {
-                        ((IEntity) getValue().getMember(memberPath)).set(((IEntity) value).duplicate());
-                        log.trace("CEntityEditor {} model updated  {}", shortDebugInfo(), memberPath);
-                        return;
-                    }
+    @Override
+    protected <T> void updateContainer(CComponent<T, ?> component, T value) {
+        if (component instanceof CPolymorphicEntityEditorTEMP) {
+            Path memberPath = binding.get(component);
+            if ((memberPath != null) && (getValue() != null)) {
+                if (value instanceof IEntity) {
+                    ((IEntity) getValue().getMember(memberPath)).set(((IEntity) value).duplicate());
+                    log.trace("CEntityEditor {} model updated  {}", shortDebugInfo(), memberPath);
+                    return;
                 }
-            } else if (!(event.getSource() instanceof CEntityContainer)) {
-                Path memberPath = binding.get(event.getSource());
-                if ((memberPath != null) && (getValue() != null)) {
-                    Object value = event.getValue();
-                    if (value instanceof IEntity) {
-                        // Process on the object level to avoid Polymorphic problems
-                        ((IEntity) getValue().getMember(memberPath)).set((IEntity) value);
-                    } else {
-                        if (value instanceof Date) {
-                            // Synchronize the value in Editor with model
-                            Class<?> cls = getValue().getEntityMeta().getMemberMeta(memberPath).getValueClass();
-                            if (cls.equals(LogicalDate.class)) {
-                                value = new LogicalDate((Date) value);
-                            } else if (cls.equals(java.sql.Date.class)) {
-                                value = new java.sql.Date(((Date) value).getTime());
-                            }
+            }
+        } else if (!(component instanceof CEntityContainer)) {
+            Path memberPath = binding.get(component);
+            if ((memberPath != null) && (getValue() != null)) {
+                if (value instanceof IEntity) {
+                    // Process on the object level to avoid Polymorphic problems
+                    ((IEntity) getValue().getMember(memberPath)).set((IEntity) value);
+                } else {
+                    if (value instanceof Date) {
+                        // Synchronize the value in Editor with model
+                        Class<?> cls = getValue().getEntityMeta().getMemberMeta(memberPath).getValueClass();
+                        if (cls.equals(LogicalDate.class)) {
+                            value = (T) new LogicalDate((Date) value);
+                        } else if (cls.equals(java.sql.Date.class)) {
+                            value = (T) new java.sql.Date(((Date) value).getTime());
                         }
-                        getValue().setValue(memberPath, value);
                     }
-                    log.trace("CEntityEditor {} model updated {}", shortDebugInfo(), memberPath);
+                    getValue().setValue(memberPath, value);
                 }
+                log.trace("CEntityEditor {} model updated {}", shortDebugInfo(), memberPath);
             }
         }
     }

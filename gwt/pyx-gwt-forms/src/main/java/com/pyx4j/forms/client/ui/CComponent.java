@@ -505,6 +505,9 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
             if (isValid()) {
                 setNativeValue(value);
             }
+            if (getParent() != null) {
+                getParent().updateContainer(this, value);
+            }
             ValueChangeEvent.fire(this, value);
         }
     }
@@ -514,6 +517,9 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
             this.value = preprocessValue(value, fireEvent, populate);
             setNativeValue(this.value);
             revalidate();
+            if (getParent() != null) {
+                getParent().updateContainer(this, value);
+            }
             if (fireEvent) {
                 ValueChangeEvent.fire(this, this.value);
             }
