@@ -14,9 +14,9 @@
 package com.propertyvista.crm.client.activity.crud.settings.tax;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.settings.financial.glcode.GlCodeCategoryViewerView;
@@ -26,7 +26,7 @@ import com.propertyvista.domain.financial.GlCodeCategory;
 
 public class GlCodeCategoryViewerActivity extends CrmViewerActivity<GlCodeCategory> {
 
-    public GlCodeCategoryViewerActivity(Place place) {
+    public GlCodeCategoryViewerActivity(CrudAppPlace place) {
         super(place, SettingsViewFactory.instance(GlCodeCategoryViewerView.class), GWT
                 .<AbstractCrudService<GlCodeCategory>> create(GlCodeCategoryCrudService.class));
     }

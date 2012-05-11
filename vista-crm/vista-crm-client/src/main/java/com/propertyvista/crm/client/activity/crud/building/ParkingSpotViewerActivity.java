@@ -14,9 +14,9 @@
 package com.propertyvista.crm.client.activity.crud.building;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.building.parking.ParkingSpotViewerView;
@@ -27,7 +27,7 @@ import com.propertyvista.domain.property.asset.ParkingSpot;
 public class ParkingSpotViewerActivity extends CrmViewerActivity<ParkingSpot> {
 
     @SuppressWarnings("unchecked")
-    public ParkingSpotViewerActivity(Place place) {
+    public ParkingSpotViewerActivity(CrudAppPlace place) {
         super(place, BuildingViewFactory.instance(ParkingSpotViewerView.class), (AbstractCrudService<ParkingSpot>) GWT.create(ParkingSpotCrudService.class));
 
     }

@@ -14,11 +14,11 @@
 package com.propertyvista.admin.client.activity.crud.onboardingusers;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.admin.client.activity.crud.AdminViewerActivity;
 import com.propertyvista.admin.client.ui.crud.onboardingusers.OnboardingUserViewerView;
@@ -30,7 +30,7 @@ import com.propertyvista.common.client.ui.components.security.PasswordChangeView
 
 public class OnBoardingUserViewerActivity extends AdminViewerActivity<OnboardingUserDTO> implements OnboardingUserViewerView.Presenter {
 
-    public OnBoardingUserViewerActivity(Place place) {
+    public OnBoardingUserViewerActivity(CrudAppPlace place) {
         super(place, ManagementVeiwFactory.instance(OnboardingUserViewerView.class), GWT.<OnboardingUserCrudService> create(OnboardingUserCrudService.class));
     }
 

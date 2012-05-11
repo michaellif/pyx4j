@@ -15,7 +15,6 @@ package com.propertyvista.crm.client.activity.crud.customer.guarantor;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.AbstractCrudService;
@@ -24,6 +23,7 @@ import com.pyx4j.site.client.activity.crud.ListerActivityBase;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.pyx4j.site.client.ui.crud.lister.IListerView.Presenter;
 import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.common.client.ui.components.security.PasswordChangeView;
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
@@ -40,7 +40,7 @@ public class GuarantorViewerActivity extends CrmViewerActivity<GuarantorDTO> imp
     private final IListerView.Presenter<PersonScreening> screeningLister;
 
     @SuppressWarnings("unchecked")
-    public GuarantorViewerActivity(Place place) {
+    public GuarantorViewerActivity(CrudAppPlace place) {
         super(place, CustomerViewFactory.instance(GuarantorViewerView.class), (AbstractCrudService<GuarantorDTO>) GWT.create(GuarantorCrudService.class));
 
         screeningLister = new ListerActivityBase<PersonScreening>(place, ((GuarantorViewerView) getView()).getScreeningListerView(),

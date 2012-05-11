@@ -18,7 +18,6 @@ import java.util.Vector;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
@@ -29,6 +28,7 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.client.activity.crud.ListerActivityBase;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.pyx4j.site.client.ui.crud.lister.IListerView.Presenter;
+import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.customer.lead.LeadViewerView;
@@ -44,7 +44,7 @@ public class LeadViewerActivity extends CrmViewerActivity<Lead> implements LeadV
     private final IListerView.Presenter<Appointment> appointmentsLister;
 
     @SuppressWarnings("unchecked")
-    public LeadViewerActivity(Place place) {
+    public LeadViewerActivity(CrudAppPlace place) {
         super(place, MarketingViewFactory.instance(LeadViewerView.class), (AbstractCrudService<Lead>) GWT.create(LeadCrudService.class));
 
         appointmentsLister = new ListerActivityBase<Appointment>(place, ((LeadViewerView) getView()).getAppointmentsListerView(),

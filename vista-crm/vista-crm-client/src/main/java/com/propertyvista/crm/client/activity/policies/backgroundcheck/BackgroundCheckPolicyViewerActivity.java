@@ -14,7 +14,8 @@
 package com.propertyvista.crm.client.activity.policies.backgroundcheck;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.place.shared.Place;
+
+import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.policies.backgroundcheck.BackgroundCheckPolicyViewerView;
@@ -24,7 +25,7 @@ import com.propertyvista.domain.policy.dto.BackgroundCheckPolicyDTO;
 
 public class BackgroundCheckPolicyViewerActivity extends CrmViewerActivity<BackgroundCheckPolicyDTO> {
 
-    public BackgroundCheckPolicyViewerActivity(Place place) {
+    public BackgroundCheckPolicyViewerActivity(CrudAppPlace place) {
         super(place, PolicyViewFactory.instance(BackgroundCheckPolicyViewerView.class), GWT
                 .<BackgroundCheckPolicyCrudService> create(BackgroundCheckPolicyCrudService.class));
     }

@@ -14,10 +14,10 @@
 package com.propertyvista.crm.client.activity.crud.billing;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.billing.payment.PaymentViewerView;
@@ -27,7 +27,7 @@ import com.propertyvista.dto.PaymentRecordDTO;
 
 public class PaymentViewerActivity extends CrmViewerActivity<PaymentRecordDTO> implements PaymentViewerView.Presenter {
 
-    public PaymentViewerActivity(Place place) {
+    public PaymentViewerActivity(CrudAppPlace place) {
         super(place, LeaseViewFactory.instance(PaymentViewerView.class), GWT.<AbstractCrudService<PaymentRecordDTO>> create(PaymentCrudService.class));
     }
 

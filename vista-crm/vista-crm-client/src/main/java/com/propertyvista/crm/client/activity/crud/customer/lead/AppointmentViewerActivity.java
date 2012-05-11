@@ -15,12 +15,12 @@ package com.propertyvista.crm.client.activity.crud.customer.lead;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.site.client.activity.crud.ListerActivityBase;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.pyx4j.site.client.ui.crud.lister.IListerView.Presenter;
+import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.customer.lead.appointment.AppointmentViewerView;
@@ -35,7 +35,7 @@ public class AppointmentViewerActivity extends CrmViewerActivity<Appointment> im
     private final IListerView.Presenter<Showing> showingsLister;
 
     @SuppressWarnings("unchecked")
-    public AppointmentViewerActivity(Place place) {
+    public AppointmentViewerActivity(CrudAppPlace place) {
         super(place, MarketingViewFactory.instance(AppointmentViewerView.class), (AbstractCrudService<Appointment>) GWT.create(AppointmentCrudService.class));
 
         showingsLister = new ListerActivityBase<Showing>(place, ((AppointmentViewerView) getView()).getShowingsListerView(),

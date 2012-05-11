@@ -48,17 +48,21 @@ public class ConcessionForm extends CrmEntityForm<Concession> {
         main.setWidget(++row, 0, valueHolder);
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().version().term()), 12).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().version().condition()), 10).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().version().mixable()), 5).build());
 
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().version().description()), 30).build());
         main.getFlexCellFormatter().setColSpan(row, 0, 2);
 
         row = -1;
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().version().createdByUser()), 20).build());
         main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().version().effectiveDate()), 9).build());
         main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().version().expirationDate()), 9).build());
+        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().updated()), 10).build());
 
         main.getColumnFormatter().setWidth(0, "50%");
         main.getColumnFormatter().setWidth(1, "50%");
+
+        // tweak:
+        get(proto().updated()).setViewable(true);
 
         get(proto().version().type()).addValueChangeHandler(new ValueChangeHandler<Concession.Type>() {
             @Override

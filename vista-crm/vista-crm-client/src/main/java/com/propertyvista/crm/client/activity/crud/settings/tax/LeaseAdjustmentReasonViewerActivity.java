@@ -14,9 +14,9 @@
 package com.propertyvista.crm.client.activity.crud.settings.tax;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.settings.financial.leaseadjustmentreason.LeaseAdjustmentReasonViewerView;
@@ -26,7 +26,7 @@ import com.propertyvista.domain.tenant.lease.LeaseAdjustmentReason;
 
 public class LeaseAdjustmentReasonViewerActivity extends CrmViewerActivity<LeaseAdjustmentReason> {
 
-    public LeaseAdjustmentReasonViewerActivity(Place place) {
+    public LeaseAdjustmentReasonViewerActivity(CrudAppPlace place) {
         super(place, SettingsViewFactory.instance(LeaseAdjustmentReasonViewerView.class), GWT
                 .<AbstractCrudService<LeaseAdjustmentReason>> create(LeaseAdjustmentReasonCrudService.class));
     }

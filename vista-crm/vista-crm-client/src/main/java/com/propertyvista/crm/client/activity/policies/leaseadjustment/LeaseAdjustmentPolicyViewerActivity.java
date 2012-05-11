@@ -14,7 +14,8 @@
 package com.propertyvista.crm.client.activity.policies.leaseadjustment;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.place.shared.Place;
+
+import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.policies.leaseadjustment.LeaseAdjustmentPolicyViewerView;
@@ -24,7 +25,7 @@ import com.propertyvista.domain.policy.dto.LeaseAdjustmentPolicyDTO;
 
 public class LeaseAdjustmentPolicyViewerActivity extends CrmViewerActivity<LeaseAdjustmentPolicyDTO> {
 
-    public LeaseAdjustmentPolicyViewerActivity(Place place) {
+    public LeaseAdjustmentPolicyViewerActivity(CrudAppPlace place) {
         super(place, PolicyViewFactory.instance(LeaseAdjustmentPolicyViewerView.class), GWT
                 .<LeaseAdjustmentPolicyCrudService> create(LeaseAdjustmentPolicyCrudService.class));
     }

@@ -14,10 +14,10 @@
 package com.propertyvista.crm.client.activity.crud.building;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.security.shared.SecurityController;
+import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.building.mech.BoilerViewerView;
@@ -29,7 +29,7 @@ import com.propertyvista.dto.BoilerDTO;
 public class BoilerViewerActivity extends CrmViewerActivity<BoilerDTO> {
 
     @SuppressWarnings("unchecked")
-    public BoilerViewerActivity(Place place) {
+    public BoilerViewerActivity(CrudAppPlace place) {
         super(place, BuildingViewFactory.instance(BoilerViewerView.class), (AbstractCrudService<BoilerDTO>) GWT.create(BoilerCrudService.class));
     }
 

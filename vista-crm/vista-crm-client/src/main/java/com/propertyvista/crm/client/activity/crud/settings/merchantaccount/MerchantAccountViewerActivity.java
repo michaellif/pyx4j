@@ -14,9 +14,9 @@
 package com.propertyvista.crm.client.activity.crud.settings.merchantaccount;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.settings.merchantaccount.MerchantAccountViewerView;
@@ -26,7 +26,7 @@ import com.propertyvista.domain.financial.MerchantAccount;
 
 public class MerchantAccountViewerActivity extends CrmViewerActivity<MerchantAccount> {
 
-    public MerchantAccountViewerActivity(Place place) {
+    public MerchantAccountViewerActivity(CrudAppPlace place) {
         super(place, SettingsViewFactory.instance(MerchantAccountViewerView.class), GWT
                 .<AbstractCrudService<MerchantAccount>> create(MerchantAccountCrudService.class));
     }

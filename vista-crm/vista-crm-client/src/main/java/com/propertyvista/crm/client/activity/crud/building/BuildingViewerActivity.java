@@ -17,12 +17,12 @@ import java.util.Arrays;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.activity.crud.ListerActivityBase;
 import com.pyx4j.site.client.ui.crud.lister.IListerView.Presenter;
+import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.activity.ListerActivityFactory;
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
@@ -84,7 +84,7 @@ public class BuildingViewerActivity extends CrmViewerActivity<BuildingDTO> imple
     private final Presenter<BillingRun> billingRunLister;
 
     @SuppressWarnings("unchecked")
-    public BuildingViewerActivity(Place place) {
+    public BuildingViewerActivity(CrudAppPlace place) {
         super(place, BuildingViewFactory.instance(BuildingViewerView.class), (AbstractCrudService<BuildingDTO>) GWT.create(BuildingCrudService.class));
 
         dashboardPresenter = new DashboardViewActivity(((BuildingViewerView) getView()).getDashboardView());

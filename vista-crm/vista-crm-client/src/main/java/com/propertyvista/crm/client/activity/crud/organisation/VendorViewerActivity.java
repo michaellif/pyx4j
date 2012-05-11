@@ -14,9 +14,9 @@
 package com.propertyvista.crm.client.activity.crud.organisation;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.organisation.vendor.VendorViewerView;
@@ -26,9 +26,7 @@ import com.propertyvista.domain.property.vendor.Vendor;
 
 public class VendorViewerActivity extends CrmViewerActivity<Vendor> {
 
-    public VendorViewerActivity(Place place) {
-        super(place, OrganizationViewFactory.instance(VendorViewerView.class),
-
-        GWT.<AbstractCrudService<Vendor>> create(VendorCrudService.class));
+    public VendorViewerActivity(CrudAppPlace place) {
+        super(place, OrganizationViewFactory.instance(VendorViewerView.class), GWT.<AbstractCrudService<Vendor>> create(VendorCrudService.class));
     }
 }

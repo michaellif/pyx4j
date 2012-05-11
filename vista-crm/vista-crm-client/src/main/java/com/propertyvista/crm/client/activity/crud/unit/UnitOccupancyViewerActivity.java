@@ -14,9 +14,9 @@
 package com.propertyvista.crm.client.activity.crud.unit;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.unit.UnitOccupancyViewerView;
@@ -27,7 +27,7 @@ import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySe
 public class UnitOccupancyViewerActivity extends CrmViewerActivity<AptUnitOccupancySegment> {
 
     @SuppressWarnings("unchecked")
-    public UnitOccupancyViewerActivity(Place place) {
+    public UnitOccupancyViewerActivity(CrudAppPlace place) {
         super(place, UnitViewFactory.instance(UnitOccupancyViewerView.class), (AbstractCrudService<AptUnitOccupancySegment>) GWT
                 .create(UnitOccupancyCrudService.class));
     }

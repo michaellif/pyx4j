@@ -14,9 +14,9 @@
 package com.propertyvista.crm.client.activity.crud.building;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.building.lockers.LockerViewerView;
@@ -27,7 +27,7 @@ import com.propertyvista.domain.property.asset.Locker;
 public class LockerViewerActivity extends CrmViewerActivity<Locker> {
 
     @SuppressWarnings("unchecked")
-    public LockerViewerActivity(Place place) {
+    public LockerViewerActivity(CrudAppPlace place) {
         super(place, BuildingViewFactory.instance(LockerViewerView.class), (AbstractCrudService<Locker>) GWT.create(LockerCrudService.class));
     }
 }

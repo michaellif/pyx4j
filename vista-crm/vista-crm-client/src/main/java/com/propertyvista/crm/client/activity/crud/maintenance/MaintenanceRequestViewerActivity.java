@@ -14,10 +14,10 @@
 package com.propertyvista.crm.client.activity.crud.maintenance;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.security.shared.SecurityController;
+import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.maintenance.MaintenanceRequestViewerView;
@@ -29,7 +29,7 @@ import com.propertyvista.dto.MaintenanceRequestDTO;
 public class MaintenanceRequestViewerActivity extends CrmViewerActivity<MaintenanceRequestDTO> {
 
     @SuppressWarnings("unchecked")
-    public MaintenanceRequestViewerActivity(Place place) {
+    public MaintenanceRequestViewerActivity(CrudAppPlace place) {
         super(place, MaintenanceViewFactory.instance(MaintenanceRequestViewerView.class), (AbstractCrudService<MaintenanceRequestDTO>) GWT
                 .create(MaintenanceCrudService.class));
     }

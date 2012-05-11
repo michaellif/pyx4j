@@ -14,9 +14,9 @@
 package com.propertyvista.crm.client.activity.crud.settings.dictionary;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.settings.financial.producttype.ServiceTypeViewerView;
@@ -27,7 +27,7 @@ import com.propertyvista.domain.financial.offering.ServiceItemType;
 public class ServiceItemTypeViewerActivity extends CrmViewerActivity<ServiceItemType> {
 
     @SuppressWarnings("unchecked")
-    public ServiceItemTypeViewerActivity(Place place) {
+    public ServiceItemTypeViewerActivity(CrudAppPlace place) {
         super(place, SettingsViewFactory.instance(ServiceTypeViewerView.class), (AbstractCrudService<ServiceItemType>) GWT
                 .create(ServiceItemTypeCrudService.class));
     }

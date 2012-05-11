@@ -14,7 +14,8 @@
 package com.propertyvista.crm.client.activity.policies.emailtemplates;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.place.shared.Place;
+
+import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.policies.emailtemplates.EmailTemplatesPolicyViewerView;
@@ -24,7 +25,7 @@ import com.propertyvista.domain.policy.dto.EmailTemplatesPolicyDTO;
 
 public class EmailTemplatesPolicyViewerActivity extends CrmViewerActivity<EmailTemplatesPolicyDTO> {
 
-    public EmailTemplatesPolicyViewerActivity(Place place) {
+    public EmailTemplatesPolicyViewerActivity(CrudAppPlace place) {
         super(place, PolicyViewFactory.instance(EmailTemplatesPolicyViewerView.class), GWT
                 .<EmailTemplatesPolicyCrudService> create(EmailTemplatesPolicyCrudService.class));
     }

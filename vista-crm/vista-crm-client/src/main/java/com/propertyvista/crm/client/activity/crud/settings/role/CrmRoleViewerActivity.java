@@ -14,9 +14,9 @@
 package com.propertyvista.crm.client.activity.crud.settings.role;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.settings.role.CrmRoleViewerView;
@@ -26,7 +26,7 @@ import com.propertyvista.domain.security.CrmRole;
 
 public class CrmRoleViewerActivity extends CrmViewerActivity<CrmRole> {
 
-    public CrmRoleViewerActivity(Place place) {
+    public CrmRoleViewerActivity(CrudAppPlace place) {
         super(place, SettingsViewFactory.instance(CrmRoleViewerView.class), GWT.<AbstractCrudService<CrmRole>> create(CrmRoleCrudService.class));
     }
 

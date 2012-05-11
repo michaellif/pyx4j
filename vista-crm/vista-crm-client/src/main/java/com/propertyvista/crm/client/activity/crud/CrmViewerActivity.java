@@ -13,8 +13,6 @@
  */
 package com.propertyvista.crm.client.activity.crud;
 
-import com.google.gwt.place.shared.Place;
-
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.site.client.AppSite;
@@ -28,11 +26,11 @@ public class CrmViewerActivity<E extends IEntity> extends ViewerActivityBase<E> 
 
     private final CrudAppPlace place;
 
-    public CrmViewerActivity(Place place, IViewerView<E> view, AbstractCrudService<E> service) {
+    public CrmViewerActivity(CrudAppPlace place, IViewerView<E> view, AbstractCrudService<E> service) {
         super(place, view, service);
 
         assert (place instanceof CrudAppPlace);
-        this.place = (CrudAppPlace) place;
+        this.place = place;
     }
 
     @Override

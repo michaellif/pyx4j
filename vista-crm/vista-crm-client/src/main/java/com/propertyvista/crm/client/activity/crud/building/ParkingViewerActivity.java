@@ -15,11 +15,11 @@ package com.propertyvista.crm.client.activity.crud.building;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.site.client.activity.crud.ListerActivityBase;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
+import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.building.parking.ParkingViewerView;
@@ -34,7 +34,7 @@ public class ParkingViewerActivity extends CrmViewerActivity<ParkingDTO> impleme
     private final IListerView.Presenter spotLister;
 
     @SuppressWarnings("unchecked")
-    public ParkingViewerActivity(Place place) {
+    public ParkingViewerActivity(CrudAppPlace place) {
         super(place, BuildingViewFactory.instance(ParkingViewerView.class), (AbstractCrudService<ParkingDTO>) GWT.create(ParkingCrudService.class));
 
         spotLister = new ListerActivityBase<ParkingSpot>(place, ((ParkingViewerView) getView()).getSpotView(),

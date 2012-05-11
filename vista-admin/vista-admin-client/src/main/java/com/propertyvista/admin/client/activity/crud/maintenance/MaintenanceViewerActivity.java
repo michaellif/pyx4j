@@ -14,13 +14,13 @@
 package com.propertyvista.admin.client.activity.crud.maintenance;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.Window;
 
 import com.pyx4j.essentials.rpc.admin.SystemMaintenanceState;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
+import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.admin.client.activity.crud.AdminViewerActivity;
 import com.propertyvista.admin.client.ui.crud.maintenance.MaintenanceViewerView;
@@ -31,7 +31,7 @@ public class MaintenanceViewerActivity extends AdminViewerActivity<SystemMainten
 
     private final static I18n i18n = I18n.get(MaintenanceViewerActivity.class);
 
-    public MaintenanceViewerActivity(Place place) {
+    public MaintenanceViewerActivity(CrudAppPlace place) {
         super(place, AdministrationVeiwFactory.instance(MaintenanceViewerView.class), GWT.<MaintenanceCrudService> create(MaintenanceCrudService.class));
     }
 

@@ -14,13 +14,13 @@
 package com.propertyvista.crm.client.activity.crud.billing;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.essentials.client.ReportDialog;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.billing.bill.BillViewerView;
@@ -33,7 +33,7 @@ import com.propertyvista.dto.BillDTO;
 public class BillViewerActivity extends CrmViewerActivity<BillDTO> implements BillViewerView.Presenter {
 
     @SuppressWarnings("unchecked")
-    public BillViewerActivity(Place place) {
+    public BillViewerActivity(CrudAppPlace place) {
         super(place, LeaseViewFactory.instance(BillViewerView.class), (AbstractCrudService<BillDTO>) GWT.create(BillCrudService.class));
     }
 

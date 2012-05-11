@@ -14,9 +14,9 @@
 package com.propertyvista.crm.client.activity.crud.building.catalog;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.building.catalog.feature.FeatureViewerView;
@@ -27,7 +27,7 @@ import com.propertyvista.domain.financial.offering.Feature;
 public class FeatureViewerActivity extends CrmViewerActivity<Feature> {
 
     @SuppressWarnings("unchecked")
-    public FeatureViewerActivity(Place place) {
+    public FeatureViewerActivity(CrudAppPlace place) {
         super(place, MarketingViewFactory.instance(FeatureViewerView.class), (AbstractCrudService<Feature>) GWT.create(FeatureCrudService.class));
     }
 }

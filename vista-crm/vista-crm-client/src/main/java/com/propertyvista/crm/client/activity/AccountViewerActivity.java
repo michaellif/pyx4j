@@ -14,12 +14,12 @@
 package com.propertyvista.crm.client.activity;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.common.client.ui.components.security.PasswordChangeView;
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
@@ -34,7 +34,7 @@ import com.propertyvista.crm.rpc.services.organization.CrmUserService;
  */
 public class AccountViewerActivity extends CrmViewerActivity<EmployeeDTO> implements EmployeeViewerView.Presenter {
 
-    public AccountViewerActivity(Place place) {
+    public AccountViewerActivity(CrudAppPlace place) {
         super(place, OrganizationViewFactory.instance(EmployeeViewerView.class), GWT.<AbstractCrudService<EmployeeDTO>> create(CrmUserService.class));
     }
 

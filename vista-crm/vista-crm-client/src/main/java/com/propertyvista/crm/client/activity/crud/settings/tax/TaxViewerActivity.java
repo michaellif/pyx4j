@@ -14,9 +14,9 @@
 package com.propertyvista.crm.client.activity.crud.settings.tax;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.settings.financial.tax.TaxViewerView;
@@ -26,7 +26,7 @@ import com.propertyvista.domain.financial.tax.Tax;
 
 public class TaxViewerActivity extends CrmViewerActivity<Tax> {
 
-    public TaxViewerActivity(Place place) {
+    public TaxViewerActivity(CrudAppPlace place) {
         super(place, SettingsViewFactory.instance(TaxViewerView.class), GWT.<AbstractCrudService<Tax>> create(TaxCrudService.class));
     }
 }

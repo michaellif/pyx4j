@@ -15,10 +15,10 @@ package com.propertyvista.crm.client.activity.crud.complex;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.security.shared.SecurityController;
+import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.activity.dashboard.DashboardViewActivity;
@@ -33,7 +33,7 @@ public class ComplexViewerActivity extends CrmViewerActivity<ComplexDTO> impleme
     private final DashboardViewActivity dashboardViewActivity;
 
     @SuppressWarnings("unchecked")
-    public ComplexViewerActivity(Place place) {
+    public ComplexViewerActivity(CrudAppPlace place) {
         super(place, BuildingViewFactory.instance(ComplexViewerView.class), (AbstractCrudService<ComplexDTO>) GWT.create(ComplexCrudService.class));
 
         dashboardViewActivity = new DashboardViewActivity(((ComplexViewerView) getView()).getDashboardView());

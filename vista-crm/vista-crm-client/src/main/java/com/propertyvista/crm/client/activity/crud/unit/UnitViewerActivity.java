@@ -15,7 +15,6 @@ package com.propertyvista.crm.client.activity.crud.unit;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
@@ -26,6 +25,7 @@ import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.activity.crud.ListerActivityBase;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.pyx4j.site.client.ui.crud.lister.IListerView.Presenter;
+import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.unit.UnitViewerView;
@@ -50,7 +50,7 @@ public class UnitViewerActivity extends CrmViewerActivity<AptUnitDTO> implements
     private final UnitOccupancyManagerService occupancyManagerService;
 
     @SuppressWarnings("unchecked")
-    public UnitViewerActivity(Place place) {
+    public UnitViewerActivity(CrudAppPlace place) {
         super(place, UnitViewFactory.instance(UnitViewerView.class), (AbstractCrudService<AptUnitDTO>) GWT.create(UnitCrudService.class));
 
         unitItemsLister = new ListerActivityBase<AptUnitItem>(place, ((UnitViewerView) getView()).getUnitItemsListerView(),

@@ -15,11 +15,11 @@ package com.propertyvista.crm.client.activity.crud.building;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.site.client.activity.crud.ListerActivityBase;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
+import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.building.lockers.LockerAreaViewerView;
@@ -34,7 +34,7 @@ public class LockerAreaViewerActivity extends CrmViewerActivity<LockerAreaDTO> i
     private final IListerView.Presenter<?> lockerLister;
 
     @SuppressWarnings("unchecked")
-    public LockerAreaViewerActivity(Place place) {
+    public LockerAreaViewerActivity(CrudAppPlace place) {
         super(place, BuildingViewFactory.instance(LockerAreaViewerView.class), (AbstractCrudService<LockerAreaDTO>) GWT.create(LockerAreaCrudService.class));
 
         lockerLister = new ListerActivityBase<Locker>(place, ((LockerAreaViewerView) getView()).getLockerView(),

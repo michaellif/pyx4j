@@ -14,12 +14,12 @@
 package com.propertyvista.admin.client.activity.crud.pmc;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.Window;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
+import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.admin.client.activity.crud.AdminViewerActivity;
 import com.propertyvista.admin.client.ui.crud.pmc.PmcViewerView;
@@ -30,7 +30,7 @@ import com.propertyvista.admin.rpc.services.PmcCrudService;
 public class PmcViewerActivity extends AdminViewerActivity<PmcDTO> implements PmcViewerView.Presenter {
 
     @SuppressWarnings("unchecked")
-    public PmcViewerActivity(Place place) {
+    public PmcViewerActivity(CrudAppPlace place) {
         super(place, ManagementVeiwFactory.instance(PmcViewerView.class), (AbstractCrudService<PmcDTO>) GWT.create(PmcCrudService.class));
 
     }

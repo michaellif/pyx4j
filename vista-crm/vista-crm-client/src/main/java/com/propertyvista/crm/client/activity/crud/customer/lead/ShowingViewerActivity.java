@@ -14,9 +14,9 @@
 package com.propertyvista.crm.client.activity.crud.customer.lead;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.customer.lead.showing.ShowingViewerView;
@@ -27,7 +27,7 @@ import com.propertyvista.domain.tenant.lead.Showing;
 public class ShowingViewerActivity extends CrmViewerActivity<Showing> {
 
     @SuppressWarnings("unchecked")
-    public ShowingViewerActivity(Place place) {
+    public ShowingViewerActivity(CrudAppPlace place) {
         super(place, MarketingViewFactory.instance(ShowingViewerView.class), (AbstractCrudService<Showing>) GWT.create(ShowingCrudService.class));
     }
 }

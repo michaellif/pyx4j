@@ -108,7 +108,7 @@ public interface Concession extends IVersionedEntity<ConcessionV> {
 
 // ----------------------------------------------
 
-    @ToStringFormat("{0}, {1}, ${2}")
+    @ToStringFormat("{0}, {1}, {2}, {3}")
     public interface ConcessionV extends IVersionData<Concession> {
 
         @NotNull
@@ -117,25 +117,25 @@ public interface Concession extends IVersionedEntity<ConcessionV> {
         IPrimitive<Type> type();
 
         @NotNull
-        @ToString(index = 1)
+        @ToString(index = 2)
         IPrimitive<Term> term();
 
-        @Length(100)
+        @Length(500)
         @Editor(type = Editor.EditorType.textarea)
         IPrimitive<String> description();
 
         /**
-         * for free item - gift price
+         * for free item - gift value
          * for percentageOff - percentage
-         * for monetaryOff - amount
-         * for skipFirstPayment - number of terms
+         * for monetaryOff/promotionalItem - value amount
          */
-        @ToString(index = 2)
+        @ToString(index = 1)
         @Format("#0.00")
         @MemberColumn(name = "val")
         IPrimitive<BigDecimal> value();
 
         @NotNull
+        @ToString(index = 3)
         @MemberColumn(name = "cond")
         IPrimitive<Condition> condition();
 
@@ -146,7 +146,7 @@ public interface Concession extends IVersionedEntity<ConcessionV> {
         IPrimitive<Integer> productItemQuantity();
 
         @NotNull
-        IPrimitive<Boolean> nonMixable();
+        IPrimitive<Boolean> mixable();
 
         @Format("MM/dd/yyyy")
         IPrimitive<LogicalDate> effectiveDate();

@@ -14,9 +14,9 @@
 package com.propertyvista.crm.client.activity.policies.applicationdocumentation;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.policies.applicationdocumentation.ApplicationDocumentationPolicyViewerView;
@@ -27,7 +27,7 @@ import com.propertyvista.domain.policy.dto.ApplicationDocumentationPolicyDTO;
 public class ApplicationDocumentationPolicyViewerActivity extends CrmViewerActivity<ApplicationDocumentationPolicyDTO> implements
         ApplicationDocumentationPolicyViewerView.Presenter {
 
-    public ApplicationDocumentationPolicyViewerActivity(Place place) {
+    public ApplicationDocumentationPolicyViewerActivity(CrudAppPlace place) {
         // TODO take the view from pool
         super(place, new ApplicationDocumentationPolicyViewerViewImpl(), (AbstractCrudService<ApplicationDocumentationPolicyDTO>) GWT
                 .create(ApplicationDocumentationPolicyCrudService.class));

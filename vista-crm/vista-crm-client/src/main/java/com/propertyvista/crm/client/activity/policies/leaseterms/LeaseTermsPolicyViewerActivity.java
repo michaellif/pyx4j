@@ -14,9 +14,9 @@
 package com.propertyvista.crm.client.activity.policies.leaseterms;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.policies.leaseterms.LeaseTermsPolicyViewerView;
@@ -26,7 +26,7 @@ import com.propertyvista.domain.policy.dto.LeaseTermsPolicyDTO;
 
 public class LeaseTermsPolicyViewerActivity extends CrmViewerActivity<LeaseTermsPolicyDTO> implements LeaseTermsPolicyViewerView.Presenter {
 
-    public LeaseTermsPolicyViewerActivity(Place place) {
+    public LeaseTermsPolicyViewerActivity(CrudAppPlace place) {
         // TODO take the view from pool
         super(place, new LeaseTermsPolicyViewerViewImpl(), (AbstractCrudService<LeaseTermsPolicyDTO>) GWT.create(LeaseTermsPolicyCrudService.class));
     }

@@ -14,10 +14,10 @@
 package com.propertyvista.crm.client.activity.crud.building;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.security.shared.SecurityController;
+import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.building.mech.RoofViewerView;
@@ -29,7 +29,7 @@ import com.propertyvista.dto.RoofDTO;
 public class RoofViewerActivity extends CrmViewerActivity<RoofDTO> {
 
     @SuppressWarnings("unchecked")
-    public RoofViewerActivity(Place place) {
+    public RoofViewerActivity(CrudAppPlace place) {
         super(place, BuildingViewFactory.instance(RoofViewerView.class), (AbstractCrudService<RoofDTO>) GWT.create(RoofCrudService.class));
     }
 
