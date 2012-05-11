@@ -49,23 +49,19 @@ public class ViewerActivityBase<E extends IEntity> extends AbstractActivity impl
     protected Class<? extends CrudAppPlace> placeClass;
 
     public ViewerActivityBase(Place place, IViewerView<E> view, AbstractCrudService<E> service) {
-// development correctness checks:
+        // development correctness checks:
+        assert (place instanceof CrudAppPlace);
         assert (view != null);
         assert (service != null);
 
         this.view = view;
         this.service = service;
 
-        setPlace(place);
-    }
-
-    private void setPlace(Place place) {
         entityId = null;
         tabIndex = -1;
 
         view.getMemento().setCurrentPlace(place);
 
-        assert (place instanceof CrudAppPlace);
         placeClass = ((CrudAppPlace) place).getClass();
 
         String val;
