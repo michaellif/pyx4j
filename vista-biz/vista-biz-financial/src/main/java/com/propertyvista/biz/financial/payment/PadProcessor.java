@@ -66,7 +66,13 @@ public class PadProcessor {
             padBatch = EntityFactory.create(PadBatch.class);
             padBatch.padFile().set(padFile);
             padBatch.pmcNamespace().setValue(namespace);
-            padBatch.merchantAccount().set(merchantAccount);
+
+            padBatch.merchantTerminalId().setValue(merchantAccount.merchantTerminalId().getValue());
+            padBatch.bankId().setValue(merchantAccount.bankId().getValue());
+            padBatch.branchTransitNumber().setValue(merchantAccount.branchTransitNumber().getValue());
+            padBatch.accountNumber().setValue(merchantAccount.accountNumber().getValue());
+            padBatch.chargeDescription().setValue(merchantAccount.chargeDescription().getValue());
+
             padBatch.merchantAccountKey().setValue(merchantAccount.id().getValue());
             Persistence.service().persist(padBatch);
         }

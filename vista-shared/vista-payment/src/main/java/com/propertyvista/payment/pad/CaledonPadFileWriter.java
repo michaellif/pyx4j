@@ -107,14 +107,14 @@ public class CaledonPadFileWriter implements Closeable {
         //Transaction Type Code; '431' fixed
         writer.append("431").append(",");
 
-        writer.append(padBatch.merchantAccount().merchantTerminalId().getStringView()).append(",");
+        writer.append(padBatch.merchantTerminalId().getStringView()).append(",");
 
         //Description to appear on client's statement. Typically a merchant's business name.
-        writer.append(padBatch.merchantAccount().chargeDescription().getStringView()).append(",");
+        writer.append(padBatch.chargeDescription().getStringView()).append(",");
 
-        writer.append(padBatch.merchantAccount().bankId().getStringView()).append(",");
-        writer.append(padBatch.merchantAccount().branchTransitNumber().getStringView()).append(",");
-        writer.append(padBatch.merchantAccount().accountNumber().getStringView());
+        writer.append(padBatch.bankId().getStringView()).append(",");
+        writer.append(padBatch.branchTransitNumber().getStringView()).append(",");
+        writer.append(padBatch.accountNumber().getStringView());
         writer.append("\n");
     }
 
