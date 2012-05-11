@@ -71,7 +71,7 @@ public class UnitViewerViewImpl extends CrmViewerViewImplBase<AptUnitDTO> implem
         OccupanciesLister = new ListerInternalViewImplBase<AptUnitOccupancySegment>(new UnitOccupancyLister());
 
         // set main main form here:
-        setForm(new UnitEditorForm(true));
+        setForm(new UnitForm(true));
 
         // init actions stuff:
         canScopeAvailable = false;

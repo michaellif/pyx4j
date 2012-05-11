@@ -24,15 +24,15 @@ import com.propertyvista.common.client.ui.components.folders.EmailFolder;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.property.vendor.Vendor;
 
-public class VendorEditorForm extends CrmEntityForm<Vendor> {
+public class VendorForm extends CrmEntityForm<Vendor> {
 
-    private static final I18n i18n = I18n.get(VendorEditorForm.class);
+    private static final I18n i18n = I18n.get(VendorForm.class);
 
-    public VendorEditorForm() {
+    public VendorForm() {
         this(false);
     }
 
-    public VendorEditorForm(boolean viewMode) {
+    public VendorForm(boolean viewMode) {
         super(Vendor.class, viewMode);
     }
 

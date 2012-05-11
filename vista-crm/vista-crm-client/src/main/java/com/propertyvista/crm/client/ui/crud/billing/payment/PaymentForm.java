@@ -46,9 +46,9 @@ import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.dto.PaymentRecordDTO;
 import com.propertyvista.dto.PaymentRecordDTO.PaymentSelect;
 
-public class PaymentEditorForm extends CrmEntityForm<PaymentRecordDTO> {
+public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
 
-    private static final I18n i18n = I18n.get(PaymentEditorForm.class);
+    private static final I18n i18n = I18n.get(PaymentForm.class);
 
     private final CComboBox<PaymentMethod> profiledPaymentMethodsBox = new CComboBox<PaymentMethod>() {
         @Override
@@ -76,18 +76,18 @@ public class PaymentEditorForm extends CrmEntityForm<PaymentRecordDTO> {
                             public void onSuccess(AddressStructured result) {
                                 comp.setValue(result, false);
                             }
-                        }, PaymentEditorForm.this.getValue().leaseParticipant());
+                        }, PaymentForm.this.getValue().leaseParticipant());
             } else {
                 comp.setValue(EntityFactory.create(AddressStructured.class), false);
             }
         }
     };
 
-    public PaymentEditorForm() {
+    public PaymentForm() {
         this(false);
     }
 
-    public PaymentEditorForm(boolean viewMode) {
+    public PaymentForm(boolean viewMode) {
         super(PaymentRecordDTO.class, viewMode);
     }
 
@@ -111,6 +111,9 @@ public class PaymentEditorForm extends CrmEntityForm<PaymentRecordDTO> {
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().unitNumber()), 15).build());
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseId()), 10).build());
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseStatus()), 10).build());
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingAccount().accountNumber())).build());
+        get(proto().billingAccount().accountNumber()).setViewable(true);
+
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseParticipant(), new CEntitySelectorHyperlink<LeaseParticipant>() {
             @Override
             protected AppPlace getTargetPlace() {
@@ -119,12 +122,12 @@ public class PaymentEditorForm extends CrmEntityForm<PaymentRecordDTO> {
 
             @Override
             protected AbstractEntitySelectorDialog<LeaseParticipant> getSelectorDialog() {
-                return new EntitySelectorListDialog<LeaseParticipant>(i18n.tr("Select Tenant/Guarantor To Pay"), false, PaymentEditorForm.this.getValue()
+                return new EntitySelectorListDialog<LeaseParticipant>(i18n.tr("Select Tenant/Guarantor To Pay"), false, PaymentForm.this.getValue()
                         .participants()) {
 
                     @Override
                     public boolean onClickOk() {
-                        get(PaymentEditorForm.this.proto().leaseParticipant()).setValue(getSelectedItems().get(0));
+                        get(PaymentForm.this.proto().leaseParticipant()).setValue(getSelectedItems().get(0));
                         return true;
                     }
                 };

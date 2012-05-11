@@ -104,6 +104,8 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
 
         Persistence.service().retrieve(dto.version().tenants());
         Persistence.service().retrieve(dto.version().guarantors());
+
+        Persistence.service().retrieve(dto.billingAccount());
     }
 
     @Override

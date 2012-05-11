@@ -27,13 +27,13 @@ import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.financial.GlCode;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustmentReason;
 
-public class LeaseAdjustmentReasonEditorForm extends CrmEntityForm<LeaseAdjustmentReason> {
+public class LeaseAdjustmentReasonForm extends CrmEntityForm<LeaseAdjustmentReason> {
 
-    public LeaseAdjustmentReasonEditorForm() {
+    public LeaseAdjustmentReasonForm() {
         this(false);
     }
 
-    public LeaseAdjustmentReasonEditorForm(boolean viewMode) {
+    public LeaseAdjustmentReasonForm(boolean viewMode) {
         super(LeaseAdjustmentReason.class, viewMode);
     }
 
@@ -57,7 +57,7 @@ public class LeaseAdjustmentReasonEditorForm extends CrmEntityForm<LeaseAdjustme
                     @Override
                     public boolean onClickOk() {
                         if (!getSelectedItems().isEmpty()) {
-                            get(LeaseAdjustmentReasonEditorForm.this.proto().glCode()).setValue(getSelectedItems().get(0));
+                            get(LeaseAdjustmentReasonForm.this.proto().glCode()).setValue(getSelectedItems().get(0));
                         }
                         return !getSelectedItems().isEmpty();
                     }

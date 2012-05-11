@@ -55,17 +55,17 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.dto.AptUnitDTO;
 
-public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
+public class UnitForm extends CrmEntityForm<AptUnitDTO> {
 
-    private static final I18n i18n = I18n.get(UnitEditorForm.class);
+    private static final I18n i18n = I18n.get(UnitForm.class);
 
     private final VistaTabLayoutPanel tabPanel = new VistaTabLayoutPanel(CrmTheme.defaultTabHeight, Unit.EM);
 
-    public UnitEditorForm() {
+    public UnitForm() {
         this(false);
     }
 
-    public UnitEditorForm(boolean viewMode) {
+    public UnitForm(boolean viewMode) {
         super(AptUnitDTO.class, viewMode);
     }
 
@@ -223,11 +223,11 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
                 @Override
                 public void onValueChange(ValueChangeEvent<Floorplan> event) {
                     if (event.getValue() != null) {
-                        get(UnitEditorForm.this.proto().info()._bedrooms()).setValue(event.getValue().bedrooms().getValue());
-                        get(UnitEditorForm.this.proto().info()._bathrooms()).setValue(event.getValue().bathrooms().getValue());
+                        get(UnitForm.this.proto().info()._bedrooms()).setValue(event.getValue().bedrooms().getValue());
+                        get(UnitForm.this.proto().info()._bathrooms()).setValue(event.getValue().bathrooms().getValue());
                     } else {
-                        get(UnitEditorForm.this.proto().info()._bedrooms()).setValue(null);
-                        get(UnitEditorForm.this.proto().info()._bathrooms()).setValue(null);
+                        get(UnitForm.this.proto().info()._bedrooms()).setValue(null);
+                        get(UnitForm.this.proto().info()._bathrooms()).setValue(null);
                     }
                 }
             });
@@ -240,10 +240,10 @@ public class UnitEditorForm extends CrmEntityForm<AptUnitDTO> {
 
         @Override
         protected AbstractEntitySelectorDialog<Floorplan> getSelectorDialog() {
-            return new BuildingBoundFloorplanSelectorDialog(UnitEditorForm.this.getValue().belongsTo().getPrimaryKey(), new DefaultAsyncCallback<Floorplan>() {
+            return new BuildingBoundFloorplanSelectorDialog(UnitForm.this.getValue().belongsTo().getPrimaryKey(), new DefaultAsyncCallback<Floorplan>() {
                 @Override
                 public void onSuccess(Floorplan result) {
-                    get(UnitEditorForm.this.proto().floorplan()).setValue(result);
+                    get(UnitForm.this.proto().floorplan()).setValue(result);
                 }
             });
         }

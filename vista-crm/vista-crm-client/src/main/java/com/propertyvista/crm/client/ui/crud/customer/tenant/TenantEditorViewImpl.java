@@ -23,6 +23,6 @@ public class TenantEditorViewImpl extends CrmEditorViewImplBase<TenantDTO> imple
     private static final I18n i18n = I18n.get(TenantEditorViewImpl.class);
 
     public TenantEditorViewImpl() {
-        super(CrmSiteMap.Tenants.Tenant.class, new TenantEditorForm());
+        super(CrmSiteMap.Tenants.Tenant.class, new TenantForm());
     }
 }

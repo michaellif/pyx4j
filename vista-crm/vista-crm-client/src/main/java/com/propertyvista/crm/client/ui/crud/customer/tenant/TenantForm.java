@@ -42,17 +42,17 @@ import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.tenant.EmergencyContact;
 import com.propertyvista.dto.TenantDTO;
 
-public class TenantEditorForm extends CrmEntityForm<TenantDTO> {
+public class TenantForm extends CrmEntityForm<TenantDTO> {
 
-    private static final I18n i18n = I18n.get(TenantEditorForm.class);
+    private static final I18n i18n = I18n.get(TenantForm.class);
 
     private final VistaTabLayoutPanel tabPanel = new VistaTabLayoutPanel(CrmTheme.defaultTabHeight, Unit.EM);
 
-    public TenantEditorForm() {
+    public TenantForm() {
         this(false);
     }
 
-    public TenantEditorForm(boolean viewMode) {
+    public TenantForm(boolean viewMode) {
         super(TenantDTO.class, viewMode);
     }
 
