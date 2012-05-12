@@ -36,7 +36,9 @@ import com.propertyvista.admin.rpc.PmcDTO;
 import com.propertyvista.admin.rpc.services.PmcCrudService;
 import com.propertyvista.admin.server.onboarding.PmcNameValidator;
 import com.propertyvista.admin.server.preloader.OnboardingUserPreloader;
+import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.security.OnboardingUser;
+import com.propertyvista.domain.security.VistaBasicBehavior;
 import com.propertyvista.domain.security.VistaOnboardingBehavior;
 import com.propertyvista.portal.rpc.corp.PmcAccountCreationRequest;
 import com.propertyvista.portal.server.preloader.PmcCreator;
@@ -144,13 +146,20 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
                 Persistence.service().endTransaction();
             }
 
+            dto.vistaCrmUrl().setValue(VistaDeployment.getBaseApplicationURL(pmc, VistaBasicBehavior.CRM, true));
+            dto.residentPortalUrl().setValue(VistaDeployment.getBaseApplicationURL(pmc, VistaBasicBehavior.TenantPortal, true));
+            dto.prospectPortalUrl().setValue(VistaDeployment.getBaseApplicationURL(pmc, VistaBasicBehavior.ProspectiveApp, true));
+
             callback.onSuccess(dto);
         } else {
             pmc.status().setValue(PmcStatus.Active);
             Persistence.service().persist(pmc);
-            PmcDTO dtoReturn = createDTO(pmc);
+            Persistence.service().commit();
+            PmcDTO dto = createDTO(pmc);
 
-            callback.onSuccess(dtoReturn);
+            enhanceRetrieved(pmc, dto);
+
+            callback.onSuccess(dto);
         }
     }
 
@@ -161,9 +170,19 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
         Persistence.service().persist(pmc);
         Persistence.service().commit();
 
-        PmcDTO dtoReturn = createDTO(pmc);
+        PmcDTO dto = createDTO(pmc);
+        enhanceRetrieved(pmc, dto);
 
-        callback.onSuccess(dtoReturn);
+        callback.onSuccess(dto);
 
+    }
+
+    @Override
+    protected void enhanceRetrieved(Pmc entity, PmcDTO dto) {
+        super.enhanceRetrieved(entity, dto);
+
+        dto.vistaCrmUrl().setValue(VistaDeployment.getBaseApplicationURL(entity, VistaBasicBehavior.CRM, true));
+        dto.residentPortalUrl().setValue(VistaDeployment.getBaseApplicationURL(entity, VistaBasicBehavior.TenantPortal, true));
+        dto.prospectPortalUrl().setValue(VistaDeployment.getBaseApplicationURL(entity, VistaBasicBehavior.ProspectiveApp, true));
     }
 }

@@ -60,6 +60,14 @@ public interface PmcDTO extends IEntity {
     @Editor(type = EditorType.password)
     IPrimitive<String> password();
 
+    IPrimitive<String> accountStatus_TBD();
+
+    IPrimitive<String> vistaCrmUrl();
+
+    IPrimitive<String> residentPortalUrl();
+
+    IPrimitive<String> prospectPortalUrl();
+
     @Timestamp(Timestamp.Update.Created)
     @ReadOnly
     IPrimitive<Date> created();

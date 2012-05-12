@@ -13,12 +13,17 @@
  */
 package com.propertyvista.admin.client.ui.crud.pmc;
 
+import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.commons.ValidationUtils;
+import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.admin.client.ui.crud.AdminEntityForm;
+import com.propertyvista.admin.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.admin.rpc.PmcDTO;
 
 public class PmcForm extends AdminEntityForm<PmcDTO> {
@@ -44,6 +49,54 @@ public class PmcForm extends AdminEntityForm<PmcDTO> {
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().namespace()), 15).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().dnsName()), 15).build());
 
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().vistaCrmUrl(), new CHyperlink(new Command() {
+            @Override
+            public void execute() {
+                String url = getValue().vistaCrmUrl().getValue();
+                if (!ValidationUtils.urlHasProtocol(url)) {
+                    url = "http://" + url;
+                }
+                if (!ValidationUtils.isCorrectUrl(url)) {
+                    throw new Error(i18n.tr("The URL is not in proper format"));
+                }
+
+                Window.open(url, i18n.tr("CRM"), "status=1,toolbar=1,location=1,resizable=1,scrollbars=1");
+            }
+
+        })), 50).build());
+
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().residentPortalUrl(), new CHyperlink(new Command() {
+            @Override
+            public void execute() {
+                String url = getValue().residentPortalUrl().getValue();
+                if (!ValidationUtils.urlHasProtocol(url)) {
+                    url = "http://" + url;
+                }
+                if (!ValidationUtils.isCorrectUrl(url)) {
+                    throw new Error(i18n.tr("The URL is not in proper format"));
+                }
+
+                Window.open(url, i18n.tr("Resident Portal"), "status=1,toolbar=1,location=1,resizable=1,scrollbars=1");
+            }
+
+        })), 50).build());
+
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().prospectPortalUrl(), new CHyperlink(new Command() {
+            @Override
+            public void execute() {
+                String url = getValue().prospectPortalUrl().getValue();
+                if (!ValidationUtils.urlHasProtocol(url)) {
+                    url = "http://" + url;
+                }
+                if (!ValidationUtils.isCorrectUrl(url)) {
+                    throw new Error(i18n.tr("The URL is not in proper format"));
+                }
+
+                Window.open(url, i18n.tr("Prospect Portal"), "status=1,toolbar=1,location=1,resizable=1,scrollbars=1");
+            }
+
+        })), 50).build());
+
         main.setH1(++row, 0, 2, proto().dnsNameAliases().getMeta().getCaption());
         main.setWidget(++row, 0, inject(proto().dnsNameAliases(), new PmcDnsNameFolder(isEditable())));
         main.getFlexCellFormatter().setColSpan(row, 0, 2);
@@ -56,5 +109,10 @@ public class PmcForm extends AdminEntityForm<PmcDTO> {
         super.onPopulate();
 
         get(proto().status()).setViewable(true);
+
+        boolean isVisible = get(proto().status()).getValue() != PmcStatus.Created;
+        get(proto().vistaCrmUrl()).setVisible(isVisible);
+        get(proto().residentPortalUrl()).setVisible(isVisible);
+        get(proto().prospectPortalUrl()).setVisible(isVisible);
     }
 }
