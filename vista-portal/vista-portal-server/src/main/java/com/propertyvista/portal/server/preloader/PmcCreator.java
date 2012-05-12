@@ -33,7 +33,7 @@ public class PmcCreator {
 
     private final static Logger log = LoggerFactory.getLogger(PmcCreator.class);
 
-    public static void preloadPmc(PmcDTO pmc) {
+    public static void preloadPmc(PmcDTO pmc, boolean encrypPwd) {
         final String namespace = NamespaceManager.getNamespace();
         NamespaceManager.setNamespace(pmc.namespace().getValue());
         try {
@@ -51,7 +51,7 @@ public class PmcCreator {
 
             CrmRole defaultRole = CrmRolesPreloader.getDefaultRole();
             UserPreloader.createCrmEmployee(pmc.person().name().firstName().getValue(), pmc.person().name().lastName().getValue(), pmc.email().getValue(), pmc
-                    .password().getValue(), true, defaultRole);
+                    .password().getValue(), true, encrypPwd, defaultRole);
 
             // Create support account by default
             createVistaSupportUsers();
@@ -59,7 +59,7 @@ public class PmcCreator {
             if (ApplicationMode.isDevelopment()) {
                 for (int i = 1; i <= DemoData.UserType.PM.getDefaultMax(); i++) {
                     String email = DemoData.UserType.PM.getEmail(i);
-                    UserPreloader.createCrmEmployee(email, email, email, email, false, defaultRole);
+                    UserPreloader.createCrmEmployee(email, email, email, email, false, true, defaultRole);
                 }
             }
             Persistence.service().commit();
@@ -69,7 +69,7 @@ public class PmcCreator {
     }
 
     public static void createVistaSupportUsers() {
-        UserPreloader.createCrmEmployee("Support", "PropertyVista", "support@propertyvista.com", "Vista2012", false, CrmRolesPreloader.getDefaultRole(),
+        UserPreloader.createCrmEmployee("Support", "PropertyVista", "support@propertyvista.com", "Vista2012", false, true, CrmRolesPreloader.getDefaultRole(),
                 CrmRolesPreloader.getSupportRole());
     }
 

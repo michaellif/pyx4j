@@ -13,6 +13,7 @@
  */
 package com.propertyvista.admin.server.services;
 
+import java.util.List;
 import java.util.Locale;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -35,6 +36,7 @@ import com.propertyvista.admin.rpc.PmcDTO;
 import com.propertyvista.admin.rpc.services.PmcCrudService;
 import com.propertyvista.admin.server.onboarding.PmcNameValidator;
 import com.propertyvista.admin.server.preloader.OnboardingUserPreloader;
+import com.propertyvista.domain.security.OnboardingUser;
 import com.propertyvista.domain.security.VistaOnboardingBehavior;
 import com.propertyvista.portal.rpc.corp.PmcAccountCreationRequest;
 import com.propertyvista.portal.server.preloader.PmcCreator;
@@ -63,7 +65,7 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
     @Override
     protected void persist(Pmc entity, PmcDTO dto) {
         entity.dnsName().setValue(entity.dnsName().getValue().toLowerCase(Locale.ENGLISH));
-        entity.namespace().setValue(entity.namespace().getValue().toLowerCase(Locale.ENGLISH));
+        entity.namespace().setValue(entity.namespace().getValue().toLowerCase(Locale.ENGLISH).replace('-', '_'));
         for (PmcDnsName alias : entity.dnsNameAliases()) {
             alias.dnsName().setValue(alias.dnsName().getValue().toLowerCase(Locale.ENGLISH));
         }
@@ -75,32 +77,25 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
     public void create(AsyncCallback<PmcDTO> callback, PmcDTO editableEntity) {
         editableEntity.dnsName().setValue(editableEntity.dnsName().getValue().toLowerCase(Locale.ENGLISH));
         editableEntity.namespace().setValue(editableEntity.dnsName().getValue().replace('-', '_'));
-        editableEntity.status().setValue(PmcStatus.Active);
+        editableEntity.status().setValue(PmcStatus.Created);
         if (!PmcNameValidator.canCreatePmcName(editableEntity.dnsName().getValue())) {
             throw new UserRuntimeException("PMC DNS name is reserved of forbidden");
         }
 
         super.create(callback, editableEntity);
 
-        try {
-            Persistence.service().startBackgroundProcessTransaction();
-            PmcCreator.preloadPmc(editableEntity);
+        EntityQueryCriteria<Pmc> criteria = EntityQueryCriteria.create(Pmc.class);
+        criteria.or(PropertyCriterion.eq(criteria.proto().dnsName(), editableEntity.dnsName().getValue()),
+                PropertyCriterion.eq(criteria.proto().namespace(), editableEntity.namespace().getValue()));
+        Pmc pmc = Persistence.service().retrieve(criteria);
 
-            EntityQueryCriteria<Pmc> criteria = EntityQueryCriteria.create(Pmc.class);
-            criteria.or(PropertyCriterion.eq(criteria.proto().dnsName(), editableEntity.dnsName().getValue()),
-                    PropertyCriterion.eq(criteria.proto().namespace(), editableEntity.namespace().getValue()));
-            Pmc pmc = Persistence.service().retrieve(criteria);
+        String name = editableEntity.person().name().firstName().getValue() + " " + editableEntity.person().name().lastName().getValue();
+        OnboardingUserCredential cred = OnboardingUserPreloader.createOnboardingUser(name, editableEntity.email().getValue(), editableEntity.password()
+                .getValue(), VistaOnboardingBehavior.ProspectiveClient, null);
 
-            OnboardingUserCredential cred = OnboardingUserPreloader.createOnboardingUser(null, editableEntity.email().getValue(), editableEntity.password()
-                    .getValue(), VistaOnboardingBehavior.ProspectiveClient, null);
-
-            cred.pmc().set(pmc);
-            Persistence.service().persist(cred);
-
-            Persistence.service().commit();
-        } finally {
-            Persistence.service().endTransaction();
-        }
+        cred.pmc().set(pmc);
+        Persistence.service().persist(cred);
+        Persistence.service().commit();
     }
 
     @Override
@@ -119,13 +114,47 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
     @Override
     public void activate(AsyncCallback<PmcDTO> callback, Key entityId) {
         Pmc pmc = Persistence.service().retrieve(entityClass, entityId);
-        pmc.status().setValue(PmcStatus.Active);
-        Persistence.service().persist(pmc);
-        Persistence.service().commit();
 
-        PmcDTO dtoReturn = createDTO(pmc);
+        if (pmc.status().getValue() == PmcStatus.Created) // First time create preload
+        {
+            EntityQueryCriteria<OnboardingUserCredential> credentialCrt = EntityQueryCriteria.create(OnboardingUserCredential.class);
+            credentialCrt.add(PropertyCriterion.eq(credentialCrt.proto().pmc(), pmc));
+            List<OnboardingUserCredential> creds = Persistence.service().query(credentialCrt);
 
-        callback.onSuccess(dtoReturn);
+            if (creds.size() == 0) {
+                throw new UserRuntimeException("No users for PMC " + pmc.name().getValue());
+            }
+
+            PmcDTO dto = createDTO(pmc);
+            OnboardingUser usr = Persistence.service().retrieve(OnboardingUser.class, creds.get(0).user().getPrimaryKey());
+            dto.email().setValue(usr.email().getValue());
+            dto.password().setValue(creds.get(0).credential().getValue());
+            String names[] = usr.name().getValue().split(" ");
+
+            dto.person().name().firstName().setValue(names[0]);
+            if (names.length > 1) {
+                dto.person().name().lastName().setValue(names[1]);
+            }
+
+            try {
+                Persistence.service().startBackgroundProcessTransaction();
+                PmcCreator.preloadPmc(dto, false);
+                pmc.status().setValue(PmcStatus.Active);
+                dto.status().setValue(PmcStatus.Active);
+                Persistence.service().persist(pmc);
+                Persistence.service().commit();
+            } finally {
+                Persistence.service().endTransaction();
+            }
+
+            callback.onSuccess(dto);
+        } else {
+            pmc.status().setValue(PmcStatus.Active);
+            Persistence.service().persist(pmc);
+            PmcDTO dtoReturn = createDTO(pmc);
+
+            callback.onSuccess(dtoReturn);
+        }
     }
 
     @Override

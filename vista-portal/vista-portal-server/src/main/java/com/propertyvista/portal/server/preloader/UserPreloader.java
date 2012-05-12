@@ -101,7 +101,8 @@ public class UserPreloader extends BaseVistaDevDataPreloader {
         return user;
     }
 
-    public static CrmUser createCrmEmployee(String firstName, String lastName, String email, String password, boolean isOwner, CrmRole... roles) {
+    public static CrmUser createCrmEmployee(String firstName, String lastName, String email, String password, boolean isOwner, boolean encryptPwd,
+            CrmRole... roles) {
         if (!ApplicationMode.isDevelopment()) {
             EntityQueryCriteria<CrmUser> criteria = EntityQueryCriteria.create(CrmUser.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().email(), email));
@@ -132,7 +133,7 @@ public class UserPreloader extends BaseVistaDevDataPreloader {
         credential.setPrimaryKey(user.getPrimaryKey());
 
         credential.user().set(user);
-        credential.credential().setValue(PasswordEncryptor.encryptPassword(password));
+        credential.credential().setValue(encryptPwd ? PasswordEncryptor.encryptPassword(password) : password);
         credential.enabled().setValue(Boolean.TRUE);
         credential.accessAllBuildings().setValue(Boolean.TRUE);
         credential.roles().addAll(Arrays.asList(roles));
