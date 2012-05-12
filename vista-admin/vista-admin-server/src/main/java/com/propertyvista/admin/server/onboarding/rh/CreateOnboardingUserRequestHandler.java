@@ -30,23 +30,6 @@ public class CreateOnboardingUserRequestHandler extends AbstractRequestHandler<C
     @Override
     public ResponseIO execute(CreateOnboardingUserRequestIO request) {
 
-//        OnboardingUser user = EntityFactory.create(OnboardingUser.class);
-//        user.name().set(request.name());
-//        user.email().setValue(PasswordEncryptor.normalizeEmailAddress(request.email().getValue()));
-//        Persistence.service().persist(user);
-//
-//        OnboardingUserCredential credential = EntityFactory.create(OnboardingUserCredential.class);
-//        credential.setPrimaryKey(user.getPrimaryKey());
-//
-//        credential.user().set(user);
-//        credential.credential().setValue(PasswordEncryptor.encryptPassword(request.password().getValue()));
-//        credential.enabled().setValue(Boolean.TRUE);
-//        credential.behavior().setValue(VistaOnboardingBehavior.ProspectiveClient);
-//        credential.onboardingAccountId().set(request.onboardingAccountId());
-//
-//        Persistence.service().persist(credential);
-//        Persistence.service().commit();
-
         OnboardingUserPreloader.createOnboardingUser(request.name().getValue(), request.email().getValue(), request.password().getValue(),
                 VistaOnboardingBehavior.ProspectiveClient, request.onboardingAccountId().getValue());
 

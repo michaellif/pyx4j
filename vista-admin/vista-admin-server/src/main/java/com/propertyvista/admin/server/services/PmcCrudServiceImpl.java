@@ -89,9 +89,9 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
                 PropertyCriterion.eq(criteria.proto().namespace(), editableEntity.namespace().getValue()));
         Pmc pmc = Persistence.service().retrieve(criteria);
 
-        String name = editableEntity.person().name().firstName().getValue() + " " + editableEntity.person().name().lastName().getValue();
-        OnboardingUserCredential cred = OnboardingUserPreloader.createOnboardingUser(name, editableEntity.email().getValue(), editableEntity.password()
-                .getValue(), VistaOnboardingBehavior.ProspectiveClient, null);
+        OnboardingUserCredential cred = OnboardingUserPreloader.createOnboardingUser(editableEntity.person().name().firstName().getValue(), editableEntity
+                .person().name().lastName().getValue(), editableEntity.email().getValue(), editableEntity.password().getValue(),
+                VistaOnboardingBehavior.ProspectiveClient, null);
 
         cred.pmc().set(pmc);
         Persistence.service().persist(cred);
@@ -129,12 +129,9 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
             OnboardingUser usr = Persistence.service().retrieve(OnboardingUser.class, creds.get(0).user().getPrimaryKey());
             dto.email().setValue(usr.email().getValue());
             dto.password().setValue(creds.get(0).credential().getValue());
-            String names[] = usr.name().getValue().split(" ");
 
-            dto.person().name().firstName().setValue(names[0]);
-            if (names.length > 1) {
-                dto.person().name().lastName().setValue(names[1]);
-            }
+            dto.person().name().firstName().setValue(usr.firstName().getValue());
+            dto.person().name().lastName().setValue(usr.lastName().getValue());
 
             try {
                 Persistence.service().startBackgroundProcessTransaction();

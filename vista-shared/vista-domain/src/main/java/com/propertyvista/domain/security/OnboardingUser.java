@@ -15,6 +15,7 @@ package com.propertyvista.domain.security;
 
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Table;
+import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.VistaNamespace;
 
@@ -22,4 +23,7 @@ import com.propertyvista.domain.VistaNamespace;
 @Table(namespace = VistaNamespace.adminNamespace)
 public interface OnboardingUser extends AbstractUser {
 
+    IPrimitive<String> firstName();
+
+    IPrimitive<String> lastName();
 }

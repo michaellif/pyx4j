@@ -26,7 +26,22 @@ public class OnboardingUserPreloader extends AbstractDataPreloader {
 
     public static OnboardingUserCredential createOnboardingUser(String name, String email, String password, VistaOnboardingBehavior role,
             String onboardingAccountId) {
+
+        return createOnboardingUser(null, null, name, email, password, role, onboardingAccountId);
+    }
+
+    public static OnboardingUserCredential createOnboardingUser(String firstName, String lastName, String email, String password, VistaOnboardingBehavior role,
+            String onboardingAccountId) {
+
+        return createOnboardingUser(firstName, lastName, firstName + " " + lastName, email, password, role, onboardingAccountId);
+
+    }
+
+    private static OnboardingUserCredential createOnboardingUser(String firstName, String lastName, String name, String email, String password,
+            VistaOnboardingBehavior role, String onboardingAccountId) {
         OnboardingUser user = EntityFactory.create(OnboardingUser.class);
+        user.firstName().setValue(firstName);
+        user.lastName().setValue(lastName);
         user.name().setValue(name);
         user.email().setValue(email);
         Persistence.service().persist(user);
