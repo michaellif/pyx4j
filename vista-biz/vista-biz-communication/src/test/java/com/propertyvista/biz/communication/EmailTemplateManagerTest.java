@@ -37,6 +37,7 @@ import com.propertyvista.biz.communication.mail.template.model.PasswordRequestTe
 import com.propertyvista.biz.communication.mail.template.model.PortalLinksT;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.config.tests.VistaDBTestBase;
+import com.propertyvista.config.tests.VistaTestDBSetup;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.contact.AddressStructured.StreetType;
@@ -106,6 +107,8 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
     @Override
     public void setUp() throws Exception {
         super.setUp();
+
+        VistaTestDBSetup.createPmc();
 
         portalHomeUrl = VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.TenantPortal, false);
         tenantHomeUrl = VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.TenantPortal, true) + DeploymentConsts.TENANT_URL;

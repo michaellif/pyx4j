@@ -95,7 +95,9 @@ public class VistaDeployment {
 
         final String namespace = NamespaceManager.getNamespace();
         try {
-            NamespaceManager.setNamespace(pmc.namespace().getValue());
+            if (pmc != null) {
+                NamespaceManager.setNamespace(pmc.namespace().getValue());
+            }
             switch (target) {
             case prospectPortal:
                 return ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance()).getDefaultBaseURLprospectPortal();
