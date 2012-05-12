@@ -33,10 +33,12 @@ public class PmcProcessContext {
         if (requestLocal.get() == null) {
             requestLocal.set(new ProcessContextData());
         }
-        requestLocal.get().runStats = stats;
+        // Preserve PK
         if (requestLocal.get().runStats != null) {
-            requestLocal.get().runStats.updateTime().setValue(System.currentTimeMillis());
+            stats.setPrimaryKey(requestLocal.get().runStats.getPrimaryKey());
         }
+        requestLocal.get().runStats = stats;
+        requestLocal.get().runStats.updateTime().setValue(System.currentTimeMillis());
     }
 
     public static void remove() {

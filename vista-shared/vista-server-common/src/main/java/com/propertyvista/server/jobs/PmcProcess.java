@@ -13,13 +13,26 @@
  */
 package com.propertyvista.server.jobs;
 
-
 public interface PmcProcess {
 
+    /**
+     * This is executed in shared context to initialize the process.
+     * 
+     * @return false if this job needs to sleep and rerun again when data is ready.
+     */
     boolean start();
 
+    /**
+     * This is executed in each selected PMC context to to the work.
+     * Any modifications to DB should be committed.
+     * 
+     * Use PmcProcessContext.setRunStats(...) to update PMC statistics
+     */
     void executePmcJob();
 
+    /**
+     * This is executed in shared context to finalize the process.
+     */
     void complete();
 
 }
