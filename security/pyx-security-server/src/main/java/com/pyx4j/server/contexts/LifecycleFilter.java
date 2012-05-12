@@ -111,9 +111,10 @@ public class LifecycleFilter implements Filter {
                         }
                     }
                 } finally {
+                    // We call LoggerConfig.mdcClear();
+                    //LoggerConfig.mdcRemove(LoggerConfig.MDC_userID);
+                    //LoggerConfig.mdcRemove(LoggerConfig.MDC_sessionNum);
                     Lifecycle.endRequest();
-                    LoggerConfig.mdcRemove(LoggerConfig.MDC_userID);
-                    LoggerConfig.mdcRemove(LoggerConfig.MDC_sessionNum);
                 }
             }
         } finally {
