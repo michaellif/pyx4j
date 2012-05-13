@@ -145,10 +145,12 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
 
         row = -1;
         panel.setWidget(++row, 1, new DecoratorBuilder(inject(proto().amount()), 10).build());
+        panel.setWidget(++row, 1, new DecoratorBuilder(inject(proto().createdDate()), 10).build());
         panel.setWidget(++row, 1, new DecoratorBuilder(inject(proto().receivedDate()), 10).build());
         panel.setWidget(++row, 1, new DecoratorBuilder(inject(proto().targetDate()), 10).build());
         panel.setWidget(++row, 1, new DecoratorBuilder(inject(proto().depositDate()), 10).build());
         panel.setWidget(++row, 1, new DecoratorBuilder(inject(proto().paymentStatus()), 10).build());
+        panel.setWidget(++row, 1, new DecoratorBuilder(inject(proto().lastStatusChangeDate()), 10).build());
         panel.setBR(++row, 1, 1);
         panel.setWidget(++row, 1, new DecoratorBuilder(inject(proto().notes()), 25).build());
 
@@ -159,6 +161,9 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
         get(proto().leaseId()).setViewable(true);
         get(proto().leaseStatus()).setViewable(true);
         get(proto().paymentStatus()).setViewable(true);
+        get(proto().createdDate()).setViewable(true);
+        get(proto().receivedDate()).setViewable(true);
+        get(proto().lastStatusChangeDate()).setViewable(true);
 
         get(proto().leaseParticipant()).addValueChangeHandler(new ValueChangeHandler<LeaseParticipant>() {
             @Override

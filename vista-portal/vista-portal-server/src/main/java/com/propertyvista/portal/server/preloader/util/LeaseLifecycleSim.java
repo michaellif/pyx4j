@@ -273,7 +273,7 @@ public class LeaseLifecycleSim {
                 return null;
             } else {
                 PaymentRecord paymentRecord = EntityFactory.create(PaymentRecord.class);
-                paymentRecord.receivedDate().setValue(now());
+                paymentRecord.createdDate().setValue(now());
                 paymentRecord.amount().setValue(amount);
                 paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Submitted);
                 paymentRecord.billingAccount().set(lease.billingAccount());

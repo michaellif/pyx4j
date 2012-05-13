@@ -79,13 +79,19 @@ public interface PaymentRecord extends IEntity {
     @ToString
     IPrimitive<Key> id();
 
+    IPrimitive<LogicalDate> createdDate();
+
     IPrimitive<LogicalDate> receivedDate();
 
+    IPrimitive<LogicalDate> lastStatusChangeDate();
+
+    //TODO What todo whit this.  Remove ?
     /**
      * Do not post before that date
      */
     IPrimitive<LogicalDate> targetDate();
 
+    //TODO What todo whit this.  Remove ?
     /**
      * TODO Add action to change this filed to Facade
      */

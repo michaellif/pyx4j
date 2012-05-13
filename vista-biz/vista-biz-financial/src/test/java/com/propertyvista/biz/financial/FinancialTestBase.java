@@ -345,7 +345,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         Lease lease = Persistence.service().retrieve(Lease.class, leaseDataModel.getLeaseKey());
 
         PaymentRecord paymentRecord = EntityFactory.create(PaymentRecord.class);
-        paymentRecord.receivedDate().setValue(FinancialTestsUtils.getDate(receivedDate));
+        paymentRecord.createdDate().setValue(FinancialTestsUtils.getDate(receivedDate));
         paymentRecord.amount().setValue(new BigDecimal(amount));
         paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Submitted);
         paymentRecord.billingAccount().set(lease.billingAccount());

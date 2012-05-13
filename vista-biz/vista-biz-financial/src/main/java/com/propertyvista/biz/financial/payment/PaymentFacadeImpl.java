@@ -13,6 +13,7 @@
  */
 package com.propertyvista.biz.financial.payment;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -58,116 +59,129 @@ public class PaymentFacadeImpl implements PaymentFacade {
     }
 
     @Override
-    public PaymentRecord persistPayment(PaymentRecord payment) {
-        if (payment.paymentStatus().isNull()) {
-            payment.paymentStatus().setValue(PaymentRecord.PaymentStatus.Submitted);
+    public PaymentRecord persistPayment(PaymentRecord paymentRecord) {
+        if (paymentRecord.paymentStatus().isNull()) {
+            paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Submitted);
         }
-        if (!payment.paymentStatus().getValue().equals(PaymentRecord.PaymentStatus.Submitted)) {
+        if (!paymentRecord.paymentStatus().getValue().equals(PaymentRecord.PaymentStatus.Submitted)) {
             throw new Error();
         }
 
-        EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto()._Units().$()._Leases().$().billingAccount(), payment.billingAccount()));
-        Building building = Persistence.service().retrieve(criteria);
+        {
+            EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto()._Units().$()._Leases().$().billingAccount(), paymentRecord.billingAccount()));
+            Building building = Persistence.service().retrieve(criteria);
 
-        persistPaymentMethod(building, payment.paymentMethod());
-        Persistence.service().merge(payment);
-        return payment;
+            persistPaymentMethod(building, paymentRecord.paymentMethod());
+        }
+
+        if (paymentRecord.id().isNull()) {
+            paymentRecord.createdDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
+        }
+
+        Persistence.service().merge(paymentRecord);
+        return paymentRecord;
     }
 
     @Override
     public PaymentRecord processPayment(PaymentRecord paymentStub) {
-        PaymentRecord payment = Persistence.service().retrieve(PaymentRecord.class, paymentStub.getPrimaryKey());
-        if (!payment.paymentStatus().getValue().equals(PaymentRecord.PaymentStatus.Submitted)) {
-            throw new IllegalArgumentException("paymentStatus:" + payment.paymentStatus().getValue());
+        PaymentRecord paymentRecord = Persistence.service().retrieve(PaymentRecord.class, paymentStub.getPrimaryKey());
+        if (!paymentRecord.paymentStatus().getValue().equals(PaymentRecord.PaymentStatus.Submitted)) {
+            throw new IllegalArgumentException("paymentStatus:" + paymentRecord.paymentStatus().getValue());
         }
-        payment.paymentStatus().setValue(PaymentRecord.PaymentStatus.Processing);
+        paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Processing);
+        paymentRecord.lastStatusChangeDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
 
-        switch (payment.paymentMethod().type().getValue()) {
+        switch (paymentRecord.paymentMethod().type().getValue()) {
         case Cash:
-            payment.paymentStatus().setValue(PaymentRecord.PaymentStatus.Received);
-            Persistence.service().merge(payment);
-            ServerSideFactory.create(ARFacade.class).postPayment(payment);
+            paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Received);
+            paymentRecord.receivedDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
+            Persistence.service().merge(paymentRecord);
+            ServerSideFactory.create(ARFacade.class).postPayment(paymentRecord);
             break;
         case Check:
-            Persistence.service().merge(payment);
-            ServerSideFactory.create(ARFacade.class).postPayment(payment);
+            paymentRecord.receivedDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
+            Persistence.service().merge(paymentRecord);
+            ServerSideFactory.create(ARFacade.class).postPayment(paymentRecord);
             break;
         case CreditCard:
-            Persistence.service().merge(payment);
-            CreditCardProcessor.realTimeSale(payment);
+            Persistence.service().merge(paymentRecord);
+            CreditCardProcessor.realTimeSale(paymentRecord);
             break;
         case Echeck:
-            Persistence.service().merge(payment);
-            ServerSideFactory.create(ARFacade.class).postPayment(payment);
-            new PadProcessor().queuePayment(payment);
+            Persistence.service().merge(paymentRecord);
+            ServerSideFactory.create(ARFacade.class).postPayment(paymentRecord);
+            new PadProcessor().queuePayment(paymentRecord);
             break;
         case EFT:
-            payment.paymentStatus().setValue(PaymentRecord.PaymentStatus.Received);
-            Persistence.service().merge(payment);
-            ServerSideFactory.create(ARFacade.class).postPayment(payment);
+            paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Received);
+            paymentRecord.receivedDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
+            Persistence.service().merge(paymentRecord);
+            ServerSideFactory.create(ARFacade.class).postPayment(paymentRecord);
             break;
         case Interac:
             throw new IllegalArgumentException("Not implemented");
         default:
-            throw new IllegalArgumentException("paymentMethod:" + payment.paymentMethod().type().getStringView());
+            throw new IllegalArgumentException("paymentMethod:" + paymentRecord.paymentMethod().type().getStringView());
         }
 
-        return payment;
+        return paymentRecord;
     }
 
     @Override
     public PaymentRecord cancel(PaymentRecord paymentStub) {
-        PaymentRecord payment = Persistence.service().retrieve(PaymentRecord.class, paymentStub.getPrimaryKey());
-        if (!payment.paymentStatus().getValue().equals(PaymentRecord.PaymentStatus.Submitted)) {
+        PaymentRecord paymentRecord = Persistence.service().retrieve(PaymentRecord.class, paymentStub.getPrimaryKey());
+        if (!paymentRecord.paymentStatus().getValue().equals(PaymentRecord.PaymentStatus.Submitted)) {
             throw new UserRuntimeException(i18n.tr("Processed payment can't be canceled"));
         }
-        payment.paymentStatus().setValue(PaymentRecord.PaymentStatus.Canceled);
-        Persistence.service().merge(payment);
-        return payment;
+        paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Canceled);
+        paymentRecord.lastStatusChangeDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
+        Persistence.service().merge(paymentRecord);
+        return paymentRecord;
     }
 
     @Override
     public PaymentRecord clear(PaymentRecord paymentStub) {
-        PaymentRecord payment = Persistence.service().retrieve(PaymentRecord.class, paymentStub.getPrimaryKey());
-        if (!payment.paymentStatus().getValue().equals(PaymentRecord.PaymentStatus.Processing)) {
+        PaymentRecord paymentRecord = Persistence.service().retrieve(PaymentRecord.class, paymentStub.getPrimaryKey());
+        if (!paymentRecord.paymentStatus().getValue().equals(PaymentRecord.PaymentStatus.Processing)) {
             throw new UserRuntimeException(i18n.tr("Processed payment can't be cleared"));
         }
-        switch (payment.paymentMethod().type().getValue()) {
+        switch (paymentRecord.paymentMethod().type().getValue()) {
         case Echeck:
         case EFT:
         case CreditCard:
-            throw new IllegalArgumentException("Electronic PaymentMethod:" + payment.paymentMethod().type().getStringView());
+            throw new IllegalArgumentException("Electronic PaymentMethod:" + paymentRecord.paymentMethod().type().getStringView());
         }
 
-        payment.paymentStatus().setValue(PaymentRecord.PaymentStatus.Received);
-        Persistence.service().merge(payment);
-        return payment;
+        paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Received);
+        paymentRecord.lastStatusChangeDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
+        Persistence.service().merge(paymentRecord);
+        return paymentRecord;
     }
 
     @Override
     public PaymentRecord reject(PaymentRecord paymentStub) {
-        PaymentRecord payment = Persistence.service().retrieve(PaymentRecord.class, paymentStub.getPrimaryKey());
-        if (!payment.paymentStatus().getValue().equals(PaymentRecord.PaymentStatus.Processing)) {
+        PaymentRecord paymentRecord = Persistence.service().retrieve(PaymentRecord.class, paymentStub.getPrimaryKey());
+        if (!paymentRecord.paymentStatus().getValue().equals(PaymentRecord.PaymentStatus.Processing)) {
             throw new UserRuntimeException(i18n.tr("Processed payment can't be rejected"));
         }
-        switch (payment.paymentMethod().type().getValue()) {
+        switch (paymentRecord.paymentMethod().type().getValue()) {
         case Echeck:
         case EFT:
         case CreditCard:
-            throw new IllegalArgumentException("Electronic PaymentMethod:" + payment.paymentMethod().type().getStringView());
+            throw new IllegalArgumentException("Electronic PaymentMethod:" + paymentRecord.paymentMethod().type().getStringView());
         }
 
-        payment.paymentStatus().setValue(PaymentRecord.PaymentStatus.Rejected);
-        Persistence.service().merge(payment);
+        paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Rejected);
+        paymentRecord.lastStatusChangeDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
+        Persistence.service().merge(paymentRecord);
 
-        switch (payment.paymentMethod().type().getValue()) {
+        switch (paymentRecord.paymentMethod().type().getValue()) {
         case Check:
         case Echeck:
-            ServerSideFactory.create(ARFacade.class).rejectPayment(payment);
+            ServerSideFactory.create(ARFacade.class).rejectPayment(paymentRecord);
             break;
         }
-        return payment;
+        return paymentRecord;
     }
-
 }
