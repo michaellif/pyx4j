@@ -13,19 +13,25 @@
  */
 package com.propertyvista.common.client.ui.components.editors.payments;
 
+import java.util.Date;
+
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.view.client.Range;
 
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
+import com.pyx4j.forms.client.ui.CMonthYearPicker;
 import com.pyx4j.forms.client.ui.CTextComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
+import com.propertyvista.common.client.ui.validators.CreditCardNumberValidator;
+import com.propertyvista.common.client.ui.validators.FutureDateValidator;
 import com.propertyvista.domain.payment.CreditCardInfo;
 
 public class CreditCardInfoEditor extends CEntityDecoratableForm<CreditCardInfo> {
@@ -45,12 +51,15 @@ public class CreditCardInfoEditor extends CEntityDecoratableForm<CreditCardInfo>
         FormFlexPanel panel = new FormFlexPanel();
 
         int row = -1;
+        CMonthYearPicker monthYearPicker = new CMonthYearPicker(false);
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().nameOn()), 30).build());
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().cardType()), 20).build());
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().number()), 20).build());
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().expiryDate()), 20).build());
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().expiryDate(), monthYearPicker), 20).build());
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().securityCode()), 5).build());
 
+        // tweak:
+        monthYearPicker.setYearRange(new Range(1900 + new Date().getYear(), 10));
         get(proto().securityCode()).setVisible(isEditable());
 
         return panel;
@@ -88,12 +97,14 @@ public class CreditCardInfoEditor extends CEntityDecoratableForm<CreditCardInfo>
         });
 
         get(proto().number()).addValueChangeHandler(new ValueChangeHandler<String>() {
-
             @Override
             public void onValueChange(ValueChangeEvent<String> event) {
                 get(proto().number()).setMandatory(true);
                 get(proto().securityCode()).setMandatory(true);
             }
         });
+
+        get(proto().number()).addValueValidator(new CreditCardNumberValidator());
+        get(proto().expiryDate()).addValueValidator(new FutureDateValidator());
     }
 }
