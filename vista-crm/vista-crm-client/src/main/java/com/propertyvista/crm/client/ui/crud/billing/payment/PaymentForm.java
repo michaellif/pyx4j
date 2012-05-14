@@ -151,7 +151,8 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
         panel.setWidget(++row, 1, new DecoratorBuilder(inject(proto().depositDate()), 10).build());
         panel.setWidget(++row, 1, new DecoratorBuilder(inject(proto().paymentStatus()), 10).build());
         panel.setWidget(++row, 1, new DecoratorBuilder(inject(proto().lastStatusChangeDate()), 10).build());
-        panel.setBR(++row, 1, 1);
+        panel.setWidget(++row, 1, new DecoratorBuilder(inject(proto().transactionAuthorizationNumber()), 10).build());
+        panel.setWidget(++row, 1, new DecoratorBuilder(inject(proto().transactionErrorMessage()), 20).build());
         panel.setWidget(++row, 1, new DecoratorBuilder(inject(proto().notes()), 25).build());
 
         // tweak UI:
@@ -230,15 +231,23 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
         super.onPopulate();
 
         get(proto().id()).setVisible(!getValue().id().isNull());
-
         get(proto().paymentSelect()).setVisible(!isViewable() && !getValue().leaseParticipant().isNull());
-
         profiledPaymentMethodsCombo.setVisible(false);
 
         checkProfiledPaymentMethods(null);
 
         paymentMethodEditor.setVisible(!getValue().leaseParticipant().isNull());
         paymentMethodEditor.setBillingAddressAsCurrentEnabled(!getValue().leaseParticipant().isNull());
+
+        if (isEditable()) {
+            get(proto().transactionAuthorizationNumber()).setVisible(false);
+            get(proto().transactionErrorMessage()).setVisible(false);
+        } else {
+            boolean transactionResult = (getValue().paymentMethod().type().getValue().isTransactable() && getValue().paymentStatus().getValue().isProcessed());
+
+            get(proto().transactionAuthorizationNumber()).setVisible(transactionResult);
+            get(proto().transactionErrorMessage()).setVisible(transactionResult && !getValue().transactionErrorMessage().isNull());
+        }
     }
 
     private void checkProfiledPaymentMethods(final AsyncCallback<List<PaymentMethod>> callback) {

@@ -50,6 +50,8 @@ public enum PaymentType {
         return I18nEnum.toString(this);
     }
 
+    // group sets:
+
     public static EnumSet<PaymentType> avalableInPortal() {
         return EnumSet.of(Echeck, CreditCard, Interac);
     }
@@ -60,5 +62,11 @@ public enum PaymentType {
 
     public static EnumSet<PaymentType> avalableInProfile() {
         return EnumSet.of(Echeck, CreditCard);
+    }
+
+    // grouping:
+
+    public boolean isTransactable() {
+        return EnumSet.of(Echeck, EFT, CreditCard).contains(this);
     }
 }

@@ -14,10 +14,13 @@
 package com.propertyvista.domain.financial;
 
 import java.math.BigDecimal;
+import java.util.Collection;
 import java.util.Date;
+import java.util.EnumSet;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.ColumnId;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
@@ -66,6 +69,18 @@ public interface PaymentRecord extends IEntity {
         public String toString() {
             return I18nEnum.toString(this);
         }
+
+        // state sets:
+
+        public static Collection<PaymentStatus> processed() {
+            return EnumSet.of(Received, Rejected);
+        }
+
+        // states:
+
+        public boolean isProcessed() {
+            return processed().contains(this);
+        }
     };
 
     @Owner
@@ -108,6 +123,7 @@ public interface PaymentRecord extends IEntity {
 
     IPrimitive<String> transactionErrorMessage();
 
+    @Caption(name = "Transaction Authorization #")
     IPrimitive<String> transactionAuthorizationNumber();
 
     @Editor(type = EditorType.textarea)
