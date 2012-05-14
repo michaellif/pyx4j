@@ -111,9 +111,11 @@ public class TransactionHistoryViewer extends CEntityViewer<TransactionHistoryDT
             int colAmount = -1;
             String amountRepresentation = "error";
             if (item.isInstanceOf(InvoiceDebit.class)) {
+                InvoiceDebit debitItem = item.duplicate(InvoiceDebit.class);
+                BigDecimal debit = debitItem.amount().getValue().add(debitItem.taxTotal().getValue());
                 colAmount = COL_DEBIT;
-                amountRepresentation = NUMBER_FORMAT.format(item.amount().getValue());
-                balance = balance.add(item.amount().getValue());
+                amountRepresentation = NUMBER_FORMAT.format(debit);
+                balance = balance.add(debit);
             } else if (item.isInstanceOf(InvoiceCredit.class)) {
                 colAmount = COL_CREDIT;
                 amountRepresentation = "(" + NUMBER_FORMAT.format(BigDecimal.ZERO.subtract(item.amount().getValue())) + ")";
