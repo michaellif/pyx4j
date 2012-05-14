@@ -16,7 +16,6 @@ package com.propertyvista.payment.pad.ak;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
@@ -31,6 +30,6 @@ public interface PadAkBatch extends IEntity {
     IPrimitive<String> acknowledgmentStatusCode();
 
     @Length(4)
-    IObject<String> batchAmount();
+    IPrimitive<String> batchAmount();
 
 }

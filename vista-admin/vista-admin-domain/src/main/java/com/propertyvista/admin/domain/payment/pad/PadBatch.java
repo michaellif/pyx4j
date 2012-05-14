@@ -31,7 +31,6 @@ import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
-import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
@@ -90,7 +89,7 @@ public interface PadBatch extends IEntity {
     IPrimitive<String> chargeDescription();
 
     // Updated when batch is sent to Caledon
-    IObject<BigDecimal> batchAmount();
+    IPrimitive<BigDecimal> batchAmount();
 
     IPrimitive<String> acknowledgmentStatusCode();
 
