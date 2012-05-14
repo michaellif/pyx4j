@@ -39,8 +39,14 @@ public interface ArrearsSnapshot extends IEntity {
     @JoinColumn
     BillingAccount billingAccount();
 
+    /**
+     * a date when this snapshot was taken
+     */
     IPrimitive<LogicalDate> fromDate();
 
+    /**
+     * a last day when this snapshot was relevant (equals to OccupancyFacade.MAX_DATE for the most recent snapshot)
+     */
     IPrimitive<LogicalDate> toDate();
 
     IPrimitive<BigDecimal> arrearsAmount();
