@@ -103,7 +103,13 @@ public class ApplicationSelectionViewImpl implements ApplicationSelectionView {
             setSelectable(true);
             setColumnDescriptors(//@formatter:off
                     new MemberColumnDescriptor.Builder(proto().role()).build(),
-                    new MemberColumnDescriptor.Builder(proto().address()).build(),
+                    new MemberColumnDescriptor.Builder(proto().address().streetNumber()).build(),                    
+                    new MemberColumnDescriptor.Builder(proto().address().streetName()).build(),
+                    new MemberColumnDescriptor.Builder(proto().address().streetType()).build(),
+                    new MemberColumnDescriptor.Builder(proto().address().streetDirection()).build(),
+                    new MemberColumnDescriptor.Builder(proto().address().city()).build(),
+                    new MemberColumnDescriptor.Builder(proto().address().province().name()).build(),
+                    new MemberColumnDescriptor.Builder(proto().address().country().name()).build(),                    
                     new MemberColumnDescriptor.Builder(proto().unit()).build()                    
             );//@formatter:on
 
