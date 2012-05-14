@@ -50,9 +50,12 @@ public class CaledonPadFileWriter implements Closeable {
             recordsCount += padBatch.records().size();
         }
         writeFileTrailer(fileAmount, recordsCount);
+
+        padFile.recordsCount().setValue(recordsCount);
+        padFile.fileAmount().setValue(fileAmount);
     }
 
-    public void writeFileHeader(PadFile padFile) throws IOException {
+    private void writeFileHeader(PadFile padFile) throws IOException {
         // Record Type
         writer.append("A").append(",");
 
@@ -96,6 +99,9 @@ public class CaledonPadFileWriter implements Closeable {
             batchAmount = batchAmount.add(record.amount().getValue());
         }
         writeBatchTrailer(padBatch, batchAmount);
+
+        padBatch.batchAmount().setValue(batchAmount);
+
         return batchAmount;
     }
 

@@ -13,6 +13,8 @@
  */
 package com.propertyvista.admin.domain.payment.pad;
 
+import java.math.BigDecimal;
+
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
@@ -29,6 +31,7 @@ import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
@@ -85,5 +88,10 @@ public interface PadBatch extends IEntity {
     @Length(60)
     @Caption(description = "Description to appear on client's statement. Typically a merchant's business name.")
     IPrimitive<String> chargeDescription();
+
+    // Updated when batch is sent to Caledon
+    IObject<BigDecimal> batchAmount();
+
+    IPrimitive<String> acknowledgementStatusCode();
 
 }

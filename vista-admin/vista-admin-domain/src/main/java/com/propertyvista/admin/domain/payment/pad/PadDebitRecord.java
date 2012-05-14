@@ -61,4 +61,7 @@ public interface PadDebitRecord extends IEntity {
     //A unique value to represent the transaction/payment
     @Length(15)
     IPrimitive<String> transactionId();
+
+    IPrimitive<String> acknowledgentStatusCode();
+
 }

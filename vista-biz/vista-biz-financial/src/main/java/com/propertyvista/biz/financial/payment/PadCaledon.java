@@ -88,6 +88,11 @@ public class PadCaledon {
                 writer.close();
             }
 
+            // Save Sent totals
+            for (PadBatch padBatch : padFile.batches()) {
+                Persistence.service().persist(padBatch);
+            }
+
             String errorMessage = new CaledonPadSftpClient().sftpPut(file);
             if (errorMessage != null) {
                 throw new Error(errorMessage);

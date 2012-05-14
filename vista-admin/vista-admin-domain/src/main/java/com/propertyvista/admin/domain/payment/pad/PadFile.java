@@ -13,6 +13,7 @@
  */
 package com.propertyvista.admin.domain.payment.pad;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import com.pyx4j.entity.annotations.Detached;
@@ -68,5 +69,13 @@ public interface PadFile extends IEntity {
 
     @Timestamp(Timestamp.Update.Updated)
     IPrimitive<Date> updated();
+
+    // Updated when batch is sent to Caledon
+
+    IPrimitive<Integer> recordsCount();
+
+    IPrimitive<BigDecimal> fileAmount();
+
+    IPrimitive<String> acknowledgmentStatusCode();
 
 }
