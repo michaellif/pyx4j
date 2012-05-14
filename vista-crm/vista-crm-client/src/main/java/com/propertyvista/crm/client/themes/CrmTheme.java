@@ -585,14 +585,12 @@ public class CrmTheme extends VistaTheme {
         }
         {
             Style style = new Style("." + TransactionHistoryStyleName.TransactionRecordEven.name());
-            style.addProperty("background-color", ThemeColors.object1, 0.15);
             style.addProperty("padding", "1em 2px");
             addStyle(style);
 
         }
         {
             Style style = new Style("." + TransactionHistoryStyleName.TransactionRecordOdd.name());
-            style.addProperty("background-color", ThemeColors.object1, 0.1);
             style.addProperty("padding", "1em 2px");
             addStyle(style);
         }
@@ -614,7 +612,6 @@ public class CrmTheme extends VistaTheme {
         }
         {
             Style style = new Style("." + ArrearsStyleName.ArrearsCategoryAll.name());
-            style.addProperty("background-color", ThemeColors.object1, 0.2);
             style.addProperty("font-weight", "bold");
             style.addProperty("border-weight", "bold");
             style.addProperty("padding", "1em 2px");
@@ -623,14 +620,12 @@ public class CrmTheme extends VistaTheme {
         }
         {
             Style style = new Style("." + ArrearsStyleName.ArrearsCategoryEven.name());
-            style.addProperty("background-color", ThemeColors.object1, 0.15);
             style.addProperty("padding", "1em 2px");
             addStyle(style);
 
         }
         {
             Style style = new Style("." + ArrearsStyleName.ArrearsCategoryOdd.name());
-            style.addProperty("background-color", ThemeColors.object1, 0.1);
             style.addProperty("padding", "1em 2px");
             addStyle(style);
         }
