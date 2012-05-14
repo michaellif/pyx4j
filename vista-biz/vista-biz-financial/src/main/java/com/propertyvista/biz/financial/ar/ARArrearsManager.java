@@ -20,6 +20,7 @@ import java.util.EnumMap;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -156,8 +157,17 @@ public class ARArrearsManager {
      * @return return of a roster of arrearsSnapshots per billing accounts of the selected building.
      */
     static List<ArrearsSnapshot> getArrearsSnapshotRoster(List<Building> buildings, LogicalDate asOf) {
-        // TOTO Artyom 
-        return null;
+        List<ArrearsSnapshot> arrearsRoster = new LinkedList<ArrearsSnapshot>();
+        for (Building building : buildings) {
+            EntityQueryCriteria<BillingAccount> billingAccountsCriteria = EntityQueryCriteria.create(BillingAccount.class);
+            billingAccountsCriteria.add(PropertyCriterion.in(billingAccountsCriteria.proto().lease().unit().belongsTo(), building));
+            Iterator<BillingAccount> billingAccountsIter = Persistence.service().query(null, billingAccountsCriteria, AttachLevel.IdOnly);
+
+            while (billingAccountsIter.hasNext()) {
+                arrearsRoster.add(getArrearsSnapshot(billingAccountsIter.next(), asOf));
+            }
+        }
+        return arrearsRoster;
 
     }
 
