@@ -92,6 +92,6 @@ public interface PadBatch extends IEntity {
     // Updated when batch is sent to Caledon
     IObject<BigDecimal> batchAmount();
 
-    IPrimitive<String> acknowledgementStatusCode();
+    IPrimitive<String> acknowledgmentStatusCode();
 
 }
