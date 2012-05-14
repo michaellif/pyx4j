@@ -27,8 +27,10 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.pyx4j.commons.StringDebugId;
 import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.security.shared.SecurityController;
 
 import com.propertyvista.common.client.ClentNavigUtils;
+import com.propertyvista.domain.security.VistaCustomerBehavior;
 import com.propertyvista.portal.rpc.ptapp.VistaFormsDebugId;
 import com.propertyvista.shared.CompiledLocale;
 
@@ -52,6 +54,8 @@ public class TopRightActionsViewImpl extends VerticalPanel implements TopRightAc
 
     private final CHyperlink login;
 
+    private final CHyperlink selectApplication;
+
     private final CHyperlink passwordChange;
 
     MenuBar languageMenu;
@@ -59,6 +63,8 @@ public class TopRightActionsViewImpl extends VerticalPanel implements TopRightAc
     MenuBar languages;
 
     private final HorizontalPanel locales;
+
+    private HTML selectApplicationSeparator;
 
     public TopRightActionsViewImpl() {
         getElement().getStyle().setFontSize(0.9, Unit.EM);
@@ -84,6 +90,16 @@ public class TopRightActionsViewImpl extends VerticalPanel implements TopRightAc
         passwordChange.setValue(i18n.tr("Change Password"));
         topLinksPanel.add(passwordChange);
         topLinksPanel.add(new HTML("&nbsp;-&nbsp;"));
+
+        selectApplication = new CHyperlink(null, new Command() {
+            @Override
+            public void execute() {
+                presenter.changeApplication();
+            }
+        });
+        selectApplication.setValue(i18n.tr("Select an Application"));
+        topLinksPanel.add(selectApplication);
+        topLinksPanel.add(selectApplicationSeparator = new HTML("&nbsp; - &nbsp;"));
 
         logout = new CHyperlink(null, new Command() {
             @Override
@@ -135,6 +151,7 @@ public class TopRightActionsViewImpl extends VerticalPanel implements TopRightAc
         login.setVisible(true);
         passwordChange.setVisible(false);
         greetings.setHTML("");
+        selectApplication.setVisible(false);
     }
 
     @Override
@@ -143,6 +160,8 @@ public class TopRightActionsViewImpl extends VerticalPanel implements TopRightAc
         login.setVisible(false);
         passwordChange.setVisible(true);
         greetings.setHTML("Hello " + userName + "&nbsp;-&nbsp;");
+        selectApplication.setVisible(SecurityController.checkBehavior(VistaCustomerBehavior.HasMultipleApplications));
+        selectApplicationSeparator.setVisible(SecurityController.checkBehavior(VistaCustomerBehavior.HasMultipleApplications));
     }
 
     @Override

@@ -101,4 +101,9 @@ public class TopRightActionsActivity extends AbstractActivity implements TopRigh
         AppSite.getPlaceController().goTo(new PtSiteMap.PasswordChange());
     }
 
+    @Override
+    public void changeApplication() {
+        AppSite.getPlaceController().goTo(new PtSiteMap.ApplicationSelectionRequired());
+    }
+
 }
