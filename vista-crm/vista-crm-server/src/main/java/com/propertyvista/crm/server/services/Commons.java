@@ -30,7 +30,14 @@ public class Commons {
                     + " NotFound");
         }
 
-        Persistence.service().retrieve(participant.screening());
-        callback.onSuccess((AddressStructured) participant.screening().currentAddress().detach());
+        Persistence.service().retrieve(participant.leaseV());
+        Persistence.service().retrieve(participant.leaseV().holder());
+        Persistence.service().retrieve(participant.leaseV().holder().unit().belongsTo());
+
+        AddressStructured address = EntityFactory.create(AddressStructured.class);
+        address.set(participant.leaseV().holder().unit().belongsTo().info().address());
+        address.suiteNumber().set(participant.leaseV().holder().unit().info().number());
+
+        callback.onSuccess(address);
     }
 }
