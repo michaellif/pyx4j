@@ -34,7 +34,7 @@ public class PastTenantListerActivity extends ListerActivityBase<TenantDTO> {
         super(place, CustomerViewFactory.instance(PastTenantListerView.class), (AbstractCrudService<TenantDTO>) GWT.create(TenantCrudService.class),
                 TenantDTO.class);
 
-        // filter out just current tenants:
+        // filter out just former tenants:
         TenantDTO proto = EntityFactory.getEntityPrototype(TenantDTO.class);
         addPreDefinedFilter(PropertyCriterion.in(proto.leaseV().status(), Lease.Status.former()));
         // and finalize lease only:
