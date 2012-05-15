@@ -15,6 +15,7 @@ package com.propertyvista.domain.dashboard.gadgets.arrears;
 
 import java.math.BigDecimal;
 
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -23,7 +24,6 @@ import com.propertyvista.domain.financial.billing.AgingBuckets;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 /**
- * Represents single record of Arrears Report,
  * 
  */
 @Transient
@@ -33,5 +33,20 @@ public interface ArrearsDTO extends IEntity {
 
     AgingBuckets buckets();
 
-    IPrimitive<BigDecimal> total();
+    @Format("#0.00")
+    IPrimitive<BigDecimal> arBalance();
+
+    @Format("#0.00")
+    IPrimitive<BigDecimal> prepayments();
+
+    /** {@link #arBalance()} - {@link #prepayments()} */
+    @Format("#0.00")
+    IPrimitive<BigDecimal> totalBalance();
+
+    /**
+     * LMR - last months rent depost.
+     */
+    @Format("#0.00")
+    IPrimitive<BigDecimal> lmrToUnitRentDifference();
+
 }

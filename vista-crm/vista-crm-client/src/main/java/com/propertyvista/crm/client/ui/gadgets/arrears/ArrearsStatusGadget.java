@@ -7,198 +7,86 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Nov 3, 2011
+ * Created on May 15, 2012
  * @author ArtyomB
  * @version $Id$
  */
 package com.propertyvista.crm.client.ui.gadgets.arrears;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Vector;
 
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.commons.Key;
-import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
-import com.pyx4j.entity.rpc.EntitySearchResult;
-import com.pyx4j.entity.shared.criterion.Criterion;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
-import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.crm.client.ui.gadgets.common.AbstractGadget;
 import com.propertyvista.crm.client.ui.gadgets.common.Directory;
 import com.propertyvista.crm.client.ui.gadgets.common.GadgetInstanceBase;
-import com.propertyvista.crm.client.ui.gadgets.common.IBuildingBoardGadgetInstance;
 import com.propertyvista.crm.client.ui.gadgets.common.ListerGadgetInstanceBase;
-import com.propertyvista.crm.rpc.services.dashboard.gadgets.MockupArrearsReportService;
-import com.propertyvista.domain.dashboard.gadgets.arrears.MockupArrears;
-import com.propertyvista.domain.dashboard.gadgets.arrears.MockupArrearsState;
-import com.propertyvista.domain.dashboard.gadgets.type.MockupArrearsStatusGadget;
+import com.propertyvista.domain.dashboard.gadgets.arrears.ArrearsDTO;
+import com.propertyvista.domain.dashboard.gadgets.type.ArrearsGadgetMeta;
 import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
 
-public class ArrearsStatusGadget extends AbstractGadget<MockupArrearsStatusGadget> {
+public class ArrearsStatusGadget extends AbstractGadget<ArrearsGadgetMeta> {
 
-    private static final I18n i18n = I18n.get(ArrearsStatusGadget.class);
-
-    private static class ArrearsStatusGadgetInstance extends ListerGadgetInstanceBase<MockupArrearsState, MockupArrearsStatusGadget> implements
-
-    IBuildingBoardGadgetInstance {
-
-        private static final I18n i18n = I18n.get(ArrearsStatusGadgetInstance.class);
-
-        private final MockupArrearsReportService service;
-
-        private FormFlexPanel panel;
-
-        private List<Key> buildings;
+    private static class ArrearsStatusGadgetInstance extends ListerGadgetInstanceBase<ArrearsDTO, ArrearsGadgetMeta> {
 
         public ArrearsStatusGadgetInstance(GadgetMetadata gmd) {
-            super(gmd, MockupArrearsState.class, MockupArrearsStatusGadget.class);
-            service = GWT.create(MockupArrearsReportService.class);
-        }
-
-        @Override
-        protected MockupArrearsStatusGadget createDefaultSettings(Class<MockupArrearsStatusGadget> metadataClass) {
-            MockupArrearsStatusGadget metadata = super.createDefaultSettings(metadataClass);
-            metadata.category().setValue(MockupArrearsStatusGadget.Category.Total);
-            return metadata;
+            super(gmd, ArrearsDTO.class, ArrearsGadgetMeta.class);
         }
 
         @Override
         protected boolean isFilterRequired() {
-            return true;
+            return false;
         }
 
-        private MockupArrears arrearsProto() {
-            if (getMetadata().category().isNull()) {
-                return proto().totalArrears();
-            }
-            switch (getMetadata().category().getValue()) {
-            case Total:
-                return proto().totalArrears();
-            case Rent:
-                return proto().rentArrears();
-            case Parking:
-                return proto().parkingArrears();
-            case Other:
-                return proto().otherArrears();
-            default:
-                return proto().totalArrears();
-            }
-        }
-
-        //@formatter:off    
         @Override
         public List<ColumnDescriptor> defineColumnDescriptors() {
-            return Arrays.asList(
-                    new MemberColumnDescriptor.Builder(proto().propertyCode()).visible(false).build(),
-                    new MemberColumnDescriptor.Builder(proto().buildingName()).build(),
-                    new MemberColumnDescriptor.Builder(proto().complexName()).visible(false).build(),
-                    new MemberColumnDescriptor.Builder(proto().unitNumber()).build(),
-                    new MemberColumnDescriptor.Builder(proto().firstName()).build(),
-                    new MemberColumnDescriptor.Builder(proto().lastName()).build(),
+            return Arrays.asList(//@formatter:off
+                    new MemberColumnDescriptor.Builder(proto().lease().unit().belongsTo().propertyCode()).visible(false).build(),
+                    new MemberColumnDescriptor.Builder(proto().lease().unit().belongsTo().info().name()).build(),
+                    new MemberColumnDescriptor.Builder(proto().lease().unit().belongsTo().info().address().streetNumber()).build(),
+                    new MemberColumnDescriptor.Builder(proto().lease().unit().belongsTo().info().address().streetName()).build(),                    
+                    new MemberColumnDescriptor.Builder(proto().lease().unit().belongsTo().info().address().province().name()).build(),                    
+                    new MemberColumnDescriptor.Builder(proto().lease().unit().belongsTo().info().address().country().name()).build(),                    
+                    new MemberColumnDescriptor.Builder(proto().lease().unit().belongsTo().complex().name()).visible(false).build(),
+                    new MemberColumnDescriptor.Builder(proto().lease().unit().info().number()).build(),
+                    new MemberColumnDescriptor.Builder(proto().lease().id()).build(),
+                    new MemberColumnDescriptor.Builder(proto().lease().leaseFrom()).build(),
+                    new MemberColumnDescriptor.Builder(proto().lease().leaseTo()).build(),
                     
-                    // arrears subclass specific stuff goes here here
-                    new MemberColumnDescriptor.Builder(arrearsProto().thisMonth()).build(),
-                    new MemberColumnDescriptor.Builder(arrearsProto().monthAgo()).build(),
-                    new MemberColumnDescriptor.Builder(arrearsProto().twoMonthsAgo()).build(),
-                    new MemberColumnDescriptor.Builder(arrearsProto().threeMonthsAgo()).build(),
-                    new MemberColumnDescriptor.Builder(arrearsProto().overFourMonthsAgo()).build(),
-                    new MemberColumnDescriptor.Builder(arrearsProto().totalBalance()).build(),
-                    new MemberColumnDescriptor.Builder(arrearsProto().prepayments()).build(),
-                                    
-                    new MemberColumnDescriptor.Builder(proto().legalStatus()).build(),
-                    new MemberColumnDescriptor.Builder(proto().lmrUnitRentDifference()).build(),
+                    // arrears
+                    new MemberColumnDescriptor.Builder(proto().buckets().bucketCurrent()).build(),
+                    new MemberColumnDescriptor.Builder(proto().buckets().bucket30()).build(),
+                    new MemberColumnDescriptor.Builder(proto().buckets().bucket60()).build(),
+                    new MemberColumnDescriptor.Builder(proto().buckets().bucket90()).build(),
+                    new MemberColumnDescriptor.Builder(proto().buckets().bucketOver90()).build(),
                     
-                    // address
-                    new MemberColumnDescriptor.Builder(proto().streetNumber()).visible(false).build(),
-                    new MemberColumnDescriptor.Builder(proto().streetName()).visible(false).build(),
-                    new MemberColumnDescriptor.Builder(proto().streetType()).visible(false).build(),
-                    new MemberColumnDescriptor.Builder(proto().city()).visible(false).build(),
-                    new MemberColumnDescriptor.Builder(proto().province()).title(i18n.tr("Province")).visible(false).build(),
-                    new MemberColumnDescriptor.Builder(proto().country().name()).title(i18n.tr("Country")).visible(false).build(),
+                    new MemberColumnDescriptor.Builder(proto().arBalance()).build(),
+                    new MemberColumnDescriptor.Builder(proto().prepayments()).build(),                    
+                    new MemberColumnDescriptor.Builder(proto().totalBalance()).build(),
+                    new MemberColumnDescriptor.Builder(proto().lmrToUnitRentDifference()).build()
                     
-                    // common tabular gadget stuff
-                    new MemberColumnDescriptor.Builder(proto().common().propertyManger().name()).title(i18n.tr("Property Manager")).visible(false).build(),
-                    new MemberColumnDescriptor.Builder(proto().common().owner().company().name()).title(i18n.tr("Owner")).visible(false).build(),
-                    new MemberColumnDescriptor.Builder(proto().common().region()).visible(false).build(),
-                    new MemberColumnDescriptor.Builder(proto().common().portfolio().name()).title(i18n.tr("Portfolio")).visible(false).build()
-            );
-        }                    
-        //@formatter:on
+            );//@formatter:on
+        }
+
+        @Override
+        public void populatePage(int pageNumber) {
+            // TODO Auto-generated method stub
+        }
 
         @Override
         public Widget initContentPanel() {
-            panel = new FormFlexPanel();
-            panel.setH1(0, 0, 1, (getMetadata().category().getValue() != null ? getMetadata().category().getValue() : MockupArrearsStatusGadget.Category.Total).toString());
-            panel.setWidget(1, 0, initListerWidget());
-            return panel;
+            // TODO Auto-generated method stub
+            return null;
         }
 
-        @Override
-        public ISetup getSetup() {
-            return new SetupForm(new CEntityDecoratableForm<MockupArrearsStatusGadget>(MockupArrearsStatusGadget.class) {
-                @Override
-                public IsWidget createContent() {
-                    FormFlexPanel p = new FormFlexPanel();
-                    int row = -1;
-                    p.setWidget(++row, 0, new DecoratorBuilder(inject(proto().refreshInterval())).build());
-                    p.setWidget(++row, 0, new DecoratorBuilder(inject(proto().pageSize())).build());
-                    p.setWidget(++row, 0, new DecoratorBuilder(inject(proto().category())).build());
-                    return p;
-                }
-            });
-
-        }
-
-        @Override
-        public void populatePage(final int pageNumber) {
-            if (buildings != null) {
-                service.arrearsList(new AsyncCallback<EntitySearchResult<MockupArrearsState>>() {
-                    @Override
-                    public void onSuccess(EntitySearchResult<MockupArrearsState> result) {
-                        setPageData(result.getData(), pageNumber, result.getTotalRows(), result.hasMoreData());
-                        populateSucceded();
-                    }
-
-                    @Override
-                    public void onFailure(Throwable caught) {
-                        populateFailed(caught);
-                    }
-                }, new Vector<Criterion>(getListerFilterData()), new Vector<Key>(buildings), getStatusDate(), new Vector<Sort>(getSorting()), getPageNumber(),
-                        getPageSize());
-            } else {
-                setPageData(new ArrayList<MockupArrearsState>(1), 0, 0, false);
-            }
-        }
-
-        private LogicalDate getStatusDate() {
-            return new LogicalDate();
-        }
     }
 
-    public ArrearsStatusGadget() {
-        super(MockupArrearsStatusGadget.class);
-    }
-
-    @Override
-    public boolean isBuildingGadget() {
-        return true;
-    }
-
-    @Override
-    public String getDescription() {
-        return i18n
-                .tr("Shows the information about tenant arrears, including how long it is overdue, total balance, legal status information etc. This gadget can either show total arrears or arrears of specific type (i.e. rent, parking or other)");
+    protected ArrearsStatusGadget() {
+        super(ArrearsGadgetMeta.class);
     }
 
     @Override
@@ -207,7 +95,12 @@ public class ArrearsStatusGadget extends AbstractGadget<MockupArrearsStatusGadge
     }
 
     @Override
-    protected GadgetInstanceBase<MockupArrearsStatusGadget> createInstance(GadgetMetadata gadgetMetadata) throws Error {
+    public boolean isBuildingGadget() {
+        return true;
+    }
+
+    @Override
+    protected GadgetInstanceBase<ArrearsGadgetMeta> createInstance(GadgetMetadata gadgetMetadata) throws Error {
         return new ArrearsStatusGadgetInstance(gadgetMetadata);
     }
 

@@ -16,8 +16,8 @@ package com.propertyvista.domain.dashboard.gadgets.type;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 
-@DiscriminatorValue("MockupArrearsYOYAnalysisChartGadget")
+@DiscriminatorValue("MockupArrearsYOYAnalysisChartGadgetMeta")
 @Caption(name = "Arrears YOY Analysis")
-public interface MockupArrearsYOYAnalysisChartGadget extends GadgetMetadata {
+public interface MockupArrearsYOYAnalysisChartGadgetMeta extends GadgetMetadata {
 
 }

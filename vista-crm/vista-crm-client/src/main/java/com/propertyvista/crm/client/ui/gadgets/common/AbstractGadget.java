@@ -26,6 +26,8 @@ public abstract class AbstractGadget<GADGET_TYPE extends GadgetMetadata> impleme
 
     protected final String name;
 
+    private String description;
+
     protected AbstractGadget(String type, String name) {
         this.type = type;
         this.name = name;
@@ -35,6 +37,7 @@ public abstract class AbstractGadget<GADGET_TYPE extends GadgetMetadata> impleme
         GADGET_TYPE gadgetMetadataProto = EntityFactory.getEntityPrototype(gadgetMetadataClassLiteral);
         type = gadgetMetadataProto.getValueClass().getName();
         name = gadgetMetadataProto.getEntityMeta().getCaption();
+        description = gadgetMetadataProto.getEntityMeta().getDescription();
     }
 
     @Override
@@ -61,6 +64,11 @@ public abstract class AbstractGadget<GADGET_TYPE extends GadgetMetadata> impleme
     @Override
     public final String getName() {
         return name;
+    }
+
+    @Override
+    public String getDescription() {
+        return description;
     }
 
     @Override

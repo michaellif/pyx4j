@@ -13,23 +13,11 @@
  */
 package com.propertyvista.domain.dashboard.gadgets.type;
 
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
-import com.pyx4j.entity.annotations.validator.NotNull;
-import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.i18n.shared.I18nEnum;
 
-@DiscriminatorValue("MockupArrearsStatusGadget")
-public interface MockupArrearsStatusGadget extends ListerGadgetBaseMetadata {
+@DiscriminatorValue("MockupArrearsSummaryGadgetMeta")
+@Caption(name = "Arrears Summary")
+public interface MockArrearsSummaryGadgetMeta extends ListerGadgetBaseMetadata {
 
-    public enum Category {
-        Rent, Parking, Other, Total;
-
-        @Override
-        public String toString() {
-            return I18nEnum.toString(this);
-        };
-    }
-
-    @NotNull
-    IPrimitive<Category> category();
 }

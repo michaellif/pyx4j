@@ -37,14 +37,14 @@ import com.propertyvista.crm.client.ui.gadgets.common.IBuildingBoardGadgetInstan
 import com.propertyvista.crm.client.ui.gadgets.common.ListerGadgetInstanceBase;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.MockupArrearsReportService;
 import com.propertyvista.domain.dashboard.gadgets.arrears.MockupArrearsSummary;
-import com.propertyvista.domain.dashboard.gadgets.type.MockArrearsSummaryGadget;
+import com.propertyvista.domain.dashboard.gadgets.type.MockArrearsSummaryGadgetMeta;
 import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
 
-public class ArrearsSummaryGadget extends AbstractGadget<MockArrearsSummaryGadget> {
+public class MockupArrearsSummaryGadget extends AbstractGadget<MockArrearsSummaryGadgetMeta> {
 
-    private static final I18n i18n = I18n.get(ArrearsSummaryGadget.class);
+    private static final I18n i18n = I18n.get(MockupArrearsSummaryGadget.class);
 
-    private static class ArrearsSummaryGadgetImpl extends ListerGadgetInstanceBase<MockupArrearsSummary, MockArrearsSummaryGadget> implements
+    private static class ArrearsSummaryGadgetImpl extends ListerGadgetInstanceBase<MockupArrearsSummary, MockArrearsSummaryGadgetMeta> implements
             IBuildingBoardGadgetInstance {
 
         private static final I18n i18n = I18n.get(ArrearsSummaryGadgetImpl.class);
@@ -54,7 +54,7 @@ public class ArrearsSummaryGadget extends AbstractGadget<MockArrearsSummaryGadge
         private List<Key> buildings;
 
         public ArrearsSummaryGadgetImpl(GadgetMetadata gmd) {
-            super(gmd, MockupArrearsSummary.class, MockArrearsSummaryGadget.class);
+            super(gmd, MockupArrearsSummary.class, MockArrearsSummaryGadgetMeta.class);
             service = GWT.create(MockupArrearsReportService.class);
         }
 
@@ -107,8 +107,8 @@ public class ArrearsSummaryGadget extends AbstractGadget<MockArrearsSummaryGadge
 
     }
 
-    public ArrearsSummaryGadget() {
-        super(MockArrearsSummaryGadget.class);
+    public MockupArrearsSummaryGadget() {
+        super(MockArrearsSummaryGadgetMeta.class);
     }
 
     @Override
@@ -127,7 +127,7 @@ public class ArrearsSummaryGadget extends AbstractGadget<MockArrearsSummaryGadge
     }
 
     @Override
-    protected GadgetInstanceBase<MockArrearsSummaryGadget> createInstance(GadgetMetadata gadgetMetadata) throws Error {
+    protected GadgetInstanceBase<MockArrearsSummaryGadgetMeta> createInstance(GadgetMetadata gadgetMetadata) throws Error {
         return new ArrearsSummaryGadgetImpl(gadgetMetadata);
     }
 }
