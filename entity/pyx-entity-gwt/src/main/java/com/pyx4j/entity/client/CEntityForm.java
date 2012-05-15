@@ -399,17 +399,8 @@ public abstract class CEntityForm<E extends IEntity> extends CEntityContainer<E>
     }
 
     @Override
-    protected <T> void updateContainer(CComponent<T, ?> component, T value) {
-        if (component instanceof CPolymorphicEntityEditorTEMP) {
-            Path memberPath = binding.get(component);
-            if ((memberPath != null) && (getValue() != null)) {
-                if (value instanceof IEntity) {
-                    ((IEntity) getValue().getMember(memberPath)).set(((IEntity) value).duplicate());
-                    log.trace("CEntityEditor {} model updated  {}", shortDebugInfo(), memberPath);
-                    return;
-                }
-            }
-        } else if (!(component instanceof CEntityContainer)) {
+    protected final <T> void updateContainer(CComponent<T, ?> component, T value) {
+        if (!(component instanceof CEntityContainer)) {
             Path memberPath = binding.get(component);
             if ((memberPath != null) && (getValue() != null)) {
                 if (value instanceof IEntity) {
@@ -429,7 +420,14 @@ public abstract class CEntityForm<E extends IEntity> extends CEntityContainer<E>
                 }
                 log.trace("CEntityEditor {} model updated {}", shortDebugInfo(), memberPath);
             }
+        } else if (component instanceof CEntityForm) {
+            Path memberPath = binding.get(component);
+            if ((memberPath != null) && (getValue() != null)) {
+                if (value instanceof IEntity) {
+                    // Process on the object level to avoid Polymorphic problems
+                    ((IEntity) getValue().getMember(memberPath)).set((IEntity) value);
+                }
+            }
         }
     }
-
 }
