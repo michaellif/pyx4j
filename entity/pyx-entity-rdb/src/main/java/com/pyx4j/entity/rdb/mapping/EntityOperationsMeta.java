@@ -215,8 +215,10 @@ public class EntityOperationsMeta {
                         } else {
                             sqlName = namingConvention.sqlChildTableName(rootEntityMeta.getPersistenceName(), memberPersistenceName);
                         }
-                        if (rootEntityMeta.getEntityClass().getAnnotation(Inheritance.class) != null) {
-                            throw new Error("Polymorphic Owner of Managed collection not supported " + memberName + " " + rootEntityMeta.getEntityClass());
+                        Inheritance inheritance = rootEntityMeta.getEntityClass().getAnnotation(Inheritance.class);
+                        if ((inheritance != null) && (inheritance.strategy() != Inheritance.InheritanceStrategy.SINGLE_TABLE)) {
+                            throw new Error("Polymorphic Owner '" + rootEntityMeta.getEntityClass().getName() + "' of Managed collection '" + memberName
+                                    + "' not supported");
                         }
                         ValueAdapter ownerValueAdapter = new ValueAdapterEntity(dialect, rootEntityMeta.getEntityClass());
                         member = new MemberCollectionOperationsMeta(memberAccess, valueAdapter, sqlName, memberMeta, memberPath, null, false,
