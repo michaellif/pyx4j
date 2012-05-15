@@ -14,6 +14,7 @@
 package com.propertyvista.biz.financial.billing;
 
 import com.propertyvista.biz.financial.AbstractProcessor;
+import com.propertyvista.domain.financial.billing.InvoiceLatePaymentFee;
 
 public class BillingLatePaymentFeeProcessor extends AbstractProcessor {
 
@@ -23,8 +24,9 @@ public class BillingLatePaymentFeeProcessor extends AbstractProcessor {
         this.billing = billing;
     }
 
-    void createInitialBalanceRecord() {
-        //TODO
+    public void createLatePaymentFeeItem() {
+        // TODO Auto-generated method stub
+        // InvoiceLatePaymentFee
     }
 
 }

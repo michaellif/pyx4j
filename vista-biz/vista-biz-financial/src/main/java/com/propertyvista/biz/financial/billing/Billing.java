@@ -52,6 +52,8 @@ class Billing {
 
     private final BillingProductChargeProcessor productChargeProcessor;
 
+    private final BillingLatePaymentFeeProcessor latePaymentFeeProcessor;
+
     private Billing(Bill bill) {
         this.nextPeriodBill = bill;
         if (!bill.previousBill().isNull()) {
@@ -70,6 +72,8 @@ class Billing {
         paymentProcessor = new BillingPaymentProcessor(this);
 
         leaseAdjustmentProcessor = new BillingLeaseAdjustmentProcessor(this);
+
+        latePaymentFeeProcessor = new BillingLatePaymentFeeProcessor(this);
 
     }
 
@@ -103,6 +107,8 @@ class Billing {
         leaseAdjustmentProcessor.attachImmediateLeaseAdjustments();
 
         paymentProcessor.attachPaymentRecords();
+
+        latePaymentFeeProcessor.createLatePaymentFeeItem();
 
         calculateTotals();
 
