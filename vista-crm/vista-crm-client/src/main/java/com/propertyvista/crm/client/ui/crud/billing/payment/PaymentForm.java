@@ -195,6 +195,8 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
                         paymentMethodEditor.selectPaymentDetailsEditor(PaymentType.Echeck);
                         paymentMethodEditor.setVisible(!getValue().leaseParticipant().isNull());
 
+                        paymentMethodEditor.getValue().isOneTimePayment().setValue(Boolean.TRUE);
+
                         profiledPaymentMethodsCombo.setVisible(false);
                         break;
                     case Profiled:

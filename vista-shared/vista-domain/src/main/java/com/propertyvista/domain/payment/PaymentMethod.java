@@ -18,8 +18,11 @@ import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
+import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.MemberColumn;
+import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
@@ -35,7 +38,12 @@ public interface PaymentMethod extends IEntity {
 
     @Detached
     @ReadOnly
+    @Owner
+    @JoinColumn
     LeaseParticipant leaseParticipant();
+
+    @OrderColumn
+    IPrimitive<Integer> orderId();
 
     @ToString(index = 0)
     @Caption(name = "Payment Type")
@@ -75,4 +83,6 @@ public interface PaymentMethod extends IEntity {
 
     @ToString(index = 2)
     IPrimitive<Boolean> isDefault();
+
+    IPrimitive<Boolean> isOneTimePayment();
 }

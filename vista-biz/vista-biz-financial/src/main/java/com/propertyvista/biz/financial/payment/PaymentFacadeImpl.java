@@ -67,7 +67,8 @@ public class PaymentFacadeImpl implements PaymentFacade {
             throw new Error();
         }
 
-        {
+        if (paymentRecord.paymentMethod().isOneTimePayment().isBooleanTrue()) {
+
             EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
             criteria.add(PropertyCriterion.eq(criteria.proto()._Units().$()._Leases().$().billingAccount(), paymentRecord.billingAccount()));
             Building building = Persistence.service().retrieve(criteria);
