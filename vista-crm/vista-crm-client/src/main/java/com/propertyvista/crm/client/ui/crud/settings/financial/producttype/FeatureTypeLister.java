@@ -20,6 +20,8 @@ import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 import com.pyx4j.widgets.client.Button;
+import com.pyx4j.widgets.client.dialog.ConfirmDecline;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.domain.financial.offering.FeatureItemType;
 import com.propertyvista.domain.financial.offering.ProductItemType;
@@ -36,9 +38,18 @@ public class FeatureTypeLister extends ListerBase<FeatureItemType> {
         addActionItem(new Button(i18n.tr("Delete Checked"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                for (ProductItemType item : getDataTablePanel().getDataTable().getCheckedItems()) {
-                    getPresenter().delete(item.getPrimaryKey());
-                }
+                MessageDialog.confirm(i18n.tr("Confirm"), i18n.tr("Do you really want to delete checked items?"), new ConfirmDecline() {
+                    @Override
+                    public void onConfirmed() {
+                        for (ProductItemType item : getDataTablePanel().getDataTable().getCheckedItems()) {
+                            getPresenter().delete(item.getPrimaryKey());
+                        }
+                    }
+
+                    @Override
+                    public void onDeclined() {
+                    }
+                });
             }
         }));
 
