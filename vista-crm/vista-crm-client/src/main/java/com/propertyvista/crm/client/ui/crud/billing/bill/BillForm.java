@@ -73,7 +73,7 @@ public class BillForm extends CrmEntityForm<BillDTO> {
         main.setWidget(++row, 0, inject(proto().immediateAccountAdjustmentLineItems(), new InvoiceLineItemViewer()));
 
         main.setH1(++row, 0, 2, i18n.tr("Current Bill"));
-        main.setWidget(++row, 0, inject(proto().serviceChargeLineItems(), new InvoiceLineItemViewer()));
+        main.setWidget(++row, 0, inject(proto().serviceChargeLineItems(), new LineItemCollapsableViewer()));
         main.setWidget(++row, 0, inject(proto().recurringFeatureChargeLineItems(), new InvoiceLineItemViewer()));
         main.setWidget(++row, 0, inject(proto().onetimeFeatureChargeLineItems(), new InvoiceLineItemViewer()));
         main.setWidget(++row, 0, inject(proto().pendingAccountAdjustmentLineItems(), new InvoiceLineItemViewer()));

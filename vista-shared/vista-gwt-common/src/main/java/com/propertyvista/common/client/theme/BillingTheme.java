@@ -20,7 +20,7 @@ import com.pyx4j.commons.css.Theme;
 public class BillingTheme extends Theme {
 
     public static enum StyleName implements IStyleName {
-        BillingLineItem, BillingLineItemTitle, BillingLineItemAmount, BillingDetailItem, BillingDetailItemTitle, BillingDetailItemAmount, BillingDetailTotal
+        BillingLineItem, BillingLineItemTitle, BillingLineItemAmount, BillingDetailItem, BillingDetailItemTitle, BillingDetailItemAmount, BillingDetailTotal, BillingDetailTotalAmount
     }
 
     public BillingTheme() {
@@ -35,7 +35,7 @@ public class BillingTheme extends Theme {
 
         style = new Style(".", StyleName.BillingDetailItem);
         style.addProperty("height", "20px");
-        style.addProperty("font-size", "16px");
+        style.addProperty("font-size", "14px");
         addStyle(style);
 
         style = new Style(".", StyleName.BillingDetailItemAmount);
@@ -43,8 +43,13 @@ public class BillingTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", StyleName.BillingDetailTotal);
+        style.addProperty("font-size", "16px");
+        addStyle(style);
+
+        style = new Style(".", StyleName.BillingDetailTotalAmount);
         style.addProperty("border-top", "1px solid black");
         style.addProperty("padding-top", "4px");
+        style.addProperty("text-align", "right");
         addStyle(style);
     }
 }
