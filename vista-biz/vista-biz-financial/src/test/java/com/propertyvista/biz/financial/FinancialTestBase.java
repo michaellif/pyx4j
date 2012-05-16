@@ -38,6 +38,7 @@ import com.propertyvista.biz.financial.billing.BillingUtils;
 import com.propertyvista.biz.financial.billing.print.BillPrint;
 import com.propertyvista.biz.financial.preload.BuildingDataModel;
 import com.propertyvista.biz.financial.preload.LeaseAdjustmentReasonDataModel;
+import com.propertyvista.biz.financial.preload.LeaseBillingPolicyDataModel;
 import com.propertyvista.biz.financial.preload.LeaseDataModel;
 import com.propertyvista.biz.financial.preload.LocationsDataModel;
 import com.propertyvista.biz.financial.preload.ProductItemTypesDataModel;
@@ -107,6 +108,8 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         leaseDataModel = new LeaseDataModel(buildingDataModel, tenantDataModel);
         leaseDataModel.generate(true);
 
+        LeaseBillingPolicyDataModel leaseBillingPolicyDataModel = new LeaseBillingPolicyDataModel(buildingDataModel);
+        leaseBillingPolicyDataModel.generate(true);
     }
 
     protected Bill runBilling(boolean confirm) {

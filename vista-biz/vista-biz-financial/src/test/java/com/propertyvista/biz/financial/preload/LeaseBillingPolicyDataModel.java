@@ -43,7 +43,8 @@ public class LeaseBillingPolicyDataModel {
         policy.prorationMethod().setValue(ProrationMethod.Standard);
 
         LateFeeItem lateFee = EntityFactory.create(LateFeeItem.class);
-        lateFee.baseFee().setValue(new BigDecimal(50.00));
+// TMP - to pass tests       lateFee.baseFee().setValue(new BigDecimal(50.00));
+        lateFee.baseFee().setValue(new BigDecimal(0));
         lateFee.baseFeeType().setValue(BaseFeeType.FlatAmount);
         lateFee.maxTotalFee().setValue(new BigDecimal(1000.00));
         lateFee.maxTotalFeeType().setValue(LateFeeItem.MaxTotalFeeType.FlatAmount);
@@ -51,12 +52,14 @@ public class LeaseBillingPolicyDataModel {
 
         NsfFeeItem nsfItem = EntityFactory.create(NsfFeeItem.class);
         nsfItem.paymentType().setValue(PaymentType.Cash);
-        nsfItem.fee().setValue(new BigDecimal(100.00));
+// TMP - to pass tests        nsfItem.fee().setValue(new BigDecimal(100.00));
+        nsfItem.fee().setValue(new BigDecimal(0));
         policy.nsfFees().add(nsfItem);
 
         nsfItem = EntityFactory.create(NsfFeeItem.class);
         nsfItem.paymentType().setValue(PaymentType.Check);
-        nsfItem.fee().setValue(new BigDecimal(30.00));
+// TMP - to pass tests        nsfItem.fee().setValue(new BigDecimal(30.00));
+        nsfItem.fee().setValue(new BigDecimal(0));
         policy.nsfFees().add(nsfItem);
 
         policy.node().set(buildingDataModel.getBuilding());

@@ -38,28 +38,29 @@ public class BillingLatePaymentFeeProcessor extends AbstractProcessor {
     public void createLatePaymentFeeItem() {
         // TODO Auto-generated method stub
 
-//        BigDecimal dueFromPreviousBill = billing.getNextPeriodBill().balanceForwardAmount().getValue();
-//        //Exit if negative
-//
-//        BigDecimal serviceCharge = billing.getNextPeriodBill().serviceCharge().getValue();
-//
-//        LeaseBillingPolicy leaseBillingPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(
-//                billing.getNextPeriodBill().billingRun().building(), LeaseBillingPolicy.class);
-//
-//        BigDecimal latePaymentFee = LatePaymentUtils.calculateLatePaymentFee(dueFromPreviousBill, serviceCharge, leaseBillingPolicy);
-//
-//        InvoiceLatePaymentFee charge = EntityFactory.create(InvoiceLatePaymentFee.class);
-//        charge.bill().set(billing.getNextPeriodBill());
-//        charge.dueDate().setValue(billing.getNextPeriodBill().billingPeriodStartDate().getValue());
-//        charge.amount().setValue(latePaymentFee);
-//        charge.description().setValue(i18n.tr("Late payment fee"));
-//
-//        Persistence.service().persist(charge);
-//
-//        billing.getNextPeriodBill().lineItems().add(charge);
-//
-//        billing.getNextPeriodBill().pendingAccountAdjustments()
-//                .setValue(billing.getNextPeriodBill().pendingAccountAdjustments().getValue().add(charge.amount().getValue()));
+        BigDecimal dueFromPreviousBill = billing.getNextPeriodBill().balanceForwardAmount().getValue();
+        //Exit if negative
+
+        BigDecimal serviceCharge = billing.getNextPeriodBill().serviceCharge().getValue();
+
+        LeaseBillingPolicy leaseBillingPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(
+                billing.getNextPeriodBill().billingRun().building(), LeaseBillingPolicy.class);
+
+        BigDecimal latePaymentFee = LatePaymentUtils.calculateLatePaymentFee(dueFromPreviousBill, serviceCharge, leaseBillingPolicy);
+
+        InvoiceLatePaymentFee charge = EntityFactory.create(InvoiceLatePaymentFee.class);
+        charge.bill().set(billing.getNextPeriodBill());
+        charge.dueDate().setValue(billing.getNextPeriodBill().billingPeriodStartDate().getValue());
+        charge.amount().setValue(latePaymentFee);
+        charge.taxTotal().setValue(new BigDecimal(0));
+        charge.description().setValue(i18n.tr("Late payment fee"));
+
+        Persistence.service().persist(charge);
+
+        billing.getNextPeriodBill().lineItems().add(charge);
+
+        billing.getNextPeriodBill().pendingAccountAdjustments()
+                .setValue(billing.getNextPeriodBill().pendingAccountAdjustments().getValue().add(charge.amount().getValue()));
 
     }
 
