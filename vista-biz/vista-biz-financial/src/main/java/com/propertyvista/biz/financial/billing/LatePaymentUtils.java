@@ -33,8 +33,9 @@ public class LatePaymentUtils {
     public static BigDecimal calculateLatePaymentFee(BigDecimal amount, BigDecimal monthlyRent, LeaseBillingPolicy policy) {
         BigDecimal fee = new BigDecimal("0.00");
 
-        if (amount.compareTo(fee) == 0)
+        if (amount.compareTo(fee) == 0) {
             return fee;
+        }
 
         switch (policy.lateFee().baseFeeType().getValue()) {
         case FlatAmount:
