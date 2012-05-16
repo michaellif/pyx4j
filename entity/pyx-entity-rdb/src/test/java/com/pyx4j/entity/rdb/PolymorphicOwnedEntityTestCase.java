@@ -32,6 +32,10 @@ import com.pyx4j.entity.test.shared.domain.ownership.polymorphic.BidirectionalOn
 import com.pyx4j.entity.test.shared.domain.ownership.polymorphic.BidirectionalOneToManyPlmSTChildAC;
 import com.pyx4j.entity.test.shared.domain.ownership.polymorphic.BidirectionalOneToManyPlmSTChildB;
 import com.pyx4j.entity.test.shared.domain.ownership.polymorphic.BidirectionalOneToManyPlmSTParent;
+import com.pyx4j.entity.test.shared.domain.ownership.polymorphic.HasManagedListSTPlmParentA;
+import com.pyx4j.entity.test.shared.domain.ownership.polymorphic.HasManagedListSTPlmParentB;
+import com.pyx4j.entity.test.shared.domain.ownership.polymorphic.HasManagedListSTPlmParentBase;
+import com.pyx4j.entity.test.shared.domain.ownership.polymorphic.ManagedChild;
 import com.pyx4j.entity.test.shared.domain.ownership.polymorphic.UnidirectionalOneToOnePlmChild;
 import com.pyx4j.entity.test.shared.domain.ownership.polymorphic.UnidirectionalOneToOnePlmChildA;
 import com.pyx4j.entity.test.shared.domain.ownership.polymorphic.UnidirectionalOneToOnePlmChildB;
@@ -349,6 +353,102 @@ public abstract class PolymorphicOwnedEntityTestCase extends AssociationMappingT
             List<BidirectionalOneToManyPlmSTChildA> children = srv.query(criteria);
 
             assertEquals(4, children.size());
+        }
+
+    }
+
+    public void IGNORE_testPolymorphicSTManagedOneToMany() {
+        String testId = uniqueString();
+
+        // SET UP:
+        // create parents A1 {"aa1", "aa2"}, A2{"x1", "x2"}, B {"ab1", "ab1"}
+        {
+            HasManagedListSTPlmParentA a1 = EntityFactory.create(HasManagedListSTPlmParentA.class);
+            a1.testId().setValue(testId);
+            a1.foo().setValue("A1");
+
+            ManagedChild childAA1 = EntityFactory.create(ManagedChild.class);
+            childAA1.testId().setValue(testId);
+            childAA1.value().setValue("aa1");
+            a1.children().add(childAA1);
+
+            ManagedChild childAA2 = EntityFactory.create(ManagedChild.class);
+            childAA2.testId().setValue(testId);
+            childAA2.value().setValue("aa2");
+            a1.children().add(childAA2);
+            srv.persist(a1);
+        }
+
+        {
+            HasManagedListSTPlmParentA a2 = EntityFactory.create(HasManagedListSTPlmParentA.class);
+            a2.testId().setValue(testId);
+            a2.foo().setValue("A2");
+
+            ManagedChild childX1 = EntityFactory.create(ManagedChild.class);
+            childX1.testId().setValue(testId);
+            childX1.value().setValue("x1");
+            a2.children().add(childX1);
+
+            ManagedChild childX2 = EntityFactory.create(ManagedChild.class);
+            childX2.testId().setValue(testId);
+            childX2.value().setValue("x2");
+            a2.children().add(childX2);
+            srv.persist(a2);
+        }
+
+        {
+            HasManagedListSTPlmParentB b = EntityFactory.create(HasManagedListSTPlmParentB.class);
+            b.testId().setValue(testId);
+            b.bar().setValue(1);
+
+            ManagedChild childAB1 = EntityFactory.create(ManagedChild.class);
+            childAB1.testId().setValue(testId);
+            childAB1.value().setValue("ab1");
+            b.children().add(childAB1);
+
+            ManagedChild childAB2 = EntityFactory.create(ManagedChild.class);
+            childAB2.testId().setValue(testId);
+            childAB2.value().setValue("ab2");
+            b.children().add(childAB2);
+            srv.persist(b);
+        }
+
+        // TEST SEARCH and SORT
+        {
+            EntityQueryCriteria<HasManagedListSTPlmParentBase> criteria = EntityQueryCriteria.create(HasManagedListSTPlmParentBase.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().testId(), testId));
+            criteria.add(PropertyCriterion.like(criteria.proto().children().$().value(), "a%"));
+            criteria.asc(criteria.proto().children().$().value());
+
+            List<HasManagedListSTPlmParentBase> result = srv.query(criteria);
+
+            assertEquals(2, result.size());
+            assertEquals(HasManagedListSTPlmParentA.class, result.get(0).getInstanceValueClass());
+            assertEquals("A1", result.get(0).<HasManagedListSTPlmParentA> cast().foo().getValue());
+            assertEquals(HasManagedListSTPlmParentB.class, result.get(1).getInstanceValueClass());
+        }
+        {
+            // now sort in reverse order
+            EntityQueryCriteria<HasManagedListSTPlmParentBase> criteria = EntityQueryCriteria.create(HasManagedListSTPlmParentBase.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().testId(), testId));
+            criteria.add(PropertyCriterion.like(criteria.proto().children().$().value(), "a%"));
+            criteria.desc(criteria.proto().children().$().value());
+
+            List<HasManagedListSTPlmParentBase> result = srv.query(criteria);
+
+            assertEquals(2, result.size());
+            assertEquals(HasManagedListSTPlmParentB.class, result.get(0).getInstanceValueClass());
+            assertEquals(HasManagedListSTPlmParentA.class, result.get(1).getInstanceValueClass());
+            assertEquals("A1", result.get(1).<HasManagedListSTPlmParentA> cast().foo().getValue());
+        }
+        {
+            EntityQueryCriteria<HasManagedListSTPlmParentBase> criteria = EntityQueryCriteria.create(HasManagedListSTPlmParentBase.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().testId(), testId));
+            criteria.add(PropertyCriterion.like(criteria.proto().children().$().value(), "x%"));
+
+            List<HasManagedListSTPlmParentBase> result = srv.query(criteria);
+            assertEquals(1, result.size());
+            assertEquals(HasManagedListSTPlmParentA.class, result.get(0).getInstanceValueClass());
         }
 
     }
