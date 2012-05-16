@@ -26,6 +26,7 @@ import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.financial.GlCode;
 import com.propertyvista.domain.financial.GlCodeCategory;
 import com.propertyvista.domain.financial.MerchantAccount;
+import com.propertyvista.domain.financial.MerchantTransaction;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.BillingRun;
@@ -121,6 +122,7 @@ public class CrmEntityMapper {
         AppPlaceEntityMapper.register(Showing.class, Marketing.Showing.class, defaultImage);
 
         AppPlaceEntityMapper.register(BillingRun.class, CrmSiteMap.Finance.BillingRun.class, defaultImage);
+        AppPlaceEntityMapper.register(MerchantTransaction.class, CrmSiteMap.Finance.MerchantTransaction.class, defaultImage);
 
         AppPlaceEntityMapper.register(Employee.class, CrmSiteMap.Organization.Employee.class, defaultImage);
         AppPlaceEntityMapper.register(Portfolio.class, CrmSiteMap.Organization.Portfolio.class, defaultImage);

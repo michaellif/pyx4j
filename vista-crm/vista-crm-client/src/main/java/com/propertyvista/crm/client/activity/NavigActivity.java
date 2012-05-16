@@ -101,6 +101,7 @@ public class NavigActivity extends AbstractActivity implements NavigView.MainNav
 
         //Finance
         folder = new NavigFolder(i18n.tr("Finance"), CrmImages.INSTANCE.financeNormal(), CrmImages.INSTANCE.financeHover(), CrmImages.INSTANCE.financeActive());
+        folder.addNavigItem(new CrmSiteMap.Finance.MerchantTransaction());
         list.add(folder);
 
         //Organization
