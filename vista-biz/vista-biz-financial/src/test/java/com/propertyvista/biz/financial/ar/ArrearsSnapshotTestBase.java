@@ -52,9 +52,11 @@ public class ArrearsSnapshotTestBase extends FinancialTestBase {
         actualArrearsSnapshot = ARArrearsManager.getArrearsSnapshot(billingAccount(), asDate(asOf));
 
         for (AgingBuckets expected : expectedAgingBuckets.values()) {
-            assertArrearsDebitType(expected.debitType().getValue(), expected.bucketCurrent().getValue().toString(), expected.bucket30().getValue().toString(),
-                    expected.bucket60().getValue().toString(), expected.bucket90().getValue().toString(), expected.bucketOver90().getValue().toString());
-
+            if (expected.debitType().getValue() != DebitType.total) {
+                assertArrearsDebitType(expected.debitType().getValue(), expected.bucketCurrent().getValue().toString(), expected.bucket30().getValue()
+                        .toString(), expected.bucket60().getValue().toString(), expected.bucket90().getValue().toString(), expected.bucketOver90().getValue()
+                        .toString());
+            }
         }
         AgingBuckets expectedTotal = expectedAgingBuckets.get(DebitType.total);
         assertArrearsTotal(expectedTotal.bucketCurrent().getValue().toString(), expectedTotal.bucket30().getValue().toString(), expectedTotal.bucket60()
@@ -66,8 +68,8 @@ public class ArrearsSnapshotTestBase extends FinancialTestBase {
 
         for (AgingBuckets actualBuckets : actualArrearsSnapshot.agingBuckets()) {
             if (actualBuckets.debitType().getValue() == debitType) {
-                assertAgingBuckets(actualBuckets, expectedAgingBuckets(debitType, expectedCurrent, expected30, expected60, expected90, expectedOver90));
-                break;
+                assertAgingBuckets(expectedAgingBuckets(debitType, expectedCurrent, expected30, expected60, expected90, expectedOver90), actualBuckets);
+                return;
             }
         }
         assertTrue("arrears snapshot does not contain aging bucket of type " + debitType, false);
@@ -84,9 +86,9 @@ public class ArrearsSnapshotTestBase extends FinancialTestBase {
         expected.debitType().setValue(debitType);
         expected.bucketCurrent().setValue(new BigDecimal(expectedCurrent));
         expected.bucket30().setValue(new BigDecimal(expected30));
-        expected.bucketCurrent().setValue(new BigDecimal(expected60));
-        expected.bucketCurrent().setValue(new BigDecimal(expected90));
-        expected.bucketCurrent().setValue(new BigDecimal(expectedOver90));
+        expected.bucket60().setValue(new BigDecimal(expected60));
+        expected.bucket90().setValue(new BigDecimal(expected90));
+        expected.bucketOver90().setValue(new BigDecimal(expectedOver90));
 
         AgingBuckets cachedExpected = expectedAgingBuckets.get(debitType);
         if (cachedExpected == null) {
@@ -107,7 +109,7 @@ public class ArrearsSnapshotTestBase extends FinancialTestBase {
         assertEquals("bucket 30", expected.bucket30().getValue(), actual.bucket30().getValue());
         assertEquals("bucket 60", expected.bucket60().getValue(), actual.bucket60().getValue());
         assertEquals("bucket 90", expected.bucket90().getValue(), actual.bucket90().getValue());
-        assertEquals("bucket over 90", expected.bucketOver90(), actual.bucketOver90().getValue());
+        assertEquals("bucket over 90", expected.bucketOver90().getValue(), actual.bucketOver90().getValue());
     }
 
     private LogicalDate asDate(String date) {

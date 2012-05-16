@@ -39,9 +39,9 @@ public class ArrearsSnapshotTest extends ArrearsSnapshotTestBase {
     }
 
     public void testLeaseScenario() {
-        setLeaseConditions("23-Mar-2011", "03-Aug-2011", 1);
-        addParking();
-        addPet();
+        setLeaseConditions("23-Mar-2011", "03-Aug-2011", 1); // lease $930 
+        addParking(); // parking $80
+//        addPet(); // pet $20
 
         // RUN 1
         setSysDate("18-Mar-2011");
@@ -50,26 +50,28 @@ public class ArrearsSnapshotTest extends ArrearsSnapshotTestBase {
 
         updateArrearsHistory();
         beginAssertArrearsSnapshot("18-Mar-2011");
-        assertArrearsDebitType(DebitType.lease, "302.50", "0.0", "0.0", "0.0", "0.0");
-        assertArrearsDebitType(DebitType.parking, "302.50", "0.0", "0.0", "0.0", "0.0");
-        assertArrearsDebitType(DebitType.pet, "302.50", "0.0", "0.0", "0.0", "0.0");
-        assertArrearsTotal("302.50", "0.0", "0.0", "0.0", "0.0");
+        // TODO these values were copied from ARSunnyDayScenarioTest: I have no idea how they were calculated, need to ask Michael  
+        assertArrearsDebitType(DebitType.lease, "302.50", "0.00", "0.00", "0.00", "0.00");
+        assertArrearsDebitType(DebitType.parking, "26.02", "0.00", "0.00", "0.00", "0.00");
+        assertArrearsDebitType(DebitType.deposit, "930.30", "0.00", "0.00", "0.00", "0.00"); // TODO how deposit is calulcated???
+//        assertArrearsDebitType(DebitType.pet, "22.40", "0.00", "0.00", "0.0", "0.0");
+        assertArrearsTotal("1258.82", "0.00", "0.00", "0.00", "0.00");
 
         setSysDate("30-Mar-2011");
         updateArrearsHistory();
 
-        assertPrevArrearsSnapshot("18-Mar-2001");
-        assertPrevArrearsSnapshot("19-Mar-2001");
-        assertPrevArrearsSnapshot("20-Mar-2001");
-        assertPrevArrearsSnapshot("30-Mar-2001");
+        assertPrevArrearsSnapshot("18-Mar-2011");
+        assertPrevArrearsSnapshot("19-Mar-2011");
+        assertPrevArrearsSnapshot("20-Mar-2011");
+        assertPrevArrearsSnapshot("30-Mar-2011");
 
-        setSysDate("1-Apr-2011");
-        assertPrevArrearsSnapshot("31-Mar-2001");
-        beginAssertArrearsSnapshot("1-Apr-2011");
-        assertArrearsDebitType(DebitType.lease, "0.0", "302.50", "0.0", "0.0", "0.0");
-        assertArrearsDebitType(DebitType.parking, "0.0", "302.50", "0.0", "0.0", "0.0");
-        assertArrearsDebitType(DebitType.pet, "0.0", "302.50", "0.0", "0.0", "0.0");
-        assertArrearsTotal("302.50", "0.0", "0.0", "0.0", "0.0");
+        setSysDate("01-Apr-2011");
+        assertPrevArrearsSnapshot("31-Mar-2011");
+        beginAssertArrearsSnapshot("01-Apr-2011");
+        assertArrearsDebitType(DebitType.lease, "0.00", "302.50", "0.00", "0.00", "0.00");
+        assertArrearsDebitType(DebitType.parking, "0.00", "302.50", "0.00", "0.00", "0.00");
+        assertArrearsDebitType(DebitType.pet, "0.00", "302.50", "0.00", "0.00", "0.00");
+        assertArrearsTotal("302.50", "0.00", "0.00", "0.00", "0.00");
 
         setSysDate("15-Apr-2011");
         updateArrearsHistory();
@@ -83,7 +85,7 @@ public class ArrearsSnapshotTest extends ArrearsSnapshotTestBase {
         updateArrearsHistory();
         // TODO assert current bucket must be updated
 
-        setSysDate("1-May-2011");
+        setSysDate("01-May-2011");
 
     }
 }

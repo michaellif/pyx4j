@@ -44,6 +44,7 @@ public interface ArrearsSnapshot extends IEntity {
 
     IPrimitive<BigDecimal> creditAmount();
 
+    @Owned
     AgingBuckets totalAgingBuckets();
 
     @Owned

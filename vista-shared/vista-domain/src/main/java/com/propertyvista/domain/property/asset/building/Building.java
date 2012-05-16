@@ -44,6 +44,7 @@ import com.propertyvista.domain.dashboard.gadgets.arrears.MockupArrearsSummary;
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitTurnoverStats;
 import com.propertyvista.domain.financial.BuildingMerchantAccount;
 import com.propertyvista.domain.financial.MerchantAccount;
+import com.propertyvista.domain.financial.billing.BuildingArrearsSnapshot;
 import com.propertyvista.domain.financial.offering.ProductCatalog;
 import com.propertyvista.domain.marketing.Marketing;
 import com.propertyvista.domain.media.Media;
@@ -170,7 +171,12 @@ public interface Building extends PolicyNode, NotesAndAttachmentsNode {
     @Detached(level = AttachLevel.Detached)
     ISet<MockupArrearsSummary> _ArrearsSummaries();
 
+    @Owned(cascade = {})
+    @Detached(level = AttachLevel.Detached)
+    ISet<BuildingArrearsSnapshot> _ArrearsSnapshots();
+
     @Owned
     @Detached(level = AttachLevel.Detached)
     ISet<UnitTurnoverStats> _UnitTurnoverStats();
+
 }
