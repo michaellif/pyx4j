@@ -22,8 +22,6 @@ import com.propertyvista.dto.ParkingDTO;
 public interface ParkingViewerView extends IViewerView<ParkingDTO> {
 
     interface Presenter extends IViewerView.Presenter {
-
-        IListerView.Presenter getSpotPresenter();
     }
 
     IListerView<ParkingSpot> getSpotView();

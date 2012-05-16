@@ -22,9 +22,6 @@ import com.propertyvista.dto.LockerAreaDTO;
 public interface LockerAreaViewerView extends IViewerView<LockerAreaDTO> {
 
     interface Presenter extends IViewerView.Presenter {
-
-        IListerView.Presenter getLockerPresenter();
-
     }
 
     IListerView<Locker> getLockerView();

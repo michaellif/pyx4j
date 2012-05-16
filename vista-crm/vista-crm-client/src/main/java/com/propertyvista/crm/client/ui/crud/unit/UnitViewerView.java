@@ -27,10 +27,6 @@ public interface UnitViewerView extends IViewerView<AptUnitDTO> {
 
     interface Presenter extends IViewerView.Presenter {
 
-        IListerView.Presenter getUnitItemsPresenter();
-
-        IListerView.Presenter getOccupanciesPresenter();
-
         void scopeOffMarket(OffMarketType type);
 
         void scopeRenovation(LogicalDate renovationEndDate);

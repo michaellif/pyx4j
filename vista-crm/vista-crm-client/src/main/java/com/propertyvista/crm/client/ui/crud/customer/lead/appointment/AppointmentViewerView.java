@@ -22,8 +22,6 @@ import com.propertyvista.domain.tenant.lead.Showing;
 public interface AppointmentViewerView extends IViewerView<Appointment> {
 
     interface Presenter extends IViewerView.Presenter {
-
-        IListerView.Presenter<Showing> getShowingsPresenter();
     }
 
     IListerView<Showing> getShowingsListerView();

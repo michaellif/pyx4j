@@ -37,28 +37,6 @@ public interface BuildingViewerView extends IViewerView<BuildingDTO> {
 
         DashboardView.Presenter getDashboardPresenter();
 
-        IListerView.Presenter<FloorplanDTO> getFloorplanPresenter();
-
-        IListerView.Presenter<AptUnitDTO> getUnitPresenter();
-
-        IListerView.Presenter<ElevatorDTO> getElevatorPresenter();
-
-        IListerView.Presenter<BoilerDTO> getBoilerPresenter();
-
-        IListerView.Presenter<RoofDTO> getRoofPresenter();
-
-        IListerView.Presenter<ParkingDTO> getParkingPresenter();
-
-        IListerView.Presenter<LockerAreaDTO> getLockerAreaPresenter();
-
-        IListerView.Presenter<Service> getServicePresenter();
-
-        IListerView.Presenter<Feature> getFeaturePresenter();
-
-        IListerView.Presenter<Concession> getConcessionPresenter();
-
-        IListerView.Presenter<BillingRun> getBillingRunPresenter();
-
         void runBill();
     }
 

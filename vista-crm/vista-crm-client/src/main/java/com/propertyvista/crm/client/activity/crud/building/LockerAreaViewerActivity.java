@@ -43,11 +43,6 @@ public class LockerAreaViewerActivity extends CrmViewerActivity<LockerAreaDTO> i
     }
 
     @Override
-    public IListerView.Presenter<?> getLockerPresenter() {
-        return lockerLister;
-    }
-
-    @Override
     public void onPopulateSuccess(LockerAreaDTO result) {
         super.onPopulateSuccess(result);
 

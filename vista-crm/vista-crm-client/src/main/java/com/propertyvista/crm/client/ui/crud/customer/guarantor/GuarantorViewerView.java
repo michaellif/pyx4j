@@ -24,8 +24,6 @@ public interface GuarantorViewerView extends IViewerView<GuarantorDTO> {
 
     interface Presenter extends IViewerView.Presenter {
 
-        IListerView.Presenter<PersonScreening> getScreeningListerPresenter();
-
         void goToChangePassword(Key guarantorPrincipalPk, String guarantorName);
     }
 

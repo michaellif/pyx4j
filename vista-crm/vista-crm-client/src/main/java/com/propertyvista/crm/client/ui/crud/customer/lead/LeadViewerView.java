@@ -29,8 +29,6 @@ public interface LeadViewerView extends IViewerView<Lead> {
 
     interface Presenter extends IViewerView.Presenter {
 
-        IListerView.Presenter<Appointment> getAppointmentsPresenter();
-
         void getInterestedUnits(AsyncCallback<List<AptUnit>> callback);
 
         void convertToLease(Key unitId);

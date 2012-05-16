@@ -31,7 +31,6 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.client.activity.crud.ListerActivityBase;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
-import com.pyx4j.site.client.ui.crud.lister.IListerView.Presenter;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.activity.crud.lease.common.LeaseViewerActivityBase;
@@ -73,21 +72,6 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
 
         leaseAdjustmentLister = new ListerActivityBase<LeaseAdjustment>(place, ((LeaseViewerView) getView()).getLeaseAdjustmentListerView(),
                 (AbstractCrudService<LeaseAdjustment>) GWT.create(LeaseAdjustmentCrudService.class), LeaseAdjustment.class);
-    }
-
-    @Override
-    public Presenter<BillDTO> getBillListerPresenter() {
-        return billLister;
-    }
-
-    @Override
-    public Presenter<PaymentRecordDTO> getPaymentListerPresenter() {
-        return paymentLister;
-    }
-
-    @Override
-    public Presenter<LeaseAdjustment> getLeaseAdjustmentListerPresenter() {
-        return leaseAdjustmentLister;
     }
 
     @Override

@@ -43,11 +43,6 @@ public class ParkingViewerActivity extends CrmViewerActivity<ParkingDTO> impleme
     }
 
     @Override
-    public IListerView.Presenter getSpotPresenter() {
-        return spotLister;
-    }
-
-    @Override
     public void onPopulateSuccess(ParkingDTO result) {
         super.onPopulateSuccess(result);
 

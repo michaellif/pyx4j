@@ -22,7 +22,6 @@ import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.activity.crud.ListerActivityBase;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
-import com.pyx4j.site.client.ui.crud.lister.IListerView.Presenter;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
@@ -47,11 +46,6 @@ public class TenantViewerActivity extends CrmViewerActivity<TenantDTO> implement
 
         screeningLister = new ListerActivityBase<PersonScreening>(place, ((TenantViewerView) getView()).getScreeningListerView(),
                 (AbstractCrudService<PersonScreening>) GWT.create(PersonScreeningCrudService.class), PersonScreening.class);
-    }
-
-    @Override
-    public Presenter<PersonScreening> getScreeningListerPresenter() {
-        return screeningLister;
     }
 
     @Override

@@ -23,7 +23,6 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.site.client.activity.crud.ListerActivityBase;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
-import com.pyx4j.site.client.ui.crud.lister.IListerView.Presenter;
 
 import com.propertyvista.crm.client.ui.crud.settings.financial.producttype.ProductDictionaryView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.SettingsViewFactory;
@@ -83,16 +82,6 @@ public class ProductDictionaryViewActivity extends AbstractActivity implements P
     @Override
     public void cancel() {
         // nothing needs here!..
-    }
-
-    @Override
-    public Presenter getServiceListerPresenter() {
-        return serviceLister;
-    }
-
-    @Override
-    public Presenter getFeatureListerPresenter() {
-        return featureLister;
     }
 
     @Override

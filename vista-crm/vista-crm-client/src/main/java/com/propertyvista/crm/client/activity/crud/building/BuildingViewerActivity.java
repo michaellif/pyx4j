@@ -132,61 +132,6 @@ public class BuildingViewerActivity extends CrmViewerActivity<BuildingDTO> imple
     }
 
     @Override
-    public Presenter<FloorplanDTO> getFloorplanPresenter() {
-        return floorplanLister;
-    }
-
-    @Override
-    public Presenter<AptUnitDTO> getUnitPresenter() {
-        return unitLister;
-    }
-
-    @Override
-    public Presenter<ElevatorDTO> getElevatorPresenter() {
-        return elevatorLister;
-    }
-
-    @Override
-    public Presenter<BoilerDTO> getBoilerPresenter() {
-        return boilerLister;
-    }
-
-    @Override
-    public Presenter<RoofDTO> getRoofPresenter() {
-        return roofLister;
-    }
-
-    @Override
-    public Presenter<ParkingDTO> getParkingPresenter() {
-        return parkingLister;
-    }
-
-    @Override
-    public Presenter<LockerAreaDTO> getLockerAreaPresenter() {
-        return lockerAreaLister;
-    }
-
-    @Override
-    public Presenter<Service> getServicePresenter() {
-        return serviceLister;
-    }
-
-    @Override
-    public Presenter<Feature> getFeaturePresenter() {
-        return featureLister;
-    }
-
-    @Override
-    public Presenter<Concession> getConcessionPresenter() {
-        return concessionLister;
-    }
-
-    @Override
-    public Presenter<BillingRun> getBillingRunPresenter() {
-        return billingRunLister;
-    }
-
-    @Override
     public void runBill() {
         // TODO Auto-generated method stub
     }

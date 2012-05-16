@@ -24,7 +24,6 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.activity.crud.ListerActivityBase;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
-import com.pyx4j.site.client.ui.crud.lister.IListerView.Presenter;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
@@ -61,16 +60,6 @@ public class UnitViewerActivity extends CrmViewerActivity<AptUnitDTO> implements
 
         occupancyManagerService = GWT.create(UnitOccupancyManagerService.class);
 
-    }
-
-    @Override
-    public Presenter<?> getUnitItemsPresenter() {
-        return unitItemsLister;
-    }
-
-    @Override
-    public Presenter<?> getOccupanciesPresenter() {
-        return OccupanciesLister;
     }
 
     @Override

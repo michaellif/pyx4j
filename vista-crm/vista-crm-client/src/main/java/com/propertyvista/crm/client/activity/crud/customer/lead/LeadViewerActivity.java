@@ -27,7 +27,6 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.client.activity.crud.ListerActivityBase;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
-import com.pyx4j.site.client.ui.crud.lister.IListerView.Presenter;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
@@ -85,11 +84,6 @@ public class LeadViewerActivity extends CrmViewerActivity<Lead> implements LeadV
         if (!((LeadViewerView) getView()).onConvertionFail(caught)) {
             throw new UnrecoverableClientError(caught);
         }
-    }
-
-    @Override
-    public Presenter<Appointment> getAppointmentsPresenter() {
-        return appointmentsLister;
     }
 
     @Override

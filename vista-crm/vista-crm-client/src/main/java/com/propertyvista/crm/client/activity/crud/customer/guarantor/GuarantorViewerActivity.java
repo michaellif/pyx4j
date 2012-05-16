@@ -21,7 +21,6 @@ import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.activity.crud.ListerActivityBase;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
-import com.pyx4j.site.client.ui.crud.lister.IListerView.Presenter;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
@@ -45,11 +44,6 @@ public class GuarantorViewerActivity extends CrmViewerActivity<GuarantorDTO> imp
 
         screeningLister = new ListerActivityBase<PersonScreening>(place, ((GuarantorViewerView) getView()).getScreeningListerView(),
                 (AbstractCrudService<PersonScreening>) GWT.create(PersonScreeningCrudService.class), PersonScreening.class);
-    }
-
-    @Override
-    public Presenter<PersonScreening> getScreeningListerPresenter() {
-        return screeningLister;
     }
 
     @Override

@@ -23,10 +23,6 @@ import com.propertyvista.domain.financial.offering.ServiceItemType;
 public interface ProductDictionaryView extends IViewerView<ProductItemType> {
 
     public interface Presenter extends IViewerView.Presenter {
-
-        IListerView.Presenter getServiceListerPresenter();
-
-        IListerView.Presenter getFeatureListerPresenter();
     }
 
     IListerView<ServiceItemType> getServiceListerView();

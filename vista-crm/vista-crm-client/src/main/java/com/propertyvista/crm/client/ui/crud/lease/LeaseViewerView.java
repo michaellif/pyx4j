@@ -31,12 +31,6 @@ public interface LeaseViewerView extends IViewerView<LeaseDTO> {
 
     interface Presenter extends IViewerView.Presenter, LeaseViewerPresenterBase {
 
-        IListerView.Presenter<BillDTO> getBillListerPresenter();
-
-        IListerView.Presenter<PaymentRecordDTO> getPaymentListerPresenter();
-
-        IListerView.Presenter<LeaseAdjustment> getLeaseAdjustmentListerPresenter();
-
         void startBilling();
 
         void notice(LogicalDate date, LogicalDate moveOut);

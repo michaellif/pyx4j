@@ -19,7 +19,6 @@ import com.google.gwt.core.client.GWT;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.site.client.activity.crud.ListerActivityBase;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
-import com.pyx4j.site.client.ui.crud.lister.IListerView.Presenter;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
@@ -41,11 +40,6 @@ public class AppointmentViewerActivity extends CrmViewerActivity<Appointment> im
         showingsLister = new ListerActivityBase<Showing>(place, ((AppointmentViewerView) getView()).getShowingsListerView(),
                 (AbstractCrudService<Showing>) GWT.create(ShowingCrudService.class), Showing.class);
 
-    }
-
-    @Override
-    public Presenter<Showing> getShowingsPresenter() {
-        return showingsLister;
     }
 
     @Override
