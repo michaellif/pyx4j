@@ -78,5 +78,5 @@ public interface MerchantTransaction extends IEntity {
 
     @Detached(level = AttachLevel.Detached)
     @JoinTable(value = PaymentRecord.class, mappedBy = ReturnTransactionId.class)
-    ISet<PaymentRecord> rejectedPayments();
+    ISet<PaymentRecord> returnedPayments();
 }
