@@ -276,7 +276,6 @@ public class BillingProductChargeProcessor extends AbstractProcessor {
                 return;
             }
 
-            //TODO use policy to determin proration type
             BigDecimal proration = ProrationUtils.prorate(overlap.getFromDate(), overlap.getToDate(), billing.getNextPeriodBill().billingRun().building());
             adjustment.amount().setValue(amount.multiply(proration));
         }
@@ -300,7 +299,6 @@ public class BillingProductChargeProcessor extends AbstractProcessor {
     }
 
     private BigDecimal prorate(InvoiceProductCharge charge) {
-        //TODO use policy to determin proration type
         BigDecimal proration = ProrationUtils.prorate(charge.fromDate().getValue(), charge.toDate().getValue(), billing.getNextPeriodBill().billingRun()
                 .building());
         return charge.chargeSubLineItem().billableItem().item().price().getValue().multiply(proration);

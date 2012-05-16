@@ -14,6 +14,7 @@
 package com.propertyvista.biz.financial.billing;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 import com.pyx4j.config.server.ServerSideFactory;
 
@@ -21,15 +22,15 @@ import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.domain.policy.policies.LeaseBillingPolicy;
 import com.propertyvista.domain.property.asset.building.Building;
 
-public class LeaseBillingUtils {
+public class LatePaymentUtils {
 
     public static BigDecimal calculateLatePaymentFee(BigDecimal amount, BigDecimal monthlyRent, Building building) {
         LeaseBillingPolicy leaseBillingPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(building, LeaseBillingPolicy.class);
 
-        return calculateLatePaymentFee(leaseBillingPolicy, amount, monthlyRent);
+        return calculateLatePaymentFee(amount, monthlyRent, leaseBillingPolicy);
     }
 
-    public static BigDecimal calculateLatePaymentFee(LeaseBillingPolicy policy, BigDecimal amount, BigDecimal monthlyRent) {
+    public static BigDecimal calculateLatePaymentFee(BigDecimal amount, BigDecimal monthlyRent, LeaseBillingPolicy policy) {
         BigDecimal fee = new BigDecimal("0.00");
 
         if (amount.compareTo(fee) == 0)
@@ -62,6 +63,6 @@ public class LeaseBillingUtils {
             break;
         }
 
-        return fee;
+        return fee.setScale(2, RoundingMode.HALF_UP);
     }
 }

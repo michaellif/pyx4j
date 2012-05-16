@@ -14,7 +14,6 @@
 package com.propertyvista.biz.financial.billing;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 
 import com.pyx4j.entity.shared.EntityFactory;
 
@@ -23,94 +22,76 @@ import com.propertyvista.domain.policy.policies.LeaseBillingPolicy;
 import com.propertyvista.domain.policy.policies.domain.LateFeeItem.BaseFeeType;
 import com.propertyvista.domain.policy.policies.domain.LateFeeItem.MaxTotalFeeType;
 
-public class LeaseBillingCalculationTest extends VistaDBTestBase {
+public class LatePaymentTest extends VistaDBTestBase {
 
     public void testZeroAmountOwning() {
         LeaseBillingPolicy policy = EntityFactory.create(LeaseBillingPolicy.class);
-
-        BigDecimal projectedFee = new BigDecimal(0).setScale(2, RoundingMode.HALF_UP);
-        BigDecimal lateFee = LeaseBillingUtils.calculateLatePaymentFee(policy, new BigDecimal("0.00"), new BigDecimal("500.00")).setScale(2,
-                RoundingMode.HALF_UP);
-
-        assertEquals(projectedFee, lateFee);
+        BigDecimal lateFee = LatePaymentUtils.calculateLatePaymentFee(new BigDecimal("0.00"), new BigDecimal("500.00"), policy);
+        assertEquals(new BigDecimal("0.00"), lateFee);
     }
 
     public void testBaseFeeType() {
         LeaseBillingPolicy policy = EntityFactory.create(LeaseBillingPolicy.class);
 
-        BigDecimal baseFee = new BigDecimal("100.00");
         BigDecimal ownedTotal = new BigDecimal("205.55");
-        BigDecimal montlyRent = new BigDecimal("1500.00");
-        BigDecimal maxTotalFee = new BigDecimal("500.00");
+        BigDecimal monthlyRent = new BigDecimal("1500.00");
 
-        policy.lateFee().baseFee().setValue(baseFee);
+        policy.lateFee().baseFee().setValue(new BigDecimal("100.00"));
         policy.lateFee().baseFeeType().setValue(BaseFeeType.FlatAmount);
-        policy.lateFee().maxTotalFee().setValue(maxTotalFee);
+        policy.lateFee().maxTotalFee().setValue(new BigDecimal("500.00"));
         policy.lateFee().maxTotalFeeType().setValue(MaxTotalFeeType.FlatAmount);
 
-        BigDecimal calculatedLateFee = LeaseBillingUtils.calculateLatePaymentFee(policy, ownedTotal, montlyRent);
-        BigDecimal projectedFee = baseFee;
-        assertEquals(projectedFee, calculatedLateFee);
+        BigDecimal calculatedLateFee = LatePaymentUtils.calculateLatePaymentFee(ownedTotal, monthlyRent, policy);
+        assertEquals(new BigDecimal("100.00"), calculatedLateFee);
 
-        baseFee = new BigDecimal("0.1");
-
-        policy.lateFee().baseFee().setValue(baseFee);
+        policy.lateFee().baseFee().setValue(new BigDecimal("0.1"));
         policy.lateFee().baseFeeType().setValue(BaseFeeType.PercentOwedTotal);
 
-        projectedFee = ownedTotal.multiply(baseFee);
-        calculatedLateFee = LeaseBillingUtils.calculateLatePaymentFee(policy, ownedTotal, montlyRent);
-        assertEquals(projectedFee, calculatedLateFee);
+        calculatedLateFee = LatePaymentUtils.calculateLatePaymentFee(ownedTotal, monthlyRent, policy);
+        assertEquals(new BigDecimal("20.56"), calculatedLateFee);
 
-        baseFee = new BigDecimal("0.1");
-
-        policy.lateFee().baseFee().setValue(baseFee);
+        policy.lateFee().baseFee().setValue(new BigDecimal("0.1"));
         policy.lateFee().baseFeeType().setValue(BaseFeeType.PercentMonthlyRent);
 
-        projectedFee = montlyRent.multiply(baseFee);
-        calculatedLateFee = LeaseBillingUtils.calculateLatePaymentFee(policy, ownedTotal, montlyRent);
-        assertEquals(projectedFee, calculatedLateFee);
+        calculatedLateFee = LatePaymentUtils.calculateLatePaymentFee(ownedTotal, monthlyRent, policy);
+        assertEquals(new BigDecimal("150.00"), calculatedLateFee);
     }
 
     public void testMaxFeeType() {
         LeaseBillingPolicy policy = EntityFactory.create(LeaseBillingPolicy.class);
 
-        BigDecimal baseFee = new BigDecimal("200.00");
         BigDecimal ownedTotal = new BigDecimal("205.55");
-        BigDecimal montlyRent = new BigDecimal("1500.00");
+        BigDecimal monthlyRent = new BigDecimal("1500.00");
         BigDecimal maxTotalFee = new BigDecimal("0.1");
 
-        policy.lateFee().baseFee().setValue(baseFee);
+        policy.lateFee().baseFee().setValue(new BigDecimal("200.00"));
         policy.lateFee().baseFeeType().setValue(BaseFeeType.FlatAmount);
         policy.lateFee().maxTotalFee().setValue(maxTotalFee);
         policy.lateFee().maxTotalFeeType().setValue(MaxTotalFeeType.PercentMonthlyRent);
 
-        BigDecimal calculatedLateFee = LeaseBillingUtils.calculateLatePaymentFee(policy, ownedTotal, montlyRent);
-        BigDecimal projectedFee = baseFee.min(montlyRent.multiply(maxTotalFee));
-        assertEquals(projectedFee, calculatedLateFee);
+        BigDecimal calculatedLateFee = LatePaymentUtils.calculateLatePaymentFee(ownedTotal, monthlyRent, policy);
+        assertEquals(new BigDecimal("150.00"), calculatedLateFee);
 
         policy.lateFee().maxTotalFeeType().setValue(MaxTotalFeeType.Unlimited);
-        calculatedLateFee = LeaseBillingUtils.calculateLatePaymentFee(policy, ownedTotal, montlyRent);
-        projectedFee = baseFee;
-        assertEquals(projectedFee, calculatedLateFee);
+        calculatedLateFee = LatePaymentUtils.calculateLatePaymentFee(ownedTotal, monthlyRent, policy);
+        assertEquals(new BigDecimal("200.00"), calculatedLateFee);
     }
 
     public void testCombined() {
         LeaseBillingPolicy policy = EntityFactory.create(LeaseBillingPolicy.class);
 
-        BigDecimal baseFee = new BigDecimal("0.1");
         BigDecimal ownedTotal = new BigDecimal("3000.55");
         BigDecimal montlyRent = new BigDecimal("1500.00");
         BigDecimal maxTotalFee = new BigDecimal("0.1");
 
-        policy.lateFee().baseFee().setValue(baseFee);
+        policy.lateFee().baseFee().setValue(new BigDecimal("0.1"));
         policy.lateFee().baseFeeType().setValue(BaseFeeType.PercentOwedTotal);
         policy.lateFee().maxTotalFee().setValue(maxTotalFee);
         policy.lateFee().maxTotalFeeType().setValue(MaxTotalFeeType.PercentMonthlyRent);
 
-        BigDecimal calculatedLateFee = LeaseBillingUtils.calculateLatePaymentFee(policy, ownedTotal, montlyRent);
+        BigDecimal calculatedLateFee = LatePaymentUtils.calculateLatePaymentFee(ownedTotal, montlyRent, policy);
 
-        BigDecimal projectedFee = montlyRent.multiply(maxTotalFee).min(ownedTotal.multiply(baseFee));
-        assertEquals(projectedFee, calculatedLateFee);
+        assertEquals(new BigDecimal("150.00"), calculatedLateFee);
 
     }
 }
