@@ -30,11 +30,11 @@ import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.ISet;
 
-import com.propertyvista.domain.financial.billing.ArrearsSnapshot;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.financial.billing.BillingRun;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
+import com.propertyvista.domain.financial.billing.LeaseArrearsSnapshot;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 
@@ -110,6 +110,6 @@ public interface BillingAccount extends IEntity {
 
     @Owned(cascade = {})
     @Detached(level = AttachLevel.Detached)
-    ISet<ArrearsSnapshot> arrearsSnapshots();
+    ISet<LeaseArrearsSnapshot> arrearsSnapshots();
 
 }

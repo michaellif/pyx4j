@@ -40,12 +40,13 @@ import com.propertyvista.domain.financial.billing.AgingBuckets;
 import com.propertyvista.domain.financial.billing.ArrearsSnapshot;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
 import com.propertyvista.domain.financial.billing.InvoiceDebit.DebitType;
+import com.propertyvista.domain.financial.billing.LeaseArrearsSnapshot;
 import com.propertyvista.domain.property.asset.building.Building;
 
 public class ARArrearsManager {
 
-    private static ArrearsSnapshot createArrearsSnapshot(BillingAccount billingAccount) {
-        ArrearsSnapshot arrearsSnapshot = createZeroArrearsSnapshot();
+    private static LeaseArrearsSnapshot createArrearsSnapshot(BillingAccount billingAccount) {
+        LeaseArrearsSnapshot arrearsSnapshot = createZeroArrearsSnapshot();
         arrearsSnapshot.agingBuckets().addAll(getAgingBuckets(billingAccount));
         arrearsSnapshot.totalAgingBuckets().set(calculateTotalAgingBuckets(arrearsSnapshot.agingBuckets()));
         BigDecimal arrearsAmount = arrearsSnapshot.totalAgingBuckets().bucket30().getValue();
@@ -91,16 +92,16 @@ public class ARArrearsManager {
 
     static void updateArrearsHistory(BillingAccount billingAccount) {
         // 1. createArrearsSnapshot for current time
-        ArrearsSnapshot currentSnapshot = createArrearsSnapshot(billingAccount);
+        LeaseArrearsSnapshot currentSnapshot = createArrearsSnapshot(billingAccount);
 
         // 2. retrieve previous ArrearsSnapshot
         LogicalDate now = new LogicalDate(Persistence.service().getTransactionSystemTime());
 
-        EntityQueryCriteria<ArrearsSnapshot> criteria = EntityQueryCriteria.create(ArrearsSnapshot.class);
+        EntityQueryCriteria<LeaseArrearsSnapshot> criteria = EntityQueryCriteria.create(LeaseArrearsSnapshot.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().billingAccount(), billingAccount));
         criteria.add(PropertyCriterion.le(criteria.proto().toDate(), now));
         criteria.desc(criteria.proto().fromDate());
-        ArrearsSnapshot previousSnapshot = Persistence.service().retrieve(criteria);
+        LeaseArrearsSnapshot previousSnapshot = Persistence.service().retrieve(criteria);
 
         // 3. compare 1 and 2 - if it is a difference persist first and update toDate of second otherwise do nothing (if 
         if (previousSnapshot == null || areDifferent(currentSnapshot, previousSnapshot)) {
@@ -138,13 +139,13 @@ public class ARArrearsManager {
         // TODO Aryom
     }
 
-    static ArrearsSnapshot getArrearsSnapshot(BillingAccount billingAccount, LogicalDate date) {
-        EntityQueryCriteria<ArrearsSnapshot> criteria = EntityQueryCriteria.create(ArrearsSnapshot.class);
+    static LeaseArrearsSnapshot getArrearsSnapshot(BillingAccount billingAccount, LogicalDate date) {
+        EntityQueryCriteria<LeaseArrearsSnapshot> criteria = EntityQueryCriteria.create(LeaseArrearsSnapshot.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().billingAccount(), billingAccount));
         criteria.add(PropertyCriterion.le(criteria.proto().fromDate(), date));
         criteria.add(PropertyCriterion.ge(criteria.proto().toDate(), date));
 
-        ArrearsSnapshot snapshot = Persistence.service().retrieve(criteria);
+        LeaseArrearsSnapshot snapshot = Persistence.service().retrieve(criteria);
         return snapshot;
     }
 
@@ -233,8 +234,8 @@ public class ARArrearsManager {
         return agingBuckets;
     }
 
-    private static ArrearsSnapshot createZeroArrearsSnapshot() {
-        ArrearsSnapshot snapshot = EntityFactory.create(ArrearsSnapshot.class);
+    private static LeaseArrearsSnapshot createZeroArrearsSnapshot() {
+        LeaseArrearsSnapshot snapshot = EntityFactory.create(LeaseArrearsSnapshot.class);
         snapshot.arrearsAmount().setValue(BigDecimal.ZERO);
         snapshot.creditAmount().setValue(BigDecimal.ZERO);
         snapshot.totalAgingBuckets().set(createAgingBuckets(DebitType.total));

@@ -16,28 +16,19 @@ package com.propertyvista.domain.financial.billing;
 import java.math.BigDecimal;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.annotations.Detached;
-import com.pyx4j.entity.annotations.Indexed;
-import com.pyx4j.entity.annotations.JoinColumn;
+import com.pyx4j.entity.annotations.AbstractEntity;
+import com.pyx4j.entity.annotations.Inheritance;
+import com.pyx4j.entity.annotations.Inheritance.InheritanceStrategy;
 import com.pyx4j.entity.annotations.Owned;
-import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.Table;
-import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.financial.BillingAccount;
-
 @Table(prefix = "billing")
+@AbstractEntity
+@Inheritance(strategy = InheritanceStrategy.SINGLE_TABLE)
 public interface ArrearsSnapshot extends IEntity {
-
-    @Owner
-    @Detached
-    @NotNull
-    @Indexed
-    @JoinColumn
-    BillingAccount billingAccount();
 
     /**
      * a date when this snapshot was taken
