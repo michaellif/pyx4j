@@ -43,12 +43,12 @@ import com.propertyvista.portal.rpc.ptapp.dto.welcomewizard.PurchaseInsuranceDTO
 public class InsurancePurchaseForm extends CEntityDecoratableForm<PurchaseInsuranceDTO> {
 
     private final static BigDecimal[] PERSONAL_CONTENTS_LIMITS_OPTIONS = asBigDecimals(10000, 12000, 14000, 16000, 18000, 20000, 22000, 24000, 26000, 28000,
-            30000, 35000, 40000, 50000, 60000);
+            30000, 35000, 40000, 50000, 60000, 70000, 80000);
 
     private final static BigDecimal[] PROPERTY_AWAY_FROM_PREMISES_OPTIONS = asBigDecimals(0, 1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000);
 
     private final static BigDecimal[] ADDITIONAL_LIVING_EXPENSES_OPTIONS = asBigDecimals(2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000, 12000, 14000,
-            16000, 18000, 20000, 22000, 24000, 26000, 28000, 30000);
+            16000, 18000, 20000, 22000, 24000, 26000, 28000, 30000, 35000, 40000);
 
     private final static BigDecimal[] JEWLERY_AND_FURS_OPTIONS = asBigDecimals(1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000);
 
@@ -129,7 +129,7 @@ public class InsurancePurchaseForm extends CEntityDecoratableForm<PurchaseInsura
         coverageTerms.setWidget(++irow, 0,
                 new DecoratorBuilder(inject(proto().animalsBirdsAndFish(), new CoverageAmountCombo(asBigDecimals(0, 500, 1000, 1500)))).build());
         coverageTerms.setWidget(++irow, 0,
-                new DecoratorBuilder(inject(proto().personalLiability(), new CoverageAmountCombo(asBigDecimals(500000, 1000000)))).build());
+                new DecoratorBuilder(inject(proto().personalLiability(), new CoverageAmountCombo(asBigDecimals(500000, 1000000, 5000000)))).build());
 
         coverageTerms.setH2(++irow, 0, 1, i18n.tr("Coverage Qualification Questions"));
         coverageTerms.setWidget(++irow, 0, new DecoratorBuilder(inject(proto().homeBuiness())).build());
@@ -185,10 +185,11 @@ public class InsurancePurchaseForm extends CEntityDecoratableForm<PurchaseInsura
     }
 
     private BigDecimal premium() {
+        BigDecimal liablilty = valueOf(proto().personalLiability()).divide(new BigDecimal("1000000"));
         BigDecimal a = valueOf(proto().personalContentsLimit()).add(valueOf(proto().propertyAwayFromPremises()))
                 .add(valueOf(proto().additionalLivingExpenses())).divide(new BigDecimal(20000));
         BigDecimal normalizedDeductible = new BigDecimal("3000").subtract(valueOf(proto().deductible())).divide(new BigDecimal("500"));
-        BigDecimal permium = new BigDecimal("5").add(a).add(normalizedDeductible);
+        BigDecimal permium = new BigDecimal("5").add(liablilty).add(a).add(normalizedDeductible);
         return permium;
     }
 

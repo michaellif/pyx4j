@@ -107,11 +107,11 @@ public class InsuranceServiceImpl implements InsuranceService {
         InsuranceDTO insurance = EntityFactory.create(InsuranceDTO.class);
 
         // INSURANCE PURCHASE PART INITIALIZATION
-        insurance.purchaseInsurance().personalContentsLimit().setValue(asMoney(28000));
-        insurance.purchaseInsurance().propertyAwayFromPremises().setValue(asMoney(6000));
-        insurance.purchaseInsurance().additionalLivingExpenses().setValue(asMoney(16000));
+        insurance.purchaseInsurance().personalContentsLimit().setValue(asMoney(80000));
+        insurance.purchaseInsurance().propertyAwayFromPremises().setValue(asMoney(10000));
+        insurance.purchaseInsurance().additionalLivingExpenses().setValue(asMoney(40000));
 
-        insurance.purchaseInsurance().deductible().setValue(asMoney(1000));
+        insurance.purchaseInsurance().deductible().setValue(asMoney(500));
 
         insurance.purchaseInsurance().formOfCoverage().setValue(FormOfCoverage.basicCoverage);
 
@@ -127,7 +127,7 @@ public class InsuranceServiceImpl implements InsuranceService {
 
         insurance.purchaseInsurance().freezerFoodSpoilage().setValue(asMoney(1000));
         insurance.purchaseInsurance().animalsBirdsAndFish().setValue(asMoney(1000));
-        insurance.purchaseInsurance().personalLiability().setValue(asMoney(1000000));
+        insurance.purchaseInsurance().personalLiability().setValue(asMoney(5000000));
 
         insurance.purchaseInsurance().homeBuiness().setValue(HomeBuisnessOptions.no);
         insurance.purchaseInsurance().numOfPrevClaims().setValue(0);
