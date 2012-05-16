@@ -17,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.config.shared.ApplicationMode;
+import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -49,7 +50,7 @@ class OnboardingProcessor {
                     return new Error(member.getPath() + " is required");
                 }
 
-                if (memberMeta.getValueClass().equals(String.class)) {
+                if (memberMeta.isValidatorAnnotationPresent(Length.class) && memberMeta.getValueClass().equals(String.class)) {
                     if ((((String) member.getValue()).length() > memberMeta.getLength())) {
 
                         return new Error("Length of member " + member.getPath() + " is greater then required");

@@ -57,6 +57,8 @@ public class OnboardingUserPreloader extends AbstractDataPreloader {
 
         Persistence.service().persist(credential);
 
+        Persistence.service().commit();
+
         return credential;
     }
 
