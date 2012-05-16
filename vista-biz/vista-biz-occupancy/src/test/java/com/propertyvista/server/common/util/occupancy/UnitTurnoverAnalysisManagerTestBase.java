@@ -70,29 +70,31 @@ public class UnitTurnoverAnalysisManagerTestBase {
         TestLifecycle.beginRequest();
 
         // clear tables
-        //Persistence.service().delete(EntityQueryCriteria.create(Tenant.class));
-        //Persistence.service().delete(EntityQueryCriteria.create(TenantUser.class));
         Persistence.service().delete(EntityQueryCriteria.create(UnitTurnoverStats.class));
         Persistence.service().delete(EntityQueryCriteria.create(AptUnitOccupancySegment.class));
         Persistence.service().delete(EntityQueryCriteria.create(UnitAvailabilityStatus.class));
-        {
-            EntityQueryCriteria<Lease> leaseCriteria = EntityQueryCriteria.create(Lease.class);
-            leaseCriteria.setVersionedCriteria(VersionedCriteria.onlyFinalized);
-            Persistence.service().delete(leaseCriteria);
+        //TODO this is unsupported, consider DB is empty for every test:  See  pom.xml <forkMode>always</forkMode>
+        if (false) {
+
+            {
+                EntityQueryCriteria<Lease> leaseCriteria = EntityQueryCriteria.create(Lease.class);
+                leaseCriteria.setVersionedCriteria(VersionedCriteria.onlyFinalized);
+                Persistence.service().delete(leaseCriteria);
+            }
+            {
+                EntityQueryCriteria<Lease> leaseCriteria = EntityQueryCriteria.create(Lease.class);
+                leaseCriteria.setVersionedCriteria(VersionedCriteria.onlyDraft);
+                Persistence.service().delete(leaseCriteria);
+            }
+            Persistence.service().delete(EntityQueryCriteria.create(AptUnit.class));
+            Persistence.service().delete(EntityQueryCriteria.create(Floorplan.class));
+            Persistence.service().delete(EntityQueryCriteria.create(ProductCatalog.class));
+            Persistence.service().delete(EntityQueryCriteria.create(Building.class));
         }
-        {
-            EntityQueryCriteria<Lease> leaseCriteria = EntityQueryCriteria.create(Lease.class);
-            leaseCriteria.setVersionedCriteria(VersionedCriteria.onlyDraft);
-            Persistence.service().delete(leaseCriteria);
-        }
-        Persistence.service().delete(EntityQueryCriteria.create(AptUnit.class));
-        Persistence.service().delete(EntityQueryCriteria.create(Floorplan.class));
-        Persistence.service().delete(EntityQueryCriteria.create(ProductCatalog.class));
-        Persistence.service().delete(EntityQueryCriteria.create(Building.class));
 
         // define common domain objects
         building = EntityFactory.create(Building.class);
-        building.propertyCode().setValue("B1");
+        building.propertyCode().setValue(String.valueOf(System.currentTimeMillis()).substring(5));
         building.info().name().setValue("building-1");
         Persistence.secureSave(building);
 
