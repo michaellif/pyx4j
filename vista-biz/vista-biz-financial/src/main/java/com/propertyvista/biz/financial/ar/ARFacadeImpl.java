@@ -41,6 +41,11 @@ public class ARFacadeImpl implements ARFacade {
     }
 
     @Override
+    public void postNSFCharge(PaymentRecord paymentRecord) {
+        new ARNSFProcessor().postNSFCharge(paymentRecord);
+    }
+
+    @Override
     public void postImmediateAdjustment(LeaseAdjustment adjustment) {
         new ARLeaseAdjustmentProcessor().postImmediateAdjustment(adjustment);
     }

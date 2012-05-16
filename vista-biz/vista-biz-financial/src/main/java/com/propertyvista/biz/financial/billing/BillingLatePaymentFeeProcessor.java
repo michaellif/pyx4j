@@ -13,9 +13,21 @@
  */
 package com.propertyvista.biz.financial.billing;
 
+import java.math.BigDecimal;
+
+import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.i18n.shared.I18n;
+
 import com.propertyvista.biz.financial.AbstractProcessor;
+import com.propertyvista.biz.policy.PolicyFacade;
+import com.propertyvista.domain.financial.billing.InvoiceLatePaymentFee;
+import com.propertyvista.domain.policy.policies.LeaseBillingPolicy;
 
 public class BillingLatePaymentFeeProcessor extends AbstractProcessor {
+
+    private static final I18n i18n = I18n.get(BillingLatePaymentFeeProcessor.class);
 
     private final Billing billing;
 
@@ -25,7 +37,30 @@ public class BillingLatePaymentFeeProcessor extends AbstractProcessor {
 
     public void createLatePaymentFeeItem() {
         // TODO Auto-generated method stub
-        // InvoiceLatePaymentFee
+
+        BigDecimal dueFromPreviousBill = billing.getNextPeriodBill().balanceForwardAmount().getValue();
+        //Exit if negative
+
+        BigDecimal serviceCharge = billing.getNextPeriodBill().serviceCharge().getValue();
+
+        LeaseBillingPolicy leaseBillingPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(
+                billing.getNextPeriodBill().billingRun().building(), LeaseBillingPolicy.class);
+
+        BigDecimal latePaymentFee = LatePaymentUtils.calculateLatePaymentFee(dueFromPreviousBill, serviceCharge, leaseBillingPolicy);
+
+        InvoiceLatePaymentFee charge = EntityFactory.create(InvoiceLatePaymentFee.class);
+        charge.bill().set(billing.getNextPeriodBill());
+        charge.dueDate().setValue(billing.getNextPeriodBill().billingPeriodStartDate().getValue());
+        charge.amount().setValue(latePaymentFee);
+        charge.description().setValue(i18n.tr("Late payment fee"));
+
+        Persistence.service().persist(charge);
+
+        billing.getNextPeriodBill().lineItems().add(charge);
+
+        billing.getNextPeriodBill().pendingAccountAdjustments()
+                .setValue(billing.getNextPeriodBill().pendingAccountAdjustments().getValue().add(charge.amount().getValue()));
+
     }
 
 }

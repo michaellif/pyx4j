@@ -370,6 +370,10 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         ServerSideFactory.create(ARFacade.class).rejectPayment(paymentRecord);
     }
 
+    protected void postNSFCharge(PaymentRecord paymentRecord) {
+        ServerSideFactory.create(ARFacade.class).postNSFCharge(paymentRecord);
+    }
+
     private BillableItem findBillableItem(String billableItemId, Lease lease) {
         BillableItem billableItem = null;
         if (lease.version().leaseProducts().serviceItem().uid().getValue().equals(billableItemId)) {

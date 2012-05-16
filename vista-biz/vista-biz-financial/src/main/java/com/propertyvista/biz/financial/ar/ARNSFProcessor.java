@@ -22,7 +22,7 @@ public class ARNSFProcessor extends AbstractProcessor {
 
     private static final I18n i18n = I18n.get(ARNSFProcessor.class);
 
-    void postNSF(PaymentRecord paymentRecord) {
+    void postNSFCharge(PaymentRecord paymentRecord) {
 //TODO
     }
 

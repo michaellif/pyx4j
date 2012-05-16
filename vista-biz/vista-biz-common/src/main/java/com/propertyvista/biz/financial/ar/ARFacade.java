@@ -31,6 +31,8 @@ public interface ARFacade {
 
     void rejectPayment(PaymentRecord payment);
 
+    void postNSFCharge(PaymentRecord paymentRecord);
+
     void postImmediateAdjustment(LeaseAdjustment adjustment);
 
     List<InvoiceDebit> getNotCoveredDebitInvoiceLineItems(BillingAccount billingAccount);
