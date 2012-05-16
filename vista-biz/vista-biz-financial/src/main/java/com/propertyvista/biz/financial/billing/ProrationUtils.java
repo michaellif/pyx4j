@@ -16,6 +16,7 @@ package com.propertyvista.biz.financial.billing;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 
 import com.pyx4j.commons.LogicalDate;
@@ -36,7 +37,7 @@ public class ProrationUtils {
         calendarFrom.setTime(from);
         int daysInMonth = calendarFrom.getActualMaximum(Calendar.DAY_OF_MONTH);
 
-        if (isPeriodLengthLessThanMonth(from, to)) {
+        if (comparePeriodToMonth(from, to) == -1) {
             BigDecimal proration = null;
             switch (method) {
             case Actual:
@@ -55,17 +56,35 @@ public class ProrationUtils {
 
             }
             return new BigDecimal(daysBetween(from, to)).divide(proration, 6, RoundingMode.HALF_UP);
+        } else if (comparePeriodToMonth(from, to) == 0) {
+            return new BigDecimal("1");
         } else {
             throw new BillingException("proration can't be calculated for a period more than one month, but period was defined as " + from + " - " + to);
         }
 
     }
 
-    public static boolean isPeriodLengthLessThanMonth(LogicalDate periodStart, LogicalDate periodEnd) {
+    /**
+     * 
+     * -1 if less than month
+     * 0 if equals to month
+     * 1 if more than month
+     */
+    public static int comparePeriodToMonth(LogicalDate periodStart, LogicalDate periodEnd) {
         Calendar oneMonthSinceStart = GregorianCalendar.getInstance();
         oneMonthSinceStart.setTime(periodStart);
         oneMonthSinceStart.add(Calendar.MONTH, 1);
-        return periodEnd.before(oneMonthSinceStart.getTime());
+        oneMonthSinceStart.add(Calendar.DATE, -1);
+        oneMonthSinceStart.getTime();
+        if (periodEnd.before(oneMonthSinceStart.getTime())) {
+            return -1;
+        } else {
+            oneMonthSinceStart.add(Calendar.DATE, 1);
+            if (periodEnd.before(oneMonthSinceStart.getTime())) {
+                return 0;
+            }
+        }
+        return 1;
     }
 
     public static int daysBetween(LogicalDate d1, LogicalDate d2) {
