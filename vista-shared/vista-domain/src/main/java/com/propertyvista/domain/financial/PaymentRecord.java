@@ -126,6 +126,18 @@ public interface PaymentRecord extends IEntity {
     @Caption(name = "Transaction Authorization #")
     IPrimitive<String> transactionAuthorizationNumber();
 
+    interface PaidRejectedTransactionId extends ColumnId {
+    }
+
+    @JoinColumn(PaidRejectedTransactionId.class)
+    MerchantTransaction merchantTransaction();
+
+    interface ReturnTransactionId extends ColumnId {
+    }
+
+    @JoinColumn(ReturnTransactionId.class)
+    MerchantTransaction merchantTransactionReturn();
+
     @Editor(type = EditorType.textarea)
     IPrimitive<String> notes();
 
