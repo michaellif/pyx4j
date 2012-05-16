@@ -66,12 +66,16 @@ public class ArrearsSnapshotTest extends ArrearsSnapshotTestBase {
         assertPrevArrearsSnapshot("30-Mar-2011");
 
         setSysDate("01-Apr-2011");
+        updateArrearsHistory();
+        // due day (1) has passed so, current bucket is "upgraded" to 1-30 range:
+
         assertPrevArrearsSnapshot("31-Mar-2011");
+
         beginAssertArrearsSnapshot("01-Apr-2011");
-        assertArrearsDebitType(DebitType.lease, "0.00", "302.50", "0.00", "0.00", "0.00");
-        assertArrearsDebitType(DebitType.parking, "0.00", "302.50", "0.00", "0.00", "0.00");
-        assertArrearsDebitType(DebitType.pet, "0.00", "302.50", "0.00", "0.00", "0.00");
-        assertArrearsTotal("302.50", "0.00", "0.00", "0.00", "0.00");
+        assertArrearsDebitType(DebitType.lease, "0.0", "302.50", "0.00", "0.00", "0.00");
+        assertArrearsDebitType(DebitType.parking, "0.0", "26.02", "0.00", "0.00", "0.00");
+        assertArrearsDebitType(DebitType.deposit, "0.0", "930.30", "0.00", "0.00", "0.00"); // TODO how deposit is calulcated???
+        assertArrearsDebitType(DebitType.total, "0.0", "1258.82", "0.00", "0.00", "0.00");
 
         setSysDate("15-Apr-2011");
         updateArrearsHistory();
@@ -83,9 +87,11 @@ public class ArrearsSnapshotTest extends ArrearsSnapshotTestBase {
         runAndConfirmBilling();
 
         updateArrearsHistory();
-        // TODO assert current bucket must be updated
 
-        setSysDate("01-May-2011");
+//        beginAssertArrearsSnapshot("18-Apr-2011");
+//        assertArrearsDebitType(DebitType.lease, "0.00", "302.50", "0.00", "0.00", "0.00");
+//        assertArrearsDebitType(DebitType.parking, "0.00", "26.02", "0.00", "0.00", "0.00");
+//        assertArrearsTotal("0.00", "0.00", "0.00", "0.00", "0.");
 
     }
 }
