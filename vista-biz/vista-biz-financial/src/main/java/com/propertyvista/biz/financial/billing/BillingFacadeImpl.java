@@ -13,7 +13,6 @@
  */
 package com.propertyvista.biz.financial.billing;
 
-import com.propertyvista.biz.financial.billing.BillingFacade;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.BillingRun;
 import com.propertyvista.domain.tenant.lease.Lease;

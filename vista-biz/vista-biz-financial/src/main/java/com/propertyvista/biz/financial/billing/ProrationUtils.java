@@ -16,7 +16,6 @@ package com.propertyvista.biz.financial.billing;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 
 import com.pyx4j.commons.LogicalDate;

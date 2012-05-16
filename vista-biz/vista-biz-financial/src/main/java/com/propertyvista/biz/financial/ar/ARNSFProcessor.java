@@ -7,25 +7,23 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Feb 25, 2012
+ * Created on Mar 24, 2012
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.biz.financial.billing;
+package com.propertyvista.biz.financial.ar;
+
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.financial.AbstractProcessor;
+import com.propertyvista.domain.financial.PaymentRecord;
 
-public class BillingLatePaymentFeeProcessor extends AbstractProcessor {
+public class ARNSFProcessor extends AbstractProcessor {
 
-    private final Billing billing;
+    private static final I18n i18n = I18n.get(ARNSFProcessor.class);
 
-    BillingLatePaymentFeeProcessor(Billing billing) {
-        this.billing = billing;
-    }
-
-    public void createLatePaymentFeeItem() {
-        // TODO Auto-generated method stub
-        // InvoiceLatePaymentFee
+    void postNSF(PaymentRecord paymentRecord) {
+//TODO
     }
 
 }
