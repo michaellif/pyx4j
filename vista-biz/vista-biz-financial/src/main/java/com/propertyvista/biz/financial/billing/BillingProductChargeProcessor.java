@@ -166,6 +166,7 @@ public class BillingProductChargeProcessor extends AbstractProcessor {
         charge.period().setValue(period);
         charge.fromDate().setValue(overlap.getFromDate());
         charge.toDate().setValue(overlap.getToDate());
+        charge.dueDate().setValue(billing.getNextPeriodBill().billingPeriodStartDate().getValue());
 
         if (BillingUtils.isService(billableItem.item().product())) {
             charge.debitType().setValue(DebitType.lease);

@@ -86,6 +86,7 @@ public class BillingLeaseAdjustmentProcessor extends AbstractLeaseAdjustmentProc
     private void createPendingCharge(LeaseAdjustment adjustment) {
         InvoiceAccountCharge charge = createCharge(adjustment);
         charge.bill().set(billing.getNextPeriodBill());
+        charge.dueDate().setValue(billing.getNextPeriodBill().billingPeriodStartDate().getValue());
         Persistence.service().persist(charge);
         addCharge(charge);
     }
