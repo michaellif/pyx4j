@@ -57,13 +57,18 @@ public interface PaymentRecord extends IEntity {
 
         Submitted,
 
+        // This state is skipped in current implementation and may be enabled by Policy in future
         Processing,
 
         Received,
 
         Rejected,
 
-        Canceled;
+        Canceled,
+
+        Cleared,
+
+        Returned;
 
         @Override
         public String toString() {
@@ -73,7 +78,7 @@ public interface PaymentRecord extends IEntity {
         // state sets:
 
         public static Collection<PaymentStatus> processed() {
-            return EnumSet.of(Received, Rejected);
+            return EnumSet.of(Received, Rejected, Cleared, Returned);
         }
 
         // states:
@@ -98,19 +103,15 @@ public interface PaymentRecord extends IEntity {
 
     IPrimitive<LogicalDate> receivedDate();
 
+    IPrimitive<LogicalDate> finalizeDate();
+
+    // Do not show in UI. May be used for reporting
     IPrimitive<LogicalDate> lastStatusChangeDate();
 
-    //TODO What todo whit this.  Remove ?
     /**
-     * Do not post before that date
+     * Do not post before that date, Date taken from Cheque and only available for Cheque
      */
     IPrimitive<LogicalDate> targetDate();
-
-    //TODO What todo whit this.  Remove ?
-    /**
-     * TODO Add action to change this filed to Facade
-     */
-    IPrimitive<LogicalDate> depositDate();
 
     @NotNull
     @Format("#0.00")

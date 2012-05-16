@@ -13,6 +13,8 @@
  */
 package com.propertyvista.biz.financial.payment;
 
+import java.util.EnumSet;
+
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
@@ -95,12 +97,14 @@ public class PaymentFacadeImpl implements PaymentFacade {
 
         switch (paymentRecord.paymentMethod().type().getValue()) {
         case Cash:
-            paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Received);
+            paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Cleared);
             paymentRecord.receivedDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
+            paymentRecord.finalizeDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
             Persistence.service().merge(paymentRecord);
             ServerSideFactory.create(ARFacade.class).postPayment(paymentRecord);
             break;
         case Check:
+            paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Received);
             paymentRecord.receivedDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
             Persistence.service().merge(paymentRecord);
             ServerSideFactory.create(ARFacade.class).postPayment(paymentRecord);
@@ -110,6 +114,8 @@ public class PaymentFacadeImpl implements PaymentFacade {
             CreditCardProcessor.realTimeSale(paymentRecord);
             break;
         case Echeck:
+            paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Received);
+            paymentRecord.receivedDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
             Persistence.service().merge(paymentRecord);
             ServerSideFactory.create(ARFacade.class).postPayment(paymentRecord);
             new PadProcessor().queuePayment(paymentRecord);
@@ -137,6 +143,7 @@ public class PaymentFacadeImpl implements PaymentFacade {
         }
         paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Canceled);
         paymentRecord.lastStatusChangeDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
+        paymentRecord.finalizeDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
         Persistence.service().merge(paymentRecord);
         return paymentRecord;
     }
@@ -144,7 +151,7 @@ public class PaymentFacadeImpl implements PaymentFacade {
     @Override
     public PaymentRecord clear(PaymentRecord paymentStub) {
         PaymentRecord paymentRecord = Persistence.service().retrieve(PaymentRecord.class, paymentStub.getPrimaryKey());
-        if (!paymentRecord.paymentStatus().getValue().equals(PaymentRecord.PaymentStatus.Processing)) {
+        if (!EnumSet.of(PaymentRecord.PaymentStatus.Processing, PaymentRecord.PaymentStatus.Received).contains(paymentRecord.paymentStatus().getValue())) {
             throw new UserRuntimeException(i18n.tr("Processed payment can't be cleared"));
         }
         switch (paymentRecord.paymentMethod().type().getValue()) {
@@ -154,8 +161,9 @@ public class PaymentFacadeImpl implements PaymentFacade {
             throw new IllegalArgumentException("Electronic PaymentMethod:" + paymentRecord.paymentMethod().type().getStringView());
         }
 
-        paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Received);
+        paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Cleared);
         paymentRecord.lastStatusChangeDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
+        paymentRecord.finalizeDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
         Persistence.service().merge(paymentRecord);
         return paymentRecord;
     }
@@ -163,7 +171,7 @@ public class PaymentFacadeImpl implements PaymentFacade {
     @Override
     public PaymentRecord reject(PaymentRecord paymentStub) {
         PaymentRecord paymentRecord = Persistence.service().retrieve(PaymentRecord.class, paymentStub.getPrimaryKey());
-        if (!paymentRecord.paymentStatus().getValue().equals(PaymentRecord.PaymentStatus.Processing)) {
+        if (!EnumSet.of(PaymentRecord.PaymentStatus.Processing, PaymentRecord.PaymentStatus.Received).contains(paymentRecord.paymentStatus().getValue())) {
             throw new UserRuntimeException(i18n.tr("Processed payment can't be rejected"));
         }
         switch (paymentRecord.paymentMethod().type().getValue()) {
@@ -175,11 +183,12 @@ public class PaymentFacadeImpl implements PaymentFacade {
 
         paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Rejected);
         paymentRecord.lastStatusChangeDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
+        paymentRecord.finalizeDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
         Persistence.service().merge(paymentRecord);
 
         switch (paymentRecord.paymentMethod().type().getValue()) {
         case Check:
-        case Echeck:
+        case Cash:
             ServerSideFactory.create(ARFacade.class).rejectPayment(paymentRecord);
             break;
         }
