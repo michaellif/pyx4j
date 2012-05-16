@@ -188,13 +188,7 @@ public class ARArrearsManager {
         calendar.add(Calendar.DATE, -30);
         LogicalDate date90 = new LogicalDate(calendar.getTime());
 
-        System.out.println("++++++++++++++ currentDate = " + currentDate);
-        System.out.println("++++++++++++++ date30 = " + date30);
-        System.out.println("++++++++++++++ date60 = " + date60);
-        System.out.println("++++++++++++++ date90 = " + date90);
-
         for (InvoiceDebit debit : debits) {
-            System.out.println("----------- " + debit.dueDate().getValue());
             if (!agingBucketsMap.containsKey(debit.debitType().getValue())) {
                 agingBucketsMap.put(debit.debitType().getValue(), createAgingBuckets(debit.debitType().getValue()));
             }
