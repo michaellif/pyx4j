@@ -77,7 +77,7 @@ public class ARTransactionManager {
         if (fromDate != null) {
             criteria.add(PropertyCriterion.ge(criteria.proto().postDate(), fromDate));
         }
-        criteria.asc(criteria.proto().postDate());
+        criteria.asc(criteria.proto().id());
 
         List<InvoiceLineItem> lineItems = Persistence.service().query(criteria);
         th.lineItems().addAll(lineItems);

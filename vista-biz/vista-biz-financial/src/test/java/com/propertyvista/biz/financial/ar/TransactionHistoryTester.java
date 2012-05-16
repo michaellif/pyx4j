@@ -70,6 +70,16 @@ public class TransactionHistoryTester extends Tester {
         return this;
     }
 
+    public TransactionHistoryTester outstandingDebit(BigDecimal amount, int index) {
+        assertEquals("Line item amount", amount, ((InvoiceDebit) transactionHistory.lineItems().get(index)).outstandingDebit().getValue());
+        return this;
+    }
+
+    public TransactionHistoryTester outstandingCredit(BigDecimal amount, int index) {
+        assertEquals("Line item amount", amount, ((InvoiceCredit) transactionHistory.lineItems().get(index)).outstandingCredit().getValue());
+        return this;
+    }
+
     public TransactionHistoryTester agingBucketsCurrent(BigDecimal amount, DebitType debitType) {
         AgingBuckets buckets = getAgingBucketsOfType(debitType);
         if (buckets != null) {
