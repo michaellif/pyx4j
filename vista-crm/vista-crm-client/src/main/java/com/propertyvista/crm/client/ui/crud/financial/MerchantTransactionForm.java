@@ -42,13 +42,22 @@ public class MerchantTransactionForm extends CrmEntityForm<MerchantTransaction> 
 
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().amount()), 10).build());
 
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().rejectItemsAmount()), 10).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().rejectItemsFee()), 10).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().rejectItemsCount()), 5).build());
+        FormFlexPanel amount = new FormFlexPanel();
+        int row2 = -1;
+        amount.setWidget(++row2, 0, new DecoratorBuilder(inject(proto().rejectItemsAmount()), 10).build());
+        amount.setWidget(++row2, 0, new DecoratorBuilder(inject(proto().rejectItemsFee()), 10).build());
+        amount.setWidget(++row2, 0, new DecoratorBuilder(inject(proto().rejectItemsCount()), 5).build());
+        row2 = -1;
+        amount.setWidget(++row2, 1, new DecoratorBuilder(inject(proto().returnItemsAmount()), 10).build());
+        amount.setWidget(++row2, 1, new DecoratorBuilder(inject(proto().returnItemsFee()), 10).build());
+        amount.setWidget(++row2, 1, new DecoratorBuilder(inject(proto().returnItemsCount()), 5).build());
 
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().returnItemsAmount()), 10).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().returnItemsFee()), 10).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().returnItemsCount()), 5).build());
+        main.setWidget(++row, 0, amount);
+
+        main.setH3(++row, 0, 1, proto().payments().getMeta().getCaption());
+        main.setWidget(++row, 0, ((MerchantTransactionViewerView) getParentView()).getPaymentsListerView().asWidget());
+        main.setH3(++row, 0, 1, proto().returnedPayments().getMeta().getCaption());
+        main.setWidget(++row, 0, ((MerchantTransactionViewerView) getParentView()).getReturnedPaymentsListerView().asWidget());
 
         return new ScrollPanel(main);
     }

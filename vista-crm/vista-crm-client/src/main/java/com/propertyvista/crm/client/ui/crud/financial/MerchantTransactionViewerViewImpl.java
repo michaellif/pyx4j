@@ -13,13 +13,36 @@
  */
 package com.propertyvista.crm.client.ui.crud.financial;
 
+import com.pyx4j.site.client.ui.crud.lister.IListerView;
+import com.pyx4j.site.client.ui.crud.lister.ListerInternalViewImplBase;
+
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.financial.MerchantTransaction;
+import com.propertyvista.domain.financial.PaymentRecord;
 
 public class MerchantTransactionViewerViewImpl extends CrmViewerViewImplBase<MerchantTransaction> implements MerchantTransactionViewerView {
 
+    private final IListerView<PaymentRecord> paymentLister;
+
+    private final IListerView<PaymentRecord> returnedPaymentLister;
+
     public MerchantTransactionViewerViewImpl() {
-        super(CrmSiteMap.Finance.MerchantTransaction.class, new MerchantTransactionForm(true));
+        super(CrmSiteMap.Finance.MerchantTransaction.class);
+
+        paymentLister = new ListerInternalViewImplBase<PaymentRecord>(new PaymentRecordLister());
+        returnedPaymentLister = new ListerInternalViewImplBase<PaymentRecord>(new PaymentRecordLister());
+
+        setForm(new MerchantTransactionForm(true));
+    }
+
+    @Override
+    public IListerView<PaymentRecord> getPaymentsListerView() {
+        return paymentLister;
+    }
+
+    @Override
+    public IListerView<PaymentRecord> getReturnedPaymentsListerView() {
+        return returnedPaymentLister;
     }
 }
