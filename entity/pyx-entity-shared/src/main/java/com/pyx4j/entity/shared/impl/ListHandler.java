@@ -159,6 +159,16 @@ public class ListHandler<TYPE extends IEntity> extends AbstractCollectionHandler
     }
 
     @Override
+    public TYPE get(TYPE element) {
+        int index = indexOf(element);
+        if (index != -1) {
+            return null;
+        } else {
+            return get(index);
+        }
+    }
+
+    @Override
     public int indexOf(Object o) {
         if (o instanceof IEntity) {
             List<?> value = getValue();

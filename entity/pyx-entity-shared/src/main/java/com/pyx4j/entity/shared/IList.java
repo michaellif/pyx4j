@@ -28,8 +28,17 @@ public interface IList<TYPE extends IEntity> extends ICollection<TYPE, List<Map<
     public void set(IList<TYPE> typedList);
 
     /**
+     * Returns the element contained in this list.
+     * 
+     * @param element
+     * @return null if element no found
+     */
+    public TYPE get(TYPE element);
+
+    /**
      * Create new instance Prototype of the Value object with special handling for item
      * position in a list.
      */
     //public TYPE $(int idx);
+
 }
