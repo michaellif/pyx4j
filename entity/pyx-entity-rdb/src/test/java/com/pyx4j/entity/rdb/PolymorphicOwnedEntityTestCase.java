@@ -357,7 +357,7 @@ public abstract class PolymorphicOwnedEntityTestCase extends AssociationMappingT
 
     }
 
-    public void IGNORE_testPolymorphicSTManagedOneToMany() {
+    public void testPolymorphicSTManagedOneToMany() {
         String testId = uniqueString();
 
         // SET UP:
@@ -366,6 +366,7 @@ public abstract class PolymorphicOwnedEntityTestCase extends AssociationMappingT
             HasManagedListSTPlmParentA a1 = EntityFactory.create(HasManagedListSTPlmParentA.class);
             a1.testId().setValue(testId);
             a1.foo().setValue("A1");
+            a1.name().setValue("T1");
 
             ManagedChild childAA1 = EntityFactory.create(ManagedChild.class);
             childAA1.testId().setValue(testId);
@@ -376,6 +377,14 @@ public abstract class PolymorphicOwnedEntityTestCase extends AssociationMappingT
             childAA2.testId().setValue(testId);
             childAA2.value().setValue("aa2");
             a1.children().add(childAA2);
+
+            {
+                ManagedChild childAB = EntityFactory.create(ManagedChild.class);
+                childAB.testId().setValue(testId);
+                childAB.value().setValue("bc3");
+                a1.children().add(childAB);
+            }
+
             srv.persist(a1);
         }
 
@@ -398,6 +407,7 @@ public abstract class PolymorphicOwnedEntityTestCase extends AssociationMappingT
 
         {
             HasManagedListSTPlmParentB b = EntityFactory.create(HasManagedListSTPlmParentB.class);
+            b.name().setValue("T3");
             b.testId().setValue(testId);
             b.bar().setValue(1);
 
@@ -410,6 +420,14 @@ public abstract class PolymorphicOwnedEntityTestCase extends AssociationMappingT
             childAB2.testId().setValue(testId);
             childAB2.value().setValue("ab2");
             b.children().add(childAB2);
+
+            {
+                ManagedChild childAB = EntityFactory.create(ManagedChild.class);
+                childAB.testId().setValue(testId);
+                childAB.value().setValue("cb3");
+                b.children().add(childAB);
+            }
+
             srv.persist(b);
         }
 
@@ -451,5 +469,17 @@ public abstract class PolymorphicOwnedEntityTestCase extends AssociationMappingT
             assertEquals(HasManagedListSTPlmParentA.class, result.get(0).getInstanceValueClass());
         }
 
+        // TEST SEARCH and SORT by 3rd child
+        {
+            EntityQueryCriteria<HasManagedListSTPlmParentBase> criteria = EntityQueryCriteria.create(HasManagedListSTPlmParentBase.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().testId(), testId));
+            criteria.add(PropertyCriterion.like(criteria.proto().children().$().value(), "*3"));
+            // This limits the criteria to first child!
+            criteria.asc(criteria.proto().children().$().value());
+
+            List<HasManagedListSTPlmParentBase> result = srv.query(criteria);
+
+            assertEquals(0, result.size());
+        }
     }
 }

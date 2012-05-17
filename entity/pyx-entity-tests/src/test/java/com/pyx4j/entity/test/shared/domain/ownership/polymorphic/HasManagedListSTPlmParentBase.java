@@ -36,6 +36,8 @@ public interface HasManagedListSTPlmParentBase extends IEntity {
 
     IPrimitive<String> testId();
 
+    IPrimitive<String> name();
+
     @Owned
     IList<ManagedChild> children();
 }
