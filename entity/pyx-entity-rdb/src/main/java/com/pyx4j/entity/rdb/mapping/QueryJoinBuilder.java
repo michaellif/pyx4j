@@ -230,13 +230,14 @@ class QueryJoinBuilder {
 
             }
 
-            if ((memberOper instanceof MemberCollectionOperationsMeta) && (!addDistinct)) {
+            if (memberOper instanceof MemberCollectionOperationsMeta) {
                 if (usedInSort) {
                     MemberCollectionOperationsMeta memberCollectionDataOper = (MemberCollectionOperationsMeta) memberOper;
                     condition.append(" AND ");
                     condition.append(memberJoin.alias).append('.').append(memberCollectionDataOper.sqlOrderColumnName());
                     condition.append(" = ");
                     condition.append(" 0 ");
+                    addDistinct = false;
                 } else {
                     addDistinct = true;
                 }
@@ -265,8 +266,17 @@ class QueryJoinBuilder {
             condition.append(" = ");
             condition.append(collectionJoin.alias).append('.').append(memberOper.sqlValueName());
 
+            // Select only first in collection   
             if (usedInSort) {
-                // TODO Select only first in collection
+                //TODO fix this
+                if (false) {
+                    MemberCollectionOperationsMeta memberCollectionDataOper = memberOper;
+                    condition.append(" AND ");
+                    condition.append(memberJoin.alias).append('.').append(memberCollectionDataOper.sqlOrderColumnName());
+                    condition.append(" = ");
+                    condition.append(" 0 ");
+                }
+                addDistinct = false;
             } else {
                 addDistinct = true;
             }

@@ -77,7 +77,7 @@ public class QueryBuilder<T extends IEntity> {
 
     QueryJoinBuilder queryJoin;
 
-    private boolean sortAddDistinct = false;
+    private boolean sortByJoin = false;
 
     public QueryBuilder(PersistenceContext persistenceContext, Mappings mappings, String alias, EntityOperationsMeta operationsMeta,
             EntityQueryCriteria<T> criteria) {
@@ -90,6 +90,13 @@ public class QueryBuilder<T extends IEntity> {
         if (dialect.isMultitenantSharedSchema()) {
             sql.append(alias).append('.').append(dialect.getNamingConvention().sqlNameSpaceColumnName()).append(" = ?");
             firstCriteria = false;
+        }
+
+        // Build JOIN for ORDER BY. This will not allow us to Use DISTINCT and add special criteria for collections
+        if ((criteria.getSorts() != null) && (!criteria.getSorts().isEmpty())) {
+            for (EntityQueryCriteria.Sort sort : expandToStringMembers(criteria.getSorts())) {
+                queryJoin.buildQueryMember(sort.getPropertyPath(), true, true);
+            }
         }
 
         if (IVersionedEntity.class.isAssignableFrom(operationsMeta.entityMeta().getEntityClass())) {
@@ -320,10 +327,8 @@ public class QueryBuilder<T extends IEntity> {
             }
 
             // Removed for postgresql, Join will use sqlOrderColumnName = 0
-            if (false) {
-                if (path.isUndefinedCollectionPath() || (sort.getPropertyPath().endsWith(Path.COLLECTION_SEPARATOR + Path.PATH_SEPARATOR))) {
-                    sortAddDistinct = true;
-                }
+            if (path.isUndefinedCollectionPath() || (sort.getPropertyPath().endsWith(Path.COLLECTION_SEPARATOR + Path.PATH_SEPARATOR))) {
+                sortByJoin = true;
             }
 
         }
@@ -352,7 +357,11 @@ public class QueryBuilder<T extends IEntity> {
     }
 
     boolean addDistinct() {
-        return sortAddDistinct || queryJoin.addDistinct;
+        if (sortByJoin) {
+            return false;
+        } else {
+            return queryJoin.addDistinct;
+        }
     }
 
     String getSQL(String mainTableSqlName) {
