@@ -13,18 +13,19 @@
  */
 package com.propertyvista.admin.client.ui.crud.scheduler.trigger;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.entity.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.admin.domain.scheduler.ScheduleType;
 import com.propertyvista.admin.domain.scheduler.TriggerSchedule;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 
 public class TriggerScheduleFolder extends VistaBoxFolder<TriggerSchedule> {
-
-    private static final I18n i18n = I18n.get(TriggerScheduleFolder.class);
 
     public TriggerScheduleFolder(boolean modifyable) {
         super(TriggerSchedule.class, modifyable);
@@ -43,6 +44,14 @@ public class TriggerScheduleFolder extends VistaBoxFolder<TriggerSchedule> {
         BoxFolderItemDecorator<TriggerSchedule> decor = (BoxFolderItemDecorator<TriggerSchedule>) super.createItemDecorator();
         decor.setExpended(false);
         return decor;
+    }
+
+    @Override
+    protected void createNewEntity(TriggerSchedule newEntity, AsyncCallback<TriggerSchedule> callback) {
+        newEntity.repeatType().setValue(ScheduleType.Weekly);
+        newEntity.repeatEvery().setValue(1);
+        newEntity.startsOn().setValue(new LogicalDate());
+        callback.onSuccess(newEntity);
     }
 
 }

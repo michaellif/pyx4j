@@ -64,7 +64,7 @@ public interface Trigger extends IEntity {
 
     @Timestamp(Timestamp.Update.Created)
     @ReadOnly
-    @Format("MM/dd/yyyy h:mm a")
+    @Format("MM/dd/yyyy HH:mm")
     IPrimitive<Date> created();
 
     @Owned(cascade = {})

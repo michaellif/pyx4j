@@ -43,6 +43,14 @@ public class TriggerViewerViewImpl extends AdminViewerViewImplBase<Trigger> impl
         setForm(new TriggerForm(true));
 
         // Add actions:
+        Button refresh = new Button(i18n.tr("Refresh"), new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                ((TriggerViewerView.Presenter) presenter).refresh();
+            }
+        });
+        addHeaderToolbarTwoItem(refresh.asWidget());
+
         runImmediately = new Button(i18n.tr("Run Immediatly"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
@@ -50,6 +58,7 @@ public class TriggerViewerViewImpl extends AdminViewerViewImplBase<Trigger> impl
             }
         });
         addHeaderToolbarTwoItem(runImmediately.asWidget());
+
     }
 
     @Override

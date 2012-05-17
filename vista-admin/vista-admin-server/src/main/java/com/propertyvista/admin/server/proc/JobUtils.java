@@ -14,7 +14,9 @@
 package com.propertyvista.admin.server.proc;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 import org.quartz.CalendarIntervalScheduleBuilder;
 import org.quartz.JobBuilder;
@@ -23,13 +25,16 @@ import org.quartz.JobKey;
 import org.quartz.SchedulerException;
 import org.quartz.Trigger;
 import org.quartz.TriggerBuilder;
+import org.quartz.TriggerKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.gwt.server.DateUtils;
 import com.pyx4j.quartz.SchedulerHelper;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 
+import com.propertyvista.admin.domain.scheduler.ScheduleType;
 import com.propertyvista.admin.domain.scheduler.TriggerSchedule;
 
 public class JobUtils {
@@ -38,6 +43,10 @@ public class JobUtils {
 
     public static JobKey getJobKey(com.propertyvista.admin.domain.scheduler.Trigger trigger) {
         return new JobKey(trigger.getPrimaryKey().toString(), "VistaJob");
+    }
+
+    public static TriggerKey getTriggerKey(TriggerSchedule schedule) {
+        return new TriggerKey(schedule.getPrimaryKey().toString(), "VistaTrigger");
     }
 
     public static JobDetail getJobDetail(com.propertyvista.admin.domain.scheduler.Trigger trigger) throws SchedulerException {
@@ -69,8 +78,8 @@ public class JobUtils {
         }
     }
 
-    private static Trigger buildTrigger(TriggerSchedule schedule) {
-        TriggerBuilder<Trigger> builder = TriggerBuilder.newTrigger().withIdentity(schedule.id().getStringView(), "ProcessStarter");
+    private static Trigger buildTrigger(TriggerSchedule schedule, JobKey keyOfJobToFire) {
+        TriggerBuilder<Trigger> builder = TriggerBuilder.newTrigger().withIdentity(getTriggerKey(schedule)).forJob(keyOfJobToFire);
 
         Calendar startTime = new GregorianCalendar();
         startTime.setTime(schedule.startsOn().getValue());
@@ -115,54 +124,79 @@ public class JobUtils {
 
     public static void updateSchedule(com.propertyvista.admin.domain.scheduler.Trigger origTrigger,
             com.propertyvista.admin.domain.scheduler.Trigger updateTrigger) {
-//        if (origTrigger == null) {
-//            if (updateTrigger.schedule().repeatType().getValue() != ScheduleType.Manual) {
-//                Trigger quartzTrigger = buildTrigger(updateTrigger);
-//                JobDetail job = JobBuilder.newJob(RunDispatcherJob.class).withIdentity(quartzTrigger.getJobKey())
-//                        .usingJobData(RunDispatcherJob.newJobDataMap(updateTrigger)).build();
-//                try {
-//                    SchedulerHelper.getScheduler().scheduleJob(job, quartzTrigger);
-//                } catch (SchedulerException e) {
-//                    log.error("Error", e);
-//                    throw new Error(e);
-//                }
-//            }
-//        } else if (!EntityGraph.fullyEqualValues(origTrigger.schedule(), updateTrigger.schedule())) {
-//            try {
-//                if (updateTrigger.schedule().repeatType().getValue() == ScheduleType.Manual) {
-//                    SchedulerHelper.getScheduler().deleteJob(processJobKey(updateTrigger));
-//                } else {
-//                    Trigger quartzTrigger = buildTrigger(updateTrigger);
-//
-//                    if (SchedulerHelper.getScheduler().getJobDetail(processJobKey(updateTrigger)) != null) {
-//                        SchedulerHelper.getScheduler().rescheduleJob(quartzTrigger.getKey(), quartzTrigger);
-//                    } else {
-//                        JobDetail job = JobBuilder.newJob(RunDispatcherJob.class).withIdentity(quartzTrigger.getJobKey())
-//                                .usingJobData(RunDispatcherJob.newJobDataMap(updateTrigger)).build();
-//                        SchedulerHelper.getScheduler().scheduleJob(job, quartzTrigger);
-//                    }
-//
-//                }
-//            } catch (SchedulerException e) {
-//                log.error("Error", e);
-//                throw new Error(e);
-//            }
-//        }
+        try {
+            JobDetail jobDetail = getJobDetail(updateTrigger);
+            if (jobDetail == null) {
+                jobDetail = createJobDetail(updateTrigger);
+            }
+
+            for (TriggerSchedule updateSchedule : updateTrigger.schedules()) {
+                TriggerSchedule origSchedule = null;
+                if (origTrigger != null) {
+                    origSchedule = origTrigger.schedules().get(updateSchedule);
+                }
+                if (origSchedule == null) {
+                    createTrigger(updateSchedule, jobDetail.getKey());
+                } else {
+                    updateTrigger(origSchedule, updateSchedule, jobDetail.getKey());
+                }
+            }
+
+            // Remove removed triggers
+            if (origTrigger != null) {
+                for (TriggerSchedule origSchedule : origTrigger.schedules()) {
+                    if (!updateTrigger.schedules().contains(origSchedule)) {
+                        removeTrigger(origSchedule, jobDetail.getKey());
+                    }
+                }
+            }
+
+        } catch (SchedulerException e) {
+            log.error("Error", e);
+            throw new UserRuntimeException(e.getMessage());
+        }
+    }
+
+    private static void createTrigger(TriggerSchedule updateSchedule, JobKey keyOfJobToFire) throws SchedulerException {
+        if (updateSchedule.repeatType().getValue() != ScheduleType.Manual) {
+            Trigger quartzTrigger = buildTrigger(updateSchedule, keyOfJobToFire);
+            SchedulerHelper.getScheduler().scheduleJob(quartzTrigger);
+        }
+    }
+
+    private static void removeTrigger(TriggerSchedule schedule, JobKey keyOfJobToFire) throws SchedulerException {
+        SchedulerHelper.getScheduler().unscheduleJob(getTriggerKey(schedule));
+    }
+
+    private static void updateTrigger(TriggerSchedule origSchedule, TriggerSchedule updateSchedule, JobKey keyOfJobToFire) throws SchedulerException {
+        if (!EntityGraph.fullyEqualValues(origSchedule, updateSchedule)) {
+            SchedulerHelper.getScheduler().unscheduleJob(getTriggerKey(updateSchedule));
+            if (updateSchedule.repeatType().getValue() != ScheduleType.Manual) {
+                Trigger quartzTrigger = buildTrigger(updateSchedule, keyOfJobToFire);
+                SchedulerHelper.getScheduler().scheduleJob(quartzTrigger);
+            }
+        }
     }
 
     public static void getScheduleDetails(com.propertyvista.admin.domain.scheduler.Trigger trigger) {
-//        trigger.schedule().nextFireTime().setValue(null);
-//        if (trigger.schedule().repeatType().getValue() != ScheduleType.Manual) {
-//            try {
-//                for (Trigger quartzTrigger : SchedulerHelper.getScheduler().getTriggersOfJob(processJobKey(trigger))) {
-//                    Date nft = quartzTrigger.getNextFireTime();
-//                    if ((nft != null) && (trigger.schedule().nextFireTime().isNull() || nft.before(trigger.schedule().nextFireTime().getValue()))) {
-//                        trigger.schedule().nextFireTime().setValue(nft);
-//                    }
-//                }
-//            } catch (SchedulerException e) {
-//                log.error("Error", e);
-//            }
-//        }
+        List<? extends Trigger> triggers;
+        try {
+            triggers = SchedulerHelper.getScheduler().getTriggersOfJob(getJobKey(trigger));
+        } catch (SchedulerException e) {
+            return;
+        }
+        for (TriggerSchedule schedule : trigger.schedules()) {
+            schedule.nextFireTime().setValue(null);
+            if (schedule.repeatType().getValue() != ScheduleType.Manual) {
+                for (Trigger quartzTrigger : triggers) {
+                    if (quartzTrigger.getKey().equals(getTriggerKey(schedule))) {
+                        Date nft = quartzTrigger.getNextFireTime();
+                        if ((nft != null) && (schedule.nextFireTime().isNull() || nft.before(schedule.nextFireTime().getValue()))) {
+                            schedule.nextFireTime().setValue(nft);
+                        }
+                    }
+                }
+            }
+        }
     }
 }

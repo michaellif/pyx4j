@@ -55,10 +55,10 @@ public interface Run extends IEntity {
     @ToString(index = 0)
     @Timestamp(Timestamp.Update.Created)
     @ReadOnly
-    @Format("MM/dd/yyyy h:mm a")
+    @Format("MM/dd/yyyy HH:mm")
     IPrimitive<Date> created();
 
-    @Format("MM/dd/yyyy h:mm a")
+    @Format("MM/dd/yyyy HH:mm")
     @Timestamp(Timestamp.Update.Updated)
     IPrimitive<Date> updated();
 

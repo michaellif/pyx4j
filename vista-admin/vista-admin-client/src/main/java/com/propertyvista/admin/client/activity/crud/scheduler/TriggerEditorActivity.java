@@ -18,7 +18,6 @@ import java.util.Date;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.site.client.activity.crud.EditorActivityBase;
@@ -26,7 +25,6 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.admin.client.ui.crud.scheduler.trigger.TriggerEditorView;
 import com.propertyvista.admin.client.viewfactories.crud.ManagementVeiwFactory;
-import com.propertyvista.admin.domain.scheduler.ScheduleType;
 import com.propertyvista.admin.domain.scheduler.Trigger;
 import com.propertyvista.admin.rpc.services.scheduler.TriggerCrudService;
 
@@ -42,10 +40,6 @@ public class TriggerEditorActivity extends EditorActivityBase<Trigger> {
     protected void createNewEntity(AsyncCallback<Trigger> callback) {
         Trigger process = EntityFactory.create(getEntityClass());
         process.created().setValue(new Date());
-        process.schedules().$().repeatType().setValue(ScheduleType.Weekly);
-        process.schedules().$().repeatEvery().setValue(1);
-        process.schedules().$().startsOn().setValue(new LogicalDate());
-
         callback.onSuccess(process);
     }
 

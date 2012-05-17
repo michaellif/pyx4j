@@ -21,20 +21,26 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
-import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
+import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.annotations.I18n;
 
-@EmbeddedEntity
+import com.propertyvista.domain.VistaNamespace;
+
+@I18n(strategy = I18n.I18nStrategy.IgnoreAll)
+@Table(prefix = "scheduler", namespace = VistaNamespace.adminNamespace)
+@ToStringFormat("{0} {1}  Since {2}; Next Fire Time {3}")
 public interface TriggerSchedule extends IEntity {
 
     @Owner
@@ -47,22 +53,24 @@ public interface TriggerSchedule extends IEntity {
     @OrderColumn
     IPrimitive<Integer> odr();
 
-    @ToString
+    @ToString(index = 0)
     @NotNull
     IPrimitive<ScheduleType> repeatType();
 
+    @NotNull
     IPrimitive<Integer> repeatEvery();
 
     @Editor(type = Editor.EditorType.timepicker)
-    @ToString
+    @ToString(index = 1)
     @NotNull
-    @Format("h:mma")
+    @Format("HH:mm")
+    @Caption(watermark = "__:__")
     @MemberColumn(name = "tm")
     @XmlSchemaType(name = "time")
     IPrimitive<java.sql.Time> time();
 
     @Caption(name = "Starts on")
-    @ToString
+    @ToString(index = 2)
     @NotNull
     @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> startsOn();
@@ -71,10 +79,11 @@ public interface TriggerSchedule extends IEntity {
     @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> endsOn();
 
+    @ToString(index = 3)
     @Transient
     @Editor(type = Editor.EditorType.label)
     @ReadOnly
-    @Format("MM/dd/yyyy h:mm a")
+    @Format("MM/dd/yyyy HH:mm")
     IPrimitive<Date> nextFireTime();
 
 }

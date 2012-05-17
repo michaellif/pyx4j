@@ -53,7 +53,7 @@ public interface RunData extends IEntity {
     @Owned(forceCreation = true, cascade = {})
     RunStats stats();
 
-    @Format("MM/dd/yyyy h:mm a")
+    @Format("MM/dd/yyyy HH:mm")
     @Timestamp(Timestamp.Update.Updated)
     IPrimitive<Date> updated();
 }
