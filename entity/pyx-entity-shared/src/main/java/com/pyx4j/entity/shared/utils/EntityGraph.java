@@ -121,9 +121,15 @@ public class EntityGraph {
         EntityMeta em = ent1.getEntityMeta();
         for (String memberName : em.getMemberNames()) {
             MemberMeta memberMeta = em.getMemberMeta(memberName);
+            IObject<?> member1 = ent1.getMember(memberName);
+            IObject<?> member2 = ent2.getMember(memberName);
+            if ((member1.getAttachLevel() == AttachLevel.Detached) && (member2.getAttachLevel() == AttachLevel.Detached)) {
+                continue;
+            }
+
             if (memberMeta.isEntity()) {
-                IEntity ent1Member = (IEntity) ent1.getMember(memberName);
-                IEntity ent2Member = (IEntity) ent2.getMember(memberName);
+                IEntity ent1Member = (IEntity) member1;
+                IEntity ent2Member = (IEntity) member2;
                 if (ent2Member.isNull() && ent2Member.isNull()) {
                     continue;
                 } else if (ent1Member.getMeta().isEmbedded()) {
@@ -139,7 +145,7 @@ public class EntityGraph {
                     }
                     return false;
                 }
-            } else if (!EqualsHelper.equals(ent1.getMember(memberName), ent2.getMember(memberName))) {
+            } else if (!EqualsHelper.equals(member1, member2)) {
                 if (traceFullyEqual) {
                     log.info("--changes in member {}", memberName);
                 }
