@@ -13,6 +13,8 @@
  */
 package com.propertyvista.portal.client.ui.residents;
 
+import java.util.Collection;
+
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -20,30 +22,38 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
 
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.common.client.events.UserMessageEvent;
 import com.propertyvista.common.client.ui.components.c.NewPaymentMethodForm;
+import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.PaymentMethod;
+import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.portal.client.ui.decorations.UserMessagePanel;
 
 public class NewPaymentMethodViewImpl extends FlowPanel implements NewPaymentMethodView {
 
+    private static final I18n i18n = I18n.get(NewPaymentMethodViewImpl.class);
+
     private final NewPaymentMethodForm form;
 
     private Presenter presenter;
-
-    private static final I18n i18n = I18n.get(NewPaymentMethodViewImpl.class);
 
     public NewPaymentMethodViewImpl() {
         add(new UserMessagePanel());
 
         form = new NewPaymentMethodForm() {
             @Override
-            public void onBillingAddressSameAsCurrentOne(boolean set) {
+            public Collection<PaymentType> getPaymentOptions() {
+                return PaymentType.avalableInProfile();
+            }
+
+            @Override
+            public void onBillingAddressSameAsCurrentOne(boolean set, CComponent<AddressStructured, ?> comp) {
                 assert (presenter != null);
-                presenter.onBillingAddressSameAsCurrentOne(set);
+                presenter.onBillingAddressSameAsCurrentOne(set, comp);
             }
         };
         form.initContent();

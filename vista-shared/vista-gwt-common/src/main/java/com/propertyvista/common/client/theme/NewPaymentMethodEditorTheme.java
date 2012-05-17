@@ -35,7 +35,7 @@ public class NewPaymentMethodEditorTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", StyleName.PaymentEditorButtons);
-        style.addProperty("width", "150px");
+        style.addProperty("width", "100px");
         addStyle(style);
 
         style = new Style(".", StyleName.PaymentEditorButtons, " .", RadioGroup.StyleName.RadioGroupItem);
@@ -51,12 +51,15 @@ public class NewPaymentMethodEditorTheme extends Theme {
         style = new Style(".", StyleName.PaymentEditorButtons, ".", RadioGroup.StyleName.RadioGroupItem, "-", RadioGroup.StyleDependent.selected);
 //        style.addProperty("border-top", "1px solid #bbb");
 //        style.addProperty("border-bottom", "1px solid #bbb");
+        style.addProperty("width", "100px");
         addStyle(style);
 
         style = new Style(".", StyleName.PaymentEditorForm);
         style.addProperty("border-radius", "5px");
         style.addProperty("border", "solid 1px #666");
-        style.addProperty("width", "400px");
+        style.addProperty("margin", "auto");
+        style.addProperty("height", "170px");
+        style.addProperty("width", "550px");
         addStyle(style);
 
         style = new Style(".", StyleName.PaymentEditorImages);

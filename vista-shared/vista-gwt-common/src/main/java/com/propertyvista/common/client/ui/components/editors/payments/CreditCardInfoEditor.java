@@ -52,7 +52,7 @@ public class CreditCardInfoEditor extends CEntityDecoratableForm<CreditCardInfo>
 
         int row = -1;
         CMonthYearPicker monthYearPicker = new CMonthYearPicker(false);
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().nameOn()), 30).build());
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().nameOn()), 20).build());
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().cardType()), 20).build());
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().number()), 20).build());
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().expiryDate(), monthYearPicker), 20).build());

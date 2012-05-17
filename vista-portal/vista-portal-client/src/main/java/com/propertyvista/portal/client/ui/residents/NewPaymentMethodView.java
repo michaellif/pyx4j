@@ -15,6 +15,9 @@ package com.propertyvista.portal.client.ui.residents;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.forms.client.ui.CComponent;
+
+import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.PaymentMethod;
 
 public interface NewPaymentMethodView extends IsWidget {
@@ -26,7 +29,7 @@ public interface NewPaymentMethodView extends IsWidget {
 
     interface Presenter {
 
-        public void onBillingAddressSameAsCurrentOne(boolean set);
+        public void onBillingAddressSameAsCurrentOne(boolean set, CComponent<AddressStructured, ?> comp);
 
         public void save(PaymentMethod paymentmethod);
 

@@ -19,11 +19,13 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.PaymentMethod;
+import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.portal.client.ui.residents.NewPaymentMethodView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
@@ -46,6 +48,11 @@ public class NewPaymentMethodActivity extends SecurityAwareActivity implements N
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         super.start(panel, eventBus);
         panel.setWidget(view);
+
+        // create default empty method:
+        PaymentMethod method = EntityFactory.create(PaymentMethod.class);
+        method.type().setValue(PaymentType.Echeck);
+        view.populate(method);
     }
 
     public NewPaymentMethodActivity withPlace(Place place) {
@@ -58,27 +65,21 @@ public class NewPaymentMethodActivity extends SecurityAwareActivity implements N
             @Override
             public void onSuccess(PaymentMethod result) {
                 AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.PaymentMethods());
-
             }
         }, paymentmethod);
     }
 
     @Override
-    public void onBillingAddressSameAsCurrentOne(boolean set) {
-        if (!set) {
-            return;
+    public void onBillingAddressSameAsCurrentOne(boolean set, final CComponent<AddressStructured, ?> comp) {
+        if (set) {
+            srv.getCurrentAddress(new DefaultAsyncCallback<AddressStructured>() {
+                @Override
+                public void onSuccess(AddressStructured result) {
+                    comp.setValue(result, false);
+                }
+            });
+        } else {
+            comp.setValue(EntityFactory.create(AddressStructured.class), false);
         }
-        srv.getCurrentAddress(new DefaultAsyncCallback<AddressStructured>() {
-
-            @Override
-            public void onSuccess(AddressStructured result) {
-                final PaymentMethod currentValue = EntityFactory.create(PaymentMethod.class);
-                currentValue.set(view.getValue().duplicate());
-                currentValue.billingAddress().set(result);
-                currentValue.sameAsCurrent().setValue(true);
-                view.populate(currentValue);
-
-            }
-        });
     }
 }
