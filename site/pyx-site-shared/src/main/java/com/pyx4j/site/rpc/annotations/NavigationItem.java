@@ -30,6 +30,9 @@ import com.pyx4j.i18n.annotations.I18nAnnotation;
 @I18nAnnotation(element = "")
 public @interface NavigationItem {
 
+    /**
+     * If not specified the navigLabel is taken from @PlaceProperties.caption
+     */
     @I18n
     String navigLabel() default I18nAnnotation.DEFAULT_VALUE;
 

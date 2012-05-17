@@ -23,13 +23,16 @@ package com.pyx4j.site.rpc.annotations;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
-import com.pyx4j.i18n.annotations.I18nAnnotation;
 import com.pyx4j.i18n.annotations.I18n;
+import com.pyx4j.i18n.annotations.I18nAnnotation;
 
 @Retention(RetentionPolicy.RUNTIME)
 @I18nAnnotation(element = "caption")
 public @interface PlaceProperties {
 
+    /**
+     * If not specified the caption value is automatically generated from Place class name.
+     */
     @I18n
     String caption() default I18nAnnotation.DEFAULT_VALUE;
 
