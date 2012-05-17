@@ -86,5 +86,8 @@ public interface PaymentMethod extends IEntity {
     @ToString(index = 2)
     IPrimitive<Boolean> isDefault();
 
+    /**
+     * Indicates if this method is one-time usage only and shouldn't be saved in DB.
+     */
     IPrimitive<Boolean> isOneTimePayment();
 }
