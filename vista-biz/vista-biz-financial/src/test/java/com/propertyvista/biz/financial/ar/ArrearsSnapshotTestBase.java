@@ -19,6 +19,7 @@ import java.util.EnumMap;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.gwt.server.DateUtils;
 
@@ -27,13 +28,36 @@ import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.billing.AgingBuckets;
 import com.propertyvista.domain.financial.billing.ArrearsSnapshot;
 import com.propertyvista.domain.financial.billing.InvoiceDebit.DebitType;
+import com.propertyvista.domain.financial.billing.LeaseArrearsSnapshot;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 public class ArrearsSnapshotTestBase extends FinancialTestBase {
 
     private ArrearsSnapshot actualArrearsSnapshot;
 
-    private EnumMap<DebitType, AgingBuckets> expectedAgingBuckets;
+    private EnumMap<DebitType, AgingBuckets> prevExpectedAgingBuckets;
+
+    private long startTime;
+
+    private LogicalDate prevFromDate;
+
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
+        cleanUp();
+        preloadData();
+        startTime = System.currentTimeMillis();
+    }
+
+    private void cleanUp() {
+        Persistence.service().delete(EntityQueryCriteria.create(LeaseArrearsSnapshot.class));
+    }
+
+    @Override
+    protected void tearDown() throws Exception {
+        System.out.println("Execution Time - " + (System.currentTimeMillis() - startTime) + "ms");
+        super.tearDown();
+    }
 
     public void runAndConfirmBilling() {
         runBilling(true);
@@ -41,24 +65,28 @@ public class ArrearsSnapshotTestBase extends FinancialTestBase {
 
     protected void updateArrearsHistory() {
         ARArrearsManager.updateArrearsHistory(billingAccount());
+        Persistence.service().commit();
     }
 
     protected void beginAssertArrearsSnapshot(String asOf) {
         actualArrearsSnapshot = ARArrearsManager.getArrearsSnapshot(billingAccount(), asDate(asOf));
-        expectedAgingBuckets = new EnumMap<DebitType, AgingBuckets>(DebitType.class);
+        prevFromDate = actualArrearsSnapshot.fromDate().getValue();
+        prevExpectedAgingBuckets = new EnumMap<DebitType, AgingBuckets>(DebitType.class);
+
     }
 
     protected void assertPrevArrearsSnapshot(String asOf) {
         actualArrearsSnapshot = ARArrearsManager.getArrearsSnapshot(billingAccount(), asDate(asOf));
+        assertEquals("got unexpected snapshot from other date", prevFromDate, actualArrearsSnapshot.fromDate().getValue());
 
-        for (AgingBuckets expected : expectedAgingBuckets.values()) {
+        for (AgingBuckets expected : prevExpectedAgingBuckets.values()) {
             if (expected.debitType().getValue() != DebitType.total) {
                 assertArrearsDebitType(expected.debitType().getValue(), expected.bucketCurrent().getValue().toString(), expected.bucket30().getValue()
                         .toString(), expected.bucket60().getValue().toString(), expected.bucket90().getValue().toString(), expected.bucketOver90().getValue()
                         .toString());
             }
         }
-        AgingBuckets expectedTotal = expectedAgingBuckets.get(DebitType.total);
+        AgingBuckets expectedTotal = prevExpectedAgingBuckets.get(DebitType.total);
         assertArrearsTotal(expectedTotal.bucketCurrent().getValue().toString(), expectedTotal.bucket30().getValue().toString(), expectedTotal.bucket60()
                 .getValue().toString(), expectedTotal.bucket90().getValue().toString(), expectedTotal.bucketOver90().getValue().toString());
     }
@@ -90,9 +118,9 @@ public class ArrearsSnapshotTestBase extends FinancialTestBase {
         expected.bucket90().setValue(new BigDecimal(expected90));
         expected.bucketOver90().setValue(new BigDecimal(expectedOver90));
 
-        AgingBuckets cachedExpected = expectedAgingBuckets.get(debitType);
+        AgingBuckets cachedExpected = prevExpectedAgingBuckets.get(debitType);
         if (cachedExpected == null) {
-            expectedAgingBuckets.put(debitType, expected);
+            prevExpectedAgingBuckets.put(debitType, expected);
             cachedExpected = expected;
         } else {
             if (!EntityGraph.fullyEqualValues(cachedExpected, expected)) {

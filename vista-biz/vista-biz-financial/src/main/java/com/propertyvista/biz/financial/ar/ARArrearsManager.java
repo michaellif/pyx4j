@@ -143,7 +143,7 @@ public class ARArrearsManager {
         EntityQueryCriteria<LeaseArrearsSnapshot> criteria = EntityQueryCriteria.create(LeaseArrearsSnapshot.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().billingAccount(), billingAccount));
         criteria.add(PropertyCriterion.le(criteria.proto().fromDate(), date));
-        criteria.add(PropertyCriterion.ge(criteria.proto().toDate(), date));
+        criteria.desc(criteria.proto().fromDate());
 
         LeaseArrearsSnapshot snapshot = Persistence.service().retrieve(criteria);
         return snapshot;
