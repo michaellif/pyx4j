@@ -47,6 +47,5 @@ public class RunViewerViewImpl extends AdminViewerViewImplBase<Run> implements R
         getForm().get(getForm().proto().stats().failed()).setValue(result.stats().failed().getValue());
         getForm().get(getForm().proto().stats().averageDuration()).setValue(result.stats().averageDuration().getValue());
         getForm().get(getForm().proto().stats().totalDuration()).setValue(result.stats().totalDuration().getValue());
-        getForm().get(getForm().proto().stats().updateTime()).setValue(result.stats().updateTime().getValue());
     }
 }

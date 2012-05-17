@@ -36,6 +36,7 @@ import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.server.contexts.Lifecycle;
@@ -45,6 +46,7 @@ import com.propertyvista.admin.domain.pmc.Pmc;
 import com.propertyvista.admin.domain.scheduler.Run;
 import com.propertyvista.admin.domain.scheduler.RunData;
 import com.propertyvista.admin.domain.scheduler.RunDataStatus;
+import com.propertyvista.admin.domain.scheduler.RunStats;
 import com.propertyvista.admin.domain.scheduler.RunStatus;
 import com.propertyvista.admin.domain.scheduler.Trigger;
 import com.propertyvista.admin.domain.scheduler.TriggerPmc;
@@ -70,7 +72,7 @@ public class PmcProcessDispatcherJob implements Job {
             NamespaceManager.setNamespace(Pmc.adminNamespace);
             Persistence.service().startBackgroundProcessTransaction();
             Trigger process = Persistence.service().retrieve(Trigger.class, new Key(dataMap.getLong(JobData.triggerId.name())));
-            log.info("starting {}", process);
+            log.info("starting {}", process.getStringView());
             startAndRun(process);
         } finally {
             Persistence.service().endTransaction();
@@ -172,13 +174,43 @@ public class PmcProcessDispatcherJob implements Job {
             while (it.hasNext()) {
                 RunData runData = it.next();
                 runData.updated().setValue(new Date());
+                runData.started().setValue(new Date());
+                runData.status().setValue(RunDataStatus.Running);
+                Persistence.service().persist(runData);
+                Persistence.service().commit();
                 executeOneRunData(executorService, pmcProcess, runData);
+
+                updateRunStats(run.stats(), startTimeNano, runData);
+
                 Persistence.service().persist(runData);
                 Persistence.service().commit();
             }
             run.status().setValue(RunStatus.Completed);
         } finally {
             executorService.shutdownNow();
+        }
+
+    }
+
+    private void updateRunStats(RunStats stats, long startTimeNano, RunData runData) {
+        long durationNano = System.nanoTime() - startTimeNano;
+
+        nvlAdd(stats.total(), runData.stats().total());
+        nvlAdd(stats.processed(), runData.stats().processed());
+        nvlAdd(stats.failed(), runData.stats().failed());
+
+        stats.totalDuration().setValue(durationNano / Consts.MSEC2NANO);
+        if ((!stats.total().isNull()) && (stats.total().getValue() != 0)) {
+            stats.averageDuration().setValue(durationNano / (Consts.MSEC2NANO * stats.total().getValue()));
+        }
+        Persistence.service().persist(stats);
+    }
+
+    private void nvlAdd(IPrimitive<Long> target, IPrimitive<Long> value) {
+        if (target.isNull()) {
+            target.setValue(value.getValue());
+        } else if (!value.isNull()) {
+            target.setValue(target.getValue() + value.getValue());
         }
 
     }

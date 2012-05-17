@@ -40,6 +40,7 @@ public class RunForm extends AdminEntityForm<Run> {
 
         container.setWidget(++row, 0, new DecoratorBuilder(inject(proto().trigger()), 15).build());
         container.setWidget(++row, 0, new DecoratorBuilder(inject(proto().trigger().triggerType()), 15).build());
+        container.setWidget(++row, 0, new DecoratorBuilder(inject(proto().started()), 10).build());
         container.setWidget(++row, 0, new DecoratorBuilder(inject(proto().created()), 10).build());
         container.setWidget(++row, 0, new DecoratorBuilder(inject(proto().status()), 15).build());
 
@@ -49,7 +50,6 @@ public class RunForm extends AdminEntityForm<Run> {
         container.setWidget(++row, 0, new DecoratorBuilder(inject(proto().stats().failed()), 10).build());
         container.setWidget(++row, 0, new DecoratorBuilder(inject(proto().stats().averageDuration()), 10).build());
         container.setWidget(++row, 0, new DecoratorBuilder(inject(proto().stats().totalDuration()), 10).build());
-        container.setWidget(++row, 0, new DecoratorBuilder(inject(proto().stats().updateTime()), 10).build());
 
         container.setWidget(++row, 0, new DecoratorBuilder(inject(proto().errorMessage()), 40).build());
 

@@ -23,6 +23,8 @@ public enum RunDataStatus implements Serializable {
 
     NeverRan,
 
+    Running,
+
     Processed,
 
     Erred,

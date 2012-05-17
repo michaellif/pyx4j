@@ -44,6 +44,9 @@ public interface RunData extends IEntity {
 
     IPrimitive<RunDataStatus> status();
 
+    @Format("MM/dd/yyyy HH:mm")
+    IPrimitive<Date> started();
+
     IPrimitive<String> errorMessage();
 
     @ReadOnly

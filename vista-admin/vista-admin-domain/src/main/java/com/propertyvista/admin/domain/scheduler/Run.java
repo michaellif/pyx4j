@@ -52,6 +52,9 @@ public interface Run extends IEntity {
     @Indexed
     IPrimitive<RunStatus> status();
 
+    @Format("MM/dd/yyyy HH:mm")
+    IPrimitive<Date> started();
+
     @ToString(index = 0)
     @Timestamp(Timestamp.Update.Created)
     @ReadOnly

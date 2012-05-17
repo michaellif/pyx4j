@@ -25,6 +25,7 @@ public class RunDataLister extends ListerBase<RunData> {
 
         setColumnDescriptors(//@formatter:off
             new MemberColumnDescriptor.Builder(proto().pmc().dnsName()).build(),
+            new MemberColumnDescriptor.Builder(proto().started()).build(),
             new MemberColumnDescriptor.Builder(proto().status()).build(),
             new MemberColumnDescriptor.Builder(proto().stats().total()).build(),
             new MemberColumnDescriptor.Builder(proto().stats().processed()).build(),
