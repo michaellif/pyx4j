@@ -76,7 +76,6 @@ public abstract class PaymentMethodFolder extends VistaBoxFolder<PaymentMethod> 
             // tune-up:
             setTypeSelectionVisible(false);
             setBillingAddressVisible(false);
-            setIsOneTimePaymentVisible(true);
             setIsDefaultVisible(true);
 
             return w;
