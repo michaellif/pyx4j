@@ -15,13 +15,16 @@ package com.propertyvista.portal.server.portal.services;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.AbstractCrudServiceImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
+import com.propertyvista.biz.financial.payment.PaymentFacade;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.PaymentMethod;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.portal.rpc.portal.services.TenantPaymentMethodCrudService;
 import com.propertyvista.portal.server.portal.TenantAppContext;
@@ -55,8 +58,15 @@ public class TenantPaymentMethodCrudServiceImpl extends AbstractCrudServiceImpl<
 
     @Override
     protected void persist(PaymentMethod entity, PaymentMethod dto) {
-        entity.leaseParticipant().set(TenantAppContext.getCurrentUserTenantInLease());
-        Persistence.service().persist(entity);
+        Tenant tenantInLease = TenantAppContext.getCurrentUserTenantInLease();
+
+        entity.leaseParticipant().set(tenantInLease);
+        entity.isOneTimePayment().setValue(Boolean.FALSE);
+
+        Persistence.service().retrieve(tenantInLease.leaseV());
+        Persistence.service().retrieve(tenantInLease.leaseV().holder().unit());
+        Building building = tenantInLease.leaseV().holder().unit().belongsTo();
+        ServerSideFactory.create(PaymentFacade.class).persistPaymentMethod(building, entity);
     }
 
     @Override
