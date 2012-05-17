@@ -93,6 +93,7 @@ public class PmcProcessDispatcherJob implements Job {
         } else {
             run = EntityFactory.create(Run.class);
         }
+        run.started().setValue(new Date());
         run.status().setValue(RunStatus.Running);
         run.trigger().set(trigger);
         Persistence.service().persist(run);
