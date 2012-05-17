@@ -50,6 +50,11 @@ public class VistaServerSideConfiguration33 extends VistaServerSideConfiguration
     }
 
     @Override
+    public boolean openIdrequired() {
+        return false;
+    }
+
+    @Override
     protected String getApplicationDeploymentProtocol() {
         return "https";
     }
