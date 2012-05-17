@@ -15,13 +15,13 @@ package com.propertyvista.crm.server.services.financial;
 
 import com.pyx4j.entity.server.AbstractCrudServiceImpl;
 
-import com.propertyvista.crm.rpc.services.financial.MerchantTransactionCrudService;
-import com.propertyvista.domain.financial.MerchantTransaction;
+import com.propertyvista.crm.rpc.services.financial.AggregatedTransferCrudService;
+import com.propertyvista.domain.financial.AggregatedTransfer;
 
-public class MerchantTransactionCrudServiceImpl extends AbstractCrudServiceImpl<MerchantTransaction> implements MerchantTransactionCrudService {
+public class AggregatedTransferCrudServiceImpl extends AbstractCrudServiceImpl<AggregatedTransfer> implements AggregatedTransferCrudService {
 
-    public MerchantTransactionCrudServiceImpl() {
-        super(MerchantTransaction.class);
+    public AggregatedTransferCrudServiceImpl() {
+        super(AggregatedTransfer.class);
     }
 
     @Override

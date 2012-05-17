@@ -27,13 +27,13 @@ import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
-import com.propertyvista.domain.financial.PaymentRecord.PaidRejectedTransactionId;
-import com.propertyvista.domain.financial.PaymentRecord.ReturnTransactionId;
+import com.propertyvista.domain.financial.PaymentRecord.PaidRejectedAggregatedTransferId;
+import com.propertyvista.domain.financial.PaymentRecord.ReturnAggregatedTransferId;
 
-public interface MerchantTransaction extends IEntity {
+public interface AggregatedTransfer extends IEntity {
 
     @I18n
-    enum MerchantTransactionStatus {
+    enum AggregatedTransferStatus {
 
         Paid,
 
@@ -48,7 +48,7 @@ public interface MerchantTransaction extends IEntity {
 
     IPrimitive<LogicalDate> paymentDate();
 
-    IPrimitive<MerchantTransactionStatus> status();
+    IPrimitive<AggregatedTransferStatus> status();
 
     MerchantAccount merchantAccount();
 
@@ -73,10 +73,10 @@ public interface MerchantTransaction extends IEntity {
     IPrimitive<Integer> returnItemsCount();
 
     @Detached(level = AttachLevel.Detached)
-    @JoinTable(value = PaymentRecord.class, mappedBy = PaidRejectedTransactionId.class)
+    @JoinTable(value = PaymentRecord.class, mappedBy = PaidRejectedAggregatedTransferId.class)
     ISet<PaymentRecord> payments();
 
     @Detached(level = AttachLevel.Detached)
-    @JoinTable(value = PaymentRecord.class, mappedBy = ReturnTransactionId.class)
+    @JoinTable(value = PaymentRecord.class, mappedBy = ReturnAggregatedTransferId.class)
     ISet<PaymentRecord> returnedPayments();
 }

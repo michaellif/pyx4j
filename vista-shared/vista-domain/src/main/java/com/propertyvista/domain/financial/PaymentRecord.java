@@ -127,17 +127,17 @@ public interface PaymentRecord extends IEntity {
     @Caption(name = "Transaction Authorization #")
     IPrimitive<String> transactionAuthorizationNumber();
 
-    interface PaidRejectedTransactionId extends ColumnId {
+    interface PaidRejectedAggregatedTransferId extends ColumnId {
     }
 
-    @JoinColumn(PaidRejectedTransactionId.class)
-    MerchantTransaction merchantTransaction();
+    @JoinColumn(PaidRejectedAggregatedTransferId.class)
+    AggregatedTransfer aggregatedTransfer();
 
-    interface ReturnTransactionId extends ColumnId {
+    interface ReturnAggregatedTransferId extends ColumnId {
     }
 
-    @JoinColumn(ReturnTransactionId.class)
-    MerchantTransaction merchantTransactionReturn();
+    @JoinColumn(ReturnAggregatedTransferId.class)
+    AggregatedTransfer aggregatedTransferReturn();
 
     @Editor(type = EditorType.textarea)
     IPrimitive<String> notes();

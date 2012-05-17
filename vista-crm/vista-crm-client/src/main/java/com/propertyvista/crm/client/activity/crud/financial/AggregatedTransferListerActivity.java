@@ -21,15 +21,15 @@ import com.pyx4j.site.client.activity.crud.ListerActivityBase;
 
 import com.propertyvista.crm.client.ui.crud.financial.MerchantTransactionListerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.FinancialViewFactory;
-import com.propertyvista.crm.rpc.services.financial.MerchantTransactionCrudService;
-import com.propertyvista.domain.financial.MerchantTransaction;
+import com.propertyvista.crm.rpc.services.financial.AggregatedTransferCrudService;
+import com.propertyvista.domain.financial.AggregatedTransfer;
 
-public class MerchantTransactionListerActivity extends ListerActivityBase<MerchantTransaction> {
+public class AggregatedTransferListerActivity extends ListerActivityBase<AggregatedTransfer> {
 
     @SuppressWarnings("unchecked")
-    public MerchantTransactionListerActivity(Place place) {
-        super(place, FinancialViewFactory.instance(MerchantTransactionListerView.class), (AbstractCrudService<MerchantTransaction>) GWT
-                .create(MerchantTransactionCrudService.class), MerchantTransaction.class);
+    public AggregatedTransferListerActivity(Place place) {
+        super(place, FinancialViewFactory.instance(MerchantTransactionListerView.class), (AbstractCrudService<AggregatedTransfer>) GWT
+                .create(AggregatedTransferCrudService.class), AggregatedTransfer.class);
     }
 
 }

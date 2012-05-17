@@ -16,10 +16,10 @@ package com.propertyvista.crm.client.ui.crud.financial;
 import com.pyx4j.site.client.ui.crud.form.IViewerView;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 
-import com.propertyvista.domain.financial.MerchantTransaction;
+import com.propertyvista.domain.financial.AggregatedTransfer;
 import com.propertyvista.domain.financial.PaymentRecord;
 
-public interface MerchantTransactionViewerView extends IViewerView<MerchantTransaction> {
+public interface MerchantTransactionViewerView extends IViewerView<AggregatedTransfer> {
 
     IListerView<PaymentRecord> getPaymentsListerView();
 

@@ -16,12 +16,12 @@ package com.propertyvista.crm.client.ui.crud.financial;
 import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 
-import com.propertyvista.domain.financial.MerchantTransaction;
+import com.propertyvista.domain.financial.AggregatedTransfer;
 
-public class MerchantTransactionLister extends ListerBase<MerchantTransaction> {
+public class MerchantTransactionLister extends ListerBase<AggregatedTransfer> {
 
     public MerchantTransactionLister() {
-        super(MerchantTransaction.class, false, false);
+        super(AggregatedTransfer.class, false, false);
 
         setColumnDescriptors(//@formatter:off
                 new MemberColumnDescriptor.Builder(proto().paymentDate()).build(), 

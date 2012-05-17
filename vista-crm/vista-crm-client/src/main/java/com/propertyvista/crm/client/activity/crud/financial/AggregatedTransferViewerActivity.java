@@ -25,21 +25,21 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.financial.MerchantTransactionViewerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.BuildingViewFactory;
-import com.propertyvista.crm.rpc.services.financial.MerchantTransactionCrudService;
+import com.propertyvista.crm.rpc.services.financial.AggregatedTransferCrudService;
 import com.propertyvista.crm.rpc.services.financial.PaymentRecordListService;
-import com.propertyvista.domain.financial.MerchantTransaction;
+import com.propertyvista.domain.financial.AggregatedTransfer;
 import com.propertyvista.domain.financial.PaymentRecord;
 
-public class MerchantTransactionViewerActivity extends CrmViewerActivity<MerchantTransaction> {
+public class AggregatedTransferViewerActivity extends CrmViewerActivity<AggregatedTransfer> {
 
     private final IListerView.Presenter<PaymentRecord> paymentLister;
 
     private final IListerView.Presenter<PaymentRecord> returnedPaymentLister;
 
     @SuppressWarnings("unchecked")
-    public MerchantTransactionViewerActivity(CrudAppPlace place) {
-        super(place, BuildingViewFactory.instance(MerchantTransactionViewerView.class), (AbstractCrudService<MerchantTransaction>) GWT
-                .create(MerchantTransactionCrudService.class));
+    public AggregatedTransferViewerActivity(CrudAppPlace place) {
+        super(place, BuildingViewFactory.instance(MerchantTransactionViewerView.class), (AbstractCrudService<AggregatedTransfer>) GWT
+                .create(AggregatedTransferCrudService.class));
 
         paymentLister = new ListerActivityBase<PaymentRecord>(place, ((MerchantTransactionViewerView) getView()).getPaymentsListerView(),
                 (AbstractCrudService<PaymentRecord>) GWT.create(PaymentRecordListService.class), PaymentRecord.class);
@@ -49,13 +49,13 @@ public class MerchantTransactionViewerActivity extends CrmViewerActivity<Merchan
     }
 
     @Override
-    protected void onPopulateSuccess(MerchantTransaction result) {
+    protected void onPopulateSuccess(AggregatedTransfer result) {
         super.onPopulateSuccess(result);
 
-        paymentLister.addPreDefinedFilter(PropertyCriterion.eq(EntityFactory.getEntityPrototype(PaymentRecord.class).merchantTransaction(), result));
+        paymentLister.addPreDefinedFilter(PropertyCriterion.eq(EntityFactory.getEntityPrototype(PaymentRecord.class).aggregatedTransfer(), result));
         paymentLister.populate();
 
-        returnedPaymentLister.addPreDefinedFilter(PropertyCriterion.eq(EntityFactory.getEntityPrototype(PaymentRecord.class).merchantTransactionReturn(),
+        returnedPaymentLister.addPreDefinedFilter(PropertyCriterion.eq(EntityFactory.getEntityPrototype(PaymentRecord.class).aggregatedTransferReturn(),
                 result));
         returnedPaymentLister.populate();
     }

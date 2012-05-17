@@ -15,12 +15,12 @@ package com.propertyvista.crm.client.ui.crud.financial;
 
 import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.domain.financial.MerchantTransaction;
+import com.propertyvista.domain.financial.AggregatedTransfer;
 
-public class MerchantTransactionListerViewImpl extends CrmListerViewImplBase<MerchantTransaction> implements MerchantTransactionListerView {
+public class MerchantTransactionListerViewImpl extends CrmListerViewImplBase<AggregatedTransfer> implements MerchantTransactionListerView {
 
     public MerchantTransactionListerViewImpl() {
-        super(CrmSiteMap.Finance.MerchantTransaction.class);
+        super(CrmSiteMap.Finance.AggregatedTransfer.class);
         setLister(new MerchantTransactionLister());
     }
 }

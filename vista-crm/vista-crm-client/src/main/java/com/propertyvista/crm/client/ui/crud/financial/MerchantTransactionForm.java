@@ -19,16 +19,16 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
-import com.propertyvista.domain.financial.MerchantTransaction;
+import com.propertyvista.domain.financial.AggregatedTransfer;
 
-public class MerchantTransactionForm extends CrmEntityForm<MerchantTransaction> {
+public class MerchantTransactionForm extends CrmEntityForm<AggregatedTransfer> {
 
     public MerchantTransactionForm() {
         this(false);
     }
 
     public MerchantTransactionForm(boolean viewMode) {
-        super(MerchantTransaction.class, viewMode);
+        super(AggregatedTransfer.class, viewMode);
     }
 
     @Override

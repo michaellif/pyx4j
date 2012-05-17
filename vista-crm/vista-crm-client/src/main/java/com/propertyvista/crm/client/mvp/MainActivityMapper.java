@@ -81,8 +81,8 @@ import com.propertyvista.crm.client.activity.crud.customer.tenant.PastTenantList
 import com.propertyvista.crm.client.activity.crud.customer.tenant.TenantEditorActivity;
 import com.propertyvista.crm.client.activity.crud.customer.tenant.TenantListerActivity;
 import com.propertyvista.crm.client.activity.crud.customer.tenant.TenantViewerActivity;
-import com.propertyvista.crm.client.activity.crud.financial.MerchantTransactionListerActivity;
-import com.propertyvista.crm.client.activity.crud.financial.MerchantTransactionViewerActivity;
+import com.propertyvista.crm.client.activity.crud.financial.AggregatedTransferListerActivity;
+import com.propertyvista.crm.client.activity.crud.financial.AggregatedTransferViewerActivity;
 import com.propertyvista.crm.client.activity.crud.floorplan.FloorplanEditorActivity;
 import com.propertyvista.crm.client.activity.crud.floorplan.FloorplanViewerActivity;
 import com.propertyvista.crm.client.activity.crud.lease.LeaseEditorActivity;
@@ -549,13 +549,13 @@ public class MainActivityMapper implements AppActivityMapper {
                             break;
                         }
 // - Financial-related:
-                    } else if (place instanceof CrmSiteMap.Finance.MerchantTransaction) {
+                    } else if (place instanceof CrmSiteMap.Finance.AggregatedTransfer) {
                         switch (crudPlace.getType()) {
                         case viewer:
-                            activity = new MerchantTransactionViewerActivity(crudPlace);
+                            activity = new AggregatedTransferViewerActivity(crudPlace);
                             break;
                         case lister:
-                            activity = new MerchantTransactionListerActivity(crudPlace);
+                            activity = new AggregatedTransferListerActivity(crudPlace);
                             break;
                         }
 

@@ -261,9 +261,8 @@ public class CrmSiteMap implements SiteMap {
         public static class BillingRun extends CRMCrudAppPlace {
         }
 
-        @PlaceProperties(caption = "Merchant Transaction")
-        @NavigationItem(navigLabel = "Merchant Transactions")
-        public static class MerchantTransaction extends CRMCrudAppPlace {
+        @NavigationItem
+        public static class AggregatedTransfer extends CRMCrudAppPlace {
         }
     }
 

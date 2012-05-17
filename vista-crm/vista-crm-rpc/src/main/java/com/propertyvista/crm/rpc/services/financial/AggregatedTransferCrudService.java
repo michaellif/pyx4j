@@ -15,8 +15,8 @@ package com.propertyvista.crm.rpc.services.financial;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
 
-import com.propertyvista.domain.financial.MerchantTransaction;
+import com.propertyvista.domain.financial.AggregatedTransfer;
 
-public interface MerchantTransactionCrudService extends AbstractCrudService<MerchantTransaction> {
+public interface AggregatedTransferCrudService extends AbstractCrudService<AggregatedTransfer> {
 
 }
