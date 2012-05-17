@@ -23,14 +23,14 @@ package com.pyx4j.site.rpc.annotations;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
-import com.pyx4j.i18n.annotations.I18nAnnotation;
 import com.pyx4j.i18n.annotations.I18n;
+import com.pyx4j.i18n.annotations.I18nAnnotation;
 
 @Retention(RetentionPolicy.RUNTIME)
 @I18nAnnotation(element = "")
 public @interface NavigationItem {
 
     @I18n
-    String navigLabel() default "";
+    String navigLabel() default I18nAnnotation.DEFAULT_VALUE;
 
 }

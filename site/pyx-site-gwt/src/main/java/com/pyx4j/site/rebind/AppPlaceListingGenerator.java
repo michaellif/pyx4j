@@ -170,7 +170,11 @@ public class AppPlaceListingGenerator extends Generator {
                 NavigationItem navigationItem = jClassType.getAnnotation(NavigationItem.class);
                 String navigLabel = null;
                 if (navigationItem != null) {
-                    navigLabel = navigationItem.navigLabel();
+                    if (I18nAnnotation.DEFAULT_VALUE.equals(navigationItem.navigLabel())) {
+                        navigLabel = caption;
+                    } else {
+                        navigLabel = navigationItem.navigLabel();
+                    }
                 }
 
                 writer.print("return new ");
