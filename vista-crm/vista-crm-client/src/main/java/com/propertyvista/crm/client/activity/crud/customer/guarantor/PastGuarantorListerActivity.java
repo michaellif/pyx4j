@@ -21,22 +21,22 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.site.client.activity.crud.ListerActivityBase;
 
-import com.propertyvista.crm.client.ui.crud.customer.guarantor.GuarantorListerView;
+import com.propertyvista.crm.client.ui.crud.customer.guarantor.PastGuarantorListerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.CustomerViewFactory;
 import com.propertyvista.crm.rpc.services.customer.GuarantorCrudService;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.dto.GuarantorDTO;
 
-public class GuarantorListerActivity extends ListerActivityBase<GuarantorDTO> {
+public class PastGuarantorListerActivity extends ListerActivityBase<GuarantorDTO> {
 
     @SuppressWarnings("unchecked")
-    public GuarantorListerActivity(Place place) {
-        super(place, CustomerViewFactory.instance(GuarantorListerView.class), (AbstractCrudService<GuarantorDTO>) GWT.create(GuarantorCrudService.class),
+    public PastGuarantorListerActivity(Place place) {
+        super(place, CustomerViewFactory.instance(PastGuarantorListerView.class), (AbstractCrudService<GuarantorDTO>) GWT.create(GuarantorCrudService.class),
                 GuarantorDTO.class);
 
         // filter out just current tenants:
         GuarantorDTO proto = EntityFactory.getEntityPrototype(GuarantorDTO.class);
-        addPreDefinedFilter(PropertyCriterion.in(proto.leaseV().status(), Lease.Status.current()));
+        addPreDefinedFilter(PropertyCriterion.in(proto.leaseV().status(), Lease.Status.former()));
         // and finalize lease only:
         addPreDefinedFilter(PropertyCriterion.isNotNull(proto.leaseV().fromDate()));
         addPreDefinedFilter(PropertyCriterion.isNull(proto.leaseV().toDate()));

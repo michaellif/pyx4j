@@ -219,6 +219,11 @@ public class CrmSiteMap implements SiteMap {
         public static class PastLease extends CRMCrudAppPlace {
         }
 
+        @PlaceProperties(caption = "Former Guarantor")
+        @NavigationItem(navigLabel = "Former Guarantors")
+        public static class PastGuarantor extends CRMCrudAppPlace {
+        }
+
     }
 
     public static class Marketing extends AppPlace {

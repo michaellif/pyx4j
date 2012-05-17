@@ -22,6 +22,8 @@ import com.propertyvista.crm.client.ui.crud.customer.guarantor.GuarantorListerVi
 import com.propertyvista.crm.client.ui.crud.customer.guarantor.GuarantorListerViewImpl;
 import com.propertyvista.crm.client.ui.crud.customer.guarantor.GuarantorViewerView;
 import com.propertyvista.crm.client.ui.crud.customer.guarantor.GuarantorViewerViewImpl;
+import com.propertyvista.crm.client.ui.crud.customer.guarantor.PastGuarantorListerView;
+import com.propertyvista.crm.client.ui.crud.customer.guarantor.PastGuarantorListerViewImpl;
 import com.propertyvista.crm.client.ui.crud.customer.screening.EquifaxResultViewerView;
 import com.propertyvista.crm.client.ui.crud.customer.screening.EquifaxResultViewerViewImpl;
 import com.propertyvista.crm.client.ui.crud.customer.screening.PersonScreeningEditorView;
@@ -58,6 +60,9 @@ public class CustomerViewFactory extends ViewFactoryBase {
                 map.put(type, new TenantViewerViewImpl());
             } else if (TenantEditorView.class.equals(type)) {
                 map.put(type, new TenantEditorViewImpl());
+
+            } else if (PastGuarantorListerView.class.equals(type)) {
+                map.put(type, new PastGuarantorListerViewImpl());
 
             } else if (GuarantorListerView.class.equals(type)) {
                 map.put(type, new GuarantorListerViewImpl());

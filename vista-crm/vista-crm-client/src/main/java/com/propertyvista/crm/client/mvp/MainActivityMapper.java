@@ -65,6 +65,7 @@ import com.propertyvista.crm.client.activity.crud.complex.ComplexViewerActivity;
 import com.propertyvista.crm.client.activity.crud.customer.guarantor.GuarantorEditorActivity;
 import com.propertyvista.crm.client.activity.crud.customer.guarantor.GuarantorListerActivity;
 import com.propertyvista.crm.client.activity.crud.customer.guarantor.GuarantorViewerActivity;
+import com.propertyvista.crm.client.activity.crud.customer.guarantor.PastGuarantorListerActivity;
 import com.propertyvista.crm.client.activity.crud.customer.lead.AppointmentEditorActivity;
 import com.propertyvista.crm.client.activity.crud.customer.lead.AppointmentListerActivity;
 import com.propertyvista.crm.client.activity.crud.customer.lead.AppointmentViewerActivity;
@@ -442,6 +443,13 @@ public class MainActivityMapper implements AppActivityMapper {
                             break;
                         case lister:
                             activity = new GuarantorListerActivity(crudPlace);
+                            break;
+                        }
+
+                    } else if (place instanceof CrmSiteMap.Tenants.PastGuarantor) {
+                        switch (crudPlace.getType()) {
+                        case lister:
+                            activity = new PastGuarantorListerActivity(crudPlace);
                             break;
                         }
 
