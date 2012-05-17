@@ -115,6 +115,7 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
 
     @Override
     public void activate(AsyncCallback<PmcDTO> callback, Key entityId) {
+        PmcDTO dto = null;
         Pmc pmc = Persistence.service().retrieve(entityClass, entityId);
 
         if (pmc.status().getValue() == PmcStatus.Created) // First time create preload
@@ -127,40 +128,36 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
                 throw new UserRuntimeException("No users for PMC " + pmc.name().getValue());
             }
 
-            PmcDTO dto = createDTO(pmc);
-            OnboardingUser usr = Persistence.service().retrieve(OnboardingUser.class, creds.get(0).user().getPrimaryKey());
+            OnboardingUserCredential onbUserCred = creds.get(0);
+            dto = createDTO(pmc);
+            OnboardingUser usr = Persistence.service().retrieve(OnboardingUser.class, onbUserCred.user().getPrimaryKey());
             dto.email().setValue(usr.email().getValue());
-            dto.password().setValue(creds.get(0).credential().getValue());
+            dto.password().setValue(onbUserCred.credential().getValue());
 
             dto.person().name().firstName().setValue(usr.firstName().getValue());
             dto.person().name().lastName().setValue(usr.lastName().getValue());
 
             try {
                 Persistence.service().startBackgroundProcessTransaction();
-                PmcCreator.preloadPmc(dto, false);
+                PmcCreator.preloadPmc(dto, onbUserCred, false);
                 pmc.status().setValue(PmcStatus.Active);
                 dto.status().setValue(PmcStatus.Active);
                 Persistence.service().persist(pmc);
+                Persistence.service().persist(onbUserCred);
                 Persistence.service().commit();
             } finally {
                 Persistence.service().endTransaction();
             }
-
-            dto.vistaCrmUrl().setValue(VistaDeployment.getBaseApplicationURL(pmc, VistaBasicBehavior.CRM, true));
-            dto.residentPortalUrl().setValue(VistaDeployment.getBaseApplicationURL(pmc, VistaBasicBehavior.TenantPortal, true));
-            dto.prospectPortalUrl().setValue(VistaDeployment.getBaseApplicationURL(pmc, VistaBasicBehavior.ProspectiveApp, true));
-
-            callback.onSuccess(dto);
         } else {
             pmc.status().setValue(PmcStatus.Active);
             Persistence.service().persist(pmc);
             Persistence.service().commit();
-            PmcDTO dto = createDTO(pmc);
-
-            enhanceRetrieved(pmc, dto);
-
-            callback.onSuccess(dto);
+            dto = createDTO(pmc);
         }
+
+        enhanceRetrieved(pmc, dto);
+
+        callback.onSuccess(dto);
     }
 
     @Override

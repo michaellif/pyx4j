@@ -24,16 +24,18 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
 import com.pyx4j.server.contexts.NamespaceManager;
 
+import com.propertyvista.admin.domain.security.OnboardingUserCredential;
 import com.propertyvista.admin.rpc.PmcDTO;
 import com.propertyvista.domain.DemoData;
 import com.propertyvista.domain.security.CrmRole;
+import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.misc.VistaDataPreloaderParameter;
 
 public class PmcCreator {
 
     private final static Logger log = LoggerFactory.getLogger(PmcCreator.class);
 
-    public static void preloadPmc(PmcDTO pmc, boolean encrypPwd) {
+    public static void preloadPmc(PmcDTO pmc, OnboardingUserCredential onbUserCred, boolean encrypPwd) {
         final String namespace = NamespaceManager.getNamespace();
         NamespaceManager.setNamespace(pmc.namespace().getValue());
         try {
@@ -50,8 +52,8 @@ public class PmcCreator {
             log.info("Preload {}", preloader.create());
 
             CrmRole defaultRole = CrmRolesPreloader.getDefaultRole();
-            UserPreloader.createCrmEmployee(pmc.person().name().firstName().getValue(), pmc.person().name().lastName().getValue(), pmc.email().getValue(), pmc
-                    .password().getValue(), true, encrypPwd, defaultRole);
+            CrmUser crmUser = UserPreloader.createCrmEmployee(pmc.person().name().firstName().getValue(), pmc.person().name().lastName().getValue(), pmc
+                    .email().getValue(), pmc.password().getValue(), true, encrypPwd, defaultRole);
 
             // Create support account by default
             createVistaSupportUsers();
@@ -63,6 +65,10 @@ public class PmcCreator {
                 }
             }
             Persistence.service().commit();
+
+            if (onbUserCred != null)
+                onbUserCred.crmUser().setValue(crmUser.getPrimaryKey());
+
         } finally {
             NamespaceManager.setNamespace(namespace);
         }
