@@ -69,6 +69,10 @@ public class CaledonPadAcknowledgmentParser {
                     PadAkDebitRecord record = EntityFactory.create(PadAkDebitRecord.class);
                     record.terminalId().setValue(values[1]);
                     record.clientId().setValue(values[2]);
+                    // TODO new version
+                    if (false) {
+                        record.transactionId().setValue(values[3]);
+                    }
                     record.amount().setValue(values[3]);
                     record.acknowledgmentStatusCode().setValue(values[4]);
                     akFile.records().add(record);

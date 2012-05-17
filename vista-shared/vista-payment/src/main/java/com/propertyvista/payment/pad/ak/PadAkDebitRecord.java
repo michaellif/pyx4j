@@ -29,6 +29,9 @@ public interface PadAkDebitRecord extends IEntity {
     @Length(29)
     IPrimitive<String> clientId();
 
+    @Length(15)
+    IPrimitive<String> transactionId();
+
     @Length(10)
     IPrimitive<String> amount();
 
