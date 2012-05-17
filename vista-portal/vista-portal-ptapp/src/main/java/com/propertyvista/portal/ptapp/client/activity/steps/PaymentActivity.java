@@ -14,9 +14,8 @@
 package com.propertyvista.portal.ptapp.client.activity.steps;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.rpc.AppPlace;
 
@@ -35,19 +34,13 @@ public class PaymentActivity extends WizardStepActivity<PaymentInformationDTO, P
     }
 
     @Override
-    public void onBillingAddressSameAsCurrentOne(boolean set, CComponent<AddressStructured, ?> comp) {
+    public void getCurrentAddress(final AsyncCallback<AddressStructured> callback) {
         final PaymentInformationDTO currentValue = getView().getValue();
-        if (set) {
-            ((PaymentService) getService()).getCurrentAddress(new DefaultAsyncCallback<AddressStructured>() {
-                @Override
-                public void onSuccess(AddressStructured result) {
-                    currentValue.paymentMethod().billingAddress().set(result);
-                    getView().populate(currentValue);
-                }
-            });
-        } else {
-            currentValue.paymentMethod().billingAddress().set(EntityFactory.create(AddressStructured.class));
-            getView().populate(currentValue);
-        }
+        ((PaymentService) getService()).getCurrentAddress(new DefaultAsyncCallback<AddressStructured>() {
+            @Override
+            public void onSuccess(AddressStructured result) {
+                callback.onSuccess(result);
+            }
+        });
     }
 }

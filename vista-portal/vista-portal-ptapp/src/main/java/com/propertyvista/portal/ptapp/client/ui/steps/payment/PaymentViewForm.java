@@ -27,6 +27,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.css.IStyleDependent;
 import com.pyx4j.commons.css.IStyleName;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CLabel;
@@ -34,6 +35,7 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationFailure;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
 
 import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
@@ -104,9 +106,18 @@ public class PaymentViewForm extends CEntityDecoratableForm<PaymentInformationDT
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().depositAgree()), 5).build());
         main.setWidget(++row, 0, inject(proto().paymentMethod(), new NewPaymentMethodForm(true) {
             @Override
-            public void onBillingAddressSameAsCurrentOne(boolean set, CComponent<AddressStructured, ?> comp) {
-                assert (view != null);
-                view.getPresenter().onBillingAddressSameAsCurrentOne(set, comp);
+            public void onBillingAddressSameAsCurrentOne(boolean set, final CComponent<AddressStructured, ?> comp) {
+                if (set) {
+                    assert (view != null);
+                    view.getPresenter().getCurrentAddress(new DefaultAsyncCallback<AddressStructured>() {
+                        @Override
+                        public void onSuccess(AddressStructured result) {
+                            comp.setValue(result, false);
+                        }
+                    });
+                } else {
+                    comp.setValue(EntityFactory.create(AddressStructured.class), false);
+                }
             }
         }));
 

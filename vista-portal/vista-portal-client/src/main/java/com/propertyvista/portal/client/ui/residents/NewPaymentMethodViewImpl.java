@@ -22,8 +22,10 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
 
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.common.client.events.UserMessageEvent;
@@ -51,9 +53,18 @@ public class NewPaymentMethodViewImpl extends FlowPanel implements NewPaymentMet
             }
 
             @Override
-            public void onBillingAddressSameAsCurrentOne(boolean set, CComponent<AddressStructured, ?> comp) {
-                assert (presenter != null);
-                presenter.onBillingAddressSameAsCurrentOne(set, comp);
+            public void onBillingAddressSameAsCurrentOne(boolean set, final CComponent<AddressStructured, ?> comp) {
+                if (set) {
+                    assert (presenter != null);
+                    presenter.getCurrentAddress(new DefaultAsyncCallback<AddressStructured>() {
+                        @Override
+                        public void onSuccess(AddressStructured result) {
+                            comp.setValue(result, false);
+                        }
+                    });
+                } else {
+                    comp.setValue(EntityFactory.create(AddressStructured.class), false);
+                }
             }
         };
         form.initContent();

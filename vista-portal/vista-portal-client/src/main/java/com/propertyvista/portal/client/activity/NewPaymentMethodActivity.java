@@ -16,10 +16,10 @@ package com.propertyvista.portal.client.activity;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppSite;
 
@@ -70,16 +70,12 @@ public class NewPaymentMethodActivity extends SecurityAwareActivity implements N
     }
 
     @Override
-    public void onBillingAddressSameAsCurrentOne(boolean set, final CComponent<AddressStructured, ?> comp) {
-        if (set) {
-            srv.getCurrentAddress(new DefaultAsyncCallback<AddressStructured>() {
-                @Override
-                public void onSuccess(AddressStructured result) {
-                    comp.setValue(result, false);
-                }
-            });
-        } else {
-            comp.setValue(EntityFactory.create(AddressStructured.class), false);
-        }
+    public void getCurrentAddress(final AsyncCallback<AddressStructured> callback) {
+        srv.getCurrentAddress(new DefaultAsyncCallback<AddressStructured>() {
+            @Override
+            public void onSuccess(AddressStructured result) {
+                callback.onSuccess(result);
+            }
+        });
     }
 }

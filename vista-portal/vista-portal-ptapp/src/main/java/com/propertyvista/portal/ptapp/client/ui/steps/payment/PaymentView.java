@@ -13,7 +13,7 @@
  */
 package com.propertyvista.portal.ptapp.client.ui.steps.payment;
 
-import com.pyx4j.forms.client.ui.CComponent;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.portal.ptapp.client.ui.steps.WizardStepPresenter;
@@ -25,6 +25,6 @@ public interface PaymentView extends WizardStepView<PaymentInformationDTO, Payme
 
     public interface PaymentPresenter extends WizardStepPresenter<PaymentInformationDTO> {
 
-        public void onBillingAddressSameAsCurrentOne(boolean set, CComponent<AddressStructured, ?> comp);
+        void getCurrentAddress(AsyncCallback<AddressStructured> callback);
     }
 }

@@ -13,26 +13,24 @@
  */
 package com.propertyvista.portal.client.ui.residents;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.IsWidget;
-
-import com.pyx4j.forms.client.ui.CComponent;
 
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.PaymentMethod;
 
 public interface NewPaymentMethodView extends IsWidget {
-    void setPresenter(Presenter presenter);
-
-    public PaymentMethod getValue();
-
-    public void populate(PaymentMethod paymentMethod);
 
     interface Presenter {
 
-        public void onBillingAddressSameAsCurrentOne(boolean set, CComponent<AddressStructured, ?> comp);
+        void getCurrentAddress(AsyncCallback<AddressStructured> callback);
 
-        public void save(PaymentMethod paymentmethod);
-
+        void save(PaymentMethod paymentmethod);
     }
 
+    void setPresenter(Presenter presenter);
+
+    PaymentMethod getValue();
+
+    void populate(PaymentMethod paymentMethod);
 }
