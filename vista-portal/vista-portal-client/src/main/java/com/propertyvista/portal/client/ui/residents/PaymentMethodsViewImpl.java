@@ -39,5 +39,4 @@ public class PaymentMethodsViewImpl extends SimplePanel implements PaymentMethod
     public void setPresenter(Presenter presenter) {
         form.setPresenter(presenter);
     }
-
 }

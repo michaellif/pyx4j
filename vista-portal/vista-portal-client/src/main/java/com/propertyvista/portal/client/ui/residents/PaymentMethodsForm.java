@@ -13,16 +13,23 @@
  */
 package com.propertyvista.portal.client.ui.residents;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.client.CEntityForm;
 import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
-import com.pyx4j.entity.client.ui.folder.CEntityFolder;
+import com.pyx4j.entity.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.forms.client.ui.CCheckBox;
+import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.ValidationFailure;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.VistaViewersComponentFactory;
@@ -41,9 +48,14 @@ public class PaymentMethodsForm extends CEntityForm<PaymentMethodListDTO> implem
     }
 
     @Override
+    public void setPresenter(Presenter presenter) {
+        this.presenter = presenter;
+    }
+
+    @Override
     public IsWidget createContent() {
         FlowPanel container = new FlowPanel();
-        container.add(inject(proto().paymentMethods(), createPaymentMethodsViewer()));
+        container.add(inject(proto().paymentMethods(), new PaymentMethodFolder()));
         return container;
     }
 
@@ -54,37 +66,112 @@ public class PaymentMethodsForm extends CEntityForm<PaymentMethodListDTO> implem
         super.populate(dto);
     }
 
-    @Override
-    public void setPresenter(Presenter presenter) {
-        this.presenter = presenter;
+    private class PaymentMethodFolder extends VistaTableFolder<PaymentMethod> {
 
-    }
+        public PaymentMethodFolder() {
+            super(PaymentMethod.class, i18n.tr("Payment Method"), true);
+            setOrderable(false);
+        }
 
-    private CEntityFolder<PaymentMethod> createPaymentMethodsViewer() {
+        @Override
+        public List<EntityFolderColumnDescriptor> columns() {
+            return Arrays.asList(//@formatter:off                    
+                    new EntityFolderColumnDescriptor(proto().type(), "10em"), 
+//                  new EntityFolderColumnDescriptor(proto().details(), "15em"),
+                    new EntityFolderColumnDescriptor(proto().isDefault(), "10em")
+            ); //@formatter:on
+        }
 
-        return new VistaTableFolder<PaymentMethod>(PaymentMethod.class, i18n.tr("Payment Method"), true) {
+        @Override
+        public CComponent<?, ?> create(IObject<?> member) {
+            if (member instanceof PaymentMethod) {
+                return new PaymentMethodEditorEx();
+            }
+            return super.create(member);
+        }
 
-            {
-                setOrderable(false);
+        @Override
+        protected void addItem() {
+            presenter.addPaymentMethod();
+        }
+
+        @Override
+        public void addValidations() {
+            super.addValidations();
+
+            this.addValueValidator(new EditableValueValidator<List<PaymentMethod>>() {
+                @Override
+                public ValidationFailure isValid(CComponent<List<PaymentMethod>, ?> component, List<PaymentMethod> value) {
+                    if (value != null && !value.isEmpty()) {
+                        boolean primaryFound = false;
+                        for (PaymentMethod item : value) {
+                            if (item.isDefault().isBooleanTrue()) {
+                                primaryFound = true;
+                                break;
+                            }
+                        }
+                        if (!primaryFound) {
+                            return new ValidationFailure(i18n.tr("Default payment should be selected"));
+                        }
+                    }
+                    return null;
+                }
+            });
+        }
+
+        private class PaymentMethodEditorEx extends CEntityFolderRowEditor<PaymentMethod> {
+
+            public PaymentMethodEditorEx() {
+                super(PaymentMethod.class, columns());
             }
 
             @Override
-            public List<EntityFolderColumnDescriptor> columns() {
-                ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
-                columns = new ArrayList<EntityFolderColumnDescriptor>();
-                columns.add(new EntityFolderColumnDescriptor(proto().type(), "9em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().creditCard().number(), "12em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().creditCard().expiryDate(), "6em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().creditCard().nameOn(), "16em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().isDefault(), "4em"));
-                return columns;
+            public CComponent<?, ?> create(IObject<?> member) {
+                CComponent<?, ?> comp = null;
+                if (member.equals(proto().isDefault())) {
+                    comp = new CCheckBox();
+                    comp.inheritViewable(false);
+                    comp.setViewable(false);
+
+                    ((CComponent<Boolean, ?>) comp).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+                        @Override
+                        public void onValueChange(ValueChangeEvent<Boolean> event) {
+                            if (event.getValue().booleanValue()) {
+                                for (int i = 0; i < PaymentMethodFolder.this.getItemCount(); ++i) {
+                                    for (CComponent<?, ?> comp : PaymentMethodFolder.this.getItem(i).getComponents()) {
+                                        if (comp instanceof PaymentMethodEditorEx && !comp.equals(PaymentMethodEditorEx.this)) {
+                                            ((PaymentMethodEditorEx) comp).get(proto().isDefault()).setValue(false);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    });
+                } else {
+                    comp = super.create(member);
+                }
+                return comp;
             }
 
             @Override
-            protected void addItem() {
-                presenter.addPaymentMethod();
-            }
-        };
-    }
+            public void addValidations() {
+                super.addValidations();
 
+                get(proto().isDefault()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+                    @Override
+                    public void onValueChange(ValueChangeEvent<Boolean> event) {
+                        if (event.getValue().booleanValue()) {
+                            for (int i = 0; i < PaymentMethodFolder.this.getItemCount(); ++i) {
+                                for (CComponent<?, ?> comp : PaymentMethodFolder.this.getItem(i).getComponents()) {
+                                    if (comp instanceof PaymentMethodEditorEx && !comp.equals(PaymentMethodEditorEx.this)) {
+                                        ((PaymentMethodEditorEx) comp).get(proto().isDefault()).setValue(false);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        }
+    }
 }

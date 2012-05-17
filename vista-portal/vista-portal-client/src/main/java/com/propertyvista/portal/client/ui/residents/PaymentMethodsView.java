@@ -22,10 +22,6 @@ import com.propertyvista.portal.domain.dto.PaymentMethodDTO;
 
 public interface PaymentMethodsView extends IsWidget {
 
-    public void populate(List<PaymentMethod> paymentMethods);
-
-    void setPresenter(Presenter presenter);
-
     interface Presenter {
 
         public void editPaymentMethod(PaymentMethodDTO paymentmethod);
@@ -36,4 +32,7 @@ public interface PaymentMethodsView extends IsWidget {
 
     }
 
+    public void populate(List<PaymentMethod> paymentMethods);
+
+    void setPresenter(Presenter presenter);
 }

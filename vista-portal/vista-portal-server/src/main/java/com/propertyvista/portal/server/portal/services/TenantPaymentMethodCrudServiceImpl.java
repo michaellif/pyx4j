@@ -42,7 +42,7 @@ public class TenantPaymentMethodCrudServiceImpl extends AbstractCrudServiceImpl<
 
     @Override
     protected void enhanceListCriteria(EntityListCriteria<PaymentMethod> dbCriteria, EntityListCriteria<PaymentMethod> dtoCriteria) {
-        dbCriteria.add(PropertyCriterion.eq(dbCriteria.proto().leaseParticipant(), TenantAppContext.getCurrentUserTenant()));
+        dbCriteria.add(PropertyCriterion.eq(dbCriteria.proto().leaseParticipant(), TenantAppContext.getCurrentUserTenantInLease()));
     }
 
     @Override

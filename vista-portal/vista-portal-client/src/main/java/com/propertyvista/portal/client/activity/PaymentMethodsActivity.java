@@ -19,6 +19,7 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.entity.rpc.EntitySearchResult;
+import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
@@ -50,12 +51,11 @@ public class PaymentMethodsActivity extends SecurityAwareActivity implements Pay
         panel.setWidget(view);
 
         srv.list(new DefaultAsyncCallback<EntitySearchResult<PaymentMethod>>() {
-
             @Override
             public void onSuccess(EntitySearchResult<PaymentMethod> result) {
                 view.populate(result.getData());
             }
-        }, null);
+        }, new EntityListCriteria<PaymentMethod>(PaymentMethod.class));
     }
 
     public PaymentMethodsActivity withPlace(Place place) {
@@ -67,7 +67,6 @@ public class PaymentMethodsActivity extends SecurityAwareActivity implements Pay
         AppPlace place = new PaymentMethods.EditPaymentMethod();
         place.queryArg(PortalSiteMap.ARG_PAYMENT_METHOD_ID, paymentmethod.id().getValue().toString());
         AppSite.getPlaceController().goTo(place);
-
     }
 
     @Override
@@ -79,7 +78,5 @@ public class PaymentMethodsActivity extends SecurityAwareActivity implements Pay
     @Override
     public void removePaymentMethod(PaymentMethodDTO paymentmethod) {
         // TODO Auto-generated method stub
-
     }
-
 }
