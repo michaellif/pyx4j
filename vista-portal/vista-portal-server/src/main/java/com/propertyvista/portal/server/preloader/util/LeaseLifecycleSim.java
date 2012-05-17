@@ -22,6 +22,10 @@ import java.util.GregorianCalendar;
 import java.util.PriorityQueue;
 import java.util.Random;
 
+import com.propertvista.generator.util.CommonsGenerator;
+import com.propertvista.generator.util.RandomUtil;
+
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
@@ -33,9 +37,14 @@ import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.BillingCycle;
+import com.propertyvista.domain.payment.CreditCardInfo;
+import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
+import com.propertyvista.domain.payment.PaymentMethod;
+import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.CompletionType;
+import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.misc.VistaTODO;
 
 public class LeaseLifecycleSim {
@@ -274,14 +283,45 @@ public class LeaseLifecycleSim {
             } else {
                 PaymentRecord paymentRecord = EntityFactory.create(PaymentRecord.class);
                 paymentRecord.createdDate().setValue(now());
+                paymentRecord.receivedDate().setValue(now());
+                paymentRecord.targetDate().setValue(now());
+                paymentRecord.finalizeDate().setValue(now());
+                paymentRecord.lastStatusChangeDate().setValue(now());
                 paymentRecord.amount().setValue(amount);
-                paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Submitted);
+                paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Received);
                 paymentRecord.billingAccount().set(lease.billingAccount());
+                paymentRecord.paymentMethod().set(createPaymentMethod(lease.version().tenants().get(0)));
 
+                Persistence.service().persist(paymentRecord.paymentMethod());
                 Persistence.service().persist(paymentRecord);
                 Persistence.service().commit();
                 return paymentRecord;
             }
+        }
+
+        public PaymentMethod createPaymentMethod(LeaseParticipant tenant) {
+            PaymentMethod m = EntityFactory.create(PaymentMethod.class);
+            m.type().setValue(PaymentType.CreditCard);
+
+            m.creditCard().numberRefference().setValue(CommonsStringUtils.d00(RandomUtil.randomInt(99)) + CommonsStringUtils.d00(RandomUtil.randomInt(99)));
+            m.creditCard().nameOn().setValue(tenant.customer().person().name().getStringView());
+            m.creditCard().expiryDate().setValue(RandomUtil.randomLogicalDate(2012, 2015));
+
+            // create new payment method details:
+            CreditCardInfo details = EntityFactory.create(CreditCardInfo.class);
+            details.cardType().setValue(CreditCardType.MasterCard);
+            details.nameOn().set(m.creditCard().nameOn());
+            details.expiryDate().set(m.creditCard().expiryDate());
+            details.number().set(m.creditCard().numberRefference());
+            m.details().set(details);
+
+            m.leaseParticipant().set(tenant);
+            m.isOneTimePayment().setValue(Boolean.TRUE);
+            m.sameAsCurrent().setValue(Boolean.FALSE);
+            m.billingAddress().set(CommonsGenerator.createAddress());
+            m.phone().setValue(CommonsGenerator.createPhone());
+
+            return m;
         }
 
     }

@@ -27,6 +27,7 @@ import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
@@ -45,6 +46,7 @@ public interface PaymentMethod extends IEntity {
     @OrderColumn
     IPrimitive<Integer> orderId();
 
+    @NotNull
     @ToString(index = 0)
     @Caption(name = "Payment Type")
     @Editor(type = EditorType.radiogroup)

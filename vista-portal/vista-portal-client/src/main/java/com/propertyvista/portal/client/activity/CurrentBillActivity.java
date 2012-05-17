@@ -54,7 +54,7 @@ public class CurrentBillActivity extends SecurityAwareActivity implements Curren
 
         PaymentMethodDTO paymentMethod = EntityFactory.create(PaymentMethodDTO.class);
         paymentMethod.number().setValue("XXXX XXXXX XXXX 7890");
-        paymentMethod.type().setValue(PaymentType.Visa);
+        paymentMethod.type().setValue(PaymentType.CreditCard);
 
         bill.paymentMethod().set(paymentMethod);
         //TODO does not work for some reason

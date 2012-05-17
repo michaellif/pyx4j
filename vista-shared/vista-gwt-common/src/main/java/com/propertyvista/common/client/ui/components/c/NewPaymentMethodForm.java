@@ -104,15 +104,17 @@ public class NewPaymentMethodForm extends CEntityDecoratableForm<PaymentMethod> 
             case Echeck:
                 paymentTypeImage = new Image(VistaImages.INSTANCE.paymentACH().getSafeUri());
                 break;
-            case Visa:
+            case CreditCard:
                 paymentTypeImage = new Image(VistaImages.INSTANCE.paymentVISA().getSafeUri());
-                break;
-            case MasterCard:
-                paymentTypeImage = new Image(VistaImages.INSTANCE.paymentMC().getSafeUri());
-                break;
-            case Discover:
-                paymentTypeImage = new Image(VistaImages.INSTANCE.paymentDiscover().getSafeUri());
-                break;
+//            case Visa:
+//                paymentTypeImage = new Image(VistaImages.INSTANCE.paymentVISA().getSafeUri());
+//                break;
+//            case MasterCard:
+//                paymentTypeImage = new Image(VistaImages.INSTANCE.paymentMC().getSafeUri());
+//                break;
+//            case Discover:
+//                paymentTypeImage = new Image(VistaImages.INSTANCE.paymentDiscover().getSafeUri());
+//                break;
             case Interac:
                 paymentTypeImage = new Image(VistaImages.INSTANCE.paymentInterac().getSafeUri());
                 break;
@@ -197,7 +199,7 @@ public class NewPaymentMethodForm extends CEntityDecoratableForm<PaymentMethod> 
     }
 
     private boolean isCardPayment(PaymentType value) {
-        return value == PaymentType.MasterCard | value == PaymentType.Visa | value == PaymentType.Discover;
+        return value == PaymentType.CreditCard;
     }
 
     private void setPaymentTableVisibility(int index) {

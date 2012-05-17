@@ -13,8 +13,6 @@
  */
 package com.propertyvista.portal.server.ptapp.services.steps;
 
-import java.util.EnumSet;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -92,8 +90,7 @@ public class PaymentServiceImpl extends ApplicationEntityServiceImpl implements 
             CampaignManager.fireEvent(CampaignTrigger.ApplicationCompleated, Persistence.secureRetrieve(criteria));
         }
 
-        if ((EnumSet.of(PaymentType.Visa, PaymentType.MasterCard, PaymentType.Discover).contains(payment.paymentMethod().type().getValue()))
-                && ("2011".equals(payment.paymentMethod().creditCard().number().getValue()))) {
+        if ((PaymentType.CreditCard == payment.paymentMethod().type().getValue()) && ("2011".equals(payment.paymentMethod().creditCard().number().getValue()))) {
             // Ok
         } else if (PaymentType.Echeck == payment.paymentMethod().type().getValue()) {
             // Ok for now

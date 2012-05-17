@@ -29,6 +29,8 @@ import com.pyx4j.essentials.server.preloader.DataGenerator;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
+import com.propertyvista.domain.payment.CreditCardInfo;
+import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.tenant.Customer;
@@ -62,14 +64,28 @@ public class TenantsGenerator {
 
         for (int i = 0; i < 2; i++) {
             PaymentMethod m = EntityFactory.create(PaymentMethod.class);
-            m.type().setValue(PaymentType.Visa);
+            m.type().setValue(PaymentType.CreditCard);
             if (i == 0) {
                 m.isDefault().setValue(Boolean.TRUE);
             }
+
             m.creditCard().numberRefference().setValue(CommonsStringUtils.d00(RandomUtil.randomInt(99)) + CommonsStringUtils.d00(RandomUtil.randomInt(99)));
             m.creditCard().nameOn().setValue(tenant.person().name().getStringView());
             m.creditCard().expiryDate().setValue(RandomUtil.randomLogicalDate(2012, 2015));
+
+            // create new payment method details:
+            CreditCardInfo details = EntityFactory.create(CreditCardInfo.class);
+            details.cardType().setValue(CreditCardType.Visa);
+            details.nameOn().set(m.creditCard().nameOn());
+            details.expiryDate().set(m.creditCard().expiryDate());
+            details.number().set(m.creditCard().numberRefference());
+            m.details().set(details);
+
             m.leaseParticipant().set(tenant);
+            m.sameAsCurrent().setValue(Boolean.FALSE);
+            m.billingAddress().set(CommonsGenerator.createAddress());
+            m.phone().setValue(CommonsGenerator.createPhone());
+
             l.add(m);
         }
 

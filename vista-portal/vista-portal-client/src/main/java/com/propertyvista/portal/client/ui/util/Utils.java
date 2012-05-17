@@ -26,12 +26,14 @@ public class Utils {
 
         if (type == PaymentType.Echeck) {
             url = VistaImages.INSTANCE.paymentACH().getSafeUri();
-        } else if (type == PaymentType.Visa) {
+        } else if (type == PaymentType.CreditCard) {
             url = VistaImages.INSTANCE.paymentVISA().getSafeUri();
-        } else if (type == PaymentType.MasterCard) {
-            url = VistaImages.INSTANCE.paymentMC().getSafeUri();
-        } else if (type == PaymentType.Discover) {
-            url = VistaImages.INSTANCE.paymentDiscover().getSafeUri();
+//        } else if (type == PaymentType.Visa) {
+//            url = VistaImages.INSTANCE.paymentVISA().getSafeUri();
+//        } else if (type == PaymentType.MasterCard) {
+//            url = VistaImages.INSTANCE.paymentMC().getSafeUri();
+//        } else if (type == PaymentType.Discover) {
+//            url = VistaImages.INSTANCE.paymentDiscover().getSafeUri();
         } else {
             url = VistaImages.INSTANCE.paymentInterac().getSafeUri();
         }

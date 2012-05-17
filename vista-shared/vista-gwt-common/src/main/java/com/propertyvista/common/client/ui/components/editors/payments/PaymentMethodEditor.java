@@ -75,13 +75,15 @@ public class PaymentMethodEditor extends CEntityDecoratableForm<PaymentMethod> {
 
         main.setH3(++row, 0, 1, proto().billingAddress().getMeta().getCaption());
         billingAddressHeader = main.getWidget(row, 0);
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().sameAsCurrent()), 5).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().sameAsCurrent())).build());
         main.setWidget(++row, 0, inject(proto().billingAddress(), new AddressStructuredEditor(true)));
 
         main.setHR(++row, 0, 1);
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().phone()), 12).build());
 
         main.setBR(++row, 0, 1);
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().isOneTimePayment())).build());
+        get(proto().isOneTimePayment()).setVisible(false);
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().isDefault())).build());
         get(proto().isDefault()).setVisible(false);
 
@@ -205,6 +207,15 @@ public class PaymentMethodEditor extends CEntityDecoratableForm<PaymentMethod> {
 
     public boolean isBillingAddressAsCurrentEnabled() {
         return get(proto().sameAsCurrent()).isEnabled();
+    }
+
+    public void setIsOneTimePaymentVisible(boolean visible) {
+        get(proto().isOneTimePayment()).setVisible(visible);
+
+    }
+
+    public boolean isIsOneTimePaymentVisible() {
+        return get(proto().isOneTimePayment()).isVisible();
     }
 
     public void setIsDefaultVisible(boolean visible) {

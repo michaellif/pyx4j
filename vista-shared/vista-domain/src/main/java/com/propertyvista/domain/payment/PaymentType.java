@@ -33,16 +33,6 @@ public enum PaymentType {
 
     CreditCard,
 
-    @Deprecated
-    Visa,
-
-    @Translate("MasterCard")
-    @Deprecated
-    MasterCard,
-
-    @Deprecated
-    Discover,
-
     Interac;
 
     @Override
