@@ -72,10 +72,10 @@ public class ArrearsSnapshotTest extends ArrearsSnapshotTestBase {
         assertPrevArrearsSnapshot("31-Mar-2011");
 
         beginAssertArrearsSnapshot("01-Apr-2011");
-        assertArrearsDebitType(DebitType.lease, "0.0", "302.50", "0.00", "0.00", "0.00");
-        assertArrearsDebitType(DebitType.parking, "0.0", "26.02", "0.00", "0.00", "0.00");
-        assertArrearsDebitType(DebitType.deposit, "0.0", "930.30", "0.00", "0.00", "0.00"); // TODO how deposit is calulcated???
-        assertArrearsDebitType(DebitType.total, "0.0", "1258.82", "0.00", "0.00", "0.00");
+        assertArrearsDebitType(DebitType.lease, "0.00", "302.50", "0.00", "0.00", "0.00");
+        assertArrearsDebitType(DebitType.parking, "0.00", "26.02", "0.00", "0.00", "0.00");
+        assertArrearsDebitType(DebitType.deposit, "0.00", "930.30", "0.00", "0.00", "0.00"); // TODO how deposit is calulcated???
+        assertArrearsDebitType(DebitType.total, "0.00", "1258.82", "0.00", "0.00", "0.00");
 
         setSysDate("15-Apr-2011");
         updateArrearsHistory();

@@ -25,6 +25,8 @@ public class PmcProcessFactory {
             return new PadSendProcess();
         case paymentsPadRecive:
             return new PadReciveProcess();
+        case cleanup:
+            return new CleanupPmcProcess();
         default:
             throw new IllegalArgumentException("Not implemented");
         }
