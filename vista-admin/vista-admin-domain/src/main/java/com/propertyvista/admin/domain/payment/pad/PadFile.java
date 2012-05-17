@@ -46,9 +46,13 @@ public interface PadFile extends IEntity {
 
         Sending,
 
-        Error,
+        SendindError,
 
         Sent,
+
+        Invalid,
+
+        Acknowledged,
 
         Received,
 
@@ -69,6 +73,8 @@ public interface PadFile extends IEntity {
 
     @Timestamp(Timestamp.Update.Updated)
     IPrimitive<Date> updated();
+
+    IPrimitive<Date> acknowledged();
 
     // Updated when batch is sent to Caledon
 

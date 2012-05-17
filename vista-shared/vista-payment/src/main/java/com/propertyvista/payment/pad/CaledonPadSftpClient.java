@@ -14,11 +14,15 @@
 package com.propertyvista.payment.pad;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Vector;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.jcraft.jsch.ChannelSftp;
+import com.jcraft.jsch.ChannelSftp.LsEntry;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
@@ -72,6 +76,56 @@ public class CaledonPadSftpClient {
         } catch (JSchException e) {
             log.error("SFTP error", e);
             return e.getMessage();
+        } finally {
+            if (channel != null) {
+                channel.exit();
+            }
+            if (session != null) {
+                session.disconnect();
+            }
+        }
+    }
+
+    public List<File> reciveFiles(String companyId, File targetDirectory) {
+        Credentials credentials = getCredentials();
+        JSch jsch = new JSch();
+        Session session = null;
+        ChannelSftp channel = null;
+        try {
+            File knownHosts = new File(System.getProperty("user.home") + "/.ssh", "known_hosts");
+            if (knownHosts.canRead()) {
+                jsch.setKnownHosts(knownHosts.getAbsolutePath());
+            }
+            session = jsch.getSession(credentials.email, hostProd, 22);
+            session.setPassword(credentials.password);
+            session.connect();
+
+            channel = (ChannelSftp) session.openChannel("sftp");
+            channel.connect();
+
+            channel.cd(getSrc);
+
+            List<File> lFiles = new ArrayList<File>();
+
+            @SuppressWarnings("unchecked")
+            Vector<LsEntry> rFiles = channel.ls(".");
+            for (LsEntry rFile : rFiles) {
+                if ((rFile.getFilename().endsWith("." + companyId)) || (rFile.getFilename().endsWith("." + companyId + "_acknowledgement.csv"))) {
+                    File dst = new File(targetDirectory, rFile.getFilename());
+                    if (!dst.exists()) {
+                        channel.get(rFile.getFilename(), dst.getAbsolutePath());
+                        lFiles.add(dst);
+                        log.info("SFTP file {} received", dst.getAbsolutePath());
+                    }
+                }
+            }
+            return lFiles;
+        } catch (SftpException e) {
+            log.error("SFTP error", e);
+            throw new Error(e.getMessage());
+        } catch (JSchException e) {
+            log.error("SFTP error", e);
+            throw new Error(e.getMessage());
         } finally {
             if (channel != null) {
                 channel.exit();

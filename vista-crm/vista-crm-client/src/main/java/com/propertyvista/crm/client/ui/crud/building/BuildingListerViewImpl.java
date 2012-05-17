@@ -37,7 +37,7 @@ public class BuildingListerViewImpl extends CrmListerViewImplBase<BuildingDTO> i
         setLister(new BuildingLister());
 
         if (SecurityController.checkBehavior(VistaCrmBehavior.PropertyVistaSupport)) {
-            upload = new Button(i18n.tr("Upload Update"), new ClickHandler() {
+            upload = new Button(i18n.tr("\u24CB Upload Update"), new ClickHandler() {
 
                 @Override
                 public void onClick(ClickEvent event) {

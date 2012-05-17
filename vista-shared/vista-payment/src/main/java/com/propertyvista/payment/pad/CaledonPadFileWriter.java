@@ -149,7 +149,7 @@ public class CaledonPadFileWriter implements Closeable {
         writer.append("\n");
     }
 
-    private CharSequence formatAmount(BigDecimal value) {
+    public static String formatAmount(BigDecimal value) {
         BigDecimal centValue = value.multiply(new BigDecimal("100"));
         centValue.setScale(0);
         return centValue.toString();

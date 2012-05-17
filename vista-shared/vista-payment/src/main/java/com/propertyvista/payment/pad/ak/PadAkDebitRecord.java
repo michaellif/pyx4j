@@ -15,6 +15,7 @@ package com.propertyvista.payment.pad.ak;
 
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
@@ -24,18 +25,23 @@ import com.pyx4j.i18n.annotations.I18n;
 public interface PadAkDebitRecord extends IEntity {
 
     @Length(8)
+    @NotNull
     IPrimitive<String> terminalId();
 
     @Length(29)
+    @NotNull
     IPrimitive<String> clientId();
 
+    //TBD
     @Length(15)
     IPrimitive<String> transactionId();
 
     @Length(10)
+    @NotNull
     IPrimitive<String> amount();
 
     @Length(4)
+    @NotNull
     IPrimitive<String> acknowledgmentStatusCode();
 
 }

@@ -17,6 +17,9 @@ import java.io.File;
 import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,7 +41,9 @@ public class PadCaledon {
 
     private static Object lock = new Object();
 
-    public PadFile sendPadFile() {
+    private final String companyId = "BIRCHWOOD";
+
+    private File getPadBaseDir() {
         File padWorkdir = new File(new File("vista-work"), LoggerConfig.getContextName());
         if (!padWorkdir.exists()) {
             if (!padWorkdir.mkdirs()) {
@@ -46,11 +51,16 @@ public class PadCaledon {
                 throw new Error(MessageFormat.format("Unable to create directory {0}", padWorkdir.getAbsolutePath()));
             }
         }
+        return padWorkdir;
+    }
+
+    public PadFile sendPadFile() {
+        File padWorkdir = getPadBaseDir();
 
         PadFile padFile;
         synchronized (lock) {
             EntityQueryCriteria<PadFile> criteria = EntityQueryCriteria.create(PadFile.class);
-            criteria.add(PropertyCriterion.in(criteria.proto().status(), PadFile.PadFileStatus.Creating, PadFile.PadFileStatus.Error));
+            criteria.add(PropertyCriterion.in(criteria.proto().status(), PadFile.PadFileStatus.Creating, PadFile.PadFileStatus.SendindError));
             padFile = Persistence.service().retrieve(criteria);
             if (padFile == null) {
                 return null;
@@ -64,15 +74,17 @@ public class PadCaledon {
 
         File file = null;
         try {
+            File fileSent;
             do {
                 String filename = new SimpleDateFormat("yyyyMMddmmHHss").format(padFile.sent().getValue());
-                file = new File(padWorkdir, filename + ".BIRCHWOOD");
-                if (file.exists()) {
+                file = new File(padWorkdir, filename + "." + companyId);
+                fileSent = new File(new File(padWorkdir, "sent"), file.getName());
+                if (file.exists() || fileSent.exists()) {
                     padFile.sent().setValue(new Date());
                     Persistence.service().merge(padFile);
                     Persistence.service().commit();
                 }
-            } while (file.exists());
+            } while (file.exists() || fileSent.exists());
 
             Persistence.service().retrieveMember(padFile.batches());
             for (PadBatch padBatch : padFile.batches()) {
@@ -101,7 +113,7 @@ public class PadCaledon {
         } catch (Throwable e) {
             log.error("pad write error", e);
             //Error recovery
-            padFile.status().setValue(PadFile.PadFileStatus.Error);
+            padFile.status().setValue(PadFile.PadFileStatus.SendindError);
             Persistence.service().merge(padFile);
             Persistence.service().commit();
 
@@ -120,6 +132,23 @@ public class PadCaledon {
 
         padFile.batches().setAttachLevel(AttachLevel.Detached);
         return padFile;
+    }
+
+    public Map<String, TransactionsStats> recivePadFiles() {
+        File padWorkdir = getPadBaseDir();
+        List<File> files = new CaledonPadSftpClient().reciveFiles(companyId, padWorkdir);
+        if (files.size() == 0) {
+            return null;
+        }
+        Map<String, TransactionsStats> transactionsStats = new HashMap<String, TransactionsStats>();
+        for (File file : files) {
+            if (file.getName().endsWith("_acknowledgement.csv")) {
+                new PadCaledonAcknowledgement().processFile(file, transactionsStats);
+            } else {
+
+            }
+        }
+        return transactionsStats;
     }
 
     private String uniqueNameTimeStamp() {
@@ -150,4 +179,5 @@ public class PadCaledon {
             }
         }
     }
+
 }

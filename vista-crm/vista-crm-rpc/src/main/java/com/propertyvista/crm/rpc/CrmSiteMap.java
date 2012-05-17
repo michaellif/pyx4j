@@ -266,6 +266,7 @@ public class CrmSiteMap implements SiteMap {
         public static class BillingRun extends CRMCrudAppPlace {
         }
 
+        @PlaceProperties(caption = "\u24CB Aggregated Transfer")
         @NavigationItem
         public static class AggregatedTransfer extends CRMCrudAppPlace {
         }

@@ -13,17 +13,28 @@
  */
 package com.propertyvista.server.jobs;
 
+import java.util.Map;
+
+import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.server.contexts.NamespaceManager;
+
+import com.propertyvista.biz.financial.payment.PaymentProcessFacade;
+import com.propertyvista.biz.financial.payment.TransactionsStats;
+
 public class PadReciveProcess implements PmcProcess {
+
+    private Map<String, TransactionsStats> transactionsStats;
 
     @Override
     public boolean start() {
-        // TODO Auto-generated method stub
-        return false;
+        transactionsStats = ServerSideFactory.create(PaymentProcessFacade.class).recivePadFiles();
+        return (transactionsStats != null);
     }
 
     @Override
     public void executePmcJob() {
-        // TODO Auto-generated method stub
+        TransactionsStats stats = transactionsStats.get(NamespaceManager.getNamespace());
+        // TODO Apply stats
     }
 
     @Override

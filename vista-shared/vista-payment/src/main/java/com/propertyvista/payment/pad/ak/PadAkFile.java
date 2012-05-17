@@ -15,6 +15,7 @@ package com.propertyvista.payment.pad.ak;
 
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -30,25 +31,34 @@ import com.pyx4j.i18n.annotations.I18n;
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 public interface PadAkFile extends IEntity {
 
+    IPrimitive<Integer> version();
+
     @Length(10)
+    @NotNull
     IPrimitive<String> companyId();
 
     @Length(4)
+    @NotNull
     IPrimitive<String> fileCreationNumber();
 
     @Length(8)
+    @NotNull
     IPrimitive<String> fileCreationDate();
 
     @Length(12)
+    @NotNull
     IPrimitive<String> batcheCount();
 
     @Length(12)
+    @NotNull
     IPrimitive<String> recordsCount();
 
     @Length(14)
+    @NotNull
     IPrimitive<String> fileAmount();
 
     @Length(4)
+    @NotNull
     IPrimitive<String> acknowledgmentStatusCode();
 
     IList<PadAkBatch> batches();

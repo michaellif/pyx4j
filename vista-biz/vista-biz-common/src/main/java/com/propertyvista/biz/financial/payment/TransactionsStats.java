@@ -7,20 +7,12 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2012-05-08
+ * Created on 2012-05-17
  * @author vlads
  * @version $Id$
  */
 package com.propertyvista.biz.financial.payment;
 
-import java.util.Map;
-
-import com.propertyvista.admin.domain.payment.pad.PadFile;
-
-public interface PaymentProcessFacade {
-
-    PadFile sendPadFile();
-
-    Map<String, TransactionsStats> recivePadFiles();
+public class TransactionsStats {
 
 }
