@@ -129,6 +129,6 @@ public class ReportDialog extends DeferredProcessDialog {
         if (downloadUrl != null) {
             reportService.cancelDownload(null, downloadUrl);
         }
-        return onClickClose();
+        return super.onClickClose();
     }
 }
