@@ -144,6 +144,7 @@ public class PadCaledon {
         for (File file : files) {
             if (file.getName().endsWith("_acknowledgement.csv")) {
                 new PadCaledonAcknowledgement().processFile(file, transactionsStats);
+                move(file, padWorkdir, "acknowledgement");
             } else {
 
             }

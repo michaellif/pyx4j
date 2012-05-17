@@ -58,7 +58,7 @@ public class CaledonPadAcknowledgmentParser {
                 akFile.fileAmount().setValue(headers[6]);
                 akFile.acknowledgmentStatusCode().setValue(headers[7]);
                 EntityValidator.validate(akFile);
-                return false;
+                return true;
             }
 
             @Override
