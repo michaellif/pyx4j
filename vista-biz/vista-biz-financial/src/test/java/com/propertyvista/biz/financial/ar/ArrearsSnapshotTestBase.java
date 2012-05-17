@@ -14,7 +14,9 @@
 package com.propertyvista.biz.financial.ar;
 
 import java.math.BigDecimal;
+import java.util.Calendar;
 import java.util.EnumMap;
+import java.util.GregorianCalendar;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.server.Persistence;
@@ -75,8 +77,26 @@ public class ArrearsSnapshotTestBase extends FinancialTestBase {
 
     }
 
+    protected void assertPrevArrearsSnapshot(String from, String to) {
+        Calendar cal = new GregorianCalendar();
+        cal.setTime(asDate(from));
+
+        LogicalDate end = new LogicalDate(asDate(from));
+        LogicalDate asOf = null;
+        do {
+            asOf = new LogicalDate(cal.getTime());
+            assertPrevArrearsSnapshot(asOf);
+            cal.add(Calendar.DATE, 1);
+        } while (asOf.before(end));
+
+    }
+
     protected void assertPrevArrearsSnapshot(String asOf) {
-        actualArrearsSnapshot = ARArrearsManager.getArrearsSnapshot(billingAccount(), asDate(asOf));
+        assertPrevArrearsSnapshot(asDate(asOf));
+    }
+
+    protected void assertPrevArrearsSnapshot(LogicalDate asOf) {
+        actualArrearsSnapshot = ARArrearsManager.getArrearsSnapshot(billingAccount(), asOf);
         assertEquals("got unexpected snapshot from other date", prevFromDate, actualArrearsSnapshot.fromDate().getValue());
 
         for (AgingBuckets expected : prevExpectedAgingBuckets.values()) {

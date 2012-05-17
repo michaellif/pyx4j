@@ -42,40 +42,44 @@ public class ArrearsSnapshotTest extends ArrearsSnapshotTestBase {
         assertArrearsDebitType(DebitType.deposit, "930.30", "0.00", "0.00", "0.00", "0.00"); // TODO how deposit is calulcated???
         assertArrearsTotal("1258.82", "0.00", "0.00", "0.00", "0.00");
 
-        setSysDate("30-Mar-2011");
         // arrears are not supposed to change until the due date
+        setSysDate("19-Mar-2011");
         updateArrearsHistory();
 
-        assertPrevArrearsSnapshot("18-Mar-2011");
-        assertPrevArrearsSnapshot("19-Mar-2011");
-        assertPrevArrearsSnapshot("20-Mar-2011");
-        assertPrevArrearsSnapshot("30-Mar-2011");
+        assertPrevArrearsSnapshot("18-Mar-2011", "19-Mar-2011");
+
+        setSysDate("22-Mar-2011");
+        updateArrearsHistory();
+        assertPrevArrearsSnapshot("18-Mar-2011", "22-Mar-2011");
+
+        // the first due date has come, but the payment hasn't been received: 
+        // we expect the current bucket to upgrade to the next level
+        // and of course all the previous to remain the same
+        setSysDate("23-Mar-2011");
+        updateArrearsHistory();
+
+        assertPrevArrearsSnapshot("18-Mar-2011", "22-Mar-2011");
+
+        beginAssertArrearsSnapshot("23-Mar-2011");
+        assertArrearsDebitType(DebitType.lease, "0.00", "302.50", "0.00", "0.00", "0.00");
+        assertArrearsDebitType(DebitType.parking, "0.00", "26.02", "0.00", "0.00", "0.00");
+        assertArrearsDebitType(DebitType.deposit, "0.00", "930.30", "0.00", "0.00", "0.00");
+        assertArrearsTotal("0.00", "1258.82", "0.00", "0.00", "0.00");
+
+        // here also nothing is supposed to change
+        setSysDate("27-Mar-2011");
+        updateArrearsHistory();
+
+        assertPrevArrearsSnapshot("26-Mar-2011", "27-Mar-2011");
+
+        // BILLING RUN 2        
+        setSysDate("28-Mar-2011");
+        runAndConfirmBilling();
 
         setSysDate("01-Apr-2011");
         updateArrearsHistory();
 
-        // the due day (1-Apr) has come and we expect, that the current bucket has been "upgraded" to 1-30 range, and we still have historical record:
-        assertPrevArrearsSnapshot("31-Mar-2011");
-
         beginAssertArrearsSnapshot("01-Apr-2011");
-        assertArrearsDebitType(DebitType.lease, "0.00", "302.50", "0.00", "0.00", "0.00");
-        assertArrearsDebitType(DebitType.parking, "0.00", "26.02", "0.00", "0.00", "0.00");
-        assertArrearsDebitType(DebitType.deposit, "0.00", "930.30", "0.00", "0.00", "0.00");
-        assertArrearsDebitType(DebitType.total, "0.00", "1258.82", "0.00", "0.00", "0.00");
-
-        setSysDate("15-Apr-2011");
-        updateArrearsHistory();
-
-        // here also nothing is supposed to change
-        assertPrevArrearsSnapshot("10-Apr-2011");
-        assertPrevArrearsSnapshot("15-Apr-2011");
-
-        // BILLING RUN 2        
-        setSysDate("18-Apr-2011");
-        runAndConfirmBilling();
-        updateArrearsHistory();
-
-        beginAssertArrearsSnapshot("18-Apr-2011");
         assertArrearsDebitType(DebitType.lease, "1041.60", "302.50", "0.00", "0.00", "0.00");
         assertArrearsDebitType(DebitType.parking, "89.60", "26.02", "0.00", "0.00", "0.00");
         assertArrearsDebitType(DebitType.deposit, "0.00", "930.30", "0.00", "0.00", "0.00");

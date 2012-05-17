@@ -13,11 +13,24 @@
  */
 package com.propertyvista.domain.financial.billing;
 
+import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.annotations.Indexed;
+import com.pyx4j.entity.annotations.JoinColumn;
+import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.Table;
+import com.pyx4j.entity.annotations.validator.NotNull;
+
+import com.propertyvista.domain.property.asset.building.Building;
 
 @Table(prefix = "billing")
 @DiscriminatorValue("BuildingArrearsSnapshot")
 public interface BuildingArrearsSnapshot extends ArrearsSnapshot {
 
+    @Owner
+    @Detached
+    @NotNull
+    @Indexed
+    @JoinColumn
+    Building building();
 }

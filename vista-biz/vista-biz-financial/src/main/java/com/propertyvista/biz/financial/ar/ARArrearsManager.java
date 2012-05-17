@@ -38,6 +38,7 @@ import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.billing.AgingBuckets;
 import com.propertyvista.domain.financial.billing.ArrearsSnapshot;
+import com.propertyvista.domain.financial.billing.BuildingArrearsSnapshot;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
 import com.propertyvista.domain.financial.billing.InvoiceDebit.DebitType;
 import com.propertyvista.domain.financial.billing.LeaseArrearsSnapshot;
@@ -46,7 +47,7 @@ import com.propertyvista.domain.property.asset.building.Building;
 public class ARArrearsManager {
 
     private static LeaseArrearsSnapshot createArrearsSnapshot(BillingAccount billingAccount) {
-        LeaseArrearsSnapshot arrearsSnapshot = createZeroArrearsSnapshot();
+        LeaseArrearsSnapshot arrearsSnapshot = createZeroArrearsSnapshot(LeaseArrearsSnapshot.class);
         arrearsSnapshot.agingBuckets().addAll(getAgingBuckets(billingAccount));
         arrearsSnapshot.totalAgingBuckets().set(calculateTotalAgingBuckets(arrearsSnapshot.agingBuckets()));
         BigDecimal arrearsAmount = arrearsSnapshot.totalAgingBuckets().bucket30().getValue();
@@ -55,19 +56,18 @@ public class ARArrearsManager {
         arrearsAmount = arrearsAmount.add(arrearsSnapshot.totalAgingBuckets().bucketOver90().getValue());
 
         arrearsSnapshot.arrearsAmount().setValue(arrearsAmount);
-        arrearsSnapshot.arrearsAmount().setValue(arrearsAmount);
         arrearsSnapshot.fromDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
         arrearsSnapshot.fromDate().setValue(arrearsSnapshot.toDate().getValue());
         return arrearsSnapshot;
     }
 
-    private static ArrearsSnapshot createArrearsSnapshot(Building building) {
+    private static BuildingArrearsSnapshot createArrearsSnapshot(Building building) {
         EntityQueryCriteria<BillingAccount> billingAccountsCriteria = EntityQueryCriteria.create(BillingAccount.class);
         billingAccountsCriteria.add(PropertyCriterion.eq(billingAccountsCriteria.proto().lease().unit().belongsTo(), building));
         Iterator<BillingAccount> billingAccountsIter = Persistence.service().query(null, billingAccountsCriteria, AttachLevel.IdOnly);
 
         // initialize accumulators - we accumulate aging buckets for each category separately in order to increase performance         
-        ArrearsSnapshot arrearsSnapshotAcc = createZeroArrearsSnapshot();
+        BuildingArrearsSnapshot arrearsSnapshotAcc = createZeroArrearsSnapshot(BuildingArrearsSnapshot.class);
         EnumMap<DebitType, AgingBuckets> agingBucketsAcc = new EnumMap<InvoiceDebit.DebitType, AgingBuckets>(DebitType.class);
         for (DebitType debitType : DebitType.values()) {
             agingBucketsAcc.put(debitType, createAgingBuckets(debitType));
@@ -95,48 +95,25 @@ public class ARArrearsManager {
         LeaseArrearsSnapshot currentSnapshot = createArrearsSnapshot(billingAccount);
 
         // 2. retrieve previous ArrearsSnapshot
-        LogicalDate now = new LogicalDate(Persistence.service().getTransactionSystemTime());
+        LogicalDate asOfNow = new LogicalDate(Persistence.service().getTransactionSystemTime());
+        LeaseArrearsSnapshot previousSnapshot = getArrearsSnapshot(billingAccount, asOfNow);
 
-        EntityQueryCriteria<LeaseArrearsSnapshot> criteria = EntityQueryCriteria.create(LeaseArrearsSnapshot.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().billingAccount(), billingAccount));
-        criteria.add(PropertyCriterion.le(criteria.proto().toDate(), now));
-        criteria.desc(criteria.proto().fromDate());
-        LeaseArrearsSnapshot previousSnapshot = Persistence.service().retrieve(criteria);
+        // 3. compare 1 and 2 - if it is a difference persist first and update toDate of second otherwise do nothing
+        currentSnapshot.billingAccount().set(billingAccount);
+        saveIfChanged(currentSnapshot, previousSnapshot);
 
-        // 3. compare 1 and 2 - if it is a difference persist first and update toDate of second otherwise do nothing (if 
-        if (previousSnapshot == null || areDifferent(currentSnapshot, previousSnapshot)) {
-            boolean isSameDaySnapshot = false;
-
-            if (previousSnapshot != null) {
-                GregorianCalendar cal = new GregorianCalendar();
-                cal.setTime(Persistence.service().getTransactionSystemTime());
-                cal.add(Calendar.DAY_OF_MONTH, -1);
-                LogicalDate prevSnapshotToDate = new LogicalDate(cal.getTime());
-
-                if (prevSnapshotToDate.before(previousSnapshot.fromDate().getValue())) {
-                    isSameDaySnapshot = true;
-                } else {
-                    previousSnapshot.toDate().setValue(prevSnapshotToDate);
-                    Persistence.service().persist(previousSnapshot);
-                }
-
-            }
-
-            if (isSameDaySnapshot) {
-                Persistence.service().delete(previousSnapshot);
-            }
-
-            currentSnapshot.fromDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
-            currentSnapshot.toDate().setValue(OccupancyFacade.MAX_DATE);
-
-            currentSnapshot.billingAccount().set(billingAccount);
-
-            Persistence.service().persist(currentSnapshot);
-        }
     }
 
     static void updateArrearsHistory(Building building) {
-        // TODO Aryom
+        // 1. createArrearsSnapshot for current time
+        BuildingArrearsSnapshot currentSnapshot = createArrearsSnapshot(building);
+
+        // 2. retrieve previous ArrearsSnapshot
+        LogicalDate asOf = new LogicalDate(Persistence.service().getTransactionSystemTime());
+        BuildingArrearsSnapshot previousSnapshot = getArrearsSnapshot(building, asOf);
+
+        // 3. compare 1 and 2 - if it is a difference persist first and update toDate of second otherwise do nothing
+        saveIfChanged(currentSnapshot, previousSnapshot);
     }
 
     static LeaseArrearsSnapshot getArrearsSnapshot(BillingAccount billingAccount, LogicalDate date) {
@@ -149,9 +126,13 @@ public class ARArrearsManager {
         return snapshot;
     }
 
-    static ArrearsSnapshot getArrearsSnapshot(Building building, LogicalDate date) {
-        // TODO Artyom
-        return null;
+    static BuildingArrearsSnapshot getArrearsSnapshot(Building building, LogicalDate date) {
+        EntityQueryCriteria<BuildingArrearsSnapshot> criteria = EntityQueryCriteria.create(BuildingArrearsSnapshot.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().building(), building));
+        criteria.add(PropertyCriterion.le(criteria.proto().fromDate(), date));
+        criteria.desc(criteria.proto().fromDate());
+
+        return Persistence.service().retrieve(criteria);
     }
 
     /**
@@ -234,8 +215,8 @@ public class ARArrearsManager {
         return agingBuckets;
     }
 
-    private static LeaseArrearsSnapshot createZeroArrearsSnapshot() {
-        LeaseArrearsSnapshot snapshot = EntityFactory.create(LeaseArrearsSnapshot.class);
+    private static <ARREARS_SNAPSHOT extends ArrearsSnapshot> ARREARS_SNAPSHOT createZeroArrearsSnapshot(Class<ARREARS_SNAPSHOT> arrearsSnapshotClass) {
+        ARREARS_SNAPSHOT snapshot = EntityFactory.create(arrearsSnapshotClass);
         snapshot.arrearsAmount().setValue(BigDecimal.ZERO);
         snapshot.creditAmount().setValue(BigDecimal.ZERO);
         snapshot.totalAgingBuckets().set(createAgingBuckets(DebitType.total));
@@ -252,10 +233,10 @@ public class ARArrearsManager {
 
     private static boolean areDifferent(ArrearsSnapshot currentSnapshot, ArrearsSnapshot previousSnapshot) {
         if (!EntityGraph.fullyEqualValues(currentSnapshot.totalAgingBuckets(), previousSnapshot.totalAgingBuckets())) {
-            return false;
+            return true;
         }
         if (currentSnapshot.agingBuckets().size() != previousSnapshot.agingBuckets().size()) {
-            return false;
+            return true;
         }
 
         EnumMap<DebitType, AgingBuckets> currentBuckets = new EnumMap<InvoiceDebit.DebitType, AgingBuckets>(DebitType.class);
@@ -265,12 +246,41 @@ public class ARArrearsManager {
         for (AgingBuckets previous : previousSnapshot.agingBuckets()) {
             AgingBuckets current = currentBuckets.get(previous.debitType().getValue());
             if (current == null || !EntityGraph.fullyEqualValues(current, previous)) {
-                return false;
+                return true;
             }
         }
 
         return EqualsHelper.equals(currentSnapshot.arrearsAmount().getValue(), previousSnapshot.arrearsAmount().getValue())
                 & EqualsHelper.equals(currentSnapshot.creditAmount().getValue(), previousSnapshot.creditAmount().getValue());
+    }
+
+    private static void saveIfChanged(ArrearsSnapshot currentSnapshot, ArrearsSnapshot previousSnapshot) {
+        if (previousSnapshot == null || areDifferent(currentSnapshot, previousSnapshot)) {
+            boolean isSameDaySnapshot = false;
+
+            if (previousSnapshot != null) {
+                GregorianCalendar cal = new GregorianCalendar();
+                cal.setTime(Persistence.service().getTransactionSystemTime());
+                cal.add(Calendar.DAY_OF_MONTH, -1);
+                LogicalDate prevSnapshotToDate = new LogicalDate(cal.getTime());
+
+                if (prevSnapshotToDate.before(previousSnapshot.fromDate().getValue())) {
+                    isSameDaySnapshot = true;
+                } else {
+                    previousSnapshot.toDate().setValue(prevSnapshotToDate);
+                    Persistence.service().persist(previousSnapshot);
+                }
+
+            }
+
+            if (isSameDaySnapshot) {
+                Persistence.service().delete(previousSnapshot);
+            }
+
+            currentSnapshot.fromDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
+            currentSnapshot.toDate().setValue(OccupancyFacade.MAX_DATE);
+            Persistence.service().persist(currentSnapshot);
+        }
     }
 
 }
