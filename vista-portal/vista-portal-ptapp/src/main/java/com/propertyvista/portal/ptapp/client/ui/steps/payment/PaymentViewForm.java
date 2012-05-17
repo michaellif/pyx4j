@@ -41,6 +41,7 @@ import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.c.NewPaymentMethodForm;
 import com.propertyvista.common.client.ui.components.folders.ChargeLineFolder;
 import com.propertyvista.common.client.ui.decorations.DecorationUtils;
+import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.portal.ptapp.client.PtAppSite;
 import com.propertyvista.portal.ptapp.client.resources.PortalImages;
 import com.propertyvista.portal.rpc.ptapp.dto.PaymentInformationDTO;
@@ -103,9 +104,9 @@ public class PaymentViewForm extends CEntityDecoratableForm<PaymentInformationDT
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().depositAgree()), 5).build());
         main.setWidget(++row, 0, inject(proto().paymentMethod(), new NewPaymentMethodForm(true) {
             @Override
-            public void onBillingAddressSameAsCurrentOne(boolean set) {
+            public void onBillingAddressSameAsCurrentOne(boolean set, CComponent<AddressStructured, ?> comp) {
                 assert (view != null);
-                view.getPresenter().onBillingAddressSameAsCurrentOne(set);
+                view.getPresenter().onBillingAddressSameAsCurrentOne(set, comp);
             }
         }));
 

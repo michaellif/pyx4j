@@ -16,6 +16,7 @@ package com.propertyvista.portal.ptapp.client.activity.steps;
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.rpc.AppPlace;
 
@@ -29,12 +30,12 @@ import com.propertyvista.portal.rpc.ptapp.services.steps.PaymentService;
 public class PaymentActivity extends WizardStepActivity<PaymentInformationDTO, PaymentPresenter> implements PaymentPresenter {
 
     public PaymentActivity(AppPlace place) {
-        super((PaymentView) WizardStepsViewFactory.instance(PaymentView.class), PaymentInformationDTO.class, (PaymentService) GWT.create(PaymentService.class));
+        super(WizardStepsViewFactory.instance(PaymentView.class), PaymentInformationDTO.class, (PaymentService) GWT.create(PaymentService.class));
         withPlace(place);
     }
 
     @Override
-    public void onBillingAddressSameAsCurrentOne(boolean set) {
+    public void onBillingAddressSameAsCurrentOne(boolean set, CComponent<AddressStructured, ?> comp) {
         final PaymentInformationDTO currentValue = getView().getValue();
         if (set) {
             ((PaymentService) getService()).getCurrentAddress(new DefaultAsyncCallback<AddressStructured>() {

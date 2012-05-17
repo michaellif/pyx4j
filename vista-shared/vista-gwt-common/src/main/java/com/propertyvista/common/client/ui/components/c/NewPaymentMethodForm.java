@@ -16,15 +16,10 @@ package com.propertyvista.common.client.ui.components.c;
 import java.util.Collection;
 import java.util.EnumSet;
 
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.ComplexPanel;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
-import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
@@ -46,8 +41,8 @@ import com.propertyvista.common.client.ui.components.editors.payments.CashInfoEd
 import com.propertyvista.common.client.ui.components.editors.payments.CheckInfoEditor;
 import com.propertyvista.common.client.ui.components.editors.payments.CreditCardInfoEditor;
 import com.propertyvista.common.client.ui.components.editors.payments.EcheckInfoEditor;
+import com.propertyvista.common.client.ui.components.editors.payments.InteracInfoEditor;
 import com.propertyvista.domain.contact.AddressStructured;
-import com.propertyvista.domain.media.Media;
 import com.propertyvista.domain.payment.CashInfo;
 import com.propertyvista.domain.payment.CheckInfo;
 import com.propertyvista.domain.payment.CreditCardInfo;
@@ -196,22 +191,6 @@ public class NewPaymentMethodForm extends CEntityDecoratableForm<PaymentMethod> 
         return get(proto().billingAddress()).isVisible();
     }
 
-    public void setBillingAddressAsCurrentVisible(boolean visible) {
-        get(proto().sameAsCurrent()).setVisible(visible);
-    }
-
-    public boolean isBillingAddressAsCurrentVisible() {
-        return get(proto().sameAsCurrent()).isVisible();
-    }
-
-    public void setBillingAddressAsCurrentEnabled(boolean visible) {
-        get(proto().sameAsCurrent()).setEnabled(visible);
-    }
-
-    public boolean isBillingAddressAsCurrentEnabled() {
-        return get(proto().sameAsCurrent()).isEnabled();
-    }
-
     private void selectPaymentDetailsEditor(PaymentType type) {
 
         if (this.contains(proto().details())) {
@@ -255,7 +234,7 @@ public class NewPaymentMethodForm extends CEntityDecoratableForm<PaymentMethod> 
                 setBillingAddressVisible(true);
                 break;
             case Interac:
-                editor = createInteracInfoEditor();
+                editor = new InteracInfoEditor();
                 if (details.getInstanceValueClass() != InteracInfo.class) {
                     details.set(EntityFactory.create(InteracInfo.class));
                 }
@@ -270,79 +249,5 @@ public class NewPaymentMethodForm extends CEntityDecoratableForm<PaymentMethod> 
                 paymentDetailsHolder.setWidget(editor);
             }
         }
-    }
-
-    private CEntityForm<InteracInfo> createInteracInfoEditor() {
-        return new CEntityForm<InteracInfo>(InteracInfo.class) {
-            @Override
-            public IsWidget createContent() {
-                FlowPanel panel = new FlowPanel();
-                panel.add(InteracPanelCanada());
-                return panel;
-            }
-        };
-    }
-
-    private HorizontalPanel InteracPanelCanada() {
-        HorizontalPanel panel = new HorizontalPanel();
-        panel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
-        panel.getElement().getStyle().setProperty("padding", "5px");
-
-        Image image = new Image(VistaImages.INSTANCE.logoBMO().getSafeUri());
-        image.addClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                interacRedirect("BMO");
-            }
-        });
-        panel.add(image);
-        panel.setCellWidth(image, "100");
-        image = new Image(VistaImages.INSTANCE.logoRBC().getSafeUri());
-        image.addClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                interacRedirect("RBC");
-            }
-        });
-        panel.add(image);
-        panel.setCellWidth(image, "100");
-        image = new Image(VistaImages.INSTANCE.logoTD().getSafeUri());
-        image.addClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                interacRedirect("TD");
-            }
-        });
-        panel.add(image);
-        panel.setCellWidth(image, "100");
-        image = new Image(VistaImages.INSTANCE.logoScotia().getSafeUri());
-        image.addClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                interacRedirect("Scotia");
-            }
-        });
-        panel.add(image);
-        panel.setCellWidth(image, "100");
-
-        return panel;
-    }
-
-    private void interacRedirect(String site) { //TODO add a method for creating proper Interac links
-        String url = null;
-        if (site.equals("BMO")) {
-            url = "https://www12.bmo.com/cgi-bin/netbnx/NBmain?product=1";
-        } else if (site.equals("RBC")) {
-            url = "https://www1.royalbank.com/cgi-bin/rbaccess/rbunxcgi?F6=1&F7=IB&F21=IB&F22=IB&REQUEST=ClientSignin&LANGUAGE=ENGLISH";
-        } else if (site.equals("TD")) {
-            url = "https://easywebcpo.td.com/waw/idp/login.htm?execution=e1s1";
-        } else if (site.equals("Scotia")) {
-            url = "https://www1.scotiaonline.scotiabank.com/online/authentication/authentication.bns";
-        } else {
-            Window.alert("Proper link is not set up yet");
-            url = "www.google.com";
-        }
-
-        Window.open(url, Media.Type.externalUrl.name(), null);
     }
 }

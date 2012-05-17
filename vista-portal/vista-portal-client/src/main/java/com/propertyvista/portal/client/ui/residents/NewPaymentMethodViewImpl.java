@@ -91,7 +91,6 @@ public class NewPaymentMethodViewImpl extends FlowPanel implements NewPaymentMet
     @Override
     public void populate(PaymentMethod paymentMethod) {
         form.populate(paymentMethod);
-
     }
 
     @Override
