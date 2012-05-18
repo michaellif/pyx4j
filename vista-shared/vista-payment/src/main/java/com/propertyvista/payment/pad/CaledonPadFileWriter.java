@@ -81,7 +81,7 @@ public class CaledonPadFileWriter implements Closeable {
 
     private void writeFileTrailer(BigDecimal fileAmount, int recordsCount) throws IOException {
         // Record Type
-        writer.append("A").append(",");
+        writer.append("Z").append(",");
 
         // Total number of detail debit records in the file
         writer.append(String.valueOf(recordsCount)).append(",");
@@ -151,8 +151,7 @@ public class CaledonPadFileWriter implements Closeable {
 
     public static String formatAmount(BigDecimal value) {
         BigDecimal centValue = value.multiply(new BigDecimal("100"));
-        centValue.setScale(0);
-        return centValue.toString();
+        return centValue.setScale(0).toString();
     }
 
     @Override
