@@ -14,6 +14,7 @@
 package com.propertyvista.biz.financial.payment;
 
 import java.util.EnumSet;
+import java.util.List;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
@@ -29,6 +30,7 @@ import com.propertyvista.domain.payment.CreditCardInfo;
 import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 
 public class PaymentFacadeImpl implements PaymentFacade {
 
@@ -54,6 +56,23 @@ public class PaymentFacadeImpl implements PaymentFacade {
         }
 
         return paymentMethod;
+    }
+
+    @Override
+    public void deletePaymentMethod(PaymentMethod paymentMethod) {
+        Persistence.service().retrieve(paymentMethod);
+        paymentMethod.isDeleted().setValue(Boolean.TRUE);
+        Persistence.service().merge(paymentMethod);
+    }
+
+    @Override
+    public List<PaymentMethod> retrievePaymentMethods(LeaseParticipant participant) {
+        EntityQueryCriteria<PaymentMethod> criteria = new EntityQueryCriteria<PaymentMethod>(PaymentMethod.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().leaseParticipant(), participant));
+        criteria.add(PropertyCriterion.eq(criteria.proto().isOneTimePayment(), Boolean.FALSE));
+        criteria.add(PropertyCriterion.eq(criteria.proto().isDeleted(), Boolean.FALSE));
+
+        return Persistence.service().query(criteria);
     }
 
     private String last4Numbers(String value) {

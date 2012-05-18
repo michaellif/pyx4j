@@ -131,8 +131,7 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
         }
 
         PaymentMethod method = null;
-        Persistence.service().retrieve(payer.paymentMethods());
-        for (PaymentMethod pm : payer.paymentMethods()) {
+        for (PaymentMethod pm : ServerSideFactory.create(PaymentFacade.class).retrievePaymentMethods(payer)) {
             if (pm.isDefault().isBooleanTrue()) {
                 method = pm;
             }
@@ -148,8 +147,7 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
                     + " NotFound");
         }
 
-        Persistence.service().retrieve(payer.paymentMethods());
-        callback.onSuccess(new Vector<PaymentMethod>(payer.paymentMethods()));
+        callback.onSuccess(new Vector<PaymentMethod>(ServerSideFactory.create(PaymentFacade.class).retrievePaymentMethods(payer)));
     }
 
     // Payment operations:

@@ -13,13 +13,20 @@
  */
 package com.propertyvista.biz.financial.payment;
 
+import java.util.List;
+
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 
 public interface PaymentFacade {
 
     PaymentMethod persistPaymentMethod(Building building, PaymentMethod paymentMethod);
+
+    void deletePaymentMethod(PaymentMethod paymentMethod);
+
+    List<PaymentMethod> retrievePaymentMethods(LeaseParticipant participant);
 
     PaymentRecord persistPayment(PaymentRecord payment);
 

@@ -52,14 +52,9 @@ public class TenantCrudServiceImpl extends AbstractCrudServiceDtoImpl<Tenant, Te
         Persistence.service().retrieve(dto.leaseV().holder(), AttachLevel.ToStringMembers);
 
         // fill/update payment methods: 
-        EntityQueryCriteria<PaymentMethod> criteria = new EntityQueryCriteria<PaymentMethod>(PaymentMethod.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().leaseParticipant(), entity));
-        criteria.add(PropertyCriterion.eq(criteria.proto().isOneTimePayment(), Boolean.FALSE));
-        criteria.add(PropertyCriterion.eq(criteria.proto().isDeleted(), Boolean.FALSE));
-
         dto.paymentMethods().setAttachLevel(AttachLevel.Attached);
         dto.paymentMethods().clear();
-        dto.paymentMethods().addAll(Persistence.service().query(criteria));
+        dto.paymentMethods().addAll(ServerSideFactory.create(PaymentFacade.class).retrievePaymentMethods(entity));
     }
 
     @Override
@@ -85,8 +80,7 @@ public class TenantCrudServiceImpl extends AbstractCrudServiceDtoImpl<Tenant, Te
     @Override
     public void deletePaymentMethod(AsyncCallback<Boolean> callback, PaymentMethod paymentMethod) {
         Persistence.service().retrieve(paymentMethod);
-        paymentMethod.isDeleted().setValue(Boolean.TRUE);
-        Persistence.service().merge(paymentMethod);
+        ServerSideFactory.create(PaymentFacade.class).deletePaymentMethod(paymentMethod);
         Persistence.service().commit();
         callback.onSuccess(Boolean.TRUE);
     }
