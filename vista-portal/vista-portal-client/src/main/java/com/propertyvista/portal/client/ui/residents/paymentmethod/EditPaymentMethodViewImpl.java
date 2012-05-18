@@ -73,9 +73,10 @@ public class EditPaymentMethodViewImpl extends FlowPanel implements EditPaymentM
         add(form);
 
         Button submitButton = new Button(i18n.tr("Save"));
-        //TODO implement
-        submitButton.addClickHandler(new ClickHandler() {
+        submitButton.getElement().getStyle().setMargin(20, Unit.PX);
+        submitButton.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.RIGHT);
 
+        submitButton.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 if (!form.isValid()) {
@@ -86,16 +87,17 @@ public class EditPaymentMethodViewImpl extends FlowPanel implements EditPaymentM
                 }
             }
         });
-        submitButton.getElement().getStyle().setMarginRight(1d, Unit.EM);
         add(DecorationUtils.inline(submitButton));
 
-        CHyperlink cancel = new CHyperlink(null, new Command() {
+        CHyperlink cancel = new CHyperlink(new Command() {
             @Override
             public void execute() {
                 presenter.cancel();
             }
         });
         cancel.setValue(i18n.tr("Cancel"));
+        cancel.asWidget().getElement().getStyle().setMarginTop(20, Unit.PX);
+        cancel.asWidget().getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.RIGHT);
         add(cancel);
     }
 

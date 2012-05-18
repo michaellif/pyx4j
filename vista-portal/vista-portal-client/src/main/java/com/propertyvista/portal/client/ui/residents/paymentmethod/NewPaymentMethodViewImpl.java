@@ -18,12 +18,14 @@ import java.util.Collection;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
 
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppSite;
@@ -89,6 +91,17 @@ public class NewPaymentMethodViewImpl extends FlowPanel implements NewPaymentMet
             }
         });
         add(submitButton);
+
+        CHyperlink cancel = new CHyperlink(new Command() {
+            @Override
+            public void execute() {
+                presenter.cancel();
+            }
+        });
+        cancel.setValue(i18n.tr("Cancel"));
+        cancel.asWidget().getElement().getStyle().setMarginTop(20, Unit.PX);
+        cancel.asWidget().getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.RIGHT);
+        add(cancel);
     }
 
     @Override

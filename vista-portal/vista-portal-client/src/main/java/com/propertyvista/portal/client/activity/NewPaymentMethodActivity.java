@@ -70,6 +70,11 @@ public class NewPaymentMethodActivity extends SecurityAwareActivity implements N
     }
 
     @Override
+    public void cancel() {
+        AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.PaymentMethods());
+    }
+
+    @Override
     public void getCurrentAddress(final AsyncCallback<AddressStructured> callback) {
         srv.getCurrentAddress(new DefaultAsyncCallback<AddressStructured>() {
             @Override
