@@ -62,6 +62,7 @@ public class TenantPaymentMethodCrudServiceImpl extends AbstractCrudServiceImpl<
         PaymentMethod entity = Persistence.service().retrieve(entityClass, entityId);
         entity.isDeleted().setValue(Boolean.TRUE);
         Persistence.service().persist(entity);
+        Persistence.service().commit();
     }
 
     @Override
