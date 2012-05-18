@@ -51,8 +51,8 @@ class OnboardingProcessor {
                 }
 
                 if (memberMeta.isValidatorAnnotationPresent(Length.class) && memberMeta.getValueClass().equals(String.class)) {
-                    if ((((String) member.getValue()).length() > memberMeta.getLength())) {
-
+                    String value = (String) member.getValue();
+                    if ((value != null) && (value.length() > memberMeta.getLength())) {
                         return new Error("Length of member " + member.getPath() + " is greater then required");
                     }
                 }
