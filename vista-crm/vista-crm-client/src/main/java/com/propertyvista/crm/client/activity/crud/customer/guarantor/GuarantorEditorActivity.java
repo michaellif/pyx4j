@@ -25,6 +25,7 @@ import com.propertyvista.crm.client.ui.crud.customer.guarantor.GuarantorEditorVi
 import com.propertyvista.crm.client.ui.crud.viewfactories.CustomerViewFactory;
 import com.propertyvista.crm.rpc.services.customer.GuarantorCrudService;
 import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.dto.GuarantorDTO;
 
 public class GuarantorEditorActivity extends EditorActivityBase<GuarantorDTO> implements GuarantorEditorView.Presenter {
@@ -33,6 +34,15 @@ public class GuarantorEditorActivity extends EditorActivityBase<GuarantorDTO> im
     public GuarantorEditorActivity(CrudAppPlace place) {
         super(place, CustomerViewFactory.instance(GuarantorEditorView.class), (AbstractCrudService<GuarantorDTO>) GWT.create(GuarantorCrudService.class),
                 GuarantorDTO.class);
+    }
+
+    @Override
+    public void deletePaymentMethod(PaymentMethod paymentMethod) {
+        ((GuarantorCrudService) getService()).deletePaymentMethod(new DefaultAsyncCallback<Boolean>() {
+            @Override
+            public void onSuccess(Boolean result) {
+            }
+        }, paymentMethod);
     }
 
     @Override

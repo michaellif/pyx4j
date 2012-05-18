@@ -30,6 +30,7 @@ import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -95,7 +96,7 @@ public interface LeaseParticipant extends IEntity {
     @Detached
     PersonScreening screening();
 
-    @Detached
     @Owned
+    @Detached(level = AttachLevel.Detached)
     IList<PaymentMethod> paymentMethods();
 }

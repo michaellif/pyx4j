@@ -25,6 +25,7 @@ import com.propertyvista.crm.client.ui.crud.customer.tenant.TenantEditorView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.CustomerViewFactory;
 import com.propertyvista.crm.rpc.services.customer.TenantCrudService;
 import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.dto.TenantDTO;
 
 public class TenantEditorActivity extends EditorActivityBase<TenantDTO> implements TenantEditorView.Presenter {
@@ -33,6 +34,15 @@ public class TenantEditorActivity extends EditorActivityBase<TenantDTO> implemen
     public TenantEditorActivity(CrudAppPlace place) {
         super(place, CustomerViewFactory.instance(TenantEditorView.class), (AbstractCrudService<TenantDTO>) GWT.create(TenantCrudService.class),
                 TenantDTO.class);
+    }
+
+    @Override
+    public void deletePaymentMethod(PaymentMethod paymentMethod) {
+        ((TenantCrudService) getService()).deletePaymentMethod(new DefaultAsyncCallback<Boolean>() {
+            @Override
+            public void onSuccess(Boolean result) {
+            }
+        }, paymentMethod);
     }
 
     @Override

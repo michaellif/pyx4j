@@ -19,6 +19,7 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.entity.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
@@ -57,6 +58,12 @@ public abstract class PaymentMethodFolder extends VistaBoxFolder<PaymentMethod> 
                 return "20em";
             }
         }.show();
+    }
+
+    @Override
+    protected void removeItem(CEntityFolderItem<PaymentMethod> item) {
+        onPaymentMethodDetlete(item.getValue());
+        super.removeItem(item);
     }
 
     @Override
@@ -108,6 +115,8 @@ public abstract class PaymentMethodFolder extends VistaBoxFolder<PaymentMethod> 
     }
 
     protected abstract void onBillingAddressSameAsCurrentOne(boolean set, CComponent<AddressStructured, ?> comp);
+
+    protected abstract void onPaymentMethodDetlete(PaymentMethod paymentMethod);
 
     @Override
     public void addValidations() {

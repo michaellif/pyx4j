@@ -33,6 +33,7 @@ import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.crud.customer.common.PaymentMethodFolder;
 import com.propertyvista.crm.client.ui.crud.lease.common.CLeaseHyperlink;
 import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.dto.GuarantorDTO;
 
 public class GuarantorForm extends CrmEntityForm<GuarantorDTO> {
@@ -118,6 +119,11 @@ public class GuarantorForm extends CrmEntityForm<GuarantorDTO> {
                 } else {
                     comp.setValue(EntityFactory.create(AddressStructured.class), false);
                 }
+            }
+
+            @Override
+            protected void onPaymentMethodDetlete(PaymentMethod paymentMethod) {
+                ((GuarantorEditorView.Presenter) ((GuarantorEditorView) getParentView()).getPresenter()).deletePaymentMethod(paymentMethod);
             }
         }));
 

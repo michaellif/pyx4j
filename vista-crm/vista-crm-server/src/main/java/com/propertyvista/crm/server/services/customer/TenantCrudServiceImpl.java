@@ -50,7 +50,16 @@ public class TenantCrudServiceImpl extends AbstractCrudServiceDtoImpl<Tenant, Te
         Persistence.service().retrieve(dto.customer().emergencyContacts());
         Persistence.service().retrieve(dto.leaseV());
         Persistence.service().retrieve(dto.leaseV().holder(), AttachLevel.ToStringMembers);
-        Persistence.service().retrieve(entity.paymentMethods());
+
+        // fill/update payment methods: 
+        EntityQueryCriteria<PaymentMethod> criteria = new EntityQueryCriteria<PaymentMethod>(PaymentMethod.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().leaseParticipant(), entity));
+        criteria.add(PropertyCriterion.eq(criteria.proto().isOneTimePayment(), Boolean.FALSE));
+        criteria.add(PropertyCriterion.eq(criteria.proto().isDeleted(), Boolean.FALSE));
+
+        dto.paymentMethods().setAttachLevel(AttachLevel.Attached);
+        dto.paymentMethods().clear();
+        dto.paymentMethods().addAll(Persistence.service().query(criteria));
     }
 
     @Override
@@ -60,7 +69,7 @@ public class TenantCrudServiceImpl extends AbstractCrudServiceDtoImpl<Tenant, Te
     }
 
     @Override
-    protected void persist(Tenant entity, TenantDTO in) {
+    protected void persist(Tenant entity, TenantDTO dto) {
         ServerSideFactory.create(CustomerFacade.class).persistCustomer(entity.customer());
 
         EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
@@ -70,7 +79,16 @@ public class TenantCrudServiceImpl extends AbstractCrudServiceDtoImpl<Tenant, Te
         for (PaymentMethod paymentMethod : entity.paymentMethods()) {
             ServerSideFactory.create(PaymentFacade.class).persistPaymentMethod(building, paymentMethod);
         }
-        super.persist(entity, in);
+        super.persist(entity, dto);
+    }
+
+    @Override
+    public void deletePaymentMethod(AsyncCallback<Boolean> callback, PaymentMethod paymentMethod) {
+        Persistence.service().retrieve(paymentMethod);
+        paymentMethod.isDeleted().setValue(Boolean.TRUE);
+        Persistence.service().merge(paymentMethod);
+        Persistence.service().commit();
+        callback.onSuccess(Boolean.TRUE);
     }
 
     @Override

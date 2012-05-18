@@ -61,8 +61,9 @@ public class TenantPaymentMethodCrudServiceImpl extends AbstractCrudServiceImpl<
     public void delete(AsyncCallback<Boolean> callback, Key entityId) {
         PaymentMethod entity = Persistence.service().retrieve(entityClass, entityId);
         entity.isDeleted().setValue(Boolean.TRUE);
-        Persistence.service().persist(entity);
+        Persistence.service().merge(entity);
         Persistence.service().commit();
+        callback.onSuccess(Boolean.TRUE);
     }
 
     @Override

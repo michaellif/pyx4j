@@ -19,9 +19,12 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 
 import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.dto.GuarantorDTO;
 
 public interface GuarantorCrudService extends AbstractCrudService<GuarantorDTO> {
+
+    void deletePaymentMethod(AsyncCallback<Boolean> callback, PaymentMethod paymentMethod);
 
     void getCurrentAddress(AsyncCallback<AddressStructured> callback, Key entityId);
 }
