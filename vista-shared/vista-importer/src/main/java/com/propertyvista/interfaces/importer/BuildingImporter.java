@@ -13,6 +13,8 @@
  */
 package com.propertyvista.interfaces.importer;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
@@ -24,6 +26,8 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 
+import com.propertyvista.domain.financial.offering.ProductItem;
+import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.FloorplanAmenity;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -153,6 +157,7 @@ public class BuildingImporter extends ImportPersister {
         // Save building
         Building building = createBuilding(buildingIO, mediaConfig);
 
+        List<ProductItem> products = new ArrayList<ProductItem>();
         //Floorplan
         {
             for (FloorplanIO floorplanIO : buildingIO.floorplans()) {
@@ -210,12 +215,32 @@ public class BuildingImporter extends ImportPersister {
                         }
 
                     }
+
                     Persistence.service().merge(items);
                     counters.units += items.size();
-                }
 
+                    for (AptUnit unit : items) {
+                        ProductItem product = EntityFactory.create(ProductItem.class);
+                        BigDecimal price = unit.financial()._marketRent().getValue();
+
+                        product.price().setValue(price);
+                        product.description().setValue(Service.Type.residentialUnit.toString() + " description");
+                        product.element().set(unit);
+
+                        products.add(product);
+                    }
+                }
             }
         }
+        List<Service> services = new ArrayList<Service>();
+        Service service = EntityFactory.create(Service.class);
+        service.version().type().setValue(Service.Type.residentialUnit);
+        service.version().items().addAll(products);
+        service.catalog().set(building.productCatalog());
+        services.add(service);
+
+        Persistence.service().persist(services);
+
         return counters;
     }
 }
