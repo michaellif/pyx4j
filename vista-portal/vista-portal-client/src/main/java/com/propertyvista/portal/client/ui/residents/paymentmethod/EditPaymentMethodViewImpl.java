@@ -11,8 +11,9 @@
  * @author Dad
  * @version $Id$
  */
-package com.propertyvista.portal.client.ui.residents;
+package com.propertyvista.portal.client.ui.residents.paymentmethod;
 
+import java.util.Collection;
 
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -22,23 +23,52 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
 
+import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 
+import com.propertyvista.common.client.ui.components.c.NewPaymentMethodForm;
 import com.propertyvista.common.client.ui.decorations.DecorationUtils;
-import com.propertyvista.portal.domain.dto.PaymentMethodDTO;
+import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.payment.PaymentMethod;
+import com.propertyvista.domain.payment.PaymentType;
+import com.propertyvista.portal.client.ui.decorations.UserMessagePanel;
 
 public class EditPaymentMethodViewImpl extends FlowPanel implements EditPaymentMethodView {
 
-    private Presenter presenter;
-
     private static final I18n i18n = I18n.get(EditPaymentMethodViewImpl.class);
 
-    private final EditPaymentMethodForm form;
+    private final NewPaymentMethodForm form;
+
+    private Presenter presenter;
 
     public EditPaymentMethodViewImpl() {
-        form = new EditPaymentMethodForm();
+        add(new UserMessagePanel());
+
+        form = new NewPaymentMethodForm() {
+            @Override
+            public Collection<PaymentType> getPaymentOptions() {
+                return PaymentType.avalableInProfile();
+            }
+
+            @Override
+            public void onBillingAddressSameAsCurrentOne(boolean set, final CComponent<AddressStructured, ?> comp) {
+                if (set) {
+                    assert (presenter != null);
+                    presenter.getCurrentAddress(new DefaultAsyncCallback<AddressStructured>() {
+                        @Override
+                        public void onSuccess(AddressStructured result) {
+                            comp.setValue(result, false);
+                        }
+                    });
+                } else {
+                    comp.setValue(EntityFactory.create(AddressStructured.class), false);
+                }
+            }
+        };
         form.initContent();
         add(form);
 
@@ -76,9 +106,9 @@ public class EditPaymentMethodViewImpl extends FlowPanel implements EditPaymentM
     }
 
     @Override
-    public void populate(PaymentMethodDTO paymentMethod) {
+    public void populate(PaymentMethod paymentMethod) {
+        form.reset();
         form.populate(paymentMethod);
-
     }
 
 }

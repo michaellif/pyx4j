@@ -11,12 +11,13 @@
  * @author Dad
  * @version $Id$
  */
-package com.propertyvista.portal.client.ui.residents;
+package com.propertyvista.portal.client.ui.residents.billing;
 
 import com.google.gwt.user.client.ui.FlowPanel;
 
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.portal.client.ui.residents.paymentmethod.PaymentMethodsForm;
 import com.propertyvista.portal.domain.dto.BillDTO;
 
 public class CurrentBillViewImpl extends FlowPanel implements CurrentBillView {

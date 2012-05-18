@@ -25,7 +25,7 @@ import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.domain.payment.PaymentMethod;
-import com.propertyvista.portal.client.ui.residents.PaymentMethodsView;
+import com.propertyvista.portal.client.ui.residents.paymentmethod.PaymentMethodsView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.Residents.PaymentMethods;
@@ -41,7 +41,6 @@ public class PaymentMethodsActivity extends SecurityAwareActivity implements Pay
         this.view = PortalViewFactory.instance(PaymentMethodsView.class);
         this.view.setPresenter(this);
         srv = GWT.create(TenantPaymentMethodCrudService.class);
-        withPlace(place);
     }
 
     @Override
@@ -57,10 +56,6 @@ public class PaymentMethodsActivity extends SecurityAwareActivity implements Pay
         }, new EntityListCriteria<PaymentMethod>(PaymentMethod.class));
     }
 
-    public PaymentMethodsActivity withPlace(Place place) {
-        return this;
-    }
-
     @Override
     public void addPaymentMethod() {
         AppSite.getPlaceController().goTo(new PaymentMethods.NewPaymentMethod());
@@ -69,7 +64,7 @@ public class PaymentMethodsActivity extends SecurityAwareActivity implements Pay
     @Override
     public void editPaymentMethod(PaymentMethod paymentMethod) {
         AppPlace place = new PaymentMethods.EditPaymentMethod();
-        place.queryArg(PortalSiteMap.ARG_PAYMENT_METHOD_ID, paymentMethod.id().getValue().toString());
+        place.placeArg(PortalSiteMap.ARG_PAYMENT_METHOD_ID, paymentMethod.id().getValue().toString());
         AppSite.getPlaceController().goTo(place);
     }
 

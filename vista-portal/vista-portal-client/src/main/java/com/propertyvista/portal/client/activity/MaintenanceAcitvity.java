@@ -25,7 +25,7 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.client.AppSite;
 
-import com.propertyvista.portal.client.ui.residents.MaintenanceView;
+import com.propertyvista.portal.client.ui.residents.maintenance.MaintenanceView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.dto.MaintananceDTO;

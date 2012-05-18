@@ -11,7 +11,7 @@
  * @author Dad
  * @version $Id$
  */
-package com.propertyvista.portal.client.ui.residents;
+package com.propertyvista.portal.client.ui.residents.maintenance;
 
 import java.util.Vector;
 

@@ -7,26 +7,29 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jun 29, 2011
+ * Created on Jun 18, 2011
  * @author Dad
  * @version $Id$
  */
-package com.propertyvista.portal.client.ui.residents;
+package com.propertyvista.portal.client.ui.residents.billing;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.propertyvista.portal.domain.dto.PaymentMethodDTO;
+import com.propertyvista.portal.domain.dto.BillDTO;
 
-public interface EditPaymentMethodView extends IsWidget {
+public interface CurrentBillView extends IsWidget {
+
+    public void populate(BillDTO bill);
 
     void setPresenter(Presenter presenter);
 
-    public void populate(PaymentMethodDTO paymentMethod);
-
     interface Presenter {
 
-        public void save(PaymentMethodDTO paymentmethod);
+        void changePaymentMethod();
 
-        public void cancel();
+        void changeAuthorization(boolean authorized);
+
+        void payBill();
     }
+
 }

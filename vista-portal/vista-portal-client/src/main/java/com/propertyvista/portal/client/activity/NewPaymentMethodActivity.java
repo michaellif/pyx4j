@@ -26,7 +26,7 @@ import com.pyx4j.site.client.AppSite;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
-import com.propertyvista.portal.client.ui.residents.NewPaymentMethodView;
+import com.propertyvista.portal.client.ui.residents.paymentmethod.NewPaymentMethodView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.services.TenantPaymentMethodCrudService;

@@ -24,7 +24,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.misc.VistaTODO;
-import com.propertyvista.portal.client.ui.residents.BillingHistoryView;
+import com.propertyvista.portal.client.ui.residents.billing.BillingHistoryView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
 import com.propertyvista.portal.domain.dto.BillDTO;
 import com.propertyvista.portal.domain.dto.BillDTO.BillType;

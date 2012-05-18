@@ -7,26 +7,30 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on May 14, 2011
+ * Created on Jun 25, 2011
  * @author Dad
  * @version $Id$
  */
-package com.propertyvista.portal.client.ui.residents;
+package com.propertyvista.portal.client.ui.residents.maintenance;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.propertyvista.portal.domain.dto.ResidentDTO;
+import com.propertyvista.portal.rpc.portal.dto.MaintenanceRequestDTO;
 
-public interface PersonalInfoView extends IsWidget {
+public interface NewMaintenanceRequestView extends IsWidget {
+
     void setPresenter(Presenter presenter);
 
-    void populate(ResidentDTO personalInfo);
+    void populate(MaintenanceRequestDTO requests);
 
-    public void showError(String msg);
-
-    public void showNote(String msg);
+    void showError(String msg);
 
     interface Presenter {
-        public void save(ResidentDTO personalInfo);
+
+        public void submit();
+
+        public void cancel();
+
     }
+
 }

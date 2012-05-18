@@ -11,7 +11,7 @@
  * @author dad
  * @version $Id$
  */
-package com.propertyvista.portal.client.ui.residents;
+package com.propertyvista.portal.client.ui.residents.billing;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -7,32 +7,30 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jun 18, 2011
+ * Created on Jun 29, 2011
  * @author Dad
  * @version $Id$
  */
-package com.propertyvista.portal.client.ui.residents;
+package com.propertyvista.portal.client.ui.residents.paymentmethod;
 
-import java.util.List;
-
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.PaymentMethod;
 
-public interface PaymentMethodsView extends IsWidget {
+public interface EditPaymentMethodView extends IsWidget {
 
     interface Presenter {
 
-        void addPaymentMethod();
+        void getCurrentAddress(AsyncCallback<AddressStructured> callback);
 
-        void editPaymentMethod(PaymentMethod paymentMethod);
+        void save(PaymentMethod paymentmethod);
 
-        void savePaymentMethod(PaymentMethod paymentMethod);
-
-        void removePaymentMethod(PaymentMethod paymentMethod);
+        void cancel();
     }
 
-    void populate(List<PaymentMethod> paymentMethods);
-
     void setPresenter(Presenter presenter);
+
+    void populate(PaymentMethod paymentMethod);
 }

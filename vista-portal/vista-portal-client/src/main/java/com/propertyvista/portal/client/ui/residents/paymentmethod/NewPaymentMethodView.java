@@ -7,30 +7,28 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jun 25, 2011
+ * Created on Jun 27, 2011
  * @author Dad
  * @version $Id$
  */
-package com.propertyvista.portal.client.ui.residents;
+package com.propertyvista.portal.client.ui.residents.paymentmethod;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.propertyvista.portal.rpc.portal.dto.MaintenanceRequestDTO;
+import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.payment.PaymentMethod;
 
-public interface NewMaintenanceRequestView extends IsWidget {
-
-    void setPresenter(Presenter presenter);
-
-    void populate(MaintenanceRequestDTO requests);
-
-    void showError(String msg);
+public interface NewPaymentMethodView extends IsWidget {
 
     interface Presenter {
 
-        public void submit();
+        void getCurrentAddress(AsyncCallback<AddressStructured> callback);
 
-        public void cancel();
-
+        void save(PaymentMethod paymentmethod);
     }
 
+    void setPresenter(Presenter presenter);
+
+    void populate(PaymentMethod paymentMethod);
 }
