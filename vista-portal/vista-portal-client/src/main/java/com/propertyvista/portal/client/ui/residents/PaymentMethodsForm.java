@@ -18,11 +18,13 @@ import java.util.List;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.client.CEntityForm;
 import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
+import com.pyx4j.entity.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.entity.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
@@ -31,6 +33,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationFailure;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.components.VistaViewersComponentFactory;
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
@@ -69,7 +72,7 @@ public class PaymentMethodsForm extends CEntityForm<PaymentMethodListDTO> implem
     private class PaymentMethodFolder extends VistaTableFolder<PaymentMethod> {
 
         public PaymentMethodFolder() {
-            super(PaymentMethod.class, i18n.tr("Payment Method"), true);
+            super(PaymentMethod.class, true);
             setOrderable(false);
         }
 
@@ -93,6 +96,18 @@ public class PaymentMethodsForm extends CEntityForm<PaymentMethodListDTO> implem
         @Override
         protected void addItem() {
             presenter.addPaymentMethod();
+        }
+
+        @Override
+        protected void removeItem(final CEntityFolderItem<PaymentMethod> item) {
+
+            MessageDialog.confirm(i18n.tr("Please confirm"), i18n.tr("Do you really want tot delete the Payment Method?"), new Command() {
+                @Override
+                public void execute() {
+                    presenter.removePaymentMethod(item.getValue());
+                    PaymentMethodFolder.super.removeItem(item);
+                }
+            });
         }
 
         @Override

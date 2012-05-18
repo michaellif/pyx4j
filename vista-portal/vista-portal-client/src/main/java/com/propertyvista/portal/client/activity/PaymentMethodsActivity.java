@@ -84,6 +84,10 @@ public class PaymentMethodsActivity extends SecurityAwareActivity implements Pay
 
     @Override
     public void removePaymentMethod(PaymentMethod paymentMethod) {
-        // TODO Auto-generated method stub
+        srv.delete(new DefaultAsyncCallback<Boolean>() {
+            @Override
+            public void onSuccess(Boolean result) {
+            }
+        }, paymentMethod.getPrimaryKey());
     }
 }

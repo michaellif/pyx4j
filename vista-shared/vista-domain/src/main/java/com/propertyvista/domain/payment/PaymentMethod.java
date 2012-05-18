@@ -90,4 +90,9 @@ public interface PaymentMethod extends IEntity {
      * Indicates if this method is one-time usage only and shouldn't be saved in DB.
      */
     IPrimitive<Boolean> isOneTimePayment();
+
+    /**
+     * Indicates if this method is deleted (still persists in DB but not used anymore!).
+     */
+    IPrimitive<Boolean> isDeleted();
 }

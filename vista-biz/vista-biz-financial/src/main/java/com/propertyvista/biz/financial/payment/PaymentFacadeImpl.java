@@ -37,6 +37,10 @@ public class PaymentFacadeImpl implements PaymentFacade {
     @Override
     public PaymentMethod persistPaymentMethod(Building building, PaymentMethod paymentMethod) {
 
+        // if it saved - these flags should be lowered: 
+        paymentMethod.isOneTimePayment().setValue(Boolean.FALSE);
+        paymentMethod.isDeleted().setValue(Boolean.FALSE);
+
         Persistence.service().merge(paymentMethod);
 
         // store credit cards
