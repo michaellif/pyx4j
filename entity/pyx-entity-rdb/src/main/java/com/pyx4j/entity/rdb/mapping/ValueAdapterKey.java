@@ -43,6 +43,8 @@ class ValueAdapterKey extends ValueAdapterPrimitive {
             stmt.setLong(parameterIndex, ((Key) value).asLong());
         } else if (value instanceof IEntity) {
             stmt.setLong(parameterIndex, ((IEntity) value).getPrimaryKey().asLong());
+        } else if (value instanceof Long) {
+            stmt.setLong(parameterIndex, ((Long) value));
         } else {
             throw new IllegalArgumentException(value.getClass().getName());
         }
