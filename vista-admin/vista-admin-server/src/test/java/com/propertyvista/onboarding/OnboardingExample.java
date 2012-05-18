@@ -137,7 +137,7 @@ public class OnboardingExample {
             rs.records().add(u);
             u.from().setValue(DateUtils.detectDateformat("2011-01-01"));
             u.to().setValue(DateUtils.detectDateformat("2011-02-01"));
-            u.usageType().setValue(UsageType.Qquifax);
+            u.usageType().setValue(UsageType.Equifax);
             u.value().setValue(21);
 
             writeXML(createExampleResponse(rs), cnt + "-response-GetUsage.xml");

@@ -15,7 +15,7 @@ package com.propertyvista.onboarding;
 
 public enum UsageType {
 
-    Qquifax,
+    Equifax,
 
     BuildingUnitCount
 
