@@ -41,7 +41,8 @@ public class EntityValidator {
                 throw new RuntimeException(i18n.tr("{0} is required", member.getMeta().getCaption()));
             }
             if (memberMeta.isValidatorAnnotationPresent(Length.class) && memberMeta.getValueClass().equals(String.class)) {
-                if ((((String) member.getValue()).length() > memberMeta.getLength())) {
+                String value = (String) member.getValue();
+                if ((value != null) && (value.length() > memberMeta.getLength())) {
                     throw new RuntimeException(i18n.tr("Length of member {0}  is greater then required", member.getMeta().getCaption()));
                 }
             }
