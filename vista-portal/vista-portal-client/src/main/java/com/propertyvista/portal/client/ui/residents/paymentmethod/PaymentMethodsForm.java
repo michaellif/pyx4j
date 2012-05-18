@@ -151,7 +151,6 @@ public class PaymentMethodsForm extends CEntityForm<PaymentMethodListDTO> implem
                             presenter.editPaymentMethod(getValue());
                         }
                     });
-
                 } else if (member.equals(proto().isDefault())) {
                     comp = new CCheckBox();
                     comp.inheritViewable(false);
