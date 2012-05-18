@@ -92,7 +92,7 @@ public abstract class PaymentMethodFolder extends VistaBoxFolder<PaymentMethod> 
                         for (int i = 0; i < PaymentMethodFolder.this.getItemCount(); ++i) {
                             for (CComponent<?, ?> comp : PaymentMethodFolder.this.getItem(i).getComponents()) {
                                 if (comp instanceof PaymentMethodEditorEx && !comp.equals(PaymentMethodEditorEx.this)) {
-                                    ((PaymentMethodEditorEx) comp).get(proto().isDefault()).setValue(false);
+                                    ((PaymentMethodEditorEx) comp).get(proto().isDefault()).setValue(false, false);
                                 }
                             }
                         }
