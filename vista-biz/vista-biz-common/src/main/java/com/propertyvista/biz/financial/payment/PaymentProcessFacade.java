@@ -21,6 +21,6 @@ public interface PaymentProcessFacade {
 
     PadFile sendPadFile();
 
-    Map<String, TransactionsStats> recivePadFiles();
+    Map<String, TransactionsStats> recivePadAcknowledgementFiles();
 
 }

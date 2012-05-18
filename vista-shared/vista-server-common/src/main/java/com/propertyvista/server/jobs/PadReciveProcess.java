@@ -27,7 +27,7 @@ public class PadReciveProcess implements PmcProcess {
 
     @Override
     public boolean start() {
-        transactionsStats = ServerSideFactory.create(PaymentProcessFacade.class).recivePadFiles();
+        transactionsStats = ServerSideFactory.create(PaymentProcessFacade.class).recivePadAcknowledgementFiles();
         return (transactionsStats != null);
     }
 

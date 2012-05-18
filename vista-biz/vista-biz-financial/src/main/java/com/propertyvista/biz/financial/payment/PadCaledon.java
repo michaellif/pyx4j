@@ -134,9 +134,9 @@ public class PadCaledon {
         return padFile;
     }
 
-    public Map<String, TransactionsStats> recivePadFiles() {
+    public Map<String, TransactionsStats> recivePadAcknowledgementFiles() {
         File padWorkdir = getPadBaseDir();
-        List<File> files = new CaledonPadSftpClient().reciveFiles(companyId, padWorkdir);
+        List<File> files = new CaledonPadSftpClient().reciveFiles(companyId, true, padWorkdir);
         if (files.size() == 0) {
             return null;
         }

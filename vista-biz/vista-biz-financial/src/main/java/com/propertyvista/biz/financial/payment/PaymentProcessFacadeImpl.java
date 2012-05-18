@@ -25,8 +25,8 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
     }
 
     @Override
-    public Map<String, TransactionsStats> recivePadFiles() {
-        return new PadCaledon().recivePadFiles();
+    public Map<String, TransactionsStats> recivePadAcknowledgementFiles() {
+        return new PadCaledon().recivePadAcknowledgementFiles();
     }
 
 }

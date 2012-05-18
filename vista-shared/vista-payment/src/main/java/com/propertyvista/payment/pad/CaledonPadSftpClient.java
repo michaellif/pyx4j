@@ -86,7 +86,7 @@ public class CaledonPadSftpClient {
         }
     }
 
-    public List<File> reciveFiles(String companyId, File targetDirectory) {
+    public List<File> reciveFiles(String companyId, Boolean acknowledgement, File targetDirectory) {
         Credentials credentials = getCredentials();
         JSch jsch = new JSch();
         Session session = null;
@@ -110,7 +110,15 @@ public class CaledonPadSftpClient {
             @SuppressWarnings("unchecked")
             Vector<LsEntry> rFiles = channel.ls(".");
             for (LsEntry rFile : rFiles) {
-                if ((rFile.getFilename().endsWith("." + companyId)) || (rFile.getFilename().endsWith("." + companyId + "_acknowledgement.csv"))) {
+
+                boolean fileMatch = false;
+                if (acknowledgement) {
+                    fileMatch = rFile.getFilename().endsWith("." + companyId + "_acknowledgement.csv");
+                } else {
+                    fileMatch = rFile.getFilename().endsWith("." + companyId);
+                }
+
+                if (fileMatch) {
                     File dst = new File(targetDirectory, rFile.getFilename());
                     if (!dst.exists()) {
                         channel.get(rFile.getFilename(), dst.getAbsolutePath());

@@ -107,6 +107,10 @@ class PadCaledonAcknowledgement {
                 throw new Error("Unexpected batchAmount '" + akBatch.batchAmount().getValue() + "', terminalId '" + akBatch.terminalId().getValue()
                         + "' in akFile " + akFile.fileCreationNumber().getValue());
             }
+            if (!padBatch.acknowledgmentStatusCode().isNull()) {
+                throw new Error("Already acknowledged batchId '" + akBatch.batchId().getValue() + "', terminalId '" + akBatch.terminalId().getValue()
+                        + "' in akFile " + akFile.fileCreationNumber().getValue());
+            }
 
             padBatch.acknowledgmentStatusCode().setValue(akBatch.acknowledgmentStatusCode().getValue());
             Persistence.service().merge(padBatch);
@@ -135,6 +139,10 @@ class PadCaledonAcknowledgement {
             if (!padDebitRecord.clientId().getValue().equals(akDebitRecord.clientId().getValue())) {
                 throw new Error("Unexpected clientId '" + padDebitRecord.clientId().getValue() + "', terminalId '" + akDebitRecord.terminalId().getValue()
                         + "' in akFile " + akFile.fileCreationNumber().getValue());
+            }
+            if (!padDebitRecord.acknowledgmentStatusCode().isNull()) {
+                throw new Error("Already acknowledged transactionId '" + akDebitRecord.transactionId().getValue() + "', clientId '"
+                        + akDebitRecord.clientId().getValue() + "' in akFile " + akFile.fileCreationNumber().getValue());
             }
 
             padDebitRecord.acknowledgmentStatusCode().setValue(akDebitRecord.acknowledgmentStatusCode().getValue());
