@@ -76,7 +76,7 @@ public class PadCaledon {
         try {
             File fileSent;
             do {
-                String filename = new SimpleDateFormat("yyyyMMddmmHHss").format(padFile.sent().getValue());
+                String filename = new SimpleDateFormat("yyyyMMddHHmmss").format(padFile.sent().getValue());
                 file = new File(padWorkdir, filename + "." + companyId);
                 fileSent = new File(new File(padWorkdir, "sent"), file.getName());
                 if (file.exists() || fileSent.exists()) {
