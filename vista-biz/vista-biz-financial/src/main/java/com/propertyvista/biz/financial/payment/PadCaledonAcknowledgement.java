@@ -42,7 +42,7 @@ class PadCaledonAcknowledgement {
             criteria.add(PropertyCriterion.eq(criteria.proto().status(), PadFile.PadFileStatus.Sent));
             padFile = Persistence.service().retrieve(criteria);
             if (padFile == null) {
-                throw new Error("Unexpected fileCreationNumber in file " + file.getName());
+                throw new Error("Unexpected fileCreationNumber '" + akFile.fileCreationNumber().getValue() + "' in file " + file.getName());
             }
         }
 
