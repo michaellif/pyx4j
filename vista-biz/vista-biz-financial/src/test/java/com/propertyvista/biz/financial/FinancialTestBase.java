@@ -108,6 +108,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         leaseDataModel = new LeaseDataModel(buildingDataModel, tenantDataModel);
         leaseDataModel.generate(true);
 
+        //TODO if commented - check exception
         LeaseBillingPolicyDataModel leaseBillingPolicyDataModel = new LeaseBillingPolicyDataModel(buildingDataModel);
         leaseBillingPolicyDataModel.generate(true);
     }
@@ -349,6 +350,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
 
         PaymentRecord paymentRecord = EntityFactory.create(PaymentRecord.class);
         paymentRecord.createdDate().setValue(FinancialTestsUtils.getDate(receivedDate));
+        paymentRecord.receivedDate().setValue(FinancialTestsUtils.getDate(receivedDate));
         paymentRecord.amount().setValue(new BigDecimal(amount));
         paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Submitted);
         paymentRecord.billingAccount().set(lease.billingAccount());
