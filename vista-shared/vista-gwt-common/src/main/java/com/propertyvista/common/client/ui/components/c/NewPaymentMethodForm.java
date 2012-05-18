@@ -76,12 +76,6 @@ public class NewPaymentMethodForm extends CEntityDecoratableForm<PaymentMethod> 
     }
 
     @Override
-    protected void onPopulate() {
-        super.onPopulate();
-        selectPaymentDetailsEditor(getValue().type().getValue());
-    }
-
-    @Override
     public IsWidget createContent() {
         FormFlexPanel container = new FormFlexPanel();
         container.setStyleName(NewPaymentMethodEditorTheme.StyleName.PaymentEditor.name());
@@ -173,25 +167,13 @@ public class NewPaymentMethodForm extends CEntityDecoratableForm<PaymentMethod> 
         return container;
     }
 
-    public void onBillingAddressSameAsCurrentOne(boolean set, CComponent<AddressStructured, ?> comp) {
-        // Implements meaningful in derived classes...
+    @Override
+    protected void propagateValue(PaymentMethod value, boolean fireEvent, boolean populate) {
+        selectPaymentDetailsEditor(value != null ? value.type().getValue() : null);
+        super.propagateValue(value, fireEvent, populate);
     }
 
-    public Collection<PaymentType> getPaymentOptions() {
-        return EnumSet.allOf(PaymentType.class);
-    }
-
-    public void setBillingAddressVisible(boolean visible) {
-        get(proto().billingAddress()).setVisible(visible);
-        get(proto().sameAsCurrent()).setVisible(visible);
-        billingAddressHeader.setVisible(visible);
-    }
-
-    public boolean isBillingAddressVisible() {
-        return get(proto().billingAddress()).isVisible();
-    }
-
-    private void selectPaymentDetailsEditor(PaymentType type) {
+    protected void selectPaymentDetailsEditor(PaymentType type) {
 
         if (this.contains(proto().details())) {
             this.unbind(proto().details());
@@ -249,5 +231,25 @@ public class NewPaymentMethodForm extends CEntityDecoratableForm<PaymentMethod> 
                 paymentDetailsHolder.setWidget(editor);
             }
         }
+    }
+
+    // some UI tuning mechanics for client:
+
+    public Collection<PaymentType> getPaymentOptions() {
+        return EnumSet.allOf(PaymentType.class);
+    }
+
+    public void setBillingAddressVisible(boolean visible) {
+        get(proto().billingAddress()).setVisible(visible);
+        get(proto().sameAsCurrent()).setVisible(visible);
+        billingAddressHeader.setVisible(visible);
+    }
+
+    public boolean isBillingAddressVisible() {
+        return get(proto().billingAddress()).isVisible();
+    }
+
+    public void onBillingAddressSameAsCurrentOne(boolean set, CComponent<AddressStructured, ?> comp) {
+        // Implements meaningful in derived classes...
     }
 }

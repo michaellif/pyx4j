@@ -38,6 +38,7 @@ import com.propertyvista.domain.payment.CashInfo;
 import com.propertyvista.domain.payment.CheckInfo;
 import com.propertyvista.domain.payment.CreditCardInfo;
 import com.propertyvista.domain.payment.EcheckInfo;
+import com.propertyvista.domain.payment.InteracInfo;
 import com.propertyvista.domain.payment.PaymentDetails;
 import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
@@ -159,6 +160,13 @@ public class PaymentMethodEditor extends CEntityDecoratableForm<PaymentMethod> {
                     details.set(EntityFactory.create(CreditCardInfo.class));
                 }
                 setBillingAddressVisible(true);
+                break;
+            case Interac:
+                editor = new InteracInfoEditor();
+                if (details.getInstanceValueClass() != InteracInfo.class) {
+                    details.set(EntityFactory.create(InteracInfo.class));
+                }
+                setBillingAddressVisible(false);
                 break;
             }
 

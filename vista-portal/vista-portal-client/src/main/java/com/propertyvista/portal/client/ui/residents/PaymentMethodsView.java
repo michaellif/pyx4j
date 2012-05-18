@@ -24,9 +24,9 @@ public interface PaymentMethodsView extends IsWidget {
 
     interface Presenter {
 
-        public void editPaymentMethod(PaymentMethodDTO paymentmethod);
-
         public void addPaymentMethod();
+
+        public void editPaymentMethod(PaymentMethodDTO paymentmethod);
 
         public void removePaymentMethod(PaymentMethodDTO paymentmethod);
 
