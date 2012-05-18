@@ -30,6 +30,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CCheckBox;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationFailure;
 import com.pyx4j.i18n.shared.I18n;
@@ -143,7 +144,15 @@ public class PaymentMethodsForm extends CEntityForm<PaymentMethodListDTO> implem
             @Override
             public CComponent<?, ?> create(IObject<?> member) {
                 CComponent<?, ?> comp = null;
-                if (member.equals(proto().isDefault())) {
+                if (member.equals(proto().type())) {
+                    comp = new CHyperlink(new Command() {
+                        @Override
+                        public void execute() {
+                            presenter.editPaymentMethod(getValue());
+                        }
+                    });
+
+                } else if (member.equals(proto().isDefault())) {
                     comp = new CCheckBox();
                     comp.inheritViewable(false);
                     comp.setViewable(false);
