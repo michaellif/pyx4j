@@ -13,11 +13,21 @@
  */
 package com.propertyvista.domain.dashboard.gadgets.type;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.shared.IPrimitive;
+
+import com.propertyvista.domain.financial.billing.InvoiceDebit.DebitType;
 
 @DiscriminatorValue("ArrearsGadgetMeta")
 @Caption(name = "Arrears Gadget", description = "TBD")
 public interface ArrearsGadgetMeta extends ListerGadgetBaseMetadata {
 
+    @Caption(description = "Choose which category of arrears to display")
+    IPrimitive<DebitType> category();
+
+    IPrimitive<Boolean> customizeDate();
+
+    IPrimitive<LogicalDate> asOf();
 }

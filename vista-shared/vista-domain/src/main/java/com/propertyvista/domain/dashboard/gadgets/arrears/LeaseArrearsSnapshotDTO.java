@@ -7,46 +7,24 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Mar 15, 2012
+ * Created on May 18, 2012
  * @author ArtyomB
  * @version $Id$
  */
 package com.propertyvista.domain.dashboard.gadgets.arrears;
 
-import java.math.BigDecimal;
-
-import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.financial.billing.AgingBuckets;
-import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.financial.billing.ArrearsSnapshot;
+import com.propertyvista.domain.financial.billing.LeaseArrearsSnapshot;
 
 /**
- * 
+ * The purpose of this DTO and its difference from {@link ArrearsSnapshot} is to transfer only one category of arrears.
  */
 @Transient
-public interface ArrearsDTO extends IEntity {
+public interface LeaseArrearsSnapshotDTO extends LeaseArrearsSnapshot {
 
-    Lease lease();
-
-    AgingBuckets buckets();
-
-    @Format("#0.00")
-    IPrimitive<BigDecimal> arBalance();
-
-    @Format("#0.00")
-    IPrimitive<BigDecimal> prepayments();
-
-    /** {@link #arBalance()} - {@link #prepayments()} */
-    @Format("#0.00")
-    IPrimitive<BigDecimal> totalBalance();
-
-    /**
-     * LMR - last months rent depost.
-     */
-    @Format("#0.00")
-    IPrimitive<BigDecimal> lmrToUnitRentDifference();
+    AgingBuckets selectedBuckets();
 
 }

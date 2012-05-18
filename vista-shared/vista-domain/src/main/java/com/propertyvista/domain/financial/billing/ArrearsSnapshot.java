@@ -17,6 +17,8 @@ import java.math.BigDecimal;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.AbstractEntity;
+import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Inheritance;
 import com.pyx4j.entity.annotations.Inheritance.InheritanceStrategy;
 import com.pyx4j.entity.annotations.Owned;
@@ -40,14 +42,25 @@ public interface ArrearsSnapshot extends IEntity {
      */
     IPrimitive<LogicalDate> toDate();
 
-    IPrimitive<BigDecimal> arrearsAmount();
-
-    IPrimitive<BigDecimal> creditAmount();
-
     @Owned
     AgingBuckets totalAgingBuckets();
 
     @Owned
     IList<AgingBuckets> agingBuckets();
+
+    /**
+     * the cumulative amount of all arrears (sum of all arrears (not current) buckets of totalAgingBuckets)
+     */
+    @Format("#0.00")
+    @Caption(name = "AR Balance")
+    IPrimitive<BigDecimal> arrearsAmount();
+
+    @Format("#0.00")
+    @Caption(name = "Prepayments")
+    IPrimitive<BigDecimal> creditAmount();
+
+    // TODO add calculation of this value
+    @Format("#0.00")
+    IPrimitive<BigDecimal> totalBalance();
 
 }

@@ -13,13 +13,17 @@
  */
 package com.propertyvista.domain.financial.billing;
 
+import java.math.BigDecimal;
+
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.validator.NotNull;
+import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.financial.BillingAccount;
 
@@ -34,4 +38,10 @@ public interface LeaseArrearsSnapshot extends ArrearsSnapshot {
     @JoinColumn
     BillingAccount billingAccount();
 
+    /**
+     * LMR - last months rent deposit
+     */
+    // TODO add calculation of this value
+    @Format("#0.00")
+    IPrimitive<BigDecimal> lmrToUnitRentDifference();
 }

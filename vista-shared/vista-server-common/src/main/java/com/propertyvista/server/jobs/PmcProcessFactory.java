@@ -27,6 +27,8 @@ public class PmcProcessFactory {
             return new PadReciveProcess();
         case cleanup:
             return new CleanupPmcProcess();
+        case updateArrears:
+            return new UpdateArrearsProcess();
         default:
             throw new IllegalArgumentException("Not implemented");
         }

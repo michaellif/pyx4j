@@ -20,16 +20,20 @@ import java.util.EnumMap;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Vector;
 
 import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.Criterion;
+import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 
@@ -136,20 +140,57 @@ public class ARArrearsManager {
     }
 
     /**
+     * @param sortCriteria
+     * @param searchCriteria
      * @return return of a roster of arrearsSnapshots per billing accounts of the selected building.
      */
-    static List<ArrearsSnapshot> getArrearsSnapshotRoster(List<Building> buildings, LogicalDate asOf) {
-        List<ArrearsSnapshot> arrearsRoster = new LinkedList<ArrearsSnapshot>();
-        for (Building building : buildings) {
-            EntityQueryCriteria<BillingAccount> billingAccountsCriteria = EntityQueryCriteria.create(BillingAccount.class);
-            billingAccountsCriteria.add(PropertyCriterion.in(billingAccountsCriteria.proto().lease().unit().belongsTo(), building));
+    static EntitySearchResult<LeaseArrearsSnapshot> getArrearsSnapshotRoster(LogicalDate asOf, List<Building> buildings, Vector<Criterion> searchCriteria,
+            Vector<Sort> sortCriteria, int pageNumber, int pageSize) {
+
+        Vector<LeaseArrearsSnapshot> arrearsRoster = new Vector<LeaseArrearsSnapshot>();
+        if (false) {
+            EntityListCriteria<BillingAccount> billingAccountsCriteria = EntityListCriteria.create(BillingAccount.class);
+            if (!buildings.isEmpty()) {
+                billingAccountsCriteria.add(PropertyCriterion.in(billingAccountsCriteria.proto().lease().unit().belongsTo(), new Vector<Building>(buildings)));
+                billingAccountsCriteria.addAll(searchCriteria);
+                billingAccountsCriteria.setSorts(sortCriteria);
+            }
+
             Iterator<BillingAccount> billingAccountsIter = Persistence.service().query(null, billingAccountsCriteria, AttachLevel.IdOnly);
 
             while (billingAccountsIter.hasNext()) {
-                arrearsRoster.add(getArrearsSnapshot(billingAccountsIter.next(), asOf));
+                LeaseArrearsSnapshot snapshot = getArrearsSnapshot(billingAccountsIter.next(), asOf);
+                if (snapshot != null) {
+                    arrearsRoster.add(snapshot);
+                }
             }
         }
-        return arrearsRoster;
+
+        EntityListCriteria<LeaseArrearsSnapshot> criteria = new EntityListCriteria<LeaseArrearsSnapshot>(LeaseArrearsSnapshot.class);
+        if (!buildings.isEmpty()) {
+            criteria.add(PropertyCriterion.in(criteria.proto().billingAccount().lease().unit().belongsTo(), new Vector<Building>(buildings)));
+        }
+
+        criteria.setPageNumber(pageNumber);
+        criteria.setPageSize(pageSize);
+
+        criteria.add(PropertyCriterion.le(criteria.proto().fromDate(), asOf));
+        criteria.addAll(searchCriteria);
+
+        Vector<Sort> adjustedSortCriteria = new Vector<EntityQueryCriteria.Sort>();
+        adjustedSortCriteria.add(new Sort(criteria.proto().fromDate().getPath().toString(), true));
+        adjustedSortCriteria.addAll(sortCriteria);
+
+        criteria.setSorts(adjustedSortCriteria);
+
+        arrearsRoster = new Vector<LeaseArrearsSnapshot>(Persistence.service().query(criteria));
+
+        EntitySearchResult<LeaseArrearsSnapshot> result = new EntitySearchResult<LeaseArrearsSnapshot>();
+        result.setTotalRows(Persistence.service().count(criteria));
+        result.hasMoreData(result.getTotalRows() > (pageSize * pageNumber));
+        result.setData(arrearsRoster);
+
+        return result;
 
     }
 

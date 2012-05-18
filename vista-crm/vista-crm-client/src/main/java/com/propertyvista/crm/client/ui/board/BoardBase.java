@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.board;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -192,7 +193,12 @@ public abstract class BoardBase extends DockLayoutPanel implements BoardView {
     @Override
     public void setBuildings(List<Building> buildings, boolean fireEvent) {
         if (board != null && getDashboardMetadata() != null && getDashboardMetadata().type().getValue() == DashboardType.building) {
-            selectedBuildings = buildings;
+
+            selectedBuildings = new ArrayList<Building>(buildings.size());
+            for (Building b : buildings) {
+                selectedBuildings.add(b.<Building> createIdentityStub());
+            }
+
             if (fireEvent) {
                 fireBuildingsSelectionChanged();
             }

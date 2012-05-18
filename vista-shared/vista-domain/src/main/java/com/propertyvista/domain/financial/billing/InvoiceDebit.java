@@ -25,12 +25,21 @@ import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.ISet;
+import com.pyx4j.i18n.annotations.I18n;
+import com.pyx4j.i18n.shared.I18nEnum;
 
 @AbstractEntity
 public interface InvoiceDebit extends InvoiceLineItem {
 
+    @I18n
     public enum DebitType {
-        lease, parking, pet, addOn, utility, locker, booking, deposit, accountCharge, nsf, latePayment, target, other, total
+
+        lease, parking, pet, addOn, utility, locker, booking, deposit, accountCharge, nsf, latePayment, target, other, total;
+
+        @Override
+        public String toString() {
+            return I18nEnum.toString(this);
+        };
     }
 
     ISet<DebitCreditLink> creditLinks();

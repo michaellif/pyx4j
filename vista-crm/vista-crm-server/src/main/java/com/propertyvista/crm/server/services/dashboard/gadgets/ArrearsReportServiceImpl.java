@@ -13,271 +13,106 @@
  */
 package com.propertyvista.crm.server.services.dashboard.gadgets;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.Criterion;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
+import com.pyx4j.entity.shared.utils.EntityDtoBinder;
 
+import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.ArrearsReportService;
-import com.propertyvista.crm.server.util.SeqUtils;
-import com.propertyvista.crm.server.util.SortingFactory;
-import com.propertyvista.domain.dashboard.gadgets.arrears.ArrearsDTO;
-import com.propertyvista.domain.dashboard.gadgets.arrears.MockupArrearsState;
+import com.propertyvista.domain.dashboard.gadgets.arrears.LeaseArrearsSnapshotDTO;
 import com.propertyvista.domain.dashboard.gadgets.arrears.MockupArrearsSummary;
-import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitTurnoversPerIntervalDTO.AnalysisResolution;
-import com.propertyvista.domain.financial.billing.InvoiceDebit.DebitType;
+import com.propertyvista.domain.financial.billing.LeaseArrearsSnapshot;
+import com.propertyvista.domain.property.asset.building.Building;
 
 public class ArrearsReportServiceImpl implements ArrearsReportService {
 
-    private static final SortingFactory<MockupArrearsState> SORTING_FACTORY = new SortingFactory<MockupArrearsState>(MockupArrearsState.class);
+    private final EntityDtoBinder<LeaseArrearsSnapshot, LeaseArrearsSnapshotDTO> DTO_BINDER = new EntityDtoBinder<LeaseArrearsSnapshot, LeaseArrearsSnapshotDTO>(
+            LeaseArrearsSnapshot.class, LeaseArrearsSnapshotDTO.class) {
+        @Override
+        protected void bind() {
+
+            bind(dtoProto.fromDate(), dboProto.fromDate());
+            bind(dtoProto.arrearsAmount(), dboProto.arrearsAmount());
+            bind(dtoProto.creditAmount(), dboProto.creditAmount());
+            bind(dtoProto.totalBalance(), dboProto.totalBalance());
+            bind(dtoProto.lmrToUnitRentDifference(), dboProto.lmrToUnitRentDifference());
+
+            // references
+            bind(dtoProto.billingAccount().lease().unit().belongsTo().propertyCode(), dboProto.billingAccount().lease().unit().belongsTo().propertyCode());
+            bind(dtoProto.billingAccount().lease().unit().belongsTo().info().name(), dboProto.billingAccount().lease().unit().belongsTo().info().name());
+            bind(dtoProto.billingAccount().lease().unit().belongsTo().info().address().streetNumber(), dboProto.billingAccount().lease().unit().belongsTo()
+                    .info().address().streetNumber());
+            bind(dtoProto.billingAccount().lease().unit().belongsTo().info().address().streetName(), dboProto.billingAccount().lease().unit().belongsTo()
+                    .info().address().streetName());
+            bind(dtoProto.billingAccount().lease().unit().belongsTo().info().address().province().name(), dboProto.billingAccount().lease().unit().belongsTo()
+                    .info().address().province().name());
+            bind(dtoProto.billingAccount().lease().unit().belongsTo().info().address().country().name(), dboProto.billingAccount().lease().unit().belongsTo()
+                    .info().address().country().name());
+            bind(dtoProto.billingAccount().lease().unit().belongsTo().complex().name(), dboProto.billingAccount().lease().unit().belongsTo().complex().name());
+            bind(dtoProto.billingAccount().lease().unit().info().number(), dboProto.billingAccount().lease().unit().info().number());
+            bind(dtoProto.billingAccount().lease().leaseId(), dboProto.billingAccount().lease().leaseId());
+            bind(dtoProto.billingAccount().lease().leaseFrom(), dboProto.billingAccount().lease().leaseFrom());
+            bind(dtoProto.billingAccount().lease().leaseTo(), dboProto.billingAccount().lease().leaseTo());
+
+        }
+    };
 
     @Override
-    public void arrearsList(AsyncCallback<EntitySearchResult<ArrearsDTO>> callback, Vector<Criterion> customCriteria, Vector<Key> buildingPKs,
-            LogicalDate when, Vector<Sort> sorting, int pageNumber, int pageSize) {
-        if (false) {
-            EntityQueryCriteria<MockupArrearsState> criteria = new EntityQueryCriteria<MockupArrearsState>(MockupArrearsState.class);
-            // adjust the order of results in order to select the most recent statuses
-            ArrayList<Sort> sortingCriteria = new ArrayList<Sort>();
-            sortingCriteria.add(new Sort(criteria.proto().statusTimestamp().getPath().toString(), true));
-            sortingCriteria.addAll(sorting);
-            criteria.setSorts(sortingCriteria);
+    public void arrearsList(AsyncCallback<EntitySearchResult<LeaseArrearsSnapshotDTO>> callback, Vector<Criterion> customCriteria,
+            Vector<Building> buildingStubs, LogicalDate asOf, Vector<Sort> sorting, int pageNumber, int pageSize) {
 
-            when = when != null ? when : new LogicalDate();
-            when = new LogicalDate(AnalysisResolution.Month.intervalStart(when.getTime()));
-            criteria.add(PropertyCriterion.eq(criteria.proto().statusTimestamp(), when));
+        EntitySearchResult<LeaseArrearsSnapshot> roster = ServerSideFactory.create(ARFacade.class).getArrearsSnapshotRoster(asOf, buildingStubs,
+                customCriteria, toDBOSortingCriteria(sorting), pageNumber, pageSize);
 
-            if (!buildingPKs.isEmpty()) {
-                criteria.add(PropertyCriterion.in(criteria.proto().building(), buildingPKs));
-            }
-            // FIXME in real version we need to apply custom criteria AFTER we have selected the most recent statuses (or if we use daily snapshots its better to let them be here)
-            for (Criterion c : customCriteria) {
-                criteria.add(c);
-            }
-            final List<MockupArrearsState> allArrears = Persistence.service().query(criteria);
+        Vector<LeaseArrearsSnapshotDTO> rosterDTO = new Vector<LeaseArrearsSnapshotDTO>();
 
-            final int capacity = allArrears.size() + 1; // add 1 in to avoid failure if the result set size is 0           
-            final List<MockupArrearsState> preliminaryResults = new ArrayList<MockupArrearsState>(capacity);
-
-            // choose only the most recent statuses (we asked the query to sort the results, hence the most recent ones must come first)
-            Key previousTenantPk = null;
-            for (MockupArrearsState arrear : allArrears) {
-//                Key thisTenantPk = arrear.belongsTo().getPrimaryKey();
-//                if (!thisTenantPk.equals(previousTenantPk)) {
-//                    preliminaryResults.add(arrear);
-//                    previousTenantPk = thisTenantPk;
-//                }
-            }
-
-            SORTING_FACTORY.sortDto(preliminaryResults, sorting);
-
-            Vector<MockupArrearsState> pageData = new Vector<MockupArrearsState>();
-            int totalRows = preliminaryResults.size();
-            boolean hasMoreRows = false;
-
-            int currentPage = 0;
-            int currentPagePosition = 0;
-
-            // FIXME fix bug with wrong page/totalrows/pagenumber mechanism
-            for (MockupArrearsState arrear : preliminaryResults) {
-                ++currentPagePosition;
-                if (currentPagePosition > pageSize) {
-                    ++currentPage;
-                    currentPagePosition = 1;
-                }
-                if (currentPage < pageNumber) {
-                    continue;
-                } else if (currentPage == pageNumber) {
-                    pageData.add(arrear);
-                } else {
-                    hasMoreRows = true;
-                    break;
-                }
-
-            }
-
-            EntitySearchResult<MockupArrearsState> result = new EntitySearchResult<MockupArrearsState>();
-            result.setData(pageData);
-            result.setTotalRows(totalRows);
-            result.hasMoreData(hasMoreRows);
-            callback.onSuccess(null);
+        for (LeaseArrearsSnapshot snapshot : roster.getData()) {
+            rosterDTO.add(toSnapshotDTO(snapshot));
         }
 
-        List<ArrearsDTO> allArrears = getCurrentArrears(buildingPKs, DebitType.total);
-    }
-
-    private List<ArrearsDTO> getCurrentArrears(Vector<Key> buildingPKs, DebitType all) {
-        List<ArrearsDTO> allArrears = null;
-
-        // TODO need something like ArFacade.getAllUncoveredLeases();
-
-        return allArrears;
+        EntitySearchResult<LeaseArrearsSnapshotDTO> result = new EntitySearchResult<LeaseArrearsSnapshotDTO>();
+        result.setData(new Vector<LeaseArrearsSnapshotDTO>(rosterDTO));
+        result.setTotalRows(roster.getTotalRows());
+        result.hasMoreData(roster.hasMoreData());
+        callback.onSuccess(result);
     }
 
     @Override
     public void summary(AsyncCallback<EntitySearchResult<MockupArrearsSummary>> callback, Vector<Key> buildingPKs, LogicalDate when, Vector<Sort> sorting,
             int pageNumber, int pageSize) {
-
-        EntityQueryCriteria<MockupArrearsSummary> criteria = new EntityQueryCriteria<MockupArrearsSummary>(MockupArrearsSummary.class);
-        if (!buildingPKs.isEmpty()) {
-            criteria.add(PropertyCriterion.in(criteria.proto().belongsTo(), buildingPKs));
-        }
-        criteria.setSorts(sorting);
-        when = when != null ? when : new LogicalDate();
-        when = new LogicalDate(AnalysisResolution.Month.intervalStart(when.getTime()));
-        criteria.add(PropertyCriterion.eq(criteria.proto().statusTimestamp(), when));
-
-        List<MockupArrearsSummary> arrearsForEachBuilding = Persistence.service().query(criteria);
-
-        //@formatter:off
-            SeqUtils.Sum<MockupArrearsSummary> sum = new SeqUtils.Sum<MockupArrearsSummary>(MockupArrearsSummary.class,                    
-                    Arrays.asList(
-                        criteria.proto().thisMonth().getPath(),
-                        criteria.proto().monthAgo().getPath(),
-                        criteria.proto().twoMonthsAgo().getPath(),
-                        criteria.proto().threeMonthsAgo().getPath(),
-                        criteria.proto().overFourMonthsAgo().getPath(),
-                        criteria.proto().arBalance().getPath())
-            );            
-            //@formatter:on
-        MockupArrearsSummary summary = SeqUtils.foldl(sum, arrearsForEachBuilding);
-
-        EntitySearchResult<MockupArrearsSummary> result = new EntitySearchResult<MockupArrearsSummary>();
-        result.setData(new Vector<MockupArrearsSummary>(1));
-        result.getData().add(summary);
-        result.setTotalRows(1);
-        result.hasMoreData(false);
-
-        callback.onSuccess(result);
-
+        // TODO
     }
 
     @Override
     public void arrearsMonthlyComparison(AsyncCallback<Vector<Vector<Double>>> callback, Vector<Key> buildingPKs, int yearsAgo) {
-        if (yearsAgo < 1) {
-            throw new Error("sorry, but you need to provide number of years that at least greater than zero");
-        }
-        final LogicalDate when = new LogicalDate();
-        final LogicalDate lastDay = new LogicalDate(AnalysisResolution.Year.intervalEnd(when.getTime()));
-        final LogicalDate firstDay = yearsAgo(yearsAgo, lastDay);
-
-        EntityQueryCriteria<MockupArrearsSummary> criteria = new EntityQueryCriteria<MockupArrearsSummary>(MockupArrearsSummary.class);
-        if (!buildingPKs.isEmpty()) {
-            criteria.add(PropertyCriterion.in(criteria.proto().belongsTo(), buildingPKs));
-        }
-        //@formatter:off
-            List<Sort> sorting = Arrays.asList(
-                    new Sort(criteria.proto().statusTimestamp().getPath().toString(), false),
-                    new Sort(criteria.proto().belongsTo().getPath().toString(), false));
-            //@formatter:on
-        criteria.setSorts(sorting);
-        criteria.add(new PropertyCriterion(criteria.proto().statusTimestamp(), Restriction.GREATER_THAN_OR_EQUAL, firstDay));
-        criteria.add(new PropertyCriterion(criteria.proto().statusTimestamp(), Restriction.LESS_THAN, lastDay));
-
-        List<MockupArrearsSummary> buildingMonthlyArrears = Persistence.service().query(criteria);
-
-        List<ArBalanceHolder> summariesPerEachMonth = computeSummariesPerEachMonth(buildingMonthlyArrears);
-
-        HashMap<Integer, Vector<ArBalanceHolder>> comparison = new HashMap<Integer, Vector<ArBalanceHolder>>();
-        for (int i = 0; i < 12; ++i) {
-            comparison.put(i, new Vector<ArBalanceHolder>());
-        }
-        for (ArBalanceHolder monthlyArrears : summariesPerEachMonth) {
-            comparison.get(monthlyArrears.timestamp.getMonth()).add(monthlyArrears);
-        }
-
-        // prepare the result: if by some accident data for some months is missing, fill in the blanks with NAN values
-        // also: we don't have to send the dates to the server because the date marks are implied by the result
-        Vector<Vector<Double>> result = new Vector<Vector<Double>>();
-        for (Vector<ArBalanceHolder> monthlyComparison : comparison.values()) {
-            Vector<Double> monthlyComparisonResult = new Vector<Double>();
-            int prevYear = firstDay.getYear();
-
-            for (ArBalanceHolder balanceHolder : monthlyComparison) {
-                int diff = balanceHolder.timestamp.getYear() - prevYear;
-                while (diff-- > 1) {
-                    monthlyComparisonResult.add(Double.NaN);
-                }
-                monthlyComparisonResult.add(balanceHolder.balance);
-                prevYear = balanceHolder.timestamp.getYear();
-            }
-            int diff = lastDay.getYear() - prevYear;
-            while (diff-- > 1) {
-                monthlyComparisonResult.add(Double.NaN);
-            }
-            result.add(monthlyComparisonResult);
-        }
-
-        callback.onSuccess(result);
-
+        // TODO
     }
 
-    @SuppressWarnings("deprecation")
-    private static LogicalDate yearsAgo(int yearsAgo, LogicalDate day) {
-        final LogicalDate firstDay = new LogicalDate(AnalysisResolution.Year.intervalStart(day.getTime()));
-        firstDay.setYear(firstDay.getYear() - yearsAgo);
-        return firstDay;
+    private LeaseArrearsSnapshotDTO toSnapshotDTO(LeaseArrearsSnapshot snapshot) {
+        Persistence.service().retrieve(snapshot.billingAccount());
+        Persistence.service().retrieve(snapshot.billingAccount().lease());
+        Persistence.service().retrieve(snapshot.billingAccount().lease().unit());
+        Persistence.service().retrieve(snapshot.billingAccount().lease().unit().belongsTo());
+
+        LeaseArrearsSnapshotDTO dto = DTO_BINDER.createDTO(snapshot);
+
+        dto.selectedBuckets().set(snapshot.totalAgingBuckets().duplicate());
+
+        return dto;
     }
 
-    private static List<ArBalanceHolder> computeSummariesPerEachMonth(List<MockupArrearsSummary> buildingMonthlyArrears) {
-        long previousMonth = -1l;
-        List<ArBalanceHolder> summaryPerEachMonth = new ArrayList<ArBalanceHolder>();
-        List<MockupArrearsSummary> buldingArrearsOfTheSameMonth = new ArrayList<MockupArrearsSummary>();
-
-        for (MockupArrearsSummary arrears : buildingMonthlyArrears) {
-            long thisMonth = arrears.statusTimestamp().getValue().getTime();
-            if (thisMonth != previousMonth) {
-                if (!buldingArrearsOfTheSameMonth.isEmpty()) {
-                    summaryPerEachMonth.add(new ArBalanceHolder(buldingArrearsOfTheSameMonth.get(0).statusTimestamp().getValue(),
-                            summarizeArBalance(buldingArrearsOfTheSameMonth)));
-                    buldingArrearsOfTheSameMonth = new ArrayList<MockupArrearsSummary>(buldingArrearsOfTheSameMonth.size());
-                }
-                previousMonth = thisMonth;
-            }
-            buldingArrearsOfTheSameMonth.add(arrears);
-        }
-        if (!buldingArrearsOfTheSameMonth.isEmpty()) {
-            summaryPerEachMonth.add(new ArBalanceHolder(buldingArrearsOfTheSameMonth.get(0).statusTimestamp().getValue(),
-                    summarizeArBalance(buldingArrearsOfTheSameMonth)));
-        }
-
-        return summaryPerEachMonth;
+    private Vector<Sort> toDBOSortingCriteria(Vector<Sort> dtoSorting) {
+        // TODO
+        return new Vector<Sort>();
     }
 
-    private static double summarizeArBalance(Iterable<MockupArrearsSummary> arrearsCollection) {
-        double sum = 0.0;
-        for (MockupArrearsSummary arrears : arrearsCollection) {
-            sum += arrears.arBalance().getValue();
-        }
-        return sum;
-    }
-
-    private static class ArBalanceHolder {
-        public final LogicalDate timestamp;
-
-        public final double balance;
-
-        public ArBalanceHolder(LogicalDate timestamp, double balance) {
-            this.timestamp = timestamp;
-            this.balance = balance;
-        }
-
-        @Override
-        /** For Debug's sake */
-        public String toString() {
-            return "(" + timestamp.toString() + ", " + balance + ")";
-        }
-    }
 }

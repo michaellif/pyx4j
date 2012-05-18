@@ -16,7 +16,12 @@ package com.propertyvista.crm.client.ui.gadgets.common;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
+import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.Label;
@@ -28,6 +33,7 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.crm.client.ui.board.BoardView;
@@ -267,10 +273,27 @@ public abstract class GadgetInstanceBase<T extends GadgetMetadata> implements IG
         refreshTimer.reactivate();
         loadingPanel.setVisible(false);
 
+        contentPanel.setVisible(false);
         // TODO create separate class for error panel
+
         errorPanel.clear();
+        errorPanel.setVisible(true);
         errorPanel.setPixelSize(contentPanel.getElement().getClientWidth(), contentPanel.getElement().getClientHeight());
-        errorPanel.add(new Label(error.getLocalizedMessage()));
+
+        errorPanel.add(new HTML(new SafeHtmlBuilder().appendEscaped(i18n.tr("Error:")).toSafeHtml()));
+        HTML errorMessage = new HTML(new SafeHtmlBuilder().appendEscaped(error.getLocalizedMessage()).toSafeHtml());
+        errorMessage.setWidth("100%");
+        errorMessage.getElement().getStyle().setPaddingTop(1, Unit.EM);
+        errorMessage.getElement().getStyle().setPaddingBottom(2, Unit.EM);
+        errorPanel.add(errorMessage);
+        errorPanel.add(new Button(i18n.tr("Try to reload"), new ClickHandler() {
+
+            @Override
+            public void onClick(ClickEvent event) {
+                populate();
+            }
+        }));
+        isLoading = false;
     }
 
     // runtime:

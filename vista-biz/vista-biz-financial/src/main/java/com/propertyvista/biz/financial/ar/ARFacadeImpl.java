@@ -14,12 +14,20 @@
 package com.propertyvista.biz.financial.ar;
 
 import java.util.List;
+import java.util.Vector;
+
+import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.rpc.EntitySearchResult;
+import com.pyx4j.entity.shared.criterion.Criterion;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.InvoiceCredit;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
+import com.propertyvista.domain.financial.billing.LeaseArrearsSnapshot;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.dto.TransactionHistoryDTO;
 
@@ -63,6 +71,18 @@ public class ARFacadeImpl implements ARFacade {
     @Override
     public List<InvoiceCredit> getNotConsumedCreditInvoiceLineItems(BillingAccount billingAccount) {
         return ARTransactionManager.getNotConsumedCreditInvoiceLineItems(billingAccount);
+    }
+
+    @Override
+    public EntitySearchResult<LeaseArrearsSnapshot> getArrearsSnapshotRoster(LogicalDate asOf, List<Building> buildings, Vector<Criterion> searchCriteria,
+            Vector<Sort> sortCriteria, int pageNumber, int pageSize) {
+        return ARArrearsManager.getArrearsSnapshotRoster(asOf, buildings, searchCriteria, sortCriteria, pageNumber, pageSize);
+    }
+
+    @Override
+    public void updateArrearsHistory(BillingAccount billingAccount) {
+        ARArrearsManager.updateArrearsHistory(billingAccount);
+
     }
 
 }

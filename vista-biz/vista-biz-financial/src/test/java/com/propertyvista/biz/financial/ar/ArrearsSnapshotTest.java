@@ -15,12 +15,9 @@ package com.propertyvista.biz.financial.ar;
 
 import static com.propertyvista.biz.financial.SysDateManager.setSysDate;
 
-import org.junit.Ignore;
-
 import com.propertyvista.domain.financial.billing.InvoiceDebit.DebitType;
 import com.propertyvista.domain.tenant.lease.Lease.Status;
 
-@Ignore
 public class ArrearsSnapshotTest extends ArrearsSnapshotTestBase {
 
     public void testLeaseScenario() {
@@ -35,7 +32,7 @@ public class ArrearsSnapshotTest extends ArrearsSnapshotTestBase {
         runAndConfirmBilling();
 
         updateArrearsHistory();
-        beginAssertArrearsSnapshot("18-Mar-2011");
+        assertArrearsSnapshotStart("18-Mar-2011");
         // TODO these values were copied from ARSunnyDayScenarioTest: I have no idea how they were calculated (part the lease month?), need to ask Michael  
         assertArrearsDebitType(DebitType.lease, "302.50", "0.00", "0.00", "0.00", "0.00");
         assertArrearsDebitType(DebitType.parking, "26.02", "0.00", "0.00", "0.00", "0.00");
@@ -46,21 +43,22 @@ public class ArrearsSnapshotTest extends ArrearsSnapshotTestBase {
         setSysDate("19-Mar-2011");
         updateArrearsHistory();
 
-        assertPrevArrearsSnapshot("18-Mar-2011", "19-Mar-2011");
+        assertArrearsSnapshotIsSameAsBefore("18-Mar-2011", "19-Mar-2011");
 
         setSysDate("22-Mar-2011");
         updateArrearsHistory();
-        assertPrevArrearsSnapshot("18-Mar-2011", "22-Mar-2011");
+        assertArrearsSnapshotIsSameAsBefore("18-Mar-2011", "22-Mar-2011");
 
         // the first due date has come, but the payment hasn't been received: 
         // we expect the current bucket to upgrade to the next level
         // and of course all the previous to remain the same
         setSysDate("23-Mar-2011");
+        setLeaseStatus(Status.Active);
         updateArrearsHistory();
 
-        assertPrevArrearsSnapshot("18-Mar-2011", "22-Mar-2011");
+        assertArrearsSnapshotIsSameAsBefore("18-Mar-2011", "22-Mar-2011");
 
-        beginAssertArrearsSnapshot("23-Mar-2011");
+        assertArrearsSnapshotStart("23-Mar-2011");
         assertArrearsDebitType(DebitType.lease, "0.00", "302.50", "0.00", "0.00", "0.00");
         assertArrearsDebitType(DebitType.parking, "0.00", "26.02", "0.00", "0.00", "0.00");
         assertArrearsDebitType(DebitType.deposit, "0.00", "930.30", "0.00", "0.00", "0.00");
@@ -70,20 +68,22 @@ public class ArrearsSnapshotTest extends ArrearsSnapshotTestBase {
         setSysDate("27-Mar-2011");
         updateArrearsHistory();
 
-        assertPrevArrearsSnapshot("26-Mar-2011", "27-Mar-2011");
+        assertArrearsSnapshotIsSameAsBefore("26-Mar-2011", "27-Mar-2011");
 
         // BILLING RUN 2        
         setSysDate("28-Mar-2011");
         runAndConfirmBilling();
+        updateArrearsHistory();
+
+        // after this billing run we expect "the current" bucket to be filled with values different from 0.00
+        assertArrearsSnapshotStart("28-Apr-2011");
+        assertArrearsDebitType(DebitType.lease, "1041.94", "302.50", "0.00", "0.00", "0.00");
+        assertArrearsDebitType(DebitType.parking, "89.60", "26.02", "0.00", "0.00", "0.00");
+        assertArrearsDebitType(DebitType.deposit, "0.00", "930.30", "0.00", "0.00", "0.00");
+        assertArrearsTotal("1131.54", "1258.82", "0.00", "0.00", "0.00");
 
         setSysDate("01-Apr-2011");
         updateArrearsHistory();
-
-        beginAssertArrearsSnapshot("01-Apr-2011");
-        assertArrearsDebitType(DebitType.lease, "1041.60", "302.50", "0.00", "0.00", "0.00");
-        assertArrearsDebitType(DebitType.parking, "89.60", "26.02", "0.00", "0.00", "0.00");
-        assertArrearsDebitType(DebitType.deposit, "0.00", "930.30", "0.00", "0.00", "0.00");
-        assertArrearsTotal("1131.20", "1258.82", "0.00", "0.00", "0.0");
 
     }
 }

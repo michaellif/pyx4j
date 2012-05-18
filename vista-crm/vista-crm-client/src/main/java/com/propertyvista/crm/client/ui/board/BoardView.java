@@ -54,7 +54,7 @@ public interface BoardView extends IsWidget, HasBuildingSelectionChangedEventHan
     LogicalDate getDashboardDate();
 
     /**
-     * @return the buildings that this view was set up to display, can't be <code>null</code>, empty list denotes all buildings.
+     * @return the stubs of the buildings that this view was set up to display, can't be <code>null</code>, empty list denotes all buildings.
      */
     List<Building> getSelectedBuildings();
 

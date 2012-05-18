@@ -70,14 +70,14 @@ public class ArrearsSnapshotTestBase extends FinancialTestBase {
         Persistence.service().commit();
     }
 
-    protected void beginAssertArrearsSnapshot(String asOf) {
+    protected void assertArrearsSnapshotStart(String asOf) {
         actualArrearsSnapshot = ARArrearsManager.getArrearsSnapshot(billingAccount(), asDate(asOf));
         prevFromDate = actualArrearsSnapshot.fromDate().getValue();
         prevExpectedAgingBuckets = new EnumMap<DebitType, AgingBuckets>(DebitType.class);
 
     }
 
-    protected void assertPrevArrearsSnapshot(String from, String to) {
+    protected void assertArrearsSnapshotIsSameAsBefore(String from, String to) {
         Calendar cal = new GregorianCalendar();
         cal.setTime(asDate(from));
 
