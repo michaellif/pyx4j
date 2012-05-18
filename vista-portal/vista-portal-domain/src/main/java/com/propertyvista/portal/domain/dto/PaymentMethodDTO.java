@@ -37,5 +37,4 @@ public interface PaymentMethodDTO extends CreditCardInfo {
     IPrimitive<String> nameOnAccount();
 
     IPrimitive<Boolean> primary();
-
 }

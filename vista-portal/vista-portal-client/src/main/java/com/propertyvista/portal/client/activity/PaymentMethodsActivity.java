@@ -27,7 +27,6 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.portal.client.ui.residents.PaymentMethodsView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
-import com.propertyvista.portal.domain.dto.PaymentMethodDTO;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.Residents.PaymentMethods;
 import com.propertyvista.portal.rpc.portal.services.TenantPaymentMethodCrudService;
@@ -68,14 +67,23 @@ public class PaymentMethodsActivity extends SecurityAwareActivity implements Pay
     }
 
     @Override
-    public void editPaymentMethod(PaymentMethodDTO paymentmethod) {
+    public void editPaymentMethod(PaymentMethod paymentMethod) {
         AppPlace place = new PaymentMethods.EditPaymentMethod();
-        place.queryArg(PortalSiteMap.ARG_PAYMENT_METHOD_ID, paymentmethod.id().getValue().toString());
+        place.queryArg(PortalSiteMap.ARG_PAYMENT_METHOD_ID, paymentMethod.id().getValue().toString());
         AppSite.getPlaceController().goTo(place);
     }
 
     @Override
-    public void removePaymentMethod(PaymentMethodDTO paymentmethod) {
+    public void savePaymentMethod(PaymentMethod paymentMethod) {
+        srv.save(new DefaultAsyncCallback<PaymentMethod>() {
+            @Override
+            public void onSuccess(PaymentMethod result) {
+            }
+        }, paymentMethod);
+    }
+
+    @Override
+    public void removePaymentMethod(PaymentMethod paymentMethod) {
         // TODO Auto-generated method stub
     }
 }

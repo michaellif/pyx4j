@@ -28,7 +28,5 @@ public interface EditPaymentMethodView extends IsWidget {
         public void save(PaymentMethodDTO paymentmethod);
 
         public void cancel();
-
     }
-
 }

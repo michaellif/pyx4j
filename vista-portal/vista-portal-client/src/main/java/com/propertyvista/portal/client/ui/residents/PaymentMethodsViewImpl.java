@@ -15,29 +15,38 @@ package com.propertyvista.portal.client.ui.residents;
 
 import java.util.List;
 
-import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.FlowPanel;
+
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.payment.PaymentMethod;
+import com.propertyvista.portal.client.ui.decorations.UserMessagePanel;
 
-public class PaymentMethodsViewImpl extends SimplePanel implements PaymentMethodsView {
+public class PaymentMethodsViewImpl extends FlowPanel implements PaymentMethodsView {
+
+    private static final I18n i18n = I18n.get(PaymentMethodsViewImpl.class);
 
     private final PaymentMethodsForm form;
 
+    private Presenter presenter;
+
     public PaymentMethodsViewImpl() {
+        add(new UserMessagePanel());
+
         form = new PaymentMethodsForm();
         form.initContent();
-        setWidget(form);
+        add(form);
+    }
 
+    @Override
+    public void setPresenter(Presenter presenter) {
+        this.presenter = presenter;
+        form.setPresenter(presenter);
     }
 
     @Override
     public void populate(List<PaymentMethod> paymentMethods) {
         form.reset();
         form.populate(paymentMethods);
-    }
-
-    @Override
-    public void setPresenter(Presenter presenter) {
-        form.setPresenter(presenter);
     }
 }

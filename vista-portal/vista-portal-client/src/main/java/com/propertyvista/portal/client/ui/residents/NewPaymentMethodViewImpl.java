@@ -74,9 +74,7 @@ public class NewPaymentMethodViewImpl extends FlowPanel implements NewPaymentMet
         submitButton.getElement().getStyle().setMargin(20, Unit.PX);
         submitButton.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.RIGHT);
 
-        //TODO implement
         submitButton.addClickHandler(new ClickHandler() {
-
             @Override
             public void onClick(ClickEvent event) {
                 if (!form.isValid()) {
@@ -96,7 +94,6 @@ public class NewPaymentMethodViewImpl extends FlowPanel implements NewPaymentMet
     @Override
     public void setPresenter(Presenter presenter) {
         this.presenter = presenter;
-
     }
 
     @Override
@@ -104,10 +101,4 @@ public class NewPaymentMethodViewImpl extends FlowPanel implements NewPaymentMet
         form.reset();
         form.populate(paymentMethod);
     }
-
-    @Override
-    public PaymentMethod getValue() {
-        return form.getValue();
-    }
-
 }

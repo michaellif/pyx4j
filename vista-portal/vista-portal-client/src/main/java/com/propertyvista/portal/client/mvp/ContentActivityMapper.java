@@ -40,7 +40,6 @@ import com.propertyvista.portal.client.activity.login.RedirectToLoginPageActivit
 import com.propertyvista.portal.client.activity.security.PasswordResetActivity;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.Residents;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap.Residents.PaymentMethods;
 
 public class ContentActivityMapper implements AppActivityMapper {
 
@@ -59,24 +58,22 @@ public class ContentActivityMapper implements AppActivityMapper {
                     activity = new DashboardActivity(place);
                 } else if (place instanceof Residents.PersonalInformation) {
                     activity = new PersonalInfoActivity(place);
+                } else if (place instanceof PortalSiteMap.PotentialTenants) {
+                    activity = new PotentialTenantActivity(place);
+                } else if (place instanceof Residents.CurrentBill) {
+                    activity = new CurrentBillActivity(place);
+                } else if (place instanceof Residents.PaymentMethods) {
+                    activity = new PaymentMethodsActivity(place);
+                } else if (place instanceof Residents.PaymentMethods.NewPaymentMethod) {
+                    activity = new NewPaymentMethodActivity(place);
+                } else if (place instanceof Residents.PaymentMethods.EditPaymentMethod) {
+                    activity = new EditPaymentMethodActivity(place);
                 } else if (place instanceof Residents.Maintenance) {
                     activity = new MaintenanceAcitvity(place);
                 } else if (place instanceof Residents.Maintenance.NewTicket) {
                     activity = new NewMaintenanceRequestActivity(place);
                 } else if (place instanceof Residents.BillingHistory) {
                     activity = new BillingHistoryActivity(place);
-                } else if (place instanceof Residents.PaymentMethods) {
-                    activity = new PaymentMethodsActivity(place);
-                } else if (place instanceof Residents.CurrentBill) {
-                    activity = new CurrentBillActivity(place);
-                } else if (place instanceof PortalSiteMap.PotentialTenants) {
-                    activity = new PotentialTenantActivity(place);
-                } else if (place instanceof PaymentMethods.NewPaymentMethod) {
-                    activity = new NewPaymentMethodActivity(place);
-                } else if (place instanceof Residents.CurrentBill) {
-                    activity = new CurrentBillActivity(place);
-                } else if (place instanceof Residents.PaymentMethods.EditPaymentMethod) {
-                    activity = new EditPaymentMethodActivity(place);
                 } else if (VistaTODO.enableWelcomeWizardDemoMode & (place instanceof PortalSiteMap.Residents.Insurance)) {
                     activity = new InsuranceActivity();
 

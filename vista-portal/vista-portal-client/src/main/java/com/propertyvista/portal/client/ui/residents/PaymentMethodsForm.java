@@ -78,7 +78,7 @@ public class PaymentMethodsForm extends CEntityForm<PaymentMethodListDTO> implem
             return Arrays.asList(//@formatter:off                    
                     new EntityFolderColumnDescriptor(proto().type(), "10em"), 
 //                  new EntityFolderColumnDescriptor(proto().details(), "15em"),
-                    new EntityFolderColumnDescriptor(proto().isDefault(), "10em")
+                    new EntityFolderColumnDescriptor(proto().isDefault(), "5em")
             ); //@formatter:on
         }
 
@@ -132,21 +132,6 @@ public class PaymentMethodsForm extends CEntityForm<PaymentMethodListDTO> implem
                     comp = new CCheckBox();
                     comp.inheritViewable(false);
                     comp.setViewable(false);
-
-                    ((CComponent<Boolean, ?>) comp).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
-                        @Override
-                        public void onValueChange(ValueChangeEvent<Boolean> event) {
-                            if (event.getValue().booleanValue()) {
-                                for (int i = 0; i < PaymentMethodFolder.this.getItemCount(); ++i) {
-                                    for (CComponent<?, ?> comp : PaymentMethodFolder.this.getItem(i).getComponents()) {
-                                        if (comp instanceof PaymentMethodEditorEx && !comp.equals(PaymentMethodEditorEx.this)) {
-                                            ((PaymentMethodEditorEx) comp).get(proto().isDefault()).setValue(false);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    });
                 } else {
                     comp = super.create(member);
                 }

@@ -30,7 +30,5 @@ public interface NewPaymentMethodView extends IsWidget {
 
     void setPresenter(Presenter presenter);
 
-    PaymentMethod getValue();
-
     void populate(PaymentMethod paymentMethod);
 }
