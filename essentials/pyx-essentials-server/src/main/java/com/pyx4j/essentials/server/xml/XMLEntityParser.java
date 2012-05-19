@@ -283,7 +283,7 @@ public class XMLEntityParser {
             if (valueClass.isAssignableFrom(byte[].class)) {
                 return new Base64().decode(str);
             } else if (Date.class.isAssignableFrom(valueClass)) {
-                if (valueClass.isAssignableFrom(java.sql.Time.class)) {
+                if (java.sql.Time.class.isAssignableFrom(valueClass)) {
                     final String timePattern = "HH:mm:ss";
                     SimpleDateFormat tFormat = new SimpleDateFormat(timePattern, Locale.ENGLISH);
                     try {

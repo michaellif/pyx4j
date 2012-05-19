@@ -20,6 +20,8 @@
  */
 package com.pyx4j.entity.test.shared;
 
+import java.math.BigDecimal;
+
 import junit.framework.TestCase;
 
 import com.pyx4j.entity.test.env.ConfigureTestsEnv;
@@ -40,5 +42,18 @@ public abstract class InitializerTestBase extends TestCase {
         } catch (Throwable e) {
             return true;
         }
+    }
+
+    static public void assertValueEquals(String message, Object expected, Object actual) {
+        if (expected == null && actual == null) {
+            return;
+        }
+        if (expected != null && expected.equals(actual)) {
+            return;
+        }
+        if ((expected instanceof BigDecimal) && (((BigDecimal) expected).compareTo((BigDecimal) actual) == 0)) {
+            return;
+        }
+        failNotEquals(message, expected, actual);
     }
 }

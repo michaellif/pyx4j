@@ -27,6 +27,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
+import java.util.TimeZone;
 
 import com.pyx4j.commons.TimeUtils;
 
@@ -164,6 +165,10 @@ public class DateUtils extends TimeUtils {
         for (int i = 0; i < formats.length; i++) {
             try {
                 SimpleDateFormat aFormat = new SimpleDateFormat(formats[i], Locale.ENGLISH);
+                // Date in UTC format
+                if (i <= 0) {
+                    aFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+                }
                 Date dateObj = aFormat.parse(str);
                 if (!str.equals(aFormat.format(dateObj))) {
                     continue;
