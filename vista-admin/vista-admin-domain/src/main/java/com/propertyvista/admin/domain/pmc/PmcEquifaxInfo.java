@@ -13,66 +13,40 @@
  */
 package com.propertyvista.admin.domain.pmc;
 
-import java.util.Date;
-
 import com.pyx4j.entity.annotations.Caption;
-import com.pyx4j.entity.annotations.Indexed;
+import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Length;
-import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Table;
-import com.pyx4j.entity.annotations.Timestamp;
-import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.VistaNamespace;
 
 @Table(prefix = "admin", namespace = VistaNamespace.adminNamespace)
-@Caption(name = "PMC")
+@Caption(name = "PMC Equifax Info")
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
-public interface Pmc extends IEntity {
-
-    public static final String adminNamespace = VistaNamespace.adminNamespace;
-
-    public enum PmcStatus {
-        Created, Active, Suspended
-    }
+public interface PmcEquifaxInfo extends IEntity {
 
     @NotNull
-    IPrimitive<PmcStatus> status();
+    @Length(10)
+    IPrimitive<String> customerNumber();
 
     @NotNull
-    @ToString
-    IPrimitive<String> name();
+    @Length(2)
+    IPrimitive<String> securityCode();
 
-    @NotNull
+    @Length(4)
+    IPrimitive<String> customerCode();
+
+    @Length(12)
+    IPrimitive<String> customerReferenceNumber();
+
     @ReadOnly
-    @Length(63)
-    @Indexed(uniqueConstraint = true)
-    IPrimitive<String> namespace();
-
-    @NotNull
-    @Length(63)
-    @Indexed(uniqueConstraint = true)
-    IPrimitive<String> dnsName();
-
-    @Owned
-    IList<PmcDnsName> dnsNameAliases();
-
-    @Owned
-    PmcEquifaxInfo equifaxInfo();
-
-    @Owned
-    PmcPaymentTypeInfo paymentTypeInfo();
-
-    IPrimitive<String> onboardingAccountId();
-
-    @Timestamp(Timestamp.Update.Created)
-    @ReadOnly
-    IPrimitive<Date> created();
-
+    @Owner
+    @JoinColumn
+    Pmc pmc();
 }
