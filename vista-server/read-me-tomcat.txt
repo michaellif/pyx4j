@@ -24,7 +24,15 @@ Create mail-credentials.properties  in tomcat home.
                     <password>123456</password>
                 </server>
 
-  mvn -P deploy,deploy-target-local,deploy-db-reset
+  mvn -Dmaven.test.skip=true -P deploy,deploy-target-local,deploy-db-reset
+
+Profiling deploymnet:
+  mvn -Dmaven.test.skip=true -P deploy,deploy-target-www11,deploy-db-reset-mini
+
+---
+ JMX to dev server  (http://blog.markfeeney.com/2010/10/jmx-through-ssh-tunnel.html)
+ Tunel 9102 and 9103 ports
+
 
 --
 To configure Tomcat to support remote debugging?
