@@ -219,6 +219,10 @@ public interface Lease extends IVersionedEntity<LeaseV> {
     @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> approvalDate();
 
+    @NotNull
+    @Format("MM/dd/yyyy")
+    IPrimitive<LogicalDate> activationDate();
+
     @Owned
     LeaseApplication leaseApplication();
 

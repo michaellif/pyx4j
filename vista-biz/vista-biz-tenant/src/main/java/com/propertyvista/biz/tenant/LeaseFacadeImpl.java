@@ -173,7 +173,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
         lease.approvalDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
         lease.leaseApplication().decidedBy().set(decidedBy);
         lease.leaseApplication().decisionReason().setValue(decisionReason);
-        lease.leaseApplication().decisionDate().setValue(new LogicalDate());
+        lease.leaseApplication().decisionDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
 
         // finalize approved leases while saving:
         lease.saveAction().setValue(SaveAction.saveAsFinal);
@@ -206,7 +206,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
         lease.leaseApplication().status().setValue(LeaseApplication.Status.Declined);
         lease.leaseApplication().decidedBy().set(decidedBy);
         lease.leaseApplication().decisionReason().setValue(decisionReason);
-        lease.leaseApplication().decisionDate().setValue(new LogicalDate());
+        lease.leaseApplication().decisionDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
 
         lease.saveAction().setValue(SaveAction.saveAsFinal);
 
@@ -234,7 +234,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
         lease.leaseApplication().status().setValue(LeaseApplication.Status.Cancelled);
         lease.leaseApplication().decidedBy().set(decidedBy);
         lease.leaseApplication().decisionReason().setValue(decisionReason);
-        lease.leaseApplication().decisionDate().setValue(new LogicalDate());
+        lease.leaseApplication().decisionDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
 
         lease.saveAction().setValue(SaveAction.saveAsFinal);
 
@@ -261,6 +261,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
 
         lease.version().status().setValue(Status.Active);
         lease.saveAction().setValue(SaveAction.saveAsFinal);
+        lease.activationDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
         Persistence.secureSave(lease);
 
         ServerSideFactory.create(UnitTurnoverAnalysisFacade.class).propagateLeaseActivationToTurnoverReport(lease);

@@ -26,27 +26,46 @@ import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
 
 public class BillingCycleManagerTest extends VistaDBTestBase {
 
-    public void testBillingPeriodStartDate() throws ParseException {
+    public void testFirstBillingRun() throws ParseException {
         BillingRun billingRun = createFirstBillingRun(FinancialTestsUtils.getDate("23-Feb-2012"), null, false);
 
         assertEquals("Billing Period Start Date", FinancialTestsUtils.getDate("23-Feb-2012"), billingRun.billingPeriodStartDate().getValue());
         assertEquals("Billing Period End Date", FinancialTestsUtils.getDate("22-Mar-2012"), billingRun.billingPeriodEndDate().getValue());
         assertEquals("Billing Execution Target Date", FinancialTestsUtils.getDate("08-Feb-2012"), billingRun.executionTargetDate().getValue());
 
+    }
+
+    public void testSubsiquentBillingRun() throws ParseException {
+        BillingRun billingRun = createFirstBillingRun(FinancialTestsUtils.getDate("23-Feb-2012"), null, false);
         billingRun = createSubsiquentBillingRun(billingRun);
 
         assertEquals("Billing Period Start Date", FinancialTestsUtils.getDate("23-Mar-2012"), billingRun.billingPeriodStartDate().getValue());
         assertEquals("Billing Period End Date", FinancialTestsUtils.getDate("22-Apr-2012"), billingRun.billingPeriodEndDate().getValue());
         assertEquals("Billing Execution Target Date", FinancialTestsUtils.getDate("08-Mar-2012"), billingRun.executionTargetDate().getValue());
+
     }
 
-    public void testBillingPeriodStartDateForEndOfMonth() throws ParseException {
+    public void testExistingLeaseInitialBillingRun() throws ParseException {
+        BillingRun billingRun = createExistingLeaseInitialBillingRun(FinancialTestsUtils.getDate("23-Feb-2011"), FinancialTestsUtils.getDate("23-Mar-2012"),
+                null, false);
+
+        assertEquals("Billing Period Start Date", FinancialTestsUtils.getDate("23-Mar-2012"), billingRun.billingPeriodStartDate().getValue());
+        assertEquals("Billing Period End Date", FinancialTestsUtils.getDate("22-Apr-2012"), billingRun.billingPeriodEndDate().getValue());
+        assertEquals("Billing Execution Target Date", FinancialTestsUtils.getDate("08-Mar-2012"), billingRun.executionTargetDate().getValue());
+
+    }
+
+    public void testFirstBillingRunForEndOfMonth() throws ParseException {
         BillingRun billingRun = createFirstBillingRun(FinancialTestsUtils.getDate("29-Mar-2012"), null, false);
 
         assertEquals("Billing Period Start Date", FinancialTestsUtils.getDate("1-Mar-2012"), billingRun.billingPeriodStartDate().getValue());
         assertEquals("Billing Period End Date", FinancialTestsUtils.getDate("31-Mar-2012"), billingRun.billingPeriodEndDate().getValue());
         assertEquals("Billing Execution Target Date", FinancialTestsUtils.getDate("15-Feb-2012"), billingRun.executionTargetDate().getValue());
 
+    }
+
+    public void testSubsiquentBillingRunForEndOfMonth() throws ParseException {
+        BillingRun billingRun = createFirstBillingRun(FinancialTestsUtils.getDate("29-Mar-2012"), null, false);
         billingRun = createSubsiquentBillingRun(billingRun);
 
         assertEquals("Billing Period Start Date", FinancialTestsUtils.getDate("1-Apr-2012"), billingRun.billingPeriodStartDate().getValue());
@@ -59,7 +78,17 @@ public class BillingCycleManagerTest extends VistaDBTestBase {
         billingCycle.paymentFrequency().setValue(PaymentFrequency.Monthly);
         billingCycle.billingPeriodStartDay().setValue(billingCycleStartDate);
 
-        BillingRun billingRun = BillingCycleManger.createFirstBillingRun(billingCycle, leaseStartDate, useCycleLeaseDay);
+        BillingRun billingRun = BillingCycleManger.createNewLeaseFirstBillingRun(billingCycle, leaseStartDate, useCycleLeaseDay);
+        return billingRun;
+    }
+
+    private BillingRun createExistingLeaseInitialBillingRun(LogicalDate leaseStartDate, LogicalDate leaseActivationDate, Integer billingCycleStartDate,
+            boolean useCycleLeaseDay) {
+        BillingCycle billingCycle = EntityFactory.create(BillingCycle.class);
+        billingCycle.paymentFrequency().setValue(PaymentFrequency.Monthly);
+        billingCycle.billingPeriodStartDay().setValue(billingCycleStartDate);
+
+        BillingRun billingRun = BillingCycleManger.createExistingLeaseInitialBillingRun(billingCycle, leaseStartDate, leaseActivationDate, useCycleLeaseDay);
         return billingRun;
     }
 

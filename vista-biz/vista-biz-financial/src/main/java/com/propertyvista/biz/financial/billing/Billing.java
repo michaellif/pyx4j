@@ -44,6 +44,8 @@ class Billing {
 
     private Bill previousPeriodBill;
 
+    private final BillingInitialBalanceProcessor initialBalanceProcessor;
+
     private final BillingPaymentProcessor paymentProcessor;
 
     private final BillingDepositProcessor depositProcessor;
@@ -64,6 +66,7 @@ class Billing {
             this.previousPeriodBill = currentPeriodBill.previousBill();
             Persistence.service().retrieve(previousPeriodBill.lineItems());
         }
+        initialBalanceProcessor = new BillingInitialBalanceProcessor(this);
 
         productChargeProcessor = new BillingProductChargeProcessor(this);
 
@@ -101,6 +104,7 @@ class Billing {
             nextPeriodBill.balanceForwardAmount().setValue(new BigDecimal(0));
         }
 
+        initialBalanceProcessor.createInitialBalanceRecord();
         productChargeProcessor.createCharges();
         depositProcessor.createDeposits();
         leaseAdjustmentProcessor.createPendingLeaseAdjustments();

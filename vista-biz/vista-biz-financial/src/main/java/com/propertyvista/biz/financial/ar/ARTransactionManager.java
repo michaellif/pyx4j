@@ -18,12 +18,14 @@ import java.util.Collection;
 import java.util.List;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.biz.financial.SysDateManager;
+import com.propertyvista.biz.financial.billing.BillingFacade;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.billing.AgingBuckets;
 import com.propertyvista.domain.financial.billing.InvoiceCredit;
@@ -43,7 +45,10 @@ public class ARTransactionManager {
         }
 
         invoiceLineItem.postDate().setValue(new LogicalDate(SysDateManager.getSysDate()));
+        createCreditDebitLinks(invoiceLineItem);
+    }
 
+    private static void createCreditDebitLinks(InvoiceLineItem invoiceLineItem) {
         if (invoiceLineItem.isInstanceOf(InvoiceCredit.class)) {
             InvoiceCredit invoiceCredit = invoiceLineItem.cast();
 
@@ -62,7 +67,6 @@ public class ARTransactionManager {
         } else {
             throw new IllegalArgumentException();
         }
-
     }
 
     static TransactionHistoryDTO getTransactionHistory(BillingAccount billingAccount) {
@@ -113,4 +117,8 @@ public class ARTransactionManager {
         return lineItems;
     }
 
+    static LogicalDate getNextBillDueDate(BillingAccount billingAccount) {
+        ServerSideFactory.create(BillingFacade.class).getLatestConfirmedBill(billingAccount.lease());
+        return null;
+    }
 }

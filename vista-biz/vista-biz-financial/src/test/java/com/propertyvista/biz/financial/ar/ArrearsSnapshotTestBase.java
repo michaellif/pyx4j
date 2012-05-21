@@ -33,7 +33,7 @@ import com.propertyvista.domain.financial.billing.InvoiceDebit.DebitType;
 import com.propertyvista.domain.financial.billing.LeaseArrearsSnapshot;
 import com.propertyvista.domain.tenant.lease.Lease;
 
-public class ArrearsSnapshotTestBase extends FinancialTestBase {
+public abstract class ArrearsSnapshotTestBase extends FinancialTestBase {
 
     private ArrearsSnapshot actualArrearsSnapshot;
 

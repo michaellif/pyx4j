@@ -153,7 +153,9 @@ public class BillingLifecycle {
             bill.billingAccount().currentBillingRun().setValue(null);
             bill.billingAccount().billCounter().setValue(bill.billingAccount().billCounter().getValue() + 1);
 
-            bill.billingAccount().interimLineItems().clear();
+            if (BillStatus.Confirmed == billStatus) {
+                bill.billingAccount().interimLineItems().clear();
+            }
 
             Persistence.service().persist(bill.billingAccount());
 
@@ -177,8 +179,15 @@ public class BillingLifecycle {
         Bill previousBill = getLatestConfirmedBill(lease);
         BillingAccount billingAccount = lease.billingAccount();
         if (previousBill == null) {
-            return BillingCycleManger.createFirstBillingRun(billingAccount.billingCycle(), billingAccount.lease().leaseFrom().getValue(), !billingAccount
-                    .billingPeriodStartDate().isNull());
+            if (lease.billingAccount().initialBalance().isNull()) {
+                return BillingCycleManger.createNewLeaseFirstBillingRun(billingAccount.billingCycle(), billingAccount.lease().leaseFrom().getValue(),
+                        !billingAccount.billingPeriodStartDate().isNull());
+
+            } else {
+                return BillingCycleManger.createExistingLeaseInitialBillingRun(billingAccount.billingCycle(), billingAccount.lease().leaseFrom().getValue(),
+                /** TODO fix me **/
+                null, !billingAccount.billingPeriodStartDate().isNull());
+            }
         } else {
             return BillingCycleManger.createSubsiquentBillingRun(billingAccount.billingCycle(), previousBill.billingRun());
         }

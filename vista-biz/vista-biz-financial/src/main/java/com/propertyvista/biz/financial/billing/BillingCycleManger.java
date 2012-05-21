@@ -111,7 +111,7 @@ public class BillingCycleManger {
         return billingPeriodStartDay;
     }
 
-    static BillingRun createFirstBillingRun(BillingCycle cycle, LogicalDate leaseStartDate, boolean useCyclePeriodStartDay) {
+    private static LogicalDate calculateFirstBillingRunStartDate(BillingCycle cycle, LogicalDate leaseStartDate, boolean useCyclePeriodStartDay) {
         LogicalDate billingRunStartDate = null;
         if (useCyclePeriodStartDay) {
             switch (cycle.paymentFrequency().getValue()) {
@@ -119,8 +119,8 @@ public class BillingCycleManger {
                 Calendar calendar = new GregorianCalendar();
                 calendar.setTime(leaseStartDate);
                 int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
-                if (cycle.billingPeriodStartDay().getValue() < 1 || cycle.billingPeriodStartDay().getValue() > 31) {
-                    throw new BillingException("Wrong billingPeriodStartDay");
+                if (cycle.billingPeriodStartDay().getValue() < 1 || cycle.billingPeriodStartDay().getValue() > 28) {
+                    throw new BillingException("Wrong billing period start day");
                 }
                 while (dayOfMonth != cycle.billingPeriodStartDay().getValue()) {
                     calendar.add(Calendar.DATE, -1);
@@ -133,6 +133,7 @@ public class BillingCycleManger {
             case SemiMonthly:
             case SemiAnnyally:
             case Annually:
+                //TODO
                 throw new Error("Not implemented");
             }
         } else {
@@ -149,24 +150,49 @@ public class BillingCycleManger {
             }
         }
 
-        return createBillingRun(cycle, billingRunStartDate);
+        return billingRunStartDate;
     }
 
-    static BillingRun createSubsiquentBillingRun(BillingCycle cycle, BillingRun previousRun) {
+    private static LogicalDate calculateSubsiquentBillingRunStartDate(BillingCycle cycle, LogicalDate previousBillingRunStartDate) {
         Calendar calendar = new GregorianCalendar();
-        calendar.setTime(previousRun.billingPeriodStartDate().getValue());
+        calendar.setTime(previousBillingRunStartDate);
         switch (cycle.paymentFrequency().getValue()) {
         case Monthly:
             // TODO use proper bill day
             calendar.add(Calendar.MONTH, 1);
             break;
+        //TODO
         case Weekly:
         case BiWeekly:
         case SemiMonthly:
         case Annually:
             throw new Error("Not implemented");
         }
-        return createBillingRun(cycle, new LogicalDate(calendar.getTime()));
+        return new LogicalDate(calendar.getTime());
+    }
+
+    static BillingRun createNewLeaseFirstBillingRun(BillingCycle cycle, LogicalDate leaseStartDate, boolean useCyclePeriodStartDay) {
+        return createBillingRun(cycle, calculateFirstBillingRunStartDate(cycle, leaseStartDate, useCyclePeriodStartDay));
+    }
+
+    static BillingRun createExistingLeaseInitialBillingRun(BillingCycle cycle, LogicalDate leaseStartDate, LogicalDate leaseActivationDate,
+            boolean useCyclePeriodStartDay) {
+        if (!leaseStartDate.before(leaseActivationDate)) {
+            throw new BillingException("Existing lease should have start date earlier than activation date");
+        }
+        LogicalDate firstBillingRunStartDate = calculateFirstBillingRunStartDate(cycle, leaseStartDate, useCyclePeriodStartDay);
+        LogicalDate billingRunStartDate = null;
+        LogicalDate nextBillingRunStartDate = firstBillingRunStartDate;
+        do {
+            billingRunStartDate = nextBillingRunStartDate;
+            nextBillingRunStartDate = calculateSubsiquentBillingRunStartDate(cycle, billingRunStartDate);
+        } while (nextBillingRunStartDate.compareTo(leaseActivationDate) <= 0);
+
+        return createBillingRun(cycle, billingRunStartDate);
+    }
+
+    static BillingRun createSubsiquentBillingRun(BillingCycle cycle, BillingRun previousRun) {
+        return createBillingRun(cycle, calculateSubsiquentBillingRunStartDate(cycle, previousRun.billingPeriodStartDate().getValue()));
     }
 
     private static BillingRun createBillingRun(BillingCycle cycle, LogicalDate billingRunStartDate) {
