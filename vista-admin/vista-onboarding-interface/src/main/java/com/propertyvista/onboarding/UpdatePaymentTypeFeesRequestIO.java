@@ -27,9 +27,9 @@ public interface UpdatePaymentTypeFeesRequestIO extends RequestIO {
 
     IPrimitive<BigDecimal> ccFee();
 
-    IPrimitive<Boolean> eChecquePaymentAvailable();
+    IPrimitive<Boolean> echeckPaymentAvailable();
 
-    IPrimitive<BigDecimal> eChecqueFee();
+    IPrimitive<BigDecimal> echeckFee();
 
     IPrimitive<Boolean> etfPaymentAvailable();
 
