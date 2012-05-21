@@ -27,6 +27,7 @@ import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.Inheritance;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.OrderColumn;
+import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
@@ -42,11 +43,15 @@ public interface InvoiceLineItem extends IEntity {
     @Detached
     @NotNull
     @Indexed
-    @JoinColumn
+    @JoinColumn(InterimLineItemLink.class)
     BillingAccount billingAccount();
+
+    public interface InterimLineItemLink extends ColumnId {
+    }
 
     @Detached
     @JoinColumn
+    @Owner
     Bill bill();
 
     IPrimitive<String> description();

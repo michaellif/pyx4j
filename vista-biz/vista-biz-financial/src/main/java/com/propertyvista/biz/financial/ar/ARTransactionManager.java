@@ -28,6 +28,7 @@ import com.propertyvista.biz.financial.SysDateManager;
 import com.propertyvista.biz.financial.billing.BillingFacade;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.billing.AgingBuckets;
+import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.InvoiceCredit;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
@@ -118,7 +119,7 @@ public class ARTransactionManager {
     }
 
     static LogicalDate getNextBillDueDate(BillingAccount billingAccount) {
-        ServerSideFactory.create(BillingFacade.class).getLatestConfirmedBill(billingAccount.lease());
+        Bill bill = ServerSideFactory.create(BillingFacade.class).getLatestConfirmedBill(billingAccount.lease());
         return null;
     }
 }

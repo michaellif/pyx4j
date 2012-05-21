@@ -35,14 +35,9 @@ public class ARLeaseAdjustmentProcessor extends AbstractLeaseAdjustmentProcessor
             } else {
                 throw new ARException("ActionType is unknown");
             }
+
+            lineItem.billingAccount().set(adjustment.billingAccount());
             Persistence.service().persist(lineItem);
-
-            Persistence.service().retrieve(adjustment.billingAccount());
-            Persistence.service().retrieve(adjustment.billingAccount().interimLineItems());
-
-            adjustment.billingAccount().interimLineItems().add(lineItem);
-
-            Persistence.service().persist(adjustment.billingAccount());
 
             ARTransactionManager.postInvoiceLineItem(lineItem);
 

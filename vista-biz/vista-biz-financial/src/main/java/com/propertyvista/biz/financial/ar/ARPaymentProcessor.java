@@ -27,10 +27,6 @@ public class ARPaymentProcessor extends AbstractProcessor {
 
     void postPayment(PaymentRecord paymentRecord) {
 
-        // TODO You don't need to DO this!!!  save only one payment, No nedd to shave interimLineItems
-        Persistence.service().retrieve(paymentRecord.billingAccount());
-        Persistence.service().retrieve(paymentRecord.billingAccount().interimLineItems());
-
         InvoicePayment payment = EntityFactory.create(InvoicePayment.class);
         payment.paymentRecord().set(paymentRecord);
         payment.amount().setValue(paymentRecord.amount().getValue().negate());
@@ -40,20 +36,13 @@ public class ARPaymentProcessor extends AbstractProcessor {
 
         Persistence.service().persist(payment);
 
-        // TODO You don't need to DO this!!!  save only one payment, No nedd to shave interimLineItems
-        paymentRecord.billingAccount().interimLineItems().add(payment);
-
-        Persistence.service().persist(paymentRecord.billingAccount());
-
         ARTransactionManager.postInvoiceLineItem(payment);
-
     }
 
-    void rejectPayment(PaymentRecord payment) {
+    void rejectPayment(PaymentRecord paymentRecord) {
 
         //TODO Add InvoicePaymentBackOut creation and InvoiceNSF
 
-        Persistence.service().persist(payment);
     }
 
 }

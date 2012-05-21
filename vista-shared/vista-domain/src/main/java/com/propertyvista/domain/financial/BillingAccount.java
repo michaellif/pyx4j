@@ -18,6 +18,7 @@ import java.math.BigDecimal;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Indexed;
+import com.pyx4j.entity.annotations.JoinTable;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.OrderBy;
 import com.pyx4j.entity.annotations.Owned;
@@ -34,6 +35,7 @@ import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.financial.billing.BillingRun;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
+import com.propertyvista.domain.financial.billing.InvoiceLineItem.InterimLineItemLink;
 import com.propertyvista.domain.financial.billing.LeaseArrearsSnapshot;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
@@ -73,6 +75,7 @@ public interface BillingAccount extends IEntity {
      * @return
      */
     @Detached
+    @JoinTable(value = InvoiceLineItem.class, mappedBy = InterimLineItemLink.class)
     ISet<InvoiceLineItem> interimLineItems();
 
     /**
