@@ -22,7 +22,9 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.financial.AbstractProcessor;
 import com.propertyvista.biz.policy.PolicyFacade;
+import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.InvoiceLatePaymentFee;
+import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.domain.policy.policies.LeaseBillingPolicy;
 
 public class BillingLatePaymentFeeProcessor extends AbstractProcessor {
@@ -35,24 +37,46 @@ public class BillingLatePaymentFeeProcessor extends AbstractProcessor {
         this.billing = billing;
     }
 
+    /*
+     * Late payments can only be identified on the 1st of the current month, which is the Due Date of the
+     * CurrentPeriodBill and the corresponding due amount is the TotalDueAmount of the CurrentPeriodBill
+     * (or BalanceForfardAmount of the NextPeriodBill)
+     * That amount does not include any payments and immediate charges posted after the CurrentPeriodBill
+     * run date. These charges have to be taken from the InterimLineItems.
+     */
     public void createLatePaymentFeeItem() {
-        // TODO Auto-generated method stub
+        if (billing.getCurrentPeriodBill() == null || billing.getCurrentPeriodBill().isNull()) {
+            // too early for late payment calculations
+            return;
+        }
+        int billNo = billing.getNextPeriodBill().billSequenceNumber().getValue();
+        Bill curBill = billing.getCurrentPeriodBill();
+        // Start with the total due amount calculated on the run date
+        BigDecimal overdueAmount = curBill.totalDueAmount().getValue();
+        // add all posted interim items
+        Persistence.service().retrieve(curBill.billingAccount());
+        Persistence.service().retrieve(curBill.billingAccount().interimLineItems());
+        for (InvoiceLineItem item : curBill.billingAccount().interimLineItems()) {
+            if (!item.postDate().isNull() && item.postDate().getValue().before(curBill.billingPeriodStartDate().getValue())) {
+                overdueAmount = overdueAmount.add(item.amount().getValue());
+            }
+        }
+        if (overdueAmount.compareTo(new BigDecimal(0)) <= 0) {
+            return;
+        }
 
-        BigDecimal dueFromPreviousBill = billing.getNextPeriodBill().balanceForwardAmount().getValue();
-        //Exit if negative
-
-        BigDecimal serviceCharge = billing.getNextPeriodBill().serviceCharge().getValue();
+        BigDecimal serviceCharge = billing.getPreviousPeriodBill().serviceCharge().getValue();
 
         LeaseBillingPolicy leaseBillingPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(
                 billing.getNextPeriodBill().billingRun().building(), LeaseBillingPolicy.class);
 
-        BigDecimal latePaymentFee = LatePaymentUtils.calculateLatePaymentFee(dueFromPreviousBill, serviceCharge, leaseBillingPolicy);
+        BigDecimal latePaymentFee = LatePaymentUtils.calculateLatePaymentFee(overdueAmount, serviceCharge, leaseBillingPolicy);
 
         InvoiceLatePaymentFee charge = EntityFactory.create(InvoiceLatePaymentFee.class);
         charge.bill().set(billing.getNextPeriodBill());
         charge.dueDate().setValue(billing.getNextPeriodBill().billingPeriodStartDate().getValue());
         charge.amount().setValue(latePaymentFee);
-        charge.taxTotal().setValue(new BigDecimal(0));
+        charge.taxTotal().setValue(new BigDecimal("0.00"));
         charge.description().setValue(i18n.tr("Late payment fee"));
 
         Persistence.service().persist(charge);
@@ -63,5 +87,4 @@ public class BillingLatePaymentFeeProcessor extends AbstractProcessor {
                 .setValue(billing.getNextPeriodBill().pendingAccountAdjustments().getValue().add(charge.amount().getValue()));
 
     }
-
 }

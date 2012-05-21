@@ -21,6 +21,8 @@ import com.propertyvista.biz.financial.FinancialTestsUtils;
 import com.propertyvista.biz.financial.Tester;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.Bill.BillType;
+import com.propertyvista.domain.financial.billing.InvoiceLatePaymentFee;
+import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.domain.financial.billing.InvoiceProductCharge;
 
 public class BillTester extends Tester {
@@ -106,6 +108,17 @@ public class BillTester extends Tester {
         return this;
     }
 
+    public BillTester latePaymentFee(String value) {
+        BigDecimal latePmnt = new BigDecimal("0.00");
+        for (InvoiceLineItem item : bill.lineItems()) {
+            if (item instanceof InvoiceLatePaymentFee) {
+                latePmnt = latePmnt.add(item.amount().getValue());
+            }
+        }
+        assertEquals("Late Payment Fee", new BigDecimal(value), latePmnt);
+        return this;
+    }
+
     public BillTester taxes(String value) {
         assertEquals("Taxes", new BigDecimal(value), bill.taxes().getValue());
         return this;
@@ -123,6 +136,11 @@ public class BillTester extends Tester {
 
     public BillTester totalDueAmount(String value) {
         assertEquals("Total Due Amount", new BigDecimal(value), bill.totalDueAmount().getValue());
+        return this;
+    }
+
+    public BillTester pastDueAmount(String value) {
+        assertEquals("Past Due Amount", new BigDecimal(value), bill.pastDueAmount().getValue());
         return this;
     }
 
