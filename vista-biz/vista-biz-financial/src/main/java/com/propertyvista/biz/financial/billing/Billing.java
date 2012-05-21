@@ -113,7 +113,7 @@ class Billing {
         paymentProcessor.attachPaymentRecords();
 
         //Should run last
-        latePaymentFeeProcessor.createLatePaymentFeeItem();
+        //   latePaymentFeeProcessor.createLatePaymentFeeItem();
 
         calculateTotals();
 
