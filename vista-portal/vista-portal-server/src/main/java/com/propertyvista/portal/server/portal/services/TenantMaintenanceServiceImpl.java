@@ -58,7 +58,7 @@ public class TenantMaintenanceServiceImpl implements TenantMaintenanceService {
     public void listHistoryIssues(AsyncCallback<Vector<MaintananceDTO>> callback) {
         Vector<MaintananceDTO> dto = new Vector<MaintananceDTO>();
         EntityQueryCriteria<MaintenanceRequest> criteria = EntityQueryCriteria.create(MaintenanceRequest.class);
-        criteria.add(PropertyCriterion.in(criteria.proto().status(), MaintenanceRequestStatus.Completed));
+        criteria.add(PropertyCriterion.in(criteria.proto().status(), MaintenanceRequestStatus.Resolved));
         criteria.add(PropertyCriterion.eq(criteria.proto().tenant(), getOwner()));
         for (MaintenanceRequest mr : Persistence.service().query(criteria.desc(criteria.proto().submitted()))) {
             dto.add(Converter.convert(mr));

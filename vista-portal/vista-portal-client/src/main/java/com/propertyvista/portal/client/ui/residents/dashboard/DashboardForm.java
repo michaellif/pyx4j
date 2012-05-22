@@ -268,7 +268,7 @@ public class DashboardForm extends CEntityDecoratableForm<TenantDashboardDTO> im
                 for (MaintananceDTO maintanance : value) {
                     container.setHTML(++row, 0, maintanance.description().getValue());
                     container.getCellFormatter().getElement(row, 0).getStyle().setPaddingLeft(4, Unit.PX);
-                    if (MaintenanceRequestStatus.Completed.equals(maintanance.status().getValue())) {
+                    if (MaintenanceRequestStatus.Resolved.equals(maintanance.status().getValue())) {
                         RateIt rateIt = new RateIt(5);
                         rateIt.setRating(4);
                         container.setWidget(row, 1, rateIt);

@@ -56,7 +56,7 @@ public class TenantMaintenanceDAO {
 
         { MaintenanceRequestStatus.Cancelled, "Broken Blinds", new GregorianCalendar(2011, 9, 22).getTime() },
 
-        { MaintenanceRequestStatus.Completed, "Door Lock is Broken", new GregorianCalendar(2011, 8, 28).getTime() }
+        { MaintenanceRequestStatus.Resolved, "Door Lock is Broken", new GregorianCalendar(2011, 8, 28).getTime() }
 
         });
 
@@ -80,15 +80,15 @@ public class TenantMaintenanceDAO {
 
         return demoIssues(new Object[][] {
 
-        { MaintenanceRequestStatus.Completed, "Leacking Kitchen Tap", new GregorianCalendar(2011, 6, 28).getTime() },
+        { MaintenanceRequestStatus.Resolved, "Leacking Kitchen Tap", new GregorianCalendar(2011, 6, 28).getTime() },
 
         { MaintenanceRequestStatus.Cancelled, "Broken Blinds", new GregorianCalendar(2011, 5, 22).getTime() },
 
         { MaintenanceRequestStatus.Cancelled, "Door Lock is Broken", new GregorianCalendar(2011, 4, 28).getTime() },
 
-        { MaintenanceRequestStatus.Completed, "Broken Blinds", new GregorianCalendar(2011, 4, 3).getTime() },
+        { MaintenanceRequestStatus.Resolved, "Broken Blinds", new GregorianCalendar(2011, 4, 3).getTime() },
 
-        { MaintenanceRequestStatus.Completed, "Door Lock is Broken", new GregorianCalendar(2011, 3, 12).getTime() }
+        { MaintenanceRequestStatus.Resolved, "Door Lock is Broken", new GregorianCalendar(2011, 3, 12).getTime() }
 
         });
 
