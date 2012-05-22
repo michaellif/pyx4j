@@ -13,8 +13,11 @@
  */
 package com.propertyvista.biz.financial.billing;
 
+import java.util.List;
+
 import com.propertyvista.biz.financial.AbstractProcessor;
 import com.propertyvista.domain.financial.billing.Bill;
+import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.domain.financial.billing.InvoiceNSF;
 import com.propertyvista.domain.financial.billing.InvoicePayment;
 import com.propertyvista.domain.financial.billing.InvoicePaymentBackOut;
@@ -28,16 +31,18 @@ public class BillingPaymentProcessor extends AbstractProcessor {
     }
 
     void attachPaymentRecords() {
-        for (InvoicePayment payment : BillingUtils.getLineItemsForType(billing.getNextPeriodBill().billingAccount().interimLineItems(), InvoicePayment.class)) {
+
+        List<InvoiceLineItem> items = BillingUtils.getNotConsumedLineItems(billing.getNextPeriodBill().billingAccount());
+
+        for (InvoicePayment payment : BillingUtils.getLineItemsForType(items, InvoicePayment.class)) {
             attachPayment(payment);
         }
 
-        for (InvoicePaymentBackOut paymentBackOut : BillingUtils.getLineItemsForType(billing.getNextPeriodBill().billingAccount().interimLineItems(),
-                InvoicePaymentBackOut.class)) {
+        for (InvoicePaymentBackOut paymentBackOut : BillingUtils.getLineItemsForType(items, InvoicePaymentBackOut.class)) {
             attachPaymentBackOut(paymentBackOut);
         }
 
-        for (InvoiceNSF nsf : BillingUtils.getLineItemsForType(billing.getNextPeriodBill().billingAccount().interimLineItems(), InvoiceNSF.class)) {
+        for (InvoiceNSF nsf : BillingUtils.getLineItemsForType(items, InvoiceNSF.class)) {
             attachNSF(nsf);
         }
     }

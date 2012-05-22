@@ -95,7 +95,7 @@ public class BillingLeaseOnlyScenarioTest extends FinancialTestBase {
         recurringFeatureCharges("0.00").
         oneTimeFeatureCharges("0.00").
         taxes("111.64").
-        totalDueAmount("1041.94");
+        totalDueAmount("1091.94");
         // @formatter:on
 
         SysDateManager.setSysDate("25-Mar-2011");
@@ -120,7 +120,7 @@ public class BillingLeaseOnlyScenarioTest extends FinancialTestBase {
         recurringFeatureCharges("0.00").
         oneTimeFeatureCharges("0.00").
         taxes("111.64").
-        totalDueAmount("1041.94");
+        totalDueAmount("1141.94");
         // @formatter:on
 
         SysDateManager.setSysDate("25-Apr-2011");

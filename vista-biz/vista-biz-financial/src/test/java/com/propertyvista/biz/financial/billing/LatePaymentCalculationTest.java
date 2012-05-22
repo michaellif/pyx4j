@@ -22,7 +22,7 @@ import com.propertyvista.domain.policy.policies.LeaseBillingPolicy;
 import com.propertyvista.domain.policy.policies.domain.LateFeeItem.BaseFeeType;
 import com.propertyvista.domain.policy.policies.domain.LateFeeItem.MaxTotalFeeType;
 
-public class LatePaymentTest extends VistaDBTestBase {
+public class LatePaymentCalculationTest extends VistaDBTestBase {
 
     public void testZeroAmountOwning() {
         LeaseBillingPolicy policy = EntityFactory.create(LeaseBillingPolicy.class);

@@ -29,6 +29,7 @@ public class BillLister extends ListerBase<BillDTO> {
 
             new MemberColumnDescriptor.Builder(proto().billingPeriodStartDate()).build(),
             new MemberColumnDescriptor.Builder(proto().billingPeriodEndDate()).build(),
+            new MemberColumnDescriptor.Builder(proto().dueDate()).build(),
             
             new MemberColumnDescriptor.Builder(proto().currentAmount()).build(),
             new MemberColumnDescriptor.Builder(proto().taxes()).build(),

@@ -154,8 +154,6 @@ class Billing {
     }
 
     static void createBill(BillingRun billingRun, BillingAccount billingAccount) {
-        Persistence.service().retrieveMember(billingAccount.interimLineItems());
-
         Persistence.service().retrieve(billingAccount.lease());
 
         Persistence.service().retrieve(billingAccount.adjustments());
@@ -208,6 +206,8 @@ class Billing {
                     throw new BillingException("Lease already ended");
                 }
             }
+
+            bill.dueDate().setValue(BillDateUtils.calculateBillDueDate(bill));
 
             new Billing(bill).run();
             bill.billStatus().setValue(Bill.BillStatus.Finished);

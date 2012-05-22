@@ -23,11 +23,11 @@ import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
-import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.Inheritance;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Owner;
+import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
@@ -40,19 +40,14 @@ import com.propertyvista.domain.financial.BillingAccount;
 @Table(prefix = "billing")
 public interface InvoiceLineItem extends IEntity {
 
-    @Detached
+    @Owner
     @NotNull
-    @Indexed
-    @JoinColumn(InterimLineItemLink.class)
-    BillingAccount billingAccount();
-
-    public interface InterimLineItemLink extends ColumnId {
-    }
-
+    @ReadOnly
     @Detached
     @JoinColumn
-    @Owner
-    Bill bill();
+    BillingAccount billingAccount();
+
+    IPrimitive<Boolean> consumed();
 
     IPrimitive<String> description();
 

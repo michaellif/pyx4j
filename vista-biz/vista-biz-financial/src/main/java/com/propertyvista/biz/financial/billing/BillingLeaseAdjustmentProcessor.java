@@ -13,12 +13,15 @@
  */
 package com.propertyvista.biz.financial.billing;
 
+import java.util.List;
+
 import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.biz.financial.AbstractLeaseAdjustmentProcessor;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.InvoiceAccountCharge;
 import com.propertyvista.domain.financial.billing.InvoiceAccountCredit;
+import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustmentReason;
 
@@ -34,7 +37,7 @@ public class BillingLeaseAdjustmentProcessor extends AbstractLeaseAdjustmentProc
         for (LeaseAdjustment adjustment : billing.getNextPeriodBill().billingAccount().adjustments()) {
             if (LeaseAdjustment.ExecutionType.pending.equals(adjustment.executionType().getValue())) {
                 // Find if adjustment effective date failes on current or next billing period 
-                DateRange overlap = DateUtils.getOverlappingRange(new DateRange(billing.getCurrentPeriodBill().billingPeriodStartDate().getValue(), billing
+                DateRange overlap = BillDateUtils.getOverlappingRange(new DateRange(billing.getCurrentPeriodBill().billingPeriodStartDate().getValue(), billing
                         .getNextPeriodBill().billingPeriodEndDate().getValue()), new DateRange(adjustment.targetDate().getValue(), adjustment.targetDate()
                         .getValue()));
                 if (overlap != null) {
@@ -65,12 +68,11 @@ public class BillingLeaseAdjustmentProcessor extends AbstractLeaseAdjustmentProc
     }
 
     void attachImmediateLeaseAdjustments() {
-        for (InvoiceAccountCredit credit : BillingUtils.getLineItemsForType(billing.getNextPeriodBill().billingAccount().interimLineItems(),
-                InvoiceAccountCredit.class)) {
+        List<InvoiceLineItem> items = BillingUtils.getNotConsumedLineItems(billing.getNextPeriodBill().billingAccount());
+        for (InvoiceAccountCredit credit : BillingUtils.getLineItemsForType(items, InvoiceAccountCredit.class)) {
             attachImmediateCredit(credit);
         }
-        for (InvoiceAccountCharge charge : BillingUtils.getLineItemsForType(billing.getNextPeriodBill().billingAccount().interimLineItems(),
-                InvoiceAccountCharge.class)) {
+        for (InvoiceAccountCharge charge : BillingUtils.getLineItemsForType(items, InvoiceAccountCharge.class)) {
             attachImmediateCharge(charge);
         }
     }
@@ -85,15 +87,13 @@ public class BillingLeaseAdjustmentProcessor extends AbstractLeaseAdjustmentProc
 
     private void createPendingCharge(LeaseAdjustment adjustment) {
         InvoiceAccountCharge charge = createCharge(adjustment);
-        charge.bill().set(billing.getNextPeriodBill());
-        charge.dueDate().setValue(billing.getNextPeriodBill().billingPeriodStartDate().getValue());
+        charge.dueDate().setValue(billing.getNextPeriodBill().dueDate().getValue());
         Persistence.service().persist(charge);
         addCharge(charge);
     }
 
     private void createPendingCredit(LeaseAdjustment adjustment) {
         InvoiceAccountCredit credit = createCredit(adjustment);
-        credit.bill().set(billing.getNextPeriodBill());
         Persistence.service().persist(credit);
         addCredit(credit);
     }

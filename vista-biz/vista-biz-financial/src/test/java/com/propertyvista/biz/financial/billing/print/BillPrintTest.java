@@ -26,7 +26,6 @@ import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.InvoiceAccountCharge;
 import com.propertyvista.domain.financial.billing.InvoiceAccountCredit;
 import com.propertyvista.domain.financial.billing.InvoiceAdjustmentSubLineItem;
-import com.propertyvista.domain.financial.billing.InvoiceChargeSubLineItem;
 import com.propertyvista.domain.financial.billing.InvoiceDeposit;
 import com.propertyvista.domain.financial.billing.InvoiceDepositRefund;
 import com.propertyvista.domain.financial.billing.InvoiceLatePaymentFee;
@@ -34,10 +33,9 @@ import com.propertyvista.domain.financial.billing.InvoiceNSF;
 import com.propertyvista.domain.financial.billing.InvoicePayment;
 import com.propertyvista.domain.financial.billing.InvoicePaymentBackOut;
 import com.propertyvista.domain.financial.billing.InvoiceProductCharge;
-import com.propertyvista.domain.financial.billing.InvoiceProductCredit;
-import com.propertyvista.domain.financial.billing.InvoiceSubLineItem;
-import com.propertyvista.domain.financial.billing.InvoiceWithdrawal;
 import com.propertyvista.domain.financial.billing.InvoiceProductCharge.ProductType;
+import com.propertyvista.domain.financial.billing.InvoiceProductCredit;
+import com.propertyvista.domain.financial.billing.InvoiceWithdrawal;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment.ExecutionType;
 
 public class BillPrintTest extends FinancialTestBase {
@@ -48,6 +46,7 @@ public class BillPrintTest extends FinancialTestBase {
         bill.billSequenceNumber().setValue(1);
 
         bill.billingPeriodStartDate().setValue(new LogicalDate(112, 03, 01));
+        bill.dueDate().setValue(new LogicalDate(112, 03, 01));
         bill.billingRun().executionDate().setValue(new LogicalDate(112, 02, 15));
 
         bill.balanceForwardAmount().setValue(new BigDecimal("1000.00"));

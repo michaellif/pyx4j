@@ -74,7 +74,7 @@ public class BillingLeaseOnlyAgingScenarioTest extends FinancialTestBase {
         bill = runBilling(true, true);
 
         // @formatter:off
-        new BillTester(bill).totalDueAmount("3014.18");
+        new BillTester(bill).totalDueAmount("3064.18");
         // @formatter:on
 
         printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
@@ -86,7 +86,7 @@ public class BillingLeaseOnlyAgingScenarioTest extends FinancialTestBase {
         bill = runBilling(true, true);
 
         // @formatter:off
-        new BillTester(bill).totalDueAmount("4056.12");
+        new BillTester(bill).totalDueAmount("4156.12");
         // @formatter:on
 
         printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));

@@ -113,7 +113,7 @@ public class BillingLatePaymentScenarioTest extends FinancialTestBase {
         bill = runBilling(true, true);
 
         // @formatter:off
-        new BillTester(bill).
+        new BillTester(bill, true).
         billingPeriodStartDate("1-Jun-2011").
         billingPeriodEndDate("30-Jun-2011").
         paymentReceivedAmount("-1041.94").
@@ -139,7 +139,7 @@ public class BillingLatePaymentScenarioTest extends FinancialTestBase {
         bill = runBilling(true, true);
 
         // @formatter:off
-        new BillTester(bill).
+        new BillTester(bill, true).
         billingPeriodStartDate("1-Jul-2011").
         billingPeriodEndDate("31-Jul-2011").
         paymentReceivedAmount("-1003.94").

@@ -142,21 +142,18 @@ public class BillingLifecycle {
         if (BillStatus.Finished.equals(bill.billStatus().getValue())) {
             bill.billStatus().setValue(billStatus);
 
-            if (BillStatus.Confirmed == billStatus) {
-                postBillLineItems(bill);
-            }
-
-            Persistence.service().persist(bill);
-
             Persistence.service().retrieve(bill.billingAccount());
+
+            if (BillStatus.Confirmed == billStatus) {
+                Persistence.service().retrieve(bill.lineItems());
+                consumeExistingLineItems(bill.lineItems());
+                postNewLineItems(bill.lineItems());
+            }
 
             bill.billingAccount().currentBillingRun().setValue(null);
             bill.billingAccount().billCounter().setValue(bill.billingAccount().billCounter().getValue() + 1);
 
-            if (BillStatus.Confirmed == billStatus) {
-                bill.billingAccount().interimLineItems().clear();
-            }
-
+            Persistence.service().persist(bill);
             Persistence.service().persist(bill.billingAccount());
 
         } else {
@@ -165,9 +162,16 @@ public class BillingLifecycle {
         return bill;
     }
 
-    private static void postBillLineItems(Bill bill) {
-        Persistence.service().retrieve(bill.lineItems());
-        List<InvoiceLineItem> lineItems = bill.lineItems();
+    private static void consumeExistingLineItems(List<InvoiceLineItem> lineItems) {
+        for (InvoiceLineItem invoiceLineItem : lineItems) {
+            if (!invoiceLineItem.postDate().isNull()) {
+                invoiceLineItem.consumed().setValue(true);
+                Persistence.service().persist(invoiceLineItem);
+            }
+        }
+    }
+
+    private static void postNewLineItems(List<InvoiceLineItem> lineItems) {
         for (InvoiceLineItem invoiceLineItem : lineItems) {
             if (invoiceLineItem.postDate().isNull() && !invoiceLineItem.amount().getValue().equals(new BigDecimal("0.00"))) {
                 ServerSideFactory.create(ARFacade.class).postInvoiceLineItem(invoiceLineItem);

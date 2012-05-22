@@ -31,6 +31,7 @@ public class ARPaymentProcessor extends AbstractProcessor {
         payment.paymentRecord().set(paymentRecord);
         payment.amount().setValue(paymentRecord.amount().getValue().negate());
         payment.billingAccount().set(paymentRecord.billingAccount());
+        payment.consumed().setValue(false);
 
         payment.description().setValue(i18n.tr("Payment Received - Thank You"));
 

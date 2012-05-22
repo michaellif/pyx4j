@@ -14,6 +14,7 @@
 package com.propertyvista.biz.financial.billing;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
@@ -23,6 +24,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.biz.financial.AbstractProcessor;
 import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.domain.financial.billing.Bill;
+import com.propertyvista.domain.financial.billing.InvoiceDebit.DebitType;
 import com.propertyvista.domain.financial.billing.InvoiceLatePaymentFee;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.domain.policy.policies.LeaseBillingPolicy;
@@ -54,10 +56,13 @@ public class BillingLatePaymentFeeProcessor extends AbstractProcessor {
         BigDecimal overdueAmount = curBill.totalDueAmount().getValue();
         // add all posted interim items
         Persistence.service().retrieve(curBill.billingAccount());
-        Persistence.service().retrieve(curBill.billingAccount().interimLineItems());
-        for (InvoiceLineItem item : curBill.billingAccount().interimLineItems()) {
-            if (!item.postDate().isNull() && item.postDate().getValue().before(curBill.billingPeriodStartDate().getValue())) {
+
+        List<InvoiceLineItem> items = BillingUtils.getNotConsumedLineItems(billing.getNextPeriodBill().billingAccount());
+
+        for (InvoiceLineItem item : items) {
+            if (!item.postDate().isNull() && item.postDate().getValue().compareTo(curBill.dueDate().getValue()) <= 0) {
                 overdueAmount = overdueAmount.add(item.amount().getValue());
+                //TODO add taxes
             }
         }
         if (overdueAmount.compareTo(new BigDecimal(0)) <= 0) {
@@ -72,11 +77,12 @@ public class BillingLatePaymentFeeProcessor extends AbstractProcessor {
         BigDecimal latePaymentFee = LatePaymentUtils.calculateLatePaymentFee(overdueAmount, serviceCharge, leaseBillingPolicy);
 
         InvoiceLatePaymentFee charge = EntityFactory.create(InvoiceLatePaymentFee.class);
-        charge.bill().set(billing.getNextPeriodBill());
-        charge.dueDate().setValue(billing.getNextPeriodBill().billingPeriodStartDate().getValue());
+        charge.billingAccount().set(billing.getNextPeriodBill().billingAccount());
+        charge.dueDate().setValue(billing.getNextPeriodBill().dueDate().getValue());
         charge.amount().setValue(latePaymentFee);
         charge.taxTotal().setValue(new BigDecimal("0.00"));
         charge.description().setValue(i18n.tr("Late payment fee"));
+        charge.debitType().setValue(DebitType.latePayment);
 
         Persistence.service().persist(charge);
 

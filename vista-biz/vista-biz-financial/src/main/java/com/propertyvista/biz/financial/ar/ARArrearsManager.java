@@ -206,13 +206,13 @@ public class ARArrearsManager {
             }
             AgingBuckets agingBuckets = agingBucketsMap.get(debit.debitType().getValue());
 
-            if (debit.dueDate().getValue().compareTo(currentDate) > 0) {
+            if (debit.dueDate().getValue().compareTo(currentDate) >= 0) {
                 agingBuckets.bucketCurrent().setValue(agingBuckets.bucketCurrent().getValue().add(debit.outstandingDebit().getValue()));
-            } else if (debit.dueDate().getValue().compareTo(currentDate) <= 0 && debit.dueDate().getValue().compareTo(date30) > 0) {
+            } else if (debit.dueDate().getValue().compareTo(currentDate) < 0 && debit.dueDate().getValue().compareTo(date30) >= 0) {
                 agingBuckets.bucket30().setValue(agingBuckets.bucket30().getValue().add(debit.outstandingDebit().getValue()));
-            } else if (debit.dueDate().getValue().compareTo(date30) <= 0 && debit.dueDate().getValue().compareTo(date60) > 0) {
+            } else if (debit.dueDate().getValue().compareTo(date30) < 0 && debit.dueDate().getValue().compareTo(date60) >= 0) {
                 agingBuckets.bucket60().setValue(agingBuckets.bucket60().getValue().add(debit.outstandingDebit().getValue()));
-            } else if (debit.dueDate().getValue().compareTo(date60) <= 0 && debit.dueDate().getValue().compareTo(date90) > 0) {
+            } else if (debit.dueDate().getValue().compareTo(date60) < 0 && debit.dueDate().getValue().compareTo(date90) >= 0) {
                 agingBuckets.bucket90().setValue(agingBuckets.bucket90().getValue().add(debit.outstandingDebit().getValue()));
             } else {
                 agingBuckets.bucketOver90().setValue(agingBuckets.bucketOver90().getValue().add(debit.outstandingDebit().getValue()));

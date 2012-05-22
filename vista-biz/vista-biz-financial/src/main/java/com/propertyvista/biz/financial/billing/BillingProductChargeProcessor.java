@@ -151,7 +151,7 @@ public class BillingProductChargeProcessor extends AbstractProcessor {
     private InvoiceProductCharge createCharge(BillableItem billableItem, Bill bill, InvoiceProductCharge.Period period) {
 
         // Find if billable item period overlaps with the bill period. 
-        DateRange overlap = DateUtils.getOverlappingRange(new DateRange(bill.billingPeriodStartDate().getValue(), bill.billingPeriodEndDate().getValue()),
+        DateRange overlap = BillDateUtils.getOverlappingRange(new DateRange(bill.billingPeriodStartDate().getValue(), bill.billingPeriodEndDate().getValue()),
                 new DateRange(billableItem.effectiveDate().getValue(), billableItem.expirationDate().getValue()));
 
         // If billable item is not in effect in this billing period do nothing
@@ -162,11 +162,10 @@ public class BillingProductChargeProcessor extends AbstractProcessor {
         InvoiceProductCharge charge = EntityFactory.create(InvoiceProductCharge.class);
 
         charge.billingAccount().set(bill.billingAccount());
-        charge.bill().set(billing.getNextPeriodBill());
         charge.period().setValue(period);
         charge.fromDate().setValue(overlap.getFromDate());
         charge.toDate().setValue(overlap.getToDate());
-        charge.dueDate().setValue(billing.getNextPeriodBill().billingPeriodStartDate().getValue());
+        charge.dueDate().setValue(billing.getNextPeriodBill().dueDate().getValue());
 
         if (BillingUtils.isService(billableItem.item().product())) {
             charge.debitType().setValue(DebitType.lease);
@@ -261,7 +260,7 @@ public class BillingProductChargeProcessor extends AbstractProcessor {
             //TODO final bill
             adjustment.amount().setValue(new BigDecimal("0.00"));
         } else {
-            DateRange overlap = DateUtils.getOverlappingRange(new DateRange(billing.getNextPeriodBill().billingPeriodStartDate().getValue(), billing
+            DateRange overlap = BillDateUtils.getOverlappingRange(new DateRange(billing.getNextPeriodBill().billingPeriodStartDate().getValue(), billing
                     .getNextPeriodBill().billingPeriodEndDate().getValue()), new DateRange(billableItemAdjustment.effectiveDate().getValue(),
                     billableItemAdjustment.expirationDate().getValue()));
 
@@ -269,7 +268,7 @@ public class BillingProductChargeProcessor extends AbstractProcessor {
                 return;
             }
 
-            overlap = DateUtils.getOverlappingRange(overlap, new DateRange(billableItemAdjustment.billableItem().effectiveDate().getValue(),
+            overlap = BillDateUtils.getOverlappingRange(overlap, new DateRange(billableItemAdjustment.billableItem().effectiveDate().getValue(),
                     billableItemAdjustment.billableItem().expirationDate().getValue()));
 
             if (overlap == null) {

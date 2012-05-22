@@ -81,8 +81,7 @@ public class BillingDepositProcessor extends AbstractProcessor {
             if (!billableItem.deposit().isNull()) {
                 InvoiceDeposit deposit = EntityFactory.create(InvoiceDeposit.class);
                 deposit.billingAccount().set(billing.getNextPeriodBill().billingAccount());
-                deposit.bill().set(billing.getNextPeriodBill());
-                deposit.dueDate().setValue(billing.getNextPeriodBill().billingPeriodStartDate().getValue());
+                deposit.dueDate().setValue(billing.getNextPeriodBill().dueDate().getValue());
                 deposit.debitType().setValue(DebitType.deposit);
                 deposit.description().setValue(i18n.tr("Deposit for") + " " + billableItem.item().description().getStringView());
 

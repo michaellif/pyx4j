@@ -17,17 +17,26 @@ import junit.framework.AssertionFailedError;
 
 public class Tester {
 
-    @SuppressWarnings("unused")
-    protected static void assertEquals(String message, Object expected, Object actual) {
+    private final boolean continueOnError;
+
+    public Tester(boolean continueOnError) {
+        this.continueOnError = continueOnError;
+    }
+
+    public Tester() {
+        this(false);
+    }
+
+    protected void assertEquals(String message, Object expected, Object actual) {
         if ((expected == null) && (actual == null)) {
             return;
         }
         if ((expected != null) && (expected.equals(actual))) {
             return;
         }
-        if (true) {
+        if (continueOnError) {
             System.out.println(format(message, expected, actual));
-//            Thread.dumpStack();
+            Thread.dumpStack();
         } else {
             throw new AssertionFailedError(format(message, expected, actual));
         }
@@ -40,13 +49,13 @@ public class Tester {
         return formatted + "expected:<" + expected + "> but was:<" + actual + ">";
     }
 
-    public static void assertTrue(String message, boolean condition) {
+    public void assertTrue(String message, boolean condition) {
         if (!(condition)) {
             new AssertionFailedError(message);
         }
     }
 
-    public static void assertFalse(String message, boolean condition) {
+    public void assertFalse(String message, boolean condition) {
         assertTrue(message, !condition);
     }
 }
