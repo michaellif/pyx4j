@@ -13,11 +13,17 @@
  */
 package com.propertyvista.crm.server.services;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.rpc.shared.VoidSerializable;
 
+import com.propertyvista.crm.rpc.dto.ScheduleDataDTO;
 import com.propertyvista.crm.rpc.services.MaintenanceCrudService;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
+import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 
 public class MaintenanceCrudServiceImpl extends AbstractCrudServiceDtoImpl<MaintenanceRequest, MaintenanceRequestDTO> implements MaintenanceCrudService {
@@ -49,4 +55,32 @@ public class MaintenanceCrudServiceImpl extends AbstractCrudServiceDtoImpl<Maint
         Persistence.service().retrieve(dto.issueClassification().subjectDetails().subject().issueElement());
     }
 
+    @Override
+    public void sheduleAction(AsyncCallback<VoidSerializable> callback, ScheduleDataDTO data, Key entityId) {
+        MaintenanceRequest entity = Persistence.service().retrieve(MaintenanceRequest.class, entityId);
+        entity.scheduledDate().set(data.date());
+        entity.scheduledTime().set(data.time());
+        entity.status().setValue(MaintenanceRequestStatus.Scheduled);
+        Persistence.service().merge(entity);
+        Persistence.service().commit();
+        callback.onSuccess(null);
+    }
+
+    @Override
+    public void resolveAction(AsyncCallback<VoidSerializable> callback, Key entityId) {
+        MaintenanceRequest entity = Persistence.service().retrieve(MaintenanceRequest.class, entityId);
+        entity.status().setValue(MaintenanceRequestStatus.Resolved);
+        Persistence.service().merge(entity);
+        Persistence.service().commit();
+        callback.onSuccess(null);
+    }
+
+    @Override
+    public void cancelAction(AsyncCallback<VoidSerializable> callback, Key entityId) {
+        MaintenanceRequest entity = Persistence.service().retrieve(MaintenanceRequest.class, entityId);
+        entity.status().setValue(MaintenanceRequestStatus.Cancelled);
+        Persistence.service().merge(entity);
+        Persistence.service().commit();
+        callback.onSuccess(null);
+    }
 }

@@ -53,11 +53,9 @@ public interface MaintenanceRequest extends IEntity {
     @Timestamp(Timestamp.Update.Updated)
     IPrimitive<LogicalDate> updated();
 
-    @NotNull
     @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> scheduledDate();
 
-    @NotNull
     @Editor(type = EditorType.timepicker)
     IPrimitive<Time> scheduledTime();
 

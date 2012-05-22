@@ -13,10 +13,20 @@
  */
 package com.propertyvista.crm.rpc.services;
 
-import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.commons.Key;
+import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.rpc.shared.VoidSerializable;
+
+import com.propertyvista.crm.rpc.dto.ScheduleDataDTO;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 
 public interface MaintenanceCrudService extends AbstractCrudService<MaintenanceRequestDTO> {
 
+    void sheduleAction(AsyncCallback<VoidSerializable> callback, ScheduleDataDTO data, Key entityId);
+
+    void resolveAction(AsyncCallback<VoidSerializable> callback, Key entityId);
+
+    void cancelAction(AsyncCallback<VoidSerializable> callback, Key entityId);
 }

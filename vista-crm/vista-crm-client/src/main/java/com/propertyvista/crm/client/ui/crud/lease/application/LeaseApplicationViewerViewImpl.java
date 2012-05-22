@@ -186,6 +186,7 @@ public class LeaseApplicationViewerViewImpl extends CrmViewerViewImplBase<LeaseA
                 }.show();
             }
         });
+        addHeaderToolbarTwoItem(cancelAction.asWidget());
     }
 
     @Override

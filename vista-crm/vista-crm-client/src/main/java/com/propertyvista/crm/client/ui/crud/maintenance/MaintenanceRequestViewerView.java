@@ -13,11 +13,20 @@
  */
 package com.propertyvista.crm.client.ui.crud.maintenance;
 
+
 import com.pyx4j.site.client.ui.crud.form.IViewerView;
 
+import com.propertyvista.crm.rpc.dto.ScheduleDataDTO;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 
 public interface MaintenanceRequestViewerView extends IViewerView<MaintenanceRequestDTO> {
+
     interface Presenter extends IViewerView.Presenter {
+
+        void scheduleAction(ScheduleDataDTO data);
+
+        void resolveAction();
+
+        void cancelAction();
     }
 }
