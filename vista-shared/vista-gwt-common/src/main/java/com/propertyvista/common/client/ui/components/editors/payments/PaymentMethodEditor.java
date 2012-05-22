@@ -45,11 +45,11 @@ import com.propertyvista.domain.payment.PaymentType;
 
 public class PaymentMethodEditor extends CEntityDecoratableForm<PaymentMethod> {
 
-    private static final I18n i18n = I18n.get(PaymentMethodEditor.class);
+    protected static final I18n i18n = I18n.get(PaymentMethodEditor.class);
 
-    private final SimplePanel paymentDetailsHolder = new SimplePanel();
+    protected final SimplePanel paymentDetailsHolder = new SimplePanel();
 
-    private Widget billingAddressHeader;
+    protected Widget billingAddressHeader;
 
     public PaymentMethodEditor() {
         super(PaymentMethod.class);

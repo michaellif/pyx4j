@@ -11,10 +11,9 @@
  * @author Dad
  * @version $Id$
  */
-package com.propertyvista.common.client.ui.components.c;
+package com.propertyvista.common.client.ui.components.editors.payments;
 
 import java.util.Collection;
-import java.util.EnumSet;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
@@ -22,45 +21,20 @@ import com.google.gwt.user.client.ui.ComplexPanel;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.entity.client.CEntityForm;
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CRadioGroupEnum;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
-import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.RadioGroup;
 
 import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.common.client.theme.NewPaymentMethodEditorTheme;
 import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
 import com.propertyvista.common.client.ui.components.editors.AddressStructuredEditor;
-import com.propertyvista.common.client.ui.components.editors.payments.CashInfoEditor;
-import com.propertyvista.common.client.ui.components.editors.payments.CheckInfoEditor;
-import com.propertyvista.common.client.ui.components.editors.payments.CreditCardInfoEditor;
-import com.propertyvista.common.client.ui.components.editors.payments.EcheckInfoEditor;
-import com.propertyvista.common.client.ui.components.editors.payments.InteracInfoEditor;
-import com.propertyvista.domain.contact.AddressStructured;
-import com.propertyvista.domain.payment.CashInfo;
-import com.propertyvista.domain.payment.CheckInfo;
-import com.propertyvista.domain.payment.CreditCardInfo;
-import com.propertyvista.domain.payment.EcheckInfo;
-import com.propertyvista.domain.payment.InteracInfo;
-import com.propertyvista.domain.payment.PaymentDetails;
-import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 
-public class PaymentMethodForm extends CEntityDecoratableForm<PaymentMethod> {
-
-    private static final I18n i18n = I18n.get(PaymentMethodForm.class);
+public class PaymentMethodForm extends PaymentMethodEditor {
 
     private final FlowPanel paymentTypeImagesPanel = new FlowPanel();
-
-    private final SimplePanel paymentDetailsHolder = new SimplePanel();
-
-    private Widget billingAddressHeader;
 
     private final boolean twoColumns;
 
@@ -69,7 +43,7 @@ public class PaymentMethodForm extends CEntityDecoratableForm<PaymentMethod> {
     }
 
     public PaymentMethodForm(boolean twoColumns) {
-        super(PaymentMethod.class, new VistaEditorsComponentFactory());
+        super(new VistaEditorsComponentFactory());
         this.twoColumns = twoColumns;
     }
 
@@ -163,91 +137,5 @@ public class PaymentMethodForm extends CEntityDecoratableForm<PaymentMethod> {
         });
 
         return container;
-    }
-
-    @Override
-    protected void propagateValue(PaymentMethod value, boolean fireEvent, boolean populate) {
-        selectPaymentDetailsEditor(value != null ? value.type().getValue() : null);
-        super.propagateValue(value, fireEvent, populate);
-    }
-
-    protected void selectPaymentDetailsEditor(PaymentType type) {
-
-        if (this.contains(proto().details())) {
-            this.unbind(proto().details());
-            paymentDetailsHolder.setWidget(null);
-        }
-
-        get(proto().type()).populate(type);
-
-        if (type != null && getValue() != null) {
-            CEntityForm editor = null;
-            PaymentDetails details = getValue().details();
-
-            switch (type) {
-            case Cash:
-                editor = new CashInfoEditor();
-                if (details.getInstanceValueClass() != CashInfo.class) {
-                    details.set(EntityFactory.create(CashInfo.class));
-                }
-                setBillingAddressVisible(false);
-                break;
-            case Check:
-                editor = new CheckInfoEditor();
-                if (details.getInstanceValueClass() != CheckInfo.class) {
-                    details.set(EntityFactory.create(CheckInfo.class));
-                }
-                setBillingAddressVisible(true);
-                break;
-            case Echeck:
-                editor = new EcheckInfoEditor();
-                if (details.getInstanceValueClass() != EcheckInfo.class) {
-                    details.set(EntityFactory.create(EcheckInfo.class));
-                }
-                setBillingAddressVisible(true);
-                break;
-            case CreditCard:
-                editor = new CreditCardInfoEditor();
-                if (details.getInstanceValueClass() != CreditCardInfo.class) {
-                    details.set(EntityFactory.create(CreditCardInfo.class));
-                }
-                setBillingAddressVisible(true);
-                break;
-            case Interac:
-                editor = new InteracInfoEditor();
-                if (details.getInstanceValueClass() != InteracInfo.class) {
-                    details.set(EntityFactory.create(InteracInfo.class));
-                }
-                setBillingAddressVisible(false);
-                break;
-            }
-
-            if (editor != null) {
-                this.inject(proto().details(), editor);
-                editor.populate(details.cast());
-
-                paymentDetailsHolder.setWidget(editor);
-            }
-        }
-    }
-
-    // some UI tuning mechanics for client:
-
-    public Collection<PaymentType> getPaymentOptions() {
-        return EnumSet.allOf(PaymentType.class);
-    }
-
-    public void setBillingAddressVisible(boolean visible) {
-        get(proto().billingAddress()).setVisible(visible);
-        get(proto().sameAsCurrent()).setVisible(visible);
-        billingAddressHeader.setVisible(visible);
-    }
-
-    public boolean isBillingAddressVisible() {
-        return get(proto().billingAddress()).isVisible();
-    }
-
-    public void onBillingAddressSameAsCurrentOne(boolean set, CComponent<AddressStructured, ?> comp) {
-        // Implements meaningful in derived classes...
     }
 }
