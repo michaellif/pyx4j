@@ -18,6 +18,7 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 import javax.imageio.ImageIO;
 import javax.servlet.ServletOutputStream;
@@ -97,8 +98,9 @@ public class ThumbnailService {
     public static ThumbnailBlob createThumbnailBlob(String fileName, byte[] originalContent, ResampleParams params, Dimension xsmall, Dimension small,
             Dimension medum, Dimension large) {
         ThumbnailBlob blob = EntityFactory.create(ThumbnailBlob.class);
+        InputStream stream = null;
         try {
-            BufferedImage inputImage = ImageIO.read(new ByteArrayInputStream(originalContent));
+            BufferedImage inputImage = ImageIO.read(stream = new ByteArrayInputStream(originalContent));
             if (inputImage == null) {
                 throw new UserRuntimeException(i18n.tr("Unable To Read The Image ''{0}''", fileName));
             }
@@ -107,6 +109,7 @@ public class ThumbnailService {
             blob.medium().setValue(resample(fileName, inputImage, params, medum));
             blob.large().setValue(resample(fileName, inputImage, params, large));
         } catch (IOException e) {
+            IOUtils.closeQuietly(stream);
             log.error("Error", e);
             throw new UserRuntimeException(i18n.tr("Unable To Resample The Image ''{0}''", fileName));
         }
