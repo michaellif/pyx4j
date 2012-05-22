@@ -23,6 +23,11 @@ public class VistaServerSideConfiguration33 extends VistaServerSideConfiguration
         return new VistaConfigurationPostgreSQL() {
 
             @Override
+            public String dbHost() {
+                return "db1";
+            }
+
+            @Override
             public String dbName() {
                 return "vista33";
             }
