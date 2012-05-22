@@ -71,6 +71,7 @@ import com.pyx4j.entity.shared.ObjectClassType;
 import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.pyx4j.xml.LogicalDateXmlAdapter;
+import com.pyx4j.xml.TimeXmlAdapter;
 
 public class EntityPojoWrapperGenerator {
 
@@ -235,6 +236,9 @@ public class EntityPojoWrapperGenerator {
                     if (LogicalDate.class.getName().equals(ctValueClass.getName())) {
                         addAnnotationValue(memberGet, XmlSchemaType.class, "name", "date");
                         addAnnotationValue(memberGet, XmlJavaTypeAdapter.class, "value", LogicalDateXmlAdapter.class);
+                    } else if (java.sql.Time.class.getName().equals(ctValueClass.getName())) {
+                        addAnnotationValue(memberGet, XmlSchemaType.class, "name", "time");
+                        addAnnotationValue(memberGet, XmlJavaTypeAdapter.class, "value", TimeXmlAdapter.class);
                     }
 
                     if (memberMeta.getObjectClassType() == ObjectClassType.EntityList) {
