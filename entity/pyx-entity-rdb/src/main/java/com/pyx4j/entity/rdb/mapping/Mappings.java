@@ -47,6 +47,7 @@ import com.pyx4j.entity.rdb.ConnectionProvider.ConnectionTarget;
 import com.pyx4j.entity.rdb.PersistenceContext;
 import com.pyx4j.entity.rdb.SQLUtils;
 import com.pyx4j.entity.rdb.cfg.Configuration;
+import com.pyx4j.entity.rdb.cfg.Configuration.DatabaseType;
 import com.pyx4j.entity.server.ServerEntityFactory;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
@@ -74,6 +75,14 @@ public class Mappings {
     public Mappings(ConnectionProvider connectionProvider, Configuration configuration) {
         this.connectionProvider = connectionProvider;
         this.configuration = configuration;
+    }
+
+    public DatabaseType getDatabaseType() {
+        return configuration.databaseType();
+    }
+
+    public String getDatabaseName() {
+        return configuration.dbName();
     }
 
     public void reset() {

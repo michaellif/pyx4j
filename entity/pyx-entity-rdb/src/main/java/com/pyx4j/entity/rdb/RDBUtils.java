@@ -34,14 +34,10 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.TimeUtils;
-import com.pyx4j.config.server.IPersistenceConfiguration;
-import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Table;
-import com.pyx4j.entity.rdb.ConnectionProvider.ConnectionTarget;
-import com.pyx4j.entity.rdb.cfg.Configuration;
-import com.pyx4j.entity.rdb.cfg.Configuration.DatabaseType;
+import com.pyx4j.entity.rdb.cfg.Configuration.MultitenancyType;
 import com.pyx4j.entity.rdb.mapping.TableMetadata;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.ServerEntityFactory;
@@ -56,37 +52,16 @@ public class RDBUtils implements Closeable {
 
     private static final Logger log = LoggerFactory.getLogger(RDBUtils.class);
 
-    private final Configuration configuration;
-
-    private final ConnectionProvider connectionProvider;
-
     private String connectionNamespace;
 
     private Connection connection = null;
 
     public RDBUtils() {
-        try {
-            connectionProvider = new ConnectionProvider(configuration = getRDBConfiguration());
-        } catch (SQLException e) {
-            log.error("RDB initialization error", e);
-            throw new RuntimeException(e.getMessage());
-        }
-    }
-
-    public static Configuration getRDBConfiguration() {
-        IPersistenceConfiguration cfg = ServerSideConfiguration.instance().getPersistenceConfiguration();
-        if (cfg == null) {
-            throw new RuntimeException("Persistence Configuration is not defined (is null) in class " + ServerSideConfiguration.instance().getClass().getName());
-        }
-        if (!(cfg instanceof Configuration)) {
-            throw new RuntimeException("Invalid RDB configuration class " + cfg);
-        }
-        return (Configuration) cfg;
     }
 
     private Connection connection() {
         if (connection == null) {
-            connection = connectionProvider.getConnection(ConnectionTarget.forDDL);
+            connection = ((EntityPersistenceServiceRDB) Persistence.service()).getAministrationConnection();
             if (connectionNamespace != null) {
                 setConnectionNamespace(connectionNamespace);
             }
@@ -96,8 +71,8 @@ public class RDBUtils implements Closeable {
 
     public void setConnectionNamespace(String connectionNamespace) {
         this.connectionNamespace = connectionNamespace;
-        if ((connection != null) && (connectionProvider.getDialect().isMultitenantSeparateSchemas())) {
-            String sql = connectionProvider.getDialect().sqlChangeConnectionNamespace(connectionNamespace);
+        if ((connection != null) && ((EntityPersistenceServiceRDB) Persistence.service()).getMultitenancyType() == MultitenancyType.SeparateSchemas) {
+            String sql = ((EntityPersistenceServiceRDB) Persistence.service()).getDialect().sqlChangeConnectionNamespace(connectionNamespace);
             try {
                 if (sql == null) {
                     connection.setCatalog(connectionNamespace);
@@ -114,21 +89,16 @@ public class RDBUtils implements Closeable {
     public void close() {
         try {
             // Correction for connection validation infrastructure in C3P0
+            setConnectionNamespace(null);
         } catch (Throwable e) {
             log.error("Error reseting connection namespace", e);
         }
-        setConnectionNamespace(null);
         SQLUtils.closeQuietly(connection);
         connection = null;
-        connectionProvider.dispose();
-    }
-
-    public DatabaseType databaseType() {
-        return configuration.databaseType();
     }
 
     public boolean isTableExists(String tableName) throws SQLException {
-        return TableMetadata.isTableExists(connectionProvider.getDialect(), connection(), connectionNamespace, tableName);
+        return TableMetadata.isTableExists(((EntityPersistenceServiceRDB) Persistence.service()).getDialect(), connection(), connectionNamespace, tableName);
     }
 
     public void dropTable(String tableName) throws SQLException {
@@ -149,8 +119,8 @@ public class RDBUtils implements Closeable {
         RDBUtils utils = new RDBUtils();
         Connection connection = null;
         try {
-            if (utils.connectionProvider.getDialect().isMultitenantSeparateSchemas()) {
-                connection = utils.connectionProvider.getConnection(ConnectionTarget.forDDL);
+            if (((EntityPersistenceServiceRDB) Persistence.service()).getMultitenancyType() == MultitenancyType.SeparateSchemas) {
+                connection = utils.connection();
                 String storedNamespaceName = NamespaceManager.getNamespace();
                 boolean schemaExists = false;
                 ResultSet rs = null;
@@ -170,7 +140,7 @@ public class RDBUtils implements Closeable {
                 }
 
                 if (!schemaExists) {
-                    switch (utils.connectionProvider.getDialect().databaseType()) {
+                    switch (((EntityPersistenceServiceRDB) Persistence.service()).getDatabaseType()) {
                     case PostgreSQL:
                         utils.execute("CREATE SCHEMA " + storedNamespaceName);
                         break;
@@ -185,7 +155,6 @@ public class RDBUtils implements Closeable {
         } catch (SQLException e) {
             throw new Error(e);
         } finally {
-            SQLUtils.closeQuietly(connection);
             utils.close();
         }
     }
@@ -194,7 +163,7 @@ public class RDBUtils implements Closeable {
         long start = System.currentTimeMillis();
         RDBUtils utils = new RDBUtils();
         try {
-            switch (utils.connectionProvider.getDialect().databaseType()) {
+            switch (((EntityPersistenceServiceRDB) Persistence.service()).getDatabaseType()) {
             case PostgreSQL:
                 DatabaseMetaData dbMeta = utils.connection().getMetaData();
                 ResultSet rs = null;
@@ -213,14 +182,15 @@ public class RDBUtils implements Closeable {
                 utils.execute("CREATE SCHEMA public");
                 break;
             case MySQL:
-                utils.execute("DROP DATABASE " + utils.configuration.dbName());
-                utils.execute("CREATE DATABASE " + utils.configuration.dbName() + "  DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci");
+                String dbName = ((EntityPersistenceServiceRDB) Persistence.service()).getDatabaseName();
+                utils.execute("DROP DATABASE " + dbName);
+                utils.execute("CREATE DATABASE " + dbName + "  DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci");
                 break;
             default:
                 throw new Error("Unsupported dialect");
             }
             ((EntityPersistenceServiceRDB) Persistence.service()).resetMapping();
-            log.info("Database '{}' recreated in {}", utils.configuration.dbName(), TimeUtils.secSince(start));
+            log.info("Database '{}' recreated in {}", ((EntityPersistenceServiceRDB) Persistence.service()).getDatabaseName(), TimeUtils.secSince(start));
         } catch (SQLException e) {
             throw new Error(e);
         } finally {

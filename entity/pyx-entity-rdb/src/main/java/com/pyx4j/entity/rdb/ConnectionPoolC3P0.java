@@ -25,8 +25,10 @@ import javax.sql.DataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mchange.v2.c3p0.C3P0Registry;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 import com.mchange.v2.c3p0.DataSources;
+import com.mchange.v2.c3p0.impl.C3P0ImplUtils;
 
 import com.pyx4j.commons.Consts;
 import com.pyx4j.entity.rdb.cfg.Configuration;
@@ -35,6 +37,8 @@ public class ConnectionPoolC3P0 implements ConnectionPool {
 
     private static final Logger log = LoggerFactory.getLogger(ConnectionPoolC3P0.class);
 
+    private static boolean singleInstanceCreated = false;
+
     private final ComboPooledDataSource dataSource;
 
     private final ComboPooledDataSource dataSourceBackgroundProcess;
@@ -42,8 +46,12 @@ public class ConnectionPoolC3P0 implements ConnectionPool {
     private final DataSource dataSourceAministration;
 
     public ConnectionPoolC3P0(Configuration cfg) throws Exception {
+        if (singleInstanceCreated) {
+            throw new Error("Only single Instance of  ConnectionPoolC3P0 supported");
+        }
         {
             dataSource = createDataSource(cfg);
+            dataSource.setDataSourceName("default");
 
             // the settings below are optional -- c3p0 can work with defaults
             dataSource.setMinPoolSize(cfg.minPoolSize()); // default is 3
@@ -53,10 +61,13 @@ public class ConnectionPoolC3P0 implements ConnectionPool {
             dataSource.setDebugUnreturnedConnectionStackTraces(true);
 
             log.debug("Pool size is {} min and {} max", dataSource.getMinPoolSize(), dataSource.getMaxPoolSize());
+            dataSource.setIdentityToken(C3P0ImplUtils.allocateIdentityToken(dataSource));
+            C3P0Registry.reregister(dataSource);
         }
 
         {
             dataSourceBackgroundProcess = createDataSource(cfg);
+            dataSourceBackgroundProcess.setDataSourceName("backgroundProcess");
 
             // the settings below are optional -- c3p0 can work with defaults
             dataSourceBackgroundProcess.setMinPoolSize(cfg.minPoolSize()); // default is 3
@@ -64,15 +75,18 @@ public class ConnectionPoolC3P0 implements ConnectionPool {
 
             dataSourceBackgroundProcess.setUnreturnedConnectionTimeout(cfg.unreturnedConnectionBackgroundProcessTimeout());
             dataSourceBackgroundProcess.setDebugUnreturnedConnectionStackTraces(true);
+            dataSourceBackgroundProcess.setIdentityToken(C3P0ImplUtils.allocateIdentityToken(dataSourceBackgroundProcess));
+            C3P0Registry.reregister(dataSourceBackgroundProcess);
         }
 
         {
             dataSourceAministration = DataSources.unpooledDataSource(cfg.connectionUrl(), cfg.dbAdministrationUserName(), cfg.dbAdministrationPassword());
         }
+        singleInstanceCreated = true;
     }
 
     private ComboPooledDataSource createDataSource(Configuration cfg) throws Exception {
-        ComboPooledDataSource dataSource = new ComboPooledDataSource();
+        ComboPooledDataSource dataSource = new ComboPooledDataSource(false);
         dataSource.setDriverClass(cfg.driverClass()); // load the jdbc driver            
         dataSource.setJdbcUrl(cfg.connectionUrl());
         dataSource.setUser(cfg.userName());
@@ -107,6 +121,7 @@ public class ConnectionPoolC3P0 implements ConnectionPool {
 
     @Override
     public void close() throws Exception {
+        singleInstanceCreated = false;
         try {
             dataSource.close();
         } finally {

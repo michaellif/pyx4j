@@ -20,6 +20,7 @@
  */
 package com.pyx4j.entity.rdb;
 
+import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
 import java.util.Date;
@@ -36,6 +37,7 @@ import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.RuntimeExceptionSerializable;
+import com.pyx4j.config.server.IPersistenceConfiguration;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.server.Trace;
 import com.pyx4j.config.shared.ApplicationMode;
@@ -52,7 +54,9 @@ import com.pyx4j.entity.cache.CacheService;
 import com.pyx4j.entity.rdb.ConnectionProvider.ConnectionTarget;
 import com.pyx4j.entity.rdb.PersistenceContext.TransactionType;
 import com.pyx4j.entity.rdb.cfg.Configuration;
+import com.pyx4j.entity.rdb.cfg.Configuration.DatabaseType;
 import com.pyx4j.entity.rdb.cfg.Configuration.MultitenancyType;
+import com.pyx4j.entity.rdb.dialect.Dialect;
 import com.pyx4j.entity.rdb.dialect.SQLAggregateFunctions;
 import com.pyx4j.entity.rdb.mapping.Mappings;
 import com.pyx4j.entity.rdb.mapping.MemberCollectionOperationsMeta;
@@ -109,7 +113,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     private final ThreadLocal<PersistenceContext> threadSessions = new ThreadLocal<PersistenceContext>();
 
     public EntityPersistenceServiceRDB() {
-        this(RDBUtils.getRDBConfiguration());
+        this(getRDBConfiguration());
     }
 
     public EntityPersistenceServiceRDB(Configuration configuration) {
@@ -120,9 +124,27 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                 log.error("RDB initialization error", e);
                 throw new RuntimeException(e.getMessage());
             }
-            mappings = new Mappings(connectionProvider, configuration);
-            databaseVersion();
+            boolean initialized = true;
+            try {
+                mappings = new Mappings(connectionProvider, configuration);
+                databaseVersion();
+            } finally {
+                if (!initialized) {
+                    connectionProvider.dispose();
+                }
+            }
         }
+    }
+
+    private static Configuration getRDBConfiguration() {
+        IPersistenceConfiguration cfg = ServerSideConfiguration.instance().getPersistenceConfiguration();
+        if (cfg == null) {
+            throw new RuntimeException("Persistence Configuration is not defined (is null) in class " + ServerSideConfiguration.instance().getClass().getName());
+        }
+        if (!(cfg instanceof Configuration)) {
+            throw new RuntimeException("Invalid RDB configuration class " + cfg);
+        }
+        return (Configuration) cfg;
     }
 
     @Override
@@ -272,6 +294,24 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         } finally {
             endContext();
         }
+    }
+
+    public DatabaseType getDatabaseType() {
+        // Because mapping hods configuration ...
+        return mappings.getDatabaseType();
+    }
+
+    String getDatabaseName() {
+        // Because mapping hods configuration ...
+        return mappings.getDatabaseName();
+    }
+
+    Dialect getDialect() {
+        return connectionProvider.getDialect();
+    }
+
+    public Connection getAministrationConnection() {
+        return connectionProvider.getConnection(ConnectionTarget.forDDL);
     }
 
     public boolean isTableExists(Class<? extends IEntity> entityClass) {

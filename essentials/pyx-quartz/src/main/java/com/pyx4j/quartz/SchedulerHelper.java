@@ -43,8 +43,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.entity.rdb.EntityPersistenceServiceRDB;
 import com.pyx4j.entity.rdb.RDBUtils;
 import com.pyx4j.entity.rdb.cfg.Configuration;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.gwt.server.IOUtils;
 
 public class SchedulerHelper {
@@ -87,7 +89,7 @@ public class SchedulerHelper {
         quartzProperties.put(StdSchedulerFactory.PROP_JOB_STORE_CLASS, JobStoreTX.class.getName());
 
         String delegateProperty = StdSchedulerFactory.PROP_JOB_STORE_PREFIX + ".driverDelegateClass";
-        Configuration rdbConfiguration = RDBUtils.getRDBConfiguration();
+        Configuration rdbConfiguration = (Configuration) ServerSideConfiguration.instance().getPersistenceConfiguration();
         switch (rdbConfiguration.databaseType()) {
         case HSQLDB:
             quartzProperties.put(delegateProperty, HSQLDBDelegate.class.getName());
@@ -170,7 +172,7 @@ public class SchedulerHelper {
                 log.debug("All quartz tables are present");
             } else {
                 String sqlResourceName;
-                switch (rdb.databaseType()) {
+                switch (((EntityPersistenceServiceRDB) Persistence.service()).getDatabaseType()) {
                 case HSQLDB:
                     sqlResourceName = "tables_hsqldb.sql";
                     break;
@@ -184,7 +186,7 @@ public class SchedulerHelper {
                     sqlResourceName = "tables_postgresql.sql";
                     break;
                 default:
-                    throw new Error("Unsupported databaseType " + rdb.databaseType());
+                    throw new Error("Unsupported databaseType " + ((EntityPersistenceServiceRDB) Persistence.service()).getDatabaseType());
                 }
 
                 String text = IOUtils.getTextResource(SchedulerHelper.class.getPackage().getName().replace('.', '/') + "/" + sqlResourceName);
