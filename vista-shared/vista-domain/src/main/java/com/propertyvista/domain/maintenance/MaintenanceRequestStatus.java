@@ -19,7 +19,7 @@ import com.pyx4j.i18n.shared.I18nEnum;
 @I18n(context = "Maintenance Request")
 public enum MaintenanceRequestStatus {
 
-    Submitted, Scheduled, Pending, Resolved, Cancelled;
+    Submitted, Scheduled, Resolved, Cancelled;
 
     @Override
     public String toString() {

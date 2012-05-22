@@ -29,6 +29,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.CLabel;
+import com.pyx4j.forms.client.ui.CTimeLabel;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
@@ -43,6 +44,7 @@ import com.propertyvista.domain.maintenance.IssueClassification;
 import com.propertyvista.domain.maintenance.IssueElement;
 import com.propertyvista.domain.maintenance.IssueRepairSubject;
 import com.propertyvista.domain.maintenance.IssueSubjectDetails;
+import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 
@@ -85,8 +87,6 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
 
     @SuppressWarnings("unchecked")
     private Widget createGeneralTab() {
-        FormFlexPanel main = new FormFlexPanel();
-
         // configure issue selectors
         CComponent<?, ?> comp1 = inject(proto().issueClassification().subjectDetails().subject().issueElement());
         CComponent<?, ?> comp2 = inject(proto().issueClassification().subjectDetails().subject());
@@ -135,20 +135,17 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
             });
         }
 
-        // start panel layout
         int row = -1;
-        main.setH1(++row, 0, 2, "Information");
-        main.setWidget(++row, 0, new DecoratorBuilder(comp1, 20).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(comp2, 20).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(comp3, 20).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(comp4, 20).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().description()), 20).build());
+        FormFlexPanel left = new FormFlexPanel();
+        left.setWidget(++row, 0, new DecoratorBuilder(comp1, 20).build());
+        left.setWidget(++row, 0, new DecoratorBuilder(comp2, 20).build());
+        left.setWidget(++row, 0, new DecoratorBuilder(comp3, 20).build());
+        left.setWidget(++row, 0, new DecoratorBuilder(comp4, 20).build());
+        left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().description()), 20).build());
 
-        main.setH1(++row, 0, 2, proto().surveyResponse().getMeta().getCaption());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().surveyResponse().rating(), new CLabel()), 10).build());
-
-        row = 0;
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().tenant(), new CEntitySelectorHyperlink<Tenant>() {
+        row = -1;
+        FormFlexPanel right = new FormFlexPanel();
+        right.setWidget(++row, 0, new DecoratorBuilder(inject(proto().tenant(), new CEntitySelectorHyperlink<Tenant>() {
             @Override
             protected AppPlace getTargetPlace() {
                 return AppPlaceEntityMapper.resolvePlace(Tenant.class, getValue().getPrimaryKey());
@@ -169,12 +166,28 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
                 };
             }
         }), 25).build());
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().status(), new CEnumLabel()), 10).build());
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().updated(), new CDateLabel()), 10).build());
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().submitted(), new CDateLabel()), 10).build());
+        right.setWidget(++row, 0, new DecoratorBuilder(inject(proto().status(), new CEnumLabel()), 10).build());
+        right.setWidget(++row, 0, new DecoratorBuilder(inject(proto().scheduledDate(), new CDateLabel()), 10).build());
+        right.setWidget(++row, 0, new DecoratorBuilder(inject(proto().scheduledTime(), new CTimeLabel()), 10).build());
+        right.setWidget(++row, 0, new DecoratorBuilder(inject(proto().updated(), new CDateLabel()), 10).build());
+        right.setWidget(++row, 0, new DecoratorBuilder(inject(proto().submitted(), new CDateLabel()), 10).build());
 
-        row += 2;
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().surveyResponse().description(), new CLabel()), 10).build());
+        FormFlexPanel survey = new FormFlexPanel();
+        survey.setWidget(1, 0, new DecoratorBuilder(inject(proto().surveyResponse().rating(), new CLabel()), 10).build());
+        survey.setWidget(1, 1, new DecoratorBuilder(inject(proto().surveyResponse().description(), new CLabel()), 10).build());
+
+        // assemble main panel:
+        FormFlexPanel main = new FormFlexPanel();
+
+        main.setH1(0, 0, 2, "Information");
+        main.getFlexCellFormatter().setColSpan(0, 0, 2);
+        main.setWidget(1, 0, left);
+        main.setWidget(1, 1, right);
+
+        main.setH1(2, 0, 2, proto().surveyResponse().getMeta().getCaption());
+        main.getFlexCellFormatter().setColSpan(2, 0, 2);
+        main.setWidget(3, 0, survey);
+        main.getFlexCellFormatter().setColSpan(3, 0, 2);
 
         main.getColumnFormatter().setWidth(0, "50%");
         main.getColumnFormatter().setWidth(1, "50%");
@@ -192,5 +205,13 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
 
     private void comboClear(CEntityComboBox<? extends IEntity> combo, String title) {
         comboReset(combo, PropertyCriterion.eq(combo.proto().id(), (Serializable) null), title);
+    }
+
+    @Override
+    protected void onPopulate() {
+        super.onPopulate();
+
+        get(proto().scheduledDate()).setVisible(getValue().status().getValue() == MaintenanceRequestStatus.Scheduled);
+        get(proto().scheduledTime()).setVisible(getValue().status().getValue() == MaintenanceRequestStatus.Scheduled);
     }
 }

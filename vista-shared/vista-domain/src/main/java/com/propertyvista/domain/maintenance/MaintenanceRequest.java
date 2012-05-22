@@ -13,11 +13,15 @@
  */
 package com.propertyvista.domain.maintenance;
 
+import java.sql.Time;
+
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.Owner;
@@ -48,6 +52,14 @@ public interface MaintenanceRequest extends IEntity {
     @Caption(name = "Last Updated")
     @Timestamp(Timestamp.Update.Updated)
     IPrimitive<LogicalDate> updated();
+
+    @NotNull
+    @Format("MM/dd/yyyy")
+    IPrimitive<LogicalDate> scheduledDate();
+
+    @NotNull
+    @Editor(type = EditorType.timepicker)
+    IPrimitive<Time> scheduledTime();
 
     @Length(250)
     @Editor(type = Editor.EditorType.textarea)
