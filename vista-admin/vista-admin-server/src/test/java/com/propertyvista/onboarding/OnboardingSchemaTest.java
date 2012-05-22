@@ -22,6 +22,7 @@ import com.pyx4j.essentials.server.xml.XMLEntitySchemaWriter;
 import com.propertyvista.config.tests.VistaDBTestBase;
 
 public class OnboardingSchemaTest extends VistaDBTestBase {
+
     public void testOnboardingSchema() throws FileNotFoundException {
         XMLEntitySchemaWriter.printSchema(new FileOutputStream(new File("target", "onboarding.xsd")), false, RequestMessageIO.class, ResponseMessageIO.class);
     }

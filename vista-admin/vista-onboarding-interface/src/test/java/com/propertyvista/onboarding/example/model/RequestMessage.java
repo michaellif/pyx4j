@@ -52,7 +52,8 @@ public class RequestMessage {
         @XmlElement(name = "onboardingUserAuthenticationRequest", type = OnboardingUserAuthenticationRequest.class),
         @XmlElement(name = "createOnboardingUserRequest", type = CreateOnboardingUserRequest.class),
         @XmlElement(name = "checkAvailabilityRequest", type = CheckAvailabilityRequest.class), 
-        @XmlElement(name = "createPMCRequest", type = CreatePMCRequest.class) })
+        @XmlElement(name = "createPMCRequest", type = CreatePMCRequest.class),
+        @XmlElement(name = "onboardingUserSendPasswordResetTokenRequest", type = OnboardingUserSendPasswordResetTokenRequest.class)})
     //@formatter:on    
     public List<Request> requests;
 
