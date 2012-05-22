@@ -96,7 +96,8 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
 
         scheduleAction.setVisible(value.status().getValue() == MaintenanceRequestStatus.Submitted);
         resolveAction.setVisible(value.status().getValue() == MaintenanceRequestStatus.Scheduled);
-        cancelAction.setVisible(value.status().getValue() != MaintenanceRequestStatus.Cancelled);
+        cancelAction.setVisible(value.status().getValue() != MaintenanceRequestStatus.Cancelled
+                && value.status().getValue() != MaintenanceRequestStatus.Resolved);
     }
 
     // Internals:
