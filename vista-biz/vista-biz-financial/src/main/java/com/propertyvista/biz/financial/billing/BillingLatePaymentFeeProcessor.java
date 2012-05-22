@@ -49,7 +49,6 @@ public class BillingLatePaymentFeeProcessor extends AbstractProcessor {
             // too early for late payment calculations
             return;
         }
-        int billNo = billing.getNextPeriodBill().billSequenceNumber().getValue();
         Bill curBill = billing.getCurrentPeriodBill();
         // Start with the total due amount calculated on the run date
         BigDecimal overdueAmount = curBill.totalDueAmount().getValue();
@@ -65,7 +64,7 @@ public class BillingLatePaymentFeeProcessor extends AbstractProcessor {
             return;
         }
 
-        BigDecimal serviceCharge = billing.getPreviousPeriodBill().serviceCharge().getValue();
+        BigDecimal serviceCharge = billing.getCurrentPeriodBill().serviceCharge().getValue();
 
         LeaseBillingPolicy leaseBillingPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(
                 billing.getNextPeriodBill().billingRun().building(), LeaseBillingPolicy.class);
