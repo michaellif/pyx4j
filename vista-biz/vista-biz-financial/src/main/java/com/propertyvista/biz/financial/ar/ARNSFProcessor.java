@@ -59,6 +59,7 @@ public class ARNSFProcessor extends AbstractProcessor {
         charge.dueDate().setValue(BillDateUtils.calculateNextBillDueDate(paymentRecord.billingAccount()));
         charge.description().setValue(i18n.tr("NSF fee"));
         charge.taxTotal().setValue(new BigDecimal("0.00"));
+        charge.consumed().setValue(false);
 
         Persistence.service().persist(charge);
 
