@@ -62,10 +62,10 @@ public class PaymentMethodForm extends PaymentMethodEditor {
         for (PaymentType type : getPaymentOptions()) {
             switch (type) {
             case Echeck:
-                paymentTypeImage = new Image(VistaImages.INSTANCE.paymentACH().getSafeUri());
+                paymentTypeImage = new Image(VistaImages.INSTANCE.paymentECheque().getSafeUri());
                 break;
             case CreditCard:
-                paymentTypeImage = new Image(VistaImages.INSTANCE.paymentVISA().getSafeUri());
+                paymentTypeImage = new Image(VistaImages.INSTANCE.paymentCredit().getSafeUri());
                 break;
 //            case Visa:
 //                paymentTypeImage = new Image(VistaImages.INSTANCE.paymentVISA().getSafeUri());
@@ -84,7 +84,6 @@ public class PaymentMethodForm extends PaymentMethodEditor {
                 break;
             }
             if (paymentTypeImage != null) {
-                paymentTypeImage.setHeight("20px");
                 holder = new FlowPanel();
                 holder.add(paymentTypeImage);
                 paymentTypeImagesPanel.add(holder);

@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -63,15 +63,11 @@ public class NewPaymentMethodEditorTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", StyleName.PaymentEditorImages);
-        style.addProperty("margin-top", "10px");
         style.addProperty("width", "70px");
         addStyle(style);
 
         style = new Style(".", StyleName.PaymentEditorImages, " div");
         style.addProperty("height", "30px");
-        style.addProperty("padding-top", "5px");
-        style.addProperty("padding-right", "10px");
-        style.addProperty("padding-left", "10px");
 //        style.addProperty("border-top-left-radius", "3px");
 //        style.addProperty("border-bottom-left-radius", "3px");
 //        style.addProperty("border-left", "1px solid #F7F7F7");
@@ -87,6 +83,7 @@ public class NewPaymentMethodEditorTheme extends Theme {
 
         style = new Style(".", StyleName.PaymentEditorImages, " div img");
         style.addProperty("padding-left", "10px");
+        style.addProperty("height", "30px");
         addStyle(style);
 
     }

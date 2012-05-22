@@ -94,4 +94,10 @@ public interface VistaImages extends FormsImageBundle, EntityFolderImages, Widge
 
     @Source("logo_td.jpg")
     ImageResource logoTD();
+
+    @Source("payment_credit.jpg")
+    ImageResource paymentCredit();
+
+    @Source("e_cheque.jpg")
+    ImageResource paymentECheque();
 }
