@@ -52,25 +52,23 @@ import com.propertyvista.domain.payment.PaymentDetails;
 import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 
-public class NewPaymentMethodForm extends CEntityDecoratableForm<PaymentMethod> {
+public class PaymentMethodForm extends CEntityDecoratableForm<PaymentMethod> {
 
-    private static final I18n i18n = I18n.get(NewPaymentMethodForm.class);
+    private static final I18n i18n = I18n.get(PaymentMethodForm.class);
 
     private final FlowPanel paymentTypeImagesPanel = new FlowPanel();
 
     private final SimplePanel paymentDetailsHolder = new SimplePanel();
 
-    private CEntityForm<AddressStructured> billingAddress;
-
     private Widget billingAddressHeader;
 
     private final boolean twoColumns;
 
-    public NewPaymentMethodForm() {
+    public PaymentMethodForm() {
         this(false);
     }
 
-    public NewPaymentMethodForm(boolean twoColumns) {
+    public PaymentMethodForm(boolean twoColumns) {
         super(PaymentMethod.class, new VistaEditorsComponentFactory());
         this.twoColumns = twoColumns;
     }
@@ -137,7 +135,7 @@ public class NewPaymentMethodForm extends CEntityDecoratableForm<PaymentMethod> 
         container.setWidget(++row, 0, new DecoratorBuilder(inject(proto().sameAsCurrent()), 5).build());
         container.getFlexCellFormatter().setColSpan(row, 0, 3);
 
-        container.setWidget(++row, 0, inject(proto().billingAddress(), billingAddress = new AddressStructuredEditor(twoColumns)));
+        container.setWidget(++row, 0, inject(proto().billingAddress(), new AddressStructuredEditor(twoColumns)));
         container.getFlexCellFormatter().setColSpan(row, 0, 3);
 
         container.setHR(++row, 0, 3);
@@ -160,7 +158,7 @@ public class NewPaymentMethodForm extends CEntityDecoratableForm<PaymentMethod> 
             @Override
             public void onValueChange(ValueChangeEvent<Boolean> event) {
                 onBillingAddressSameAsCurrentOne(event.getValue(), get(proto().billingAddress()));
-                billingAddress.setEditable(!event.getValue());
+                get(proto().billingAddress()).setEditable(!event.getValue());
             }
         });
 

@@ -40,7 +40,7 @@ import com.pyx4j.security.client.ClientContext;
 
 import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
-import com.propertyvista.common.client.ui.components.c.NewPaymentMethodForm;
+import com.propertyvista.common.client.ui.components.c.PaymentMethodForm;
 import com.propertyvista.common.client.ui.components.folders.ChargeLineFolder;
 import com.propertyvista.common.client.ui.decorations.DecorationUtils;
 import com.propertyvista.domain.contact.AddressStructured;
@@ -104,7 +104,7 @@ public class PaymentViewForm extends CEntityDecoratableForm<PaymentInformationDT
 
         main.setWidget(++row, 0, info);
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().depositAgree()), 5).build());
-        main.setWidget(++row, 0, inject(proto().paymentMethod(), new NewPaymentMethodForm(true) {
+        main.setWidget(++row, 0, inject(proto().paymentMethod(), new PaymentMethodForm(true) {
             @Override
             public void onBillingAddressSameAsCurrentOne(boolean set, final CComponent<AddressStructured, ?> comp) {
                 if (set) {

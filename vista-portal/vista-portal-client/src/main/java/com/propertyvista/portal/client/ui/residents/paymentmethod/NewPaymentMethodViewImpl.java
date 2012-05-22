@@ -31,7 +31,7 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.common.client.events.UserMessageEvent;
-import com.propertyvista.common.client.ui.components.c.NewPaymentMethodForm;
+import com.propertyvista.common.client.ui.components.c.PaymentMethodForm;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
@@ -41,14 +41,14 @@ public class NewPaymentMethodViewImpl extends FlowPanel implements NewPaymentMet
 
     private static final I18n i18n = I18n.get(NewPaymentMethodViewImpl.class);
 
-    private final NewPaymentMethodForm form;
+    private final PaymentMethodForm form;
 
     private Presenter presenter;
 
     public NewPaymentMethodViewImpl() {
         add(new UserMessagePanel());
 
-        form = new NewPaymentMethodForm() {
+        form = new PaymentMethodForm() {
             @Override
             public Collection<PaymentType> getPaymentOptions() {
                 return PaymentType.avalableInProfile();
