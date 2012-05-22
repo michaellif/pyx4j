@@ -109,9 +109,10 @@ public class ThumbnailService {
             blob.medium().setValue(resample(fileName, inputImage, params, medum));
             blob.large().setValue(resample(fileName, inputImage, params, large));
         } catch (IOException e) {
-            IOUtils.closeQuietly(stream);
             log.error("Error", e);
             throw new UserRuntimeException(i18n.tr("Unable To Resample The Image ''{0}''", fileName));
+        } finally {
+            IOUtils.closeQuietly(stream);
         }
         return blob;
     }
