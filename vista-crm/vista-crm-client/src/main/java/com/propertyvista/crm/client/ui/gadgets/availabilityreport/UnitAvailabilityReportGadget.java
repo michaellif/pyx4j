@@ -313,8 +313,7 @@ public class UnitAvailabilityReportGadget extends AbstractGadget<UnitAvailabilit
                 Scheduler.get().scheduleDeferred(new ScheduledCommand() {
                     @Override
                     public void execute() {
-                        getMetadata().pageNumber().setValue(0);
-                        populate(false);
+                        populatePage(0);
                     }
                 });
             }

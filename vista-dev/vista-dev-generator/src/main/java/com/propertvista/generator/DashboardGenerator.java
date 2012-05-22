@@ -48,7 +48,6 @@ public class DashboardGenerator extends Dashboards {
         BuildingLister buildingLister = EntityFactory.create(BuildingLister.class);
         buildingLister.user().id().setValue(ISharedUserEntity.DORMANT_KEY); // shared for everyone usage
         buildingLister.pageSize().setValue(10);
-        buildingLister.pageNumber().setValue(0);
         buildingLister.refreshInterval().setValue(RefreshInterval.Never);
         buildingLister.docking().column().setValue(0);
 
@@ -71,7 +70,6 @@ public class DashboardGenerator extends Dashboards {
         unitAvailabilityReport.user().id().setValue(ISharedUserEntity.DORMANT_KEY); // shared for everyone usage
         unitAvailabilityReport.refreshInterval().setValue(RefreshInterval.Never);
         unitAvailabilityReport.pageSize().setValue(10);
-        unitAvailabilityReport.pageNumber().setValue(0);
         unitAvailabilityReport.defaultFilteringPreset().setValue(UnitAvailability.FilterPreset.VacantAndNotice);
         unitAvailabilityReport.docking().column().setValue(0);
         dmd.gadgets().add(unitAvailabilityReport);

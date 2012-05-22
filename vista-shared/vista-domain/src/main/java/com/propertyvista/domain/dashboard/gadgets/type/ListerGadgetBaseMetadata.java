@@ -28,8 +28,6 @@ public interface ListerGadgetBaseMetadata extends GadgetMetadata {
 
     IPrimitive<Integer> pageSize();
 
-    IPrimitive<Integer> pageNumber();
-
     @Owned
     IList<ColumnDescriptorEntity> columnDescriptors();
 

@@ -123,8 +123,8 @@ public class ARArrearsManager {
     static LeaseArrearsSnapshot getArrearsSnapshot(BillingAccount billingAccount, LogicalDate date) {
         EntityQueryCriteria<LeaseArrearsSnapshot> criteria = EntityQueryCriteria.create(LeaseArrearsSnapshot.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().billingAccount(), billingAccount));
+        criteria.add(PropertyCriterion.ge(criteria.proto().toDate(), date));
         criteria.add(PropertyCriterion.le(criteria.proto().fromDate(), date));
-        criteria.desc(criteria.proto().fromDate());
 
         LeaseArrearsSnapshot snapshot = Persistence.service().retrieve(criteria);
         return snapshot;
@@ -133,8 +133,8 @@ public class ARArrearsManager {
     static BuildingArrearsSnapshot getArrearsSnapshot(Building building, LogicalDate date) {
         EntityQueryCriteria<BuildingArrearsSnapshot> criteria = EntityQueryCriteria.create(BuildingArrearsSnapshot.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().building(), building));
+        criteria.add(PropertyCriterion.ge(criteria.proto().toDate(), date));
         criteria.add(PropertyCriterion.le(criteria.proto().fromDate(), date));
-        criteria.desc(criteria.proto().fromDate());
 
         return Persistence.service().retrieve(criteria);
     }
@@ -148,23 +148,6 @@ public class ARArrearsManager {
             Vector<Sort> sortCriteria, int pageNumber, int pageSize) {
 
         Vector<LeaseArrearsSnapshot> arrearsRoster = new Vector<LeaseArrearsSnapshot>();
-        if (false) {
-            EntityListCriteria<BillingAccount> billingAccountsCriteria = EntityListCriteria.create(BillingAccount.class);
-            if (!buildings.isEmpty()) {
-                billingAccountsCriteria.add(PropertyCriterion.in(billingAccountsCriteria.proto().lease().unit().belongsTo(), new Vector<Building>(buildings)));
-                billingAccountsCriteria.addAll(searchCriteria);
-                billingAccountsCriteria.setSorts(sortCriteria);
-            }
-
-            Iterator<BillingAccount> billingAccountsIter = Persistence.service().query(null, billingAccountsCriteria, AttachLevel.IdOnly);
-
-            while (billingAccountsIter.hasNext()) {
-                LeaseArrearsSnapshot snapshot = getArrearsSnapshot(billingAccountsIter.next(), asOf);
-                if (snapshot != null) {
-                    arrearsRoster.add(snapshot);
-                }
-            }
-        }
 
         EntityListCriteria<LeaseArrearsSnapshot> criteria = new EntityListCriteria<LeaseArrearsSnapshot>(LeaseArrearsSnapshot.class);
         if (!buildings.isEmpty()) {
@@ -174,14 +157,18 @@ public class ARArrearsManager {
         criteria.setPageNumber(pageNumber);
         criteria.setPageSize(pageSize);
 
+        criteria.add(PropertyCriterion.ge(criteria.proto().toDate(), asOf));
         criteria.add(PropertyCriterion.le(criteria.proto().fromDate(), asOf));
+
         criteria.addAll(searchCriteria);
 
-        Vector<Sort> adjustedSortCriteria = new Vector<EntityQueryCriteria.Sort>();
-        adjustedSortCriteria.add(new Sort(criteria.proto().fromDate().getPath().toString(), true));
-        adjustedSortCriteria.addAll(sortCriteria);
+//        // add sorting criteria to fetch the most recent arrears snapshots
+//        Vector<Sort> adjustedSortCriteria = new Vector<EntityQueryCriteria.Sort>();
+//        adjustedSortCriteria.add(new Sort(criteria.proto().fromDate().getPath().toString(), true));
+//        adjustedSortCriteria.addAll(sortCriteria);
 
-        criteria.setSorts(adjustedSortCriteria);
+//        criteria.setSorts(adjustedSortCriteria);
+        criteria.setSorts(sortCriteria);
 
         arrearsRoster = new Vector<LeaseArrearsSnapshot>(Persistence.service().query(criteria));
 

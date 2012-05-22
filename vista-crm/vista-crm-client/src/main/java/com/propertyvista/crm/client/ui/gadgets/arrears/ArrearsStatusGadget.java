@@ -18,20 +18,22 @@ import java.util.List;
 import java.util.Vector;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.entity.rpc.EntitySearchResult;
-import com.pyx4j.entity.shared.criterion.Criterion;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.CDatePicker;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 
+import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.crm.client.ui.board.BoardView;
 import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEvent;
 import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEventHandler;
@@ -44,7 +46,6 @@ import com.propertyvista.domain.dashboard.gadgets.arrears.LeaseArrearsSnapshotDT
 import com.propertyvista.domain.dashboard.gadgets.type.ArrearsGadgetMeta;
 import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
 import com.propertyvista.domain.financial.billing.InvoiceDebit.DebitType;
-import com.propertyvista.domain.property.asset.building.Building;
 
 public class ArrearsStatusGadget extends AbstractGadget<ArrearsGadgetMeta> {
 
@@ -70,7 +71,42 @@ public class ArrearsStatusGadget extends AbstractGadget<ArrearsGadgetMeta> {
 
         @Override
         protected ArrearsGadgetMeta createDefaultSettings(Class<ArrearsGadgetMeta> metadataClass) {
-            return super.createDefaultSettings(metadataClass);
+            ArrearsGadgetMeta settings = super.createDefaultSettings(metadataClass);
+            settings.category().setValue(DebitType.total);
+            return settings;
+        }
+
+        @Override
+        public ISetup getSetup() {
+            return new SetupForm(new CEntityDecoratableForm<ArrearsGadgetMeta>(ArrearsGadgetMeta.class) {
+                @Override
+                public IsWidget createContent() {
+                    FormFlexPanel p = new FormFlexPanel();
+                    int row = -1;
+                    p.setWidget(++row, 0, new DecoratorBuilder(inject(proto().refreshInterval())).build());
+                    p.setWidget(++row, 0, new DecoratorBuilder(inject(proto().pageSize())).build());
+                    p.setWidget(++row, 0, new DecoratorBuilder(inject(proto().category())).build());
+                    p.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customizeDate())).build());
+                    get(proto().customizeDate()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+                        @Override
+                        public void onValueChange(ValueChangeEvent<Boolean> event) {
+                            if (event.getValue() != null) {
+                                get(proto().asOf()).setVisible(event.getValue());
+                            }
+                        }
+                    });
+                    p.setWidget(++row, 0, new DecoratorBuilder(inject(proto().asOf())).build());
+                    get(proto().asOf()).setVisible(false);
+                    return p;
+                }
+
+                @Override
+                protected void onPopulate() {
+                    super.onPopulate();
+                    get(proto().asOf()).setVisible(getValue().customizeDate().isBooleanTrue());
+                }
+            });
+
         }
 
         @Override
@@ -122,13 +158,11 @@ public class ArrearsStatusGadget extends AbstractGadget<ArrearsGadgetMeta> {
                 populateSucceded();
                 return;
             } else {
-                final int page = pageNumber;
-
                 service.arrearsList(new DefaultAsyncCallback<EntitySearchResult<LeaseArrearsSnapshotDTO>>() {
 
                     @Override
                     public void onSuccess(EntitySearchResult<LeaseArrearsSnapshotDTO> result) {
-                        setPageData(result.getData(), page, result.getTotalRows(), result.hasMoreData());
+                        setPageData(result.getData(), pageNumber, result.getTotalRows(), result.hasMoreData());
                         populateSucceded();
                     }
 
@@ -137,8 +171,7 @@ public class ArrearsStatusGadget extends AbstractGadget<ArrearsGadgetMeta> {
                         populateFailed(caught);
                     }
 
-                }, new Vector<Criterion>(), new Vector<Building>(containerBoard.getSelectedBuildings()), getStatusDate(), new Vector<Sort>(getSorting()),
-                        pageNumber, getMetadata().pageSize().getValue());
+                }, getMetadata().<ArrearsGadgetMeta> createIdentityStub(), pageNumber);
             }
 
         }

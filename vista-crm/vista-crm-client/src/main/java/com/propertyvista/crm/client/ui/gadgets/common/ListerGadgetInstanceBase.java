@@ -50,6 +50,8 @@ public abstract class ListerGadgetInstanceBase<E extends IEntity, GADGET_TYPE ex
 
     private boolean needToSaveColumns = false;
 
+    private int pageNumber = 0;
+
     public ListerGadgetInstanceBase(GadgetMetadata gmd, Class<E> entityClass, Class<GADGET_TYPE> gadgetTypeClass) {
         super(gmd, gadgetTypeClass);
 
@@ -196,7 +198,6 @@ public abstract class ListerGadgetInstanceBase<E extends IEntity, GADGET_TYPE ex
     protected GADGET_TYPE createDefaultSettings(Class<GADGET_TYPE> metadataClass) {
         GADGET_TYPE settings = super.createDefaultSettings(metadataClass);
         settings.pageSize().setValue(DEFAULT_PAGE_SIZE);
-        settings.pageNumber().setValue(0);
         return settings;
     }
 
@@ -210,7 +211,7 @@ public abstract class ListerGadgetInstanceBase<E extends IEntity, GADGET_TYPE ex
 
     @Override
     public void start() {
-        getMetadata().pageNumber().setValue(0);
+        setPageNumber(0);
         dataTablePanel.getDataTableModel().setSortColumn(ColumnDescriptorConverter.columnDescriptorFromEntity(entityClass, getMetadata().primarySortColumn()));
         dataTablePanel.getDataTableModel().setSortAscending(getMetadata().sortAscending().isBooleanTrue());
         dataTablePanel.getDataTable().renderTable();
@@ -245,7 +246,14 @@ public abstract class ListerGadgetInstanceBase<E extends IEntity, GADGET_TYPE ex
     }
 
     public int getPageNumber() {
-        return getMetadata().pageNumber().getValue();
+        return pageNumber;
+    }
+
+    /**
+     * This is <b>NOT</b> for changing the current page!!!
+     */
+    private void setPageNumber(int pageNumber) {
+        this.pageNumber = pageNumber;
     }
 
     public List<Sort> getSorting() {
@@ -261,7 +269,7 @@ public abstract class ListerGadgetInstanceBase<E extends IEntity, GADGET_TYPE ex
      * @param hasMoreData
      */
     public final void setPageData(List<E> data, int pageNumber, int totalRows, boolean hasMoreData) {
-        getMetadata().pageNumber().setValue(pageNumber);
+        setPageNumber(pageNumber);
         if (data.size() == 0 & pageNumber > 0) {
             prevListPage();
         } else {
@@ -271,24 +279,24 @@ public abstract class ListerGadgetInstanceBase<E extends IEntity, GADGET_TYPE ex
     }
 
     private void firstListPage() {
-        getMetadata().pageNumber().setValue(0);
+        setPageNumber(0);
         populate(false);
     }
 
     private void nextListPage() {
-        getMetadata().pageNumber().setValue(getPageNumber() + 1);
+        setPageNumber(getPageNumber() + 1);
         populate(false);
     }
 
     private void prevListPage() {
         if (getPageNumber() != 0) {
-            getMetadata().pageNumber().setValue(getPageNumber() - 1);
+            setPageNumber(getPageNumber() - 1);
             populate(false);
         }
     }
 
     private void lastListPage() {
-        getMetadata().pageNumber().setValue(dataTablePanel.getDataTableModel().getTotalRows() / dataTablePanel.getDataTableModel().getPageSize());
+        setPageNumber(dataTablePanel.getDataTableModel().getTotalRows() / dataTablePanel.getDataTableModel().getPageSize());
         populate(false);
     }
 

@@ -20,13 +20,12 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.rpc.EntitySearchResult;
-import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.rpc.shared.IService;
 
 import com.propertyvista.domain.dashboard.gadgets.arrears.LeaseArrearsSnapshotDTO;
 import com.propertyvista.domain.dashboard.gadgets.arrears.MockupArrearsSummary;
-import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.dashboard.gadgets.type.ArrearsGadgetMeta;
 
 public interface ArrearsReportService extends IService {
 
@@ -39,8 +38,7 @@ public interface ArrearsReportService extends IService {
      * @param when
      *            calculate arrears as on this date.
      */
-    void arrearsList(AsyncCallback<EntitySearchResult<LeaseArrearsSnapshotDTO>> callback, Vector<Criterion> customCriteria, Vector<Building> buildingStubs,
-            LogicalDate when, Vector<Sort> sortingCriteria, int pageNumber, int pageSize);
+    void arrearsList(AsyncCallback<EntitySearchResult<LeaseArrearsSnapshotDTO>> callback, ArrearsGadgetMeta gadgetMetaStub, int pageNumber);
 
     @Deprecated
     void summary(AsyncCallback<EntitySearchResult<MockupArrearsSummary>> callback, Vector<Key> buildingPKs, LogicalDate when, Vector<Sort> sortingCriteria,
