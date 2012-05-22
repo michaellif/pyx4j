@@ -103,17 +103,19 @@ public class BillingLatePaymentScenarioTest extends FinancialTestBase {
         receiveAndPostPayment("30-Apr-2011", "1041.94");
         // add some immediate charges - should see late payment fee
         addBooking("28-Apr-2011");
-        addGoodWillAdjustment("-100.00", "28-Apr-2011", true);
+        addAccountCharge("100.00", "28-Apr-2011", true);
 
-        SysDateManager.setSysDate("01-May-2011");
-        addGoodWillAdjustment("300.00", "28-Apr-2011", true);
+        SysDateManager.setSysDate("02-May-2011");
+        addGoodWillCredit("300.00", "28-Apr-2011", true);
 
         SysDateManager.setSysDate("17-May-2011");
 
         bill = runBilling(true, true);
 
+        printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
+
         // @formatter:off
-        new BillTester(bill, true).
+        new BillTester(bill).
         billingPeriodStartDate("1-Jun-2011").
         billingPeriodEndDate("30-Jun-2011").
         paymentReceivedAmount("-1041.94").
@@ -131,7 +133,7 @@ public class BillingLatePaymentScenarioTest extends FinancialTestBase {
         receiveAndPostPayment("30-May-2011", "1000.00");
 
         // Add Payment for May (final) - should see late fee
-        SysDateManager.setSysDate("01-Jun-2011");
+        SysDateManager.setSysDate("02-Jun-2011");
         receiveAndPostPayment("30-May-2011", "3.94");
 
         SysDateManager.setSysDate("17-Jun-2011");
@@ -139,7 +141,7 @@ public class BillingLatePaymentScenarioTest extends FinancialTestBase {
         bill = runBilling(true, true);
 
         // @formatter:off
-        new BillTester(bill, true).
+        new BillTester(bill).
         billingPeriodStartDate("1-Jul-2011").
         billingPeriodEndDate("31-Jul-2011").
         paymentReceivedAmount("-1003.94").

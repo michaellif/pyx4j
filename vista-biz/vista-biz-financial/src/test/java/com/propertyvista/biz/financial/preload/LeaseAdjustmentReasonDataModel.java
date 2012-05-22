@@ -23,7 +23,7 @@ import com.propertyvista.domain.tenant.lease.LeaseAdjustmentReason;
 public class LeaseAdjustmentReasonDataModel {
 
     public enum Reason {
-        goodWill("Good Will", LeaseAdjustmentReason.ActionType.credit), maintenance("Maintenance Fees", LeaseAdjustmentReason.ActionType.charge);
+        goodWill("Good Will Credit", LeaseAdjustmentReason.ActionType.credit), accountCharge("Account Charge", LeaseAdjustmentReason.ActionType.charge);
 
         private String description;
 

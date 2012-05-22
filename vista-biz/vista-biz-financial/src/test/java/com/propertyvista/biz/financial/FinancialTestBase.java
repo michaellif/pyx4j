@@ -318,8 +318,13 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         return adjustment;
     }
 
-    protected LeaseAdjustment addGoodWillAdjustment(String amount, String effectiveDate, boolean immediate) {
+    protected LeaseAdjustment addGoodWillCredit(String amount, String effectiveDate, boolean immediate) {
         return addLeaseAdjustment(amount, leaseAdjustmentReasonDataModel.getReason(LeaseAdjustmentReasonDataModel.Reason.goodWill),
+                FinancialTestsUtils.getDate(effectiveDate), immediate);
+    }
+
+    protected LeaseAdjustment addAccountCharge(String amount, String effectiveDate, boolean immediate) {
+        return addLeaseAdjustment(amount, leaseAdjustmentReasonDataModel.getReason(LeaseAdjustmentReasonDataModel.Reason.accountCharge),
                 FinancialTestsUtils.getDate(effectiveDate), immediate);
     }
 

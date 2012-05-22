@@ -110,8 +110,8 @@ public class ARSunnyDayScenarioTest extends FinancialTestBase {
 
         SysDateManager.setSysDate("18-May-2011");
 
-        addGoodWillAdjustment("120.00", "18-May-2011", false);
-        addGoodWillAdjustment("130.00", "18-May-2011", true);
+        addGoodWillCredit("120.00", "18-May-2011", false);
+        addGoodWillCredit("130.00", "18-May-2011", true);
 
         runBilling(true, false);
 
@@ -121,8 +121,8 @@ public class ARSunnyDayScenarioTest extends FinancialTestBase {
 
         SysDateManager.setSysDate("18-Jun-2011");
 
-        addGoodWillAdjustment("30.00", "1-Jul-2011", false);
-        addGoodWillAdjustment("40.00", "1-Jul-2011", true);
+        addGoodWillCredit("30.00", "1-Jul-2011", false);
+        addGoodWillCredit("40.00", "1-Jul-2011", true);
 
         runBilling(true, false);
 
