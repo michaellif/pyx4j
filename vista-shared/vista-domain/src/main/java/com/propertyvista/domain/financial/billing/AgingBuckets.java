@@ -16,6 +16,7 @@ package com.propertyvista.domain.financial.billing;
 import java.math.BigDecimal;
 
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
@@ -39,5 +40,19 @@ public interface AgingBuckets extends IEntity {
 
     @Caption(name = "91 and more")
     IPrimitive<BigDecimal> bucketOver90();
+
+    /**
+     * the cumulative amount of all arrears (sum of all arrears (not current) buckets of totalAgingBuckets)
+     */
+    @Format("#0.00")
+    @Caption(name = "AR Balance")
+    IPrimitive<BigDecimal> arrearsAmount();
+
+    @Format("#0.00")
+    @Caption(name = "Prepayments")
+    IPrimitive<BigDecimal> creditAmount();
+
+    @Format("#0.00")
+    IPrimitive<BigDecimal> totalBalance();
 
 }

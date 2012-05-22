@@ -52,9 +52,6 @@ public class ArrearsReportServiceImpl implements ArrearsReportService {
         @Override
         protected void bind() {
             bind(dtoProto.fromDate(), dboProto.fromDate());
-            bind(dtoProto.arrearsAmount(), dboProto.arrearsAmount());
-            bind(dtoProto.creditAmount(), dboProto.creditAmount());
-            bind(dtoProto.totalBalance(), dboProto.totalBalance());
             bind(dtoProto.lmrToUnitRentDifference(), dboProto.lmrToUnitRentDifference());
 
             // references

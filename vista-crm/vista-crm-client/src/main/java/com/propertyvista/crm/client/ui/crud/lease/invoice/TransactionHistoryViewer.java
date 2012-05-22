@@ -175,15 +175,12 @@ public class TransactionHistoryViewer extends CEntityViewer<TransactionHistoryDT
         arrearsView.setHTML(row, 3, toSafeHtml(proto.bucket60().getMeta().getCaption()));
         arrearsView.setHTML(row, 4, toSafeHtml(proto.bucket90().getMeta().getCaption()));
         arrearsView.setHTML(row, 5, toSafeHtml(proto.bucketOver90().getMeta().getCaption()));
-        arrearsView.setHTML(row, 6, toSafeHtml(i18n.tr("AR Balance")));
+        arrearsView.setHTML(row, 6, toSafeHtml(proto.arrearsAmount().getMeta().getCaption()));
         arrearsView.getRowFormatter().setStyleName(row, CrmTheme.ArrearsStyleName.ArrearsTitle.name());
 
     }
 
     private void drawArrears(AgingBuckets bucket, FormFlexPanel panel, int row) {
-
-        BigDecimal arBalance = bucket.bucket30().getValue().add(bucket.bucket60().getValue()).add(bucket.bucket90().getValue())
-                .add(bucket.bucketOver90().getValue());
 
         panel.setHTML(row, 0, toSafeHtml(bucket.debitType().getStringView()));
         panel.setHTML(row, 1, toSafeHtml(NUMBER_FORMAT.format(bucket.bucketCurrent().getValue())));
@@ -191,7 +188,7 @@ public class TransactionHistoryViewer extends CEntityViewer<TransactionHistoryDT
         panel.setHTML(row, 3, toSafeHtml(NUMBER_FORMAT.format(bucket.bucket60().getValue())));
         panel.setHTML(row, 4, toSafeHtml(NUMBER_FORMAT.format(bucket.bucket90().getValue())));
         panel.setHTML(row, 5, toSafeHtml(NUMBER_FORMAT.format(bucket.bucketOver90().getValue())));
-        panel.setHTML(row, 6, toSafeHtml(NUMBER_FORMAT.format(arBalance)));
+        panel.setHTML(row, 6, toSafeHtml(NUMBER_FORMAT.format(bucket.arrearsAmount().getValue())));
 
         if (bucket.debitType().getValue() != DebitType.total) {
             panel.getRowFormatter().setStyleName(row,

@@ -131,10 +131,12 @@ public class ArrearsStatusGadget extends AbstractGadget<ArrearsGadgetMeta> {
                     new MemberColumnDescriptor.Builder(proto().selectedBuckets().bucket90()).build(),
                     new MemberColumnDescriptor.Builder(proto().selectedBuckets().bucketOver90()).build(),
                     
-                    new MemberColumnDescriptor.Builder(proto().arrearsAmount()).build(),
-                    new MemberColumnDescriptor.Builder(proto().creditAmount()).build(),                    
-                    new MemberColumnDescriptor.Builder(proto().totalBalance()).build(),
-                    new MemberColumnDescriptor.Builder(proto().lmrToUnitRentDifference()).build()
+                    new MemberColumnDescriptor.Builder(proto().selectedBuckets().arrearsAmount()).build()
+// TODO calculate CREDIT AMOUNT                    
+//                    new MemberColumnDescriptor.Builder(proto().selectedBuckets().creditAmount()).build(),                    
+//                    new MemberColumnDescriptor.Builder(proto().selectedBuckets().totalBalance()).build(),
+// TODO calculate LMR                    
+//                    new MemberColumnDescriptor.Builder(proto().lmrToUnitRentDifference()).build()
                     
             );//@formatter:on
         }

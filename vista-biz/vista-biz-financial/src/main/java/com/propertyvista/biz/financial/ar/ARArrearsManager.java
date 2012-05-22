@@ -24,7 +24,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
-import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.Persistence;
@@ -54,15 +53,20 @@ public class ARArrearsManager {
         LeaseArrearsSnapshot arrearsSnapshot = createZeroArrearsSnapshot(LeaseArrearsSnapshot.class);
         arrearsSnapshot.agingBuckets().addAll(getAgingBuckets(billingAccount));
         arrearsSnapshot.totalAgingBuckets().set(calculateTotalAgingBuckets(arrearsSnapshot.agingBuckets()));
-        BigDecimal arrearsAmount = arrearsSnapshot.totalAgingBuckets().bucket30().getValue();
-        arrearsAmount = arrearsAmount.add(arrearsSnapshot.totalAgingBuckets().bucket60().getValue());
-        arrearsAmount = arrearsAmount.add(arrearsSnapshot.totalAgingBuckets().bucket90().getValue());
-        arrearsAmount = arrearsAmount.add(arrearsSnapshot.totalAgingBuckets().bucketOver90().getValue());
 
-        arrearsSnapshot.arrearsAmount().setValue(arrearsAmount);
         arrearsSnapshot.fromDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
         arrearsSnapshot.fromDate().setValue(arrearsSnapshot.toDate().getValue());
+
+        arrearsSnapshot.lmrToUnitRentDifference().setValue(lastMonthRentDeposit(billingAccount).subtract(unitRent(billingAccount)));
         return arrearsSnapshot;
+    }
+
+    private static BigDecimal unitRent(BillingAccount billingAccount) {
+        return new BigDecimal("0.00"); // TODO how to fetch unit rent + taxes;
+    }
+
+    private static BigDecimal lastMonthRentDeposit(BillingAccount billingAccount) {
+        return new BigDecimal("0.00");// TODO how to get last month rent deposit and taxes
     }
 
     private static BuildingArrearsSnapshot createArrearsSnapshot(Building building) {
@@ -84,8 +88,6 @@ public class ARArrearsManager {
                 addInPlace(agingBucketsAcc.get(agingBuckets.debitType().getValue()), agingBuckets);
             }
             addInPlace(arrearsSnapshotAcc.totalAgingBuckets(), arrearsSnapshot.totalAgingBuckets());
-            arrearsSnapshotAcc.arrearsAmount().setValue(arrearsSnapshotAcc.arrearsAmount().getValue().add(arrearsSnapshot.arrearsAmount().getValue()));
-            arrearsSnapshotAcc.creditAmount().setValue(arrearsSnapshotAcc.creditAmount().getValue().add(arrearsSnapshot.creditAmount().getValue()));
         }
 
         // put accumulated agingBuckets by category back to the general snapshot acccumulator
@@ -215,6 +217,19 @@ public class ARArrearsManager {
             } else {
                 agingBuckets.bucketOver90().setValue(agingBuckets.bucketOver90().getValue().add(debit.outstandingDebit().getValue()));
             }
+
+        }
+
+        // TODO calculate prepayments
+
+        for (AgingBuckets agingBuckets : agingBucketsMap.values()) {
+            BigDecimal arrearsAmount = agingBuckets.bucket30().getValue();
+            arrearsAmount = arrearsAmount.add(agingBuckets.bucket60().getValue());
+            arrearsAmount = arrearsAmount.add(agingBuckets.bucket90().getValue());
+            arrearsAmount = arrearsAmount.add(agingBuckets.bucketOver90().getValue());
+
+            agingBuckets.arrearsAmount().setValue(arrearsAmount);
+            agingBuckets.totalBalance().setValue(arrearsAmount.subtract(agingBuckets.creditAmount().getValue()));
         }
 
         return agingBucketsMap.values();
@@ -228,6 +243,9 @@ public class ARArrearsManager {
             agingBuckets.bucket60().setValue(agingBuckets.bucket60().getValue().add(typedBuckets.bucket60().getValue()));
             agingBuckets.bucket90().setValue(agingBuckets.bucket90().getValue().add(typedBuckets.bucket90().getValue()));
             agingBuckets.bucketOver90().setValue(agingBuckets.bucketOver90().getValue().add(typedBuckets.bucketOver90().getValue()));
+            agingBuckets.arrearsAmount().setValue(agingBuckets.arrearsAmount().getValue().add(typedBuckets.arrearsAmount().getValue()));
+            agingBuckets.creditAmount().setValue(agingBuckets.creditAmount().getValue().add(typedBuckets.creditAmount().getValue()));
+            agingBuckets.totalBalance().setValue(agingBuckets.totalBalance().getValue().add(typedBuckets.totalBalance().getValue()));
         }
         return agingBuckets;
     }
@@ -239,14 +257,15 @@ public class ARArrearsManager {
         agingBuckets.bucket60().setValue(new BigDecimal("0.00"));
         agingBuckets.bucket90().setValue(new BigDecimal("0.00"));
         agingBuckets.bucketOver90().setValue(new BigDecimal("0.00"));
+        agingBuckets.arrearsAmount().setValue(new BigDecimal("0.00"));
+        agingBuckets.creditAmount().setValue(new BigDecimal("0.00"));
+        agingBuckets.totalBalance().setValue(new BigDecimal("0.00"));
         agingBuckets.debitType().setValue(debitType);
         return agingBuckets;
     }
 
     private static <ARREARS_SNAPSHOT extends ArrearsSnapshot> ARREARS_SNAPSHOT createZeroArrearsSnapshot(Class<ARREARS_SNAPSHOT> arrearsSnapshotClass) {
         ARREARS_SNAPSHOT snapshot = EntityFactory.create(arrearsSnapshotClass);
-        snapshot.arrearsAmount().setValue(BigDecimal.ZERO);
-        snapshot.creditAmount().setValue(BigDecimal.ZERO);
         snapshot.totalAgingBuckets().set(createAgingBuckets(DebitType.total));
         return snapshot;
     }
@@ -257,6 +276,10 @@ public class ARArrearsManager {
         buckets1.bucket60().setValue(buckets1.bucket60().getValue().add(buckets2.bucket60().getValue()));
         buckets1.bucket90().setValue(buckets1.bucket90().getValue().add(buckets2.bucket90().getValue()));
         buckets1.bucketOver90().setValue(buckets1.bucketOver90().getValue().add(buckets2.bucketOver90().getValue()));
+
+        buckets1.arrearsAmount().setValue(buckets1.arrearsAmount().getValue().add(buckets2.arrearsAmount().getValue()));
+        buckets1.creditAmount().setValue(buckets1.creditAmount().getValue().add(buckets2.creditAmount().getValue()));
+        buckets1.totalBalance().setValue(buckets1.totalBalance().getValue().add(buckets2.totalBalance().getValue()));
     }
 
     private static boolean areDifferent(ArrearsSnapshot currentSnapshot, ArrearsSnapshot previousSnapshot) {
@@ -278,8 +301,7 @@ public class ARArrearsManager {
             }
         }
 
-        return EqualsHelper.equals(currentSnapshot.arrearsAmount().getValue(), previousSnapshot.arrearsAmount().getValue())
-                & EqualsHelper.equals(currentSnapshot.creditAmount().getValue(), previousSnapshot.creditAmount().getValue());
+        return false;
     }
 
     private static void saveIfChanged(ArrearsSnapshot currentSnapshot, ArrearsSnapshot previousSnapshot) {

@@ -270,7 +270,8 @@ public class LeaseLifecycleSim {
             Bill bill = ServerSideFactory.create(BillingFacade.class).getLatestBill(lease);
 
             if (bill != null && !bill.totalDueAmount().getValue().equals(BigDecimal.ZERO)) {
-                PaymentRecord payment = receivePayment(tenantAgent.pay(bill));
+                BigDecimal amount = tenantAgent.pay(bill);
+                PaymentRecord payment = receivePayment(amount);
                 if (payment != null) {
                     ServerSideFactory.create(ARFacade.class).postPayment(payment);
                 }
@@ -508,6 +509,9 @@ public class LeaseLifecycleSim {
 
         @Override
         public BigDecimal pay(Bill bill) {
+            if (bill.totalDueAmount().getValue().compareTo(BigDecimal.ZERO) < 0) {
+                return null;
+            }
             if (RND.nextDouble() < 0.66) {
                 if (RND.nextDouble() < 0.5) {
                     // pay just a part of the bill                    
