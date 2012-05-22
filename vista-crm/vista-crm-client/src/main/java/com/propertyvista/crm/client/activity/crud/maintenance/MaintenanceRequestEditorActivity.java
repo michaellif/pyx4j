@@ -16,7 +16,6 @@ package com.propertyvista.crm.client.activity.crud.maintenance;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.site.client.activity.crud.EditorActivityBase;
@@ -39,7 +38,6 @@ public class MaintenanceRequestEditorActivity extends EditorActivityBase<Mainten
     @Override
     protected void createNewEntity(AsyncCallback<MaintenanceRequestDTO> callback) {
         MaintenanceRequestDTO entity = EntityFactory.create(getEntityClass());
-        entity.submitted().setValue(new LogicalDate());
         entity.status().setValue(MaintenanceRequestStatus.Submitted);
         callback.onSuccess(entity);
     }

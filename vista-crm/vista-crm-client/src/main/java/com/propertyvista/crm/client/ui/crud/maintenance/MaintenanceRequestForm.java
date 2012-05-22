@@ -213,5 +213,9 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
 
         get(proto().scheduledDate()).setVisible(getValue().status().getValue() == MaintenanceRequestStatus.Scheduled);
         get(proto().scheduledTime()).setVisible(getValue().status().getValue() == MaintenanceRequestStatus.Scheduled);
+
+        get(proto().submitted()).setVisible(!getValue().submitted().isNull());
+        get(proto().updated()).setVisible(!getValue().updated().isNull());
+        get(proto().status()).setVisible(!getValue().submitted().isNull());
     }
 }

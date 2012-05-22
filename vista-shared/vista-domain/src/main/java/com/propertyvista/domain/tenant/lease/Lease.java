@@ -213,7 +213,7 @@ public interface Lease extends IVersionedEntity<LeaseV> {
     @Timestamp(Update.Created)
     IPrimitive<LogicalDate> createDate();
 
-    @Timestamp
+    @Timestamp(Update.Updated)
     IPrimitive<Date> updated();
 
     @Format("MM/dd/yyyy")

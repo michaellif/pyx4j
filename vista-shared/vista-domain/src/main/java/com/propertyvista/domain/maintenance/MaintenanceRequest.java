@@ -26,6 +26,7 @@ import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.Timestamp;
+import com.pyx4j.entity.annotations.Timestamp.Update;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -47,10 +48,11 @@ public interface MaintenanceRequest extends IEntity {
     @NotNull
     IPrimitive<MaintenanceRequestStatus> status();
 
+    @Timestamp(Update.Created)
     IPrimitive<LogicalDate> submitted();
 
     @Caption(name = "Last Updated")
-    @Timestamp(Timestamp.Update.Updated)
+    @Timestamp(Update.Updated)
     IPrimitive<LogicalDate> updated();
 
     @Format("MM/dd/yyyy")
