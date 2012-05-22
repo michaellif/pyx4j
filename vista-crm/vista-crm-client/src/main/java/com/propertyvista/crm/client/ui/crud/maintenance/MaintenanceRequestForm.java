@@ -27,6 +27,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CDateLabel;
+import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -168,12 +169,11 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
                 };
             }
         }), 25).build());
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().submitted(), new CDateLabel()), 10).build());
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().status()), 10).build());
+        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().status(), new CEnumLabel()), 10).build());
         main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().updated(), new CDateLabel()), 10).build());
-        row++;
+        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().submitted(), new CDateLabel()), 10).build());
 
-        row++;
+        row += 2;
         main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().surveyResponse().description(), new CLabel()), 10).build());
 
         main.getColumnFormatter().setWidth(0, "50%");
@@ -193,5 +193,4 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
     private void comboClear(CEntityComboBox<? extends IEntity> combo, String title) {
         comboReset(combo, PropertyCriterion.eq(combo.proto().id(), (Serializable) null), title);
     }
-
 }

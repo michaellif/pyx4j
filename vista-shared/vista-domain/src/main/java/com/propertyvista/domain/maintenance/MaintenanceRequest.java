@@ -26,7 +26,6 @@ import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.Tenant;
 
 public interface MaintenanceRequest extends IEntity {
@@ -37,17 +36,14 @@ public interface MaintenanceRequest extends IEntity {
     @JoinColumn
     Tenant tenant();
 
-    //TODO Add 
-    //Building building();
-
     @Detached
     @NotNull
     IssueClassification issueClassification();
 
-    IPrimitive<LogicalDate> submitted();
-
     @NotNull
     IPrimitive<MaintenanceRequestStatus> status();
+
+    IPrimitive<LogicalDate> submitted();
 
     @Caption(name = "Last Updated")
     @Timestamp(Timestamp.Update.Updated)
