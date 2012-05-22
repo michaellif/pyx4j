@@ -83,13 +83,12 @@ public class MaintenanceList extends VerticalPanel implements MaintenanceView {
         if (openRequests.size() > 0) {
             openRequestsPanel.getFlexCellFormatter().setColSpan(row, 0, 3);
 
-            openRequestsPanel.getColumnFormatter().setWidth(0, "250px");
+            openRequestsPanel.getColumnFormatter().setWidth(0, "240px");
             openRequestsPanel.getColumnFormatter().setWidth(1, "75px");
-            openRequestsPanel.getColumnFormatter().setWidth(2, "75px");
+            openRequestsPanel.getColumnFormatter().setWidth(2, "85px");
 
             openRequestsPanel.setHTML(++row, 0, i18n.tr("Open Tickets"));
             openRequestsPanel.getCellFormatter().getElement(row, 0).getStyle().setPaddingLeft(4, Unit.PX);
-
             openRequestsPanel.setHTML(row, 1, i18n.tr("Status"));
             openRequestsPanel.setHTML(row, 2, "");
 
@@ -99,8 +98,16 @@ public class MaintenanceList extends VerticalPanel implements MaintenanceView {
                 openRequestsPanel.setHTML(++row, 0, request.description().getStringView());
                 openRequestsPanel.getCellFormatter().getElement(row, 0).getStyle().setPaddingLeft(4, Unit.PX);
 
-                openRequestsPanel
-                        .setHTML(row, 1, request.status().getStringView() + "<p><i style='font-size:0.8em'>" + request.date().getStringView() + "</i>");
+                switch (request.status().getValue()) {
+                case Submitted:
+                    openRequestsPanel.setHTML(row, 1, request.status().getStringView() + "<p><i style='font-size:0.8em'>" + request.submitted().getStringView()
+                            + "</i>");
+                    break;
+                case Scheduled:
+                    openRequestsPanel.setHTML(row, 1, request.status().getStringView() + "<p><i style='font-size:0.8em'>"
+                            + request.scheduledTime().getStringView() + ",&nbsp" + request.scheduledDate().getStringView() + "</i>");
+                    break;
+                }
 
                 Anchor cancelTicket = new Anchor(i18n.tr("Cancel"));
                 cancelTicket.addClickHandler(new ClickHandler() {
@@ -136,13 +143,12 @@ public class MaintenanceList extends VerticalPanel implements MaintenanceView {
         if (historyRequests.size() > 0) {
             historyRequestsPanel.getFlexCellFormatter().setColSpan(row, 0, 3);
 
-            historyRequestsPanel.getColumnFormatter().setWidth(0, "250px");
+            historyRequestsPanel.getColumnFormatter().setWidth(0, "240px");
             historyRequestsPanel.getColumnFormatter().setWidth(1, "75px");
-            historyRequestsPanel.getColumnFormatter().setWidth(2, "75px");
+            historyRequestsPanel.getColumnFormatter().setWidth(2, "85px");
 
             historyRequestsPanel.setHTML(++row, 0, i18n.tr("Ticket"));
             historyRequestsPanel.getCellFormatter().getElement(row, 0).getStyle().setPaddingLeft(4, Unit.PX);
-
             historyRequestsPanel.setHTML(row, 1, i18n.tr("Status"));
             historyRequestsPanel.setHTML(row, 2, i18n.tr("Rate Service"));
             historyRequestsPanel.getRowFormatter().getElement(row).addClassName(TenantDashboardTheme.StyleName.TenantDashboardTableHeader.name());
@@ -151,7 +157,7 @@ public class MaintenanceList extends VerticalPanel implements MaintenanceView {
                 historyRequestsPanel.setHTML(++row, 0, request.description().getStringView());
                 historyRequestsPanel.getCellFormatter().getElement(row, 0).getStyle().setPaddingLeft(4, Unit.PX);
 
-                historyRequestsPanel.setHTML(row, 1, request.status().getStringView() + "<p><i style='font-size:0.8em'>" + request.date().getStringView()
+                historyRequestsPanel.setHTML(row, 1, request.status().getStringView() + "<p><i style='font-size:0.8em'>" + request.submitted().getStringView()
                         + "</i>");
 
                 RateIt rateIt = new RateIt(5);
@@ -160,7 +166,6 @@ public class MaintenanceList extends VerticalPanel implements MaintenanceView {
                     rateIt.setRating(rate);
                 }
                 rateIt.addValueChangeHandler(new ValueChangeHandler<Integer>() {
-
                     @Override
                     public void onValueChange(ValueChangeEvent<Integer> event) {
                         presenter.rateRequest(request, event.getValue());

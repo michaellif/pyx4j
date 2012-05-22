@@ -27,7 +27,6 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
-import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.portal.rpc.portal.dto.MaintananceDTO;
 import com.propertyvista.portal.rpc.portal.dto.MaintenanceRequestDTO;
 import com.propertyvista.portal.rpc.portal.services.TenantMaintenanceService;
@@ -36,18 +35,12 @@ import com.propertyvista.portal.server.ptapp.util.Converter;
 
 public class TenantMaintenanceServiceImpl implements TenantMaintenanceService {
 
-    private Customer getOwner() {
-        EntityQueryCriteria<Customer> criteria = EntityQueryCriteria.create(Customer.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().user(), TenantAppContext.getCurrentUser()));
-        return Persistence.service().retrieve(criteria);
-    }
-
     @Override
     public void listOpenIssues(AsyncCallback<Vector<MaintananceDTO>> callback) {
         Vector<MaintananceDTO> dto = new Vector<MaintananceDTO>();
         EntityQueryCriteria<MaintenanceRequest> criteria = EntityQueryCriteria.create(MaintenanceRequest.class);
         criteria.add(PropertyCriterion.in(criteria.proto().status(), MaintenanceRequestStatus.Scheduled, MaintenanceRequestStatus.Submitted));
-        criteria.add(PropertyCriterion.eq(criteria.proto().tenant(), getOwner()));
+        criteria.add(PropertyCriterion.eq(criteria.proto().tenant(), TenantAppContext.getCurrentUserTenantInLease()));
         for (MaintenanceRequest mr : Persistence.service().query(criteria.desc(criteria.proto().submitted()))) {
             dto.add(Converter.convert(mr));
         }
@@ -59,7 +52,7 @@ public class TenantMaintenanceServiceImpl implements TenantMaintenanceService {
         Vector<MaintananceDTO> dto = new Vector<MaintananceDTO>();
         EntityQueryCriteria<MaintenanceRequest> criteria = EntityQueryCriteria.create(MaintenanceRequest.class);
         criteria.add(PropertyCriterion.in(criteria.proto().status(), MaintenanceRequestStatus.Resolved));
-        criteria.add(PropertyCriterion.eq(criteria.proto().tenant(), getOwner()));
+        criteria.add(PropertyCriterion.eq(criteria.proto().tenant(), TenantAppContext.getCurrentUserTenantInLease()));
         for (MaintenanceRequest mr : Persistence.service().query(criteria.desc(criteria.proto().submitted()))) {
             dto.add(Converter.convert(mr));
         }
@@ -69,14 +62,12 @@ public class TenantMaintenanceServiceImpl implements TenantMaintenanceService {
     @Override
     public void createNewTicket(AsyncCallback<VoidSerializable> callback, MaintenanceRequestDTO dto) {
         MaintenanceRequest req = EntityFactory.create(MaintenanceRequest.class);
-        req.tenant().set(getOwner());
+        req.tenant().set(TenantAppContext.getCurrentUserTenantInLease());
         req.issueClassification().set(dto.issueClassification());
-        req.description().set(dto.description());
         req.status().setValue(MaintenanceRequestStatus.Submitted);
-        req.submitted().setValue(new LogicalDate());
+        req.description().set(dto.description());
         Persistence.service().persist(req);
         Persistence.service().commit();
-
         callback.onSuccess(null);
     }
 
@@ -95,7 +86,6 @@ public class TenantMaintenanceServiceImpl implements TenantMaintenanceService {
         } else {
             callback.onFailure(new Throwable("Ticket not found."));
         }
-
     }
 
     @Override
@@ -113,5 +103,4 @@ public class TenantMaintenanceServiceImpl implements TenantMaintenanceService {
             callback.onFailure(new Throwable("Ticket not found."));
         }
     }
-
 }

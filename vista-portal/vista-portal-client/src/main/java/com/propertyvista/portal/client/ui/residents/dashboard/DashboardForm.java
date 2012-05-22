@@ -232,11 +232,24 @@ public class DashboardForm extends CEntityDecoratableForm<TenantDashboardDTO> im
             HorizontalPanel actions = new HorizontalPanel();
             actions.getElement().getStyle().setMargin(20, Unit.PX);
 
-            Anchor viewBill = new Anchor(i18n.tr("View Bill"));
+            Anchor viewBill = new Anchor(i18n.tr("View Bill")) {
+            };
+            viewBill.addClickHandler(new ClickHandler() {
+                @Override
+                public void onClick(ClickEvent event) {
+                    presenter.viewCurrentBill();
+                }
+            });
             viewBill.getElement().getStyle().setPaddingRight(20, Unit.PX);
             actions.add(viewBill);
 
             Button payButton = new Button(i18n.tr("Pay Now"));
+            payButton.addClickHandler(new ClickHandler() {
+                @Override
+                public void onClick(ClickEvent event) {
+                    presenter.payNow();
+                }
+            });
             actions.add(payButton);
 
             content.add(actions);
@@ -273,8 +286,8 @@ public class DashboardForm extends CEntityDecoratableForm<TenantDashboardDTO> im
                         rateIt.setRating(4);
                         container.setWidget(row, 1, rateIt);
                     } else {
-                        container.setHTML(row, 1, maintanance.status().getStringView() + "<p><i style='font-size:0.8em'>" + maintanance.date().getStringView()
-                                + "</i>");
+                        container.setHTML(row, 1, maintanance.status().getStringView() + "<p><i style='font-size:0.8em'>"
+                                + maintanance.submitted().getStringView() + "</i>");
                     }
                     container.getRowFormatter().getElement(row).addClassName(TenantDashboardTheme.StyleName.TenantDashboardTableRow.name());
                 }

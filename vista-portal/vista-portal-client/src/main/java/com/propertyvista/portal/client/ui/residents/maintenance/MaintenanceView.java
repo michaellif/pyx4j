@@ -21,21 +21,20 @@ import com.propertyvista.portal.rpc.portal.dto.MaintananceDTO;
 
 public interface MaintenanceView extends IsWidget {
 
+    interface Presenter {
+
+        void createNewRequest();
+
+        void openRequest(MaintananceDTO requests);
+
+        void cancelRequest(MaintananceDTO request);
+
+        void rateRequest(MaintananceDTO request, Integer rate);
+    }
+
     void setPresenter(Presenter presenter);
 
     void populateOpenRequests(Vector<MaintananceDTO> openRequests);
 
     void populateHistoryRequests(Vector<MaintananceDTO> historyRequests);
-
-    interface Presenter {
-
-        public void openRequest(MaintananceDTO requests);
-
-        public void cancelRequest(MaintananceDTO request);
-
-        public void createNewRequest();
-
-        public void rateRequest(MaintananceDTO request, Integer rate);
-    }
-
 }

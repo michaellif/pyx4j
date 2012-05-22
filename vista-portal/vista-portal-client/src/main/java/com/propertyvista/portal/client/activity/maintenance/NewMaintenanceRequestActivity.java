@@ -11,7 +11,7 @@
  * @author Dad
  * @version $Id$
  */
-package com.propertyvista.portal.client.activity;
+package com.propertyvista.portal.client.activity.maintenance;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
@@ -23,6 +23,7 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.client.AppSite;
 
+import com.propertyvista.portal.client.activity.SecurityAwareActivity;
 import com.propertyvista.portal.client.ui.residents.maintenance.NewMaintenanceRequestView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
@@ -35,8 +36,6 @@ public class NewMaintenanceRequestActivity extends SecurityAwareActivity impleme
 
     private final TenantMaintenanceService srv;
 
-    private MaintenanceRequestDTO request;
-
     public NewMaintenanceRequestActivity(Place place) {
         this.view = PortalViewFactory.instance(NewMaintenanceRequestView.class);
         this.view.setPresenter(this);
@@ -47,13 +46,14 @@ public class NewMaintenanceRequestActivity extends SecurityAwareActivity impleme
     public void start(final AcceptsOneWidget panel, EventBus eventBus) {
         super.start(panel, eventBus);
         panel.setWidget(view);
-        request = EntityFactory.create(MaintenanceRequestDTO.class);
-        view.populate(request);
 
+        // create default empty request:
+        MaintenanceRequestDTO request = EntityFactory.create(MaintenanceRequestDTO.class);
+        view.populate(request);
     }
 
     @Override
-    public void submit() {
+    public void submit(MaintenanceRequestDTO request) {
         srv.createNewTicket(new DefaultAsyncCallback<VoidSerializable>() {
             @Override
             public void onSuccess(VoidSerializable result) {

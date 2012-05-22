@@ -13,6 +13,8 @@
  */
 package com.propertyvista.portal.rpc.portal.dto;
 
+import java.sql.Time;
+
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Format;
@@ -28,10 +30,16 @@ public interface MaintananceDTO extends IEntity {
 
     IPrimitive<String> description();
 
-    @Format("MMM dd, yyyy")
-    IPrimitive<LogicalDate> date();
-
     IPrimitive<MaintenanceRequestStatus> status();
+
+    @Format("MMM dd, yyyy")
+    IPrimitive<LogicalDate> submitted();
+
+    @Format("MMM dd, yyyy")
+    IPrimitive<LogicalDate> scheduledDate();
+
+    @Format("h:mm a")
+    IPrimitive<Time> scheduledTime();
 
     @EmbeddedEntity
     SurveyResponse satisfactionSurvey();

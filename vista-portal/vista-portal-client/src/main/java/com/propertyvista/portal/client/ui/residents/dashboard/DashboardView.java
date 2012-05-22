@@ -19,12 +19,14 @@ import com.propertyvista.portal.rpc.portal.dto.TenantDashboardDTO;
 
 public interface DashboardView extends IsWidget {
 
+    interface Presenter {
+
+        void viewCurrentBill();
+
+        void payNow();
+    }
+
     void populate(TenantDashboardDTO dashboard);
 
     void setPresenter(Presenter presenter);
-
-    interface Presenter {
-
-    }
-
 }

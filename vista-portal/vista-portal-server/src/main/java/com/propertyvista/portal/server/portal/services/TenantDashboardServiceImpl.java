@@ -31,7 +31,6 @@ import com.propertyvista.domain.communication.Message;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
-import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.portal.rpc.portal.dto.MessageDTO;
 import com.propertyvista.portal.rpc.portal.dto.ReservationDTO;
@@ -46,20 +45,13 @@ public class TenantDashboardServiceImpl implements TenantDashboardService {
     public void retrieveTenantDashboard(AsyncCallback<TenantDashboardDTO> callback) {
         TenantDashboardDTO dashboard = EntityFactory.create(TenantDashboardDTO.class);
 
-        // get tenant
-        EntityQueryCriteria<Customer> crit = EntityQueryCriteria.create(Customer.class);
-        crit.add(PropertyCriterion.eq(crit.proto().user(), TenantAppContext.getCurrentUser()));
-        Customer tenant = Persistence.service().retrieve(crit);
-
-        Persistence.service().retrieve(tenant.user());
-        dashboard.general().tenantName().set(tenant.user().name());
-
         Tenant tenantInLease = TenantAppContext.getCurrentUserTenantInLease();
         Persistence.service().retrieve(tenantInLease.leaseV());
         Persistence.service().retrieve(tenantInLease.leaseV().holder().unit());
         Persistence.service().retrieve(tenantInLease.leaseV().holder().unit().floorplan());
         Persistence.service().retrieve(tenantInLease.leaseV().holder().unit().belongsTo());
 
+        dashboard.general().tenantName().setValue(tenantInLease.customer().person().name().getStringView());
         dashboard.general().floorplanName().set(tenantInLease.leaseV().holder().unit().floorplan().marketingName());
         AddressStructured address = tenantInLease.leaseV().holder().unit().belongsTo().info().address().duplicate();
         address.suiteNumber().set(tenantInLease.leaseV().holder().unit().info().number());
@@ -121,11 +113,10 @@ public class TenantDashboardServiceImpl implements TenantDashboardService {
         // add open issues
         EntityQueryCriteria<MaintenanceRequest> criteria = EntityQueryCriteria.create(MaintenanceRequest.class);
         criteria.add(PropertyCriterion.in(criteria.proto().status(), MaintenanceRequestStatus.Scheduled, MaintenanceRequestStatus.Submitted));
-        criteria.add(PropertyCriterion.eq(criteria.proto().tenant(), tenant));
+        criteria.add(PropertyCriterion.eq(criteria.proto().tenant(), TenantAppContext.getCurrentUserTenantInLease()));
         for (MaintenanceRequest mr : Persistence.service().query(criteria.desc(criteria.proto().submitted()))) {
             dashboard.maintanances().add(Converter.convert(mr));
         }
-
         callback.onSuccess(dashboard);
     }
 

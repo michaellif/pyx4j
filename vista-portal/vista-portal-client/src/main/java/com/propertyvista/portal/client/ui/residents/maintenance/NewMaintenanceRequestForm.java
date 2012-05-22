@@ -43,12 +43,10 @@ public class NewMaintenanceRequestForm extends CEntityDecoratableForm<Maintenanc
 
     public NewMaintenanceRequestForm() {
         super(MaintenanceRequestDTO.class, new VistaEditorsComponentFactory());
-        initContent();
     }
 
     @Override
     public IsWidget createContent() {
-
         FormFlexPanel content = new FormFlexPanel();
 
         int row = -1;
@@ -121,8 +119,10 @@ public class NewMaintenanceRequestForm extends CEntityDecoratableForm<Maintenanc
         return content;
     }
 
-    public void clearInput() {
+    @Override
+    public void reset() {
         mainCombo.setValue(null);
+        super.reset();
     }
 
     private void comboReset(CEntityComboBox<? extends IEntity> combo, PropertyCriterion crit, String title) {

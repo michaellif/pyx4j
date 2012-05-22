@@ -25,7 +25,7 @@ public interface NewPaymentMethodView extends IsWidget {
 
         void getCurrentAddress(AsyncCallback<AddressStructured> callback);
 
-        void save(PaymentMethod paymentmethod);
+        void submit(PaymentMethod paymentmethod);
 
         void cancel();
     }

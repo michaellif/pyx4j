@@ -11,7 +11,7 @@
  * @author vadims
  * @version $Id$
  */
-package com.propertyvista.portal.client.activity;
+package com.propertyvista.portal.client.activity.maintenance;
 
 import java.util.Vector;
 
@@ -25,6 +25,7 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.client.AppSite;
 
+import com.propertyvista.portal.client.activity.SecurityAwareActivity;
 import com.propertyvista.portal.client.ui.residents.maintenance.MaintenanceView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
@@ -53,7 +54,6 @@ public class MaintenanceAcitvity extends SecurityAwareActivity implements Mainte
             public void onSuccess(Vector<MaintananceDTO> result) {
                 view.populateOpenRequests(result);
             }
-
         });
 
         srv.listHistoryIssues(new DefaultAsyncCallback<Vector<MaintananceDTO>>() {
@@ -61,15 +61,18 @@ public class MaintenanceAcitvity extends SecurityAwareActivity implements Mainte
             public void onSuccess(Vector<MaintananceDTO> result) {
                 view.populateHistoryRequests(result);
             }
-
         });
 
     }
 
     @Override
+    public void createNewRequest() {
+        AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.Maintenance.NewTicket());
+    }
+
+    @Override
     public void openRequest(MaintananceDTO requests) {
         // TODO Auto-generated method stub
-
     }
 
     @Override
@@ -84,11 +87,6 @@ public class MaintenanceAcitvity extends SecurityAwareActivity implements Mainte
                 view.populateOpenRequests(result);
             }
         }, request);
-    }
-
-    @Override
-    public void createNewRequest() {
-        AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.Maintenance.NewTicket());
     }
 
     @Override

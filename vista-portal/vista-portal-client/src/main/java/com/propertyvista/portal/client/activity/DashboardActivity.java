@@ -19,13 +19,15 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.portal.client.ui.residents.dashboard.DashboardView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.dto.TenantDashboardDTO;
 import com.propertyvista.portal.rpc.portal.services.TenantDashboardService;
 
-public class DashboardActivity extends SecurityAwareActivity {
+public class DashboardActivity extends SecurityAwareActivity implements DashboardView.Presenter {
 
     private final DashboardView view;
 
@@ -33,6 +35,7 @@ public class DashboardActivity extends SecurityAwareActivity {
 
     public DashboardActivity(Place place) {
         this.view = PortalViewFactory.instance(DashboardView.class);
+        this.view.setPresenter(this);
         srv = GWT.create(TenantDashboardService.class);
     }
 
@@ -46,9 +49,17 @@ public class DashboardActivity extends SecurityAwareActivity {
             public void onSuccess(TenantDashboardDTO result) {
                 view.populate(result);
             }
-
         });
-
     }
 
+    @Override
+    public void viewCurrentBill() {
+        AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.CurrentBill());
+    }
+
+    @Override
+    public void payNow() {
+        // TODO Auto-generated method stub
+
+    }
 }

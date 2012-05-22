@@ -18,16 +18,18 @@ import java.util.Vector;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FlowPanel;
 
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.AppSite;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.ListBox;
 
-import com.propertyvista.common.client.events.UserMessageEvent.UserMessageType;
+import com.propertyvista.common.client.events.UserMessageEvent;
 import com.propertyvista.portal.client.ui.decorations.UserMessagePanel;
 import com.propertyvista.portal.rpc.portal.dto.MaintenanceRequestDTO;
 
@@ -35,54 +37,46 @@ public class NewMaintenanceRequestViewImpl extends FlowPanel implements NewMaint
 
     private static final I18n i18n = I18n.get(NewMaintenanceRequestViewImpl.class);
 
-    private final UserMessagePanel errorPanel = new UserMessagePanel();
-
     private final NewMaintenanceRequestForm form;
 
     private Presenter presenter;
 
     public NewMaintenanceRequestViewImpl() {
-        // Input Error notification panel
-        add(errorPanel);
+        add(new UserMessagePanel());
 
         form = new NewMaintenanceRequestForm();
-
+        form.initContent();
         add(form);
 
-        FlexTable buttonSet = new FlexTable();
-        buttonSet.setWidth("100%");
-
-        Button submitButton = new Button(i18n.tr("Submit"));
+        Button submitButton = new Button(i18n.tr("Save"));
         submitButton.getElement().getStyle().setMargin(20, Unit.PX);
-        submitButton.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.LEFT);
+        submitButton.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.RIGHT);
         submitButton.addClickHandler(new ClickHandler() {
-
             @Override
             public void onClick(ClickEvent event) {
                 if (!form.isValid()) {
                     form.setVisited(true);
                     Window.scrollTo(0, 0);
-                    String msg = i18n.tr("The form was completed with errors outlined below. Please review and try again.");
-                    showError(msg);
+                    AppSite.getEventBus().fireEvent(
+                            new UserMessageEvent("The form was completed with errors outlined below. Please review and try again.", "",
+                                    UserMessageEvent.UserMessageType.ERROR));
                 } else {
-                    presenter.submit();
+                    presenter.submit(form.getValue());
                 }
             }
         });
-        buttonSet.setWidget(0, 0, submitButton);
+        add(submitButton);
 
-        Button cancelButton = new Button(i18n.tr("Cancel"));
-        cancelButton.getElement().getStyle().setMargin(20, Unit.PX);
-        cancelButton.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.RIGHT);
-        cancelButton.addClickHandler(new ClickHandler() {
+        CHyperlink cancel = new CHyperlink(new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 presenter.cancel();
             }
         });
-        buttonSet.setWidget(0, 1, cancelButton);
-
-        add(buttonSet);
+        cancel.setValue(i18n.tr("Cancel"));
+        cancel.asWidget().getElement().getStyle().setMarginTop(20, Unit.PX);
+        cancel.asWidget().getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.RIGHT);
+        add(cancel);
     }
 
     @Override
@@ -92,15 +86,8 @@ public class NewMaintenanceRequestViewImpl extends FlowPanel implements NewMaint
 
     @Override
     public void populate(MaintenanceRequestDTO request) {
-        errorPanel.clearMessage();
-        form.clearInput();
+        form.reset();
         form.populate(request);
-
-    }
-
-    @Override
-    public void showError(String msg) {
-        errorPanel.setMessage(msg, UserMessageType.ERROR);
     }
 
     class Selector<E extends IEntity> extends ListBox {

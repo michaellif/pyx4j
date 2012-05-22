@@ -39,11 +39,6 @@ public class CurrentBillActivity extends SecurityAwareActivity implements Curren
     public CurrentBillActivity(Place place) {
         this.view = PortalViewFactory.instance(CurrentBillView.class);
         this.view.setPresenter(this);
-        withPlace(place);
-    }
-
-    public CurrentBillActivity withPlace(Place place) {
-        return this;
     }
 
     @Override
@@ -86,14 +81,11 @@ public class CurrentBillActivity extends SecurityAwareActivity implements Curren
         view.populate(bill);
 
         panel.setWidget(view);
-
     }
 
     @Override
     public void changePaymentMethod() {
-        // TODO Implement
         AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.PaymentMethods());
-
     }
 
     @Override

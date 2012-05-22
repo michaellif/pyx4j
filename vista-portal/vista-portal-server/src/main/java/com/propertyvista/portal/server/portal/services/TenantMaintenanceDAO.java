@@ -41,7 +41,7 @@ public class TenantMaintenanceDAO {
             MaintananceDTO m = EntityFactory.create(MaintananceDTO.class);
             m.status().setValue((MaintenanceRequestStatus) maintanances[i][0]);
             m.description().setValue((String) maintanances[i][1]);
-            m.date().setValue(new LogicalDate((Date) maintanances[i][2]));
+            m.submitted().setValue(new LogicalDate((Date) maintanances[i][2]));
             m.satisfactionSurvey().rating().setValue(random.nextInt(6));
             r.add(m);
         }

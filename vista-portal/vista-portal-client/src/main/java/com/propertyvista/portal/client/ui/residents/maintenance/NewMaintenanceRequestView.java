@@ -19,18 +19,14 @@ import com.propertyvista.portal.rpc.portal.dto.MaintenanceRequestDTO;
 
 public interface NewMaintenanceRequestView extends IsWidget {
 
+    interface Presenter {
+
+        void submit(MaintenanceRequestDTO request);
+
+        void cancel();
+    }
+
     void setPresenter(Presenter presenter);
 
     void populate(MaintenanceRequestDTO requests);
-
-    void showError(String msg);
-
-    interface Presenter {
-
-        public void submit();
-
-        public void cancel();
-
-    }
-
 }

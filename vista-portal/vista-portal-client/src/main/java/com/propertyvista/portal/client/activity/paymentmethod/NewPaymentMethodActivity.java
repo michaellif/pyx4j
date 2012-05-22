@@ -11,7 +11,7 @@
  * @author Dad
  * @version $Id$
  */
-package com.propertyvista.portal.client.activity;
+package com.propertyvista.portal.client.activity.paymentmethod;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
@@ -26,6 +26,7 @@ import com.pyx4j.site.client.AppSite;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
+import com.propertyvista.portal.client.activity.SecurityAwareActivity;
 import com.propertyvista.portal.client.ui.residents.paymentmethod.NewPaymentMethodView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
@@ -60,7 +61,7 @@ public class NewPaymentMethodActivity extends SecurityAwareActivity implements N
     }
 
     @Override
-    public void save(PaymentMethod paymentmethod) {
+    public void submit(PaymentMethod paymentmethod) {
         srv.create(new DefaultAsyncCallback<PaymentMethod>() {
             @Override
             public void onSuccess(PaymentMethod result) {

@@ -75,7 +75,6 @@ public class NewPaymentMethodViewImpl extends FlowPanel implements NewPaymentMet
         Button submitButton = new Button(i18n.tr("Save"));
         submitButton.getElement().getStyle().setMargin(20, Unit.PX);
         submitButton.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.RIGHT);
-
         submitButton.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
@@ -86,7 +85,7 @@ public class NewPaymentMethodViewImpl extends FlowPanel implements NewPaymentMet
                             new UserMessageEvent("The form was completed with errors outlined below. Please review and try again.", "",
                                     UserMessageEvent.UserMessageType.ERROR));
                 } else {
-                    presenter.save(form.getValue());
+                    presenter.submit(form.getValue());
                 }
             }
         });

@@ -11,7 +11,7 @@
  * @author dad
  * @version $Id$
  */
-package com.propertyvista.portal.client.activity;
+package com.propertyvista.portal.client.activity.paymentmethod;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
@@ -27,6 +27,7 @@ import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.PaymentMethod;
+import com.propertyvista.portal.client.activity.SecurityAwareActivity;
 import com.propertyvista.portal.client.ui.residents.paymentmethod.EditPaymentMethodView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;

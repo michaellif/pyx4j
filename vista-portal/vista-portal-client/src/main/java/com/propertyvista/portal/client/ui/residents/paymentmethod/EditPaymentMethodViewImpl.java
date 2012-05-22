@@ -75,7 +75,6 @@ public class EditPaymentMethodViewImpl extends FlowPanel implements EditPaymentM
         Button submitButton = new Button(i18n.tr("Save"));
         submitButton.getElement().getStyle().setMargin(20, Unit.PX);
         submitButton.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.RIGHT);
-
         submitButton.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
