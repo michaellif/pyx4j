@@ -37,9 +37,7 @@ public interface ARFacade {
 
     void postPayment(PaymentRecord payment);
 
-    void rejectPayment(PaymentRecord payment);
-
-    void postNSFCharge(PaymentRecord paymentRecord);
+    void rejectPayment(PaymentRecord payment, boolean applyNSF);
 
     void postImmediateAdjustment(LeaseAdjustment adjustment);
 

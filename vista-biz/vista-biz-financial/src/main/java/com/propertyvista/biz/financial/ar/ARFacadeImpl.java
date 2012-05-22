@@ -44,13 +44,11 @@ public class ARFacadeImpl implements ARFacade {
     }
 
     @Override
-    public void rejectPayment(PaymentRecord paymentRecord) {
+    public void rejectPayment(PaymentRecord paymentRecord, boolean applyNSF) {
         new ARPaymentProcessor().rejectPayment(paymentRecord);
-    }
-
-    @Override
-    public void postNSFCharge(PaymentRecord paymentRecord) {
-        new ARNSFProcessor().postNSFCharge(paymentRecord);
+        if (applyNSF) {
+            new ARNSFProcessor().postNSFCharge(paymentRecord);
+        }
     }
 
     @Override

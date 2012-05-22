@@ -371,12 +371,8 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         return paymentRecord;
     }
 
-    protected void rejectPayment(PaymentRecord paymentRecord) {
-        ServerSideFactory.create(ARFacade.class).rejectPayment(paymentRecord);
-    }
-
-    protected void postNSFCharge(PaymentRecord paymentRecord) {
-        ServerSideFactory.create(ARFacade.class).postNSFCharge(paymentRecord);
+    protected void rejectPayment(PaymentRecord paymentRecord, boolean applyNSF) {
+        ServerSideFactory.create(ARFacade.class).rejectPayment(paymentRecord, applyNSF);
     }
 
     private BillableItem findBillableItem(String billableItemId, Lease lease) {
