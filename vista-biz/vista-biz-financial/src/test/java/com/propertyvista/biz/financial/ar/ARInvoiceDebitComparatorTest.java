@@ -27,7 +27,6 @@ import com.propertyvista.biz.financial.FinancialTestsUtils;
 import com.propertyvista.biz.financial.SysDateManager;
 import com.propertyvista.domain.financial.billing.InvoiceAccountCharge;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
-import com.propertyvista.domain.financial.billing.InvoiceDebit.DebitType;
 
 public class ARInvoiceDebitComparatorTest extends FinancialTestBase {
 
@@ -42,11 +41,45 @@ public class ARInvoiceDebitComparatorTest extends FinancialTestBase {
     }
 
     public void testBucketAgeComparator() {
-        SysDateManager.setSysDate("01-Mar-2011");
+        SysDateManager.setSysDate("01-Apr-2011");
 
-        InvoiceDebit lineItem = EntityFactory.create(InvoiceAccountCharge.class);
-        lineItem.dueDate().setValue(FinancialTestsUtils.getDate("18-Mar-2011"));
-        lineItem.debitType().setValue(DebitType.accountCharge);
+        //Same day
+        compareBucketAge("01-Apr-2011", "01-Apr-2011", 0);
+        compareBucketAge("27-Mar-2011", "27-Mar-2011", 0);
+        compareBucketAge("27-Mar-2010", "27-Mar-2010", 0);
+
+        //Same bucket
+        compareBucketAge("20-Mar-2011", "10-Mar-2011", 0);
+        compareBucketAge("10-Mar-2011", "20-Mar-2011", 0);
+        compareBucketAge("20-Feb-2011", "10-Feb-2011", 0);
+        compareBucketAge("10-Feb-2011", "20-Feb-2011", 0);
+        compareBucketAge("20-Jan-2011", "10-Jan-2011", 0);
+        compareBucketAge("10-Jan-2011", "20-Jan-2011", 0);
+        compareBucketAge("20-Dec-2010", "10-Dec-2010", 0);
+        compareBucketAge("10-Dec-2010", "20-Dec-2010", 0);
+        compareBucketAge("20-Oct-2010", "10-Oct-2010", 0);
+        compareBucketAge("10-Oct-2010", "20-Oct-2010", 0);
+        compareBucketAge("20-Jun-2010", "10-Oct-2010", 0);
+        compareBucketAge("10-Oct-2010", "20-Jun-2010", 0);
+        compareBucketAge("20-Jun-2011", "10-Oct-2011", 0);
+        compareBucketAge("10-Oct-2011", "20-Jun-2011", 0);
+
+        //Different buckets
+        compareBucketAge("31-Mar-2011", "1-Mar-2011", 29);
+        compareBucketAge("31-Mar-2011", "31-Jan-2011", 58);
+        compareBucketAge("31-Jan-2011", "31-Mar-2011", -58);
+        compareBucketAge("31-Jan-2011", "20-Dec-2010", 42);
+
+    }
+
+    private void compareBucketAge(String date1, String date2, int expected) {
+        InvoiceDebit lineItem1 = EntityFactory.create(InvoiceAccountCharge.class);
+        lineItem1.dueDate().setValue(FinancialTestsUtils.getDate(date1));
+
+        InvoiceDebit lineItem2 = EntityFactory.create(InvoiceAccountCharge.class);
+        lineItem2.dueDate().setValue(FinancialTestsUtils.getDate(date2));
+
+        assertEquals("", expected, InvoiceDebitComparator.compareBucketAge(lineItem1, lineItem2));
 
     }
 }
