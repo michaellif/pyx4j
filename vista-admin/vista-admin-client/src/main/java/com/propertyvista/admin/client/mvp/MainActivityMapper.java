@@ -34,6 +34,8 @@ import com.propertyvista.admin.client.activity.crud.maintenance.MaintenanceViewe
 import com.propertyvista.admin.client.activity.crud.onboardingusers.OnBoardingUserViewerActivity;
 import com.propertyvista.admin.client.activity.crud.onboardingusers.OnboardingUserEditorActivity;
 import com.propertyvista.admin.client.activity.crud.onboardingusers.OnboardingUserListerActivity;
+import com.propertyvista.admin.client.activity.crud.padsimulation.PadBatchEditorActivity;
+import com.propertyvista.admin.client.activity.crud.padsimulation.PadBatchViewerActivity;
 import com.propertyvista.admin.client.activity.crud.padsimulation.PadFileEditorActivity;
 import com.propertyvista.admin.client.activity.crud.padsimulation.PadFileListerActivity;
 import com.propertyvista.admin.client.activity.crud.padsimulation.PadFileViewerActivity;
@@ -143,6 +145,16 @@ public class MainActivityMapper implements AppActivityMapper {
                             break;
                         case lister:
                             activity = new PadFileListerActivity(crudPlace);
+                            break;
+                        }
+
+                    } else if (place instanceof AdminSiteMap.Administration.PadSimulation.PadSimBatch) {
+                        switch (crudPlace.getType()) {
+                        case editor:
+                            activity = new PadBatchEditorActivity(crudPlace);
+                            break;
+                        case viewer:
+                            activity = new PadBatchViewerActivity(crudPlace);
                             break;
                         }
 

@@ -14,30 +14,16 @@
 package com.propertyvista.admin.client.ui.crud.padsimulation;
 
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.crud.lister.IListerView;
-import com.pyx4j.site.client.ui.crud.lister.ListerInternalViewImplBase;
 
 import com.propertyvista.admin.client.ui.crud.AdminViewerViewImplBase;
 import com.propertyvista.admin.domain.payment.pad.sim.PadSimBatch;
-import com.propertyvista.admin.domain.payment.pad.sim.PadSimFile;
 import com.propertyvista.admin.rpc.AdminSiteMap;
 
-public class PadFileViewerViewImpl extends AdminViewerViewImplBase<PadSimFile> implements PadFileViewerView {
+public class PadBatchViewerViewImpl extends AdminViewerViewImplBase<PadSimBatch> implements PadBatchViewerView {
 
     private static final I18n i18n = I18n.get(PadFileEditorViewImpl.class);
 
-    private final IListerView<PadSimBatch> batchLister;
-
-    public PadFileViewerViewImpl() {
-        super(AdminSiteMap.Administration.PadSimulation.PadSimFile.class);
-
-        batchLister = new ListerInternalViewImplBase<PadSimBatch>(new PadBatchLister());
-
-        setForm(new PadFileForm(true));
-    }
-
-    @Override
-    public IListerView<PadSimBatch> getBatchListerView() {
-        return batchLister;
+    public PadBatchViewerViewImpl() {
+        super(AdminSiteMap.Administration.PadSimulation.PadSimBatch.class, new PadBatchForm(true));
     }
 }

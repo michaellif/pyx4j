@@ -26,6 +26,8 @@ import com.propertyvista.admin.client.ui.crud.maintenance.MaintenanceEditorView;
 import com.propertyvista.admin.client.ui.crud.maintenance.MaintenanceEditorViewImpl;
 import com.propertyvista.admin.client.ui.crud.maintenance.MaintenanceViewerView;
 import com.propertyvista.admin.client.ui.crud.maintenance.MaintenanceViewerViewImpl;
+import com.propertyvista.admin.client.ui.crud.padsimulation.PadBatchViewerView;
+import com.propertyvista.admin.client.ui.crud.padsimulation.PadBatchViewerViewImpl;
 import com.propertyvista.admin.client.ui.crud.padsimulation.PadFileEditorView;
 import com.propertyvista.admin.client.ui.crud.padsimulation.PadFileEditorViewImpl;
 import com.propertyvista.admin.client.ui.crud.padsimulation.PadFileListerView;
@@ -57,6 +59,9 @@ public class AdministrationVeiwFactory extends ViewFactoryBase {
                 map.put(type, new PadFileEditorViewImpl());
             } else if (PadFileListerView.class.equals(type)) {
                 map.put(type, new PadFileListerViewImpl());
+
+            } else if (PadBatchViewerView.class.equals(type)) {
+                map.put(type, new PadBatchViewerViewImpl());
 
             } else if (AdminUserViewerView.class.equals(type)) {
                 map.put(type, new AdminUserViewerViewImpl());
