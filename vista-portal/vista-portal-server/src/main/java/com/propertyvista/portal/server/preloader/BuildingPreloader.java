@@ -125,7 +125,16 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
         Persistence.service().persist(managements);
 
         MerchantAccount merchantAccount = EntityFactory.create(MerchantAccount.class);
-        { // Test for VladL
+        {
+            merchantAccount.merchantTerminalId().setValue("BIRCHWTT");
+            merchantAccount.bankId().setValue("001");
+            merchantAccount.branchTransitNumber().setValue("00550");
+            merchantAccount.accountNumber().setValue("12345678");
+            merchantAccount.chargeDescription().setValue("Pay for Vista2");
+            Persistence.service().persist(merchantAccount);
+        }
+
+        { // Tests
             MerchantAccount merchantAccount1 = EntityFactory.create(MerchantAccount.class);
             merchantAccount1.merchantTerminalId().setValue("BIRCHWT1");
             merchantAccount1.bankId().setValue("002");
@@ -136,13 +145,16 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
 
             Persistence.service().persist(merchantAccount1);
         }
-        {
-            merchantAccount.merchantTerminalId().setValue("BIRCHWTT");
-            merchantAccount.bankId().setValue("001");
-            merchantAccount.branchTransitNumber().setValue("00550");
-            merchantAccount.accountNumber().setValue("12345678");
-            merchantAccount.chargeDescription().setValue("Pay for Vista2");
-            Persistence.service().persist(merchantAccount);
+        { // Test to fail payments
+            MerchantAccount merchantAccount1 = EntityFactory.create(MerchantAccount.class);
+            merchantAccount1.merchantTerminalId().setValue("BIRCHWTE");
+            merchantAccount1.bankId().setValue("007");
+            merchantAccount1.branchTransitNumber().setValue("70050");
+            merchantAccount1.accountNumber().setValue("71234567");
+
+            merchantAccount1.chargeDescription().setValue("Pay for Vista3");
+
+            Persistence.service().persist(merchantAccount1);
         }
 
         // create some portfolios:
