@@ -35,6 +35,11 @@ public class VistaServerSideConfiguration11 extends VistaServerSideConfiguration
             public String password() {
                 return "vista11";
             }
+
+            @Override
+            public int tablesItentityOffset() {
+                return 0;
+            }
         };
     }
 
