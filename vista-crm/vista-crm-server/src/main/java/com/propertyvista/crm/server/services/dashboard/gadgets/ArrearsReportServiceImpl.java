@@ -35,10 +35,8 @@ import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.ArrearsReportService;
 import com.propertyvista.crm.server.util.EntityDTOHelper;
 import com.propertyvista.crm.server.util.EntityDTOHelper.PropertyMapper;
-import com.propertyvista.crm.server.util.GadgetMetadataHelper;
 import com.propertyvista.domain.dashboard.gadgets.arrears.LeaseArrearsSnapshotDTO;
 import com.propertyvista.domain.dashboard.gadgets.arrears.MockupArrearsSummary;
-import com.propertyvista.domain.dashboard.gadgets.type.ArrearsGadgetMeta;
 import com.propertyvista.domain.financial.billing.AgingBuckets;
 import com.propertyvista.domain.financial.billing.InvoiceDebit.DebitType;
 import com.propertyvista.domain.financial.billing.LeaseArrearsSnapshot;
@@ -75,17 +73,10 @@ public class ArrearsReportServiceImpl implements ArrearsReportService {
     };
 
     @Override
-    public void arrearsList(AsyncCallback<EntitySearchResult<LeaseArrearsSnapshotDTO>> callback, ArrearsGadgetMeta arrearsGadgetMetaStub, int pageNumber) {
-        ArrearsGadgetMeta metadata = Persistence.secureRetrieve(ArrearsGadgetMeta.class, arrearsGadgetMetaStub.getPrimaryKey());
-        EntityDTOHelper<LeaseArrearsSnapshot, LeaseArrearsSnapshotDTO> dtoHelper = createDTOHelper(metadata);
-
-        LogicalDate asOf = metadata.customizeDate().isBooleanTrue() ? metadata.asOf().getValue() : new LogicalDate();
-        // TODO fetch buildings from parent dashboard filter
-        Vector<Building> buildingStubs = new Vector<Building>();
-        // TODO add support for saving the search criteria in the metadata, and init the criteria here        
-        Collection<Criterion> customCriteria = new Vector<Criterion>();
-        List<Sort> sortingCriteria = GadgetMetadataHelper.getSortingCriteria(metadata);
-        int pageSize = metadata.pageSize().getValue();
+    public void leaseArrearsRoster(AsyncCallback<EntitySearchResult<LeaseArrearsSnapshotDTO>> callback, Vector<Building> buildingStubs, LogicalDate asOf,
+            DebitType arrearsCategory, Vector<Sort> sortingCriteria, int pageNumber, int pageSize) {
+        EntityDTOHelper<LeaseArrearsSnapshot, LeaseArrearsSnapshotDTO> dtoHelper = createDTOHelper(arrearsCategory);
+        Collection<Criterion> customCriteria = new Vector<Criterion>(); // reserved for future use
 
         EntitySearchResult<LeaseArrearsSnapshot> roster = ServerSideFactory.create(ARFacade.class).getArrearsSnapshotRoster(//@formatter:off
                 asOf,
@@ -93,18 +84,20 @@ public class ArrearsReportServiceImpl implements ArrearsReportService {
                 new Vector<Criterion>(dtoHelper.convertDTOSearchCriteria(customCriteria)),
                 new Vector<Sort>(dtoHelper.convertDTOSortingCriteria(sortingCriteria)),
                 pageNumber,
-                pageSize);
+                pageSize);//@formatter:on
 
+        // convert the roster to DTO
         Vector<LeaseArrearsSnapshotDTO> rosterDTO = new Vector<LeaseArrearsSnapshotDTO>();
-
         for (LeaseArrearsSnapshot snapshot : roster.getData()) {
-            rosterDTO.add(toSnapshotDTO(metadata, snapshot));
+            rosterDTO.add(toSnapshotDTO(arrearsCategory, snapshot));
         }
 
+        // prepare the result 
         EntitySearchResult<LeaseArrearsSnapshotDTO> result = new EntitySearchResult<LeaseArrearsSnapshotDTO>();
         result.setData(new Vector<LeaseArrearsSnapshotDTO>(rosterDTO));
         result.setTotalRows(roster.getTotalRows());
         result.hasMoreData(roster.hasMoreData());
+
         callback.onSuccess(result);
     }
 
@@ -119,7 +112,7 @@ public class ArrearsReportServiceImpl implements ArrearsReportService {
         // TODO
     }
 
-    private LeaseArrearsSnapshotDTO toSnapshotDTO(ArrearsGadgetMeta metadata, LeaseArrearsSnapshot snapshot) {
+    private LeaseArrearsSnapshotDTO toSnapshotDTO(DebitType arrearsCategory, LeaseArrearsSnapshot snapshot) {
         Persistence.service().retrieve(snapshot.billingAccount());
         Persistence.service().retrieve(snapshot.billingAccount().lease());
         Persistence.service().retrieve(snapshot.billingAccount().lease().unit());
@@ -128,14 +121,14 @@ public class ArrearsReportServiceImpl implements ArrearsReportService {
         LeaseArrearsSnapshotDTO snapshotDTO = DTO_BINDER.createDTO(snapshot);
 
         AgingBuckets selectedBuckets = null;
-        if (metadata.category().getValue() == DebitType.total) {
+        if (arrearsCategory == DebitType.total) {
             selectedBuckets = snapshot.totalAgingBuckets().duplicate();
-        } else {            
+        } else {
             for (AgingBuckets buckets : snapshot.agingBuckets()) {
-                if (buckets.debitType().getValue() == metadata.category().getValue()) {
+                if (buckets.debitType().getValue() == arrearsCategory) {
                     selectedBuckets = buckets.duplicate();
                 }
-            }            
+            }
         }
         if (selectedBuckets == null) {
             selectedBuckets = EntityFactory.create(AgingBuckets.class);
@@ -144,38 +137,39 @@ public class ArrearsReportServiceImpl implements ArrearsReportService {
 
         return snapshotDTO;
     }
-    
-    private EntityDTOHelper<LeaseArrearsSnapshot, LeaseArrearsSnapshotDTO> createDTOHelper(ArrearsGadgetMeta metadata) {
-        final DebitType category = metadata.category().getValue();
+
+    private EntityDTOHelper<LeaseArrearsSnapshot, LeaseArrearsSnapshotDTO> createDTOHelper(final DebitType arrearsCategory) {
         final LeaseArrearsSnapshotDTO dtoProto = EntityFactory.getEntityPrototype(LeaseArrearsSnapshotDTO.class);
         final LeaseArrearsSnapshot dboProto = EntityFactory.getEntityPrototype(LeaseArrearsSnapshot.class);
-        
+
         PropertyMapper bucketMapper = null;
-        if (category == DebitType.total) {
+        if (arrearsCategory == DebitType.total) {
             bucketMapper = new PropertyMapper() {
                 @Override
-                public Path getDboMemberPath(Path dtoMemberPath) {                    
+                public Path getDboMemberPath(Path dtoMemberPath) {
                     if (dtoMemberPath.toString().startsWith(dtoProto.selectedBuckets().getPath().toString())) {
-                        return new Path(dtoMemberPath.toString().replace(dtoProto.selectedBuckets().getPath().toString(), dboProto.totalAgingBuckets().getPath().toString()));
+                        return new Path(dtoMemberPath.toString().replace(dtoProto.selectedBuckets().getPath().toString(),
+                                dboProto.totalAgingBuckets().getPath().toString()));
                     } else {
                         return null;
                     }
                 }
             };
         } else {
-            bucketMapper = new PropertyMapper() {                
+            bucketMapper = new PropertyMapper() {
                 @Override
                 public Path getDboMemberPath(Path dtoMemberPath) {
                     if (dtoMemberPath.toString().startsWith(dtoProto.selectedBuckets().getPath().toString())) {
-                        return new Path(dtoMemberPath.toString().replace(dtoProto.selectedBuckets().getPath().toString(), dboProto.agingBuckets().$().getPath().toString()));
+                        return new Path(dtoMemberPath.toString().replace(dtoProto.selectedBuckets().getPath().toString(),
+                                dboProto.agingBuckets().$().getPath().toString()));
                     } else {
                         return null;
                     }
                 }
             };
         }
-        
-        List<PropertyMapper> mappers = Arrays.<PropertyMapper>asList(//@formatter:off
+
+        List<PropertyMapper> mappers = Arrays.<PropertyMapper> asList(//@formatter:off
                 new PropertyMapper() {
                     @Override
                     public Path getDboMemberPath(Path dtoMemberPath) {

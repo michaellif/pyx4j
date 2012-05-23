@@ -20,6 +20,9 @@ import java.util.Vector;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
@@ -28,6 +31,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.entity.rpc.EntitySearchResult;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.CDatePicker;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -46,6 +50,7 @@ import com.propertyvista.domain.dashboard.gadgets.arrears.LeaseArrearsSnapshotDT
 import com.propertyvista.domain.dashboard.gadgets.type.ArrearsGadgetMeta;
 import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
 import com.propertyvista.domain.financial.billing.InvoiceDebit.DebitType;
+import com.propertyvista.domain.property.asset.building.Building;
 
 public class ArrearsStatusGadget extends AbstractGadget<ArrearsGadgetMeta> {
 
@@ -53,11 +58,15 @@ public class ArrearsStatusGadget extends AbstractGadget<ArrearsGadgetMeta> {
 
     private static class ArrearsStatusGadgetInstance extends ListerGadgetInstanceBase<LeaseArrearsSnapshotDTO, ArrearsGadgetMeta> {
 
+        private static final DateTimeFormat DATE_FORMAT = DateTimeFormat.getFormat(CDatePicker.defaultDateFormat);
+
         private final ArrearsReportService service;
 
         private FormFlexPanel contentPanel;
 
         private CDatePicker asOf;
+
+        private HTML titleBannerLabel;
 
         public ArrearsStatusGadgetInstance(GadgetMetadata gmd) {
             super(gmd, LeaseArrearsSnapshotDTO.class, ArrearsGadgetMeta.class);
@@ -155,15 +164,19 @@ public class ArrearsStatusGadget extends AbstractGadget<ArrearsGadgetMeta> {
         @Override
         public void populatePage(final int pageNumber) {
             if (containerBoard.getSelectedBuildings() == null) {
-                setAsOfValue(getStatusDate());
+                refreshTitleBanner();
                 setPageData(new Vector<LeaseArrearsSnapshotDTO>(), 0, 0, false);
                 populateSucceded();
                 return;
             } else {
-                service.arrearsList(new DefaultAsyncCallback<EntitySearchResult<LeaseArrearsSnapshotDTO>>() {
+                Vector<Building> buildings = new Vector<Building>(containerBoard.getSelectedBuildings());
+                Vector<Sort> sortingCriteria = new Vector<Sort>(getSorting());
+
+                service.leaseArrearsRoster(new DefaultAsyncCallback<EntitySearchResult<LeaseArrearsSnapshotDTO>>() {
 
                     @Override
                     public void onSuccess(EntitySearchResult<LeaseArrearsSnapshotDTO> result) {
+                        refreshTitleBanner();
                         setPageData(result.getData(), pageNumber, result.getTotalRows(), result.hasMoreData());
                         populateSucceded();
                     }
@@ -173,7 +186,7 @@ public class ArrearsStatusGadget extends AbstractGadget<ArrearsGadgetMeta> {
                         populateFailed(caught);
                     }
 
-                }, getMetadata().<ArrearsGadgetMeta> createIdentityStub(), pageNumber);
+                }, buildings, getStatusDate(), getMetadata().category().getValue(), sortingCriteria, pageNumber, getMetadata().pageSize().getValue());
             }
 
         }
@@ -181,32 +194,28 @@ public class ArrearsStatusGadget extends AbstractGadget<ArrearsGadgetMeta> {
         @Override
         public Widget initContentPanel() {
             contentPanel = new FormFlexPanel();
-            String selectedCategory = (getMetadata().category().getValue() != null ? getMetadata().category().getValue() : DebitType.total).toString();
-            contentPanel.setH1(0, 0, 1, selectedCategory);
-            contentPanel.setWidget(1, 0, initAsOfBannerPanel());
+            contentPanel.setWidget(1, 0, initTitleBannerPanel());
             contentPanel.setWidget(2, 0, initListerWidget());
             return contentPanel;
         }
 
-        private Widget initAsOfBannerPanel() {
-            HorizontalPanel asForBannerPanel = new HorizontalPanel();
-            asForBannerPanel.setWidth("100%");
-            asForBannerPanel.setHorizontalAlignment(HorizontalPanel.ALIGN_CENTER);
+        private Widget initTitleBannerPanel() {
+            HorizontalPanel titleBannerPanel = new HorizontalPanel();
+            titleBannerPanel.setWidth("100%");
+            titleBannerPanel.setHorizontalAlignment(HorizontalPanel.ALIGN_CENTER);
 
-            asOf = new CDatePicker();
-            asOf.setValue(getStatusDate());
-            asOf.setViewable(true);
-
-            asForBannerPanel.add(asOf);
-            return asForBannerPanel.asWidget();
+            titleBannerLabel = new HTML();
+            titleBannerPanel.add(titleBannerLabel);
+            return titleBannerPanel.asWidget();
         }
 
         private LogicalDate getStatusDate() {
             return getMetadata().customizeDate().isBooleanTrue() ? getMetadata().asOf().getValue() : new LogicalDate();
         }
 
-        private void setAsOfValue(LogicalDate asOf) {
-            this.asOf.setValue(asOf);
+        private void refreshTitleBanner() {
+            String unescaptedBanner = i18n.tr("{0} arrears as of {1}", getMetadata().category().getValue(), DATE_FORMAT.format(getStatusDate()));
+            titleBannerLabel.setHTML(new SafeHtmlBuilder().appendEscaped(unescaptedBanner).toSafeHtml());
         }
     }
 
