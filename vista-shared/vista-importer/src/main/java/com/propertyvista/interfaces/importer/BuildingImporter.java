@@ -28,6 +28,7 @@ import com.pyx4j.rpc.shared.UserRuntimeException;
 
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.Service;
+import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.FloorplanAmenity;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -219,10 +220,14 @@ public class BuildingImporter extends ImportPersister {
                     Persistence.service().merge(items);
                     counters.units += items.size();
 
+                    EntityQueryCriteria<ServiceItemType> serviceCriteria = EntityQueryCriteria.create(ServiceItemType.class);
+                    serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().serviceType(), Service.Type.residentialUnit));
+                    ServiceItemType productType = Persistence.service().retrieve(serviceCriteria);
+
                     for (AptUnit unit : items) {
                         ProductItem product = EntityFactory.create(ProductItem.class);
                         BigDecimal price = unit.financial()._marketRent().getValue();
-
+                        product.type().set(productType);
                         product.price().setValue(price);
                         product.description().setValue(Service.Type.residentialUnit.toString() + " description");
                         product.element().set(unit);
