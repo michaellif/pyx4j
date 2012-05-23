@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Bill1" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" scriptletClass="com.propertyvista.biz.financial.billing.print.BillPrintScriptlet">
 	<property name="ireport.zoom" value="2.1435888100000056"/>
-	<property name="ireport.x" value="64"/>
-	<property name="ireport.y" value="146"/>
+	<property name="ireport.x" value="15"/>
+	<property name="ireport.y" value="22"/>
 	<field name="bill" class="com.propertyvista.domain.financial.billing.Bill"/>
 	<background>
 		<band splitType="Stretch"/>
@@ -56,7 +56,7 @@
 				<textElement verticalAlignment="Middle">
 					<font size="5"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{REPORT_SCRIPTLET}.formatDate($F{bill}.billingPeriodStartDate().getValue())]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{REPORT_SCRIPTLET}.formatDate($F{bill}.dueDate().getValue())]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="394" y="40" width="61" height="10"/>

@@ -23,6 +23,7 @@
 	<field name="billingPeriodStartDate" class="com.pyx4j.commons.LogicalDate"/>
 	<field name="billingRun/executionDate" class="com.pyx4j.commons.LogicalDate"/>
 	<field name="billingRun" class="com.propertyvista.domain.financial.billing.BillingRun"/>
+	<field name="dueDate" class="com.pyx4j.commons.LogicalDate"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -61,7 +62,7 @@
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="12" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{REPORT_SCRIPTLET}.formatDate($F{billingPeriodStartDate})]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{REPORT_SCRIPTLET}.formatDate($F{dueDate})]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement x="0" y="108" width="380" height="1" forecolor="#AFAAAA"/>

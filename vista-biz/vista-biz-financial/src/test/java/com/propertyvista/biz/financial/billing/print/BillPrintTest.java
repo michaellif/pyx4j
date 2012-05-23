@@ -46,7 +46,7 @@ public class BillPrintTest extends FinancialTestBase {
         bill.billSequenceNumber().setValue(1);
 
         bill.billingPeriodStartDate().setValue(new LogicalDate(112, 03, 01));
-        bill.dueDate().setValue(new LogicalDate(112, 03, 01));
+        bill.dueDate().setValue(new LogicalDate(112, 03, 02));
         bill.billingRun().executionDate().setValue(new LogicalDate(112, 02, 15));
 
         bill.balanceForwardAmount().setValue(new BigDecimal("1000.00"));
