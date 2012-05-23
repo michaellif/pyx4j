@@ -26,7 +26,7 @@ import com.propertyvista.admin.client.ui.crud.padsimulation.PadFileViewerView;
 import com.propertyvista.admin.client.viewfactories.crud.AdministrationVeiwFactory;
 import com.propertyvista.admin.domain.payment.pad.sim.PadSimBatch;
 import com.propertyvista.admin.domain.payment.pad.sim.PadSimFile;
-import com.propertyvista.admin.rpc.services.scheduler.RunCrudService;
+import com.propertyvista.admin.rpc.services.sim.PadSimBatchCrudService;
 import com.propertyvista.admin.rpc.services.sim.PadSimFileCrudService;
 
 public class PadFileViewerActivity extends AdminViewerActivity<PadSimFile> implements PadFileViewerView.Presenter {
@@ -38,7 +38,7 @@ public class PadFileViewerActivity extends AdminViewerActivity<PadSimFile> imple
         super(place, AdministrationVeiwFactory.instance(PadFileViewerView.class), (AbstractCrudService<PadSimFile>) GWT.create(PadSimFileCrudService.class));
 
         batchLister = new ListerActivityBase<PadSimBatch>(place, ((PadFileViewerView) getView()).getBatchListerView(),
-                (AbstractCrudService<PadSimBatch>) GWT.create(RunCrudService.class), PadSimBatch.class);
+                (AbstractCrudService<PadSimBatch>) GWT.create(PadSimBatchCrudService.class), PadSimBatch.class);
     }
 
     @Override
