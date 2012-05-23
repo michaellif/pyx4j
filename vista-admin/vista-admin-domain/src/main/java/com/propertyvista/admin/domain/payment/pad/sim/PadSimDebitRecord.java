@@ -13,8 +13,6 @@
  */
 package com.propertyvista.admin.domain.payment.pad.sim;
 
-import com.pyx4j.commons.Key;
-import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.OrderColumn;
@@ -34,10 +32,8 @@ public interface PadSimDebitRecord extends IEntity {
     @JoinColumn
     PadSimBatch padBatch();
 
-    @Override
-    @Indexed
     @OrderColumn
-    IPrimitive<Key> id();
+    IPrimitive<Integer> odr();
 
     // A unique value to represent the client/cardholder
     @Length(29)
