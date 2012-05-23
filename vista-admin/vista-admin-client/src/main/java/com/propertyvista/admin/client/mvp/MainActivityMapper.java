@@ -34,6 +34,9 @@ import com.propertyvista.admin.client.activity.crud.maintenance.MaintenanceViewe
 import com.propertyvista.admin.client.activity.crud.onboardingusers.OnBoardingUserViewerActivity;
 import com.propertyvista.admin.client.activity.crud.onboardingusers.OnboardingUserEditorActivity;
 import com.propertyvista.admin.client.activity.crud.onboardingusers.OnboardingUserListerActivity;
+import com.propertyvista.admin.client.activity.crud.padsimulation.PadFileEditorActivity;
+import com.propertyvista.admin.client.activity.crud.padsimulation.PadFileListerActivity;
+import com.propertyvista.admin.client.activity.crud.padsimulation.PadFileViewerActivity;
 import com.propertyvista.admin.client.activity.crud.pmc.PmcEditorActivity;
 import com.propertyvista.admin.client.activity.crud.pmc.PmcListerActivity;
 import com.propertyvista.admin.client.activity.crud.pmc.PmcViewerActivity;
@@ -109,7 +112,7 @@ public class MainActivityMapper implements AppActivityMapper {
                             activity = new OnboardingUserListerActivity(crudPlace);
                             break;
                         }
-                        // - Administration:
+// - Administration:
                     } else if (place instanceof AdminSiteMap.Administration.Maintenance) {
                         switch (crudPlace.getType()) {
                         case editor:
@@ -130,6 +133,19 @@ public class MainActivityMapper implements AppActivityMapper {
                             break;
                         }
 
+                    } else if (place instanceof AdminSiteMap.Administration.PadSimulation.PadSimFile) {
+                        switch (crudPlace.getType()) {
+                        case editor:
+                            activity = new PadFileEditorActivity(crudPlace);
+                            break;
+                        case viewer:
+                            activity = new PadFileViewerActivity(crudPlace);
+                            break;
+                        case lister:
+                            activity = new PadFileListerActivity(crudPlace);
+                            break;
+                        }
+
                     } else if (place instanceof AdminSiteMap.Administration.AdminUsers) {
                         switch (crudPlace.getType()) {
                         case editor:
@@ -142,13 +158,12 @@ public class MainActivityMapper implements AppActivityMapper {
                             activity = new AdminUserListerActivity(crudPlace);
                             break;
                         }
-
-                        // - Settings:
                     }
+// - Settings:
                 } else if (place instanceof AdminSiteMap.Settings) {
                     activity = new SettingsActivity(place);
 
-                    // - Other:
+// - Other:
                 } else if (place instanceof AdminSiteMap.Account) {
                     activity = new AccountActivity(place);
                 } else if (place instanceof AdminSiteMap.Alert) {

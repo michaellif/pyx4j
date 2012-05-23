@@ -26,6 +26,12 @@ import com.propertyvista.admin.client.ui.crud.maintenance.MaintenanceEditorView;
 import com.propertyvista.admin.client.ui.crud.maintenance.MaintenanceEditorViewImpl;
 import com.propertyvista.admin.client.ui.crud.maintenance.MaintenanceViewerView;
 import com.propertyvista.admin.client.ui.crud.maintenance.MaintenanceViewerViewImpl;
+import com.propertyvista.admin.client.ui.crud.padsimulation.PadFileEditorView;
+import com.propertyvista.admin.client.ui.crud.padsimulation.PadFileEditorViewImpl;
+import com.propertyvista.admin.client.ui.crud.padsimulation.PadFileListerView;
+import com.propertyvista.admin.client.ui.crud.padsimulation.PadFileListerViewImpl;
+import com.propertyvista.admin.client.ui.crud.padsimulation.PadFileViewerView;
+import com.propertyvista.admin.client.ui.crud.padsimulation.PadFileViewerViewImpl;
 import com.propertyvista.admin.client.ui.crud.simulation.SimulationEditorView;
 import com.propertyvista.admin.client.ui.crud.simulation.SimulationEdtiorViewImpl;
 import com.propertyvista.admin.client.ui.crud.simulation.SimulationViewerView;
@@ -44,6 +50,13 @@ public class AdministrationVeiwFactory extends ViewFactoryBase {
                 map.put(type, new SimulationViewerViewImpl());
             } else if (SimulationEditorView.class.equals(type)) {
                 map.put(type, new SimulationEdtiorViewImpl());
+
+            } else if (PadFileViewerView.class.equals(type)) {
+                map.put(type, new PadFileViewerViewImpl());
+            } else if (PadFileEditorView.class.equals(type)) {
+                map.put(type, new PadFileEditorViewImpl());
+            } else if (PadFileListerView.class.equals(type)) {
+                map.put(type, new PadFileListerViewImpl());
 
             } else if (AdminUserViewerView.class.equals(type)) {
                 map.put(type, new AdminUserViewerViewImpl());

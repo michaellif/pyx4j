@@ -90,7 +90,21 @@ public class AdminSiteMap implements SiteMap {
             public Simulation() {
                 formViewerPlace(new Key(-1));
             }
+        }
 
+        @PlaceProperties(caption = "PAD Simulation")
+        @NavigationItem(navigLabel = "PAD Simulations")
+        public static class PadSimulation extends CrudAppPlace {
+
+            @PlaceProperties(caption = "PAD File")
+            @NavigationItem(navigLabel = "PAD Files")
+            public static class PadSimFile extends CrudAppPlace {
+            }
+
+            @PlaceProperties(caption = "PAD Batch")
+            @NavigationItem(navigLabel = "PAD Batches")
+            public static class PadSimBatch extends CrudAppPlace {
+            }
         }
 
         @PlaceProperties(caption = "User")
