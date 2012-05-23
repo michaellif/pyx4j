@@ -163,13 +163,13 @@ public class ArrearsStatusGadget extends AbstractGadget<ArrearsGadgetMeta> {
 
         @Override
         public void populatePage(final int pageNumber) {
-            if (containerBoard.getSelectedBuildings() == null) {
+            if (containerBoard.getSelectedBuildingsStubs() == null) {
                 refreshTitleBanner();
                 setPageData(new Vector<LeaseArrearsSnapshotDTO>(), 0, 0, false);
                 populateSucceded();
                 return;
             } else {
-                Vector<Building> buildings = new Vector<Building>(containerBoard.getSelectedBuildings());
+                Vector<Building> buildings = new Vector<Building>(containerBoard.getSelectedBuildingsStubs());
                 Vector<Sort> sortingCriteria = new Vector<Sort>(getSorting());
 
                 service.leaseArrearsRoster(new DefaultAsyncCallback<EntitySearchResult<LeaseArrearsSnapshotDTO>>() {

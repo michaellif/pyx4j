@@ -103,6 +103,11 @@ public class BoardViewImpl extends ViewImplBase implements BoardView {
     }
 
     @Override
+    public List<Building> getSelectedBuildingsStubs() {
+        return board.getSelectedBuildingsStubs();
+    }
+
+    @Override
     public List<Building> getSelectedBuildings() {
         return board.getSelectedBuildings();
     }

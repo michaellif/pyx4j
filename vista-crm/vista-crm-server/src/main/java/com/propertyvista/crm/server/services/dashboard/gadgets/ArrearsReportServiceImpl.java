@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.server.services.dashboard.gadgets;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -26,8 +27,10 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.criterion.Criterion;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.shared.utils.EntityDtoBinder;
 
@@ -36,8 +39,8 @@ import com.propertyvista.crm.rpc.services.dashboard.gadgets.ArrearsReportService
 import com.propertyvista.crm.server.util.EntityDTOHelper;
 import com.propertyvista.crm.server.util.EntityDTOHelper.PropertyMapper;
 import com.propertyvista.domain.dashboard.gadgets.arrears.LeaseArrearsSnapshotDTO;
-import com.propertyvista.domain.dashboard.gadgets.arrears.MockupArrearsSummary;
 import com.propertyvista.domain.financial.billing.AgingBuckets;
+import com.propertyvista.domain.financial.billing.BuildingArrearsSnapshot;
 import com.propertyvista.domain.financial.billing.InvoiceDebit.DebitType;
 import com.propertyvista.domain.financial.billing.LeaseArrearsSnapshot;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -102,9 +105,56 @@ public class ArrearsReportServiceImpl implements ArrearsReportService {
     }
 
     @Override
-    public void summary(AsyncCallback<EntitySearchResult<MockupArrearsSummary>> callback, Vector<Key> buildingPKs, LogicalDate when, Vector<Sort> sorting,
-            int pageNumber, int pageSize) {
-        // TODO
+    public void summary(AsyncCallback<EntitySearchResult<AgingBuckets>> callback, Vector<Building> selectedBuildingsStubs, LogicalDate asOf,
+            Vector<Sort> sortingCriteria) {
+        ARFacade facade = ServerSideFactory.create(ARFacade.class);
+
+        Vector<Building> buildings = selectedBuildingsStubs.isEmpty() ? Persistence.secureQuery(EntityQueryCriteria.create(Building.class))
+                : selectedBuildingsStubs;
+
+        AgingBuckets proto = EntityFactory.create(AgingBuckets.class);
+
+        @SuppressWarnings("unchecked")
+        IPrimitive<BigDecimal>[] propertiesToAggregate = new IPrimitive[] {//@formatter:off
+                proto.bucketCurrent(),
+                proto.bucket30(),
+                proto.bucket60(),
+                proto.bucket90(),
+                proto.bucketOver90(),
+                proto.totalBalance(),
+                proto.arrearsAmount(),
+                proto.creditAmount()
+        };//@formatter:on
+
+        AgingBuckets totalBuckets = EntityFactory.create(AgingBuckets.class);
+
+        for (IPrimitive<BigDecimal> property : propertiesToAggregate) {
+            totalBuckets.setValue(property.getPath(), new BigDecimal("0.0"));
+        }
+
+        for (Building b : buildings) {
+
+            BuildingArrearsSnapshot snapshot = facade.getArrearsSnapshot(b, asOf);
+            if (snapshot == null) {
+                continue;
+            }
+            AgingBuckets snapshotBuckets = snapshot.totalAgingBuckets().detach();
+
+            for (IPrimitive<BigDecimal> property : propertiesToAggregate) {
+                BigDecimal value = (BigDecimal) totalBuckets.getValue(property.getPath());
+                value = value.add((BigDecimal) snapshotBuckets.getValue(property.getPath()));
+                totalBuckets.setValue(property.getPath(), value);
+            }
+        }
+
+        EntitySearchResult<AgingBuckets> result = new EntitySearchResult<AgingBuckets>();
+        Vector<AgingBuckets> agingBuckets = new Vector<AgingBuckets>();
+        agingBuckets.add(totalBuckets);
+        result.setData(agingBuckets);
+        result.hasMoreData(false);
+        result.setTotalRows(1);
+
+        callback.onSuccess(result);
     }
 
     @Override

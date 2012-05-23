@@ -117,13 +117,18 @@ public class BuildingDashboardViewImpl implements BuildingDashboardView {
     }
 
     @Override
-    public List<Building> getSelectedBuildings() {
-        return dashboard.getSelectedBuildings();
+    public List<Building> getSelectedBuildingsStubs() {
+        return dashboard.getSelectedBuildingsStubs();
     }
 
     @Override
     public EventBus getEventBus() {
         return dashboard.getEventBus();
+    }
+
+    @Override
+    public List<Building> getSelectedBuildings() {
+        return dashboard.getSelectedBuildings();
     }
 
 }

@@ -23,6 +23,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
+import com.propertyvista.domain.financial.billing.BuildingArrearsSnapshot;
 import com.propertyvista.domain.financial.billing.InvoiceCredit;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
@@ -72,6 +73,11 @@ public class ARFacadeImpl implements ARFacade {
     }
 
     @Override
+    public BuildingArrearsSnapshot getArrearsSnapshot(Building buildingStub, LogicalDate asOf) {
+        return ARArrearsManager.getArrearsSnapshot(buildingStub, asOf);
+    }
+
+    @Override
     public EntitySearchResult<LeaseArrearsSnapshot> getArrearsSnapshotRoster(LogicalDate asOf, List<Building> buildings, Vector<Criterion> searchCriteria,
             Vector<Sort> sortCriteria, int pageNumber, int pageSize) {
         return ARArrearsManager.getArrearsSnapshotRoster(asOf, buildings, searchCriteria, sortCriteria, pageNumber, pageSize);
@@ -81,6 +87,11 @@ public class ARFacadeImpl implements ARFacade {
     public void updateArrearsHistory(BillingAccount billingAccount) {
         ARArrearsManager.updateArrearsHistory(billingAccount);
 
+    }
+
+    @Override
+    public void updateArrearsHistory(Building building) {
+        ARArrearsManager.updateArrearsHistory(building);
     }
 
 }

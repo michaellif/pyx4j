@@ -138,8 +138,8 @@ public abstract class BoardViewActivity<V extends BoardView> extends AbstractAct
         EntityQueryCriteria<DashboardMetadata> criteria = new EntityQueryCriteria<DashboardMetadata>(DashboardMetadata.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().id(), view.getDashboardMetadata().getPrimaryKey()));
         HashMap<String, Serializable> parameters = new HashMap<String, Serializable>();
-        Vector<Key> buildingsPks = new Vector<Key>(view.getSelectedBuildings().size());
-        for (Building b : view.getSelectedBuildings()) {
+        Vector<Key> buildingsPks = new Vector<Key>(view.getSelectedBuildingsStubs().size());
+        for (Building b : view.getSelectedBuildingsStubs()) {
             buildingsPks.add(b.getPrimaryKey());
         }
         parameters.put(DashboardReportService.PARAM_SELECTED_BUILDINGS, buildingsPks);

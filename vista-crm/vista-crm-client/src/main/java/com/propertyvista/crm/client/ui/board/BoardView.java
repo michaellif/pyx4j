@@ -56,6 +56,8 @@ public interface BoardView extends IsWidget, HasBuildingSelectionChangedEventHan
     /**
      * @return the stubs of the buildings that this view was set up to display, can't be <code>null</code>, empty list denotes all buildings.
      */
+    List<Building> getSelectedBuildingsStubs();
+
     List<Building> getSelectedBuildings();
 
     DashboardMetadata getDashboardMetadata();

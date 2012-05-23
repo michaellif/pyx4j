@@ -23,6 +23,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
+import com.propertyvista.domain.financial.billing.BuildingArrearsSnapshot;
 import com.propertyvista.domain.financial.billing.InvoiceCredit;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
@@ -47,9 +48,13 @@ public interface ARFacade {
 
     TransactionHistoryDTO getTransactionHistory(BillingAccount billingAccount);
 
+    BuildingArrearsSnapshot getArrearsSnapshot(Building buildingStub, LogicalDate asOf);
+
     EntitySearchResult<LeaseArrearsSnapshot> getArrearsSnapshotRoster(LogicalDate asOf, List<Building> buildings, Vector<Criterion> searchCriteria,
             Vector<Sort> sortCriteria, int pageNumber, int pageSize);
 
     void updateArrearsHistory(BillingAccount billingAccount);
+
+    void updateArrearsHistory(Building building);
 
 }

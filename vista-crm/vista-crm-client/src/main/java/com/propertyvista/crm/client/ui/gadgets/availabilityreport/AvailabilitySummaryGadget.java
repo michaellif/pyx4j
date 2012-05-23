@@ -165,8 +165,8 @@ public class AvailabilitySummaryGadget extends AbstractGadget<AvailabilitySummar
         }
 
         private void doPopulate() {
-            final Vector<Key> buildingPks = new Vector<Key>(containerBoard.getSelectedBuildings().size());
-            for (Building b : containerBoard.getSelectedBuildings()) {
+            final Vector<Key> buildingPks = new Vector<Key>(containerBoard.getSelectedBuildingsStubs().size());
+            for (Building b : containerBoard.getSelectedBuildingsStubs()) {
                 buildingPks.add(b.getPrimaryKey());
             }
 

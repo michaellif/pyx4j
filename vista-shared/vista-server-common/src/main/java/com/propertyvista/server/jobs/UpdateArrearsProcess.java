@@ -27,6 +27,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.domain.financial.BillingAccount;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 public class UpdateArrearsProcess implements PmcProcess {
@@ -41,6 +42,11 @@ public class UpdateArrearsProcess implements PmcProcess {
 
     @Override
     public void executePmcJob() {
+        updateBillingAccountsArrears();
+        updateBuildingArrears();
+    }
+
+    public void updateBillingAccountsArrears() {
         log.info("Arrears Update for billing accounts started");
 
         EntityQueryCriteria<BillingAccount> criteria = EntityQueryCriteria.create(BillingAccount.class);
@@ -64,10 +70,9 @@ public class UpdateArrearsProcess implements PmcProcess {
 
             try {
                 facade.updateArrearsHistory(billingAccounts.next());
-
+                Persistence.service().commit();
                 PmcProcessContext.getRunStats().processed().setValue(currentBillingAccount);
                 PmcProcessContext.setRunStats(PmcProcessContext.getRunStats());
-                Persistence.service().commit();
             } catch (Throwable caught) {
                 log.error("failed to update arrears history: {}", caught.getMessage());
                 Persistence.service().rollback();
@@ -79,6 +84,42 @@ public class UpdateArrearsProcess implements PmcProcess {
         }
         log.info(SimpleMessageFormat.format("Arrears Update for billing accounts finished, processed {0} billignAccounts, {1} FAILED", numOfBillingAccounts,
                 failed));
+    }
+
+    private void updateBuildingArrears() {
+        log.info("Arrears Update for buildings started");
+
+        EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
+        long total = Persistence.service().count(criteria);
+
+        Iterator<Building> buildings = Persistence.service().query(null, criteria, AttachLevel.IdOnly);
+
+        ARFacade facade = ServerSideFactory.create(ARFacade.class);
+
+        long current = 0L;
+        long failed = 0L;
+
+        PmcProcessContext.getRunStats().total().setValue(total);
+        PmcProcessContext.getRunStats().failed().setValue(0L);
+
+        while (buildings.hasNext()) {
+            ++current;
+            try {
+                facade.updateArrearsHistory(buildings.next());
+                Persistence.service().commit();
+                PmcProcessContext.getRunStats().processed().setValue(current);
+                PmcProcessContext.setRunStats(PmcProcessContext.getRunStats());
+            } catch (Throwable caught) {
+                log.error("failed to update arrears history: {}", caught.getMessage());
+                Persistence.service().rollback();
+                PmcProcessContext.getRunStats().processed().setValue(current);
+                PmcProcessContext.getRunStats().failed().setValue(++failed);
+                PmcProcessContext.setRunStats(PmcProcessContext.getRunStats());
+
+            }
+        }
+
+        log.info(SimpleMessageFormat.format("Arrears Update for buildings finished, processed {0} billignAccounts, {1} FAILED", current, failed));
     }
 
     @Override

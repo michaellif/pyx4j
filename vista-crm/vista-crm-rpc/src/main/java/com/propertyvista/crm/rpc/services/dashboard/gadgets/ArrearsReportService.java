@@ -24,19 +24,18 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.rpc.shared.IService;
 
 import com.propertyvista.domain.dashboard.gadgets.arrears.LeaseArrearsSnapshotDTO;
-import com.propertyvista.domain.dashboard.gadgets.arrears.MockupArrearsSummary;
+import com.propertyvista.domain.financial.billing.AgingBuckets;
 import com.propertyvista.domain.financial.billing.InvoiceDebit.DebitType;
 import com.propertyvista.domain.property.asset.building.Building;
 
 public interface ArrearsReportService extends IService {
 
     @Deprecated
-    void summary(AsyncCallback<EntitySearchResult<MockupArrearsSummary>> callback, Vector<Key> buildingPKs, LogicalDate when, Vector<Sort> sortingCriteria,
-            int pageNumber, int pageSize);
-
-    @Deprecated
     void arrearsMonthlyComparison(AsyncCallback<Vector<Vector<Double>>> callback, Vector<Key> buildingPKs, int yearsAgo);
 
-    void leaseArrearsRoster(AsyncCallback<EntitySearchResult<LeaseArrearsSnapshotDTO>> callback, Vector<Building> buildingStubs, LogicalDate asOf,
+    void leaseArrearsRoster(AsyncCallback<EntitySearchResult<LeaseArrearsSnapshotDTO>> callback, Vector<Building> selectedBuildingsStubs, LogicalDate asOf,
             DebitType arrearsCategory, Vector<Sort> sortingCriteria, int pageNumber, int pageSize);
+
+    void summary(AsyncCallback<EntitySearchResult<AgingBuckets>> callback, Vector<Building> selectedBuildingsStubs, LogicalDate asOf,
+            Vector<Sort> sortingCriteria);
 }

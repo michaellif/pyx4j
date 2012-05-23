@@ -119,6 +119,7 @@ public class ARArrearsManager {
         BuildingArrearsSnapshot previousSnapshot = getArrearsSnapshot(building, asOf);
 
         // 3. compare 1 and 2 - if it is a difference persist first and update toDate of second otherwise do nothing
+        currentSnapshot.building().set(building);
         saveIfChanged(currentSnapshot, previousSnapshot);
     }
 
@@ -144,7 +145,7 @@ public class ARArrearsManager {
     /**
      * @param sortCriteria
      * @param searchCriteria
-     * @return return of a roster of arrearsSnapshots per billing accounts of the selected building.
+     * @return a roster of arrearsSnapshots per billing accounts of the selected building.
      */
     static EntitySearchResult<LeaseArrearsSnapshot> getArrearsSnapshotRoster(LogicalDate asOf, List<Building> buildings, Vector<Criterion> searchCriteria,
             Vector<Sort> sortCriteria, int pageNumber, int pageSize) {

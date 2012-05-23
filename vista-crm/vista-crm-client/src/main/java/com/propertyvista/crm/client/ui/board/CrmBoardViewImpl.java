@@ -143,7 +143,7 @@ public class CrmBoardViewImpl extends BoardViewImpl implements CrmBoardView {
             new BuildingSelectorDialog(true, getSelectedBuildings()) {
                 @Override
                 public boolean onClickOk() {
-                    ArrayList<Building> selected = new ArrayList<Building>(getSelectedBuildings().size() + getSelectedItems().size());
+                    ArrayList<Building> selected = new ArrayList<Building>(getSelectedBuildingsStubs().size() + getSelectedItems().size());
                     selected.addAll(getSelectedBuildings());
                     selected.addAll(getSelectedItems());
                     CrmBoardViewImpl.this.setBuildings(selected, true);
@@ -163,4 +163,5 @@ public class CrmBoardViewImpl extends BoardViewImpl implements CrmBoardView {
         }
 
     }
+
 }

@@ -193,11 +193,7 @@ public abstract class BoardBase extends DockLayoutPanel implements BoardView {
     @Override
     public void setBuildings(List<Building> buildings, boolean fireEvent) {
         if (board != null && getDashboardMetadata() != null && getDashboardMetadata().type().getValue() == DashboardType.building) {
-
-            selectedBuildings = new ArrayList<Building>(buildings.size());
-            for (Building b : buildings) {
-                selectedBuildings.add(b.<Building> createIdentityStub());
-            }
+            selectedBuildings = new ArrayList<Building>(buildings);
 
             if (fireEvent) {
                 fireBuildingsSelectionChanged();
@@ -246,6 +242,17 @@ public abstract class BoardBase extends DockLayoutPanel implements BoardView {
 
     public boolean isReadOnly() {
         return readOnly;
+    }
+
+    @Override
+    public List<Building> getSelectedBuildingsStubs() {
+        List<Building> selectedBuilingStubs = new ArrayList<Building>();
+
+        for (Building b : selectedBuildings) {
+            selectedBuilingStubs.add(b.<Building> createIdentityStub());
+        }
+
+        return selectedBuilingStubs;
     }
 
     @Override

@@ -115,7 +115,7 @@ public class UnitAvailabilityReportGadget extends AbstractGadget<UnitAvailabilit
 
         @Override
         public void populatePage(int pageNumber) {
-            if (containerBoard.getSelectedBuildings() == null) {
+            if (containerBoard.getSelectedBuildingsStubs() == null) {
                 setAsOfValue(getStatusDate());
                 setPageData(new Vector<UnitAvailabilityStatus>(), 0, 0, false);
                 populateSucceded();
@@ -123,8 +123,8 @@ public class UnitAvailabilityReportGadget extends AbstractGadget<UnitAvailabilit
             }
 
             final int page = pageNumber;
-            final Vector<Key> buildingPks = new Vector<Key>(containerBoard.getSelectedBuildings().size());
-            for (Building b : containerBoard.getSelectedBuildings()) {
+            final Vector<Key> buildingPks = new Vector<Key>(containerBoard.getSelectedBuildingsStubs().size());
+            for (Building b : containerBoard.getSelectedBuildingsStubs()) {
                 buildingPks.add(b.getPrimaryKey());
             }
 

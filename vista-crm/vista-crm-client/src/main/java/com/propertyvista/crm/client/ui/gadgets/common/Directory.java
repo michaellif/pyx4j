@@ -19,6 +19,7 @@ import java.util.List;
 import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.crm.client.ui.gadgets.arrears.ArrearsStatusGadget;
+import com.propertyvista.crm.client.ui.gadgets.arrears.ArrearsSummaryGadget;
 import com.propertyvista.crm.client.ui.gadgets.availabilityreport.AvailabilitySummaryGadget;
 import com.propertyvista.crm.client.ui.gadgets.availabilityreport.TurnoverAnalysisGraphGadget;
 import com.propertyvista.crm.client.ui.gadgets.availabilityreport.UnitAvailabilityReportGadget;
@@ -41,6 +42,7 @@ public class Directory {
         (IGadgetFactory)new BuildingListerGadget(),
         
         new ArrearsStatusGadget(),
+        new ArrearsSummaryGadget(),
         
 //        new ArrearsSummaryGadget(),
 //        new ArrearsYOYAnalysisChartGadget(),
