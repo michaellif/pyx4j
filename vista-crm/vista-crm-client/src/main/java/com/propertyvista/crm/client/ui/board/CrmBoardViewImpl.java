@@ -29,7 +29,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.crm.client.themes.CrmTheme;
+import com.propertyvista.crm.client.ui.board.BoardBase.StyleSuffix;
 import com.propertyvista.crm.client.ui.components.boxes.BuildingSelectorDialog;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.dashboard.DashboardMetadata.DashboardType;
@@ -41,10 +41,12 @@ public class CrmBoardViewImpl extends BoardViewImpl implements CrmBoardView {
 
     private final BuildingsBar buildingsBar;
 
+    private final static int BUILDINGS_BAR_HEIGHT = 30;
+
     public CrmBoardViewImpl(BoardBase board) {
         buildingsBar = new BuildingsBar();
-        addNorth(buildingsBar, 0.1); // 0.1 instead of "setVisible(false)"
-
+        buildingsBar.asWidget().getElement().setId("buildingsbar");
+        addNorth(buildingsBar, 0.1);
         setBoard(board);
     }
 
@@ -54,7 +56,7 @@ public class CrmBoardViewImpl extends BoardViewImpl implements CrmBoardView {
         setCaption(asBoardCaption(dashboardMetadata));
         if (dashboardMetadata != null) {
             boolean isBuildingDashboard = dashboardMetadata.type().getValue() == DashboardType.building;
-            this.setWidgetSize(buildingsBar.asWidget(), isBuildingDashboard ? CrmTheme.defaultHeaderHeight : 0.1); // for some reason setVisible() doesn't work here
+            this.setWidgetSize(buildingsBar.asWidget(), isBuildingDashboard ? BUILDINGS_BAR_HEIGHT : 0.1); // for some reason setVisible() doesn't work here
         }
     }
 
@@ -106,6 +108,7 @@ public class CrmBoardViewImpl extends BoardViewImpl implements CrmBoardView {
         public BuildingsBar() {
 
             bar = new HorizontalPanel();
+            bar.setStyleName(BoardBase.DEFAULT_STYLE_PREFIX + StyleSuffix.actionsPanel);
             bar.setWidth("100%");
             bar.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
             bar.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);

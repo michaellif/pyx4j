@@ -163,13 +163,6 @@ public class ARArrearsManager {
         criteria.add(PropertyCriterion.le(criteria.proto().fromDate(), asOf));
 
         criteria.addAll(searchCriteria);
-
-//        // add sorting criteria to fetch the most recent arrears snapshots
-//        Vector<Sort> adjustedSortCriteria = new Vector<EntityQueryCriteria.Sort>();
-//        adjustedSortCriteria.add(new Sort(criteria.proto().fromDate().getPath().toString(), true));
-//        adjustedSortCriteria.addAll(sortCriteria);
-
-//        criteria.setSorts(adjustedSortCriteria);
         criteria.setSorts(sortCriteria);
 
         arrearsRoster = new Vector<LeaseArrearsSnapshot>(Persistence.service().query(criteria));
