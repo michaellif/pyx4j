@@ -14,6 +14,7 @@
 package com.propertyvista.biz.financial.payment;
 
 import java.io.File;
+import java.math.BigDecimal;
 import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -31,6 +32,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.log4j.LoggerConfig;
 
 import com.propertyvista.admin.domain.payment.pad.PadBatch;
+import com.propertyvista.admin.domain.payment.pad.PadDebitRecord;
 import com.propertyvista.admin.domain.payment.pad.PadFile;
 import com.propertyvista.payment.pad.CaledonPadFileWriter;
 import com.propertyvista.payment.pad.CaledonPadSftpClient;
@@ -86,10 +88,29 @@ public class PadCaledon {
                 }
             } while (file.exists() || fileSent.exists());
 
+            // Calculate Totals
+            int fileRecordsCount = 0;
+            BigDecimal fileAmount = new BigDecimal("0");
+            int batchNumberCount = 0;
             Persistence.service().retrieveMember(padFile.batches());
             for (PadBatch padBatch : padFile.batches()) {
                 Persistence.service().retrieveMember(padBatch.records());
+
+                padBatch.batchNumber().setValue(++batchNumberCount);
+                BigDecimal batchAmount = new BigDecimal("0");
+                for (PadDebitRecord record : padBatch.records()) {
+                    batchAmount = batchAmount.add(record.amount().getValue());
+                }
+                padBatch.batchAmount().setValue(batchAmount);
+
+                fileRecordsCount += padBatch.records().size();
+                fileAmount = fileAmount.add(batchAmount);
+                // Save Calculated totals
+                Persistence.service().persist(padBatch);
             }
+            padFile.recordsCount().setValue(fileRecordsCount);
+            padFile.fileAmount().setValue(fileAmount);
+            Persistence.service().persist(padFile);
 
             log.info("sending pad file {}", file.getAbsolutePath());
 
@@ -98,11 +119,6 @@ public class PadCaledon {
                 writer.write();
             } finally {
                 writer.close();
-            }
-
-            // Save Sent totals
-            for (PadBatch padBatch : padFile.batches()) {
-                Persistence.service().persist(padBatch);
             }
 
             String errorMessage = new CaledonPadSftpClient().sftpPut(file);

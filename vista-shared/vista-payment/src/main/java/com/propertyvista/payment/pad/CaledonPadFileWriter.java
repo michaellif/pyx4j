@@ -42,17 +42,10 @@ public class CaledonPadFileWriter implements Closeable {
 
     public void write() throws IOException {
         writeFileHeader(padFile);
-        BigDecimal fileAmount = new BigDecimal("0");
-        int recordsCount = 0;
         for (PadBatch padBatch : padFile.batches()) {
-            BigDecimal batchAmount = writeBatch(padBatch);
-            fileAmount = fileAmount.add(batchAmount);
-            recordsCount += padBatch.records().size();
+            writeBatch(padBatch);
         }
-        writeFileTrailer(fileAmount, recordsCount);
-
-        padFile.recordsCount().setValue(recordsCount);
-        padFile.fileAmount().setValue(fileAmount);
+        writeFileTrailer(padFile);
     }
 
     private void writeFileHeader(PadFile padFile) throws IOException {
@@ -79,35 +72,33 @@ public class CaledonPadFileWriter implements Closeable {
         writer.append("\n");
     }
 
-    private void writeFileTrailer(BigDecimal fileAmount, int recordsCount) throws IOException {
+    private void writeFileTrailer(PadFile padFile) throws IOException {
         // Record Type
         writer.append("Z").append(",");
 
         // Total number of detail debit records in the file
-        writer.append(String.valueOf(recordsCount)).append(",");
+        writer.append(String.valueOf(padFile.recordsCount().getValue())).append(",");
 
         // Total value of the batch - 14 digit field with 2 implied decimal places! ($1.00 would be represented by 100). This field cannot contain a decimal or dollar ($) sign
-        writer.append(formatAmount(fileAmount));
+        writer.append(formatAmount(padFile.fileAmount().getValue()));
         writer.append("\n");
     }
 
-    private BigDecimal writeBatch(PadBatch padBatch) throws IOException {
+    private void writeBatch(PadBatch padBatch) throws IOException {
         writeBatchHeader(padBatch);
-        BigDecimal batchAmount = new BigDecimal("0");
         for (PadDebitRecord record : padBatch.records()) {
             writeDebitRecord(record);
-            batchAmount = batchAmount.add(record.amount().getValue());
         }
-        writeBatchTrailer(padBatch, batchAmount);
-
-        padBatch.batchAmount().setValue(batchAmount);
-
-        return batchAmount;
+        writeBatchTrailer(padBatch);
     }
 
     private void writeBatchHeader(PadBatch padBatch) throws IOException {
         // Record Type
         writer.append("X").append(",");
+
+        //Batch Number, Must be incremented by one for each batch submitted within a file
+        writer.append(padBatch.batchNumber().getStringView()).append(",");
+
         // Batch Payment Type | 'D' - fixed, represents debit
         writer.append("D").append(",");
         //Transaction Type Code; '431' fixed
@@ -124,7 +115,7 @@ public class CaledonPadFileWriter implements Closeable {
         writer.append("\n");
     }
 
-    private void writeBatchTrailer(PadBatch padBatch, BigDecimal batchAmount) throws IOException {
+    private void writeBatchTrailer(PadBatch padBatch) throws IOException {
         // Record Type
         writer.append("Y").append(",");
         // Batch Payment Type | 'D' - fixed, represents debit
@@ -133,7 +124,7 @@ public class CaledonPadFileWriter implements Closeable {
         writer.append(String.valueOf(padBatch.records().size())).append(",");
 
         // Total value of the batch - 14 digit field with 2 implied decimal places! ($1.00 would be represented by 100). This field cannot contain a decimal or dollar ($) sign
-        writer.append(formatAmount(batchAmount));
+        writer.append(formatAmount(padBatch.batchAmount().getValue()));
         writer.append("\n");
     }
 

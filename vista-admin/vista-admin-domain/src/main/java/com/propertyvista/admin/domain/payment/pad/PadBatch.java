@@ -50,6 +50,8 @@ public interface PadBatch extends IEntity {
     @JoinColumn
     PadFile padFile();
 
+    IPrimitive<Integer> batchNumber();
+
     @Owned(cascade = {})
     @Detached(level = AttachLevel.Detached)
     IList<PadDebitRecord> records();
