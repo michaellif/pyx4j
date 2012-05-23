@@ -15,6 +15,9 @@ package com.propertyvista.biz.financial.ar;
 
 import java.util.Comparator;
 
+import com.pyx4j.commons.LogicalDate;
+
+import com.propertyvista.biz.financial.SysDateManager;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
 import com.propertyvista.domain.policy.policies.ARPolicy;
 
@@ -43,14 +46,20 @@ public class InvoiceDebitComparator implements Comparator<InvoiceDebit> {
         return 0;
     }
 
-    private int compareBucketAge(InvoiceDebit debit1, InvoiceDebit debit2) {
-        long diff = debit1.dueDate().getValue().getTime() - debit2.dueDate().getValue().getTime();
-        int diffDays = (int) (diff / (24 * 1000 * 60 * 60));
-        if (new Integer(Math.abs(diffDays)) >= 30) {
-            return diffDays;
+    int compareBucketAge(InvoiceDebit debit1, InvoiceDebit debit2) {
+        long u = debit1.dueDate().getValue().getTime() - debit2.dueDate().getValue().getTime();
+        int uDays = (int) (u / (24 * 1000 * 60 * 60));
+        if (new Integer(Math.abs(uDays)) >= 30) {
+            return uDays;
         } else {
-//TODO 1
+            LogicalDate currentDate = new LogicalDate(SysDateManager.getSysDate());
+            long v = debit1.dueDate().getValue().getTime() - currentDate.getTime();
+            int vDays = (int) (v / (24 * 1000 * 60 * 60));
+            if ((uDays + vDays) >= 0 || (uDays + vDays) < 30) {
+                return 0;
+            } else {
+                return uDays;
+            }
         }
-        return 0;
     }
 }

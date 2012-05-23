@@ -20,99 +20,33 @@
  */
 package com.propertyvista.biz.financial.ar;
 
-import java.util.List;
-
-import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.biz.financial.FinancialTestBase;
+import com.propertyvista.biz.financial.FinancialTestsUtils;
 import com.propertyvista.biz.financial.SysDateManager;
+import com.propertyvista.domain.financial.billing.InvoiceAccountCharge;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
-import com.propertyvista.domain.policy.policies.ARPolicy;
-import com.propertyvista.domain.policy.policies.ARPolicy.CreditDebitRule;
-import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.financial.billing.InvoiceDebit.DebitType;
 
 public class ARInvoiceDebitComparatorTest extends FinancialTestBase {
-
-    private long startTime;
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        preloadData();
-        startTime = System.currentTimeMillis();
     }
 
     @Override
     protected void tearDown() throws Exception {
-        System.out.println("Execution Time - " + (System.currentTimeMillis() - startTime) + "ms");
         super.tearDown();
     }
 
-    public void testScenario() {
-
-        setLeaseConditions("01-Mar-2011", "31-Aug-2011", 1);
-        addParking();
-
-        //==================== RUN 1 ======================//
-
-        SysDateManager.setSysDate("22-Feb-2011");
-        setLeaseStatus(Lease.Status.Approved);
-        runBilling(true, false);
-
-        //==================== RUN 2 ======================//
-
+    public void testBucketAgeComparator() {
         SysDateManager.setSysDate("01-Mar-2011");
-        setLeaseStatus(Lease.Status.Active);
 
-        SysDateManager.setSysDate("18-Mar-2011");
-        runBilling(true, false);
-
-        //==================== RUN 3 ======================//
-
-        SysDateManager.setSysDate("18-Apr-2011");
-        runBilling(true, false);
-
-        //==================== RUN 4 ======================//
-
-        SysDateManager.setSysDate("18-May-2011");
-        runBilling(true, false);
-
-        printTransactionHistory(ARTransactionManager.getTransactionHistory(retrieveLease().billingAccount()));
-
-        //
-        ARPolicy policy = arPolicyDataModel.getPolicy();
-        policy.creditDebitRule().setValue(CreditDebitRule.byDueDate);
-        Persistence.service().persist(policy);
-        Persistence.service().commit();
-
-        List<InvoiceDebit> debits = ARTransactionManager.getNotCoveredDebitInvoiceLineItems(retrieveLease().billingAccount());
-
-        for (InvoiceDebit invoiceDebit : debits) {
-            System.out.println("++++++++++" + invoiceDebit.dueDate().getValue() + " +++ " + invoiceDebit.description().getStringView());
-        }
-
-        policy = arPolicyDataModel.getPolicy();
-        policy.creditDebitRule().setValue(CreditDebitRule.byDebitType);
-        Persistence.service().persist(policy);
-        Persistence.service().commit();
-
-        debits = ARTransactionManager.getNotCoveredDebitInvoiceLineItems(retrieveLease().billingAccount());
-
-        for (InvoiceDebit invoiceDebit : debits) {
-            System.out.println("++++++++++" + invoiceDebit.dueDate().getValue() + " +++ " + invoiceDebit.description().getStringView());
-        }
-
-        policy = arPolicyDataModel.getPolicy();
-        policy.creditDebitRule().setValue(CreditDebitRule.byAgingBucketAndDebitType);
-        Persistence.service().persist(policy);
-        Persistence.service().commit();
-
-        debits = ARTransactionManager.getNotCoveredDebitInvoiceLineItems(retrieveLease().billingAccount());
-
-        for (InvoiceDebit invoiceDebit : debits) {
-            System.out.println("++++++++++" + invoiceDebit.dueDate().getValue() + " +++ " + invoiceDebit.description().getStringView());
-        }
+        InvoiceDebit lineItem = EntityFactory.create(InvoiceAccountCharge.class);
+        lineItem.dueDate().setValue(FinancialTestsUtils.getDate("18-Mar-2011"));
+        lineItem.debitType().setValue(DebitType.accountCharge);
 
     }
-
 }

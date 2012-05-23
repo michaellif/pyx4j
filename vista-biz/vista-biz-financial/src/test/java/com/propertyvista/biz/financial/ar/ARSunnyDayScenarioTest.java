@@ -29,19 +29,10 @@ import com.propertyvista.domain.tenant.lease.Lease;
 
 public class ARSunnyDayScenarioTest extends FinancialTestBase {
 
-    private long startTime;
-
     @Override
     protected void setUp() throws Exception {
         super.setUp();
         preloadData();
-        startTime = System.currentTimeMillis();
-    }
-
-    @Override
-    protected void tearDown() throws Exception {
-        System.out.println("Execution Time - " + (System.currentTimeMillis() - startTime) + "ms");
-        super.tearDown();
     }
 
     public void testScenario() {

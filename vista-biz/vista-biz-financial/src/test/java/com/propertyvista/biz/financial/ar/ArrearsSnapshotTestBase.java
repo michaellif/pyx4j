@@ -39,8 +39,6 @@ public abstract class ArrearsSnapshotTestBase extends FinancialTestBase {
 
     private EnumMap<DebitType, AgingBuckets> prevExpectedAgingBuckets;
 
-    private long startTime;
-
     private LogicalDate prevFromDate;
 
     @Override
@@ -48,17 +46,10 @@ public abstract class ArrearsSnapshotTestBase extends FinancialTestBase {
         super.setUp();
         cleanUp();
         preloadData();
-        startTime = System.currentTimeMillis();
     }
 
     private void cleanUp() {
         Persistence.service().delete(EntityQueryCriteria.create(LeaseArrearsSnapshot.class));
-    }
-
-    @Override
-    protected void tearDown() throws Exception {
-        System.out.println("Execution Time - " + (System.currentTimeMillis() - startTime) + "ms");
-        super.tearDown();
     }
 
     public void runAndConfirmBilling() {

@@ -66,6 +66,8 @@ import com.propertyvista.dto.TransactionHistoryDTO;
 
 public abstract class FinancialTestBase extends VistaDBTestBase {
 
+    private long startTime;
+
     protected LeaseDataModel leaseDataModel;
 
     protected LeaseAdjustmentReasonDataModel leaseAdjustmentReasonDataModel;
@@ -77,12 +79,14 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         super.setUp();
         Persistence.service().startBackgroundProcessTransaction();
         SysDateManager.setSysDate("01-Jan-2000");
+        startTime = System.currentTimeMillis();
     }
 
     @Override
     protected void tearDown() throws Exception {
         Persistence.service().commit();
         Persistence.service().endTransaction();
+        System.out.println("Execution Time - " + (System.currentTimeMillis() - startTime) + "ms");
         super.tearDown();
     }
 
