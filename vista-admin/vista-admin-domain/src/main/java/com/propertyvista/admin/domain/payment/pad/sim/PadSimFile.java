@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.admin.domain.payment.pad.sym;
+package com.propertyvista.admin.domain.payment.pad.sim;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -38,7 +38,7 @@ import com.propertyvista.domain.VistaNamespace;
 @Table(namespace = VistaNamespace.adminNamespace)
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 @GwtBlacklist
-public interface PadSymFile extends IEntity {
+public interface PadSimFile extends IEntity {
 
     public enum PadFileStatus {
 
@@ -64,7 +64,7 @@ public interface PadSymFile extends IEntity {
 
     @Owned(cascade = {})
     @Detached(level = AttachLevel.Detached)
-    IList<PadSymBatch> batches();
+    IList<PadSimBatch> batches();
 
     IPrimitive<Date> sent();
 

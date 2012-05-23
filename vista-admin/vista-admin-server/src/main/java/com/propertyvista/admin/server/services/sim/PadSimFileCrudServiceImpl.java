@@ -11,20 +11,20 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.admin.server.services.sym;
+package com.propertyvista.admin.server.services.sim;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.server.AbstractCrudServiceImpl;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
-import com.propertyvista.admin.domain.payment.pad.sym.PadSymFile;
-import com.propertyvista.admin.rpc.services.sym.PadSymFileCrudService;
+import com.propertyvista.admin.domain.payment.pad.sim.PadSimFile;
+import com.propertyvista.admin.rpc.services.sim.PadSimFileCrudService;
 
-public class PadSymFileCrudServiceImpl extends AbstractCrudServiceImpl<PadSymFile> implements PadSymFileCrudService {
+public class PadSimFileCrudServiceImpl extends AbstractCrudServiceImpl<PadSimFile> implements PadSimFileCrudService {
 
-    public PadSymFileCrudServiceImpl() {
-        super(PadSymFile.class);
+    public PadSimFileCrudServiceImpl() {
+        super(PadSimFile.class);
     }
 
     @Override
@@ -33,17 +33,17 @@ public class PadSymFileCrudServiceImpl extends AbstractCrudServiceImpl<PadSymFil
     }
 
     @Override
-    public void loadPadFile(AsyncCallback<PadSymFile> callback) {
+    public void loadPadFile(AsyncCallback<PadSimFile> callback) {
         // TODO Auto-generated method stub
     }
 
     @Override
-    public void replyAcknowledgment(AsyncCallback<VoidSerializable> callback, PadSymFile triggerStub) {
+    public void replyAcknowledgment(AsyncCallback<VoidSerializable> callback, PadSimFile triggerStub) {
         // TODO Auto-generated method stub
     }
 
     @Override
-    public void replyReconciliation(AsyncCallback<VoidSerializable> callback, PadSymFile triggerStub) {
+    public void replyReconciliation(AsyncCallback<VoidSerializable> callback, PadSimFile triggerStub) {
         // TODO Auto-generated method stub
     }
 

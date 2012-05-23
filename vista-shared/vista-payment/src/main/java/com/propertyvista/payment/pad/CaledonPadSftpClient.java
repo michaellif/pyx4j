@@ -41,6 +41,21 @@ public class CaledonPadSftpClient {
 
     private final String getSrc = "out";
 
+    private static boolean usePadSimulator = defaultUsePadSimulator();
+
+    private static boolean defaultUsePadSimulator() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    public static boolean usePadSimulator() {
+        return usePadSimulator;
+    }
+
+    public static void setUsePadSymulator(boolean usePadSymulator) {
+        CaledonPadSftpClient.usePadSimulator = usePadSymulator;
+    }
+
     private static Credentials getCredentials() {
         File credentialsFile = new File(System.getProperty("user.dir", "."), "caledon-credentials.properties");
         return J2SEServiceConnector.getCredentials(credentialsFile.getAbsolutePath());

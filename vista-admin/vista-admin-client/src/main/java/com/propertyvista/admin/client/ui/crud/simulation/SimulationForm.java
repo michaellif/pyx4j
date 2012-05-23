@@ -43,6 +43,10 @@ public class SimulationForm extends AdminEntityForm<SimulationDTO> {
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().networkSimulation().enabled())).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().networkSimulation().delay())).build());
 
+        content.setH1(++row, 0, 1, i18n.tr("External Systems"));
+
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().usePadSimulator())).build());
+
         return content;
     }
 

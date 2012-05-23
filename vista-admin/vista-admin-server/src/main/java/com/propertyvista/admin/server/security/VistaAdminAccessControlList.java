@@ -36,8 +36,8 @@ import com.propertyvista.admin.rpc.services.SimulationService;
 import com.propertyvista.admin.rpc.services.scheduler.RunCrudService;
 import com.propertyvista.admin.rpc.services.scheduler.RunDataCrudService;
 import com.propertyvista.admin.rpc.services.scheduler.TriggerCrudService;
-import com.propertyvista.admin.rpc.services.sym.PadSymBatchCrudService;
-import com.propertyvista.admin.rpc.services.sym.PadSymFileCrudService;
+import com.propertyvista.admin.rpc.services.sim.PadSimBatchCrudService;
+import com.propertyvista.admin.rpc.services.sim.PadSimFileCrudService;
 import com.propertyvista.domain.security.VistaBasicBehavior;
 
 public class VistaAdminAccessControlList extends ServletContainerAclBuilder {
@@ -68,7 +68,7 @@ public class VistaAdminAccessControlList extends ServletContainerAclBuilder {
         grant(VistaBasicBehavior.Admin, new IServiceExecutePermission(RunCrudService.class));
         grant(VistaBasicBehavior.Admin, new IServiceExecutePermission(RunDataCrudService.class));
 
-        grant(VistaBasicBehavior.Admin, new IServiceExecutePermission(PadSymFileCrudService.class));
-        grant(VistaBasicBehavior.Admin, new IServiceExecutePermission(PadSymBatchCrudService.class));
+        grant(VistaBasicBehavior.Admin, new IServiceExecutePermission(PadSimFileCrudService.class));
+        grant(VistaBasicBehavior.Admin, new IServiceExecutePermission(PadSimBatchCrudService.class));
     }
 }

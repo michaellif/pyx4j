@@ -26,6 +26,8 @@ public interface SimulationDTO extends IEntity {
 
     IPrimitive<Boolean> entityCacheServiceEnabled();
 
+    IPrimitive<Boolean> usePadSimulator();
+
     @ReadOnly
     IPrimitive<String> memcacheStatistics();
 

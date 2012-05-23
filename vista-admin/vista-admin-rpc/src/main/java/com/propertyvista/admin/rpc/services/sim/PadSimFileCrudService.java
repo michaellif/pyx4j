@@ -11,12 +11,21 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.admin.rpc.services.sym;
+package com.propertyvista.admin.rpc.services.sim;
+
+import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.rpc.shared.VoidSerializable;
 
-import com.propertyvista.admin.domain.payment.pad.sym.PadSymBatch;
+import com.propertyvista.admin.domain.payment.pad.sim.PadSimFile;
 
-public interface PadSymBatchCrudService extends AbstractCrudService<PadSymBatch> {
+public interface PadSimFileCrudService extends AbstractCrudService<PadSimFile> {
+
+    public void loadPadFile(AsyncCallback<PadSimFile> callback);
+
+    public void replyAcknowledgment(AsyncCallback<VoidSerializable> callback, PadSimFile triggerStub);
+
+    public void replyReconciliation(AsyncCallback<VoidSerializable> callback, PadSimFile triggerStub);
 
 }

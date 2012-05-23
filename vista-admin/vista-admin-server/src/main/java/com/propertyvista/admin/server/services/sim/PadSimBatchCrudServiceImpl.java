@@ -11,17 +11,17 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.admin.server.services.sym;
+package com.propertyvista.admin.server.services.sim;
 
 import com.pyx4j.entity.server.AbstractCrudServiceImpl;
 
-import com.propertyvista.admin.domain.payment.pad.sym.PadSymBatch;
-import com.propertyvista.admin.rpc.services.sym.PadSymBatchCrudService;
+import com.propertyvista.admin.domain.payment.pad.sim.PadSimBatch;
+import com.propertyvista.admin.rpc.services.sim.PadSimBatchCrudService;
 
-public class PadSymBatchCrudServiceImpl extends AbstractCrudServiceImpl<PadSymBatch> implements PadSymBatchCrudService {
+public class PadSimBatchCrudServiceImpl extends AbstractCrudServiceImpl<PadSimBatch> implements PadSimBatchCrudService {
 
-    public PadSymBatchCrudServiceImpl() {
-        super(PadSymBatch.class);
+    public PadSimBatchCrudServiceImpl() {
+        super(PadSimBatch.class);
     }
 
     @Override
