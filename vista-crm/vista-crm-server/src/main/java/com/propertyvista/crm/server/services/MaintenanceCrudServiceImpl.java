@@ -24,6 +24,7 @@ import com.propertyvista.crm.rpc.dto.ScheduleDataDTO;
 import com.propertyvista.crm.rpc.services.MaintenanceCrudService;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
+import com.propertyvista.domain.maintenance.SurveyResponse;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 
 public class MaintenanceCrudServiceImpl extends AbstractCrudServiceDtoImpl<MaintenanceRequest, MaintenanceRequestDTO> implements MaintenanceCrudService {
@@ -70,6 +71,15 @@ public class MaintenanceCrudServiceImpl extends AbstractCrudServiceDtoImpl<Maint
     public void resolveAction(AsyncCallback<VoidSerializable> callback, Key entityId) {
         MaintenanceRequest entity = Persistence.service().retrieve(MaintenanceRequest.class, entityId);
         entity.status().setValue(MaintenanceRequestStatus.Resolved);
+        Persistence.service().merge(entity);
+        Persistence.service().commit();
+        callback.onSuccess(null);
+    }
+
+    @Override
+    public void rateAction(AsyncCallback<VoidSerializable> callback, SurveyResponse rate, Key entityId) {
+        MaintenanceRequest entity = Persistence.service().retrieve(MaintenanceRequest.class, entityId);
+        entity.surveyResponse().set(rate);
         Persistence.service().merge(entity);
         Persistence.service().commit();
         callback.onSuccess(null);

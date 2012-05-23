@@ -20,6 +20,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.forms.client.ui.CNumberField;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
@@ -31,6 +32,7 @@ import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.dto.ScheduleDataDTO;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
+import com.propertyvista.domain.maintenance.SurveyResponse;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 
 public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<MaintenanceRequestDTO> implements MaintenanceRequestViewerView {
@@ -40,6 +42,8 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
     private final Button scheduleAction;
 
     private final Button resolveAction;
+
+    private final Button rateAction;
 
     private final Button cancelAction;
 
@@ -68,6 +72,20 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
         });
         addHeaderToolbarTwoItem(resolveAction.asWidget());
 
+        rateAction = new Button(i18n.tr("Rate..."), new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                new RateBox(getForm().getValue().surveyResponse()) {
+                    @Override
+                    public boolean onClickOk() {
+                        ((MaintenanceRequestViewerView.Presenter) presenter).rateAction(getValue());
+                        return true;
+                    }
+                }.show();
+            }
+        });
+        addHeaderToolbarTwoItem(rateAction.asWidget());
+
         cancelAction = new Button(i18n.tr("Cancel"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
@@ -86,6 +104,7 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
     public void reset() {
         scheduleAction.setVisible(false);
         resolveAction.setVisible(false);
+        rateAction.setVisible(false);
         cancelAction.setVisible(false);
         super.reset();
     }
@@ -98,6 +117,7 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
 
         scheduleAction.setVisible(value.status().getValue() == MaintenanceRequestStatus.Submitted);
         resolveAction.setVisible(value.status().getValue() == MaintenanceRequestStatus.Scheduled);
+        rateAction.setVisible(value.status().getValue() == MaintenanceRequestStatus.Resolved);
         cancelAction.setVisible(value.status().getValue() != MaintenanceRequestStatus.Cancelled
                 && value.status().getValue() != MaintenanceRequestStatus.Resolved);
     }
@@ -111,7 +131,7 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
         public ScheduleBox() {
             super(i18n.tr("Schedule"));
             setBody(createBody());
-            setSize("350px", "100px");
+            setHeight("100px");
         }
 
         protected Widget createBody() {
@@ -122,8 +142,8 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
                 public IsWidget createContent() {
                     FormFlexPanel main = new FormFlexPanel();
 
-                    main.setWidget(1, 0, new DecoratorBuilder(inject(proto().date()), 10).build());
-                    main.setWidget(2, 0, new DecoratorBuilder(inject(proto().time()), 10).build());
+                    main.setWidget(1, 0, new DecoratorBuilder(inject(proto().date()), 10).labelWidth(7).build());
+                    main.setWidget(2, 0, new DecoratorBuilder(inject(proto().time()), 10).labelWidth(7).build());
 
                     return main;
                 }
@@ -141,6 +161,52 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
         }
 
         public ScheduleDataDTO getValue() {
+            return content.getValue();
+        }
+    }
+
+    private abstract class RateBox extends OkCancelDialog {
+
+        private CEntityDecoratableForm<SurveyResponse> content;
+
+        public RateBox(SurveyResponse currentRate) {
+            super(i18n.tr("Schedule"));
+            setBody(createBody(currentRate));
+            setHeight("100px");
+        }
+
+        protected Widget createBody(SurveyResponse currentRate) {
+            getOkButton().setEnabled(true);
+
+            content = new CEntityDecoratableForm<SurveyResponse>(SurveyResponse.class) {
+                @Override
+                public IsWidget createContent() {
+                    FormFlexPanel main = new FormFlexPanel();
+
+                    main.setWidget(0, 0, new DecoratorBuilder(inject(proto().rating()), 3).labelWidth(7).build());
+                    main.setWidget(1, 0, new DecoratorBuilder(inject(proto().description()), 20).labelWidth(7).build());
+
+                    // tweaking:
+                    get(proto().rating()).setTooltip(i18n.tr("Set value in range from 1 to 5..."));
+                    if (get(proto().rating()) instanceof CNumberField) {
+                        ((CNumberField<Integer>) get(proto().rating())).setRange(1, 5);
+                    }
+
+                    return main;
+                }
+
+                @Override
+                public void addValidations() {
+                    super.addValidations();
+                }
+            };
+
+            content.initContent();
+            content.populate(currentRate);
+            return content.asWidget();
+        }
+
+        public SurveyResponse getValue() {
             return content.getValue();
         }
     }

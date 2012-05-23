@@ -25,5 +25,4 @@ public interface SurveyResponse extends IEntity {
     IPrimitive<String> description();
 
     IPrimitive<Integer> rating();
-
 }

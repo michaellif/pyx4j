@@ -26,6 +26,7 @@ import com.propertyvista.crm.client.ui.crud.maintenance.MaintenanceRequestViewer
 import com.propertyvista.crm.client.ui.crud.viewfactories.MaintenanceViewFactory;
 import com.propertyvista.crm.rpc.dto.ScheduleDataDTO;
 import com.propertyvista.crm.rpc.services.MaintenanceCrudService;
+import com.propertyvista.domain.maintenance.SurveyResponse;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 
@@ -63,6 +64,16 @@ public class MaintenanceRequestViewerActivity extends CrmViewerActivity<Maintena
     }
 
     @Override
+    public void rateAction(SurveyResponse rate) {
+        ((MaintenanceCrudService) getService()).rateAction(new DefaultAsyncCallback<VoidSerializable>() {
+            @Override
+            public void onSuccess(VoidSerializable result) {
+                populate();
+            }
+        }, rate, getEntityId());
+    }
+
+    @Override
     public void cancelAction() {
         ((MaintenanceCrudService) getService()).cancelAction(new DefaultAsyncCallback<VoidSerializable>() {
             @Override
@@ -71,4 +82,5 @@ public class MaintenanceRequestViewerActivity extends CrmViewerActivity<Maintena
             }
         }, getEntityId());
     }
+
 }

@@ -18,6 +18,7 @@ import java.io.Serializable;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -55,6 +56,8 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
     private final VistaTabLayoutPanel tabPanel = new VistaTabLayoutPanel(CrmTheme.defaultTabHeight, Unit.EM);
 
     private static final String optionSelect = i18n.tr("Select");
+
+    private final FormFlexPanel surveyPanel = new FormFlexPanel();
 
     public MaintenanceRequestForm() {
         this(false);
@@ -172,9 +175,9 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         right.setWidget(++row, 0, new DecoratorBuilder(inject(proto().updated(), new CDateLabel()), 10).build());
         right.setWidget(++row, 0, new DecoratorBuilder(inject(proto().submitted(), new CDateLabel()), 10).build());
 
-        FormFlexPanel survey = new FormFlexPanel();
-        survey.setWidget(1, 0, new DecoratorBuilder(inject(proto().surveyResponse().rating(), new CLabel()), 10).build());
-        survey.setWidget(1, 1, new DecoratorBuilder(inject(proto().surveyResponse().description(), new CLabel()), 10).build());
+        surveyPanel.setH1(0, 0, 2, proto().surveyResponse().getMeta().getCaption());
+        surveyPanel.setWidget(1, 0, new DecoratorBuilder(inject(proto().surveyResponse().rating(), new CLabel()), 10).build());
+        surveyPanel.setWidget(1, 1, new DecoratorBuilder(inject(proto().surveyResponse().description(), new CLabel()), 10).build());
 
         // assemble main panel:
         FormFlexPanel main = new FormFlexPanel();
@@ -183,11 +186,10 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         main.getFlexCellFormatter().setColSpan(0, 0, 2);
         main.setWidget(1, 0, left);
         main.setWidget(1, 1, right);
+        main.getFlexCellFormatter().setVerticalAlignment(1, 1, HasVerticalAlignment.ALIGN_TOP);
 
-        main.setH1(2, 0, 2, proto().surveyResponse().getMeta().getCaption());
+        main.setWidget(2, 0, surveyPanel);
         main.getFlexCellFormatter().setColSpan(2, 0, 2);
-        main.setWidget(3, 0, survey);
-        main.getFlexCellFormatter().setColSpan(3, 0, 2);
 
         main.getColumnFormatter().setWidth(0, "50%");
         main.getColumnFormatter().setWidth(1, "50%");
@@ -217,5 +219,7 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         get(proto().submitted()).setVisible(!getValue().submitted().isNull());
         get(proto().updated()).setVisible(!getValue().updated().isNull());
         get(proto().status()).setVisible(!getValue().submitted().isNull());
+
+        surveyPanel.setVisible(getValue().status().getValue() == MaintenanceRequestStatus.Resolved);
     }
 }
