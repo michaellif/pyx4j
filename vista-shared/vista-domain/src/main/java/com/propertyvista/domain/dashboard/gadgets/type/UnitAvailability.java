@@ -15,6 +15,7 @@ package com.propertyvista.domain.dashboard.gadgets.type;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.shared.I18nEnum;
@@ -41,6 +42,7 @@ public interface UnitAvailability extends ListerGadgetBaseMetadata {
     }
 
     /** Defines the filtering criteria button by its caption */
+    @NotNull
     IPrimitive<FilterPreset> defaultFilteringPreset();
 
     /** <code>null</code> null means now */
