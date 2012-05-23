@@ -16,7 +16,6 @@ package com.propertyvista.domain.property.asset.building;
 import java.util.Date;
 
 import com.pyx4j.entity.annotations.Caption;
-import com.pyx4j.entity.annotations.CascadeType;
 import com.pyx4j.entity.annotations.ColumnId;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
@@ -43,7 +42,6 @@ import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.dashboard.gadgets.arrears.MockupArrearsSummary;
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitTurnoverStats;
 import com.propertyvista.domain.financial.BuildingMerchantAccount;
-import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.financial.billing.BuildingArrearsSnapshot;
 import com.propertyvista.domain.financial.offering.ProductCatalog;
 import com.propertyvista.domain.marketing.Marketing;
@@ -127,14 +125,12 @@ public interface Building extends PolicyNode, NotesAndAttachmentsNode {
     IPrimitive<Date> updated();
 
     @Owned
-    @Detached
-// TODO VladS    
-//    @Detached(level = AttachLevel.Detached)
+    @Detached(level = AttachLevel.Detached)
     IList<BuildingAmenity> amenities();
 
-    @JoinTable(value = BuildingMerchantAccount.class, cascade = CascadeType.PERSIST)
-    @Detached
-    ISet<MerchantAccount> merchantAccounts();
+    @Detached(level = AttachLevel.Detached)
+    @Owned
+    ISet<BuildingMerchantAccount> merchantAccounts();
 
     // ----------------------------------------------------
     // parent <-> child relationship:

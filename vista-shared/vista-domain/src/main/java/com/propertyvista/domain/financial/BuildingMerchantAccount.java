@@ -13,14 +13,26 @@
  */
 package com.propertyvista.domain.financial;
 
+import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.Indexed;
+import com.pyx4j.entity.annotations.JoinColumn;
+import com.pyx4j.entity.annotations.Owner;
+import com.pyx4j.entity.annotations.ReadOnly;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 
 import com.propertyvista.domain.property.asset.building.Building;
 
 public interface BuildingMerchantAccount extends IEntity {
 
-    MerchantAccount merchantAccount();
-
+    @Owner
+    @NotNull
+    @ReadOnly
+    @Detached
+    @Indexed
+    @JoinColumn
     Building building();
+
+    MerchantAccount merchantAccount();
 
 }

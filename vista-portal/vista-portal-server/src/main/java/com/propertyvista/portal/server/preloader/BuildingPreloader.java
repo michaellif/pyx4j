@@ -35,6 +35,7 @@ import com.pyx4j.essentials.server.preloader.DataGenerator;
 
 import com.propertyvista.domain.company.Portfolio;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
+import com.propertyvista.domain.financial.BuildingMerchantAccount;
 import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.FeatureItemType;
@@ -193,7 +194,9 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
             // Service Catalog:
             productCatalogGenerator.createProductCatalog(building.productCatalog());
 
-            building.merchantAccounts().add(merchantAccount);
+            BuildingMerchantAccount bma = building.merchantAccounts().$();
+            bma.merchantAccount().set(merchantAccount);
+            building.merchantAccounts().add(bma);
 
             //Media
             if (this.getParameter(VistaDataPreloaderParameter.attachMedia) != Boolean.FALSE) {

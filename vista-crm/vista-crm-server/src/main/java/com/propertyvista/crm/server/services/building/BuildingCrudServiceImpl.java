@@ -30,6 +30,7 @@ import com.propertyvista.domain.GeoLocation;
 import com.propertyvista.domain.GeoLocation.LatitudeType;
 import com.propertyvista.domain.GeoLocation.LongitudeType;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
+import com.propertyvista.domain.financial.BuildingMerchantAccount;
 import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.FeatureItemType;
@@ -58,7 +59,8 @@ public class BuildingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Building
         Persistence.service().retrieve(dto.contacts().organizationContacts());
         Persistence.service().retrieve(dto.marketing().adBlurbs());
         Persistence.service().retrieve(dto.dashboard());
-        Persistence.service().retrieve(dto.amenities());
+        Persistence.service().retrieveMember(in.amenities());
+        dto.amenities().set(in.amenities());
 
         if (dto.dashboard().isEmpty()) {
             // load first building  dashoard by default:
@@ -96,11 +98,10 @@ public class BuildingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Building
         }
 
         // Financial
+        Persistence.service().retrieveMember(in.merchantAccounts());
         if (!in.merchantAccounts().isEmpty()) {
-            Persistence.service().retrieve(in.merchantAccounts());
-            MerchantAccount oneAccount = in.merchantAccounts().iterator().next();
+            MerchantAccount oneAccount = in.merchantAccounts().iterator().next().merchantAccount();
             MerchantAccountCrudServiceImpl.setCalulatedFileds(oneAccount, oneAccount);
-            dto.merchantAccounts().add(oneAccount);
             dto.merchantAccount().set(oneAccount);
         }
     }
@@ -138,8 +139,13 @@ public class BuildingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Building
             ServerSideFactory.create(IdAssignmentFacade.class).assignId(dbo);
         }
 
-        dbo.merchantAccounts().clear();
-        dbo.merchantAccounts().add(in.merchantAccount());
+        {
+            Persistence.service().retrieveMember(dbo.merchantAccounts());
+            dbo.merchantAccounts().clear();
+            BuildingMerchantAccount bma = dbo.merchantAccounts().$();
+            bma.merchantAccount().set(in.merchantAccount());
+            dbo.merchantAccounts().add(bma);
+        }
 
         Persistence.service().merge(dbo);
         PublicDataUpdater.updateIndexData(dbo);
