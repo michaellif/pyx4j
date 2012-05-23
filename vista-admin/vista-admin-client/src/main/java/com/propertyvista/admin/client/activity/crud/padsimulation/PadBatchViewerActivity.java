@@ -22,12 +22,12 @@ import com.propertyvista.admin.client.activity.crud.AdminViewerActivity;
 import com.propertyvista.admin.client.ui.crud.padsimulation.PadBatchViewerView;
 import com.propertyvista.admin.client.viewfactories.crud.AdministrationVeiwFactory;
 import com.propertyvista.admin.domain.payment.pad.sim.PadSimBatch;
-import com.propertyvista.admin.rpc.services.sim.PadSimFileCrudService;
+import com.propertyvista.admin.rpc.services.sim.PadSimBatchCrudService;
 
 public class PadBatchViewerActivity extends AdminViewerActivity<PadSimBatch> implements PadBatchViewerView.Presenter {
 
     @SuppressWarnings("unchecked")
     public PadBatchViewerActivity(CrudAppPlace place) {
-        super(place, AdministrationVeiwFactory.instance(PadBatchViewerView.class), (AbstractCrudService<PadSimBatch>) GWT.create(PadSimFileCrudService.class));
+        super(place, AdministrationVeiwFactory.instance(PadBatchViewerView.class), (AbstractCrudService<PadSimBatch>) GWT.create(PadSimBatchCrudService.class));
     }
 }
