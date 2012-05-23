@@ -25,11 +25,11 @@ import com.propertyvista.admin.server.onboarding.rhf.AbstractRequestHandler;
 import com.propertyvista.onboarding.ReserveDnsNameRequestIO;
 import com.propertyvista.onboarding.ResponseIO;
 
-public class ReservDnsNameRequestHandler extends AbstractRequestHandler<ReserveDnsNameRequestIO> {
+public class ReserveDnsNameRequestHandler extends AbstractRequestHandler<ReserveDnsNameRequestIO> {
 
-    private final static Logger log = LoggerFactory.getLogger(ReservDnsNameRequestHandler.class);
+    private final static Logger log = LoggerFactory.getLogger(ReserveDnsNameRequestHandler.class);
 
-    public ReservDnsNameRequestHandler() {
+    public ReserveDnsNameRequestHandler() {
         super(ReserveDnsNameRequestIO.class);
     }
 
