@@ -126,6 +126,10 @@ public class CaledonPadSftpClient {
                         log.info("SFTP file {} received", dst.getAbsolutePath());
                     }
                 }
+                // Only one file for Ack. 
+                if (acknowledgement) {
+                    break;
+                }
             }
             return lFiles;
         } catch (SftpException e) {

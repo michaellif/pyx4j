@@ -13,14 +13,12 @@
  */
 package com.propertyvista.biz.financial.payment;
 
-import java.util.Map;
-
 import com.propertyvista.admin.domain.payment.pad.PadFile;
 
 public interface PaymentProcessFacade {
 
     PadFile sendPadFile();
 
-    Map<String, TransactionsStats> recivePadAcknowledgementFiles();
+    PadFile recivePadAcknowledgementFiles();
 
 }

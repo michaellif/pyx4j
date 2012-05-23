@@ -23,8 +23,8 @@ public class PmcProcessFactory {
             return new TestPmcProcess();
         case paymentsPadSend:
             return new PadSendProcess();
-        case paymentsPadRecive:
-            return new PadReciveProcess();
+        case paymentsPadReciveAcknowledgment:
+            return new PadReciveAcknowledgmentProcess();
         case cleanup:
             return new CleanupPmcProcess();
         case updateArrears:

@@ -13,27 +13,23 @@
  */
 package com.propertyvista.server.jobs;
 
-import java.util.Map;
-
 import com.pyx4j.config.server.ServerSideFactory;
-import com.pyx4j.server.contexts.NamespaceManager;
 
+import com.propertyvista.admin.domain.payment.pad.PadFile;
 import com.propertyvista.biz.financial.payment.PaymentProcessFacade;
-import com.propertyvista.biz.financial.payment.TransactionsStats;
 
-public class PadReciveProcess implements PmcProcess {
+public class PadReciveAcknowledgmentProcess implements PmcProcess {
 
-    private Map<String, TransactionsStats> transactionsStats;
+    private PadFile padFile;
 
     @Override
     public boolean start() {
-        transactionsStats = ServerSideFactory.create(PaymentProcessFacade.class).recivePadAcknowledgementFiles();
-        return (transactionsStats != null);
+        padFile = ServerSideFactory.create(PaymentProcessFacade.class).recivePadAcknowledgementFiles();
+        return (padFile != null);
     }
 
     @Override
     public void executePmcJob() {
-        TransactionsStats stats = transactionsStats.get(NamespaceManager.getNamespace());
         // TODO Apply stats
     }
 

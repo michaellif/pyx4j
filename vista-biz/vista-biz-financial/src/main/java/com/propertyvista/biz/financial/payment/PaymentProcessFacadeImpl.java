@@ -13,8 +13,6 @@
  */
 package com.propertyvista.biz.financial.payment;
 
-import java.util.Map;
-
 import com.propertyvista.admin.domain.payment.pad.PadFile;
 
 public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
@@ -25,7 +23,7 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
     }
 
     @Override
-    public Map<String, TransactionsStats> recivePadAcknowledgementFiles() {
+    public PadFile recivePadAcknowledgementFiles() {
         return new PadCaledon().recivePadAcknowledgementFiles();
     }
 

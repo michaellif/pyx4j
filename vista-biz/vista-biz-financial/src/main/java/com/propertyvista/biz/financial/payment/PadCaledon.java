@@ -18,9 +18,7 @@ import java.math.BigDecimal;
 import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -150,22 +148,20 @@ public class PadCaledon {
         return padFile;
     }
 
-    public Map<String, TransactionsStats> recivePadAcknowledgementFiles() {
+    public PadFile recivePadAcknowledgementFiles() {
         File padWorkdir = getPadBaseDir();
         List<File> files = new CaledonPadSftpClient().reciveFiles(companyId, true, padWorkdir);
         if (files.size() == 0) {
             return null;
         }
-        Map<String, TransactionsStats> transactionsStats = new HashMap<String, TransactionsStats>();
         for (File file : files) {
             if (file.getName().endsWith("_acknowledgement.csv")) {
-                new PadCaledonAcknowledgement().processFile(file, transactionsStats);
+                PadFile padFile = new PadCaledonAcknowledgement().processFile(file);
                 move(file, padWorkdir, "acknowledgement");
-            } else {
-
+                return padFile;
             }
         }
-        return transactionsStats;
+        return null;
     }
 
     private String uniqueNameTimeStamp() {

@@ -16,7 +16,6 @@ package com.propertyvista.biz.financial.payment;
 import java.io.File;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.Map;
 
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -33,7 +32,7 @@ import com.propertyvista.payment.pad.ak.PadAkFile;
 
 class PadCaledonAcknowledgement {
 
-    void processFile(File file, Map<String, TransactionsStats> transactionsStats) {
+    PadFile processFile(File file) {
         PadAkFile akFile = new CaledonPadAcknowledgmentParser().parsReport(file);
         PadFile padFile;
         {
@@ -52,7 +51,6 @@ class PadCaledonAcknowledgement {
             padFile.acknowledgmentStatusCode().setValue(akFile.acknowledgmentStatusCode().getValue());
             Persistence.service().merge(padFile);
             Persistence.service().commit();
-            return;
         } else if (Arrays.asList("0000").contains(akFile.acknowledgmentStatusCode().getValue())) {
             assertAcknowledgedValues(padFile, akFile);
             padFile.status().setValue(PadFile.PadFileStatus.Acknowledged);
@@ -60,7 +58,6 @@ class PadCaledonAcknowledgement {
             padFile.acknowledgmentStatusCode().setValue(akFile.acknowledgmentStatusCode().getValue());
             Persistence.service().merge(padFile);
             Persistence.service().commit();
-            return;
         } else if (Arrays.asList("0002", "0003", "0004").contains(akFile.acknowledgmentStatusCode().getValue())) {
             assertAcknowledgedValues(padFile, akFile);
             updateBatches(padFile, akFile);
@@ -73,6 +70,8 @@ class PadCaledonAcknowledgement {
         } else {
             throw new Error("Unexpected acknowledgmentStatusCode '" + akFile.acknowledgmentStatusCode().getValue() + "' in file " + file.getName());
         }
+
+        return padFile;
     }
 
     private void assertAcknowledgedValues(PadFile padFile, PadAkFile akFile) {
