@@ -121,15 +121,7 @@ public class WidgetDecorator extends FlexTable {
 
         infoImageHolder = new SpaceHolder();
         infoImageHolder.setStyleName(WidgetDecoratorInfoImage.name());
-
-        if (component.getTooltip() != null && component.getTooltip().trim().length() > 0) {
-            Image infoImage = new Image(ImageFactory.getImages().formTooltipInfo());
-            infoImage.setTitle(component.getTooltip());
-
-            infoImageHolder.ensureDebugId(CompositeDebugId.debugId(component.getDebugId(), DebugIds.InfoImageHolder));
-            infoImage.ensureDebugId(CompositeDebugId.debugId(component.getDebugId(), new CompositeDebugId(DebugIds.InfoImageHolder, DebugIds.InfoImage)));
-            infoImageHolder.setWidget(infoImage);
-        }
+        renderTooltip();
 
         mandatoryImageHolder = new SpaceHolder();
         mandatoryImageHolder.setStyleName(WidgetDecoratorMandatoryImage.name());
@@ -147,6 +139,8 @@ public class WidgetDecorator extends FlexTable {
                     setVisible(component.isVisible());
                 } else if (event.getPropertyName() == PropertyChangeEvent.PropertyName.title) {
                     label.setText(component.getTitle() + ":");
+                } else if (event.getPropertyName() == PropertyChangeEvent.PropertyName.tooltip) {
+                    renderTooltip();
                 } else if (event.isEventOfType(PropertyName.valid, PropertyName.visited, PropertyName.repopulated, PropertyName.enabled, PropertyName.editable)) {
                     renderValidationMessage();
                     renderMandatoryStar();
@@ -236,6 +230,17 @@ public class WidgetDecorator extends FlexTable {
         }
     }
 
+    protected void renderTooltip() {
+        if (component.getTooltip() != null && component.getTooltip().trim().length() > 0) {
+            Image infoImage = new Image(ImageFactory.getImages().formTooltipInfo());
+            infoImage.setTitle(component.getTooltip());
+
+            infoImageHolder.ensureDebugId(CompositeDebugId.debugId(component.getDebugId(), DebugIds.InfoImageHolder));
+            infoImage.ensureDebugId(CompositeDebugId.debugId(component.getDebugId(), new CompositeDebugId(DebugIds.InfoImageHolder, DebugIds.InfoImage)));
+            infoImageHolder.setWidget(infoImage);
+        }
+    }
+
     public static class Builder {
 
         public enum Alignment {
@@ -292,6 +297,10 @@ public class WidgetDecorator extends FlexTable {
         public Builder labelAlignment(Alignment labelAlignment) {
             this.labelAlignment = labelAlignment;
             return this;
+        }
+
+        public void setTooltip(String tooltip) {
+            this.component.setTooltip(tooltip);
         }
     }
 

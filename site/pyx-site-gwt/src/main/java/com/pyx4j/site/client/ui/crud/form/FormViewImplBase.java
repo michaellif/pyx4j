@@ -114,5 +114,4 @@ public class FormViewImplBase<E extends IEntity> extends ViewImplBase implements
     @Override
     public void restoreState() {
     }
-
 }
