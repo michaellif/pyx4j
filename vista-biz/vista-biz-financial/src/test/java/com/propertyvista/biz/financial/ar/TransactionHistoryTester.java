@@ -35,6 +35,11 @@ public class TransactionHistoryTester extends Tester {
     private final List<InvoiceCredit> notConsumedCreditInvoiceLineItems;
 
     public TransactionHistoryTester(BillingAccount billingAccount) {
+        this(billingAccount, false);
+    }
+
+    public TransactionHistoryTester(BillingAccount billingAccount, boolean continueOnError) {
+        super(continueOnError);
         transactionHistory = ARTransactionManager.getTransactionHistory(billingAccount);
         notCoveredDebitInvoiceLineItems = ARTransactionManager.getNotCoveredDebitInvoiceLineItems(billingAccount);
         notConsumedCreditInvoiceLineItems = ARTransactionManager.getNotConsumedCreditInvoiceLineItems(billingAccount);

@@ -20,13 +20,18 @@
  */
 package com.propertyvista.biz.financial.ar;
 
-import java.math.BigDecimal;
+import java.util.List;
+
+import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.biz.financial.FinancialTestBase;
 import com.propertyvista.biz.financial.SysDateManager;
+import com.propertyvista.domain.financial.billing.InvoiceDebit;
+import com.propertyvista.domain.policy.policies.ARPolicy;
+import com.propertyvista.domain.policy.policies.ARPolicy.CreditDebitRule;
 import com.propertyvista.domain.tenant.lease.Lease;
 
-public class ARCreditDebitLinkManagerTest extends FinancialTestBase {
+public class ARInvoiceDebitComparatorTest extends FinancialTestBase {
 
     private long startTime;
 
@@ -52,31 +57,7 @@ public class ARCreditDebitLinkManagerTest extends FinancialTestBase {
 
         SysDateManager.setSysDate("22-Feb-2011");
         setLeaseStatus(Lease.Status.Approved);
-
         runBilling(true, false);
-
-        // @formatter:off
-        new TransactionHistoryTester(retrieveLease().billingAccount()).
-        lineItemSize(3).
-        notCoveredDebitLineItemSize(3).
-        notConsumedCreditInvoiceItemSize(0).
-        outstandingDebit(new BigDecimal("1041.94"), 0).
-        outstandingDebit(new BigDecimal("89.60"), 1).
-        outstandingDebit(new BigDecimal("930.30"), 2);
-        // @formatter:on
-
-        SysDateManager.setSysDate("25-Feb-2011");
-        receiveAndPostPayment("25-Feb-2011", "300.00");
-
-        // @formatter:off
-        new TransactionHistoryTester(retrieveLease().billingAccount()).
-        lineItemSize(4).
-        notCoveredDebitLineItemSize(3).
-        notConsumedCreditInvoiceItemSize(0).
-        outstandingDebit(new BigDecimal("741.94"), 0).
-        outstandingDebit(new BigDecimal("89.60"), 1).
-        outstandingDebit(new BigDecimal("930.30"), 2);
-        // @formatter:on
 
         //==================== RUN 2 ======================//
 
@@ -86,38 +67,51 @@ public class ARCreditDebitLinkManagerTest extends FinancialTestBase {
         SysDateManager.setSysDate("18-Mar-2011");
         runBilling(true, false);
 
-        printTransactionHistory(ARTransactionManager.getTransactionHistory(retrieveLease().billingAccount()));
-
-        SysDateManager.setSysDate("25-Mar-2011");
-        receiveAndPostPayment("25-Mar-2011", "300.00");
-
-        printTransactionHistory(ARTransactionManager.getTransactionHistory(retrieveLease().billingAccount()));
-
         //==================== RUN 3 ======================//
 
         SysDateManager.setSysDate("18-Apr-2011");
-
         runBilling(true, false);
-
-        printTransactionHistory(ARTransactionManager.getTransactionHistory(retrieveLease().billingAccount()));
-
-        SysDateManager.setSysDate("25-Apr-2011");
-        receiveAndPostPayment("25-Apr-2011", "300.00");
-
-        printTransactionHistory(ARTransactionManager.getTransactionHistory(retrieveLease().billingAccount()));
 
         //==================== RUN 4 ======================//
 
         SysDateManager.setSysDate("18-May-2011");
-
         runBilling(true, false);
 
         printTransactionHistory(ARTransactionManager.getTransactionHistory(retrieveLease().billingAccount()));
 
-        SysDateManager.setSysDate("25-May-2011");
-        receiveAndPostPayment("25-May-2011", "100.00");
+        //
+        ARPolicy policy = arPolicyDataModel.getPolicy();
+        policy.creditDebitRule().setValue(CreditDebitRule.byDueDate);
+        Persistence.service().persist(policy);
+        Persistence.service().commit();
 
-        printTransactionHistory(ARTransactionManager.getTransactionHistory(retrieveLease().billingAccount()));
+        List<InvoiceDebit> debits = ARTransactionManager.getNotCoveredDebitInvoiceLineItems(retrieveLease().billingAccount());
+
+        for (InvoiceDebit invoiceDebit : debits) {
+            System.out.println("++++++++++" + invoiceDebit.dueDate().getValue() + " +++ " + invoiceDebit.description().getStringView());
+        }
+
+        policy = arPolicyDataModel.getPolicy();
+        policy.creditDebitRule().setValue(CreditDebitRule.byDebitType);
+        Persistence.service().persist(policy);
+        Persistence.service().commit();
+
+        debits = ARTransactionManager.getNotCoveredDebitInvoiceLineItems(retrieveLease().billingAccount());
+
+        for (InvoiceDebit invoiceDebit : debits) {
+            System.out.println("++++++++++" + invoiceDebit.dueDate().getValue() + " +++ " + invoiceDebit.description().getStringView());
+        }
+
+        policy = arPolicyDataModel.getPolicy();
+        policy.creditDebitRule().setValue(CreditDebitRule.byAgingBucketAndDebitType);
+        Persistence.service().persist(policy);
+        Persistence.service().commit();
+
+        debits = ARTransactionManager.getNotCoveredDebitInvoiceLineItems(retrieveLease().billingAccount());
+
+        for (InvoiceDebit invoiceDebit : debits) {
+            System.out.println("++++++++++" + invoiceDebit.dueDate().getValue() + " +++ " + invoiceDebit.description().getStringView());
+        }
 
     }
 

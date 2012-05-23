@@ -32,7 +32,6 @@ public class LeaseBillingPolicyDataModel {
 
     public LeaseBillingPolicyDataModel(BuildingDataModel buildingDataModel) {
         this.buildingDataModel = buildingDataModel;
-        generate(true);
     }
 
     public void generate(boolean persist) {

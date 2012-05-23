@@ -34,7 +34,6 @@ public class ProductTaxPolicyDataModel {
         this.productItemTypesDataModel = productItemTypesDataModel;
         this.taxesDataModel = taxesDataModel;
         this.buildingDataModel = buildingDataModel;
-        generate(true);
     }
 
     public void generate(boolean persist) {

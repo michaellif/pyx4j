@@ -36,6 +36,7 @@ import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.billing.BillingFacade;
 import com.propertyvista.biz.financial.billing.BillingUtils;
 import com.propertyvista.biz.financial.billing.print.BillPrint;
+import com.propertyvista.biz.financial.preload.ARPolicyDataModel;
 import com.propertyvista.biz.financial.preload.BuildingDataModel;
 import com.propertyvista.biz.financial.preload.LeaseAdjustmentReasonDataModel;
 import com.propertyvista.biz.financial.preload.LeaseBillingPolicyDataModel;
@@ -68,6 +69,8 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
     protected LeaseDataModel leaseDataModel;
 
     protected LeaseAdjustmentReasonDataModel leaseAdjustmentReasonDataModel;
+
+    protected ARPolicyDataModel arPolicyDataModel;
 
     @Override
     protected void setUp() throws Exception {
@@ -111,6 +114,10 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         //TODO if commented - check exception
         LeaseBillingPolicyDataModel leaseBillingPolicyDataModel = new LeaseBillingPolicyDataModel(buildingDataModel);
         leaseBillingPolicyDataModel.generate(true);
+
+        arPolicyDataModel = new ARPolicyDataModel(buildingDataModel);
+        arPolicyDataModel.generate(true);
+
     }
 
     protected Bill runBilling(boolean confirm) {
@@ -293,10 +300,6 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
 
         Lease lease = Persistence.service().retrieve(Lease.class, leaseDataModel.getLeaseKey());
         BillableItem actualBillableItem = findBillableItem(billableItemId, lease);
-
-        if (actualBillableItem == null) {
-            System.out.println("++++++++++");
-        }
 
         BillableItemAdjustment adjustment = EntityFactory.create(BillableItemAdjustment.class);
         adjustment.effectiveDate().setValue(new LogicalDate(lease.leaseFrom().getValue()));

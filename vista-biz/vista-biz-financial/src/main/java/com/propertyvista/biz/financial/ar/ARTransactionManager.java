@@ -15,20 +15,25 @@ package com.propertyvista.biz.financial.ar;
 
 import java.math.BigDecimal;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.biz.financial.SysDateManager;
+import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.billing.AgingBuckets;
 import com.propertyvista.domain.financial.billing.InvoiceCredit;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
+import com.propertyvista.domain.policy.policies.ARPolicy;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.dto.TransactionHistoryDTO;
 
 public class ARTransactionManager {
@@ -96,12 +101,28 @@ public class ARTransactionManager {
     }
 
     static List<InvoiceDebit> getNotCoveredDebitInvoiceLineItems(BillingAccount billingAccount) {
-        EntityQueryCriteria<InvoiceDebit> criteria = EntityQueryCriteria.create(InvoiceDebit.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().billingAccount(), billingAccount));
-        criteria.add(PropertyCriterion.ne(criteria.proto().outstandingDebit(), new BigDecimal("0.00")));
-        criteria.add(PropertyCriterion.isNotNull(criteria.proto().postDate()));
-        criteria.asc(criteria.proto().postDate());
-        List<InvoiceDebit> lineItems = Persistence.service().query(criteria);
+        List<InvoiceDebit> lineItems;
+        {
+            EntityQueryCriteria<InvoiceDebit> criteria = EntityQueryCriteria.create(InvoiceDebit.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().billingAccount(), billingAccount));
+            criteria.add(PropertyCriterion.ne(criteria.proto().outstandingDebit(), new BigDecimal("0.00")));
+            criteria.add(PropertyCriterion.isNotNull(criteria.proto().postDate()));
+            criteria.asc(criteria.proto().postDate());
+            lineItems = Persistence.service().query(criteria);
+        }
+
+        //Find building that billingAccount belongs to
+        Building building;
+        {
+            EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto()._Units().$()._Leases().$().billingAccount(), billingAccount));
+            building = Persistence.service().retrieve(criteria);
+        }
+
+        // make a sorting in required mode. ConsumeCreditPolicy should be set on Application level.
+        ARPolicy arPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(building, ARPolicy.class);
+        Collections.sort(lineItems, new InvoiceDebitComparator(arPolicy));
+
         return lineItems;
     }
 
