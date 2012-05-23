@@ -108,6 +108,8 @@ class ValueAdapterEntity implements ValueAdapter {
                         long key;
                         if (value instanceof Key) {
                             key = ((Key) value).asLong();
+                        } else if (value instanceof IEntity) {
+                            key = ((IEntity) value).getPrimaryKey().asLong();
                         } else {
                             key = (Long) value;
                         }
