@@ -29,6 +29,8 @@ public class PmcProcessFactory {
             return new CleanupPmcProcess();
         case updateArrears:
             return new UpdateArrearsProcess();
+        case leaseActivation:
+            return new LeaseActivationProcess();
         default:
             throw new IllegalArgumentException("Not implemented");
         }

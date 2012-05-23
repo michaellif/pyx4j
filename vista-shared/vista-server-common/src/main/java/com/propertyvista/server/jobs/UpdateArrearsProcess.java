@@ -67,14 +67,16 @@ public class UpdateArrearsProcess implements PmcProcess {
 
                 PmcProcessContext.getRunStats().processed().setValue(currentBillingAccount);
                 PmcProcessContext.setRunStats(PmcProcessContext.getRunStats());
-
+                Persistence.service().commit();
             } catch (Throwable caught) {
+                log.error("failed to update arrears history: {}", caught.getMessage());
+                Persistence.service().rollback();
+                PmcProcessContext.getRunStats().processed().setValue(currentBillingAccount);
                 PmcProcessContext.getRunStats().failed().setValue(++failed);
                 PmcProcessContext.setRunStats(PmcProcessContext.getRunStats());
             }
 
         }
-        Persistence.service().commit();
         log.info(SimpleMessageFormat.format("Arrears Update for billing accounts finished, processed {0} billignAccounts, {1} FAILED", numOfBillingAccounts,
                 failed));
     }
