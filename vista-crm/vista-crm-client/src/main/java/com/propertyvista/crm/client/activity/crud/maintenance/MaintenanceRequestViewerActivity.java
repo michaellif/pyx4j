@@ -70,7 +70,7 @@ public class MaintenanceRequestViewerActivity extends CrmViewerActivity<Maintena
             public void onSuccess(VoidSerializable result) {
                 populate();
             }
-        }, rate, getEntityId());
+        }, (SurveyResponse) rate.detach(), getEntityId());
     }
 
     @Override
@@ -82,5 +82,4 @@ public class MaintenanceRequestViewerActivity extends CrmViewerActivity<Maintena
             }
         }, getEntityId());
     }
-
 }

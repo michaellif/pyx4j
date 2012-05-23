@@ -22,11 +22,11 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.site.client.activity.AppActivityMapper;
 
 import com.propertyvista.misc.VistaTODO;
-import com.propertyvista.portal.client.activity.BillingHistoryActivity;
-import com.propertyvista.portal.client.activity.CurrentBillActivity;
 import com.propertyvista.portal.client.activity.DashboardActivity;
 import com.propertyvista.portal.client.activity.PersonalInfoActivity;
 import com.propertyvista.portal.client.activity.PotentialTenantActivity;
+import com.propertyvista.portal.client.activity.billing.BillingHistoryActivity;
+import com.propertyvista.portal.client.activity.billing.CurrentBillActivity;
 import com.propertyvista.portal.client.activity.insurancemockup.InsuranceActivity;
 import com.propertyvista.portal.client.activity.login.LeaseContextSelectionActivity;
 import com.propertyvista.portal.client.activity.login.LoginWithTokenActivity;
