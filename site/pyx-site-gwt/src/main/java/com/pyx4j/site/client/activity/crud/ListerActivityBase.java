@@ -78,6 +78,10 @@ public class ListerActivityBase<E extends IEntity> extends AbstractActivity impl
         super.onStop();
     }
 
+    public AbstractListService<E> getService() {
+        return service;
+    }
+
     @Override
     public ListerDataSource<E> getDataSource() {
         return dataSource;
