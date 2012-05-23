@@ -31,6 +31,9 @@ import com.jcraft.jsch.SftpException;
 import com.pyx4j.essentials.j2se.J2SEServiceConnector;
 import com.pyx4j.essentials.j2se.J2SEServiceConnector.Credentials;
 
+import com.propertyvista.config.VistaDeployment;
+import com.propertyvista.shared.VistaSystemIdentification;
+
 public class CaledonPadSftpClient {
 
     private static final Logger log = LoggerFactory.getLogger(CaledonPadSftpClient.class);
@@ -44,15 +47,14 @@ public class CaledonPadSftpClient {
     private static boolean usePadSimulator = defaultUsePadSimulator();
 
     private static boolean defaultUsePadSimulator() {
-        // TODO Auto-generated method stub
-        return false;
+        return (VistaSystemIdentification.production != VistaDeployment.getSystemIdentification());
     }
 
     public static boolean usePadSimulator() {
         return usePadSimulator;
     }
 
-    public static void setUsePadSymulator(boolean usePadSymulator) {
+    public static void setUsePadSimulator(boolean usePadSymulator) {
         CaledonPadSftpClient.usePadSimulator = usePadSymulator;
     }
 
@@ -61,7 +63,32 @@ public class CaledonPadSftpClient {
         return J2SEServiceConnector.getCredentials(credentialsFile.getAbsolutePath());
     }
 
+    private String sftpHost() {
+        if (usePadSimulator()) {
+            return "209.47.15.97";
+            //return "dev.birchwoodsoftwaregroup.com";
+        } else {
+            return hostProd;
+        }
+    }
+
+    private int sftpPort() {
+        if (usePadSimulator()) {
+            return 3322;
+        } else {
+            return 22;
+        }
+    }
+
     public String sftpPut(File file) {
+        return sftpPut(file, postDst);
+    }
+
+    public String sftpPutSim(File file) {
+        return sftpPut(file, getSrc);
+    }
+
+    private String sftpPut(File file, String dst) {
         Credentials credentials = getCredentials();
         JSch jsch = new JSch();
         Session session = null;
@@ -73,14 +100,14 @@ public class CaledonPadSftpClient {
                 jsch.setKnownHosts(knownHosts.getAbsolutePath());
             }
 
-            session = jsch.getSession(credentials.email, hostProd, 22);
+            session = jsch.getSession(credentials.email, sftpHost(), sftpPort());
             session.setPassword(credentials.password);
             session.connect();
 
             channel = (ChannelSftp) session.openChannel("sftp");
             channel.connect();
 
-            channel.cd(postDst);
+            channel.cd(dst);
             channel.put(file.getAbsolutePath(), file.getName());
 
             log.info("SFTP file {} transfer completed", file.getAbsolutePath());
@@ -102,6 +129,14 @@ public class CaledonPadSftpClient {
     }
 
     public List<File> reciveFiles(String companyId, Boolean acknowledgement, File targetDirectory) {
+        return reciveFiles(getSrc, companyId, acknowledgement, targetDirectory);
+    }
+
+    public List<File> reciveFilesSim(String companyId, File targetDirectory) {
+        return reciveFiles(postDst, companyId, false, targetDirectory);
+    }
+
+    private List<File> reciveFiles(String src, String companyId, Boolean acknowledgement, File targetDirectory) {
         Credentials credentials = getCredentials();
         JSch jsch = new JSch();
         Session session = null;
@@ -111,7 +146,7 @@ public class CaledonPadSftpClient {
             if (knownHosts.canRead()) {
                 jsch.setKnownHosts(knownHosts.getAbsolutePath());
             }
-            session = jsch.getSession(credentials.email, hostProd, 22);
+            session = jsch.getSession(credentials.email, sftpHost(), sftpPort());
             session.setPassword(credentials.password);
             session.connect();
 

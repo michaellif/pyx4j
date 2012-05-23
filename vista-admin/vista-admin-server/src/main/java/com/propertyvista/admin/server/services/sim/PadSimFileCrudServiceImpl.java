@@ -34,7 +34,7 @@ public class PadSimFileCrudServiceImpl extends AbstractCrudServiceImpl<PadSimFil
 
     @Override
     public void loadPadFile(AsyncCallback<PadSimFile> callback) {
-        // TODO Auto-generated method stub
+        callback.onSuccess(new PadSim().loadPadFile());
     }
 
     @Override

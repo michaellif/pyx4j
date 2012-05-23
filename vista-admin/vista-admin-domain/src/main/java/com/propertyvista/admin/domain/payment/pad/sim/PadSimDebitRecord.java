@@ -13,10 +13,7 @@
  */
 package com.propertyvista.admin.domain.payment.pad.sim;
 
-import java.math.BigDecimal;
-
 import com.pyx4j.commons.Key;
-import com.pyx4j.entity.annotations.GwtBlacklist;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Length;
@@ -31,7 +28,6 @@ import com.propertyvista.domain.VistaNamespace;
 
 @Table(namespace = VistaNamespace.adminNamespace)
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
-@GwtBlacklist
 public interface PadSimDebitRecord extends IEntity {
 
     @Owner
@@ -47,7 +43,7 @@ public interface PadSimDebitRecord extends IEntity {
     @Length(29)
     IPrimitive<String> clientId();
 
-    IPrimitive<BigDecimal> amount();
+    IPrimitive<String> amount();
 
     @Length(3)
     IPrimitive<String> bankId();

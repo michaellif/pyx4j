@@ -13,12 +13,7 @@
  */
 package com.propertyvista.admin.domain.payment.pad.sim;
 
-import java.math.BigDecimal;
-
 import com.pyx4j.commons.Key;
-import com.pyx4j.entity.annotations.Caption;
-import com.pyx4j.entity.annotations.Detached;
-import com.pyx4j.entity.annotations.GwtBlacklist;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Length;
@@ -28,7 +23,6 @@ import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.RpcTransient;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.ToString;
-import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -38,7 +32,6 @@ import com.propertyvista.domain.VistaNamespace;
 
 @Table(namespace = VistaNamespace.adminNamespace)
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
-@GwtBlacklist
 public interface PadSimBatch extends IEntity {
 
     @Override
@@ -52,8 +45,7 @@ public interface PadSimBatch extends IEntity {
 
     IPrimitive<Integer> batchNumber();
 
-    @Owned(cascade = {})
-    @Detached(level = AttachLevel.Detached)
+    @Owned
     IList<PadSimDebitRecord> records();
 
     /**
@@ -61,7 +53,7 @@ public interface PadSimBatch extends IEntity {
      */
     @Length(8)
     @RpcTransient
-    IPrimitive<String> merchantTerminalId();
+    IPrimitive<String> terminalId();
 
     @Length(3)
     @ToString
@@ -81,11 +73,11 @@ public interface PadSimBatch extends IEntity {
      * Caledon: Description to appear on client's statement. Typically a merchant's business name.
      */
     @Length(60)
-    @Caption(description = "Description to appear on client's statement. Typically a merchant's business name.")
     IPrimitive<String> chargeDescription();
 
-    // Updated when batch is sent to Caledon
-    IPrimitive<BigDecimal> batchAmount();
+    IPrimitive<Integer> recordsCount();
+
+    IPrimitive<String> batchAmount();
 
     IPrimitive<String> acknowledgmentStatusCode();
 
