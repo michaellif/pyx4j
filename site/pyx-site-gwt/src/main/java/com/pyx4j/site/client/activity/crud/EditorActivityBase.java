@@ -157,7 +157,6 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
 
     @Override
     public void populate() {
-        view.reset();
         if (isNewEntity()) {
             createNewEntity(new DefaultAsyncCallback<E>() {
                 @Override
@@ -184,7 +183,7 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
                 public void onSuccess(E result) {
                     onPopulateSuccess(result);
                 }
-            }, entityId, RetrieveTraget.View);
+            }, entityId, RetrieveTraget.Edit);
         }
     }
 
@@ -225,6 +224,7 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
         if (activeTab < 0) {
             activeTab = view.getActiveTab();
         }
+        view.reset();
         view.populate(result);
         view.setActiveTab(activeTab);
     }
