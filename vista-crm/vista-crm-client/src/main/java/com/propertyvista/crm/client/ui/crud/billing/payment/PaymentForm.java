@@ -245,7 +245,8 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
             get(proto().transactionAuthorizationNumber()).setVisible(false);
             get(proto().transactionErrorMessage()).setVisible(false);
         } else {
-            boolean transactionResult = (getValue().paymentMethod().type().getValue().isTransactable() && getValue().paymentStatus().getValue().isProcessed());
+            boolean transactionResult = getValue().paymentMethod().isNull() ? false
+                    : (getValue().paymentMethod().type().getValue().isTransactable() && getValue().paymentStatus().getValue().isProcessed());
 
             get(proto().transactionAuthorizationNumber()).setVisible(transactionResult);
             get(proto().transactionErrorMessage()).setVisible(transactionResult && !getValue().transactionErrorMessage().isNull());
