@@ -52,13 +52,11 @@ public class MaintenanceList extends VerticalPanel implements MaintenanceView {
         historyRequestsPanel = new FormFlexPanel();
         historyRequestsPanel.getElement().getStyle().setMarginBottom(20, Unit.PX);
         add(historyRequestsPanel);
-
     }
 
     @Override
     public void setPresenter(Presenter presenter) {
         this.presenter = presenter;
-
     }
 
     @Override
@@ -78,19 +76,19 @@ public class MaintenanceList extends VerticalPanel implements MaintenanceView {
             }
         });
 
-        openRequestsPanel.setH1(++row, 0, 1, i18n.tr("OPEN TICKETS"), newTicket);
+        openRequestsPanel.setH1(++row, 0, 4, i18n.tr("OPEN TICKETS"), newTicket);
 
         if (openRequests.size() > 0) {
-            openRequestsPanel.getFlexCellFormatter().setColSpan(row, 0, 3);
-
             openRequestsPanel.getColumnFormatter().setWidth(0, "240px");
             openRequestsPanel.getColumnFormatter().setWidth(1, "75px");
-            openRequestsPanel.getColumnFormatter().setWidth(2, "85px");
+            openRequestsPanel.getColumnFormatter().setWidth(2, "45px");
+            openRequestsPanel.getColumnFormatter().setWidth(3, "40px");
 
             openRequestsPanel.setHTML(++row, 0, i18n.tr("Open Tickets"));
             openRequestsPanel.getCellFormatter().getElement(row, 0).getStyle().setPaddingLeft(4, Unit.PX);
             openRequestsPanel.setHTML(row, 1, i18n.tr("Status"));
             openRequestsPanel.setHTML(row, 2, "");
+            openRequestsPanel.setHTML(row, 3, "");
 
             openRequestsPanel.getRowFormatter().getElement(row).addClassName(TenantDashboardTheme.StyleName.TenantDashboardTableHeader.name());
 
@@ -116,8 +114,16 @@ public class MaintenanceList extends VerticalPanel implements MaintenanceView {
                         presenter.cancelRequest(request);
                     }
                 });
-
                 openRequestsPanel.setWidget(row, 2, cancelTicket);
+
+                Anchor viewlTicket = new Anchor(i18n.tr("View"));
+                viewlTicket.addClickHandler(new ClickHandler() {
+                    @Override
+                    public void onClick(ClickEvent event) {
+                        presenter.editRequest(request);
+                    }
+                });
+                openRequestsPanel.setWidget(row, 3, viewlTicket);
 
                 openRequestsPanel.getRowFormatter().getElement(row).addClassName(TenantDashboardTheme.StyleName.TenantDashboardTableRow.name());
             }
@@ -138,11 +144,9 @@ public class MaintenanceList extends VerticalPanel implements MaintenanceView {
 
         historyRequestsPanel.setWidth("100%");
 
-        historyRequestsPanel.setH1(++row, 0, 1, i18n.tr("HISTORY"));
+        historyRequestsPanel.setH1(++row, 0, 3, i18n.tr("HISTORY"));
 
         if (historyRequests.size() > 0) {
-            historyRequestsPanel.getFlexCellFormatter().setColSpan(row, 0, 3);
-
             historyRequestsPanel.getColumnFormatter().setWidth(0, "240px");
             historyRequestsPanel.getColumnFormatter().setWidth(1, "75px");
             historyRequestsPanel.getColumnFormatter().setWidth(2, "85px");

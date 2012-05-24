@@ -30,7 +30,6 @@ import com.propertyvista.portal.client.ui.residents.maintenance.EditMaintenanceR
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.services.TenantMaintenanceService;
-import com.propertyvista.portal.rpc.portal.services.TenantPaymentMethodCrudService;
 
 public class EditMaintenanceRequestActivity extends SecurityAwareActivity implements EditMaintenanceRequestView.Presenter {
 
@@ -43,7 +42,7 @@ public class EditMaintenanceRequestActivity extends SecurityAwareActivity implem
     public EditMaintenanceRequestActivity(Place place) {
         this.view = PortalViewFactory.instance(EditMaintenanceRequestView.class);
         this.view.setPresenter(this);
-        srv = GWT.create(TenantPaymentMethodCrudService.class);
+        srv = GWT.create(TenantMaintenanceService.class);
 
         String val;
         assert (place instanceof AppPlace);
