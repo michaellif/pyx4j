@@ -45,6 +45,16 @@ import com.propertyvista.domain.financial.BillingAccount;
 public interface LeaseAdjustment extends IEntity {
 
     @I18n
+    public enum Status {
+        draft, submited;
+
+        @Override
+        public String toString() {
+            return I18nEnum.toString(this);
+        }
+    }
+
+    @I18n
     public enum ExecutionType {
         pending, immediate;
 
@@ -56,6 +66,9 @@ public interface LeaseAdjustment extends IEntity {
 
     @GeneratedValue(type = GeneratedValue.GenerationType.randomUUID)
     IPrimitive<String> uid();
+
+    @NotNull
+    IPrimitive<Status> status();
 
     @Owner
     @ReadOnly

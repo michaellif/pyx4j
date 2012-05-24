@@ -85,6 +85,7 @@ public class LeaseAdjustmentForm extends CrmEntityForm<LeaseAdjustment> {
             main.setWidget(row, 1, new DecoratorBuilder(inject(proto().updated()), 10).build());
 
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().createdBy()), 25).build());
+            main.setWidget(row, 1, new DecoratorBuilder(inject(proto().status()), 10).build());
         }
 
         // tweak:

@@ -26,6 +26,7 @@ import com.propertyvista.crm.client.ui.crud.billing.adjustments.LeaseAdjustmentE
 import com.propertyvista.crm.client.ui.crud.viewfactories.LeaseViewFactory;
 import com.propertyvista.crm.rpc.services.billing.LeaseAdjustmentCrudService;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
+import com.propertyvista.domain.tenant.lease.LeaseAdjustment.Status;
 
 public class LeaseAdjustmentEditorActivity extends EditorActivityBase<LeaseAdjustment> {
 
@@ -39,6 +40,7 @@ public class LeaseAdjustmentEditorActivity extends EditorActivityBase<LeaseAdjus
         LeaseAdjustment entity = EntityFactory.create(LeaseAdjustment.class);
         entity.receivedDate().setValue(new LogicalDate());
         entity.targetDate().setValue(new LogicalDate());
+        entity.status().setValue(Status.draft);
         callback.onSuccess(entity);
     }
 }

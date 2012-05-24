@@ -13,10 +13,14 @@
  */
 package com.propertyvista.crm.rpc.services.billing;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 
 public interface LeaseAdjustmentCrudService extends AbstractCrudService<LeaseAdjustment> {
 
+    void submitAdjustment(AsyncCallback<LeaseAdjustment> callback, Key entityId);
 }

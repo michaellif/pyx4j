@@ -16,6 +16,7 @@ package com.propertyvista.crm.client.activity.crud.billing;
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
@@ -24,11 +25,21 @@ import com.propertyvista.crm.client.ui.crud.viewfactories.LeaseViewFactory;
 import com.propertyvista.crm.rpc.services.billing.LeaseAdjustmentCrudService;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 
-public class LeaseAdjustmentViewerActivity extends CrmViewerActivity<LeaseAdjustment> {
+public class LeaseAdjustmentViewerActivity extends CrmViewerActivity<LeaseAdjustment> implements LeaseAdjustmentViewerView.Presenter {
 
     public LeaseAdjustmentViewerActivity(CrudAppPlace place) {
         super(place, LeaseViewFactory.instance(LeaseAdjustmentViewerView.class),
 
         GWT.<AbstractCrudService<LeaseAdjustment>> create(LeaseAdjustmentCrudService.class));
+    }
+
+    @Override
+    public void submitAdjustment() {
+        ((LeaseAdjustmentCrudService) getService()).submitAdjustment(new DefaultAsyncCallback<LeaseAdjustment>() {
+            @Override
+            public void onSuccess(LeaseAdjustment result) {
+                populateView(result);
+            }
+        }, getEntityId());
     }
 }
