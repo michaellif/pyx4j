@@ -25,6 +25,7 @@ import com.pyx4j.site.client.ui.crud.misc.CEntitySelectorHyperlink;
 import com.pyx4j.site.client.ui.dialogs.AbstractEntitySelectorDialog;
 import com.pyx4j.site.rpc.AppPlace;
 
+import com.propertyvista.common.client.ui.validators.FutureDateValidator;
 import com.propertyvista.crm.client.ui.components.boxes.LeaseAdjustmentReasonSelectorDialog;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
@@ -102,7 +103,10 @@ public class LeaseAdjustmentForm extends CrmEntityForm<LeaseAdjustment> {
     }
 
     @Override
-    protected void onPopulate() {
-        super.onPopulate();
+    public void addValidations() {
+        super.addValidations();
+
+        get(proto().targetDate()).addValueValidator(new FutureDateValidator());
     }
+
 }
