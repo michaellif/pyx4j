@@ -120,6 +120,9 @@ public class SchedulerHelper {
             quartzProperties.put(dsConfigPrefix + StdSchedulerFactory.PROP_DATASOURCE_VALIDATION_QUERY, rdbConfiguration.connectionValidationQuery());
         }
 
+        log.debug("use DB configuration {}", rdbConfiguration);
+        log.debug("quartzProperties {}", quartzProperties);
+
         schedulerFactory = new StdSchedulerFactory(quartzProperties);
 
         scheduler = schedulerFactory.getScheduler();
