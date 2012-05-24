@@ -140,12 +140,17 @@ public class BillingSunnyDayScenarioTest extends FinancialTestBase {
 
         addBooking("28-Apr-2011");
 
+        addGoodWillCredit("20.00", "19-Apr-2011", false);
+        addGoodWillCredit("30.00", "19-Apr-2011", true);
+
         SysDateManager.setSysDate("18-May-2011");
 
         addGoodWillCredit("120.00", "18-May-2011", false);
         addGoodWillCredit("130.00", "18-May-2011", true);
 
         bill = runBilling(true, true);
+
+        printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
 
         // @formatter:off
         new BillTester(bill).
@@ -160,10 +165,10 @@ public class BillingSunnyDayScenarioTest extends FinancialTestBase {
         recurringFeatureCharges("188.00").
         oneTimeFeatureCharges("100.00").
         taxes("143.20").
-        totalDueAmount("1086.50");
+        totalDueAmount("1036.50");
         // @formatter:on
 
-        receiveAndPostPayment("19-May-2011", "1086.50");
+        receiveAndPostPayment("19-May-2011", "1036.50");
 
         //==================== RUN 5 ======================//
 
@@ -182,7 +187,7 @@ public class BillingSunnyDayScenarioTest extends FinancialTestBase {
         billingPeriodStartDate("1-Jul-2011").
         billingPeriodEndDate("31-Jul-2011").
         numOfProductCharges(5).
-        paymentReceivedAmount("-1086.50").
+        paymentReceivedAmount("-1036.50").
         serviceCharge("905.30").
         recurringFeatureCharges("188.00").
         oneTimeFeatureCharges("0.00").

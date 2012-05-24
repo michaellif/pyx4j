@@ -13,6 +13,7 @@
  */
 package com.propertyvista.biz.financial.billing;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.pyx4j.entity.server.Persistence;
@@ -36,15 +37,18 @@ public class BillingLeaseAdjustmentProcessor extends AbstractLeaseAdjustmentProc
     void createPendingLeaseAdjustments() {
         for (LeaseAdjustment adjustment : billing.getNextPeriodBill().billingAccount().adjustments()) {
             if (LeaseAdjustment.ExecutionType.pending.equals(adjustment.executionType().getValue())) {
-                // Find if adjustment effective date failes on current or next billing period 
-                DateRange overlap = BillDateUtils.getOverlappingRange(new DateRange(billing.getCurrentPeriodBill().billingPeriodStartDate().getValue(), billing
-                        .getNextPeriodBill().billingPeriodEndDate().getValue()), new DateRange(adjustment.targetDate().getValue(), adjustment.targetDate()
-                        .getValue()));
+                // Find if adjustment effective date fails on current or next billing period 
+                DateRange overlap = BillDateUtils.getOverlappingRange(new DateRange(billing.getPreviousPeriodBill().billingPeriodStartDate().getValue(),
+                        billing.getNextPeriodBill().billingPeriodEndDate().getValue()), new DateRange(adjustment.targetDate().getValue(), adjustment
+                        .targetDate().getValue()));
                 if (overlap != null) {
-                    //Check if that adjustment is already presented in previous bill
+                    //Check if that adjustment is already presented in previous bills
                     boolean attachedToPreviousBill = false;
                     if (LeaseAdjustmentReason.ActionType.charge.equals(adjustment.reason().actionType().getValue())) {
-                        for (InvoiceAccountCharge charge : BillingUtils.getLineItemsForType(billing.getCurrentPeriodBill(), InvoiceAccountCharge.class)) {
+                        List<InvoiceAccountCharge> charges = new ArrayList<InvoiceAccountCharge>();
+                        charges.addAll(BillingUtils.getLineItemsForType(billing.getPreviousPeriodBill(), InvoiceAccountCharge.class));
+                        charges.addAll(BillingUtils.getLineItemsForType(billing.getCurrentPeriodBill(), InvoiceAccountCharge.class));
+                        for (InvoiceAccountCharge charge : charges) {
                             if (charge.adjustment().uid().equals(adjustment.uid())) {
                                 attachedToPreviousBill = true;
                             }
@@ -53,7 +57,10 @@ public class BillingLeaseAdjustmentProcessor extends AbstractLeaseAdjustmentProc
                             createPendingCharge(adjustment);
                         }
                     } else if (LeaseAdjustmentReason.ActionType.credit.equals(adjustment.reason().actionType().getValue())) {
-                        for (InvoiceAccountCredit credit : BillingUtils.getLineItemsForType(billing.getCurrentPeriodBill(), InvoiceAccountCredit.class)) {
+                        List<InvoiceAccountCredit> credits = new ArrayList<InvoiceAccountCredit>();
+                        credits.addAll(BillingUtils.getLineItemsForType(billing.getPreviousPeriodBill(), InvoiceAccountCredit.class));
+                        credits.addAll(BillingUtils.getLineItemsForType(billing.getCurrentPeriodBill(), InvoiceAccountCredit.class));
+                        for (InvoiceAccountCredit credit : credits) {
                             if (credit.adjustment().uid().equals(adjustment.uid())) {
                                 attachedToPreviousBill = true;
                             }
