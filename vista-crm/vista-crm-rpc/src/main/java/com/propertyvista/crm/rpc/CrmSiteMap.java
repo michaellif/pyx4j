@@ -400,6 +400,12 @@ public class CrmSiteMap implements SiteMap {
             public static class IdAssignment extends CRMCrudAppPlace {
 
             }
+
+            @PlaceProperties(caption = "AR")
+            @NavigationItem(navigLabel = "AR")
+            public static class AR extends CRMCrudAppPlace {
+
+            }
         }
 
         @PlaceProperties(caption = "Lease Terms")

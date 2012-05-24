@@ -145,6 +145,9 @@ import com.propertyvista.crm.client.activity.dashboard.DashboardViewActivity;
 import com.propertyvista.crm.client.activity.policies.applicationdocumentation.ApplicationDocumentationPolicyEditorActivity;
 import com.propertyvista.crm.client.activity.policies.applicationdocumentation.ApplicationDocumentationPolicyListerActivicty;
 import com.propertyvista.crm.client.activity.policies.applicationdocumentation.ApplicationDocumentationPolicyViewerActivity;
+import com.propertyvista.crm.client.activity.policies.ar.ARPolicyEditorActivity;
+import com.propertyvista.crm.client.activity.policies.ar.ARPolicyListerActivity;
+import com.propertyvista.crm.client.activity.policies.ar.ARPolicyViewerActivity;
 import com.propertyvista.crm.client.activity.policies.backgroundcheck.BackgroundCheckPolicyEditorActivity;
 import com.propertyvista.crm.client.activity.policies.backgroundcheck.BackgroundCheckPolicyListerActivity;
 import com.propertyvista.crm.client.activity.policies.backgroundcheck.BackgroundCheckPolicyViewerActivity;
@@ -889,6 +892,19 @@ public class MainActivityMapper implements AppActivityMapper {
                             break;
                         case viewer:
                             activity = new IdAssignmentPolicyViewerActivity(crudPlace);
+                            break;
+                        }
+
+                    } else if (place instanceof CrmSiteMap.Settings.Policies.AR) {
+                        switch (crudPlace.getType()) {
+                        case lister:
+                            activity = new ARPolicyListerActivity(crudPlace);
+                            break;
+                        case editor:
+                            activity = new ARPolicyEditorActivity(crudPlace);
+                            break;
+                        case viewer:
+                            activity = new ARPolicyViewerActivity(crudPlace);
                             break;
                         }
                     } // CRUD APP PLACE IF ENDS HERE

@@ -20,6 +20,12 @@ import com.propertyvista.crm.client.ui.crud.policies.applicationdocumentation.Ap
 import com.propertyvista.crm.client.ui.crud.policies.applicationdocumentation.ApplicationDocumentationPolicyEdtiorView;
 import com.propertyvista.crm.client.ui.crud.policies.applicationdocumentation.ApplicationDocumentationPolicyListerView;
 import com.propertyvista.crm.client.ui.crud.policies.applicationdocumentation.ApplicationDocumentationPolicyListerViewImpl;
+import com.propertyvista.crm.client.ui.crud.policies.ar.ARPolicyEditorView;
+import com.propertyvista.crm.client.ui.crud.policies.ar.ARPolicyEditorViewImpl;
+import com.propertyvista.crm.client.ui.crud.policies.ar.ARPolicyListerView;
+import com.propertyvista.crm.client.ui.crud.policies.ar.ARPolicyListerViewImpl;
+import com.propertyvista.crm.client.ui.crud.policies.ar.ARPolicyViewerView;
+import com.propertyvista.crm.client.ui.crud.policies.ar.ARPolicyViewerViewImpl;
 import com.propertyvista.crm.client.ui.crud.policies.backgroundcheck.BackgroundCheckPolicyEditorView;
 import com.propertyvista.crm.client.ui.crud.policies.backgroundcheck.BackgroundCheckPolicyEditorViewImpl;
 import com.propertyvista.crm.client.ui.crud.policies.backgroundcheck.BackgroundCheckPolicyListerView;
@@ -154,6 +160,13 @@ public class PolicyViewFactory extends ViewFactoryBase {
                 map.put(IdAssignmentPolicyEditorView.class, new IdAssignmentPolicyEditorViewImpl());
             } else if (IdAssignmentPolicyViewerView.class.equals(type)) {
                 map.put(IdAssignmentPolicyViewerView.class, new IdAssignmentPolicyViewerViewImpl());
+
+            } else if (ARPolicyListerView.class.equals(type)) {
+                map.put(ARPolicyListerView.class, new ARPolicyListerViewImpl());
+            } else if (ARPolicyEditorView.class.equals(type)) {
+                map.put(ARPolicyEditorView.class, new ARPolicyEditorViewImpl());
+            } else if (ARPolicyViewerView.class.equals(type)) {
+                map.put(ARPolicyViewerView.class, new ARPolicyViewerViewImpl());
             }
 
         }

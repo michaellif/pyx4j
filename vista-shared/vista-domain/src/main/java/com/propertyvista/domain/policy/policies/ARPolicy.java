@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -17,6 +17,9 @@ import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.annotations.I18n;
+import com.pyx4j.i18n.annotations.Translate;
+import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.policy.framework.LowestApplicableNode;
 import com.propertyvista.domain.policy.framework.Policy;
@@ -26,11 +29,24 @@ import com.propertyvista.domain.property.asset.building.Building;
 @LowestApplicableNode(value = Building.class)
 public interface ARPolicy extends Policy {
 
+    @I18n
     enum CreditDebitRule {
-        byDueDate, byDebitType, byAgingBucketAndDebitType;
+        @Translate("By due date")
+        byDueDate,
+
+        @Translate("By debit type")
+        byDebitType,
+
+        @Translate("By aging bucket and debit")
+        byAgingBucketAndDebitType;
+
+        @Override
+        public String toString() {
+            return I18nEnum.toString(this);
+        };
     }
 
-    @Caption(description = "The rule by which the automatic credit-debit links will be created")
+    @Caption(description = "The rule by which the automatic credit-debit links will be created.")
     @NotNull
     IPrimitive<CreditDebitRule> creditDebitRule();
 
