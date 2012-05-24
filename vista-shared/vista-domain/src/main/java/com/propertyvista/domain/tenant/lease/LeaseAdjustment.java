@@ -93,7 +93,7 @@ public interface LeaseAdjustment extends IEntity {
     IPrimitive<LogicalDate> updated();
 
     @Timestamp(Update.Created)
-    IPrimitive<LogicalDate> createdWhen();
+    IPrimitive<LogicalDate> created();
 
     Employee createdBy();
 

@@ -38,7 +38,7 @@ public class LeaseAdjustmentCrudServiceImpl extends AbstractCrudServiceImpl<Leas
 
     private void updateAdjustments(LeaseAdjustment adj) {
 
-        if (adj.createdWhen().isNull()) {
+        if (adj.created().isNull()) {
             adj.createdBy().set(CrmAppContext.getCurrentUserEmployee());
         }
     }

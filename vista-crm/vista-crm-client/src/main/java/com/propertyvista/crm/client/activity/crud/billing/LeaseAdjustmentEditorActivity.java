@@ -14,8 +14,11 @@
 package com.propertyvista.crm.client.activity.crud.billing;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
@@ -27,13 +30,15 @@ import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 public class LeaseAdjustmentEditorActivity extends EditorActivityBase<LeaseAdjustment> {
 
     public LeaseAdjustmentEditorActivity(CrudAppPlace place) {
-        super(place,
-
-        LeaseViewFactory.instance(LeaseAdjustmentEditorView.class),
-
-        GWT.<AbstractCrudService<LeaseAdjustment>> create(LeaseAdjustmentCrudService.class),
-
-        LeaseAdjustment.class);
+        super(place, LeaseViewFactory.instance(LeaseAdjustmentEditorView.class), GWT
+                .<AbstractCrudService<LeaseAdjustment>> create(LeaseAdjustmentCrudService.class), LeaseAdjustment.class);
     }
 
+    @Override
+    protected void createNewEntity(AsyncCallback<LeaseAdjustment> callback) {
+        LeaseAdjustment entity = EntityFactory.create(LeaseAdjustment.class);
+        entity.receivedDate().setValue(new LogicalDate());
+        entity.targetDate().setValue(new LogicalDate());
+        callback.onSuccess(entity);
+    }
 }

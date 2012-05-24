@@ -13,9 +13,12 @@
  */
 package com.propertyvista.crm.client.ui.crud.billing.adjustments;
 
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ScrollPanel;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.ui.crud.misc.CEntitySelectorHyperlink;
@@ -25,6 +28,7 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.propertyvista.crm.client.ui.components.boxes.LeaseAdjustmentReasonSelectorDialog;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
+import com.propertyvista.domain.tenant.lease.LeaseAdjustment.ExecutionType;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustmentReason;
 
 public class LeaseAdjustmentForm extends CrmEntityForm<LeaseAdjustment> {
@@ -66,17 +70,34 @@ public class LeaseAdjustmentForm extends CrmEntityForm<LeaseAdjustment> {
 
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().amount()), 10).build());
         main.setWidget(row, 1, new DecoratorBuilder(inject(proto().tax()), 10).build());
+
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().executionType()), 10).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().receivedDate()), 10).build());
-        main.setWidget(row, 1, new DecoratorBuilder(inject(proto().targetDate()), 10).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().targetDate()), 10).build());
+        main.setWidget(row, 1, new DecoratorBuilder(inject(proto().receivedDate()), 10).build());
+
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().description()), 25).build());
         main.getFlexCellFormatter().setColSpan(row, 0, 2);
 
         if (!isEditable()) {
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().createdWhen()), 10).build());
+            main.setBR(++row, 0, 2);
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().created()), 10).build());
             main.setWidget(row, 1, new DecoratorBuilder(inject(proto().updated()), 10).build());
+
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().createdBy()), 10).build());
         }
+
+        // tweak:
+        get(proto().receivedDate()).setViewable(true);
+        get(proto().executionType()).addValueChangeHandler(new ValueChangeHandler<LeaseAdjustment.ExecutionType>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<ExecutionType> event) {
+                get(proto().targetDate()).setEditable(event.getValue() != ExecutionType.immediate);
+                if (event.getValue() == ExecutionType.immediate) {
+                    get(proto().targetDate()).setValue(new LogicalDate());
+                }
+            }
+        });
+
         return new ScrollPanel(main);
     }
 

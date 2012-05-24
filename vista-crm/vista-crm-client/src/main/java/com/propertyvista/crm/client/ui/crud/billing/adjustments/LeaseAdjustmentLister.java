@@ -33,7 +33,7 @@ public class LeaseAdjustmentLister extends ListerBase<LeaseAdjustment> {
             new MemberColumnDescriptor.Builder(proto().executionType(), false).build(),
             new MemberColumnDescriptor.Builder(proto().tax(), false).build(),
             new MemberColumnDescriptor.Builder(proto().updated(), false).build(),
-            new MemberColumnDescriptor.Builder(proto().createdWhen(), false).build(),
+            new MemberColumnDescriptor.Builder(proto().created(), false).build(),
             new MemberColumnDescriptor.Builder(proto().createdBy(), false).build()
 
         );//@formatter:on
