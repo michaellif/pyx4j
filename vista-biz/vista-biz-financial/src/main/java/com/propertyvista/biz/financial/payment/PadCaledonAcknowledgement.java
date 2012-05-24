@@ -87,11 +87,8 @@ class PadCaledonAcknowledgement {
         for (PadAkBatch akBatch : akFile.batches()) {
             EntityQueryCriteria<PadBatch> criteria = EntityQueryCriteria.create(PadBatch.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().padFile().id(), Long.valueOf(akFile.fileCreationNumber().getValue())));
-            if (akFile.version().getValue() > 1) {
-                criteria.add(PropertyCriterion.eq(criteria.proto().id(), akBatch.batchId()));
-            } else {
-                criteria.add(PropertyCriterion.eq(criteria.proto().merchantTerminalId(), akBatch.terminalId()));
-            }
+            criteria.add(PropertyCriterion.eq(criteria.proto().batchNumber(), akBatch.batchId()));
+            //criteria.add(PropertyCriterion.eq(criteria.proto().merchantTerminalId(), akBatch.terminalId()));
             PadBatch padBatch = Persistence.service().retrieve(criteria);
             if (padBatch == null) {
                 throw new Error("Unexpected batchId '" + akBatch.batchId().getValue() + "', terminalId '" + akBatch.terminalId().getValue() + "' in akFile "
@@ -120,11 +117,8 @@ class PadCaledonAcknowledgement {
         for (PadAkDebitRecord akDebitRecord : akFile.records()) {
             EntityQueryCriteria<PadDebitRecord> criteria = EntityQueryCriteria.create(PadDebitRecord.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().padBatch().padFile().id(), Long.valueOf(akFile.fileCreationNumber().getValue())));
-            if (akFile.version().getValue() > 1) {
-                criteria.add(PropertyCriterion.eq(criteria.proto().transactionId(), akDebitRecord.transactionId()));
-            } else {
-                criteria.add(PropertyCriterion.eq(criteria.proto().clientId(), akDebitRecord.clientId()));
-            }
+            criteria.add(PropertyCriterion.eq(criteria.proto().transactionId(), akDebitRecord.transactionId()));
+            //criteria.add(PropertyCriterion.eq(criteria.proto().clientId(), akDebitRecord.clientId()));
             PadDebitRecord padDebitRecord = Persistence.service().retrieve(criteria);
             if (padDebitRecord == null) {
                 throw new Error("Unexpected transactionId '" + akDebitRecord.transactionId().getValue() + "', clientId '" + akDebitRecord.clientId().getValue()

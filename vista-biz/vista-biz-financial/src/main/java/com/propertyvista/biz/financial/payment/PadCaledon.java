@@ -17,6 +17,7 @@ import java.io.File;
 import java.math.BigDecimal;
 import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -154,14 +155,26 @@ public class PadCaledon {
         if (files.size() == 0) {
             return null;
         }
-        for (File file : files) {
-            if (file.getName().endsWith("_acknowledgement.csv")) {
-                PadFile padFile = new PadCaledonAcknowledgement().processFile(file);
-                move(file, padWorkdir, "acknowledgement");
-                return padFile;
-            }
+        File file = files.get(0);
+        files.remove(0);
+        if (!file.getName().endsWith("_acknowledgement.csv")) {
+            throw new Error("Invalid acknowledgement file name" + file.getName());
         }
-        return null;
+        PadFile padFile = new PadCaledonAcknowledgement().processFile(file);
+        move(file, padWorkdir, "acknowledgement");
+
+        // Cleanup SFTP directory
+        {
+            List<File> filesToRemove = new ArrayList<File>();
+            filesToRemove.add(file);
+            new CaledonPadSftpClient().removeFiles(filesToRemove);
+        }
+
+        // Ignore other files received if any
+        for (File otherFiles : files) {
+            otherFiles.delete();
+        }
+        return padFile;
     }
 
     private String uniqueNameTimeStamp() {

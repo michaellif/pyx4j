@@ -65,25 +65,19 @@ public class CaledonPadAcknowledgmentParser {
             public void onRow(String[] values) {
                 if (values[0].equals("BRJ")) {
                     PadAkBatch batch = EntityFactory.create(PadAkBatch.class);
-                    batch.terminalId().setValue(values[1]);
-                    batch.acknowledgmentStatusCode().setValue(values[2]);
-                    batch.batchAmount().setValue(values[3]);
-                    // TODO new version
-                    if (akFile.version().getValue() > 1) {
-                        batch.batchId().setValue(null);
-                    }
+                    batch.batchId().setValue(values[1]);
+                    batch.terminalId().setValue(values[2]);
+                    batch.acknowledgmentStatusCode().setValue(values[3]);
+                    batch.batchAmount().setValue(values[4]);
                     EntityValidator.validate(batch);
                     akFile.batches().add(batch);
                 } else if (values[0].equals("TRJ")) {
                     PadAkDebitRecord record = EntityFactory.create(PadAkDebitRecord.class);
                     record.terminalId().setValue(values[1]);
                     record.clientId().setValue(values[2]);
-                    // TODO new version
-                    if (akFile.version().getValue() > 1) {
-                        record.transactionId().setValue(values[3]);
-                    }
-                    record.amount().setValue(values[3]);
-                    record.acknowledgmentStatusCode().setValue(values[4]);
+                    record.transactionId().setValue(values[3]);
+                    record.amount().setValue(values[4]);
+                    record.acknowledgmentStatusCode().setValue(values[5]);
                     EntityValidator.validate(record);
                     akFile.records().add(record);
                 } else {

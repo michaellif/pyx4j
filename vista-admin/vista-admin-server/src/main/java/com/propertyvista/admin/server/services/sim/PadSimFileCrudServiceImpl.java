@@ -39,12 +39,14 @@ public class PadSimFileCrudServiceImpl extends AbstractCrudServiceImpl<PadSimFil
 
     @Override
     public void replyAcknowledgment(AsyncCallback<VoidSerializable> callback, PadSimFile triggerStub) {
-        // TODO Auto-generated method stub
+        new PadSim().replyAcknowledgment(triggerStub);
+        callback.onSuccess(null);
     }
 
     @Override
     public void replyReconciliation(AsyncCallback<VoidSerializable> callback, PadSimFile triggerStub) {
-        // TODO Auto-generated method stub
+        new PadSim().replyReconciliation(triggerStub);
+        callback.onSuccess(null);
     }
 
 }

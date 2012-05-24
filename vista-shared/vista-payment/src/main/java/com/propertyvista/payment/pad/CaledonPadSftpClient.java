@@ -187,11 +187,11 @@ public class CaledonPadSftpClient {
                         client.channel.get(rFile.getFilename(), dst.getAbsolutePath());
                         lFiles.add(dst);
                         log.info("SFTP file {} received", dst.getAbsolutePath());
+                        // Only one file for Ack. 
+                        if (acknowledgement) {
+                            break;
+                        }
                     }
-                }
-                // Only one file for Ack. 
-                if (acknowledgement) {
-                    break;
                 }
             }
             return lFiles;

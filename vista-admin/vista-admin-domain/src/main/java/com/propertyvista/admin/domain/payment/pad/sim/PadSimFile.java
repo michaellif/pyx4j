@@ -65,6 +65,8 @@ public interface PadSimFile extends IEntity {
 
     IPrimitive<String> fileVersion();
 
+    IPrimitive<Integer> batchRecordsCount();
+
     IPrimitive<Integer> recordsCount();
 
     IPrimitive<String> fileAmount();

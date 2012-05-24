@@ -65,8 +65,10 @@ public class PadFileForm extends AdminEntityForm<PadSimFile> {
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().acknowledged()), 10).build());
         main.setWidget(row, 1, new DecoratorBuilder(inject(proto().reconciliationSent()), 10).build());
 
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().recordsCount()), 10).build());
-        main.setWidget(row, 1, new DecoratorBuilder(inject(proto().fileAmount()), 10).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().batchRecordsCount()), 10).build());
+        main.setWidget(row, 1, new DecoratorBuilder(inject(proto().recordsCount()), 10).build());
+
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().fileAmount()), 10).build());
 
         return new ScrollPanel(main);
     }
