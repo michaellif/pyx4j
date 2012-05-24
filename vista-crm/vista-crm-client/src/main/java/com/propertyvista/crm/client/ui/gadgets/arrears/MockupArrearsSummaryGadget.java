@@ -44,16 +44,16 @@ public class MockupArrearsSummaryGadget extends AbstractGadget<MockArrearsSummar
 
     private static final I18n i18n = I18n.get(MockupArrearsSummaryGadget.class);
 
-    private static class ArrearsSummaryGadgetImpl extends ListerGadgetInstanceBase<MockupArrearsSummary, MockArrearsSummaryGadgetMeta> implements
+    private static class MockupArrearsSummaryGadgetImpl extends ListerGadgetInstanceBase<MockupArrearsSummary, MockArrearsSummaryGadgetMeta> implements
             IBuildingBoardGadgetInstance {
 
-        private static final I18n i18n = I18n.get(ArrearsSummaryGadgetImpl.class);
+        private static final I18n i18n = I18n.get(MockupArrearsSummaryGadgetImpl.class);
 
         MockupArrearsReportService service;
 
         private List<Key> buildings;
 
-        public ArrearsSummaryGadgetImpl(GadgetMetadata gmd) {
+        public MockupArrearsSummaryGadgetImpl(GadgetMetadata gmd) {
             super(gmd, MockupArrearsSummary.class, MockArrearsSummaryGadgetMeta.class);
             service = GWT.create(MockupArrearsReportService.class);
         }
@@ -128,6 +128,6 @@ public class MockupArrearsSummaryGadget extends AbstractGadget<MockArrearsSummar
 
     @Override
     protected GadgetInstanceBase<MockArrearsSummaryGadgetMeta> createInstance(GadgetMetadata gadgetMetadata) throws Error {
-        return new ArrearsSummaryGadgetImpl(gadgetMetadata);
+        return new MockupArrearsSummaryGadgetImpl(gadgetMetadata);
     }
 }

@@ -17,12 +17,12 @@ import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.rpc.shared.IService;
 
+import com.propertyvista.domain.dashboard.gadgets.arrears.ArrearsYOYComparisonDataDTO;
 import com.propertyvista.domain.dashboard.gadgets.arrears.LeaseArrearsSnapshotDTO;
 import com.propertyvista.domain.financial.billing.AgingBuckets;
 import com.propertyvista.domain.financial.billing.InvoiceDebit.DebitType;
@@ -30,12 +30,13 @@ import com.propertyvista.domain.property.asset.building.Building;
 
 public interface ArrearsReportService extends IService {
 
-    @Deprecated
-    void arrearsMonthlyComparison(AsyncCallback<Vector<Vector<Double>>> callback, Vector<Key> buildingPKs, int yearsAgo);
+    static int YOY_ANALYSIS_CHART_MAX_YEARS_AGO = 10;
 
     void leaseArrearsRoster(AsyncCallback<EntitySearchResult<LeaseArrearsSnapshotDTO>> callback, Vector<Building> selectedBuildingsStubs, LogicalDate asOf,
             DebitType arrearsCategory, Vector<Sort> sortingCriteria, int pageNumber, int pageSize);
 
     void summary(AsyncCallback<EntitySearchResult<AgingBuckets>> callback, Vector<Building> selectedBuildingsStubs, LogicalDate asOf,
             Vector<Sort> sortingCriteria);
+
+    void arrearsMonthlyComparison(AsyncCallback<ArrearsYOYComparisonDataDTO> callback, Vector<Building> buildings, int yearsAgo);
 }

@@ -47,16 +47,16 @@ import com.propertyvista.crm.client.ui.gadgets.common.GadgetInstanceBase;
 import com.propertyvista.crm.client.ui.gadgets.common.ListerGadgetInstanceBase;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.ArrearsReportService;
 import com.propertyvista.domain.dashboard.gadgets.arrears.LeaseArrearsSnapshotDTO;
-import com.propertyvista.domain.dashboard.gadgets.type.ArrearsGadgetMeta;
+import com.propertyvista.domain.dashboard.gadgets.type.ArrearsStatusGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
 import com.propertyvista.domain.financial.billing.InvoiceDebit.DebitType;
 import com.propertyvista.domain.property.asset.building.Building;
 
-public class ArrearsStatusGadget extends AbstractGadget<ArrearsGadgetMeta> {
+public class ArrearsStatusGadget extends AbstractGadget<ArrearsStatusGadgetMetadata> {
 
     private final static I18n i18n = I18n.get(ArrearsStatusGadget.class);
 
-    private static class ArrearsStatusGadgetInstance extends ListerGadgetInstanceBase<LeaseArrearsSnapshotDTO, ArrearsGadgetMeta> {
+    private static class ArrearsStatusGadgetInstance extends ListerGadgetInstanceBase<LeaseArrearsSnapshotDTO, ArrearsStatusGadgetMetadata> {
 
         private static final DateTimeFormat DATE_FORMAT = DateTimeFormat.getFormat(CDatePicker.defaultDateFormat);
 
@@ -64,12 +64,10 @@ public class ArrearsStatusGadget extends AbstractGadget<ArrearsGadgetMeta> {
 
         private FormFlexPanel contentPanel;
 
-        private CDatePicker asOf;
-
         private HTML titleBannerLabel;
 
         public ArrearsStatusGadgetInstance(GadgetMetadata gmd) {
-            super(gmd, LeaseArrearsSnapshotDTO.class, ArrearsGadgetMeta.class);
+            super(gmd, LeaseArrearsSnapshotDTO.class, ArrearsStatusGadgetMetadata.class);
             service = GWT.<ArrearsReportService> create(ArrearsReportService.class);
         }
 
@@ -79,15 +77,15 @@ public class ArrearsStatusGadget extends AbstractGadget<ArrearsGadgetMeta> {
         }
 
         @Override
-        protected ArrearsGadgetMeta createDefaultSettings(Class<ArrearsGadgetMeta> metadataClass) {
-            ArrearsGadgetMeta settings = super.createDefaultSettings(metadataClass);
+        protected ArrearsStatusGadgetMetadata createDefaultSettings(Class<ArrearsStatusGadgetMetadata> metadataClass) {
+            ArrearsStatusGadgetMetadata settings = super.createDefaultSettings(metadataClass);
             settings.category().setValue(DebitType.total);
             return settings;
         }
 
         @Override
         public ISetup getSetup() {
-            return new SetupForm(new CEntityDecoratableForm<ArrearsGadgetMeta>(ArrearsGadgetMeta.class) {
+            return new SetupForm(new CEntityDecoratableForm<ArrearsStatusGadgetMetadata>(ArrearsStatusGadgetMetadata.class) {
                 @Override
                 public IsWidget createContent() {
                     FormFlexPanel p = new FormFlexPanel();
@@ -220,7 +218,7 @@ public class ArrearsStatusGadget extends AbstractGadget<ArrearsGadgetMeta> {
     }
 
     public ArrearsStatusGadget() {
-        super(ArrearsGadgetMeta.class);
+        super(ArrearsStatusGadgetMetadata.class);
     }
 
     @Override
@@ -234,7 +232,7 @@ public class ArrearsStatusGadget extends AbstractGadget<ArrearsGadgetMeta> {
     }
 
     @Override
-    protected GadgetInstanceBase<ArrearsGadgetMeta> createInstance(GadgetMetadata gadgetMetadata) throws Error {
+    protected GadgetInstanceBase<ArrearsStatusGadgetMetadata> createInstance(GadgetMetadata gadgetMetadata) throws Error {
         return new ArrearsStatusGadgetInstance(gadgetMetadata);
     }
 

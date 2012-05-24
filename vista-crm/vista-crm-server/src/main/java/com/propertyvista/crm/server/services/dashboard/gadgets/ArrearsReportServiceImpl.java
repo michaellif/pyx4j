@@ -15,13 +15,14 @@ package com.propertyvista.crm.server.services.dashboard.gadgets;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collection;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.rpc.EntitySearchResult;
@@ -38,8 +39,12 @@ import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.ArrearsReportService;
 import com.propertyvista.crm.server.util.EntityDTOHelper;
 import com.propertyvista.crm.server.util.EntityDTOHelper.PropertyMapper;
+import com.propertyvista.domain.dashboard.gadgets.arrears.ArrearsComparisonDTO;
+import com.propertyvista.domain.dashboard.gadgets.arrears.ArrearsValueDTO;
+import com.propertyvista.domain.dashboard.gadgets.arrears.ArrearsYOYComparisonDataDTO;
 import com.propertyvista.domain.dashboard.gadgets.arrears.LeaseArrearsSnapshotDTO;
 import com.propertyvista.domain.financial.billing.AgingBuckets;
+import com.propertyvista.domain.financial.billing.ArrearsSnapshot;
 import com.propertyvista.domain.financial.billing.BuildingArrearsSnapshot;
 import com.propertyvista.domain.financial.billing.InvoiceDebit.DebitType;
 import com.propertyvista.domain.financial.billing.LeaseArrearsSnapshot;
@@ -107,6 +112,7 @@ public class ArrearsReportServiceImpl implements ArrearsReportService {
     @Override
     public void summary(AsyncCallback<EntitySearchResult<AgingBuckets>> callback, Vector<Building> selectedBuildingsStubs, LogicalDate asOf,
             Vector<Sort> sortingCriteria) {
+
         ARFacade facade = ServerSideFactory.create(ARFacade.class);
 
         Vector<Building> buildings = selectedBuildingsStubs.isEmpty() ? Persistence.secureQuery(EntityQueryCriteria.create(Building.class))
@@ -158,8 +164,81 @@ public class ArrearsReportServiceImpl implements ArrearsReportService {
     }
 
     @Override
-    public void arrearsMonthlyComparison(AsyncCallback<Vector<Vector<Double>>> callback, Vector<Key> buildingPKs, int yearsAgo) {
-        // TODO
+    public void arrearsMonthlyComparison(AsyncCallback<ArrearsYOYComparisonDataDTO> callback, Vector<Building> buildingsCriteria, int yearsAgo) {
+        if (yearsAgo < 0 | yearsAgo > YOY_ANALYSIS_CHART_MAX_YEARS_AGO) {
+
+        }
+        Vector<Building> buildings = null;
+        if (buildingsCriteria.isEmpty()) {
+            buildings = new Vector<Building>(Persistence.secureQuery(EntityQueryCriteria.create(Building.class)));
+        } else {
+            buildings = buildingsCriteria;
+        }
+
+        final LogicalDate now = new LogicalDate(Persistence.service().getTransactionSystemTime());
+
+        final GregorianCalendar cal = new GregorianCalendar();
+        cal.setTime(now);
+
+        final ArrearsYOYComparisonDataDTO comparisonData = EntityFactory.create(ArrearsYOYComparisonDataDTO.class);
+
+        final int thisYear = cal.get(Calendar.YEAR);
+        final int thisMonth = cal.get(Calendar.MONTH);
+        final int thisDayOfMonth = cal.get(Calendar.DAY_OF_MONTH);
+
+        final int firstMonth = cal.getMinimum(Calendar.MONTH);
+        final int lastMonth = cal.getMaximum(Calendar.MONTH);
+        final int lastYear = cal.get(Calendar.YEAR);
+        final int firstYear = lastYear - yearsAgo;
+
+        // we assume Gregorian calendar with constant number of 12 month (Hebrew calendar with its pregnant year will NOT work here)
+        for (int month = firstMonth; month <= lastMonth; ++month) {
+            ArrearsComparisonDTO yoyComparison = comparisonData.comparisonsByMonth().$();
+            yoyComparison.month().setValue(month);
+
+            for (int year = firstYear; year <= lastYear; ++year) {
+                cal.set(Calendar.YEAR, year);
+                cal.set(Calendar.MONTH, month);
+                if (!(year == thisYear & month == thisMonth)) {
+                    cal.set(Calendar.DAY_OF_MONTH, cal.getMaximum(Calendar.DAY_OF_MONTH));
+                } else {
+                    cal.set(Calendar.DAY_OF_MONTH, thisDayOfMonth);
+                }
+
+                ArrearsValueDTO arrearsValue = yoyComparison.values().$();
+                arrearsValue.year().setValue(year);
+                arrearsValue.totalArrears().setValue(totalArrears(buildings, new LogicalDate(cal.getTime())));
+
+                yoyComparison.values().add(arrearsValue);
+
+            }
+            comparisonData.comparisonsByMonth().add(yoyComparison);
+
+        }
+
+        callback.onSuccess(comparisonData);
+    }
+
+    /**
+     * @return the sum of total arrears of the chosen buildings on <b>asOf</b> date, if <b>asOf</b> is in the future return $0.0,
+     */
+    private BigDecimal totalArrears(Vector<Building> buildings, LogicalDate asOf) {
+
+        BigDecimal totalArrears = new BigDecimal("0.00");
+
+        if (!asOf.after(new LogicalDate(Persistence.service().getTransactionSystemTime()))) { // if we asked for the future value of total arrears return 0            
+
+            ARFacade facade = ServerSideFactory.create(ARFacade.class);
+
+            for (Building b : buildings) {
+                ArrearsSnapshot snapshot = facade.getArrearsSnapshot(b, asOf);
+                if (snapshot != null) {
+                    totalArrears = totalArrears.add(snapshot.totalAgingBuckets().totalBalance().getValue());
+                }
+            }
+        }
+
+        return totalArrears;
     }
 
     private LeaseArrearsSnapshotDTO toSnapshotDTO(DebitType arrearsCategory, LeaseArrearsSnapshot snapshot) {
