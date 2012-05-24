@@ -84,7 +84,7 @@ public class LeaseAdjustmentForm extends CrmEntityForm<LeaseAdjustment> {
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().created()), 10).build());
             main.setWidget(row, 1, new DecoratorBuilder(inject(proto().updated()), 10).build());
 
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().createdBy()), 10).build());
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().createdBy()), 25).build());
         }
 
         // tweak:
@@ -98,6 +98,9 @@ public class LeaseAdjustmentForm extends CrmEntityForm<LeaseAdjustment> {
                 }
             }
         });
+
+        main.getColumnFormatter().setWidth(0, "50%");
+        main.getColumnFormatter().setWidth(1, "50%");
 
         return new ScrollPanel(main);
     }
