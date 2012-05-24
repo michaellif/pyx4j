@@ -11,11 +11,12 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.admin.client.ui.crud.padsimulation;
+package com.propertyvista.admin.client.ui.crud.padsimulation.batch;
 
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.admin.client.ui.crud.AdminViewerViewImplBase;
+import com.propertyvista.admin.client.ui.crud.padsimulation.PadFileEditorViewImpl;
 import com.propertyvista.admin.domain.payment.pad.sim.PadSimBatch;
 import com.propertyvista.admin.rpc.AdminSiteMap;
 

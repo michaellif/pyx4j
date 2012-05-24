@@ -17,6 +17,9 @@ import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.client.activity.crud.ListerActivityBase;
 import com.pyx4j.site.client.ui.crud.lister.IListerView.Presenter;
 import com.pyx4j.site.rpc.CrudAppPlace;
@@ -53,5 +56,25 @@ public class PadFileViewerActivity extends AdminViewerActivity<PadSimFile> imple
     public void onStop() {
         ((AbstractActivity) batchLister).onStop();
         super.onStop();
+    }
+
+    @Override
+    public void replyAcknowledgment() {
+        ((PadSimFileCrudService) getService()).replyAcknowledgment(new DefaultAsyncCallback<VoidSerializable>() {
+            @Override
+            public void onSuccess(VoidSerializable result) {
+                populate();
+            }
+        }, EntityFactory.createIdentityStub(PadSimFile.class, getEntityId()));
+    }
+
+    @Override
+    public void replyReconciliation() {
+        ((PadSimFileCrudService) getService()).replyReconciliation(new DefaultAsyncCallback<VoidSerializable>() {
+            @Override
+            public void onSuccess(VoidSerializable result) {
+                populate();
+            }
+        }, EntityFactory.createIdentityStub(PadSimFile.class, getEntityId()));
     }
 }

@@ -19,7 +19,7 @@ import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
-import com.propertyvista.admin.client.ui.crud.padsimulation.PadBatchEditorView;
+import com.propertyvista.admin.client.ui.crud.padsimulation.batch.PadBatchEditorView;
 import com.propertyvista.admin.client.viewfactories.crud.AdministrationVeiwFactory;
 import com.propertyvista.admin.domain.payment.pad.sim.PadSimBatch;
 import com.propertyvista.admin.rpc.services.sim.PadSimBatchCrudService;

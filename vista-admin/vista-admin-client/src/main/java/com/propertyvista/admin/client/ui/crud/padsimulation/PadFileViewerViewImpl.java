@@ -13,11 +13,16 @@
  */
 package com.propertyvista.admin.client.ui.crud.padsimulation;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.pyx4j.site.client.ui.crud.lister.ListerInternalViewImplBase;
+import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.admin.client.ui.crud.AdminViewerViewImplBase;
+import com.propertyvista.admin.client.ui.crud.padsimulation.batch.PadBatchLister;
 import com.propertyvista.admin.domain.payment.pad.sim.PadSimBatch;
 import com.propertyvista.admin.domain.payment.pad.sim.PadSimFile;
 import com.propertyvista.admin.rpc.AdminSiteMap;
@@ -34,6 +39,22 @@ public class PadFileViewerViewImpl extends AdminViewerViewImplBase<PadSimFile> i
         batchLister = new ListerInternalViewImplBase<PadSimBatch>(new PadBatchLister());
 
         setForm(new PadFileForm(true));
+
+        Button replyAcknowledgment = new Button(i18n.tr("Reply Acknowledgment"), new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                ((PadFileViewerView.Presenter) presenter).replyAcknowledgment();
+            }
+        });
+        addHeaderToolbarTwoItem(replyAcknowledgment.asWidget());
+
+        Button replyReconciliation = new Button(i18n.tr("Reply Reconciliation"), new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                ((PadFileViewerView.Presenter) presenter).replyReconciliation();
+            }
+        });
+        addHeaderToolbarTwoItem(replyReconciliation.asWidget());
     }
 
     @Override

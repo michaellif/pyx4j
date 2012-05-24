@@ -11,16 +11,12 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.admin.client.ui.crud.padsimulation;
+package com.propertyvista.admin.client.ui.crud.padsimulation.batch;
 
-import com.propertyvista.admin.client.ui.crud.AdminEditorViewImplBase;
+import com.pyx4j.site.client.ui.crud.form.IEditorView;
+
 import com.propertyvista.admin.domain.payment.pad.sim.PadSimBatch;
-import com.propertyvista.admin.rpc.AdminSiteMap;
 
-public class PadBatchEditorViewImpl extends AdminEditorViewImplBase<PadSimBatch> implements PadBatchEditorView {
-
-    public PadBatchEditorViewImpl() {
-        super(AdminSiteMap.Administration.PadSimulation.PadSimBatch.class, new PadBatchForm());
-    }
+public interface PadBatchEditorView extends IEditorView<PadSimBatch> {
 
 }

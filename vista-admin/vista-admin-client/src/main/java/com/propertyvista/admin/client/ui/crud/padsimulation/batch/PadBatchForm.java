@@ -11,7 +11,7 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.admin.client.ui.crud.padsimulation;
+package com.propertyvista.admin.client.ui.crud.padsimulation.batch;
 
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ScrollPanel;
@@ -19,9 +19,12 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.pyx4j.forms.client.ui.CNumberLabel;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.AppPlaceEntityMapper;
+import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;
 
 import com.propertyvista.admin.client.ui.crud.AdminEntityForm;
 import com.propertyvista.admin.domain.payment.pad.sim.PadSimBatch;
+import com.propertyvista.admin.domain.payment.pad.sim.PadSimFile;
 
 public class PadBatchForm extends AdminEntityForm<PadSimBatch> {
 
@@ -41,7 +44,15 @@ public class PadBatchForm extends AdminEntityForm<PadSimBatch> {
 
         int row = -1;
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().id(), new CNumberLabel()), 10).build());
+
+        main.setWidget(++row, 0,
+                new DecoratorBuilder(inject(proto().id(), new CEntityCrudHyperlink<PadSimFile>(AppPlaceEntityMapper.resolvePlace(PadSimFile.class))), 10)
+                        .build());
+
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().batchNumber()), 10).build());
+
+        main.setWidget(++row, 0, inject(proto().records(), new DebitRecordFolder(isEditable())));
+
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().terminalId()), 10).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().bankId()), 10).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().branchTransitNumber()), 10).build());

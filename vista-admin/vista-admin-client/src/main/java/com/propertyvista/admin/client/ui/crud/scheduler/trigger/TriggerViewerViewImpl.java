@@ -58,7 +58,6 @@ public class TriggerViewerViewImpl extends AdminViewerViewImplBase<Trigger> impl
             }
         });
         addHeaderToolbarTwoItem(runImmediately.asWidget());
-
     }
 
     @Override

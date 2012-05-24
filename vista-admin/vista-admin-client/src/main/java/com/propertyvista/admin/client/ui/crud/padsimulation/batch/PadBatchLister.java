@@ -11,7 +11,7 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.admin.client.ui.crud.padsimulation;
+package com.propertyvista.admin.client.ui.crud.padsimulation.batch;
 
 import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;

@@ -22,6 +22,10 @@ import com.propertyvista.admin.domain.payment.pad.sim.PadSimFile;
 public interface PadFileViewerView extends IViewerView<PadSimFile> {
 
     interface Presenter extends IViewerView.Presenter {
+
+        public void replyAcknowledgment();
+
+        public void replyReconciliation();
     }
 
     IListerView<PadSimBatch> getBatchListerView();
