@@ -34,6 +34,8 @@ import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.shared.utils.EntityDtoBinder;
+import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.rpc.shared.UserRuntimeException;
 
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.ArrearsReportService;
@@ -51,6 +53,8 @@ import com.propertyvista.domain.financial.billing.LeaseArrearsSnapshot;
 import com.propertyvista.domain.property.asset.building.Building;
 
 public class ArrearsReportServiceImpl implements ArrearsReportService {
+
+    private final static I18n i18n = I18n.get(ArrearsReportServiceImpl.class);
 
     // reminder: resist the urge to make it static because maybe it's not thread safe
     private final EntityDtoBinder<LeaseArrearsSnapshot, LeaseArrearsSnapshotDTO> DTO_BINDER = new EntityDtoBinder<LeaseArrearsSnapshot, LeaseArrearsSnapshotDTO>(
@@ -166,7 +170,7 @@ public class ArrearsReportServiceImpl implements ArrearsReportService {
     @Override
     public void arrearsMonthlyComparison(AsyncCallback<ArrearsYOYComparisonDataDTO> callback, Vector<Building> buildingsCriteria, int yearsAgo) {
         if (yearsAgo < 0 | yearsAgo > YOY_ANALYSIS_CHART_MAX_YEARS_AGO) {
-
+            throw new UserRuntimeException(i18n.tr("the value of years for comparison has to be between 0 and {0}", YOY_ANALYSIS_CHART_MAX_YEARS_AGO));
         }
         Vector<Building> buildings = null;
         if (buildingsCriteria.isEmpty()) {

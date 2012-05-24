@@ -20,11 +20,15 @@ import com.propertyvista.domain.ISharedUserEntity;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.dashboard.DashboardMetadata.DashboardType;
 import com.propertyvista.domain.dashboard.DashboardMetadata.LayoutType;
+import com.propertyvista.domain.dashboard.gadgets.type.ArrearsStatusGadgetMetadata;
+import com.propertyvista.domain.dashboard.gadgets.type.ArrearsSummaryGadgetMetadata;
+import com.propertyvista.domain.dashboard.gadgets.type.ArrearsYOYAnalysisChartMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.AvailabilitySummary;
 import com.propertyvista.domain.dashboard.gadgets.type.BuildingLister;
 import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata.RefreshInterval;
 import com.propertyvista.domain.dashboard.gadgets.type.TurnoverAnalysisMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.UnitAvailability;
+import com.propertyvista.domain.financial.billing.InvoiceDebit.DebitType;
 
 public class DashboardGenerator extends Dashboards {
 
@@ -32,11 +36,12 @@ public class DashboardGenerator extends Dashboards {
 
     public DashboardGenerator() {
 
-        systemDashboards.add(DefaultSystem());
-        systemDashboards.add(DefaultUnitAvailability());
+        systemDashboards.add(defaultSystem());
+        systemDashboards.add(defaultUnitAvailability());
+        systemDashboards.add(defaultArrears());
     }
 
-    private DashboardMetadata DefaultSystem() {
+    private DashboardMetadata defaultSystem() {
         DashboardMetadata dmd = EntityFactory.create(DashboardMetadata.class);
         dmd.user().id().setValue(ISharedUserEntity.DORMANT_KEY); // shared for everyone usage 
         dmd.type().setValue(DashboardType.system);
@@ -56,13 +61,13 @@ public class DashboardGenerator extends Dashboards {
         return dmd;
     }
 
-    private DashboardMetadata DefaultUnitAvailability() {
+    private DashboardMetadata defaultUnitAvailability() {
         DashboardMetadata dmd = EntityFactory.create(DashboardMetadata.class);
 
         dmd.user().id().setValue(ISharedUserEntity.DORMANT_KEY); // shared for everyone usage 
         dmd.type().setValue(DashboardType.building);
         dmd.isShared().setValue(true);
-        dmd.name().setValue(i18n.tr("Availability Dashboard"));
+        dmd.name().setValue(i18n.tr("Arrears Dashboard"));
         dmd.description().setValue(i18n.tr("Contains various availablility gadgets"));
         dmd.layoutType().setValue(LayoutType.One);
 
@@ -90,4 +95,39 @@ public class DashboardGenerator extends Dashboards {
         return dmd;
     }
 
+    private DashboardMetadata defaultArrears() {
+        DashboardMetadata dmd = EntityFactory.create(DashboardMetadata.class);
+        dmd.user().id().setValue(ISharedUserEntity.DORMANT_KEY); // shared for everyone usage 
+        dmd.type().setValue(DashboardType.building);
+        dmd.isShared().setValue(true);
+        dmd.name().setValue(i18n.tr("Availability Dashboard"));
+        dmd.description().setValue(i18n.tr("Contains various arrears gadgets"));
+        dmd.layoutType().setValue(LayoutType.One);
+
+        ArrearsSummaryGadgetMetadata arrearsSummaryGadget = EntityFactory.create(ArrearsSummaryGadgetMetadata.class);
+        arrearsSummaryGadget.docking().column().setValue(0);
+        arrearsSummaryGadget.user().id().setValue(ISharedUserEntity.DORMANT_KEY);
+        arrearsSummaryGadget.refreshInterval().setValue(RefreshInterval.Never);
+        arrearsSummaryGadget.pageSize().setValue(1);
+        arrearsSummaryGadget.customizeDate().setValue(false);
+        dmd.gadgets().add(arrearsSummaryGadget);
+
+        ArrearsYOYAnalysisChartMetadata arrearsYOYAnalysisChart = EntityFactory.create(ArrearsYOYAnalysisChartMetadata.class);
+        arrearsYOYAnalysisChart.docking().column().setValue(0);
+        arrearsYOYAnalysisChart.user().id().setValue(ISharedUserEntity.DORMANT_KEY);
+        arrearsYOYAnalysisChart.refreshInterval().setValue(RefreshInterval.Never);
+        arrearsYOYAnalysisChart.yearsToCompare().setValue(3);
+        dmd.gadgets().add(arrearsYOYAnalysisChart);
+
+        ArrearsStatusGadgetMetadata arrearsStatusGadget = EntityFactory.create(ArrearsStatusGadgetMetadata.class);
+        arrearsStatusGadget.docking().column().setValue(0);
+        arrearsStatusGadget.user().id().setValue(ISharedUserEntity.DORMANT_KEY);
+        arrearsStatusGadget.refreshInterval().setValue(RefreshInterval.Never);
+        arrearsStatusGadget.pageSize().setValue(10);
+        arrearsStatusGadget.category().setValue(DebitType.total);
+        dmd.gadgets().add(arrearsStatusGadget);
+
+        return dmd;
+
+    }
 }
