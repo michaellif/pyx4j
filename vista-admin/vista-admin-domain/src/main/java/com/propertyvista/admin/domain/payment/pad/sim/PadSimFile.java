@@ -15,10 +15,12 @@ package com.propertyvista.admin.domain.payment.pad.sim;
 
 import java.util.Date;
 
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.Timestamp;
+import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
@@ -37,31 +39,21 @@ import com.propertyvista.domain.VistaNamespace;
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 public interface PadSimFile extends IEntity {
 
-    public enum PadFileStatus {
+    public enum PadSimFileStatus {
 
-        Creating,
-
-        Sending,
-
-        SendindError,
-
-        Sent,
-
-        Invalid,
+        Loaded,
 
         Acknowledged,
 
-        Received,
-
-        Procesed;
+        ReconciliationSent;
 
     };
 
-    IPrimitive<PadFileStatus> status();
+    @ToString
+    IPrimitive<String> fileName();
 
-    @Owned(cascade = {})
-    @Detached(level = AttachLevel.Detached)
-    IList<PadSimBatch> batches();
+    @ToString
+    IPrimitive<PadSimFileStatus> status();
 
     IPrimitive<String> companyId();
 
@@ -77,18 +69,21 @@ public interface PadSimFile extends IEntity {
 
     IPrimitive<String> fileAmount();
 
+    @Caption(description = "If Empty Calculated base on batches.\n  '0000' - Accepted\n '0001' - File out of balance\n '0002' - Batch level reject\n '0003' - Transaction reject '0004' - Batch and transaction reject\n '0005' Detail Record Count out of balance\n '0006' - Invalid File Format\n '0007' - Invalid File Header")
     IPrimitive<String> acknowledgmentStatusCode();
 
-    IPrimitive<Date> sent();
-
     @Timestamp(Timestamp.Update.Created)
-    IPrimitive<Date> created();
+    IPrimitive<Date> received();
 
     @Timestamp(Timestamp.Update.Updated)
     IPrimitive<Date> updated();
 
     IPrimitive<Date> acknowledged();
 
-    // Updated when batch is sent to Caledon
+    IPrimitive<Date> reconciliationSent();
+
+    @Owned(cascade = {})
+    @Detached(level = AttachLevel.Detached)
+    IList<PadSimBatch> batches();
 
 }

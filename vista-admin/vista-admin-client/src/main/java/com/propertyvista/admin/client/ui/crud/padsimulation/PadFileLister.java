@@ -24,14 +24,13 @@ public class PadFileLister extends ListerBase<PadSimFile> {
         super(PadSimFile.class, false, false);
 
         setColumnDescriptors(//@formatter:off
+            new MemberColumnDescriptor.Builder(proto().fileName()).build(),
+            new MemberColumnDescriptor.Builder(proto().fileCreationNumber()).build(),
             new MemberColumnDescriptor.Builder(proto().status()).build(),
-            new MemberColumnDescriptor.Builder(proto().created()).build(),
-            new MemberColumnDescriptor.Builder(proto().updated()).build(),
-            new MemberColumnDescriptor.Builder(proto().sent()).build(),
-            new MemberColumnDescriptor.Builder(proto().acknowledged()).build(),
-            new MemberColumnDescriptor.Builder(proto().acknowledgmentStatusCode()).build(),
+            new MemberColumnDescriptor.Builder(proto().received()).build(),
             new MemberColumnDescriptor.Builder(proto().recordsCount()).build(),
-            new MemberColumnDescriptor.Builder(proto().fileAmount()).build()
+            new MemberColumnDescriptor.Builder(proto().fileAmount()).build(),
+            new MemberColumnDescriptor.Builder(proto().acknowledgmentStatusCode()).build()
         );//@formatter:on
     }
 }

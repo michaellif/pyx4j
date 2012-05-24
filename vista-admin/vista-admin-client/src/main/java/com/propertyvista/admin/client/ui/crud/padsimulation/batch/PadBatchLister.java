@@ -24,7 +24,6 @@ public class PadBatchLister extends ListerBase<PadSimBatch> {
         super(PadSimBatch.class, false, false);
 
         setColumnDescriptors(//@formatter:off
-                new MemberColumnDescriptor.Builder(proto().id()).build(),
                 new MemberColumnDescriptor.Builder(proto().batchNumber()).build(),
                 new MemberColumnDescriptor.Builder(proto().terminalId()).build(),
                 new MemberColumnDescriptor.Builder(proto().bankId()).build(),

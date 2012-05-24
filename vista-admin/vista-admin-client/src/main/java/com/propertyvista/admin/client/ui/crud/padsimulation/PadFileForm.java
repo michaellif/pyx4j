@@ -43,9 +43,10 @@ public class PadFileForm extends AdminEntityForm<PadSimFile> {
         content.setH1(++row, 0, 1, i18n.tr("File Details"));
         content.setWidget(++row, 0, createDetailsTab());
 
-        content.setH1(++row, 0, 1, i18n.tr("Batches"));
-
-        content.setWidget(++row, 0, ((PadFileViewerView) getParentView()).getBatchListerView().asWidget());
+        if (!isEditable()) {
+            content.setH1(++row, 0, 1, i18n.tr("Batches"));
+            content.setWidget(++row, 0, ((PadFileViewerView) getParentView()).getBatchListerView().asWidget());
+        }
         return content;
     }
 
@@ -53,15 +54,19 @@ public class PadFileForm extends AdminEntityForm<PadSimFile> {
         FormFlexPanel main = new FormFlexPanel();
 
         int row = -1;
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().fileName()), 10).build());
+        main.setWidget(row, 1, new DecoratorBuilder(inject(proto().fileCreationNumber()), 10).build());
+
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().status()), 10).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().sent()), 10).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().created()), 10).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().updated()), 10).build());
+        main.setWidget(row, 1, new DecoratorBuilder(inject(proto().acknowledgmentStatusCode()), 10).build());
+
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().received()), 10).build());
 
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().acknowledged()), 10).build());
+        main.setWidget(row, 1, new DecoratorBuilder(inject(proto().reconciliationSent()), 10).build());
+
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().recordsCount()), 10).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().fileAmount()), 10).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().acknowledgmentStatusCode()), 10).build());
+        main.setWidget(row, 1, new DecoratorBuilder(inject(proto().fileAmount()), 10).build());
 
         return new ScrollPanel(main);
     }

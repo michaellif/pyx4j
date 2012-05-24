@@ -14,13 +14,13 @@
 package com.propertyvista.admin.domain.payment.pad.sim;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
-import com.pyx4j.entity.annotations.RpcTransient;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IEntity;
@@ -52,7 +52,6 @@ public interface PadSimBatch extends IEntity {
      * TBD Copy of merchantAccount at the time of Batch creation
      */
     @Length(8)
-    @RpcTransient
     IPrimitive<String> terminalId();
 
     @Length(3)
@@ -79,6 +78,7 @@ public interface PadSimBatch extends IEntity {
 
     IPrimitive<String> batchAmount();
 
+    @Caption(description = "'1001' - Invalid Count\n'1002' - Batch out of balance\n'1003' - Invalid Terminal ID \n'1004' - Invalid Bank ID \n'1005' - Invalid Transit Number \n'1006' - Invalid Bank Account Number \n'1007' - Bank Information Mismatch")
     IPrimitive<String> acknowledgmentStatusCode();
 
 }

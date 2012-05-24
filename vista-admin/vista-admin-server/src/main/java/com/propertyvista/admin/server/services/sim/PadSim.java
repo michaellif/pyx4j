@@ -51,6 +51,8 @@ public class PadSim {
 
         for (File file : files) {
             PadSimFile padFile = new PadSimFileParser().parsReport(file);
+            padFile.fileName().setValue(file.getName());
+            padFile.status().setValue(PadSimFile.PadSimFileStatus.Loaded);
             Persistence.service().persist(padFile);
             for (PadSimBatch padBatch : padFile.batches()) {
                 Persistence.service().persist(padBatch);

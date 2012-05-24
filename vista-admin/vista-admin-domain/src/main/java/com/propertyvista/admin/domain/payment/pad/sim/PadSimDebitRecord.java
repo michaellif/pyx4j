@@ -13,6 +13,7 @@
  */
 package com.propertyvista.admin.domain.payment.pad.sim;
 
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.OrderColumn;
@@ -54,6 +55,7 @@ public interface PadSimDebitRecord extends IEntity {
     @Length(15)
     IPrimitive<String> transactionId();
 
+    @Caption(description = "'2001' - Invalid Amount\n '2002' - Invalid Bank ID\n '2003' - Invalid Bank Transit Number\n '2004' - Invalid Bank Account Number\n '2005' - Invalid Reference Number")
     IPrimitive<String> acknowledgmentStatusCode();
 
 }
