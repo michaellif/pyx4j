@@ -40,4 +40,9 @@ public abstract class CEntitySelectorHyperlink<E extends IEntity> extends CTextF
     protected NEntitySelectorHyperlink<E> createWidget() {
         return new NEntitySelectorHyperlink<E>(this);
     }
+
+    @Override
+    public boolean isValueEmpty() {
+        return (super.isValueEmpty() || getValue().isEmpty());
+    }
 }
