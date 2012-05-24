@@ -7,8 +7,8 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-06-22
- * @author vlads
+ * Created on May 23, 2012
+ * @author igor
  * @version $Id$
  */
 package com.propertyvista.onboarding.example.model;
@@ -16,22 +16,20 @@ package com.propertyvista.onboarding.example.model;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlElement;
 
-import com.propertyvista.onboarding.CreateOnboardingUserRequestIO;
+public class AccountInfoResponse extends Response {
 
-/**
- * @see CreateOnboardingUserRequestIO
- */
-public class CreateOnboardingUserRequest extends Request {
-
-    @NotNull
     @XmlElement
-    public String name;
+    public String accountStatus_TBD;
 
+    @XmlElement(required = true)
     @NotNull
-    @XmlElement
-    public String email;
+    public String vistaCrmUrl;
 
+    @XmlElement(required = true)
     @NotNull
-    @XmlElement
-    public String password;
+    public String residentPortalUrl;
+
+    @XmlElement(required = true)
+    @NotNull
+    public String prospectPortalUrl;
 }

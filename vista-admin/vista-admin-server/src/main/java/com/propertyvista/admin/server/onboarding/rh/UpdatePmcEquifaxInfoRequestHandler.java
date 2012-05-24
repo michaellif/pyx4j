@@ -13,11 +13,17 @@
  */
 package com.propertyvista.admin.server.onboarding.rh;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
+import com.propertyvista.admin.domain.pmc.Pmc;
 import com.propertyvista.admin.server.onboarding.rhf.AbstractRequestHandler;
 import com.propertyvista.onboarding.ResponseIO;
 import com.propertyvista.onboarding.UpdatePmcEquifaxInfoRequestIO;
@@ -34,6 +40,27 @@ public class UpdatePmcEquifaxInfoRequestHandler extends AbstractRequestHandler<U
     public ResponseIO execute(UpdatePmcEquifaxInfoRequestIO request) {
         ResponseIO response = EntityFactory.create(ResponseIO.class);
         response.success().setValue(Boolean.TRUE);
+
+        EntityQueryCriteria<Pmc> crpmc = EntityQueryCriteria.create(Pmc.class);
+        crpmc.add(PropertyCriterion.eq(crpmc.proto().onboardingAccountId(), request.onboardingAccountId().getValue()));
+        List<Pmc> pmcs = Persistence.service().query(crpmc);
+
+        if (pmcs.size() != 1) {
+            log.debug("INp Pmc for onboarding accountid {} rs {}", request.onboardingAccountId().getValue(), pmcs.size());
+            response.success().setValue(Boolean.FALSE);
+
+            return response;
+        }
+
+        Pmc pmc = pmcs.get(0);
+
+        pmc.equifaxInfo().customerCode().setValue(request.customerCode().getValue());
+        pmc.equifaxInfo().customerNumber().setValue(request.customerNumber().getValue());
+        pmc.equifaxInfo().customerReferenceNumber().setValue(request.customerReferenceNumber().getValue());
+        pmc.equifaxInfo().securityCode().setValue(request.securityCode().getValue());
+
+        Persistence.service().persist(pmc);
+        Persistence.service().commit();
 
         return response;
 

@@ -35,7 +35,7 @@ public interface PmcPaymentTypeInfo extends IEntity {
 
     IPrimitive<BigDecimal> ccFee();
 
-    IPrimitive<Boolean> eChecquePaymentAvailable();
+    IPrimitive<Boolean> eCheckPaymentAvailable();
 
     IPrimitive<BigDecimal> eChecqueFee();
 

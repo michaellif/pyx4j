@@ -13,11 +13,17 @@
  */
 package com.propertyvista.admin.server.onboarding.rh;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
+import com.propertyvista.admin.domain.pmc.Pmc;
 import com.propertyvista.admin.server.onboarding.rhf.AbstractRequestHandler;
 import com.propertyvista.onboarding.ResponseIO;
 import com.propertyvista.onboarding.UpdatePaymentTypeFeesRequestIO;
@@ -35,6 +41,37 @@ public class UpdatePaymentTypeFeesRequestHandler extends AbstractRequestHandler<
 
         ResponseIO response = EntityFactory.create(ResponseIO.class);
         response.success().setValue(Boolean.TRUE);
+
+        EntityQueryCriteria<Pmc> crpmc = EntityQueryCriteria.create(Pmc.class);
+        crpmc.add(PropertyCriterion.eq(crpmc.proto().onboardingAccountId(), request.onboardingAccountId().getValue()));
+        List<Pmc> pmcs = Persistence.service().query(crpmc);
+
+        if (pmcs.size() != 1) {
+            log.debug("INp Pmc for onboarding accountid {} rs {}", request.onboardingAccountId().getValue(), pmcs.size());
+            response.success().setValue(Boolean.FALSE);
+
+            return response;
+        }
+
+        Pmc pmc = pmcs.get(0);
+
+        pmc.paymentTypeInfo().ccPaymentAvailable().setValue(request.ccPaymentAvailable().getValue());
+        pmc.paymentTypeInfo().ccFee().setValue(request.ccFee().getValue());
+
+        pmc.paymentTypeInfo().eCheckPaymentAvailable().setValue(request.echeckPaymentAvailable().getValue());
+        pmc.paymentTypeInfo().eChecqueFee().setValue(request.echeckFee().getValue());
+
+        pmc.paymentTypeInfo().etfFee().setValue(request.etfFee().getValue());
+        pmc.paymentTypeInfo().etfPaymentAvailable().setValue(request.etfPaymentAvailable().getValue());
+
+        pmc.paymentTypeInfo().interacCaledonFee().setValue(request.interacCaledonFee().getValue());
+        pmc.paymentTypeInfo().interacCaledonPaymentAvailable().setValue(request.interacCaledonPaymentAvailable().getValue());
+
+        pmc.paymentTypeInfo().interacVisaFee().setValue(request.interacVisaFee().getValue());
+        pmc.paymentTypeInfo().interacVisaPaymentAvailable().setValue(request.interacVisaPaymentAvailable().getValue());
+
+        Persistence.service().persist(pmc);
+        Persistence.service().commit();
 
         return response;
     }
