@@ -68,7 +68,7 @@ public class PadSimFileParser {
                     eof = true;
                 } else if (values[0].equals("X")) {
                     batch = EntityFactory.create(PadSimBatch.class);
-                    batch.batchNumber().setValue(Integer.valueOf(values[1]));
+                    batch.batchNumber().setValue(values[1]);
                     batch.terminalId().setValue(values[4]);
                     batch.chargeDescription().setValue(values[5]);
                     batch.bankId().setValue(values[6]);

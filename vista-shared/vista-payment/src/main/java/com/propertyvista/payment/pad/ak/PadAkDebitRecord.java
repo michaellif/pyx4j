@@ -32,7 +32,6 @@ public interface PadAkDebitRecord extends IEntity {
     @NotNull
     IPrimitive<String> clientId();
 
-    //TBD
     @Length(15)
     IPrimitive<String> transactionId();
 

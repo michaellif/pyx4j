@@ -60,6 +60,8 @@ public interface PadFile extends IEntity {
 
     };
 
+    IPrimitive<String> fileCreationNumber();
+
     IPrimitive<PadFileStatus> status();
 
     @Owned(cascade = {})

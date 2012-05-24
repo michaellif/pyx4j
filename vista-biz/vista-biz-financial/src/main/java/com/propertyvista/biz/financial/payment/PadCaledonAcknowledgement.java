@@ -37,7 +37,7 @@ class PadCaledonAcknowledgement {
         PadFile padFile;
         {
             EntityQueryCriteria<PadFile> criteria = EntityQueryCriteria.create(PadFile.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().id(), Long.valueOf(akFile.fileCreationNumber().getValue())));
+            criteria.add(PropertyCriterion.eq(criteria.proto().fileCreationNumber(), akFile.fileCreationNumber().getValue()));
             criteria.add(PropertyCriterion.eq(criteria.proto().status(), PadFile.PadFileStatus.Sent));
             padFile = Persistence.service().retrieve(criteria);
             if (padFile == null) {
@@ -86,7 +86,7 @@ class PadCaledonAcknowledgement {
     private void updateBatches(PadFile padFile, PadAkFile akFile) {
         for (PadAkBatch akBatch : akFile.batches()) {
             EntityQueryCriteria<PadBatch> criteria = EntityQueryCriteria.create(PadBatch.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().padFile().id(), Long.valueOf(akFile.fileCreationNumber().getValue())));
+            criteria.add(PropertyCriterion.eq(criteria.proto().padFile(), padFile));
             criteria.add(PropertyCriterion.eq(criteria.proto().batchNumber(), akBatch.batchId()));
             //criteria.add(PropertyCriterion.eq(criteria.proto().merchantTerminalId(), akBatch.terminalId()));
             PadBatch padBatch = Persistence.service().retrieve(criteria);
@@ -116,7 +116,7 @@ class PadCaledonAcknowledgement {
     private void updateRecords(PadFile padFile, PadAkFile akFile) {
         for (PadAkDebitRecord akDebitRecord : akFile.records()) {
             EntityQueryCriteria<PadDebitRecord> criteria = EntityQueryCriteria.create(PadDebitRecord.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().padBatch().padFile().id(), Long.valueOf(akFile.fileCreationNumber().getValue())));
+            criteria.add(PropertyCriterion.eq(criteria.proto().padBatch().padFile(), padFile));
             criteria.add(PropertyCriterion.eq(criteria.proto().transactionId(), akDebitRecord.transactionId()));
             //criteria.add(PropertyCriterion.eq(criteria.proto().clientId(), akDebitRecord.clientId()));
             PadDebitRecord padDebitRecord = Persistence.service().retrieve(criteria);

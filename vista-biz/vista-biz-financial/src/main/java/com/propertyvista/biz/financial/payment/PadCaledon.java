@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.log4j.LoggerConfig;
@@ -33,6 +34,7 @@ import com.pyx4j.log4j.LoggerConfig;
 import com.propertyvista.admin.domain.payment.pad.PadBatch;
 import com.propertyvista.admin.domain.payment.pad.PadDebitRecord;
 import com.propertyvista.admin.domain.payment.pad.PadFile;
+import com.propertyvista.admin.domain.payment.pad.PadFileCreationNumber;
 import com.propertyvista.payment.pad.CaledonPadFileWriter;
 import com.propertyvista.payment.pad.CaledonPadSftpClient;
 
@@ -65,6 +67,10 @@ public class PadCaledon {
             padFile = Persistence.service().retrieve(criteria);
             if (padFile == null) {
                 return null;
+            }
+
+            if (PadFile.PadFileStatus.Creating.equals(padFile.status().getValue())) {
+                padFile.fileCreationNumber().setValue(getNextFileCreationNumber());
             }
 
             padFile.status().setValue(PadFile.PadFileStatus.Sending);
@@ -147,6 +153,25 @@ public class PadCaledon {
 
         padFile.batches().setAttachLevel(AttachLevel.Detached);
         return padFile;
+    }
+
+    /**
+     * Length 4 Must be incremented by one for each file submitted per Company ID
+     */
+    private String getNextFileCreationNumber() {
+        EntityQueryCriteria<PadFileCreationNumber> criteria = EntityQueryCriteria.create(PadFileCreationNumber.class);
+        PadFileCreationNumber sequence = Persistence.service().retrieve(criteria);
+        if (sequence == null) {
+            sequence = EntityFactory.create(PadFileCreationNumber.class);
+            sequence.number().setValue(0);
+        }
+        int id = sequence.number().getValue() + 1;
+        if (id == 9999) {
+            id = 1;
+        }
+        sequence.number().setValue(id);
+        Persistence.service().persist(sequence);
+        return String.valueOf(id);
     }
 
     public PadFile recivePadAcknowledgementFiles() {

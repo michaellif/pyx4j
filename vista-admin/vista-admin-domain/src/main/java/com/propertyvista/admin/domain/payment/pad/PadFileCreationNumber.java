@@ -11,33 +11,23 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.payment.pad.ak;
+package com.propertyvista.admin.domain.payment.pad;
 
-import com.pyx4j.entity.annotations.Length;
-import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.annotations.GwtBlacklist;
+import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
+import com.propertyvista.domain.VistaNamespace;
+
+@Table(namespace = VistaNamespace.adminNamespace)
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
-@Transient
-public interface PadAkBatch extends IEntity {
+@GwtBlacklist
+public interface PadFileCreationNumber extends IEntity {
 
-    @Length(3)
     @NotNull
-    IPrimitive<String> batchId();
-
-    @Length(8)
-    @NotNull
-    IPrimitive<String> terminalId();
-
-    @Length(4)
-    @NotNull
-    IPrimitive<String> acknowledgmentStatusCode();
-
-    @Length(14)
-    @NotNull
-    IPrimitive<String> batchAmount();
+    IPrimitive<Integer> number();
 
 }

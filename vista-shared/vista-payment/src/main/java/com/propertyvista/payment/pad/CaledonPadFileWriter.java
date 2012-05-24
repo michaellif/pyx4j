@@ -56,7 +56,7 @@ public class CaledonPadFileWriter implements Closeable {
         writer.append("BIRCHWOOD").append(",");
 
         //File Creation Number
-        writer.append(padFile.id().getStringView()).append(",");
+        writer.append(padFile.fileCreationNumber().getStringView()).append(",");
 
         String fileCreationDate = new SimpleDateFormat("yyyyMMdd").format(padFile.created().getValue());
         writer.append(fileCreationDate).append(",");

@@ -207,14 +207,14 @@ public class CaledonPadSftpClient {
     }
 
     public void removeFiles(List<File> files) {
-        removeFiles(postDst, files);
+        removeFiles(getSrc, files);
     }
 
     public void removeFilesSim(List<File> files) {
         if (!CaledonPadSftpClient.usePadSimulator()) {
             throw new UserRuntimeException("PadSimulator is disabled");
         }
-        removeFiles(getSrc, files);
+        removeFiles(postDst, files);
     }
 
     private void removeFiles(String src, List<File> files) {
@@ -223,6 +223,8 @@ public class CaledonPadSftpClient {
             client.connect();
             client.channel.cd(src);
             for (File file : files) {
+                String filePath = src + "/" + file.getName();
+                log.debug("removing file {}", filePath);
                 client.channel.rm(file.getName());
             }
         } catch (SftpException e) {

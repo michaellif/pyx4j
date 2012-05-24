@@ -53,6 +53,7 @@ public class PadSim {
 
         File file = files.get(0);
         files.remove(0);
+
         PadSimFile padFile = new PadSimFileParser().parsReport(file);
         padFile.fileName().setValue(file.getName());
         padFile.status().setValue(PadSimFile.PadSimFileStatus.Loaded);
