@@ -29,7 +29,6 @@ import com.propertyvista.portal.client.activity.SecurityAwareActivity;
 import com.propertyvista.portal.client.ui.residents.paymentmethod.PaymentMethodsView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap.Residents.PaymentMethods;
 import com.propertyvista.portal.rpc.portal.services.TenantPaymentMethodCrudService;
 
 public class PaymentMethodsActivity extends SecurityAwareActivity implements PaymentMethodsView.Presenter {
@@ -59,13 +58,13 @@ public class PaymentMethodsActivity extends SecurityAwareActivity implements Pay
 
     @Override
     public void addPaymentMethod() {
-        AppSite.getPlaceController().goTo(new PaymentMethods.NewPaymentMethod());
+        AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.PaymentMethods.NewPaymentMethod());
     }
 
     @Override
     public void editPaymentMethod(PaymentMethod paymentMethod) {
-        AppPlace place = new PaymentMethods.EditPaymentMethod();
-        place.placeArg(PortalSiteMap.ARG_PAYMENT_METHOD_ID, paymentMethod.id().getValue().toString());
+        AppPlace place = new PortalSiteMap.Residents.PaymentMethods.EditPaymentMethod();
+        place.placeArg(PortalSiteMap.ARG_ENTITY_ID, paymentMethod.id().getValue().toString());
         AppSite.getPlaceController().goTo(place);
     }
 

@@ -42,7 +42,6 @@ public class NewPaymentMethodActivity extends SecurityAwareActivity implements N
         this.view = PortalViewFactory.instance(NewPaymentMethodView.class);
         this.view.setPresenter(this);
         srv = GWT.create(TenantPaymentMethodCrudService.class);
-        withPlace(place);
     }
 
     @Override
@@ -54,10 +53,6 @@ public class NewPaymentMethodActivity extends SecurityAwareActivity implements N
         PaymentMethod method = EntityFactory.create(PaymentMethod.class);
         method.type().setValue(PaymentType.Echeck);
         view.populate(method);
-    }
-
-    public NewPaymentMethodActivity withPlace(Place place) {
-        return this;
     }
 
     @Override

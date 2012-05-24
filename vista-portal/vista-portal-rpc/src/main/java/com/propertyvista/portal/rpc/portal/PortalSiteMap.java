@@ -22,9 +22,7 @@ public class PortalSiteMap implements SiteMap {
 
     public static String ARG_PAGE_ID = "item-id";
 
-    public static String ARG_MAINTENANCE_ID = "maintenance-id";
-
-    public static String ARG_PAYMENT_METHOD_ID = "payment-method-id";
+    public static String ARG_ENTITY_ID = "entity-id";
 
     public static class Login extends AppPlace {
     }
@@ -65,7 +63,10 @@ public class PortalSiteMap implements SiteMap {
         @NavigationItem(navigLabel = "Maintenance")
         public static class Maintenance extends AppPlace {
 
-            public static class NewTicket extends AppPlace {
+            public static class NewMaintenanceRequest extends AppPlace {
+            }
+
+            public static class EditMaintenanceRequest extends AppPlace {
             }
         }
 

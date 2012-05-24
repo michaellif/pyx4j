@@ -34,12 +34,12 @@ import com.propertyvista.domain.property.asset.FloorplanAmenity;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.dto.MaintenanceRequestDTO;
 import com.propertyvista.portal.domain.dto.AmenityDTO;
 import com.propertyvista.portal.domain.dto.FloorplanDTO;
 import com.propertyvista.portal.domain.dto.FloorplanPropertyDTO;
 import com.propertyvista.portal.domain.dto.MediaDTO;
 import com.propertyvista.portal.domain.dto.PropertyDTO;
-import com.propertyvista.portal.rpc.portal.dto.MaintananceDTO;
 
 public class Converter {
 
@@ -169,15 +169,15 @@ public class Converter {
         return to;
     }
 
-    public static MaintananceDTO convert(MaintenanceRequest from) {
-        MaintananceDTO to = EntityFactory.create(MaintananceDTO.class);
+    public static MaintenanceRequestDTO convert(MaintenanceRequest from) {
+        MaintenanceRequestDTO to = EntityFactory.create(MaintenanceRequestDTO.class);
         to.id().set(from.id());
         to.description().set(from.description());
         to.status().set(from.status());
         to.submitted().set(from.submitted());
         to.scheduledDate().set(from.scheduledDate());
         to.scheduledTime().set(from.scheduledTime());
-        to.satisfactionSurvey().set(from.surveyResponse());
+        to.surveyResponse().set(from.surveyResponse());
         return to;
     }
 }

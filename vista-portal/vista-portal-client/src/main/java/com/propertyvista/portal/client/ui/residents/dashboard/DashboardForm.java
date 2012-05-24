@@ -38,11 +38,11 @@ import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.domain.communication.Message;
 import com.propertyvista.domain.communication.Message.MessageType;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
+import com.propertyvista.dto.MaintenanceRequestDTO;
 import com.propertyvista.portal.client.resources.PortalImages;
 import com.propertyvista.portal.client.themes.TenantDashboardTheme;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.dto.BillInfoDTO;
-import com.propertyvista.portal.rpc.portal.dto.MaintananceDTO;
 import com.propertyvista.portal.rpc.portal.dto.ReservationDTO;
 import com.propertyvista.portal.rpc.portal.dto.TenantDashboardDTO;
 import com.propertyvista.portal.rpc.portal.dto.TenantGeneralInfoDTO;
@@ -105,7 +105,7 @@ public class DashboardForm extends CEntityDecoratableForm<TenantDashboardDTO> im
         newTicket.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.Maintenance.NewTicket());
+                AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.Maintenance.NewMaintenanceRequest());
             }
         });
 
@@ -259,10 +259,10 @@ public class DashboardForm extends CEntityDecoratableForm<TenantDashboardDTO> im
         }
     }
 
-    class MaintananceViewer extends CEntityViewer<IList<MaintananceDTO>> {
+    class MaintananceViewer extends CEntityViewer<IList<MaintenanceRequestDTO>> {
 
         @Override
-        public IsWidget createContent(IList<MaintananceDTO> value) {
+        public IsWidget createContent(IList<MaintenanceRequestDTO> value) {
             FlexTable container = new FlexTable();
 
             container.setWidth("100%");
@@ -278,7 +278,7 @@ public class DashboardForm extends CEntityDecoratableForm<TenantDashboardDTO> im
 
                 int row = 0;
 
-                for (MaintananceDTO maintanance : value) {
+                for (MaintenanceRequestDTO maintanance : value) {
                     container.setHTML(++row, 0, maintanance.description().getValue());
                     container.getCellFormatter().getElement(row, 0).getStyle().setPaddingLeft(4, Unit.PX);
                     if (MaintenanceRequestStatus.Resolved.equals(maintanance.status().getValue())) {

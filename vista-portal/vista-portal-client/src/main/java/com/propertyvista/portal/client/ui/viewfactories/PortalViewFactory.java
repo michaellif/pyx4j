@@ -40,6 +40,8 @@ import com.propertyvista.portal.client.ui.residents.dashboard.DashboardView;
 import com.propertyvista.portal.client.ui.residents.dashboard.DashboardViewImpl;
 import com.propertyvista.portal.client.ui.residents.insurancemockup.InsuranceView;
 import com.propertyvista.portal.client.ui.residents.insurancemockup.InsuranceViewImpl;
+import com.propertyvista.portal.client.ui.residents.maintenance.EditMaintenanceRequestView;
+import com.propertyvista.portal.client.ui.residents.maintenance.EditMaintenanceRequestViewImpl;
 import com.propertyvista.portal.client.ui.residents.maintenance.MaintenanceView;
 import com.propertyvista.portal.client.ui.residents.maintenance.MaintenanceViewImpl;
 import com.propertyvista.portal.client.ui.residents.maintenance.NewMaintenanceRequestView;
@@ -59,28 +61,33 @@ public class PortalViewFactory extends ViewFactoryBase {
         if (!map.containsKey(type)) {
             if (DashboardView.class.equals(type)) {
                 map.put(type, new DashboardViewImpl());
-            } else if (MaintenanceView.class.equals(type)) {
-                map.put(type, new MaintenanceViewImpl());
-            } else if (NavigView.class.equals(type)) {
-                map.put(type, new NavigViewImpl());
-            } else if (CaptionView.class.equals(type)) {
-                map.put(type, new CaptionViewImpl());
-            } else if (BillingHistoryView.class.equals(type)) {
-                map.put(type, new BillingHistoryViewImpl());
             } else if (PersonalInfoView.class.equals(type)) {
                 map.put(type, new PersonalInfoViewImpl());
-            } else if (PaymentMethodsView.class.equals(type)) {
-                map.put(type, new PaymentMethodsViewImpl());
-            } else if (CurrentBillView.class.equals(type)) {
-                map.put(type, new CurrentBillViewImpl());
             } else if (PotentialTenantView.class.equals(type)) {
                 map.put(type, new PotentialTenantViewImpl());
-            } else if (NewMaintenanceRequestView.class.equals(type)) {
-                map.put(type, new NewMaintenanceRequestViewImpl());
+            } else if (BillingHistoryView.class.equals(type)) {
+                map.put(type, new BillingHistoryViewImpl());
+            } else if (CurrentBillView.class.equals(type)) {
+                map.put(type, new CurrentBillViewImpl());
+
+            } else if (PaymentMethodsView.class.equals(type)) {
+                map.put(type, new PaymentMethodsViewImpl());
             } else if (NewPaymentMethodView.class.equals(type)) {
                 map.put(type, new NewPaymentMethodViewImpl());
             } else if (EditPaymentMethodView.class.equals(type)) {
                 map.put(type, new EditPaymentMethodViewImpl());
+
+            } else if (MaintenanceView.class.equals(type)) {
+                map.put(type, new MaintenanceViewImpl());
+            } else if (NewMaintenanceRequestView.class.equals(type)) {
+                map.put(type, new NewMaintenanceRequestViewImpl());
+            } else if (EditMaintenanceRequestView.class.equals(type)) {
+                map.put(type, new EditMaintenanceRequestViewImpl());
+
+            } else if (NavigView.class.equals(type)) {
+                map.put(type, new NavigViewImpl());
+            } else if (CaptionView.class.equals(type)) {
+                map.put(type, new CaptionViewImpl());
             } else if (PasswordResetRequestView.class.equals(type)) {
                 map.put(type, new PasswordResetRequestViewImpl());
             } else if (PasswordResetView.class.equals(type)) {

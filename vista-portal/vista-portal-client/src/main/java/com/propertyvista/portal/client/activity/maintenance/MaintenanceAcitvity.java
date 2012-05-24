@@ -24,12 +24,13 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.client.AppSite;
+import com.pyx4j.site.rpc.AppPlace;
 
+import com.propertyvista.dto.MaintenanceRequestDTO;
 import com.propertyvista.portal.client.activity.SecurityAwareActivity;
 import com.propertyvista.portal.client.ui.residents.maintenance.MaintenanceView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
-import com.propertyvista.portal.rpc.portal.dto.MaintananceDTO;
 import com.propertyvista.portal.rpc.portal.services.TenantMaintenanceService;
 
 public class MaintenanceAcitvity extends SecurityAwareActivity implements MaintenanceView.Presenter {
@@ -49,16 +50,16 @@ public class MaintenanceAcitvity extends SecurityAwareActivity implements Mainte
         super.start(panel, eventBus);
         panel.setWidget(view);
 
-        srv.listOpenIssues(new DefaultAsyncCallback<Vector<MaintananceDTO>>() {
+        srv.listOpenIssues(new DefaultAsyncCallback<Vector<MaintenanceRequestDTO>>() {
             @Override
-            public void onSuccess(Vector<MaintananceDTO> result) {
+            public void onSuccess(Vector<MaintenanceRequestDTO> result) {
                 view.populateOpenRequests(result);
             }
         });
 
-        srv.listHistoryIssues(new DefaultAsyncCallback<Vector<MaintananceDTO>>() {
+        srv.listHistoryIssues(new DefaultAsyncCallback<Vector<MaintenanceRequestDTO>>() {
             @Override
-            public void onSuccess(Vector<MaintananceDTO> result) {
+            public void onSuccess(Vector<MaintenanceRequestDTO> result) {
                 view.populateHistoryRequests(result);
             }
         });
@@ -67,30 +68,32 @@ public class MaintenanceAcitvity extends SecurityAwareActivity implements Mainte
 
     @Override
     public void createNewRequest() {
-        AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.Maintenance.NewTicket());
+        AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.Maintenance.NewMaintenanceRequest());
     }
 
     @Override
-    public void openRequest(MaintananceDTO requests) {
-        // TODO Auto-generated method stub
+    public void editRequest(MaintenanceRequestDTO requests) {
+        AppPlace place = new PortalSiteMap.Residents.Maintenance.EditMaintenanceRequest();
+        place.placeArg(PortalSiteMap.ARG_ENTITY_ID, requests.id().getValue().toString());
+        AppSite.getPlaceController().goTo(place);
     }
 
     @Override
-    public void cancelRequest(MaintananceDTO request) {
+    public void cancelRequest(MaintenanceRequestDTO request) {
         if (!Window.confirm("You are about to cancel ticket '" + request.description().getStringView() + "'")) {
             return;
         }
 
-        srv.cancelTicket(new DefaultAsyncCallback<Vector<MaintananceDTO>>() {
+        srv.cancelTicket(new DefaultAsyncCallback<Vector<MaintenanceRequestDTO>>() {
             @Override
-            public void onSuccess(Vector<MaintananceDTO> result) {
+            public void onSuccess(Vector<MaintenanceRequestDTO> result) {
                 view.populateOpenRequests(result);
             }
         }, request);
     }
 
     @Override
-    public void rateRequest(MaintananceDTO request, Integer rate) {
+    public void rateRequest(MaintenanceRequestDTO request, Integer rate) {
         srv.rateTicket(new DefaultAsyncCallback<VoidSerializable>() {
             @Override
             public void onSuccess(VoidSerializable result) {

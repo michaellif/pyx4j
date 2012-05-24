@@ -20,14 +20,14 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.client.AppSite;
 
+import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
+import com.propertyvista.dto.MaintenanceRequestDTO;
 import com.propertyvista.portal.client.activity.SecurityAwareActivity;
 import com.propertyvista.portal.client.ui.residents.maintenance.NewMaintenanceRequestView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
-import com.propertyvista.portal.rpc.portal.dto.MaintenanceRequestDTO;
 import com.propertyvista.portal.rpc.portal.services.TenantMaintenanceService;
 
 public class NewMaintenanceRequestActivity extends SecurityAwareActivity implements NewMaintenanceRequestView.Presenter {
@@ -49,14 +49,15 @@ public class NewMaintenanceRequestActivity extends SecurityAwareActivity impleme
 
         // create default empty request:
         MaintenanceRequestDTO request = EntityFactory.create(MaintenanceRequestDTO.class);
+        request.status().setValue(MaintenanceRequestStatus.Submitted);
         view.populate(request);
     }
 
     @Override
     public void submit(MaintenanceRequestDTO request) {
-        srv.createNewTicket(new DefaultAsyncCallback<VoidSerializable>() {
+        srv.create(new DefaultAsyncCallback<MaintenanceRequestDTO>() {
             @Override
-            public void onSuccess(VoidSerializable result) {
+            public void onSuccess(MaintenanceRequestDTO result) {
                 AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.Maintenance());
             }
         }, request);

@@ -15,7 +15,7 @@ package com.propertyvista.portal.client.ui.residents.maintenance;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.propertyvista.portal.rpc.portal.dto.MaintenanceRequestDTO;
+import com.propertyvista.dto.MaintenanceRequestDTO;
 
 public interface NewMaintenanceRequestView extends IsWidget {
 

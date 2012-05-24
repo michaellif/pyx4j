@@ -27,8 +27,8 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.RateIt;
 
+import com.propertyvista.dto.MaintenanceRequestDTO;
 import com.propertyvista.portal.client.themes.TenantDashboardTheme;
-import com.propertyvista.portal.rpc.portal.dto.MaintananceDTO;
 
 public class MaintenanceList extends VerticalPanel implements MaintenanceView {
 
@@ -62,7 +62,7 @@ public class MaintenanceList extends VerticalPanel implements MaintenanceView {
     }
 
     @Override
-    public void populateOpenRequests(Vector<MaintananceDTO> openRequests) {
+    public void populateOpenRequests(Vector<MaintenanceRequestDTO> openRequests) {
         openRequestsPanel.removeAllRows();
 
         openRequestsPanel.setWidth("100%");
@@ -94,7 +94,7 @@ public class MaintenanceList extends VerticalPanel implements MaintenanceView {
 
             openRequestsPanel.getRowFormatter().getElement(row).addClassName(TenantDashboardTheme.StyleName.TenantDashboardTableHeader.name());
 
-            for (final MaintananceDTO request : openRequests) {
+            for (final MaintenanceRequestDTO request : openRequests) {
                 openRequestsPanel.setHTML(++row, 0, request.description().getStringView());
                 openRequestsPanel.getCellFormatter().getElement(row, 0).getStyle().setPaddingLeft(4, Unit.PX);
 
@@ -131,7 +131,7 @@ public class MaintenanceList extends VerticalPanel implements MaintenanceView {
     }
 
     @Override
-    public void populateHistoryRequests(Vector<MaintananceDTO> historyRequests) {
+    public void populateHistoryRequests(Vector<MaintenanceRequestDTO> historyRequests) {
         historyRequestsPanel.removeAllRows();
 
         int row = -1;
@@ -153,7 +153,7 @@ public class MaintenanceList extends VerticalPanel implements MaintenanceView {
             historyRequestsPanel.setHTML(row, 2, i18n.tr("Rate Service"));
             historyRequestsPanel.getRowFormatter().getElement(row).addClassName(TenantDashboardTheme.StyleName.TenantDashboardTableHeader.name());
 
-            for (final MaintananceDTO request : historyRequests) {
+            for (final MaintenanceRequestDTO request : historyRequests) {
                 historyRequestsPanel.setHTML(++row, 0, request.description().getStringView());
                 historyRequestsPanel.getCellFormatter().getElement(row, 0).getStyle().setPaddingLeft(4, Unit.PX);
 
@@ -161,7 +161,7 @@ public class MaintenanceList extends VerticalPanel implements MaintenanceView {
                         + "</i>");
 
                 RateIt rateIt = new RateIt(5);
-                Integer rate = request.satisfactionSurvey().rating().getValue();
+                Integer rate = request.surveyResponse().rating().getValue();
                 if (rate != null) {
                     rateIt.setRating(rate);
                 }

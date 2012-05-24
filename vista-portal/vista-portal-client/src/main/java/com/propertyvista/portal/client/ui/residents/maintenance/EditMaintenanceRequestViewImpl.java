@@ -7,7 +7,7 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jun 25, 2011
+ * Created on Jun 29, 2011
  * @author Dad
  * @version $Id$
  */
@@ -18,26 +18,26 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
 
 import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.AppSite;
-import com.pyx4j.widgets.client.Button;
+import com.pyx4j.rpc.shared.UserRuntimeException;
 
-import com.propertyvista.common.client.events.UserMessageEvent;
+import com.propertyvista.common.client.ui.decorations.DecorationUtils;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 import com.propertyvista.portal.client.ui.decorations.UserMessagePanel;
 
-public class NewMaintenanceRequestViewImpl extends FlowPanel implements NewMaintenanceRequestView {
+public class EditMaintenanceRequestViewImpl extends FlowPanel implements EditMaintenanceRequestView {
 
-    private static final I18n i18n = I18n.get(NewMaintenanceRequestViewImpl.class);
+    private static final I18n i18n = I18n.get(EditMaintenanceRequestViewImpl.class);
 
     private final MaintenanceRequestForm form;
 
     private Presenter presenter;
 
-    public NewMaintenanceRequestViewImpl() {
+    public EditMaintenanceRequestViewImpl() {
         add(new UserMessagePanel());
 
         form = new MaintenanceRequestForm();
@@ -51,17 +51,14 @@ public class NewMaintenanceRequestViewImpl extends FlowPanel implements NewMaint
             @Override
             public void onClick(ClickEvent event) {
                 if (!form.isValid()) {
-                    form.setVisited(true);
                     Window.scrollTo(0, 0);
-                    AppSite.getEventBus().fireEvent(
-                            new UserMessageEvent("The form was completed with errors outlined below. Please review and try again.", "",
-                                    UserMessageEvent.UserMessageType.ERROR));
+                    throw new UserRuntimeException(form.getValidationResults().getMessagesText(true));
                 } else {
-                    presenter.submit(form.getValue());
+                    presenter.save(form.getValue());
                 }
             }
         });
-        add(submitButton);
+        add(DecorationUtils.inline(submitButton));
 
         CHyperlink cancel = new CHyperlink(new Command() {
             @Override
@@ -81,8 +78,8 @@ public class NewMaintenanceRequestViewImpl extends FlowPanel implements NewMaint
     }
 
     @Override
-    public void populate(MaintenanceRequestDTO request) {
+    public void populate(MaintenanceRequestDTO value) {
         form.reset();
-        form.populate(request);
+        form.populate(value);
     }
 }

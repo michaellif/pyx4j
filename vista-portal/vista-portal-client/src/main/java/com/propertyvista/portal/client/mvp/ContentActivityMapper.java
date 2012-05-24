@@ -32,6 +32,7 @@ import com.propertyvista.portal.client.activity.login.LeaseContextSelectionActiv
 import com.propertyvista.portal.client.activity.login.LoginWithTokenActivity;
 import com.propertyvista.portal.client.activity.login.PasswordResetRequestActivity;
 import com.propertyvista.portal.client.activity.login.RedirectToLoginPageActivity;
+import com.propertyvista.portal.client.activity.maintenance.EditMaintenanceRequestActivity;
 import com.propertyvista.portal.client.activity.maintenance.MaintenanceAcitvity;
 import com.propertyvista.portal.client.activity.maintenance.NewMaintenanceRequestActivity;
 import com.propertyvista.portal.client.activity.paymentmethod.EditPaymentMethodActivity;
@@ -44,7 +45,6 @@ import com.propertyvista.portal.rpc.portal.PortalSiteMap.Residents;
 public class ContentActivityMapper implements AppActivityMapper {
 
     public ContentActivityMapper() {
-
     }
 
     @Override
@@ -60,18 +60,24 @@ public class ContentActivityMapper implements AppActivityMapper {
                     activity = new PersonalInfoActivity(place);
                 } else if (place instanceof PortalSiteMap.PotentialTenants) {
                     activity = new PotentialTenantActivity(place);
+
                 } else if (place instanceof Residents.CurrentBill) {
                     activity = new CurrentBillActivity(place);
+
                 } else if (place instanceof Residents.PaymentMethods) {
                     activity = new PaymentMethodsActivity(place);
                 } else if (place instanceof Residents.PaymentMethods.NewPaymentMethod) {
                     activity = new NewPaymentMethodActivity(place);
                 } else if (place instanceof Residents.PaymentMethods.EditPaymentMethod) {
                     activity = new EditPaymentMethodActivity(place);
+
                 } else if (place instanceof Residents.Maintenance) {
                     activity = new MaintenanceAcitvity(place);
-                } else if (place instanceof Residents.Maintenance.NewTicket) {
+                } else if (place instanceof Residents.Maintenance.NewMaintenanceRequest) {
                     activity = new NewMaintenanceRequestActivity(place);
+                } else if (place instanceof Residents.Maintenance.EditMaintenanceRequest) {
+                    activity = new EditMaintenanceRequestActivity(place);
+
                 } else if (place instanceof Residents.BillingHistory) {
                     activity = new BillingHistoryActivity(place);
                 } else if (VistaTODO.enableWelcomeWizardDemoMode & (place instanceof PortalSiteMap.Residents.Insurance)) {
@@ -99,6 +105,5 @@ public class ContentActivityMapper implements AppActivityMapper {
                 callback.onFailure(reason);
             }
         });
-
     }
 }

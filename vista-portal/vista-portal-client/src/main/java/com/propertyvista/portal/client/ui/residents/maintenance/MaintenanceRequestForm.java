@@ -31,17 +31,17 @@ import com.propertyvista.domain.maintenance.IssueClassification;
 import com.propertyvista.domain.maintenance.IssueElement;
 import com.propertyvista.domain.maintenance.IssueRepairSubject;
 import com.propertyvista.domain.maintenance.IssueSubjectDetails;
-import com.propertyvista.portal.rpc.portal.dto.MaintenanceRequestDTO;
+import com.propertyvista.dto.MaintenanceRequestDTO;
 
-public class NewMaintenanceRequestForm extends CEntityDecoratableForm<MaintenanceRequestDTO> {
+public class MaintenanceRequestForm extends CEntityDecoratableForm<MaintenanceRequestDTO> {
 
-    private static final I18n i18n = I18n.get(NewMaintenanceRequestForm.class);
+    private static final I18n i18n = I18n.get(MaintenanceRequestForm.class);
 
     private static String defaultChoice = i18n.tr("Select");
 
     private CEntityComboBox<IssueElement> mainCombo;
 
-    public NewMaintenanceRequestForm() {
+    public MaintenanceRequestForm() {
         super(MaintenanceRequestDTO.class, new VistaEditorsComponentFactory());
     }
 

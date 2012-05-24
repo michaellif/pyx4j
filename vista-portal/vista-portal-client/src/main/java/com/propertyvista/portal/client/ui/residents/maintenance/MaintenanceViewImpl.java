@@ -17,7 +17,7 @@ import java.util.Vector;
 
 import com.google.gwt.user.client.ui.FlowPanel;
 
-import com.propertyvista.portal.rpc.portal.dto.MaintananceDTO;
+import com.propertyvista.dto.MaintenanceRequestDTO;
 
 public class MaintenanceViewImpl extends FlowPanel implements MaintenanceView {
 
@@ -34,12 +34,12 @@ public class MaintenanceViewImpl extends FlowPanel implements MaintenanceView {
     }
 
     @Override
-    public void populateOpenRequests(Vector<MaintananceDTO> openRequests) {
+    public void populateOpenRequests(Vector<MaintenanceRequestDTO> openRequests) {
         list.populateOpenRequests(openRequests);
     }
 
     @Override
-    public void populateHistoryRequests(Vector<MaintananceDTO> historyRequests) {
+    public void populateHistoryRequests(Vector<MaintenanceRequestDTO> historyRequests) {
         list.populateHistoryRequests(historyRequests);
     }
 

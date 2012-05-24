@@ -17,22 +17,19 @@ import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.rpc.shared.IService;
+import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
-import com.propertyvista.portal.rpc.portal.dto.MaintananceDTO;
-import com.propertyvista.portal.rpc.portal.dto.MaintenanceRequestDTO;
+import com.propertyvista.dto.MaintenanceRequestDTO;
 
-public interface TenantMaintenanceService extends IService {
+public interface TenantMaintenanceService extends AbstractCrudService<MaintenanceRequestDTO> {
 
     // Can't use List, this should be serializable collection
-    public void listOpenIssues(AsyncCallback<Vector<MaintananceDTO>> callback);
+    void listOpenIssues(AsyncCallback<Vector<MaintenanceRequestDTO>> callback);
 
-    public void listHistoryIssues(AsyncCallback<Vector<MaintananceDTO>> callback);
+    void listHistoryIssues(AsyncCallback<Vector<MaintenanceRequestDTO>> callback);
 
-    public void createNewTicket(AsyncCallback<VoidSerializable> callback, MaintenanceRequestDTO request);
+    void cancelTicket(AsyncCallback<Vector<MaintenanceRequestDTO>> callback, MaintenanceRequestDTO request);
 
-    public void cancelTicket(AsyncCallback<Vector<MaintananceDTO>> callback, MaintananceDTO request);
-
-    public void rateTicket(AsyncCallback<VoidSerializable> callback, MaintananceDTO request, Integer rate);
+    void rateTicket(AsyncCallback<VoidSerializable> callback, MaintenanceRequestDTO request, Integer rate);
 }

@@ -17,7 +17,7 @@ import java.util.Vector;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.propertyvista.portal.rpc.portal.dto.MaintananceDTO;
+import com.propertyvista.dto.MaintenanceRequestDTO;
 
 public interface MaintenanceView extends IsWidget {
 
@@ -25,16 +25,16 @@ public interface MaintenanceView extends IsWidget {
 
         void createNewRequest();
 
-        void openRequest(MaintananceDTO requests);
+        void editRequest(MaintenanceRequestDTO requests);
 
-        void cancelRequest(MaintananceDTO request);
+        void cancelRequest(MaintenanceRequestDTO request);
 
-        void rateRequest(MaintananceDTO request, Integer rate);
+        void rateRequest(MaintenanceRequestDTO request, Integer rate);
     }
 
     void setPresenter(Presenter presenter);
 
-    void populateOpenRequests(Vector<MaintananceDTO> openRequests);
+    void populateOpenRequests(Vector<MaintenanceRequestDTO> openRequests);
 
-    void populateHistoryRequests(Vector<MaintananceDTO> historyRequests);
+    void populateHistoryRequests(Vector<MaintenanceRequestDTO> historyRequests);
 }

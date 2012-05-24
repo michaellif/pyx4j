@@ -7,31 +7,26 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-16
- * @author vlads
+ * Created on Jun 29, 2011
+ * @author Dad
  * @version $Id$
  */
-package com.propertyvista.portal.rpc.portal.dto;
+package com.propertyvista.portal.client.ui.residents.maintenance;
 
-import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
-import com.pyx4j.i18n.annotations.I18n;
+import com.google.gwt.user.client.ui.IsWidget;
 
 import com.propertyvista.dto.MaintenanceRequestDTO;
 
-@Transient
-@I18n(strategy = I18n.I18nStrategy.IgnoreThis)
-public interface TenantDashboardDTO extends IEntity {
+public interface EditMaintenanceRequestView extends IsWidget {
 
-    TenantGeneralInfoDTO general();
+    interface Presenter {
 
-    IList<MessageDTO> notifications();
+        void save(MaintenanceRequestDTO entity);
 
-    BillInfoDTO currentBill();
+        void cancel();
+    }
 
-    IList<ReservationDTO> reservations();
+    void setPresenter(Presenter presenter);
 
-    IList<MaintenanceRequestDTO> maintanances();
-
+    void populate(MaintenanceRequestDTO value);
 }
