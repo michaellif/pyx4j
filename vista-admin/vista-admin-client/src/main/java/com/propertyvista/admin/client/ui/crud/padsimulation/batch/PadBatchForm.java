@@ -16,7 +16,6 @@ package com.propertyvista.admin.client.ui.crud.padsimulation.batch;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ScrollPanel;
 
-import com.pyx4j.forms.client.ui.CNumberLabel;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
@@ -43,15 +42,14 @@ public class PadBatchForm extends AdminEntityForm<PadSimBatch> {
         FormFlexPanel main = new FormFlexPanel();
 
         int row = -1;
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().id(), new CNumberLabel()), 10).build());
+
+        main.setH1(++row, 0, 1, i18n.tr("Batch Details"));
 
         main.setWidget(++row, 0,
-                new DecoratorBuilder(inject(proto().id(), new CEntityCrudHyperlink<PadSimFile>(AppPlaceEntityMapper.resolvePlace(PadSimFile.class))), 10)
+                new DecoratorBuilder(inject(proto().padFile(), new CEntityCrudHyperlink<PadSimFile>(AppPlaceEntityMapper.resolvePlace(PadSimFile.class))), 10)
                         .build());
 
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().batchNumber()), 10).build());
-
-        main.setWidget(++row, 0, inject(proto().records(), new DebitRecordFolder(isEditable())));
 
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().terminalId()), 10).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().bankId()), 10).build());
@@ -62,6 +60,10 @@ public class PadBatchForm extends AdminEntityForm<PadSimBatch> {
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().recordsCount()), 10).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().batchAmount()), 10).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().acknowledgmentStatusCode()), 10).build());
+
+        main.setH1(++row, 0, 1, i18n.tr("Detail Debit Records"));
+
+        main.setWidget(++row, 0, inject(proto().records(), new DebitRecordFolder(isEditable())));
 
         return new ScrollPanel(main);
     }

@@ -13,8 +13,6 @@
  */
 package com.propertyvista.admin.client.ui.crud.padsimulation;
 
-import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -22,16 +20,12 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.admin.client.themes.AdminTheme;
 import com.propertyvista.admin.client.ui.crud.AdminEntityForm;
 import com.propertyvista.admin.domain.payment.pad.sim.PadSimFile;
-import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 
 public class PadFileForm extends AdminEntityForm<PadSimFile> {
 
     private static final I18n i18n = I18n.get(PadFileForm.class);
-
-    protected final VistaTabLayoutPanel tabPanel = new VistaTabLayoutPanel(AdminTheme.defaultTabHeight, Unit.EM);
 
     public PadFileForm() {
         this(false);
@@ -43,13 +37,16 @@ public class PadFileForm extends AdminEntityForm<PadSimFile> {
 
     @Override
     public IsWidget createContent() {
-        tabPanel.add(createDetailsTab(), i18n.tr("Details"));
+        FormFlexPanel content = new FormFlexPanel();
+        int row = -1;
 
-        tabPanel.add(isEditable() ? new HTML() : ((PadFileViewerView) getParentView()).getBatchListerView().asWidget(), i18n.tr("PadSimBatches"));
-        tabPanel.setLastTabDisabled(isEditable());
+        content.setH1(++row, 0, 1, i18n.tr("File Details"));
+        content.setWidget(++row, 0, createDetailsTab());
 
-        tabPanel.setSize("100%", "100%");
-        return tabPanel;
+        content.setH1(++row, 0, 1, i18n.tr("Batches"));
+
+        content.setWidget(++row, 0, ((PadFileViewerView) getParentView()).getBatchListerView().asWidget());
+        return content;
     }
 
     private Widget createDetailsTab() {
