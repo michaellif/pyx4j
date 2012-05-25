@@ -13,40 +13,27 @@
  */
 package com.propertyvista.portal.client.activity.paymentmethod;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppSite;
 
-import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
-import com.propertyvista.portal.client.activity.SecurityAwareActivity;
-import com.propertyvista.portal.client.ui.residents.paymentmethod.NewPaymentMethodView;
-import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
-import com.propertyvista.portal.rpc.portal.services.TenantPaymentMethodCrudService;
 
-public class NewPaymentMethodActivity extends SecurityAwareActivity implements NewPaymentMethodView.Presenter {
-
-    private final NewPaymentMethodView view;
-
-    private final TenantPaymentMethodCrudService srv;
+public class NewPaymentMethodActivity extends EditPaymentMethodActivity {
 
     public NewPaymentMethodActivity(Place place) {
-        this.view = PortalViewFactory.instance(NewPaymentMethodView.class);
-        this.view.setPresenter(this);
-        srv = GWT.create(TenantPaymentMethodCrudService.class);
+        super(place);
     }
 
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
-        super.start(panel, eventBus);
+        securityAwareStart(panel, eventBus);
         panel.setWidget(view);
 
         // create default empty method:
@@ -56,7 +43,7 @@ public class NewPaymentMethodActivity extends SecurityAwareActivity implements N
     }
 
     @Override
-    public void submit(PaymentMethod paymentmethod) {
+    public void save(PaymentMethod paymentmethod) {
         srv.create(new DefaultAsyncCallback<PaymentMethod>() {
             @Override
             public void onSuccess(PaymentMethod result) {
@@ -68,15 +55,5 @@ public class NewPaymentMethodActivity extends SecurityAwareActivity implements N
     @Override
     public void cancel() {
         AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.PaymentMethods());
-    }
-
-    @Override
-    public void getCurrentAddress(final AsyncCallback<AddressStructured> callback) {
-        srv.getCurrentAddress(new DefaultAsyncCallback<AddressStructured>() {
-            @Override
-            public void onSuccess(AddressStructured result) {
-                callback.onSuccess(result);
-            }
-        });
     }
 }

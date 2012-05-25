@@ -44,12 +44,8 @@ import com.propertyvista.portal.client.ui.residents.maintenance.EditMaintenanceR
 import com.propertyvista.portal.client.ui.residents.maintenance.EditMaintenanceRequestViewImpl;
 import com.propertyvista.portal.client.ui.residents.maintenance.MaintenanceView;
 import com.propertyvista.portal.client.ui.residents.maintenance.MaintenanceViewImpl;
-import com.propertyvista.portal.client.ui.residents.maintenance.NewMaintenanceRequestView;
-import com.propertyvista.portal.client.ui.residents.maintenance.NewMaintenanceRequestViewImpl;
 import com.propertyvista.portal.client.ui.residents.paymentmethod.EditPaymentMethodView;
 import com.propertyvista.portal.client.ui.residents.paymentmethod.EditPaymentMethodViewImpl;
-import com.propertyvista.portal.client.ui.residents.paymentmethod.NewPaymentMethodView;
-import com.propertyvista.portal.client.ui.residents.paymentmethod.NewPaymentMethodViewImpl;
 import com.propertyvista.portal.client.ui.residents.paymentmethod.PaymentMethodsView;
 import com.propertyvista.portal.client.ui.residents.paymentmethod.PaymentMethodsViewImpl;
 import com.propertyvista.portal.client.ui.residents.personalinfo.PersonalInfoView;
@@ -72,15 +68,11 @@ public class PortalViewFactory extends ViewFactoryBase {
 
             } else if (PaymentMethodsView.class.equals(type)) {
                 map.put(type, new PaymentMethodsViewImpl());
-            } else if (NewPaymentMethodView.class.equals(type)) {
-                map.put(type, new NewPaymentMethodViewImpl());
             } else if (EditPaymentMethodView.class.equals(type)) {
                 map.put(type, new EditPaymentMethodViewImpl());
 
             } else if (MaintenanceView.class.equals(type)) {
                 map.put(type, new MaintenanceViewImpl());
-            } else if (NewMaintenanceRequestView.class.equals(type)) {
-                map.put(type, new NewMaintenanceRequestViewImpl());
             } else if (EditMaintenanceRequestView.class.equals(type)) {
                 map.put(type, new EditMaintenanceRequestViewImpl());
 

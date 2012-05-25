@@ -16,6 +16,7 @@ package com.propertyvista.portal.client.activity.paymentmethod;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
+import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
@@ -35,9 +36,9 @@ import com.propertyvista.portal.rpc.portal.services.TenantPaymentMethodCrudServi
 
 public class EditPaymentMethodActivity extends SecurityAwareActivity implements EditPaymentMethodView.Presenter {
 
-    private final EditPaymentMethodView view;
+    protected final EditPaymentMethodView view;
 
-    private final TenantPaymentMethodCrudService srv;
+    protected final TenantPaymentMethodCrudService srv;
 
     private Key entityId;
 
@@ -51,22 +52,24 @@ public class EditPaymentMethodActivity extends SecurityAwareActivity implements 
         if ((val = ((AppPlace) place).getFirstArg(PortalSiteMap.ARG_ENTITY_ID)) != null) {
             entityId = new Key(val);
         }
-
-        assert (entityId != null);
     }
 
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
-        super.start(panel, eventBus);
+        securityAwareStart(panel, eventBus);
         panel.setWidget(view);
 
+        assert (entityId != null);
         srv.retrieve(new DefaultAsyncCallback<PaymentMethod>() {
             @Override
             public void onSuccess(PaymentMethod result) {
                 view.populate(result);
             }
         }, entityId, AbstractCrudService.RetrieveTraget.Edit);
+    }
 
+    protected final void securityAwareStart(AcceptsOneWidget panel, EventBus eventBus) {
+        super.start(panel, eventBus);
     }
 
     @Override
@@ -81,7 +84,7 @@ public class EditPaymentMethodActivity extends SecurityAwareActivity implements 
 
     @Override
     public void cancel() {
-        AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.PaymentMethods());
+        History.back();
     }
 
     @Override

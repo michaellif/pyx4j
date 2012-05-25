@@ -16,6 +16,7 @@ package com.propertyvista.portal.client.activity;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
+import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
@@ -70,4 +71,8 @@ public class PersonalInfoActivity extends SecurityAwareActivity implements Perso
         }, info);
     }
 
+    @Override
+    public void cancel() {
+        History.back();
+    }
 }

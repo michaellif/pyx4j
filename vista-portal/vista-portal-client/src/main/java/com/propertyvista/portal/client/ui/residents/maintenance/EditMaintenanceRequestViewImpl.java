@@ -13,73 +13,25 @@
  */
 package com.propertyvista.portal.client.ui.residents.maintenance;
 
-import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.FlowPanel;
-
-import com.pyx4j.forms.client.ui.CHyperlink;
-import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.rpc.shared.UserRuntimeException;
-
-import com.propertyvista.common.client.ui.decorations.DecorationUtils;
+import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
 import com.propertyvista.dto.MaintenanceRequestDTO;
-import com.propertyvista.portal.client.ui.decorations.UserMessagePanel;
+import com.propertyvista.portal.client.ui.residents.BasicViewImpl;
 
-public class EditMaintenanceRequestViewImpl extends FlowPanel implements EditMaintenanceRequestView {
-
-    private static final I18n i18n = I18n.get(EditMaintenanceRequestViewImpl.class);
-
-    private final MaintenanceRequestForm form;
-
-    private Presenter presenter;
+public class EditMaintenanceRequestViewImpl extends BasicViewImpl<MaintenanceRequestDTO> implements EditMaintenanceRequestView {
 
     public EditMaintenanceRequestViewImpl() {
-        add(new UserMessagePanel());
-
-        form = new MaintenanceRequestForm();
-        form.initContent();
-        add(form);
-
-        Button submitButton = new Button(i18n.tr("Save"));
-        submitButton.getElement().getStyle().setMargin(20, Unit.PX);
-        submitButton.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.RIGHT);
-        submitButton.addClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                if (!form.isValid()) {
-                    Window.scrollTo(0, 0);
-                    throw new UserRuntimeException(form.getValidationResults().getMessagesText(true));
-                } else {
-                    presenter.save(form.getValue());
-                }
-            }
-        });
-        add(DecorationUtils.inline(submitButton));
-
-        CHyperlink cancel = new CHyperlink(new Command() {
-            @Override
-            public void execute() {
-                presenter.cancel();
-            }
-        });
-        cancel.setValue(i18n.tr("Cancel"));
-        cancel.asWidget().getElement().getStyle().setMarginTop(20, Unit.PX);
-        cancel.asWidget().getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.RIGHT);
-        add(cancel);
-    }
-
-    @Override
-    public void setPresenter(Presenter presenter) {
-        this.presenter = presenter;
+        super(new MaintenanceRequestForm());
     }
 
     @Override
     public void populate(MaintenanceRequestDTO value) {
-        form.reset();
-        form.populate(value);
+        boolean editable = (value.status().getValue() == MaintenanceRequestStatus.Submitted);
+
+        form.setViewable(!editable);
+
+        submitButton.setVisible(editable);
+        cancel.setValue(editable ? i18n.tr("Cancel") : i18n.tr("Back"));
+
+        super.populate(value);
     }
 }

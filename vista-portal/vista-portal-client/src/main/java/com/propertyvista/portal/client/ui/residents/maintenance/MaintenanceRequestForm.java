@@ -52,7 +52,6 @@ public class MaintenanceRequestForm extends CEntityDecoratableForm<MaintenanceRe
         FormFlexPanel content = new FormFlexPanel();
 
         int row = -1;
-        content.setH1(++row, 0, 1, i18n.tr("TICKET"));
 
         // Add components
         final OptionsDrivenCombo<IssueElement> combo1 = new OptionsDrivenCombo<IssueElement>(IssueElement.class) {

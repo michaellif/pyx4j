@@ -102,7 +102,7 @@ public class PaymentMethodsForm extends CEntityForm<PaymentMethodListDTO> implem
         @Override
         protected void removeItem(final CEntityFolderItem<PaymentMethod> item) {
 
-            MessageDialog.confirm(i18n.tr("Please confirm"), i18n.tr("Do you really want tot delete the Payment Method?"), new Command() {
+            MessageDialog.confirm(i18n.tr("Please confirm"), i18n.tr("Do you really want to delete the Payment Method?"), new Command() {
                 @Override
                 public void execute() {
                     presenter.removePaymentMethod(item.getValue());

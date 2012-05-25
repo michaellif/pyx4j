@@ -26,12 +26,12 @@ public class PaymentMethodsViewImpl extends FlowPanel implements PaymentMethodsV
 
     private static final I18n i18n = I18n.get(PaymentMethodsViewImpl.class);
 
+    protected final UserMessagePanel messagePanel;
+
     private final PaymentMethodsForm form;
 
-    private Presenter presenter;
-
     public PaymentMethodsViewImpl() {
-        add(new UserMessagePanel());
+        add(messagePanel = new UserMessagePanel());
 
         form = new PaymentMethodsForm();
         form.initContent();
@@ -40,12 +40,13 @@ public class PaymentMethodsViewImpl extends FlowPanel implements PaymentMethodsV
 
     @Override
     public void setPresenter(Presenter presenter) {
-        this.presenter = presenter;
         form.setPresenter(presenter);
     }
 
     @Override
     public void populate(List<PaymentMethod> paymentMethods) {
+        messagePanel.clearMessage();
+
         form.reset();
         form.populate(paymentMethods);
     }

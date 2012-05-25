@@ -13,20 +13,15 @@
  */
 package com.propertyvista.portal.client.ui.residents.personalinfo;
 
-import com.google.gwt.user.client.ui.IsWidget;
-
+import com.propertyvista.portal.client.ui.residents.View;
 import com.propertyvista.portal.domain.dto.ResidentDTO;
 
-public interface PersonalInfoView extends IsWidget {
-    void setPresenter(Presenter presenter);
+public interface PersonalInfoView extends View<ResidentDTO> {
 
-    void populate(ResidentDTO personalInfo);
-
-    public void showError(String msg);
-
-    public void showNote(String msg);
-
-    interface Presenter {
-        public void save(ResidentDTO personalInfo);
+    interface Presenter extends View.Presenter<ResidentDTO> {
     }
+
+    void showError(String msg);
+
+    void showNote(String msg);
 }

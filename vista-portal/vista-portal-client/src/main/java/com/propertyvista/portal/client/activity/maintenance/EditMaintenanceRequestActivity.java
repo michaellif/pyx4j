@@ -16,6 +16,7 @@ package com.propertyvista.portal.client.activity.maintenance;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
+import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.commons.Key;
@@ -33,9 +34,9 @@ import com.propertyvista.portal.rpc.portal.services.TenantMaintenanceService;
 
 public class EditMaintenanceRequestActivity extends SecurityAwareActivity implements EditMaintenanceRequestView.Presenter {
 
-    private final EditMaintenanceRequestView view;
+    protected final EditMaintenanceRequestView view;
 
-    private final TenantMaintenanceService srv;
+    protected final TenantMaintenanceService srv;
 
     private Key entityId;
 
@@ -49,22 +50,24 @@ public class EditMaintenanceRequestActivity extends SecurityAwareActivity implem
         if ((val = ((AppPlace) place).getFirstArg(PortalSiteMap.ARG_ENTITY_ID)) != null) {
             entityId = new Key(val);
         }
-
-        assert (entityId != null);
     }
 
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
-        super.start(panel, eventBus);
+        securityAwareStart(panel, eventBus);
         panel.setWidget(view);
 
+        assert (entityId != null);
         srv.retrieve(new DefaultAsyncCallback<MaintenanceRequestDTO>() {
             @Override
             public void onSuccess(MaintenanceRequestDTO result) {
                 view.populate(result);
             }
         }, entityId, AbstractCrudService.RetrieveTraget.Edit);
+    }
 
+    protected final void securityAwareStart(AcceptsOneWidget panel, EventBus eventBus) {
+        super.start(panel, eventBus);
     }
 
     @Override
@@ -79,6 +82,6 @@ public class EditMaintenanceRequestActivity extends SecurityAwareActivity implem
 
     @Override
     public void cancel() {
-        AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.Maintenance());
+        History.back();
     }
 }

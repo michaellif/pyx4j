@@ -13,20 +13,11 @@
  */
 package com.propertyvista.portal.client.ui.residents.maintenance;
 
-import com.google.gwt.user.client.ui.IsWidget;
-
 import com.propertyvista.dto.MaintenanceRequestDTO;
+import com.propertyvista.portal.client.ui.residents.View;
 
-public interface EditMaintenanceRequestView extends IsWidget {
+public interface EditMaintenanceRequestView extends View<MaintenanceRequestDTO> {
 
-    interface Presenter {
-
-        void save(MaintenanceRequestDTO entity);
-
-        void cancel();
+    interface Presenter extends View.Presenter<MaintenanceRequestDTO> {
     }
-
-    void setPresenter(Presenter presenter);
-
-    void populate(MaintenanceRequestDTO value);
 }

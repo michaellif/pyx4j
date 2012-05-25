@@ -14,23 +14,15 @@
 package com.propertyvista.portal.client.ui.residents.paymentmethod;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.IsWidget;
 
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.PaymentMethod;
+import com.propertyvista.portal.client.ui.residents.View;
 
-public interface EditPaymentMethodView extends IsWidget {
+public interface EditPaymentMethodView extends View<PaymentMethod> {
 
-    interface Presenter {
+    interface Presenter extends View.Presenter<PaymentMethod> {
 
         void getCurrentAddress(AsyncCallback<AddressStructured> callback);
-
-        void save(PaymentMethod paymentmethod);
-
-        void cancel();
     }
-
-    void setPresenter(Presenter presenter);
-
-    void populate(PaymentMethod paymentMethod);
 }

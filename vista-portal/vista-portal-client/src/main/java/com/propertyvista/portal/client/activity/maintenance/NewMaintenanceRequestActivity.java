@@ -13,7 +13,6 @@
  */
 package com.propertyvista.portal.client.activity.maintenance;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
@@ -24,27 +23,17 @@ import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
 import com.propertyvista.dto.MaintenanceRequestDTO;
-import com.propertyvista.portal.client.activity.SecurityAwareActivity;
-import com.propertyvista.portal.client.ui.residents.maintenance.NewMaintenanceRequestView;
-import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
-import com.propertyvista.portal.rpc.portal.services.TenantMaintenanceService;
 
-public class NewMaintenanceRequestActivity extends SecurityAwareActivity implements NewMaintenanceRequestView.Presenter {
-
-    private final NewMaintenanceRequestView view;
-
-    private final TenantMaintenanceService srv;
+public class NewMaintenanceRequestActivity extends EditMaintenanceRequestActivity {
 
     public NewMaintenanceRequestActivity(Place place) {
-        this.view = PortalViewFactory.instance(NewMaintenanceRequestView.class);
-        this.view.setPresenter(this);
-        srv = GWT.create(TenantMaintenanceService.class);
+        super(place);
     }
 
     @Override
     public void start(final AcceptsOneWidget panel, EventBus eventBus) {
-        super.start(panel, eventBus);
+        securityAwareStart(panel, eventBus);
         panel.setWidget(view);
 
         // create default empty request:
@@ -54,17 +43,12 @@ public class NewMaintenanceRequestActivity extends SecurityAwareActivity impleme
     }
 
     @Override
-    public void submit(MaintenanceRequestDTO request) {
+    public void save(MaintenanceRequestDTO request) {
         srv.create(new DefaultAsyncCallback<MaintenanceRequestDTO>() {
             @Override
             public void onSuccess(MaintenanceRequestDTO result) {
                 AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.Maintenance());
             }
         }, request);
-    }
-
-    @Override
-    public void cancel() {
-        AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.Maintenance());
     }
 }
