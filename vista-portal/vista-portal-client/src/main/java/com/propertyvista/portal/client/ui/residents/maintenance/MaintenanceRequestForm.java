@@ -53,6 +53,8 @@ public class MaintenanceRequestForm extends CEntityDecoratableForm<MaintenanceRe
 
         int row = -1;
 
+        content.setBR(++row, 0, 1);
+
         // Add components
         final OptionsDrivenCombo<IssueElement> combo1 = new OptionsDrivenCombo<IssueElement>(IssueElement.class) {
             @Override
