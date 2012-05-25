@@ -17,6 +17,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.ui.crud.DefaultSiteCrudPanelsTheme;
 import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
@@ -39,21 +40,13 @@ public class PaymentViewerViewImpl extends CrmViewerViewImplBase<PaymentRecordDT
     public PaymentViewerViewImpl() {
         super(CrmSiteMap.Tenants.Payment.class, new PaymentForm(true));
 
-        processAction = new Button(i18n.tr("Process"), new ClickHandler() {
+        cancelAction = new Button(i18n.tr("Cancel"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                ((PaymentViewerView.Presenter) presenter).processPayment();
+                ((PaymentViewerView.Presenter) presenter).cancelPayment();
             }
         });
-        addHeaderToolbarTwoItem(processAction.asWidget());
-
-        clearAction = new Button(i18n.tr("Clear"), new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                ((PaymentViewerView.Presenter) presenter).clearPayment();
-            }
-        });
-        addHeaderToolbarTwoItem(clearAction.asWidget());
+        addHeaderToolbarTwoItem(cancelAction.asWidget());
 
         rejectAction = new Button(i18n.tr("Reject"), new ClickHandler() {
             @Override
@@ -63,13 +56,23 @@ public class PaymentViewerViewImpl extends CrmViewerViewImplBase<PaymentRecordDT
         });
         addHeaderToolbarTwoItem(rejectAction.asWidget());
 
-        cancelAction = new Button(i18n.tr("Cancel"), new ClickHandler() {
+        clearAction = new Button(i18n.tr("Clear"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                ((PaymentViewerView.Presenter) presenter).cancelPayment();
+                ((PaymentViewerView.Presenter) presenter).clearPayment();
             }
         });
-        addHeaderToolbarTwoItem(cancelAction.asWidget());
+        addHeaderToolbarTwoItem(clearAction.asWidget());
+
+        processAction = new Button(i18n.tr("Process"), new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                ((PaymentViewerView.Presenter) presenter).processPayment();
+            }
+        });
+        processAction.addStyleName(DefaultSiteCrudPanelsTheme.StyleName.HighlightedButton.name());
+        addHeaderToolbarTwoItem(processAction.asWidget());
+
     }
 
     @Override
