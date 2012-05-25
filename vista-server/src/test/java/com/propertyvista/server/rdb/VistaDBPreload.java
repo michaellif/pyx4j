@@ -18,10 +18,12 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.server.contexts.Lifecycle;
 import com.pyx4j.server.contexts.NamespaceManager;
 import com.pyx4j.server.mail.Mail;
 
+import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.server.config.VistaNamespaceResolver;
 import com.propertyvista.server.config.VistaServerSideConfiguration;
 
@@ -38,8 +40,10 @@ public class VistaDBPreload {
         try {
             Lifecycle.startElevatedUserContext();
             Mail.getMailService().setDisabled(true);
+            ServerSideFactory.create(CommunicationFacade.class).setDisabled(true);
             log.info(conf.getDataPreloaders().preloadAll());
         } finally {
+            ServerSideFactory.create(CommunicationFacade.class).setDisabled(false);
             Mail.getMailService().setDisabled(false);
             Lifecycle.endElevatedUserContext();
         }

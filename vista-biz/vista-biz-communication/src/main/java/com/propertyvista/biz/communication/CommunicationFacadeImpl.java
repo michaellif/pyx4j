@@ -39,7 +39,19 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
 
     private static final I18n i18n = I18n.get(CommunicationFacadeImpl.class);
 
+    private static boolean disabled = false;
+
     final static String GENERIC_FAILED_MESSAGE = "Invalid User Account";
+
+    @Override
+    public void setDisabled(boolean disabled) {
+        CommunicationFacadeImpl.disabled = disabled;
+    }
+
+    @Override
+    public boolean isDisabled() {
+        return disabled;
+    }
 
     @Override
     public void sendApplicantApplicationInvitation(Tenant tenant) {
@@ -57,6 +69,9 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
     }
 
     private static void sendInvitationEmail(LeaseParticipant leaseParticipant, EmailTemplateType emailTemplateType) {
+        if (disabled) {
+            return;
+        }
         String token = AccessKey.createAccessToken(leaseParticipant.customer().user(), CustomerUserCredential.class, 10);
         if (token == null) {
             throw new UserRuntimeException(GENERIC_FAILED_MESSAGE);
@@ -69,6 +84,9 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
 
     @Override
     public void sendApplicationStatus(Tenant tenantId) {
+        if (disabled) {
+            return;
+        }
         Tenant tenant = Persistence.service().retrieve(Tenant.class, tenantId.getPrimaryKey());
         Persistence.service().retrieve(tenant.leaseV());
         EmailTemplateType emailType;
@@ -91,6 +109,9 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
 
     @Override
     public void sendTenantInvitation(Tenant tenant) {
+        if (disabled) {
+            return;
+        }
         CustomerUser user = tenant.customer().user();
         if (user.isValueDetached()) {
             Persistence.service().retrieve(user);
@@ -111,6 +132,9 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
 
     @Override
     public void sendProspectPasswordRetrievalToken(Customer customer) {
+        if (disabled) {
+            return;
+        }
         String token = AccessKey.createAccessToken(customer.user(), CustomerUserCredential.class, 1);
         if (token == null) {
             throw new UserRuntimeException(GENERIC_FAILED_MESSAGE);
@@ -123,6 +147,9 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
 
     @Override
     public void sendTenantPasswordRetrievalToken(Customer customer) {
+        if (disabled) {
+            return;
+        }
         String token = AccessKey.createAccessToken(customer.user(), CustomerUserCredential.class, 1);
         if (token == null) {
             throw new UserRuntimeException(GENERIC_FAILED_MESSAGE);
@@ -135,6 +162,9 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
 
     @Override
     public void sendAdminPasswordRetrievalToken(AdminUser user) {
+        if (disabled) {
+            return;
+        }
         String token = AccessKey.createAccessToken(user, AdminUserCredential.class, 1);
         if (token == null) {
             throw new UserRuntimeException(GENERIC_FAILED_MESSAGE);
@@ -147,6 +177,9 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
 
     @Override
     public void sendOnboardingPasswordRetrievalToken(OnboardingUser user, String onboardingSystemBaseUrl) {
+        if (disabled) {
+            return;
+        }
         String token = AccessKey.createAccessToken(user, OnboardingUserCredential.class, 1);
         if (token == null) {
             throw new UserRuntimeException(GENERIC_FAILED_MESSAGE);
@@ -159,6 +192,9 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
 
     @Override
     public void sendCrmPasswordRetrievalToken(CrmUser user) {
+        if (disabled) {
+            return;
+        }
         String token = AccessKey.createAccessToken(user, CrmUserCredential.class, 1);
         if (token == null) {
             throw new UserRuntimeException(GENERIC_FAILED_MESSAGE);

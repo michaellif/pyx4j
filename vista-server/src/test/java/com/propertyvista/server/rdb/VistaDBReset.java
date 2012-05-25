@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.rdb.EntityPersistenceServiceRDB;
 import com.pyx4j.entity.rdb.RDBUtils;
 import com.pyx4j.entity.rdb.cfg.Configuration.MultitenancyType;
@@ -32,6 +33,7 @@ import com.pyx4j.server.mail.Mail;
 import com.propertyvista.admin.domain.pmc.Pmc;
 import com.propertyvista.admin.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.admin.server.preloader.VistaAminDataPreloaders;
+import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.misc.VistaDataPreloaderParameter;
 import com.propertyvista.misc.VistaDevPreloadConfig;
 import com.propertyvista.server.config.VistaNamespaceResolver;
@@ -99,9 +101,11 @@ public class VistaDBReset {
             try {
                 Lifecycle.startElevatedUserContext();
                 Mail.getMailService().setDisabled(true);
+                ServerSideFactory.create(CommunicationFacade.class).setDisabled(true);
                 log.info(preloaders.preloadAll());
                 Persistence.service().commit();
             } finally {
+                ServerSideFactory.create(CommunicationFacade.class).setDisabled(false);
                 Mail.getMailService().setDisabled(false);
                 Lifecycle.endElevatedUserContext();
             }

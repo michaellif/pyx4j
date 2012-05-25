@@ -32,6 +32,7 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.cache.CacheService;
 import com.pyx4j.entity.rdb.EntityPersistenceServiceRDB;
@@ -57,6 +58,7 @@ import com.pyx4j.server.mail.Mail;
 import com.propertyvista.admin.domain.pmc.Pmc;
 import com.propertyvista.admin.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.admin.server.preloader.VistaAminDataPreloaders;
+import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.domain.DemoData.DemoPmc;
 import com.propertyvista.domain.security.VistaBasicBehavior;
@@ -168,6 +170,7 @@ public class DBResetServlet extends HttpServlet {
                         Persistence.service().startBackgroundProcessTransaction();
                         Lifecycle.startElevatedUserContext();
                         Mail.getMailService().setDisabled(true);
+                        ServerSideFactory.create(CommunicationFacade.class).setDisabled(true);
                         try {
                             if (EnumSet.of(ResetType.prodReset, ResetType.all, ResetType.allMini, ResetType.allWithMockup, ResetType.clear).contains(type)) {
                                 SchedulerHelper.shutdown();
@@ -246,6 +249,7 @@ public class DBResetServlet extends HttpServlet {
                             Persistence.service().rollback();
                             throw new Error(t);
                         } finally {
+                            ServerSideFactory.create(CommunicationFacade.class).setDisabled(false);
                             Mail.getMailService().setDisabled(false);
                             Lifecycle.endElevatedUserContext();
                             Persistence.service().endTransaction();

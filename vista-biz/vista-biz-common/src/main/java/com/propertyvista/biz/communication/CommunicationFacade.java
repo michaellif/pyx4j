@@ -27,6 +27,10 @@ import com.propertyvista.domain.tenant.Tenant;
  */
 public interface CommunicationFacade {
 
+    void setDisabled(boolean disabled);
+
+    boolean isDisabled();
+
     void sendAdminPasswordRetrievalToken(AdminUser user);
 
     void sendOnboardingPasswordRetrievalToken(OnboardingUser user, String onboardingSystemBaseUrl);
