@@ -32,7 +32,6 @@ public class PersonalInfoForm extends CEntityDecoratableForm<ResidentDTO> {
 
     public PersonalInfoForm() {
         super(ResidentDTO.class, new VistaEditorsComponentFactory());
-        initContent();
     }
 
     @Override
