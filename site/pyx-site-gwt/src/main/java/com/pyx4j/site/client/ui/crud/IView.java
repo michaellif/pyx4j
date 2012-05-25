@@ -31,6 +31,10 @@ public interface IView<E extends IEntity> extends IsWidget {
     public interface Presenter {
 
         void populate();
+
+        @Deprecated
+        //TODO see if it is really needed for editor?
+        void refresh();
     }
 
     IMemento getMemento();

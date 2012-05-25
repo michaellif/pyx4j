@@ -28,8 +28,6 @@ public interface IEditorView<E extends IEntity> extends IFormView<E> {
 
     public interface Presenter extends IView.Presenter {
 
-        void refresh();
-
         void apply();
 
         void save();

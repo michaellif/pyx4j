@@ -29,8 +29,6 @@ public interface IViewerView<E extends IEntity> extends IFormView<E> {
 
     public interface Presenter extends IView.Presenter {
 
-        void refresh();
-
         boolean canEdit();
 
         void edit();
