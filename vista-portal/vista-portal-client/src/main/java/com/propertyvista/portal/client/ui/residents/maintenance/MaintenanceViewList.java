@@ -31,9 +31,9 @@ import com.pyx4j.widgets.client.RateIt;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 import com.propertyvista.portal.client.themes.TenantDashboardTheme;
 
-public class MaintenanceList extends VerticalPanel implements MaintenanceView {
+public class MaintenanceViewList extends VerticalPanel implements MaintenanceView {
 
-    private static final I18n i18n = I18n.get(MaintenanceList.class);
+    private static final I18n i18n = I18n.get(MaintenanceViewList.class);
 
     public static final String NoRecordsFound = i18n.tr("No Records Found");
 
@@ -43,7 +43,7 @@ public class MaintenanceList extends VerticalPanel implements MaintenanceView {
 
     private final FormFlexPanel historyRequestsPanel;
 
-    public MaintenanceList() {
+    public MaintenanceViewList() {
         setWidth("100%");
 
         openRequestsPanel = new FormFlexPanel();

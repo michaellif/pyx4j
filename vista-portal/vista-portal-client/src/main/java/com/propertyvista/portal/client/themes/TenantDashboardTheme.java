@@ -63,10 +63,10 @@ public class TenantDashboardTheme extends Theme {
         style.addProperty("border-bottom", "none");
         addStyle(style);
 
-        style = new Style(".", StyleName.TenantDashboardTableRow, ":hover");
-        style.addProperty("background-color", ThemeColors.object1, 0.05);
-        style.addProperty("cursor", "pointer");
-        addStyle(style);
+//        style = new Style(".", StyleName.TenantDashboardTableRow, ":hover");
+//        style.addProperty("background-color", ThemeColors.object1, 0.05);
+//        style.addProperty("cursor", "pointer");
+//        addStyle(style);
 
     }
 }

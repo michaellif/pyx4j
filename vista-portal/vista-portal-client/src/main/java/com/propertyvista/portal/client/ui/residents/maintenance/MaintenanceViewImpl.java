@@ -21,10 +21,10 @@ import com.propertyvista.dto.MaintenanceRequestDTO;
 
 public class MaintenanceViewImpl extends FlowPanel implements MaintenanceView {
 
-    private final MaintenanceList list;
+    private final MaintenanceViewList list;
 
     public MaintenanceViewImpl() {
-        list = new MaintenanceList();
+        list = new MaintenanceViewList();
         add(list);
     }
 
@@ -42,5 +42,4 @@ public class MaintenanceViewImpl extends FlowPanel implements MaintenanceView {
     public void populateHistoryRequests(Vector<MaintenanceRequestDTO> historyRequests) {
         list.populateHistoryRequests(historyRequests);
     }
-
 }
