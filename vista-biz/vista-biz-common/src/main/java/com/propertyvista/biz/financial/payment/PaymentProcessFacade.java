@@ -21,4 +21,6 @@ public interface PaymentProcessFacade {
 
     PadFile recivePadAcknowledgementFiles();
 
+    String processAcknowledgement(PadFile padFile);
+
 }

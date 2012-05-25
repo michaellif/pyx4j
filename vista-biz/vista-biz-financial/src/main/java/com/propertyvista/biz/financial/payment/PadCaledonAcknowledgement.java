@@ -14,8 +14,7 @@
 package com.propertyvista.biz.financial.payment;
 
 import java.io.File;
-import java.util.Arrays;
-import java.util.Date;
+import java.util.EnumSet;
 
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -24,6 +23,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.propertyvista.admin.domain.payment.pad.PadBatch;
 import com.propertyvista.admin.domain.payment.pad.PadDebitRecord;
 import com.propertyvista.admin.domain.payment.pad.PadFile;
+import com.propertyvista.admin.domain.payment.pad.PadFile.FileAcknowledgmentStatus;
 import com.propertyvista.payment.pad.CaledonPadAcknowledgmentParser;
 import com.propertyvista.payment.pad.CaledonPadFileWriter;
 import com.propertyvista.payment.pad.ak.PadAkBatch;
@@ -45,38 +45,45 @@ class PadCaledonAcknowledgement {
             }
         }
 
-        if (Arrays.asList("0001", "0005", "0006", "0007").contains(akFile.acknowledgmentStatusCode().getValue())) {
-            padFile.status().setValue(PadFile.PadFileStatus.Invalid);
-            padFile.acknowledged().setValue(new Date());
-            padFile.acknowledgmentStatusCode().setValue(akFile.acknowledgmentStatusCode().getValue());
-            Persistence.service().merge(padFile);
-            Persistence.service().commit();
-        } else if (Arrays.asList("0000").contains(akFile.acknowledgmentStatusCode().getValue())) {
+        for (FileAcknowledgmentStatus acknowledgmentStatus : EnumSet.allOf(FileAcknowledgmentStatus.class)) {
+            if (acknowledgmentStatus.equals(akFile.acknowledgmentStatusCode().getValue())) {
+                padFile.acknowledgmentStatus().setValue(acknowledgmentStatus);
+                padFile.acknowledgmentStatusCode().setValue(akFile.acknowledgmentStatusCode().getValue());
+                break;
+            }
+        }
+        if (padFile.acknowledgmentStatus().isNull()) {
+            throw new Error("Unexpected acknowledgmentStatusCode '" + akFile.acknowledgmentStatusCode().getValue() + "' in file " + file.getName());
+        }
+
+        padFile.acknowledged().setValue(Persistence.service().getTransactionSystemTime());
+
+        if (akFile.acknowledgmentStatusCode().getValue().equals(FileAcknowledgmentStatus.Accepted)) {
             assertAcknowledgedValues(padFile, akFile);
             padFile.status().setValue(PadFile.PadFileStatus.Acknowledged);
-            padFile.acknowledged().setValue(new Date());
-            padFile.acknowledgmentStatusCode().setValue(akFile.acknowledgmentStatusCode().getValue());
             Persistence.service().merge(padFile);
             Persistence.service().commit();
-        } else if (Arrays.asList("0002", "0003", "0004").contains(akFile.acknowledgmentStatusCode().getValue())) {
+        } else if (EnumSet.of(FileAcknowledgmentStatus.BatchAndTransactionReject, FileAcknowledgmentStatus.TransactionReject,
+                FileAcknowledgmentStatus.BatchLevelReject).contains(akFile.acknowledgmentStatusCode().getValue())) {
             assertAcknowledgedValues(padFile, akFile);
             updateBatches(padFile, akFile);
             updateRecords(padFile, akFile);
             padFile.status().setValue(PadFile.PadFileStatus.Acknowledged);
-            padFile.acknowledged().setValue(new Date());
-            padFile.acknowledgmentStatusCode().setValue(akFile.acknowledgmentStatusCode().getValue());
             Persistence.service().merge(padFile);
             Persistence.service().commit();
         } else {
-            throw new Error("Unexpected acknowledgmentStatusCode '" + akFile.acknowledgmentStatusCode().getValue() + "' in file " + file.getName());
+            padFile.status().setValue(PadFile.PadFileStatus.Invalid);
+            Persistence.service().merge(padFile);
+            Persistence.service().commit();
         }
 
         return padFile;
     }
 
     private void assertAcknowledgedValues(PadFile padFile, PadAkFile akFile) {
-        if (!padFile.recordsCount().getValue().equals(Long.valueOf(akFile.recordsCount().getValue()))) {
-            throw new Error("Unexpected recordsCount '" + akFile.recordsCount().getValue() + "' in akFile " + akFile.fileCreationNumber().getValue());
+        if (!padFile.recordsCount().getValue().equals(Integer.valueOf(akFile.recordsCount().getValue()))) {
+            throw new Error("Unexpected recordsCount '" + akFile.recordsCount().getValue() + "' != '" + padFile.recordsCount().getValue() + "' in akFile "
+                    + akFile.fileCreationNumber().getValue());
         }
         if (!CaledonPadFileWriter.formatAmount(padFile.fileAmount().getValue()).equals(akFile.fileAmount().getValue())) {
             throw new Error("Unexpected fileAmount '" + akFile.fileAmount().getValue() + "' in akFile " + akFile.fileCreationNumber().getValue());

@@ -24,6 +24,7 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.log4j.LoggerConfig;
 
+import com.propertyvista.admin.domain.payment.pad.PadFile.FileAcknowledgmentStatus;
 import com.propertyvista.admin.domain.payment.pad.sim.PadSimBatch;
 import com.propertyvista.admin.domain.payment.pad.sim.PadSimDebitRecord;
 import com.propertyvista.admin.domain.payment.pad.sim.PadSimFile;
@@ -98,13 +99,13 @@ public class PadSim {
                 }
             }
             if (batchLevelReject && transactionReject) {
-                padFile.acknowledgmentStatusCode().setValue("0004");
+                padFile.acknowledgmentStatusCode().setValue(FileAcknowledgmentStatus.BatchAndTransactionReject.getStatusCode());
             } else if (batchLevelReject) {
-                padFile.acknowledgmentStatusCode().setValue("0002");
+                padFile.acknowledgmentStatusCode().setValue(FileAcknowledgmentStatus.BatchLevelReject.getStatusCode());
             } else if (transactionReject) {
-                padFile.acknowledgmentStatusCode().setValue("0003");
+                padFile.acknowledgmentStatusCode().setValue(FileAcknowledgmentStatus.TransactionReject.getStatusCode());
             } else {
-                padFile.acknowledgmentStatusCode().setValue("0000");
+                padFile.acknowledgmentStatusCode().setValue(FileAcknowledgmentStatus.Accepted.getStatusCode());
             }
         }
 

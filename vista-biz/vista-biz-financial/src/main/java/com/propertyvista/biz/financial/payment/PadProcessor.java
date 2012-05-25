@@ -13,6 +13,11 @@
  */
 package com.propertyvista.biz.financial.payment;
 
+import java.util.EnumSet;
+
+import com.pyx4j.commons.Key;
+import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -22,10 +27,12 @@ import com.pyx4j.server.contexts.NamespaceManager;
 import com.propertyvista.admin.domain.payment.pad.PadBatch;
 import com.propertyvista.admin.domain.payment.pad.PadDebitRecord;
 import com.propertyvista.admin.domain.payment.pad.PadFile;
+import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.payment.EcheckInfo;
+import com.propertyvista.domain.payment.PaymentType;
 
 public class PadProcessor {
 
@@ -94,5 +101,37 @@ public class PadProcessor {
 
         Persistence.service().persist(padRecord);
 
+    }
+
+    public void acknowledgmentReject(PadDebitRecord debitRecord) {
+        PaymentRecord paymentRecord = Persistence.service().retrieve(PaymentRecord.class, new Key(debitRecord.transactionId().getValue()));
+        if (!EnumSet.of(PaymentRecord.PaymentStatus.Processing, PaymentRecord.PaymentStatus.Received).contains(paymentRecord.paymentStatus().getValue())) {
+            throw new Error("Processed payment can't be rejected");
+        }
+        if (PaymentType.Echeck != paymentRecord.paymentMethod().type().getValue()) {
+            throw new IllegalArgumentException("Invalid PaymentMethod:" + paymentRecord.paymentMethod().type().getStringView());
+        }
+        paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Rejected);
+        paymentRecord.lastStatusChangeDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
+        paymentRecord.finalizeDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
+
+        // Caledon status codes
+        if ("2001".equals(debitRecord.acknowledgmentStatusCode().getValue())) {
+            paymentRecord.transactionErrorMessage().setValue("Invalid Amount");
+        } else if ("2002".equals(debitRecord.acknowledgmentStatusCode().getValue())) {
+            paymentRecord.transactionErrorMessage().setValue("Invalid Bank ID ");
+        } else if ("2003".equals(debitRecord.acknowledgmentStatusCode().getValue())) {
+            paymentRecord.transactionErrorMessage().setValue("Invalid Bank Transit Number ");
+        } else if ("2004".equals(debitRecord.acknowledgmentStatusCode().getValue())) {
+            paymentRecord.transactionErrorMessage().setValue("Invalid Bank Account Number ");
+        } else if ("2005".equals(debitRecord.acknowledgmentStatusCode().getValue())) {
+            paymentRecord.transactionErrorMessage().setValue("Invalid Reference Number");
+        } else {
+            paymentRecord.transactionErrorMessage().setValue(debitRecord.acknowledgmentStatusCode().getValue());
+        }
+
+        Persistence.service().merge(paymentRecord);
+
+        ServerSideFactory.create(ARFacade.class).rejectPayment(paymentRecord, false);
     }
 }

@@ -46,4 +46,6 @@ public interface RunStats extends IEntity {
     @Transient
     IPrimitive<Long> updateTime();
 
+    IPrimitive<String> message();
+
 }

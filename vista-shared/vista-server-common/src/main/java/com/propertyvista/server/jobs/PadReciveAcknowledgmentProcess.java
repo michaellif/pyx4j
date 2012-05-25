@@ -16,6 +16,7 @@ package com.propertyvista.server.jobs;
 import com.pyx4j.config.server.ServerSideFactory;
 
 import com.propertyvista.admin.domain.payment.pad.PadFile;
+import com.propertyvista.admin.domain.scheduler.RunStats;
 import com.propertyvista.biz.financial.payment.PaymentProcessFacade;
 
 public class PadReciveAcknowledgmentProcess implements PmcProcess {
@@ -30,7 +31,9 @@ public class PadReciveAcknowledgmentProcess implements PmcProcess {
 
     @Override
     public void executePmcJob() {
-        // TODO Apply stats
+        final RunStats stats = PmcProcessContext.getRunStats();
+        stats.message().setValue(ServerSideFactory.create(PaymentProcessFacade.class).processAcknowledgement(padFile));
+        PmcProcessContext.setRunStats(stats);
     }
 
     @Override

@@ -211,6 +211,8 @@ public class PaymentFacadeImpl implements PaymentFacade {
 
         switch (paymentRecord.paymentMethod().type().getValue()) {
         case Check:
+            ServerSideFactory.create(ARFacade.class).rejectPayment(paymentRecord, false);
+            break;
         case Cash:
             ServerSideFactory.create(ARFacade.class).rejectPayment(paymentRecord, true);
             break;

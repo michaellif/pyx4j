@@ -60,6 +60,35 @@ public interface PadFile extends IEntity {
 
     };
 
+    public enum FileAcknowledgmentStatus {
+
+        Accepted("0000"),
+
+        FileOutOfBalance("0001"),
+
+        BatchLevelReject("0002"),
+
+        TransactionReject("0003"),
+
+        BatchAndTransactionReject("0004"),
+
+        DetailRecordCountOutOfBalance("0005"),
+
+        InvalidFileFormat("0006"),
+
+        InvalidFileHeader("0007");
+
+        private final String statusCode;
+
+        FileAcknowledgmentStatus(String code) {
+            statusCode = code;
+        }
+
+        public String getStatusCode() {
+            return statusCode;
+        }
+    }
+
     IPrimitive<String> fileCreationNumber();
 
     IPrimitive<PadFileStatus> status();
@@ -85,5 +114,7 @@ public interface PadFile extends IEntity {
     IPrimitive<BigDecimal> fileAmount();
 
     IPrimitive<String> acknowledgmentStatusCode();
+
+    IPrimitive<FileAcknowledgmentStatus> acknowledgmentStatus();
 
 }
