@@ -30,7 +30,7 @@ import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 public class DefaultSiteCrudPanelsTheme extends Theme {
 
     public static enum StyleName implements IStyleName {
-        HeaderToolbarOne, HeaderToolbarTwo, Lister, ListerFiltersPanel, ListerListPanel, Header, FooterToolbar, BreadcrumbsBar, BreadcrumbAnchor
+        HeaderToolbarOne, HeaderToolbarTwo, Lister, ListerFiltersPanel, ListerListPanel, Header, FooterToolbar, BreadcrumbsBar, BreadcrumbAnchor, HighlightedButton
     }
 
     public DefaultSiteCrudPanelsTheme() {
@@ -44,11 +44,13 @@ public class DefaultSiteCrudPanelsTheme extends Theme {
 
     private void initGeneralStyles() {
 
-        initButtonrStyles("." + StyleName.HeaderToolbarOne);
+        initButtonStyles("." + StyleName.HeaderToolbarOne);
 
-        initButtonrStyles("." + StyleName.HeaderToolbarTwo);
+        initButtonStyles("." + StyleName.HeaderToolbarTwo);
 
-        initButtonrStyles("." + StyleName.FooterToolbar);
+        initButtonStyles("." + StyleName.FooterToolbar);
+
+        initHighlightedButtonStyles("." + StyleName.HeaderToolbarTwo);
 
         Style style = new Style(".", StyleName.HeaderToolbarOne);
         style.addProperty("background-color", ThemeColors.object1, 0.3);
@@ -95,7 +97,30 @@ public class DefaultSiteCrudPanelsTheme extends Theme {
 
     }
 
-    private void initButtonrStyles(String selector) {
+    private void initHighlightedButtonStyles(String selector) {
+        Style style = new Style(selector, " .", StyleName.HighlightedButton);
+        style.addProperty("border", "1px solid");
+        style.addProperty("border-color", ThemeColors.foreground, 0.05);
+        style.addProperty("color", ThemeColors.foreground, 0);
+        style.addProperty("padding", "2px 12px");
+        style.addGradient(ThemeColors.object1, 1, ThemeColors.object1, 1.6);
+        style.addProperty("font-size", "11px");
+        style.addProperty("font-weight", "bold");
+        style.addProperty("border-radius", "5px");
+        style.addProperty("-moz-border-radius", "5px");
+        addStyle(style);
+
+        style = new Style(selector, " .", StyleName.HighlightedButton, "-", DefaultWidgetsTheme.StyleDependent.hover);
+        style.addProperty("border-color", ThemeColors.foreground, 0.3);
+        addStyle(style);
+
+        style = new Style(selector, " .", StyleName.HighlightedButton, "-", DefaultWidgetsTheme.StyleDependent.disabled);
+        style.addProperty("color", ThemeColors.foreground, 0);
+        style.addGradient(ThemeColors.foreground, 0.4, ThemeColors.foreground, 0.4);
+        addStyle(style);
+    }
+
+    private void initButtonStyles(String selector) {
         Style style = new Style(selector, " .", DefaultWidgetsTheme.StyleName.Button);
         style.addProperty("border", "1px solid");
         style.addProperty("border-color", ThemeColors.foreground, 0.05);
