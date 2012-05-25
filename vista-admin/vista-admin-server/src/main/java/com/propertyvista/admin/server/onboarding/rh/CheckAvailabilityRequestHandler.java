@@ -32,7 +32,7 @@ public class CheckAvailabilityRequestHandler extends AbstractRequestHandler<Chec
     public ResponseIO execute(CheckAvailabilityRequestIO request) {
         String dnsName = request.dnsName().getValue().toLowerCase(Locale.ENGLISH);
         ResponseIO response = EntityFactory.create(ResponseIO.class);
-        response.success().setValue(PmcNameValidator.canCreatePmcName(dnsName));
+        response.success().setValue(PmcNameValidator.canCreatePmcName(dnsName, null));
 
         return response;
     }

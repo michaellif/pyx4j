@@ -80,7 +80,7 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
         editableEntity.dnsName().setValue(editableEntity.dnsName().getValue().toLowerCase(Locale.ENGLISH));
         editableEntity.namespace().setValue(editableEntity.dnsName().getValue().replace('-', '_'));
         editableEntity.status().setValue(PmcStatus.Created);
-        if (!PmcNameValidator.canCreatePmcName(editableEntity.dnsName().getValue())) {
+        if (!PmcNameValidator.canCreatePmcName(editableEntity.dnsName().getValue(), null)) {
             throw new UserRuntimeException("PMC DNS name is reserved of forbidden");
         }
 

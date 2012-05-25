@@ -70,9 +70,9 @@ public class PmcNameValidator {
         load(words);
     }
 
-    public static boolean canCreatePmcName(String dnsName) {
-        return PmcNameValidator.isDnsNameValid(dnsName) && !PmcNameValidator.isDnsReserved(dnsName) && !PmcNameValidator.isDnsReservedByCustomers(dnsName)
-                && !PmcNameValidator.isDnsTaken(dnsName);
+    public static boolean canCreatePmcName(String dnsName, String onboardingAccountId) {
+        return PmcNameValidator.isDnsNameValid(dnsName) && !PmcNameValidator.isDnsReserved(dnsName)
+                && !PmcNameValidator.isDnsReservedByCustomers(dnsName, onboardingAccountId) && !PmcNameValidator.isDnsTaken(dnsName);
     }
 
     public static boolean isDnsNameValid(String value) {
@@ -91,10 +91,18 @@ public class PmcNameValidator {
         return false;
     }
 
-    public static boolean isDnsReservedByCustomers(String dnsName) {
+    public static boolean isDnsReservedByCustomers(String dnsName, String onboardingAccountId) {
         EntityQueryCriteria<ReservedPmcNames> criteria = EntityQueryCriteria.create(ReservedPmcNames.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().dnsName(), dnsName));
-        return (Persistence.service().retrieve(criteria) != null);
+
+        ReservedPmcNames resPmc = Persistence.service().retrieve(criteria);
+
+        if (resPmc == null)
+            return false; // Never reserved
+        else if ((resPmc.onboardingAccountId().getValue() == null) || (onboardingAccountId == null))
+            return true; // Reserved through Admin app or called through admin app
+        else
+            return !resPmc.onboardingAccountId().getValue().equals(onboardingAccountId); // reserved by another onboarding account
     }
 
     public static boolean isDnsTaken(String dnsName) {

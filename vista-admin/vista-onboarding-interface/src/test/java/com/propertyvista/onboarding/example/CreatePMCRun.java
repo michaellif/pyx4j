@@ -19,6 +19,7 @@ import com.propertyvista.onboarding.example.model.AccountInfoResponse;
 import com.propertyvista.onboarding.example.model.CreateOnboardingUserRequest;
 import com.propertyvista.onboarding.example.model.CreatePMCRequest;
 import com.propertyvista.onboarding.example.model.RequestMessage;
+import com.propertyvista.onboarding.example.model.ReserveDnsNameRequest;
 import com.propertyvista.onboarding.example.model.ResponseMessage;
 import com.propertyvista.onboarding.example.utils.ExampleClient;
 
@@ -51,12 +52,36 @@ public class CreatePMCRun {
             }
         }
 
+        ReserveDnsNameRequest resDnsNamereq = new ReserveDnsNameRequest();
+        resDnsNamereq.requestId = "TestCreatePMCRun";
+        resDnsNamereq.dnsName = "test" + String.valueOf(System.currentTimeMillis());
+        resDnsNamereq.onboardingAccountId = user.onboardingAccountId;
+
+        {
+            RequestMessage rm = new RequestMessage();
+            rm.interfaceEntity = "rossul";
+            rm.interfaceEntityPassword = "secret";
+            rm.addRequest(resDnsNamereq);
+
+            ResponseMessage response = ExampleClient.execute(rm);
+
+            System.out.println("response Status   : " + response.status);
+            System.out.println("response Message  : " + response.errorMessage);
+
+            if (response.status == ResponseMessage.StatusCode.OK) {
+                System.out.println("echo requestId    : " + response.responses.get(0).requestId);
+                System.out.println("response Code     : " + response.responses.get(0).success);
+                System.out.println("response Message  : " + response.responses.get(0).errorMessage);
+            }
+        }
+
         CreatePMCRequest r = new CreatePMCRequest();
         r.requestId = "TestCreatePMCRun";
-        r.dnsName = "testcomp" + String.valueOf(System.currentTimeMillis());
+        r.dnsName = resDnsNamereq.dnsName;
         //r.dnsNameAliases = Arrays.asList(new String[] { "www.rossul.com", "www.rossul.ca" });
-        r.name = "Apartments & Co" + String.valueOf(System.currentTimeMillis());
-        r.onboardingAccountId = user.onboardingAccountId;
+        r.name = "Apartments & Co " + String.valueOf(System.currentTimeMillis());
+        r.onboardingAccountId = resDnsNamereq.onboardingAccountId;
+//resDnsNamereq.onboardingAccountId;
         r.requestId = "CreatePMCRequest";
 
         {

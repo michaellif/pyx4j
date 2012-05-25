@@ -25,7 +25,7 @@ public class OnboardingPmcPreloader extends AbstractDataPreloader {
 
     public static Pmc createOnboardingPmc(String name, String dnsName, String onboardingAccountId) {
 
-        if (!PmcNameValidator.canCreatePmcName(dnsName))
+        if (!PmcNameValidator.canCreatePmcName(dnsName, onboardingAccountId))
             return null;
 
         Pmc pmc = EntityFactory.create(Pmc.class);

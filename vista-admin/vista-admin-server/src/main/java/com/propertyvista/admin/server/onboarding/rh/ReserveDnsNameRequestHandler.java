@@ -40,7 +40,7 @@ public class ReserveDnsNameRequestHandler extends AbstractRequestHandler<Reserve
 
         String dnsName = request.dnsName().getValue();
 
-        if (!PmcNameValidator.canCreatePmcName(dnsName)) {
+        if (!PmcNameValidator.canCreatePmcName(dnsName, null)) {
             response.success().setValue(Boolean.FALSE);
             return response;
         }
