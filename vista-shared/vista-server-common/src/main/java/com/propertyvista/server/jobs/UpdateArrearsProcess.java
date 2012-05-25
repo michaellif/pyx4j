@@ -82,11 +82,11 @@ public class UpdateArrearsProcess implements PmcProcess {
             }
 
         }
-        log.info(SimpleMessageFormat.format("Arrears Update for billing accounts finished, processed {0} billignAccounts, {1} FAILED", numOfBillingAccounts,
+        log.info(SimpleMessageFormat.format("Arrears Update for billing accounts finished, processed {0} billing accounts, {1} FAILED", numOfBillingAccounts,
                 failed));
     }
 
-    private void updateBuildingArrears() {
+    public void updateBuildingArrears() {
         log.info("Arrears Update for buildings started");
 
         EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
@@ -119,7 +119,7 @@ public class UpdateArrearsProcess implements PmcProcess {
             }
         }
 
-        log.info(SimpleMessageFormat.format("Arrears Update for buildings finished, processed {0} billignAccounts, {1} FAILED", current, failed));
+        log.info(SimpleMessageFormat.format("Arrears Update for buildings finished, processed {0} buildings, {1} FAILED", current, failed));
     }
 
     @Override

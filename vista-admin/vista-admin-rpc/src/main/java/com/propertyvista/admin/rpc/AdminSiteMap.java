@@ -92,6 +92,16 @@ public class AdminSiteMap implements SiteMap {
             }
         }
 
+        @PlaceProperties(caption = "Simulated Data Preload")
+        @NavigationItem(navigLabel = "Simulated Data Preload")
+        public static class SimulatedDataPreload extends CrudAppPlace {
+
+            public SimulatedDataPreload() {
+                formViewerPlace(new Key(-1));
+            }
+
+        }
+
         @PlaceProperties(caption = "PAD Simulation")
         @NavigationItem(navigLabel = "PAD Simulations")
         public static class PadSimulation extends CrudAppPlace {

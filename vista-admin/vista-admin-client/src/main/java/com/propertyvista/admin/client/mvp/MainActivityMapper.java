@@ -48,6 +48,7 @@ import com.propertyvista.admin.client.activity.crud.scheduler.TriggerEditorActiv
 import com.propertyvista.admin.client.activity.crud.scheduler.TriggerListerActivity;
 import com.propertyvista.admin.client.activity.crud.scheduler.TriggerViewerActivity;
 import com.propertyvista.admin.client.activity.security.PasswordChangeActivity;
+import com.propertyvista.admin.client.activity.simulateddatapreload.SimulatedDataPreloadActivity;
 import com.propertyvista.admin.client.activity.simulation.SimulationEditorActivity;
 import com.propertyvista.admin.client.activity.simulation.SimulationViewerActivity;
 import com.propertyvista.admin.rpc.AdminSiteMap;
@@ -134,6 +135,9 @@ public class MainActivityMapper implements AppActivityMapper {
                             activity = new SimulationViewerActivity(crudPlace);
                             break;
                         }
+
+                    } else if (place instanceof AdminSiteMap.Administration.SimulatedDataPreload) {
+                        activity = new SimulatedDataPreloadActivity();
 
                     } else if (place instanceof AdminSiteMap.Administration.PadSimulation.PadSimFile) {
                         switch (crudPlace.getType()) {
