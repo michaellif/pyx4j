@@ -32,7 +32,6 @@ import com.pyx4j.site.client.ui.crud.form.ViewerViewImplBase;
 import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.widgets.client.Button;
 
-import com.propertyvista.crm.client.themes.CrmTheme;
 import com.propertyvista.crm.client.ui.components.boxes.VersionSelectorDialog;
 import com.propertyvista.crm.rpc.services.breadcrumbs.BreadcrumbsService;
 
@@ -69,8 +68,6 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
                     presenter.edit();
                 }
             });
-            editButton.addStyleName(editButton.getStylePrimaryName() + CrmTheme.StyleSuffixEx.EditButton);
-
             addHeaderToolbarTwoItem(editButton);
         }
 

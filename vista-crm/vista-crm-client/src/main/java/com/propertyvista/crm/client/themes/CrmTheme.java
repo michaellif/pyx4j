@@ -52,10 +52,6 @@ public class CrmTheme extends VistaTheme {
 
     public static double defaultTabHeight = 2.6;
 
-    public static enum StyleSuffixEx implements IStyleName {
-        SaveButton, CancelButton, EditButton, ActionButton;
-    }
-
     public static enum TitleBarStyleName implements IStyleName {
         TitleBarBreadcrumb
     }
@@ -287,49 +283,10 @@ public class CrmTheme extends VistaTheme {
     }
 
     protected void initButtonStylesEx() {
-        //
-        // Save Button: 
-        String buttonEx = Selector.valueOf("gwt-Button", StyleSuffixEx.SaveButton);
-        Style style = new Style(buttonEx);
-        style.addProperty("color", ThemeColors.foreground, 0.15);
-        style.addProperty("background-color", ThemeColors.foreground, 1.1);
-        addStyle(style);
-
-        style = new Style(buttonEx + ":hover");
-        style.addProperty("border", "1px solid");
-        style.addProperty("border-color", ThemeColors.foreground, 0.9);
-        addStyle(style);
-
-        //
-        // Edit Button: 
-        buttonEx = Selector.valueOf("gwt-Button", StyleSuffixEx.EditButton);
-        style = new Style(buttonEx);
-        style.addProperty("color", ThemeColors.foreground, 0.15);
-        style.addProperty("background-color", ThemeColors.foreground, 1.1);
-        addStyle(style);
-
-        style = new Style(buttonEx + ":hover");
-        style.addProperty("border", "1px solid");
-        style.addProperty("border-color", ThemeColors.foreground, 0.9);
-        addStyle(style);
-
-        //
-        // Action Button: 
-        buttonEx = Selector.valueOf("gwt-Button", StyleSuffixEx.ActionButton);
-        style = new Style(buttonEx);
-        style.addProperty("color", ThemeColors.foreground, 0.15);
-        style.addProperty("background-color", ThemeColors.foreground, 1.1);
-        addStyle(style);
-
-        style = new Style(buttonEx + ":hover");
-        style.addProperty("border", "1px solid");
-        style.addProperty("border-color", ThemeColors.foreground, 0.9);
-        addStyle(style);
 
         //
         // Toggle Button
-        buttonEx = Selector.valueOf("gwt-ToggleButton");
-        style = new Style(buttonEx);
+        Style style = new Style(".gwt-ToggleButton");
         style.addProperty("color", ThemeColors.foreground);
         style.addProperty("border-width", "1px");
         style.addProperty("border-style", "solid");
@@ -340,13 +297,12 @@ public class CrmTheme extends VistaTheme {
         style.addProperty("font-weight", "bold");
         addStyle(style);
 
-        buttonEx = Selector.valueOf("gwt-ToggleButton-up");
-        style = new Style(buttonEx);
+        style = new Style(".gwt-ToggleButton-up");
         style.addGradient(ThemeColors.foreground, 0.1, ThemeColors.foreground, 0.3);
         style.addProperty("border-style", "outset");
         addStyle(style);
 
-        buttonEx = Selector.valueOf("gwt-ToggleButton-up-hovering");
+        String buttonEx = Selector.valueOf("gwt-ToggleButton-up-hovering");
         style = new Style(buttonEx);
         style.addGradient(ThemeColors.foreground, 0.0, ThemeColors.foreground, 0.2);
         style.addProperty("border-style", "outset");
@@ -404,24 +360,6 @@ public class CrmTheme extends VistaTheme {
 
         style = new Style(buttonEx + ":hover");
         style.addProperty("text-decoration", "underline");
-        addStyle(style);
-
-        //
-        // Edit AnchorButton: 
-        buttonEx = Selector.valueOf(AnchorButton.DEFAULT_STYLE_PREFIX, StyleSuffixEx.EditButton);
-        style = new Style(buttonEx);
-        style.addProperty("color", "white");
-        style.addProperty("font-size", "1.1em");
-        style.addProperty("font-weight", "bolder");
-        addStyle(style);
-
-        //
-        // Action AnchorButton: 
-        buttonEx = Selector.valueOf(AnchorButton.DEFAULT_STYLE_PREFIX, StyleSuffixEx.ActionButton);
-        style = new Style(buttonEx);
-        style.addProperty("color", ThemeColors.object1, 0.85);
-        style.addProperty("font-size", "1.1em");
-        style.addProperty("font-weight", "bolder");
         addStyle(style);
 
         //

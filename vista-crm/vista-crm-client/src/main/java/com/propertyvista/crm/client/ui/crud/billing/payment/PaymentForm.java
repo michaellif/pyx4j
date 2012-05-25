@@ -21,6 +21,7 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.ui.CComboBox;
@@ -49,6 +50,8 @@ import com.propertyvista.dto.PaymentRecordDTO.PaymentSelect;
 public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
 
     private static final I18n i18n = I18n.get(PaymentForm.class);
+
+    private Widget paymentMethodEditorSeparator;
 
     private final CComboBox<PaymentMethod> profiledPaymentMethodsCombo = new CComboBox<PaymentMethod>() {
         @Override
@@ -96,7 +99,8 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
         FormFlexPanel main = new FormFlexPanel();
 
         main.setWidget(0, 0, createDetailsPanel());
-        main.setHR(1, 0, 1);
+        main.setH1(1, 0, 1, i18n.tr("Payment Method"));
+        paymentMethodEditorSeparator = main.getWidget(1, 0);
         main.setWidget(2, 0, inject(proto().paymentMethod(), paymentMethodEditor));
 
         return new ScrollPanel(main);
@@ -191,6 +195,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
                     switch (event.getValue()) {
                     case New:
                         paymentMethodEditor.setViewable(false);
+                        paymentMethodEditorSeparator.setVisible(false);
                         paymentMethodEditor.setTypeSelectionVisible(true);
                         paymentMethodEditor.selectPaymentDetailsEditor(PaymentType.Echeck);
                         paymentMethodEditor.setVisible(!getValue().leaseParticipant().isNull());
@@ -201,6 +206,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
                         break;
                     case Profiled:
                         paymentMethodEditor.setViewable(true);
+                        paymentMethodEditorSeparator.setVisible(true);
                         paymentMethodEditor.setTypeSelectionVisible(false);
                         paymentMethodEditor.setVisible(false);
 
@@ -216,6 +222,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
             @Override
             public void onValueChange(ValueChangeEvent<PaymentMethod> event) {
                 paymentMethodEditor.setVisible(event.getValue() != null);
+                paymentMethodEditorSeparator.setVisible(event.getValue() != null);
                 if (event.getValue() != null) {
                     paymentMethodEditor.setViewable(true);
                     paymentMethodEditor.populate(event.getValue());
@@ -239,6 +246,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
         checkProfiledPaymentMethods(null);
 
         paymentMethodEditor.setVisible(!getValue().leaseParticipant().isNull());
+        paymentMethodEditorSeparator.setVisible(!getValue().leaseParticipant().isNull());
         paymentMethodEditor.setBillingAddressAsCurrentEnabled(!getValue().leaseParticipant().isNull());
 
         if (isEditable()) {

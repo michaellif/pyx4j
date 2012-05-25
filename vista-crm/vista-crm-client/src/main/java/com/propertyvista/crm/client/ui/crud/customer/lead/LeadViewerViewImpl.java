@@ -28,7 +28,6 @@ import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog.Formatter;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
-import com.propertyvista.crm.client.themes.CrmTheme;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.client.ui.crud.customer.lead.appointment.AppointmentLister;
 import com.propertyvista.crm.rpc.CrmSiteMap.Marketing;
@@ -79,7 +78,6 @@ public class LeadViewerViewImpl extends CrmViewerViewImplBase<Lead> implements L
 
             }
         });
-        convertAction.addStyleName(convertAction.getStylePrimaryName() + CrmTheme.StyleSuffixEx.ActionButton);
         addHeaderToolbarTwoItem(convertAction);
 
         closeAction = new Button(i18n.tr("Close Lead"), new ClickHandler() {

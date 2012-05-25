@@ -13,7 +13,6 @@
  */
 package com.propertyvista.admin.client.themes;
 
-import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.commons.css.Selector;
 import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.ThemeColors;
@@ -46,10 +45,6 @@ public class AdminTheme extends VistaTheme {
     public static double defaultActionBarHeight = 2.9;
 
     public static double defaultTabHeight = 2.6;
-
-    public static enum StyleSuffixEx implements IStyleName {
-        SaveButton, CancelButton, EditButton, ActionButton;
-    }
 
     public AdminTheme() {
         initStyles();
@@ -249,49 +244,11 @@ public class AdminTheme extends VistaTheme {
     }
 
     protected void initButtonStylesEx() {
-        //
-        // Save Button: 
-        String buttonEx = Selector.valueOf("gwt-Button", StyleSuffixEx.SaveButton);
-        Style style = new Style(buttonEx);
-        style.addProperty("color", ThemeColors.foreground, 0.15);
-        style.addProperty("background-color", ThemeColors.foreground, 1.1);
-        addStyle(style);
-
-        style = new Style(buttonEx + ":hover");
-        style.addProperty("border", "1px solid");
-        style.addProperty("border-color", ThemeColors.foreground, 0.9);
-        addStyle(style);
-
-        //
-        // Edit Button: 
-        buttonEx = Selector.valueOf("gwt-Button", StyleSuffixEx.EditButton);
-        style = new Style(buttonEx);
-        style.addProperty("color", ThemeColors.foreground, 0.15);
-        style.addProperty("background-color", ThemeColors.foreground, 1.1);
-        addStyle(style);
-
-        style = new Style(buttonEx + ":hover");
-        style.addProperty("border", "1px solid");
-        style.addProperty("border-color", ThemeColors.foreground, 0.9);
-        addStyle(style);
-
-        //
-        // Action Button: 
-        buttonEx = Selector.valueOf("gwt-Button", StyleSuffixEx.ActionButton);
-        style = new Style(buttonEx);
-        style.addProperty("color", ThemeColors.foreground, 0.15);
-        style.addProperty("background-color", ThemeColors.foreground, 1.1);
-        addStyle(style);
-
-        style = new Style(buttonEx + ":hover");
-        style.addProperty("border", "1px solid");
-        style.addProperty("border-color", ThemeColors.foreground, 0.9);
-        addStyle(style);
 
         //
         // Toggle Button
-        buttonEx = Selector.valueOf("gwt-ToggleButton");
-        style = new Style(buttonEx);
+        String buttonEx = Selector.valueOf("gwt-ToggleButton");
+        Style style = new Style(buttonEx);
         style.addProperty("color", ThemeColors.object1, 0.1);
         style.addProperty("background-color", ThemeColors.object1, 0.8);
         style.addProperty("border-width", "0px");
@@ -350,24 +307,6 @@ public class AdminTheme extends VistaTheme {
 
         style = new Style(buttonEx + ":hover");
         style.addProperty("text-decoration", "underline");
-        addStyle(style);
-
-        //
-        // Edit AnchorButton: 
-        buttonEx = Selector.valueOf(AnchorButton.DEFAULT_STYLE_PREFIX, StyleSuffixEx.EditButton);
-        style = new Style(buttonEx);
-        style.addProperty("color", "white");
-        style.addProperty("font-size", "1.1em");
-        style.addProperty("font-weight", "bolder");
-        addStyle(style);
-
-        //
-        // Action AnchorButton: 
-        buttonEx = Selector.valueOf(AnchorButton.DEFAULT_STYLE_PREFIX, StyleSuffixEx.ActionButton);
-        style = new Style(buttonEx);
-        style.addProperty("color", ThemeColors.object1, 0.85);
-        style.addProperty("font-size", "1.1em");
-        style.addProperty("font-weight", "bolder");
         addStyle(style);
 
     }

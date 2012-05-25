@@ -23,8 +23,6 @@ import com.pyx4j.site.client.ui.crud.form.ViewerViewImplBase;
 import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.widgets.client.Button;
 
-import com.propertyvista.admin.client.themes.AdminTheme;
-
 public class AdminViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase<E> {
 
     private static final I18n i18n = I18n.get(AdminViewerViewImplBase.class);
@@ -48,7 +46,6 @@ public class AdminViewerViewImplBase<E extends IEntity> extends ViewerViewImplBa
                     presenter.edit();
                 }
             });
-            btnEdit.addStyleName(btnEdit.getStylePrimaryName() + AdminTheme.StyleSuffixEx.EditButton);
 
             addHeaderToolbarTwoItem(btnEdit);
         }
