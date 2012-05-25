@@ -15,7 +15,6 @@ package com.propertyvista.crm.client.activity.crud.financial;
 
 import com.google.gwt.core.client.GWT;
 
-import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.site.client.activity.crud.ListerActivityBase;
@@ -24,7 +23,7 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.financial.MerchantTransactionViewerView;
-import com.propertyvista.crm.client.ui.crud.viewfactories.BuildingViewFactory;
+import com.propertyvista.crm.client.ui.crud.viewfactories.FinancialViewFactory;
 import com.propertyvista.crm.rpc.services.financial.AggregatedTransferCrudService;
 import com.propertyvista.crm.rpc.services.financial.PaymentRecordListService;
 import com.propertyvista.domain.financial.AggregatedTransfer;
@@ -38,14 +37,14 @@ public class AggregatedTransferViewerActivity extends CrmViewerActivity<Aggregat
 
     @SuppressWarnings("unchecked")
     public AggregatedTransferViewerActivity(CrudAppPlace place) {
-        super(place, BuildingViewFactory.instance(MerchantTransactionViewerView.class), (AbstractCrudService<AggregatedTransfer>) GWT
-                .create(AggregatedTransferCrudService.class));
+        super(place, FinancialViewFactory.instance(MerchantTransactionViewerView.class), GWT
+                .<AggregatedTransferCrudService> create(AggregatedTransferCrudService.class));
 
         paymentLister = new ListerActivityBase<PaymentRecord>(place, ((MerchantTransactionViewerView) getView()).getPaymentsListerView(),
-                (AbstractCrudService<PaymentRecord>) GWT.create(PaymentRecordListService.class), PaymentRecord.class);
+                GWT.<PaymentRecordListService> create(PaymentRecordListService.class), PaymentRecord.class);
 
         returnedPaymentLister = new ListerActivityBase<PaymentRecord>(place, ((MerchantTransactionViewerView) getView()).getReturnedPaymentsListerView(),
-                (AbstractCrudService<PaymentRecord>) GWT.create(PaymentRecordListService.class), PaymentRecord.class);
+                GWT.<PaymentRecordListService> create(PaymentRecordListService.class), PaymentRecord.class);
     }
 
     @Override
@@ -55,8 +54,8 @@ public class AggregatedTransferViewerActivity extends CrmViewerActivity<Aggregat
         paymentLister.addPreDefinedFilter(PropertyCriterion.eq(EntityFactory.getEntityPrototype(PaymentRecord.class).aggregatedTransfer(), result));
         paymentLister.populate();
 
-        returnedPaymentLister.addPreDefinedFilter(PropertyCriterion.eq(EntityFactory.getEntityPrototype(PaymentRecord.class).aggregatedTransferReturn(),
-                result));
+        returnedPaymentLister.addPreDefinedFilter(PropertyCriterion
+                .eq(EntityFactory.getEntityPrototype(PaymentRecord.class).aggregatedTransferReturn(), result));
         returnedPaymentLister.populate();
     }
 }

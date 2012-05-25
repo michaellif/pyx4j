@@ -28,7 +28,7 @@ public class MerchantTransactionViewerViewImpl extends CrmViewerViewImplBase<Agg
     private final IListerView<PaymentRecord> returnedPaymentLister;
 
     public MerchantTransactionViewerViewImpl() {
-        super(CrmSiteMap.Finance.AggregatedTransfer.class);
+        super(CrmSiteMap.Finance.AggregatedTransfer.class, true);
 
         paymentLister = new ListerInternalViewImplBase<PaymentRecord>(new PaymentRecordLister());
         returnedPaymentLister = new ListerInternalViewImplBase<PaymentRecord>(new PaymentRecordLister());
