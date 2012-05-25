@@ -61,7 +61,7 @@ public class DatePickerDropDownPanel extends DropDownPanel implements Focusable 
 
         picker = new DatePickerComposite();
 
-        dateFormat = new DateFormat();
+        dateFormat = new DateFormat(CDatePicker.defaultDateFormat);
 
         focusPanel.setWidget(picker);
         setWidget(focusPanel);

@@ -49,8 +49,12 @@ public class CDatePicker extends CTextFieldBase<Date, NDatePicker> {
 
     public CDatePicker(String title) {
         super(title);
-        setFormat(new DateFormat());
+        setFormat(new DateFormat(defaultDateFormat));
         addValueValidator(new TextBoxParserValidator<Date>());
+    }
+
+    public void setDateFormat(String pattern) {
+        setFormat(new DateFormat(pattern));
     }
 
     @Override
@@ -103,9 +107,14 @@ public class CDatePicker extends CTextFieldBase<Date, NDatePicker> {
 
     static class DateFormat implements IFormat<Date> {
 
-        private static DateTimeFormat parser = DateTimeFormat.getFormat(defaultDateFormat);
+        private final DateTimeFormat parser;
 
-        private static DateTimeFormat formatter = DateTimeFormat.getFormat(defaultDateFormat);
+        private final DateTimeFormat formatter;
+
+        DateFormat(String format) {
+            parser = DateTimeFormat.getFormat(format);
+            formatter = DateTimeFormat.getFormat(format);
+        }
 
         @Override
         public String format(Date value) {

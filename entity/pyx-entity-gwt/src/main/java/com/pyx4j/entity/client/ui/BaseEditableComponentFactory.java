@@ -164,7 +164,11 @@ public class BaseEditableComponentFactory implements IEditableComponentFactory {
             comp.setOptions(EnumSet.allOf((Class<Enum>) mm.getValueClass()));
             return comp;
         } else if (mm.getValueClass().equals(Date.class) || (mm.getValueClass().equals(java.sql.Date.class)) || (mm.getValueClass().equals(LogicalDate.class))) {
-            return new CDatePicker();
+            CDatePicker comp = new CDatePicker();
+            if (mm.getFormat() != null) {
+                comp.setDateFormat(mm.getFormat());
+            }
+            return comp;
         } else if (mm.getValueClass().equals(Time.class)) {
             CTimeField comp = new CTimeField();
             if (mm.getFormat() != null) {
