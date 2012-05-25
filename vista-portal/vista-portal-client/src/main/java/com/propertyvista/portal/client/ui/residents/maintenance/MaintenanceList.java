@@ -20,6 +20,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
@@ -111,7 +112,9 @@ public class MaintenanceList extends VerticalPanel implements MaintenanceView {
                 cancelTicket.addClickHandler(new ClickHandler() {
                     @Override
                     public void onClick(ClickEvent event) {
-                        presenter.cancelRequest(request);
+                        if (Window.confirm("You are about to cancel ticket '" + request.description().getStringView() + "'")) {
+                            presenter.cancelRequest(request);
+                        }
                     }
                 });
                 openRequestsPanel.setWidget(row, 2, cancelTicket);
