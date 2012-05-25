@@ -46,7 +46,7 @@ class PadCaledonAcknowledgement {
         }
 
         for (FileAcknowledgmentStatus acknowledgmentStatus : EnumSet.allOf(FileAcknowledgmentStatus.class)) {
-            if (acknowledgmentStatus.equals(akFile.acknowledgmentStatusCode().getValue())) {
+            if (acknowledgmentStatus.getStatusCode().equals(akFile.acknowledgmentStatusCode().getValue())) {
                 padFile.acknowledgmentStatus().setValue(acknowledgmentStatus);
                 padFile.acknowledgmentStatusCode().setValue(akFile.acknowledgmentStatusCode().getValue());
                 break;
@@ -64,7 +64,7 @@ class PadCaledonAcknowledgement {
             Persistence.service().merge(padFile);
             Persistence.service().commit();
         } else if (EnumSet.of(FileAcknowledgmentStatus.BatchAndTransactionReject, FileAcknowledgmentStatus.TransactionReject,
-                FileAcknowledgmentStatus.BatchLevelReject).contains(akFile.acknowledgmentStatusCode().getValue())) {
+                FileAcknowledgmentStatus.BatchLevelReject).contains(padFile.acknowledgmentStatus().getValue())) {
             assertAcknowledgedValues(padFile, akFile);
             updateBatches(padFile, akFile);
             updateRecords(padFile, akFile);
