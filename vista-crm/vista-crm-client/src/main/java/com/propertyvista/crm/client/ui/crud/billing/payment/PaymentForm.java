@@ -195,10 +195,10 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
                     switch (event.getValue()) {
                     case New:
                         paymentMethodEditor.setViewable(false);
-                        paymentMethodEditorSeparator.setVisible(false);
                         paymentMethodEditor.setTypeSelectionVisible(true);
                         paymentMethodEditor.selectPaymentDetailsEditor(PaymentType.Echeck);
                         paymentMethodEditor.setVisible(!getValue().leaseParticipant().isNull());
+                        paymentMethodEditorSeparator.setVisible(!getValue().leaseParticipant().isNull());
 
                         paymentMethodEditor.getValue().isOneTimePayment().setValue(Boolean.TRUE);
 
@@ -206,9 +206,9 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
                         break;
                     case Profiled:
                         paymentMethodEditor.setViewable(true);
-                        paymentMethodEditorSeparator.setVisible(true);
                         paymentMethodEditor.setTypeSelectionVisible(false);
                         paymentMethodEditor.setVisible(false);
+                        paymentMethodEditorSeparator.setVisible(false);
 
                         profiledPaymentMethodsCombo.populate(null);
                         profiledPaymentMethodsCombo.setVisible(true);
