@@ -67,7 +67,7 @@ public class DashboardGenerator extends Dashboards {
         dmd.user().id().setValue(ISharedUserEntity.DORMANT_KEY); // shared for everyone usage 
         dmd.type().setValue(DashboardType.building);
         dmd.isShared().setValue(true);
-        dmd.name().setValue(i18n.tr("Arrears Dashboard"));
+        dmd.name().setValue(i18n.tr("Availability Dashboard"));
         dmd.description().setValue(i18n.tr("Contains various availablility gadgets"));
         dmd.layoutType().setValue(LayoutType.One);
 
@@ -100,7 +100,7 @@ public class DashboardGenerator extends Dashboards {
         dmd.user().id().setValue(ISharedUserEntity.DORMANT_KEY); // shared for everyone usage 
         dmd.type().setValue(DashboardType.building);
         dmd.isShared().setValue(true);
-        dmd.name().setValue(i18n.tr("Availability Dashboard"));
+        dmd.name().setValue(i18n.tr("Arrears Dashboard"));
         dmd.description().setValue(i18n.tr("Contains various arrears gadgets"));
         dmd.layoutType().setValue(LayoutType.One);
 
