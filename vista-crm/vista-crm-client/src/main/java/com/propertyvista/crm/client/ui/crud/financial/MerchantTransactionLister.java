@@ -29,6 +29,7 @@ public class MerchantTransactionLister extends ListerBase<AggregatedTransfer> {
                 
                 new MemberColumnDescriptor.Builder(proto().merchantAccount()).build(),
                 
+                new MemberColumnDescriptor.Builder(proto().grossPaymentCount()).build(),
                 new MemberColumnDescriptor.Builder(proto().amount()).build(),
                 
                 new MemberColumnDescriptor.Builder(proto().rejectItemsAmount()).build(),

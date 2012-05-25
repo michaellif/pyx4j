@@ -94,7 +94,7 @@ class PadCaledonAcknowledgement {
         for (PadAkBatch akBatch : akFile.batches()) {
             EntityQueryCriteria<PadBatch> criteria = EntityQueryCriteria.create(PadBatch.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().padFile(), padFile));
-            criteria.add(PropertyCriterion.eq(criteria.proto().batchNumber(), akBatch.batchId()));
+            criteria.add(PropertyCriterion.eq(criteria.proto().batchNumber(), Integer.valueOf(akBatch.batchId().getValue())));
             //criteria.add(PropertyCriterion.eq(criteria.proto().merchantTerminalId(), akBatch.terminalId()));
             PadBatch padBatch = Persistence.service().retrieve(criteria);
             if (padBatch == null) {

@@ -17,6 +17,7 @@ import java.util.Date;
 
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.Timestamp;
@@ -75,9 +76,11 @@ public interface PadSimFile extends IEntity {
     IPrimitive<String> acknowledgmentStatusCode();
 
     @Timestamp(Timestamp.Update.Created)
+    @Format("MM/dd/yyyy HH:mm")
     IPrimitive<Date> received();
 
     @Timestamp(Timestamp.Update.Updated)
+    @Format("MM/dd/yyyy HH:mm")
     IPrimitive<Date> updated();
 
     IPrimitive<Date> acknowledged();

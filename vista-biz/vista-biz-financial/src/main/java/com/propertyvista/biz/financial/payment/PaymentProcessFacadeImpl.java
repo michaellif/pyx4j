@@ -68,6 +68,10 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
             }
         });
 
+        for (PadBatch padBatch : rejectedBatch) {
+            new PadProcessor().aggregatedTransferRejected(padBatch);
+        }
+
         Persistence.service().commit();
 
         if (rejectedBatch.size() == 0 && rejectedRecodrs.size() == 0) {

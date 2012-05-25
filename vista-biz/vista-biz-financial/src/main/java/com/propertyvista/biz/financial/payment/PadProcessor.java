@@ -14,6 +14,7 @@
 package com.propertyvista.biz.financial.payment;
 
 import java.util.EnumSet;
+import java.util.concurrent.Callable;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
@@ -29,17 +30,19 @@ import com.propertyvista.admin.domain.payment.pad.PadDebitRecord;
 import com.propertyvista.admin.domain.payment.pad.PadFile;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.domain.VistaNamespace;
+import com.propertyvista.domain.financial.AggregatedTransfer;
+import com.propertyvista.domain.financial.AggregatedTransfer.AggregatedTransferStatus;
 import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.payment.EcheckInfo;
 import com.propertyvista.domain.payment.PaymentType;
+import com.propertyvista.server.jobs.TaskRunner;
 
 public class PadProcessor {
 
     void queuePayment(PaymentRecord paymentRecord) {
         MerchantAccount merchantAccount = PaymentUtils.retrieveMerchantAccount(paymentRecord);
         Persistence.service().retrieve(paymentRecord.billingAccount());
-        // TODO new Transaction
         String namespace = NamespaceManager.getNamespace();
         try {
             NamespaceManager.setNamespace(VistaNamespace.adminNamespace);
@@ -52,15 +55,21 @@ public class PadProcessor {
     }
 
     PadFile getPadFile() {
-        EntityQueryCriteria<PadFile> criteria = EntityQueryCriteria.create(PadFile.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().status(), PadFile.PadFileStatus.Creating));
-        PadFile padFile = Persistence.service().retrieve(criteria);
-        if (padFile == null) {
-            padFile = EntityFactory.create(PadFile.class);
-            padFile.status().setValue(PadFile.PadFileStatus.Creating);
-            Persistence.service().persist(padFile);
-        }
-        return padFile;
+        return TaskRunner.runAutonomousTransation(new Callable<PadFile>() {
+            @Override
+            public PadFile call() {
+                EntityQueryCriteria<PadFile> criteria = EntityQueryCriteria.create(PadFile.class);
+                criteria.add(PropertyCriterion.eq(criteria.proto().status(), PadFile.PadFileStatus.Creating));
+                PadFile padFile = Persistence.service().retrieve(criteria);
+                if (padFile == null) {
+                    padFile = EntityFactory.create(PadFile.class);
+                    padFile.status().setValue(PadFile.PadFileStatus.Creating);
+                    Persistence.service().persist(padFile);
+                    Persistence.service().commit();
+                }
+                return padFile;
+            }
+        });
     }
 
     private PadBatch getPadBatch(PadFile padFile, String namespace, MerchantAccount merchantAccount) {
@@ -133,5 +142,43 @@ public class PadProcessor {
         Persistence.service().merge(paymentRecord);
 
         ServerSideFactory.create(ARFacade.class).rejectPayment(paymentRecord, false);
+    }
+
+    public void aggregatedTransferRejected(PadBatch padBatch) {
+        Persistence.service().retrieveMember(padBatch.records());
+
+        AggregatedTransfer at = EntityFactory.create(AggregatedTransfer.class);
+        at.status().setValue(AggregatedTransferStatus.Rejected);
+        at.paymentDate().setValue(new LogicalDate(padBatch.padFile().created().getValue()));
+        at.amount().setValue(padBatch.batchAmount().getValue());
+        at.grossPaymentCount().setValue(padBatch.records().size());
+        at.merchantAccount().setPrimaryKey(padBatch.merchantAccountKey().getValue());
+
+        // Caledon status codes
+        if ("1003".equals(padBatch.acknowledgmentStatusCode().getValue())) {
+            at.transactionErrorMessage().setValue("Invalid Terminal ID");
+        } else if ("1004".equals(padBatch.acknowledgmentStatusCode().getValue())) {
+            at.transactionErrorMessage().setValue("Invalid Bank ID ");
+        } else if ("1005".equals(padBatch.acknowledgmentStatusCode().getValue())) {
+            at.transactionErrorMessage().setValue("Invalid Bank Transit Number ");
+        } else if ("1006".equals(padBatch.acknowledgmentStatusCode().getValue())) {
+            at.transactionErrorMessage().setValue("Invalid Bank Account Number ");
+        } else if ("1007".equals(padBatch.acknowledgmentStatusCode().getValue())) {
+            at.transactionErrorMessage().setValue("Bank Information Mismatch");
+        } else {
+            at.transactionErrorMessage().setValue(padBatch.acknowledgmentStatusCode().getValue());
+        }
+
+        Persistence.service().persist(at);
+
+        for (PadDebitRecord debitRecord : padBatch.records()) {
+            PaymentRecord paymentRecord = Persistence.service().retrieve(PaymentRecord.class, new Key(debitRecord.transactionId().getValue()));
+            if (!EnumSet.of(PaymentRecord.PaymentStatus.Processing, PaymentRecord.PaymentStatus.Received).contains(paymentRecord.paymentStatus().getValue())) {
+                throw new Error("Processed payment can't be rejected");
+            }
+            // Do not update record status. Allow to ReSend or Cancel Manually
+            paymentRecord.aggregatedTransfer().set(at);
+            Persistence.service().persist(paymentRecord);
+        }
     }
 }

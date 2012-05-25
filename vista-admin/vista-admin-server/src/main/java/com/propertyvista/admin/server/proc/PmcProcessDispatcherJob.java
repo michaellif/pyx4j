@@ -39,6 +39,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.essentials.server.admin.SystemMaintenance;
 import com.pyx4j.server.contexts.Lifecycle;
 import com.pyx4j.server.contexts.NamespaceManager;
 
@@ -67,6 +68,10 @@ public class PmcProcessDispatcherJob implements Job {
     @Override
     public void execute(JobExecutionContext context) throws JobExecutionException {
         JobDataMap dataMap = context.getJobDetail().getJobDataMap();
+        if (SystemMaintenance.isSystemMaintenance()) {
+            log.warn("Ignored trigger fired during SystemMaintenance");
+            return;
+        }
         try {
             Lifecycle.startElevatedUserContext();
             NamespaceManager.setNamespace(Pmc.adminNamespace);

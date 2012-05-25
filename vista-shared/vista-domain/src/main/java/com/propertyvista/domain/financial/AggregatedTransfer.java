@@ -35,9 +35,13 @@ public interface AggregatedTransfer extends IEntity {
     @I18n
     enum AggregatedTransferStatus {
 
+        Rejected,
+
         Paid,
 
-        Hold;
+        Hold,
+
+        Resent;
 
         @Override
         public String toString() {
@@ -55,6 +59,8 @@ public interface AggregatedTransfer extends IEntity {
     @NotNull
     @Format("#0.00")
     IPrimitive<BigDecimal> amount();
+
+    IPrimitive<Integer> grossPaymentCount();
 
     @Format("#0.00")
     IPrimitive<BigDecimal> rejectItemsAmount();
@@ -79,4 +85,6 @@ public interface AggregatedTransfer extends IEntity {
     @Detached(level = AttachLevel.Detached)
     @JoinTable(value = PaymentRecord.class, mappedBy = ReturnAggregatedTransferId.class)
     ISet<PaymentRecord> returnedPayments();
+
+    IPrimitive<String> transactionErrorMessage();
 }
