@@ -69,7 +69,8 @@ public class RefferenceDataPreloader extends AbstractDataPreloader {
 
         Map<String, IssueElement> elements = new HashMap<String, IssueElement>();
         for (MaintenanceTreeImport row : data) {
-            normalizePreload(row);
+//            No need to normalize for now as we use null-value to indicate that no more input is required            
+//            normalizePreload(row);
             // Find or create Element
             IssueElement element = elements.get(row.type().getValue() + row.rooms().getValue());
             if (element == null) {

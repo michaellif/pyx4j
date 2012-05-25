@@ -14,6 +14,7 @@
 package com.propertyvista.portal.client.ui.residents.maintenance;
 
 import java.io.Serializable;
+import java.util.List;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
@@ -22,6 +23,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.entity.client.ui.CEntityComboBox;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.forms.client.ui.CListBox.AsyncOptionsReadyCallback;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -53,10 +55,30 @@ public class MaintenanceRequestForm extends CEntityDecoratableForm<MaintenanceRe
         content.setH1(++row, 0, 1, i18n.tr("TICKET"));
 
         // Add components
-        final CEntityComboBox<IssueElement> combo1 = new CEntityComboBox<IssueElement>(IssueElement.class);
-        final CEntityComboBox<IssueRepairSubject> combo2 = new CEntityComboBox<IssueRepairSubject>(IssueRepairSubject.class);
-        final CEntityComboBox<IssueSubjectDetails> combo3 = new CEntityComboBox<IssueSubjectDetails>(IssueSubjectDetails.class);
-        final CEntityComboBox<IssueClassification> combo4 = new CEntityComboBox<IssueClassification>(IssueClassification.class);
+        final OptionsDrivenCombo<IssueElement> combo1 = new OptionsDrivenCombo<IssueElement>(IssueElement.class) {
+            @Override
+            protected boolean isLeaf(IssueElement opt) {
+                return !opt.isEmpty() && opt.name().isNull();
+            }
+        };
+        final OptionsDrivenCombo<IssueRepairSubject> combo2 = new OptionsDrivenCombo<IssueRepairSubject>(IssueRepairSubject.class) {
+            @Override
+            protected boolean isLeaf(IssueRepairSubject opt) {
+                return !opt.isEmpty() && opt.name().isNull();
+            }
+        };
+        final OptionsDrivenCombo<IssueSubjectDetails> combo3 = new OptionsDrivenCombo<IssueSubjectDetails>(IssueSubjectDetails.class) {
+            @Override
+            protected boolean isLeaf(IssueSubjectDetails opt) {
+                return !opt.isEmpty() && opt.name().isNull();
+            }
+        };
+        final OptionsDrivenCombo<IssueClassification> combo4 = new OptionsDrivenCombo<IssueClassification>(IssueClassification.class) {
+            @Override
+            protected boolean isLeaf(IssueClassification opt) {
+                return !opt.isEmpty() && opt.issue().isNull();
+            }
+        };
 
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().issueClassification().subjectDetails().subject().issueElement(), combo1), 15).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().issueClassification().subjectDetails().subject(), combo2), 15).build());
@@ -69,22 +91,22 @@ public class MaintenanceRequestForm extends CEntityDecoratableForm<MaintenanceRe
         final String defaultClassification = defaultChoice + " " + combo3.getTitle();
 
         combo1.setNoSelectionText(defaultChoice);
-        comboClear(combo2, defaultRepairSubject);
-        comboClear(combo3, defaultSubjectDetails);
-        comboClear(combo4, defaultClassification);
+        combo2.optionsClear(defaultRepairSubject);
+        combo3.optionsClear(defaultSubjectDetails);
+        combo4.optionsClear(defaultClassification);
 
         // add onChange handlers
         combo1.addValueChangeHandler(new ValueChangeHandler<IssueElement>() {
             @Override
             public void onValueChange(ValueChangeEvent<IssueElement> event) {
                 if (event.getValue() != null) {
-                    comboReset(combo2, PropertyCriterion.eq(combo2.proto().issueElement(), event.getValue()), defaultChoice);
+                    combo2.optionsReset(PropertyCriterion.eq(combo2.proto().issueElement(), event.getValue()), defaultChoice);
                 } else {
-                    comboClear(combo2, defaultRepairSubject);
+                    combo2.optionsClear(defaultRepairSubject);
                 }
                 // clear remaining selectors
-                comboClear(combo3, defaultSubjectDetails);
-                comboClear(combo4, defaultClassification);
+                combo3.optionsClear(defaultSubjectDetails);
+                combo4.optionsClear(defaultClassification);
             }
         });
 
@@ -92,12 +114,12 @@ public class MaintenanceRequestForm extends CEntityDecoratableForm<MaintenanceRe
             @Override
             public void onValueChange(ValueChangeEvent<IssueRepairSubject> event) {
                 if (event.getValue() != null) {
-                    comboReset(combo3, PropertyCriterion.eq(combo3.proto().subject(), event.getValue()), defaultChoice);
+                    combo3.optionsReset(PropertyCriterion.eq(combo3.proto().subject(), event.getValue()), defaultChoice);
                 } else {
-                    comboClear(combo3, defaultSubjectDetails);
+                    combo3.optionsClear(defaultSubjectDetails);
                 }
                 // clear remaining selectors
-                comboClear(combo4, defaultClassification);
+                combo4.optionsClear(defaultClassification);
             }
         });
 
@@ -105,9 +127,9 @@ public class MaintenanceRequestForm extends CEntityDecoratableForm<MaintenanceRe
             @Override
             public void onValueChange(ValueChangeEvent<IssueSubjectDetails> event) {
                 if (event.getValue() != null) {
-                    comboReset(combo4, PropertyCriterion.eq(combo4.proto().subjectDetails(), event.getValue()), defaultChoice);
+                    combo4.optionsReset(PropertyCriterion.eq(combo4.proto().subjectDetails(), event.getValue()), defaultChoice);
                 } else {
-                    comboClear(combo4, defaultClassification);
+                    combo4.optionsClear(defaultClassification);
                 }
             }
         });
@@ -125,15 +147,48 @@ public class MaintenanceRequestForm extends CEntityDecoratableForm<MaintenanceRe
         super.reset();
     }
 
-    private void comboReset(CEntityComboBox<? extends IEntity> combo, PropertyCriterion crit, String title) {
-        combo.resetCriteria();
-        combo.addCriterion(crit);
-        combo.setNoSelectionText(title);
-        combo.retriveOptions(null);
-        combo.setValue(null);
-    }
+    abstract class OptionsDrivenCombo<E extends IEntity> extends CEntityComboBox<E> {
+        public OptionsDrivenCombo(Class<E> entityClass) {
+            super(entityClass);
+        }
 
-    private void comboClear(CEntityComboBox<? extends IEntity> combo, String title) {
-        comboReset(combo, PropertyCriterion.eq(combo.proto().id(), (Serializable) null), title);
+        protected abstract boolean isLeaf(E opt);
+
+        public void optionsReset(PropertyCriterion crit, final String title) {
+//            System.out.println("===> " + getTitle() + ": optionsReset()");
+            optionsSet(crit, title);
+        }
+
+        private void optionsSet(PropertyCriterion crit, final String title) {
+            this.resetCriteria();
+            this.addCriterion(crit);
+            this.retriveOptions(new AsyncOptionsReadyCallback<E>() {
+                @Override
+                public void onOptionsReady(List<E> opt) {
+//                    System.out.println("===> " + getTitle() + ": got " + opt.size() + " opts");
+                    boolean autoComplete = (opt != null && opt.size() == 1 && isLeaf(opt.get(0)));
+                    if (autoComplete) {
+                        setVisible(false);
+                        // auto-load options for next selector
+                        setValue(opt.get(0));
+//                        System.out.println("===> " + getTitle() + ": autoselect " + opt.get(0).getPrimaryKey());
+                    } else {
+                        boolean isActive = (opt != null && opt.size() > 0 && !isLeaf(opt.get(0)));
+                        setVisible(isActive);
+                        setMandatory(isActive);
+                        if (isActive) {
+                            setNoSelectionText(title);
+                            // clear options for next selector
+                            setValue(null);
+                        }
+                    }
+                }
+            });
+        }
+
+        public void optionsClear(String title) {
+//            System.out.println("===> " + getTitle() + ": optionsClear()");
+            optionsSet(PropertyCriterion.eq(this.proto().id(), (Serializable) null), title);
+        }
     }
 }
