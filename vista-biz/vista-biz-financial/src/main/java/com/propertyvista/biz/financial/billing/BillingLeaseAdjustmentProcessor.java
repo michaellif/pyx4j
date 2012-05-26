@@ -36,7 +36,8 @@ public class BillingLeaseAdjustmentProcessor extends AbstractLeaseAdjustmentProc
 
     void createPendingLeaseAdjustments() {
         for (LeaseAdjustment adjustment : billing.getNextPeriodBill().billingAccount().adjustments()) {
-            if (LeaseAdjustment.ExecutionType.pending.equals(adjustment.executionType().getValue())) {
+            if (LeaseAdjustment.Status.submited == adjustment.status().getValue()
+                    && LeaseAdjustment.ExecutionType.pending == adjustment.executionType().getValue()) {
                 // Find if adjustment effective date fails on current or next billing period 
                 DateRange overlap = BillDateUtils.getOverlappingRange(new DateRange(billing.getPreviousPeriodBill().billingPeriodStartDate().getValue(),
                         billing.getNextPeriodBill().billingPeriodEndDate().getValue()), new DateRange(adjustment.targetDate().getValue(), adjustment

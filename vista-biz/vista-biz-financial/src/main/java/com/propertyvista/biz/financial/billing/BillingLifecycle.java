@@ -189,8 +189,7 @@ public class BillingLifecycle {
 
             } else {
                 return BillingCycleManger.createExistingLeaseInitialBillingRun(billingAccount.billingCycle(), billingAccount.lease().leaseFrom().getValue(),
-                /** TODO fix me **/
-                null, !billingAccount.billingPeriodStartDate().isNull());
+                        billingAccount.lease().activationDate().getValue(), !billingAccount.billingPeriodStartDate().isNull());
             }
         } else {
             return BillingCycleManger.createSubsiquentBillingRun(billingAccount.billingCycle(), previousBill.billingRun());

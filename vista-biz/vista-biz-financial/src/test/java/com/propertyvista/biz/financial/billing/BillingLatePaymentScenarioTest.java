@@ -94,10 +94,10 @@ public class BillingLatePaymentScenarioTest extends FinancialTestBase {
         receiveAndPostPayment("30-Apr-2011", "1041.94");
         // add some immediate charges - should see late payment fee
         addBooking("28-Apr-2011");
-        addAccountCharge("100.00", "28-Apr-2011", true);
+        addAccountCharge("100.00");
 
         SysDateManager.setSysDate("02-May-2011");
-        addGoodWillCredit("300.00", "28-Apr-2011", true);
+        addGoodWillCredit("300.00");
 
         SysDateManager.setSysDate("17-May-2011");
 
