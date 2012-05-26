@@ -29,6 +29,8 @@ import com.propertyvista.admin.domain.payment.pad.sim.PadSimBatch;
 import com.propertyvista.admin.domain.payment.pad.sim.PadSimDebitRecord;
 import com.propertyvista.admin.domain.payment.pad.sim.PadSimFile;
 import com.propertyvista.payment.pad.CaledonPadSftpClient;
+import com.propertyvista.payment.pad.simulator.PadSimAcknowledgementFileWriter;
+import com.propertyvista.payment.pad.simulator.PadSimFileParser;
 
 public class PadSim {
 

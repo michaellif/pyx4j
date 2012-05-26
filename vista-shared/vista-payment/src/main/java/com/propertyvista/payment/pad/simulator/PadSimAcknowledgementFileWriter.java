@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.admin.server.services.sim;
+package com.propertyvista.payment.pad.simulator;
 
 import java.io.Closeable;
 import java.io.File;
