@@ -31,6 +31,7 @@ import com.propertyvista.admin.domain.payment.pad.sim.PadSimFile;
 import com.propertyvista.payment.pad.CaledonPadSftpClient;
 import com.propertyvista.payment.pad.simulator.PadSimAcknowledgementFileWriter;
 import com.propertyvista.payment.pad.simulator.PadSimFileParser;
+import com.propertyvista.payment.pad.simulator.PadSimReconciliationFileWriter;
 
 public class PadSim {
 
@@ -139,6 +140,24 @@ public class PadSim {
 
         padFile.status().setValue(PadSimFile.PadSimFileStatus.ReconciliationSent);
         padFile.reconciliationSent().setValue(Persistence.service().getTransactionSystemTime());
+
+        File file = new File(getPadBaseDir(), padFile.fileName().getValue().replace(".", "_reconcil_rpt."));
+        try {
+            PadSimReconciliationFileWriter writer = new PadSimReconciliationFileWriter(padFile, file);
+            try {
+                writer.write();
+            } finally {
+                writer.close();
+            }
+        } catch (Throwable e) {
+            log.error("pad write error", e);
+            throw new Error(e.getMessage());
+        }
+        String errorMessage = new CaledonPadSftpClient().sftpPutSim(file);
+        if (errorMessage != null) {
+            throw new Error(errorMessage);
+        }
+        log.info("pad file sent {}", file.getAbsolutePath());
 
         Persistence.service().persist(padFile);
         Persistence.service().commit();

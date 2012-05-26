@@ -23,12 +23,20 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
-import com.propertyvista.admin.domain.payment.pad.TransactionReconciliationStatus;
 import com.propertyvista.domain.VistaNamespace;
 
 @Table(namespace = VistaNamespace.adminNamespace)
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 public interface PadSimDebitRecord extends IEntity {
+
+    public enum TransactionReconciliationStatus {
+
+        PROCESSED,
+
+        RETURNED,
+
+        REJECTED;
+    }
 
     @Owner
     @JoinColumn
@@ -60,6 +68,9 @@ public interface PadSimDebitRecord extends IEntity {
     IPrimitive<String> acknowledgmentStatusCode();
 
     // --- reconciliation
+
+    @Caption(description = "YYYYMMDD")
+    IPrimitive<String> paymentDate();
 
     IPrimitive<TransactionReconciliationStatus> reconciliationStatus();
 

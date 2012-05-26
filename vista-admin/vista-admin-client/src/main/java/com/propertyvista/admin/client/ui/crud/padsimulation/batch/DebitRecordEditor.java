@@ -42,6 +42,7 @@ public class DebitRecordEditor extends AdminEntityForm<PadSimDebitRecord> {
         content.setHTML(++row, 0, "<hr style='border-top: 1px dashed #000000'/>");
         content.getFlexCellFormatter().setColSpan(row, 0, 2);
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().acknowledgmentStatusCode()), 10).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().reconciliationStatus()), 10).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().reasonCode()), 10).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().fee()), 10).build());
 
@@ -50,7 +51,8 @@ public class DebitRecordEditor extends AdminEntityForm<PadSimDebitRecord> {
         content.setWidget(++row, 1, new DecoratorBuilder(inject(proto().branchTransitNumber()), 10).build());
         content.setWidget(++row, 1, new DecoratorBuilder(inject(proto().accountNumber()), 10).build());
         ++row;
-        content.setWidget(++row, 1, new DecoratorBuilder(inject(proto().reconciliationStatus()), 10).build());
+        ++row;
+        content.setWidget(++row, 1, new DecoratorBuilder(inject(proto().paymentDate()), 10).build());
         content.setWidget(++row, 1, new DecoratorBuilder(inject(proto().reasonText()), 10).build());
 
         return new ScrollPanel(content);
