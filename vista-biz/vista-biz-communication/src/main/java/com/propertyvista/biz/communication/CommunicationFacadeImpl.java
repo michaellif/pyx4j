@@ -184,7 +184,7 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
         if (token == null) {
             throw new UserRuntimeException(GENERIC_FAILED_MESSAGE);
         }
-        MailMessage m = MessageTemplates.createAdminPasswordResetEmail(user, token);
+        MailMessage m = MessageTemplates.createOnboardingUserPasswordResetEmail(user, token, onboardingSystemBaseUrl);
         if (MailDeliveryStatus.Success != Mail.send(m)) {
             throw new UserRuntimeException(i18n.tr("Mail Service Is Temporary Unavailable. Please Try Again Later"));
         }
