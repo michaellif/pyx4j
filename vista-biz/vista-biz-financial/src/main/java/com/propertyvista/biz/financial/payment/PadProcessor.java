@@ -150,7 +150,7 @@ public class PadProcessor {
         AggregatedTransfer at = EntityFactory.create(AggregatedTransfer.class);
         at.status().setValue(AggregatedTransferStatus.Rejected);
         at.paymentDate().setValue(new LogicalDate(padBatch.padFile().created().getValue()));
-        at.amount().setValue(padBatch.batchAmount().getValue());
+        at.grossPaymentAmount().setValue(padBatch.batchAmount().getValue());
         at.grossPaymentCount().setValue(padBatch.records().size());
         at.merchantAccount().setPrimaryKey(padBatch.merchantAccountKey().getValue());
 

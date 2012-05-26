@@ -23,7 +23,6 @@ import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.ToString;
-import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -35,6 +34,14 @@ import com.propertyvista.domain.VistaNamespace;
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 public interface PadSimBatch extends IEntity {
 
+    public enum BatchReconciliationStatus {
+
+        PAID,
+
+        HOLD;
+
+    }
+
     @Override
     @Indexed
     @OrderColumn
@@ -45,7 +52,6 @@ public interface PadSimBatch extends IEntity {
     PadSimFile padFile();
 
     @Length(3)
-    @NotNull
     IPrimitive<String> batchNumber();
 
     @Owned
@@ -81,7 +87,37 @@ public interface PadSimBatch extends IEntity {
 
     IPrimitive<String> batchAmount();
 
-    @Caption(description = "'1001' - Invalid Count\n'1002' - Batch out of balance\n'1003' - Invalid Terminal ID \n'1004' - Invalid Bank ID \n'1005' - Invalid Transit Number \n'1006' - Invalid Bank Account Number \n'1007' - Bank Information Mismatch")
+    @Caption(name = "Acknowledgment Code", description = "'1001' - Invalid Count\n'1002' - Batch out of balance\n'1003' - Invalid Terminal ID \n'1004' - Invalid Bank ID \n'1005' - Invalid Transit Number \n'1006' - Invalid Bank Account Number \n'1007' - Bank Information Mismatch")
     IPrimitive<String> acknowledgmentStatusCode();
+
+    // --- reconciliation --------------
+
+    IPrimitive<BatchReconciliationStatus> reconciliationStatus();
+
+    IPrimitive<String> grossPaymentAmount();
+
+    IPrimitive<String> grossPaymentFee();
+
+    IPrimitive<String> grossPaymentCount();
+
+    IPrimitive<String> rejectItemsAmount();
+
+    IPrimitive<String> rejectItemsFee();
+
+    IPrimitive<String> rejectItemsCount();
+
+    IPrimitive<String> returnItemsAmount();
+
+    IPrimitive<String> returnItemsFee();
+
+    IPrimitive<String> returnItemsCount();
+
+    IPrimitive<String> netAmount();
+
+    IPrimitive<String> adjustments();
+
+    IPrimitive<String> merchantBalance();
+
+    IPrimitive<String> fundsReleased();
 
 }

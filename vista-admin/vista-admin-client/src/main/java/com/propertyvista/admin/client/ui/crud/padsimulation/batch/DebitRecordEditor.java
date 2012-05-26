@@ -33,20 +33,26 @@ public class DebitRecordEditor extends AdminEntityForm<PadSimDebitRecord> {
 
     @Override
     public IsWidget createContent() {
-        FormFlexPanel main = new FormFlexPanel();
+        FormFlexPanel content = new FormFlexPanel();
 
         int row = -1;
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().odr()), 10).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().clientId()), 10).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().transactionId()), 10).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().acknowledgmentStatusCode()), 10).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().amount()), 10).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().clientId()), 10).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().transactionId()), 10).build());
+        content.setHTML(++row, 0, "<hr style='border-top: 1px dashed #000000'/>");
+        content.getFlexCellFormatter().setColSpan(row, 0, 2);
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().acknowledgmentStatusCode()), 10).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().reasonCode()), 10).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().fee()), 10).build());
 
         row = -1;
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().amount()), 10).build());
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().bankId()), 10).build());
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().branchTransitNumber()), 10).build());
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().accountNumber()), 10).build());
+        content.setWidget(++row, 1, new DecoratorBuilder(inject(proto().bankId()), 10).build());
+        content.setWidget(++row, 1, new DecoratorBuilder(inject(proto().branchTransitNumber()), 10).build());
+        content.setWidget(++row, 1, new DecoratorBuilder(inject(proto().accountNumber()), 10).build());
+        ++row;
+        content.setWidget(++row, 1, new DecoratorBuilder(inject(proto().reconciliationStatus()), 10).build());
+        content.setWidget(++row, 1, new DecoratorBuilder(inject(proto().reasonText()), 10).build());
 
-        return new ScrollPanel(main);
+        return new ScrollPanel(content);
     }
 }

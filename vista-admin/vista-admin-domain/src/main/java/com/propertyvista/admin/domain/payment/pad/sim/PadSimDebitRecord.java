@@ -23,6 +23,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
+import com.propertyvista.admin.domain.payment.pad.TransactionReconciliationStatus;
 import com.propertyvista.domain.VistaNamespace;
 
 @Table(namespace = VistaNamespace.adminNamespace)
@@ -55,7 +56,19 @@ public interface PadSimDebitRecord extends IEntity {
     @Length(15)
     IPrimitive<String> transactionId();
 
-    @Caption(description = "'2001' - Invalid Amount\n '2002' - Invalid Bank ID\n '2003' - Invalid Bank Transit Number\n '2004' - Invalid Bank Account Number\n '2005' - Invalid Reference Number")
+    @Caption(name = "Acknowledgment Code", description = "'2001' - Invalid Amount\n '2002' - Invalid Bank ID\n '2003' - Invalid Bank Transit Number\n '2004' - Invalid Bank Account Number\n '2005' - Invalid Reference Number")
     IPrimitive<String> acknowledgmentStatusCode();
+
+    // --- reconciliation
+
+    IPrimitive<TransactionReconciliationStatus> reconciliationStatus();
+
+    @Caption(description = "900 - EDIT REJECT\n;\n 901 - NSF (DEBIT ONLY);\n 902 - ACCOUNT NOT FOUND")
+    IPrimitive<String> reasonCode();
+
+    IPrimitive<String> reasonText();
+
+    @Caption(description = "Reject/Return Item Fee; This field will contain the fee for the reject or returned item.")
+    IPrimitive<String> fee();
 
 }

@@ -39,32 +39,61 @@ public class PadBatchForm extends AdminEntityForm<PadSimBatch> {
 
     @Override
     public IsWidget createContent() {
-        FormFlexPanel main = new FormFlexPanel();
+        FormFlexPanel content = new FormFlexPanel();
 
         int row = -1;
 
-        main.setH1(++row, 0, 1, i18n.tr("Batch Details"));
+        content.setH1(++row, 0, 1, i18n.tr("Batch Details"));
+        content.getFlexCellFormatter().setColSpan(row, 0, 2);
 
-        main.setWidget(++row, 0,
+        content.setWidget(++row, 0,
                 new DecoratorBuilder(inject(proto().padFile(), new CEntityCrudHyperlink<PadSimFile>(AppPlaceEntityMapper.resolvePlace(PadSimFile.class))), 10)
                         .build());
 
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().batchNumber()), 10).build());
+        content.setWidget(row, 1, new DecoratorBuilder(inject(proto().batchNumber()), 10).build());
 
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().terminalId()), 10).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().bankId()), 10).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().branchTransitNumber()), 10).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().accountNumber()), 10).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().terminalId()), 10).build());
+        content.setWidget(row, 1, new DecoratorBuilder(inject(proto().bankId()), 10).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().branchTransitNumber()), 10).build());
+        content.setWidget(row, 1, new DecoratorBuilder(inject(proto().accountNumber()), 10).build());
 
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().chargeDescription()), 10).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().recordsCount()), 10).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().batchAmount()), 10).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().acknowledgmentStatusCode()), 10).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().chargeDescription()), 10).readOnlyMode(true).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().batchAmount()), 10).build());
+        content.setWidget(row, 1, new DecoratorBuilder(inject(proto().recordsCount()), 10).build());
 
-        main.setH1(++row, 0, 1, i18n.tr("Detail Debit Records"));
+        content.setH1(++row, 0, 1, i18n.tr("Reconciliation"));
+        content.getFlexCellFormatter().setColSpan(row, 0, 2);
 
-        main.setWidget(++row, 0, inject(proto().records(), new DebitRecordFolder(isEditable())));
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().acknowledgmentStatusCode()), 10).build());
+        content.setWidget(row, 1, new DecoratorBuilder(inject(proto().reconciliationStatus()), 10).build());
 
-        return new ScrollPanel(main);
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().grossPaymentAmount()), 10).build());
+        content.setWidget(row, 1, new DecoratorBuilder(inject(proto().grossPaymentFee()), 10).build());
+
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().grossPaymentCount()), 10).build());
+
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().rejectItemsAmount()), 10).build());
+        content.setWidget(row, 1, new DecoratorBuilder(inject(proto().rejectItemsFee()), 10).build());
+
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().rejectItemsCount()), 10).build());
+
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().returnItemsAmount()), 10).build());
+        content.setWidget(row, 1, new DecoratorBuilder(inject(proto().returnItemsFee()), 10).build());
+
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().returnItemsCount()), 10).build());
+
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().netAmount()), 10).build());
+        content.setWidget(row, 1, new DecoratorBuilder(inject(proto().adjustments()), 10).build());
+
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().merchantBalance()), 10).build());
+        content.setWidget(row, 1, new DecoratorBuilder(inject(proto().fundsReleased()), 10).build());
+
+        content.setH1(++row, 0, 1, i18n.tr("Detail Debit Records"));
+        content.getFlexCellFormatter().setColSpan(row, 0, 2);
+
+        content.setWidget(++row, 0, inject(proto().records(), new DebitRecordFolder(isEditable())));
+        content.getFlexCellFormatter().setColSpan(row, 0, 2);
+
+        return new ScrollPanel(content);
     }
 }

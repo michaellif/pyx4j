@@ -58,7 +58,10 @@ public interface AggregatedTransfer extends IEntity {
 
     @NotNull
     @Format("#0.00")
-    IPrimitive<BigDecimal> amount();
+    IPrimitive<BigDecimal> grossPaymentAmount();
+
+    @Format("#0.00")
+    IPrimitive<BigDecimal> grossPaymentFee();
 
     IPrimitive<Integer> grossPaymentCount();
 
@@ -77,6 +80,18 @@ public interface AggregatedTransfer extends IEntity {
     IPrimitive<BigDecimal> returnItemsFee();
 
     IPrimitive<Integer> returnItemsCount();
+
+    @Format("#0.00")
+    IPrimitive<BigDecimal> netAmount();
+
+    @Format("#0.00")
+    IPrimitive<BigDecimal> adjustments();
+
+    @Format("#0.00")
+    IPrimitive<BigDecimal> merchantBalance();
+
+    @Format("#0.00")
+    IPrimitive<BigDecimal> fundsReleased();
 
     @Detached(level = AttachLevel.Detached)
     @JoinTable(value = PaymentRecord.class, mappedBy = PaidRejectedAggregatedTransferId.class)

@@ -40,7 +40,7 @@ public class MerchantTransactionForm extends CrmEntityForm<AggregatedTransfer> {
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().status()), 10).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().merchantAccount()), 20).build());
 
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().amount()), 10).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().grossPaymentAmount()), 10).build());
 
         FormFlexPanel amount = new FormFlexPanel();
         int row2 = -1;
