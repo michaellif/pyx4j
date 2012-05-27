@@ -53,6 +53,24 @@ public class BillingCycleManagerTest extends VistaDBTestBase {
         assertEquals("Billing Period End Date", FinancialTestsUtils.getDate("22-Apr-2012"), billingRun.billingPeriodEndDate().getValue());
         assertEquals("Billing Execution Target Date", FinancialTestsUtils.getDate("08-Mar-2012"), billingRun.executionTargetDate().getValue());
 
+        billingRun = createExistingLeaseInitialBillingRun(FinancialTestsUtils.getDate("23-Feb-2011"), FinancialTestsUtils.getDate("24-Mar-2012"), null, false);
+
+        assertEquals("Billing Period Start Date", FinancialTestsUtils.getDate("23-Mar-2012"), billingRun.billingPeriodStartDate().getValue());
+        assertEquals("Billing Period End Date", FinancialTestsUtils.getDate("22-Apr-2012"), billingRun.billingPeriodEndDate().getValue());
+        assertEquals("Billing Execution Target Date", FinancialTestsUtils.getDate("08-Mar-2012"), billingRun.executionTargetDate().getValue());
+
+        billingRun = createExistingLeaseInitialBillingRun(FinancialTestsUtils.getDate("23-Feb-2011"), FinancialTestsUtils.getDate("22-Mar-2012"), null, false);
+
+        assertEquals("Billing Period Start Date", FinancialTestsUtils.getDate("23-Feb-2012"), billingRun.billingPeriodStartDate().getValue());
+        assertEquals("Billing Period End Date", FinancialTestsUtils.getDate("22-Mar-2012"), billingRun.billingPeriodEndDate().getValue());
+        assertEquals("Billing Execution Target Date", FinancialTestsUtils.getDate("08-Feb-2012"), billingRun.executionTargetDate().getValue());
+
+        billingRun = createExistingLeaseInitialBillingRun(FinancialTestsUtils.getDate("23-Feb-2011"), FinancialTestsUtils.getDate("15-Mar-2012"), null, false);
+
+        assertEquals("Billing Period Start Date", FinancialTestsUtils.getDate("23-Feb-2012"), billingRun.billingPeriodStartDate().getValue());
+        assertEquals("Billing Period End Date", FinancialTestsUtils.getDate("22-Mar-2012"), billingRun.billingPeriodEndDate().getValue());
+        assertEquals("Billing Execution Target Date", FinancialTestsUtils.getDate("08-Feb-2012"), billingRun.executionTargetDate().getValue());
+
     }
 
     public void testFirstBillingRunForEndOfMonth() throws ParseException {
