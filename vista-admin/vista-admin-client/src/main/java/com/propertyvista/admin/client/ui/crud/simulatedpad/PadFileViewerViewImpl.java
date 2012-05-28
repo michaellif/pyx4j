@@ -11,7 +11,7 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.admin.client.ui.crud.padsimulation;
+package com.propertyvista.admin.client.ui.crud.simulatedpad;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;

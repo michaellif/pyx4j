@@ -34,11 +34,6 @@ import com.propertyvista.admin.client.activity.crud.maintenance.MaintenanceViewe
 import com.propertyvista.admin.client.activity.crud.onboardingusers.OnBoardingUserViewerActivity;
 import com.propertyvista.admin.client.activity.crud.onboardingusers.OnboardingUserEditorActivity;
 import com.propertyvista.admin.client.activity.crud.onboardingusers.OnboardingUserListerActivity;
-import com.propertyvista.admin.client.activity.crud.padsimulation.PadBatchEditorActivity;
-import com.propertyvista.admin.client.activity.crud.padsimulation.PadBatchViewerActivity;
-import com.propertyvista.admin.client.activity.crud.padsimulation.PadFileEditorActivity;
-import com.propertyvista.admin.client.activity.crud.padsimulation.PadFileListerActivity;
-import com.propertyvista.admin.client.activity.crud.padsimulation.PadFileViewerActivity;
 import com.propertyvista.admin.client.activity.crud.pmc.PmcEditorActivity;
 import com.propertyvista.admin.client.activity.crud.pmc.PmcListerActivity;
 import com.propertyvista.admin.client.activity.crud.pmc.PmcViewerActivity;
@@ -47,10 +42,15 @@ import com.propertyvista.admin.client.activity.crud.scheduler.RunViewerActivity;
 import com.propertyvista.admin.client.activity.crud.scheduler.TriggerEditorActivity;
 import com.propertyvista.admin.client.activity.crud.scheduler.TriggerListerActivity;
 import com.propertyvista.admin.client.activity.crud.scheduler.TriggerViewerActivity;
+import com.propertyvista.admin.client.activity.crud.simulateddatapreload.SimulatedDataPreloadActivity;
+import com.propertyvista.admin.client.activity.crud.simulatedpad.PadBatchEditorActivity;
+import com.propertyvista.admin.client.activity.crud.simulatedpad.PadBatchViewerActivity;
+import com.propertyvista.admin.client.activity.crud.simulatedpad.PadFileEditorActivity;
+import com.propertyvista.admin.client.activity.crud.simulatedpad.PadFileListerActivity;
+import com.propertyvista.admin.client.activity.crud.simulatedpad.PadFileViewerActivity;
+import com.propertyvista.admin.client.activity.crud.simulation.SimulationEditorActivity;
+import com.propertyvista.admin.client.activity.crud.simulation.SimulationViewerActivity;
 import com.propertyvista.admin.client.activity.security.PasswordChangeActivity;
-import com.propertyvista.admin.client.activity.simulateddatapreload.SimulatedDataPreloadActivity;
-import com.propertyvista.admin.client.activity.simulation.SimulationEditorActivity;
-import com.propertyvista.admin.client.activity.simulation.SimulationViewerActivity;
 import com.propertyvista.admin.rpc.AdminSiteMap;
 
 public class MainActivityMapper implements AppActivityMapper {

@@ -11,7 +11,7 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.admin.client.activity.crud.padsimulation;
+package com.propertyvista.admin.client.activity.crud.simulatedpad;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
@@ -25,7 +25,7 @@ import com.pyx4j.site.client.ui.crud.lister.IListerView.Presenter;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.admin.client.activity.crud.AdminViewerActivity;
-import com.propertyvista.admin.client.ui.crud.padsimulation.PadFileViewerView;
+import com.propertyvista.admin.client.ui.crud.simulatedpad.PadFileViewerView;
 import com.propertyvista.admin.client.viewfactories.crud.AdministrationVeiwFactory;
 import com.propertyvista.admin.domain.payment.pad.sim.PadSimBatch;
 import com.propertyvista.admin.domain.payment.pad.sim.PadSimFile;

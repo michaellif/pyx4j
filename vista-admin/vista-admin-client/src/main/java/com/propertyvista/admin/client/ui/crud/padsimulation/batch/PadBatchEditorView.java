@@ -19,4 +19,8 @@ import com.propertyvista.admin.domain.payment.pad.sim.PadSimBatch;
 
 public interface PadBatchEditorView extends IEditorView<PadSimBatch> {
 
+    interface Presenter extends IEditorView.Presenter {
+
+        void calculate();
+    }
 }

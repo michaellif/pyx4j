@@ -11,7 +11,7 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.admin.client.activity.crud.padsimulation;
+package com.propertyvista.admin.client.activity.crud.simulatedpad;
 
 import com.google.gwt.core.client.GWT;
 
@@ -24,11 +24,16 @@ import com.propertyvista.admin.client.viewfactories.crud.AdministrationVeiwFacto
 import com.propertyvista.admin.domain.payment.pad.sim.PadSimBatch;
 import com.propertyvista.admin.rpc.services.sim.PadSimBatchCrudService;
 
-public class PadBatchEditorActivity extends EditorActivityBase<PadSimBatch> {
+public class PadBatchEditorActivity extends EditorActivityBase<PadSimBatch> implements PadBatchEditorView.Presenter {
 
     @SuppressWarnings("unchecked")
     public PadBatchEditorActivity(CrudAppPlace place) {
         super(place, AdministrationVeiwFactory.instance(PadBatchEditorView.class), (AbstractCrudService<PadSimBatch>) GWT.create(PadSimBatchCrudService.class),
                 PadSimBatch.class);
+    }
+
+    @Override
+    public void calculate() {
+        // TODO Auto-generated method stub
     }
 }

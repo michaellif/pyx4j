@@ -15,7 +15,7 @@ package com.propertyvista.admin.client.ui.crud.simulateddatapreload;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.propertyvista.admin.client.activity.simulateddatapreload.SimulatedDataPreloadActivity;
+import com.propertyvista.admin.client.activity.crud.simulateddatapreload.SimulatedDataPreloadActivity;
 
 public interface SimulatedDataPreloadView extends IsWidget {
 

@@ -22,7 +22,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.widgets.client.Button;
 
-import com.propertyvista.admin.client.activity.simulateddatapreload.SimulatedDataPreloadActivity;
+import com.propertyvista.admin.client.activity.crud.simulateddatapreload.SimulatedDataPreloadActivity;
 
 public class SimulatedDataPreloadViewImpl implements SimulatedDataPreloadView {
 

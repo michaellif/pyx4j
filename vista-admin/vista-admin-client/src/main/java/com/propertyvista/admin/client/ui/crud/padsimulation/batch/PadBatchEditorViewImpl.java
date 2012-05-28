@@ -13,14 +13,29 @@
  */
 package com.propertyvista.admin.client.ui.crud.padsimulation.batch;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+
+import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.Button;
+
 import com.propertyvista.admin.client.ui.crud.AdminEditorViewImplBase;
 import com.propertyvista.admin.domain.payment.pad.sim.PadSimBatch;
 import com.propertyvista.admin.rpc.AdminSiteMap;
 
 public class PadBatchEditorViewImpl extends AdminEditorViewImplBase<PadSimBatch> implements PadBatchEditorView {
 
+    private static final I18n i18n = I18n.get(PadBatchEditorViewImpl.class);
+
     public PadBatchEditorViewImpl() {
         super(AdminSiteMap.Administration.PadSimulation.PadSimBatch.class, new PadBatchForm());
-    }
 
+        Button calculateAction = new Button(i18n.tr("Calculate Fields"), new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                ((PadBatchEditorView.Presenter) getPresenter()).calculate();
+            }
+        });
+        addHeaderToolbarTwoItem(calculateAction.asWidget());
+    }
 }

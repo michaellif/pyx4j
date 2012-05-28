@@ -7,21 +7,20 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-25
+ * Created on 2011-05-09
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.admin.client.ui.crud.padsimulation;
+package com.propertyvista.admin.client.ui.crud.simulatedpad;
 
-import com.propertyvista.admin.client.ui.crud.AdminEditorViewImplBase;
+import com.pyx4j.site.client.ui.crud.lister.IListerView;
+
 import com.propertyvista.admin.domain.payment.pad.sim.PadSimFile;
-import com.propertyvista.admin.rpc.AdminSiteMap;
 
-public class PadFileEditorViewImpl extends AdminEditorViewImplBase<PadSimFile> implements PadFileEditorView {
+public interface PadFileListerView extends IListerView<PadSimFile> {
 
-    public PadFileEditorViewImpl() {
-        super(AdminSiteMap.Administration.PadSimulation.PadSimFile.class);
-        setForm(new PadFileForm());
+    interface Presenter extends IListerView.Presenter<PadSimFile> {
+
+        void loadPadFile();
     }
-
 }

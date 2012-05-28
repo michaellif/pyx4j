@@ -11,23 +11,24 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.admin.client.activity.crud.padsimulation;
+package com.propertyvista.admin.client.activity.crud.simulatedpad;
 
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
-import com.propertyvista.admin.client.activity.crud.AdminViewerActivity;
-import com.propertyvista.admin.client.ui.crud.padsimulation.batch.PadBatchViewerView;
+import com.propertyvista.admin.client.ui.crud.simulatedpad.PadFileEditorView;
 import com.propertyvista.admin.client.viewfactories.crud.AdministrationVeiwFactory;
-import com.propertyvista.admin.domain.payment.pad.sim.PadSimBatch;
-import com.propertyvista.admin.rpc.services.sim.PadSimBatchCrudService;
+import com.propertyvista.admin.domain.payment.pad.sim.PadSimFile;
+import com.propertyvista.admin.rpc.services.sim.PadSimFileCrudService;
 
-public class PadBatchViewerActivity extends AdminViewerActivity<PadSimBatch> implements PadBatchViewerView.Presenter {
+public class PadFileEditorActivity extends EditorActivityBase<PadSimFile> {
 
     @SuppressWarnings("unchecked")
-    public PadBatchViewerActivity(CrudAppPlace place) {
-        super(place, AdministrationVeiwFactory.instance(PadBatchViewerView.class), (AbstractCrudService<PadSimBatch>) GWT.create(PadSimBatchCrudService.class));
+    public PadFileEditorActivity(CrudAppPlace place) {
+        super(place, AdministrationVeiwFactory.instance(PadFileEditorView.class), (AbstractCrudService<PadSimFile>) GWT.create(PadSimFileCrudService.class),
+                PadSimFile.class);
     }
 }

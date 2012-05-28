@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.admin.client.activity.simulateddatapreload;
+package com.propertyvista.admin.client.activity.crud.simulateddatapreload;
 
 import java.util.Vector;
 

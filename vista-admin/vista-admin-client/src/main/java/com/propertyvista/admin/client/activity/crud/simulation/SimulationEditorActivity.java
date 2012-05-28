@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.admin.client.activity.simulation;
+package com.propertyvista.admin.client.activity.crud.simulation;
 
 import com.google.gwt.core.client.GWT;
 
