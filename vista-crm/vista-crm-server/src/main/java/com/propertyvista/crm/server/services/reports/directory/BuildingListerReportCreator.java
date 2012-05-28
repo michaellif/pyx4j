@@ -20,12 +20,15 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.EntitySearchResult;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.crm.rpc.services.building.BuildingCrudService;
 import com.propertyvista.crm.server.services.building.BuildingCrudServiceImpl;
 import com.propertyvista.crm.server.services.reports.AbstractGadgetReportModelCreator;
+import com.propertyvista.crm.server.services.reports.util.ReportTableTemplateBuilder;
 import com.propertyvista.domain.dashboard.gadgets.ColumnDescriptorEntity;
 import com.propertyvista.domain.dashboard.gadgets.type.BuildingLister;
 import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
@@ -33,13 +36,17 @@ import com.propertyvista.dto.BuildingDTO;
 
 public class BuildingListerReportCreator extends AbstractGadgetReportModelCreator<BuildingLister> {
 
+    private final static I18n i18n = I18n.get(BuildingListerReportCreator.class);
+
+    private BuildingLister listerMetadata;
+
     public BuildingListerReportCreator() {
         super(BuildingLister.class);
     }
 
     @Override
     protected void convert(final AsyncCallback<ConvertedGadgetMetadata> callback, GadgetMetadata gadgetMetadata, List<Key> selectedBuildings) {
-        final BuildingLister lister = (BuildingLister) gadgetMetadata;
+        listerMetadata = (BuildingLister) gadgetMetadata;
 
         BuildingCrudService service = new BuildingCrudServiceImpl();
 
@@ -51,13 +58,15 @@ public class BuildingListerReportCreator extends AbstractGadgetReportModelCreato
                 // Create map of column properties to names
                 // for columns that appear in the report
                 HashMap<String, String> columns = new HashMap<String, String>();
-                for (ColumnDescriptorEntity column : lister.columnDescriptors()) {
+                for (ColumnDescriptorEntity column : listerMetadata.columnDescriptors()) {
                     if (column.visiblily().getValue())
                         columns.put(column.propertyPath().getValue(), column.title().getValue());
                 }
 
                 HashMap<String, Object> parameters = new HashMap<String, Object>();
                 parameters.put("COLUMNS", columns);
+                parameters.put("TITLE", i18n.tr("Buildings"));
+
                 callback.onSuccess(new ConvertedGadgetMetadata(result.getData(), parameters));
             }
 
@@ -66,6 +75,16 @@ public class BuildingListerReportCreator extends AbstractGadgetReportModelCreato
                 callback.onFailure(arg0);
             }
         }, convertToCriteria(gadgetMetadata.duplicate(BuildingLister.class)));
+    }
+
+    @Override
+    protected String design() {
+        return new ReportTableTemplateBuilder(EntityFactory.create(BuildingDTO.class), listerMetadata).generateReportTemplate();
+    }
+
+    @Override
+    protected String designName() {
+        return "" + System.currentTimeMillis() + "-" + super.designName();
     }
 
     private EntityListCriteria<BuildingDTO> convertToCriteria(BuildingLister metadata) {

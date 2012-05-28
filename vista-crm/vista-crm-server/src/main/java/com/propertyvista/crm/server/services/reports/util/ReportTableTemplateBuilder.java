@@ -13,9 +13,12 @@
  */
 package com.propertyvista.crm.server.services.reports.util;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -25,11 +28,18 @@ import com.propertyvista.domain.dashboard.gadgets.ColumnDescriptorEntity;
 import com.propertyvista.domain.dashboard.gadgets.type.ListerGadgetBaseMetadata;
 
 /**
+ * This class knows to build templates (designs) for tabular reports that has columns that can hide themselves on demand;
+ * The created report will have two parameters:
+ * <ul>
+ * <li><b>COLUMNS</b> which is a <code>java.util.HashMap</code> of (propertyPath, columnName)</li> of the <i>visible</i> columns</li>
+ * <li><b>TITLE</b> which is a <code>java.lang.String</code> that holds the table title</li>
+ * </ul>
  * 
- * Warning: this is not THREAD SAFE!!!
- * 
+ * <b>WARNING:</b> Please keep in mind that this class not THREAD SAFE!!!
  */
 public class ReportTableTemplateBuilder {
+
+    private static final int DEFAULT_TABLE_WIDTH = 554;
 
     private final IEntity proto;
 
@@ -41,13 +51,11 @@ public class ReportTableTemplateBuilder {
 
     private int tableWidth;
 
-    private int identLevel = 0;
-
     private String identString;
 
-    public static void main(String[] argv) {
+    public LinkedList<String> elementStack;
 
-    }
+    public boolean isElementDefinitionInProgress = false;
 
     public ReportTableTemplateBuilder(IEntity proto, ListerGadgetBaseMetadata metadata) {
         this.proto = proto;
@@ -56,22 +64,63 @@ public class ReportTableTemplateBuilder {
 
     public String generateReportTemplate() {
         init();
+        build();
+        String generatedtemplate = template.toString();
 
-        return template.toString();
+        if (false) {
+            int lineNum = 0;
+            for (String line : generatedtemplate.split("\n")) {
+                System.out.print(++lineNum);
+                System.out.print(": ");
+                System.out.println(line);
+            }
+        }
+
+        return generatedtemplate;
     }
 
     private void init() {
         template = new StringBuilder();
-        identLevel = 0;
+        elementStack = new LinkedList<String>();
         identString = "";
+        tableWidth = DEFAULT_TABLE_WIDTH;
         initEvenColumnWidths();
+    }
 
-        genReportBegin();
-        genPropertiesDeclarations();
-        genStyles();
-        genSubStatasetSection();
-        genParametersSection();
-        genReportEnd();
+    private void build() {
+        //@formatter:off
+        elo("jasperReport")
+                .attr("xmlns", "http://jasperreports.sourceforge.net/jasperreports")
+                .attr("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance")
+                .attr("xsi:schemaLocation", "http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd")
+                .attr("name", "Property Vista Report")
+                .attr("whenNoDataType", "AllSectionsNoDetail")
+                .attr("pageWidth", "555")
+                .attr("pageHeight", "300")                
+                .attr("columnWidth", "555")
+                .attr("leftMargin", "0")
+                .attr("rightMargin", "0")
+                .attr("topMargin", "10")
+                .attr("bottomMargin", "10")
+                .add();
+        
+            addProperties();
+            addStyles();
+            addSubDtatasetDeclaration();
+            addParametersDeclaration();
+                        
+            addTitleSectionWithTable();
+            
+            // TODO not sure whether the following sections are mandatory
+            addPageHeader();
+            addColumnHeader();
+            addDetail();
+            addColumnFooter();
+            addPageFooter();
+            addSummary();
+            
+        elc("jasperReport");
+        //@formatter:on        
     }
 
     private void initEvenColumnWidths() {
@@ -85,122 +134,250 @@ public class ReportTableTemplateBuilder {
         for (ColumnDescriptorEntity columnDescriptor : metadata.columnDescriptors()) {
             columnWidths.put(columnDescriptor.propertyPath().getValue(), columnWidth);
         }
-        columnWidths.put(metadata.columnDescriptors().get(metadata.columnDescriptors().size() - 1).propertyPath().getValue(), tableWidth - columnWidth
-                * metadata.columnDescriptors().size());
+
+        // compensate for integer truncation for the last column
+        String lastColumnPath = metadata.columnDescriptors().get(metadata.columnDescriptors().size() - 1).propertyPath().getValue();
+        columnWidths.put(lastColumnPath, tableWidth - columnWidth * (metadata.columnDescriptors().size() - 1));
     }
 
-    private void genReportBegin() {
-        template.append("<jasperReport xmlns=\"http://jasperreports.sourceforge.net/jasperreports\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd\" name=\"Property Vista Report\" pageWidth=\"555\" pageHeight=\"300\" whenNoDataType=\"AllSectionsNoDetail\" columnWidth=\"555\" leftMargin=\"0\" rightMargin=\"0\" topMargin=\"10\" bottomMargin=\"10\">\n");
+    private void addProperties() {
+        el("property").attr("name", "ireport.zoom").attr("value", "1.0").add();
+        el("property").attr("name", "ireport.x").attr("value", "0").add();
+        el("property").attr("name", "ireport.y").attr("value", "0").add();
     }
 
-    private void genReportEnd() {
-        template.append("</jasperReport>\n");
-    }
-
-    private void genPropertiesDeclarations() {
-        template.append("<property name=\"ireport.zoom\" value=\"1.0\"/>").append("<property name=\"ireport.x\" value=\"0\"/>\n")
-                .append("<property name=\"ireport.y\" value=\"0\"/>\n");
-    }
-
-    private void genStyles() {
-        //@formatter:off
-        template
-        .append("<style name=\"table\">")
-            .append("<box>")
-                .append("<pen lineWidth=\"0.5\" lineColor=\"#FFFFFF\"/>")
-            .append("</box>")
-        .append("</style>")
+    private void addStyles() {//@formatter:off
+        elo("style").attr("name", "table").add();
+            elo("box").add();
+                el("pen").attr("lineWidth", "0.5").attr("lineColor", "#FFFFFF").add();
+            elc("box");
+        elc("style");
         
-        .append("<style name=\"table_TH\" style=\"table\" mode=\"Opaque\" forecolor=\"#FFFFF\" backcolor=\"#FFFFFF\">")
-            .append("<box>")
-                .append("<pen lineWidth=\"0.5\" lineColor=\"#000000\"/>")
-            .append("</box>")
-        .append("</style>")
+        elo("style")
+                .attr("name", "table_TH")
+                .attr("style", "table")
+                .attr("mode", "Opaque")
+                .attr("forecolor", "#FFFFFF")
+                .attr("backcolor", "#FFFFFF")
+                .add();
+            elo("box").add();
+                el("pen").attr("lineWidth", "0.5").attr("lineColor", "#000000").add();
+            elc("box");
+        elc("style");
         
-        .append("<style name=\"table_TD\" style=\"table\" mode=\"Opaque\" forecolor=\"#FFFFF\" backcolor=\"#FFFFFF\">")
-            .append("<box>")
-                .append("<pen lineWidth=\"0.5\" lineColor=\"#000000\"/>")
-             .append("</box>")
-        .append("</style>")
+        elo("style")
+                .attr("name", "table_TD")
+                .attr("style", "table")
+                .attr("mode", "Opaque")
+                .attr("forecolor", "#FFFFFF")
+                .attr("backcolor", "#FFFFFF")
+                .add();
+            elo("box").add();
+                el("pen").attr("lineWidth", "0.5").attr("lineColor", "#000000").add();
+            elc("box");
+        elc("style");
         
-        .append("<style name=\"table_text\" fontSize=\"6\"/>")
+        el("style").attr("name", "table_text").attr("fontSize", "6").add();
         
-        .append("<style name=\"table_TH_text\" style=\"table_text\" forecolor=\"#000000\"/>")
+        el("style").attr("name", "table_TH_text").attr("style", "table_text").attr("forecolor", "#000000").add();
         
-        .append("<style name=\"table_TD_text\" style=\"table_text\" forecolor=\"#000000\"/>");
-        //@formatter:on
+        el("style").attr("name", "table_TD_text").attr("style", "table_text").attr("forecolor", "#000000").add();
+        //@formatter:on        
     }
 
-    private void genSubStatasetSection() {
-        template.append("<subDataset name=\"Dataset\">\n");
-        template.append("<parameter name=\"COLUMNS\" class=\"java.util.HashMap\"/>\n");
-        for (String memberName : proto.getEntityMeta().getMemberNames()) {
-            generateFieldDeclaration(proto.getMember(memberName));
-        }
-        template.append("</subDataset>\n");
+    private void addSubDtatasetDeclaration() {//@formatter:off        
+        elo("subDataset").attr("name", "Dataset").add();
+            el("parameter").attr("name", "COLUMNS").attr("class", "java.util.HashMap").add();
+            for(String memberName: proto.getEntityMeta().getMemberNames()) {
+                addFieldDeclaration(proto.getMember(memberName));
+            }
+        elc("subStatSet");      
+    } //@formatter:on
+
+    private void addParametersDeclaration() {
+        el("parameter").attr("name", "COLUMNS").attr("class", "java.util.HashMap").add();
+        el("parameter").attr("name", "TITLE").attr("class", "java.lang.String").add();
     }
 
-    private void genParametersSection() {
-        append("<parameter name=\"COLUMNS\" class=\"java.util.HashMap\"/>");
-        append("<parameter name=\"TITLE\" class=\"java.lang.String\"/>");
-    }
+    private void addTitleSectionWithTable() {//@formatter:off
+        elo("title").add();
+            elo("band").attr("height", "100").attr("splitType", "Stretch").add();
+                elo("frame").add();
+                    el("reportElement").attr("x", "0").attr("y", "0").attr("width", "554").attr("height", "30").add();
+                    elo("box").add();
+                        el("pen").attr("lineWidth", "1.0").attr("lineStyle", "Solid").add();
+                    elc("box");
+                    elo("textField").add();
+                        el("reportElement").attr("x", "0").attr("y", "0").attr("width", "553").attr("height", "29").add();
+                        elo("textElement").attr("textAlignment", "Center").attr("verticalAlignment", "Middle").add();
+                            el("font").attr("size", "10").add();
+                        elc("textElement");
+                        elo("textFieldExpression").add();
+                            line("<![CDATA[$P{TITLE}]]>");
+                        elc("textFieldExpression");
+                    elc("textField");
+                elc("frame");
+                
+                elo("componentElement").add();
+                    el("reportElement").attr("key", "table").attr("x", "0").attr("y", "31").attr("width", "555").attr("height", "30").add();
+                    elo("jr:table")
+                            .attr("xmlns:jr", "http://jasperreports.sourceforge.net/jasperreports/components")
+                            .attr("xsi:schemaLocation", "http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd")
+                            .add();
+                        elo("datasetRun").attr("subDataset", "Dataset").add();
+                            elo("parametersMapExpression").add();
+                                line("<![CDATA[$P{REPORT_PARAMETERS_MAP}]]>");
+                            elc("parametersMapExpression");
+                            elo("dataSourceExpression").add();
+                                line("<![CDATA[((com.pyx4j.entity.report.JRIEntityCollectionDataSource)$P{REPORT_DATA_SOURCE}).cloneDataSource()]]>");
+                            elc("dataSourceExpression");
+                        elc("datasetRun");
+                                                
+                        appendColumns();
+                        
+                    elc("jr:table");
+                elc("componentElement");     
+                
+            elc("band");
+        elc("title");
+    } //@formatter:on
 
-    private void genTitleWithTableSection() {
-        //@formatter:off
-        appendI("<title>");            
-            appendI("<band height=\"100\" splitType=\"Stretch\">");                
-                appendI("<frame>");
-                                       
-                appendD("/<frame>");                
-            appendD("</band>");            
-        appendD("</title>");
-        //@formatter:on
-    }
+    private void addFieldDeclaration(IObject<?> member) {//@formatter:off
+        el("field")
+                .attr("name", member.getFieldName())
+                .attr("class", member.getValueClass().getName())
+                .add();
+    }//@formatter:on
 
-    private void generateFieldDeclaration(IObject<?> member) {
-        template.append("<field name =\"").append(member.getFieldName()).append("\" class=\"").append(member.getValueClass().getName()).append("\">")
-                .append('\n');
-    }
-
-    private void generateTableColumn(ColumnDescriptorEntity columnDescriptor) {
+    private void addTableColumnDeclaration(ColumnDescriptorEntity columnDescriptor) {
         String path = columnDescriptor.propertyPath().getValue();
         IObject<?> property = proto.getMember(new Path(path));
 
-        String columnValueExpression = columnValueExpression(property);
-        String columnWidthExpression = columnWidths.get(path).toString();
+        String columnWidth = columnWidths.get(path).toString();
         String columnSelectExpression = "$P{COLUMNS}.containsKey(\"" + path + "\")";
         String columnNameExpression = "$P{COLUMNS}.get(\"" + path + "\")";
+        String columnValueExpression = columnValueExpression(property);
         String patternExpression = patternExpression(property);
 
-        template.append("<jr:column width=\"").append(columnWidthExpression).append("\">");
-        template.append("<printWhenExpression><![CDATA[").append(columnSelectExpression).append("]]></printWhenExpression>");
-        template.append("<jr:columnHeader style=\"table_TH\" height=\"10\" rowSpan=\"1\">");
-        template.append("<textField isStretchWithOverflow=\"true\">");
-        template.append("<reportElement style=\"table_TH_text\" x=\"0\" y=\"0\" width=\"").append(columnWidthExpression).append("\" height=\"10\"/>");
-        template.append("<textElement markup=\"none\"/>");
-        template.append("<textFieldExpression><![CDATA[").append(columnNameExpression).append("]]></textFieldExpression>");
-        template.append("</textField>");
-        template.append("</jr:columnHeader>");
-        template.append("<jr:detailCell style=\"table_TD\" height=\"10\" rowSpan=\"1\">");
-        template.append("<textField isStretchWithOverflow=\"true\" isBlankWhenNull=\"true\"").append(patternExpression).append(">");
-        template.append("<reportElement style=\"table_TD_text\" x=\"0\" y=\"0\" width=\"").append(columnWidthExpression).append("\" height=\"10\"/>");
-        template.append("<textElement/>");
-        template.append("<textFieldExpression><![CDATA[").append(columnValueExpression).append("]]></textFieldExpression>");
-        template.append("</textField>");
-        template.append("</jr:detailCell>");
-        template.append("</jr:column>");
+        //@formatter:off
+        elo("jr:column").attr("width", columnWidth).add();
+            elo("printWhenExpression").add();
+                CDATA(columnSelectExpression);
+            elc("printWhenExpression");
+            
+            elo("jr:columnHeader").attr("style", "table_TH").attr("height", "10").attr("rowSpan", "1").add();
+                elo("textField").attr("isStretchWithOverflow", "true").add();                
+                    el("reportElement")
+                            .attr("style", "table_TH_text")
+                            .attr("x", "0")
+                            .attr("y", "0")
+                            .attr("width", columnWidth)
+                            .attr("height", "10")                            
+                            .add();
+                    el("textElement").attr("markup", "none").add();
+                    elo("textFieldExpression").add();                        
+                        CDATA(columnNameExpression);
+                    elc("textFieldExpression");
+                elc("textField");
+            elc("jr:columnHeader");
+            
+            elo("jr:detailCell").attr("style", "table_TD").attr("height", "10").attr("rowSpan", "1").add();
+                elo("textField")
+                        .attr("isStretchWithOverflow", "true")
+                        .attr("isBlankWhenNull", "true")
+                        .attr("pattern", patternExpression).add();
+                   
+                    el("reportElement")
+                            .attr("style", "table_TD_text")
+                            .attr("x", "0")
+                            .attr("y", "0")
+                            .attr("width", columnWidth)
+                            .attr("height", "10")
+                            .add();
+                    el("textElement").add();
+                    elo("textFieldExpression").add();
+                        CDATA(columnValueExpression);
+                    elc("textFieldExpression");
+                elc("textField");
+            elc("jr:detailCell");
+        elc("jr:column");
+    }//@formatter:on
+
+    private void addPageHeader() {//@formatter:off
+        elo("pageHeader").add();
+            el("band").attr("splitType", "Stretch").add();            
+        elc();
+    }//@formatter:on
+
+    private void addColumnHeader() {//@formatter:off
+        elo("columnHeader").add();
+            el("band").attr("splitType", "Stretch").add();            
+        elc();
+    }//@formatter:on
+
+    private void addDetail() {//@formatter:off
+        elo("detail").add();
+            el("band").attr("splitType", "Stretch").add();            
+        elc();
+    }//@formatter:on
+
+    private void addColumnFooter() {//@formatter:off
+        elo("columnFooter").add();
+            el("band").attr("splitType", "Stretch").add();            
+        elc();
+    }//@formatter:on
+
+    private void addPageFooter() {//@formatter:off
+        elo("pageFooter").add();
+            el("band").attr("splitType", "Stretch").add();            
+        elc();
+    }//@formatter:on
+
+    private void addSummary() {//@formatter:off
+        elo("summary").add();
+            el("band").attr("splitType", "Stretch").add();            
+        elc();
+    }//@formatter:on
+
+    private void appendColumns() {
+        for (ColumnDescriptorEntity columnDescriptor : metadata.columnDescriptors()) {
+            addTableColumnDeclaration(columnDescriptor);
+        }
     }
 
     private static String patternExpression(IObject<?> property) {
-        return "";
+        Class<?> clazz = property.getValueClass();
+        // TODO refactor in declarative style and use property @Format if possible 
+        if (BigDecimal.class.equals(clazz)) {
+            return "###0.00";
+
+        } else if (Double.class.equals(clazz)) {
+            return "###0.00";
+
+        } else if (LogicalDate.class.equals(clazz)) {
+            return "MM/dd/yyyy";
+
+        } else {
+            return null;
+        }
     }
 
     private static String columnValueExpression(IObject<?> property) {
-        String fieldName = property.getFieldName();
+        String path = property.getPath().toString();
+        String fieldName = path.substring(path.indexOf('/') + 1, path.lastIndexOf('/'));
         String[] splittedName = fieldName.split("/");
         boolean isSubProperty = splittedName.length > 1;
         String fieldIdenitfier = isSubProperty ? splittedName[0] : fieldName;
-        StringBuilder columnValueExpressionBuilder = new StringBuilder(fieldIdenitfier);
+        StringBuilder columnValueExpressionBuilder = new StringBuilder();
+
+        columnValueExpressionBuilder.append("$F{");
+        if (isSubProperty) {
+            columnValueExpressionBuilder.append(splittedName[0]);
+        } else {
+            columnValueExpressionBuilder.append(fieldIdenitfier);
+        }
+        columnValueExpressionBuilder.append("}");
+
         if (isSubProperty) {
             columnValueExpressionBuilder.append(".");
             for (int i = 1; i < splittedName.length; ++i) {
@@ -218,28 +395,92 @@ public class ReportTableTemplateBuilder {
         return columnValueExpressionBuilder.toString();
     }
 
-    private void append(String str) {
+    private void line(String str) {
         template.append(identString).append(str).append("\n");
     }
 
-    private void appendI(String str) {
-        append(str);
-        identInc();
-    }
-
-    private void appendD(String str) {
-        identDec();
-        append(str);
+    private void CDATA(String expression) {
+        line("<![CDATA[" + expression + "]]>");
     }
 
     private void identInc() {
-        identLevel += 1;
-
         identString = identString + "    ";
     }
 
     private void identDec() {
-        identLevel -= 1;
         identString = identString.substring(0, identString.length() - 4);
+    }
+
+    private ElementBuilder elo(String element) {
+        return new ElementBuilder(element, false);
+    }
+
+    private ElementBuilder el(String element) {
+        return new ElementBuilder(element, true);
+    }
+
+    private void elc() {
+        if (ReportTableTemplateBuilder.this.isElementDefinitionInProgress) {
+            throw new IllegalStateException(
+                    "attempting to close element definition before finishing element openning: please end previous definition with 'add()'");
+        }
+        String element = ReportTableTemplateBuilder.this.elementStack.pop();
+        identDec();
+        line("</" + element + ">");
+    }
+
+    /** this is just for comment */
+    private void elc(String element) {
+        elc();
+    }
+
+    private class ElementBuilder {
+
+        private final StringBuffer element;
+
+        private final boolean isClosed;
+
+        public ElementBuilder(String element, boolean isClosed) {
+            if (ReportTableTemplateBuilder.this.isElementDefinitionInProgress) {
+                throw new IllegalStateException(
+                        "attempting to start new element definition before finishing another one: please end previous definition with 'add()'");
+            }
+            ReportTableTemplateBuilder.this.isElementDefinitionInProgress = true;
+
+            this.isClosed = isClosed;
+            this.element = new StringBuffer();
+            this.element.append("<").append(element);
+
+            if (!isClosed) {
+                ReportTableTemplateBuilder.this.elementStack.push(element);
+            }
+        }
+
+        /**
+         * add an attribute if <code>value != null</code>
+         * 
+         * @param attribute
+         * @param value
+         * @return
+         */
+        public ElementBuilder attr(String attribute, String value) {
+            if (value != null) {
+                element.append(" ").append(attribute).append("=\"").append(value).append("\"");
+            }
+            return this;
+        }
+
+        public void add() {
+            if (isClosed) {
+                element.append("/");
+            }
+            element.append(">");
+
+            ReportTableTemplateBuilder.this.line(element.toString());
+            if (!isClosed) {
+                identInc();
+            }
+            ReportTableTemplateBuilder.this.isElementDefinitionInProgress = false;
+        }
     }
 }

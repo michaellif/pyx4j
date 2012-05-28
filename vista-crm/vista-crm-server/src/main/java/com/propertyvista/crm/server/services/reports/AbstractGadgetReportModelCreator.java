@@ -27,9 +27,13 @@ import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
 
 public abstract class AbstractGadgetReportModelCreator<G extends GadgetMetadata> implements GadgetReportModelCreator {
 
-    private static final String REPORT_DESIGN_NAME_PREFIX = "reports";
+    private static final String REPORT_DESIGN_NAME_CLASSPATH_PREFIX = "reports";
 
     private final Class<G> gadgetMetadataClass;
+
+    public static String designName(Class<? extends GadgetMetadata> gadgetMetadataClass) {
+        return REPORT_DESIGN_NAME_CLASSPATH_PREFIX + "." + gadgetMetadataClass.getSimpleName();
+    }
 
     public AbstractGadgetReportModelCreator(Class<G> gadgetMetadataClass) {
         this.gadgetMetadataClass = gadgetMetadataClass;
@@ -42,7 +46,7 @@ public abstract class AbstractGadgetReportModelCreator<G extends GadgetMetadata>
      *            not <code>null</code>
      */
     @Override
-    public void createReportModel(final AsyncCallback<JasperReportModel> callback, GadgetMetadata gadgetMetadata, Vector<Key> selectedBuildings) {
+    public void createReportModel(final AsyncCallback<JasperReportModel> callback, final GadgetMetadata gadgetMetadata, Vector<Key> selectedBuildings) {
         if (canHandle(gadgetMetadata.getInstanceValueClass())) {
             convert(new AsyncCallback<AbstractGadgetReportModelCreator.ConvertedGadgetMetadata>() {
 
@@ -53,7 +57,7 @@ public abstract class AbstractGadgetReportModelCreator<G extends GadgetMetadata>
 
                 @Override
                 public void onSuccess(ConvertedGadgetMetadata reportData) {
-                    callback.onSuccess(new JasperReportModel(designName(gadgetMetadataClass), reportData.data, reportData.parameters));
+                    callback.onSuccess(new JasperReportModel(designName(), reportData.data, reportData.parameters, design()));
                 }
             }, gadgetMetadata, selectedBuildings);
         } else {
@@ -62,8 +66,12 @@ public abstract class AbstractGadgetReportModelCreator<G extends GadgetMetadata>
         }
     }
 
-    protected String designName(Class<? extends GadgetMetadata> gadgetMetadataClass) {
-        return REPORT_DESIGN_NAME_PREFIX + "." + gadgetMetadataClass.getSimpleName();
+    protected String design() {
+        return null;
+    }
+
+    protected String designName() {
+        return designName(gadgetMetadataClass);
     }
 
     public boolean canHandle(Class<? extends IEntity> class1) {
