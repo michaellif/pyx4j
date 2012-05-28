@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -68,23 +68,23 @@ public class BillForm extends CrmEntityForm<BillDTO> {
 
         main.setH1(++row, 0, 2, i18n.tr("Last Bill"));
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().balanceForwardAmount()), 10).build());
-        main.setWidget(++row, 0, inject(proto().paymentLineItems(), new InvoiceLineItemViewer()));
-        main.setWidget(++row, 0, inject(proto().depositRefundLineItems(), new InvoiceLineItemViewer()));
-        main.setWidget(++row, 0, inject(proto().immediateAccountAdjustmentLineItems(), new InvoiceLineItemViewer()));
+        main.setWidget(++row, 0, inject(proto().paymentLineItems(), new LineItemCollapsableViewer()));
+        main.setWidget(++row, 0, inject(proto().depositRefundLineItems(), new LineItemCollapsableViewer()));
+        main.setWidget(++row, 0, inject(proto().immediateAccountAdjustmentLineItems(), new LineItemCollapsableViewer()));
 
         main.setH1(++row, 0, 2, i18n.tr("Current Bill"));
         main.setWidget(++row, 0, inject(proto().serviceChargeLineItems(), new LineItemCollapsableViewer()));
-        main.setWidget(++row, 0, inject(proto().recurringFeatureChargeLineItems(), new InvoiceLineItemViewer()));
-        main.setWidget(++row, 0, inject(proto().onetimeFeatureChargeLineItems(), new InvoiceLineItemViewer()));
-        main.setWidget(++row, 0, inject(proto().pendingAccountAdjustmentLineItems(), new InvoiceLineItemViewer()));
+        main.setWidget(++row, 0, inject(proto().recurringFeatureChargeLineItems(), new LineItemCollapsableViewer()));
+        main.setWidget(++row, 0, inject(proto().onetimeFeatureChargeLineItems(), new LineItemCollapsableViewer()));
+        main.setWidget(++row, 0, inject(proto().pendingAccountAdjustmentLineItems(), new LineItemCollapsableViewer()));
 
-        main.setWidget(++row, 0, inject(proto().depositLineItems(), new InvoiceLineItemViewer()));
+        main.setWidget(++row, 0, inject(proto().depositLineItems(), new LineItemCollapsableViewer()));
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().productCreditAmount()), 10).build());
 
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().currentAmount()), 10).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().taxes()), 10).build());
 
-        // Dues: 
+        // Dues:
         main.setHR(++row, 0, 2);
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().totalDueAmount()), 10).build());
         main.setWidget(row, 1, new DecoratorBuilder(inject(proto().pastDueAmount()), 10).build());

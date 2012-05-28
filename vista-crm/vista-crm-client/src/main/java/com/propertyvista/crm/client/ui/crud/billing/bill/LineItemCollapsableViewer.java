@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -39,7 +39,7 @@ public class LineItemCollapsableViewer extends CEntityCollapsableViewer<InvoiceL
         FlexTable content = new FlexTable();
         // details
         content.setWidth("100%");
-        content.getElement().getStyle().setProperty("paddingLeft", "20px");
+//        content.getElement().getStyle().setProperty("paddingLeft", "20px");
         content.getColumnFormatter().setWidth(0, "20%");
         content.getColumnFormatter().setWidth(2, "20%");
         int row = 0;
@@ -84,7 +84,7 @@ public class LineItemCollapsableViewer extends CEntityCollapsableViewer<InvoiceL
         FlexTable content = new FlexTable();
         // details
         content.setWidth("100%");
-        content.getElement().getStyle().setProperty("paddingLeft", "20px");
+//        content.getElement().getStyle().setProperty("paddingLeft", "20px");
         content.getColumnFormatter().setWidth(0, "20%");
         content.getColumnFormatter().setWidth(2, "20%");
         int row = 0;
@@ -111,10 +111,12 @@ public class LineItemCollapsableViewer extends CEntityCollapsableViewer<InvoiceL
 
     private void addTotalRecord(FlexTable table, int row, String description, String amount) {
         HTML descHtml = new HTML(description);
-        descHtml.getElement().getStyle().setProperty("fontSize", "16px");
+        descHtml.getElement().getStyle().setProperty("fontSize", "12px");
+        descHtml.getElement().getStyle().setProperty("fontWeight", "bold");
         table.setWidget(row, 1, descHtml);
         HTML amountHtml = new HTML(amount);
         amountHtml.setStyleName(BillingTheme.StyleName.BillingDetailTotalAmount.name());
+        amountHtml.getElement().getStyle().setProperty("fontWeight", "bold");
         table.setWidget(row, 2, amountHtml);
         table.getRowFormatter().setStyleName(row, BillingTheme.StyleName.BillingDetailTotal.name());
     }
