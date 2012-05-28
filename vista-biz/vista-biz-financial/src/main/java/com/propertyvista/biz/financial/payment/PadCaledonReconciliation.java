@@ -30,7 +30,7 @@ class PadCaledonReconciliation {
         // TODO Match transaction?
 
         for (PadReconciliationSummary summary : reconciliationFile.batches()) {
-            Persistence.service().persist(summary);
+
         }
 
         Persistence.service().commit();
