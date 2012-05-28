@@ -18,6 +18,8 @@ import java.util.Date;
 import com.propertyvista.onboarding.example.model.AccountInfoResponse;
 import com.propertyvista.onboarding.example.model.CreateOnboardingUserRequest;
 import com.propertyvista.onboarding.example.model.CreatePMCRequest;
+import com.propertyvista.onboarding.example.model.OnboardingUserAuthenticationRequest;
+import com.propertyvista.onboarding.example.model.OnboardingUserAuthenticationResponse;
 import com.propertyvista.onboarding.example.model.RequestMessage;
 import com.propertyvista.onboarding.example.model.ReserveDnsNameRequest;
 import com.propertyvista.onboarding.example.model.ResponseMessage;
@@ -105,6 +107,39 @@ public class CreatePMCRun {
                     System.out.println("vistaCrmUrl : " + resp.vistaCrmUrl);
                     System.out.println("residentPortalUrl : " + resp.residentPortalUrl);
                     System.out.println("prospectPortalUrl : " + resp.prospectPortalUrl);
+                }
+            }
+        }
+
+        /**
+         * Authenticate using this user
+         */
+        OnboardingUserAuthenticationRequest authRequest = new OnboardingUserAuthenticationRequest();
+        {
+            authRequest.email = user.email;
+            authRequest.password = user.password;
+//            authRequest.captcha = new Captcha();
+//            authRequest.captcha.challenge = "123";
+//            authRequest.captcha.response = "rr";
+
+            RequestMessage rm = new RequestMessage();
+            rm.interfaceEntity = "rossul";
+            rm.interfaceEntityPassword = "secret";
+            rm.addRequest(authRequest);
+
+            ResponseMessage response = ExampleClient.execute(rm);
+
+            System.out.println("response Status   : " + response.status);
+            System.out.println("response Message  : " + response.errorMessage);
+
+            if (response.status == ResponseMessage.StatusCode.OK) {
+                System.out.println("echo requestId    : " + response.responses.get(0).requestId);
+                System.out.println("response Code     : " + response.responses.get(0).success);
+                System.out.println("response Message  : " + response.responses.get(0).errorMessage);
+                if (response.responses.get(0) instanceof OnboardingUserAuthenticationResponse) {
+                    OnboardingUserAuthenticationResponse authResponse = (OnboardingUserAuthenticationResponse) response.responses.get(0);
+                    System.out.println("Authentication status : " + authResponse.status);
+                    System.out.println("Onboarding Account Id : " + authResponse.onboardingAccountId);
                 }
             }
         }

@@ -13,9 +13,6 @@
  */
 package com.propertyvista.onboarding.example;
 
-import java.util.Date;
-
-import com.propertyvista.onboarding.example.model.CreateOnboardingUserRequest;
 import com.propertyvista.onboarding.example.model.OnboardingUserAuthenticationRequest;
 import com.propertyvista.onboarding.example.model.OnboardingUserAuthenticationResponse;
 import com.propertyvista.onboarding.example.model.RequestMessage;
@@ -28,38 +25,38 @@ public class OnboardingUserAuthenticationRun {
         /**
          * First create user
          */
-        CreateOnboardingUserRequest createRequest = new CreateOnboardingUserRequest();
-        createRequest.requestId = "OnboardingUserAuthenticationRun";
-        createRequest.name = "Bob " + new Date().toString();
-        createRequest.email = String.valueOf(System.currentTimeMillis()) + "@rossul.com";
-        createRequest.password = "pwd~" + String.valueOf(System.currentTimeMillis());
-        createRequest.onboardingAccountId = "acc" + System.nanoTime();
-
-        {
-            RequestMessage rm = new RequestMessage();
-            rm.interfaceEntity = "rossul";
-            rm.interfaceEntityPassword = "secret";
-            rm.addRequest(createRequest);
-
-            ResponseMessage response = ExampleClient.execute(rm);
-
-            System.out.println("response Status   : " + response.status);
-            System.out.println("response Message  : " + response.errorMessage);
-
-            if (response.status == ResponseMessage.StatusCode.OK) {
-                System.out.println("echo requestId    : " + response.responses.get(0).requestId);
-                System.out.println("response Code     : " + response.responses.get(0).success);
-                System.out.println("response Message  : " + response.responses.get(0).errorMessage);
-            }
-        }
+//        CreateOnboardingUserRequest createRequest = new CreateOnboardingUserRequest();
+//        createRequest.requestId = "OnboardingUserAuthenticationRun";
+//        createRequest.name = "Bob " + new Date().toString();
+//        createRequest.email = String.valueOf(System.currentTimeMillis()) + "@rossul.com";
+//        createRequest.password = "pwd~" + String.valueOf(System.currentTimeMillis());
+//        createRequest.onboardingAccountId = "acc" + System.nanoTime();
+//
+//        {
+//            RequestMessage rm = new RequestMessage();
+//            rm.interfaceEntity = "rossul";
+//            rm.interfaceEntityPassword = "secret";
+//            rm.addRequest(createRequest);
+//
+//            ResponseMessage response = ExampleClient.execute(rm);
+//
+//            System.out.println("response Status   : " + response.status);
+//            System.out.println("response Message  : " + response.errorMessage);
+//
+//            if (response.status == ResponseMessage.StatusCode.OK) {
+//                System.out.println("echo requestId    : " + response.responses.get(0).requestId);
+//                System.out.println("response Code     : " + response.responses.get(0).success);
+//                System.out.println("response Message  : " + response.responses.get(0).errorMessage);
+//            }
+//        }
 
         /**
          * Authenticate using this user
          */
         OnboardingUserAuthenticationRequest authRequest = new OnboardingUserAuthenticationRequest();
         {
-            authRequest.email = createRequest.email;
-            authRequest.password = createRequest.password;
+            authRequest.email = "1338167117750@test.com";//createRequest.email;
+            authRequest.password = "pwd~1338167117750";//createRequest.password;
 //            authRequest.captcha = new Captcha();
 //            authRequest.captcha.challenge = "123";
 //            authRequest.captcha.response = "rr";

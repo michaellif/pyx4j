@@ -28,14 +28,18 @@ import com.pyx4j.essentials.server.AbstractAntiBot;
 import com.pyx4j.essentials.server.EssentialsServerSideConfiguration;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 
+import com.propertyvista.admin.domain.pmc.Pmc;
+import com.propertyvista.admin.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.admin.domain.security.OnboardingUserCredential;
 import com.propertyvista.admin.server.onboarding.OnboardingXMLUtils;
 import com.propertyvista.admin.server.onboarding.rhf.AbstractRequestHandler;
 import com.propertyvista.domain.security.OnboardingUser;
+import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.onboarding.OnboardingUserAuthenticationRequestIO;
 import com.propertyvista.onboarding.OnboardingUserAuthenticationResponseIO;
 import com.propertyvista.onboarding.ResponseIO;
 import com.propertyvista.server.common.security.PasswordEncryptor;
+import com.propertyvista.server.domain.security.CrmUserCredential;
 
 public class OnboardingUserAuthenticationRequestHandler extends AbstractRequestHandler<OnboardingUserAuthenticationRequestIO> {
 
@@ -74,34 +78,90 @@ public class OnboardingUserAuthenticationRequestHandler extends AbstractRequestH
         if (cr == null) {
             throw new UserRuntimeException("Invalid User Account. Please Contact Support");
         }
+
         if (!cr.enabled().isBooleanTrue()) {
             response.status().setValue(OnboardingUserAuthenticationResponseIO.AuthenticationStatusCode.PermissionDenied);
             return response;
         }
-        if (!PasswordEncryptor.checkPassword(request.password().getValue(), cr.credential().getValue())) {
-            log.info("Invalid password for user {}", email);
-            if (AbstractAntiBot.authenticationFailed(email)) {
-                response.status().setValue(OnboardingUserAuthenticationResponseIO.AuthenticationStatusCode.ChallengeVerificationRequired);
-                response.reCaptchaPublicKey().setValue(((EssentialsServerSideConfiguration) ServerSideConfiguration.instance()).getReCaptchaPublicKey());
+
+        if (cr.pmc().getPrimaryKey() != null) {
+            Pmc pmc = Persistence.service().retrieve(Pmc.class, cr.pmc().getPrimaryKey());
+            response.onboardingAccountId().set(pmc.onboardingAccountId());
+
+            if (pmc.status().getValue() == PmcStatus.Active) {
+                EntityQueryCriteria<CrmUserCredential> crmUCrt = EntityQueryCriteria.create(CrmUserCredential.class);
+                crmUCrt.add(PropertyCriterion.eq(crmUCrt.proto().roles().$().behaviors(), VistaCrmBehavior.PropertyVistaAccountOwner));
+
+                CrmUserCredential crmCred = Persistence.service().retrieve(crmUCrt);
+
+                if (crmCred == null) {
+                    response.status().setValue(OnboardingUserAuthenticationResponseIO.AuthenticationStatusCode.PermissionDenied);
+                    return response;
+                }
+
+                if (!PasswordEncryptor.checkPassword(request.password().getValue(), crmCred.credential().getValue())) {
+                    response.status().setValue(OnboardingUserAuthenticationResponseIO.AuthenticationStatusCode.AuthenticationFailed);
+                    return response;
+                }
+
+                response.role().setValue(OnboardingXMLUtils.convertRole(cr.behavior().getValue()));
+                response.status().setValue(OnboardingUserAuthenticationResponseIO.AuthenticationStatusCode.OK);
                 return response;
             } else {
-                response.status().setValue(OnboardingUserAuthenticationResponseIO.AuthenticationStatusCode.AuthenticationFailed);
+                if (!PasswordEncryptor.checkPassword(request.password().getValue(), cr.credential().getValue())) {
+                    log.info("Invalid password for user {}", email);
+                    if (AbstractAntiBot.authenticationFailed(email)) {
+                        response.status().setValue(OnboardingUserAuthenticationResponseIO.AuthenticationStatusCode.ChallengeVerificationRequired);
+                        response.reCaptchaPublicKey()
+                                .setValue(((EssentialsServerSideConfiguration) ServerSideConfiguration.instance()).getReCaptchaPublicKey());
+                        return response;
+                    } else {
+                        response.status().setValue(OnboardingUserAuthenticationResponseIO.AuthenticationStatusCode.AuthenticationFailed);
+                        return response;
+                    }
+                }
+                if (!cr.accessKey().isNull()) {
+                    cr.accessKey().setValue(null);
+                    Persistence.service().persist(cr);
+                    Persistence.service().commit();
+                }
+                if (cr.requiredPasswordChangeOnNextLogIn().isBooleanTrue()) {
+                    response.status().setValue(OnboardingUserAuthenticationResponseIO.AuthenticationStatusCode.OK_PasswordChangeRequired);
+                    return response;
+                } else {
+                    response.role().setValue(OnboardingXMLUtils.convertRole(cr.behavior().getValue()));
+                    response.onboardingAccountId().set(pmc.onboardingAccountId());
+                    response.status().setValue(OnboardingUserAuthenticationResponseIO.AuthenticationStatusCode.OK);
+                    return response;
+                }
+            }
+
+        } else {
+            if (!PasswordEncryptor.checkPassword(request.password().getValue(), cr.credential().getValue())) {
+                log.info("Invalid password for user {}", email);
+                if (AbstractAntiBot.authenticationFailed(email)) {
+                    response.status().setValue(OnboardingUserAuthenticationResponseIO.AuthenticationStatusCode.ChallengeVerificationRequired);
+                    response.reCaptchaPublicKey().setValue(((EssentialsServerSideConfiguration) ServerSideConfiguration.instance()).getReCaptchaPublicKey());
+                    return response;
+                } else {
+                    response.status().setValue(OnboardingUserAuthenticationResponseIO.AuthenticationStatusCode.AuthenticationFailed);
+                    return response;
+                }
+            }
+            if (!cr.accessKey().isNull()) {
+                cr.accessKey().setValue(null);
+                Persistence.service().persist(cr);
+                Persistence.service().commit();
+            }
+            if (cr.requiredPasswordChangeOnNextLogIn().isBooleanTrue()) {
+                response.status().setValue(OnboardingUserAuthenticationResponseIO.AuthenticationStatusCode.OK_PasswordChangeRequired);
+                return response;
+            } else {
+                response.role().setValue(OnboardingXMLUtils.convertRole(cr.behavior().getValue()));
+                response.onboardingAccountId().set(cr.onboardingAccountId());
+                response.status().setValue(OnboardingUserAuthenticationResponseIO.AuthenticationStatusCode.OK);
                 return response;
             }
-        }
-        if (!cr.accessKey().isNull()) {
-            cr.accessKey().setValue(null);
-            Persistence.service().persist(cr);
-            Persistence.service().commit();
-        }
-        if (cr.requiredPasswordChangeOnNextLogIn().isBooleanTrue()) {
-            response.status().setValue(OnboardingUserAuthenticationResponseIO.AuthenticationStatusCode.OK_PasswordChangeRequired);
-            return response;
-        } else {
-            response.role().setValue(OnboardingXMLUtils.convertRole(cr.behavior().getValue()));
-            response.onboardingAccountId().set(cr.onboardingAccountId());
-            response.status().setValue(OnboardingUserAuthenticationResponseIO.AuthenticationStatusCode.OK);
-            return response;
         }
     }
 }

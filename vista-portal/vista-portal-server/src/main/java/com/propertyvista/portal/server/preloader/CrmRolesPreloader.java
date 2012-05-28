@@ -54,13 +54,27 @@ public class CrmRolesPreloader extends BaseVistaDevDataPreloader {
     public static CrmRole getDefaultRole() {
         EntityQueryCriteria<CrmRole> criteria = EntityQueryCriteria.create(CrmRole.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().name(), CrmRolesPreloader.DEFAULT_ACCESS_ALL_ROLE_NAME));
-        return Persistence.service().retrieve(criteria);
+        CrmRole role = Persistence.service().retrieve(criteria);
+        assert (role != null);
+        return role;
+
     }
 
     public static CrmRole getSupportRole() {
         EntityQueryCriteria<CrmRole> criteria = EntityQueryCriteria.create(CrmRole.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().name(), CrmRolesPreloader.DEFAULT_SUPPORT_ROLE_NAME));
-        return Persistence.service().retrieve(criteria);
+        CrmRole role = Persistence.service().retrieve(criteria);
+        assert (role != null);
+        return role;
+
+    }
+
+    public static CrmRole getPropertyVistaAccountOwnerRole() {
+        EntityQueryCriteria<CrmRole> criteria = EntityQueryCriteria.create(CrmRole.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().name(), VistaCrmBehavior.PropertyVistaAccountOwner.name()));
+        CrmRole role = Persistence.service().retrieve(criteria);
+        assert (role != null);
+        return role;
     }
 
     @Override
