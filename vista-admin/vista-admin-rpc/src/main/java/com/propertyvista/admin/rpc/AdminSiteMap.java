@@ -102,12 +102,10 @@ public class AdminSiteMap implements SiteMap {
 
         }
 
-        @PlaceProperties(caption = "PAD Simulation")
-        @NavigationItem(navigLabel = "PAD Simulations")
         public static class PadSimulation extends CrudAppPlace {
 
-            @PlaceProperties(caption = "PAD File")
-            @NavigationItem(navigLabel = "PAD Files")
+            @PlaceProperties(caption = "Simulated PAD")
+            @NavigationItem(navigLabel = "Simulated PAD")
             public static class PadSimFile extends CrudAppPlace {
             }
 
