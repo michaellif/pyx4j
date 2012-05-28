@@ -115,7 +115,6 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
 
     @Override
     public void activate(AsyncCallback<PmcDTO> callback, Key entityId) {
-        PmcDTO dto = null;
         Pmc pmc = Persistence.service().retrieve(entityClass, entityId);
 
         if (pmc.status().getValue() == PmcStatus.Created) // First time create preload
@@ -129,20 +128,15 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
             }
 
             OnboardingUserCredential onbUserCred = creds.get(0);
-            dto = createDTO(pmc);
-            OnboardingUser onbUser = Persistence.service().retrieve(OnboardingUser.class, onbUserCred.user().getPrimaryKey());
-            dto.email().setValue(onbUser.email().getValue());
-            dto.password().setValue(onbUserCred.credential().getValue());
 
-            dto.person().name().firstName().setValue(onbUser.firstName().getValue());
-            dto.person().name().lastName().setValue(onbUser.lastName().getValue());
+            OnboardingUser onbUser = Persistence.service().retrieve(OnboardingUser.class, onbUserCred.user().getPrimaryKey());
 
             try {
                 Persistence.service().startBackgroundProcessTransaction();
-                PmcCreator.preloadPmc(dto, onbUserCred, false);
+                PmcCreator.preloadPmc(pmc, onbUser, onbUserCred);
                 pmc.status().setValue(PmcStatus.Active);
-                dto.status().setValue(PmcStatus.Active);
                 Persistence.service().persist(pmc);
+                onbUserCred.behavior().setValue(VistaOnboardingBehavior.Client);
                 Persistence.service().persist(onbUserCred);
                 Persistence.service().commit();
             } finally {
@@ -152,12 +146,9 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
             pmc.status().setValue(PmcStatus.Active);
             Persistence.service().persist(pmc);
             Persistence.service().commit();
-            dto = createDTO(pmc);
         }
 
-        enhanceRetrieved(pmc, dto);
-
-        callback.onSuccess(dto);
+        super.retrieve(callback, entityId, RetrieveTraget.View);
     }
 
     @Override

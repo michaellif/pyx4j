@@ -89,7 +89,7 @@ public class OnboardingUserAuthenticationRequestHandler extends AbstractRequestH
             Pmc pmc = Persistence.service().retrieve(Pmc.class, cr.pmc().getPrimaryKey());
             response.onboardingAccountId().set(pmc.onboardingAccountId());
 
-            if (pmc.status().getValue() == PmcStatus.Active) {
+            if (pmc.status().getValue() != PmcStatus.Created) {
                 String curNameSpace = NamespaceManager.getNamespace();
 
                 try {
@@ -106,8 +106,15 @@ public class OnboardingUserAuthenticationRequestHandler extends AbstractRequestH
                     }
 
                     if (!PasswordEncryptor.checkPassword(request.password().getValue(), crmCred.credential().getValue())) {
-                        response.status().setValue(OnboardingUserAuthenticationResponseIO.AuthenticationStatusCode.AuthenticationFailed);
-                        return response;
+                        if (AbstractAntiBot.authenticationFailed(email)) {
+                            response.status().setValue(OnboardingUserAuthenticationResponseIO.AuthenticationStatusCode.ChallengeVerificationRequired);
+                            response.reCaptchaPublicKey().setValue(
+                                    ((EssentialsServerSideConfiguration) ServerSideConfiguration.instance()).getReCaptchaPublicKey());
+                            return response;
+                        } else {
+                            response.status().setValue(OnboardingUserAuthenticationResponseIO.AuthenticationStatusCode.AuthenticationFailed);
+                            return response;
+                        }
                     }
 
                     response.role().setValue(OnboardingXMLUtils.convertRole(cr.behavior().getValue()));

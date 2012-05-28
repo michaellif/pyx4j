@@ -19,7 +19,7 @@ import com.propertyvista.server.domain.security.CrmUserCredential;
 
 public class ManagedCrmUserServiceImpl extends VistaManagedPasswordChangeServiceImpl<CrmUserCredential> implements ManagedCrmUserService {
 
-    protected ManagedCrmUserServiceImpl() {
+    public ManagedCrmUserServiceImpl() {
         super(CrmUserCredential.class);
     }
 
