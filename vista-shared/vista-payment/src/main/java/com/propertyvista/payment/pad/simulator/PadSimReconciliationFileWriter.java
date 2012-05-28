@@ -36,16 +36,20 @@ public class PadSimReconciliationFileWriter implements Closeable {
 
     public void write() throws IOException {
         for (PadSimBatch padBatch : padFile.batches()) {
-            writeBatchRecord(padBatch);
-            for (PadSimDebitRecord record : padBatch.records()) {
-                writeDebitRecord(record);
+            if (padBatch.acknowledgmentStatusCode().isNull()) {
+                writeBatchRecord(padBatch);
+                for (PadSimDebitRecord record : padBatch.records()) {
+                    if (record.acknowledgmentStatusCode().isNull()) {
+                        writeDebitRecord(record);
+                    }
+                }
             }
         }
     }
 
     private void writeBatchRecord(PadSimBatch padBatch) throws IOException {
         // Record Type
-        writer.append("TBD1").append(",");
+        writer.append("SUMM").append(",");
         writer.append(padBatch.padFile().fileCreationDate().getStringView()).append(",");
         writer.append(padBatch.terminalId().getStringView()).append(",");
 
@@ -73,7 +77,7 @@ public class PadSimReconciliationFileWriter implements Closeable {
 
     private void writeDebitRecord(PadSimDebitRecord record) throws IOException {
         // Record Type
-        writer.append("TBD2").append(",");
+        writer.append("TDTL").append(",");
         writer.append(record.paymentDate().getStringView()).append(",");
         writer.append(record.padBatch().terminalId().getStringView()).append(",");
         writer.append(record.clientId().getStringView()).append(",");

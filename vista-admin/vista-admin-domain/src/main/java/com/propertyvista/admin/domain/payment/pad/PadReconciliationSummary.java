@@ -29,6 +29,7 @@ import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
+import com.propertyvista.admin.domain.pmc.OboardingMerchantAccount;
 import com.propertyvista.domain.VistaNamespace;
 
 @Table(namespace = VistaNamespace.adminNamespace)
@@ -46,6 +47,9 @@ public interface PadReconciliationSummary extends IEntity {
     IPrimitive<LogicalDate> paymentDate();
 
     IPrimitive<String> merchantTerminalId();
+
+    // found based on merchantTerminalId
+    OboardingMerchantAccount merchantAccount();
 
     IPrimitive<MerchantReconciliationStatus> reconciliationStatus();
 

@@ -24,7 +24,7 @@ import com.pyx4j.i18n.annotations.I18n;
 @Transient
 public interface PadAkBatch extends IEntity {
 
-    @Length(3)
+    @Length(6)
     @NotNull
     IPrimitive<String> batchId();
 

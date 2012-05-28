@@ -19,5 +19,7 @@ public enum TransactionReconciliationStatus {
 
     RETURNED,
 
-    REJECTED;
+    REJECTED,
+
+    DUPLICATE;
 }

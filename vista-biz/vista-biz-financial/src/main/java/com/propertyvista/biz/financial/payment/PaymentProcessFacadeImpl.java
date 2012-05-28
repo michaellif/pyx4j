@@ -25,6 +25,7 @@ import com.propertyvista.admin.domain.payment.pad.PadBatch;
 import com.propertyvista.admin.domain.payment.pad.PadDebitRecord;
 import com.propertyvista.admin.domain.payment.pad.PadFile;
 import com.propertyvista.admin.domain.payment.pad.PadReconciliationFile;
+import com.propertyvista.admin.domain.payment.pad.PadReconciliationSummary;
 import com.propertyvista.server.jobs.TaskRunner;
 
 public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
@@ -84,13 +85,23 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
 
     @Override
     public PadReconciliationFile recivePadReconciliation() {
-        // TODO Auto-generated method stub
-        return null;
+        return new PadCaledon().recivePadReconciliation();
     }
 
     @Override
-    public String processPadReconciliation(PadReconciliationFile reconciliationFile) {
-        // TODO Auto-generated method stub
+    public String processPadReconciliation(final PadReconciliationFile reconciliationFile) {
+        final String namespace = NamespaceManager.getNamespace();
+
+        List<PadReconciliationSummary> transactions = TaskRunner.runInAdminNamespace(new Callable<List<PadReconciliationSummary>>() {
+            @Override
+            public List<PadReconciliationSummary> call() throws Exception {
+                EntityQueryCriteria<PadReconciliationSummary> criteria = EntityQueryCriteria.create(PadReconciliationSummary.class);
+                criteria.add(PropertyCriterion.eq(criteria.proto().reconciliationFile(), reconciliationFile));
+                criteria.add(PropertyCriterion.eq(criteria.proto().merchantAccount().pmc().namespace(), namespace));
+                return Persistence.service().query(criteria);
+            }
+        });
+
         return null;
     }
 }

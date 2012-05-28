@@ -16,6 +16,7 @@ package com.propertyvista.payment.pad;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.LogicalDate;
@@ -45,6 +46,10 @@ public class CaledonPadUtils {
             BigDecimal money = new BigDecimal(valueDollars + "." + valueCents);
             return money.setScale(2);
         }
+    }
+
+    public static String formatDate(Date value) {
+        return new SimpleDateFormat("yyyyMMdd").format(value);
     }
 
     public static LogicalDate parsDate(String value) {

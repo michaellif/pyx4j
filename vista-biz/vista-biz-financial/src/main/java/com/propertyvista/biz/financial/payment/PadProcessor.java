@@ -28,6 +28,8 @@ import com.pyx4j.server.contexts.NamespaceManager;
 import com.propertyvista.admin.domain.payment.pad.PadBatch;
 import com.propertyvista.admin.domain.payment.pad.PadDebitRecord;
 import com.propertyvista.admin.domain.payment.pad.PadFile;
+import com.propertyvista.admin.domain.payment.pad.PadReconciliationDebitRecord;
+import com.propertyvista.admin.domain.payment.pad.PadReconciliationSummary;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.domain.financial.AggregatedTransfer;
@@ -173,6 +175,9 @@ public class PadProcessor {
 
         for (PadDebitRecord debitRecord : padBatch.records()) {
             PaymentRecord paymentRecord = Persistence.service().retrieve(PaymentRecord.class, new Key(debitRecord.transactionId().getValue()));
+            if (paymentRecord == null) {
+                throw new Error("Payment transaction '" + debitRecord.transactionId().getValue() + "' not found");
+            }
             if (!EnumSet.of(PaymentRecord.PaymentStatus.Processing, PaymentRecord.PaymentStatus.Received).contains(paymentRecord.paymentStatus().getValue())) {
                 throw new Error("Processed payment can't be rejected");
             }
@@ -180,5 +185,105 @@ public class PadProcessor {
             paymentRecord.aggregatedTransfer().set(at);
             Persistence.service().persist(paymentRecord);
         }
+    }
+
+    public void aggregatedTransferReconciliation(PadReconciliationSummary summary) {
+        AggregatedTransfer at = EntityFactory.create(AggregatedTransfer.class);
+        at.padReconciliationSummaryKey().setValue(summary.getPrimaryKey());
+        switch (summary.reconciliationStatus().getValue()) {
+        case HOLD:
+            at.status().setValue(AggregatedTransferStatus.Hold);
+            break;
+        case PAID:
+            at.status().setValue(AggregatedTransferStatus.Paid);
+            break;
+        }
+        at.paymentDate().setValue(summary.paymentDate().getValue());
+        at.grossPaymentAmount().setValue(summary.grossPaymentAmount().getValue());
+        at.grossPaymentFee().setValue(summary.grossPaymentFee().getValue());
+        at.grossPaymentCount().setValue(summary.grossPaymentCount().getValue());
+        at.rejectItemsAmount().setValue(summary.rejectItemsAmount().getValue());
+        at.rejectItemsFee().setValue(summary.rejectItemsFee().getValue());
+        at.rejectItemsCount().setValue(summary.rejectItemsCount().getValue());
+        at.returnItemsAmount().setValue(summary.returnItemsAmount().getValue());
+        at.returnItemsFee().setValue(summary.returnItemsFee().getValue());
+        at.returnItemsCount().setValue(summary.returnItemsCount().getValue());
+        at.netAmount().setValue(summary.netAmount().getValue());
+        at.adjustments().setValue(summary.adjustments().getValue());
+        at.merchantBalance().setValue(summary.merchantBalance().getValue());
+        at.fundsReleased().setValue(summary.fundsReleased().getValue());
+
+        Persistence.service().persist(at);
+
+        for (PadReconciliationDebitRecord debitRecord : summary.records()) {
+            PaymentRecord paymentRecord = Persistence.service().retrieve(PaymentRecord.class, new Key(debitRecord.transactionId().getValue()));
+            if (paymentRecord == null) {
+                throw new Error("Payment transaction '" + debitRecord.transactionId().getValue() + "' not found");
+            }
+            if (PaymentType.Echeck != paymentRecord.paymentMethod().type().getValue()) {
+                throw new IllegalArgumentException("Invalid PaymentMethod:" + paymentRecord.paymentMethod().type().getStringView());
+            }
+            if (debitRecord.amount().getValue().compareTo(paymentRecord.amount().getValue()) != 0) {
+                throw new Error("Unexpected transaction amount '" + paymentRecord.amount().getValue() + "', terminalId '"
+                        + debitRecord.merchantTerminalId().getValue() + "', transactionId " + debitRecord.transactionId().getValue());
+            }
+            switch (debitRecord.reconciliationStatus().getValue()) {
+            case PROCESSED:
+                reconciliationClearedPayment(at, debitRecord, paymentRecord);
+                break;
+            case REJECTED:
+                reconciliationRejectPayment(at, debitRecord, paymentRecord);
+                break;
+            case RETURNED:
+                reconciliationReturnedPayment(at, debitRecord, paymentRecord);
+                break;
+            case DUPLICATE:
+                // TODO What todo ?
+                reconciliationRejectPayment(at, debitRecord, paymentRecord);
+                break;
+            }
+
+        }
+    }
+
+    void reconciliationRejectPayment(AggregatedTransfer at, PadReconciliationDebitRecord debitRecord, PaymentRecord paymentRecord) {
+        if (!EnumSet.of(PaymentRecord.PaymentStatus.Processing, PaymentRecord.PaymentStatus.Received).contains(paymentRecord.paymentStatus().getValue())) {
+            throw new Error("Processed payment can't be rejected");
+        }
+        paymentRecord.aggregatedTransfer().set(at);
+
+        paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Rejected);
+        paymentRecord.lastStatusChangeDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
+        paymentRecord.finalizeDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
+
+        paymentRecord.transactionErrorMessage().setValue(debitRecord.reasonCode().getValue() + " " + debitRecord.reasonText().getValue());
+
+        Persistence.service().persist(paymentRecord);
+
+        ServerSideFactory.create(ARFacade.class).rejectPayment(paymentRecord, true);
+    }
+
+    void reconciliationClearedPayment(AggregatedTransfer at, PadReconciliationDebitRecord debitRecord, PaymentRecord paymentRecord) {
+        if (!EnumSet.of(PaymentRecord.PaymentStatus.Processing, PaymentRecord.PaymentStatus.Received).contains(paymentRecord.paymentStatus().getValue())) {
+            throw new Error("Processed payment can't be cleared");
+        }
+        paymentRecord.aggregatedTransfer().set(at);
+
+        paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Cleared);
+        paymentRecord.lastStatusChangeDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
+        paymentRecord.finalizeDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
+        Persistence.service().persist(paymentRecord);
+    }
+
+    void reconciliationReturnedPayment(AggregatedTransfer at, PadReconciliationDebitRecord debitRecord, PaymentRecord paymentRecord) {
+        if (!EnumSet.of(PaymentRecord.PaymentStatus.Cleared).contains(paymentRecord.paymentStatus().getValue())) {
+            throw new Error("Unprocessed payment can't be returned");
+        }
+        paymentRecord.aggregatedTransferReturn().set(at);
+        paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Returned);
+        paymentRecord.lastStatusChangeDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
+        paymentRecord.finalizeDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
+        Persistence.service().persist(paymentRecord);
+        ServerSideFactory.create(ARFacade.class).rejectPayment(paymentRecord, false);
     }
 }

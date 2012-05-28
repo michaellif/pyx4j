@@ -169,7 +169,7 @@ public class PadCaledon {
             sequence.number().setValue(0);
         }
         int id = sequence.number().getValue() + 1;
-        if (id == 9999) {
+        if (id == 999999) {
             id = 1;
         }
         sequence.number().setValue(id);

@@ -24,11 +24,14 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.log4j.LoggerConfig;
 
+import com.propertyvista.admin.domain.payment.pad.MerchantReconciliationStatus;
 import com.propertyvista.admin.domain.payment.pad.PadFile.FileAcknowledgmentStatus;
+import com.propertyvista.admin.domain.payment.pad.TransactionReconciliationStatus;
 import com.propertyvista.admin.domain.payment.pad.sim.PadSimBatch;
 import com.propertyvista.admin.domain.payment.pad.sim.PadSimDebitRecord;
 import com.propertyvista.admin.domain.payment.pad.sim.PadSimFile;
 import com.propertyvista.payment.pad.CaledonPadSftpClient;
+import com.propertyvista.payment.pad.CaledonPadUtils;
 import com.propertyvista.payment.pad.simulator.PadSimAcknowledgementFileWriter;
 import com.propertyvista.payment.pad.simulator.PadSimFileParser;
 import com.propertyvista.payment.pad.simulator.PadSimReconciliationFileWriter;
@@ -81,12 +84,7 @@ public class PadSim {
         return padFile;
     }
 
-    public void replyAcknowledgment(PadSimFile triggerStub) {
-        PadSimFile padFile = Persistence.service().retrieve(PadSimFile.class, triggerStub.getPrimaryKey());
-        padFile.status().setValue(PadSimFile.PadSimFileStatus.Acknowledged);
-        padFile.acknowledged().setValue(Persistence.service().getTransactionSystemTime());
-
-        Persistence.service().retrieveMember(padFile.batches());
+    private void updateAcknowledgments(PadSimFile padFile) {
         if (padFile.acknowledgmentStatusCode().isNull()) {
             boolean batchLevelReject = false;
             boolean transactionReject = false;
@@ -111,6 +109,15 @@ public class PadSim {
                 padFile.acknowledgmentStatusCode().setValue(FileAcknowledgmentStatus.Accepted.getStatusCode());
             }
         }
+    }
+
+    public void replyAcknowledgment(PadSimFile triggerStub) {
+        PadSimFile padFile = Persistence.service().retrieve(PadSimFile.class, triggerStub.getPrimaryKey());
+        padFile.status().setValue(PadSimFile.PadSimFileStatus.Acknowledged);
+        padFile.acknowledged().setValue(Persistence.service().getTransactionSystemTime());
+
+        Persistence.service().retrieveMember(padFile.batches());
+        updateAcknowledgments(padFile);
 
         File file = new File(getPadBaseDir(), padFile.fileName().getValue() + "_acknowledgement.csv");
         try {
@@ -134,12 +141,32 @@ public class PadSim {
         Persistence.service().commit();
     }
 
+    private void updateReconciliation(PadSimFile padFile) {
+        for (PadSimBatch padBatch : padFile.batches()) {
+            if (padBatch.reconciliationStatus().isNull()) {
+                for (PadSimDebitRecord record : padBatch.records()) {
+                    if (record.acknowledgmentStatusCode().isNull()) {
+                        if (record.paymentDate().isNull()) {
+                            record.paymentDate().setValue(CaledonPadUtils.formatDate(Persistence.service().getTransactionSystemTime()));
+                        }
+                        if (record.reconciliationStatus().isNull()) {
+                            record.reconciliationStatus().setValue(TransactionReconciliationStatus.PROCESSED);
+                        }
+                    }
+                }
+                padBatch.reconciliationStatus().setValue(MerchantReconciliationStatus.PAID);
+                Persistence.service().persist(padBatch);
+            }
+        }
+    }
+
     public void replyReconciliation(PadSimFile triggerStub) {
         PadSimFile padFile = Persistence.service().retrieve(PadSimFile.class, triggerStub.getPrimaryKey());
         Persistence.service().retrieveMember(padFile.batches());
 
         padFile.status().setValue(PadSimFile.PadSimFileStatus.ReconciliationSent);
         padFile.reconciliationSent().setValue(Persistence.service().getTransactionSystemTime());
+        updateReconciliation(padFile);
 
         File file = new File(getPadBaseDir(), padFile.fileName().getValue().replace(".", "_reconcil_rpt."));
         try {

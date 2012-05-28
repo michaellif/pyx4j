@@ -48,7 +48,7 @@ public class CaledonPadReconciliationParser {
 
             @Override
             public boolean onHeader(String[] headers) {
-                if (!headers[0].equals("TBD1")) {
+                if (!headers[0].equals("SUMM")) {
                     throw new Error("Wrong file header  '" + headers[0] + "' format");
                 }
                 parsSummary(headers);
@@ -57,10 +57,9 @@ public class CaledonPadReconciliationParser {
 
             @Override
             public void onRow(String[] values) {
-                if (values[0].equals("TBD1")) {
+                if (values[0].equals("SUMM")) {
                     parsSummary(values);
-                }
-                if (values[0].equals("TBD2")) {
+                } else if (values[0].equals("TDTL")) {
                     PadReconciliationDebitRecord record = EntityFactory.create(PadReconciliationDebitRecord.class);
                     int v = 1;
                     record.paymentDate().setValue(CaledonPadUtils.parsDate(values[v++]));
