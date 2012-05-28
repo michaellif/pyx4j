@@ -130,12 +130,12 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
 
             OnboardingUserCredential onbUserCred = creds.get(0);
             dto = createDTO(pmc);
-            OnboardingUser usr = Persistence.service().retrieve(OnboardingUser.class, onbUserCred.user().getPrimaryKey());
-            dto.email().setValue(usr.email().getValue());
+            OnboardingUser onbUser = Persistence.service().retrieve(OnboardingUser.class, onbUserCred.user().getPrimaryKey());
+            dto.email().setValue(onbUser.email().getValue());
             dto.password().setValue(onbUserCred.credential().getValue());
 
-            dto.person().name().firstName().setValue(usr.firstName().getValue());
-            dto.person().name().lastName().setValue(usr.lastName().getValue());
+            dto.person().name().firstName().setValue(onbUser.firstName().getValue());
+            dto.person().name().lastName().setValue(onbUser.lastName().getValue());
 
             try {
                 Persistence.service().startBackgroundProcessTransaction();

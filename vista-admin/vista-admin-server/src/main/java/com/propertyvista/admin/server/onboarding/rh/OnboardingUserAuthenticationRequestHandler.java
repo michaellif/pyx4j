@@ -27,6 +27,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.essentials.server.AbstractAntiBot;
 import com.pyx4j.essentials.server.EssentialsServerSideConfiguration;
 import com.pyx4j.rpc.shared.UserRuntimeException;
+import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.admin.domain.pmc.Pmc;
 import com.propertyvista.admin.domain.pmc.Pmc.PmcStatus;
@@ -89,24 +90,33 @@ public class OnboardingUserAuthenticationRequestHandler extends AbstractRequestH
             response.onboardingAccountId().set(pmc.onboardingAccountId());
 
             if (pmc.status().getValue() == PmcStatus.Active) {
-                EntityQueryCriteria<CrmUserCredential> crmUCrt = EntityQueryCriteria.create(CrmUserCredential.class);
-                crmUCrt.add(PropertyCriterion.eq(crmUCrt.proto().roles().$().behaviors(), VistaCrmBehavior.PropertyVistaAccountOwner));
+                String curNameSpace = NamespaceManager.getNamespace();
 
-                CrmUserCredential crmCred = Persistence.service().retrieve(crmUCrt);
+                try {
+                    NamespaceManager.setNamespace(pmc.namespace().getValue());
 
-                if (crmCred == null) {
-                    response.status().setValue(OnboardingUserAuthenticationResponseIO.AuthenticationStatusCode.PermissionDenied);
+                    EntityQueryCriteria<CrmUserCredential> crmUCrt = EntityQueryCriteria.create(CrmUserCredential.class);
+                    crmUCrt.add(PropertyCriterion.eq(crmUCrt.proto().roles().$().behaviors(), VistaCrmBehavior.PropertyVistaAccountOwner));
+                    crmUCrt.add(PropertyCriterion.eq(crmUCrt.proto().onboardingUser(), user.getPrimaryKey()));
+
+                    CrmUserCredential crmCred = Persistence.service().retrieve(crmUCrt);
+                    if (crmCred == null) {
+                        response.status().setValue(OnboardingUserAuthenticationResponseIO.AuthenticationStatusCode.PermissionDenied);
+                        return response;
+                    }
+
+                    if (!PasswordEncryptor.checkPassword(request.password().getValue(), crmCred.credential().getValue())) {
+                        response.status().setValue(OnboardingUserAuthenticationResponseIO.AuthenticationStatusCode.AuthenticationFailed);
+                        return response;
+                    }
+
+                    response.role().setValue(OnboardingXMLUtils.convertRole(cr.behavior().getValue()));
+                    response.status().setValue(OnboardingUserAuthenticationResponseIO.AuthenticationStatusCode.OK);
+
                     return response;
+                } finally {
+                    NamespaceManager.setNamespace(curNameSpace);
                 }
-
-                if (!PasswordEncryptor.checkPassword(request.password().getValue(), crmCred.credential().getValue())) {
-                    response.status().setValue(OnboardingUserAuthenticationResponseIO.AuthenticationStatusCode.AuthenticationFailed);
-                    return response;
-                }
-
-                response.role().setValue(OnboardingXMLUtils.convertRole(cr.behavior().getValue()));
-                response.status().setValue(OnboardingUserAuthenticationResponseIO.AuthenticationStatusCode.OK);
-                return response;
             } else {
                 if (!PasswordEncryptor.checkPassword(request.password().getValue(), cr.credential().getValue())) {
                     log.info("Invalid password for user {}", email);

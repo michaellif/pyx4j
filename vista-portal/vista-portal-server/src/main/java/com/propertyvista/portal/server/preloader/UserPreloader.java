@@ -27,6 +27,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
+import com.propertyvista.admin.domain.security.OnboardingUserCredential;
 import com.propertyvista.domain.DemoData;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.security.CrmRole;
@@ -102,7 +103,7 @@ public class UserPreloader extends BaseVistaDevDataPreloader {
     }
 
     public static CrmUser createCrmEmployee(String firstName, String lastName, String email, String password, boolean isOwner, boolean encryptPwd,
-            CrmRole... roles) {
+            OnboardingUserCredential onbUserCred, CrmRole... roles) {
         if (!ApplicationMode.isDevelopment()) {
             EntityQueryCriteria<CrmUser> criteria = EntityQueryCriteria.create(CrmUser.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().email(), email));
@@ -114,7 +115,7 @@ public class UserPreloader extends BaseVistaDevDataPreloader {
         }
         CrmUser user = EntityFactory.create(CrmUser.class);
 
-        user.name().setValue(firstName);
+        user.name().setValue(firstName + " " + firstName);
         user.email().setValue(email);
 
         Persistence.service().persist(user);
@@ -137,6 +138,9 @@ public class UserPreloader extends BaseVistaDevDataPreloader {
         credential.enabled().setValue(Boolean.TRUE);
         credential.accessAllBuildings().setValue(Boolean.TRUE);
         credential.roles().addAll(Arrays.asList(roles));
+
+        if (onbUserCred != null)
+            credential.onboardingUser().setValue(onbUserCred.user().getPrimaryKey());
 
         Persistence.service().persist(credential);
 
