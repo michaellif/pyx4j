@@ -92,6 +92,8 @@ public class UpdateBankAccountInfoRequestHandler extends AbstractRequestHandler<
 
                     Persistence.service().persist(macc);
                     acc.merchantAccountKey().setValue(macc.getPrimaryKey());
+                    // Newly created OboardingMerchantAccount assigned to this PMC.
+                    acc.pmc().set(pmc);
                 }
             } finally {
                 NamespaceManager.setNamespace(VistaNamespace.adminNamespace);

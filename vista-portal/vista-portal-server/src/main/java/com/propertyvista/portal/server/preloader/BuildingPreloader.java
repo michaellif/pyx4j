@@ -14,6 +14,7 @@ package com.propertyvista.portal.server.preloader;
 
 import java.util.List;
 import java.util.Vector;
+import java.util.concurrent.Callable;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,6 +34,8 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.essentials.server.preloader.DataGenerator;
 
+import com.propertyvista.admin.domain.pmc.OboardingMerchantAccount;
+import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.company.Portfolio;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.financial.BuildingMerchantAccount;
@@ -65,6 +68,7 @@ import com.propertyvista.server.common.reference.geo.GeoLocator.Mode;
 import com.propertyvista.server.common.reference.geo.SharedGeoLocator;
 import com.propertyvista.server.domain.FileBlob;
 import com.propertyvista.server.domain.ThumbnailBlob;
+import com.propertyvista.server.jobs.TaskRunner;
 
 public class BuildingPreloader extends BaseVistaDevDataPreloader {
 
@@ -133,6 +137,7 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
             merchantAccount.accountNumber().setValue("12345678");
             merchantAccount.chargeDescription().setValue("Pay for Vista2");
             Persistence.service().persist(merchantAccount);
+            createSsharedMerchantAccount(merchantAccount);
         }
 
         { // Tests
@@ -145,6 +150,7 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
             merchantAccount1.chargeDescription().setValue("Pay for Vista1");
 
             Persistence.service().persist(merchantAccount1);
+            createSsharedMerchantAccount(merchantAccount1);
         }
         { // Test to fail payments
             MerchantAccount merchantAccount1 = EntityFactory.create(MerchantAccount.class);
@@ -156,6 +162,7 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
             merchantAccount1.chargeDescription().setValue("Pay for Vista3");
 
             Persistence.service().persist(merchantAccount1);
+            createSsharedMerchantAccount(merchantAccount1);
         }
 
         // create some portfolios:
@@ -326,6 +333,24 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
         sb.append("Created ").append(buildings.size()).append(" buildings\n");
         sb.append("Created ").append(unitCount).append(" units");
         return sb.toString();
+    }
+
+    private void createSsharedMerchantAccount(MerchantAccount acc) {
+        final OboardingMerchantAccount macc = EntityFactory.create(OboardingMerchantAccount.class);
+        macc.bankId().setValue(acc.bankId().getValue());
+        macc.branchTransitNumber().setValue(acc.branchTransitNumber().getValue());
+        macc.accountNumber().setValue(acc.accountNumber().getValue());
+        macc.chargeDescription().setValue(acc.chargeDescription().getValue());
+        macc.merchantTerminalId().setValue(acc.merchantTerminalId().getValue());
+        macc.merchantAccountKey().setValue(acc.getPrimaryKey());
+        macc.pmc().set(VistaDeployment.getCurrentPmc());
+        TaskRunner.runInAdminNamespace(new Callable<Void>() {
+            @Override
+            public Void call() {
+                Persistence.service().persist(macc);
+                return null;
+            }
+        });
     }
 
     @Override
