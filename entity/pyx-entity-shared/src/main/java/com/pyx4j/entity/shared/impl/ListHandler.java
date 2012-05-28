@@ -256,6 +256,13 @@ public class ListHandler<TYPE extends IEntity> extends AbstractCollectionHandler
     }
 
     @Override
+    public void move(int originalIndex, int targetIndex) {
+        TYPE entity = get(originalIndex);
+        getValue().remove(originalIndex);
+        getValue().add(targetIndex, ensureTypedValue(entity));
+    }
+
+    @Override
     public TYPE remove(int index) {
         TYPE entity = get(index);
         getValue().remove(index);

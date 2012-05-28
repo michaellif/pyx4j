@@ -28,6 +28,11 @@ public interface IList<TYPE extends IEntity> extends ICollection<TYPE, List<Map<
     public void set(IList<TYPE> typedList);
 
     /**
+     * Move element to new position in list
+     */
+    void move(int originalIndex, int targetIndex);
+
+    /**
      * Returns the element contained in this list.
      * 
      * @param element

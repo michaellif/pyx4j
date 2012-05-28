@@ -246,11 +246,10 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
             return;
         }
 
-        getValue().remove(indexBefore);
+        getValue().move(indexBefore, indexAfter);
         itemsList.remove(indexBefore);
         container.remove(item);
 
-        getValue().add(indexAfter, item.getValue());
         itemsList.add(indexAfter, item);
         container.insert(item, indexAfter);
 
