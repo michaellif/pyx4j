@@ -31,6 +31,11 @@ import com.propertyvista.domain.VistaNamespace;
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 public interface PmcPaymentTypeInfo extends IEntity {
 
+    @ReadOnly
+    @Owner
+    @JoinColumn
+    Pmc pmc();
+
     IPrimitive<Boolean> ccPaymentAvailable();
 
     IPrimitive<BigDecimal> ccFee();
@@ -51,8 +56,4 @@ public interface PmcPaymentTypeInfo extends IEntity {
 
     IPrimitive<BigDecimal> interacVisaFee();
 
-    @ReadOnly
-    @Owner
-    @JoinColumn
-    Pmc pmc();
 }

@@ -37,7 +37,7 @@ import com.pyx4j.essentials.server.xml.XMLStringWriter;
 import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.server.contexts.NamespaceManager;
 
-import com.propertyvista.admin.domain.pmc.Pmc;
+import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.interfaces.importer.xml.ImportXMLEntityNamingConvention;
 import com.propertyvista.onboarding.RequestMessageIO;
 import com.propertyvista.onboarding.ResponseMessageIO;
@@ -83,7 +83,7 @@ public class OnboardingServiceServlet extends HttpServlet {
             IOUtils.closeQuietly(is);
         }
 
-        NamespaceManager.setNamespace(Pmc.adminNamespace);
+        NamespaceManager.setNamespace(VistaNamespace.adminNamespace);
         OnboardingProcessor pp;
         try {
             pp = new OnboardingProcessor();

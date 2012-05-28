@@ -16,6 +16,7 @@ package com.propertyvista.admin.domain.pmc;
 import java.util.Date;
 
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.Owned;
@@ -24,9 +25,11 @@ import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.VistaNamespace;
@@ -35,8 +38,6 @@ import com.propertyvista.domain.VistaNamespace;
 @Caption(name = "PMC")
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 public interface Pmc extends IEntity {
-
-    public static final String adminNamespace = VistaNamespace.adminNamespace;
 
     public enum PmcStatus {
         Created, Active, Suspended
@@ -64,9 +65,15 @@ public interface Pmc extends IEntity {
     IList<PmcDnsName> dnsNameAliases();
 
     @Owned
+    @Detached(level = AttachLevel.Detached)
     PmcEquifaxInfo equifaxInfo();
 
     @Owned
+    @Detached(level = AttachLevel.Detached)
+    ISet<OboardingMerchantAccount> merchantAccounts();
+
+    @Owned
+    @Detached(level = AttachLevel.Detached)
     PmcPaymentTypeInfo paymentTypeInfo();
 
     IPrimitive<String> onboardingAccountId();

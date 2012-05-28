@@ -51,6 +51,7 @@ import com.propertyvista.admin.domain.scheduler.RunStats;
 import com.propertyvista.admin.domain.scheduler.RunStatus;
 import com.propertyvista.admin.domain.scheduler.Trigger;
 import com.propertyvista.admin.domain.scheduler.TriggerPmc;
+import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.server.jobs.PmcProcess;
 import com.propertyvista.server.jobs.PmcProcessContext;
 import com.propertyvista.server.jobs.PmcProcessFactory;
@@ -74,7 +75,7 @@ public class PmcProcessDispatcherJob implements Job {
         }
         try {
             Lifecycle.startElevatedUserContext();
-            NamespaceManager.setNamespace(Pmc.adminNamespace);
+            NamespaceManager.setNamespace(VistaNamespace.adminNamespace);
             Persistence.service().startBackgroundProcessTransaction();
             Trigger process = Persistence.service().retrieve(Trigger.class, new Key(dataMap.getLong(JobData.triggerId.name())));
             log.info("starting {}", process.getStringView());

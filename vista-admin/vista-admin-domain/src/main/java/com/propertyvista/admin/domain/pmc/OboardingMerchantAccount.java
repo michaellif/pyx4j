@@ -13,20 +13,26 @@
  */
 package com.propertyvista.admin.domain.pmc;
 
-import com.pyx4j.entity.annotations.Length;
-import com.pyx4j.entity.annotations.RpcTransient;
+import com.pyx4j.commons.Key;
+import com.pyx4j.entity.annotations.JoinColumn;
+import com.pyx4j.entity.annotations.Owner;
+import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Table;
-import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.VistaNamespace;
+import com.propertyvista.domain.financial.AbstractMerchantAccount;
 
 @Table(prefix = "admin", namespace = VistaNamespace.adminNamespace)
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
-public interface OboardingMerchantAccount extends IEntity {
+public interface OboardingMerchantAccount extends AbstractMerchantAccount {
+
+    @ReadOnly
+    @Owner
+    @JoinColumn
+    Pmc pmc();
 
     @NotNull
     IPrimitive<String> onboardingAccountId();
@@ -34,20 +40,6 @@ public interface OboardingMerchantAccount extends IEntity {
     // aka external id for updates from onboarding
     IPrimitive<String> onboardingBankAccountId();
 
-    @Length(8)
-    @RpcTransient
-    IPrimitive<String> merchantTerminalId();
-
-    @Length(3)
-    @ToString
-    IPrimitive<String> bankId();
-
-    @Length(5)
-    @ToString
-    IPrimitive<String> branchTransitNumber();
-
-    @Length(12)
-    @ToString
-    IPrimitive<String> accountNumber();
+    IPrimitive<Key> merchantAccountKey();
 
 }

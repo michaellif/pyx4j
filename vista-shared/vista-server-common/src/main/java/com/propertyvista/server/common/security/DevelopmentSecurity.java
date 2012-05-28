@@ -20,8 +20,8 @@ import com.pyx4j.essentials.server.dev.DevSession;
 import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.admin.domain.dev.DevelopmentUser;
-import com.propertyvista.admin.domain.pmc.Pmc;
 import com.propertyvista.config.SystemConfig;
+import com.propertyvista.domain.VistaNamespace;
 
 public class DevelopmentSecurity {
 
@@ -59,7 +59,7 @@ public class DevelopmentSecurity {
     public static DevelopmentUser findDevelopmentUser() {
         final String requestNamespace = NamespaceManager.getNamespace();
         try {
-            NamespaceManager.setNamespace(Pmc.adminNamespace);
+            NamespaceManager.setNamespace(VistaNamespace.adminNamespace);
             DevelopmentUser developmentUser = findByHost();
             if (developmentUser != null) {
                 return developmentUser;

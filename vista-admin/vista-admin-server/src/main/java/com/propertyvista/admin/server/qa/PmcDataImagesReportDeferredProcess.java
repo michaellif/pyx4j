@@ -23,6 +23,7 @@ import com.pyx4j.essentials.server.report.SearchReportDeferredProcess;
 import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.admin.domain.pmc.Pmc;
+import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.domain.marketing.PublicVisibilityType;
 import com.propertyvista.domain.media.Media;
 import com.propertyvista.domain.property.asset.Floorplan;
@@ -39,7 +40,7 @@ public class PmcDataImagesReportDeferredProcess extends SearchReportDeferredProc
     @Override
     public void execute() {
         try {
-            NamespaceManager.setNamespace(Pmc.adminNamespace);
+            NamespaceManager.setNamespace(VistaNamespace.adminNamespace);
             super.execute();
         } finally {
             NamespaceManager.remove();
@@ -61,7 +62,7 @@ public class PmcDataImagesReportDeferredProcess extends SearchReportDeferredProc
             NamespaceManager.setNamespace(entity.namespace().getValue());
             exportPmcBuildings(entity);
         } finally {
-            NamespaceManager.setNamespace(Pmc.adminNamespace);
+            NamespaceManager.setNamespace(VistaNamespace.adminNamespace);
         }
     }
 

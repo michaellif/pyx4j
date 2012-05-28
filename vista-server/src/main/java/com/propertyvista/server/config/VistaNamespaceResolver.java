@@ -33,6 +33,7 @@ import com.pyx4j.server.contexts.NamespaceManager;
 import com.propertyvista.admin.domain.pmc.Pmc;
 import com.propertyvista.admin.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.domain.DemoData;
+import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 
 public class VistaNamespaceResolver implements NamespaceResolver {
@@ -56,7 +57,7 @@ public class VistaNamespaceResolver implements NamespaceResolver {
     public String getNamespace(HttpServletRequest httprequest) {
         if (httprequest.getServletPath() != null) {
             if ((httprequest.getServletPath().startsWith("/" + DeploymentConsts.ADMIN_URL) || httprequest.getServletPath().startsWith("/public/onboarding"))) {
-                return Pmc.adminNamespace;
+                return VistaNamespace.adminNamespace;
             }
             if (httprequest.getServletPath().startsWith("/public/schema") || httprequest.getServletPath().startsWith("/public/status")) {
                 return "_";
@@ -94,7 +95,7 @@ public class VistaNamespaceResolver implements NamespaceResolver {
 
         String pmcNamespace;
         try {
-            NamespaceManager.setNamespace(Pmc.adminNamespace);
+            NamespaceManager.setNamespace(VistaNamespace.adminNamespace);
             pmcNamespace = CacheService.get(host);
             if (pmcNamespace == null) {
                 EntityQueryCriteria<Pmc> criteria = EntityQueryCriteria.create(Pmc.class);
@@ -133,7 +134,7 @@ public class VistaNamespaceResolver implements NamespaceResolver {
 
         // Avoid Query for every request
         try {
-            NamespaceManager.setNamespace(Pmc.adminNamespace);
+            NamespaceManager.setNamespace(VistaNamespace.adminNamespace);
             CacheService.put(host, pmcNamespace);
         } finally {
             NamespaceManager.remove();

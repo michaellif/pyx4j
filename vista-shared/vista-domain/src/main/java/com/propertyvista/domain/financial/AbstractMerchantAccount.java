@@ -7,41 +7,44 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on May 2, 2012
- * @author igor
+ * Created on 2012-05-28
+ * @author vlads
  * @version $Id$
  */
-package com.propertyvista.onboarding;
+package com.propertyvista.domain.financial;
 
+import com.pyx4j.entity.annotations.AbstractEntity;
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Length;
-import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.annotations.validator.NotNull;
+import com.pyx4j.entity.annotations.RpcTransient;
+import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.i18n.annotations.I18n;
 
-@Transient
-@I18n(strategy = I18n.I18nStrategy.IgnoreAll)
-public interface BankAccountInfo extends IEntity {
-
-    @NotNull
-    IPrimitive<String> onboardingBankAccountId();
+@AbstractEntity
+public interface AbstractMerchantAccount extends IEntity {
 
     @Length(8)
-    IPrimitive<String> terminalId();
+    @RpcTransient
+    IPrimitive<String> merchantTerminalId();
 
     @Length(3)
-    @NotNull
+    @ToString
     IPrimitive<String> bankId();
 
     @Length(5)
-    @NotNull
+    @ToString
     IPrimitive<String> branchTransitNumber();
 
     @Length(12)
-    @NotNull
+    @ToString
     IPrimitive<String> accountNumber();
 
+    // filed editable by CRM
+    /**
+     * Caledon: Description to appear on client's statement. Typically a merchant's business name.
+     */
     @Length(60)
+    @Caption(description = "Description to appear on client's statement. Typically a merchant's business name.")
     IPrimitive<String> chargeDescription();
 }

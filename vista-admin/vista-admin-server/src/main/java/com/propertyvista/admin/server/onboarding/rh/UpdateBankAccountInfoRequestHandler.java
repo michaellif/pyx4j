@@ -13,10 +13,8 @@
  */
 package com.propertyvista.admin.server.onboarding.rh;
 
+import java.util.ArrayList;
 import java.util.List;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -24,16 +22,17 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.server.contexts.NamespaceManager;
 
+import com.propertyvista.admin.domain.pmc.OboardingMerchantAccount;
 import com.propertyvista.admin.domain.pmc.Pmc;
+import com.propertyvista.admin.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.admin.server.onboarding.rhf.AbstractRequestHandler;
+import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.onboarding.BankAccountInfo;
 import com.propertyvista.onboarding.ResponseIO;
 import com.propertyvista.onboarding.UpdateBankAccountInfoRequestIO;
 
 public class UpdateBankAccountInfoRequestHandler extends AbstractRequestHandler<UpdateBankAccountInfoRequestIO> {
-
-    private final static Logger log = LoggerFactory.getLogger(UpdateBankAccountInfoRequestHandler.class);
 
     public UpdateBankAccountInfoRequestHandler() {
         super(UpdateBankAccountInfoRequestIO.class);
@@ -42,62 +41,69 @@ public class UpdateBankAccountInfoRequestHandler extends AbstractRequestHandler<
     @Override
     public ResponseIO execute(UpdateBankAccountInfoRequestIO request) {
         ResponseIO response = EntityFactory.create(ResponseIO.class);
-        response.success().setValue(Boolean.TRUE);
 
-        EntityQueryCriteria<Pmc> crpmc = EntityQueryCriteria.create(Pmc.class);
-        crpmc.add(PropertyCriterion.eq(crpmc.proto().onboardingAccountId(), request.onboardingAccountId().getValue()));
-        List<Pmc> pmcs = Persistence.service().query(crpmc);
+        List<OboardingMerchantAccount> updatedAccount = new ArrayList<OboardingMerchantAccount>();
 
-        if (pmcs.size() != 1) {
-            log.debug("INp Pmc for onboarding accountid {} rs {}", request.onboardingAccountId().getValue(), pmcs.size());
-            response.success().setValue(Boolean.FALSE);
-
-            return response;
+        for (BankAccountInfo acc : request.accounts()) {
+            EntityQueryCriteria<OboardingMerchantAccount> crmerch = EntityQueryCriteria.create(OboardingMerchantAccount.class);
+            crmerch.add(PropertyCriterion.eq(crmerch.proto().onboardingAccountId(), request.onboardingAccountId().getValue()));
+            crmerch.add(PropertyCriterion.eq(crmerch.proto().onboardingBankAccountId(), acc.onboardingBankAccountId().getValue()));
+            OboardingMerchantAccount macc = Persistence.service().retrieve(crmerch);
+            if (macc == null) {
+                macc = EntityFactory.create(OboardingMerchantAccount.class);
+            }
+            macc.bankId().setValue(acc.bankId().getValue());
+            macc.branchTransitNumber().setValue(acc.branchTransitNumber().getValue());
+            macc.accountNumber().setValue(acc.accountNumber().getValue());
+            macc.chargeDescription().setValue(acc.chargeDescription().getValue());
+            macc.merchantTerminalId().setValue(acc.terminalId().getValue());
+            Persistence.service().persist(macc);
+            updatedAccount.add(macc);
         }
 
-        // Switch namespace.
-        Pmc pmc = pmcs.get(0);
-        // TODO See if PMC was activated e.g. namespace already exists, if not use table OboardingMerchantAccount
-        NamespaceManager.setNamespace(pmc.namespace().getValue());
-
-        try {
-            for (BankAccountInfo acc : request.accounts()) {
-
-                // Check if account exists already.
-                EntityQueryCriteria<MerchantAccount> crmerch = EntityQueryCriteria.create(MerchantAccount.class);
-                crmerch.add(PropertyCriterion.eq(crmerch.proto().onboardingBankAccountId(), acc.onboardingBankAccountId().getValue()));
-                List<MerchantAccount> accs = Persistence.service().query(crmerch);
-
-                MerchantAccount macc = null;
-                if (accs.size() != 1) {
-                    macc = EntityFactory.create(MerchantAccount.class);
+        // See if PMC is created, Then copy the same data to Pmc namespace
+        EntityQueryCriteria<Pmc> crpmc = EntityQueryCriteria.create(Pmc.class);
+        crpmc.add(PropertyCriterion.eq(crpmc.proto().onboardingAccountId(), request.onboardingAccountId().getValue()));
+        Pmc pmc = Persistence.service().retrieve(crpmc);
+        if ((pmc != null) && (pmc.status().getValue() != PmcStatus.Created)) {
+            List<OboardingMerchantAccount> merchantAccountKeyUpdated = new ArrayList<OboardingMerchantAccount>();
+            // Switch namespace.
+            NamespaceManager.setNamespace(pmc.namespace().getValue());
+            try {
+                for (OboardingMerchantAccount acc : updatedAccount) {
+                    // Check if account exists already.
+                    MerchantAccount macc;
+                    if (acc.merchantAccountKey().isNull()) {
+                        macc = EntityFactory.create(MerchantAccount.class);
+                        merchantAccountKeyUpdated.add(acc);
+                    } else {
+                        macc = Persistence.service().retrieve(MerchantAccount.class, acc.merchantAccountKey().getValue());
+                    }
 
                     macc.bankId().setValue(acc.bankId().getValue());
                     macc.branchTransitNumber().setValue(acc.branchTransitNumber().getValue());
                     macc.accountNumber().setValue(acc.accountNumber().getValue());
-                } else {
-                    macc = accs.get(0);
+
+                    if (macc.chargeDescription().getValue() == null) {
+                        macc.chargeDescription().setValue(pmc.name().getValue());
+                    }
+
+                    macc.merchantTerminalId().setValue(acc.merchantTerminalId().getValue());
+
+                    Persistence.service().persist(macc);
+                    acc.merchantAccountKey().setValue(macc.getPrimaryKey());
                 }
-
-                if (macc.chargeDescription().getValue() == null)
-                    macc.chargeDescription().setValue(pmc.name().getValue());
-
-                macc.merchantTerminalId().setValue(acc.terminalId().getValue());
-
-                Persistence.service().persist(macc);
+            } finally {
+                NamespaceManager.setNamespace(VistaNamespace.adminNamespace);
             }
 
-            Persistence.service().commit();
-
-            return response;
-        } catch (Throwable e) {
-            log.debug(e.getMessage());
-            Persistence.service().rollback();
-
-            response.success().setValue(Boolean.FALSE);
-
-            return response;
+            Persistence.service().persist(merchantAccountKeyUpdated);
         }
+
+        Persistence.service().commit();
+
+        response.success().setValue(Boolean.TRUE);
+        return response;
 
     }
 }

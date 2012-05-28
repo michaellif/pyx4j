@@ -31,6 +31,11 @@ import com.propertyvista.domain.VistaNamespace;
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 public interface PmcEquifaxInfo extends IEntity {
 
+    @ReadOnly
+    @Owner
+    @JoinColumn
+    Pmc pmc();
+
     @NotNull
     @Length(10)
     IPrimitive<String> customerNumber();
@@ -45,8 +50,4 @@ public interface PmcEquifaxInfo extends IEntity {
     @Length(12)
     IPrimitive<String> customerReferenceNumber();
 
-    @ReadOnly
-    @Owner
-    @JoinColumn
-    Pmc pmc();
 }

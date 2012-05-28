@@ -36,6 +36,7 @@ import com.pyx4j.server.contexts.NamespaceManager;
 import com.propertyvista.admin.domain.pmc.Pmc;
 import com.propertyvista.admin.rpc.PmcImportDTO;
 import com.propertyvista.admin.rpc.services.ImportUploadService;
+import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.interfaces.importer.BuildingImporter;
 import com.propertyvista.interfaces.importer.BuildingUpdater;
 import com.propertyvista.interfaces.importer.ImportCounters;
@@ -99,7 +100,7 @@ public class ImportUploadServiceImpl extends UploadServiceImpl<PmcImportDTO, IEn
             if (importDTO.id().isNull()) {
                 throw new Error();
             }
-            NamespaceManager.setNamespace(Pmc.adminNamespace);
+            NamespaceManager.setNamespace(VistaNamespace.adminNamespace);
             Pmc pmc = Persistence.service().retrieve(Pmc.class, importDTO.id().getValue());
             if (pmc == null) {
                 throw new Error("PMC Not found");

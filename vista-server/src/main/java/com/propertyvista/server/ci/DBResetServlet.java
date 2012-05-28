@@ -61,6 +61,7 @@ import com.propertyvista.admin.server.preloader.VistaAminDataPreloaders;
 import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.domain.DemoData.DemoPmc;
+import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.domain.security.VistaBasicBehavior;
 import com.propertyvista.misc.VistaDataPreloaderParameter;
 import com.propertyvista.misc.VistaDevPreloadConfig;
@@ -176,7 +177,7 @@ public class DBResetServlet extends HttpServlet {
                                 SchedulerHelper.shutdown();
                                 RDBUtils.resetDatabase();
                                 // Initialize Admin
-                                NamespaceManager.setNamespace(Pmc.adminNamespace);
+                                NamespaceManager.setNamespace(VistaNamespace.adminNamespace);
                                 try {
                                     RDBUtils.ensureNamespace();
                                     SchedulerHelper.dbReset();
@@ -225,7 +226,7 @@ public class DBResetServlet extends HttpServlet {
                                 }
                                 buf.append("\n--- PMC  '" + pmc + "' ---\n");
                                 RDBUtils.deleteFromAllEntityTables();
-                                NamespaceManager.setNamespace(Pmc.adminNamespace);
+                                NamespaceManager.setNamespace(VistaNamespace.adminNamespace);
                                 EntityQueryCriteria<Pmc> criteria = EntityQueryCriteria.create(Pmc.class);
                                 criteria.add(PropertyCriterion.eq(criteria.proto().namespace(), pmc));
                                 Persistence.service().delete(criteria);
@@ -289,7 +290,7 @@ public class DBResetServlet extends HttpServlet {
 
     private void preloadPmc(HttpServletRequest req, StringBuilder buf, String pmcName, ResetType type) {
         long pmcStart = System.currentTimeMillis();
-        NamespaceManager.setNamespace(Pmc.adminNamespace);
+        NamespaceManager.setNamespace(VistaNamespace.adminNamespace);
         EntityQueryCriteria<Pmc> criteria = EntityQueryCriteria.create(Pmc.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().dnsName(), pmcName));
         Persistence.service().delete(criteria);

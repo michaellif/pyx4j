@@ -34,6 +34,7 @@ import com.propertyvista.admin.domain.pmc.Pmc;
 import com.propertyvista.admin.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.admin.server.preloader.VistaAminDataPreloaders;
 import com.propertyvista.biz.communication.CommunicationFacade;
+import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.misc.VistaDataPreloaderParameter;
 import com.propertyvista.misc.VistaDevPreloadConfig;
 import com.propertyvista.server.config.VistaNamespaceResolver;
@@ -67,7 +68,7 @@ public class VistaDBReset {
             log.info("Generating new Data...");
             long start = System.currentTimeMillis();
 
-            NamespaceManager.setNamespace(Pmc.adminNamespace);
+            NamespaceManager.setNamespace(VistaNamespace.adminNamespace);
 
             if (((EntityPersistenceServiceRDB) Persistence.service()).getMultitenancyType() == MultitenancyType.SeparateSchemas) {
                 RDBUtils.ensureNamespace();

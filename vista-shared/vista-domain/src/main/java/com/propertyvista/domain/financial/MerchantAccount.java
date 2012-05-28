@@ -13,15 +13,10 @@
  */
 package com.propertyvista.domain.financial;
 
-import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.JoinTable;
-import com.pyx4j.entity.annotations.Length;
-import com.pyx4j.entity.annotations.RpcTransient;
-import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.AttachLevel;
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.i18n.annotations.I18n;
@@ -29,7 +24,7 @@ import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.property.asset.building.Building;
 
-public interface MerchantAccount extends IEntity {
+public interface MerchantAccount extends AbstractMerchantAccount {
 
     @I18n
     enum MerchantAccountStatus {
@@ -49,34 +44,6 @@ public interface MerchantAccount extends IEntity {
      */
     @Transient
     IPrimitive<MerchantAccountStatus> status();
-
-    // aka external id for updates from onboarding
-    IPrimitive<String> onboardingBankAccountId();
-
-    @Length(8)
-    @RpcTransient
-    IPrimitive<String> merchantTerminalId();
-
-    @Length(3)
-    @ToString
-    IPrimitive<String> bankId();
-
-    @Length(5)
-    @ToString
-    IPrimitive<String> branchTransitNumber();
-
-    @Length(12)
-    @ToString
-    IPrimitive<String> accountNumber();
-
-    // filed editable by CRM
-
-    /**
-     * Caledon: Description to appear on client's statement. Typically a merchant's business name.
-     */
-    @Length(60)
-    @Caption(description = "Description to appear on client's statement. Typically a merchant's business name.")
-    IPrimitive<String> chargeDescription();
 
     @JoinTable(value = BuildingMerchantAccount.class)
     @Detached(level = AttachLevel.Detached)

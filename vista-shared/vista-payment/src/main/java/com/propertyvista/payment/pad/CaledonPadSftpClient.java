@@ -41,6 +41,8 @@ public class CaledonPadSftpClient {
 
     private static final String hostProd = "apato.caledoncard.com";
 
+    private static final String hostTests = "dev.birchwoodsoftwaregroup.com";
+
     private final String postDst = "in";
 
     private final String getSrc = "out";
@@ -75,8 +77,7 @@ public class CaledonPadSftpClient {
 
     private static String sftpHost() {
         if (usePadSimulator()) {
-            return "209.47.15.97";
-            //return "dev.birchwoodsoftwaregroup.com";
+            return hostTests;
         } else {
             return hostProd;
         }
