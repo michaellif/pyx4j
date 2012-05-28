@@ -184,8 +184,10 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
 
         main.setH1(0, 0, 2, "Information");
         main.getFlexCellFormatter().setColSpan(0, 0, 2);
+
         main.setWidget(1, 0, left);
         main.setWidget(1, 1, right);
+        main.getFlexCellFormatter().setVerticalAlignment(1, 0, HasVerticalAlignment.ALIGN_TOP);
         main.getFlexCellFormatter().setVerticalAlignment(1, 1, HasVerticalAlignment.ALIGN_TOP);
 
         main.setWidget(2, 0, surveyPanel);

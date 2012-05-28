@@ -64,7 +64,6 @@ public class LeaseAdjustmentReasonDataModel {
     private void generateReason(Reason reason) {
         LeaseAdjustmentReason adjustmentReason = EntityFactory.create(LeaseAdjustmentReason.class);
         adjustmentReason.name().setValue(reason.getDescription());
-        adjustmentReason.precalculatedTax().setValue(true);
         adjustmentReason.actionType().setValue(reason.getActionType());
         reasons.put(reason, adjustmentReason);
     }

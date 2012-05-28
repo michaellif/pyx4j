@@ -44,7 +44,6 @@ public class LeaseAdjustmentReasonForm extends CrmEntityForm<LeaseAdjustmentReas
         int row = -1;
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 25).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().actionType()), 10).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().precalculatedTax())).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().glCode(), new CEntitySelectorHyperlink<GlCode>() {
             @Override
             protected AppPlace getTargetPlace() {

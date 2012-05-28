@@ -34,6 +34,7 @@ import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.Timestamp.Update;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -68,6 +69,17 @@ public interface LeaseAdjustment extends IEntity {
         }
     }
 
+    @I18n(context = "LeaseAdjustment TaxType")
+    @XmlType(name = "LeaseAdjustmentTaxType")
+    public enum TaxType {
+        percent, value;
+
+        @Override
+        public String toString() {
+            return I18nEnum.toString(this);
+        }
+    }
+
     @GeneratedValue(type = GeneratedValue.GenerationType.randomUUID)
     IPrimitive<String> uid();
 
@@ -91,12 +103,24 @@ public interface LeaseAdjustment extends IEntity {
     @NotNull
     @ToString(index = 1)
     @Format("#0.00")
+    @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> amount();
 
     @NotNull
     @ToString(index = 2)
     @Format("#0.00")
     IPrimitive<BigDecimal> tax();
+
+    @NotNull
+    IPrimitive<TaxType> taxType();
+
+    IPrimitive<Boolean> overwriteDefaultTax();
+
+    @Transient
+    @Caption(name = "Total")
+    @Format("#0.00")
+    @Editor(type = EditorType.money)
+    IPrimitive<BigDecimal> _total();
 
     @Editor(type = EditorType.textarea)
     IPrimitive<String> description();

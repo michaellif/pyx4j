@@ -157,11 +157,15 @@ public class UnitForm extends CrmEntityForm<AptUnitDTO> {
 
         // form main panel from those two:
         FormFlexPanel main = new FormFlexPanel();
+
         main.setWidget(0, 0, left);
         main.setWidget(0, 1, right);
+        main.getFlexCellFormatter().setVerticalAlignment(0, 0, HasVerticalAlignment.ALIGN_TOP);
+        main.getFlexCellFormatter().setVerticalAlignment(0, 1, HasVerticalAlignment.ALIGN_TOP);
+
         main.getColumnFormatter().setWidth(0, "40%");
         main.getColumnFormatter().setWidth(1, "60%");
-        main.getCellFormatter().setVerticalAlignment(0, 1, HasVerticalAlignment.ALIGN_TOP);
+
         return new ScrollPanel(main);
     }
 

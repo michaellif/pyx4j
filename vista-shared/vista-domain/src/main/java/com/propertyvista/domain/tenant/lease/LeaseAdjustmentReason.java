@@ -17,16 +17,13 @@ import javax.xml.bind.annotation.XmlType;
 
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
-import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.financial.GlCode;
-import com.propertyvista.domain.financial.tax.Tax;
 
 /**
  * 
@@ -52,8 +49,6 @@ public interface LeaseAdjustmentReason extends IEntity {
 
     @NotNull
     IPrimitive<ActionType> actionType();
-
-    IPrimitive<Boolean> precalculatedTax();
 
     @NotNull
     @ToString(index = 1)

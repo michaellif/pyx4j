@@ -13,10 +13,8 @@
  */
 package com.propertyvista.domain.policy.policies;
 
-import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Owned;
-import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IList;
 
 import com.propertyvista.domain.policy.framework.LowestApplicableNode;
@@ -29,6 +27,5 @@ import com.propertyvista.domain.property.asset.building.Building;
 public interface LeaseAdjustmentPolicy extends Policy {
 
     @Owned
-    @Detached(level = AttachLevel.Detached)
     IList<LeaseAdjustmentPolicyItem> policyItems();
 }
