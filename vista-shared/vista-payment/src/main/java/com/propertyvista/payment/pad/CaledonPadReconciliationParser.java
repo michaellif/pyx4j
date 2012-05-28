@@ -68,9 +68,15 @@ public class CaledonPadReconciliationParser {
                     record.transactionId().setValue(values[v++]);
                     record.amount().setValue(CaledonPadUtils.parsAmount(values[v++]));
                     record.reconciliationStatus().setValue(record.reconciliationStatus().parse(values[v++]));
-                    record.reasonCode().setValue(values[v++]);
-                    record.reasonText().setValue(values[v++]);
-                    record.fee().setValue(CaledonPadUtils.parsAmount(values[v++]));
+                    if (values.length > v) {
+                        record.reasonCode().setValue(values[v++]);
+                        if (values.length > v) {
+                            record.reasonText().setValue(values[v++]);
+                            if (values.length > v) {
+                                record.fee().setValue(CaledonPadUtils.parsAmount(values[v++]));
+                            }
+                        }
+                    }
 
                     EntityValidator.validate(record);
                     summary.records().add(record);
