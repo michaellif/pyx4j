@@ -7,57 +7,43 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on May 15, 2012
+ * Created on 2012-05-26
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.domain.financial;
+package com.propertyvista.admin.domain.payment.pad;
 
 import java.math.BigDecimal;
 
-import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Format;
-import com.pyx4j.entity.annotations.JoinTable;
+import com.pyx4j.entity.annotations.GwtBlacklist;
+import com.pyx4j.entity.annotations.JoinColumn;
+import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.Owner;
+import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.validator.NotNull;
-import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.i18n.annotations.I18n;
-import com.pyx4j.i18n.shared.I18nEnum;
 
-import com.propertyvista.domain.financial.PaymentRecord.PaidRejectedAggregatedTransferId;
-import com.propertyvista.domain.financial.PaymentRecord.ReturnAggregatedTransferId;
+import com.propertyvista.domain.VistaNamespace;
 
-public interface AggregatedTransfer extends IEntity {
+@Table(namespace = VistaNamespace.adminNamespace)
+@I18n(strategy = I18n.I18nStrategy.IgnoreAll)
+@GwtBlacklist
+public interface PadReconciliationSummary extends IEntity {
 
-    @I18n
-    enum AggregatedTransferStatus {
-
-        Rejected,
-
-        Paid,
-
-        Hold,
-
-        Resent;
-
-        @Override
-        public String toString() {
-            return I18nEnum.toString(this);
-        }
-
-    };
+    @Owner
+    @JoinColumn
+    PadReconciliationFile reconciliationFile();
 
     IPrimitive<LogicalDate> paymentDate();
 
-    IPrimitive<AggregatedTransferStatus> status();
+    IPrimitive<String> merchantTerminalId();
 
-    MerchantAccount merchantAccount();
-
-    IPrimitive<Key> padReconciliationSummaryKey();
+    IPrimitive<MerchantReconciliationStatus> reconciliationStatus();
 
     @NotNull
     @Format("#0.00")
@@ -96,13 +82,7 @@ public interface AggregatedTransfer extends IEntity {
     @Format("#0.00")
     IPrimitive<BigDecimal> fundsReleased();
 
-    @Detached(level = AttachLevel.Detached)
-    @JoinTable(value = PaymentRecord.class, mappedBy = PaidRejectedAggregatedTransferId.class)
-    ISet<PaymentRecord> payments();
+    @Owned
+    IList<PadReconciliationDebitRecord> records();
 
-    @Detached(level = AttachLevel.Detached)
-    @JoinTable(value = PaymentRecord.class, mappedBy = ReturnAggregatedTransferId.class)
-    ISet<PaymentRecord> returnedPayments();
-
-    IPrimitive<String> transactionErrorMessage();
 }

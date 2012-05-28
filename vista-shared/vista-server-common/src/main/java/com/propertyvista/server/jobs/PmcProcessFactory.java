@@ -25,6 +25,8 @@ public class PmcProcessFactory {
             return new PadSendProcess();
         case paymentsPadReciveAcknowledgment:
             return new PadReciveAcknowledgmentProcess();
+        case paymentsPadReciveReconciliation:
+            return new PadReciveReconciliationProcess();
         case cleanup:
             return new CleanupPmcProcess();
         case updateArrears:

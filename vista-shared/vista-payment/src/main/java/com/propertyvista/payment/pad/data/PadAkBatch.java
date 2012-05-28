@@ -11,57 +11,33 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.payment.pad.ak;
+package com.propertyvista.payment.pad.data;
 
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
-/**
- * e-Cheque or PAD (pre-authorized debit transactions) / EFT Batch payments
- * 
- * @see http://jira.birchwoodsoftwaregroup.com/wiki/display/VISTA/Caledon
- * @see http://jira.birchwoodsoftwaregroup.com/wiki/download/attachments/4587553/CCS-PAD-File-Specifications.pdf
- */
-@Transient
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
-public interface PadAkFile extends IEntity {
+@Transient
+public interface PadAkBatch extends IEntity {
 
-    IPrimitive<Integer> version();
-
-    @Length(10)
+    @Length(3)
     @NotNull
-    IPrimitive<String> companyId();
-
-    @Length(4)
-    @NotNull
-    IPrimitive<String> fileCreationNumber();
+    IPrimitive<String> batchId();
 
     @Length(8)
     @NotNull
-    IPrimitive<String> fileCreationDate();
-
-    @Length(12)
-    @NotNull
-    IPrimitive<String> batcheCount();
-
-    @Length(12)
-    @NotNull
-    IPrimitive<String> recordsCount();
-
-    @Length(14)
-    @NotNull
-    IPrimitive<String> fileAmount();
+    IPrimitive<String> terminalId();
 
     @Length(4)
     @NotNull
     IPrimitive<String> acknowledgmentStatusCode();
 
-    IList<PadAkBatch> batches();
+    @Length(14)
+    @NotNull
+    IPrimitive<String> batchAmount();
 
-    IList<PadAkDebitRecord> records();
 }

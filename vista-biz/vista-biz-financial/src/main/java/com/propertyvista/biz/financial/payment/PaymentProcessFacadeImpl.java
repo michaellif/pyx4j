@@ -24,6 +24,7 @@ import com.pyx4j.server.contexts.NamespaceManager;
 import com.propertyvista.admin.domain.payment.pad.PadBatch;
 import com.propertyvista.admin.domain.payment.pad.PadDebitRecord;
 import com.propertyvista.admin.domain.payment.pad.PadFile;
+import com.propertyvista.admin.domain.payment.pad.PadReconciliationFile;
 import com.propertyvista.server.jobs.TaskRunner;
 
 public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
@@ -34,8 +35,8 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
     }
 
     @Override
-    public PadFile recivePadAcknowledgementFiles() {
-        return new PadCaledon().recivePadAcknowledgementFiles();
+    public PadFile recivePadAcknowledgementFile() {
+        return new PadCaledon().recivePadAcknowledgementFile();
     }
 
     @Override
@@ -79,5 +80,17 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
         } else {
             return "Batch Level Reject:" + rejectedBatch.size() + "; Transaction Reject:" + rejectedRecodrs.size();
         }
+    }
+
+    @Override
+    public PadReconciliationFile recivePadReconciliation() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public String processPadReconciliation(PadReconciliationFile reconciliationFile) {
+        // TODO Auto-generated method stub
+        return null;
     }
 }

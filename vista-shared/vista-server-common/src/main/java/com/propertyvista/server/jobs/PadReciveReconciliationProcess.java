@@ -15,24 +15,24 @@ package com.propertyvista.server.jobs;
 
 import com.pyx4j.config.server.ServerSideFactory;
 
-import com.propertyvista.admin.domain.payment.pad.PadFile;
+import com.propertyvista.admin.domain.payment.pad.PadReconciliationFile;
 import com.propertyvista.admin.domain.scheduler.RunStats;
 import com.propertyvista.biz.financial.payment.PaymentProcessFacade;
 
-public class PadReciveAcknowledgmentProcess implements PmcProcess {
+public class PadReciveReconciliationProcess implements PmcProcess {
 
-    private PadFile padFile;
+    private PadReconciliationFile reconciliationFile;
 
     @Override
     public boolean start() {
-        padFile = ServerSideFactory.create(PaymentProcessFacade.class).recivePadAcknowledgementFile();
-        return (padFile != null);
+        reconciliationFile = ServerSideFactory.create(PaymentProcessFacade.class).recivePadReconciliation();
+        return (reconciliationFile != null);
     }
 
     @Override
     public void executePmcJob() {
         final RunStats stats = PmcProcessContext.getRunStats();
-        stats.message().setValue(ServerSideFactory.create(PaymentProcessFacade.class).processAcknowledgement(padFile));
+        stats.message().setValue(ServerSideFactory.create(PaymentProcessFacade.class).processPadReconciliation(reconciliationFile));
         PmcProcessContext.setRunStats(stats);
     }
 

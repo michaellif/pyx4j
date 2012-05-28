@@ -47,6 +47,15 @@ public class CaledonPadSftpClient {
 
     private static boolean usePadSimulator = defaultUsePadSimulator();
 
+    public static enum PadFileType {
+
+        PadFile,
+
+        Acknowledgement,
+
+        Reconciliation;
+    }
+
     private static boolean defaultUsePadSimulator() {
         return (VistaSystemIdentification.production != VistaDeployment.getSystemIdentification());
     }
@@ -148,18 +157,18 @@ public class CaledonPadSftpClient {
         }
     }
 
-    public List<File> reciveFiles(String companyId, Boolean acknowledgement, File targetDirectory) {
-        return reciveFiles(getSrc, companyId, acknowledgement, targetDirectory);
+    public List<File> reciveFiles(String companyId, PadFileType padFileType, File targetDirectory) {
+        return reciveFiles(getSrc, companyId, padFileType, targetDirectory);
     }
 
     public List<File> reciveFilesSim(File targetDirectory) {
         if (!CaledonPadSftpClient.usePadSimulator()) {
             throw new UserRuntimeException("PadSimulator is disabled");
         }
-        return reciveFiles(postDst, null, false, targetDirectory);
+        return reciveFiles(postDst, null, PadFileType.PadFile, targetDirectory);
     }
 
-    private List<File> reciveFiles(String src, String companyId, Boolean acknowledgement, File targetDirectory) {
+    private List<File> reciveFiles(String src, String companyId, PadFileType padFileType, File targetDirectory) {
         SftpClient client = new SftpClient();
         try {
             client.connect();
@@ -175,22 +184,30 @@ public class CaledonPadSftpClient {
                 boolean fileMatch = false;
                 if (companyId == null) {
                     fileMatch = true;
-                } else if (acknowledgement) {
-                    fileMatch = rFile.getFilename().endsWith("." + companyId + "_acknowledgement.csv");
                 } else {
-                    fileMatch = rFile.getFilename().endsWith("." + companyId);
+                    switch (padFileType) {
+                    case PadFile:
+                        // Used for simulator only
+                        fileMatch = rFile.getFilename().endsWith("." + companyId);
+                        break;
+                    case Acknowledgement:
+                        fileMatch = rFile.getFilename().endsWith("." + companyId + "_acknowledgement.csv");
+                        break;
+                    case Reconciliation:
+                        fileMatch = rFile.getFilename().endsWith("_reconcil_rpt." + companyId);
+                        break;
+                    }
                 }
 
                 if (fileMatch) {
                     File dst = new File(targetDirectory, rFile.getFilename());
-                    if (!dst.exists()) {
+                    File dst2 = new File(new File(targetDirectory, "processed"), rFile.getFilename());
+                    if ((!dst.exists()) && (!dst2.exists())) {
                         client.channel.get(rFile.getFilename(), dst.getAbsolutePath());
                         lFiles.add(dst);
                         log.info("SFTP file {} received", dst.getAbsolutePath());
-                        // Only one file for Ack. 
-                        if (acknowledgement) {
-                            break;
-                        }
+                        // Only one file  
+                        break;
                     }
                 }
             }

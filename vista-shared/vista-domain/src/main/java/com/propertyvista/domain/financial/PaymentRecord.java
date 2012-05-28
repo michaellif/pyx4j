@@ -28,7 +28,6 @@ import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
-import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Timestamp;
@@ -139,15 +138,10 @@ public interface PaymentRecord extends IEntity {
     @JoinColumn(ReturnAggregatedTransferId.class)
     AggregatedTransfer aggregatedTransferReturn();
 
+    IPrimitive<Key> padReconciliationDebitRecordKey();
+
     @Editor(type = EditorType.textarea)
     IPrimitive<String> notes();
-
-    // internals:
-    interface OrderId extends ColumnId {
-    }
-
-    @OrderColumn(OrderId.class)
-    IPrimitive<Integer> orderInParent();
 
     @Timestamp(Timestamp.Update.Updated)
     IPrimitive<Date> updated();

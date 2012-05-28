@@ -25,10 +25,10 @@ import com.propertyvista.admin.domain.payment.pad.PadDebitRecord;
 import com.propertyvista.admin.domain.payment.pad.PadFile;
 import com.propertyvista.admin.domain.payment.pad.PadFile.FileAcknowledgmentStatus;
 import com.propertyvista.payment.pad.CaledonPadAcknowledgmentParser;
-import com.propertyvista.payment.pad.CaledonPadFileWriter;
-import com.propertyvista.payment.pad.ak.PadAkBatch;
-import com.propertyvista.payment.pad.ak.PadAkDebitRecord;
-import com.propertyvista.payment.pad.ak.PadAkFile;
+import com.propertyvista.payment.pad.CaledonPadUtils;
+import com.propertyvista.payment.pad.data.PadAkBatch;
+import com.propertyvista.payment.pad.data.PadAkDebitRecord;
+import com.propertyvista.payment.pad.data.PadAkFile;
 
 class PadCaledonAcknowledgement {
 
@@ -85,7 +85,7 @@ class PadCaledonAcknowledgement {
             throw new Error("Unexpected recordsCount '" + akFile.recordsCount().getValue() + "' != '" + padFile.recordsCount().getValue() + "' in akFile "
                     + akFile.fileCreationNumber().getValue());
         }
-        if (!CaledonPadFileWriter.formatAmount(padFile.fileAmount().getValue()).equals(akFile.fileAmount().getValue())) {
+        if (!CaledonPadUtils.formatAmount(padFile.fileAmount().getValue()).equals(akFile.fileAmount().getValue())) {
             throw new Error("Unexpected fileAmount '" + akFile.fileAmount().getValue() + "' in akFile " + akFile.fileCreationNumber().getValue());
         }
     }
@@ -106,7 +106,7 @@ class PadCaledonAcknowledgement {
             if (!padBatch.merchantTerminalId().getValue().equals(akBatch.terminalId().getValue())) {
                 throw new Error("Unexpected terminalId '" + akBatch.terminalId().getValue() + "' in akFile " + akFile.fileCreationNumber().getValue());
             }
-            if (!CaledonPadFileWriter.formatAmount(padBatch.batchAmount().getValue()).equals(akBatch.batchAmount().getValue())) {
+            if (!CaledonPadUtils.formatAmount(padBatch.batchAmount().getValue()).equals(akBatch.batchAmount().getValue())) {
                 throw new Error("Unexpected batchAmount '" + akBatch.batchAmount().getValue() + "', terminalId '" + akBatch.terminalId().getValue()
                         + "' in akFile " + akFile.fileCreationNumber().getValue());
             }
@@ -132,7 +132,7 @@ class PadCaledonAcknowledgement {
                         + "' in akFile " + akFile.fileCreationNumber().getValue());
             }
             // assert Acknowledged Values
-            if (!CaledonPadFileWriter.formatAmount(padDebitRecord.amount().getValue()).equals(akDebitRecord.amount().getValue())) {
+            if (!CaledonPadUtils.formatAmount(padDebitRecord.amount().getValue()).equals(akDebitRecord.amount().getValue())) {
                 throw new Error("Unexpected recordAmount '" + padDebitRecord.amount().getValue() + "', terminalId '" + akDebitRecord.terminalId().getValue()
                         + "' in akFile " + akFile.fileCreationNumber().getValue());
             }

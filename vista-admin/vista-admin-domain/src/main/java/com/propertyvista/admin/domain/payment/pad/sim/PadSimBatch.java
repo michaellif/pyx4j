@@ -28,19 +28,12 @@ import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
+import com.propertyvista.admin.domain.payment.pad.MerchantReconciliationStatus;
 import com.propertyvista.domain.VistaNamespace;
 
 @Table(namespace = VistaNamespace.adminNamespace)
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 public interface PadSimBatch extends IEntity {
-
-    public enum BatchReconciliationStatus {
-
-        PAID,
-
-        HOLD;
-
-    }
 
     @Override
     @Indexed
@@ -92,7 +85,7 @@ public interface PadSimBatch extends IEntity {
 
     // --- reconciliation --------------
 
-    IPrimitive<BatchReconciliationStatus> reconciliationStatus();
+    IPrimitive<MerchantReconciliationStatus> reconciliationStatus();
 
     IPrimitive<String> grossPaymentAmount();
 

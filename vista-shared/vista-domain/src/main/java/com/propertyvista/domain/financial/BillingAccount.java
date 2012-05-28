@@ -85,10 +85,9 @@ public interface BillingAccount extends IEntity {
 
     IPrimitive<Double> total();
 
-    @Owned
-    @OrderBy(PaymentRecord.OrderId.class)
+    @Owned(cascade = {})
     @Detached(level = AttachLevel.Detached)
-    IList<PaymentRecord> payments();
+    ISet<PaymentRecord> payments();
 
     @Owned
     @OrderBy(LeaseAdjustment.OrderId.class)

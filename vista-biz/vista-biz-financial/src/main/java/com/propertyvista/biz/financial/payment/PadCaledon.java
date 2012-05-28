@@ -35,8 +35,10 @@ import com.propertyvista.admin.domain.payment.pad.PadBatch;
 import com.propertyvista.admin.domain.payment.pad.PadDebitRecord;
 import com.propertyvista.admin.domain.payment.pad.PadFile;
 import com.propertyvista.admin.domain.payment.pad.PadFileCreationNumber;
+import com.propertyvista.admin.domain.payment.pad.PadReconciliationFile;
 import com.propertyvista.payment.pad.CaledonPadFileWriter;
 import com.propertyvista.payment.pad.CaledonPadSftpClient;
+import com.propertyvista.payment.pad.CaledonPadSftpClient.PadFileType;
 
 public class PadCaledon {
 
@@ -85,9 +87,10 @@ public class PadCaledon {
             do {
                 String filename = new SimpleDateFormat("yyyyMMddHHmmss").format(padFile.sent().getValue());
                 file = new File(padWorkdir, filename + "." + companyId);
-                fileSent = new File(new File(padWorkdir, "sent"), file.getName());
+                fileSent = new File(new File(padWorkdir, "processed"), file.getName());
                 if (file.exists() || fileSent.exists()) {
                     padFile.sent().setValue(new Date());
+                    padFile.fileName().setValue(file.getName());
                     Persistence.service().merge(padFile);
                     Persistence.service().commit();
                 }
@@ -145,7 +148,7 @@ public class PadCaledon {
             throw new Error(e.getMessage());
         }
 
-        move(file, padWorkdir, "sent");
+        move(file, padWorkdir, "processed");
 
         padFile.status().setValue(PadFile.PadFileStatus.Sent);
         Persistence.service().merge(padFile);
@@ -174,9 +177,9 @@ public class PadCaledon {
         return String.valueOf(id);
     }
 
-    public PadFile recivePadAcknowledgementFiles() {
+    public PadFile recivePadAcknowledgementFile() {
         File padWorkdir = getPadBaseDir();
-        List<File> files = new CaledonPadSftpClient().reciveFiles(companyId, true, padWorkdir);
+        List<File> files = new CaledonPadSftpClient().reciveFiles(companyId, PadFileType.Acknowledgement, padWorkdir);
         if (files.size() == 0) {
             return null;
         }
@@ -186,7 +189,35 @@ public class PadCaledon {
             throw new Error("Invalid acknowledgement file name" + file.getName());
         }
         PadFile padFile = new PadCaledonAcknowledgement().processFile(file);
-        move(file, padWorkdir, "acknowledgement");
+        move(file, padWorkdir, "processed");
+
+        // Cleanup SFTP directory
+        {
+            List<File> filesToRemove = new ArrayList<File>();
+            filesToRemove.add(file);
+            new CaledonPadSftpClient().removeFiles(filesToRemove);
+        }
+
+        // Ignore other files received if any
+        for (File otherFiles : files) {
+            otherFiles.delete();
+        }
+        return padFile;
+    }
+
+    public PadReconciliationFile recivePadReconciliation() {
+        File padWorkdir = getPadBaseDir();
+        List<File> files = new CaledonPadSftpClient().reciveFiles(companyId, PadFileType.Reconciliation, padWorkdir);
+        if (files.size() == 0) {
+            return null;
+        }
+        File file = files.get(0);
+        files.remove(0);
+        if (!file.getName().endsWith("_reconcil_rpt." + companyId)) {
+            throw new Error("Invalid Reconciliation file name" + file.getName());
+        }
+        PadReconciliationFile padFile = new PadCaledonReconciliation().processFile(file);
+        move(file, padWorkdir, "processed");
 
         // Cleanup SFTP directory
         {

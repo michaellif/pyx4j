@@ -24,9 +24,9 @@ import com.pyx4j.essentials.server.csv.CSVLoad;
 import com.pyx4j.essentials.server.csv.CSVParser;
 import com.pyx4j.essentials.server.csv.CSVReciver;
 
-import com.propertyvista.payment.pad.ak.PadAkBatch;
-import com.propertyvista.payment.pad.ak.PadAkDebitRecord;
-import com.propertyvista.payment.pad.ak.PadAkFile;
+import com.propertyvista.payment.pad.data.PadAkBatch;
+import com.propertyvista.payment.pad.data.PadAkDebitRecord;
+import com.propertyvista.payment.pad.data.PadAkFile;
 
 public class CaledonPadAcknowledgmentParser {
 
@@ -50,13 +50,14 @@ public class CaledonPadAcknowledgmentParser {
                 if (!headers[0].equals("FHD")) {
                     throw new Error("Wrong file header  '" + headers[0] + "' format");
                 }
-                akFile.companyId().setValue(headers[1]);
-                akFile.fileCreationNumber().setValue(headers[2]);
-                akFile.fileCreationDate().setValue(headers[3]);
-                akFile.batcheCount().setValue(headers[4]);
-                akFile.recordsCount().setValue(headers[5]);
-                akFile.fileAmount().setValue(headers[6]);
-                akFile.acknowledgmentStatusCode().setValue(headers[7]);
+                int v = 1;
+                akFile.companyId().setValue(headers[v++]);
+                akFile.fileCreationNumber().setValue(headers[v++]);
+                akFile.fileCreationDate().setValue(headers[v++]);
+                akFile.batcheCount().setValue(headers[v++]);
+                akFile.recordsCount().setValue(headers[v++]);
+                akFile.fileAmount().setValue(headers[v++]);
+                akFile.acknowledgmentStatusCode().setValue(headers[v++]);
                 EntityValidator.validate(akFile);
                 return true;
             }
@@ -65,19 +66,21 @@ public class CaledonPadAcknowledgmentParser {
             public void onRow(String[] values) {
                 if (values[0].equals("BRJ")) {
                     PadAkBatch batch = EntityFactory.create(PadAkBatch.class);
-                    batch.batchId().setValue(values[1]);
-                    batch.terminalId().setValue(values[2]);
-                    batch.acknowledgmentStatusCode().setValue(values[3]);
-                    batch.batchAmount().setValue(values[4]);
+                    int v = 1;
+                    batch.batchId().setValue(values[v++]);
+                    batch.terminalId().setValue(values[v++]);
+                    batch.acknowledgmentStatusCode().setValue(values[v++]);
+                    batch.batchAmount().setValue(values[v++]);
                     EntityValidator.validate(batch);
                     akFile.batches().add(batch);
                 } else if (values[0].equals("TRJ")) {
                     PadAkDebitRecord record = EntityFactory.create(PadAkDebitRecord.class);
-                    record.terminalId().setValue(values[1]);
-                    record.clientId().setValue(values[2]);
-                    record.transactionId().setValue(values[3]);
-                    record.amount().setValue(values[4]);
-                    record.acknowledgmentStatusCode().setValue(values[5]);
+                    int v = 1;
+                    record.terminalId().setValue(values[v++]);
+                    record.clientId().setValue(values[v++]);
+                    record.transactionId().setValue(values[v++]);
+                    record.amount().setValue(values[v++]);
+                    record.acknowledgmentStatusCode().setValue(values[v++]);
                     EntityValidator.validate(record);
                     akFile.records().add(record);
                 } else {

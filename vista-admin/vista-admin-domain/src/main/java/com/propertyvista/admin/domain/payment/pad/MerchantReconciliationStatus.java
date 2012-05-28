@@ -7,25 +7,15 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2012-05-08
+ * Created on 2012-05-26
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.biz.financial.payment;
+package com.propertyvista.admin.domain.payment.pad;
 
-import com.propertyvista.admin.domain.payment.pad.PadFile;
-import com.propertyvista.admin.domain.payment.pad.PadReconciliationFile;
+public enum MerchantReconciliationStatus {
 
-public interface PaymentProcessFacade {
+    PAID,
 
-    PadFile sendPadFile();
-
-    PadFile recivePadAcknowledgementFile();
-
-    String processAcknowledgement(PadFile padFile);
-
-    PadReconciliationFile recivePadReconciliation();
-
-    String processPadReconciliation(PadReconciliationFile reconciliationFile);
-
+    HOLD;
 }

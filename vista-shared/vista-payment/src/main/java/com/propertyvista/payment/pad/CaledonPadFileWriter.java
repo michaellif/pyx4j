@@ -18,7 +18,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
-import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 
 import com.pyx4j.config.shared.ApplicationMode;
@@ -80,7 +79,7 @@ public class CaledonPadFileWriter implements Closeable {
         writer.append(String.valueOf(padFile.recordsCount().getValue())).append(",");
 
         // Total value of the batch - 14 digit field with 2 implied decimal places! ($1.00 would be represented by 100). This field cannot contain a decimal or dollar ($) sign
-        writer.append(formatAmount(padFile.fileAmount().getValue()));
+        writer.append(CaledonPadUtils.formatAmount(padFile.fileAmount().getValue()));
         writer.append("\n");
     }
 
@@ -124,7 +123,7 @@ public class CaledonPadFileWriter implements Closeable {
         writer.append(String.valueOf(padBatch.records().size())).append(",");
 
         // Total value of the batch - 14 digit field with 2 implied decimal places! ($1.00 would be represented by 100). This field cannot contain a decimal or dollar ($) sign
-        writer.append(formatAmount(padBatch.batchAmount().getValue()));
+        writer.append(CaledonPadUtils.formatAmount(padBatch.batchAmount().getValue()));
         writer.append("\n");
     }
 
@@ -132,17 +131,12 @@ public class CaledonPadFileWriter implements Closeable {
         // Record Type
         writer.append("D").append(",");
         writer.append(record.clientId().getStringView()).append(",");
-        writer.append(formatAmount(record.amount().getValue())).append(",");
+        writer.append(CaledonPadUtils.formatAmount(record.amount().getValue())).append(",");
         writer.append(record.bankId().getStringView()).append(",");
         writer.append(record.branchTransitNumber().getStringView()).append(",");
         writer.append(record.accountNumber().getStringView()).append(",");
         writer.append(record.transactionId().getStringView());
         writer.append("\n");
-    }
-
-    public static String formatAmount(BigDecimal value) {
-        BigDecimal centValue = value.multiply(new BigDecimal("100"));
-        return centValue.setScale(0).toString();
     }
 
     @Override
