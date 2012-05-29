@@ -50,6 +50,7 @@ public abstract class LeaseEditorActivityBase<DTO extends LeaseDTO> extends Edit
     public void onPopulateSuccess(DTO result) {
         fillserviceItems(result);
         fillServiceEligibilityData(result, result.version().leaseProducts().serviceItem().item());
+        previousItem = result.version().leaseProducts().serviceItem().item();
 
         super.onPopulateSuccess(result);
     }
