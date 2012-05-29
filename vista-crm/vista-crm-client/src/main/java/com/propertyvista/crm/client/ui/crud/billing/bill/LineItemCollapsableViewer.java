@@ -39,9 +39,10 @@ public class LineItemCollapsableViewer extends CEntityCollapsableViewer<InvoiceL
         FlexTable content = new FlexTable();
         // details
         content.setWidth("100%");
-//        content.getElement().getStyle().setProperty("paddingLeft", "20px");
-        content.getColumnFormatter().setWidth(0, "20%");
+        content.getColumnFormatter().setWidth(0, "750px"); //overrides FlexTable's width auto-management for cells
+        content.getColumnFormatter().setWidth(1, "400px");
         content.getColumnFormatter().setWidth(2, "20%");
+        content.getElement().getStyle().setProperty("textAlign", "left");
         int row = 0;
         if (value != null && !value.total().isNull()) {
             HTML caption = new HTML(value.getMeta().getCaption());
@@ -73,8 +74,8 @@ public class LineItemCollapsableViewer extends CEntityCollapsableViewer<InvoiceL
                                 .getStringView());
                     }
                 }
-                addTotalRecord(content, row++, value.getMeta().getCaption(), value.total().getStringView());
             }
+            addTotalRecord(content, row++, value.getMeta().getCaption(), value.total().getStringView());
         }
         return content;
     }
@@ -84,8 +85,7 @@ public class LineItemCollapsableViewer extends CEntityCollapsableViewer<InvoiceL
         FlexTable content = new FlexTable();
         // details
         content.setWidth("100%");
-//        content.getElement().getStyle().setProperty("paddingLeft", "20px");
-        content.getColumnFormatter().setWidth(0, "20%");
+        content.getColumnFormatter().setWidth(0, "700px"); //overrides FlexTable's width auto-management for cells
         content.getColumnFormatter().setWidth(2, "20%");
         int row = 0;
         if (value != null && !value.total().isNull()) {
