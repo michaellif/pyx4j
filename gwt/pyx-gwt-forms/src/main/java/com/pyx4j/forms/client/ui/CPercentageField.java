@@ -37,6 +37,7 @@ public class CPercentageField extends CTextFieldBase<BigDecimal, NTextBox<BigDec
         super();
         setFormat(new PercentageFormat("#.#"));
         addValueValidator(new TextBoxParserValidator<BigDecimal>());
+        setWatermark("0.00%");
     }
 
     @Override
