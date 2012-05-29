@@ -228,7 +228,7 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
         if (isEditable()) {
             get(proto().item()).setViewable(false);
             if (isService) {
-                get(proto().item()).setEditable(lease.getValue().approvalDate().isNull());
+                get(proto().item()).setEditable(!lease.getValue().approvalDate().isNull() && lease.getValue().selectedServiceItems().size() > 1);
             } else {
                 get(proto().item()).setEditable(false);
             }
@@ -254,7 +254,7 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
         private final List<BillableItemAdjustment> populatedValues = new LinkedList<BillableItemAdjustment>();
 
         public AdjustmentFolder() {
-            super(BillableItemAdjustment.class, !BillableItemEditor.this.isViewable());
+            super(BillableItemAdjustment.class, i18n.tr("Adjustment"), !BillableItemEditor.this.isViewable());
         }
 
         @Override
