@@ -46,7 +46,7 @@ public class ReportTableTemplateBuilderTest {
         } else {
             descriptor.title().setValue(title);
         }
-        descriptor.visiblily().setValue(isVisible);
+        descriptor.isVisible().setValue(isVisible);
 
         return descriptor;
 

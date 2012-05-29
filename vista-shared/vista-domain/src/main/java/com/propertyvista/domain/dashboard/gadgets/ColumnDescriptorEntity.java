@@ -37,5 +37,5 @@ public interface ColumnDescriptorEntity extends IEntity {
     IPrimitive<Boolean> wordWrap();
 
     /** Determines if the column is visible */
-    IPrimitive<Boolean> visiblily();
+    IPrimitive<Boolean> isVisible();
 }

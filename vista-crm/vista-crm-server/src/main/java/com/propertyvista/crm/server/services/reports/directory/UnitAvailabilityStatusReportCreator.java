@@ -64,7 +64,7 @@ public class UnitAvailabilityStatusReportCreator extends AbstractGadgetReportMod
                 HashMap<String, String> columns = new HashMap<String, String>();
                 Persistence.service().retrieve(metadata.columnDescriptors());
                 for (ColumnDescriptorEntity column : metadata.columnDescriptors()) {
-                    if (column.visiblily().getValue())
+                    if (column.isVisible().getValue())
                         columns.put(column.propertyPath().getValue(), column.title().getValue());
                 }
 

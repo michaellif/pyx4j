@@ -30,7 +30,7 @@ public class ColumnDescriptorConverter {
 
             ColumnDescriptor columnDescriptor = new MemberColumnDescriptor.Builder(member).title(columnDescriptorEntity.title().getValue())
                     .sortable(columnDescriptorEntity.sortable().getValue()).width(columnDescriptorEntity.width().getValue())
-                    .wordWrap(columnDescriptorEntity.wordWrap().getValue()).visible(columnDescriptorEntity.visiblily().getValue()).build();
+                    .wordWrap(columnDescriptorEntity.wordWrap().getValue()).visible(columnDescriptorEntity.isVisible().getValue()).build();
 
             return columnDescriptor;
         } else {
@@ -46,7 +46,7 @@ public class ColumnDescriptorConverter {
         entity.title().setValue(columnDescriptor.getColumnTitle());
         entity.width().setValue(columnDescriptor.getWidth());
         entity.wordWrap().setValue(columnDescriptor.isWordWrap());
-        entity.visiblily().setValue(columnDescriptor.isVisible());
+        entity.isVisible().setValue(columnDescriptor.isVisible());
         return entity;
     }
 }

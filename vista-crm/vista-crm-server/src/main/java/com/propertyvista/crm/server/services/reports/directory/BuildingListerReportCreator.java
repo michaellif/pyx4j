@@ -28,7 +28,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.crm.rpc.services.building.BuildingCrudService;
 import com.propertyvista.crm.server.services.building.BuildingCrudServiceImpl;
 import com.propertyvista.crm.server.services.reports.AbstractGadgetReportModelCreator;
-import com.propertyvista.crm.server.services.reports.util.ReportTableTemplateBuilder;
+import com.propertyvista.crm.server.services.reports.util.DynamicColumnWidthReportTableTemplateBuilder;
 import com.propertyvista.domain.dashboard.gadgets.ColumnDescriptorEntity;
 import com.propertyvista.domain.dashboard.gadgets.type.BuildingLister;
 import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
@@ -59,7 +59,7 @@ public class BuildingListerReportCreator extends AbstractGadgetReportModelCreato
                 // for columns that appear in the report
                 HashMap<String, String> columns = new HashMap<String, String>();
                 for (ColumnDescriptorEntity column : listerMetadata.columnDescriptors()) {
-                    if (column.visiblily().getValue())
+                    if (column.isVisible().getValue())
                         columns.put(column.propertyPath().getValue(), column.title().getValue());
                 }
 
@@ -79,7 +79,8 @@ public class BuildingListerReportCreator extends AbstractGadgetReportModelCreato
 
     @Override
     protected String design() {
-        return new ReportTableTemplateBuilder(EntityFactory.create(BuildingDTO.class), listerMetadata).generateReportTemplate();
+//        return new ReportTableTemplateBuilder(EntityFactory.create(BuildingDTO.class), listerMetadata).generateReportTemplate();
+        return new DynamicColumnWidthReportTableTemplateBuilder(EntityFactory.getEntityPrototype(BuildingDTO.class), listerMetadata).build();
     }
 
     @Override
