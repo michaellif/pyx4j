@@ -24,6 +24,7 @@ import com.pyx4j.server.contexts.NamespaceManager;
 import com.propertyvista.admin.domain.payment.pad.PadBatch;
 import com.propertyvista.admin.domain.payment.pad.PadDebitRecord;
 import com.propertyvista.admin.domain.payment.pad.PadFile;
+import com.propertyvista.admin.domain.payment.pad.PadReconciliationDebitRecord;
 import com.propertyvista.admin.domain.payment.pad.PadReconciliationFile;
 import com.propertyvista.admin.domain.payment.pad.PadReconciliationSummary;
 import com.propertyvista.server.jobs.TaskRunner;
@@ -102,6 +103,56 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
             }
         });
 
-        return null;
+        int processed = 0;
+        int returned = 0;
+        int rejected = 0;
+        int duplicate = 0;
+
+        for (PadReconciliationSummary summary : transactions) {
+            new PadProcessor().aggregatedTransferReconciliation(summary);
+
+            for (PadReconciliationDebitRecord debitRecord : summary.records()) {
+                switch (debitRecord.reconciliationStatus().getValue()) {
+                case PROCESSED:
+                    processed++;
+                    break;
+                case REJECTED:
+                    rejected++;
+                    break;
+                case RETURNED:
+                    returned++;
+                    break;
+                case DUPLICATE:
+                    duplicate++;
+                    break;
+                }
+            }
+        }
+        Persistence.service().commit();
+
+        StringBuilder message = new StringBuilder();
+        if (processed != 0) {
+            message.append("Processed:").append(processed);
+        }
+        if (returned != 0) {
+            if (message.length() > 0) {
+                message.append(", ");
+            }
+            message.append("Returned:").append(returned);
+        }
+        if (rejected != 0) {
+            if (message.length() > 0) {
+                message.append(", ");
+            }
+            message.append("Rejected:").append(rejected);
+        }
+        if (duplicate != 0) {
+            if (message.length() > 0) {
+                message.append(", ");
+            }
+            message.append("Duplicate:").append(duplicate);
+        }
+
+        return message.toString();
     }
 }

@@ -28,7 +28,6 @@ class PadCaledonReconciliation {
 
     PadReconciliationFile processFile(File file) {
         PadReconciliationFile reconciliationFile = new CaledonPadReconciliationParser().parsReport(file);
-        Persistence.service().persist(reconciliationFile);
 
         // Match merchantAccounts.
         for (PadReconciliationSummary summary : reconciliationFile.batches()) {
@@ -41,6 +40,7 @@ class PadCaledonReconciliation {
             summary.merchantAccount().set(macc);
         }
 
+        Persistence.service().persist(reconciliationFile);
         Persistence.service().commit();
         return reconciliationFile;
     }

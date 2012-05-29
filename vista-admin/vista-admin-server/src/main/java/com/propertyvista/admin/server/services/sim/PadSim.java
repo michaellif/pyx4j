@@ -14,6 +14,7 @@
 package com.propertyvista.admin.server.services.sim;
 
 import java.io.File;
+import java.math.BigDecimal;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -141,9 +142,26 @@ public class PadSim {
         Persistence.service().commit();
     }
 
+    private class SummaryTotal {
+
+        int recordsCount = 0;
+
+        BigDecimal totalAmount = new BigDecimal("0");
+
+        void add(String amountValue) {
+            recordsCount++;
+            totalAmount = totalAmount.add(CaledonPadUtils.parsAmount(amountValue));
+        }
+    }
+
     private void updateReconciliation(PadSimFile padFile) {
         for (PadSimBatch padBatch : padFile.batches()) {
             if (padBatch.reconciliationStatus().isNull()) {
+
+                SummaryTotal gross = new SummaryTotal();
+                SummaryTotal rejects = new SummaryTotal();
+                SummaryTotal returns = new SummaryTotal();
+
                 for (PadSimDebitRecord record : padBatch.records()) {
                     if (record.acknowledgmentStatusCode().isNull()) {
                         if (record.paymentDate().isNull()) {
@@ -152,9 +170,42 @@ public class PadSim {
                         if (record.reconciliationStatus().isNull()) {
                             record.reconciliationStatus().setValue(TransactionReconciliationStatus.PROCESSED);
                         }
+                        switch (record.reconciliationStatus().getValue()) {
+                        case PROCESSED:
+                            gross.add(record.amount().getValue());
+                            break;
+                        case REJECTED:
+                            rejects.add(record.amount().getValue());
+                            break;
+                        case RETURNED:
+                            returns.add(record.amount().getValue());
+                            break;
+                        }
                     }
                 }
                 padBatch.reconciliationStatus().setValue(MerchantReconciliationStatus.PAID);
+
+                if (padBatch.grossPaymentCount().isNull()) {
+                    padBatch.grossPaymentCount().setValue(String.valueOf(gross.recordsCount));
+                }
+                if (padBatch.grossPaymentAmount().isNull()) {
+                    padBatch.grossPaymentAmount().setValue(CaledonPadUtils.formatAmount(gross.totalAmount));
+                }
+
+                if (padBatch.rejectItemsCount().isNull()) {
+                    padBatch.rejectItemsCount().setValue(String.valueOf(rejects.recordsCount));
+                }
+                if (padBatch.rejectItemsAmount().isNull()) {
+                    padBatch.rejectItemsAmount().setValue(CaledonPadUtils.formatAmount(rejects.totalAmount));
+                }
+
+                if (padBatch.returnItemsCount().isNull()) {
+                    padBatch.returnItemsCount().setValue(String.valueOf(returns.recordsCount));
+                }
+                if (padBatch.returnItemsAmount().isNull()) {
+                    padBatch.returnItemsAmount().setValue(CaledonPadUtils.formatAmount(returns.totalAmount));
+                }
+
                 Persistence.service().persist(padBatch);
             }
         }
