@@ -47,7 +47,6 @@ public class DateInPeriodValidation {
         final String msg = message;
 
         value2.addValueValidator(new EditableValueValidator<Date>() {
-
             @Override
             public ValidationFailure isValid(CComponent<Date, ?> component, Date value) {
                 if (value2.getValue() == null || value3.getValue() == null) {

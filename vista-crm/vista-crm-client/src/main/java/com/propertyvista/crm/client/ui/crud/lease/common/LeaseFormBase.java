@@ -281,9 +281,9 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
     public void addValidations() {
         super.addValidations();
 
-        validate(get(proto().leaseFrom()), get(proto().leaseTo()), null);
-        validate(get(proto().leaseFrom()), get(proto().version().actualLeaseTo()), null);
-        validate(get(proto().version().actualMoveIn()), get(proto().version().actualMoveOut()), null);
+        crossValidate(get(proto().leaseFrom()), get(proto().leaseTo()), null);
+        crossValidate(get(proto().leaseFrom()), get(proto().version().actualLeaseTo()), null);
+        crossValidate(get(proto().version().actualMoveIn()), get(proto().version().actualMoveOut()), null);
 
         new DateInPeriodValidation(get(proto().leaseFrom()), get(proto().version().expectedMoveIn()), get(proto().leaseTo()),
                 i18n.tr("The Date Should Be Within The Lease Period"));
@@ -301,7 +301,7 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
         });
     }
 
-    private void validate(CComponent<LogicalDate, ?> date1, CComponent<LogicalDate, ?> date2, String message) {
+    private void crossValidate(CComponent<LogicalDate, ?> date1, CComponent<LogicalDate, ?> date2, String message) {
         new StartEndDateValidation(date1, date2, message);
         date1.addValueChangeHandler(new RevalidationTrigger<LogicalDate>(date2));
         date2.addValueChangeHandler(new RevalidationTrigger<LogicalDate>(date1));
