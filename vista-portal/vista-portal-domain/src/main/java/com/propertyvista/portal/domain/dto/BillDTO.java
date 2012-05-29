@@ -15,25 +15,26 @@ package com.propertyvista.portal.domain.dto;
 
 import java.math.BigDecimal;
 
+import javax.xml.bind.annotation.XmlType;
+
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
-
-import com.propertyvista.domain.charges.ChargeLine;
 
 @Transient
 public interface BillDTO extends IEntity {
 
     @I18n
-    public enum BillType {
+    @XmlType(name = "BillType")
+    public enum Type {
 
         Bill, Payment;
 
@@ -44,31 +45,15 @@ public interface BillDTO extends IEntity {
     }
 
     @NotNull
-    IPrimitive<BillType> type();
+    IPrimitive<Type> type();
 
-    IList<ChargeLine> charges();
-
-    IPrimitive<LogicalDate> dueDate();
-
-    IPrimitive<LogicalDate> paidOn();
-
+    @Caption(name = "Date")
     IPrimitive<LogicalDate> fromDate();
 
-    IPrimitive<LogicalDate> toDate();
-
-    IPrimitive<LogicalDate> prevPaymentDate();
-
-    @Format("#0.00")
-    @Editor(type = EditorType.money)
-    IPrimitive<BigDecimal> prevTotal();
-
-    PaymentMethodDTO paymentMethod();
-
-    IPrimitive<Boolean> preAuthorized();
-
-    IPrimitive<String> transactionID();
+    @Caption(name = "Reference #")
+    IPrimitive<String> referenceNo();
 
     @Format("#0.00")
     @Editor(type = EditorType.money)
-    IPrimitive<BigDecimal> total();
+    IPrimitive<BigDecimal> amount();
 }

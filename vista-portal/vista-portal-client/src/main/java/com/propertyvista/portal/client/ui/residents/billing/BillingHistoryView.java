@@ -15,17 +15,19 @@ package com.propertyvista.portal.client.ui.residents.billing;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.propertyvista.portal.domain.dto.BillDTO;
 import com.propertyvista.portal.domain.dto.BillListDTO;
 
 public interface BillingHistoryView extends IsWidget {
 
-    public void populate(BillListDTO bills);
-
-    void setPresenter(Presenter presenter);
-
     interface Presenter {
 
         void search(BillListDTO.SearchType searchType);
+
+        void view(BillDTO item);
     }
 
+    void populate(BillListDTO bills);
+
+    void setPresenter(Presenter presenter);
 }

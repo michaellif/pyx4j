@@ -38,7 +38,6 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.VistaViewersComponentFactory;
-import com.propertyvista.common.client.ui.components.folders.ChargeLineFolder;
 import com.propertyvista.common.client.ui.decorations.DecorationUtils;
 import com.propertyvista.domain.financial.Money;
 import com.propertyvista.portal.client.resources.PortalImages;
@@ -62,13 +61,13 @@ public class CurrentBillForm extends CEntityForm<BillDTO> implements CurrentBill
 
         int row = -1;
 
-        container.setWidget(++row, 0, inject(proto().charges(), new ChargeLineFolder()));
-        container.setHR(++row, 0, 1);
-        //TODO review later (display total)
-        container.setWidget(++row, 0, inject(proto().total()/* , new TotalLineViewer() */));
-        container.setWidget(++row, 0, inject(proto().dueDate(), new DueDateViewer()));
-        container.setWidget(++row, 0, inject(proto().paymentMethod(), new PaymentMethodViewer()));
-        container.setWidget(++row, 0, inject(proto().preAuthorized(), new PreauthorizedOutcomeViewer()));
+//        container.setWidget(++row, 0, inject(proto().charges(), new ChargeLineFolder()));
+//        container.setHR(++row, 0, 1);
+//        //TODO review later (display total)
+//        container.setWidget(++row, 0, inject(proto().total()/* , new TotalLineViewer() */));
+//        container.setWidget(++row, 0, inject(proto().dueDate(), new DueDateViewer()));
+//        container.setWidget(++row, 0, inject(proto().paymentMethod(), new PaymentMethodViewer()));
+//        container.setWidget(++row, 0, inject(proto().preAuthorized(), new PreauthorizedOutcomeViewer()));
         return container;
     }
 

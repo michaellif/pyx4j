@@ -60,9 +60,9 @@ public class BillingHistoryForm extends CEntityForm<BillListDTO> implements Bill
             public List<EntityFolderColumnDescriptor> columns() {
                 ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
                 columns.add(new EntityFolderColumnDescriptor(proto().type(), "10em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().paidOn(), "7em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().total(), "10em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().transactionID(), "10em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().fromDate(), "7em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().amount(), "10em"));
+                columns.add(new EntityFolderColumnDescriptor(proto().referenceNo(), "10em"));
                 return columns;
             }
 

@@ -13,25 +13,17 @@
  */
 package com.propertyvista.portal.client.activity.billing;
 
-import java.math.BigDecimal;
-import java.util.Date;
-
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.site.client.AppSite;
 
-import com.propertyvista.domain.charges.ChargeLine;
-import com.propertyvista.domain.charges.ChargeLine.ChargeType;
-import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.portal.client.activity.SecurityAwareActivity;
 import com.propertyvista.portal.client.ui.residents.billing.CurrentBillView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
 import com.propertyvista.portal.domain.dto.BillDTO;
-import com.propertyvista.portal.domain.dto.PaymentMethodDTO;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 
 public class CurrentBillActivity extends SecurityAwareActivity implements CurrentBillView.Presenter {
@@ -45,43 +37,10 @@ public class CurrentBillActivity extends SecurityAwareActivity implements Curren
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         super.start(panel, eventBus);
-        //TODO implement a service call
-        BillDTO bill = EntityFactory.create(BillDTO.class);
-
-        PaymentMethodDTO paymentMethod = EntityFactory.create(PaymentMethodDTO.class);
-        paymentMethod.number().setValue("XXXX XXXXX XXXX 7890");
-        paymentMethod.type().setValue(PaymentType.CreditCard);
-
-        bill.paymentMethod().set(paymentMethod);
-        //TODO does not work for some reason
-        //  bill.preAuthorized().setValue(new Boolean(true));
-
-        ChargeLine cLine = EntityFactory.create(ChargeLine.class);
-        cLine.type().setValue(ChargeType.monthlyRent);
-        cLine.label().setValue(ChargeType.monthlyRent.toString());
-        cLine.amount().setValue(new BigDecimal(1200));
-        bill.charges().add(cLine);
-
-        ChargeLine cLine2 = EntityFactory.create(ChargeLine.class);
-        cLine2.label().setValue("Parking");
-        cLine2.amount().setValue(new BigDecimal(100));
-        bill.charges().add(cLine2);
-
-        ChargeLine cLine3 = EntityFactory.create(ChargeLine.class);
-        cLine3.label().setValue("Locker");
-        cLine3.amount().setValue(new BigDecimal(100));
-        bill.charges().add(cLine3);
-
-        ChargeLine cLine4 = EntityFactory.create(ChargeLine.class);
-        cLine4.label().setValue("Cable TV");
-        cLine4.amount().setValue(new BigDecimal(90));
-        bill.charges().add(cLine4);
-
-        bill.dueDate().setValue(new LogicalDate(new Date()));
-        bill.total().setValue(new BigDecimal(1490));
-        view.populate(bill);
-
         panel.setWidget(view);
+
+        //TODO implement a service call
+        view.populate(EntityFactory.create(BillDTO.class));
     }
 
     @Override

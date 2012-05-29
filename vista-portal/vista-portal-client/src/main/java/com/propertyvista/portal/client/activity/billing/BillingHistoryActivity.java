@@ -28,7 +28,7 @@ import com.propertyvista.portal.client.activity.SecurityAwareActivity;
 import com.propertyvista.portal.client.ui.residents.billing.BillingHistoryView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
 import com.propertyvista.portal.domain.dto.BillDTO;
-import com.propertyvista.portal.domain.dto.BillDTO.BillType;
+import com.propertyvista.portal.domain.dto.BillDTO.Type;
 import com.propertyvista.portal.domain.dto.BillListDTO;
 import com.propertyvista.portal.domain.dto.BillListDTO.SearchType;
 
@@ -49,24 +49,24 @@ public class BillingHistoryActivity extends SecurityAwareActivity implements Bil
 
         if (!VistaTODO.removedForProduction) {
             BillDTO bill = EntityFactory.create(BillDTO.class);
-            bill.type().setValue(BillType.Bill);
-            bill.paidOn().setValue(new LogicalDate(new Date()));
-            bill.transactionID().setValue("645436654");
-            bill.total().setValue(new BigDecimal(1490));
+            bill.type().setValue(Type.Bill);
+            bill.fromDate().setValue(new LogicalDate(new Date()));
+            bill.referenceNo().setValue("645436654");
+            bill.amount().setValue(new BigDecimal(1490));
             billHistory.bills().add(bill);
 
             bill = EntityFactory.create(BillDTO.class);
-            bill.type().setValue(BillType.Bill);
-            bill.paidOn().setValue(new LogicalDate(new Date()));
-            bill.transactionID().setValue("10096654");
-            bill.total().setValue(new BigDecimal(1010));
+            bill.type().setValue(Type.Bill);
+            bill.fromDate().setValue(new LogicalDate(new Date()));
+            bill.referenceNo().setValue("10096654");
+            bill.amount().setValue(new BigDecimal(1010));
             billHistory.bills().add(bill);
 
             bill = EntityFactory.create(BillDTO.class);
-            bill.type().setValue(BillType.Bill);
-            bill.paidOn().setValue(new LogicalDate(new Date()));
-            bill.transactionID().setValue("90056789");
-            bill.total().setValue(new BigDecimal(890));
+            bill.type().setValue(Type.Bill);
+            bill.fromDate().setValue(new LogicalDate(new Date()));
+            bill.referenceNo().setValue("90056789");
+            bill.amount().setValue(new BigDecimal(890));
             billHistory.bills().add(bill);
         }
 
@@ -82,4 +82,9 @@ public class BillingHistoryActivity extends SecurityAwareActivity implements Bil
 
     }
 
+    @Override
+    public void view(BillDTO item) {
+        // TODO Auto-generated method stub
+
+    }
 }

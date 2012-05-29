@@ -59,19 +59,13 @@ public class PortalSiteMap implements SiteMap {
         public static class PersonalInformation extends AppPlace {
         }
 
-        @PlaceProperties(caption = "Maintenance")
-        @NavigationItem(navigLabel = "Maintenance")
-        public static class Maintenance extends AppPlace {
-
-            public static class NewMaintenanceRequest extends AppPlace {
-            }
-
-            public static class EditMaintenanceRequest extends AppPlace {
-            }
+        @PlaceProperties(caption = "Current Bill")
+        @NavigationItem(navigLabel = "Current Bill")
+        public static class CurrentBill extends AppPlace {
         }
 
-        @PlaceProperties(caption = "Billing History")
-        @NavigationItem(navigLabel = "Billing History")
+        @PlaceProperties(caption = "Billing and Payment")
+        @NavigationItem(navigLabel = "Billing and Payment")
         public static class BillingHistory extends AppPlace {
         }
 
@@ -86,9 +80,15 @@ public class PortalSiteMap implements SiteMap {
             }
         }
 
-        @PlaceProperties(caption = "Current Bill")
-        @NavigationItem(navigLabel = "Current Bill")
-        public static class CurrentBill extends AppPlace {
+        @PlaceProperties(caption = "Maintenance")
+        @NavigationItem(navigLabel = "Maintenance")
+        public static class Maintenance extends AppPlace {
+
+            public static class NewMaintenanceRequest extends AppPlace {
+            }
+
+            public static class EditMaintenanceRequest extends AppPlace {
+            }
         }
 
         @PlaceProperties(caption = "My Insurance")
@@ -97,5 +97,4 @@ public class PortalSiteMap implements SiteMap {
 
         }
     }
-
 }
