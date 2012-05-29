@@ -40,6 +40,8 @@ import com.propertyvista.dto.LeaseDTO;
 
 public abstract class LeaseEditorActivityBase<DTO extends LeaseDTO> extends EditorActivityBase<DTO> implements LeaseEditorPresenterBase {
 
+    private ProductItem previousItem;
+
     public LeaseEditorActivityBase(CrudAppPlace place, IEditorView<DTO> view, AbstractCrudService<DTO> service, Class<DTO> entityClass) {
         super(place, view, service, entityClass);
     }
@@ -78,6 +80,10 @@ public abstract class LeaseEditorActivityBase<DTO extends LeaseDTO> extends Edit
 
     @Override
     public void setSelectedService(ProductItem serviceItem) {
+        if (previousItem != null && previousItem.equals(serviceItem)) {
+            return; // do not rebuild/repopulate view!..
+        }
+
         DTO currentValue = getView().getValue().duplicate();
         if (fillServiceEligibilityData(currentValue, serviceItem)) {
 
@@ -93,6 +99,8 @@ public abstract class LeaseEditorActivityBase<DTO extends LeaseDTO> extends Edit
             }
 
             populateView(currentValue);
+
+            previousItem = serviceItem;
         }
     }
 
