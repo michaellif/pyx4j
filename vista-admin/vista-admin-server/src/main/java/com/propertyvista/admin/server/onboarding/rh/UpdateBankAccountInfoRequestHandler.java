@@ -22,7 +22,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.server.contexts.NamespaceManager;
 
-import com.propertyvista.admin.domain.pmc.OboardingMerchantAccount;
+import com.propertyvista.admin.domain.pmc.OnboardingMerchantAccount;
 import com.propertyvista.admin.domain.pmc.Pmc;
 import com.propertyvista.admin.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.admin.server.onboarding.rhf.AbstractRequestHandler;
@@ -42,16 +42,20 @@ public class UpdateBankAccountInfoRequestHandler extends AbstractRequestHandler<
     public ResponseIO execute(UpdateBankAccountInfoRequestIO request) {
         ResponseIO response = EntityFactory.create(ResponseIO.class);
 
-        List<OboardingMerchantAccount> updatedAccount = new ArrayList<OboardingMerchantAccount>();
+        List<OnboardingMerchantAccount> updatedAccount = new ArrayList<OnboardingMerchantAccount>();
 
         for (BankAccountInfo acc : request.accounts()) {
-            EntityQueryCriteria<OboardingMerchantAccount> crmerch = EntityQueryCriteria.create(OboardingMerchantAccount.class);
+            EntityQueryCriteria<OnboardingMerchantAccount> crmerch = EntityQueryCriteria.create(OnboardingMerchantAccount.class);
             crmerch.add(PropertyCriterion.eq(crmerch.proto().onboardingAccountId(), request.onboardingAccountId().getValue()));
             crmerch.add(PropertyCriterion.eq(crmerch.proto().onboardingBankAccountId(), acc.onboardingBankAccountId().getValue()));
-            OboardingMerchantAccount macc = Persistence.service().retrieve(crmerch);
+
+            OnboardingMerchantAccount macc = Persistence.service().retrieve(crmerch);
             if (macc == null) {
-                macc = EntityFactory.create(OboardingMerchantAccount.class);
+                macc = EntityFactory.create(OnboardingMerchantAccount.class);
+                macc.onboardingAccountId().setValue(request.onboardingAccountId().getValue());
+                macc.onboardingBankAccountId().setValue(acc.onboardingBankAccountId().getValue());
             }
+
             macc.bankId().setValue(acc.bankId().getValue());
             macc.branchTransitNumber().setValue(acc.branchTransitNumber().getValue());
             macc.accountNumber().setValue(acc.accountNumber().getValue());
@@ -66,11 +70,11 @@ public class UpdateBankAccountInfoRequestHandler extends AbstractRequestHandler<
         crpmc.add(PropertyCriterion.eq(crpmc.proto().onboardingAccountId(), request.onboardingAccountId().getValue()));
         Pmc pmc = Persistence.service().retrieve(crpmc);
         if ((pmc != null) && (pmc.status().getValue() != PmcStatus.Created)) {
-            List<OboardingMerchantAccount> merchantAccountKeyUpdated = new ArrayList<OboardingMerchantAccount>();
+            List<OnboardingMerchantAccount> merchantAccountKeyUpdated = new ArrayList<OnboardingMerchantAccount>();
             // Switch namespace.
             NamespaceManager.setNamespace(pmc.namespace().getValue());
             try {
-                for (OboardingMerchantAccount acc : updatedAccount) {
+                for (OnboardingMerchantAccount acc : updatedAccount) {
                     // Check if account exists already.
                     MerchantAccount macc;
                     if (acc.merchantAccountKey().isNull()) {

@@ -27,7 +27,7 @@ import com.propertyvista.domain.financial.AbstractMerchantAccount;
 
 @Table(prefix = "admin", namespace = VistaNamespace.adminNamespace)
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
-public interface OboardingMerchantAccount extends AbstractMerchantAccount {
+public interface OnboardingMerchantAccount extends AbstractMerchantAccount {
 
     @ReadOnly
     @Owner

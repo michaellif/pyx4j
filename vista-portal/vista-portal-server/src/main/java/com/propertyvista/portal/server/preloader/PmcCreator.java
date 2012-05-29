@@ -30,10 +30,12 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.server.contexts.NamespaceManager;
 
+import com.propertyvista.admin.domain.pmc.OnboardingMerchantAccount;
 import com.propertyvista.admin.domain.pmc.Pmc;
 import com.propertyvista.admin.domain.security.OnboardingUserCredential;
 import com.propertyvista.domain.DemoData;
 import com.propertyvista.domain.company.Employee;
+import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.security.CrmRole;
 import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.security.OnboardingUser;
@@ -45,7 +47,7 @@ public class PmcCreator {
 
     private final static Logger log = LoggerFactory.getLogger(PmcCreator.class);
 
-    public static void preloadPmc(Pmc pmc, OnboardingUser onbUser, OnboardingUserCredential onbUserCred) {
+    public static void preloadPmc(Pmc pmc, OnboardingUser onbUser, OnboardingUserCredential onbUserCred, List<OnboardingMerchantAccount> onbMrchAccs) {
         assert onbUser != null;
         assert onbUserCred != null;
 
@@ -79,6 +81,24 @@ public class PmcCreator {
                     createCrmEmployee(email, email, email, email, null, defaultRole);
                 }
             }
+
+            for (OnboardingMerchantAccount acc : onbMrchAccs) {
+                MerchantAccount macc = EntityFactory.create(MerchantAccount.class);
+
+                macc.bankId().setValue(acc.bankId().getValue());
+                macc.branchTransitNumber().setValue(acc.branchTransitNumber().getValue());
+                macc.accountNumber().setValue(acc.accountNumber().getValue());
+
+                if (macc.chargeDescription().getValue() == null) {
+                    macc.chargeDescription().setValue(pmc.name().getValue());
+                }
+
+                macc.merchantTerminalId().setValue(acc.merchantTerminalId().getValue());
+
+                Persistence.service().persist(macc);
+                acc.merchantAccountKey().setValue(macc.getPrimaryKey());
+            }
+
             Persistence.service().commit();
 
         } finally {

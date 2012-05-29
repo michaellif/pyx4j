@@ -28,6 +28,7 @@ import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.server.contexts.NamespaceManager;
 
+import com.propertyvista.admin.domain.pmc.OnboardingMerchantAccount;
 import com.propertyvista.admin.domain.pmc.Pmc;
 import com.propertyvista.admin.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.admin.domain.pmc.PmcDnsName;
@@ -131,13 +132,19 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
 
             OnboardingUser onbUser = Persistence.service().retrieve(OnboardingUser.class, onbUserCred.user().getPrimaryKey());
 
+            EntityQueryCriteria<OnboardingMerchantAccount> onbMrchAccCrt = EntityQueryCriteria.create(OnboardingMerchantAccount.class);
+            credentialCrt.add(PropertyCriterion.eq(onbMrchAccCrt.proto().pmc(), pmc));
+            List<OnboardingMerchantAccount> onbMrchAccs = Persistence.service().query(onbMrchAccCrt);
+
             try {
                 Persistence.service().startBackgroundProcessTransaction();
-                PmcCreator.preloadPmc(pmc, onbUser, onbUserCred);
+                PmcCreator.preloadPmc(pmc, onbUser, onbUserCred, onbMrchAccs);
                 pmc.status().setValue(PmcStatus.Active);
                 Persistence.service().persist(pmc);
                 onbUserCred.behavior().setValue(VistaOnboardingBehavior.Client);
                 Persistence.service().persist(onbUserCred);
+                Persistence.service().persist(onbMrchAccs);
+
                 Persistence.service().commit();
             } finally {
                 Persistence.service().endTransaction();

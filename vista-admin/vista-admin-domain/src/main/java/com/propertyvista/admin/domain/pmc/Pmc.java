@@ -70,7 +70,7 @@ public interface Pmc extends IEntity {
 
     @Owned
     @Detached(level = AttachLevel.Detached)
-    ISet<OboardingMerchantAccount> merchantAccounts();
+    ISet<OnboardingMerchantAccount> merchantAccounts();
 
     @Owned
     @Detached(level = AttachLevel.Detached)

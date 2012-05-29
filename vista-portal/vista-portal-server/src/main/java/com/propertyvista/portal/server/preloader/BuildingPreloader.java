@@ -34,7 +34,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.essentials.server.preloader.DataGenerator;
 
-import com.propertyvista.admin.domain.pmc.OboardingMerchantAccount;
+import com.propertyvista.admin.domain.pmc.OnboardingMerchantAccount;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.company.Portfolio;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
@@ -336,7 +336,7 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
     }
 
     private void createSsharedMerchantAccount(MerchantAccount acc) {
-        final OboardingMerchantAccount macc = EntityFactory.create(OboardingMerchantAccount.class);
+        final OnboardingMerchantAccount macc = EntityFactory.create(OnboardingMerchantAccount.class);
         macc.bankId().setValue(acc.bankId().getValue());
         macc.branchTransitNumber().setValue(acc.branchTransitNumber().getValue());
         macc.accountNumber().setValue(acc.accountNumber().getValue());
