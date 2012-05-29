@@ -175,6 +175,8 @@ public class LeaseAdjustmentForm extends CrmEntityForm<LeaseAdjustment> {
                 comp = new CPercentageField();
                 break;
             }
+        } else {
+            comp = new CPercentageField(); // default
         }
 
         unbind(proto().tax());
@@ -182,13 +184,13 @@ public class LeaseAdjustmentForm extends CrmEntityForm<LeaseAdjustment> {
         if (comp != null) {
             taxHolder.setWidget(new DecoratorBuilder(inject(proto().tax(), comp), 10).build());
             if (repopulate) {
-                get(proto().tax()).setValue(getValue().tax().getValue());
+                get(proto().tax()).populate(getValue().tax().getValue(new BigDecimal(0)));
             }
         }
     }
 
     private void recalculateTaxesAndTotal() {
-        if (get(proto().overwriteDefaultTax()).getValue()) {
+        if (getValue().overwriteDefaultTax().isBooleanTrue()) {
             get(proto().tax()).setEditable(true);
             get(proto().taxType()).setEnabled(true);
 
@@ -199,6 +201,7 @@ public class LeaseAdjustmentForm extends CrmEntityForm<LeaseAdjustment> {
 
             get(proto().tax()).populate(new BigDecimal(0));
             get(proto().taxType()).populate(TaxType.percent);
+            bindValueEditor(TaxType.percent, false);
 
             ClientPolicyManager.obtainEffectivePolicy(ClientPolicyManager.getOrganizationPoliciesNode(), LeaseAdjustmentPolicy.class,
                     new DefaultAsyncCallback<LeaseAdjustmentPolicy>() {
@@ -223,15 +226,18 @@ public class LeaseAdjustmentForm extends CrmEntityForm<LeaseAdjustment> {
 
     private void recalculateTotal() {
         BigDecimal total = new BigDecimal(0);
-        total = total.add(get(proto().amount()).getValue());
 
-        switch (get(proto().taxType()).getValue()) {
-        case percent:
-            total = total.add(total.multiply(getValue().tax().getValue()));
-            break;
-        case value:
-            total = total.add(getValue().tax().getValue());
-            break;
+        if (!getValue().isEmpty()) {
+            total = total.add(getValue().amount().getValue(new BigDecimal(0)));
+
+            switch (getValue().taxType().getValue()) {
+            case percent:
+                total = total.add(total.multiply(getValue().tax().getValue(new BigDecimal(0))));
+                break;
+            case value:
+                total = total.add(getValue().tax().getValue(new BigDecimal(0)));
+                break;
+            }
         }
 
         if (contains(proto()._total())) {
