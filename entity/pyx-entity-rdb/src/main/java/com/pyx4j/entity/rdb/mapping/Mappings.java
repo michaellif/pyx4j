@@ -249,7 +249,7 @@ public class Mappings {
                 }
             }
 
-            if (configuration.createForeignKeys()) {
+            if (configuration.createForeignKeys() && (configuration.ddl() != Ddl.disabled)) {
                 synchronized (entityTypeLock) {
                     try {
                         model.ensureForeignKeys(persistenceContext);
