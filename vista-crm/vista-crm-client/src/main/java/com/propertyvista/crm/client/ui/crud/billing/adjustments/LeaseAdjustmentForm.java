@@ -175,8 +175,6 @@ public class LeaseAdjustmentForm extends CrmEntityForm<LeaseAdjustment> {
                 comp = new CPercentageField();
                 break;
             }
-        } else {
-            comp = new CPercentageField(); // default
         }
 
         unbind(proto().tax());
@@ -193,16 +191,15 @@ public class LeaseAdjustmentForm extends CrmEntityForm<LeaseAdjustment> {
     private void recalculateTaxesAndTotal() {
         if (getValue().overwriteDefaultTax().isBooleanTrue()) {
             get(proto().tax()).setEditable(true);
-            get(proto().taxType()).setEnabled(true);
+            get(proto().taxType()).setEditable(true);
 
             recalculateTotal();
         } else {
-            get(proto().tax()).setEditable(false);
-            get(proto().taxType()).setEnabled(false);
-
-            get(proto().tax()).populate(new BigDecimal(0));
-            get(proto().taxType()).populate(TaxType.percent);
             bindValueEditor(TaxType.percent, false);
+            get(proto().taxType()).populate(TaxType.percent);
+
+            get(proto().tax()).setEditable(false);
+            get(proto().taxType()).setEditable(false);
 
             ClientPolicyManager.obtainEffectivePolicy(ClientPolicyManager.getOrganizationPoliciesNode(), LeaseAdjustmentPolicy.class,
                     new DefaultAsyncCallback<LeaseAdjustmentPolicy>() {
