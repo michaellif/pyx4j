@@ -36,9 +36,9 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.entity.rpc.EntitySearchResult;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.CDatePicker;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
@@ -53,6 +53,7 @@ import com.propertyvista.crm.client.ui.gadgets.common.Directory;
 import com.propertyvista.crm.client.ui.gadgets.common.GadgetInstanceBase;
 import com.propertyvista.crm.client.ui.gadgets.common.IBuildingBoardGadgetInstance;
 import com.propertyvista.crm.client.ui.gadgets.common.ListerGadgetInstanceBase;
+import com.propertyvista.crm.client.ui.gadgets.util.ColumnDescriptorConverter;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.AvailabilityReportService;
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatus;
 import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
@@ -90,16 +91,9 @@ public class UnitAvailabilityReportGadget extends AbstractGadget<UnitAvailabilit
         private CDatePicker asOf;
 
         public UnitAvailabilityReportGadgetInstance(GadgetMetadata gmd) {
-            super(gmd, UnitAvailabilityStatus.class, UnitAvailability.class);
+            super(UnitAvailability.class, gmd, UnitAvailabilityStatus.class, false);
             service = GWT.create(AvailabilityReportService.class);
             filterButtonClickHandler = new FilterButtonClickHanlder();
-        }
-
-        @Override
-        protected UnitAvailability createDefaultSettings(Class<UnitAvailability> metadataClass) {
-            UnitAvailability settings = super.createDefaultSettings(metadataClass);
-            settings.defaultFilteringPreset().setValue(FilterPreset.VacantAndNotice);
-            return settings;
         }
 
         @Override
@@ -114,9 +108,96 @@ public class UnitAvailabilityReportGadget extends AbstractGadget<UnitAvailabilit
         }
 
         @Override
-        public void populatePage(int pageNumber) {
+        public void start() {
+            super.start();
+            setupFilteringButtons();
+        }
+
+        @Override
+        public ISetup getSetup() {
+            return new SetupForm(new CEntityDecoratableForm<UnitAvailability>(UnitAvailability.class) {
+                @Override
+                public IsWidget createContent() {
+                    FormFlexPanel p = new FormFlexPanel();
+                    int row = -1;
+                    p.setWidget(++row, 0, new DecoratorBuilder(inject(proto().refreshInterval())).build());
+                    p.setWidget(++row, 0, new DecoratorBuilder(inject(proto().pageSize())).build());
+                    p.setWidget(++row, 0, new DecoratorBuilder(inject(proto().defaultFilteringPreset())).build());
+                    p.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customizeDate())).build());
+                    get(proto().customizeDate()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+                        @Override
+                        public void onValueChange(ValueChangeEvent<Boolean> event) {
+                            if (event.getValue() != null) {
+                                get(proto().asOf()).setVisible(event.getValue());
+                            }
+                        }
+                    });
+                    p.setWidget(++row, 0, new DecoratorBuilder(inject(proto().asOf())).build());
+                    get(proto().asOf()).setVisible(false);
+                    return p;
+                }
+
+                @Override
+                protected void onPopulate() {
+                    super.onPopulate();
+                    get(proto().asOf()).setVisible(getValue().customizeDate().isBooleanTrue());
+                }
+
+            });
+        }
+
+        @Override
+        protected UnitAvailability createDefaultSettings(Class<UnitAvailability> metadataClass) {
+            UnitAvailability settings = super.createDefaultSettings(metadataClass);
+            settings.defaultFilteringPreset().setValue(FilterPreset.VacantAndNotice);
+            UnitAvailabilityStatus proto = EntityFactory.getEntityPrototype(UnitAvailabilityStatus.class);
+            settings.columnDescriptors().addAll(ColumnDescriptorConverter.asColumnDesciptorEntityList(Arrays.asList(//@formatter:off
+                    // references
+                    new MemberColumnDescriptor.Builder(proto.building().propertyCode()).build(),
+                    new MemberColumnDescriptor.Builder(proto.building().externalId()).visible(false).build(),
+                    new MemberColumnDescriptor.Builder(proto.building().info().name()).visible(false).title(i18n.tr("Building Name")).build(),
+                    new MemberColumnDescriptor.Builder(proto.building().info().address()).visible(false).build(),
+                    new MemberColumnDescriptor.Builder(proto.building().propertyManager().name()).visible(false).title(i18n.tr("Property Manager")).build(),                    
+                    new MemberColumnDescriptor.Builder(proto.building().complex().name()).visible(false).title(i18n.tr("Complex")).build(),
+                    new MemberColumnDescriptor.Builder(proto.unit().info().number()).title(i18n.tr("Unit Name")).build(),
+                    new MemberColumnDescriptor.Builder(proto.floorplan().name()).visible(false).title(i18n.tr("Floorplan Name")).build(),
+                    new MemberColumnDescriptor.Builder(proto.floorplan().marketingName()).visible(false).title(i18n.tr("Floorplan Marketing Name")).build(),
+                    
+                    // status
+                    new MemberColumnDescriptor.Builder(proto.vacancyStatus()).build(),
+                    new MemberColumnDescriptor.Builder(proto.rentedStatus()).visible(true).build(),
+                    new MemberColumnDescriptor.Builder(proto.scoping()).visible(true).build(),
+                    new MemberColumnDescriptor.Builder(proto.rentReadinessStatus()).visible(true).build(),
+//                    new MemberColumnDescriptor.Builder(proto.unitRent()).build(),
+//                    new MemberColumnDescriptor.Builder(proto.marketRent()).build(),
+//                    new MemberColumnDescriptor.Builder(proto.rentDeltaAbsolute()).visible(true).build(),
+//                    new MemberColumnDescriptor.Builder(proto.rentDeltaRelative()).visible(false).build(),
+                    new MemberColumnDescriptor.Builder(proto.rentEndDay()).visible(true).build(),
+                    new MemberColumnDescriptor.Builder(proto.moveInDay()).visible(true).build(),
+                    new MemberColumnDescriptor.Builder(proto.rentedFromDay()).visible(true).build(),
+                    new MemberColumnDescriptor.Builder(proto.daysVacant()).build()
+//                    new MemberColumnDescriptor.Builder(proto.revenueLost()).build()
+            )));//@formatter:on
+            return settings;
+        }
+
+        @Override
+        protected Widget initContentPanel() {
+
+            gadgetPanel = new VerticalPanel();
+            gadgetPanel.add(initAsOfBannerPanel());
+            gadgetPanel.add(initFilteringConrolsPanel());
+            gadgetPanel.add(initListerWidget());
+            gadgetPanel.setCellHorizontalAlignment(controlsPanel, VerticalPanel.ALIGN_CENTER);
+            gadgetPanel.setWidth("100%");
+
+            return gadgetPanel;
+        }
+
+        @Override
+        protected void populatePage(int pageNumber) {
             if (containerBoard.getSelectedBuildingsStubs() == null) {
-                setAsOfValue(getStatusDate());
+                setAsOf(getStatusDate());
                 setPageData(new Vector<UnitAvailabilityStatus>(), 0, 0, false);
                 populateSucceded();
                 return;
@@ -139,28 +220,16 @@ public class UnitAvailabilityReportGadget extends AbstractGadget<UnitAvailabilit
                 public void onFailure(Throwable caught) {
                     populateFailed(caught);
                 }
-            }, buildingPks, getMetadata().defaultFilteringPreset().getValue(), getStatusDate(), new Vector<Sort>(getSorting()), pageNumber, getPageSize());
+            }, buildingPks, getMetadata().defaultFilteringPreset().getValue(), getStatusDate(), new Vector<Sort>(getListerSortingCriteria()), pageNumber,
+                    getPageSize());
         }
 
-        private void setAsOfValue(LogicalDate statusDate) {
+        private void setAsOf(LogicalDate statusDate) {
             asOf.setValue(statusDate);
         }
 
         private LogicalDate getStatusDate() {
             return getMetadata().customizeDate().isBooleanTrue() ? getMetadata().asOf().getValue() : new LogicalDate();
-        }
-
-        @Override
-        public Widget initContentPanel() {
-
-            gadgetPanel = new VerticalPanel();
-            gadgetPanel.add(initAsOfBannerPanel());
-            gadgetPanel.add(initFilteringConrolsPanel());
-            gadgetPanel.add(initListerWidget());
-            gadgetPanel.setCellHorizontalAlignment(controlsPanel, VerticalPanel.ALIGN_CENTER);
-            gadgetPanel.setWidth("100%");
-
-            return gadgetPanel;
         }
 
         private Widget initAsOfBannerPanel() {
@@ -196,12 +265,6 @@ public class UnitAvailabilityReportGadget extends AbstractGadget<UnitAvailabilit
             return controlsPanel;
         }
 
-        @Override
-        public void start() {
-            super.start();
-            setupFilteringButtons();
-        }
-
         /**
          * Set the filtering buttons according to the state in metadata.
          */
@@ -213,76 +276,6 @@ public class UnitAvailabilityReportGadget extends AbstractGadget<UnitAvailabilit
                     button.setValue(false, false);
                 }
             }
-        }
-
-        @Override
-        protected boolean isFilterRequired() {
-            return false;
-        }
-
-        @Override
-        public List<ColumnDescriptor> defineColumnDescriptors() {
-            return Arrays.asList(//@formatter:off
-                    // references
-                    new MemberColumnDescriptor.Builder(proto().building().propertyCode()).build(),
-                    new MemberColumnDescriptor.Builder(proto().building().externalId()).visible(false).build(),
-                    new MemberColumnDescriptor.Builder(proto().building().info().name()).visible(false).title(i18n.tr("Building Name")).build(),
-                    new MemberColumnDescriptor.Builder(proto().building().info().address()).visible(false).build(),
-                    new MemberColumnDescriptor.Builder(proto().building().propertyManager().name()).visible(false).title(i18n.tr("Property Manager")).build(),                    
-                    new MemberColumnDescriptor.Builder(proto().building().complex().name()).visible(false).title(i18n.tr("Complex")).build(),
-                    new MemberColumnDescriptor.Builder(proto().unit().info().number()).title(i18n.tr("Unit Name")).build(),
-                    new MemberColumnDescriptor.Builder(proto().floorplan().name()).visible(false).title(i18n.tr("Floorplan Name")).build(),
-                    new MemberColumnDescriptor.Builder(proto().floorplan().marketingName()).visible(false).title(i18n.tr("Floorplan Marketing Name")).build(),
-                    
-                    // status
-                    new MemberColumnDescriptor.Builder(proto().vacancyStatus()).build(),
-                    new MemberColumnDescriptor.Builder(proto().rentedStatus()).visible(true).build(),
-                    new MemberColumnDescriptor.Builder(proto().scoping()).visible(true).build(),
-                    new MemberColumnDescriptor.Builder(proto().rentReadinessStatus()).visible(true).build(),
-//                    new MemberColumnDescriptor.Builder(proto().unitRent()).build(),
-//                    new MemberColumnDescriptor.Builder(proto().marketRent()).build(),
-//                    new MemberColumnDescriptor.Builder(proto().rentDeltaAbsolute()).visible(true).build(),
-//                    new MemberColumnDescriptor.Builder(proto().rentDeltaRelative()).visible(false).build(),
-                    new MemberColumnDescriptor.Builder(proto().rentEndDay()).visible(true).build(),
-                    new MemberColumnDescriptor.Builder(proto().moveInDay()).visible(true).build(),
-                    new MemberColumnDescriptor.Builder(proto().rentedFromDay()).visible(true).build(),
-                    new MemberColumnDescriptor.Builder(proto().daysVacant()).build()
-//                    new MemberColumnDescriptor.Builder(proto().revenueLost()).build()
-            );//@formatter:on
-        }
-
-        @Override
-        public ISetup getSetup() {
-            return new SetupForm(new CEntityDecoratableForm<UnitAvailability>(UnitAvailability.class) {
-                @Override
-                public IsWidget createContent() {
-                    FormFlexPanel p = new FormFlexPanel();
-                    int row = -1;
-                    p.setWidget(++row, 0, new DecoratorBuilder(inject(proto().refreshInterval())).build());
-                    p.setWidget(++row, 0, new DecoratorBuilder(inject(proto().pageSize())).build());
-                    p.setWidget(++row, 0, new DecoratorBuilder(inject(proto().defaultFilteringPreset())).build());
-                    p.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customizeDate())).build());
-                    get(proto().customizeDate()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
-                        @Override
-                        public void onValueChange(ValueChangeEvent<Boolean> event) {
-                            if (event.getValue() != null) {
-                                get(proto().asOf()).setVisible(event.getValue());
-                            }
-                        }
-                    });
-                    p.setWidget(++row, 0, new DecoratorBuilder(inject(proto().asOf())).build());
-                    get(proto().asOf()).setVisible(false);
-                    return p;
-                }
-
-                @Override
-                protected void onPopulate() {
-                    super.onPopulate();
-                    get(proto().asOf()).setVisible(getValue().customizeDate().isBooleanTrue());
-                }
-
-            });
-
         }
 
         private class FilterButton extends ToggleButton {

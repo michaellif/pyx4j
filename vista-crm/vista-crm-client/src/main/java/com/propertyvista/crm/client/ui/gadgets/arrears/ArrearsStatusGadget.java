@@ -28,9 +28,9 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.entity.rpc.EntitySearchResult;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.CDatePicker;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
@@ -45,6 +45,7 @@ import com.propertyvista.crm.client.ui.gadgets.common.AbstractGadget;
 import com.propertyvista.crm.client.ui.gadgets.common.Directory;
 import com.propertyvista.crm.client.ui.gadgets.common.GadgetInstanceBase;
 import com.propertyvista.crm.client.ui.gadgets.common.ListerGadgetInstanceBase;
+import com.propertyvista.crm.client.ui.gadgets.util.ColumnDescriptorConverter;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.ArrearsReportService;
 import com.propertyvista.domain.dashboard.gadgets.arrears.LeaseArrearsSnapshotDTO;
 import com.propertyvista.domain.dashboard.gadgets.type.ArrearsStatusGadgetMetadata;
@@ -67,19 +68,42 @@ public class ArrearsStatusGadget extends AbstractGadget<ArrearsStatusGadgetMetad
         private HTML titleBannerLabel;
 
         public ArrearsStatusGadgetInstance(GadgetMetadata gmd) {
-            super(gmd, LeaseArrearsSnapshotDTO.class, ArrearsStatusGadgetMetadata.class);
+            super(ArrearsStatusGadgetMetadata.class, gmd, LeaseArrearsSnapshotDTO.class, false);
             service = GWT.<ArrearsReportService> create(ArrearsReportService.class);
-        }
-
-        @Override
-        protected boolean isFilterRequired() {
-            return false;
         }
 
         @Override
         protected ArrearsStatusGadgetMetadata createDefaultSettings(Class<ArrearsStatusGadgetMetadata> metadataClass) {
             ArrearsStatusGadgetMetadata settings = super.createDefaultSettings(metadataClass);
             settings.category().setValue(DebitType.total);
+            LeaseArrearsSnapshotDTO proto = EntityFactory.getEntityPrototype(LeaseArrearsSnapshotDTO.class);
+            settings.columnDescriptors().addAll(ColumnDescriptorConverter.asColumnDesciptorEntityList(Arrays.asList(//@formatter:off
+                    new MemberColumnDescriptor.Builder(proto.billingAccount().lease().unit().belongsTo().propertyCode()).visible(true).build(),
+                    new MemberColumnDescriptor.Builder(proto.billingAccount().lease().unit().belongsTo().info().name()).title(i18n.tr("Building")).build(),
+                    new MemberColumnDescriptor.Builder(proto.billingAccount().lease().unit().belongsTo().info().address().streetNumber()).visible(false).build(),
+                    new MemberColumnDescriptor.Builder(proto.billingAccount().lease().unit().belongsTo().info().address().streetName()).visible(false).build(),                    
+                    new MemberColumnDescriptor.Builder(proto.billingAccount().lease().unit().belongsTo().info().address().province().name()).visible(false).title(i18n.tr("Province")).build(),                    
+                    new MemberColumnDescriptor.Builder(proto.billingAccount().lease().unit().belongsTo().info().address().country().name()).visible(false).title(i18n.tr("Country")).build(),                    
+                    new MemberColumnDescriptor.Builder(proto.billingAccount().lease().unit().belongsTo().complex().name()).visible(false).title(i18n.tr("Complex")).build(),
+                    new MemberColumnDescriptor.Builder(proto.billingAccount().lease().unit().info().number()).title(i18n.tr("Unit")).build(),
+                    new MemberColumnDescriptor.Builder(proto.billingAccount().lease().leaseId()).build(),
+                    new MemberColumnDescriptor.Builder(proto.billingAccount().lease().leaseFrom()).build(),
+                    new MemberColumnDescriptor.Builder(proto.billingAccount().lease().leaseTo()).build(),
+                    
+                    // arrears
+                    new MemberColumnDescriptor.Builder(proto.selectedBuckets().bucketCurrent()).build(),
+                    new MemberColumnDescriptor.Builder(proto.selectedBuckets().bucket30()).build(),
+                    new MemberColumnDescriptor.Builder(proto.selectedBuckets().bucket60()).build(),
+                    new MemberColumnDescriptor.Builder(proto.selectedBuckets().bucket90()).build(),
+                    new MemberColumnDescriptor.Builder(proto.selectedBuckets().bucketOver90()).build(),
+                    
+                    new MemberColumnDescriptor.Builder(proto.selectedBuckets().arrearsAmount()).build()
+// TODO calculate CREDIT AMOUNT                    
+//                    new MemberColumnDescriptor.Builder(proto.selectedBuckets().creditAmount()).build(),                    
+//                    new MemberColumnDescriptor.Builder(proto.selectedBuckets().totalBalance()).build(),
+// TODO calculate LMR                    
+//                    new MemberColumnDescriptor.Builder(proto.lmrToUnitRentDifference()).build()                   
+            )));//@formatter:on
             return settings;
         }
 
@@ -117,38 +141,6 @@ public class ArrearsStatusGadget extends AbstractGadget<ArrearsStatusGadgetMetad
         }
 
         @Override
-        public List<ColumnDescriptor> defineColumnDescriptors() {
-            return Arrays.asList(//@formatter:off
-                    new MemberColumnDescriptor.Builder(proto().billingAccount().lease().unit().belongsTo().propertyCode()).visible(true).build(),
-                    new MemberColumnDescriptor.Builder(proto().billingAccount().lease().unit().belongsTo().info().name()).title(i18n.tr("Building")).build(),
-                    new MemberColumnDescriptor.Builder(proto().billingAccount().lease().unit().belongsTo().info().address().streetNumber()).visible(false).build(),
-                    new MemberColumnDescriptor.Builder(proto().billingAccount().lease().unit().belongsTo().info().address().streetName()).visible(false).build(),                    
-                    new MemberColumnDescriptor.Builder(proto().billingAccount().lease().unit().belongsTo().info().address().province().name()).visible(false).title(i18n.tr("Province")).build(),                    
-                    new MemberColumnDescriptor.Builder(proto().billingAccount().lease().unit().belongsTo().info().address().country().name()).visible(false).title(i18n.tr("Country")).build(),                    
-                    new MemberColumnDescriptor.Builder(proto().billingAccount().lease().unit().belongsTo().complex().name()).visible(false).title(i18n.tr("Complex")).build(),
-                    new MemberColumnDescriptor.Builder(proto().billingAccount().lease().unit().info().number()).title(i18n.tr("Unit")).build(),
-                    new MemberColumnDescriptor.Builder(proto().billingAccount().lease().leaseId()).build(),
-                    new MemberColumnDescriptor.Builder(proto().billingAccount().lease().leaseFrom()).build(),
-                    new MemberColumnDescriptor.Builder(proto().billingAccount().lease().leaseTo()).build(),
-                    
-                    // arrears
-                    new MemberColumnDescriptor.Builder(proto().selectedBuckets().bucketCurrent()).build(),
-                    new MemberColumnDescriptor.Builder(proto().selectedBuckets().bucket30()).build(),
-                    new MemberColumnDescriptor.Builder(proto().selectedBuckets().bucket60()).build(),
-                    new MemberColumnDescriptor.Builder(proto().selectedBuckets().bucket90()).build(),
-                    new MemberColumnDescriptor.Builder(proto().selectedBuckets().bucketOver90()).build(),
-                    
-                    new MemberColumnDescriptor.Builder(proto().selectedBuckets().arrearsAmount()).build()
-// TODO calculate CREDIT AMOUNT                    
-//                    new MemberColumnDescriptor.Builder(proto().selectedBuckets().creditAmount()).build(),                    
-//                    new MemberColumnDescriptor.Builder(proto().selectedBuckets().totalBalance()).build(),
-// TODO calculate LMR                    
-//                    new MemberColumnDescriptor.Builder(proto().lmrToUnitRentDifference()).build()
-                    
-            );//@formatter:on
-        }
-
-        @Override
         public void setContainerBoard(BoardView board) {
             super.setContainerBoard(board);
             board.addBuildingSelectionChangedEventHandler(new BuildingSelectionChangedEventHandler() {
@@ -160,7 +152,25 @@ public class ArrearsStatusGadget extends AbstractGadget<ArrearsStatusGadgetMetad
         }
 
         @Override
-        public void populatePage(final int pageNumber) {
+        protected Widget initContentPanel() {
+            contentPanel = new FormFlexPanel();
+            contentPanel.setWidget(1, 0, initTitleBannerPanel());
+            contentPanel.setWidget(2, 0, initListerWidget());
+            return contentPanel;
+        }
+
+        private Widget initTitleBannerPanel() {
+            HorizontalPanel titleBannerPanel = new HorizontalPanel();
+            titleBannerPanel.setWidth("100%");
+            titleBannerPanel.setHorizontalAlignment(HorizontalPanel.ALIGN_CENTER);
+
+            titleBannerLabel = new HTML();
+            titleBannerPanel.add(titleBannerLabel);
+            return titleBannerPanel.asWidget();
+        }
+
+        @Override
+        protected void populatePage(final int pageNumber) {
             if (containerBoard.getSelectedBuildingsStubs() == null) {
                 refreshTitleBanner();
                 setPageData(new Vector<LeaseArrearsSnapshotDTO>(), 0, 0, false);
@@ -168,7 +178,7 @@ public class ArrearsStatusGadget extends AbstractGadget<ArrearsStatusGadgetMetad
                 return;
             } else {
                 Vector<Building> buildings = new Vector<Building>(containerBoard.getSelectedBuildingsStubs());
-                Vector<Sort> sortingCriteria = new Vector<Sort>(getSorting());
+                Vector<Sort> sortingCriteria = new Vector<Sort>(getListerSortingCriteria());
 
                 service.leaseArrearsRoster(new DefaultAsyncCallback<EntitySearchResult<LeaseArrearsSnapshotDTO>>() {
 
@@ -187,24 +197,6 @@ public class ArrearsStatusGadget extends AbstractGadget<ArrearsStatusGadgetMetad
                 }, buildings, getStatusDate(), getMetadata().category().getValue(), sortingCriteria, pageNumber, getMetadata().pageSize().getValue());
             }
 
-        }
-
-        @Override
-        public Widget initContentPanel() {
-            contentPanel = new FormFlexPanel();
-            contentPanel.setWidget(1, 0, initTitleBannerPanel());
-            contentPanel.setWidget(2, 0, initListerWidget());
-            return contentPanel;
-        }
-
-        private Widget initTitleBannerPanel() {
-            HorizontalPanel titleBannerPanel = new HorizontalPanel();
-            titleBannerPanel.setWidth("100%");
-            titleBannerPanel.setHorizontalAlignment(HorizontalPanel.ALIGN_CENTER);
-
-            titleBannerLabel = new HTML();
-            titleBannerPanel.add(titleBannerLabel);
-            return titleBannerPanel.asWidget();
         }
 
         private LogicalDate getStatusDate() {

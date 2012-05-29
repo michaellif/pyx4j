@@ -175,7 +175,7 @@ public abstract class GadgetInstanceBase<T extends GadgetMetadata> implements IG
     /**
      * Implement in derived class to represent desired gadget UI.
      */
-    public abstract Widget initContentPanel();
+    protected abstract Widget initContentPanel();
 
     protected final Widget initView() {
         if (errorPanel == null) {

@@ -25,7 +25,6 @@ import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.DataTable;
 import com.pyx4j.entity.client.ui.datatable.DataTable.SortChangeHandler;
 import com.pyx4j.entity.client.ui.datatable.DataTablePanel;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
@@ -42,37 +41,73 @@ public abstract class ListerGadgetInstanceBase<E extends IEntity, GADGET_TYPE ex
 
     protected static final int DEFAULT_PAGE_SIZE = 10;
 
+    private final Class<E> listedEntityClass;
+
+    private final boolean isSearchFilterEnabled;
+
     private DataTablePanel<E> dataTablePanel;
 
-    private final E proto;
+    private int pageNumber;
 
-    private final Class<E> entityClass;
+    private boolean needToSaveColumns;
 
-    private boolean needToSaveColumns = false;
+    /**
+     * @param gadgetTypeClass
+     *            gadget type
+     * @param gadgetMetadata
+     *            instance of gadget metadata that defines gadget type and holds the state of the gadget (can be <code>null</code>), it's type is
+     *            {@link GadgetMetadata} because it has to be provided via factory that doesn't have an option to provide with a concrete type
+     * @param listedEntityClass
+     *            class of the entity that this list is supposed to display
+     * @param isSearchFilterEnabled
+     *            display search filter on the lister
+     */
+    // TODO defaultColumnDescriptors are only required if gadget metadata is initialized by gadget, actually it's 
+    public ListerGadgetInstanceBase(Class<GADGET_TYPE> gadgetTypeClass, GadgetMetadata gadgetMetadata, Class<E> listedEntityClass, boolean isSearchFilterEnabled) {
+        super(gadgetMetadata, gadgetTypeClass);
 
-    private int pageNumber = 0;
+        this.needToSaveColumns = false;
 
-    public ListerGadgetInstanceBase(GadgetMetadata gmd, Class<E> entityClass, Class<GADGET_TYPE> gadgetTypeClass) {
-        super(gmd, gadgetTypeClass);
+        this.pageNumber = 0;
 
-        this.entityClass = entityClass;
-        proto = EntityFactory.getEntityPrototype(entityClass);
+        this.isSearchFilterEnabled = isSearchFilterEnabled;
+        this.listedEntityClass = listedEntityClass;
 
         setDefaultPopulator(new Populator() {
             @Override
             public void populate() {
-                doPopulate();
+                populatePage(pageNumber);
             }
         });
     }
 
-    protected final E proto() {
-        return proto;
+    @Override
+    public void setPresenter(IGadgetInstancePresenter presenter) {
+        super.setPresenter(presenter);
+        // TODO this is a hack to save preloaded lister gadgets (that do not have columns in metadata):
+        // i think this has to be fixed but not letting null gagdet metadata to be passed to the constructor, and creating default settings on server side
+        // one of the advantages of server side creation of gadget metadata, is that it allows to select different settings based on user context
+        if (needToSaveColumns) {
+            saveMetadata();
+            needToSaveColumns = false;
+        }
     }
 
+    /**
+     * Implement in derived class to fill the page via {@link #setPageData(List, int, int, boolean)}, and {@link #populateSucceded()} or
+     * {@link #populateFailed(Throwable)}
+     * 
+     * @param pageNumber
+     *            the page that it's requested to populate
+     */
+    protected abstract void populatePage(int pageNumber);
+
+    /**
+     * Initializes the lister widget so it can be added to a gadget panel
+     */
     protected Widget initListerWidget() {
-        dataTablePanel = new DataTablePanel<E>(entityClass);
-        dataTablePanel.setColumnDescriptors(fetchColumnDescriptorsFromSettings());
+        dataTablePanel = new DataTablePanel<E>(listedEntityClass);
+        dataTablePanel.setColumnDescriptors(getColumnDescriptorsFromSettings());
         dataTablePanel.setFilterApplyCommand(new Command() {
             @Override
             public void execute() {
@@ -82,25 +117,31 @@ public abstract class ListerGadgetInstanceBase<E extends IEntity, GADGET_TYPE ex
         dataTablePanel.setFirstActionHandler(new Command() {
             @Override
             public void execute() {
-                firstListPage();
+                pageNumber = 0;
+                populate(false);
             }
         });
         dataTablePanel.setPrevActionHandler(new Command() {
             @Override
             public void execute() {
-                prevListPage();
+                if (pageNumber != 0) {
+                    --pageNumber;
+                    populate(false);
+                }
             }
         });
         dataTablePanel.setNextActionHandler(new Command() {
             @Override
             public void execute() {
-                nextListPage();
+                pageNumber += 1;
+                populate(false);
             }
         });
         dataTablePanel.setLastActionHandler(new Command() {
             @Override
             public void execute() {
-                lastListPage();
+                pageNumber = dataTablePanel.getDataTableModel().getTotalRows() / getMetadata().pageSize().getValue();
+                populate(false);
             }
         });
         dataTablePanel.getDataTable().addSortChangeHandler(new SortChangeHandler<E>() {
@@ -113,7 +154,7 @@ public abstract class ListerGadgetInstanceBase<E extends IEntity, GADGET_TYPE ex
                         break;
                     }
                 }
-                // warning: both calls are async
+                // TODO: warning: both calls are async
                 saveMetadata();
                 populate(false);
             }
@@ -126,7 +167,7 @@ public abstract class ListerGadgetInstanceBase<E extends IEntity, GADGET_TYPE ex
                 while (columnDescriptors.hasNext()) {
                     assert columnDescriptorEntities.hasNext() : "DataTable's column descriptors and gadget metadata's column descriptor arrays don't match";
                     ColumnDescriptorEntity entity = columnDescriptorEntities.next();
-                    ColumnDescriptorConverter.columnDescriptorToEntity(columnDescriptors.next(), entity);
+                    ColumnDescriptorConverter.saveColumnDescriptorToEntity(columnDescriptors.next(), entity);
                 }
                 saveMetadata();
             }
@@ -143,7 +184,7 @@ public abstract class ListerGadgetInstanceBase<E extends IEntity, GADGET_TYPE ex
         });
 
         dataTablePanel.setSize("100%", "100%");
-        dataTablePanel.setFilteringEnabled(isFilterRequired());
+        dataTablePanel.setFilteringEnabled(isSearchFilterEnabled);
         dataTablePanel.getDataTable().setHasColumnClickSorting(true);
         dataTablePanel.getDataTable().setHasCheckboxColumn(false);
         dataTablePanel.getDataTable().setMarkSelectedRow(false);
@@ -158,61 +199,11 @@ public abstract class ListerGadgetInstanceBase<E extends IEntity, GADGET_TYPE ex
         return dataTablePanel;
     }
 
-    // FIXME put this in the constructor
-    protected abstract boolean isFilterRequired();
-
-    /**
-     * Implement in derived class to fill the page via {@link #setPageData(List, int, int, boolean)}.
-     * 
-     * @param pageNumber
-     */
-    public abstract void populatePage(int pageNumber);
-
-    // FIXME put this in the constructor
-    public abstract List<ColumnDescriptor> defineColumnDescriptors();
-
-    /**
-     * Actions, Override in derived class for your own select item procedure.
-     */
-    protected void onItemSelect(E item) {
-    }
-
-    private List<ColumnDescriptor> fetchColumnDescriptorsFromSettings() {
-        List<ColumnDescriptor> columnDescriptors = new ArrayList<ColumnDescriptor>();
-        if (getMetadata().columnDescriptors().isEmpty()) {
-            // normally this should happen only once in gadget's lifetime
-            // we do it here because of two reasons:
-            //      1. Preloaded gadgets need this
-            //      2. createDefaultSettings() is called from the base class constructor before we can know the default columns, and
-            //         before the dataTablePanel has been initialized, hence we can't put it into createDefaultSettings();
-            dumpDefaultColumnDescriptorsToSettings();
-            needToSaveColumns = true; // to save it when we get the presenter.
-        }
-        for (ColumnDescriptorEntity columnDescriptorEntity : getMetadata().columnDescriptors()) {
-            columnDescriptors.add(ColumnDescriptorConverter.columnDescriptorFromEntity(entityClass, columnDescriptorEntity));
-        }
-        return columnDescriptors;
-    }
-
-    @Override
-    protected GADGET_TYPE createDefaultSettings(Class<GADGET_TYPE> metadataClass) {
-        GADGET_TYPE settings = super.createDefaultSettings(metadataClass);
-        settings.pageSize().setValue(DEFAULT_PAGE_SIZE);
-        return settings;
-    }
-
-    private void dumpDefaultColumnDescriptorsToSettings() {
-        GADGET_TYPE settings = getMetadata();
-        for (ColumnDescriptor columnDescriptor : defineColumnDescriptors()) {
-            ColumnDescriptorEntity entity = EntityFactory.create(ColumnDescriptorEntity.class);
-            settings.columnDescriptors().add(ColumnDescriptorConverter.columnDescriptorToEntity(columnDescriptor, entity));
-        }
-    }
-
     @Override
     public void start() {
-        setPageNumber(0);
-        dataTablePanel.getDataTableModel().setSortColumn(ColumnDescriptorConverter.columnDescriptorFromEntity(entityClass, getMetadata().primarySortColumn()));
+        pageNumber = 0;
+        dataTablePanel.getDataTableModel().setSortColumn(
+                ColumnDescriptorConverter.columnDescriptorFromEntity(listedEntityClass, getMetadata().primarySortColumn()));
         dataTablePanel.getDataTableModel().setSortAscending(getMetadata().sortAscending().isBooleanTrue());
         dataTablePanel.getDataTable().renderTable();
         super.start();
@@ -237,81 +228,69 @@ public abstract class ListerGadgetInstanceBase<E extends IEntity, GADGET_TYPE ex
         });
     }
 
-    protected List<Criterion> getListerFilterData() {
-        return dataTablePanel.getFilters();
-    }
-
-    public int getPageSize() {
-        return getMetadata().pageSize().getValue();
-    }
-
-    public int getPageNumber() {
-        return pageNumber;
-    }
-
     /**
-     * This is <b>NOT</b> for changing the current page!!!
-     */
-    private void setPageNumber(int pageNumber) {
-        this.pageNumber = pageNumber;
-    }
-
-    public List<Sort> getSorting() {
-        return dataTablePanel.getDataTableModel().getSortCriteria();
-    }
-
-    /**
-     * Fills the lister with data for a single page.
+     * Fills the lister widget with data for a single page.
      * 
      * @param data
      * @param pageNumber
      * @param totalRows
      * @param hasMoreData
      */
-    public final void setPageData(List<E> data, int pageNumber, int totalRows, boolean hasMoreData) {
-        setPageNumber(pageNumber);
-        if (data.size() == 0 & pageNumber > 0) {
-            prevListPage();
-        } else {
-            dataTablePanel.setPageSize(getMetadata().pageSize().getValue());
-            dataTablePanel.populateData(data, pageNumber, hasMoreData, totalRows);
+    protected void setPageData(List<E> data, int pageNumber, int totalRows, boolean hasMoreData) {
+        this.pageNumber = pageNumber;
+        dataTablePanel.setPageSize(getMetadata().pageSize().getValue());
+        dataTablePanel.populateData(data, pageNumber, hasMoreData, totalRows);
+    }
+
+    /**
+     * Override in derived class for to define lister widget's item selection handler
+     */
+    protected void onItemSelect(E item) {
+    }
+
+    /**
+     * convenience method that gets lister sorting criteria from gadget's metadata
+     */
+    protected final List<Sort> getListerSortingCriteria() {
+        List<Sort> sortingCriteria = new ArrayList<Sort>();
+        if (!getMetadata().primarySortColumn().isNull()) {
+            sortingCriteria.add(new Sort(getMetadata().primarySortColumn().propertyPath().getValue(), !getMetadata().sortAscending().isBooleanTrue()));
         }
+        return sortingCriteria;
     }
 
-    private void firstListPage() {
-        setPageNumber(0);
-        populate(false);
+    // TODO need to save criteria in metadata and make it final
+    @Deprecated
+    protected List<Criterion> getListerSearchCriteria() {
+        return dataTablePanel.getFilters();
     }
 
-    private void nextListPage() {
-        setPageNumber(getPageNumber() + 1);
-        populate(false);
-    }
-
-    private void prevListPage() {
-        if (getPageNumber() != 0) {
-            setPageNumber(getPageNumber() - 1);
-            populate(false);
-        }
-    }
-
-    private void lastListPage() {
-        setPageNumber(dataTablePanel.getDataTableModel().getTotalRows() / dataTablePanel.getDataTableModel().getPageSize());
-        populate(false);
-    }
-
-    private void doPopulate() {
-        populatePage(getPageNumber());
+    /**
+     * Convenience method that gets page size from gadget's metadata
+     */
+    protected final int getPageSize() {
+        return getMetadata().pageSize().getValue();
     }
 
     @Override
-    public void setPresenter(IGadgetInstancePresenter presenter) {
-        super.setPresenter(presenter);
-        // this is a hack to save preloaded lister gadgets (that do not have columns in metadata)
-        if (needToSaveColumns) {
-            saveMetadata();
-            needToSaveColumns = false;
+    protected GADGET_TYPE createDefaultSettings(Class<GADGET_TYPE> metadataClass) {
+        GADGET_TYPE settings = super.createDefaultSettings(metadataClass);
+        settings.pageSize().setValue(DEFAULT_PAGE_SIZE);
+        return settings;
+    }
+
+    private List<ColumnDescriptor> getColumnDescriptorsFromSettings() {
+        List<ColumnDescriptor> columnDescriptors = new ArrayList<ColumnDescriptor>();
+        if (getMetadata().getPrimaryKey() == null) {
+            // normally this should happen only once in gadget's lifetime
+            // we do it here because of the following reason:
+            //      preloaded gadgets need this
+            needToSaveColumns = true; // to save it when we get the presenter.
         }
+        for (ColumnDescriptorEntity columnDescriptorEntity : getMetadata().columnDescriptors()) {
+            columnDescriptors.add(ColumnDescriptorConverter.columnDescriptorFromEntity(listedEntityClass, columnDescriptorEntity));
+        }
+        return columnDescriptors;
     }
 
 }
