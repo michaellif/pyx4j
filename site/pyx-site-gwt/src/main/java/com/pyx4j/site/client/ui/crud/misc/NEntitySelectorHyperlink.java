@@ -44,12 +44,20 @@ class NEntitySelectorHyperlink<E extends IEntity> extends NFocusComponent<E, Tex
     protected TextBox createEditor() {
         TextBox editor = new TextBox() {
             {
-                super.setEditable(false);
+                super.setEditable(false); // edit box is always non-editable! 
             }
+
+            // but  - emulate state change for parent logic:
+            private boolean editable = super.isEditable();
 
             @Override
             public void setEditable(boolean editable) {
-                //Do nothing, it should always stay read-only
+                this.editable = editable;
+            }
+
+            @Override
+            public boolean isEditable() {
+                return editable;
             }
         };
         return editor;
