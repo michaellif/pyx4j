@@ -13,6 +13,8 @@
  */
 package com.propertyvista.crm.client.ui.crud.building.catalog.concession;
 
+import java.math.BigDecimal;
+
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -107,7 +109,7 @@ public class ConcessionForm extends CrmEntityForm<Concession> {
             valueHolder.setWidget(new DecoratorBuilder(inject(proto().version().value(), comp), 6).build());
 
             if (repopulatevalue && valueType != Concession.Type.free) {
-                get(proto().version().value()).populate(getValue().version().value().getValue());
+                get(proto().version().value()).populate(getValue().version().value().getValue(new BigDecimal(0)));
             }
         }
     }

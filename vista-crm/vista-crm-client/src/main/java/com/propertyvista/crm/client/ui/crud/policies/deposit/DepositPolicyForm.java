@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.policies.deposit;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumSet;
@@ -158,7 +159,7 @@ public class DepositPolicyForm extends PolicyDTOTabPanelBasedForm<DepositPolicyD
                     valueHolder.setWidget(new DecoratorBuilder(inject(proto().value(), comp), 6).build());
 
                     if (repopulatevalue) {
-                        get(proto().value()).populate(getValue().value().getValue());
+                        get(proto().value()).populate(getValue().value().getValue(new BigDecimal(0)));
                     }
                 }
             }

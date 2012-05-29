@@ -183,6 +183,7 @@ public class LeaseAdjustmentForm extends CrmEntityForm<LeaseAdjustment> {
 
         if (comp != null) {
             taxHolder.setWidget(new DecoratorBuilder(inject(proto().tax(), comp), 10).build());
+
             if (repopulate) {
                 get(proto().tax()).populate(getValue().tax().getValue(new BigDecimal(0)));
             }
