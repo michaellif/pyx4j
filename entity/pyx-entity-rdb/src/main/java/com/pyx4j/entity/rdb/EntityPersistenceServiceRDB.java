@@ -306,6 +306,10 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         return mappings.getDatabaseName();
     }
 
+    public Configuration.Ddl getDdl() {
+        return mappings.getDdl();
+    }
+
     Dialect getDialect() {
         return connectionProvider.getDialect();
     }

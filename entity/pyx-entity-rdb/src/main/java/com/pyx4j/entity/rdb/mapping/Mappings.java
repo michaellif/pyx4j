@@ -86,6 +86,10 @@ public class Mappings {
         return configuration.dbName();
     }
 
+    public Configuration.Ddl getDdl() {
+        return configuration.ddl();
+    }
+
     public void reset() {
         tables.clear();
         usedTableNames.clear();
