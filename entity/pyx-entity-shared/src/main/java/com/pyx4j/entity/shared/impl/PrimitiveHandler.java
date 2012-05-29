@@ -243,6 +243,15 @@ public class PrimitiveHandler<TYPE> extends ObjectHandler<TYPE> implements IPrim
     }
 
     @Override
+    public TYPE getValue(TYPE defaultValueIfNull) {
+        if (isNull()) {
+            return defaultValueIfNull;
+        } else {
+            return this.getValue();
+        }
+    }
+
+    @Override
     public boolean isBooleanTrue() {
         if (isNull()) {
             return false;

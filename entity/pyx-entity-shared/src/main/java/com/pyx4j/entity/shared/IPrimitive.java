@@ -34,4 +34,6 @@ public interface IPrimitive<TYPE> extends IObject<TYPE>, Comparable<IPrimitive<T
      */
     public boolean isBooleanTrue();
 
+    public TYPE getValue(TYPE defaultValueIfNull);
+
 }
