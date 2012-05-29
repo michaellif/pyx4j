@@ -24,6 +24,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.log4j.LogManager;
+import org.apache.log4j.MDC50486;
 import org.slf4j.MDC;
 
 import com.pyx4j.commons.CommonsStringUtils;
@@ -54,6 +55,7 @@ public class LoggerConfig {
 
     public static void setContextName(String name) {
         nameVariables.put("contextName", name);
+        init();
     }
 
     public static String getContextName() {
@@ -68,11 +70,24 @@ public class LoggerConfig {
         nameVariables.put(name, value);
     }
 
+    public static void init() {
+        try {
+            LogbackAdapter.init();
+        } catch (NoClassDefFoundError ignore) {
+        }
+    }
+
     public static void shutdown() {
         try {
             LogManager.shutdown();
         } catch (NoClassDefFoundError ignore) {
         }
+
+        try {
+            LogbackAdapter.shutdown();
+        } catch (NoClassDefFoundError ignore) {
+        }
+
     }
 
     public static void mdcPut(String key, String o) {
@@ -89,13 +104,14 @@ public class LoggerConfig {
         }
     }
 
-    /**
-     * https://issues.apache.org/bugzilla/show_bug.cgi?id=50486
-     */
     public static void mdcClear() {
+        MDC.clear();
+
+        /**
+         * https://issues.apache.org/bugzilla/show_bug.cgi?id=50486
+         */
         try {
-            MDC.clear();
-            //MDC50486.remove();
+            MDC50486.remove();
         } catch (NoClassDefFoundError ignore) {
         }
     }
