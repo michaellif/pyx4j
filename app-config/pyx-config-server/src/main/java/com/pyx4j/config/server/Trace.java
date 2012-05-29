@@ -53,6 +53,8 @@ public class Trace {
         TraceId tid = traceId.get();
         if (tid.id.length() > 0) {
             tid.id = tid.id.substring(0, tid.id.length() - 1);
+        } else {
+            traceId.remove();
         }
         return tid.id + "}";
     }

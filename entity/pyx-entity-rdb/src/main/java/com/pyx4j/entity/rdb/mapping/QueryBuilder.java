@@ -131,7 +131,7 @@ public class QueryBuilder<T extends IEntity> {
             appendFilters(criteria.getFilters(), firstCriteria, true);
         }
         if ((criteria.getSorts() != null) && (!criteria.getSorts().isEmpty())) {
-            log.debug("sort by {}", criteria.getSorts());
+            log.trace("sort by {}", criteria.getSorts());
             sortsSql.append(" ORDER BY ");
             boolean firstOrderBy = true;
             for (EntityQueryCriteria.Sort sort : expandToStringMembers(criteria.getSorts())) {

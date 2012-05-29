@@ -24,8 +24,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.log4j.LogManager;
-import org.apache.log4j.MDC;
-import org.apache.log4j.MDC50486;
+import org.slf4j.MDC;
 
 import com.pyx4j.commons.CommonsStringUtils;
 
@@ -76,7 +75,7 @@ public class LoggerConfig {
         }
     }
 
-    public static void mdcPut(String key, Object o) {
+    public static void mdcPut(String key, String o) {
         try {
             MDC.put(key, o);
         } catch (NoClassDefFoundError ignore) {
@@ -96,7 +95,7 @@ public class LoggerConfig {
     public static void mdcClear() {
         try {
             MDC.clear();
-            MDC50486.remove();
+            //MDC50486.remove();
         } catch (NoClassDefFoundError ignore) {
         }
     }
