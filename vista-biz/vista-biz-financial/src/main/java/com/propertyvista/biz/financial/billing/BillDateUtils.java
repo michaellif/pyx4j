@@ -18,6 +18,7 @@ import java.util.GregorianCalendar;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.financial.SysDateManager;
 import com.propertyvista.domain.financial.BillingAccount;
@@ -26,6 +27,8 @@ import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
 
 public class BillDateUtils {
+
+    private static final I18n i18n = I18n.get(BillDateUtils.class);
 
     private static final long MILIS_IN_DAY = 1000 * 60 * 60 * 24;
 
@@ -178,6 +181,31 @@ public class BillDateUtils {
         return new LogicalDate(calendar.getTime());
     }
 
+    public static LogicalDate calculateBillingPeriodStartDate(Bill bill) {
+        LogicalDate date = null;
+        if (Bill.BillType.Estimate == bill.billType().getValue() || Bill.BillType.First == bill.billType().getValue()) {
+            date = bill.billingAccount().lease().leaseFrom().getValue();
+        } else if (Bill.BillType.Regular == bill.billType().getValue() || Bill.BillType.ZeroCycle == bill.billType().getValue()) {
+            date = bill.billingRun().billingPeriodStartDate().getValue();
+        }
+        return date;
+    }
+
+    public static LogicalDate calculateBillingPeriodEndDate(Bill bill) {
+        LogicalDate date = null;
+        if (Bill.BillType.Final != bill.billType().getValue()) {
+            if (bill.billingAccount().lease().leaseTo().isNull()
+                    || (bill.billingAccount().lease().leaseTo().getValue().compareTo(bill.billingRun().billingPeriodEndDate().getValue()) >= 0)) {
+                date = bill.billingRun().billingPeriodEndDate().getValue();
+            } else if (bill.billingAccount().lease().leaseTo().getValue().compareTo(bill.billingRun().billingPeriodStartDate().getValue()) >= 0) {
+                date = bill.billingAccount().lease().leaseTo().getValue();
+            } else {
+                throw new BillingException(i18n.tr("Lease already ended"));
+            }
+        }
+        return date;
+    }
+
     public static LogicalDate calculateBillDueDate(Bill bill) {
         if (bill.billType().getValue() == Bill.BillType.Final) {
             //TODO add policy for final bill duedate - for now 7 days after bill run
@@ -197,4 +225,5 @@ public class BillDateUtils {
         calendar.add(Calendar.DATE, 1);
         return new LogicalDate(calendar.getTime());
     }
+
 }

@@ -24,9 +24,9 @@ import com.propertyvista.domain.financial.billing.InvoicePaymentBackOut;
 
 public class BillingPaymentProcessor extends AbstractProcessor {
 
-    private final Billing billing;
+    private final AbstractBillingProcessor billing;
 
-    BillingPaymentProcessor(Billing billing) {
+    BillingPaymentProcessor(AbstractBillingProcessor billing) {
         this.billing = billing;
     }
 

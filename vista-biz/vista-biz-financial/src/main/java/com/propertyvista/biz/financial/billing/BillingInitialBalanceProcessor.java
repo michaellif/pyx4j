@@ -17,14 +17,21 @@ import com.propertyvista.biz.financial.AbstractProcessor;
 
 public class BillingInitialBalanceProcessor extends AbstractProcessor {
 
-    private final Billing billing;
+    private final AbstractBillingProcessor billing;
 
-    BillingInitialBalanceProcessor(Billing billing) {
+    BillingInitialBalanceProcessor(AbstractBillingProcessor billing) {
         this.billing = billing;
     }
 
     void createInitialBalanceRecord() {
         //TODO
+
+        //1. get initial balance
+        // if not null
+        //2. create current bill charges/adjustments etc..
+        //3. create initial debit/credit so initial debit/credit + charges = initial balance
+        //
+
     }
 
 }

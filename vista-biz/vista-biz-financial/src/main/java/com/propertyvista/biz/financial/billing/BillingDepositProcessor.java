@@ -31,9 +31,9 @@ public class BillingDepositProcessor extends AbstractProcessor {
 
     private static final I18n i18n = I18n.get(BillingDepositProcessor.class);
 
-    private final Billing billing;
+    private final AbstractBillingProcessor billing;
 
-    BillingDepositProcessor(Billing billing) {
+    BillingDepositProcessor(AbstractBillingProcessor billing) {
         this.billing = billing;
     }
 

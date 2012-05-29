@@ -33,9 +33,9 @@ public class BillingLatePaymentFeeProcessor extends AbstractProcessor {
 
     private static final I18n i18n = I18n.get(BillingLatePaymentFeeProcessor.class);
 
-    private final Billing billing;
+    private final AbstractBillingProcessor billing;
 
-    BillingLatePaymentFeeProcessor(Billing billing) {
+    BillingLatePaymentFeeProcessor(AbstractBillingProcessor billing) {
         this.billing = billing;
     }
 

@@ -96,7 +96,7 @@ public class BillingCycleManagerTest extends VistaDBTestBase {
         billingCycle.paymentFrequency().setValue(PaymentFrequency.Monthly);
         billingCycle.billingPeriodStartDay().setValue(billingCycleStartDate);
 
-        BillingRun billingRun = BillingCycleManger.createNewLeaseFirstBillingRun(billingCycle, leaseStartDate, useCycleLeaseDay);
+        BillingRun billingRun = BillingLifecycleManager.createNewLeaseFirstBillingRun(billingCycle, leaseStartDate, useCycleLeaseDay);
         return billingRun;
     }
 
@@ -106,12 +106,12 @@ public class BillingCycleManagerTest extends VistaDBTestBase {
         billingCycle.paymentFrequency().setValue(PaymentFrequency.Monthly);
         billingCycle.billingPeriodStartDay().setValue(billingCycleStartDate);
 
-        BillingRun billingRun = BillingCycleManger.createExistingLeaseInitialBillingRun(billingCycle, leaseStartDate, leaseActivationDate, useCycleLeaseDay);
+        BillingRun billingRun = BillingLifecycleManager.createExistingLeaseInitialBillingRun(billingCycle, leaseStartDate, leaseActivationDate, useCycleLeaseDay);
         return billingRun;
     }
 
     private BillingRun createSubsiquentBillingRun(BillingRun previousBillingRun) {
-        BillingRun billingRun = BillingCycleManger.createSubsiquentBillingRun(previousBillingRun.billingCycle(), previousBillingRun);
+        BillingRun billingRun = BillingLifecycleManager.createSubsiquentBillingRun(previousBillingRun.billingCycle(), previousBillingRun);
         return billingRun;
     }
 

@@ -62,6 +62,10 @@ public interface Bill extends IEntity {
     @I18n
     enum BillType {
 
+        ZeroCycle,
+
+        Estimate,
+
         First,
 
         Regular,
@@ -85,11 +89,6 @@ public interface Bill extends IEntity {
     Lease lease();
 
     IPrimitive<Integer> billSequenceNumber();
-
-    /**
-     * If draft is true no need to verify it. Next bill will run on the same billing cycle.
-     */
-    IPrimitive<Boolean> draft();
 
     IPrimitiveSet<String> warnings();
 

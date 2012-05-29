@@ -36,9 +36,9 @@ public class BillingProductChargeProcessor extends AbstractProcessor {
 
     private static final I18n i18n = I18n.get(BillingProductChargeProcessor.class);
 
-    private final Billing billing;
+    private final AbstractBillingProcessor billing;
 
-    BillingProductChargeProcessor(Billing billing) {
+    BillingProductChargeProcessor(AbstractBillingProcessor billing) {
         this.billing = billing;
 
         billing.getNextPeriodBill().serviceCharge().setValue(new BigDecimal(0));

@@ -21,27 +21,27 @@ public class BillingFacadeImpl implements BillingFacade {
 
     @Override
     public BillingRun runBilling(Lease lease) {
-        return BillingLifecycle.runBilling(lease);
+        return BillingLifecycleManager.runBilling(lease);
     }
 
     @Override
     public Bill getLatestConfirmedBill(Lease lease) {
-        return BillingLifecycle.getLatestConfirmedBill(lease);
+        return BillingLifecycleManager.getLatestConfirmedBill(lease);
     }
 
     @Override
     public Bill getLatestBill(Lease lease) {
-        return BillingLifecycle.getLatestBill(lease);
+        return BillingLifecycleManager.getLatestBill(lease);
     }
 
     @Override
     public Bill confirmBill(Bill bill) {
-        return BillingLifecycle.confirmBill(bill);
+        return BillingLifecycleManager.confirmBill(bill);
     }
 
     @Override
     public Bill rejectBill(Bill bill) {
-        return BillingLifecycle.rejectBill(bill);
+        return BillingLifecycleManager.rejectBill(bill);
     }
 
 }
