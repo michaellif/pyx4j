@@ -48,6 +48,7 @@ import com.pyx4j.entity.rdb.PersistenceContext;
 import com.pyx4j.entity.rdb.SQLUtils;
 import com.pyx4j.entity.rdb.cfg.Configuration;
 import com.pyx4j.entity.rdb.cfg.Configuration.DatabaseType;
+import com.pyx4j.entity.rdb.cfg.Configuration.Ddl;
 import com.pyx4j.entity.server.ServerEntityFactory;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
@@ -166,12 +167,12 @@ public class Mappings {
                         }
                     }
                     try {
-                        model.ensureExists(persistenceContext);
+                        model.ensureExists(persistenceContext, configuration.ddl());
                     } catch (SQLException e) {
                         log.error("table creation error", e);
                         throw new RuntimeException(e);
                     }
-                    if (persistenceContext.getDialect().isSequencesBaseIdentity()) {
+                    if (persistenceContext.getDialect().isSequencesBaseIdentity() && (configuration.ddl() != Ddl.disabled)) {
                         if (model.getPrimaryKeyStrategy() == Table.PrimaryKeyStrategy.AUTO) {
                             ensureSequence(persistenceContext,
                                     persistenceContext.getDialect().getNamingConvention().sqlTableSequenceName(entityMeta.getPersistenceName()));

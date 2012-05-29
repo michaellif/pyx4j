@@ -56,6 +56,8 @@ public class ConfigurationOracleProperties extends ConfigurationOracle {
 
     private boolean createForeignKeys = true;
 
+    private Ddl ddl = Ddl.auto;
+
     @Override
     public String dbHost() {
         return host;
@@ -131,6 +133,11 @@ public class ConfigurationOracleProperties extends ConfigurationOracle {
         return tablesItentityOffset;
     }
 
+    @Override
+    public Ddl ddl() {
+        return ddl;
+    }
+
     public void readProperties(String prefix, Map<String, String> properties) {
         PropertiesConfiguration c = new PropertiesConfiguration(prefix, properties);
         this.host = c.getValue("host", this.host);
@@ -155,6 +162,7 @@ public class ConfigurationOracleProperties extends ConfigurationOracle {
                 this.unreturnedConnectionBackgroundProcessTimeout);
 
         this.tablesItentityOffset = c.getIntegerValue("tablesItentityOffset", this.tablesItentityOffset);
+        this.ddl = c.getEnumValue("ddl", Ddl.class, ddl);
     }
 
 }

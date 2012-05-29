@@ -25,6 +25,10 @@ import com.pyx4j.entity.rdb.dialect.NamingConvention;
 
 public interface Configuration extends IPersistenceConfiguration {
 
+    public enum Ddl {
+        auto, validate, disabled
+    };
+
     public enum ConnectionPoolProvider {
         dbcp, c3p0
     };
@@ -60,6 +64,8 @@ public interface Configuration extends IPersistenceConfiguration {
     public String dbAdministrationUserName();
 
     public String dbAdministrationPassword();
+
+    public Ddl ddl();
 
     public MultitenancyType getMultitenancyType();
 

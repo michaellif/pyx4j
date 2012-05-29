@@ -56,6 +56,11 @@ public abstract class ConfigurationPostgreSQL implements Configuration {
     }
 
     @Override
+    public Ddl ddl() {
+        return Ddl.auto;
+    }
+
+    @Override
     public MultitenancyType getMultitenancyType() {
         return MultitenancyType.SingleTenant;
     }
