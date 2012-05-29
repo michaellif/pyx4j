@@ -27,14 +27,14 @@ public interface ColumnDescriptorEntity extends IEntity {
     /** Determines which property of the embodied member to hold. Supposed to be the same thing as <code>ColumnDescriptor.columnName() </code> */
     IPrimitive<String> propertyPath();
 
-    IPrimitive<Boolean> sortable();
+    IPrimitive<Boolean> isSortable();
 
     /** Sets title to override the default title of the column. <code>null</code> means use the default one */
     IPrimitive<String> title();
 
     IPrimitive<String> width();
 
-    IPrimitive<Boolean> wordWrap();
+    IPrimitive<Boolean> wrapWords();
 
     /** Determines if the column is visible */
     IPrimitive<Boolean> isVisible();

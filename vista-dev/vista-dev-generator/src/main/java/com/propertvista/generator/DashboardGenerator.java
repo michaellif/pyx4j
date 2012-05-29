@@ -13,6 +13,11 @@
  */
 package com.propertvista.generator;
 
+import static com.propertvista.generator.util.ColumnDescriptorEntityBuilder.column;
+
+import java.util.Arrays;
+import java.util.List;
+
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -20,6 +25,9 @@ import com.propertyvista.domain.ISharedUserEntity;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.dashboard.DashboardMetadata.DashboardType;
 import com.propertyvista.domain.dashboard.DashboardMetadata.LayoutType;
+import com.propertyvista.domain.dashboard.gadgets.ColumnDescriptorEntity;
+import com.propertyvista.domain.dashboard.gadgets.arrears.LeaseArrearsSnapshotDTO;
+import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatus;
 import com.propertyvista.domain.dashboard.gadgets.type.ArrearsStatusGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.ArrearsSummaryGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.ArrearsYOYAnalysisChartMetadata;
@@ -28,6 +36,7 @@ import com.propertyvista.domain.dashboard.gadgets.type.BuildingLister;
 import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata.RefreshInterval;
 import com.propertyvista.domain.dashboard.gadgets.type.TurnoverAnalysisMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.UnitAvailability;
+import com.propertyvista.domain.financial.billing.AgingBuckets;
 import com.propertyvista.domain.financial.billing.InvoiceDebit.DebitType;
 
 public class DashboardGenerator extends Dashboards {
@@ -77,6 +86,7 @@ public class DashboardGenerator extends Dashboards {
         unitAvailabilityReport.pageSize().setValue(10);
         unitAvailabilityReport.defaultFilteringPreset().setValue(UnitAvailability.FilterPreset.VacantAndNotice);
         unitAvailabilityReport.docking().column().setValue(0);
+        unitAvailabilityReport.columnDescriptors().addAll(defineUnitAvailabilityReportColumns());
         dmd.gadgets().add(unitAvailabilityReport);
 
         AvailabilitySummary availabilitySummary = EntityFactory.create(AvailabilitySummary.class);
@@ -95,6 +105,38 @@ public class DashboardGenerator extends Dashboards {
         return dmd;
     }
 
+    private List<? extends ColumnDescriptorEntity> defineUnitAvailabilityReportColumns() {
+        UnitAvailabilityStatus proto = EntityFactory.getEntityPrototype(UnitAvailabilityStatus.class);
+
+        return Arrays.asList(//@formatter:off
+                // references
+                column(proto.building().propertyCode()).build(),
+                column(proto.building().externalId()).visible(false).build(),
+                column(proto.building().info().name()).visible(false).title(i18n.tr("Building Name")).build(),
+                column(proto.building().info().address()).visible(false).build(),
+                column(proto.building().propertyManager().name()).visible(false).title(i18n.tr("Property Manager")).build(),                    
+                column(proto.building().complex().name()).visible(false).title(i18n.tr("Complex")).build(),
+                column(proto.unit().info().number()).title(i18n.tr("Unit Name")).build(),
+                column(proto.floorplan().name()).visible(false).title(i18n.tr("Floorplan Name")).build(),
+                column(proto.floorplan().marketingName()).visible(false).title(i18n.tr("Floorplan Marketing Name")).build(),
+                
+                // status
+                column(proto.vacancyStatus()).build(),
+                column(proto.rentedStatus()).visible(true).build(),
+                column(proto.scoping()).visible(true).build(),
+                column(proto.rentReadinessStatus()).visible(true).build(),
+//                column(proto.unitRent()).build(),
+//                column(proto.marketRent()).build(),
+//                column(proto.rentDeltaAbsolute()).visible(true).build(),
+//                column(proto.rentDeltaRelative()).visible(false).build(),
+                column(proto.rentEndDay()).visible(true).build(),
+                column(proto.moveInDay()).visible(true).build(),
+                column(proto.rentedFromDay()).visible(true).build(),
+                column(proto.daysVacant()).build()
+//                column(proto.revenueLost()).build()
+        );//@formatter:on
+    }
+
     private DashboardMetadata defaultArrears() {
         DashboardMetadata dmd = EntityFactory.create(DashboardMetadata.class);
         dmd.user().id().setValue(ISharedUserEntity.DORMANT_KEY); // shared for everyone usage 
@@ -110,6 +152,7 @@ public class DashboardGenerator extends Dashboards {
         arrearsSummaryGadget.refreshInterval().setValue(RefreshInterval.Never);
         arrearsSummaryGadget.pageSize().setValue(1);
         arrearsSummaryGadget.customizeDate().setValue(false);
+        arrearsSummaryGadget.columnDescriptors().addAll(defineArreasSummaryGadgetColumns());
         dmd.gadgets().add(arrearsSummaryGadget);
 
         ArrearsYOYAnalysisChartMetadata arrearsYOYAnalysisChart = EntityFactory.create(ArrearsYOYAnalysisChartMetadata.class);
@@ -125,9 +168,57 @@ public class DashboardGenerator extends Dashboards {
         arrearsStatusGadget.refreshInterval().setValue(RefreshInterval.Never);
         arrearsStatusGadget.pageSize().setValue(10);
         arrearsStatusGadget.category().setValue(DebitType.total);
+        arrearsStatusGadget.columnDescriptors().addAll(defineArrearsStatusGadgetColumns());
         dmd.gadgets().add(arrearsStatusGadget);
 
         return dmd;
 
+    }
+
+    private List<ColumnDescriptorEntity> defineArrearsStatusGadgetColumns() {
+        LeaseArrearsSnapshotDTO proto = EntityFactory.create(LeaseArrearsSnapshotDTO.class);
+
+        return Arrays.asList(//@formatter:off
+                column(proto.billingAccount().lease().unit().belongsTo().propertyCode()).visible(true).build(),
+                column(proto.billingAccount().lease().unit().belongsTo().info().name()).title(i18n.tr("Building")).build(),
+                column(proto.billingAccount().lease().unit().belongsTo().info().address().streetNumber()).visible(false).build(),
+                column(proto.billingAccount().lease().unit().belongsTo().info().address().streetName()).visible(false).build(),                    
+                column(proto.billingAccount().lease().unit().belongsTo().info().address().province().name()).visible(false).title(i18n.tr("Province")).build(),                    
+                column(proto.billingAccount().lease().unit().belongsTo().info().address().country().name()).visible(false).title(i18n.tr("Country")).build(),                    
+                column(proto.billingAccount().lease().unit().belongsTo().complex().name()).visible(false).title(i18n.tr("Complex")).build(),
+                column(proto.billingAccount().lease().unit().info().number()).title(i18n.tr("Unit")).build(),
+                column(proto.billingAccount().lease().leaseId()).build(),
+                column(proto.billingAccount().lease().leaseFrom()).build(),
+                column(proto.billingAccount().lease().leaseTo()).build(),
+                
+                // arrears
+                column(proto.selectedBuckets().bucketCurrent()).build(),
+                column(proto.selectedBuckets().bucket30()).build(),
+                column(proto.selectedBuckets().bucket60()).build(),
+                column(proto.selectedBuckets().bucket90()).build(),
+                column(proto.selectedBuckets().bucketOver90()).build(),
+                
+                column(proto.selectedBuckets().arrearsAmount()).build()
+        //TODO calculate CREDIT AMOUNT                    
+        //        column(proto.selectedBuckets().creditAmount()).build(),                    
+        //        column(proto.selectedBuckets().totalBalance()).build(),
+        //TODO calculate LMR                    
+        //        column(proto.lmrToUnitRentDifference()).build()                   
+        );//@formatter:on        
+    }
+
+    private List<ColumnDescriptorEntity> defineArreasSummaryGadgetColumns() {
+        AgingBuckets proto = EntityFactory.create(AgingBuckets.class);
+
+        return Arrays.asList(//@formatter:off
+                column(proto.bucketCurrent()).build(),
+                column(proto.bucket30()).build(),
+                column(proto.bucket60()).build(),
+                column(proto.bucket90()).build(),
+                column(proto.bucketOver90()).build(),
+                column(proto.arrearsAmount()).build()
+//                column(proto.creditAmount()).build()
+//                column(proto.totalBalance()).build()                
+        );//@formatter:on
     }
 }
