@@ -16,6 +16,7 @@ package com.propertyvista.domain.dashboard.gadgets.type;
 import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Inheritance;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.shared.I18nEnum;
@@ -66,6 +67,7 @@ public interface GadgetMetadata extends ISharedUserEntity {
     };
 
     /** Refresh Period of the gadget in milliseconds (non positive value means the gadget never has to refresh itself) */
+    @NotNull
     IPrimitive<RefreshInterval> refreshInterval();
 
     @EmbeddedEntity

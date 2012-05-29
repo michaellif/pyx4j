@@ -25,12 +25,15 @@ import com.propertyvista.crm.client.ui.gadgets.availabilityreport.AvailabilitySu
 import com.propertyvista.crm.client.ui.gadgets.availabilityreport.TurnoverAnalysisGraphGadget;
 import com.propertyvista.crm.client.ui.gadgets.availabilityreport.UnitAvailabilityReportGadget;
 import com.propertyvista.crm.client.ui.gadgets.other.BuildingListerGadget;
+import com.propertyvista.crm.client.ui.gadgets.payments.PaymentRecordsGadgetFactory;
 import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
 
 /** Global container of all possible gadgets */
 public class Directory {
+
     public enum Categories {
-        Availability, Arrears, Chart, Buildings, Demo;
+
+        Availability, Arrears, Chart, Buildings, Payments, Demo;
 
         @Override
         public String toString() {
@@ -45,13 +48,12 @@ public class Directory {
         new ArrearsStatusGadget(),
         new ArrearsSummaryGadget(),
         new ArrearsYOYAnalysisChartGadget(),
-        
-//        new ArrearsSummaryGadget(),
-//        new ArrearsYOYAnalysisChartGadget(),
-        
+                
         new UnitAvailabilityReportGadget(),
         new AvailabilitySummaryGadget(),
-        new TurnoverAnalysisGraphGadget()                
+        new TurnoverAnalysisGraphGadget(),
+        
+        new PaymentRecordsGadgetFactory()
         
 //        new BarChart2DGadget(),
 //        new DemoGadget(),

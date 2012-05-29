@@ -13,8 +13,10 @@
  */
 package com.propertyvista.domain.dashboard.gadgets.type;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.IPrimitiveSet;
 
@@ -29,11 +31,17 @@ public interface PaymentRecordsGadgetMetadata extends ListerGadgetBaseMetadata {
      * Payment type filter.
      * When <code>null</code> the gadget should display all payment records.
      */
+    @Caption(name = "Payment Method Restriction", description = "Define which payment method you wish to display")
     IPrimitive<PaymentType> paymentType();
 
     /**
      * Payment status filter.
      */
     IPrimitiveSet<PaymentRecord.PaymentStatus> paymentStatus();
+
+    IPrimitive<Boolean> customizeTargetDate();
+
+    @NotNull
+    IPrimitive<LogicalDate> targetDate();
 
 }
