@@ -26,7 +26,7 @@ public class ColumnDescriptorEntityBuilder {
         return new ColumnDescriptorEntityBuilder(property, title);
     }
 
-    public static ColumnDescriptorEntityBuilder column(IObject<?> property) {
+    public static ColumnDescriptorEntityBuilder defColumn(IObject<?> property) {
         return new ColumnDescriptorEntityBuilder(property, null);
     }
 

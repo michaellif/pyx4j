@@ -13,7 +13,7 @@
  */
 package com.propertvista.generator;
 
-import static com.propertvista.generator.util.ColumnDescriptorEntityBuilder.column;
+import static com.propertvista.generator.util.ColumnDescriptorEntityBuilder.defColumn;
 
 import java.util.Arrays;
 import java.util.List;
@@ -38,6 +38,7 @@ import com.propertyvista.domain.dashboard.gadgets.type.TurnoverAnalysisMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.UnitAvailability;
 import com.propertyvista.domain.financial.billing.AgingBuckets;
 import com.propertyvista.domain.financial.billing.InvoiceDebit.DebitType;
+import com.propertyvista.dto.BuildingDTO;
 
 public class DashboardGenerator extends Dashboards {
 
@@ -64,6 +65,7 @@ public class DashboardGenerator extends Dashboards {
         buildingLister.pageSize().setValue(10);
         buildingLister.refreshInterval().setValue(RefreshInterval.Never);
         buildingLister.docking().column().setValue(0);
+        buildingLister.columnDescriptors().addAll(defineBuildingListerGadgetColumns());
 
         dmd.gadgets().add(buildingLister);
 
@@ -110,29 +112,29 @@ public class DashboardGenerator extends Dashboards {
 
         return Arrays.asList(//@formatter:off
                 // references
-                column(proto.building().propertyCode()).build(),
-                column(proto.building().externalId()).visible(false).build(),
-                column(proto.building().info().name()).visible(false).title(i18n.tr("Building Name")).build(),
-                column(proto.building().info().address()).visible(false).build(),
-                column(proto.building().propertyManager().name()).visible(false).title(i18n.tr("Property Manager")).build(),                    
-                column(proto.building().complex().name()).visible(false).title(i18n.tr("Complex")).build(),
-                column(proto.unit().info().number()).title(i18n.tr("Unit Name")).build(),
-                column(proto.floorplan().name()).visible(false).title(i18n.tr("Floorplan Name")).build(),
-                column(proto.floorplan().marketingName()).visible(false).title(i18n.tr("Floorplan Marketing Name")).build(),
+                defColumn(proto.building().propertyCode()).build(),
+                defColumn(proto.building().externalId()).visible(false).build(),
+                defColumn(proto.building().info().name()).visible(false).title(i18n.tr("Building Name")).build(),
+                defColumn(proto.building().info().address()).visible(false).build(),
+                defColumn(proto.building().propertyManager().name()).visible(false).title(i18n.tr("Property Manager")).build(),                    
+                defColumn(proto.building().complex().name()).visible(false).title(i18n.tr("Complex")).build(),
+                defColumn(proto.unit().info().number()).title(i18n.tr("Unit Name")).build(),
+                defColumn(proto.floorplan().name()).visible(false).title(i18n.tr("Floorplan Name")).build(),
+                defColumn(proto.floorplan().marketingName()).visible(false).title(i18n.tr("Floorplan Marketing Name")).build(),
                 
                 // status
-                column(proto.vacancyStatus()).build(),
-                column(proto.rentedStatus()).visible(true).build(),
-                column(proto.scoping()).visible(true).build(),
-                column(proto.rentReadinessStatus()).visible(true).build(),
+                defColumn(proto.vacancyStatus()).build(),
+                defColumn(proto.rentedStatus()).visible(true).build(),
+                defColumn(proto.scoping()).visible(true).build(),
+                defColumn(proto.rentReadinessStatus()).visible(true).build(),
 //                column(proto.unitRent()).build(),
 //                column(proto.marketRent()).build(),
 //                column(proto.rentDeltaAbsolute()).visible(true).build(),
 //                column(proto.rentDeltaRelative()).visible(false).build(),
-                column(proto.rentEndDay()).visible(true).build(),
-                column(proto.moveInDay()).visible(true).build(),
-                column(proto.rentedFromDay()).visible(true).build(),
-                column(proto.daysVacant()).build()
+                defColumn(proto.rentEndDay()).visible(true).build(),
+                defColumn(proto.moveInDay()).visible(true).build(),
+                defColumn(proto.rentedFromDay()).visible(true).build(),
+                defColumn(proto.daysVacant()).build()
 //                column(proto.revenueLost()).build()
         );//@formatter:on
     }
@@ -175,30 +177,49 @@ public class DashboardGenerator extends Dashboards {
 
     }
 
-    private List<ColumnDescriptorEntity> defineArrearsStatusGadgetColumns() {
-        LeaseArrearsSnapshotDTO proto = EntityFactory.create(LeaseArrearsSnapshotDTO.class);
+    private List<ColumnDescriptorEntity> defineBuildingListerGadgetColumns() {
+
+        BuildingDTO proto = EntityFactory.getEntityPrototype(BuildingDTO.class);
 
         return Arrays.asList(//@formatter:off
-                column(proto.billingAccount().lease().unit().belongsTo().propertyCode()).visible(true).build(),
-                column(proto.billingAccount().lease().unit().belongsTo().info().name()).title(i18n.tr("Building")).build(),
-                column(proto.billingAccount().lease().unit().belongsTo().info().address().streetNumber()).visible(false).build(),
-                column(proto.billingAccount().lease().unit().belongsTo().info().address().streetName()).visible(false).build(),                    
-                column(proto.billingAccount().lease().unit().belongsTo().info().address().province().name()).visible(false).title(i18n.tr("Province")).build(),                    
-                column(proto.billingAccount().lease().unit().belongsTo().info().address().country().name()).visible(false).title(i18n.tr("Country")).build(),                    
-                column(proto.billingAccount().lease().unit().belongsTo().complex().name()).visible(false).title(i18n.tr("Complex")).build(),
-                column(proto.billingAccount().lease().unit().info().number()).title(i18n.tr("Unit")).build(),
-                column(proto.billingAccount().lease().leaseId()).build(),
-                column(proto.billingAccount().lease().leaseFrom()).build(),
-                column(proto.billingAccount().lease().leaseTo()).build(),
+                defColumn(proto.complex()).visible(false).build(),
+                defColumn(proto.propertyCode()).build(),
+                defColumn(proto.propertyManager()).build(),
+                defColumn(proto.marketing().name()).title(i18n.tr("Marketing Name")).build(),
+                defColumn(proto.info().name()).build(),
+                defColumn(proto.info().type()).build(),
+                defColumn(proto.info().shape()).visible(false).build(),
+                defColumn(proto.info().address().streetName()).visible(false).build(),
+                defColumn(proto.info().address().city()).build(),
+                defColumn(proto.info().address().province()).build(),
+                defColumn(proto.info().address().country()).build()
+        );//@formatter:on
+    }
+
+    private List<ColumnDescriptorEntity> defineArrearsStatusGadgetColumns() {
+        LeaseArrearsSnapshotDTO proto = EntityFactory.getEntityPrototype(LeaseArrearsSnapshotDTO.class);
+
+        return Arrays.asList(//@formatter:off
+                defColumn(proto.billingAccount().lease().unit().belongsTo().propertyCode()).visible(true).build(),
+                defColumn(proto.billingAccount().lease().unit().belongsTo().info().name()).title(i18n.tr("Building")).build(),
+                defColumn(proto.billingAccount().lease().unit().belongsTo().info().address().streetNumber()).visible(false).build(),
+                defColumn(proto.billingAccount().lease().unit().belongsTo().info().address().streetName()).visible(false).build(),                    
+                defColumn(proto.billingAccount().lease().unit().belongsTo().info().address().province().name()).visible(false).title(i18n.tr("Province")).build(),                    
+                defColumn(proto.billingAccount().lease().unit().belongsTo().info().address().country().name()).visible(false).title(i18n.tr("Country")).build(),                    
+                defColumn(proto.billingAccount().lease().unit().belongsTo().complex().name()).visible(false).title(i18n.tr("Complex")).build(),
+                defColumn(proto.billingAccount().lease().unit().info().number()).title(i18n.tr("Unit")).build(),
+                defColumn(proto.billingAccount().lease().leaseId()).build(),
+                defColumn(proto.billingAccount().lease().leaseFrom()).build(),
+                defColumn(proto.billingAccount().lease().leaseTo()).build(),
                 
                 // arrears
-                column(proto.selectedBuckets().bucketCurrent()).build(),
-                column(proto.selectedBuckets().bucket30()).build(),
-                column(proto.selectedBuckets().bucket60()).build(),
-                column(proto.selectedBuckets().bucket90()).build(),
-                column(proto.selectedBuckets().bucketOver90()).build(),
+                defColumn(proto.selectedBuckets().bucketCurrent()).build(),
+                defColumn(proto.selectedBuckets().bucket30()).build(),
+                defColumn(proto.selectedBuckets().bucket60()).build(),
+                defColumn(proto.selectedBuckets().bucket90()).build(),
+                defColumn(proto.selectedBuckets().bucketOver90()).build(),
                 
-                column(proto.selectedBuckets().arrearsAmount()).build()
+                defColumn(proto.selectedBuckets().arrearsAmount()).build()
         //TODO calculate CREDIT AMOUNT                    
         //        column(proto.selectedBuckets().creditAmount()).build(),                    
         //        column(proto.selectedBuckets().totalBalance()).build(),
@@ -211,12 +232,12 @@ public class DashboardGenerator extends Dashboards {
         AgingBuckets proto = EntityFactory.create(AgingBuckets.class);
 
         return Arrays.asList(//@formatter:off
-                column(proto.bucketCurrent()).build(),
-                column(proto.bucket30()).build(),
-                column(proto.bucket60()).build(),
-                column(proto.bucket90()).build(),
-                column(proto.bucketOver90()).build(),
-                column(proto.arrearsAmount()).build()
+                defColumn(proto.bucketCurrent()).build(),
+                defColumn(proto.bucket30()).build(),
+                defColumn(proto.bucket60()).build(),
+                defColumn(proto.bucket90()).build(),
+                defColumn(proto.bucketOver90()).build(),
+                defColumn(proto.arrearsAmount()).build()
 //                column(proto.creditAmount()).build()
 //                column(proto.totalBalance()).build()                
         );//@formatter:on
