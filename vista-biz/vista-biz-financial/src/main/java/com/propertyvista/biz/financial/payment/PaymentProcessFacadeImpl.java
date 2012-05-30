@@ -79,7 +79,20 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
         Persistence.service().commit();
 
         if (rejectedBatch.size() == 0 && rejectedRecodrs.size() == 0) {
-            return "All Accepted";
+            Integer countBatchs = TaskRunner.runInAdminNamespace(new Callable<Integer>() {
+                @Override
+                public Integer call() throws Exception {
+                    EntityQueryCriteria<PadBatch> criteria = EntityQueryCriteria.create(PadBatch.class);
+                    criteria.add(PropertyCriterion.eq(criteria.proto().padFile(), padFile));
+                    criteria.add(PropertyCriterion.eq(criteria.proto().pmcNamespace(), namespace));
+                    return Persistence.service().count(criteria);
+                }
+            });
+            if (countBatchs > 0) {
+                return "All Accepted";
+            } else {
+                return null;
+            }
         } else {
             return "Batch Level Reject:" + rejectedBatch.size() + "; Transaction Reject:" + rejectedRecodrs.size();
         }
@@ -103,6 +116,10 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
                 return Persistence.service().query(criteria);
             }
         });
+
+        if (transactions.size() == 0) {
+            return null;
+        }
 
         int processed = 0;
         int returned = 0;

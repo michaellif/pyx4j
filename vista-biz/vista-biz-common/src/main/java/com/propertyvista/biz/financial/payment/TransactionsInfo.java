@@ -13,6 +13,12 @@
  */
 package com.propertyvista.biz.financial.payment;
 
-public class TransactionsStats {
+public class TransactionsInfo {
+
+    public String message;
+
+    public int processedRecords;
+
+    public int failedRecords;
 
 }
