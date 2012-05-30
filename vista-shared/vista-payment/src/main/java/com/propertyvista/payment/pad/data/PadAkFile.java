@@ -33,7 +33,7 @@ public interface PadAkFile extends IEntity {
 
     IPrimitive<Integer> version();
 
-    @Length(10)
+    @Length(15)
     @NotNull
     IPrimitive<String> companyId();
 
@@ -60,6 +60,8 @@ public interface PadAkFile extends IEntity {
     @Length(4)
     @NotNull
     IPrimitive<String> acknowledgmentStatusCode();
+
+    IPrimitive<String> acknowledgmentRejectReasonMessage();
 
     IList<PadAkBatch> batches();
 

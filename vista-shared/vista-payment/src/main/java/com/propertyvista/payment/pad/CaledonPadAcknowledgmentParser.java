@@ -58,6 +58,7 @@ public class CaledonPadAcknowledgmentParser {
                 akFile.recordsCount().setValue(headers[v++]);
                 akFile.fileAmount().setValue(headers[v++]);
                 akFile.acknowledgmentStatusCode().setValue(headers[v++]);
+                akFile.acknowledgmentRejectReasonMessage().setValue(headers[v++]);
                 EntityValidator.validate(akFile);
                 return true;
             }

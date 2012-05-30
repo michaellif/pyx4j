@@ -72,7 +72,10 @@ public class PadSimAcknowledgementFileWriter implements Closeable {
         writer.append(padFile.fileAmount().getStringView()).append(",");
 
         //File Status Code
-        writer.append(padFile.acknowledgmentStatusCode().getStringView());
+        writer.append(padFile.acknowledgmentStatusCode().getStringView()).append(",");
+
+        // Reject Reason
+        writer.append(padFile.acknowledgmentRejectReasonMessage().getStringView());
 
         writer.append("\n");
     }

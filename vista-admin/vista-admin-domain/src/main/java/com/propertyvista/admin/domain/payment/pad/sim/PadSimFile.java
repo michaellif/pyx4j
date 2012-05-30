@@ -75,6 +75,8 @@ public interface PadSimFile extends IEntity {
     @Caption(name = "Acknowledgment Code", description = "If Empty Calculated base on batches.\n  '0000' - Accepted\n '0001' - File out of balance\n '0002' - Batch level reject\n '0003' - Transaction reject '0004' - Batch and transaction reject\n '0005' Detail Record Count out of balance\n '0006' - Invalid File Format\n '0007' - Invalid File Header")
     IPrimitive<String> acknowledgmentStatusCode();
 
+    IPrimitive<String> acknowledgmentRejectReasonMessage();
+
     @Timestamp(Timestamp.Update.Created)
     @Format("MM/dd/yyyy HH:mm")
     IPrimitive<Date> received();

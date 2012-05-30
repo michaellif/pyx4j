@@ -54,13 +54,14 @@ public class PadFileForm extends AdminEntityForm<PadSimFile> {
         FormFlexPanel main = new FormFlexPanel();
 
         int row = -1;
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().fileName()), 10).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().fileName()), 20).build());
         main.setWidget(row, 1, new DecoratorBuilder(inject(proto().fileCreationNumber()), 10).build());
 
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().status()), 10).build());
         main.setWidget(row, 1, new DecoratorBuilder(inject(proto().acknowledgmentStatusCode()), 10).build());
 
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().received()), 10).build());
+        main.setWidget(row, 1, new DecoratorBuilder(inject(proto().acknowledgmentRejectReasonMessage()), 40).build());
 
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().acknowledged()), 10).build());
         main.setWidget(row, 1, new DecoratorBuilder(inject(proto().reconciliationSent()), 10).build());
