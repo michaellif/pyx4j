@@ -85,7 +85,7 @@ public class LineItemCollapsableViewer extends CEntityCollapsableViewer<InvoiceL
         FlexTable content = new FlexTable();
         // details
         content.setWidth("100%");
-        content.getColumnFormatter().setWidth(0, "700px"); //overrides FlexTable's width auto-management for cells
+        content.getColumnFormatter().setWidth(0, "80%"); //overrides FlexTable's width auto-management for cells
         content.getColumnFormatter().setWidth(2, "20%");
         int row = 0;
         if (value != null && !value.total().isNull()) {
@@ -96,7 +96,7 @@ public class LineItemCollapsableViewer extends CEntityCollapsableViewer<InvoiceL
             content.getRowFormatter().setStyleName(row, BillingTheme.StyleName.BillingLineItem.name());
             content.getFlexCellFormatter().setColSpan(row, 0, 2);
             content.setWidget(row, 0, caption);
-            content.setWidget(row, 1, amount);
+            content.setWidget(row, 2, amount);
         }
         return content;
     }

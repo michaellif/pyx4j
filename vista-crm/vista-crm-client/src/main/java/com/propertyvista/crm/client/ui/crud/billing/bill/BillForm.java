@@ -71,6 +71,8 @@ public class BillForm extends CrmEntityForm<BillDTO> {
         main.setWidget(++row, 0, inject(proto().paymentLineItems(), new LineItemCollapsableViewer()));
         main.setWidget(++row, 0, inject(proto().depositRefundLineItems(), new LineItemCollapsableViewer()));
         main.setWidget(++row, 0, inject(proto().immediateAccountAdjustmentLineItems(), new LineItemCollapsableViewer()));
+        main.setHR(++row, 0, 2);
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().pastDueAmount()), 10).build());
 
         main.setH1(++row, 0, 2, i18n.tr("Current Bill"));
         main.setWidget(++row, 0, inject(proto().serviceChargeLineItems(), new LineItemCollapsableViewer()));
@@ -87,7 +89,6 @@ public class BillForm extends CrmEntityForm<BillDTO> {
         // Dues:
         main.setHR(++row, 0, 2);
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().totalDueAmount()), 10).build());
-        main.setWidget(row, 1, new DecoratorBuilder(inject(proto().pastDueAmount()), 10).build());
 
         main.getColumnFormatter().setWidth(0, "50%");
         main.getColumnFormatter().setWidth(1, "50%");
