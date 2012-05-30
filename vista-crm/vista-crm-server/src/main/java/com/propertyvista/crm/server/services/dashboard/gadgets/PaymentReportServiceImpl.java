@@ -13,6 +13,8 @@
  */
 package com.propertyvista.crm.server.services.dashboard.gadgets;
 
+import static com.propertyvista.crm.server.util.EntityDTOHelper.mapper;
+
 import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -23,33 +25,62 @@ import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.entity.shared.utils.EntityDtoBinder;
 
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.PaymentReportService;
+import com.propertyvista.crm.server.util.EntityDTOHelper;
+import com.propertyvista.domain.dashboard.gadgets.payments.PaymentRecordForReportDTO;
 import com.propertyvista.domain.financial.PaymentRecord;
-import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.domain.tenant.lease.LeaseParticipant.Role;
 
 public class PaymentReportServiceImpl implements PaymentReportService {
 
-    @Override
-    public void paymentRecords(AsyncCallback<EntitySearchResult<PaymentRecord>> callback, Vector<Building> buildings, LogicalDate targetDate,
-            PaymentType paymentTypeCriteria, Vector<PaymentStatus> paymentStatusCriteria) {
+    private final EntityDtoBinder<PaymentRecord, PaymentRecordForReportDTO> dtoBinder;
 
-        // TODO convert to method arguments
-        int pageSize = 10;
-        int pageNumber = 1;
+    private final EntityDTOHelper<PaymentRecord, PaymentRecordForReportDTO> dtoHelper;
+
+    public PaymentReportServiceImpl() {
+
+        dtoBinder = new EntityDtoBinder<PaymentRecord, PaymentRecordForReportDTO>(PaymentRecord.class, PaymentRecordForReportDTO.class) {
+            @Override
+            protected void bind() {
+                bind(dtoProto.billingAccount().accountNumber(), dboProto.billingAccount().accountNumber());
+                bind(dtoProto.billingAccount().lease().unit().belongsTo().propertyCode(), dboProto.billingAccount().lease().unit().belongsTo().propertyCode());
+                bind(dtoProto.billingAccount().lease().leaseId(), dboProto.billingAccount().lease().leaseId());
+                bind(dtoProto.paymentMethod().type(), dboProto.paymentMethod().type());
+                bind(dtoProto.paymentStatus(), dboProto.paymentStatus());
+                bind(dtoProto.createdDate(), dboProto.createdDate());
+                bind(dtoProto.receivedDate(), dboProto.receivedDate());
+                bind(dtoProto.finalizeDate(), dboProto.finalizeDate());
+                bind(dtoProto.targetDate(), dboProto.targetDate());
+                bind(dtoProto.amount(), dboProto.amount());
+            }
+        };
+
+        dtoHelper = new EntityDTOHelper<PaymentRecord, PaymentRecordForReportDTO>(PaymentRecord.class, PaymentRecordForReportDTO.class, mapper(dtoBinder));
+    }
+
+    @Override
+    public void paymentRecords(AsyncCallback<EntitySearchResult<PaymentRecordForReportDTO>> callback, Vector<Building> buildings, LogicalDate targetDate,
+            PaymentType paymentTypeCriteria, Vector<PaymentRecord.PaymentStatus> paymentStatusCriteria, int pageNumber, int pageSize,
+            Vector<Sort> sortingCriteria) {
 
         EntityListCriteria<PaymentRecord> criteria = EntityListCriteria.create(PaymentRecord.class);
 
         criteria.setPageSize(pageSize);
-        criteria.setPageNumber(0);
+        criteria.setPageNumber(pageNumber);
+
+        criteria.setSorts(dtoHelper.convertDTOSortingCriteria(sortingCriteria));
 
         if (!buildings.isEmpty()) {
             criteria.add(PropertyCriterion.in(criteria.proto().billingAccount().lease().unit().belongsTo(), buildings));
         }
-//        criteria.add(PropertyCriterion.ge(criteria.proto().targetDate(), targetDate));
+        criteria.add(PropertyCriterion.ge(criteria.proto().targetDate(), targetDate));
         if (paymentTypeCriteria != null) {
             criteria.add(PropertyCriterion.eq(criteria.proto().paymentMethod().type(), paymentTypeCriteria));
         }
@@ -57,28 +88,36 @@ public class PaymentReportServiceImpl implements PaymentReportService {
             criteria.add(PropertyCriterion.in(criteria.proto().paymentStatus(), paymentStatusCriteria));
         }
 
-        Vector<PaymentRecord> paymentRecords = new Vector<PaymentRecord>();
         ICursorIterator<PaymentRecord> i = Persistence.service().query(null, criteria, AttachLevel.Attached);
-
+        Vector<PaymentRecordForReportDTO> paymentRecordsPageData = new Vector<PaymentRecordForReportDTO>();
         while (i.hasNext()) {
-            PaymentRecord paymentRecord = i.next();
-
-            Persistence.service().retrieve(paymentRecord.billingAccount());
-            Persistence.service().retrieve(paymentRecord.billingAccount().lease());
-            Persistence.service().retrieve(paymentRecord.billingAccount().lease().version().tenants());
-            Persistence.service().retrieve(paymentRecord.billingAccount().lease().unit());
-            Persistence.service().retrieve(paymentRecord.billingAccount().lease().unit().belongsTo());
-
-            paymentRecords.add(paymentRecord);
+            paymentRecordsPageData.add(makeDTO(i.next()));
         }
 
-        EntitySearchResult<PaymentRecord> result = new EntitySearchResult<PaymentRecord>();
-        result.setData(paymentRecords);
+        EntitySearchResult<PaymentRecordForReportDTO> result = new EntitySearchResult<PaymentRecordForReportDTO>();
         result.setTotalRows(Persistence.service().count(criteria));
-
-        // TODO
-        result.hasMoreData(true);
+        result.setData(paymentRecordsPageData);
+        result.hasMoreData(result.getTotalRows() > (pageNumber * pageSize + paymentRecordsPageData.size())); // MIN(pageNumber) = 0, so the formula is correct 
 
         callback.onSuccess(result);
+    }
+
+    private PaymentRecordForReportDTO makeDTO(PaymentRecord paymentRecordDBO) {
+        Persistence.service().retrieve(paymentRecordDBO.billingAccount());
+        Persistence.service().retrieve(paymentRecordDBO.billingAccount().lease());
+        Persistence.service().retrieve(paymentRecordDBO.billingAccount().lease().version().tenants());
+        Persistence.service().retrieve(paymentRecordDBO.billingAccount().lease().unit());
+        Persistence.service().retrieve(paymentRecordDBO.billingAccount().lease().unit().belongsTo());
+
+        PaymentRecordForReportDTO paymentRecordDTO = dtoBinder.createDTO(paymentRecordDBO);
+
+        gotPrimaryTenant: for (Tenant tenant : paymentRecordDBO.billingAccount().lease().version().tenants()) {
+            if (tenant.role().getValue() == Role.Applicant) {
+                paymentRecordDTO.primaryTenant().set(tenant.detach());
+                break gotPrimaryTenant;
+            }
+        }
+
+        return paymentRecordDTO;
     }
 }

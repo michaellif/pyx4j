@@ -19,15 +19,18 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.rpc.EntitySearchResult;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.rpc.shared.IService;
 
+import com.propertyvista.domain.dashboard.gadgets.payments.PaymentRecordForReportDTO;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.property.asset.building.Building;
 
 public interface PaymentReportService extends IService {
 
-    void paymentRecords(AsyncCallback<EntitySearchResult<PaymentRecord>> callback, Vector<Building> buildings, LogicalDate targetDate,
-            PaymentType paymentTypeCriteria, Vector<PaymentRecord.PaymentStatus> paymentStatusCriteria);
+    void paymentRecords(AsyncCallback<EntitySearchResult<PaymentRecordForReportDTO>> callback, Vector<Building> buildings, LogicalDate targetDate,
+            PaymentType paymentTypeCriteria, Vector<PaymentRecord.PaymentStatus> paymentStatusCriteria, int pageNumber, int pageSize,
+            Vector<Sort> sortingCriteria);
 
 }

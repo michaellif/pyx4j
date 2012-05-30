@@ -14,6 +14,7 @@
 package com.propertyvista.crm.server.util;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -23,10 +24,19 @@ import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.shared.criterion.OrCriterion;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.entity.shared.utils.EntityDtoBinder;
 
 public class EntityDTOHelper<DBO extends IEntity, DTO extends IEntity> {
 
     private final List<PropertyMapper> mappers;
+
+    public static PropertyMapper mapper(EntityDtoBinder<?, ?> dtoBinder) {
+        return new DtoBinderMapper(dtoBinder);
+    }
+
+    public EntityDTOHelper(Class<DBO> dboClass, Class<DTO> dtoClass, PropertyMapper... mappers) {
+        this(dboClass, dtoClass, Arrays.asList(mappers));
+    }
 
     public EntityDTOHelper(Class<DBO> dboClass, Class<DTO> dtoClass, List<PropertyMapper> mappers) {
         this.mappers = mappers;
@@ -84,6 +94,21 @@ public class EntityDTOHelper<DBO extends IEntity, DTO extends IEntity> {
     public static interface PropertyMapper {
 
         Path getDboMemberPath(Path dtoMemberPath);
+
+    }
+
+    private static class DtoBinderMapper implements PropertyMapper {
+
+        private final EntityDtoBinder<?, ?> binder;
+
+        public DtoBinderMapper(EntityDtoBinder<?, ?> binder) {
+            this.binder = binder;
+        }
+
+        @Override
+        public Path getDboMemberPath(Path dtoMemberPath) {
+            return binder.getBoundDboMemberPath(dtoMemberPath);
+        }
 
     }
 }

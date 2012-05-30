@@ -87,6 +87,7 @@ public class ArrearsReportServiceImpl implements ArrearsReportService {
     @Override
     public void leaseArrearsRoster(AsyncCallback<EntitySearchResult<LeaseArrearsSnapshotDTO>> callback, Vector<Building> buildingStubs, LogicalDate asOf,
             DebitType arrearsCategory, Vector<Sort> sortingCriteria, int pageNumber, int pageSize) {
+
         EntityDTOHelper<LeaseArrearsSnapshot, LeaseArrearsSnapshotDTO> dtoHelper = createDTOHelper(arrearsCategory);
         Collection<Criterion> customCriteria = new Vector<Criterion>(); // reserved for future use
 
