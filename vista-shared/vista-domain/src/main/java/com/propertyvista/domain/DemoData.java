@@ -20,7 +20,7 @@ public class DemoData {
     public static final boolean vistaDemo = false;
 
     public static enum DemoPmc {
-        vista, star, redridge, rockville;
+        vista, redridge, rockville, star;
     }
 
     //We need E-mail delivery during tests. All E-mails goes to us!

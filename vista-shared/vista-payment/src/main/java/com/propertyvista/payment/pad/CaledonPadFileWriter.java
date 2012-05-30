@@ -39,20 +39,20 @@ public class CaledonPadFileWriter implements Closeable {
         writer = new FileWriter(file);
     }
 
-    public void write() throws IOException {
-        writeFileHeader(padFile);
+    public void write(String companyId) throws IOException {
+        writeFileHeader(padFile, companyId);
         for (PadBatch padBatch : padFile.batches()) {
             writeBatch(padBatch);
         }
         writeFileTrailer(padFile);
     }
 
-    private void writeFileHeader(PadFile padFile) throws IOException {
+    private void writeFileHeader(PadFile padFile, String companyId) throws IOException {
         // Record Type
         writer.append("A").append(",");
 
         //Customer ID
-        writer.append("BIRCHWOOD").append(",");
+        writer.append(companyId).append(",");
 
         //File Creation Number
         writer.append(padFile.fileCreationNumber().getStringView()).append(",");

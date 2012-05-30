@@ -45,4 +45,6 @@ public abstract class AbstractVistaServerSideConfiguration extends EssentialsSer
      */
     public abstract String getDefaultBaseURLvistaAdmin();
 
+    public abstract String getCaledonCompanyId();
+
 }

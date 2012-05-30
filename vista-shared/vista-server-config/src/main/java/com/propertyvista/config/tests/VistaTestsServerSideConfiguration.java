@@ -130,4 +130,9 @@ public class VistaTestsServerSideConfiguration extends AbstractVistaServerSideCo
     public String getDefaultBaseURLvistaAdmin() {
         return getMainApplicationURL() + "a";
     }
+
+    @Override
+    public String getCaledonCompanyId() {
+        return "vista_test";
+    }
 }

@@ -24,6 +24,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -36,6 +37,7 @@ import com.propertyvista.admin.domain.payment.pad.PadDebitRecord;
 import com.propertyvista.admin.domain.payment.pad.PadFile;
 import com.propertyvista.admin.domain.payment.pad.PadFileCreationNumber;
 import com.propertyvista.admin.domain.payment.pad.PadReconciliationFile;
+import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.payment.pad.CaledonPadFileWriter;
 import com.propertyvista.payment.pad.CaledonPadSftpClient;
 import com.propertyvista.payment.pad.CaledonPadSftpClient.PadFileType;
@@ -46,7 +48,7 @@ public class PadCaledon {
 
     private static Object lock = new Object();
 
-    private final String companyId = "BIRCHWOOD";
+    private final String companyId = ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance()).getCaledonCompanyId();
 
     private File getPadBaseDir() {
         File padWorkdir = new File(new File("vista-work"), LoggerConfig.getContextName());
@@ -124,7 +126,7 @@ public class PadCaledon {
 
             CaledonPadFileWriter writer = new CaledonPadFileWriter(padFile, file);
             try {
-                writer.write();
+                writer.write(companyId);
             } finally {
                 writer.close();
             }

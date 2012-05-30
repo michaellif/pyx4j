@@ -200,4 +200,9 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
         return RecaptchaConfig.getReCaptchaPublicKey();
     }
 
+    @Override
+    public String getCaledonCompanyId() {
+        return "BIRCHWOODTEST";
+    }
+
 }

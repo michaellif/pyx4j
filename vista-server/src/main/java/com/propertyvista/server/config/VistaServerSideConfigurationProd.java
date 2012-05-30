@@ -105,4 +105,9 @@ public class VistaServerSideConfigurationProd extends VistaServerSideConfigurati
         }
     }
 
+    @Override
+    public String getCaledonCompanyId() {
+        return "BIRCHWOOD";
+    }
+
 }
