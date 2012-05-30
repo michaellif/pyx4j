@@ -22,6 +22,7 @@ import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 
+import com.propertyvista.biz.financial.billing.BillingUtils;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.BuildingArrearsSnapshot;
@@ -98,6 +99,11 @@ public class ARFacadeImpl implements ARFacade {
     @Override
     public BigDecimal getCurrentBallance(BillingAccount billingAccount) {
         return ARTransactionManager.getCurrentBallance(billingAccount);
+    }
+
+    @Override
+    public List<InvoiceLineItem> getNotInvoicedLineItems(BillingAccount billingAccount) {
+        return BillingUtils.getNotConsumedLineItems(billingAccount);
     }
 
 }
