@@ -60,15 +60,20 @@ public class TaskRunner {
                 @Override
                 public T call() throws Exception {
                     Lifecycle.inheritUserContext(inheritableUserContext);
+                    boolean success = false;
                     try {
                         if (targetNamespace != null) {
                             NamespaceManager.setNamespace(targetNamespace);
                         }
                         Persistence.service().startTransaction();
                         T rv = task.call();
+                        success = true;
                         return rv;
                     } finally {
                         try {
+                            if (!success) {
+                                Persistence.service().rollback();
+                            }
                             Persistence.service().endTransaction();
                         } finally {
                             Lifecycle.endContext();

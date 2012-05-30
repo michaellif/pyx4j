@@ -248,7 +248,7 @@ public class PadProcessor {
 
     private void reconciliationRejectPayment(AggregatedTransfer at, PadReconciliationDebitRecord debitRecord, PaymentRecord paymentRecord) {
         if (!EnumSet.of(PaymentRecord.PaymentStatus.Processing, PaymentRecord.PaymentStatus.Received).contains(paymentRecord.paymentStatus().getValue())) {
-            throw new Error("Processed payment can't be rejected");
+            throw new Error("Processed payment '" + debitRecord.transactionId().getValue() + "' can't be rejected");
         }
         paymentRecord.aggregatedTransfer().set(at);
 
@@ -265,7 +265,7 @@ public class PadProcessor {
 
     private void reconciliationClearedPayment(AggregatedTransfer at, PadReconciliationDebitRecord debitRecord, PaymentRecord paymentRecord) {
         if (!EnumSet.of(PaymentRecord.PaymentStatus.Processing, PaymentRecord.PaymentStatus.Received).contains(paymentRecord.paymentStatus().getValue())) {
-            throw new Error("Processed payment can't be cleared");
+            throw new Error("Processed payment '" + debitRecord.transactionId().getValue() + "' can't be cleared");
         }
         paymentRecord.aggregatedTransfer().set(at);
 
@@ -277,7 +277,7 @@ public class PadProcessor {
 
     private void reconciliationReturnedPayment(AggregatedTransfer at, PadReconciliationDebitRecord debitRecord, PaymentRecord paymentRecord) {
         if (!EnumSet.of(PaymentRecord.PaymentStatus.Cleared).contains(paymentRecord.paymentStatus().getValue())) {
-            throw new Error("Unprocessed payment can't be returned");
+            throw new Error("Unprocessed payment '" + debitRecord.transactionId().getValue() + "' can't be returned");
         }
         paymentRecord.aggregatedTransferReturn().set(at);
         paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Returned);

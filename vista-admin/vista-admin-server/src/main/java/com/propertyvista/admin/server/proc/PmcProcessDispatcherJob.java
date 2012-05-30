@@ -231,16 +231,24 @@ public class PmcProcessDispatcherJob implements Job {
 
             @Override
             public Boolean call() throws Exception {
+                boolean success = false;
                 try {
                     Lifecycle.startElevatedUserContext();
                     NamespaceManager.setNamespace(runData.pmc().namespace().getValue());
                     Persistence.service().startBackgroundProcessTransaction();
                     PmcProcessContext.setRunStats(runData.stats());
                     pmcProcess.executePmcJob();
+                    success = true;
                     return Boolean.TRUE;
                 } finally {
-                    Persistence.service().endTransaction();
-                    Lifecycle.endContext();
+                    try {
+                        if (!success) {
+                            Persistence.service().rollback();
+                        }
+                        Persistence.service().endTransaction();
+                    } finally {
+                        Lifecycle.endContext();
+                    }
                     PmcProcessContext.remove();
                 }
             }
