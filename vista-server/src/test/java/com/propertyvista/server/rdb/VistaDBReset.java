@@ -24,20 +24,18 @@ import com.pyx4j.entity.rdb.RDBUtils;
 import com.pyx4j.entity.rdb.cfg.Configuration.MultitenancyType;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.dataimport.DataPreloaderCollection;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.quartz.SchedulerHelper;
 import com.pyx4j.server.contexts.Lifecycle;
 import com.pyx4j.server.contexts.NamespaceManager;
 import com.pyx4j.server.mail.Mail;
 
 import com.propertyvista.admin.domain.pmc.Pmc;
-import com.propertyvista.admin.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.admin.server.preloader.VistaAminDataPreloaders;
 import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.misc.VistaDataPreloaderParameter;
 import com.propertyvista.misc.VistaDevPreloadConfig;
-import com.propertyvista.server.config.VistaNamespaceResolver;
+import com.propertyvista.portal.server.preloader.PmcCreatorDev;
 import com.propertyvista.server.config.VistaServerSideConfiguration;
 import com.propertyvista.server.config.VistaServerSideConfigurationDev;
 import com.propertyvista.server.config.VistaServerSideConfigurationDevPostgreSQL;
@@ -60,7 +58,7 @@ public class VistaDBReset {
         Persistence.service().startBackgroundProcessTransaction();
         try {
             RDBUtils.resetDatabase();
-            NamespaceManager.setNamespace(VistaNamespaceResolver.demoNamespace);
+            NamespaceManager.setNamespace(VistaNamespace.demoNamespace);
             RDBUtils.ensureNamespace();
             RDBUtils.dropAllEntityTables();
             SchedulerHelper.dbReset();
@@ -77,18 +75,13 @@ public class VistaDBReset {
                 RDBUtils.dropAllEntityTables();
             }
 
-            Pmc pmc = EntityFactory.create(Pmc.class);
-            pmc.status().setValue(PmcStatus.Active);
-            pmc.name().setValue("Vista Demo");
-            pmc.dnsName().setValue(VistaNamespaceResolver.demoNamespace);
-            pmc.namespace().setValue(VistaNamespaceResolver.demoNamespace);
-            Persistence.service().persist(pmc);
+            Pmc pmc = PmcCreatorDev.createPmc(VistaNamespace.demoNamespace);
 
             new VistaAminDataPreloaders().preloadAll();
 
             Persistence.service().commit();
 
-            NamespaceManager.setNamespace(VistaNamespaceResolver.demoNamespace);
+            NamespaceManager.setNamespace(VistaNamespace.demoNamespace);
             RDBUtils.ensureNamespace();
             DataPreloaderCollection preloaders = ((VistaServerSideConfiguration) ServerSideConfiguration.instance()).getDataPreloaders();
             if ((args != null) && (args.length > 0)) {

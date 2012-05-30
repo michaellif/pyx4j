@@ -41,7 +41,6 @@ import com.pyx4j.entity.rdb.cfg.Configuration.MultitenancyType;
 import com.pyx4j.entity.rpc.DataPreloaderInfo;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.dataimport.DataPreloaderCollection;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.essentials.server.preloader.DataGenerator;
@@ -56,7 +55,6 @@ import com.pyx4j.server.contexts.NamespaceManager;
 import com.pyx4j.server.mail.Mail;
 
 import com.propertyvista.admin.domain.pmc.Pmc;
-import com.propertyvista.admin.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.admin.server.preloader.VistaAminDataPreloaders;
 import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
@@ -65,6 +63,7 @@ import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.domain.security.VistaBasicBehavior;
 import com.propertyvista.misc.VistaDataPreloaderParameter;
 import com.propertyvista.misc.VistaDevPreloadConfig;
+import com.propertyvista.portal.server.preloader.PmcCreatorDev;
 import com.propertyvista.server.config.VistaServerSideConfiguration;
 
 @SuppressWarnings("serial")
@@ -176,7 +175,7 @@ public class DBResetServlet extends HttpServlet {
                             if (EnumSet.of(ResetType.prodReset, ResetType.all, ResetType.allMini, ResetType.allWithMockup, ResetType.clear).contains(type)) {
                                 SchedulerHelper.shutdown();
                                 RDBUtils.resetDatabase();
-                                // Initialize Admin
+                                log.debug("Initialize Admin");
                                 NamespaceManager.setNamespace(VistaNamespace.adminNamespace);
                                 try {
                                     RDBUtils.ensureNamespace();
@@ -291,18 +290,13 @@ public class DBResetServlet extends HttpServlet {
     private void preloadPmc(HttpServletRequest req, StringBuilder buf, String pmcName, ResetType type) {
         long pmcStart = System.currentTimeMillis();
         NamespaceManager.setNamespace(VistaNamespace.adminNamespace);
+        log.debug("Preload PMC '{}'", pmcName);
+
         EntityQueryCriteria<Pmc> criteria = EntityQueryCriteria.create(Pmc.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().dnsName(), pmcName));
         Persistence.service().delete(criteria);
 
-        Pmc pmc = EntityFactory.create(Pmc.class);
-        pmc.name().setValue(pmcName + " Demo");
-        //pmc.enabled().setValue(Boolean.TRUE);
-        pmc.status().setValue(PmcStatus.Active);
-        pmc.dnsName().setValue(pmcName);
-        pmc.namespace().setValue(pmcName.replace('-', '_'));
-
-        Persistence.service().persist(pmc);
+        Pmc pmc = PmcCreatorDev.createPmc(pmcName);
         Persistence.service().commit();
 
         NamespaceManager.setNamespace(pmcName);

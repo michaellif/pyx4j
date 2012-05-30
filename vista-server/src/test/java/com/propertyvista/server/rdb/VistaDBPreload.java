@@ -24,7 +24,7 @@ import com.pyx4j.server.contexts.NamespaceManager;
 import com.pyx4j.server.mail.Mail;
 
 import com.propertyvista.biz.communication.CommunicationFacade;
-import com.propertyvista.server.config.VistaNamespaceResolver;
+import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.server.config.VistaServerSideConfiguration;
 
 public class VistaDBPreload {
@@ -36,7 +36,7 @@ public class VistaDBPreload {
         long start = System.currentTimeMillis();
         VistaServerSideConfiguration conf = new VistaServerSideConfiguration();
         ServerSideConfiguration.setInstance(conf);
-        NamespaceManager.setNamespace(VistaNamespaceResolver.demoNamespace);
+        NamespaceManager.setNamespace(VistaNamespace.demoNamespace);
         try {
             Lifecycle.startElevatedUserContext();
             Mail.getMailService().setDisabled(true);

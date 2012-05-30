@@ -32,15 +32,12 @@ import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.admin.domain.pmc.Pmc;
 import com.propertyvista.admin.domain.pmc.Pmc.PmcStatus;
-import com.propertyvista.domain.DemoData;
 import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 
 public class VistaNamespaceResolver implements NamespaceResolver {
 
     private static final I18n i18n = I18n.get(VistaNamespaceResolver.class);
-
-    public static final String demoNamespace = DemoData.DemoPmc.vista.name();
 
     private final static Set<String> prodSystemDnsBase = new HashSet<String>();
 
@@ -75,7 +72,7 @@ public class VistaNamespaceResolver implements NamespaceResolver {
         if (host == null) {
             host = httprequest.getServerName();
             if ("localhost".equals(host) || httprequest.getLocalAddr().equals(host)) {
-                return demoNamespace;
+                return VistaNamespace.demoNamespace;
             }
         }
         host = host.toLowerCase(Locale.ENGLISH);
@@ -126,7 +123,7 @@ public class VistaNamespaceResolver implements NamespaceResolver {
         if (pmcNamespace == null) {
             if (httprequest.getServletPath() != null) {
                 if (httprequest.getServletPath().startsWith("/o/db-reset")) {
-                    return demoNamespace;
+                    return VistaNamespace.demoNamespace;
                 }
             }
             throw new UserRuntimeException(i18n.tr("This property management site was not set-up yet"));

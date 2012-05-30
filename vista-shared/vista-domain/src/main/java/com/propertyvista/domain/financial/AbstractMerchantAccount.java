@@ -15,6 +15,7 @@ package com.propertyvista.domain.financial;
 
 import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.RpcTransient;
 import com.pyx4j.entity.annotations.ToString;
@@ -26,6 +27,7 @@ public interface AbstractMerchantAccount extends IEntity {
 
     @Length(8)
     @RpcTransient
+    @Indexed(uniqueConstraint = true)
     IPrimitive<String> merchantTerminalId();
 
     @Length(3)

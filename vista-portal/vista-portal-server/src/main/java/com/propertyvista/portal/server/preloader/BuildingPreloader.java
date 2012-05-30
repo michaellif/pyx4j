@@ -129,41 +129,7 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
         }
         Persistence.service().persist(managements);
 
-        MerchantAccount merchantAccount = EntityFactory.create(MerchantAccount.class);
-        {
-            merchantAccount.merchantTerminalId().setValue("BIRCHWTT");
-            merchantAccount.bankId().setValue("001");
-            merchantAccount.branchTransitNumber().setValue("00550");
-            merchantAccount.accountNumber().setValue("12345678");
-            merchantAccount.chargeDescription().setValue("Pay for Vista2");
-            Persistence.service().persist(merchantAccount);
-            createSsharedMerchantAccount(merchantAccount);
-        }
-
-        { // Tests
-            MerchantAccount merchantAccount1 = EntityFactory.create(MerchantAccount.class);
-            merchantAccount1.merchantTerminalId().setValue("BIRCHWT1");
-            merchantAccount1.bankId().setValue("002");
-            merchantAccount1.branchTransitNumber().setValue("00750");
-            merchantAccount1.accountNumber().setValue("01234567");
-
-            merchantAccount1.chargeDescription().setValue("Pay for Vista1");
-
-            Persistence.service().persist(merchantAccount1);
-            createSsharedMerchantAccount(merchantAccount1);
-        }
-        { // Test to fail payments
-            MerchantAccount merchantAccount1 = EntityFactory.create(MerchantAccount.class);
-            merchantAccount1.merchantTerminalId().setValue("BIRCHWTE");
-            merchantAccount1.bankId().setValue("007");
-            merchantAccount1.branchTransitNumber().setValue("70050");
-            merchantAccount1.accountNumber().setValue("71234567");
-
-            merchantAccount1.chargeDescription().setValue("Pay for Vista3");
-
-            Persistence.service().persist(merchantAccount1);
-            createSsharedMerchantAccount(merchantAccount1);
-        }
+        MerchantAccount merchantAccount = createMerchantAccount();
 
         // create some portfolios:
         List<Portfolio> portfolios = new Vector<Portfolio>();
@@ -335,22 +301,43 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
         return sb.toString();
     }
 
-    private void createSsharedMerchantAccount(MerchantAccount acc) {
-        final OnboardingMerchantAccount macc = EntityFactory.create(OnboardingMerchantAccount.class);
-        macc.bankId().setValue(acc.bankId().getValue());
-        macc.branchTransitNumber().setValue(acc.branchTransitNumber().getValue());
-        macc.accountNumber().setValue(acc.accountNumber().getValue());
-        macc.chargeDescription().setValue(acc.chargeDescription().getValue());
-        macc.merchantTerminalId().setValue(acc.merchantTerminalId().getValue());
-        macc.merchantAccountKey().setValue(acc.getPrimaryKey());
-        macc.pmc().set(VistaDeployment.getCurrentPmc());
+    private MerchantAccount createMerchantAccount() {
+        final EntityQueryCriteria<OnboardingMerchantAccount> criteria = EntityQueryCriteria.create(OnboardingMerchantAccount.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().pmc(), VistaDeployment.getCurrentPmc()));
+        final List<OnboardingMerchantAccount> accs = TaskRunner.runInAdminNamespace(new Callable<List<OnboardingMerchantAccount>>() {
+            @Override
+            public List<OnboardingMerchantAccount> call() {
+                return Persistence.service().query(criteria);
+            }
+        });
+
+        MerchantAccount singleAccount = null;
+
+        for (OnboardingMerchantAccount acc : accs) {
+            MerchantAccount merchantAccount = EntityFactory.create(MerchantAccount.class);
+            merchantAccount.bankId().setValue(acc.bankId().getValue());
+            merchantAccount.branchTransitNumber().setValue(acc.branchTransitNumber().getValue());
+            merchantAccount.accountNumber().setValue(acc.accountNumber().getValue());
+            merchantAccount.chargeDescription().setValue(acc.chargeDescription().getValue());
+            merchantAccount.merchantTerminalId().setValue(acc.merchantTerminalId().getValue());
+            Persistence.service().persist(merchantAccount);
+            if (singleAccount == null) {
+                singleAccount = merchantAccount;
+            }
+            // join accounts
+            acc.merchantAccountKey().setValue(merchantAccount.getPrimaryKey());
+        }
+
         TaskRunner.runInAdminNamespace(new Callable<Void>() {
             @Override
             public Void call() {
-                Persistence.service().persist(macc);
+                Persistence.service().persist(accs);
                 return null;
             }
         });
+
+        return singleAccount;
+
     }
 
     @Override
