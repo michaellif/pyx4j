@@ -30,7 +30,7 @@ import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.components.security.PasswordChangeView;
 import com.propertyvista.portal.ptapp.client.ui.viewfactories.PtAppViewFactory;
-import com.propertyvista.portal.rpc.portal.services.TenantPasswordChangeUserService;
+import com.propertyvista.portal.rpc.portal.services.PasswordChangeUserService;
 
 public class PasswordChangeActivity extends AbstractActivity implements PasswordChangeView.Presenter {
 
@@ -51,7 +51,7 @@ public class PasswordChangeActivity extends AbstractActivity implements Password
 
     @Override
     public void changePassword(PasswordChangeRequest request) {
-        AbstractPasswordChangeService service = GWT.<AbstractPasswordChangeService> create(TenantPasswordChangeUserService.class);
+        AbstractPasswordChangeService service = GWT.<AbstractPasswordChangeService> create(PasswordChangeUserService.class);
         service.changePassword(new DefaultAsyncCallback<VoidSerializable>() {
             @Override
             public void onSuccess(VoidSerializable result) {

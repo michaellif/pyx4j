@@ -7,18 +7,14 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jul 11, 2011
- * @author dad
+ * Created on Jan 27, 2012
+ * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.domain.dto;
+package com.propertyvista.portal.rpc.portal.services;
 
-import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
+import com.pyx4j.security.rpc.AbstractPasswordChangeService;
 
-@Transient
-public interface BillListDTO extends IEntity {
+public interface PasswordChangeUserService extends AbstractPasswordChangeService {
 
-    IList<BillDTO> bills();
 }

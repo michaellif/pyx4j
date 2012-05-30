@@ -28,13 +28,13 @@ public class BillingHistoryViewImpl extends SimplePanel implements BillingHistor
     }
 
     @Override
-    public void populate(BillListDTO bills) {
-        form.populate(bills);
-
+    public void setPresenter(Presenter presenter) {
+        form.setPresenter(presenter);
     }
 
     @Override
-    public void setPresenter(Presenter presenter) {
-        form.setPresenter(presenter);
+    public void populate(BillListDTO bills) {
+        form.reset();
+        form.populate(bills);
     }
 }

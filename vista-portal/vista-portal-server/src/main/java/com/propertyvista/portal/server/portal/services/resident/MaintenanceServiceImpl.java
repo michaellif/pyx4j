@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.server.portal.services;
+package com.propertyvista.portal.server.portal.services.resident;
 
 import java.util.List;
 import java.util.Vector;
@@ -28,13 +28,13 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
 import com.propertyvista.dto.MaintenanceRequestDTO;
-import com.propertyvista.portal.rpc.portal.services.TenantMaintenanceService;
+import com.propertyvista.portal.rpc.portal.services.resident.MaintenanceService;
 import com.propertyvista.portal.server.portal.TenantAppContext;
 import com.propertyvista.portal.server.ptapp.util.Converter;
 
-public class TenantMaintenanceServiceImpl extends AbstractCrudServiceDtoImpl<MaintenanceRequest, MaintenanceRequestDTO> implements TenantMaintenanceService {
+public class MaintenanceServiceImpl extends AbstractCrudServiceDtoImpl<MaintenanceRequest, MaintenanceRequestDTO> implements MaintenanceService {
 
-    public TenantMaintenanceServiceImpl() {
+    public MaintenanceServiceImpl() {
         super(MaintenanceRequest.class, MaintenanceRequestDTO.class);
     }
 

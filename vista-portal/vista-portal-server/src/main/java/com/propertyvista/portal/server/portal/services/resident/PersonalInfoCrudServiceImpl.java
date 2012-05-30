@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.server.portal.services;
+package com.propertyvista.portal.server.portal.services.resident;
 
 import java.util.List;
 
@@ -29,7 +29,7 @@ import com.propertyvista.domain.security.CustomerUser;
 import com.propertyvista.domain.tenant.PersonScreening;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.portal.domain.dto.ResidentDTO;
-import com.propertyvista.portal.rpc.portal.services.PersonalInfoCrudService;
+import com.propertyvista.portal.rpc.portal.services.resident.PersonalInfoCrudService;
 import com.propertyvista.portal.server.portal.TenantAppContext;
 
 public class PersonalInfoCrudServiceImpl implements PersonalInfoCrudService {

@@ -7,20 +7,23 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Nov 27, 2011
+ * Created on Nov 24, 2011
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.rpc.portal.services;
+package com.propertyvista.portal.rpc.portal.services.resident;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.commons.Key;
+import com.pyx4j.rpc.shared.IService;
 
-import com.propertyvista.domain.contact.AddressStructured;
-import com.propertyvista.domain.payment.PaymentMethod;
+import com.propertyvista.portal.rpc.portal.dto.TenantDashboardDTO;
 
-public interface TenantPaymentMethodCrudService extends AbstractCrudService<PaymentMethod> {
+public interface DashboardService extends IService {
 
-    public void getCurrentAddress(AsyncCallback<AddressStructured> callback);
+    public void retrieveTenantDashboard(AsyncCallback<TenantDashboardDTO> callback);
+
+    public void acknowledgeMessage(AsyncCallback<TenantDashboardDTO> callback, Key messageId);
+
 }

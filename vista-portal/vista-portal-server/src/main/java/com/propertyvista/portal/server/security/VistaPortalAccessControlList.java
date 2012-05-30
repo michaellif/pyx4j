@@ -38,15 +38,15 @@ import com.propertyvista.portal.domain.ptapp.Charges;
 import com.propertyvista.portal.domain.ptapp.PaymentInformation;
 import com.propertyvista.portal.domain.ptapp.Summary;
 import com.propertyvista.portal.rpc.portal.services.LeaseContextSelectionService;
-import com.propertyvista.portal.rpc.portal.services.PersonalInfoCrudService;
+import com.propertyvista.portal.rpc.portal.services.PasswordChangeUserService;
 import com.propertyvista.portal.rpc.portal.services.PortalAuthenticationService;
 import com.propertyvista.portal.rpc.portal.services.PortalPasswordResetService;
 import com.propertyvista.portal.rpc.portal.services.PortalSiteServices;
 import com.propertyvista.portal.rpc.portal.services.SiteThemeServices;
-import com.propertyvista.portal.rpc.portal.services.TenantDashboardService;
-import com.propertyvista.portal.rpc.portal.services.TenantMaintenanceService;
-import com.propertyvista.portal.rpc.portal.services.TenantPasswordChangeUserService;
-import com.propertyvista.portal.rpc.portal.services.TenantPaymentMethodCrudService;
+import com.propertyvista.portal.rpc.portal.services.resident.PersonalInfoCrudService;
+import com.propertyvista.portal.rpc.portal.services.resident.DashboardService;
+import com.propertyvista.portal.rpc.portal.services.resident.MaintenanceService;
+import com.propertyvista.portal.rpc.portal.services.resident.PaymentMethodCrudService;
 import com.propertyvista.portal.rpc.ptapp.services.ApplicationDocumentUploadService;
 import com.propertyvista.portal.rpc.ptapp.services.ApplicationSelectionService;
 import com.propertyvista.portal.rpc.ptapp.services.ApplicationService;
@@ -96,8 +96,8 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
             grant(VistaBasicBehavior.ProspectiveAppPasswordChangeRequired, new IServiceExecutePermission(PtPasswordResetService.class));
             grant(VistaBasicBehavior.TenantPortalPasswordChangeRequired, new IServiceExecutePermission(PortalPasswordResetService.class));
 
-            grant(VistaBasicBehavior.TenantPortal, new IServiceExecutePermission(TenantPasswordChangeUserService.class));
-            grant(VistaBasicBehavior.ProspectiveApp, new IServiceExecutePermission(TenantPasswordChangeUserService.class));
+            grant(VistaBasicBehavior.TenantPortal, new IServiceExecutePermission(PasswordChangeUserService.class));
+            grant(VistaBasicBehavior.ProspectiveApp, new IServiceExecutePermission(PasswordChangeUserService.class));
             grant(VistaCustomerBehavior.Prospective, new IServiceExecutePermission(PtPolicyRetrieveService.class));
             grant(VistaCustomerBehavior.Prospective, new IServiceExecutePermission(ApplicationService.class));
             grant(VistaCustomerBehavior.Prospective, new IServiceExecutePermission(ApplicationDocumentUploadService.class));
@@ -150,10 +150,10 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
 
             // -------------
 
-            grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(TenantDashboardService.class));
+            grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(DashboardService.class));
             grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(PersonalInfoCrudService.class));
-            grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(TenantPaymentMethodCrudService.class));
-            grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(TenantMaintenanceService.class));
+            grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(PaymentMethodCrudService.class));
+            grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(MaintenanceService.class));
 
             grant(VistaCustomerBehavior.Tenant, new EntityPermission(IssueElement.class, EntityPermission.READ));
             grant(VistaCustomerBehavior.Tenant, new EntityPermission(IssueRepairSubject.class, EntityPermission.READ));

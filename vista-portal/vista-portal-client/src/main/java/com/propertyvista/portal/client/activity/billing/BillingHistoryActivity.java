@@ -13,78 +13,57 @@
  */
 package com.propertyvista.portal.client.activity.billing;
 
-import java.math.BigDecimal;
-import java.util.Date;
+import java.util.Vector;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.site.client.AppSite;
+import com.pyx4j.site.rpc.AppPlace;
 
-import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.portal.client.activity.SecurityAwareActivity;
 import com.propertyvista.portal.client.ui.residents.billing.BillingHistoryView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
 import com.propertyvista.portal.domain.dto.BillDTO;
-import com.propertyvista.portal.domain.dto.BillDTO.Type;
 import com.propertyvista.portal.domain.dto.BillListDTO;
-import com.propertyvista.portal.domain.dto.BillListDTO.SearchType;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap;
+import com.propertyvista.portal.rpc.portal.services.resident.BillingHistoryService;
 
 public class BillingHistoryActivity extends SecurityAwareActivity implements BillingHistoryView.Presenter {
+
     private final BillingHistoryView view;
+
+    private final BillingHistoryService srv;
 
     public BillingHistoryActivity(Place place) {
         this.view = PortalViewFactory.instance(BillingHistoryView.class);
         this.view.setPresenter(this);
+        srv = GWT.create(BillingHistoryService.class);
     }
 
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         super.start(panel, eventBus);
-
-        //TODO implement a service call
-        BillListDTO billHistory = EntityFactory.create(BillListDTO.class);
-
-        if (!VistaTODO.removedForProduction) {
-            BillDTO bill = EntityFactory.create(BillDTO.class);
-            bill.type().setValue(Type.Bill);
-            bill.fromDate().setValue(new LogicalDate(new Date()));
-            bill.referenceNo().setValue("645436654");
-            bill.amount().setValue(new BigDecimal(1490));
-            billHistory.bills().add(bill);
-
-            bill = EntityFactory.create(BillDTO.class);
-            bill.type().setValue(Type.Bill);
-            bill.fromDate().setValue(new LogicalDate(new Date()));
-            bill.referenceNo().setValue("10096654");
-            bill.amount().setValue(new BigDecimal(1010));
-            billHistory.bills().add(bill);
-
-            bill = EntityFactory.create(BillDTO.class);
-            bill.type().setValue(Type.Bill);
-            bill.fromDate().setValue(new LogicalDate(new Date()));
-            bill.referenceNo().setValue("90056789");
-            bill.amount().setValue(new BigDecimal(890));
-            billHistory.bills().add(bill);
-        }
-
-        view.populate(billHistory);
-
         panel.setWidget(view);
 
-    }
-
-    @Override
-    public void search(SearchType searchType) {
-        // TODO Implement
-
+        srv.listBills(new DefaultAsyncCallback<Vector<BillDTO>>() {
+            @Override
+            public void onSuccess(Vector<BillDTO> result) {
+                BillListDTO billHistory = EntityFactory.create(BillListDTO.class);
+                billHistory.bills().addAll(result);
+                view.populate(billHistory);
+            }
+        });
     }
 
     @Override
     public void view(BillDTO item) {
-        // TODO Auto-generated method stub
-
+        AppPlace place = new PortalSiteMap.Residents.BillingHistory.ViewBill();
+        place.placeArg(PortalSiteMap.ARG_ENTITY_ID, item.id().getValue().toString());
+        AppSite.getPlaceController().goTo(place);
     }
 }

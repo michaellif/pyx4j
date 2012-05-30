@@ -32,20 +32,20 @@ import com.propertyvista.portal.client.activity.SecurityAwareActivity;
 import com.propertyvista.portal.client.ui.residents.paymentmethod.EditPaymentMethodView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
-import com.propertyvista.portal.rpc.portal.services.TenantPaymentMethodCrudService;
+import com.propertyvista.portal.rpc.portal.services.resident.PaymentMethodCrudService;
 
 public class EditPaymentMethodActivity extends SecurityAwareActivity implements EditPaymentMethodView.Presenter {
 
     protected final EditPaymentMethodView view;
 
-    protected final TenantPaymentMethodCrudService srv;
+    protected final PaymentMethodCrudService srv;
 
     private Key entityId;
 
     public EditPaymentMethodActivity(Place place) {
         this.view = PortalViewFactory.instance(EditPaymentMethodView.class);
         this.view.setPresenter(this);
-        srv = GWT.create(TenantPaymentMethodCrudService.class);
+        srv = GWT.create(PaymentMethodCrudService.class);
 
         String val;
         assert (place instanceof AppPlace);

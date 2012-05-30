@@ -59,14 +59,17 @@ public class PortalSiteMap implements SiteMap {
         public static class PersonalInformation extends AppPlace {
         }
 
-        @PlaceProperties(caption = "Current Bill")
-        @NavigationItem(navigLabel = "Current Bill")
-        public static class CurrentBill extends AppPlace {
+        @PlaceProperties(caption = "Bill Summary")
+        @NavigationItem(navigLabel = "Bill Summary")
+        public static class BillSummary extends AppPlace {
         }
 
-        @PlaceProperties(caption = "Billing and Payment")
-        @NavigationItem(navigLabel = "Billing and Payment")
+        @PlaceProperties(caption = "Billing History")
+        @NavigationItem(navigLabel = "Billing History")
         public static class BillingHistory extends AppPlace {
+
+            public static class ViewBill extends AppPlace {
+            }
         }
 
         @PlaceProperties(caption = "Payment Methods")

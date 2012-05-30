@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.server.portal.services;
+package com.propertyvista.portal.server.portal.services.resident;
 
 import java.math.BigDecimal;
 import java.sql.Time;
@@ -35,11 +35,11 @@ import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.portal.rpc.portal.dto.MessageDTO;
 import com.propertyvista.portal.rpc.portal.dto.ReservationDTO;
 import com.propertyvista.portal.rpc.portal.dto.TenantDashboardDTO;
-import com.propertyvista.portal.rpc.portal.services.TenantDashboardService;
+import com.propertyvista.portal.rpc.portal.services.resident.DashboardService;
 import com.propertyvista.portal.server.portal.TenantAppContext;
 import com.propertyvista.portal.server.ptapp.util.Converter;
 
-public class TenantDashboardServiceImpl implements TenantDashboardService {
+public class DashboardServiceImpl implements DashboardService {
 
     @Override
     public void retrieveTenantDashboard(AsyncCallback<TenantDashboardDTO> callback) {

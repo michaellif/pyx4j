@@ -17,14 +17,10 @@ import java.util.List;
 
 import com.google.gwt.user.client.ui.FlowPanel;
 
-import com.pyx4j.i18n.shared.I18n;
-
 import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.portal.client.ui.decorations.UserMessagePanel;
 
 public class PaymentMethodsViewImpl extends FlowPanel implements PaymentMethodsView {
-
-    private static final I18n i18n = I18n.get(PaymentMethodsViewImpl.class);
 
     protected final UserMessagePanel messagePanel;
 

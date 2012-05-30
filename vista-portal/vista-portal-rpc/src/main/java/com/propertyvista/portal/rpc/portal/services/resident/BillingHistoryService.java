@@ -7,14 +7,22 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jan 27, 2012
- * @author vlads
+ * Created on 2012-05-30
+ * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.portal.rpc.portal.services;
+package com.propertyvista.portal.rpc.portal.services.resident;
 
-import com.pyx4j.security.rpc.AbstractPasswordChangeService;
+import java.util.Vector;
 
-public interface TenantPasswordChangeUserService extends AbstractPasswordChangeService {
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
+import com.pyx4j.rpc.shared.IService;
+
+import com.propertyvista.portal.domain.dto.BillDTO;
+
+public interface BillingHistoryService extends IService {
+
+    void listBills(AsyncCallback<Vector<BillDTO>> callback);
 
 }

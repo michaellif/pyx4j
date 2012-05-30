@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.rpc.portal.services;
+package com.propertyvista.portal.rpc.portal.services.resident;
 
 import java.util.Vector;
 
@@ -22,7 +22,7 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.dto.MaintenanceRequestDTO;
 
-public interface TenantMaintenanceService extends AbstractCrudService<MaintenanceRequestDTO> {
+public interface MaintenanceService extends AbstractCrudService<MaintenanceRequestDTO> {
 
     // Can't use List, this should be serializable collection
     void listOpenIssues(AsyncCallback<Vector<MaintenanceRequestDTO>> callback);

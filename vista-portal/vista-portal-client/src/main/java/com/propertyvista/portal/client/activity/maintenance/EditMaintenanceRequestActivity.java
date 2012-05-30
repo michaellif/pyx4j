@@ -30,20 +30,20 @@ import com.propertyvista.portal.client.activity.SecurityAwareActivity;
 import com.propertyvista.portal.client.ui.residents.maintenance.EditMaintenanceRequestView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
-import com.propertyvista.portal.rpc.portal.services.TenantMaintenanceService;
+import com.propertyvista.portal.rpc.portal.services.resident.MaintenanceService;
 
 public class EditMaintenanceRequestActivity extends SecurityAwareActivity implements EditMaintenanceRequestView.Presenter {
 
     protected final EditMaintenanceRequestView view;
 
-    protected final TenantMaintenanceService srv;
+    protected final MaintenanceService srv;
 
     private Key entityId;
 
     public EditMaintenanceRequestActivity(Place place) {
         this.view = PortalViewFactory.instance(EditMaintenanceRequestView.class);
         this.view.setPresenter(this);
-        srv = GWT.create(TenantMaintenanceService.class);
+        srv = GWT.create(MaintenanceService.class);
 
         String val;
         assert (place instanceof AppPlace);

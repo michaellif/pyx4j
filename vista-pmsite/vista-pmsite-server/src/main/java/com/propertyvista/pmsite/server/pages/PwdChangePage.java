@@ -56,8 +56,8 @@ import com.propertyvista.pmsite.server.PMSiteApplication;
 import com.propertyvista.pmsite.server.PMSiteSession;
 import com.propertyvista.pmsite.server.PMSiteWebRequest;
 import com.propertyvista.pmsite.server.model.WicketUtils.VolatileTemplateResourceReference;
+import com.propertyvista.portal.rpc.portal.services.PasswordChangeUserService;
 import com.propertyvista.portal.rpc.portal.services.PortalPasswordResetService;
-import com.propertyvista.portal.rpc.portal.services.TenantPasswordChangeUserService;
 
 @AuthorizeInstantiation({ Roles.USER, PMSiteSession.PasswordChangeRequiredRole })
 public final class PwdChangePage extends BasePage {
@@ -187,7 +187,7 @@ public final class PwdChangePage extends BasePage {
                     }
                 }, request);
             } else {
-                LocalService.create(TenantPasswordChangeUserService.class).changePassword(new AsyncCallback<VoidSerializable>() {
+                LocalService.create(PasswordChangeUserService.class).changePassword(new AsyncCallback<VoidSerializable>() {
                     @Override
                     public void onSuccess(VoidSerializable result) {
                         // success - redirect to target

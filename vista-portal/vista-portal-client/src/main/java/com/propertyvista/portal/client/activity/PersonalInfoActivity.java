@@ -25,7 +25,7 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.propertyvista.portal.client.ui.residents.personalinfo.PersonalInfoView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
 import com.propertyvista.portal.domain.dto.ResidentDTO;
-import com.propertyvista.portal.rpc.portal.services.PersonalInfoCrudService;
+import com.propertyvista.portal.rpc.portal.services.resident.PersonalInfoCrudService;
 
 public class PersonalInfoActivity extends SecurityAwareActivity implements PersonalInfoView.Presenter {
 

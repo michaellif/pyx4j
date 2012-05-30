@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.server.portal.services;
+package com.propertyvista.portal.server.portal.services.resident;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -26,12 +26,12 @@ import com.propertyvista.biz.financial.payment.PaymentFacade;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.domain.tenant.Tenant;
-import com.propertyvista.portal.rpc.portal.services.TenantPaymentMethodCrudService;
+import com.propertyvista.portal.rpc.portal.services.resident.PaymentMethodCrudService;
 import com.propertyvista.portal.server.portal.TenantAppContext;
 
-public class TenantPaymentMethodCrudServiceImpl extends AbstractCrudServiceImpl<PaymentMethod> implements TenantPaymentMethodCrudService {
+public class PaymentMethodCrudServiceImpl extends AbstractCrudServiceImpl<PaymentMethod> implements PaymentMethodCrudService {
 
-    public TenantPaymentMethodCrudServiceImpl() {
+    public PaymentMethodCrudServiceImpl() {
         super(PaymentMethod.class);
     }
 

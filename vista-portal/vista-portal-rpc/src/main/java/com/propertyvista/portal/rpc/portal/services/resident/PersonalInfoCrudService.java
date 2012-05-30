@@ -7,23 +7,16 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Nov 24, 2011
+ * Created on Oct 27, 2011
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.rpc.portal.services;
+package com.propertyvista.portal.rpc.portal.services.resident;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.pyx4j.entity.rpc.AbstractCrudService;
 
-import com.pyx4j.commons.Key;
-import com.pyx4j.rpc.shared.IService;
+import com.propertyvista.portal.domain.dto.ResidentDTO;
 
-import com.propertyvista.portal.rpc.portal.dto.TenantDashboardDTO;
-
-public interface TenantDashboardService extends IService {
-
-    public void retrieveTenantDashboard(AsyncCallback<TenantDashboardDTO> callback);
-
-    public void acknowledgeMessage(AsyncCallback<TenantDashboardDTO> callback, Key messageId);
+public interface PersonalInfoCrudService extends AbstractCrudService<ResidentDTO> {
 
 }

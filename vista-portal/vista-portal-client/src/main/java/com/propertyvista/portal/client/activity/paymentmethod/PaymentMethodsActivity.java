@@ -29,18 +29,18 @@ import com.propertyvista.portal.client.activity.SecurityAwareActivity;
 import com.propertyvista.portal.client.ui.residents.paymentmethod.PaymentMethodsView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
-import com.propertyvista.portal.rpc.portal.services.TenantPaymentMethodCrudService;
+import com.propertyvista.portal.rpc.portal.services.resident.PaymentMethodCrudService;
 
 public class PaymentMethodsActivity extends SecurityAwareActivity implements PaymentMethodsView.Presenter {
 
     private final PaymentMethodsView view;
 
-    private final TenantPaymentMethodCrudService srv;
+    private final PaymentMethodCrudService srv;
 
     public PaymentMethodsActivity(Place place) {
         this.view = PortalViewFactory.instance(PaymentMethodsView.class);
         this.view.setPresenter(this);
-        srv = GWT.create(TenantPaymentMethodCrudService.class);
+        srv = GWT.create(PaymentMethodCrudService.class);
     }
 
     @Override

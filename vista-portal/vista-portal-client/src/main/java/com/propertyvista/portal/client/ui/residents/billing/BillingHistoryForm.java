@@ -16,18 +16,20 @@ package com.propertyvista.portal.client.ui.residents.billing;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.client.CEntityForm;
 import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
-import com.pyx4j.entity.client.ui.folder.CEntityFolder;
-import com.pyx4j.entity.client.ui.folder.IFolderDecorator;
+import com.pyx4j.entity.client.ui.folder.CEntityFolderRowEditor;
+import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.VistaViewersComponentFactory;
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
-import com.propertyvista.common.client.ui.decorations.VistaTableFolderDecorator;
 import com.propertyvista.portal.domain.dto.BillDTO;
 import com.propertyvista.portal.domain.dto.BillListDTO;
 
@@ -44,7 +46,7 @@ public class BillingHistoryForm extends CEntityForm<BillListDTO> implements Bill
     @Override
     public IsWidget createContent() {
         FlowPanel container = new FlowPanel();
-        container.add(inject(proto().bills(), createBillingHistoryViewer()));
+        container.add(inject(proto().bills(), new BillingHistoryFolder()));
         return container;
     }
 
@@ -54,23 +56,52 @@ public class BillingHistoryForm extends CEntityForm<BillListDTO> implements Bill
 
     }
 
-    private CEntityFolder<BillDTO> createBillingHistoryViewer() {
-        return new VistaTableFolder<BillDTO>(BillDTO.class, false) {
-            @Override
-            public List<EntityFolderColumnDescriptor> columns() {
-                ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
-                columns.add(new EntityFolderColumnDescriptor(proto().type(), "10em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().fromDate(), "7em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().amount(), "10em"));
-                columns.add(new EntityFolderColumnDescriptor(proto().referenceNo(), "10em"));
-                return columns;
+    private class BillingHistoryFolder extends VistaTableFolder<BillDTO> {
+
+        public BillingHistoryFolder() {
+            super(BillDTO.class, false);
+            setOrderable(false);
+        }
+
+        @Override
+        public List<EntityFolderColumnDescriptor> columns() {
+            ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
+            columns.add(new EntityFolderColumnDescriptor(proto().amount(), "10em"));
+            columns.add(new EntityFolderColumnDescriptor(proto().dueDate(), "10em"));
+            columns.add(new EntityFolderColumnDescriptor(proto().fromDate(), "10em"));
+            columns.add(new EntityFolderColumnDescriptor(proto().referenceNo(), "10em"));
+            return columns;
+        }
+
+        @Override
+        public CComponent<?, ?> create(IObject<?> member) {
+            if (member instanceof BillDTO) {
+                return new BillEditor();
+            }
+            return super.create(member);
+        }
+
+        private class BillEditor extends CEntityFolderRowEditor<BillDTO> {
+
+            public BillEditor() {
+                super(BillDTO.class, columns());
             }
 
             @Override
-            protected IFolderDecorator<BillDTO> createDecorator() {
-                return new VistaTableFolderDecorator<BillDTO>(this, this.isEditable());
+            public CComponent<?, ?> create(IObject<?> member) {
+                CComponent<?, ?> comp = null;
+                if (member.equals(proto().referenceNo())) {
+                    comp = new CHyperlink(new Command() {
+                        @Override
+                        public void execute() {
+                            presenter.view(getValue());
+                        }
+                    });
+                } else {
+                    comp = super.create(member);
+                }
+                return comp;
             }
-        };
+        }
     }
-
 }

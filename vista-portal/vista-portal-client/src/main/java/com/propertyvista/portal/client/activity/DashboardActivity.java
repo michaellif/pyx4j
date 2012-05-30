@@ -25,18 +25,18 @@ import com.propertyvista.portal.client.ui.residents.dashboard.DashboardView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.dto.TenantDashboardDTO;
-import com.propertyvista.portal.rpc.portal.services.TenantDashboardService;
+import com.propertyvista.portal.rpc.portal.services.resident.DashboardService;
 
 public class DashboardActivity extends SecurityAwareActivity implements DashboardView.Presenter {
 
     private final DashboardView view;
 
-    private final TenantDashboardService srv;
+    private final DashboardService srv;
 
     public DashboardActivity(Place place) {
         this.view = PortalViewFactory.instance(DashboardView.class);
         this.view.setPresenter(this);
-        srv = GWT.create(TenantDashboardService.class);
+        srv = GWT.create(DashboardService.class);
     }
 
     @Override
@@ -54,7 +54,7 @@ public class DashboardActivity extends SecurityAwareActivity implements Dashboar
 
     @Override
     public void viewCurrentBill() {
-        AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.CurrentBill());
+        AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.BillSummary());
     }
 
     @Override

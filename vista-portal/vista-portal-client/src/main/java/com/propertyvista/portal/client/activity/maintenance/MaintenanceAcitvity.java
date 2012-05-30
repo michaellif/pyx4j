@@ -30,18 +30,18 @@ import com.propertyvista.portal.client.activity.SecurityAwareActivity;
 import com.propertyvista.portal.client.ui.residents.maintenance.MaintenanceView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
-import com.propertyvista.portal.rpc.portal.services.TenantMaintenanceService;
+import com.propertyvista.portal.rpc.portal.services.resident.MaintenanceService;
 
 public class MaintenanceAcitvity extends SecurityAwareActivity implements MaintenanceView.Presenter {
 
     private final MaintenanceView view;
 
-    private final TenantMaintenanceService srv;
+    private final MaintenanceService srv;
 
     public MaintenanceAcitvity(Place place) {
         this.view = PortalViewFactory.instance(MaintenanceView.class);
         this.view.setPresenter(this);
-        srv = GWT.create(TenantMaintenanceService.class);
+        srv = GWT.create(MaintenanceService.class);
     }
 
     @Override

@@ -22,8 +22,6 @@ public interface BillingHistoryView extends IsWidget {
 
     interface Presenter {
 
-        void search(BillListDTO.SearchType searchType);
-
         void view(BillDTO item);
     }
 
