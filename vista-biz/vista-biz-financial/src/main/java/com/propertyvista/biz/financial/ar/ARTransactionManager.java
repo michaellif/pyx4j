@@ -142,6 +142,10 @@ public class ARTransactionManager {
 
     static BigDecimal getCurrentBallance(BillingAccount billingAccount) {
         Bill bill = ServerSideFactory.create(BillingFacade.class).getLatestConfirmedBill(billingAccount.lease());
+        if (bill == null) {
+            return new BigDecimal("0.00");
+        }
+
         BigDecimal currentBallanceAmount = bill.totalDueAmount().getValue();
         List<InvoiceLineItem> items = BillingUtils.getNotConsumedLineItems(billingAccount);
 

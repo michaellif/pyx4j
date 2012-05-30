@@ -25,8 +25,8 @@ import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.portal.client.activity.DashboardActivity;
 import com.propertyvista.portal.client.activity.PersonalInfoActivity;
 import com.propertyvista.portal.client.activity.PotentialTenantActivity;
+import com.propertyvista.portal.client.activity.billing.BillSummaryActivity;
 import com.propertyvista.portal.client.activity.billing.BillingHistoryActivity;
-import com.propertyvista.portal.client.activity.billing.CurrentBillActivity;
 import com.propertyvista.portal.client.activity.billing.ViewBillActivity;
 import com.propertyvista.portal.client.activity.insurancemockup.InsuranceActivity;
 import com.propertyvista.portal.client.activity.login.LeaseContextSelectionActivity;
@@ -77,8 +77,7 @@ public class ContentActivityMapper implements AppActivityMapper {
                     activity = new EditMaintenanceRequestActivity(place);
 
                 } else if (place instanceof Residents.BillSummary) {
-                    activity = new CurrentBillActivity(place);
-
+                    activity = new BillSummaryActivity(place);
                 } else if (place instanceof Residents.BillingHistory) {
                     activity = new BillingHistoryActivity(place);
                 } else if (place instanceof Residents.BillingHistory.ViewBill) {

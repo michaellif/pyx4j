@@ -18,20 +18,18 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.portal.client.activity.SecurityAwareActivity;
-import com.propertyvista.portal.client.ui.residents.billing.CurrentBillView;
+import com.propertyvista.portal.client.ui.residents.billing.BillSummaryView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
-import com.propertyvista.portal.domain.dto.BillDataDTO;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap;
+import com.propertyvista.portal.domain.dto.BillSummaryDTO;
 
-public class CurrentBillActivity extends SecurityAwareActivity implements CurrentBillView.Presenter {
+public class BillSummaryActivity extends SecurityAwareActivity implements BillSummaryView.Presenter {
 
-    private final CurrentBillView view;
+    private final BillSummaryView view;
 
-    public CurrentBillActivity(Place place) {
-        this.view = PortalViewFactory.instance(CurrentBillView.class);
+    public BillSummaryActivity(Place place) {
+        this.view = PortalViewFactory.instance(BillSummaryView.class);
         this.view.setPresenter(this);
     }
 
@@ -41,22 +39,17 @@ public class CurrentBillActivity extends SecurityAwareActivity implements Curren
         panel.setWidget(view);
 
         //TODO implement a service call
-        view.populate(EntityFactory.create(BillDataDTO.class));
-    }
-
-    @Override
-    public void changePaymentMethod() {
-        AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.PaymentMethods());
-    }
-
-    @Override
-    public void changeAuthorization(boolean authorized) {
-        // TODO Implement
-
+        view.populate(EntityFactory.create(BillSummaryDTO.class));
     }
 
     @Override
     public void payBill() {
         // TODO Implement
+    }
+
+    @Override
+    public void viewCurrentBill() {
+        // TODO Auto-generated method stub
+
     }
 }

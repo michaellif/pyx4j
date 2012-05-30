@@ -15,20 +15,18 @@ package com.propertyvista.portal.client.ui.residents.billing;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.propertyvista.portal.domain.dto.BillDataDTO;
+import com.propertyvista.portal.domain.dto.BillSummaryDTO;
 
-public interface CurrentBillView extends IsWidget {
+public interface BillSummaryView extends IsWidget {
 
     interface Presenter {
 
-        void changePaymentMethod();
-
-        void changeAuthorization(boolean authorized);
+        void viewCurrentBill();
 
         void payBill();
     }
 
     void setPresenter(Presenter presenter);
 
-    void populate(BillDataDTO bill);
+    void populate(BillSummaryDTO bill);
 }
