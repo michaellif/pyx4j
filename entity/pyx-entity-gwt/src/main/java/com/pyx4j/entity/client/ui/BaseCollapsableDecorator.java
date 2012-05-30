@@ -52,7 +52,7 @@ public class BaseCollapsableDecorator<E extends IEntity> extends SimplePanel imp
             }
         });
         mainPanel.add(collapseImage);
-        reset();
+        collapseImage.setResource(images.collapse());
         mainPanel.setCellWidth(collapseImage, collapseImage.getWidth() + "px");
         contentHolder = new SimplePanel();
 //        contentHolder.setStyleName(EntityFolderBoxItem.name());
