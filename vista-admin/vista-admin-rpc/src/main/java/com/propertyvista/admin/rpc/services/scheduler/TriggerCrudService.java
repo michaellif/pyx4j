@@ -13,6 +13,8 @@
  */
 package com.propertyvista.admin.rpc.services.scheduler;
 
+import java.util.Date;
+
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
@@ -23,4 +25,6 @@ import com.propertyvista.admin.domain.scheduler.Trigger;
 public interface TriggerCrudService extends AbstractCrudService<Trigger> {
 
     public void runImmediately(AsyncCallback<Run> callback, Trigger triggerStub);
+
+    public void runImmediatelyForDate(AsyncCallback<Run> callback, Trigger triggerStub, Date executionDate);
 }

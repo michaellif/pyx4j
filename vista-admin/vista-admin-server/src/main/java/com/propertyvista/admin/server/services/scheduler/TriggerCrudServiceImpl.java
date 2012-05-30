@@ -69,6 +69,11 @@ public class TriggerCrudServiceImpl extends AbstractCrudServiceImpl<Trigger> imp
 
     @Override
     public void runImmediately(AsyncCallback<Run> callback, Trigger triggerStub) {
+        runImmediatelyForDate(callback, triggerStub, Persistence.service().getTransactionSystemTime());
+    }
+
+    @Override
+    public void runImmediatelyForDate(AsyncCallback<Run> callback, Trigger triggerStub, Date executionDate) {
         {
             EntityQueryCriteria<Run> criteria = EntityQueryCriteria.create(Run.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().trigger(), triggerStub));

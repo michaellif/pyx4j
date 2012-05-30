@@ -26,6 +26,7 @@ public class RunLister extends ListerBase<Run> {
         setColumnDescriptors(//@formatter:off
                 new MemberColumnDescriptor.Builder(proto().status()).build(),
                 new MemberColumnDescriptor.Builder(proto().started()).build(),
+                new MemberColumnDescriptor.Builder(proto().forDate()).build(),
                 new MemberColumnDescriptor.Builder(proto().stats().total()).build(),
                 new MemberColumnDescriptor.Builder(proto().stats().processed()).build(),
                 new MemberColumnDescriptor.Builder(proto().stats().failed()).build(),
