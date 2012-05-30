@@ -29,4 +29,8 @@ public interface View<E extends IEntity> extends IsWidget {
     void setPresenter(Presenter<E> presenter);
 
     void populate(E value);
+
+    void showError(String msg);
+
+    void showNote(String msg);
 }

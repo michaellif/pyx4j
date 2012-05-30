@@ -19,10 +19,10 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.rpc.shared.IService;
 
-import com.propertyvista.portal.domain.dto.BillDTO;
+import com.propertyvista.portal.domain.dto.BillDataDTO;
 
 public interface BillingHistoryService extends IService {
 
-    void listBills(AsyncCallback<Vector<BillDTO>> callback);
+    void listBills(AsyncCallback<Vector<BillDataDTO>> callback);
 
 }

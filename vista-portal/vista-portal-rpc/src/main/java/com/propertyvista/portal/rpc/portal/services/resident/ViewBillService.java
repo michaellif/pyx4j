@@ -7,28 +7,16 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jun 18, 2011
- * @author Dad
+ * Created on 2012-05-30
+ * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.portal.client.ui.residents.billing;
+package com.propertyvista.portal.rpc.portal.services.resident;
 
-import com.google.gwt.user.client.ui.IsWidget;
+import com.pyx4j.entity.rpc.AbstractCrudService;
 
-import com.propertyvista.portal.domain.dto.BillDataDTO;
+import com.propertyvista.dto.BillDTO;
 
-public interface CurrentBillView extends IsWidget {
+public interface ViewBillService extends AbstractCrudService<BillDTO> {
 
-    interface Presenter {
-
-        void changePaymentMethod();
-
-        void changeAuthorization(boolean authorized);
-
-        void payBill();
-    }
-
-    void setPresenter(Presenter presenter);
-
-    void populate(BillDataDTO bill);
 }

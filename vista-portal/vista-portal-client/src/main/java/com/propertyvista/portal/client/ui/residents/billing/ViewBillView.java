@@ -13,22 +13,13 @@
  */
 package com.propertyvista.portal.client.ui.residents.billing;
 
-import com.google.gwt.user.client.ui.IsWidget;
+import com.propertyvista.dto.BillDTO;
+import com.propertyvista.portal.client.ui.residents.View;
 
-import com.propertyvista.portal.domain.dto.BillDataDTO;
+public interface ViewBillView extends View<BillDTO> {
 
-public interface CurrentBillView extends IsWidget {
-
-    interface Presenter {
-
-        void changePaymentMethod();
-
-        void changeAuthorization(boolean authorized);
+    interface Presenter extends View.Presenter<BillDTO> {
 
         void payBill();
     }
-
-    void setPresenter(Presenter presenter);
-
-    void populate(BillDataDTO bill);
 }

@@ -42,17 +42,17 @@ import com.propertyvista.common.client.ui.decorations.DecorationUtils;
 import com.propertyvista.domain.financial.Money;
 import com.propertyvista.portal.client.resources.PortalImages;
 import com.propertyvista.portal.client.ui.util.Utils;
-import com.propertyvista.portal.domain.dto.BillDTO;
+import com.propertyvista.portal.domain.dto.BillDataDTO;
 import com.propertyvista.portal.domain.dto.PaymentMethodDTO;
 
-public class CurrentBillForm extends CEntityForm<BillDTO> implements CurrentBillView {
+public class CurrentBillForm extends CEntityForm<BillDataDTO> implements CurrentBillView {
 
     private static final I18n i18n = I18n.get(CurrentBillForm.class);
 
     private Presenter presenter;
 
     public CurrentBillForm() {
-        super(BillDTO.class, new VistaViewersComponentFactory());
+        super(BillDataDTO.class, new VistaViewersComponentFactory());
     }
 
     @Override

@@ -36,6 +36,8 @@ import com.propertyvista.portal.client.ui.residents.billing.BillingHistoryView;
 import com.propertyvista.portal.client.ui.residents.billing.BillingHistoryViewImpl;
 import com.propertyvista.portal.client.ui.residents.billing.CurrentBillView;
 import com.propertyvista.portal.client.ui.residents.billing.CurrentBillViewImpl;
+import com.propertyvista.portal.client.ui.residents.billing.ViewBillView;
+import com.propertyvista.portal.client.ui.residents.billing.ViewBillViewImpl;
 import com.propertyvista.portal.client.ui.residents.dashboard.DashboardView;
 import com.propertyvista.portal.client.ui.residents.dashboard.DashboardViewImpl;
 import com.propertyvista.portal.client.ui.residents.insurancemockup.InsuranceView;
@@ -63,6 +65,8 @@ public class PortalViewFactory extends ViewFactoryBase {
                 map.put(type, new PotentialTenantViewImpl());
             } else if (BillingHistoryView.class.equals(type)) {
                 map.put(type, new BillingHistoryViewImpl());
+            } else if (ViewBillView.class.equals(type)) {
+                map.put(type, new ViewBillViewImpl());
             } else if (CurrentBillView.class.equals(type)) {
                 map.put(type, new CurrentBillViewImpl());
 

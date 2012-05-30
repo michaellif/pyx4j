@@ -28,6 +28,7 @@ import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 
+import com.propertyvista.common.client.events.UserMessageEvent.UserMessageType;
 import com.propertyvista.common.client.ui.decorations.DecorationUtils;
 import com.propertyvista.portal.client.ui.decorations.UserMessagePanel;
 
@@ -102,5 +103,15 @@ public class BasicViewImpl<E extends IEntity> extends FlowPanel implements View<
 
         form.reset();
         form.populate(value);
+    }
+
+    @Override
+    public void showError(String msg) {
+        messagePanel.setMessage(msg, UserMessageType.ERROR);
+    }
+
+    @Override
+    public void showNote(String msg) {
+        messagePanel.setMessage(msg, UserMessageType.INFO);
     }
 }

@@ -28,7 +28,7 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.propertyvista.portal.client.activity.SecurityAwareActivity;
 import com.propertyvista.portal.client.ui.residents.billing.BillingHistoryView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
-import com.propertyvista.portal.domain.dto.BillDTO;
+import com.propertyvista.portal.domain.dto.BillDataDTO;
 import com.propertyvista.portal.domain.dto.BillListDTO;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.services.resident.BillingHistoryService;
@@ -50,9 +50,9 @@ public class BillingHistoryActivity extends SecurityAwareActivity implements Bil
         super.start(panel, eventBus);
         panel.setWidget(view);
 
-        srv.listBills(new DefaultAsyncCallback<Vector<BillDTO>>() {
+        srv.listBills(new DefaultAsyncCallback<Vector<BillDataDTO>>() {
             @Override
-            public void onSuccess(Vector<BillDTO> result) {
+            public void onSuccess(Vector<BillDataDTO> result) {
                 BillListDTO billHistory = EntityFactory.create(BillListDTO.class);
                 billHistory.bills().addAll(result);
                 view.populate(billHistory);
@@ -61,7 +61,7 @@ public class BillingHistoryActivity extends SecurityAwareActivity implements Bil
     }
 
     @Override
-    public void view(BillDTO item) {
+    public void view(BillDataDTO item) {
         AppPlace place = new PortalSiteMap.Residents.BillingHistory.ViewBill();
         place.placeArg(PortalSiteMap.ARG_ENTITY_ID, item.id().getValue().toString());
         AppSite.getPlaceController().goTo(place);

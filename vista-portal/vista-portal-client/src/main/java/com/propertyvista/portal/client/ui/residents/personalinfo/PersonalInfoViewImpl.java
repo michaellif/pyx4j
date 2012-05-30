@@ -13,7 +13,6 @@
  */
 package com.propertyvista.portal.client.ui.residents.personalinfo;
 
-import com.propertyvista.common.client.events.UserMessageEvent.UserMessageType;
 import com.propertyvista.portal.client.ui.residents.BasicViewImpl;
 import com.propertyvista.portal.domain.dto.ResidentDTO;
 
@@ -21,15 +20,5 @@ public class PersonalInfoViewImpl extends BasicViewImpl<ResidentDTO> implements 
 
     public PersonalInfoViewImpl() {
         super(new PersonalInfoForm());
-    }
-
-    @Override
-    public void showError(String msg) {
-        messagePanel.setMessage(msg, UserMessageType.ERROR);
-    }
-
-    @Override
-    public void showNote(String msg) {
-        messagePanel.setMessage(msg, UserMessageType.INFO);
     }
 }

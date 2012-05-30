@@ -21,7 +21,4 @@ public interface PersonalInfoView extends View<ResidentDTO> {
     interface Presenter extends View.Presenter<ResidentDTO> {
     }
 
-    void showError(String msg);
-
-    void showNote(String msg);
 }

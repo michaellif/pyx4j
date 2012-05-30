@@ -30,7 +30,7 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.VistaViewersComponentFactory;
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
-import com.propertyvista.portal.domain.dto.BillDTO;
+import com.propertyvista.portal.domain.dto.BillDataDTO;
 import com.propertyvista.portal.domain.dto.BillListDTO;
 
 public class BillingHistoryForm extends CEntityForm<BillListDTO> implements BillingHistoryView {
@@ -56,10 +56,10 @@ public class BillingHistoryForm extends CEntityForm<BillListDTO> implements Bill
 
     }
 
-    private class BillingHistoryFolder extends VistaTableFolder<BillDTO> {
+    private class BillingHistoryFolder extends VistaTableFolder<BillDataDTO> {
 
         public BillingHistoryFolder() {
-            super(BillDTO.class, false);
+            super(BillDataDTO.class, false);
             setOrderable(false);
         }
 
@@ -75,16 +75,16 @@ public class BillingHistoryForm extends CEntityForm<BillListDTO> implements Bill
 
         @Override
         public CComponent<?, ?> create(IObject<?> member) {
-            if (member instanceof BillDTO) {
+            if (member instanceof BillDataDTO) {
                 return new BillEditor();
             }
             return super.create(member);
         }
 
-        private class BillEditor extends CEntityFolderRowEditor<BillDTO> {
+        private class BillEditor extends CEntityFolderRowEditor<BillDataDTO> {
 
             public BillEditor() {
-                super(BillDTO.class, columns());
+                super(BillDataDTO.class, columns());
             }
 
             @Override

@@ -13,22 +13,19 @@
  */
 package com.propertyvista.portal.client.ui.residents.billing;
 
-import com.google.gwt.user.client.ui.IsWidget;
+import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.portal.domain.dto.BillDataDTO;
+import com.propertyvista.dto.BillDTO;
+import com.propertyvista.portal.client.ui.residents.BasicViewImpl;
 
-public interface CurrentBillView extends IsWidget {
+public class ViewBillViewImpl extends BasicViewImpl<BillDTO> implements ViewBillView {
 
-    interface Presenter {
+    private static final I18n i18n = I18n.get(ViewBillViewImpl.class);
 
-        void changePaymentMethod();
+    public ViewBillViewImpl() {
+        super(new ViewBillForm());
 
-        void changeAuthorization(boolean authorized);
-
-        void payBill();
+        submitButton.setVisible(false);
+        cancel.setValue(i18n.tr("Back"));
     }
-
-    void setPresenter(Presenter presenter);
-
-    void populate(BillDataDTO bill);
 }

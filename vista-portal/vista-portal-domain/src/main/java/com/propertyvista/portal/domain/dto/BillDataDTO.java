@@ -25,7 +25,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 @Transient
-public interface BillDTO extends IEntity {
+public interface BillDataDTO extends IEntity {
 
     @Caption(name = "")
     IPrimitive<String> referenceNo();

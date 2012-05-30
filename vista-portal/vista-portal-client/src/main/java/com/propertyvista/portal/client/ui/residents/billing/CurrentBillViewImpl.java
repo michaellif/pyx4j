@@ -17,31 +17,28 @@ import com.google.gwt.user.client.ui.FlowPanel;
 
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.portal.client.ui.residents.paymentmethod.PaymentMethodsForm;
-import com.propertyvista.portal.domain.dto.BillDTO;
+import com.propertyvista.portal.domain.dto.BillDataDTO;
 
 public class CurrentBillViewImpl extends FlowPanel implements CurrentBillView {
 
     private final CurrentBillForm billForm;
 
-    private static final I18n i18n = I18n.get(PaymentMethodsForm.class);
+    private static final I18n i18n = I18n.get(CurrentBillViewImpl.class);
 
     public CurrentBillViewImpl() {
         billForm = new CurrentBillForm();
         billForm.initContent();
         add(billForm);
-
-    }
-
-    @Override
-    public void populate(BillDTO bill) {
-        billForm.populate(bill);
-
     }
 
     @Override
     public void setPresenter(Presenter presenter) {
         billForm.setPresenter(presenter);
 
+    }
+
+    @Override
+    public void populate(BillDataDTO bill) {
+        billForm.populate(bill);
     }
 }

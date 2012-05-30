@@ -24,15 +24,15 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.tenant.Tenant;
-import com.propertyvista.portal.domain.dto.BillDTO;
+import com.propertyvista.portal.domain.dto.BillDataDTO;
 import com.propertyvista.portal.rpc.portal.services.resident.BillingHistoryService;
 import com.propertyvista.portal.server.portal.TenantAppContext;
 
 public class BillingHistoryServiceImpl implements BillingHistoryService {
 
     @Override
-    public void listBills(AsyncCallback<Vector<BillDTO>> callback) {
-        Vector<BillDTO> bills = new Vector<BillDTO>();
+    public void listBills(AsyncCallback<Vector<BillDataDTO>> callback) {
+        Vector<BillDataDTO> bills = new Vector<BillDataDTO>();
         EntityQueryCriteria<Bill> criteria = EntityQueryCriteria.create(Bill.class);
 
         Tenant tenant = TenantAppContext.getCurrentUserTenantInLease();
@@ -41,7 +41,7 @@ public class BillingHistoryServiceImpl implements BillingHistoryService {
 
         criteria.add(PropertyCriterion.eq(criteria.proto().billingAccount(), tenant.leaseV().holder().billingAccount()));
         for (Bill bill : Persistence.service().query(criteria)) {
-            BillDTO dto = EntityFactory.create(BillDTO.class);
+            BillDataDTO dto = EntityFactory.create(BillDataDTO.class);
             dto.setPrimaryKey(bill.getPrimaryKey());
             dto.amount().setValue(bill.totalDueAmount().getValue());
             dto.dueDate().setValue(bill.dueDate().getValue());

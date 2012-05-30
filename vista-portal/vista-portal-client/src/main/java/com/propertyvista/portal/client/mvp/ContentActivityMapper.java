@@ -27,6 +27,7 @@ import com.propertyvista.portal.client.activity.PersonalInfoActivity;
 import com.propertyvista.portal.client.activity.PotentialTenantActivity;
 import com.propertyvista.portal.client.activity.billing.BillingHistoryActivity;
 import com.propertyvista.portal.client.activity.billing.CurrentBillActivity;
+import com.propertyvista.portal.client.activity.billing.ViewBillActivity;
 import com.propertyvista.portal.client.activity.insurancemockup.InsuranceActivity;
 import com.propertyvista.portal.client.activity.login.LeaseContextSelectionActivity;
 import com.propertyvista.portal.client.activity.login.LoginWithTokenActivity;
@@ -61,9 +62,6 @@ public class ContentActivityMapper implements AppActivityMapper {
                 } else if (place instanceof PortalSiteMap.PotentialTenants) {
                     activity = new PotentialTenantActivity(place);
 
-                } else if (place instanceof Residents.BillSummary) {
-                    activity = new CurrentBillActivity(place);
-
                 } else if (place instanceof Residents.PaymentMethods) {
                     activity = new PaymentMethodsActivity(place);
                 } else if (place instanceof Residents.PaymentMethods.NewPaymentMethod) {
@@ -78,8 +76,14 @@ public class ContentActivityMapper implements AppActivityMapper {
                 } else if (place instanceof Residents.Maintenance.EditMaintenanceRequest) {
                     activity = new EditMaintenanceRequestActivity(place);
 
+                } else if (place instanceof Residents.BillSummary) {
+                    activity = new CurrentBillActivity(place);
+
                 } else if (place instanceof Residents.BillingHistory) {
                     activity = new BillingHistoryActivity(place);
+                } else if (place instanceof Residents.BillingHistory.ViewBill) {
+                    activity = new ViewBillActivity(place);
+
                 } else if (VistaTODO.enableWelcomeWizardDemoMode & (place instanceof PortalSiteMap.Residents.Insurance)) {
                     activity = new InsuranceActivity();
 

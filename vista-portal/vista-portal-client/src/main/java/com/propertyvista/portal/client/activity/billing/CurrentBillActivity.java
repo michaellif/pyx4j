@@ -23,10 +23,11 @@ import com.pyx4j.site.client.AppSite;
 import com.propertyvista.portal.client.activity.SecurityAwareActivity;
 import com.propertyvista.portal.client.ui.residents.billing.CurrentBillView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
-import com.propertyvista.portal.domain.dto.BillDTO;
+import com.propertyvista.portal.domain.dto.BillDataDTO;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 
 public class CurrentBillActivity extends SecurityAwareActivity implements CurrentBillView.Presenter {
+
     private final CurrentBillView view;
 
     public CurrentBillActivity(Place place) {
@@ -40,7 +41,7 @@ public class CurrentBillActivity extends SecurityAwareActivity implements Curren
         panel.setWidget(view);
 
         //TODO implement a service call
-        view.populate(EntityFactory.create(BillDTO.class));
+        view.populate(EntityFactory.create(BillDataDTO.class));
     }
 
     @Override
@@ -57,6 +58,5 @@ public class CurrentBillActivity extends SecurityAwareActivity implements Curren
     @Override
     public void payBill() {
         // TODO Implement
-
     }
 }
