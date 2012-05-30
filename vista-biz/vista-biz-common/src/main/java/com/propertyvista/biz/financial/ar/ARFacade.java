@@ -62,5 +62,5 @@ public interface ARFacade {
 
     BigDecimal getCurrentBallance(BillingAccount billingAccount);
 
-    List<InvoiceLineItem> getNotInvoicedLineItems(BillingAccount billingAccount);
+    List<InvoiceLineItem> getNotAcquiredLineItems(BillingAccount billingAccount);
 }
