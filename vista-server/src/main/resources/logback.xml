@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE configuration>
+	<!-- $Id$ -->
+<configuration>
+
+	<appender name="ConsoleAppender-info" class="ch.qos.logback.core.ConsoleAppender">
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+			<level>INFO</level>
+		</filter>
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<!-- The Line# should clickable in eclipse console. Do not change -->
+			<pattern>%-5p [%X{namespace}] %m \t\n</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="FileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${container.home}/logs/${contextName}/vista-server.log</file>
+		<append>false</append>
+		<prudent>false</prudent>
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+			<level>DEBUG</level>
+		</filter>
+		<!-- start new file on every restart -->
+		<triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+			<maxFileSize>3000KB</maxFileSize>
+		</triggeringPolicy>
+		<rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy"> 
+			<FileNamePattern>${container.home}/logs/${contextName}/vista-server.%i.log</FileNamePattern> 
+			<maxIndex>10</maxIndex>
+		</rollingPolicy>
+
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<!--
+				Patterns %d event date %r Number of milliseconds elapsed since the
+				start of the application until the creation of the logging event. %p
+				event priority %c logger name %C Caller class %F Caller file %caller{10}
+				Caller full location information %L Caller Line number %M Caller
+				method %m message %n platform dependent line separator %X MDC
+			-->
+			<pattern>%-5p %d %6r\t [%c{1}.%M:%L] [%X{namespace}.%X{sessionNum}.%X{userID}]\t [%t]\n\t%m\n</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="FileAppender.warn" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${container.home}/logs/${contextName}/vista-server-warn.log</file>
+		<append>false</append>
+		<prudent>false</prudent>
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+			<level>WARN</level>
+		</filter>
+		<!-- start new file on every restart -->
+		<triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+			<maxFileSize>1000KB</maxFileSize>
+		</triggeringPolicy>
+		<rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy"> 
+			<FileNamePattern>${container.home}/logs/${contextName}/vista-server-warn.%i.log</FileNamePattern> 
+			<maxIndex>10</maxIndex>
+		</rollingPolicy>
+
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<pattern>%-5p %d %6r\t [%c{1}.%M:%L] [%X{namespace}.%X{sessionNum}.%X{userID}]\t [%t]\n\t%m\n</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="FileAppender.client" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${container.home}/logs/${contextName}/vista-client.log</file>
+		<append>false</append>
+		<prudent>false</prudent>
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+			<level>TRACE</level>
+		</filter>
+		<!-- start new file on every restart -->
+		<triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+			<maxFileSize>3000KB</maxFileSize>
+		</triggeringPolicy>
+		<rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy"> 
+			<FileNamePattern>${container.home}/logs/${contextName}/vista-client.%i.log</FileNamePattern> 
+			<maxIndex>10</maxIndex>
+		</rollingPolicy>
+
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<!--
+				Patterns %d event date %r Number of milliseconds elapsed since the
+				start of the application until the creation of the logging event. %p
+				event priority %c logger name %C Caller class %F Caller file %caller{10}
+				Caller full location information %L Caller Line number %M Caller
+				method %m message %n platform dependent line separator %X MDC
+			-->
+			<pattern>%-5p %d %6r\t [%c{1}.%M:%L] [%X{namespace}.%X{sessionNum}.%X{userID}]\t [%t]\n\t%m\n</pattern>
+		</encoder>
+	</appender>
+	
+    <appender name="FileAppender.importer" class="ch.qos.logback.core.rolling.RollingFileAppender">
+	<file>${container.home}/logs/${contextName}/vista-importer.log</file>
+        <append>false</append>
+		<prudent>false</prudent>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+			<level>DEBUG</level>
+		</filter>
+        <!-- start new file on every restart -->
+		<triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+			<maxFileSize>3000KB</maxFileSize>
+		</triggeringPolicy>	
+		<rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy"> 
+			<FileNamePattern>${container.home}/logs/${contextName}/vista-importer.%i.log</FileNamePattern> 
+			<maxIndex>10</maxIndex>
+		</rollingPolicy>
+
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <!--
+                Patterns %d event date %r Number of milliseconds elapsed since the
+                start of the application until the creation of the logging event. %p
+                event priority %c logger name %C Caller class %F Caller file %caller{10}
+                Caller full location information %L Caller Line number %M Caller
+                method %m message %n platform dependent line separator %X MDC
+            -->
+            <pattern>%-5p %d %6r\t [%c{1}.%M:%L] [%X{namespace}.%X{sessionNum}.%X{userID}]\t [%t]\n\t%m\n</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="com.propertyvista.interfaces.importer" additivity="false" level="debug">
+        <appender-ref ref="FileAppender.importer" />
+        <appender-ref ref="FileAppender.warn" />
+    </logger>
+        
+	<logger name="com.propertyvista" level="debug" />
+
+	<logger name="com.pyx4j" level="debug" />
+
+	<logger name="org.apache" level="info" />
+
+    <logger name="com.mchange" level="warn" />
+    
+	<logger name="client" level="trace">
+        <appender-ref ref="FileAppender.client" />
+    </logger>
+    
+	<root level="info">
+		<appender-ref ref="ConsoleAppender-info" />
+		<appender-ref ref="FileAppender" />
+		<appender-ref ref="FileAppender.warn" />
+	</root>
+
+
+</configuration>
