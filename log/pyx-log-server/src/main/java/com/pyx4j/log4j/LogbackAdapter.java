@@ -20,6 +20,8 @@
  */
 package com.pyx4j.log4j;
 
+import java.util.Map;
+
 import org.slf4j.ILoggerFactory;
 import org.slf4j.LoggerFactory;
 
@@ -36,6 +38,9 @@ class LogbackAdapter {
             LoggerContext context = (LoggerContext) lc;
             context.reset();
             context.setName(LoggerConfig.getContextName());
+            for (Map.Entry<String, String> me : LoggerConfig.nameVariables.entrySet()) {
+                context.putProperty(me.getKey(), me.getValue());
+            }
             try {
                 new ContextInitializer(context).autoConfig();
             } catch (JoranException je) {
