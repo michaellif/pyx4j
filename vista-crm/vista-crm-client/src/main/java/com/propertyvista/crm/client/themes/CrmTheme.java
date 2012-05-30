@@ -57,11 +57,11 @@ public class CrmTheme extends VistaTheme {
     }
 
     public static enum ArrearsStyleName implements IStyleName {
-        ArrearsTitle, ArrearsCategoryEven, ArrearsCategoryOdd, ArrearsCategoryAll, ArrearsMoneyCell;
+        ArrearsColumnTitle, ArrearsMoneyColumnTitle, ArrearsCategoryEven, ArrearsCategoryOdd, ArrearsCategoryAll, ArrearsMoneyCell;
     }
 
     public static enum TransactionHistoryStyleName implements IStyleName {
-        TransactionsHistoryTitle, TransactionRecordEven, TransactionRecordOdd, TransactionRecordMoneyCell, TansactionHistoryColumn;
+        TransactionsHistoryColumnTitle, TransactionsHistoryMoneyColumnTitle, TransactionRecordEven, TransactionRecordOdd, TransactionRecordMoneyCell;
     }
 
     public CrmTheme() {
@@ -510,15 +510,15 @@ public class CrmTheme extends VistaTheme {
 
     protected void initTransactionHistoryStyles() {
         {
-            Style style = new Style("." + TransactionHistoryStyleName.TansactionHistoryColumn.name());
-            style.addProperty("border-right-width", "1px");
-            style.addProperty("border-right-color", ThemeColors.foreground);
+            Style style = new Style("." + TransactionHistoryStyleName.TransactionsHistoryColumnTitle.name());
+            style.addProperty("font-weight", "bold");
+            style.addProperty("text-align", "left");
             addStyle(style);
         }
         {
-            Style style = new Style("." + TransactionHistoryStyleName.TransactionsHistoryTitle.name());
+            Style style = new Style("." + TransactionHistoryStyleName.TransactionsHistoryMoneyColumnTitle.name());
             style.addProperty("font-weight", "bold");
-            style.addProperty("text-align", "center");
+            style.addProperty("text-align", "right");
             addStyle(style);
         }
         {
@@ -543,9 +543,15 @@ public class CrmTheme extends VistaTheme {
 
     protected void initArrearsViewStyles() {
         {
-            Style style = new Style("." + ArrearsStyleName.ArrearsTitle.name());
+            Style style = new Style("." + ArrearsStyleName.ArrearsColumnTitle.name());
             style.addProperty("font-weight", "bold");
-            style.addProperty("text-align", "center");
+            style.addProperty("text-align", "left");
+            addStyle(style);
+        }
+        {
+            Style style = new Style("." + ArrearsStyleName.ArrearsMoneyColumnTitle.name());
+            style.addProperty("font-weight", "bold");
+            style.addProperty("text-align", "right");
             addStyle(style);
         }
         {

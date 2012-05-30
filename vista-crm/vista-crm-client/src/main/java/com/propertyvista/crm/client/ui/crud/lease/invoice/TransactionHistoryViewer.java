@@ -86,12 +86,10 @@ public class TransactionHistoryViewer extends CEntityViewer<TransactionHistoryDT
         lineItemsView.setWidget(row, COL_BALANCE, new HTML(i18n.tr("Balance")));
         lineItemsView.getFlexCellFormatter().setWidth(row, COL_BALANCE, "10em");
 
-        lineItemsView.getRowFormatter().setStyleName(row, CrmTheme.TransactionHistoryStyleName.TransactionsHistoryTitle.name());
-        lineItemsView.getColumnFormatter().setStyleName(COL_DATE, CrmTheme.TransactionHistoryStyleName.TansactionHistoryColumn.name());
-        lineItemsView.getColumnFormatter().setStyleName(COL_ITEM, CrmTheme.TransactionHistoryStyleName.TansactionHistoryColumn.name());
-        lineItemsView.getColumnFormatter().setStyleName(COL_DEBIT, CrmTheme.TransactionHistoryStyleName.TansactionHistoryColumn.name());
-        lineItemsView.getColumnFormatter().setStyleName(COL_CREDIT, CrmTheme.TransactionHistoryStyleName.TansactionHistoryColumn.name());
-        lineItemsView.getColumnFormatter().setStyleName(COL_BALANCE, CrmTheme.TransactionHistoryStyleName.TansactionHistoryColumn.name());
+        lineItemsView.getRowFormatter().setStyleName(row, CrmTheme.TransactionHistoryStyleName.TransactionsHistoryColumnTitle.name());
+        lineItemsView.getCellFormatter().setStyleName(row, COL_DEBIT, CrmTheme.TransactionHistoryStyleName.TransactionsHistoryMoneyColumnTitle.name());
+        lineItemsView.getCellFormatter().setStyleName(row, COL_CREDIT, CrmTheme.TransactionHistoryStyleName.TransactionsHistoryMoneyColumnTitle.name());
+        lineItemsView.getCellFormatter().setStyleName(row, COL_BALANCE, CrmTheme.TransactionHistoryStyleName.TransactionsHistoryMoneyColumnTitle.name());
 
         BigDecimal balance = balanceForward != null ? balanceForward : new BigDecimal("0.0");
 
@@ -176,7 +174,13 @@ public class TransactionHistoryViewer extends CEntityViewer<TransactionHistoryDT
         arrearsView.setHTML(row, 4, toSafeHtml(proto.bucket90().getMeta().getCaption()));
         arrearsView.setHTML(row, 5, toSafeHtml(proto.bucketOver90().getMeta().getCaption()));
         arrearsView.setHTML(row, 6, toSafeHtml(proto.arrearsAmount().getMeta().getCaption()));
-        arrearsView.getRowFormatter().setStyleName(row, CrmTheme.ArrearsStyleName.ArrearsTitle.name());
+        arrearsView.getRowFormatter().setStyleName(row, CrmTheme.ArrearsStyleName.ArrearsColumnTitle.name());
+        arrearsView.getCellFormatter().setStyleName(row, 1, CrmTheme.ArrearsStyleName.ArrearsMoneyColumnTitle.name());
+        arrearsView.getCellFormatter().setStyleName(row, 2, CrmTheme.ArrearsStyleName.ArrearsMoneyColumnTitle.name());
+        arrearsView.getCellFormatter().setStyleName(row, 3, CrmTheme.ArrearsStyleName.ArrearsMoneyColumnTitle.name());
+        arrearsView.getCellFormatter().setStyleName(row, 4, CrmTheme.ArrearsStyleName.ArrearsMoneyColumnTitle.name());
+        arrearsView.getCellFormatter().setStyleName(row, 5, CrmTheme.ArrearsStyleName.ArrearsMoneyColumnTitle.name());
+        arrearsView.getCellFormatter().setStyleName(row, 6, CrmTheme.ArrearsStyleName.ArrearsMoneyColumnTitle.name());
 
     }
 
