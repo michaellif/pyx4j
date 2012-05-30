@@ -23,6 +23,7 @@ package com.pyx4j.essentials.server.csv;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Vector;
 
@@ -49,6 +50,8 @@ public class EntityCSVReciver<E extends IEntity> implements CSVReciver {
     private final List<E> list = new Vector<E>();
 
     private final List<Path> headersPath = new Vector<Path>();
+
+    private boolean headerIgnoreCase = false;
 
     private int headerLinesCount = 1;
 
@@ -81,6 +84,14 @@ public class EntityCSVReciver<E extends IEntity> implements CSVReciver {
 
     public void setHeadersMatchMinimum(int headersMatchMinimum) {
         this.headersMatchMinimum = headersMatchMinimum;
+    }
+
+    public boolean isHeaderIgnoreCase() {
+        return headerIgnoreCase;
+    }
+
+    public void setHeaderIgnoreCase(boolean headerIgnoreCase) {
+        this.headerIgnoreCase = headerIgnoreCase;
     }
 
     private String[] combineHeader(String[] headers) {
@@ -137,13 +148,21 @@ public class EntityCSVReciver<E extends IEntity> implements CSVReciver {
         for (String memberName : em.getMemberNames()) {
             IObject<?> member = entity.getMember(memberName);
             if (member instanceof IPrimitive<?>) {
-                membersNames.put(columnName(member), member.getPath());
+                String name = columnName(member);
+                if (isHeaderIgnoreCase()) {
+                    name = name.toLowerCase(Locale.ENGLISH);
+                }
+                membersNames.put(name, member.getPath());
             }
         }
         int headersFound = 0;
         headersPath.clear();
         nextHeader: for (String header : headersCombined) {
-            Path path = membersNames.get(header);
+            String name = header;
+            if (isHeaderIgnoreCase()) {
+                name = name.toLowerCase(Locale.ENGLISH);
+            }
+            Path path = membersNames.get(name);
             if (path != null) {
                 headersPath.add(path);
                 headersFound++;
