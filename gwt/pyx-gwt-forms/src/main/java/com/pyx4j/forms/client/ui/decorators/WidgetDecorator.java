@@ -150,15 +150,16 @@ public class WidgetDecorator extends FlexTable {
 
         labelHolder = new FlowPanel();
         labelHolder.setStyleName(WidgetDecoratorLabelHolder.name());
+        labelHolder.getElement().getStyle().setWidth(builder.labelWidth, Unit.EM);
+        labelHolder.getElement().getStyle().setProperty("textAlign", builder.labelAlignment.name());
         labelHolder.add(mandatoryImageHolder);
         labelHolder.add(label);
-        labelHolder.getElement().getStyle().setProperty("textAlign", builder.labelAlignment.name());
-        labelHolder.getElement().getStyle().setWidth(builder.labelWidth, Unit.EM);
         getCellFormatter().setHorizontalAlignment(0, 0, HasHorizontalAlignment.ALIGN_RIGHT);
 
         SimplePanel componentHolder = new SimplePanel();
         componentHolder.setStyleName(WidgetDecoratorComponentHolder.name());
         componentHolder.getElement().getStyle().setWidth(builder.componentWidth, Unit.EM);
+        componentHolder.getElement().getStyle().setProperty("textAlign", builder.componentAlignment.name());
         componentHolder.add(nativeComponent);
 
         validationLabel = new Label();
@@ -261,6 +262,8 @@ public class WidgetDecorator extends FlexTable {
 
         private Alignment labelAlignment = Alignment.right;
 
+        private Alignment componentAlignment = Alignment.left;
+
         public Builder(final CComponent<?, ?> component) {
             this.component = component;
         }
@@ -296,6 +299,11 @@ public class WidgetDecorator extends FlexTable {
 
         public Builder labelAlignment(Alignment labelAlignment) {
             this.labelAlignment = labelAlignment;
+            return this;
+        }
+
+        public Builder componentAlignment(Alignment componentAlignment) {
+            this.componentAlignment = componentAlignment;
             return this;
         }
 
