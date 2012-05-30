@@ -22,7 +22,6 @@ import com.pyx4j.gwt.server.IOUtils;
 import com.propertyvista.domain.financial.billing.AgingBuckets;
 import com.propertyvista.domain.financial.billing.InvoiceCredit;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
-import com.propertyvista.domain.financial.billing.InvoiceDebit.DebitType;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.dto.TransactionHistoryDTO;
 
@@ -41,6 +40,8 @@ public class TransactionHistoryPrinter {
             out.newLine();
             out.write("\nFrom Date: " + transactionHistory.fromDate().getValue());
             out.write("\nIssue Date: " + transactionHistory.issueDate().getValue());
+            out.write("\nCurrent Balance: " + transactionHistory.currentBalanceAmount().getValue());
+            out.newLine();
             out.newLine();
             out.write(convertToCell("Date", 14, true) + convertToCell("Description", 60, true) + convertToCell("Debits", 14, true)
                     + convertToCell("Credits", 14, true));

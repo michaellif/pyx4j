@@ -33,6 +33,8 @@ public interface TransactionHistoryDTO extends IEntity {
 
     IPrimitive<BigDecimal> balanceForwardAmount();
 
+    IPrimitive<BigDecimal> currentBalanceAmount();
+
     IList<InvoiceLineItem> lineItems();
 
     AgingBuckets totalAgingBuckets();

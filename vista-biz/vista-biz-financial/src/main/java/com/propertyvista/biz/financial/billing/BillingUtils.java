@@ -20,6 +20,7 @@
  */
 package com.propertyvista.biz.financial.billing;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -32,6 +33,7 @@ import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.InvoiceAccountCharge;
 import com.propertyvista.domain.financial.billing.InvoiceAccountCredit;
+import com.propertyvista.domain.financial.billing.InvoiceDebit;
 import com.propertyvista.domain.financial.billing.InvoiceDeposit;
 import com.propertyvista.domain.financial.billing.InvoiceDepositRefund;
 import com.propertyvista.domain.financial.billing.InvoiceLatePaymentFee;
@@ -76,6 +78,14 @@ public class BillingUtils {
 
     public static <E extends InvoiceLineItem> List<E> getLineItemsForType(Bill bill, Class<E> type) {
         return getLineItemsForType(bill.lineItems(), type);
+    }
+
+    public static BigDecimal calculateTotal(InvoiceLineItem lineItem) {
+        BigDecimal tax = new BigDecimal(0);
+        if (lineItem.isInstanceOf(InvoiceDebit.class)) {
+            tax = lineItem.<InvoiceDebit> cast().taxTotal().getValue();
+        }
+        return lineItem.amount().getValue().add(tax);
     }
 
     @SuppressWarnings("unchecked")

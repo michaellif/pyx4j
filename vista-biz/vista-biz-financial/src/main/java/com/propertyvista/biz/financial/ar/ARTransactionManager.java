@@ -26,9 +26,12 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.biz.financial.SysDateManager;
+import com.propertyvista.biz.financial.billing.BillingFacade;
+import com.propertyvista.biz.financial.billing.BillingUtils;
 import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.billing.AgingBuckets;
+import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.InvoiceCredit;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
@@ -90,6 +93,7 @@ public class ARTransactionManager {
         th.lineItems().addAll(lineItems);
         th.fromDate().setValue(fromDate);
         th.issueDate().setValue(new LogicalDate(SysDateManager.getSysDate()));
+        th.currentBalanceAmount().setValue(getCurrentBallance(billingAccount));
 
         Collection<AgingBuckets> agingBucketsCollection = ARArrearsManager.getAgingBuckets(billingAccount);
 
@@ -134,6 +138,17 @@ public class ARTransactionManager {
         criteria.asc(criteria.proto().postDate());
         List<InvoiceCredit> lineItems = Persistence.service().query(criteria);
         return lineItems;
+    }
+
+    static BigDecimal getCurrentBallance(BillingAccount billingAccount) {
+        Bill bill = ServerSideFactory.create(BillingFacade.class).getLatestConfirmedBill(billingAccount.lease());
+        BigDecimal currentBallanceAmount = bill.totalDueAmount().getValue();
+        List<InvoiceLineItem> items = BillingUtils.getNotConsumedLineItems(billingAccount);
+
+        for (InvoiceLineItem item : items) {
+            currentBallanceAmount = currentBallanceAmount.add(BillingUtils.calculateTotal(item));
+        }
+        return currentBallanceAmount;
     }
 
 }

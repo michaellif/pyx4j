@@ -61,8 +61,7 @@ public class BillingLatePaymentFeeProcessor extends AbstractProcessor {
 
         for (InvoiceLineItem item : items) {
             if (!item.postDate().isNull() && item.postDate().getValue().compareTo(curBill.dueDate().getValue()) <= 0) {
-                overdueAmount = overdueAmount.add(item.amount().getValue());
-                //TODO add taxes
+                overdueAmount = overdueAmount.add(BillingUtils.calculateTotal(item));
             }
         }
         if (overdueAmount.compareTo(new BigDecimal(0)) <= 0) {

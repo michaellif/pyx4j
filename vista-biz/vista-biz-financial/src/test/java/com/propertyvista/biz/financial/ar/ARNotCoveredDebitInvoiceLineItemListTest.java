@@ -83,10 +83,6 @@ public class ARNotCoveredDebitInvoiceLineItemListTest extends FinancialTestBase 
 
         List<InvoiceDebit> debits = ARTransactionManager.getNotCoveredDebitInvoiceLineItems(retrieveLease().billingAccount());
 
-        for (InvoiceDebit invoiceDebit : debits) {
-            System.out.println("++++++++++" + invoiceDebit.dueDate().getValue() + " +++ " + invoiceDebit.description().getStringView());
-        }
-
         policy = arPolicyDataModel.getPolicy();
         policy.creditDebitRule().setValue(CreditDebitRule.byDebitType);
         Persistence.service().persist(policy);
@@ -94,20 +90,12 @@ public class ARNotCoveredDebitInvoiceLineItemListTest extends FinancialTestBase 
 
         debits = ARTransactionManager.getNotCoveredDebitInvoiceLineItems(retrieveLease().billingAccount());
 
-        for (InvoiceDebit invoiceDebit : debits) {
-            System.out.println("++++++++++" + invoiceDebit.dueDate().getValue() + " +++ " + invoiceDebit.description().getStringView());
-        }
-
         policy = arPolicyDataModel.getPolicy();
         policy.creditDebitRule().setValue(CreditDebitRule.byAgingBucketAndDebitType);
         Persistence.service().persist(policy);
         Persistence.service().commit();
 
         debits = ARTransactionManager.getNotCoveredDebitInvoiceLineItems(retrieveLease().billingAccount());
-
-        for (InvoiceDebit invoiceDebit : debits) {
-            System.out.println("++++++++++" + invoiceDebit.dueDate().getValue() + " +++ " + invoiceDebit.description().getStringView());
-        }
 
     }
 

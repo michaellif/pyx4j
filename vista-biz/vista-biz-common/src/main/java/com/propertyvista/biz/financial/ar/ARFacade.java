@@ -13,6 +13,7 @@
  */
 package com.propertyvista.biz.financial.ar;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Vector;
 
@@ -58,5 +59,7 @@ public interface ARFacade {
     void updateArrearsHistory(BillingAccount billingAccount);
 
     void updateArrearsHistory(Building building);
+
+    BigDecimal getCurrentBallance(BillingAccount billingAccount);
 
 }
