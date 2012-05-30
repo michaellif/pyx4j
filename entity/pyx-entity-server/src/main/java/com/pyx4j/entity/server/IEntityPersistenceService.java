@@ -43,6 +43,9 @@ public interface IEntityPersistenceService {
 
     public void startBackgroundProcessTransaction();
 
+    /**
+     * Validate that Transaction is explicitly committed or rolled back and then close it.
+     */
     public void endTransaction();
 
     public void removeThreadLocale();
