@@ -282,13 +282,13 @@ public class WidgetDecorator extends FlexTable {
             return this;
         }
 
-        public Builder customLabel(String customLabel) {
-            this.customLabel = customLabel;
+        public Builder labelAlignment(Alignment labelAlignment) {
+            this.labelAlignment = labelAlignment;
             return this;
         }
 
-        public Builder useLabelSemicolon(boolean useLabelSemicolon) {
-            this.useLabelSemicolon = useLabelSemicolon;
+        public Builder componentAlignment(Alignment componentAlignment) {
+            this.componentAlignment = componentAlignment;
             return this;
         }
 
@@ -297,13 +297,13 @@ public class WidgetDecorator extends FlexTable {
             return this;
         }
 
-        public Builder labelAlignment(Alignment labelAlignment) {
-            this.labelAlignment = labelAlignment;
+        public Builder useLabelSemicolon(boolean useLabelSemicolon) {
+            this.useLabelSemicolon = useLabelSemicolon;
             return this;
         }
 
-        public Builder componentAlignment(Alignment componentAlignment) {
-            this.componentAlignment = componentAlignment;
+        public Builder customLabel(String customLabel) {
+            this.customLabel = customLabel;
             return this;
         }
 
