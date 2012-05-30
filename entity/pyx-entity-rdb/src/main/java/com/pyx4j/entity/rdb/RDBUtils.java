@@ -163,6 +163,7 @@ public class RDBUtils implements Closeable {
         long start = System.currentTimeMillis();
         RDBUtils utils = new RDBUtils();
         try {
+            log.debug("recreate DB/SCHEMAs");
             switch (((EntityPersistenceServiceRDB) Persistence.service()).getDatabaseType()) {
             case PostgreSQL:
                 DatabaseMetaData dbMeta = utils.connection().getMetaData();
