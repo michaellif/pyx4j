@@ -94,7 +94,7 @@ public class CSVLoad {
         } catch (IOException ioe) {
             throw new RuntimeException("Load file error", ioe);
         } catch (Exception e) {
-            throw new RuntimeException("Load file error, Line# " + lineNumber, e);
+            throw new RuntimeException("Load file error, Line# " + lineNumber + "; " + e.getMessage(), e);
         } finally {
             try {
                 if (is != null) {
