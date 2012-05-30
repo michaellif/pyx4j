@@ -48,6 +48,8 @@ public interface ARFacade {
 
     TransactionHistoryDTO getTransactionHistory(BillingAccount billingAccount);
 
+    //BigDecimal getCurrentBalance(BillingAccount billingAccount);
+
     BuildingArrearsSnapshot getArrearsSnapshot(Building buildingStub, LogicalDate asOf);
 
     EntitySearchResult<LeaseArrearsSnapshot> getArrearsSnapshotRoster(LogicalDate asOf, List<Building> buildings, Vector<Criterion> searchCriteria,

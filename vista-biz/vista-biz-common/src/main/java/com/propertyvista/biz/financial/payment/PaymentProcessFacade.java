@@ -13,6 +13,8 @@
  */
 package com.propertyvista.biz.financial.payment;
 
+import com.pyx4j.commons.LogicalDate;
+
 import com.propertyvista.admin.domain.payment.pad.PadFile;
 import com.propertyvista.admin.domain.payment.pad.PadReconciliationFile;
 
@@ -27,5 +29,7 @@ public interface PaymentProcessFacade {
     PadReconciliationFile recivePadReconciliation();
 
     String processPadReconciliation(PadReconciliationFile reconciliationFile);
+
+    String createPreauthorisedPayments(LogicalDate dueDate);
 
 }

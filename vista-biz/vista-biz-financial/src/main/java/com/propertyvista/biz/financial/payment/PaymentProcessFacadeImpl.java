@@ -16,6 +16,7 @@ package com.propertyvista.biz.financial.payment;
 import java.util.List;
 import java.util.concurrent.Callable;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
@@ -155,4 +156,17 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
 
         return message.toString();
     }
+
+    @Override
+    public String createPreauthorisedPayments(LogicalDate dueDate) {
+        // TODO Auto-generated method stub
+        // Find all Bills 
+        //For Due Date (trigger target date), go over all Bills that have specified DueDate - see if this bill not yet created preauthorised payments and create
+
+        //Check this bill is latest
+        // call ar facade to get current balance for dueDate
+
+        return null;
+    }
+
 }

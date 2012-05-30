@@ -13,13 +13,19 @@
  */
 package com.propertyvista.biz.financial.billing;
 
+import com.pyx4j.commons.LogicalDate;
+
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.BillingRun;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
 
 public interface BillingFacade {
 
     BillingRun runBilling(Lease lease);
+
+    BillingRun runBilling(Building building, PaymentFrequency paymentFrequency, LogicalDate billingPeriodStartDate);
 
     Bill getLatestConfirmedBill(Lease lease);
 
