@@ -13,6 +13,9 @@
  */
 package com.propertyvista.admin.client.activity.crud.simulatedpad;
 
+import java.math.BigDecimal;
+import java.util.Date;
+
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
@@ -21,7 +24,10 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.admin.client.ui.crud.padsimulation.batch.PadBatchEditorView;
 import com.propertyvista.admin.client.viewfactories.crud.AdministrationVeiwFactory;
+import com.propertyvista.admin.domain.payment.pad.MerchantReconciliationStatus;
+import com.propertyvista.admin.domain.payment.pad.TransactionReconciliationStatus;
 import com.propertyvista.admin.domain.payment.pad.sim.PadSimBatch;
+import com.propertyvista.admin.domain.payment.pad.sim.PadSimDebitRecord;
 import com.propertyvista.admin.rpc.services.sim.PadSimBatchCrudService;
 
 public class PadBatchEditorActivity extends EditorActivityBase<PadSimBatch> implements PadBatchEditorView.Presenter {
@@ -34,6 +40,81 @@ public class PadBatchEditorActivity extends EditorActivityBase<PadSimBatch> impl
 
     @Override
     public void calculate() {
-        // TODO Auto-generated method stub
+        PadSimBatch batch = getView().getValue();
+        updateReconciliation(batch);
+        onPopulateSuccess(batch);
+    }
+
+    private class SummaryTotal {
+
+        int recordsCount = 0;
+
+        BigDecimal totalAmount = new BigDecimal("0");
+
+        void add(String amountValue) {
+            recordsCount++;
+            totalAmount = totalAmount.add(PadSimUtils.parsAmount(amountValue));
+        }
+    }
+
+    private void updateReconciliation(PadSimBatch padBatch) {
+        if (padBatch.reconciliationStatus().isNull()) {
+            padBatch.reconciliationStatus().setValue(MerchantReconciliationStatus.PAID);
+        }
+        SummaryTotal total = new SummaryTotal();
+        SummaryTotal gross = new SummaryTotal();
+        SummaryTotal rejects = new SummaryTotal();
+        SummaryTotal returns = new SummaryTotal();
+
+        for (PadSimDebitRecord record : padBatch.records()) {
+            if (record.acknowledgmentStatusCode().isNull()) {
+                if (record.paymentDate().isNull()) {
+                    record.paymentDate().setValue(PadSimUtils.formatDate(new Date()));
+                }
+                if (record.reconciliationStatus().isNull()) {
+                    record.reconciliationStatus().setValue(TransactionReconciliationStatus.PROCESSED);
+                }
+                switch (record.reconciliationStatus().getValue()) {
+                case PROCESSED:
+                    gross.add(record.amount().getValue());
+                    break;
+                case REJECTED:
+                    rejects.add(record.amount().getValue());
+                    break;
+                case RETURNED:
+                    returns.add(record.amount().getValue());
+                    break;
+                }
+                total.add(record.amount().getValue());
+            }
+        }
+        if (padBatch.recordsCount().isNull()) {
+            padBatch.recordsCount().setValue(padBatch.records().size());
+        }
+        if (padBatch.batchAmount().isNull()) {
+            padBatch.batchAmount().setValue(PadSimUtils.formatAmount(total.totalAmount));
+        }
+
+        if (padBatch.grossPaymentCount().isNull()) {
+            padBatch.grossPaymentCount().setValue(String.valueOf(gross.recordsCount));
+        }
+        if (padBatch.grossPaymentAmount().isNull()) {
+            padBatch.grossPaymentAmount().setValue(PadSimUtils.formatAmount(gross.totalAmount));
+        }
+
+        if (padBatch.rejectItemsCount().isNull()) {
+            padBatch.rejectItemsCount().setValue(String.valueOf(rejects.recordsCount));
+        }
+        if (padBatch.rejectItemsAmount().isNull()) {
+            padBatch.rejectItemsAmount().setValue(PadSimUtils.formatAmount(rejects.totalAmount));
+        }
+
+        if (padBatch.returnItemsCount().isNull()) {
+            padBatch.returnItemsCount().setValue(String.valueOf(returns.recordsCount));
+        }
+        if (padBatch.returnItemsAmount().isNull()) {
+            padBatch.returnItemsAmount().setValue(PadSimUtils.formatAmount(returns.totalAmount));
+        }
+
     }
 }
