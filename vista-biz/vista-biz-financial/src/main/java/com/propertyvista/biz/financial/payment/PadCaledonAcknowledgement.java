@@ -57,6 +57,7 @@ class PadCaledonAcknowledgement {
         }
 
         padFile.acknowledged().setValue(Persistence.service().getTransactionSystemTime());
+        padFile.acknowledgmentRejectReasonMessage().setValue(akFile.acknowledgmentRejectReasonMessage().getValue());
 
         if (akFile.acknowledgmentStatusCode().getValue().equals(FileAcknowledgmentStatus.Accepted)) {
             assertAcknowledgedValues(padFile, akFile);

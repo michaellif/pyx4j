@@ -52,6 +52,7 @@ public class RunForm extends AdminEntityForm<Run> {
         container.setWidget(++row, 0, new DecoratorBuilder(inject(proto().stats().averageDuration()), 10).build());
         container.setWidget(++row, 0, new DecoratorBuilder(inject(proto().stats().totalDuration()), 10).build());
 
+        container.setWidget(++row, 0, new DecoratorBuilder(inject(proto().stats().message()), 40).build());
         container.setWidget(++row, 0, new DecoratorBuilder(inject(proto().errorMessage()), 40).build());
 
         container.setH2(++row, 0, 2, i18n.tr("Data"));

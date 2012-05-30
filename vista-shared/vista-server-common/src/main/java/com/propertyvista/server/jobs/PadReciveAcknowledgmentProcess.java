@@ -26,6 +26,11 @@ public class PadReciveAcknowledgmentProcess implements PmcProcess {
     @Override
     public boolean start() {
         padFile = ServerSideFactory.create(PaymentProcessFacade.class).recivePadAcknowledgementFile();
+        if (!padFile.acknowledgmentRejectReasonMessage().isNull()) {
+            final RunStats stats = PmcProcessContext.getRunStats();
+            stats.message().setValue(padFile.acknowledgmentRejectReasonMessage().getValue());
+            PmcProcessContext.setRunStats(stats);
+        }
         return (padFile != null);
     }
 

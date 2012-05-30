@@ -117,6 +117,8 @@ public interface PadFile extends IEntity {
 
     IPrimitive<String> acknowledgmentStatusCode();
 
+    IPrimitive<String> acknowledgmentRejectReasonMessage();
+
     IPrimitive<FileAcknowledgmentStatus> acknowledgmentStatus();
 
 }

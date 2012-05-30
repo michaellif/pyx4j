@@ -168,6 +168,7 @@ public class PmcProcessDispatcherJob implements Job {
         PmcProcess pmcProcess = PmcProcessFactory.createPmcProcess(run.trigger().triggerType().getValue());
         long startTimeNano = System.nanoTime();
         try {
+            PmcProcessContext.setRunStats(run.stats());
             if (!pmcProcess.start()) {
                 run.status().setValue(RunStatus.Sleeping);
                 return;
@@ -177,8 +178,11 @@ public class PmcProcessDispatcherJob implements Job {
             run.errorMessage().setValue(e.getMessage());
             run.status().setValue(RunStatus.Failed);
             return;
+        } finally {
+            PmcProcessContext.remove();
         }
 
+        Persistence.service().persist(run.stats());
         ExecutorService executorService = Executors.newSingleThreadExecutor();
 
         try {
