@@ -33,6 +33,11 @@ public class Anchor extends com.google.gwt.user.client.ui.Anchor {
         this(text, false, DEFAULT_HREF);
     }
 
+    public Anchor(String text, ClickHandler handler) {
+        this(text, false, DEFAULT_HREF);
+        addClickHandler(handler);
+    }
+
     public Anchor(String text, boolean asHTML, String href) {
         super(text, asHTML, href);
         setStylePrimaryName(getElement(), DefaultWidgetsTheme.StyleName.Anchor.name());
