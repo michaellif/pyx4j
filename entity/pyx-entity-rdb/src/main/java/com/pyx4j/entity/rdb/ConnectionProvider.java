@@ -99,7 +99,7 @@ public class ConnectionProvider {
             dataSource = connectionPool.getDataSource();
             backgroundProcessDataSource = connectionPool.getBackgroundProcessDataSource();
         } catch (Exception e) {
-            throw new SQLException("Failed to initialize connection pool: " + e.getMessage());
+            throw new SQLException("Failed to initialize connection pool: " + e.getMessage(), e);
         }
 
         NamingConvention namingConvention = cfg.namingConvention();

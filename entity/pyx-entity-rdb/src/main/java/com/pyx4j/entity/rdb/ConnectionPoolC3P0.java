@@ -49,6 +49,7 @@ public class ConnectionPoolC3P0 implements ConnectionPool {
         if (singleInstanceCreated) {
             throw new Error("Only single Instance of  ConnectionPoolC3P0 supported");
         }
+        log.debug("initialize DB ConnectionPool {}", cfg);
         {
             dataSource = createDataSource(cfg);
             dataSource.setDataSourceName("default");
