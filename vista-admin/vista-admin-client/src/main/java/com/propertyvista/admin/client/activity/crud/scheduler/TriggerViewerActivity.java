@@ -16,7 +16,6 @@ package com.propertyvista.admin.client.activity.crud.scheduler;
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
 
-import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
@@ -33,6 +32,7 @@ import com.propertyvista.admin.domain.scheduler.Trigger;
 import com.propertyvista.admin.rpc.AdminSiteMap;
 import com.propertyvista.admin.rpc.services.scheduler.RunCrudService;
 import com.propertyvista.admin.rpc.services.scheduler.TriggerCrudService;
+import com.propertyvista.crm.rpc.dto.ScheduleDataDTO;
 
 public class TriggerViewerActivity extends AdminViewerActivity<Trigger> implements TriggerViewerView.Presenter {
 
@@ -72,13 +72,13 @@ public class TriggerViewerActivity extends AdminViewerActivity<Trigger> implemen
     }
 
     @Override
-    public void runForDate(LogicalDate date) {
+    public void runForDate(ScheduleDataDTO date) {
         GWT.<TriggerCrudService> create(TriggerCrudService.class).runForDate(new DefaultAsyncCallback<Run>() {
             @Override
             public void onSuccess(Run result) {
                 AppSite.getPlaceController().goTo(
                         AppSite.getHistoryMapper().createPlace(AdminSiteMap.Management.Run.class).formViewerPlace(result.getPrimaryKey()));
             }
-        }, EntityFactory.createIdentityStub(Trigger.class, getEntityId()), date);
+        }, EntityFactory.createIdentityStub(Trigger.class, getEntityId()), date.date().getValue());
     }
 }

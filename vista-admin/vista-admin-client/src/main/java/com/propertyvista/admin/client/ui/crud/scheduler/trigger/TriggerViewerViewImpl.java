@@ -74,7 +74,7 @@ public class TriggerViewerViewImpl extends AdminViewerViewImplBase<Trigger> impl
                 new ScheduleBox() {
                     @Override
                     public boolean onClickOk() {
-                        ((TriggerViewerView.Presenter) presenter).runForDate(getValue().date().getValue());
+                        ((TriggerViewerView.Presenter) presenter).runForDate(getValue());
                         return true;
                     }
                 }.show();
