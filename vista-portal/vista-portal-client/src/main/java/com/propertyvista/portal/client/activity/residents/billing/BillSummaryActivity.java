@@ -52,7 +52,7 @@ public class BillSummaryActivity extends SecurityAwareActivity implements BillSu
     }
 
     @Override
-    public void payBill() {
+    public void payNow() {
         // TODO Implement
     }
 

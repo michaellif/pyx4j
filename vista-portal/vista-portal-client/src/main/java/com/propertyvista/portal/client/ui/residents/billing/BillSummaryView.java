@@ -23,7 +23,7 @@ public interface BillSummaryView extends IsWidget {
 
         void viewCurrentBill();
 
-        void payBill();
+        void payNow();
     }
 
     void setPresenter(Presenter presenter);
