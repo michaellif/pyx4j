@@ -16,6 +16,7 @@ package com.propertyvista.portal.client.ui.residents.billing;
 import java.util.Arrays;
 import java.util.List;
 
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -23,6 +24,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.common.client.ui.components.VistaViewersComponentFactory;
@@ -48,18 +50,29 @@ public class BillSummaryForm extends CEntityDecoratableForm<BillSummaryDTO> {
         FormFlexPanel content = new FormFlexPanel();
 
         int row = -1;
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().currentBalance())).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().currentBalance()), 10).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().dueDate()), 10).build());
+        content.setWidget(++row, 0, new Anchor(i18n.tr("View Current Bill"), new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                presenter.viewCurrentBill();
+            }
+        }));
+        content.getWidget(row, 0).getElement().getStyle().setMarginLeft(15, Unit.EM);
         content.setWidget(row, 1, new Button(i18n.tr("Pay Now"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 presenter.payNow();
             }
         }));
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().dueDate())).build());
 
-        content.setBR(++row, 0, 1);
-        content.setH3(++row, 0, 1, proto().latestActivities().getMeta().getCaption());
+        content.setBR(++row, 0, 2);
+        content.setH3(++row, 0, 2, proto().latestActivities().getMeta().getCaption());
         content.setWidget(++row, 0, inject(proto().latestActivities(), new InvoiceLineItemFolder()));
+        content.getFlexCellFormatter().setColSpan(row, 0, 2);
+
+        content.getColumnFormatter().setWidth(0, "50%");
+        content.getColumnFormatter().setWidth(1, "50%");
 
         return content;
     }
