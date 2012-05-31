@@ -52,7 +52,7 @@ public class ConfigurationMySQLProperties extends ConfigurationMySQL {
 
     protected int maxBackgroundProcessPoolSize = 40;
 
-    protected int maxPoolPreparedStatement = 1000;
+    protected int maxPoolPreparedStatements = 1000;
 
     protected int unreturnedConnectionTimeout = 60;
 
@@ -129,7 +129,7 @@ public class ConfigurationMySQLProperties extends ConfigurationMySQL {
 
     @Override
     public int maxPoolPreparedStatements() {
-        return maxPoolPreparedStatement;
+        return maxPoolPreparedStatements;
     }
 
     @Override
@@ -170,7 +170,7 @@ public class ConfigurationMySQLProperties extends ConfigurationMySQL {
 
         this.minPoolSize = c.getIntegerValue("minPoolSize", this.minPoolSize);
         this.maxPoolSize = c.getIntegerValue("maxPoolSize", this.maxPoolSize);
-        this.maxPoolPreparedStatement = c.getIntegerValue("maxPoolPreparedStatement", this.maxPoolPreparedStatement);
+        this.maxPoolPreparedStatements = c.getIntegerValue("maxPoolPreparedStatements", this.maxPoolPreparedStatements);
         this.unreturnedConnectionTimeout = c.getIntegerValue("unreturnedConnectionTimeout", this.unreturnedConnectionTimeout);
 
         this.maxBackgroundProcessPoolSize = c.getIntegerValue("maxBackgroundProcessPoolSize", this.maxBackgroundProcessPoolSize);
