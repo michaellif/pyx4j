@@ -91,7 +91,7 @@ public class UnitAvailabilityReportGadget extends AbstractGadget<UnitAvailabilit
         private CDatePicker asOf;
 
         public UnitAvailabilityReportGadgetInstance(GadgetMetadata gmd) {
-            super(UnitAvailability.class, gmd, UnitAvailabilityStatus.class, false);
+            super(gmd, UnitAvailability.class, null, UnitAvailabilityStatus.class, false);
             service = GWT.create(AvailabilityReportService.class);
             filterButtonClickHandler = new FilterButtonClickHanlder();
         }
@@ -115,14 +115,14 @@ public class UnitAvailabilityReportGadget extends AbstractGadget<UnitAvailabilit
 
         @Override
         public ISetup getSetup() {
-            return new SetupForm(new CEntityDecoratableForm<UnitAvailability>(UnitAvailability.class) {
+            return new SetupFormWrapper(new CEntityDecoratableForm<UnitAvailability>(UnitAvailability.class) {
                 @Override
                 public IsWidget createContent() {
                     FormFlexPanel p = new FormFlexPanel();
                     int row = -1;
                     p.setWidget(++row, 0, new DecoratorBuilder(inject(proto().refreshInterval())).build());
                     p.setWidget(++row, 0, new DecoratorBuilder(inject(proto().pageSize())).build());
-                    p.setWidget(++row, 0, new DecoratorBuilder(inject(proto().defaultFilteringPreset())).build());
+                    p.setWidget(++row, 0, new DecoratorBuilder(inject(proto().filterPreset())).build());
                     p.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customizeDate())).build());
                     get(proto().customizeDate()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
                         @Override
@@ -149,7 +149,7 @@ public class UnitAvailabilityReportGadget extends AbstractGadget<UnitAvailabilit
         @Override
         protected UnitAvailability createDefaultSettings(Class<UnitAvailability> metadataClass) {
             UnitAvailability settings = super.createDefaultSettings(metadataClass);
-            settings.defaultFilteringPreset().setValue(FilterPreset.VacantAndNotice);
+            settings.filterPreset().setValue(FilterPreset.VacantAndNotice);
             UnitAvailabilityStatus proto = EntityFactory.getEntityPrototype(UnitAvailabilityStatus.class);
             settings.columnDescriptors().addAll(ColumnDescriptorConverter.asColumnDesciptorEntityList(Arrays.asList(//@formatter:off
                     // references
@@ -220,7 +220,7 @@ public class UnitAvailabilityReportGadget extends AbstractGadget<UnitAvailabilit
                 public void onFailure(Throwable caught) {
                     populateFailed(caught);
                 }
-            }, buildingPks, getMetadata().defaultFilteringPreset().getValue(), getStatusDate(), new Vector<Sort>(getListerSortingCriteria()), pageNumber,
+            }, buildingPks, getMetadata().filterPreset().getValue(), getStatusDate(), new Vector<Sort>(getListerSortingCriteria()), pageNumber,
                     getPageSize());
         }
 
@@ -270,7 +270,7 @@ public class UnitAvailabilityReportGadget extends AbstractGadget<UnitAvailabilit
          */
         private void setupFilteringButtons() {
             for (FilterButton button : filteringButtons) {
-                if (button.filterPreset == getMetadata().defaultFilteringPreset().getValue()) {
+                if (button.filterPreset == getMetadata().filterPreset().getValue()) {
                     button.setValue(true, false);
                 } else {
                     button.setValue(false, false);
@@ -298,7 +298,7 @@ public class UnitAvailabilityReportGadget extends AbstractGadget<UnitAvailabilit
                 for (FilterButton button : filteringButtons) {
                     if (event.getSource().equals(button)) {
                         button.setDown(true);
-                        getMetadata().defaultFilteringPreset().setValue(button.filterPreset);
+                        getMetadata().filterPreset().setValue(button.filterPreset);
                     } else {
                         button.setDown(false);
                     }
@@ -315,11 +315,6 @@ public class UnitAvailabilityReportGadget extends AbstractGadget<UnitAvailabilit
 
     public UnitAvailabilityReportGadget() {
         super(UnitAvailability.class);
-    }
-
-    @Override
-    public String getDescription() {
-        return "Shows the information about units, whether they are available or rented, how long they have been vacant for and revenue lost as a result. Can be customized to show various information about buildings and units, for example their physical condition.";
     }
 
     @Override

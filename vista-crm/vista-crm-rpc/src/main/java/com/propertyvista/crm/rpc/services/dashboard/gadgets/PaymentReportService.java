@@ -30,7 +30,7 @@ import com.propertyvista.domain.property.asset.building.Building;
 public interface PaymentReportService extends IService {
 
     void paymentRecords(AsyncCallback<EntitySearchResult<PaymentRecordForReportDTO>> callback, Vector<Building> buildings, LogicalDate targetDate,
-            PaymentType paymentTypeCriteria, Vector<PaymentRecord.PaymentStatus> paymentStatusCriteria, int pageNumber, int pageSize,
+            Vector<PaymentType> paymentTypeCriteria, Vector<PaymentRecord.PaymentStatus> paymentStatusCriteria, int pageNumber, int pageSize,
             Vector<Sort> sortingCriteria);
 
 }

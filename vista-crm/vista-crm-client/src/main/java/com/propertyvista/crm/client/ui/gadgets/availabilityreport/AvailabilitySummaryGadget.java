@@ -191,7 +191,7 @@ public class AvailabilitySummaryGadget extends AbstractGadget<AvailabilitySummar
 
         @Override
         public ISetup getSetup() {
-            return new SetupForm(new CEntityDecoratableForm<AvailabilitySummary>(AvailabilitySummary.class) {
+            return new SetupFormWrapper(new CEntityDecoratableForm<AvailabilitySummary>(AvailabilitySummary.class) {
                 @Override
                 public IsWidget createContent() {
                     FormFlexPanel p = new FormFlexPanel();

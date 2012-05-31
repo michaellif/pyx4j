@@ -14,14 +14,19 @@
 package com.propertyvista.domain.dashboard.gadgets.type;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.shared.I18nEnum;
 
 @DiscriminatorValue("UnitAvailability")
+@Caption(name = "Unit Availability", description = "Shows the information about units, whether they are available or rented, how long they have been vacant for and revenue lost as a result. Can be customized to show various information about buildings and units, for example their physical condition.")
 public interface UnitAvailability extends ListerGadgetBaseMetadata {
+
+    @I18n
     enum FilterPreset {
 
         Vacant,
@@ -43,10 +48,11 @@ public interface UnitAvailability extends ListerGadgetBaseMetadata {
 
     /** Defines the filtering criteria button by its caption */
     @NotNull
-    IPrimitive<FilterPreset> defaultFilteringPreset();
-
-    /** <code>null</code> null means now */
-    IPrimitive<LogicalDate> asOf();
+    IPrimitive<FilterPreset> filterPreset();
 
     IPrimitive<Boolean> customizeDate();
+
+    /** <code>null</code> means now */
+    IPrimitive<LogicalDate> asOf();
+
 }

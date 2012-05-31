@@ -35,8 +35,6 @@ import com.propertyvista.domain.dashboard.gadgets.payments.PaymentRecordForRepor
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.property.asset.building.Building;
-import com.propertyvista.domain.tenant.Tenant;
-import com.propertyvista.domain.tenant.lease.LeaseParticipant.Role;
 
 public class PaymentReportServiceImpl implements PaymentReportService {
 
@@ -53,6 +51,7 @@ public class PaymentReportServiceImpl implements PaymentReportService {
                 bind(dtoProto.billingAccount().lease().unit().belongsTo().propertyCode(), dboProto.billingAccount().lease().unit().belongsTo().propertyCode());
                 bind(dtoProto.billingAccount().lease().leaseId(), dboProto.billingAccount().lease().leaseId());
                 bind(dtoProto.paymentMethod().type(), dboProto.paymentMethod().type());
+                bind(dtoProto.paymentMethod().leaseParticipant(), dboProto.paymentMethod().leaseParticipant());
                 bind(dtoProto.paymentStatus(), dboProto.paymentStatus());
                 bind(dtoProto.createdDate(), dboProto.createdDate());
                 bind(dtoProto.receivedDate(), dboProto.receivedDate());
@@ -67,7 +66,7 @@ public class PaymentReportServiceImpl implements PaymentReportService {
 
     @Override
     public void paymentRecords(AsyncCallback<EntitySearchResult<PaymentRecordForReportDTO>> callback, Vector<Building> buildings, LogicalDate targetDate,
-            PaymentType paymentTypeCriteria, Vector<PaymentRecord.PaymentStatus> paymentStatusCriteria, int pageNumber, int pageSize,
+            Vector<PaymentType> paymentTypeCriteria, Vector<PaymentRecord.PaymentStatus> paymentStatusCriteria, int pageNumber, int pageSize,
             Vector<Sort> sortingCriteria) {
 
         EntityListCriteria<PaymentRecord> criteria = EntityListCriteria.create(PaymentRecord.class);
@@ -77,17 +76,19 @@ public class PaymentReportServiceImpl implements PaymentReportService {
 
         criteria.setSorts(dtoHelper.convertDTOSortingCriteria(sortingCriteria));
 
+        // set up search criteria
+        criteria.add(PropertyCriterion.eq(criteria.proto().lastStatusChangeDate(), targetDate));
         if (!buildings.isEmpty()) {
             criteria.add(PropertyCriterion.in(criteria.proto().billingAccount().lease().unit().belongsTo(), buildings));
         }
-        criteria.add(PropertyCriterion.ge(criteria.proto().targetDate(), targetDate));
-        if (paymentTypeCriteria != null) {
-            criteria.add(PropertyCriterion.eq(criteria.proto().paymentMethod().type(), paymentTypeCriteria));
+        if (!paymentTypeCriteria.isEmpty()) {
+            criteria.add(PropertyCriterion.in(criteria.proto().paymentMethod().type(), paymentTypeCriteria));
         }
-        if (paymentStatusCriteria != null & !paymentStatusCriteria.isEmpty()) {
+        if (!paymentStatusCriteria.isEmpty()) {
             criteria.add(PropertyCriterion.in(criteria.proto().paymentStatus(), paymentStatusCriteria));
         }
 
+        // query and return the result
         ICursorIterator<PaymentRecord> i = Persistence.service().query(null, criteria, AttachLevel.Attached);
         Vector<PaymentRecordForReportDTO> paymentRecordsPageData = new Vector<PaymentRecordForReportDTO>();
         while (i.hasNext()) {
@@ -105,18 +106,11 @@ public class PaymentReportServiceImpl implements PaymentReportService {
     private PaymentRecordForReportDTO makeDTO(PaymentRecord paymentRecordDBO) {
         Persistence.service().retrieve(paymentRecordDBO.billingAccount());
         Persistence.service().retrieve(paymentRecordDBO.billingAccount().lease());
-        Persistence.service().retrieve(paymentRecordDBO.billingAccount().lease().version().tenants());
         Persistence.service().retrieve(paymentRecordDBO.billingAccount().lease().unit());
         Persistence.service().retrieve(paymentRecordDBO.billingAccount().lease().unit().belongsTo());
+        Persistence.service().retrieve(paymentRecordDBO.paymentMethod().leaseParticipant());
 
         PaymentRecordForReportDTO paymentRecordDTO = dtoBinder.createDTO(paymentRecordDBO);
-
-        gotPrimaryTenant: for (Tenant tenant : paymentRecordDBO.billingAccount().lease().version().tenants()) {
-            if (tenant.role().getValue() == Role.Applicant) {
-                paymentRecordDTO.primaryTenant().set(tenant.detach());
-                break gotPrimaryTenant;
-            }
-        }
 
         return paymentRecordDTO;
     }

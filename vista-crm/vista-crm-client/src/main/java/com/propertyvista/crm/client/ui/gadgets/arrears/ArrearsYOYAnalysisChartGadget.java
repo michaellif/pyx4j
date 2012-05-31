@@ -138,7 +138,7 @@ public class ArrearsYOYAnalysisChartGadget extends AbstractGadget<ArrearsYOYAnal
 
         @Override
         public ISetup getSetup() {
-            return new SetupForm(new CEntityDecoratableForm<ArrearsYOYAnalysisChartMetadata>(ArrearsYOYAnalysisChartMetadata.class) {
+            return new SetupFormWrapper(new CEntityDecoratableForm<ArrearsYOYAnalysisChartMetadata>(ArrearsYOYAnalysisChartMetadata.class) {
 
                 @Override
                 public IsWidget createContent() {

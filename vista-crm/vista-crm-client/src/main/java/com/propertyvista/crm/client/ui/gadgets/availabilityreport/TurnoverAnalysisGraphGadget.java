@@ -300,7 +300,7 @@ public class TurnoverAnalysisGraphGadget extends AbstractGadget<TurnoverAnalysis
 
         @Override
         public ISetup getSetup() {
-            return new SetupForm(new CEntityDecoratableForm<TurnoverAnalysisMetadata>(TurnoverAnalysisMetadata.class) {
+            return new SetupFormWrapper(new CEntityDecoratableForm<TurnoverAnalysisMetadata>(TurnoverAnalysisMetadata.class) {
                 @Override
                 public IsWidget createContent() {
                     FormFlexPanel p = new FormFlexPanel();

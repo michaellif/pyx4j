@@ -21,6 +21,7 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.entity.client.CEntityContainer;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.DataTable;
 import com.pyx4j.entity.client.ui.datatable.DataTable.SortChangeHandler;
@@ -28,10 +29,8 @@ import com.pyx4j.entity.client.ui.datatable.DataTablePanel;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.site.client.ui.crud.DefaultSiteCrudPanelsTheme;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.crm.client.ui.gadgets.util.ColumnDescriptorConverter;
 import com.propertyvista.domain.dashboard.gadgets.ColumnDescriptorEntity;
 import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
@@ -52,19 +51,22 @@ public abstract class ListerGadgetInstanceBase<E extends IEntity, GADGET_TYPE ex
     private boolean needToSaveColumns;
 
     /**
-     * @param gadgetTypeClass
-     *            gadget type
      * @param gadgetMetadata
      *            instance of gadget metadata that defines gadget type and holds the state of the gadget (can be <code>null</code>), it's type is
      *            {@link GadgetMetadata} because it has to be provided via factory that doesn't have an option to provide with a concrete type
+     * @param gadgetTypeClass
+     *            gadget type
+     * @param setupForm
+     *            the form that is used to setup the gadget or <code>null</code> if gadget is not 'setupable' or is intended to be made 'setupable' by
+     *            overriding of {@link #isSetupable()} and {@link #getSetup()} methods
      * @param listedEntityClass
      *            class of the entity that this list is supposed to display
      * @param isSearchFilterEnabled
      *            display search filter on the lister
      */
-    // TODO defaultColumnDescriptors are only required if gadget metadata is initialized by gadget, actually it's 
-    public ListerGadgetInstanceBase(Class<GADGET_TYPE> gadgetTypeClass, GadgetMetadata gadgetMetadata, Class<E> listedEntityClass, boolean isSearchFilterEnabled) {
-        super(gadgetMetadata, gadgetTypeClass);
+    public ListerGadgetInstanceBase(GadgetMetadata gadgetMetadata, Class<GADGET_TYPE> gadgetTypeClass, CEntityContainer<GADGET_TYPE> setupForm,
+            Class<E> listedEntityClass, boolean isSearchFilterEnabled) {
+        super(gadgetMetadata, gadgetTypeClass, setupForm);
 
         this.needToSaveColumns = false;
 
@@ -207,25 +209,6 @@ public abstract class ListerGadgetInstanceBase<E extends IEntity, GADGET_TYPE ex
         dataTablePanel.getDataTableModel().setSortAscending(getMetadata().sortAscending().isBooleanTrue());
         dataTablePanel.getDataTable().renderTable();
         super.start();
-    }
-
-    @Override
-    public boolean isSetupable() {
-        return true;
-    }
-
-    @Override
-    public ISetup getSetup() {
-        return new SetupForm(new CEntityDecoratableForm<GADGET_TYPE>(metadataClass) {
-            @Override
-            public IsWidget createContent() {
-                FormFlexPanel p = new FormFlexPanel();
-                int row = -1;
-                p.setWidget(++row, 0, new DecoratorBuilder(inject(proto().refreshInterval())).build());
-                p.setWidget(++row, 0, new DecoratorBuilder(inject(proto().pageSize())).build());
-                return p;
-            }
-        });
     }
 
     /**

@@ -57,8 +57,6 @@ public class SubsetSelector<OPTION_TYPE> extends SimplePanel implements IFocusWi
 
     private final GroupFocusHandler focusHandlerManager;
 
-    private final IFormat<OPTION_TYPE> format;
-
     private boolean enabled;
 
     private boolean editable;
@@ -92,7 +90,6 @@ public class SubsetSelector<OPTION_TYPE> extends SimplePanel implements IFocusWi
         } else {
             throw new IllegalArgumentException("layout is not specified");
         }
-        this.format = format;
         this.optionsState = new HashMap<OPTION_TYPE, HasValue<Boolean>>();
 
         this.focusHandlerManager = new GroupFocusHandler(this);
@@ -208,7 +205,6 @@ public class SubsetSelector<OPTION_TYPE> extends SimplePanel implements IFocusWi
     @Override
     public void setAccessKey(char key) {
         // TODO Auto-generated method stub
-
     }
 
     @Override
@@ -243,7 +239,7 @@ public class SubsetSelector<OPTION_TYPE> extends SimplePanel implements IFocusWi
                 if (stateHolder != null) {
                     stateHolder.setValue(true, false);
                 } else {
-                    throw new IllegalArgumentException("its impossilbe to set an unknown option:" + selectedOption);
+                    throw new IllegalArgumentException("its impossilbe to set an unknown option: '" + selectedOption + "'");
                 }
             }
         }

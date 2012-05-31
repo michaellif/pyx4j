@@ -31,11 +31,11 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.client.CEntityContainer;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.crm.client.ui.board.BoardView;
 import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata.RefreshInterval;
@@ -64,20 +64,24 @@ public abstract class GadgetInstanceBase<T extends GadgetMetadata> implements IG
 
     private final T metadata;
 
-    protected final Class<T> metadataClass;
-
     protected BoardView containerBoard;
 
+    private CEntityContainer<T> setupForm;
+
+    // TODO metadataClass argument is needed only for creation of the default metatada, remove when default metadata creation is implemented on server side
     @SuppressWarnings("unchecked")
-    public GadgetInstanceBase(GadgetMetadata gmd, Class<T> metadataClass) {
-        assert metadataClass != null;
-        this.metadataClass = metadataClass;
+    public GadgetInstanceBase(GadgetMetadata metadata, Class<T> metadataClass, CEntityContainer<T> setupForm) {
+        this.metadata = (metadata == null) ? createDefaultSettings(metadataClass) : (T) metadata.cast();
+        this.setupForm = setupForm;
+        this.setupForm.initContent();
 
-        metadata = (gmd == null) ? createDefaultSettings(metadataClass) : (T) gmd.cast();
+        this.isRunning = false;
+        this.refreshTimer = new RefreshTimer();
+        this.defaultPopulator = null;
+    }
 
-        refreshTimer = new RefreshTimer();
-        defaultPopulator = null;
-        isRunning = false;
+    public GadgetInstanceBase(GadgetMetadata metadata, Class<T> metadataClass) {
+        this(metadata, metadataClass, null);
     }
 
     protected Panel initLoadingPanel() {
@@ -110,6 +114,7 @@ public abstract class GadgetInstanceBase<T extends GadgetMetadata> implements IG
      * 
      * @return instance of settings (cannot be <code>null</code>)
      */
+    // TODO this should be done on server side
     protected T createDefaultSettings(Class<T> metadataClass) {
         T settings = EntityFactory.create(metadataClass);
         settings.refreshInterval().setValue(RefreshInterval.Never);
@@ -218,7 +223,7 @@ public abstract class GadgetInstanceBase<T extends GadgetMetadata> implements IG
     @Override
     public String getDescription() {
         // FIXME talk to someone about this: do we really need to keep this inside the gadget
-        return "";
+        return getMetadata().getMeta().getDescription();
     }
 
     /** Set a callback that will run on each time refresh period and when {@link #populate(boolean)} or {@link #populate()} are exectuted. */
@@ -341,7 +346,7 @@ public abstract class GadgetInstanceBase<T extends GadgetMetadata> implements IG
 
     @Override
     public boolean isSetupable() {
-        return false;
+        return setupForm != null;
     }
 
     @Override
@@ -353,7 +358,11 @@ public abstract class GadgetInstanceBase<T extends GadgetMetadata> implements IG
 
     @Override
     public ISetup getSetup() {
-        return null;
+        if (setupForm != null) {
+            return new SetupFormWrapper(setupForm);
+        } else {
+            throw new IllegalStateException("this gadget is not setupable");
+        }
     }
 
     // notifications:
@@ -443,14 +452,13 @@ public abstract class GadgetInstanceBase<T extends GadgetMetadata> implements IG
         }
     }
 
-    protected class SetupForm implements ISetup {
-        private final CEntityDecoratableForm<T> form;
+    protected class SetupFormWrapper implements ISetup {
 
-        public SetupForm(CEntityDecoratableForm<T> form) {
+        private final CEntityContainer<T> form;
+
+        public SetupFormWrapper(CEntityContainer<T> form) {
             assert form != null;
-
             this.form = form;
-            this.form.initContent();
         }
 
         @Override
@@ -461,7 +469,7 @@ public abstract class GadgetInstanceBase<T extends GadgetMetadata> implements IG
         @Override
         public boolean onStart() {
             suspend();
-            form.populate(getMetadata().duplicate(metadataClass));
+            form.populate(getMetadata().<T> duplicate());
             return true;
         }
 

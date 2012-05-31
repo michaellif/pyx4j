@@ -23,7 +23,7 @@ import com.propertyvista.common.client.ui.components.SubsetSelector.Layout;
 
 public class CEnumSubsetSelector<E extends Enum<E>> extends CSubsetSelector<E> {
 
-    public CEnumSubsetSelector(Layout layout, Set<E> options) {
+    public CEnumSubsetSelector(Set<E> options, Layout layout) {
         super(layout, new IFormat<E>() {
             @Override
             public String format(E value) {
@@ -42,7 +42,7 @@ public class CEnumSubsetSelector<E extends Enum<E>> extends CSubsetSelector<E> {
     }
 
     public CEnumSubsetSelector(Class<E> elementType, Layout layout) {
-        this(layout, EnumSet.allOf(elementType));
+        this(EnumSet.allOf(elementType), layout);
     }
 
 }

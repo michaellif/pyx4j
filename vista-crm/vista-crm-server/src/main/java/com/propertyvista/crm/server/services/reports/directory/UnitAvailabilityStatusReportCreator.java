@@ -72,7 +72,7 @@ public class UnitAvailabilityStatusReportCreator extends AbstractGadgetReportMod
                 parameters.put("COLUMNS", columns);
                 parameters.put(
                         "TITLE",
-                        i18n.tr("Unit Availability Status Report as of {0}, filtering: {1}", REPORT_FORMAT.format(asOf), metadata.defaultFilteringPreset()
+                        i18n.tr("Unit Availability Status Report as of {0}, filtering: {1}", REPORT_FORMAT.format(asOf), metadata.filterPreset()
                                 .getValue().toString()));
                 callback.onSuccess(new ConvertedGadgetMetadata(result.getData(), parameters));
             }
@@ -81,7 +81,7 @@ public class UnitAvailabilityStatusReportCreator extends AbstractGadgetReportMod
             public void onFailure(Throwable arg0) {
                 callback.onFailure(arg0);
             }
-        }, new Vector<Key>(selectedBuildings), metadata.defaultFilteringPreset().getValue(), asOf, new Vector<Sort>(), 0, Integer.MAX_VALUE);
+        }, new Vector<Key>(selectedBuildings), metadata.filterPreset().getValue(), asOf, new Vector<Sort>(), 0, Integer.MAX_VALUE);
     }
 
     private EntityListCriteria<BuildingDTO> convertToCriteria(BuildingLister metadata) {

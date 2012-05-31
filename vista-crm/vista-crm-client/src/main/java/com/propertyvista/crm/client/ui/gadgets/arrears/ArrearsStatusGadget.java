@@ -68,7 +68,7 @@ public class ArrearsStatusGadget extends AbstractGadget<ArrearsStatusGadgetMetad
         private HTML titleBannerLabel;
 
         public ArrearsStatusGadgetInstance(GadgetMetadata gmd) {
-            super(ArrearsStatusGadgetMetadata.class, gmd, LeaseArrearsSnapshotDTO.class, false);
+            super(gmd, ArrearsStatusGadgetMetadata.class, null, LeaseArrearsSnapshotDTO.class, false);
             service = GWT.<ArrearsReportService> create(ArrearsReportService.class);
         }
 
@@ -109,7 +109,7 @@ public class ArrearsStatusGadget extends AbstractGadget<ArrearsStatusGadgetMetad
 
         @Override
         public ISetup getSetup() {
-            return new SetupForm(new CEntityDecoratableForm<ArrearsStatusGadgetMetadata>(ArrearsStatusGadgetMetadata.class) {
+            return new SetupFormWrapper(new CEntityDecoratableForm<ArrearsStatusGadgetMetadata>(ArrearsStatusGadgetMetadata.class) {
                 @Override
                 public IsWidget createContent() {
                     FormFlexPanel p = new FormFlexPanel();

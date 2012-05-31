@@ -48,7 +48,7 @@ public class ArrearsSummaryGadget extends AbstractGadget<ArrearsSummaryGadgetMet
         private final ArrearsReportService service;
 
         public ArrearsSummaryGadgetInstance(GadgetMetadata gmd) {
-            super(ArrearsSummaryGadgetMetadata.class, gmd, AgingBuckets.class, false);
+            super(gmd, ArrearsSummaryGadgetMetadata.class, null, AgingBuckets.class, false);
             service = GWT.<ArrearsReportService> create(ArrearsReportService.class);
         }
 

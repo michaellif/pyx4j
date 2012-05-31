@@ -86,7 +86,7 @@ public class DashboardGenerator extends Dashboards {
         unitAvailabilityReport.user().id().setValue(ISharedUserEntity.DORMANT_KEY); // shared for everyone usage
         unitAvailabilityReport.refreshInterval().setValue(RefreshInterval.Never);
         unitAvailabilityReport.pageSize().setValue(10);
-        unitAvailabilityReport.defaultFilteringPreset().setValue(UnitAvailability.FilterPreset.VacantAndNotice);
+        unitAvailabilityReport.filterPreset().setValue(UnitAvailability.FilterPreset.VacantAndNotice);
         unitAvailabilityReport.docking().column().setValue(0);
         unitAvailabilityReport.columnDescriptors().addAll(defineUnitAvailabilityReportColumns());
         dmd.gadgets().add(unitAvailabilityReport);

@@ -24,6 +24,8 @@ import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.annotations.I18n;
+import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.property.asset.Complex;
@@ -33,7 +35,9 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 
 public interface UnitAvailabilityStatus extends IEntity {
 
+    @I18n
     public enum Vacancy {
+
         Vacant,
 
         Notice;
@@ -44,16 +48,26 @@ public interface UnitAvailabilityStatus extends IEntity {
         }
     }
 
+    @I18n
     public enum RentedStatus {
+
         Rented, Unrented, OffMarket;
+
         @Override
         public String toString() {
             return I18nEnum.toString(this);
         }
     }
 
+    @I18n
     public enum RentReadiness {
-        RentReady, RenoInProgress, NeedsRepairs;
+
+        RentReady,
+
+        @Translate("Renovation in Progress")
+        RenoInProgress,
+
+        NeedsRepairs;
 
         @Override
         public String toString() {
@@ -61,7 +75,9 @@ public interface UnitAvailabilityStatus extends IEntity {
         }
     }
 
+    @I18n
     public enum Scoping {
+
         Scoped, Unscoped;
 
         @Override

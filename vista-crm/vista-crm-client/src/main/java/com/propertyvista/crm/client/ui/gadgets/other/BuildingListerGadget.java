@@ -43,6 +43,7 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.dto.BuildingDTO;
 
 public class BuildingListerGadget extends AbstractGadget<BuildingLister> {
+
     private static final I18n i18n = I18n.get(BuildingListerGadget.class);
 
     public static class BuildingListerGadgetInstance extends ListerGadgetInstanceBase<BuildingDTO, BuildingLister> {
@@ -53,7 +54,7 @@ public class BuildingListerGadget extends AbstractGadget<BuildingLister> {
 
         @SuppressWarnings("unchecked")
         public BuildingListerGadgetInstance(GadgetMetadata gmd) {
-            super(BuildingLister.class, gmd, BuildingDTO.class, false);
+            super(gmd, BuildingLister.class, null, BuildingDTO.class, false);
             service = (AbstractListService<BuildingDTO>) GWT.create(BuildingCrudService.class);
             initView();
         }

@@ -23,7 +23,7 @@ import com.pyx4j.entity.shared.IPrimitiveSet;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.payment.PaymentType;
 
-@Caption(name = "Payment Records", description = "")
+@Caption(name = "Payment Records", description = "TBD")
 @DiscriminatorValue("PaymentRecordsGadgetMetadata")
 public interface PaymentRecordsGadgetMetadata extends ListerGadgetBaseMetadata {
 
@@ -31,13 +31,12 @@ public interface PaymentRecordsGadgetMetadata extends ListerGadgetBaseMetadata {
      * Payment type filter.
      * When <code>null</code> the gadget should display all payment records.
      */
-    @Caption(name = "Payment Method Restriction", description = "Define which payment method you wish to display")
-    IPrimitive<PaymentType> paymentType();
+    IPrimitiveSet<PaymentType> paymentMethodFilter();
 
     /**
      * Payment status filter.
      */
-    IPrimitiveSet<PaymentRecord.PaymentStatus> paymentStatus();
+    IPrimitiveSet<PaymentRecord.PaymentStatus> paymentStatusFilter();
 
     IPrimitive<Boolean> customizeTargetDate();
 

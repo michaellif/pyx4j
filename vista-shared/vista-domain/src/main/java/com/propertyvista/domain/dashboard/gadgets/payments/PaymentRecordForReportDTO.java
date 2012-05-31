@@ -16,11 +16,8 @@ package com.propertyvista.domain.dashboard.gadgets.payments;
 import com.pyx4j.entity.annotations.Transient;
 
 import com.propertyvista.domain.financial.PaymentRecord;
-import com.propertyvista.domain.tenant.Tenant;
 
 @Transient
 public interface PaymentRecordForReportDTO extends PaymentRecord {
-
-    Tenant primaryTenant();
 
 }
