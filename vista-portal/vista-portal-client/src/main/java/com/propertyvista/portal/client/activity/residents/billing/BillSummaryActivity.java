@@ -13,24 +13,29 @@
  */
 package com.propertyvista.portal.client.activity.residents.billing;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
 
 import com.propertyvista.portal.client.activity.SecurityAwareActivity;
 import com.propertyvista.portal.client.ui.residents.billing.BillSummaryView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
 import com.propertyvista.portal.domain.dto.BillSummaryDTO;
+import com.propertyvista.portal.rpc.portal.services.resident.BillSummaryService;
 
 public class BillSummaryActivity extends SecurityAwareActivity implements BillSummaryView.Presenter {
 
     private final BillSummaryView view;
 
+    private final BillSummaryService srv;
+
     public BillSummaryActivity(Place place) {
         this.view = PortalViewFactory.instance(BillSummaryView.class);
         this.view.setPresenter(this);
+        srv = GWT.create(BillSummaryService.class);
     }
 
     @Override
@@ -38,8 +43,12 @@ public class BillSummaryActivity extends SecurityAwareActivity implements BillSu
         super.start(panel, eventBus);
         panel.setWidget(view);
 
-        //TODO implement a service call
-        view.populate(EntityFactory.create(BillSummaryDTO.class));
+        srv.retrieve(new DefaultAsyncCallback<BillSummaryDTO>() {
+            @Override
+            public void onSuccess(BillSummaryDTO result) {
+                view.populate(result);
+            }
+        });
     }
 
     @Override

@@ -21,7 +21,10 @@ import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
+
+import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 
 @Transient
 public interface BillSummaryDTO extends IEntity {
@@ -32,4 +35,6 @@ public interface BillSummaryDTO extends IEntity {
     @Format("#0.00")
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> currentBalance();
+
+    IList<InvoiceLineItem> latestActivities();
 }

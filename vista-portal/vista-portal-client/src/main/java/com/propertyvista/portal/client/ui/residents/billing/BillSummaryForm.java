@@ -13,23 +13,23 @@
  */
 package com.propertyvista.portal.client.ui.residents.billing;
 
-import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.Label;
+import java.util.Arrays;
+import java.util.List;
 
-import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.client.CEntityForm;
-import com.pyx4j.forms.client.ui.CViewer;
+import com.google.gwt.user.client.ui.IsWidget;
+
+import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.VistaViewersComponentFactory;
-import com.propertyvista.common.client.ui.decorations.DecorationUtils;
+import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
+import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
+import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.portal.client.ui.residents.billing.BillSummaryView.Presenter;
 import com.propertyvista.portal.domain.dto.BillSummaryDTO;
 
-public class BillSummaryForm extends CEntityForm<BillSummaryDTO> {
+public class BillSummaryForm extends CEntityDecoratableForm<BillSummaryDTO> {
 
     private static final I18n i18n = I18n.get(BillSummaryForm.class);
 
@@ -37,40 +37,41 @@ public class BillSummaryForm extends CEntityForm<BillSummaryDTO> {
 
     public BillSummaryForm() {
         super(BillSummaryDTO.class, new VistaViewersComponentFactory());
+        setViewable(true);
     }
 
     @Override
     public IsWidget createContent() {
-        FormFlexPanel container = new FormFlexPanel();
+        FormFlexPanel content = new FormFlexPanel();
 
         int row = -1;
-        container.setWidget(++row, 0, inject(proto().currentBalance()));
-        container.setWidget(++row, 0, inject(proto().dueDate(), new DueDateViewer()));
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().currentBalance())).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().dueDate())).build());
 
-        return container;
+        content.setBR(++row, 0, 1);
+        content.setH3(++row, 0, 1, proto().latestActivities().getMeta().getCaption());
+        content.setWidget(++row, 0, inject(proto().latestActivities(), new InvoiceLineItemFolder()));
+
+        return content;
     }
 
     public void setPresenter(Presenter presenter) {
         this.presenter = presenter;
     }
 
-    class DueDateViewer extends CViewer<LogicalDate> {
+    class InvoiceLineItemFolder extends VistaTableFolder<InvoiceLineItem> {
 
-        @Override
-        public IsWidget createContent(LogicalDate value) {
-            if (value != null) {
-                FlowPanel container = new FlowPanel();
-                container.setWidth("100%");
-                container.add(DecorationUtils.inline(new Label(i18n.tr("Due Date")), "14em"));
-                container.add(DecorationUtils.inline(new Label(value.toString())));
-
-                container.asWidget().getElement().getStyle().setMarginLeft(20, Unit.PX);
-                container.asWidget().getElement().getStyle().setMarginTop(20, Unit.PX);
-                return container;
-            } else {
-                return null;
-            }
+        public InvoiceLineItemFolder() {
+            super(InvoiceLineItem.class, false);
         }
 
+        @Override
+        public List<EntityFolderColumnDescriptor> columns() {
+            return Arrays.asList(// @formatter:off
+                    new EntityFolderColumnDescriptor(proto().amount(), "10em"),
+                    new EntityFolderColumnDescriptor(proto().postDate(), "10em"),
+                    new EntityFolderColumnDescriptor(proto().description(), "20em")
+            ); // formatter:on
+        }
     }
 }
