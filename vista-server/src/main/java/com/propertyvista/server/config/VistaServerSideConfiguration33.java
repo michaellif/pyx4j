@@ -34,14 +34,14 @@ public class VistaServerSideConfiguration33 extends VistaServerSideConfiguration
         ConfigurationPostgreSQLProperties config = new ConfigurationPostgreSQLProperties() {
 
             {
-                readProperties("db", VistaServerSideConfiguration33.this.getConfigProperties().getProperties());
-
                 File dbCredentialsFile = new File(getConfigDirectory(), "db-credentials.properties");
                 if (dbCredentialsFile.canRead()) {
                     Credentials credentials = J2SEServiceConnector.getCredentials(dbCredentialsFile.getAbsolutePath());
                     this.user = credentials.email;
                     this.password = credentials.password;
                 }
+
+                readProperties("db", VistaServerSideConfiguration33.this.getConfigProperties().getProperties());
 
             }
 
