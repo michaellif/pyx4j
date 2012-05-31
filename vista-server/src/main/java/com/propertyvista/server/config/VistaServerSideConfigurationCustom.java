@@ -22,7 +22,7 @@ import com.pyx4j.config.server.PropertiesConfiguration;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.rdb.cfg.ConfigurationMySQLProperties;
 import com.pyx4j.entity.rdb.dialect.NamingConvention;
-import com.pyx4j.entity.rdb.dialect.NamingConventionModern;
+import com.pyx4j.entity.rdb.dialect.NamingConventionOracle;
 import com.pyx4j.essentials.j2se.J2SEServiceConnector;
 import com.pyx4j.essentials.j2se.J2SEServiceConnector.Credentials;
 import com.pyx4j.log4j.LoggerConfig;
@@ -80,7 +80,7 @@ public class VistaServerSideConfigurationCustom extends VistaServerSideConfigura
 
             @Override
             public NamingConvention namingConvention() {
-                return new NamingConventionModern();
+                return new NamingConventionOracle(63, null, false, false, '$');
             }
 
         };
