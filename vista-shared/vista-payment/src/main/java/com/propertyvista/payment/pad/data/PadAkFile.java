@@ -33,7 +33,7 @@ public interface PadAkFile extends IEntity {
 
     IPrimitive<Integer> version();
 
-    @Length(15)
+    @Length(20)
     @NotNull
     IPrimitive<String> companyId();
 
