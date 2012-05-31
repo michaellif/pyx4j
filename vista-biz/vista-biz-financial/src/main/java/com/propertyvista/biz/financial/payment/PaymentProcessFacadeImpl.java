@@ -13,6 +13,7 @@
  */
 package com.propertyvista.biz.financial.payment;
 
+import java.util.EnumSet;
 import java.util.List;
 import java.util.concurrent.Callable;
 
@@ -25,6 +26,7 @@ import com.pyx4j.server.contexts.NamespaceManager;
 import com.propertyvista.admin.domain.payment.pad.PadBatch;
 import com.propertyvista.admin.domain.payment.pad.PadDebitRecord;
 import com.propertyvista.admin.domain.payment.pad.PadFile;
+import com.propertyvista.admin.domain.payment.pad.PadFile.FileAcknowledgmentStatus;
 import com.propertyvista.admin.domain.payment.pad.PadReconciliationDebitRecord;
 import com.propertyvista.admin.domain.payment.pad.PadReconciliationFile;
 import com.propertyvista.admin.domain.payment.pad.PadReconciliationSummary;
@@ -44,8 +46,12 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
 
     @Override
     public String processAcknowledgement(final PadFile padFile) {
-        final String namespace = NamespaceManager.getNamespace();
+        if (!EnumSet.of(FileAcknowledgmentStatus.BatchAndTransactionReject, FileAcknowledgmentStatus.TransactionReject,
+                FileAcknowledgmentStatus.BatchLevelReject, FileAcknowledgmentStatus.Accepted).contains(padFile.acknowledgmentStatus().getValue())) {
+            throw new Error("Invalid pad file acknowledgmentStatus " + padFile.acknowledgmentStatus().getValue());
+        }
 
+        final String namespace = NamespaceManager.getNamespace();
         List<PadDebitRecord> rejectedRecodrs = TaskRunner.runInAdminNamespace(new Callable<List<PadDebitRecord>>() {
             @Override
             public List<PadDebitRecord> call() throws Exception {

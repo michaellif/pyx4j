@@ -61,6 +61,14 @@ class PadCaledonAcknowledgement {
 
         if (akFile.acknowledgmentStatusCode().getValue().equals(FileAcknowledgmentStatus.Accepted)) {
             assertAcknowledgedValues(padFile, akFile);
+            if (akFile.batches().size() > 0) {
+                throw new Error("Unexpected batches rejects for acknowledgmentStatus '" + akFile.acknowledgmentStatusCode().getValue() + "' in file "
+                        + file.getName());
+            }
+            if (akFile.records().size() > 0) {
+                throw new Error("Unexpected record level rejects for acknowledgmentStatus '" + akFile.acknowledgmentStatusCode().getValue() + "' in file "
+                        + file.getName());
+            }
             padFile.status().setValue(PadFile.PadFileStatus.Acknowledged);
             Persistence.service().merge(padFile);
             Persistence.service().commit();

@@ -31,6 +31,14 @@ public class PadReciveAcknowledgmentProcess implements PmcProcess {
             stats.message().setValue(padFile.acknowledgmentRejectReasonMessage().getValue());
             PmcProcessContext.setRunStats(stats);
         }
+        if (padFile.status().getValue() != PadFile.PadFileStatus.Acknowledged) {
+            if (!padFile.acknowledgmentRejectReasonMessage().isNull()) {
+                throw new Error(padFile.acknowledgmentRejectReasonMessage().getValue());
+            } else {
+                throw new Error("Pad file acknowledgment failed " + padFile.acknowledgmentStatus().getValue());
+            }
+        }
+
         return (padFile != null);
     }
 
