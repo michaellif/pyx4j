@@ -26,5 +26,5 @@ public interface TriggerCrudService extends AbstractCrudService<Trigger> {
 
     public void runImmediately(AsyncCallback<Run> callback, Trigger triggerStub);
 
-    public void runImmediatelyForDate(AsyncCallback<Run> callback, Trigger triggerStub, Date executionDate);
+    public void runForDate(AsyncCallback<Run> callback, Trigger triggerStub, Date executionDate);
 }

@@ -13,6 +13,7 @@
  */
 package com.propertyvista.admin.client.ui.crud.scheduler.trigger;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.site.client.ui.crud.form.IViewerView;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 
@@ -22,7 +23,10 @@ import com.propertyvista.admin.domain.scheduler.Trigger;
 public interface TriggerViewerView extends IViewerView<Trigger> {
 
     interface Presenter extends IViewerView.Presenter {
+
         void runImmediately();
+
+        void runForDate(LogicalDate date);
     }
 
     IListerView<Run> getRunListerView();
