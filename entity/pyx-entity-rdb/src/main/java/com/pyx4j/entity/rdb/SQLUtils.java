@@ -95,7 +95,7 @@ public class SQLUtils {
                     continue;
                 }
                 boolean success = false;
-                log.debug("exec: {}", sql);
+                log.trace("exec: {}", sql);
                 try {
                     stmt.executeUpdate(sql);
                     success = true;
