@@ -11,7 +11,7 @@
  * @author vadims
  * @version $Id$
  */
-package com.propertyvista.portal.client.activity.billing;
+package com.propertyvista.portal.client.activity.residents.billing;
 
 import java.util.Vector;
 

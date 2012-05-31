@@ -11,7 +11,7 @@
  * @author vadims
  * @version $Id$
  */
-package com.propertyvista.portal.client.activity.maintenance;
+package com.propertyvista.portal.client.activity.residents.maintenance;
 
 import java.util.Vector;
 

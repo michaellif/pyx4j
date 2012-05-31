@@ -11,7 +11,7 @@
  * @author Dad
  * @version $Id$
  */
-package com.propertyvista.portal.client.activity.billing;
+package com.propertyvista.portal.client.activity.residents.billing;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;

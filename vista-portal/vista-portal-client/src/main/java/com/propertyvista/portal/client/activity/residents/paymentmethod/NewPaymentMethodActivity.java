@@ -11,7 +11,7 @@
  * @author Dad
  * @version $Id$
  */
-package com.propertyvista.portal.client.activity.paymentmethod;
+package com.propertyvista.portal.client.activity.residents.paymentmethod;
 
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;

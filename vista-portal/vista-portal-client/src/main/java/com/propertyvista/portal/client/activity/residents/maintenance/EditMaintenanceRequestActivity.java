@@ -11,7 +11,7 @@
  * @author dad
  * @version $Id$
  */
-package com.propertyvista.portal.client.activity.maintenance;
+package com.propertyvista.portal.client.activity.residents.maintenance;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
