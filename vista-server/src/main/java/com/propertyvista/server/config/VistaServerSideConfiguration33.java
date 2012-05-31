@@ -13,50 +13,46 @@
  */
 package com.propertyvista.server.config;
 
+import java.io.File;
+
 import com.pyx4j.config.server.IMailServiceConfigConfiguration;
 import com.pyx4j.config.server.IPersistenceConfiguration;
+import com.pyx4j.entity.rdb.cfg.ConfigurationPostgreSQLProperties;
+import com.pyx4j.entity.rdb.dialect.NamingConvention;
+import com.pyx4j.entity.rdb.dialect.NamingConventionOracle;
+import com.pyx4j.essentials.j2se.J2SEServiceConnector;
+import com.pyx4j.essentials.j2se.J2SEServiceConnector.Credentials;
 
-public class VistaServerSideConfiguration33 extends VistaServerSideConfiguration {
+/**
+ * See the files https://svn.pyx4j.com/svn-configs/trunk/vista/testenv/apps/catalina.base/tomcatA/conf/vista33
+ * 
+ */
+public class VistaServerSideConfiguration33 extends VistaServerSideConfigurationCustom {
 
     @Override
     public IPersistenceConfiguration getPersistenceConfiguration() {
-        return new VistaConfigurationPostgreSQL() {
+        ConfigurationPostgreSQLProperties config = new ConfigurationPostgreSQLProperties() {
 
-            @Override
-            public String dbHost() {
-                return "db1";
+            {
+                readProperties("db", VistaServerSideConfiguration33.this.getConfigProperties().getProperties());
+
+                File dbCredentialsFile = new File(getConfigDirectory(), "db-credentials.properties");
+                if (dbCredentialsFile.canRead()) {
+                    Credentials credentials = J2SEServiceConnector.getCredentials(dbCredentialsFile.getAbsolutePath());
+                    this.user = credentials.email;
+                    this.password = credentials.password;
+                }
+
             }
 
             @Override
-            public String dbName() {
-                return "vista33";
+            public NamingConvention namingConvention() {
+                return new NamingConventionOracle(63, null, false, false, '$');
             }
 
-            @Override
-            public String userName() {
-                return "vista33";
-            }
-
-            @Override
-            public String password() {
-                return "vista33";
-            }
-
-            @Override
-            public int maxPoolSize() {
-                return 100;
-            }
-
-            @Override
-            public int tablesItentityOffset() {
-                return 997;
-            }
         };
-    }
 
-    @Override
-    public boolean openIdrequired() {
-        return true;
+        return config;
     }
 
     @Override
