@@ -21,7 +21,6 @@ import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.billing.BillingFacade;
-import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.portal.domain.dto.BillSummaryDTO;
@@ -37,11 +36,10 @@ public class BillSummaryServiceImpl implements BillSummaryService {
         Persistence.service().retrieve(tenant.leaseV().holder());
 
         Lease lease = tenant.leaseV().holder();
-        Bill latestBill = ServerSideFactory.create(BillingFacade.class).getLatestBill(lease);
         ARFacade arFacade = ServerSideFactory.create(ARFacade.class);
 
         BillSummaryDTO entity = EntityFactory.create(BillSummaryDTO.class);
-        entity.dueDate().setValue(latestBill != null ? latestBill.dueDate().getValue() : null);
+        entity.currentBill().set(ServerSideFactory.create(BillingFacade.class).getLatestBill(lease));
         entity.currentBalance().setValue(arFacade.getCurrentBallance(lease.billingAccount()));
         entity.latestActivities().addAll(arFacade.getNotAcquiredLineItems(lease.billingAccount()));
 

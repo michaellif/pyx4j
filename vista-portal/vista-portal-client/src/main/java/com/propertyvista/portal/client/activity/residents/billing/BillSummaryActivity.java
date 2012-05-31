@@ -19,11 +19,15 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.site.client.AppSite;
+import com.pyx4j.site.rpc.AppPlace;
 
+import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.portal.client.activity.SecurityAwareActivity;
 import com.propertyvista.portal.client.ui.residents.billing.BillSummaryView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
 import com.propertyvista.portal.domain.dto.BillSummaryDTO;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.services.resident.BillSummaryService;
 
 public class BillSummaryActivity extends SecurityAwareActivity implements BillSummaryView.Presenter {
@@ -57,8 +61,11 @@ public class BillSummaryActivity extends SecurityAwareActivity implements BillSu
     }
 
     @Override
-    public void viewCurrentBill() {
-        // TODO Auto-generated method stub
-
+    public void viewCurrentBill(Bill bill) {
+        if (bill != null) {
+            AppPlace place = new PortalSiteMap.Residents.BillingHistory.ViewBill();
+            place.placeArg(PortalSiteMap.ARG_ENTITY_ID, bill.getPrimaryKey().toString());
+            AppSite.getPlaceController().goTo(place);
+        }
     }
 }

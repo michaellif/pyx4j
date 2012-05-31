@@ -15,7 +15,6 @@ package com.propertyvista.portal.domain.dto;
 
 import java.math.BigDecimal;
 
-import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
@@ -24,17 +23,17 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
+import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 
 @Transient
 public interface BillSummaryDTO extends IEntity {
 
-    @Format("MM/dd/yyyy")
-    IPrimitive<LogicalDate> dueDate();
-
     @Format("#0.00")
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> currentBalance();
+
+    Bill currentBill();
 
     IList<InvoiceLineItem> latestActivities();
 }

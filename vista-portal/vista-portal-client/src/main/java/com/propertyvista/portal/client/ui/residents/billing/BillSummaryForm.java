@@ -51,11 +51,11 @@ public class BillSummaryForm extends CEntityDecoratableForm<BillSummaryDTO> {
 
         int row = -1;
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().currentBalance()), 10).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().dueDate()), 10).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().currentBill().dueDate()), 10).build());
         content.setWidget(++row, 0, new Anchor(i18n.tr("View Current Bill"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                presenter.viewCurrentBill();
+                presenter.viewCurrentBill(getValue().currentBill());
             }
         }));
         content.getWidget(row, 0).getElement().getStyle().setMarginLeft(15, Unit.EM);
