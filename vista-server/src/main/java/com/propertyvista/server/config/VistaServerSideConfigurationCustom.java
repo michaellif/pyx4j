@@ -68,8 +68,6 @@ public class VistaServerSideConfigurationCustom extends VistaServerSideConfigura
         ConfigurationMySQLProperties config = new ConfigurationMySQLProperties() {
 
             {
-                readProperties("db", VistaServerSideConfigurationCustom.this.getConfigProperties().getProperties());
-
                 File dbCredentialsFile = new File(getConfigDirectory(), "db-credentials.properties");
                 if (dbCredentialsFile.canRead()) {
                     Credentials credentials = J2SEServiceConnector.getCredentials(dbCredentialsFile.getAbsolutePath());
@@ -77,6 +75,7 @@ public class VistaServerSideConfigurationCustom extends VistaServerSideConfigura
                     this.password = credentials.password;
                 }
 
+                readProperties("db", VistaServerSideConfigurationCustom.this.getConfigProperties().getProperties());
             }
 
             @Override
