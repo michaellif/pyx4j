@@ -100,6 +100,7 @@ public class PadProcessor {
     private void createPadDebitRecord(PadBatch padBatch, PaymentRecord paymentRecord) {
         PadDebitRecord padRecord = EntityFactory.create(PadDebitRecord.class);
         padRecord.padBatch().set(padBatch);
+        padRecord.processed().setValue(Boolean.FALSE);
         padRecord.clientId().setValue(paymentRecord.billingAccount().accountNumber().getValue());
         padRecord.amount().setValue(paymentRecord.amount().getValue());
         EcheckInfo echeckInfo = paymentRecord.paymentMethod().details().cast();
@@ -114,7 +115,7 @@ public class PadProcessor {
 
     }
 
-    public void acknowledgmentReject(PadDebitRecord debitRecord) {
+    public void acknowledgmentReject(final PadDebitRecord debitRecord) {
         PaymentRecord paymentRecord = Persistence.service().retrieve(PaymentRecord.class, new Key(debitRecord.transactionId().getValue()));
         if (!EnumSet.of(PaymentRecord.PaymentStatus.Processing, PaymentRecord.PaymentStatus.Received).contains(paymentRecord.paymentStatus().getValue())) {
             throw new Error("Processed payment can't be rejected");
@@ -144,6 +145,15 @@ public class PadProcessor {
         Persistence.service().merge(paymentRecord);
 
         ServerSideFactory.create(ARFacade.class).rejectPayment(paymentRecord, false);
+
+        TaskRunner.runInAdminNamespace(new Callable<Void>() {
+            @Override
+            public Void call() {
+                debitRecord.processed().setValue(Boolean.TRUE);
+                Persistence.service().persist(debitRecord);
+                return null;
+            }
+        });
     }
 
     public void aggregatedTransferRejected(PadBatch padBatch) {
@@ -188,6 +198,8 @@ public class PadProcessor {
     }
 
     public void aggregatedTransferReconciliation(PadReconciliationSummary summary) {
+        final String namespace = NamespaceManager.getNamespace();
+
         AggregatedTransfer at = EntityFactory.create(AggregatedTransfer.class);
         at.padReconciliationSummaryKey().setValue(summary.getPrimaryKey());
         switch (summary.reconciliationStatus().getValue()) {
@@ -215,7 +227,7 @@ public class PadProcessor {
 
         Persistence.service().persist(at);
 
-        for (PadReconciliationDebitRecord debitRecord : summary.records()) {
+        for (final PadReconciliationDebitRecord debitRecord : summary.records()) {
             PaymentRecord paymentRecord = Persistence.service().retrieve(PaymentRecord.class, new Key(debitRecord.transactionId().getValue()));
             if (paymentRecord == null) {
                 throw new Error("Payment transaction '" + debitRecord.transactionId().getValue() + "' not found");
@@ -227,6 +239,22 @@ public class PadProcessor {
                 throw new Error("Unexpected transaction amount '" + paymentRecord.amount().getValue() + "', terminalId '"
                         + debitRecord.merchantTerminalId().getValue() + "', transactionId " + debitRecord.transactionId().getValue());
             }
+
+            // Verify PAD record
+            final PadDebitRecord padDebitRecord = TaskRunner.runInAdminNamespace(new Callable<PadDebitRecord>() {
+                @Override
+                public PadDebitRecord call() throws Exception {
+                    EntityQueryCriteria<PadDebitRecord> criteria = EntityQueryCriteria.create(PadDebitRecord.class);
+                    criteria.add(PropertyCriterion.eq(criteria.proto().transactionId(), debitRecord.transactionId()));
+                    criteria.add(PropertyCriterion.eq(criteria.proto().padBatch().pmcNamespace(), namespace));
+                    criteria.add(PropertyCriterion.eq(criteria.proto().processed(), Boolean.FALSE));
+                    return Persistence.service().retrieve(criteria);
+                }
+            });
+            if (padDebitRecord == null) {
+                throw new Error("Payment PAD transaction '" + debitRecord.transactionId().getValue() + "' not found");
+            }
+
             switch (debitRecord.reconciliationStatus().getValue()) {
             case PROCESSED:
                 reconciliationClearedPayment(at, debitRecord, paymentRecord);
@@ -239,9 +267,18 @@ public class PadProcessor {
                 break;
             case DUPLICATE:
                 // TODO What todo ?
-                reconciliationRejectPayment(at, debitRecord, paymentRecord);
-                break;
+            default:
+                throw new IllegalArgumentException("reconciliationStatus:" + debitRecord.reconciliationStatus().getValue());
             }
+
+            TaskRunner.runInAdminNamespace(new Callable<Void>() {
+                @Override
+                public Void call() {
+                    padDebitRecord.processed().setValue(Boolean.TRUE);
+                    Persistence.service().persist(padDebitRecord);
+                    return null;
+                }
+            });
 
         }
     }

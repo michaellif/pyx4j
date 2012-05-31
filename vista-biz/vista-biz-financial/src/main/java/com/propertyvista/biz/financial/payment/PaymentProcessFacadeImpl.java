@@ -105,6 +105,22 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
     }
 
     @Override
+    public void updatePadFilesProcessingStatus() {
+        EntityQueryCriteria<PadFile> filesCriteria = EntityQueryCriteria.create(PadFile.class);
+        filesCriteria.add(PropertyCriterion.eq(filesCriteria.proto().status(), PadFile.PadFileStatus.Acknowledged));
+        for (PadFile padFile : Persistence.service().query(filesCriteria)) {
+            EntityQueryCriteria<PadDebitRecord> criteria = EntityQueryCriteria.create(PadDebitRecord.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().padBatch().padFile(), padFile));
+            criteria.add(PropertyCriterion.eq(criteria.proto().processed(), Boolean.FALSE));
+            int unprocessedRecords = Persistence.service().count(criteria);
+            if (unprocessedRecords == 0) {
+                padFile.status().setValue(PadFile.PadFileStatus.Procesed);
+                Persistence.service().persist(padFile);
+            }
+        }
+    }
+
+    @Override
     public PadReconciliationFile recivePadReconciliation() {
         return new PadCaledon().recivePadReconciliation();
     }
@@ -119,6 +135,7 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
                 EntityQueryCriteria<PadReconciliationSummary> criteria = EntityQueryCriteria.create(PadReconciliationSummary.class);
                 criteria.add(PropertyCriterion.eq(criteria.proto().reconciliationFile(), reconciliationFile));
                 criteria.add(PropertyCriterion.eq(criteria.proto().merchantAccount().pmc().namespace(), namespace));
+
                 return Persistence.service().query(criteria);
             }
         });

@@ -38,10 +38,12 @@ class PadCaledonAcknowledgement {
         {
             EntityQueryCriteria<PadFile> criteria = EntityQueryCriteria.create(PadFile.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().fileCreationNumber(), akFile.fileCreationNumber().getValue()));
-            criteria.add(PropertyCriterion.eq(criteria.proto().status(), PadFile.PadFileStatus.Sent));
             padFile = Persistence.service().retrieve(criteria);
             if (padFile == null) {
                 throw new Error("Unexpected fileCreationNumber '" + akFile.fileCreationNumber().getValue() + "' in file " + file.getName());
+            }
+            if (padFile.status().getValue() != PadFile.PadFileStatus.Sent) {
+                throw new Error("Unexpected file status '" + padFile.status().getValue() + "' for file " + file.getName());
             }
         }
 
@@ -59,7 +61,7 @@ class PadCaledonAcknowledgement {
         padFile.acknowledged().setValue(Persistence.service().getTransactionSystemTime());
         padFile.acknowledgmentRejectReasonMessage().setValue(akFile.acknowledgmentRejectReasonMessage().getValue());
 
-        if (akFile.acknowledgmentStatusCode().getValue().equals(FileAcknowledgmentStatus.Accepted)) {
+        if (padFile.acknowledgmentStatus().getValue() == FileAcknowledgmentStatus.Accepted) {
             assertAcknowledgedValues(padFile, akFile);
             if (akFile.batches().size() > 0) {
                 throw new Error("Unexpected batches rejects for acknowledgmentStatus '" + akFile.acknowledgmentStatusCode().getValue() + "' in file "
@@ -151,6 +153,11 @@ class PadCaledonAcknowledgement {
             }
             if (!padDebitRecord.acknowledgmentStatusCode().isNull()) {
                 throw new Error("Already acknowledged transactionId '" + akDebitRecord.transactionId().getValue() + "', clientId '"
+                        + akDebitRecord.clientId().getValue() + "' in akFile " + akFile.fileCreationNumber().getValue());
+            }
+
+            if (padDebitRecord.processed().isBooleanTrue()) {
+                throw new Error("Already processed transactionId '" + akDebitRecord.transactionId().getValue() + "', clientId '"
                         + akDebitRecord.clientId().getValue() + "' in akFile " + akFile.fileCreationNumber().getValue());
             }
 

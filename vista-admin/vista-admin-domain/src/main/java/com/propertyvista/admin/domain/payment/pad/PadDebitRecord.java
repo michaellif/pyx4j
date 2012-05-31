@@ -64,4 +64,7 @@ public interface PadDebitRecord extends IEntity {
 
     IPrimitive<String> acknowledgmentStatusCode();
 
+    // Record processing status
+    IPrimitive<Boolean> processed();
+
 }

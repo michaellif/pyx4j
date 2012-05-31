@@ -26,19 +26,21 @@ public class PadReciveAcknowledgmentProcess implements PmcProcess {
     @Override
     public boolean start() {
         padFile = ServerSideFactory.create(PaymentProcessFacade.class).recivePadAcknowledgementFile();
-        if (!padFile.acknowledgmentRejectReasonMessage().isNull()) {
-            final RunStats stats = PmcProcessContext.getRunStats();
-            stats.message().setValue(padFile.acknowledgmentRejectReasonMessage().getValue());
-            PmcProcessContext.setRunStats(stats);
-        }
-        if (padFile.status().getValue() != PadFile.PadFileStatus.Acknowledged) {
+        if (padFile != null) {
             if (!padFile.acknowledgmentRejectReasonMessage().isNull()) {
-                throw new Error(padFile.acknowledgmentRejectReasonMessage().getValue());
-            } else {
-                throw new Error("Pad file acknowledgment failed " + padFile.acknowledgmentStatus().getValue());
+                final RunStats stats = PmcProcessContext.getRunStats();
+                stats.message().setValue(padFile.acknowledgmentRejectReasonMessage().getValue());
+                PmcProcessContext.setRunStats(stats);
+            }
+            if (padFile.status().getValue() != PadFile.PadFileStatus.Acknowledged) {
+                if (!padFile.acknowledgmentRejectReasonMessage().isNull()) {
+                    throw new Error(padFile.acknowledgmentRejectReasonMessage().getValue());
+                } else {
+                    throw new Error("Pad file acknowledgment failed. File AcknowledgmentStatus '" + padFile.acknowledgmentStatus().getValue()
+                            + "'; File status '" + padFile.status().getValue() + "'");
+                }
             }
         }
-
         return (padFile != null);
     }
 
@@ -51,6 +53,7 @@ public class PadReciveAcknowledgmentProcess implements PmcProcess {
 
     @Override
     public void complete() {
+        ServerSideFactory.create(PaymentProcessFacade.class).updatePadFilesProcessingStatus();
     }
 
 }

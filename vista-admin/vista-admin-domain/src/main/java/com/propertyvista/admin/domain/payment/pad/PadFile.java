@@ -52,9 +52,9 @@ public interface PadFile extends IEntity {
 
         Invalid,
 
-        Acknowledged,
+        Canceled,
 
-        Received,
+        Acknowledged,
 
         Procesed;
 
@@ -114,6 +114,8 @@ public interface PadFile extends IEntity {
     IPrimitive<Integer> recordsCount();
 
     IPrimitive<BigDecimal> fileAmount();
+
+    // Updated when batch is received from Caledon
 
     IPrimitive<String> acknowledgmentStatusCode();
 

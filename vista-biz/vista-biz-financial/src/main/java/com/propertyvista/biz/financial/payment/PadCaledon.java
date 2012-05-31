@@ -19,6 +19,7 @@ import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.EnumSet;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -73,7 +74,7 @@ public class PadCaledon {
                 return null;
             }
 
-            if (PadFile.PadFileStatus.Creating.equals(padFile.status().getValue())) {
+            if (padFile.fileCreationNumber().isNull()) {
                 padFile.fileCreationNumber().setValue(getNextFileCreationNumber());
             }
 
@@ -170,6 +171,25 @@ public class PadCaledon {
             sequence = EntityFactory.create(PadFileCreationNumber.class);
             sequence.number().setValue(0);
         }
+
+        // Find and verify that previous file has acknowledgment
+        {
+            EntityQueryCriteria<PadFile> previousFileCriteria = EntityQueryCriteria.create(PadFile.class);
+            previousFileCriteria.add(PropertyCriterion.eq(previousFileCriteria.proto().fileCreationNumber(), String.valueOf(sequence.number().getValue())));
+            PadFile padFile = Persistence.service().retrieve(previousFileCriteria);
+            if (padFile != null) {
+                if (!EnumSet.of(PadFile.PadFileStatus.Acknowledged, PadFile.PadFileStatus.Procesed, PadFile.PadFileStatus.Canceled).contains(
+                        padFile.status().getValue())) {
+                    throw new Error("Can't send PAD file until previous file is processed");
+                }
+
+                //If a file has rejected the corrected file must be submitted using the same file creation number.
+                if (PadFile.PadFileStatus.Canceled == padFile.status().getValue()) {
+                    return String.valueOf(sequence.number().getValue());
+                }
+            }
+        }
+
         int id = sequence.number().getValue() + 1;
         if (id == 999999) {
             id = 1;

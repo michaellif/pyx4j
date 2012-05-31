@@ -30,6 +30,8 @@ public interface PaymentProcessFacade {
 
     String processPadReconciliation(PadReconciliationFile reconciliationFile);
 
+    void updatePadFilesProcessingStatus();
+
     String createPreauthorisedPayments(LogicalDate dueDate);
 
 }
