@@ -14,12 +14,8 @@
 package com.propertyvista.config.tests;
 
 import com.pyx4j.config.server.ServerSideConfiguration;
-import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.server.contexts.NamespaceManager;
 import com.pyx4j.server.mail.Mail;
-
-import com.propertyvista.admin.domain.pmc.Pmc;
 
 public class VistaTestDBSetup {
 
@@ -40,10 +36,4 @@ public class VistaTestDBSetup {
         NamespaceManager.setNamespace(VistaTestsNamespaceResolver.demoNamespace);
     }
 
-    public static synchronized void createPmc() {
-        Pmc pmc = EntityFactory.create(Pmc.class);
-        pmc.dnsName().setValue(NamespaceManager.getNamespace());
-        pmc.namespace().setValue(NamespaceManager.getNamespace());
-        Persistence.service().persist(pmc);
-    }
 }

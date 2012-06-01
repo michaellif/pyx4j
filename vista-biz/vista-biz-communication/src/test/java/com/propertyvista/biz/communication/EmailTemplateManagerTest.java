@@ -14,6 +14,7 @@
 package com.propertyvista.biz.communication;
 
 import java.text.SimpleDateFormat;
+import java.util.concurrent.Callable;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,9 +25,11 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
 import com.pyx4j.security.rpc.AuthenticationService;
+import com.pyx4j.server.contexts.NamespaceManager;
 import com.pyx4j.server.mail.MailMessage;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 
+import com.propertyvista.admin.domain.pmc.Pmc;
 import com.propertyvista.biz.communication.mail.template.EmailTemplateManager;
 import com.propertyvista.biz.communication.mail.template.model.ApplicationT;
 import com.propertyvista.biz.communication.mail.template.model.BuildingT;
@@ -37,7 +40,6 @@ import com.propertyvista.biz.communication.mail.template.model.PasswordRequestTe
 import com.propertyvista.biz.communication.mail.template.model.PortalLinksT;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.config.tests.VistaDBTestBase;
-import com.propertyvista.config.tests.VistaTestDBSetup;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.contact.AddressStructured.StreetType;
@@ -63,6 +65,7 @@ import com.propertyvista.domain.tenant.ptapp.MasterOnlineApplication;
 import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
+import com.propertyvista.server.jobs.TaskRunner;
 
 public class EmailTemplateManagerTest extends VistaDBTestBase {
 
@@ -104,11 +107,24 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
 
     private String tenantHomeUrl;
 
+    public static synchronized void createPmc() {
+        final Pmc pmc = EntityFactory.create(Pmc.class);
+        pmc.dnsName().setValue(NamespaceManager.getNamespace());
+        pmc.namespace().setValue(NamespaceManager.getNamespace());
+        TaskRunner.runInAdminNamespace(new Callable<Void>() {
+            @Override
+            public Void call() {
+                Persistence.service().persist(pmc);
+                return null;
+            }
+        });
+    }
+
     @Override
     public void setUp() throws Exception {
         super.setUp();
 
-        VistaTestDBSetup.createPmc();
+        createPmc();
 
         portalHomeUrl = VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.TenantPortal, false);
         tenantHomeUrl = VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.TenantPortal, true) + DeploymentConsts.TENANT_URL;
