@@ -21,6 +21,7 @@ import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Table;
+import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
@@ -30,6 +31,7 @@ import com.pyx4j.i18n.annotations.I18n;
 @DiscriminatorValue("CashInfo")
 public interface CashInfo extends PaymentDetails {
 
+    @ToString(index = 0)
     @NotNull
     @Format("#0.00")
     @Caption(name = "Received Amount")

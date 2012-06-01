@@ -17,6 +17,7 @@ import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.Table;
+import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
@@ -33,6 +34,7 @@ public interface EcheckInfo extends PaymentDetails {
 
     @NotNull
     @Length(3)
+    @ToString(index = 0)
     IPrimitive<String> bankId();
 
     @NotNull
@@ -41,6 +43,7 @@ public interface EcheckInfo extends PaymentDetails {
 
     @NotNull
     @Length(12)
+    @ToString(index = 1)
     @Caption(name = "Account Number")
     IPrimitive<String> accountNo();
 }

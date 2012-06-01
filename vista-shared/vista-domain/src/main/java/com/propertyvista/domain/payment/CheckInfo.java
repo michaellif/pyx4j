@@ -16,6 +16,7 @@ package com.propertyvista.domain.payment;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Table;
+import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
@@ -30,12 +31,14 @@ public interface CheckInfo extends PaymentDetails {
     IPrimitive<String> nameOn();
 
     @NotNull
+    @ToString(index = 0)
     IPrimitive<String> bankName();
 
     @NotNull
     IPrimitive<AccountType> accountType();
 
     @NotNull
+    @ToString(index = 1)
     @Caption(name = "Cheque Number")
     IPrimitive<String> checkNo();
 
@@ -48,6 +51,7 @@ public interface CheckInfo extends PaymentDetails {
     IPrimitive<String> institutionNo();
 
     @NotNull
+    @ToString(index = 2)
     @Caption(name = "Account Number")
     IPrimitive<String> accountNo();
 }

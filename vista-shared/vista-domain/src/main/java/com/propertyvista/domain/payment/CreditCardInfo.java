@@ -66,6 +66,7 @@ public interface CreditCardInfo extends PaymentDetails {
     IPrimitive<String> token();
 
     @NotNull
+    @ToString(index = 1)
     @Caption(name = "Expiry Date")
     @Editor(type = EditorType.monthyearpicker)
     IPrimitive<LogicalDate> expiryDate();
