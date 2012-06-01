@@ -21,7 +21,7 @@ import com.propertyvista.domain.tenant.lease.Lease;
 
 public interface LeaseFacade {
 
-    void createLease(Lease lease);
+    void initLease(Lease lease);
 
     void persistLease(Lease lease);
 
@@ -47,5 +47,7 @@ public interface LeaseFacade {
     void complete(Key leaseId);
 
     void close(Key leaseId);
+
+    void verifyExistingLease(Lease leaseId);
 
 }

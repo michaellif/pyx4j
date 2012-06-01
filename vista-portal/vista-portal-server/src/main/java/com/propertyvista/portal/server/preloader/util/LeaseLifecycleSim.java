@@ -173,7 +173,7 @@ public class LeaseLifecycleSim {
 
         @Override
         public void exec() {
-            leaseFacade().createLease(lease);
+            leaseFacade().initLease(lease);
 
             // TODO change that to Employee Agent Decision
             queueEvent(rndBetween(now(), lease.leaseFrom().getValue()), new ApproveApplication(lease));

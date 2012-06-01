@@ -21,6 +21,7 @@
 package com.propertyvista.biz.financial.billing;
 
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
 
 import com.propertyvista.biz.financial.FinancialTestBase;
 import com.propertyvista.biz.financial.SysDateManager;
@@ -29,7 +30,6 @@ import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.AdjustmentType;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.ExecutionType;
-import com.propertyvista.domain.tenant.lease.Lease;
 
 public class BillingSunnyDayScenarioTest extends FinancialTestBase {
 
@@ -41,27 +41,28 @@ public class BillingSunnyDayScenarioTest extends FinancialTestBase {
 
     public void testScenario() {
 
-        setLeaseConditions("23-Mar-2011", "03-Aug-2011", 1);
+        SysDateManager.setSysDate("17-Mar-2011");
+
+        initLease("23-Mar-2011", "03-Aug-2011", 1);
         addServiceAdjustment("-25", AdjustmentType.monetary, ExecutionType.inLease);
 
-        BillableItem parking1 = addParking();
+        BillableItem parking1 = addParking(SaveAction.saveAsDraft);
         addFeatureAdjustment(parking1.uid().getValue(), "-10", AdjustmentType.monetary, ExecutionType.inLease);
 
-        BillableItem parking2 = addParking("23-Apr-2011", "03-Aug-2011");
+        BillableItem parking2 = addParking("23-Apr-2011", "03-Aug-2011", SaveAction.saveAsDraft);
         addFeatureAdjustment(parking2.uid().getValue(), "-10", AdjustmentType.monetary, ExecutionType.inLease);
 
-        BillableItem locker1 = addLocker();
+        BillableItem locker1 = addLocker(SaveAction.saveAsDraft);
         addFeatureAdjustment(locker1.uid().getValue(), "-0.2", AdjustmentType.percentage, ExecutionType.inLease);
 
-        BillableItem pet1 = addPet();
+        BillableItem pet1 = addPet(SaveAction.saveAsDraft);
         addFeatureAdjustment(pet1.uid().getValue(), "-1", AdjustmentType.percentage, ExecutionType.inLease);
 
         //==================== RUN 1 ======================//
 
-        SysDateManager.setSysDate("17-Mar-2011");
-        setLeaseStatus(Lease.Status.Approved);
+        Bill bill = approveApplication();
 
-        Bill bill = runBilling(true, true);
+        bill = confirmBill(bill, true, true);
 
         // @formatter:off
         new BillTester(bill).
@@ -75,18 +76,18 @@ public class BillingSunnyDayScenarioTest extends FinancialTestBase {
         serviceCharge("262.83").
         recurringFeatureCharges("34.26").
         oneTimeFeatureCharges("0.00").
-        depositAmount("1130.30").
+        depositAmount("930.30").
         taxes("35.65").
-        totalDueAmount("1463.04");
+        totalDueAmount("1263.04");
         // @formatter:on
 
         //==================== RUN 2 ======================//
 
         SysDateManager.setSysDate("18-Mar-2011");
 
-        receiveAndPostPayment("18-Mar-2011", "1463.04");
+        receiveAndPostPayment("18-Mar-2011", "1263.04");
 
-        setLeaseStatus(Lease.Status.Active);
+        activateLease();
 
         bill = runBilling(true, true);
 
@@ -98,7 +99,7 @@ public class BillingSunnyDayScenarioTest extends FinancialTestBase {
         billingPeriodStartDate("1-Apr-2011").
         billingPeriodEndDate("30-Apr-2011").
         numOfProductCharges(5).
-        paymentReceivedAmount("-1463.04").
+        paymentReceivedAmount("-1263.04").
         serviceCharge("905.30").
         recurringFeatureCharges("136.67").
         oneTimeFeatureCharges("0.00").
@@ -113,8 +114,8 @@ public class BillingSunnyDayScenarioTest extends FinancialTestBase {
 
         SysDateManager.setSysDate("18-Apr-2011");
 
-        addBooking("25-Apr-2011");
-        addBooking("5-May-2011");
+        addBooking("25-Apr-2011", SaveAction.saveAsFinal);
+        addBooking("5-May-2011", SaveAction.saveAsFinal);
 
         bill = runBilling(true, true);
 
@@ -138,7 +139,7 @@ public class BillingSunnyDayScenarioTest extends FinancialTestBase {
 
         //==================== RUN 4 ======================//
 
-        addBooking("28-Apr-2011");
+        addBooking("28-Apr-2011", SaveAction.saveAsFinal);
 
         addGoodWillCredit("20.00", "19-Apr-2011");
         addGoodWillCredit("30.00");
@@ -149,8 +150,6 @@ public class BillingSunnyDayScenarioTest extends FinancialTestBase {
         addGoodWillCredit("130.00");
 
         bill = runBilling(true, true);
-
-        printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
 
         // @formatter:off
         new BillTester(bill).
@@ -225,7 +224,7 @@ public class BillingSunnyDayScenarioTest extends FinancialTestBase {
 
         SysDateManager.setSysDate("05-Aug-2011");
 
-        setLeaseStatus(Lease.Status.Completed);
+        completeLease();
 
         bill = runBilling(true, true);
 
@@ -234,6 +233,7 @@ public class BillingSunnyDayScenarioTest extends FinancialTestBase {
         billSequenceNumber(7).
         previousBillSequenceNumber(6).
         billType(Bill.BillType.Final).
+        paymentReceivedAmount("-118.49").
         billingPeriodStartDate(null).
         billingPeriodEndDate(null);
         // @formatter:on

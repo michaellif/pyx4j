@@ -20,39 +20,40 @@
  */
 package com.propertyvista.biz.financial.billing;
 
+import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
+
 import com.propertyvista.biz.financial.FinancialTestBase;
 import com.propertyvista.biz.financial.SysDateManager;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.AdjustmentType;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.ExecutionType;
-import com.propertyvista.domain.tenant.lease.Lease;
 
 public class BillingFeatureEagerScenarioTest extends FinancialTestBase {
 
     public void testSequentialBillingRun() {
         preloadData();
-        setLeaseConditions("23-Mar-2011", "3-Aug-2011", 1);
+        initLease("23-Mar-2011", "3-Aug-2011", 1);
 
-        BillableItem parking1 = addParking();
+        BillableItem parking1 = addParking(SaveAction.saveAsDraft);
         addFeatureAdjustment(parking1.uid().getValue(), "-10", AdjustmentType.monetary, ExecutionType.inLease);
 
-        BillableItem parking2 = addParking("23-Apr-2011", null);
+        BillableItem parking2 = addParking("23-Apr-2011", null, SaveAction.saveAsDraft);
         addFeatureAdjustment(parking2.uid().getValue(), "-10", AdjustmentType.monetary, ExecutionType.inLease);
 
-        BillableItem locker1 = addLocker();
+        BillableItem locker1 = addLocker(SaveAction.saveAsDraft);
         addFeatureAdjustment(locker1.uid().getValue(), "-0.2", AdjustmentType.percentage, ExecutionType.inLease);
 
-        BillableItem pet1 = addPet();
+        BillableItem pet1 = addPet(SaveAction.saveAsDraft);
         addFeatureAdjustment(pet1.uid().getValue(), "-1", AdjustmentType.percentage, ExecutionType.inLease);
 
         //==================== RUN 1 ======================//
 
         SysDateManager.setSysDate("18-Mar-2011");
 
-        setLeaseStatus(Lease.Status.Approved);
+        Bill bill = approveApplication();
 
-        Bill bill = runBilling(true, true);
+        bill = confirmBill(bill, true, true);
 
         // @formatter:off
         new BillTester(bill).
@@ -70,7 +71,7 @@ public class BillingFeatureEagerScenarioTest extends FinancialTestBase {
         //==================== RUN 2 ======================//
 
         SysDateManager.setSysDate("18-Mar-2011");
-        setLeaseStatus(Lease.Status.Active);
+        activateLease();
 
         bill = runBilling(true, true);
 
@@ -90,8 +91,8 @@ public class BillingFeatureEagerScenarioTest extends FinancialTestBase {
         //==================== RUN 3 ======================//
 
         SysDateManager.setSysDate("18-Apr-2011");
-        addPet("10-Apr-2011", null);
-        changeBillableItem(parking1.uid().getValue(), null, "20-May-2011");
+        addPet("10-Apr-2011", null, SaveAction.saveAsFinal);
+        changeBillableItem(parking1.uid().getValue(), null, "20-May-2011", SaveAction.saveAsFinal);
 
         bill = runBilling(true, true);
 
@@ -112,7 +113,7 @@ public class BillingFeatureEagerScenarioTest extends FinancialTestBase {
 
         SysDateManager.setSysDate("18-May-2011");
         //TODO calculate arrears
-        changeBillableItem(parking1.uid().getValue(), null, "10-May-2011");
+        changeBillableItem(parking1.uid().getValue(), null, "10-May-2011", SaveAction.saveAsFinal);
 
         bill = runBilling(true, true);
 
@@ -172,7 +173,7 @@ public class BillingFeatureEagerScenarioTest extends FinancialTestBase {
 
         SysDateManager.setSysDate("05-Aug-2011");
 
-        setLeaseStatus(Lease.Status.Completed);
+        completeLease();
 
         bill = runBilling(true, true);
 

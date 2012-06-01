@@ -25,22 +25,19 @@ import java.util.Date;
 
 import com.propertyvista.biz.financial.FinancialTestBase;
 import com.propertyvista.biz.financial.SysDateManager;
-import com.propertyvista.biz.financial.billing.BillingException;
 import com.propertyvista.domain.financial.billing.Bill;
-import com.propertyvista.domain.tenant.lease.Lease;
 
 public class BillingPeriodsTest extends FinancialTestBase {
 
     public void testSequentialBillingRunWithGlobalBillingPeriodStartDate() throws ParseException {
         preloadData();
-        setLeaseConditions("23-Mar-2011", "3-Aug-2011", 1);
+        initLease("23-Mar-2011", "3-Aug-2011", 1);
 
         //==================== RUN 1 ======================//
 
-        SysDateManager.setSysDate("18-Feb-2011");
-        setLeaseStatus(Lease.Status.Approved);
+        Bill bill = approveApplication();
 
-        Bill bill = runBilling(true);
+        bill = confirmBill(bill, true, true);
 
         // @formatter:off
         new BillTester(bill).
@@ -60,7 +57,7 @@ public class BillingPeriodsTest extends FinancialTestBase {
 
         //==================== RUN 2 ======================//
 
-        setLeaseStatus(Lease.Status.Active);
+        activateLease();
 
         SysDateManager.setSysDate("19-Mar-2011");
 
@@ -194,7 +191,7 @@ public class BillingPeriodsTest extends FinancialTestBase {
 
         SysDateManager.setSysDate("05-Aug-2011");
 
-        setLeaseStatus(Lease.Status.Completed);
+        completeLease();
 
         bill = runBilling(true);
 
@@ -227,13 +224,13 @@ public class BillingPeriodsTest extends FinancialTestBase {
         SysDateManager.setSysDate((Date) null);
 
         preloadData();
-        setLeaseConditions("23-Mar-2011", "3-Aug-2011", null);
+        initLease("23-Mar-2011", "3-Aug-2011", null);
 
         //==================== RUN 1 ======================//
 
-        setLeaseStatus(Lease.Status.Approved);
+        Bill bill = approveApplication();
 
-        Bill bill = runBilling(true);
+        bill = confirmBill(bill, true, true);
 
         // @formatter:off
         new BillTester(bill).
@@ -251,7 +248,7 @@ public class BillingPeriodsTest extends FinancialTestBase {
 
         //==================== RUN 2 ======================//
 
-        setLeaseStatus(Lease.Status.Active);
+        activateLease();
 
         bill = runBilling(true);
 
@@ -341,7 +338,7 @@ public class BillingPeriodsTest extends FinancialTestBase {
 
         //==================== RUN Final ======================//
 
-        setLeaseStatus(Lease.Status.Completed);
+        completeLease();
 
         bill = runBilling(true);
 
@@ -384,13 +381,13 @@ public class BillingPeriodsTest extends FinancialTestBase {
     public void testSequentialBillingRunWIthLeaseStartDateAsBillingPeriodStartDay(int day) throws ParseException {
         SysDateManager.setSysDate((Date) null);
         preloadData();
-        setLeaseConditions(day + "-Mar-2011", "3-Aug-2011", null);
+        initLease(day + "-Mar-2011", "3-Aug-2011", null);
 
         //==================== RUN 1 ======================//
 
-        setLeaseStatus(Lease.Status.Approved);
+        Bill bill = approveApplication();
 
-        Bill bill = runBilling(true);
+        bill = confirmBill(bill, true, true);
 
         // @formatter:off
         new BillTester(bill).
@@ -410,7 +407,7 @@ public class BillingPeriodsTest extends FinancialTestBase {
 
         //==================== RUN 2 ======================//
 
-        setLeaseStatus(Lease.Status.Active);
+        activateLease();
 
         bill = runBilling(true);
 
@@ -480,7 +477,7 @@ public class BillingPeriodsTest extends FinancialTestBase {
 
         //==================== RUN final ======================//
 
-        setLeaseStatus(Lease.Status.Completed);
+        completeLease();
 
         bill = runBilling(true);
 

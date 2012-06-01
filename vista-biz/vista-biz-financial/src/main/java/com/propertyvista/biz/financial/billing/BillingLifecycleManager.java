@@ -153,7 +153,7 @@ public class BillingLifecycleManager {
             Persistence.service().persist(bill);
 
             if (Status.Created == billingAccount.lease().version().status().getValue()) {//zeroCycle bill should be issued
-                if (billingAccount.initialBalance().isNull()) {
+                if (billingAccount.carryforwardBalance().isNull()) {
                     new EstimateBillingProcessor(bill).run();
                 } else {
                     new ZeroCycleBillingProcessor(bill).run();
@@ -231,13 +231,13 @@ public class BillingLifecycleManager {
         Bill previousBill = getLatestConfirmedBill(lease);
         BillingAccount billingAccount = lease.billingAccount();
         if (previousBill == null) {
-            if (lease.billingAccount().initialBalance().isNull()) {
+            if (lease.billingAccount().carryforwardBalance().isNull()) {
                 return createNewLeaseFirstBillingRun(billingAccount.billingCycle(), billingAccount.lease().leaseFrom().getValue(), !billingAccount
                         .billingPeriodStartDate().isNull());
 
             } else {
                 return createExistingLeaseInitialBillingRun(billingAccount.billingCycle(), billingAccount.lease().leaseFrom().getValue(), billingAccount
-                        .lease().activationDate().getValue(), !billingAccount.billingPeriodStartDate().isNull());
+                        .lease().creationDate().getValue(), !billingAccount.billingPeriodStartDate().isNull());
             }
         } else {
             return createSubsiquentBillingRun(billingAccount.billingCycle(), previousBill.billingRun());
@@ -320,10 +320,10 @@ public class BillingLifecycleManager {
         return createBillingRun(cycle, BillDateUtils.calculateFirstBillingRunStartDate(cycle, leaseStartDate, useCyclePeriodStartDay));
     }
 
-    static BillingRun createExistingLeaseInitialBillingRun(BillingCycle cycle, LogicalDate leaseStartDate, LogicalDate leaseActivationDate,
+    static BillingRun createExistingLeaseInitialBillingRun(BillingCycle cycle, LogicalDate leaseStartDate, LogicalDate leaseCreationDate,
             boolean useCyclePeriodStartDay) {
-        if (!leaseStartDate.before(leaseActivationDate)) {
-            throw new BillingException("Existing lease should have start date earlier than activation date");
+        if (!leaseStartDate.before(leaseCreationDate)) {
+            throw new BillingException("Existing lease start date should be earlier than creation date");
         }
         LogicalDate firstBillingRunStartDate = BillDateUtils.calculateFirstBillingRunStartDate(cycle, leaseStartDate, useCyclePeriodStartDay);
         LogicalDate billingRunStartDate = null;
@@ -331,7 +331,7 @@ public class BillingLifecycleManager {
         do {
             billingRunStartDate = nextBillingRunStartDate;
             nextBillingRunStartDate = BillDateUtils.calculateSubsiquentBillingRunStartDate(cycle.paymentFrequency().getValue(), billingRunStartDate);
-        } while (nextBillingRunStartDate.compareTo(leaseActivationDate) <= 0);
+        } while (nextBillingRunStartDate.compareTo(leaseCreationDate) <= 0);
 
         return createBillingRun(cycle, billingRunStartDate);
     }

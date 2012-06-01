@@ -210,8 +210,9 @@ public interface Lease extends IVersionedEntity<LeaseV> {
 
     // internals:
 
+    @ReadOnly
     @Timestamp(Update.Created)
-    IPrimitive<LogicalDate> createDate();
+    IPrimitive<LogicalDate> creationDate();
 
     @Timestamp(Update.Updated)
     IPrimitive<Date> updated();

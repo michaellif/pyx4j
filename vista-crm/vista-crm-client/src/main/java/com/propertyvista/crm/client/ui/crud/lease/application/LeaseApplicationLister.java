@@ -56,7 +56,7 @@ public class LeaseApplicationLister extends ListerBase<LeaseApplicationDTO> {
             new Builder(proto().version().actualMoveOut(), false).build(),
             new Builder(proto().version().moveOutNotice(), false).build(),
             
-            new Builder(proto().createDate(), false).build(),
+            new Builder(proto().creationDate(), false).build(),
             
             new Builder(proto().mainApplicant()).sortable(!VistaTODO.complextQueryCriteria).build(),
             

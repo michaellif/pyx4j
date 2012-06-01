@@ -106,7 +106,7 @@ public interface BillingAccount extends IEntity {
     /**
      * for newly created/converted existing leases:
      */
-    IPrimitive<BigDecimal> initialBalance();
+    IPrimitive<BigDecimal> carryforwardBalance();
 
     @Owned(cascade = {})
     @Detached(level = AttachLevel.Detached)

@@ -22,10 +22,12 @@ package com.propertyvista.biz.financial.ar;
 
 import java.math.BigDecimal;
 
+import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
+
 import com.propertyvista.biz.financial.FinancialTestBase;
 import com.propertyvista.biz.financial.SysDateManager;
+import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.InvoiceDebit.DebitType;
-import com.propertyvista.domain.tenant.lease.Lease;
 
 public class ARSunnyDayScenarioTest extends FinancialTestBase {
 
@@ -37,16 +39,16 @@ public class ARSunnyDayScenarioTest extends FinancialTestBase {
 
     public void testScenario() {
 
-        setLeaseConditions("23-Mar-2011", "03-Aug-2011", 1);
-        addParking();
-        addParking("23-Apr-2011", "03-Aug-2011");
+        initLease("23-Mar-2011", "03-Aug-2011", 1);
+        addParking(SaveAction.saveAsDraft);
+        addParking("23-Apr-2011", "03-Aug-2011", SaveAction.saveAsDraft);
 
         //==================== RUN 1 ======================//
 
         SysDateManager.setSysDate("18-Mar-2011");
-        setLeaseStatus(Lease.Status.Approved);
+        Bill bill = approveApplication();
 
-        runBilling(true, false);
+        bill = confirmBill(bill, true, true);
 
         printTransactionHistory(ARTransactionManager.getTransactionHistory(retrieveLease().billingAccount()));
 
@@ -75,7 +77,7 @@ public class ARSunnyDayScenarioTest extends FinancialTestBase {
         //==================== RUN 2 ======================//
 
         SysDateManager.setSysDate("18-Mar-2011");
-        setLeaseStatus(Lease.Status.Active);
+        activateLease();
 
         runBilling(true, false);
 
@@ -88,8 +90,8 @@ public class ARSunnyDayScenarioTest extends FinancialTestBase {
 
         SysDateManager.setSysDate("18-Apr-2011");
 
-        addBooking("25-Apr-2011");
-        addBooking("5-May-2011");
+        addBooking("25-Apr-2011", SaveAction.saveAsFinal);
+        addBooking("5-May-2011", SaveAction.saveAsFinal);
 
         runBilling(true, false);
 
@@ -97,7 +99,7 @@ public class ARSunnyDayScenarioTest extends FinancialTestBase {
 
         //==================== RUN 4 ======================//
 
-        addBooking("28-Apr-2011");
+        addBooking("28-Apr-2011", SaveAction.saveAsFinal);
 
         SysDateManager.setSysDate("18-May-2011");
 
@@ -131,7 +133,7 @@ public class ARSunnyDayScenarioTest extends FinancialTestBase {
 
         SysDateManager.setSysDate("05-Aug-2011");
 
-        setLeaseStatus(Lease.Status.Completed);
+        completeLease();
 
         runBilling(true, false);
 

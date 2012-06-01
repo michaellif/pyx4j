@@ -21,16 +21,13 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
 
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.Deposit.RepaymentMode;
 import com.propertyvista.domain.tenant.lease.Deposit.ValueType;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
-import com.propertyvista.domain.tenant.lease.LeaseParticipant.Role;
 
 public class LeaseDataModel {
 
@@ -55,7 +52,6 @@ public class LeaseDataModel {
         lease = EntityFactory.create(Lease.class);
 
         lease.unit().set(serviceItem.element());
-        lease.paymentFrequency().setValue(PaymentFrequency.Monthly);
 
         lease.version().leaseProducts().serviceItem().item().set(serviceItem);
 
@@ -72,12 +68,9 @@ public class LeaseDataModel {
         calendar.add(Calendar.DATE, -1);
         lease.leaseTo().setValue(new LogicalDate(calendar.getTime()));
 
-        lease.paymentFrequency().setValue(PaymentFrequency.Monthly);
-
         addTenants();
 
         if (persist) {
-            lease.saveAction().setValue(SaveAction.saveAsFinal);
             Persistence.service().persist(lease);
         }
     }

@@ -26,7 +26,6 @@ import com.propertyvista.biz.financial.FinancialTestBase;
 import com.propertyvista.biz.financial.SysDateManager;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.domain.financial.billing.Bill;
-import com.propertyvista.domain.tenant.lease.Lease;
 
 public class BillingLeaseOnlyAgingScenarioTest extends FinancialTestBase {
 
@@ -38,14 +37,14 @@ public class BillingLeaseOnlyAgingScenarioTest extends FinancialTestBase {
 
     public void testScenario() {
 
-        setLeaseConditions("1-Mar-2011", "31-Aug-2011", 1);
+        initLease("1-Mar-2011", "31-Aug-2011", 1);
 
         //==================== RUN 1 ======================//
 
         SysDateManager.setSysDate("17-Feb-2011");
-        setLeaseStatus(Lease.Status.Approved);
+        Bill bill = approveApplication();
 
-        Bill bill = runBilling(true, true);
+        bill = confirmBill(bill, true, true);
 
         // @formatter:off
         new BillTester(bill).totalDueAmount("1972.24");
@@ -60,7 +59,7 @@ public class BillingLeaseOnlyAgingScenarioTest extends FinancialTestBase {
         //==================== RUN 2 ======================//
 
         SysDateManager.setSysDate("18-Mar-2011");
-        setLeaseStatus(Lease.Status.Active);
+        activateLease();
 
         bill = runBilling(true, true);
 

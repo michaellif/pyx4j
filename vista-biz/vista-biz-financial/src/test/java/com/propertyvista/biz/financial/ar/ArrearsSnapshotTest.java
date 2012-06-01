@@ -15,21 +15,25 @@ package com.propertyvista.biz.financial.ar;
 
 import static com.propertyvista.biz.financial.SysDateManager.setSysDate;
 
+import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
+
+import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.InvoiceDebit.DebitType;
-import com.propertyvista.domain.tenant.lease.Lease.Status;
 
 public class ArrearsSnapshotTest extends ArrearsSnapshotTestBase {
 
     public void testLeaseScenario() {
         // SET UP
         // tax is 12%
-        setLeaseConditions("23-Mar-2011", "03-Aug-2011", 1); // lease $930 
-        addParking(); // parking $80
+        initLease("23-Mar-2011", "03-Aug-2011", 1); // lease $930 
+        addParking(SaveAction.saveAsDraft); // parking $80
 
         // BILLING RUN 1
         setSysDate("18-Mar-2011");
-        setLeaseStatus(Status.Approved);
-        runAndConfirmBilling();
+
+        Bill bill = approveApplication();
+
+        bill = confirmBill(bill, true, true);
 
         updateArrearsHistory();
         assertArrearsSnapshotStart("18-Mar-2011");
@@ -53,7 +57,7 @@ public class ArrearsSnapshotTest extends ArrearsSnapshotTestBase {
         // we expect the current bucket to upgrade to the next level
         // and of course all the previous to remain the same
         setSysDate("23-Mar-2011");
-        setLeaseStatus(Status.Active);
+        activateLease();
         updateArrearsHistory();
 
         assertArrearsSnapshotIsSameAsBefore("18-Mar-2011", "22-Mar-2011");

@@ -23,13 +23,14 @@ package com.propertyvista.biz.financial.ar;
 import java.util.List;
 
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
 
 import com.propertyvista.biz.financial.FinancialTestBase;
 import com.propertyvista.biz.financial.SysDateManager;
+import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
 import com.propertyvista.domain.policy.policies.ARPolicy;
 import com.propertyvista.domain.policy.policies.ARPolicy.CreditDebitRule;
-import com.propertyvista.domain.tenant.lease.Lease;
 
 public class ARNotCoveredDebitInvoiceLineItemListTest extends FinancialTestBase {
 
@@ -46,19 +47,20 @@ public class ARNotCoveredDebitInvoiceLineItemListTest extends FinancialTestBase 
 
     public void testScenario() {
 
-        setLeaseConditions("01-Mar-2011", "31-Aug-2011", 1);
-        addParking();
+        initLease("01-Mar-2011", "31-Aug-2011", 1);
+        addParking(SaveAction.saveAsDraft);
 
         //==================== RUN 1 ======================//
 
         SysDateManager.setSysDate("22-Feb-2011");
-        setLeaseStatus(Lease.Status.Approved);
-        runBilling(true, false);
+        Bill bill = approveApplication();
+
+        bill = confirmBill(bill, true, true);
 
         //==================== RUN 2 ======================//
 
         SysDateManager.setSysDate("01-Mar-2011");
-        setLeaseStatus(Lease.Status.Active);
+        activateLease();
 
         SysDateManager.setSysDate("18-Mar-2011");
         runBilling(true, false);

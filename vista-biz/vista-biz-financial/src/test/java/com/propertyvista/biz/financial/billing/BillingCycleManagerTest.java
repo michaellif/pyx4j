@@ -100,13 +100,13 @@ public class BillingCycleManagerTest extends VistaDBTestBase {
         return billingRun;
     }
 
-    private BillingRun createExistingLeaseInitialBillingRun(LogicalDate leaseStartDate, LogicalDate leaseActivationDate, Integer billingCycleStartDate,
+    private BillingRun createExistingLeaseInitialBillingRun(LogicalDate leaseStartDate, LogicalDate leaseCreationDate, Integer billingCycleStartDate,
             boolean useCycleLeaseDay) {
         BillingCycle billingCycle = EntityFactory.create(BillingCycle.class);
         billingCycle.paymentFrequency().setValue(PaymentFrequency.Monthly);
         billingCycle.billingPeriodStartDay().setValue(billingCycleStartDate);
 
-        BillingRun billingRun = BillingLifecycleManager.createExistingLeaseInitialBillingRun(billingCycle, leaseStartDate, leaseActivationDate, useCycleLeaseDay);
+        BillingRun billingRun = BillingLifecycleManager.createExistingLeaseInitialBillingRun(billingCycle, leaseStartDate, leaseCreationDate, useCycleLeaseDay);
         return billingRun;
     }
 

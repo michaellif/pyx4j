@@ -80,7 +80,7 @@ public class LeaseGenerator extends DataGenerator {
         lease.leaseFrom().setValue(leaseFrom);
         lease.leaseTo().setValue(leaseTo);
 
-        lease.createDate().setValue(createdDate);
+        lease.creationDate().setValue(createdDate);
         lease.version().expectedMoveIn().setValue(expectedMoveIn);
 
         addTenants(lease);

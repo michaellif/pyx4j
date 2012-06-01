@@ -233,10 +233,10 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
 
         // other dates:
         main.setBR(++row, 0, 1);
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().createDate()), 9).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().creationDate()), 9).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().approvalDate()), 9).build());
 
-        get(proto().createDate()).setViewable(true);
+        get(proto().creationDate()).setViewable(true);
         get(proto().approvalDate()).setViewable(true);
 
         return new ScrollPanel(main);

@@ -22,9 +22,11 @@ package com.propertyvista.biz.financial.ar;
 
 import java.math.BigDecimal;
 
+import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
+
 import com.propertyvista.biz.financial.FinancialTestBase;
 import com.propertyvista.biz.financial.SysDateManager;
-import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.financial.billing.Bill;
 
 public class ARCreditDebitLinkManagerTest extends FinancialTestBase {
 
@@ -36,15 +38,15 @@ public class ARCreditDebitLinkManagerTest extends FinancialTestBase {
 
     public void testScenario() {
 
-        setLeaseConditions("01-Mar-2011", "31-Aug-2011", 1);
-        addParking();
+        initLease("01-Mar-2011", "31-Aug-2011", 1);
+        addParking(SaveAction.saveAsDraft);
 
         //==================== RUN 1 ======================//
 
         SysDateManager.setSysDate("22-Feb-2011");
-        setLeaseStatus(Lease.Status.Approved);
+        Bill bill = approveApplication();
 
-        runBilling(true, false);
+        bill = confirmBill(bill, true, true);
 
         // @formatter:off
         new TransactionHistoryTester(retrieveLease().billingAccount()).
@@ -72,7 +74,7 @@ public class ARCreditDebitLinkManagerTest extends FinancialTestBase {
         //==================== RUN 2 ======================//
 
         SysDateManager.setSysDate("01-Mar-2011");
-        setLeaseStatus(Lease.Status.Active);
+        activateLease();
 
         SysDateManager.setSysDate("18-Mar-2011");
         runBilling(true, false);

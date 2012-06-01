@@ -49,35 +49,36 @@ public class LeaseFacadeImpl implements LeaseFacade {
     private static final I18n i18n = I18n.get(LeaseFacadeImpl.class);
 
     @Override
-    public void createLease(Lease lease) {
+    public void initLease(Lease leaseDraft) {
         // let client supply initial status value:
-        if (lease.version().status().isNull()) {
-            lease.version().status().setValue(Lease.Status.Created);
+        if (leaseDraft.version().status().isNull()) {
+            leaseDraft.version().status().setValue(Lease.Status.Created);
         } else {
-            switch (lease.version().status().getValue()) {
+            switch (leaseDraft.version().status().getValue()) {
             case Created:
             case ApplicationInProgress:
                 break; // ok, allowed values...
             default:
-                lease.version().status().setValue(Lease.Status.Created);
+                leaseDraft.version().status().setValue(Lease.Status.Created);
             }
         }
-        lease.paymentFrequency().setValue(PaymentFrequency.Monthly);
+        //TODO
+        leaseDraft.paymentFrequency().setValue(PaymentFrequency.Monthly);
 
         // Create Application by default
-        lease.leaseApplication().status().setValue(LeaseApplication.Status.Created);
-        lease.leaseApplication().leaseOnApplication().set(lease);
+        leaseDraft.leaseApplication().status().setValue(LeaseApplication.Status.Created);
+        leaseDraft.leaseApplication().leaseOnApplication().set(leaseDraft);
 
-        saveCustomers(lease);
+        saveCustomers(leaseDraft);
 
-        ServerSideFactory.create(IdAssignmentFacade.class).assignId(lease);
+        ServerSideFactory.create(IdAssignmentFacade.class).assignId(leaseDraft);
 
-        lease.billingAccount().accountNumber().setValue(ServerSideFactory.create(IdAssignmentFacade.class).createAccountNumber());
+        leaseDraft.billingAccount().accountNumber().setValue(ServerSideFactory.create(IdAssignmentFacade.class).createAccountNumber());
 
-        Persistence.service().merge(lease);
+        Persistence.service().merge(leaseDraft);
 
-        if (lease.unit().getPrimaryKey() != null) {
-            ServerSideFactory.create(OccupancyFacade.class).reserve(lease.unit().getPrimaryKey(), lease);
+        if (leaseDraft.unit().getPrimaryKey() != null) {
+            ServerSideFactory.create(OccupancyFacade.class).reserve(leaseDraft.unit().getPrimaryKey(), leaseDraft);
         }
     }
 
@@ -245,13 +246,28 @@ public class LeaseFacadeImpl implements LeaseFacade {
         ServerSideFactory.create(OccupancyFacade.class).unreserve(lease.unit().getPrimaryKey());
     }
 
+    @Override
+    public void verifyExistingLease(Lease leaseId) {
+        Lease lease = Persistence.secureRetrieveDraft(Lease.class, leaseId.getPrimaryKey());
+
+        ServerSideFactory.create(OccupancyFacade.class).approveLease(lease.unit().getPrimaryKey());
+
+        ServerSideFactory.create(ProductCatalogFacade.class).updateUnitRentPrice(lease);
+
+        lease.saveAction().setValue(SaveAction.saveAsFinal);
+        Persistence.secureSave(lease);
+
+        ServerSideFactory.create(BillingFacade.class).runBilling(lease);
+
+    }
+
     // TODO review code here
     @Override
     public void activate(Key leaseId) {
         Lease lease = Persistence.secureRetrieveDraft(Lease.class, leaseId);
         // set lease status to active ONLY if first (latest till now) bill is confirmed: 
         // TODO
-        if (!VistaTODO.removedForProduction && lease.billingAccount().initialBalance().isNull()
+        if (!VistaTODO.removedForProduction && lease.billingAccount().carryforwardBalance().isNull()
                 && ServerSideFactory.create(BillingFacade.class).getLatestBill(lease).billStatus().getValue() != Bill.BillStatus.Confirmed) {
             throw new UserRuntimeException(i18n.tr("Please run and confirm first bill in order to activate the lease."));
         }

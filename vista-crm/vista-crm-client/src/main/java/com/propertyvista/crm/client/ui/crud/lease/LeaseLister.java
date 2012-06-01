@@ -70,7 +70,7 @@ public class LeaseLister extends VersionedLister<LeaseDTO> {
             new Builder(proto().version().moveOutNotice(), false).build(),
             
             new Builder(proto().approvalDate(), false).build(),
-            new Builder(proto().createDate(), false).build(),
+            new Builder(proto().creationDate(), false).build(),
             
             new Builder(proto().version().tenants()).build()
         );//@formatter:on
@@ -98,7 +98,7 @@ public class LeaseLister extends VersionedLister<LeaseDTO> {
         LeaseDTO newLease = EntityFactory.create(LeaseDTO.class);
         newLease.type().setValue(leaseType);
         newLease.paymentFrequency().setValue(PaymentFrequency.Monthly);
-        newLease.billingAccount().initialBalance().setValue(balance);
+        newLease.billingAccount().carryforwardBalance().setValue(balance);
         newLease.version().status().setValue(Lease.Status.Created);
         return newLease;
     }

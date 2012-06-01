@@ -116,7 +116,7 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
     @Override
     protected void create(Lease entity, DTO dto) {
         updateAdjustments(entity);
-        ServerSideFactory.create(LeaseFacade.class).createLease(entity);
+        ServerSideFactory.create(LeaseFacade.class).initLease(entity);
     }
 
     @Override

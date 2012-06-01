@@ -46,7 +46,7 @@ public class PastLeaseLister extends ListerBase<LeaseDTO> {
             new Builder(proto().version().moveOutNotice(), false).build(),
             
             new Builder(proto().approvalDate(), false).build(),
-            new Builder(proto().createDate(), false).build(),
+            new Builder(proto().creationDate(), false).build(),
             
             new Builder(proto().version().tenants()).build()
         );//@formatter:on

@@ -21,12 +21,12 @@
 package com.propertyvista.biz.financial.billing;
 
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
 
 import com.propertyvista.biz.financial.FinancialTestBase;
 import com.propertyvista.biz.financial.SysDateManager;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.domain.financial.billing.Bill;
-import com.propertyvista.domain.tenant.lease.Lease;
 
 public class BillingLatePaymentScenarioTest extends FinancialTestBase {
 
@@ -38,14 +38,14 @@ public class BillingLatePaymentScenarioTest extends FinancialTestBase {
 
     public void testScenario() {
 
-        setLeaseConditions("01-Apr-2011", "31-Aug-2011", 1);
+        initLease("01-Apr-2011", "31-Aug-2011", 1);
 
         //==================== First Bill ======================//
 
         SysDateManager.setSysDate("17-Mar-2011");
-        setLeaseStatus(Lease.Status.Approved);
+        Bill bill = approveApplication();
 
-        Bill bill = runBilling(true, true);
+        bill = confirmBill(bill, true, true);
 
         // @formatter:off
         new BillTester(bill).
@@ -69,7 +69,7 @@ public class BillingLatePaymentScenarioTest extends FinancialTestBase {
         receiveAndPostPayment("31-Mar-2011", "1972.24");
 
         SysDateManager.setSysDate("17-Apr-2011");
-        setLeaseStatus(Lease.Status.Active);
+        activateLease();
 
         bill = runBilling(true, true);
 
@@ -93,7 +93,7 @@ public class BillingLatePaymentScenarioTest extends FinancialTestBase {
         SysDateManager.setSysDate("30-Apr-2011");
         receiveAndPostPayment("30-Apr-2011", "1041.94");
         // add some immediate charges - should see late payment fee
-        addBooking("28-Apr-2011");
+        addBooking("28-Apr-2011", SaveAction.saveAsFinal);
         addAccountCharge("100.00");
 
         SysDateManager.setSysDate("02-May-2011");
