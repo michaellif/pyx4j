@@ -73,7 +73,9 @@ public abstract class GadgetInstanceBase<T extends GadgetMetadata> implements IG
     public GadgetInstanceBase(GadgetMetadata metadata, Class<T> metadataClass, CEntityContainer<T> setupForm) {
         this.metadata = (metadata == null) ? createDefaultSettings(metadataClass) : (T) metadata.cast();
         this.setupForm = setupForm;
-        this.setupForm.initContent();
+        if (setupForm != null) {
+            this.setupForm.initContent();
+        }
 
         this.isRunning = false;
         this.refreshTimer = new RefreshTimer();
@@ -367,8 +369,9 @@ public abstract class GadgetInstanceBase<T extends GadgetMetadata> implements IG
 
     // notifications:
 
+    @Deprecated
     protected void onDashboardDateChangeEvent(LogicalDate changedDate) {
-
+        // TODO remove this method (remains of date setup in dashboard)
     }
 
     @Override
