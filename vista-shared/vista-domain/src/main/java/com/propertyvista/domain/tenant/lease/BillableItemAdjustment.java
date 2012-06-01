@@ -52,17 +52,6 @@ public interface BillableItemAdjustment extends IEntity {
         }
     }
 
-    @I18n
-    @XmlType(name = "ChargeType")
-    enum ChargeType {
-        negotiation, priceCorrection;
-
-        @Override
-        public String toString() {
-            return I18nEnum.toString(this);
-        }
-    }
-
     /**
      * postLease - applied during renewal
      * 
@@ -101,9 +90,6 @@ public interface BillableItemAdjustment extends IEntity {
     @NotNull
     @ToString(index = 0)
     IPrimitive<AdjustmentType> adjustmentType();
-
-    @NotNull
-    IPrimitive<ChargeType> chargeType();
 
     @NotNull
     IPrimitive<ExecutionType> executionType();

@@ -261,7 +261,6 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
         public List<EntityFolderColumnDescriptor> columns() {
             ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
             columns.add(new EntityFolderColumnDescriptor(proto().adjustmentType(), "8em"));
-            columns.add(new EntityFolderColumnDescriptor(proto().chargeType(), "9em"));
             columns.add(new EntityFolderColumnDescriptor(proto().executionType(), "8em"));
             columns.add(new EntityFolderColumnDescriptor(proto().value(), "5em"));
             columns.add(new EntityFolderColumnDescriptor(proto().effectiveDate(), "9em"));
