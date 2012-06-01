@@ -44,6 +44,7 @@ import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.rdb.ConnectionProvider;
 import com.pyx4j.entity.rdb.ConnectionProvider.ConnectionTarget;
+import com.pyx4j.entity.rdb.EntityPersistenceServiceRDB;
 import com.pyx4j.entity.rdb.PersistenceContext;
 import com.pyx4j.entity.rdb.SQLUtils;
 import com.pyx4j.entity.rdb.cfg.Configuration;
@@ -124,6 +125,8 @@ public class Mappings {
     }
 
     public TableModel ensureTable(PersistenceContext persistenceContext, EntityMeta entityMeta) {
+        assert EntityPersistenceServiceRDB.allowNamespaceUse(entityMeta.getEntityClass()) : "Name space restriction is broken for "
+                + entityMeta.getEntityClass();
         TableModel model = tables.get(entityMeta.getEntityClass());
         if (model != null) {
             return model;

@@ -252,7 +252,7 @@ public class RDBUtils implements Closeable {
             if (meta.isTransient() || entityClass.getAnnotation(AbstractEntity.class) != null || entityClass.getAnnotation(EmbeddedEntity.class) != null) {
                 continue;
             }
-            if (!srv.allowNamespaceUse(entityClass)) {
+            if (!EntityPersistenceServiceRDB.allowNamespaceUse(entityClass)) {
                 continue;
             }
             srv.count(EntityQueryCriteria.create(entityClass));

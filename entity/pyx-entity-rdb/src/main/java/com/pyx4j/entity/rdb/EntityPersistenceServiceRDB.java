@@ -342,7 +342,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         }
     }
 
-    public boolean allowNamespaceUse(Class<? extends IEntity> entityClass) {
+    public static boolean allowNamespaceUse(Class<? extends IEntity> entityClass) {
         Table table = entityClass.getAnnotation(Table.class);
         if (table == null) {
             return true;
