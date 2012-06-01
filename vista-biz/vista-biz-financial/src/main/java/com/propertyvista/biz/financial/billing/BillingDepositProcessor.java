@@ -83,13 +83,13 @@ public class BillingDepositProcessor extends AbstractProcessor {
                 deposit.billingAccount().set(billing.getNextPeriodBill().billingAccount());
                 deposit.dueDate().setValue(billing.getNextPeriodBill().dueDate().getValue());
                 deposit.debitType().setValue(DebitType.deposit);
-                deposit.description().setValue(i18n.tr("Deposit for") + " " + billableItem.item().description().getStringView());
+                deposit.description().setValue(billableItem.deposit().description().getStringView());
 
                 if (ValueType.amount == billableItem.deposit().valueType().getValue()) {
                     deposit.amount().setValue(billableItem.deposit().depositAmount().getValue());
                 } else if (ValueType.percentage == billableItem.deposit().valueType().getValue()) {
                     //TODO consider real price of service or feature including concessions etc
-                    deposit.amount().setValue(billableItem.deposit().depositAmount().getValue().multiply(billableItem.item().price().getValue()));
+                    deposit.amount().setValue(billableItem.deposit().depositAmount().getValue().multiply(billableItem.agreedPrice().getValue()));
                 } else {
                     throw new Error("Unsupported ValueType");
                 }

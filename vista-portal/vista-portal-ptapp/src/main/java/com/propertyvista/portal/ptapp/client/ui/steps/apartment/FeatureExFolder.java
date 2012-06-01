@@ -87,6 +87,7 @@ public class FeatureExFolder extends VistaBoxFolder<BillableItem> {
                             if (getValue().size() < getMaxCount()) {
                                 BillableItem newItem = EntityFactory.create(BillableItem.class);
                                 newItem.item().set(item);
+                                newItem.agreedPrice().setValue(item.price().getValue());
                                 newItem._currentPrice().setValue(item.price().getValue());
                                 addItem(newItem);
                             }

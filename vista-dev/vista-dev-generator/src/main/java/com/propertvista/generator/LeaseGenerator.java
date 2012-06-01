@@ -174,6 +174,7 @@ public class LeaseGenerator extends DataGenerator {
     private static BillableItem createBillableItem(ProductItem serviceItem, LogicalDate effectiveDate) {
         BillableItem newItem = EntityFactory.create(BillableItem.class);
         newItem.item().set(serviceItem);
+        newItem.agreedPrice().setValue(newItem.item().price().getValue());
         newItem.effectiveDate().setValue(effectiveDate != null ? effectiveDate : new LogicalDate());
         return newItem;
     }

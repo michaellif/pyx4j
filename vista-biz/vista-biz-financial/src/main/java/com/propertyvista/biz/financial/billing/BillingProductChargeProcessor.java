@@ -231,7 +231,7 @@ public class BillingProductChargeProcessor extends AbstractProcessor {
 
         if (BillingUtils.isOneTimeFeature(charge.chargeSubLineItem().billableItem().item().product())) {
             // do not prorate one-time charge
-            charge.chargeSubLineItem().amount().setValue(charge.chargeSubLineItem().billableItem().item().price().getValue());
+            charge.chargeSubLineItem().amount().setValue(charge.chargeSubLineItem().billableItem().agreedPrice().getValue());
         } else {
             charge.chargeSubLineItem().amount().setValue(prorate(charge));
         }
@@ -251,7 +251,7 @@ public class BillingProductChargeProcessor extends AbstractProcessor {
         BigDecimal amount = null;
 
         if (BillableItemAdjustment.AdjustmentType.percentage.equals(billableItemAdjustment.adjustmentType().getValue())) {
-            amount = billableItemAdjustment.billableItem().item().price().getValue().multiply(billableItemAdjustment.value().getValue());
+            amount = billableItemAdjustment.billableItem().agreedPrice().getValue().multiply(billableItemAdjustment.value().getValue());
         } else if (BillableItemAdjustment.AdjustmentType.monetary.equals(billableItemAdjustment.adjustmentType().getValue())) {
             amount = billableItemAdjustment.value().getValue();
         }
@@ -300,7 +300,7 @@ public class BillingProductChargeProcessor extends AbstractProcessor {
     private BigDecimal prorate(InvoiceProductCharge charge) {
         BigDecimal proration = ProrationUtils.prorate(charge.fromDate().getValue(), charge.toDate().getValue(), billing.getNextPeriodBill().billingRun()
                 .building());
-        return charge.chargeSubLineItem().billableItem().item().price().getValue().multiply(proration);
+        return charge.chargeSubLineItem().billableItem().agreedPrice().getValue().multiply(proration);
     }
 
     private void calculateTax(InvoiceProductCharge charge) {

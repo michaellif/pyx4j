@@ -21,7 +21,7 @@ import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
 public class PriceCalculationHelpers {
 
     public static BigDecimal calculateChargeItemAdjustments(BillableItem item) {
-        BigDecimal adjustedPrice = item.item().price().getValue();
+        BigDecimal adjustedPrice = item.agreedPrice().getValue();
         for (BillableItemAdjustment adjustment : item.adjustments()) {
             adjustedPrice = calculateBillableItemAdjustments(adjustedPrice, adjustment);
         }

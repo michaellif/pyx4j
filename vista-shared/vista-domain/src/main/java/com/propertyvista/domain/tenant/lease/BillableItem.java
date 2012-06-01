@@ -30,7 +30,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.financial.offering.ProductItem;
 
-@ToStringFormat("{0}")
+@ToStringFormat("{0}, agreed price: {1}")
 public interface BillableItem extends IEntity {
 
     @GeneratedValue(type = GeneratedValue.GenerationType.randomUUID)
@@ -39,6 +39,10 @@ public interface BillableItem extends IEntity {
     @ToString(index = 0)
     @Caption(name = "Product Item")
     ProductItem item();
+
+    @ToString(index = 1)
+    @Format("#0.00")
+    IPrimitive<BigDecimal> agreedPrice();
 
     @Caption(name = "Last Updated")
     @Timestamp
@@ -63,11 +67,11 @@ public interface BillableItem extends IEntity {
     Deposit deposit();
 
     /**
-     * Current price: contractual price value (ProductItem.price + adjustments),
+     * Current price: contractual price value (agreed price + adjustments),
      * should be recalculated (@link
      * PriceCalculationHelpers.calculateBillableItemAdjustments()) before use!..
      */
-    @ToString(index = 1)
+    @ToString(index = 2)
     @Format("#0.00")
     @Caption(name = "Price")
     IPrimitive<BigDecimal> _currentPrice();

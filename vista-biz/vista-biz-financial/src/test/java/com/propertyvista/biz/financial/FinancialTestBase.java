@@ -280,6 +280,8 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
             if (featureType.equals(feature.version().type().getValue()) && feature.version().items().size() != 0) {
                 BillableItem billableItem = EntityFactory.create(BillableItem.class);
                 billableItem.item().set(feature.version().items().get(0));
+                billableItem.agreedPrice().setValue(billableItem.item().price().getValue());
+
                 billableItem.effectiveDate().setValue(effectiveDate);
                 billableItem.expirationDate().setValue(expirationDate);
                 draftLease.version().leaseProducts().featureItems().add(billableItem);

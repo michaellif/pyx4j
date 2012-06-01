@@ -64,7 +64,7 @@ public class ProductCatalogFacadeImpl implements ProductCatalogFacade {
         Lease lease = Persistence.service().retrieve(leaseCriteria);
         if (lease != null && !lease.version().leaseProducts().isNull() && !lease.version().leaseProducts().serviceItem().isNull()) {
             //TODO add concessions and adjustments
-            return lease.version().leaseProducts().serviceItem().item().price().getValue();
+            return lease.version().leaseProducts().serviceItem().agreedPrice().getValue();
         }
         return null;
     }

@@ -54,6 +54,7 @@ public class LeaseDataModel {
         lease.unit().set(serviceItem.element());
 
         lease.version().leaseProducts().serviceItem().item().set(serviceItem);
+        lease.version().leaseProducts().serviceItem().agreedPrice().setValue(serviceItem.price().getValue());
 
         lease.version().leaseProducts().serviceItem().deposit().depositAmount().setValue(new BigDecimal("1.0"));
         lease.version().leaseProducts().serviceItem().deposit().valueType().setValue(ValueType.percentage);
