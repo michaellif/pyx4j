@@ -17,6 +17,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.Locale;
 
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.validator.EntityValidator;
@@ -67,7 +68,7 @@ public class CaledonPadReconciliationParser {
                     record.clientId().setValue(values[v++]);
                     record.transactionId().setValue(values[v++]);
                     record.amount().setValue(CaledonPadUtils.parsAmount(values[v++]));
-                    record.reconciliationStatus().setValue(record.reconciliationStatus().parse(values[v++]));
+                    record.reconciliationStatus().setValue(record.reconciliationStatus().parse(values[v++].toUpperCase(Locale.ENGLISH)));
                     if (values.length > v) {
                         record.reasonCode().setValue(values[v++]);
                         if (values.length > v) {
