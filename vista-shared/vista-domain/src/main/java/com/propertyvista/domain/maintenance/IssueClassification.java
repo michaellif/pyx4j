@@ -13,19 +13,19 @@
  */
 package com.propertyvista.domain.maintenance;
 
-import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 public interface IssueClassification extends IEntity {
 
     @Owner
-    @Detached
     @JoinColumn
+    @NotNull
     IssueSubjectDetails subjectDetails();
 
     @OrderColumn

@@ -51,9 +51,6 @@ public class MaintenanceCrudServiceImpl extends AbstractCrudServiceDtoImpl<Maint
     protected void enhanceAll(MaintenanceRequestDTO dto) {
         Persistence.service().retrieve(dto.tenant());
         Persistence.service().retrieve(dto.issueClassification());
-        Persistence.service().retrieve(dto.issueClassification().subjectDetails());
-        Persistence.service().retrieve(dto.issueClassification().subjectDetails().subject());
-        Persistence.service().retrieve(dto.issueClassification().subjectDetails().subject().issueElement());
     }
 
     @Override

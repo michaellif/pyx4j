@@ -13,9 +13,12 @@
  */
 package com.propertyvista.crm.client.ui.crud.maintenance;
 
+import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 
+import com.propertyvista.domain.maintenance.IssueClassification;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 
 public class MaintenanceRequestLister extends ListerBase<MaintenanceRequestDTO> {
@@ -24,7 +27,25 @@ public class MaintenanceRequestLister extends ListerBase<MaintenanceRequestDTO> 
         super(MaintenanceRequestDTO.class, false, true);
 
         setColumnDescriptors( // @formatter:off
-                new MemberColumnDescriptor.Builder(proto().issueClassification().issue()).build(),
+                new ColumnDescriptor(proto().issueClassification().issue().getPath().toString(), proto().issueClassification().issue().getMeta().getCaption()) {
+                    @Override
+                    public String convert(IEntity entity) {
+                        if (entity instanceof MaintenanceRequestDTO) {
+                            // return the first available value
+                            IssueClassification issue = ((MaintenanceRequestDTO)entity).issueClassification();
+                            if (!issue.issue().isNull()) {
+                                return issue.issue().getValue();
+                            } else if (!issue.subjectDetails().name().isNull()) {
+                                return issue.subjectDetails().name().getValue();
+                            } else if (!issue.subjectDetails().subject().name().isNull()) {
+                                return issue.subjectDetails().subject().name().getValue();
+                            } else if (!issue.subjectDetails().subject().issueElement().name().isNull()) {
+                                return issue.subjectDetails().subject().issueElement().name().getValue();
+                            }
+                        }
+                        return super.convert(entity);
+                    }
+                },
                 new MemberColumnDescriptor.Builder(proto().issueClassification().priority()).build(),
                 new MemberColumnDescriptor.Builder(proto().description()).build(),
                 new MemberColumnDescriptor.Builder(proto().tenant().customer().person().name()).searchable(false).build(),

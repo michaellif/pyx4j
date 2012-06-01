@@ -19,6 +19,7 @@ import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -26,8 +27,8 @@ import com.pyx4j.entity.shared.IPrimitive;
 public interface IssueRepairSubject extends IEntity {
 
     @Owner
-    @Detached
     @JoinColumn
+    @NotNull
     IssueElement issueElement();
 
     @OrderColumn
