@@ -7,14 +7,12 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-09
+ * Created on 2012-06-01
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.server.services.billing;
+package com.propertyvista.portal.server.portal.services.resident;
 
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -27,18 +25,15 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.biz.financial.payment.PaymentFacade;
-import com.propertyvista.crm.rpc.services.billing.PaymentCrudService;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
 import com.propertyvista.domain.payment.PaymentMethod;
-import com.propertyvista.domain.tenant.Guarantor;
-import com.propertyvista.domain.tenant.Tenant;
-import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.dto.PaymentRecordDTO;
 import com.propertyvista.dto.PaymentRecordDTO.PaymentSelect;
+import com.propertyvista.portal.rpc.portal.services.resident.PaymentCrudService;
+import com.propertyvista.portal.server.portal.TenantAppContext;
 import com.propertyvista.server.common.util.Commons;
 
 public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRecord, PaymentRecordDTO> implements PaymentCrudService {
@@ -56,8 +51,6 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
     protected void enhanceRetrieved(PaymentRecord entity, PaymentRecordDTO dto) {
         super.enhanceRetrieved(entity, dto);
         enhanceListRetrieved(entity, dto);
-
-        dto.participants().addAll(retrieveUsers(dto.billingAccount().lease()));
 
         dto.paymentSelect().setValue(PaymentSelect.New);
     }
@@ -105,7 +98,6 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
         dto.leaseStatus().set(billingAccount.lease().version().status());
         dto.propertyCode().set(billingAccount.lease().unit().belongsTo().propertyCode());
         dto.unitNumber().set(billingAccount.lease().unit().info().number());
-        dto.participants().addAll(retrieveUsers(billingAccount.lease()));
 
         // some default values:
         dto.paymentStatus().setValue(PaymentStatus.Submitted);
@@ -118,20 +110,14 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
     }
 
     @Override
-    public void getCurrentAddress(AsyncCallback<AddressStructured> callback, LeaseParticipant participant) {
-        Commons.getLeaseParticipantCurrentAddress(callback, participant);
+    public void getCurrentAddress(AsyncCallback<AddressStructured> callback) {
+        Commons.getLeaseParticipantCurrentAddress(callback, TenantAppContext.getCurrentUserTenantInLease());
     }
 
     @Override
-    public void getDefaultPaymentMethod(AsyncCallback<PaymentMethod> callback, LeaseParticipant payer) {
-        Persistence.service().retrieve(payer);
-        if ((payer == null) || (payer.isNull())) {
-            throw new RuntimeException("Entity '" + EntityFactory.getEntityMeta(LeaseParticipant.class).getCaption() + "' " + payer.getPrimaryKey()
-                    + " NotFound");
-        }
-
+    public void getDefaultPaymentMethod(AsyncCallback<PaymentMethod> callback) {
         PaymentMethod method = null;
-        for (PaymentMethod pm : ServerSideFactory.create(PaymentFacade.class).retrievePaymentMethods(payer)) {
+        for (PaymentMethod pm : ServerSideFactory.create(PaymentFacade.class).retrievePaymentMethods(TenantAppContext.getCurrentUserTenantInLease())) {
             if (pm.isDefault().isBooleanTrue()) {
                 method = pm;
             }
@@ -140,65 +126,9 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
     }
 
     @Override
-    public void getProfiledPaymentMethods(AsyncCallback<Vector<PaymentMethod>> callback, LeaseParticipant payer) {
-        Persistence.service().retrieve(payer);
-        if ((payer == null) || (payer.isNull())) {
-            throw new RuntimeException("Entity '" + EntityFactory.getEntityMeta(LeaseParticipant.class).getCaption() + "' " + payer.getPrimaryKey()
-                    + " NotFound");
-        }
-
-        callback.onSuccess(new Vector<PaymentMethod>(ServerSideFactory.create(PaymentFacade.class).retrievePaymentMethods(payer)));
+    public void getProfiledPaymentMethods(AsyncCallback<Vector<PaymentMethod>> callback) {
+        callback.onSuccess(new Vector<PaymentMethod>(ServerSideFactory.create(PaymentFacade.class).retrievePaymentMethods(
+                TenantAppContext.getCurrentUserTenantInLease())));
     }
 
-    // Payment operations:
-
-    @Override
-    public void processPayment(AsyncCallback<PaymentRecordDTO> callback, Key entityId) {
-        ServerSideFactory.create(PaymentFacade.class).processPayment(EntityFactory.createIdentityStub(PaymentRecord.class, entityId));
-        Persistence.service().commit();
-        retrieve(callback, entityId, RetrieveTraget.View);
-    }
-
-    @Override
-    public void clearPayment(AsyncCallback<PaymentRecordDTO> callback, Key entityId) {
-        ServerSideFactory.create(PaymentFacade.class).clear(EntityFactory.createIdentityStub(PaymentRecord.class, entityId));
-        Persistence.service().commit();
-        retrieve(callback, entityId, RetrieveTraget.View);
-    }
-
-    @Override
-    public void rejectPayment(AsyncCallback<PaymentRecordDTO> callback, Key entityId) {
-        ServerSideFactory.create(PaymentFacade.class).reject(EntityFactory.createIdentityStub(PaymentRecord.class, entityId));
-        Persistence.service().commit();
-        retrieve(callback, entityId, RetrieveTraget.View);
-    }
-
-    @Override
-    public void cancelPayment(AsyncCallback<PaymentRecordDTO> callback, Key entityId) {
-        ServerSideFactory.create(PaymentFacade.class).cancel(EntityFactory.createIdentityStub(PaymentRecord.class, entityId));
-        Persistence.service().commit();
-        retrieve(callback, entityId, RetrieveTraget.View);
-    }
-
-    // internals:
-    private List<LeaseParticipant> retrieveUsers(Lease lease) {
-        List<LeaseParticipant> users = new LinkedList<LeaseParticipant>();
-
-        Persistence.service().retrieve(lease.version().tenants());
-        for (Tenant tenant : lease.version().tenants()) {
-            Persistence.service().retrieve(tenant);
-            switch (tenant.role().getValue()) {
-            case Applicant:
-            case CoApplicant:
-                users.add(tenant);
-            }
-        }
-
-        Persistence.service().retrieve(lease.version().guarantors());
-        for (Guarantor guarantor : lease.version().guarantors()) {
-            users.add(guarantor);
-        }
-
-        return users;
-    }
 }

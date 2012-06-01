@@ -41,9 +41,10 @@ import com.propertyvista.common.client.ui.components.VistaViewersComponentFactor
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.domain.payment.PaymentDetails;
 import com.propertyvista.domain.payment.PaymentMethod;
+import com.propertyvista.portal.client.ui.residents.paymentmethod.PaymentMethodsView.Presenter;
 import com.propertyvista.portal.domain.dto.PaymentMethodListDTO;
 
-public class PaymentMethodsForm extends CEntityForm<PaymentMethodListDTO> implements PaymentMethodsView {
+public class PaymentMethodsForm extends CEntityForm<PaymentMethodListDTO> {
 
     private static final I18n i18n = I18n.get(PaymentMethodsForm.class);
 
@@ -53,7 +54,6 @@ public class PaymentMethodsForm extends CEntityForm<PaymentMethodListDTO> implem
         super(PaymentMethodListDTO.class, new VistaViewersComponentFactory());
     }
 
-    @Override
     public void setPresenter(Presenter presenter) {
         this.presenter = presenter;
     }
@@ -65,7 +65,6 @@ public class PaymentMethodsForm extends CEntityForm<PaymentMethodListDTO> implem
         return container;
     }
 
-    @Override
     public void populate(List<PaymentMethod> paymentMethods) {
         PaymentMethodListDTO dto = EntityFactory.create(PaymentMethodListDTO.class);
         dto.paymentMethods().addAll(paymentMethods);
@@ -82,8 +81,8 @@ public class PaymentMethodsForm extends CEntityForm<PaymentMethodListDTO> implem
         @Override
         public List<EntityFolderColumnDescriptor> columns() {
             return Arrays.asList(//@formatter:off                    
-                    new EntityFolderColumnDescriptor(proto().type(), "10em"), 
-                    new EntityFolderColumnDescriptor(proto().details(), "15em"),
+                    new EntityFolderColumnDescriptor(proto().type(), "15em"), 
+                    new EntityFolderColumnDescriptor(proto().details(), "20em"),
                     new EntityFolderColumnDescriptor(proto().isDefault(), "5em")
             ); //@formatter:on
         }
