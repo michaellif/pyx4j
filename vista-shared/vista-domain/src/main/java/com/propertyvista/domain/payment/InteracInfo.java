@@ -17,8 +17,10 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.shared.IPrimitive;
 
+@ToStringFormat("{0}, {1}")
 @DiscriminatorValue("InteracInfo")
 public interface InteracInfo extends PaymentDetails {
 

@@ -18,10 +18,12 @@ import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
+@ToStringFormat("{0}, {1}")
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
 @Table(prefix = "payment")
 @DiscriminatorValue("EcheckInfo")
