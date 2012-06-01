@@ -14,8 +14,12 @@
 package com.propertyvista.admin.domain.scheduler;
 
 import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.annotations.Table;
+
+import com.propertyvista.domain.VistaNamespace;
 
 @DiscriminatorValue("test")
+@Table(namespace = VistaNamespace.adminNamespace)
 public interface TriggerDetailsTest extends TriggerDetails {
 
 }
