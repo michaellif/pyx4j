@@ -157,7 +157,6 @@ public class PadProcessor {
     }
 
     public void aggregatedTransferRejected(PadBatch padBatch) {
-        Persistence.service().retrieveMember(padBatch.records());
 
         AggregatedTransfer at = EntityFactory.create(AggregatedTransfer.class);
         at.status().setValue(AggregatedTransferStatus.Rejected);

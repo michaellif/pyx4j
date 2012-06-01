@@ -54,7 +54,7 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
         final String namespace = NamespaceManager.getNamespace();
         List<PadDebitRecord> rejectedRecodrs = TaskRunner.runInAdminNamespace(new Callable<List<PadDebitRecord>>() {
             @Override
-            public List<PadDebitRecord> call() throws Exception {
+            public List<PadDebitRecord> call() {
                 EntityQueryCriteria<PadDebitRecord> criteria = EntityQueryCriteria.create(PadDebitRecord.class);
                 criteria.add(PropertyCriterion.eq(criteria.proto().padBatch().padFile(), padFile));
                 criteria.add(PropertyCriterion.eq(criteria.proto().padBatch().pmcNamespace(), namespace));
@@ -69,12 +69,16 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
 
         List<PadBatch> rejectedBatch = TaskRunner.runInAdminNamespace(new Callable<List<PadBatch>>() {
             @Override
-            public List<PadBatch> call() throws Exception {
+            public List<PadBatch> call() {
                 EntityQueryCriteria<PadBatch> criteria = EntityQueryCriteria.create(PadBatch.class);
                 criteria.add(PropertyCriterion.eq(criteria.proto().padFile(), padFile));
                 criteria.add(PropertyCriterion.eq(criteria.proto().pmcNamespace(), namespace));
                 criteria.add(PropertyCriterion.isNotNull(criteria.proto().acknowledgmentStatusCode()));
-                return Persistence.service().query(criteria);
+                List<PadBatch> rejectedBatch = Persistence.service().query(criteria);
+                for (PadBatch padBatch : rejectedBatch) {
+                    Persistence.service().retrieveMember(padBatch.records());
+                }
+                return rejectedBatch;
             }
         });
 
