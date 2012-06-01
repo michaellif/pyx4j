@@ -21,7 +21,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 
-public class Commons {
+public class AddressRetriever {
 
     public static void getLeaseParticipantCurrentAddress(AsyncCallback<AddressStructured> callback, LeaseParticipant participant) {
         Persistence.service().retrieve(participant);

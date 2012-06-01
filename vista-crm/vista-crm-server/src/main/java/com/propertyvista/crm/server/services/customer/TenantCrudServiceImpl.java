@@ -31,7 +31,7 @@ import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.dto.TenantDTO;
-import com.propertyvista.server.common.util.Commons;
+import com.propertyvista.server.common.util.AddressRetriever;
 
 public class TenantCrudServiceImpl extends AbstractCrudServiceDtoImpl<Tenant, TenantDTO> implements TenantCrudService {
 
@@ -87,6 +87,6 @@ public class TenantCrudServiceImpl extends AbstractCrudServiceDtoImpl<Tenant, Te
 
     @Override
     public void getCurrentAddress(AsyncCallback<AddressStructured> callback, Key entityId) {
-        Commons.getLeaseParticipantCurrentAddress(callback, Persistence.service().retrieve(Tenant.class, entityId));
+        AddressRetriever.getLeaseParticipantCurrentAddress(callback, Persistence.service().retrieve(Tenant.class, entityId));
     }
 }

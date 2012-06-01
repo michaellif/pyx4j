@@ -32,7 +32,7 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.dto.GuarantorDTO;
-import com.propertyvista.server.common.util.Commons;
+import com.propertyvista.server.common.util.AddressRetriever;
 
 public class GuarantorCrudServiceImpl extends AbstractCrudServiceDtoImpl<Guarantor, GuarantorDTO> implements GuarantorCrudService {
 
@@ -88,6 +88,6 @@ public class GuarantorCrudServiceImpl extends AbstractCrudServiceDtoImpl<Guarant
 
     @Override
     public void getCurrentAddress(AsyncCallback<AddressStructured> callback, Key entityId) {
-        Commons.getLeaseParticipantCurrentAddress(callback, Persistence.service().retrieve(Guarantor.class, entityId));
+        AddressRetriever.getLeaseParticipantCurrentAddress(callback, Persistence.service().retrieve(Guarantor.class, entityId));
     }
 }
