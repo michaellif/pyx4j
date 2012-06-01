@@ -27,6 +27,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 
 import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.payment.CreditCardInfo;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.policy.policies.LeaseTermsPolicy;
 import com.propertyvista.portal.domain.ptapp.Charges;
@@ -90,7 +91,8 @@ public class PaymentServiceImpl extends ApplicationEntityServiceImpl implements 
             CampaignManager.fireEvent(CampaignTrigger.ApplicationCompleated, Persistence.secureRetrieve(criteria));
         }
 
-        if ((PaymentType.CreditCard == payment.paymentMethod().type().getValue()) && ("2011".equals(payment.paymentMethod().creditCard().number().getValue()))) {
+        if ((PaymentType.CreditCard == payment.paymentMethod().type().getValue())
+                && ("2011".equals(((CreditCardInfo) payment.paymentMethod().details()).number().getValue()))) {
             // Ok
         } else if (PaymentType.Echeck == payment.paymentMethod().type().getValue()) {
             // Ok for now

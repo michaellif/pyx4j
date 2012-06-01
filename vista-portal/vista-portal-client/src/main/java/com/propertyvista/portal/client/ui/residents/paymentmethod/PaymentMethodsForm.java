@@ -24,6 +24,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.client.CEntityForm;
 import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
+import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.entity.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.entity.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -38,6 +39,7 @@ import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.components.VistaViewersComponentFactory;
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
+import com.propertyvista.domain.payment.PaymentDetails;
 import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.portal.domain.dto.PaymentMethodListDTO;
 
@@ -81,7 +83,7 @@ public class PaymentMethodsForm extends CEntityForm<PaymentMethodListDTO> implem
         public List<EntityFolderColumnDescriptor> columns() {
             return Arrays.asList(//@formatter:off                    
                     new EntityFolderColumnDescriptor(proto().type(), "10em"), 
-//                  new EntityFolderColumnDescriptor(proto().details(), "15em"),
+                    new EntityFolderColumnDescriptor(proto().details(), "15em"),
                     new EntityFolderColumnDescriptor(proto().isDefault(), "5em")
             ); //@formatter:on
         }
@@ -90,6 +92,8 @@ public class PaymentMethodsForm extends CEntityForm<PaymentMethodListDTO> implem
         public CComponent<?, ?> create(IObject<?> member) {
             if (member instanceof PaymentMethod) {
                 return new PaymentMethodEditorEx();
+            } else if (member instanceof PaymentDetails) {
+                return new CEntityLabel<PaymentDetails>();
             }
             return super.create(member);
         }

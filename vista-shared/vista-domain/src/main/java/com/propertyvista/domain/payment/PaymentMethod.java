@@ -26,7 +26,6 @@ import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
-import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -57,22 +56,6 @@ public interface PaymentMethod extends IEntity {
     @ToString(index = 1)
     @Caption(name = "Payment Attributes")
     PaymentDetails details();
-
-    @Caption(name = "eCheque")
-    @Owned
-    @Deprecated
-    @Transient
-    EcheckInfo echeck();
-
-    @Owned
-    @Deprecated
-    @Transient
-    CreditCardInfo creditCard();
-
-    @Owned
-    @Deprecated
-    @Transient
-    InteracInfo interac();
 
     // Billing Address:
     IPrimitive<Boolean> sameAsCurrent();
