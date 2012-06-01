@@ -235,7 +235,7 @@ public class PadCaledon {
         }
         File file = files.get(0);
         files.remove(0);
-        if (!file.getName().endsWith("_reconcil_rpt." + companyId)) {
+        if (!file.getName().endsWith("_reconciliation_rpt." + companyId)) {
             throw new Error("Invalid Reconciliation file name" + file.getName());
         }
         PadReconciliationFile padFile = new PadCaledonReconciliation().processFile(file);

@@ -195,7 +195,7 @@ public class CaledonPadSftpClient {
                         fileMatch = rFile.getFilename().endsWith("." + companyId + "_acknowledgement.csv");
                         break;
                     case Reconciliation:
-                        fileMatch = rFile.getFilename().endsWith("_reconcil_rpt." + companyId);
+                        fileMatch = rFile.getFilename().endsWith("_reconciliation_rpt." + companyId);
                         break;
                     }
                 }
