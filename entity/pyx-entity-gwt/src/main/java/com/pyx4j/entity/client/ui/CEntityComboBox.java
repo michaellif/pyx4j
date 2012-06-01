@@ -47,8 +47,6 @@ import com.pyx4j.forms.client.events.AsyncValueChangeEvent;
 import com.pyx4j.forms.client.events.AsyncValueChangeHandler;
 import com.pyx4j.forms.client.events.HasAsyncValue;
 import com.pyx4j.forms.client.events.HasAsyncValueChangeHandlers;
-import com.pyx4j.forms.client.events.OptionsChangeEvent;
-import com.pyx4j.forms.client.events.OptionsChangeHandler;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CListBox.AsyncOptionsReadyCallback;
@@ -87,6 +85,8 @@ public class CEntityComboBox<E extends IEntity> extends CComboBox<E> implements 
     private EntityDataSource<E> optionsDataSource;
 
     private HandlerRegistration referenceDataManagerHandlerRegistration;
+
+    private TerminableHandlingCallback optionHandlingCallback = null;
 
     public CEntityComboBox(Class<E> entityClass) {
         this(null, entityClass, (NotInOptionsPolicy) null);
@@ -172,21 +172,55 @@ public class CEntityComboBox<E extends IEntity> extends CComboBox<E> implements 
         retriveOptions(null);
     }
 
-    private class OptionsReadyPropertyChangeHandler implements OptionsChangeHandler<List<E>> {
+    private class TerminableHandlingCallback implements AsyncCallback<List<E>> {
+        private final AsyncOptionsReadyCallback<E> callback;
 
-        final HandlerRegistration handlerRegistration;
+        private boolean cancelled = false;
 
-        final AsyncOptionsReadyCallback<E> callback;
-
-        OptionsReadyPropertyChangeHandler(final AsyncOptionsReadyCallback<E> callback) {
+        public TerminableHandlingCallback(AsyncOptionsReadyCallback<E> callback) {
             this.callback = callback;
-            this.handlerRegistration = CEntityComboBox.this.addOptionsChangeHandler(this);
+        }
+
+        public void cancel() {
+            cancelled = true;
         }
 
         @Override
-        public void onOptionsChange(OptionsChangeEvent<List<E>> event) {
-            handlerRegistration.removeHandler();
-            callback.onOptionsReady(event.getOptions());
+        public void onSuccess(List<E> result) {
+            if (cancelled) {
+                return;
+            }
+            isLoading = false;
+            isUnavailable = false;
+            if (unavailableValidator != null) {
+                removeValueValidator(unavailableValidator);
+            }
+            setOptions(result);
+            optionsLoaded = true;
+            if (callback != null) {
+                callback.onOptionsReady(getOptions());
+            }
+        }
+
+        @Override
+        public void onFailure(Throwable caught) {
+            if (cancelled) {
+                return;
+            }
+            isLoading = false;
+            isUnavailable = true;
+            log.error("can't load {} {}", getTitle(), caught);
+            if (unavailableValidator == null) {
+                unavailableValidator = new EditableValueValidator<E>() {
+
+                    @Override
+                    public ValidationFailure isValid(CComponent<E, ?> component, E value) {
+                        return !isUnavailable ? null : new ValidationFailure(i18n.tr("Reference data unavailable"));
+                    }
+                };
+            }
+            addValueValidator(unavailableValidator);
+            setOptions(null);
         }
     }
 
@@ -195,59 +229,27 @@ public class CEntityComboBox<E extends IEntity> extends CComboBox<E> implements 
         if (optionsLoaded) {
             super.retriveOptions(callback);
         } else {
-            if (isLoading) {
-                // Second or any other sequential call.
-                if (callback != null) {
-                    new OptionsReadyPropertyChangeHandler(callback);
-                }
-                return;
+            if (isLoading && (optionHandlingCallback != null)) {
+                // Second or any other sequential call cancels previous callback
+                optionHandlingCallback.cancel();
             }
-
-            final AsyncCallback<List<E>> handlingCallback = new AsyncCallback<List<E>>() {
-
-                @Override
-                public void onSuccess(List<E> result) {
-                    isLoading = false;
-                    isUnavailable = false;
-                    if (unavailableValidator != null) {
-                        removeValueValidator(unavailableValidator);
-                    }
-                    setOptions(result);
-                    optionsLoaded = true;
-                    if (callback != null) {
-                        callback.onOptionsReady(getOptions());
-                    }
-                }
-
-                @Override
-                public void onFailure(Throwable caught) {
-                    isLoading = false;
-                    isUnavailable = true;
-                    log.error("can't load {} {}", getTitle(), caught);
-                    if (unavailableValidator == null) {
-                        unavailableValidator = new EditableValueValidator<E>() {
-
-                            @Override
-                            public ValidationFailure isValid(CComponent<E, ?> component, E value) {
-                                return !isUnavailable ? null : new ValidationFailure(i18n.tr("Reference data unavailable"));
-                            }
-                        };
-                    }
-                    addValueValidator(unavailableValidator);
-                    setOptions(null);
-                }
-            };
             isLoading = true;
+            optionHandlingCallback = new TerminableHandlingCallback(callback);
             if (optionsDataSource != null) {
                 //TODO  optionsDataSource.obtain(criteria, handlingCallback, true);
             } else {
                 if (ReferenceDataManager.isCached(criteria)) {
-                    ReferenceDataManager.obtain(criteria, handlingCallback, true);
+                    ReferenceDataManager.obtain(criteria, optionHandlingCallback, true);
                 } else {
                     Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+                        // keep current criteria and callback reference as they can change by the time the command executes
+                        final TerminableHandlingCallback handlingCallback = optionHandlingCallback;
+
+                        final EntityQueryCriteria<E> crit = criteria.iclone();
+
                         @Override
                         public void execute() {
-                            ReferenceDataManager.obtain(criteria, handlingCallback, true);
+                            ReferenceDataManager.obtain(crit, handlingCallback, true);
                         }
                     });
                 }
