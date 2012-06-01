@@ -15,6 +15,8 @@ package com.propertyvista.admin.server.proc;
 
 public enum JobData {
 
-    triggerId
+    triggerId,
+
+    forDate
 
 }

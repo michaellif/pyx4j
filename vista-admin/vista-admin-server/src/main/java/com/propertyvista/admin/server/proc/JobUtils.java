@@ -65,13 +65,17 @@ public class JobUtils {
         return job;
     }
 
-    public static void runNow(com.propertyvista.admin.domain.scheduler.Trigger trigger) {
+    public static void runNow(com.propertyvista.admin.domain.scheduler.Trigger trigger, Date executionDate) {
         try {
             JobDetail jobDetail = getJobDetail(trigger);
             if (jobDetail == null) {
                 jobDetail = createJobDetail(trigger);
             }
-            SchedulerHelper.getScheduler().scheduleJob(TriggerBuilder.newTrigger().forJob(jobDetail).startNow().build());
+            TriggerBuilder<Trigger> tb = TriggerBuilder.newTrigger().forJob(jobDetail).startNow();
+            if (executionDate != null) {
+                tb.usingJobData(JobData.forDate.name(), executionDate.getTime());
+            }
+            SchedulerHelper.getScheduler().scheduleJob(tb.build());
         } catch (SchedulerException e) {
             log.error("Error", e);
             throw new UserRuntimeException(e.getMessage());

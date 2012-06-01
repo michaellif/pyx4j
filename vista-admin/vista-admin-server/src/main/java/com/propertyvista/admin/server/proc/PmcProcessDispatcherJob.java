@@ -68,7 +68,7 @@ public class PmcProcessDispatcherJob implements Job {
 
     @Override
     public void execute(JobExecutionContext context) throws JobExecutionException {
-        JobDataMap dataMap = context.getJobDetail().getJobDataMap();
+        JobDataMap dataMap = context.getMergedJobDataMap();
         if (SystemMaintenance.isSystemMaintenance()) {
             log.warn("Ignored trigger fired during SystemMaintenance");
             return;
@@ -78,8 +78,14 @@ public class PmcProcessDispatcherJob implements Job {
             NamespaceManager.setNamespace(VistaNamespace.adminNamespace);
             Persistence.service().startBackgroundProcessTransaction();
             Trigger process = Persistence.service().retrieve(Trigger.class, new Key(dataMap.getLong(JobData.triggerId.name())));
+
+            Date scheduledFireTime = context.getScheduledFireTime();
+            if (dataMap.containsKey(JobData.forDate.name())) {
+                scheduledFireTime = new Date(dataMap.getLong(JobData.forDate.name()));
+            }
+
             log.info("starting {}", process.getStringView());
-            startAndRun(process, context.getScheduledFireTime());
+            startAndRun(process, scheduledFireTime);
         } finally {
             Persistence.service().endTransaction();
             Lifecycle.endContext();

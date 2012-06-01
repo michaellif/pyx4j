@@ -84,7 +84,7 @@ public class TriggerCrudServiceImpl extends AbstractCrudServiceImpl<Trigger> imp
             }
         }
         Date startDate = new Date();
-        JobUtils.runNow(triggerStub);
+        JobUtils.runNow(triggerStub, executionDate);
         // Find running Run
         long start = System.currentTimeMillis();
         Run run = null;
