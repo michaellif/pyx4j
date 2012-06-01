@@ -49,13 +49,13 @@ public class PmcCreatorDev {
         }
         // Use data provided by Caledon
         if (true) {
-            int ordinal = 0;
+            int ordinal = -1;
             try {
                 DemoPmc pmcId = DemoData.DemoPmc.valueOf(pmcName);
-                ordinal = pmcId.ordinal() + 1;
+                ordinal = pmcId.ordinal();
             } catch (IllegalArgumentException ignore) {
             }
-            if (ordinal != 0) {
+            if (ordinal >= 0) {
                 String caledonCompanyId = ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance()).getCaledonCompanyId();
                 List<OnboardingMerchantAccountImport> companyImport = new ArrayList<OnboardingMerchantAccountImport>();
                 for (OnboardingMerchantAccountImport imp : accountImport) {
