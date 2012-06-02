@@ -37,6 +37,7 @@ import com.propertyvista.common.client.ui.components.VistaViewersComponentFactor
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.domain.communication.Message;
 import com.propertyvista.domain.communication.Message.MessageType;
+import com.propertyvista.domain.maintenance.IssueClassification;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 import com.propertyvista.portal.client.resources.PortalImages;
@@ -278,16 +279,15 @@ public class DashboardForm extends CEntityDecoratableForm<TenantDashboardDTO> im
 
                 int row = 0;
 
-                for (MaintenanceRequestDTO maintanance : value) {
-                    container.setHTML(++row, 0, maintanance.description().getValue());
+                for (MaintenanceRequestDTO mr : value) {
+                    container.setHTML(++row, 0, issueDetail(mr.issueClassification()));
                     container.getCellFormatter().getElement(row, 0).getStyle().setPaddingLeft(4, Unit.PX);
-                    if (MaintenanceRequestStatus.Resolved.equals(maintanance.status().getValue())) {
+                    if (MaintenanceRequestStatus.Resolved.equals(mr.status().getValue())) {
                         RateIt rateIt = new RateIt(5);
                         rateIt.setRating(4);
                         container.setWidget(row, 1, rateIt);
                     } else {
-                        container.setHTML(row, 1, maintanance.status().getStringView() + "<p><i style='font-size:0.8em'>"
-                                + maintanance.submitted().getStringView() + "</i>");
+                        container.setHTML(row, 1, mr.status().getStringView() + "<p><i style='font-size:0.8em'>" + mr.submitted().getStringView() + "</i>");
                     }
                     container.getRowFormatter().getElement(row).addClassName(TenantDashboardTheme.StyleName.TenantDashboardTableRow.name());
                 }
@@ -302,6 +302,19 @@ public class DashboardForm extends CEntityDecoratableForm<TenantDashboardDTO> im
 
         }
 
+        private String issueDetail(IssueClassification ic) {
+            if (!ic.issue().isNull()) {
+                return ic.issue().getValue();
+            } else if (!ic.subjectDetails().name().isNull()) {
+                return ic.subjectDetails().name().getValue();
+            } else if (!ic.subjectDetails().subject().name().isNull()) {
+                return ic.subjectDetails().subject().name().getValue();
+            } else if (!ic.subjectDetails().subject().issueElement().name().isNull()) {
+                return ic.subjectDetails().subject().issueElement().name().getValue();
+            } else {
+                return "Invalid Entry";
+            }
+        }
     }
 
     class ReservationsViewer extends CEntityViewer<IList<ReservationDTO>> {

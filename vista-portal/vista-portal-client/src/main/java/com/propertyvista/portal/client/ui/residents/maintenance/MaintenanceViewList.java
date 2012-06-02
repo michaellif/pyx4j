@@ -28,6 +28,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.RateIt;
 
+import com.propertyvista.domain.maintenance.IssueClassification;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 import com.propertyvista.portal.client.themes.TenantDashboardTheme;
 
@@ -85,7 +86,7 @@ public class MaintenanceViewList extends VerticalPanel implements MaintenanceVie
             openRequestsPanel.getColumnFormatter().setWidth(2, "45px");
             openRequestsPanel.getColumnFormatter().setWidth(3, "40px");
 
-            openRequestsPanel.setHTML(++row, 0, i18n.tr("Open Tickets"));
+            openRequestsPanel.setHTML(++row, 0, i18n.tr("Ticket"));
             openRequestsPanel.getCellFormatter().getElement(row, 0).getStyle().setPaddingLeft(4, Unit.PX);
             openRequestsPanel.setHTML(row, 1, i18n.tr("Status"));
             openRequestsPanel.setHTML(row, 2, "");
@@ -94,7 +95,7 @@ public class MaintenanceViewList extends VerticalPanel implements MaintenanceVie
             openRequestsPanel.getRowFormatter().getElement(row).addClassName(TenantDashboardTheme.StyleName.TenantDashboardTableHeader.name());
 
             for (final MaintenanceRequestDTO request : openRequests) {
-                openRequestsPanel.setHTML(++row, 0, request.description().getStringView());
+                openRequestsPanel.setHTML(++row, 0, issueDetails(request, true));
                 openRequestsPanel.getCellFormatter().getElement(row, 0).getStyle().setPaddingLeft(4, Unit.PX);
 
                 switch (request.status().getValue()) {
@@ -112,7 +113,7 @@ public class MaintenanceViewList extends VerticalPanel implements MaintenanceVie
                 cancelTicket.addClickHandler(new ClickHandler() {
                     @Override
                     public void onClick(ClickEvent event) {
-                        if (Window.confirm("You are about to cancel ticket '" + request.description().getStringView() + "'")) {
+                        if (Window.confirm("You are about to cancel ticket '" + issueDetails(request, false) + "'")) {
                             presenter.cancelRequest(request);
                         }
                     }
@@ -161,7 +162,7 @@ public class MaintenanceViewList extends VerticalPanel implements MaintenanceVie
             historyRequestsPanel.getRowFormatter().getElement(row).addClassName(TenantDashboardTheme.StyleName.TenantDashboardTableHeader.name());
 
             for (final MaintenanceRequestDTO request : historyRequests) {
-                historyRequestsPanel.setHTML(++row, 0, request.description().getStringView());
+                historyRequestsPanel.setHTML(++row, 0, issueDetails(request, true));
                 historyRequestsPanel.getCellFormatter().getElement(row, 0).getStyle().setPaddingLeft(4, Unit.PX);
 
                 historyRequestsPanel.setHTML(row, 1, request.status().getStringView() + "<p><i style='font-size:0.8em'>" + request.submitted().getStringView()
@@ -190,6 +191,29 @@ public class MaintenanceViewList extends VerticalPanel implements MaintenanceVie
             historyRequestsPanel.setHTML(++row, 0, "");
             historyRequestsPanel.getRowFormatter().getElement(row).addClassName(TenantDashboardTheme.StyleName.TenantDashboardTableRow.name());
         }
+    }
+
+    private String issueDetails(MaintenanceRequestDTO request, boolean withDescription) {
+        String details = "Invalid Entry";
+        IssueClassification ic;
+        if (request == null || (ic = request.issueClassification()) == null) {
+            return details;
+        } else if (!ic.issue().isNull()) {
+            details = ic.issue().getValue();
+        } else if (!ic.subjectDetails().name().isNull()) {
+            details = ic.subjectDetails().name().getValue();
+        } else if (!ic.subjectDetails().subject().name().isNull()) {
+            details = ic.subjectDetails().subject().name().getValue();
+        } else if (!ic.subjectDetails().subject().issueElement().name().isNull()) {
+            details = ic.subjectDetails().subject().issueElement().name().getValue();
+        } else {
+            return details;
+        }
+
+        if (withDescription && !request.description().isNull() && request.description().getStringView().length() > 0) {
+            details += " - " + request.description().getStringView();
+        }
+        return details;
     }
 
 }

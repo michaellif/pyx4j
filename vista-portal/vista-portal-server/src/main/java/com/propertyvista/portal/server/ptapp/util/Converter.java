@@ -178,6 +178,7 @@ public class Converter {
         to.scheduledDate().set(from.scheduledDate());
         to.scheduledTime().set(from.scheduledTime());
         to.surveyResponse().set(from.surveyResponse());
+        to.issueClassification().set(from.issueClassification());
         return to;
     }
 }

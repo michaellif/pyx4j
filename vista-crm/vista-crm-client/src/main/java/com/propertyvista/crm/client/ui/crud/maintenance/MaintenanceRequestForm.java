@@ -13,29 +13,17 @@
  */
 package com.propertyvista.crm.client.ui.crud.maintenance;
 
-import java.io.Serializable;
-import java.util.List;
-
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.event.logical.shared.ValueChangeEvent;
-import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.entity.client.ui.CEntityComboBox;
 import com.pyx4j.entity.client.ui.CEntityLabel;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.entity.shared.Path;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.CLabel;
-import com.pyx4j.forms.client.ui.CListBox.AsyncOptionsReadyCallback;
 import com.pyx4j.forms.client.ui.CTimeLabel;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -43,6 +31,7 @@ import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.ui.crud.misc.CEntitySelectorHyperlink;
 import com.pyx4j.site.rpc.AppPlace;
 
+import com.propertyvista.common.client.ui.components.IssueClassificationChoice;
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.crm.client.themes.CrmTheme;
 import com.propertyvista.crm.client.ui.components.boxes.TenantSelectorDialog;
@@ -61,13 +50,13 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
 
     private final VistaTabLayoutPanel tabPanel = new VistaTabLayoutPanel(CrmTheme.defaultTabHeight, Unit.EM);
 
-    private static final String defaultChoice = i18n.tr("Select");
-
     private final FormFlexPanel statusPanel = new FormFlexPanel();
 
     private final FormFlexPanel surveyPanel = new FormFlexPanel();
 
     IssueClassificationChoice<?> mainChoice;
+
+    private CComponent<?, ?> comp1, comp2, comp3, comp4;
 
     public MaintenanceRequestForm() {
         this(false);
@@ -124,7 +113,6 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
             }
         }), 25).build());
 
-        CComponent<?, ?> comp1, comp2, comp3, comp4;
         if (isEditable()) {
             // create selectors
             final IssueClassificationChoice<IssueElement> choice1 = new IssueClassificationChoice<IssueElement>(IssueElement.class) {
@@ -225,9 +213,9 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
 
         MaintenanceRequestDTO mr = getValue();
 
-        get(proto().issueClassification().subjectDetails().subject()).setVisible(!mr.issueClassification().subjectDetails().subject().name().isNull());
-        get(proto().issueClassification().subjectDetails()).setVisible(!mr.issueClassification().subjectDetails().name().isNull());
-        get(proto().issueClassification()).setVisible(!mr.issueClassification().issue().isNull());
+        comp2.setVisible(!mr.issueClassification().subjectDetails().subject().name().isNull());
+        comp3.setVisible(!mr.issueClassification().subjectDetails().name().isNull());
+        comp4.setVisible(!mr.issueClassification().issue().isNull());
 
         get(proto().scheduledDate()).setVisible(mr.status().getValue() == MaintenanceRequestStatus.Scheduled);
         get(proto().scheduledTime()).setVisible(mr.status().getValue() == MaintenanceRequestStatus.Scheduled);
@@ -240,121 +228,4 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         surveyPanel.setVisible(mr.status().getValue() == MaintenanceRequestStatus.Resolved);
     }
 
-    abstract static class IssueClassificationChoice<E extends IEntity> extends CEntityComboBox<E> {
-
-        public enum LoadOptionsMode {
-            EMPTY_SET, // clear options
-            USE_PARENT, // set options based on the the parent selector value
-            REFRESH; // set options using parent member of selector's value
-        }
-
-        private IssueClassificationChoice<?> child;
-
-        private IssueClassificationChoice<?> parent;
-
-        private Path parentPath;
-
-        private LoadOptionsMode optionsMode = LoadOptionsMode.EMPTY_SET;
-
-        public IssueClassificationChoice(Class<E> entityClass) {
-            super(entityClass);
-            addValueChangeHandler(new ValueChangeHandler<E>() {
-                @Override
-                public void onValueChange(ValueChangeEvent<E> event) {
-                    if (child != null) {
-                        child.onParentChange();
-                    }
-                }
-            });
-            setMandatory(true);
-            setVisible(false);
-        }
-
-        protected abstract boolean isLeaf(E opt);
-
-        public void init() {
-            resetLoadingMode();
-            if (child != null) {
-                child.init();
-            }
-        }
-
-        public void resetLoadingMode() {
-            optionsMode = LoadOptionsMode.REFRESH;
-        }
-
-        public void assignParent(IssueClassificationChoice<?> parent, IObject<?> member) {
-            if (parent == null) {
-                return;
-            }
-            assert (proto().getMember(member.getPath()) != null);
-            this.parent = parent;
-            this.parentPath = member.getPath();
-            parent.acceptChild(this);
-        }
-
-        public void acceptChild(final IssueClassificationChoice<?> child) {
-            this.child = child;
-        }
-
-        private PropertyCriterion getOptionsCriterion() {
-            PropertyCriterion crit = null;
-            switch (optionsMode) {
-            case EMPTY_SET:
-                // set empty-set criteria to prevent extra option loads for parent-controlled selectors
-                crit = PropertyCriterion.eq(proto().id(), (Serializable) null);
-                break;
-            case USE_PARENT:
-                // set options based on parent member
-                if (parent != null) {
-                    crit = new PropertyCriterion(parentPath.toString(), Restriction.EQUAL, parent.getValue());
-                }
-                break;
-            case REFRESH:
-                E value = getValue();
-                if (parent != null) {
-                    IEntity pValue = null;
-                    if (value != null && value.getMember(parentPath) != null) {
-                        pValue = ((IEntity) value.getMember(parentPath)).cast();
-                    }
-                    crit = new PropertyCriterion(parentPath.toString(), Restriction.EQUAL, pValue);
-                }
-                break;
-            }
-            return crit;
-        }
-
-        public void onParentChange() {
-            optionsMode = LoadOptionsMode.USE_PARENT;
-            setValue(null, true, true);
-        }
-
-        @Override
-        public void retriveOptions(final AsyncOptionsReadyCallback<E> callback) {
-            final PropertyCriterion crit = getOptionsCriterion();
-            resetCriteria();
-            if (crit != null) {
-                addCriterion(crit);
-            }
-            super.retriveOptions(new AsyncOptionsReadyCallback<E>() {
-                @Override
-                public void onOptionsReady(List<E> opt) {
-                    if (callback != null) {
-                        callback.onOptionsReady(opt);
-                    }
-
-                    boolean autoSelect = (opt != null && opt.size() == 1 && isLeaf(opt.get(0)) && !opt.get(0).equals(getValue()));
-                    if (autoSelect) {
-                        setVisible(false);
-                        // auto-select first value and load options for child selector
-                        setValue(opt.get(0), true, true);
-                    } else {
-                        setVisible(opt != null && opt.size() > 0 && !isLeaf(opt.get(0)));
-                    }
-                }
-            });
-            // restore mode to default
-            resetLoadingMode();
-        }
-    }
 }

@@ -115,6 +115,7 @@ public class DashboardServiceImpl implements DashboardService {
         criteria.add(PropertyCriterion.in(criteria.proto().status(), MaintenanceRequestStatus.Scheduled, MaintenanceRequestStatus.Submitted));
         criteria.add(PropertyCriterion.eq(criteria.proto().tenant(), TenantAppContext.getCurrentUserTenantInLease()));
         for (MaintenanceRequest mr : Persistence.service().query(criteria.desc(criteria.proto().submitted()))) {
+            Persistence.service().retrieve(mr.issueClassification());
             dashboard.maintanances().add(Converter.convert(mr));
         }
         callback.onSuccess(dashboard);
