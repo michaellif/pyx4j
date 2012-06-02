@@ -53,8 +53,6 @@ public class PaymentMethodForm extends PaymentMethodEditor {
         container.setStyleName(NewPaymentMethodEditorTheme.StyleName.PaymentEditor.name());
 
         int row = -1;
-        container.setH1(++row, 0, 3, proto().type().getMeta().getCaption());
-
         paymentTypeImagesPanel.setStyleName(NewPaymentMethodEditorTheme.StyleName.PaymentEditorImages.name());
         Image paymentTypeImage;
         FlowPanel holder;

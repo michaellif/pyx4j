@@ -18,7 +18,6 @@ import java.util.List;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -65,7 +64,7 @@ public class PaymentForm extends CEntityDecoratableForm<PaymentRecordDTO> {
     private final PaymentMethodForm paymentMethodEditor = new PaymentMethodForm() {
         @Override
         public Collection<PaymentType> getPaymentOptions() {
-            return PaymentType.avalableInCrm();
+            return PaymentType.avalableInPortal();
         }
 
         @Override
@@ -81,7 +80,6 @@ public class PaymentForm extends CEntityDecoratableForm<PaymentRecordDTO> {
             } else {
                 comp.setValue(EntityFactory.create(AddressStructured.class), false);
             }
-
         }
     };
 
@@ -110,15 +108,17 @@ public class PaymentForm extends CEntityDecoratableForm<PaymentRecordDTO> {
 
         int row = -1;
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().id(), new CNumberLabel()), 10).build());
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().propertyCode()), 15).build());
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().unitNumber()), 15).build());
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseId()), 10).build());
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseStatus()), 10).build());
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingAccount().accountNumber())).build());
-        get(proto().billingAccount().accountNumber()).setViewable(true);
-
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().unitNumber()), 15).build());
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseParticipant(), new CEntityLabel<LeaseParticipant>()), 25).build());
-
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().createdDate()), 10).build());
+//        panel.setWidget(++row, 1, new DecoratorBuilder(inject(proto().paymentStatus()), 10).build());
+//        panel.setWidget(++row, 1, new DecoratorBuilder(inject(proto().transactionAuthorizationNumber()), 10).build());
+//        panel.setWidget(++row, 1, new DecoratorBuilder(inject(proto().transactionErrorMessage()), 20).build());
+        panel.setHR(++row, 0, 1);
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().amount()), 10).build());
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().notes()), 25).build());
         panel.setWidget(
                 ++row,
                 0,
@@ -128,44 +128,13 @@ public class PaymentForm extends CEntityDecoratableForm<PaymentRecordDTO> {
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().profiledPaymentMethod(), profiledPaymentMethodsCombo), 25).build());
         profiledPaymentMethodsCombo.setMandatory(true);
 
-        row = -1;
-        panel.setWidget(++row, 1, new DecoratorBuilder(inject(proto().amount()), 10).build());
-        panel.setWidget(++row, 1, new DecoratorBuilder(inject(proto().createdDate()), 10).build());
-        panel.setWidget(++row, 1, new DecoratorBuilder(inject(proto().receivedDate()), 10).build());
-        panel.setWidget(++row, 1, new DecoratorBuilder(inject(proto().targetDate()), 10).build());
-        panel.setWidget(++row, 1, new DecoratorBuilder(inject(proto().finalizeDate()), 10).build());
-        panel.setWidget(++row, 1, new DecoratorBuilder(inject(proto().paymentStatus()), 10).build());
-        panel.setWidget(++row, 1, new DecoratorBuilder(inject(proto().lastStatusChangeDate()), 10).build());
-        panel.setWidget(++row, 1, new DecoratorBuilder(inject(proto().transactionAuthorizationNumber()), 10).build());
-        panel.setWidget(++row, 1, new DecoratorBuilder(inject(proto().transactionErrorMessage()), 20).build());
-        panel.setWidget(++row, 1, new DecoratorBuilder(inject(proto().notes()), 25).build());
-
         // tweak UI:
         get(proto().id()).setViewable(true);
-        get(proto().propertyCode()).setViewable(true);
         get(proto().unitNumber()).setViewable(true);
         get(proto().leaseId()).setViewable(true);
         get(proto().leaseStatus()).setViewable(true);
-        get(proto().paymentStatus()).setViewable(true);
+//        get(proto().paymentStatus()).setViewable(true);
         get(proto().createdDate()).setViewable(true);
-        get(proto().receivedDate()).setViewable(true);
-        get(proto().lastStatusChangeDate()).setViewable(true);
-
-        get(proto().leaseParticipant()).addValueChangeHandler(new ValueChangeHandler<LeaseParticipant>() {
-            @Override
-            public void onValueChange(ValueChangeEvent<LeaseParticipant> event) {
-                paymentMethodEditor.reset();
-                paymentMethodEditor.setBillingAddressAsCurrentEnabled(!event.getValue().isNull());
-                checkProfiledPaymentMethods(new DefaultAsyncCallback<List<PaymentMethod>>() {
-                    @Override
-                    public void onSuccess(List<PaymentMethod> result) {
-                        get(proto().paymentSelect()).populate(null);
-                        get(proto().paymentSelect()).setValue(result.isEmpty() ? PaymentSelect.New : PaymentSelect.Profiled);
-                        get(proto().paymentSelect()).setVisible(!result.isEmpty());
-                    }
-                });
-            }
-        });
 
         get(proto().paymentSelect()).addValueChangeHandler(new ValueChangeHandler<PaymentSelect>() {
             @Override
@@ -211,8 +180,6 @@ public class PaymentForm extends CEntityDecoratableForm<PaymentRecordDTO> {
             }
         });
 
-        panel.getColumnFormatter().setWidth(0, "50%");
-        panel.getColumnFormatter().setWidth(1, "50%");
         return panel;
     }
 
@@ -224,25 +191,25 @@ public class PaymentForm extends CEntityDecoratableForm<PaymentRecordDTO> {
         get(proto().paymentSelect()).setVisible(!isViewable() && !getValue().leaseParticipant().isNull());
         profiledPaymentMethodsCombo.setVisible(false);
 
-        checkProfiledPaymentMethods(null);
+        checkProfiledPaymentMethods();
 
         paymentMethodEditor.setVisible(!getValue().leaseParticipant().isNull());
         paymentMethodEditorSeparator.setVisible(!getValue().leaseParticipant().isNull());
         paymentMethodEditor.setBillingAddressAsCurrentEnabled(!getValue().leaseParticipant().isNull());
 
-        if (isEditable()) {
-            get(proto().transactionAuthorizationNumber()).setVisible(false);
-            get(proto().transactionErrorMessage()).setVisible(false);
-        } else {
-            boolean transactionResult = getValue().paymentMethod().isNull() ? false
-                    : (getValue().paymentMethod().type().getValue().isTransactable() && getValue().paymentStatus().getValue().isProcessed());
+//        if (isEditable()) {
+//            get(proto().transactionAuthorizationNumber()).setVisible(false);
+//            get(proto().transactionErrorMessage()).setVisible(false);
+//        } else {
+//            boolean transactionResult = getValue().paymentMethod().isNull() ? false
+//                    : (getValue().paymentMethod().type().getValue().isTransactable() && getValue().paymentStatus().getValue().isProcessed());
 
-            get(proto().transactionAuthorizationNumber()).setVisible(transactionResult);
-            get(proto().transactionErrorMessage()).setVisible(transactionResult && !getValue().transactionErrorMessage().isNull());
-        }
+//            get(proto().transactionAuthorizationNumber()).setVisible(transactionResult);
+//            get(proto().transactionErrorMessage()).setVisible(transactionResult && !getValue().transactionErrorMessage().isNull());
+//        }
     }
 
-    private void checkProfiledPaymentMethods(final AsyncCallback<List<PaymentMethod>> callback) {
+    private void checkProfiledPaymentMethods() {
         get(proto().paymentSelect()).setEnabled(false);
 
         profiledPaymentMethodsCombo.populate(null);
@@ -257,10 +224,6 @@ public class PaymentForm extends CEntityDecoratableForm<PaymentRecordDTO> {
 
                     profiledPaymentMethodsCombo.setOptions(result);
                     profiledPaymentMethodsCombo.setMandatory(true);
-
-                    if (callback != null) {
-                        callback.onSuccess(result);
-                    }
                 }
             });
         }

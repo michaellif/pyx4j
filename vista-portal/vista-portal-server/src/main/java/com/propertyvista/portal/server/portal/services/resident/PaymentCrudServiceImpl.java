@@ -92,6 +92,7 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
 
         PaymentRecordDTO dto = EntityFactory.create(PaymentRecordDTO.class);
 
+        dto.leaseParticipant().set(tenant);
         dto.billingAccount().set(lease.billingAccount());
         dto.leaseId().set(lease.leaseId());
         dto.leaseStatus().set(lease.version().status());
