@@ -60,6 +60,6 @@ public class DashboardActivity extends SecurityAwareActivity implements Dashboar
 
     @Override
     public void payNow() {
-        // TODO Auto-generated method stub
+        AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.BillSummary.PayNow());
     }
 }

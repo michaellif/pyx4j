@@ -62,6 +62,9 @@ public class PortalSiteMap implements SiteMap {
         @PlaceProperties(caption = "Bill Summary")
         @NavigationItem(navigLabel = "Bill Summary")
         public static class BillSummary extends AppPlace {
+
+            public static class PayNow extends AppPlace {
+            }
         }
 
         @PlaceProperties(caption = "Billing History")

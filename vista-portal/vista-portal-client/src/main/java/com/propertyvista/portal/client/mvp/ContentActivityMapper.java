@@ -29,6 +29,7 @@ import com.propertyvista.portal.client.activity.login.PasswordResetRequestActivi
 import com.propertyvista.portal.client.activity.login.RedirectToLoginPageActivity;
 import com.propertyvista.portal.client.activity.residents.DashboardActivity;
 import com.propertyvista.portal.client.activity.residents.InsuranceActivity;
+import com.propertyvista.portal.client.activity.residents.PaymentActivity;
 import com.propertyvista.portal.client.activity.residents.PersonalInfoActivity;
 import com.propertyvista.portal.client.activity.residents.billing.BillSummaryActivity;
 import com.propertyvista.portal.client.activity.residents.billing.BillingHistoryActivity;
@@ -78,6 +79,9 @@ public class ContentActivityMapper implements AppActivityMapper {
 
                 } else if (place instanceof Residents.BillSummary) {
                     activity = new BillSummaryActivity(place);
+                } else if (place instanceof Residents.BillSummary.PayNow) {
+                    activity = new PaymentActivity(place);
+
                 } else if (place instanceof Residents.BillingHistory) {
                     activity = new BillingHistoryActivity(place);
                 } else if (place instanceof Residents.BillingHistory.ViewBill) {

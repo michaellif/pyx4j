@@ -14,6 +14,7 @@
 package com.propertyvista.portal.client.activity.residents;
 
 import java.util.List;
+import java.util.Vector;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
@@ -23,7 +24,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
@@ -62,13 +62,12 @@ public class PaymentActivity extends SecurityAwareActivity implements PaymentVie
         securityAwareStart(panel, eventBus);
         panel.setWidget(view);
 
-        assert (entityId != null);
-        srv.retrieve(new DefaultAsyncCallback<PaymentRecordDTO>() {
+        srv.initNew(new DefaultAsyncCallback<PaymentRecordDTO>() {
             @Override
             public void onSuccess(PaymentRecordDTO result) {
                 view.populate(result);
             }
-        }, entityId, AbstractCrudService.RetrieveTraget.Edit);
+        });
     }
 
     protected final void securityAwareStart(AcceptsOneWidget panel, EventBus eventBus) {
@@ -101,7 +100,12 @@ public class PaymentActivity extends SecurityAwareActivity implements PaymentVie
     }
 
     @Override
-    public void getProfiledPaymentMethods(AsyncCallback<List<PaymentMethod>> callback) {
-        // TODO Auto-generated method stub
+    public void getProfiledPaymentMethods(final AsyncCallback<List<PaymentMethod>> callback) {
+        srv.getProfiledPaymentMethods(new DefaultAsyncCallback<Vector<PaymentMethod>>() {
+            @Override
+            public void onSuccess(Vector<PaymentMethod> result) {
+                callback.onSuccess(result);
+            }
+        });
     }
 }

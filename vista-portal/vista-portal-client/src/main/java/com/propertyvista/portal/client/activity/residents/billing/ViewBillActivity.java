@@ -22,6 +22,7 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.dto.BillDTO;
@@ -77,6 +78,6 @@ public class ViewBillActivity extends SecurityAwareActivity implements ViewBillV
 
     @Override
     public void payBill() {
-        // TODO Implement
+        AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.BillSummary.PayNow());
     }
 }

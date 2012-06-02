@@ -57,7 +57,7 @@ public class BillSummaryActivity extends SecurityAwareActivity implements BillSu
 
     @Override
     public void payNow() {
-        // TODO Implement
+        AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.BillSummary.PayNow());
     }
 
     @Override
