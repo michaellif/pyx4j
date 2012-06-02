@@ -110,8 +110,8 @@ public class PaymentForm extends CEntityDecoratableForm<PaymentRecordDTO> {
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().id(), new CNumberLabel()), 10).build());
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseId()), 10).build());
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseStatus()), 10).build());
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().unitNumber()), 15).build());
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseParticipant(), new CEntityLabel<LeaseParticipant>()), 25).build());
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().unitNumber()), 15).build());
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().createdDate()), 10).build());
 //        panel.setWidget(++row, 1, new DecoratorBuilder(inject(proto().paymentStatus()), 10).build());
 //        panel.setWidget(++row, 1, new DecoratorBuilder(inject(proto().transactionAuthorizationNumber()), 10).build());
@@ -215,17 +215,19 @@ public class PaymentForm extends CEntityDecoratableForm<PaymentRecordDTO> {
         profiledPaymentMethodsCombo.populate(null);
         profiledPaymentMethodsCombo.setOptions(null);
 
-        if (!getValue().leaseParticipant().isNull()) {
-            presenter.getProfiledPaymentMethods(new DefaultAsyncCallback<List<PaymentMethod>>() {
-                @Override
-                public void onSuccess(List<PaymentMethod> result) {
-                    get(proto().paymentSelect()).setEnabled(!result.isEmpty());
-                    get(proto().paymentSelect()).setVisible(!result.isEmpty());
+        presenter.getProfiledPaymentMethods(new DefaultAsyncCallback<List<PaymentMethod>>() {
+            @Override
+            public void onSuccess(List<PaymentMethod> result) {
+                get(proto().paymentSelect()).setEnabled(!result.isEmpty());
+                get(proto().paymentSelect()).setVisible(!result.isEmpty());
 
-                    profiledPaymentMethodsCombo.setOptions(result);
-                    profiledPaymentMethodsCombo.setMandatory(true);
-                }
-            });
-        }
+                profiledPaymentMethodsCombo.setOptions(result);
+                profiledPaymentMethodsCombo.setMandatory(true);
+
+                get(proto().paymentSelect()).populate(null);
+                get(proto().paymentSelect()).setValue(result.isEmpty() ? PaymentSelect.New : PaymentSelect.Profiled);
+                get(proto().paymentSelect()).setVisible(!result.isEmpty());
+            }
+        });
     }
 }

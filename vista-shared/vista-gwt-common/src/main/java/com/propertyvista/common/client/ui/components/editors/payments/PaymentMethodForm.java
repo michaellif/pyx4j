@@ -65,15 +65,6 @@ public class PaymentMethodForm extends PaymentMethodEditor {
             case CreditCard:
                 paymentTypeImage = new Image(VistaImages.INSTANCE.paymentCredit().getSafeUri());
                 break;
-//            case Visa:
-//                paymentTypeImage = new Image(VistaImages.INSTANCE.paymentVISA().getSafeUri());
-//                break;
-//            case MasterCard:
-//                paymentTypeImage = new Image(VistaImages.INSTANCE.paymentMC().getSafeUri());
-//                break;
-//            case Discover:
-//                paymentTypeImage = new Image(VistaImages.INSTANCE.paymentDiscover().getSafeUri());
-//                break;
             case Interac:
                 paymentTypeImage = new Image(VistaImages.INSTANCE.paymentInterac().getSafeUri());
                 break;
@@ -116,7 +107,6 @@ public class PaymentMethodForm extends PaymentMethodEditor {
         container.setWidth("100%");
 
         // tweaks:
-        get(proto().type()).setValue(PaymentType.Echeck);
         get(proto().type()).asWidget().setStyleName(NewPaymentMethodEditorTheme.StyleName.PaymentEditorButtons.name());
         get(proto().type()).addValueChangeHandler(new ValueChangeHandler<PaymentType>() {
             @Override
