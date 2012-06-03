@@ -55,8 +55,8 @@ public class OnboardingUserAuthenticationRun {
          */
         OnboardingUserAuthenticationRequest authRequest = new OnboardingUserAuthenticationRequest();
         {
-            authRequest.email = "1338177649177@test.com";//createRequest.email;
-            authRequest.password = "pwd~1338177649177";//createRequest.password;
+            authRequest.email = "aaa.bbb@ttt.com";//createRequest.email;
+            authRequest.password = "abcd";//createRequest.password;
 //            authRequest.captcha = new Captcha();
 //            authRequest.captcha.challenge = "123";
 //            authRequest.captcha.response = "rr";
