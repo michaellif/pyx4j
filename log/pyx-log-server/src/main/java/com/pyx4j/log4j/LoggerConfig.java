@@ -55,7 +55,7 @@ public class LoggerConfig {
 
     public static void setContextName(String name) {
         nameVariables.put("contextName", name);
-        init();
+        //init();
     }
 
     public static String getContextName() {
