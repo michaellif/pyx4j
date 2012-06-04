@@ -22,7 +22,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.financial.GlCode;
 
-@Inheritance
+@Inheritance(strategy = Inheritance.InheritanceStrategy.SINGLE_TABLE)
 @AbstractEntity
 public interface ProductItemType extends IEntity {
 
