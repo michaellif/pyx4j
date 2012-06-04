@@ -80,7 +80,7 @@ public class PmcCreatorDev {
                 for (OnboardingMerchantAccountImport imp : accountImport) {
                     if (caledonCompanyId.equals(imp.companyId().getValue())) {
                         companyImport.add(imp);
-                        fees.eChequeFee().setValue(new BigDecimal(imp.transactionFee().getValue()));
+                        fees.eChequeFee().setValue(new BigDecimal(stripDollars(imp.transactionFee().getValue())));
                     }
                 }
 
@@ -184,5 +184,13 @@ public class PmcCreatorDev {
         }
 
         return pmc;
+    }
+
+    private static String stripDollars(String value) {
+        if (value.startsWith("$")) {
+            return value.substring(1);
+        } else {
+            return value;
+        }
     }
 }
