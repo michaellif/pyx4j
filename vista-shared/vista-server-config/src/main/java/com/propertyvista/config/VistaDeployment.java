@@ -39,6 +39,7 @@ public class VistaDeployment {
 
     public static Pmc getCurrentPmc() {
         final String namespace = NamespaceManager.getNamespace();
+        assert (!namespace.equals(VistaNamespace.adminNamespace)) : "PMC not available when running in admin namespace";
         try {
             NamespaceManager.setNamespace(VistaNamespace.adminNamespace);
             EntityQueryCriteria<Pmc> criteria = EntityQueryCriteria.create(Pmc.class);
