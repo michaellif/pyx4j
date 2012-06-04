@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
@@ -340,7 +341,11 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
             return;
         }
 
-        LogicalDate tweleveMonthsAgo = new LogicalDate(reportDate.getYear() - 1, reportDate.getMonth(), 1);
+        GregorianCalendar cal = new GregorianCalendar();
+        cal.setTime(reportDate);
+        cal.add(Calendar.MONTH, -12);
+        cal.set(Calendar.DAY_OF_MONTH, cal.getActualMaximum(Calendar.DAY_OF_MONTH));
+        LogicalDate tweleveMonthsAgo = new LogicalDate(cal.getTime());
         LogicalDate endOfTheMonth = thisMonthEnd(tweleveMonthsAgo);
         UnitTurnoverAnalysisFacade manager = ServerSideFactory.create(UnitTurnoverAnalysisFacade.class);
 
@@ -376,17 +381,17 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
     }
 
     private LogicalDate thisMonthEnd(LogicalDate date) {
-        Calendar cal = Calendar.getInstance();
+        Calendar cal = new GregorianCalendar();
         cal.setTime(date);
-        cal.set(Calendar.DAY_OF_MONTH, cal.getMaximum(Calendar.DAY_OF_MONTH));
+        cal.set(Calendar.DAY_OF_MONTH, cal.getActualMaximum(Calendar.DAY_OF_MONTH));
         return new LogicalDate(cal.getTime());
     }
 
     private LogicalDate nextMonthEnd(LogicalDate endOfTheMonth) {
-        Calendar cal = Calendar.getInstance();
+        Calendar cal = new GregorianCalendar();
         cal.setTime(endOfTheMonth);
-        cal.add(Calendar.DAY_OF_MONTH, 1);
-        cal.set(Calendar.DAY_OF_MONTH, cal.getMaximum(Calendar.DAY_OF_MONTH));
+        cal.add(Calendar.MONTH, 1);
+        cal.set(Calendar.DAY_OF_MONTH, cal.getActualMaximum(Calendar.DAY_OF_MONTH));
         return new LogicalDate(cal.getTime());
     }
 

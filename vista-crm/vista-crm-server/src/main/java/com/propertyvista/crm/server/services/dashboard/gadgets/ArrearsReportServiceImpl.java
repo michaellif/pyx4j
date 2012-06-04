@@ -191,8 +191,8 @@ public class ArrearsReportServiceImpl implements ArrearsReportService {
         final int thisMonth = cal.get(Calendar.MONTH);
         final int thisDayOfMonth = cal.get(Calendar.DAY_OF_MONTH);
 
-        final int firstMonth = cal.getMinimum(Calendar.MONTH);
-        final int lastMonth = cal.getMaximum(Calendar.MONTH);
+        final int firstMonth = cal.getActualMinimum(Calendar.MONTH);
+        final int lastMonth = cal.getActualMaximum(Calendar.MONTH);
         final int lastYear = cal.get(Calendar.YEAR);
         final int firstYear = lastYear - yearsAgo;
 
@@ -205,7 +205,7 @@ public class ArrearsReportServiceImpl implements ArrearsReportService {
                 cal.set(Calendar.YEAR, year);
                 cal.set(Calendar.MONTH, month);
                 if (!(year == thisYear & month == thisMonth)) {
-                    cal.set(Calendar.DAY_OF_MONTH, cal.getMaximum(Calendar.DAY_OF_MONTH));
+                    cal.set(Calendar.DAY_OF_MONTH, cal.getActualMaximum(Calendar.DAY_OF_MONTH));
                 } else {
                     cal.set(Calendar.DAY_OF_MONTH, thisDayOfMonth);
                 }
