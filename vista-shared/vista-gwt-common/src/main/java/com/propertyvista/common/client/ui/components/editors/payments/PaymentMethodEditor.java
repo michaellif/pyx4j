@@ -119,7 +119,13 @@ public class PaymentMethodEditor extends CEntityDecoratableForm<PaymentMethod> {
         get(proto().billingAddress()).setEditable(!getValue().sameAsCurrent().isBooleanTrue());
     }
 
-    public void selectPaymentDetailsEditor(PaymentType type) {
+    public void initNew(PaymentType type) {
+        PaymentMethod value = EntityFactory.create(PaymentMethod.class);
+        value.type().setValue(type);
+        setValue(value, false);
+    }
+
+    protected void selectPaymentDetailsEditor(PaymentType type) {
 
         if (this.contains(proto().details())) {
             this.unbind(proto().details());

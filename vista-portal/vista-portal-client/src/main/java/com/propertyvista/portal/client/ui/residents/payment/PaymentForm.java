@@ -146,7 +146,7 @@ public class PaymentForm extends CEntityDecoratableForm<PaymentRecordDTO> {
                     case New:
                         paymentMethodEditor.setViewable(false);
                         paymentMethodEditor.setTypeSelectionVisible(true);
-                        paymentMethodEditor.selectPaymentDetailsEditor(PaymentType.Echeck);
+                        paymentMethodEditor.initNew(PaymentType.Echeck);
                         paymentMethodEditor.setVisible(!getValue().leaseParticipant().isNull());
                         paymentMethodEditorSeparator.setVisible(!getValue().leaseParticipant().isNull());
 
@@ -160,7 +160,7 @@ public class PaymentForm extends CEntityDecoratableForm<PaymentRecordDTO> {
                         paymentMethodEditor.setVisible(false);
                         paymentMethodEditorSeparator.setVisible(false);
 
-                        profiledPaymentMethodsCombo.populate(null);
+                        profiledPaymentMethodsCombo.setValue(null, false);
                         profiledPaymentMethodsCombo.setVisible(true);
                         break;
                     }
@@ -175,7 +175,7 @@ public class PaymentForm extends CEntityDecoratableForm<PaymentRecordDTO> {
                 paymentMethodEditorSeparator.setVisible(event.getValue() != null);
                 if (event.getValue() != null) {
                     paymentMethodEditor.setViewable(true);
-                    paymentMethodEditor.populate(event.getValue());
+                    paymentMethodEditor.setValue(event.getValue(), false);
                 }
             }
         });

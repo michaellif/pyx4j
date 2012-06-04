@@ -23,7 +23,6 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.domain.contact.AddressStructured;
@@ -77,7 +76,7 @@ public class EditPaymentMethodActivity extends SecurityAwareActivity implements 
         srv.create(new DefaultAsyncCallback<PaymentMethod>() {
             @Override
             public void onSuccess(PaymentMethod result) {
-                AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.PaymentMethods());
+                History.back();
             }
         }, paymentmethod);
     }
