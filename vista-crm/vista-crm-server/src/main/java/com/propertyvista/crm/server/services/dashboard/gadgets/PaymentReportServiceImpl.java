@@ -16,6 +16,7 @@ package com.propertyvista.crm.server.services.dashboard.gadgets;
 import static com.propertyvista.crm.server.util.EntityDto2DboCriteriaConverter.makeMapper;
 
 import java.util.Vector;
+import java.util.concurrent.Callable;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -24,21 +25,26 @@ import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.utils.EntityDtoBinder;
 
+import com.propertyvista.admin.domain.pmc.Pmc;
+import com.propertyvista.admin.domain.pmc.PmcPaymentTypeInfo;
+import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.PaymentReportService;
 import com.propertyvista.crm.server.util.EntityDto2DboCriteriaConverter;
 import com.propertyvista.domain.dashboard.gadgets.payments.PaymentFeesDTO;
+import com.propertyvista.domain.dashboard.gadgets.payments.PaymentFeesDTO.PaymentFeeMeasure;
 import com.propertyvista.domain.dashboard.gadgets.payments.PaymentRecordForReportDTO;
 import com.propertyvista.domain.dashboard.gadgets.payments.PaymentsSummary;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.server.jobs.TaskRunner;
 
 public class PaymentReportServiceImpl implements PaymentReportService {
 
@@ -111,7 +117,6 @@ public class PaymentReportServiceImpl implements PaymentReportService {
     @Override
     public void paymentsSummary(AsyncCallback<EntitySearchResult<PaymentsSummary>> callback, Vector<Building> buildings, LogicalDate targetDate,
             Vector<PaymentStatus> paymentStatusCriteria, int pageNumber, int pageSize, Vector<Sort> sortingCriteria) {
-
         // TODO implement this
         EntitySearchResult<PaymentsSummary> result = new EntitySearchResult<PaymentsSummary>();
         result.setTotalRows(0);
@@ -123,18 +128,21 @@ public class PaymentReportServiceImpl implements PaymentReportService {
 
     @Override
     public void paymentsFees(AsyncCallback<Vector<PaymentFeesDTO>> callback) {
-        // PmcPaymentTypeInfo
+        // TODO: WARNING getCurrentPmc() uses current namespace to get currentPmc:        
+        final Pmc currentPmc = VistaDeployment.getCurrentPmc();
+
+        PmcPaymentTypeInfo paymentTypeInfo = TaskRunner.runInAdminNamespace(new Callable<PmcPaymentTypeInfo>() {
+            @Override
+            public PmcPaymentTypeInfo call() throws Exception {
+                EntityQueryCriteria<PmcPaymentTypeInfo> criteria = EntityQueryCriteria.create(PmcPaymentTypeInfo.class);
+                criteria.add(PropertyCriterion.eq(criteria.proto().pmc(), currentPmc));
+                return Persistence.service().retrieve(criteria);
+            }
+        });
+
         Vector<PaymentFeesDTO> paymentFees = new Vector<PaymentFeesDTO>();
-
-        PaymentFeesDTO relative = EntityFactory.create(PaymentFeesDTO.class);
-        relative.paymentFeeMeasure().setValue(PaymentFeesDTO.PaymentFeeMeasure.relative);
-        // TODO fill relative fees
-        paymentFees.add(relative);
-
-        PaymentFeesDTO absolute = EntityFactory.create(PaymentFeesDTO.class);
-        absolute.paymentFeeMeasure().setValue(PaymentFeesDTO.PaymentFeeMeasure.absolute);
-        // TODO fill absolute fees
-        paymentFees.add(absolute);
+        paymentFees.add(PaymentFeesHelper.extractFees(paymentTypeInfo, PaymentFeeMeasure.absolute));
+        paymentFees.add(PaymentFeesHelper.extractFees(paymentTypeInfo, PaymentFeeMeasure.relative));
 
         callback.onSuccess(paymentFees);
 

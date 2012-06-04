@@ -21,7 +21,7 @@ import com.propertyvista.domain.dashboard.gadgets.payments.PaymentFeesDTO.Paymen
 
 public class PaymentFeesHelper {
 
-    public PaymentFeesDTO extractFees(PmcPaymentTypeInfo typeInfo, PaymentFeeMeasure measure) {
+    public static PaymentFeesDTO extractFees(PmcPaymentTypeInfo typeInfo, PaymentFeeMeasure measure) {
         PaymentFeesDTO fees = EntityFactory.create(PaymentFeesDTO.class);
         fees.paymentFeeMeasure().setValue(measure);
 
