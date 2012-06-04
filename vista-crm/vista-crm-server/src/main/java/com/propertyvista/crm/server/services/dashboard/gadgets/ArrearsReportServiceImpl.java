@@ -13,12 +13,12 @@
  */
 package com.propertyvista.crm.server.services.dashboard.gadgets;
 
+import static com.propertyvista.crm.server.util.EntityDto2DboCriteriaConverter.makeMapper;
+
 import java.math.BigDecimal;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.GregorianCalendar;
-import java.util.List;
 import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -39,8 +39,8 @@ import com.pyx4j.rpc.shared.UserRuntimeException;
 
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.ArrearsReportService;
-import com.propertyvista.crm.server.util.EntityDTOHelper;
-import com.propertyvista.crm.server.util.EntityDTOHelper.PropertyMapper;
+import com.propertyvista.crm.server.util.EntityDto2DboCriteriaConverter;
+import com.propertyvista.crm.server.util.EntityDto2DboCriteriaConverter.PropertyMapper;
 import com.propertyvista.domain.dashboard.gadgets.arrears.ArrearsComparisonDTO;
 import com.propertyvista.domain.dashboard.gadgets.arrears.ArrearsValueDTO;
 import com.propertyvista.domain.dashboard.gadgets.arrears.ArrearsYOYComparisonDataDTO;
@@ -57,7 +57,7 @@ public class ArrearsReportServiceImpl implements ArrearsReportService {
     private final static I18n i18n = I18n.get(ArrearsReportServiceImpl.class);
 
     // reminder: resist the urge to make it static because maybe it's not thread safe
-    private final EntityDtoBinder<LeaseArrearsSnapshot, LeaseArrearsSnapshotDTO> DTO_BINDER = new EntityDtoBinder<LeaseArrearsSnapshot, LeaseArrearsSnapshotDTO>(
+    private final EntityDtoBinder<LeaseArrearsSnapshot, LeaseArrearsSnapshotDTO> dtoBinder = new EntityDtoBinder<LeaseArrearsSnapshot, LeaseArrearsSnapshotDTO>(
             LeaseArrearsSnapshot.class, LeaseArrearsSnapshotDTO.class) {
         @Override
         protected void bind() {
@@ -88,14 +88,14 @@ public class ArrearsReportServiceImpl implements ArrearsReportService {
     public void leaseArrearsRoster(AsyncCallback<EntitySearchResult<LeaseArrearsSnapshotDTO>> callback, Vector<Building> buildingStubs, LogicalDate asOf,
             DebitType arrearsCategory, Vector<Sort> sortingCriteria, int pageNumber, int pageSize) {
 
-        EntityDTOHelper<LeaseArrearsSnapshot, LeaseArrearsSnapshotDTO> dtoHelper = createDTOHelper(arrearsCategory);
+        EntityDto2DboCriteriaConverter<LeaseArrearsSnapshot, LeaseArrearsSnapshotDTO> criteriaConverter = createCriteriaConverter(arrearsCategory);
         Collection<Criterion> customCriteria = new Vector<Criterion>(); // reserved for future use
 
         EntitySearchResult<LeaseArrearsSnapshot> roster = ServerSideFactory.create(ARFacade.class).getArrearsSnapshotRoster(//@formatter:off
                 asOf,
                 buildingStubs,
-                new Vector<Criterion>(dtoHelper.convertDTOSearchCriteria(customCriteria)),
-                new Vector<Sort>(dtoHelper.convertDTOSortingCriteria(sortingCriteria)),
+                new Vector<Criterion>(criteriaConverter.convertDTOSearchCriteria(customCriteria)),
+                new Vector<Sort>(criteriaConverter.convertDTOSortingCriteria(sortingCriteria)),
                 pageNumber,
                 pageSize);//@formatter:on
 
@@ -252,7 +252,7 @@ public class ArrearsReportServiceImpl implements ArrearsReportService {
         Persistence.service().retrieve(snapshot.billingAccount().lease().unit());
         Persistence.service().retrieve(snapshot.billingAccount().lease().unit().belongsTo());
 
-        LeaseArrearsSnapshotDTO snapshotDTO = DTO_BINDER.createDTO(snapshot);
+        LeaseArrearsSnapshotDTO snapshotDTO = dtoBinder.createDTO(snapshot);
 
         AgingBuckets selectedBuckets = null;
         if (arrearsCategory == DebitType.total) {
@@ -272,7 +272,7 @@ public class ArrearsReportServiceImpl implements ArrearsReportService {
         return snapshotDTO;
     }
 
-    private EntityDTOHelper<LeaseArrearsSnapshot, LeaseArrearsSnapshotDTO> createDTOHelper(final DebitType arrearsCategory) {
+    private EntityDto2DboCriteriaConverter<LeaseArrearsSnapshot, LeaseArrearsSnapshotDTO> createCriteriaConverter(final DebitType arrearsCategory) {
         final LeaseArrearsSnapshotDTO dtoProto = EntityFactory.getEntityPrototype(LeaseArrearsSnapshotDTO.class);
         final LeaseArrearsSnapshot dboProto = EntityFactory.getEntityPrototype(LeaseArrearsSnapshot.class);
 
@@ -303,16 +303,8 @@ public class ArrearsReportServiceImpl implements ArrearsReportService {
             };
         }
 
-        List<PropertyMapper> mappers = Arrays.<PropertyMapper> asList(//@formatter:off
-                new PropertyMapper() {
-                    @Override
-                    public Path getDboMemberPath(Path dtoMemberPath) {
-                        return DTO_BINDER.getBoundDboMemberPath(dtoMemberPath);
-                    }                    
-                },
-                bucketMapper
-        );//@formatter:on
-        return new EntityDTOHelper<LeaseArrearsSnapshot, LeaseArrearsSnapshotDTO>(LeaseArrearsSnapshot.class, LeaseArrearsSnapshotDTO.class, mappers);
+        return new EntityDto2DboCriteriaConverter<LeaseArrearsSnapshot, LeaseArrearsSnapshotDTO>(LeaseArrearsSnapshot.class, LeaseArrearsSnapshotDTO.class,
+                makeMapper(dtoBinder), bucketMapper);
     }
 
 }

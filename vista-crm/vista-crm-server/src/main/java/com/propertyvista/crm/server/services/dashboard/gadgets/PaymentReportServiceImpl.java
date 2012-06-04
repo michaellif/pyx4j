@@ -13,7 +13,7 @@
  */
 package com.propertyvista.crm.server.services.dashboard.gadgets;
 
-import static com.propertyvista.crm.server.util.EntityDTOHelper.mapper;
+import static com.propertyvista.crm.server.util.EntityDto2DboCriteriaConverter.makeMapper;
 
 import java.util.Vector;
 
@@ -24,15 +24,19 @@ import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.utils.EntityDtoBinder;
 
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.PaymentReportService;
-import com.propertyvista.crm.server.util.EntityDTOHelper;
+import com.propertyvista.crm.server.util.EntityDto2DboCriteriaConverter;
+import com.propertyvista.domain.dashboard.gadgets.payments.PaymentFeesDTO;
 import com.propertyvista.domain.dashboard.gadgets.payments.PaymentRecordForReportDTO;
+import com.propertyvista.domain.dashboard.gadgets.payments.PaymentsSummary;
 import com.propertyvista.domain.financial.PaymentRecord;
+import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.property.asset.building.Building;
 
@@ -40,7 +44,7 @@ public class PaymentReportServiceImpl implements PaymentReportService {
 
     private final EntityDtoBinder<PaymentRecord, PaymentRecordForReportDTO> dtoBinder;
 
-    private final EntityDTOHelper<PaymentRecord, PaymentRecordForReportDTO> dtoHelper;
+    private final EntityDto2DboCriteriaConverter<PaymentRecord, PaymentRecordForReportDTO> dto2dboCriteriaConverter;
 
     public PaymentReportServiceImpl() {
 
@@ -61,7 +65,8 @@ public class PaymentReportServiceImpl implements PaymentReportService {
             }
         };
 
-        dtoHelper = new EntityDTOHelper<PaymentRecord, PaymentRecordForReportDTO>(PaymentRecord.class, PaymentRecordForReportDTO.class, mapper(dtoBinder));
+        dto2dboCriteriaConverter = new EntityDto2DboCriteriaConverter<PaymentRecord, PaymentRecordForReportDTO>(PaymentRecord.class,
+                PaymentRecordForReportDTO.class, makeMapper(dtoBinder));
     }
 
     @Override
@@ -74,7 +79,7 @@ public class PaymentReportServiceImpl implements PaymentReportService {
         criteria.setPageSize(pageSize);
         criteria.setPageNumber(pageNumber);
 
-        criteria.setSorts(dtoHelper.convertDTOSortingCriteria(sortingCriteria));
+        criteria.setSorts(dto2dboCriteriaConverter.convertDTOSortingCriteria(sortingCriteria));
 
         // set up search criteria
         criteria.add(PropertyCriterion.eq(criteria.proto().lastStatusChangeDate(), targetDate));
@@ -103,7 +108,40 @@ public class PaymentReportServiceImpl implements PaymentReportService {
         callback.onSuccess(result);
     }
 
+    @Override
+    public void paymentsSummary(AsyncCallback<EntitySearchResult<PaymentsSummary>> callback, Vector<Building> buildings, LogicalDate targetDate,
+            Vector<PaymentStatus> paymentStatusCriteria, int pageNumber, int pageSize, Vector<Sort> sortingCriteria) {
+
+        // TODO implement this
+        EntitySearchResult<PaymentsSummary> result = new EntitySearchResult<PaymentsSummary>();
+        result.setTotalRows(0);
+        result.setData(new Vector<PaymentsSummary>());
+        result.hasMoreData(false);
+
+        callback.onSuccess(result);
+    }
+
+    @Override
+    public void paymentsFees(AsyncCallback<Vector<PaymentFeesDTO>> callback) {
+        // PmcPaymentTypeInfo
+        Vector<PaymentFeesDTO> paymentFees = new Vector<PaymentFeesDTO>();
+
+        PaymentFeesDTO relative = EntityFactory.create(PaymentFeesDTO.class);
+        relative.paymentFeeMeasure().setValue(PaymentFeesDTO.PaymentFeeMeasure.relative);
+        // TODO fill relative fees
+        paymentFees.add(relative);
+
+        PaymentFeesDTO absolute = EntityFactory.create(PaymentFeesDTO.class);
+        absolute.paymentFeeMeasure().setValue(PaymentFeesDTO.PaymentFeeMeasure.absolute);
+        // TODO fill absolute fees
+        paymentFees.add(absolute);
+
+        callback.onSuccess(paymentFees);
+
+    }
+
     private PaymentRecordForReportDTO makeDTO(PaymentRecord paymentRecordDBO) {
+
         Persistence.service().retrieve(paymentRecordDBO.billingAccount());
         Persistence.service().retrieve(paymentRecordDBO.billingAccount().lease());
         Persistence.service().retrieve(paymentRecordDBO.billingAccount().lease().unit());
@@ -114,4 +152,5 @@ public class PaymentReportServiceImpl implements PaymentReportService {
 
         return paymentRecordDTO;
     }
+
 }

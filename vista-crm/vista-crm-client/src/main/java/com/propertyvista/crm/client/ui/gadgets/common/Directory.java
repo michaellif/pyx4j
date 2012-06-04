@@ -26,6 +26,7 @@ import com.propertyvista.crm.client.ui.gadgets.availabilityreport.TurnoverAnalys
 import com.propertyvista.crm.client.ui.gadgets.availabilityreport.UnitAvailabilityReportGadget;
 import com.propertyvista.crm.client.ui.gadgets.other.BuildingListerGadget;
 import com.propertyvista.crm.client.ui.gadgets.payments.PaymentRecordsGadgetFactory;
+import com.propertyvista.crm.client.ui.gadgets.payments.PaymentsSummaryGadgetFactory;
 import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
 
 /** Global container of all possible gadgets */
@@ -53,7 +54,8 @@ public class Directory {
         new AvailabilitySummaryGadget(),
         new TurnoverAnalysisGraphGadget(),
         
-        new PaymentRecordsGadgetFactory()
+        new PaymentRecordsGadgetFactory(),
+        new PaymentsSummaryGadgetFactory()
         
 //        new BarChart2DGadget(),
 //        new DemoGadget(),

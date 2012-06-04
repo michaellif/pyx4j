@@ -15,20 +15,22 @@ package com.propertyvista.crm.server.util;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.Path;
 
 public class SeqUtils {
+
     public interface CombiningFunction<A, B> {
+
         /** must never return <code>null</code> */
         public <X extends A, Y extends B> A combine(X a, Y b);
 
-        public A initialValue();
     }
 
-    public static class Sum<T extends IEntity> implements CombiningFunction<T, T> {
+    public static class Add<T extends IEntity> implements CombiningFunction<T, T> {
         final Path[] doubleProperties;
 
         final Path[] integerProperties;
@@ -37,7 +39,7 @@ public class SeqUtils {
 
         final T proto;
 
-        public Sum(Class<T> entityClass, Collection<Path> properties) {
+        public Add(Class<T> entityClass, Collection<Path> properties) {
             this.entityClass = entityClass;
             this.proto = EntityFactory.getEntityPrototype(entityClass);
 
@@ -58,7 +60,6 @@ public class SeqUtils {
             this.integerProperties = integerProperties.isEmpty() ? null : integerProperties.toArray(new Path[integerProperties.size()]);
         }
 
-        @Override
         public T initialValue() {
             T value = EntityFactory.create(entityClass);
             if (doubleProperties != null) {
@@ -90,16 +91,19 @@ public class SeqUtils {
         }
     }
 
-    public static <X, Y> X foldl(CombiningFunction<X, Y> f, X initalValue, Iterable<Y> sequence) {
-        X result = initalValue;
-        for (Y value : sequence) {
-            result = f.combine(result, value);
+    public static <X, Y> X foldl(CombiningFunction<X, Y> f, X initialValue, Iterator<Y> iterator) {
+
+        X result = initialValue;
+
+        while (iterator.hasNext()) {
+            result = f.combine(result, iterator.next());
         }
+
         return result;
     }
 
-    public static <X, Y> X foldl(CombiningFunction<X, Y> f, Iterable<Y> sequence) {
-        return foldl(f, f.initialValue(), sequence);
+    public static <X, Y> X foldl(CombiningFunction<X, Y> f, X initalValue, Iterable<Y> sequence) {
+        return foldl(f, initalValue, sequence.iterator());
     }
 
     // TODO add map

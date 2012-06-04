@@ -7,15 +7,22 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Dec 1, 2011
+ * Created on Jun 1, 2012
  * @author ArtyomB
  * @version $Id$
  */
 package com.propertyvista.domain.dashboard.gadgets.type;
 
-import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.annotations.AbstractEntity;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
 
-@DiscriminatorValue("AvailabilitySummary")
-public interface AvailabilitySummary extends GadgetMetadata, HasCustomizableDateGadgetMetadata {
+@AbstractEntity
+public interface HasCustomizableDateGadgetMetadata extends IEntity {
+
+    IPrimitive<LogicalDate> asOf();
+
+    IPrimitive<Boolean> customizeDate();
 
 }

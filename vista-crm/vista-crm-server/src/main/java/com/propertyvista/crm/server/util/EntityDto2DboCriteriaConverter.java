@@ -26,19 +26,36 @@ import com.pyx4j.entity.shared.criterion.OrCriterion;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.utils.EntityDtoBinder;
 
-public class EntityDTOHelper<DBO extends IEntity, DTO extends IEntity> {
+/**
+ * Utility class for converting DTO search/sorting criteria to DBO
+ * 
+ * @author ArtyomB
+ * 
+ * @param <DBO>
+ * @param <DTO>
+ */
+public class EntityDto2DboCriteriaConverter<DBO extends IEntity, DTO extends IEntity> {
 
     private final List<PropertyMapper> mappers;
 
-    public static PropertyMapper mapper(EntityDtoBinder<?, ?> dtoBinder) {
+    /**
+     * Creates a mapper from {@link entity DTO binder}
+     */
+    public static PropertyMapper makeMapper(EntityDtoBinder<?, ?> dtoBinder) {
         return new DtoBinderMapper(dtoBinder);
     }
 
-    public EntityDTOHelper(Class<DBO> dboClass, Class<DTO> dtoClass, PropertyMapper... mappers) {
+    /**
+     * @param dboClass
+     * @param dtoClass
+     * @param mappers
+     *            mappers that map DTO members to DBO members
+     */
+    public EntityDto2DboCriteriaConverter(Class<DBO> dboClass, Class<DTO> dtoClass, PropertyMapper... mappers) {
         this(dboClass, dtoClass, Arrays.asList(mappers));
     }
 
-    public EntityDTOHelper(Class<DBO> dboClass, Class<DTO> dtoClass, List<PropertyMapper> mappers) {
+    public EntityDto2DboCriteriaConverter(Class<DBO> dboClass, Class<DTO> dtoClass, List<PropertyMapper> mappers) {
         this.mappers = mappers;
     }
 

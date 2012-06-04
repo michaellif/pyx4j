@@ -7,15 +7,22 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Dec 1, 2011
+ * Created on May 31, 2012
  * @author ArtyomB
  * @version $Id$
  */
 package com.propertyvista.domain.dashboard.gadgets.type;
 
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.shared.IPrimitiveSet;
 
-@DiscriminatorValue("AvailabilitySummary")
-public interface AvailabilitySummary extends GadgetMetadata, HasCustomizableDateGadgetMetadata {
+import com.propertyvista.domain.financial.PaymentRecord;
+
+@Caption(name = "Payments Summary", description = "TBD")
+@DiscriminatorValue("PaymentsSummaryGadgetMetadata")
+public interface PaymentsSummaryGadgetMetadata extends ListerGadgetBaseMetadata, HasCustomizableDateGadgetMetadata {
+
+    IPrimitiveSet<PaymentRecord.PaymentStatus> paymentStatus();
 
 }
