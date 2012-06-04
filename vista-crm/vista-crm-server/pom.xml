@@ -54,7 +54,6 @@
             <version>${project.version}</version>
         </dependency>
 
-
         <dependency>
             <groupId>com.propertyvista</groupId>
             <artifactId>vista-callfire</artifactId>
@@ -116,7 +115,7 @@
             <scope>test</scope>
             <optional>true</optional>
         </dependency>
-        
+
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>servlet-api</artifactId>
@@ -140,6 +139,14 @@
             <artifactId>pyx-entity-report</artifactId>
             <version>${pyxVersion}</version>
             <classifier>tests</classifier>
+            <scope>test</scope>
+            <optional>true</optional>
+        </dependency>
+
+        <dependency>
+            <groupId>com.propertyvista</groupId>
+            <artifactId>vista-biz-tenant</artifactId>
+            <version>${project.version}</version>
             <scope>test</scope>
             <optional>true</optional>
         </dependency>
