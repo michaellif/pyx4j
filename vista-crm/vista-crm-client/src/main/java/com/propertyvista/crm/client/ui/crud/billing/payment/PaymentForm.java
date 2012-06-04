@@ -178,7 +178,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
                 checkProfiledPaymentMethods(new DefaultAsyncCallback<List<PaymentMethod>>() {
                     @Override
                     public void onSuccess(List<PaymentMethod> result) {
-                        get(proto().paymentSelect()).populate(null);
+                        get(proto().paymentSelect()).reset();
                         get(proto().paymentSelect()).setValue(result.isEmpty() ? PaymentSelect.New : PaymentSelect.Profiled);
                         get(proto().paymentSelect()).setVisible(!result.isEmpty());
                     }
@@ -225,7 +225,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
                 paymentMethodEditorSeparator.setVisible(event.getValue() != null);
                 if (event.getValue() != null) {
                     paymentMethodEditor.setViewable(true);
-                    paymentMethodEditor.populate(event.getValue());
+                    paymentMethodEditor.setValue(event.getValue(), false);
                 }
             }
         });
@@ -265,7 +265,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
         if (getParentView() instanceof PaymentEditorView) {
             get(proto().paymentSelect()).setEnabled(false);
 
-            profiledPaymentMethodsCombo.populate(null);
+            profiledPaymentMethodsCombo.reset();
             profiledPaymentMethodsCombo.setOptions(null);
 
             if (!getValue().leaseParticipant().isNull()) {

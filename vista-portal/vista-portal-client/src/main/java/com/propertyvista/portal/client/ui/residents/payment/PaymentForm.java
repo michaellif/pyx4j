@@ -212,7 +212,7 @@ public class PaymentForm extends CEntityDecoratableForm<PaymentRecordDTO> {
     private void checkProfiledPaymentMethods() {
         get(proto().paymentSelect()).setEnabled(false);
 
-        profiledPaymentMethodsCombo.populate(null);
+        profiledPaymentMethodsCombo.reset();
         profiledPaymentMethodsCombo.setOptions(null);
 
         presenter.getProfiledPaymentMethods(new DefaultAsyncCallback<List<PaymentMethod>>() {
@@ -224,7 +224,7 @@ public class PaymentForm extends CEntityDecoratableForm<PaymentRecordDTO> {
                 profiledPaymentMethodsCombo.setOptions(result);
                 profiledPaymentMethodsCombo.setMandatory(true);
 
-                get(proto().paymentSelect()).populate(null);
+                get(proto().paymentSelect()).reset();
                 get(proto().paymentSelect()).setValue(result.isEmpty() ? PaymentSelect.New : PaymentSelect.Profiled);
                 get(proto().paymentSelect()).setVisible(!result.isEmpty());
             }
