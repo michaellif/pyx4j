@@ -43,13 +43,13 @@ import com.propertyvista.server.jobs.TaskRunner;
 public class PadProcessor {
 
     void queuePayment(PaymentRecord paymentRecord) {
-        MerchantAccount merchantAccount = PaymentUtils.retrieveMerchantAccount(paymentRecord);
+        Persistence.service().retrieve(paymentRecord.merchantAccount());
         Persistence.service().retrieve(paymentRecord.billingAccount());
         String namespace = NamespaceManager.getNamespace();
         try {
             NamespaceManager.setNamespace(VistaNamespace.adminNamespace);
             PadFile padFile = getPadFile();
-            PadBatch padBatch = getPadBatch(padFile, namespace, merchantAccount);
+            PadBatch padBatch = getPadBatch(padFile, namespace, paymentRecord.merchantAccount());
             createPadDebitRecord(padBatch, paymentRecord);
         } finally {
             NamespaceManager.setNamespace(namespace);
@@ -287,6 +287,7 @@ public class PadProcessor {
             throw new Error("Processed payment '" + debitRecord.transactionId().getValue() + "' can't be rejected");
         }
         paymentRecord.aggregatedTransfer().set(at);
+        paymentRecord.padReconciliationDebitRecordKey().setValue(debitRecord.getPrimaryKey());
 
         paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Rejected);
         paymentRecord.lastStatusChangeDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
@@ -294,7 +295,7 @@ public class PadProcessor {
 
         paymentRecord.transactionErrorMessage().setValue(debitRecord.reasonCode().getValue() + " " + debitRecord.reasonText().getValue());
 
-        Persistence.service().persist(paymentRecord);
+        Persistence.service().merge(paymentRecord);
 
         ServerSideFactory.create(ARFacade.class).rejectPayment(paymentRecord, true);
     }
@@ -304,11 +305,12 @@ public class PadProcessor {
             throw new Error("Processed payment '" + debitRecord.transactionId().getValue() + "' can't be cleared");
         }
         paymentRecord.aggregatedTransfer().set(at);
+        paymentRecord.padReconciliationDebitRecordKey().setValue(debitRecord.getPrimaryKey());
 
         paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Cleared);
         paymentRecord.lastStatusChangeDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
         paymentRecord.finalizeDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
-        Persistence.service().persist(paymentRecord);
+        Persistence.service().merge(paymentRecord);
     }
 
     private void reconciliationReturnedPayment(AggregatedTransfer at, PadReconciliationDebitRecord debitRecord, PaymentRecord paymentRecord) {
@@ -316,10 +318,12 @@ public class PadProcessor {
             throw new Error("Unprocessed payment '" + debitRecord.transactionId().getValue() + "' can't be returned");
         }
         paymentRecord.aggregatedTransferReturn().set(at);
+        paymentRecord.padReconciliationReturnRecordKey().setValue(debitRecord.getPrimaryKey());
+
         paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Returned);
         paymentRecord.lastStatusChangeDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
         paymentRecord.finalizeDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
-        Persistence.service().persist(paymentRecord);
+        Persistence.service().merge(paymentRecord);
         ServerSideFactory.create(ARFacade.class).rejectPayment(paymentRecord, false);
     }
 }

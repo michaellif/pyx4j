@@ -56,6 +56,8 @@ public interface PaymentRecord extends IEntity {
 
         Submitted,
 
+        Scheduled,
+
         // This state is skipped in current implementation and may be enabled by Policy in future
         Processing,
 
@@ -108,7 +110,7 @@ public interface PaymentRecord extends IEntity {
     IPrimitive<LogicalDate> lastStatusChangeDate();
 
     /**
-     * Do not post before that date, Date taken from Cheque and only available for Cheque
+     * Do not post before that date, Date taken from Cheque. If present and in future record will become Scheduled
      */
     IPrimitive<LogicalDate> targetDate();
 
@@ -121,6 +123,12 @@ public interface PaymentRecord extends IEntity {
 
     IPrimitive<PaymentStatus> paymentStatus();
 
+    /**
+     * This value set when record we Processing record. e.g. wehn we set status to Processing or Received
+     */
+    @Detached
+    MerchantAccount merchantAccount();
+
     IPrimitive<String> transactionErrorMessage();
 
     @Caption(name = "Transaction Authorization #")
@@ -130,15 +138,24 @@ public interface PaymentRecord extends IEntity {
     }
 
     @JoinColumn(PaidRejectedAggregatedTransferId.class)
+    @ReadOnly(allowOverrideNull = true)
     AggregatedTransfer aggregatedTransfer();
 
     interface ReturnAggregatedTransferId extends ColumnId {
     }
 
     @JoinColumn(ReturnAggregatedTransferId.class)
+    @ReadOnly(allowOverrideNull = true)
     AggregatedTransfer aggregatedTransferReturn();
 
+    /**
+     * Key of record PadReconciliationDebitRecord from shared namespace.
+     */
+    @ReadOnly(allowOverrideNull = true)
     IPrimitive<Key> padReconciliationDebitRecordKey();
+
+    @ReadOnly(allowOverrideNull = true)
+    IPrimitive<Key> padReconciliationReturnRecordKey();
 
     @Editor(type = EditorType.textarea)
     IPrimitive<String> notes();

@@ -117,6 +117,7 @@ public class PaymentFacadeImpl implements PaymentFacade {
         }
         paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Processing);
         paymentRecord.lastStatusChangeDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
+        paymentRecord.merchantAccount().set(PaymentUtils.retrieveMerchantAccount(paymentRecord));
 
         switch (paymentRecord.paymentMethod().type().getValue()) {
         case Cash:
