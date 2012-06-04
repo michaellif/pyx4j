@@ -16,6 +16,8 @@ package com.propertyvista.crm.client.ui.crud.billing.bill;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ScrollPanel;
 
+import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -46,28 +48,29 @@ public class BillForm extends CrmEntityForm<BillDTO> {
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingAccount().lease().unit()), 20).build());
 
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingRun().building()), 20).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingRun().billingPeriodStartDate()), 10).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingRun().billingPeriodEndDate()), 10).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingRun().billingPeriodStartDate()), 20).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingRun().billingPeriodEndDate()), 20).build());
 
         ++row2;
-        main.setWidget(++row2, 1, new DecoratorBuilder(inject(proto().billingRun().billingCycle().paymentFrequency()), 15).build());
-        main.setWidget(++row2, 1, new DecoratorBuilder(inject(proto().billingRun().billingCycle().billingPeriodStartDay()), 5).build());
-        main.setWidget(++row2, 1, new DecoratorBuilder(inject(proto().billingRun().billingCycle().billingRunTargetDay()), 5).build());
+        main.setWidget(++row2, 1, new DecoratorBuilder(inject(proto().billingRun().billingCycle().paymentFrequency()), 20).build());
+        main.setWidget(++row2, 1, new DecoratorBuilder(inject(proto().billingRun().billingCycle().billingPeriodStartDay()), 20).build());
+        main.setWidget(++row2, 1, new DecoratorBuilder(inject(proto().billingRun().billingCycle().billingRunTargetDay()), 20).build());
 
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingRun().executionTargetDate()), 10).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingRun().executionDate()), 10).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingRun().executionTargetDate()), 20).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingRun().executionDate()), 20).build());
 
         main.setH1(++row, 0, 2, i18n.tr("Status"));
         row2 = row;
 
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billSequenceNumber()), 10).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billType()), 10).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billSequenceNumber()), 20).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billType()), 20).build());
 
-        main.setWidget(++row2, 1, new DecoratorBuilder(inject(proto().billStatus()), 10).build());
-        main.setWidget(++row2, 1, new DecoratorBuilder(inject(proto().rejectReason()), 15).build());
+        main.setWidget(++row2, 1, new DecoratorBuilder(inject(proto().billStatus()), 20).build());
+        main.setWidget(++row2, 1, new DecoratorBuilder(inject(proto().rejectReason()), 20).build());
 
         main.setH1(++row, 0, 2, i18n.tr("Last Bill"));
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().balanceForwardAmount()), 10).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().balanceForwardAmount())).build());
+
         main.setWidget(++row, 0, inject(proto().paymentLineItems(), new LineItemCollapsableViewer()));
         main.setWidget(++row, 0, inject(proto().depositRefundLineItems(), new LineItemCollapsableViewer()));
         main.setWidget(++row, 0, inject(proto().immediateAccountAdjustmentLineItems(), new LineItemCollapsableViewer()));
@@ -81,14 +84,14 @@ public class BillForm extends CrmEntityForm<BillDTO> {
         main.setWidget(++row, 0, inject(proto().pendingAccountAdjustmentLineItems(), new LineItemCollapsableViewer()));
 
         main.setWidget(++row, 0, inject(proto().depositLineItems(), new LineItemCollapsableViewer()));
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().productCreditAmount()), 10).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().productCreditAmount())).build());
 
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().currentAmount()), 10).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().taxes()), 10).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().currentAmount())).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().taxes())).build());
 
         // Dues:
         main.setHR(++row, 0, 2);
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().totalDueAmount()), 10).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().totalDueAmount())).build());
 
         main.getColumnFormatter().setWidth(0, "50%");
         main.getColumnFormatter().setWidth(1, "50%");
@@ -101,5 +104,25 @@ public class BillForm extends CrmEntityForm<BillDTO> {
         super.onPopulate();
 
         get(proto().rejectReason()).setVisible(getValue().billStatus().getValue() == BillStatus.Rejected);
+    }
+
+    protected class DecoratorBuilder extends WidgetDecorator.Builder { //builder specifically for this form (as it uses mixed formats)
+
+        public DecoratorBuilder(CComponent<?, ?> component) {
+            super(component);
+            readOnlyMode(!isEditable());
+            componentAlignment(Alignment.right);
+            labelAlignment(Alignment.left);
+            useLabelSemicolon(false);
+            componentWidth(30);
+        }
+
+        public DecoratorBuilder(CComponent<?, ?> component, double componentWidth) {
+            super(component);
+            readOnlyMode(!isEditable());
+            componentWidth(componentWidth);
+            componentAlignment(Alignment.right);
+            labelAlignment(Alignment.left);
+        }
     }
 }
