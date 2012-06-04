@@ -38,15 +38,18 @@ public interface PmcPaymentTypeInfo extends IEntity {
 
     IPrimitive<Boolean> ccPaymentAvailable();
 
+    /**
+     * this fee is percent of a transaction
+     */
     IPrimitive<BigDecimal> ccFee();
 
     IPrimitive<Boolean> eCheckPaymentAvailable();
 
-    IPrimitive<BigDecimal> eChecqueFee();
+    IPrimitive<BigDecimal> eChequeFee();
 
-    IPrimitive<Boolean> etfPaymentAvailable();
+    IPrimitive<Boolean> eftPaymentAvailable();
 
-    IPrimitive<BigDecimal> etfFee();
+    IPrimitive<BigDecimal> eftFee();
 
     IPrimitive<Boolean> interacCaledonPaymentAvailable();
 

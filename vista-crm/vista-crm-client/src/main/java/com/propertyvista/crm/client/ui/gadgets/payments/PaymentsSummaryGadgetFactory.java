@@ -156,12 +156,13 @@ public class PaymentsSummaryGadgetFactory extends AbstractGadget<PaymentsSummary
             feesTableModel = new DataTableModel<PaymentFeesDTO>(PaymentFeesDTO.class);
             feesTableModel.setColumnDescriptors(Arrays.asList(//@formatter:off
                     new MemberColumnDescriptor.Builder(proto.paymentFeeMeasure()).sortable(false).width("20%").build(),
-                    new MemberColumnDescriptor.Builder(proto.cash()).sortable(false).width("13.33%").build(),
-                    new MemberColumnDescriptor.Builder(proto.cheque()).sortable(false).width("13.33%").build(),
-                    new MemberColumnDescriptor.Builder(proto.eCheque()).sortable(false).width("13.33%").build(),
-                    new MemberColumnDescriptor.Builder(proto.eft()).sortable(false).width("13.33%").build(),
-                    new MemberColumnDescriptor.Builder(proto.cc()).sortable(false).width("13.33%").build(),
-                    new MemberColumnDescriptor.Builder(proto.interac()).sortable(false).width("13.33%").build()
+                    new MemberColumnDescriptor.Builder(proto.cash()).sortable(false).build(),
+                    new MemberColumnDescriptor.Builder(proto.cheque()).sortable(false).build(),
+                    new MemberColumnDescriptor.Builder(proto.eCheque()).sortable(false).build(),
+                    new MemberColumnDescriptor.Builder(proto.eft()).sortable(false).build(),
+                    new MemberColumnDescriptor.Builder(proto.cc()).sortable(false).build(),
+                    new MemberColumnDescriptor.Builder(proto.interacCaledon()).sortable(false).build(),
+                    new MemberColumnDescriptor.Builder(proto.interacVisa()).sortable(false).build()
             ));//@formatter:on
 
             DataTable<PaymentFeesDTO> feesTable = new DataTable<PaymentFeesDTO>(feesTableModel);

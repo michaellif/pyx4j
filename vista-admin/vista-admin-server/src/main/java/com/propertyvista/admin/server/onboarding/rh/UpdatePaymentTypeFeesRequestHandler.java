@@ -59,10 +59,10 @@ public class UpdatePaymentTypeFeesRequestHandler extends AbstractRequestHandler<
         pmc.paymentTypeInfo().ccFee().setValue(request.ccFee().getValue());
 
         pmc.paymentTypeInfo().eCheckPaymentAvailable().setValue(request.echeckPaymentAvailable().getValue());
-        pmc.paymentTypeInfo().eChecqueFee().setValue(request.echeckFee().getValue());
+        pmc.paymentTypeInfo().eChequeFee().setValue(request.echeckFee().getValue());
 
-        pmc.paymentTypeInfo().etfFee().setValue(request.etfFee().getValue());
-        pmc.paymentTypeInfo().etfPaymentAvailable().setValue(request.etfPaymentAvailable().getValue());
+        pmc.paymentTypeInfo().eftFee().setValue(request.etfFee().getValue());
+        pmc.paymentTypeInfo().eftPaymentAvailable().setValue(request.etfPaymentAvailable().getValue());
 
         pmc.paymentTypeInfo().interacCaledonFee().setValue(request.interacCaledonFee().getValue());
         pmc.paymentTypeInfo().interacCaledonPaymentAvailable().setValue(request.interacCaledonPaymentAvailable().getValue());

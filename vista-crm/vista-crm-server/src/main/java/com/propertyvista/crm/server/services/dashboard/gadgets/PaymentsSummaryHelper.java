@@ -38,8 +38,8 @@ public class PaymentsSummaryHelper {
 
         public PaymentTypeMapper() {
             memberMap = new Path[PaymentType.values().length];
-
             PaymentsSummary proto = EntityFactory.create(PaymentsSummary.class);
+
             bind(PaymentType.Cash, proto.cash());
             bind(PaymentType.Echeck, proto.eCheque());
             bind(PaymentType.CreditCard, proto.cc());
@@ -74,9 +74,9 @@ public class PaymentsSummaryHelper {
      */
     public PaymentsSummary calculateSummary(MerchantAccount merchantAccount, PaymentRecord.PaymentStatus paymentStatus, LogicalDate snapshotDay) {
 
-        PaymentsSummary summary = initSummary(snapshotDay);
+        PaymentsSummary summary = initPaymentsSummary(snapshotDay);
 
-        ICursorIterator<PaymentRecord> i = Persistence.service().query(null, buildCriteria(merchantAccount, paymentStatus, snapshotDay), AttachLevel.Attached);
+        ICursorIterator<PaymentRecord> i = Persistence.service().query(null, makeCriteria(merchantAccount, paymentStatus, snapshotDay), AttachLevel.Attached);
         while (i.hasNext()) {
             PaymentRecord r = i.next();
             PaymentType paymentType = r.paymentMethod().type().getValue();
@@ -87,15 +87,15 @@ public class PaymentsSummaryHelper {
         return summary;
     }
 
-    private EntityQueryCriteria<PaymentRecord> buildCriteria(MerchantAccount merchantAccount, PaymentRecord.PaymentStatus paymentStatus, LogicalDate snapshotDay) {
+    private EntityQueryCriteria<PaymentRecord> makeCriteria(MerchantAccount merchantAccount, PaymentRecord.PaymentStatus paymentStatus, LogicalDate snapshotDay) {
         EntityQueryCriteria<PaymentRecord> criteria = EntityQueryCriteria.create(PaymentRecord.class);
-        // TODO merchanAccount
+        // TODO merchantAccount
         criteria.add(PropertyCriterion.eq(criteria.proto().lastStatusChangeDate(), snapshotDay));
         criteria.add(PropertyCriterion.eq(criteria.proto().paymentStatus(), paymentStatus));
         return criteria;
     }
 
-    private PaymentsSummary initSummary(LogicalDate snapshotDay) {
+    private PaymentsSummary initPaymentsSummary(LogicalDate snapshotDay) {
         PaymentsSummary summary = EntityFactory.create(PaymentsSummary.class);
         for (PaymentType type : PaymentType.values()) {
             paymentTypeMapper.member(summary, type).setValue(new BigDecimal("0.00"));

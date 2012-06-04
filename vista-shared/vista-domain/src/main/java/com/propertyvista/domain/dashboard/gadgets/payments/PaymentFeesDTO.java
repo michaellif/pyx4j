@@ -58,6 +58,8 @@ public interface PaymentFeesDTO extends IEntity {
     @Caption(name = "CC")
     IPrimitive<BigDecimal> cc();
 
-    IPrimitive<BigDecimal> interac();
+    IPrimitive<BigDecimal> interacCaledon();
+
+    IPrimitive<BigDecimal> interacVisa();
 
 }
