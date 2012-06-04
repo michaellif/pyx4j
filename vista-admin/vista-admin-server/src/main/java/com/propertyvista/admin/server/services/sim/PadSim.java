@@ -27,12 +27,14 @@ import com.pyx4j.log4j.LoggerConfig;
 
 import com.propertyvista.admin.domain.payment.pad.MerchantReconciliationStatus;
 import com.propertyvista.admin.domain.payment.pad.PadFile.FileAcknowledgmentStatus;
+import com.propertyvista.admin.domain.payment.pad.PadReconciliationFile;
 import com.propertyvista.admin.domain.payment.pad.TransactionReconciliationStatus;
 import com.propertyvista.admin.domain.payment.pad.sim.PadSimBatch;
 import com.propertyvista.admin.domain.payment.pad.sim.PadSimDebitRecord;
 import com.propertyvista.admin.domain.payment.pad.sim.PadSimFile;
 import com.propertyvista.payment.pad.CaledonPadSftpClient;
 import com.propertyvista.payment.pad.CaledonPadUtils;
+import com.propertyvista.payment.pad.data.PadAkFile;
 import com.propertyvista.payment.pad.simulator.PadSimAcknowledgementFileWriter;
 import com.propertyvista.payment.pad.simulator.PadSimFileParser;
 import com.propertyvista.payment.pad.simulator.PadSimReconciliationFileWriter;
@@ -120,7 +122,7 @@ public class PadSim {
         Persistence.service().retrieveMember(padFile.batches());
         updateAcknowledgments(padFile);
 
-        File file = new File(getPadBaseDir(), padFile.fileName().getValue() + "_acknowledgement.csv");
+        File file = new File(getPadBaseDir(), padFile.fileName().getValue() + PadAkFile.FileNameSufix);
         try {
             PadSimAcknowledgementFileWriter writer = new PadSimAcknowledgementFileWriter(padFile, file);
             try {
@@ -219,7 +221,7 @@ public class PadSim {
         padFile.reconciliationSent().setValue(Persistence.service().getTransactionSystemTime());
         updateReconciliation(padFile);
 
-        File file = new File(getPadBaseDir(), padFile.fileName().getValue().replace(".", "_reconcil_rpt."));
+        File file = new File(getPadBaseDir(), padFile.fileName().getValue().replace(".", PadReconciliationFile.FileNameSufix));
         try {
             PadSimReconciliationFileWriter writer = new PadSimReconciliationFileWriter(padFile, file);
             try {

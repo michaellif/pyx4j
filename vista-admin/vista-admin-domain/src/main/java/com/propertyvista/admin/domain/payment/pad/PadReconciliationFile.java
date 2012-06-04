@@ -30,6 +30,8 @@ import com.propertyvista.domain.VistaNamespace;
 @GwtBlacklist
 public interface PadReconciliationFile extends IEntity {
 
+    public static String FileNameSufix = "_reconciliation_rpt.";
+
     IPrimitive<String> fileName();
 
     @Owned

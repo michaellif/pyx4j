@@ -32,7 +32,9 @@ import com.pyx4j.essentials.j2se.J2SEServiceConnector;
 import com.pyx4j.essentials.j2se.J2SEServiceConnector.Credentials;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 
+import com.propertyvista.admin.domain.payment.pad.PadReconciliationFile;
 import com.propertyvista.config.VistaDeployment;
+import com.propertyvista.payment.pad.data.PadAkFile;
 import com.propertyvista.shared.VistaSystemIdentification;
 
 public class CaledonPadSftpClient {
@@ -192,10 +194,10 @@ public class CaledonPadSftpClient {
                         fileMatch = rFile.getFilename().endsWith("." + companyId);
                         break;
                     case Acknowledgement:
-                        fileMatch = rFile.getFilename().endsWith("." + companyId + "_acknowledgement.csv");
+                        fileMatch = rFile.getFilename().endsWith("." + companyId + PadAkFile.FileNameSufix);
                         break;
                     case Reconciliation:
-                        fileMatch = rFile.getFilename().endsWith("_reconciliation_rpt." + companyId);
+                        fileMatch = rFile.getFilename().endsWith(PadReconciliationFile.FileNameSufix + companyId);
                         break;
                     }
                 }

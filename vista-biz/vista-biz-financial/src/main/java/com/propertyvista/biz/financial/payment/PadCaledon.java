@@ -42,6 +42,7 @@ import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.payment.pad.CaledonPadFileWriter;
 import com.propertyvista.payment.pad.CaledonPadSftpClient;
 import com.propertyvista.payment.pad.CaledonPadSftpClient.PadFileType;
+import com.propertyvista.payment.pad.data.PadAkFile;
 
 public class PadCaledon {
 
@@ -207,7 +208,7 @@ public class PadCaledon {
         }
         File file = files.get(0);
         files.remove(0);
-        if (!file.getName().endsWith("_acknowledgement.csv")) {
+        if (!file.getName().endsWith(PadAkFile.FileNameSufix)) {
             throw new Error("Invalid acknowledgement file name" + file.getName());
         }
         PadFile padFile = new PadCaledonAcknowledgement().processFile(file);
@@ -235,7 +236,7 @@ public class PadCaledon {
         }
         File file = files.get(0);
         files.remove(0);
-        if (!file.getName().endsWith("_reconciliation_rpt." + companyId)) {
+        if (!file.getName().endsWith(PadReconciliationFile.FileNameSufix + companyId)) {
             throw new Error("Invalid Reconciliation file name" + file.getName());
         }
         PadReconciliationFile padFile = new PadCaledonReconciliation().processFile(file);
