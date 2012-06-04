@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.server.preloader;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +25,7 @@ import com.pyx4j.essentials.server.csv.EntityCSVReciver;
 import com.propertyvista.admin.domain.pmc.OnboardingMerchantAccount;
 import com.propertyvista.admin.domain.pmc.Pmc;
 import com.propertyvista.admin.domain.pmc.Pmc.PmcStatus;
+import com.propertyvista.admin.domain.pmc.PmcPaymentTypeInfo;
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.domain.DemoData;
 import com.propertyvista.domain.DemoData.DemoPmc;
@@ -56,11 +58,29 @@ public class PmcCreatorDev {
             } catch (IllegalArgumentException ignore) {
             }
             if (ordinal >= 0) {
+                PmcPaymentTypeInfo fees = EntityFactory.create(PmcPaymentTypeInfo.class);
+                fees.pmc().set(pmc);
+                fees.ccPaymentAvailable().setValue(Boolean.TRUE);
+                fees.ccFee().setValue(new BigDecimal("2.50"));
+
+                fees.eCheckPaymentAvailable().setValue(Boolean.TRUE);
+                fees.eChequeFee().setValue(new BigDecimal("0.20"));
+
+                fees.eftPaymentAvailable().setValue(Boolean.FALSE);
+                fees.eftFee().setValue(new BigDecimal("0.40"));
+
+                fees.interacCaledonPaymentAvailable().setValue(Boolean.FALSE);
+                fees.interacCaledonFee().setValue(new BigDecimal("1.50"));
+
+                fees.interacVisaPaymentAvailable().setValue(Boolean.FALSE);
+                fees.interacVisaFee().setValue(new BigDecimal("1.50"));
+
                 String caledonCompanyId = ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance()).getCaledonCompanyId();
                 List<OnboardingMerchantAccountImport> companyImport = new ArrayList<OnboardingMerchantAccountImport>();
                 for (OnboardingMerchantAccountImport imp : accountImport) {
                     if (caledonCompanyId.equals(imp.companyId().getValue())) {
                         companyImport.add(imp);
+                        fees.eChequeFee().setValue(new BigDecimal(imp.transactionFee().getValue()));
                     }
                 }
 
@@ -92,6 +112,26 @@ public class PmcCreatorDev {
 
                     Persistence.service().persist(merchantAccount);
                 }
+
+                Persistence.service().persist(fees);
+            } else {
+                PmcPaymentTypeInfo fees = EntityFactory.create(PmcPaymentTypeInfo.class);
+                fees.pmc().set(pmc);
+                fees.ccPaymentAvailable().setValue(Boolean.FALSE);
+                fees.ccFee().setValue(new BigDecimal("2.50"));
+
+                fees.eCheckPaymentAvailable().setValue(Boolean.FALSE);
+                fees.eChequeFee().setValue(new BigDecimal("0.20"));
+
+                fees.eftPaymentAvailable().setValue(Boolean.FALSE);
+                fees.eftFee().setValue(new BigDecimal("0.40"));
+
+                fees.interacCaledonPaymentAvailable().setValue(Boolean.FALSE);
+                fees.interacCaledonFee().setValue(new BigDecimal("1.50"));
+
+                fees.interacVisaPaymentAvailable().setValue(Boolean.FALSE);
+                fees.interacVisaFee().setValue(new BigDecimal("1.50"));
+                Persistence.service().persist(fees);
             }
 
         } else {
