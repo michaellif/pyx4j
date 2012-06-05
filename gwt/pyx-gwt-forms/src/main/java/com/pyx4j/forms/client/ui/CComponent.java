@@ -665,13 +665,13 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
     }
 
     public void onEditingStart() {
-        if (isEnabled() && isVisible() && isEditable()) {
+        if (isEnabled() && isVisible() && isEditable() && !isViewable()) {
             editing = true;
         }
     }
 
     public void onEditingStop() {
-        if (isEnabled() && isVisible() && isEditable()) {
+        if (isEnabled() && isVisible() && isEditable() && !isViewable()) {
             boolean isOrigEmpty = isValueEmpty();
             editing = false;
             try {
