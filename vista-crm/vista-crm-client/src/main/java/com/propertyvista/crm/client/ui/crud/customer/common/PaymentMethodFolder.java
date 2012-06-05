@@ -13,8 +13,6 @@
  */
 package com.propertyvista.crm.client.ui.crud.customer.common;
 
-import java.util.List;
-
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -23,8 +21,6 @@ import com.pyx4j.entity.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.validators.EditableValueValidator;
-import com.pyx4j.forms.client.validators.ValidationFailure;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
 
@@ -118,27 +114,27 @@ public abstract class PaymentMethodFolder extends VistaBoxFolder<PaymentMethod> 
 
     protected abstract void onPaymentMethodDetlete(PaymentMethod paymentMethod);
 
-    @Override
-    public void addValidations() {
-        super.addValidations();
-
-        this.addValueValidator(new EditableValueValidator<List<PaymentMethod>>() {
-            @Override
-            public ValidationFailure isValid(CComponent<List<PaymentMethod>, ?> component, List<PaymentMethod> value) {
-                if (value != null && !value.isEmpty()) {
-                    boolean primaryFound = false;
-                    for (PaymentMethod item : value) {
-                        if (item.isDefault().isBooleanTrue()) {
-                            primaryFound = true;
-                            break;
-                        }
-                    }
-                    if (!primaryFound) {
-                        return new ValidationFailure(i18n.tr("Default payment should be selected"));
-                    }
-                }
-                return null;
-            }
-        });
-    }
+//    @Override
+//    public void addValidations() {
+//        super.addValidations();
+//
+//        this.addValueValidator(new EditableValueValidator<List<PaymentMethod>>() {
+//            @Override
+//            public ValidationFailure isValid(CComponent<List<PaymentMethod>, ?> component, List<PaymentMethod> value) {
+//                if (value != null && !value.isEmpty()) {
+//                    boolean primaryFound = false;
+//                    for (PaymentMethod item : value) {
+//                        if (item.isDefault().isBooleanTrue()) {
+//                            primaryFound = true;
+//                            break;
+//                        }
+//                    }
+//                    if (!primaryFound) {
+//                        return new ValidationFailure(i18n.tr("Default payment should be selected"));
+//                    }
+//                }
+//                return null;
+//            }
+//        });
+//    }
 }
