@@ -33,7 +33,6 @@ public class MerchantAccountListerViewImpl extends CrmListerViewImplBase<Merchan
             super(MerchantAccount.class, false, false);
 
             setColumnDescriptors(//@formatter:off
-                new MemberColumnDescriptor.Builder(proto().merchantTerminalId()).build(),
                 new MemberColumnDescriptor.Builder(proto().bankId()).build(),
                 new MemberColumnDescriptor.Builder(proto().branchTransitNumber()).build(),
                 new MemberColumnDescriptor.Builder(proto().accountNumber()).build(),

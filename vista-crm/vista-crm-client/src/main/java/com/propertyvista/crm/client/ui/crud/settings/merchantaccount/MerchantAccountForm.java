@@ -43,7 +43,6 @@ public class MerchantAccountForm extends CrmEntityForm<MerchantAccount> {
 
         int row = -1;
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().status()), 25).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().merchantTerminalId()), 10).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().bankId()), 5).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().branchTransitNumber()), 5).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().accountNumber()), 15).build());
