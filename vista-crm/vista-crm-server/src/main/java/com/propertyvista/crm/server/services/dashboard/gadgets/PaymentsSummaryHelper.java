@@ -41,6 +41,7 @@ public class PaymentsSummaryHelper {
             PaymentsSummary proto = EntityFactory.create(PaymentsSummary.class);
 
             bind(PaymentType.Cash, proto.cash());
+            bind(PaymentType.Check, proto.cheque());
             bind(PaymentType.Echeck, proto.eCheque());
             bind(PaymentType.CreditCard, proto.cc());
             bind(PaymentType.EFT, proto.eft());
@@ -48,7 +49,7 @@ public class PaymentsSummaryHelper {
 
         }
 
-        public IPrimitive<BigDecimal> member(PaymentsSummary summary, PaymentType type) {
+        public IPrimitive<BigDecimal> getMember(PaymentsSummary summary, PaymentType type) {
             return (IPrimitive<BigDecimal>) summary.getMember(memberMap[type.ordinal()]);
         }
 
@@ -73,14 +74,14 @@ public class PaymentsSummaryHelper {
      * @return
      */
     public PaymentsSummary calculateSummary(MerchantAccount merchantAccount, PaymentRecord.PaymentStatus paymentStatus, LogicalDate snapshotDay) {
-
         PaymentsSummary summary = initPaymentsSummary(snapshotDay);
 
+        summary.status().setValue(paymentStatus);
         ICursorIterator<PaymentRecord> i = Persistence.service().query(null, makeCriteria(merchantAccount, paymentStatus, snapshotDay), AttachLevel.Attached);
         while (i.hasNext()) {
             PaymentRecord r = i.next();
             PaymentType paymentType = r.paymentMethod().type().getValue();
-            IPrimitive<BigDecimal> amountMember = paymentTypeMapper.member(summary, paymentType);
+            IPrimitive<BigDecimal> amountMember = paymentTypeMapper.getMember(summary, paymentType);
             amountMember.setValue(amountMember.getValue().add(r.amount().getValue()));
         }
 
@@ -97,8 +98,9 @@ public class PaymentsSummaryHelper {
 
     private PaymentsSummary initPaymentsSummary(LogicalDate snapshotDay) {
         PaymentsSummary summary = EntityFactory.create(PaymentsSummary.class);
+
         for (PaymentType type : PaymentType.values()) {
-            paymentTypeMapper.member(summary, type).setValue(new BigDecimal("0.00"));
+            paymentTypeMapper.getMember(summary, type).setValue(new BigDecimal("0.00"));
         }
         summary.timestamp().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
         summary.snapshotDay().setValue(snapshotDay);

@@ -17,38 +17,14 @@ import static com.pyx4j.gwt.server.DateUtils.detectDateformat;
 
 import java.math.BigDecimal;
 
-import org.junit.Ignore;
-
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.EntityFactory;
 
-import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.domain.dashboard.gadgets.payments.PaymentsSummary;
 import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
 import com.propertyvista.domain.payment.PaymentType;
-import com.propertyvista.domain.tenant.lease.Lease;
 
-@Ignore
 public class PaymentsSummaryHelperTest extends PaymentsSummaryHelperTestBase {
-
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
-
-        lease = EntityFactory.create(Lease.class);
-        ServerSideFactory.create(LeaseFacade.class);
-
-        // TODO add merchant account
-
-    }
-
-    @Override
-    protected void tearDown() throws Exception {
-        super.tearDown();
-        Persistence.service().setTransactionSystemTime(null);
-    }
 
     public void testCalculateSummary() {
         // initialize
@@ -76,6 +52,7 @@ public class PaymentsSummaryHelperTest extends PaymentsSummaryHelperTestBase {
 
             assertEquals(PaymentStatus.Received, summary.status().getValue());
             assertEquals(new LogicalDate(detectDateformat("01-Aug-2010")), summary.timestamp().getValue());
+            assertEquals(new LogicalDate(detectDateformat("01-May-2010")), summary.snapshotDay().getValue());
 
             assertEquals(new BigDecimal("250.00"), summary.cash().getValue());
             assertEquals(new BigDecimal("0.00"), summary.cheque().getValue());
@@ -90,7 +67,8 @@ public class PaymentsSummaryHelperTest extends PaymentsSummaryHelperTestBase {
                     detectDateformat("02-May-2010")));
 
             assertEquals(PaymentStatus.Received, summary.status().getValue());
-            assertEquals(new LogicalDate(detectDateformat("02-Aug-2010")), summary.timestamp().getValue());
+            assertEquals(new LogicalDate(detectDateformat("01-Aug-2010")), summary.timestamp().getValue());
+            assertEquals(new LogicalDate(detectDateformat("02-May-2010")), summary.snapshotDay().getValue());
 
             assertEquals(new BigDecimal("0.00"), summary.cash().getValue());
             assertEquals(new BigDecimal("0.00"), summary.cheque().getValue());

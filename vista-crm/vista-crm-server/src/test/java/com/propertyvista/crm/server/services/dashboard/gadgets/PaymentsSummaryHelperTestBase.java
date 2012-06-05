@@ -18,13 +18,22 @@ import static com.pyx4j.gwt.server.DateUtils.detectDateformat;
 import java.math.BigDecimal;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 
+import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.config.tests.VistaDBTestBase;
 import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
+import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
+import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
+import com.propertyvista.domain.policy.policies.IdAssignmentPolicy;
+import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem;
+import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdAssignmentType;
+import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
+import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 public class PaymentsSummaryHelperTestBase extends VistaDBTestBase {
@@ -35,20 +44,80 @@ public class PaymentsSummaryHelperTestBase extends VistaDBTestBase {
 
     protected MerchantAccount merchantAccountB;
 
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
+
+        OrganizationPoliciesNode policyNode = EntityFactory.create(OrganizationPoliciesNode.class);
+        Persistence.service().persist(policyNode);
+        IdAssignmentPolicy idAssignmentPolicy = EntityFactory.create(IdAssignmentPolicy.class);
+        idAssignmentPolicy.node().set(policyNode);
+        {
+            IdAssignmentItem leaseAssignmentItem = idAssignmentPolicy.itmes().$();
+            leaseAssignmentItem.target().setValue(IdTarget.lease);
+            leaseAssignmentItem.type().setValue(IdAssignmentType.generatedNumber);
+            idAssignmentPolicy.itmes().add(leaseAssignmentItem);
+        }
+        {
+            IdAssignmentItem tenantAssignmentItem = idAssignmentPolicy.itmes().$();
+            tenantAssignmentItem.target().setValue(IdTarget.tenant);
+            tenantAssignmentItem.type().setValue(IdAssignmentType.generatedNumber);
+            idAssignmentPolicy.itmes().add(tenantAssignmentItem);
+        }
+
+        Persistence.service().persist(idAssignmentPolicy);
+
+        lease = EntityFactory.create(Lease.class);
+
+        Tenant tenant = lease.version().tenants().$();
+        tenant.customer().person().name().firstName().setValue("Foo");
+        tenant.customer().person().name().lastName().setValue("Foo");
+        lease.version().tenants().add(tenant);
+
+        ServerSideFactory.create(LeaseFacade.class).initLease(lease);
+
+        makeMerchantAccount("A");
+        makeMerchantAccount("B");
+
+        Persistence.service().startTransaction();
+    }
+
+    @Override
+    protected void tearDown() throws Exception {
+        try {
+            super.tearDown();
+            Persistence.service().setTransactionSystemTime(null);
+        } finally {
+            Persistence.service().commit();
+            Persistence.service().endTransaction();
+        }
+    }
+
     protected PaymentRecord makePaymentRecord(MerchantAccount merchantAccount, String lastStatusChangeDate, String amount, PaymentType paymentType,
             PaymentRecord.PaymentStatus paymentStatus) {
+        PaymentMethod paymentMethod = EntityFactory.create(PaymentMethod.class);
+        paymentMethod.type().setValue(paymentType);
+        paymentMethod.leaseParticipant().set(lease.version().tenants().get(0));
+        Persistence.service().persist(paymentMethod);
 
         PaymentRecord paymentRecord = EntityFactory.create(PaymentRecord.class);
-
         paymentRecord.lastStatusChangeDate().setValue(new LogicalDate(detectDateformat(lastStatusChangeDate)));
         paymentRecord.amount().setValue(new BigDecimal(amount));
-        paymentRecord.paymentMethod().type().setValue(paymentType);
+        paymentRecord.paymentMethod().set(paymentMethod);
         paymentRecord.paymentStatus().setValue(paymentStatus);
         paymentRecord.billingAccount().set(lease.billingAccount());
+        paymentRecord.merchantAccount().set(merchantAccountA);
 
         Persistence.service().persist(paymentRecord);
 
         return paymentRecord;
+    }
+
+    private MerchantAccount makeMerchantAccount(String accountNumber) {
+        MerchantAccount merchantAccount = EntityFactory.create(MerchantAccount.class);
+        merchantAccount.accountNumber().setValue(accountNumber);
+        Persistence.service().persist(merchantAccount);
+        return merchantAccount;
     }
 
 }
