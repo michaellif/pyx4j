@@ -28,9 +28,16 @@ import com.google.gwt.user.client.ui.Widget;
 public class SpaceHolder extends FlowPanel {
 
     public SpaceHolder() {
+        this(null);
+    }
+
+    public SpaceHolder(Widget widget) {
         HTML html = new HTML("&nbsp;");
         html.getElement().getStyle().setHeight(1, Unit.PX);
         add(html);
+        if (widget != null) {
+            add(widget);
+        }
     }
 
     public void setWidget(Widget widget) {

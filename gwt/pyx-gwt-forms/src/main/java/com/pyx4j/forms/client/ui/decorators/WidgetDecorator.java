@@ -69,7 +69,7 @@ public class WidgetDecorator extends FlexTable {
 
     private final SpaceHolder mandatoryImageHolder;
 
-    private final SpaceHolder infoImageHolder;
+    private final SimplePanel infoImageHolder;
 
     private Image mandatoryImage;
 
@@ -119,13 +119,11 @@ public class WidgetDecorator extends FlexTable {
 
         label.ensureDebugId(CompositeDebugId.debugId(component.getDebugId(), DebugIds.Label));
 
-        infoImageHolder = new SpaceHolder();
-        infoImageHolder.setStyleName(WidgetDecoratorInfoImage.name());
+        infoImageHolder = new SimplePanel();
         renderTooltip();
 
         mandatoryImageHolder = new SpaceHolder();
         mandatoryImageHolder.setStyleName(WidgetDecoratorMandatoryImage.name());
-
         renderMandatoryStar();
 
         label.setVisible(component.isVisible());
@@ -213,7 +211,7 @@ public class WidgetDecorator extends FlexTable {
                     mandatoryImage.ensureDebugId(new CompositeDebugId(component.getDebugId(), DebugIds.MandatoryImage).debugId());
                 }
             }
-            mandatoryImageHolder.add(mandatoryImage);
+            mandatoryImageHolder.setWidget(mandatoryImage);
         } else {
             mandatoryImageHolder.clear();
         }
@@ -238,7 +236,10 @@ public class WidgetDecorator extends FlexTable {
 
             infoImageHolder.ensureDebugId(CompositeDebugId.debugId(component.getDebugId(), DebugIds.InfoImageHolder));
             infoImage.ensureDebugId(CompositeDebugId.debugId(component.getDebugId(), new CompositeDebugId(DebugIds.InfoImageHolder, DebugIds.InfoImage)));
-            infoImageHolder.setWidget(infoImage);
+            infoImageHolder.setWidget(new SpaceHolder(infoImage));
+            infoImageHolder.getWidget().setStyleName(WidgetDecoratorInfoImage.name());
+        } else {
+            infoImageHolder.clear();
         }
     }
 
