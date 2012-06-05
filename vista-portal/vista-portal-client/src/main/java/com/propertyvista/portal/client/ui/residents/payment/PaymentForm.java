@@ -145,7 +145,7 @@ public class PaymentForm extends CEntityDecoratableForm<PaymentRecordDTO> {
                     switch (event.getValue()) {
                     case New:
                         paymentMethodEditor.setViewable(false);
-                        paymentMethodEditor.setTypeSelectionVisible(true);
+                        paymentMethodEditor.setTypeSelectionEnabled(true);
                         paymentMethodEditor.initNew(PaymentType.Echeck);
                         paymentMethodEditor.setVisible(!getValue().leaseParticipant().isNull());
                         paymentMethodEditorSeparator.setVisible(!getValue().leaseParticipant().isNull());
@@ -156,11 +156,11 @@ public class PaymentForm extends CEntityDecoratableForm<PaymentRecordDTO> {
                         break;
                     case Profiled:
                         paymentMethodEditor.setViewable(true);
-                        paymentMethodEditor.setTypeSelectionVisible(false);
+                        paymentMethodEditor.setTypeSelectionEnabled(false);
                         paymentMethodEditor.setVisible(false);
                         paymentMethodEditorSeparator.setVisible(false);
 
-                        profiledPaymentMethodsCombo.setValue(null, false);
+                        profiledPaymentMethodsCombo.reset();
                         profiledPaymentMethodsCombo.setVisible(true);
                         break;
                     }
@@ -203,7 +203,7 @@ public class PaymentForm extends CEntityDecoratableForm<PaymentRecordDTO> {
 //        } else {
 //            boolean transactionResult = getValue().paymentMethod().isNull() ? false
 //                    : (getValue().paymentMethod().type().getValue().isTransactable() && getValue().paymentStatus().getValue().isProcessed());
-
+//
 //            get(proto().transactionAuthorizationNumber()).setVisible(transactionResult);
 //            get(proto().transactionErrorMessage()).setVisible(transactionResult && !getValue().transactionErrorMessage().isNull());
 //        }

@@ -90,7 +90,7 @@ public class PaymentMethodEditor extends CEntityDecoratableForm<PaymentMethod> {
         get(proto().type()).addValueChangeHandler(new ValueChangeHandler<PaymentType>() {
             @Override
             public void onValueChange(ValueChangeEvent<PaymentType> event) {
-                selectPaymentDetailsEditor(event.getValue());
+                selectPaymentDetailsEditor(event.getValue(), false);
             }
         });
 
@@ -107,7 +107,7 @@ public class PaymentMethodEditor extends CEntityDecoratableForm<PaymentMethod> {
 
     @Override
     protected void propagateValue(PaymentMethod value, boolean fireEvent, boolean populate) {
-        selectPaymentDetailsEditor(value != null ? value.type().getValue() : null);
+        selectPaymentDetailsEditor(value != null ? value.type().getValue() : null, populate);
         super.propagateValue(value, fireEvent, populate);
     }
 
@@ -119,20 +119,18 @@ public class PaymentMethodEditor extends CEntityDecoratableForm<PaymentMethod> {
         get(proto().billingAddress()).setEditable(!getValue().sameAsCurrent().isBooleanTrue());
     }
 
-    public void initNew(PaymentType type) {
-        PaymentMethod value = EntityFactory.create(PaymentMethod.class);
-        value.type().setValue(type);
-        setValue(value, false);
-    }
-
-    protected void selectPaymentDetailsEditor(PaymentType type) {
+    protected void selectPaymentDetailsEditor(PaymentType type, boolean populate) {
 
         if (this.contains(proto().details())) {
             this.unbind(proto().details());
             paymentDetailsHolder.setWidget(null);
         }
 
-        get(proto().type()).populate(type);
+        if (populate) {
+            get(proto().type()).populate(type);
+        } else {
+            get(proto().type()).setValue(type, false);
+        }
 
         if (type != null && getValue() != null) {
             CEntityForm editor = null;
@@ -185,6 +183,12 @@ public class PaymentMethodEditor extends CEntityDecoratableForm<PaymentMethod> {
         }
     }
 
+    public void initNew(PaymentType type) {
+        PaymentMethod value = EntityFactory.create(PaymentMethod.class);
+        value.type().setValue(type);
+        populate(value);
+    }
+
     // some UI tuning mechanics for client:
 
     public void setTypeSelectionVisible(boolean visible) {
@@ -193,6 +197,14 @@ public class PaymentMethodEditor extends CEntityDecoratableForm<PaymentMethod> {
 
     public boolean isTypeSelectionVisible() {
         return get(proto().type()).isVisible();
+    }
+
+    public void setTypeSelectionEnabled(boolean visible) {
+        get(proto().type()).setEnabled(visible);
+    }
+
+    public boolean isTypeSelectionEnabled() {
+        return get(proto().type()).isEnabled();
     }
 
     public void setBillingAddressVisible(boolean visible) {

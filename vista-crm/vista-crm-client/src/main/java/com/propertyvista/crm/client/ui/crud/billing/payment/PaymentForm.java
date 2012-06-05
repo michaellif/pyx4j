@@ -210,7 +210,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
                         paymentMethodEditor.setVisible(false);
                         paymentMethodEditorSeparator.setVisible(false);
 
-                        profiledPaymentMethodsCombo.setValue(null, false);
+                        profiledPaymentMethodsCombo.reset();
                         profiledPaymentMethodsCombo.setVisible(true);
                         break;
                     }

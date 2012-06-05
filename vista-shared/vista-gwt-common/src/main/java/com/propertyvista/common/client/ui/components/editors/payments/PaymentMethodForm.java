@@ -111,7 +111,7 @@ public class PaymentMethodForm extends PaymentMethodEditor {
         get(proto().type()).addValueChangeHandler(new ValueChangeHandler<PaymentType>() {
             @Override
             public void onValueChange(ValueChangeEvent<PaymentType> event) {
-                selectPaymentDetailsEditor(event.getValue());
+                selectPaymentDetailsEditor(event.getValue(), false);
             }
         });
 
