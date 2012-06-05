@@ -39,63 +39,69 @@ public class BillForm extends CrmEntityForm<BillDTO> {
 
     @Override
     public IsWidget createContent() {
+        FormFlexPanel top = new FormFlexPanel();
+        FormFlexPanel bottom = new FormFlexPanel();
         FormFlexPanel main = new FormFlexPanel();
         int row = -1;
 
-        main.setH1(++row, 0, 2, i18n.tr("Info"));
+        top.setH1(++row, 0, 2, i18n.tr("Info"));
         int row2 = row;
 
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingAccount().lease().unit()), 20).build());
+        top.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingAccount().lease().unit()), 20).build());
 
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingRun().building()), 20).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingRun().billingPeriodStartDate()), 20).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingRun().billingPeriodEndDate()), 20).build());
+        top.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingRun().building()), 20).build());
+        top.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingRun().billingPeriodStartDate()), 20).build());
+        top.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingRun().billingPeriodEndDate()), 20).build());
 
         ++row2;
-        main.setWidget(++row2, 1, new DecoratorBuilder(inject(proto().billingRun().billingCycle().paymentFrequency()), 20).build());
-        main.setWidget(++row2, 1, new DecoratorBuilder(inject(proto().billingRun().billingCycle().billingPeriodStartDay()), 20).build());
-        main.setWidget(++row2, 1, new DecoratorBuilder(inject(proto().billingRun().billingCycle().billingRunTargetDay()), 20).build());
+        top.setWidget(++row2, 1, new DecoratorBuilder(inject(proto().billingRun().billingCycle().paymentFrequency()), 20).build());
+        top.setWidget(++row2, 1, new DecoratorBuilder(inject(proto().billingRun().billingCycle().billingPeriodStartDay()), 20).build());
+        top.setWidget(++row2, 1, new DecoratorBuilder(inject(proto().billingRun().billingCycle().billingRunTargetDay()), 20).build());
 
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingRun().executionTargetDate()), 20).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingRun().executionDate()), 20).build());
+        top.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingRun().executionTargetDate()), 20).build());
+        top.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingRun().executionDate()), 20).build());
 
-        main.setH1(++row, 0, 2, i18n.tr("Status"));
+        top.setH1(++row, 0, 2, i18n.tr("Status"));
         row2 = row;
 
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billSequenceNumber()), 20).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billType()), 20).build());
+        top.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billSequenceNumber()), 20).build());
+        top.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billType()), 20).build());
 
-        main.setWidget(++row2, 1, new DecoratorBuilder(inject(proto().billStatus()), 20).build());
-        main.setWidget(++row2, 1, new DecoratorBuilder(inject(proto().rejectReason()), 20).build());
+        top.setWidget(++row2, 1, new DecoratorBuilder(inject(proto().billStatus()), 20).build());
+        top.setWidget(++row2, 1, new DecoratorBuilder(inject(proto().rejectReason()), 20).build());
 
-        main.setH1(++row, 0, 2, i18n.tr("Last Bill"));
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().balanceForwardAmount())).build());
+        bottom.setH1(++row, 0, 2, i18n.tr("Last Bill"));
+        int row3 = row;
+        bottom.setWidget(++row, 0, new DecoratorBuilder(inject(proto().balanceForwardAmount())).build());
 
-        main.setWidget(++row, 0, inject(proto().paymentLineItems(), new LineItemCollapsableViewer()));
-        main.setWidget(++row, 0, inject(proto().depositRefundLineItems(), new LineItemCollapsableViewer()));
-        main.setWidget(++row, 0, inject(proto().immediateAccountAdjustmentLineItems(), new LineItemCollapsableViewer()));
-        main.setHR(++row, 0, 2);
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().pastDueAmount()), 10).build());
+        bottom.setWidget(++row, 0, inject(proto().paymentLineItems(), new LineItemCollapsableViewer()));
+        bottom.setWidget(++row, 0, inject(proto().depositRefundLineItems(), new LineItemCollapsableViewer()));
+        bottom.setWidget(++row, 0, inject(proto().immediateAccountAdjustmentLineItems(), new LineItemCollapsableViewer()));
+        bottom.setHR(++row, 0, 2);
+        bottom.setWidget(++row, 0, new DecoratorBuilder(inject(proto().pastDueAmount())).build());
 
-        main.setH1(++row, 0, 2, i18n.tr("Current Bill"));
-        main.setWidget(++row, 0, inject(proto().serviceChargeLineItems(), new LineItemCollapsableViewer()));
-        main.setWidget(++row, 0, inject(proto().recurringFeatureChargeLineItems(), new LineItemCollapsableViewer()));
-        main.setWidget(++row, 0, inject(proto().onetimeFeatureChargeLineItems(), new LineItemCollapsableViewer()));
-        main.setWidget(++row, 0, inject(proto().pendingAccountAdjustmentLineItems(), new LineItemCollapsableViewer()));
+        bottom.setH1(++row, 0, 2, i18n.tr("Current Bill"));
+        bottom.setWidget(++row, 0, inject(proto().serviceChargeLineItems(), new LineItemCollapsableViewer()));
+        bottom.setWidget(++row, 0, inject(proto().recurringFeatureChargeLineItems(), new LineItemCollapsableViewer()));
+        bottom.setWidget(++row, 0, inject(proto().onetimeFeatureChargeLineItems(), new LineItemCollapsableViewer()));
+        bottom.setWidget(++row, 0, inject(proto().pendingAccountAdjustmentLineItems(), new LineItemCollapsableViewer()));
 
-        main.setWidget(++row, 0, inject(proto().depositLineItems(), new LineItemCollapsableViewer()));
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().productCreditAmount())).build());
+        bottom.setWidget(++row, 0, inject(proto().depositLineItems(), new LineItemCollapsableViewer()));
+        bottom.setWidget(++row, 0, new DecoratorBuilder(inject(proto().productCreditAmount())).build());
 
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().currentAmount())).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().taxes())).build());
+        bottom.setWidget(++row, 0, new DecoratorBuilder(inject(proto().currentAmount())).build());
+        bottom.setWidget(++row, 0, new DecoratorBuilder(inject(proto().taxes())).build());
 
         // Dues:
-        main.setHR(++row, 0, 2);
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().totalDueAmount())).build());
+        bottom.setHR(++row, 0, 2);
+        bottom.setWidget(++row, 0, new DecoratorBuilder(inject(proto().totalDueAmount())).build());
 
-        main.getColumnFormatter().setWidth(0, "50%");
-        main.getColumnFormatter().setWidth(1, "50%");
-
+        bottom.getColumnFormatter().setWidth(0, "50%");
+        bottom.getColumnFormatter().setWidth(1, "50%");
+        top.getColumnFormatter().setWidth(0, "45%");
+        top.getColumnFormatter().setWidth(1, "55%");
+        main.setWidget(0, 0, top);
+        main.setWidget(row3, 0, bottom);
         return new ScrollPanel(main);
     }
 
