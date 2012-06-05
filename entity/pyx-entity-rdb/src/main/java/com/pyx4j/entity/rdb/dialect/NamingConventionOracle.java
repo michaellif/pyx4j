@@ -128,17 +128,17 @@ public class NamingConventionOracle implements NamingConvention {
 
     @Override
     public String sqlTableSequenceName(String javaPersistenceName) {
-        return makeName(javaPersistenceName, identifierMaximumLength - 4) + "_SEQ";
+        return makeName(javaPersistenceName, identifierMaximumLength - 4) + "_seq";
     }
 
     @Override
     public String sqlTablePKName(String tableName) {
-        return makeName(tableName, identifierMaximumLength - 3) + "_PK";
+        return makeName(tableName, identifierMaximumLength - 3) + "_pk";
     }
 
     @Override
     public String sqlChildTableSequenceName(String tableName) {
-        return makeName(tableName, identifierMaximumLength - 4) + "_SEQ";
+        return makeName(tableName, identifierMaximumLength - 4) + "_seq";
     }
 
     @Override
@@ -150,7 +150,7 @@ public class NamingConventionOracle implements NamingConvention {
             sql.append(column);
             sql.append('_');
         }
-        sql.append("IDX");
+        sql.append("idx");
         return makeName(sql.toString());
     }
 
@@ -223,7 +223,7 @@ public class NamingConventionOracle implements NamingConvention {
         sql.append(makeName(tableFrom));
         sql.append('_');
         sql.append(makeName(indexColName));
-        sql.append("_Fk");
+        sql.append("_fk");
         return makeName(sql.toString());
     }
 
