@@ -15,16 +15,20 @@ package com.propertyvista.crm.server.services.dashboard.gadgets;
 
 import static com.propertyvista.crm.server.util.EntityDto2DboCriteriaConverter.makeMapper;
 
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 import java.util.Vector;
 import java.util.concurrent.Callable;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.rpc.EntitySearchResult;
+import com.pyx4j.entity.rpc.InMemeoryListService;
 import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
@@ -63,7 +67,7 @@ public class PaymentReportServiceImpl implements PaymentReportService {
         dtoBinder = new EntityDtoBinder<PaymentRecord, PaymentRecordForReportDTO>(PaymentRecord.class, PaymentRecordForReportDTO.class) {
             @Override
             protected void bind() {
-                bind(dtoProto.billingAccount().accountNumber(), dboProto.billingAccount().accountNumber());
+                bind(dtoProto.merchantAccount().accountNumber(), dboProto.merchantAccount().accountNumber());
                 bind(dtoProto.billingAccount().lease().unit().belongsTo().propertyCode(), dboProto.billingAccount().lease().unit().belongsTo().propertyCode());
                 bind(dtoProto.billingAccount().lease().leaseId(), dboProto.billingAccount().lease().leaseId());
                 bind(dtoProto.paymentMethod().type(), dboProto.paymentMethod().type());
@@ -124,25 +128,34 @@ public class PaymentReportServiceImpl implements PaymentReportService {
     public void paymentsSummary(AsyncCallback<EntitySearchResult<PaymentsSummary>> callback, Vector<Building> buildings, LogicalDate targetDate,
             Vector<PaymentStatus> paymentStatusCriteria, int pageNumber, int pageSize, Vector<Sort> sortingCriteria) {
 
-        Vector<PaymentsSummary> summary = new Vector<PaymentsSummary>();
+        Vector<PaymentsSummary> summariesVector = new Vector<PaymentsSummary>();
 
         Iterator<Building> buildingIterator = !buildings.isEmpty() ? buildings.iterator() : Persistence.service().query(null,
                 EntityQueryCriteria.create(Building.class), AttachLevel.Detached);
         Iterator<MerchantAccount> merchantAccounts = merchantAccountIterator(buildingIterator);
 
         PaymentsSummaryHelper summaryHelper = new PaymentsSummaryHelper();
+
         while (merchantAccounts.hasNext()) {
-
+            MerchantAccount merchantAccount = merchantAccounts.next();
+            for (PaymentStatus paymentStatus : paymentStatusCriteria) {
+                PaymentsSummary summary = summaryHelper.calculateSummary(merchantAccount, paymentStatus, targetDate);
+                if (summaryHelper.hasPayments(summary)) {
+                    summariesVector.add(summary);
+                }
+            }
         }
+        // load detached merchant accounts
+        for (PaymentsSummary paymentsSummary : summariesVector) {
+            paymentsSummary.merchantAccount().set(Persistence.service().retrieve(MerchantAccount.class, paymentsSummary.merchantAccount().getPrimaryKey()));
+        }
+        EntityListCriteria<PaymentsSummary> criteria = EntityListCriteria.create(PaymentsSummary.class);
+        criteria.setSorts(sortingCriteria);
+        criteria.setPageNumber(pageNumber);
+        criteria.setPageSize(pageSize);
 
-        //summaryHelper.calculateSummary(merchantAccount, paymentStatus, snapshotDay)
-        // TODO implement this
-        EntitySearchResult<PaymentsSummary> result = new EntitySearchResult<PaymentsSummary>();
-        result.setTotalRows(0);
-        result.setData(new Vector<PaymentsSummary>());
-        result.hasMoreData(false);
-
-        callback.onSuccess(result);
+        InMemeoryListService<PaymentsSummary> inMemoryService = new InMemeoryListService<PaymentsSummary>(summariesVector);
+        inMemoryService.list(callback, criteria);
     }
 
     @Override
@@ -168,7 +181,7 @@ public class PaymentReportServiceImpl implements PaymentReportService {
     }
 
     private PaymentRecordForReportDTO makeDTO(PaymentRecord paymentRecordDBO) {
-
+        Persistence.service().retrieve(paymentRecordDBO.merchantAccount());
         Persistence.service().retrieve(paymentRecordDBO.billingAccount());
         Persistence.service().retrieve(paymentRecordDBO.billingAccount().lease());
         Persistence.service().retrieve(paymentRecordDBO.billingAccount().lease().unit());
@@ -183,13 +196,17 @@ public class PaymentReportServiceImpl implements PaymentReportService {
     /** returns iterator over merchant accounts of the given buildings */
     private static Iterator<MerchantAccount> merchantAccountIterator(Iterator<Building> buildingIterator) {
         List<MerchantAccount> merchantAccounts = new LinkedList<MerchantAccount>();
+        Set<Key> alreadyAddedMerchantAccounts = new HashSet<Key>();
+
         while (buildingIterator.hasNext()) {
             EntityQueryCriteria<BuildingMerchantAccount> criteria = EntityQueryCriteria.create(BuildingMerchantAccount.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().building(), buildingIterator.next()));
 
             List<BuildingMerchantAccount> buildingMerchantAccounts = Persistence.service().query(criteria, AttachLevel.Detached);
             for (BuildingMerchantAccount buildingMerchantAccount : buildingMerchantAccounts) {
-                merchantAccounts.add(buildingMerchantAccount.merchantAccount().<MerchantAccount> detach());
+                if (alreadyAddedMerchantAccounts.add(buildingMerchantAccount.merchantAccount().getPrimaryKey())) {
+                    merchantAccounts.add(buildingMerchantAccount.merchantAccount().<MerchantAccount> detach());
+                }
             }
         }
         return merchantAccounts.iterator();

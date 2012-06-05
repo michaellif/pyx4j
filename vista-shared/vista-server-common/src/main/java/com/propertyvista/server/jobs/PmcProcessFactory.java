@@ -36,7 +36,7 @@ public class PmcProcessFactory {
         case leaseActivation:
             return new LeaseActivationProcess();
         case updatePaymentsSummary:
-            return new PaymentsSummarySnapshotProcess();
+            // TODO: not sure if it should happen: return new PaymentsSummarySnapshotProcess();
         default:
             throw new IllegalArgumentException("Not implemented");
         }

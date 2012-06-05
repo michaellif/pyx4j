@@ -17,7 +17,7 @@ import static com.propertyvista.crm.client.ui.gadgets.util.ColumnDescriptorConve
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.EnumSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
@@ -66,8 +66,10 @@ public class PaymentsSummaryGadgetFactory extends AbstractGadget<PaymentsSummary
 
         private DataTableModel<PaymentFeesDTO> feesTableModel;
 
+        private HTML summaryTitlePanel;
+
         public PaymentsSummaryGadget(GadgetMetadata gadgetMetadata) {
-            super(gadgetMetadata, PaymentsSummaryGadgetMetadata.class, null, PaymentsSummary.class, false);
+            super(gadgetMetadata, PaymentsSummaryGadgetMetadata.class, new PaymentsSummaryGadgetMetadataForm(), PaymentsSummary.class, false);
             service = GWT.<PaymentReportService> create(PaymentReportService.class);
         }
 
@@ -87,11 +89,11 @@ public class PaymentsSummaryGadgetFactory extends AbstractGadget<PaymentsSummary
 
             PaymentsSummaryGadgetMetadata settings = super.createDefaultSettings(metadataClass);
 
-            settings.paymentStatus().addAll(EnumSet.complementOf(EnumSet.of(PaymentStatus.Processing)));
+            settings.paymentStatus().addAll(PaymentStatus.processed());
 
             PaymentsSummary proto = EntityFactory.create(PaymentsSummary.class);
             settings.columnDescriptors().addAll(asColumnDesciptorEntityList(Arrays.asList(//@formatter:off
-                    new MemberColumnDescriptor.Builder(proto.merchantAccount()).build(),
+                    new MemberColumnDescriptor.Builder(proto.merchantAccount().accountNumber()).title(i18n.tr("Merchant Account")).build(),
                     new MemberColumnDescriptor.Builder(proto.status()).build(),
                     new MemberColumnDescriptor.Builder(proto.cash()).build(),
                     new MemberColumnDescriptor.Builder(proto.cheque()).build(),
@@ -136,10 +138,24 @@ public class PaymentsSummaryGadgetFactory extends AbstractGadget<PaymentsSummary
             VerticalPanel contentPanel = new VerticalPanel();
             contentPanel.setWidth("100%");
 
-            contentPanel.add(initListerWidget());
+            contentPanel.add(initSummaryPanel());
             contentPanel.add(initFeesPanel());
 
             return contentPanel;
+        }
+
+        private Widget initSummaryPanel() {
+            VerticalPanel summaryPanel = new VerticalPanel();
+            summaryPanel.setWidth("100%");
+
+            summaryTitlePanel = new HTML();
+            summaryTitlePanel.setWidth("100%");
+            summaryTitlePanel.getElement().getStyle().setProperty("textAlign", "center");
+            summaryPanel.add(summaryTitlePanel);
+
+            summaryPanel.add(initListerWidget());
+
+            return summaryPanel;
         }
 
         private Widget initFeesPanel() {
@@ -179,6 +195,34 @@ public class PaymentsSummaryGadgetFactory extends AbstractGadget<PaymentsSummary
             return feesPanel;
         }
 
+        private void redrawSummaryCaption() {
+            String statusFilterView = !getMetadata().paymentStatus().isEmpty() ? makeListView(getMetadata().paymentStatus()) : i18n.tr("none");
+
+            summaryTitlePanel.setHTML(new SafeHtmlBuilder()//@formatter:off                     
+                    .appendHtmlConstant("<div>")
+                        .appendEscaped(i18n.tr("Target Date: {0}", getStatusDate()))
+                    .appendHtmlConstant("</div>")
+                                        
+                    .appendHtmlConstant("<div>")                    
+                        .appendEscaped(i18n.tr("Payment Statuses: {0}", statusFilterView))
+                    .appendHtmlConstant("</div>")
+                    .toSafeHtml());//@formatter:on
+
+        }
+
+        private String makeListView(Iterable<?> col) {
+            StringBuilder viewBuilder = new StringBuilder();
+            Iterator<?> i = col.iterator();
+            if (i.hasNext()) {
+                viewBuilder.append(i.next().toString());
+            }
+            while (i.hasNext()) {
+                viewBuilder.append(", ").append(i.next().toString());
+            }
+            return viewBuilder.toString();
+
+        }
+
         private void populateFeesPanel() {
             service.paymentsFees(new AsyncCallback<Vector<PaymentFeesDTO>>() {
 
@@ -193,6 +237,7 @@ public class PaymentsSummaryGadgetFactory extends AbstractGadget<PaymentsSummary
                     dataItems.add(new DataItem<PaymentFeesDTO>(result.get(0)));
                     dataItems.add(new DataItem<PaymentFeesDTO>(result.get(1)));
                     feesTableModel.populateData(dataItems, 0, false, 2);
+                    redrawSummaryCaption();
                     populateSucceded();
                 }
             });

@@ -91,7 +91,7 @@ public class PaymentRecordsGadgetFactory extends AbstractGadget<PaymentRecordsGa
 
             PaymentRecordForReportDTO proto = EntityFactory.create(PaymentRecordForReportDTO.class);
             settings.columnDescriptors().addAll(asColumnDesciptorEntityList(Arrays.asList(//@formatter:off
-                    new MemberColumnDescriptor.Builder(proto.billingAccount().accountNumber()).title(i18n.tr("TODO Merchant Account")).build(),
+                    new MemberColumnDescriptor.Builder(proto.merchantAccount().accountNumber()).title(i18n.tr("Merchant Account")).build(),
                     new MemberColumnDescriptor.Builder(proto.billingAccount().lease().unit().belongsTo().propertyCode()).title(i18n.tr("Building")).build(),
                     new MemberColumnDescriptor.Builder(proto.billingAccount().lease().leaseId()).title(i18n.tr("Lease")).build(),
                     new MemberColumnDescriptor.Builder(proto.paymentMethod().leaseParticipant().customer()).title(i18n.tr("Tenant")).build(),                    

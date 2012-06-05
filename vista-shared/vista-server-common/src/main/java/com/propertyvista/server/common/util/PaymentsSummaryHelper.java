@@ -126,13 +126,31 @@ public final class PaymentsSummaryHelper {
         }
 
         summary.status().setValue(paymentStatus);
+        summary.merchantAccount().set(merchantAccount);
         return summary;
+    }
+
+    /**
+     * @return <code>true</code> if the summary has payments, else <code>false</code>
+     */
+    public boolean hasPayments(PaymentsSummary summary) {
+        final BigDecimal ZERO = new BigDecimal("0.00"); // not using BigDecimal.ZERO because i'm not sure about percision
+        // TODO refactor this access to private value memberMap 
+        for (Path memberPath : paymentTypeMapper.memberMap) {
+            if (!summary.getMember(memberPath).getValue().equals(ZERO)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
      * takes snapshots of payments summary for every merchant account and every payment status, runs hook on after finishing every snapshot, if a snapshot
      * with the same key (merchant account, payment status, snapshotDay) already exists it's updated (overridden with new values)
+     * 
+     * @deprecated if used generates too many records in database per day... if used as intended (every day) will bomb the database with A LOT of records
      */
+    @Deprecated
     public void takePaymentsSummarySnapshots(LogicalDate snapshotDay) {
 
         Iterator<MerchantAccount> merchantAccountsIterator = Persistence.service().query(null, EntityQueryCriteria.create(MerchantAccount.class),
