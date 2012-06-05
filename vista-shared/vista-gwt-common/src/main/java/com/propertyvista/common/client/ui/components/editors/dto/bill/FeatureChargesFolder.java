@@ -11,7 +11,7 @@
  * @author stanp
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.billing.bill;
+package com.propertyvista.common.client.ui.components.editors.dto.bill;
 
 import java.util.ArrayList;
 import java.util.List;

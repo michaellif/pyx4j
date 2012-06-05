@@ -11,37 +11,41 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.billing.bill;
+package com.propertyvista.common.client.ui.components.editors.dto.bill;
 
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.ScrollPanel;
 
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
+import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.domain.financial.billing.Bill.BillStatus;
 import com.propertyvista.dto.BillDTO;
 
-public class BillForm extends CrmEntityForm<BillDTO> {
+public class BillForm extends CEntityDecoratableForm<BillDTO> {
 
     private static final I18n i18n = I18n.get(BillForm.class);
 
     public BillForm() {
-        this(false);
+        this(true);
     }
 
     public BillForm(boolean viewMode) {
-        super(BillDTO.class, viewMode);
+        super(BillDTO.class);
+
+        if (viewMode) {
+            setEditable(false);
+            setViewable(true);
+        }
     }
 
     @Override
     public IsWidget createContent() {
+
+        // form top panel:
         FormFlexPanel top = new FormFlexPanel();
-        FormFlexPanel bottom = new FormFlexPanel();
-        FormFlexPanel main = new FormFlexPanel();
         int row = -1;
 
         top.setH1(++row, 0, 2, i18n.tr("Info"));
@@ -70,6 +74,11 @@ public class BillForm extends CrmEntityForm<BillDTO> {
         top.setWidget(++row2, 1, new DecoratorBuilder(inject(proto().billStatus()), 20).build());
         top.setWidget(++row2, 1, new DecoratorBuilder(inject(proto().rejectReason()), 20).build());
 
+        top.getColumnFormatter().setWidth(0, "45%");
+        top.getColumnFormatter().setWidth(1, "55%");
+
+        // form bottom panel:
+        FormFlexPanel bottom = new FormFlexPanel();
         bottom.setH1(++row, 0, 2, i18n.tr("Last Bill"));
         int row3 = row;
         bottom.setWidget(++row, 0, new DecoratorBuilder(inject(proto().balanceForwardAmount())).build());
@@ -98,11 +107,13 @@ public class BillForm extends CrmEntityForm<BillDTO> {
 
         bottom.getColumnFormatter().setWidth(0, "50%");
         bottom.getColumnFormatter().setWidth(1, "50%");
-        top.getColumnFormatter().setWidth(0, "45%");
-        top.getColumnFormatter().setWidth(1, "55%");
+
+        // form main panel:
+        FormFlexPanel main = new FormFlexPanel();
         main.setWidget(0, 0, top);
         main.setWidget(row3, 0, bottom);
-        return new ScrollPanel(main);
+
+        return main;
     }
 
     @Override

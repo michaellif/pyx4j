@@ -20,40 +20,41 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
+import com.pyx4j.entity.shared.IEntity;
 
 import com.propertyvista.biz.financial.billing.BillingFacade;
 import com.propertyvista.biz.financial.billing.BillingUtils;
+import com.propertyvista.crm.rpc.dto.BillDataDTO;
 import com.propertyvista.crm.rpc.services.billing.BillCrudService;
 import com.propertyvista.domain.financial.billing.Bill;
-import com.propertyvista.dto.BillDTO;
 
-public class BillCrudServiceImpl extends AbstractCrudServiceDtoImpl<Bill, BillDTO> implements BillCrudService {
+public class BillCrudServiceImpl extends AbstractCrudServiceDtoImpl<Bill, BillDataDTO> implements BillCrudService {
 
     public BillCrudServiceImpl() {
-        super(Bill.class, BillDTO.class);
+        super(Bill.class, BillDataDTO.class);
     }
 
     @Override
     protected void bind() {
-        bindCompleateDBO();
+        bind((Class<IEntity>) dboProto.getValueClass(), dtoProto.bill(), dboProto);
     }
 
     @Override
-    protected void enhanceRetrieved(Bill entity, BillDTO dto) {
+    protected void enhanceRetrieved(Bill entity, BillDataDTO dto) {
         // load detached entities:
-        Persistence.service().retrieve(dto.lineItems());
-        Persistence.service().retrieve(dto.billingAccount());
-        Persistence.service().retrieve(dto.billingRun().building(), AttachLevel.ToStringMembers);
-        BillingUtils.enhanceBillDto(entity, dto);
+        Persistence.service().retrieve(dto.bill().lineItems());
+        Persistence.service().retrieve(dto.bill().billingAccount());
+        Persistence.service().retrieve(dto.bill().billingRun().building(), AttachLevel.ToStringMembers);
+        BillingUtils.enhanceBillDto(entity, dto.bill());
     }
 
     @Override
-    protected void persist(Bill entity, BillDTO dto) {
+    protected void persist(Bill entity, BillDataDTO dto) {
         throw new IllegalArgumentException();
     }
 
     @Override
-    public void confirm(AsyncCallback<BillDTO> callback, Key entityId) {
+    public void confirm(AsyncCallback<BillDataDTO> callback, Key entityId) {
         Bill bill = Persistence.service().retrieve(Bill.class, entityId);
         if (bill != null) {
             ServerSideFactory.create(BillingFacade.class).confirmBill(bill);
@@ -65,7 +66,7 @@ public class BillCrudServiceImpl extends AbstractCrudServiceDtoImpl<Bill, BillDT
     }
 
     @Override
-    public void reject(AsyncCallback<BillDTO> callback, Key entityId, String reason) {
+    public void reject(AsyncCallback<BillDataDTO> callback, Key entityId, String reason) {
         Bill bill = Persistence.service().retrieve(Bill.class, entityId);
         if (bill != null) {
             ServerSideFactory.create(BillingFacade.class).rejectBill(bill);

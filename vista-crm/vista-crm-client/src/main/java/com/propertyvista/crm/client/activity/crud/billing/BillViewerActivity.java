@@ -25,23 +25,23 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.billing.bill.BillViewerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.LeaseViewFactory;
+import com.propertyvista.crm.rpc.dto.BillDataDTO;
 import com.propertyvista.crm.rpc.services.billing.BillCrudService;
 import com.propertyvista.crm.rpc.services.billing.BillPrintService;
 import com.propertyvista.domain.financial.billing.Bill;
-import com.propertyvista.dto.BillDTO;
 
-public class BillViewerActivity extends CrmViewerActivity<BillDTO> implements BillViewerView.Presenter {
+public class BillViewerActivity extends CrmViewerActivity<BillDataDTO> implements BillViewerView.Presenter {
 
     @SuppressWarnings("unchecked")
     public BillViewerActivity(CrudAppPlace place) {
-        super(place, LeaseViewFactory.instance(BillViewerView.class), (AbstractCrudService<BillDTO>) GWT.create(BillCrudService.class));
+        super(place, LeaseViewFactory.instance(BillViewerView.class), (AbstractCrudService<BillDataDTO>) GWT.create(BillCrudService.class));
     }
 
     @Override
     public void confirm() {
-        ((BillCrudService) getService()).confirm(new DefaultAsyncCallback<BillDTO>() {
+        ((BillCrudService) getService()).confirm(new DefaultAsyncCallback<BillDataDTO>() {
             @Override
-            public void onSuccess(BillDTO result) {
+            public void onSuccess(BillDataDTO result) {
                 populateView(result);
             }
         }, getEntityId());
@@ -49,9 +49,9 @@ public class BillViewerActivity extends CrmViewerActivity<BillDTO> implements Bi
 
     @Override
     public void reject(String reason) {
-        ((BillCrudService) getService()).reject(new DefaultAsyncCallback<BillDTO>() {
+        ((BillCrudService) getService()).reject(new DefaultAsyncCallback<BillDataDTO>() {
             @Override
-            public void onSuccess(BillDTO result) {
+            public void onSuccess(BillDataDTO result) {
                 populateView(result);
             }
         }, getEntityId(), reason);

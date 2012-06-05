@@ -26,10 +26,10 @@ import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.crm.rpc.dto.BillDataDTO;
 import com.propertyvista.domain.financial.billing.Bill.BillStatus;
-import com.propertyvista.dto.BillDTO;
 
-public class BillViewerViewImpl extends CrmViewerViewImplBase<BillDTO> implements BillViewerView {
+public class BillViewerViewImpl extends CrmViewerViewImplBase<BillDataDTO> implements BillViewerView {
 
     private final static I18n i18n = I18n.get(BillViewerViewImpl.class);
 
@@ -46,7 +46,7 @@ public class BillViewerViewImpl extends CrmViewerViewImplBase<BillDTO> implement
     private final Button print;
 
     public BillViewerViewImpl() {
-        super(CrmSiteMap.Tenants.Bill.class, new BillForm(true), true);
+        super(CrmSiteMap.Tenants.Bill.class, new BillDataForm(true), true);
 
         // Add actions:
 
@@ -84,9 +84,9 @@ public class BillViewerViewImpl extends CrmViewerViewImplBase<BillDTO> implement
     }
 
     @Override
-    public void populate(BillDTO value) {
-        approveAction.setVisible(value.billStatus().getValue() == BillStatus.Finished);
-        declineAction.setVisible(value.billStatus().getValue() == BillStatus.Finished);
+    public void populate(BillDataDTO value) {
+        approveAction.setVisible(value.bill().billStatus().getValue() == BillStatus.Finished);
+        declineAction.setVisible(value.bill().billStatus().getValue() == BillStatus.Finished);
         super.populate(value);
     }
 

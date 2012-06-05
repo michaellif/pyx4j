@@ -45,6 +45,7 @@ import com.propertyvista.crm.client.ui.crud.billing.adjustments.LeaseAdjustmentL
 import com.propertyvista.crm.client.ui.crud.billing.bill.BillLister;
 import com.propertyvista.crm.client.ui.crud.billing.payment.PaymentLister;
 import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.crm.rpc.dto.BillDataDTO;
 import com.propertyvista.crm.rpc.services.selections.version.LeaseVersionService;
 import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -52,7 +53,6 @@ import com.propertyvista.domain.tenant.lease.Lease.CompletionType;
 import com.propertyvista.domain.tenant.lease.Lease.Status;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
-import com.propertyvista.dto.BillDTO;
 import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.dto.PaymentRecordDTO;
 
@@ -60,7 +60,7 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
 
     private static final I18n i18n = I18n.get(LeaseViewerViewImpl.class);
 
-    private final IListerView<BillDTO> billLister;
+    private final IListerView<BillDataDTO> billLister;
 
     private final IListerView<PaymentRecordDTO> paymentLister;
 
@@ -84,7 +84,7 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
         super(CrmSiteMap.Tenants.Lease.class);
         enableVersioning(Lease.LeaseV.class, GWT.<LeaseVersionService> create(LeaseVersionService.class));
 
-        billLister = new ListerInternalViewImplBase<BillDTO>(new BillLister());
+        billLister = new ListerInternalViewImplBase<BillDataDTO>(new BillLister());
 
         paymentLister = new ListerInternalViewImplBase<PaymentRecordDTO>(new PaymentLister());
 
@@ -219,7 +219,7 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
     }
 
     @Override
-    public IListerView<BillDTO> getBillListerView() {
+    public IListerView<BillDataDTO> getBillListerView() {
         return billLister;
     }
 

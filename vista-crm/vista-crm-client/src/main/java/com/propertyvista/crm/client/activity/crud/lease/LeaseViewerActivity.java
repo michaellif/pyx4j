@@ -36,6 +36,7 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 import com.propertyvista.crm.client.activity.crud.lease.common.LeaseViewerActivityBase;
 import com.propertyvista.crm.client.ui.crud.lease.LeaseViewerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.LeaseViewFactory;
+import com.propertyvista.crm.rpc.dto.BillDataDTO;
 import com.propertyvista.crm.rpc.services.billing.BillCrudService;
 import com.propertyvista.crm.rpc.services.billing.BillingExecutionService;
 import com.propertyvista.crm.rpc.services.billing.LeaseAdjustmentCrudService;
@@ -44,7 +45,6 @@ import com.propertyvista.crm.rpc.services.lease.LeaseCrudService;
 import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
-import com.propertyvista.dto.BillDTO;
 import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.dto.PaymentRecordDTO;
 
@@ -52,7 +52,7 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
 
     private static final I18n i18n = I18n.get(LeaseViewerActivity.class);
 
-    private final IListerView.Presenter<BillDTO> billLister;
+    private final IListerView.Presenter<BillDataDTO> billLister;
 
     private final IListerView.Presenter<PaymentRecordDTO> paymentLister;
 
@@ -64,8 +64,8 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
     public LeaseViewerActivity(CrudAppPlace place) {
         super(place, LeaseViewFactory.instance(LeaseViewerView.class), (AbstractCrudService<LeaseDTO>) GWT.create(LeaseCrudService.class));
 
-        billLister = new ListerActivityBase<BillDTO>(place, ((LeaseViewerView) getView()).getBillListerView(),
-                (AbstractCrudService<BillDTO>) GWT.create(BillCrudService.class), BillDTO.class);
+        billLister = new ListerActivityBase<BillDataDTO>(place, ((LeaseViewerView) getView()).getBillListerView(),
+                (AbstractCrudService<BillDataDTO>) GWT.create(BillCrudService.class), BillDataDTO.class);
 
         paymentLister = new ListerActivityBase<PaymentRecordDTO>(place, ((LeaseViewerView) getView()).getPaymentListerView(),
                 (AbstractCrudService<PaymentRecordDTO>) GWT.create(PaymentCrudService.class), PaymentRecordDTO.class);
@@ -85,7 +85,7 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
 
     protected void populateBills(LeaseDTO result) {
         List<Criterion> preDefinedFilters = new ArrayList<Criterion>();
-        preDefinedFilters.add(PropertyCriterion.eq(EntityFactory.getEntityPrototype(BillDTO.class).billingAccount().id(), result.billingAccount()
+        preDefinedFilters.add(PropertyCriterion.eq(EntityFactory.getEntityPrototype(BillDataDTO.class).bill().billingAccount().id(), result.billingAccount()
                 .getPrimaryKey()));
         billLister.setPreDefinedFilters(preDefinedFilters);
         billLister.populate();

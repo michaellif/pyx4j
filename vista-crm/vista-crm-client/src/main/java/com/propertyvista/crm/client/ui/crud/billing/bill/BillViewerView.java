@@ -15,9 +15,9 @@ package com.propertyvista.crm.client.ui.crud.billing.bill;
 
 import com.pyx4j.site.client.ui.crud.form.IViewerView;
 
-import com.propertyvista.dto.BillDTO;
+import com.propertyvista.crm.rpc.dto.BillDataDTO;
 
-public interface BillViewerView extends IViewerView<BillDTO> {
+public interface BillViewerView extends IViewerView<BillDataDTO> {
 
     interface Presenter extends IViewerView.Presenter {
 
