@@ -24,6 +24,7 @@ public class TriggerLister extends ListerBase<Trigger> {
         super(Trigger.class, false, true);
 
         setColumnDescriptors(//@formatter:off
+            new MemberColumnDescriptor.Builder(proto().triggerType()).build(),
             new MemberColumnDescriptor.Builder(proto().name()).build(),
             new MemberColumnDescriptor.Builder(proto().created()).build()
         );//@formatter:on

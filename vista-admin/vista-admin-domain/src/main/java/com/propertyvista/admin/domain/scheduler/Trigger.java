@@ -37,13 +37,13 @@ import com.propertyvista.domain.VistaNamespace;
 public interface Trigger extends IEntity {
 
     @NotNull
-    @ToString
-    IPrimitive<String> name();
-
-    @NotNull
     @ReadOnly
     @ToString
     IPrimitive<PmcProcessType> triggerType();
+
+    @NotNull
+    @ToString
+    IPrimitive<String> name();
 
     /**
      * Configuration parameters for each particular trigger type.

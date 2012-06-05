@@ -222,7 +222,11 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
         //For Due Date (trigger target date), go over all Bills that have specified DueDate - see if this bill not yet created preauthorised payments and create one
         Calendar c = new GregorianCalendar();
         c.setTime(runDate);
-        c.add(Calendar.DAY_OF_YEAR, 4);
+
+        // For now we do the same day payments.  No Policy!
+
+        //c.add(Calendar.DAY_OF_YEAR, 4);
+
         LogicalDate dueDate = new LogicalDate(c.getTime());
 
         EntityQueryCriteria<Bill> billCriteria = EntityQueryCriteria.create(Bill.class);
@@ -239,14 +243,15 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
             if (!ServerSideFactory.create(BillingFacade.class).isLatestBill(bill)) {
                 continue;
             }
+            Persistence.service().retrieve(bill.billingAccount());
+            Persistence.service().retrieve(bill.billingAccount().lease());
+
             // call ar facade to get current balance for dueDate
             BigDecimal currentBalance = ServerSideFactory.create(ARFacade.class).getCurrentBalance(bill.billingAccount());
             if (currentBalance.compareTo(BigDecimal.ZERO) <= 0) {
                 continue;
             }
 
-            Persistence.service().retrieve(bill.billingAccount());
-            Persistence.service().retrieve(bill.billingAccount().lease());
             Lease lease = bill.billingAccount().lease();
             Persistence.service().retrieve(lease.version().tenants());
 
@@ -269,6 +274,8 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
 
         }
 
+        Persistence.service().commit();
+
         StringBuilder message = new StringBuilder();
         if (paymentRecordsCreated != 0) {
             message.append("Records:").append(paymentRecordsCreated);
@@ -285,6 +292,19 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
         paymentRecord.paymentMethod().set(method);
 
         ServerSideFactory.create(PaymentFacade.class).persistPayment(paymentRecord);
-        ServerSideFactory.create(PaymentFacade.class).processPayment(paymentRecord);
+
+        switch (method.type().getValue()) {
+        case Echeck:
+            ServerSideFactory.create(PaymentFacade.class).processPayment(paymentRecord);
+            break;
+        case CreditCard:
+            paymentRecord.targetDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
+            paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Scheduled);
+            ServerSideFactory.create(PaymentFacade.class).persistPayment(paymentRecord);
+            break;
+        default:
+            throw new IllegalArgumentException("Invalid PreAuthorized Payment Method:" + paymentRecord.paymentMethod().type().getStringView());
+        }
+
     }
 }

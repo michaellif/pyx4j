@@ -88,8 +88,8 @@ public class PaymentFacadeImpl implements PaymentFacade {
         if (paymentRecord.paymentStatus().isNull()) {
             paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Submitted);
         }
-        if (!paymentRecord.paymentStatus().getValue().equals(PaymentRecord.PaymentStatus.Submitted)) {
-            throw new Error();
+        if (!EnumSet.of(PaymentRecord.PaymentStatus.Submitted, PaymentRecord.PaymentStatus.Scheduled).contains(paymentRecord.paymentStatus().getValue())) {
+            throw new IllegalArgumentException("paymentStatus:" + paymentRecord.paymentStatus().getValue());
         }
 
         if (paymentRecord.paymentMethod().isOneTimePayment().isBooleanTrue()) {
@@ -115,6 +115,13 @@ public class PaymentFacadeImpl implements PaymentFacade {
         if (!paymentRecord.paymentStatus().getValue().equals(PaymentRecord.PaymentStatus.Submitted)) {
             throw new IllegalArgumentException("paymentStatus:" + paymentRecord.paymentStatus().getValue());
         }
+
+        if ((!paymentRecord.targetDate().isNull()) && Persistence.service().getTransactionSystemTime().before(paymentRecord.targetDate().getValue())) {
+            paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Scheduled);
+            Persistence.service().merge(paymentRecord);
+            return paymentRecord;
+        }
+
         paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Processing);
         paymentRecord.lastStatusChangeDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
         paymentRecord.merchantAccount().set(PaymentUtils.retrieveMerchantAccount(paymentRecord));
