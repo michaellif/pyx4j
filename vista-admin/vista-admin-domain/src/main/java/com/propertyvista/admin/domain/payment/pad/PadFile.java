@@ -46,7 +46,7 @@ public interface PadFile extends IEntity {
 
         Sending,
 
-        SendindError,
+        SendError,
 
         Sent,
 

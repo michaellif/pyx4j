@@ -31,6 +31,8 @@ public interface BillingFacade {
 
     Bill getLatestBill(Lease lease);
 
+    boolean isLatestBill(Bill bill);
+
     Bill confirmBill(Bill billStub);
 
     Bill rejectBill(Bill billStub);

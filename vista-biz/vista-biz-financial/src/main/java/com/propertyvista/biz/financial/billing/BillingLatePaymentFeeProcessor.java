@@ -64,7 +64,7 @@ public class BillingLatePaymentFeeProcessor extends AbstractProcessor {
                 overdueAmount = overdueAmount.add(BillingUtils.calculateTotal(item));
             }
         }
-        if (overdueAmount.compareTo(new BigDecimal(0)) <= 0) {
+        if (overdueAmount.compareTo(BigDecimal.ZERO) <= 0) {
             return;
         }
 

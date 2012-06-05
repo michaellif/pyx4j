@@ -13,12 +13,16 @@
  */
 package com.propertyvista.biz.financial.payment;
 
+import java.math.BigDecimal;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.concurrent.Callable;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.server.contexts.NamespaceManager;
@@ -30,6 +34,9 @@ import com.propertyvista.admin.domain.payment.pad.PadFile.FileAcknowledgmentStat
 import com.propertyvista.admin.domain.payment.pad.PadReconciliationDebitRecord;
 import com.propertyvista.admin.domain.payment.pad.PadReconciliationFile;
 import com.propertyvista.admin.domain.payment.pad.PadReconciliationSummary;
+import com.propertyvista.biz.financial.ar.ARFacade;
+import com.propertyvista.biz.financial.billing.BillingFacade;
+import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.server.jobs.TaskRunner;
 
 public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
@@ -203,14 +210,30 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
 
     @Override
     public String createPreauthorisedPayments(LogicalDate dueDate) {
-        // TODO Auto-generated method stub
-        // Find all Bills 
-        //For Due Date (trigger target date), go over all Bills that have specified DueDate - see if this bill not yet created preauthorised payments and create
+        // Find Bills 
+        //For Due Date (trigger target date), go over all Bills that have specified DueDate - see if this bill not yet created preauthorised payments and create one
 
-        //Check this bill is latest
-        // call ar facade to get current balance for dueDate
+        EntityQueryCriteria<Bill> criteria = EntityQueryCriteria.create(Bill.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().dueDate(), dueDate));
+        criteria.add(PropertyCriterion.eq(criteria.proto().billStatus(), Bill.BillStatus.Confirmed));
+
+        int paymentRecordsCreated = 0;
+
+        ICursorIterator<Bill> billIterator = Persistence.service().query(null, criteria, AttachLevel.Attached);
+        while (billIterator.hasNext()) {
+            Bill bill = billIterator.next();
+            //Check this bill is latest
+            if (!ServerSideFactory.create(BillingFacade.class).isLatestBill(bill)) {
+                continue;
+            }
+            // call ar facade to get current balance for dueDate
+            BigDecimal currentBallance = ServerSideFactory.create(ARFacade.class).getCurrentBallance(bill.billingAccount());
+            if (currentBallance.compareTo(BigDecimal.ZERO) <= 0) {
+                continue;
+            }
+
+        }
 
         return null;
     }
-
 }

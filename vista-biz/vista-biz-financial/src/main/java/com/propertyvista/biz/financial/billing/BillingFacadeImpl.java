@@ -44,6 +44,11 @@ public class BillingFacadeImpl implements BillingFacade {
     }
 
     @Override
+    public boolean isLatestBill(Bill bill) {
+        return BillingLifecycleManager.isLatestBill(bill);
+    }
+
+    @Override
     public Bill confirmBill(Bill bill) {
         return BillingLifecycleManager.confirmBill(bill);
     }

@@ -69,7 +69,7 @@ public class PadCaledon {
         PadFile padFile;
         synchronized (lock) {
             EntityQueryCriteria<PadFile> criteria = EntityQueryCriteria.create(PadFile.class);
-            criteria.add(PropertyCriterion.in(criteria.proto().status(), PadFile.PadFileStatus.Creating, PadFile.PadFileStatus.SendindError));
+            criteria.add(PropertyCriterion.in(criteria.proto().status(), PadFile.PadFileStatus.Creating, PadFile.PadFileStatus.SendError));
             padFile = Persistence.service().retrieve(criteria);
             if (padFile == null) {
                 return null;
@@ -141,7 +141,7 @@ public class PadCaledon {
         } catch (Throwable e) {
             log.error("pad write error", e);
             //Error recovery
-            padFile.status().setValue(PadFile.PadFileStatus.SendindError);
+            padFile.status().setValue(PadFile.PadFileStatus.SendError);
             Persistence.service().merge(padFile);
             Persistence.service().commit();
 

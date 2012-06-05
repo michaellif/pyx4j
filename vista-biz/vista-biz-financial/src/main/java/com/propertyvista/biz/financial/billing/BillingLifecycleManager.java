@@ -283,6 +283,13 @@ public class BillingLifecycleManager {
         return Persistence.service().retrieve(criteria);
     }
 
+    static boolean isLatestBill(Bill bill) {
+        EntityQueryCriteria<Bill> criteria = EntityQueryCriteria.create(Bill.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().billingAccount(), bill.billingAccount()));
+        criteria.add(PropertyCriterion.gt(criteria.proto().billSequenceNumber(), bill.billSequenceNumber()));
+        return Persistence.service().exists(criteria);
+    }
+
     static BillingCycle ensureBillingCycle(Lease lease) {
         BillingCycle billingCycle = lease.billingAccount().billingCycle();
 
