@@ -39,11 +39,9 @@ class ZeroCycleBillingManager extends AbstractBillingManager {
     protected List<AbstractBillingProcessor> initProcessors() {
         // @formatter:off
         return Arrays.asList(new AbstractBillingProcessor[] {
-                
-                new BillingInitialBalanceProcessor(this), 
+
                 new BillingProductChargeProcessor(this),
-                new BillingLeaseAdjustmentProcessor(this), 
-                new BillingPaymentProcessor(this)
+                new BillingCarryforwardProcessor(this)
                 
         });
         // @formatter:on

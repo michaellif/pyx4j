@@ -51,7 +51,7 @@ public class BillingExistingLeaseSunnyDayScenarioTest extends FinancialTestBase 
         //==================== RUN 1 ======================//
 
         // @formatter:off
-        new BillTester(bill).
+        new BillTester(bill, true).
         billSequenceNumber(1).
         previousBillSequenceNumber(null).
         billType(Bill.BillType.ZeroCycle).
@@ -64,7 +64,7 @@ public class BillingExistingLeaseSunnyDayScenarioTest extends FinancialTestBase 
         oneTimeFeatureCharges("0.00").
         depositAmount("0.00").
         taxes("111.64").
-        totalDueAmount("1041.94");
+        totalDueAmount("300.00");
         // @formatter:on
 
         activateLease();

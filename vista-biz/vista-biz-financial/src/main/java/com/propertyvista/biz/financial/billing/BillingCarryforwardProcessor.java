@@ -13,9 +13,9 @@
  */
 package com.propertyvista.biz.financial.billing;
 
-public class BillingInitialBalanceProcessor extends AbstractBillingProcessor {
+public class BillingCarryforwardProcessor extends AbstractBillingProcessor {
 
-    BillingInitialBalanceProcessor(AbstractBillingManager billingManager) {
+    BillingCarryforwardProcessor(AbstractBillingManager billingManager) {
         super(billingManager);
     }
 

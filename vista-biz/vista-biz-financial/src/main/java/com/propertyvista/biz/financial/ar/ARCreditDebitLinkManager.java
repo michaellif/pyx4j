@@ -24,13 +24,12 @@ import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.DebitCreditLink;
 import com.propertyvista.domain.financial.billing.InvoiceAccountCharge;
 import com.propertyvista.domain.financial.billing.InvoiceAccountCredit;
+import com.propertyvista.domain.financial.billing.InvoiceCarryforwardCredit;
 import com.propertyvista.domain.financial.billing.InvoiceCharge;
 import com.propertyvista.domain.financial.billing.InvoiceCredit;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
 import com.propertyvista.domain.financial.billing.InvoiceDeposit;
 import com.propertyvista.domain.financial.billing.InvoiceDepositRefund;
-import com.propertyvista.domain.financial.billing.InvoiceInitialCredit;
-import com.propertyvista.domain.financial.billing.InvoiceInitialDebit;
 import com.propertyvista.domain.financial.billing.InvoicePayment;
 import com.propertyvista.domain.financial.billing.InvoicePaymentBackOut;
 import com.propertyvista.domain.financial.billing.InvoiceProductCharge;
@@ -49,7 +48,7 @@ import com.propertyvista.domain.financial.billing.InvoiceWithdrawal;
  * 
  * - {@link InvoiceAccountCredit} behaves same as {@link InvoicePayment}
  * 
- * - {@link InvoiceInitialCredit} behaves same as {@link InvoicePayment}
+ * - {@link InvoiceCarryforwardCredit} behaves same as {@link InvoicePayment}
  * 
  * - {@link InvoiceDepositRefund} covers {@link InvoiceProductCharge}(s) of the same origin (BillableItem) as deposit. If it is still not consumed apply
  * according to {@link InvoicePayment} rules.
