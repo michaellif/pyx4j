@@ -28,7 +28,7 @@ public interface PaymentFacade {
 
     List<PaymentMethod> retrievePaymentMethods(LeaseParticipant participant);
 
-    PaymentRecord persistPayment(PaymentRecord payment);
+    PaymentRecord persistPayment(PaymentRecord paymentRecord);
 
     /**
      * Cash: automatically -> Received (AR. Posted)

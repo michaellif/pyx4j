@@ -21,6 +21,8 @@ public class PmcProcessFactory {
         switch (triggerType) {
         case test:
             return new TestPmcProcess();
+        case paymentsIssue:
+            return new PaymentsIssueProcess();
         case paymentsPadSend:
             return new PadSendProcess();
         case paymentsPadReciveAcknowledgment:

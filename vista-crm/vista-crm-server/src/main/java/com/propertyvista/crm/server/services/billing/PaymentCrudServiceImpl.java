@@ -186,7 +186,6 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
 
         Persistence.service().retrieve(lease.version().tenants());
         for (Tenant tenant : lease.version().tenants()) {
-            Persistence.service().retrieve(tenant);
             switch (tenant.role().getValue()) {
             case Applicant:
             case CoApplicant:

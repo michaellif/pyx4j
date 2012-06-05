@@ -14,7 +14,9 @@
 package com.propertyvista.biz.financial.payment;
 
 import java.math.BigDecimal;
+import java.util.Calendar;
 import java.util.EnumSet;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.concurrent.Callable;
 
@@ -23,6 +25,7 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.server.contexts.NamespaceManager;
@@ -36,7 +39,12 @@ import com.propertyvista.admin.domain.payment.pad.PadReconciliationFile;
 import com.propertyvista.admin.domain.payment.pad.PadReconciliationSummary;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.billing.BillingFacade;
+import com.propertyvista.domain.financial.BillingAccount;
+import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.Bill;
+import com.propertyvista.domain.payment.PaymentMethod;
+import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.server.jobs.TaskRunner;
 
 public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
@@ -209,17 +217,22 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
     }
 
     @Override
-    public String createPreauthorisedPayments(LogicalDate dueDate) {
+    public String createPreauthorisedPayments(LogicalDate runDate) {
         // Find Bills 
         //For Due Date (trigger target date), go over all Bills that have specified DueDate - see if this bill not yet created preauthorised payments and create one
+        Calendar c = new GregorianCalendar();
+        c.setTime(runDate);
+        c.add(Calendar.DAY_OF_YEAR, 4);
+        LogicalDate dueDate = new LogicalDate(c.getTime());
 
-        EntityQueryCriteria<Bill> criteria = EntityQueryCriteria.create(Bill.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().dueDate(), dueDate));
-        criteria.add(PropertyCriterion.eq(criteria.proto().billStatus(), Bill.BillStatus.Confirmed));
+        EntityQueryCriteria<Bill> billCriteria = EntityQueryCriteria.create(Bill.class);
+        billCriteria.add(PropertyCriterion.eq(billCriteria.proto().dueDate(), dueDate));
+        billCriteria.add(PropertyCriterion.eq(billCriteria.proto().billStatus(), Bill.BillStatus.Confirmed));
 
         int paymentRecordsCreated = 0;
+        BigDecimal totalAmount = BigDecimal.ZERO;
 
-        ICursorIterator<Bill> billIterator = Persistence.service().query(null, criteria, AttachLevel.Attached);
+        ICursorIterator<Bill> billIterator = Persistence.service().query(null, billCriteria, AttachLevel.Attached);
         while (billIterator.hasNext()) {
             Bill bill = billIterator.next();
             //Check this bill is latest
@@ -227,13 +240,51 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
                 continue;
             }
             // call ar facade to get current balance for dueDate
-            BigDecimal currentBallance = ServerSideFactory.create(ARFacade.class).getCurrentBalance(bill.billingAccount());
-            if (currentBallance.compareTo(BigDecimal.ZERO) <= 0) {
+            BigDecimal currentBalance = ServerSideFactory.create(ARFacade.class).getCurrentBalance(bill.billingAccount());
+            if (currentBalance.compareTo(BigDecimal.ZERO) <= 0) {
                 continue;
+            }
+
+            Persistence.service().retrieve(bill.billingAccount());
+            Persistence.service().retrieve(bill.billingAccount().lease());
+            Lease lease = bill.billingAccount().lease();
+            Persistence.service().retrieve(lease.version().tenants());
+
+            for (Tenant tenant : lease.version().tenants()) {
+                // do pre authorized payments for main applicant for now
+                switch (tenant.role().getValue()) {
+                case Applicant:
+                    PaymentMethod method = PaymentUtils.retrievePreAuthorizedPaymentMethod(tenant);
+                    if (method != null) {
+                        createPreAuthorizedPayment(currentBalance, bill.billingAccount(), method);
+                        paymentRecordsCreated++;
+                        totalAmount = totalAmount.add(currentBalance);
+                    }
+                    break;
+                case CoApplicant:
+                    break;
+                }
+
             }
 
         }
 
-        return null;
+        StringBuilder message = new StringBuilder();
+        if (paymentRecordsCreated != 0) {
+            message.append("Records:").append(paymentRecordsCreated);
+            message.append(", Total:").append(totalAmount);
+        }
+
+        return message.toString();
+    }
+
+    private void createPreAuthorizedPayment(BigDecimal amount, BillingAccount billingAccount, PaymentMethod method) {
+        PaymentRecord paymentRecord = EntityFactory.create(PaymentRecord.class);
+        paymentRecord.billingAccount().set(billingAccount);
+        paymentRecord.amount().setValue(amount);
+        paymentRecord.paymentMethod().set(method);
+
+        ServerSideFactory.create(PaymentFacade.class).persistPayment(paymentRecord);
+        ServerSideFactory.create(PaymentFacade.class).processPayment(paymentRecord);
     }
 }

@@ -203,7 +203,7 @@ public class PmcProcessDispatcherJob implements Job {
                 runData.status().setValue(RunDataStatus.Running);
                 Persistence.service().persist(runData);
                 Persistence.service().commit();
-                executeOneRunData(executorService, pmcProcess, runData);
+                executeOneRunData(executorService, pmcProcess, runData, run.forDate().getValue());
 
                 updateRunStats(run.stats(), startTimeNano, runData);
 
@@ -240,7 +240,7 @@ public class PmcProcessDispatcherJob implements Job {
 
     }
 
-    private void executeOneRunData(ExecutorService executorService, final PmcProcess pmcProcess, final RunData runData) {
+    private void executeOneRunData(ExecutorService executorService, final PmcProcess pmcProcess, final RunData runData, final Date forDate) {
         long startTimeNano = System.nanoTime();
         Future<Boolean> futureResult = executorService.submit(new Callable<Boolean>() {
 
@@ -252,6 +252,7 @@ public class PmcProcessDispatcherJob implements Job {
                     NamespaceManager.setNamespace(runData.pmc().namespace().getValue());
                     Persistence.service().startBackgroundProcessTransaction();
                     PmcProcessContext.setRunStats(runData.stats());
+                    PmcProcessContext.setForDate(forDate);
                     pmcProcess.executePmcJob();
                     success = true;
                     return Boolean.TRUE;

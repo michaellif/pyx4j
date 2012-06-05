@@ -13,6 +13,7 @@
  */
 package com.propertyvista.biz.financial.payment;
 
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
@@ -21,7 +22,9 @@ import com.pyx4j.rpc.shared.UserRuntimeException;
 
 import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
+import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 
 class PaymentUtils {
 
@@ -48,5 +51,14 @@ class PaymentUtils {
             }
         }
         throw new UserRuntimeException(i18n.tr("No active merchantAccount found to process the payment"));
+    }
+
+    public static PaymentMethod retrievePreAuthorizedPaymentMethod(LeaseParticipant participant) {
+        for (PaymentMethod pm : ServerSideFactory.create(PaymentFacade.class).retrievePaymentMethods(participant)) {
+            if (pm.isDefault().isBooleanTrue()) {
+                return pm;
+            }
+        }
+        return null;
     }
 }

@@ -102,14 +102,14 @@ public class PadCaledon {
 
             // Calculate Totals
             int fileRecordsCount = 0;
-            BigDecimal fileAmount = new BigDecimal("0");
+            BigDecimal fileAmount = BigDecimal.ZERO;
             int batchNumberCount = 0;
             Persistence.service().retrieveMember(padFile.batches());
             for (PadBatch padBatch : padFile.batches()) {
                 Persistence.service().retrieveMember(padBatch.records());
 
                 padBatch.batchNumber().setValue(++batchNumberCount);
-                BigDecimal batchAmount = new BigDecimal("0");
+                BigDecimal batchAmount = BigDecimal.ZERO;
                 for (PadDebitRecord record : padBatch.records()) {
                     batchAmount = batchAmount.add(record.amount().getValue());
                 }

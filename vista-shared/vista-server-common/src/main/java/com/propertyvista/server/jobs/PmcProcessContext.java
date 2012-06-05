@@ -13,6 +13,8 @@
  */
 package com.propertyvista.server.jobs;
 
+import java.util.Date;
+
 import com.propertyvista.admin.domain.scheduler.RunStats;
 
 public class PmcProcessContext {
@@ -20,6 +22,8 @@ public class PmcProcessContext {
     private static class ProcessContextData {
 
         RunStats runStats;
+
+        Date forDate;
 
     }
 
@@ -43,6 +47,14 @@ public class PmcProcessContext {
 
     public static void remove() {
         requestLocal.remove();
+    }
+
+    public static Date getForDate() {
+        return requestLocal.get().forDate;
+    }
+
+    public static void setForDate(Date forDate) {
+        requestLocal.get().forDate = forDate;
     }
 
 }
