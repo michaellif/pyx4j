@@ -135,12 +135,13 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
                 };
 
             }
-        }), 30).build());
+        }), 25).build());
 
         get(proto().item()).setViewable(!isService);
 
+        main.setWidget(row, 1, new DecoratorBuilder(inject(proto().agreedPrice()), 10).build());
         main.setWidget(++row, 0, new DecoratorBuilder(itemEffectiveDateEditor = (CComponent<LogicalDate, ?>) inject(proto().effectiveDate()), 9).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(itemExpirationDateEditor = (CComponent<LogicalDate, ?>) inject(proto().expirationDate()), 9).build());
+        main.setWidget(row, 1, new DecoratorBuilder(itemExpirationDateEditor = (CComponent<LogicalDate, ?>) inject(proto().expirationDate()), 9).build());
 
         main.setWidget(++row, 0, extraDataPanel);
         main.getFlexCellFormatter().setColSpan(row, 0, 2);
@@ -232,6 +233,7 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
             } else {
                 get(proto().item()).setEditable(false);
             }
+            get(proto().agreedPrice()).setEditable(lease.getValue().approvalDate().isNull());
         } else {
             get(proto().item()).setViewable(true);
         }

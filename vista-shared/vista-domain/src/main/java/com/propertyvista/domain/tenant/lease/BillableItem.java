@@ -17,6 +17,8 @@ import java.math.BigDecimal;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.GeneratedValue;
 import com.pyx4j.entity.annotations.OrderBy;
@@ -24,13 +26,14 @@ import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.financial.offering.ProductItem;
 
-@ToStringFormat("{0}, agreed price: {1}")
+@ToStringFormat("{0}, agreed price: ${1}")
 public interface BillableItem extends IEntity {
 
     @GeneratedValue(type = GeneratedValue.GenerationType.randomUUID)
@@ -40,8 +43,10 @@ public interface BillableItem extends IEntity {
     @Caption(name = "Product Item")
     ProductItem item();
 
+    @NotNull
     @ToString(index = 1)
     @Format("#0.00")
+    @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> agreedPrice();
 
     @Caption(name = "Last Updated")
