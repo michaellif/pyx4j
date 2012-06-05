@@ -39,7 +39,7 @@ public class VistaDeployment {
 
     public static Pmc getCurrentPmc() {
         final String namespace = NamespaceManager.getNamespace();
-        // assert (!namespace.equals(VistaNamespace.adminNamespace)) : "PMC not available when running in admin namespace";
+        assert (!namespace.equals(VistaNamespace.adminNamespace)) : "PMC not available when running in admin namespace";
         try {
             NamespaceManager.setNamespace(VistaNamespace.adminNamespace);
             EntityQueryCriteria<Pmc> criteria = EntityQueryCriteria.create(Pmc.class);
@@ -58,7 +58,11 @@ public class VistaDeployment {
      * @return
      */
     public static String getBaseApplicationURL(VistaBasicBehavior application, boolean secure) {
-        return getBaseApplicationURL(getCurrentPmc(), application, secure);
+        if (application == VistaBasicBehavior.Admin) {
+            return getBaseApplicationURL(null, application, secure);
+        } else {
+            return getBaseApplicationURL(getCurrentPmc(), application, secure);
+        }
     }
 
     public static String getBaseApplicationURL(Pmc pmc, VistaBasicBehavior application, boolean secure) {
