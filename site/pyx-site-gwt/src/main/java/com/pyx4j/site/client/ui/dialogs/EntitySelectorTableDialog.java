@@ -128,7 +128,7 @@ public abstract class EntitySelectorTableDialog<E extends IEntity> extends Abstr
         E proto = EntityFactory.getEntityPrototype(entityClass);
 
         for (E entity : alreadySelected) {
-            restrictAlreadySelected.add(PropertyCriterion.ne(proto.id(), entity.id().getValue()));
+            restrictAlreadySelected.add(PropertyCriterion.ne(proto.id(), entity.getPrimaryKey()));
         }
 
         return restrictAlreadySelected;
