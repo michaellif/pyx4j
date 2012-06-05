@@ -25,6 +25,8 @@ import com.pyx4j.entity.annotations.OrderBy;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Table;
+import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.Versioned;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
@@ -37,6 +39,7 @@ import com.pyx4j.i18n.shared.I18nEnum;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.tenant.lease.Lease;
 
+@ToStringFormat("{0}, ${1}, {2}")
 @Table(prefix = "billing")
 public interface Bill extends IEntity {
 
@@ -95,6 +98,7 @@ public interface Bill extends IEntity {
     Bill previousBill();
 
     @Format("MM/dd/yyyy")
+    @ToString(index = 0)
     IPrimitive<LogicalDate> dueDate();
 
     @Format("MM/dd/yyyy")
@@ -103,6 +107,7 @@ public interface Bill extends IEntity {
     @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> billingPeriodEndDate();
 
+    @ToString(index = 0)
     IPrimitive<BillStatus> billStatus();
 
     IPrimitive<BillType> billType();
@@ -167,6 +172,7 @@ public interface Bill extends IEntity {
     /**
      * totalDueAmount = currentAmount + taxes
      */
+    @ToString(index = 1)
     IPrimitive<BigDecimal> totalDueAmount();
 
 }
