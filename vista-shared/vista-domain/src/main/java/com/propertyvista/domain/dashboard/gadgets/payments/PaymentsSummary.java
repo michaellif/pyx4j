@@ -25,9 +25,6 @@ import com.propertyvista.domain.financial.PaymentRecord;
 
 public interface PaymentsSummary extends IEntity {
 
-    /** The date when a summary was taken */
-    IPrimitive<LogicalDate> timestamp();
-
     /** The date for which a summary is applied to */
     IPrimitive<LogicalDate> snapshotDay();
 

@@ -49,6 +49,7 @@ import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.server.common.util.PaymentsSummaryHelper;
 import com.propertyvista.server.jobs.TaskRunner;
 
 public class PaymentReportServiceImpl implements PaymentReportService {

@@ -23,6 +23,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.propertyvista.domain.dashboard.gadgets.payments.PaymentsSummary;
 import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
 import com.propertyvista.domain.payment.PaymentType;
+import com.propertyvista.server.common.util.PaymentsSummaryHelper;
 
 public class PaymentsSummaryHelperTest extends PaymentsSummaryHelperTestBase {
 
@@ -53,7 +54,6 @@ public class PaymentsSummaryHelperTest extends PaymentsSummaryHelperTestBase {
                     detectDateformat("01-May-2010")));
 
             assertEquals(PaymentStatus.Received, summary.status().getValue());
-            assertEquals(new LogicalDate(detectDateformat("01-Aug-2010")), summary.timestamp().getValue());
             assertEquals(new LogicalDate(detectDateformat("01-May-2010")), summary.snapshotDay().getValue());
 
             assertEquals(new BigDecimal("250.00"), summary.cash().getValue());
@@ -69,7 +69,6 @@ public class PaymentsSummaryHelperTest extends PaymentsSummaryHelperTestBase {
                     detectDateformat("02-May-2010")));
 
             assertEquals(PaymentStatus.Received, summary.status().getValue());
-            assertEquals(new LogicalDate(detectDateformat("01-Aug-2010")), summary.timestamp().getValue());
             assertEquals(new LogicalDate(detectDateformat("02-May-2010")), summary.snapshotDay().getValue());
 
             assertEquals(new BigDecimal("0.00"), summary.cash().getValue());

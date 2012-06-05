@@ -11,9 +11,10 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.server.services.dashboard.gadgets;
+package com.propertyvista.server.common.util;
 
 import java.math.BigDecimal;
+import java.util.Iterator;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
@@ -24,13 +25,31 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.entity.shared.utils.EntityGraph;
 
 import com.propertyvista.domain.dashboard.gadgets.payments.PaymentsSummary;
 import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
+import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
 import com.propertyvista.domain.payment.PaymentType;
 
-public class PaymentsSummaryHelper {
+public final class PaymentsSummaryHelper {
+
+    public interface PaymentsSummarySnapshotHook {
+
+        /**
+         * @param summmary
+         * @return if the snapshot taking should continue
+         */
+        boolean onPaymentsSummarySnapshotTaken(PaymentsSummary summmary);
+
+        /**
+         * @param caught
+         * @return if the snapshot taking should continue
+         */
+        boolean onPaymentsSummarySnapshotFailed(Throwable caught);
+
+    }
 
     private class PaymentTypeMapper {
 
@@ -46,7 +65,6 @@ public class PaymentsSummaryHelper {
             bind(PaymentType.CreditCard, proto.cc());
             bind(PaymentType.EFT, proto.eft());
             bind(PaymentType.Interac, proto.interac());
-
         }
 
         public IPrimitive<BigDecimal> getMember(PaymentsSummary summary, PaymentType type) {
@@ -60,8 +78,15 @@ public class PaymentsSummaryHelper {
 
     private final PaymentTypeMapper paymentTypeMapper;
 
+    private final PaymentsSummarySnapshotHook paymentsSummarySnapshotHook;
+
     public PaymentsSummaryHelper() {
-        paymentTypeMapper = new PaymentTypeMapper();
+        this(null);
+    }
+
+    public PaymentsSummaryHelper(PaymentsSummarySnapshotHook paymentsSummarySnapshotHook) {
+        this.paymentsSummarySnapshotHook = paymentsSummarySnapshotHook;
+        this.paymentTypeMapper = new PaymentTypeMapper();
     }
 
     /**
@@ -104,13 +129,64 @@ public class PaymentsSummaryHelper {
         return summary;
     }
 
+    /**
+     * takes snapshots of payments summary for every merchant account and every payment status, runs hook on after finishing every snapshot, if a snapshot
+     * with the same key (merchant account, payment status, snapshotDay) already exists it's updated (overridden with new values)
+     */
+    public void takePaymentsSummarySnapshots(LogicalDate snapshotDay) {
+
+        Iterator<MerchantAccount> merchantAccountsIterator = Persistence.service().query(null, EntityQueryCriteria.create(MerchantAccount.class),
+                AttachLevel.IdOnly);
+
+        boolean shouldRun = true;
+        while (merchantAccountsIterator.hasNext() & shouldRun) {
+            for (PaymentRecord.PaymentStatus paymentStatus : PaymentStatus.values()) {
+                try {
+                    MerchantAccount merchantAccount = merchantAccountsIterator.next();
+
+                    PaymentsSummary currentPaymentsSummary = retrieveSummary(merchantAccount, paymentStatus, snapshotDay);
+                    PaymentsSummary updatedPaymentsSummary = calculateSummary(merchantAccount, paymentStatus, snapshotDay);
+
+                    boolean isUpdated = true;
+                    if (currentPaymentsSummary != null) {
+                        if (EntityGraph.fullyEqualValues(currentPaymentsSummary, updatedPaymentsSummary)) {
+                            updatedPaymentsSummary.setPrimaryKey(currentPaymentsSummary.getPrimaryKey());
+                        } else {
+                            isUpdated = false;
+                        }
+                    }
+                    if (isUpdated) {
+                        Persistence.service().persist(updatedPaymentsSummary);
+                    }
+
+                    if (paymentsSummarySnapshotHook != null) {
+                        shouldRun = paymentsSummarySnapshotHook.onPaymentsSummarySnapshotTaken(updatedPaymentsSummary);
+                    }
+
+                } catch (Throwable caught) {
+                    if (paymentsSummarySnapshotHook != null) {
+                        shouldRun = paymentsSummarySnapshotHook.onPaymentsSummarySnapshotFailed(caught);
+                    }
+                }
+            }
+        }
+
+    }
+
+    private PaymentsSummary retrieveSummary(MerchantAccount merchantAccount, PaymentRecord.PaymentStatus paymentStatus, LogicalDate snapshotDay) {
+        EntityQueryCriteria<PaymentsSummary> criteria = EntityQueryCriteria.create(PaymentsSummary.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().merchantAccount(), merchantAccount));
+        criteria.add(PropertyCriterion.eq(criteria.proto().status(), paymentStatus));
+        criteria.add(PropertyCriterion.eq(criteria.proto().snapshotDay(), snapshotDay));
+        return Persistence.service().retrieve(criteria);
+    }
+
     private PaymentsSummary initPaymentsSummary(LogicalDate snapshotDay) {
         PaymentsSummary summary = EntityFactory.create(PaymentsSummary.class);
 
         for (PaymentType type : PaymentType.values()) {
             paymentTypeMapper.getMember(summary, type).setValue(new BigDecimal("0.00"));
         }
-        summary.timestamp().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
         summary.snapshotDay().setValue(snapshotDay);
 
         return summary;

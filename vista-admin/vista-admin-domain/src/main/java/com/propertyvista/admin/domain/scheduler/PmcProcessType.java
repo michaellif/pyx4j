@@ -41,6 +41,8 @@ public enum PmcProcessType implements Serializable {
 
     updateArrears,
 
+    updatePaymentsSummary,
+
     // Used for scheduler testing
     test;
 
