@@ -15,6 +15,9 @@ package com.propertyvista.crm.server.services.dashboard.gadgets;
 
 import static com.propertyvista.crm.server.util.EntityDto2DboCriteriaConverter.makeMapper;
 
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Vector;
 import java.util.concurrent.Callable;
 
@@ -40,6 +43,8 @@ import com.propertyvista.domain.dashboard.gadgets.payments.PaymentFeesDTO;
 import com.propertyvista.domain.dashboard.gadgets.payments.PaymentFeesDTO.PaymentFeeMeasure;
 import com.propertyvista.domain.dashboard.gadgets.payments.PaymentRecordForReportDTO;
 import com.propertyvista.domain.dashboard.gadgets.payments.PaymentsSummary;
+import com.propertyvista.domain.financial.BuildingMerchantAccount;
+import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
 import com.propertyvista.domain.payment.PaymentType;
@@ -117,6 +122,19 @@ public class PaymentReportServiceImpl implements PaymentReportService {
     @Override
     public void paymentsSummary(AsyncCallback<EntitySearchResult<PaymentsSummary>> callback, Vector<Building> buildings, LogicalDate targetDate,
             Vector<PaymentStatus> paymentStatusCriteria, int pageNumber, int pageSize, Vector<Sort> sortingCriteria) {
+
+        Vector<PaymentsSummary> summary = new Vector<PaymentsSummary>();
+
+        Iterator<Building> buildingIterator = !buildings.isEmpty() ? buildings.iterator() : Persistence.service().query(null,
+                EntityQueryCriteria.create(Building.class), AttachLevel.Detached);
+        Iterator<MerchantAccount> merchantAccounts = merchantAccountIterator(buildingIterator);
+
+        PaymentsSummaryHelper summaryHelper = new PaymentsSummaryHelper();
+        while (merchantAccounts.hasNext()) {
+
+        }
+
+        //summaryHelper.calculateSummary(merchantAccount, paymentStatus, snapshotDay)
         // TODO implement this
         EntitySearchResult<PaymentsSummary> result = new EntitySearchResult<PaymentsSummary>();
         result.setTotalRows(0);
@@ -159,6 +177,21 @@ public class PaymentReportServiceImpl implements PaymentReportService {
         PaymentRecordForReportDTO paymentRecordDTO = dtoBinder.createDTO(paymentRecordDBO);
 
         return paymentRecordDTO;
+    }
+
+    /** returns iterator over merchant accounts of the given buildings */
+    private static Iterator<MerchantAccount> merchantAccountIterator(Iterator<Building> buildingIterator) {
+        List<MerchantAccount> merchantAccounts = new LinkedList<MerchantAccount>();
+        while (buildingIterator.hasNext()) {
+            EntityQueryCriteria<BuildingMerchantAccount> criteria = EntityQueryCriteria.create(BuildingMerchantAccount.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().building(), buildingIterator.next()));
+
+            List<BuildingMerchantAccount> buildingMerchantAccounts = Persistence.service().query(criteria, AttachLevel.Detached);
+            for (BuildingMerchantAccount buildingMerchantAccount : buildingMerchantAccounts) {
+                merchantAccounts.add(buildingMerchantAccount.merchantAccount().<MerchantAccount> detach());
+            }
+        }
+        return merchantAccounts.iterator();
     }
 
 }

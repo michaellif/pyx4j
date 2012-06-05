@@ -76,8 +76,8 @@ public class PaymentsSummaryHelperTestBase extends VistaDBTestBase {
 
         ServerSideFactory.create(LeaseFacade.class).initLease(lease);
 
-        makeMerchantAccount("A");
-        makeMerchantAccount("B");
+        merchantAccountA = makeMerchantAccount("A");
+        merchantAccountB = makeMerchantAccount("B");
 
         Persistence.service().startTransaction();
     }
@@ -106,7 +106,7 @@ public class PaymentsSummaryHelperTestBase extends VistaDBTestBase {
         paymentRecord.paymentMethod().set(paymentMethod);
         paymentRecord.paymentStatus().setValue(paymentStatus);
         paymentRecord.billingAccount().set(lease.billingAccount());
-        paymentRecord.merchantAccount().set(merchantAccountA);
+        paymentRecord.merchantAccount().set(merchantAccount);
 
         Persistence.service().persist(paymentRecord);
 

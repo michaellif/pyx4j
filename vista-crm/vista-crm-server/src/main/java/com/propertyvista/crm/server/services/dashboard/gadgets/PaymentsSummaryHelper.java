@@ -74,26 +74,34 @@ public class PaymentsSummaryHelper {
      * @return
      */
     public PaymentsSummary calculateSummary(MerchantAccount merchantAccount, PaymentRecord.PaymentStatus paymentStatus, LogicalDate snapshotDay) {
+        if (merchantAccount == null || merchantAccount.isNull()) {
+            throw new IllegalArgumentException("merchantAccount is a mandatory argument");
+        }
+        if (paymentStatus == null) {
+            throw new IllegalArgumentException("paymentStatus is a mandatory argument");
+        }
+        if (snapshotDay == null) {
+            throw new IllegalArgumentException("snapshotDay is a amandatory argument");
+        }
+
         PaymentsSummary summary = initPaymentsSummary(snapshotDay);
 
-        summary.status().setValue(paymentStatus);
-        ICursorIterator<PaymentRecord> i = Persistence.service().query(null, makeCriteria(merchantAccount, paymentStatus, snapshotDay), AttachLevel.Attached);
+        EntityQueryCriteria<PaymentRecord> criteria = EntityQueryCriteria.create(PaymentRecord.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().merchantAccount(), merchantAccount));
+        criteria.add(PropertyCriterion.eq(criteria.proto().lastStatusChangeDate(), snapshotDay));
+        criteria.add(PropertyCriterion.eq(criteria.proto().paymentStatus(), paymentStatus));
+
+        ICursorIterator<PaymentRecord> i = Persistence.service().query(null, criteria, AttachLevel.Attached);
         while (i.hasNext()) {
             PaymentRecord r = i.next();
+            Persistence.service().retrieve(r.merchantAccount());
             PaymentType paymentType = r.paymentMethod().type().getValue();
             IPrimitive<BigDecimal> amountMember = paymentTypeMapper.getMember(summary, paymentType);
             amountMember.setValue(amountMember.getValue().add(r.amount().getValue()));
         }
 
+        summary.status().setValue(paymentStatus);
         return summary;
-    }
-
-    private EntityQueryCriteria<PaymentRecord> makeCriteria(MerchantAccount merchantAccount, PaymentRecord.PaymentStatus paymentStatus, LogicalDate snapshotDay) {
-        EntityQueryCriteria<PaymentRecord> criteria = EntityQueryCriteria.create(PaymentRecord.class);
-        // TODO merchantAccount
-        criteria.add(PropertyCriterion.eq(criteria.proto().lastStatusChangeDate(), snapshotDay));
-        criteria.add(PropertyCriterion.eq(criteria.proto().paymentStatus(), paymentStatus));
-        return criteria;
     }
 
     private PaymentsSummary initPaymentsSummary(LogicalDate snapshotDay) {

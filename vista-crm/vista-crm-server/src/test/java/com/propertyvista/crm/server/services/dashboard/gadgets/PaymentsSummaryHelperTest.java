@@ -40,7 +40,9 @@ public class PaymentsSummaryHelperTest extends PaymentsSummaryHelperTestBase {
         // add some clutter
         makePaymentRecord(merchantAccountA, "01-May-2010", "100.00", PaymentType.Cash, PaymentStatus.Canceled);
         makePaymentRecord(merchantAccountA, "01-May-2010", "200.00", PaymentType.Echeck, PaymentStatus.Rejected);
+
         makePaymentRecord(merchantAccountB, "01-May-2010", "200.00", PaymentType.Echeck, PaymentStatus.Rejected);
+        makePaymentRecord(merchantAccountB, "01-May-2010", "200.00", PaymentType.CreditCard, PaymentStatus.Received);
         makePaymentRecord(merchantAccountB, "01-May-2010", "200.00", PaymentType.CreditCard, PaymentStatus.Rejected);
 
         Persistence.service().setTransactionSystemTime(new LogicalDate(detectDateformat("01-Aug-2010")));

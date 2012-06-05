@@ -20,7 +20,7 @@ import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.financial.BuildingMerchantAccount;
+import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 
 public interface PaymentsSummary extends IEntity {
@@ -32,7 +32,7 @@ public interface PaymentsSummary extends IEntity {
     IPrimitive<LogicalDate> snapshotDay();
 
     /** This one is for holding a merchant account */
-    BuildingMerchantAccount merchantAccount();
+    MerchantAccount merchantAccount();
 
     IPrimitive<PaymentRecord.PaymentStatus> status();
 
