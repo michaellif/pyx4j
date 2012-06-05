@@ -22,12 +22,15 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
 import com.propertyvista.crm.client.ui.crud.lease.common.LeaseFormBase;
 import com.propertyvista.crm.client.ui.crud.lease.invoice.TransactionHistoryViewer;
+import com.propertyvista.domain.tenant.lease.Lease.Status;
 import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.misc.VistaTODO;
 
 public class LeaseForm extends LeaseFormBase<LeaseDTO> {
 
     private Widget paymentsTab;
+
+    private Widget adjustmentTab;
 
     public LeaseForm() {
         this(false);
@@ -43,7 +46,8 @@ public class LeaseForm extends LeaseFormBase<LeaseDTO> {
         createCommonContent();
 
         if (!VistaTODO.removedForProduction) {
-            tabPanel.add(isEditable() ? new HTML() : ((LeaseViewerView) getParentView()).getLeaseAdjustmentListerView().asWidget(), i18n.tr("Adjustments"));
+            tabPanel.add(adjustmentTab = isEditable() ? new HTML() : ((LeaseViewerView) getParentView()).getLeaseAdjustmentListerView().asWidget(),
+                    i18n.tr("Adjustments"));
             tabPanel.setLastTabDisabled(isEditable());
             tabPanel.add(isEditable() ? new HTML() : ((LeaseViewerView) getParentView()).getBillListerView().asWidget(), i18n.tr("Bills"));
             tabPanel.setLastTabDisabled(isEditable());
@@ -61,7 +65,15 @@ public class LeaseForm extends LeaseFormBase<LeaseDTO> {
     protected void onPopulate() {
         super.onPopulate();
 
+        tabPanel.setTabDisabled(adjustmentTab, getValue().version().status().getValue().isDraft());
         tabPanel.setTabDisabled(paymentsTab, getValue().version().status().getValue().isDraft());
+
+        if (!isEditable()) {
+            ((LeaseViewerView) getParentView()).getLeaseAdjustmentListerView().getLister().getDataTablePanel().getAddButton()
+                    .setEnabled(getValue().version().status().getValue() == Status.Closed);
+            ((LeaseViewerView) getParentView()).getPaymentListerView().getLister().getDataTablePanel().getAddButton()
+                    .setEnabled(getValue().version().status().getValue() == Status.Closed);
+        }
     }
 
     private IsWidget createFinancialTransactionHistoryTab() {
