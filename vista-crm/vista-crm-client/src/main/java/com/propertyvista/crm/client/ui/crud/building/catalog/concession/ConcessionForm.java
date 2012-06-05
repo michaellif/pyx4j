@@ -109,7 +109,7 @@ public class ConcessionForm extends CrmEntityForm<Concession> {
             valueHolder.setWidget(new DecoratorBuilder(inject(proto().version().value(), comp), 6).build());
 
             if (repopulatevalue && valueType != Concession.Type.free) {
-                get(proto().version().value()).populate(getValue().version().value().getValue(new BigDecimal(0)));
+                get(proto().version().value()).populate(getValue().version().value().getValue(BigDecimal.ZERO));
             }
         }
     }

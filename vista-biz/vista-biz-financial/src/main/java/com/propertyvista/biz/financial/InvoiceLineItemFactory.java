@@ -59,7 +59,7 @@ public class InvoiceLineItemFactory {
         if (!charge.amount().isNull()) {
             charge.taxes().addAll(TaxUtils.calculateTaxes(charge.amount().getValue(), charge.adjustment().reason(), building));
         }
-        charge.taxTotal().setValue(new BigDecimal(0));
+        charge.taxTotal().setValue(BigDecimal.ZERO);
         for (InvoiceChargeTax chargeTax : charge.taxes()) {
             charge.taxTotal().setValue(charge.taxTotal().getValue().add(chargeTax.amount().getValue()));
         }

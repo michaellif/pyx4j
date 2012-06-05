@@ -81,7 +81,7 @@ public class BillingUtils {
     }
 
     public static BigDecimal calculateTotal(InvoiceLineItem lineItem) {
-        BigDecimal tax = new BigDecimal(0);
+        BigDecimal tax = BigDecimal.ZERO;
         if (lineItem.isInstanceOf(InvoiceDebit.class)) {
             tax = lineItem.<InvoiceDebit> cast().taxTotal().getValue();
         }

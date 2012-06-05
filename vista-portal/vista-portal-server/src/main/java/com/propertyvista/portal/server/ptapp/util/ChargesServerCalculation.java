@@ -133,7 +133,7 @@ public class ChargesServerCalculation extends ChargesSharedCalculation {
             if (status == LeaseParticipant.Role.Applicant) {
                 percentage = 100;
             }
-            TenantCharge tenantCharge = com.propertyvista.portal.domain.util.DomainUtil.createTenantCharge(percentage, new BigDecimal(0));
+            TenantCharge tenantCharge = com.propertyvista.portal.domain.util.DomainUtil.createTenantCharge(percentage, BigDecimal.ZERO);
             tenantCharge.tenant().set(tenant);
             //            Persistence.service().persist(tenant);
             charges.paymentSplitCharges().charges().add(tenantCharge);

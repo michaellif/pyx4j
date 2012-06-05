@@ -113,7 +113,7 @@ public class ChargesSharedCalculation {
         }
 
         totalSplitPrc = 0; // perform actual calculation:
-        BigDecimal totalSplitVal = new BigDecimal(0); // sum value, paid by co-applicants
+        BigDecimal totalSplitVal = BigDecimal.ZERO; // sum value, paid by co-applicants
         TenantCharge mainApplicantCharge = null;
         for (TenantCharge charge : charges.paymentSplitCharges().charges()) {
             // !N.B. charge.tenant().status()  is not available here.  charge.tenant() never loaded to GWT!
@@ -140,7 +140,7 @@ public class ChargesSharedCalculation {
     }
 
     public static void calculateTotal(ChargeLineList charges) {
-        BigDecimal total = new BigDecimal(0);
+        BigDecimal total = BigDecimal.ZERO;
         for (Charge_OLD charge : charges.charges()) {
             total = total.add(charge.amount().getValue());
         }
@@ -148,7 +148,7 @@ public class ChargesSharedCalculation {
     }
 
     public static void calculateTotal(TenantChargeList charges) {
-        BigDecimal total = new BigDecimal(0);
+        BigDecimal total = BigDecimal.ZERO;
         for (Charge_OLD charge : charges.charges()) {
             total = total.add(charge.amount().getValue());
         }

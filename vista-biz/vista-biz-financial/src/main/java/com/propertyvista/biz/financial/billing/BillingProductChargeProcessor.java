@@ -38,9 +38,9 @@ public class BillingProductChargeProcessor extends AbstractBillingProcessor {
     BillingProductChargeProcessor(AbstractBillingManager billingManager) {
         super(billingManager);
 
-        getBillingManager().getNextPeriodBill().serviceCharge().setValue(new BigDecimal(0));
-        getBillingManager().getNextPeriodBill().recurringFeatureCharges().setValue(new BigDecimal(0));
-        getBillingManager().getNextPeriodBill().oneTimeFeatureCharges().setValue(new BigDecimal(0));
+        getBillingManager().getNextPeriodBill().serviceCharge().setValue(BigDecimal.ZERO);
+        getBillingManager().getNextPeriodBill().recurringFeatureCharges().setValue(BigDecimal.ZERO);
+        getBillingManager().getNextPeriodBill().oneTimeFeatureCharges().setValue(BigDecimal.ZERO);
 
     }
 
@@ -312,7 +312,7 @@ public class BillingProductChargeProcessor extends AbstractBillingProcessor {
                     TaxUtils.calculateTaxes(charge.amount().getValue(), charge.chargeSubLineItem().billableItem().item().type(), getBillingManager()
                             .getNextPeriodBill().billingRun().building()));
         }
-        charge.taxTotal().setValue(new BigDecimal(0));
+        charge.taxTotal().setValue(BigDecimal.ZERO);
         for (InvoiceChargeTax chargeTax : charge.taxes()) {
             charge.taxTotal().setValue(charge.taxTotal().getValue().add(chargeTax.amount().getValue()));
         }

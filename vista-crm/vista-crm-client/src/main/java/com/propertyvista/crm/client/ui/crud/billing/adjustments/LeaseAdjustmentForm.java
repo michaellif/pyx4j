@@ -183,7 +183,7 @@ public class LeaseAdjustmentForm extends CrmEntityForm<LeaseAdjustment> {
             taxHolder.setWidget(new DecoratorBuilder(inject(proto().tax(), comp), 10).build());
 
             if (repopulate) {
-                get(proto().tax()).populate(getValue().tax().getValue(new BigDecimal(0)));
+                get(proto().tax()).populate(getValue().tax().getValue(BigDecimal.ZERO));
             }
         }
     }
@@ -207,7 +207,7 @@ public class LeaseAdjustmentForm extends CrmEntityForm<LeaseAdjustment> {
                         public void onSuccess(LeaseAdjustmentPolicy result) {
                             for (LeaseAdjustmentPolicyItem item : result.policyItems()) {
                                 if (item.leaseAdjustmentReason().equals(getValue().reason())) {
-                                    BigDecimal taxRate = new BigDecimal(0);
+                                    BigDecimal taxRate = BigDecimal.ZERO;
                                     for (Tax tax : item.taxes()) {
                                         taxRate = taxRate.add(tax.rate().getValue());
                                     }
@@ -223,17 +223,17 @@ public class LeaseAdjustmentForm extends CrmEntityForm<LeaseAdjustment> {
     }
 
     private void recalculateTotal() {
-        BigDecimal total = new BigDecimal(0);
+        BigDecimal total = BigDecimal.ZERO;
 
         if (!getValue().isEmpty()) {
-            total = total.add(getValue().amount().getValue(new BigDecimal(0)));
+            total = total.add(getValue().amount().getValue(BigDecimal.ZERO));
 
             switch (getValue().taxType().getValue()) {
             case percent:
-                total = total.add(total.multiply(getValue().tax().getValue(new BigDecimal(0))));
+                total = total.add(total.multiply(getValue().tax().getValue(BigDecimal.ZERO)));
                 break;
             case value:
-                total = total.add(getValue().tax().getValue(new BigDecimal(0)));
+                total = total.add(getValue().tax().getValue(BigDecimal.ZERO));
                 break;
             }
         }

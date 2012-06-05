@@ -159,7 +159,7 @@ public class DepositPolicyForm extends PolicyDTOTabPanelBasedForm<DepositPolicyD
                     valueHolder.setWidget(new DecoratorBuilder(inject(proto().value(), comp), 6).build());
 
                     if (repopulatevalue) {
-                        get(proto().value()).populate(getValue().value().getValue(new BigDecimal(0)));
+                        get(proto().value()).populate(getValue().value().getValue(BigDecimal.ZERO));
                     }
                 }
             }

@@ -31,10 +31,10 @@ public class ChargesSharedCalculationTest extends TestCase {
 
         charges.monthlyCharges().total().setValue(new BigDecimal("10.6"));
 
-        charges.paymentSplitCharges().charges().add(DomainUtil.createTenantCharge(0, new BigDecimal(0)));
+        charges.paymentSplitCharges().charges().add(DomainUtil.createTenantCharge(0, BigDecimal.ZERO));
         int splitPrc = 31;
-        charges.paymentSplitCharges().charges().add(DomainUtil.createTenantCharge(splitPrc, new BigDecimal(0)));
-        charges.paymentSplitCharges().charges().add(DomainUtil.createTenantCharge(splitPrc, new BigDecimal(0)));
+        charges.paymentSplitCharges().charges().add(DomainUtil.createTenantCharge(splitPrc, BigDecimal.ZERO));
+        charges.paymentSplitCharges().charges().add(DomainUtil.createTenantCharge(splitPrc, BigDecimal.ZERO));
 
         ChargesSharedCalculation.calculatePaymentSplitCharges(charges);
 
