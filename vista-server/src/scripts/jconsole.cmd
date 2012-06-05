@@ -1,6 +1,6 @@
 @echo off
 rem @version $Revision$ ($Author$)  $Date$
-
+rem
 @set CLASSPATH=%JAVA_HOME%\lib\jconsole.jar;%JAVA_HOME%\lib\tools.jar
 
 @set MAVEN2_REPO=%HOMEDRIVE%\%HOMEPATH%\.m2\repository
