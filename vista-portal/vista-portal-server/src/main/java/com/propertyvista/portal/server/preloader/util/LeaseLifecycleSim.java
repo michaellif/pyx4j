@@ -138,10 +138,9 @@ public class LeaseLifecycleSim {
     private void setUpBillableItemsEffectiveTime(Lease lease) {
         // TODO something more sophisticated is probably required here
 
-        lease.version().leaseProducts().serviceItem().effectiveDate().setValue(simStart);
-
+        lease.version().leaseProducts().serviceItem().effectiveDate().setValue(lease.leaseFrom().getValue());
         for (BillableItem item : lease.version().leaseProducts().featureItems()) {
-            item.effectiveDate().setValue(simStart);
+            item.effectiveDate().setValue(lease.leaseFrom().getValue());
         }
     }
 
