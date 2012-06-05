@@ -152,21 +152,25 @@ public class BillingLifecycleManager {
 
             Persistence.service().persist(bill);
 
+            AbstractBillingManager processor = null;
+
             if (Status.Created == billingAccount.lease().version().status().getValue()) {//zeroCycle bill should be issued
                 if (billingAccount.carryforwardBalance().isNull()) {
-                    new EstimateBillingProcessor(bill).run();
+                    processor = new EstimateBillingManager(bill);
                 } else {
-                    new ZeroCycleBillingProcessor(bill).run();
+                    processor = new ZeroCycleBillingManager(bill);
                 }
             } else if (Status.Approved == billingAccount.lease().version().status().getValue()) {// first bill should be issued
-                new FirstBillingProcessor(bill).run();
+                processor = new FirstBillingManager(bill);
             } else if (Status.Active == billingAccount.lease().version().status().getValue()) {
-                new RegularBillingProcessor(bill).run();
+                processor = new RegularBillingManager(bill);
             } else if (Status.Completed == billingAccount.lease().version().status().getValue()) {// final bill should be issued
-                new FinalBillingProcessor(bill).run();
+                processor = new FinalBillingManager(bill);
             } else {
                 throw new BillingException(i18n.tr("Billing can't run when lease is in status '{0}'", billingAccount.lease().version().status().getValue()));
             }
+
+            processor.processBill();
 
             bill.billStatus().setValue(Bill.BillStatus.Finished);
         } catch (Throwable e) {

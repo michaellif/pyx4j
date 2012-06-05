@@ -20,16 +20,19 @@
  */
 package com.propertyvista.biz.financial.billing;
 
+import java.util.Arrays;
+import java.util.List;
+
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.financial.SysDateManager;
 import com.propertyvista.domain.financial.billing.Bill;
 
-class RegularBillingProcessor extends AbstractBillingProcessor {
+class RegularBillingManager extends AbstractBillingManager {
 
-    private static final I18n i18n = I18n.get(RegularBillingProcessor.class);
+    private static final I18n i18n = I18n.get(RegularBillingManager.class);
 
-    RegularBillingProcessor(Bill bill) {
+    RegularBillingManager(Bill bill) {
         super(bill, Bill.BillType.Regular);
 
         if (SysDateManager.getSysDate().compareTo(bill.billingRun().executionTargetDate().getValue()) < 0) {
@@ -38,4 +41,18 @@ class RegularBillingProcessor extends AbstractBillingProcessor {
 
     }
 
+    @Override
+    protected List<AbstractBillingProcessor> initProcessors() {
+        // @formatter:off
+        return Arrays.asList(new AbstractBillingProcessor[] {
+                
+                new BillingProductChargeProcessor(this),
+                new BillingLeaseAdjustmentProcessor(this), 
+                new BillingPaymentProcessor(this), 
+                /** Should run last **/
+                new BillingLatePaymentFeeProcessor(this) 
+                
+        });
+        // @formatter:on
+    }
 }

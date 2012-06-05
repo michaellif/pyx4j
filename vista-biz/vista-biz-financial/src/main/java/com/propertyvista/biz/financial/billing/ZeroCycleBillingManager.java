@@ -20,16 +20,32 @@
  */
 package com.propertyvista.biz.financial.billing;
 
+import java.util.Arrays;
+import java.util.List;
+
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.financial.billing.Bill;
 
-class FinalBillingProcessor extends AbstractBillingProcessor {
+class ZeroCycleBillingManager extends AbstractBillingManager {
 
-    private static final I18n i18n = I18n.get(FinalBillingProcessor.class);
+    private static final I18n i18n = I18n.get(ZeroCycleBillingManager.class);
 
-    FinalBillingProcessor(Bill bill) {
-        super(bill, Bill.BillType.Final);
+    ZeroCycleBillingManager(Bill bill) {
+        super(bill, Bill.BillType.ZeroCycle);
     }
 
+    @Override
+    protected List<AbstractBillingProcessor> initProcessors() {
+        // @formatter:off
+        return Arrays.asList(new AbstractBillingProcessor[] {
+                
+                new BillingInitialBalanceProcessor(this), 
+                new BillingProductChargeProcessor(this),
+                new BillingLeaseAdjustmentProcessor(this), 
+                new BillingPaymentProcessor(this)
+                
+        });
+        // @formatter:on
+    }
 }

@@ -20,7 +20,6 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.biz.financial.AbstractProcessor;
 import com.propertyvista.biz.financial.billing.BillDateUtils;
 import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.domain.financial.PaymentRecord;
@@ -29,7 +28,7 @@ import com.propertyvista.domain.financial.billing.InvoiceNSF;
 import com.propertyvista.domain.policy.policies.LeaseBillingPolicy;
 import com.propertyvista.domain.policy.policies.domain.NsfFeeItem;
 
-public class ARNSFProcessor extends AbstractProcessor {
+public class ARNSFProcessor extends AbstractARProcessor {
 
     private static final I18n i18n = I18n.get(ARNSFProcessor.class);
 

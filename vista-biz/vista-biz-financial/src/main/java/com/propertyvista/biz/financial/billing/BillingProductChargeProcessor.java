@@ -19,7 +19,6 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.biz.financial.AbstractProcessor;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.InvoiceAdjustmentSubLineItem;
 import com.propertyvista.domain.financial.billing.InvoiceChargeTax;
@@ -32,28 +31,31 @@ import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
 
-public class BillingProductChargeProcessor extends AbstractProcessor {
+public class BillingProductChargeProcessor extends AbstractBillingProcessor {
 
     private static final I18n i18n = I18n.get(BillingProductChargeProcessor.class);
 
-    private final AbstractBillingProcessor billing;
+    BillingProductChargeProcessor(AbstractBillingManager billingManager) {
+        super(billingManager);
 
-    BillingProductChargeProcessor(AbstractBillingProcessor billing) {
-        this.billing = billing;
-
-        billing.getNextPeriodBill().serviceCharge().setValue(new BigDecimal(0));
-        billing.getNextPeriodBill().recurringFeatureCharges().setValue(new BigDecimal(0));
-        billing.getNextPeriodBill().oneTimeFeatureCharges().setValue(new BigDecimal(0));
+        getBillingManager().getNextPeriodBill().serviceCharge().setValue(new BigDecimal(0));
+        getBillingManager().getNextPeriodBill().recurringFeatureCharges().setValue(new BigDecimal(0));
+        getBillingManager().getNextPeriodBill().oneTimeFeatureCharges().setValue(new BigDecimal(0));
 
     }
 
-    void createCharges() {
+    @Override
+    protected void execute() {
+        createCharges();
+    }
 
-        if (!Bill.BillType.Final.equals(billing.getNextPeriodBill().billType().getValue())) {
-            createCharge(billing.getNextPeriodBill().billingAccount().lease().version().leaseProducts().serviceItem());
+    private void createCharges() {
+
+        if (!Bill.BillType.Final.equals(getBillingManager().getNextPeriodBill().billType().getValue())) {
+            createCharge(getBillingManager().getNextPeriodBill().billingAccount().lease().version().leaseProducts().serviceItem());
         }
 
-        for (BillableItem billableItem : billing.getNextPeriodBill().billingAccount().lease().version().leaseProducts().featureItems()) {
+        for (BillableItem billableItem : getBillingManager().getNextPeriodBill().billingAccount().lease().version().leaseProducts().featureItems()) {
             if (billableItem.isNull()) {
                 throw new BillingException("Service Item is mandatory in lease");
             }
@@ -73,22 +75,22 @@ public class BillingProductChargeProcessor extends AbstractProcessor {
 
     private void createChargeForNextPeriod(BillableItem billableItem) {
 
-        if (Bill.BillType.Final.equals(billing.getNextPeriodBill().billType().getValue())) {
+        if (Bill.BillType.Final.equals(getBillingManager().getNextPeriodBill().billType().getValue())) {
             return;
         }
-        addCharge(createCharge(billableItem, billing.getNextPeriodBill(), InvoiceProductCharge.Period.next));
+        addCharge(createCharge(billableItem, getBillingManager().getNextPeriodBill(), InvoiceProductCharge.Period.next));
     }
 
     private void reviseChargeForCurrentPeriod(BillableItem billableItem) {
-        if (billing.getCurrentPeriodBill() == null) {
+        if (getBillingManager().getCurrentPeriodBill() == null) {
             return;
         }
 
-        InvoiceProductCharge revisedCharge = createCharge(billableItem, billing.getCurrentPeriodBill(), InvoiceProductCharge.Period.current);
+        InvoiceProductCharge revisedCharge = createCharge(billableItem, getBillingManager().getCurrentPeriodBill(), InvoiceProductCharge.Period.current);
 
         InvoiceProductCharge originalCharge = null;
 
-        for (InvoiceProductCharge charge : BillingUtils.getLineItemsForType(billing.getCurrentPeriodBill(), InvoiceProductCharge.class)) {
+        for (InvoiceProductCharge charge : BillingUtils.getLineItemsForType(getBillingManager().getCurrentPeriodBill(), InvoiceProductCharge.class)) {
             if (sameBillableItem(billableItem, charge.chargeSubLineItem().billableItem())
                     && InvoiceProductCharge.Period.next.equals(charge.period().getValue())) {
                 originalCharge = charge;
@@ -100,23 +102,23 @@ public class BillingProductChargeProcessor extends AbstractProcessor {
             addCharge(revisedCharge);
         } else if (revisedCharge != null && originalCharge != null) {
             if (!revisedCharge.amount().getValue().equals(originalCharge.amount().getValue())) {
-                //TODO   billing.getBillEntryAdjustmentProcessor().createBillEntryAdjustment(originalCharge, revisedCharge);
+                //TODO   getBillingManager().getBillEntryAdjustmentProcessor().createBillEntryAdjustment(originalCharge, revisedCharge);
             }
         }
     }
 
     private void reviseChargeForPreviousPeriod(BillableItem billableItem) {
-        if (billing.getPreviousPeriodBill() == null) {
+        if (getBillingManager().getPreviousPeriodBill() == null) {
             return;
         }
 
-        InvoiceProductCharge finalCharge = createCharge(billableItem, billing.getPreviousPeriodBill(), InvoiceProductCharge.Period.previous);
+        InvoiceProductCharge finalCharge = createCharge(billableItem, getBillingManager().getPreviousPeriodBill(), InvoiceProductCharge.Period.previous);
 
         InvoiceProductCharge originalCharge = null;
 
         //TODO handle case when both previous and current have charge
 
-        for (InvoiceProductCharge charge : BillingUtils.getLineItemsForType(billing.getPreviousPeriodBill(), InvoiceProductCharge.class)) {
+        for (InvoiceProductCharge charge : BillingUtils.getLineItemsForType(getBillingManager().getPreviousPeriodBill(), InvoiceProductCharge.class)) {
             if (sameBillableItem(billableItem, charge.chargeSubLineItem().billableItem())
                     && InvoiceProductCharge.Period.next.equals(charge.period().getValue())) {
                 originalCharge = charge;
@@ -124,7 +126,7 @@ public class BillingProductChargeProcessor extends AbstractProcessor {
             }
         }
 
-        for (InvoiceProductCharge charge : BillingUtils.getLineItemsForType(billing.getCurrentPeriodBill(), InvoiceProductCharge.class)) {
+        for (InvoiceProductCharge charge : BillingUtils.getLineItemsForType(getBillingManager().getCurrentPeriodBill(), InvoiceProductCharge.class)) {
             if (sameBillableItem(billableItem, charge.chargeSubLineItem().billableItem())
                     && InvoiceProductCharge.Period.current.equals(charge.period().getValue())) {
                 originalCharge = charge;
@@ -136,14 +138,14 @@ public class BillingProductChargeProcessor extends AbstractProcessor {
             addCharge(finalCharge);
         } else if (finalCharge != null && originalCharge != null) {
 //            BillEntryAdjustment billEntryAdjustment = null;
-//            for (BillEntryAdjustment adjustment : billing.getCurrentPeriodBill().billEntryAdjustments()) {
+//            for (BillEntryAdjustment adjustment : getBillingManager().getCurrentPeriodBill().billEntryAdjustments()) {
 //                if (originalCharge.equals(adjustment.originalBillEntry())) {
 //                    billEntryAdjustment = adjustment;
 //                    break;
 //                }
 //            }
 //            if (billEntryAdjustment != null) {
-//                //TODO    billing.getBillEntryAdjustmentProcessor().createBillEntryAdjustment(billEntryAdjustment.revisedBillEntry(), finalCharge);
+//                //TODO    getBillingManager().getBillEntryAdjustmentProcessor().createBillEntryAdjustment(billEntryAdjustment.revisedBillEntry(), finalCharge);
 //            }
         }
     }
@@ -165,7 +167,7 @@ public class BillingProductChargeProcessor extends AbstractProcessor {
         charge.period().setValue(period);
         charge.fromDate().setValue(overlap.getFromDate());
         charge.toDate().setValue(overlap.getToDate());
-        charge.dueDate().setValue(billing.getNextPeriodBill().dueDate().getValue());
+        charge.dueDate().setValue(getBillingManager().getNextPeriodBill().dueDate().getValue());
 
         if (BillingUtils.isService(billableItem.item().product())) {
             charge.debitType().setValue(DebitType.lease);
@@ -256,13 +258,13 @@ public class BillingProductChargeProcessor extends AbstractProcessor {
             amount = billableItemAdjustment.value().getValue();
         }
 
-        if (Bill.BillType.Final.equals(billing.getNextPeriodBill().billType().getValue())) {
+        if (Bill.BillType.Final.equals(getBillingManager().getNextPeriodBill().billType().getValue())) {
             //TODO final bill
             adjustment.amount().setValue(new BigDecimal("0.00"));
         } else {
-            DateRange overlap = BillDateUtils.getOverlappingRange(new DateRange(billing.getNextPeriodBill().billingPeriodStartDate().getValue(), billing
-                    .getNextPeriodBill().billingPeriodEndDate().getValue()), new DateRange(billableItemAdjustment.effectiveDate().getValue(),
-                    billableItemAdjustment.expirationDate().getValue()));
+            DateRange overlap = BillDateUtils.getOverlappingRange(new DateRange(getBillingManager().getNextPeriodBill().billingPeriodStartDate().getValue(),
+                    getBillingManager().getNextPeriodBill().billingPeriodEndDate().getValue()), new DateRange(
+                    billableItemAdjustment.effectiveDate().getValue(), billableItemAdjustment.expirationDate().getValue()));
 
             if (overlap == null) {
                 return;
@@ -275,7 +277,8 @@ public class BillingProductChargeProcessor extends AbstractProcessor {
                 return;
             }
 
-            BigDecimal proration = ProrationUtils.prorate(overlap.getFromDate(), overlap.getToDate(), billing.getNextPeriodBill().billingRun().building());
+            BigDecimal proration = ProrationUtils.prorate(overlap.getFromDate(), overlap.getToDate(), getBillingManager().getNextPeriodBill().billingRun()
+                    .building());
             adjustment.amount().setValue(amount.multiply(proration));
         }
 
@@ -298,16 +301,16 @@ public class BillingProductChargeProcessor extends AbstractProcessor {
     }
 
     private BigDecimal prorate(InvoiceProductCharge charge) {
-        BigDecimal proration = ProrationUtils.prorate(charge.fromDate().getValue(), charge.toDate().getValue(), billing.getNextPeriodBill().billingRun()
-                .building());
+        BigDecimal proration = ProrationUtils.prorate(charge.fromDate().getValue(), charge.toDate().getValue(), getBillingManager().getNextPeriodBill()
+                .billingRun().building());
         return charge.chargeSubLineItem().billableItem().agreedPrice().getValue().multiply(proration);
     }
 
     private void calculateTax(InvoiceProductCharge charge) {
         if (!charge.amount().isNull()) {
             charge.taxes().addAll(
-                    TaxUtils.calculateTaxes(charge.amount().getValue(), charge.chargeSubLineItem().billableItem().item().type(), billing.getNextPeriodBill()
-                            .billingRun().building()));
+                    TaxUtils.calculateTaxes(charge.amount().getValue(), charge.chargeSubLineItem().billableItem().item().type(), getBillingManager()
+                            .getNextPeriodBill().billingRun().building()));
         }
         charge.taxTotal().setValue(new BigDecimal(0));
         for (InvoiceChargeTax chargeTax : charge.taxes()) {
@@ -323,16 +326,16 @@ public class BillingProductChargeProcessor extends AbstractProcessor {
         Persistence.service().persist(charge);
 
         if (BillingUtils.isService(charge.chargeSubLineItem().billableItem().item().product())) { //Service
-            billing.getNextPeriodBill().serviceCharge().setValue(charge.amount().getValue());
+            getBillingManager().getNextPeriodBill().serviceCharge().setValue(charge.amount().getValue());
         } else if (BillingUtils.isRecurringFeature(charge.chargeSubLineItem().billableItem().item().product())) { //Recurring Feature
-            billing.getNextPeriodBill().recurringFeatureCharges()
-                    .setValue(billing.getNextPeriodBill().recurringFeatureCharges().getValue().add(charge.amount().getValue()));
+            getBillingManager().getNextPeriodBill().recurringFeatureCharges()
+                    .setValue(getBillingManager().getNextPeriodBill().recurringFeatureCharges().getValue().add(charge.amount().getValue()));
         } else {
-            billing.getNextPeriodBill().oneTimeFeatureCharges()
-                    .setValue(billing.getNextPeriodBill().oneTimeFeatureCharges().getValue().add(charge.amount().getValue()));
+            getBillingManager().getNextPeriodBill().oneTimeFeatureCharges()
+                    .setValue(getBillingManager().getNextPeriodBill().oneTimeFeatureCharges().getValue().add(charge.amount().getValue()));
         }
-        billing.getNextPeriodBill().lineItems().add(charge);
-        billing.getNextPeriodBill().taxes().setValue(billing.getNextPeriodBill().taxes().getValue().add(charge.taxTotal().getValue()));
+        getBillingManager().getNextPeriodBill().lineItems().add(charge);
+        getBillingManager().getNextPeriodBill().taxes().setValue(getBillingManager().getNextPeriodBill().taxes().getValue().add(charge.taxTotal().getValue()));
     }
 
 }

@@ -17,11 +17,10 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.biz.financial.AbstractProcessor;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.InvoicePayment;
 
-public class ARPaymentProcessor extends AbstractProcessor {
+public class ARPaymentProcessor extends AbstractARProcessor {
 
     private static final I18n i18n = I18n.get(ARPaymentProcessor.class);
 

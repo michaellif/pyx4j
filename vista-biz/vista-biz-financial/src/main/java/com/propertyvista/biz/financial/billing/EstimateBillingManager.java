@@ -20,16 +20,30 @@
  */
 package com.propertyvista.biz.financial.billing;
 
+import java.util.Arrays;
+import java.util.List;
+
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.financial.billing.Bill;
 
-class EstimateBillingProcessor extends AbstractBillingProcessor {
+class EstimateBillingManager extends AbstractBillingManager {
 
-    private static final I18n i18n = I18n.get(EstimateBillingProcessor.class);
+    private static final I18n i18n = I18n.get(EstimateBillingManager.class);
 
-    EstimateBillingProcessor(Bill bill) {
+    EstimateBillingManager(Bill bill) {
         super(bill, Bill.BillType.Estimate);
     }
 
+    @Override
+    protected List<AbstractBillingProcessor> initProcessors() {
+        // @formatter:off
+        return Arrays.asList(new AbstractBillingProcessor[] {
+                
+                new BillingProductChargeProcessor(this),
+                new BillingDepositProcessor(this)
+                
+        });
+        // @formatter:on
+    }
 }

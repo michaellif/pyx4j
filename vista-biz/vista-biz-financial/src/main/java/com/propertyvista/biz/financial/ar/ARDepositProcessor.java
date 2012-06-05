@@ -15,10 +15,9 @@ package com.propertyvista.biz.financial.ar;
 
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.biz.financial.AbstractProcessor;
 import com.propertyvista.domain.tenant.lease.Deposit;
 
-public class ARDepositProcessor extends AbstractProcessor {
+public class ARDepositProcessor extends AbstractARProcessor {
 
     private static final I18n i18n = I18n.get(ARDepositProcessor.class);
 

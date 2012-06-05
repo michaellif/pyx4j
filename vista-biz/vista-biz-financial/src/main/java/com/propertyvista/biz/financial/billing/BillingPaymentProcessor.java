@@ -15,24 +15,26 @@ package com.propertyvista.biz.financial.billing;
 
 import java.util.List;
 
-import com.propertyvista.biz.financial.AbstractProcessor;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.domain.financial.billing.InvoiceNSF;
 import com.propertyvista.domain.financial.billing.InvoicePayment;
 import com.propertyvista.domain.financial.billing.InvoicePaymentBackOut;
 
-public class BillingPaymentProcessor extends AbstractProcessor {
+public class BillingPaymentProcessor extends AbstractBillingProcessor {
 
-    private final AbstractBillingProcessor billing;
-
-    BillingPaymentProcessor(AbstractBillingProcessor billing) {
-        this.billing = billing;
+    BillingPaymentProcessor(AbstractBillingManager billingManager) {
+        super(billingManager);
     }
 
-    void attachPaymentRecords() {
+    @Override
+    protected void execute() {
+        attachPaymentRecords();
+    }
 
-        List<InvoiceLineItem> items = BillingUtils.getNotConsumedLineItems(billing.getNextPeriodBill().billingAccount());
+    private void attachPaymentRecords() {
+
+        List<InvoiceLineItem> items = BillingUtils.getNotConsumedLineItems(getBillingManager().getNextPeriodBill().billingAccount());
 
         for (InvoicePayment payment : BillingUtils.getLineItemsForType(items, InvoicePayment.class)) {
             attachPayment(payment);
@@ -48,19 +50,19 @@ public class BillingPaymentProcessor extends AbstractProcessor {
     }
 
     private void attachPayment(InvoicePayment payment) {
-        Bill bill = billing.getNextPeriodBill();
+        Bill bill = getBillingManager().getNextPeriodBill();
         bill.lineItems().add(payment);
         bill.paymentReceivedAmount().setValue(bill.paymentReceivedAmount().getValue().add(payment.amount().getValue()));
     }
 
     private void attachPaymentBackOut(InvoicePaymentBackOut paymentBackOut) {
-        Bill bill = billing.getNextPeriodBill();
+        Bill bill = getBillingManager().getNextPeriodBill();
         bill.lineItems().add(paymentBackOut);
         bill.paymentReceivedAmount().setValue(bill.paymentReceivedAmount().getValue().subtract(paymentBackOut.amount().getValue()));
     }
 
     private void attachNSF(InvoiceNSF nsf) {
-        Bill bill = billing.getNextPeriodBill();
+        Bill bill = getBillingManager().getNextPeriodBill();
         bill.lineItems().add(nsf);
         // bill..setValue(bill.paymentReceivedAmount().getValue().subtract(paymentBackOut.amount().getValue()));
     }

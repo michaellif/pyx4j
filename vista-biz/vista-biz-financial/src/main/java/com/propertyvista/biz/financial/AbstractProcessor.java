@@ -15,9 +15,10 @@ package com.propertyvista.biz.financial;
 
 import com.propertyvista.domain.tenant.lease.BillableItem;
 
-public class AbstractProcessor {
+public abstract class AbstractProcessor {
 
     protected boolean sameBillableItem(BillableItem billableItem1, BillableItem billableItem2) {
         return billableItem1.uid().equals(billableItem2.uid());
     }
+
 }

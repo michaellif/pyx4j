@@ -15,12 +15,12 @@ package com.propertyvista.biz.financial.ar;
 
 import com.pyx4j.entity.server.Persistence;
 
-import com.propertyvista.biz.financial.AbstractLeaseAdjustmentProcessor;
+import com.propertyvista.biz.financial.InvoiceLineItemFactory;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustmentReason;
 
-public class ARLeaseAdjustmentProcessor extends AbstractLeaseAdjustmentProcessor {
+public class ARLeaseAdjustmentProcessor extends AbstractARProcessor {
 
     void postImmediateAdjustment(LeaseAdjustment adjustment) {
 
@@ -29,9 +29,9 @@ public class ARLeaseAdjustmentProcessor extends AbstractLeaseAdjustmentProcessor
         } else {
             InvoiceLineItem lineItem = null;
             if (LeaseAdjustmentReason.ActionType.charge.equals(adjustment.reason().actionType().getValue())) {
-                lineItem = createCharge(adjustment);
+                lineItem = InvoiceLineItemFactory.createInvoiceAccountCharge(adjustment);
             } else if (LeaseAdjustmentReason.ActionType.credit.equals(adjustment.reason().actionType().getValue())) {
-                lineItem = createCredit(adjustment);
+                lineItem = InvoiceLineItemFactory.createInvoiceAccountCredit(adjustment);
             } else {
                 throw new ARException("ActionType is unknown");
             }

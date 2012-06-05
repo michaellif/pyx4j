@@ -13,17 +13,18 @@
  */
 package com.propertyvista.biz.financial.billing;
 
-import com.propertyvista.biz.financial.AbstractProcessor;
+public class BillingInitialBalanceProcessor extends AbstractBillingProcessor {
 
-public class BillingInitialBalanceProcessor extends AbstractProcessor {
-
-    private final AbstractBillingProcessor billing;
-
-    BillingInitialBalanceProcessor(AbstractBillingProcessor billing) {
-        this.billing = billing;
+    BillingInitialBalanceProcessor(AbstractBillingManager billingManager) {
+        super(billingManager);
     }
 
-    void createInitialBalanceRecord() {
+    @Override
+    protected void execute() {
+        createInitialBalanceRecord();
+    }
+
+    private void createInitialBalanceRecord() {
         //TODO
 
         //1. get initial balance
