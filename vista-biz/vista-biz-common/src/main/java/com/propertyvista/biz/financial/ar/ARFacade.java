@@ -49,7 +49,7 @@ public interface ARFacade {
 
     TransactionHistoryDTO getTransactionHistory(BillingAccount billingAccount);
 
-    //BigDecimal getCurrentBalance(BillingAccount billingAccount);
+    BigDecimal getCurrentBalance(BillingAccount billingAccount);
 
     BuildingArrearsSnapshot getArrearsSnapshot(Building buildingStub, LogicalDate asOf);
 
@@ -59,8 +59,6 @@ public interface ARFacade {
     void updateArrearsHistory(BillingAccount billingAccount);
 
     void updateArrearsHistory(Building building);
-
-    BigDecimal getCurrentBallance(BillingAccount billingAccount);
 
     List<InvoiceLineItem> getNotAcquiredLineItems(BillingAccount billingAccount);
 }

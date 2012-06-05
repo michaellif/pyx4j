@@ -40,7 +40,7 @@ public class BillSummaryServiceImpl implements BillSummaryService {
 
         BillSummaryDTO entity = EntityFactory.create(BillSummaryDTO.class);
         entity.currentBill().set(ServerSideFactory.create(BillingFacade.class).getLatestBill(lease));
-        entity.currentBalance().setValue(arFacade.getCurrentBallance(lease.billingAccount()));
+        entity.currentBalance().setValue(arFacade.getCurrentBalance(lease.billingAccount()));
         entity.latestActivities().addAll(arFacade.getNotAcquiredLineItems(lease.billingAccount()));
 
         callback.onSuccess(entity);

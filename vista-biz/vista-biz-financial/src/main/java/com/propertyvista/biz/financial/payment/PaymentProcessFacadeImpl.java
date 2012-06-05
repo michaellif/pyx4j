@@ -227,7 +227,7 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
                 continue;
             }
             // call ar facade to get current balance for dueDate
-            BigDecimal currentBallance = ServerSideFactory.create(ARFacade.class).getCurrentBallance(bill.billingAccount());
+            BigDecimal currentBallance = ServerSideFactory.create(ARFacade.class).getCurrentBalance(bill.billingAccount());
             if (currentBallance.compareTo(BigDecimal.ZERO) <= 0) {
                 continue;
             }

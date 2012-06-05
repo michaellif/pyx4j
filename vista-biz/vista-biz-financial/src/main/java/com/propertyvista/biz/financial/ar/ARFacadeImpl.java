@@ -97,7 +97,7 @@ public class ARFacadeImpl implements ARFacade {
     }
 
     @Override
-    public BigDecimal getCurrentBallance(BillingAccount billingAccount) {
+    public BigDecimal getCurrentBalance(BillingAccount billingAccount) {
         return ARTransactionManager.getCurrentBallance(billingAccount);
     }
 
