@@ -57,7 +57,6 @@ public class ViewBillActivity extends SecurityAwareActivity implements ViewBillV
         super.start(panel, eventBus);
         panel.setWidget(view);
 
-        assert (entityId != null);
         srv.retrieve(new DefaultAsyncCallback<BillDTO>() {
             @Override
             public void onSuccess(BillDTO result) {

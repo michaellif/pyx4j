@@ -15,14 +15,13 @@ package com.propertyvista.portal.client.ui.residents.billing;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.portal.domain.dto.BillSummaryDTO;
 
 public interface BillSummaryView extends IsWidget {
 
     interface Presenter {
 
-        void viewCurrentBill(Bill bill);
+        void viewCurrentBill();
 
         void payNow();
     }

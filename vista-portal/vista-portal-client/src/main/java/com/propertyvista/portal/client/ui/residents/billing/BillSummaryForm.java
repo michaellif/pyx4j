@@ -55,7 +55,7 @@ public class BillSummaryForm extends CEntityDecoratableForm<BillSummaryDTO> {
         content.setWidget(++row, 0, new Anchor(i18n.tr("View Current Bill"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                presenter.viewCurrentBill(getValue().currentBill());
+                presenter.viewCurrentBill();
             }
         }));
         content.getWidget(row, 0).getElement().getStyle().setMarginLeft(15, Unit.EM);

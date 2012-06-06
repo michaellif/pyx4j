@@ -20,9 +20,7 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.rpc.AppPlace;
 
-import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.portal.client.activity.SecurityAwareActivity;
 import com.propertyvista.portal.client.ui.residents.billing.BillSummaryView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
@@ -56,16 +54,13 @@ public class BillSummaryActivity extends SecurityAwareActivity implements BillSu
     }
 
     @Override
+    public void viewCurrentBill() {
+        AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.BillingHistory.ViewBill());
+    }
+
+    @Override
     public void payNow() {
         AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.BillSummary.PayNow());
     }
 
-    @Override
-    public void viewCurrentBill(Bill bill) {
-        if (bill != null) {
-            AppPlace place = new PortalSiteMap.Residents.BillingHistory.ViewBill();
-            place.placeArg(PortalSiteMap.ARG_ENTITY_ID, bill.getPrimaryKey().toString());
-            AppSite.getPlaceController().goTo(place);
-        }
-    }
 }
