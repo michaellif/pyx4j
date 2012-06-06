@@ -26,6 +26,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -194,9 +195,15 @@ public class PadCaledon {
         int id = sequence.number().getValue() + 1;
         if (id == 999999) {
             id = 1;
+            if (ApplicationMode.isDevelopment()) {
+                id = PadCaledonDev.restoreFileCreationNumber();
+            }
         }
         sequence.number().setValue(id);
         Persistence.service().persist(sequence);
+        if (ApplicationMode.isDevelopment()) {
+            PadCaledonDev.saveFileCreationNumber(id);
+        }
         return String.valueOf(id);
     }
 
