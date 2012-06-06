@@ -53,8 +53,7 @@ public enum PmcProcessType implements Serializable {
     // Used for scheduler testing
     test;
 
-    @Override
-    public String toString() {
+    public String getDescription() {
         return I18nEnum.toString(this);
     }
 }
