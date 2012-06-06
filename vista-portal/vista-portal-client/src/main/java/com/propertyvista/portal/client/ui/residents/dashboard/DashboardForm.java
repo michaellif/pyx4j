@@ -17,7 +17,6 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.FlexTable;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -61,8 +60,12 @@ public class DashboardForm extends CEntityDecoratableForm<TenantDashboardDTO> im
     }
 
     @Override
-    public IsWidget createContent() {
+    public void setPresenter(Presenter presenter) {
+        this.presenter = presenter;
+    }
 
+    @Override
+    public IsWidget createContent() {
         HorizontalPanel container = new HorizontalPanel();
         container.setStyleName(TenantDashboardTheme.StyleName.TenantDashboard.name());
 
@@ -111,7 +114,6 @@ public class DashboardForm extends CEntityDecoratableForm<TenantDashboardDTO> im
                 AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.Maintenance.NewMaintenanceRequest());
             }
         });
-
         rightPanel.setH1(++row, 0, 1, i18n.tr("MAINTENANCE"), newTicket);
         rightPanel.setWidget(++row, 0, inject(proto().maintanances(), new MaintananceViewer()));
 
@@ -124,19 +126,10 @@ public class DashboardForm extends CEntityDecoratableForm<TenantDashboardDTO> im
         return container;
     }
 
-    @Override
-    public void setPresenter(Presenter presenter) {
-        this.presenter = presenter;
-    }
-
     class CommunicationViewer extends CEntityViewer<IList<Message>> {
-
         @Override
         public IsWidget createContent(IList<Message> value) {
-
             FlexTable container = new FlexTable();
-
-            container.setWidth("100%");
 
             if (value.size() > 0) {
                 container.getColumnFormatter().setWidth(0, "35px");
@@ -148,21 +141,22 @@ public class DashboardForm extends CEntityDecoratableForm<TenantDashboardDTO> im
                 container.getRowFormatter().getElement(0).addClassName(TenantDashboardTheme.StyleName.TenantDashboardTableHeader.name());
 
                 int row = 0;
-
                 for (Message message : value) {
                     container.setWidget(++row, 0, getIcon(message.type().getValue()));
-                    container.getCellFormatter().getElement(row, 0).getStyle().setPaddingLeft(4, Unit.PX);
+                    container.getCellFormatter().getElement(row, 0).getStyle().setPaddingLeft(1, Unit.EM);
                     container.setHTML(row, 1, message.subject().getValue());
                     container.setHTML(row, 2, message.date().getStringView());
                     container.getRowFormatter().getElement(row).addClassName(TenantDashboardTheme.StyleName.TenantDashboardTableRow.name());
                 }
             } else {
                 container.setHTML(0, 0, NoRecordsFound);
-                container.getCellFormatter().getElement(0, 0).getStyle().setPaddingLeft(4, Unit.PX);
+                container.getCellFormatter().getElement(0, 0).getStyle().setPaddingLeft(1, Unit.EM);
                 container.getRowFormatter().getElement(0).addClassName(TenantDashboardTheme.StyleName.TenantDashboardTableHeader.name());
                 container.setHTML(1, 0, "");
                 container.getRowFormatter().getElement(1).addClassName(TenantDashboardTheme.StyleName.TenantDashboardTableRow.name());
             }
+
+            container.setWidth("100%");
             return container;
         }
 
@@ -178,52 +172,53 @@ public class DashboardForm extends CEntityDecoratableForm<TenantDashboardDTO> im
             default:
                 break;
             }
+
             return new Image(PortalImages.INSTANCE.communicationMessage());
         }
-
     }
 
     class GeneralInfoViewer extends CEntityViewer<TenantGeneralInfoDTO> {
-
         @Override
         public IsWidget createContent(TenantGeneralInfoDTO value) {
-            HTML content = new HTML(value.tenantName().getValue() + "<p>" + value.floorplanName().getValue() + "<p>" + value.tenantAddress().getValue());
-            content.getElement().getStyle().setPadding(20, Unit.PX);
+            FlexTable content = new FlexTable();
+            int row = -1;
+
+            content.setHTML(++row, 0, value.tenantName().getValue());
+            content.setHTML(++row, 0, value.floorplanName().getValue());
+            content.setHTML(++row, 0, value.tenantAddress().getValue());
+
+            content.getElement().getStyle().setMargin(1, Unit.EM);
             return content;
         }
     }
 
     class BillSummaryViewer extends CEntityViewer<BillSummaryDTO> {
-
         @Override
         public IsWidget createContent(BillSummaryDTO value) {
-
-            VerticalPanel content = new VerticalPanel();
-            content.setWidth("100%");
-
             FlexTable dataPanel = new FlexTable();
 
             dataPanel.setWidth("100%");
             dataPanel.getColumnFormatter().setWidth(0, "250px");
             dataPanel.getColumnFormatter().setWidth(1, "75px");
 
-            int row = 0;
+            int row = -1;
 
             dataPanel.setHTML(++row, 0, value.currentBalance().getMeta().getCaption());
             dataPanel.getRowFormatter().getElement(row).addClassName(TenantDashboardTheme.StyleName.TenantDashboardTableRow.name());
-            dataPanel.getCellFormatter().getElement(row, 0).getStyle().setPaddingLeft(4, Unit.PX);
+            dataPanel.getCellFormatter().getElement(row, 0).getStyle().setPaddingLeft(1, Unit.EM);
             dataPanel.setHTML(row, 1, "$" + value.currentBalance().getValue());
 
             dataPanel.setHTML(++row, 0, value.currentBill().dueDate().getMeta().getCaption());
             dataPanel.getRowFormatter().getElement(row).addClassName(TenantDashboardTheme.StyleName.TenantDashboardTableRow.name());
-            dataPanel.getCellFormatter().getElement(row, 0).getStyle().setPaddingLeft(4, Unit.PX);
+            dataPanel.getCellFormatter().getElement(row, 0).getStyle().setPaddingLeft(1, Unit.EM);
             dataPanel.setHTML(row, 1, value.currentBill().dueDate().getStringView());
 
+            VerticalPanel content = new VerticalPanel();
             content.add(dataPanel);
             content.setCellWidth(dataPanel, "100%");
 
             HorizontalPanel actions = new HorizontalPanel();
-            actions.getElement().getStyle().setMargin(20, Unit.PX);
+            actions.getElement().getStyle().setMargin(1, Unit.EM);
 
             Anchor viewBill = new Anchor(i18n.tr("View Current Bill")) {
             };
@@ -247,34 +242,29 @@ public class DashboardForm extends CEntityDecoratableForm<TenantDashboardDTO> im
 
             content.add(actions);
             content.setCellHorizontalAlignment(actions, HorizontalPanel.ALIGN_RIGHT);
-
+            content.setWidth("100%");
             return content;
         }
-
     }
 
     class MaintananceViewer extends CEntityViewer<IList<MaintenanceRequestDTO>> {
-
         @Override
         public IsWidget createContent(IList<MaintenanceRequestDTO> value) {
             FlexTable container = new FlexTable();
-
-            container.setWidth("100%");
 
             if (value.size() > 0) {
                 container.getColumnFormatter().setWidth(0, "250px");
                 container.getColumnFormatter().setWidth(1, "75px");
 
                 container.setHTML(0, 0, i18n.tr("Ticket"));
-                container.getCellFormatter().getElement(0, 0).getStyle().setPaddingLeft(4, Unit.PX);
+                container.getCellFormatter().getElement(0, 0).getStyle().setPaddingLeft(1, Unit.EM);
                 container.setHTML(0, 1, i18n.tr("Status"));
                 container.getRowFormatter().getElement(0).addClassName(TenantDashboardTheme.StyleName.TenantDashboardTableHeader.name());
 
                 int row = 0;
-
                 for (MaintenanceRequestDTO mr : value) {
                     container.setHTML(++row, 0, issueDetail(mr.issueClassification()));
-                    container.getCellFormatter().getElement(row, 0).getStyle().setPaddingLeft(4, Unit.PX);
+                    container.getCellFormatter().getElement(row, 0).getStyle().setPaddingLeft(1, Unit.EM);
                     if (MaintenanceRequestStatus.Resolved.equals(mr.status().getValue())) {
                         RateIt rateIt = new RateIt(5);
                         rateIt.setRating(4);
@@ -286,13 +276,14 @@ public class DashboardForm extends CEntityDecoratableForm<TenantDashboardDTO> im
                 }
             } else {
                 container.setHTML(0, 0, NoRecordsFound);
-                container.getCellFormatter().getElement(0, 0).getStyle().setPaddingLeft(4, Unit.PX);
+                container.getCellFormatter().getElement(0, 0).getStyle().setPaddingLeft(1, Unit.EM);
                 container.getRowFormatter().getElement(0).addClassName(TenantDashboardTheme.StyleName.TenantDashboardTableHeader.name());
                 container.setHTML(1, 0, "");
                 container.getRowFormatter().getElement(1).addClassName(TenantDashboardTheme.StyleName.TenantDashboardTableRow.name());
             }
-            return container;
 
+            container.setWidth("100%");
+            return container;
         }
 
         private String issueDetail(IssueClassification ic) {
@@ -311,41 +302,37 @@ public class DashboardForm extends CEntityDecoratableForm<TenantDashboardDTO> im
     }
 
     class ReservationsViewer extends CEntityViewer<IList<ReservationDTO>> {
-
         @Override
         public IsWidget createContent(IList<ReservationDTO> value) {
             FlexTable container = new FlexTable();
-
-            container.setWidth("100%");
 
             if (value.size() > 0) {
                 container.getColumnFormatter().setWidth(0, "250px");
                 container.getColumnFormatter().setWidth(1, "75px");
 
                 container.setHTML(0, 0, i18n.tr("Service"));
-                container.getCellFormatter().getElement(0, 0).getStyle().setPaddingLeft(4, Unit.PX);
+                container.getCellFormatter().getElement(0, 0).getStyle().setPaddingLeft(1, Unit.EM);
                 container.setHTML(0, 1, i18n.tr("Status"));
                 container.getRowFormatter().getElement(0).addClassName(TenantDashboardTheme.StyleName.TenantDashboardTableHeader.name());
 
                 int row = 0;
-
                 for (ReservationDTO reservation : value) {
                     container.setHTML(++row, 0, reservation.description().getValue());
-                    container.getCellFormatter().getElement(row, 0).getStyle().setPaddingLeft(4, Unit.PX);
+                    container.getCellFormatter().getElement(row, 0).getStyle().setPaddingLeft(1, Unit.EM);
                     container.setHTML(row, 1, reservation.status().getStringView() + "<p><i style='font-size:0.8em'>" + reservation.date().getStringView()
                             + "</i>");
                     container.getRowFormatter().getElement(row).addClassName(TenantDashboardTheme.StyleName.TenantDashboardTableRow.name());
                 }
             } else {
                 container.setHTML(0, 0, NoRecordsFound);
-                container.getCellFormatter().getElement(0, 0).getStyle().setPaddingLeft(4, Unit.PX);
+                container.getCellFormatter().getElement(0, 0).getStyle().setPaddingLeft(1, Unit.EM);
                 container.getRowFormatter().getElement(0).addClassName(TenantDashboardTheme.StyleName.TenantDashboardTableHeader.name());
                 container.setHTML(1, 0, "");
                 container.getRowFormatter().getElement(1).addClassName(TenantDashboardTheme.StyleName.TenantDashboardTableRow.name());
             }
+
+            container.setWidth("100%");
             return container;
         }
-
     }
-
 }
