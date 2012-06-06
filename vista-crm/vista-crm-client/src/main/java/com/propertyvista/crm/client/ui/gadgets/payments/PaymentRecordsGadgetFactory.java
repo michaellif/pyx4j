@@ -83,10 +83,7 @@ public class PaymentRecordsGadgetFactory extends AbstractGadget<PaymentRecordsGa
         protected PaymentRecordsGadgetMetadata createDefaultSettings(Class<PaymentRecordsGadgetMetadata> metadataClass) {
             PaymentRecordsGadgetMetadata settings = super.createDefaultSettings(metadataClass);
 
-            // all payment types
             settings.paymentMethodFilter().addAll(EnumSet.allOf(PaymentType.class));
-
-            // all statuses
             settings.paymentStatusFilter().addAll(EnumSet.complementOf(EnumSet.of(PaymentStatus.Processing)));
 
             PaymentRecordForReportDTO proto = EntityFactory.create(PaymentRecordForReportDTO.class);
