@@ -110,9 +110,23 @@ public class PaymentFacadeImpl implements PaymentFacade {
     }
 
     @Override
-    public PaymentRecord processPayment(PaymentRecord paymentStub) {
+    public PaymentRecord schedulePayment(PaymentRecord paymentStub) {
         PaymentRecord paymentRecord = Persistence.service().retrieve(PaymentRecord.class, paymentStub.getPrimaryKey());
         if (!paymentRecord.paymentStatus().getValue().equals(PaymentRecord.PaymentStatus.Submitted)) {
+            throw new IllegalArgumentException("paymentStatus:" + paymentRecord.paymentStatus().getValue());
+        }
+        if ((paymentRecord.targetDate().isNull()) || Persistence.service().getTransactionSystemTime().after(paymentRecord.targetDate().getValue())) {
+            throw new UserRuntimeException(i18n.tr("Payment target date already passed"));
+        }
+        paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Scheduled);
+        Persistence.service().merge(paymentRecord);
+        return paymentRecord;
+    }
+
+    @Override
+    public PaymentRecord processPayment(PaymentRecord paymentStub) {
+        PaymentRecord paymentRecord = Persistence.service().retrieve(PaymentRecord.class, paymentStub.getPrimaryKey());
+        if (!EnumSet.of(PaymentRecord.PaymentStatus.Submitted, PaymentRecord.PaymentStatus.Scheduled).contains(paymentRecord.paymentStatus().getValue())) {
             throw new IllegalArgumentException("paymentStatus:" + paymentRecord.paymentStatus().getValue());
         }
 

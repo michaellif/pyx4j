@@ -153,8 +153,20 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
     // Payment operations:
 
     @Override
+    public void schedulePayment(AsyncCallback<PaymentRecordDTO> callback, Key entityId) {
+        ServerSideFactory.create(PaymentFacade.class).schedulePayment(EntityFactory.createIdentityStub(PaymentRecord.class, entityId));
+        Persistence.service().commit();
+        retrieve(callback, entityId, RetrieveTraget.View);
+    }
+
+    @Override
     public void processPayment(AsyncCallback<PaymentRecordDTO> callback, Key entityId) {
-        ServerSideFactory.create(PaymentFacade.class).processPayment(EntityFactory.createIdentityStub(PaymentRecord.class, entityId));
+        PaymentRecord paymentRecord = Persistence.service().retrieve(PaymentRecord.class, entityId);
+        if ((!paymentRecord.targetDate().isNull()) && Persistence.service().getTransactionSystemTime().before(paymentRecord.targetDate().getValue())) {
+            ServerSideFactory.create(PaymentFacade.class).schedulePayment(EntityFactory.createIdentityStub(PaymentRecord.class, entityId));
+        } else {
+            ServerSideFactory.create(PaymentFacade.class).processPayment(EntityFactory.createIdentityStub(PaymentRecord.class, entityId));
+        }
         Persistence.service().commit();
         retrieve(callback, entityId, RetrieveTraget.View);
     }

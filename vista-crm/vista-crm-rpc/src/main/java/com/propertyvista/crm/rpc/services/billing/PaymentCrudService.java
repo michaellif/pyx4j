@@ -37,6 +37,8 @@ public interface PaymentCrudService extends AbstractCrudService<PaymentRecordDTO
 
     // Payment operations:
 
+    void schedulePayment(AsyncCallback<PaymentRecordDTO> callback, Key entityId);
+
     void processPayment(AsyncCallback<PaymentRecordDTO> callback, Key entityId);
 
     void clearPayment(AsyncCallback<PaymentRecordDTO> callback, Key entityId);

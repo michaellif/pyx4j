@@ -30,6 +30,8 @@ public interface PaymentFacade {
 
     PaymentRecord persistPayment(PaymentRecord paymentRecord);
 
+    PaymentRecord schedulePayment(PaymentRecord paymentStub);
+
     /**
      * Cash: automatically -> Received (AR. Posted)
      * Check: Submitted, -> by targetDate Processing (AR. Posted), -> Received or Rejected (AR. Reject)
