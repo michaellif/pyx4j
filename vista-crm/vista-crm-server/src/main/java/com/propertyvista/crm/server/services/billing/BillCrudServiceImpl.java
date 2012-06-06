@@ -20,7 +20,6 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
-import com.pyx4j.entity.shared.IEntity;
 
 import com.propertyvista.biz.financial.billing.BillingFacade;
 import com.propertyvista.biz.financial.billing.BillingUtils;
@@ -36,7 +35,7 @@ public class BillCrudServiceImpl extends AbstractCrudServiceDtoImpl<Bill, BillDa
 
     @Override
     protected void bind() {
-        bind((Class<IEntity>) dboProto.getValueClass(), dtoProto.bill(), dboProto);
+        bind(dboClass, dtoProto.bill(), dboProto);
     }
 
     @Override
@@ -44,6 +43,7 @@ public class BillCrudServiceImpl extends AbstractCrudServiceDtoImpl<Bill, BillDa
         // load detached entities:
         Persistence.service().retrieve(dto.bill().lineItems());
         Persistence.service().retrieve(dto.bill().billingAccount());
+        Persistence.service().retrieve(dto.bill().billingAccount().lease());
         Persistence.service().retrieve(dto.bill().billingRun().building(), AttachLevel.ToStringMembers);
         BillingUtils.enhanceBillDto(entity, dto.bill());
     }

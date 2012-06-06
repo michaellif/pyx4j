@@ -38,6 +38,7 @@ public class ViewBillServiceImpl extends AbstractCrudServiceDtoImpl<Bill, BillDT
         // load detached entities:
         Persistence.service().retrieve(dto.lineItems());
         Persistence.service().retrieve(dto.billingAccount());
+        Persistence.service().retrieve(dto.billingAccount().lease());
         Persistence.service().retrieve(dto.billingRun().building(), AttachLevel.ToStringMembers);
         BillingUtils.enhanceBillDto(entity, dto);
     }
