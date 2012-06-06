@@ -107,6 +107,7 @@ public class PaymentsSummaryHelperTestBase extends VistaDBTestBase {
         paymentRecord.paymentStatus().setValue(paymentStatus);
         paymentRecord.billingAccount().set(lease.billingAccount());
         paymentRecord.merchantAccount().set(merchantAccount);
+        paymentRecord.leaseParticipant().set(lease.version().tenants().get(0));
 
         Persistence.service().persist(paymentRecord);
 

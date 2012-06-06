@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.server.services.billing;
 
+import java.math.BigDecimal;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Vector;
@@ -26,6 +27,7 @@ import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 
+import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.payment.PaymentFacade;
 import com.propertyvista.crm.rpc.services.billing.PaymentCrudService;
 import com.propertyvista.domain.contact.AddressStructured;
@@ -70,20 +72,18 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
         Persistence.service().retrieve(dto.billingAccount().lease());
         Persistence.service().retrieve(dto.billingAccount().lease().unit());
         Persistence.service().retrieve(dto.billingAccount().lease().unit().belongsTo());
+        Persistence.service().retrieve(dto.leaseParticipant());
+        Persistence.service().retrieve(dto.paymentMethod());
 
         dto.leaseId().set(dto.billingAccount().lease().leaseId());
         dto.leaseStatus().set(dto.billingAccount().lease().version().status());
         dto.propertyCode().set(dto.billingAccount().lease().unit().belongsTo().propertyCode());
         dto.unitNumber().set(dto.billingAccount().lease().unit().info().number());
-
-        Persistence.service().retrieve(dto.paymentMethod());
-        Persistence.service().retrieve(dto.paymentMethod().leaseParticipant());
-        dto.leaseParticipant().set(dto.paymentMethod().leaseParticipant());
     }
 
     @Override
     protected void persist(PaymentRecord entity, PaymentRecordDTO dto) {
-        entity.paymentMethod().leaseParticipant().set(dto.leaseParticipant());
+//        entity.paymentMethod().leaseParticipant().set(dto.leaseParticipant());
         ServerSideFactory.create(PaymentFacade.class).persistPayment(entity);
     }
 
@@ -112,7 +112,11 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
         dto.paymentSelect().setValue(PaymentSelect.New);
         dto.createdDate().setValue(new LogicalDate());
 
-//        dto.paymentMethod().type().setValue(PaymentType.Echeck);
+        // calculate current balance:
+        dto.amount().setValue(ServerSideFactory.create(ARFacade.class).getCurrentBalance(billingAccount));
+        if (dto.amount().isNull() || dto.amount().getValue().signum() == -1) {
+            dto.amount().setValue(new BigDecimal("0.00"));
+        }
 
         callback.onSuccess(dto);
     }

@@ -65,6 +65,7 @@ import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment.Status;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustmentReason;
+import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.dto.TransactionHistoryDTO;
 
 public abstract class FinancialTestBase extends VistaDBTestBase {
@@ -396,7 +397,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         return adjustment;
     }
 
-    protected PaymentRecord receivePayment(String receivedDate, String amount) {
+    protected PaymentRecord receivePayment(String receivedDate, LeaseParticipant leaseParticipant, String amount) {
         Lease lease = Persistence.service().retrieve(Lease.class, leaseDataModel.getLeaseKey());
 
         PaymentRecord paymentRecord = EntityFactory.create(PaymentRecord.class);
@@ -405,6 +406,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         paymentRecord.amount().setValue(new BigDecimal(amount));
         paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Submitted);
         paymentRecord.billingAccount().set(lease.billingAccount());
+        paymentRecord.leaseParticipant().set(leaseParticipant);
 
         Persistence.service().persist(paymentRecord);
         Persistence.service().commit();
@@ -417,7 +419,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
     }
 
     protected PaymentRecord receiveAndPostPayment(String receivedDate, String amount) {
-        PaymentRecord paymentRecord = receivePayment(receivedDate, amount);
+        PaymentRecord paymentRecord = receivePayment(receivedDate, null, amount); // TODO : find leaseParticipant, if nedded here!.. 
         postPayment(paymentRecord);
         return paymentRecord;
     }

@@ -291,6 +291,7 @@ public class LeaseLifecycleSim {
                 paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Received);
                 paymentRecord.billingAccount().set(lease.billingAccount());
                 paymentRecord.paymentMethod().set(createPaymentMethod(lease.version().tenants().get(0)));
+                paymentRecord.leaseParticipant().set(lease.version().tenants().get(0));
 
                 Persistence.service().persist(paymentRecord.paymentMethod());
                 Persistence.service().persist(paymentRecord);

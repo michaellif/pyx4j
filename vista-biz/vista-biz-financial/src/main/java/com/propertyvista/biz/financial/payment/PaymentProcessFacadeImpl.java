@@ -45,6 +45,7 @@ import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.server.jobs.TaskRunner;
 
 public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
@@ -261,7 +262,7 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
                 case Applicant:
                     PaymentMethod method = PaymentUtils.retrievePreAuthorizedPaymentMethod(tenant);
                     if (method != null) {
-                        createPreAuthorizedPayment(currentBalance, bill.billingAccount(), method);
+                        createPreAuthorizedPayment(tenant, currentBalance, bill.billingAccount(), method);
                         paymentRecordsCreated++;
                         totalAmount = totalAmount.add(currentBalance);
                     }
@@ -285,9 +286,10 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
         return message.toString();
     }
 
-    private void createPreAuthorizedPayment(BigDecimal amount, BillingAccount billingAccount, PaymentMethod method) {
+    private void createPreAuthorizedPayment(LeaseParticipant leaseParticipant, BigDecimal amount, BillingAccount billingAccount, PaymentMethod method) {
         PaymentRecord paymentRecord = EntityFactory.create(PaymentRecord.class);
         paymentRecord.billingAccount().set(billingAccount);
+        paymentRecord.leaseParticipant().set(leaseParticipant);
         paymentRecord.amount().setValue(amount);
         paymentRecord.paymentMethod().set(method);
 
@@ -305,6 +307,5 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
         default:
             throw new IllegalArgumentException("Invalid PreAuthorized Payment Method:" + paymentRecord.paymentMethod().type().getStringView());
         }
-
     }
 }

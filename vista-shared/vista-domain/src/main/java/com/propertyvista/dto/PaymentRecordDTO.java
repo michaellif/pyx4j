@@ -51,9 +51,6 @@ public interface PaymentRecordDTO extends PaymentRecord {
 
     IPrimitive<Status> leaseStatus();
 
-    @NotNull
-    LeaseParticipant leaseParticipant();
-
     IList<LeaseParticipant> participants();
 
     @NotNull
