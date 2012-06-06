@@ -277,7 +277,7 @@ public class BillingProductChargeProcessor extends AbstractBillingProcessor {
                 return;
             }
 
-            BigDecimal proration = ProrationUtils.prorate(overlap.getFromDate(), overlap.getToDate(), getBillingManager().getNextPeriodBill().billingRun()
+            BigDecimal proration = ProrationUtils.prorate(overlap.getFromDate(), overlap.getToDate(), getBillingManager().getNextPeriodBill().billingCycle()
                     .building());
             adjustment.amount().setValue(amount.multiply(proration));
         }
@@ -302,7 +302,7 @@ public class BillingProductChargeProcessor extends AbstractBillingProcessor {
 
     private BigDecimal prorate(InvoiceProductCharge charge) {
         BigDecimal proration = ProrationUtils.prorate(charge.fromDate().getValue(), charge.toDate().getValue(), getBillingManager().getNextPeriodBill()
-                .billingRun().building());
+                .billingCycle().building());
         return charge.chargeSubLineItem().billableItem().agreedPrice().getValue().multiply(proration);
     }
 
@@ -310,7 +310,7 @@ public class BillingProductChargeProcessor extends AbstractBillingProcessor {
         if (!charge.amount().isNull()) {
             charge.taxes().addAll(
                     TaxUtils.calculateTaxes(charge.amount().getValue(), charge.chargeSubLineItem().billableItem().item().type(), getBillingManager()
-                            .getNextPeriodBill().billingRun().building()));
+                            .getNextPeriodBill().billingCycle().building()));
         }
         charge.taxTotal().setValue(BigDecimal.ZERO);
         for (InvoiceChargeTax chargeTax : charge.taxes()) {

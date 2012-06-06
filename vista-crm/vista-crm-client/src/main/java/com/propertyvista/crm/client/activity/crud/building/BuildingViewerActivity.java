@@ -30,7 +30,7 @@ import com.propertyvista.crm.client.activity.dashboard.DashboardViewActivity;
 import com.propertyvista.crm.client.ui.crud.building.BuildingViewerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.BuildingViewFactory;
 import com.propertyvista.crm.client.ui.dashboard.DashboardView;
-import com.propertyvista.crm.rpc.services.billing.BillingRunCrudService;
+import com.propertyvista.crm.rpc.services.billing.BillingCycleCrudService;
 import com.propertyvista.crm.rpc.services.building.BuildingCrudService;
 import com.propertyvista.crm.rpc.services.building.FloorplanCrudService;
 import com.propertyvista.crm.rpc.services.building.LockerAreaCrudService;
@@ -42,7 +42,7 @@ import com.propertyvista.crm.rpc.services.building.mech.BoilerCrudService;
 import com.propertyvista.crm.rpc.services.building.mech.ElevatorCrudService;
 import com.propertyvista.crm.rpc.services.building.mech.RoofCrudService;
 import com.propertyvista.crm.rpc.services.unit.UnitCrudService;
-import com.propertyvista.domain.financial.billing.BillingRun;
+import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.financial.offering.Concession;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.Service;
@@ -81,7 +81,7 @@ public class BuildingViewerActivity extends CrmViewerActivity<BuildingDTO> imple
 
     private final Presenter<Concession> concessionLister;
 
-    private final Presenter<BillingRun> billingRunLister;
+    private final Presenter<BillingCycle> billingCycleLister;
 
     @SuppressWarnings("unchecked")
     public BuildingViewerActivity(CrudAppPlace place) {
@@ -117,8 +117,8 @@ public class BuildingViewerActivity extends CrmViewerActivity<BuildingDTO> imple
         concessionLister = ListerActivityFactory.create(place, ((BuildingViewerView) getView()).getConcessionListerView(),
                 (AbstractCrudService<Concession>) GWT.create(ConcessionCrudService.class), Concession.class, VistaCrmBehavior.ProductCatalog);
 
-        billingRunLister = ListerActivityFactory.create(place, ((BuildingViewerView) getView()).getBillingRunListerView(),
-                (AbstractCrudService<BillingRun>) GWT.create(BillingRunCrudService.class), BillingRun.class, VistaCrmBehavior.PropertyManagement);
+        billingCycleLister = ListerActivityFactory.create(place, ((BuildingViewerView) getView()).getBillingCycleListerView(),
+                (AbstractCrudService<BillingCycle>) GWT.create(BillingCycleCrudService.class), BillingCycle.class, VistaCrmBehavior.PropertyManagement);
     }
 
     @Override

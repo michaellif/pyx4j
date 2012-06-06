@@ -35,7 +35,7 @@ class RegularBillingManager extends AbstractBillingManager {
     RegularBillingManager(Bill bill) {
         super(bill, Bill.BillType.Regular);
 
-        if (SysDateManager.getSysDate().compareTo(bill.billingRun().executionTargetDate().getValue()) < 0) {
+        if (SysDateManager.getSysDate().compareTo(bill.billingCycle().executionTargetDate().getValue()) < 0) {
             throw new BillingException(i18n.tr("Regular billing can't run before target execution date"));
         }
 

@@ -29,7 +29,7 @@ import com.propertyvista.domain.financial.billing.Bill;
 
 public class BillingPeriodsTest extends FinancialTestBase {
 
-    public void testSequentialBillingRunWithGlobalBillingPeriodStartDate() throws ParseException {
+    public void testSequentialBillingCycleWithGlobalBillingPeriodStartDate() throws ParseException {
         preloadData();
         initLease("23-Mar-2011", "3-Aug-2011", 1);
 
@@ -45,15 +45,15 @@ public class BillingPeriodsTest extends FinancialTestBase {
         previousBillSequenceNumber(null).
         billingTypePeriodStartDay(1).
         billingTypePeriodTargetDay(14).
-        billingRunPeriodStartDate("01-Mar-2011").
-        billingRunPeriodEndDate("31-Mar-2011").
-        billingRunExecutionTargetDate("14-Feb-2011").
+        billingCyclePeriodStartDate("01-Mar-2011").
+        billingCyclePeriodEndDate("31-Mar-2011").
+        billingCycleExecutionTargetDate("14-Feb-2011").
         billType(Bill.BillType.First).
         billingPeriodStartDate("23-Mar-2011").
         billingPeriodEndDate("31-Mar-2011");
         // @formatter:on
 
-        String billingTypeId = bill.billingRun().billingType().id().toString();
+        String billingTypeId = bill.billingCycle().billingType().id().toString();
 
         //==================== RUN 2 ======================//
 
@@ -69,15 +69,15 @@ public class BillingPeriodsTest extends FinancialTestBase {
         previousBillSequenceNumber(1).
         billingTypePeriodStartDay(1).
         billingTypePeriodTargetDay(14).
-        billingRunPeriodStartDate("1-Apr-2011").
-        billingRunPeriodEndDate("30-Apr-2011").
-        billingRunExecutionTargetDate("17-Mar-2011").
+        billingCyclePeriodStartDate("1-Apr-2011").
+        billingCyclePeriodEndDate("30-Apr-2011").
+        billingCycleExecutionTargetDate("17-Mar-2011").
         billType(Bill.BillType.Regular).
         billingPeriodStartDate("1-Apr-2011").
         billingPeriodEndDate("30-Apr-2011");
         // @formatter:on
 
-        assertEquals("Same Billing Cycle", billingTypeId, bill.billingRun().billingType().id().toString());
+        assertEquals("Same Billing Cycle", billingTypeId, bill.billingCycle().billingType().id().toString());
 
         //==================== RUN 3 ======================//
 
@@ -91,16 +91,16 @@ public class BillingPeriodsTest extends FinancialTestBase {
         previousBillSequenceNumber(2).
         billingTypePeriodStartDay(1).
         billingTypePeriodTargetDay(14).
-        billingRunPeriodStartDate("1-May-2011").
-        billingRunPeriodEndDate("31-May-2011").
-        billingRunExecutionTargetDate("16-Apr-2011").
+        billingCyclePeriodStartDate("1-May-2011").
+        billingCyclePeriodEndDate("31-May-2011").
+        billingCycleExecutionTargetDate("16-Apr-2011").
         billType(Bill.BillType.Regular).
         billingPeriodStartDate("1-May-2011").
         billingPeriodEndDate("31-May-2011").
         billStatus(Bill.BillStatus.Rejected);
         // @formatter:on
 
-        assertEquals("Same Billing Cycle", billingTypeId, bill.billingRun().billingType().id().toString());
+        assertEquals("Same Billing Cycle", billingTypeId, bill.billingCycle().billingType().id().toString());
 
         bill = runBilling(true);
 
@@ -110,16 +110,16 @@ public class BillingPeriodsTest extends FinancialTestBase {
         previousBillSequenceNumber(2).
         billingTypePeriodStartDay(1).
         billingTypePeriodTargetDay(14).
-        billingRunPeriodStartDate("1-May-2011").
-        billingRunPeriodEndDate("31-May-2011").
-        billingRunExecutionTargetDate("16-Apr-2011").
+        billingCyclePeriodStartDate("1-May-2011").
+        billingCyclePeriodEndDate("31-May-2011").
+        billingCycleExecutionTargetDate("16-Apr-2011").
         billType(Bill.BillType.Regular).
         billingPeriodStartDate("1-May-2011").
         billingPeriodEndDate("31-May-2011").
         billStatus(Bill.BillStatus.Confirmed);
         // @formatter:on
 
-        assertEquals("Same Billing Cycle", billingTypeId, bill.billingRun().billingType().id().toString());
+        assertEquals("Same Billing Cycle", billingTypeId, bill.billingCycle().billingType().id().toString());
 
         //==================== RUN 4 ======================//
 
@@ -133,15 +133,15 @@ public class BillingPeriodsTest extends FinancialTestBase {
         previousBillSequenceNumber(4).
         billingTypePeriodStartDay(1).
         billingTypePeriodTargetDay(14).
-        billingRunPeriodStartDate("1-June-2011").
-        billingRunPeriodEndDate("30-June-2011").
-        billingRunExecutionTargetDate("17-May-2011").
+        billingCyclePeriodStartDate("1-June-2011").
+        billingCyclePeriodEndDate("30-June-2011").
+        billingCycleExecutionTargetDate("17-May-2011").
         billType(Bill.BillType.Regular).
         billingPeriodStartDate("1-June-2011").
         billingPeriodEndDate("30-June-2011");
         // @formatter:on
 
-        assertEquals("Same Billing Cycle", billingTypeId, bill.billingRun().billingType().id().toString());
+        assertEquals("Same Billing Cycle", billingTypeId, bill.billingCycle().billingType().id().toString());
 
         //==================== RUN 5 ======================//
 
@@ -155,15 +155,15 @@ public class BillingPeriodsTest extends FinancialTestBase {
         previousBillSequenceNumber(5).
         billingTypePeriodStartDay(1).
         billingTypePeriodTargetDay(14).
-        billingRunPeriodStartDate("1-July-2011").
-        billingRunPeriodEndDate("31-July-2011").
-        billingRunExecutionTargetDate("16-Jun-2011").
+        billingCyclePeriodStartDate("1-July-2011").
+        billingCyclePeriodEndDate("31-July-2011").
+        billingCycleExecutionTargetDate("16-Jun-2011").
         billType(Bill.BillType.Regular).
         billingPeriodStartDate("1-Jul-2011").
         billingPeriodEndDate("31-July-2011");
         // @formatter:on
 
-        assertEquals("Same Billing Cycle", billingTypeId, bill.billingRun().billingType().id().toString());
+        assertEquals("Same Billing Cycle", billingTypeId, bill.billingCycle().billingType().id().toString());
 
         //==================== RUN 6 ======================//
 
@@ -177,15 +177,15 @@ public class BillingPeriodsTest extends FinancialTestBase {
         previousBillSequenceNumber(6).
         billingTypePeriodStartDay(1).
         billingTypePeriodTargetDay(14).
-        billingRunPeriodStartDate("1-Aug-2011").
-        billingRunPeriodEndDate("31-Aug-2011").
-        billingRunExecutionTargetDate("17-Jul-2011").
+        billingCyclePeriodStartDate("1-Aug-2011").
+        billingCyclePeriodEndDate("31-Aug-2011").
+        billingCycleExecutionTargetDate("17-Jul-2011").
         billType(Bill.BillType.Regular).
         billingPeriodStartDate("1-Aug-2011").
         billingPeriodEndDate("3-Aug-2011");
         // @formatter:on
 
-        assertEquals("Same Billing Cycle", billingTypeId, bill.billingRun().billingType().id().toString());
+        assertEquals("Same Billing Cycle", billingTypeId, bill.billingCycle().billingType().id().toString());
 
         //==================== RUN final ======================//
 
@@ -201,15 +201,15 @@ public class BillingPeriodsTest extends FinancialTestBase {
         previousBillSequenceNumber(7).
         billingTypePeriodStartDay(1).
         billingTypePeriodTargetDay(14).
-        billingRunPeriodStartDate("01-Sep-2011").
-        billingRunPeriodEndDate("30-Sep-2011").
-        billingRunExecutionTargetDate("17-Aug-2011").
+        billingCyclePeriodStartDate("01-Sep-2011").
+        billingCyclePeriodEndDate("30-Sep-2011").
+        billingCycleExecutionTargetDate("17-Aug-2011").
         billType(Bill.BillType.Final).
         billingPeriodStartDate(null).
         billingPeriodEndDate(null);
         // @formatter:on
 
-        assertEquals("Same Billing Cycle", billingTypeId, bill.billingRun().billingType().id().toString());
+        assertEquals("Same Billing Cycle", billingTypeId, bill.billingCycle().billingType().id().toString());
 
         //==================== RUN 6 ======================//
 
@@ -220,7 +220,7 @@ public class BillingPeriodsTest extends FinancialTestBase {
         }
     }
 
-    public void testSequentialBillingRunWIthLeaseStartDateAsBillingPeriodStartDay() throws ParseException {
+    public void testSequentialBillingCycleWIthLeaseStartDateAsBillingPeriodStartDay() throws ParseException {
         SysDateManager.setSysDate((Date) null);
 
         preloadData();
@@ -238,9 +238,9 @@ public class BillingPeriodsTest extends FinancialTestBase {
         previousBillSequenceNumber(null).
         billingTypePeriodStartDay(23).
         billingTypePeriodTargetDay(8).
-        billingRunPeriodStartDate("23-Mar-2011").
-        billingRunPeriodEndDate("22-Apr-2011").
-        billingRunExecutionTargetDate("8-Mar-2011").
+        billingCyclePeriodStartDate("23-Mar-2011").
+        billingCyclePeriodEndDate("22-Apr-2011").
+        billingCycleExecutionTargetDate("8-Mar-2011").
         billType(Bill.BillType.First).
         billingPeriodStartDate("23-Mar-2011").
         billingPeriodEndDate("22-Apr-2011");
@@ -258,9 +258,9 @@ public class BillingPeriodsTest extends FinancialTestBase {
         previousBillSequenceNumber(1).
         billingTypePeriodStartDay(23).
         billingTypePeriodTargetDay(8).
-        billingRunPeriodStartDate("23-Apr-2011").
-        billingRunPeriodEndDate("22-May-2011").
-        billingRunExecutionTargetDate("8-Apr-2011").
+        billingCyclePeriodStartDate("23-Apr-2011").
+        billingCyclePeriodEndDate("22-May-2011").
+        billingCycleExecutionTargetDate("8-Apr-2011").
         billType(Bill.BillType.Regular).
         billingPeriodStartDate("23-Apr-2011").
         billingPeriodEndDate("22-May-2011");
@@ -276,9 +276,9 @@ public class BillingPeriodsTest extends FinancialTestBase {
         previousBillSequenceNumber(2).
         billingTypePeriodStartDay(23).
         billingTypePeriodTargetDay(8).
-        billingRunPeriodStartDate("23-May-2011").
-        billingRunPeriodEndDate("22-Jun-2011").
-        billingRunExecutionTargetDate("8-May-2011").
+        billingCyclePeriodStartDate("23-May-2011").
+        billingCyclePeriodEndDate("22-Jun-2011").
+        billingCycleExecutionTargetDate("8-May-2011").
         billType(Bill.BillType.Regular).
         billingPeriodStartDate("23-May-2011").
         billingPeriodEndDate("22-Jun-2011");
@@ -292,9 +292,9 @@ public class BillingPeriodsTest extends FinancialTestBase {
         previousBillSequenceNumber(2).
         billingTypePeriodStartDay(23).
         billingTypePeriodTargetDay(8).
-        billingRunPeriodStartDate("23-May-2011").
-        billingRunPeriodEndDate("22-Jun-2011").
-        billingRunExecutionTargetDate("8-May-2011").
+        billingCyclePeriodStartDate("23-May-2011").
+        billingCyclePeriodEndDate("22-Jun-2011").
+        billingCycleExecutionTargetDate("8-May-2011").
         billType(Bill.BillType.Regular).
         billingPeriodStartDate("23-May-2011").
         billingPeriodEndDate("22-Jun-2011");
@@ -310,9 +310,9 @@ public class BillingPeriodsTest extends FinancialTestBase {
         previousBillSequenceNumber(4).
         billingTypePeriodStartDay(23).
         billingTypePeriodTargetDay(8).
-        billingRunPeriodStartDate("23-Jun-2011").
-        billingRunPeriodEndDate("22-Jul-2011").
-        billingRunExecutionTargetDate("8-Jun-2011").
+        billingCyclePeriodStartDate("23-Jun-2011").
+        billingCyclePeriodEndDate("22-Jul-2011").
+        billingCycleExecutionTargetDate("8-Jun-2011").
         billType(Bill.BillType.Regular).
         billingPeriodStartDate("23-Jun-2011").
         billingPeriodEndDate("22-Jul-2011");
@@ -328,9 +328,9 @@ public class BillingPeriodsTest extends FinancialTestBase {
         previousBillSequenceNumber(5).
         billingTypePeriodStartDay(23).
         billingTypePeriodTargetDay(8).
-        billingRunPeriodStartDate("23-Jul-2011").
-        billingRunPeriodEndDate("22-Aug-2011").
-        billingRunExecutionTargetDate("8-Jul-2011").
+        billingCyclePeriodStartDate("23-Jul-2011").
+        billingCyclePeriodEndDate("22-Aug-2011").
+        billingCycleExecutionTargetDate("8-Jul-2011").
         billType(Bill.BillType.Regular).
         billingPeriodStartDate("23-Jul-2011").
         billingPeriodEndDate("3-Aug-2011");
@@ -348,9 +348,9 @@ public class BillingPeriodsTest extends FinancialTestBase {
         previousBillSequenceNumber(6).
         billingTypePeriodStartDay(23).
         billingTypePeriodTargetDay(8).
-        billingRunPeriodStartDate("23-Aug-2011").
-        billingRunPeriodEndDate("22-Sep-2011").
-        billingRunExecutionTargetDate("8-Aug-2011").
+        billingCyclePeriodStartDate("23-Aug-2011").
+        billingCyclePeriodEndDate("22-Sep-2011").
+        billingCycleExecutionTargetDate("8-Aug-2011").
         billType(Bill.BillType.Final).
         billingPeriodStartDate(null).
         billingPeriodEndDate(null);
@@ -366,19 +366,19 @@ public class BillingPeriodsTest extends FinancialTestBase {
 
     }
 
-    public void testSequentialBillingRunWIthLeaseStartDateAsBillingPeriodStartDayOn29() throws ParseException {
-        testSequentialBillingRunWIthLeaseStartDateAsBillingPeriodStartDay(29);
+    public void testSequentialBillingCycleWIthLeaseStartDateAsBillingPeriodStartDayOn29() throws ParseException {
+        testSequentialBillingCycleWIthLeaseStartDateAsBillingPeriodStartDay(29);
     }
 
-    public void testSequentialBillingRunWIthLeaseStartDateAsBillingPeriodStartDayOn30() throws ParseException {
-        testSequentialBillingRunWIthLeaseStartDateAsBillingPeriodStartDay(30);
+    public void testSequentialBillingCycleWIthLeaseStartDateAsBillingPeriodStartDayOn30() throws ParseException {
+        testSequentialBillingCycleWIthLeaseStartDateAsBillingPeriodStartDay(30);
     }
 
-    public void testSequentialBillingRunWIthLeaseStartDateAsBillingPeriodStartDayOn31() throws ParseException {
-        testSequentialBillingRunWIthLeaseStartDateAsBillingPeriodStartDay(31);
+    public void testSequentialBillingCycleWIthLeaseStartDateAsBillingPeriodStartDayOn31() throws ParseException {
+        testSequentialBillingCycleWIthLeaseStartDateAsBillingPeriodStartDay(31);
     }
 
-    public void testSequentialBillingRunWIthLeaseStartDateAsBillingPeriodStartDay(int day) throws ParseException {
+    public void testSequentialBillingCycleWIthLeaseStartDateAsBillingPeriodStartDay(int day) throws ParseException {
         SysDateManager.setSysDate((Date) null);
         preloadData();
         initLease(day + "-Mar-2011", "3-Aug-2011", null);
@@ -395,15 +395,15 @@ public class BillingPeriodsTest extends FinancialTestBase {
         previousBillSequenceNumber(null).
         billingTypePeriodStartDay(1).
         billingTypePeriodTargetDay(14).
-        billingRunPeriodStartDate("1-Mar-2011").
-        billingRunPeriodEndDate("31-Mar-2011").
-        billingRunExecutionTargetDate("14-Feb-2011").
+        billingCyclePeriodStartDate("1-Mar-2011").
+        billingCyclePeriodEndDate("31-Mar-2011").
+        billingCycleExecutionTargetDate("14-Feb-2011").
         billType(Bill.BillType.First).
         billingPeriodStartDate(day + "-Mar-2011").
         billingPeriodEndDate("31-Mar-2011");
         // @formatter:on
 
-        String billingTypeId = bill.billingRun().billingType().id().toString();
+        String billingTypeId = bill.billingCycle().billingType().id().toString();
 
         //==================== RUN 2 ======================//
 
@@ -417,15 +417,15 @@ public class BillingPeriodsTest extends FinancialTestBase {
         previousBillSequenceNumber(1).
         billingTypePeriodStartDay(1).
         billingTypePeriodTargetDay(14).
-        billingRunPeriodStartDate("1-Apr-2011").
-        billingRunPeriodEndDate("30-Apr-2011").
-        billingRunExecutionTargetDate("17-Mar-2011").
+        billingCyclePeriodStartDate("1-Apr-2011").
+        billingCyclePeriodEndDate("30-Apr-2011").
+        billingCycleExecutionTargetDate("17-Mar-2011").
         billType(Bill.BillType.Regular).
         billingPeriodStartDate("1-Apr-2011").
         billingPeriodEndDate("30-Apr-2011");
         // @formatter:on
 
-        assertEquals("Same Billing Cycle", billingTypeId, bill.billingRun().billingType().id().toString());
+        assertEquals("Same Billing Cycle", billingTypeId, bill.billingCycle().billingType().id().toString());
 
         //==================== RUN 3 ======================//
 
@@ -445,15 +445,15 @@ public class BillingPeriodsTest extends FinancialTestBase {
         previousBillSequenceNumber(4).
         billingTypePeriodStartDay(1).
         billingTypePeriodTargetDay(14).
-        billingRunPeriodStartDate("1-Jul-2011").
-        billingRunPeriodEndDate("31-Jul-2011").
-        billingRunExecutionTargetDate("16-Jun-2011").
+        billingCyclePeriodStartDate("1-Jul-2011").
+        billingCyclePeriodEndDate("31-Jul-2011").
+        billingCycleExecutionTargetDate("16-Jun-2011").
         billType(Bill.BillType.Regular).
         billingPeriodStartDate("1-Jul-2011").
         billingPeriodEndDate("31-Jul-2011");
         // @formatter:on
 
-        assertEquals("Same Billing Cycle", billingTypeId, bill.billingRun().billingType().id().toString());
+        assertEquals("Same Billing Cycle", billingTypeId, bill.billingCycle().billingType().id().toString());
 
         //==================== RUN 6 ======================//
 
@@ -465,15 +465,15 @@ public class BillingPeriodsTest extends FinancialTestBase {
         previousBillSequenceNumber(5).
         billingTypePeriodStartDay(1).
         billingTypePeriodTargetDay(14).
-        billingRunPeriodStartDate("1-Aug-2011").
-        billingRunPeriodEndDate("31-Aug-2011").
-        billingRunExecutionTargetDate("17-Jul-2011").
+        billingCyclePeriodStartDate("1-Aug-2011").
+        billingCyclePeriodEndDate("31-Aug-2011").
+        billingCycleExecutionTargetDate("17-Jul-2011").
         billType(Bill.BillType.Regular).
         billingPeriodStartDate("1-Aug-2011").
         billingPeriodEndDate("3-Aug-2011");
         // @formatter:on
 
-        assertEquals("Same Billing Cycle", billingTypeId, bill.billingRun().billingType().id().toString());
+        assertEquals("Same Billing Cycle", billingTypeId, bill.billingCycle().billingType().id().toString());
 
         //==================== RUN final ======================//
 
@@ -487,15 +487,15 @@ public class BillingPeriodsTest extends FinancialTestBase {
         previousBillSequenceNumber(6).
         billingTypePeriodStartDay(1).
         billingTypePeriodTargetDay(14).
-        billingRunPeriodStartDate("1-Sep-2011").
-        billingRunPeriodEndDate("30-Sep-2011").
-        billingRunExecutionTargetDate("17-Aug-2011").
+        billingCyclePeriodStartDate("1-Sep-2011").
+        billingCyclePeriodEndDate("30-Sep-2011").
+        billingCycleExecutionTargetDate("17-Aug-2011").
         billType(Bill.BillType.Final).
         billingPeriodStartDate(null).
         billingPeriodEndDate(null);
         // @formatter:on
 
-        assertEquals("Same Billing Cycle", billingTypeId, bill.billingRun().billingType().id().toString());
+        assertEquals("Same Billing Cycle", billingTypeId, bill.billingCycle().billingType().id().toString());
 
         //==================== RUN after final ======================//
 

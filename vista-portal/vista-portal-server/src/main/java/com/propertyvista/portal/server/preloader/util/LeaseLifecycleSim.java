@@ -346,11 +346,11 @@ public class LeaseLifecycleSim {
                         // lease ended
                         return;
                     }
-                    LogicalDate billingRunDay = calculateBillingRunTargetExecutionDate(lease.billingAccount().billingType(), new LogicalDate(
+                    LogicalDate billingCycleDay = calculateBillingCycleTargetExecutionDate(lease.billingAccount().billingType(), new LogicalDate(
                             billingPeriodStartDate.getTime()));
                     // CREEPY PART ENDS HERE *******************************************************************************************************************
 
-                    if (now().equals(billingRunDay)) {
+                    if (now().equals(billingCycleDay)) {
                         BillingFacade billing = ServerSideFactory.create(BillingFacade.class);
                         billing.runBilling(lease);
                         billing.confirmBill(billing.getLatestBill(lease));
@@ -362,7 +362,7 @@ public class LeaseLifecycleSim {
                         queueEvent(nextRun, new RunBillingRecurrent(lease));
 
                     } else {
-                        queueEvent(billingRunDay, new RunBillingRecurrent(lease));
+                        queueEvent(billingCycleDay, new RunBillingRecurrent(lease));
                     }
 
                 }
@@ -396,9 +396,9 @@ public class LeaseLifecycleSim {
 
     // UTILITY FUNCTIONS
     // FIXME copied form BillingCycleManager, find some other better way to do it
-    private static LogicalDate calculateBillingRunTargetExecutionDate(BillingType cycle, LogicalDate billingRunStartDate) {
+    private static LogicalDate calculateBillingCycleTargetExecutionDate(BillingType cycle, LogicalDate billingCycleStartDate) {
         Calendar calendar = new GregorianCalendar();
-        calendar.setTime(billingRunStartDate);
+        calendar.setTime(billingCycleStartDate);
         calendar.add(Calendar.DATE, -cycle.paymentFrequency().getValue().getBillRunTargetDayOffset());
         return new LogicalDate(calendar.getTime());
     }

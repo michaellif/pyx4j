@@ -261,9 +261,9 @@ public class CrmSiteMap implements SiteMap {
 
     public static class Finance extends AppPlace {
 
-        @PlaceProperties(caption = "BillingRun")
-        @NavigationItem(navigLabel = "BillingRuns")
-        public static class BillingRun extends CRMCrudAppPlace {
+        @PlaceProperties(caption = "BillingCycle")
+        @NavigationItem(navigLabel = "BillingCycles")
+        public static class BillingCycle extends CRMCrudAppPlace {
         }
 
         @PlaceProperties(caption = "Aggregated Transfer")

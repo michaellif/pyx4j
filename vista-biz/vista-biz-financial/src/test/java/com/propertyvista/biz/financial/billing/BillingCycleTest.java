@@ -20,99 +20,103 @@ import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.biz.financial.FinancialTestsUtils;
 import com.propertyvista.config.tests.VistaDBTestBase;
-import com.propertyvista.domain.financial.billing.BillingRun;
+import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.financial.billing.BillingType;
 import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
 
 public class BillingCycleTest extends VistaDBTestBase {
 
-    public void testFirstBillingRun() throws ParseException {
-        BillingRun billingRun = createFirstBillingRun(FinancialTestsUtils.getDate("23-Feb-2012"), null, false);
+    public void testFirstBillingCycle() throws ParseException {
+        BillingCycle billingCycle = createFirstBillingCycle(FinancialTestsUtils.getDate("23-Feb-2012"), null, false);
 
-        assertEquals("Billing Period Start Date", FinancialTestsUtils.getDate("23-Feb-2012"), billingRun.billingPeriodStartDate().getValue());
-        assertEquals("Billing Period End Date", FinancialTestsUtils.getDate("22-Mar-2012"), billingRun.billingPeriodEndDate().getValue());
-        assertEquals("Billing Execution Target Date", FinancialTestsUtils.getDate("08-Feb-2012"), billingRun.executionTargetDate().getValue());
-
-    }
-
-    public void testSubsiquentBillingRun() throws ParseException {
-        BillingRun billingRun = createFirstBillingRun(FinancialTestsUtils.getDate("23-Feb-2012"), null, false);
-        billingRun = createSubsiquentBillingRun(billingRun);
-
-        assertEquals("Billing Period Start Date", FinancialTestsUtils.getDate("23-Mar-2012"), billingRun.billingPeriodStartDate().getValue());
-        assertEquals("Billing Period End Date", FinancialTestsUtils.getDate("22-Apr-2012"), billingRun.billingPeriodEndDate().getValue());
-        assertEquals("Billing Execution Target Date", FinancialTestsUtils.getDate("08-Mar-2012"), billingRun.executionTargetDate().getValue());
+        assertEquals("Billing Period Start Date", FinancialTestsUtils.getDate("23-Feb-2012"), billingCycle.billingPeriodStartDate().getValue());
+        assertEquals("Billing Period End Date", FinancialTestsUtils.getDate("22-Mar-2012"), billingCycle.billingPeriodEndDate().getValue());
+        assertEquals("Billing Execution Target Date", FinancialTestsUtils.getDate("08-Feb-2012"), billingCycle.executionTargetDate().getValue());
 
     }
 
-    public void testExistingLeaseInitialBillingRun() throws ParseException {
-        BillingRun billingRun = createExistingLeaseInitialBillingRun(FinancialTestsUtils.getDate("23-Feb-2011"), FinancialTestsUtils.getDate("23-Mar-2012"),
-                null, false);
+    public void testSubsiquentBillingCycle() throws ParseException {
+        BillingCycle billingCycle = createFirstBillingCycle(FinancialTestsUtils.getDate("23-Feb-2012"), null, false);
+        billingCycle = createSubsiquentBillingCycle(billingCycle);
 
-        assertEquals("Billing Period Start Date", FinancialTestsUtils.getDate("23-Mar-2012"), billingRun.billingPeriodStartDate().getValue());
-        assertEquals("Billing Period End Date", FinancialTestsUtils.getDate("22-Apr-2012"), billingRun.billingPeriodEndDate().getValue());
-        assertEquals("Billing Execution Target Date", FinancialTestsUtils.getDate("08-Mar-2012"), billingRun.executionTargetDate().getValue());
-
-        billingRun = createExistingLeaseInitialBillingRun(FinancialTestsUtils.getDate("23-Feb-2011"), FinancialTestsUtils.getDate("24-Mar-2012"), null, false);
-
-        assertEquals("Billing Period Start Date", FinancialTestsUtils.getDate("23-Mar-2012"), billingRun.billingPeriodStartDate().getValue());
-        assertEquals("Billing Period End Date", FinancialTestsUtils.getDate("22-Apr-2012"), billingRun.billingPeriodEndDate().getValue());
-        assertEquals("Billing Execution Target Date", FinancialTestsUtils.getDate("08-Mar-2012"), billingRun.executionTargetDate().getValue());
-
-        billingRun = createExistingLeaseInitialBillingRun(FinancialTestsUtils.getDate("23-Feb-2011"), FinancialTestsUtils.getDate("22-Mar-2012"), null, false);
-
-        assertEquals("Billing Period Start Date", FinancialTestsUtils.getDate("23-Feb-2012"), billingRun.billingPeriodStartDate().getValue());
-        assertEquals("Billing Period End Date", FinancialTestsUtils.getDate("22-Mar-2012"), billingRun.billingPeriodEndDate().getValue());
-        assertEquals("Billing Execution Target Date", FinancialTestsUtils.getDate("08-Feb-2012"), billingRun.executionTargetDate().getValue());
-
-        billingRun = createExistingLeaseInitialBillingRun(FinancialTestsUtils.getDate("23-Feb-2011"), FinancialTestsUtils.getDate("15-Mar-2012"), null, false);
-
-        assertEquals("Billing Period Start Date", FinancialTestsUtils.getDate("23-Feb-2012"), billingRun.billingPeriodStartDate().getValue());
-        assertEquals("Billing Period End Date", FinancialTestsUtils.getDate("22-Mar-2012"), billingRun.billingPeriodEndDate().getValue());
-        assertEquals("Billing Execution Target Date", FinancialTestsUtils.getDate("08-Feb-2012"), billingRun.executionTargetDate().getValue());
+        assertEquals("Billing Period Start Date", FinancialTestsUtils.getDate("23-Mar-2012"), billingCycle.billingPeriodStartDate().getValue());
+        assertEquals("Billing Period End Date", FinancialTestsUtils.getDate("22-Apr-2012"), billingCycle.billingPeriodEndDate().getValue());
+        assertEquals("Billing Execution Target Date", FinancialTestsUtils.getDate("08-Mar-2012"), billingCycle.executionTargetDate().getValue());
 
     }
 
-    public void testFirstBillingRunForEndOfMonth() throws ParseException {
-        BillingRun billingRun = createFirstBillingRun(FinancialTestsUtils.getDate("29-Mar-2012"), null, false);
+    public void testExistingLeaseInitialBillingCycle() throws ParseException {
+        BillingCycle billingCycle = createExistingLeaseInitialBillingCycle(FinancialTestsUtils.getDate("23-Feb-2011"),
+                FinancialTestsUtils.getDate("23-Mar-2012"), null, false);
 
-        assertEquals("Billing Period Start Date", FinancialTestsUtils.getDate("1-Mar-2012"), billingRun.billingPeriodStartDate().getValue());
-        assertEquals("Billing Period End Date", FinancialTestsUtils.getDate("31-Mar-2012"), billingRun.billingPeriodEndDate().getValue());
-        assertEquals("Billing Execution Target Date", FinancialTestsUtils.getDate("15-Feb-2012"), billingRun.executionTargetDate().getValue());
+        assertEquals("Billing Period Start Date", FinancialTestsUtils.getDate("23-Mar-2012"), billingCycle.billingPeriodStartDate().getValue());
+        assertEquals("Billing Period End Date", FinancialTestsUtils.getDate("22-Apr-2012"), billingCycle.billingPeriodEndDate().getValue());
+        assertEquals("Billing Execution Target Date", FinancialTestsUtils.getDate("08-Mar-2012"), billingCycle.executionTargetDate().getValue());
+
+        billingCycle = createExistingLeaseInitialBillingCycle(FinancialTestsUtils.getDate("23-Feb-2011"), FinancialTestsUtils.getDate("24-Mar-2012"), null,
+                false);
+
+        assertEquals("Billing Period Start Date", FinancialTestsUtils.getDate("23-Mar-2012"), billingCycle.billingPeriodStartDate().getValue());
+        assertEquals("Billing Period End Date", FinancialTestsUtils.getDate("22-Apr-2012"), billingCycle.billingPeriodEndDate().getValue());
+        assertEquals("Billing Execution Target Date", FinancialTestsUtils.getDate("08-Mar-2012"), billingCycle.executionTargetDate().getValue());
+
+        billingCycle = createExistingLeaseInitialBillingCycle(FinancialTestsUtils.getDate("23-Feb-2011"), FinancialTestsUtils.getDate("22-Mar-2012"), null,
+                false);
+
+        assertEquals("Billing Period Start Date", FinancialTestsUtils.getDate("23-Feb-2012"), billingCycle.billingPeriodStartDate().getValue());
+        assertEquals("Billing Period End Date", FinancialTestsUtils.getDate("22-Mar-2012"), billingCycle.billingPeriodEndDate().getValue());
+        assertEquals("Billing Execution Target Date", FinancialTestsUtils.getDate("08-Feb-2012"), billingCycle.executionTargetDate().getValue());
+
+        billingCycle = createExistingLeaseInitialBillingCycle(FinancialTestsUtils.getDate("23-Feb-2011"), FinancialTestsUtils.getDate("15-Mar-2012"), null,
+                false);
+
+        assertEquals("Billing Period Start Date", FinancialTestsUtils.getDate("23-Feb-2012"), billingCycle.billingPeriodStartDate().getValue());
+        assertEquals("Billing Period End Date", FinancialTestsUtils.getDate("22-Mar-2012"), billingCycle.billingPeriodEndDate().getValue());
+        assertEquals("Billing Execution Target Date", FinancialTestsUtils.getDate("08-Feb-2012"), billingCycle.executionTargetDate().getValue());
 
     }
 
-    public void testSubsiquentBillingRunForEndOfMonth() throws ParseException {
-        BillingRun billingRun = createFirstBillingRun(FinancialTestsUtils.getDate("29-Mar-2012"), null, false);
-        billingRun = createSubsiquentBillingRun(billingRun);
+    public void testFirstBillingCycleForEndOfMonth() throws ParseException {
+        BillingCycle billingCycle = createFirstBillingCycle(FinancialTestsUtils.getDate("29-Mar-2012"), null, false);
 
-        assertEquals("Billing Period Start Date", FinancialTestsUtils.getDate("1-Apr-2012"), billingRun.billingPeriodStartDate().getValue());
-        assertEquals("Billing Period End Date", FinancialTestsUtils.getDate("30-Apr-2012"), billingRun.billingPeriodEndDate().getValue());
-        assertEquals("Billing Execution Target Date", FinancialTestsUtils.getDate("17-Mar-2012"), billingRun.executionTargetDate().getValue());
+        assertEquals("Billing Period Start Date", FinancialTestsUtils.getDate("1-Mar-2012"), billingCycle.billingPeriodStartDate().getValue());
+        assertEquals("Billing Period End Date", FinancialTestsUtils.getDate("31-Mar-2012"), billingCycle.billingPeriodEndDate().getValue());
+        assertEquals("Billing Execution Target Date", FinancialTestsUtils.getDate("15-Feb-2012"), billingCycle.executionTargetDate().getValue());
+
     }
 
-    private BillingRun createFirstBillingRun(LogicalDate leaseStartDate, Integer billingPeriodStartDay, boolean useCycleLeaseDay) {
+    public void testSubsiquentBillingCycleForEndOfMonth() throws ParseException {
+        BillingCycle billingCycle = createFirstBillingCycle(FinancialTestsUtils.getDate("29-Mar-2012"), null, false);
+        billingCycle = createSubsiquentBillingCycle(billingCycle);
+
+        assertEquals("Billing Period Start Date", FinancialTestsUtils.getDate("1-Apr-2012"), billingCycle.billingPeriodStartDate().getValue());
+        assertEquals("Billing Period End Date", FinancialTestsUtils.getDate("30-Apr-2012"), billingCycle.billingPeriodEndDate().getValue());
+        assertEquals("Billing Execution Target Date", FinancialTestsUtils.getDate("17-Mar-2012"), billingCycle.executionTargetDate().getValue());
+    }
+
+    private BillingCycle createFirstBillingCycle(LogicalDate leaseStartDate, Integer billingPeriodStartDay, boolean useCycleLeaseDay) {
         BillingType billingType = EntityFactory.create(BillingType.class);
         billingType.paymentFrequency().setValue(PaymentFrequency.Monthly);
         billingType.billingPeriodStartDay().setValue(billingPeriodStartDay);
 
-        BillingRun billingRun = BillingLifecycleManager.createNewLeaseFirstBillingRun(billingType, leaseStartDate, useCycleLeaseDay);
-        return billingRun;
+        BillingCycle billingCycle = BillingLifecycleManager.createNewLeaseFirstBillingCycle(billingType, leaseStartDate, useCycleLeaseDay);
+        return billingCycle;
     }
 
-    private BillingRun createExistingLeaseInitialBillingRun(LogicalDate leaseStartDate, LogicalDate leaseCreationDate, Integer billingPeriodStartDay,
+    private BillingCycle createExistingLeaseInitialBillingCycle(LogicalDate leaseStartDate, LogicalDate leaseCreationDate, Integer billingPeriodStartDay,
             boolean useCycleLeaseDay) {
         BillingType billingType = EntityFactory.create(BillingType.class);
         billingType.paymentFrequency().setValue(PaymentFrequency.Monthly);
         billingType.billingPeriodStartDay().setValue(billingPeriodStartDay);
 
-        BillingRun billingRun = BillingLifecycleManager.createExistingLeaseInitialBillingRun(billingType, leaseStartDate, leaseCreationDate, useCycleLeaseDay);
-        return billingRun;
+        BillingCycle billingCycle = BillingLifecycleManager.createExistingLeaseInitialBillingCycle(billingType, leaseStartDate, leaseCreationDate,
+                useCycleLeaseDay);
+        return billingCycle;
     }
 
-    private BillingRun createSubsiquentBillingRun(BillingRun previousBillingRun) {
-        BillingRun billingRun = BillingLifecycleManager.createSubsiquentBillingRun(previousBillingRun.billingType(), previousBillingRun);
-        return billingRun;
+    private BillingCycle createSubsiquentBillingCycle(BillingCycle previousBillingCycle) {
+        BillingCycle billingCycle = BillingLifecycleManager.createSubsiquentBillingCycle(previousBillingCycle.billingType(), previousBillingCycle);
+        return billingCycle;
     }
 
     public void testBillingTypeStartDayForMonthlyFrequency() throws ParseException {

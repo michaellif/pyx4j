@@ -30,6 +30,6 @@ public interface BillingType extends IEntity {
 
     IPrimitive<Integer> billingPeriodStartDay();
 
-    IPrimitive<Integer> billingRunTargetDay();
+    IPrimitive<Integer> billingCycleTargetDay();
 
 }

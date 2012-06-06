@@ -73,7 +73,7 @@ public class BillingLatePaymentFeeProcessor extends AbstractBillingProcessor {
         BigDecimal serviceCharge = getBillingManager().getCurrentPeriodBill().serviceCharge().getValue();
 
         LeaseBillingPolicy leaseBillingPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(
-                getBillingManager().getNextPeriodBill().billingRun().building(), LeaseBillingPolicy.class);
+                getBillingManager().getNextPeriodBill().billingCycle().building(), LeaseBillingPolicy.class);
 
         BigDecimal latePaymentFee = LatePaymentUtils.calculateLatePaymentFee(overdueAmount, serviceCharge, leaseBillingPolicy);
 

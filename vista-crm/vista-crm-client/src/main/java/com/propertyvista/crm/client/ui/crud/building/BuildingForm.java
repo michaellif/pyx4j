@@ -130,7 +130,7 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         tabPanel.add(createNotesAndAttachmentsTab(), i18n.tr("Notes & Attachments"));
 
         if (ApplicationMode.isDevelopment()) {
-            tabPanel.add(isEditable() ? new HTML() : new ScrollPanel(((BuildingViewerView) getParentView()).getBillingRunListerView().asWidget()),
+            tabPanel.add(isEditable() ? new HTML() : new ScrollPanel(((BuildingViewerView) getParentView()).getBillingCycleListerView().asWidget()),
                     i18n.tr("Billing Runs"));
             tabPanel.setLastTabDisabled(isEditable());
         }

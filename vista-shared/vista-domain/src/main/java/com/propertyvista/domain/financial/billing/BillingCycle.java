@@ -24,7 +24,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.propertyvista.domain.property.asset.building.Building;
 
 @Table(prefix = "billing")
-public interface BillingRun extends IEntity {
+public interface BillingCycle extends IEntity {
 
     @ReadOnly
     BillingType billingType();

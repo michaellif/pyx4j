@@ -15,13 +15,13 @@ package com.propertyvista.crm.server.services.billing;
 
 import com.pyx4j.entity.server.AbstractCrudServiceImpl;
 
-import com.propertyvista.crm.rpc.services.billing.BillingRunCrudService;
-import com.propertyvista.domain.financial.billing.BillingRun;
+import com.propertyvista.crm.rpc.services.billing.BillingCycleCrudService;
+import com.propertyvista.domain.financial.billing.BillingCycle;
 
-public class BillingRunCrudServiceImpl extends AbstractCrudServiceImpl<BillingRun> implements BillingRunCrudService {
+public class BillingCycleCrudServiceImpl extends AbstractCrudServiceImpl<BillingCycle> implements BillingCycleCrudService {
 
-    public BillingRunCrudServiceImpl() {
-        super(BillingRun.class);
+    public BillingCycleCrudServiceImpl() {
+        super(BillingCycle.class);
     }
 
     @Override

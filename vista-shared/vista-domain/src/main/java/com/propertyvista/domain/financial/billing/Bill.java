@@ -120,7 +120,7 @@ public interface Bill extends IEntity {
     IPrimitive<String> rejectReason();
 
     @ReadOnly
-    BillingRun billingRun();
+    BillingCycle billingCycle();
 
     @Detached
     @OrderBy(InvoiceLineItem.OrderId.class)

@@ -108,8 +108,8 @@ public class BillDateUtils {
         return billingPeriodStartDay;
     }
 
-    public static LogicalDate calculateFirstBillingRunStartDate(BillingType cycle, LogicalDate leaseStartDate, boolean useCyclePeriodStartDay) {
-        LogicalDate billingRunStartDate = null;
+    public static LogicalDate calculateFirstBillingCycleStartDate(BillingType cycle, LogicalDate leaseStartDate, boolean useCyclePeriodStartDay) {
+        LogicalDate billingCycleStartDate = null;
         if (useCyclePeriodStartDay) {
             switch (cycle.paymentFrequency().getValue()) {
             case Monthly:
@@ -123,7 +123,7 @@ public class BillDateUtils {
                     calendar.add(Calendar.DATE, -1);
                     dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
                 }
-                billingRunStartDate = new LogicalDate(calendar.getTime());
+                billingCycleStartDate = new LogicalDate(calendar.getTime());
                 break;
             case Weekly:
             case BiWeekly:
@@ -141,32 +141,32 @@ public class BillDateUtils {
                 if (dayOfMonth > 28) {
                     calendar.add(Calendar.DATE, -dayOfMonth + 1);
                 }
-                billingRunStartDate = new LogicalDate(calendar.getTime());
+                billingCycleStartDate = new LogicalDate(calendar.getTime());
             } else {
-                billingRunStartDate = leaseStartDate;
+                billingCycleStartDate = leaseStartDate;
             }
         }
 
-        return billingRunStartDate;
+        return billingCycleStartDate;
     }
 
-    public static LogicalDate calculateSubsiquentBillingRunStartDate(PaymentFrequency frequency, LogicalDate previousBillingRunStartDate) {
+    public static LogicalDate calculateSubsiquentBillingCycleStartDate(PaymentFrequency frequency, LogicalDate previousBillingCycleStartDate) {
         Calendar calendar = new GregorianCalendar();
-        calendar.setTime(calculateBillingRunEndDate(frequency, previousBillingRunStartDate));
+        calendar.setTime(calculateBillingCycleEndDate(frequency, previousBillingCycleStartDate));
         calendar.add(Calendar.DATE, 1);
         return new LogicalDate(calendar.getTime());
     }
 
-    public static LogicalDate calculateBillingRunTargetExecutionDate(BillingType cycle, LogicalDate billingRunStartDate) {
+    public static LogicalDate calculateBillingCycleTargetExecutionDate(BillingType cycle, LogicalDate billingCycleStartDate) {
         Calendar calendar = new GregorianCalendar();
-        calendar.setTime(billingRunStartDate);
+        calendar.setTime(billingCycleStartDate);
         calendar.add(Calendar.DATE, -cycle.paymentFrequency().getValue().getBillRunTargetDayOffset());
         return new LogicalDate(calendar.getTime());
     }
 
-    public static LogicalDate calculateBillingRunEndDate(PaymentFrequency frequency, LogicalDate billingRunStartDate) {
+    public static LogicalDate calculateBillingCycleEndDate(PaymentFrequency frequency, LogicalDate billingCycleStartDate) {
         Calendar calendar = new GregorianCalendar();
-        calendar.setTime(billingRunStartDate);
+        calendar.setTime(billingCycleStartDate);
         switch (frequency) {
         case Monthly:
             calendar.add(Calendar.MONTH, 1);
@@ -186,7 +186,7 @@ public class BillDateUtils {
         if (Bill.BillType.Estimate == bill.billType().getValue() || Bill.BillType.First == bill.billType().getValue()) {
             date = bill.billingAccount().lease().leaseFrom().getValue();
         } else if (Bill.BillType.Regular == bill.billType().getValue() || Bill.BillType.ZeroCycle == bill.billType().getValue()) {
-            date = bill.billingRun().billingPeriodStartDate().getValue();
+            date = bill.billingCycle().billingPeriodStartDate().getValue();
         }
         return date;
     }
@@ -195,9 +195,9 @@ public class BillDateUtils {
         LogicalDate date = null;
         if (Bill.BillType.Final != bill.billType().getValue()) {
             if (bill.billingAccount().lease().leaseTo().isNull()
-                    || (bill.billingAccount().lease().leaseTo().getValue().compareTo(bill.billingRun().billingPeriodEndDate().getValue()) >= 0)) {
-                date = bill.billingRun().billingPeriodEndDate().getValue();
-            } else if (bill.billingAccount().lease().leaseTo().getValue().compareTo(bill.billingRun().billingPeriodStartDate().getValue()) >= 0) {
+                    || (bill.billingAccount().lease().leaseTo().getValue().compareTo(bill.billingCycle().billingPeriodEndDate().getValue()) >= 0)) {
+                date = bill.billingCycle().billingPeriodEndDate().getValue();
+            } else if (bill.billingAccount().lease().leaseTo().getValue().compareTo(bill.billingCycle().billingPeriodStartDate().getValue()) >= 0) {
                 date = bill.billingAccount().lease().leaseTo().getValue();
             } else {
                 throw new BillingException(i18n.tr("Lease already ended"));
@@ -221,7 +221,7 @@ public class BillDateUtils {
     public static LogicalDate calculateNextBillDueDate(BillingAccount billingAccount) {
         Bill bill = ServerSideFactory.create(BillingFacade.class).getLatestConfirmedBill(billingAccount.lease());
         Calendar calendar = new GregorianCalendar();
-        calendar.setTime(bill.billingRun().billingPeriodEndDate().getValue());
+        calendar.setTime(bill.billingCycle().billingPeriodEndDate().getValue());
         calendar.add(Calendar.DATE, 1);
         return new LogicalDate(calendar.getTime());
     }

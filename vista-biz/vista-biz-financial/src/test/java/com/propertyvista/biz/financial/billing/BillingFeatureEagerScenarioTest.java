@@ -31,7 +31,7 @@ import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.ExecutionTyp
 
 public class BillingFeatureEagerScenarioTest extends FinancialTestBase {
 
-    public void testSequentialBillingRun() {
+    public void testSequentialBillingCycle() {
         preloadData();
         initLease("23-Mar-2011", "3-Aug-2011", 1);
 

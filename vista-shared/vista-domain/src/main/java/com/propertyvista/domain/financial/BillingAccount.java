@@ -31,8 +31,8 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.ISet;
 
 import com.propertyvista.domain.financial.billing.Bill;
+import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.financial.billing.BillingType;
-import com.propertyvista.domain.financial.billing.BillingRun;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.domain.financial.billing.LeaseArrearsSnapshot;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -58,10 +58,10 @@ public interface BillingAccount extends IEntity {
     IPrimitive<String> accountNumber();
 
     /**
-     * Assign to BillingRun during billing extract.
+     * Assign to BillingCycle during billing extract.
      * Set to null when last period bill has been approved or rejected.
      */
-    BillingRun currentBillingRun();
+    BillingCycle currentBillingCycle();
 
     @Owned(cascade = {})
     @Detached(level = AttachLevel.Detached)
