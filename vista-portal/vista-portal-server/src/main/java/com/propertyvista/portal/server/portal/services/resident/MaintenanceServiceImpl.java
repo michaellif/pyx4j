@@ -45,6 +45,10 @@ public class MaintenanceServiceImpl extends AbstractCrudServiceDtoImpl<Maintenan
 
     @Override
     public void listOpenIssues(AsyncCallback<Vector<MaintenanceRequestDTO>> callback) {
+        callback.onSuccess(listOpenIssues());
+    }
+
+    static Vector<MaintenanceRequestDTO> listOpenIssues() {
         Vector<MaintenanceRequestDTO> dto = new Vector<MaintenanceRequestDTO>();
         EntityQueryCriteria<MaintenanceRequest> criteria = EntityQueryCriteria.create(MaintenanceRequest.class);
         criteria.add(PropertyCriterion.in(criteria.proto().status(), MaintenanceRequestStatus.Scheduled, MaintenanceRequestStatus.Submitted));
@@ -53,7 +57,7 @@ public class MaintenanceServiceImpl extends AbstractCrudServiceDtoImpl<Maintenan
             Persistence.service().retrieve(mr.issueClassification());
             dto.add(Converter.convert(mr));
         }
-        callback.onSuccess(dto);
+        return dto;
     }
 
     @Override

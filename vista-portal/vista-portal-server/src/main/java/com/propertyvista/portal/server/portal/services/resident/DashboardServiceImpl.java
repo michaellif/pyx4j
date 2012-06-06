@@ -13,31 +13,17 @@
  */
 package com.propertyvista.portal.server.portal.services.resident;
 
-import java.math.BigDecimal;
-import java.sql.Time;
-import java.util.Date;
-import java.util.GregorianCalendar;
-
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
-import com.propertyvista.domain.communication.Message;
 import com.propertyvista.domain.contact.AddressStructured;
-import com.propertyvista.domain.maintenance.MaintenanceRequest;
-import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
 import com.propertyvista.domain.tenant.Tenant;
-import com.propertyvista.portal.rpc.portal.dto.MessageDTO;
-import com.propertyvista.portal.rpc.portal.dto.ReservationDTO;
 import com.propertyvista.portal.rpc.portal.dto.TenantDashboardDTO;
 import com.propertyvista.portal.rpc.portal.services.resident.DashboardService;
 import com.propertyvista.portal.server.portal.TenantAppContext;
-import com.propertyvista.portal.server.ptapp.util.Converter;
 
 public class DashboardServiceImpl implements DashboardService {
 
@@ -57,67 +43,9 @@ public class DashboardServiceImpl implements DashboardService {
         address.suiteNumber().set(tenantInLease.leaseV().holder().unit().info().number());
         dashboard.general().tenantAddress().setValue(address.getStringView());
 
-        dashboard.general().superIntendantPhone().setValue("(416) 333-22-44");
+        dashboard.billSummary().set(BillSummaryServiceImpl.retrieve());
+        dashboard.maintanances().addAll(MaintenanceServiceImpl.listOpenIssues());
 
-        // TODO get Data from DB, Now we just Generate some Data now
-        {
-            Object[][] messages = new Object[][] {
-                    { Message.MessageType.paymnetPastDue, "Overdue September payment", new GregorianCalendar(2011, 8, 28).getTime() },
-
-                    { Message.MessageType.communication, "Your maintanance call sceduled", new GregorianCalendar(2011, 9, 28).getTime() },
-
-                    { Message.MessageType.communication, "Your Party Room reservation request received", new GregorianCalendar(2011, 9, 28).getTime() },
-
-                    { Message.MessageType.maintananceAlert, "Elevator Maintanance", new GregorianCalendar(2011, 9, 26).getTime() },
-
-                    { Message.MessageType.communication, "Your maintanance call received", new GregorianCalendar(2011, 9, 26).getTime() },
-
-                    { Message.MessageType.maintananceAlert, "Stairs Renovation", new GregorianCalendar(2011, 9, 22).getTime() } };
-
-            for (int i = 0; i < messages.length; i++) {
-                MessageDTO msg = dashboard.notifications().$();
-                msg.subject().setValue((String) messages[i][1]);
-                msg.acknowledged().setValue(Boolean.FALSE);
-                msg.type().setValue((Message.MessageType) messages[i][0]);
-                msg.date().setValue(new LogicalDate((Date) messages[i][2]));
-                dashboard.notifications().add(msg);
-            }
-        }
-
-        dashboard.currentBill().message().setValue("You have unpaid October Rent");
-        dashboard.currentBill().paid().setValue(Boolean.FALSE);
-        dashboard.currentBill().dueDate().setValue(new LogicalDate(new GregorianCalendar(2011, 9, 28).getTime()));
-        dashboard.currentBill().ammount().setValue(BigDecimal.valueOf(1240));
-        dashboard.currentBill().lastPayment().setValue(BigDecimal.valueOf(1231));
-        dashboard.currentBill().receivedOn().setValue(new LogicalDate(new GregorianCalendar(2011, 8, 29).getTime()));
-
-        {
-            Object[][] reservations = new Object[][] {
-
-            { ReservationDTO.Status.Submitted, "Party Room", new GregorianCalendar(2011, 9, 28).getTime() },
-
-            { ReservationDTO.Status.Completed, "Pool", new GregorianCalendar(2011, 9, 22).getTime() },
-
-            { ReservationDTO.Status.Approved, "Party Room", new GregorianCalendar(2011, 6, 28).getTime() } };
-
-            for (int i = 0; i < reservations.length; i++) {
-                ReservationDTO r = dashboard.reservations().$();
-                r.status().setValue((ReservationDTO.Status) reservations[i][0]);
-                r.description().setValue((String) reservations[i][1]);
-                r.date().setValue(new LogicalDate((Date) reservations[i][2]));
-                r.time().setValue(new Time(19, 00, 00));
-                dashboard.reservations().add(r);
-            }
-        }
-
-        // add open issues
-        EntityQueryCriteria<MaintenanceRequest> criteria = EntityQueryCriteria.create(MaintenanceRequest.class);
-        criteria.add(PropertyCriterion.in(criteria.proto().status(), MaintenanceRequestStatus.Scheduled, MaintenanceRequestStatus.Submitted));
-        criteria.add(PropertyCriterion.eq(criteria.proto().tenant(), TenantAppContext.getCurrentUserTenantInLease()));
-        for (MaintenanceRequest mr : Persistence.service().query(criteria.desc(criteria.proto().submitted()))) {
-            Persistence.service().retrieve(mr.issueClassification());
-            dashboard.maintanances().add(Converter.convert(mr));
-        }
         callback.onSuccess(dashboard);
     }
 
@@ -125,5 +53,4 @@ public class DashboardServiceImpl implements DashboardService {
     public void acknowledgeMessage(AsyncCallback<TenantDashboardDTO> callback, Key messageId) {
         retrieveTenantDashboard(callback);
     }
-
 }

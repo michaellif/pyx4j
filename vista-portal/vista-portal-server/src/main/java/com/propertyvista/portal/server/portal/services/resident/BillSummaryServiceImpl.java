@@ -31,6 +31,10 @@ public class BillSummaryServiceImpl implements BillSummaryService {
 
     @Override
     public void retrieve(AsyncCallback<BillSummaryDTO> callback) {
+        callback.onSuccess(retrieve());
+    }
+
+    static BillSummaryDTO retrieve() {
         Tenant tenant = TenantAppContext.getCurrentUserTenantInLease();
         Persistence.service().retrieve(tenant.leaseV());
         Persistence.service().retrieve(tenant.leaseV().holder());
@@ -43,6 +47,6 @@ public class BillSummaryServiceImpl implements BillSummaryService {
         entity.currentBalance().setValue(arFacade.getCurrentBalance(lease.billingAccount()));
         entity.latestActivities().addAll(arFacade.getNotAcquiredLineItems(lease.billingAccount()));
 
-        callback.onSuccess(entity);
+        return entity;
     }
 }

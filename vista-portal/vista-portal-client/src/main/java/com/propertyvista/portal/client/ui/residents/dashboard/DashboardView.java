@@ -26,7 +26,7 @@ public interface DashboardView extends IsWidget {
         void payNow();
     }
 
-    void populate(TenantDashboardDTO dashboard);
-
     void setPresenter(Presenter presenter);
+
+    void populate(TenantDashboardDTO dashboard);
 }

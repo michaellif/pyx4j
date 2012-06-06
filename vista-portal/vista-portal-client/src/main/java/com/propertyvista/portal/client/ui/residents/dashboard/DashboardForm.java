@@ -42,8 +42,8 @@ import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 import com.propertyvista.portal.client.resources.PortalImages;
 import com.propertyvista.portal.client.themes.TenantDashboardTheme;
+import com.propertyvista.portal.domain.dto.BillSummaryDTO;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
-import com.propertyvista.portal.rpc.portal.dto.BillInfoDTO;
 import com.propertyvista.portal.rpc.portal.dto.ReservationDTO;
 import com.propertyvista.portal.rpc.portal.dto.TenantDashboardDTO;
 import com.propertyvista.portal.rpc.portal.dto.TenantGeneralInfoDTO;
@@ -80,8 +80,18 @@ public class DashboardForm extends CEntityDecoratableForm<TenantDashboardDTO> im
 
         int row = -1;
 
-        leftPanel.setH1(++row, 0, 1, i18n.tr("COMMUNICATION"));
-        leftPanel.setWidget(++row, 0, inject(proto().notifications(), new CommunicationViewer()));
+        if (false) {
+            leftPanel.setH1(++row, 0, 1, i18n.tr("COMMUNICATION"));
+            leftPanel.setWidget(++row, 0, inject(proto().notifications(), new CommunicationViewer()));
+        }
+
+        leftPanel.setH1(++row, 0, 1, i18n.tr("GENERAL INFO"));
+        leftPanel.setWidget(++row, 0, inject(proto().general(), new GeneralInfoViewer()));
+
+        leftPanel.setH1(++row, 0, 1, i18n.tr("BILL SUMMARY"));
+        leftPanel.setWidget(++row, 0, inject(proto().billSummary(), new BillSummaryViewer()));
+
+        // =============================================================================================
 
         SimplePanel rightPanelHolder = new SimplePanel();
         rightPanelHolder.setStyleName(TenantDashboardTheme.StyleName.TenantDashboardRight.name());
@@ -94,14 +104,6 @@ public class DashboardForm extends CEntityDecoratableForm<TenantDashboardDTO> im
 
         row = -1;
 
-        if (false) {
-            rightPanel.setH1(++row, 0, 1, i18n.tr("GENERAL INFO"));
-            rightPanel.setWidget(++row, 0, inject(proto().general(), new GeneralInfoViewer()));
-        }
-
-        rightPanel.setH1(++row, 0, 1, i18n.tr("CURRENT BILL"));
-        rightPanel.setWidget(++row, 0, inject(proto().currentBill(), new CurrentBillViewer()));
-
         Anchor newTicket = new Anchor(i18n.tr("New Ticket"));
         newTicket.addClickHandler(new ClickHandler() {
             @Override
@@ -113,9 +115,11 @@ public class DashboardForm extends CEntityDecoratableForm<TenantDashboardDTO> im
         rightPanel.setH1(++row, 0, 1, i18n.tr("MAINTENANCE"), newTicket);
         rightPanel.setWidget(++row, 0, inject(proto().maintanances(), new MaintananceViewer()));
 
-        Anchor newReservations = new Anchor(i18n.tr("Order Service"));
-        rightPanel.setH1(++row, 0, 1, i18n.tr("SERVICES"), newReservations);
-        rightPanel.setWidget(++row, 0, inject(proto().reservations(), new ReservationsViewer()));
+        if (false) {
+            Anchor newReservations = new Anchor(i18n.tr("Order Service"));
+            rightPanel.setH1(++row, 0, 1, i18n.tr("SERVICES"), newReservations);
+            rightPanel.setWidget(++row, 0, inject(proto().reservations(), new ReservationsViewer()));
+        }
 
         return container;
     }
@@ -123,7 +127,6 @@ public class DashboardForm extends CEntityDecoratableForm<TenantDashboardDTO> im
     @Override
     public void setPresenter(Presenter presenter) {
         this.presenter = presenter;
-
     }
 
     class CommunicationViewer extends CEntityViewer<IList<Message>> {
@@ -184,17 +187,16 @@ public class DashboardForm extends CEntityDecoratableForm<TenantDashboardDTO> im
 
         @Override
         public IsWidget createContent(TenantGeneralInfoDTO value) {
-            HTML content = new HTML(value.tenantName().getValue() + "<p>" + value.floorplanName().getValue() + "<p>" + value.tenantAddress().getValue() + "<p>"
-                    + value.superIntendantPhone().getValue());
+            HTML content = new HTML(value.tenantName().getValue() + "<p>" + value.floorplanName().getValue() + "<p>" + value.tenantAddress().getValue());
             content.getElement().getStyle().setPadding(20, Unit.PX);
             return content;
         }
     }
 
-    class CurrentBillViewer extends CEntityViewer<BillInfoDTO> {
+    class BillSummaryViewer extends CEntityViewer<BillSummaryDTO> {
 
         @Override
-        public IsWidget createContent(BillInfoDTO value) {
+        public IsWidget createContent(BillSummaryDTO value) {
 
             VerticalPanel content = new VerticalPanel();
             content.setWidth("100%");
@@ -207,25 +209,15 @@ public class DashboardForm extends CEntityDecoratableForm<TenantDashboardDTO> im
 
             int row = 0;
 
-            dataPanel.setHTML(++row, 0, value.ammount().getMeta().getCaption());
+            dataPanel.setHTML(++row, 0, value.currentBalance().getMeta().getCaption());
             dataPanel.getRowFormatter().getElement(row).addClassName(TenantDashboardTheme.StyleName.TenantDashboardTableRow.name());
             dataPanel.getCellFormatter().getElement(row, 0).getStyle().setPaddingLeft(4, Unit.PX);
-            dataPanel.setHTML(row, 1, "$" + value.ammount().getValue());
+            dataPanel.setHTML(row, 1, "$" + value.currentBalance().getValue());
 
-            dataPanel.setHTML(++row, 0, value.dueDate().getMeta().getCaption());
+            dataPanel.setHTML(++row, 0, value.currentBill().dueDate().getMeta().getCaption());
             dataPanel.getRowFormatter().getElement(row).addClassName(TenantDashboardTheme.StyleName.TenantDashboardTableRow.name());
             dataPanel.getCellFormatter().getElement(row, 0).getStyle().setPaddingLeft(4, Unit.PX);
-            dataPanel.setHTML(row, 1, value.dueDate().getStringView());
-
-            dataPanel.setHTML(++row, 0, value.lastPayment().getMeta().getCaption());
-            dataPanel.getRowFormatter().getElement(row).addClassName(TenantDashboardTheme.StyleName.TenantDashboardTableRow.name());
-            dataPanel.getCellFormatter().getElement(row, 0).getStyle().setPaddingLeft(4, Unit.PX);
-            dataPanel.setHTML(row, 1, "$" + value.lastPayment().getValue());
-
-            dataPanel.setHTML(++row, 0, value.receivedOn().getMeta().getCaption());
-            dataPanel.getRowFormatter().getElement(row).addClassName(TenantDashboardTheme.StyleName.TenantDashboardTableRow.name());
-            dataPanel.getCellFormatter().getElement(row, 0).getStyle().setPaddingLeft(4, Unit.PX);
-            dataPanel.setHTML(row, 1, value.receivedOn().getStringView());
+            dataPanel.setHTML(row, 1, value.currentBill().dueDate().getStringView());
 
             content.add(dataPanel);
             content.setCellWidth(dataPanel, "100%");
@@ -258,6 +250,7 @@ public class DashboardForm extends CEntityDecoratableForm<TenantDashboardDTO> im
 
             return content;
         }
+
     }
 
     class MaintananceViewer extends CEntityViewer<IList<MaintenanceRequestDTO>> {

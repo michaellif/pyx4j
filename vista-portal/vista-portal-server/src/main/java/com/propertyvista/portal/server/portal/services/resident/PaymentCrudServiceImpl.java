@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.server.portal.services.resident;
 
+import java.math.BigDecimal;
 import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -23,6 +24,7 @@ import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 
+import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.payment.PaymentFacade;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.financial.PaymentRecord;
@@ -103,6 +105,12 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
         dto.paymentStatus().setValue(PaymentStatus.Submitted);
         dto.paymentSelect().setValue(PaymentSelect.New);
         dto.createdDate().setValue(new LogicalDate());
+
+        // calculate current balance:
+        dto.amount().setValue(ServerSideFactory.create(ARFacade.class).getCurrentBalance(lease.billingAccount()));
+        if (dto.amount().isNull() || dto.amount().getValue().signum() == -1) {
+            dto.amount().setValue(new BigDecimal("0.00"));
+        }
 
         callback.onSuccess(dto);
     }
