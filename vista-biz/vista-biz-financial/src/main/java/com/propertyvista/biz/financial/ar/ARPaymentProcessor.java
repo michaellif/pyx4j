@@ -19,6 +19,7 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.InvoicePayment;
+import com.propertyvista.domain.financial.billing.InvoicePaymentBackOut;
 
 public class ARPaymentProcessor extends AbstractARProcessor {
 
@@ -41,8 +42,15 @@ public class ARPaymentProcessor extends AbstractARProcessor {
 
     void rejectPayment(PaymentRecord paymentRecord) {
 
-        //TODO Add InvoicePaymentBackOut creation and InvoiceNSF
+        InvoicePaymentBackOut backOut = EntityFactory.create(InvoicePaymentBackOut.class);
+        backOut.paymentRecord().set(paymentRecord);
+        backOut.amount().setValue(paymentRecord.amount().getValue().negate());
+        backOut.billingAccount().set(paymentRecord.billingAccount());
+        backOut.description().setValue(i18n.tr("Payment Rejected"));
+
+        Persistence.service().persist(backOut);
+
+        ARTransactionManager.processBackOutPayment(backOut);
 
     }
-
 }

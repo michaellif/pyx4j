@@ -91,6 +91,8 @@ public class ARCreditDebitLinkManager {
 
             }
 
+//            link.debitItem().set(debit);
+//            link.creditItem().set(credit);
             Persistence.service().persist(link);
 
             debit.creditLinks().add(link);
@@ -134,6 +136,8 @@ public class ARCreditDebitLinkManager {
 
             }
 
+            //           link.debitItem().set(debit);
+//            link.creditItem().set(credit);
             Persistence.service().persist(link);
 
             debit.creditLinks().add(link);
@@ -159,6 +163,31 @@ public class ARCreditDebitLinkManager {
     static void updateCreditDebitLinks(Bill bill) {
         // TODO Auto-generated method stub
 
+    }
+
+    static void declinePayment(InvoicePaymentBackOut backOut) {
+
+        InvoiceCredit creditToReturn = ARTransactionManager.getCorrespodingCreditByPayment(backOut.billingAccount(), backOut.paymentRecord());
+        List<InvoiceCredit> credits = ARTransactionManager.getSuccedingCreditInvoiceLineItems(backOut.billingAccount(), creditToReturn);
+        List<DebitCreditLink> links = ARTransactionManager.getInstalledLinksByCredits(credits);
+
+        for (DebitCreditLink link : links) {
+
+            InvoiceDebit debit = link.debitItem().cast();
+            debit.outstandingDebit().setValue(debit.outstandingDebit().getValue().add(link.amount().getValue()));
+            debit.creditLinks().remove(link);
+            links.remove(link);
+
+            Persistence.service().persist(debit);
+        }
+
+        Persistence.service().persist(links);
+
+        // Go through the list of Debits
+        for (InvoiceCredit credit : credits) {
+
+            consumeCredit(credit);
+        }
     }
 
 }

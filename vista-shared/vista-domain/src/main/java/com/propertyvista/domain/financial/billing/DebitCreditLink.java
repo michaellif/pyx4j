@@ -30,4 +30,7 @@ public interface DebitCreditLink extends IEntity {
     @Format("#0.00")
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> amount();
+
+    IPrimitive<Boolean> hardLink();
+
 }

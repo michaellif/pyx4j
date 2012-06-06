@@ -30,16 +30,24 @@ import com.propertyvista.biz.financial.billing.BillingFacade;
 import com.propertyvista.biz.financial.billing.BillingUtils;
 import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.domain.financial.BillingAccount;
+import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.AgingBuckets;
 import com.propertyvista.domain.financial.billing.Bill;
+import com.propertyvista.domain.financial.billing.DebitCreditLink;
 import com.propertyvista.domain.financial.billing.InvoiceCredit;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
+import com.propertyvista.domain.financial.billing.InvoicePaymentBackOut;
 import com.propertyvista.domain.policy.policies.ARPolicy;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.dto.TransactionHistoryDTO;
 
 public class ARTransactionManager {
+
+    static void processBackOutPayment(InvoicePaymentBackOut backOut) {
+
+        ARCreditDebitLinkManager.declinePayment(backOut);
+    }
 
     static void postInvoiceLineItem(InvoiceLineItem invoiceLineItem) {
         if (!invoiceLineItem.postDate().isNull()) {
@@ -111,7 +119,6 @@ public class ARTransactionManager {
             criteria.add(PropertyCriterion.eq(criteria.proto().billingAccount(), billingAccount));
             criteria.add(PropertyCriterion.ne(criteria.proto().outstandingDebit(), new BigDecimal("0.00")));
             criteria.add(PropertyCriterion.isNotNull(criteria.proto().postDate()));
-            criteria.asc(criteria.proto().postDate());
             lineItems = Persistence.service().query(criteria);
         }
 
@@ -155,4 +162,40 @@ public class ARTransactionManager {
         return currentBallanceAmount;
     }
 
+    static InvoiceCredit getCorrespodingCreditByPayment(BillingAccount billingAccount, PaymentRecord paymentRecord) {
+        InvoiceCredit credit;
+        {
+            EntityQueryCriteria<InvoiceCredit> criteria = EntityQueryCriteria.create(InvoiceCredit.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().billingAccount(), billingAccount));
+            criteria.add(PropertyCriterion.eq(criteria.proto().id(), paymentRecord.id()));
+            credit = Persistence.service().retrieve(criteria);
+        }
+        return credit;
+    }
+
+    static List<InvoiceCredit> getSuccedingCreditInvoiceLineItems(BillingAccount billingAccount, InvoiceCredit credit) {
+        List<InvoiceCredit> lineItems;
+        {
+            EntityQueryCriteria<InvoiceCredit> criteria = EntityQueryCriteria.create(InvoiceCredit.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().billingAccount(), billingAccount));
+            // do not include incoming credit
+            criteria.add(PropertyCriterion.gt(criteria.proto().id(), credit.id()));
+            criteria.asc(criteria.proto().id());
+            lineItems = Persistence.service().query(criteria);
+        }
+
+        return lineItems;
+    }
+
+    static List<DebitCreditLink> getInstalledLinksByCredits(List<InvoiceCredit> credits) {
+        List<DebitCreditLink> links;
+        {
+            EntityQueryCriteria<DebitCreditLink> criteria = EntityQueryCriteria.create(DebitCreditLink.class);
+            criteria.add(PropertyCriterion.in(criteria.proto().creditItem(), credits));
+            criteria.add(PropertyCriterion.ne(criteria.proto().hardLink(), true));
+            links = Persistence.service().query(criteria);
+        }
+
+        return links;
+    }
 }
