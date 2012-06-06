@@ -78,7 +78,7 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
 
     @Override
     protected void persist(PaymentRecord entity, PaymentRecordDTO dto) {
-        entity.paymentMethod().leaseParticipant().set(dto.leaseParticipant());
+//        entity.paymentMethod().leaseParticipant().set(dto.leaseParticipant());
         ServerSideFactory.create(PaymentFacade.class).persistPayment(entity);
     }
 
