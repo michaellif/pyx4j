@@ -36,7 +36,7 @@ import com.propertyvista.biz.financial.billing.BillingFacade;
 import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.Bill;
-import com.propertyvista.domain.financial.billing.BillingCycle;
+import com.propertyvista.domain.financial.billing.BillingCycleType;
 import com.propertyvista.domain.payment.CreditCardInfo;
 import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.domain.payment.PaymentMethod;
@@ -395,7 +395,7 @@ public class LeaseLifecycleSim {
 
     // UTILITY FUNCTIONS
     // FIXME copied form BillingCycleManager, find some other better way to do it
-    private static LogicalDate calculateBillingRunTargetExecutionDate(BillingCycle cycle, LogicalDate billingRunStartDate) {
+    private static LogicalDate calculateBillingRunTargetExecutionDate(BillingCycleType cycle, LogicalDate billingRunStartDate) {
         Calendar calendar = new GregorianCalendar();
         calendar.setTime(billingRunStartDate);
         calendar.add(Calendar.DATE, -cycle.paymentFrequency().getValue().getBillRunTargetDayOffset());

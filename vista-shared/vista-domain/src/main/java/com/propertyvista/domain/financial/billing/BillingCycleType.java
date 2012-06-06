@@ -24,7 +24,7 @@ import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
  * 
  */
 @Table(prefix = "billing")
-public interface BillingCycle extends IEntity {
+public interface BillingCycleType extends IEntity {
 
     IPrimitive<PaymentFrequency> paymentFrequency();
 

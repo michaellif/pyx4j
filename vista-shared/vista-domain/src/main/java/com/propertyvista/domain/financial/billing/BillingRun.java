@@ -48,7 +48,7 @@ public interface BillingRun extends IEntity {
     };
 
     @ReadOnly
-    BillingCycle billingCycle();
+    BillingCycleType billingCycle();
 
     @ReadOnly
     IPrimitive<LogicalDate> billingPeriodStartDate();

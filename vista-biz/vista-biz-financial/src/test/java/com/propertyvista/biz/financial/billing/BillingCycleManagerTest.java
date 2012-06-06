@@ -20,7 +20,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.biz.financial.FinancialTestsUtils;
 import com.propertyvista.config.tests.VistaDBTestBase;
-import com.propertyvista.domain.financial.billing.BillingCycle;
+import com.propertyvista.domain.financial.billing.BillingCycleType;
 import com.propertyvista.domain.financial.billing.BillingRun;
 import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
 
@@ -92,7 +92,7 @@ public class BillingCycleManagerTest extends VistaDBTestBase {
     }
 
     private BillingRun createFirstBillingRun(LogicalDate leaseStartDate, Integer billingCycleStartDate, boolean useCycleLeaseDay) {
-        BillingCycle billingCycle = EntityFactory.create(BillingCycle.class);
+        BillingCycleType billingCycle = EntityFactory.create(BillingCycleType.class);
         billingCycle.paymentFrequency().setValue(PaymentFrequency.Monthly);
         billingCycle.billingPeriodStartDay().setValue(billingCycleStartDate);
 
@@ -102,7 +102,7 @@ public class BillingCycleManagerTest extends VistaDBTestBase {
 
     private BillingRun createExistingLeaseInitialBillingRun(LogicalDate leaseStartDate, LogicalDate leaseCreationDate, Integer billingCycleStartDate,
             boolean useCycleLeaseDay) {
-        BillingCycle billingCycle = EntityFactory.create(BillingCycle.class);
+        BillingCycleType billingCycle = EntityFactory.create(BillingCycleType.class);
         billingCycle.paymentFrequency().setValue(PaymentFrequency.Monthly);
         billingCycle.billingPeriodStartDay().setValue(billingCycleStartDate);
 

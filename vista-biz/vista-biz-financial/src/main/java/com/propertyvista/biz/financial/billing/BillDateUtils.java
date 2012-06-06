@@ -23,7 +23,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.biz.financial.SysDateManager;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.billing.Bill;
-import com.propertyvista.domain.financial.billing.BillingCycle;
+import com.propertyvista.domain.financial.billing.BillingCycleType;
 import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
 
 public class BillDateUtils {
@@ -108,7 +108,7 @@ public class BillDateUtils {
         return billingPeriodStartDay;
     }
 
-    public static LogicalDate calculateFirstBillingRunStartDate(BillingCycle cycle, LogicalDate leaseStartDate, boolean useCyclePeriodStartDay) {
+    public static LogicalDate calculateFirstBillingRunStartDate(BillingCycleType cycle, LogicalDate leaseStartDate, boolean useCyclePeriodStartDay) {
         LogicalDate billingRunStartDate = null;
         if (useCyclePeriodStartDay) {
             switch (cycle.paymentFrequency().getValue()) {
@@ -157,7 +157,7 @@ public class BillDateUtils {
         return new LogicalDate(calendar.getTime());
     }
 
-    public static LogicalDate calculateBillingRunTargetExecutionDate(BillingCycle cycle, LogicalDate billingRunStartDate) {
+    public static LogicalDate calculateBillingRunTargetExecutionDate(BillingCycleType cycle, LogicalDate billingRunStartDate) {
         Calendar calendar = new GregorianCalendar();
         calendar.setTime(billingRunStartDate);
         calendar.add(Calendar.DATE, -cycle.paymentFrequency().getValue().getBillRunTargetDayOffset());

@@ -39,7 +39,7 @@ import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.Bill.BillStatus;
-import com.propertyvista.domain.financial.billing.BillingCycle;
+import com.propertyvista.domain.financial.billing.BillingCycleType;
 import com.propertyvista.domain.financial.billing.BillingRun;
 import com.propertyvista.domain.financial.billing.BillingRun.BillingRunStatus;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
@@ -294,8 +294,8 @@ public class BillingLifecycleManager {
         return !Persistence.service().exists(criteria);
     }
 
-    static BillingCycle ensureBillingCycle(Lease lease) {
-        BillingCycle billingCycle = lease.billingAccount().billingCycle();
+    static BillingCycleType ensureBillingCycle(Lease lease) {
+        BillingCycleType billingCycle = lease.billingAccount().billingCycle();
 
         if (billingCycle.isNull()) {
             PaymentFrequency paymentFrequency = lease.paymentFrequency().getValue();
@@ -307,13 +307,13 @@ public class BillingLifecycleManager {
             }
 
             //try to find existing billing cycle    
-            EntityQueryCriteria<BillingCycle> criteria = EntityQueryCriteria.create(BillingCycle.class);
+            EntityQueryCriteria<BillingCycleType> criteria = EntityQueryCriteria.create(BillingCycleType.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().paymentFrequency(), paymentFrequency));
             criteria.add(PropertyCriterion.eq(criteria.proto().billingPeriodStartDay(), billingPeriodStartDay));
             billingCycle = Persistence.service().retrieve(criteria);
 
             if (billingCycle == null) {
-                billingCycle = EntityFactory.create(BillingCycle.class);
+                billingCycle = EntityFactory.create(BillingCycleType.class);
                 billingCycle.paymentFrequency().setValue(paymentFrequency);
                 billingCycle.billingPeriodStartDay().setValue(billingPeriodStartDay);
                 billingCycle.billingRunTargetDay().setValue(
@@ -327,11 +327,11 @@ public class BillingLifecycleManager {
         return billingCycle;
     }
 
-    static BillingRun createNewLeaseFirstBillingRun(BillingCycle cycle, LogicalDate leaseStartDate, boolean useCyclePeriodStartDay) {
+    static BillingRun createNewLeaseFirstBillingRun(BillingCycleType cycle, LogicalDate leaseStartDate, boolean useCyclePeriodStartDay) {
         return createBillingRun(cycle, BillDateUtils.calculateFirstBillingRunStartDate(cycle, leaseStartDate, useCyclePeriodStartDay));
     }
 
-    static BillingRun createExistingLeaseInitialBillingRun(BillingCycle cycle, LogicalDate leaseStartDate, LogicalDate leaseCreationDate,
+    static BillingRun createExistingLeaseInitialBillingRun(BillingCycleType cycle, LogicalDate leaseStartDate, LogicalDate leaseCreationDate,
             boolean useCyclePeriodStartDay) {
         if (!leaseStartDate.before(leaseCreationDate)) {
             throw new BillingException("Existing lease start date should be earlier than creation date");
@@ -347,12 +347,12 @@ public class BillingLifecycleManager {
         return createBillingRun(cycle, billingRunStartDate);
     }
 
-    static BillingRun createSubsiquentBillingRun(BillingCycle cycle, BillingRun previousRun) {
+    static BillingRun createSubsiquentBillingRun(BillingCycleType cycle, BillingRun previousRun) {
         return createBillingRun(cycle,
                 BillDateUtils.calculateSubsiquentBillingRunStartDate(cycle.paymentFrequency().getValue(), previousRun.billingPeriodStartDate().getValue()));
     }
 
-    private static BillingRun createBillingRun(BillingCycle cycle, LogicalDate billingRunStartDate) {
+    private static BillingRun createBillingRun(BillingCycleType cycle, LogicalDate billingRunStartDate) {
         BillingRun billingRun = EntityFactory.create(BillingRun.class);
         billingRun.status().setValue(BillingRun.BillingRunStatus.Scheduled);
         billingRun.billingCycle().set(cycle);
