@@ -32,7 +32,7 @@ public class NDatePicker extends NTextBox<Date> implements INativeTextComponent<
     private DatePickerDropDownPanel datePickerDropDown;
 
     public NDatePicker(CDatePicker cComponent) {
-        super(cComponent, ImageFactory.getImages().triggerBlueUp());
+        super(cComponent, ImageFactory.getImages().datePicker());
     }
 
     @Override

@@ -25,6 +25,10 @@ import com.google.gwt.resources.client.ImageResource;
 
 public interface FormImages extends ClientBundleWithLookup {
 
+    ImageResource datePicker();
+
+    // ----
+
     ImageResource triggerUp();
 
     ImageResource triggerDown();
