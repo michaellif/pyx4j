@@ -179,6 +179,9 @@ public class PadCaledon {
             sequence.number().setValue(0);
             sequence.simulator().setValue(useSimulator);
             sequence.companyId().setValue(companyId);
+            if ((!useSimulator) && ApplicationMode.isDevelopment()) {
+                sequence.number().setValue(PadCaledonDev.restoreFileCreationNumber(companyId));
+            }
         }
 
         // Find and verify that previous file has acknowledgment
@@ -202,9 +205,6 @@ public class PadCaledon {
         int id = sequence.number().getValue() + 1;
         if (id == 999999) {
             id = 1;
-            if ((!useSimulator) && ApplicationMode.isDevelopment()) {
-                id = PadCaledonDev.restoreFileCreationNumber(companyId);
-            }
         }
         sequence.number().setValue(id);
         Persistence.service().persist(sequence);
