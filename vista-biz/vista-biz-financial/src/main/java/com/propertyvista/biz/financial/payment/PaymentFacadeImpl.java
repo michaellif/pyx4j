@@ -183,9 +183,10 @@ public class PaymentFacadeImpl implements PaymentFacade {
     @Override
     public PaymentRecord cancel(PaymentRecord paymentStub) {
         PaymentRecord paymentRecord = Persistence.service().retrieve(PaymentRecord.class, paymentStub.getPrimaryKey());
-        if (!paymentRecord.paymentStatus().getValue().equals(PaymentRecord.PaymentStatus.Submitted)) {
+        if (!EnumSet.of(PaymentRecord.PaymentStatus.Submitted, PaymentRecord.PaymentStatus.Scheduled).contains(paymentRecord.paymentStatus().getValue())) {
             throw new UserRuntimeException(i18n.tr("Processed payment can't be canceled"));
         }
+
         paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Canceled);
         paymentRecord.lastStatusChangeDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
         paymentRecord.finalizeDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
