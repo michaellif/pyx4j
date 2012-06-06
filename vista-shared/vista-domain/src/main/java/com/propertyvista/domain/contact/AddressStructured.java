@@ -18,6 +18,7 @@ import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Reference;
+import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -35,21 +36,21 @@ import com.propertyvista.domain.ref.ProvinceReferenceAdapter;
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
 public interface AddressStructured extends IEntity {
 
-    IPrimitive<String> suiteNumber();
-
-    @NotNull
-    IPrimitive<String> streetNumber();
-
-    IPrimitive<String> streetNumberSuffix();
-
-    @NotNull
-    IPrimitive<String> streetName();
-
     @I18n
     @I18nComment("Street Type")
     public enum StreetType {
 
-        alley, approach, arcade, avenue, boulevard, brow, bypass, causeway, circuit, circle, circus, close, copse, corner, cove, court, crescent, drive, end, esplanande, flat, freeway, frontage, gardens, glade, glen, green, grove, heights, highway, lane, line, link, loop, mall, mews, packet, parade, park, parkway, place, promenade, reserve, ridge, rise, road, row, square, street, strip, tarn, terrace, thoroughfaree, track, trunkway, view, vista, walk, way, walkway, yard,
+        alley, approach, arcade, avenue, boulevard, brow, bypass, causeway,
+
+        circuit, circle, circus, close, copse, corner, cove, court, crescent,
+
+        drive, end, esplanande, flat, freeway, frontage, gardens, glade, glen, green, grove,
+
+        heights, highway, lane, line, link, loop, mall, mews, packet, parade, park, parkway, place,
+
+        promenade, reserve, ridge, rise, road, row, square, street, strip, tarn, terrace, thoroughfaree,
+
+        track, trunkway, view, vista, walk, way, walkway, yard,
 
         other;
 
@@ -59,27 +60,14 @@ public interface AddressStructured extends IEntity {
         }
     }
 
-    @NotNull
-    IPrimitive<StreetType> streetType();
-
     @I18n
     public enum StreetDirection {
 
-        east,
+        east, north, south, west,
 
-        north,
+        southEast, southWest,
 
-        south,
-
-        west,
-
-        southEast,
-
-        southWest,
-
-        northEast,
-
-        northWest;
+        northEast, northWest;
 
         @Override
         public String toString() {
@@ -87,26 +75,49 @@ public interface AddressStructured extends IEntity {
         }
     }
 
+    @ToString(index = 5)
+    IPrimitive<String> suiteNumber();
+
+    @NotNull
+    @ToString(index = 0)
+    IPrimitive<String> streetNumber();
+
+    @ToString(index = 1)
+    IPrimitive<String> streetNumberSuffix();
+
+    @NotNull
+    @ToString(index = 2)
+    IPrimitive<String> streetName();
+
+    @NotNull
+    @ToString(index = 3)
+    IPrimitive<StreetType> streetType();
+
+    @ToString(index = 4)
     IPrimitive<StreetDirection> streetDirection();
 
     @NotNull
+    @ToString(index = 6)
     IPrimitive<String> city();
 
     IPrimitive<String> county();
 
     @NotNull
+    @ToString(index = 7)
     @Caption(name = "Province")
     @Editor(type = EditorType.combo)
     @Reference(adapter = ProvinceReferenceAdapter.class)
     Province province();
 
     @NotNull
+    @ToString(index = 8)
     @Caption(name = "Country")
     @Editor(type = EditorType.combo)
     @Reference(adapter = CountryReferenceAdapter.class)
     Country country();
 
     @NotNull
+    @ToString(index = 9)
     @Caption(name = "Postal Code")
     IPrimitive<String> postalCode();
 
