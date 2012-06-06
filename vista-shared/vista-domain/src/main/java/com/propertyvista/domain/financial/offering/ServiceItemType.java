@@ -14,10 +14,12 @@
 package com.propertyvista.domain.financial.offering;
 
 import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IPrimitive;
 
 @DiscriminatorValue("service")
 public interface ServiceItemType extends ProductItemType {
 
+    @NotNull
     IPrimitive<Service.Type> serviceType();
 }
