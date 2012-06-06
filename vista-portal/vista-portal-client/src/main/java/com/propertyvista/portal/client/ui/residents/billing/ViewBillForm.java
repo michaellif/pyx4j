@@ -13,37 +13,16 @@
  */
 package com.propertyvista.portal.client.ui.residents.billing;
 
-import com.google.gwt.user.client.ui.IsWidget;
-
-import com.pyx4j.entity.client.CEntityForm;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.common.client.ui.components.VistaViewersComponentFactory;
-import com.propertyvista.dto.BillDTO;
+import com.propertyvista.common.client.ui.components.editors.dto.bill.BillForm;
 
-public class ViewBillForm extends CEntityForm<BillDTO> {
+public class ViewBillForm extends BillForm {
 
     private static final I18n i18n = I18n.get(ViewBillForm.class);
 
     public ViewBillForm() {
-        super(BillDTO.class, new VistaViewersComponentFactory());
+        super();
     }
 
-    @Override
-    public IsWidget createContent() {
-        FormFlexPanel container = new FormFlexPanel();
-
-        int row = -1;
-        container.setH1(++row, 0, 1, "Bill content goes here...");
-
-//        container.setWidget(++row, 0, inject(proto().charges(), new ChargeLineFolder()));
-//        container.setHR(++row, 0, 1);
-//        //TODO review later (display total)
-//        container.setWidget(++row, 0, inject(proto().total()/* , new TotalLineViewer() */));
-//        container.setWidget(++row, 0, inject(proto().dueDate(), new DueDateViewer()));
-//        container.setWidget(++row, 0, inject(proto().paymentMethod(), new PaymentMethodViewer()));
-//        container.setWidget(++row, 0, inject(proto().preAuthorized(), new PreauthorizedOutcomeViewer()));
-        return container;
-    }
 }
