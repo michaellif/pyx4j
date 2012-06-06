@@ -225,7 +225,7 @@ public class DashboardForm extends CEntityDecoratableForm<TenantDashboardDTO> im
             HorizontalPanel actions = new HorizontalPanel();
             actions.getElement().getStyle().setMargin(20, Unit.PX);
 
-            Anchor viewBill = new Anchor(i18n.tr("View Bill")) {
+            Anchor viewBill = new Anchor(i18n.tr("View Current Bill")) {
             };
             viewBill.addClickHandler(new ClickHandler() {
                 @Override

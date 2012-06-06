@@ -49,10 +49,14 @@ public class NavigActivity extends AbstractActivity implements NavigView.NavigPr
         items.add(new Residents());
         items.add(new Residents.PersonalInformation());
         items.add(new Residents.PaymentMethods());
-        items.add(new Residents.BillingHistory());
         items.add(new Residents.BillSummary());
+        items.add(new Residents.BillingHistory());
         items.add(new Residents.Maintenance());
-        items.add(new Residents.Insurance());
+
+        if (false) { // this is just mock-up!..
+            items.add(new Residents.Insurance());
+        }
+
         view.setNavig(items);
 
     }

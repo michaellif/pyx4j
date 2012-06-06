@@ -16,7 +16,6 @@ package com.propertyvista.portal.client.ui.residents.billing;
 import java.util.Arrays;
 import java.util.List;
 
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -50,19 +49,19 @@ public class BillSummaryForm extends CEntityDecoratableForm<BillSummaryDTO> {
         FormFlexPanel content = new FormFlexPanel();
 
         int row = -1;
+        content.setBR(++row, 0, 2);
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().currentBalance()), 10).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().currentBill().dueDate()), 10).build());
-        content.setWidget(++row, 0, new Anchor(i18n.tr("View Current Bill"), new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                presenter.viewCurrentBill();
-            }
-        }));
-        content.getWidget(row, 0).getElement().getStyle().setMarginLeft(15, Unit.EM);
         content.setWidget(row, 1, new Button(i18n.tr("Pay Now"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 presenter.payNow();
+            }
+        }));
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().currentBill().dueDate()), 10).build());
+        content.setWidget(row, 1, new Anchor(i18n.tr("View Current Bill"), new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                presenter.viewCurrentBill();
             }
         }));
 
