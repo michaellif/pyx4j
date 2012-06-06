@@ -23,7 +23,6 @@ package com.pyx4j.entity.rdb.mapping;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.sql.Statement;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -1089,14 +1088,14 @@ public class TableModel {
             persistenceContext.setUncommittedChanges();
             int rc = stmt.executeUpdate();
             return rc >= 1;
-        } catch (SQLIntegrityConstraintViolationException e) {
-            log.error("{} SQL: {}", tableName, sql);
-            log.error("{} SQL delete error", tableName, e);
-            throw new UserRuntimeException(i18n.tr("Unable to delete \"{0}\". The record is referenced by another record.", entityMeta().getCaption()));
         } catch (SQLException e) {
             log.error("{} SQL: {}", tableName, sql);
             log.error("{} SQL delete error", tableName, e);
-            throw new RuntimeException(e);
+            if (dialect.isIntegrityConstraintException(e)) {
+                throw new UserRuntimeException(i18n.tr("Unable to delete \"{0}\". The record is referenced by another record.", entityMeta().getCaption()));
+            } else {
+                throw new RuntimeException(e);
+            }
         } finally {
             SQLUtils.closeQuietly(stmt);
         }

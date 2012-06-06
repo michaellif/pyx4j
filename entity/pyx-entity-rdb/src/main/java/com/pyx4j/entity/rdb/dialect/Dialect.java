@@ -22,6 +22,7 @@ package com.pyx4j.entity.rdb.dialect;
 
 import java.math.BigDecimal;
 import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.sql.Types;
 import java.util.HashMap;
 import java.util.Map;
@@ -247,5 +248,9 @@ public abstract class Dialect {
     }
 
     public abstract boolean isUniqueConstraintException(SQLException e);
+
+    public boolean isIntegrityConstraintException(SQLException e) {
+        return (e instanceof SQLIntegrityConstraintViolationException);
+    }
 
 }

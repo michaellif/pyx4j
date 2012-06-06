@@ -142,4 +142,14 @@ public class PostgreSQLDialect extends Dialect {
             return message.contains("duplicate") || message.contains("unique");
         }
     }
+
+    @Override
+    public boolean isIntegrityConstraintException(SQLException e) {
+        String message = e.getMessage();
+        if (message == null) {
+            return false;
+        } else {
+            return message.contains("violates foreign key constraint");
+        }
+    }
 }
