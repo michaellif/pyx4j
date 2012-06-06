@@ -30,4 +30,7 @@ public interface PadFileCreationNumber extends IEntity {
     @NotNull
     IPrimitive<Integer> number();
 
+    IPrimitive<String> companyId();
+
+    IPrimitive<Boolean> simulator();
 }

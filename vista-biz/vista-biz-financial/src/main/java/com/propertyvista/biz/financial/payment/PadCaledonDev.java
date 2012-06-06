@@ -27,7 +27,7 @@ public class PadCaledonDev {
         return new File(".", "caledon_file_creation_number.properties");
     }
 
-    public static void saveFileCreationNumber(int number) {
+    public static void saveFileCreationNumber(String companyId, int number) {
         String value = String.valueOf(number);
 
         BufferedWriter out = null;
@@ -53,7 +53,7 @@ public class PadCaledonDev {
         }
     }
 
-    public static int restoreFileCreationNumber() {
+    public static int restoreFileCreationNumber(String companyId) {
         BufferedReader in = null;
         try {
             in = new BufferedReader(new FileReader(getFile()));

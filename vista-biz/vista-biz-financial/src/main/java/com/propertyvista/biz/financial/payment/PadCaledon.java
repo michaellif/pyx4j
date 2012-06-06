@@ -167,11 +167,18 @@ public class PadCaledon {
      * Length 4 Must be incremented by one for each file submitted per Company ID
      */
     private String getNextFileCreationNumber() {
+        boolean useSimulator = CaledonPadSftpClient.usePadSimulator();
+
         EntityQueryCriteria<PadFileCreationNumber> criteria = EntityQueryCriteria.create(PadFileCreationNumber.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().simulator(), useSimulator));
+        criteria.add(PropertyCriterion.eq(criteria.proto().companyId(), companyId));
+
         PadFileCreationNumber sequence = Persistence.service().retrieve(criteria);
         if (sequence == null) {
             sequence = EntityFactory.create(PadFileCreationNumber.class);
             sequence.number().setValue(0);
+            sequence.simulator().setValue(useSimulator);
+            sequence.companyId().setValue(companyId);
         }
 
         // Find and verify that previous file has acknowledgment
@@ -195,14 +202,14 @@ public class PadCaledon {
         int id = sequence.number().getValue() + 1;
         if (id == 999999) {
             id = 1;
-            if (ApplicationMode.isDevelopment()) {
-                id = PadCaledonDev.restoreFileCreationNumber();
+            if ((!useSimulator) && ApplicationMode.isDevelopment()) {
+                id = PadCaledonDev.restoreFileCreationNumber(companyId);
             }
         }
         sequence.number().setValue(id);
         Persistence.service().persist(sequence);
-        if (ApplicationMode.isDevelopment()) {
-            PadCaledonDev.saveFileCreationNumber(id);
+        if ((!useSimulator) && ApplicationMode.isDevelopment()) {
+            PadCaledonDev.saveFileCreationNumber(companyId, id);
         }
         return String.valueOf(id);
     }
