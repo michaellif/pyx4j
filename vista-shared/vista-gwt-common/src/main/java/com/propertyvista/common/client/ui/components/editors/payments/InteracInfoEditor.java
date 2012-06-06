@@ -17,6 +17,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -44,16 +45,18 @@ public class InteracInfoEditor extends CEntityDecoratableForm<InteracInfo> {
 
     @Override
     public IsWidget createContent() {
-        FormFlexPanel panel = new FormFlexPanel();
+        FormFlexPanel main = new FormFlexPanel();
 
-        int row = -1;
-        panel.setWidget(++row, 0, InteracPanelCanada());
+        main.setWidget(0, 0, InteracPanelCanada());
+        main.getCellFormatter().setAlignment(0, 0, HasHorizontalAlignment.ALIGN_CENTER, HasVerticalAlignment.ALIGN_MIDDLE);
+        main.setHeight("12em");
 
-        return panel;
+        return main;
     }
 
     private HorizontalPanel InteracPanelCanada() {
         HorizontalPanel panel = new HorizontalPanel();
+
         panel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
         panel.getElement().getStyle().setProperty("padding", "5px");
 
