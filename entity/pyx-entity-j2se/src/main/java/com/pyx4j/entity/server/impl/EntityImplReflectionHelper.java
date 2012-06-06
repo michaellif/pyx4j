@@ -26,7 +26,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
-import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Map;
 
 import com.pyx4j.entity.shared.IEntity;
@@ -120,7 +120,7 @@ public class EntityImplReflectionHelper {
         //Class<?> genericValueCalss;
     }
 
-    private static Map<String, MethodInfo> members = new HashMap<String, MethodInfo>();
+    private static Map<String, MethodInfo> members = new Hashtable<String, MethodInfo>();
 
     @SuppressWarnings("unchecked")
     public static IObject<?> lazyCreateMember(Class<?> interfaceClass, SharedEntityHandler implHandler, String memberName) {
