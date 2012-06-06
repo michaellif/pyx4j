@@ -17,12 +17,14 @@ import java.util.Date;
 
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IEntity;
@@ -63,6 +65,12 @@ public interface Trigger extends IEntity {
     @Owned
     IList<TriggerSchedule> schedules();
 
+    @Transient
+    @Editor(type = Editor.EditorType.label)
+    @ReadOnly
+    @Format("MM/dd/yyyy HH:mm")
+    IPrimitive<Date> nextScheduledFireTime();
+
     @Timestamp(Timestamp.Update.Created)
     @ReadOnly
     @Format("MM/dd/yyyy HH:mm")
@@ -74,6 +82,12 @@ public interface Trigger extends IEntity {
 
     @Caption(description = "Minutes to automatically restart sleeping process")
     IPrimitive<Integer> sleepRetry();
+
+    @Transient
+    @Editor(type = Editor.EditorType.label)
+    @ReadOnly
+    @Format("MM/dd/yyyy HH:mm")
+    IPrimitive<Date> nextSleepRetryFireTime();
 
     @Owned
     IList<TriggerNotification> notifications();

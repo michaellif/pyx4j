@@ -129,6 +129,11 @@ public class PmcProcessDispatcherJob implements Job {
         Persistence.service().persist(run);
         Persistence.service().commit();
 
+        if ((run.status().getValue() == RunStatus.Sleeping) && !trigger.sleepRetry().isNull()) {
+            // Reschedule run automatically
+            JobUtils.schedulSleepRetry(trigger, scheduledFireTime);
+        }
+
     }
 
     private void createPopulation(Run run) {

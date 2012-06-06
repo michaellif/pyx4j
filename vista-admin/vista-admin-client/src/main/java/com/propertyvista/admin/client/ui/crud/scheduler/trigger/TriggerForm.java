@@ -67,9 +67,11 @@ public class TriggerForm extends AdminEntityForm<Trigger> {
         main.setWidget(++row, 0, inject(proto().population(), new PopulationFolder(isEditable())));
 
         main.setH2(++row, 0, 2, i18n.tr("Schedules"));
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().nextScheduledFireTime()), 10).build());
         main.setWidget(++row, 0, inject(proto().schedules(), new TriggerScheduleFolder(isEditable())));
 
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().sleepRetry()), 10).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().nextSleepRetryFireTime()), 10).build());
 
         main.setH2(++row, 0, 2, i18n.tr("Notifications"));
         main.setWidget(++row, 0, inject(proto().notifications(), new NotificationFolder(isEditable())));

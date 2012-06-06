@@ -49,6 +49,10 @@ public class JobUtils {
         return new TriggerKey(schedule.getPrimaryKey().toString(), "VistaTrigger");
     }
 
+    public static TriggerKey getSleepRetryTriggerKey(com.propertyvista.admin.domain.scheduler.Trigger trigger) {
+        return new TriggerKey(trigger.getPrimaryKey().toString(), "VistaSleepRetryTrigger");
+    }
+
     public static JobDetail getJobDetail(com.propertyvista.admin.domain.scheduler.Trigger trigger) throws SchedulerException {
         return SchedulerHelper.getScheduler().getJobDetail(getJobKey(trigger));
     }
@@ -75,6 +79,30 @@ public class JobUtils {
             if (executionDate != null) {
                 tb.usingJobData(JobData.forDate.name(), executionDate.getTime());
             }
+            SchedulerHelper.getScheduler().scheduleJob(tb.build());
+        } catch (SchedulerException e) {
+            log.error("Error", e);
+            throw new UserRuntimeException(e.getMessage());
+        }
+    }
+
+    public static void schedulSleepRetry(com.propertyvista.admin.domain.scheduler.Trigger trigger, Date executionDate) {
+        try {
+            JobDetail jobDetail = getJobDetail(trigger);
+            if (jobDetail == null) {
+                jobDetail = createJobDetail(trigger);
+            }
+            TriggerKey sleepRetryTriggerKey = getSleepRetryTriggerKey(trigger);
+            SchedulerHelper.getScheduler().unscheduleJob(sleepRetryTriggerKey);
+
+            TriggerBuilder<Trigger> tb = TriggerBuilder.newTrigger().withIdentity(sleepRetryTriggerKey).forJob(jobDetail);
+            if (executionDate != null) {
+                tb.usingJobData(JobData.forDate.name(), executionDate.getTime());
+            }
+            Calendar triggerStartTime = new GregorianCalendar();
+            triggerStartTime.add(Calendar.MINUTE, trigger.sleepRetry().getValue());
+            tb.startAt(triggerStartTime.getTime());
+
             SchedulerHelper.getScheduler().scheduleJob(tb.build());
         } catch (SchedulerException e) {
             log.error("Error", e);
@@ -195,11 +223,27 @@ public class JobUtils {
                 for (Trigger quartzTrigger : triggers) {
                     if (quartzTrigger.getKey().equals(getTriggerKey(schedule))) {
                         Date nft = quartzTrigger.getNextFireTime();
-                        if ((nft != null) && (schedule.nextFireTime().isNull() || nft.before(schedule.nextFireTime().getValue()))) {
-                            schedule.nextFireTime().setValue(nft);
+                        if (nft != null) {
+                            if ((schedule.nextFireTime().isNull() || nft.before(schedule.nextFireTime().getValue()))) {
+                                schedule.nextFireTime().setValue(nft);
+                            }
+                            if ((trigger.nextScheduledFireTime().isNull() || nft.before(trigger.nextScheduledFireTime().getValue()))) {
+                                trigger.nextScheduledFireTime().setValue(nft);
+                            }
                         }
                     }
                 }
+            }
+        }
+
+        TriggerKey sleepRetryTriggerKey = getSleepRetryTriggerKey(trigger);
+        for (Trigger quartzTrigger : triggers) {
+            if (quartzTrigger.getKey().equals(sleepRetryTriggerKey)) {
+                Date nft = quartzTrigger.getNextFireTime();
+                if (nft != null) {
+                    trigger.nextSleepRetryFireTime().setValue(nft);
+                }
+                break;
             }
         }
     }
