@@ -49,38 +49,25 @@ public class BillForm extends CEntityDecoratableForm<BillDTO> {
         int row = -1;
 
         top.setH1(++row, 0, 2, i18n.tr("Info"));
-        int row2 = row;
-
         top.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingAccount().lease().unit()), 20).build());
-
         top.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingRun().building()), 20).build());
         top.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingRun().billingPeriodStartDate()), 20).build());
         top.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingRun().billingPeriodEndDate()), 20).build());
-
-        ++row2;
-        top.setWidget(++row2, 1, new DecoratorBuilder(inject(proto().billingRun().billingCycle().paymentFrequency()), 20).build());
-        top.setWidget(++row2, 1, new DecoratorBuilder(inject(proto().billingRun().billingCycle().billingPeriodStartDay()), 20).build());
-        top.setWidget(++row2, 1, new DecoratorBuilder(inject(proto().billingRun().billingCycle().billingRunTargetDay()), 20).build());
-
+        top.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingRun().billingCycle().paymentFrequency()), 20).build());
         top.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingRun().executionTargetDate()), 20).build());
         top.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingRun().executionDate()), 20).build());
 
         top.setH1(++row, 0, 2, i18n.tr("Status"));
-        row2 = row;
-
         top.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billSequenceNumber()), 20).build());
         top.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billType()), 20).build());
-
-        top.setWidget(++row2, 1, new DecoratorBuilder(inject(proto().billStatus()), 20).build());
-        top.setWidget(++row2, 1, new DecoratorBuilder(inject(proto().rejectReason()), 20).build());
-
-        top.getColumnFormatter().setWidth(0, "45%");
-        top.getColumnFormatter().setWidth(1, "55%");
+        top.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billStatus()), 20).build());
+        top.setWidget(++row, 0, new DecoratorBuilder(inject(proto().rejectReason()), 20).build());
 
         // form bottom panel:
         FormFlexPanel bottom = new FormFlexPanel();
+        row = -1;
+
         bottom.setH1(++row, 0, 2, i18n.tr("Last Bill"));
-        int row3 = row;
         bottom.setWidget(++row, 0, new DecoratorBuilder(inject(proto().balanceForwardAmount())).build());
 
         bottom.setWidget(++row, 0, inject(proto().paymentLineItems(), new LineItemCollapsableViewer()));
@@ -111,7 +98,7 @@ public class BillForm extends CEntityDecoratableForm<BillDTO> {
         // form main panel:
         FormFlexPanel main = new FormFlexPanel();
         main.setWidget(0, 0, top);
-        main.setWidget(row3, 0, bottom);
+        main.setWidget(1, 0, bottom);
 
         return main;
     }
