@@ -25,6 +25,11 @@ import com.propertyvista.domain.dashboard.gadgets.type.ListerGadgetBaseMetadata;
 
 public class DynamicColumnWidthReportTableTemplateBuilder extends XMLBuilder {
 
+    private enum Styles {
+
+        TITLE, TABLE, TABLE_HEADER, TABLE_COLUMN_TITLE, TABLE_ROW;
+    }
+
     private final IEntity proto;
 
     private final ListerGadgetBaseMetadata metadata;
@@ -34,6 +39,12 @@ public class DynamicColumnWidthReportTableTemplateBuilder extends XMLBuilder {
     private int[] columnWidths;
 
     private ArrayList<ColumnDescriptorEntity> visibleColumns;
+
+    private final Integer fontSize = 6;
+
+    private final Integer fontSizeTitle = 10;
+
+    private final Integer padding = 2;
 
     public DynamicColumnWidthReportTableTemplateBuilder(IEntity proto, ListerGadgetBaseMetadata metadata) {
         this.proto = proto;
@@ -58,6 +69,7 @@ public class DynamicColumnWidthReportTableTemplateBuilder extends XMLBuilder {
                 .add();
         
             declareCustomProperties();
+            declareStyles();
             declareParameters();
             declareFields();
             
@@ -74,9 +86,58 @@ public class DynamicColumnWidthReportTableTemplateBuilder extends XMLBuilder {
     }//@formatter:on
 
     private void declareCustomProperties() {//@formatter:off
+        // I'm commenting this out because it's probably something to do wiht IReport          
 //        el("property").attr("name", "ireport.zoom").attr("value", "1.0").add();
 //        el("property").attr("name", "ireport.x").attr("value", "0").add();
 //        el("property").attr("name", "ireport.y").attr("value", "0").add();
+    }//@formatter:on
+
+    private void declareStyles() {//@formatter:off
+        elo("style")
+            .attr("name", Styles.TITLE.name())
+            .attr("fontSize", fontSizeTitle.toString())
+            .attr("pdfFontName", "Helvetica")
+            .add();
+        elc("style");        
+        
+        
+        elo("style")
+            .attr("name", Styles.TABLE.name())
+            .attr("fontSize", fontSize.toString())
+            .attr("pdfFontName", "Helvetica")
+            .add();
+        elc("style");
+        
+        elo("style")
+                .attr("name", Styles.TABLE_HEADER.name())
+                .attr("style", Styles.TABLE.name())
+                .add();
+            elo("box").add();
+                el("topPen").attr("lineWidth", "0.5").attr("lineColor", "#000000").attr("lineStyle", "Solid").add();
+                el("bottomPen").attr("lineWidth", "0.5").attr("lineColor", "#000000").attr("lineStyle", "Solid").add();
+            elc("box");
+        elc("style");        
+
+        
+        elo("style")
+                .attr("name", Styles.TABLE_COLUMN_TITLE.name())
+                .attr("style", Styles.TABLE.name())
+                .add();
+        elc("style");        
+        
+        elo("style")
+                .attr("name", Styles.TABLE_ROW.name())
+                .attr("style", Styles.TABLE.name())
+                .attr("mode", "Opaque")
+                .add();
+            elo("conditionalStyle").add();
+                elo("conditionExpression").add();
+                    CDATA("new Boolean($V{REPORT_COUNT}.intValue() % 2 == 0)");
+                elc("conditionExpression");
+                el("style")
+                        .attr("backcolor", "#E6E6E6").add();
+            elc("conditionalStyle");            
+        elc("style");
     }//@formatter:on
 
     private void declareParameters() {//@formatter:off
@@ -98,33 +159,40 @@ public class DynamicColumnWidthReportTableTemplateBuilder extends XMLBuilder {
 
     // TODO for dynamic purposes maybe title should be "STATIC TEXT" element
     private void addTitle() {//@formatter:off
+        int padding = 4;
         elo("title").add();
-            elo("band").attr("height", "30").attr("splitType", "Stretch").add();
-                elo("frame").add();
-                    el("reportElement").attr("x", "0").attr("y", "0").attr("width", "554").attr("height", "30").add();
-                    if (false) {
-                        elo("box").add();
-                            el("pen").attr("lineWidth", "1.0").attr("lineStyle", "Solid").add();
-                        elc("box");
-                    }
+            elo("band").attr("height", "" + (fontSizeTitle + padding)).attr("splitType", "Stretch").add();
                     elo("textField").add();
-                        el("reportElement").attr("x", "0").attr("y", "0").attr("width", "553").attr("height", "29").add();
-                        elo("textElement").attr("textAlignment", "Center").attr("verticalAlignment", "Middle").add();
-                            el("font").attr("size", "10").add();
-                        elc("textElement");
+                        el("reportElement")
+                                .attr("style", Styles.TITLE.name())
+                                .attr("x", "0")
+                                .attr("y", "0")
+                                .attr("width", "554")
+                                .attr("height", "" + (fontSizeTitle + padding))
+                                .attr("stretchType", "RelativeToBandHeight")
+                                .add();
                         elo("textFieldExpression").add();
-                            CDATA("$P{TITLE}");                            
+                            CDATA("$P{TITLE}");
                         elc("textFieldExpression");
-                    elc("textField");
-                elc("frame");
+                    elc("textField");                
             elc("band");
         elc("title");
     }//@formatter:off
     
     private void addPageHeader() {//@formatter:off
         elo("pageHeader").add();
-            elo("band").attr("height", "20").attr("splitType", "Stretch").add();                
-                addTableColumnTitles();
+            elo("band").attr("height", "" + (fontSize + padding + 2)).attr("splitType", "Stretch").add();
+                elo("frame")
+                        .add();
+                    el("reportElement")
+                            .attr("style", Styles.TABLE_HEADER.name())
+                            .attr("x", "0")
+                            .attr("y", "0")
+                            .attr("width", "554")
+                            .attr("height", "" + (fontSize + padding))
+                            .add();
+                    addTableColumnTitles();
+                elc("frame");
             elc("band");
         elc();
     }//@formatter:on
@@ -137,7 +205,7 @@ public class DynamicColumnWidthReportTableTemplateBuilder extends XMLBuilder {
 
     private void addDetail() {//@formatter:off
         elo("detail").add();
-            elo("band").attr("height", "15").attr("splitType", "Stretch").add();
+            elo("band").attr("height", "" + (fontSize + padding)).attr("splitType", "Stretch").add();
                 addDetailMembers();
             elc("band");
         elc();
@@ -186,31 +254,15 @@ public class DynamicColumnWidthReportTableTemplateBuilder extends XMLBuilder {
     private void addColumnTitle(ColumnDescriptorEntity columnDescriptor, Integer offset, Integer width) {//@formatter:off
         String effectiveTitle = columnDescriptor.title().isNull() ? proto.getMember(columnDescriptor.propertyPath().getValue()).getMeta().getCaption() 
                                                                   : columnDescriptor.title().getValue();
-        if (false) {
-            // TODO for some reason that i'm unable to understand, this static text thing doesn't work, so i'm using *textField* as a workaround
-            elo("staticText").add();
-                el("reportElement")
-                        .attr("x", offset.toString())
-                        .attr("y", "0")
-                        .attr("width", width.toString())
-                        .attr("height", "20")
-                        .attr("stretchType", "RelativeToBandHeight")
-                        .add();
-                el("textElement").add();      
-                elo("text").add();
-                    CDATA(effectiveTitle);
-                elc("text");
-            elc("staticText");
-        }
         elo("textField").add();
             el("reportElement")
+                    .attr("style", Styles.TABLE_COLUMN_TITLE.name())
                     .attr("x", offset.toString())
                     .attr("y", "0")
                     .attr("width", width.toString())
-                    .attr("height", "20")
+                    .attr("height", "" + (fontSize + 2))
                     .attr("stretchType", "RelativeToBandHeight")
                     .add();
-            el("box").attr("topBorder", "Thin").attr("bottomBorder", "Thin").add();
             el("textElement").add();
             elo("textFieldExpression").add();
                 CDATA("\"" + effectiveTitle +"\"");
@@ -235,10 +287,11 @@ public class DynamicColumnWidthReportTableTemplateBuilder extends XMLBuilder {
                 
         elo("textField").attr("isStretchWithOverflow", "true").add();
             el("reportElement")
+                    .attr("style", Styles.TABLE_ROW.name())
                     .attr("x", offset.toString())
                     .attr("y", "0")
                     .attr("width", width.toString())
-                    .attr("height", "15")
+                    .attr("height", "" + (fontSize + padding))
                     .attr("stretchType", "RelativeToBandHeight")
                     .add();
             el("textElement").add();
