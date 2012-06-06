@@ -141,6 +141,8 @@ public interface Bill extends IEntity {
     //immediateAccountAdjustments should include taxes
     IPrimitive<BigDecimal> immediateAccountAdjustments();
 
+    IPrimitive<BigDecimal> nsfCharges();
+
     IPrimitive<BigDecimal> withdrawalAmount();
 
     /**
@@ -156,6 +158,8 @@ public interface Bill extends IEntity {
     IPrimitive<BigDecimal> oneTimeFeatureCharges();
 
     IPrimitive<BigDecimal> pendingAccountAdjustments();
+
+    IPrimitive<BigDecimal> latePaymentFees();
 
     IPrimitive<BigDecimal> depositAmount();
 

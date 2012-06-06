@@ -17,10 +17,10 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.math.BigDecimal;
 
-import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.biz.financial.FinancialTestBase;
+import com.propertyvista.biz.financial.FinancialTestsUtils;
 import com.propertyvista.biz.financial.billing.BillingUtils;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.InvoiceAccountCharge;
@@ -45,9 +45,9 @@ public class BillPrintTest extends FinancialTestBase {
         Bill bill = EntityFactory.create(Bill.class);
         bill.billSequenceNumber().setValue(1);
 
-        bill.billingPeriodStartDate().setValue(new LogicalDate(112, 03, 01));
-        bill.dueDate().setValue(new LogicalDate(112, 03, 02));
-        bill.billingRun().executionDate().setValue(new LogicalDate(112, 02, 15));
+        bill.billingPeriodStartDate().setValue(FinancialTestsUtils.getDate("1-Mar-2011"));
+        bill.dueDate().setValue(FinancialTestsUtils.getDate("1-Mar-2011"));
+        bill.billingRun().executionDate().setValue(FinancialTestsUtils.getDate("14-Feb-2011"));
 
         bill.balanceForwardAmount().setValue(new BigDecimal("1000.00"));
 
@@ -55,11 +55,13 @@ public class BillPrintTest extends FinancialTestBase {
             InvoiceDepositRefund depositRefund = EntityFactory.create(InvoiceDepositRefund.class);
             depositRefund.amount().setValue(new BigDecimal("-150.00"));
             depositRefund.description().setValue("Deposit Refund 1");
+            depositRefund.postDate().setValue(FinancialTestsUtils.getDate("2-Mar-2011"));
             bill.lineItems().add(depositRefund);
 
             depositRefund = EntityFactory.create(InvoiceDepositRefund.class);
             depositRefund.amount().setValue(new BigDecimal("-50.00"));
             depositRefund.description().setValue("Deposit Refund 2");
+            depositRefund.postDate().setValue(FinancialTestsUtils.getDate("3-Mar-2011"));
             bill.lineItems().add(depositRefund);
 
             bill.depositRefundAmount().setValue(new BigDecimal("-200.00"));
@@ -70,31 +72,39 @@ public class BillPrintTest extends FinancialTestBase {
             accountCharge.adjustment().executionType().setValue(ExecutionType.immediate);
             accountCharge.amount().setValue(new BigDecimal("250.00"));
             accountCharge.description().setValue("Account Charge");
+            accountCharge.targetDate().setValue(FinancialTestsUtils.getDate("1-Mar-2011"));
             bill.lineItems().add(accountCharge);
 
             InvoiceAccountCredit accountCredit = EntityFactory.create(InvoiceAccountCredit.class);
             accountCredit.adjustment().executionType().setValue(ExecutionType.immediate);
             accountCredit.amount().setValue(new BigDecimal("-50.00"));
             accountCredit.description().setValue("Account Credit");
+            accountCredit.targetDate().setValue(FinancialTestsUtils.getDate("2-Mar-2011"));
             bill.lineItems().add(accountCredit);
 
+            bill.immediateAccountAdjustments().setValue(new BigDecimal("200.00"));
+        }
+
+        {
             InvoiceNSF nsf = EntityFactory.create(InvoiceNSF.class);
             nsf.amount().setValue(new BigDecimal("50.00"));
             nsf.description().setValue("NSF");
             bill.lineItems().add(nsf);
 
-            bill.immediateAccountAdjustments().setValue(new BigDecimal("200.00"));
+            bill.nsfCharges().setValue(new BigDecimal("50.00"));
         }
 
         {
             InvoiceWithdrawal withdrawal = EntityFactory.create(InvoiceWithdrawal.class);
             withdrawal.amount().setValue(new BigDecimal("100.00"));
             withdrawal.description().setValue("Withdrawal 1");
+            withdrawal.postDate().setValue(FinancialTestsUtils.getDate("1-Mar-2011"));
             bill.lineItems().add(withdrawal);
 
             withdrawal = EntityFactory.create(InvoiceWithdrawal.class);
             withdrawal.amount().setValue(new BigDecimal("50.00"));
             withdrawal.description().setValue("Withdrawal 2");
+            withdrawal.postDate().setValue(FinancialTestsUtils.getDate("2-Mar-2011"));
             bill.lineItems().add(withdrawal);
 
             bill.withdrawalAmount().setValue(new BigDecimal("150.00"));
@@ -104,11 +114,13 @@ public class BillPrintTest extends FinancialTestBase {
             InvoicePaymentBackOut paymentBackOut = EntityFactory.create(InvoicePaymentBackOut.class);
             paymentBackOut.amount().setValue(new BigDecimal("200.00"));
             paymentBackOut.description().setValue("Rejected Payment 1");
+            paymentBackOut.postDate().setValue(FinancialTestsUtils.getDate("3-Mar-2011"));
             bill.lineItems().add(paymentBackOut);
 
             paymentBackOut = EntityFactory.create(InvoicePaymentBackOut.class);
             paymentBackOut.amount().setValue(new BigDecimal("500.00"));
             paymentBackOut.description().setValue("Rejected Payment 2");
+            paymentBackOut.postDate().setValue(FinancialTestsUtils.getDate("4-Mar-2011"));
             bill.lineItems().add(paymentBackOut);
 
             bill.paymentRejectedAmount().setValue(new BigDecimal("500.00"));
@@ -118,11 +130,13 @@ public class BillPrintTest extends FinancialTestBase {
             InvoicePayment payment = EntityFactory.create(InvoicePayment.class);
             payment.amount().setValue(new BigDecimal("-300.00"));
             payment.description().setValue("Payment 1");
+            payment.postDate().setValue(FinancialTestsUtils.getDate("5-Mar-2011"));
             bill.lineItems().add(payment);
 
             payment = EntityFactory.create(InvoicePayment.class);
             payment.amount().setValue(new BigDecimal("-400.00"));
             payment.description().setValue("Payment 2");
+            payment.postDate().setValue(FinancialTestsUtils.getDate("6-Mar-2011"));
             bill.lineItems().add(payment);
 
             bill.paymentReceivedAmount().setValue(new BigDecimal("-700.00"));
@@ -133,6 +147,8 @@ public class BillPrintTest extends FinancialTestBase {
 
             productCharge.chargeSubLineItem().amount().setValue(new BigDecimal("800.00"));
             productCharge.chargeSubLineItem().description().setValue("Lease");
+            productCharge.fromDate().setValue(FinancialTestsUtils.getDate("5-Mar-2011"));
+            productCharge.toDate().setValue(FinancialTestsUtils.getDate("5-Apr-2011"));
 
             InvoiceAdjustmentSubLineItem adjustment = EntityFactory.create(InvoiceAdjustmentSubLineItem.class);
             adjustment.amount().setValue(new BigDecimal("50.00"));
@@ -152,6 +168,8 @@ public class BillPrintTest extends FinancialTestBase {
 
             featureCharge.chargeSubLineItem().amount().setValue(new BigDecimal("120.00"));
             featureCharge.chargeSubLineItem().description().setValue("Feature A");
+            featureCharge.fromDate().setValue(FinancialTestsUtils.getDate("6-Mar-2011"));
+            featureCharge.toDate().setValue(FinancialTestsUtils.getDate("6-Apr-2011"));
 
             InvoiceAdjustmentSubLineItem adjustment = EntityFactory.create(InvoiceAdjustmentSubLineItem.class);
             adjustment.amount().setValue(new BigDecimal("-20.00"));
@@ -170,6 +188,8 @@ public class BillPrintTest extends FinancialTestBase {
 
             featureCharge.chargeSubLineItem().amount().setValue(new BigDecimal("70.00"));
             featureCharge.chargeSubLineItem().description().setValue("Feature B");
+            featureCharge.fromDate().setValue(FinancialTestsUtils.getDate("6-Mar-2011"));
+            featureCharge.toDate().setValue(FinancialTestsUtils.getDate("6-Apr-2011"));
 
             adjustment = EntityFactory.create(InvoiceAdjustmentSubLineItem.class);
             adjustment.amount().setValue(new BigDecimal("-20.00"));
@@ -189,6 +209,7 @@ public class BillPrintTest extends FinancialTestBase {
 
             featureCharge.chargeSubLineItem().amount().setValue(new BigDecimal("120.00"));
             featureCharge.chargeSubLineItem().description().setValue("Feature A");
+            featureCharge.fromDate().setValue(FinancialTestsUtils.getDate("6-Mar-2011"));
 
             InvoiceAdjustmentSubLineItem adjustment = EntityFactory.create(InvoiceAdjustmentSubLineItem.class);
             adjustment.amount().setValue(new BigDecimal("-20.00"));
@@ -207,6 +228,7 @@ public class BillPrintTest extends FinancialTestBase {
 
             featureCharge.chargeSubLineItem().amount().setValue(new BigDecimal("100.00"));
             featureCharge.chargeSubLineItem().description().setValue("Feature B");
+            featureCharge.fromDate().setValue(FinancialTestsUtils.getDate("8-Mar-2011"));
 
             featureCharge.productType().setValue(ProductType.oneTimeFeature);
             featureCharge.amount().setValue(new BigDecimal("50.00"));
@@ -221,31 +243,40 @@ public class BillPrintTest extends FinancialTestBase {
             accountCharge.adjustment().executionType().setValue(ExecutionType.pending);
             accountCharge.amount().setValue(new BigDecimal("150.00"));
             accountCharge.description().setValue("Account Charge");
+            accountCharge.targetDate().setValue(FinancialTestsUtils.getDate("8-Mar-2011"));
             bill.lineItems().add(accountCharge);
 
             InvoiceAccountCredit accountCredit = EntityFactory.create(InvoiceAccountCredit.class);
             accountCredit.adjustment().executionType().setValue(ExecutionType.pending);
             accountCredit.amount().setValue(new BigDecimal("-100.00"));
             accountCredit.description().setValue("Account Credit");
+            accountCredit.targetDate().setValue(FinancialTestsUtils.getDate("9-Mar-2011"));
             bill.lineItems().add(accountCredit);
 
+            bill.pendingAccountAdjustments().setValue(new BigDecimal("50.00"));
+        }
+
+        {
             InvoiceLatePaymentFee latePaymentFee = EntityFactory.create(InvoiceLatePaymentFee.class);
             latePaymentFee.amount().setValue(new BigDecimal("50.00"));
             latePaymentFee.description().setValue("Late Payment Fee");
+            latePaymentFee.postDate().setValue(FinancialTestsUtils.getDate("10-Mar-2011"));
             bill.lineItems().add(latePaymentFee);
 
-            bill.pendingAccountAdjustments().setValue(new BigDecimal("150.00"));
+            bill.latePaymentFees().setValue(new BigDecimal("50.00"));
         }
 
         {
             InvoiceDeposit deposit = EntityFactory.create(InvoiceDeposit.class);
             deposit.amount().setValue(new BigDecimal("650.00"));
             deposit.description().setValue("Lease Deposit");
+            deposit.postDate().setValue(FinancialTestsUtils.getDate("01-Mar-2011"));
             bill.lineItems().add(deposit);
 
             deposit = EntityFactory.create(InvoiceDeposit.class);
             deposit.amount().setValue(new BigDecimal("150.00"));
             deposit.description().setValue("Parking Deposit");
+            deposit.postDate().setValue(FinancialTestsUtils.getDate("02-Mar-2011"));
             bill.lineItems().add(deposit);
 
             bill.depositAmount().setValue(new BigDecimal("800.00"));
@@ -255,15 +286,18 @@ public class BillPrintTest extends FinancialTestBase {
             InvoiceProductCredit productCredit = EntityFactory.create(InvoiceProductCredit.class);
             productCredit.amount().setValue(new BigDecimal("-650.00"));
             productCredit.description().setValue("Credit 1");
+            productCredit.postDate().setValue(FinancialTestsUtils.getDate("01-Mar-2011"));
             bill.lineItems().add(productCredit);
 
             productCredit = EntityFactory.create(InvoiceProductCredit.class);
             productCredit.amount().setValue(new BigDecimal("-50.00"));
             productCredit.description().setValue("Credit 2");
+            productCredit.postDate().setValue(FinancialTestsUtils.getDate("02-Mar-2011"));
             bill.lineItems().add(productCredit);
 
             bill.productCreditAmount().setValue(new BigDecimal("-700.00"));
         }
+
         bill.pastDueAmount().setValue(new BigDecimal("950.00"));
 
         bill.currentAmount().setValue(new BigDecimal("1150.00"));

@@ -27,7 +27,6 @@ import com.propertyvista.biz.financial.billing.BillingUtils;
 import com.propertyvista.domain.financial.billing.InvoiceAccountCharge;
 import com.propertyvista.domain.financial.billing.InvoiceAccountCredit;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
-import com.propertyvista.domain.financial.billing.InvoicePayment;
 import com.propertyvista.domain.financial.billing.InvoiceProductCharge;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 
@@ -64,14 +63,6 @@ public class BillPrintScriptlet extends JRDefaultScriptlet {
             }
         }
         return "";
-    }
-
-    public List<InvoicePayment> getPayments(IList<InvoiceLineItem> lineItems) {
-        return BillingUtils.getLineItemsForType(lineItems, InvoicePayment.class);
-    }
-
-    public List<InvoiceLineItem> getPendingLeaseAdjustment(IList<InvoiceLineItem> lineItems) {
-        return getLeaseAdjustment(lineItems, LeaseAdjustment.ExecutionType.pending);
     }
 
     public List<InvoiceLineItem> getImmediateLeaseAdjustment(IList<InvoiceLineItem> lineItems) {

@@ -117,6 +117,9 @@ public class BillingUtils {
         dto.depositRefundLineItems().total().set(bill.depositRefundAmount());
         dto.immediateAccountAdjustmentLineItems().total().set(bill.immediateAccountAdjustments());
         dto.pendingAccountAdjustmentLineItems().total().set(bill.pendingAccountAdjustments());
+        dto.nsfChargeLineItems().total().set(bill.nsfCharges());
+        dto.pendingAccountAdjustmentLineItems().total().set(bill.pendingAccountAdjustments());
+        dto.latePaymentFeeLineItems().total().set(bill.latePaymentFees());
         dto.withdrawalLineItems().total().set(bill.withdrawalAmount());
         dto.rejectedPaymentLineItems().total().set(bill.paymentRejectedAmount());
         dto.paymentLineItems().total().set(bill.paymentReceivedAmount());
@@ -154,9 +157,9 @@ public class BillingUtils {
                     dto.pendingAccountAdjustmentLineItems().lineItems().add(lineItem);
                 }
             } else if (lineItem instanceof InvoiceLatePaymentFee) {
-                dto.pendingAccountAdjustmentLineItems().lineItems().add(lineItem);
+                dto.latePaymentFeeLineItems().lineItems().add(lineItem);
             } else if (lineItem instanceof InvoiceNSF) {
-                dto.immediateAccountAdjustmentLineItems().lineItems().add(lineItem);
+                dto.nsfChargeLineItems().lineItems().add(lineItem);
             } else if (lineItem instanceof InvoiceWithdrawal) {
                 dto.withdrawalLineItems().lineItems().add(lineItem);
             } else if (lineItem instanceof InvoicePayment) {

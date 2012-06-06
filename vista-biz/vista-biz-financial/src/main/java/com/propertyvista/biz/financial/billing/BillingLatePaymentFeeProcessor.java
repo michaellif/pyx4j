@@ -81,7 +81,7 @@ public class BillingLatePaymentFeeProcessor extends AbstractBillingProcessor {
         charge.billingAccount().set(getBillingManager().getNextPeriodBill().billingAccount());
         charge.dueDate().setValue(getBillingManager().getNextPeriodBill().dueDate().getValue());
         charge.amount().setValue(latePaymentFee);
-        charge.taxTotal().setValue(new BigDecimal("0.00"));
+        charge.taxTotal().setValue(BigDecimal.ZERO);
         charge.description().setValue(i18n.tr("Late payment fee"));
         charge.debitType().setValue(DebitType.latePayment);
 
@@ -89,8 +89,8 @@ public class BillingLatePaymentFeeProcessor extends AbstractBillingProcessor {
 
         getBillingManager().getNextPeriodBill().lineItems().add(charge);
 
-        getBillingManager().getNextPeriodBill().pendingAccountAdjustments()
-                .setValue(getBillingManager().getNextPeriodBill().pendingAccountAdjustments().getValue().add(charge.amount().getValue()));
+        getBillingManager().getNextPeriodBill().latePaymentFees()
+                .setValue(getBillingManager().getNextPeriodBill().latePaymentFees().getValue().add(charge.amount().getValue()));
 
     }
 }

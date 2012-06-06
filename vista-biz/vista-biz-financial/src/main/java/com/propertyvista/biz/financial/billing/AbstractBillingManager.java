@@ -67,6 +67,7 @@ abstract class AbstractBillingManager {
         //Set accumulating fields to 0 value
         nextPeriodBill.depositRefundAmount().setValue(BigDecimal.ZERO);
         nextPeriodBill.immediateAccountAdjustments().setValue(BigDecimal.ZERO);
+        nextPeriodBill.nsfCharges().setValue(BigDecimal.ZERO);
         nextPeriodBill.withdrawalAmount().setValue(BigDecimal.ZERO);
         nextPeriodBill.paymentRejectedAmount().setValue(BigDecimal.ZERO);
         nextPeriodBill.paymentReceivedAmount().setValue(BigDecimal.ZERO);
@@ -74,6 +75,7 @@ abstract class AbstractBillingManager {
         nextPeriodBill.recurringFeatureCharges().setValue(BigDecimal.ZERO);
         nextPeriodBill.oneTimeFeatureCharges().setValue(BigDecimal.ZERO);
         nextPeriodBill.pendingAccountAdjustments().setValue(BigDecimal.ZERO);
+        nextPeriodBill.latePaymentFees().setValue(BigDecimal.ZERO);
         nextPeriodBill.depositAmount().setValue(BigDecimal.ZERO);
         nextPeriodBill.productCreditAmount().setValue(BigDecimal.ZERO);
 
@@ -98,17 +100,30 @@ abstract class AbstractBillingManager {
     abstract protected List<AbstractBillingProcessor> initProcessors();
 
     private void calculateTotals() {
+
+        // @formatter:off
+        
         nextPeriodBill.pastDueAmount().setValue(
-                nextPeriodBill.balanceForwardAmount().getValue().add(nextPeriodBill.paymentReceivedAmount().getValue())
-                        .add(nextPeriodBill.paymentRejectedAmount().getValue()).add(nextPeriodBill.immediateAccountAdjustments().getValue())
-                        .add(nextPeriodBill.depositRefundAmount().getValue()).add(nextPeriodBill.withdrawalAmount().getValue()));
+                nextPeriodBill.balanceForwardAmount().getValue().
+                add(nextPeriodBill.paymentReceivedAmount().getValue()).
+                add(nextPeriodBill.paymentRejectedAmount().getValue()).
+                add(nextPeriodBill.immediateAccountAdjustments().getValue()).
+                add(nextPeriodBill.nsfCharges().getValue()).
+                add(nextPeriodBill.depositRefundAmount().getValue()).
+                add(nextPeriodBill.withdrawalAmount().getValue()));
 
         nextPeriodBill.currentAmount().setValue(
-                nextPeriodBill.pastDueAmount().getValue().add(nextPeriodBill.serviceCharge().getValue())
-                        .add(nextPeriodBill.recurringFeatureCharges().getValue()).add(nextPeriodBill.oneTimeFeatureCharges().getValue())
-                        .add(nextPeriodBill.pendingAccountAdjustments().getValue()).add(nextPeriodBill.depositAmount().getValue()));
+                nextPeriodBill.pastDueAmount().getValue().
+                add(nextPeriodBill.serviceCharge().getValue()).
+                add(nextPeriodBill.recurringFeatureCharges().getValue()).
+                add(nextPeriodBill.oneTimeFeatureCharges().getValue()).
+                add(nextPeriodBill.pendingAccountAdjustments().getValue()).
+                add(nextPeriodBill.latePaymentFees().getValue()).
+                add(nextPeriodBill.depositAmount().getValue()));
 
         nextPeriodBill.totalDueAmount().setValue(nextPeriodBill.currentAmount().getValue().add(nextPeriodBill.taxes().getValue()));
+        
+        // @formatter:on
     }
 
     public Bill getNextPeriodBill() {

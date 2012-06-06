@@ -53,6 +53,12 @@ public interface BillDTO extends Bill {
     @Caption(name = "Pending Account Adjustments")
     InvoiceLineItemGroupDTO pendingAccountAdjustmentLineItems();
 
+    @Caption(name = "NSF Charges")
+    InvoiceLineItemGroupDTO nsfChargeLineItems();
+
+    @Caption(name = "Late Payment Fees")
+    InvoiceLineItemGroupDTO latePaymentFeeLineItems();
+
     @Caption(name = "Withdrawals")
     InvoiceLineItemGroupDTO withdrawalLineItems();
 

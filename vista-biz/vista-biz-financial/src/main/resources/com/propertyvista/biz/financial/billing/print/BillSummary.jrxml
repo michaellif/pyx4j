@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Bill1" pageWidth="400" pageHeight="842" columnWidth="380" leftMargin="10" rightMargin="10" topMargin="0" bottomMargin="0" scriptletClass="com.propertyvista.biz.financial.billing.print.BillPrintScriptlet">
-	<property name="ireport.zoom" value="1.6105100000000039"/>
+	<property name="ireport.zoom" value="1.948717100000005"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="110"/>
+	<property name="ireport.y" value="150"/>
 	<field name="billSequenceNumber" class="java.lang.Integer"/>
 	<field name="pastDueAmount" class="java.math.BigDecimal"/>
 	<field name="totalDueAmount" class="java.math.BigDecimal"/>
@@ -14,16 +14,31 @@
 	<field name="paymentRejectedAmount" class="java.math.BigDecimal"/>
 	<field name="depositRefundAmount" class="java.math.BigDecimal"/>
 	<field name="immediateAccountAdjustments" class="java.math.BigDecimal"/>
+	<field name="nsfCharges" class="java.math.BigDecimal"/>
 	<field name="withdrawalAmount" class="java.math.BigDecimal"/>
 	<field name="serviceCharge" class="java.math.BigDecimal"/>
 	<field name="recurringFeatureCharges" class="java.math.BigDecimal"/>
 	<field name="oneTimeFeatureCharges" class="java.math.BigDecimal"/>
 	<field name="depositAmount" class="java.math.BigDecimal"/>
 	<field name="pendingAccountAdjustments" class="java.math.BigDecimal"/>
+	<field name="latePaymentFees" class="java.math.BigDecimal"/>
 	<field name="billingPeriodStartDate" class="com.pyx4j.commons.LogicalDate"/>
 	<field name="billingRun/executionDate" class="com.pyx4j.commons.LogicalDate"/>
 	<field name="billingRun" class="com.propertyvista.domain.financial.billing.BillingRun"/>
 	<field name="dueDate" class="com.pyx4j.commons.LogicalDate"/>
+	<field name="depositRefundLineItems" class="com.propertyvista.dto.InvoiceLineItemGroupDTO"/>
+	<field name="immediateAccountAdjustmentLineItems" class="com.propertyvista.dto.InvoiceLineItemGroupDTO"/>
+	<field name="withdrawalLineItems" class="com.propertyvista.dto.InvoiceLineItemGroupDTO"/>
+	<field name="rejectedPaymentLineItems" class="com.propertyvista.dto.InvoiceLineItemGroupDTO"/>
+	<field name="paymentLineItems" class="com.propertyvista.dto.InvoiceLineItemGroupDTO"/>
+	<field name="serviceChargeLineItems" class="com.propertyvista.dto.InvoiceLineItemGroupDTO"/>
+	<field name="recurringFeatureChargeLineItems" class="com.propertyvista.dto.InvoiceLineItemGroupDTO"/>
+	<field name="onetimeFeatureChargeLineItems" class="com.propertyvista.dto.InvoiceLineItemGroupDTO"/>
+	<field name="pendingAccountAdjustmentLineItems" class="com.propertyvista.dto.InvoiceLineItemGroupDTO"/>
+	<field name="nsfChargeLineItems" class="com.propertyvista.dto.InvoiceLineItemGroupDTO"/>
+	<field name="latePaymentFeeLineItems" class="com.propertyvista.dto.InvoiceLineItemGroupDTO"/>
+	<field name="depositLineItems" class="com.propertyvista.dto.InvoiceLineItemGroupDTO"/>
+	<field name="productCreditLineItems" class="com.propertyvista.dto.InvoiceLineItemGroupDTO"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -68,7 +83,7 @@
 				<reportElement x="0" y="108" width="380" height="1" forecolor="#AFAAAA"/>
 			</line>
 		</band>
-		<band height="190">
+		<band height="50">
 			<staticText>
 				<reportElement x="0" y="4" width="194" height="20"/>
 				<textElement verticalAlignment="Middle">
@@ -81,18 +96,6 @@
 				<textElement verticalAlignment="Middle"/>
 				<text><![CDATA[Previous balance]]></text>
 			</staticText>
-			<staticText>
-				<reportElement x="0" y="125" width="194" height="20"/>
-				<textElement verticalAlignment="Middle"/>
-				<text><![CDATA[Payment(s)]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="0" y="151" width="194" height="20"/>
-				<textElement verticalAlignment="Middle">
-					<font size="12" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Balance from the last bill]]></text>
-			</staticText>
 			<textField>
 				<reportElement x="280" y="30" width="100" height="20"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
@@ -100,85 +103,130 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{balanceForwardAmount}]]></textFieldExpression>
 			</textField>
+		</band>
+		<band height="20">
+			<printWhenExpression><![CDATA[$F{depositRefundLineItems}.lineItems().size()>0]]></printWhenExpression>
 			<textField>
-				<reportElement x="280" y="125" width="100" height="20"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font isBold="false"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{paymentReceivedAmount}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="280" y="151" width="100" height="20"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="12" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA["$ "+$F{pastDueAmount}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="280" y="49" width="100" height="20"/>
+				<reportElement x="280" y="0" width="100" height="20"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{depositRefundAmount}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="0" y="49" width="194" height="20"/>
+				<reportElement x="0" y="0" width="194" height="20"/>
 				<textElement verticalAlignment="Middle"/>
 				<text><![CDATA[Deposit refund(s)]]></text>
 			</staticText>
+		</band>
+		<band height="20">
+			<printWhenExpression><![CDATA[$F{immediateAccountAdjustmentLineItems}.lineItems().size()>0]]></printWhenExpression>
 			<staticText>
-				<reportElement x="0" y="68" width="194" height="20"/>
+				<reportElement x="0" y="0" width="194" height="20"/>
 				<textElement verticalAlignment="Middle"/>
 				<text><![CDATA[Immediate adjustment(s)]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="280" y="68" width="100" height="20"/>
+				<reportElement x="280" y="0" width="100" height="20"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{immediateAccountAdjustments}]]></textFieldExpression>
 			</textField>
-			<line>
-				<reportElement x="320" y="147" width="60" height="1"/>
-				<graphicElement>
-					<pen lineWidth="0.75" lineStyle="Dotted"/>
-				</graphicElement>
-			</line>
-			<textField isStretchWithOverflow="true">
-				<reportElement x="0" y="171" width="320" height="14"/>
-				<textElement markup="none">
-					<font size="8"/>
-				</textElement>
-				<textFieldExpression><![CDATA["Any payments we received and processed after" + $P{REPORT_SCRIPTLET}.formatDate($F{billingRun}.executionDate().getValue()) + " will appear on your next bill"]]></textFieldExpression>
-			</textField>
+		</band>
+		<band height="20">
+			<printWhenExpression><![CDATA[$F{nsfChargeLineItems}.lineItems().size()>0]]></printWhenExpression>
 			<staticText>
-				<reportElement x="0" y="106" width="194" height="20"/>
+				<reportElement x="0" y="0" width="194" height="20"/>
 				<textElement verticalAlignment="Middle"/>
-				<text><![CDATA[Rejected payment(s)]]></text>
+				<text><![CDATA[NSF charges(s)]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="280" y="106" width="100" height="20"/>
+				<reportElement x="280" y="0" width="100" height="20"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font isBold="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{paymentRejectedAmount}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{nsfCharges}]]></textFieldExpression>
 			</textField>
+		</band>
+		<band height="20">
+			<printWhenExpression><![CDATA[$F{withdrawalLineItems}.lineItems().size()>0]]></printWhenExpression>
 			<textField>
-				<reportElement x="280" y="87" width="100" height="20"/>
+				<reportElement x="280" y="0" width="100" height="20"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{withdrawalAmount}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="0" y="87" width="194" height="20"/>
+				<reportElement x="0" y="0" width="194" height="20"/>
 				<textElement verticalAlignment="Middle"/>
 				<text><![CDATA[Withdrawals(s)]]></text>
 			</staticText>
 		</band>
-		<band height="323">
+		<band height="20">
+			<printWhenExpression><![CDATA[$F{rejectedPaymentLineItems}.lineItems().size()>0]]></printWhenExpression>
+			<staticText>
+				<reportElement x="0" y="0" width="194" height="20"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Rejected payment(s)]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="280" y="0" width="100" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{paymentRejectedAmount}]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="20">
+			<printWhenExpression><![CDATA[$F{paymentLineItems}.lineItems().size()>0]]></printWhenExpression>
+			<staticText>
+				<reportElement x="0" y="0" width="194" height="20"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Payment(s)]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="280" y="0" width="100" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{paymentReceivedAmount}]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="20"/>
+		<band height="50">
 			<staticText>
 				<reportElement x="0" y="7" width="194" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Balance from the last bill]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="280" y="7" width="100" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["$ "+$F{pastDueAmount}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="320" y="3" width="60" height="1"/>
+				<graphicElement>
+					<pen lineWidth="0.75" lineStyle="Dotted"/>
+				</graphicElement>
+			</line>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="0" y="27" width="320" height="14"/>
+				<textElement markup="none">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Any payments we received and processed after" + $P{REPORT_SCRIPTLET}.formatDate($F{billingRun}.executionDate().getValue()) + " will appear on your next bill"]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="54">
+			<staticText>
+				<reportElement x="0" y="4" width="194" height="20"/>
 				<textElement verticalAlignment="Middle">
 					<font size="12" isBold="true"/>
 				</textElement>
@@ -189,43 +237,6 @@
 				<textElement verticalAlignment="Middle"/>
 				<text><![CDATA[Lease charges]]></text>
 			</staticText>
-			<staticText>
-				<reportElement x="0" y="53" width="194" height="20"/>
-				<textElement verticalAlignment="Middle"/>
-				<text><![CDATA[Additional recurring charges]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="0" y="72" width="194" height="20"/>
-				<textElement verticalAlignment="Middle"/>
-				<text><![CDATA[One-time charges]]></text>
-			</staticText>
-			<line>
-				<reportElement x="0" y="217" width="380" height="1" forecolor="#AFAAAA"/>
-			</line>
-			<staticText>
-				<reportElement x="111" y="172" width="170" height="20"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle"/>
-				<text><![CDATA[Total (before taxes)]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="111" y="192" width="170" height="20"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle"/>
-				<text><![CDATA[Taxes]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="111" y="223" width="170" height="20"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="12" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Total:]]></text>
-			</staticText>
-			<textField>
-				<reportElement x="280" y="72" width="100" height="20"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font isBold="false"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{oneTimeFeatureCharges}]]></textFieldExpression>
-			</textField>
 			<textField>
 				<reportElement x="280" y="34" width="100" height="20"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
@@ -233,75 +244,144 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{serviceCharge}]]></textFieldExpression>
 			</textField>
+		</band>
+		<band height="20">
+			<printWhenExpression><![CDATA[$F{recurringFeatureChargeLineItems}.lineItems().size()>0]]></printWhenExpression>
+			<staticText>
+				<reportElement x="0" y="0" width="194" height="20"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Additional recurring charges]]></text>
+			</staticText>
 			<textField>
-				<reportElement x="280" y="53" width="100" height="20"/>
+				<reportElement x="280" y="0" width="100" height="20"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{recurringFeatureCharges}]]></textFieldExpression>
 			</textField>
+		</band>
+		<band height="20">
+			<printWhenExpression><![CDATA[$F{onetimeFeatureChargeLineItems}.lineItems().size()>0]]></printWhenExpression>
+			<staticText>
+				<reportElement x="0" y="0" width="194" height="20"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[One-time charges]]></text>
+			</staticText>
 			<textField>
-				<reportElement x="280" y="172" width="100" height="20"/>
+				<reportElement x="280" y="0" width="100" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{oneTimeFeatureCharges}]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="20">
+			<printWhenExpression><![CDATA[$F{pendingAccountAdjustmentLineItems}.lineItems().size()>0]]></printWhenExpression>
+			<staticText>
+				<reportElement x="0" y="0" width="194" height="20"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Adjustment(s)]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="280" y="0" width="100" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{pendingAccountAdjustments}]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="20">
+			<printWhenExpression><![CDATA[$F{latePaymentFeeLineItems}.lineItems().size()>0]]></printWhenExpression>
+			<staticText>
+				<reportElement x="0" y="0" width="194" height="20"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Late payment fee(s)]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="280" y="0" width="100" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{latePaymentFees}]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="20">
+			<printWhenExpression><![CDATA[$F{depositLineItems}.lineItems().size()>0]]></printWhenExpression>
+			<staticText>
+				<reportElement x="0" y="0" width="194" height="20"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Deposit(s)]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="280" y="0" width="100" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{depositAmount}]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="20">
+			<printWhenExpression><![CDATA[$F{productCreditLineItems}.lineItems().size()>0]]></printWhenExpression>
+			<staticText>
+				<reportElement x="0" y="0" width="194" height="20"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Credit(s)]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="280" y="0" width="100" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{productCreditAmount}]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="114">
+			<line>
+				<reportElement x="0" y="53" width="380" height="1" forecolor="#AFAAAA"/>
+			</line>
+			<staticText>
+				<reportElement x="111" y="8" width="170" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<text><![CDATA[Total (before taxes)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="111" y="28" width="170" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<text><![CDATA[Taxes]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="111" y="59" width="170" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="280" y="8" width="100" height="20"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{currentAmount}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="280" y="192" width="100" height="20"/>
+				<reportElement x="280" y="28" width="100" height="20"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{taxes}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="280" y="223" width="100" height="20"/>
+				<reportElement x="280" y="59" width="100" height="20"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="12" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["$ "+$F{totalDueAmount}]]></textFieldExpression>
 			</textField>
 			<line>
-				<reportElement x="0" y="248" width="380" height="1" forecolor="#AFAAAA"/>
+				<reportElement x="0" y="84" width="380" height="1" forecolor="#AFAAAA"/>
 			</line>
-			<staticText>
-				<reportElement x="0" y="91" width="194" height="20"/>
-				<textElement verticalAlignment="Middle"/>
-				<text><![CDATA[Adjustment(s)]]></text>
-			</staticText>
-			<textField>
-				<reportElement x="280" y="91" width="100" height="20"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font isBold="false"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{pendingAccountAdjustments}]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement x="0" y="129" width="194" height="20"/>
-				<textElement verticalAlignment="Middle"/>
-				<text><![CDATA[Credit(s)]]></text>
-			</staticText>
-			<textField>
-				<reportElement x="280" y="129" width="100" height="20"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font isBold="false"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{productCreditAmount}]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement x="0" y="110" width="194" height="20"/>
-				<textElement verticalAlignment="Middle"/>
-				<text><![CDATA[Deposit(s)]]></text>
-			</staticText>
-			<textField>
-				<reportElement x="280" y="110" width="100" height="20"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font isBold="false"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{depositAmount}]]></textFieldExpression>
-			</textField>
 			<line>
-				<reportElement x="320" y="168" width="60" height="1"/>
+				<reportElement x="320" y="4" width="60" height="1"/>
 				<graphicElement>
 					<pen lineWidth="0.75" lineStyle="Dotted"/>
 				</graphicElement>

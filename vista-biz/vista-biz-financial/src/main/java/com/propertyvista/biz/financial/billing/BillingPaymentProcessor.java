@@ -64,6 +64,6 @@ public class BillingPaymentProcessor extends AbstractBillingProcessor {
     private void attachNSF(InvoiceNSF nsf) {
         Bill bill = getBillingManager().getNextPeriodBill();
         bill.lineItems().add(nsf);
-        // bill..setValue(bill.paymentReceivedAmount().getValue().subtract(paymentBackOut.amount().getValue()));
+        bill.nsfCharges().setValue(bill.nsfCharges().getValue().add(nsf.amount().getValue()));
     }
 }
