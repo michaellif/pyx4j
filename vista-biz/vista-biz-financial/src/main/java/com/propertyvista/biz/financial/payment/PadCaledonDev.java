@@ -21,7 +21,15 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.pyx4j.config.server.ApplicationVersion;
+import com.pyx4j.gwt.server.IOUtils;
+
 public class PadCaledonDev {
+
+    private static final Logger log = LoggerFactory.getLogger(ApplicationVersion.class);
 
     static File getFile() {
         return new File(".", "caledon_file_creation_number.properties");
@@ -37,18 +45,18 @@ public class PadCaledonDev {
             out = new BufferedWriter(new FileWriter(getFile()));
             out.write(value);
 
-        } catch (FileNotFoundException ex) {
-            ex.printStackTrace();
-        } catch (IOException ex) {
-            ex.printStackTrace();
+        } catch (FileNotFoundException e) {
+            log.error("Error while saving file creation number", e);
+        } catch (IOException e) {
+            log.error("Error while saving file creation number", e);
         } finally {
             try {
                 if (out != null) {
                     out.flush();
-                    out.close();
+                    IOUtils.closeQuietly(out);
                 }
-            } catch (IOException ex) {
-                ex.printStackTrace();
+            } catch (IOException e) {
+                log.error("Error while closing output stream", e);
             }
         }
     }
@@ -59,21 +67,18 @@ public class PadCaledonDev {
             in = new BufferedReader(new FileReader(getFile()));
             String result;
             if ((result = in.readLine()) != null) {
-                in.close();
+                IOUtils.closeQuietly(in);
                 int number = Integer.parseInt(result);
                 return number;
             }
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            log.error("Error while restoring file creation number", e);
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("Error while restoring file creation number", e);
         } finally {
-            try {
-                if (in != null) {
-                    in.close();
-                }
-            } catch (IOException ex) {
-                ex.printStackTrace();
+
+            if (in != null) {
+                IOUtils.closeQuietly(in);
             }
         }
         return 0;
