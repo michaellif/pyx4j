@@ -134,6 +134,8 @@ public class PmcProcessDispatcherJob implements Job {
             JobUtils.schedulSleepRetry(trigger, scheduledFireTime);
         }
 
+        JobNotifications.notify(trigger, run);
+
     }
 
     private void createPopulation(Run run) {
