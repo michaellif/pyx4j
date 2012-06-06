@@ -14,21 +14,21 @@ import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.admin.domain.scheduler.Notification;
+import com.propertyvista.admin.domain.scheduler.TriggerNotification;
 import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 
-public class NotificationFolder extends VistaBoxFolder<Notification> {
+public class NotificationFolder extends VistaBoxFolder<TriggerNotification> {
 
     private static final I18n i18n = I18n.get(NotificationFolder.class);
 
     public NotificationFolder(boolean modifyable) {
-        super(Notification.class, modifyable);
+        super(TriggerNotification.class, modifyable);
     }
 
     @Override
     public CComponent<?, ?> create(IObject<?> member) {
-        if (member instanceof Notification) {
+        if (member instanceof TriggerNotification) {
             return new NotificationEditor();
         } else {
             return super.create(member);
@@ -36,8 +36,8 @@ public class NotificationFolder extends VistaBoxFolder<Notification> {
     }
 
     @Override
-    public IFolderItemDecorator<Notification> createItemDecorator() {
-        BoxFolderItemDecorator<Notification> decor = new BoxFolderItemDecorator<Notification>(VistaImages.INSTANCE);
+    public IFolderItemDecorator<TriggerNotification> createItemDecorator() {
+        BoxFolderItemDecorator<TriggerNotification> decor = new BoxFolderItemDecorator<TriggerNotification>(VistaImages.INSTANCE);
         decor.setExpended(false);
         return decor;
 

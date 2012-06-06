@@ -13,12 +13,12 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
 import com.propertyvista.admin.client.ui.crud.AdminEntityForm;
-import com.propertyvista.admin.domain.scheduler.Notification;
+import com.propertyvista.admin.domain.scheduler.TriggerNotification;
 
-public class NotificationEditor extends AdminEntityForm<Notification> {
+public class NotificationEditor extends AdminEntityForm<TriggerNotification> {
 
     public NotificationEditor() {
-        super(Notification.class);
+        super(TriggerNotification.class);
     }
 
     @Override

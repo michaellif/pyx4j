@@ -31,7 +31,7 @@ import com.propertyvista.domain.security.AdminUser;
 
 @ToStringFormat("{0} {1}")
 @Table(prefix = "scheduler", namespace = VistaNamespace.adminNamespace)
-public interface Notification extends IEntity {
+public interface TriggerNotification extends IEntity {
 
     @Owner
     @JoinColumn
@@ -45,7 +45,7 @@ public interface Notification extends IEntity {
 
     @ToString
     @NotNull
-    IPrimitive<NotificationEvent> event();
+    IPrimitive<TriggerNotificationEvent> event();
 
     @ToString
     @NotNull

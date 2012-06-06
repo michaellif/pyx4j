@@ -15,6 +15,7 @@ package com.propertyvista.admin.domain.scheduler;
 
 import java.util.Date;
 
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Owned;
@@ -71,7 +72,10 @@ public interface Trigger extends IEntity {
     @Detached(level = AttachLevel.Detached)
     ISet<Run> executions();
 
+    @Caption(description = "Minutes to automatically restart sleeping process")
+    IPrimitive<Integer> sleepRetry();
+
     @Owned
-    IList<Notification> notifications();
+    IList<TriggerNotification> notifications();
 
 }
