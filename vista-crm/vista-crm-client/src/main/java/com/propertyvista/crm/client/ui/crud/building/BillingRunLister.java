@@ -23,12 +23,10 @@ public class BillingRunLister extends ListerBase<BillingRun> {
     public BillingRunLister() {
         super(BillingRun.class, false, false);
         setColumnDescriptors(//@formatter:off
-            new MemberColumnDescriptor.Builder(proto().billingCycle()).build(),
+            new MemberColumnDescriptor.Builder(proto().billingType()).build(),
             new MemberColumnDescriptor.Builder(proto().billingPeriodStartDate()).build(),
             new MemberColumnDescriptor.Builder(proto().billingPeriodEndDate()).build(),
-            new MemberColumnDescriptor.Builder(proto().status()).build(),
-            new MemberColumnDescriptor.Builder(proto().executionTargetDate()).build(),
-            new MemberColumnDescriptor.Builder(proto().executionDate()).build()
+            new MemberColumnDescriptor.Builder(proto().executionTargetDate()).build()
         );//@formatter:on
     }
 }

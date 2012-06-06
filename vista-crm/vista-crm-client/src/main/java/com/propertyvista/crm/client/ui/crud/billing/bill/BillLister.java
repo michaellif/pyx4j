@@ -50,9 +50,8 @@ public class BillLister extends ListerBase<BillDataDTO> {
             new MemberColumnDescriptor.Builder(proto().bill().pastDueAmount(),false).build(),
             new MemberColumnDescriptor.Builder(proto().bill().serviceCharge(),false).build(),
             new MemberColumnDescriptor.Builder(proto().bill().recurringFeatureCharges(),false).build(),
-            new MemberColumnDescriptor.Builder(proto().bill().oneTimeFeatureCharges(),false).build(),
+            new MemberColumnDescriptor.Builder(proto().bill().oneTimeFeatureCharges(),false).build()
             
-            new MemberColumnDescriptor.Builder(proto().bill().billingRun().executionDate()).build()
         );//@formatter:on
     }
 }

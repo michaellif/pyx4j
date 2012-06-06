@@ -23,7 +23,7 @@
 	<field name="pendingAccountAdjustments" class="java.math.BigDecimal"/>
 	<field name="latePaymentFees" class="java.math.BigDecimal"/>
 	<field name="billingPeriodStartDate" class="com.pyx4j.commons.LogicalDate"/>
-	<field name="billingRun/executionDate" class="com.pyx4j.commons.LogicalDate"/>
+	<field name="executionDate" class="com.pyx4j.commons.LogicalDate"/>
 	<field name="billingRun" class="com.propertyvista.domain.financial.billing.BillingRun"/>
 	<field name="dueDate" class="com.pyx4j.commons.LogicalDate"/>
 	<field name="depositRefundLineItems" class="com.propertyvista.dto.InvoiceLineItemGroupDTO"/>
@@ -221,7 +221,7 @@
 				<textElement markup="none">
 					<font size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Any payments we received and processed after" + $P{REPORT_SCRIPTLET}.formatDate($F{billingRun}.executionDate().getValue()) + " will appear on your next bill"]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Any payments we received and processed after" + $P{REPORT_SCRIPTLET}.formatDate($F{executionDate}) + " will appear on your next bill"]]></textFieldExpression>
 			</textField>
 		</band>
 		<band height="54">

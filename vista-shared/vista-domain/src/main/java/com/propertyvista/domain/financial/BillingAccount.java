@@ -31,7 +31,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.ISet;
 
 import com.propertyvista.domain.financial.billing.Bill;
-import com.propertyvista.domain.financial.billing.BillingCycleType;
+import com.propertyvista.domain.financial.billing.BillingType;
 import com.propertyvista.domain.financial.billing.BillingRun;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.domain.financial.billing.LeaseArrearsSnapshot;
@@ -51,7 +51,7 @@ public interface BillingAccount extends IEntity {
     Lease lease();
 
     @ReadOnly(allowOverrideNull = true)
-    BillingCycleType billingCycle();
+    BillingType billingType();
 
     @Length(14)
     @Indexed(uniqueConstraint = true)

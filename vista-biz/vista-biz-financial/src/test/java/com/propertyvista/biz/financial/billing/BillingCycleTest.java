@@ -20,11 +20,11 @@ import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.biz.financial.FinancialTestsUtils;
 import com.propertyvista.config.tests.VistaDBTestBase;
-import com.propertyvista.domain.financial.billing.BillingCycleType;
 import com.propertyvista.domain.financial.billing.BillingRun;
+import com.propertyvista.domain.financial.billing.BillingType;
 import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
 
-public class BillingCycleManagerTest extends VistaDBTestBase {
+public class BillingCycleTest extends VistaDBTestBase {
 
     public void testFirstBillingRun() throws ParseException {
         BillingRun billingRun = createFirstBillingRun(FinancialTestsUtils.getDate("23-Feb-2012"), null, false);
@@ -91,124 +91,124 @@ public class BillingCycleManagerTest extends VistaDBTestBase {
         assertEquals("Billing Execution Target Date", FinancialTestsUtils.getDate("17-Mar-2012"), billingRun.executionTargetDate().getValue());
     }
 
-    private BillingRun createFirstBillingRun(LogicalDate leaseStartDate, Integer billingCycleStartDate, boolean useCycleLeaseDay) {
-        BillingCycleType billingCycle = EntityFactory.create(BillingCycleType.class);
-        billingCycle.paymentFrequency().setValue(PaymentFrequency.Monthly);
-        billingCycle.billingPeriodStartDay().setValue(billingCycleStartDate);
+    private BillingRun createFirstBillingRun(LogicalDate leaseStartDate, Integer billingPeriodStartDay, boolean useCycleLeaseDay) {
+        BillingType billingType = EntityFactory.create(BillingType.class);
+        billingType.paymentFrequency().setValue(PaymentFrequency.Monthly);
+        billingType.billingPeriodStartDay().setValue(billingPeriodStartDay);
 
-        BillingRun billingRun = BillingLifecycleManager.createNewLeaseFirstBillingRun(billingCycle, leaseStartDate, useCycleLeaseDay);
+        BillingRun billingRun = BillingLifecycleManager.createNewLeaseFirstBillingRun(billingType, leaseStartDate, useCycleLeaseDay);
         return billingRun;
     }
 
-    private BillingRun createExistingLeaseInitialBillingRun(LogicalDate leaseStartDate, LogicalDate leaseCreationDate, Integer billingCycleStartDate,
+    private BillingRun createExistingLeaseInitialBillingRun(LogicalDate leaseStartDate, LogicalDate leaseCreationDate, Integer billingPeriodStartDay,
             boolean useCycleLeaseDay) {
-        BillingCycleType billingCycle = EntityFactory.create(BillingCycleType.class);
-        billingCycle.paymentFrequency().setValue(PaymentFrequency.Monthly);
-        billingCycle.billingPeriodStartDay().setValue(billingCycleStartDate);
+        BillingType billingType = EntityFactory.create(BillingType.class);
+        billingType.paymentFrequency().setValue(PaymentFrequency.Monthly);
+        billingType.billingPeriodStartDay().setValue(billingPeriodStartDay);
 
-        BillingRun billingRun = BillingLifecycleManager.createExistingLeaseInitialBillingRun(billingCycle, leaseStartDate, leaseCreationDate, useCycleLeaseDay);
+        BillingRun billingRun = BillingLifecycleManager.createExistingLeaseInitialBillingRun(billingType, leaseStartDate, leaseCreationDate, useCycleLeaseDay);
         return billingRun;
     }
 
     private BillingRun createSubsiquentBillingRun(BillingRun previousBillingRun) {
-        BillingRun billingRun = BillingLifecycleManager.createSubsiquentBillingRun(previousBillingRun.billingCycle(), previousBillingRun);
+        BillingRun billingRun = BillingLifecycleManager.createSubsiquentBillingRun(previousBillingRun.billingType(), previousBillingRun);
         return billingRun;
     }
 
-    public void testBillingCycleStartDayForMonthlyFrequency() throws ParseException {
+    public void testBillingTypeStartDayForMonthlyFrequency() throws ParseException {
         assertEquals("Billing Cycle Start Date", 1,
-                BillDateUtils.calculateBillingCycleStartDay(PaymentFrequency.Monthly, FinancialTestsUtils.getDate("1-Feb-2012")));
+                BillDateUtils.calculateBillingTypeStartDay(PaymentFrequency.Monthly, FinancialTestsUtils.getDate("1-Feb-2012")));
         assertEquals("Billing Cycle Start Date", 23,
-                BillDateUtils.calculateBillingCycleStartDay(PaymentFrequency.Monthly, FinancialTestsUtils.getDate("23-Feb-2012")));
+                BillDateUtils.calculateBillingTypeStartDay(PaymentFrequency.Monthly, FinancialTestsUtils.getDate("23-Feb-2012")));
         assertEquals("Billing Cycle Start Date", 28,
-                BillDateUtils.calculateBillingCycleStartDay(PaymentFrequency.Monthly, FinancialTestsUtils.getDate("28-Feb-2012")));
+                BillDateUtils.calculateBillingTypeStartDay(PaymentFrequency.Monthly, FinancialTestsUtils.getDate("28-Feb-2012")));
         assertEquals("Billing Cycle Start Date", 1,
-                BillDateUtils.calculateBillingCycleStartDay(PaymentFrequency.Monthly, FinancialTestsUtils.getDate("29-Feb-2012")));
+                BillDateUtils.calculateBillingTypeStartDay(PaymentFrequency.Monthly, FinancialTestsUtils.getDate("29-Feb-2012")));
         assertEquals("Billing Cycle Start Date", 24,
-                BillDateUtils.calculateBillingCycleStartDay(PaymentFrequency.Monthly, FinancialTestsUtils.getDate("24-Mar-2012")));
+                BillDateUtils.calculateBillingTypeStartDay(PaymentFrequency.Monthly, FinancialTestsUtils.getDate("24-Mar-2012")));
         assertEquals("Billing Cycle Start Date", 28,
-                BillDateUtils.calculateBillingCycleStartDay(PaymentFrequency.Monthly, FinancialTestsUtils.getDate("28-Mar-2012")));
+                BillDateUtils.calculateBillingTypeStartDay(PaymentFrequency.Monthly, FinancialTestsUtils.getDate("28-Mar-2012")));
         assertEquals("Billing Cycle Start Date", 1,
-                BillDateUtils.calculateBillingCycleStartDay(PaymentFrequency.Monthly, FinancialTestsUtils.getDate("29-Mar-2012")));
+                BillDateUtils.calculateBillingTypeStartDay(PaymentFrequency.Monthly, FinancialTestsUtils.getDate("29-Mar-2012")));
         assertEquals("Billing Cycle Start Date", 1,
-                BillDateUtils.calculateBillingCycleStartDay(PaymentFrequency.Monthly, FinancialTestsUtils.getDate("30-Mar-2012")));
+                BillDateUtils.calculateBillingTypeStartDay(PaymentFrequency.Monthly, FinancialTestsUtils.getDate("30-Mar-2012")));
         assertEquals("Billing Cycle Start Date", 1,
-                BillDateUtils.calculateBillingCycleStartDay(PaymentFrequency.Monthly, FinancialTestsUtils.getDate("31-Mar-2012")));
+                BillDateUtils.calculateBillingTypeStartDay(PaymentFrequency.Monthly, FinancialTestsUtils.getDate("31-Mar-2012")));
         assertEquals("Billing Cycle Start Date", 1,
-                BillDateUtils.calculateBillingCycleStartDay(PaymentFrequency.Monthly, FinancialTestsUtils.getDate("1-Feb-2013")));
+                BillDateUtils.calculateBillingTypeStartDay(PaymentFrequency.Monthly, FinancialTestsUtils.getDate("1-Feb-2013")));
         assertEquals("Billing Cycle Start Date", 23,
-                BillDateUtils.calculateBillingCycleStartDay(PaymentFrequency.Monthly, FinancialTestsUtils.getDate("23-Feb-2013")));
+                BillDateUtils.calculateBillingTypeStartDay(PaymentFrequency.Monthly, FinancialTestsUtils.getDate("23-Feb-2013")));
         assertEquals("Billing Cycle Start Date", 28,
-                BillDateUtils.calculateBillingCycleStartDay(PaymentFrequency.Monthly, FinancialTestsUtils.getDate("28-Feb-2013")));
+                BillDateUtils.calculateBillingTypeStartDay(PaymentFrequency.Monthly, FinancialTestsUtils.getDate("28-Feb-2013")));
 
     }
 
-    public void testBillingCycleStartDayForSemimonthlyFrequency() throws ParseException {
+    public void testBillingTypeStartDayForSemimonthlyFrequency() throws ParseException {
         assertEquals("Billing Cycle Start Date", 1,
-                BillDateUtils.calculateBillingCycleStartDay(PaymentFrequency.SemiMonthly, FinancialTestsUtils.getDate("1-Feb-2012")));
+                BillDateUtils.calculateBillingTypeStartDay(PaymentFrequency.SemiMonthly, FinancialTestsUtils.getDate("1-Feb-2012")));
         assertEquals("Billing Cycle Start Date", 14,
-                BillDateUtils.calculateBillingCycleStartDay(PaymentFrequency.SemiMonthly, FinancialTestsUtils.getDate("14-Feb-2012")));
+                BillDateUtils.calculateBillingTypeStartDay(PaymentFrequency.SemiMonthly, FinancialTestsUtils.getDate("14-Feb-2012")));
         assertEquals("Billing Cycle Start Date", 1,
-                BillDateUtils.calculateBillingCycleStartDay(PaymentFrequency.SemiMonthly, FinancialTestsUtils.getDate("15-Feb-2012")));
+                BillDateUtils.calculateBillingTypeStartDay(PaymentFrequency.SemiMonthly, FinancialTestsUtils.getDate("15-Feb-2012")));
         assertEquals("Billing Cycle Start Date", 9,
-                BillDateUtils.calculateBillingCycleStartDay(PaymentFrequency.SemiMonthly, FinancialTestsUtils.getDate("23-Feb-2012")));
+                BillDateUtils.calculateBillingTypeStartDay(PaymentFrequency.SemiMonthly, FinancialTestsUtils.getDate("23-Feb-2012")));
         assertEquals("Billing Cycle Start Date", 14,
-                BillDateUtils.calculateBillingCycleStartDay(PaymentFrequency.SemiMonthly, FinancialTestsUtils.getDate("28-Feb-2012")));
+                BillDateUtils.calculateBillingTypeStartDay(PaymentFrequency.SemiMonthly, FinancialTestsUtils.getDate("28-Feb-2012")));
         assertEquals("Billing Cycle Start Date", 1,
-                BillDateUtils.calculateBillingCycleStartDay(PaymentFrequency.SemiMonthly, FinancialTestsUtils.getDate("29-Feb-2012")));
+                BillDateUtils.calculateBillingTypeStartDay(PaymentFrequency.SemiMonthly, FinancialTestsUtils.getDate("29-Feb-2012")));
         assertEquals("Billing Cycle Start Date", 14,
-                BillDateUtils.calculateBillingCycleStartDay(PaymentFrequency.SemiMonthly, FinancialTestsUtils.getDate("14-Mar-2012")));
+                BillDateUtils.calculateBillingTypeStartDay(PaymentFrequency.SemiMonthly, FinancialTestsUtils.getDate("14-Mar-2012")));
         assertEquals("Billing Cycle Start Date", 1,
-                BillDateUtils.calculateBillingCycleStartDay(PaymentFrequency.SemiMonthly, FinancialTestsUtils.getDate("15-Mar-2012")));
+                BillDateUtils.calculateBillingTypeStartDay(PaymentFrequency.SemiMonthly, FinancialTestsUtils.getDate("15-Mar-2012")));
         assertEquals("Billing Cycle Start Date", 10,
-                BillDateUtils.calculateBillingCycleStartDay(PaymentFrequency.SemiMonthly, FinancialTestsUtils.getDate("24-Mar-2012")));
+                BillDateUtils.calculateBillingTypeStartDay(PaymentFrequency.SemiMonthly, FinancialTestsUtils.getDate("24-Mar-2012")));
         assertEquals("Billing Cycle Start Date", 14,
-                BillDateUtils.calculateBillingCycleStartDay(PaymentFrequency.SemiMonthly, FinancialTestsUtils.getDate("28-Mar-2012")));
+                BillDateUtils.calculateBillingTypeStartDay(PaymentFrequency.SemiMonthly, FinancialTestsUtils.getDate("28-Mar-2012")));
         assertEquals("Billing Cycle Start Date", 1,
-                BillDateUtils.calculateBillingCycleStartDay(PaymentFrequency.SemiMonthly, FinancialTestsUtils.getDate("29-Mar-2012")));
+                BillDateUtils.calculateBillingTypeStartDay(PaymentFrequency.SemiMonthly, FinancialTestsUtils.getDate("29-Mar-2012")));
         assertEquals("Billing Cycle Start Date", 1,
-                BillDateUtils.calculateBillingCycleStartDay(PaymentFrequency.SemiMonthly, FinancialTestsUtils.getDate("30-Mar-2012")));
+                BillDateUtils.calculateBillingTypeStartDay(PaymentFrequency.SemiMonthly, FinancialTestsUtils.getDate("30-Mar-2012")));
         assertEquals("Billing Cycle Start Date", 1,
-                BillDateUtils.calculateBillingCycleStartDay(PaymentFrequency.SemiMonthly, FinancialTestsUtils.getDate("31-Mar-2012")));
+                BillDateUtils.calculateBillingTypeStartDay(PaymentFrequency.SemiMonthly, FinancialTestsUtils.getDate("31-Mar-2012")));
         assertEquals("Billing Cycle Start Date", 1,
-                BillDateUtils.calculateBillingCycleStartDay(PaymentFrequency.SemiMonthly, FinancialTestsUtils.getDate("1-Feb-2013")));
+                BillDateUtils.calculateBillingTypeStartDay(PaymentFrequency.SemiMonthly, FinancialTestsUtils.getDate("1-Feb-2013")));
         assertEquals("Billing Cycle Start Date", 9,
-                BillDateUtils.calculateBillingCycleStartDay(PaymentFrequency.SemiMonthly, FinancialTestsUtils.getDate("23-Feb-2013")));
+                BillDateUtils.calculateBillingTypeStartDay(PaymentFrequency.SemiMonthly, FinancialTestsUtils.getDate("23-Feb-2013")));
         assertEquals("Billing Cycle Start Date", 14,
-                BillDateUtils.calculateBillingCycleStartDay(PaymentFrequency.SemiMonthly, FinancialTestsUtils.getDate("28-Feb-2013")));
+                BillDateUtils.calculateBillingTypeStartDay(PaymentFrequency.SemiMonthly, FinancialTestsUtils.getDate("28-Feb-2013")));
 
     }
 
-    public void testBillingCycleStartDayForWeeklyFrequency() throws ParseException {
+    public void testBillingTypeStartDayForWeeklyFrequency() throws ParseException {
         assertEquals("Billing Cycle Start Date", 4,
-                BillDateUtils.calculateBillingCycleStartDay(PaymentFrequency.Weekly, FinancialTestsUtils.getDate("1-Feb-2012")));
+                BillDateUtils.calculateBillingTypeStartDay(PaymentFrequency.Weekly, FinancialTestsUtils.getDate("1-Feb-2012")));
         assertEquals("Billing Cycle Start Date", 7,
-                BillDateUtils.calculateBillingCycleStartDay(PaymentFrequency.Weekly, FinancialTestsUtils.getDate("4-Feb-2012")));
+                BillDateUtils.calculateBillingTypeStartDay(PaymentFrequency.Weekly, FinancialTestsUtils.getDate("4-Feb-2012")));
         assertEquals("Billing Cycle Start Date", 1,
-                BillDateUtils.calculateBillingCycleStartDay(PaymentFrequency.Weekly, FinancialTestsUtils.getDate("5-Feb-2012")));
+                BillDateUtils.calculateBillingTypeStartDay(PaymentFrequency.Weekly, FinancialTestsUtils.getDate("5-Feb-2012")));
     }
 
-    public void testBillingCycleStartDayForBiweeklyFrequency() throws ParseException {
+    public void testBillingTypeStartDayForBiweeklyFrequency() throws ParseException {
         assertEquals("Billing Cycle Start Date", 4,
-                BillDateUtils.calculateBillingCycleStartDay(PaymentFrequency.BiWeekly, FinancialTestsUtils.getDate("1-Feb-2012")));
+                BillDateUtils.calculateBillingTypeStartDay(PaymentFrequency.BiWeekly, FinancialTestsUtils.getDate("1-Feb-2012")));
         assertEquals("Billing Cycle Start Date", 7,
-                BillDateUtils.calculateBillingCycleStartDay(PaymentFrequency.BiWeekly, FinancialTestsUtils.getDate("4-Feb-2012")));
+                BillDateUtils.calculateBillingTypeStartDay(PaymentFrequency.BiWeekly, FinancialTestsUtils.getDate("4-Feb-2012")));
         assertEquals("Billing Cycle Start Date", 8,
-                BillDateUtils.calculateBillingCycleStartDay(PaymentFrequency.BiWeekly, FinancialTestsUtils.getDate("5-Feb-2012")));
+                BillDateUtils.calculateBillingTypeStartDay(PaymentFrequency.BiWeekly, FinancialTestsUtils.getDate("5-Feb-2012")));
         assertEquals("Billing Cycle Start Date", 14,
-                BillDateUtils.calculateBillingCycleStartDay(PaymentFrequency.BiWeekly, FinancialTestsUtils.getDate("11-Feb-2012")));
+                BillDateUtils.calculateBillingTypeStartDay(PaymentFrequency.BiWeekly, FinancialTestsUtils.getDate("11-Feb-2012")));
         assertEquals("Billing Cycle Start Date", 1,
-                BillDateUtils.calculateBillingCycleStartDay(PaymentFrequency.BiWeekly, FinancialTestsUtils.getDate("12-Feb-2012")));
+                BillDateUtils.calculateBillingTypeStartDay(PaymentFrequency.BiWeekly, FinancialTestsUtils.getDate("12-Feb-2012")));
         assertEquals("Billing Cycle Start Date", 6,
-                BillDateUtils.calculateBillingCycleStartDay(PaymentFrequency.BiWeekly, FinancialTestsUtils.getDate("1-Feb-2013")));
+                BillDateUtils.calculateBillingTypeStartDay(PaymentFrequency.BiWeekly, FinancialTestsUtils.getDate("1-Feb-2013")));
         assertEquals("Billing Cycle Start Date", 9,
-                BillDateUtils.calculateBillingCycleStartDay(PaymentFrequency.BiWeekly, FinancialTestsUtils.getDate("4-Feb-2013")));
+                BillDateUtils.calculateBillingTypeStartDay(PaymentFrequency.BiWeekly, FinancialTestsUtils.getDate("4-Feb-2013")));
         assertEquals("Billing Cycle Start Date", 10,
-                BillDateUtils.calculateBillingCycleStartDay(PaymentFrequency.BiWeekly, FinancialTestsUtils.getDate("5-Feb-2013")));
+                BillDateUtils.calculateBillingTypeStartDay(PaymentFrequency.BiWeekly, FinancialTestsUtils.getDate("5-Feb-2013")));
         assertEquals("Billing Cycle Start Date", 2,
-                BillDateUtils.calculateBillingCycleStartDay(PaymentFrequency.BiWeekly, FinancialTestsUtils.getDate("11-Feb-2013")));
+                BillDateUtils.calculateBillingTypeStartDay(PaymentFrequency.BiWeekly, FinancialTestsUtils.getDate("11-Feb-2013")));
         assertEquals("Billing Cycle Start Date", 3,
-                BillDateUtils.calculateBillingCycleStartDay(PaymentFrequency.BiWeekly, FinancialTestsUtils.getDate("12-Feb-2013")));
+                BillDateUtils.calculateBillingTypeStartDay(PaymentFrequency.BiWeekly, FinancialTestsUtils.getDate("12-Feb-2013")));
     }
 
 }

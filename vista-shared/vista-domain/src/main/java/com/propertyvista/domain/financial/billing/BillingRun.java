@@ -20,35 +20,14 @@ import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.i18n.annotations.I18n;
-import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.property.asset.building.Building;
 
 @Table(prefix = "billing")
 public interface BillingRun extends IEntity {
 
-    @I18n
-    enum BillingRunStatus {
-
-        Scheduled,
-
-        Running,
-
-        Erred,
-
-        Finished,
-
-        Completed;
-
-        @Override
-        public String toString() {
-            return I18nEnum.toString(this);
-        }
-    };
-
     @ReadOnly
-    BillingCycleType billingCycle();
+    BillingType billingType();
 
     @ReadOnly
     IPrimitive<LogicalDate> billingPeriodStartDate();
@@ -60,14 +39,8 @@ public interface BillingRun extends IEntity {
     @Detached
     Building building();
 
-    IPrimitive<BillingRunStatus> status();
-
     @ReadOnly
     @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> executionTargetDate();
-
-    @ReadOnly
-    @Format("MM/dd/yyyy")
-    IPrimitive<LogicalDate> executionDate();
 
 }

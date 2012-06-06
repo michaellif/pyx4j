@@ -107,6 +107,9 @@ public interface Bill extends IEntity {
     @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> billingPeriodEndDate();
 
+    @Format("MM/dd/yyyy")
+    IPrimitive<LogicalDate> executionDate();
+
     @ToString(index = 2)
     IPrimitive<BillStatus> billStatus();
 

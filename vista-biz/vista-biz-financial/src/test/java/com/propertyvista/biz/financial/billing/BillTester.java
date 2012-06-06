@@ -48,13 +48,13 @@ public class BillTester extends Tester {
         return this;
     }
 
-    public BillTester billingCyclePeriodStartDay(Integer day) {
-        assertEquals("Billing Cycle Period Start Day", day, bill.billingRun().billingCycle().billingPeriodStartDay().getValue());
+    public BillTester billingTypePeriodStartDay(Integer day) {
+        assertEquals("Billing Cycle Period Start Day", day, bill.billingRun().billingType().billingPeriodStartDay().getValue());
         return this;
     }
 
-    public BillTester billingCycleRunTargetDay(Integer day) {
-        assertEquals("Billing Cycle Period Run Target Day", day, bill.billingRun().billingCycle().billingRunTargetDay().getValue());
+    public BillTester billingTypePeriodTargetDay(Integer day) {
+        assertEquals("Billing Cycle Period Run Target Day", day, bill.billingRun().billingType().billingRunTargetDay().getValue());
         return this;
     }
 

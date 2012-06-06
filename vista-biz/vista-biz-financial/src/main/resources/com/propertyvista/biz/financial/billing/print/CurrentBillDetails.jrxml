@@ -5,7 +5,7 @@
 	<property name="ireport.y" value="426"/>
 	<field name="billSequenceNumber" class="java.lang.Integer"/>
 	<field name="billingPeriodStartDate" class="com.pyx4j.commons.LogicalDate"/>
-	<field name="billingRun/executionDate" class="com.pyx4j.commons.LogicalDate"/>
+	<field name="executionDate" class="com.pyx4j.commons.LogicalDate"/>
 	<field name="pastDueAmount" class="java.math.BigDecimal"/>
 	<field name="totalDueAmount" class="java.math.BigDecimal"/>
 	<field name="currentAmount" class="java.math.BigDecimal"/>
@@ -44,7 +44,7 @@
 				<textElement markup="none">
 					<font size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Any service changes made after " + $P{REPORT_SCRIPTLET}.formatDate($F{billingRun/executionDate}) + " will appear on your next bill"]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Any service changes made after " + $P{REPORT_SCRIPTLET}.formatDate($F{executionDate}) + " will appear on your next bill"]]></textFieldExpression>
 			</textField>
 		</band>
 		<band height="30">

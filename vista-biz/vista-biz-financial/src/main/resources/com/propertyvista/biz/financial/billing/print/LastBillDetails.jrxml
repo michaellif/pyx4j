@@ -21,7 +21,6 @@
 	<field name="pendingAccountAdjustments" class="java.math.BigDecimal"/>
 	<field name="lineItems" class="com.pyx4j.entity.shared.IList"/>
 	<field name="billingPeriodStartDate" class="com.pyx4j.commons.LogicalDate"/>
-	<field name="billingRun/executionDate" class="com.pyx4j.commons.LogicalDate"/>
 	<field name="depositRefundLineItems" class="com.propertyvista.dto.InvoiceLineItemGroupDTO"/>
 	<field name="immediateAccountAdjustmentLineItems" class="com.propertyvista.dto.InvoiceLineItemGroupDTO"/>
 	<field name="nsfChargeLineItems" class="com.propertyvista.dto.InvoiceLineItemGroupDTO"/>

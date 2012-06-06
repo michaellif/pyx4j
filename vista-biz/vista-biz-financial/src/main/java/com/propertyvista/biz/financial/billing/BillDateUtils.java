@@ -23,7 +23,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.biz.financial.SysDateManager;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.billing.Bill;
-import com.propertyvista.domain.financial.billing.BillingCycleType;
+import com.propertyvista.domain.financial.billing.BillingType;
 import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
 
 public class BillDateUtils {
@@ -73,7 +73,7 @@ public class BillDateUtils {
      * - for 'monthly' or 'semimonthly' PaymentFrequency and if lease date starts on 29, 30, or 31 we correspond this lease to cycle
      * with billingPeriodStartDay = 1 and prorate days of 29/30/31.
      */
-    public static int calculateBillingCycleStartDay(PaymentFrequency frequency, LogicalDate leaseStartDate) {
+    public static int calculateBillingTypeStartDay(PaymentFrequency frequency, LogicalDate leaseStartDate) {
         int billingPeriodStartDay = 0;
         Calendar calendar = new GregorianCalendar();
         calendar.setTime(leaseStartDate);
@@ -108,7 +108,7 @@ public class BillDateUtils {
         return billingPeriodStartDay;
     }
 
-    public static LogicalDate calculateFirstBillingRunStartDate(BillingCycleType cycle, LogicalDate leaseStartDate, boolean useCyclePeriodStartDay) {
+    public static LogicalDate calculateFirstBillingRunStartDate(BillingType cycle, LogicalDate leaseStartDate, boolean useCyclePeriodStartDay) {
         LogicalDate billingRunStartDate = null;
         if (useCyclePeriodStartDay) {
             switch (cycle.paymentFrequency().getValue()) {
@@ -157,7 +157,7 @@ public class BillDateUtils {
         return new LogicalDate(calendar.getTime());
     }
 
-    public static LogicalDate calculateBillingRunTargetExecutionDate(BillingCycleType cycle, LogicalDate billingRunStartDate) {
+    public static LogicalDate calculateBillingRunTargetExecutionDate(BillingType cycle, LogicalDate billingRunStartDate) {
         Calendar calendar = new GregorianCalendar();
         calendar.setTime(billingRunStartDate);
         calendar.add(Calendar.DATE, -cycle.paymentFrequency().getValue().getBillRunTargetDayOffset());
