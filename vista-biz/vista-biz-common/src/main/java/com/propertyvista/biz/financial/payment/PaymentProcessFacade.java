@@ -17,6 +17,8 @@ import com.pyx4j.commons.LogicalDate;
 
 import com.propertyvista.admin.domain.payment.pad.PadFile;
 import com.propertyvista.admin.domain.payment.pad.PadReconciliationFile;
+import com.propertyvista.domain.StatisticsRecord;
+import com.propertyvista.domain.payment.PaymentType;
 
 public interface PaymentProcessFacade {
 
@@ -33,5 +35,7 @@ public interface PaymentProcessFacade {
     void updatePadFilesProcessingStatus();
 
     String createPreauthorisedPayments(LogicalDate dueDate);
+
+    void processScheduledPayments(StatisticsRecord dynamicStatisticsRecord, PaymentType paymentType);
 
 }

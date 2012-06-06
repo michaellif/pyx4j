@@ -7,18 +7,32 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2012-05-17
+ * Created on 2012-06-06
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.biz.financial.payment;
+package com.propertyvista.domain;
 
-public class TransactionsInfo {
+import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
 
-    public String message;
+@Transient
+public interface StatisticsRecord extends IEntity {
 
-    public int processedRecords;
+    IPrimitive<Long> total();
 
-    public int failedRecords;
+    IPrimitive<Long> processed();
+
+    IPrimitive<Double> amountProcessed();
+
+    IPrimitive<Long> failed();
+
+    IPrimitive<Double> amountFailed();
+
+    @Transient
+    IPrimitive<Long> updateTime();
+
+    IPrimitive<String> message();
 
 }

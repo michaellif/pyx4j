@@ -14,6 +14,7 @@
 package com.propertyvista.server.jobs;
 
 import com.propertyvista.admin.domain.scheduler.PmcProcessType;
+import com.propertyvista.domain.payment.PaymentType;
 
 public class PmcProcessFactory {
 
@@ -23,6 +24,10 @@ public class PmcProcessFactory {
             return new TestPmcProcess();
         case paymentsIssue:
             return new PaymentsIssueProcess();
+        case paymentsScheduledCreditCards:
+            return new PaymentsScheduledProcess(PaymentType.CreditCard);
+        case paymentsScheduledEcheck:
+            return new PaymentsScheduledProcess(PaymentType.Echeck);
         case paymentsPadSend:
             return new PadSendProcess();
         case paymentsPadReciveAcknowledgment:

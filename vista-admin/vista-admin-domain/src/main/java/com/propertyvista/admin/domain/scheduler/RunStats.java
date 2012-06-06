@@ -17,22 +17,24 @@ import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
-import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
+import com.propertyvista.domain.StatisticsRecord;
 import com.propertyvista.domain.VistaNamespace;
 
 @ToStringFormat("Total {0}, Processed {1}, Failed {2}, Avg {3}")
 @Table(prefix = "scheduler", namespace = VistaNamespace.adminNamespace)
-public interface RunStats extends IEntity {
+public interface RunStats extends StatisticsRecord {
 
+    @Override
     @ToString(index = 0)
     IPrimitive<Long> total();
 
+    @Override
     @ToString(index = 1)
     IPrimitive<Long> processed();
 
+    @Override
     @ToString(index = 2)
     IPrimitive<Long> failed();
 
@@ -42,10 +44,5 @@ public interface RunStats extends IEntity {
 
     /** This used for avg calculation **/
     IPrimitive<Long> totalDuration();
-
-    @Transient
-    IPrimitive<Long> updateTime();
-
-    IPrimitive<String> message();
 
 }

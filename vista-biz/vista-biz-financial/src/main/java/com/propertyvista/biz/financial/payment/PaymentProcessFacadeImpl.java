@@ -39,10 +39,12 @@ import com.propertyvista.admin.domain.payment.pad.PadReconciliationFile;
 import com.propertyvista.admin.domain.payment.pad.PadReconciliationSummary;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.billing.BillingFacade;
+import com.propertyvista.domain.StatisticsRecord;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.payment.PaymentMethod;
+import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
@@ -308,4 +310,10 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
             throw new IllegalArgumentException("Invalid PreAuthorized Payment Method:" + paymentRecord.paymentMethod().type().getStringView());
         }
     }
+
+    @Override
+    public void processScheduledPayments(StatisticsRecord dynamicStatisticsRecord, PaymentType paymentType) {
+        // TODO Auto-generated method stub
+    }
+
 }
