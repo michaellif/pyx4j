@@ -18,13 +18,10 @@ import java.util.List;
 import java.util.Vector;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.logical.shared.ValueChangeEvent;
-import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.LogicalDate;
@@ -37,7 +34,6 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.crm.client.ui.board.BoardView;
 import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEvent;
 import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEventHandler;
@@ -68,7 +64,7 @@ public class ArrearsStatusGadget extends AbstractGadget<ArrearsStatusGadgetMetad
         private HTML titleBannerLabel;
 
         public ArrearsStatusGadgetInstance(GadgetMetadata gmd) {
-            super(gmd, ArrearsStatusGadgetMetadata.class, null, LeaseArrearsSnapshotDTO.class, false);
+            super(gmd, ArrearsStatusGadgetMetadata.class, new ArrearsStatusGadgetMetadataForm(), LeaseArrearsSnapshotDTO.class, false);
             service = GWT.<ArrearsReportService> create(ArrearsReportService.class);
         }
 
@@ -105,39 +101,6 @@ public class ArrearsStatusGadget extends AbstractGadget<ArrearsStatusGadgetMetad
 //                    new MemberColumnDescriptor.Builder(proto.lmrToUnitRentDifference()).build()                   
             )));//@formatter:on
             return settings;
-        }
-
-        @Override
-        public ISetup getSetup() {
-            return new SetupFormWrapper(new CEntityDecoratableForm<ArrearsStatusGadgetMetadata>(ArrearsStatusGadgetMetadata.class) {
-                @Override
-                public IsWidget createContent() {
-                    FormFlexPanel p = new FormFlexPanel();
-                    int row = -1;
-                    p.setWidget(++row, 0, new DecoratorBuilder(inject(proto().refreshInterval())).build());
-                    p.setWidget(++row, 0, new DecoratorBuilder(inject(proto().pageSize())).build());
-                    p.setWidget(++row, 0, new DecoratorBuilder(inject(proto().category())).build());
-                    p.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customizeDate())).build());
-                    get(proto().customizeDate()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
-                        @Override
-                        public void onValueChange(ValueChangeEvent<Boolean> event) {
-                            if (event.getValue() != null) {
-                                get(proto().asOf()).setVisible(event.getValue());
-                            }
-                        }
-                    });
-                    p.setWidget(++row, 0, new DecoratorBuilder(inject(proto().asOf())).build());
-                    get(proto().asOf()).setVisible(false);
-                    return p;
-                }
-
-                @Override
-                protected void onPopulate() {
-                    super.onPopulate();
-                    get(proto().asOf()).setVisible(getValue().customizeDate().isBooleanTrue());
-                }
-            });
-
         }
 
         @Override

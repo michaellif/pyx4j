@@ -24,16 +24,11 @@ import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.dom.client.Style.Overflow;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.TimeUtils;
-import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
-import com.pyx4j.forms.client.validators.EditableValueValidator;
-import com.pyx4j.forms.client.validators.ValidationFailure;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.svg.basic.SvgRoot;
 import com.pyx4j.svg.chart.BarChart2D;
@@ -44,7 +39,6 @@ import com.pyx4j.svg.chart.GridBasedChartConfigurator;
 import com.pyx4j.svg.chart.GridBasedChartConfigurator.GridType;
 import com.pyx4j.svg.gwt.SvgFactoryForGwt;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.crm.client.ui.board.BoardView;
 import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEvent;
 import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEventHandler;
@@ -79,7 +73,7 @@ public class ArrearsYOYAnalysisChartGadget extends AbstractGadget<ArrearsYOYAnal
         private final SvgFactoryForGwt factory;
 
         public ArrearsYOYAnalysisChartGadgetInstance(GadgetMetadata gmd) {
-            super(gmd, ArrearsYOYAnalysisChartMetadata.class);
+            super(gmd, ArrearsYOYAnalysisChartMetadata.class, new ArrearsYoyAnalysisGadgetMetadataForm());
             service = GWT.create(ArrearsReportService.class);
             data = null;
             factory = new SvgFactoryForGwt();
@@ -127,39 +121,6 @@ public class ArrearsYOYAnalysisChartGadget extends AbstractGadget<ArrearsYOYAnal
                 @Override
                 public void onBuildingSelectionChanged(BuildingSelectionChangedEvent event) {
                     populate();
-                }
-            });
-        }
-
-        @Override
-        public boolean isSetupable() {
-            return true;
-        }
-
-        @Override
-        public ISetup getSetup() {
-            return new SetupFormWrapper(new CEntityDecoratableForm<ArrearsYOYAnalysisChartMetadata>(ArrearsYOYAnalysisChartMetadata.class) {
-
-                @Override
-                public IsWidget createContent() {
-                    FormFlexPanel p = new FormFlexPanel();
-                    int row = -1;
-                    p.setWidget(++row, 0, new DecoratorBuilder(inject(proto().refreshInterval())).build());
-                    p.setWidget(++row, 0, new DecoratorBuilder(inject(proto().yearsToCompare())).build());
-                    get(proto().yearsToCompare()).addValueValidator(new EditableValueValidator<Integer>() {
-                        @Override
-                        public ValidationFailure isValid(CComponent<Integer, ?> component, Integer value) {
-                            if (value != null & value >= 0) {
-                                if (value > ArrearsReportService.YOY_ANALYSIS_CHART_MAX_YEARS_AGO) {
-                                    return new ValidationFailure(i18n.tr("Please enter a value between 0 and {0}", ArrearsReportService.YOY_ANALYSIS_CHART_MAX_YEARS_AGO));
-                                }
-                                return null;
-                            } else {
-                                return new ValidationFailure(i18n.tr("Non-negative value expected"));
-                            }
-                        }
-                    });
-                    return p;
                 }
             });
         }
