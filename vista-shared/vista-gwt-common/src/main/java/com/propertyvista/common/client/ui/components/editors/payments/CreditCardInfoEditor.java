@@ -78,10 +78,12 @@ public class CreditCardInfoEditor extends CEntityDecoratableForm<CreditCardInfo>
             if (!value.numberRefference().isNull()) {
                 ((CTextComponent<?, ?>) get(proto().number())).setWatermark(i18n.tr("XXXX-XXXX-{0}", value.numberRefference().getValue()));
             } else {
-                ((CTextComponent<?, ?>) get(proto().number())).setWatermark(null);
+                ((CTextComponent<?, ?>) get(proto().number())).setWatermark("XXXX XXXX XXXX XXXX");
             }
+            ((CTextComponent<?, ?>) get(proto().securityCode())).setWatermark("XXX");
         } else {
             get(proto().number()).setValue(i18n.tr("XXXX-XXXX-{0}", value.numberRefference().getValue()));
+            get(proto().securityCode()).setValue("XXX");
         }
     }
 
