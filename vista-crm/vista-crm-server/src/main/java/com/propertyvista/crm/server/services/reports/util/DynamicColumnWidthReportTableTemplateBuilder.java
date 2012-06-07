@@ -24,15 +24,18 @@ import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.Path;
 
+import com.propertyvista.crm.server.services.reports.util.XMLBuilder.ElementBuilder;
 import com.propertyvista.domain.dashboard.gadgets.ColumnDescriptorEntity;
 import com.propertyvista.domain.dashboard.gadgets.type.ListerGadgetBaseMetadata;
 
-public class DynamicColumnWidthReportTableTemplateBuilder extends XMLBuilder {
+public class DynamicColumnWidthReportTableTemplateBuilder {
 
     private enum Styles {
 
         TITLE, SUB_TITLE, TABLE, TABLE_HEADER, TABLE_COLUMN_TITLE, TABLE_ROW;
     }
+
+    private final XMLBuilder xmlBuilder;
 
     private final IEntity proto;
 
@@ -58,6 +61,7 @@ public class DynamicColumnWidthReportTableTemplateBuilder extends XMLBuilder {
         this.proto = proto;
         this.metadata = metadata;
         this.subTitleParams = new LinkedList<String>();
+        this.xmlBuilder = new XMLBuilder();
     }
 
     /**
@@ -69,10 +73,9 @@ public class DynamicColumnWidthReportTableTemplateBuilder extends XMLBuilder {
         return this;
     }
 
-    @Override
     public String build() {
-        this.createTemplate();
-        return super.build();
+        createTemplate();
+        return xmlBuilder.build();
     }
 
     private void createTemplate() {//@formatter:off
@@ -304,7 +307,8 @@ public class DynamicColumnWidthReportTableTemplateBuilder extends XMLBuilder {
     }
 
     private void addColumnTitle(ColumnDescriptorEntity columnDescriptor, Integer offset, Integer width) {//@formatter:off
-        String effectiveTitle = columnDescriptor.title().isNull() ? proto.getMember(columnDescriptor.propertyPath().getValue()).getMeta().getCaption() 
+        IObject<?> member = proto.getMember(new Path(columnDescriptor.propertyPath().getValue()));
+        String effectiveTitle = columnDescriptor.title().isNull() ?  member.getMeta().getCaption()
                                                                   : columnDescriptor.title().getValue();
         elo("textField").attr("isStretchWithOverflow", "true").add();
             el("reportElement")
@@ -315,7 +319,7 @@ public class DynamicColumnWidthReportTableTemplateBuilder extends XMLBuilder {
                     .attr("height", "" + (fontSize + 2))
                     .attr("stretchType", "RelativeToBandHeight")
                     .add();
-            el("textElement").add();
+            el("textElement").attr("textAlignment", textAlignment(member)).add();
             elo("textFieldExpression").add();
                 CDATA("\"" + effectiveTitle +"\"");
             elc("textFieldExpression");
@@ -336,8 +340,7 @@ public class DynamicColumnWidthReportTableTemplateBuilder extends XMLBuilder {
 
     private void addMemberField(ColumnDescriptorEntity columnDescriptor, Integer offset, Integer width) {//@formatter:off
         IObject<?> member = proto.getMember(new Path(columnDescriptor.propertyPath().getValue())); 
-                
-        // 
+  
         ElementBuilder textField = elo("textField").attr("isStretchWithOverflow", "true").attr("isBlankWhenNull", "true");
         String patternExpression = patternExpression(member);
         if (patternExpression != null) {
@@ -352,13 +355,33 @@ public class DynamicColumnWidthReportTableTemplateBuilder extends XMLBuilder {
                     .attr("height", "" + (fontSize + padding))
                     .attr("stretchType", "RelativeToBandHeight")
                     .add();
-            el("textElement").add();
+            el("textElement").attr("textAlignment", textAlignment(member)).add();
             elo("textFieldExpression").add();
                 CDATA(fieldValueExpression(member));
             elc("textFieldExpression");
         elc("textField");
         
     }//@formatter:on
+
+    private XMLBuilder.ElementBuilder elo(String name) {
+        return xmlBuilder.elo(name);
+    }
+
+    private XMLBuilder.ElementBuilder el(String name) {
+        return xmlBuilder.el(name);
+    }
+
+    private void CDATA(String expression) {
+        xmlBuilder.CDATA(expression);
+    }
+
+    private void elc(String name) {
+        xmlBuilder.elc(name);
+    }
+
+    private void elc() {
+        xmlBuilder.elc();
+    }
 
     private static String fieldValueExpression(IObject<?> member) {
         String path = member.getPath().toString();
@@ -409,6 +432,10 @@ public class DynamicColumnWidthReportTableTemplateBuilder extends XMLBuilder {
         } else {
             return null;
         }
+    }
+
+    private static String textAlignment(IObject<?> member) {
+        return Number.class.isAssignableFrom(member.getValueClass()) ? "Right" : "Left";
     }
 
 }

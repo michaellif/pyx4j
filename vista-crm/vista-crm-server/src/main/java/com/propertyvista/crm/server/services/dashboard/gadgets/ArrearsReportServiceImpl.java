@@ -115,8 +115,7 @@ public class ArrearsReportServiceImpl implements ArrearsReportService {
     }
 
     @Override
-    public void summary(AsyncCallback<EntitySearchResult<AgingBuckets>> callback, Vector<Building> selectedBuildingsStubs, LogicalDate asOf,
-            Vector<Sort> sortingCriteria) {
+    public void summary(AsyncCallback<EntitySearchResult<AgingBuckets>> callback, Vector<Building> selectedBuildingsStubs, LogicalDate asOf) {
 
         ARFacade facade = ServerSideFactory.create(ARFacade.class);
 

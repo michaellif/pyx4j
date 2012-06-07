@@ -23,10 +23,14 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.report.JasperReportModel;
 
+import com.propertyvista.crm.server.services.reports.directory.ArrearsStatusReportModelCreator;
+import com.propertyvista.crm.server.services.reports.directory.ArrearsSummaryReportModelCreator;
 import com.propertyvista.crm.server.services.reports.directory.BuildingListerReportCreator;
 import com.propertyvista.crm.server.services.reports.directory.TurnoverAnalysisReportCreator;
 import com.propertyvista.crm.server.services.reports.directory.UnitAvailabilityStatusReportCreator;
 import com.propertyvista.crm.server.services.reports.directory.UnitAvailabilitySummaryReportCreator;
+import com.propertyvista.domain.dashboard.gadgets.type.ArrearsStatusGadgetMetadata;
+import com.propertyvista.domain.dashboard.gadgets.type.ArrearsSummaryGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.AvailabilitySummary;
 import com.propertyvista.domain.dashboard.gadgets.type.BuildingLister;
 import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
@@ -49,6 +53,10 @@ public class ReportModelCreatorDispatcher implements GadgetReportModelCreator {
         map.put(UnitAvailability.class, new UnitAvailabilityStatusReportCreator());
         map.put(AvailabilitySummary.class, new UnitAvailabilitySummaryReportCreator());
         map.put(TurnoverAnalysisMetadata.class, new TurnoverAnalysisReportCreator());
+
+        map.put(ArrearsStatusGadgetMetadata.class, new ArrearsStatusReportModelCreator());
+        map.put(ArrearsSummaryGadgetMetadata.class, new ArrearsSummaryReportModelCreator());
+        // TODO put ArrearsYOYChartGadgetReportModelCreator here
 
         // add more GadgetReportModelCreators here
     }

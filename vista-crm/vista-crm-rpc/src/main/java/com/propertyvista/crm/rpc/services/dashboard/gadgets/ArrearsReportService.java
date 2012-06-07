@@ -35,8 +35,7 @@ public interface ArrearsReportService extends IService {
     void leaseArrearsRoster(AsyncCallback<EntitySearchResult<LeaseArrearsSnapshotDTO>> callback, Vector<Building> selectedBuildingsStubs, LogicalDate asOf,
             DebitType arrearsCategory, Vector<Sort> sortingCriteria, int pageNumber, int pageSize);
 
-    void summary(AsyncCallback<EntitySearchResult<AgingBuckets>> callback, Vector<Building> selectedBuildingsStubs, LogicalDate asOf,
-            Vector<Sort> sortingCriteria);
+    void summary(AsyncCallback<EntitySearchResult<AgingBuckets>> callback, Vector<Building> selectedBuildingsStubs, LogicalDate asOf);
 
     void arrearsMonthlyComparison(AsyncCallback<ArrearsYOYComparisonDataDTO> callback, Vector<Building> buildings, int yearsAgo);
 }

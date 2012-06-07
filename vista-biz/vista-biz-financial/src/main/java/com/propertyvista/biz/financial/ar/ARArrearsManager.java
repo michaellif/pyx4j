@@ -157,8 +157,11 @@ public class ARArrearsManager {
             criteria.add(PropertyCriterion.in(criteria.proto().billingAccount().lease().unit().belongsTo(), new Vector<Building>(buildings)));
         }
 
-        criteria.setPageNumber(pageNumber);
-        criteria.setPageSize(pageSize);
+        // TODO this looks like a hack and i don't like it
+        if (pageSize != Integer.MAX_VALUE) {
+            criteria.setPageNumber(pageNumber);
+            criteria.setPageSize(pageSize);
+        }
 
         criteria.add(PropertyCriterion.ge(criteria.proto().toDate(), asOf));
         criteria.add(PropertyCriterion.le(criteria.proto().fromDate(), asOf));
@@ -170,7 +173,12 @@ public class ARArrearsManager {
 
         EntitySearchResult<LeaseArrearsSnapshot> result = new EntitySearchResult<LeaseArrearsSnapshot>();
         result.setTotalRows(Persistence.service().count(criteria));
-        result.hasMoreData(result.getTotalRows() > (pageSize * pageNumber));
+
+        if (pageSize != Integer.MAX_VALUE) {
+            result.hasMoreData(result.getTotalRows() > (pageSize * pageNumber));
+        } else {
+            result.hasMoreData(false);
+        }
         result.setData(arrearsRoster);
 
         return result;

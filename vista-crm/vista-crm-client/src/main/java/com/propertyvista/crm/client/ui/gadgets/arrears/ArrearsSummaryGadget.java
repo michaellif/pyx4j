@@ -25,7 +25,6 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 
 import com.propertyvista.crm.client.ui.board.BoardView;
 import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEvent;
@@ -104,7 +103,7 @@ public class ArrearsSummaryGadget extends AbstractGadget<ArrearsSummaryGadgetMet
                     public void onFailure(Throwable caught) {
                         populateFailed(caught);
                     }
-                }, new Vector<Building>(containerBoard.getSelectedBuildingsStubs()), getStatusDate(), new Vector<Sort>(getListerSortingCriteria()));
+                }, new Vector<Building>(containerBoard.getSelectedBuildingsStubs()), getStatusDate());
             }
         }
 
