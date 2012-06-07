@@ -82,6 +82,9 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
         if (dto.addThisPaymentMethodToProfile().isBooleanTrue() && PaymentType.avalableInProfile().contains(dto.paymentMethod().type().getValue())) {
             entity.paymentMethod().leaseParticipant().set(dto.leaseParticipant());
         }
+        if (dto.paymentMethod().type().getValue() == PaymentType.Echeck) {
+            entity.paymentMethod().isOneTimePayment().setValue(Boolean.FALSE);
+        }
         ServerSideFactory.create(PaymentFacade.class).persistPayment(entity);
     }
 

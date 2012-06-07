@@ -325,7 +325,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
 
     private void setupAddThisPaymentMethodToProfile(PaymentType paymentType) {
         get(proto().addThisPaymentMethodToProfile()).setEnabled(PaymentType.avalableInProfile().contains(paymentType));
-        get(proto().addThisPaymentMethodToProfile()).setValue(false);
+        get(proto().addThisPaymentMethodToProfile()).setValue(Boolean.FALSE);
         switch (paymentType) {
         case Cash:
         case Check:
@@ -334,7 +334,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
             break;
         case CreditCard:
         case Echeck:
-            get(proto().addThisPaymentMethodToProfile()).setValue(true);
+            get(proto().addThisPaymentMethodToProfile()).setValue(Boolean.TRUE);
             break;
         }
     }
