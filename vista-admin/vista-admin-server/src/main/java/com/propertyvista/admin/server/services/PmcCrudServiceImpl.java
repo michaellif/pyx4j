@@ -154,7 +154,7 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
             Persistence.service().persist(pmc);
             Persistence.service().commit();
         }
-
+        CacheService.reset();
         super.retrieve(callback, entityId, RetrieveTraget.View);
     }
 
@@ -164,6 +164,7 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
         pmc.status().setValue(PmcStatus.Suspended);
         Persistence.service().persist(pmc);
         Persistence.service().commit();
+        CacheService.reset();
 
         PmcDTO dto = createDTO(pmc);
         enhanceRetrieved(pmc, dto);
