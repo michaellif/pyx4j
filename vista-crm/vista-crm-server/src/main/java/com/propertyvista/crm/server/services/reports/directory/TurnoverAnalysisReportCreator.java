@@ -18,20 +18,15 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Vector;
 
-import org.apache.batik.transcoder.TranscoderException;
-import org.apache.batik.transcoder.TranscoderInput;
-import org.apache.batik.transcoder.TranscoderOutput;
-import org.apache.batik.transcoder.image.ImageTranscoder;
-import org.apache.batik.transcoder.image.PNGTranscoder;
-import org.w3c.dom.Document;
-
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.report.JasperReportModel;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.svg.basic.SvgFactory;
 import com.pyx4j.svg.basic.SvgRoot;
+import com.pyx4j.svg.chart.ChartTheme;
 import com.pyx4j.svg.chart.DataSource;
 import com.pyx4j.svg.chart.GridBasedChartConfigurator;
 import com.pyx4j.svg.chart.LineChart;
@@ -41,11 +36,15 @@ import com.pyx4j.svg.j2se.SvgRootImpl;
 import com.propertyvista.crm.server.services.dashboard.gadgets.AvailabilityReportServiceImpl;
 import com.propertyvista.crm.server.services.reports.GadgetReportModelCreator;
 import com.propertyvista.crm.server.services.reports.ReportModelBuilder;
+import com.propertyvista.crm.server.services.reports.util.SvgRasterizer;
+import com.propertyvista.crm.server.services.reports.util.SvgRasterizerImpl;
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitTurnoversPerIntervalDTO;
 import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.TurnoverAnalysisMetadata;
 
 public class TurnoverAnalysisReportCreator implements GadgetReportModelCreator {
+
+    private static final I18n i18n = I18n.get(TurnoverAnalysisReportCreator.class);
 
     private static final SimpleDateFormat MONTH_LABEL_FORMAT = new SimpleDateFormat("MMM-yy");
 
@@ -54,6 +53,8 @@ public class TurnoverAnalysisReportCreator implements GadgetReportModelCreator {
     private static final int HEIGHT = 250;
 
     private static final int WIDTH = 554;
+
+    protected static final String TITLE = "TITLE";
 
     protected static final String GRAPH = "GRAPH";
 
@@ -65,6 +66,10 @@ public class TurnoverAnalysisReportCreator implements GadgetReportModelCreator {
         final LogicalDate asOf = turnoverAnalysisMetadata.customizeDate().isBooleanTrue() ? turnoverAnalysisMetadata.asOf().getValue() : new LogicalDate();
 
         new AvailabilityReportServiceImpl().turnoverAnalysis(new AsyncCallback<Vector<UnitTurnoversPerIntervalDTO>>() {
+
+
+
+
 
             @Override
             public void onSuccess(Vector<UnitTurnoversPerIntervalDTO> data) {
@@ -84,29 +89,19 @@ public class TurnoverAnalysisReportCreator implements GadgetReportModelCreator {
                 SvgFactory factory = new SvgFactoryForBatik();
 
                 GridBasedChartConfigurator config = new GridBasedChartConfigurator(factory, ds, WIDTH, HEIGHT);
-                BufferedImage graph = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
+                config.setTheme(ChartTheme.Bright);
 
                 SvgRoot svgroot = factory.getSvgRoot();
                 ((SvgRootImpl) svgroot).setAttributeNS(null, "width", String.valueOf(WIDTH));
                 ((SvgRootImpl) svgroot).setAttributeNS(null, "height", String.valueOf(HEIGHT));
-
                 svgroot.add(new LineChart(config));
 
-                Document doc = ((SvgRootImpl) svgroot).getDocument();
-
-                BufferedImageTranscoder transcoder = new BufferedImageTranscoder();
-                transcoder.addTranscodingHint(PNGTranscoder.KEY_WIDTH, new Float(WIDTH));
-                transcoder.addTranscodingHint(PNGTranscoder.KEY_HEIGHT, new Float(HEIGHT));
-
-                try {
-                    transcoder.transcode(new TranscoderInput(doc), null);
-                    graph = transcoder.getImage();
-                } catch (TranscoderException exeption) {
-                    throw new RuntimeException(exeption);
-                }
+                SvgRasterizer rasterizer = new SvgRasterizerImpl();
+                BufferedImage graph = rasterizer.rasterize(svgroot, WIDTH, HEIGHT);
 
                 callback.onSuccess(new ReportModelBuilder<TurnoverAnalysisMetadata>(TurnoverAnalysisMetadata.class)//@formatter:off
-                        .param(AS_OF, REPORT_FORMAT.format(asOf))
+                        .param(TITLE, turnoverAnalysisMetadata.getEntityMeta().getCaption())
+                        .param(AS_OF, i18n.tr("As of Date: {0}", REPORT_FORMAT.format(asOf)))
                         .param(GRAPH, graph)
                         .build());//@formatter:on
             }
@@ -119,23 +114,4 @@ public class TurnoverAnalysisReportCreator implements GadgetReportModelCreator {
         }, new Vector<Key>(), asOf);
     }
 
-    public class BufferedImageTranscoder extends ImageTranscoder {
-
-        private BufferedImage image = null;
-
-        @Override
-        public BufferedImage createImage(int width, int height) {
-            BufferedImage bi = new BufferedImage(width, height, BufferedImage.TYPE_4BYTE_ABGR);
-            return bi;
-        }
-
-        @Override
-        public void writeImage(BufferedImage image, TranscoderOutput out) throws TranscoderException {
-            this.image = image;
-        }
-
-        public BufferedImage getImage() {
-            return this.image;
-        }
-    }
 }

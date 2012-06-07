@@ -46,7 +46,7 @@ import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.TurnoverAnalysisMetadata;
 
 // TODO
-public class ArrearsYoyAnalysisCharReportModelCreator implements GadgetReportModelCreator {
+public class ArrearsYoyAnalysisChartReportModelCreator implements GadgetReportModelCreator {
 
     private static final SimpleDateFormat MONTH_LABEL_FORMAT = new SimpleDateFormat("MMM-yy");
 
@@ -94,6 +94,9 @@ public class ArrearsYoyAnalysisCharReportModelCreator implements GadgetReportMod
                 svgroot.add(new LineChart(config));
 
                 Document doc = ((SvgRootImpl) svgroot).getDocument();
+
+//                ImageWriterRegistry.getInstance().register(new PNGImageWriter());
+//                ImageWriterRegistry.getInstance().register();
 
                 BufferedImageTranscoder transcoder = new BufferedImageTranscoder();
                 transcoder.addTranscodingHint(PNGTranscoder.KEY_WIDTH, new Float(WIDTH));

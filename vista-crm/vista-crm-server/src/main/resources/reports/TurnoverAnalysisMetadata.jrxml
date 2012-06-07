@@ -5,22 +5,30 @@
 	<property name="ireport.y" value="0"/>
 	<parameter name="GRAPH" class="java.awt.Image"/>
 	<parameter name="AS_OF" class="java.lang.String"/>
+	<parameter name="TITLE" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="31" splitType="Stretch">
+		<band height="16" splitType="Stretch">
 			<frame>
-				<reportElement x="0" y="0" width="554" height="30"/>
+				<reportElement x="0" y="0" width="554" height="16"/>
 				<box>
-					<pen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth=".5" lineStyle="Solid"/>
 				</box>
-				<textField>
-					<reportElement x="0" y="0" width="553" height="29"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
+				<textField isStretchWithOverflow="true">
+					<reportElement x="0" y="0" width="553" height="1"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
 						<font size="10"/>
 					</textElement>
-					<textFieldExpression><![CDATA["Turnover Analysis as of " + $P{AS_OF}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$P{TITLE}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement x="0" y="11" width="553" height="1" stretchType="RelativeToBandHeight"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font size="6"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{AS_OF}]]></textFieldExpression>
 				</textField>
 			</frame>
 		</band>
@@ -29,9 +37,6 @@
 		<band height="251" splitType="Stretch">
 			<image>
 				<reportElement x="0" y="0" width="554" height="250"/>
-				<box>
-					<pen lineWidth="1.0" lineStyle="Solid"/>
-				</box>
 				<imageExpression><![CDATA[$P{GRAPH}]]></imageExpression>
 			</image>
 		</band>
