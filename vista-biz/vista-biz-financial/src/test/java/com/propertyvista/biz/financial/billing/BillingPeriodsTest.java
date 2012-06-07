@@ -358,6 +358,8 @@ public class BillingPeriodsTest extends FinancialTestBase {
         billingPeriodEndDate(null);
         // @formatter:on
 
+        closeLease();
+
         //==================== RUN after Final ======================//
 
         try {
@@ -498,6 +500,8 @@ public class BillingPeriodsTest extends FinancialTestBase {
         // @formatter:on
 
         assertEquals("Same Billing Cycle", billingTypeId, bill.billingCycle().billingType().id().toString());
+
+        closeLease();
 
         //==================== RUN after final ======================//
 

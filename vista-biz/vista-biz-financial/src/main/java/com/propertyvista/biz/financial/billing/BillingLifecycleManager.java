@@ -157,6 +157,8 @@ public class BillingLifecycleManager {
 
     private static void validateBillingRunPreconditions(BillingCycle billingCycle, BillingAccount billingAccount) {
 
+        Persistence.service().retrieve(billingAccount.lease());
+
         if (billingAccount.lease().version().status().getValue() == Lease.Status.Closed) {
             throw new BillingException("Lease is closed");
         }
