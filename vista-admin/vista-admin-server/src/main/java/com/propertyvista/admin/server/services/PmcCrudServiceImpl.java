@@ -56,6 +56,7 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
         bind(dtoProto.name(), dboProto.name());
         bind(dtoProto.dnsName(), dboProto.dnsName());
         bind(dtoProto.namespace(), dboProto.namespace());
+        bind(dtoProto.onboardingAccountId(), dboProto.onboardingAccountId());
         bind(dtoProto.dnsNameAliases(), dboProto.dnsNameAliases());
         bind(dtoProto.created(), dboProto.created());
     }

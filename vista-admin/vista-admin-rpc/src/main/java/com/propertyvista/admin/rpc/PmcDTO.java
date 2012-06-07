@@ -50,6 +50,10 @@ public interface PmcDTO extends IEntity {
 
     IList<PmcDnsName> dnsNameAliases();
 
+    @ReadOnly
+    @Editor(type = Editor.EditorType.label)
+    IPrimitive<String> onboardingAccountId();
+
     Person person();
 
     @Editor(type = EditorType.email)
