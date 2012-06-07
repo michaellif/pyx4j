@@ -105,11 +105,11 @@ public class BillingLifecycleManager {
 
     static void runBilling(BillingCycle billingCycle, BillingAccount billingAccount) {
 
-        validateBillingRunPreconditions(billingCycle, billingAccount);
-
         Persistence.service().retrieve(billingAccount.lease());
 
         Persistence.service().retrieve(billingAccount.adjustments());
+
+        validateBillingRunPreconditions(billingCycle, billingAccount);
 
         Bill bill = EntityFactory.create(Bill.class);
         try {
