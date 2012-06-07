@@ -13,19 +13,17 @@
  */
 package com.propertyvista.biz.financial.payment;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Properties;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.config.server.ApplicationVersion;
-import com.pyx4j.gwt.server.IOUtils;
 
 public class PadCaledonDev {
 
@@ -35,53 +33,38 @@ public class PadCaledonDev {
         return new File(".", "caledon_file_creation_number.properties");
     }
 
-    public static void saveFileCreationNumber(String companyId, int number) {
-        String value = String.valueOf(number);
+    static Properties getProperties(File file) {
+        Properties props = new Properties();
+        try {
+            props.load(new FileInputStream(getFile()));
+            return props;
+        } catch (FileNotFoundException e) {
+            log.error("File Not Found", e);
+        } catch (IOException e) {
+            log.error("IO Exception", e);
+        }
+        return new Properties();
+    }
 
-        BufferedWriter out = null;
+    public static void saveFileCreationNumber(String companyId, int number) {
+        Properties props = getProperties(getFile());
 
         try {
+            String value = String.valueOf(number);
+            props.setProperty(companyId, value);
+            props.store(new FileOutputStream(getFile()), null);
 
-            out = new BufferedWriter(new FileWriter(getFile()));
-            out.write(value);
-
-        } catch (FileNotFoundException e) {
-            log.error("Error while saving file creation number", e);
         } catch (IOException e) {
             log.error("Error while saving file creation number", e);
-        } finally {
-            try {
-                if (out != null) {
-                    out.flush();
-                    IOUtils.closeQuietly(out);
-                }
-            } catch (IOException e) {
-                log.error("Error while closing output stream", e);
-            }
         }
     }
 
     public static int restoreFileCreationNumber(String companyId) {
-        BufferedReader in = null;
-        try {
-            in = new BufferedReader(new FileReader(getFile()));
-            String result;
-            if ((result = in.readLine()) != null) {
-                IOUtils.closeQuietly(in);
-                int number = Integer.parseInt(result);
-                return number;
-            }
-        } catch (FileNotFoundException e) {
-            log.error("Error while restoring file creation number", e);
-        } catch (IOException e) {
-            log.error("Error while restoring file creation number", e);
-        } finally {
-
-            if (in != null) {
-                IOUtils.closeQuietly(in);
-            }
+        Properties props = getProperties(getFile());
+        String result = props.getProperty(companyId);
+        if (result != null) {
+            return Integer.parseInt(result);
         }
         return 0;
     }
-
 }
