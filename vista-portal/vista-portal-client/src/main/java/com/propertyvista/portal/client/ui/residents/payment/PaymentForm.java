@@ -217,6 +217,7 @@ public class PaymentForm extends CEntityDecoratableForm<PaymentRecordDTO> {
             public void onSuccess(List<PaymentMethod> result) {
                 get(proto().paymentSelect()).setEnabled(!result.isEmpty());
                 get(proto().paymentSelect()).setVisible(!result.isEmpty());
+                get(proto().paymentSelect()).reset();
                 if (result.isEmpty()) {
                     get(proto().paymentSelect()).setValue(PaymentSelect.New, false);
                 } else {

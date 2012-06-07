@@ -271,6 +271,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
                             public void onSuccess(List<PaymentMethod> result) {
                                 get(proto().paymentSelect()).setEnabled(!result.isEmpty());
                                 get(proto().paymentSelect()).setVisible(!result.isEmpty());
+                                get(proto().paymentSelect()).reset();
 
                                 profiledPaymentMethodsCombo.setOptions(result);
                                 profiledPaymentMethodsCombo.setMandatory(true);
