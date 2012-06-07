@@ -57,6 +57,9 @@ public class DevSession {
     }
 
     public static DevSession getSession() {
+        if (Context.getRequest() == null) {
+            return new DevSession();
+        }
         DevSession session = (DevSession) Context.getRequest().getAttribute(DEV_SESSION_REQUEST_ATTRIBUTE);
         if (session == null) {
             session = singleSession;
