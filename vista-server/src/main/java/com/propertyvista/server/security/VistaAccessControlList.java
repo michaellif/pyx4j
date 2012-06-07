@@ -15,14 +15,11 @@ package com.propertyvista.server.security;
 
 import com.pyx4j.entity.rpc.EntityServices;
 import com.pyx4j.entity.security.EntityPermission;
-import com.pyx4j.essentials.rpc.admin.AdminServices;
-import com.pyx4j.essentials.rpc.admin.DatastoreAdminServices;
 import com.pyx4j.log4gwt.rpc.LogServices;
 import com.pyx4j.rpc.shared.IServiceAdapter;
 import com.pyx4j.rpc.shared.IServiceExecutePermission;
 import com.pyx4j.rpc.shared.ServiceExecutePermission;
 import com.pyx4j.security.server.ServletContainerAclBuilder;
-import com.pyx4j.security.shared.CoreBehavior;
 
 import com.propertyvista.admin.server.security.VistaAdminAccessControlList;
 import com.propertyvista.crm.server.security.VistaCrmAccessControlList;
@@ -51,9 +48,6 @@ public class VistaAccessControlList extends ServletContainerAclBuilder {
         merge(new VistaPortalAccessControlList());
         merge(new VistaCrmAccessControlList());
         merge(new VistaAdminAccessControlList());
-
-        grant(CoreBehavior.DEVELOPER, new ServiceExecutePermission(DatastoreAdminServices.class, "*"));
-        grant(CoreBehavior.DEVELOPER, new ServiceExecutePermission(AdminServices.class, "*"));
 
         freeze();
     }
