@@ -103,7 +103,6 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
 
         // some default values:
         dto.paymentStatus().setValue(PaymentStatus.Submitted);
-        dto.paymentSelect().setValue(PaymentSelect.New);
         dto.createdDate().setValue(new LogicalDate());
 
         // calculate current balance:

@@ -25,7 +25,6 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.domain.contact.AddressStructured;
@@ -79,7 +78,7 @@ public class PaymentActivity extends SecurityAwareActivity implements PaymentVie
         srv.save(new DefaultAsyncCallback<PaymentRecordDTO>() {
             @Override
             public void onSuccess(PaymentRecordDTO result) {
-                AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.PaymentMethods());
+                History.back();
             }
         }, paymentmethod);
     }

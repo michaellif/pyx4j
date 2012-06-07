@@ -19,6 +19,7 @@ import java.util.List;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -107,18 +108,18 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
     }
 
     private IsWidget createDetailsPanel() {
-        FormFlexPanel panel = new FormFlexPanel();
-
+        FormFlexPanel left = new FormFlexPanel();
         int row = -1;
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().id(), new CNumberLabel()), 10).build());
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().propertyCode()), 15).build());
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().unitNumber()), 15).build());
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseId()), 10).build());
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseStatus()), 10).build());
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingAccount().accountNumber())).build());
+
+        left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().id(), new CNumberLabel()), 10).build());
+        left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().propertyCode()), 15).build());
+        left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().unitNumber()), 15).build());
+        left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseId()), 10).build());
+        left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseStatus()), 10).build());
+        left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingAccount().accountNumber())).build());
         get(proto().billingAccount().accountNumber()).setViewable(true);
 
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseParticipant(), new CEntitySelectorHyperlink<LeaseParticipant>() {
+        left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseParticipant(), new CEntitySelectorHyperlink<LeaseParticipant>() {
             @Override
             protected AppPlace getTargetPlace() {
                 return AppPlaceEntityMapper.resolvePlace(getValue().getInstanceValueClass(), getValue().getPrimaryKey());
@@ -138,26 +139,28 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
             }
         }), 25).build());
 
-        panel.setWidget(
+        left.setWidget(
                 ++row,
                 0,
                 new DecoratorBuilder(inject(proto().paymentSelect(), new CRadioGroupEnum<PaymentSelect>(PaymentSelect.class, RadioGroup.Layout.HORISONTAL)), 20)
                         .build());
 
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().profiledPaymentMethod(), profiledPaymentMethodsCombo), 25).build());
+        left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().profiledPaymentMethod(), profiledPaymentMethodsCombo), 25).build());
         profiledPaymentMethodsCombo.setMandatory(true);
 
+        FormFlexPanel right = new FormFlexPanel();
         row = -1;
-        panel.setWidget(++row, 1, new DecoratorBuilder(inject(proto().amount()), 10).build());
-        panel.setWidget(++row, 1, new DecoratorBuilder(inject(proto().createdDate()), 10).build());
-        panel.setWidget(++row, 1, new DecoratorBuilder(inject(proto().receivedDate()), 10).build());
-        panel.setWidget(++row, 1, new DecoratorBuilder(inject(proto().targetDate()), 10).build());
-        panel.setWidget(++row, 1, new DecoratorBuilder(inject(proto().finalizeDate()), 10).build());
-        panel.setWidget(++row, 1, new DecoratorBuilder(inject(proto().paymentStatus()), 10).build());
-        panel.setWidget(++row, 1, new DecoratorBuilder(inject(proto().lastStatusChangeDate()), 10).build());
-        panel.setWidget(++row, 1, new DecoratorBuilder(inject(proto().transactionAuthorizationNumber()), 10).build());
-        panel.setWidget(++row, 1, new DecoratorBuilder(inject(proto().transactionErrorMessage()), 20).build());
-        panel.setWidget(++row, 1, new DecoratorBuilder(inject(proto().notes()), 25).build());
+
+        right.setWidget(++row, 1, new DecoratorBuilder(inject(proto().amount()), 10).build());
+        right.setWidget(++row, 1, new DecoratorBuilder(inject(proto().createdDate()), 10).build());
+        right.setWidget(++row, 1, new DecoratorBuilder(inject(proto().receivedDate()), 10).build());
+        right.setWidget(++row, 1, new DecoratorBuilder(inject(proto().targetDate()), 10).build());
+        right.setWidget(++row, 1, new DecoratorBuilder(inject(proto().finalizeDate()), 10).build());
+        right.setWidget(++row, 1, new DecoratorBuilder(inject(proto().paymentStatus()), 10).build());
+        right.setWidget(++row, 1, new DecoratorBuilder(inject(proto().lastStatusChangeDate()), 10).build());
+        right.setWidget(++row, 1, new DecoratorBuilder(inject(proto().transactionAuthorizationNumber()), 10).build());
+        right.setWidget(++row, 1, new DecoratorBuilder(inject(proto().transactionErrorMessage()), 20).build());
+        right.setWidget(++row, 1, new DecoratorBuilder(inject(proto().notes()), 25).build());
 
         // tweak UI:
         get(proto().id()).setViewable(true);
@@ -226,8 +229,16 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
             }
         });
 
+        FormFlexPanel panel = new FormFlexPanel();
+
+        panel.setWidget(0, 0, left);
+        panel.setWidget(0, 1, right);
+        panel.getFlexCellFormatter().setVerticalAlignment(0, 0, HasVerticalAlignment.ALIGN_TOP);
+        panel.getFlexCellFormatter().setVerticalAlignment(0, 1, HasVerticalAlignment.ALIGN_TOP);
+
         panel.getColumnFormatter().setWidth(0, "50%");
         panel.getColumnFormatter().setWidth(1, "50%");
+
         return panel;
     }
 
@@ -279,8 +290,8 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
                                 if (callback != null) {
                                     callback.onSuccess(result);
                                 } else {
-                                    if (result.isEmpty()) {
-                                        get(proto().paymentSelect()).setValue(PaymentSelect.New, false);
+                                    if (getValue().getPrimaryKey() == null) {
+                                        get(proto().paymentSelect()).setValue(PaymentSelect.Profiled, true);
                                     } else {
                                         get(proto().paymentSelect()).setValue(
                                                 getValue().paymentMethod().leaseParticipant().isNull() ? PaymentSelect.New : PaymentSelect.Profiled, false);

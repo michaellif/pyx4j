@@ -218,11 +218,16 @@ public class PaymentForm extends CEntityDecoratableForm<PaymentRecordDTO> {
                 get(proto().paymentSelect()).setEnabled(!result.isEmpty());
                 get(proto().paymentSelect()).setVisible(!result.isEmpty());
                 get(proto().paymentSelect()).reset();
+
                 if (result.isEmpty()) {
-                    get(proto().paymentSelect()).setValue(PaymentSelect.New, false);
+                    get(proto().paymentSelect()).setValue(PaymentSelect.New, getValue().getPrimaryKey() == null);
                 } else {
-                    get(proto().paymentSelect()).setValue(getValue().paymentMethod().leaseParticipant().isNull() ? PaymentSelect.New : PaymentSelect.Profiled,
-                            false);
+                    if (getValue().getPrimaryKey() == null) {
+                        get(proto().paymentSelect()).setValue(PaymentSelect.Profiled, true);
+                    } else {
+                        get(proto().paymentSelect()).setValue(
+                                getValue().paymentMethod().leaseParticipant().isNull() ? PaymentSelect.New : PaymentSelect.Profiled, false);
+                    }
                 }
 
                 profiledPaymentMethodsCombo.setOptions(result);
