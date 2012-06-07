@@ -249,4 +249,8 @@ public class PaymentMethodEditor extends CEntityDecoratableForm<PaymentMethod> {
     protected void onBillingAddressSameAsCurrentOne(boolean set, CComponent<AddressStructured, ?> comp) {
         // Implements meaningful in derived classes...
     }
+
+    public void addTypeSelectionValueChangeHandler(ValueChangeHandler<PaymentType> handler) {
+        get(proto().type()).addValueChangeHandler(handler);
+    }
 }

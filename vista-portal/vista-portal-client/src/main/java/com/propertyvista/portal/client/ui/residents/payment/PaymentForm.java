@@ -100,6 +100,14 @@ public class PaymentForm extends CEntityDecoratableForm<PaymentRecordDTO> {
         paymentMethodEditorSeparator = main.getWidget(1, 0);
         main.setWidget(2, 0, inject(proto().paymentMethod(), paymentMethodEditor));
 
+        // tweaks:
+        paymentMethodEditor.addTypeSelectionValueChangeHandler(new ValueChangeHandler<PaymentType>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<PaymentType> event) {
+                setupAddThisPaymentMethodToProfile(event.getValue());
+            }
+        });
+
         return new ScrollPanel(main);
     }
 
@@ -128,7 +136,7 @@ public class PaymentForm extends CEntityDecoratableForm<PaymentRecordDTO> {
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().profiledPaymentMethod(), profiledPaymentMethodsCombo), 25).build());
         profiledPaymentMethodsCombo.setMandatory(true);
 
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().addThisPaymentMethodToProfile()), 3).labelWidth(20).build());
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().addThisPaymentMethodToProfile()), 5).labelWidth(20).build());
 
         // tweak UI:
         get(proto().id()).setViewable(true);
@@ -240,7 +248,23 @@ public class PaymentForm extends CEntityDecoratableForm<PaymentRecordDTO> {
 
     private void setProfiledPaymentMethodsVisible(boolean visible) {
         profiledPaymentMethodsCombo.setVisible(visible && !isViewable());
-        get(proto().addThisPaymentMethodToProfile()).setVisible(
-                !visible && PaymentType.avalableInProfile().contains(getValue().paymentMethod().type().getValue()) && !isViewable());
+        get(proto().addThisPaymentMethodToProfile()).setVisible(!visible && !isViewable());
+        setupAddThisPaymentMethodToProfile(getValue().paymentMethod().type().getValue());
+    }
+
+    private void setupAddThisPaymentMethodToProfile(PaymentType paymentType) {
+        get(proto().addThisPaymentMethodToProfile()).setEnabled(PaymentType.avalableInProfile().contains(paymentType));
+        get(proto().addThisPaymentMethodToProfile()).setValue(false);
+        switch (paymentType) {
+        case Cash:
+        case Check:
+        case EFT:
+        case Interac:
+            break;
+        case CreditCard:
+        case Echeck:
+            get(proto().addThisPaymentMethodToProfile()).setValue(true);
+            break;
+        }
     }
 }
