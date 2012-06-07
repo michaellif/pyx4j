@@ -13,82 +13,63 @@
  */
 package com.propertyvista.crm.server.services.reports.directory;
 
-import java.util.HashMap;
-import java.util.List;
+import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.entity.report.JasperReportModel;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.crm.rpc.services.building.BuildingCrudService;
 import com.propertyvista.crm.server.services.building.BuildingCrudServiceImpl;
-import com.propertyvista.crm.server.services.reports.AbstractGadgetReportModelCreator;
+import com.propertyvista.crm.server.services.reports.GadgetReportModelCreator;
+import com.propertyvista.crm.server.services.reports.ReportModelBuilder;
 import com.propertyvista.crm.server.services.reports.util.DynamicColumnWidthReportTableTemplateBuilder;
-import com.propertyvista.domain.dashboard.gadgets.ColumnDescriptorEntity;
 import com.propertyvista.domain.dashboard.gadgets.type.BuildingLister;
 import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
 import com.propertyvista.dto.BuildingDTO;
 
-public class BuildingListerReportCreator extends AbstractGadgetReportModelCreator<BuildingLister> {
+public class BuildingListerReportCreator implements GadgetReportModelCreator {
+
+    enum Params {
+
+        TITLE
+
+    }
 
     private final static I18n i18n = I18n.get(BuildingListerReportCreator.class);
 
-    private BuildingLister listerMetadata;
-
-    public BuildingListerReportCreator() {
-        super(BuildingLister.class);
-    }
-
     @Override
-    protected void convert(final AsyncCallback<ConvertedGadgetMetadata> callback, GadgetMetadata gadgetMetadata, List<Key> selectedBuildings) {
-        listerMetadata = (BuildingLister) gadgetMetadata;
+    public void createReportModel(final AsyncCallback<JasperReportModel> callback, GadgetMetadata gadgetMetadata, Vector<Key> selectedBuildings) {
+        final BuildingLister metadata = gadgetMetadata.duplicate(BuildingLister.class);
 
-        BuildingCrudService service = new BuildingCrudServiceImpl();
-
-        service.list(new AsyncCallback<EntitySearchResult<BuildingDTO>>() {
+        new BuildingCrudServiceImpl().list(new AsyncCallback<EntitySearchResult<BuildingDTO>>() {
 
             @Override
             public void onSuccess(EntitySearchResult<BuildingDTO> result) {
+                String reportTemplate = new DynamicColumnWidthReportTableTemplateBuilder(EntityFactory.getEntityPrototype(BuildingDTO.class), metadata).build();
+                JasperReportModel reportModel = new ReportModelBuilder<BuildingLister>(BuildingLister.class)//@formatter:off
+                        .template(reportTemplate)
+                        .param(Params.TITLE.name(), i18n.tr("Building Details"))
+                        .reportData(result.getData().iterator())
+                        .build();//@formatter:on
 
-                // Create map of column properties to names
-                // for columns that appear in the report
-                HashMap<String, String> columns = new HashMap<String, String>();
-                for (ColumnDescriptorEntity column : listerMetadata.columnDescriptors()) {
-                    if (column.isVisible().getValue())
-                        columns.put(column.propertyPath().getValue(), column.title().getValue());
-                }
-
-                HashMap<String, Object> parameters = new HashMap<String, Object>();
-                parameters.put("COLUMNS", columns);
-                parameters.put("TITLE", i18n.tr("Buildings"));
-
-                callback.onSuccess(new ConvertedGadgetMetadata(result.getData(), parameters));
+                callback.onSuccess(reportModel);
             }
 
             @Override
-            public void onFailure(Throwable arg0) {
-                callback.onFailure(arg0);
+            public void onFailure(Throwable caught) {
+                callback.onFailure(caught);
             }
-        }, convertToCriteria(gadgetMetadata.duplicate(BuildingLister.class)));
+
+        }, getSearchCriteria(metadata));
     }
 
-    @Override
-    protected String design() {
-//        return new ReportTableTemplateBuilder(EntityFactory.create(BuildingDTO.class), listerMetadata).generateReportTemplate();
-        return new DynamicColumnWidthReportTableTemplateBuilder(EntityFactory.getEntityPrototype(BuildingDTO.class), listerMetadata).build();
-    }
-
-    @Override
-    protected String designName() {
-        return "" + System.currentTimeMillis() + "-" + super.designName();
-    }
-
-    private EntityListCriteria<BuildingDTO> convertToCriteria(BuildingLister metadata) {
+    private EntityListCriteria<BuildingDTO> getSearchCriteria(BuildingLister metadata) {
         EntityListCriteria<BuildingDTO> criteria = new EntityListCriteria<BuildingDTO>(BuildingDTO.class);
         String sortCoulmn = metadata.primarySortColumn().propertyPath().getValue();
         if (sortCoulmn != null) {
@@ -96,4 +77,5 @@ public class BuildingListerReportCreator extends AbstractGadgetReportModelCreato
         }
         return criteria;
     }
+
 }

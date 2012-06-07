@@ -14,87 +14,70 @@
 package com.propertyvista.crm.server.services.reports.directory;
 
 import java.text.SimpleDateFormat;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.report.JasperReportModel;
 import com.pyx4j.entity.rpc.EntitySearchResult;
-import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.crm.rpc.services.dashboard.gadgets.AvailabilityReportService;
 import com.propertyvista.crm.server.services.dashboard.gadgets.AvailabilityReportServiceImpl;
-import com.propertyvista.crm.server.services.reports.AbstractGadgetReportModelCreator;
+import com.propertyvista.crm.server.services.reports.GadgetReportModelCreator;
+import com.propertyvista.crm.server.services.reports.ReportModelBuilder;
 import com.propertyvista.crm.server.services.reports.util.DynamicColumnWidthReportTableTemplateBuilder;
-import com.propertyvista.domain.dashboard.gadgets.ColumnDescriptorEntity;
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatus;
 import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
-import com.propertyvista.domain.dashboard.gadgets.type.ListerGadgetBaseMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.UnitAvailability;
 
-public class UnitAvailabilityStatusReportCreator extends AbstractGadgetReportModelCreator<UnitAvailability> {
+public class UnitAvailabilityStatusReportCreator implements GadgetReportModelCreator {
+
+    private enum ReportParams {
+
+        TITLE, AS_OF, FILTER_CRITERIA;
+
+    }
 
     private final static I18n i18n = I18n.get(UnitAvailabilityStatusReportCreator.class);
 
-    private static final SimpleDateFormat REPORT_FORMAT = new SimpleDateFormat("dd/MMM/yyyy");
-
-    private ListerGadgetBaseMetadata listerMetadata;
-
-    public UnitAvailabilityStatusReportCreator() {
-        super(UnitAvailability.class);
-    }
+    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd/MMM/yyyy");
 
     @Override
-    protected void convert(final AsyncCallback<ConvertedGadgetMetadata> callback, GadgetMetadata gadgetMetadata, List<Key> selectedBuildings) {
-        listerMetadata = (ListerGadgetBaseMetadata) gadgetMetadata;
-        final UnitAvailability metadata = (UnitAvailability) gadgetMetadata;
+    public void createReportModel(final AsyncCallback<JasperReportModel> callback, GadgetMetadata gadgetMetadata, Vector<Key> selectedBuildings) {
+
+        final UnitAvailability metadata = gadgetMetadata.duplicate(UnitAvailability.class);
         final LogicalDate asOf = metadata.customizeDate().isBooleanTrue() ? metadata.asOf().getValue() : new LogicalDate();
 
-        AvailabilityReportService service = new AvailabilityReportServiceImpl();
+        new AvailabilityReportServiceImpl().unitStatusList(new AsyncCallback<EntitySearchResult<UnitAvailabilityStatus>>() {
 
-        service.unitStatusList(new AsyncCallback<EntitySearchResult<UnitAvailabilityStatus>>() {
+
             @Override
-            public void onSuccess(EntitySearchResult<UnitAvailabilityStatus> result) {
+            public void onSuccess(EntitySearchResult<UnitAvailabilityStatus> result) {                
+                //@formatter:off
+                String template = new DynamicColumnWidthReportTableTemplateBuilder(EntityFactory.getEntityPrototype(UnitAvailabilityStatus.class), metadata)
+                        .defSubTitle(ReportParams.FILTER_CRITERIA.name())
+                        .defSubTitle(ReportParams.AS_OF.name())
+                        .build();
+                //@formatter:on
 
-                // Create map of column properties to names
-                // for columns that appear in the report
-                HashMap<String, String> columns = new HashMap<String, String>();
-                Persistence.service().retrieve(metadata.columnDescriptors());
-                for (ColumnDescriptorEntity column : metadata.columnDescriptors()) {
-                    if (column.isVisible().getValue())
-                        columns.put(column.propertyPath().getValue(), column.title().getValue());
-                }
-
-                HashMap<String, Object> parameters = new HashMap<String, Object>();
-                parameters.put("TITLE", i18n.tr("Unit Availability Status"));
-                parameters.put("FILTER_CRITERIA", i18n.tr("Filter Setting: {0}", metadata.filterPreset().getValue().toString()));
-                parameters.put("AS_OF", i18n.tr("As of Date: {0}", REPORT_FORMAT.format(asOf)));
-
-                callback.onSuccess(new ConvertedGadgetMetadata(result.getData(), parameters));
+                callback.onSuccess(new ReportModelBuilder<UnitAvailability>(UnitAvailability.class)//@formatter:off
+                        .template(template)
+                        .param(ReportParams.TITLE.name(), i18n.tr("Unit Availability Status"))
+                        .param(ReportParams.FILTER_CRITERIA.name(), i18n.tr("Filter Setting: {0}", metadata.filterPreset().getValue().toString()))
+                        .param(ReportParams.AS_OF.name(), i18n.tr("As of Date: {0}", DATE_FORMAT.format(asOf)))
+                        .reportData(result.getData().iterator())
+                        .build());//@formatter:on
             }
 
             @Override
-            public void onFailure(Throwable arg0) {
-                callback.onFailure(arg0);
+            public void onFailure(Throwable caught) {
+                callback.onFailure(caught);
             }
+
         }, new Vector<Key>(selectedBuildings), metadata.filterPreset().getValue(), asOf, new Vector<Sort>(), 0, Integer.MAX_VALUE);
     }
-
-    @Override
-    protected String design() {
-        return new DynamicColumnWidthReportTableTemplateBuilder(EntityFactory.getEntityPrototype(UnitAvailabilityStatus.class), listerMetadata)
-                .defSubTitle("FILTER_CRITERIA").defSubTitle("AS_OF").build();
-    }
-
-    @Override
-    protected String designName() {
-        return "" + System.currentTimeMillis() + "-" + super.designName();
-    }
-
 }

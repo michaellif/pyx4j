@@ -39,23 +39,23 @@ public class ReportModelCreatorDispatcher implements GadgetReportModelCreator {
 
     private static volatile ReportModelCreatorDispatcher instance = null;
 
-    Map<Class<? extends GadgetMetadata>, AbstractGadgetReportModelCreator<?>> map;
+    Map<Class<? extends GadgetMetadata>, GadgetReportModelCreator> map;
 
     private ReportModelCreatorDispatcher() {
-        map = new ConcurrentHashMap<Class<? extends GadgetMetadata>, AbstractGadgetReportModelCreator<?>>();
+        map = new ConcurrentHashMap<Class<? extends GadgetMetadata>, GadgetReportModelCreator>();
 
         map.put(BuildingLister.class, new BuildingListerReportCreator());
 
-        map.put(TurnoverAnalysisMetadata.class, new TurnoverAnalysisReportCreator());
         map.put(UnitAvailability.class, new UnitAvailabilityStatusReportCreator());
         map.put(AvailabilitySummary.class, new UnitAvailabilitySummaryReportCreator());
+        map.put(TurnoverAnalysisMetadata.class, new TurnoverAnalysisReportCreator());
 
         // add more GadgetReportModelCreators here
     }
 
     @Override
     public void createReportModel(AsyncCallback<JasperReportModel> callback, GadgetMetadata gadgetMetadata, Vector<Key> selectedBuildings) {
-        AbstractGadgetReportModelCreator<?> creator = map.get(gadgetMetadata.getInstanceValueClass());
+        GadgetReportModelCreator creator = map.get(gadgetMetadata.getInstanceValueClass());
 
         if (creator != null) {
             creator.createReportModel(callback, gadgetMetadata, selectedBuildings);

@@ -16,8 +16,6 @@ package com.propertyvista.crm.server.services.reports.directory;
 import java.awt.image.BufferedImage;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Vector;
 
 import org.apache.batik.transcoder.TranscoderException;
@@ -31,6 +29,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.report.JasperReportModel;
 import com.pyx4j.svg.basic.SvgFactory;
 import com.pyx4j.svg.basic.SvgRoot;
 import com.pyx4j.svg.chart.DataSource;
@@ -39,14 +38,14 @@ import com.pyx4j.svg.chart.LineChart;
 import com.pyx4j.svg.j2se.SvgFactoryForBatik;
 import com.pyx4j.svg.j2se.SvgRootImpl;
 
-import com.propertyvista.crm.rpc.services.dashboard.gadgets.AvailabilityReportService;
 import com.propertyvista.crm.server.services.dashboard.gadgets.AvailabilityReportServiceImpl;
-import com.propertyvista.crm.server.services.reports.AbstractGadgetReportModelCreator;
+import com.propertyvista.crm.server.services.reports.GadgetReportModelCreator;
+import com.propertyvista.crm.server.services.reports.ReportModelBuilder;
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitTurnoversPerIntervalDTO;
 import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.TurnoverAnalysisMetadata;
 
-public class TurnoverAnalysisReportCreator extends AbstractGadgetReportModelCreator<TurnoverAnalysisMetadata> {
+public class TurnoverAnalysisReportCreator implements GadgetReportModelCreator {
 
     private static final SimpleDateFormat MONTH_LABEL_FORMAT = new SimpleDateFormat("MMM-yy");
 
@@ -60,24 +59,12 @@ public class TurnoverAnalysisReportCreator extends AbstractGadgetReportModelCrea
 
     protected static final String AS_OF = "AS_OF";
 
-    public TurnoverAnalysisReportCreator() {
-        super(TurnoverAnalysisMetadata.class);
-    }
-
     @Override
-    protected void convert(
-            final AsyncCallback<com.propertyvista.crm.server.services.reports.AbstractGadgetReportModelCreator.ConvertedGadgetMetadata> callback,
-            GadgetMetadata gadgetMetadata, List<Key> selectedBuildings) {
+    public void createReportModel(final AsyncCallback<JasperReportModel> callback, GadgetMetadata gadgetMetadata, Vector<Key> selectedBuildings) {
         final TurnoverAnalysisMetadata turnoverAnalysisMetadata = (TurnoverAnalysisMetadata) gadgetMetadata;
         final LogicalDate asOf = turnoverAnalysisMetadata.customizeDate().isBooleanTrue() ? turnoverAnalysisMetadata.asOf().getValue() : new LogicalDate();
 
-        AvailabilityReportService service = new AvailabilityReportServiceImpl();
-
-        service.turnoverAnalysis(new AsyncCallback<Vector<UnitTurnoversPerIntervalDTO>>() {
-
-            @Override
-            public void onFailure(Throwable arg0) {
-            }
+        new AvailabilityReportServiceImpl().turnoverAnalysis(new AsyncCallback<Vector<UnitTurnoversPerIntervalDTO>>() {
 
             @Override
             public void onSuccess(Vector<UnitTurnoversPerIntervalDTO> data) {
@@ -117,13 +104,18 @@ public class TurnoverAnalysisReportCreator extends AbstractGadgetReportModelCrea
                 } catch (TranscoderException exeption) {
                     throw new RuntimeException(exeption);
                 }
-                HashMap<String, Object> parameters = new HashMap<String, Object>();
 
-                parameters.put(AS_OF, REPORT_FORMAT.format(asOf));
-                parameters.put(GRAPH, graph);
-
-                callback.onSuccess(new ConvertedGadgetMetadata(null, parameters));
+                callback.onSuccess(new ReportModelBuilder<TurnoverAnalysisMetadata>(TurnoverAnalysisMetadata.class)//@formatter:off
+                        .param(AS_OF, REPORT_FORMAT.format(asOf))
+                        .param(GRAPH, graph)
+                        .build());//@formatter:on
             }
+
+            @Override
+            public void onFailure(Throwable arg0) {
+                callback.onFailure(arg0);
+            }
+
         }, new Vector<Key>(), asOf);
     }
 
