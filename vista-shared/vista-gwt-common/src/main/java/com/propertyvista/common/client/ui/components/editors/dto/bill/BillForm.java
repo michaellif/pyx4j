@@ -49,18 +49,18 @@ public class BillForm extends CEntityDecoratableForm<BillDTO> {
         int row = -1;
 
         top.setH1(++row, 0, 2, i18n.tr("Info"));
-        top.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingAccount().lease().unit()), 20).build());
-        top.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingCycle().building()), 20).build());
-        top.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingCycle().billingPeriodStartDate()), 20).build());
-        top.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingCycle().billingPeriodEndDate()), 20).build());
-        top.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingCycle().billingType().paymentFrequency()), 20).build());
-        top.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingCycle().executionTargetDate()), 20).build());
+        top.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingAccount().lease().unit())).build());
+        top.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingCycle().building())).build());
+        top.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingCycle().billingPeriodStartDate())).build());
+        top.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingCycle().billingPeriodEndDate())).build());
+        top.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingCycle().billingType().paymentFrequency())).build());
+        top.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingCycle().executionTargetDate())).build());
 
         top.setH1(++row, 0, 2, i18n.tr("Status"));
-        top.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billSequenceNumber()), 20).build());
-        top.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billType()), 20).build());
-        top.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billStatus()), 20).build());
-        top.setWidget(++row, 0, new DecoratorBuilder(inject(proto().rejectReason()), 20).build());
+        top.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billSequenceNumber())).build());
+        top.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billType())).build());
+        top.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billStatus())).build());
+        top.setWidget(++row, 0, new DecoratorBuilder(inject(proto().rejectReason())).build());
 
         // form bottom panel:
         FormFlexPanel bottom = new FormFlexPanel();
@@ -91,6 +91,7 @@ public class BillForm extends CEntityDecoratableForm<BillDTO> {
         bottom.setHR(++row, 0, 2);
         bottom.setWidget(++row, 0, new DecoratorBuilder(inject(proto().totalDueAmount())).build());
 
+        top.getColumnFormatter().setWidth(1, "200px");
         bottom.getColumnFormatter().setWidth(0, "50%");
         bottom.getColumnFormatter().setWidth(1, "50%");
 
@@ -118,14 +119,6 @@ public class BillForm extends CEntityDecoratableForm<BillDTO> {
             labelAlignment(Alignment.left);
             useLabelSemicolon(false);
             componentWidth(30);
-        }
-
-        public DecoratorBuilder(CComponent<?, ?> component, double componentWidth) {
-            super(component);
-            readOnlyMode(!isEditable());
-            componentWidth(componentWidth);
-            componentAlignment(Alignment.right);
-            labelAlignment(Alignment.left);
         }
     }
 }
