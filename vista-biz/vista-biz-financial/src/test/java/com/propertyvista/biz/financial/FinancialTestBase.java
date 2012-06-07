@@ -39,6 +39,7 @@ import com.propertyvista.biz.financial.billing.print.BillPrint;
 import com.propertyvista.biz.financial.preload.ARPolicyDataModel;
 import com.propertyvista.biz.financial.preload.BuildingDataModel;
 import com.propertyvista.biz.financial.preload.IdAssignmentPolicyDataModel;
+import com.propertyvista.biz.financial.preload.LeaseAdjustmentPolicyDataModel;
 import com.propertyvista.biz.financial.preload.LeaseAdjustmentReasonDataModel;
 import com.propertyvista.biz.financial.preload.LeaseBillingPolicyDataModel;
 import com.propertyvista.biz.financial.preload.LeaseDataModel;
@@ -115,6 +116,10 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
 
         ProductTaxPolicyDataModel productTaxPolicyDataModel = new ProductTaxPolicyDataModel(productItemTypesDataModel, taxesDataModel, buildingDataModel);
         productTaxPolicyDataModel.generate(true);
+
+        LeaseAdjustmentPolicyDataModel leaseAdjustmentPolicyDataModel = new LeaseAdjustmentPolicyDataModel(leaseAdjustmentReasonDataModel, taxesDataModel,
+                buildingDataModel);
+        leaseAdjustmentPolicyDataModel.generate(true);
 
         TenantDataModel tenantDataModel = new TenantDataModel();
         tenantDataModel.generate(true);
@@ -379,7 +384,6 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         Lease lease = retrieveLease();
 
         LeaseAdjustment adjustment = EntityFactory.create(LeaseAdjustment.class);
-        adjustment.targetDate().setValue(new LogicalDate(lease.leaseFrom().getValue()));
         adjustment.status().setValue(Status.submited);
         adjustment.amount().setValue(new BigDecimal(amount));
         adjustment.executionType().setValue(targetDate == null ? LeaseAdjustment.ExecutionType.immediate : LeaseAdjustment.ExecutionType.pending);

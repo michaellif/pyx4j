@@ -38,7 +38,7 @@ public class BillingLatePaymentScenarioTest extends FinancialTestBase {
 
     public void testScenario() {
 
-        initLease("01-Apr-2011", "31-Aug-2011", 1);
+        initLease("01-Apr-2011", "31-Oct-2011", 1);
 
         //==================== First Bill ======================//
 
@@ -92,10 +92,10 @@ public class BillingLatePaymentScenarioTest extends FinancialTestBase {
         // Add Payment for May (full)
         SysDateManager.setSysDate("30-Apr-2011");
         receiveAndPostPayment("30-Apr-2011", "1041.94");
-        // add some immediate charges - should see late payment fee
+        // add some immediate charges (taxable) - should see late payment fee
         addBooking("28-Apr-2011", SaveAction.saveAsFinal);
         addAccountCharge("100.00");
-
+        // post credit after due date - too late to avoid late charges
         SysDateManager.setSysDate("02-May-2011");
         addGoodWillCredit("300.00");
 
@@ -113,8 +113,8 @@ public class BillingLatePaymentScenarioTest extends FinancialTestBase {
         serviceCharge("930.30").
         oneTimeFeatureCharges("100.00").
         latePaymentFee("50.00").
-        taxes("123.64"). // 12% (930.30 + 100) = 123.64
-        totalDueAmount("1003.94"); // 930.30 +100 +123.64 +100 -300 +50
+        taxes("135.64"). // 12% (930.30 + 100 + 100) = 135.64
+        totalDueAmount("1015.94"); // 930.30 +100 +100 +135.64 -300 +50
         // @formatter:on
 
         //==================== Bill 4 (partial late payment scenario) ======================//
@@ -123,9 +123,9 @@ public class BillingLatePaymentScenarioTest extends FinancialTestBase {
         SysDateManager.setSysDate("30-May-2011");
         receiveAndPostPayment("30-May-2011", "1000.00");
 
-        // Add Payment for May (final) - should see late fee
+        // Add Payment for May (final) after due date - should see late fee
         SysDateManager.setSysDate("02-Jun-2011");
-        receiveAndPostPayment("30-May-2011", "3.94");
+        receiveAndPostPayment("30-May-2011", "15.94");
 
         SysDateManager.setSysDate("17-Jun-2011");
 
@@ -135,11 +135,56 @@ public class BillingLatePaymentScenarioTest extends FinancialTestBase {
         new BillTester(bill).
         billingPeriodStartDate("1-Jul-2011").
         billingPeriodEndDate("31-Jul-2011").
-        paymentReceivedAmount("-1003.94").
+        paymentReceivedAmount("-1015.94").
         serviceCharge("930.30").
         latePaymentFee("50.00").
         taxes("111.64").
-        totalDueAmount("1091.94"); // 1041.94 + 50
+        totalDueAmount("1091.94"); // 930.30 +111.64 +50
+        // @formatter:on
+
+        //==================== Bill 5 (unpaid immediate charge tax scenario) ======================//
+
+        // Add Payment for July (full)
+        SysDateManager.setSysDate("30-Jun-2011");
+        receiveAndPostPayment("30-Jun-2011", "1091.94");
+        // add some immediate charges (taxable)
+        addAccountCharge("100.00");
+        // add payment for the charge w/o tax - should see late payment fee
+        SysDateManager.setSysDate("01-Jul-2011");
+        receiveAndPostPayment("01-Jul-2011", "100.00");
+
+        // run bill
+        SysDateManager.setSysDate("17-Jul-2011");
+        bill = runBilling(true, true);
+
+        // @formatter:off
+        new BillTester(bill).
+        paymentReceivedAmount("-1191.94").
+        serviceCharge("930.30").
+        taxes("123.64"). // 12% of (930.30 + 100)
+        latePaymentFee("50.00").
+        totalDueAmount("1103.94"); // 930.30 +100 +123.64 +50 -100
+        // @formatter:on
+
+        //==================== Bill 6 (not-immediate charge scenario) ======================//
+
+        // Add Payment for July (full)
+        SysDateManager.setSysDate("30-Jul-2011");
+        receiveAndPostPayment("30-Jul-2011", "1103.94");
+        // add non-immediate charge (taxable) - should not generate late fee
+        addAccountCharge("200.00", "02-Aug-2011");
+
+        // run bill
+        SysDateManager.setSysDate("17-Aug-2011");
+        bill = runBilling(true, true);
+
+        // @formatter:off
+        new BillTester(bill).
+        paymentReceivedAmount("-1103.94").
+        serviceCharge("930.30").
+        taxes("135.64"). // 12% of (930.30 + 200)
+        latePaymentFee("0.00").
+        totalDueAmount("1265.94"); // 930.30 +200 +135.64
         // @formatter:on
 
         printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));

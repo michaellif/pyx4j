@@ -226,4 +226,17 @@ public class BillDateUtils {
         return new LogicalDate(calendar.getTime());
     }
 
+    public static LogicalDate calculateDueDate(BillingAccount billingAccount) {
+        // TODO - this is used to set the due date for immediate charges, which is the start date of
+        // next bill, in case it's coming in time. If not, all kind of aspects must be accounted...
+        // For now we just return the next billing period start date
+        Calendar dueDate = new GregorianCalendar();
+        int dayOfMonth = billingAccount.billingType().billingPeriodStartDay().getValue().intValue();
+        dueDate.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+        if (dueDate.before(SysDateManager.getSysDate())) {
+            dueDate.add(Calendar.MONTH, 1);
+        }
+        return new LogicalDate(dueDate.getTime());
+    }
+
 }

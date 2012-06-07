@@ -29,7 +29,9 @@ import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.domain.financial.billing.InvoiceChargeTax;
 import com.propertyvista.domain.financial.offering.ProductItemType;
 import com.propertyvista.domain.financial.tax.Tax;
+import com.propertyvista.domain.policy.policies.LeaseAdjustmentPolicy;
 import com.propertyvista.domain.policy.policies.ProductTaxPolicy;
+import com.propertyvista.domain.policy.policies.domain.LeaseAdjustmentPolicyItem;
 import com.propertyvista.domain.policy.policies.domain.ProductTaxPolicyItem;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustmentReason;
@@ -90,8 +92,16 @@ public class TaxUtils {
     }
 
     private static List<Tax> retrieveTaxesForAdjustmentReason(LeaseAdjustmentReason reason, Building building) {
-//TODO
-        return new ArrayList<Tax>();
+        LeaseAdjustmentPolicy leaseAdjustmentPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(building, LeaseAdjustmentPolicy.class);
+        LeaseAdjustmentPolicyItem leaseAdjustmentPolicyItem = null;
+        {
+            EntityQueryCriteria<LeaseAdjustmentPolicyItem> criteria = new EntityQueryCriteria<LeaseAdjustmentPolicyItem>(LeaseAdjustmentPolicyItem.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().policy(), leaseAdjustmentPolicy));
+            criteria.add(PropertyCriterion.eq(criteria.proto().leaseAdjustmentReason(), reason));
+            leaseAdjustmentPolicyItem = Persistence.service().retrieve(criteria);
+        }
+
+        return leaseAdjustmentPolicyItem == null ? new ArrayList<Tax>() : leaseAdjustmentPolicyItem.taxes();
     }
 
 }
