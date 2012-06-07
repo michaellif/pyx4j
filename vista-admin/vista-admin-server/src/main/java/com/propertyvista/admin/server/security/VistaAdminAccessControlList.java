@@ -18,7 +18,12 @@ import com.pyx4j.essentials.rpc.deferred.DeferredProcessService;
 import com.pyx4j.rpc.shared.IServiceExecutePermission;
 import com.pyx4j.security.server.ServletContainerAclBuilder;
 
+import com.propertyvista.admin.domain.payment.pad.sim.PadSimBatch;
+import com.propertyvista.admin.domain.payment.pad.sim.PadSimFile;
 import com.propertyvista.admin.domain.pmc.Pmc;
+import com.propertyvista.admin.domain.scheduler.Run;
+import com.propertyvista.admin.domain.scheduler.RunData;
+import com.propertyvista.admin.domain.scheduler.Trigger;
 import com.propertyvista.admin.domain.security.AdminUserCredential;
 import com.propertyvista.admin.domain.security.OnboardingUserCredential;
 import com.propertyvista.admin.rpc.services.AdminAuthenticationService;
@@ -38,6 +43,7 @@ import com.propertyvista.admin.rpc.services.scheduler.RunDataCrudService;
 import com.propertyvista.admin.rpc.services.scheduler.TriggerCrudService;
 import com.propertyvista.admin.rpc.services.sim.PadSimBatchCrudService;
 import com.propertyvista.admin.rpc.services.sim.PadSimFileCrudService;
+import com.propertyvista.domain.security.VistaAdminBehavior;
 import com.propertyvista.domain.security.VistaBasicBehavior;
 
 public class VistaAdminAccessControlList extends ServletContainerAclBuilder {
@@ -46,29 +52,36 @@ public class VistaAdminAccessControlList extends ServletContainerAclBuilder {
         grant(new IServiceExecutePermission(AdminAuthenticationService.class));
         grant(VistaBasicBehavior.AdminPasswordChangeRequired, new IServiceExecutePermission(AdminPasswordResetService.class));
 
-        grant(VistaBasicBehavior.Admin, new EntityPermission(Pmc.class, EntityPermission.ALL));
-        grant(VistaBasicBehavior.Admin, new IServiceExecutePermission(DeferredProcessService.class));
+        grant(VistaAdminBehavior.SystemAdmin, new EntityPermission(Pmc.class, EntityPermission.ALL));
+        grant(VistaAdminBehavior.SystemAdmin, new IServiceExecutePermission(DeferredProcessService.class));
 
-        grant(VistaBasicBehavior.Admin, new IServiceExecutePermission(MaintenanceCrudService.class));
-        grant(VistaBasicBehavior.Admin, new IServiceExecutePermission(SimulationService.class));
-        grant(VistaBasicBehavior.Admin, new IServiceExecutePermission(PmcCrudService.class));
-        grant(VistaBasicBehavior.Admin, new IServiceExecutePermission(ImportUploadService.class));
-        grant(VistaBasicBehavior.Admin, new IServiceExecutePermission(PmcDataReportService.class));
+        grant(VistaAdminBehavior.SystemAdmin, new IServiceExecutePermission(MaintenanceCrudService.class));
+        grant(VistaAdminBehavior.SystemAdmin, new IServiceExecutePermission(SimulationService.class));
+        grant(VistaAdminBehavior.SystemAdmin, new IServiceExecutePermission(PmcCrudService.class));
+        grant(VistaAdminBehavior.SystemAdmin, new IServiceExecutePermission(ImportUploadService.class));
+        grant(VistaAdminBehavior.SystemAdmin, new IServiceExecutePermission(PmcDataReportService.class));
 
-        grant(VistaBasicBehavior.Admin, new IServiceExecutePermission(AdminPasswordChangeUserService.class));
-        grant(VistaBasicBehavior.Admin, new IServiceExecutePermission(AdminPasswordChangeManagedService.class));
-        grant(VistaBasicBehavior.Admin, new IServiceExecutePermission(AdminUserCrudService.class));
-        grant(VistaBasicBehavior.Admin, new IServiceExecutePermission(OnboardingUserCrudService.class));
-        grant(VistaBasicBehavior.Admin, new IServiceExecutePermission(OnboardingUserPasswordChangeManagedService.class));
+        grant(VistaAdminBehavior.SystemAdmin, new IServiceExecutePermission(AdminPasswordChangeUserService.class));
+        grant(VistaAdminBehavior.SystemAdmin, new IServiceExecutePermission(AdminPasswordChangeManagedService.class));
+        grant(VistaAdminBehavior.SystemAdmin, new IServiceExecutePermission(AdminUserCrudService.class));
+        grant(VistaAdminBehavior.SystemAdmin, new IServiceExecutePermission(OnboardingUserCrudService.class));
+        grant(VistaAdminBehavior.SystemAdmin, new IServiceExecutePermission(OnboardingUserPasswordChangeManagedService.class));
 
-        grant(VistaBasicBehavior.Admin, new EntityPermission(AdminUserCredential.class, EntityPermission.ALL));
-        grant(VistaBasicBehavior.Admin, new EntityPermission(OnboardingUserCredential.class, EntityPermission.ALL));
+        grant(VistaAdminBehavior.SystemAdmin, new EntityPermission(AdminUserCredential.class, EntityPermission.ALL));
+        grant(VistaAdminBehavior.SystemAdmin, new EntityPermission(OnboardingUserCredential.class, EntityPermission.ALL));
 
-        grant(VistaBasicBehavior.Admin, new IServiceExecutePermission(TriggerCrudService.class));
-        grant(VistaBasicBehavior.Admin, new IServiceExecutePermission(RunCrudService.class));
-        grant(VistaBasicBehavior.Admin, new IServiceExecutePermission(RunDataCrudService.class));
+        grant(VistaAdminBehavior.SystemAdmin, new IServiceExecutePermission(TriggerCrudService.class));
+        grant(VistaAdminBehavior.SystemAdmin, new IServiceExecutePermission(RunCrudService.class));
+        grant(VistaAdminBehavior.SystemAdmin, new IServiceExecutePermission(RunDataCrudService.class));
 
-        grant(VistaBasicBehavior.Admin, new IServiceExecutePermission(PadSimFileCrudService.class));
-        grant(VistaBasicBehavior.Admin, new IServiceExecutePermission(PadSimBatchCrudService.class));
+        grant(VistaAdminBehavior.SystemAdmin, new EntityPermission(Trigger.class, EntityPermission.ALL));
+        grant(VistaAdminBehavior.SystemAdmin, new EntityPermission(Run.class, EntityPermission.ALL));
+        grant(VistaAdminBehavior.SystemAdmin, new EntityPermission(RunData.class, EntityPermission.ALL));
+
+        grant(VistaAdminBehavior.SystemAdmin, new IServiceExecutePermission(PadSimFileCrudService.class));
+        grant(VistaAdminBehavior.SystemAdmin, new IServiceExecutePermission(PadSimBatchCrudService.class));
+
+        grant(VistaAdminBehavior.SystemAdmin, new EntityPermission(PadSimFile.class, EntityPermission.ALL));
+        grant(VistaAdminBehavior.SystemAdmin, new EntityPermission(PadSimBatch.class, EntityPermission.ALL));
     }
 }

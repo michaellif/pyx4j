@@ -45,7 +45,7 @@ import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.admin.domain.pmc.Pmc;
 import com.propertyvista.domain.property.asset.building.Building;
-import com.propertyvista.domain.security.VistaBasicBehavior;
+import com.propertyvista.domain.security.VistaAdminBehavior;
 import com.propertyvista.interfaces.importer.BuildingRetriever;
 import com.propertyvista.interfaces.importer.converter.MediaConfig;
 import com.propertyvista.interfaces.importer.model.ImportIO;
@@ -59,7 +59,7 @@ public class ExportDownloadServlet extends HttpServlet {
     @Override
     public void service(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 
-        SecurityController.assertBehavior(VistaBasicBehavior.Admin);
+        SecurityController.assertBehavior(VistaAdminBehavior.SystemAdmin);
 
         long pmcId = Long.valueOf(request.getParameter("pmc"));
         Pmc pmc = Persistence.service().retrieve(Pmc.class, new Key(pmcId));
