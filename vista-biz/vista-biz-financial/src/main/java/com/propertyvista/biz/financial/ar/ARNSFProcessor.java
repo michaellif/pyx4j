@@ -41,7 +41,7 @@ public class ARNSFProcessor extends AbstractARProcessor {
 
         NsfFeeItem nsfItem = null;
         for (NsfFeeItem nsf : leaseBillingPolicy.nsfFees()) {
-            if (paymentRecord.paymentMethod().type().getValue().equals(nsf.paymentType().getValue())) {
+            if (nsf.paymentType().getValue().equals(paymentRecord.paymentMethod().type().getValue())) {
                 nsfItem = nsf;
                 break;
             }

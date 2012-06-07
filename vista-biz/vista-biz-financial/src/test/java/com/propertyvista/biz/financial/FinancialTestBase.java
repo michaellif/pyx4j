@@ -56,6 +56,8 @@ import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.Feature.Type;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.Service;
+import com.propertyvista.domain.payment.PaymentMethod;
+import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.AdjustmentType;
@@ -401,7 +403,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         return adjustment;
     }
 
-    protected PaymentRecord receivePayment(String receivedDate, LeaseParticipant leaseParticipant, String amount) {
+    protected PaymentRecord receivePayment(String receivedDate, LeaseParticipant leaseParticipant, String amount, PaymentType type) {
         Lease lease = Persistence.service().retrieve(Lease.class, leaseDataModel.getLeaseKey());
 
         PaymentRecord paymentRecord = EntityFactory.create(PaymentRecord.class);
@@ -411,6 +413,12 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Submitted);
         paymentRecord.billingAccount().set(lease.billingAccount());
         paymentRecord.leaseParticipant().set(leaseParticipant);
+
+        // add payment method type
+        PaymentMethod pm = EntityFactory.create(PaymentMethod.class);
+        pm.type().setValue(type);
+        paymentRecord.paymentMethod().set(pm);
+        Persistence.service().persist(pm);
 
         Persistence.service().persist(paymentRecord);
         Persistence.service().commit();
@@ -423,7 +431,11 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
     }
 
     protected PaymentRecord receiveAndPostPayment(String receivedDate, String amount) {
-        PaymentRecord paymentRecord = receivePayment(receivedDate, null, amount); // TODO : find leaseParticipant, if nedded here!.. 
+        return receiveAndPostPayment(receivedDate, amount, PaymentType.Cash);
+    }
+
+    protected PaymentRecord receiveAndPostPayment(String receivedDate, String amount, PaymentType type) {
+        PaymentRecord paymentRecord = receivePayment(receivedDate, null, amount, type); // TODO : find leaseParticipant, if nedded here!.. 
         postPayment(paymentRecord);
         return paymentRecord;
     }

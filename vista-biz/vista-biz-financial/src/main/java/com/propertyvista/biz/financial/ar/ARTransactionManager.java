@@ -37,6 +37,7 @@ import com.propertyvista.domain.financial.billing.DebitCreditLink;
 import com.propertyvista.domain.financial.billing.InvoiceCredit;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
+import com.propertyvista.domain.financial.billing.InvoicePayment;
 import com.propertyvista.domain.financial.billing.InvoicePaymentBackOut;
 import com.propertyvista.domain.policy.policies.ARPolicy;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -165,9 +166,9 @@ public class ARTransactionManager {
     static InvoiceCredit getCorrespodingCreditByPayment(BillingAccount billingAccount, PaymentRecord paymentRecord) {
         InvoiceCredit credit;
         {
-            EntityQueryCriteria<InvoiceCredit> criteria = EntityQueryCriteria.create(InvoiceCredit.class);
+            EntityQueryCriteria<InvoicePayment> criteria = EntityQueryCriteria.create(InvoicePayment.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().billingAccount(), billingAccount));
-            criteria.add(PropertyCriterion.eq(criteria.proto().id(), paymentRecord.id()));
+            criteria.add(PropertyCriterion.eq(criteria.proto().paymentRecord(), paymentRecord));
             credit = Persistence.service().retrieve(criteria);
         }
         return credit;

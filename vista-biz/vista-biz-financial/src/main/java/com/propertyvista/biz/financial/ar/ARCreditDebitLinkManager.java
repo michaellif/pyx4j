@@ -169,24 +169,25 @@ public class ARCreditDebitLinkManager {
 
         InvoiceCredit creditToReturn = ARTransactionManager.getCorrespodingCreditByPayment(backOut.billingAccount(), backOut.paymentRecord());
         List<InvoiceCredit> credits = ARTransactionManager.getSuccedingCreditInvoiceLineItems(backOut.billingAccount(), creditToReturn);
-        List<DebitCreditLink> links = ARTransactionManager.getInstalledLinksByCredits(credits);
+        if (credits != null && credits.size() > 0) {
+            List<DebitCreditLink> links = ARTransactionManager.getInstalledLinksByCredits(credits);
+            if (links != null && links.size() > 0) {
+                for (DebitCreditLink link : links) {
+                    InvoiceDebit debit = link.debitItem().cast();
+                    debit.outstandingDebit().setValue(debit.outstandingDebit().getValue().add(link.amount().getValue()));
+                    debit.creditLinks().remove(link);
+                    links.remove(link);
 
-        for (DebitCreditLink link : links) {
+                    Persistence.service().persist(debit);
+                }
 
-            InvoiceDebit debit = link.debitItem().cast();
-            debit.outstandingDebit().setValue(debit.outstandingDebit().getValue().add(link.amount().getValue()));
-            debit.creditLinks().remove(link);
-            links.remove(link);
+                Persistence.service().persist(links);
 
-            Persistence.service().persist(debit);
-        }
-
-        Persistence.service().persist(links);
-
-        // Go through the list of Debits
-        for (InvoiceCredit credit : credits) {
-
-            consumeCredit(credit);
+                // Go through the list of Debits
+                for (InvoiceCredit credit : credits) {
+                    consumeCredit(credit);
+                }
+            }
         }
     }
 
