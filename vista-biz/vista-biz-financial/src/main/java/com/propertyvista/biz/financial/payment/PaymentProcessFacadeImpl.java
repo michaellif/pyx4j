@@ -250,7 +250,7 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
             Persistence.service().retrieve(bill.billingAccount());
             Persistence.service().retrieve(bill.billingAccount().lease());
 
-            // call ar facade to get current balance for dueDate
+            // call AR facade to get current balance for dueDate
             BigDecimal currentBalance = ServerSideFactory.create(ARFacade.class).getCurrentBalance(bill.billingAccount());
             if (currentBalance.compareTo(BigDecimal.ZERO) <= 0) {
                 continue;
@@ -259,8 +259,8 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
             Lease lease = bill.billingAccount().lease();
             Persistence.service().retrieve(lease.version().tenants());
 
-            for (Tenant tenant : lease.version().tenants()) {
-                // do pre authorized payments for main applicant for now
+            tanantLoop: for (Tenant tenant : lease.version().tenants()) {
+                // do pre-authorized payments for main applicant for now
                 switch (tenant.role().getValue()) {
                 case Applicant:
                     PaymentMethod method = PaymentUtils.retrievePreAuthorizedPaymentMethod(tenant);
@@ -268,7 +268,7 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
                         createPreAuthorizedPayment(tenant, currentBalance, bill.billingAccount(), method);
                         StatisticsUtils.addProcessed(dynamicStatisticsRecord, 1, currentBalance);
                     }
-                    break;
+                    break tanantLoop;
                 case CoApplicant:
                     break;
                 }
