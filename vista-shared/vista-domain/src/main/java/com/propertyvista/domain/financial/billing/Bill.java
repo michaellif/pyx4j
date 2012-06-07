@@ -14,6 +14,7 @@
 package com.propertyvista.domain.financial.billing;
 
 import java.math.BigDecimal;
+import java.util.EnumSet;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Detached;
@@ -60,6 +61,11 @@ public interface Bill extends IEntity {
         public String toString() {
             return I18nEnum.toString(this);
         }
+
+        public static boolean notConfirmed(BillStatus status) {
+            return EnumSet.of(Running, Finished).contains(status);
+        }
+
     };
 
     @I18n

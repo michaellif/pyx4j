@@ -54,31 +54,18 @@ public class BillingLifecycleManager {
 
     private final static Logger log = LoggerFactory.getLogger(BillingLifecycleManager.class);
 
-    static BillingCycle runBilling(Lease lease) {
-        BillingAccount billingAccount = ensureInitBillingAccount(lease);
-
-        BillingCycle billingCycle = getBillingCycle(lease);
-
-        Bill previousBill = BillingLifecycleManager.getLatestConfirmedBill(lease);
-        if (previousBill != null && Bill.BillType.Final.equals(previousBill.billType().getValue())) {
-            throw new BillingException("Final bill has been issued");
-        }
-
-        runBilling(billingCycle, Arrays.asList(new BillingAccount[] { billingAccount }), false);
-
-        return billingCycle;
+    static void runBilling(Lease lease) {
+        runBilling(getBillingCycle(lease), Arrays.asList(new BillingAccount[] { ensureInitBillingAccount(lease) }), false);
     }
 
-    static BillingCycle runBilling(Building building, PaymentFrequency paymentFrequency, LogicalDate billingPeriodStartDate) {
+    static void runBilling(Building building, PaymentFrequency paymentFrequency, LogicalDate billingPeriodStartDate) {
         //TODO
 
         // runBilling(billingCycle, true);
 
-        return null;
     }
 
     private static void runBilling(BillingCycle billingCycle, List<BillingAccount> billingAccounts, boolean manageTransactions) {
-
         if (manageTransactions) {
             Persistence.service().commit();
         }
@@ -163,10 +150,16 @@ public class BillingLifecycleManager {
     }
 
     private static void validateBillingRunPreconditions(BillingCycle billingCycle, BillingAccount billingAccount) {
-        //TODO verify that bill should/may run on that lease
-//      if (!billingAccount.currentBillingCycle().isNull()) {
-//          throw new BillingException("Can't run billing on Account with non-confirmed bills");
-//      }
+
+        Bill previousBill = BillingLifecycleManager.getLatestConfirmedBill(billingAccount.lease());
+        if (previousBill != null) {
+            if (Bill.BillType.Final.equals(previousBill.billType().getValue())) {
+                throw new BillingException("Final bill has been issued");
+            }
+            if (BillStatus.notConfirmed(previousBill.billStatus().getValue())) {
+                throw new BillingException("Can't run billing on Account with non-confirmed bills");
+            }
+        }
 
     }
 
