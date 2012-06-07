@@ -55,7 +55,13 @@ public class BillingLifecycleManager {
     private final static Logger log = LoggerFactory.getLogger(BillingLifecycleManager.class);
 
     static void runBilling(Lease lease) {
-        runBilling(getBillingCycle(lease), Arrays.asList(new BillingAccount[] { ensureInitBillingAccount(lease) }), false);
+
+        BillingAccount billingAccount = ensureInitBillingAccount(lease);
+
+        BillingCycle billingCycle = getBillingCycle(lease);
+
+        runBilling(billingCycle, Arrays.asList(new BillingAccount[] { billingAccount }), false);
+
     }
 
     static void runBilling(Building building, PaymentFrequency paymentFrequency, LogicalDate billingPeriodStartDate) {
@@ -151,11 +157,12 @@ public class BillingLifecycleManager {
 
     private static void validateBillingRunPreconditions(BillingCycle billingCycle, BillingAccount billingAccount) {
 
+        if (billingAccount.lease().version().status().getValue() == Lease.Status.Closed) {
+            throw new BillingException("Lease is closed");
+        }
+
         Bill previousBill = BillingLifecycleManager.getLatestConfirmedBill(billingAccount.lease());
         if (previousBill != null) {
-            if (Bill.BillType.Final.equals(previousBill.billType().getValue())) {
-                throw new BillingException("Final bill has been issued");
-            }
             if (BillStatus.notConfirmed(previousBill.billStatus().getValue())) {
                 throw new BillingException("Can't run billing on Account with non-confirmed bills");
             }

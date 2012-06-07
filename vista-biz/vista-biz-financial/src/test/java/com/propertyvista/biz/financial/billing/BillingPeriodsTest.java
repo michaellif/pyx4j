@@ -211,6 +211,8 @@ public class BillingPeriodsTest extends FinancialTestBase {
 
         assertEquals("Same Billing Cycle", billingTypeId, bill.billingCycle().billingType().id().toString());
 
+        closeLease();
+
         //==================== RUN 6 ======================//
 
         try {
