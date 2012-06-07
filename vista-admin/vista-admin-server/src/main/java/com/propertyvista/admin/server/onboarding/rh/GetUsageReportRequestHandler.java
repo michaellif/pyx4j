@@ -18,6 +18,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -68,7 +69,11 @@ public class GetUsageReportRequestHandler extends AbstractRequestHandler<GetUsag
         record.from().setValue(request.from().getValue());
         record.to().setValue(request.to().getValue());
         record.usageType().setValue(request.usageType().getValue());
-        record.value().setValue(55);
+
+        if (ApplicationMode.isDevelopment())
+            record.value().setValue(55);
+        else
+            record.value().setValue(0);
 
         response.records().add(record);
 

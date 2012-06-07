@@ -56,5 +56,36 @@ public class GetUsageRun {
                 }
             }
         }
+
+        request.usageType = UsageType.Equifax;
+        request.onboardingAccountId = "acc1338253812822304000";
+        request.requestId = "GetUsageRequest";
+
+        {
+            RequestMessage rm = new RequestMessage();
+            rm.interfaceEntity = "rossul";
+            rm.interfaceEntityPassword = "secret";
+            rm.addRequest(request);
+
+            ResponseMessage response = ExampleClient.execute(rm);
+
+            System.out.println("response Status   : " + response.status);
+            System.out.println("response Message  : " + response.errorMessage);
+
+            if (response.status == ResponseMessage.StatusCode.OK) {
+                System.out.println("echo requestId    : " + response.responses.get(0).requestId);
+                System.out.println("response Code     : " + response.responses.get(0).success);
+                System.out.println("response Message  : " + response.responses.get(0).errorMessage);
+
+                if (response.responses.get(0) instanceof UsageReportResponse) {
+                    UsageReportResponse ur = (UsageReportResponse) response.responses.get(0);
+
+                    for (UsageRecord rec : ur.records) {
+                        System.out.println("Equifax  usage : " + rec.value);
+                    }
+                }
+            }
+        }
+
     }
 }
