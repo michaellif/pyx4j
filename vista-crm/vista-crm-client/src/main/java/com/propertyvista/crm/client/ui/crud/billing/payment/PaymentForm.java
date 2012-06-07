@@ -178,9 +178,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
                 checkProfiledPaymentMethods(new DefaultAsyncCallback<List<PaymentMethod>>() {
                     @Override
                     public void onSuccess(List<PaymentMethod> result) {
-                        get(proto().paymentSelect()).reset();
                         get(proto().paymentSelect()).setValue(result.isEmpty() ? PaymentSelect.New : PaymentSelect.Profiled);
-                        get(proto().paymentSelect()).setVisible(!result.isEmpty());
                     }
                 });
             }
@@ -279,6 +277,13 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
 
                                 if (callback != null) {
                                     callback.onSuccess(result);
+                                } else {
+                                    if (result.isEmpty()) {
+                                        get(proto().paymentSelect()).setValue(PaymentSelect.New, false);
+                                    } else {
+                                        get(proto().paymentSelect()).setValue(
+                                                getValue().paymentMethod().leaseParticipant().isNull() ? PaymentSelect.New : PaymentSelect.Profiled, false);
+                                    }
                                 }
                             }
                         }, getValue().leaseParticipant());

@@ -217,13 +217,15 @@ public class PaymentForm extends CEntityDecoratableForm<PaymentRecordDTO> {
             public void onSuccess(List<PaymentMethod> result) {
                 get(proto().paymentSelect()).setEnabled(!result.isEmpty());
                 get(proto().paymentSelect()).setVisible(!result.isEmpty());
+                if (result.isEmpty()) {
+                    get(proto().paymentSelect()).setValue(PaymentSelect.New, false);
+                } else {
+                    get(proto().paymentSelect()).setValue(getValue().paymentMethod().leaseParticipant().isNull() ? PaymentSelect.New : PaymentSelect.Profiled,
+                            false);
+                }
 
                 profiledPaymentMethodsCombo.setOptions(result);
                 profiledPaymentMethodsCombo.setMandatory(true);
-
-                get(proto().paymentSelect()).reset();
-                get(proto().paymentSelect()).setValue(result.isEmpty() ? PaymentSelect.New : PaymentSelect.Profiled);
-                get(proto().paymentSelect()).setVisible(!result.isEmpty());
             }
         });
     }
