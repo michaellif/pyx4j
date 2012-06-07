@@ -15,7 +15,10 @@ package com.propertyvista.domain.financial.billing;
 
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 
+import com.propertyvista.domain.financial.PaymentRecord;
+
 @DiscriminatorValue("NSF")
 public interface InvoiceNSF extends InvoiceDebit {
 
+    PaymentRecord paymentRecord();
 }

@@ -17,7 +17,6 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.financial.SysDateManager;
@@ -216,14 +215,6 @@ public class BillDateUtils {
         } else {
             return bill.billingPeriodStartDate().getValue();
         }
-    }
-
-    public static LogicalDate calculateNextBillDueDate(BillingAccount billingAccount) {
-        Bill bill = ServerSideFactory.create(BillingFacade.class).getLatestConfirmedBill(billingAccount.lease());
-        Calendar calendar = new GregorianCalendar();
-        calendar.setTime(bill.billingCycle().billingPeriodEndDate().getValue());
-        calendar.add(Calendar.DATE, 1);
-        return new LogicalDate(calendar.getTime());
     }
 
     public static LogicalDate calculateDueDate(BillingAccount billingAccount) {
