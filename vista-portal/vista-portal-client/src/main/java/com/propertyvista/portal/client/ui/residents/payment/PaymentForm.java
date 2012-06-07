@@ -128,6 +128,8 @@ public class PaymentForm extends CEntityDecoratableForm<PaymentRecordDTO> {
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().profiledPaymentMethod(), profiledPaymentMethodsCombo), 25).build());
         profiledPaymentMethodsCombo.setMandatory(true);
 
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().addThisPaymentMethodToProfile()), 3).labelWidth(20).build());
+
         // tweak UI:
         get(proto().id()).setViewable(true);
         get(proto().unitNumber()).setViewable(true);
@@ -151,7 +153,7 @@ public class PaymentForm extends CEntityDecoratableForm<PaymentRecordDTO> {
 
                         paymentMethodEditor.getValue().isOneTimePayment().setValue(Boolean.TRUE);
 
-                        profiledPaymentMethodsCombo.setVisible(false);
+                        setProfiledPaymentMethodsVisible(false);
                         break;
                     case Profiled:
                         paymentMethodEditor.setEnabled(false);
@@ -159,7 +161,7 @@ public class PaymentForm extends CEntityDecoratableForm<PaymentRecordDTO> {
                         paymentMethodEditorSeparator.setVisible(false);
 
                         profiledPaymentMethodsCombo.reset();
-                        profiledPaymentMethodsCombo.setVisible(true);
+                        setProfiledPaymentMethodsVisible(true);
                         break;
                     }
                 }
@@ -186,7 +188,7 @@ public class PaymentForm extends CEntityDecoratableForm<PaymentRecordDTO> {
 
         get(proto().id()).setVisible(!getValue().id().isNull());
         get(proto().paymentSelect()).setVisible(!isViewable() && !getValue().leaseParticipant().isNull());
-        profiledPaymentMethodsCombo.setVisible(false);
+        setProfiledPaymentMethodsVisible(false);
 
         checkProfiledPaymentMethods();
 
@@ -234,5 +236,11 @@ public class PaymentForm extends CEntityDecoratableForm<PaymentRecordDTO> {
                 profiledPaymentMethodsCombo.setMandatory(true);
             }
         });
+    }
+
+    private void setProfiledPaymentMethodsVisible(boolean visible) {
+        profiledPaymentMethodsCombo.setVisible(visible && !isViewable());
+        get(proto().addThisPaymentMethodToProfile()).setVisible(
+                !visible && PaymentType.avalableInProfile().contains(getValue().paymentMethod().type().getValue()) && !isViewable());
     }
 }

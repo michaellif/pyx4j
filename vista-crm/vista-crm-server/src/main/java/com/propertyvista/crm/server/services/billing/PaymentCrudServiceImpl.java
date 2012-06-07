@@ -35,6 +35,7 @@ import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
 import com.propertyvista.domain.payment.PaymentMethod;
+import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -83,7 +84,9 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
 
     @Override
     protected void persist(PaymentRecord entity, PaymentRecordDTO dto) {
-//        entity.paymentMethod().leaseParticipant().set(dto.leaseParticipant());
+        if (dto.addThisPaymentMethodToProfile().isBooleanTrue() && PaymentType.avalableInProfile().contains(dto.paymentMethod().type().getValue())) {
+            entity.paymentMethod().leaseParticipant().set(dto.leaseParticipant());
+        }
         ServerSideFactory.create(PaymentFacade.class).persistPayment(entity);
     }
 

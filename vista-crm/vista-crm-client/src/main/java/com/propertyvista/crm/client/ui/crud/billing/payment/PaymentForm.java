@@ -148,6 +148,8 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
         left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().profiledPaymentMethod(), profiledPaymentMethodsCombo), 25).build());
         profiledPaymentMethodsCombo.setMandatory(true);
 
+        left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().addThisPaymentMethodToProfile()), 3).labelWidth(20).build());
+
         FormFlexPanel right = new FormFlexPanel();
         row = -1;
 
@@ -202,7 +204,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
 
                         paymentMethodEditor.getValue().isOneTimePayment().setValue(Boolean.TRUE);
 
-                        profiledPaymentMethodsCombo.setVisible(false);
+                        setProfiledPaymentMethodsVisible(false);
                         break;
                     case Profiled:
                         paymentMethodEditor.setViewable(true);
@@ -210,7 +212,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
                         paymentMethodEditorSeparator.setVisible(false);
 
                         profiledPaymentMethodsCombo.reset();
-                        profiledPaymentMethodsCombo.setVisible(true);
+                        setProfiledPaymentMethodsVisible(true);
                         break;
                     }
                 }
@@ -248,7 +250,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
 
         get(proto().id()).setVisible(!getValue().id().isNull());
         get(proto().paymentSelect()).setVisible(!isViewable() && !getValue().leaseParticipant().isNull());
-        profiledPaymentMethodsCombo.setVisible(false);
+        setProfiledPaymentMethodsVisible(false);
 
         checkProfiledPaymentMethods(null);
 
@@ -290,11 +292,15 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
                                 if (callback != null) {
                                     callback.onSuccess(result);
                                 } else {
-                                    if (getValue().getPrimaryKey() == null) {
-                                        get(proto().paymentSelect()).setValue(PaymentSelect.Profiled, true);
+                                    if (result.isEmpty()) {
+                                        get(proto().paymentSelect()).setValue(PaymentSelect.New, getValue().getPrimaryKey() == null);
                                     } else {
-                                        get(proto().paymentSelect()).setValue(
-                                                getValue().paymentMethod().leaseParticipant().isNull() ? PaymentSelect.New : PaymentSelect.Profiled, false);
+                                        if (getValue().getPrimaryKey() == null) {
+                                            get(proto().paymentSelect()).setValue(PaymentSelect.Profiled, true);
+                                        } else {
+                                            get(proto().paymentSelect()).setValue(
+                                                    getValue().paymentMethod().leaseParticipant().isNull() ? PaymentSelect.New : PaymentSelect.Profiled, false);
+                                        }
                                     }
                                 }
                             }
@@ -302,4 +308,11 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
             }
         }
     }
+
+    private void setProfiledPaymentMethodsVisible(boolean visible) {
+        profiledPaymentMethodsCombo.setVisible(visible && !isViewable());
+        get(proto().addThisPaymentMethodToProfile()).setVisible(
+                !visible && PaymentType.avalableInProfile().contains(getValue().paymentMethod().type().getValue()) && !isViewable());
+    }
+
 }
