@@ -13,8 +13,12 @@
  */
 package com.propertyvista.crm.server.services.reports.util;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -27,7 +31,7 @@ public class DynamicColumnWidthReportTableTemplateBuilder extends XMLBuilder {
 
     private enum Styles {
 
-        TITLE, TABLE, TABLE_HEADER, TABLE_COLUMN_TITLE, TABLE_ROW;
+        TITLE, SUB_TITLE, TABLE, TABLE_HEADER, TABLE_COLUMN_TITLE, TABLE_ROW;
     }
 
     private final IEntity proto;
@@ -42,14 +46,33 @@ public class DynamicColumnWidthReportTableTemplateBuilder extends XMLBuilder {
 
     private final Integer fontSize = 6;
 
-    private final Integer fontSizeTitle = 10;
+    private final Integer titleFontSize = 10;
+
+    private final Integer subTitleFontSize = 6;
 
     private final Integer padding = 2;
+
+    private final List<String> subTitleParams;
 
     public DynamicColumnWidthReportTableTemplateBuilder(IEntity proto, ListerGadgetBaseMetadata metadata) {
         this.proto = proto;
         this.metadata = metadata;
-        createTemplate();
+        this.subTitleParams = new LinkedList<String>();
+    }
+
+    /**
+     * define a sub title with that will be bound to <code>paramName</code> report template parameter.
+     */
+    public DynamicColumnWidthReportTableTemplateBuilder defSubTitle(String paramName) {
+        // TODO add paramName validation
+        subTitleParams.add(paramName);
+        return this;
+    }
+
+    @Override
+    public String build() {
+        this.createTemplate();
+        return super.build();
     }
 
     private void createTemplate() {//@formatter:off
@@ -95,7 +118,14 @@ public class DynamicColumnWidthReportTableTemplateBuilder extends XMLBuilder {
     private void declareStyles() {//@formatter:off
         elo("style")
             .attr("name", Styles.TITLE.name())
-            .attr("fontSize", fontSizeTitle.toString())
+            .attr("fontSize", titleFontSize.toString())
+            .attr("pdfFontName", "Helvetica")
+            .add();
+        elc("style");
+        
+        elo("style")
+            .attr("name", Styles.SUB_TITLE.name())
+            .attr("fontSize", subTitleFontSize.toString())
             .attr("pdfFontName", "Helvetica")
             .add();
         elc("style");        
@@ -142,6 +172,9 @@ public class DynamicColumnWidthReportTableTemplateBuilder extends XMLBuilder {
 
     private void declareParameters() {//@formatter:off
         el("parameter").attr("name", "TITLE").attr("class", "java.lang.String").add();
+        for (String subTitleParam : subTitleParams) {
+            el("parameter").attr("name", subTitleParam).attr("class", "java.lang.String").add();
+        }
     }//@formatter:on
 
     private void declareFields() {
@@ -153,32 +186,51 @@ public class DynamicColumnWidthReportTableTemplateBuilder extends XMLBuilder {
     private void declareField(IObject<?> member) {//@formatter:off
         el("field")
                 .attr("name", member.getFieldName())
-                .attr("class", member.getValueClass().getName())
+                .attr("class", member.getValueClass().getCanonicalName())
                 .add(); 
     }//@formatter:on
 
     // TODO for dynamic purposes maybe title should be "STATIC TEXT" element
     private void addTitle() {//@formatter:off
-        int padding = 4;
+        int titlePadding = 2;
+        Integer bandHeight = ((titleFontSize + titlePadding) + ((subTitleFontSize + padding) * subTitleParams.size()));
         elo("title").add();
-            elo("band").attr("height", "" + (fontSizeTitle + padding)).attr("splitType", "Stretch").add();
-                    elo("textField").add();
+            elo("band").attr("height", bandHeight.toString()).attr("splitType", "Stretch").add();
+                    elo("textField").attr("isStretchWithOverflow", "true").add();
                         el("reportElement")
                                 .attr("style", Styles.TITLE.name())
                                 .attr("x", "0")
                                 .attr("y", "0")
                                 .attr("width", "554")
-                                .attr("height", "" + (fontSizeTitle + padding))
+                                .attr("height", "" + (titleFontSize + titlePadding))
                                 .attr("stretchType", "RelativeToBandHeight")
                                 .add();
                         elo("textFieldExpression").add();
                             CDATA("$P{TITLE}");
                         elc("textFieldExpression");
-                    elc("textField");                
+                    elc("textField");
+                    
+                    int yOffset = titleFontSize + titlePadding; 
+                    for (String subTitleParam : subTitleParams) {                        
+                        elo("textField").attr("isStretchWithOverflow", "true").add();
+                            el("reportElement")
+                                    .attr("style", Styles.SUB_TITLE.name())
+                                    .attr("x", "0")
+                                    .attr("y", Integer.toString(yOffset))
+                                    .attr("width", "554")
+                                    .attr("height", "" + (subTitleFontSize + padding))
+                                    .attr("stretchType", "RelativeToBandHeight")
+                                    .add();
+                            elo("textFieldExpression").add();
+                                CDATA("$P{" + subTitleParam + "}");
+                            elc("textFieldExpression");
+                        elc("textField");
+                        yOffset += subTitleFontSize + padding;
+                    }
             elc("band");
         elc("title");
     }//@formatter:off
-    
+
     private void addPageHeader() {//@formatter:off
         elo("pageHeader").add();
             elo("band").attr("height", "" + (fontSize + padding + 2)).attr("splitType", "Stretch").add();
@@ -254,7 +306,7 @@ public class DynamicColumnWidthReportTableTemplateBuilder extends XMLBuilder {
     private void addColumnTitle(ColumnDescriptorEntity columnDescriptor, Integer offset, Integer width) {//@formatter:off
         String effectiveTitle = columnDescriptor.title().isNull() ? proto.getMember(columnDescriptor.propertyPath().getValue()).getMeta().getCaption() 
                                                                   : columnDescriptor.title().getValue();
-        elo("textField").add();
+        elo("textField").attr("isStretchWithOverflow", "true").add();
             el("reportElement")
                     .attr("style", Styles.TABLE_COLUMN_TITLE.name())
                     .attr("x", offset.toString())
@@ -276,16 +328,22 @@ public class DynamicColumnWidthReportTableTemplateBuilder extends XMLBuilder {
         for (ColumnDescriptorEntity columnDescriptor : metadata.columnDescriptors()) {
             if (columnDescriptor.isVisible().isBooleanTrue()) {
                 int width = columnWidths[columnNum++];
-                addDetailMember(columnDescriptor, offset, width);
+                addMemberField(columnDescriptor, offset, width);
                 offset += width;
             }
         }
     }
 
-    private void addDetailMember(ColumnDescriptorEntity columnDescriptor, Integer offset, Integer width) {//@formatter:off
+    private void addMemberField(ColumnDescriptorEntity columnDescriptor, Integer offset, Integer width) {//@formatter:off
         IObject<?> member = proto.getMember(new Path(columnDescriptor.propertyPath().getValue())); 
                 
-        elo("textField").attr("isStretchWithOverflow", "true").add();
+        // 
+        ElementBuilder textField = elo("textField").attr("isStretchWithOverflow", "true").attr("isBlankWhenNull", "true");
+        String patternExpression = patternExpression(member);
+        if (patternExpression != null) {
+            textField.attr("pattern", patternExpression);
+        }
+        textField.add();
             el("reportElement")
                     .attr("style", Styles.TABLE_ROW.name())
                     .attr("x", offset.toString())
@@ -334,4 +392,23 @@ public class DynamicColumnWidthReportTableTemplateBuilder extends XMLBuilder {
         }
         return columnValueExpressionBuilder.toString();
     }
+
+    private static String patternExpression(IObject<?> property) {
+        Class<?> clazz = property.getValueClass();
+
+        // TODO refactor in declarative style and use property @Format if possible
+        if (BigDecimal.class.equals(clazz)) {
+            return "###0.00";
+
+        } else if (Double.class.equals(clazz)) {
+            return "###0.00";
+
+        } else if (LogicalDate.class.equals(clazz)) {
+            return "MM/dd/yyyy";
+
+        } else {
+            return null;
+        }
+    }
+
 }

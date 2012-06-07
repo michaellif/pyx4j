@@ -24,25 +24,27 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.criterion.EntityListCriteria;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.AvailabilityReportService;
 import com.propertyvista.crm.server.services.dashboard.gadgets.AvailabilityReportServiceImpl;
 import com.propertyvista.crm.server.services.reports.AbstractGadgetReportModelCreator;
+import com.propertyvista.crm.server.services.reports.util.DynamicColumnWidthReportTableTemplateBuilder;
 import com.propertyvista.domain.dashboard.gadgets.ColumnDescriptorEntity;
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatus;
-import com.propertyvista.domain.dashboard.gadgets.type.BuildingLister;
 import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
+import com.propertyvista.domain.dashboard.gadgets.type.ListerGadgetBaseMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.UnitAvailability;
-import com.propertyvista.dto.BuildingDTO;
 
 public class UnitAvailabilityStatusReportCreator extends AbstractGadgetReportModelCreator<UnitAvailability> {
 
     private final static I18n i18n = I18n.get(UnitAvailabilityStatusReportCreator.class);
 
-    private static final SimpleDateFormat REPORT_FORMAT = new SimpleDateFormat("yyyy-MMM-dd");
+    private static final SimpleDateFormat REPORT_FORMAT = new SimpleDateFormat("dd/MMM/yyyy");
+
+    private ListerGadgetBaseMetadata listerMetadata;
 
     public UnitAvailabilityStatusReportCreator() {
         super(UnitAvailability.class);
@@ -50,6 +52,7 @@ public class UnitAvailabilityStatusReportCreator extends AbstractGadgetReportMod
 
     @Override
     protected void convert(final AsyncCallback<ConvertedGadgetMetadata> callback, GadgetMetadata gadgetMetadata, List<Key> selectedBuildings) {
+        listerMetadata = (ListerGadgetBaseMetadata) gadgetMetadata;
         final UnitAvailability metadata = (UnitAvailability) gadgetMetadata;
         final LogicalDate asOf = metadata.customizeDate().isBooleanTrue() ? metadata.asOf().getValue() : new LogicalDate();
 
@@ -69,11 +72,10 @@ public class UnitAvailabilityStatusReportCreator extends AbstractGadgetReportMod
                 }
 
                 HashMap<String, Object> parameters = new HashMap<String, Object>();
-                parameters.put("COLUMNS", columns);
-                parameters.put(
-                        "TITLE",
-                        i18n.tr("Unit Availability Status Report as of {0}, filtering: {1}", REPORT_FORMAT.format(asOf), metadata.filterPreset()
-                                .getValue().toString()));
+                parameters.put("TITLE", i18n.tr("Unit Availability Status"));
+                parameters.put("FILTER_CRITERIA", i18n.tr("Filter Setting: {0}", metadata.filterPreset().getValue().toString()));
+                parameters.put("AS_OF", i18n.tr("As of Date: {0}", REPORT_FORMAT.format(asOf)));
+
                 callback.onSuccess(new ConvertedGadgetMetadata(result.getData(), parameters));
             }
 
@@ -84,13 +86,15 @@ public class UnitAvailabilityStatusReportCreator extends AbstractGadgetReportMod
         }, new Vector<Key>(selectedBuildings), metadata.filterPreset().getValue(), asOf, new Vector<Sort>(), 0, Integer.MAX_VALUE);
     }
 
-    private EntityListCriteria<BuildingDTO> convertToCriteria(BuildingLister metadata) {
-        EntityListCriteria<BuildingDTO> criteria = new EntityListCriteria<BuildingDTO>(BuildingDTO.class);
-        String sortCoulmn = metadata.primarySortColumn().propertyPath().getValue();
-        if (sortCoulmn != null) {
-            criteria.sort(new Sort(sortCoulmn, !metadata.sortAscending().isBooleanTrue()));
-        }
-
-        return criteria;
+    @Override
+    protected String design() {
+        return new DynamicColumnWidthReportTableTemplateBuilder(EntityFactory.getEntityPrototype(UnitAvailabilityStatus.class), listerMetadata)
+                .defSubTitle("FILTER_CRITERIA").defSubTitle("AS_OF").build();
     }
+
+    @Override
+    protected String designName() {
+        return "" + System.currentTimeMillis() + "-" + super.designName();
+    }
+
 }
