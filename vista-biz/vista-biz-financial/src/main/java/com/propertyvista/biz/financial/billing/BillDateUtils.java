@@ -108,18 +108,18 @@ public class BillDateUtils {
         return billingPeriodStartDay;
     }
 
-    public static LogicalDate calculateFirstBillingCycleStartDate(BillingType cycle, LogicalDate leaseStartDate, boolean useCyclePeriodStartDay) {
+    public static LogicalDate calculateFirstBillingCycleStartDate(BillingType billingType, LogicalDate leaseStartDate, boolean useCyclePeriodStartDay) {
         LogicalDate billingCycleStartDate = null;
         if (useCyclePeriodStartDay) {
-            switch (cycle.paymentFrequency().getValue()) {
+            switch (billingType.paymentFrequency().getValue()) {
             case Monthly:
                 Calendar calendar = new GregorianCalendar();
                 calendar.setTime(leaseStartDate);
                 int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
-                if (cycle.billingPeriodStartDay().getValue() < 1 || cycle.billingPeriodStartDay().getValue() > 28) {
+                if (billingType.billingPeriodStartDay().getValue() < 1 || billingType.billingPeriodStartDay().getValue() > 28) {
                     throw new BillingException("Wrong billing period start day");
                 }
-                while (dayOfMonth != cycle.billingPeriodStartDay().getValue()) {
+                while (dayOfMonth != billingType.billingPeriodStartDay().getValue()) {
                     calendar.add(Calendar.DATE, -1);
                     dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
                 }
@@ -134,7 +134,7 @@ public class BillDateUtils {
                 throw new Error("Not implemented");
             }
         } else {
-            if (PaymentFrequency.Monthly.equals(cycle.paymentFrequency().getValue())) {
+            if (PaymentFrequency.Monthly.equals(billingType.paymentFrequency().getValue())) {
                 Calendar calendar = new GregorianCalendar();
                 calendar.setTime(leaseStartDate);
                 int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);

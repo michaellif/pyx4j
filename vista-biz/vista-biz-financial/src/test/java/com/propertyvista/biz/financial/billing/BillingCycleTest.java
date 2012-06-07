@@ -16,6 +16,7 @@ package com.propertyvista.biz.financial.billing;
 import java.text.ParseException;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.biz.financial.FinancialTestsUtils;
@@ -98,8 +99,9 @@ public class BillingCycleTest extends VistaDBTestBase {
         BillingType billingType = EntityFactory.create(BillingType.class);
         billingType.paymentFrequency().setValue(PaymentFrequency.Monthly);
         billingType.billingPeriodStartDay().setValue(billingPeriodStartDay);
+        Persistence.service().persist(billingType);
 
-        BillingCycle billingCycle = BillingLifecycleManager.createNewLeaseFirstBillingCycle(billingType, leaseStartDate, useCycleLeaseDay);
+        BillingCycle billingCycle = BillingLifecycleManager.getNewLeaseFirstBillingCycle(billingType, null, leaseStartDate, useCycleLeaseDay);
         return billingCycle;
     }
 
@@ -108,14 +110,15 @@ public class BillingCycleTest extends VistaDBTestBase {
         BillingType billingType = EntityFactory.create(BillingType.class);
         billingType.paymentFrequency().setValue(PaymentFrequency.Monthly);
         billingType.billingPeriodStartDay().setValue(billingPeriodStartDay);
+        Persistence.service().persist(billingType);
 
-        BillingCycle billingCycle = BillingLifecycleManager.createExistingLeaseInitialBillingCycle(billingType, leaseStartDate, leaseCreationDate,
+        BillingCycle billingCycle = BillingLifecycleManager.getExistingLeaseInitialBillingCycle(billingType, null, leaseStartDate, leaseCreationDate,
                 useCycleLeaseDay);
         return billingCycle;
     }
 
     private BillingCycle createSubsiquentBillingCycle(BillingCycle previousBillingCycle) {
-        BillingCycle billingCycle = BillingLifecycleManager.createSubsiquentBillingCycle(previousBillingCycle.billingType(), previousBillingCycle);
+        BillingCycle billingCycle = BillingLifecycleManager.getSubsiquentBillingCycle(previousBillingCycle.billingType(), null, previousBillingCycle);
         return billingCycle;
     }
 
