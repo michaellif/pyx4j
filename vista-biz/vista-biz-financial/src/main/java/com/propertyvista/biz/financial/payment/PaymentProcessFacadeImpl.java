@@ -48,6 +48,7 @@ import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
+import com.propertyvista.server.jobs.StatisticsUtils;
 import com.propertyvista.server.jobs.TaskRunner;
 
 public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
@@ -63,7 +64,7 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
     }
 
     @Override
-    public String processAcknowledgement(final PadFile padFile) {
+    public void processAcknowledgement(StatisticsRecord dynamicStatisticsRecord, final PadFile padFile) {
         if (!EnumSet.of(FileAcknowledgmentStatus.BatchAndTransactionReject, FileAcknowledgmentStatus.TransactionReject,
                 FileAcknowledgmentStatus.BatchLevelReject, FileAcknowledgmentStatus.Accepted).contains(padFile.acknowledgmentStatus().getValue())) {
             throw new Error("Invalid pad file acknowledgmentStatus " + padFile.acknowledgmentStatus().getValue());
@@ -83,6 +84,7 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
 
         for (PadDebitRecord debitRecord : rejectedRecodrs) {
             new PadProcessor().acknowledgmentReject(debitRecord);
+            StatisticsUtils.addFailed(dynamicStatisticsRecord, 1, debitRecord.amount().getValue());
         }
 
         List<PadBatch> rejectedBatch = TaskRunner.runInAdminNamespace(new Callable<List<PadBatch>>() {
@@ -117,12 +119,10 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
                 }
             });
             if (countBatchs > 0) {
-                return "All Accepted";
-            } else {
-                return null;
+                dynamicStatisticsRecord.message().setValue("All Accepted");
             }
         } else {
-            return "Batch Level Reject:" + rejectedBatch.size() + "; Transaction Reject:" + rejectedRecodrs.size();
+            dynamicStatisticsRecord.message().setValue("Batch Level Reject:" + rejectedBatch.size() + "; Transaction Reject:" + rejectedRecodrs.size());
         }
     }
 
@@ -148,7 +148,7 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
     }
 
     @Override
-    public String processPadReconciliation(final PadReconciliationFile reconciliationFile) {
+    public void processPadReconciliation(StatisticsRecord dynamicStatisticsRecord, final PadReconciliationFile reconciliationFile) {
         final String namespace = NamespaceManager.getNamespace();
 
         List<PadReconciliationSummary> transactions = TaskRunner.runInAdminNamespace(new Callable<List<PadReconciliationSummary>>() {
@@ -163,7 +163,7 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
         });
 
         if (transactions.size() == 0) {
-            return null;
+            return;
         }
 
         int processed = 0;
@@ -178,15 +178,19 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
                 switch (debitRecord.reconciliationStatus().getValue()) {
                 case PROCESSED:
                     processed++;
+                    StatisticsUtils.addProcessed(dynamicStatisticsRecord, 1, debitRecord.amount().getValue());
                     break;
                 case REJECTED:
                     rejected++;
+                    StatisticsUtils.addFailed(dynamicStatisticsRecord, 1, debitRecord.amount().getValue());
                     break;
                 case RETURNED:
                     returned++;
+                    StatisticsUtils.addFailed(dynamicStatisticsRecord, 1, debitRecord.amount().getValue());
                     break;
                 case DUPLICATE:
                     duplicate++;
+                    StatisticsUtils.addFailed(dynamicStatisticsRecord, 1, debitRecord.amount().getValue());
                     break;
                 }
             }
@@ -216,11 +220,11 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
             message.append("Duplicate:").append(duplicate);
         }
 
-        return message.toString();
+        dynamicStatisticsRecord.message().setValue(message.toString());
     }
 
     @Override
-    public String createPreauthorisedPayments(LogicalDate runDate) {
+    public void createPreauthorisedPayments(StatisticsRecord dynamicStatisticsRecord, LogicalDate runDate) {
         // Find Bills 
         //For Due Date (trigger target date), go over all Bills that have specified DueDate - see if this bill not yet created preauthorised payments and create one
         Calendar c = new GregorianCalendar();
@@ -235,9 +239,6 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
         EntityQueryCriteria<Bill> billCriteria = EntityQueryCriteria.create(Bill.class);
         billCriteria.add(PropertyCriterion.eq(billCriteria.proto().dueDate(), dueDate));
         billCriteria.add(PropertyCriterion.eq(billCriteria.proto().billStatus(), Bill.BillStatus.Confirmed));
-
-        int paymentRecordsCreated = 0;
-        BigDecimal totalAmount = BigDecimal.ZERO;
 
         ICursorIterator<Bill> billIterator = Persistence.service().query(null, billCriteria, AttachLevel.Attached);
         while (billIterator.hasNext()) {
@@ -265,8 +266,7 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
                     PaymentMethod method = PaymentUtils.retrievePreAuthorizedPaymentMethod(tenant);
                     if (method != null) {
                         createPreAuthorizedPayment(tenant, currentBalance, bill.billingAccount(), method);
-                        paymentRecordsCreated++;
-                        totalAmount = totalAmount.add(currentBalance);
+                        StatisticsUtils.addProcessed(dynamicStatisticsRecord, 1, currentBalance);
                     }
                     break;
                 case CoApplicant:
@@ -278,14 +278,6 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
         }
 
         Persistence.service().commit();
-
-        StringBuilder message = new StringBuilder();
-        if (paymentRecordsCreated != 0) {
-            message.append("Records:").append(paymentRecordsCreated);
-            message.append(", Total:").append(totalAmount);
-        }
-
-        return message.toString();
     }
 
     private void createPreAuthorizedPayment(LeaseParticipant leaseParticipant, BigDecimal amount, BillingAccount billingAccount, PaymentMethod method) {
@@ -313,7 +305,22 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
 
     @Override
     public void processScheduledPayments(StatisticsRecord dynamicStatisticsRecord, PaymentType paymentType) {
-        // TODO Auto-generated method stub
+        EntityQueryCriteria<PaymentRecord> criteria = EntityQueryCriteria.create(PaymentRecord.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().paymentStatus(), PaymentRecord.PaymentStatus.Scheduled));
+        criteria.add(PropertyCriterion.eq(criteria.proto().paymentMethod().type(), paymentType));
+
+        ICursorIterator<PaymentRecord> paymentRecordIterator = Persistence.service().query(null, criteria, AttachLevel.Attached);
+        while (paymentRecordIterator.hasNext()) {
+            PaymentRecord paymentRecord = paymentRecordIterator.next();
+            paymentRecord = ServerSideFactory.create(PaymentFacade.class).processPayment(paymentRecord);
+
+            if (paymentRecord.paymentStatus().getValue() == PaymentRecord.PaymentStatus.Rejected) {
+                StatisticsUtils.addFailed(dynamicStatisticsRecord, 1, paymentRecord.amount().getValue());
+            } else {
+                StatisticsUtils.addProcessed(dynamicStatisticsRecord, 1, paymentRecord.amount().getValue());
+            }
+        }
+        Persistence.service().commit();
     }
 
 }

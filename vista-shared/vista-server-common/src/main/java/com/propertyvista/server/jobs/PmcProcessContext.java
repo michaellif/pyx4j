@@ -42,7 +42,6 @@ public class PmcProcessContext {
             stats.setPrimaryKey(requestLocal.get().runStats.getPrimaryKey());
         }
         requestLocal.get().runStats = stats;
-        requestLocal.get().runStats.updateTime().setValue(System.currentTimeMillis());
     }
 
     public static void remove() {

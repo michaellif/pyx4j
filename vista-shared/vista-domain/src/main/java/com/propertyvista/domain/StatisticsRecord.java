@@ -30,9 +30,6 @@ public interface StatisticsRecord extends IEntity {
 
     IPrimitive<Double> amountFailed();
 
-    @Transient
-    IPrimitive<Long> updateTime();
-
     IPrimitive<String> message();
 
 }

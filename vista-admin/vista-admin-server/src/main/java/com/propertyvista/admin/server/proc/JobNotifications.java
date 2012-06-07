@@ -43,7 +43,7 @@ public class JobNotifications {
         }
 
         for (TriggerNotification notificationCfg : trigger.notifications()) {
-            if (notificationCfg.event().equals(TriggerNotificationEvent.All) || notificationCfg.event().equals(event)) {
+            if ((notificationCfg.event().getValue() == TriggerNotificationEvent.All) || (notificationCfg.event().getValue() == event)) {
                 sendNotification(trigger, run, notificationCfg.user());
             }
         }

@@ -36,9 +36,9 @@ import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.essentials.server.admin.SystemMaintenance;
 import com.pyx4j.server.contexts.Lifecycle;
 import com.pyx4j.server.contexts.NamespaceManager;
@@ -55,6 +55,7 @@ import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.server.jobs.PmcProcess;
 import com.propertyvista.server.jobs.PmcProcessContext;
 import com.propertyvista.server.jobs.PmcProcessFactory;
+import com.propertyvista.server.jobs.StatisticsUtils;
 
 public class PmcProcessDispatcherJob implements Job {
 
@@ -227,9 +228,11 @@ public class PmcProcessDispatcherJob implements Job {
     private void updateRunStats(RunStats stats, long startTimeNano, RunData runData) {
         long durationNano = System.nanoTime() - startTimeNano;
 
-        nvlAdd(stats.total(), runData.stats().total());
-        nvlAdd(stats.processed(), runData.stats().processed());
-        nvlAdd(stats.failed(), runData.stats().failed());
+        StatisticsUtils.nvlAddLong(stats.total(), runData.stats().total());
+        StatisticsUtils.nvlAddLong(stats.processed(), runData.stats().processed());
+        StatisticsUtils.nvlAddDouble(stats.amountProcessed(), runData.stats().amountProcessed());
+        StatisticsUtils.nvlAddLong(stats.failed(), runData.stats().failed());
+        StatisticsUtils.nvlAddDouble(stats.amountFailed(), runData.stats().amountFailed());
 
         stats.totalDuration().setValue(durationNano / Consts.MSEC2NANO);
         if ((!stats.total().isNull()) && (stats.total().getValue() != 0)) {
@@ -238,17 +241,9 @@ public class PmcProcessDispatcherJob implements Job {
         Persistence.service().persist(stats);
     }
 
-    private void nvlAdd(IPrimitive<Long> target, IPrimitive<Long> value) {
-        if (target.isNull()) {
-            target.setValue(value.getValue());
-        } else if (!value.isNull()) {
-            target.setValue(target.getValue() + value.getValue());
-        }
-
-    }
-
     private void executeOneRunData(ExecutorService executorService, final PmcProcess pmcProcess, final RunData runData, final Date forDate) {
         long startTimeNano = System.nanoTime();
+        RunStats savedStats = runData.stats().duplicate();
         Future<Boolean> futureResult = executorService.submit(new Callable<Boolean>() {
 
             @Override
@@ -280,7 +275,6 @@ public class PmcProcessDispatcherJob implements Job {
         Throwable executionException = null;
 
         boolean compleated = false;
-        long runStatsUpdateTime = 0;
         while (!compleated) {
 
             if (futureResult.isDone()) {
@@ -288,8 +282,8 @@ public class PmcProcessDispatcherJob implements Job {
             }
 
             // Update Statistics 
-            if ((!runData.stats().updateTime().isNull()) && (runData.stats().updateTime().getValue() > runStatsUpdateTime)) {
-                runStatsUpdateTime = runData.stats().updateTime().getValue();
+            if (!EntityGraph.fullyEqualValues(savedStats, runData.stats())) {
+                savedStats = runData.stats().duplicate();
                 Persistence.service().persist(runData.stats());
                 Persistence.service().commit();
             }

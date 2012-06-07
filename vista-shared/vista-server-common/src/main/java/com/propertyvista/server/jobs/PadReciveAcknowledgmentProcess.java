@@ -46,9 +46,7 @@ public class PadReciveAcknowledgmentProcess implements PmcProcess {
 
     @Override
     public void executePmcJob() {
-        final RunStats stats = PmcProcessContext.getRunStats();
-        stats.message().setValue(ServerSideFactory.create(PaymentProcessFacade.class).processAcknowledgement(padFile));
-        PmcProcessContext.setRunStats(stats);
+        ServerSideFactory.create(PaymentProcessFacade.class).processAcknowledgement(PmcProcessContext.getRunStats(), padFile);
     }
 
     @Override

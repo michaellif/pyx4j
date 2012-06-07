@@ -46,9 +46,12 @@ public class RunForm extends AdminEntityForm<Run> {
         container.setWidget(++row, 0, new DecoratorBuilder(inject(proto().status()), 15).build());
 
         container.setH2(++row, 0, 2, i18n.tr("Statistics"));
+        container.getFlexCellFormatter().setColSpan(row, 0, 2);
         container.setWidget(++row, 0, new DecoratorBuilder(inject(proto().stats().total()), 10).build());
         container.setWidget(++row, 0, new DecoratorBuilder(inject(proto().stats().processed()), 10).build());
+        container.setWidget(row, 1, new DecoratorBuilder(inject(proto().stats().amountProcessed()), 10).build());
         container.setWidget(++row, 0, new DecoratorBuilder(inject(proto().stats().failed()), 10).build());
+        container.setWidget(row, 1, new DecoratorBuilder(inject(proto().stats().amountFailed()), 10).build());
         container.setWidget(++row, 0, new DecoratorBuilder(inject(proto().stats().averageDuration()), 10).build());
         container.setWidget(++row, 0, new DecoratorBuilder(inject(proto().stats().totalDuration()), 10).build());
 
@@ -56,7 +59,9 @@ public class RunForm extends AdminEntityForm<Run> {
         container.setWidget(++row, 0, new DecoratorBuilder(inject(proto().errorMessage()), 40).build());
 
         container.setH2(++row, 0, 2, i18n.tr("Data"));
+        container.getFlexCellFormatter().setColSpan(row, 0, 2);
         container.setWidget(++row, 0, ((RunViewerView) getParentView()).getRunDataListerView().asWidget());
+        container.getFlexCellFormatter().setColSpan(row, 0, 2);
 
         return container;
     }

@@ -16,7 +16,6 @@ package com.propertyvista.server.jobs;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 
-import com.propertyvista.admin.domain.scheduler.RunStats;
 import com.propertyvista.biz.financial.payment.PaymentProcessFacade;
 
 public class PaymentsIssueProcess implements PmcProcess {
@@ -28,10 +27,8 @@ public class PaymentsIssueProcess implements PmcProcess {
 
     @Override
     public void executePmcJob() {
-        final RunStats stats = PmcProcessContext.getRunStats();
-        stats.message().setValue(
-                ServerSideFactory.create(PaymentProcessFacade.class).createPreauthorisedPayments(new LogicalDate(PmcProcessContext.getForDate())));
-        PmcProcessContext.setRunStats(stats);
+        ServerSideFactory.create(PaymentProcessFacade.class).createPreauthorisedPayments(PmcProcessContext.getRunStats(),
+                new LogicalDate(PmcProcessContext.getForDate()));
     }
 
     @Override

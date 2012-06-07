@@ -26,15 +26,15 @@ public interface PaymentProcessFacade {
 
     PadFile recivePadAcknowledgementFile();
 
-    String processAcknowledgement(PadFile padFile);
+    void processAcknowledgement(StatisticsRecord dynamicStatisticsRecord, PadFile padFile);
 
     PadReconciliationFile recivePadReconciliation();
 
-    String processPadReconciliation(PadReconciliationFile reconciliationFile);
+    void processPadReconciliation(StatisticsRecord dynamicStatisticsRecord, PadReconciliationFile reconciliationFile);
 
     void updatePadFilesProcessingStatus();
 
-    String createPreauthorisedPayments(LogicalDate dueDate);
+    void createPreauthorisedPayments(StatisticsRecord dynamicStatisticsRecord, LogicalDate dueDate);
 
     void processScheduledPayments(StatisticsRecord dynamicStatisticsRecord, PaymentType paymentType);
 
