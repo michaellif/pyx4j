@@ -23,7 +23,6 @@ import com.propertyvista.admin.domain.security.AdminUserCredential;
 import com.propertyvista.admin.rpc.services.AdminAuthenticationService;
 import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.domain.security.AdminUser;
-import com.propertyvista.domain.security.VistaAdminBehavior;
 import com.propertyvista.domain.security.VistaBasicBehavior;
 import com.propertyvista.server.common.security.VistaAuthenticationServicesImpl;
 
@@ -52,8 +51,6 @@ public class AdminAuthenticationServiceImpl extends VistaAuthenticationServicesI
     protected Set<Behavior> getBehaviors(AdminUserCredential userCredential) {
         Set<Behavior> behaviors = new HashSet<Behavior>();
         behaviors.addAll(userCredential.behaviors());
-        // TODO remove after preload fixed
-        behaviors.add(VistaAdminBehavior.SystemAdmin);
         return behaviors;
     }
 

@@ -35,6 +35,13 @@ public class AdminUserCrudServiceImpl extends AbstractCrudServiceDtoImpl<AdminUs
     }
 
     @Override
+    protected void enhanceRetrieved(AdminUserCredential entity, AdminUserDTO dto) {
+        if (!entity.behaviors().isEmpty()) {
+            dto.role().setValue(entity.behaviors().iterator().next());
+        }
+    }
+
+    @Override
     protected void retrievedForList(AdminUserCredential entity) {
         Persistence.service().retrieve(entity.user());
     }
@@ -48,6 +55,9 @@ public class AdminUserCrudServiceImpl extends AbstractCrudServiceDtoImpl<AdminUs
     protected void persist(AdminUserCredential dbo, AdminUserDTO dto) {
         dbo.user().email().setValue(PasswordEncryptor.normalizeEmailAddress(dto.email().getValue()));
         Persistence.service().merge(dbo.user());
+
+        dbo.behaviors().clear();
+        dbo.behaviors().add(dto.role().getValue());
 
         if (dbo.getPrimaryKey() == null) {
             dbo.credential().setValue(PasswordEncryptor.encryptPassword(dto.password().getValue()));

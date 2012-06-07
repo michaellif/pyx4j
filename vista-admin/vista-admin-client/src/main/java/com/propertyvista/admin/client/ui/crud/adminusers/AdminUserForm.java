@@ -45,6 +45,7 @@ public class AdminUserForm extends AdminEntityForm<AdminUserDTO> {
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().password())).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().passwordConfirm())).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().enabled())).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().role())).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().requireChangePasswordOnNextLogIn())).build());
 
         return content;

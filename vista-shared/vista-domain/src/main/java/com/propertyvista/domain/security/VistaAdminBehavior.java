@@ -17,6 +17,8 @@ import com.pyx4j.security.shared.Behavior;
 
 public enum VistaAdminBehavior implements Behavior {
 
-    SystemAdmin
+    SystemAdmin,
+
+    OnboardingApi
 
 }
