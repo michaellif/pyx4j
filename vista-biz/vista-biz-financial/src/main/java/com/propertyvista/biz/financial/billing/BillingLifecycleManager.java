@@ -228,7 +228,7 @@ public class BillingLifecycleManager {
 
         if (previousBill == null) {
             if (billingAccount.carryforwardBalance().isNull()) {
-                return getNewLeaseFirstBillingCycle(billingAccount.billingType(), lease.unit().belongsTo(), lease.leaseFrom().getValue(), !billingAccount
+                return getNewLeaseInitialBillingCycle(billingAccount.billingType(), lease.unit().belongsTo(), lease.leaseFrom().getValue(), !billingAccount
                         .billingPeriodStartDate().isNull());
 
             } else {
@@ -317,8 +317,8 @@ public class BillingLifecycleManager {
         return billingType;
     }
 
-    static BillingCycle getNewLeaseFirstBillingCycle(BillingType billingType, Building building, LogicalDate leaseStartDate, boolean useCyclePeriodStartDay) {
-        return ensureBillingCycle(billingType, building, BillDateUtils.calculateFirstBillingCycleStartDate(billingType, leaseStartDate, useCyclePeriodStartDay));
+    static BillingCycle getNewLeaseInitialBillingCycle(BillingType billingType, Building building, LogicalDate leaseStartDate, boolean useCyclePeriodStartDay) {
+        return ensureBillingCycle(billingType, building, BillDateUtils.calculateInitialBillingCycleStartDate(billingType, leaseStartDate, useCyclePeriodStartDay));
     }
 
     static BillingCycle getExistingLeaseInitialBillingCycle(BillingType billingType, Building building, LogicalDate leaseStartDate,
@@ -326,7 +326,7 @@ public class BillingLifecycleManager {
         if (!leaseStartDate.before(leaseCreationDate)) {
             throw new BillingException("Existing lease start date should be earlier than creation date");
         }
-        LogicalDate firstBillingCycleStartDate = BillDateUtils.calculateFirstBillingCycleStartDate(billingType, leaseStartDate, useCyclePeriodStartDay);
+        LogicalDate firstBillingCycleStartDate = BillDateUtils.calculateInitialBillingCycleStartDate(billingType, leaseStartDate, useCyclePeriodStartDay);
         LogicalDate billingCycleStartDate = null;
         LogicalDate nextBillingCycleStartDate = firstBillingCycleStartDate;
         do {

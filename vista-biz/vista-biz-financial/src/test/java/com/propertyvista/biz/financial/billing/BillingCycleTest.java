@@ -101,7 +101,7 @@ public class BillingCycleTest extends VistaDBTestBase {
         billingType.billingPeriodStartDay().setValue(billingPeriodStartDay);
         Persistence.service().persist(billingType);
 
-        BillingCycle billingCycle = BillingLifecycleManager.getNewLeaseFirstBillingCycle(billingType, null, leaseStartDate, useCycleLeaseDay);
+        BillingCycle billingCycle = BillingLifecycleManager.getNewLeaseInitialBillingCycle(billingType, null, leaseStartDate, useCycleLeaseDay);
         return billingCycle;
     }
 

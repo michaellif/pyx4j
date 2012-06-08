@@ -16,7 +16,6 @@ package com.propertyvista.biz.financial.ar;
 import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.biz.financial.InvoiceLineItemFactory;
-import com.propertyvista.biz.financial.billing.BillDateUtils;
 import com.propertyvista.domain.financial.billing.InvoiceAccountCharge;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
@@ -32,7 +31,7 @@ public class ARLeaseAdjustmentProcessor extends AbstractARProcessor {
             InvoiceLineItem lineItem = null;
             if (LeaseAdjustmentReason.ActionType.charge.equals(adjustment.reason().actionType().getValue())) {
                 InvoiceAccountCharge charge = InvoiceLineItemFactory.createInvoiceAccountCharge(adjustment);
-                charge.dueDate().setValue(BillDateUtils.calculateDueDate(adjustment.billingAccount()));
+                charge.dueDate().setValue(ARDateUtils.calculateDueDate(adjustment.billingAccount()));
                 lineItem = charge;
             } else if (LeaseAdjustmentReason.ActionType.credit.equals(adjustment.reason().actionType().getValue())) {
                 lineItem = InvoiceLineItemFactory.createInvoiceAccountCredit(adjustment);

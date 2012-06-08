@@ -20,7 +20,6 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.financial.SysDateManager;
-import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.BillingType;
 import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
@@ -72,7 +71,7 @@ public class BillDateUtils {
      * - for 'monthly' or 'semimonthly' PaymentFrequency and if lease date starts on 29, 30, or 31 we correspond this lease to cycle
      * with billingPeriodStartDay = 1 and prorate days of 29/30/31.
      */
-    public static int calculateBillingTypeStartDay(PaymentFrequency frequency, LogicalDate leaseStartDate) {
+    static int calculateBillingTypeStartDay(PaymentFrequency frequency, LogicalDate leaseStartDate) {
         int billingPeriodStartDay = 0;
         Calendar calendar = new GregorianCalendar();
         calendar.setTime(leaseStartDate);
@@ -107,7 +106,7 @@ public class BillDateUtils {
         return billingPeriodStartDay;
     }
 
-    public static LogicalDate calculateFirstBillingCycleStartDate(BillingType billingType, LogicalDate leaseStartDate, boolean useCyclePeriodStartDay) {
+    static LogicalDate calculateInitialBillingCycleStartDate(BillingType billingType, LogicalDate leaseStartDate, boolean useCyclePeriodStartDay) {
         LogicalDate billingCycleStartDate = null;
         if (useCyclePeriodStartDay) {
             switch (billingType.paymentFrequency().getValue()) {
@@ -215,19 +214,6 @@ public class BillDateUtils {
         } else {
             return bill.billingPeriodStartDate().getValue();
         }
-    }
-
-    public static LogicalDate calculateDueDate(BillingAccount billingAccount) {
-        // TODO - this is used to set the due date for immediate charges, which is the start date of
-        // next bill, in case it's coming in time. If not, all kind of aspects must be accounted...
-        // For now we just return the next billing period start date
-        Calendar dueDate = new GregorianCalendar();
-        int dayOfMonth = billingAccount.billingType().billingPeriodStartDay().getValue().intValue();
-        dueDate.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-        if (dueDate.before(SysDateManager.getSysDate())) {
-            dueDate.add(Calendar.MONTH, 1);
-        }
-        return new LogicalDate(dueDate.getTime());
     }
 
 }
