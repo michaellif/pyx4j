@@ -20,6 +20,7 @@
     <modules>
         <module>vista-server-config</module>
         <module>vista-domain</module>
+        <module>vista-svg-shared</module>
         <module>vista-domain-srv</module>
         <module>vista-server-common</module>
         <module>vista-gwt-common</module>
