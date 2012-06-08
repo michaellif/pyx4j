@@ -30,8 +30,6 @@ public interface TurnoverAnalysisMetadata extends GadgetMetadata {
 
     /**
      * This is not going to be used in the first released version: the resolution is always one month.
-     * 
-     * @return
      */
     @Deprecated
     IPrimitive<AnalysisResolution> turnoverAnalysisResolution();

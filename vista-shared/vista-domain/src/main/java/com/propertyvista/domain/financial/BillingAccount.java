@@ -62,8 +62,6 @@ public interface BillingAccount extends IEntity {
 
     /**
      * Immediate InvoiceLineItems are kept here between billing runs. Approved billing cleans this set.
-     * 
-     * @return
      */
     @Owned(cascade = {})
     @Detached(level = AttachLevel.Detached)
