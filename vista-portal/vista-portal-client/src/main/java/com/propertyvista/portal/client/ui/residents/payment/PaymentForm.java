@@ -235,8 +235,16 @@ public class PaymentForm extends CEntityDecoratableForm<PaymentRecordDTO> {
                     if (getValue().getPrimaryKey() == null) {
                         get(proto().paymentSelect()).setValue(PaymentSelect.Profiled, true);
                     } else {
-                        get(proto().paymentSelect()).setValue(
-                                getValue().paymentMethod().leaseParticipant().isNull() ? PaymentSelect.New : PaymentSelect.Profiled, false);
+                        if (getValue().paymentMethod().leaseParticipant().isNull()) {
+                            get(proto().paymentSelect()).setValue(PaymentSelect.New, false);
+                        } else {
+                            get(proto().paymentSelect()).setValue(PaymentSelect.Profiled, false);
+//                            profiledPaymentMethodsCombo.setValueByString(getValue().paymentMethod().getStringView());
+                            // TODO: find out why this setValue doen't work!?
+                            profiledPaymentMethodsCombo.setValue(getValue().paymentMethod(), false);
+                            setProfiledPaymentMethodsVisible(true);
+                            paymentMethodEditor.setViewable(true);
+                        }
                     }
                 }
 
