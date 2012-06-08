@@ -17,16 +17,19 @@ package com.propertyvista.domain.financial.billing;
 import java.math.BigDecimal;
 
 import com.pyx4j.entity.annotations.AbstractEntity;
+import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
+import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.entity.shared.ISet;
 
 @AbstractEntity
 public interface InvoiceCredit extends InvoiceLineItem {
-
-    ISet<DebitCreditLink> debitLinks();
+    @Owned
+    @Detached
+    IList<DebitCreditLink> debitLinks();
 
     @Format("#0.00")
     @Editor(type = EditorType.money)

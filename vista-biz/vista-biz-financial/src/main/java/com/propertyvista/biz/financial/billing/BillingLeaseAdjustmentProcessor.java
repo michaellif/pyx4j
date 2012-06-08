@@ -80,7 +80,7 @@ public class BillingLeaseAdjustmentProcessor extends AbstractBillingProcessor {
     }
 
     private void attachImmediateLeaseAdjustments() {
-        List<InvoiceLineItem> items = BillingUtils.getNotConsumedLineItems(getBillingManager().getNextPeriodBill().billingAccount());
+        List<InvoiceLineItem> items = BillingUtils.getUnclaimedLineItems(getBillingManager().getNextPeriodBill().billingAccount());
         for (InvoiceAccountCredit credit : BillingUtils.getLineItemsForType(items, InvoiceAccountCredit.class)) {
             attachImmediateCredit(credit);
         }

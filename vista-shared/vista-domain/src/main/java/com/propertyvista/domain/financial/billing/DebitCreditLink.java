@@ -23,9 +23,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 
 public interface DebitCreditLink extends IEntity {
 
-    InvoiceLineItem debitItem();
-
-    InvoiceLineItem creditItem();
+    InvoiceDebit debitItem();
 
     @Format("#0.00")
     @Editor(type = EditorType.money)

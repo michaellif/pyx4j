@@ -13,6 +13,8 @@
  */
 package com.propertyvista.biz.financial.ar;
 
+import java.math.BigDecimal;
+
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
@@ -31,9 +33,8 @@ public class ARPaymentProcessor extends AbstractARProcessor {
         payment.paymentRecord().set(paymentRecord);
         payment.amount().setValue(paymentRecord.amount().getValue().negate());
         payment.billingAccount().set(paymentRecord.billingAccount());
-        payment.consumed().setValue(false);
-
         payment.description().setValue(i18n.tr("Payment Received - Thank You"));
+        payment.claimed().setValue(false);
 
         Persistence.service().persist(payment);
 
@@ -47,10 +48,11 @@ public class ARPaymentProcessor extends AbstractARProcessor {
         backOut.amount().setValue(paymentRecord.amount().getValue().negate());
         backOut.billingAccount().set(paymentRecord.billingAccount());
         backOut.description().setValue(i18n.tr("Payment Rejected"));
+        backOut.taxTotal().setValue(BigDecimal.ZERO);
+        backOut.claimed().setValue(false);
 
         Persistence.service().persist(backOut);
 
-        ARTransactionManager.processBackOutPayment(backOut);
-
+        ARTransactionManager.postInvoiceLineItem(backOut);
     }
 }

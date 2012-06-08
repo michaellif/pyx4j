@@ -381,10 +381,6 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
                 FinancialTestsUtils.getDate(effectiveDate));
     }
 
-    private LeaseAdjustment addLeaseAdjustment(String amount, LeaseAdjustmentReason reason) {
-        return addLeaseAdjustment(amount, reason, null);
-    }
-
     private LeaseAdjustment addLeaseAdjustment(String amount, LeaseAdjustmentReason reason, LogicalDate targetDate) {
 
         Lease lease = retrieveLease();

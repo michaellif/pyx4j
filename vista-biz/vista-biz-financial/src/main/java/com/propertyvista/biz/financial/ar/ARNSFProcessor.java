@@ -32,7 +32,7 @@ public class ARNSFProcessor extends AbstractARProcessor {
 
     private static final I18n i18n = I18n.get(ARNSFProcessor.class);
 
-    void postNSFCharge(PaymentRecord paymentRecord) {
+    void applyNSFCharge(PaymentRecord paymentRecord) {
         Persistence.service().retrieve(paymentRecord.billingAccount());
         // get NSF policy data
         Persistence.service().retrieve(paymentRecord.billingAccount().lease());
@@ -52,13 +52,12 @@ public class ARNSFProcessor extends AbstractARProcessor {
 
         InvoiceNSF charge = EntityFactory.create(InvoiceNSF.class);
         charge.billingAccount().set(paymentRecord.billingAccount());
-        charge.consumed().setValue(false);
         charge.debitType().setValue(DebitType.nsf);
         charge.amount().setValue(nsfItem.fee().getValue());
         charge.dueDate().setValue(BillDateUtils.calculateDueDate(paymentRecord.billingAccount()));
         charge.description().setValue(i18n.tr("NSF fee"));
-        charge.taxTotal().setValue(new BigDecimal("0.00"));
-        charge.consumed().setValue(false);
+        charge.taxTotal().setValue(BigDecimal.ZERO);
+        charge.claimed().setValue(false);
         charge.paymentRecord().set(paymentRecord);
 
         Persistence.service().persist(charge);

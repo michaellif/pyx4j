@@ -47,7 +47,7 @@ public interface InvoiceLineItem extends IEntity {
     @JoinColumn
     BillingAccount billingAccount();
 
-    IPrimitive<Boolean> consumed();
+    IPrimitive<Boolean> claimed();
 
     IPrimitive<String> description();
 

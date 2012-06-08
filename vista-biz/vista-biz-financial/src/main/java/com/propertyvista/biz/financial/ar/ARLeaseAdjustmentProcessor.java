@@ -41,7 +41,7 @@ public class ARLeaseAdjustmentProcessor extends AbstractARProcessor {
             }
 
             lineItem.billingAccount().set(adjustment.billingAccount());
-            lineItem.consumed().setValue(false);
+            lineItem.claimed().setValue(false);
             Persistence.service().persist(lineItem);
 
             ARTransactionManager.postInvoiceLineItem(lineItem);

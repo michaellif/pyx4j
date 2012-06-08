@@ -59,7 +59,7 @@ public class BillingLatePaymentFeeProcessor extends AbstractBillingProcessor {
 
         // add all posted interim items
         Persistence.service().retrieve(curBill.billingAccount());
-        List<InvoiceLineItem> items = BillingUtils.getNotConsumedLineItems(getBillingManager().getNextPeriodBill().billingAccount());
+        List<InvoiceLineItem> items = BillingUtils.getUnclaimedLineItems(getBillingManager().getNextPeriodBill().billingAccount());
         for (InvoiceLineItem item : items) {
             if (!item.postDate().isNull() && item.postDate().getValue().compareTo(curBill.dueDate().getValue()) <= 0) {
                 overdueAmount = overdueAmount.add(BillingUtils.calculateTotal(item));

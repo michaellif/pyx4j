@@ -69,9 +69,9 @@ public class BillingUtils {
         return isFeature(product) && !((Feature.FeatureV) product.cast()).recurring().getValue();
     }
 
-    public static List<InvoiceLineItem> getNotConsumedLineItems(BillingAccount billingAccount) {
+    public static List<InvoiceLineItem> getUnclaimedLineItems(BillingAccount billingAccount) {
         EntityQueryCriteria<InvoiceLineItem> criteria = EntityQueryCriteria.create(InvoiceLineItem.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().consumed(), false));
+        criteria.add(PropertyCriterion.eq(criteria.proto().claimed(), false));
         criteria.add(PropertyCriterion.eq(criteria.proto().billingAccount(), billingAccount));
         return Persistence.service().query(criteria);
     }

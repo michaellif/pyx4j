@@ -31,23 +31,14 @@ import com.propertyvista.domain.payment.PaymentType;
 
 public class BillingRejectedPaymentScenarioTest extends FinancialTestBase {
 
-    private long startTime;
-
     @Override
     protected void setUp() throws Exception {
         super.setUp();
         preloadData();
-        startTime = System.currentTimeMillis();
-    }
-
-    @Override
-    protected void tearDown() throws Exception {
-        System.out.println("Execution Time - " + (System.currentTimeMillis() - startTime) + "ms");
-        super.tearDown();
     }
 
     public void testScenario() {
-        initLease("01-Apr-2011", "31-Aug-2011", 1);
+        initLease("01-Apr-2011", "31-Dec-2011", 1);
 
         //==================== First Bill ======================//
 
@@ -66,7 +57,7 @@ public class BillingRejectedPaymentScenarioTest extends FinancialTestBase {
         paymentReceivedAmount("0.00").
         depositAmount("930.30").
         serviceCharge("930.30").
-        latePaymentFee("0.00").
+        latePaymentFees("0.00").
         taxes("111.64").
         totalDueAmount("1972.24");
         // @formatter:on
@@ -84,14 +75,13 @@ public class BillingRejectedPaymentScenarioTest extends FinancialTestBase {
 
         // @formatter:off
         new BillTester(bill,true).
-        billSequenceNumber(2).
         previousBillSequenceNumber(1).
         billType(Bill.BillType.Regular).
         billingPeriodStartDate("1-May-2011").
         billingPeriodEndDate("31-May-2011").
         paymentReceivedAmount("-1972.24").
         serviceCharge("930.30").
-        latePaymentFee("0.00").
+        latePaymentFees("0.00").
         taxes("111.64").
         totalDueAmount("1041.94"); // 930.30 + 111.64 = 1041.94
         // @formatter:on
@@ -116,37 +106,68 @@ public class BillingRejectedPaymentScenarioTest extends FinancialTestBase {
         billingPeriodStartDate("1-Jun-2011").
         billingPeriodEndDate("30-Jun-2011").
         paymentReceivedAmount("-1041.94").
+        paymentRejectedAmount("41.94").
         serviceCharge("930.30").
-        nsfFee("30.00").
+        nsfCharges("30.00").
         taxes("111.64"). // 12% (930.30 + 100) = 123.64
-        totalDueAmount("1071.94"); // 930.30 +111.64 +30
+        totalDueAmount("1113.88"); // 930.30 +111.64 +30 +41.94
         // @formatter:on
 
         //==================== Bill 4 (reject intermediate payment scenario) ======================//
 
-//        // Add Payment for May
-//        SysDateManager.setSysDate("01-Jun-2011");
-//        payment = receiveAndPostPayment("30-May-2011", "1000.00", PaymentType.Check);
-//        receiveAndPostPayment("31-May-2011", "71.94", PaymentType.Cash);
-//
-//        // reject payments
-//        SysDateManager.setSysDate("05-Jun-2011");
-//        rejectPayment(payment, true);
-//
-//        SysDateManager.setSysDate("17-Jun-2011");
-//
-//        bill = runBilling(true, true);
-//
-//        // @formatter:off
-//        new BillTester(bill,true).
-//        billingPeriodStartDate("1-Jul-2011").
-//        billingPeriodEndDate("31-Jul-2011").
-//        paymentReceivedAmount("-1071.94").
-//        serviceCharge("930.30").
-//        nsfFee("100.00").
-//        taxes("111.64"). // 12% (930.30)
-//        totalDueAmount("1141.94"); // 930.30 +111.64 +100
-//        // @formatter:on
+        // Add Payment for June
+        SysDateManager.setSysDate("01-Jun-2011");
+        payment = receiveAndPostPayment("30-May-2011", "950.00", PaymentType.Cash);
+        receiveAndPostPayment("31-May-2011", "163.88", PaymentType.Check);
+
+        // reject payments
+        SysDateManager.setSysDate("05-Jun-2011");
+        rejectPayment(payment, true);
+
+        SysDateManager.setSysDate("17-Jun-2011");
+
+        bill = runBilling(true, true);
+
+        // @formatter:off
+        new BillTester(bill,true).
+        billingPeriodStartDate("1-Jul-2011").
+        billingPeriodEndDate("31-Jul-2011").
+        paymentReceivedAmount("-1113.88").
+        paymentRejectedAmount("950.00").
+        serviceCharge("930.30").
+        nsfCharges("100.00").
+        taxes("111.64"). // 12% (930.30)
+        totalDueAmount("2091.94"); // 930.30 +111.64 +100 +950
+        // @formatter:on
+
+        //==================== Bill 5 (reject two payments scenario) ======================//
+
+        // Add Payment for July
+        SysDateManager.setSysDate("01-Jul-2011");
+        payment = receiveAndPostPayment("29-Jun-2011", "900.00", PaymentType.Check);
+        PaymentRecord payment2 = receiveAndPostPayment("30-Jun-2011", "1191.94", PaymentType.Cash);
+
+        // reject payments
+        SysDateManager.setSysDate("05-Jul-2011");
+        rejectPayment(payment, true);
+        SysDateManager.setSysDate("06-Jul-2011");
+        rejectPayment(payment2, true);
+
+        SysDateManager.setSysDate("17-Jul-2011");
+
+        bill = runBilling(true, true);
+
+        // @formatter:off
+        new BillTester(bill,true).
+        billingPeriodStartDate("1-Aug-2011").
+        billingPeriodEndDate("31-Aug-2011").
+        paymentReceivedAmount("-2091.94").
+        paymentRejectedAmount("2091.94").
+        serviceCharge("930.30").
+        nsfCharges("130.00").
+        taxes("111.64"). // 12% (930.30)
+        totalDueAmount("3263.88"); // 930.30 +111.64 +130 +2091.94
+        // @formatter:on
 
         printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
 

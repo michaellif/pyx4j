@@ -78,26 +78,23 @@ public class ARCreditDebitLinkManager {
 
                 debit.outstandingDebit().setValue(debit.outstandingDebit().getValue().add(credit.outstandingCredit().getValue()));
 
-                credit.outstandingCredit().setValue(new BigDecimal("0.00"));
+                credit.outstandingCredit().setValue(BigDecimal.ZERO);
             } else {
                 link.amount().setValue(debit.outstandingDebit().getValue());
 
                 credit.outstandingCredit().setValue(credit.outstandingCredit().getValue().add(debit.outstandingDebit().getValue()));
 
-                debit.outstandingDebit().setValue(new BigDecimal("0.00"));
+                debit.outstandingDebit().setValue(BigDecimal.ZERO);
 
             }
 
-//            link.debitItem().set(debit);
-//            link.creditItem().set(credit);
-            Persistence.service().persist(link);
-
-            debit.creditLinks().add(link);
+            link.debitItem().set(debit);
             credit.debitLinks().add(link);
 
+            Persistence.service().persist(link);
             Persistence.service().persist(debit);
 
-            if (credit.outstandingCredit().getValue().compareTo(new BigDecimal("0.00")) == 0) {
+            if (credit.outstandingCredit().getValue().compareTo(BigDecimal.ZERO) == 0) {
                 break;
             }
         }
@@ -123,26 +120,23 @@ public class ARCreditDebitLinkManager {
 
                 credit.outstandingCredit().setValue(credit.outstandingCredit().getValue().add(debit.outstandingDebit().getValue()));
 
-                debit.outstandingDebit().setValue(new BigDecimal("0.00"));
+                debit.outstandingDebit().setValue(BigDecimal.ZERO);
             } else {
                 link.amount().setValue(credit.outstandingCredit().getValue());
 
                 debit.outstandingDebit().setValue(debit.outstandingDebit().getValue().add(credit.outstandingCredit().getValue()));
 
-                credit.outstandingCredit().setValue(new BigDecimal("0.00"));
+                credit.outstandingCredit().setValue(BigDecimal.ZERO);
 
             }
 
-            //           link.debitItem().set(debit);
-//            link.creditItem().set(credit);
-            Persistence.service().persist(link);
-
-            debit.creditLinks().add(link);
+            link.debitItem().set(debit);
             credit.debitLinks().add(link);
 
+            Persistence.service().persist(link);
             Persistence.service().persist(credit);
 
-            if (debit.outstandingDebit().getValue().compareTo(new BigDecimal("0.00")) == 0) {
+            if (debit.outstandingDebit().getValue().compareTo(BigDecimal.ZERO) == 0) {
                 break;
             }
         }
@@ -163,26 +157,22 @@ public class ARCreditDebitLinkManager {
     }
 
     static void declinePayment(InvoicePaymentBackOut backOut) {
-
         InvoiceCredit creditToReturn = ARTransactionManager.getCorrespodingCreditByPayment(backOut.billingAccount(), backOut.paymentRecord());
         List<InvoiceCredit> credits = ARTransactionManager.getSuccedingCreditInvoiceLineItems(backOut.billingAccount(), creditToReturn);
         if (credits != null && credits.size() > 0) {
-            List<DebitCreditLink> links = ARTransactionManager.getInstalledLinksByCredits(credits);
-            if (links != null && links.size() > 0) {
-                for (DebitCreditLink link : links) {
-                    InvoiceDebit debit = link.debitItem().cast();
-                    debit.outstandingDebit().setValue(debit.outstandingDebit().getValue().add(link.amount().getValue()));
-                    debit.creditLinks().remove(link);
-                    links.remove(link);
+            for (InvoiceCredit credit : credits) {
+                Persistence.service().retrieve(credit.debitLinks());
+                if (!credit.debitLinks().isEmpty()) {
+                    for (DebitCreditLink link : credit.debitLinks()) {
+                        InvoiceDebit debit = link.debitItem().cast();
+                        debit.outstandingDebit().setValue(debit.outstandingDebit().getValue().add(link.amount().getValue()));
+                        Persistence.service().persist(debit);
+                    }
+                    credit.debitLinks().clear();
+                    Persistence.service().persist(credit);
 
-                    Persistence.service().persist(debit);
-                }
-
-                Persistence.service().persist(links);
-
-                // Go through the list of Debits
-                for (InvoiceCredit credit : credits) {
                     consumeCredit(credit);
+                    Persistence.service().merge(credit);
                 }
             }
         }

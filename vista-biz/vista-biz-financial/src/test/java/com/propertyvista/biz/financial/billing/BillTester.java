@@ -21,9 +21,6 @@ import com.propertyvista.biz.financial.FinancialTestsUtils;
 import com.propertyvista.biz.financial.Tester;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.Bill.BillType;
-import com.propertyvista.domain.financial.billing.InvoiceLatePaymentFee;
-import com.propertyvista.domain.financial.billing.InvoiceLineItem;
-import com.propertyvista.domain.financial.billing.InvoiceNSF;
 import com.propertyvista.domain.financial.billing.InvoiceProductCharge;
 
 public class BillTester extends Tester {
@@ -114,28 +111,6 @@ public class BillTester extends Tester {
         return this;
     }
 
-    public BillTester latePaymentFee(String value) {
-        BigDecimal latePmnt = new BigDecimal("0.00");
-        for (InvoiceLineItem item : bill.lineItems()) {
-            if (item instanceof InvoiceLatePaymentFee) {
-                latePmnt = latePmnt.add(item.amount().getValue());
-            }
-        }
-        assertEquals("Late Payment Fee", new BigDecimal(value), latePmnt);
-        return this;
-    }
-
-    public BillTester nsfFee(String value) {
-        BigDecimal nsf = new BigDecimal("0.00");
-        for (InvoiceLineItem item : bill.lineItems()) {
-            if (item instanceof InvoiceNSF) {
-                nsf = nsf.add(item.amount().getValue());
-            }
-        }
-        assertEquals("NSF Fee", new BigDecimal(value), nsf);
-        return this;
-    }
-
     public BillTester taxes(String value) {
         assertEquals("Taxes", new BigDecimal(value), bill.taxes().getValue());
         return this;
@@ -143,6 +118,21 @@ public class BillTester extends Tester {
 
     public BillTester paymentReceivedAmount(String value) {
         assertEquals("Payment Received Amount", new BigDecimal(value), bill.paymentReceivedAmount().getValue());
+        return this;
+    }
+
+    public BillTester paymentRejectedAmount(String value) {
+        assertEquals("Payment Rejected Amount", new BigDecimal(value), bill.paymentRejectedAmount().getValue());
+        return this;
+    }
+
+    public BillTester nsfCharges(String value) {
+        assertEquals("NSF Charges", new BigDecimal(value), bill.nsfCharges().getValue());
+        return this;
+    }
+
+    public BillTester latePaymentFees(String value) {
+        assertEquals("Late Payment Fees", new BigDecimal(value), bill.latePaymentFees().getValue());
         return this;
     }
 

@@ -126,7 +126,7 @@ public class BillingDepositProcessor extends AbstractBillingProcessor {
     }
 
     private void attachDepositRefunds() {
-        List<InvoiceLineItem> items = BillingUtils.getNotConsumedLineItems(getBillingManager().getNextPeriodBill().billingAccount());
+        List<InvoiceLineItem> items = BillingUtils.getUnclaimedLineItems(getBillingManager().getNextPeriodBill().billingAccount());
         for (InvoiceDepositRefund payment : BillingUtils.getLineItemsForType(items, InvoiceDepositRefund.class)) {
             addDepositRefund(payment);
         }

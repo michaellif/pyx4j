@@ -189,7 +189,7 @@ public class BillingLifecycleManager {
 
             if (BillStatus.Confirmed == billStatus) {
                 Persistence.service().retrieve(bill.lineItems());
-                consumeExistingLineItems(bill.lineItems());
+                claimExistingLineItems(bill.lineItems());
                 postNewLineItems(bill.lineItems());
             }
 
@@ -204,10 +204,10 @@ public class BillingLifecycleManager {
         return bill;
     }
 
-    private static void consumeExistingLineItems(List<InvoiceLineItem> lineItems) {
+    private static void claimExistingLineItems(List<InvoiceLineItem> lineItems) {
         for (InvoiceLineItem invoiceLineItem : lineItems) {
             if (!invoiceLineItem.postDate().isNull()) {
-                invoiceLineItem.consumed().setValue(true);
+                invoiceLineItem.claimed().setValue(true);
                 Persistence.service().persist(invoiceLineItem);
             }
         }

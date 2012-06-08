@@ -33,7 +33,6 @@ import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.AgingBuckets;
 import com.propertyvista.domain.financial.billing.Bill;
-import com.propertyvista.domain.financial.billing.DebitCreditLink;
 import com.propertyvista.domain.financial.billing.InvoiceCredit;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
@@ -55,16 +54,22 @@ public class ARTransactionManager {
             throw new ARException("The LineItem is already posted");
         }
 
-        if (invoiceLineItem.amount().getValue().equals(new BigDecimal("0.00"))) {
+        if (invoiceLineItem.amount().getValue().compareTo(BigDecimal.ZERO) == 0) {
             throw new ARException("The LineItem has 0 value");
         }
 
         invoiceLineItem.postDate().setValue(new LogicalDate(SysDateManager.getSysDate()));
-        createCreditDebitLinks(invoiceLineItem);
+
+        manageCreditDebitLinks(invoiceLineItem);
+
+        Persistence.service().persist(invoiceLineItem);
     }
 
-    private static void createCreditDebitLinks(InvoiceLineItem invoiceLineItem) {
-        if (invoiceLineItem.isInstanceOf(InvoiceCredit.class)) {
+    private static void manageCreditDebitLinks(InvoiceLineItem invoiceLineItem) {
+        if (invoiceLineItem.isInstanceOf(InvoicePaymentBackOut.class)) {
+            InvoicePaymentBackOut backout = invoiceLineItem.cast();
+            processBackOutPayment(backout);
+        } else if (invoiceLineItem.isInstanceOf(InvoiceCredit.class)) {
             InvoiceCredit invoiceCredit = invoiceLineItem.cast();
 
             invoiceCredit.outstandingCredit().setValue(invoiceCredit.amount().getValue());
@@ -118,7 +123,7 @@ public class ARTransactionManager {
         {
             EntityQueryCriteria<InvoiceDebit> criteria = EntityQueryCriteria.create(InvoiceDebit.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().billingAccount(), billingAccount));
-            criteria.add(PropertyCriterion.ne(criteria.proto().outstandingDebit(), new BigDecimal("0.00")));
+            criteria.add(PropertyCriterion.ne(criteria.proto().outstandingDebit(), BigDecimal.ZERO));
             criteria.add(PropertyCriterion.isNotNull(criteria.proto().postDate()));
             lineItems = Persistence.service().query(criteria);
         }
@@ -141,7 +146,7 @@ public class ARTransactionManager {
     static List<InvoiceCredit> getNotConsumedCreditInvoiceLineItems(BillingAccount billingAccount) {
         EntityQueryCriteria<InvoiceCredit> criteria = EntityQueryCriteria.create(InvoiceCredit.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().billingAccount(), billingAccount));
-        criteria.add(PropertyCriterion.ne(criteria.proto().outstandingCredit(), new BigDecimal("0.00")));
+        criteria.add(PropertyCriterion.ne(criteria.proto().outstandingCredit(), BigDecimal.ZERO));
         criteria.add(PropertyCriterion.isNotNull(criteria.proto().postDate()));
         criteria.asc(criteria.proto().postDate());
         List<InvoiceCredit> lineItems = Persistence.service().query(criteria);
@@ -151,11 +156,11 @@ public class ARTransactionManager {
     static BigDecimal getCurrentBallance(BillingAccount billingAccount) {
         Bill bill = ServerSideFactory.create(BillingFacade.class).getLatestConfirmedBill(billingAccount.lease());
         if (bill == null) {
-            return new BigDecimal("0.00");
+            return BigDecimal.ZERO;
         }
 
         BigDecimal currentBallanceAmount = bill.totalDueAmount().getValue();
-        List<InvoiceLineItem> items = BillingUtils.getNotConsumedLineItems(billingAccount);
+        List<InvoiceLineItem> items = BillingUtils.getUnclaimedLineItems(billingAccount);
 
         for (InvoiceLineItem item : items) {
             currentBallanceAmount = currentBallanceAmount.add(BillingUtils.calculateTotal(item));
@@ -186,17 +191,5 @@ public class ARTransactionManager {
         }
 
         return lineItems;
-    }
-
-    static List<DebitCreditLink> getInstalledLinksByCredits(List<InvoiceCredit> credits) {
-        List<DebitCreditLink> links;
-        {
-            EntityQueryCriteria<DebitCreditLink> criteria = EntityQueryCriteria.create(DebitCreditLink.class);
-            criteria.add(PropertyCriterion.in(criteria.proto().creditItem(), credits));
-            criteria.add(PropertyCriterion.ne(criteria.proto().hardLink(), true));
-            links = Persistence.service().query(criteria);
-        }
-
-        return links;
     }
 }

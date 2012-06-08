@@ -57,7 +57,7 @@ public class BillingLatePaymentScenarioTest extends FinancialTestBase {
         paymentReceivedAmount("0.00").
         depositAmount("930.30").
         serviceCharge("930.30").
-        latePaymentFee("0.00").
+        latePaymentFees("0.00").
         taxes("111.64").
         totalDueAmount("1972.24");
         // @formatter:on
@@ -82,7 +82,7 @@ public class BillingLatePaymentScenarioTest extends FinancialTestBase {
         billingPeriodEndDate("31-May-2011").
         paymentReceivedAmount("-1972.24").
         serviceCharge("930.30").
-        latePaymentFee("0.00").
+        latePaymentFees("0.00").
         taxes("111.64").
         totalDueAmount("1041.94"); // 930.30 + 111.64 = 1041.94
         // @formatter:on
@@ -112,7 +112,7 @@ public class BillingLatePaymentScenarioTest extends FinancialTestBase {
         paymentReceivedAmount("-1041.94").
         serviceCharge("930.30").
         oneTimeFeatureCharges("100.00").
-        latePaymentFee("50.00").
+        latePaymentFees("50.00").
         taxes("135.64"). // 12% (930.30 + 100 + 100) = 135.64
         totalDueAmount("1015.94"); // 930.30 +100 +100 +135.64 -300 +50
         // @formatter:on
@@ -137,7 +137,7 @@ public class BillingLatePaymentScenarioTest extends FinancialTestBase {
         billingPeriodEndDate("31-Jul-2011").
         paymentReceivedAmount("-1015.94").
         serviceCharge("930.30").
-        latePaymentFee("50.00").
+        latePaymentFees("50.00").
         taxes("111.64").
         totalDueAmount("1091.94"); // 930.30 +111.64 +50
         // @formatter:on
@@ -162,7 +162,7 @@ public class BillingLatePaymentScenarioTest extends FinancialTestBase {
         paymentReceivedAmount("-1191.94").
         serviceCharge("930.30").
         taxes("123.64"). // 12% of (930.30 + 100)
-        latePaymentFee("50.00").
+        latePaymentFees("50.00").
         totalDueAmount("1103.94"); // 930.30 +100 +123.64 +50 -100
         // @formatter:on
 
@@ -183,7 +183,7 @@ public class BillingLatePaymentScenarioTest extends FinancialTestBase {
         paymentReceivedAmount("-1103.94").
         serviceCharge("930.30").
         taxes("135.64"). // 12% of (930.30 + 200)
-        latePaymentFee("0.00").
+        latePaymentFees("0.00").
         totalDueAmount("1265.94"); // 930.30 +200 +135.64
         // @formatter:on
 

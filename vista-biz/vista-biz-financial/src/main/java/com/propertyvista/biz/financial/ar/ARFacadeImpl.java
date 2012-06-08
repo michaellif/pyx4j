@@ -50,7 +50,7 @@ public class ARFacadeImpl implements ARFacade {
     public void rejectPayment(PaymentRecord paymentRecord, boolean applyNSF) {
         new ARPaymentProcessor().rejectPayment(paymentRecord);
         if (applyNSF) {
-            new ARNSFProcessor().postNSFCharge(paymentRecord);
+            new ARNSFProcessor().applyNSFCharge(paymentRecord);
         }
     }
 
@@ -103,7 +103,7 @@ public class ARFacadeImpl implements ARFacade {
 
     @Override
     public List<InvoiceLineItem> getNotAcquiredLineItems(BillingAccount billingAccount) {
-        return BillingUtils.getNotConsumedLineItems(billingAccount);
+        return BillingUtils.getUnclaimedLineItems(billingAccount);
     }
 
 }
