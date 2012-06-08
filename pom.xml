@@ -182,7 +182,6 @@
         <google.translate.apiKey>AIzaSyD5Yfp-G4ynDKTZK6h_S8FJS3eE3TT_LFQ</google.translate.apiKey>
         <poSaveLocation>true</poSaveLocation>
         <poSufix></poSufix>
-        <gettextArg></gettextArg>
     </properties>
 
     <dependencyManagement>
