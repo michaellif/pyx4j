@@ -83,8 +83,8 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
                 presenter.showAccount();
             }
         });
-        account.setDebugIdSuffix(new StringDebugId("settings"));
-        account.setValue(i18n.tr("Settings"));
+        account.setDebugIdSuffix(new StringDebugId("account"));
+        account.setValue(i18n.tr("Account"));
         account.asWidget().getElement().getStyle().setMarginRight(1, Unit.EM);
 
         settings = new CHyperlink(null, new Command() {
