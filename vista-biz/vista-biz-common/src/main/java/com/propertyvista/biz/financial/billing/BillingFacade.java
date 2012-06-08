@@ -22,8 +22,6 @@ import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
 
 public interface BillingFacade {
 
-    //  void createPreauthorisedPayments(StatisticsRecord dynamicStatisticsRecord, LogicalDate dueDate);
-
     void runBilling(Lease lease);
 
     void runBilling(Building building, PaymentFrequency paymentFrequency, LogicalDate billingPeriodStartDate);
@@ -37,4 +35,10 @@ public interface BillingFacade {
     Bill confirmBill(Bill billStub);
 
     Bill rejectBill(Bill billStub);
+
+    // Processes
+
+    //  void runBilling(StatisticsRecord dynamicStatisticsRecord, LogicalDate dueDate);
+
+    void initializeFutureBillingCycles();
 }

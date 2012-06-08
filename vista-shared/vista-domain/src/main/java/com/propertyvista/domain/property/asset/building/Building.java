@@ -41,6 +41,7 @@ import com.pyx4j.entity.shared.ISet;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitTurnoverStats;
 import com.propertyvista.domain.financial.BuildingMerchantAccount;
+import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.financial.billing.BuildingArrearsSnapshot;
 import com.propertyvista.domain.financial.offering.ProductCatalog;
 import com.propertyvista.domain.marketing.Marketing;
@@ -170,4 +171,7 @@ public interface Building extends PolicyNode, NotesAndAttachmentsNode {
     @Detached(level = AttachLevel.Detached)
     ISet<UnitTurnoverStats> _UnitTurnoverStats();
 
+    @Owned
+    @Detached(level = AttachLevel.Detached)
+    ISet<BillingCycle> billingCycles();
 }

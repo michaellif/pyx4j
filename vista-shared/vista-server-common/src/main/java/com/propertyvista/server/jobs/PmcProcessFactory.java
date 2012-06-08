@@ -40,6 +40,8 @@ public class PmcProcessFactory {
             return new UpdateArrearsProcess();
         case leaseActivation:
             return new LeaseActivationProcess();
+        case initializeFutureBillingCycles:
+            return new FutureBillingCycleInitializationProcess();
         case updatePaymentsSummary:
             // TODO: not sure if it should happen: return new PaymentsSummarySnapshotProcess();
         default:

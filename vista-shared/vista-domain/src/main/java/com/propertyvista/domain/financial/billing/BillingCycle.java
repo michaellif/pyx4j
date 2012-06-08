@@ -16,6 +16,7 @@ package com.propertyvista.domain.financial.billing;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Format;
+import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.shared.IEntity;
@@ -27,6 +28,7 @@ import com.propertyvista.domain.property.asset.building.Building;
 public interface BillingCycle extends IEntity {
 
     @ReadOnly
+    @Owner
     @Detached
     Building building();
 

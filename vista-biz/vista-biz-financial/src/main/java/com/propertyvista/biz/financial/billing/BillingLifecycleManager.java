@@ -22,6 +22,8 @@ package com.propertyvista.biz.financial.billing;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -29,7 +31,9 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
@@ -318,7 +322,8 @@ public class BillingLifecycleManager {
     }
 
     static BillingCycle getNewLeaseInitialBillingCycle(BillingType billingType, Building building, LogicalDate leaseStartDate, boolean useCyclePeriodStartDay) {
-        return ensureBillingCycle(billingType, building, BillDateUtils.calculateInitialBillingCycleStartDate(billingType, leaseStartDate, useCyclePeriodStartDay));
+        return ensureBillingCycle(billingType, building,
+                BillDateUtils.calculateInitialBillingCycleStartDate(billingType, leaseStartDate, useCyclePeriodStartDay));
     }
 
     static BillingCycle getExistingLeaseInitialBillingCycle(BillingType billingType, Building building, LogicalDate leaseStartDate,
@@ -338,9 +343,9 @@ public class BillingLifecycleManager {
         return ensureBillingCycle(billingType, building, billingCycleStartDate);
     }
 
-    static BillingCycle getSubsiquentBillingCycle(BillingType billingType, Building building, BillingCycle previousRun) {
+    static BillingCycle getSubsiquentBillingCycle(BillingType billingType, Building building, BillingCycle previousBillingCycle) {
         return ensureBillingCycle(billingType, building, BillDateUtils.calculateSubsiquentBillingCycleStartDate(billingType.paymentFrequency().getValue(),
-                previousRun.billingPeriodStartDate().getValue()));
+                previousBillingCycle.billingPeriodStartDate().getValue()));
     }
 
     private static BillingCycle ensureBillingCycle(BillingType billingType, Building building, LogicalDate billingCycleStartDate) {
@@ -364,5 +369,34 @@ public class BillingLifecycleManager {
         }
         return billingCycle;
 
+    }
+
+    static void initializeFutureBillingCycles() {
+        for (BillingType billingType : Persistence.service().query(EntityQueryCriteria.create(BillingType.class))) {
+
+            EntityQueryCriteria<Building> buildingCriteria = EntityQueryCriteria.create(Building.class);
+            buildingCriteria.add(PropertyCriterion.eq(buildingCriteria.proto().billingCycles().$().billingType(), billingType));
+            ICursorIterator<Building> buildingIterator = Persistence.service().query(null, buildingCriteria, AttachLevel.IdOnly);
+            while (buildingIterator.hasNext()) {
+                Building building = buildingIterator.next();
+
+                // Find latest BillingCycle
+                EntityQueryCriteria<BillingCycle> criteria = EntityQueryCriteria.create(BillingCycle.class);
+                criteria.add(PropertyCriterion.eq(criteria.proto().billingType(), billingType));
+                criteria.add(PropertyCriterion.eq(criteria.proto().building(), building));
+                criteria.desc(criteria.proto().billingPeriodStartDate());
+                BillingCycle latestBillingCycle = Persistence.service().retrieve(criteria);
+
+                Calendar createUntill = new GregorianCalendar();
+                createUntill.setTime(Persistence.service().getTransactionSystemTime());
+                createUntill.add(Calendar.MONTH, 1);
+
+                while (latestBillingCycle.billingPeriodStartDate().getValue().before(createUntill.getTime())) {
+                    latestBillingCycle = getSubsiquentBillingCycle(billingType, building, latestBillingCycle);
+                }
+
+            }
+
+        }
     }
 }

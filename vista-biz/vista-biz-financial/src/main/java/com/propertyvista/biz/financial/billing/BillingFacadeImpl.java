@@ -57,4 +57,9 @@ public class BillingFacadeImpl implements BillingFacade {
         return BillingLifecycleManager.rejectBill(bill);
     }
 
+    @Override
+    public void initializeFutureBillingCycles() {
+        BillingLifecycleManager.initializeFutureBillingCycles();
+    }
+
 }
