@@ -24,14 +24,9 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.shared.I18nEnum;
 
-/**
- * Contains analysis results of for a single interval for all events from {@link #fromDate()} until (exclusively) {@link #toDate()}.
- * 
- * @author ArtyomB
- * 
- */
 @Transient
 public interface UnitTurnoversPerIntervalDTO extends IEntity {
+
     public enum AnalysisResolution {
         Day {
 
@@ -235,7 +230,7 @@ public interface UnitTurnoversPerIntervalDTO extends IEntity {
          *            denotes the beginning of the interval (not <code>null</code>).
          * @param end
          *            denotes the end of the interval (not <code>null</code>).
-         * @return
+         * @return string representation of the given interval
          */
         public String intervalLabelFormat(Date start, Date end) {
             return "(" + start.toString() + ", " + end.toString() + ")";
@@ -249,14 +244,13 @@ public interface UnitTurnoversPerIntervalDTO extends IEntity {
     IPrimitive<LogicalDate> intervalValue();
 
     /**
-     * @return number of units turned over during time interval <code>[{@link #fromDate()}, {@link #toDate()})</code>.
+     * @return number of units turned over during this time interval
      */
     @Caption(name = "Number Of Units Turned Over")
     IPrimitive<Integer> unitsTurnedOverAbs();
 
     /**
-     * @return percentage of units turned over during time interval <code>[{@link #fromDate()}, {@link #toDate()})</code> relative to overall number of units
-     *         turned over during the time interval specified in a query.
+     * @return share of units turned over during this time interval
      */
     @Caption(name = "Percentage Of Units Turned Over")
     IPrimitive<Double> unitsTurnedOverPct();

@@ -120,13 +120,13 @@ public interface UnitAvailabilityStatus extends IEntity {
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> marketRent();
 
-    /** <code>{@link #unitRent()} - {@link #unitMarketRent()} </code> */
+    /** <code>unitRent - marketRent</code> */
     @Caption(name = "Delta, in $")
     @Format("#0.00")
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> rentDeltaAbsolute();
 
-    /** <code>({@link #unitRent()} - {@link #unitMarketRent()})/{@link #unitMarketRent()}</code> */
+    /** <code>(unitRent - unitMarketRent)/marketRent</code> */
     @Caption(name = "Delta, in %")
     @Format("#0.00")
     IPrimitive<BigDecimal> rentDeltaRelative();
