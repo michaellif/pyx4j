@@ -36,8 +36,6 @@ public interface BuildingViewerView extends IViewerView<BuildingDTO> {
     interface Presenter extends IViewerView.Presenter {
 
         DashboardView.Presenter getDashboardPresenter();
-
-        void runBill();
     }
 
     BuildingDashboardView getDashboardView();

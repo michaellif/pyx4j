@@ -19,6 +19,8 @@ import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.activity.crud.ListerActivityBase;
 import com.pyx4j.site.client.ui.crud.lister.IListerView.Presenter;
@@ -132,11 +134,6 @@ public class BuildingViewerActivity extends CrmViewerActivity<BuildingDTO> imple
     }
 
     @Override
-    public void runBill() {
-        // TODO Auto-generated method stub
-    }
-
-    @Override
     public void onPopulateSuccess(BuildingDTO result) {
         super.onPopulateSuccess(result);
 
@@ -180,6 +177,10 @@ public class BuildingViewerActivity extends CrmViewerActivity<BuildingDTO> imple
 
         concessionLister.setParent(result.productCatalog().getPrimaryKey());
         concessionLister.populate();
+
+        billingCycleLister.clearPreDefinedFilters();
+        billingCycleLister.addPreDefinedFilter(PropertyCriterion.eq(EntityFactory.getEntityPrototype(BillingCycle.class).building(), result));
+        billingCycleLister.populate();
     }
 
     @Override
@@ -195,6 +196,7 @@ public class BuildingViewerActivity extends CrmViewerActivity<BuildingDTO> imple
         ((AbstractActivity) serviceLister).onStop();
         ((AbstractActivity) featureLister).onStop();
         ((AbstractActivity) concessionLister).onStop();
+        ((AbstractActivity) billingCycleLister).onStop();
         super.onStop();
     }
 }

@@ -18,8 +18,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.EnumSet;
 
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -35,11 +33,11 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.pyx4j.site.client.ui.crud.lister.ListerInternalViewImplBase;
-import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
+import com.propertyvista.crm.client.ui.crud.billing.cycle.BillingCycleLister;
 import com.propertyvista.crm.client.ui.crud.building.catalog.ConcessionLister;
 import com.propertyvista.crm.client.ui.crud.building.catalog.FeatureLister;
 import com.propertyvista.crm.client.ui.crud.building.catalog.ServiceLister;
@@ -66,7 +64,6 @@ import com.propertyvista.dto.FloorplanDTO;
 import com.propertyvista.dto.LockerAreaDTO;
 import com.propertyvista.dto.ParkingDTO;
 import com.propertyvista.dto.RoofDTO;
-import com.propertyvista.misc.VistaTODO;
 
 public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> implements BuildingViewerView {
 
@@ -96,8 +93,6 @@ public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> i
 
     private final BuildingDashboardView dashboardView = new BuildingDashboardViewImpl();
 
-    private final Button runBillAction;
-
     public BuildingViewerViewImpl() {
         super(CrmSiteMap.Properties.Building.class);
 
@@ -120,24 +115,6 @@ public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> i
 
         // set main form here:
         setForm(new BuildingForm(true));
-
-        runBillAction = new Button(i18n.tr("Run Bill"), new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                new RunBillDataBox() {
-                    @Override
-                    public boolean onClickOk() {
-                        // TODO: pass data from Box into the service call: 
-                        ((BuildingViewerView.Presenter) presenter).runBill(/* getValue() */);
-                        return true;
-                    }
-                }.show();
-
-            }
-        });
-        if (!VistaTODO.removedForProduction) {
-            addHeaderToolbarTwoItem(runBillAction.asWidget());
-        }
     }
 
     @Override

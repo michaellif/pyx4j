@@ -51,9 +51,11 @@ public class AggregatedTransferViewerActivity extends CrmViewerActivity<Aggregat
     protected void onPopulateSuccess(AggregatedTransfer result) {
         super.onPopulateSuccess(result);
 
+        paymentLister.clearPreDefinedFilters();
         paymentLister.addPreDefinedFilter(PropertyCriterion.eq(EntityFactory.getEntityPrototype(PaymentRecord.class).aggregatedTransfer(), result));
         paymentLister.populate();
 
+        returnedPaymentLister.clearPreDefinedFilters();
         returnedPaymentLister.addPreDefinedFilter(PropertyCriterion
                 .eq(EntityFactory.getEntityPrototype(PaymentRecord.class).aggregatedTransferReturn(), result));
         returnedPaymentLister.populate();
