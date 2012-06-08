@@ -25,6 +25,7 @@ import java.io.Serializable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.i18n.shared.I18n;
@@ -41,6 +42,8 @@ public abstract class IServiceBase implements IService {
 
     //TODO move to generated implementations and create only when required
     protected static final I18n i18n = I18n.get(IServiceBase.class);
+
+    protected static final ServiceNames serviceNames = GWT.create(ServiceNames.class);
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
     protected final void execute(String serviceMethodId, int serviceMethodSignature, AsyncCallback<? extends Serializable> callback, Serializable... args) {

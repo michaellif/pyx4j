@@ -43,10 +43,17 @@ public class IServiceImplCreator extends AbstractGeneratorClassCreator {
         getWriter().println();
         this.getWriter().println("public final String getServiceClassId() {");
         getWriter().indent();
-        this.getWriter().print("return \"");
-        //TODO USe the ServiceNames approach, e.g. see ServiceNamesGenerator.ElideServiceNamesFromRPC
-        this.getWriter().print(getTarget().getQualifiedSourceName());
-        this.getWriter().println("\";");
+        // Use the ServiceNames approach, e.g. see ServiceNamesGenerator.ElideServiceNamesFromRPC
+        final boolean serviceNamesEnabled = true;
+        if (serviceNamesEnabled) {
+            this.getWriter().print("return serviceNames.getIServiceName(");
+            this.getWriter().print(getTarget().getQualifiedSourceName());
+            this.getWriter().println(".class);");
+        } else {
+            this.getWriter().print("return \"");
+            this.getWriter().print(getTarget().getQualifiedSourceName());
+            this.getWriter().println("\";");
+        }
         getWriter().outdent();
         this.getWriter().println("}");
     }

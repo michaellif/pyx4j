@@ -51,6 +51,7 @@ import com.google.gwt.dev.util.Util;
 import com.google.gwt.user.rebind.ClassSourceFileComposerFactory;
 import com.google.gwt.user.rebind.SourceWriter;
 
+import com.pyx4j.rpc.shared.IService;
 import com.pyx4j.rpc.shared.Service;
 
 public class ServiceNamesGenerator extends Generator {
@@ -82,7 +83,7 @@ public class ServiceNamesGenerator extends Generator {
             String packageName = interfaceType.getPackage().getName();
             String simpleName = interfaceType.getSimpleSourceName() + "_Impl";
             ClassSourceFileComposerFactory composer = new ClassSourceFileComposerFactory(packageName, simpleName);
-            composer.addImplementedInterface(typeName);
+            composer.setSuperclass(typeName);
             composer.addImport(Map.class.getName());
             composer.addImport(HashMap.class.getName());
             composer.addImport(JsArrayString.class.getName());
@@ -95,11 +96,13 @@ public class ServiceNamesGenerator extends Generator {
                 return packageName + "." + simpleName;
             }
 
-            JClassType iServiceInterfaceType = oracle.getType(Service.class.getName());
+            JClassType serviceInterfaceType = oracle.getType(Service.class.getName());
+            JClassType iServiceInterfaceType = oracle.getType(IService.class.getName());
             List<JClassType> serviceClasses = new Vector<JClassType>();
 
             for (JClassType type : oracle.getTypes()) {
-                if ((type.isInterface() != null) && type.isAssignableTo(iServiceInterfaceType) && (iServiceInterfaceType != type)) {
+                if ((type.isInterface() != null) && (type.isAssignableTo(iServiceInterfaceType) && (iServiceInterfaceType != type))
+                        || (type.isAssignableTo(serviceInterfaceType) && (serviceInterfaceType != type))) {
                     serviceClasses.add(type);
                     logger.log(TreeLogger.Type.DEBUG, "Service class:" + type.getName());
                 }
@@ -212,7 +215,7 @@ public class ServiceNamesGenerator extends Generator {
 
         if (!useClassMetadata) {
 
-            writer.println("private static final Map<Class<? extends Service>, String> nameMapJava;");
+            writer.println("private static final Map<Class<?>, String> nameMapJava;");
             writer.println("private static final JsArrayString nameMapNative;");
             writer.println();
 
@@ -237,7 +240,7 @@ public class ServiceNamesGenerator extends Generator {
 
         writer.println();
         writer.println("@Override");
-        writer.println("public String getServiceName(@SuppressWarnings(\"rawtypes\") final Class<? extends Service> serviceInterface) {");
+        writer.println("public String getServiceClassRpcName(final Class<?> serviceInterface) {");
         writer.indent();
 
         if (useClassMetadata) {
@@ -261,9 +264,9 @@ public class ServiceNamesGenerator extends Generator {
             //---
 
             writer.println();
-            writer.println("private static Map<Class<? extends Service>, String> loadNamesJava() {");
+            writer.println("private static Map<Class<?>, String> loadNamesJava() {");
             writer.indent();
-            writer.println("Map<Class<? extends Service>, String> result = new HashMap<Class<? extends Service>, String>();");
+            writer.println("Map<Class<?>, String> result = new HashMap<Class<?>, String>();");
 
             for (JClassType serviceClass : serviceClasses) {
                 writer.print("result.put(");

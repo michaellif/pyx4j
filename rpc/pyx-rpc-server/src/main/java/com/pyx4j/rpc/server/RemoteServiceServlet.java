@@ -25,6 +25,7 @@ import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Map;
 import java.util.Properties;
 
@@ -57,7 +58,9 @@ public class RemoteServiceServlet extends com.google.gwt.user.server.rpc.RemoteS
 
     private RemoteService implementation;
 
-    private final transient Map<String, Map<String, String>> servicePolicyCache = new HashMap<String, Map<String, String>>();
+    private final transient Map<String, Map<String, String>> servicePolicyCache = new Hashtable<String, Map<String, String>>();
+
+    public static String SERVICE_INTERFACE_CLASSNAMES_REQUEST_ATTRIBUTE = "pyx.ServicePolicy";
 
     @Override
     public void init(ServletConfig config) throws ServletException {
@@ -135,7 +138,7 @@ public class RemoteServiceServlet extends com.google.gwt.user.server.rpc.RemoteS
                     }
                 }
             }
-            Context.getRequest().setAttribute("pyx.ServicePolicy", servicePolicy);
+            Context.getRequest().setAttribute(SERVICE_INTERFACE_CLASSNAMES_REQUEST_ATTRIBUTE, servicePolicy);
         } catch (Throwable t) {
             log.error("unable to load service-manifest", t);
             throw new IncompatibleRemoteServiceException();
@@ -173,7 +176,7 @@ public class RemoteServiceServlet extends com.google.gwt.user.server.rpc.RemoteS
     public Serializable execute(String serviceInterfaceClassName, Serializable serviceRequest, String userVisitHashCode) throws RuntimeException {
         String realServiceName = null;
         @SuppressWarnings("unchecked")
-        Map<String, String> servicePolicy = (Map<String, String>) Context.getRequest().getAttribute("pyx.ServicePolicy");
+        Map<String, String> servicePolicy = (Map<String, String>) Context.getRequest().getAttribute(SERVICE_INTERFACE_CLASSNAMES_REQUEST_ATTRIBUTE);
         if (servicePolicy != null) {
             realServiceName = servicePolicy.get(serviceInterfaceClassName);
         }

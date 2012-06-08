@@ -20,10 +20,18 @@
  */
 package com.pyx4j.rpc.client;
 
+import com.pyx4j.rpc.shared.IService;
 import com.pyx4j.rpc.shared.Service;
 
-interface ServiceNames {
+public abstract class ServiceNames {
 
-    public String getServiceName(@SuppressWarnings("rawtypes") final Class<? extends Service> serviceInterface);
+    public final String getServiceName(@SuppressWarnings({ "rawtypes", "deprecation" }) final Class<? extends Service> serviceInterface) {
+        return getServiceClassRpcName(serviceInterface);
+    }
 
+    public final String getIServiceName(final Class<? extends IService> serviceInterface) {
+        return getServiceClassRpcName(serviceInterface);
+    }
+
+    public abstract String getServiceClassRpcName(final Class<?> serviceInterface);
 }
