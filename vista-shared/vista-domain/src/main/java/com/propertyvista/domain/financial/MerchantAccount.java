@@ -15,6 +15,7 @@ package com.propertyvista.domain.financial;
 
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.JoinTable;
+import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -24,6 +25,7 @@ import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.property.asset.building.Building;
 
+@ToStringFormat("{0}: {2}: {1}")
 public interface MerchantAccount extends AbstractMerchantAccount {
 
     @I18n
