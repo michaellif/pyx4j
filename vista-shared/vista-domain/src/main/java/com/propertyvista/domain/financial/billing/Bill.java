@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -17,6 +17,7 @@ import java.math.BigDecimal;
 import java.util.EnumSet;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Format;
@@ -135,6 +136,7 @@ public interface Bill extends IEntity {
     /**
      * The total amount due from the previous bill.
      */
+    @Caption(name = "Previous Balance")
     IPrimitive<BigDecimal> balanceForwardAmount();
 
     /**
@@ -158,6 +160,8 @@ public interface Bill extends IEntity {
      * pastDueAmount = previousBalanceAmount + paymentReceivedAmount + depositRefundAmount +
      * immediateAdjustments
      */
+
+    @Caption(name = "Balance from last bill")
     IPrimitive<BigDecimal> pastDueAmount();
 
     IPrimitive<BigDecimal> serviceCharge();
@@ -178,6 +182,8 @@ public interface Bill extends IEntity {
      * currentAmount = pastDueAmount + serviceCharge + recurringFeatureCharges +
      * oneTimeFeatureCharges + totalAdjustments + depositPaidAmount
      */
+
+    @Caption(name = "Total (before taxes)")
     IPrimitive<BigDecimal> currentAmount();
 
     IPrimitive<BigDecimal> taxes();

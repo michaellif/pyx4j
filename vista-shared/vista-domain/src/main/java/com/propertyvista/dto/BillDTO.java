@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -27,13 +27,13 @@ public interface BillDTO extends Bill {
     @Override
     Lease lease();
 
-    @Caption(name = "Service Charges")
+    @Caption(name = "Lease Charges")
     InvoiceLineItemGroupDTO serviceChargeLineItems();
 
-    @Caption(name = "Recurring Feature Charges")
+    @Caption(name = "Additional Recurring Charges")
     InvoiceLineItemGroupDTO recurringFeatureChargeLineItems();
 
-    @Caption(name = "One-Time Feature Charges")
+    @Caption(name = "One-Time Charges")
     InvoiceLineItemGroupDTO onetimeFeatureChargeLineItems();
 
     @Caption(name = "Credits")
@@ -42,29 +42,29 @@ public interface BillDTO extends Bill {
     @Caption(name = "Deposits")
     InvoiceLineItemGroupDTO depositLineItems();
 
-    @Caption(name = "Deposit Refunds")
+    @Caption(name = "Deposit Refund(s)")
     InvoiceLineItemGroupDTO depositRefundLineItems();
 
     //Debit and credit combined
-    @Caption(name = "Immediate Account Adjustments")
+    @Caption(name = "Immediate Adjustment(s)")
     InvoiceLineItemGroupDTO immediateAccountAdjustmentLineItems();
 
     // Debit and credit combined
     @Caption(name = "Pending Account Adjustments")
     InvoiceLineItemGroupDTO pendingAccountAdjustmentLineItems();
 
-    @Caption(name = "NSF Charges")
+    @Caption(name = "NSF Charge(s)")
     InvoiceLineItemGroupDTO nsfChargeLineItems();
 
     @Caption(name = "Late Payment Fees")
     InvoiceLineItemGroupDTO latePaymentFeeLineItems();
 
-    @Caption(name = "Withdrawals")
+    @Caption(name = "Withdrawal(s)")
     InvoiceLineItemGroupDTO withdrawalLineItems();
 
-    @Caption(name = "Rejected Payments")
+    @Caption(name = "Rejected Payment(s)")
     InvoiceLineItemGroupDTO rejectedPaymentLineItems();
 
-    @Caption(name = "Payments Received")
+    @Caption(name = "Payment(s) Received")
     InvoiceLineItemGroupDTO paymentLineItems();
 }
