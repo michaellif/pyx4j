@@ -14,6 +14,8 @@
 package com.propertyvista.domain.financial.billing;
 
 import com.pyx4j.entity.annotations.Table;
+import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
@@ -24,10 +26,13 @@ import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
  * 
  */
 @Table(prefix = "billing")
+@ToStringFormat("{0} on {1}")
 public interface BillingType extends IEntity {
 
+    @ToString
     IPrimitive<PaymentFrequency> paymentFrequency();
 
+    @ToString
     IPrimitive<Integer> billingPeriodStartDay();
 
     IPrimitive<Integer> billingCycleTargetDay();
