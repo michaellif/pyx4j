@@ -27,8 +27,8 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.crm.server.services.dashboard.gadgets.ArrearsReportServiceImpl;
+import com.propertyvista.crm.server.services.reports.DynamicTableTemplateReportModelBuilder;
 import com.propertyvista.crm.server.services.reports.GadgetReportModelCreator;
-import com.propertyvista.crm.server.services.reports.ReportModelBuilder;
 import com.propertyvista.crm.server.services.reports.util.DynamicColumnWidthReportTableTemplateBuilder;
 import com.propertyvista.domain.dashboard.gadgets.type.ArrearsSummaryGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
@@ -61,11 +61,11 @@ public class ArrearsSummaryReportModelCreator implements GadgetReportModelCreato
                 String template = new DynamicColumnWidthReportTableTemplateBuilder(EntityFactory.create(AgingBuckets.class), arrearsSummaryGadgetMetadata)
                         .defSubTitle(Params.AS_OF.name())
                         .build();
-                JasperReportModel reportModel = new ReportModelBuilder<ArrearsSummaryGadgetMetadata>(ArrearsSummaryGadgetMetadata.class)
+                JasperReportModel reportModel = new DynamicTableTemplateReportModelBuilder()
                         .template(template)
                         .param(Params.TITLE.name(), arrearsSummaryGadgetMetadata.getEntityMeta().getCaption())
                         .param(Params.AS_OF.name(), i18n.tr("As of Date: {0}", DATE_FORMAT.format(asOf)))
-                        .reportData(result.getData().iterator())
+                        .data(result.getData().iterator())
                         .build();
                 callback.onSuccess(reportModel);
                 //@formatter:on

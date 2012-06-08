@@ -26,8 +26,8 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.crm.server.services.building.BuildingCrudServiceImpl;
+import com.propertyvista.crm.server.services.reports.DynamicTableTemplateReportModelBuilder;
 import com.propertyvista.crm.server.services.reports.GadgetReportModelCreator;
-import com.propertyvista.crm.server.services.reports.ReportModelBuilder;
 import com.propertyvista.crm.server.services.reports.util.DynamicColumnWidthReportTableTemplateBuilder;
 import com.propertyvista.domain.dashboard.gadgets.type.BuildingLister;
 import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
@@ -52,10 +52,10 @@ public class BuildingListerReportCreator implements GadgetReportModelCreator {
             @Override
             public void onSuccess(EntitySearchResult<BuildingDTO> result) {
                 String reportTemplate = new DynamicColumnWidthReportTableTemplateBuilder(EntityFactory.getEntityPrototype(BuildingDTO.class), metadata).build();
-                JasperReportModel reportModel = new ReportModelBuilder<BuildingLister>(BuildingLister.class)//@formatter:off
+                JasperReportModel reportModel = new DynamicTableTemplateReportModelBuilder()//@formatter:off
                         .template(reportTemplate)
                         .param(Params.TITLE.name(), i18n.tr("Building Details"))
-                        .reportData(result.getData().iterator())
+                        .data(result.getData().iterator())
                         .build();//@formatter:on
 
                 callback.onSuccess(reportModel);

@@ -179,7 +179,7 @@ public class ArrearsReportServiceImpl implements ArrearsReportService {
             buildings = buildingsCriteria;
         }
 
-        final LogicalDate now = new LogicalDate(Persistence.service().getTransactionSystemTime());
+        final LogicalDate now = new LogicalDate();
 
         final GregorianCalendar cal = new GregorianCalendar();
         cal.setTime(now);
@@ -230,7 +230,9 @@ public class ArrearsReportServiceImpl implements ArrearsReportService {
 
         BigDecimal totalArrears = new BigDecimal("0.00");
 
-        if (!asOf.after(new LogicalDate(Persistence.service().getTransactionSystemTime()))) { // if we asked for the future value of total arrears return 0            
+        LogicalDate today = new LogicalDate();
+
+        if (!asOf.after(today)) { // if we asked for the future value of total arrears return 0            
 
             ARFacade facade = ServerSideFactory.create(ARFacade.class);
 

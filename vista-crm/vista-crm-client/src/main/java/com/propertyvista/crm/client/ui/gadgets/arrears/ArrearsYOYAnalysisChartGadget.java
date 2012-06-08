@@ -13,10 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.gadgets.arrears;
 
-import java.sql.Date;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Vector;
 
 import com.google.gwt.core.client.GWT;
@@ -28,15 +25,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.svg.basic.SvgRoot;
-import com.pyx4j.svg.chart.BarChart2D;
-import com.pyx4j.svg.chart.ChartTheme;
-import com.pyx4j.svg.chart.DataSource;
-import com.pyx4j.svg.chart.GridBasedChart;
-import com.pyx4j.svg.chart.GridBasedChartConfigurator;
-import com.pyx4j.svg.chart.GridBasedChartConfigurator.GridType;
 import com.pyx4j.svg.gwt.SvgFactoryForGwt;
 
 import com.propertyvista.crm.client.ui.board.BoardView;
@@ -47,12 +36,11 @@ import com.propertyvista.crm.client.ui.gadgets.common.Directory;
 import com.propertyvista.crm.client.ui.gadgets.common.GadgetInstanceBase;
 import com.propertyvista.crm.client.ui.gadgets.common.IBuildingBoardGadgetInstance;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.ArrearsReportService;
-import com.propertyvista.domain.dashboard.gadgets.arrears.ArrearsComparisonDTO;
-import com.propertyvista.domain.dashboard.gadgets.arrears.ArrearsValueDTO;
 import com.propertyvista.domain.dashboard.gadgets.arrears.ArrearsYOYComparisonDataDTO;
 import com.propertyvista.domain.dashboard.gadgets.type.ArrearsYOYAnalysisChartMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.svg.gadgets.ArrearsYoyAnalysisChartFactory;
 
 public class ArrearsYOYAnalysisChartGadget extends AbstractGadget<ArrearsYOYAnalysisChartMetadata> {
 
@@ -64,7 +52,7 @@ public class ArrearsYOYAnalysisChartGadget extends AbstractGadget<ArrearsYOYAnal
         /** Sets graph height in <i>EMs</i>. */
         private static final double GRAPH_HEIGHT = 20.0;
 
-        private LayoutPanel graph;
+        private LayoutPanel graphPanel;
 
         private final ArrearsReportService service;
 
@@ -94,7 +82,7 @@ public class ArrearsYOYAnalysisChartGadget extends AbstractGadget<ArrearsYOYAnal
 
         @Override
         public Widget initContentPanel() {
-            graph = new LayoutPanel() {
+            graphPanel = new LayoutPanel() {
                 // FIXME this supposed to cause automatic resizing of the graph, but unfortunately it doesn't: fix auto-resizing 
                 @Override
                 public void onResize() {
@@ -108,10 +96,10 @@ public class ArrearsYOYAnalysisChartGadget extends AbstractGadget<ArrearsYOYAnal
                 }
             };
 
-            graph.setSize("100%", defineHeight());
-            graph.getElement().getStyle().setOverflow(Overflow.HIDDEN);
+            graphPanel.setSize("100%", defineHeight());
+            graphPanel.getElement().getStyle().setOverflow(Overflow.HIDDEN);
 
-            return graph;
+            return graphPanel;
         }
 
         @Override
@@ -154,70 +142,27 @@ public class ArrearsYOYAnalysisChartGadget extends AbstractGadget<ArrearsYOYAnal
         }
 
         private void redraw() {
-            graph.clear();
+            graphPanel.clear();
 
             if (!(data == null || data.isEmpty())) {
-
-                final DataSource ds = new DataSource();
-                ds.setSeriesDescription(createSeriesDescription());
-
-                for (ArrearsComparisonDTO comparison : data.comparisonsByMonth()) {
-                    ds.addDataSet(asMetric(ds, comparison), asValues(comparison));
-                }
 
                 Scheduler.get().scheduleDeferred(new ScheduledCommand() {
                     @Override
                     public void execute() {
-                        SvgRoot svgroot = factory.getSvgRoot();
-                        svgroot.add(createChart(ds));
-                        graph.add((Widget) svgroot);
+
+                        int width = graphPanel.getElement().getClientWidth();
+                        int height = graphPanel.getElement().getClientHeight();
+
+                        graphPanel.add((Widget) new ArrearsYoyAnalysisChartFactory(factory).createChart(data, width, height));
                     }
                 });
             } else {
                 // TODO make it look better
                 // TODO maybe this kind of functionality should be provided by the base class
                 Label noData = new Label(i18n.tr("Data unavailable"));
-                graph.add(noData);
+                graphPanel.add(noData);
             }
 
-        }
-
-        private DataSource.Metric asMetric(DataSource ds, ArrearsComparisonDTO comparison) {
-            Date month = new Date(0, comparison.month().getValue() + 1, 0);
-            String monthLabel = TimeUtils.simpleFormat(month, "MMM");
-            return ds.new Metric(monthLabel);
-        }
-
-        private List<Double> asValues(ArrearsComparisonDTO comparison) {
-            List<Double> values = new ArrayList<Double>();
-            for (ArrearsValueDTO value : comparison.values()) {
-                values.add(value.totalArrears().getValue().doubleValue());
-            }
-            return values;
-        }
-
-        private List<String> createSeriesDescription() {
-            ArrearsComparisonDTO comparison = data.comparisonsByMonth().get(0);
-            List<String> description = new ArrayList<String>();
-            for (ArrearsValueDTO value : comparison.values()) {
-                description.add(Integer.toString(value.year().getValue()));
-            }
-            return description;
-        }
-
-        private GridBasedChartConfigurator createConfig(DataSource ds) {
-            GridBasedChartConfigurator config = new GridBasedChartConfigurator(factory, ds, graph.getElement().getClientWidth(), graph.getElement()
-                    .getClientHeight());
-            config.setGridType(GridType.Both);
-            config.setTheme(ChartTheme.Bright);
-            config.setShowValueLabels(false);
-            config.setLegend(true);
-            config.setZeroBased(false);
-            return config;
-        }
-
-        private GridBasedChart createChart(DataSource ds) {
-            return new BarChart2D(createConfig(ds));
         }
 
         @Override

@@ -15,7 +15,6 @@ package com.propertyvista.crm.server.services.reports.directory;
 
 import java.awt.image.BufferedImage;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -24,31 +23,23 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.report.JasperReportModel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.svg.basic.SvgFactory;
-import com.pyx4j.svg.basic.SvgRoot;
-import com.pyx4j.svg.chart.ChartTheme;
-import com.pyx4j.svg.chart.DataSource;
-import com.pyx4j.svg.chart.GridBasedChartConfigurator;
-import com.pyx4j.svg.chart.LineChart;
 import com.pyx4j.svg.j2se.SvgFactoryForBatik;
-import com.pyx4j.svg.j2se.SvgRootImpl;
 
 import com.propertyvista.crm.server.services.dashboard.gadgets.AvailabilityReportServiceImpl;
 import com.propertyvista.crm.server.services.reports.GadgetReportModelCreator;
-import com.propertyvista.crm.server.services.reports.ReportModelBuilder;
+import com.propertyvista.crm.server.services.reports.StaticTemplateReportModelBuilder;
 import com.propertyvista.crm.server.services.reports.util.SvgRasterizer;
 import com.propertyvista.crm.server.services.reports.util.SvgRasterizerImpl;
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitTurnoversPerIntervalDTO;
 import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.TurnoverAnalysisMetadata;
+import com.propertyvista.svg.gadgets.TurnoverAnalysisChartFactory;
 
-public class TurnoverAnalysisReportCreator implements GadgetReportModelCreator {
+public class TurnoverAnalysisChartReportModelCreator implements GadgetReportModelCreator {
 
-    private static final I18n i18n = I18n.get(TurnoverAnalysisReportCreator.class);
+    private static final I18n i18n = I18n.get(TurnoverAnalysisChartReportModelCreator.class);
 
-    private static final SimpleDateFormat MONTH_LABEL_FORMAT = new SimpleDateFormat("MMM-yy");
-
-    private static final SimpleDateFormat REPORT_FORMAT = new SimpleDateFormat("yyyy-MMM-dd");
+    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MMM-dd");
 
     private static final int HEIGHT = 250;
 
@@ -67,41 +58,15 @@ public class TurnoverAnalysisReportCreator implements GadgetReportModelCreator {
 
         new AvailabilityReportServiceImpl().turnoverAnalysis(new AsyncCallback<Vector<UnitTurnoversPerIntervalDTO>>() {
 
-
-
-
-
             @Override
             public void onSuccess(Vector<UnitTurnoversPerIntervalDTO> data) {
-
-                DataSource ds = new DataSource();
-                for (UnitTurnoversPerIntervalDTO intervalData : data) {
-                    ArrayList<Double> values = new ArrayList<Double>();
-                    if (!turnoverAnalysisMetadata.isTurnoverMeasuredByPercent().isBooleanTrue()) {
-                        values.add((double) intervalData.unitsTurnedOverAbs().getValue().intValue());
-                    } else {
-                        values.add(intervalData.unitsTurnedOverPct().getValue());
-                    }
-
-                    ds.addDataSet(ds.new Metric(MONTH_LABEL_FORMAT.format(intervalData.intervalValue().getValue())), values);
-                }
-
-                SvgFactory factory = new SvgFactoryForBatik();
-
-                GridBasedChartConfigurator config = new GridBasedChartConfigurator(factory, ds, WIDTH, HEIGHT);
-                config.setTheme(ChartTheme.Bright);
-
-                SvgRoot svgroot = factory.getSvgRoot();
-                ((SvgRootImpl) svgroot).setAttributeNS(null, "width", String.valueOf(WIDTH));
-                ((SvgRootImpl) svgroot).setAttributeNS(null, "height", String.valueOf(HEIGHT));
-                svgroot.add(new LineChart(config));
-
                 SvgRasterizer rasterizer = new SvgRasterizerImpl();
-                BufferedImage graph = rasterizer.rasterize(svgroot, WIDTH, HEIGHT);
+                BufferedImage graph = rasterizer.rasterize(new TurnoverAnalysisChartFactory(new SvgFactoryForBatik()).createChart(data,
+                        turnoverAnalysisMetadata.isTurnoverMeasuredByPercent().getValue(), WIDTH, HEIGHT), WIDTH, HEIGHT);
 
-                callback.onSuccess(new ReportModelBuilder<TurnoverAnalysisMetadata>(TurnoverAnalysisMetadata.class)//@formatter:off
+                callback.onSuccess(new StaticTemplateReportModelBuilder(TurnoverAnalysisMetadata.class)//@formatter:off
                         .param(TITLE, turnoverAnalysisMetadata.getEntityMeta().getCaption())
-                        .param(AS_OF, i18n.tr("As of Date: {0}", REPORT_FORMAT.format(asOf)))
+                        .param(AS_OF, i18n.tr("As of Date: {0}", DATE_FORMAT.format(asOf)))
                         .param(GRAPH, graph)
                         .build());//@formatter:on
             }

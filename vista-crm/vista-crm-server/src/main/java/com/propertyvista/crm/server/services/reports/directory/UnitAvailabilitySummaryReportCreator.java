@@ -26,7 +26,7 @@ import com.pyx4j.entity.report.JasperReportModel;
 
 import com.propertyvista.crm.server.services.dashboard.gadgets.AvailabilityReportServiceImpl;
 import com.propertyvista.crm.server.services.reports.GadgetReportModelCreator;
-import com.propertyvista.crm.server.services.reports.ReportModelBuilder;
+import com.propertyvista.crm.server.services.reports.StaticTemplateReportModelBuilder;
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityReportSummaryDTO;
 import com.propertyvista.domain.dashboard.gadgets.type.AvailabilitySummary;
 import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
@@ -51,9 +51,8 @@ public class UnitAvailabilitySummaryReportCreator implements GadgetReportModelCr
             public void onSuccess(UnitAvailabilityReportSummaryDTO summary) {
                 List<UnitAvailabilityReportSummaryDTO> details = new ArrayList<UnitAvailabilityReportSummaryDTO>();
                 details.add(summary);
-
-                callback.onSuccess(new ReportModelBuilder(AvailabilitySummary.class).param(AS_OF, DATE_FORMAT.format(asOf)).reportData(details.iterator())
-                        .build());
+                callback.onSuccess(new StaticTemplateReportModelBuilder(AvailabilitySummary.class).param(AS_OF, DATE_FORMAT.format(asOf))
+                        .data(details.iterator()).build());
             }
 
             @Override

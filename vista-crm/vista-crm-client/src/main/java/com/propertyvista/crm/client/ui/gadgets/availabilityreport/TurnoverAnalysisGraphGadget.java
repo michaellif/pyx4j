@@ -13,7 +13,6 @@
  */
 package com.propertyvista.crm.client.ui.gadgets.availabilityreport;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Vector;
@@ -25,7 +24,6 @@ import com.google.gwt.dom.client.Style.Overflow;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -41,13 +39,6 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.forms.client.ui.CDatePicker;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.svg.basic.SvgFactory;
-import com.pyx4j.svg.basic.SvgRoot;
-import com.pyx4j.svg.chart.ChartTheme;
-import com.pyx4j.svg.chart.DataSource;
-import com.pyx4j.svg.chart.GridBasedChartConfigurator;
-import com.pyx4j.svg.chart.GridBasedChartConfigurator.GridType;
-import com.pyx4j.svg.chart.LineChart;
 import com.pyx4j.svg.gwt.SvgFactoryForGwt;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
@@ -63,6 +54,7 @@ import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitTurnove
 import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.TurnoverAnalysisMetadata;
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.svg.gadgets.TurnoverAnalysisChartFactory;
 
 public class TurnoverAnalysisGraphGadget extends AbstractGadget<TurnoverAnalysisMetadata> {
 
@@ -72,35 +64,33 @@ public class TurnoverAnalysisGraphGadget extends AbstractGadget<TurnoverAnalysis
 
         private static final I18n i18n = I18n.get(TurnoverAnalysisGraphGadgetInstance.class);
 
-        //@formatter:off
         /** Sets graph height in <i>EMs</i>. */
         private static double GRAPH_HEIGHT = 20.0;
-        
+
         /** Sets toolbar height in <i>EMs</i>. */
         private static double CONTROLS_HEIGHT = 3.5;
-               
-    
-        private static final String MEASURE_SELECTOR_RADIO_GROUP_ID = "measureSelector";        
-       
+
+        private static final String MEASURE_SELECTOR_RADIO_GROUP_ID = "measureSelector";
+
         private static final boolean DEFAULT_IS_TURNOVER_MEASURED_BY_PERCENT = false;
+
         public static AnalysisResolution DEFAULT_TURNOVER_ANALYSIS_RESOLUTION_MAX = AnalysisResolution.Year;
-                        
+
         List<UnitTurnoversPerIntervalDTO> data;
-    
-        private SimplePanel graph;
-    
+
+        private SimplePanel chartPanel;
+
         private HorizontalPanel controls;
-    
+
         private LayoutPanel layoutPanel;
-    
+
         private RadioButton percent;
+
         private RadioButton number;
-    
+
         private final AvailabilityReportService service;
 
         private CDatePicker asOf;
-                    
-        //@formatter:on
 
         public TurnoverAnalysisGraphGadgetInstance(GadgetMetadata gmd) {
             super(gmd, TurnoverAnalysisMetadata.class);
@@ -143,17 +133,13 @@ public class TurnoverAnalysisGraphGadget extends AbstractGadget<TurnoverAnalysis
             return true;
         }
 
-        public boolean isTunoverMeasuredByPercent() {
-            return getMetadata().isTurnoverMeasuredByPercent().isBooleanTrue();
-        }
-
         public void setTurnoverAnalysisData(List<UnitTurnoversPerIntervalDTO> data) {
             this.data = data;
             redraw();
         }
 
         private void redraw() {
-            graph.clear();
+            chartPanel.clear();
 
             if ((data == null || data.size() == 0)) {
                 // TODO show something like "no data provided"/"no search criteria"?)
@@ -163,30 +149,12 @@ public class TurnoverAnalysisGraphGadget extends AbstractGadget<TurnoverAnalysis
             Scheduler.get().scheduleDeferred(new ScheduledCommand() {
                 @Override
                 public void execute() {
-                    DataSource ds = new DataSource();
-                    for (UnitTurnoversPerIntervalDTO intervalData : data) {
-                        ArrayList<Double> values = new ArrayList<Double>();
-                        if (!isTunoverMeasuredByPercent()) {
-                            values.add((double) intervalData.unitsTurnedOverAbs().getValue().intValue());
-                        } else {
-                            values.add(intervalData.unitsTurnedOverPct().getValue());
-                        }
+                    int width = chartPanel.getElement().getClientWidth();
+                    int height = chartPanel.getElement().getClientHeight();
 
-                        ds.addDataSet(ds.new Metric(DateTimeFormat.getFormat("MMM-yy").format(intervalData.intervalValue().getValue())), values);
-                    }
-                    SvgFactory factory = new SvgFactoryForGwt();
-                    GridBasedChartConfigurator config = new GridBasedChartConfigurator(factory, ds, graph.getElement().getClientWidth(), graph.getElement()
-                            .getClientHeight());
-                    config.setGridType(GridType.Both);
-                    config.setTheme(ChartTheme.Bright);
-                    config.setShowValueLabels(true);
-                    config.setZeroBased(false);
-
-                    SvgRoot svgroot = factory.getSvgRoot();
-                    svgroot.add(new LineChart(config));
-
-                    graph.add((Widget) svgroot);
-                    graph.getElement().getStyle().setOverflow(Overflow.HIDDEN);
+                    chartPanel.add((Widget) new TurnoverAnalysisChartFactory(new SvgFactoryForGwt()).createChart(data, getMetadata()
+                            .isTurnoverMeasuredByPercent().getValue(), width, height));
+                    chartPanel.getElement().getStyle().setOverflow(Overflow.HIDDEN);
                 }
             });
         }
@@ -238,8 +206,8 @@ public class TurnoverAnalysisGraphGadget extends AbstractGadget<TurnoverAnalysis
 
         @Override
         public Widget initContentPanel() {
-            graph = new SimplePanel();
-            graph.setSize("100%", "100%");
+            chartPanel = new SimplePanel();
+            chartPanel.setSize("100%", "100%");
 
             controls = new HorizontalPanel();
             controls.setHorizontalAlignment(HorizontalPanel.ALIGN_LEFT);
@@ -289,9 +257,9 @@ public class TurnoverAnalysisGraphGadget extends AbstractGadget<TurnoverAnalysis
             layoutPanel.setSize("100%", defineHeight());
 
             layoutPanel.add(initAsOfBannerPanel());
-            layoutPanel.add(graph);
-            layoutPanel.setWidgetTopHeight(graph, 0, Unit.EM, GRAPH_HEIGHT, Unit.EM);
-            layoutPanel.setWidgetLeftWidth(graph, 0, Unit.PCT, 100, Unit.PCT);
+            layoutPanel.add(chartPanel);
+            layoutPanel.setWidgetTopHeight(chartPanel, 0, Unit.EM, GRAPH_HEIGHT, Unit.EM);
+            layoutPanel.setWidgetLeftWidth(chartPanel, 0, Unit.PCT, 100, Unit.PCT);
             layoutPanel.add(controls);
             layoutPanel.setWidgetTopHeight(controls, GRAPH_HEIGHT, Unit.EM, CONTROLS_HEIGHT, Unit.EM);
             layoutPanel.setWidgetLeftWidth(controls, 0, Unit.PCT, 100, Unit.PCT);

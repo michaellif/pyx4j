@@ -27,8 +27,8 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.crm.server.services.dashboard.gadgets.AvailabilityReportServiceImpl;
+import com.propertyvista.crm.server.services.reports.DynamicTableTemplateReportModelBuilder;
 import com.propertyvista.crm.server.services.reports.GadgetReportModelCreator;
-import com.propertyvista.crm.server.services.reports.ReportModelBuilder;
 import com.propertyvista.crm.server.services.reports.util.DynamicColumnWidthReportTableTemplateBuilder;
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatus;
 import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
@@ -55,6 +55,7 @@ public class UnitAvailabilityStatusReportCreator implements GadgetReportModelCre
         new AvailabilityReportServiceImpl().unitStatusList(new AsyncCallback<EntitySearchResult<UnitAvailabilityStatus>>() {
 
 
+
             @Override
             public void onSuccess(EntitySearchResult<UnitAvailabilityStatus> result) {                
                 //@formatter:off
@@ -64,12 +65,12 @@ public class UnitAvailabilityStatusReportCreator implements GadgetReportModelCre
                         .build();
                 //@formatter:on
 
-                callback.onSuccess(new ReportModelBuilder<UnitAvailability>(UnitAvailability.class)//@formatter:off
+                callback.onSuccess(new DynamicTableTemplateReportModelBuilder()//@formatter:off
                         .template(template)
                         .param(ReportParams.TITLE.name(), i18n.tr("Unit Availability Status"))
                         .param(ReportParams.FILTER_CRITERIA.name(), i18n.tr("Filter Setting: {0}", metadata.filterPreset().getValue().toString()))
                         .param(ReportParams.AS_OF.name(), i18n.tr("As of Date: {0}", DATE_FORMAT.format(asOf)))
-                        .reportData(result.getData().iterator())
+                        .data(result.getData().iterator())
                         .build());//@formatter:on
             }
 

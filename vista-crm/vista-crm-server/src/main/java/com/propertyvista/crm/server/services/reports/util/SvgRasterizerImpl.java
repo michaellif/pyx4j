@@ -31,6 +31,8 @@ public class SvgRasterizerImpl implements SvgRasterizer {
     @Override
     public BufferedImage rasterize(SvgRoot svgRoot, int width, int height) {
         UserAgentAdapter userAgentAdapter = new UserAgentAdapter();
+        ((SvgRootImpl) svgRoot).setAttributeNS(null, "width", String.valueOf(width));
+        ((SvgRootImpl) svgRoot).setAttributeNS(null, "height", String.valueOf(height));
         BridgeContext bridgeContext = new BridgeContext(userAgentAdapter);
         GVTBuilder gvtBuilder = new GVTBuilder();
         GraphicsNode graphicsNode = gvtBuilder.build(bridgeContext, ((SvgRootImpl) svgRoot).getDocument());

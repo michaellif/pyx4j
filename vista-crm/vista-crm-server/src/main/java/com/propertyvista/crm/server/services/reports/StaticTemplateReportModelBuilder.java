@@ -7,7 +7,7 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jun 7, 2012
+ * Created on Jun 8, 2012
  * @author ArtyomB
  * @version $Id$
  */
@@ -16,55 +16,42 @@ package com.propertyvista.crm.server.services.reports;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
 
 import com.pyx4j.entity.report.JasperReportModel;
 import com.pyx4j.entity.shared.IEntity;
 
 import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
 
-public class ReportModelBuilder<M extends GadgetMetadata> {
+public class StaticTemplateReportModelBuilder {
 
     private static final String REPORT_DESIGN_NAME_CLASSPATH_PREFIX = "reports";
 
-    private final List<IEntity> data;
+    private final Class<? extends GadgetMetadata> gadgetMetadataClass;
 
-    private final Map<String, Object> parameters;
+    private final HashMap<String, Object> parameters;
 
-    private String template = null;
+    private final LinkedList<IEntity> data;
 
-    private final Class<M> gadgetMetadataClass;
-
-    public ReportModelBuilder(Class<M> gadgetMedataClass) {
-        this.data = new LinkedList<IEntity>();
-        this.parameters = new HashMap<String, Object>();
+    public <M extends GadgetMetadata> StaticTemplateReportModelBuilder(Class<M> gadgetMedataClass) {
         this.gadgetMetadataClass = gadgetMedataClass;
+        this.parameters = new HashMap<String, Object>();
+        this.data = new LinkedList<IEntity>();
     }
 
-    public ReportModelBuilder<M> param(String paramName, Object paramValue) {
+    public StaticTemplateReportModelBuilder param(String paramName, Object paramValue) {
         parameters.put(paramName, paramValue);
         return this;
     }
 
-    public ReportModelBuilder<M> reportData(Iterator<? extends IEntity> reportDataIterator) {
-        while (reportDataIterator.hasNext()) {
-            this.data.add(reportDataIterator.next());
+    public StaticTemplateReportModelBuilder data(Iterator<? extends IEntity> dataIterator) {
+        while (dataIterator.hasNext()) {
+            data.add(dataIterator.next());
         }
-        return this;
-    }
-
-    public ReportModelBuilder<M> template(String template) {
-        this.template = template;
         return this;
     }
 
     public JasperReportModel build() {
-        if (this.template == null) {
-            return new JasperReportModel(designName(), data, parameters);
-        } else {
-            return new JasperReportModel(template, data, parameters, template);
-        }
+        return new JasperReportModel(designName(), data, parameters);
     }
 
     private String designName() {
