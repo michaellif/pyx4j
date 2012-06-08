@@ -255,16 +255,19 @@ public class PaymentForm extends CEntityDecoratableForm<PaymentRecordDTO> {
     private void setupAddThisPaymentMethodToProfile(PaymentType paymentType) {
         get(proto().addThisPaymentMethodToProfile()).setEnabled(PaymentType.avalableInProfile().contains(paymentType));
         get(proto().addThisPaymentMethodToProfile()).setValue(Boolean.FALSE);
-        switch (paymentType) {
-        case Cash:
-        case Check:
-        case EFT:
-        case Interac:
-            break;
-        case CreditCard:
-        case Echeck:
-            get(proto().addThisPaymentMethodToProfile()).setValue(Boolean.TRUE);
-            break;
+        if (paymentType != null) {
+            switch (paymentType) {
+            case Cash:
+            case Check:
+            case EFT:
+            case Interac:
+                break;
+            case CreditCard:
+            case Echeck:
+                get(proto().addThisPaymentMethodToProfile()).setValue(Boolean.TRUE);
+                break;
+            }
         }
     }
+
 }
