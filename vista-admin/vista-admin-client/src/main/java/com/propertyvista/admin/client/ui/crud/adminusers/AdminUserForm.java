@@ -13,10 +13,16 @@
  */
 package com.propertyvista.admin.client.ui.crud.adminusers;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.security.client.ClientContext;
 
 import com.propertyvista.admin.client.ui.crud.AdminEntityForm;
 import com.propertyvista.admin.rpc.AdminUserDTO;
@@ -25,12 +31,35 @@ public class AdminUserForm extends AdminEntityForm<AdminUserDTO> {
 
     private final static I18n i18n = I18n.get(AdminUserForm.class);
 
+    private Map<CComponent<?, ?>, Condition> conditionalVisibilityMap;
+
+    private Condition isSelfManagedUserCondition;
+
+    private Condition isNewUserCondition;
+
     public AdminUserForm(boolean viewMode) {
         super(AdminUserDTO.class, viewMode);
+
+        conditionalVisibilityMap = new HashMap<CComponent<?, ?>, Condition>();
+
+        isSelfManagedUserCondition = new Condition() {
+            @Override
+            public boolean isVisible() {
+                return !ClientContext.getUserVisit().getPrincipalPrimaryKey().equals(getValue().getPrimaryKey());
+            }
+        };
+
+        isNewUserCondition = new Condition() {
+            @Override
+            public boolean isVisible() {
+                return getValue().id().isNull();
+            }
+        };
+
     }
 
     public AdminUserForm() {
-        super(AdminUserDTO.class, false);
+        this(false);
     }
 
     @Override
@@ -42,11 +71,12 @@ public class AdminUserForm extends AdminEntityForm<AdminUserDTO> {
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().email())).build());
 
         content.setH1(++row, 0, 1, i18n.tr("Security"));
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().password())).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().passwordConfirm())).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().enabled())).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().role())).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().requireChangePasswordOnNextLogIn())).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(addVisibilityCondition(inject(proto().password()), isNewUserCondition)).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(addVisibilityCondition(inject(proto().passwordConfirm()), isNewUserCondition)).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(addVisibilityCondition(inject(proto().enabled()), isSelfManagedUserCondition)).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(addVisibilityCondition(inject(proto().role()), isSelfManagedUserCondition)).build());
+        content.setWidget(++row, 0,
+                new DecoratorBuilder(addVisibilityCondition(inject(proto().requireChangePasswordOnNextLogIn()), isSelfManagedUserCondition)).build());
 
         return content;
     }
@@ -54,12 +84,19 @@ public class AdminUserForm extends AdminEntityForm<AdminUserDTO> {
     @Override
     protected void onPopulate() {
         super.onPopulate();
-        get(proto().password()).setVisible(isNewUser());
-        get(proto().passwordConfirm()).setVisible(isNewUser());
+        for (Entry<CComponent<?, ?>, Condition> entry : conditionalVisibilityMap.entrySet()) {
+            entry.getKey().setVisible(entry.getValue().isVisible());
+        }
     }
 
-    private boolean isNewUser() {
-        return getValue().id().isNull();
+    private CComponent<?, ?> addVisibilityCondition(CComponent<?, ?> widget, Condition condition) {
+        conditionalVisibilityMap.put(widget, condition);
+        return widget;
     }
 
+    private interface Condition {
+
+        boolean isVisible();
+
+    }
 }

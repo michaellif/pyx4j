@@ -15,8 +15,6 @@ package com.propertyvista.admin.client.viewfactories;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.propertyvista.admin.client.ui.AccountView;
-import com.propertyvista.admin.client.ui.AccountViewImpl;
 import com.propertyvista.admin.client.ui.AlertView;
 import com.propertyvista.admin.client.ui.AlertViewImpl;
 import com.propertyvista.admin.client.ui.FooterView;
@@ -56,8 +54,6 @@ public class AdminVeiwFactory extends ViewFactoryBase {
 
             } else if (SettingsView.class.equals(type)) {
                 map.put(type, new SettingsViewImpl());
-            } else if (AccountView.class.equals(type)) {
-                map.put(type, new AccountViewImpl());
             }
         }
 

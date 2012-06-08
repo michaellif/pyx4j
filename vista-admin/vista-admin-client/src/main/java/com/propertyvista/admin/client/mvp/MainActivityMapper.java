@@ -22,7 +22,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.site.client.activity.AppActivityMapper;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
-import com.propertyvista.admin.client.activity.AccountActivity;
 import com.propertyvista.admin.client.activity.AlertActivity;
 import com.propertyvista.admin.client.activity.MessageActivity;
 import com.propertyvista.admin.client.activity.SettingsActivity;
@@ -181,7 +180,7 @@ public class MainActivityMapper implements AppActivityMapper {
 
 // - Other:
                 } else if (place instanceof AdminSiteMap.Account) {
-                    activity = new AccountActivity(place);
+                    // is supposed to be AdminUser*Activity for  AdminSiteMap.Administration.AdminUsers                    
                 } else if (place instanceof AdminSiteMap.Alert) {
                     activity = new AlertActivity(place);
                 } else if (place instanceof AdminSiteMap.Message) {
