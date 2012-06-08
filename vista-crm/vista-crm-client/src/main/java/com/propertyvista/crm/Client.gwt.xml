@@ -9,7 +9,7 @@
     
     <inherits name='com.propertyvista.crm.Rpc' />
     <inherits name='com.propertyvista.Domain' />
-    <inherits name='com.pyx4j.SVG' />
+    <inherits name='com.propertyvista.SVG' />
     <inherits name='com.pyx4j.essentials.EssentialsSwf' />
     
 
