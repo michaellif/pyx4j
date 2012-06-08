@@ -98,8 +98,14 @@ public class EmployeeCrudServiceImpl extends AbstractCrudServiceDtoImpl<Employee
                 credential = Persistence.service().retrieve(CrmUserCredential.class, in.user().getPrimaryKey());
 
                 for (CrmRole role : credential.roles()) {
-                    if (role.name().getValue().equals(VistaCrmBehavior.PropertyVistaAccountOwner.name())) {
-                        isPropVistaAccOwner = true;
+                    for (VistaCrmBehavior vcb : role.behaviors()) {
+                        if (vcb == VistaCrmBehavior.PropertyVistaAccountOwner) {
+                            isPropVistaAccOwner = true;
+                            break;
+                        }
+                    }
+
+                    if (isPropVistaAccOwner) { // If ther a need to create onborading user
                         break;
                     }
                 }
@@ -118,14 +124,17 @@ public class EmployeeCrudServiceImpl extends AbstractCrudServiceDtoImpl<Employee
 
             boolean isPropVistaAccOwnerSet = false;
             for (CrmRole role : in.roles()) {
-                if (role.name().getValue().equals(VistaCrmBehavior.PropertyVistaAccountOwner.name())) { // If ther a need to create onborading user
-                    isPropVistaAccOwnerSet = true;
+                for (VistaCrmBehavior vcb : role.behaviors()) {
+                    if (vcb == VistaCrmBehavior.PropertyVistaAccountOwner) {
+                        isPropVistaAccOwnerSet = true;
+                        break;
+                    }
+                }
+
+                if (isPropVistaAccOwnerSet) { // If ther a need to create onborading user
                     break;
                 }
             }
-
-            //OnboardingUser onbUser;
-            //OnboardingUserCredential onbUserCred;
 
             final String namespace = NamespaceManager.getNamespace();
             final Pmc pmc = TaskRunner.runInAdminNamespace(new Callable<Pmc>() {

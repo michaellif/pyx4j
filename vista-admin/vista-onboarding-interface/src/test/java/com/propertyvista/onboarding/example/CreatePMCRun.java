@@ -38,8 +38,8 @@ public class CreatePMCRun {
 
         {
             RequestMessage rm = new RequestMessage();
-            rm.interfaceEntity = "rossul";
-            rm.interfaceEntityPassword = "secret";
+            rm.interfaceEntity = ExampleClient.interfaceEntity;
+            rm.interfaceEntityPassword = ExampleClient.interfaceEntityPassword;
             rm.addRequest(user);
 
             ResponseMessage response = ExampleClient.execute(rm);
@@ -61,8 +61,9 @@ public class CreatePMCRun {
 
         {
             RequestMessage rm = new RequestMessage();
-            rm.interfaceEntity = "rossul";
-            rm.interfaceEntityPassword = "secret";
+            rm.interfaceEntity = ExampleClient.interfaceEntity;
+            rm.interfaceEntityPassword = ExampleClient.interfaceEntityPassword;
+
             rm.addRequest(resDnsNamereq);
 
             ResponseMessage response = ExampleClient.execute(rm);
@@ -88,8 +89,8 @@ public class CreatePMCRun {
 
         {
             RequestMessage rm = new RequestMessage();
-            rm.interfaceEntity = "rossul";
-            rm.interfaceEntityPassword = "secret";
+            rm.interfaceEntity = ExampleClient.interfaceEntity;
+            rm.interfaceEntityPassword = ExampleClient.interfaceEntityPassword;
             rm.addRequest(r);
 
             ResponseMessage response = ExampleClient.execute(rm);
@@ -123,8 +124,8 @@ public class CreatePMCRun {
 //            authRequest.captcha.response = "rr";
 
             RequestMessage rm = new RequestMessage();
-            rm.interfaceEntity = "rossul";
-            rm.interfaceEntityPassword = "secret";
+            rm.interfaceEntity = ExampleClient.interfaceEntity;
+            rm.interfaceEntityPassword = ExampleClient.interfaceEntityPassword;
             rm.addRequest(authRequest);
 
             ResponseMessage response = ExampleClient.execute(rm);

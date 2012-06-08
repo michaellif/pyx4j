@@ -26,7 +26,7 @@ import com.propertyvista.server.common.security.PasswordEncryptor;
 
 class AminUsersPreloader extends AbstractDataPreloader {
 
-    public static AdminUser createAdminUser(String name, String email) {
+    public static AdminUser createAdminUser(String name, String email, String password, VistaAdminBehavior behaivior) {
         AdminUser user = EntityFactory.create(AdminUser.class);
         user.name().setValue(name);
         user.email().setValue(email);
@@ -36,9 +36,9 @@ class AminUsersPreloader extends AbstractDataPreloader {
         credential.setPrimaryKey(user.getPrimaryKey());
 
         credential.user().set(user);
-        credential.credential().setValue(PasswordEncryptor.encryptPassword(email));
+        credential.credential().setValue(PasswordEncryptor.encryptPassword(password));
         credential.enabled().setValue(Boolean.TRUE);
-        credential.behaviors().add(VistaAdminBehavior.SystemAdmin);
+        credential.behaviors().add(behaivior);
 
         Persistence.service().persist(credential);
 
@@ -52,14 +52,15 @@ class AminUsersPreloader extends AbstractDataPreloader {
         if (ApplicationMode.isDevelopment()) {
             for (int i = 1; i <= DemoData.UserType.ADMIN.getDefaultMax(); i++) {
                 String email = DemoData.UserType.ADMIN.getEmail(i);
-                createAdminUser(email, email);
+                createAdminUser(email, email, email, VistaAdminBehavior.SystemAdmin);
                 cnt++;
             }
         }
-        cnt += 3;
-        createAdminUser("PropertyVista Support", "support@propertyvista.com");
-        createAdminUser("VladS", "vlads@propertyvista.com");
-        createAdminUser("VictorV", "vvassiliev@propertyvista.com");
+        cnt += 4;
+        createAdminUser("PropertyVista Support", "support@propertyvista.com", "support@propertyvista.com", VistaAdminBehavior.SystemAdmin);
+        createAdminUser("VladS", "vlads@propertyvista.com", "vlads@propertyvista.com", VistaAdminBehavior.SystemAdmin);
+        createAdminUser("VictorV", "vvassiliev@propertyvista.com", "vvassiliev@propertyvista.com", VistaAdminBehavior.SystemAdmin);
+        createAdminUser("Onboarding API", "romans@rossul.com", "secret", VistaAdminBehavior.OnboardingApi);
 
         return "Created " + cnt + " Admin Users";
     }

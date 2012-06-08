@@ -83,35 +83,41 @@ public class OnboardingServiceServlet extends HttpServlet {
             IOUtils.closeQuietly(is);
         }
 
-        NamespaceManager.setNamespace(VistaNamespace.adminNamespace);
-        OnboardingProcessor pp;
+        boolean isLoggedIn = false;
         try {
-            pp = new OnboardingProcessor();
-            log.info("processing message {}", message.messageId().getValue());
-            Throwable validationResults = pp.isValid(message);
-            if (validationResults != null) {
-                replyWithStatusCode(response, ResponseMessageIO.StatusCode.MessageFormatError, validationResults);
+            NamespaceManager.setNamespace(VistaNamespace.adminNamespace);
+            OnboardingProcessor pp;
+            try {
+                pp = new OnboardingProcessor();
+                log.info("processing message {}", message.messageId().getValue());
+                Throwable validationResults = pp.isValid(message);
+                if (validationResults != null) {
+                    replyWithStatusCode(response, ResponseMessageIO.StatusCode.MessageFormatError, validationResults);
+                    return;
+                }
+
+                if (!(isLoggedIn = OnboardingSecurity.enter(message))) {
+                    replyWithStatusCode(response, ResponseMessageIO.StatusCode.AuthenticationFailed, null);
+                    return;
+                }
+            } catch (Throwable e) {
+                log.error("Error", e);
+                replyWithStatusCode(response, ResponseMessageIO.StatusCode.SystemDown, e);
                 return;
             }
 
-            if (!OnboardingSecurity.enter(message)) {
-                replyWithStatusCode(response, ResponseMessageIO.StatusCode.AuthenticationFailed, null);
-                return;
+            try {
+                ResponseMessageIO rm = pp.execute(message);
+                log.info("reply {}", rm);
+                response.setContentType("text/xml");
+                replyWith(response, rm);
+            } catch (Throwable e) {
+                log.error("Error", e);
+                replyWithStatusCode(response, ResponseMessageIO.StatusCode.SystemError, e);
             }
-        } catch (Throwable e) {
-            log.error("Error", e);
-            replyWithStatusCode(response, ResponseMessageIO.StatusCode.SystemDown, e);
-            return;
-        }
-
-        try {
-            ResponseMessageIO rm = pp.execute(message);
-            log.info("reply {}", rm);
-            response.setContentType("text/xml");
-            replyWith(response, rm);
-        } catch (Throwable e) {
-            log.error("Error", e);
-            replyWithStatusCode(response, ResponseMessageIO.StatusCode.SystemError, e);
+        } finally {
+            if (isLoggedIn)
+                OnboardingSecurity.exit();
         }
 
     }

@@ -55,15 +55,15 @@ public class OnboardingUserAuthenticationRun {
          */
         OnboardingUserAuthenticationRequest authRequest = new OnboardingUserAuthenticationRequest();
         {
-            authRequest.email = "aaa.bbb@ttt.com";//createRequest.email;
-            authRequest.password = "abcd";//createRequest.password;
+            authRequest.email = "1339127428245@test.com";//createRequest.email;
+            authRequest.password = "pwd~1339127428245";//createRequest.password;
 //            authRequest.captcha = new Captcha();
 //            authRequest.captcha.challenge = "123";
 //            authRequest.captcha.response = "rr";
 
             RequestMessage rm = new RequestMessage();
-            rm.interfaceEntity = "rossul";
-            rm.interfaceEntityPassword = "secret";
+            rm.interfaceEntity = ExampleClient.interfaceEntity;
+            rm.interfaceEntityPassword = ExampleClient.interfaceEntityPassword;
             rm.addRequest(authRequest);
 
             ResponseMessage response = ExampleClient.execute(rm);
