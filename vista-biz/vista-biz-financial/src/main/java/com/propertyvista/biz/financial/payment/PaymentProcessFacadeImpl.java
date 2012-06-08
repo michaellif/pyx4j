@@ -296,7 +296,7 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
         case CreditCard:
             paymentRecord.targetDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
             paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Scheduled);
-            ServerSideFactory.create(PaymentFacade.class).persistPayment(paymentRecord);
+            ServerSideFactory.create(PaymentFacade.class).schedulePayment(paymentRecord);
             break;
         default:
             throw new IllegalArgumentException("Invalid PreAuthorized Payment Method:" + paymentRecord.paymentMethod().type().getStringView());
@@ -308,6 +308,7 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
         EntityQueryCriteria<PaymentRecord> criteria = EntityQueryCriteria.create(PaymentRecord.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().paymentStatus(), PaymentRecord.PaymentStatus.Scheduled));
         criteria.add(PropertyCriterion.eq(criteria.proto().paymentMethod().type(), paymentType));
+        criteria.add(PropertyCriterion.le(criteria.proto().targetDate(), Persistence.service().getTransactionSystemTime()));
 
         ICursorIterator<PaymentRecord> paymentRecordIterator = Persistence.service().query(null, criteria, AttachLevel.Attached);
         while (paymentRecordIterator.hasNext()) {

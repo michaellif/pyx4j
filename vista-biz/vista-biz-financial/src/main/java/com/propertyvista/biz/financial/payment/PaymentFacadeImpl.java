@@ -115,8 +115,8 @@ public class PaymentFacadeImpl implements PaymentFacade {
         if (!paymentRecord.paymentStatus().getValue().equals(PaymentRecord.PaymentStatus.Submitted)) {
             throw new IllegalArgumentException("paymentStatus:" + paymentRecord.paymentStatus().getValue());
         }
-        if ((paymentRecord.targetDate().isNull()) || Persistence.service().getTransactionSystemTime().after(paymentRecord.targetDate().getValue())) {
-            throw new UserRuntimeException(i18n.tr("Payment target date already passed"));
+        if (paymentRecord.targetDate().isNull()) {
+            throw new UserRuntimeException(i18n.tr("Payment target date should be present"));
         }
         paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Scheduled);
         Persistence.service().merge(paymentRecord);
