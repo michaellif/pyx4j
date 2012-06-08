@@ -66,7 +66,7 @@ public class BillDateUtils {
     }
 
     /**
-     * For {@see BillingPeriodCorrelationMethod.LeaseStart}
+     * For @see BillingPeriodCorrelationMethod.LeaseStart
      * 
      * When billing period required to start on lease start date we have one special case:
      * - for 'monthly' or 'semimonthly' PaymentFrequency and if lease date starts on 29, 30, or 31 we correspond this lease to cycle

@@ -16,7 +16,7 @@ package com.propertyvista.biz.policy;
 import java.util.Random;
 
 /**
- * @see http://jira.birchwoodsoftwaregroup.com/wiki/display/VISTA/Account+Numbers
+ * @see <a href="http://jira.birchwoodsoftwaregroup.com/wiki/display/VISTA/Account+Numbers"/>
  */
 public class AccountNumberGenerator {
 
