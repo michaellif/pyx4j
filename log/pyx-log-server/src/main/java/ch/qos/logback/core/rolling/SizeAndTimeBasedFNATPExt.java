@@ -18,14 +18,14 @@
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.logback;
+package ch.qos.logback.core.rolling;
 
 import java.io.File;
 
 import ch.qos.logback.core.joran.spi.NoAutoStart;
 
 @NoAutoStart
-public class SizeAndTimeBasedFNATP<E> extends ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP<E> {
+public class SizeAndTimeBasedFNATPExt<E> extends ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP<E> {
 
     private boolean rolloverOnStartTriggered = false;
 
@@ -50,6 +50,8 @@ public class SizeAndTimeBasedFNATP<E> extends ch.qos.logback.core.rolling.SizeAn
         boolean trigger = super.isTriggeringEvent(activeFile, event);
         if (!rolloverOnStartTriggered && isRolloverOnStart()) {
             rolloverOnStartTriggered = true;
+            elapsedPeriodsFileName = tbrp.fileNamePatternWCS.convertMultipleArguments(dateInCurrentPeriod, currentPeriodsCounter);
+            currentPeriodsCounter++;
             return true;
         } else {
             return trigger;
