@@ -229,6 +229,9 @@ public class PaymentForm extends CEntityDecoratableForm<PaymentRecordDTO> {
                 get(proto().paymentSelect()).setVisible(!result.isEmpty());
                 get(proto().paymentSelect()).reset();
 
+                profiledPaymentMethodsCombo.setOptions(result);
+                profiledPaymentMethodsCombo.setMandatory(true);
+
                 if (result.isEmpty()) {
                     get(proto().paymentSelect()).setValue(PaymentSelect.New, getValue().getPrimaryKey() == null);
                 } else {
@@ -247,9 +250,6 @@ public class PaymentForm extends CEntityDecoratableForm<PaymentRecordDTO> {
                         }
                     }
                 }
-
-                profiledPaymentMethodsCombo.setOptions(result);
-                profiledPaymentMethodsCombo.setMandatory(true);
             }
         });
     }
