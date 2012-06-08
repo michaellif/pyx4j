@@ -30,14 +30,11 @@ import com.pyx4j.unit.server.mock.TestLifecycle;
 
 import com.propertyvista.admin.rpc.services.PmcCrudService;
 import com.propertyvista.config.tests.VistaTestsDBConfigurationHSQLMemory;
-import com.propertyvista.portal.rpc.ptapp.services.ApplicationService;
+import com.propertyvista.crm.rpc.services.organization.EmployeeCrudService;
+import com.propertyvista.portal.rpc.portal.services.resident.PersonalInfoCrudService;
 import com.propertyvista.portal.rpc.ptapp.services.ApplicationStatusService;
-import com.propertyvista.portal.rpc.ptapp.services.steps.ChargesService;
-import com.propertyvista.portal.rpc.ptapp.services.steps.PaymentService;
 import com.propertyvista.portal.rpc.ptapp.services.steps.SummaryService;
-import com.propertyvista.portal.rpc.ptapp.services.steps.TenantFinancialService;
 import com.propertyvista.portal.rpc.ptapp.services.steps.TenantInfoService;
-import com.propertyvista.portal.rpc.ptapp.services.steps.TenantService;
 import com.propertyvista.server.config.VistaServerSideConfigurationProdMain;
 
 public class VistaProdAccessControlListTest {
@@ -68,18 +65,18 @@ public class VistaProdAccessControlListTest {
     @Test
     public void publicServicePermissions() {
         TestLifecycle.beginRequest();
-        assertPermission(false, ApplicationService.class);
-        assertPermission(false, TenantService.class);
         assertPermission(false, TenantInfoService.class);
-        assertPermission(false, TenantFinancialService.class);
-        assertPermission(false, ChargesService.class);
         assertPermission(false, SummaryService.class);
-        assertPermission(false, PaymentService.class);
-
         assertPermission(false, ApplicationStatusService.class);
 
         // Admin
         assertPermission(false, PmcCrudService.class);
+
+        //Crm
+        assertPermission(false, EmployeeCrudService.class);
+
+        // Portal
+        assertPermission(false, PersonalInfoCrudService.class);
 
         TestLifecycle.endRequest();
     }
