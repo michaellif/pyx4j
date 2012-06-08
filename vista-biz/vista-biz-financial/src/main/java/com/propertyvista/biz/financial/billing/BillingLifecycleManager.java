@@ -396,7 +396,7 @@ public class BillingLifecycleManager {
                 }
 
             }
-
+            Persistence.service().commit();
         }
     }
 }

@@ -21,7 +21,7 @@ public class FutureBillingCycleInitializationProcess implements PmcProcess {
 
     @Override
     public boolean start() {
-        return false;
+        return true;
     }
 
     @Override
