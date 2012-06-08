@@ -26,7 +26,7 @@ import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.crm.rpc.dto.BillDataDTO;
+import com.propertyvista.crm.rpc.dto.billing.BillDataDTO;
 import com.propertyvista.domain.financial.billing.Bill.BillStatus;
 
 public class BillViewerViewImpl extends CrmViewerViewImplBase<BillDataDTO> implements BillViewerView {

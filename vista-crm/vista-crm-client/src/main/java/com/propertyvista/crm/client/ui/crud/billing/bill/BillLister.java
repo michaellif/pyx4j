@@ -16,7 +16,7 @@ package com.propertyvista.crm.client.ui.crud.billing.bill;
 import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 
-import com.propertyvista.crm.rpc.dto.BillDataDTO;
+import com.propertyvista.crm.rpc.dto.billing.BillDataDTO;
 
 public class BillLister extends ListerBase<BillDataDTO> {
 

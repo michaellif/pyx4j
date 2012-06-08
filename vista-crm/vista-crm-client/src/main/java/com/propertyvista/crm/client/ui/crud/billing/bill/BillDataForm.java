@@ -21,7 +21,7 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.editors.dto.bill.BillForm;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
-import com.propertyvista.crm.rpc.dto.BillDataDTO;
+import com.propertyvista.crm.rpc.dto.billing.BillDataDTO;
 
 public class BillDataForm extends CrmEntityForm<BillDataDTO> {
 

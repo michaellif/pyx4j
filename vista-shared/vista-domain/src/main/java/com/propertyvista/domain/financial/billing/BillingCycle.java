@@ -27,6 +27,10 @@ import com.propertyvista.domain.property.asset.building.Building;
 public interface BillingCycle extends IEntity {
 
     @ReadOnly
+    @Detached
+    Building building();
+
+    @ReadOnly
     BillingType billingType();
 
     @ReadOnly
@@ -36,11 +40,6 @@ public interface BillingCycle extends IEntity {
     IPrimitive<LogicalDate> billingPeriodEndDate();
 
     @ReadOnly
-    @Detached
-    Building building();
-
-    @ReadOnly
     @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> executionTargetDate();
-
 }
