@@ -205,15 +205,11 @@ public interface PropertySearchCriteria extends IEntity {
 
     /**
      * don't use in criteria
-     * 
-     * @return
      */
     IPrimitive<BedroomRange> bedsRange();
 
     /**
      * don't use in criteria
-     * 
-     * @return
      */
     IPrimitive<PriceRange> priceRange();
 

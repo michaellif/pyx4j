@@ -55,7 +55,7 @@ public class VistaDeployment {
      *            residentPortal. Crm or PtApp
      * @param secure
      *            only matters for residentPortal, for other types will be ignored
-     * @return
+     * @return full URL
      */
     public static String getBaseApplicationURL(VistaBasicBehavior application, boolean secure) {
         if (application == VistaBasicBehavior.Admin) {
