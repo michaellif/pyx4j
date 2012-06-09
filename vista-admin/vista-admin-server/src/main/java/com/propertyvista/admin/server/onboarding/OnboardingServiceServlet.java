@@ -83,20 +83,21 @@ public class OnboardingServiceServlet extends HttpServlet {
             IOUtils.closeQuietly(is);
         }
 
-        boolean isLoggedIn = false;
-        try {
-            NamespaceManager.setNamespace(VistaNamespace.adminNamespace);
-            OnboardingProcessor pp;
-            try {
-                pp = new OnboardingProcessor();
-                log.info("processing message {}", message.messageId().getValue());
-                Throwable validationResults = pp.isValid(message);
-                if (validationResults != null) {
-                    replyWithStatusCode(response, ResponseMessageIO.StatusCode.MessageFormatError, validationResults);
-                    return;
-                }
+        NamespaceManager.setNamespace(VistaNamespace.adminNamespace);
+        OnboardingProcessor pp;
 
-                if (!(isLoggedIn = OnboardingSecurity.enter(message))) {
+        pp = new OnboardingProcessor();
+        log.info("processing message {}", message.messageId().getValue());
+        Throwable validationResults = pp.isValid(message);
+        if (validationResults != null) {
+            replyWithStatusCode(response, ResponseMessageIO.StatusCode.MessageFormatError, validationResults);
+            return;
+        }
+
+        ResponseMessageIO rm;
+        try {
+            try {
+                if (!OnboardingSecurity.enter(message)) {
                     replyWithStatusCode(response, ResponseMessageIO.StatusCode.AuthenticationFailed, null);
                     return;
                 }
@@ -107,17 +108,24 @@ public class OnboardingServiceServlet extends HttpServlet {
             }
 
             try {
-                ResponseMessageIO rm = pp.execute(message);
-                log.info("reply {}", rm);
-                response.setContentType("text/xml");
-                replyWith(response, rm);
+                rm = pp.execute(message);
             } catch (Throwable e) {
                 log.error("Error", e);
                 replyWithStatusCode(response, ResponseMessageIO.StatusCode.SystemError, e);
+                return;
             }
+
         } finally {
-            if (isLoggedIn)
-                OnboardingSecurity.exit();
+            OnboardingSecurity.exit(); // Logout in order not to send session token
+        }
+
+        try {
+            log.info("reply {}", rm);
+            response.setContentType("text/xml");
+            replyWith(response, rm);
+        } catch (Throwable e) {
+            log.error("Error", e);
+            replyWithStatusCode(response, ResponseMessageIO.StatusCode.SystemError, e);
         }
 
     }

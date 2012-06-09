@@ -13,6 +13,8 @@
  */
 package com.propertyvista.admin.server.onboarding;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,7 +35,7 @@ public class OnboardingSecurity {
 
     private final static Logger log = LoggerFactory.getLogger(OnboardingSecurity.class);
 
-    public static boolean enter(RequestMessageIO requestMessage) {
+    public static boolean enter(final RequestMessageIO requestMessage) {
         try {
             //AbstractAntiBot.assertLogin(requestMessage.interfaceEntity().getValue(), null);
 
@@ -41,28 +43,27 @@ public class OnboardingSecurity {
             request.email().setValue(requestMessage.interfaceEntity().getValue());
             request.password().setValue(requestMessage.interfaceEntityPassword().getValue());
 
-            final boolean[] rc = { false };
+            final AtomicBoolean rc = new AtomicBoolean(false);
             // This does the actual authentication; will throw an exception in case of failure
             LocalService.create(AdminAuthenticationService.class).authenticate(new AsyncCallback<AuthenticationResponse>() {
                 @Override
                 public void onFailure(Throwable caught) {
-
-                    rc[0] = false;
+                    log.error("Authentication error for interfaceEntity: " + requestMessage.interfaceEntity().getValue());
+                    rc.set(false);
                 }
 
                 @Override
                 public void onSuccess(AuthenticationResponse result) {
                     // Our wicket session authentication simply returns true, so this call will just create wicket session
-                    rc[0] = SecurityController.checkBehavior(VistaAdminBehavior.OnboardingApi);
+                    rc.set(SecurityController.checkBehavior(VistaAdminBehavior.OnboardingApi));
                 }
             }, new ClientSystemInfo(), request);
 
-            return rc[0];
+            return rc.get();
         } catch (Throwable e) {
             log.error("", e);
             return false;
         }
-        //return "rossul".equals(requestMessage.interfaceEntity().getValue()) && "secret".equals(requestMessage.interfaceEntityPassword().getValue());
     }
 
     public static void exit() {
