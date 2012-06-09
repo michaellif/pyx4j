@@ -136,7 +136,7 @@ abstract class JoinInformation {
             }
         } else {
             for (Class<?> entityClass : entityClasses) {
-                if (memeberClass.equals(entityClass)) {
+                if (memeberClass.isAssignableFrom(entityClass)) {
                     return true;
                 }
             }
