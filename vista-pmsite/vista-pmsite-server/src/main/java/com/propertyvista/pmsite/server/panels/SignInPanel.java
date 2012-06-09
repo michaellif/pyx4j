@@ -20,6 +20,8 @@
  */
 package com.propertyvista.pmsite.server.panels;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+
 import net.tanesha.recaptcha.ReCaptcha;
 import net.tanesha.recaptcha.ReCaptchaFactory;
 
@@ -157,7 +159,7 @@ public class SignInPanel extends Panel {
         request.password().setValue(password);
         request.captcha().setValue(captcha);
 
-        final boolean[] rc = { false };
+        final AtomicBoolean rc = new AtomicBoolean(false);
         // This does the actual authentication; will throw an exception in case of failure
         LocalService.create(PortalAuthenticationService.class).authenticate(new AsyncCallback<AuthenticationResponse>() {
             @Override
@@ -171,17 +173,17 @@ public class SignInPanel extends Panel {
                 } else {
                     error(i18n.tr("Action failed. Please try again later."));
                 }
-                rc[0] = false;
+                rc.set(false);
             }
 
             @Override
             public void onSuccess(AuthenticationResponse result) {
                 // Our wicket session authentication simply returns true, so this call will just create wicket session
-                rc[0] = AuthenticatedWebSession.get().signIn(username, password);
+                rc.set(AuthenticatedWebSession.get().signIn(username, password));
             }
         }, new ClientSystemInfo(), request);
 
-        return rc[0];
+        return rc.get();
     }
 
     private boolean isSignedIn() {
