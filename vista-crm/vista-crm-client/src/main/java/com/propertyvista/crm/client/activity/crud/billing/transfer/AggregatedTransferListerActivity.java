@@ -18,7 +18,7 @@ import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.site.client.activity.crud.ListerActivityBase;
 
-import com.propertyvista.crm.client.ui.crud.financial.AggregatedTransferListerView;
+import com.propertyvista.crm.client.ui.crud.billing.transfer.AggregatedTransferListerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.FinancialViewFactory;
 import com.propertyvista.crm.rpc.services.financial.AggregatedTransferCrudService;
 import com.propertyvista.domain.financial.AggregatedTransfer;

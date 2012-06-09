@@ -26,10 +26,10 @@ import com.propertyvista.crm.client.ui.crud.billing.payment.PaymentEditorView;
 import com.propertyvista.crm.client.ui.crud.billing.payment.PaymentEditorViewImpl;
 import com.propertyvista.crm.client.ui.crud.billing.payment.PaymentViewerView;
 import com.propertyvista.crm.client.ui.crud.billing.payment.PaymentViewerViewImpl;
-import com.propertyvista.crm.client.ui.crud.financial.AggregatedTransferListerView;
-import com.propertyvista.crm.client.ui.crud.financial.AggregatedTransferListerViewImpl;
-import com.propertyvista.crm.client.ui.crud.financial.AggregatedTransferViewerView;
-import com.propertyvista.crm.client.ui.crud.financial.AggregatedTransferViewerViewImpl;
+import com.propertyvista.crm.client.ui.crud.billing.transfer.AggregatedTransferListerView;
+import com.propertyvista.crm.client.ui.crud.billing.transfer.AggregatedTransferListerViewImpl;
+import com.propertyvista.crm.client.ui.crud.billing.transfer.AggregatedTransferViewerView;
+import com.propertyvista.crm.client.ui.crud.billing.transfer.AggregatedTransferViewerViewImpl;
 
 public class FinancialViewFactory extends ViewFactoryBase {
 
