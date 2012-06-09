@@ -118,7 +118,7 @@ public class BillingCycleTest extends VistaDBTestBase {
     }
 
     private BillingCycle createSubsiquentBillingCycle(BillingCycle previousBillingCycle) {
-        BillingCycle billingCycle = BillingLifecycleManager.getSubsiquentBillingCycle(previousBillingCycle.billingType(), null, previousBillingCycle);
+        BillingCycle billingCycle = BillingLifecycleManager.getSubsiquentBillingCycle(previousBillingCycle);
         return billingCycle;
     }
 

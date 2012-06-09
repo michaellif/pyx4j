@@ -68,7 +68,7 @@ public class BillingLifecycleManager {
 
     }
 
-    static void runBilling(Building building, PaymentFrequency paymentFrequency, LogicalDate billingPeriodStartDate) {
+    static void runBilling(BillingCycle billingCycle) {
         //TODO
 
         // runBilling(billingCycle, true);
@@ -240,7 +240,7 @@ public class BillingLifecycleManager {
                         .creationDate().getValue(), !billingAccount.billingPeriodStartDate().isNull());
             }
         } else {
-            return getSubsiquentBillingCycle(billingAccount.billingType(), lease.unit().belongsTo(), previousBill.billingCycle());
+            return getSubsiquentBillingCycle(previousBill.billingCycle());
         }
     }
 
@@ -343,9 +343,9 @@ public class BillingLifecycleManager {
         return ensureBillingCycle(billingType, building, billingCycleStartDate);
     }
 
-    static BillingCycle getSubsiquentBillingCycle(BillingType billingType, Building building, BillingCycle previousBillingCycle) {
-        return ensureBillingCycle(billingType, building, BillDateUtils.calculateSubsiquentBillingCycleStartDate(billingType.paymentFrequency().getValue(),
-                previousBillingCycle.billingPeriodStartDate().getValue()));
+    static BillingCycle getSubsiquentBillingCycle(BillingCycle previousBillingCycle) {
+        return ensureBillingCycle(previousBillingCycle.billingType(), previousBillingCycle.building(), BillDateUtils.calculateSubsiquentBillingCycleStartDate(
+                previousBillingCycle.billingType().paymentFrequency().getValue(), previousBillingCycle.billingPeriodStartDate().getValue()));
     }
 
     private static BillingCycle ensureBillingCycle(BillingType billingType, Building building, LogicalDate billingCycleStartDate) {
@@ -392,7 +392,7 @@ public class BillingLifecycleManager {
                 createUntill.add(Calendar.MONTH, 1);
 
                 while (latestBillingCycle.billingPeriodStartDate().getValue().before(createUntill.getTime())) {
-                    latestBillingCycle = getSubsiquentBillingCycle(billingType, building, latestBillingCycle);
+                    latestBillingCycle = getSubsiquentBillingCycle(latestBillingCycle);
                 }
 
             }
