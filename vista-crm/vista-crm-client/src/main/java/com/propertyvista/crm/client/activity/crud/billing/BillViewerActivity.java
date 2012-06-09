@@ -15,7 +15,6 @@ package com.propertyvista.crm.client.activity.crud.billing;
 
 import com.google.gwt.core.client.GWT;
 
-import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.essentials.client.ReportDialog;
@@ -24,7 +23,7 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.billing.bill.BillViewerView;
-import com.propertyvista.crm.client.ui.crud.viewfactories.LeaseViewFactory;
+import com.propertyvista.crm.client.ui.crud.viewfactories.FinancialViewFactory;
 import com.propertyvista.crm.rpc.dto.billing.BillDataDTO;
 import com.propertyvista.crm.rpc.services.billing.BillCrudService;
 import com.propertyvista.crm.rpc.services.billing.BillPrintService;
@@ -32,9 +31,8 @@ import com.propertyvista.domain.financial.billing.Bill;
 
 public class BillViewerActivity extends CrmViewerActivity<BillDataDTO> implements BillViewerView.Presenter {
 
-    @SuppressWarnings("unchecked")
     public BillViewerActivity(CrudAppPlace place) {
-        super(place, LeaseViewFactory.instance(BillViewerView.class), (AbstractCrudService<BillDataDTO>) GWT.create(BillCrudService.class));
+        super(place, FinancialViewFactory.instance(BillViewerView.class), GWT.<BillCrudService> create(BillCrudService.class));
     }
 
     @Override

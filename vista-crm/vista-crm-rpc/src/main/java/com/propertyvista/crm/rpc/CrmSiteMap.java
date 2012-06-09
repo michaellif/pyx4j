@@ -185,22 +185,6 @@ public class CrmSiteMap implements SiteMap {
         public static class LeaseApplication extends CRMCrudAppPlace {
         }
 
-        @PlaceProperties(caption = "Bill")
-        @NavigationItem(navigLabel = "Bills")
-        public static class Bill extends CRMCrudAppPlace {
-        }
-
-        @PlaceProperties(caption = "Payment")
-        @NavigationItem(navigLabel = "Payments")
-        public static class Payment extends CRMCrudAppPlace {
-        }
-
-        @PlaceProperties(caption = "Lease Adjustments")
-        @NavigationItem(navigLabel = "Lease Adjustments")
-        public static class LeaseAdjustment extends CRMCrudAppPlace {
-
-        }
-
         public static class EquifaxResult extends CRMCrudAppPlace {
         }
 
@@ -264,10 +248,29 @@ public class CrmSiteMap implements SiteMap {
         @PlaceProperties(caption = "BillingCycle")
         @NavigationItem(navigLabel = "BillingCycles")
         public static class BillingCycle extends CRMCrudAppPlace {
+
+            public static class Lease extends CRMCrudAppPlace {
+            }
+        }
+
+        @PlaceProperties(caption = "Bill")
+        @NavigationItem(navigLabel = "Bills")
+        public static class Bill extends CRMCrudAppPlace {
+        }
+
+        @PlaceProperties(caption = "Payment")
+        @NavigationItem(navigLabel = "Payments")
+        public static class Payment extends CRMCrudAppPlace {
+        }
+
+        @PlaceProperties(caption = "Lease Adjustments")
+        @NavigationItem(navigLabel = "Lease Adjustments")
+        public static class LeaseAdjustment extends CRMCrudAppPlace {
+
         }
 
         @PlaceProperties(caption = "Aggregated Transfer")
-        @NavigationItem
+        @NavigationItem(navigLabel = "Aggregated Transfers")
         public static class AggregatedTransfer extends CRMCrudAppPlace {
         }
     }

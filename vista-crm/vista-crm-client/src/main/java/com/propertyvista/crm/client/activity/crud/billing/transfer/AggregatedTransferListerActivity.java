@@ -11,25 +11,22 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.activity.crud.financial;
+package com.propertyvista.crm.client.activity.crud.billing.transfer;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
-import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.site.client.activity.crud.ListerActivityBase;
 
-import com.propertyvista.crm.client.ui.crud.financial.MerchantTransactionListerView;
+import com.propertyvista.crm.client.ui.crud.financial.AggregatedTransferListerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.FinancialViewFactory;
 import com.propertyvista.crm.rpc.services.financial.AggregatedTransferCrudService;
 import com.propertyvista.domain.financial.AggregatedTransfer;
 
 public class AggregatedTransferListerActivity extends ListerActivityBase<AggregatedTransfer> {
 
-    @SuppressWarnings("unchecked")
     public AggregatedTransferListerActivity(Place place) {
-        super(place, FinancialViewFactory.instance(MerchantTransactionListerView.class), (AbstractCrudService<AggregatedTransfer>) GWT
-                .create(AggregatedTransferCrudService.class), AggregatedTransfer.class);
+        super(place, FinancialViewFactory.instance(AggregatedTransferListerView.class), GWT
+                .<AggregatedTransferCrudService> create(AggregatedTransferCrudService.class), AggregatedTransfer.class);
     }
-
 }

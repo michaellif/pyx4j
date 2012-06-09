@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.client.activity.crud.billing;
+package com.propertyvista.crm.client.activity.crud.billing.payment;
 
 import com.google.gwt.core.client.GWT;
 
@@ -21,14 +21,14 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.billing.payment.PaymentViewerView;
-import com.propertyvista.crm.client.ui.crud.viewfactories.LeaseViewFactory;
+import com.propertyvista.crm.client.ui.crud.viewfactories.FinancialViewFactory;
 import com.propertyvista.crm.rpc.services.billing.PaymentCrudService;
 import com.propertyvista.dto.PaymentRecordDTO;
 
 public class PaymentViewerActivity extends CrmViewerActivity<PaymentRecordDTO> implements PaymentViewerView.Presenter {
 
     public PaymentViewerActivity(CrudAppPlace place) {
-        super(place, LeaseViewFactory.instance(PaymentViewerView.class), GWT.<AbstractCrudService<PaymentRecordDTO>> create(PaymentCrudService.class));
+        super(place, FinancialViewFactory.instance(PaymentViewerView.class), GWT.<AbstractCrudService<PaymentRecordDTO>> create(PaymentCrudService.class));
     }
 
     @Override

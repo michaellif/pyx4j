@@ -21,19 +21,19 @@ import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.financial.AggregatedTransfer;
 import com.propertyvista.domain.financial.PaymentRecord;
 
-public class MerchantTransactionViewerViewImpl extends CrmViewerViewImplBase<AggregatedTransfer> implements MerchantTransactionViewerView {
+public class AggregatedTransferViewerViewImpl extends CrmViewerViewImplBase<AggregatedTransfer> implements AggregatedTransferViewerView {
 
     private final IListerView<PaymentRecord> paymentLister;
 
     private final IListerView<PaymentRecord> returnedPaymentLister;
 
-    public MerchantTransactionViewerViewImpl() {
+    public AggregatedTransferViewerViewImpl() {
         super(CrmSiteMap.Finance.AggregatedTransfer.class, true);
 
         paymentLister = new ListerInternalViewImplBase<PaymentRecord>(new PaymentRecordLister());
         returnedPaymentLister = new ListerInternalViewImplBase<PaymentRecord>(new PaymentRecordLister());
 
-        setForm(new MerchantTransactionForm(true));
+        setForm(new AggregatedTransferForm(true));
     }
 
     @Override

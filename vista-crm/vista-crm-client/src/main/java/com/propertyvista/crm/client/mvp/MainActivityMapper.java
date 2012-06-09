@@ -28,12 +28,14 @@ import com.propertyvista.crm.client.activity.AccountViewerActivity;
 import com.propertyvista.crm.client.activity.AlertActivity;
 import com.propertyvista.crm.client.activity.MessageActivity;
 import com.propertyvista.crm.client.activity.crud.billing.BillViewerActivity;
-import com.propertyvista.crm.client.activity.crud.billing.LeaseAdjustmentEditorActivity;
-import com.propertyvista.crm.client.activity.crud.billing.LeaseAdjustmentListerActivity;
-import com.propertyvista.crm.client.activity.crud.billing.LeaseAdjustmentViewerActivity;
-import com.propertyvista.crm.client.activity.crud.billing.PaymentEditorActivity;
-import com.propertyvista.crm.client.activity.crud.billing.PaymentListerActivity;
-import com.propertyvista.crm.client.activity.crud.billing.PaymentViewerActivity;
+import com.propertyvista.crm.client.activity.crud.billing.adjustment.LeaseAdjustmentEditorActivity;
+import com.propertyvista.crm.client.activity.crud.billing.adjustment.LeaseAdjustmentViewerActivity;
+import com.propertyvista.crm.client.activity.crud.billing.cycle.BillingCycleLeaseViewerActivity;
+import com.propertyvista.crm.client.activity.crud.billing.cycle.BillingCycleViewerActivity;
+import com.propertyvista.crm.client.activity.crud.billing.payment.PaymentEditorActivity;
+import com.propertyvista.crm.client.activity.crud.billing.payment.PaymentViewerActivity;
+import com.propertyvista.crm.client.activity.crud.billing.transfer.AggregatedTransferListerActivity;
+import com.propertyvista.crm.client.activity.crud.billing.transfer.AggregatedTransferViewerActivity;
 import com.propertyvista.crm.client.activity.crud.building.BoilerEditorActivity;
 import com.propertyvista.crm.client.activity.crud.building.BoilerViewerActivity;
 import com.propertyvista.crm.client.activity.crud.building.BuildingEditorActivity;
@@ -82,8 +84,6 @@ import com.propertyvista.crm.client.activity.crud.customer.tenant.PastTenantList
 import com.propertyvista.crm.client.activity.crud.customer.tenant.TenantEditorActivity;
 import com.propertyvista.crm.client.activity.crud.customer.tenant.TenantListerActivity;
 import com.propertyvista.crm.client.activity.crud.customer.tenant.TenantViewerActivity;
-import com.propertyvista.crm.client.activity.crud.financial.AggregatedTransferListerActivity;
-import com.propertyvista.crm.client.activity.crud.financial.AggregatedTransferViewerActivity;
 import com.propertyvista.crm.client.activity.crud.floorplan.FloorplanEditorActivity;
 import com.propertyvista.crm.client.activity.crud.floorplan.FloorplanViewerActivity;
 import com.propertyvista.crm.client.activity.crud.lease.LeaseEditorActivity;
@@ -466,40 +466,6 @@ public class MainActivityMapper implements AppActivityMapper {
                             break;
                         }
 
-                    } else if (place instanceof CrmSiteMap.Tenants.Bill) {
-                        switch (crudPlace.getType()) {
-                        case viewer:
-                            activity = new BillViewerActivity(crudPlace);
-                            break;
-                        }
-
-                    } else if (place instanceof CrmSiteMap.Tenants.Payment) {
-                        switch (crudPlace.getType()) {
-                        case editor:
-                            activity = new PaymentEditorActivity(crudPlace);
-                            break;
-                        case viewer:
-                            activity = new PaymentViewerActivity(crudPlace);
-                            break;
-                        case lister:
-                            activity = new PaymentListerActivity(crudPlace);
-                            break;
-                        }
-
-                    } else if (place instanceof CrmSiteMap.Tenants.LeaseAdjustment) {
-                        switch (crudPlace.getType()) {
-                        case editor:
-                            activity = new LeaseAdjustmentEditorActivity(crudPlace);
-                            break;
-                        case viewer:
-                            activity = new LeaseAdjustmentViewerActivity(crudPlace);
-                            break;
-                        case lister:
-                            activity = new LeaseAdjustmentListerActivity(crudPlace);
-                            break;
-
-                        }
-
                     } else if (place instanceof CrmSiteMap.Tenants.Lease) {
                         switch (crudPlace.getType()) {
                         case editor:
@@ -560,6 +526,48 @@ public class MainActivityMapper implements AppActivityMapper {
                             break;
                         }
 // - Financial-related:
+
+                    } else if (place instanceof CrmSiteMap.Finance.BillingCycle) {
+                        switch (crudPlace.getType()) {
+                        case viewer:
+                            activity = new BillingCycleViewerActivity(crudPlace);
+                            break;
+                        }
+
+                    } else if (place instanceof CrmSiteMap.Finance.BillingCycle.Lease) {
+                        switch (crudPlace.getType()) {
+                        case viewer:
+                            activity = new BillingCycleLeaseViewerActivity(crudPlace);
+                            break;
+                        }
+
+                    } else if (place instanceof CrmSiteMap.Finance.Bill) {
+                        switch (crudPlace.getType()) {
+                        case viewer:
+                            activity = new BillViewerActivity(crudPlace);
+                            break;
+                        }
+
+                    } else if (place instanceof CrmSiteMap.Finance.Payment) {
+                        switch (crudPlace.getType()) {
+                        case editor:
+                            activity = new PaymentEditorActivity(crudPlace);
+                            break;
+                        case viewer:
+                            activity = new PaymentViewerActivity(crudPlace);
+                            break;
+                        }
+
+                    } else if (place instanceof CrmSiteMap.Finance.LeaseAdjustment) {
+                        switch (crudPlace.getType()) {
+                        case editor:
+                            activity = new LeaseAdjustmentEditorActivity(crudPlace);
+                            break;
+                        case viewer:
+                            activity = new LeaseAdjustmentViewerActivity(crudPlace);
+                            break;
+                        }
+
                     } else if (place instanceof CrmSiteMap.Finance.AggregatedTransfer) {
                         switch (crudPlace.getType()) {
                         case viewer:

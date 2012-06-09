@@ -106,14 +106,11 @@ public class CrmEntityMapper {
         AppPlaceEntityMapper.register(Roof.class, CrmSiteMap.Properties.Roof.class, defaultImage);
         AppPlaceEntityMapper.register(Service.class, CrmSiteMap.Properties.Service.class, defaultImage);
 
-        AppPlaceEntityMapper.register(Bill.class, CrmSiteMap.Tenants.Bill.class, defaultImage);
         AppPlaceEntityMapper.register(EquifaxResult.class, CrmSiteMap.Tenants.EquifaxResult.class, defaultImage);
         AppPlaceEntityMapper.register(Guarantor.class, CrmSiteMap.Tenants.Guarantor.class, CrmImages.INSTANCE.tenant());
         AppPlaceEntityMapper.register(Lease.class, CrmSiteMap.Tenants.Lease.class, defaultImage);
         AppPlaceEntityMapper.register(Locker.class, CrmSiteMap.Properties.Locker.class, defaultImage);
         AppPlaceEntityMapper.register(MaintenanceRequest.class, CrmSiteMap.Tenants.MaintenanceRequest.class, defaultImage);
-        AppPlaceEntityMapper.register(PaymentRecord.class, CrmSiteMap.Tenants.Payment.class, defaultImage);
-        AppPlaceEntityMapper.register(LeaseAdjustment.class, CrmSiteMap.Tenants.LeaseAdjustment.class, defaultImage);
         AppPlaceEntityMapper.register(PersonScreening.class, CrmSiteMap.Tenants.Screening.class, defaultImage);
         AppPlaceEntityMapper.register(Customer.class, CrmSiteMap.Tenants.Tenant.class, defaultImage);
         AppPlaceEntityMapper.register(Tenant.class, CrmSiteMap.Tenants.Tenant.class, CrmImages.INSTANCE.tenant());
@@ -123,6 +120,9 @@ public class CrmEntityMapper {
         AppPlaceEntityMapper.register(Showing.class, Marketing.Showing.class, defaultImage);
 
         AppPlaceEntityMapper.register(BillingCycle.class, CrmSiteMap.Finance.BillingCycle.class, defaultImage);
+        AppPlaceEntityMapper.register(Bill.class, CrmSiteMap.Finance.Bill.class, defaultImage);
+        AppPlaceEntityMapper.register(PaymentRecord.class, CrmSiteMap.Finance.Payment.class, defaultImage);
+        AppPlaceEntityMapper.register(LeaseAdjustment.class, CrmSiteMap.Finance.LeaseAdjustment.class, defaultImage);
         AppPlaceEntityMapper.register(AggregatedTransfer.class, CrmSiteMap.Finance.AggregatedTransfer.class, defaultImage);
 
         AppPlaceEntityMapper.register(Employee.class, CrmSiteMap.Organization.Employee.class, defaultImage);

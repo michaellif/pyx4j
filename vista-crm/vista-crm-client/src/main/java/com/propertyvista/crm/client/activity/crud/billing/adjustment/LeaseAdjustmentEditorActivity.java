@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.client.activity.crud.billing;
+package com.propertyvista.crm.client.activity.crud.billing.adjustment;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;

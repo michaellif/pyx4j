@@ -7,7 +7,7 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-09
+ * Created on 2012-06-09
  * @author Vlad
  * @version $Id$
  */
@@ -15,31 +15,27 @@ package com.propertyvista.crm.server.services.billing;
 
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 
-import com.propertyvista.crm.rpc.dto.billing.BillingCycleDTO;
-import com.propertyvista.crm.rpc.services.billing.BillingCycleCrudService;
-import com.propertyvista.domain.financial.billing.BillingCycle;
+import com.propertyvista.crm.rpc.dto.billing.BillingCycleLeaseDTO;
+import com.propertyvista.crm.rpc.services.billing.BillingCycleLeaseCrudService;
+import com.propertyvista.domain.tenant.lease.Lease;
 
-public class BillingCycleCrudServiceImpl extends AbstractCrudServiceDtoImpl<BillingCycle, BillingCycleDTO> implements BillingCycleCrudService {
+public class BillingCycleLeaseCrudServiceImpl extends AbstractCrudServiceDtoImpl<Lease, BillingCycleLeaseDTO> implements BillingCycleLeaseCrudService {
 
-    public BillingCycleCrudServiceImpl() {
-        super(BillingCycle.class, BillingCycleDTO.class);
+    protected BillingCycleLeaseCrudServiceImpl() {
+        super(Lease.class, BillingCycleLeaseDTO.class);
     }
 
     @Override
     protected void bind() {
-        bindCompleateDBO();
+        bind(dboClass, dtoProto.lease(), dboProto);
     }
 
     @Override
-    protected void enhanceRetrieved(BillingCycle entity, BillingCycleDTO dto) {
+    protected void enhanceListRetrieved(Lease entity, BillingCycleLeaseDTO dto) {
     }
 
     @Override
-    protected void enhanceListRetrieved(BillingCycle entity, BillingCycleDTO dto) {
-    }
-
-    @Override
-    protected void persist(BillingCycle entity, BillingCycleDTO dto) {
+    protected void persist(Lease entity, BillingCycleLeaseDTO dto) {
         throw new IllegalArgumentException();
     }
 }

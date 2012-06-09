@@ -18,9 +18,9 @@ import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 
 import com.propertyvista.domain.financial.AggregatedTransfer;
 
-public class MerchantTransactionLister extends ListerBase<AggregatedTransfer> {
+public class AggregatedTransferLister extends ListerBase<AggregatedTransfer> {
 
-    public MerchantTransactionLister() {
+    public AggregatedTransferLister() {
         super(AggregatedTransfer.class, false, false);
 
         setColumnDescriptors(//@formatter:off

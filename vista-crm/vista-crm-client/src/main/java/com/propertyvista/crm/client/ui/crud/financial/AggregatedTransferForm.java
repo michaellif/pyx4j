@@ -21,13 +21,13 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.financial.AggregatedTransfer;
 
-public class MerchantTransactionForm extends CrmEntityForm<AggregatedTransfer> {
+public class AggregatedTransferForm extends CrmEntityForm<AggregatedTransfer> {
 
-    public MerchantTransactionForm() {
+    public AggregatedTransferForm() {
         this(false);
     }
 
-    public MerchantTransactionForm(boolean viewMode) {
+    public AggregatedTransferForm(boolean viewMode) {
         super(AggregatedTransfer.class, viewMode);
     }
 
@@ -62,9 +62,9 @@ public class MerchantTransactionForm extends CrmEntityForm<AggregatedTransfer> {
         main.setWidget(++row, 0, amount);
 
         main.setH3(++row, 0, 1, proto().payments().getMeta().getCaption());
-        main.setWidget(++row, 0, ((MerchantTransactionViewerView) getParentView()).getPaymentsListerView().asWidget());
+        main.setWidget(++row, 0, ((AggregatedTransferViewerView) getParentView()).getPaymentsListerView().asWidget());
         main.setH3(++row, 0, 1, proto().returnedPayments().getMeta().getCaption());
-        main.setWidget(++row, 0, ((MerchantTransactionViewerView) getParentView()).getReturnedPaymentsListerView().asWidget());
+        main.setWidget(++row, 0, ((AggregatedTransferViewerView) getParentView()).getReturnedPaymentsListerView().asWidget());
 
         return new ScrollPanel(main);
     }

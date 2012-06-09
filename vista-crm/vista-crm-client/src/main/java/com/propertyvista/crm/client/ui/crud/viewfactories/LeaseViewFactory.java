@@ -18,18 +18,8 @@ import com.pyx4j.site.client.ui.crud.IView;
 
 import com.propertyvista.crm.client.ui.crud.billing.adjustments.LeaseAdjustmentEditorView;
 import com.propertyvista.crm.client.ui.crud.billing.adjustments.LeaseAdjustmentEditorViewImpl;
-import com.propertyvista.crm.client.ui.crud.billing.adjustments.LeaseAdjustmentListerView;
-import com.propertyvista.crm.client.ui.crud.billing.adjustments.LeaseAdjustmentListerViewImpl;
 import com.propertyvista.crm.client.ui.crud.billing.adjustments.LeaseAdjustmentViewerView;
 import com.propertyvista.crm.client.ui.crud.billing.adjustments.LeaseAdjustmentViewerViewImpl;
-import com.propertyvista.crm.client.ui.crud.billing.bill.BillViewerView;
-import com.propertyvista.crm.client.ui.crud.billing.bill.BillViewerViewImpl;
-import com.propertyvista.crm.client.ui.crud.billing.payment.PaymentEditorView;
-import com.propertyvista.crm.client.ui.crud.billing.payment.PaymentEditorViewImpl;
-import com.propertyvista.crm.client.ui.crud.billing.payment.PaymentListerView;
-import com.propertyvista.crm.client.ui.crud.billing.payment.PaymentListerViewImpl;
-import com.propertyvista.crm.client.ui.crud.billing.payment.PaymentViewerView;
-import com.propertyvista.crm.client.ui.crud.billing.payment.PaymentViewerViewImpl;
 import com.propertyvista.crm.client.ui.crud.lease.LeaseEditorView;
 import com.propertyvista.crm.client.ui.crud.lease.LeaseEditorViewImpl;
 import com.propertyvista.crm.client.ui.crud.lease.LeaseListerView;
@@ -66,18 +56,6 @@ public class LeaseViewFactory extends ViewFactoryBase {
             } else if (LeaseApplicationEditorView.class.equals(type)) {
                 map.put(type, new LeaseApplicationEditorViewImpl());
 
-            } else if (BillViewerView.class.equals(type)) {
-                map.put(type, new BillViewerViewImpl());
-
-            } else if (PaymentListerView.class.equals(type)) {
-                map.put(type, new PaymentListerViewImpl());
-            } else if (PaymentEditorView.class.equals(type)) {
-                map.put(type, new PaymentEditorViewImpl());
-            } else if (PaymentViewerView.class.equals(type)) {
-                map.put(type, new PaymentViewerViewImpl());
-
-            } else if (LeaseAdjustmentListerView.class.equals(type)) {
-                map.put(type, new LeaseAdjustmentListerViewImpl());
             } else if (LeaseAdjustmentViewerView.class.equals(type)) {
                 map.put(type, new LeaseAdjustmentViewerViewImpl());
             } else if (LeaseAdjustmentEditorView.class.equals(type)) {

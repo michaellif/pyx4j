@@ -38,7 +38,7 @@ public class PaymentViewerViewImpl extends CrmViewerViewImplBase<PaymentRecordDT
     private final Button cancelAction;
 
     public PaymentViewerViewImpl() {
-        super(CrmSiteMap.Tenants.Payment.class, new PaymentForm(true));
+        super(CrmSiteMap.Finance.Payment.class, new PaymentForm(true));
 
         cancelAction = new Button(i18n.tr("Cancel"), new ClickHandler() {
             @Override

@@ -7,21 +7,23 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-24
+ * Created on 2012-06-09
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.financial;
+package com.propertyvista.crm.client.ui.crud.billing.cycle;
 
 import com.pyx4j.site.client.ui.crud.form.IViewerView;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 
-import com.propertyvista.domain.financial.AggregatedTransfer;
-import com.propertyvista.domain.financial.PaymentRecord;
+import com.propertyvista.crm.rpc.dto.billing.BillingCycleDTO;
+import com.propertyvista.crm.rpc.dto.billing.BillingCycleLeaseDTO;
 
-public interface MerchantTransactionViewerView extends IViewerView<AggregatedTransfer> {
+public interface BillingCycleView extends IViewerView<BillingCycleDTO> {
 
-    IListerView<PaymentRecord> getPaymentsListerView();
+    interface Presenter extends IViewerView.Presenter {
 
-    IListerView<PaymentRecord> getReturnedPaymentsListerView();
+    }
+
+    IListerView<BillingCycleLeaseDTO> getLeaseListerView();
 }

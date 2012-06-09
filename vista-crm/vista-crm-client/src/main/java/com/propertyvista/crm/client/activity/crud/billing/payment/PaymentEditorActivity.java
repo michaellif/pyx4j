@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.client.activity.crud.billing;
+package com.propertyvista.crm.client.activity.crud.billing.payment;
 
 import java.util.List;
 import java.util.Vector;
@@ -25,7 +25,7 @@ import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.ui.crud.billing.payment.PaymentEditorView;
-import com.propertyvista.crm.client.ui.crud.viewfactories.LeaseViewFactory;
+import com.propertyvista.crm.client.ui.crud.viewfactories.FinancialViewFactory;
 import com.propertyvista.crm.rpc.services.billing.PaymentCrudService;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.PaymentMethod;
@@ -35,7 +35,7 @@ import com.propertyvista.dto.PaymentRecordDTO;
 public class PaymentEditorActivity extends EditorActivityBase<PaymentRecordDTO> implements PaymentEditorView.Presenter {
 
     public PaymentEditorActivity(CrudAppPlace place) {
-        super(place, LeaseViewFactory.instance(PaymentEditorView.class), GWT.<AbstractCrudService<PaymentRecordDTO>> create(PaymentCrudService.class),
+        super(place, FinancialViewFactory.instance(PaymentEditorView.class), GWT.<AbstractCrudService<PaymentRecordDTO>> create(PaymentCrudService.class),
                 PaymentRecordDTO.class);
     }
 

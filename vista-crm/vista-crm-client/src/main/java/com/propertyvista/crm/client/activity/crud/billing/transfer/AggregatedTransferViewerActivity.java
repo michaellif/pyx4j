@@ -11,8 +11,9 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.activity.crud.financial;
+package com.propertyvista.crm.client.activity.crud.billing.transfer;
 
+import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.shared.EntityFactory;
@@ -22,7 +23,7 @@ import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
-import com.propertyvista.crm.client.ui.crud.financial.MerchantTransactionViewerView;
+import com.propertyvista.crm.client.ui.crud.financial.AggregatedTransferViewerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.FinancialViewFactory;
 import com.propertyvista.crm.rpc.services.financial.AggregatedTransferCrudService;
 import com.propertyvista.crm.rpc.services.financial.PaymentRecordListService;
@@ -37,14 +38,21 @@ public class AggregatedTransferViewerActivity extends CrmViewerActivity<Aggregat
 
     @SuppressWarnings("unchecked")
     public AggregatedTransferViewerActivity(CrudAppPlace place) {
-        super(place, FinancialViewFactory.instance(MerchantTransactionViewerView.class), GWT
+        super(place, FinancialViewFactory.instance(AggregatedTransferViewerView.class), GWT
                 .<AggregatedTransferCrudService> create(AggregatedTransferCrudService.class));
 
-        paymentLister = new ListerActivityBase<PaymentRecord>(place, ((MerchantTransactionViewerView) getView()).getPaymentsListerView(),
+        paymentLister = new ListerActivityBase<PaymentRecord>(place, ((AggregatedTransferViewerView) getView()).getPaymentsListerView(),
                 GWT.<PaymentRecordListService> create(PaymentRecordListService.class), PaymentRecord.class);
 
-        returnedPaymentLister = new ListerActivityBase<PaymentRecord>(place, ((MerchantTransactionViewerView) getView()).getReturnedPaymentsListerView(),
+        returnedPaymentLister = new ListerActivityBase<PaymentRecord>(place, ((AggregatedTransferViewerView) getView()).getReturnedPaymentsListerView(),
                 GWT.<PaymentRecordListService> create(PaymentRecordListService.class), PaymentRecord.class);
+    }
+
+    @Override
+    public void onStop() {
+        ((AbstractActivity) paymentLister).onStop();
+        ((AbstractActivity) returnedPaymentLister).onStop();
+        super.onStop();
     }
 
     @Override

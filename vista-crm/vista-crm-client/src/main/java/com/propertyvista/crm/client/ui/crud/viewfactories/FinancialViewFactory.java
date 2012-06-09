@@ -16,19 +16,43 @@ package com.propertyvista.crm.client.ui.crud.viewfactories;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.site.client.ui.crud.IView;
 
-import com.propertyvista.crm.client.ui.crud.financial.MerchantTransactionListerView;
-import com.propertyvista.crm.client.ui.crud.financial.MerchantTransactionListerViewImpl;
-import com.propertyvista.crm.client.ui.crud.financial.MerchantTransactionViewerView;
-import com.propertyvista.crm.client.ui.crud.financial.MerchantTransactionViewerViewImpl;
+import com.propertyvista.crm.client.ui.crud.billing.bill.BillViewerView;
+import com.propertyvista.crm.client.ui.crud.billing.bill.BillViewerViewImpl;
+import com.propertyvista.crm.client.ui.crud.billing.cycle.BillingCycleLeaseView;
+import com.propertyvista.crm.client.ui.crud.billing.cycle.BillingCycleLeaseViewImpl;
+import com.propertyvista.crm.client.ui.crud.billing.cycle.BillingCycleView;
+import com.propertyvista.crm.client.ui.crud.billing.cycle.BillingCycleViewImpl;
+import com.propertyvista.crm.client.ui.crud.billing.payment.PaymentEditorView;
+import com.propertyvista.crm.client.ui.crud.billing.payment.PaymentEditorViewImpl;
+import com.propertyvista.crm.client.ui.crud.billing.payment.PaymentViewerView;
+import com.propertyvista.crm.client.ui.crud.billing.payment.PaymentViewerViewImpl;
+import com.propertyvista.crm.client.ui.crud.financial.AggregatedTransferListerView;
+import com.propertyvista.crm.client.ui.crud.financial.AggregatedTransferListerViewImpl;
+import com.propertyvista.crm.client.ui.crud.financial.AggregatedTransferViewerView;
+import com.propertyvista.crm.client.ui.crud.financial.AggregatedTransferViewerViewImpl;
 
 public class FinancialViewFactory extends ViewFactoryBase {
 
     public static <E extends IEntity, T extends IView<E>> T instance(Class<T> type) {
         if (!map.containsKey(type)) {
-            if (MerchantTransactionListerView.class.equals(type)) {
-                map.put(type, new MerchantTransactionListerViewImpl());
-            } else if (MerchantTransactionViewerView.class.equals(type)) {
-                map.put(type, new MerchantTransactionViewerViewImpl());
+            if (BillingCycleView.class.equals(type)) {
+                map.put(type, new BillingCycleViewImpl());
+
+            } else if (BillingCycleLeaseView.class.equals(type)) {
+                map.put(type, new BillingCycleLeaseViewImpl());
+
+            } else if (BillViewerView.class.equals(type)) {
+                map.put(type, new BillViewerViewImpl());
+
+            } else if (PaymentEditorView.class.equals(type)) {
+                map.put(type, new PaymentEditorViewImpl());
+            } else if (PaymentViewerView.class.equals(type)) {
+                map.put(type, new PaymentViewerViewImpl());
+
+            } else if (AggregatedTransferListerView.class.equals(type)) {
+                map.put(type, new AggregatedTransferListerViewImpl());
+            } else if (AggregatedTransferViewerView.class.equals(type)) {
+                map.put(type, new AggregatedTransferViewerViewImpl());
             }
         }
         @SuppressWarnings("unchecked")
