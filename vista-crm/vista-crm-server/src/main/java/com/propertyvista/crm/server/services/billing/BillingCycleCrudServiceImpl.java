@@ -14,6 +14,8 @@
 package com.propertyvista.crm.server.services.billing;
 
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
+import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.AttachLevel;
 
 import com.propertyvista.crm.rpc.dto.billing.BillingCycleDTO;
 import com.propertyvista.crm.rpc.services.billing.BillingCycleCrudService;
@@ -32,6 +34,7 @@ public class BillingCycleCrudServiceImpl extends AbstractCrudServiceDtoImpl<Bill
 
     @Override
     protected void enhanceRetrieved(BillingCycle entity, BillingCycleDTO dto) {
+        Persistence.service().retrieve(dto.building(), AttachLevel.ToStringMembers);
     }
 
     @Override

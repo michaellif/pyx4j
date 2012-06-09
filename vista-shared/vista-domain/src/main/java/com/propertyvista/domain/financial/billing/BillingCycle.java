@@ -20,14 +20,18 @@ import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Table;
+import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.property.asset.building.Building;
 
+@ToStringFormat("{0}, {1}")
 @Table(prefix = "billing")
 public interface BillingCycle extends IEntity {
 
+    @ToString(index = 0)
     @ReadOnly
     @Owner
     @Detached
@@ -35,6 +39,7 @@ public interface BillingCycle extends IEntity {
     Building building();
 
     @ReadOnly
+    @ToString(index = 1)
     BillingType billingType();
 
     @ReadOnly
