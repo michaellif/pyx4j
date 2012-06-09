@@ -61,6 +61,7 @@ class AminUsersPreloader extends AbstractDataPreloader {
         createAdminUser("VladS", "vlads@propertyvista.com", "vlads@propertyvista.com", VistaAdminBehavior.SystemAdmin);
         createAdminUser("VictorV", "vvassiliev@propertyvista.com", "vvassiliev@propertyvista.com", VistaAdminBehavior.SystemAdmin);
         createAdminUser("Onboarding API", "romans@rossul.com", "secret", VistaAdminBehavior.OnboardingApi);
+        createAdminUser("Onboarding API (old)", "rossul", "secret", VistaAdminBehavior.OnboardingApi);
 
         return "Created " + cnt + " Admin Users";
     }
