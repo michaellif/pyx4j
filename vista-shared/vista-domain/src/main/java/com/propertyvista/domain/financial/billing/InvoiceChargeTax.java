@@ -18,11 +18,13 @@ import java.math.BigDecimal;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
+import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.financial.tax.Tax;
 
+@Table(prefix = "billing")
 public interface InvoiceChargeTax extends IEntity {
 
     Tax tax();

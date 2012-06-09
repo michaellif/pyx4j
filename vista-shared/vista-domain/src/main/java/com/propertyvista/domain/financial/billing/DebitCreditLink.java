@@ -18,12 +18,20 @@ import java.math.BigDecimal;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
+import com.pyx4j.entity.annotations.JoinColumn;
+import com.pyx4j.entity.annotations.Owner;
+import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
+@Table(prefix = "billing")
 public interface DebitCreditLink extends IEntity {
 
     InvoiceDebit debitItem();
+
+    @Owner
+    @JoinColumn
+    InvoiceCredit creditItem();
 
     @Format("#0.00")
     @Editor(type = EditorType.money)
