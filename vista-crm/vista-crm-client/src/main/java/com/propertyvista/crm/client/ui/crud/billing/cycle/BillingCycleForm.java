@@ -40,12 +40,12 @@ public class BillingCycleForm extends CrmEntityForm<BillingCycleDTO> {
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingPeriodEndDate())).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().executionTargetDate())).build());
 
-        main.setH2(++row, 0, 2, i18n.tr("Statistics"));
+        main.setH2(++row, 0, 1, i18n.tr("Statistics"));
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().numberOfNonConfirmedBills())).build());
 
-        main.setH2(++row, 0, 2, i18n.tr("Leases"));
+        main.setH2(++row, 0, 1, i18n.tr("Leases"));
         main.setWidget(++row, 0, ((BillingCycleView) getParentView()).getLeaseListerView().asWidget());
-        main.getFlexCellFormatter().getRowSpan(row, 2);
+//        main.getFlexCellFormatter().getRowSpan(row, 2);
 
         return new ScrollPanel(main);
     }

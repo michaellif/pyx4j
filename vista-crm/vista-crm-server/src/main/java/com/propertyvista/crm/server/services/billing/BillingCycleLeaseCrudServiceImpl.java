@@ -21,7 +21,7 @@ import com.propertyvista.domain.tenant.lease.Lease;
 
 public class BillingCycleLeaseCrudServiceImpl extends AbstractCrudServiceDtoImpl<Lease, BillingCycleLeaseDTO> implements BillingCycleLeaseCrudService {
 
-    protected BillingCycleLeaseCrudServiceImpl() {
+    public BillingCycleLeaseCrudServiceImpl() {
         super(Lease.class, BillingCycleLeaseDTO.class);
     }
 

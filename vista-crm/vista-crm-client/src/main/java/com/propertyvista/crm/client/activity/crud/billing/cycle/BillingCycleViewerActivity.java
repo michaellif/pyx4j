@@ -16,7 +16,7 @@ package com.propertyvista.crm.client.activity.crud.billing.cycle;
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
 
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.site.client.activity.crud.ListerActivityBase;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
@@ -29,7 +29,6 @@ import com.propertyvista.crm.rpc.dto.billing.BillingCycleDTO;
 import com.propertyvista.crm.rpc.dto.billing.BillingCycleLeaseDTO;
 import com.propertyvista.crm.rpc.services.billing.BillingCycleCrudService;
 import com.propertyvista.crm.rpc.services.billing.BillingCycleLeaseCrudService;
-import com.propertyvista.domain.tenant.lease.Lease;
 
 public class BillingCycleViewerActivity extends CrmViewerActivity<BillingCycleDTO> implements BillingCycleView.Presenter {
 
@@ -53,9 +52,9 @@ public class BillingCycleViewerActivity extends CrmViewerActivity<BillingCycleDT
         super.onPopulateSuccess(result);
 
         leaseLister.clearPreDefinedFilters();
-        EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
-        leaseLister.addPreDefinedFilter(PropertyCriterion.eq(criteria.proto().unit().belongsTo(), result.building()));
-        leaseLister.addPreDefinedFilter(PropertyCriterion.eq(criteria.proto().billingAccount().billingType(), result.billingType()));
+        BillingCycleLeaseDTO proto = EntityFactory.getEntityPrototype(BillingCycleLeaseDTO.class);
+        leaseLister.addPreDefinedFilter(PropertyCriterion.eq(proto.lease().unit().belongsTo(), result.building()));
+        leaseLister.addPreDefinedFilter(PropertyCriterion.eq(proto.lease().billingAccount().billingType(), result.billingType()));
         leaseLister.populate();
     }
 }
