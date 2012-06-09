@@ -43,6 +43,10 @@ public class OnboardingSecurity {
             request.email().setValue(requestMessage.interfaceEntity().getValue());
             request.password().setValue(requestMessage.interfaceEntityPassword().getValue());
 
+            if ("rossul".equals(request.email().getValue())) {
+                request.email().setValue("romans@rossul.com");
+            }
+
             final AtomicBoolean rc = new AtomicBoolean(false);
             // This does the actual authentication; will throw an exception in case of failure
             LocalService.create(AdminAuthenticationService.class).authenticate(new AsyncCallback<AuthenticationResponse>() {

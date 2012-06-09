@@ -38,8 +38,8 @@ public class OnboardingUserSendPasswordResetTokenRequestRun {
 
         {
             RequestMessage rm = new RequestMessage();
-            rm.interfaceEntity = "rossul";
-            rm.interfaceEntityPassword = "secret";
+            rm.interfaceEntity = ExampleClient.interfaceEntity;
+            rm.interfaceEntityPassword = ExampleClient.interfaceEntityPassword;
             rm.addRequest(createRequest);
 
             ResponseMessage response = ExampleClient.execute(rm);

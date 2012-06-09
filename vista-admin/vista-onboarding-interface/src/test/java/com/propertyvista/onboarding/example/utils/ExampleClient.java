@@ -29,9 +29,9 @@ public class ExampleClient {
 
     //public static String serverUrl = "http://interfaces.birchwoodsoftwaregroup.com/onboarding";
 
-    public static String serverUrl = "http://vista.22.birchwoodsoftwaregroup.com/public/onboarding";
+    //public static String serverUrl = "http://vista.22.birchwoodsoftwaregroup.com/public/onboarding";
 
-    //public static String serverUrl = "http://localhost:8888/vista/public/onboarding";
+    public static String serverUrl = "http://localhost:8888/vista/public/onboarding";
 
     public static String interfaceEntity = "romans@rossul.com";
 
