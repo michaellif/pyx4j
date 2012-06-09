@@ -15,9 +15,9 @@ package com.propertyvista.crm.rpc.services.billing;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
 
-import com.propertyvista.domain.financial.billing.BillingCycle;
+import com.propertyvista.crm.rpc.dto.billing.BillingCycleDTO;
 
-public interface BillingCycleCrudService extends AbstractCrudService<BillingCycle> {
+public interface BillingCycleCrudService extends AbstractCrudService<BillingCycleDTO> {
 
     //TODO Review
     /**

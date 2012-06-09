@@ -16,17 +16,18 @@ package com.propertyvista.crm.client.ui.crud.billing.cycle;
 import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 
-import com.propertyvista.domain.financial.billing.BillingCycle;
+import com.propertyvista.crm.rpc.dto.billing.BillingCycleDTO;
 
-public class BillingCycleLister extends ListerBase<BillingCycle> {
+public class BillingCycleLister extends ListerBase<BillingCycleDTO> {
 
     public BillingCycleLister() {
-        super(BillingCycle.class, false, false);
+        super(BillingCycleDTO.class, false, false);
         setColumnDescriptors(//@formatter:off
             new MemberColumnDescriptor.Builder(proto().billingType()).build(),
             new MemberColumnDescriptor.Builder(proto().billingPeriodStartDate()).build(),
             new MemberColumnDescriptor.Builder(proto().billingPeriodEndDate()).build(),
-            new MemberColumnDescriptor.Builder(proto().executionTargetDate()).build()
+            new MemberColumnDescriptor.Builder(proto().executionTargetDate()).build(),
+            new MemberColumnDescriptor.Builder(proto().numberOfNonConfirmedBills()).build()           
         );//@formatter:on
     }
 }

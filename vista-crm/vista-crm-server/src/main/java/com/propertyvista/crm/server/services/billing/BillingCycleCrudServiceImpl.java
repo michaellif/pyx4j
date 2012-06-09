@@ -13,19 +13,28 @@
  */
 package com.propertyvista.crm.server.services.billing;
 
-import com.pyx4j.entity.server.AbstractCrudServiceImpl;
+import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 
+import com.propertyvista.crm.rpc.dto.billing.BillingCycleDTO;
 import com.propertyvista.crm.rpc.services.billing.BillingCycleCrudService;
 import com.propertyvista.domain.financial.billing.BillingCycle;
 
-public class BillingCycleCrudServiceImpl extends AbstractCrudServiceImpl<BillingCycle> implements BillingCycleCrudService {
+public class BillingCycleCrudServiceImpl extends AbstractCrudServiceDtoImpl<BillingCycle, BillingCycleDTO> implements BillingCycleCrudService {
 
     public BillingCycleCrudServiceImpl() {
-        super(BillingCycle.class);
+        super(BillingCycle.class, BillingCycleDTO.class);
     }
 
     @Override
     protected void bind() {
         bindCompleateDBO();
+    }
+
+    @Override
+    protected void enhanceRetrieved(BillingCycle entity, BillingCycleDTO dto) {
+    }
+
+    @Override
+    protected void enhanceListRetrieved(BillingCycle entity, BillingCycleDTO dto) {
     }
 }

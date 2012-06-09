@@ -32,6 +32,7 @@ import com.propertyvista.crm.client.activity.dashboard.DashboardViewActivity;
 import com.propertyvista.crm.client.ui.crud.building.BuildingViewerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.BuildingViewFactory;
 import com.propertyvista.crm.client.ui.dashboard.DashboardView;
+import com.propertyvista.crm.rpc.dto.billing.BillingCycleDTO;
 import com.propertyvista.crm.rpc.services.billing.BillingCycleCrudService;
 import com.propertyvista.crm.rpc.services.building.BuildingCrudService;
 import com.propertyvista.crm.rpc.services.building.FloorplanCrudService;
@@ -83,7 +84,7 @@ public class BuildingViewerActivity extends CrmViewerActivity<BuildingDTO> imple
 
     private final Presenter<Concession> concessionLister;
 
-    private final Presenter<BillingCycle> billingCycleLister;
+    private final Presenter<BillingCycleDTO> billingCycleLister;
 
     @SuppressWarnings("unchecked")
     public BuildingViewerActivity(CrudAppPlace place) {
@@ -120,7 +121,7 @@ public class BuildingViewerActivity extends CrmViewerActivity<BuildingDTO> imple
                 (AbstractCrudService<Concession>) GWT.create(ConcessionCrudService.class), Concession.class, VistaCrmBehavior.ProductCatalog);
 
         billingCycleLister = ListerActivityFactory.create(place, ((BuildingViewerView) getView()).getBillingCycleListerView(),
-                (AbstractCrudService<BillingCycle>) GWT.create(BillingCycleCrudService.class), BillingCycle.class, VistaCrmBehavior.PropertyManagement);
+                (AbstractCrudService<BillingCycleDTO>) GWT.create(BillingCycleCrudService.class), BillingCycleDTO.class, VistaCrmBehavior.PropertyManagement);
     }
 
     @Override

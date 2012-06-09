@@ -51,7 +51,7 @@ import com.propertyvista.crm.client.ui.crud.building.parking.ParkingLister;
 import com.propertyvista.crm.client.ui.crud.floorplan.FloorplanLister;
 import com.propertyvista.crm.client.ui.crud.unit.UnitLister;
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.domain.financial.billing.BillingCycle;
+import com.propertyvista.crm.rpc.dto.billing.BillingCycleDTO;
 import com.propertyvista.domain.financial.offering.Concession;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.Service;
@@ -89,7 +89,7 @@ public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> i
 
     private final IListerView<Concession> concessionLister;
 
-    private final IListerView<BillingCycle> billingCycleLister;
+    private final IListerView<BillingCycleDTO> billingCycleLister;
 
     private final BuildingDashboardView dashboardView = new BuildingDashboardViewImpl();
 
@@ -111,7 +111,7 @@ public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> i
         featureLister = new ListerInternalViewImplBase<Feature>(new FeatureLister());
         concessionLister = new ListerInternalViewImplBase<Concession>(new ConcessionLister());
 
-        billingCycleLister = new ListerInternalViewImplBase<BillingCycle>(new BillingCycleLister());
+        billingCycleLister = new ListerInternalViewImplBase<BillingCycleDTO>(new BillingCycleLister());
 
         // set main form here:
         setForm(new BuildingForm(true));
@@ -173,7 +173,7 @@ public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> i
     }
 
     @Override
-    public IListerView<BillingCycle> getBillingCycleListerView() {
+    public IListerView<BillingCycleDTO> getBillingCycleListerView() {
         return billingCycleLister;
     }
 
