@@ -26,13 +26,12 @@ public class BillingCycleViewImpl extends CrmViewerViewImplBase<BillingCycleDTO>
     private final IListerView<BillingCycleLeaseDTO> leaseLister;
 
     public BillingCycleViewImpl() {
-        super(CrmSiteMap.Finance.BillingCycle.class);
+        super(CrmSiteMap.Finance.BillingCycle.class, true);
 
         leaseLister = new ListerInternalViewImplBase<BillingCycleLeaseDTO>(new BillingCycleLeaseLister());
 
         // set main form here:
         setForm(new BillingCycleForm());
-
     }
 
     @Override
