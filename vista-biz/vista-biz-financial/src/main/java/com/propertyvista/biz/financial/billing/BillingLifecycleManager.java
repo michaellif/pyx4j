@@ -24,6 +24,7 @@ import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.Iterator;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -59,30 +60,27 @@ public class BillingLifecycleManager {
     private final static Logger log = LoggerFactory.getLogger(BillingLifecycleManager.class);
 
     static void runBilling(Lease lease) {
-
         BillingAccount billingAccount = ensureInitBillingAccount(lease);
-
         BillingCycle billingCycle = getBillingCycle(lease);
-
-        runBilling(billingCycle, Arrays.asList(new BillingAccount[] { billingAccount }), false);
-
+        runBilling(billingCycle, Arrays.asList(new BillingAccount[] { billingAccount }).iterator(), false);
     }
 
     static void runBilling(BillingCycle billingCycle) {
-        //TODO
-
-        // runBilling(billingCycle, true);
-
+        EntityQueryCriteria<BillingAccount> billingAccountCriteria = EntityQueryCriteria.create(BillingAccount.class);
+        billingAccountCriteria.add(PropertyCriterion.eq(billingAccountCriteria.proto().lease().unit().belongsTo(), billingCycle.building()));
+        billingAccountCriteria.add(PropertyCriterion.eq(billingAccountCriteria.proto().billingType(), billingCycle.billingType()));
+        ICursorIterator<BillingAccount> billingAccountIterator = Persistence.service().query(null, billingAccountCriteria, AttachLevel.Attached);
+        runBilling(billingCycle, billingAccountIterator, true);
     }
 
-    private static void runBilling(BillingCycle billingCycle, List<BillingAccount> billingAccounts, boolean manageTransactions) {
+    private static void runBilling(BillingCycle billingCycle, Iterator<BillingAccount> billingAccounts, boolean manageTransactions) {
         if (manageTransactions) {
             Persistence.service().commit();
         }
 
         try {
-            for (BillingAccount billingAccount : billingAccounts) {
-                runBilling(billingCycle, billingAccount);
+            while (billingAccounts.hasNext()) {
+                runBilling(billingCycle, billingAccounts.next());
                 if (manageTransactions) {
                     Persistence.service().commit();
                 }
@@ -95,12 +93,6 @@ public class BillingLifecycleManager {
         } catch (Throwable e) {
             Persistence.service().rollback();
             log.error("Bill run error", e);
-
-            for (BillingAccount billingAccount : billingAccounts) {
-                billingAccount.billCounter().setValue(billingAccount.billCounter().getValue() + 1);
-                Persistence.service().persist(billingAccount);
-            }
-
             if (manageTransactions) {
                 Persistence.service().commit();
             }
@@ -110,7 +102,6 @@ public class BillingLifecycleManager {
     static void runBilling(BillingCycle billingCycle, BillingAccount billingAccount) {
 
         Persistence.service().retrieve(billingAccount.lease());
-
         Persistence.service().retrieve(billingAccount.adjustments());
 
         validateBillingRunPreconditions(billingCycle, billingAccount);
@@ -127,8 +118,6 @@ public class BillingLifecycleManager {
             bill.previousBill().set(previousBill);
 
             bill.executionDate().setValue(new LogicalDate(SysDateManager.getSysDate()));
-
-            Persistence.service().persist(bill);
 
             AbstractBillingManager processor = null;
 
@@ -156,7 +145,8 @@ public class BillingLifecycleManager {
             bill.billStatus().setValue(Bill.BillStatus.Failed);
         }
         Persistence.service().persist(bill);
-
+        billingAccount.billCounter().setValue(billingAccount.billCounter().getValue() + 1);
+        Persistence.service().persist(billingAccount);
     }
 
     private static void validateBillingRunPreconditions(BillingCycle billingCycle, BillingAccount billingAccount) {
@@ -189,18 +179,13 @@ public class BillingLifecycleManager {
         if (BillStatus.Finished.equals(bill.billStatus().getValue())) {
             bill.billStatus().setValue(billStatus);
 
-            Persistence.service().retrieve(bill.billingAccount());
-
             if (BillStatus.Confirmed == billStatus) {
                 Persistence.service().retrieve(bill.lineItems());
                 claimExistingLineItems(bill.lineItems());
                 postNewLineItems(bill.lineItems());
             }
 
-            bill.billingAccount().billCounter().setValue(bill.billingAccount().billCounter().getValue() + 1);
-
             Persistence.service().persist(bill);
-            Persistence.service().persist(bill.billingAccount());
 
         } else {
             throw new BillingException("Bill is in status '" + bill.billStatus().getValue() + "'. Bill should be in 'Finished' state in order to verify it.");
