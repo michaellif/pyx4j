@@ -13,12 +13,18 @@
  */
 package com.propertyvista.biz.financial.billing;
 
+import com.pyx4j.commons.LogicalDate;
+
+import com.propertyvista.domain.StatisticsRecord;
 import com.propertyvista.domain.financial.billing.Bill;
+import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 public interface BillingFacade {
 
     void runBilling(Lease lease);
+
+    void runBilling(BillingCycle billingCycle);
 
     Bill getLatestConfirmedBill(Lease lease);
 
@@ -31,8 +37,7 @@ public interface BillingFacade {
     Bill rejectBill(Bill billStub);
 
     // Processes
-
-    //  void runBilling(StatisticsRecord dynamicStatisticsRecord, LogicalDate dueDate);
+    void runBilling(StatisticsRecord dynamicStatisticsRecord, LogicalDate date);
 
     void initializeFutureBillingCycles();
 }

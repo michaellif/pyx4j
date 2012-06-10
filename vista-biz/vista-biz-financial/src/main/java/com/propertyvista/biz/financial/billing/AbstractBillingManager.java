@@ -113,15 +113,14 @@ abstract class AbstractBillingManager {
                 add(nextPeriodBill.withdrawalAmount().getValue()));
 
         nextPeriodBill.currentAmount().setValue(
-                nextPeriodBill.pastDueAmount().getValue().
-                add(nextPeriodBill.serviceCharge().getValue()).
+                nextPeriodBill.serviceCharge().getValue().
                 add(nextPeriodBill.recurringFeatureCharges().getValue()).
                 add(nextPeriodBill.oneTimeFeatureCharges().getValue()).
                 add(nextPeriodBill.pendingAccountAdjustments().getValue()).
                 add(nextPeriodBill.latePaymentFees().getValue()).
                 add(nextPeriodBill.depositAmount().getValue()));
 
-        nextPeriodBill.totalDueAmount().setValue(nextPeriodBill.currentAmount().getValue().add(nextPeriodBill.taxes().getValue()));
+        nextPeriodBill.totalDueAmount().setValue(nextPeriodBill.pastDueAmount().getValue().add(nextPeriodBill.currentAmount().getValue().add(nextPeriodBill.taxes().getValue())));
         
         // @formatter:on
     }

@@ -13,7 +13,11 @@
  */
 package com.propertyvista.biz.financial.billing;
 
+import com.pyx4j.commons.LogicalDate;
+
+import com.propertyvista.domain.StatisticsRecord;
 import com.propertyvista.domain.financial.billing.Bill;
+import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 public class BillingFacadeImpl implements BillingFacade {
@@ -21,6 +25,16 @@ public class BillingFacadeImpl implements BillingFacade {
     @Override
     public void runBilling(Lease lease) {
         BillingLifecycleManager.runBilling(lease);
+    }
+
+    @Override
+    public void runBilling(StatisticsRecord dynamicStatisticsRecord, LogicalDate date) {
+        BillingLifecycleManager.runBilling(dynamicStatisticsRecord, date);
+    }
+
+    @Override
+    public void runBilling(BillingCycle billingCycle) {
+        BillingLifecycleManager.runBilling(billingCycle);
     }
 
     @Override

@@ -179,7 +179,7 @@ public interface Bill extends IEntity {
     IPrimitive<BigDecimal> productCreditAmount();
 
     /**
-     * currentAmount = pastDueAmount + serviceCharge + recurringFeatureCharges +
+     * currentAmount = serviceCharge + recurringFeatureCharges +
      * oneTimeFeatureCharges + totalAdjustments + depositPaidAmount
      */
 
@@ -189,7 +189,7 @@ public interface Bill extends IEntity {
     IPrimitive<BigDecimal> taxes();
 
     /**
-     * totalDueAmount = currentAmount + taxes
+     * totalDueAmount = pastDueAmount + currentAmount + taxes
      */
     @ToString(index = 1)
     IPrimitive<BigDecimal> totalDueAmount();
