@@ -86,39 +86,46 @@ class ValueAdapterEntity implements ValueAdapter {
         }
     }
 
+    static class QueryByEntityValueBindAdapter implements ValueBindAdapter {
+
+        private final int sqlTypeKey;
+
+        QueryByEntityValueBindAdapter(int sqlTypeKey) {
+            this.sqlTypeKey = sqlTypeKey;
+        }
+
+        @Override
+        public List<String> getColumnNames(String memberSqlName) {
+            List<String> columnNames = new Vector<String>();
+            columnNames.add(memberSqlName);
+            return columnNames;
+        }
+
+        @Override
+        public int bindValue(PersistenceContext persistenceContext, PreparedStatement stmt, int parameterIndex, Object value) throws SQLException {
+            if (value == null) {
+                stmt.setNull(parameterIndex, sqlTypeKey);
+            } else {
+                long key;
+                if (value instanceof Key) {
+                    key = ((Key) value).asLong();
+                } else if (value instanceof IEntity) {
+                    key = ((IEntity) value).getPrimaryKey().asLong();
+                } else {
+                    key = (Long) value;
+                }
+                stmt.setLong(parameterIndex, key);
+            }
+            return 1;
+        }
+    }
+
     @Override
     public ValueBindAdapter getQueryValueBindAdapter(Restriction restriction, Object value) {
         if (value instanceof IEntity) {
             return this;
         } else {
-            return new ValueBindAdapter() {
-
-                @Override
-                public List<String> getColumnNames(String memberSqlName) {
-                    List<String> columnNames = new Vector<String>();
-                    columnNames.add(memberSqlName);
-                    return columnNames;
-                }
-
-                @Override
-                public int bindValue(PersistenceContext persistenceContext, PreparedStatement stmt, int parameterIndex, Object value) throws SQLException {
-                    if (value == null) {
-                        stmt.setNull(parameterIndex, sqlTypeKey);
-                    } else {
-                        long key;
-                        if (value instanceof Key) {
-                            key = ((Key) value).asLong();
-                        } else if (value instanceof IEntity) {
-                            key = ((IEntity) value).getPrimaryKey().asLong();
-                        } else {
-                            key = (Long) value;
-                        }
-                        stmt.setLong(parameterIndex, key);
-                    }
-                    return 1;
-                }
-
-            };
+            return new QueryByEntityValueBindAdapter(sqlTypeKey);
         }
     }
 

@@ -23,6 +23,7 @@ package com.pyx4j.entity.shared.meta;
 import java.lang.annotation.Annotation;
 import java.util.List;
 
+import com.pyx4j.entity.annotations.Inheritance;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.Path;
 
@@ -42,6 +43,9 @@ public interface EntityMeta {
      */
     public Class<? extends IEntity> getDBOClass();
 
+    /**
+     * @see Inheritance.InheritanceStrategy.SINGLE_TABLE
+     */
     public Class<? extends IEntity> getPerstableSuperClass();
 
     public <T extends IEntity> boolean isEntityClassAssignableFrom(T targetInstance);

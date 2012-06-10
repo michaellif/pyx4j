@@ -33,6 +33,7 @@ import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.annotations.Inheritance;
 import com.pyx4j.entity.rdb.PersistenceContext;
 import com.pyx4j.entity.rdb.dialect.Dialect;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -49,10 +50,24 @@ public class ValueAdapterEntityPolymorphic implements ValueAdapter {
 
     private final String discriminatorColumnNameSufix;
 
+    private final boolean singlePkRoot;
+
     protected ValueAdapterEntityPolymorphic(Dialect dialect, Class<? extends IEntity> entityClass) {
         sqlTypeKey = dialect.getTargetSqlType(Long.class);
         sqlTypeDiscriminator = dialect.getTargetSqlType(String.class);
         discriminatorColumnNameSufix = dialect.getNamingConvention().sqlDiscriminatorColumnNameSufix();
+
+        Class<? extends IEntity> perstableSuperClass = EntityFactory.getEntityMeta(entityClass).getPerstableSuperClass();
+        if (perstableSuperClass != null) {
+            singlePkRoot = true;
+        } else {
+            Inheritance inheritance = entityClass.getAnnotation(Inheritance.class);
+            if ((inheritance != null) && (inheritance.strategy() == Inheritance.InheritanceStrategy.SINGLE_TABLE)) {
+                singlePkRoot = true;
+            } else {
+                singlePkRoot = false;
+            }
+        }
 
         for (Class<? extends IEntity> subclass : Mappings.getPersistableAssignableFrom(entityClass)) {
             DiscriminatorValue discriminator = subclass.getAnnotation(DiscriminatorValue.class);
@@ -130,7 +145,7 @@ public class ValueAdapterEntityPolymorphic implements ValueAdapter {
         }
     }
 
-    private class DiscriminatorValueBindAdapter implements ValueBindAdapter {
+    private class DiscriminatorQueryValueBindAdapter implements ValueBindAdapter {
 
         @Override
         public int bindValue(PersistenceContext persistenceContext, PreparedStatement stmt, int parameterIndex, Object value) throws SQLException {
@@ -156,14 +171,16 @@ public class ValueAdapterEntityPolymorphic implements ValueAdapter {
                 + value.getClass();
 
         if ((value instanceof IEntity) && (((IEntity) value).getPrimaryKey() == null)) {
-            return new DiscriminatorValueBindAdapter();
+            return new DiscriminatorQueryValueBindAdapter();
         } else if (value instanceof Collection) {
             if (((Collection<?>) value).isEmpty()) {
                 return this;
             } else {
                 Object fistValue = ((Collection<?>) value).iterator().next();
                 if ((fistValue instanceof IEntity) && (((IEntity) fistValue).getPrimaryKey() == null)) {
-                    return new DiscriminatorValueBindAdapter();
+                    return new DiscriminatorQueryValueBindAdapter();
+                } else if (singlePkRoot) {
+                    return new ValueAdapterEntity.QueryByEntityValueBindAdapter(sqlTypeKey);
                 } else {
                     return this;
                 }

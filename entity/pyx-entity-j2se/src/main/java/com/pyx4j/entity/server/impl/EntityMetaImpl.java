@@ -93,19 +93,23 @@ public class EntityMetaImpl implements EntityMeta {
     public EntityMetaImpl(Class<? extends IEntity> clazz) {
         entityClass = clazz;
 
-        Class<? extends IEntity> persistableClass = null;
+        Class<? extends IEntity> perstableSuperClass = null;
         DiscriminatorValue discriminator = clazz.getAnnotation(DiscriminatorValue.class);
         if ((discriminator != null) || (clazz.getAnnotation(AbstractEntity.class) != null)) {
-            persistableClass = findSingeTableInheritance(entityClass);
-        }
-        if (persistableClass == null) {
-            persistableClass = entityClass;
-        }
-
-        if (persistableClass != entityClass) {
-            perstableSuperClass = persistableClass;
+            perstableSuperClass = findSingeTableInheritance(entityClass);
         } else {
             perstableSuperClass = null;
+        }
+
+        if (perstableSuperClass != entityClass) {
+            this.perstableSuperClass = perstableSuperClass;
+        } else {
+            this.perstableSuperClass = null;
+        }
+
+        Class<? extends IEntity> persistableClass = perstableSuperClass;
+        if (persistableClass == null) {
+            persistableClass = entityClass;
         }
 
         String persistenceNamePrefix = ServerSideConfiguration.instance().persistenceNamePrefix();
@@ -159,7 +163,7 @@ public class EntityMetaImpl implements EntityMeta {
 
     private Class<? extends IEntity> findSingeTableInheritance(Class<? extends IEntity> clazz) {
         for (Class<?> superClasses : clazz.getInterfaces()) {
-            if (IEntity.class.isAssignableFrom(superClasses)) {
+            if (IEntity.class.isAssignableFrom(superClasses) && (superClasses != IEntity.class)) {
                 @SuppressWarnings("unchecked")
                 Class<? extends IEntity> superEntityClasses = (Class<? extends IEntity>) superClasses;
                 Inheritance inheritance = superClasses.getAnnotation(Inheritance.class);
