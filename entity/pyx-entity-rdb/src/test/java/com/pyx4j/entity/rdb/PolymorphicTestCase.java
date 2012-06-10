@@ -26,6 +26,7 @@ import java.util.List;
 import junit.framework.Assert;
 
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.test.server.DatastoreTestBase;
@@ -390,24 +391,33 @@ public abstract class PolymorphicTestCase extends DatastoreTestBase {
             Assert.assertEquals(ent11, found.reference());
         }
 
-        // Query using IN criteria
+        // Query using IN criteria by Class
         {
+            List<Class<? extends IEntity>> entList = new ArrayList<Class<? extends IEntity>>();
+            entList.add(Concrete1Entity.class);
+            entList.add(Concrete3AssignedPKEntity.class);
+
+            EntityQueryCriteria<Concrete2Entity> criteria = EntityQueryCriteria.create(Concrete2Entity.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().testId(), testId));
+            criteria.add(PropertyCriterion.in(criteria.proto().reference(), entList));
+
+            List<Concrete2Entity> found = srv.query(criteria);
+            Assert.assertTrue(found.contains(ent1));
+            Assert.assertTrue(found.contains(ent2));
+        }
+
+        // Query using IN criteria by Value
+        // TODO code below fails as follows, fix when time permits...
+        if (false) {
             List<Concrete1Entity> entList = new ArrayList<Concrete1Entity>();
             entList.add(ent11);
             EntityQueryCriteria<Concrete2Entity> criteria = EntityQueryCriteria.create(Concrete2Entity.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().testId(), testId));
             criteria.add(PropertyCriterion.in(criteria.proto().reference(), entList));
-// TODO code below fails as follows, fix when time permits...
-//
-// ERROR test_concrete2_entity SQL: SELECT  m1.* FROM test_concrete2_entity m1
-//   WHERE m1.ns = ? AND m1.test_id = ?  AND m1.referencediscriminator IN ( ? )     { com.pyx4j.entity.rdb.mapping.TableModel.query(TableModel.java:826)}
-// ERROR test_concrete2_entity SQL select error    { com.pyx4j.entity.rdb.mapping.TableModel.query(TableModel.java:827)}
-// java.sql.SQLException: Invalid argument in JDBC call: parameter index out of range: 4
-//    at org.hsqldb.jdbc.Util.sqlException(Util.java:418)
-//
-//            Concrete2Entity found = srv.retrieve(criteria);
-//            Assert.assertEquals(ent1, found);
-//            Assert.assertEquals(ent11, found.reference());
+
+            Concrete2Entity found = srv.retrieve(criteria);
+            Assert.assertEquals(ent1, found);
+            Assert.assertEquals(ent11, found.reference());
         }
 
         //Query by Class
