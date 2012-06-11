@@ -13,6 +13,8 @@
  */
 package com.propertyvista.common.client.ui.components.editors.dto.bill;
 
+import java.math.BigDecimal;
+
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CComponent;
@@ -23,6 +25,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.domain.financial.billing.Bill.BillStatus;
 import com.propertyvista.dto.BillDTO;
+import com.propertyvista.dto.InvoiceLineItemGroupDTO;
 
 public class BillForm extends CEntityDecoratableForm<BillDTO> {
 
@@ -84,8 +87,10 @@ public class BillForm extends CEntityDecoratableForm<BillDTO> {
         bottom.setWidget(++row, 0, inject(proto().recurringFeatureChargeLineItems(), new LineItemCollapsableViewer()));
         bottom.setWidget(++row, 0, inject(proto().onetimeFeatureChargeLineItems(), new LineItemCollapsableViewer()));
         bottom.setWidget(++row, 0, inject(proto().pendingAccountAdjustmentLineItems(), new LineItemCollapsableViewer()));
+        bottom.setWidget(++row, 0, new DecoratorBuilder(inject(proto().latePaymentFees())).build());
         bottom.setWidget(++row, 0, inject(proto().depositLineItems(), new LineItemCollapsableViewer()));
         bottom.setWidget(++row, 0, new DecoratorBuilder(inject(proto().productCreditAmount())).build());
+        bottom.setWidget(++row, 0, new DecoratorBuilder(inject(proto().carryForwardCredit())).build());
 
         bottom.setWidget(++row, 0, new DecoratorBuilder(inject(proto().currentAmount())).build());
         bottom.setWidget(++row, 0, new DecoratorBuilder(inject(proto().taxes())).build());
@@ -111,6 +116,25 @@ public class BillForm extends CEntityDecoratableForm<BillDTO> {
         super.onPopulate();
 
         get(proto().rejectReason()).setVisible(getValue().billStatus().getValue() == BillStatus.Rejected);
+        if (getValue().productCreditAmount().getValue().compareTo(BigDecimal.ZERO) == 0)
+            get(proto().productCreditAmount()).setVisible(false);
+        if (getValue().latePaymentFees().getValue().compareTo(BigDecimal.ZERO) == 0)
+            get(proto().latePaymentFees()).setVisible(false);
+        if (getValue().carryForwardCredit().getValue().compareTo(BigDecimal.ZERO) == 0)
+            get(proto().carryForwardCredit()).setVisible(false);
+
+        hideLines(getValue().depositRefundLineItems(), proto().depositRefundLineItems());
+        hideLines(getValue().immediateAccountAdjustmentLineItems(), proto().immediateAccountAdjustmentLineItems());
+        hideLines(getValue().nsfChargeLineItems(), proto().nsfChargeLineItems());
+        hideLines(getValue().withdrawalLineItems(), proto().withdrawalLineItems());
+        hideLines(getValue().rejectedPaymentLineItems(), proto().rejectedPaymentLineItems());
+        hideLines(getValue().paymentLineItems(), proto().paymentLineItems());
+        hideLines(getValue().serviceChargeLineItems(), proto().serviceChargeLineItems());
+        hideLines(getValue().recurringFeatureChargeLineItems(), proto().recurringFeatureChargeLineItems());
+        hideLines(getValue().onetimeFeatureChargeLineItems(), proto().onetimeFeatureChargeLineItems());
+        hideLines(getValue().pendingAccountAdjustmentLineItems(), proto().pendingAccountAdjustmentLineItems());
+        hideLines(getValue().depositLineItems(), proto().depositLineItems());
+
     }
 
     protected class DecoratorBuilder extends WidgetDecorator.Builder { //builder specifically for this form (as it uses mixed formats)
@@ -122,6 +146,12 @@ public class BillForm extends CEntityDecoratableForm<BillDTO> {
             labelAlignment(Alignment.left);
             useLabelSemicolon(false);
             componentWidth(30);
+        }
+    }
+
+    private void hideLines(InvoiceLineItemGroupDTO line, InvoiceLineItemGroupDTO line2) {
+        if (line.lineItems().size() == 0) {
+            get(line2).setVisible(false);
         }
     }
 }
