@@ -36,7 +36,6 @@ import com.propertyvista.domain.financial.billing.InvoiceAccountCredit;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
 import com.propertyvista.domain.financial.billing.InvoiceDeposit;
 import com.propertyvista.domain.financial.billing.InvoiceDepositRefund;
-import com.propertyvista.domain.financial.billing.InvoiceLatePaymentFee;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.domain.financial.billing.InvoiceNSF;
 import com.propertyvista.domain.financial.billing.InvoicePayment;
@@ -119,7 +118,6 @@ public class BillingUtils {
         dto.pendingAccountAdjustmentLineItems().total().set(bill.pendingAccountAdjustments());
         dto.nsfChargeLineItems().total().set(bill.nsfCharges());
         dto.pendingAccountAdjustmentLineItems().total().set(bill.pendingAccountAdjustments());
-        dto.latePaymentFeeLineItems().total().set(bill.latePaymentFees());
         dto.withdrawalLineItems().total().set(bill.withdrawalAmount());
         dto.rejectedPaymentLineItems().total().set(bill.paymentRejectedAmount());
         dto.paymentLineItems().total().set(bill.paymentReceivedAmount());
@@ -157,8 +155,6 @@ public class BillingUtils {
                 } else if (LeaseAdjustment.ExecutionType.pending == adjusment.executionType().getValue()) {
                     dto.pendingAccountAdjustmentLineItems().lineItems().add(lineItem);
                 }
-            } else if (lineItem instanceof InvoiceLatePaymentFee) {
-                dto.latePaymentFeeLineItems().lineItems().add(lineItem);
             } else if (lineItem instanceof InvoiceNSF) {
                 dto.nsfChargeLineItems().lineItems().add(lineItem);
             } else if (lineItem instanceof InvoiceWithdrawal) {

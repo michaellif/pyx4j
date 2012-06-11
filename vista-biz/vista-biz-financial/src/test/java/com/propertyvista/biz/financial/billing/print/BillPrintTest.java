@@ -49,7 +49,9 @@ public class BillPrintTest extends FinancialTestBase {
         bill.dueDate().setValue(FinancialTestsUtils.getDate("1-Mar-2011"));
         bill.executionDate().setValue(FinancialTestsUtils.getDate("15-Apr-2011"));
 
-        bill.balanceForwardAmount().setValue(new BigDecimal("1000.00"));
+        bill.carryForwardCredit().setValue(new BigDecimal("1111.00"));
+
+        bill.balanceForwardAmount().setValue(new BigDecimal("102.00"));
 
         {
             InvoiceDepositRefund depositRefund = EntityFactory.create(InvoiceDepositRefund.class);

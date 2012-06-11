@@ -56,9 +56,6 @@ public interface BillDTO extends Bill {
     @Caption(name = "NSF Charge(s)")
     InvoiceLineItemGroupDTO nsfChargeLineItems();
 
-    @Caption(name = "Late Payment Fees")
-    InvoiceLineItemGroupDTO latePaymentFeeLineItems();
-
     @Caption(name = "Withdrawal(s)")
     InvoiceLineItemGroupDTO withdrawalLineItems();
 

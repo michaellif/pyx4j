@@ -84,7 +84,6 @@ public class BillForm extends CEntityDecoratableForm<BillDTO> {
         bottom.setWidget(++row, 0, inject(proto().recurringFeatureChargeLineItems(), new LineItemCollapsableViewer()));
         bottom.setWidget(++row, 0, inject(proto().onetimeFeatureChargeLineItems(), new LineItemCollapsableViewer()));
         bottom.setWidget(++row, 0, inject(proto().pendingAccountAdjustmentLineItems(), new LineItemCollapsableViewer()));
-        bottom.setWidget(++row, 0, inject(proto().latePaymentFeeLineItems(), new LineItemCollapsableViewer()));
         bottom.setWidget(++row, 0, inject(proto().depositLineItems(), new LineItemCollapsableViewer()));
         bottom.setWidget(++row, 0, new DecoratorBuilder(inject(proto().productCreditAmount())).build());
 

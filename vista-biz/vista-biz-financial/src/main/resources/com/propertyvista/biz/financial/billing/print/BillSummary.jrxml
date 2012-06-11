@@ -2,11 +2,12 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Bill1" pageWidth="400" pageHeight="842" columnWidth="380" leftMargin="10" rightMargin="10" topMargin="0" bottomMargin="0" scriptletClass="com.propertyvista.biz.financial.billing.print.BillPrintScriptlet">
 	<property name="ireport.zoom" value="1.948717100000005"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="240"/>
+	<property name="ireport.y" value="658"/>
 	<field name="billSequenceNumber" class="java.lang.Integer"/>
 	<field name="pastDueAmount" class="java.math.BigDecimal"/>
 	<field name="totalDueAmount" class="java.math.BigDecimal"/>
 	<field name="productCreditAmount" class="java.math.BigDecimal"/>
+	<field name="carryForwardCredit" class="java.math.BigDecimal"/>
 	<field name="currentAmount" class="java.math.BigDecimal"/>
 	<field name="taxes" class="java.math.BigDecimal"/>
 	<field name="balanceForwardAmount" class="java.math.BigDecimal"/>
@@ -35,7 +36,6 @@
 	<field name="onetimeFeatureChargeLineItems" class="com.propertyvista.dto.InvoiceLineItemGroupDTO"/>
 	<field name="pendingAccountAdjustmentLineItems" class="com.propertyvista.dto.InvoiceLineItemGroupDTO"/>
 	<field name="nsfChargeLineItems" class="com.propertyvista.dto.InvoiceLineItemGroupDTO"/>
-	<field name="latePaymentFeeLineItems" class="com.propertyvista.dto.InvoiceLineItemGroupDTO"/>
 	<field name="depositLineItems" class="com.propertyvista.dto.InvoiceLineItemGroupDTO"/>
 	<field name="productCreditLineItems" class="com.propertyvista.dto.InvoiceLineItemGroupDTO"/>
 	<background>
@@ -290,11 +290,11 @@
 			</textField>
 		</band>
 		<band height="20">
-			<printWhenExpression><![CDATA[$F{latePaymentFeeLineItems}.lineItems().size()>0]]></printWhenExpression>
+			<printWhenExpression><![CDATA[$F{latePaymentFees}.compareTo(BigDecimal.ZERO) != 0]]></printWhenExpression>
 			<staticText>
 				<reportElement x="0" y="0" width="194" height="20"/>
 				<textElement verticalAlignment="Middle"/>
-				<text><![CDATA[Late payment fee(s)]]></text>
+				<text><![CDATA[Late payment fee]]></text>
 			</staticText>
 			<textField>
 				<reportElement x="280" y="0" width="100" height="20"/>
@@ -332,6 +332,21 @@
 					<font isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{productCreditAmount}]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="20">
+			<printWhenExpression><![CDATA[$F{carryForwardCredit}.compareTo(BigDecimal.ZERO) != 0]]></printWhenExpression>
+			<staticText>
+				<reportElement x="0" y="0" width="194" height="20"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Carryforward credit]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="280" y="0" width="100" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{carryForwardCredit}]]></textFieldExpression>
 			</textField>
 		</band>
 		<band height="114">
