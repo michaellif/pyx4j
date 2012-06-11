@@ -32,24 +32,17 @@ import com.propertyvista.crm.rpc.dto.billing.BillDataDTO;
 import com.propertyvista.crm.rpc.dto.billing.BillingCycleLeaseDTO;
 import com.propertyvista.crm.rpc.services.billing.BillCrudService;
 import com.propertyvista.crm.rpc.services.billing.BillingCycleLeaseCrudService;
-import com.propertyvista.crm.rpc.services.billing.PaymentCrudService;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.dto.PaymentRecordDTO;
 
 public class BillingCycleLeaseViewerActivity extends CrmViewerActivity<BillingCycleLeaseDTO> implements BillingCycleLeaseView.Presenter {
 
     private final IListerView.Presenter<BillDataDTO> billLister;
-
-    private final IListerView.Presenter<PaymentRecordDTO> paymentLister;
 
     public BillingCycleLeaseViewerActivity(CrudAppPlace place) {
         super(place, FinancialViewFactory.instance(BillingCycleLeaseView.class), GWT.<BillingCycleLeaseCrudService> create(BillingCycleLeaseCrudService.class));
 
         billLister = new ListerActivityBase<BillDataDTO>(place, ((BillingCycleLeaseView) getView()).getBillListerView(),
                 GWT.<BillCrudService> create(BillCrudService.class), BillDataDTO.class);
-
-        paymentLister = new ListerActivityBase<PaymentRecordDTO>(place, ((BillingCycleLeaseView) getView()).getPaymentListerView(),
-                GWT.<PaymentCrudService> create(PaymentCrudService.class), PaymentRecordDTO.class);
     }
 
     @Override
@@ -57,7 +50,6 @@ public class BillingCycleLeaseViewerActivity extends CrmViewerActivity<BillingCy
         super.onPopulateSuccess(result);
 
         populateBills(result.lease());
-        populatePayments(result.lease());
     }
 
     protected void populateBills(Lease result) {
@@ -66,14 +58,5 @@ public class BillingCycleLeaseViewerActivity extends CrmViewerActivity<BillingCy
                 .getPrimaryKey()));
         billLister.setPreDefinedFilters(preDefinedFilters);
         billLister.populate();
-    }
-
-    protected void populatePayments(Lease result) {
-        List<Criterion> preDefinedFilters = new ArrayList<Criterion>();
-        preDefinedFilters.add(PropertyCriterion.eq(EntityFactory.getEntityPrototype(PaymentRecordDTO.class).billingAccount().id(), result.billingAccount()
-                .getPrimaryKey()));
-        paymentLister.setPreDefinedFilters(preDefinedFilters);
-        paymentLister.setParent(result.billingAccount().getPrimaryKey());
-        paymentLister.populate();
     }
 }

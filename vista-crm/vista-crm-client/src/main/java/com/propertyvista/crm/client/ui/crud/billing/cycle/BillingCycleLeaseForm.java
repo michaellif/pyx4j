@@ -38,9 +38,6 @@ public class BillingCycleLeaseForm extends CrmEntityForm<BillingCycleLeaseDTO> {
         main.setH2(++row, 0, 1, i18n.tr("Bills"));
         main.setWidget(++row, 0, ((BillingCycleLeaseView) getParentView()).getBillListerView().asWidget());
 
-        main.setH2(++row, 0, 1, i18n.tr("Payments"));
-        main.setWidget(++row, 0, ((BillingCycleLeaseView) getParentView()).getPaymentListerView().asWidget());
-
         return new ScrollPanel(main);
     }
 

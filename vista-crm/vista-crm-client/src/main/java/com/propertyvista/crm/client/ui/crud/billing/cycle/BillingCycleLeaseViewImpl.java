@@ -17,25 +17,18 @@ import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.pyx4j.site.client.ui.crud.lister.ListerInternalViewImplBase;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
-import com.propertyvista.crm.client.ui.crud.billing.bill.BillLister;
-import com.propertyvista.crm.client.ui.crud.billing.payment.PaymentLister;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.dto.billing.BillDataDTO;
 import com.propertyvista.crm.rpc.dto.billing.BillingCycleLeaseDTO;
-import com.propertyvista.dto.PaymentRecordDTO;
 
 public class BillingCycleLeaseViewImpl extends CrmViewerViewImplBase<BillingCycleLeaseDTO> implements BillingCycleLeaseView {
 
     private final IListerView<BillDataDTO> billLister;
 
-    private final IListerView<PaymentRecordDTO> paymentLister;
-
     public BillingCycleLeaseViewImpl() {
         super(CrmSiteMap.Finance.BillingCycle.Lease.class, true);
 
-        billLister = new ListerInternalViewImplBase<BillDataDTO>(new BillLister());
-        paymentLister = new ListerInternalViewImplBase<PaymentRecordDTO>(new PaymentLister());
-        paymentLister.getLister().getDataTablePanel().getAddButton().setVisible(false);
+        billLister = new ListerInternalViewImplBase<BillDataDTO>(new BillingCycleBillLister());
 
         // set main form here:
         setForm(new BillingCycleLeaseForm());
@@ -44,10 +37,5 @@ public class BillingCycleLeaseViewImpl extends CrmViewerViewImplBase<BillingCycl
     @Override
     public IListerView<BillDataDTO> getBillListerView() {
         return billLister;
-    }
-
-    @Override
-    public IListerView<PaymentRecordDTO> getPaymentListerView() {
-        return paymentLister;
     }
 }

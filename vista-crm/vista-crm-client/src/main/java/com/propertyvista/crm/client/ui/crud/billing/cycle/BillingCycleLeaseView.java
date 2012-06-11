@@ -18,7 +18,6 @@ import com.pyx4j.site.client.ui.crud.lister.IListerView;
 
 import com.propertyvista.crm.rpc.dto.billing.BillDataDTO;
 import com.propertyvista.crm.rpc.dto.billing.BillingCycleLeaseDTO;
-import com.propertyvista.dto.PaymentRecordDTO;
 
 public interface BillingCycleLeaseView extends IViewerView<BillingCycleLeaseDTO> {
 
@@ -27,6 +26,4 @@ public interface BillingCycleLeaseView extends IViewerView<BillingCycleLeaseDTO>
     }
 
     IListerView<BillDataDTO> getBillListerView();
-
-    IListerView<PaymentRecordDTO> getPaymentListerView();
 }
