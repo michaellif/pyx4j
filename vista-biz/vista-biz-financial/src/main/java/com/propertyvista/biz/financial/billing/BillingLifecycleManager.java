@@ -359,14 +359,14 @@ public class BillingLifecycleManager {
 
     static BillingCycle getSubsiquentBillingCycle(BillingCycle previousBillingCycle) {
         return ensureBillingCycle(previousBillingCycle.billingType(), previousBillingCycle.building(), BillDateUtils.calculateSubsiquentBillingCycleStartDate(
-                previousBillingCycle.billingType().paymentFrequency().getValue(), previousBillingCycle.billingPeriodStartDate().getValue()));
+                previousBillingCycle.billingType().paymentFrequency().getValue(), previousBillingCycle.billingCycleStartDate().getValue()));
     }
 
     private static BillingCycle ensureBillingCycle(BillingType billingType, Building building, LogicalDate billingCycleStartDate) {
 
         EntityQueryCriteria<BillingCycle> criteria = EntityQueryCriteria.create(BillingCycle.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().billingType(), billingType));
-        criteria.add(PropertyCriterion.eq(criteria.proto().billingPeriodStartDate(), billingCycleStartDate));
+        criteria.add(PropertyCriterion.eq(criteria.proto().billingCycleStartDate(), billingCycleStartDate));
         criteria.add(PropertyCriterion.eq(criteria.proto().building(), building));
         BillingCycle billingCycle = Persistence.service().retrieve(criteria);
 
@@ -374,8 +374,8 @@ public class BillingLifecycleManager {
             billingCycle = EntityFactory.create(BillingCycle.class);
             billingCycle.billingType().set(billingType);
             billingCycle.building().set(building);
-            billingCycle.billingPeriodStartDate().setValue(billingCycleStartDate);
-            billingCycle.billingPeriodEndDate().setValue(
+            billingCycle.billingCycleStartDate().setValue(billingCycleStartDate);
+            billingCycle.billingCycleEndDate().setValue(
                     BillDateUtils.calculateBillingCycleEndDate(billingType.paymentFrequency().getValue(), billingCycleStartDate));
             billingCycle.executionTargetDate().setValue(BillDateUtils.calculateBillingCycleTargetExecutionDate(billingType, billingCycleStartDate));
 
@@ -398,14 +398,14 @@ public class BillingLifecycleManager {
                 EntityQueryCriteria<BillingCycle> criteria = EntityQueryCriteria.create(BillingCycle.class);
                 criteria.add(PropertyCriterion.eq(criteria.proto().billingType(), billingType));
                 criteria.add(PropertyCriterion.eq(criteria.proto().building(), building));
-                criteria.desc(criteria.proto().billingPeriodStartDate());
+                criteria.desc(criteria.proto().billingCycleStartDate());
                 BillingCycle latestBillingCycle = Persistence.service().retrieve(criteria);
 
                 Calendar createUntill = new GregorianCalendar();
                 createUntill.setTime(Persistence.service().getTransactionSystemTime());
                 createUntill.add(Calendar.MONTH, 1);
 
-                while (latestBillingCycle.billingPeriodStartDate().getValue().before(createUntill.getTime())) {
+                while (latestBillingCycle.billingCycleStartDate().getValue().before(createUntill.getTime())) {
                     latestBillingCycle = getSubsiquentBillingCycle(latestBillingCycle);
                 }
 

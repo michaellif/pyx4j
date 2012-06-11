@@ -57,12 +57,12 @@ public class BillTester extends Tester {
     }
 
     public BillTester billingCyclePeriodStartDate(String date) {
-        assertEquals("Billing Run Period Start Day", getDate(date), bill.billingCycle().billingPeriodStartDate().getValue());
+        assertEquals("Billing Run Period Start Day", getDate(date), bill.billingCycle().billingCycleStartDate().getValue());
         return this;
     }
 
     public BillTester billingCyclePeriodEndDate(String date) {
-        assertEquals("Billing Run Period End Day", getDate(date), bill.billingCycle().billingPeriodEndDate().getValue());
+        assertEquals("Billing Run Period End Day", getDate(date), bill.billingCycle().billingCycleEndDate().getValue());
         return this;
     }
 

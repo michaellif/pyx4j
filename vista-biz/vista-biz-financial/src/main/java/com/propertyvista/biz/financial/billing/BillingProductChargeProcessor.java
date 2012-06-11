@@ -20,6 +20,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.financial.billing.Bill;
+import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.financial.billing.InvoiceAdjustmentSubLineItem;
 import com.propertyvista.domain.financial.billing.InvoiceChargeTax;
 import com.propertyvista.domain.financial.billing.InvoiceConcessionSubLineItem;
@@ -277,8 +278,7 @@ public class BillingProductChargeProcessor extends AbstractBillingProcessor {
                 return;
             }
 
-            BigDecimal proration = ProrationUtils.prorate(overlap.getFromDate(), overlap.getToDate(), getBillingManager().getNextPeriodBill().billingCycle()
-                    .building());
+            BigDecimal proration = ProrationUtils.prorate(overlap.getFromDate(), overlap.getToDate(), getBillingManager().getNextPeriodBill().billingCycle());
             adjustment.amount().setValue(amount.multiply(proration));
         }
 
@@ -301,8 +301,20 @@ public class BillingProductChargeProcessor extends AbstractBillingProcessor {
     }
 
     private BigDecimal prorate(InvoiceProductCharge charge) {
-        BigDecimal proration = ProrationUtils.prorate(charge.fromDate().getValue(), charge.toDate().getValue(), getBillingManager().getNextPeriodBill()
-                .billingCycle().building());
+        BillingCycle cycle = null;
+        switch (charge.period().getValue()) {
+        case previous:
+            cycle = getBillingManager().getPreviousPeriodBill().billingCycle();
+            break;
+        case current:
+            cycle = getBillingManager().getCurrentPeriodBill().billingCycle();
+            break;
+        case next:
+            cycle = getBillingManager().getNextPeriodBill().billingCycle();
+            break;
+        }
+
+        BigDecimal proration = ProrationUtils.prorate(charge.fromDate().getValue(), charge.toDate().getValue(), cycle);
         return charge.chargeSubLineItem().billableItem().agreedPrice().getValue().multiply(proration);
     }
 

@@ -30,8 +30,8 @@ public class BillingCycleTest extends VistaDBTestBase {
     public void testFirstBillingCycle() throws ParseException {
         BillingCycle billingCycle = createFirstBillingCycle(FinancialTestsUtils.getDate("23-Feb-2012"), null, false);
 
-        assertEquals("Billing Period Start Date", FinancialTestsUtils.getDate("23-Feb-2012"), billingCycle.billingPeriodStartDate().getValue());
-        assertEquals("Billing Period End Date", FinancialTestsUtils.getDate("22-Mar-2012"), billingCycle.billingPeriodEndDate().getValue());
+        assertEquals("Billing Period Start Date", FinancialTestsUtils.getDate("23-Feb-2012"), billingCycle.billingCycleStartDate().getValue());
+        assertEquals("Billing Period End Date", FinancialTestsUtils.getDate("22-Mar-2012"), billingCycle.billingCycleEndDate().getValue());
         assertEquals("Billing Execution Target Date", FinancialTestsUtils.getDate("08-Feb-2012"), billingCycle.executionTargetDate().getValue());
 
     }
@@ -40,8 +40,8 @@ public class BillingCycleTest extends VistaDBTestBase {
         BillingCycle billingCycle = createFirstBillingCycle(FinancialTestsUtils.getDate("23-Feb-2012"), null, false);
         billingCycle = createSubsiquentBillingCycle(billingCycle);
 
-        assertEquals("Billing Period Start Date", FinancialTestsUtils.getDate("23-Mar-2012"), billingCycle.billingPeriodStartDate().getValue());
-        assertEquals("Billing Period End Date", FinancialTestsUtils.getDate("22-Apr-2012"), billingCycle.billingPeriodEndDate().getValue());
+        assertEquals("Billing Period Start Date", FinancialTestsUtils.getDate("23-Mar-2012"), billingCycle.billingCycleStartDate().getValue());
+        assertEquals("Billing Period End Date", FinancialTestsUtils.getDate("22-Apr-2012"), billingCycle.billingCycleEndDate().getValue());
         assertEquals("Billing Execution Target Date", FinancialTestsUtils.getDate("08-Mar-2012"), billingCycle.executionTargetDate().getValue());
 
     }
@@ -50,29 +50,29 @@ public class BillingCycleTest extends VistaDBTestBase {
         BillingCycle billingCycle = createExistingLeaseInitialBillingCycle(FinancialTestsUtils.getDate("23-Feb-2011"),
                 FinancialTestsUtils.getDate("23-Mar-2012"), null, false);
 
-        assertEquals("Billing Period Start Date", FinancialTestsUtils.getDate("23-Mar-2012"), billingCycle.billingPeriodStartDate().getValue());
-        assertEquals("Billing Period End Date", FinancialTestsUtils.getDate("22-Apr-2012"), billingCycle.billingPeriodEndDate().getValue());
+        assertEquals("Billing Period Start Date", FinancialTestsUtils.getDate("23-Mar-2012"), billingCycle.billingCycleStartDate().getValue());
+        assertEquals("Billing Period End Date", FinancialTestsUtils.getDate("22-Apr-2012"), billingCycle.billingCycleEndDate().getValue());
         assertEquals("Billing Execution Target Date", FinancialTestsUtils.getDate("08-Mar-2012"), billingCycle.executionTargetDate().getValue());
 
         billingCycle = createExistingLeaseInitialBillingCycle(FinancialTestsUtils.getDate("23-Feb-2011"), FinancialTestsUtils.getDate("24-Mar-2012"), null,
                 false);
 
-        assertEquals("Billing Period Start Date", FinancialTestsUtils.getDate("23-Mar-2012"), billingCycle.billingPeriodStartDate().getValue());
-        assertEquals("Billing Period End Date", FinancialTestsUtils.getDate("22-Apr-2012"), billingCycle.billingPeriodEndDate().getValue());
+        assertEquals("Billing Period Start Date", FinancialTestsUtils.getDate("23-Mar-2012"), billingCycle.billingCycleStartDate().getValue());
+        assertEquals("Billing Period End Date", FinancialTestsUtils.getDate("22-Apr-2012"), billingCycle.billingCycleEndDate().getValue());
         assertEquals("Billing Execution Target Date", FinancialTestsUtils.getDate("08-Mar-2012"), billingCycle.executionTargetDate().getValue());
 
         billingCycle = createExistingLeaseInitialBillingCycle(FinancialTestsUtils.getDate("23-Feb-2011"), FinancialTestsUtils.getDate("22-Mar-2012"), null,
                 false);
 
-        assertEquals("Billing Period Start Date", FinancialTestsUtils.getDate("23-Feb-2012"), billingCycle.billingPeriodStartDate().getValue());
-        assertEquals("Billing Period End Date", FinancialTestsUtils.getDate("22-Mar-2012"), billingCycle.billingPeriodEndDate().getValue());
+        assertEquals("Billing Period Start Date", FinancialTestsUtils.getDate("23-Feb-2012"), billingCycle.billingCycleStartDate().getValue());
+        assertEquals("Billing Period End Date", FinancialTestsUtils.getDate("22-Mar-2012"), billingCycle.billingCycleEndDate().getValue());
         assertEquals("Billing Execution Target Date", FinancialTestsUtils.getDate("08-Feb-2012"), billingCycle.executionTargetDate().getValue());
 
         billingCycle = createExistingLeaseInitialBillingCycle(FinancialTestsUtils.getDate("23-Feb-2011"), FinancialTestsUtils.getDate("15-Mar-2012"), null,
                 false);
 
-        assertEquals("Billing Period Start Date", FinancialTestsUtils.getDate("23-Feb-2012"), billingCycle.billingPeriodStartDate().getValue());
-        assertEquals("Billing Period End Date", FinancialTestsUtils.getDate("22-Mar-2012"), billingCycle.billingPeriodEndDate().getValue());
+        assertEquals("Billing Period Start Date", FinancialTestsUtils.getDate("23-Feb-2012"), billingCycle.billingCycleStartDate().getValue());
+        assertEquals("Billing Period End Date", FinancialTestsUtils.getDate("22-Mar-2012"), billingCycle.billingCycleEndDate().getValue());
         assertEquals("Billing Execution Target Date", FinancialTestsUtils.getDate("08-Feb-2012"), billingCycle.executionTargetDate().getValue());
 
     }
@@ -80,8 +80,8 @@ public class BillingCycleTest extends VistaDBTestBase {
     public void testFirstBillingCycleForEndOfMonth() throws ParseException {
         BillingCycle billingCycle = createFirstBillingCycle(FinancialTestsUtils.getDate("29-Mar-2012"), null, false);
 
-        assertEquals("Billing Period Start Date", FinancialTestsUtils.getDate("1-Mar-2012"), billingCycle.billingPeriodStartDate().getValue());
-        assertEquals("Billing Period End Date", FinancialTestsUtils.getDate("31-Mar-2012"), billingCycle.billingPeriodEndDate().getValue());
+        assertEquals("Billing Period Start Date", FinancialTestsUtils.getDate("1-Mar-2012"), billingCycle.billingCycleStartDate().getValue());
+        assertEquals("Billing Period End Date", FinancialTestsUtils.getDate("31-Mar-2012"), billingCycle.billingCycleEndDate().getValue());
         assertEquals("Billing Execution Target Date", FinancialTestsUtils.getDate("15-Feb-2012"), billingCycle.executionTargetDate().getValue());
 
     }
@@ -90,8 +90,8 @@ public class BillingCycleTest extends VistaDBTestBase {
         BillingCycle billingCycle = createFirstBillingCycle(FinancialTestsUtils.getDate("29-Mar-2012"), null, false);
         billingCycle = createSubsiquentBillingCycle(billingCycle);
 
-        assertEquals("Billing Period Start Date", FinancialTestsUtils.getDate("1-Apr-2012"), billingCycle.billingPeriodStartDate().getValue());
-        assertEquals("Billing Period End Date", FinancialTestsUtils.getDate("30-Apr-2012"), billingCycle.billingPeriodEndDate().getValue());
+        assertEquals("Billing Period Start Date", FinancialTestsUtils.getDate("1-Apr-2012"), billingCycle.billingCycleStartDate().getValue());
+        assertEquals("Billing Period End Date", FinancialTestsUtils.getDate("30-Apr-2012"), billingCycle.billingCycleEndDate().getValue());
         assertEquals("Billing Execution Target Date", FinancialTestsUtils.getDate("17-Mar-2012"), billingCycle.executionTargetDate().getValue());
     }
 

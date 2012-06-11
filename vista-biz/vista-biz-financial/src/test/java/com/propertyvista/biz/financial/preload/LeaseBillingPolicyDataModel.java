@@ -39,7 +39,7 @@ public class LeaseBillingPolicyDataModel {
 
         policy.billingPeriodStartDay().setValue(1);
         policy.useBillingPeriodSartDay().setValue(false);
-        policy.prorationMethod().setValue(ProrationMethod.Standard);
+        policy.prorationMethod().setValue(ProrationMethod.Actual);
 
         LateFeeItem lateFee = EntityFactory.create(LateFeeItem.class);
         lateFee.baseFee().setValue(new BigDecimal(50.00));

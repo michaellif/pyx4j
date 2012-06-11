@@ -19,21 +19,40 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.domain.financial.BillingAccount;
-import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.financial.billing.BillingCycle;
+import com.propertyvista.domain.policy.policies.LeaseBillingPolicy;
+import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
 
 public class ProrationUtils {
 
+    private static final I18n i18n = I18n.get(ProrationUtils.class);
+
     //TODO implement retrieving ProrationMethod from policy
-    public static BigDecimal prorate(LogicalDate from, LogicalDate to, Building building) {
-        return prorate(from, to, BillingAccount.ProrationMethod.Actual);
+    public static BigDecimal prorate(LogicalDate from, LogicalDate to, BillingCycle billingCycle) {
+        if (billingCycle.billingCycleStartDate().getValue().after(from) || billingCycle.billingCycleEndDate().getValue().before(to)) {
+            throw new BillingException(i18n.tr("Proration days are out of cycle boundaries"));
+        }
+        if (PaymentFrequency.Monthly == billingCycle.billingType().paymentFrequency().getValue()) {
+            LeaseBillingPolicy leaseBillingPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(billingCycle.building(),
+                    LeaseBillingPolicy.class);
+            return prorateMonthlyPeriod(from, to, billingCycle.billingCycleStartDate().getValue(), leaseBillingPolicy.prorationMethod().getValue());
+        } else if (PaymentFrequency.SemiMonthly == billingCycle.billingType().paymentFrequency().getValue()) {
+            //TODO
+            throw new Error("NOT IMPLEMENTED");
+        } else {
+            return prorateNormalPeriod(from, to, billingCycle.billingType().paymentFrequency().getValue().getNumOfCycles());
+        }
     }
 
-    static BigDecimal prorate(LogicalDate from, LogicalDate to, BillingAccount.ProrationMethod method) {
-        assert from != null && to != null;
+    static BigDecimal prorateMonthlyPeriod(LogicalDate from, LogicalDate to, LogicalDate cycleStartDate, BillingAccount.ProrationMethod method) {
+        assert from != null && to != null && cycleStartDate != null;
         Calendar calendarFrom = new GregorianCalendar();
-        calendarFrom.setTime(from);
+        calendarFrom.setTime(cycleStartDate);
         int daysInMonth = calendarFrom.getActualMaximum(Calendar.DAY_OF_MONTH);
 
         if (comparePeriodToMonth(from, to) == -1) {
@@ -61,6 +80,11 @@ public class ProrationUtils {
             throw new BillingException("proration can't be calculated for a period more than one month, but period was defined as " + from + " - " + to);
         }
 
+    }
+
+    static BigDecimal prorateNormalPeriod(LogicalDate from, LogicalDate to, int cycleLength) {
+        BigDecimal proration = new BigDecimal(cycleLength);
+        return new BigDecimal(daysBetween(from, to)).divide(proration, 6, RoundingMode.HALF_UP);
     }
 
     /**

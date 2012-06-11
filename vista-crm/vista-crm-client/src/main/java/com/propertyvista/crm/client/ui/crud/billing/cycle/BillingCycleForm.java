@@ -36,8 +36,8 @@ public class BillingCycleForm extends CrmEntityForm<BillingCycleDTO> {
         int row = -1;
 
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingType())).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingPeriodStartDate())).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingPeriodEndDate())).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingCycleStartDate())).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingCycleEndDate())).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().executionTargetDate())).build());
 
         main.setH2(++row, 0, 1, i18n.tr("Statistics"));

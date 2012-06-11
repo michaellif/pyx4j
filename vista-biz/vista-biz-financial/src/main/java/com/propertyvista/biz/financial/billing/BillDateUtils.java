@@ -184,7 +184,7 @@ public class BillDateUtils {
         if (Bill.BillType.Estimate == bill.billType().getValue() || Bill.BillType.First == bill.billType().getValue()) {
             date = bill.billingAccount().lease().leaseFrom().getValue();
         } else if (Bill.BillType.Regular == bill.billType().getValue() || Bill.BillType.ZeroCycle == bill.billType().getValue()) {
-            date = bill.billingCycle().billingPeriodStartDate().getValue();
+            date = bill.billingCycle().billingCycleStartDate().getValue();
         }
         return date;
     }
@@ -193,9 +193,9 @@ public class BillDateUtils {
         LogicalDate date = null;
         if (Bill.BillType.Final != bill.billType().getValue()) {
             if (bill.billingAccount().lease().leaseTo().isNull()
-                    || (bill.billingAccount().lease().leaseTo().getValue().compareTo(bill.billingCycle().billingPeriodEndDate().getValue()) >= 0)) {
-                date = bill.billingCycle().billingPeriodEndDate().getValue();
-            } else if (bill.billingAccount().lease().leaseTo().getValue().compareTo(bill.billingCycle().billingPeriodStartDate().getValue()) >= 0) {
+                    || (bill.billingAccount().lease().leaseTo().getValue().compareTo(bill.billingCycle().billingCycleEndDate().getValue()) >= 0)) {
+                date = bill.billingCycle().billingCycleEndDate().getValue();
+            } else if (bill.billingAccount().lease().leaseTo().getValue().compareTo(bill.billingCycle().billingCycleStartDate().getValue()) >= 0) {
                 date = bill.billingAccount().lease().leaseTo().getValue();
             } else {
                 throw new BillingException(i18n.tr("Lease already ended"));

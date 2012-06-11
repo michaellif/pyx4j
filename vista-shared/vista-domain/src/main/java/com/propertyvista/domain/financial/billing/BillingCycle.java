@@ -43,10 +43,10 @@ public interface BillingCycle extends IEntity {
     BillingType billingType();
 
     @ReadOnly
-    IPrimitive<LogicalDate> billingPeriodStartDate();
+    IPrimitive<LogicalDate> billingCycleStartDate();
 
     @ReadOnly
-    IPrimitive<LogicalDate> billingPeriodEndDate();
+    IPrimitive<LogicalDate> billingCycleEndDate();
 
     @ReadOnly
     @Format("MM/dd/yyyy")
