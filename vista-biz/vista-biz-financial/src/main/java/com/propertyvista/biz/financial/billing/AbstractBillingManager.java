@@ -78,6 +78,7 @@ abstract class AbstractBillingManager {
         nextPeriodBill.latePaymentFees().setValue(BigDecimal.ZERO);
         nextPeriodBill.depositAmount().setValue(BigDecimal.ZERO);
         nextPeriodBill.productCreditAmount().setValue(BigDecimal.ZERO);
+        nextPeriodBill.carryForwardCredit().setValue(BigDecimal.ZERO);
 
         nextPeriodBill.taxes().setValue(BigDecimal.ZERO);
 
@@ -118,7 +119,8 @@ abstract class AbstractBillingManager {
                 add(nextPeriodBill.oneTimeFeatureCharges().getValue()).
                 add(nextPeriodBill.pendingAccountAdjustments().getValue()).
                 add(nextPeriodBill.latePaymentFees().getValue()).
-                add(nextPeriodBill.depositAmount().getValue()));
+                add(nextPeriodBill.depositAmount().getValue()).
+                add(nextPeriodBill.carryForwardCredit().getValue()));
 
         nextPeriodBill.totalDueAmount().setValue(nextPeriodBill.pastDueAmount().getValue().add(nextPeriodBill.currentAmount().getValue().add(nextPeriodBill.taxes().getValue())));
         

@@ -178,6 +178,8 @@ public interface Bill extends IEntity {
 
     IPrimitive<BigDecimal> productCreditAmount();
 
+    IPrimitive<BigDecimal> carryForwardCredit();
+
     /**
      * currentAmount = serviceCharge + recurringFeatureCharges +
      * oneTimeFeatureCharges + totalAdjustments + depositPaidAmount

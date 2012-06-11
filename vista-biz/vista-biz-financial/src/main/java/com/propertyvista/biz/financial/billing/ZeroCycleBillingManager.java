@@ -39,8 +39,9 @@ class ZeroCycleBillingManager extends AbstractBillingManager {
     protected List<AbstractBillingProcessor> initProcessors() {
         // @formatter:off
         return Arrays.asList(new AbstractBillingProcessor[] {
-
+                // create current bill charges/adjustments etc..
                 new BillingProductChargeProcessor(this),
+                // create initial debit/credit so initial debit/credit + charges = initial balance
                 new BillingCarryforwardProcessor(this)
                 
         });

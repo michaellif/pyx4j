@@ -58,7 +58,6 @@ public class BillingPaymentProcessor extends AbstractBillingProcessor {
     private void attachPaymentBackOut(InvoicePaymentBackOut paymentBackOut) {
         Bill bill = getBillingManager().getNextPeriodBill();
         bill.lineItems().add(paymentBackOut);
-//        bill.paymentReceivedAmount().setValue(bill.paymentReceivedAmount().getValue().subtract(paymentBackOut.amount().getValue()));
         bill.paymentRejectedAmount().setValue(bill.paymentRejectedAmount().getValue().subtract(paymentBackOut.amount().getValue()));
     }
 
