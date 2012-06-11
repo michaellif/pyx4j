@@ -24,7 +24,7 @@ import com.propertyvista.dto.MaintenanceRequestDTO;
 public class MaintenanceRequestLister extends ListerBase<MaintenanceRequestDTO> {
 
     public MaintenanceRequestLister() {
-        super(MaintenanceRequestDTO.class, false, true);
+        super(MaintenanceRequestDTO.class, true);
 
         setColumnDescriptors( // @formatter:off
                 new ColumnDescriptor(proto().issueClassification().issue().getPath().toString(), proto().issueClassification().issue().getMeta().getCaption()) {

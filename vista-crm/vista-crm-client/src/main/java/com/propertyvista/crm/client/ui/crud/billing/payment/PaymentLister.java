@@ -24,7 +24,7 @@ public class PaymentLister extends ListerBase<PaymentRecordDTO> {
     private static final I18n i18n = I18n.get(PaymentLister.class);
 
     public PaymentLister() {
-        super(PaymentRecordDTO.class, false, true);
+        super(PaymentRecordDTO.class, true);
         getDataTablePanel().getDataTable().setHasCheckboxColumn(false);
 
         setColumnDescriptors(//@formatter:off

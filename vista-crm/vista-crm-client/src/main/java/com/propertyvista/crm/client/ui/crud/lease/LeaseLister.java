@@ -46,7 +46,7 @@ public class LeaseLister extends VersionedLister<LeaseDTO> {
     private final static I18n i18n = I18n.get(LeaseLister.class);
 
     public LeaseLister() {
-        super(LeaseDTO.class, false, true);
+        super(LeaseDTO.class, true);
 
         setColumnDescriptors(//@formatter:off
             new Builder(proto().leaseId()).build(),

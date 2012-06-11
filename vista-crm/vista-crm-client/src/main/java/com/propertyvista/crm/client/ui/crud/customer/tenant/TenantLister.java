@@ -24,7 +24,7 @@ public class TenantLister extends ListerBase<TenantDTO> {
     protected static final I18n i18n = I18n.get(TenantLister.class);
 
     public TenantLister() {
-        super(TenantDTO.class, false, false);
+        super(TenantDTO.class, false);
 
         setColumnDescriptors(//@formatter:off
             new Builder(proto().customer().customerId(), false).build(),

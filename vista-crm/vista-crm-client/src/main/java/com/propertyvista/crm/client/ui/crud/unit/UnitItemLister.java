@@ -21,7 +21,7 @@ import com.propertyvista.domain.property.asset.unit.AptUnitItem;
 public class UnitItemLister extends ListerBase<AptUnitItem> {
 
     public UnitItemLister() {
-        super(AptUnitItem.class, false, true);
+        super(AptUnitItem.class, true);
         getDataTablePanel().setFilteringEnabled(false);
 
         setColumnDescriptors(//@formatter:off

@@ -21,7 +21,7 @@ import com.propertyvista.domain.financial.AggregatedTransfer;
 public class AggregatedTransferLister extends ListerBase<AggregatedTransfer> {
 
     public AggregatedTransferLister() {
-        super(AggregatedTransfer.class, false, false);
+        super(AggregatedTransfer.class, false);
 
         setColumnDescriptors(//@formatter:off
                 new MemberColumnDescriptor.Builder(proto().paymentDate()).build(), 

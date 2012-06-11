@@ -22,7 +22,7 @@ import com.propertyvista.misc.VistaTODO;
 public class LeadLister extends ListerBase<Lead> {
 
     public LeadLister() {
-        super(Lead.class, false, true);
+        super(Lead.class, true);
 
         setColumnDescriptors(//@formatter:off
             new MemberColumnDescriptor.Builder(proto().leadId(), true).build(),

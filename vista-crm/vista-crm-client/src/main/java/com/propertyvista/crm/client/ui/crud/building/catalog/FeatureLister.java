@@ -29,7 +29,7 @@ public class FeatureLister extends VersionedLister<Feature> {
     private final static I18n i18n = I18n.get(FeatureLister.class);
 
     public FeatureLister() {
-        super(Feature.class, false, true);
+        super(Feature.class, true);
         getDataTablePanel().setFilteringEnabled(false);
 
         setColumnDescriptors(//@formatter:off

@@ -21,7 +21,7 @@ import com.propertyvista.domain.property.vendor.Vendor;
 public class VendorLister extends ListerBase<Vendor> {
 
     public VendorLister() {
-        super(Vendor.class, false, true);
+        super(Vendor.class, true);
 
         setColumnDescriptors(//@formatter:off
             new MemberColumnDescriptor.Builder(proto().name()).build(),

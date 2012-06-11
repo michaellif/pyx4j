@@ -55,8 +55,8 @@ public class VersionedLister<E extends IEntity> extends ListerBase<E> {
         getDataTablePanel().addUpperActionItem(displayModeButton.asWidget());
     }
 
-    public VersionedLister(Class<E> clazz, boolean openEditor, boolean allowAddNew) {
-        super(clazz, openEditor, allowAddNew);
+    public VersionedLister(Class<E> clazz, boolean allowAddNew) {
+        super(clazz, allowAddNew);
         getDataTablePanel().addUpperActionItem(displayModeButton.asWidget());
     }
 

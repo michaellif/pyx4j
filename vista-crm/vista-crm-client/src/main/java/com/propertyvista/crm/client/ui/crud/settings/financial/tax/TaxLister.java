@@ -30,7 +30,7 @@ public class TaxLister extends ListerBase<Tax> {
     private static final I18n i18n = I18n.get(TaxLister.class);
 
     public TaxLister() {
-        super(Tax.class, false, true);
+        super(Tax.class, true);
 
         getDataTablePanel().getDataTable().setHasCheckboxColumn(true);
 

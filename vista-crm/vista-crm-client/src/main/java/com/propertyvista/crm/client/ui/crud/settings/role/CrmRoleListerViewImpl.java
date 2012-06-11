@@ -30,7 +30,7 @@ public class CrmRoleListerViewImpl extends CrmListerViewImplBase<CrmRole> implem
     private static class CrmRoleLister extends ListerBase<CrmRole> {
 
         public CrmRoleLister() {
-            super(CrmRole.class, false, true);
+            super(CrmRole.class, true);
 
             setColumnDescriptors(//@formatter:off
                 new MemberColumnDescriptor.Builder(proto().name()).build(),

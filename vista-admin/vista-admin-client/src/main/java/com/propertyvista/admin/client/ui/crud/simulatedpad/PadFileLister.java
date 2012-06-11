@@ -21,7 +21,7 @@ import com.propertyvista.admin.domain.payment.pad.sim.PadSimFile;
 public class PadFileLister extends ListerBase<PadSimFile> {
 
     public PadFileLister() {
-        super(PadSimFile.class, false, false);
+        super(PadSimFile.class, false);
 
         setColumnDescriptors(//@formatter:off
             new MemberColumnDescriptor.Builder(proto().fileName()).build(),

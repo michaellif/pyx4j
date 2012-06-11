@@ -24,7 +24,7 @@ public class GuarantorLister extends ListerBase<GuarantorDTO> {
     protected static final I18n i18n = I18n.get(GuarantorLister.class);
 
     public GuarantorLister() {
-        super(GuarantorDTO.class, false, false);
+        super(GuarantorDTO.class, false);
 
         setColumnDescriptors(//@formatter:off
             new Builder(proto().customer().customerId(), false).build(),

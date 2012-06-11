@@ -21,7 +21,7 @@ import com.propertyvista.domain.property.asset.Locker;
 public class LockerLister extends ListerBase<Locker> {
 
     public LockerLister() {
-        super(Locker.class, false, true);
+        super(Locker.class, true);
 
         setColumnDescriptors(//@formatter:off
                 new MemberColumnDescriptor.Builder(proto().name()).build(), 

@@ -21,7 +21,7 @@ import com.propertyvista.crm.rpc.dto.billing.BillingCycleLeaseDTO;
 public class BillingCycleLeaseLister extends ListerBase<BillingCycleLeaseDTO> {
 
     public BillingCycleLeaseLister() {
-        super(BillingCycleLeaseDTO.class, false, false);
+        super(BillingCycleLeaseDTO.class, false);
         setColumnDescriptors(//@formatter:off
             new MemberColumnDescriptor.Builder(proto().lease()).build(),
             new MemberColumnDescriptor.Builder(proto().numberOfNonConfirmedBills()).build(),

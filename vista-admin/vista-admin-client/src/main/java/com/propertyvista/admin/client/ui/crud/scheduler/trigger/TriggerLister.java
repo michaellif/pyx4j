@@ -21,7 +21,7 @@ import com.propertyvista.admin.domain.scheduler.Trigger;
 public class TriggerLister extends ListerBase<Trigger> {
 
     public TriggerLister() {
-        super(Trigger.class, false, true);
+        super(Trigger.class, true);
 
         setColumnDescriptors(//@formatter:off
             new MemberColumnDescriptor.Builder(proto().triggerType()).build(),

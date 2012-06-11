@@ -21,7 +21,7 @@ import com.propertyvista.dto.FloorplanDTO;
 public class FloorplanLister extends ListerBase<FloorplanDTO> {
 
     public FloorplanLister() {
-        super(FloorplanDTO.class, false, true);
+        super(FloorplanDTO.class, true);
 
         setColumnDescriptors(//@formatter:off
             new MemberColumnDescriptor.Builder(proto().name()).build(),

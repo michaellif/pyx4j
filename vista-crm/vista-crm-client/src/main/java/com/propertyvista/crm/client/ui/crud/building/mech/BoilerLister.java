@@ -21,7 +21,7 @@ import com.propertyvista.dto.BoilerDTO;
 public class BoilerLister extends ListerBase<BoilerDTO> {
 
     public BoilerLister() {
-        super(BoilerDTO.class, false, true);
+        super(BoilerDTO.class, true);
         getDataTablePanel().setFilteringEnabled(false);
 
         setColumnDescriptors(//@formatter:off

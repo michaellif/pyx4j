@@ -31,7 +31,7 @@ public class FeatureTypeLister extends ListerBase<FeatureItemType> {
     private static final I18n i18n = I18n.get(FeatureTypeLister.class);
 
     public FeatureTypeLister() {
-        super(FeatureItemType.class, false, true);
+        super(FeatureItemType.class, true);
 
         getDataTablePanel().getDataTable().setHasCheckboxColumn(true);
 

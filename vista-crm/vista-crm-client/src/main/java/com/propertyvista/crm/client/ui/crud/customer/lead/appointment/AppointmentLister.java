@@ -21,7 +21,7 @@ import com.propertyvista.domain.tenant.lead.Appointment;
 public class AppointmentLister extends ListerBase<Appointment> {
 
     public AppointmentLister() {
-        super(Appointment.class, false, true);
+        super(Appointment.class, true);
         setColumnDescriptors(//@formatter:off
                 new MemberColumnDescriptor.Builder(proto().date()).build(),
                 new MemberColumnDescriptor.Builder(proto().time()).build(),

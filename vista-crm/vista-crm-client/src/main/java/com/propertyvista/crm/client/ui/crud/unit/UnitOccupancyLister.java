@@ -21,7 +21,7 @@ import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySe
 public class UnitOccupancyLister extends ListerBase<AptUnitOccupancySegment> {
 
     public UnitOccupancyLister() {
-        super(AptUnitOccupancySegment.class, false, false);
+        super(AptUnitOccupancySegment.class, false);
         getDataTablePanel().setFilteringEnabled(false);
 
         setColumnDescriptors(//@formatter:off

@@ -21,7 +21,7 @@ import com.propertyvista.admin.domain.payment.pad.sim.PadSimBatch;
 public class PadBatchLister extends ListerBase<PadSimBatch> {
 
     public PadBatchLister() {
-        super(PadSimBatch.class, false, true);
+        super(PadSimBatch.class, true);
 
         setColumnDescriptors(//@formatter:off
                 new MemberColumnDescriptor.Builder(proto().batchNumber()).build(),

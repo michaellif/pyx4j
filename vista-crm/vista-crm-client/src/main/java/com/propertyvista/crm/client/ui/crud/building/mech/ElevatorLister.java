@@ -21,7 +21,7 @@ import com.propertyvista.dto.ElevatorDTO;
 public class ElevatorLister extends ListerBase<ElevatorDTO> {
 
     public ElevatorLister() {
-        super(ElevatorDTO.class, false, true);
+        super(ElevatorDTO.class, true);
         getDataTablePanel().setFilteringEnabled(false);
 
         setColumnDescriptors(//@formatter:off

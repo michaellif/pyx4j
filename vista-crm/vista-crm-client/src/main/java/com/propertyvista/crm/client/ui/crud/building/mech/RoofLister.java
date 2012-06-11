@@ -21,20 +21,16 @@ import com.propertyvista.dto.RoofDTO;
 public class RoofLister extends ListerBase<RoofDTO> {
 
     public RoofLister() {
-        super(RoofDTO.class, false, true);
+        super(RoofDTO.class, true);
         getDataTablePanel().setFilteringEnabled(false);
 
-        setColumnDescriptors(new MemberColumnDescriptor.Builder(proto().type()).build(),
-
-        new MemberColumnDescriptor.Builder(proto().year()).build(),
-
-        new MemberColumnDescriptor.Builder(proto().license().number(), false).build(),
-
-        new MemberColumnDescriptor.Builder(proto().license().expiration(), false).build(),
-
-        new MemberColumnDescriptor.Builder(proto().license().renewal(), false).build(),
-
-        new MemberColumnDescriptor.Builder(proto().warranty().type(), false).build());
-
+        setColumnDescriptors( //@formatter:off
+                new MemberColumnDescriptor.Builder(proto().type()).build(),
+                new MemberColumnDescriptor.Builder(proto().year()).build(),
+                new MemberColumnDescriptor.Builder(proto().license().number(), false).build(),
+                new MemberColumnDescriptor.Builder(proto().license().expiration(), false).build(),
+                new MemberColumnDescriptor.Builder(proto().license().renewal(), false).build(),
+                new MemberColumnDescriptor.Builder(proto().warranty().type(), false).build()
+        ); //@formatter:on
     }
 }

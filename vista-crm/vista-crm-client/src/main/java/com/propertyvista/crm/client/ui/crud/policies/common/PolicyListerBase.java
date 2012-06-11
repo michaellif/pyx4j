@@ -42,7 +42,7 @@ public abstract class PolicyListerBase<P extends PolicyDTOBase> extends ListerBa
     protected List<ColumnDescriptor> defaultColumns;
 
     public PolicyListerBase(Class<P> clazz) {
-        super(clazz, false, true);
+        super(clazz, true);
         getDataTablePanel().setFilteringEnabled(false);
         getDataTablePanel().getDataTable().setHasCheckboxColumn(true);
 

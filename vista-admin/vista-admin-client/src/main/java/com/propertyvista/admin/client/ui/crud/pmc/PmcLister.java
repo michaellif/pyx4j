@@ -21,7 +21,7 @@ import com.propertyvista.admin.rpc.PmcDTO;
 public class PmcLister extends ListerBase<PmcDTO> {
 
     public PmcLister() {
-        super(PmcDTO.class, false, true);
+        super(PmcDTO.class, true);
 
         setColumnDescriptors( //@formatter:off
             new MemberColumnDescriptor.Builder(proto().name()).build(),

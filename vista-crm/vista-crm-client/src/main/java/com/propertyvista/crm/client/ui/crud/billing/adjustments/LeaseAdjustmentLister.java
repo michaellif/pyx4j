@@ -21,7 +21,7 @@ import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 public class LeaseAdjustmentLister extends ListerBase<LeaseAdjustment> {
 
     public LeaseAdjustmentLister() {
-        super(LeaseAdjustment.class, false, true);
+        super(LeaseAdjustment.class, true);
         getDataTablePanel().getDataTable().setHasCheckboxColumn(false);
 
         setColumnDescriptors(//@formatter:off

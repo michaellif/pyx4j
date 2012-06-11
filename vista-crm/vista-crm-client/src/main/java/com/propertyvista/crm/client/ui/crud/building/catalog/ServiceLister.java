@@ -29,7 +29,7 @@ public class ServiceLister extends VersionedLister<Service> {
     private final static I18n i18n = I18n.get(ServiceLister.class);
 
     public ServiceLister() {
-        super(Service.class, false, true);
+        super(Service.class, true);
         getDataTablePanel().setFilteringEnabled(false);
 
         setColumnDescriptors(//@formatter:off

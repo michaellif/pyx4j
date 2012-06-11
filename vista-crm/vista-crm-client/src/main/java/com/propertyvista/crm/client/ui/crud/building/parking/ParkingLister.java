@@ -21,7 +21,7 @@ import com.propertyvista.dto.ParkingDTO;
 public class ParkingLister extends ListerBase<ParkingDTO> {
 
     public ParkingLister() {
-        super(ParkingDTO.class, false, true);
+        super(ParkingDTO.class, true);
         getDataTablePanel().setFilteringEnabled(false);
 
         setColumnDescriptors(//@formatter:off

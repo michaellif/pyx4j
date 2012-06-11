@@ -21,7 +21,7 @@ import com.propertyvista.crm.rpc.dto.billing.BillingCycleDTO;
 public class BillingCycleLister extends ListerBase<BillingCycleDTO> {
 
     public BillingCycleLister() {
-        super(BillingCycleDTO.class, false, false);
+        super(BillingCycleDTO.class, false);
         setColumnDescriptors(//@formatter:off
             new MemberColumnDescriptor.Builder(proto().billingType()).build(),
             new MemberColumnDescriptor.Builder(proto().billingCycleStartDate()).build(),

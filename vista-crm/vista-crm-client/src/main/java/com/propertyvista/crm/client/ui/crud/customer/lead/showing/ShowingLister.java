@@ -21,7 +21,7 @@ import com.propertyvista.domain.tenant.lead.Showing;
 public class ShowingLister extends ListerBase<Showing> {
 
     public ShowingLister() {
-        super(Showing.class, false, true);
+        super(Showing.class, true);
 
         setColumnDescriptors(//@formatter:off
             new MemberColumnDescriptor.Builder(proto().building()).build(),

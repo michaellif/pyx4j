@@ -21,7 +21,7 @@ import com.propertyvista.admin.domain.scheduler.RunData;
 public class RunDataLister extends ListerBase<RunData> {
 
     public RunDataLister() {
-        super(RunData.class, false, false);
+        super(RunData.class, false);
 
         setColumnDescriptors(//@formatter:off
             new MemberColumnDescriptor.Builder(proto().pmc().dnsName()).build(),

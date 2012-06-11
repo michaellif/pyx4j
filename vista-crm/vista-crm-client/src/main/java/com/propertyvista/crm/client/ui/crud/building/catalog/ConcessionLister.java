@@ -21,7 +21,7 @@ import com.propertyvista.domain.financial.offering.Concession;
 public class ConcessionLister extends VersionedLister<Concession> {
 
     public ConcessionLister() {
-        super(Concession.class, false, true);
+        super(Concession.class, true);
 
         getDataTablePanel().setFilteringEnabled(false);
 

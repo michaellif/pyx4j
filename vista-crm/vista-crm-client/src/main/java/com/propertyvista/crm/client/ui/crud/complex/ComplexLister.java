@@ -21,7 +21,7 @@ import com.propertyvista.dto.ComplexDTO;
 public class ComplexLister extends ListerBase<ComplexDTO> {
 
     public ComplexLister() {
-        super(ComplexDTO.class, false, true);
+        super(ComplexDTO.class, true);
 
         setColumnDescriptors(//@formatter:off
             new MemberColumnDescriptor.Builder(proto().name()).build(), 

@@ -31,7 +31,7 @@ public class ServiceTypeLister extends ListerBase<ServiceItemType> {
     private static final I18n i18n = I18n.get(ServiceTypeLister.class);
 
     public ServiceTypeLister() {
-        super(ServiceItemType.class, false, true);
+        super(ServiceItemType.class, true);
 
         getDataTablePanel().getDataTable().setHasCheckboxColumn(true);
 

@@ -24,7 +24,7 @@ public class BuildingLister extends ListerBase<BuildingDTO> {
     private static final I18n i18n = I18n.get(BuildingLister.class);
 
     public BuildingLister() {
-        super(BuildingDTO.class, false, true);
+        super(BuildingDTO.class, true);
 
         setColumnDescriptors(//@formatter:off
             new MemberColumnDescriptor.Builder(proto().propertyCode(), true).build(),

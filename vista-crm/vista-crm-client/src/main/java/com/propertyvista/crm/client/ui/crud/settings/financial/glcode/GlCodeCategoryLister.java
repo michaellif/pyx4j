@@ -30,7 +30,7 @@ public class GlCodeCategoryLister extends ListerBase<GlCodeCategory> {
     private static final I18n i18n = I18n.get(GlCodeCategoryLister.class);
 
     public GlCodeCategoryLister() {
-        super(GlCodeCategory.class, false, true);
+        super(GlCodeCategory.class, true);
 
         getDataTablePanel().getDataTable().setHasCheckboxColumn(true);
 

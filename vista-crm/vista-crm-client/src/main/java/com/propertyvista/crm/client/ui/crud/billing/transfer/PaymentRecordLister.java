@@ -24,7 +24,7 @@ public class PaymentRecordLister extends ListerBase<PaymentRecord> {
     private static final I18n i18n = I18n.get(PaymentRecordLister.class);
 
     public PaymentRecordLister() {
-        super(PaymentRecord.class, false, false);
+        super(PaymentRecord.class, false);
 
         setColumnDescriptors(//@formatter:off
             new MemberColumnDescriptor.Builder(proto().id()).build(),

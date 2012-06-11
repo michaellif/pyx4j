@@ -21,7 +21,7 @@ import com.propertyvista.crm.rpc.dto.billing.BillDataDTO;
 public class BillLister extends ListerBase<BillDataDTO> {
 
     public BillLister() {
-        super(BillDataDTO.class, false, false);
+        super(BillDataDTO.class, false);
         getDataTablePanel().getDataTable().setHasCheckboxColumn(false);
 
         setColumnDescriptors(//@formatter:off

@@ -21,7 +21,7 @@ import com.propertyvista.domain.property.asset.ParkingSpot;
 public class ParkingSpotLister extends ListerBase<ParkingSpot> {
 
     public ParkingSpotLister() {
-        super(ParkingSpot.class, false, true);
+        super(ParkingSpot.class, true);
 
         setColumnDescriptors(//@formatter:off
             new MemberColumnDescriptor.Builder(proto().name()).build(),

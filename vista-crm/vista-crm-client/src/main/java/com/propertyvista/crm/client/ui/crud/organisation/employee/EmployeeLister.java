@@ -21,7 +21,7 @@ import com.propertyvista.crm.rpc.dto.company.EmployeeDTO;
 public class EmployeeLister extends ListerBase<EmployeeDTO> {
 
     public EmployeeLister() {
-        super(EmployeeDTO.class, false, true);
+        super(EmployeeDTO.class, true);
 
         setColumnDescriptors(//@formatter:off
             new MemberColumnDescriptor.Builder(proto().title()).build(),

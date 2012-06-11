@@ -38,7 +38,7 @@ public class UnitLister extends ListerBase<AptUnitDTO> {
     }
 
     public UnitLister(boolean allowAddNew) {
-        super(AptUnitDTO.class, false, allowAddNew);
+        super(AptUnitDTO.class, allowAddNew);
 
         setColumnDescriptors(//@formatter:off
                 new MemberColumnDescriptor.Builder(proto().buildingCode()).build(),

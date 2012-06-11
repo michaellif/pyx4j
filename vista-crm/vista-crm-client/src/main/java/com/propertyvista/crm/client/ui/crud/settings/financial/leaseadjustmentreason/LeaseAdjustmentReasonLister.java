@@ -30,7 +30,7 @@ public class LeaseAdjustmentReasonLister extends ListerBase<LeaseAdjustmentReaso
     private static final I18n i18n = I18n.get(LeaseAdjustmentReasonLister.class);
 
     public LeaseAdjustmentReasonLister() {
-        super(LeaseAdjustmentReason.class, false, true);
+        super(LeaseAdjustmentReason.class, true);
 
         getDataTablePanel().getDataTable().setHasCheckboxColumn(true);
 

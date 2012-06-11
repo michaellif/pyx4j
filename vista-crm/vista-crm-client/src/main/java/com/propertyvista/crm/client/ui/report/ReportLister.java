@@ -30,7 +30,7 @@ public class ReportLister extends ListerBase<DashboardMetadata> {
     private static final I18n i18n = I18n.get(ReportLister.class);
 
     public ReportLister() {
-        super(DashboardMetadata.class, false, true);
+        super(DashboardMetadata.class, true);
         getDataTablePanel().setFilteringEnabled(false);
         getDataTablePanel().getDataTable().setHasCheckboxColumn(true);
 

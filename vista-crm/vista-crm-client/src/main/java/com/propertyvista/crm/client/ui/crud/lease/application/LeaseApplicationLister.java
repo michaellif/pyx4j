@@ -36,7 +36,7 @@ public class LeaseApplicationLister extends ListerBase<LeaseApplicationDTO> {
     private final static I18n i18n = I18n.get(LeaseApplicationLister.class);
 
     public LeaseApplicationLister() {
-        super(LeaseApplicationDTO.class, false, true);
+        super(LeaseApplicationDTO.class, true);
 
         setColumnDescriptors(//@formatter:off
             new Builder(proto().leaseId()).build(),

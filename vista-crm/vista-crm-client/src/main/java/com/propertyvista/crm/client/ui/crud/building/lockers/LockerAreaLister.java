@@ -21,7 +21,7 @@ import com.propertyvista.dto.LockerAreaDTO;
 public class LockerAreaLister extends ListerBase<LockerAreaDTO> {
 
     public LockerAreaLister() {
-        super(LockerAreaDTO.class, false, true);
+        super(LockerAreaDTO.class, true);
         getDataTablePanel().setFilteringEnabled(false);
 
         setColumnDescriptors(//@formatter:off

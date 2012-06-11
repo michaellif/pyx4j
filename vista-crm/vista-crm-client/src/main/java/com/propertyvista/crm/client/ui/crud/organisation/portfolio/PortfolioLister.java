@@ -21,16 +21,11 @@ import com.propertyvista.domain.company.Portfolio;
 public class PortfolioLister extends ListerBase<Portfolio> {
 
     public PortfolioLister() {
-        super(Portfolio.class, false, true);
+        super(Portfolio.class, true);
 
-        setColumnDescriptors(
-
-        new MemberColumnDescriptor.Builder(proto().name()).build(),
-
-        new MemberColumnDescriptor.Builder(proto().description()).build()
-
-        );
-
+        setColumnDescriptors(//@formatter:off
+                new MemberColumnDescriptor.Builder(proto().name()).build(),
+                new MemberColumnDescriptor.Builder(proto().description()).build()
+        ); //@formatter:on
     }
-
 }
