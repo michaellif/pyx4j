@@ -22,9 +22,9 @@ import com.propertyvista.domain.tenant.lease.Lease;
 
 public interface BillingFacade {
 
-    void runBilling(Lease lease);
+    BillCreationResult runBilling(Lease lease);
 
-    void runBilling(BillingCycle billingCycle);
+    void runBilling(BillingCycle billingCycle, StatisticsRecord dynamicStatisticsRecord);
 
     Bill getLatestConfirmedBill(Lease lease);
 
@@ -37,7 +37,7 @@ public interface BillingFacade {
     Bill rejectBill(Bill billStub);
 
     // Processes
-    void runBilling(StatisticsRecord dynamicStatisticsRecord, LogicalDate date);
+    void runBilling(LogicalDate date, StatisticsRecord dynamicStatisticsRecord);
 
     void initializeFutureBillingCycles();
 }

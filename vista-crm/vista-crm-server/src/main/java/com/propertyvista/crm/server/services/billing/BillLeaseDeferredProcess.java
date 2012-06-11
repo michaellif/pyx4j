@@ -18,6 +18,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.essentials.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.essentials.server.deferred.IDeferredProcess;
 
+import com.propertyvista.biz.financial.billing.BillCreationResult;
 import com.propertyvista.biz.financial.billing.BillingFacade;
 import com.propertyvista.domain.tenant.lease.Lease;
 
@@ -27,9 +28,11 @@ class BillLeaseDeferredProcess implements IDeferredProcess {
 
     protected volatile boolean canceled;
 
-    private boolean compleate;
+    private boolean complete;
 
     private final Lease lease;
+
+    private BillCreationResult result;
 
     BillLeaseDeferredProcess(Lease lease) {
         this.lease = lease;
@@ -37,17 +40,17 @@ class BillLeaseDeferredProcess implements IDeferredProcess {
 
     @Override
     public void execute() {
-        if (!compleate) {
+        if (!complete) {
             try {
                 Persistence.service().startBackgroundProcessTransaction();
 
-                ServerSideFactory.create(BillingFacade.class).runBilling(lease);
+                result = ServerSideFactory.create(BillingFacade.class).runBilling(lease);
                 Persistence.service().commit();
             } finally {
                 Persistence.service().endTransaction();
             }
         }
-        compleate = true;
+        complete = true;
     }
 
     @Override
@@ -57,9 +60,12 @@ class BillLeaseDeferredProcess implements IDeferredProcess {
 
     @Override
     public DeferredProcessProgressResponse status() {
-        if (compleate) {
+        if (complete) {
             DeferredProcessProgressResponse r = new DeferredProcessProgressResponse();
             r.setCompleted();
+            if (result.getMessage() != null) {
+                r.setMessage(result.getMessage());
+            }
             return r;
         } else {
             DeferredProcessProgressResponse r = new DeferredProcessProgressResponse();

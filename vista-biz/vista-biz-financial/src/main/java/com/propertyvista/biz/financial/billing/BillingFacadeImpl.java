@@ -23,18 +23,18 @@ import com.propertyvista.domain.tenant.lease.Lease;
 public class BillingFacadeImpl implements BillingFacade {
 
     @Override
-    public void runBilling(Lease lease) {
-        BillingLifecycleManager.runBilling(lease);
+    public BillCreationResult runBilling(Lease lease) {
+        return BillingLifecycleManager.runBilling(lease);
     }
 
     @Override
-    public void runBilling(StatisticsRecord dynamicStatisticsRecord, LogicalDate date) {
-        BillingLifecycleManager.runBilling(dynamicStatisticsRecord, date);
+    public void runBilling(LogicalDate date, StatisticsRecord dynamicStatisticsRecord) {
+        BillingLifecycleManager.runBilling(date, dynamicStatisticsRecord);
     }
 
     @Override
-    public void runBilling(BillingCycle billingCycle) {
-        BillingLifecycleManager.runBilling(billingCycle);
+    public void runBilling(BillingCycle billingCycle, StatisticsRecord dynamicStatisticsRecord) {
+        BillingLifecycleManager.runBilling(billingCycle, dynamicStatisticsRecord);
     }
 
     @Override

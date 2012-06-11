@@ -27,7 +27,7 @@ public class BillingProcess implements PmcProcess {
 
     @Override
     public void executePmcJob() {
-        ServerSideFactory.create(BillingFacade.class).runBilling(PmcProcessContext.getRunStats(), new LogicalDate(PmcProcessContext.getForDate()));
+        ServerSideFactory.create(BillingFacade.class).runBilling(new LogicalDate(PmcProcessContext.getForDate()), PmcProcessContext.getRunStats());
     }
 
     @Override

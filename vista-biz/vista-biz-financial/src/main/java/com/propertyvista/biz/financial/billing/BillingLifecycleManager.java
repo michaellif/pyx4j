@@ -21,7 +21,6 @@
 package com.propertyvista.biz.financial.billing;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
@@ -55,6 +54,7 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
 import com.propertyvista.domain.tenant.lease.Lease.Status;
+import com.propertyvista.server.jobs.StatisticsUtils;
 
 public class BillingLifecycleManager {
 
@@ -62,14 +62,22 @@ public class BillingLifecycleManager {
 
     private final static Logger log = LoggerFactory.getLogger(BillingLifecycleManager.class);
 
-    static void runBilling(Lease lease) {
+    static BillCreationResult runBilling(Lease lease) {
         BillingAccount billingAccount = ensureInitBillingAccount(lease);
         BillingCycle billingCycle = getNextBillBillingCycle(lease);
         validateBillingRunPreconditions(billingCycle, billingAccount);
-        runBilling(billingCycle, Arrays.asList(new BillingAccount[] { billingAccount }).iterator(), false);
+
+        try {
+            return createBill(billingCycle, billingAccount);
+        } catch (Throwable e) {
+            Persistence.service().rollback();
+            log.error("Bill run error", e);
+            return new BillCreationResult("Bill run error");
+        }
+
     }
 
-    static void runBilling(final BillingCycle billingCycle) {
+    static void runBilling(final BillingCycle billingCycle, StatisticsRecord dynamicStatisticsRecord) {
         EntityQueryCriteria<BillingAccount> billingAccountCriteria = EntityQueryCriteria.create(BillingAccount.class);
         billingAccountCriteria.add(PropertyCriterion.eq(billingAccountCriteria.proto().lease().unit().belongsTo(), billingCycle.building()));
         billingAccountCriteria.add(PropertyCriterion.eq(billingAccountCriteria.proto().billingType(), billingCycle.billingType()));
@@ -87,10 +95,10 @@ public class BillingLifecycleManager {
                         }
                     }
                 });
-        runBilling(billingCycle, filteredbillingAccountIterator, true);
+        runBilling(billingCycle, filteredbillingAccountIterator, true, dynamicStatisticsRecord);
     }
 
-    static void runBilling(StatisticsRecord dynamicStatisticsRecord, LogicalDate date) {
+    static void runBilling(LogicalDate date, StatisticsRecord dynamicStatisticsRecord) {
         for (BillingType billingType : Persistence.service().query(EntityQueryCriteria.create(BillingType.class))) {
 
             EntityQueryCriteria<BillingCycle> criteria = EntityQueryCriteria.create(BillingCycle.class);
@@ -100,18 +108,20 @@ public class BillingLifecycleManager {
             ICursorIterator<BillingCycle> billingCycleIterator = Persistence.service().query(null, criteria, AttachLevel.IdOnly);
             while (billingCycleIterator.hasNext()) {
                 BillingCycle billingCycle = billingCycleIterator.next();
-                runBilling(billingCycle);
+                runBilling(billingCycle, dynamicStatisticsRecord);
             }
         }
     }
 
-    private static void runBilling(BillingCycle billingCycle, Iterator<BillingAccount> billingAccounts, boolean manageTransactions) {
+    private static void runBilling(BillingCycle billingCycle, Iterator<BillingAccount> billingAccounts, boolean manageTransactions,
+            StatisticsRecord dynamicStatisticsRecord) {
         if (manageTransactions) {
             Persistence.service().commit();
         }
         try {
             while (billingAccounts.hasNext()) {
-                runBilling(billingCycle, billingAccounts.next());
+                BillCreationResult result = createBill(billingCycle, billingAccounts.next());
+                appendStats(dynamicStatisticsRecord, result);
                 if (manageTransactions) {
                     Persistence.service().commit();
                 }
@@ -119,13 +129,22 @@ public class BillingLifecycleManager {
         } catch (Throwable e) {
             Persistence.service().rollback();
             log.error("Bill run error", e);
+            appendStats(dynamicStatisticsRecord, new BillCreationResult(i18n.tr("Bill run error")));
             if (manageTransactions) {
                 Persistence.service().commit();
             }
         }
     }
 
-    static void runBilling(BillingCycle billingCycle, BillingAccount billingAccount) {
+    private static void appendStats(StatisticsRecord dynamicStatisticsRecord, BillCreationResult result) {
+        if (result.getStatus() == BillCreationResult.Status.created) {
+            StatisticsUtils.addProcessed(dynamicStatisticsRecord, 1);
+        } else {
+            StatisticsUtils.addFailed(dynamicStatisticsRecord, 1);
+        }
+    }
+
+    static BillCreationResult createBill(BillingCycle billingCycle, BillingAccount billingAccount) {
 
         Persistence.service().retrieve(billingAccount.lease());
         Persistence.service().retrieve(billingAccount.adjustments());
@@ -143,35 +162,42 @@ public class BillingLifecycleManager {
 
             bill.executionDate().setValue(new LogicalDate(SysDateManager.getSysDate()));
 
-            AbstractBillingManager processor = null;
+            AbstractBillingManager manager = null;
 
             if (Status.Created == billingAccount.lease().version().status().getValue()) {//zeroCycle bill should be issued
                 if (billingAccount.carryforwardBalance().isNull()) {
-                    processor = new EstimateBillingManager(bill);
+                    manager = new EstimateBillingManager(bill);
                 } else {
-                    processor = new ZeroCycleBillingManager(bill);
+                    manager = new ZeroCycleBillingManager(bill);
                 }
             } else if (Status.Approved == billingAccount.lease().version().status().getValue()) {// first bill should be issued
-                processor = new FirstBillingManager(bill);
+                manager = new FirstBillingManager(bill);
             } else if (Status.Active == billingAccount.lease().version().status().getValue()) {
-                processor = new RegularBillingManager(bill);
+                manager = new RegularBillingManager(bill);
             } else if (Status.Completed == billingAccount.lease().version().status().getValue()) {// final bill should be issued
-                processor = new FinalBillingManager(bill);
+                manager = new FinalBillingManager(bill);
             } else {
                 throw new BillingException(i18n.tr("Billing can't run when lease is in status '{0}'", billingAccount.lease().version().status().getValue()));
             }
 
-            processor.processBill();
+            manager.processBill();
 
             bill.billStatus().setValue(Bill.BillStatus.Finished);
         } catch (Throwable e) {
             log.error("Bill run error", e);
             bill.billStatus().setValue(Bill.BillStatus.Failed);
+            String billCreationError = i18n.tr("Bill run error");
+            if (BillingException.class.isAssignableFrom(e.getClass())) {
+                billCreationError = e.getMessage();
+            }
+            bill.billCreationError().setValue(billCreationError);
         }
         Persistence.service().persist(bill);
 
         billingAccount.billCounter().setValue(billingAccount.billCounter().getValue() + 1);
         Persistence.service().persist(billingAccount);
+
+        return new BillCreationResult(bill);
     }
 
     private static void validateBillingRunPreconditions(BillingCycle billingCycle, BillingAccount billingAccount) {
@@ -179,7 +205,7 @@ public class BillingLifecycleManager {
         Persistence.service().retrieve(billingAccount.lease());
 
         if (!getNextBillBillingCycle(billingAccount.lease()).equals(billingCycle)) {
-            throw new BillingException("Bill can't be created for a given billing cycle");
+            throw new BillingException(i18n.tr("Bill can't be created for a given billing cycle"));
         }
 
         if (billingAccount.lease().version().status().getValue() == Lease.Status.Closed) {
@@ -189,7 +215,7 @@ public class BillingLifecycleManager {
         Bill previousBill = BillingLifecycleManager.getLatestBill(billingAccount.lease());
         if (previousBill != null) {
             if (BillStatus.notConfirmed(previousBill.billStatus().getValue())) {
-                throw new BillingException("Can't run billing on Account with non-confirmed bills");
+                throw new BillingException(i18n.tr("Can't run billing on Account with non-confirmed bills"));
             }
         }
 
