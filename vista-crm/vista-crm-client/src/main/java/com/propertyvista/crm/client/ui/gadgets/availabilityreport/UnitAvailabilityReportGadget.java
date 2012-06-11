@@ -18,22 +18,13 @@ import java.util.List;
 import java.util.Vector;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.core.client.Scheduler;
-import com.google.gwt.core.client.Scheduler.ScheduledCommand;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.logical.shared.ValueChangeEvent;
-import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.ToggleButton;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.commons.IDebugId;
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
@@ -41,10 +32,8 @@ import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.CDatePicker;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.crm.client.ui.board.BoardView;
 import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEvent;
 import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEventHandler;
@@ -68,32 +57,17 @@ public class UnitAvailabilityReportGadget extends AbstractGadget<UnitAvailabilit
     public static class UnitAvailabilityReportGadgetInstance extends ListerGadgetInstanceBase<UnitAvailabilityStatus, UnitAvailability> implements
             IBuildingBoardGadgetInstance {
 
-        public static enum DebugIds implements IDebugId {
-
-            vacantFilter, noticeFilter, vacantAndNoticeFilter, rentedFilter, netExposureFilter;
-
-            @Override
-            public String debugId() {
-                return this.name();
-            }
-        }
-
         private VerticalPanel gadgetPanel;
 
-        private FlexTable controlsPanel;
-
-        private List<FilterButton> filteringButtons;
-
-        private final FilterButtonClickHanlder filterButtonClickHandler;
+        private HTML filterDisplayPanel;
 
         private final AvailabilityReportService service;
 
         private CDatePicker asOf;
 
         public UnitAvailabilityReportGadgetInstance(GadgetMetadata gmd) {
-            super(gmd, UnitAvailability.class, null, UnitAvailabilityStatus.class, false);
+            super(gmd, UnitAvailability.class, new UnitAvailabilityGadgetMetatadaForm(), UnitAvailabilityStatus.class, false);
             service = GWT.create(AvailabilityReportService.class);
-            filterButtonClickHandler = new FilterButtonClickHanlder();
         }
 
         @Override
@@ -104,45 +78,6 @@ public class UnitAvailabilityReportGadget extends AbstractGadget<UnitAvailabilit
                 public void onBuildingSelectionChanged(BuildingSelectionChangedEvent event) {
                     populate();
                 }
-            });
-        }
-
-        @Override
-        public void start() {
-            super.start();
-            setupFilteringButtons();
-        }
-
-        @Override
-        public ISetup getSetup() {
-            return new SetupFormWrapper(new CEntityDecoratableForm<UnitAvailability>(UnitAvailability.class) {
-                @Override
-                public IsWidget createContent() {
-                    FormFlexPanel p = new FormFlexPanel();
-                    int row = -1;
-                    p.setWidget(++row, 0, new DecoratorBuilder(inject(proto().refreshInterval())).build());
-                    p.setWidget(++row, 0, new DecoratorBuilder(inject(proto().pageSize())).build());
-                    p.setWidget(++row, 0, new DecoratorBuilder(inject(proto().filterPreset())).build());
-                    p.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customizeDate())).build());
-                    get(proto().customizeDate()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
-                        @Override
-                        public void onValueChange(ValueChangeEvent<Boolean> event) {
-                            if (event.getValue() != null) {
-                                get(proto().asOf()).setVisible(event.getValue());
-                            }
-                        }
-                    });
-                    p.setWidget(++row, 0, new DecoratorBuilder(inject(proto().asOf())).build());
-                    get(proto().asOf()).setVisible(false);
-                    return p;
-                }
-
-                @Override
-                protected void onPopulate() {
-                    super.onPopulate();
-                    get(proto().asOf()).setVisible(getValue().customizeDate().isBooleanTrue());
-                }
-
             });
         }
 
@@ -186,9 +121,8 @@ public class UnitAvailabilityReportGadget extends AbstractGadget<UnitAvailabilit
 
             gadgetPanel = new VerticalPanel();
             gadgetPanel.add(initAsOfBannerPanel());
-            gadgetPanel.add(initFilteringConrolsPanel());
+            gadgetPanel.add(initFilterDisplayPanel());
             gadgetPanel.add(initListerWidget());
-            gadgetPanel.setCellHorizontalAlignment(controlsPanel, VerticalPanel.ALIGN_CENTER);
             gadgetPanel.setWidth("100%");
 
             return gadgetPanel;
@@ -213,6 +147,7 @@ public class UnitAvailabilityReportGadget extends AbstractGadget<UnitAvailabilit
                 @Override
                 public void onSuccess(EntitySearchResult<UnitAvailabilityStatus> result) {
                     setPageData(result.getData(), page, result.getTotalRows(), result.hasMoreData());
+                    redrawFilterDisplayPanel();
                     populateSucceded();
                 }
 
@@ -220,8 +155,7 @@ public class UnitAvailabilityReportGadget extends AbstractGadget<UnitAvailabilit
                 public void onFailure(Throwable caught) {
                     populateFailed(caught);
                 }
-            }, buildingPks, getMetadata().filterPreset().getValue(), getStatusDate(), new Vector<Sort>(getListerSortingCriteria()), pageNumber,
-                    getPageSize());
+            }, buildingPks, getMetadata().filterPreset().getValue(), getStatusDate(), new Vector<Sort>(getListerSortingCriteria()), pageNumber, getPageSize());
         }
 
         private void setAsOf(LogicalDate statusDate) {
@@ -245,71 +179,15 @@ public class UnitAvailabilityReportGadget extends AbstractGadget<UnitAvailabilit
             return asForBannerPanel.asWidget();
         }
 
-        private Widget initFilteringConrolsPanel() {
-
-            controlsPanel = new FlexTable();
-
-            filteringButtons = Arrays.asList(//@formatter:off
-                    new FilterButton(FilterPreset.VacantAndNotice, DebugIds.vacantAndNoticeFilter),
-            		new FilterButton(FilterPreset.Vacant, DebugIds.vacantFilter),
-            		new FilterButton(FilterPreset.Notice, DebugIds.noticeFilter),            
-            		new FilterButton(FilterPreset.Rented, DebugIds.rentedFilter),
-            		new FilterButton(FilterPreset.NetExposure, DebugIds.netExposureFilter)
-            );//@formatter:on
-
-            int col = -1;
-            for (ToggleButton button : filteringButtons) {
-                controlsPanel.setWidget(0, ++col, button);
-            }
-
-            return controlsPanel;
+        private Widget initFilterDisplayPanel() {
+            filterDisplayPanel = new HTML();
+            filterDisplayPanel.getElement().getStyle().setProperty("width", "100%");
+            filterDisplayPanel.getElement().getStyle().setProperty("textAlign", "center");
+            return filterDisplayPanel;
         }
 
-        /**
-         * Set the filtering buttons according to the state in metadata.
-         */
-        private void setupFilteringButtons() {
-            for (FilterButton button : filteringButtons) {
-                if (button.filterPreset == getMetadata().filterPreset().getValue()) {
-                    button.setValue(true, false);
-                } else {
-                    button.setValue(false, false);
-                }
-            }
-        }
-
-        private class FilterButton extends ToggleButton {
-
-            public final UnitAvailability.FilterPreset filterPreset;
-
-            public FilterButton(FilterPreset filterPreset, IDebugId debugId) {
-                super(new SafeHtmlBuilder().appendEscaped(filterPreset.toString()).toSafeHtml().asString());
-                this.filterPreset = filterPreset;
-                this.ensureDebugId(debugId.toString());
-                this.addClickHandler(filterButtonClickHandler);
-            }
-
-        }
-
-        private class FilterButtonClickHanlder implements ClickHandler {
-
-            @Override
-            public void onClick(ClickEvent event) {
-                for (FilterButton button : filteringButtons) {
-                    if (event.getSource().equals(button)) {
-                        button.setDown(true);
-                        getMetadata().filterPreset().setValue(button.filterPreset);
-                    } else {
-                        button.setDown(false);
-                    }
-                }
-                Scheduler.get().scheduleDeferred(new ScheduledCommand() {
-                    @Override
-                    public void execute() {
-                        populatePage(0);
-                    }
-                });
-            }
+        private void redrawFilterDisplayPanel() {
+            filterDisplayPanel.setHTML(new SafeHtmlBuilder().appendEscaped(getMetadata().filterPreset().getValue().toString()).toSafeHtml());
         }
     }
 
