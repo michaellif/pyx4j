@@ -14,9 +14,13 @@
 package com.propertyvista.crm.server.services.billing;
 
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
+import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.crm.rpc.dto.billing.BillingCycleLeaseDTO;
 import com.propertyvista.crm.rpc.services.billing.BillingCycleLeaseCrudService;
+import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 public class BillingCycleLeaseCrudServiceImpl extends AbstractCrudServiceDtoImpl<Lease, BillingCycleLeaseDTO> implements BillingCycleLeaseCrudService {
@@ -31,7 +35,10 @@ public class BillingCycleLeaseCrudServiceImpl extends AbstractCrudServiceDtoImpl
     }
 
     @Override
-    protected void enhanceListRetrieved(Lease entity, BillingCycleLeaseDTO dto) {
+    protected void enhanceRetrieved(Lease entity, BillingCycleLeaseDTO dto) {
+        EntityQueryCriteria<Bill> criteria = EntityQueryCriteria.create(Bill.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().billingAccount().id(), entity.billingAccount().getPrimaryKey()));
+        dto.bills().addAll(Persistence.service().query(criteria));
     }
 
     @Override

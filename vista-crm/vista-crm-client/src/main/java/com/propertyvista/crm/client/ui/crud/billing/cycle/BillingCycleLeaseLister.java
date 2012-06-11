@@ -24,10 +24,9 @@ public class BillingCycleLeaseLister extends ListerBase<BillingCycleLeaseDTO> {
         super(BillingCycleLeaseDTO.class, false);
         setColumnDescriptors(//@formatter:off
             new MemberColumnDescriptor.Builder(proto().lease()).build(),
-            new MemberColumnDescriptor.Builder(proto().numberOfNonConfirmedBills()).build(),
-            new MemberColumnDescriptor.Builder(proto().numberOfNonRunnedBills()).build(),
-            new MemberColumnDescriptor.Builder(proto().numberOfFailedBills()).build(),
-            new MemberColumnDescriptor.Builder(proto().numberOfBills()).build()           
+            new MemberColumnDescriptor.Builder(proto().nonConfirmedBills()).build(),
+            new MemberColumnDescriptor.Builder(proto().nonRunnedBills()).build(),
+            new MemberColumnDescriptor.Builder(proto().failedBills()).build()
         );//@formatter:on
     }
 }

@@ -17,8 +17,10 @@ import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.ExtendsDBO;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
+import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 @Transient
@@ -27,15 +29,14 @@ public interface BillingCycleLeaseDTO extends IEntity {
 
     Lease lease();
 
-    @Caption(name = "# Of Non Confirmed Bills")
-    IPrimitive<Integer> numberOfNonConfirmedBills();
+    IList<Bill> bills();
 
-    @Caption(name = "# Of Non Runned Bills")
-    IPrimitive<Integer> numberOfNonRunnedBills();
+    @Caption(name = "# Of Non-Confirmed Bills")
+    IPrimitive<Integer> nonConfirmedBills();
+
+    @Caption(name = "# Of Non-Runned Bills")
+    IPrimitive<Integer> nonRunnedBills();
 
     @Caption(name = "# Of Failed Bills")
-    IPrimitive<Integer> numberOfFailedBills();
-
-    @Caption(name = "# Of Bills")
-    IPrimitive<Integer> numberOfBills();
+    IPrimitive<Integer> failedBills();
 }

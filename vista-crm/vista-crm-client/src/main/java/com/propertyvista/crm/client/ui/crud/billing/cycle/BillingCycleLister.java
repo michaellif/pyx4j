@@ -27,7 +27,7 @@ public class BillingCycleLister extends ListerBase<BillingCycleDTO> {
             new MemberColumnDescriptor.Builder(proto().billingCycleStartDate()).build(),
             new MemberColumnDescriptor.Builder(proto().billingCycleEndDate()).build(),
             new MemberColumnDescriptor.Builder(proto().executionTargetDate()).build(),
-            new MemberColumnDescriptor.Builder(proto().numberOfNonConfirmedBills()).build()           
+            new MemberColumnDescriptor.Builder(proto().nonConfirmedBills()).build()           
         );//@formatter:on
     }
 }

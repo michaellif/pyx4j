@@ -25,5 +25,11 @@ import com.propertyvista.domain.financial.billing.BillingCycle;
 public interface BillingCycleDTO extends BillingCycle {
 
     @Caption(name = "# Of Non Confirmed Bills")
-    IPrimitive<Integer> numberOfNonConfirmedBills();
+    IPrimitive<Integer> nonConfirmedBills();
+
+    @Caption(name = "# Of Non Runned Bills")
+    IPrimitive<Integer> nonRunnedBills();
+
+    @Caption(name = "# Of Failed Bills")
+    IPrimitive<Integer> failedBills();
 }

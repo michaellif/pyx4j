@@ -13,29 +13,13 @@
  */
 package com.propertyvista.crm.client.ui.crud.billing.cycle;
 
-import com.pyx4j.site.client.ui.crud.lister.IListerView;
-import com.pyx4j.site.client.ui.crud.lister.ListerInternalViewImplBase;
-
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.crm.rpc.dto.billing.BillDataDTO;
 import com.propertyvista.crm.rpc.dto.billing.BillingCycleLeaseDTO;
 
 public class BillingCycleLeaseViewImpl extends CrmViewerViewImplBase<BillingCycleLeaseDTO> implements BillingCycleLeaseView {
 
-    private final IListerView<BillDataDTO> billLister;
-
     public BillingCycleLeaseViewImpl() {
-        super(CrmSiteMap.Finance.BillingCycle.Lease.class, true);
-
-        billLister = new ListerInternalViewImplBase<BillDataDTO>(new BillingCycleBillLister());
-
-        // set main form here:
-        setForm(new BillingCycleLeaseForm());
-    }
-
-    @Override
-    public IListerView<BillDataDTO> getBillListerView() {
-        return billLister;
+        super(CrmSiteMap.Finance.BillingCycle.Lease.class, new BillingCycleLeaseForm(), true);
     }
 }

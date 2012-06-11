@@ -14,16 +14,14 @@
 package com.propertyvista.crm.client.ui.crud.billing.cycle;
 
 import com.pyx4j.site.client.ui.crud.form.IViewerView;
-import com.pyx4j.site.client.ui.crud.lister.IListerView;
 
-import com.propertyvista.crm.rpc.dto.billing.BillDataDTO;
 import com.propertyvista.crm.rpc.dto.billing.BillingCycleLeaseDTO;
+import com.propertyvista.domain.financial.billing.Bill;
 
 public interface BillingCycleLeaseView extends IViewerView<BillingCycleLeaseDTO> {
 
     interface Presenter extends IViewerView.Presenter {
 
+        void viewBill(Bill bill);
     }
-
-    IListerView<BillDataDTO> getBillListerView();
 }
