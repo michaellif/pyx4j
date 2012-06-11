@@ -139,6 +139,8 @@ public class BillingLifecycleManager {
     private static void appendStats(StatisticsRecord dynamicStatisticsRecord, BillCreationResult result) {
         if (result.getStatus() == BillCreationResult.Status.created) {
             StatisticsUtils.addProcessed(dynamicStatisticsRecord, 1);
+            Double amountProcessed = dynamicStatisticsRecord.amountProcessed().getValue();
+            dynamicStatisticsRecord.amountProcessed().setValue(amountProcessed != null ? amountProcessed : 0 + result.getTotalDueAmount().doubleValue());
         } else {
             StatisticsUtils.addFailed(dynamicStatisticsRecord, 1);
         }

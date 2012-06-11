@@ -13,6 +13,8 @@
  */
 package com.propertyvista.biz.financial.billing;
 
+import java.math.BigDecimal;
+
 import com.propertyvista.domain.financial.billing.Bill;
 
 public class BillCreationResult {
@@ -25,6 +27,8 @@ public class BillCreationResult {
 
     private String message;
 
+    private BigDecimal totalDueAmount;
+
     public BillCreationResult(Bill bill) {
         switch (bill.billStatus().getValue()) {
         case Failed:
@@ -32,6 +36,7 @@ public class BillCreationResult {
             break;
         case Finished:
             status = Status.created;
+            totalDueAmount = bill.totalDueAmount().getValue();
             break;
         }
     }
@@ -47,5 +52,9 @@ public class BillCreationResult {
 
     public String getMessage() {
         return message;
+    }
+
+    public BigDecimal getTotalDueAmount() {
+        return totalDueAmount;
     }
 }
