@@ -174,7 +174,8 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         if (persistenceContext == null) {
             threadSessions.set(new PersistenceContext(connectionProvider, TransactionType.AutoCommit));
         } else {
-            assert (persistenceContext.isExplicitTransaction()) : "PersistenceContext leftover detected ";
+            assert (persistenceContext.isExplicitTransaction()) : "PersistenceContext leftover detected, Context open from "
+                    + persistenceContext.getContextOpenFrom();
         }
     }
 

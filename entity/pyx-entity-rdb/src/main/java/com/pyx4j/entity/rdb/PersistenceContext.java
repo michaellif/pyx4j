@@ -30,6 +30,7 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Key;
+import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.server.Trace;
 import com.pyx4j.entity.rdb.dialect.Dialect;
 import com.pyx4j.entity.server.NamespaceNotFoundException;
@@ -43,6 +44,8 @@ public class PersistenceContext {
     private final ConnectionProvider connectionProvider;
 
     private final TransactionType transactionType;
+
+    private final String contextOpenFrom;
 
     private Connection connection = null;
 
@@ -72,6 +75,15 @@ public class PersistenceContext {
     PersistenceContext(ConnectionProvider connectionProvider, TransactionType transactionType) {
         this.connectionProvider = connectionProvider;
         this.transactionType = transactionType;
+        if (ServerSideConfiguration.isStartedUnderJvmDebugMode()) {
+            this.contextOpenFrom = Trace.getCallOrigin(EntityPersistenceServiceRDB.class);
+        } else {
+            this.contextOpenFrom = "n/a";
+        }
+    }
+
+    String getContextOpenFrom() {
+        return contextOpenFrom;
     }
 
     public boolean isExplicitTransaction() {
@@ -157,7 +169,11 @@ public class PersistenceContext {
 
     public void setUncommittedChanges() {
         this.uncommittedChanges = true;
-        this.uncommittedChangesFrom = Trace.getCallOrigin(EntityPersistenceServiceRDB.class);
+        if (ServerSideConfiguration.isStartedUnderJvmDebugMode()) {
+            this.uncommittedChangesFrom = Trace.getCallOrigin(EntityPersistenceServiceRDB.class);
+        } else {
+            this.uncommittedChangesFrom = "n/a";
+        }
         this.transactionStart = System.currentTimeMillis();
     }
 
