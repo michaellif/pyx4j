@@ -1,5 +1,7 @@
 name
 welcome
+start
+shared
 propertyvista
 starlight
 static
@@ -8,6 +10,7 @@ www*
 internal
 interface
 interfaces
+secure-interfaces
 admin
 _admin_
 _dba*
