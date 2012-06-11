@@ -123,6 +123,7 @@ public class BillingUtils {
         dto.withdrawalLineItems().total().set(bill.withdrawalAmount());
         dto.rejectedPaymentLineItems().total().set(bill.paymentRejectedAmount());
         dto.paymentLineItems().total().set(bill.paymentReceivedAmount());
+        dto.productCreditLineItems().total().set(bill.productCreditAmount());
         // set detail lists
         for (InvoiceLineItem lineItem : bill.lineItems()) {
             // *** Current Bill list values ***
