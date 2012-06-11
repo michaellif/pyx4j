@@ -61,13 +61,13 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
 
     public void enforceBehaviour() {
         boolean isManager = SecurityController.checkBehavior(VistaCrmBehavior.Organization);
+        boolean isSelfManged = ClientContext.getUserVisit().getPrincipalPrimaryKey().equals(getValue().user().getPrimaryKey());
 
         get(proto().enabled()).setVisible(isManager);
         get(proto().requireChangePasswordOnNextLogIn()).setVisible(isManager);
 
         get(proto().accessAllBuildings()).setViewable(!isManager);
-//        get(proto().roles()).setViewable(!isManager);
-//        get(proto().roles()).setEditable(isManager);
+        get(proto().roles()).setEditable(!isSelfManged);
 
         get(proto().portfolios()).setViewable(!isManager);
         get(proto().portfolios()).setEditable(isManager);
