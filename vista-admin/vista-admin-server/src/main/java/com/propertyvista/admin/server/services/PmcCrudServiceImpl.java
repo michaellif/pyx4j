@@ -41,7 +41,6 @@ import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.security.OnboardingUser;
 import com.propertyvista.domain.security.VistaBasicBehavior;
 import com.propertyvista.domain.security.VistaOnboardingBehavior;
-import com.propertyvista.portal.rpc.corp.PmcAccountCreationRequest;
 import com.propertyvista.portal.server.preloader.PmcCreator;
 
 public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> implements PmcCrudService {
@@ -59,11 +58,6 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
         bind(dtoProto.onboardingAccountId(), dboProto.onboardingAccountId());
         bind(dtoProto.dnsNameAliases(), dboProto.dnsNameAliases());
         bind(dtoProto.created(), dboProto.created());
-    }
-
-    @Override
-    public void createAccount(AsyncCallback<PmcDTO> callback, PmcAccountCreationRequest request) {
-        // TODO Auto-generated method stub
     }
 
     @Override

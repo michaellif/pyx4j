@@ -20,11 +20,8 @@ import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.admin.rpc.PmcDTO;
-import com.propertyvista.portal.rpc.corp.PmcAccountCreationRequest;
 
 public interface PmcCrudService extends AbstractCrudService<PmcDTO> {
-
-    public void createAccount(AsyncCallback<PmcDTO> callback, PmcAccountCreationRequest request);
 
     public void resetCache(AsyncCallback<VoidSerializable> callback, Key entityId);
 

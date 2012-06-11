@@ -62,6 +62,7 @@ public interface PmcDTO extends IEntity {
 
     @NotNull
     @Editor(type = EditorType.password)
+    @Transient(logTransient = true)
     IPrimitive<String> password();
 
     IPrimitive<String> accountStatus_TBD();

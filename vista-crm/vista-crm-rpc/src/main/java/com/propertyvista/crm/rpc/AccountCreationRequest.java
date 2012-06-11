@@ -31,6 +31,7 @@ public interface AccountCreationRequest extends IEntity {
 
     @NotNull
     @Editor(type = EditorType.password)
+    @Transient(logTransient = true)
     IPrimitive<String> password();
 
     /**

@@ -31,11 +31,13 @@ public interface UserCredentialEditDTO extends IEntity {
     @NotNull
     @Editor(type = EditorType.password)
     @Caption(name = "Password")
+    @Transient(logTransient = true)
     IPrimitive<String> password();
 
     @NotNull
     @Editor(type = EditorType.password)
     @Caption(name = "Confirm password")
+    @Transient(logTransient = true)
     IPrimitive<String> passwordConfirm();
 
     @Caption(name = "Require to change password on next sign in")
