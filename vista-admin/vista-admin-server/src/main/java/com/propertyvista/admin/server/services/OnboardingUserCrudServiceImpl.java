@@ -10,10 +10,17 @@ package com.propertyvista.admin.server.services;
 
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.server.contexts.NamespaceManager;
 
+import com.propertyvista.admin.domain.pmc.Pmc;
+import com.propertyvista.admin.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.admin.domain.security.OnboardingUserCredential;
 import com.propertyvista.admin.rpc.OnboardingUserDTO;
 import com.propertyvista.admin.rpc.services.OnboardingUserCrudService;
+import com.propertyvista.domain.company.Employee;
+import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.server.common.security.PasswordEncryptor;
 
 public class OnboardingUserCrudServiceImpl extends AbstractCrudServiceDtoImpl<OnboardingUserCredential, OnboardingUserDTO> implements OnboardingUserCrudService {
@@ -56,6 +63,30 @@ public class OnboardingUserCrudServiceImpl extends AbstractCrudServiceDtoImpl<On
         }
         dbo.setPrimaryKey(dbo.user().getPrimaryKey());
         Persistence.service().merge(dbo);
-    }
 
+        if (dbo.pmc().getPrimaryKey() != null) {
+            Pmc pmc = Persistence.service().retrieve(Pmc.class, dbo.pmc().getPrimaryKey());
+
+            if (pmc.status().getValue() != PmcStatus.Created) {
+                // Update existing CRM user
+
+                final String namespace = NamespaceManager.getNamespace();
+                try {
+                    NamespaceManager.setNamespace(pmc.namespace().getValue());
+
+                    CrmUser crmUser = Persistence.service().retrieve(CrmUser.class, dbo.crmUser().getValue());
+                    crmUser.email().setValue(dbo.user().email().getValue());
+                    Persistence.service().persist(crmUser);
+
+                    EntityQueryCriteria<Employee> criteria = EntityQueryCriteria.create(Employee.class);
+                    criteria.add(PropertyCriterion.eq(criteria.proto().user(), dbo.crmUser().getValue()));
+                    Employee emp = Persistence.service().retrieve(criteria);
+                    emp.email().setValue(dbo.user().email().getValue());
+                    Persistence.service().persist(emp);
+                } finally {
+                    NamespaceManager.setNamespace(namespace);
+                }
+            }
+        }
+    }
 }
