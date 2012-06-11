@@ -16,6 +16,9 @@ package com.propertyvista.biz.financial.payment;
 import java.util.EnumSet;
 import java.util.concurrent.Callable;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
@@ -41,6 +44,8 @@ import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.server.jobs.TaskRunner;
 
 public class PadProcessor {
+
+    private static final Logger log = LoggerFactory.getLogger(PadProcessor.class);
 
     void queuePayment(PaymentRecord paymentRecord) {
         Persistence.service().retrieve(paymentRecord.merchantAccount());
@@ -145,6 +150,8 @@ public class PadProcessor {
         Persistence.service().merge(paymentRecord);
 
         ServerSideFactory.create(ARFacade.class).rejectPayment(paymentRecord, false);
+
+        log.info("Payment {} {} Rejected", paymentRecord.id().getValue(), paymentRecord.amount().getValue());
 
         TaskRunner.runInAdminNamespace(new Callable<Void>() {
             @Override
@@ -296,6 +303,7 @@ public class PadProcessor {
         paymentRecord.transactionErrorMessage().setValue(debitRecord.reasonCode().getValue() + " " + debitRecord.reasonText().getValue());
 
         Persistence.service().merge(paymentRecord);
+        log.info("Payment {} {} Rejected", paymentRecord.id().getValue(), paymentRecord.amount().getValue());
 
         ServerSideFactory.create(ARFacade.class).rejectPayment(paymentRecord, true);
     }
@@ -311,6 +319,7 @@ public class PadProcessor {
         paymentRecord.lastStatusChangeDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
         paymentRecord.finalizeDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
         Persistence.service().merge(paymentRecord);
+        log.info("Payment {} {} Cleared", paymentRecord.id().getValue(), paymentRecord.amount().getValue());
     }
 
     private void reconciliationReturnedPayment(AggregatedTransfer at, PadReconciliationDebitRecord debitRecord, PaymentRecord paymentRecord) {
@@ -325,5 +334,7 @@ public class PadProcessor {
         paymentRecord.finalizeDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
         Persistence.service().merge(paymentRecord);
         ServerSideFactory.create(ARFacade.class).rejectPayment(paymentRecord, false);
+
+        log.info("Payment {} {} Returned", paymentRecord.id().getValue(), paymentRecord.amount().getValue());
     }
 }

@@ -23,11 +23,9 @@ import java.util.Properties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.pyx4j.config.server.ApplicationVersion;
-
 public class PadCaledonDev {
 
-    private static final Logger log = LoggerFactory.getLogger(ApplicationVersion.class);
+    private static final Logger log = LoggerFactory.getLogger(PadCaledonDev.class);
 
     static File getFile() {
         return new File(".", "caledon_file_creation_number.properties");
