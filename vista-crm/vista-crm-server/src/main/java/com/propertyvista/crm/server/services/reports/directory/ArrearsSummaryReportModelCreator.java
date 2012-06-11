@@ -13,6 +13,8 @@
  */
 package com.propertyvista.crm.server.services.reports.directory;
 
+import static com.propertyvista.crm.server.services.reports.Util.asStubs;
+
 import java.text.SimpleDateFormat;
 import java.util.Vector;
 
@@ -22,7 +24,6 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.report.JasperReportModel;
 import com.pyx4j.entity.rpc.EntitySearchResult;
-import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -33,7 +34,6 @@ import com.propertyvista.crm.server.services.reports.util.DynamicColumnWidthRepo
 import com.propertyvista.domain.dashboard.gadgets.type.ArrearsSummaryGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
 import com.propertyvista.domain.financial.billing.AgingBuckets;
-import com.propertyvista.domain.property.asset.building.Building;
 
 public class ArrearsSummaryReportModelCreator implements GadgetReportModelCreator {
 
@@ -77,17 +77,6 @@ public class ArrearsSummaryReportModelCreator implements GadgetReportModelCreato
             }
         };
         new ArrearsReportServiceImpl().summary(serviceCallback, asStubs(selectedBuildings), asOf);
-    }
-
-    // TODO this has to be refactored on more generic level (for now it's just a HACK)
-    private static Vector<Building> asStubs(Vector<Key> selectedBuildings) {
-        Vector<Building> stubs = new Vector<Building>();
-        for (Key key : selectedBuildings) {
-            Building stub = EntityFactory.create(Building.class);
-            stub.setPrimaryKey(key);
-            stub.setAttachLevel(AttachLevel.IdOnly);
-        }
-        return stubs;
     }
 
 }

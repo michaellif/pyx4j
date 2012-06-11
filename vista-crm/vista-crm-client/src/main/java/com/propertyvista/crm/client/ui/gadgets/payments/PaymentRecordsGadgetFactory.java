@@ -14,10 +14,10 @@
 package com.propertyvista.crm.client.ui.gadgets.payments;
 
 import static com.propertyvista.crm.client.ui.gadgets.util.ColumnDescriptorConverter.asColumnDesciptorEntityList;
+import static com.propertyvista.svg.gadgets.util.LabelHelper.makeListView;
 
 import java.util.Arrays;
 import java.util.EnumSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
@@ -178,18 +178,6 @@ public class PaymentRecordsGadgetFactory extends AbstractGadget<PaymentRecordsGa
             titlePanel.getElement().getStyle().setProperty("textAlign", "center");
         }
 
-        private static String makeListView(Iterable<?> col) {
-            StringBuilder viewBuilder = new StringBuilder();
-            Iterator<?> i = col.iterator();
-            if (i.hasNext()) {
-                viewBuilder.append(i.next().toString());
-            }
-            while (i.hasNext()) {
-                viewBuilder.append(", ").append(i.next().toString());
-            }
-            return viewBuilder.toString();
-
-        }
     }
 
     public PaymentRecordsGadgetFactory() {

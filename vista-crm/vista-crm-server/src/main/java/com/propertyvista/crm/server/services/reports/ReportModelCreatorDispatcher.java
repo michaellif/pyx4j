@@ -27,6 +27,8 @@ import com.propertyvista.crm.server.services.reports.directory.ArrearsStatusRepo
 import com.propertyvista.crm.server.services.reports.directory.ArrearsSummaryReportModelCreator;
 import com.propertyvista.crm.server.services.reports.directory.ArrearsYoyAnalysisChartGadgetReportModelCreator;
 import com.propertyvista.crm.server.services.reports.directory.BuildingListerReportCreator;
+import com.propertyvista.crm.server.services.reports.directory.PaymentRecordsReportModelCreator;
+import com.propertyvista.crm.server.services.reports.directory.PaymentsSummaryReportModelCreator;
 import com.propertyvista.crm.server.services.reports.directory.TurnoverAnalysisChartReportModelCreator;
 import com.propertyvista.crm.server.services.reports.directory.UnitAvailabilityStatusReportCreator;
 import com.propertyvista.crm.server.services.reports.directory.UnitAvailabilitySummaryReportCreator;
@@ -36,6 +38,8 @@ import com.propertyvista.domain.dashboard.gadgets.type.ArrearsYOYAnalysisChartMe
 import com.propertyvista.domain.dashboard.gadgets.type.AvailabilitySummary;
 import com.propertyvista.domain.dashboard.gadgets.type.BuildingLister;
 import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
+import com.propertyvista.domain.dashboard.gadgets.type.PaymentRecordsGadgetMetadata;
+import com.propertyvista.domain.dashboard.gadgets.type.PaymentsSummaryGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.TurnoverAnalysisMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.UnitAvailability;
 
@@ -59,6 +63,9 @@ public class ReportModelCreatorDispatcher implements GadgetReportModelCreator {
         map.put(ArrearsStatusGadgetMetadata.class, new ArrearsStatusReportModelCreator());
         map.put(ArrearsSummaryGadgetMetadata.class, new ArrearsSummaryReportModelCreator());
         map.put(ArrearsYOYAnalysisChartMetadata.class, new ArrearsYoyAnalysisChartGadgetReportModelCreator());
+
+        map.put(PaymentRecordsGadgetMetadata.class, new PaymentRecordsReportModelCreator());
+        map.put(PaymentsSummaryGadgetMetadata.class, new PaymentsSummaryReportModelCreator());
 
         // add more GadgetReportModelCreators here
     }

@@ -13,7 +13,6 @@
  */
 package com.propertyvista.crm.server.services.reports.directory;
 
-import java.text.SimpleDateFormat;
 import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -29,6 +28,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.crm.server.services.dashboard.gadgets.AvailabilityReportServiceImpl;
 import com.propertyvista.crm.server.services.reports.DynamicTableTemplateReportModelBuilder;
 import com.propertyvista.crm.server.services.reports.GadgetReportModelCreator;
+import com.propertyvista.crm.server.services.reports.ReportsCommon;
 import com.propertyvista.crm.server.services.reports.util.DynamicColumnWidthReportTableTemplateBuilder;
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatus;
 import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
@@ -44,8 +44,6 @@ public class UnitAvailabilityStatusReportCreator implements GadgetReportModelCre
 
     private final static I18n i18n = I18n.get(UnitAvailabilityStatusReportCreator.class);
 
-    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd/MMM/yyyy");
-
     @Override
     public void createReportModel(final AsyncCallback<JasperReportModel> callback, GadgetMetadata gadgetMetadata, Vector<Key> selectedBuildings) {
 
@@ -53,6 +51,8 @@ public class UnitAvailabilityStatusReportCreator implements GadgetReportModelCre
         final LogicalDate asOf = metadata.customizeDate().isBooleanTrue() ? metadata.asOf().getValue() : new LogicalDate();
 
         new AvailabilityReportServiceImpl().unitStatusList(new AsyncCallback<EntitySearchResult<UnitAvailabilityStatus>>() {
+
+
 
 
 
@@ -69,7 +69,7 @@ public class UnitAvailabilityStatusReportCreator implements GadgetReportModelCre
                         .template(template)
                         .param(ReportParams.TITLE.name(), i18n.tr("Unit Availability Status"))
                         .param(ReportParams.FILTER_CRITERIA.name(), i18n.tr("Filter Setting: {0}", metadata.filterPreset().getValue().toString()))
-                        .param(ReportParams.AS_OF.name(), i18n.tr("As of Date: {0}", DATE_FORMAT.format(asOf)))
+                        .param(ReportParams.AS_OF.name(), i18n.tr("As of Date: {0}", ReportsCommon.instance().getAsOfDateFormat().format(asOf)))
                         .data(result.getData().iterator())
                         .build());//@formatter:on
             }

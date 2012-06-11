@@ -109,6 +109,7 @@ public class PaymentReportServiceImpl implements PaymentReportService {
             criteria.add(PropertyCriterion.in(criteria.proto().paymentStatus(), paymentStatusCriteria));
         }
 
+        int totalRows = Persistence.service().count(criteria);
         // query and return the result
         ICursorIterator<PaymentRecord> i = Persistence.service().query(null, criteria, AttachLevel.Attached);
         Vector<PaymentRecordForReportDTO> paymentRecordsPageData = new Vector<PaymentRecordForReportDTO>();
@@ -117,7 +118,7 @@ public class PaymentReportServiceImpl implements PaymentReportService {
         }
 
         EntitySearchResult<PaymentRecordForReportDTO> result = new EntitySearchResult<PaymentRecordForReportDTO>();
-        result.setTotalRows(Persistence.service().count(criteria));
+        result.setTotalRows(totalRows);
         result.setData(paymentRecordsPageData);
         result.hasMoreData(result.getTotalRows() > (pageNumber * pageSize + paymentRecordsPageData.size())); // MIN(pageNumber) = 0, so the formula is correct 
 

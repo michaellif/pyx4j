@@ -13,7 +13,6 @@
  */
 package com.propertyvista.crm.server.services.reports.directory;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
@@ -26,14 +25,13 @@ import com.pyx4j.entity.report.JasperReportModel;
 
 import com.propertyvista.crm.server.services.dashboard.gadgets.AvailabilityReportServiceImpl;
 import com.propertyvista.crm.server.services.reports.GadgetReportModelCreator;
+import com.propertyvista.crm.server.services.reports.ReportsCommon;
 import com.propertyvista.crm.server.services.reports.StaticTemplateReportModelBuilder;
 import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityReportSummaryDTO;
 import com.propertyvista.domain.dashboard.gadgets.type.AvailabilitySummary;
 import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
 
 public class UnitAvailabilitySummaryReportCreator implements GadgetReportModelCreator {
-
-    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MMM-dd");
 
     protected static final String GRAPH = "GRAPH";
 
@@ -51,8 +49,8 @@ public class UnitAvailabilitySummaryReportCreator implements GadgetReportModelCr
             public void onSuccess(UnitAvailabilityReportSummaryDTO summary) {
                 List<UnitAvailabilityReportSummaryDTO> details = new ArrayList<UnitAvailabilityReportSummaryDTO>();
                 details.add(summary);
-                callback.onSuccess(new StaticTemplateReportModelBuilder(AvailabilitySummary.class).param(AS_OF, DATE_FORMAT.format(asOf))
-                        .data(details.iterator()).build());
+                callback.onSuccess(new StaticTemplateReportModelBuilder(AvailabilitySummary.class)
+                        .param(AS_OF, ReportsCommon.instance().getAsOfDateFormat().format(asOf)).data(details.iterator()).build());
             }
 
             @Override
