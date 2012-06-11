@@ -93,7 +93,7 @@ public class VistaNamespaceResolver implements NamespaceResolver {
         String pmcNamespace;
         try {
             NamespaceManager.setNamespace(VistaNamespace.adminNamespace);
-            pmcNamespace = CacheService.get(host);
+            pmcNamespace = CacheService.get("NamespaceResolver." + host);
             if (pmcNamespace == null) {
                 EntityQueryCriteria<Pmc> criteria = EntityQueryCriteria.create(Pmc.class);
                 if (namespaceProposal != null) {
@@ -113,7 +113,7 @@ public class VistaNamespaceResolver implements NamespaceResolver {
                     }
 
                     pmcNamespace = pmc.namespace().getValue();
-                    CacheService.put(host, pmcNamespace);
+                    CacheService.put("NamespaceResolver." + host, pmcNamespace);
                 }
             }
         } finally {

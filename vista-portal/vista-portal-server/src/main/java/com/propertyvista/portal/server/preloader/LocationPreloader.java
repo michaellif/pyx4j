@@ -23,7 +23,6 @@ import com.propertyvista.biz.preloader.LocationsGenerator;
 import com.propertyvista.domain.ref.City;
 import com.propertyvista.domain.ref.Country;
 import com.propertyvista.domain.ref.Province;
-import com.propertyvista.server.common.reference.SharedData;
 
 public class LocationPreloader extends AbstractDataPreloader {
 
@@ -37,9 +36,6 @@ public class LocationPreloader extends AbstractDataPreloader {
         }
 
         Persistence.service().persist(countries);
-
-        SharedData.registerCountries(countries);
-        SharedData.registerProvinces(provinces);
 
         List<City> cities = LocationsGenerator.loadCityFromFile();
         Persistence.service().persist(cities);
