@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.rpc.dto.billing;
 
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.ExtendsDBO;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
@@ -26,11 +27,15 @@ public interface BillingCycleLeaseDTO extends IEntity {
 
     Lease lease();
 
+    @Caption(name = "# Of Non Confirmed Bills")
     IPrimitive<Integer> numberOfNonConfirmedBills();
 
+    @Caption(name = "# Of Non Runned Bills")
     IPrimitive<Integer> numberOfNonRunnedBills();
 
+    @Caption(name = "# Of Failed Bills")
     IPrimitive<Integer> numberOfFailedBills();
 
+    @Caption(name = "# Of Bills")
     IPrimitive<Integer> numberOfBills();
 }

@@ -43,6 +43,7 @@ import com.propertyvista.crm.rpc.services.billing.LeaseAdjustmentCrudService;
 import com.propertyvista.crm.rpc.services.billing.PaymentCrudService;
 import com.propertyvista.crm.rpc.services.lease.LeaseCrudService;
 import com.propertyvista.domain.communication.EmailTemplateType;
+import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.dto.LeaseDTO;
@@ -65,13 +66,13 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
         super(place, LeaseViewFactory.instance(LeaseViewerView.class), (AbstractCrudService<LeaseDTO>) GWT.create(LeaseCrudService.class));
 
         billLister = new ListerActivityBase<BillDataDTO>(place, ((LeaseViewerView) getView()).getBillListerView(),
-                (AbstractCrudService<BillDataDTO>) GWT.create(BillCrudService.class), BillDataDTO.class);
+                GWT.<BillCrudService> create(BillCrudService.class), BillDataDTO.class);
 
         paymentLister = new ListerActivityBase<PaymentRecordDTO>(place, ((LeaseViewerView) getView()).getPaymentListerView(),
-                (AbstractCrudService<PaymentRecordDTO>) GWT.create(PaymentCrudService.class), PaymentRecordDTO.class);
+                GWT.<PaymentCrudService> create(PaymentCrudService.class), PaymentRecordDTO.class);
 
         leaseAdjustmentLister = new ListerActivityBase<LeaseAdjustment>(place, ((LeaseViewerView) getView()).getLeaseAdjustmentListerView(),
-                (AbstractCrudService<LeaseAdjustment>) GWT.create(LeaseAdjustmentCrudService.class), LeaseAdjustment.class);
+                GWT.<LeaseAdjustmentCrudService> create(LeaseAdjustmentCrudService.class), LeaseAdjustment.class);
     }
 
     @Override
@@ -83,7 +84,7 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
         populateLeaseAdjustments(result);
     }
 
-    protected void populateBills(LeaseDTO result) {
+    protected void populateBills(Lease result) {
         List<Criterion> preDefinedFilters = new ArrayList<Criterion>();
         preDefinedFilters.add(PropertyCriterion.eq(EntityFactory.getEntityPrototype(BillDataDTO.class).bill().billingAccount().id(), result.billingAccount()
                 .getPrimaryKey()));
@@ -91,7 +92,7 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
         billLister.populate();
     }
 
-    protected void populatePayments(LeaseDTO result) {
+    protected void populatePayments(Lease result) {
         List<Criterion> preDefinedFilters = new ArrayList<Criterion>();
         preDefinedFilters.add(PropertyCriterion.eq(EntityFactory.getEntityPrototype(PaymentRecordDTO.class).billingAccount().id(), result.billingAccount()
                 .getPrimaryKey()));
@@ -100,7 +101,7 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
         paymentLister.populate();
     }
 
-    protected void populateLeaseAdjustments(LeaseDTO result) {
+    protected void populateLeaseAdjustments(Lease result) {
         List<Criterion> preDefinedFilters = new ArrayList<Criterion>();
         preDefinedFilters.add(PropertyCriterion.eq(EntityFactory.getEntityPrototype(LeaseAdjustment.class).billingAccount().id(), result.billingAccount()
                 .getPrimaryKey()));

@@ -34,8 +34,8 @@ public class BillingCycleLeaseViewImpl extends CrmViewerViewImplBase<BillingCycl
         super(CrmSiteMap.Finance.BillingCycle.Lease.class, true);
 
         billLister = new ListerInternalViewImplBase<BillDataDTO>(new BillLister());
-
         paymentLister = new ListerInternalViewImplBase<PaymentRecordDTO>(new PaymentLister());
+        paymentLister.getLister().getDataTablePanel().getAddButton().setVisible(false);
 
         // set main form here:
         setForm(new BillingCycleLeaseForm());

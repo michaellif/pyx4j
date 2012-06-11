@@ -14,11 +14,17 @@
 package com.propertyvista.crm.client.ui.crud.billing.cycle;
 
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.ScrollPanel;
+
+import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.rpc.dto.billing.BillingCycleLeaseDTO;
 
 public class BillingCycleLeaseForm extends CrmEntityForm<BillingCycleLeaseDTO> {
+
+    private static final I18n i18n = I18n.get(BillingCycleLeaseForm.class);
 
     public BillingCycleLeaseForm() {
         super(BillingCycleLeaseDTO.class);
@@ -26,8 +32,16 @@ public class BillingCycleLeaseForm extends CrmEntityForm<BillingCycleLeaseDTO> {
 
     @Override
     public IsWidget createContent() {
-        // TODO Auto-generated method stub
-        return null;
+        FormFlexPanel main = new FormFlexPanel();
+        int row = -1;
+
+        main.setH2(++row, 0, 1, i18n.tr("Bills"));
+        main.setWidget(++row, 0, ((BillingCycleLeaseView) getParentView()).getBillListerView().asWidget());
+
+        main.setH2(++row, 0, 1, i18n.tr("Payments"));
+        main.setWidget(++row, 0, ((BillingCycleLeaseView) getParentView()).getPaymentListerView().asWidget());
+
+        return new ScrollPanel(main);
     }
 
 }
