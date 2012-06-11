@@ -67,8 +67,8 @@ public class BillingCycleLeaseForm extends CrmEntityForm<BillingCycleLeaseDTO> {
         public List<EntityFolderColumnDescriptor> columns() {
             return Arrays.asList(//@formatter:off
                     new EntityFolderColumnDescriptor(proto().totalDueAmount(), "10em"),
-                    new EntityFolderColumnDescriptor(proto().dueDate(), "10em"),
-                    new EntityFolderColumnDescriptor(proto().executionDate(), "10em"),
+                    new EntityFolderColumnDescriptor(proto().dueDate(), "9em"),
+                    new EntityFolderColumnDescriptor(proto().executionDate(), "9em"),
                     new EntityFolderColumnDescriptor(proto().billStatus(), "10em")
                     ); //@formatter:on
         }

@@ -36,9 +36,14 @@ public class BillingCycleLeaseCrudServiceImpl extends AbstractCrudServiceDtoImpl
 
     @Override
     protected void enhanceRetrieved(Lease entity, BillingCycleLeaseDTO dto) {
+        enhanceListRetrieved(entity, dto);
         EntityQueryCriteria<Bill> criteria = EntityQueryCriteria.create(Bill.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().billingAccount().id(), entity.billingAccount().getPrimaryKey()));
         dto.bills().addAll(Persistence.service().query(criteria));
+    }
+
+    @Override
+    protected void enhanceListRetrieved(Lease entity, BillingCycleLeaseDTO dto) {
     }
 
     @Override
