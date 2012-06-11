@@ -15,6 +15,7 @@ package com.propertyvista.portal.server.preloader;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 import com.propertvista.generator.LeaseGenerator;
 
@@ -43,11 +44,6 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
         int numCreatedWithBilling = 0;
 
         LeaseGenerator generator = new LeaseGenerator(config());
-
-        // Start creating leases from 4 years ago
-        Calendar fourYearsAgo = Calendar.getInstance();
-        fourYearsAgo.setTime(new Date());
-        fourYearsAgo.add(Calendar.YEAR, -4);
 
         AptUnitSource aptUnitSource = new AptUnitSource(1);
 
@@ -80,7 +76,18 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
                 //TODO
                 // ServerSideFactory.create(LeaseFacade.class).activate(lease.getPrimaryKey());
             } else {
-                LeaseLifecycleSimBuilder simBuilder = LeaseLifecycleSim.sim().start(new LogicalDate(fourYearsAgo.getTime()));
+                LeaseLifecycleSimBuilder simBuilder = LeaseLifecycleSim.sim();
+                // create simulation events that happen between 4 years ago, and and the end of the previous month 
+                Calendar cal = new GregorianCalendar();
+                cal.setTime(new Date());
+                cal.add(Calendar.YEAR, -4);
+
+                simBuilder.start(new LogicalDate(cal.getTime()));
+                cal.setTime(new Date());
+                cal.add(Calendar.MONTH, -1);
+                cal.set(Calendar.DAY_OF_MONTH, cal.getActualMaximum(Calendar.DAY_OF_MONTH));
+
+                simBuilder.end(new LogicalDate(cal.getTime()));
                 if (numCreatedWithBilling < MAX_NUM_OF_LEASES_WITH_SIM_BILLING) {
                     ++numCreatedWithBilling;
                     simBuilder.runBilling();
