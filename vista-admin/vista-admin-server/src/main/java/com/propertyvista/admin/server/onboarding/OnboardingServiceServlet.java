@@ -94,38 +94,44 @@ public class OnboardingServiceServlet extends HttpServlet {
             return;
         }
 
-        ResponseMessageIO rm;
+        Throwable processingError = null;
+        ResponseMessageIO.StatusCode processingStatusCode = null;
+        ResponseMessageIO responseMessage = null;
         try {
             try {
                 if (!OnboardingSecurity.enter(message)) {
-                    replyWithStatusCode(response, ResponseMessageIO.StatusCode.AuthenticationFailed, null);
-                    return;
+                    processingStatusCode = ResponseMessageIO.StatusCode.AuthenticationFailed;
                 }
             } catch (Throwable e) {
                 log.error("Error", e);
-                replyWithStatusCode(response, ResponseMessageIO.StatusCode.SystemDown, e);
-                return;
+                processingError = e;
+                processingStatusCode = ResponseMessageIO.StatusCode.SystemDown;
             }
 
+            if (processingStatusCode == null) {
+                try {
+                    responseMessage = pp.execute(message);
+                } catch (Throwable e) {
+                    log.error("Error", e);
+                    processingError = e;
+                    processingStatusCode = ResponseMessageIO.StatusCode.SystemError;
+                }
+            }
+        } finally {
+            OnboardingSecurity.exit();
+        }
+        // Do not send session token, All write to http goes here.
+        if ((processingStatusCode != null) || (responseMessage == null)) {
+            replyWithStatusCode(response, processingStatusCode, processingError);
+        } else {
             try {
-                rm = pp.execute(message);
+                log.info("reply {}", responseMessage);
+                response.setContentType("text/xml");
+                replyWith(response, responseMessage);
             } catch (Throwable e) {
                 log.error("Error", e);
                 replyWithStatusCode(response, ResponseMessageIO.StatusCode.SystemError, e);
-                return;
             }
-
-        } finally {
-            OnboardingSecurity.exit(); // Logout in order not to send session token
-        }
-
-        try {
-            log.info("reply {}", rm);
-            response.setContentType("text/xml");
-            replyWith(response, rm);
-        } catch (Throwable e) {
-            log.error("Error", e);
-            replyWithStatusCode(response, ResponseMessageIO.StatusCode.SystemError, e);
         }
 
     }

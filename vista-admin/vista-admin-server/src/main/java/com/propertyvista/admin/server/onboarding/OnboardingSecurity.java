@@ -37,22 +37,16 @@ public class OnboardingSecurity {
 
     public static boolean enter(final RequestMessageIO requestMessage) {
         try {
-            //AbstractAntiBot.assertLogin(requestMessage.interfaceEntity().getValue(), null);
-
             AuthenticationRequest request = EntityFactory.create(AuthenticationRequest.class);
             request.email().setValue(requestMessage.interfaceEntity().getValue());
             request.password().setValue(requestMessage.interfaceEntityPassword().getValue());
-
-            if ("rossul".equals(request.email().getValue())) {
-                request.email().setValue("romans@rossul.com");
-            }
 
             final AtomicBoolean rc = new AtomicBoolean(false);
             // This does the actual authentication; will throw an exception in case of failure
             LocalService.create(AdminAuthenticationService.class).authenticate(new AsyncCallback<AuthenticationResponse>() {
                 @Override
                 public void onFailure(Throwable caught) {
-                    log.error("Authentication error for interfaceEntity: " + requestMessage.interfaceEntity().getValue());
+                    log.error("Authentication error for interfaceEntity {} ", requestMessage.interfaceEntity().getValue());
                     rc.set(false);
                 }
 
@@ -65,7 +59,7 @@ public class OnboardingSecurity {
 
             return rc.get();
         } catch (Throwable e) {
-            log.error("", e);
+            log.error("Onboarding login error", e);
             return false;
         }
     }
@@ -75,12 +69,11 @@ public class OnboardingSecurity {
 
             @Override
             public void onFailure(Throwable caught) {
-                log.error(caught.getMessage());
+                log.error("logout error", caught);
             }
 
             @Override
             public void onSuccess(AuthenticationResponse result) {
-
             }
         });
     }
