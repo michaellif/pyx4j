@@ -45,16 +45,19 @@ public interface PasswordChangeRequest extends IEntity {
     @NotNull
     @Editor(type = EditorType.password)
     @Caption(name = "Current Password")
+    @Transient(logTransient = true)
     IPrimitive<String> currentPassword();
 
     @NotNull
     @Editor(type = EditorType.password)
     @Caption(name = "New Password")
+    @Transient(logTransient = true)
     IPrimitive<String> newPassword();
 
     @NotNull
     @Editor(type = EditorType.password)
     @Caption(name = "Confirm New Password")
+    @Transient(logTransient = true)
     IPrimitive<String> newPasswordConfirm();
 
     /**

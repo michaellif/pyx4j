@@ -43,6 +43,7 @@ public interface AuthenticationRequest extends IEntity {
 
     @Editor(type = EditorType.password)
     @NotNull
+    @Transient(logTransient = true)
     IPrimitive<String> password();
 
     @Caption(name = "Remember Me")
