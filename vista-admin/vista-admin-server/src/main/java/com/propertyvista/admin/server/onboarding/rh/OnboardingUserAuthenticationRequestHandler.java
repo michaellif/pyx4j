@@ -52,7 +52,6 @@ public class OnboardingUserAuthenticationRequestHandler extends AbstractRequestH
 
     @Override
     public ResponseIO execute(OnboardingUserAuthenticationRequestIO request) {
-
         OnboardingUserAuthenticationResponseIO response = EntityFactory.create(OnboardingUserAuthenticationResponseIO.class);
         response.success().setValue(Boolean.TRUE);
 

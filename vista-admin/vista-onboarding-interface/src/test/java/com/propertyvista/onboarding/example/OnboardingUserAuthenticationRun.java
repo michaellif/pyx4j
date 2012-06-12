@@ -55,8 +55,8 @@ public class OnboardingUserAuthenticationRun {
          */
         OnboardingUserAuthenticationRequest authRequest = new OnboardingUserAuthenticationRequest();
         {
-            authRequest.email = "1339127428245@test.com";//createRequest.email;
-            authRequest.password = "pwd~1339127428245";//createRequest.password;
+            authRequest.email = "vista.equifax@rossul.com";//createRequest.email;
+            authRequest.password = "vista.equifax@rossul.com";//createRequest.password;
 //            authRequest.captcha = new Captcha();
 //            authRequest.captcha.challenge = "123";
 //            authRequest.captcha.response = "rr";

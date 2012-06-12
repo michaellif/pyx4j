@@ -40,7 +40,9 @@ public class DemoData {
 
         EMP("e", 10),
 
-        ADMIN("a", 2);
+        ADMIN("a", 2),
+
+        ONB("o", 2);
 
         private final String namePrefix;
 

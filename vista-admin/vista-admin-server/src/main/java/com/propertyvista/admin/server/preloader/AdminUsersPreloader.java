@@ -24,7 +24,7 @@ import com.propertyvista.domain.security.AdminUser;
 import com.propertyvista.domain.security.VistaAdminBehavior;
 import com.propertyvista.server.common.security.PasswordEncryptor;
 
-class AminUsersPreloader extends AbstractDataPreloader {
+class AdminUsersPreloader extends AbstractDataPreloader {
 
     public static AdminUser createAdminUser(String name, String email, String password, VistaAdminBehavior behaivior) {
         AdminUser user = EntityFactory.create(AdminUser.class);

@@ -15,6 +15,7 @@ package com.propertyvista.portal.server.preloader;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,16 +27,23 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.server.contexts.NamespaceManager;
 
+import com.propertyvista.admin.domain.pmc.Pmc;
+import com.propertyvista.admin.domain.security.OnboardingUserCredential;
 import com.propertyvista.domain.DemoData;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.security.CrmRole;
 import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.security.CustomerUser;
+import com.propertyvista.domain.security.OnboardingUser;
+import com.propertyvista.domain.security.VistaOnboardingBehavior;
 import com.propertyvista.portal.server.preloader.util.BaseVistaDevDataPreloader;
+import com.propertyvista.preloader.OnboardingUserPreloader;
 import com.propertyvista.server.common.security.PasswordEncryptor;
 import com.propertyvista.server.domain.security.CrmUserCredential;
 import com.propertyvista.server.domain.security.CustomerUserCredential;
+import com.propertyvista.server.jobs.TaskRunner;
 
 public class UserPreloader extends BaseVistaDevDataPreloader {
 
@@ -70,7 +78,7 @@ public class UserPreloader extends BaseVistaDevDataPreloader {
         return user;
     }
 
-    public static CrmUser createCrmUser(String name, String email, String password, CrmRole... roles) {
+    public static CrmUser createCrmUser(String name, String email, String password, OnboardingUser onbUser, CrmRole... roles) {
         if (!ApplicationMode.isDevelopment()) {
             EntityQueryCriteria<CrmUser> criteria = EntityQueryCriteria.create(CrmUser.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().email(), email));
@@ -96,6 +104,9 @@ public class UserPreloader extends BaseVistaDevDataPreloader {
         credential.accessAllBuildings().setValue(Boolean.TRUE);
         credential.roles().addAll(Arrays.asList(roles));
 
+        if (onbUser != null)
+            credential.onboardingUser().setValue(onbUser.getPrimaryKey());
+
         Persistence.service().persist(credential);
 
         return user;
@@ -114,7 +125,7 @@ public class UserPreloader extends BaseVistaDevDataPreloader {
             emp.title().setValue("Executive");
             emp.email().setValue(email);
 
-            emp.user().set(createCrmUser(emp.name().getStringView(), email, email, defaultRole));
+            emp.user().set(createCrmUser(emp.name().getStringView(), email, email, null, defaultRole));
 
             Persistence.service().persist(emp);
 
@@ -128,11 +139,58 @@ public class UserPreloader extends BaseVistaDevDataPreloader {
             emp.title().setValue(CommonsGenerator.randomEmployeeTitle());
             emp.email().setValue(email);
 
-            emp.user().set(createCrmUser(emp.name().getStringView(), email, email, defaultRole));
+            emp.user().set(createCrmUser(emp.name().getStringView(), email, email, null, defaultRole));
 
             Persistence.service().persist(emp);
             userCount++;
         }
+
+        final String namespace = NamespaceManager.getNamespace();
+        final Pmc pmc = TaskRunner.runInAdminNamespace(new Callable<Pmc>() {
+            @Override
+            public Pmc call() {
+                EntityQueryCriteria<Pmc> criteria = EntityQueryCriteria.create(Pmc.class);
+                criteria.add(PropertyCriterion.eq(criteria.proto().namespace(), namespace));
+
+                return Persistence.service().retrieve(criteria);
+            }
+        });
+
+        if (pmc != null) {
+            for (int i = 1; i <= config().maxOnboardingUsers; i++) {
+                final String email = DemoData.UserType.ONB.getEmail(i);
+
+                final Employee emp = CommonsGenerator.createEmployee().duplicate(Employee.class);
+                emp.title().setValue(CommonsGenerator.randomEmployeeTitle());
+                emp.email().setValue(email);
+
+                final OnboardingUserCredential userCred = TaskRunner.runInAdminNamespace(new Callable<OnboardingUserCredential>() {
+                    @Override
+                    public OnboardingUserCredential call() {
+                        return OnboardingUserPreloader.createOnboardingUser(emp.name().getStringView(), email, email, VistaOnboardingBehavior.Client, null);
+                    }
+                });
+
+                emp.user().set(createCrmUser(emp.name().getStringView(), email, email, userCred.user(), defaultRole));
+
+                Persistence.service().persist(emp);
+
+                TaskRunner.runInAdminNamespace(new Callable<Void>() {
+                    @Override
+                    public Void call() {
+
+                        userCred.pmc().set(pmc);
+                        userCred.crmUser().setValue(emp.user().getPrimaryKey());
+                        Persistence.service().persist(userCred);
+
+                        return null;
+                    }
+                });
+
+                userCount++;
+            }
+        }
+
         PmcCreator.createVistaSupportUsers();
 
         return "Created " + userCount + " Employee/Users";

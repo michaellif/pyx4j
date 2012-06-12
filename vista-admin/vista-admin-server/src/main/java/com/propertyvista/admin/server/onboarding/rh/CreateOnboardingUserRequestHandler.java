@@ -16,10 +16,10 @@ package com.propertyvista.admin.server.onboarding.rh;
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.admin.server.onboarding.rhf.AbstractRequestHandler;
-import com.propertyvista.admin.server.preloader.OnboardingUserPreloader;
 import com.propertyvista.domain.security.VistaOnboardingBehavior;
 import com.propertyvista.onboarding.CreateOnboardingUserRequestIO;
 import com.propertyvista.onboarding.ResponseIO;
+import com.propertyvista.preloader.OnboardingUserPreloader;
 
 public class CreateOnboardingUserRequestHandler extends AbstractRequestHandler<CreateOnboardingUserRequestIO> {
 

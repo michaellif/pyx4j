@@ -55,7 +55,7 @@ import com.pyx4j.server.contexts.NamespaceManager;
 import com.pyx4j.server.mail.Mail;
 
 import com.propertyvista.admin.domain.pmc.Pmc;
-import com.propertyvista.admin.server.preloader.VistaAminDataPreloaders;
+import com.propertyvista.admin.server.preloader.VistaAdminDataPreloaders;
 import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.domain.DemoData.DemoPmc;
@@ -190,7 +190,7 @@ public class DBResetServlet extends HttpServlet {
                                     }
                                     CacheService.resetAll();
 
-                                    new VistaAminDataPreloaders().preloadAll();
+                                    new VistaAdminDataPreloaders().preloadAll();
                                     Persistence.service().commit();
                                 } finally {
                                     NamespaceManager.setNamespace(requestNamespace);

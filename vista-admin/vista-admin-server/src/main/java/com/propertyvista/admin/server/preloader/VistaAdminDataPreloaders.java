@@ -16,10 +16,12 @@ package com.propertyvista.admin.server.preloader;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.dataimport.DataPreloaderCollection;
 
-public class VistaAminDataPreloaders extends DataPreloaderCollection {
+import com.propertyvista.preloader.OnboardingUserPreloader;
 
-    public VistaAminDataPreloaders() {
-        add(new AminUsersPreloader());
+public class VistaAdminDataPreloaders extends DataPreloaderCollection {
+
+    public VistaAdminDataPreloaders() {
+        add(new AdminUsersPreloader());
         add(new OnboardingUserPreloader());
         add(new TriggerPreloader());
         if (ApplicationMode.isDevelopment()) {

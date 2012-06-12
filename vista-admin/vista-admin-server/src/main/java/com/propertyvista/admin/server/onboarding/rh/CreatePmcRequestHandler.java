@@ -21,9 +21,10 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.admin.domain.pmc.Pmc;
+import com.propertyvista.admin.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.admin.domain.security.OnboardingUserCredential;
+import com.propertyvista.admin.server.onboarding.PmcNameValidator;
 import com.propertyvista.admin.server.onboarding.rhf.AbstractRequestHandler;
-import com.propertyvista.admin.server.preloader.OnboardingPmcPreloader;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.security.VistaBasicBehavior;
 import com.propertyvista.onboarding.AccountInfoResponseIO;
@@ -50,11 +51,25 @@ public class CreatePmcRequestHandler extends AbstractRequestHandler<CreatePMCReq
             return response;
         }
 
-        Pmc pmc = OnboardingPmcPreloader.createOnboardingPmc(request.name().getValue(), request.dnsName().getValue(), request.onboardingAccountId().getValue());
-        if (pmc == null) {
+        final String dnsName = request.name().getValue();
+        if (!PmcNameValidator.canCreatePmcName(dnsName, request.onboardingAccountId().getValue())) {
             response.success().setValue(Boolean.FALSE);
             return response;
         }
+
+        Pmc pmc = EntityFactory.create(Pmc.class);
+        pmc.dnsName().setValue(dnsName);
+        pmc.namespace().setValue(dnsName.replace('-', '_'));
+        pmc.name().setValue(request.name().getValue());
+        pmc.onboardingAccountId().setValue(request.onboardingAccountId().getValue());
+
+        // TODO For future
+//        for (String dndAlias : request.dnsNameAliases()) {
+//
+//        }
+
+        pmc.status().setValue(PmcStatus.Created);
+        Persistence.service().persist(pmc);
 
         for (OnboardingUserCredential cred : creds) {
             cred.pmc().set(pmc);
