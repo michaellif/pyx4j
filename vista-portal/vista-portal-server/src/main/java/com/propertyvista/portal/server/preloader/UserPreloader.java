@@ -31,6 +31,7 @@ import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.admin.domain.pmc.Pmc;
 import com.propertyvista.admin.domain.security.OnboardingUserCredential;
+import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.DemoData;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.security.CrmRole;
@@ -146,16 +147,7 @@ public class UserPreloader extends BaseVistaDevDataPreloader {
         }
 
         final String namespace = NamespaceManager.getNamespace();
-        final Pmc pmc = TaskRunner.runInAdminNamespace(new Callable<Pmc>() {
-            @Override
-            public Pmc call() {
-                EntityQueryCriteria<Pmc> criteria = EntityQueryCriteria.create(Pmc.class);
-                criteria.add(PropertyCriterion.eq(criteria.proto().namespace(), namespace));
-
-                return Persistence.service().retrieve(criteria);
-            }
-        });
-
+        final Pmc pmc = VistaDeployment.getCurrentPmc();
         if (pmc != null) {
             for (int i = 1; i <= config().maxOnboardingUsers; i++) {
                 final String email = DemoData.UserType.ONB.getEmail(i, namespace);
