@@ -32,7 +32,8 @@ public class ColumnDescriptorConverter {
             IEntity proto = EntityFactory.getEntityPrototype(describedEntityClass);
             IObject<?> member = proto.getMember(new Path(columnDescriptorEntity.propertyPath().getValue()));
 
-            ColumnDescriptor columnDescriptor = new MemberColumnDescriptor.Builder(member).title(columnDescriptorEntity.title().getValue())
+            ColumnDescriptor columnDescriptor = new MemberColumnDescriptor.Builder(member)
+                    .title(columnDescriptorEntity.title().isNull() ? "" : columnDescriptorEntity.title().getValue())
                     .sortable(columnDescriptorEntity.isSortable().getValue()).width(columnDescriptorEntity.width().getValue())
                     .wordWrap(columnDescriptorEntity.wrapWords().getValue()).visible(columnDescriptorEntity.isVisible().getValue()).build();
 
@@ -60,5 +61,14 @@ public class ColumnDescriptorConverter {
             columnDescriptorEntityList.add(columnDescriptorEntity);
         }
         return columnDescriptorEntityList;
+    }
+
+    public static <E extends IEntity> List<ColumnDescriptor> asColumnDescriptorist(Class<E> describedEntityClass,
+            List<ColumnDescriptorEntity> columnDescriptorEntities) {
+        List<ColumnDescriptor> descriptors = new ArrayList<ColumnDescriptor>();
+        for (ColumnDescriptorEntity entity : columnDescriptorEntities) {
+            descriptors.add(columnDescriptorFromEntity(describedEntityClass, entity));
+        }
+        return descriptors;
     }
 }

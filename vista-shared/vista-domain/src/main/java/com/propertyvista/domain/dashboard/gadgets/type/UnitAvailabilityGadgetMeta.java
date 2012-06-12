@@ -24,7 +24,7 @@ import com.pyx4j.i18n.shared.I18nEnum;
 
 @DiscriminatorValue("UnitAvailability")
 @Caption(name = "Unit Availability", description = "Shows the information about units, whether they are available or rented, how long they have been vacant for and revenue lost as a result. Can be customized to show various information about buildings and units, for example their physical condition.")
-public interface UnitAvailability extends ListerGadgetBaseMetadata {
+public interface UnitAvailabilityGadgetMeta extends ListerGadgetBaseMetadata {
 
     @I18n
     enum FilterPreset {

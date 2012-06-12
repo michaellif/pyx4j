@@ -29,19 +29,20 @@ import com.propertyvista.domain.dashboard.DashboardMetadata.DashboardType;
 import com.propertyvista.domain.dashboard.DashboardMetadata.LayoutType;
 import com.propertyvista.domain.dashboard.gadgets.ColumnDescriptorEntity;
 import com.propertyvista.domain.dashboard.gadgets.arrears.LeaseArrearsSnapshotDTO;
-import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatus;
+import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus;
+import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatusSummaryLineDTO;
 import com.propertyvista.domain.dashboard.gadgets.payments.PaymentRecordForReportDTO;
 import com.propertyvista.domain.dashboard.gadgets.payments.PaymentsSummary;
 import com.propertyvista.domain.dashboard.gadgets.type.ArrearsStatusGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.ArrearsSummaryGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.ArrearsYOYAnalysisChartMetadata;
-import com.propertyvista.domain.dashboard.gadgets.type.AvailabilitySummary;
 import com.propertyvista.domain.dashboard.gadgets.type.BuildingLister;
 import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata.RefreshInterval;
 import com.propertyvista.domain.dashboard.gadgets.type.PaymentRecordsGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.PaymentsSummaryGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.TurnoverAnalysisMetadata;
-import com.propertyvista.domain.dashboard.gadgets.type.UnitAvailability;
+import com.propertyvista.domain.dashboard.gadgets.type.UnitAvailabilityGadgetMeta;
+import com.propertyvista.domain.dashboard.gadgets.type.UnitAvailabilitySummaryGMeta;
 import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
 import com.propertyvista.domain.financial.billing.AgingBuckets;
 import com.propertyvista.domain.financial.billing.InvoiceDebit.DebitType;
@@ -90,20 +91,21 @@ public class DashboardGenerator extends Dashboards {
         dmd.description().setValue(i18n.tr("Contains various availablility gadgets"));
         dmd.layoutType().setValue(LayoutType.One);
 
-        UnitAvailability unitAvailabilityReport = EntityFactory.create(UnitAvailability.class);
+        UnitAvailabilityGadgetMeta unitAvailabilityReport = EntityFactory.create(UnitAvailabilityGadgetMeta.class);
         unitAvailabilityReport.user().id().setValue(ISharedUserEntity.DORMANT_KEY); // shared for everyone usage
         unitAvailabilityReport.refreshInterval().setValue(RefreshInterval.Never);
         unitAvailabilityReport.pageSize().setValue(10);
-        unitAvailabilityReport.filterPreset().setValue(UnitAvailability.FilterPreset.VacantAndNotice);
+        unitAvailabilityReport.filterPreset().setValue(UnitAvailabilityGadgetMeta.FilterPreset.VacantAndNotice);
         unitAvailabilityReport.docking().column().setValue(0);
         unitAvailabilityReport.columnDescriptors().addAll(defineUnitAvailabilityReportColumns());
         dmd.gadgets().add(unitAvailabilityReport);
 
-        AvailabilitySummary availabilitySummary = EntityFactory.create(AvailabilitySummary.class);
-        availabilitySummary.user().id().setValue(ISharedUserEntity.DORMANT_KEY);
-        availabilitySummary.refreshInterval().setValue(RefreshInterval.Never);
-        availabilitySummary.docking().column().setValue(0);
-        dmd.gadgets().add(availabilitySummary);
+        UnitAvailabilitySummaryGMeta unitAvailabilitySummary = EntityFactory.create(UnitAvailabilitySummaryGMeta.class);
+        unitAvailabilitySummary.user().id().setValue(ISharedUserEntity.DORMANT_KEY);
+        unitAvailabilitySummary.refreshInterval().setValue(RefreshInterval.Never);
+        unitAvailabilitySummary.docking().column().setValue(0);
+        unitAvailabilitySummary.columnDescriptors().addAll(defineUnitSummaryStatusColumns());
+        dmd.gadgets().add(unitAvailabilitySummary);
 
         TurnoverAnalysisMetadata turnoverAnalysis = EntityFactory.create(TurnoverAnalysisMetadata.class);
         turnoverAnalysis.user().id().setValue(ISharedUserEntity.DORMANT_KEY);
@@ -113,38 +115,6 @@ public class DashboardGenerator extends Dashboards {
         dmd.gadgets().add(turnoverAnalysis);
 
         return dmd;
-    }
-
-    private List<? extends ColumnDescriptorEntity> defineUnitAvailabilityReportColumns() {
-        UnitAvailabilityStatus proto = EntityFactory.getEntityPrototype(UnitAvailabilityStatus.class);
-
-        return Arrays.asList(//@formatter:off
-                // references
-                defColumn(proto.building().propertyCode()).build(),
-                defColumn(proto.building().externalId()).visible(false).build(),
-                defColumn(proto.building().info().name()).visible(false).title(i18n.tr("Building Name")).build(),
-                defColumn(proto.building().info().address()).visible(false).build(),
-                defColumn(proto.building().propertyManager().name()).visible(false).title(i18n.tr("Property Manager")).build(),                    
-                defColumn(proto.building().complex().name()).visible(false).title(i18n.tr("Complex")).build(),
-                defColumn(proto.unit().info().number()).title(i18n.tr("Unit Name")).build(),
-                defColumn(proto.floorplan().name()).visible(false).title(i18n.tr("Floorplan Name")).build(),
-                defColumn(proto.floorplan().marketingName()).visible(false).title(i18n.tr("Floorplan Marketing Name")).build(),
-                
-                // status
-                defColumn(proto.vacancyStatus()).build(),
-                defColumn(proto.rentedStatus()).visible(true).build(),
-                defColumn(proto.scoping()).visible(true).build(),
-                defColumn(proto.rentReadinessStatus()).visible(true).build(),
-//                column(proto.unitRent()).build(),
-//                column(proto.marketRent()).build(),
-//                column(proto.rentDeltaAbsolute()).visible(true).build(),
-//                column(proto.rentDeltaRelative()).visible(false).build(),
-                defColumn(proto.rentEndDay()).visible(true).build(),
-                defColumn(proto.moveInDay()).visible(true).build(),
-                defColumn(proto.rentedFromDay()).visible(true).build(),
-                defColumn(proto.daysVacant()).build()
-//                column(proto.revenueLost()).build()
-        );//@formatter:on
     }
 
     private DashboardMetadata makeDefaultArrearsDashboard() {
@@ -216,6 +186,47 @@ public class DashboardGenerator extends Dashboards {
         dmd.gadgets().add(paymentsSummaryGadget);
 
         return dmd;
+    }
+
+    private List<? extends ColumnDescriptorEntity> defineUnitAvailabilityReportColumns() {
+        UnitAvailabilityStatus proto = EntityFactory.getEntityPrototype(UnitAvailabilityStatus.class);
+
+        return Arrays.asList(//@formatter:off
+                // references
+                defColumn(proto.building().propertyCode()).build(),
+                defColumn(proto.building().externalId()).visible(false).build(),
+                defColumn(proto.building().info().name()).visible(false).title(i18n.tr("Building Name")).build(),
+                defColumn(proto.building().info().address()).visible(false).build(),
+                defColumn(proto.building().propertyManager().name()).visible(false).title(i18n.tr("Property Manager")).build(),                    
+                defColumn(proto.building().complex().name()).visible(false).title(i18n.tr("Complex")).build(),
+                defColumn(proto.unit().info().number()).title(i18n.tr("Unit Name")).build(),
+                defColumn(proto.floorplan().name()).visible(false).title(i18n.tr("Floorplan Name")).build(),
+                defColumn(proto.floorplan().marketingName()).visible(false).title(i18n.tr("Floorplan Marketing Name")).build(),
+                
+                // status
+                defColumn(proto.vacancyStatus()).build(),
+                defColumn(proto.rentedStatus()).visible(true).build(),
+                defColumn(proto.scoping()).visible(true).build(),
+                defColumn(proto.rentReadinessStatus()).visible(true).build(),
+//                column(proto.unitRent()).build(),
+//                column(proto.marketRent()).build(),
+//                column(proto.rentDeltaAbsolute()).visible(true).build(),
+//                column(proto.rentDeltaRelative()).visible(false).build(),
+                defColumn(proto.rentEndDay()).visible(true).build(),
+                defColumn(proto.moveInDay()).visible(true).build(),
+                defColumn(proto.rentedFromDay()).visible(true).build(),
+                defColumn(proto.daysVacant()).build()
+//                column(proto.revenueLost()).build()
+        );//@formatter:on
+    }
+
+    private List<? extends ColumnDescriptorEntity> defineUnitSummaryStatusColumns() {
+        UnitAvailabilityStatusSummaryLineDTO proto = EntityFactory.create(UnitAvailabilityStatusSummaryLineDTO.class);
+        return Arrays.asList(//@formatter:off
+                defColumn(proto.category()).title("").sortable(false).build(),
+                defColumn(proto.units()).sortable(false).build(),
+                defColumn(proto.percentile()).sortable(false).build()
+        );//@formatter:on
     }
 
     private Collection<? extends ColumnDescriptorEntity> definePaymentsSummaryListerColumns() {

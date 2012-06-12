@@ -33,6 +33,7 @@ public class Util {
             Building stub = EntityFactory.create(Building.class);
             stub.setPrimaryKey(key);
             stub.setAttachLevel(AttachLevel.IdOnly);
+            stubs.add(stub);
         }
         return stubs;
     }

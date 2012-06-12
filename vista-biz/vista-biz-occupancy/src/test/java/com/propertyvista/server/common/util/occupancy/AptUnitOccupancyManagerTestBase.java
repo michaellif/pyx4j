@@ -37,7 +37,7 @@ import com.pyx4j.unit.server.mock.TestLifecycle;
 
 import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.config.tests.VistaTestDBSetup;
-import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatus;
+import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.OffMarketType;

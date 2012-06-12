@@ -13,8 +13,6 @@
  */
 package com.propertyvista.crm.server.services.reports.directory;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -22,35 +20,48 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.report.JasperReportModel;
+import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.crm.server.services.dashboard.gadgets.AvailabilityReportServiceImpl;
+import com.propertyvista.crm.server.services.reports.DynamicTableTemplateReportModelBuilder;
 import com.propertyvista.crm.server.services.reports.GadgetReportModelCreator;
-import com.propertyvista.crm.server.services.reports.ReportsCommon;
-import com.propertyvista.crm.server.services.reports.StaticTemplateReportModelBuilder;
-import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityReportSummaryDTO;
-import com.propertyvista.domain.dashboard.gadgets.type.AvailabilitySummary;
+import com.propertyvista.crm.server.services.reports.Util;
+import com.propertyvista.crm.server.services.reports.util.DynamicColumnWidthReportTableTemplateBuilder;
+import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatusSummaryLineDTO;
 import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
+import com.propertyvista.domain.dashboard.gadgets.type.UnitAvailabilitySummaryGMeta;
 
 public class UnitAvailabilitySummaryReportCreator implements GadgetReportModelCreator {
 
-    protected static final String GRAPH = "GRAPH";
+    enum Params {
+        TITLE, AS_OF;
+    }
 
-    protected static final String AS_OF = "AS_OF";
+    private static final I18n i18n = I18n.get(UnitAvailabilitySummaryReportCreator.class);
 
     @Override
     public void createReportModel(final AsyncCallback<JasperReportModel> callback, GadgetMetadata gadgetMetadata, Vector<Key> selectedBuildings) {
-        final AvailabilitySummary availabilitySummaryMetadata = (AvailabilitySummary) gadgetMetadata;
+        final UnitAvailabilitySummaryGMeta availabilitySummaryMetadata = (UnitAvailabilitySummaryGMeta) gadgetMetadata;
         final LogicalDate asOf = availabilitySummaryMetadata.customizeDate().isBooleanTrue() ? availabilitySummaryMetadata.asOf().getValue()
                 : new LogicalDate();
 
-        new AvailabilityReportServiceImpl().summary(new AsyncCallback<UnitAvailabilityReportSummaryDTO>() {
+        new AvailabilityReportServiceImpl().unitStatusSummary(new AsyncCallback<Vector<UnitAvailabilityStatusSummaryLineDTO>>() {//@formatter:off
 
             @Override
-            public void onSuccess(UnitAvailabilityReportSummaryDTO summary) {
-                List<UnitAvailabilityReportSummaryDTO> details = new ArrayList<UnitAvailabilityReportSummaryDTO>();
-                details.add(summary);
-                callback.onSuccess(new StaticTemplateReportModelBuilder(AvailabilitySummary.class)
-                        .param(AS_OF, ReportsCommon.instance().getAsOfDateFormat().format(asOf)).data(details.iterator()).build());
+            public void onSuccess(Vector<UnitAvailabilityStatusSummaryLineDTO> result) {
+                String template = new DynamicColumnWidthReportTableTemplateBuilder(EntityFactory.create(UnitAvailabilityStatusSummaryLineDTO.class), availabilitySummaryMetadata)
+                        .defSubTitle(Params.AS_OF.name())
+                        .build();
+                
+                JasperReportModel reportModel = new DynamicTableTemplateReportModelBuilder()
+                        .param(Params.TITLE.name(), availabilitySummaryMetadata.getEntityMeta().getCaption())
+                        .param(Params.AS_OF.name(), i18n.tr("As of Date: {0}", asOf))
+                        .template(template)
+                        .data(result.iterator())
+                        .build();
+                
+                callback.onSuccess(reportModel);
             }
 
             @Override
@@ -58,6 +69,6 @@ public class UnitAvailabilitySummaryReportCreator implements GadgetReportModelCr
                 callback.onFailure(arg0);
             }
 
-        }, new Vector<Key>(selectedBuildings), asOf);
+        }, Util.asStubs(selectedBuildings), asOf);//@formatter:on
     }
 }

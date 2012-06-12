@@ -41,14 +41,16 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.propertyvista.biz.occupancy.UnitTurnoverAnalysisFacade;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.AvailabilityReportService;
 import com.propertyvista.crm.server.util.SortingFactory;
-import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityReportSummaryDTO;
-import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatus;
-import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatus.RentedStatus;
-import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityStatus.Vacancy;
-import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitTurnoversPerIntervalDTO;
-import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitTurnoversPerIntervalDTO.AnalysisResolution;
-import com.propertyvista.domain.dashboard.gadgets.type.UnitAvailability;
-import com.propertyvista.domain.dashboard.gadgets.type.UnitAvailability.FilterPreset;
+import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityReportSummaryDTO;
+import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus;
+import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus.RentedStatus;
+import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus.Vacancy;
+import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatusSummaryLineDTO;
+import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatusSummaryLineDTO.AvailabilityCategory;
+import com.propertyvista.domain.dashboard.gadgets.availability.UnitTurnoversPerIntervalDTO;
+import com.propertyvista.domain.dashboard.gadgets.availability.UnitTurnoversPerIntervalDTO.AnalysisResolution;
+import com.propertyvista.domain.dashboard.gadgets.type.UnitAvailabilityGadgetMeta;
+import com.propertyvista.domain.dashboard.gadgets.type.UnitAvailabilityGadgetMeta.FilterPreset;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
@@ -59,7 +61,7 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
 
     @Override
     public void unitStatusList(AsyncCallback<EntitySearchResult<UnitAvailabilityStatus>> callback, Vector<Key> buildings,
-            UnitAvailability.FilterPreset filterPreset, LogicalDate on, Vector<Sort> sortingCriteria, int pageNumber, int pageSize) {
+            UnitAvailabilityGadgetMeta.FilterPreset filterPreset, LogicalDate on, Vector<Sort> sortingCriteria, int pageNumber, int pageSize) {
 
         EntityListCriteria<UnitAvailabilityStatus> criteria = new EntityListCriteria<UnitAvailabilityStatus>(UnitAvailabilityStatus.class);
 
@@ -285,6 +287,90 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
         summary.netExposureAbsolute().setValue(netExposure);
         summary.netExposureRelative().setValue(netExposure / ((double) total) * 100d);
         callback.onSuccess(summary);
+    }
+
+    @Override
+    public void unitStatusSummary(AsyncCallback<Vector<UnitAvailabilityStatusSummaryLineDTO>> callback, Vector<Building> buildings, LogicalDate asOf) {
+        Vector<UnitAvailabilityStatusSummaryLineDTO> summary = new Vector<UnitAvailabilityStatusSummaryLineDTO>();
+
+        if (buildings == null) {
+            callback.onFailure(new Error("the set of buildings was not provided."));
+            return;
+        }
+
+        EntityQueryCriteria<UnitAvailabilityStatus> criteria = new EntityQueryCriteria<UnitAvailabilityStatus>(UnitAvailabilityStatus.class);
+        if (!buildings.isEmpty()) {
+            criteria.add(PropertyCriterion.in(criteria.proto().building(), buildings));
+        }
+        criteria.add(PropertyCriterion.le(criteria.proto().statusDate(), asOf));
+        // use descending order of the status date in order to select the most recent statuses first
+        criteria.setSorts(Arrays.asList(new Sort(criteria.proto().unit().getPath().toString(), true), new Sort(criteria.proto().statusDate().getPath()
+                .toString(), true), new Sort(criteria.proto().id().getPath().toString(), true)));
+
+        List<UnitAvailabilityStatus> unitStatuses = Persistence.service().query(criteria);
+
+        int total = 0;
+
+        int vacant = 0;
+        int vacantRented = 0;
+
+        int occupied = 0;
+
+        int notice = 0;
+        int noticeRented = 0;
+
+        int netExposure = 0;
+
+        Key pervUnitPK = null;
+        for (UnitAvailabilityStatus unitStatus : unitStatuses) {
+            Key thisUnitPK = unitStatus.unit().getPrimaryKey();
+            if (!thisUnitPK.equals(pervUnitPK)) {
+                pervUnitPK = thisUnitPK;
+                ++total;
+
+                // check that we have vacancy status, and don't waste the cpu cycles if we don't have it
+                Vacancy vacancyStatus = unitStatus.vacancyStatus().getValue();
+                if (vacancyStatus == null) {
+                    continue;
+
+                } else if (vacancyStatus == Vacancy.Vacant) {
+                    ++vacant;
+                    if (unitStatus.rentedStatus().getValue() == RentedStatus.Rented) {
+                        ++vacantRented;
+                    }
+                } else if (Vacancy.Notice.equals(vacancyStatus)) {
+                    ++notice;
+                    if (unitStatus.rentedStatus().getValue() == RentedStatus.Rented) {
+                        ++noticeRented;
+                    }
+                }
+            }
+        }
+        occupied = total - vacant;
+        netExposure = vacant + notice - (vacantRented + noticeRented);
+
+        summary.add(makeSummaryRecord(AvailabilityCategory.total, total, 1d));
+        summary.add(makeSummaryRecord(AvailabilityCategory.occupied, occupied, percentile(occupied, total)));
+        summary.add(makeSummaryRecord(AvailabilityCategory.vacant, vacant, percentile(vacant, total)));
+        summary.add(makeSummaryRecord(AvailabilityCategory.vacantRented, vacantRented, percentile(vacantRented, total)));
+        summary.add(makeSummaryRecord(AvailabilityCategory.notice, notice, percentile(notice, total)));
+        summary.add(makeSummaryRecord(AvailabilityCategory.noticeRented, noticeRented, percentile(noticeRented, total)));
+        summary.add(makeSummaryRecord(AvailabilityCategory.netExposure, netExposure, percentile(netExposure, total)));
+
+        callback.onSuccess(summary);
+    }
+
+    private static UnitAvailabilityStatusSummaryLineDTO makeSummaryRecord(UnitAvailabilityStatusSummaryLineDTO.AvailabilityCategory category, int units,
+            double percentile) {
+        UnitAvailabilityStatusSummaryLineDTO summaryRecord = EntityFactory.create(UnitAvailabilityStatusSummaryLineDTO.class);
+        summaryRecord.category().setValue(category);
+        summaryRecord.units().setValue(units);
+        summaryRecord.percentile().setValue(percentile);
+        return summaryRecord;
+    }
+
+    private static double percentile(int part, int total) {
+        return total != 0 ? ((double) part) / ((double) total) : 0d;
     }
 
     private static UnitAvailabilityStatus computeTransientFields(final UnitAvailabilityStatus unitStatus, final LogicalDate now) {

@@ -41,7 +41,8 @@ import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.PaymentRecordsGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.PaymentsSummaryGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.TurnoverAnalysisMetadata;
-import com.propertyvista.domain.dashboard.gadgets.type.UnitAvailability;
+import com.propertyvista.domain.dashboard.gadgets.type.UnitAvailabilityGadgetMeta;
+import com.propertyvista.domain.dashboard.gadgets.type.UnitAvailabilitySummaryGMeta;
 
 public class ReportModelCreatorDispatcher implements GadgetReportModelCreator {
 
@@ -56,7 +57,8 @@ public class ReportModelCreatorDispatcher implements GadgetReportModelCreator {
 
         map.put(BuildingLister.class, new BuildingListerReportCreator());
 
-        map.put(UnitAvailability.class, new UnitAvailabilityStatusReportCreator());
+        map.put(UnitAvailabilityGadgetMeta.class, new UnitAvailabilityStatusReportCreator());
+        map.put(UnitAvailabilitySummaryGMeta.class, new UnitAvailabilitySummaryReportCreator());
         map.put(AvailabilitySummary.class, new UnitAvailabilitySummaryReportCreator());
         map.put(TurnoverAnalysisMetadata.class, new TurnoverAnalysisChartReportModelCreator());
 

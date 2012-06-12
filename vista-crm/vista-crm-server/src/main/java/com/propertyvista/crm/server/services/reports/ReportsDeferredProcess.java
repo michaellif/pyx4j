@@ -15,10 +15,12 @@ package com.propertyvista.crm.server.services.reports;
 
 import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Vector;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,6 +34,7 @@ import com.pyx4j.entity.report.JasperReportProcessor;
 import com.pyx4j.entity.report.master.MasterReportEntry;
 import com.pyx4j.entity.report.master.MasterReportModel;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.essentials.rpc.deferred.DeferredProcessProgressResponse;
@@ -42,18 +45,20 @@ import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.dashboard.DashboardMetadata;
+import com.propertyvista.domain.dashboard.DashboardMetadata.DashboardType;
 import com.propertyvista.domain.dashboard.DashboardMetadata.LayoutType;
 import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
+import com.propertyvista.domain.property.asset.building.Building;
 
 public class ReportsDeferredProcess implements IDeferredProcess {
 
-    private static final Logger log = LoggerFactory.getLogger(ReportsDeferredProcess.class);
-
-    private final static I18n i18n = I18n.get(ReportsDeferredProcess.class);
+    public static final String MIME_PDF_TYPE = "application/pdf";
 
     private static final long serialVersionUID = -9137768646648453119L;
 
-    public static final String MIME_PDF_TYPE = "application/pdf";
+    private static final Logger log = LoggerFactory.getLogger(ReportsDeferredProcess.class);
+
+    private static final I18n i18n = I18n.get(ReportsDeferredProcess.class);
 
     private volatile boolean isDone = false;
 
@@ -67,9 +72,9 @@ public class ReportsDeferredProcess implements IDeferredProcess {
 
     private final EntityQueryCriteria<?> queryCriteria;
 
-    private final JasperFileFormat format;
-
     private final Vector<Key> selectedBuildigns;
+
+    private final JasperFileFormat format;
 
     public ReportsDeferredProcess(EntityQueryCriteria<DashboardMetadata> queryCriteria, Vector<Key> selectedBuildings, JasperFileFormat format) {
         this.queryCriteria = queryCriteria;
@@ -91,13 +96,24 @@ public class ReportsDeferredProcess implements IDeferredProcess {
             DashboardMetadata dashboard = (DashboardMetadata) Persistence.service().retrieve(queryCriteria);
             if (dashboard != null) {
 
-                HashMap<String, Object> masterReportParameters = new HashMap<String, Object>();
-                masterReportParameters.put(MasterReportModel.REPORT_TITLE, dashboard.name().getValue());
-
                 MasterReportModel masterReportModel = null;
+                HashMap<String, Object> masterReportParameters = new HashMap<String, Object>();
+
                 if (dashboard.layoutType().getValue() == LayoutType.Report) {
+                    masterReportParameters.put(MasterReportModel.REPORT_TITLE, dashboard.name().getValue());
                     masterReportModel = new MasterReportModel(prepareSubreportsForReportLayout(dashboard.gadgets(), selectedBuildigns), masterReportParameters);
                 } else {
+                    String title;
+                    if (dashboard.type().getValue() == DashboardType.building) {
+                        if (selectedBuildigns.isEmpty()) {
+                            title = i18n.tr("{0} for all buildings", dashboard.name().getValue());
+                        } else {
+                            title = i18n.tr("{0} for {1}", dashboard.name().getValue(), buildingsLabel());
+                        }
+                    } else {
+                        title = dashboard.name().getValue();
+                    }
+                    masterReportParameters.put(MasterReportModel.REPORT_TITLE, title);
                     masterReportModel = new MasterReportModel(prepareSubreportsForDashboardLayout(dashboard.gadgets(), selectedBuildigns),
                             masterReportParameters);
                 }
@@ -107,7 +123,7 @@ public class ReportsDeferredProcess implements IDeferredProcess {
                 bos.flush();
 
                 Downloadable report = new Downloadable(bos.toByteArray(), asMimeType(format));
-                report.save(fileName = metadata2fileName(dashboard, format));
+                report.save(fileName = asFileName(dashboard, format));
             } else {
                 throw new Error("Report Metadata was not found");
             }
@@ -148,7 +164,29 @@ public class ReportsDeferredProcess implements IDeferredProcess {
         return response;
     }
 
-    public static JasperReportModel createReportModel(GadgetMetadata gadgetMetadata, Vector<Key> selectedBuildings) throws Exception {
+    private String buildingsLabel() {
+        Iterator<String> buildingLabelIterator = new Iterator<String>() {
+            Iterator<Key> buildingsI = selectedBuildigns.iterator();
+
+            @Override
+            public boolean hasNext() {
+                return buildingsI.hasNext();
+            }
+
+            @Override
+            public String next() {
+                return Persistence.service().retrieve(Building.class, buildingsI.next(), AttachLevel.Attached).propertyCode().getValue();
+            }
+
+            @Override
+            public void remove() {
+                buildingsI.remove();
+            }
+        };
+        return StringUtils.join(buildingLabelIterator, ", ");
+    }
+
+    static JasperReportModel createSubReportModel(GadgetMetadata gadgetMetadata, Vector<Key> selectedBuildings) throws Exception {
         final Boolean[] isFinished = new Boolean[] { false };
         final JasperReportModel[] result = new JasperReportModel[] { null };
         final Throwable[] error = new Throwable[] { null };
@@ -194,16 +232,15 @@ public class ReportsDeferredProcess implements IDeferredProcess {
         }
     }
 
-    public static List<MasterReportEntry> prepareSubreportsForDashboardLayout(IList<GadgetMetadata> gadgets, Vector<Key> selectedBuildigns) throws Exception {
+    static List<MasterReportEntry> prepareSubreportsForDashboardLayout(IList<GadgetMetadata> gadgets, Vector<Key> selectedBuildigns) throws Exception {
         List<MasterReportEntry> subreports = new LinkedList<MasterReportEntry>();
         for (GadgetMetadata gadgetMetadata : gadgets) {
-            subreports.add(new MasterReportEntry(createReportModel(gadgetMetadata, selectedBuildigns)));
+            subreports.add(new MasterReportEntry(createSubReportModel(gadgetMetadata, selectedBuildigns)));
         }
         return subreports;
     }
 
-    public static List<MasterReportEntry> prepareSubreportsForReportLayout(List<GadgetMetadata> gadgetMetadatas, Vector<Key> selectedBuildigns)
-            throws Exception {
+    static List<MasterReportEntry> prepareSubreportsForReportLayout(List<GadgetMetadata> gadgetMetadatas, Vector<Key> selectedBuildigns) throws Exception {
         List<MasterReportEntry> subreports = new LinkedList<MasterReportEntry>();
 
         GadgetMetadata leftGadgetMetadata = null;
@@ -211,40 +248,39 @@ public class ReportsDeferredProcess implements IDeferredProcess {
             switch (gadgetMetadata.docking().column().getValue()) {
             case -1:
                 if (leftGadgetMetadata != null) {
-                    subreports.add(new MasterReportEntry(createReportModel(leftGadgetMetadata, selectedBuildigns), null));
+                    subreports.add(new MasterReportEntry(createSubReportModel(leftGadgetMetadata, selectedBuildigns), null));
                 }
-                subreports.add(new MasterReportEntry(createReportModel(gadgetMetadata, selectedBuildigns)));
+                subreports.add(new MasterReportEntry(createSubReportModel(gadgetMetadata, selectedBuildigns)));
                 leftGadgetMetadata = null;
                 break;
             case 0:
                 if (leftGadgetMetadata != null) {
-                    subreports.add(new MasterReportEntry(createReportModel(gadgetMetadata, selectedBuildigns)));
+                    subreports.add(new MasterReportEntry(createSubReportModel(gadgetMetadata, selectedBuildigns)));
                 }
                 leftGadgetMetadata = gadgetMetadata;
                 break;
             case 1:
-                subreports.add(new MasterReportEntry(createReportModel(leftGadgetMetadata, selectedBuildigns), createReportModel(gadgetMetadata,
+                subreports.add(new MasterReportEntry(createSubReportModel(leftGadgetMetadata, selectedBuildigns), createSubReportModel(gadgetMetadata,
                         selectedBuildigns)));
                 leftGadgetMetadata = null;
                 break;
             default:
-                throw new Exception(SimpleMessageFormat.format("invalid docking column value {0} for gadget {1} (id() =  {2})",
-
-                gadgetMetadata.docking().column().getValue(),
-
-                gadgetMetadata.getEntityMeta().getCaption(),
-
-                gadgetMetadata.id().getValue()));
+                throw new Exception(SimpleMessageFormat.format(//@formatter:off
+                        "invalid docking column value {0} for gadget {1} (id() =  {2})",
+                        gadgetMetadata.docking().column().getValue(),
+                        gadgetMetadata.getEntityMeta().getCaption(),
+                        gadgetMetadata.getPrimaryKey()
+                ));//@formatter:on
             }
         }
         if (leftGadgetMetadata != null) {
-            subreports.add(new MasterReportEntry(createReportModel(leftGadgetMetadata, selectedBuildigns), null));
+            subreports.add(new MasterReportEntry(createSubReportModel(leftGadgetMetadata, selectedBuildigns), null));
         }
 
         return subreports;
     }
 
-    private static String metadata2fileName(DashboardMetadata metadata, JasperFileFormat format) {
+    private static String asFileName(DashboardMetadata metadata, JasperFileFormat format) {
         return metadata.name().getValue().replaceAll(" ", "-") + "." + format.toString().toLowerCase();
     }
 
@@ -253,7 +289,7 @@ public class ReportsDeferredProcess implements IDeferredProcess {
         case PDF:
             return MIME_PDF_TYPE;
         default:
-            throw new Exception("unsupported jasper file format (currently can hanle only " + JasperFileFormat.PDF + ")");
+            throw new Exception("unsupported jasper file format (currently this process knows to hanle only " + JasperFileFormat.PDF + ")");
         }
     }
 

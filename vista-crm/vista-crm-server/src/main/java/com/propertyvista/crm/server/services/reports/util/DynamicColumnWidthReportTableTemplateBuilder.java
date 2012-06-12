@@ -419,6 +419,9 @@ public class DynamicColumnWidthReportTableTemplateBuilder {
     private static String patternExpression(IObject<?> property) {
         Class<?> clazz = property.getValueClass();
 
+        if (property.getMeta().getFormat() != null) {
+            return property.getMeta().getFormat();
+        }
         // TODO refactor in declarative style and use property @Format if possible
         if (BigDecimal.class.equals(clazz)) {
             return "###0.00";

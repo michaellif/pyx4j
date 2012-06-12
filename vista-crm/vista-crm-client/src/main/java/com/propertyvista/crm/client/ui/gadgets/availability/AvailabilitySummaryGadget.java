@@ -11,7 +11,7 @@
  * @author artyom
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.gadgets.availabilityreport;
+package com.propertyvista.crm.client.ui.gadgets.availability;
 
 import java.util.Arrays;
 import java.util.List;
@@ -43,7 +43,7 @@ import com.propertyvista.crm.client.ui.gadgets.common.Directory;
 import com.propertyvista.crm.client.ui.gadgets.common.GadgetInstanceBase;
 import com.propertyvista.crm.client.ui.gadgets.common.IBuildingBoardGadgetInstance;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.AvailabilityReportService;
-import com.propertyvista.domain.dashboard.gadgets.availabilityreport.UnitAvailabilityReportSummaryDTO;
+import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityReportSummaryDTO;
 import com.propertyvista.domain.dashboard.gadgets.type.AvailabilitySummary;
 import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
 import com.propertyvista.domain.property.asset.building.Building;

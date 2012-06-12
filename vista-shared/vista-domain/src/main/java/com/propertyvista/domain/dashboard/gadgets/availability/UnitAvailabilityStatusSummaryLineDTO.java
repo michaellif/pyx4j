@@ -11,9 +11,10 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.domain.dashboard.gadgets.availabilityreport;
+package com.propertyvista.domain.dashboard.gadgets.availability;
 
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -21,12 +22,12 @@ import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
 @Transient
-public interface UnitAvailabilityReportSummaryTableDTO extends IEntity {
+public interface UnitAvailabilityStatusSummaryLineDTO extends IEntity {
 
     @I18n
     public enum AvailabilityCategory {
 
-        total, occupied, vacant, vacantRented, notice, noticeRented;
+        total, occupied, vacant, vacantRented, notice, noticeRented, netExposure;
 
         @Override
         public String toString() {
@@ -37,7 +38,8 @@ public interface UnitAvailabilityReportSummaryTableDTO extends IEntity {
     @Caption(name = "")
     IPrimitive<AvailabilityCategory> category();
 
-    IPrimitive<Double> units();
+    IPrimitive<Integer> units();
 
+    @Format("#0.00%")
     IPrimitive<Double> percentile();
 }

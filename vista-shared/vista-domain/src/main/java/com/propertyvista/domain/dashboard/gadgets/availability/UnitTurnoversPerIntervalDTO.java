@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.domain.dashboard.gadgets.availabilityreport;
+package com.propertyvista.domain.dashboard.gadgets.availability;
 
 import java.sql.Date;
 

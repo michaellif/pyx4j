@@ -11,7 +11,7 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.domain.dashboard.gadgets.availabilityreport;
+package com.propertyvista.domain.dashboard.gadgets.availability;
 
 import java.math.BigDecimal;
 
