@@ -14,6 +14,7 @@
 package com.propertyvista.domain.financial.billing;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.JoinColumn;
@@ -53,15 +54,24 @@ public interface BillingCycle extends IEntity {
     @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> executionTargetDate();
 
-    @Transient
-    IPrimitive<Long> total();
+    // Statistics:
+    @Caption(name = "# Of Non Runned Bills")
+    IPrimitive<Long> notRunned();
 
-    IPrimitive<Long> completed();
-
+    @Caption(name = "# Of Non Confirmed Bills")
     IPrimitive<Long> notConfirmed();
 
+    @Caption(name = "# Of Failed Bills")
     IPrimitive<Long> failed();
 
-    IPrimitive<Long> notRunned();
+    @Caption(name = "# Of Rejected Bills")
+    IPrimitive<Long> rejected();
+
+    @Caption(name = "# Of Approved Bills")
+    IPrimitive<Long> approved();
+
+    @Transient
+    @Caption(name = "# Of Bills Total")
+    IPrimitive<Long> total();
 
 }
