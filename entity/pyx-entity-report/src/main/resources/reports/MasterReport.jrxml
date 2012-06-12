@@ -18,7 +18,8 @@
 	<pageHeader>
 		<band height="50">
 			<textField isBlankWhenNull="true">
-				<reportElement x="227" y="15" width="100" height="20" />
+				<reportElement x="0" y="15" width="555" height="20" />
+				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$P{ReportTitle}]]></textFieldExpression>
 			</textField>
 			<image isUsingCache="true">
