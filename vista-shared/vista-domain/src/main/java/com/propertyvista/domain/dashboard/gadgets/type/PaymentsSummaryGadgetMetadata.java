@@ -17,6 +17,7 @@ import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.shared.IPrimitiveSet;
 
+import com.propertyvista.domain.dashboard.gadgets.HasCustomizableDateGadgetMetadata;
 import com.propertyvista.domain.financial.PaymentRecord;
 
 @Caption(name = "Payments Summary", description = "TBD")

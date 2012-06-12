@@ -62,7 +62,6 @@ public class PaymentsSummaryReportModelCreator implements GadgetReportModelCreat
                 : new LogicalDate();
         final Vector<PaymentRecord.PaymentStatus> paymentStatusCriteria = new Vector<PaymentRecord.PaymentStatus>(paymentsSummaryGadgetMetadata.paymentStatus()
                 .getValue());
-
         final PaymentFeesDTO[] paymentFees = new PaymentFeesDTO[2];
 
         new PaymentReportServiceImpl().paymentsFees(//@formatter:off
@@ -98,8 +97,8 @@ public class PaymentsSummaryReportModelCreator implements GadgetReportModelCreat
                                 .data(result.getData().iterator())
                                 .param(Params.TITLE.name(), paymentsSummaryGadgetMetadata.getEntityMeta().getCaption())
                                 .param(Params.AS_OF.name(), i18n.tr("As of Date: {0}", ReportsCommon.instance().getAsOfDateFormat().format(targetDate)))
-                                .param(Params.PAYMENT_STATUS_FILTER.name(), LabelHelper.makeListView(paymentStatusCriteria))
-                                .param(Params.PAYMENT_FEES.name(), i18n.tr("Note: the following payment fees are applied: {0}", makePaymentFeesLabel(paymentFees)))
+                                .param(Params.PAYMENT_STATUS_FILTER.name(), i18n.tr("Payment Status Filter: {0}", LabelHelper.makeListView(paymentStatusCriteria)))
+                                .param(Params.PAYMENT_FEES.name(), i18n.tr("The following payment fees are applied (per transaction): {0}", makePaymentFeesLabel(paymentFees)))
                                 .build();
                         callback.onSuccess(model);
                     }
@@ -120,51 +119,45 @@ public class PaymentsSummaryReportModelCreator implements GadgetReportModelCreat
     }
 
     private String makePaymentFeesLabel(PaymentFeesDTO[] paymentFees) {
-        StringBuilder label = new StringBuilder();
-        PaymentFeesDTO absFees;
-        PaymentFeesDTO relFees;
-        if (paymentFees[0].paymentFeeMeasure().getValue() == PaymentFeeMeasure.absolute) {
-            absFees = paymentFees[0];
-            relFees = paymentFees[1];
+
+        Vector<String> labels = new Vector<String>();
+        labels.addAll(makePaymentFeeLabelList(paymentFees[0]));
+        labels.addAll(makePaymentFeeLabelList(paymentFees[1]));
+        if (!labels.isEmpty()) {
+            return StringUtils.join(labels, ", ");
         } else {
-            absFees = paymentFees[1];
-            relFees = paymentFees[0];
+            return i18n.tr("None");
         }
-
-        boolean hasAbs = false;
-        Vector<String> absLabels = makePaymentFeeLabelList(absFees);
-        if (!absLabels.isEmpty()) {
-            hasAbs = true;
-            label.append(i18n.tr("$ per transaction: {0}", StringUtils.join(absLabels, ", ")));
-        }
-
-        Vector<String> relLabels = makePaymentFeeLabelList(relFees);
-        if (!relLabels.isEmpty()) {
-            if (hasAbs) {
-                label.append("; ");
-            }
-            label.append(i18n.tr("% per transaction: {0}", StringUtils.join(relLabels, ", ")));
-        }
-
-        return label.toString();
     }
 
     private Vector<String> makePaymentFeeLabelList(PaymentFeesDTO fees) {
         Vector<String> labels = new Vector<String>();
-        addIfNotNull(labels, makePaymentFeeLabel(fees.cash()));
-        addIfNotNull(labels, makePaymentFeeLabel(fees.cheque()));
-        addIfNotNull(labels, makePaymentFeeLabel(fees.eCheque()));
-        addIfNotNull(labels, makePaymentFeeLabel(fees.eft()));
-        addIfNotNull(labels, makePaymentFeeLabel(fees.cc()));
-        addIfNotNull(labels, makePaymentFeeLabel(fees.interacCaledon()));
-        addIfNotNull(labels, makePaymentFeeLabel(fees.interacVisa()));
+        addIfNotNull(labels, makePaymentFeeLabel(fees.cash(), fees.paymentFeeMeasure().getValue()));
+        addIfNotNull(labels, makePaymentFeeLabel(fees.cheque(), fees.paymentFeeMeasure().getValue()));
+        addIfNotNull(labels, makePaymentFeeLabel(fees.eCheque(), fees.paymentFeeMeasure().getValue()));
+        addIfNotNull(labels, makePaymentFeeLabel(fees.eft(), fees.paymentFeeMeasure().getValue()));
+        addIfNotNull(labels, makePaymentFeeLabel(fees.cc(), fees.paymentFeeMeasure().getValue()));
+        addIfNotNull(labels, makePaymentFeeLabel(fees.interacCaledon(), fees.paymentFeeMeasure().getValue()));
+        addIfNotNull(labels, makePaymentFeeLabel(fees.interacVisa(), fees.paymentFeeMeasure().getValue()));
         return labels;
     }
 
-    private String makePaymentFeeLabel(IPrimitive<BigDecimal> fee) {
+    private String makePaymentFeeLabel(IPrimitive<BigDecimal> fee, PaymentFeesDTO.PaymentFeeMeasure measure) {
         final BigDecimal zero = new BigDecimal("0.00");
-        if (!fee.getValue().equals(zero)) {
-            return fee.getMeta().getCaption() + " " + fee.getValue().toString();
+        if (!fee.isNull() & !zero.equals(fee.getValue())) {
+            StringBuilder label = new StringBuilder();
+
+            label.append(fee.getMeta().getCaption());
+            label.append(' ');
+
+            if (measure == PaymentFeeMeasure.absolute) {
+                label.append("$");
+            }
+            label.append(fee.getValue().toString());
+            if (measure == PaymentFeeMeasure.relative) {
+                label.append("%");
+            }
+            return label.toString();
         } else {
             return null;
         }

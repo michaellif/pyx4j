@@ -15,6 +15,8 @@ package com.propertyvista.domain.dashboard.gadgets.type;
 
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 
+import com.propertyvista.domain.dashboard.gadgets.HasCustomizableDateGadgetMetadata;
+
 @DiscriminatorValue("AvailabilitySummary")
 public interface AvailabilitySummary extends GadgetMetadata, HasCustomizableDateGadgetMetadata {
 

@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.domain.dashboard.gadgets.type;
+package com.propertyvista.domain.dashboard.gadgets;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.AbstractEntity;
