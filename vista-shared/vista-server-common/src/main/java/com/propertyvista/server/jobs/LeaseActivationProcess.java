@@ -32,52 +32,43 @@ public class LeaseActivationProcess implements PmcProcess {
     private static final Logger log = LoggerFactory.getLogger(LeaseActivationProcess.class);
 
     @Override
-    public boolean start() {
+    public boolean start(PmcProcessContext context) {
         log.info("Activate Lease batch job started");
         return true;
     }
 
     @Override
-    public void executePmcJob() {
+    public void executePmcJob(PmcProcessContext context) {
         EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().version().status(), Lease.Status.Approved));
         criteria.add(PropertyCriterion.le(criteria.proto().leaseFrom(), Persistence.service().getTransactionSystemTime()));
 
-        final long total = Persistence.service().count(criteria);
-        long current = 0;
+        long total = 0;
         long failed = 0;
-        PmcProcessContext.getRunStats().total().setValue(total);
-        PmcProcessContext.getRunStats().failed().setValue(0L);
 
         Iterator<Lease> i = Persistence.service().query(null, criteria, AttachLevel.IdOnly);
         LeaseFacade leaseFacade = ServerSideFactory.create(LeaseFacade.class);
         while (i.hasNext()) {
-            ++current;
+            ++total;
 
             Lease lease = i.next();
             try {
                 leaseFacade.activate(lease.getPrimaryKey());
                 Persistence.service().commit();
 
-                PmcProcessContext.getRunStats().processed().setValue(current);
-                PmcProcessContext.setRunStats(PmcProcessContext.getRunStats());
+                StatisticsUtils.addProcessed(context.getRunStats(), 1);
             } catch (Throwable error) {
                 log.error("failed to activate lease id = {}:  {}", lease.getPrimaryKey(), error.getMessage());
-
                 Persistence.service().rollback();
-
                 ++failed;
-                PmcProcessContext.getRunStats().processed().setValue(current);
-                PmcProcessContext.getRunStats().failed().setValue(failed);
-
-                PmcProcessContext.setRunStats(PmcProcessContext.getRunStats());
+                StatisticsUtils.addFailed(context.getRunStats(), 1);
             }
         }
-        log.info("{} out of {} leases were activated successfully", current - failed, total);
+        log.info("{} out of {} leases were activated successfully", total - failed, total);
     }
 
     @Override
-    public void complete() {
+    public void complete(PmcProcessContext context) {
         log.info("Activate Lease batch job finished");
     }
 

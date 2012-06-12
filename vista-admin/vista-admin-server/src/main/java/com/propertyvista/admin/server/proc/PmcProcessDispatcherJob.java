@@ -181,9 +181,9 @@ public class PmcProcessDispatcherJob implements Job {
     private void executeRun(Run run) {
         PmcProcess pmcProcess = PmcProcessFactory.createPmcProcess(run.trigger().triggerType().getValue());
         long startTimeNano = System.nanoTime();
+        PmcProcessContext context = new PmcProcessContext(run.stats(), run.forDate().getValue());
         try {
-            PmcProcessContext.setRunStats(run.stats());
-            if (!pmcProcess.start()) {
+            if (!pmcProcess.start(context)) {
                 run.status().setValue(RunStatus.Sleeping);
                 return;
             }
@@ -192,8 +192,6 @@ public class PmcProcessDispatcherJob implements Job {
             run.errorMessage().setValue(e.getMessage());
             run.status().setValue(RunStatus.Failed);
             return;
-        } finally {
-            PmcProcessContext.remove();
         }
 
         Persistence.service().persist(run.stats());
@@ -253,9 +251,9 @@ public class PmcProcessDispatcherJob implements Job {
                     Lifecycle.startElevatedUserContext();
                     NamespaceManager.setNamespace(runData.pmc().namespace().getValue());
                     Persistence.service().startBackgroundProcessTransaction();
-                    PmcProcessContext.setRunStats(runData.stats());
-                    PmcProcessContext.setForDate(forDate);
-                    pmcProcess.executePmcJob();
+
+                    PmcProcessContext context = new PmcProcessContext(runData.stats(), forDate);
+                    pmcProcess.executePmcJob(context);
                     success = true;
                     return Boolean.TRUE;
                 } finally {
@@ -267,7 +265,6 @@ public class PmcProcessDispatcherJob implements Job {
                     } finally {
                         Lifecycle.endContext();
                     }
-                    PmcProcessContext.remove();
                 }
             }
         });
@@ -301,7 +298,7 @@ public class PmcProcessDispatcherJob implements Job {
             }
         }
 
-        pmcProcess.complete();
+        pmcProcess.complete(null);
 
         long durationNano = System.nanoTime() - startTimeNano;
 

@@ -35,35 +35,27 @@ public class UpdateArrearsProcess implements PmcProcess {
     private static final Logger log = LoggerFactory.getLogger(UpdateArrearsProcess.class);
 
     @Override
-    public boolean start() {
+    public boolean start(PmcProcessContext context) {
         log.info("Arrears Update job started");
         return true;
     }
 
     @Override
-    public void executePmcJob() {
-        updateBillingAccountsArrears();
-        updateBuildingArrears();
+    public void executePmcJob(PmcProcessContext context) {
+        updateBillingAccountsArrears(context);
+        updateBuildingArrears(context);
     }
 
-    public void updateBillingAccountsArrears() {
+    public void updateBillingAccountsArrears(PmcProcessContext context) {
         log.info("Arrears Update for billing accounts started");
 
         EntityQueryCriteria<BillingAccount> criteria = EntityQueryCriteria.create(BillingAccount.class);
         criteria.add(PropertyCriterion.ne(criteria.proto().lease().version().status(), Lease.Status.Closed));
-
-        long numOfBillingAccounts = Persistence.service().count(criteria);
-        log.debug(SimpleMessageFormat.format("Found {0} billing account that belong to not closed leases", numOfBillingAccounts));
-
         Iterator<BillingAccount> billingAccounts = Persistence.service().query(null, criteria, AttachLevel.IdOnly);
-
         ARFacade facade = ServerSideFactory.create(ARFacade.class);
 
         long currentBillingAccount = 0L;
         long failed = 0L;
-
-        PmcProcessContext.getRunStats().total().setValue(numOfBillingAccounts);
-        PmcProcessContext.getRunStats().failed().setValue(0L);
 
         while (billingAccounts.hasNext()) {
             ++currentBillingAccount;
@@ -71,51 +63,37 @@ public class UpdateArrearsProcess implements PmcProcess {
             try {
                 facade.updateArrearsHistory(billingAccounts.next());
                 Persistence.service().commit();
-                PmcProcessContext.getRunStats().processed().setValue(currentBillingAccount);
-                PmcProcessContext.setRunStats(PmcProcessContext.getRunStats());
+                StatisticsUtils.addProcessed(context.getRunStats(), 1);
             } catch (Throwable caught) {
                 log.error("failed to update arrears history: {}", caught.getMessage());
                 Persistence.service().rollback();
-                PmcProcessContext.getRunStats().processed().setValue(currentBillingAccount);
-                PmcProcessContext.getRunStats().failed().setValue(++failed);
-                PmcProcessContext.setRunStats(PmcProcessContext.getRunStats());
+                failed++;
+                StatisticsUtils.addFailed(context.getRunStats(), 1);
             }
 
         }
-        log.info(SimpleMessageFormat.format("Arrears Update for billing accounts finished, processed {0} billing accounts, {1} FAILED", numOfBillingAccounts,
+        log.info(SimpleMessageFormat.format("Arrears Update for billing accounts finished, processed {0} billing accounts, {1} FAILED", currentBillingAccount,
                 failed));
     }
 
-    public void updateBuildingArrears() {
+    public void updateBuildingArrears(PmcProcessContext context) {
         log.info("Arrears Update for buildings started");
-
         EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
-        long total = Persistence.service().count(criteria);
-
         Iterator<Building> buildings = Persistence.service().query(null, criteria, AttachLevel.IdOnly);
-
         ARFacade facade = ServerSideFactory.create(ARFacade.class);
-
         long current = 0L;
         long failed = 0L;
-
-        PmcProcessContext.getRunStats().total().setValue(total);
-        PmcProcessContext.getRunStats().failed().setValue(0L);
-
         while (buildings.hasNext()) {
             ++current;
             try {
                 facade.updateArrearsHistory(buildings.next());
                 Persistence.service().commit();
-                PmcProcessContext.getRunStats().processed().setValue(current);
-                PmcProcessContext.setRunStats(PmcProcessContext.getRunStats());
+                StatisticsUtils.addProcessed(context.getRunStats(), 1);
             } catch (Throwable caught) {
                 log.error("failed to update arrears history: {}", caught.getMessage());
                 Persistence.service().rollback();
-                PmcProcessContext.getRunStats().processed().setValue(current);
-                PmcProcessContext.getRunStats().failed().setValue(++failed);
-                PmcProcessContext.setRunStats(PmcProcessContext.getRunStats());
-
+                failed++;
+                StatisticsUtils.addFailed(context.getRunStats(), 1);
             }
         }
 
@@ -123,7 +101,7 @@ public class UpdateArrearsProcess implements PmcProcess {
     }
 
     @Override
-    public void complete() {
+    public void complete(PmcProcessContext context) {
         log.info("Arrears Update job finished");
     }
 

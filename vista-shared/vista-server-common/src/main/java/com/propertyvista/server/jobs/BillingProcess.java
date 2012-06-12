@@ -21,17 +21,17 @@ import com.propertyvista.biz.financial.billing.BillingFacade;
 public class BillingProcess implements PmcProcess {
 
     @Override
-    public boolean start() {
+    public boolean start(PmcProcessContext context) {
         return true;
     }
 
     @Override
-    public void executePmcJob() {
-        ServerSideFactory.create(BillingFacade.class).runBilling(new LogicalDate(PmcProcessContext.getForDate()), PmcProcessContext.getRunStats());
+    public void executePmcJob(PmcProcessContext context) {
+        ServerSideFactory.create(BillingFacade.class).runBilling(new LogicalDate(context.getForDate()), context.getRunStats());
     }
 
     @Override
-    public void complete() {
+    public void complete(PmcProcessContext context) {
     }
 
 }

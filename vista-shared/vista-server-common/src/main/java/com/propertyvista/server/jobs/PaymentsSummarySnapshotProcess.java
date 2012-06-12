@@ -31,16 +31,15 @@ public class PaymentsSummarySnapshotProcess implements PmcProcess {
     private static final Logger log = LoggerFactory.getLogger(PaymentsSummarySnapshotProcess.class);
 
     @Override
-    public boolean start() {
+    public boolean start(PmcProcessContext context) {
         log.info("Payment Summary Snapshot process started");
         return true;
     }
 
     @Override
-    public void executePmcJob() {
+    public void executePmcJob(final PmcProcessContext context) {
         long maxProgress = Persistence.service().count(EntityQueryCriteria.create(MerchantAccount.class)) * (long) PaymentRecord.PaymentStatus.values().length;
-        PmcProcessContext.getRunStats().total().setValue(maxProgress);
-        PmcProcessContext.getRunStats().failed().setValue(0L);
+        context.getRunStats().total().setValue(maxProgress);
 
         PaymentsSummaryHelper summaryHelper = new PaymentsSummaryHelper(new PaymentsSummarySnapshotHook() {
 
@@ -51,14 +50,14 @@ public class PaymentsSummarySnapshotProcess implements PmcProcess {
             @Override
             public boolean onPaymentsSummarySnapshotTaken(PaymentsSummary summmary) {
                 Persistence.service().commit();
-                PmcProcessContext.getRunStats().processed().setValue(++processed);
+                context.getRunStats().processed().setValue(++processed);
                 return true;
             }
 
             @Override
             public boolean onPaymentsSummarySnapshotFailed(Throwable caught) {
                 Persistence.service().rollback();
-                PmcProcessContext.getRunStats().processed().setValue(++failed);
+                context.getRunStats().failed().setValue(++failed);
                 log.error("Failed to create payments summary snapshot", caught);
                 return true;
             }
@@ -70,7 +69,7 @@ public class PaymentsSummarySnapshotProcess implements PmcProcess {
     }
 
     @Override
-    public void complete() {
+    public void complete(PmcProcessContext context) {
         log.info("Payment Summary Snapshot process finished");
     }
 

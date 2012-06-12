@@ -14,6 +14,7 @@
 package com.propertyvista.admin.server.services.sim;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Vector;
 
@@ -61,7 +62,7 @@ public class SimulatedDataPreloadServiceImpl implements SimulatedDataPreloadServ
                     setProgress(0, 365);
 
                     UpdateArrearsProcess updateArrearsProcess = new UpdateArrearsProcess();
-                    PmcProcessContext.setRunStats(EntityFactory.create(RunStats.class));
+                    PmcProcessContext context = new PmcProcessContext(EntityFactory.create(RunStats.class), new Date());
                     GregorianCalendar cal = new GregorianCalendar();
                     cal.add(Calendar.YEAR, -2);
                     LogicalDate today = new LogicalDate();
@@ -71,7 +72,7 @@ public class SimulatedDataPreloadServiceImpl implements SimulatedDataPreloadServ
                         boolean error = false;
                         try {
                             Persistence.service().setTransactionSystemTime(simToday);
-                            updateArrearsProcess.executePmcJob();
+                            updateArrearsProcess.executePmcJob(context);
                         } catch (Throwable caught) {
                             caught.printStackTrace();
                         }
@@ -154,7 +155,7 @@ public class SimulatedDataPreloadServiceImpl implements SimulatedDataPreloadServ
                 Persistence.service().startBackgroundProcessTransaction();
 
                 UpdateArrearsProcess updateArrearsProcess = new UpdateArrearsProcess();
-                PmcProcessContext.setRunStats(EntityFactory.create(RunStats.class));
+                PmcProcessContext context = new PmcProcessContext(EntityFactory.create(RunStats.class), new Date());
                 GregorianCalendar cal = new GregorianCalendar();
                 int numOfYearsBack = 3;
                 cal.add(Calendar.YEAR, -numOfYearsBack);
@@ -166,7 +167,7 @@ public class SimulatedDataPreloadServiceImpl implements SimulatedDataPreloadServ
                     boolean error = false;
                     try {
                         Persistence.service().setTransactionSystemTime(simToday);
-                        updateArrearsProcess.executePmcJob();
+                        updateArrearsProcess.executePmcJob(context);
                     } catch (Throwable caught) {
                         caught.printStackTrace();
                     }

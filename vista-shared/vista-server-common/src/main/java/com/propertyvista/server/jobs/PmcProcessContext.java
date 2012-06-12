@@ -19,41 +19,21 @@ import com.propertyvista.admin.domain.scheduler.RunStats;
 
 public class PmcProcessContext {
 
-    private static class ProcessContextData {
+    private final RunStats runStats;
 
-        RunStats runStats;
+    private final Date forDate;
 
-        Date forDate;
-
+    public PmcProcessContext(RunStats runStats, Date forDate) {
+        this.runStats = runStats;
+        this.forDate = forDate;
     }
 
-    private static final ThreadLocal<ProcessContextData> requestLocal = new ThreadLocal<ProcessContextData>();
-
-    public static RunStats getRunStats() {
-        return requestLocal.get().runStats;
+    public RunStats getRunStats() {
+        return runStats;
     }
 
-    public static void setRunStats(RunStats stats) {
-        if (requestLocal.get() == null) {
-            requestLocal.set(new ProcessContextData());
-        }
-        // Preserve PK
-        if (requestLocal.get().runStats != null) {
-            stats.setPrimaryKey(requestLocal.get().runStats.getPrimaryKey());
-        }
-        requestLocal.get().runStats = stats;
-    }
-
-    public static void remove() {
-        requestLocal.remove();
-    }
-
-    public static Date getForDate() {
-        return requestLocal.get().forDate;
-    }
-
-    public static void setForDate(Date forDate) {
-        requestLocal.get().forDate = forDate;
+    public Date getForDate() {
+        return forDate;
     }
 
 }

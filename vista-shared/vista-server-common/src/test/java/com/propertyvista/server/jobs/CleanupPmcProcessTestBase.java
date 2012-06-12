@@ -21,7 +21,6 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 
-import com.propertyvista.admin.domain.scheduler.RunStats;
 import com.propertyvista.config.tests.VistaDBTestBase;
 import com.propertyvista.domain.media.ApplicationDocument;
 import com.propertyvista.domain.media.ApplicationDocumentFile;
@@ -39,7 +38,6 @@ public class CleanupPmcProcessTestBase extends VistaDBTestBase {
     protected void setUp() throws Exception {
         super.setUp();
         Persistence.service().startTransaction();
-        PmcProcessContext.setRunStats(EntityFactory.create(RunStats.class));
         mockupConfig = new MockupCleanupPmcProcessConfig();
         cleanupProcessInstance = new CleanupPmcProcess(mockupConfig);
     }

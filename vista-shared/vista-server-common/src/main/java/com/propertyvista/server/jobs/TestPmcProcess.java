@@ -23,33 +23,32 @@ public class TestPmcProcess implements PmcProcess {
     private static final Logger log = LoggerFactory.getLogger(TestPmcProcess.class);
 
     @Override
-    public boolean start() {
+    public boolean start(PmcProcessContext context) {
         log.info("Test Job started");
         return true;
     }
 
     @Override
-    public void executePmcJob() {
+    public void executePmcJob(PmcProcessContext context) {
 
         Random random = new Random();
         int max = random.nextInt(300);
 
-        PmcProcessContext.getRunStats().total().setValue((long) max);
-        PmcProcessContext.getRunStats().failed().setValue(0L);
+        context.getRunStats().total().setValue((long) max);
+        context.getRunStats().failed().setValue(0L);
 
         for (int i = 0; i < max; i++) {
             try {
                 Thread.sleep(100);
             } catch (InterruptedException e) {
             }
-            PmcProcessContext.getRunStats().processed().setValue((long) i);
-            PmcProcessContext.setRunStats(PmcProcessContext.getRunStats());
+            context.getRunStats().processed().setValue((long) i);
         }
 
     }
 
     @Override
-    public void complete() {
+    public void complete(PmcProcessContext context) {
         log.info("Test Job complete");
     }
 }

@@ -16,7 +16,6 @@ package com.propertyvista.server.jobs;
 import com.pyx4j.config.server.ServerSideFactory;
 
 import com.propertyvista.admin.domain.payment.pad.PadFile;
-import com.propertyvista.admin.domain.scheduler.RunStats;
 import com.propertyvista.biz.financial.payment.PaymentProcessFacade;
 
 public class PadReciveAcknowledgmentProcess implements PmcProcess {
@@ -24,13 +23,11 @@ public class PadReciveAcknowledgmentProcess implements PmcProcess {
     private PadFile padFile;
 
     @Override
-    public boolean start() {
+    public boolean start(PmcProcessContext context) {
         padFile = ServerSideFactory.create(PaymentProcessFacade.class).recivePadAcknowledgementFile();
         if (padFile != null) {
             if (!padFile.acknowledgmentRejectReasonMessage().isNull()) {
-                final RunStats stats = PmcProcessContext.getRunStats();
-                stats.message().setValue(padFile.acknowledgmentRejectReasonMessage().getValue());
-                PmcProcessContext.setRunStats(stats);
+                context.getRunStats().message().setValue(padFile.acknowledgmentRejectReasonMessage().getValue());
             }
             if (padFile.status().getValue() != PadFile.PadFileStatus.Acknowledged) {
                 if (!padFile.acknowledgmentRejectReasonMessage().isNull()) {
@@ -45,12 +42,12 @@ public class PadReciveAcknowledgmentProcess implements PmcProcess {
     }
 
     @Override
-    public void executePmcJob() {
-        ServerSideFactory.create(PaymentProcessFacade.class).processAcknowledgement(PmcProcessContext.getRunStats(), padFile);
+    public void executePmcJob(PmcProcessContext context) {
+        ServerSideFactory.create(PaymentProcessFacade.class).processAcknowledgement(context.getRunStats(), padFile);
     }
 
     @Override
-    public void complete() {
+    public void complete(PmcProcessContext context) {
         ServerSideFactory.create(PaymentProcessFacade.class).updatePadFilesProcessingStatus();
     }
 

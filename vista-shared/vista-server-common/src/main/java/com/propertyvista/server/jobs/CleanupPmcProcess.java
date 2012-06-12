@@ -59,26 +59,16 @@ public class CleanupPmcProcess implements PmcProcess {
     }
 
     @Override
-    public boolean start() {
+    public boolean start(PmcProcessContext context) {
         log.info("Cleanup PMC Job started");
         return true;
-    }
-
-    @Override
-    public void executePmcJob() {
-        cleanupOrphanApplicationDocuments();
-
-    }
-
-    @Override
-    public void complete() {
-        log.info("Cleanup PMC Job complete");
     }
 
     /**
      * Clean up documents (i.e. scanned IDs) that were uploaded but cancelled later.
      */
-    void cleanupOrphanApplicationDocuments() {
+    @Override
+    public void executePmcJob(PmcProcessContext context) {
         log.info("Cleaunup orphan application documents started");
 
         EntityQueryCriteria<ApplicationDocumentBlob> allDataCriteria = EntityQueryCriteria.create(ApplicationDocumentBlob.class);
@@ -95,9 +85,6 @@ public class CleanupPmcProcess implements PmcProcess {
         log.debug("Number of data records found within the timeframe: {}", maxProgress);
         log.trace("dataKeys={}", dataKeys);
 
-        long processed = 0;
-        PmcProcessContext.getRunStats().total().setValue((long) maxProgress);
-        PmcProcessContext.getRunStats().failed().setValue(0L);
         for (Key dataKey : dataKeys) {
             EntityQueryCriteria<ApplicationDocumentFile> criteria = EntityQueryCriteria.create(ApplicationDocumentFile.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().blobKey(), dataKey));
@@ -105,9 +92,8 @@ public class CleanupPmcProcess implements PmcProcess {
             if (doc == null) {
                 log.debug("CleanOrphanApplicationDocumentDataRecordsJob: Found orphan ApplicationDocumentData record - deleting. id={}", dataKey);
                 Persistence.service().delete(ApplicationDocumentBlob.class, dataKey);
+                StatisticsUtils.addProcessed(context.getRunStats(), 1);
             }
-            PmcProcessContext.getRunStats().processed().setValue(++processed);
-            PmcProcessContext.setRunStats(PmcProcessContext.getRunStats());
         }
         Persistence.service().commit();
         log.info("Cleanup orphan application documents complete");
@@ -119,5 +105,10 @@ public class CleanupPmcProcess implements PmcProcess {
 
         Date cleanupOrphanApplicationDocumentsDateRangeMax();
 
+    }
+
+    @Override
+    public void complete(PmcProcessContext context) {
+        log.info("Cleanup PMC Job complete");
     }
 }

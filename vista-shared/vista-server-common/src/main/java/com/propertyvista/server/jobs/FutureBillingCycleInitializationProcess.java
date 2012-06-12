@@ -20,17 +20,17 @@ import com.propertyvista.biz.financial.billing.BillingFacade;
 public class FutureBillingCycleInitializationProcess implements PmcProcess {
 
     @Override
-    public boolean start() {
+    public boolean start(PmcProcessContext context) {
         return true;
     }
 
     @Override
-    public void executePmcJob() {
+    public void executePmcJob(PmcProcessContext context) {
         ServerSideFactory.create(BillingFacade.class).initializeFutureBillingCycles();
     }
 
     @Override
-    public void complete() {
+    public void complete(PmcProcessContext context) {
     }
 
 }

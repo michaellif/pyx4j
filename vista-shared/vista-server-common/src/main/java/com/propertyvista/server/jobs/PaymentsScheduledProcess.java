@@ -27,16 +27,16 @@ public class PaymentsScheduledProcess implements PmcProcess {
     }
 
     @Override
-    public boolean start() {
+    public boolean start(PmcProcessContext context) {
         return true;
     }
 
     @Override
-    public void executePmcJob() {
-        ServerSideFactory.create(PaymentProcessFacade.class).processScheduledPayments(PmcProcessContext.getRunStats(), paymentType);
+    public void executePmcJob(PmcProcessContext context) {
+        ServerSideFactory.create(PaymentProcessFacade.class).processScheduledPayments(context.getRunStats(), paymentType);
     }
 
     @Override
-    public void complete() {
+    public void complete(PmcProcessContext context) {
     }
 }

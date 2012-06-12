@@ -22,10 +22,10 @@ import com.pyx4j.i18n.shared.I18nEnum;
 @I18n
 public enum PmcProcessType implements Serializable {
 
-    billing,
+    billing(true),
 
     @Translate("Issue PreAuthorized Payments")
-    paymentsIssue,
+    paymentsIssue(true),
 
     @Translate("Process Scheduled CreditCards Payments")
     paymentsScheduledCreditCards,
@@ -54,6 +54,20 @@ public enum PmcProcessType implements Serializable {
 
     // Used for scheduler testing
     test;
+
+    private final boolean dailyExecutions;
+
+    PmcProcessType() {
+        dailyExecutions = false;
+    }
+
+    PmcProcessType(boolean dailyExecutions) {
+        this.dailyExecutions = dailyExecutions;
+    }
+
+    public boolean isDailyExecutions() {
+        return dailyExecutions;
+    }
 
     public String getDescription() {
         return I18nEnum.toString(this);

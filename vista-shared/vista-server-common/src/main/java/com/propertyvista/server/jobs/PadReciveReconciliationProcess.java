@@ -23,18 +23,18 @@ public class PadReciveReconciliationProcess implements PmcProcess {
     private PadReconciliationFile reconciliationFile;
 
     @Override
-    public boolean start() {
+    public boolean start(PmcProcessContext context) {
         reconciliationFile = ServerSideFactory.create(PaymentProcessFacade.class).recivePadReconciliation();
         return (reconciliationFile != null);
     }
 
     @Override
-    public void executePmcJob() {
-        ServerSideFactory.create(PaymentProcessFacade.class).processPadReconciliation(PmcProcessContext.getRunStats(), reconciliationFile);
+    public void executePmcJob(PmcProcessContext context) {
+        ServerSideFactory.create(PaymentProcessFacade.class).processPadReconciliation(context.getRunStats(), reconciliationFile);
     }
 
     @Override
-    public void complete() {
+    public void complete(PmcProcessContext context) {
         ServerSideFactory.create(PaymentProcessFacade.class).updatePadFilesProcessingStatus();
     }
 

@@ -21,18 +21,17 @@ import com.propertyvista.biz.financial.payment.PaymentProcessFacade;
 public class PaymentsIssueProcess implements PmcProcess {
 
     @Override
-    public boolean start() {
+    public boolean start(PmcProcessContext context) {
         return true;
     }
 
     @Override
-    public void executePmcJob() {
-        ServerSideFactory.create(PaymentProcessFacade.class).createPreauthorisedPayments(PmcProcessContext.getRunStats(),
-                new LogicalDate(PmcProcessContext.getForDate()));
+    public void executePmcJob(PmcProcessContext context) {
+        ServerSideFactory.create(PaymentProcessFacade.class).createPreauthorisedPayments(context.getRunStats(), new LogicalDate(context.getForDate()));
     }
 
     @Override
-    public void complete() {
+    public void complete(PmcProcessContext context) {
     }
 
 }

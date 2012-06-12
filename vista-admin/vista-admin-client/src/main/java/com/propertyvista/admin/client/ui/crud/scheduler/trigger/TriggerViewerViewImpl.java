@@ -102,7 +102,7 @@ public class TriggerViewerViewImpl extends AdminViewerViewImplBase<Trigger> impl
         super.populate(value);
 
         runImmediately.setVisible(true);
-        runForDate.setVisible(true);
+        runForDate.setVisible(((value != null) && (value.triggerType().getValue() != null) && (value.triggerType().getValue().isDailyExecutions())));
     }
 
     // Internals:

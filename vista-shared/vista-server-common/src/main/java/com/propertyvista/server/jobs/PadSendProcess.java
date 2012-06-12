@@ -23,7 +23,6 @@ import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.admin.domain.payment.pad.PadDebitRecord;
 import com.propertyvista.admin.domain.payment.pad.PadFile;
-import com.propertyvista.admin.domain.scheduler.RunStats;
 import com.propertyvista.biz.financial.payment.PaymentProcessFacade;
 
 public class PadSendProcess implements PmcProcess {
@@ -31,36 +30,31 @@ public class PadSendProcess implements PmcProcess {
     private PadFile padFile;
 
     @Override
-    public boolean start() {
+    public boolean start(PmcProcessContext context) {
         padFile = ServerSideFactory.create(PaymentProcessFacade.class).sendPadFile();
         return (padFile != null);
     }
 
     @Override
-    public void executePmcJob() {
-        final RunStats stats = PmcProcessContext.getRunStats();
+    public void executePmcJob(final PmcProcessContext context) {
         final String namespace = NamespaceManager.getNamespace();
 
-        Boolean updated = TaskRunner.runInAdminNamespace(new Callable<Boolean>() {
+        TaskRunner.runInAdminNamespace(new Callable<Void>() {
             @Override
-            public Boolean call() throws Exception {
+            public Void call() throws Exception {
                 EntityQueryCriteria<PadDebitRecord> criteria = EntityQueryCriteria.create(PadDebitRecord.class);
                 criteria.add(PropertyCriterion.eq(criteria.proto().padBatch().padFile(), padFile));
                 criteria.add(PropertyCriterion.eq(criteria.proto().padBatch().pmcNamespace(), namespace));
                 int records = Persistence.service().count(criteria);
-                stats.total().setValue((long) records);
-                stats.processed().setValue((long) records);
-                return Boolean.TRUE;
+                context.getRunStats().total().setValue((long) records);
+                context.getRunStats().processed().setValue((long) records);
+                return null;
             }
         });
-
-        if (updated) {
-            PmcProcessContext.setRunStats(stats);
-        }
     }
 
     @Override
-    public void complete() {
+    public void complete(PmcProcessContext context) {
     }
 
 }

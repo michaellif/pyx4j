@@ -18,21 +18,30 @@ public interface PmcProcess {
     /**
      * This is executed in shared context to initialize the process.
      * 
+     * @param context
+     *            Run statistics and forDate
+     * 
      * @return false if this job needs to sleep and rerun again when data is ready.
      */
-    boolean start();
+    boolean start(PmcProcessContext context);
 
     /**
      * This is executed in each selected PMC context to to the work.
      * Any modifications to DB should be committed.
      * 
      * Use PmcProcessContext.setRunStats(...) to update PMC statistics
+     * 
+     * @param context
+     *            RunData statistics and forDate
      */
-    void executePmcJob();
+    void executePmcJob(PmcProcessContext context);
 
     /**
      * This is executed in shared context to finalize the process.
+     * 
+     * @param context
+     *            Run statistics and forDate
      */
-    void complete();
+    void complete(PmcProcessContext context);
 
 }
