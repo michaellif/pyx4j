@@ -86,6 +86,8 @@ public class ReportsDeferredProcess implements IDeferredProcess {
         // TODO somehow make report generation process "abortable" and monitorable (progress) 
         ByteArrayOutputStream bos = null;
         try {
+            Persistence.service().startBackgroundProcessTransaction();
+
             DashboardMetadata dashboard = (DashboardMetadata) Persistence.service().retrieve(queryCriteria);
             if (dashboard != null) {
 
@@ -110,6 +112,7 @@ public class ReportsDeferredProcess implements IDeferredProcess {
                 throw new Error("Report Metadata was not found");
             }
 
+            Persistence.service().endTransaction();
         } catch (Throwable error) {
             failureReasonForClient = error;
             isFailed = true;
