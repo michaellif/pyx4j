@@ -22,9 +22,9 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.domain.dashboard.gadgets.type.UnitAvailabilitySummaryGMeta;
 
-public class UnitAvailabilitySummaryMetaForm extends CEntityDecoratableForm<UnitAvailabilitySummaryGMeta> {
+public class UnitAvailabilitySummaryGMetaForm extends CEntityDecoratableForm<UnitAvailabilitySummaryGMeta> {
 
-    public UnitAvailabilitySummaryMetaForm() {
+    public UnitAvailabilitySummaryGMetaForm() {
         super(UnitAvailabilitySummaryGMeta.class);
     }
 

@@ -61,7 +61,7 @@ public class UnitAvailabilitySummaryGadgetFactory extends AbstractGadget<UnitAva
         private final AvailabilityReportService service;
 
         public UnitAvailabilitySummaryGadget(GadgetMetadata gadgetMetadata) {
-            super(gadgetMetadata, UnitAvailabilitySummaryGMeta.class, new UnitAvailabilitySummaryMetaForm());
+            super(gadgetMetadata, UnitAvailabilitySummaryGMeta.class, new UnitAvailabilitySummaryGMetaForm());
 
             service = GWT.<AvailabilityReportService> create(AvailabilityReportService.class);
 
