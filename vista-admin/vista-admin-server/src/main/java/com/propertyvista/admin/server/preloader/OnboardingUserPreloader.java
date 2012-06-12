@@ -65,7 +65,12 @@ public class OnboardingUserPreloader extends AbstractDataPreloader {
     @Override
     public String create() {
         createOnboardingUser("Roman Spakovych", "romans@rossul.com", "romans@rossul.com", VistaOnboardingBehavior.OnboardingAdministrator, null);
-        return "Created " + 1 + " OnboardingUser";
+        createOnboardingUser("Vista Equifax", "vista.equifax@rossul.com", "vista.equifax@rossul.com", VistaOnboardingBehavior.Equifax, null);
+        createOnboardingUser("Vista Caledon", "vista.caledon@rossul.com", "vista.caledon@rossul.com", VistaOnboardingBehavior.Caledon, null);
+        createOnboardingUser("Prospective Client", "prospective.client@rossul.com", "prospective.client@rossul.com", VistaOnboardingBehavior.ProspectiveClient,
+                null);
+
+        return "Created " + 3 + " Onboarding Users";
     }
 
     @Override
