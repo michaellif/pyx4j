@@ -17,6 +17,7 @@ import java.math.BigDecimal;
 
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.OrderBy;
@@ -67,14 +68,8 @@ public interface BillingAccount extends IEntity {
     @Detached(level = AttachLevel.Detached)
     ISet<InvoiceLineItem> invoiceLineItems();
 
-    /**
-     * Counter for all (including failed) bills for given lease
-     * 
-     * @return
-     */
-    IPrimitive<Integer> billCounter();
-
-    IPrimitive<Double> total();
+    @EmbeddedEntity
+    BillingRunController billingRunController();
 
     @Owned(cascade = {})
     @Detached(level = AttachLevel.Detached)

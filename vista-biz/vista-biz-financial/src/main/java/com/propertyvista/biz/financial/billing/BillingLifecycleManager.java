@@ -156,7 +156,7 @@ public class BillingLifecycleManager {
             bill.billStatus().setValue(Bill.BillStatus.Running);
             bill.billingAccount().set(billingAccount);
 
-            bill.billSequenceNumber().setValue(billingAccount.billCounter().getValue());
+            bill.billSequenceNumber().setValue(billingAccount.billingRunController().billCounter().getValue());
             bill.billingCycle().set(billingCycle);
 
             Bill previousBill = BillingLifecycleManager.getLatestConfirmedBill(billingAccount.lease());
@@ -196,7 +196,7 @@ public class BillingLifecycleManager {
         }
         Persistence.service().persist(bill);
 
-        billingAccount.billCounter().setValue(billingAccount.billCounter().getValue() + 1);
+        billingAccount.billingRunController().billCounter().setValue(billingAccount.billingRunController().billCounter().getValue() + 1);
         Persistence.service().persist(billingAccount);
 
         return new BillCreationResult(bill);
@@ -302,7 +302,7 @@ public class BillingLifecycleManager {
         }
         if (billingAccount.billingType().isNull()) {
             billingAccount.billingType().set(ensureBillingType(lease));
-            billingAccount.billCounter().setValue(1);
+            billingAccount.billingRunController().billCounter().setValue(1);
             Persistence.service().persist(billingAccount);
         }
         return billingAccount;

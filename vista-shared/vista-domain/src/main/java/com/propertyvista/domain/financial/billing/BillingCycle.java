@@ -22,6 +22,7 @@ import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
@@ -51,4 +52,16 @@ public interface BillingCycle extends IEntity {
     @ReadOnly
     @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> executionTargetDate();
+
+    @Transient
+    IPrimitive<Long> total();
+
+    IPrimitive<Long> completed();
+
+    IPrimitive<Long> notConfirmed();
+
+    IPrimitive<Long> failed();
+
+    IPrimitive<Long> notRunned();
+
 }
