@@ -77,21 +77,45 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
                 // ServerSideFactory.create(LeaseFacade.class).activate(lease.getPrimaryKey());
             } else {
                 LeaseLifecycleSimBuilder simBuilder = LeaseLifecycleSim.sim();
-                // create simulation events that happen between 4 years ago, and and the end of the previous month 
-                Calendar cal = new GregorianCalendar();
-                cal.setTime(new Date());
-                cal.add(Calendar.YEAR, -4);
 
-                simBuilder.start(new LogicalDate(cal.getTime()));
-                cal.setTime(new Date());
-                cal.add(Calendar.MONTH, -1);
-                cal.set(Calendar.DAY_OF_MONTH, cal.getActualMaximum(Calendar.DAY_OF_MONTH));
-
-                simBuilder.end(new LogicalDate(cal.getTime()));
                 if (numCreatedWithBilling < MAX_NUM_OF_LEASES_WITH_SIM_BILLING) {
+                    // create simulation events that happen between 4 years ago, and and the end of the previous month 
+                    Calendar cal = new GregorianCalendar();
+                    cal.setTime(new Date());
+                    cal.add(Calendar.YEAR, -4);
+                    simBuilder.start(new LogicalDate(cal.getTime()));
+
+                    cal.setTime(new Date());
+                    cal.add(Calendar.MONTH, -1);
+                    cal.set(Calendar.DAY_OF_MONTH, cal.getActualMaximum(Calendar.DAY_OF_MONTH));
+                    simBuilder.end(new LogicalDate(cal.getTime()));
+
                     ++numCreatedWithBilling;
-                    simBuilder.runBilling();
+                    simBuilder.simulateBilling();
+                } else {
+                    // create lease for the future (all the leases going to start on 1st day of the next month)
+                    simBuilder.start(new LogicalDate());
+
+                    Calendar cal = new GregorianCalendar();
+                    cal.setTime(new Date());
+                    cal.add(Calendar.DAY_OF_YEAR, 1);
+                    simBuilder.end(new LogicalDate(cal.getTime()));
+
+                    simBuilder.availabilityTermContraints(0l, 0l);
+
+                    cal.setTime(new Date());
+                    cal.add(Calendar.MONTH, 1);
+                    cal.set(Calendar.DAY_OF_MONTH, cal.getActualMinimum(Calendar.DAY_OF_MONTH));
+                    cal.getTimeInMillis();
+                    long leaseStart = cal.getTimeInMillis();
+                    cal.setTime(new Date());
+                    long now = cal.getTimeInMillis();
+                    long reservedTerm = leaseStart - now;
+                    // set the simulation to crate leases that start on 1st day of the next months, or in other words, reserve the unit until next month
+                    simBuilder.reservedTermConstraints(reservedTerm, reservedTerm);
+                    simBuilder.approveImmidately();
                 }
+
                 simBuilder.create().generateRandomLeaseLifeCycle(lease);
             }
 

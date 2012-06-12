@@ -58,9 +58,9 @@ public class LeaseLifecycleSim {
     private final static Random RND = new Random(1);
 
     // TODO define these as customizable parameters via builder
-    private static final long MIN_RESERVE_TIME = 0L;
+    private long minReserveTerm = 0L;
 
-    private static final long MAX_RESERVE_TIME = 1000L * 60L * 60L * 24L * 60L; // 60 days
+    private long maxReserveTerm = 1000L * 60L * 60L * 24L * 60L; // 60 days
 
     private static final long MIN_LEASE_TERM = 1000L * 60L * 60L * 24L * 365L; // approx 1 Year
 
@@ -70,9 +70,11 @@ public class LeaseLifecycleSim {
 
     private static final long MAX_NOTICE_TERM = 1000L * 60L * 60L * 24L * 60L;
 
-    private static final long MIN_AVAILABLE_TERM = 0;
+    private long minAvailableTerm = 0;
 
-    private static final long MAX_AVAILABLE_TERM = 1000L * 60L * 60L * 24L * 30L;
+    private long maxAvailableTerm = 1000L * 60L * 60L * 24L * 30L;
+
+    private boolean hasImmideateApproval = false;
 
     private PriorityQueue<LeaseEventContainer> events;
 
@@ -110,9 +112,9 @@ public class LeaseLifecycleSim {
             return;
         }
 
-        LogicalDate reservedOn = add(max(simStart, lease.unit()._availableForRent().getValue()), rndBetween(MIN_AVAILABLE_TERM, MAX_AVAILABLE_TERM));
+        LogicalDate reservedOn = add(max(simStart, lease.unit()._availableForRent().getValue()), rndBetween(minAvailableTerm, maxAvailableTerm));
 
-        LogicalDate leaseFrom = add(reservedOn, rndBetween(MIN_RESERVE_TIME, MAX_RESERVE_TIME));
+        LogicalDate leaseFrom = add(reservedOn, rndBetween(minReserveTerm, maxReserveTerm));
         LogicalDate leaseTo = add(leaseFrom, rndBetween(MIN_LEASE_TERM, MAX_LEASE_TERM));
 
         lease.leaseFrom().setValue(leaseFrom);
@@ -175,7 +177,7 @@ public class LeaseLifecycleSim {
             leaseFacade().initLease(lease);
 
             // TODO change that to Employee Agent Decision
-            queueEvent(rndBetween(now(), lease.leaseFrom().getValue()), new ApproveApplication(lease));
+            queueEvent(hasImmideateApproval ? now() : rndBetween(now(), lease.leaseFrom().getValue()), new ApproveApplication(lease));
         }
     }
 
@@ -566,8 +568,47 @@ public class LeaseLifecycleSim {
             return end(toDate(simEnd));
         }
 
-        public LeaseLifecycleSimBuilder runBilling() {
+        public LeaseLifecycleSimBuilder simulateBilling() {
             leaseLifecycleSim.runBilling = true;
+            return this;
+        }
+
+        // TODO create some kind of TimeSpan class and use it
+        /**
+         * Set the minimum and maximum term that will pass until lease will become reserved
+         * 
+         * @param min
+         *            minimum time
+         * @param max
+         *            maximum time
+         */
+        public LeaseLifecycleSimBuilder availabilityTermContraints(long min, long max) {
+            assert min <= max;
+            leaseLifecycleSim.minAvailableTerm = min;
+            leaseLifecycleSim.maxAvailableTerm = max;
+            return this;
+        }
+
+        /**
+         * Set the time constraints for the period between lease reservation and lease activation
+         * 
+         * @param min
+         *            minimum time
+         * @param max
+         *            maximum time
+         */
+        public LeaseLifecycleSimBuilder reservedTermConstraints(long min, long max) {
+            assert min <= max;
+            leaseLifecycleSim.minReserveTerm = min;
+            leaseLifecycleSim.maxReserveTerm = max;
+            return this;
+        }
+
+        /**
+         * Approve lease after it has been created, don't make random waiting period between approval and lease from date
+         */
+        public LeaseLifecycleSimBuilder approveImmidately() {
+            leaseLifecycleSim.hasImmideateApproval = true;
             return this;
         }
 
