@@ -158,7 +158,7 @@ public class UserPreloader extends BaseVistaDevDataPreloader {
 
         if (pmc != null) {
             for (int i = 1; i <= config().maxOnboardingUsers; i++) {
-                final String email = DemoData.UserType.ONB.getEmail(i);
+                final String email = DemoData.UserType.ONB.getEmail(i, namespace);
 
                 final Employee emp = CommonsGenerator.createEmployee().duplicate(Employee.class);
                 emp.title().setValue(CommonsGenerator.randomEmployeeTitle());

@@ -65,6 +65,10 @@ public class DemoData {
             return getNamePrefix() + CommonsStringUtils.d000(number) + DemoData.USERS_DOMAIN;
         }
 
+        public String getEmail(int number, String namespace) {
+            return getNamePrefix() + CommonsStringUtils.d000(number) + "." + namespace + DemoData.USERS_DOMAIN;
+        }
+
     }
 
     public static String applicationModeName() {
