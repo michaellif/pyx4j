@@ -52,9 +52,9 @@ public class NavigActivity extends AbstractActivity implements NavigView.MainNav
 
     private final DashboardMetadataService dashboardMetadataService;
 
-    private static boolean isDashboardFolderUpdateRequired = true;
+    private boolean isDashboardFolderUpdateRequired = true;
 
-    private static NavigFolder dashboardFolder;
+    private NavigFolder dashboardFolder;
 
     public NavigActivity(Place place) {
         dashboardMetadataService = GWT.<DashboardMetadataService> create(DashboardMetadataService.class);
