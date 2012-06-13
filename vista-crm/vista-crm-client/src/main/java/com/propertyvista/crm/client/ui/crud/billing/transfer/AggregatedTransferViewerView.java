@@ -21,6 +21,13 @@ import com.propertyvista.domain.financial.PaymentRecord;
 
 public interface AggregatedTransferViewerView extends IViewerView<AggregatedTransfer> {
 
+    interface Presenter extends IViewerView.Presenter {
+
+        void resendAction();
+
+        void cancelAction();
+    }
+
     IListerView<PaymentRecord> getPaymentsListerView();
 
     IListerView<PaymentRecord> getReturnedPaymentsListerView();

@@ -18,6 +18,8 @@ import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.client.activity.crud.ListerActivityBase;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.pyx4j.site.rpc.CrudAppPlace;
@@ -30,7 +32,7 @@ import com.propertyvista.crm.rpc.services.financial.PaymentRecordListService;
 import com.propertyvista.domain.financial.AggregatedTransfer;
 import com.propertyvista.domain.financial.PaymentRecord;
 
-public class AggregatedTransferViewerActivity extends CrmViewerActivity<AggregatedTransfer> {
+public class AggregatedTransferViewerActivity extends CrmViewerActivity<AggregatedTransfer> implements AggregatedTransferViewerView.Presenter {
 
     private final IListerView.Presenter<PaymentRecord> paymentLister;
 
@@ -66,5 +68,25 @@ public class AggregatedTransferViewerActivity extends CrmViewerActivity<Aggregat
         returnedPaymentLister.addPreDefinedFilter(PropertyCriterion
                 .eq(EntityFactory.getEntityPrototype(PaymentRecord.class).aggregatedTransferReturn(), result));
         returnedPaymentLister.populate();
+    }
+
+    @Override
+    public void resendAction() {
+        ((AggregatedTransferCrudService) getService()).cancelTransactions(new DefaultAsyncCallback<VoidSerializable>() {
+            @Override
+            public void onSuccess(VoidSerializable result) {
+                populate();
+            }
+        }, EntityFactory.createIdentityStub(AggregatedTransfer.class, getEntityId()));
+    }
+
+    @Override
+    public void cancelAction() {
+        ((AggregatedTransferCrudService) getService()).resendTransactions(new DefaultAsyncCallback<VoidSerializable>() {
+            @Override
+            public void onSuccess(VoidSerializable result) {
+                populate();
+            }
+        }, EntityFactory.createIdentityStub(AggregatedTransfer.class, getEntityId()));
     }
 }
