@@ -21,10 +21,10 @@ import com.propertyvista.crm.client.activity.NavigFolder;
 
 public interface NavigView extends IsWidget {
 
-    public void setPresenter(MainNavigPresenter presenter);
-
     public interface MainNavigPresenter {
     }
+
+    public void setPresenter(MainNavigPresenter presenter);
 
     public void setNavigFolders(List<NavigFolder> folders);
 }

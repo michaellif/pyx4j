@@ -35,37 +35,48 @@ import com.propertyvista.crm.client.ui.NavigView;
 import com.propertyvista.crm.client.ui.viewfactories.CrmVeiwFactory;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.dashboard.DashboardMetadataService;
-import com.propertyvista.crm.rpc.services.dashboard.ReportMetadataService;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 
 public class NavigActivity extends AbstractActivity implements NavigView.MainNavigPresenter, BoardUpdateHandler {
 
     private static final I18n i18n = I18n.get(NavigActivity.class);
 
+    private static final Comparator<DashboardMetadata> ORDER_BY_NAME = new Comparator<DashboardMetadata>() {
+        @Override
+        public int compare(DashboardMetadata e1, DashboardMetadata e2) {
+            return e1.name().getValue().toLowerCase().compareTo(e2.name().getValue().toLowerCase());
+        }
+    };
+
     private final NavigView view;
 
-    private List<NavigFolder> currentfolders;
+    private final DashboardMetadataService dashboardMetadataService;
+
+    private static boolean isDashboardFolderUpdateRequired = true;
+
+    private static NavigFolder dashboardFolder;
 
     public NavigActivity(Place place) {
+        dashboardMetadataService = GWT.<DashboardMetadataService> create(DashboardMetadataService.class);
         view = CrmVeiwFactory.instance(NavigView.class);
-        assert (view != null);
         view.setPresenter(this);
-        withPlace(place);
-    }
-
-    public NavigActivity withPlace(Place place) {
-        return this;
     }
 
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
-        view.setNavigFolders(currentfolders = createNavigFolders());
-        panel.setWidget(view);
         eventBus.addHandler(BoardUpdateEvent.getType(), this);
+        panel.setWidget(view);
+        startCreateNavigFolders();
     }
 
-    public List<NavigFolder> createNavigFolders() {
-        ArrayList<NavigFolder> list = new ArrayList<NavigFolder>();
+    @Override
+    public void onBoardUpdate(BoardUpdateEvent event) {
+        isDashboardFolderUpdateRequired = true;
+        startCreateNavigFolders();
+    }
+
+    private void startCreateNavigFolders() {
+        final ArrayList<NavigFolder> list = new ArrayList<NavigFolder>();
 
         //Properties
         NavigFolder folder = new NavigFolder(i18n.tr("Properties"), CrmImages.INSTANCE.propertiesNormal(), CrmImages.INSTANCE.propertiesHover(),
@@ -116,66 +127,38 @@ public class NavigActivity extends AbstractActivity implements NavigView.MainNav
         //Reports
         folder = new NavigFolder(i18n.tr("Reports"), CrmImages.INSTANCE.reportsNormal(), CrmImages.INSTANCE.reportsHover(), CrmImages.INSTANCE.reportsActive());
         folder.addNavigItem(new CrmSiteMap.Report.Management());
-//        folder.addNavigItem(new CrmSiteMap.Report.System());
-        fillReports(folder);
         list.add(folder);
 
-        //Dashboards
-        folder = new NavigFolder(i18n.tr("Dashboards"), CrmImages.INSTANCE.dashboardsNormal(), CrmImages.INSTANCE.dashboardsHover(),
-                CrmImages.INSTANCE.dashboardsActive());
-        folder.addNavigItem(new CrmSiteMap.Dashboard.Management());
+        {
+            //Dashboards
+            if (isDashboardFolderUpdateRequired) {
+                dashboardFolder = new NavigFolder(i18n.tr("Dashboards"), CrmImages.INSTANCE.dashboardsNormal(), CrmImages.INSTANCE.dashboardsHover(),
+                        CrmImages.INSTANCE.dashboardsActive());
+                dashboardFolder.addNavigItem(new CrmSiteMap.Dashboard.Management());
+                // add the rest of stuff asynchronously from the server
+                dashboardMetadataService.listMetadata(new DefaultAsyncCallback<Vector<DashboardMetadata>>() {
+                    @Override
+                    public void onSuccess(Vector<DashboardMetadata> result) {
+                        Collections.sort(result, ORDER_BY_NAME);
+                        for (DashboardMetadata metadata : result) {
+                            dashboardFolder.addNavigItem(new CrmSiteMap.Dashboard().formPlace(metadata.getPrimaryKey(), metadata.name().getStringView()));
+                        }
+                        isDashboardFolderUpdateRequired = false;
 
-// TODO: this folder is populated below (in fillDashboards())...
-//        so we should decide how many system dashborads we'll have and if > 1
-//        - should we show here link to 'most' system one ;)
-//        folder.addNavigItem(new CrmSiteMap.Dashboard.System());
+                        list.add(dashboardFolder);
 
-        fillDashboards(folder);
-        list.add(folder);
-
-        return list;
-    }
-
-    private void fillReports(final NavigFolder folder) {
-        ReportMetadataService service = GWT.create(ReportMetadataService.class);
-        service.listMetadata(new DefaultAsyncCallback<Vector<DashboardMetadata>>() {
-            @Override
-            public void onSuccess(Vector<DashboardMetadata> result) {
-                for (DashboardMetadata dmd : result) {
-                    folder.addNavigItem(new CrmSiteMap.Report().formPlace(dmd.getPrimaryKey(), dmd.name().getStringView()));
-                }
-                // update UI:
-                view.setNavigFolders(currentfolders);
+                        onCreateNavigFoldersFinished(list);
+                    }
+                });
+            } else {
+                list.add(dashboardFolder);
+                onCreateNavigFoldersFinished(list);
             }
-        });
-    }
-
-    static final Comparator<DashboardMetadata> ORDER_BY_NAME = new Comparator<DashboardMetadata>() {
-        @Override
-        public int compare(DashboardMetadata e1, DashboardMetadata e2) {
-            return e1.name().getValue().toLowerCase().compareTo(e2.name().getValue().toLowerCase());
         }
-    };
-
-    private void fillDashboards(final NavigFolder folder) {
-        DashboardMetadataService service = GWT.create(DashboardMetadataService.class);
-        service.listMetadata(new DefaultAsyncCallback<Vector<DashboardMetadata>>() {
-            @Override
-            public void onSuccess(Vector<DashboardMetadata> result) {
-
-                Collections.sort(result, ORDER_BY_NAME);
-                int j = result.size();
-                for (int i = 0; i < j; i++) {
-                    folder.addNavigItem(new CrmSiteMap.Dashboard().formPlace(result.get(i).getPrimaryKey(), result.get(i).name().getStringView()));
-                }
-                // update UI:
-                view.setNavigFolders(currentfolders);
-            }
-        });
     }
 
-    @Override
-    public void onBoardUpdate(BoardUpdateEvent event) {
-        view.setNavigFolders(currentfolders = createNavigFolders());
+    private void onCreateNavigFoldersFinished(List<NavigFolder> navigFolders) {
+        view.setNavigFolders(navigFolders);
     }
+
 }
