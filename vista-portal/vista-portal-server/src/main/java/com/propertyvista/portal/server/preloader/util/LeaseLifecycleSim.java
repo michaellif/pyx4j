@@ -141,6 +141,7 @@ public class LeaseLifecycleSim {
         // TODO something more sophisticated is probably required here
 
         lease.version().leaseProducts().serviceItem().effectiveDate().setValue(lease.leaseFrom().getValue());
+
         for (BillableItem item : lease.version().leaseProducts().featureItems()) {
             item.effectiveDate().setValue(lease.leaseFrom().getValue());
         }
@@ -582,7 +583,7 @@ public class LeaseLifecycleSim {
          * @param max
          *            maximum time
          */
-        public LeaseLifecycleSimBuilder availabilityTermContraints(long min, long max) {
+        public LeaseLifecycleSimBuilder availabilityTermConstraints(long min, long max) {
             assert min <= max;
             leaseLifecycleSim.minAvailableTerm = min;
             leaseLifecycleSim.maxAvailableTerm = max;
