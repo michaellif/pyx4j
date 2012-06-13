@@ -16,6 +16,7 @@ package com.propertyvista.admin.server.preloader;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.dataimport.DataPreloaderCollection;
 
+import com.propertyvista.preloader.OnboardingPmcPreloader;
 import com.propertyvista.preloader.OnboardingUserPreloader;
 
 public class VistaAdminDataPreloaders extends DataPreloaderCollection {
@@ -23,10 +24,10 @@ public class VistaAdminDataPreloaders extends DataPreloaderCollection {
     public VistaAdminDataPreloaders() {
         add(new AdminUsersPreloader());
         add(new OnboardingUserPreloader());
+        add(new OnboardingPmcPreloader());
         add(new TriggerPreloader());
         if (ApplicationMode.isDevelopment()) {
             add(new DevelopmentSecurityPreloader());
         }
     }
-
 }
