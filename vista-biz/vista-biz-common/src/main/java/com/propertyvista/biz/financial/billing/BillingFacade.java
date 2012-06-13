@@ -18,6 +18,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.propertyvista.domain.StatisticsRecord;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.BillingCycle;
+import com.propertyvista.domain.financial.billing.BillingType;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 public interface BillingFacade {
@@ -40,4 +41,6 @@ public interface BillingFacade {
     void runBilling(LogicalDate date, StatisticsRecord dynamicStatisticsRecord);
 
     void initializeFutureBillingCycles();
+
+    BillingType ensureBillingType(Lease lease);
 }

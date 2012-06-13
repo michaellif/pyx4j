@@ -28,7 +28,7 @@ public class TaxesDataModel {
 
     private final LocationsDataModel locationsDataModel;
 
-    public TaxesDataModel(LocationsDataModel locationsDataModel) {
+    public TaxesDataModel(PreloadConfig config, LocationsDataModel locationsDataModel) {
         this.locationsDataModel = locationsDataModel;
         taxes = new ArrayList<Tax>();
     }

@@ -98,7 +98,7 @@ public class BillingCycleTest extends VistaDBTestBase {
     private BillingCycle createFirstBillingCycle(LogicalDate leaseStartDate, Integer billingPeriodStartDay, boolean useCycleLeaseDay) {
         BillingType billingType = EntityFactory.create(BillingType.class);
         billingType.paymentFrequency().setValue(PaymentFrequency.Monthly);
-        billingType.billingPeriodStartDay().setValue(billingPeriodStartDay);
+        billingType.billingCycleStartDay().setValue(billingPeriodStartDay);
         Persistence.service().persist(billingType);
 
         BillingCycle billingCycle = BillingLifecycleManager.getNewLeaseInitialBillingCycle(billingType, null, leaseStartDate, useCycleLeaseDay);
@@ -109,7 +109,7 @@ public class BillingCycleTest extends VistaDBTestBase {
             boolean useCycleLeaseDay) {
         BillingType billingType = EntityFactory.create(BillingType.class);
         billingType.paymentFrequency().setValue(PaymentFrequency.Monthly);
-        billingType.billingPeriodStartDay().setValue(billingPeriodStartDay);
+        billingType.billingCycleStartDay().setValue(billingPeriodStartDay);
         Persistence.service().persist(billingType);
 
         BillingCycle billingCycle = BillingLifecycleManager.getExistingLeaseInitialBillingCycle(billingType, null, leaseStartDate, leaseCreationDate,

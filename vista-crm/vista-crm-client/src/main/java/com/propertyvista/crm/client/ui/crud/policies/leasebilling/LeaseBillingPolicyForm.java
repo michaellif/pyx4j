@@ -62,11 +62,11 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
 
         int row = -1;
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().prorationMethod()), 10).build());
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().useBillingPeriodSartDay())).build());
-        get(proto().useBillingPeriodSartDay()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().useDefaultBillingCycleSartDay())).build());
+        get(proto().useDefaultBillingCycleSartDay()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
             public void onValueChange(ValueChangeEvent<Boolean> event) {
-                get(proto().billingPeriodStartDay()).setEnabled(event.getValue());
+                get(proto().defaultBillingCycleSartDay()).setEnabled(event.getValue());
 
             }
         });
@@ -77,7 +77,7 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
         }
         CComboBox<Integer> comboBox = new CComboBox<Integer>();
         comboBox.setOptions(options);
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingPeriodStartDay(), comboBox), 5).build());
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().defaultBillingCycleSartDay(), comboBox), 5).build());
 
         return panel;
     }
@@ -111,7 +111,7 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
     protected void onPopulate() {
         super.onPopulate();
 
-        get(proto().billingPeriodStartDay()).setEnabled(getValue().useBillingPeriodSartDay().getValue());
+        get(proto().defaultBillingCycleSartDay()).setEnabled(getValue().useDefaultBillingCycleSartDay().getValue());
     }
 
     private class NsfFeeItemFolder extends VistaTableFolder<NsfFeeItem> {

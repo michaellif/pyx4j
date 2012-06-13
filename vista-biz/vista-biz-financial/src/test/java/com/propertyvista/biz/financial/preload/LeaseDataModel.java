@@ -27,6 +27,7 @@ import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.Deposit.RepaymentMode;
 import com.propertyvista.domain.tenant.lease.Deposit.ValueType;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 
 public class LeaseDataModel {
@@ -39,7 +40,7 @@ public class LeaseDataModel {
 
     private final BuildingDataModel buildingDataModel;
 
-    public LeaseDataModel(BuildingDataModel buildingDataModel, TenantDataModel tenantDataModel) {
+    public LeaseDataModel(PreloadConfig config, BuildingDataModel buildingDataModel, TenantDataModel tenantDataModel) {
         this.buildingDataModel = buildingDataModel;
         this.tenantDataModel = tenantDataModel;
 
@@ -68,6 +69,8 @@ public class LeaseDataModel {
         calendar.add(Calendar.MONTH, 6);
         calendar.add(Calendar.DATE, -1);
         lease.leaseTo().setValue(new LogicalDate(calendar.getTime()));
+
+        lease.paymentFrequency().setValue(PaymentFrequency.Monthly);
 
         addTenants();
 

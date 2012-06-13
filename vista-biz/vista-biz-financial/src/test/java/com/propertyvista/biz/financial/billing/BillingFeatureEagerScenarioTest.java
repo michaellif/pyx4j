@@ -33,7 +33,7 @@ public class BillingFeatureEagerScenarioTest extends FinancialTestBase {
 
     public void testSequentialBillingCycle() {
         preloadData();
-        initLease("23-Mar-2011", "3-Aug-2011", 1);
+        initLease("23-Mar-2011", "3-Aug-2011");
 
         BillableItem parking1 = addParking(SaveAction.saveAsDraft);
         addFeatureAdjustment(parking1.uid().getValue(), "-10", AdjustmentType.monetary, ExecutionType.inLease);

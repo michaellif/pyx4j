@@ -38,8 +38,8 @@ public class LeaseBillingPolicyPreloader extends AbstractPolicyPreloader<LeaseBi
     protected LeaseBillingPolicy createPolicy(StringBuilder log) {
         LeaseBillingPolicy policy = EntityFactory.create(LeaseBillingPolicy.class);
 
-        policy.billingPeriodStartDay().setValue(1);
-        policy.useBillingPeriodSartDay().setValue(false);
+        policy.defaultBillingCycleSartDay().setValue(1);
+        policy.useDefaultBillingCycleSartDay().setValue(false);
         policy.prorationMethod().setValue(ProrationMethod.Standard);
 
         LateFeeItem lateFee = EntityFactory.create(LateFeeItem.class);

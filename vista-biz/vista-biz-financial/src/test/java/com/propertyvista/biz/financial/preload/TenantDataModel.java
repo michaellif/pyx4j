@@ -23,7 +23,7 @@ public class TenantDataModel {
 
     private Customer tenant;
 
-    public TenantDataModel() {
+    public TenantDataModel(PreloadConfig config) {
     }
 
     public void generate(boolean persist) {

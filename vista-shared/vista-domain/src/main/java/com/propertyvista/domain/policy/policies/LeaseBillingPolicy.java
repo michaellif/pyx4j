@@ -35,10 +35,10 @@ public interface LeaseBillingPolicy extends Policy {
     IPrimitive<BillingAccount.ProrationMethod> prorationMethod();
 
     @NotNull
-    IPrimitive<Boolean> useBillingPeriodSartDay();
+    IPrimitive<Boolean> useDefaultBillingCycleSartDay();
 
     @NotNull
-    IPrimitive<Integer> billingPeriodStartDay();
+    IPrimitive<Integer> defaultBillingCycleSartDay();
 
     @Owned
     LateFeeItem lateFee();

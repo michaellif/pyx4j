@@ -120,6 +120,7 @@ public interface Bill extends IEntity {
     @ToString(index = 2)
     IPrimitive<BillStatus> billStatus();
 
+    //TODO 1
     IPrimitive<Boolean> latestBillInCycle();
 
     IPrimitive<String> billCreationError();

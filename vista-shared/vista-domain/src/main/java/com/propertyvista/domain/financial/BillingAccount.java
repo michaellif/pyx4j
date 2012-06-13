@@ -86,8 +86,6 @@ public interface BillingAccount extends IEntity {
 
     IPrimitive<ProrationMethod> prorationMethod();
 
-    IPrimitive<Integer> billingPeriodStartDate();
-
     //Should have deposit value field
 
     // atb report

@@ -38,7 +38,7 @@ public class BillingRejectedPaymentScenarioTest extends FinancialTestBase {
     }
 
     public void testScenario() {
-        initLease("01-Apr-2011", "31-Dec-2011", 1);
+        initLease("01-Apr-2011", "31-Dec-2011");
 
         //==================== First Bill ======================//
 

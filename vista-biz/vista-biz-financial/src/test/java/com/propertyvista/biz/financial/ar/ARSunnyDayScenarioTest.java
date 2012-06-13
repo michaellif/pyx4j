@@ -39,7 +39,7 @@ public class ARSunnyDayScenarioTest extends FinancialTestBase {
 
     public void testScenario() {
 
-        initLease("23-Mar-2011", "03-Aug-2011", 1);
+        initLease("23-Mar-2011", "03-Aug-2011");
         addParking(SaveAction.saveAsDraft);
         addParking("23-Apr-2011", "03-Aug-2011", SaveAction.saveAsDraft);
 

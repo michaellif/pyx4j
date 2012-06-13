@@ -43,6 +43,7 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.financial.SysDateManager;
 import com.propertyvista.biz.financial.ar.ARFacade;
+import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.domain.StatisticsRecord;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.billing.Bill;
@@ -50,6 +51,7 @@ import com.propertyvista.domain.financial.billing.Bill.BillStatus;
 import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.financial.billing.BillingType;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
+import com.propertyvista.domain.policy.policies.LeaseBillingPolicy;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
@@ -275,11 +277,11 @@ public class BillingLifecycleManager {
         if (previousBill == null) {
             if (billingAccount.carryforwardBalance().isNull()) {
                 return getNewLeaseInitialBillingCycle(billingAccount.billingType(), lease.unit().belongsTo(), lease.leaseFrom().getValue(), !billingAccount
-                        .billingPeriodStartDate().isNull());
+                        .billingType().billingCycleStartDay().isNull());
 
             } else {
                 return getExistingLeaseInitialBillingCycle(billingAccount.billingType(), lease.unit().belongsTo(), lease.leaseFrom().getValue(), lease
-                        .creationDate().getValue(), !billingAccount.billingPeriodStartDate().isNull());
+                        .creationDate().getValue(), !billingAccount.billingType().billingCycleStartDay().isNull());
             }
         } else {
             return getSubsiquentBillingCycle(previousBill.billingCycle());
@@ -302,7 +304,6 @@ public class BillingLifecycleManager {
         }
         if (billingAccount.billingType().isNull()) {
             billingAccount.billingType().set(ensureBillingType(lease));
-            billingAccount.billCounter().setValue(0);
             Persistence.service().persist(billingAccount);
         }
         return billingAccount;
@@ -335,26 +336,26 @@ public class BillingLifecycleManager {
 
         if (billingType.isNull()) {
             PaymentFrequency paymentFrequency = lease.paymentFrequency().getValue();
-            Integer billingPeriodStartDay = null;
-            if (lease.billingAccount().billingPeriodStartDate().isNull()) {
-                billingPeriodStartDay = BillDateUtils.calculateBillingTypeStartDay(lease.paymentFrequency().getValue(), lease.leaseFrom().getValue());
-            } else {
-                billingPeriodStartDay = lease.billingAccount().billingPeriodStartDate().getValue();
+
+            LeaseBillingPolicy leaseBillingPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(lease.unit().belongsTo(),
+                    LeaseBillingPolicy.class);
+            Integer billingCycleStartDay = leaseBillingPolicy.defaultBillingCycleSartDay().getValue();
+            if (billingCycleStartDay == null) {
+                billingCycleStartDay = BillDateUtils.calculateBillingTypeStartDay(lease.paymentFrequency().getValue(), lease.leaseFrom().getValue());
             }
 
             //try to find existing billing cycle    
             EntityQueryCriteria<BillingType> criteria = EntityQueryCriteria.create(BillingType.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().paymentFrequency(), paymentFrequency));
-            criteria.add(PropertyCriterion.eq(criteria.proto().billingPeriodStartDay(), billingPeriodStartDay));
+            criteria.add(PropertyCriterion.eq(criteria.proto().billingCycleStartDay(), billingCycleStartDay));
             billingType = Persistence.service().retrieve(criteria);
 
             if (billingType == null) {
                 billingType = EntityFactory.create(BillingType.class);
                 billingType.paymentFrequency().setValue(paymentFrequency);
-                billingType.billingPeriodStartDay().setValue(billingPeriodStartDay);
+                billingType.billingCycleStartDay().setValue(billingCycleStartDay);
                 billingType.billingCycleTargetDay().setValue(
-                        (billingPeriodStartDay + lease.paymentFrequency().getValue().getNumOfCycles() - lease.paymentFrequency().getValue()
-                                .getBillRunTargetDayOffset())
+                        (billingCycleStartDay + lease.paymentFrequency().getValue().getNumOfCycles() - paymentFrequency.getBillRunTargetDayOffset())
                                 % lease.paymentFrequency().getValue().getNumOfCycles());
 
                 Persistence.service().persist(billingType);

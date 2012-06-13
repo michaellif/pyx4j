@@ -26,7 +26,7 @@ public class IdAssignmentPolicyDataModel {
 
     private IdAssignmentPolicy policy;
 
-    public IdAssignmentPolicyDataModel() {
+    public IdAssignmentPolicyDataModel(PreloadConfig config) {
     }
 
     public void generate(boolean persist) {

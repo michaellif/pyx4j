@@ -47,7 +47,7 @@ public class BillTester extends Tester {
     }
 
     public BillTester billingTypePeriodStartDay(Integer day) {
-        assertEquals("Billing Cycle Period Start Day", day, bill.billingCycle().billingType().billingPeriodStartDay().getValue());
+        assertEquals("Billing Cycle Period Start Day", day, bill.billingCycle().billingType().billingCycleStartDay().getValue());
         return this;
     }
 

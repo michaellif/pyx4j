@@ -31,7 +31,7 @@ public class ProductItemTypesDataModel {
 
     public final List<FeatureItemType> featureItemTypes;
 
-    public ProductItemTypesDataModel() {
+    public ProductItemTypesDataModel(PreloadConfig config) {
         serviceItemTypes = new ArrayList<ServiceItemType>();
         featureItemTypes = new ArrayList<FeatureItemType>();
     }

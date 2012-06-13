@@ -22,6 +22,7 @@ package com.propertyvista.biz.financial.billing;
 
 import com.propertyvista.biz.financial.FinancialTestBase;
 import com.propertyvista.biz.financial.SysDateManager;
+import com.propertyvista.biz.financial.preload.PreloadConfig;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.AdjustmentType;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.ExecutionType;
@@ -31,14 +32,14 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        preloadData();
+        PreloadConfig config = new PreloadConfig();
+        config.defaultBillingCycleSartDay = 15;
+        preloadData(config);
     }
 
-    public void testScenario1()
+    public void testScenario1() {
 
-    {
-
-        initLease("15-Jan-2012", "14-Feb-2012", 15);
+        initLease("15-Jan-2012", "14-Feb-2012");
         addServiceAdjustment("-55.55", AdjustmentType.monetary, ExecutionType.inLease);
 
         //==================== RUN 1 ======================//
@@ -63,17 +64,15 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
         depositAmount("930.30").
         taxes("104.97").
         totalDueAmount("1910.02");
-        // @formatter:off
+        // @formatter:on
 
         // printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
 
     }
 
-    public void testScenario2()
+    public void testScenario2() {
 
-    {
-
-        initLease("16-Jan-2012", "14-Feb-2012", 15);
+        initLease("16-Jan-2012", "14-Feb-2012");
         addServiceAdjustment("-55.55", AdjustmentType.monetary, ExecutionType.inLease);
 
         SysDateManager.setSysDate("01-Jan-2012");
@@ -81,6 +80,7 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
 
         bill = confirmBill(bill, true, true);
 
+        // @formatter:off
         new BillTester(bill).
         billSequenceNumber(1).
         previousBillSequenceNumber(null).
@@ -92,16 +92,16 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
         depositAmount("930.30").
         taxes("101.58").
         totalDueAmount("1878.41");
-        // @formatter:off
+        // @formatter:on
 
         // printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
-
     }
+
     public void testScenario3()
-    
+
     {
 
-        initLease("17-Jan-2012", "14-Feb-2012", 15);
+        initLease("17-Jan-2012", "14-Feb-2012");
         addServiceAdjustment("-55.55", AdjustmentType.monetary, ExecutionType.inLease);
 
         SysDateManager.setSysDate("01-Jan-2012");
@@ -109,26 +109,17 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
 
         bill = confirmBill(bill, true, true);
 
-        new BillTester(bill).billSequenceNumber(1).
-        previousBillSequenceNumber(null).
-        billType(Bill.BillType.First).
-        billingPeriodStartDate("17-Jan-2012").
-        billingPeriodEndDate("14-Feb-2012").
-        numOfProductCharges(1).
-        serviceCharge("818.31").
-        depositAmount("930.30").
-        taxes("98.20").
-        totalDueAmount("1846.81");
-        // @formatter:off
+        new BillTester(bill).billSequenceNumber(1).previousBillSequenceNumber(null).billType(Bill.BillType.First).billingPeriodStartDate("17-Jan-2012")
+                .billingPeriodEndDate("14-Feb-2012").numOfProductCharges(1).serviceCharge("818.31").depositAmount("930.30").taxes("98.20")
+                .totalDueAmount("1846.81");
 
         // printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
 
     }
-    public void testScenario4()
-    
-    {
 
-        initLease("18-Jan-2012", "14-Feb-2012", 15);
+    public void testScenario4() {
+
+        initLease("18-Jan-2012", "14-Feb-2012");
         addServiceAdjustment("-55.55", AdjustmentType.monetary, ExecutionType.inLease);
 
         SysDateManager.setSysDate("01-Jan-2012");
@@ -136,6 +127,7 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
 
         bill = confirmBill(bill, true, true);
 
+        // @formatter:off
         new BillTester(bill).billSequenceNumber(1).
         previousBillSequenceNumber(null).
         billType(Bill.BillType.First).
@@ -146,16 +138,15 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
         depositAmount("930.30").
         taxes("94.81").
         totalDueAmount("1815.21");
-        // @formatter:off
+        // @formatter:on
 
         // printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
 
     }
-    public void testScenario5()
 
-    {
+    public void testScenario5() {
 
-        initLease("19-Jan-2012", "14-Feb-2012", 15);
+        initLease("19-Jan-2012", "14-Feb-2012");
         addServiceAdjustment("-55.55", AdjustmentType.monetary, ExecutionType.inLease);
 
         SysDateManager.setSysDate("01-Jan-2012");
@@ -163,7 +154,9 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
 
         bill = confirmBill(bill, true, true);
 
-        new BillTester(bill).billSequenceNumber(1).
+        // @formatter:off
+        new BillTester(bill).
+        billSequenceNumber(1).
         previousBillSequenceNumber(null).
         billType(Bill.BillType.First).
         billingPeriodStartDate("19-Jan-2012").
@@ -173,16 +166,17 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
         depositAmount("930.30").
         taxes("91.43").
         totalDueAmount("1783.61");
-        // @formatter:off
+        // @formatter:on
 
         // printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
 
     }
+
     public void testScenario6()
-    
+
     {
 
-        initLease("20-Jan-2012", "14-Feb-2012", 15);
+        initLease("20-Jan-2012", "14-Feb-2012");
         addServiceAdjustment("-55.55", AdjustmentType.monetary, ExecutionType.inLease);
 
         SysDateManager.setSysDate("01-Jan-2012");
@@ -190,16 +184,9 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
 
         bill = confirmBill(bill, true, true);
 
-        new BillTester(bill).billSequenceNumber(1).
-        previousBillSequenceNumber(null).
-        billType(Bill.BillType.First).
-        billingPeriodStartDate("20-Jan-2012").
-        billingPeriodEndDate("14-Feb-2012").
-        numOfProductCharges(1).
-        serviceCharge("733.66").
-        depositAmount("930.30").
-        taxes("88.04").
-        totalDueAmount("1752.00");
+        new BillTester(bill).billSequenceNumber(1).previousBillSequenceNumber(null).billType(Bill.BillType.First).billingPeriodStartDate("20-Jan-2012")
+                .billingPeriodEndDate("14-Feb-2012").numOfProductCharges(1).serviceCharge("733.66").depositAmount("930.30").taxes("88.04")
+                .totalDueAmount("1752.00");
         // @formatter:off
 
         // printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
@@ -209,7 +196,7 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
     
     {
 
-        initLease("21-Jan-2012", "14-Feb-2012", 15);
+        initLease("21-Jan-2012", "14-Feb-2012");
         addServiceAdjustment("-55.55", AdjustmentType.monetary, ExecutionType.inLease);
 
         SysDateManager.setSysDate("01-Jan-2012");
@@ -236,7 +223,7 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
     
     {
 
-        initLease("22-Jan-2012", "14-Feb-2012", 15);
+        initLease("22-Jan-2012", "14-Feb-2012");
         addServiceAdjustment("-55.55", AdjustmentType.monetary, ExecutionType.inLease);
 
         SysDateManager.setSysDate("01-Jan-2012");
@@ -263,7 +250,7 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
     
     {
 
-        initLease("23-Jan-2012", "14-Feb-2012", 15);
+        initLease("23-Jan-2012", "14-Feb-2012");
         addServiceAdjustment("-55.55", AdjustmentType.monetary, ExecutionType.inLease);
 
         SysDateManager.setSysDate("01-Jan-2012");
@@ -290,7 +277,7 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
     
     {
 
-        initLease("24-Jan-2012", "14-Feb-2012", 15);
+        initLease("24-Jan-2012", "14-Feb-2012");
         addServiceAdjustment("-55.55", AdjustmentType.monetary, ExecutionType.inLease);
 
         SysDateManager.setSysDate("01-Jan-2012");
@@ -317,7 +304,7 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
     
     {
 
-        initLease("25-Jan-2012", "14-Feb-2012", 15);
+        initLease("25-Jan-2012", "14-Feb-2012");
         addServiceAdjustment("-55.55", AdjustmentType.monetary, ExecutionType.inLease);
 
         SysDateManager.setSysDate("01-Jan-2012");
@@ -344,7 +331,7 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
     
     {
 
-        initLease("26-Jan-2012", "14-Feb-2012", 15);
+        initLease("26-Jan-2012", "14-Feb-2012");
         addServiceAdjustment("-55.55", AdjustmentType.monetary, ExecutionType.inLease);
 
         SysDateManager.setSysDate("01-Jan-2012");
@@ -371,7 +358,7 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
     
     {
 
-        initLease("27-Jan-2012", "14-Feb-2012", 15);
+        initLease("27-Jan-2012", "14-Feb-2012");
         addServiceAdjustment("-55.55", AdjustmentType.monetary, ExecutionType.inLease);
 
         SysDateManager.setSysDate("01-Jan-2012");
@@ -398,7 +385,7 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
     
     {
 
-        initLease("28-Jan-2012", "14-Feb-2012", 15);
+        initLease("28-Jan-2012", "14-Feb-2012");
         addServiceAdjustment("-55.55", AdjustmentType.monetary, ExecutionType.inLease);
 
         SysDateManager.setSysDate("01-Jan-2012");
@@ -425,7 +412,7 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
     
     {
 
-        initLease("29-Jan-2012", "14-Feb-2012", 15);
+        initLease("29-Jan-2012", "14-Feb-2012");
         addServiceAdjustment("-55.55", AdjustmentType.monetary, ExecutionType.inLease);
 
         SysDateManager.setSysDate("01-Jan-2012");
@@ -452,7 +439,7 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
     
     {
 
-        initLease("30-Jan-2012", "14-Feb-2012", 15);
+        initLease("30-Jan-2012", "14-Feb-2012");
         addServiceAdjustment("-55.55", AdjustmentType.monetary, ExecutionType.inLease);
 
         SysDateManager.setSysDate("01-Jan-2012");
@@ -479,7 +466,7 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
     
     {
 
-        initLease("31-Jan-2012", "14-Feb-2012", 15);
+        initLease("31-Jan-2012", "14-Feb-2012");
         addServiceAdjustment("-55.55", AdjustmentType.monetary, ExecutionType.inLease);
 
         SysDateManager.setSysDate("01-Jan-2012");
@@ -506,7 +493,7 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
     
     {
 
-        initLease("01-Feb-2012", "14-Feb-2012", 15);
+        initLease("01-Feb-2012", "14-Feb-2012");
         addServiceAdjustment("-55.55", AdjustmentType.monetary, ExecutionType.inLease);
 
         SysDateManager.setSysDate("01-Jan-2012");
@@ -533,7 +520,7 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
     
     {
 
-        initLease("02-Feb-2012", "14-Feb-2012", 15);
+        initLease("02-Feb-2012", "14-Feb-2012");
         addServiceAdjustment("-55.55", AdjustmentType.monetary, ExecutionType.inLease);
 
         SysDateManager.setSysDate("01-Jan-2012");
@@ -560,7 +547,7 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
     
     {
 
-        initLease("02-Feb-2012", "14-Feb-2012", 15);
+        initLease("02-Feb-2012", "14-Feb-2012");
         addServiceAdjustment("-55.55", AdjustmentType.monetary, ExecutionType.inLease);
 
         SysDateManager.setSysDate("01-Jan-2012");
@@ -588,7 +575,7 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
     
     {
 
-        initLease("03-Feb-2012", "14-Feb-2012", 15);
+        initLease("03-Feb-2012", "14-Feb-2012");
         addServiceAdjustment("-55.55", AdjustmentType.monetary, ExecutionType.inLease);
 
         SysDateManager.setSysDate("01-Jan-2012");
@@ -616,7 +603,7 @@ public void testScenario22()
     
     {
 
-        initLease("04-Feb-2012", "14-Feb-2012", 15);
+        initLease("04-Feb-2012", "14-Feb-2012");
         addServiceAdjustment("-55.55", AdjustmentType.monetary, ExecutionType.inLease);
 
         SysDateManager.setSysDate("01-Jan-2012");
@@ -643,7 +630,7 @@ public void testScenario23()
 
 {
 
-    initLease("05-Feb-2012", "14-Feb-2012", 15);
+    initLease("05-Feb-2012", "14-Feb-2012");
     addServiceAdjustment("-55.55", AdjustmentType.monetary, ExecutionType.inLease);
 
     SysDateManager.setSysDate("01-Jan-2012");
@@ -670,7 +657,7 @@ public void testScenario24()
 
 {
 
-    initLease("06-Feb-2012", "14-Feb-2012", 15);
+    initLease("06-Feb-2012", "14-Feb-2012");
     addServiceAdjustment("-55.55", AdjustmentType.monetary, ExecutionType.inLease);
 
     SysDateManager.setSysDate("01-Jan-2012");
@@ -697,7 +684,7 @@ public void testScenario25()
 
 {
 
-    initLease("07-Feb-2012", "14-Feb-2012", 15);
+    initLease("07-Feb-2012", "14-Feb-2012");
     addServiceAdjustment("-55.55", AdjustmentType.monetary, ExecutionType.inLease);
 
     SysDateManager.setSysDate("01-Jan-2012");
@@ -724,7 +711,7 @@ public void testScenario26()
 
 {
 
-    initLease("08-Feb-2012", "14-Feb-2012", 15);
+    initLease("08-Feb-2012", "14-Feb-2012");
     addServiceAdjustment("-55.55", AdjustmentType.monetary, ExecutionType.inLease);
 
     SysDateManager.setSysDate("01-Jan-2012");
@@ -751,7 +738,7 @@ public void testScenario27()
 
 {
 
-    initLease("09-Feb-2012", "14-Feb-2012", 15);
+    initLease("09-Feb-2012", "14-Feb-2012");
     addServiceAdjustment("-55.55", AdjustmentType.monetary, ExecutionType.inLease);
 
     SysDateManager.setSysDate("01-Jan-2012");
@@ -778,7 +765,7 @@ public void testScenario28()
 
 {
 
-    initLease("10-Feb-2012", "14-Feb-2012", 15);
+    initLease("10-Feb-2012", "14-Feb-2012");
     addServiceAdjustment("-55.55", AdjustmentType.monetary, ExecutionType.inLease);
 
     SysDateManager.setSysDate("01-Jan-2012");
@@ -805,7 +792,7 @@ public void testScenario29()
 
 {
 
-    initLease("11-Feb-2012", "14-Feb-2012", 15);
+    initLease("11-Feb-2012", "14-Feb-2012");
     addServiceAdjustment("-55.55", AdjustmentType.monetary, ExecutionType.inLease);
 
     SysDateManager.setSysDate("01-Jan-2012");
@@ -832,7 +819,7 @@ public void testScenario30()
 
 {
 
-    initLease("12-Feb-2012", "14-Feb-2012", 15);
+    initLease("12-Feb-2012", "14-Feb-2012");
     addServiceAdjustment("-55.55", AdjustmentType.monetary, ExecutionType.inLease);
 
     SysDateManager.setSysDate("01-Jan-2012");
@@ -859,7 +846,7 @@ public void testScenario31()
 
 {
 
-    initLease("13-Feb-2012", "14-Feb-2012", 15);
+    initLease("13-Feb-2012", "14-Feb-2012");
     addServiceAdjustment("-55.55", AdjustmentType.monetary, ExecutionType.inLease);
 
     SysDateManager.setSysDate("01-Jan-2012");
@@ -887,7 +874,7 @@ public void testScenario31()
 
     {
 
-        initLease("14-Feb-2012", "14-Feb-2012", 15);
+        initLease("14-Feb-2012", "14-Feb-2012");
         addServiceAdjustment("-55.55", AdjustmentType.monetary, ExecutionType.inLease);
 
         SysDateManager.setSysDate("01-Jan-2012");

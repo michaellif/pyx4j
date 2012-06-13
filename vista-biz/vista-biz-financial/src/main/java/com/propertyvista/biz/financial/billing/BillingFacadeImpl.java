@@ -18,6 +18,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.propertyvista.domain.StatisticsRecord;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.BillingCycle;
+import com.propertyvista.domain.financial.billing.BillingType;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 public class BillingFacadeImpl implements BillingFacade {
@@ -65,6 +66,11 @@ public class BillingFacadeImpl implements BillingFacade {
     @Override
     public void initializeFutureBillingCycles() {
         BillingLifecycleManager.initializeFutureBillingCycles();
+    }
+
+    @Override
+    public BillingType ensureBillingType(Lease lease) {
+        return BillingLifecycleManager.ensureBillingType(lease);
     }
 
 }

@@ -46,7 +46,7 @@ public class LeaseAdjustmentReasonDataModel {
 
     public final HashMap<Reason, LeaseAdjustmentReason> reasons;
 
-    public LeaseAdjustmentReasonDataModel() {
+    public LeaseAdjustmentReasonDataModel(PreloadConfig config) {
         reasons = new HashMap<Reason, LeaseAdjustmentReason>();
     }
 

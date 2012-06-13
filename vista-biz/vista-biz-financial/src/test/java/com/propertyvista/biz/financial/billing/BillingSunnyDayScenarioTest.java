@@ -43,7 +43,7 @@ public class BillingSunnyDayScenarioTest extends FinancialTestBase {
 
         SysDateManager.setSysDate("17-Mar-2011");
 
-        initLease("23-Mar-2011", "03-Aug-2011", 1);
+        initLease("23-Mar-2011", "03-Aug-2011");
         addServiceAdjustment("-25", AdjustmentType.monetary, ExecutionType.inLease);
 
         BillableItem parking1 = addParking(SaveAction.saveAsDraft);

@@ -38,7 +38,7 @@ public class ARCreditDebitLinkManagerTest extends FinancialTestBase {
 
     public void testScenario() {
 
-        initLease("01-Mar-2011", "31-Aug-2011", 1);
+        initLease("01-Mar-2011", "31-Aug-2011");
         addParking(SaveAction.saveAsDraft);
 
         //==================== RUN 1 ======================//

@@ -74,6 +74,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
         ServerSideFactory.create(IdAssignmentFacade.class).assignId(leaseDraft);
 
         leaseDraft.billingAccount().accountNumber().setValue(ServerSideFactory.create(IdAssignmentFacade.class).createAccountNumber());
+        leaseDraft.billingAccount().billCounter().setValue(0);
 
         Persistence.service().merge(leaseDraft);
 

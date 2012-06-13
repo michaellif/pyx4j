@@ -30,7 +30,7 @@ public class LeaseAdjustmentPolicyDataModel {
 
     private LeaseAdjustmentPolicy policy;
 
-    public LeaseAdjustmentPolicyDataModel(LeaseAdjustmentReasonDataModel leaseAdjustmentReasonDataModel, TaxesDataModel taxesDataModel,
+    public LeaseAdjustmentPolicyDataModel(PreloadConfig config, LeaseAdjustmentReasonDataModel leaseAdjustmentReasonDataModel, TaxesDataModel taxesDataModel,
             BuildingDataModel buildingDataModel) {
         this.leaseAdjustmentReasonDataModel = leaseAdjustmentReasonDataModel;
         this.taxesDataModel = taxesDataModel;

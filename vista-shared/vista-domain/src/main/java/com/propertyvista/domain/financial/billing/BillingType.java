@@ -33,7 +33,7 @@ public interface BillingType extends IEntity {
     IPrimitive<PaymentFrequency> paymentFrequency();
 
     @ToString
-    IPrimitive<Integer> billingPeriodStartDay();
+    IPrimitive<Integer> billingCycleStartDay();
 
     IPrimitive<Integer> billingCycleTargetDay();
 

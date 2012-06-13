@@ -30,15 +30,18 @@ public class LeaseBillingPolicyDataModel {
 
     private LeaseBillingPolicy policy;
 
-    public LeaseBillingPolicyDataModel(BuildingDataModel buildingDataModel) {
+    private final PreloadConfig config;
+
+    public LeaseBillingPolicyDataModel(PreloadConfig config, BuildingDataModel buildingDataModel) {
+        this.config = config;
         this.buildingDataModel = buildingDataModel;
     }
 
     public void generate(boolean persist) {
         policy = EntityFactory.create(LeaseBillingPolicy.class);
 
-        policy.billingPeriodStartDay().setValue(1);
-        policy.useBillingPeriodSartDay().setValue(false);
+        policy.defaultBillingCycleSartDay().setValue(config.defaultBillingCycleSartDay);
+        policy.useDefaultBillingCycleSartDay().setValue(false);
         policy.prorationMethod().setValue(ProrationMethod.Actual);
 
         LateFeeItem lateFee = EntityFactory.create(LateFeeItem.class);

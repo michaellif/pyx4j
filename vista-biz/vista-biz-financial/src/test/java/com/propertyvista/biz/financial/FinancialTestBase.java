@@ -44,6 +44,7 @@ import com.propertyvista.biz.financial.preload.LeaseAdjustmentReasonDataModel;
 import com.propertyvista.biz.financial.preload.LeaseBillingPolicyDataModel;
 import com.propertyvista.biz.financial.preload.LeaseDataModel;
 import com.propertyvista.biz.financial.preload.LocationsDataModel;
+import com.propertyvista.biz.financial.preload.PreloadConfig;
 import com.propertyvista.biz.financial.preload.ProductItemTypesDataModel;
 import com.propertyvista.biz.financial.preload.ProductTaxPolicyDataModel;
 import com.propertyvista.biz.financial.preload.TaxesDataModel;
@@ -52,6 +53,7 @@ import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.config.tests.VistaDBTestBase;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.Bill;
+import com.propertyvista.domain.financial.billing.BillingType;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.Feature.Type;
 import com.propertyvista.domain.financial.offering.ProductItem;
@@ -98,42 +100,48 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
     }
 
     protected void preloadData() {
-        LocationsDataModel locationsDataModel = new LocationsDataModel();
+        PreloadConfig config = new PreloadConfig();
+        preloadData(config);
+    }
+
+    protected void preloadData(PreloadConfig config) {
+        LocationsDataModel locationsDataModel = new LocationsDataModel(config);
         locationsDataModel.generate(true);
 
-        TaxesDataModel taxesDataModel = new TaxesDataModel(locationsDataModel);
+        TaxesDataModel taxesDataModel = new TaxesDataModel(config, locationsDataModel);
         taxesDataModel.generate(true);
 
-        ProductItemTypesDataModel productItemTypesDataModel = new ProductItemTypesDataModel();
+        ProductItemTypesDataModel productItemTypesDataModel = new ProductItemTypesDataModel(config);
         productItemTypesDataModel.generate(true);
 
-        leaseAdjustmentReasonDataModel = new LeaseAdjustmentReasonDataModel();
+        leaseAdjustmentReasonDataModel = new LeaseAdjustmentReasonDataModel(config);
         leaseAdjustmentReasonDataModel.generate(true);
 
-        BuildingDataModel buildingDataModel = new BuildingDataModel(productItemTypesDataModel);
+        BuildingDataModel buildingDataModel = new BuildingDataModel(config, productItemTypesDataModel);
         buildingDataModel.generate(true);
 
-        IdAssignmentPolicyDataModel idAssignmentPolicyDataModel = new IdAssignmentPolicyDataModel();
+        IdAssignmentPolicyDataModel idAssignmentPolicyDataModel = new IdAssignmentPolicyDataModel(config);
         idAssignmentPolicyDataModel.generate(true);
 
-        ProductTaxPolicyDataModel productTaxPolicyDataModel = new ProductTaxPolicyDataModel(productItemTypesDataModel, taxesDataModel, buildingDataModel);
+        ProductTaxPolicyDataModel productTaxPolicyDataModel = new ProductTaxPolicyDataModel(config, productItemTypesDataModel, taxesDataModel,
+                buildingDataModel);
         productTaxPolicyDataModel.generate(true);
 
-        LeaseAdjustmentPolicyDataModel leaseAdjustmentPolicyDataModel = new LeaseAdjustmentPolicyDataModel(leaseAdjustmentReasonDataModel, taxesDataModel,
-                buildingDataModel);
+        LeaseAdjustmentPolicyDataModel leaseAdjustmentPolicyDataModel = new LeaseAdjustmentPolicyDataModel(config, leaseAdjustmentReasonDataModel,
+                taxesDataModel, buildingDataModel);
         leaseAdjustmentPolicyDataModel.generate(true);
 
-        TenantDataModel tenantDataModel = new TenantDataModel();
+        TenantDataModel tenantDataModel = new TenantDataModel(config);
         tenantDataModel.generate(true);
 
-        leaseDataModel = new LeaseDataModel(buildingDataModel, tenantDataModel);
+        leaseDataModel = new LeaseDataModel(config, buildingDataModel, tenantDataModel);
         leaseDataModel.generate(true);
 
         //TODO if commented - check exception
-        LeaseBillingPolicyDataModel leaseBillingPolicyDataModel = new LeaseBillingPolicyDataModel(buildingDataModel);
+        LeaseBillingPolicyDataModel leaseBillingPolicyDataModel = new LeaseBillingPolicyDataModel(config, buildingDataModel);
         leaseBillingPolicyDataModel.generate(true);
 
-        arPolicyDataModel = new ARPolicyDataModel(buildingDataModel);
+        arPolicyDataModel = new ARPolicyDataModel(config, buildingDataModel);
         arPolicyDataModel.generate(true);
 
     }
@@ -179,11 +187,11 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         TransactionHistoryPrinter.printTransactionHistory(transactionHistory, transactionHistoryFileName(transactionHistory, getClass().getSimpleName()));
     }
 
-    protected void initLease(String leaseDateFrom, String leaseDateTo, Integer billingPeriodStartDate) {
-        initLease(leaseDateFrom, leaseDateTo, billingPeriodStartDate, null);
+    protected void initLease(String leaseDateFrom, String leaseDateTo) {
+        initLease(leaseDateFrom, leaseDateTo, null);
     }
 
-    protected void initLease(String leaseDateFrom, String leaseDateTo, Integer billingPeriodStartDate, BigDecimal carryforwardBalance) {
+    protected void initLease(String leaseDateFrom, String leaseDateTo, BigDecimal carryforwardBalance) {
         Lease lease = retrieveLeaseForEdit();
 
         lease.leaseFrom().setValue(FinancialTestsUtils.getDate(leaseDateFrom));
@@ -191,11 +199,13 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
 
         lease.billingAccount().carryforwardBalance().setValue(carryforwardBalance);
 
-        lease.billingAccount().billingPeriodStartDate().setValue(billingPeriodStartDate);
+        ServerSideFactory.create(LeaseFacade.class).initLease(lease);
+
+        BillingType billingType = ServerSideFactory.create(BillingFacade.class).ensureBillingType(lease);
+
+        lease.billingAccount().billingType().set(billingType);
 
         Persistence.service().persist(lease.billingAccount());
-
-        ServerSideFactory.create(LeaseFacade.class).initLease(lease);
 
         Persistence.service().commit();
 

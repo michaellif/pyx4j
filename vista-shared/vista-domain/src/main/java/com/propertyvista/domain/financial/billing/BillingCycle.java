@@ -55,6 +55,8 @@ public interface BillingCycle extends IEntity {
     IPrimitive<LogicalDate> executionTargetDate();
 
     // Statistics:
+    //TODO 1 add stats
+
     @Caption(name = "# Of Leases With Non Runned Bills")
     IPrimitive<Long> notRunned();
 

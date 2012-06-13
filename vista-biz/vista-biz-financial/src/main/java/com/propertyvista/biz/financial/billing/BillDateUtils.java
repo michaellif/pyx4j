@@ -114,10 +114,10 @@ public class BillDateUtils {
                 Calendar calendar = new GregorianCalendar();
                 calendar.setTime(leaseStartDate);
                 int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
-                if (billingType.billingPeriodStartDay().getValue() < 1 || billingType.billingPeriodStartDay().getValue() > 28) {
+                if (billingType.billingCycleStartDay().getValue() < 1 || billingType.billingCycleStartDay().getValue() > 28) {
                     throw new BillingException("Wrong billing period start day");
                 }
-                while (dayOfMonth != billingType.billingPeriodStartDay().getValue()) {
+                while (dayOfMonth != billingType.billingCycleStartDay().getValue()) {
                     calendar.add(Calendar.DATE, -1);
                     dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
                 }

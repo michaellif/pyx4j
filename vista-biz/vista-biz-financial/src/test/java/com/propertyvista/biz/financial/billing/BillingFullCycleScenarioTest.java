@@ -25,6 +25,7 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.propertyvista.biz.financial.FinancialTestBase;
 import com.propertyvista.biz.financial.SysDateManager;
 import com.propertyvista.biz.financial.ar.ARFacade;
+import com.propertyvista.biz.financial.preload.PreloadConfig;
 import com.propertyvista.domain.financial.billing.Bill;
 
 public class BillingFullCycleScenarioTest extends FinancialTestBase {
@@ -32,12 +33,14 @@ public class BillingFullCycleScenarioTest extends FinancialTestBase {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        preloadData();
+        PreloadConfig config = new PreloadConfig();
+        config.defaultBillingCycleSartDay = 15;
+        preloadData(config);
     }
 
     public void testScenario() {
 
-        initLease("28-Jan-2012", "16-Feb-2013", 15);
+        initLease("28-Jan-2012", "16-Feb-2013");
 
         //==================== RUN 1 ======================//
 

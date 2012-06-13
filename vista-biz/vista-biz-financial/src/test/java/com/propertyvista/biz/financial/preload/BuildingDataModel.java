@@ -52,7 +52,7 @@ public class BuildingDataModel {
 
     private boolean persist;
 
-    public BuildingDataModel(ProductItemTypesDataModel productItemTypesDataModel) {
+    public BuildingDataModel(PreloadConfig config, ProductItemTypesDataModel productItemTypesDataModel) {
         this.productItemTypesDataModel = productItemTypesDataModel;
         createServiceMeta();
     }

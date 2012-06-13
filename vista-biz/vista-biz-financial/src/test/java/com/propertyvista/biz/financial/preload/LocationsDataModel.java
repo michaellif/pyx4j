@@ -30,7 +30,7 @@ public class LocationsDataModel {
 
     final HashMap<String, Province> provincesMap;
 
-    public LocationsDataModel() {
+    public LocationsDataModel(PreloadConfig config) {
         provincesMap = new HashMap<String, Province>();
     }
 

@@ -23,7 +23,7 @@ public class ARPolicyDataModel {
 
     private ARPolicy policy;
 
-    public ARPolicyDataModel(BuildingDataModel buildingDataModel) {
+    public ARPolicyDataModel(PreloadConfig config, BuildingDataModel buildingDataModel) {
         this.buildingDataModel = buildingDataModel;
     }
 

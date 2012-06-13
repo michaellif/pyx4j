@@ -30,7 +30,8 @@ public class ProductTaxPolicyDataModel {
 
     private ProductTaxPolicy policy;
 
-    public ProductTaxPolicyDataModel(ProductItemTypesDataModel productItemTypesDataModel, TaxesDataModel taxesDataModel, BuildingDataModel buildingDataModel) {
+    public ProductTaxPolicyDataModel(PreloadConfig config, ProductItemTypesDataModel productItemTypesDataModel, TaxesDataModel taxesDataModel,
+            BuildingDataModel buildingDataModel) {
         this.productItemTypesDataModel = productItemTypesDataModel;
         this.taxesDataModel = taxesDataModel;
         this.buildingDataModel = buildingDataModel;

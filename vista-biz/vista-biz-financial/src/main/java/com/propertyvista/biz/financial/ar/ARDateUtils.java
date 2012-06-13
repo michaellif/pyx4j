@@ -31,7 +31,7 @@ public class ARDateUtils {
         // next bill, in case it's coming in time. If not, all kind of aspects must be accounted...
         // For now we just return the next billing period start date
         Calendar dueDate = new GregorianCalendar();
-        int dayOfMonth = billingAccount.billingType().billingPeriodStartDay().getValue();
+        int dayOfMonth = billingAccount.billingType().billingCycleStartDay().getValue();
         dueDate.set(Calendar.DAY_OF_MONTH, dayOfMonth);
         if (dueDate.before(SysDateManager.getSysDate())) {
             dueDate.add(Calendar.MONTH, 1);

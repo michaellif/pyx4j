@@ -25,13 +25,14 @@ import java.util.Date;
 
 import com.propertyvista.biz.financial.FinancialTestBase;
 import com.propertyvista.biz.financial.SysDateManager;
+import com.propertyvista.biz.financial.preload.PreloadConfig;
 import com.propertyvista.domain.financial.billing.Bill;
 
 public class BillingPeriodsTest extends FinancialTestBase {
 
     public void testSequentialBillingCycleWithGlobalBillingPeriodStartDate() throws ParseException {
         preloadData();
-        initLease("23-Mar-2011", "3-Aug-2011", 1);
+        initLease("23-Mar-2011", "3-Aug-2011");
 
         //==================== RUN 1 ======================//
 
@@ -225,8 +226,10 @@ public class BillingPeriodsTest extends FinancialTestBase {
     public void testSequentialBillingCycleWIthLeaseStartDateAsBillingPeriodStartDay() throws ParseException {
         SysDateManager.setSysDate((Date) null);
 
-        preloadData();
-        initLease("23-Mar-2011", "3-Aug-2011", null);
+        PreloadConfig config = new PreloadConfig();
+        config.defaultBillingCycleSartDay = null;
+        preloadData(config);
+        initLease("23-Mar-2011", "3-Aug-2011");
 
         //==================== RUN 1 ======================//
 
@@ -384,8 +387,11 @@ public class BillingPeriodsTest extends FinancialTestBase {
 
     public void testSequentialBillingCycleWIthLeaseStartDateAsBillingPeriodStartDay(int day) throws ParseException {
         SysDateManager.setSysDate((Date) null);
-        preloadData();
-        initLease(day + "-Mar-2011", "3-Aug-2011", null);
+
+        PreloadConfig config = new PreloadConfig();
+        config.defaultBillingCycleSartDay = null;
+        preloadData(config);
+        initLease(day + "-Mar-2011", "3-Aug-2011");
 
         //==================== RUN 1 ======================//
 
