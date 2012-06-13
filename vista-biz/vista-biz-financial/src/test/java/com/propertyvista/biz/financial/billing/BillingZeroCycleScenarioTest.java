@@ -34,20 +34,20 @@ public class BillingZeroCycleScenarioTest extends FinancialTestBase {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        SysDateManager.setSysDate("17-Mar-2011");
+        SysDateManager.setSysDate("17-Mar-2011"); // create existing lease
         preloadData();
     }
 
-    public void testScenario() {
+    public void testCarryForwardOwingScenario() {
 
-        SysDateManager.setSysDate("17-Mar-2011");
+        SysDateManager.setSysDate("17-Mar-2011"); // create existing lease
 
-        initLease("15-Mar-2011", "31-Aug-2011", 1, new BigDecimal("300.00"));
+        // When we create Existing Lease, the tenant is already living in the building
+        initLease("1-Jan-2011", "31-Dec-2011", 1, new BigDecimal("300.00"));
 
         //==================== RUN 1 ======================//
 
-        SysDateManager.setSysDate("17-Feb-2011");
-        Bill bill = approveApplication();
+        Bill bill = verifyExistingLease();
 
         bill = confirmBill(bill, true, true);
 
@@ -55,7 +55,7 @@ public class BillingZeroCycleScenarioTest extends FinancialTestBase {
         new BillTester(bill, true).
         billSequenceNumber(1).
         previousBillSequenceNumber(null).
-        billType(Bill.BillType.First).
+        billType(Bill.BillType.ZeroCycle).
         billingPeriodStartDate("1-Mar-2011").
         billingPeriodEndDate("31-Mar-2011").
         numOfProductCharges(1).
@@ -63,18 +63,18 @@ public class BillingZeroCycleScenarioTest extends FinancialTestBase {
         serviceCharge("930.30").
         recurringFeatureCharges("0.00").
         oneTimeFeatureCharges("0.00").
-        depositAmount("930.30").
+        depositAmount("0.00").
         taxes("111.64").
-        totalDueAmount("1972.24");
+        totalDueAmount("300.00");
         // @formatter:on
 
         //==================== RUN 2 ======================//
 
-        SysDateManager.setSysDate("18-Mar-2011");
-        receiveAndPostPayment("18-Mar-2011", "1972.24");
-
         activateLease();
 
+        receiveAndPostPayment("17-Mar-2011", "300.00");
+
+        SysDateManager.setSysDate("18-Mar-2011");
         bill = runBilling(true, true);
 
         // @formatter:off
@@ -85,41 +85,65 @@ public class BillingZeroCycleScenarioTest extends FinancialTestBase {
         billingPeriodStartDate("1-Apr-2011").
         billingPeriodEndDate("30-Apr-2011").
         numOfProductCharges(1).
-        paymentReceivedAmount("-1972.24").
+        paymentReceivedAmount("-300.00").
+        latePaymentFees("50.00"). // fined for 300.00 carry-forward owing
         serviceCharge("930.30").
-        recurringFeatureCharges("0.00").
-        oneTimeFeatureCharges("0.00").
         taxes("111.64").
         totalDueAmount("1091.94");
         // @formatter:on
 
-        SysDateManager.setSysDate("25-Mar-2011");
-        receiveAndPostPayment("25-Mar-2011", "1041.94");
+        printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
+    }
 
-        //==================== RUN 3 ======================//
+    public void testCarryForwardOwedScenario() {
 
-        SysDateManager.setSysDate("18-Apr-2011");
+        SysDateManager.setSysDate("17-Mar-2011"); // create existing lease
 
+        // When we create Existing Lease, the tenant is already living in the building
+        initLease("1-Jan-2011", "31-Dec-2011", 1, new BigDecimal("-100.00"));
+
+        //==================== RUN 1 ======================//
+
+        Bill bill = verifyExistingLease();
+
+        bill = confirmBill(bill, true, true);
+
+        // @formatter:off
+        new BillTester(bill, true).
+        billSequenceNumber(1).
+        previousBillSequenceNumber(null).
+        billType(Bill.BillType.ZeroCycle).
+        billingPeriodStartDate("1-Mar-2011").
+        billingPeriodEndDate("31-Mar-2011").
+        numOfProductCharges(1).
+        paymentReceivedAmount("0.00").
+        serviceCharge("930.30").
+        recurringFeatureCharges("0.00").
+        oneTimeFeatureCharges("0.00").
+        depositAmount("0.00").
+        taxes("111.64").
+        totalDueAmount("-100.00");
+        // @formatter:on
+
+        //==================== RUN 2 ======================//
+
+        activateLease();
+
+        SysDateManager.setSysDate("18-Mar-2011");
         bill = runBilling(true, true);
 
         // @formatter:off
         new BillTester(bill, true).
-        billSequenceNumber(3).
-        previousBillSequenceNumber(2).
+        billSequenceNumber(2).
+        previousBillSequenceNumber(1).
         billType(Bill.BillType.Regular).
-        billingPeriodStartDate("1-May-2011").
-        billingPeriodEndDate("31-May-2011").
+        billingPeriodStartDate("1-Apr-2011").
+        billingPeriodEndDate("30-Apr-2011").
         numOfProductCharges(1).
-        paymentReceivedAmount("-1041.94").
         serviceCharge("930.30").
-        recurringFeatureCharges("0.00").
-        oneTimeFeatureCharges("0.00").
         taxes("111.64").
-        totalDueAmount("1141.94");
+        totalDueAmount("941.94"); // 1041.94 -100
         // @formatter:on
-
-        SysDateManager.setSysDate("25-Apr-2011");
-        receiveAndPostPayment("25-Apr-2011", "1041.94");
 
         printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
 

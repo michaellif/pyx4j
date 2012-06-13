@@ -22,6 +22,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.InvoiceCarryforwardCharge;
 import com.propertyvista.domain.financial.billing.InvoiceCarryforwardCredit;
+import com.propertyvista.domain.financial.billing.InvoiceDebit.DebitType;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 
 public class BillingCarryforwardProcessor extends AbstractBillingProcessor {
@@ -47,13 +48,14 @@ public class BillingCarryforwardProcessor extends AbstractBillingProcessor {
         BigDecimal initialBalance = nextPeriodBill.billingAccount().carryforwardBalance().getValue().subtract(total);
         InvoiceLineItem zeroCycleBalance = null;
         if (initialBalance.compareTo(BigDecimal.ZERO) < 0) {
+            InvoiceCarryforwardCredit credit = EntityFactory.create(InvoiceCarryforwardCredit.class);
+            zeroCycleBalance = credit;
+        } else {
             InvoiceCarryforwardCharge charge = EntityFactory.create(InvoiceCarryforwardCharge.class);
             charge.dueDate().setValue(getBillingManager().getNextPeriodBill().dueDate().getValue());
             charge.taxTotal().setValue(BigDecimal.ZERO);
+            charge.debitType().setValue(DebitType.other);
             zeroCycleBalance = charge;
-        } else {
-            InvoiceCarryforwardCredit credit = EntityFactory.create(InvoiceCarryforwardCredit.class);
-            zeroCycleBalance = credit;
         }
         zeroCycleBalance.billingAccount().set(getBillingManager().getNextPeriodBill().billingAccount());
         zeroCycleBalance.amount().setValue(initialBalance);
