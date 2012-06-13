@@ -25,6 +25,8 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 
 import com.propertyvista.biz.financial.ar.ARFacade;
+import com.propertyvista.domain.financial.AggregatedTransfer;
+import com.propertyvista.domain.financial.AggregatedTransfer.AggregatedTransferStatus;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.payment.CreditCardInfo;
 import com.propertyvista.domain.payment.PaymentMethod;
@@ -242,4 +244,23 @@ public class PaymentFacadeImpl implements PaymentFacade {
         }
         return paymentRecord;
     }
+
+    @Override
+    public void cancelAggregatedTransfer(AggregatedTransfer aggregatedTransferStub) {
+        AggregatedTransfer at = Persistence.service().retrieve(AggregatedTransfer.class, aggregatedTransferStub.getPrimaryKey());
+        if (!EnumSet.of(AggregatedTransferStatus.Rejected).contains(at.status().getValue())) {
+            throw new UserRuntimeException(i18n.tr("Processed transaction can't be canceled"));
+        }
+        new PadProcessor().cancelAggregatedTransfer(at);
+    }
+
+    @Override
+    public void resendAggregatedTransfer(AggregatedTransfer aggregatedTransferStub) {
+        AggregatedTransfer at = Persistence.service().retrieve(AggregatedTransfer.class, aggregatedTransferStub.getPrimaryKey());
+        if (!EnumSet.of(AggregatedTransferStatus.Rejected).contains(at.status().getValue())) {
+            throw new UserRuntimeException(i18n.tr("Processed transaction can't be sent again"));
+        }
+        new PadProcessor().resendAggregatedTransfer(at);
+    }
+
 }

@@ -15,6 +15,7 @@ package com.propertyvista.biz.financial.payment;
 
 import java.util.List;
 
+import com.propertyvista.domain.financial.AggregatedTransfer;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -50,5 +51,11 @@ public interface PaymentFacade {
     PaymentRecord reject(PaymentRecord paymentStub);
 
     // TODO Gap: Make Refunds
+
+    // PMC AggregatedTransfer management
+
+    public void cancelAggregatedTransfer(AggregatedTransfer aggregatedTransferStub);
+
+    public void resendAggregatedTransfer(AggregatedTransfer aggregatedTransferStub);
 
 }

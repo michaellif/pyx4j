@@ -15,9 +15,12 @@ package com.propertyvista.crm.server.services.financial;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.AbstractCrudServiceImpl;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
+import com.propertyvista.biz.financial.payment.PaymentFacade;
 import com.propertyvista.crm.rpc.services.financial.AggregatedTransferCrudService;
 import com.propertyvista.domain.financial.AggregatedTransfer;
 
@@ -34,11 +37,15 @@ public class AggregatedTransferCrudServiceImpl extends AbstractCrudServiceImpl<A
 
     @Override
     public void resendTransactions(AsyncCallback<VoidSerializable> callback, AggregatedTransfer aggregatedTransferStub) {
-        // TODO VladS
+        ServerSideFactory.create(PaymentFacade.class).resendAggregatedTransfer(aggregatedTransferStub);
+        Persistence.service().commit();
+        callback.onSuccess(null);
     }
 
     @Override
     public void cancelTransactions(AsyncCallback<VoidSerializable> callback, AggregatedTransfer aggregatedTransferStub) {
-        // TODO VladS
+        ServerSideFactory.create(PaymentFacade.class).cancelAggregatedTransfer(aggregatedTransferStub);
+        Persistence.service().commit();
+        callback.onSuccess(null);
     }
 }

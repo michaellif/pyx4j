@@ -93,11 +93,12 @@ class PadCaledonAcknowledgement {
 
     private void assertAcknowledgedValues(PadFile padFile, PadAkFile akFile) {
         if (!padFile.recordsCount().getValue().equals(Integer.valueOf(akFile.recordsCount().getValue()))) {
-            throw new Error("Unexpected recordsCount '" + akFile.recordsCount().getValue() + "' != '" + padFile.recordsCount().getValue() + "' in akFile "
+            throw new Error("Unexpected recordsCount '" + akFile.recordsCount().getValue() + "' != '" + padFile.recordsCount().getValue() + "'; in akFile "
                     + akFile.fileCreationNumber().getValue());
         }
         if (!CaledonPadUtils.formatAmount(padFile.fileAmount().getValue()).equals(akFile.fileAmount().getValue())) {
-            throw new Error("Unexpected fileAmount '" + akFile.fileAmount().getValue() + "' in akFile " + akFile.fileCreationNumber().getValue());
+            throw new Error("Unexpected fileAmount '" + akFile.fileAmount().getValue() + "', expected'" + padFile.fileAmount().getValue() + "'; in akFile "
+                    + akFile.fileCreationNumber().getValue());
         }
     }
 

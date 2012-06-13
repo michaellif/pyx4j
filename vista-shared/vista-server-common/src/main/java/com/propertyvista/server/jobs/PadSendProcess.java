@@ -32,7 +32,12 @@ public class PadSendProcess implements PmcProcess {
     @Override
     public boolean start(PmcProcessContext context) {
         padFile = ServerSideFactory.create(PaymentProcessFacade.class).sendPadFile();
-        return (padFile != null);
+        if (padFile != null) {
+            context.getRunStats().message().setValue("PAD file# " + padFile.fileCreationNumber().getStringView() + " created");
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override

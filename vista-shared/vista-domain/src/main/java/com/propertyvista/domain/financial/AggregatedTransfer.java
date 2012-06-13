@@ -38,6 +38,8 @@ public interface AggregatedTransfer extends IEntity {
 
         Rejected,
 
+        Canceled,
+
         Paid,
 
         Hold,
