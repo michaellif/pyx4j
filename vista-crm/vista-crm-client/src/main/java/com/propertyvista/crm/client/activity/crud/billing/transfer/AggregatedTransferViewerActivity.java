@@ -36,7 +36,6 @@ public class AggregatedTransferViewerActivity extends CrmViewerActivity<Aggregat
 
     private final IListerView.Presenter<PaymentRecord> returnedPaymentLister;
 
-    @SuppressWarnings("unchecked")
     public AggregatedTransferViewerActivity(CrudAppPlace place) {
         super(place, FinancialViewFactory.instance(AggregatedTransferViewerView.class), GWT
                 .<AggregatedTransferCrudService> create(AggregatedTransferCrudService.class));
