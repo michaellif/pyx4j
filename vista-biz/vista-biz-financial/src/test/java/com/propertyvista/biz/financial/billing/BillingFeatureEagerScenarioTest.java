@@ -64,7 +64,7 @@ public class BillingFeatureEagerScenarioTest extends FinancialTestBase {
         billingPeriodEndDate("31-Mar-2011").
         numOfProductCharges(4).
         serviceCharge("270.09").
-        recurringFeatureCharges("34.26").
+        recurringFeatureCharges("34.27").
         oneTimeFeatureCharges("0.00");
         // @formatter:on
 
@@ -84,7 +84,7 @@ public class BillingFeatureEagerScenarioTest extends FinancialTestBase {
         billingPeriodEndDate("30-Apr-2011").
         numOfProductCharges(5).
         serviceCharge("930.30").
-        recurringFeatureCharges("136.67").
+        recurringFeatureCharges("136.66").
         oneTimeFeatureCharges("0.00");
         // @formatter:on
 
@@ -164,7 +164,7 @@ public class BillingFeatureEagerScenarioTest extends FinancialTestBase {
         billingPeriodEndDate("03-Aug-2011").
         numOfProductCharges(5).
         serviceCharge("90.03").
-        recurringFeatureCharges("13.35").
+        recurringFeatureCharges("13.36").
         oneTimeFeatureCharges("0.00").
         taxes("12.40");
         // @formatter:on

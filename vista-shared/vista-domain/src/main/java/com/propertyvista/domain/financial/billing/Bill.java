@@ -120,6 +120,8 @@ public interface Bill extends IEntity {
     @ToString(index = 2)
     IPrimitive<BillStatus> billStatus();
 
+    IPrimitive<Boolean> latestBillInCycle();
+
     IPrimitive<String> billCreationError();
 
     IPrimitive<BillType> billType();
@@ -197,5 +199,11 @@ public interface Bill extends IEntity {
      */
     @ToString(index = 1)
     IPrimitive<BigDecimal> totalDueAmount();
+
+    class aaa {
+        String toString1(Bill bill) {
+            return bill.depositAmount().getStringView() + "Vasja";
+        }
+    }
 
 }

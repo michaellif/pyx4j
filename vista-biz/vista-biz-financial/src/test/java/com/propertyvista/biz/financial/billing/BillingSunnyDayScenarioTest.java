@@ -74,18 +74,18 @@ public class BillingSunnyDayScenarioTest extends FinancialTestBase {
         numOfProductCharges(4).
         paymentReceivedAmount("0.00").
         serviceCharge("262.83").
-        recurringFeatureCharges("34.26").
+        recurringFeatureCharges("34.27").
         oneTimeFeatureCharges("0.00").
         depositAmount("930.30").
         taxes("35.65").
-        totalDueAmount("1263.04");
+        totalDueAmount("1263.05");
         // @formatter:on
 
         //==================== RUN 2 ======================//
 
         SysDateManager.setSysDate("18-Mar-2011");
 
-        receiveAndPostPayment("18-Mar-2011", "1263.04");
+        receiveAndPostPayment("18-Mar-2011", "1263.05");
 
         activateLease();
 
@@ -99,15 +99,15 @@ public class BillingSunnyDayScenarioTest extends FinancialTestBase {
         billingPeriodStartDate("1-Apr-2011").
         billingPeriodEndDate("30-Apr-2011").
         numOfProductCharges(5).
-        paymentReceivedAmount("-1263.04").
+        paymentReceivedAmount("-1263.05").
         serviceCharge("905.30").
-        recurringFeatureCharges("136.67").
+        recurringFeatureCharges("136.66").
         oneTimeFeatureCharges("0.00").
         taxes("125.04").
-        totalDueAmount("1167.01");
+        totalDueAmount("1167.00");
         // @formatter:on
 
-        receiveAndPostPayment("19-Mar-2011", "1067.01");
+        receiveAndPostPayment("19-Mar-2011", "1067.00");
         receiveAndPostPayment("20-Mar-2011", "100.00");
 
         //==================== RUN 3 ======================//
@@ -127,7 +127,7 @@ public class BillingSunnyDayScenarioTest extends FinancialTestBase {
         billingPeriodStartDate("1-May-2011").
         billingPeriodEndDate("31-May-2011").
         numOfProductCharges(7).
-        paymentReceivedAmount("-1167.01").
+        paymentReceivedAmount("-1167.00").
         serviceCharge("905.30").
         recurringFeatureCharges("188.00").
         oneTimeFeatureCharges("200.00").

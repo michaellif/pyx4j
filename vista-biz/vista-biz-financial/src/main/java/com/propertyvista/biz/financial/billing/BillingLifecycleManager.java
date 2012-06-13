@@ -151,12 +151,15 @@ public class BillingLifecycleManager {
         Persistence.service().retrieve(billingAccount.lease());
         Persistence.service().retrieve(billingAccount.adjustments());
 
+        billingAccount.billCounter().setValue(billingAccount.billCounter().getValue() + 1);
+        Persistence.service().persist(billingAccount);
+
         Bill bill = EntityFactory.create(Bill.class);
         try {
             bill.billStatus().setValue(Bill.BillStatus.Running);
             bill.billingAccount().set(billingAccount);
 
-            bill.billSequenceNumber().setValue(billingAccount.billingRunController().billCounter().getValue());
+            bill.billSequenceNumber().setValue(billingAccount.billCounter().getValue());
             bill.billingCycle().set(billingCycle);
 
             Bill previousBill = BillingLifecycleManager.getLatestConfirmedBill(billingAccount.lease());
@@ -195,9 +198,6 @@ public class BillingLifecycleManager {
             bill.billCreationError().setValue(billCreationError);
         }
         Persistence.service().persist(bill);
-
-        billingAccount.billingRunController().billCounter().setValue(billingAccount.billingRunController().billCounter().getValue() + 1);
-        Persistence.service().persist(billingAccount);
 
         return new BillCreationResult(bill);
     }
@@ -302,7 +302,7 @@ public class BillingLifecycleManager {
         }
         if (billingAccount.billingType().isNull()) {
             billingAccount.billingType().set(ensureBillingType(lease));
-            billingAccount.billingRunController().billCounter().setValue(1);
+            billingAccount.billCounter().setValue(0);
             Persistence.service().persist(billingAccount);
         }
         return billingAccount;

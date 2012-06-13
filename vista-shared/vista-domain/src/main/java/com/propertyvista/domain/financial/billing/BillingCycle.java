@@ -55,7 +55,7 @@ public interface BillingCycle extends IEntity {
     IPrimitive<LogicalDate> executionTargetDate();
 
     // Statistics:
-    @Caption(name = "# Of Non Runned Bills")
+    @Caption(name = "# Of Leases With Non Runned Bills")
     IPrimitive<Long> notRunned();
 
     @Caption(name = "# Of Non Confirmed Bills")
@@ -71,7 +71,7 @@ public interface BillingCycle extends IEntity {
     IPrimitive<Long> approved();
 
     @Transient
-    @Caption(name = "# Of Bills Total")
+    @Caption(name = "# Of Total Leases")
     IPrimitive<Long> total();
 
 }
