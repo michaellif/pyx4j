@@ -78,6 +78,9 @@ public interface Pmc extends IEntity {
 
     IPrimitive<String> onboardingAccountId();
 
+    /**
+     * Initialized from OnboardingUserCredential.interfaceUid
+     */
     IPrimitive<String> interfaceUidBase();
 
     @Timestamp(Timestamp.Update.Created)

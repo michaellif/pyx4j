@@ -52,6 +52,14 @@ public class UserAccessUtils {
         return credential.interfaceUid().getStringView() + ":";
     }
 
+    private static String getPmcInterfaceUidBase(Pmc pmc) {
+        if (pmc.interfaceUidBase().isNull()) {
+            return pmc.namespace().getStringView();
+        } else {
+            return pmc.interfaceUidBase().getStringView();
+        }
+    }
+
     public static String getUserUUID(Pmc pmc, OnboardingUserCredential credential) {
         StringBuilder uid = new StringBuilder();
         if (ApplicationMode.isDevelopment()) {
@@ -60,11 +68,19 @@ public class UserAccessUtils {
         if (pmc == null) {
             uid.append(getPmcInterfaceUidBase(credential));
         } else {
-            uid.append(pmc.interfaceUidBase().getStringView());
+            uid.append(getPmcInterfaceUidBase(pmc));
         }
         uid.append(credential.interfaceUid().getStringView());
 
         return uid.toString();
+    }
+
+    public static String getCrmUserInterfaceUid(CrmUserCredential credential) {
+        if (credential.interfaceUid().isNull()) {
+            return credential.getPrimaryKey().toString();
+        } else {
+            return credential.interfaceUid().getStringView();
+        }
     }
 
     public static String getCrmUserUUID(Key principalPrimaryKey) {
@@ -78,12 +94,8 @@ public class UserAccessUtils {
         }
 
         Pmc pmc = VistaDeployment.getCurrentPmc();
-        uid.append(pmc.interfaceUidBase().getStringView());
-        if (credential.interfaceUid().isNull()) {
-            uid.append(credential.getPrimaryKey().toString());
-        } else {
-            uid.append(credential.interfaceUid().getStringView());
-        }
+        uid.append(getPmcInterfaceUidBase(pmc));
+        uid.append(getCrmUserInterfaceUid(credential));
         return uid.toString();
     }
 }

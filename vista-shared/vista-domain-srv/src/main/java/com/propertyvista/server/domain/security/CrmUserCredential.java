@@ -37,5 +37,8 @@ public interface CrmUserCredential extends AbstractUserCredential<CrmUser> {
 
     IPrimitive<Key> onboardingUser();
 
+    /**
+     * The value is copied from onboardingUser when creating this user base on onboardingUser
+     */
     IPrimitive<String> interfaceUid();
 }

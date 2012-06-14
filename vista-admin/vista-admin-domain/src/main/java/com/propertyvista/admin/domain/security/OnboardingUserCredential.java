@@ -39,6 +39,10 @@ public interface OnboardingUserCredential extends AbstractUserCredential<Onboard
     @NotNull
     IPrimitive<String> onboardingAccountId();
 
+    /**
+     * Set to "o" + user.getPrimaryKey() when creating the User from Onboarding.
+     * Or the value is copied from CrmUserCredential when creating this user base on CrmUser. Use UserAccessUtils.getCrmUserInterfaceUid()
+     */
     IPrimitive<String> interfaceUid();
 
     @ReadOnly(allowOverrideNull = true)
