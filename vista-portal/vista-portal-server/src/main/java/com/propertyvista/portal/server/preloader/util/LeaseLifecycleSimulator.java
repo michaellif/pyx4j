@@ -47,17 +47,18 @@ import com.propertyvista.domain.tenant.lease.Lease.CompletionType;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.misc.VistaTODO;
 
-public class LeaseLifecycleSim {
+public class LeaseLifecycleSimulator {
 
+    private final static Random RND = new Random(1);
+
+    // TODO define these as customizable parameters via builder
+    // TODO define some kind of framework of classes that represent time terms/intervals and allow to perform computations, instead of this *long* crap
     public static final long DAY = 1000L * 60L * 60L * 24L;
 
     public static final long MONTH = 1000L * 60L * 60L * 24L * 30L;
 
     public static final long YEAR = 1000L * 60L * 60L * 24L * 365L;
 
-    private final static Random RND = new Random(1);
-
-    // TODO define these as customizable parameters via builder
     private long minReserveTerm = 0L;
 
     private long maxReserveTerm = 1000L * 60L * 60L * 24L * 60L; // 60 days
@@ -86,8 +87,8 @@ public class LeaseLifecycleSim {
 
     private TenantAgent tenantAgent = new DefaultTenantAgent();
 
-    private LeaseLifecycleSim() {
-        this.events = new PriorityQueue<LeaseLifecycleSim.LeaseEventContainer>(10, new Comparator<LeaseEventContainer>() {
+    private LeaseLifecycleSimulator() {
+        this.events = new PriorityQueue<LeaseLifecycleSimulator.LeaseEventContainer>(10, new Comparator<LeaseEventContainer>() {
             @Override
             public int compare(LeaseEventContainer arg0, LeaseEventContainer arg1) {
                 int cmp = arg0.date().compareTo(arg1.date());
@@ -102,12 +103,10 @@ public class LeaseLifecycleSim {
     }
 
     public static LeaseLifecycleSimBuilder sim() {
-
         return new LeaseLifecycleSimBuilder();
-
     }
 
-    public void generateRandomLeaseLifeCycle(Lease lease) {
+    public void generateRandomLifeCycle(Lease lease) {
         if (lease.unit()._availableForRent().isNull()) {
             return;
         }
@@ -119,6 +118,8 @@ public class LeaseLifecycleSim {
 
         lease.leaseFrom().setValue(leaseFrom);
         lease.leaseTo().setValue(leaseTo);
+        lease.version().expectedMoveIn().setValue(leaseFrom);
+        lease.version().expectedMoveOut().setValue(leaseTo);
 
         setUpBillableItemsEffectiveTime(lease);
 
@@ -162,7 +163,7 @@ public class LeaseLifecycleSim {
     }
 
     private boolean hasNextEvent() {
-        return !events.isEmpty() && events.peek().date().before(simEnd);
+        return !events.isEmpty() && (events.peek().date().before(simEnd) | events.peek().date().equals(simEnd));
     }
 
     // EVENTS
@@ -398,7 +399,7 @@ public class LeaseLifecycleSim {
     }
 
     // UTILITY FUNCTIONS
-    // FIXME copied form BillingCycleManager, find some other better way to do it
+    // FIXME copied form BillingCycleManager, find some other and better way to do it
     private static LogicalDate calculateBillingCycleTargetExecutionDate(BillingType cycle, LogicalDate billingCycleStartDate) {
         Calendar calendar = new GregorianCalendar();
         calendar.setTime(billingCycleStartDate);
@@ -529,14 +530,14 @@ public class LeaseLifecycleSim {
 
     public static class LeaseLifecycleSimBuilder {
 
-        private final LeaseLifecycleSim leaseLifecycleSim;
+        private final LeaseLifecycleSimulator leaseLifecycleSim;
 
         public LeaseLifecycleSimBuilder() {
-            this.leaseLifecycleSim = new LeaseLifecycleSim();
+            this.leaseLifecycleSim = new LeaseLifecycleSimulator();
             this.leaseLifecycleSim.runBilling = false;
         }
 
-        public LeaseLifecycleSim create() {
+        public LeaseLifecycleSimulator create() {
             if (leaseLifecycleSim.simStart == null) {
                 throw new IllegalStateException("simulation start was not set");
             }
@@ -546,7 +547,7 @@ public class LeaseLifecycleSim {
             return leaseLifecycleSim;
         }
 
-        public LeaseLifecycleSim attachTennant(TenantAgent tenantAgent) {
+        public LeaseLifecycleSimulator attachTennant(TenantAgent tenantAgent) {
             this.leaseLifecycleSim.tenantAgent = tenantAgent;
             return this.leaseLifecycleSim;
         }
@@ -560,11 +561,13 @@ public class LeaseLifecycleSim {
             return start(toDate(simStart));
         }
 
+        /** inclusive */
         public LeaseLifecycleSimBuilder end(LogicalDate end) {
             leaseLifecycleSim.simEnd = end;
             return this;
         }
 
+        /** inclusive */
         public LeaseLifecycleSimBuilder end(String simEnd) {
             return end(toDate(simEnd));
         }
