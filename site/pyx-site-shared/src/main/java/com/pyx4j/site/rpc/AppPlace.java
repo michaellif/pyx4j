@@ -246,4 +246,20 @@ public class AppPlace extends Place {
     public void setStable(boolean stable) {
         this.stable = stable;
     }
+
+    public AppPlace copy(AppPlace place) {
+
+        if (place.name != null) {
+            name = new String(place.name);
+        }
+        if (place.queryArgs != null) {
+            queryArgs = new HashMap<String, List<String>>(place.queryArgs);
+        }
+        if (place.placeArgs != null) {
+            placeArgs = new HashMap<String, List<String>>(place.placeArgs);
+        }
+        stable = place.stable;
+
+        return this;
+    }
 }

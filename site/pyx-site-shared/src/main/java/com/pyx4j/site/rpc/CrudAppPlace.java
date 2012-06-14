@@ -111,4 +111,13 @@ public abstract class CrudAppPlace extends AppPlace {
     public IEntity getNewItem() {
         return newItem;
     }
+
+    @Override
+    public CrudAppPlace copy(AppPlace place) {
+        super.copy(place);
+        if (place instanceof CrudAppPlace) {
+            newItem = ((CrudAppPlace) place).newItem;
+        }
+        return this;
+    }
 }
