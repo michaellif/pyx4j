@@ -48,6 +48,7 @@ import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lead.Lead;
+import com.propertyvista.domain.tenant.lease.Lease;
 
 public class LeadForm extends CrmEntityForm<Lead> {
 
@@ -138,8 +139,13 @@ public class LeadForm extends CrmEntityForm<Lead> {
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().agent()), 20).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().createDate()), 9).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().status()), 10).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().lease(), new CLeaseHyperlink()), 40).build());
-        main.getFlexCellFormatter().setColSpan(row, 0, 2);
+
+        if (isEditable()) {
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().lease(), new CEntityLabel<Lease>()), 40).build());
+        } else {
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().lease(), new CLeaseHyperlink()), 40).build());
+            main.getFlexCellFormatter().setColSpan(row, 0, 2);
+        }
 
         row = -1;
         main.setH4(++row, 1, 1, i18n.tr("Preferred Appointment Times") + ":");
