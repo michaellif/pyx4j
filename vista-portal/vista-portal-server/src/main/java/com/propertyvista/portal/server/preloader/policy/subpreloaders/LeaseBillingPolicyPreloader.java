@@ -21,6 +21,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.domain.financial.BillingAccount.ProrationMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.policy.policies.LeaseBillingPolicy;
+import com.propertyvista.domain.policy.policies.LeaseBillingPolicy.BillConfirmationMethod;
 import com.propertyvista.domain.policy.policies.domain.LateFeeItem;
 import com.propertyvista.domain.policy.policies.domain.LateFeeItem.BaseFeeType;
 import com.propertyvista.domain.policy.policies.domain.NsfFeeItem;
@@ -39,7 +40,8 @@ public class LeaseBillingPolicyPreloader extends AbstractPolicyPreloader<LeaseBi
         LeaseBillingPolicy policy = EntityFactory.create(LeaseBillingPolicy.class);
 
         policy.defaultBillingCycleSartDay().setValue(1);
-        policy.useDefaultBillingCycleSartDay().setValue(false);
+        policy.useDefaultBillingCycleSartDay().setValue(true);
+
         policy.prorationMethod().setValue(ProrationMethod.Standard);
 
         LateFeeItem lateFee = EntityFactory.create(LateFeeItem.class);
@@ -58,6 +60,8 @@ public class LeaseBillingPolicyPreloader extends AbstractPolicyPreloader<LeaseBi
         nsfItem.paymentType().setValue(PaymentType.Check);
         nsfItem.fee().setValue(new BigDecimal(30.00));
         policy.nsfFees().add(nsfItem);
+
+        policy.confirmationMethod().setValue(BillConfirmationMethod.manual);
 
         return policy;
     }

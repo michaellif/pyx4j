@@ -62,6 +62,7 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
 
         int row = -1;
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().prorationMethod()), 10).build());
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().confirmationMethod()), 10).build());
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().useDefaultBillingCycleSartDay())).build());
         get(proto().useDefaultBillingCycleSartDay()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override

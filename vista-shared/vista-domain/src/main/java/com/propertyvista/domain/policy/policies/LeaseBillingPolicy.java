@@ -19,6 +19,8 @@ import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.annotations.I18n;
+import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.policy.framework.LowestApplicableNode;
@@ -30,6 +32,17 @@ import com.propertyvista.domain.property.asset.building.Building;
 @DiscriminatorValue("LeaseBillingPolicy")
 @LowestApplicableNode(value = Building.class)
 public interface LeaseBillingPolicy extends Policy {
+
+    @I18n
+    enum BillConfirmationMethod {
+
+        automatic, manual;
+
+        @Override
+        public String toString() {
+            return I18nEnum.toString(this);
+        };
+    }
 
     @NotNull
     IPrimitive<BillingAccount.ProrationMethod> prorationMethod();
@@ -46,4 +59,7 @@ public interface LeaseBillingPolicy extends Policy {
     @Owned
     @OrderBy(NsfFeeItem.OrderId.class)
     IList<NsfFeeItem> nsfFees();
+
+    @NotNull
+    IPrimitive<BillConfirmationMethod> confirmationMethod();
 }
