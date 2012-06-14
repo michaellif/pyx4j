@@ -17,11 +17,14 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 
 import com.propertyvista.domain.company.Employee;
+import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 public interface LeaseFacade {
 
     void initLease(Lease lease);
+
+    void setUnit(Lease leaseId, AptUnit unitId);
 
     void persistLease(Lease lease);
 

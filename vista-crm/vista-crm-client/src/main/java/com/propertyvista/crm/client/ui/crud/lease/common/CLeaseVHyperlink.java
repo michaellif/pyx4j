@@ -16,31 +16,48 @@ package com.propertyvista.crm.client.ui.crud.lease.common;
 import com.google.gwt.user.client.Command;
 
 import com.pyx4j.entity.client.ui.CEntityHyperlink;
+import com.pyx4j.forms.client.ui.IFormat;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
-import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.Lease.LeaseV;
 import com.propertyvista.dto.LeaseApplicationDTO;
 import com.propertyvista.dto.LeaseDTO;
 
-public class CLeaseHyperlink extends CEntityHyperlink<Lease> {
+public class CLeaseVHyperlink extends CEntityHyperlink<LeaseV> {
 
-    public CLeaseHyperlink() {
+    public CLeaseVHyperlink() {
         super(null);
 
         setCommand(new Command() {
             @Override
             public void execute() {
-                if (!getValue().isNull() && !getValue().version().isNull()) {
+                if (!getValue().isNull()) {
                     CrudAppPlace place;
-                    if (getValue().version().status().getValue().isDraft()) {
+                    if (getValue().status().getValue().isDraft()) {
                         place = AppPlaceEntityMapper.resolvePlace(LeaseApplicationDTO.class);
                     } else {
                         place = AppPlaceEntityMapper.resolvePlace(LeaseDTO.class);
                     }
-                    AppSite.getPlaceController().goTo(place.formViewerPlace(getValue().getPrimaryKey()));
+                    AppSite.getPlaceController().goTo(place.formViewerPlace(getValue().holder().getPrimaryKey()));
                 }
+            }
+        });
+
+        setFormat(new IFormat<LeaseV>() {
+            @Override
+            public String format(LeaseV value) {
+                if (value != null) {
+                    return value.holder().getStringView();
+                } else {
+                    return null;
+                }
+            }
+
+            @Override
+            public LeaseV parse(String string) {
+                return null;
             }
         });
     }

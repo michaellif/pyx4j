@@ -33,6 +33,7 @@ import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lead.Lead;
 import com.propertyvista.domain.tenant.lead.Showing;
+import com.propertyvista.domain.tenant.lease.Lease;
 
 public class LeadCrudServiceImpl extends AbstractCrudServiceImpl<Lead> implements LeadCrudService {
 
@@ -50,6 +51,12 @@ public class LeadCrudServiceImpl extends AbstractCrudServiceImpl<Lead> implement
         if (!entity.floorplan().isNull()) {
             Persistence.service().retrieve(entity.floorplan().building());
             dto.building().set(entity.floorplan().building());
+        }
+        if (!entity.lease().isNull()) {
+            Persistence.service().retrieve(dto.lease());
+            if (dto.lease().version().isNull()) {
+                dto.lease().set(Persistence.service().retrieve(Lease.class, dto.lease().getPrimaryKey().asDraftKey()));
+            }
         }
     }
 

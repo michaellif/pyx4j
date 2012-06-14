@@ -40,6 +40,7 @@ import com.propertyvista.common.client.policy.ClientPolicyManager;
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.crm.client.themes.CrmTheme;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
+import com.propertyvista.crm.client.ui.crud.lease.common.CLeaseHyperlink;
 import com.propertyvista.crm.rpc.services.selections.SelectFloorplanListService;
 import com.propertyvista.domain.policy.policies.IdAssignmentPolicy;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem;
@@ -137,6 +138,8 @@ public class LeadForm extends CrmEntityForm<Lead> {
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().agent()), 20).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().createDate()), 9).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().status()), 10).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().lease(), new CLeaseHyperlink()), 40).build());
+        main.getFlexCellFormatter().setColSpan(row, 0, 2);
 
         row = -1;
         main.setH4(++row, 1, 1, i18n.tr("Preferred Appointment Times") + ":");
@@ -158,6 +161,8 @@ public class LeadForm extends CrmEntityForm<Lead> {
     @Override
     protected void onPopulate() {
         super.onPopulate();
+
+        get(proto().lease()).setVisible(!getValue().lease().isNull());
 
         get(proto().leadId()).setViewable(false);
         ClientPolicyManager.obtainEffectivePolicy(ClientPolicyManager.getOrganizationPoliciesNode(), IdAssignmentPolicy.class,

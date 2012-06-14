@@ -13,13 +13,16 @@
  */
 package com.propertyvista.biz.tenant;
 
+import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.List;
 
 import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
@@ -34,9 +37,16 @@ import com.propertyvista.biz.occupancy.UnitTurnoverAnalysisFacade;
 import com.propertyvista.biz.policy.IdAssignmentFacade;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.financial.billing.Bill;
+import com.propertyvista.domain.financial.offering.Feature;
+import com.propertyvista.domain.financial.offering.FeatureItemType;
+import com.propertyvista.domain.financial.offering.ProductCatalog;
+import com.propertyvista.domain.financial.offering.ProductItem;
+import com.propertyvista.domain.financial.offering.Service;
+import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lead.Lead;
+import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.CompletionType;
 import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
@@ -80,7 +90,69 @@ public class LeaseFacadeImpl implements LeaseFacade {
 
         if (leaseDraft.unit().getPrimaryKey() != null) {
             ServerSideFactory.create(OccupancyFacade.class).reserve(leaseDraft.unit().getPrimaryKey(), leaseDraft);
+            setUnit(leaseDraft, leaseDraft.unit());
         }
+    }
+
+    @Override
+    public void setUnit(Lease leaseId, AptUnit unitId) {
+        Lease lease = Persistence.secureRetrieveDraft(Lease.class, leaseId.getPrimaryKey());
+
+        AptUnit unit = Persistence.secureRetrieve(AptUnit.class, unitId.getPrimaryKey());
+        Persistence.service().retrieve(unit.belongsTo());
+        Persistence.service().retrieve(unit.belongsTo().productCatalog());
+        Persistence.service().retrieve(unit.belongsTo().productCatalog().services());
+        for (Service service : unit.belongsTo().productCatalog().services()) {
+            if (service.version().type().equals(lease.type())) {
+                Persistence.service().retrieve(service.version().items());
+                for (ProductItem item : service.version().items()) {
+                    Persistence.service().retrieve(item.element());
+                    if (item.element().equals(unit)) {
+//                    if (item.element().getInstanceValueClass().equals(AptUnit.class) & item.element().getPrimaryKey().equals(unitId.getPrimaryKey())) {
+                        setService(lease, unit.belongsTo().productCatalog(), service, item);
+                    }
+                }
+            }
+        }
+
+        lease.unit().set(unit);
+
+        persistLease(lease);
+    }
+
+    private void setService(Lease lease, ProductCatalog catalog, Service service, ProductItem serviceItem) {
+        // set selected service:
+        lease.version().leaseProducts().serviceItem().set(createBillableItem(serviceItem));
+
+        // clear current dependable data:
+        lease.version().leaseProducts().featureItems().clear();
+        lease.version().leaseProducts().concessions().clear();
+
+        List<FeatureItemType> utilitiesToExclude = new ArrayList<FeatureItemType>(catalog.includedUtilities().size() + catalog.externalUtilities().size());
+        utilitiesToExclude.addAll(catalog.includedUtilities());
+        utilitiesToExclude.addAll(catalog.externalUtilities());
+
+        // pre-populate utilities for the new service:
+        for (Feature feature : service.version().features()) {
+            for (ProductItem item : feature.version().items()) {
+                switch (feature.version().type().getValue()) {
+                case utility:
+                    // filter out utilities included in price for selected building:
+                    if (!utilitiesToExclude.contains(item.type())) {
+                        lease.version().leaseProducts().featureItems().add(createBillableItem(item));
+                    }
+                    break;
+                }
+            }
+        }
+    }
+
+    private BillableItem createBillableItem(ProductItem item) {
+        BillableItem newItem = EntityFactory.create(BillableItem.class);
+        newItem.item().set(item);
+        newItem.agreedPrice().setValue(item.price().getValue());
+        newItem._currentPrice().setValue(item.price().getValue());
+        return newItem;
     }
 
     @Override

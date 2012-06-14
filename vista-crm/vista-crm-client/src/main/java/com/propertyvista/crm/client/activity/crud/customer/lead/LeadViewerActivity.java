@@ -21,7 +21,6 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
@@ -42,13 +41,11 @@ public class LeadViewerActivity extends CrmViewerActivity<Lead> implements LeadV
 
     private final IListerView.Presenter<Appointment> appointmentsLister;
 
-    @SuppressWarnings("unchecked")
     public LeadViewerActivity(CrudAppPlace place) {
-        super(place, MarketingViewFactory.instance(LeadViewerView.class), (AbstractCrudService<Lead>) GWT.create(LeadCrudService.class));
+        super(place, MarketingViewFactory.instance(LeadViewerView.class), GWT.<LeadCrudService> create(LeadCrudService.class));
 
         appointmentsLister = new ListerActivityBase<Appointment>(place, ((LeadViewerView) getView()).getAppointmentsListerView(),
-                (AbstractCrudService<Appointment>) GWT.create(AppointmentCrudService.class), Appointment.class);
-
+                GWT.<AppointmentCrudService> create(AppointmentCrudService.class), Appointment.class);
     }
 
     @Override
@@ -67,6 +64,7 @@ public class LeadViewerActivity extends CrmViewerActivity<Lead> implements LeadV
             @Override
             public void onSuccess(VoidSerializable result) {
                 onLeaseConvertionSuccess();
+                populate();
             }
 
             @Override

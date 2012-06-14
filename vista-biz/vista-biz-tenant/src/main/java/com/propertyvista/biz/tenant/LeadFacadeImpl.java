@@ -32,7 +32,6 @@ import com.propertyvista.domain.tenant.lead.Guest;
 import com.propertyvista.domain.tenant.lead.Lead;
 import com.propertyvista.domain.tenant.lead.Lead.Status;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 
 public class LeadFacadeImpl implements LeadFacade {
@@ -77,17 +76,14 @@ public class LeadFacadeImpl implements LeadFacade {
         }
 
         Lease lease = EntityFactory.create(Lease.class);
-
         lease.type().set(lead.leaseType());
-        lease.paymentFrequency().setValue(PaymentFrequency.Monthly);
         lease.unit().set(unitId);
 
         lease.leaseFrom().setValue(lead.moveInDate().getValue());
         lease.leaseTo().setValue(new LogicalDate(leaseEnd));
 
-        lease.version().status().setValue(Lease.Status.ApplicationInProgress);
-
         lease.version().expectedMoveIn().setValue(lead.moveInDate().getValue());
+        lease.version().status().setValue(Lease.Status.ApplicationInProgress);
 
         boolean asApplicant = true;
         for (Guest guest : lead.guests()) {

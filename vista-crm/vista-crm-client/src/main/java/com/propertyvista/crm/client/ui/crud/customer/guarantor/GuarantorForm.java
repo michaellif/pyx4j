@@ -31,7 +31,7 @@ import com.propertyvista.common.client.ui.validators.PastDateValidation;
 import com.propertyvista.crm.client.themes.CrmTheme;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.crud.customer.common.PaymentMethodFolder;
-import com.propertyvista.crm.client.ui.crud.lease.common.CLeaseHyperlink;
+import com.propertyvista.crm.client.ui.crud.lease.common.CLeaseVHyperlink;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.dto.GuarantorDTO;
@@ -96,7 +96,7 @@ public class GuarantorForm extends CrmEntityForm<GuarantorDTO> {
         if (!isEditable()) {
             main.setBR(++row, 0, 1);
 
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseV(), new CLeaseHyperlink()), 35).customLabel(i18n.tr("Lease")).build());
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseV(), new CLeaseVHyperlink()), 35).customLabel(i18n.tr("Lease")).build());
         }
 
         return new ScrollPanel(main);
