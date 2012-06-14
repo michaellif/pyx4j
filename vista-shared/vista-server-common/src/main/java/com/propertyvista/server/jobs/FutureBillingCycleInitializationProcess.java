@@ -14,7 +14,6 @@
 package com.propertyvista.server.jobs;
 
 import com.pyx4j.config.server.ServerSideFactory;
-import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.biz.financial.billing.BillingFacade;
 
@@ -28,7 +27,6 @@ public class FutureBillingCycleInitializationProcess implements PmcProcess {
     @Override
     public void executePmcJob(PmcProcessContext context) {
         ServerSideFactory.create(BillingFacade.class).initializeFutureBillingCycles();
-        Persistence.service().commit();
     }
 
     @Override
