@@ -54,7 +54,7 @@ public class LeadCrudServiceImpl extends AbstractCrudServiceImpl<Lead> implement
         }
         if (!entity.lease().isNull()) {
             Persistence.service().retrieve(dto.lease());
-            if (dto.lease().version().isNull()) {
+            if (dto.lease().version().isNull()) { // load draft if there is no version still:
                 dto.lease().set(Persistence.service().retrieve(Lease.class, dto.lease().getPrimaryKey().asDraftKey()));
             }
         }

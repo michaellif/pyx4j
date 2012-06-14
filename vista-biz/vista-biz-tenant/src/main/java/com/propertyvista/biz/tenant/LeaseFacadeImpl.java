@@ -106,9 +106,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
             if (service.version().type().equals(lease.type())) {
                 Persistence.service().retrieve(service.version().items());
                 for (ProductItem item : service.version().items()) {
-                    Persistence.service().retrieve(item.element());
                     if (item.element().equals(unit)) {
-//                    if (item.element().getInstanceValueClass().equals(AptUnit.class) & item.element().getPrimaryKey().equals(unitId.getPrimaryKey())) {
                         setService(lease, unit.belongsTo().productCatalog(), service, item);
                     }
                 }
@@ -297,7 +295,6 @@ public class LeaseFacadeImpl implements LeaseFacade {
                 }
             }
         }
-
     }
 
     @Override
@@ -331,7 +328,6 @@ public class LeaseFacadeImpl implements LeaseFacade {
         Persistence.secureSave(lease);
 
         ServerSideFactory.create(BillingFacade.class).runBilling(lease);
-
     }
 
     // TODO review code here
