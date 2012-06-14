@@ -32,7 +32,7 @@ import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.portal.server.preloader.util.AptUnitSource;
 import com.propertyvista.portal.server.preloader.util.BaseVistaDevDataPreloader;
 import com.propertyvista.portal.server.preloader.util.LeaseLifecycleSimulator;
-import com.propertyvista.portal.server.preloader.util.LeaseLifecycleSimulator.LeaseLifecycleSimBuilder;
+import com.propertyvista.portal.server.preloader.util.LeaseLifecycleSimulator.LeaseLifecycleSimulatorBuilder;
 
 public class LeasePreloader extends BaseVistaDevDataPreloader {
 
@@ -76,7 +76,7 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
                 //TODO
                 // ServerSideFactory.create(LeaseFacade.class).activate(lease.getPrimaryKey());
             } else {
-                LeaseLifecycleSimBuilder simBuilder = LeaseLifecycleSimulator.sim();
+                LeaseLifecycleSimulatorBuilder simBuilder = LeaseLifecycleSimulator.sim();
 
                 if (numCreatedWithBilling < MAX_NUM_OF_LEASES_WITH_SIM_BILLING) {
                     // create simulation events that happen between 4 years ago, and and the end of the previous month 

@@ -102,8 +102,8 @@ public class LeaseLifecycleSimulator {
         });
     }
 
-    public static LeaseLifecycleSimBuilder sim() {
-        return new LeaseLifecycleSimBuilder();
+    public static LeaseLifecycleSimulatorBuilder sim() {
+        return new LeaseLifecycleSimulatorBuilder();
     }
 
     public void generateRandomLifeCycle(Lease lease) {
@@ -528,11 +528,11 @@ public class LeaseLifecycleSimulator {
         }
     }
 
-    public static class LeaseLifecycleSimBuilder {
+    public static class LeaseLifecycleSimulatorBuilder {
 
         private final LeaseLifecycleSimulator leaseLifecycleSim;
 
-        public LeaseLifecycleSimBuilder() {
+        public LeaseLifecycleSimulatorBuilder() {
             this.leaseLifecycleSim = new LeaseLifecycleSimulator();
             this.leaseLifecycleSim.runBilling = false;
         }
@@ -552,27 +552,27 @@ public class LeaseLifecycleSimulator {
             return this.leaseLifecycleSim;
         }
 
-        public LeaseLifecycleSimBuilder start(LogicalDate start) {
+        public LeaseLifecycleSimulatorBuilder start(LogicalDate start) {
             leaseLifecycleSim.simStart = start;
             return this;
         }
 
-        public LeaseLifecycleSimBuilder start(String simStart) {
+        public LeaseLifecycleSimulatorBuilder start(String simStart) {
             return start(toDate(simStart));
         }
 
         /** inclusive */
-        public LeaseLifecycleSimBuilder end(LogicalDate end) {
+        public LeaseLifecycleSimulatorBuilder end(LogicalDate end) {
             leaseLifecycleSim.simEnd = end;
             return this;
         }
 
         /** inclusive */
-        public LeaseLifecycleSimBuilder end(String simEnd) {
+        public LeaseLifecycleSimulatorBuilder end(String simEnd) {
             return end(toDate(simEnd));
         }
 
-        public LeaseLifecycleSimBuilder simulateBilling() {
+        public LeaseLifecycleSimulatorBuilder simulateBilling() {
             leaseLifecycleSim.runBilling = true;
             return this;
         }
@@ -586,7 +586,7 @@ public class LeaseLifecycleSimulator {
          * @param max
          *            maximum time
          */
-        public LeaseLifecycleSimBuilder availabilityTermConstraints(long min, long max) {
+        public LeaseLifecycleSimulatorBuilder availabilityTermConstraints(long min, long max) {
             assert min <= max;
             leaseLifecycleSim.minAvailableTerm = min;
             leaseLifecycleSim.maxAvailableTerm = max;
@@ -601,7 +601,7 @@ public class LeaseLifecycleSimulator {
          * @param max
          *            maximum time
          */
-        public LeaseLifecycleSimBuilder reservedTermConstraints(long min, long max) {
+        public LeaseLifecycleSimulatorBuilder reservedTermConstraints(long min, long max) {
             assert min <= max;
             leaseLifecycleSim.minReserveTerm = min;
             leaseLifecycleSim.maxReserveTerm = max;
@@ -611,7 +611,7 @@ public class LeaseLifecycleSimulator {
         /**
          * Approve lease after it has been created, don't make random waiting period between approval and lease from date
          */
-        public LeaseLifecycleSimBuilder approveImmidately() {
+        public LeaseLifecycleSimulatorBuilder approveImmidately() {
             leaseLifecycleSim.hasImmideateApproval = true;
             return this;
         }
