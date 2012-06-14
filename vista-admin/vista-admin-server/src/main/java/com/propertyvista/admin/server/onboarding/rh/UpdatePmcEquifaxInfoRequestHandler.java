@@ -13,8 +13,6 @@
  */
 package com.propertyvista.admin.server.onboarding.rh;
 
-import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,21 +36,20 @@ public class UpdatePmcEquifaxInfoRequestHandler extends AbstractRequestHandler<U
 
     @Override
     public ResponseIO execute(UpdatePmcEquifaxInfoRequestIO request) {
+        log.info("User {} requested {} ", new Object[] { request.onboardingAccountId().getValue(), "UpdatePmcEquifaxInfo" });
+
         ResponseIO response = EntityFactory.create(ResponseIO.class);
         response.success().setValue(Boolean.TRUE);
 
-        EntityQueryCriteria<Pmc> crpmc = EntityQueryCriteria.create(Pmc.class);
-        crpmc.add(PropertyCriterion.eq(crpmc.proto().onboardingAccountId(), request.onboardingAccountId().getValue()));
-        List<Pmc> pmcs = Persistence.service().query(crpmc);
+        EntityQueryCriteria<Pmc> pmcCr = EntityQueryCriteria.create(Pmc.class);
+        pmcCr.add(PropertyCriterion.eq(pmcCr.proto().onboardingAccountId(), request.onboardingAccountId().getValue()));
+        Pmc pmc = Persistence.service().retrieve(pmcCr);
 
-        if (pmcs.size() != 1) {
-            log.debug("INp Pmc for onboarding accountid {} rs {}", request.onboardingAccountId().getValue(), pmcs.size());
+        if (pmc == null) {
+            log.debug("No Pmc for onboarding accountid {}", request.onboardingAccountId().getValue());
             response.success().setValue(Boolean.FALSE);
-
             return response;
         }
-
-        Pmc pmc = pmcs.get(0);
 
         pmc.equifaxInfo().customerCode().setValue(request.customerCode().getValue());
         pmc.equifaxInfo().customerNumber().setValue(request.customerNumber().getValue());

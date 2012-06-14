@@ -47,6 +47,8 @@ public class OnboardingUserPasswordChangeRequestHandler extends AbstractRequestH
 
     @Override
     public ResponseIO execute(OnboardingUserPasswordChangeRequestIO request) {
+        log.info("User {} requested {}", new Object[] { request.onboardingAccountId().getValue(), "OnboardingUserPasswordChange" });
+
         ResponseIO response = EntityFactory.create(ResponseIO.class);
 
         String email = PasswordEncryptor.normalizeEmailAddress(request.email().getValue());

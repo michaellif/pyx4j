@@ -35,6 +35,9 @@ public class ReserveDnsNameRequestHandler extends AbstractRequestHandler<Reserve
 
     @Override
     public ResponseIO execute(ReserveDnsNameRequestIO request) {
+        log.info("User {} requested {} for DNS name {}", new Object[] { request.onboardingAccountId().getValue(), "ReserveDnsName",
+                request.dnsName().getValue() });
+
         ResponseIO response = EntityFactory.create(ResponseIO.class);
         response.success().setValue(Boolean.TRUE);
 

@@ -44,6 +44,8 @@ public class OnboardingUserTokenValidationRequestHandler extends AbstractRequest
 
     @Override
     public ResponseIO execute(OnboardingUserTokenValidationRequestIO request) {
+        log.info("User {} requested {}", new Object[] { request.onboardingAccountId().getValue(), "OnboardingUserTokenValidation" });
+
         ResponseIO response = EntityFactory.create(ResponseIO.class);
 
         AccessKey.TokenParser token = new AccessKey.TokenParser(request.token().getValue());

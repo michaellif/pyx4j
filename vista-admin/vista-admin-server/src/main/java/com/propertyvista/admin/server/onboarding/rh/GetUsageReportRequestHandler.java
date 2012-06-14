@@ -45,6 +45,7 @@ public class GetUsageReportRequestHandler extends AbstractRequestHandler<GetUsag
 
     @Override
     public ResponseIO execute(GetUsageRequestIO request) {
+        log.info("User {} requested {}", new Object[] { request.onboardingAccountId().getValue(), "GetUsageReportRequest" });
 
         if (request.usageType().getValue() == UsageType.Equifax)
             return getEquifaxUsageResponse(request);
@@ -57,7 +58,6 @@ public class GetUsageReportRequestHandler extends AbstractRequestHandler<GetUsag
 
             return response;
         }
-
     }
 
     private UsageReportResponseIO getEquifaxUsageResponse(GetUsageRequestIO request) {

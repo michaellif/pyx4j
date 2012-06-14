@@ -15,6 +15,9 @@ package com.propertyvista.admin.server.onboarding.rh;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -33,12 +36,16 @@ import com.propertyvista.onboarding.ResponseIO;
 
 public class CreatePmcRequestHandler extends AbstractRequestHandler<CreatePMCRequestIO> {
 
+    private final static Logger log = LoggerFactory.getLogger(CreatePmcRequestHandler.class);
+
     public CreatePmcRequestHandler() {
         super(CreatePMCRequestIO.class);
     }
 
     @Override
     public ResponseIO execute(CreatePMCRequestIO request) {
+        log.info("User {} requested {} for PMC name {}", new Object[] { request.onboardingAccountId().getValue(), "CreatePmc", request.name().getValue() });
+
         AccountInfoResponseIO response = EntityFactory.create(AccountInfoResponseIO.class);
         response.success().setValue(Boolean.TRUE);
 
@@ -48,12 +55,14 @@ public class CreatePmcRequestHandler extends AbstractRequestHandler<CreatePMCReq
 
         if (creds.size() == 0) {
             response.success().setValue(Boolean.FALSE);
+            log.info("Error occured.  User {}, action {}", new Object[] { request.onboardingAccountId(), "CreatePmc" });
             return response;
         }
 
-        final String dnsName = request.name().getValue();
+        final String dnsName = request.dnsName().getValue();
         if (!PmcNameValidator.canCreatePmcName(dnsName, request.onboardingAccountId().getValue())) {
             response.success().setValue(Boolean.FALSE);
+            log.info("Error occured.  User {}, action {}", new Object[] { request.onboardingAccountId(), "CreatePmc" });
             return response;
         }
 

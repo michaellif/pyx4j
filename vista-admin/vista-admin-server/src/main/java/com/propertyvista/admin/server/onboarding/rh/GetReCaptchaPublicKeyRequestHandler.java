@@ -35,6 +35,7 @@ public class GetReCaptchaPublicKeyRequestHandler extends AbstractRequestHandler<
 
     @Override
     public ResponseIO execute(GetReCaptchaPublicKeyRequestIO request) {
+        log.info("User {} requested {}", new Object[] { request.onboardingAccountId().getValue(), "GetReCaptchaPublicKey" });
 
         GetReCaptchaPublicKeyResponseIO response = EntityFactory.create(GetReCaptchaPublicKeyResponseIO.class);
         response.success().setValue(Boolean.TRUE);

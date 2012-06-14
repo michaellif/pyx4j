@@ -13,6 +13,9 @@
  */
 package com.propertyvista.admin.server.onboarding.rh;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.admin.server.onboarding.rhf.AbstractRequestHandler;
@@ -23,12 +26,16 @@ import com.propertyvista.preloader.OnboardingUserPreloader;
 
 public class CreateOnboardingUserRequestHandler extends AbstractRequestHandler<CreateOnboardingUserRequestIO> {
 
+    private final static Logger log = LoggerFactory.getLogger(CreateOnboardingUserRequestHandler.class);
+
     public CreateOnboardingUserRequestHandler() {
         super(CreateOnboardingUserRequestIO.class);
     }
 
     @Override
     public ResponseIO execute(CreateOnboardingUserRequestIO request) {
+        log.info("User {} requested {} for email {}", new Object[] { request.onboardingAccountId().getValue(), "CreateOnboardingUser",
+                request.email().getValue() });
 
         OnboardingUserPreloader.createOnboardingUser(request.name().getValue(), request.email().getValue(), request.password().getValue(),
                 VistaOnboardingBehavior.ProspectiveClient, request.onboardingAccountId().getValue());

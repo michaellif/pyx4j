@@ -15,6 +15,9 @@ package com.propertyvista.admin.server.onboarding.rh;
 
 import java.util.Locale;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.admin.server.onboarding.PmcNameValidator;
@@ -24,12 +27,17 @@ import com.propertyvista.onboarding.ResponseIO;
 
 public class CheckAvailabilityRequestHandler extends AbstractRequestHandler<CheckAvailabilityRequestIO> {
 
+    private final static Logger log = LoggerFactory.getLogger(CheckAvailabilityRequestHandler.class);
+
     public CheckAvailabilityRequestHandler() {
         super(CheckAvailabilityRequestIO.class);
     }
 
     @Override
     public ResponseIO execute(CheckAvailabilityRequestIO request) {
+        log.info("User {} requested {} for DNS name {}", new Object[] { request.onboardingAccountId().getValue(), "CheckAvailability",
+                request.dnsName().getValue() });
+
         String dnsName = request.dnsName().getValue().toLowerCase(Locale.ENGLISH);
         ResponseIO response = EntityFactory.create(ResponseIO.class);
         response.success().setValue(PmcNameValidator.canCreatePmcName(dnsName, null));

@@ -16,6 +16,9 @@ package com.propertyvista.admin.server.onboarding.rh;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -33,6 +36,7 @@ import com.propertyvista.onboarding.ResponseIO;
 import com.propertyvista.onboarding.UpdateBankAccountInfoRequestIO;
 
 public class UpdateBankAccountInfoRequestHandler extends AbstractRequestHandler<UpdateBankAccountInfoRequestIO> {
+    private final static Logger log = LoggerFactory.getLogger(UpdateBankAccountInfoRequestHandler.class);
 
     public UpdateBankAccountInfoRequestHandler() {
         super(UpdateBankAccountInfoRequestIO.class);
@@ -40,6 +44,8 @@ public class UpdateBankAccountInfoRequestHandler extends AbstractRequestHandler<
 
     @Override
     public ResponseIO execute(UpdateBankAccountInfoRequestIO request) {
+        log.info("User {} requested {} ", new Object[] { request.onboardingAccountId().getValue(), "UpdateBankAccountInfo" });
+
         ResponseIO response = EntityFactory.create(ResponseIO.class);
 
         List<OnboardingMerchantAccount> updatedAccount = new ArrayList<OnboardingMerchantAccount>();

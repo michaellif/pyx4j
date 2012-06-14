@@ -15,6 +15,9 @@ package com.propertyvista.admin.server.onboarding.rh;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -30,12 +33,16 @@ import com.propertyvista.onboarding.ResponseIO;
 
 public class GetAccountInfoRequestHandler extends AbstractRequestHandler<GetAccountInfoRequestIO> {
 
+    private final static Logger log = LoggerFactory.getLogger(GetAccountInfoRequestHandler.class);
+
     public GetAccountInfoRequestHandler() {
         super(GetAccountInfoRequestIO.class);
     }
 
     @Override
     public ResponseIO execute(GetAccountInfoRequestIO request) {
+        log.info("User {} requested {}", new Object[] { request.onboardingAccountId().getValue(), "GetAccountInfo" });
+
         AccountInfoResponseIO response = EntityFactory.create(AccountInfoResponseIO.class);
         response.success().setValue(Boolean.TRUE);
 
@@ -45,12 +52,14 @@ public class GetAccountInfoRequestHandler extends AbstractRequestHandler<GetAcco
 
         if (pmcs.size() == 0) {
             response.success().setValue(Boolean.FALSE);
+            log.info("Error occured.  User {}, action {}", new Object[] { request.onboardingAccountId(), "GetAccountInfo" });
             return response;
         }
 
         Pmc pmc = pmcs.get(0);
         if (pmc == null) {
             response.success().setValue(Boolean.FALSE);
+            log.info("Error occured.  User {}, action {}", new Object[] { request.onboardingAccountId(), "GetAccountInfo" });
             return response;
         }
 
