@@ -134,6 +134,8 @@ public class LeaseGenerator extends DataGenerator {
         PaymentMethod m = EntityFactory.create(PaymentMethod.class);
         m.type().setValue(PaymentType.Echeck);
         m.isDefault().setValue(Boolean.TRUE);
+        m.isOneTimePayment().setValue(Boolean.FALSE);
+        m.isDeleted().setValue(Boolean.FALSE);
 
         // create new payment method details:
         EcheckInfo details = EntityFactory.create(EcheckInfo.class);
