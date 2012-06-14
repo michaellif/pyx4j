@@ -102,7 +102,7 @@ public interface Bill extends IEntity {
 
     IPrimitiveSet<String> warnings();
 
-    Bill previousBill();
+    Bill previousCycleBill();
 
     @Format("MM/dd/yyyy")
     @ToString(index = 0)

@@ -164,8 +164,8 @@ public class BillingLifecycleManager {
             bill.billSequenceNumber().setValue(billingAccount.billCounter().getValue());
             bill.billingCycle().set(billingCycle);
 
-            Bill previousBill = BillingLifecycleManager.getLatestConfirmedBill(billingAccount.lease());
-            bill.previousBill().set(previousBill);
+            Bill previousCycleBill = BillingLifecycleManager.getLatestConfirmedBill(billingAccount.lease());
+            bill.previousCycleBill().set(previousCycleBill);
 
             bill.executionDate().setValue(new LogicalDate(SysDateManager.getSysDate()));
 

@@ -42,7 +42,7 @@ public class BillTester extends Tester {
     }
 
     public BillTester previousBillSequenceNumber(Integer sequenceNumber) {
-        assertEquals("Previous Bill Sequence number", sequenceNumber, bill.previousBill().billSequenceNumber().getValue());
+        assertEquals("Previous Bill Sequence number", sequenceNumber, bill.previousCycleBill().billSequenceNumber().getValue());
         return this;
     }
 
