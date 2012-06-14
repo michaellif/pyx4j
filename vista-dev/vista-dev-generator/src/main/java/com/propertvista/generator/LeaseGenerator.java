@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -15,6 +15,7 @@ package com.propertvista.generator;
 
 import java.util.EnumSet;
 
+import com.propertvista.generator.util.CommonsGenerator;
 import com.propertvista.generator.util.RandomUtil;
 
 import com.pyx4j.commons.LogicalDate;
@@ -28,6 +29,9 @@ import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
+import com.propertyvista.domain.payment.EcheckInfo;
+import com.propertyvista.domain.payment.PaymentMethod;
+import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.Guarantor;
@@ -98,6 +102,7 @@ public class LeaseGenerator extends DataGenerator {
         mainTenant.percentage().setValue(100);
         lease.version().tenants().add(mainTenant);
 
+        addPreathorisedPaymentMethod(mainTenant);
         Guarantor guarantor = EntityFactory.create(Guarantor.class);
         guarantor.customer().set(customerGenerator.createCustomer());
         guarantor.screening().set(screeningGenerator.createScreening());
@@ -124,6 +129,29 @@ public class LeaseGenerator extends DataGenerator {
         }
     }
 
+    private void addPreathorisedPaymentMethod(Tenant tenant) {
+
+        PaymentMethod m = EntityFactory.create(PaymentMethod.class);
+        m.type().setValue(PaymentType.Echeck);
+        m.isDefault().setValue(Boolean.TRUE);
+
+        // create new payment method details:
+        EcheckInfo details = EntityFactory.create(EcheckInfo.class);
+        details.nameOn().setValue(tenant.customer().person().name().getStringView());
+        details.bankId().setValue(Integer.toString(RandomUtil.randomInt(999)));
+        details.branchTransitNumber().setValue(Integer.toString(RandomUtil.randomInt(99999)));
+        details.accountNo().setValue("000000" + Integer.toString(RandomUtil.randomInt(999999)));
+        m.details().set(details);
+
+        m.leaseParticipant().set(tenant);
+        m.sameAsCurrent().setValue(Boolean.FALSE);
+        m.billingAddress().set(CommonsGenerator.createAddress());
+        m.phone().setValue(CommonsGenerator.createPhone());
+
+        tenant.paymentMethods().add(m);
+
+    }
+
     public static void attachDocumentData(Lease lease) {
         for (Tenant tenant : lease.version().tenants()) {
             for (PersonScreening screening : tenant.customer()._PersonScreenings()) {
@@ -148,7 +176,7 @@ public class LeaseGenerator extends DataGenerator {
             Persistence.service().retrieve(building);
 
             Persistence.service().retrieve(building.productCatalog());
-            // pre-populate utilities for the new service: 
+            // pre-populate utilities for the new service:
             Persistence.service().retrieve(selectedService.version().features());
             for (Feature feature : selectedService.version().features()) {
                 if (Feature.Type.utility.equals(feature.version().type().getValue())) {
@@ -163,7 +191,7 @@ public class LeaseGenerator extends DataGenerator {
 
             }
 
-            // pre-populate concessions for the new service: 
+            // pre-populate concessions for the new service:
             Persistence.service().retrieve(selectedService.version().concessions());
             if (!selectedService.version().concessions().isEmpty()) {
                 lease.version().leaseProducts().concessions().add(RandomUtil.random(selectedService.version().concessions()));
