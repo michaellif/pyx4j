@@ -5,6 +5,12 @@ Add -Dcom.pyx4j.appConfig=DevTomcat
 
 Create mail-credentials.properties  in tomcat home.
 
+--- Custom configuration on Tomcat
+
+Add -Dcom.pyx4j.appConfig=DevCustom
+
+  Place the file config.properties.template  to catalina.base/conf/${vista.war.name}/config.properties
+
 -------
     Q: When uploading a WAR file larger than 50 MB,
      Get error: the request was rejected because its size (XXX) exceeds the configured maximum (52428800)

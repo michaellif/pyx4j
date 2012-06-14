@@ -13,47 +13,13 @@
  */
 package com.propertyvista.server.config;
 
-import java.io.File;
-
 import com.pyx4j.config.server.IMailServiceConfigConfiguration;
-import com.pyx4j.config.server.IPersistenceConfiguration;
-import com.pyx4j.entity.rdb.cfg.ConfigurationPostgreSQLProperties;
-import com.pyx4j.entity.rdb.dialect.NamingConvention;
-import com.pyx4j.entity.rdb.dialect.NamingConventionOracle;
-import com.pyx4j.essentials.j2se.J2SEServiceConnector;
-import com.pyx4j.essentials.j2se.J2SEServiceConnector.Credentials;
 
 /**
  * See the files https://svn.pyx4j.com/svn-configs/trunk/vista/testenv/apps/catalina.base/tomcatA/conf/vista33
  * 
  */
 public class VistaServerSideConfiguration33 extends VistaServerSideConfigurationCustom {
-
-    @Override
-    public IPersistenceConfiguration getPersistenceConfiguration() {
-        ConfigurationPostgreSQLProperties config = new ConfigurationPostgreSQLProperties() {
-
-            {
-                File dbCredentialsFile = new File(getConfigDirectory(), "db-credentials.properties");
-                if (dbCredentialsFile.canRead()) {
-                    Credentials credentials = J2SEServiceConnector.getCredentials(dbCredentialsFile.getAbsolutePath());
-                    this.user = credentials.email;
-                    this.password = credentials.password;
-                }
-
-                readProperties("db", VistaServerSideConfiguration33.this.getConfigProperties().getProperties());
-
-            }
-
-            @Override
-            public NamingConvention namingConvention() {
-                return new NamingConventionOracle(63, null, false, false, '$');
-            }
-
-        };
-
-        return config;
-    }
 
     @Override
     protected String getApplicationDeploymentProtocol() {

@@ -1,0 +1,36 @@
+#version $Revision$ ($Author$)  $Date$
+#place this file to directory  apache-tomcat\conf\${contextName}
+
+#Application configs
+openIdrequired=false
+isDevelopmentBehavior=true
+
+ApplicationURLNamespace=.dev.birchwoodsoftwaregroup.com:8080/vista/
+
+## DB Connection configuration
+
+db.type=PostgreSQL
+db.host=localhost
+db.sharedSequencesSchema=public
+db.multitenant=SeparateSchemas
+
+db.user=vista
+db.password=vista
+#optionally you may have db-credentials.properties in additional file that may be encrypted
+
+db.maxPoolPreparedStatements=0
+db.minPoolSize=3
+db.maxPoolSize=100
+
+
+## TODO Mail server configuration
+
+mail.host=smtp.amdocs.com
+mail.port=25
+mail.sender="MCO Services" <noreply-mco@amdocs.com>
+
+#mail.allowSendToEmailSufix=amdocs.com;gmail.com
+#mail.user=noreply-mco@amdocs.com
+#mail.password=secret2
+
+#optionally you may have mail-credentials.properties in additional file that may be encrypted

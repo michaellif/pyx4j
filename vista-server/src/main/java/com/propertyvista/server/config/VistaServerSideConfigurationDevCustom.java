@@ -7,30 +7,29 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Aug 26, 2011
+ * Created on 2011-02-25
  * @author vlads
  * @version $Id$
  */
 package com.propertyvista.server.config;
 
-import com.pyx4j.config.server.IMailServiceConfigConfiguration;
 import com.pyx4j.config.server.IPersistenceConfiguration;
 
-public class VistaServerSideConfigurationProdMain extends VistaServerSideConfigurationProd {
+public class VistaServerSideConfigurationDevCustom extends VistaServerSideConfigurationDev {
+
+    @Override
+    public boolean isDevelopmentBehavior() {
+        return getConfigProperties().getBooleanValue("isDevelopmentBehavior", true);
+    }
+
+    @Override
+    public boolean openIdrequired() {
+        return getConfigProperties().getBooleanValue("openIdrequired", true);
+    }
 
     @Override
     public String getApplicationURLNamespace() {
-        return ".prod02.birchwoodsoftwaregroup.com/";
-    }
-
-    @Override
-    public String getApplicationEmailSender() {
-        return "\"Property Vista\" <noreply@propertyvista>";
-    }
-
-    @Override
-    public IMailServiceConfigConfiguration getMailServiceConfigConfiguration() {
-        return VistaSMTPMailServiceConfig.getGmailConfig("prod-main-");
+        return getConfigProperties().getValue("ApplicationURLNamespace");
     }
 
     @Override

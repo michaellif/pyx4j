@@ -13,17 +13,21 @@
  */
 package com.propertyvista.server.config;
 
+import java.io.File;
+
 import javax.servlet.ServletContext;
 
 import com.pyx4j.commons.Consts;
 import com.pyx4j.config.server.IMailServiceConfigConfiguration;
 import com.pyx4j.config.server.IPersistenceConfiguration;
 import com.pyx4j.config.server.NamespaceResolver;
+import com.pyx4j.config.server.PropertiesConfiguration;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.server.rpc.IServiceFactory;
 import com.pyx4j.entity.server.dataimport.DataPreloaderCollection;
 import com.pyx4j.essentials.server.AbstractAntiBot;
 import com.pyx4j.essentials.server.EssentialsRPCServiceFactory;
+import com.pyx4j.log4j.LoggerConfig;
 import com.pyx4j.security.server.ThrottleConfig;
 import com.pyx4j.security.shared.AclCreator;
 import com.pyx4j.security.shared.AclRevalidator;
@@ -38,6 +42,8 @@ import com.propertyvista.server.security.VistaAccessControlList;
 import com.propertyvista.server.security.VistaAclRevalidator;
 
 public class VistaServerSideConfiguration extends AbstractVistaServerSideConfiguration {
+
+    private PropertiesConfiguration configProperties;
 
     @Override
     public ServerSideConfiguration selectInstanceByContextName(ServletContext servletContext, String contextName) {
@@ -69,6 +75,17 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
             return new VistaServerSideConfiguration22();
         }
         return this;
+    }
+
+    public File getConfigDirectory() {
+        return new File(new File(LoggerConfig.getContainerHome(), "conf"), LoggerConfig.getContextName());
+    }
+
+    public PropertiesConfiguration getConfigProperties() {
+        if (configProperties == null) {
+            configProperties = new PropertiesConfiguration(null, PropertiesConfiguration.loadProperties(new File(getConfigDirectory(), "config.properties")));
+        }
+        return configProperties;
     }
 
     @Override
