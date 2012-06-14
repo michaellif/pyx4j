@@ -35,8 +35,6 @@ public interface LeaseDTO extends Lease {
     // -----------------------------------------------------
     // temporary runtime data:
 
-    IList<ProductItem> selectedServiceItems();
-
     IList<ProductItem> selectedFeatureItems();
 
     IList<ProductItem> selectedUtilityItems();

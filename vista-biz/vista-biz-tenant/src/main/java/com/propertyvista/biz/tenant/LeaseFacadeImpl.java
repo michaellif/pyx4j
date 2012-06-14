@@ -98,6 +98,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
     public void setUnit(Lease leaseId, AptUnit unitId) {
         Lease lease = Persistence.secureRetrieveDraft(Lease.class, leaseId.getPrimaryKey());
 
+        boolean succeeded = false;
         AptUnit unit = Persistence.secureRetrieve(AptUnit.class, unitId.getPrimaryKey());
         Persistence.service().retrieve(unit.belongsTo());
         Persistence.service().retrieve(unit.belongsTo().productCatalog());
@@ -108,10 +109,17 @@ public class LeaseFacadeImpl implements LeaseFacade {
                 for (ProductItem item : service.version().items()) {
                     if (item.element().equals(unit)) {
                         setService(lease, unit.belongsTo().productCatalog(), service, item);
+                        succeeded = true;
                     }
                 }
             }
         }
+
+// TODO : ensure preloaders do work with this!!        
+//        if (!succeeded) {
+//            throw new UserRuntimeException(i18n.tr("There no service for selected unit: {0} from Building: {1}", unit.getStringView(), unit.belongsTo()
+//                    .getStringView()));
+//        }
 
         lease.unit().set(unit);
 

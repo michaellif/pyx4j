@@ -31,5 +31,4 @@ public class LeaseApplicationEditorActivity extends LeaseEditorActivityBase<Leas
         super(place, LeaseViewFactory.instance(LeaseApplicationEditorView.class), (AbstractCrudService<LeaseApplicationDTO>) GWT
                 .create(LeaseApplicationCrudService.class), LeaseApplicationDTO.class);
     }
-
 }

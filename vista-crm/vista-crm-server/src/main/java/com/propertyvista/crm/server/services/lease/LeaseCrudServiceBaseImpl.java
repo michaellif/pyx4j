@@ -14,6 +14,8 @@
 package com.propertyvista.crm.server.services.lease;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -24,11 +26,16 @@ import com.pyx4j.entity.server.AbstractVersionedCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.crm.rpc.services.lease.LeaseCrudServiceBase;
 import com.propertyvista.crm.server.util.CrmAppContext;
+import com.propertyvista.domain.financial.offering.Concession;
 import com.propertyvista.domain.financial.offering.Feature;
+import com.propertyvista.domain.financial.offering.FeatureItemType;
+import com.propertyvista.domain.financial.offering.ProductCatalog;
+import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
@@ -90,6 +97,9 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
         for (Guarantor item : dto.version().guarantors()) {
             Persistence.service().retrieve(item.screening(), AttachLevel.ToStringMembers);
         }
+
+        // fill runtime data:
+        fillServiceEligibilityData(dto, dto.version().leaseProducts().serviceItem().item());
     }
 
     @Override
@@ -155,11 +165,15 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
     }
 
     @Override
-    public void setSelectededUnit(AsyncCallback<AptUnit> callback, Key unitId) {
+    public void setSelectededUnit(AsyncCallback<VoidSerializable> callback, Key unitId, Key entityId) {
+        ServerSideFactory.create(LeaseFacade.class).setUnit(EntityFactory.createIdentityStub(Lease.class, entityId),
+                EntityFactory.createIdentityStub(AptUnit.class, unitId));
+        Persistence.service().commit();
+
         AptUnit unit = Persistence.service().retrieve(AptUnit.class, unitId);
         Persistence.service().retrieve(unit.belongsTo());
         syncBuildingProductCatalog(unit.belongsTo());
-        callback.onSuccess(unit);
+        callback.onSuccess(null);
     }
 
     private Building syncBuildingProductCatalog(Building building) {
@@ -231,5 +245,62 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
         }
 
         callback.onSuccess(users);
+    }
+
+    // Internals:
+
+    private boolean fillServiceEligibilityData(DTO currentValue, ProductItem serviceItem) {
+        if (serviceItem == null) {
+            return false;
+        }
+
+        // find the service by Service item:
+        Service selectedService = null;
+        for (Service service : currentValue.selectedBuilding().productCatalog().services()) {
+            for (ProductItem item : service.version().items()) {
+                if (item.equals(serviceItem)) {
+                    selectedService = service;
+                    break;
+                }
+            }
+            if (selectedService != null) {
+                break; // found!..
+            }
+        }
+
+        // fill related features and concession:
+        currentValue.selectedFeatureItems().clear();
+        currentValue.selectedUtilityItems().clear();
+        currentValue.selectedConcessions().clear();
+
+        if (selectedService != null) {
+            ProductCatalog catalog = currentValue.selectedBuilding().productCatalog();
+            List<FeatureItemType> utilitiesToExclude = new ArrayList<FeatureItemType>(catalog.includedUtilities().size() + catalog.externalUtilities().size());
+            utilitiesToExclude.addAll(catalog.includedUtilities());
+            utilitiesToExclude.addAll(catalog.externalUtilities());
+
+            // fill features:
+            for (Feature feature : selectedService.version().features()) {
+                for (ProductItem item : feature.version().items()) {
+                    switch (feature.version().type().getValue()) {
+                    case utility:
+                        // filter out utilities included in price for selected building:
+                        if (!utilitiesToExclude.contains(item.type())) {
+                            currentValue.selectedUtilityItems().add(item);
+                        }
+                        break;
+                    default:
+                        currentValue.selectedFeatureItems().add(item);
+                    }
+                }
+            }
+
+            // fill concessions:
+            for (Concession concession : selectedService.version().concessions()) {
+                currentValue.selectedConcessions().add(concession);
+            }
+        }
+
+        return (selectedService != null);
     }
 }
