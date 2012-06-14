@@ -25,6 +25,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.StackLayoutPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.site.client.AppSite;
@@ -117,17 +118,17 @@ public class ShortCutsViewImpl extends StackLayoutPanel implements ShortCutsView
 
     private class NavigItem extends SimplePanel {
 
-        private final AppPlace place;
+        private AppPlace place;
 
         public NavigItem(AppPlace place) {
             this(place, null);
         }
 
-        public NavigItem(AppPlace place, IEntity value) {
-            this.place = place;
+        public NavigItem(AppPlace placeIn, IEntity value) {
+            adoptPlace(placeIn);
 
             String label = null;
-            String typeLabel = AppSite.getHistoryMapper().getPlaceInfo(place).getCaption();
+            String typeLabel = AppSite.getHistoryMapper().getPlaceInfo(placeIn).getCaption();
             if (typeLabel.length() > MAX_SHORTCUT_LENGTH) {
                 label = "<i>" + typeLabel.substring(0, MAX_SHORTCUT_LENGTH) + "...</i>";
             } else {
@@ -144,7 +145,7 @@ public class ShortCutsViewImpl extends StackLayoutPanel implements ShortCutsView
                     AppSite.getPlaceController().goTo(NavigItem.this.place);
                 }
             });
-            anchor.setTitle(AppSite.getHistoryMapper().getPlaceInfo(place).getCaption() + (value != null ? ": " + value.getStringView() : ""));
+            anchor.setTitle(typeLabel + (value != null ? ": " + value.getStringView() : ""));
 
             setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Item);
             setWidget(anchor);
@@ -152,6 +153,23 @@ public class ShortCutsViewImpl extends StackLayoutPanel implements ShortCutsView
 
         public AppPlace getPlace() {
             return place;
+        }
+
+        private void adoptPlace(AppPlace placeIn) {
+
+            if (false) {
+                // TODO create appropriate AppPlace descendant here:
+//                this.place = new CRMCrudAppPlace().copy(placeIn);
+
+                String val;
+                if ((val = place.getFirstArg(CrudAppPlace.ARG_NAME_ID)) != null) {
+                    Key entityId = new Key(val);
+                    entityId.asCurrentKey();
+                    place.formPlace(entityId);
+                }
+            } else {
+                this.place = placeIn;
+            }
         }
     }
 
