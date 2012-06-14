@@ -36,6 +36,7 @@ import com.propertyvista.admin.domain.pmc.Pmc;
 import com.propertyvista.admin.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.admin.domain.security.OnboardingUserCredential;
 import com.propertyvista.domain.security.VistaOnboardingBehavior;
+import com.propertyvista.server.common.security.UserAccessUtils;
 import com.propertyvista.server.jobs.TaskRunner;
 
 public class OnboardingPmcPreloader extends AbstractDataPreloader {
@@ -56,6 +57,7 @@ public class OnboardingPmcPreloader extends AbstractDataPreloader {
         pmc.namespace().setValue(dnsName.replace('-', '_'));
         pmc.name().setValue(name);
         pmc.onboardingAccountId().setValue(onboardingAccountId);
+        pmc.interfaceUidBase().setValue(UserAccessUtils.getPmcInterfaceUidBase(creds.get(0)));
 
         // TODO For future
 //        for (String dndAlias : request.dnsNameAliases()) {

@@ -55,6 +55,8 @@ public class OnboardingUserPreloader extends AbstractDataPreloader {
         credential.enabled().setValue(Boolean.TRUE);
         credential.onboardingAccountId().setValue(onboardingAccountId);
 
+        credential.interfaceUid().setValue("o" + user.getPrimaryKey().toString());
+
         Persistence.service().persist(credential);
 
         Persistence.service().commit();

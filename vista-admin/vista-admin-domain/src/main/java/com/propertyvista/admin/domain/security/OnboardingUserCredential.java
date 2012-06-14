@@ -39,6 +39,8 @@ public interface OnboardingUserCredential extends AbstractUserCredential<Onboard
     @NotNull
     IPrimitive<String> onboardingAccountId();
 
+    IPrimitive<String> interfaceUid();
+
     @ReadOnly(allowOverrideNull = true)
     Pmc pmc();
 

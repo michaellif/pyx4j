@@ -7,12 +7,18 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Mar 31, 2012
+ * Created on 2012-06-14
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.server.common.security;
+package com.propertyvista.onboarding;
 
-public interface TenantUserFacade {
+import com.pyx4j.entity.annotations.validator.NotNull;
+import com.pyx4j.entity.shared.IPrimitive;
+
+public interface GetSatisfactionFastpassUrlResponseIO extends ResponseIO {
+
+    @NotNull
+    IPrimitive<String> fastpassAuthenticationUrl();
 
 }

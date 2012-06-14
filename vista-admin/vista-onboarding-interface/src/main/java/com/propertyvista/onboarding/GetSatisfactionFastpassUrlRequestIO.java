@@ -7,12 +7,24 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Mar 31, 2012
+ * Created on 2012-03-06
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.server.common.security;
+package com.propertyvista.onboarding;
 
-public class TenantUserFacadeImpl implements TenantUserFacade {
+import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.annotations.validator.NotNull;
+import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.annotations.I18n;
+
+@Transient
+@I18n(strategy = I18n.I18nStrategy.IgnoreAll)
+public interface GetSatisfactionFastpassUrlRequestIO extends RequestIO {
+
+    @NotNull
+    IPrimitive<String> email();
+
+    IPrimitive<Boolean> secureUrl();
 
 }

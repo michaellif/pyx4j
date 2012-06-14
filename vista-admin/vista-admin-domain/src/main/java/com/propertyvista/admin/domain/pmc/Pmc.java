@@ -78,6 +78,8 @@ public interface Pmc extends IEntity {
 
     IPrimitive<String> onboardingAccountId();
 
+    IPrimitive<String> interfaceUidBase();
+
     @Timestamp(Timestamp.Update.Created)
     @ReadOnly
     IPrimitive<Date> created();

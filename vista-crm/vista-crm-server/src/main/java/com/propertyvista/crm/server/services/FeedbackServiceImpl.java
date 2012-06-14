@@ -18,16 +18,15 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.gwt.server.ServletUtils;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.server.contexts.Context;
-import com.pyx4j.server.contexts.NamespaceManager;
 import com.pyx4j.server.contexts.Visit;
 
 import com.propertyvista.crm.rpc.services.FeedbackService;
-import com.propertyvista.server.getsatisfaction.FastPass;
+import com.propertyvista.server.common.security.UserAccessUtils;
+import com.propertyvista.server.getsatisfaction.GetSatisfactionUrl;
 
 public class FeedbackServiceImpl implements FeedbackService {
 
@@ -35,20 +34,14 @@ public class FeedbackServiceImpl implements FeedbackService {
 
     private static final I18n i18n = I18n.get(FeedbackServiceImpl.class);
 
-    private static String vistaGSFNkey = "e5i5h5pun8lw";
-
-    private static String vistaGSFNsecret = "qm2r8h01tylp6jax88lgzjielct0mabq";
-
     @Override
     public void obtainSetsatisfactionLoginUrl(AsyncCallback<String> callback) {
-
         boolean isSecure = "https".equals(ServletUtils.getRequestProtocol(Context.getRequest()));
-
         Visit visit = Context.getVisit();
-        String uid = ApplicationMode.isDevelopment() ? "$$" : "" + NamespaceManager.getNamespace() + visit.getUserVisit().getPrincipalPrimaryKey().toString();
         String url;
         try {
-            url = FastPass.url(vistaGSFNkey, vistaGSFNsecret, visit.getUserVisit().getEmail(), visit.getUserVisit().getName(), uid, isSecure);
+            url = GetSatisfactionUrl.url(visit.getUserVisit().getEmail(), visit.getUserVisit().getName(),
+                    UserAccessUtils.getCrmUserUUID(visit.getUserVisit().getPrincipalPrimaryKey()), isSecure);
         } catch (Throwable e) {
             log.error("Error", e);
             throw new UserRuntimeException(i18n.tr("Feedback Service unavailable"));

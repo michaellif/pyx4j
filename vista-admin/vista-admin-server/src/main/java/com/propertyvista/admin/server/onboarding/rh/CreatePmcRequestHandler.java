@@ -33,6 +33,7 @@ import com.propertyvista.domain.security.VistaBasicBehavior;
 import com.propertyvista.onboarding.AccountInfoResponseIO;
 import com.propertyvista.onboarding.CreatePMCRequestIO;
 import com.propertyvista.onboarding.ResponseIO;
+import com.propertyvista.server.common.security.UserAccessUtils;
 
 public class CreatePmcRequestHandler extends AbstractRequestHandler<CreatePMCRequestIO> {
 
@@ -78,11 +79,14 @@ public class CreatePmcRequestHandler extends AbstractRequestHandler<CreatePMCReq
 //        }
 
         pmc.status().setValue(PmcStatus.Created);
+
+        OnboardingUserCredential firstUser = creds.iterator().next();
+        pmc.interfaceUidBase().setValue(UserAccessUtils.getPmcInterfaceUidBase(firstUser));
+
         Persistence.service().persist(pmc);
 
         for (OnboardingUserCredential cred : creds) {
             cred.pmc().set(pmc);
-
             cred.onboardingAccountId().setValue(null); // We will lookup by pmc
             Persistence.service().persist(cred);
         }

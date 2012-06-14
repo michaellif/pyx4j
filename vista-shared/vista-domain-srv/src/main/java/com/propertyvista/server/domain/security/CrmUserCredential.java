@@ -36,4 +36,6 @@ public interface CrmUserCredential extends AbstractUserCredential<CrmUser> {
     ISet<CrmRole> roles();
 
     IPrimitive<Key> onboardingUser();
+
+    IPrimitive<String> interfaceUid();
 }
