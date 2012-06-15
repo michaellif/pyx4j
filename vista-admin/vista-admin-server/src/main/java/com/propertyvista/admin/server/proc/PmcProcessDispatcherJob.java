@@ -44,6 +44,7 @@ import com.pyx4j.server.contexts.Lifecycle;
 import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.admin.domain.pmc.Pmc;
+import com.propertyvista.admin.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.admin.domain.scheduler.Run;
 import com.propertyvista.admin.domain.scheduler.RunData;
 import com.propertyvista.admin.domain.scheduler.RunDataStatus;
@@ -140,9 +141,12 @@ public class PmcProcessDispatcherJob implements Job {
     }
 
     private void createPopulation(Run run) {
+        EntityQueryCriteria<Pmc> allPmcCriteria = EntityQueryCriteria.create(Pmc.class);
+        allPmcCriteria.add(PropertyCriterion.eq(allPmcCriteria.proto().status(), PmcStatus.Active));
+
         switch (run.trigger().populationType().getValue()) {
         case allPmc:
-            for (Key pmcKey : Persistence.service().queryKeys(EntityQueryCriteria.create(Pmc.class))) {
+            for (Key pmcKey : Persistence.service().queryKeys(allPmcCriteria)) {
                 RunData runData = EntityFactory.create(RunData.class);
                 runData.execution().set(run);
                 runData.status().setValue(RunDataStatus.NeverRan);
@@ -155,7 +159,7 @@ public class PmcProcessDispatcherJob implements Job {
             for (TriggerPmc triggerPmc : run.trigger().population()) {
                 except.add(triggerPmc.pmc().getPrimaryKey());
             }
-            for (Key pmcKey : Persistence.service().queryKeys(EntityQueryCriteria.create(Pmc.class))) {
+            for (Key pmcKey : Persistence.service().queryKeys(allPmcCriteria)) {
                 if (!except.contains(pmcKey)) {
                     RunData runData = EntityFactory.create(RunData.class);
                     runData.execution().set(run);
