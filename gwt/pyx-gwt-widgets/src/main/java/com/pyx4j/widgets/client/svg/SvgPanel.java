@@ -27,6 +27,8 @@ public class SvgPanel extends ComplexPanel {
 
     public SvgPanel() {
         setElement(SvgDOM.createElementNS(SvgDOM.SVG_NAMESPACE, "svg"));
+        setWidth("100%");
+        setHeight("100%");
     }
 
     @Override
