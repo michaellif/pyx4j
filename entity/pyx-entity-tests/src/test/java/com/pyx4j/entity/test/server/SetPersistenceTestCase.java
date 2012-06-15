@@ -121,6 +121,8 @@ public abstract class SetPersistenceTestCase extends DatastoreTestBase {
 
         srv.persist(emp);
 
+        Assert.assertFalse("Values saved and updated", task.id().isNull());
+
         Employee emp2 = srv.retrieve(Employee.class, emp.getPrimaryKey());
         Assert.assertEquals("Retr. Set size", 1, emp2.tasks().size());
         Task task2 = emp2.tasks().iterator().next();
@@ -163,6 +165,8 @@ public abstract class SetPersistenceTestCase extends DatastoreTestBase {
 
         srv.persist(emp);
 
+        Assert.assertFalse("Values saved and Id updated", task11.id().isNull());
+
         Employee emp2 = srv.retrieve(Employee.class, emp.getPrimaryKey());
         Assert.assertEquals("Retr. Set size", 1, emp2.tasksSorted().size());
         Task task2 = emp2.tasksSorted().iterator().next();
@@ -204,6 +208,8 @@ public abstract class SetPersistenceTestCase extends DatastoreTestBase {
         emp4.tasksSorted().add(task44);
 
         srvSave(emp4, testCaseMethod);
+
+        Assert.assertFalse("Values saved and Id updated", task44.id().isNull());
 
         Employee emp5 = srv.retrieve(Employee.class, emp.getPrimaryKey());
         Assert.assertEquals("Retr. Set size", 3, emp5.tasksSorted().size());
