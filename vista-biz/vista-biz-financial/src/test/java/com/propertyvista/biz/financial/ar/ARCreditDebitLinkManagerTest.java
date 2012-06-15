@@ -26,6 +26,7 @@ import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
 
 import com.propertyvista.biz.financial.FinancialTestBase;
 import com.propertyvista.biz.financial.SysDateManager;
+import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.Bill;
 
 public class ARCreditDebitLinkManagerTest extends FinancialTestBase {
@@ -59,7 +60,7 @@ public class ARCreditDebitLinkManagerTest extends FinancialTestBase {
         // @formatter:on
 
         SysDateManager.setSysDate("25-Feb-2011");
-        receiveAndPostPayment("25-Feb-2011", "300.00");
+        PaymentRecord payment = receiveAndPostPayment("25-Feb-2011", "300.00");
 
         // @formatter:off
         new TransactionHistoryTester(retrieveLease().billingAccount()).
@@ -82,7 +83,7 @@ public class ARCreditDebitLinkManagerTest extends FinancialTestBase {
         printTransactionHistory(ARTransactionManager.getTransactionHistory(retrieveLease().billingAccount()));
 
         SysDateManager.setSysDate("25-Mar-2011");
-        receiveAndPostPayment("25-Mar-2011", "300.00");
+        receiveAndPostPayment("25-Mar-2011", "301.00");
 
         printTransactionHistory(ARTransactionManager.getTransactionHistory(retrieveLease().billingAccount()));
 
@@ -95,7 +96,7 @@ public class ARCreditDebitLinkManagerTest extends FinancialTestBase {
         printTransactionHistory(ARTransactionManager.getTransactionHistory(retrieveLease().billingAccount()));
 
         SysDateManager.setSysDate("25-Apr-2011");
-        receiveAndPostPayment("25-Apr-2011", "300.00");
+        receiveAndPostPayment("25-Apr-2011", "302.00");
 
         printTransactionHistory(ARTransactionManager.getTransactionHistory(retrieveLease().billingAccount()));
 
@@ -112,6 +113,13 @@ public class ARCreditDebitLinkManagerTest extends FinancialTestBase {
 
         printTransactionHistory(ARTransactionManager.getTransactionHistory(retrieveLease().billingAccount()));
 
+        //==================== RUN 5 ======================//
+
+        SysDateManager.setSysDate("27-May-2011");
+
+        rejectPayment(payment, false);
+
+        printTransactionHistory(ARTransactionManager.getTransactionHistory(retrieveLease().billingAccount()));
     }
 
 }

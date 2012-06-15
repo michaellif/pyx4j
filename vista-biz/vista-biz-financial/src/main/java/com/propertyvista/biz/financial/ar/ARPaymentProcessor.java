@@ -45,9 +45,9 @@ public class ARPaymentProcessor extends AbstractARProcessor {
 
         InvoicePaymentBackOut backOut = EntityFactory.create(InvoicePaymentBackOut.class);
         backOut.paymentRecord().set(paymentRecord);
-        backOut.amount().setValue(paymentRecord.amount().getValue().negate());
+        backOut.amount().setValue(paymentRecord.amount().getValue());
         backOut.billingAccount().set(paymentRecord.billingAccount());
-        backOut.description().setValue(i18n.tr("Payment Rejected"));
+        backOut.description().setValue(i18n.tr("Payment from ''{0}'' was rejected", paymentRecord.createdDate().getValue().toString()));
         backOut.taxTotal().setValue(BigDecimal.ZERO);
         backOut.claimed().setValue(false);
 

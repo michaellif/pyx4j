@@ -168,8 +168,8 @@ public class ARTransactionManager {
         return currentBallanceAmount;
     }
 
-    static InvoiceCredit getCorrespodingCreditByPayment(BillingAccount billingAccount, PaymentRecord paymentRecord) {
-        InvoiceCredit credit;
+    static InvoicePayment getCorrespodingCreditByPayment(BillingAccount billingAccount, PaymentRecord paymentRecord) {
+        InvoicePayment credit;
         {
             EntityQueryCriteria<InvoicePayment> criteria = EntityQueryCriteria.create(InvoicePayment.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().billingAccount(), billingAccount));

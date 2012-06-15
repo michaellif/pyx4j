@@ -18,7 +18,9 @@ import java.util.List;
 
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.biz.financial.billing.BillingException;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.DebitCreditLink;
@@ -67,6 +69,8 @@ import com.propertyvista.domain.financial.billing.InvoiceWithdrawal;
  */
 public class ARCreditDebitLinkManager {
 
+    private static final I18n i18n = I18n.get(ARPaymentProcessor.class);
+
     static InvoiceCredit consumeCredit(InvoiceCredit credit) {
         List<InvoiceDebit> debits = ARTransactionManager.getNotCoveredDebitInvoiceLineItems(credit.billingAccount());
         for (InvoiceDebit debit : debits) {
@@ -74,7 +78,7 @@ public class ARCreditDebitLinkManager {
             DebitCreditLink link = EntityFactory.create(DebitCreditLink.class);
 
             if (debit.outstandingDebit().getValue().compareTo(credit.outstandingCredit().getValue().negate()) > 0) {
-                link.amount().setValue(credit.outstandingCredit().getValue());
+                link.amount().setValue(credit.outstandingCredit().getValue().negate());
 
                 debit.outstandingDebit().setValue(debit.outstandingDebit().getValue().add(credit.outstandingCredit().getValue()));
 
@@ -90,6 +94,7 @@ public class ARCreditDebitLinkManager {
 
             link.debitItem().set(debit);
             credit.debitLinks().add(link);
+            link.creditItem().set(credit);
 
             Persistence.service().persist(link);
             Persistence.service().persist(debit);
@@ -122,7 +127,7 @@ public class ARCreditDebitLinkManager {
 
                 debit.outstandingDebit().setValue(BigDecimal.ZERO);
             } else {
-                link.amount().setValue(credit.outstandingCredit().getValue());
+                link.amount().setValue(credit.outstandingCredit().getValue().negate());
 
                 debit.outstandingDebit().setValue(debit.outstandingDebit().getValue().add(credit.outstandingCredit().getValue()));
 
@@ -132,6 +137,7 @@ public class ARCreditDebitLinkManager {
 
             link.debitItem().set(debit);
             credit.debitLinks().add(link);
+            link.creditItem().set(credit);
 
             Persistence.service().persist(link);
             Persistence.service().persist(credit);
@@ -157,25 +163,49 @@ public class ARCreditDebitLinkManager {
     }
 
     static void declinePayment(InvoicePaymentBackOut backOut) {
-        InvoiceCredit creditToReturn = ARTransactionManager.getCorrespodingCreditByPayment(backOut.billingAccount(), backOut.paymentRecord());
-        List<InvoiceCredit> credits = ARTransactionManager.getSuccedingCreditInvoiceLineItems(backOut.billingAccount(), creditToReturn);
+        InvoicePayment invoicePaymentToReturn = ARTransactionManager.getCorrespodingCreditByPayment(backOut.billingAccount(), backOut.paymentRecord());
+        if (invoicePaymentToReturn.isEmpty()) {
+            throw new BillingException(i18n.tr("Cannot find Payment Record"));
+        } else {
+            Persistence.service().retrieve(invoicePaymentToReturn.debitLinks());
+            if (!invoicePaymentToReturn.debitLinks().isEmpty()) {
+                for (DebitCreditLink link : invoicePaymentToReturn.debitLinks()) {
+                    InvoiceDebit debit = link.debitItem().cast();
+                    debit.outstandingDebit().setValue(debit.outstandingDebit().getValue().add(link.amount().getValue()));
+                    Persistence.service().persist(debit);
+                    Persistence.service().delete(link);
+                }
+                invoicePaymentToReturn.debitLinks().clear();
+                Persistence.service().persist(invoicePaymentToReturn);
+            }
+        }
+        List<InvoiceCredit> credits = ARTransactionManager.getSuccedingCreditInvoiceLineItems(backOut.billingAccount(), invoicePaymentToReturn);
         if (credits != null && credits.size() > 0) {
             for (InvoiceCredit credit : credits) {
                 Persistence.service().retrieve(credit.debitLinks());
+                boolean hardLink = false;
                 if (!credit.debitLinks().isEmpty()) {
                     for (DebitCreditLink link : credit.debitLinks()) {
+                        if (link.hardLink().isBooleanTrue()) {
+                            hardLink = true;
+                            break;
+                        }
                         InvoiceDebit debit = link.debitItem().cast();
                         debit.outstandingDebit().setValue(debit.outstandingDebit().getValue().add(link.amount().getValue()));
                         Persistence.service().persist(debit);
+                        Persistence.service().delete(link);
                     }
-                    credit.debitLinks().clear();
-                    Persistence.service().persist(credit);
-
-                    consumeCredit(credit);
-                    Persistence.service().merge(credit);
+                    if (!hardLink) {
+                        credit.debitLinks().clear();
+                        credit.outstandingCredit().setValue(credit.amount().getValue());
+                        Persistence.service().persist(credit);
+                    }
                 }
+            }
+            // Pay available debits by Succeeding credits
+            for (InvoiceCredit credit : credits) {
+                consumeCredit(credit);
             }
         }
     }
-
 }
