@@ -23,6 +23,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.financial.offering.ProductItem;
+import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.Deposit.RepaymentMode;
 import com.propertyvista.domain.tenant.lease.Deposit.ValueType;
@@ -52,6 +53,7 @@ public class LeaseDataModel {
 
         lease = EntityFactory.create(Lease.class);
 
+        lease.type().setValue(Service.Type.residentialUnit);
         lease.unit().set(serviceItem.element());
 
         lease.version().leaseProducts().serviceItem().item().set(serviceItem);

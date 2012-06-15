@@ -20,8 +20,10 @@ import java.util.List;
 import java.util.Map;
 
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
 
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.FeatureItemType;
@@ -77,20 +79,23 @@ public class BuildingDataModel {
 
         generateParking();
         generateLockerArea();
+
+        Persistence.service().persist(building);
+
         generateCatalog();
 
-        if (persist) {
-            Persistence.service().persist(building);
-        }
+        Persistence.service().persist(building);
     }
 
     private void generateParking() {
         Parking parking = EntityFactory.create(Parking.class);
+        building._Parkings().setAttachLevel(AttachLevel.Attached);
         building._Parkings().add(parking);
     }
 
     private void generateLockerArea() {
         LockerArea lockerArea = EntityFactory.create(LockerArea.class);
+        building._LockerAreas().setAttachLevel(AttachLevel.Attached);
         building._LockerAreas().add(lockerArea);
     }
 
@@ -114,22 +119,39 @@ public class BuildingDataModel {
     }
 
     private void generateCatalog() {
-        building.productCatalog();
+        Persistence.service().persist(building);
+        Persistence.service().commit();
+
         generateResidentialUnitService();
+
+        Persistence.service().commit();
+        Persistence.service().persist(building);
+
         generateFeatures();
+
+        Persistence.service().commit();
+        Persistence.service().persist(building);
+
         generateConcessions();
+        Persistence.service().persist(building);
+
     }
 
     private void generateResidentialUnitService() {
         standardResidentialService = EntityFactory.create(Service.class);
-        building.productCatalog().services().add(standardResidentialService);
-
+        standardResidentialService.catalog().set(building.productCatalog());
         standardResidentialService.version().type().setValue(Service.Type.residentialUnit);
         standardResidentialService.version().name().setValue("Standard Residential Unit");
         standardResidentialService.version().description().setValue("Standard Residential Unit Lease for 1 year term");
+
+        standardResidentialService.saveAction().setValue(SaveAction.saveAsFinal);
+        Persistence.service().persist(standardResidentialService);
+
     }
 
     public ProductItem generateResidentialUnitServiceItem() {
+        standardResidentialService = Persistence.retrieveDraft(Service.class, standardResidentialService.getPrimaryKey());
+
         ProductItem productItem = EntityFactory.create(ProductItem.class);
         productItem.type().set(serviceMeta.get(Service.Type.residentialUnit).get(0));
         productItem.element().set(generateResidentialUnit());
@@ -137,10 +159,8 @@ public class BuildingDataModel {
         productItem.description().setValue(productItem.type().name().getValue());
 
         standardResidentialService.version().items().add(productItem);
-
-        if (persist) {
-            Persistence.service().persist(standardResidentialService);
-        }
+        standardResidentialService.saveAction().setValue(SaveAction.saveAsFinal);
+        Persistence.service().persist(standardResidentialService);
 
         return productItem;
     }
@@ -153,6 +173,7 @@ public class BuildingDataModel {
 
     private void generateFeature(Feature.Type type) {
         Feature feature = EntityFactory.create(Feature.class);
+
         feature.catalog().set(building.productCatalog());
 
         feature.version().type().setValue(type);
@@ -199,9 +220,14 @@ public class BuildingDataModel {
             break;
         }
 
-        building.productCatalog().features().add(feature);
+        feature.saveAction().setValue(SaveAction.saveAsFinal);
+        Persistence.service().persist(feature);
+
+        standardResidentialService = Persistence.retrieveDraft(Service.class, standardResidentialService.getPrimaryKey());
 
         standardResidentialService.version().features().add(feature);
+        standardResidentialService.saveAction().setValue(SaveAction.saveAsFinal);
+        Persistence.service().persist(standardResidentialService);
 
     }
 

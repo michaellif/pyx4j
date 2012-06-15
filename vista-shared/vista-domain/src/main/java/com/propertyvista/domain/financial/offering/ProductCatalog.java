@@ -47,15 +47,15 @@ public interface ProductCatalog extends IEntity {
     // parent <-> child relationship:
     // note, that declaration order is important!
 
-    @Owned
+    @Owned(cascade = {})
     @Detached
     IList<Concession> concessions();
 
-    @Owned
+    @Owned(cascade = {})
     @Detached
     IList<Feature> features();
 
-    @Owned
+    @Owned(cascade = {})
     @Detached
     IList<Service> services();
 

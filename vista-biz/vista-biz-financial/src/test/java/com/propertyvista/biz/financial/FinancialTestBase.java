@@ -100,8 +100,17 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
     }
 
     protected void preloadData() {
+        boolean ok = false;
         PreloadConfig config = new PreloadConfig();
-        preloadData(config);
+        try {
+            preloadData(config);
+            ok = true;
+        } finally {
+            if (!ok) {
+                Persistence.service().commit();
+            }
+        }
+
     }
 
     protected void preloadData(PreloadConfig config) {

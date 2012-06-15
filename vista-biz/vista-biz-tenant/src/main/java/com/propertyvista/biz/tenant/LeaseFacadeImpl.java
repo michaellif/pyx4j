@@ -105,6 +105,8 @@ public class LeaseFacadeImpl implements LeaseFacade {
         AptUnit unit = Persistence.secureRetrieve(AptUnit.class, unitId.getPrimaryKey());
         Persistence.service().retrieve(unit.belongsTo());
 
+        assert !lease.isValueDetached();
+
         EntityQueryCriteria<Service> criteria = new EntityQueryCriteria<Service>(Service.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().catalog(), unit.belongsTo().productCatalog()));
         criteria.add(PropertyCriterion.eq(criteria.proto().version().type(), lease.type()));
