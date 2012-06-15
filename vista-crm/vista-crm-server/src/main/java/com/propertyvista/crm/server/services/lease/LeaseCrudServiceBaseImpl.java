@@ -204,6 +204,11 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
     // Internals:
 
     private boolean fillServiceEligibilityData(DTO currentValue) {
+
+        currentValue.selectedFeatureItems().clear();
+        currentValue.selectedUtilityItems().clear();
+        currentValue.selectedConcessions().clear();
+
         Building building = currentValue.selectedBuilding();
         if (building == null || building.isNull()) {
             return false;
@@ -216,35 +221,21 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
         }
 
         // find the service by Service item:
-        Service selectedService = null;
-        Persistence.service().retrieve(catalog);
-        Persistence.service().retrieve(catalog.services());
-        for (Service service : catalog.services()) {
-            Persistence.service().retrieve(service.version().items());
-            for (ProductItem item : service.version().items()) {
-                if (item.equals(serviceItem)) {
-                    selectedService = service;
-                    break;
-                }
-            }
-            if (selectedService != null) {
-                break; // found!..
-            }
+        Service.ServiceV selectedService = null;
+        Persistence.service().retrieve(serviceItem.product());
+        if (serviceItem.product().getInstanceValueClass().equals(Service.ServiceV.class)) {
+            selectedService = serviceItem.product().cast();
         }
 
-        // fill related features and concession:
-        currentValue.selectedFeatureItems().clear();
-        currentValue.selectedUtilityItems().clear();
-        currentValue.selectedConcessions().clear();
-
+        // fill related features/utilities and concession:
         if (selectedService != null) {
             List<FeatureItemType> utilitiesToExclude = new ArrayList<FeatureItemType>(catalog.includedUtilities().size() + catalog.externalUtilities().size());
             utilitiesToExclude.addAll(catalog.includedUtilities());
             utilitiesToExclude.addAll(catalog.externalUtilities());
 
             // fill features:
-            Persistence.service().retrieve(selectedService.version().features());
-            for (Feature feature : selectedService.version().features()) {
+            Persistence.service().retrieve(selectedService.features());
+            for (Feature feature : selectedService.features()) {
                 Persistence.service().retrieve(feature.version().items());
                 for (ProductItem item : feature.version().items()) {
                     switch (feature.version().type().getValue()) {
@@ -261,8 +252,8 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
             }
 
             // fill concessions:
-            Persistence.service().retrieve(selectedService.version().concessions());
-            currentValue.selectedConcessions().addAll(selectedService.version().concessions());
+            Persistence.service().retrieve(selectedService.concessions());
+            currentValue.selectedConcessions().addAll(selectedService.concessions());
         }
 
         return (selectedService != null);
