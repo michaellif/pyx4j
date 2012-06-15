@@ -29,6 +29,7 @@ import org.slf4j.LoggerFactory;
 import org.xml.sax.InputSource;
 
 import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
@@ -69,6 +70,7 @@ public class OnboardingServiceServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        long start = System.currentTimeMillis();
         ServletInputStream is = null;
         RequestMessageIO message;
         try {
@@ -87,7 +89,7 @@ public class OnboardingServiceServlet extends HttpServlet {
         OnboardingProcessor pp;
 
         pp = new OnboardingProcessor();
-        log.info("processing message {}", message.messageId().getValue());
+        log.info("processing messageId {}", message.messageId().getValue());
         Throwable validationResults = pp.isValid(message);
         if (validationResults != null) {
             replyWithStatusCode(response, ResponseMessageIO.StatusCode.MessageFormatError, validationResults);
@@ -125,7 +127,7 @@ public class OnboardingServiceServlet extends HttpServlet {
             replyWithStatusCode(response, processingStatusCode, processingError);
         } else {
             try {
-                log.info("reply {}", responseMessage);
+                log.info("processed in {} reply {}", TimeUtils.secSince(start), responseMessage);
                 response.setContentType("text/xml");
                 replyWith(response, responseMessage);
             } catch (Throwable e) {
