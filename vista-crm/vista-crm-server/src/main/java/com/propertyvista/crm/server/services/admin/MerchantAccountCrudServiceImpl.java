@@ -13,7 +13,11 @@
  */
 package com.propertyvista.crm.server.services.admin;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
 import com.pyx4j.entity.server.AbstractCrudServiceImpl;
+import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.crm.rpc.services.admin.MerchantAccountCrudService;
 import com.propertyvista.domain.financial.MerchantAccount;
@@ -55,6 +59,15 @@ public class MerchantAccountCrudServiceImpl extends AbstractCrudServiceImpl<Merc
     @Override
     protected void enhanceListRetrieved(MerchantAccount entity, MerchantAccount dto) {
         setCalulatedFileds(entity, dto);
+    }
+
+    @Override
+    public void problemResolved(AsyncCallback<VoidSerializable> callback, MerchantAccount merchantAccountStub) {
+        MerchantAccount merchantAccount = Persistence.service().retrieve(MerchantAccount.class, merchantAccountStub.getPrimaryKey());
+        merchantAccount.invalid().setValue(Boolean.FALSE);
+        Persistence.service().persist(merchantAccount);
+        Persistence.service().commit();
+        callback.onSuccess(null);
     }
 
 }

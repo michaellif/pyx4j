@@ -28,6 +28,7 @@ import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
+import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Timestamp;
@@ -58,6 +59,8 @@ public interface PaymentRecord extends IEntity {
         Submitted,
 
         Scheduled,
+
+        Queued,
 
         // This state is skipped in current implementation and may be enabled by Policy in future
         Processing,
@@ -167,4 +170,8 @@ public interface PaymentRecord extends IEntity {
 
     @Timestamp(Timestamp.Update.Updated)
     IPrimitive<Date> updated();
+
+    @Owned
+    @Detached
+    PaymentRecordProcessing processing();
 }

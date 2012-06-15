@@ -7,20 +7,17 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on May 4, 2012
+ * Created on 2012-06-13
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.crm.rpc.services.admin;
+package com.propertyvista.domain.financial;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
 
-import com.pyx4j.entity.rpc.AbstractCrudService;
-import com.pyx4j.rpc.shared.VoidSerializable;
+public interface PaymentRecordProcessing extends IEntity {
 
-import com.propertyvista.domain.financial.MerchantAccount;
+    IPrimitive<Integer> attempt();
 
-public interface MerchantAccountCrudService extends AbstractCrudService<MerchantAccount> {
-
-    void problemResolved(AsyncCallback<VoidSerializable> callback, MerchantAccount merchantAccountStub);
 }

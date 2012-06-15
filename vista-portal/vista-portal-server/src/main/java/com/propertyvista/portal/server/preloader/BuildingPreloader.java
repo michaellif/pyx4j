@@ -320,6 +320,7 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
             merchantAccount.accountNumber().setValue(acc.accountNumber().getValue());
             merchantAccount.chargeDescription().setValue(acc.chargeDescription().getValue());
             merchantAccount.merchantTerminalId().setValue(acc.merchantTerminalId().getValue());
+            merchantAccount.invalid().setValue(Boolean.FALSE);
             Persistence.service().persist(merchantAccount);
             if (singleAccount == null) {
                 singleAccount = merchantAccount;

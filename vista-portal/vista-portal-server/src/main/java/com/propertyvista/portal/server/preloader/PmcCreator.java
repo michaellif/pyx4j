@@ -88,6 +88,7 @@ public class PmcCreator {
                 macc.bankId().setValue(acc.bankId().getValue());
                 macc.branchTransitNumber().setValue(acc.branchTransitNumber().getValue());
                 macc.accountNumber().setValue(acc.accountNumber().getValue());
+                macc.invalid().setValue(Boolean.FALSE);
 
                 if (macc.chargeDescription().getValue() == null) {
                     macc.chargeDescription().setValue(pmc.name().getValue());

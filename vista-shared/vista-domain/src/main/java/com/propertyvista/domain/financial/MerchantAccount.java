@@ -33,7 +33,9 @@ public interface MerchantAccount extends AbstractMerchantAccount {
 
         ElectronicPaymentsAllowed,
 
-        NoElectronicPaymentsAllowed;
+        NoElectronicPaymentsAllowed,
+
+        Invalid;
 
         @Override
         public String toString() {
@@ -46,6 +48,8 @@ public interface MerchantAccount extends AbstractMerchantAccount {
      */
     @Transient
     IPrimitive<MerchantAccountStatus> status();
+
+    IPrimitive<Boolean> invalid();
 
     @JoinTable(value = BuildingMerchantAccount.class)
     @Detached(level = AttachLevel.Detached)
