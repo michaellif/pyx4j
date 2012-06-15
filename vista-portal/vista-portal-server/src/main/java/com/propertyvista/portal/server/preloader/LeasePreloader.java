@@ -67,6 +67,7 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
                 Tenant mainTenant = lease.version().tenants().get(0);
                 mainTenant.customer().set(dualTenantCustomer);
                 mainTenant.screening().set(mainTenant.customer()._PersonScreenings().iterator().next());
+                mainTenant.preauthorizedPayment().set(mainTenant.customer().paymentMethods().iterator().next());
             }
 
             // Create normal Active Lease first for Shortcut users
