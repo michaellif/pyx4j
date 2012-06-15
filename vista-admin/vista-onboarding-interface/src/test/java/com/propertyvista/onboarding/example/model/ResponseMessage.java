@@ -65,7 +65,8 @@ public class ResponseMessage {
         @XmlElement(name = "response", type = Response.class),
         @XmlElement(name = "accountInfoResponse", type = AccountInfoResponse.class),
         @XmlElement(name = "onboardingUserAuthenticationResponse", type = OnboardingUserAuthenticationResponse.class),
-        @XmlElement(name = "usageReportResponse", type = UsageReportResponse.class)
+        @XmlElement(name = "usageReportResponse", type = UsageReportResponse.class),
+        @XmlElement(name = "getSatisfactionFastpassUrlResponse", type = GetSatisfactionFastpassUrlResponse.class)
         })
     //@formatter:on    
     public List<Response> responses;

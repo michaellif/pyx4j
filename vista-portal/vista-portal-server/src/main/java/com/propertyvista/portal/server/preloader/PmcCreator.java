@@ -147,6 +147,7 @@ public class PmcCreator {
             assert onbUserCred.user().getPrimaryKey() != null;
             credential.onboardingUser().setValue(onbUserCred.user().getPrimaryKey());
             credential.credential().setValue(onbUserCred.credential().getValue());
+            credential.interfaceUid().setValue(onbUserCred.interfaceUid().getValue());
         } else {
             credential.credential().setValue(PasswordEncryptor.encryptPassword(password));
         }

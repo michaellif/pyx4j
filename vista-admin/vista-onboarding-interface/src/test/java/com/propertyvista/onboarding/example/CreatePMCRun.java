@@ -18,6 +18,8 @@ import java.util.Date;
 import com.propertyvista.onboarding.example.model.AccountInfoResponse;
 import com.propertyvista.onboarding.example.model.CreateOnboardingUserRequest;
 import com.propertyvista.onboarding.example.model.CreatePMCRequest;
+import com.propertyvista.onboarding.example.model.GetSatisfactionFastpassUrlRequest;
+import com.propertyvista.onboarding.example.model.GetSatisfactionFastpassUrlResponse;
 import com.propertyvista.onboarding.example.model.OnboardingUserAuthenticationRequest;
 import com.propertyvista.onboarding.example.model.OnboardingUserAuthenticationResponse;
 import com.propertyvista.onboarding.example.model.RequestMessage;
@@ -141,6 +143,37 @@ public class CreatePMCRun {
                     OnboardingUserAuthenticationResponse authResponse = (OnboardingUserAuthenticationResponse) response.responses.get(0);
                     System.out.println("Authentication status : " + authResponse.status);
                     System.out.println("Onboarding Account Id : " + authResponse.onboardingAccountId);
+                }
+            }
+        }
+
+        GetSatisfactionFastpassUrlRequest gsur = new GetSatisfactionFastpassUrlRequest();
+        {
+            gsur.email = user.email;
+            gsur.onboardingAccountId = user.onboardingAccountId;
+            gsur.secureUrl = Boolean.TRUE;
+//            authRequest.captcha = new Captcha();
+//            authRequest.captcha.challenge = "123";
+//            authRequest.captcha.response = "rr";
+
+            RequestMessage rm = new RequestMessage();
+            rm.interfaceEntity = ExampleClient.interfaceEntity;
+            rm.interfaceEntityPassword = ExampleClient.interfaceEntityPassword;
+            rm.addRequest(gsur);
+
+            ResponseMessage response = ExampleClient.execute(rm);
+
+            System.out.println("response Status   : " + response.status);
+            System.out.println("response Message  : " + response.errorMessage);
+
+            if (response.status == ResponseMessage.StatusCode.OK) {
+                System.out.println("echo requestId    : " + response.responses.get(0).requestId);
+                System.out.println("response Code     : " + response.responses.get(0).success);
+                System.out.println("response Message  : " + response.responses.get(0).errorMessage);
+
+                if (response.responses.get(0) instanceof GetSatisfactionFastpassUrlResponse) {
+                    GetSatisfactionFastpassUrlResponse resp = (GetSatisfactionFastpassUrlResponse) response.responses.get(0);
+                    System.out.println("Fastpass Authentication Url : " + resp.fastpassAuthenticationUrl);
                 }
             }
         }

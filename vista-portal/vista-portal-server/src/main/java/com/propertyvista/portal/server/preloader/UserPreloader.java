@@ -37,7 +37,6 @@ import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.security.CrmRole;
 import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.security.CustomerUser;
-import com.propertyvista.domain.security.OnboardingUser;
 import com.propertyvista.domain.security.VistaOnboardingBehavior;
 import com.propertyvista.portal.server.preloader.util.BaseVistaDevDataPreloader;
 import com.propertyvista.preloader.OnboardingUserPreloader;
@@ -79,7 +78,7 @@ public class UserPreloader extends BaseVistaDevDataPreloader {
         return user;
     }
 
-    public static CrmUser createCrmUser(String name, String email, String password, OnboardingUser onbUser, CrmRole... roles) {
+    public static CrmUser createCrmUser(String name, String email, String password, OnboardingUserCredential onbUserCred, CrmRole... roles) {
         if (!ApplicationMode.isDevelopment()) {
             EntityQueryCriteria<CrmUser> criteria = EntityQueryCriteria.create(CrmUser.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().email(), email));
@@ -105,8 +104,10 @@ public class UserPreloader extends BaseVistaDevDataPreloader {
         credential.accessAllBuildings().setValue(Boolean.TRUE);
         credential.roles().addAll(Arrays.asList(roles));
 
-        if (onbUser != null)
-            credential.onboardingUser().setValue(onbUser.getPrimaryKey());
+        if (onbUserCred != null) {
+            credential.onboardingUser().setValue(onbUserCred.user().getPrimaryKey());
+            credential.interfaceUid().setValue(onbUserCred.interfaceUid().getValue());
+        }
 
         Persistence.service().persist(credential);
 
@@ -163,7 +164,7 @@ public class UserPreloader extends BaseVistaDevDataPreloader {
                     }
                 });
 
-                emp.user().set(createCrmUser(emp.name().getStringView(), email, email, userCred.user(), defaultRole));
+                emp.user().set(createCrmUser(emp.name().getStringView(), email, email, userCred, defaultRole));
 
                 Persistence.service().persist(emp);
 

@@ -35,6 +35,7 @@ import com.propertyvista.domain.security.OnboardingUser;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.domain.security.VistaOnboardingBehavior;
 import com.propertyvista.server.common.security.PasswordEncryptor;
+import com.propertyvista.server.common.security.UserAccessUtils;
 import com.propertyvista.server.domain.security.CrmUserCredential;
 import com.propertyvista.server.jobs.TaskRunner;
 
@@ -121,6 +122,8 @@ public class EmployeeCrudServiceImpl extends AbstractCrudServiceDtoImpl<Employee
             credential.accessAllBuildings().set(in.accessAllBuildings());
             credential.requiredPasswordChangeOnNextLogIn().setValue(in.requireChangePasswordOnNextLogIn().getValue());
             Persistence.service().persist(credential);
+            credential.interfaceUid().setValue(UserAccessUtils.getCrmUserInterfaceUid(credential));
+            Persistence.service().persist(credential);
 
             boolean isPropVistaAccOwnerSet = false;
             for (CrmRole role : in.roles()) {
@@ -185,6 +188,7 @@ public class EmployeeCrudServiceImpl extends AbstractCrudServiceDtoImpl<Employee
                 onbUserCred.enabled().setValue(in.enabled().getValue());
                 onbUserCred.onboardingAccountId().setValue(null);
                 onbUserCred.requiredPasswordChangeOnNextLogIn().setValue(in.requireChangePasswordOnNextLogIn().getValue());
+                onbUserCred.interfaceUid().setValue(credential.interfaceUid().getValue());
 
                 Boolean res = TaskRunner.runInAdminNamespace(new Callable<Boolean>() {
                     @Override
