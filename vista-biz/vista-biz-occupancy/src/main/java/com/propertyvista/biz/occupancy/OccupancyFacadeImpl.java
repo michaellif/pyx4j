@@ -32,6 +32,8 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.rpc.shared.UserRuntimeException;
 
 import com.propertyvista.biz.occupancy.AptUnitOccupancyManagerHelper.MergeHandler;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
@@ -42,6 +44,8 @@ import com.propertyvista.domain.property.asset.unit.occupancy.opconstraints.Make
 import com.propertyvista.domain.tenant.lease.Lease;
 
 public class OccupancyFacadeImpl implements OccupancyFacade {
+
+    private static final I18n i18n = I18n.get(OccupancyFacadeImpl.class);
 
     @Override
     public void setupNewUnit(AptUnit unit) {
@@ -253,8 +257,12 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
             createAvailableSegment(unitPk, leaseFrom);
         }
 
-        AptUnitOccupancySegment segment = retrieveOccupancySegment(unitPk, leaseFrom);
-        assertStatus(segment, Status.available);
+        List<AptUnitOccupancySegment> occupancy = retrieveOccupancy(unitPk, leaseFrom);
+        if (occupancy.size() != 1) {
+            throw new UserRuntimeException(i18n.tr("Operation 'reserve unit' is not permitted, the unit is not available after {0}", leaseFrom));
+        }
+        AptUnitOccupancySegment segment = occupancy.get(0);
+        assertStatus(occupancy.get(0), Status.available);
 
         LogicalDate reservedFrom = now.before(segment.dateFrom().getValue()) ? segment.dateFrom().getValue() : now;
 
