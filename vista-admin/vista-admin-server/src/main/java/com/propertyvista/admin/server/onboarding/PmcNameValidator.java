@@ -54,7 +54,7 @@ public class PmcNameValidator {
                     reservedWordsRegex.add(wildCardToRegex(reservedWord));
                 } else {
                     log.warn(SimpleMessageFormat
-                            .format("skipping reserved or forbidden domain name pattern '{0}' because it contains charachters that cannot be used in a domain name anyway",
+                            .format("skipping reserved or forbidden domain name pattern ''{0}'' because it contains charachters that cannot be used in a domain name anyway",
                                     reservedWord));
 
                 }
