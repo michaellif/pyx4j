@@ -57,9 +57,6 @@ public interface BillingCycle extends IEntity {
     // Statistics:
     //TODO 1 add stats
 
-    @Caption(name = "# Of Leases With Non Runned Bills")
-    IPrimitive<Long> notRunned();
-
     @Caption(name = "# Of Non Confirmed Bills")
     IPrimitive<Long> notConfirmed();
 
@@ -75,5 +72,9 @@ public interface BillingCycle extends IEntity {
     @Transient
     @Caption(name = "# Of Total Leases")
     IPrimitive<Long> total();
+
+    @Transient
+    @Caption(name = "# Of Leases With Non Runned Bills")
+    IPrimitive<Long> notRunned();
 
 }
