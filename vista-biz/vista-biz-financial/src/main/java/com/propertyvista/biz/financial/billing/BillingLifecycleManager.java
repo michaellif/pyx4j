@@ -184,7 +184,7 @@ public class BillingLifecycleManager {
             } else if (Status.Completed == billingAccount.lease().version().status().getValue()) {// final bill should be issued
                 manager = new FinalBillingManager(bill);
             } else {
-                throw new BillingException(i18n.tr("Billing can't run when lease is in status '{0}'", billingAccount.lease().version().status().getValue()));
+                throw new BillingException(i18n.tr("Billing can't run when lease is in status ''{0}''", billingAccount.lease().version().status().getValue()));
             }
 
             manager.processBill();
