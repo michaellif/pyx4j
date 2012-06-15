@@ -565,6 +565,7 @@
                                         <configuration>
                                             <excludes>
                                                 <exclude>**/*.cvs</exclude>
+                                                <exclude>**/*.po</exclude>
                                             </excludes>
                                             <nonDeveloperLogins>
                                                 <nonDeveloperLogin>cruisecontrol</nonDeveloperLogin>
