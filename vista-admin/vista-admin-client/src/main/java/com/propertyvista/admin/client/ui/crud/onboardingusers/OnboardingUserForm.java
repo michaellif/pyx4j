@@ -17,9 +17,13 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.AppPlaceEntityMapper;
+import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;
 
 import com.propertyvista.admin.client.ui.crud.AdminEntityForm;
+import com.propertyvista.admin.domain.pmc.Pmc;
 import com.propertyvista.admin.rpc.OnboardingUserDTO;
+import com.propertyvista.admin.rpc.PmcDTO;
 
 public class OnboardingUserForm extends AdminEntityForm<OnboardingUserDTO> {
 
@@ -42,6 +46,9 @@ public class OnboardingUserForm extends AdminEntityForm<OnboardingUserDTO> {
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().email())).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().role())).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().onboardingAccountId())).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().pmc(), new CEntityCrudHyperlink<Pmc>(AppPlaceEntityMapper.resolvePlace(PmcDTO.class))),
+                10).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().pmcStatus())).build());
 
         content.setH1(++row, 0, 1, i18n.tr("Security"));
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().password())).build());
@@ -57,6 +64,7 @@ public class OnboardingUserForm extends AdminEntityForm<OnboardingUserDTO> {
         super.onPopulate();
         get(proto().password()).setVisible(isNewUser());
         get(proto().passwordConfirm()).setVisible(isNewUser());
+        get(proto().onboardingAccountId()).setEditable(getValue().pmcStatus().isNull());
     }
 
     private boolean isNewUser() {

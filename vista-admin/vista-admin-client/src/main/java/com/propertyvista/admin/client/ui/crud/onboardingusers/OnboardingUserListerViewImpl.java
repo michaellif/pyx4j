@@ -36,6 +36,8 @@ public class OnboardingUserListerViewImpl extends AdminListerViewImplBase<Onboar
                     new MemberColumnDescriptor.Builder(proto().email()).build(),
                     new MemberColumnDescriptor.Builder(proto().enabled()).build(),
                     new MemberColumnDescriptor.Builder(proto().onboardingAccountId()).build(),
+                    new MemberColumnDescriptor.Builder(proto().pmc().namespace()).title("Pmc").build(),
+                    new MemberColumnDescriptor.Builder(proto().pmcStatus()).build(),
                     new MemberColumnDescriptor.Builder(proto().role()).build(),
                     new MemberColumnDescriptor.Builder(proto().created()).build()
             );//@formatter:on

@@ -44,6 +44,24 @@ public class OnboardingUserCrudServiceImpl extends AbstractCrudServiceDtoImpl<On
     }
 
     @Override
+    protected void enhanceRetrieved(OnboardingUserCredential entity, OnboardingUserDTO dto) {
+        if (!entity.pmc().isNull()) {
+            dto.onboardingAccountId().setValue(entity.pmc().onboardingAccountId().getValue());
+            dto.pmcStatus().setValue(entity.pmc().status().getValue());
+            dto.pmc().set(entity.pmc());
+        }
+    }
+
+    @Override
+    protected void enhanceListRetrieved(OnboardingUserCredential entity, OnboardingUserDTO dto) {
+        if (!entity.pmc().isNull()) {
+            dto.onboardingAccountId().setValue(entity.pmc().onboardingAccountId().getValue());
+            dto.pmcStatus().setValue(entity.pmc().status().getValue());
+            dto.pmc().set(entity.pmc());
+        }
+    }
+
+    @Override
     protected void retrievedForList(OnboardingUserCredential entity) {
         Persistence.service().retrieve(entity.user());
     }
@@ -62,6 +80,9 @@ public class OnboardingUserCrudServiceImpl extends AbstractCrudServiceDtoImpl<On
             dbo.credential().setValue(PasswordEncryptor.encryptPassword(dto.password().getValue()));
         }
         dbo.setPrimaryKey(dbo.user().getPrimaryKey());
+        if (!dbo.pmc().isNull()) {
+            dbo.onboardingAccountId().setValue(null);
+        }
         Persistence.service().merge(dbo);
 
         if (dbo.pmc().getPrimaryKey() != null) {
