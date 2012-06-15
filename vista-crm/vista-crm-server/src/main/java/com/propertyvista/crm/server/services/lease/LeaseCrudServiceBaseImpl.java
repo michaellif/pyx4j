@@ -31,7 +31,6 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.crm.rpc.services.lease.LeaseCrudServiceBase;
 import com.propertyvista.crm.server.util.CrmAppContext;
-import com.propertyvista.domain.financial.offering.Concession;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.FeatureItemType;
 import com.propertyvista.domain.financial.offering.ProductCatalog;
@@ -72,12 +71,10 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
         // load detached entities:
         Persistence.service().retrieve(dto.billingAccount().adjustments());
 //        Persistence.service().retrieve(dto.documents());
+
         if (!dto.unit().isNull()) {
             // fill selected building by unit:
             dto.selectedBuilding().set(dto.unit().belongsTo());
-            syncBuildingProductCatalog(dto.selectedBuilding());
-
-            // fill runtime catalog-related data:
             fillServiceEligibilityData(dto);
         }
 
@@ -172,45 +169,6 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
         callback.onSuccess(null);
     }
 
-    private Building syncBuildingProductCatalog(Building building) {
-        if (building == null || building.isNull()) {
-            return null;
-        }
-
-        // load detached entities:
-        Persistence.service().retrieve(building.productCatalog());
-        Persistence.service().retrieve(building.productCatalog().services());
-
-        // load detached service eligibility matrix data:
-        for (Service item : building.productCatalog().services()) {
-            Persistence.service().retrieve(item.version().items());
-            Persistence.service().retrieve(item.version().features());
-            for (Feature fi : item.version().features()) {
-                Persistence.service().retrieve(fi.version().items());
-            }
-            Persistence.service().retrieve(item.version().concessions());
-        }
-//
-//  Currently not used here:
-//
-//        EntityQueryCriteria<Feature> featureCriteria = EntityQueryCriteria.create(Feature.class);
-//        featureCriteria.add(PropertyCriterion.eq(featureCriteria.proto().catalog(), building.serviceCatalog()));
-//        List<Feature> features = Persistence.service().query(featureCriteria);
-//        building.serviceCatalog().features().clear();
-//        building.serviceCatalog().features().addAll(features);
-//        for (Feature item : features) {
-//            Persistence.service().retrieve(item.items());
-//        }
-//
-//        EntityQueryCriteria<Concession> concessionCriteria = EntityQueryCriteria.create(Concession.class);
-//        concessionCriteria.add(PropertyCriterion.eq(concessionCriteria.proto().catalog(), building.serviceCatalog()));
-//        List<Concession> concessions = Persistence.service().query(concessionCriteria);
-//        building.serviceCatalog().concessions().clear();
-//        building.serviceCatalog().concessions().addAll(concessions);
-
-        return building;
-    }
-
     @Override
     public void calculateChargeItemAdjustments(AsyncCallback<BigDecimal> callback, BillableItem item) {
         callback.onSuccess(PriceCalculationHelpers.calculateChargeItemAdjustments(item));
@@ -246,7 +204,14 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
     // Internals:
 
     private boolean fillServiceEligibilityData(DTO currentValue) {
-        ProductCatalog catalog = currentValue.selectedBuilding().productCatalog();
+//        syncBuildingProductCatalog(currentValue.selectedBuilding());
+
+        Building building = currentValue.selectedBuilding();
+        if (building == null || building.isNull()) {
+            return false;
+        }
+
+        ProductCatalog catalog = building.productCatalog();
         ProductItem serviceItem = currentValue.version().leaseProducts().serviceItem().item();
         if (catalog == null || serviceItem == null) {
             return false;
@@ -254,6 +219,8 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
 
         // find the service by Service item:
         Service selectedService = null;
+        Persistence.service().retrieve(catalog);
+        Persistence.service().retrieve(catalog.services());
         for (Service service : catalog.services()) {
             Persistence.service().retrieve(service.version().items());
             for (ProductItem item : service.version().items()) {
@@ -278,7 +245,9 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
             utilitiesToExclude.addAll(catalog.externalUtilities());
 
             // fill features:
+            Persistence.service().retrieve(selectedService.version().features());
             for (Feature feature : selectedService.version().features()) {
+                Persistence.service().retrieve(feature.version().items());
                 for (ProductItem item : feature.version().items()) {
                     switch (feature.version().type().getValue()) {
                     case utility:
@@ -294,9 +263,8 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
             }
 
             // fill concessions:
-            for (Concession concession : selectedService.version().concessions()) {
-                currentValue.selectedConcessions().add(concession);
-            }
+            Persistence.service().retrieve(selectedService.version().concessions());
+            currentValue.selectedConcessions().addAll(selectedService.version().concessions());
         }
 
         return (selectedService != null);
