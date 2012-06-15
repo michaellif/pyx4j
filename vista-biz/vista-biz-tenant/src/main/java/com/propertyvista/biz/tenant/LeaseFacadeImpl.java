@@ -97,25 +97,24 @@ public class LeaseFacadeImpl implements LeaseFacade {
     @Override
     public void setUnit(Lease leaseId, AptUnit unitId) {
         Lease lease = Persistence.secureRetrieveDraft(Lease.class, leaseId.getPrimaryKey());
+        if (!Lease.Status.draft().contains(lease.version().status().getValue())) {
+            throw new UserRuntimeException(i18n.tr("Invalid Lease State"));
+        }
 
         boolean succeeded = false;
         AptUnit unit = Persistence.secureRetrieve(AptUnit.class, unitId.getPrimaryKey());
         Persistence.service().retrieve(unit.belongsTo());
-        Persistence.service().retrieve(unit.belongsTo().productCatalog());
-        Persistence.service().retrieve(unit.belongsTo().productCatalog().services());
-        for (Service service : unit.belongsTo().productCatalog().services()) {
-            if (service.version().type().equals(lease.type())) {
-                Persistence.service().retrieve(service.version().items());
-                for (ProductItem item : service.version().items()) {
-                    if (item.element().equals(unit)) {
-                        setService(lease, unit.belongsTo().productCatalog(), service, item);
-                        succeeded = true;
-                        break;
-                    }
-                }
-            }
-            if (succeeded) {
-                break; // found!..
+
+        EntityQueryCriteria<Service> criteria = new EntityQueryCriteria<Service>(Service.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().catalog(), unit.belongsTo().productCatalog()));
+        criteria.add(PropertyCriterion.eq(criteria.proto().version().type(), lease.type()));
+        Service service = Persistence.service().retrieve(criteria);
+        Persistence.service().retrieve(service.version().items());
+        for (ProductItem item : service.version().items()) {
+            if (item.element().equals(unit)) {
+                setService(lease, unit.belongsTo().productCatalog(), service, item);
+                succeeded = true;
+                break;
             }
         }
 
