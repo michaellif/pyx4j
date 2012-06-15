@@ -70,16 +70,13 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
 
         // load detached entities:
         Persistence.service().retrieve(dto.billingAccount().adjustments());
-//        Persistence.service().retrieve(dto.documents());
+//      Persistence.service().retrieve(dto.documents());
 
         if (!dto.unit().isNull()) {
             // fill selected building by unit:
             dto.selectedBuilding().set(dto.unit().belongsTo());
             fillServiceEligibilityData(dto);
         }
-
-        // Need this for navigation
-        Persistence.service().retrieve(dto.version().leaseProducts().serviceItem().item().product());
 
         // calculate price adjustments:
         PriceCalculationHelpers.calculateChargeItemAdjustments(dto.version().leaseProducts().serviceItem());
@@ -97,6 +94,9 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
         for (Guarantor item : dto.version().guarantors()) {
             Persistence.service().retrieve(item.screening(), AttachLevel.ToStringMembers);
         }
+
+        // Need this for navigation
+        Persistence.service().retrieve(dto.version().leaseProducts().serviceItem().item().product());
     }
 
     @Override
@@ -204,8 +204,6 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
     // Internals:
 
     private boolean fillServiceEligibilityData(DTO currentValue) {
-//        syncBuildingProductCatalog(currentValue.selectedBuilding());
-
         Building building = currentValue.selectedBuilding();
         if (building == null || building.isNull()) {
             return false;
