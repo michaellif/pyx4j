@@ -76,6 +76,9 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
             // fill selected building by unit:
             dto.selectedBuilding().set(dto.unit().belongsTo());
             syncBuildingProductCatalog(dto.selectedBuilding());
+
+            // fill runtime catalog-related data:
+            fillServiceEligibilityData(dto);
         }
 
         // Need this for navigation
@@ -97,9 +100,6 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
         for (Guarantor item : dto.version().guarantors()) {
             Persistence.service().retrieve(item.screening(), AttachLevel.ToStringMembers);
         }
-
-        // fill runtime data:
-        fillServiceEligibilityData(dto, dto.version().leaseProducts().serviceItem().item());
     }
 
     @Override
@@ -169,10 +169,6 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
         ServerSideFactory.create(LeaseFacade.class).setUnit(EntityFactory.createIdentityStub(Lease.class, entityId),
                 EntityFactory.createIdentityStub(AptUnit.class, unitId));
         Persistence.service().commit();
-
-        AptUnit unit = Persistence.service().retrieve(AptUnit.class, unitId);
-        Persistence.service().retrieve(unit.belongsTo());
-        syncBuildingProductCatalog(unit.belongsTo());
         callback.onSuccess(null);
     }
 
@@ -249,14 +245,17 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
 
     // Internals:
 
-    private boolean fillServiceEligibilityData(DTO currentValue, ProductItem serviceItem) {
-        if (serviceItem == null) {
+    private boolean fillServiceEligibilityData(DTO currentValue) {
+        ProductCatalog catalog = currentValue.selectedBuilding().productCatalog();
+        ProductItem serviceItem = currentValue.version().leaseProducts().serviceItem().item();
+        if (catalog == null || serviceItem == null) {
             return false;
         }
 
         // find the service by Service item:
         Service selectedService = null;
-        for (Service service : currentValue.selectedBuilding().productCatalog().services()) {
+        for (Service service : catalog.services()) {
+            Persistence.service().retrieve(service.version().items());
             for (ProductItem item : service.version().items()) {
                 if (item.equals(serviceItem)) {
                     selectedService = service;
@@ -274,7 +273,6 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
         currentValue.selectedConcessions().clear();
 
         if (selectedService != null) {
-            ProductCatalog catalog = currentValue.selectedBuilding().productCatalog();
             List<FeatureItemType> utilitiesToExclude = new ArrayList<FeatureItemType>(catalog.includedUtilities().size() + catalog.externalUtilities().size());
             utilitiesToExclude.addAll(catalog.includedUtilities());
             utilitiesToExclude.addAll(catalog.externalUtilities());

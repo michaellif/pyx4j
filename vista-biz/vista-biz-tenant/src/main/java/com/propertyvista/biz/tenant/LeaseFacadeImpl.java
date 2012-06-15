@@ -110,8 +110,12 @@ public class LeaseFacadeImpl implements LeaseFacade {
                     if (item.element().equals(unit)) {
                         setService(lease, unit.belongsTo().productCatalog(), service, item);
                         succeeded = true;
+                        break;
                     }
                 }
+            }
+            if (succeeded) {
+                break; // found!..
             }
         }
 
@@ -122,7 +126,6 @@ public class LeaseFacadeImpl implements LeaseFacade {
 //        }
 
         lease.unit().set(unit);
-
         persistLease(lease);
     }
 
