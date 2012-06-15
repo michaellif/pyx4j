@@ -249,7 +249,7 @@ public class DashboardGenerator extends Dashboards {
                 defColumn(proto.merchantAccount().accountNumber()).title(i18n.tr("Merchant Account")).build(),
                 defColumn(proto.billingAccount().lease().unit().belongsTo().propertyCode()).title(i18n.tr("Building")).build(),
                 defColumn(proto.billingAccount().lease().leaseId()).title(i18n.tr("Lease")).build(),
-                defColumn(proto.paymentMethod().leaseParticipant().customer()).title(i18n.tr("Tenant")).build(),                    
+                defColumn(proto.paymentMethod().customer()).title(i18n.tr("Tenant")).build(),                    
                 defColumn(proto.paymentMethod().type()).title(i18n.tr("Method")).build(),
                 defColumn(proto.paymentStatus()).title(i18n.tr("Status")).build(),
                 defColumn(proto.createdDate()).title(i18n.tr("Created")).build(),

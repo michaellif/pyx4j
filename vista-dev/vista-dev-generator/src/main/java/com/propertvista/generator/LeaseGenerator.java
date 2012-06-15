@@ -145,13 +145,14 @@ public class LeaseGenerator extends DataGenerator {
         details.accountNo().setValue("000000" + Integer.toString(RandomUtil.randomInt(999999)));
         m.details().set(details);
 
-        m.leaseParticipant().set(tenant);
+        m.customer().set(tenant.customer());
         m.sameAsCurrent().setValue(Boolean.FALSE);
         m.billingAddress().set(CommonsGenerator.createAddress());
         m.phone().setValue(CommonsGenerator.createPhone());
 
-        tenant.paymentMethods().add(m);
+        tenant.preauthorizedPayment().set(m);
 
+        tenant.customer().paymentMethods().add(tenant.preauthorizedPayment());
     }
 
     public static void attachDocumentData(Lease lease) {

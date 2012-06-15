@@ -42,7 +42,7 @@ public class PaymentMethodCrudServiceImpl extends AbstractCrudServiceImpl<Paymen
 
     @Override
     protected void enhanceListCriteria(EntityListCriteria<PaymentMethod> dbCriteria, EntityListCriteria<PaymentMethod> dtoCriteria) {
-        dbCriteria.add(PropertyCriterion.eq(dbCriteria.proto().leaseParticipant(), TenantAppContext.getCurrentUserTenantInLease()));
+        dbCriteria.add(PropertyCriterion.eq(dbCriteria.proto().customer().user(), TenantAppContext.getCurrentUser()));
         dbCriteria.add(PropertyCriterion.eq(dbCriteria.proto().isOneTimePayment(), Boolean.FALSE));
         dbCriteria.add(PropertyCriterion.eq(dbCriteria.proto().isDeleted(), Boolean.FALSE));
     }
@@ -53,7 +53,7 @@ public class PaymentMethodCrudServiceImpl extends AbstractCrudServiceImpl<Paymen
         Persistence.service().retrieve(tenantInLease.leaseV());
         Persistence.service().retrieve(tenantInLease.leaseV().holder().unit());
 
-        entity.leaseParticipant().set(tenantInLease);
+        entity.customer().set(tenantInLease.customer());
         ServerSideFactory.create(PaymentFacade.class).persistPaymentMethod(tenantInLease.leaseV().holder().unit().belongsTo(), entity);
     }
 

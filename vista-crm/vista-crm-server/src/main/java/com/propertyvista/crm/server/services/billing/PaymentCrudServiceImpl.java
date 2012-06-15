@@ -85,12 +85,13 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
     @Override
     protected void persist(PaymentRecord entity, PaymentRecordDTO dto) {
         if (dto.addThisPaymentMethodToProfile().isBooleanTrue() && PaymentType.avalableInProfile().contains(dto.paymentMethod().type().getValue())) {
-            entity.paymentMethod().leaseParticipant().set(dto.leaseParticipant());
+            entity.paymentMethod().customer().set(dto.leaseParticipant().customer());
 
             EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
             criteria.add(PropertyCriterion.eq(criteria.proto()._Units().$()._Leases().$().billingAccount(), entity.billingAccount()));
             ServerSideFactory.create(PaymentFacade.class).persistPaymentMethod(Persistence.service().retrieve(criteria), entity.paymentMethod());
         }
+
         if (dto.paymentMethod().type().getValue() == PaymentType.Echeck) {
             entity.paymentMethod().isOneTimePayment().setValue(Boolean.FALSE);
         }

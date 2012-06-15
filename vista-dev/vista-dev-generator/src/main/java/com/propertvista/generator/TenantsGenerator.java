@@ -59,7 +59,7 @@ public class TenantsGenerator {
         return item;
     }
 
-    public List<PaymentMethod> createPaymentMethods(Customer tenant) {
+    public List<PaymentMethod> createPaymentMethods(Customer customer) {
         List<PaymentMethod> l = new Vector<PaymentMethod>();
 
         for (int i = 0; i < 2; i++) {
@@ -73,11 +73,11 @@ public class TenantsGenerator {
             CreditCardInfo details = EntityFactory.create(CreditCardInfo.class);
             details.cardType().setValue(CreditCardType.Visa);
             details.numberRefference().setValue(CommonsStringUtils.d00(RandomUtil.randomInt(99)) + CommonsStringUtils.d00(RandomUtil.randomInt(99)));
-            details.nameOn().setValue(tenant.person().name().getStringView());
+            details.nameOn().setValue(customer.person().name().getStringView());
             details.expiryDate().setValue(RandomUtil.randomLogicalDate(2012, 2015));
             m.details().set(details);
 
-            m.leaseParticipant().set(tenant);
+            m.customer().set(customer);
             m.sameAsCurrent().setValue(Boolean.FALSE);
             m.billingAddress().set(CommonsGenerator.createAddress());
             m.phone().setValue(CommonsGenerator.createPhone());

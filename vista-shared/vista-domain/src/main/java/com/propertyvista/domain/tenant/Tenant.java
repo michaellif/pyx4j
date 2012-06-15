@@ -26,6 +26,7 @@ import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
+import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 
 @ToStringFormat("{0} - {1}{2,choice,null#|!null#, {2}}")
@@ -44,6 +45,8 @@ public interface Tenant extends LeaseParticipant {
      * Tenant's payment share:
      */
     IPrimitive<Integer> percentage();
+
+    PaymentMethod preauthorizedPayment();
 
     // ----------------------------------------------------
     // parent <-> child relationship:

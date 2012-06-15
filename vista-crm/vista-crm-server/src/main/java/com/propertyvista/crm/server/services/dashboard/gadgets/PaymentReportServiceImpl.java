@@ -71,7 +71,7 @@ public class PaymentReportServiceImpl implements PaymentReportService {
                 bind(dtoProto.billingAccount().lease().unit().belongsTo().propertyCode(), dboProto.billingAccount().lease().unit().belongsTo().propertyCode());
                 bind(dtoProto.billingAccount().lease().leaseId(), dboProto.billingAccount().lease().leaseId());
                 bind(dtoProto.paymentMethod().type(), dboProto.paymentMethod().type());
-                bind(dtoProto.paymentMethod().leaseParticipant(), dboProto.paymentMethod().leaseParticipant());
+                bind(dtoProto.paymentMethod().customer(), dboProto.paymentMethod().customer());
                 bind(dtoProto.paymentStatus(), dboProto.paymentStatus());
                 bind(dtoProto.createdDate(), dboProto.createdDate());
                 bind(dtoProto.receivedDate(), dboProto.receivedDate());
@@ -187,7 +187,7 @@ public class PaymentReportServiceImpl implements PaymentReportService {
         Persistence.service().retrieve(paymentRecordDBO.billingAccount().lease());
         Persistence.service().retrieve(paymentRecordDBO.billingAccount().lease().unit());
         Persistence.service().retrieve(paymentRecordDBO.billingAccount().lease().unit().belongsTo());
-        Persistence.service().retrieve(paymentRecordDBO.paymentMethod().leaseParticipant());
+        Persistence.service().retrieve(paymentRecordDBO.paymentMethod().customer());
 
         PaymentRecordForReportDTO paymentRecordDTO = dtoBinder.createDTO(paymentRecordDBO);
 

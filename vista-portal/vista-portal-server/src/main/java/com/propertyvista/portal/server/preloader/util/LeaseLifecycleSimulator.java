@@ -316,7 +316,7 @@ public class LeaseLifecycleSimulator {
             details.expiryDate().setValue(RandomUtil.randomLogicalDate(2012, 2015));
             m.details().set(details);
 
-            m.leaseParticipant().set(tenant);
+            m.customer().set(tenant.customer());
             m.isOneTimePayment().setValue(Boolean.TRUE);
             m.sameAsCurrent().setValue(Boolean.FALSE);
             m.billingAddress().set(CommonsGenerator.createAddress());

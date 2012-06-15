@@ -31,7 +31,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.contact.AddressStructured;
-import com.propertyvista.domain.tenant.lease.LeaseParticipant;
+import com.propertyvista.domain.tenant.Customer;
 
 @ToStringFormat("{0} - {1} {2,choice,null#|1#Default}")
 public interface PaymentMethod extends IEntity {
@@ -40,7 +40,7 @@ public interface PaymentMethod extends IEntity {
     @ReadOnly
     @Owner
     @JoinColumn
-    LeaseParticipant leaseParticipant();
+    Customer customer();
 
     @OrderColumn
     IPrimitive<Integer> orderId();
@@ -67,6 +67,7 @@ public interface PaymentMethod extends IEntity {
     IPrimitive<String> phone();
 
     @ToString(index = 2)
+    @Deprecated
     IPrimitive<Boolean> isDefault();
 
     /**

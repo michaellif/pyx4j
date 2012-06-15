@@ -73,14 +73,14 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
         dto.unitNumber().set(dto.billingAccount().lease().unit().info().number());
 
         Persistence.service().retrieve(dto.paymentMethod());
-        Persistence.service().retrieve(dto.paymentMethod().leaseParticipant());
-        dto.leaseParticipant().set(dto.paymentMethod().leaseParticipant());
+        Persistence.service().retrieve(dto.paymentMethod().customer());
+        Persistence.service().retrieve(dto.leaseParticipant());
     }
 
     @Override
     protected void persist(PaymentRecord entity, PaymentRecordDTO dto) {
         if (dto.addThisPaymentMethodToProfile().isBooleanTrue() && PaymentType.avalableInProfile().contains(dto.paymentMethod().type().getValue())) {
-            entity.paymentMethod().leaseParticipant().set(dto.leaseParticipant());
+            entity.paymentMethod().customer().set(dto.leaseParticipant().customer());
 
             EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
             criteria.add(PropertyCriterion.eq(criteria.proto()._Units().$()._Leases().$().billingAccount(), entity.billingAccount()));

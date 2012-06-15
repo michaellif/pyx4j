@@ -52,7 +52,6 @@ public class GuarantorCrudServiceImpl extends AbstractCrudServiceDtoImpl<Guarant
         Persistence.service().retrieve(dto.leaseV().holder(), AttachLevel.ToStringMembers);
 
         // fill/update payment methods: 
-        dto.paymentMethods().setAttachLevel(AttachLevel.Attached);
         dto.paymentMethods().clear();
         dto.paymentMethods().addAll(ServerSideFactory.create(PaymentFacade.class).retrievePaymentMethods(entity));
     }
@@ -72,7 +71,8 @@ public class GuarantorCrudServiceImpl extends AbstractCrudServiceDtoImpl<Guarant
         criteria.add(PropertyCriterion.eq(criteria.proto()._Units().$()._Leases().$().versions(), entity.leaseV()));
         Building building = Persistence.service().retrieve(criteria);
 
-        for (PaymentMethod paymentMethod : entity.paymentMethods()) {
+        for (PaymentMethod paymentMethod : dto.paymentMethods()) {
+            paymentMethod.customer().set(entity.customer());
             ServerSideFactory.create(PaymentFacade.class).persistPaymentMethod(building, paymentMethod);
         }
         super.persist(entity, dto);

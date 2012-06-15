@@ -15,11 +15,14 @@ package com.propertyvista.dto;
 
 import com.pyx4j.entity.annotations.ExtendsDBO;
 import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.shared.IList;
 
+import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.domain.tenant.Tenant;
-import com.propertyvista.domain.tenant.lease.Lease;
 
 @Transient
 @ExtendsDBO
 public interface TenantDTO extends Tenant {
+
+    IList<PaymentMethod> paymentMethods();
 }

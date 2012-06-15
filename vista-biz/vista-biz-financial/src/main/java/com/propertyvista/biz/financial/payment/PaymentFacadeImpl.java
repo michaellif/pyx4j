@@ -69,8 +69,9 @@ public class PaymentFacadeImpl implements PaymentFacade {
 
     @Override
     public List<PaymentMethod> retrievePaymentMethods(LeaseParticipant participant) {
+        assert !participant.customer().isValueDetached();
         EntityQueryCriteria<PaymentMethod> criteria = new EntityQueryCriteria<PaymentMethod>(PaymentMethod.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().leaseParticipant(), participant));
+        criteria.add(PropertyCriterion.eq(criteria.proto().customer(), participant.customer()));
         criteria.add(PropertyCriterion.eq(criteria.proto().isOneTimePayment(), Boolean.FALSE));
         criteria.add(PropertyCriterion.eq(criteria.proto().isDeleted(), Boolean.FALSE));
 

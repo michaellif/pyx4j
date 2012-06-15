@@ -238,7 +238,7 @@ public class PaymentForm extends CEntityDecoratableForm<PaymentRecordDTO> {
                     if (getValue().getPrimaryKey() == null) {
                         get(proto().paymentSelect()).setValue(PaymentSelect.Profiled, true);
                     } else {
-                        if (getValue().paymentMethod().leaseParticipant().isNull()) {
+                        if (getValue().paymentMethod().customer().isNull()) {
                             get(proto().paymentSelect()).setValue(PaymentSelect.New, false);
                         } else {
                             get(proto().paymentSelect()).setValue(PaymentSelect.Profiled, false);

@@ -97,7 +97,11 @@ public class PaymentsSummaryHelperTestBase extends VistaDBTestBase {
             PaymentRecord.PaymentStatus paymentStatus) {
         PaymentMethod paymentMethod = EntityFactory.create(PaymentMethod.class);
         paymentMethod.type().setValue(paymentType);
-        paymentMethod.leaseParticipant().set(lease.version().tenants().get(0));
+        Tenant tenant = lease.version().tenants().get(0);
+        if (tenant.isValueDetached()) {
+            Persistence.service().retrieve(tenant);
+        }
+        paymentMethod.customer().set(tenant.customer());
         Persistence.service().persist(paymentMethod);
 
         PaymentRecord paymentRecord = EntityFactory.create(PaymentRecord.class);
