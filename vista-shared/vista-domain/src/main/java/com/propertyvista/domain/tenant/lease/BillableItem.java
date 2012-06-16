@@ -69,7 +69,7 @@ public interface BillableItem extends IEntity {
     IPrimitive<LogicalDate> expirationDate();
 
     @Owned
-    Deposit deposit();
+    IList<Deposit> deposits();
 
     /**
      * Current price: contractual price value (agreed price + adjustments),

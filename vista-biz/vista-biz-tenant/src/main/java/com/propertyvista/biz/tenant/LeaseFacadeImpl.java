@@ -50,6 +50,7 @@ import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lead.Lead;
 import com.propertyvista.domain.tenant.lease.BillableItem;
+import com.propertyvista.domain.tenant.lease.Deposit;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.CompletionType;
 import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
@@ -141,10 +142,12 @@ public class LeaseFacadeImpl implements LeaseFacade {
         DepositPolicy depositPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(lease.unit().belongsTo(), DepositPolicy.class);
 
         for (DepositPolicyItem item : depositPolicy.policyItems()) {
-            if (item.appliedTo().equals(serviceItem.type())) {
-                lease.version().leaseProducts().serviceItem().deposit().depositAmount().setValue(item.value().getValue());
-                lease.version().leaseProducts().serviceItem().deposit().valueType().setValue(item.valueType().getValue());
-                lease.version().leaseProducts().serviceItem().deposit().repaymentMode().setValue(item.repaymentMode().getValue());
+            if (item.productType().equals(serviceItem.type())) {
+                Deposit deposit = EntityFactory.create(Deposit.class);
+                deposit.initialAmount().setValue(item.value().getValue());
+                deposit.valueType().setValue(item.valueType().getValue());
+                deposit.repaymentMode().setValue(item.repaymentMode().getValue());
+                lease.version().leaseProducts().serviceItem().deposits().add(deposit);
             }
         }
 

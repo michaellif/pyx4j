@@ -58,7 +58,7 @@ public class DepositPolicyPreloader extends AbstractPolicyPreloader<DepositPolic
             item.value().setValue(new BigDecimal(RandomUtil.randomDouble(500.0)));
             item.repaymentMode().setValue(RepaymentMode.returnAtLeaseEnd);
             item.valueType().setValue(ValueType.amount);
-            item.appliedTo().set(pit);
+            item.productType().set(pit);
 
             policy.policyItems().add(item);
         }
@@ -75,7 +75,7 @@ public class DepositPolicyPreloader extends AbstractPolicyPreloader<DepositPolic
                     item.value().setValue(new BigDecimal(RandomUtil.randomDouble(1.0)));
                     item.repaymentMode().setValue(RepaymentMode.applyToFirstMonth);
                     item.valueType().setValue(ValueType.percentage);
-                    item.appliedTo().set(pit);
+                    item.productType().set(pit);
 
                     policy.policyItems().add(item);
                     break;
@@ -86,7 +86,7 @@ public class DepositPolicyPreloader extends AbstractPolicyPreloader<DepositPolic
                     item.value().setValue(new BigDecimal(RandomUtil.randomDouble(1.0)));
                     item.repaymentMode().setValue(RepaymentMode.applyToLastMonth);
                     item.valueType().setValue(ValueType.percentage);
-                    item.appliedTo().set(pit);
+                    item.productType().set(pit);
 
                     policy.policyItems().add(item);
                     break;

@@ -65,6 +65,7 @@ import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.AdjustmentType;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.ExecutionType;
+import com.propertyvista.domain.tenant.lease.Deposit;
 import com.propertyvista.domain.tenant.lease.Deposit.RepaymentMode;
 import com.propertyvista.domain.tenant.lease.Deposit.ValueType;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -336,9 +337,11 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
     protected void setDeposit(String billableItemId, String value, ValueType valueType, RepaymentMode repaymentMode, SaveAction saveAction) {
         Lease lease = retrieveLeaseForEdit();
         BillableItem billableItem = findBillableItem(billableItemId, lease);
-        billableItem.deposit().depositAmount().setValue(new BigDecimal(value));
-        billableItem.deposit().valueType().setValue(valueType);
-        billableItem.deposit().repaymentMode().setValue(repaymentMode);
+        Deposit deposit = EntityFactory.create(Deposit.class);
+        deposit.initialAmount().setValue(new BigDecimal(value));
+        deposit.valueType().setValue(valueType);
+        deposit.repaymentMode().setValue(repaymentMode);
+        billableItem.deposits().add(deposit);
         lease.saveAction().setValue(saveAction);
         Persistence.service().persist(lease);
         Persistence.service().commit();

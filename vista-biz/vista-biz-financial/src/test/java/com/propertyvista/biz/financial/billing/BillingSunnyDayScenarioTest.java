@@ -76,16 +76,16 @@ public class BillingSunnyDayScenarioTest extends FinancialTestBase {
         serviceCharge("262.83").
         recurringFeatureCharges("34.27").
         oneTimeFeatureCharges("0.00").
-        depositAmount("930.30").
+        depositAmount("1130.30").
         taxes("35.65").
-        totalDueAmount("1263.05");
+        totalDueAmount("1463.05");
         // @formatter:on
 
         //==================== RUN 2 ======================//
 
         SysDateManager.setSysDate("18-Mar-2011");
 
-        receiveAndPostPayment("18-Mar-2011", "1263.05");
+        receiveAndPostPayment("18-Mar-2011", "1463.05");
 
         activateLease();
 
@@ -99,7 +99,7 @@ public class BillingSunnyDayScenarioTest extends FinancialTestBase {
         billingPeriodStartDate("1-Apr-2011").
         billingPeriodEndDate("30-Apr-2011").
         numOfProductCharges(5).
-        paymentReceivedAmount("-1263.05").
+        paymentReceivedAmount("-1463.05").
         serviceCharge("905.30").
         recurringFeatureCharges("136.66").
         oneTimeFeatureCharges("0.00").

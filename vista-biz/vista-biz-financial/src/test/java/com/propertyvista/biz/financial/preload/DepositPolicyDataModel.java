@@ -51,7 +51,7 @@ public class DepositPolicyDataModel {
                     item.value().setValue(new BigDecimal("1.0"));
                     item.valueType().setValue(ValueType.percentage);
                     item.repaymentMode().setValue(RepaymentMode.returnAtLeaseEnd);
-                    item.appliedTo().set(type);
+                    item.productType().set(type);
                     break;
                 default:
                     break;

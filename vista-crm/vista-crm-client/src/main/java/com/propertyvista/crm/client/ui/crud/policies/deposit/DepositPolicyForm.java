@@ -108,9 +108,11 @@ public class DepositPolicyForm extends PolicyDTOTabPanelBasedForm<DepositPolicyD
                 FormFlexPanel content = new FormFlexPanel();
 
                 int row = -1;
-                content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().appliedTo()), 20).build());
-                get(proto().appliedTo()).inheritViewable(false);
-                get(proto().appliedTo()).setViewable(true);
+                content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().depositType()), 20).build());
+
+                content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().productType()), 20).build());
+                get(proto().productType()).inheritViewable(false);
+                get(proto().productType()).setViewable(true);
 
                 content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().valueType()), 10).build());
                 content.setWidget(++row, 0, valueHolder);
@@ -169,8 +171,8 @@ public class DepositPolicyForm extends PolicyDTOTabPanelBasedForm<DepositPolicyD
         protected void addItem() {
             final List<ProductItemType> alreadySelectedProducts = new ArrayList<ProductItemType>();
             for (DepositPolicyItem di : getValue()) {
-                if (!di.appliedTo().isNull()) {
-                    alreadySelectedProducts.add(di.appliedTo());
+                if (!di.productType().isNull()) {
+                    alreadySelectedProducts.add(di.productType());
                 }
             }
 
@@ -211,7 +213,7 @@ public class DepositPolicyForm extends PolicyDTOTabPanelBasedForm<DepositPolicyD
                     for (ProductItemType type : getSelectedItems()) {
                         DepositPolicyItem newItem = EntityFactory.create(DepositPolicyItem.class);
                         newItem.repaymentMode().setValue(RepaymentMode.returnAtLeaseEnd);
-                        newItem.appliedTo().set(type);
+                        newItem.productType().set(type);
                         DepositPolicyItemEditorFolder.this.addItem(newItem);
                     }
                     return true;
