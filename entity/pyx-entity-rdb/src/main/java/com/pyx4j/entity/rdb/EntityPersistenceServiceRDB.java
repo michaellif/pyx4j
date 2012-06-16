@@ -106,7 +106,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
 
     public static final boolean trace = false;
 
-    public static final boolean traceSql = false;
+    public static final boolean traceSql = true;
 
     public static final boolean traceWarnings = false;
 

@@ -89,7 +89,11 @@ public class TableModelCollections {
         Dialect dialect = persistenceContext.getDialect();
         try {
             int numberOfParams = 0;
-            sql.append("INSERT INTO ").append(member.sqlName()).append(" ( ");
+            sql.append("INSERT INTO ");
+            if (dialect.isMultitenantSeparateSchemas()) {
+                sql.append(NamespaceManager.getNamespace()).append('.');
+            }
+            sql.append(member.sqlName()).append(" ( ");
 
             for (String name : member.getOwnerValueAdapter().getColumnNames(member.sqlOwnerName())) {
                 if (numberOfParams > 0) {
@@ -224,7 +228,11 @@ public class TableModelCollections {
             if (isList) {
                 sql.append(", ").append(member.sqlOrderColumnName());
             }
-            sql.append(" FROM ").append(member.sqlName()).append(" WHERE ");
+            sql.append(" FROM ");
+            if (dialect.isMultitenantSeparateSchemas()) {
+                sql.append(NamespaceManager.getNamespace()).append('.');
+            }
+            sql.append(member.sqlName()).append(" WHERE ");
 
             boolean firstWhereColumn = true;
             for (String name : member.getOwnerValueAdapter().getColumnNames(member.sqlOwnerName())) {
@@ -320,7 +328,11 @@ public class TableModelCollections {
                 }
                 sql.append(name);
             }
-            sql.append(" FROM ").append(member.sqlName()).append(" WHERE ");
+            sql.append(" FROM ");
+            if (dialect.isMultitenantSeparateSchemas()) {
+                sql.append(NamespaceManager.getNamespace()).append('.');
+            }
+            sql.append(member.sqlName()).append(" WHERE ");
 
             boolean firstWhereColumn = true;
             for (String name : member.getOwnerValueAdapter().getColumnNames(member.sqlOwnerName())) {
@@ -391,7 +403,12 @@ public class TableModelCollections {
                 sql.append(", ");
                 sql.append(name);
             }
-            sql.append(" FROM ").append(member.sqlName()).append(" WHERE ");
+            sql.append(" FROM ");
+            if (dialect.isMultitenantSeparateSchemas()) {
+                sql.append(NamespaceManager.getNamespace()).append('.');
+            }
+            sql.append(member.sqlName()).append(" WHERE ");
+
             if (dialect.isMultitenantSharedSchema()) {
                 sql.append(" ns = ? AND ");
             }
@@ -451,7 +468,12 @@ public class TableModelCollections {
             if (member.getOwnerValueAdapter() instanceof ValueAdapterEntityPolymorphic) {
                 throw new Error("TODO delete by Polymorphic Owner");
             }
-            sql.append("DELETE FROM ").append(member.sqlName()).append(" WHERE ").append(member.sqlOwnerName()).append(" = ?");
+            sql.append("DELETE FROM ");
+            if (dialect.isMultitenantSeparateSchemas()) {
+                sql.append(NamespaceManager.getNamespace()).append('.');
+            }
+            sql.append(member.sqlName()).append(" WHERE ").append(member.sqlOwnerName()).append(" = ?");
+
             if (dialect.isMultitenantSharedSchema()) {
                 sql.append(" AND ").append(dialect.getNamingConvention().sqlNameSpaceColumnName()).append(" = ?");
             }
@@ -480,7 +502,12 @@ public class TableModelCollections {
         Dialect dialect = persistenceContext.getDialect();
         try {
             //TODO delete by Polymorphic Owner
-            sql.append("DELETE FROM ").append(member.sqlName()).append(" WHERE ").append(member.sqlOwnerName()).append(" = ?");
+            sql.append("DELETE FROM ");
+            if (dialect.isMultitenantSeparateSchemas()) {
+                sql.append(NamespaceManager.getNamespace()).append('.');
+            }
+            sql.append(member.sqlName()).append(" WHERE ").append(member.sqlOwnerName()).append(" = ?");
+
             if (dialect.isMultitenantSharedSchema()) {
                 sql.append(" AND ").append(dialect.getNamingConvention().sqlNameSpaceColumnName()).append(" = ?");
             }
@@ -519,8 +546,15 @@ public class TableModelCollections {
 
     public static void truncate(PersistenceContext persistenceContext, MemberOperationsMeta member) {
         PreparedStatement stmt = null;
+        StringBuilder sql = new StringBuilder();
         try {
-            stmt = persistenceContext.getConnection().prepareStatement("TRUNCATE TABLE " + member.sqlName());
+            sql.append("TRUNCATE TABLE ");
+            if (persistenceContext.getDialect().isMultitenantSeparateSchemas()) {
+                sql.append(NamespaceManager.getNamespace()).append('.');
+            }
+            sql.append(member.sqlName());
+
+            stmt = persistenceContext.getConnection().prepareStatement(sql.toString());
             stmt.execute();
         } catch (SQLException e) {
             log.error("{} SQL truncate error", member.sqlName(), e);

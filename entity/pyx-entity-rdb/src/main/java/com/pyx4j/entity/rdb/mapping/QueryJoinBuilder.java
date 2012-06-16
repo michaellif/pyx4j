@@ -35,6 +35,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.VersionedCriteria;
+import com.pyx4j.server.contexts.NamespaceManager;
 
 class QueryJoinBuilder {
 
@@ -317,7 +318,9 @@ class QueryJoinBuilder {
             } else {
                 sql.append(" INNER JOIN ");
             }
-
+            if (dialect.isMultitenantSeparateSchemas()) {
+                sql.append(NamespaceManager.getNamespace()).append('.');
+            }
             sql.append(memberJoin.sqlTableName);
 
             sql.append(' ');

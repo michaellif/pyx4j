@@ -59,7 +59,11 @@ public class TableModleExternal {
                 }
                 sql.append(name);
             }
-            sql.append(" FROM ").append(member.sqlName()).append(" WHERE ");
+            sql.append(" FROM ");
+            if (dialect.isMultitenantSeparateSchemas()) {
+                sql.append(NamespaceManager.getNamespace()).append('.');
+            }
+            sql.append(member.sqlName()).append(" WHERE ");
 
             boolean firstWhereColumn = true;
             for (String name : member.getOwnerValueAdapter().getColumnNames(member.sqlOwnerName())) {
