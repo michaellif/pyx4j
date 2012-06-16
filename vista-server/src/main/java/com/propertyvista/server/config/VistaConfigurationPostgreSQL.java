@@ -45,7 +45,7 @@ public class VistaConfigurationPostgreSQL extends com.pyx4j.entity.rdb.cfg.Confi
 
     @Override
     public int maxPoolPreparedStatements() {
-        return 0;
+        return 1000;
     }
 
     @Override
