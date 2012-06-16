@@ -128,7 +128,9 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
             OnboardingUser onbUser = Persistence.service().retrieve(OnboardingUser.class, onbUserCred.user().getPrimaryKey());
 
             EntityQueryCriteria<OnboardingMerchantAccount> onbMrchAccCrt = EntityQueryCriteria.create(OnboardingMerchantAccount.class);
-            credentialCrt.add(PropertyCriterion.eq(onbMrchAccCrt.proto().pmc(), pmc));
+            onbMrchAccCrt.or(PropertyCriterion.eq(onbMrchAccCrt.proto().pmc(), pmc),
+                    PropertyCriterion.eq(onbMrchAccCrt.proto().onboardingAccountId(), pmc.onboardingAccountId().getValue()));
+            //credentialCrt.add(PropertyCriterion.eq(onbMrchAccCrt.proto().pmc(), pmc));
             List<OnboardingMerchantAccount> onbMrchAccs = Persistence.service().query(onbMrchAccCrt);
 
             try {

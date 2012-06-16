@@ -13,6 +13,7 @@
  */
 package com.propertyvista.onboarding.example.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlElement;
@@ -22,5 +23,5 @@ import javax.xml.bind.annotation.XmlElements;
 public class UpdateBankAccountInfoRequest extends Request {
     @XmlElementWrapper
     @XmlElements({ @XmlElement(name = "bankAccountInfo", type = BankAccountInfo.class) })
-    public List<BankAccountInfo> accounts;
+    public List<BankAccountInfo> accounts = new ArrayList<BankAccountInfo>();
 }

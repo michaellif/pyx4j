@@ -34,9 +34,9 @@ public class UpdateBankAccountInfoRun {
         for (int i = 0; i < cnt; i++) {
             BankAccountInfo bai = new BankAccountInfo();
             bai.onboardingBankAccountId = "7891" + num;
-            bai.terminalId = "1234" + num;
-            bai.bankId = "234" + num;
-            bai.branchTransitNumber = "234567786" + num;
+            bai.terminalId = "1235" + num;
+            bai.bankId = "23" + num;
+            bai.branchTransitNumber = "2789" + num;
             bai.accountNumber = "34566562526" + num;
             bai.chargeDescription = "chargeDescription" + num;
 
@@ -69,9 +69,9 @@ public class UpdateBankAccountInfoRun {
         for (int i = 0; i < cnt; i++) {
             BankAccountInfo bai = new BankAccountInfo();
             bai.onboardingBankAccountId = "7891" + num;
-            bai.terminalId = "1234" + num;
-            bai.bankId = "234" + num;
-            bai.branchTransitNumber = "234567786" + num;
+            bai.terminalId = "1236" + num;
+            bai.bankId = "24" + num;
+            bai.branchTransitNumber = "2341" + num;
             bai.accountNumber = "34566562526" + num;
             bai.chargeDescription = "chargeDescription" + num;
 

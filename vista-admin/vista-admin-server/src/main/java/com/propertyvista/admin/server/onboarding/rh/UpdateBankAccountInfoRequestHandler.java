@@ -48,6 +48,10 @@ public class UpdateBankAccountInfoRequestHandler extends AbstractRequestHandler<
 
         ResponseIO response = EntityFactory.create(ResponseIO.class);
 
+        EntityQueryCriteria<Pmc> crpmc = EntityQueryCriteria.create(Pmc.class);
+        crpmc.add(PropertyCriterion.eq(crpmc.proto().onboardingAccountId(), request.onboardingAccountId().getValue()));
+        Pmc pmc = Persistence.service().retrieve(crpmc);
+
         List<OnboardingMerchantAccount> updatedAccount = new ArrayList<OnboardingMerchantAccount>();
 
         for (BankAccountInfo acc : request.accounts()) {
@@ -62,6 +66,10 @@ public class UpdateBankAccountInfoRequestHandler extends AbstractRequestHandler<
                 macc.onboardingBankAccountId().setValue(acc.onboardingBankAccountId().getValue());
             }
 
+            if (pmc != null) {
+                macc.pmc().set(pmc);
+            }
+
             macc.bankId().setValue(acc.bankId().getValue());
             macc.branchTransitNumber().setValue(acc.branchTransitNumber().getValue());
             macc.accountNumber().setValue(acc.accountNumber().getValue());
@@ -72,9 +80,6 @@ public class UpdateBankAccountInfoRequestHandler extends AbstractRequestHandler<
         }
 
         // See if PMC is created, Then copy the same data to Pmc namespace
-        EntityQueryCriteria<Pmc> crpmc = EntityQueryCriteria.create(Pmc.class);
-        crpmc.add(PropertyCriterion.eq(crpmc.proto().onboardingAccountId(), request.onboardingAccountId().getValue()));
-        Pmc pmc = Persistence.service().retrieve(crpmc);
         if ((pmc != null) && (pmc.status().getValue() != PmcStatus.Created)) {
             List<OnboardingMerchantAccount> merchantAccountKeyUpdated = new ArrayList<OnboardingMerchantAccount>();
             // Switch namespace.
@@ -103,8 +108,6 @@ public class UpdateBankAccountInfoRequestHandler extends AbstractRequestHandler<
 
                     Persistence.service().persist(macc);
                     acc.merchantAccountKey().setValue(macc.getPrimaryKey());
-                    // Newly created OboardingMerchantAccount assigned to this PMC.
-                    acc.pmc().set(pmc);
                 }
             } finally {
                 NamespaceManager.setNamespace(VistaNamespace.adminNamespace);
