@@ -26,6 +26,7 @@ import java.util.Collection;
 import java.util.List;
 
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
@@ -165,5 +166,19 @@ public class BillingUtils {
                 dto.rejectedPaymentLineItems().lineItems().add(lineItem);
             }
         }
+    }
+
+    public static void increment(IPrimitive<Long> counter) {
+        if (counter.getValue() == null) {
+            counter.setValue(0L);
+        }
+        counter.setValue(counter.getValue() + 1);
+    }
+
+    public static void decrement(IPrimitive<Long> counter) {
+        if (counter.getValue() == null) {
+            counter.setValue(0L);
+        }
+        counter.setValue(counter.getValue() - 1);
     }
 }

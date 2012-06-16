@@ -190,6 +190,8 @@ public class BillingLifecycleManager {
             manager.processBill();
 
             bill.billStatus().setValue(Bill.BillStatus.Finished);
+            updateBillingCycleStats(bill, true);
+
         } catch (Throwable e) {
             log.error("Bill run error", e);
             bill.billStatus().setValue(Bill.BillStatus.Failed);
@@ -198,6 +200,7 @@ public class BillingLifecycleManager {
                 billCreationError = e.getMessage();
             }
             bill.billCreationError().setValue(billCreationError);
+            updateBillingCycleStats(bill, true);
         }
         Persistence.service().persist(bill);
 
@@ -245,6 +248,8 @@ public class BillingLifecycleManager {
             }
 
             Persistence.service().persist(bill);
+
+            updateBillingCycleStats(bill, false);
 
         } else {
             throw new BillingException("Bill is in status '" + bill.billStatus().getValue() + "'. Bill should be in 'Finished' state in order to verify it.");
@@ -408,6 +413,13 @@ public class BillingLifecycleManager {
                     BillDateUtils.calculateBillingCycleEndDate(billingType.paymentFrequency().getValue(), billingCycleStartDate));
             billingCycle.executionTargetDate().setValue(BillDateUtils.calculateBillingCycleTargetExecutionDate(billingType, billingCycleStartDate));
 
+            billingCycle.notConfirmed().setValue(0L);
+            billingCycle.failed().setValue(0L);
+            billingCycle.rejected().setValue(0L);
+            billingCycle.confirmed().setValue(0L);
+            billingCycle.total().setValue(0L);
+            billingCycle.notRunned().setValue(0L);
+
             Persistence.service().persist(billingCycle);
         }
         return billingCycle;
@@ -443,4 +455,51 @@ public class BillingLifecycleManager {
         }
     }
 
+    private static void updateBillingCycleStats(Bill bill, boolean newlyCreated) {
+
+        switch (bill.billStatus().getValue()) {
+        case Failed:
+            BillingUtils.increment(bill.billingCycle().failed());
+            break;
+        case Finished:
+            BillingUtils.increment(bill.billingCycle().notConfirmed());
+            break;
+        case Confirmed:
+            BillingUtils.increment(bill.billingCycle().confirmed());
+            BillingUtils.decrement(bill.billingCycle().notConfirmed());
+            break;
+        case Rejected:
+            BillingUtils.increment(bill.billingCycle().rejected());
+            BillingUtils.decrement(bill.billingCycle().notConfirmed());
+            break;
+        default:
+            throw new Error("Unexpected billStatus");
+
+        }
+
+        if (newlyCreated && bill.billSequenceNumber().getValue() > 1) {
+            EntityQueryCriteria<Bill> criteria = EntityQueryCriteria.create(Bill.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().billingAccount(), bill.billingAccount()));
+            criteria.add(PropertyCriterion.eq(criteria.proto().billSequenceNumber(), bill.billSequenceNumber().getValue() - 1));
+            criteria.add(PropertyCriterion.eq(criteria.proto().billingCycle(), bill.billingCycle()));
+            Bill previousBill = Persistence.service().retrieve(criteria);
+
+            if (previousBill != null) {
+                switch (previousBill.billStatus().getValue()) {
+                case Failed:
+                    BillingUtils.decrement(bill.billingCycle().failed());
+                    break;
+                case Rejected:
+                    BillingUtils.decrement(bill.billingCycle().rejected());
+                    break;
+
+                default:
+                    throw new Error("Unexpected billStatus");
+                }
+            }
+        }
+
+        Persistence.service().persist(bill.billingCycle());
+
+    }
 }

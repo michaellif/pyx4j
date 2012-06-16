@@ -67,6 +67,10 @@ public interface Bill extends IEntity {
             return EnumSet.of(Running, Finished).contains(status);
         }
 
+        public static boolean discarded(BillStatus status) {
+            return EnumSet.of(Failed, Rejected).contains(status);
+        }
+
     };
 
     @I18n

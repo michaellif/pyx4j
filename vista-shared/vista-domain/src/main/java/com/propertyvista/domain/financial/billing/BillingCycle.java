@@ -66,8 +66,8 @@ public interface BillingCycle extends IEntity {
     @Caption(name = "# Of Rejected Bills")
     IPrimitive<Long> rejected();
 
-    @Caption(name = "# Of Approved Bills")
-    IPrimitive<Long> approved();
+    @Caption(name = "# Of Confirmed Bills")
+    IPrimitive<Long> confirmed();
 
     @Transient
     @Caption(name = "# Of Total Leases")

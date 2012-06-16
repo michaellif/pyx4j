@@ -31,7 +31,7 @@ public class BillingCycleLister extends ListerBase<BillingCycleDTO> {
             new MemberColumnDescriptor.Builder(proto().notConfirmed()).build(),        
             new MemberColumnDescriptor.Builder(proto().failed()).build(), 
             new MemberColumnDescriptor.Builder(proto().rejected()).build(),  
-            new MemberColumnDescriptor.Builder(proto().approved()).build(), 
+            new MemberColumnDescriptor.Builder(proto().confirmed()).build(), 
             new MemberColumnDescriptor.Builder(proto().total()).build()           
         );//@formatter:on
     }

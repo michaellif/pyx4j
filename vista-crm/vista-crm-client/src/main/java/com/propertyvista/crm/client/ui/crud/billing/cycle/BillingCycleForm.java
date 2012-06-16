@@ -44,7 +44,7 @@ class BillingCycleForm extends CrmEntityForm<BillingCycleDTO> {
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().notRunned())).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().notConfirmed())).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().failed())).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().approved())).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().confirmed())).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().total())).build());
 
         main.setH2(++row, 0, 1, i18n.tr("Leases"));
