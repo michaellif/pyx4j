@@ -33,6 +33,7 @@ import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.essentials.server.dev.DataDump;
 import com.pyx4j.essentials.server.xml.XMLEntityWriter;
 import com.pyx4j.essentials.server.xml.XMLStringWriter;
 import com.pyx4j.gwt.server.IOUtils;
@@ -84,6 +85,7 @@ public class OnboardingServiceServlet extends HttpServlet {
         } finally {
             IOUtils.closeQuietly(is);
         }
+        DataDump.dumpToDirectory("onboarding", "request", message);
 
         NamespaceManager.setNamespace(VistaNamespace.adminNamespace);
         OnboardingProcessor pp;
