@@ -48,6 +48,8 @@ public class DataDump {
 
     private static long debugCount = 0;
 
+    public static final String defaultDirectory = "dump-entity";
+
     private static class DumpXMLEntityWriter extends XMLEntityWriter {
 
         public DumpXMLEntityWriter(XMLStringWriter xml) {
@@ -75,19 +77,23 @@ public class DataDump {
     }
 
     public static void dump(String type, List<? extends IEntity> entList) {
-        dumpAny(type, entList, DataType.EntityList);
+        dumpAny(defaultDirectory, type, entList, DataType.EntityList);
     }
 
     public static void dump(String type, IEntity ent) {
-        dumpAny(type, ent, DataType.Entity);
+        dumpAny(defaultDirectory, type, ent, DataType.Entity);
     }
 
     public static void dump(String type, Serializable object) {
-        dumpAny(type, object, DataType.SerializableObject);
+        dumpAny(defaultDirectory, type, object, DataType.SerializableObject);
+    }
+
+    public static void dumpToDirectory(String baseDirectory, String type, IEntity ent) {
+        dumpAny(baseDirectory, type, ent, DataType.Entity);
     }
 
     @SuppressWarnings("unchecked")
-    private static void dumpAny(String type, Object item, DataType dataType) {
+    private static void dumpAny(String baseDirectory, String type, Object item, DataType dataType) {
         if ((item == null) || (!ServerSideConfiguration.instance().isDevelopmentBehavior())) {
             return;
         }
@@ -128,7 +134,7 @@ public class DataDump {
         } else {
             dir = new File("logs");
         }
-        dir = new File(dir, "dump-entity");
+        dir = new File(dir, baseDirectory);
         try {
             FileUtils.forceMkdir(dir);
             if (id == 1) {
