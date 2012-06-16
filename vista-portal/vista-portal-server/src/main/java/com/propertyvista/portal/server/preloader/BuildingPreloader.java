@@ -30,6 +30,7 @@ import com.propertvista.generator.util.RandomUtil;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.essentials.server.preloader.DataGenerator;
@@ -40,6 +41,7 @@ import com.propertyvista.domain.company.Portfolio;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.financial.BuildingMerchantAccount;
 import com.propertyvista.domain.financial.MerchantAccount;
+import com.propertyvista.domain.financial.offering.Concession;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.FeatureItemType;
 import com.propertyvista.domain.financial.offering.ProductCatalog;
@@ -282,6 +284,19 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
             }
 
             Persistence.service().persist(building);
+            // Save Versioned Items
+            for (Concession concession : building.productCatalog().concessions()) {
+                concession.saveAction().setValue(SaveAction.saveAsFinal);
+                Persistence.service().persist(concession);
+            }
+            for (Feature feature : building.productCatalog().features()) {
+                feature.saveAction().setValue(SaveAction.saveAsFinal);
+                Persistence.service().persist(feature);
+            }
+            for (Service service : building.productCatalog().services()) {
+                service.saveAction().setValue(SaveAction.saveAsFinal);
+                Persistence.service().persist(service);
+            }
 
             //Do not publish until data is clean-up
             if (true) {

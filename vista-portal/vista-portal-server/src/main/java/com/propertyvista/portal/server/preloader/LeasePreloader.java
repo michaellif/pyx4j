@@ -66,6 +66,7 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
             } else if (i == DemoData.UserType.TENANT.getDefaultMax()) {
                 Tenant mainTenant = lease.version().tenants().get(0);
                 mainTenant.customer().set(dualTenantCustomer);
+                // Trick to share the same already saved data
                 mainTenant.screening().set(mainTenant.customer()._PersonScreenings().iterator().next());
                 mainTenant.preauthorizedPayment().set(mainTenant.customer().paymentMethods().iterator().next());
             }
@@ -142,7 +143,9 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
             } else if (i == DemoData.UserType.PTENANT.getDefaultMax()) {
                 Tenant mainTenant = lease.version().tenants().get(0);
                 mainTenant.customer().set(dualPotentialCustomer);
+                // Trick to share the same already saved data 
                 mainTenant.screening().set(mainTenant.customer()._PersonScreenings().iterator().next());
+                mainTenant.preauthorizedPayment().set(mainTenant.customer().paymentMethods().iterator().next());
             }
 
             ServerSideFactory.create(LeaseFacade.class).initLease(lease);
