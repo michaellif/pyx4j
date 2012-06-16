@@ -51,7 +51,7 @@ public class BillingExistingLeaseSunnyDayScenarioTest extends FinancialTestBase 
         //==================== RUN 1 ======================//
 
         // @formatter:off
-        new BillTester(bill, true).
+        new BillTester(bill).
         billSequenceNumber(1).
         previousBillSequenceNumber(null).
         billType(Bill.BillType.ZeroCycle).

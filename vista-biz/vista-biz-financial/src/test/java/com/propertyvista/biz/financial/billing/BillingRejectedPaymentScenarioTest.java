@@ -48,7 +48,7 @@ public class BillingRejectedPaymentScenarioTest extends FinancialTestBase {
         bill = confirmBill(bill, true, true);
 
         // @formatter:off
-        new BillTester(bill,true).
+        new BillTester(bill).
         billSequenceNumber(1).
         previousBillSequenceNumber(null).
         billType(Bill.BillType.First).
@@ -74,7 +74,7 @@ public class BillingRejectedPaymentScenarioTest extends FinancialTestBase {
         bill = runBilling(true, true);
 
         // @formatter:off
-        new BillTester(bill,true).
+        new BillTester(bill).
         previousBillSequenceNumber(1).
         billType(Bill.BillType.Regular).
         billingPeriodStartDate("1-May-2011").
@@ -102,7 +102,7 @@ public class BillingRejectedPaymentScenarioTest extends FinancialTestBase {
         bill = runBilling(true, true);
 
         // @formatter:off
-        new BillTester(bill,true).
+        new BillTester(bill, true).
         billingPeriodStartDate("1-Jun-2011").
         billingPeriodEndDate("30-Jun-2011").
         paymentReceivedAmount("-1041.94").
@@ -129,7 +129,7 @@ public class BillingRejectedPaymentScenarioTest extends FinancialTestBase {
         bill = runBilling(true, true);
 
         // @formatter:off
-        new BillTester(bill,true).
+        new BillTester(bill, true).
         billingPeriodStartDate("1-Jul-2011").
         billingPeriodEndDate("31-Jul-2011").
         paymentReceivedAmount("-1113.88").
@@ -158,7 +158,7 @@ public class BillingRejectedPaymentScenarioTest extends FinancialTestBase {
         bill = runBilling(true, true);
 
         // @formatter:off
-        new BillTester(bill,true).
+        new BillTester(bill, true).
         billingPeriodStartDate("1-Aug-2011").
         billingPeriodEndDate("31-Aug-2011").
         paymentReceivedAmount("-2091.94").

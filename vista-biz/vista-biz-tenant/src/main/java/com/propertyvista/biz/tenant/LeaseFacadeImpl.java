@@ -13,6 +13,7 @@
  */
 package com.propertyvista.biz.tenant;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
@@ -47,6 +48,8 @@ import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lead.Lead;
 import com.propertyvista.domain.tenant.lease.BillableItem;
+import com.propertyvista.domain.tenant.lease.Deposit.RepaymentMode;
+import com.propertyvista.domain.tenant.lease.Deposit.ValueType;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.CompletionType;
 import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
@@ -92,6 +95,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
             ServerSideFactory.create(OccupancyFacade.class).reserve(leaseDraft.unit().getPrimaryKey(), leaseDraft);
             setUnit(leaseDraft, leaseDraft.unit());
         }
+
     }
 
     @Override
@@ -133,6 +137,11 @@ public class LeaseFacadeImpl implements LeaseFacade {
     private void setService(Lease lease, ProductCatalog catalog, Service service, ProductItem serviceItem) {
         // set selected service:
         lease.version().leaseProducts().serviceItem().set(createBillableItem(serviceItem));
+
+        //TODO
+        lease.version().leaseProducts().serviceItem().deposit().depositAmount().setValue(new BigDecimal("1.0"));
+        lease.version().leaseProducts().serviceItem().deposit().valueType().setValue(ValueType.percentage);
+        lease.version().leaseProducts().serviceItem().deposit().repaymentMode().setValue(RepaymentMode.returnAtLeaseEnd);
 
         // clear current dependable data:
         lease.version().leaseProducts().featureItems().clear();

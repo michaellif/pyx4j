@@ -13,7 +13,6 @@
  */
 package com.propertyvista.biz.financial.preload;
 
-import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
@@ -25,8 +24,6 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.tenant.Tenant;
-import com.propertyvista.domain.tenant.lease.Deposit.RepaymentMode;
-import com.propertyvista.domain.tenant.lease.Deposit.ValueType;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
@@ -56,13 +53,7 @@ public class LeaseDataModel {
         lease.type().setValue(Service.Type.residentialUnit);
         lease.unit().set(serviceItem.element());
 
-        lease.version().leaseProducts().serviceItem().item().set(serviceItem);
         lease.version().leaseProducts().serviceItem().agreedPrice().setValue(serviceItem.price().getValue());
-
-        lease.version().leaseProducts().serviceItem().deposit().depositAmount().setValue(new BigDecimal("1.0"));
-        lease.version().leaseProducts().serviceItem().deposit().valueType().setValue(ValueType.percentage);
-        lease.version().leaseProducts().serviceItem().deposit().repaymentMode().setValue(RepaymentMode.returnAtLeaseEnd);
-
         lease.leaseFrom().setValue(new LogicalDate(111, 1, 25));
         lease.approvalDate().setValue(lease.leaseFrom().getValue());
 
@@ -76,9 +67,7 @@ public class LeaseDataModel {
 
         addTenants();
 
-        if (persist) {
-            Persistence.service().persist(lease);
-        }
+        Persistence.service().persist(lease);
     }
 
     private void addTenants() {

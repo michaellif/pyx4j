@@ -119,21 +119,12 @@ public class BuildingDataModel {
     }
 
     private void generateCatalog() {
-        Persistence.service().persist(building);
-        Persistence.service().commit();
 
         generateResidentialUnitService();
 
-        Persistence.service().commit();
-        Persistence.service().persist(building);
-
         generateFeatures();
 
-        Persistence.service().commit();
-        Persistence.service().persist(building);
-
         generateConcessions();
-        Persistence.service().persist(building);
 
     }
 

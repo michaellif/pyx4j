@@ -52,7 +52,7 @@ public class BillingZeroCycleScenarioTest extends FinancialTestBase {
         bill = confirmBill(bill, true, true);
 
         // @formatter:off
-        new BillTester(bill, true).
+        new BillTester(bill).
         billSequenceNumber(1).
         previousBillSequenceNumber(null).
         billType(Bill.BillType.ZeroCycle).
@@ -78,7 +78,7 @@ public class BillingZeroCycleScenarioTest extends FinancialTestBase {
         bill = runBilling(true, true);
 
         // @formatter:off
-        new BillTester(bill, true).
+        new BillTester(bill).
         billSequenceNumber(2).
         previousBillSequenceNumber(1).
         billType(Bill.BillType.Regular).
@@ -109,7 +109,7 @@ public class BillingZeroCycleScenarioTest extends FinancialTestBase {
         bill = confirmBill(bill, true, true);
 
         // @formatter:off
-        new BillTester(bill, true).
+        new BillTester(bill).
         billSequenceNumber(1).
         previousBillSequenceNumber(null).
         billType(Bill.BillType.ZeroCycle).
@@ -133,7 +133,7 @@ public class BillingZeroCycleScenarioTest extends FinancialTestBase {
         bill = runBilling(true, true);
 
         // @formatter:off
-        new BillTester(bill, true).
+        new BillTester(bill).
         billSequenceNumber(2).
         previousBillSequenceNumber(1).
         billType(Bill.BillType.Regular).
