@@ -32,6 +32,8 @@ public class ConfigurationToString {
         b.append("Multitenant                  : ").append(conf.getMultitenancyType()).append("\n");
         b.append("minPoolSize                  : ").append(conf.minPoolSize()).append("\n");
         b.append("maxPoolSize                  : ").append(conf.maxPoolSize()).append("\n");
+        b.append("maxBackgroundProcessPoolSize : ").append(conf.maxPoolSize()).append("\n");
+        b.append("maxPoolPreparedStatements    : ").append(conf.maxPoolPreparedStatements()).append("\n");
         b.append("unreturnedConnectionTimeout  : ").append(conf.unreturnedConnectionTimeout()).append("\n");
         b.append("tablesItentityOffset         : ").append(conf.tablesItentityOffset()).append("\n");
         return b.toString();
