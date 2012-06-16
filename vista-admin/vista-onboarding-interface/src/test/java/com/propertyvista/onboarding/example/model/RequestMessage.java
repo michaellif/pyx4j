@@ -56,6 +56,7 @@ public class RequestMessage {
         @XmlElement(name = "onboardingUserSendPasswordResetTokenRequest", type = OnboardingUserSendPasswordResetTokenRequest.class),
         @XmlElement(name = "getUsageRequest", type = GetUsageRequest.class),
         @XmlElement(name = "getSatisfactionFastpassUrlRequest", type = GetSatisfactionFastpassUrlRequest.class),
+        @XmlElement(name = "updateBankAccountInfoRequest", type = UpdateBankAccountInfoRequest.class),
         @XmlElement(name = "reserveDnsNameRequest", type = ReserveDnsNameRequest.class)})
     //@formatter:on    
     public List<Request> requests;
