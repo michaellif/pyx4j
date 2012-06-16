@@ -85,7 +85,7 @@ public class LeaseApplicationLister extends ListerBase<LeaseApplicationDTO> {
         new SelectLeaseTypeDialog().show();
     }
 
-    private LeaseApplicationDTO createNewLease(Service.Type leaseType) {
+    private LeaseApplicationDTO createNewLease(Service.ServiceType leaseType) {
         LeaseApplicationDTO newLease = EntityFactory.create(LeaseApplicationDTO.class);
         newLease.type().setValue(leaseType);
         newLease.paymentFrequency().setValue(PaymentFrequency.Monthly);
@@ -93,10 +93,10 @@ public class LeaseApplicationLister extends ListerBase<LeaseApplicationDTO> {
         return newLease;
     }
 
-    private class SelectLeaseTypeDialog extends SelectEnumDialog<Service.Type> implements OkCancelOption {
+    private class SelectLeaseTypeDialog extends SelectEnumDialog<Service.ServiceType> implements OkCancelOption {
 
         public SelectLeaseTypeDialog() {
-            super(i18n.tr("Select Lease Type"), EnumSet.allOf(Service.Type.class));
+            super(i18n.tr("Select Lease Type"), EnumSet.allOf(Service.ServiceType.class));
         }
 
         @Override

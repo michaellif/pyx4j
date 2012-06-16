@@ -94,7 +94,7 @@ public class LeaseLister extends VersionedLister<LeaseDTO> {
         new ExistingLeaseDataDialog().show();
     }
 
-    private LeaseDTO createNewLease(Service.Type leaseType, BigDecimal balance) {
+    private LeaseDTO createNewLease(Service.ServiceType leaseType, BigDecimal balance) {
         LeaseDTO newLease = EntityFactory.create(LeaseDTO.class);
         newLease.type().setValue(leaseType);
         newLease.paymentFrequency().setValue(PaymentFrequency.Monthly);
@@ -103,12 +103,12 @@ public class LeaseLister extends VersionedLister<LeaseDTO> {
         return newLease;
     }
 
-    private class ExistingLeaseDataDialog extends SelectEnumDialog<Service.Type> implements OkCancelOption {
+    private class ExistingLeaseDataDialog extends SelectEnumDialog<Service.ServiceType> implements OkCancelOption {
 
         private CMoneyField balance;
 
         public ExistingLeaseDataDialog() {
-            super(i18n.tr("Lease Data"), EnumSet.allOf(Service.Type.class));
+            super(i18n.tr("Lease Data"), EnumSet.allOf(Service.ServiceType.class));
         }
 
         @Override

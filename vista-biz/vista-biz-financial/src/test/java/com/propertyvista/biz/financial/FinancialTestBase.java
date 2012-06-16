@@ -38,6 +38,7 @@ import com.propertyvista.biz.financial.billing.BillingUtils;
 import com.propertyvista.biz.financial.billing.print.BillPrint;
 import com.propertyvista.biz.financial.preload.ARPolicyDataModel;
 import com.propertyvista.biz.financial.preload.BuildingDataModel;
+import com.propertyvista.biz.financial.preload.DepositPolicyDataModel;
 import com.propertyvista.biz.financial.preload.IdAssignmentPolicyDataModel;
 import com.propertyvista.biz.financial.preload.LeaseAdjustmentPolicyDataModel;
 import com.propertyvista.biz.financial.preload.LeaseAdjustmentReasonDataModel;
@@ -55,7 +56,7 @@ import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.BillingType;
 import com.propertyvista.domain.financial.offering.Feature;
-import com.propertyvista.domain.financial.offering.Feature.Type;
+import com.propertyvista.domain.financial.offering.Feature.FeatureType;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.payment.PaymentMethod;
@@ -115,43 +116,46 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
 
     protected void preloadData(PreloadConfig config) {
         LocationsDataModel locationsDataModel = new LocationsDataModel(config);
-        locationsDataModel.generate(true);
+        locationsDataModel.generate();
 
         TaxesDataModel taxesDataModel = new TaxesDataModel(config, locationsDataModel);
-        taxesDataModel.generate(true);
+        taxesDataModel.generate();
 
         ProductItemTypesDataModel productItemTypesDataModel = new ProductItemTypesDataModel(config);
-        productItemTypesDataModel.generate(true);
+        productItemTypesDataModel.generate();
 
         leaseAdjustmentReasonDataModel = new LeaseAdjustmentReasonDataModel(config);
-        leaseAdjustmentReasonDataModel.generate(true);
+        leaseAdjustmentReasonDataModel.generate();
 
         BuildingDataModel buildingDataModel = new BuildingDataModel(config, productItemTypesDataModel);
-        buildingDataModel.generate(true);
+        buildingDataModel.generate();
 
         IdAssignmentPolicyDataModel idAssignmentPolicyDataModel = new IdAssignmentPolicyDataModel(config);
-        idAssignmentPolicyDataModel.generate(true);
+        idAssignmentPolicyDataModel.generate();
 
         ProductTaxPolicyDataModel productTaxPolicyDataModel = new ProductTaxPolicyDataModel(config, productItemTypesDataModel, taxesDataModel,
                 buildingDataModel);
-        productTaxPolicyDataModel.generate(true);
+        productTaxPolicyDataModel.generate();
+
+        DepositPolicyDataModel depositPolicyDataModel = new DepositPolicyDataModel(config, productItemTypesDataModel, buildingDataModel);
+        depositPolicyDataModel.generate();
 
         LeaseAdjustmentPolicyDataModel leaseAdjustmentPolicyDataModel = new LeaseAdjustmentPolicyDataModel(config, leaseAdjustmentReasonDataModel,
                 taxesDataModel, buildingDataModel);
-        leaseAdjustmentPolicyDataModel.generate(true);
+        leaseAdjustmentPolicyDataModel.generate();
 
         TenantDataModel tenantDataModel = new TenantDataModel(config);
-        tenantDataModel.generate(true);
+        tenantDataModel.generate();
 
         leaseDataModel = new LeaseDataModel(config, buildingDataModel, tenantDataModel);
-        leaseDataModel.generate(true);
+        leaseDataModel.generate();
 
         //TODO if commented - check exception
         LeaseBillingPolicyDataModel leaseBillingPolicyDataModel = new LeaseBillingPolicyDataModel(config, buildingDataModel);
-        leaseBillingPolicyDataModel.generate(true);
+        leaseBillingPolicyDataModel.generate();
 
         arPolicyDataModel = new ARPolicyDataModel(config, buildingDataModel);
-        arPolicyDataModel.generate(true);
+        arPolicyDataModel.generate();
 
     }
 
@@ -251,33 +255,33 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
     }
 
     protected BillableItem addParking(String effectiveDate, String expirationDate, SaveAction saveAction) {
-        return addBillableItem(Type.parking, effectiveDate, expirationDate, saveAction);
+        return addBillableItem(FeatureType.parking, effectiveDate, expirationDate, saveAction);
     }
 
     protected BillableItem addParking(SaveAction saveAction) {
-        return addBillableItem(Type.parking, saveAction);
+        return addBillableItem(FeatureType.parking, saveAction);
     }
 
     protected BillableItem addLocker(String effectiveDate, String expirationDate, SaveAction saveAction) {
-        return addBillableItem(Type.locker, effectiveDate, expirationDate, saveAction);
+        return addBillableItem(FeatureType.locker, effectiveDate, expirationDate, saveAction);
     }
 
     protected BillableItem addLocker(SaveAction saveAction) {
-        return addBillableItem(Type.locker, saveAction);
+        return addBillableItem(FeatureType.locker, saveAction);
     }
 
     protected BillableItem addPet(String effectiveDate, String expirationDate, SaveAction saveAction) {
-        return addBillableItem(Type.pet, effectiveDate, expirationDate, saveAction);
+        return addBillableItem(FeatureType.pet, effectiveDate, expirationDate, saveAction);
     }
 
     protected BillableItem addPet(SaveAction saveAction) {
-        BillableItem billableItem = addBillableItem(Type.pet, SaveAction.saveAsDraft);
+        BillableItem billableItem = addBillableItem(FeatureType.pet, SaveAction.saveAsDraft);
         setDeposit(billableItem.uid().getValue(), "200", ValueType.amount, RepaymentMode.returnAtLeaseEnd, saveAction);
         return billableItem;
     }
 
     protected BillableItem addBooking(String date, SaveAction saveAction) {
-        return addBillableItem(Type.booking, date, date, saveAction);
+        return addBillableItem(FeatureType.booking, date, date, saveAction);
     }
 
     protected void changeBillableItem(String billableItemId, String effectiveDate, String expirationDate, SaveAction saveAction) {
@@ -293,16 +297,16 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         Persistence.service().commit();
     }
 
-    private BillableItem addBillableItem(Feature.Type featureType, SaveAction saveAction) {
+    private BillableItem addBillableItem(Feature.FeatureType featureType, SaveAction saveAction) {
         Lease lease = Persistence.service().retrieve(Lease.class, leaseDataModel.getLeaseKey());
         return addBillableItem(featureType, lease.leaseFrom().getValue(), lease.leaseTo().getValue(), saveAction);
     }
 
-    private BillableItem addBillableItem(Feature.Type featureType, String effectiveDate, String expirationDate, SaveAction saveAction) {
+    private BillableItem addBillableItem(Feature.FeatureType featureType, String effectiveDate, String expirationDate, SaveAction saveAction) {
         return addBillableItem(featureType, FinancialTestsUtils.getDate(effectiveDate), FinancialTestsUtils.getDate(expirationDate), saveAction);
     }
 
-    private BillableItem addBillableItem(Feature.Type featureType, LogicalDate effectiveDate, LogicalDate expirationDate, SaveAction saveAction) {
+    private BillableItem addBillableItem(Feature.FeatureType featureType, LogicalDate effectiveDate, LogicalDate expirationDate, SaveAction saveAction) {
         Lease draftLease = retrieveLeaseForEdit();
 
         ProductItem serviceItem = leaseDataModel.getServiceItem();

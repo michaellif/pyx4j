@@ -36,49 +36,47 @@ public class ProductItemTypesDataModel {
         featureItemTypes = new ArrayList<FeatureItemType>();
     }
 
-    public void generate(boolean persist) {
-        generateChargeItemType("Regular Residential Unit", Service.Type.residentialUnit);
-        generateChargeItemType("Ocean View Residential Unit", Service.Type.residentialUnit);
-        generateChargeItemType("Regular Commercial Unit", Service.Type.commercialUnit);
-        generateChargeItemType("Regular Short Term Residential Unit", Service.Type.residentialShortTermUnit);
-        generateChargeItemType("Roof Spot", Service.Type.roof);
-        generateChargeItemType("Billboard", Service.Type.sundry);
-        generateChargeItemType("Garage", Service.Type.garage);
-        generateChargeItemType("Storage", Service.Type.storage);
+    public void generate() {
+        generateChargeItemType("Regular Residential Unit", Service.ServiceType.residentialUnit);
+        generateChargeItemType("Ocean View Residential Unit", Service.ServiceType.residentialUnit);
+        generateChargeItemType("Regular Commercial Unit", Service.ServiceType.commercialUnit);
+        generateChargeItemType("Regular Short Term Residential Unit", Service.ServiceType.residentialShortTermUnit);
+        generateChargeItemType("Roof Spot", Service.ServiceType.roof);
+        generateChargeItemType("Billboard", Service.ServiceType.sundry);
+        generateChargeItemType("Garage", Service.ServiceType.garage);
+        generateChargeItemType("Storage", Service.ServiceType.storage);
 
-        generateChargeItemType("Regular Parking", Feature.Type.parking);
-        generateChargeItemType("Wide Parking", Feature.Type.parking);
-        generateChargeItemType("Narrow Parking", Feature.Type.parking);
-        generateChargeItemType("Disabled Parking", Feature.Type.parking);
-        generateChargeItemType("Cat", Feature.Type.pet);
-        generateChargeItemType("Dog", Feature.Type.pet);
-        generateChargeItemType("Small Locker", Feature.Type.locker);
-        generateChargeItemType("Medium Locker", Feature.Type.locker);
-        generateChargeItemType("Large Locker", Feature.Type.locker);
-        generateChargeItemType("Fitness", Feature.Type.addOn);
-        generateChargeItemType("Pool", Feature.Type.addOn);
-        generateChargeItemType("Furnished", Feature.Type.addOn);
-        generateChargeItemType("Key", Feature.Type.addOn);
-        generateChargeItemType("Access Card", Feature.Type.addOn);
-        generateChargeItemType("Cable", Feature.Type.addOn);
-        generateChargeItemType("Water", Feature.Type.utility);
-        generateChargeItemType("Gas", Feature.Type.utility);
-        generateChargeItemType("Hydro", Feature.Type.utility);
-        generateChargeItemType("Booking", Feature.Type.booking);
+        generateChargeItemType("Regular Parking", Feature.FeatureType.parking);
+        generateChargeItemType("Wide Parking", Feature.FeatureType.parking);
+        generateChargeItemType("Narrow Parking", Feature.FeatureType.parking);
+        generateChargeItemType("Disabled Parking", Feature.FeatureType.parking);
+        generateChargeItemType("Cat", Feature.FeatureType.pet);
+        generateChargeItemType("Dog", Feature.FeatureType.pet);
+        generateChargeItemType("Small Locker", Feature.FeatureType.locker);
+        generateChargeItemType("Medium Locker", Feature.FeatureType.locker);
+        generateChargeItemType("Large Locker", Feature.FeatureType.locker);
+        generateChargeItemType("Fitness", Feature.FeatureType.addOn);
+        generateChargeItemType("Pool", Feature.FeatureType.addOn);
+        generateChargeItemType("Furnished", Feature.FeatureType.addOn);
+        generateChargeItemType("Key", Feature.FeatureType.addOn);
+        generateChargeItemType("Access Card", Feature.FeatureType.addOn);
+        generateChargeItemType("Cable", Feature.FeatureType.addOn);
+        generateChargeItemType("Water", Feature.FeatureType.utility);
+        generateChargeItemType("Gas", Feature.FeatureType.utility);
+        generateChargeItemType("Hydro", Feature.FeatureType.utility);
+        generateChargeItemType("Booking", Feature.FeatureType.booking);
 
-        if (persist) {
-            Persistence.service().persist(getProductItemTypes());
-        }
+        Persistence.service().persist(getProductItemTypes());
     }
 
-    private void generateChargeItemType(String name, Service.Type serviceType) {
+    private void generateChargeItemType(String name, Service.ServiceType serviceType) {
         ServiceItemType type = EntityFactory.create(ServiceItemType.class);
         type.name().setValue(name);
         type.serviceType().setValue(serviceType);
         serviceItemTypes.add(type);
     }
 
-    private void generateChargeItemType(String name, Feature.Type featureType) {
+    private void generateChargeItemType(String name, Feature.FeatureType featureType) {
         FeatureItemType type = EntityFactory.create(FeatureItemType.class);
         type.name().setValue(name);
         type.featureType().setValue(featureType);

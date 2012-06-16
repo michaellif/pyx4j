@@ -37,7 +37,7 @@ public class ProductTaxPolicyDataModel {
         this.buildingDataModel = buildingDataModel;
     }
 
-    public void generate(boolean persist) {
+    public void generate() {
         policy = EntityFactory.create(ProductTaxPolicy.class);
 
         for (ProductItemType type : productItemTypesDataModel.getProductItemTypes()) {
@@ -49,9 +49,7 @@ public class ProductTaxPolicyDataModel {
 
         policy.node().set(buildingDataModel.getBuilding());
 
-        if (persist) {
-            Persistence.service().persist(policy);
-        }
+        Persistence.service().persist(policy);
     }
 
     ProductTaxPolicy getPolicy() {

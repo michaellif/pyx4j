@@ -44,13 +44,13 @@ public class LeaseDataModel {
 
     }
 
-    public void generate(boolean persist) {
+    public void generate() {
 
         serviceItem = buildingDataModel.generateResidentialUnitServiceItem();
 
         lease = EntityFactory.create(Lease.class);
 
-        lease.type().setValue(Service.Type.residentialUnit);
+        lease.type().setValue(Service.ServiceType.residentialUnit);
         lease.unit().set(serviceItem.element());
 
         lease.version().leaseProducts().serviceItem().agreedPrice().setValue(serviceItem.price().getValue());

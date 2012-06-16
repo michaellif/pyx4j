@@ -131,7 +131,7 @@ public class UnitTurnoverAnalysisManagerTestBase {
         lease.version().status().setValue(Lease.Status.Active);
         lease.leaseId().setValue("lease: " + dateFrom + " " + dateTo);
         lease.unit().set(unit);
-        lease.type().setValue(Service.Type.residentialUnit);
+        lease.type().setValue(Service.ServiceType.residentialUnit);
         lease.creationDate().setValue(asDate(dateFrom));
         lease.leaseFrom().setValue(asDate(dateFrom));
         lease.leaseTo().setValue(asDate(dateTo));

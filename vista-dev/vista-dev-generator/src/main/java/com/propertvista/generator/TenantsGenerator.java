@@ -109,7 +109,7 @@ public class TenantsGenerator {
 
         item.moveInDate().setValue(RandomUtil.randomLogicalDate(2011, 2012));
         item.leaseTerm().setValue(RandomUtil.randomEnum(Lead.LeaseTerm.class));
-        item.leaseType().setValue(RandomUtil.randomEnum(Service.Type.class));
+        item.leaseType().setValue(RandomUtil.randomEnum(Service.ServiceType.class));
 
         item.comments().setValue(CommonsGenerator.lipsum());
         item.refSource().setValue(RandomUtil.randomEnum(Lead.RefSource.class));

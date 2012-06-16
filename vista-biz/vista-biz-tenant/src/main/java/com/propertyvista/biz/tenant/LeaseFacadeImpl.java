@@ -13,7 +13,6 @@
  */
 package com.propertyvista.biz.tenant;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
@@ -36,6 +35,7 @@ import com.propertyvista.biz.financial.productcatalog.ProductCatalogFacade;
 import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.biz.occupancy.UnitTurnoverAnalysisFacade;
 import com.propertyvista.biz.policy.IdAssignmentFacade;
+import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.offering.Feature;
@@ -43,13 +43,13 @@ import com.propertyvista.domain.financial.offering.FeatureItemType;
 import com.propertyvista.domain.financial.offering.ProductCatalog;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.Service;
+import com.propertyvista.domain.policy.policies.DepositPolicy;
+import com.propertyvista.domain.policy.policies.domain.DepositPolicyItem;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lead.Lead;
 import com.propertyvista.domain.tenant.lease.BillableItem;
-import com.propertyvista.domain.tenant.lease.Deposit.RepaymentMode;
-import com.propertyvista.domain.tenant.lease.Deposit.ValueType;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.CompletionType;
 import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
@@ -138,10 +138,15 @@ public class LeaseFacadeImpl implements LeaseFacade {
         // set selected service:
         lease.version().leaseProducts().serviceItem().set(createBillableItem(serviceItem));
 
-        //TODO
-        lease.version().leaseProducts().serviceItem().deposit().depositAmount().setValue(new BigDecimal("1.0"));
-        lease.version().leaseProducts().serviceItem().deposit().valueType().setValue(ValueType.percentage);
-        lease.version().leaseProducts().serviceItem().deposit().repaymentMode().setValue(RepaymentMode.returnAtLeaseEnd);
+        DepositPolicy depositPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(lease.unit().belongsTo(), DepositPolicy.class);
+
+        for (DepositPolicyItem item : depositPolicy.policyItems()) {
+            if (item.appliedTo().equals(serviceItem.type())) {
+                lease.version().leaseProducts().serviceItem().deposit().depositAmount().setValue(item.value().getValue());
+                lease.version().leaseProducts().serviceItem().deposit().valueType().setValue(item.valueType().getValue());
+                lease.version().leaseProducts().serviceItem().deposit().repaymentMode().setValue(item.repaymentMode().getValue());
+            }
+        }
 
         // clear current dependable data:
         lease.version().leaseProducts().featureItems().clear();

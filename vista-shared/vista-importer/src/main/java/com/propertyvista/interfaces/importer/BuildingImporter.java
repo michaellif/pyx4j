@@ -221,7 +221,7 @@ public class BuildingImporter extends ImportPersister {
                     counters.units += items.size();
 
                     EntityQueryCriteria<ServiceItemType> serviceCriteria = EntityQueryCriteria.create(ServiceItemType.class);
-                    serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().serviceType(), Service.Type.residentialUnit));
+                    serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().serviceType(), Service.ServiceType.residentialUnit));
                     ServiceItemType productType = Persistence.service().retrieve(serviceCriteria);
 
                     for (AptUnit unit : items) {
@@ -229,7 +229,7 @@ public class BuildingImporter extends ImportPersister {
                         BigDecimal price = unit.financial()._marketRent().getValue();
                         product.type().set(productType);
                         product.price().setValue(price);
-                        product.description().setValue(Service.Type.residentialUnit.toString() + " description");
+                        product.description().setValue(Service.ServiceType.residentialUnit.toString() + " description");
                         product.element().set(unit);
 
                         products.add(product);
@@ -239,7 +239,7 @@ public class BuildingImporter extends ImportPersister {
         }
         List<Service> services = new ArrayList<Service>();
         Service service = EntityFactory.create(Service.class);
-        service.version().type().setValue(Service.Type.residentialUnit);
+        service.version().type().setValue(Service.ServiceType.residentialUnit);
         service.version().items().addAll(products);
         service.catalog().set(building.productCatalog());
         services.add(service);

@@ -62,7 +62,7 @@ public class PetPolicyCrudServiceImpl extends GenericPolicyCrudService<PetPolicy
 
     private void attachNewPets(PetPolicyDTO policyDTO) {
         EntityQueryCriteria<FeatureItemType> criteria = new EntityQueryCriteria<FeatureItemType>(FeatureItemType.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().featureType(), Feature.Type.pet));
+        criteria.add(PropertyCriterion.eq(criteria.proto().featureType(), Feature.FeatureType.pet));
         List<FeatureItemType> availablePets = Persistence.service().query(criteria);
 
         for (ProductItemType availablePet : availablePets) {

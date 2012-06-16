@@ -33,7 +33,7 @@ public class TaxesDataModel {
         taxes = new ArrayList<Tax>();
     }
 
-    public void generate(boolean persist) {
+    public void generate() {
         generateTax("HST", "BC", new BigDecimal("0.12"), false);
 
         generateTax("GST", "AB", new BigDecimal("0.05"), false);
@@ -64,9 +64,7 @@ public class TaxesDataModel {
 
         generateTax("GST", "YT", new BigDecimal("0.05"), false);
 
-        if (persist) {
-            Persistence.service().persist(taxes);
-        }
+        Persistence.service().persist(taxes);
     }
 
     private void generateTax(String name, String authority, BigDecimal rate, Boolean compound) {

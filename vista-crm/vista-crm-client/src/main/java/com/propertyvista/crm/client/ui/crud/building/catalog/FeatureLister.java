@@ -46,10 +46,10 @@ public class FeatureLister extends VersionedLister<Feature> {
         new CreateNewFeatureDialog().show();
     }
 
-    private class CreateNewFeatureDialog extends SelectEnumDialog<Feature.Type> implements OkCancelOption {
+    private class CreateNewFeatureDialog extends SelectEnumDialog<Feature.FeatureType> implements OkCancelOption {
 
         public CreateNewFeatureDialog() {
-            super(i18n.tr("Select Feature Type"), EnumSet.allOf(Feature.Type.class));
+            super(i18n.tr("Select Feature Type"), EnumSet.allOf(Feature.FeatureType.class));
         }
 
         @Override

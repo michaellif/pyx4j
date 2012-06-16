@@ -150,7 +150,7 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
                 get(proto().effectiveDate()).setVisible(isEditable() || !getValue().effectiveDate().isNull());
                 get(proto().expirationDate()).setVisible(isEditable() || !getValue().expirationDate().isNull());
 
-                if (getValue().item().type().<FeatureItemType> cast().featureType().getValue() == Feature.Type.utility) {
+                if (getValue().item().type().<FeatureItemType> cast().featureType().getValue() == Feature.FeatureType.utility) {
                     // correct folder item:
                     if (getParent() instanceof CEntityFolderItem) {
                         CEntityFolderItem<BillableItem> item = (CEntityFolderItem<BillableItem>) getParent();

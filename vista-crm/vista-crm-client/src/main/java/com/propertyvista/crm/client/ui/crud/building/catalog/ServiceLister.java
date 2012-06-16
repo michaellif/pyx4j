@@ -44,10 +44,10 @@ public class ServiceLister extends VersionedLister<Service> {
         new CreateNewServiceDialog().show();
     }
 
-    private class CreateNewServiceDialog extends SelectEnumDialog<Service.Type> implements OkCancelOption {
+    private class CreateNewServiceDialog extends SelectEnumDialog<Service.ServiceType> implements OkCancelOption {
 
         public CreateNewServiceDialog() {
-            super(i18n.tr("Select Service Type"), EnumSet.allOf(Service.Type.class));
+            super(i18n.tr("Select Service Type"), EnumSet.allOf(Service.ServiceType.class));
         }
 
         @Override

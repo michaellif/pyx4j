@@ -182,7 +182,7 @@ public interface Lease extends IVersionedEntity<LeaseV> {
     @ReadOnly
     @ToString(index = 1)
     @MemberColumn(name = "leaseType")
-    IPrimitive<Service.Type> type();
+    IPrimitive<Service.ServiceType> type();
 
     @NotNull
     @ToString(index = 2)

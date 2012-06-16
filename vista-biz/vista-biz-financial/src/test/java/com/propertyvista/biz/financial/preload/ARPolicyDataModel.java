@@ -27,16 +27,14 @@ public class ARPolicyDataModel {
         this.buildingDataModel = buildingDataModel;
     }
 
-    public void generate(boolean persist) {
+    public void generate() {
         policy = EntityFactory.create(ARPolicy.class);
 
         policy.creditDebitRule().setValue(ARPolicy.CreditDebitRule.byDueDate);
 
         policy.node().set(buildingDataModel.getBuilding());
 
-        if (persist) {
-            Persistence.service().persist(policy);
-        }
+        Persistence.service().persist(policy);
     }
 
     public ARPolicy getPolicy() {

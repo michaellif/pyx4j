@@ -29,7 +29,7 @@ abstract class SelectFeatureBox extends EntitySelectorListDialog<ProductItem> {
 
     private static final I18n i18n = I18n.get(OkCancelDialog.class);
 
-    public SelectFeatureBox(Feature.Type type, ApartmentInfoDTO apartmentInfo) {
+    public SelectFeatureBox(Feature.FeatureType type, ApartmentInfoDTO apartmentInfo) {
         super(i18n.tr("Select {0}(s)", type), true, getAvailableList(type, apartmentInfo));
     }
 
@@ -43,7 +43,7 @@ abstract class SelectFeatureBox extends EntitySelectorListDialog<ProductItem> {
         return "100px";
     }
 
-    private static List<ProductItem> getAvailableList(Feature.Type type, ApartmentInfoDTO apartmentInfo) {
+    private static List<ProductItem> getAvailableList(Feature.FeatureType type, ApartmentInfoDTO apartmentInfo) {
         // TODO in the previous version there was a commented out part of code that restricted addition of already selected items (from apartmentInfo.agreed*())
         List<ProductItem> available = null;
         switch (type) {
@@ -72,9 +72,9 @@ abstract class SelectFeatureBox extends EntitySelectorListDialog<ProductItem> {
         return result;
     }
 
-    private static boolean isCompatible(ProductItem item, Feature.Type type) {
+    private static boolean isCompatible(ProductItem item, Feature.FeatureType type) {
 
-        if (type.equals(Feature.Type.addOn)) {
+        if (type.equals(Feature.FeatureType.addOn)) {
             switch (item.type().<FeatureItemType> cast().featureType().getValue()) {
             case utility:
             case pet:

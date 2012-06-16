@@ -37,7 +37,7 @@ public interface Feature extends Product, IVersionedEntity<FeatureV> {
 
     @I18n
     @XmlType(name = "FeatureType")
-    public enum Type {
+    public enum FeatureType {
 
         parking(true),
 
@@ -54,7 +54,7 @@ public interface Feature extends Product, IVersionedEntity<FeatureV> {
 
         private final boolean inAgreement;
 
-        Type(boolean inAgreement) {
+        FeatureType(boolean inAgreement) {
             this.inAgreement = inAgreement;
         }
 
@@ -78,7 +78,7 @@ public interface Feature extends Product, IVersionedEntity<FeatureV> {
         @NotNull
         @ToString(index = 0)
         @MemberColumn(name = "featureType")
-        IPrimitive<Type> type();
+        IPrimitive<FeatureType> type();
 
         IPrimitive<Boolean> recurring();
 

@@ -116,7 +116,7 @@ public interface Lead extends IEntity {
 
     @NotNull
     @ToString(index = 3)
-    IPrimitive<Service.Type> leaseType();
+    IPrimitive<Service.ServiceType> leaseType();
 
     @Transient
     // calculated from selected floorplan below!

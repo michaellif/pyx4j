@@ -27,7 +27,7 @@ import com.propertyvista.domain.financial.offering.Service;
 @Transient
 public interface AptUnitServicePriceDTO extends IEntity {
 
-    IPrimitive<Service.Type> type();
+    IPrimitive<Service.ServiceType> type();
 
     @Format("#0.00")
     @Editor(type = EditorType.money)

@@ -34,13 +34,11 @@ public class LocationsDataModel {
         provincesMap = new HashMap<String, Province>();
     }
 
-    public void generate(boolean persist) {
+    public void generate() {
 
         List<Country> countries = createCountries();
 
-        if (persist) {
-            Persistence.service().persist(countries);
-        }
+        Persistence.service().persist(countries);
     }
 
     private List<Country> createCountries() {

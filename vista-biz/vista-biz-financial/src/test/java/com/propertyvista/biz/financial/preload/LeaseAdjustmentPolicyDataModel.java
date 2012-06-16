@@ -37,7 +37,7 @@ public class LeaseAdjustmentPolicyDataModel {
         this.buildingDataModel = buildingDataModel;
     }
 
-    public void generate(boolean persist) {
+    public void generate() {
         policy = EntityFactory.create(LeaseAdjustmentPolicy.class);
 
         for (LeaseAdjustmentReasonDataModel.Reason reason : LeaseAdjustmentReasonDataModel.Reason.values()) {
@@ -50,9 +50,7 @@ public class LeaseAdjustmentPolicyDataModel {
 
         policy.node().set(buildingDataModel.getBuilding());
 
-        if (persist) {
-            Persistence.service().persist(policy);
-        }
+        Persistence.service().persist(policy);
     }
 
     LeaseAdjustmentPolicy getPolicy() {

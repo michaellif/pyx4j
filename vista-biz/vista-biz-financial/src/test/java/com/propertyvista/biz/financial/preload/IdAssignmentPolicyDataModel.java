@@ -29,7 +29,7 @@ public class IdAssignmentPolicyDataModel {
     public IdAssignmentPolicyDataModel(PreloadConfig config) {
     }
 
-    public void generate(boolean persist) {
+    public void generate() {
         policy = EntityFactory.create(IdAssignmentPolicy.class);
 
         IdAssignmentItem item = null;
@@ -52,9 +52,7 @@ public class IdAssignmentPolicyDataModel {
 
         policy.node().set(orgNode);
 
-        if (persist) {
-            Persistence.service().persist(policy);
-        }
+        Persistence.service().persist(policy);
     }
 
     IdAssignmentPolicy getPolicy() {

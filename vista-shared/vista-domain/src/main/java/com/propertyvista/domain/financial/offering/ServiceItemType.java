@@ -21,5 +21,5 @@ import com.pyx4j.entity.shared.IPrimitive;
 public interface ServiceItemType extends ProductItemType {
 
     @NotNull
-    IPrimitive<Service.Type> serviceType();
+    IPrimitive<Service.ServiceType> serviceType();
 }

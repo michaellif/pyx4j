@@ -80,7 +80,7 @@ public class LeaseGenerator extends DataGenerator {
                 % (MAX_LEASE_DURATION - MIN_LEASE_DURATION));
         LogicalDate expectedMoveIn = leaseFrom; // for simplicity's sake
 
-        lease.type().setValue(Service.Type.residentialUnit);
+        lease.type().setValue(Service.ServiceType.residentialUnit);
         lease.leaseFrom().setValue(leaseFrom);
         lease.leaseTo().setValue(leaseTo);
 
@@ -182,7 +182,7 @@ public class LeaseGenerator extends DataGenerator {
             // pre-populate utilities for the new service:
             Persistence.service().retrieve(selectedService.version().features());
             for (Feature feature : selectedService.version().features()) {
-                if (Feature.Type.utility.equals(feature.version().type().getValue())) {
+                if (Feature.FeatureType.utility.equals(feature.version().type().getValue())) {
                     Persistence.service().retrieve(feature.version().items());
                     for (ProductItem item : feature.version().items()) {
                         if (!building.productCatalog().includedUtilities().contains(item.type())

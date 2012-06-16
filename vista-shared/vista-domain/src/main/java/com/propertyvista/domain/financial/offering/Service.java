@@ -39,7 +39,7 @@ public interface Service extends Product, IVersionedEntity<ServiceV> {
 
     @I18n
     @XmlType(name = "ServiceType")
-    public enum Type {
+    public enum ServiceType {
 
         residentialUnit,
 
@@ -71,7 +71,7 @@ public interface Service extends Product, IVersionedEntity<ServiceV> {
         @NotNull
         @ToString(index = 0)
         @MemberColumn(name = "serviceType")
-        IPrimitive<Type> type();
+        IPrimitive<ServiceType> type();
 
         // ----------------------------------------------------
         // eligibility matrix:

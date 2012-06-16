@@ -50,15 +50,13 @@ public class LeaseAdjustmentReasonDataModel {
         reasons = new HashMap<Reason, LeaseAdjustmentReason>();
     }
 
-    public void generate(boolean persist) {
+    public void generate() {
 
         for (Reason reason : Reason.values()) {
             generateReason(reason);
         }
 
-        if (persist) {
-            Persistence.service().persist(reasons.values());
-        }
+        Persistence.service().persist(reasons.values());
     }
 
     private void generateReason(Reason reason) {

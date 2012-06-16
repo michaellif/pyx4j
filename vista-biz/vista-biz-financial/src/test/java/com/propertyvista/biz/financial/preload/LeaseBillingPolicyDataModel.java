@@ -37,7 +37,7 @@ public class LeaseBillingPolicyDataModel {
         this.buildingDataModel = buildingDataModel;
     }
 
-    public void generate(boolean persist) {
+    public void generate() {
         policy = EntityFactory.create(LeaseBillingPolicy.class);
 
         policy.defaultBillingCycleSartDay().setValue(config.defaultBillingCycleSartDay);
@@ -63,9 +63,7 @@ public class LeaseBillingPolicyDataModel {
 
         policy.node().set(buildingDataModel.getBuilding());
 
-        if (persist) {
-            Persistence.service().persist(policy);
-        }
+        Persistence.service().persist(policy);
     }
 
     LeaseBillingPolicy getPolicy() {

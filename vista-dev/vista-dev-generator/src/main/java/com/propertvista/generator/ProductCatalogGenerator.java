@@ -33,7 +33,7 @@ import com.propertyvista.domain.financial.offering.FeatureItemType;
 import com.propertyvista.domain.financial.offering.ProductCatalog;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.Service;
-import com.propertyvista.domain.financial.offering.Service.Type;
+import com.propertyvista.domain.financial.offering.Service.ServiceType;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.domain.property.asset.BuildingElement;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
@@ -70,16 +70,16 @@ public class ProductCatalogGenerator {
     }
 
     public List<Service> createServices(ProductCatalog catalog) {
-        List<Service> items = new ArrayList<Service>(Service.Type.values().length);
-        for (Service.Type type : EnumSet.allOf(Service.Type.class)) {
+        List<Service> items = new ArrayList<Service>(Service.ServiceType.values().length);
+        for (Service.ServiceType type : EnumSet.allOf(Service.ServiceType.class)) {
             items.add(createService(catalog, type));
         }
         return items;
     }
 
     public List<Feature> createFeatures(ProductCatalog catalog) {
-        List<Feature> items = new ArrayList<Feature>(Feature.Type.values().length);
-        for (Feature.Type type : EnumSet.allOf(Feature.Type.class)) {
+        List<Feature> items = new ArrayList<Feature>(Feature.FeatureType.values().length);
+        for (Feature.FeatureType type : EnumSet.allOf(Feature.FeatureType.class)) {
             items.add(createFeature(catalog, type));
         }
         return items;
@@ -95,9 +95,9 @@ public class ProductCatalogGenerator {
 
     public void buildEligibilityMatrix(ProductCatalog catalog) {
         for (Service srv : catalog.services()) {
-            if (srv.version().type().getValue().equals(Service.Type.residentialUnit)
-                    || srv.version().type().getValue().equals(Service.Type.residentialShortTermUnit)
-                    || srv.version().type().getValue().equals(Service.Type.commercialUnit)) {
+            if (srv.version().type().getValue().equals(Service.ServiceType.residentialUnit)
+                    || srv.version().type().getValue().equals(Service.ServiceType.residentialShortTermUnit)
+                    || srv.version().type().getValue().equals(Service.ServiceType.commercialUnit)) {
 
                 int count = catalog.features().size();
                 for (int i = 0; i < count; ++i) {
@@ -113,7 +113,7 @@ public class ProductCatalogGenerator {
     }
 
 // internals:
-    private Service createService(ProductCatalog catalog, Service.Type type) {
+    private Service createService(ProductCatalog catalog, Service.ServiceType type) {
         Service item = EntityFactory.create(Service.class);
         item.catalog().set(catalog);
 
@@ -126,7 +126,7 @@ public class ProductCatalogGenerator {
         return item;
     }
 
-    private List<ProductItem> createServiceItems(Service.Type type) {
+    private List<ProductItem> createServiceItems(Service.ServiceType type) {
 
         List<ServiceItemType> allowedItemTypes = new ArrayList<ServiceItemType>();
         for (ServiceItemType itemType : getServiceItemTypes()) {
@@ -169,7 +169,7 @@ public class ProductCatalogGenerator {
         return items;
     }
 
-    private Feature createFeature(ProductCatalog catalog, Feature.Type type) {
+    private Feature createFeature(ProductCatalog catalog, Feature.FeatureType type) {
         Feature item = EntityFactory.create(Feature.class);
         item.catalog().set(catalog);
 
@@ -186,7 +186,7 @@ public class ProductCatalogGenerator {
         return item;
     }
 
-    private List<ProductItem> createFeatureItems(Feature.Type type) {
+    private List<ProductItem> createFeatureItems(Feature.FeatureType type) {
         List<FeatureItemType> allowedItemTypes = new ArrayList<FeatureItemType>();
         for (FeatureItemType itemType : getFeatureItemTypes()) {
             if (type.equals(itemType.featureType().getValue())) {
@@ -270,7 +270,7 @@ public class ProductCatalogGenerator {
     public List<FeatureItemType> createIncludedUtilities() {
         List<FeatureItemType> allowedItemTypes = new ArrayList<FeatureItemType>();
         for (FeatureItemType itemType : getFeatureItemTypes()) {
-            if (Feature.Type.utility.equals(itemType.featureType().getValue())) {
+            if (Feature.FeatureType.utility.equals(itemType.featureType().getValue())) {
                 allowedItemTypes.add(itemType);
             }
         }
@@ -289,7 +289,7 @@ public class ProductCatalogGenerator {
     public List<FeatureItemType> createExcludedUtilities(List<FeatureItemType> includedOnes) {
         List<FeatureItemType> allowedItemTypes = new ArrayList<FeatureItemType>();
         for (FeatureItemType itemType : getFeatureItemTypes()) {
-            if (Feature.Type.utility.equals(itemType.featureType().getValue()) && !includedOnes.contains(itemType)) {
+            if (Feature.FeatureType.utility.equals(itemType.featureType().getValue()) && !includedOnes.contains(itemType)) {
                 allowedItemTypes.add(itemType);
             }
         }
@@ -305,7 +305,7 @@ public class ProductCatalogGenerator {
         return items;
     }
 
-    private Service getService(ProductCatalog catalog, Service.Type type) {
+    private Service getService(ProductCatalog catalog, Service.ServiceType type) {
         for (Service service : catalog.services()) {
             if (service.version().type().getValue().equals(type)) {
                 return service;
@@ -314,7 +314,7 @@ public class ProductCatalogGenerator {
         throw new Error("Service of type " + type + " not found");
     }
 
-    private List<ServiceItemType> getServiceItemTypes(ProductCatalog catalog, Service.Type type) {
+    private List<ServiceItemType> getServiceItemTypes(ProductCatalog catalog, Service.ServiceType type) {
         List<ServiceItemType> allowedItemTypes = new ArrayList<ServiceItemType>();
         for (ServiceItemType itemType : getServiceItemTypes()) {
             if (type.equals(itemType.serviceType().getValue())) {
@@ -337,14 +337,14 @@ public class ProductCatalogGenerator {
         BigDecimal price = createUnitMarketRent(unit);
 //      Service.Type type = RandomUtil.random(EnumSet.of(Type.residentialUnit, Type.residentialShortTermUnit, Type.commercialUnit));
 
-        serviceItems.add(createBuildingElementServices(catalog, unit, Type.residentialUnit, price));
-        serviceItems.add(createBuildingElementServices(catalog, unit, Type.residentialShortTermUnit, price));
-        serviceItems.add(createBuildingElementServices(catalog, unit, Type.commercialUnit, price));
+        serviceItems.add(createBuildingElementServices(catalog, unit, ServiceType.residentialUnit, price));
+        serviceItems.add(createBuildingElementServices(catalog, unit, ServiceType.residentialShortTermUnit, price));
+        serviceItems.add(createBuildingElementServices(catalog, unit, ServiceType.commercialUnit, price));
 
         return serviceItems;
     }
 
-    public ProductItem createBuildingElementServices(ProductCatalog catalog, BuildingElement buildingElement, Service.Type type, BigDecimal price) {
+    public ProductItem createBuildingElementServices(ProductCatalog catalog, BuildingElement buildingElement, Service.ServiceType type, BigDecimal price) {
         Service service = getService(catalog, type);
         List<ServiceItemType> allowedItemTypes = getServiceItemTypes(catalog, type);
 

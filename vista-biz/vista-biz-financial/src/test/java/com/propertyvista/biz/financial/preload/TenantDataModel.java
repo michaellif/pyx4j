@@ -26,12 +26,10 @@ public class TenantDataModel {
     public TenantDataModel(PreloadConfig config) {
     }
 
-    public void generate(boolean persist) {
+    public void generate() {
         tenant = EntityFactory.create(Customer.class);
 
-        if (persist) {
-            Persistence.service().persist(tenant);
-        }
+        Persistence.service().persist(tenant);
     }
 
     public IEntity getTenant() {
