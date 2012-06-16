@@ -13,6 +13,7 @@
  */
 package com.propertyvista.admin.server.services;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -127,11 +128,14 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
 
             OnboardingUser onbUser = Persistence.service().retrieve(OnboardingUser.class, onbUserCred.user().getPrimaryKey());
 
-            EntityQueryCriteria<OnboardingMerchantAccount> onbMrchAccCrt = EntityQueryCriteria.create(OnboardingMerchantAccount.class);
-            onbMrchAccCrt.or(PropertyCriterion.eq(onbMrchAccCrt.proto().pmc(), pmc),
-                    PropertyCriterion.eq(onbMrchAccCrt.proto().onboardingAccountId(), pmc.onboardingAccountId().getValue()));
-            //credentialCrt.add(PropertyCriterion.eq(onbMrchAccCrt.proto().pmc(), pmc));
-            List<OnboardingMerchantAccount> onbMrchAccs = Persistence.service().query(onbMrchAccCrt);
+            List<OnboardingMerchantAccount> onbMrchAccs;
+            if (pmc.onboardingAccountId().getValue() != null) {
+                EntityQueryCriteria<OnboardingMerchantAccount> onbMrchAccCrt = EntityQueryCriteria.create(OnboardingMerchantAccount.class);
+                onbMrchAccCrt.add(PropertyCriterion.eq(onbMrchAccCrt.proto().onboardingAccountId(), pmc.onboardingAccountId().getValue()));
+                onbMrchAccs = Persistence.service().query(onbMrchAccCrt);
+            } else {
+                onbMrchAccs = new ArrayList<OnboardingMerchantAccount>();
+            }
 
             try {
                 Persistence.service().startBackgroundProcessTransaction();

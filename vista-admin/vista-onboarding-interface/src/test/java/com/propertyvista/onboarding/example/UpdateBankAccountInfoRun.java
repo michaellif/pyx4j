@@ -29,16 +29,28 @@ public class UpdateBankAccountInfoRun {
         int num = 0;
 
         UpdateBankAccountInfoRequest request = new UpdateBankAccountInfoRequest();
-        request.onboardingAccountId = "1";
+        request.onboardingAccountId = "onb_vista";
 
-        for (int i = 0; i < cnt; i++) {
+        {
             BankAccountInfo bai = new BankAccountInfo();
-            bai.onboardingBankAccountId = "7891" + num;
+            bai.onboardingBankAccountId = "onb_003";
             bai.terminalId = "1235" + num;
-            bai.bankId = "23" + num;
-            bai.branchTransitNumber = "2789" + num;
-            bai.accountNumber = "34566562526" + num;
-            bai.chargeDescription = "chargeDescription" + num;
+            bai.bankId = "3";
+            bai.branchTransitNumber = "98765";
+            bai.accountNumber = "258963";
+            bai.chargeDescription = "Pay for vista 0";
+            request.accounts.add(bai);
+            num++;
+        }
+
+        {
+            BankAccountInfo bai = new BankAccountInfo();
+            bai.onboardingBankAccountId = "onb_004";
+            bai.terminalId = "1235" + num;
+            bai.bankId = "4";
+            bai.branchTransitNumber = "54874";
+            bai.accountNumber = "123456987123";
+            bai.chargeDescription = "Pay for vista 1";
 
             request.accounts.add(bai);
             num++;
@@ -66,17 +78,27 @@ public class UpdateBankAccountInfoRun {
         request = new UpdateBankAccountInfoRequest();
         request.onboardingAccountId = "2";
 
-        for (int i = 0; i < cnt; i++) {
+        {
             BankAccountInfo bai = new BankAccountInfo();
-            bai.onboardingBankAccountId = "7891" + num;
-            bai.terminalId = "1236" + num;
-            bai.bankId = "24" + num;
-            bai.branchTransitNumber = "2341" + num;
-            bai.accountNumber = "34566562526" + num;
-            bai.chargeDescription = "chargeDescription" + num;
+            bai.onboardingBankAccountId = "onb_003";
+            bai.terminalId = "BIRCHWT2";
+            bai.bankId = "3";
+            bai.branchTransitNumber = "98765";
+            bai.accountNumber = "258963";
+            bai.chargeDescription = "Pay for PMC 1-5";
+            request.accounts.add(bai);
+        }
+
+        {
+            BankAccountInfo bai = new BankAccountInfo();
+            bai.onboardingBankAccountId = "onb_004";
+            bai.terminalId = "BIRCHWT3";
+            bai.bankId = "4";
+            bai.branchTransitNumber = "54874";
+            bai.accountNumber = "123456987123";
+            bai.chargeDescription = "Pay for PMC 1-5";
 
             request.accounts.add(bai);
-            num++;
         }
 
         {
