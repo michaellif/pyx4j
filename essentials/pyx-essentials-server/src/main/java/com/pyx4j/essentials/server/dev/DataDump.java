@@ -115,6 +115,7 @@ public class DataDump {
             case Entity:
                 ent = (IEntity) item;
                 ext = ".xml";
+                break;
             default:
                 if (item != null) {
                     name.append(item.getClass().getSimpleName());
