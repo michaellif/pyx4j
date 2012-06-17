@@ -166,6 +166,20 @@ public class PadProcessor {
         at.grossPaymentCount().setValue(padBatch.records().size());
         at.merchantAccount().setPrimaryKey(padBatch.merchantAccountKey().getValue());
 
+        // Find MerchantAccount
+        {
+            // TODO handle the case when merchant account was changed.
+            EntityQueryCriteria<MerchantAccount> criteria = EntityQueryCriteria.create(MerchantAccount.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().id(), padBatch.merchantAccountKey()));
+            criteria.add(PropertyCriterion.eq(criteria.proto().merchantTerminalId(), padBatch.merchantTerminalId()));
+            MerchantAccount merchantAccount = Persistence.service().retrieve(criteria);
+            if (merchantAccount == null) {
+                throw new Error("Merchant Account '" + padBatch.merchantTerminalId().getValue() + "' not found");
+            }
+            merchantAccount.invalid().setValue(Boolean.TRUE);
+            Persistence.service().persist(merchantAccount);
+        }
+
         // Caledon status codes
         if ("1003".equals(padBatch.acknowledgmentStatusCode().getValue())) {
             at.transactionErrorMessage().setValue("Invalid Terminal ID");
