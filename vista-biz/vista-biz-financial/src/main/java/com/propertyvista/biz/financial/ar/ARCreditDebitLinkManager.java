@@ -22,7 +22,6 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.financial.billing.BillingException;
 import com.propertyvista.domain.financial.PaymentRecord;
-import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.DebitCreditLink;
 import com.propertyvista.domain.financial.billing.InvoiceAccountCharge;
 import com.propertyvista.domain.financial.billing.InvoiceAccountCredit;
@@ -109,7 +108,16 @@ public class ARCreditDebitLinkManager {
         return credit;
     }
 
-    static void consumeCredit(InvoiceCredit credit, List<InvoiceDebit> debits) {
+    /**
+     * - Exceptions
+     * credit amount - credit hard links >= amount && debit - debit hard links >= amount
+     */
+    static void consumeCredit(InvoiceCredit credit, InvoiceDebit debit, BigDecimal amount) {
+        // TODO Auto-generated method stub
+
+    }
+
+    static void deleteHardLink(DebitCreditLink link) {
         // TODO Auto-generated method stub
 
     }
@@ -150,16 +158,6 @@ public class ARCreditDebitLinkManager {
         Persistence.service().persist(debit);
 
         return debit;
-    }
-
-    static void coverDebit(InvoiceDebit debit, List<InvoiceCredit> credits) {
-        // TODO Auto-generated method stub
-
-    }
-
-    static void updateCreditDebitLinks(Bill bill) {
-        // TODO Auto-generated method stub
-
     }
 
     static void declinePayment(InvoicePaymentBackOut backOut) {
