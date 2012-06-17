@@ -28,6 +28,7 @@ import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.domain.financial.AggregatedTransfer;
 import com.propertyvista.domain.financial.AggregatedTransfer.AggregatedTransferStatus;
 import com.propertyvista.domain.financial.PaymentRecord;
+import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
 import com.propertyvista.domain.payment.CreditCardInfo;
 import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
@@ -182,14 +183,22 @@ public class PaymentFacadeImpl implements PaymentFacade {
     @Override
     public PaymentRecord cancel(PaymentRecord paymentStub) {
         PaymentRecord paymentRecord = Persistence.service().retrieve(PaymentRecord.class, paymentStub.getPrimaryKey());
-        if (!EnumSet.of(PaymentRecord.PaymentStatus.Submitted, PaymentRecord.PaymentStatus.Scheduled).contains(paymentRecord.paymentStatus().getValue())) {
+        if (!EnumSet.of(PaymentRecord.PaymentStatus.Submitted, PaymentRecord.PaymentStatus.Scheduled, PaymentRecord.PaymentStatus.Queued).contains(
+                paymentRecord.paymentStatus().getValue())) {
             throw new UserRuntimeException(i18n.tr("Processed payment can't be canceled"));
         }
+
+        PaymentStatus incommingStatus = paymentRecord.paymentStatus().getValue();
 
         paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Canceled);
         paymentRecord.lastStatusChangeDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
         paymentRecord.finalizeDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
         Persistence.service().merge(paymentRecord);
+
+        if (incommingStatus == PaymentRecord.PaymentStatus.Queued) {
+            ServerSideFactory.create(ARFacade.class).rejectPayment(paymentRecord, false);
+        }
+
         return paymentRecord;
     }
 

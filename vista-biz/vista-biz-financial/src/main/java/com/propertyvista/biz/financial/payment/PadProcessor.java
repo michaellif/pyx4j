@@ -203,9 +203,11 @@ public class PadProcessor {
     }
 
     void cancelAggregatedTransfer(AggregatedTransfer aggregatedTransfer) {
-        Persistence.service().retrieveMember(aggregatedTransfer.payments(), AttachLevel.IdOnly);
-        for (PaymentRecord paymentRecord : aggregatedTransfer.payments()) {
-            ServerSideFactory.create(PaymentFacade.class).cancel(paymentRecord);
+        Persistence.service().retrieveMember(aggregatedTransfer.rejectedBatchPayments(), AttachLevel.Attached);
+        for (PaymentRecord paymentRecord : aggregatedTransfer.rejectedBatchPayments()) {
+            if (paymentRecord.paymentStatus().getValue() == PaymentRecord.PaymentStatus.Queued) {
+                ServerSideFactory.create(PaymentFacade.class).cancel(paymentRecord);
+            }
         }
         aggregatedTransfer.status().setValue(AggregatedTransferStatus.Canceled);
         Persistence.service().persist(aggregatedTransfer);
