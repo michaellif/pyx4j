@@ -103,22 +103,22 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
 
     @Override
     public String getDefaultBaseURLresidentPortal(boolean secure) {
-        String url = getMainApplicationURL() + DeploymentConsts.PORTAL_URL;
         if (secure) {
-            return url;
+            return getApplicationDeploymentProtocol() + "://" + "portal." + NamespaceManager.getNamespace() + getApplicationURLNamespace()
+                    + DeploymentConsts.PORTAL_URL;
         } else {
-            return url.replace("https://", "http://");
+            return "http" + "://" + "portal." + NamespaceManager.getNamespace() + getApplicationURLNamespace() + DeploymentConsts.PORTAL_URL;
         }
     }
 
     @Override
     public String getDefaultBaseURLvistaCrm() {
-        return getMainApplicationURL() + DeploymentConsts.CRM_URL;
+        return getApplicationDeploymentProtocol() + "://" + "crm." + NamespaceManager.getNamespace() + getApplicationURLNamespace() + DeploymentConsts.CRM_URL;
     }
 
     @Override
     public String getDefaultBaseURLprospectPortal() {
-        return getMainApplicationURL() + DeploymentConsts.PTAPP_URL;
+        return getApplicationDeploymentProtocol() + "://" + "pt." + NamespaceManager.getNamespace() + getApplicationURLNamespace() + DeploymentConsts.PTAPP_URL;
     }
 
     @Override
