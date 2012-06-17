@@ -69,6 +69,14 @@ public class DateUtils extends TimeUtils {
         return c;
     }
 
+    public static Date getDBRounded(Date date) {
+        Calendar c = new GregorianCalendar();
+        c.setTime(date);
+        // DB does not store Milliseconds
+        c.set(Calendar.MILLISECOND, 0);
+        return c.getTime();
+    }
+
     public static void dayStart(Calendar calendar) {
         calendar.set(Calendar.MILLISECOND, 0);
         calendar.set(Calendar.SECOND, 0);

@@ -84,6 +84,7 @@ import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.entity.shared.meta.MemberMeta;
+import com.pyx4j.gwt.server.DateUtils;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.security.shared.SecurityViolationException;
@@ -447,7 +448,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         }
         MemberOperationsMeta updatedTs = tm.operationsMeta().getUpdatedTimestampMember();
         if (updatedTs != null) {
-            updatedTs.setMemberValue(entity, getPersistenceContext().getTimeNow());
+            updatedTs.setMemberValue(entity, DateUtils.getDBRounded(getPersistenceContext().getTimeNow()));
         }
         boolean isNewEntity = ((entity.getPrimaryKey() == null) || ((tm.getPrimaryKeyStrategy() == Table.PrimaryKeyStrategy.ASSIGNED) && (!tm.exists(
                 getPersistenceContext(), entity.getPrimaryKey()))));
@@ -467,7 +468,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         }
         MemberOperationsMeta createdTs = tm.operationsMeta().getCreatedTimestampMember();
         if ((createdTs != null) && (createdTs.getMemberValue(entity) == null)) {
-            createdTs.setMemberValue(entity, getPersistenceContext().getTimeNow());
+            createdTs.setMemberValue(entity, DateUtils.getDBRounded(getPersistenceContext().getTimeNow()));
         }
         try {
             for (MemberOperationsMeta member : tm.operationsMeta().getOwnedMembers()) {
@@ -714,7 +715,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         if (updatedTs != null) {
             for (T entity : entityIterable) {
                 if (updatedTs != null) {
-                    updatedTs.setMemberValue(entity, getPersistenceContext().getTimeNow());
+                    updatedTs.setMemberValue(entity, DateUtils.getDBRounded(getPersistenceContext().getTimeNow()));
                 }
             }
         }
@@ -1020,7 +1021,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         if (updated) {
             MemberOperationsMeta updatedTs = tm.operationsMeta().getUpdatedTimestampMember();
             if (updatedTs != null) {
-                updatedTs.setMemberValue(entity, getPersistenceContext().getTimeNow());
+                updatedTs.setMemberValue(entity, DateUtils.getDBRounded(getPersistenceContext().getTimeNow()));
             }
             if (isNewEntity) {
                 insert(tm, entity);
