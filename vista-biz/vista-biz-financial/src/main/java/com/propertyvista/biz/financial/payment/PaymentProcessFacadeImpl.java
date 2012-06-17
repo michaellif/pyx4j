@@ -54,8 +54,31 @@ import com.propertyvista.server.jobs.TaskRunner;
 public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
 
     @Override
-    public PadFile sendPadFile() {
-        return new PadCaledon().sendPadFile();
+    public PadFile preparePadFile() {
+        return new PadCaledon().preparePadFile();
+    }
+
+    @Override
+    public PadFile sendPadFile(PadFile padFile) {
+        return new PadCaledon().sendPadFile(padFile);
+    }
+
+    @Override
+    public void prepareEcheckPayments(StatisticsRecord dynamicStatisticsRecord, PadFile padFile) {
+        // We take all Queued records in this PMC
+        EntityQueryCriteria<PaymentRecord> criteria = EntityQueryCriteria.create(PaymentRecord.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().paymentStatus(), PaymentRecord.PaymentStatus.Queued));
+        criteria.add(PropertyCriterion.eq(criteria.proto().paymentMethod().type(), PaymentType.Echeck));
+        ICursorIterator<PaymentRecord> paymentRecordIterator = Persistence.service().query(null, criteria, AttachLevel.Attached);
+        while (paymentRecordIterator.hasNext()) {
+            PaymentRecord paymentRecord = paymentRecordIterator.next();
+            if (new PadProcessor().processPayment(paymentRecord, padFile)) {
+                StatisticsUtils.addProcessed(dynamicStatisticsRecord, 1, paymentRecord.amount().getValue());
+            } else {
+                StatisticsUtils.addFailed(dynamicStatisticsRecord, 1, paymentRecord.amount().getValue());
+            }
+        }
+        Persistence.service().commit();
     }
 
     @Override

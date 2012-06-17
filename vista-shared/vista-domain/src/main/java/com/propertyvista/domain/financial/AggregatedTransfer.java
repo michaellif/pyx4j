@@ -42,9 +42,7 @@ public interface AggregatedTransfer extends IEntity {
 
         Paid,
 
-        Hold,
-
-        Resent;
+        Hold;
 
         @Override
         public String toString() {

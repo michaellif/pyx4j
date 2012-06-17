@@ -139,9 +139,8 @@ public class PaymentFacadeImpl implements PaymentFacade {
             return paymentRecord;
         }
 
-        paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Processing);
         paymentRecord.lastStatusChangeDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
-        paymentRecord.merchantAccount().set(PaymentUtils.retrieveMerchantAccount(paymentRecord));
+        paymentRecord.merchantAccount().set(PaymentUtils.retrieveValidMerchantAccount(paymentRecord));
 
         switch (paymentRecord.paymentMethod().type().getValue()) {
         case Cash:
@@ -158,15 +157,11 @@ public class PaymentFacadeImpl implements PaymentFacade {
             ServerSideFactory.create(ARFacade.class).postPayment(paymentRecord);
             break;
         case CreditCard:
-            Persistence.service().merge(paymentRecord);
             CreditCardProcessor.realTimeSale(paymentRecord);
             break;
         case Echeck:
-            paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Received);
-            paymentRecord.receivedDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
+            paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Queued);
             Persistence.service().merge(paymentRecord);
-            ServerSideFactory.create(ARFacade.class).postPayment(paymentRecord);
-            new PadProcessor().queuePayment(paymentRecord);
             break;
         case EFT:
             paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Received);
@@ -240,7 +235,7 @@ public class PaymentFacadeImpl implements PaymentFacade {
             ServerSideFactory.create(ARFacade.class).rejectPayment(paymentRecord, false);
             break;
         case Cash:
-            ServerSideFactory.create(ARFacade.class).rejectPayment(paymentRecord, true);
+            ServerSideFactory.create(ARFacade.class).rejectPayment(paymentRecord, false);
             break;
         }
         return paymentRecord;
@@ -253,15 +248,6 @@ public class PaymentFacadeImpl implements PaymentFacade {
             throw new UserRuntimeException(i18n.tr("Processed transaction can't be canceled"));
         }
         new PadProcessor().cancelAggregatedTransfer(at);
-    }
-
-    @Override
-    public void resendAggregatedTransfer(AggregatedTransfer aggregatedTransferStub) {
-        AggregatedTransfer at = Persistence.service().retrieve(AggregatedTransfer.class, aggregatedTransferStub.getPrimaryKey());
-        if (!EnumSet.of(AggregatedTransferStatus.Rejected).contains(at.status().getValue())) {
-            throw new UserRuntimeException(i18n.tr("Processed transaction can't be sent again"));
-        }
-        new PadProcessor().resendAggregatedTransfer(at);
     }
 
 }

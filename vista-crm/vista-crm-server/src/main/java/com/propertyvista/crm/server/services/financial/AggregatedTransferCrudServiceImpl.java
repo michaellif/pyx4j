@@ -36,13 +36,6 @@ public class AggregatedTransferCrudServiceImpl extends AbstractCrudServiceImpl<A
     }
 
     @Override
-    public void resendTransactions(AsyncCallback<VoidSerializable> callback, AggregatedTransfer aggregatedTransferStub) {
-        ServerSideFactory.create(PaymentFacade.class).resendAggregatedTransfer(aggregatedTransferStub);
-        Persistence.service().commit();
-        callback.onSuccess(null);
-    }
-
-    @Override
     public void cancelTransactions(AsyncCallback<VoidSerializable> callback, AggregatedTransfer aggregatedTransferStub) {
         ServerSideFactory.create(PaymentFacade.class).cancelAggregatedTransfer(aggregatedTransferStub);
         Persistence.service().commit();

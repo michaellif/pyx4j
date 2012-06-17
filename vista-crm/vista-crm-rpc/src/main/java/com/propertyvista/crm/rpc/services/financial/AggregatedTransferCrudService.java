@@ -25,7 +25,5 @@ public interface AggregatedTransferCrudService extends AbstractCrudService<Aggre
     /**
      * Available as error recovery for Failed PadBatch. Usually due to errors in merchantAccount.
      */
-    public void resendTransactions(AsyncCallback<VoidSerializable> callback, AggregatedTransfer aggregatedTransferStub);
-
     public void cancelTransactions(AsyncCallback<VoidSerializable> callback, AggregatedTransfer aggregatedTransferStub);
 }

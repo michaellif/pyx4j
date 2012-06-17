@@ -13,15 +13,8 @@
  */
 package com.propertyvista.server.jobs;
 
-import java.util.concurrent.Callable;
-
 import com.pyx4j.config.server.ServerSideFactory;
-import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
-import com.pyx4j.server.contexts.NamespaceManager;
 
-import com.propertyvista.admin.domain.payment.pad.PadDebitRecord;
 import com.propertyvista.admin.domain.payment.pad.PadFile;
 import com.propertyvista.biz.financial.payment.PaymentProcessFacade;
 
@@ -31,35 +24,23 @@ public class PadSendProcess implements PmcProcess {
 
     @Override
     public boolean start(PmcProcessContext context) {
-        padFile = ServerSideFactory.create(PaymentProcessFacade.class).sendPadFile();
-        if (padFile != null) {
-            context.getRunStats().message().setValue("PAD file# " + padFile.fileCreationNumber().getStringView() + " created");
-            return true;
-        } else {
-            return false;
-        }
+        padFile = ServerSideFactory.create(PaymentProcessFacade.class).preparePadFile();
+        return true;
     }
 
     @Override
     public void executePmcJob(final PmcProcessContext context) {
-        final String namespace = NamespaceManager.getNamespace();
-
-        TaskRunner.runInAdminNamespace(new Callable<Void>() {
-            @Override
-            public Void call() throws Exception {
-                EntityQueryCriteria<PadDebitRecord> criteria = EntityQueryCriteria.create(PadDebitRecord.class);
-                criteria.add(PropertyCriterion.eq(criteria.proto().padBatch().padFile(), padFile));
-                criteria.add(PropertyCriterion.eq(criteria.proto().padBatch().pmcNamespace(), namespace));
-                int records = Persistence.service().count(criteria);
-                context.getRunStats().total().setValue((long) records);
-                context.getRunStats().processed().setValue((long) records);
-                return null;
-            }
-        });
+        ServerSideFactory.create(PaymentProcessFacade.class).prepareEcheckPayments(context.getRunStats(), padFile);
     }
 
     @Override
     public void complete(PmcProcessContext context) {
+        PadFile padFile = ServerSideFactory.create(PaymentProcessFacade.class).sendPadFile(this.padFile);
+        if (padFile != null) {
+            context.getRunStats().message().setValue("PAD file# " + padFile.fileCreationNumber().getStringView() + " created");
+        } else {
+            context.getRunStats().message().setValue("Nothing to send");
+        }
     }
 
 }

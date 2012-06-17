@@ -37,8 +37,6 @@ public class AggregatedTransferViewerViewImpl extends CrmViewerViewImplBase<Aggr
 
     private final IListerView<PaymentRecord> returnedPaymentLister;
 
-    private final Button resendAction;
-
     private final Button cancelAction;
 
     public AggregatedTransferViewerViewImpl() {
@@ -51,13 +49,6 @@ public class AggregatedTransferViewerViewImpl extends CrmViewerViewImplBase<Aggr
 
         // Actions:
 
-        resendAction = new Button(i18n.tr("Re-Send..."), new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                ((AggregatedTransferViewerView.Presenter) presenter).resendAction();
-            }
-        });
-        addHeaderToolbarTwoItem(resendAction.asWidget());
         cancelAction = new Button(i18n.tr("Cancel"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
@@ -75,7 +66,6 @@ public class AggregatedTransferViewerViewImpl extends CrmViewerViewImplBase<Aggr
 
     @Override
     public void reset() {
-        resendAction.setVisible(false);
         cancelAction.setVisible(false);
         super.reset();
     }
@@ -84,7 +74,6 @@ public class AggregatedTransferViewerViewImpl extends CrmViewerViewImplBase<Aggr
     public void populate(AggregatedTransfer value) {
         super.populate(value);
 
-        resendAction.setVisible(value.status().getValue() == AggregatedTransferStatus.Rejected && value.status().getValue() != AggregatedTransferStatus.Resent);
         cancelAction.setVisible(value.status().getValue() == AggregatedTransferStatus.Rejected
                 && value.status().getValue() != AggregatedTransferStatus.Canceled);
     }

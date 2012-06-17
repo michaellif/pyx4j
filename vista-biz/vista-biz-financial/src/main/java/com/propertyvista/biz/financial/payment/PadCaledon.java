@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.EnumSet;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,12 +45,11 @@ import com.propertyvista.payment.pad.CaledonPadFileWriter;
 import com.propertyvista.payment.pad.CaledonPadSftpClient;
 import com.propertyvista.payment.pad.CaledonPadSftpClient.PadFileType;
 import com.propertyvista.payment.pad.data.PadAkFile;
+import com.propertyvista.server.jobs.TaskRunner;
 
 public class PadCaledon {
 
     private static final Logger log = LoggerFactory.getLogger(PadCaledon.class);
-
-    private static Object lock = new Object();
 
     private final String companyId = ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance()).getCaledonCompanyId();
 
@@ -64,27 +64,39 @@ public class PadCaledon {
         return padWorkdir;
     }
 
-    public PadFile sendPadFile() {
-        File padWorkdir = getPadBaseDir();
-
-        PadFile padFile;
-        synchronized (lock) {
-            EntityQueryCriteria<PadFile> criteria = EntityQueryCriteria.create(PadFile.class);
-            criteria.add(PropertyCriterion.in(criteria.proto().status(), PadFile.PadFileStatus.Creating, PadFile.PadFileStatus.SendError));
-            padFile = Persistence.service().retrieve(criteria);
-            if (padFile == null) {
-                return null;
+    public PadFile preparePadFile() {
+        return TaskRunner.runAutonomousTransation(new Callable<PadFile>() {
+            @Override
+            public PadFile call() {
+                EntityQueryCriteria<PadFile> criteria = EntityQueryCriteria.create(PadFile.class);
+                criteria.add(PropertyCriterion.in(criteria.proto().status(), PadFile.PadFileStatus.Creating, PadFile.PadFileStatus.SendError));
+                PadFile padFile = Persistence.service().retrieve(criteria);
+                if (padFile == null) {
+                    padFile = EntityFactory.create(PadFile.class);
+                    padFile.status().setValue(PadFile.PadFileStatus.Creating);
+                    padFile.fileCreationNumber().setValue(getNextFileCreationNumber());
+                    Persistence.service().persist(padFile);
+                    Persistence.service().commit();
+                }
+                return padFile;
             }
+        });
+    }
 
-            if (padFile.fileCreationNumber().isNull()) {
-                padFile.fileCreationNumber().setValue(getNextFileCreationNumber());
-            }
-
-            padFile.status().setValue(PadFile.PadFileStatus.Sending);
-            padFile.sent().setValue(new Date());
-            Persistence.service().merge(padFile);
-            Persistence.service().commit();
+    public PadFile sendPadFile(PadFile padFile) {
+        EntityQueryCriteria<PadDebitRecord> criteria = EntityQueryCriteria.create(PadDebitRecord.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().padBatch().padFile(), padFile));
+        int records = Persistence.service().count(criteria);
+        if (records == 0) {
+            return null;
         }
+
+        padFile.status().setValue(PadFile.PadFileStatus.Sending);
+        padFile.sent().setValue(new Date());
+        Persistence.service().merge(padFile);
+        Persistence.service().commit();
+
+        File padWorkdir = getPadBaseDir();
 
         File file = null;
         try {

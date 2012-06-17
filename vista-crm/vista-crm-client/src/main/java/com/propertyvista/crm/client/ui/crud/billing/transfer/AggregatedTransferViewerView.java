@@ -23,9 +23,8 @@ public interface AggregatedTransferViewerView extends IViewerView<AggregatedTran
 
     interface Presenter extends IViewerView.Presenter {
 
-        void resendAction();
-
         void cancelAction();
+
     }
 
     IListerView<PaymentRecord> getPaymentsListerView();

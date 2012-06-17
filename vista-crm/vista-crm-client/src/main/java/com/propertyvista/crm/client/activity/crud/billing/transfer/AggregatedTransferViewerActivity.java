@@ -71,18 +71,8 @@ public class AggregatedTransferViewerActivity extends CrmViewerActivity<Aggregat
     }
 
     @Override
-    public void resendAction() {
-        ((AggregatedTransferCrudService) getService()).cancelTransactions(new DefaultAsyncCallback<VoidSerializable>() {
-            @Override
-            public void onSuccess(VoidSerializable result) {
-                populate();
-            }
-        }, EntityFactory.createIdentityStub(AggregatedTransfer.class, getEntityId()));
-    }
-
-    @Override
     public void cancelAction() {
-        ((AggregatedTransferCrudService) getService()).resendTransactions(new DefaultAsyncCallback<VoidSerializable>() {
+        ((AggregatedTransferCrudService) getService()).cancelTransactions(new DefaultAsyncCallback<VoidSerializable>() {
             @Override
             public void onSuccess(VoidSerializable result) {
                 populate();

@@ -220,6 +220,15 @@ public class PmcProcessDispatcherJob implements Job {
                 Persistence.service().persist(runData);
                 Persistence.service().commit();
             }
+
+            try {
+                pmcProcess.complete(context);
+            } catch (Throwable e) {
+                log.error("pmcProcess execution error", e);
+                run.errorMessage().setValue(e.getMessage());
+                run.status().setValue(RunStatus.Failed);
+                return;
+            }
             run.status().setValue(RunStatus.Completed);
         } finally {
             executorService.shutdownNow();
@@ -301,8 +310,6 @@ public class PmcProcessDispatcherJob implements Job {
                 break;
             }
         }
-
-        pmcProcess.complete(null);
 
         long durationNano = System.nanoTime() - startTimeNano;
 

@@ -56,6 +56,4 @@ public interface PaymentFacade {
 
     public void cancelAggregatedTransfer(AggregatedTransfer aggregatedTransferStub);
 
-    public void resendAggregatedTransfer(AggregatedTransfer aggregatedTransferStub);
-
 }

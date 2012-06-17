@@ -32,6 +32,19 @@ class PaymentUtils {
 
     static MerchantAccount retrieveMerchantAccount(PaymentRecord paymentRecord) {
         EntityQueryCriteria<MerchantAccount> criteria = EntityQueryCriteria.create(MerchantAccount.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().invalid(), Boolean.FALSE));
+        criteria.add(PropertyCriterion.eq(criteria.proto()._buildings().$()._Units().$()._Leases().$().billingAccount(), paymentRecord.billingAccount()));
+        for (MerchantAccount merchantAccount : Persistence.service().query(criteria)) {
+            if (!merchantAccount.merchantTerminalId().isNull()) {
+                return merchantAccount;
+            }
+        }
+        return null;
+    }
+
+    static MerchantAccount retrieveValidMerchantAccount(PaymentRecord paymentRecord) {
+        EntityQueryCriteria<MerchantAccount> criteria = EntityQueryCriteria.create(MerchantAccount.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().invalid(), Boolean.FALSE));
         criteria.add(PropertyCriterion.eq(criteria.proto()._buildings().$()._Units().$()._Leases().$().billingAccount(), paymentRecord.billingAccount()));
         for (MerchantAccount merchantAccount : Persistence.service().query(criteria)) {
             if (!merchantAccount.merchantTerminalId().isNull()) {
@@ -39,7 +52,6 @@ class PaymentUtils {
             }
         }
         throw new UserRuntimeException(i18n.tr("No active merchantAccount found to process the payment"));
-
     }
 
     public static MerchantAccount retrieveMerchantAccount(Building buildingStub) {

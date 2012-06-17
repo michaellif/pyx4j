@@ -22,7 +22,11 @@ import com.propertyvista.domain.payment.PaymentType;
 
 public interface PaymentProcessFacade {
 
-    PadFile sendPadFile();
+    PadFile preparePadFile();
+
+    void prepareEcheckPayments(StatisticsRecord dynamicStatisticsRecord, PadFile padFile);
+
+    PadFile sendPadFile(PadFile padFile);
 
     PadFile recivePadAcknowledgementFile();
 

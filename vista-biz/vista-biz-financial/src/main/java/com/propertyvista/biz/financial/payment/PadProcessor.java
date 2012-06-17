@@ -35,7 +35,6 @@ import com.propertyvista.admin.domain.payment.pad.PadFile;
 import com.propertyvista.admin.domain.payment.pad.PadReconciliationDebitRecord;
 import com.propertyvista.admin.domain.payment.pad.PadReconciliationSummary;
 import com.propertyvista.biz.financial.ar.ARFacade;
-import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.domain.financial.AggregatedTransfer;
 import com.propertyvista.domain.financial.AggregatedTransfer.AggregatedTransferStatus;
 import com.propertyvista.domain.financial.MerchantAccount;
@@ -48,36 +47,30 @@ public class PadProcessor {
 
     private static final Logger log = LoggerFactory.getLogger(PadProcessor.class);
 
-    void queuePayment(PaymentRecord paymentRecord) {
-        Persistence.service().retrieve(paymentRecord.merchantAccount());
-        Persistence.service().retrieve(paymentRecord.billingAccount());
-        String namespace = NamespaceManager.getNamespace();
-        try {
-            NamespaceManager.setNamespace(VistaNamespace.adminNamespace);
-            PadFile padFile = getPadFile();
-            PadBatch padBatch = getPadBatch(padFile, namespace, paymentRecord.merchantAccount());
-            createPadDebitRecord(padBatch, paymentRecord);
-        } finally {
-            NamespaceManager.setNamespace(namespace);
+    boolean processPayment(final PaymentRecord paymentRecord, final PadFile padFile) {
+        MerchantAccount merchantAccount = PaymentUtils.retrieveMerchantAccount(paymentRecord);
+        if (merchantAccount == null) {
+            return false;
         }
-    }
+        paymentRecord.merchantAccount().set(merchantAccount);
+        paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Received);
+        paymentRecord.receivedDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
+        Persistence.service().merge(paymentRecord);
+        ServerSideFactory.create(ARFacade.class).postPayment(paymentRecord);
 
-    PadFile getPadFile() {
-        return TaskRunner.runAutonomousTransation(new Callable<PadFile>() {
+        Persistence.service().retrieve(paymentRecord.billingAccount());
+
+        final String namespace = NamespaceManager.getNamespace();
+        TaskRunner.runInAdminNamespace(new Callable<Void>() {
             @Override
-            public PadFile call() {
-                EntityQueryCriteria<PadFile> criteria = EntityQueryCriteria.create(PadFile.class);
-                criteria.add(PropertyCriterion.eq(criteria.proto().status(), PadFile.PadFileStatus.Creating));
-                PadFile padFile = Persistence.service().retrieve(criteria);
-                if (padFile == null) {
-                    padFile = EntityFactory.create(PadFile.class);
-                    padFile.status().setValue(PadFile.PadFileStatus.Creating);
-                    Persistence.service().persist(padFile);
-                    Persistence.service().commit();
-                }
-                return padFile;
+            public Void call() {
+                PadBatch padBatch = getPadBatch(padFile, namespace, paymentRecord.merchantAccount());
+                createPadDebitRecord(padBatch, paymentRecord);
+                return null;
             }
         });
+
+        return true;
     }
 
     private PadBatch getPadBatch(PadFile padFile, String namespace, MerchantAccount merchantAccount) {
@@ -210,12 +203,6 @@ public class PadProcessor {
             ServerSideFactory.create(PaymentFacade.class).cancel(paymentRecord);
         }
         aggregatedTransfer.status().setValue(AggregatedTransferStatus.Canceled);
-        Persistence.service().persist(aggregatedTransfer);
-    }
-
-    void resendAggregatedTransfer(AggregatedTransfer aggregatedTransfer) {
-        aggregatedTransfer.status().setValue(AggregatedTransferStatus.Resent);
-
         Persistence.service().persist(aggregatedTransfer);
     }
 

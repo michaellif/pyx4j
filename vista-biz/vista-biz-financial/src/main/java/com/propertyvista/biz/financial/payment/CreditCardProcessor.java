@@ -15,6 +15,7 @@ package com.propertyvista.biz.financial.payment;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.concurrent.Callable;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,14 +41,26 @@ import com.propertyvista.payment.PaymentRequest;
 import com.propertyvista.payment.PaymentResponse;
 import com.propertyvista.payment.Token;
 import com.propertyvista.payment.caledon.CaledonPaymentProcessor;
+import com.propertyvista.server.jobs.TaskRunner;
 import com.propertyvista.shared.VistaSystemIdentification;
 
 class CreditCardProcessor {
 
     private final static Logger log = LoggerFactory.getLogger(CreditCardProcessor.class);
 
-    static void realTimeSale(PaymentRecord paymentRecord) {
-        MerchantAccount account = PaymentUtils.retrieveMerchantAccount(paymentRecord);
+    static PaymentRecord realTimeSale(final PaymentRecord paymentRecord) {
+        return TaskRunner.runAutonomousTransation(new Callable<PaymentRecord>() {
+            @Override
+            public PaymentRecord call() {
+                Persistence.service().merge(paymentRecord);
+                doRealTimeSale(paymentRecord);
+                return paymentRecord;
+            }
+        });
+    }
+
+    private static void doRealTimeSale(PaymentRecord paymentRecord) {
+        MerchantAccount account = PaymentUtils.retrieveValidMerchantAccount(paymentRecord);
 
         Merchant merchant = EntityFactory.create(Merchant.class);
         merchant.terminalID().setValue(account.merchantTerminalId().getValue());
@@ -82,6 +95,7 @@ class CreditCardProcessor {
             Persistence.service().merge(paymentRecord);
             Persistence.service().commit();
             ServerSideFactory.create(ARFacade.class).postPayment(paymentRecord);
+            Persistence.service().commit();
         } else {
             log.debug("ccTransaction rejected {}", response);
             paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Rejected);
@@ -91,6 +105,7 @@ class CreditCardProcessor {
             Persistence.service().merge(paymentRecord);
             Persistence.service().commit();
             ServerSideFactory.create(ARFacade.class).postPayment(paymentRecord);
+            Persistence.service().commit();
         }
     }
 
