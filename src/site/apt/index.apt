@@ -30,7 +30,7 @@ Property Vista
 
     * {{{http://code.pyx4j.com/changelog.html}Change Log}} - Generated change log report from SVN for Framework.
 
-~~ {{{./statscm/index.html}StatSCM}} -  Source Code Management Metrics and Statistic for Vista.
+    * {{{./statscm/index.html}StatSCM}} -  Source Code Management Metrics and Statistic for Vista.
 
     * {{{http://code.pyx4j.com/statscm/index.html}StatSCM}} -  Source Code Management Metrics and Statistic for Framework.
 
