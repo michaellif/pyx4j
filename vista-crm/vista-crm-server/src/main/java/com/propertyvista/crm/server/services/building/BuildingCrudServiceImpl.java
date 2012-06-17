@@ -142,9 +142,11 @@ public class BuildingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Building
         {
             Persistence.service().retrieveMember(dbo.merchantAccounts());
             dbo.merchantAccounts().clear();
-            BuildingMerchantAccount bma = dbo.merchantAccounts().$();
-            bma.merchantAccount().set(in.merchantAccount());
-            dbo.merchantAccounts().add(bma);
+            if (!in.merchantAccount().isNull()) {
+                BuildingMerchantAccount bma = dbo.merchantAccounts().$();
+                bma.merchantAccount().set(in.merchantAccount());
+                dbo.merchantAccounts().add(bma);
+            }
         }
 
         Persistence.service().merge(dbo);
