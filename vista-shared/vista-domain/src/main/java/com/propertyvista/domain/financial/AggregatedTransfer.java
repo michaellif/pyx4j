@@ -104,5 +104,9 @@ public interface AggregatedTransfer extends IEntity {
     @JoinTable(value = PaymentRecord.class, mappedBy = ReturnAggregatedTransferId.class)
     ISet<PaymentRecord> returnedPayments();
 
+    @Detached(level = AttachLevel.Detached)
+    @JoinTable(value = PaymentRecordProcessing.class, mappedBy = PaymentRecordProcessing.RejectedBatchAggregatedTransferId.class)
+    ISet<PaymentRecord> rejectedBatchPayments();
+
     IPrimitive<String> transactionErrorMessage();
 }

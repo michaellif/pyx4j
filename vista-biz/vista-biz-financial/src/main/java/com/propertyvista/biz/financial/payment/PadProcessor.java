@@ -39,6 +39,7 @@ import com.propertyvista.domain.financial.AggregatedTransfer;
 import com.propertyvista.domain.financial.AggregatedTransfer.AggregatedTransferStatus;
 import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
+import com.propertyvista.domain.financial.PaymentRecordProcessing;
 import com.propertyvista.domain.payment.EcheckInfo;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.server.jobs.TaskRunner;
@@ -56,7 +57,6 @@ public class PadProcessor {
         paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Received);
         paymentRecord.receivedDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
         Persistence.service().merge(paymentRecord);
-        ServerSideFactory.create(ARFacade.class).postPayment(paymentRecord);
 
         Persistence.service().retrieve(paymentRecord.billingAccount());
 
@@ -188,12 +188,17 @@ public class PadProcessor {
             if (paymentRecord == null) {
                 throw new Error("Payment transaction '" + debitRecord.transactionId().getValue() + "' not found");
             }
-            if (!EnumSet.of(PaymentRecord.PaymentStatus.Processing, PaymentRecord.PaymentStatus.Received).contains(paymentRecord.paymentStatus().getValue())) {
-                throw new Error("Processed payment can't be rejected");
+            if (!EnumSet.of(PaymentRecord.PaymentStatus.Received).contains(paymentRecord.paymentStatus().getValue())) {
+                throw new Error("Unexpected payment record status " + paymentRecord.getPrimaryKey() + " " + paymentRecord.paymentStatus().getValue());
             }
-            // Do not update record status. Allow to ReSend or Cancel Manually
-            paymentRecord.aggregatedTransfer().set(at);
+            // Update record status. Allow to ReSend automatically or Cancel Manually
+            paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Queued);
             Persistence.service().persist(paymentRecord);
+
+            PaymentRecordProcessing processing = EntityFactory.create(PaymentRecordProcessing.class);
+            processing.paymentRecord().set(paymentRecord);
+            processing.aggregatedTransfer().set(at);
+            Persistence.service().persist(processing);
         }
     }
 

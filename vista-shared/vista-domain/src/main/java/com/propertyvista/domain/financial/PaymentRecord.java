@@ -36,6 +36,7 @@ import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
@@ -171,7 +172,6 @@ public interface PaymentRecord extends IEntity {
     @Timestamp(Timestamp.Update.Updated)
     IPrimitive<Date> updated();
 
-    @Owned
-    @Detached
-    PaymentRecordProcessing processing();
+    @Owned(cascade = {})
+    ISet<PaymentRecordProcessing> processing();
 }

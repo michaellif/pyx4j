@@ -37,6 +37,8 @@ public class AggregatedTransferViewerViewImpl extends CrmViewerViewImplBase<Aggr
 
     private final IListerView<PaymentRecord> returnedPaymentLister;
 
+    private final IListerView<PaymentRecord> rejectedBatchPaymentsLister;
+
     private final Button cancelAction;
 
     public AggregatedTransferViewerViewImpl() {
@@ -44,6 +46,7 @@ public class AggregatedTransferViewerViewImpl extends CrmViewerViewImplBase<Aggr
 
         paymentLister = new ListerInternalViewImplBase<PaymentRecord>(new PaymentRecordLister());
         returnedPaymentLister = new ListerInternalViewImplBase<PaymentRecord>(new PaymentRecordLister());
+        rejectedBatchPaymentsLister = new ListerInternalViewImplBase<PaymentRecord>(new PaymentRecordLister());
 
         setForm(new AggregatedTransferForm(true));
 
@@ -86,6 +89,11 @@ public class AggregatedTransferViewerViewImpl extends CrmViewerViewImplBase<Aggr
     @Override
     public IListerView<PaymentRecord> getReturnedPaymentsListerView() {
         return returnedPaymentLister;
+    }
+
+    @Override
+    public IListerView<PaymentRecord> getRejectedBatchPaymentsListerView() {
+        return rejectedBatchPaymentsLister;
     }
 
 }

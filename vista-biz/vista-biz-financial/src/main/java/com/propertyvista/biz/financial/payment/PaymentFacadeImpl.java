@@ -162,6 +162,7 @@ public class PaymentFacadeImpl implements PaymentFacade {
         case Echeck:
             paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Queued);
             Persistence.service().merge(paymentRecord);
+            ServerSideFactory.create(ARFacade.class).postPayment(paymentRecord);
             break;
         case EFT:
             paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Received);

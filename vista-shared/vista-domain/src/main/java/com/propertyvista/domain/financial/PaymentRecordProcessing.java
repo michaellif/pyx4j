@@ -13,11 +13,22 @@
  */
 package com.propertyvista.domain.financial;
 
+import com.pyx4j.entity.annotations.ColumnId;
+import com.pyx4j.entity.annotations.JoinColumn;
+import com.pyx4j.entity.annotations.Owner;
+import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
 
 public interface PaymentRecordProcessing extends IEntity {
 
-    IPrimitive<Integer> attempt();
+    @Owner
+    @JoinColumn
+    PaymentRecord paymentRecord();
 
+    interface RejectedBatchAggregatedTransferId extends ColumnId {
+    }
+
+    @JoinColumn(RejectedBatchAggregatedTransferId.class)
+    @ReadOnly(allowOverrideNull = true)
+    AggregatedTransfer aggregatedTransfer();
 }

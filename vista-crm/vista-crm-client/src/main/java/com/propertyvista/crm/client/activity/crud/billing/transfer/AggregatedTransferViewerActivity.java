@@ -38,6 +38,8 @@ public class AggregatedTransferViewerActivity extends CrmViewerActivity<Aggregat
 
     private final IListerView.Presenter<PaymentRecord> returnedPaymentLister;
 
+    private final IListerView.Presenter<PaymentRecord> rejectedBatchPaymentsLister;
+
     public AggregatedTransferViewerActivity(CrudAppPlace place) {
         super(place, FinancialViewFactory.instance(AggregatedTransferViewerView.class), GWT
                 .<AggregatedTransferCrudService> create(AggregatedTransferCrudService.class));
@@ -47,12 +49,17 @@ public class AggregatedTransferViewerActivity extends CrmViewerActivity<Aggregat
 
         returnedPaymentLister = new ListerActivityBase<PaymentRecord>(place, ((AggregatedTransferViewerView) getView()).getReturnedPaymentsListerView(),
                 GWT.<PaymentRecordListService> create(PaymentRecordListService.class), PaymentRecord.class);
+
+        rejectedBatchPaymentsLister = new ListerActivityBase<PaymentRecord>(place,
+                ((AggregatedTransferViewerView) getView()).getRejectedBatchPaymentsListerView(),
+                GWT.<PaymentRecordListService> create(PaymentRecordListService.class), PaymentRecord.class);
     }
 
     @Override
     public void onStop() {
         ((AbstractActivity) paymentLister).onStop();
         ((AbstractActivity) returnedPaymentLister).onStop();
+        ((AbstractActivity) rejectedBatchPaymentsLister).onStop();
         super.onStop();
     }
 
@@ -68,6 +75,11 @@ public class AggregatedTransferViewerActivity extends CrmViewerActivity<Aggregat
         returnedPaymentLister.addPreDefinedFilter(PropertyCriterion
                 .eq(EntityFactory.getEntityPrototype(PaymentRecord.class).aggregatedTransferReturn(), result));
         returnedPaymentLister.populate();
+
+        rejectedBatchPaymentsLister.clearPreDefinedFilters();
+        rejectedBatchPaymentsLister.addPreDefinedFilter(PropertyCriterion.eq(EntityFactory.getEntityPrototype(PaymentRecord.class).processing().$()
+                .aggregatedTransfer(), result));
+        rejectedBatchPaymentsLister.populate();
     }
 
     @Override

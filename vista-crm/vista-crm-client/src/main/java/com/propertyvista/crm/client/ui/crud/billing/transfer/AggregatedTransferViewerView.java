@@ -30,4 +30,6 @@ public interface AggregatedTransferViewerView extends IViewerView<AggregatedTran
     IListerView<PaymentRecord> getPaymentsListerView();
 
     IListerView<PaymentRecord> getReturnedPaymentsListerView();
+
+    IListerView<PaymentRecord> getRejectedBatchPaymentsListerView();
 }

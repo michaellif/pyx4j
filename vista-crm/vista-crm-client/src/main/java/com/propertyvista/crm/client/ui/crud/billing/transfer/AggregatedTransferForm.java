@@ -66,6 +66,9 @@ public class AggregatedTransferForm extends CrmEntityForm<AggregatedTransfer> {
         main.setH3(++row, 0, 1, proto().returnedPayments().getMeta().getCaption());
         main.setWidget(++row, 0, ((AggregatedTransferViewerView) getParentView()).getReturnedPaymentsListerView().asWidget());
 
+        main.setH3(++row, 0, 1, proto().rejectedBatchPayments().getMeta().getCaption());
+        main.setWidget(++row, 0, ((AggregatedTransferViewerView) getParentView()).getRejectedBatchPaymentsListerView().asWidget());
+
         return new ScrollPanel(main);
     }
 }
