@@ -80,8 +80,10 @@ public interface Feature extends Product, IVersionedEntity<FeatureV> {
         @MemberColumn(name = "featureType")
         IPrimitive<FeatureType> type();
 
+        @NotNull
         IPrimitive<Boolean> recurring();
 
+        @NotNull
         IPrimitive<Boolean> mandatory();
     }
 }
