@@ -59,7 +59,7 @@ public class BillCrudServiceImpl extends AbstractCrudServiceDtoImpl<Bill, BillDa
         if (bill != null) {
             ServerSideFactory.create(BillingFacade.class).confirmBill(bill);
             Persistence.service().commit();
-            callback.onSuccess(createDTO(bill));
+            super.retrieve(callback, entityId, RetrieveTraget.View);
         } else {
             throw new IllegalArgumentException();
         }
@@ -71,7 +71,7 @@ public class BillCrudServiceImpl extends AbstractCrudServiceDtoImpl<Bill, BillDa
         if (bill != null) {
             ServerSideFactory.create(BillingFacade.class).rejectBill(bill);
             Persistence.service().commit();
-            callback.onSuccess(createDTO(bill));
+            super.retrieve(callback, entityId, RetrieveTraget.View);
         } else {
             throw new IllegalArgumentException();
         }
