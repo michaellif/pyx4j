@@ -210,6 +210,10 @@ public class TransactionHistoryViewer extends CEntityViewer<TransactionHistoryDT
     }
 
     private static SafeHtml toSafeHtml(String str) {
-        return new SafeHtmlBuilder().appendEscaped(str).toSafeHtml();
+        SafeHtmlBuilder b = new SafeHtmlBuilder();
+        if (str != null) {
+            b.appendEscaped(str);
+        }
+        return b.toSafeHtml();
     }
 }
