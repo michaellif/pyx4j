@@ -880,13 +880,13 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         }
         String updatedTs = tm.entityMeta().getUpdatedTimestampMember();
         if (!EqualsHelper.equals(entity.getMemberValue(updatedTs), baseEntity.getMemberValue(updatedTs))) {
-            log.debug("Timestamp " + updatedTs + " change {} -> {}", baseEntity.getMemberValue(updatedTs), entity.getMemberValue(updatedTs));
+            log.debug("Timestamp '" + updatedTs + "' change {} -> {}", baseEntity.getMemberValue(updatedTs), entity.getMemberValue(updatedTs));
             throw new ConcurrentUpdateException(i18n.tr("{0} Updated Externally", tm.entityMeta().getCaption()));
         }
         String createdTs = tm.entityMeta().getCreatedTimestampMember();
         if (createdTs != null) {
             if (!EqualsHelper.equals(entity.getMemberValue(createdTs), baseEntity.getMemberValue(createdTs))) {
-                log.debug("Timestamp " + createdTs + " change {} -> {}", baseEntity.getMemberValue(createdTs), entity.getMemberValue(createdTs));
+                log.debug("Timestamp '" + createdTs + "' change {} -> {}", baseEntity.getMemberValue(createdTs), entity.getMemberValue(createdTs));
                 throw new SecurityViolationException("Permission Denied");
             }
         }
