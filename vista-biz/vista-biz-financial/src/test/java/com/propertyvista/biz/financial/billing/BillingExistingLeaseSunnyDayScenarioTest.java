@@ -42,7 +42,7 @@ public class BillingExistingLeaseSunnyDayScenarioTest extends FinancialTestBase 
 
         SysDateManager.setSysDate("17-May-2011");
 
-        initLease("1-Mar-2011", "31-Aug-2011", new BigDecimal("300.00"));
+        initLease("1-Mar-2011", "31-Aug-2011", null, new BigDecimal("300.00"));
 
         Bill bill = verifyExistingLease();
 

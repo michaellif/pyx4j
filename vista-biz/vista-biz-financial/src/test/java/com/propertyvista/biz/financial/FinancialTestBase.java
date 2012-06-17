@@ -202,10 +202,10 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
     }
 
     protected void initLease(String leaseDateFrom, String leaseDateTo) {
-        initLease(leaseDateFrom, leaseDateTo, null);
+        initLease(leaseDateFrom, leaseDateTo, null, null);
     }
 
-    protected void initLease(String leaseDateFrom, String leaseDateTo, BigDecimal carryforwardBalance) {
+    protected void initLease(String leaseDateFrom, String leaseDateTo, BigDecimal agreedPrice, BigDecimal carryforwardBalance) {
         Lease lease = retrieveLeaseForEdit();
 
         lease.leaseFrom().setValue(FinancialTestsUtils.getDate(leaseDateFrom));
@@ -213,7 +213,12 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
 
         lease.billingAccount().carryforwardBalance().setValue(carryforwardBalance);
 
-        ServerSideFactory.create(LeaseFacade.class).initLease(lease);
+        lease = ServerSideFactory.create(LeaseFacade.class).initLease(lease);
+
+        if (agreedPrice != null) {
+            lease.version().leaseProducts().serviceItem().agreedPrice().setValue(agreedPrice);
+            Persistence.service().persist(lease);
+        }
 
         BillingType billingType = ServerSideFactory.create(BillingFacade.class).ensureBillingType(lease);
 

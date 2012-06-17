@@ -63,7 +63,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
     private static final I18n i18n = I18n.get(LeaseFacadeImpl.class);
 
     @Override
-    public void initLease(Lease leaseDraft) {
+    public Lease initLease(Lease leaseDraft) {
         // let client supply initial status value:
         if (leaseDraft.version().status().isNull()) {
             leaseDraft.version().status().setValue(Lease.Status.Created);
@@ -90,17 +90,19 @@ public class LeaseFacadeImpl implements LeaseFacade {
         leaseDraft.billingAccount().accountNumber().setValue(ServerSideFactory.create(IdAssignmentFacade.class).createAccountNumber());
         leaseDraft.billingAccount().billCounter().setValue(0);
 
+        Persistence.service().merge(leaseDraft.billingAccount());
+
         Persistence.service().merge(leaseDraft);
 
         if (leaseDraft.unit().getPrimaryKey() != null) {
             ServerSideFactory.create(OccupancyFacade.class).reserve(leaseDraft.unit().getPrimaryKey(), leaseDraft);
-            setUnit(leaseDraft, leaseDraft.unit());
+            leaseDraft = setUnit(leaseDraft, leaseDraft.unit());
         }
-
+        return leaseDraft;
     }
 
     @Override
-    public void setUnit(Lease leaseId, AptUnit unitId) {
+    public Lease setUnit(Lease leaseId, AptUnit unitId) {
         Lease lease = Persistence.secureRetrieveDraft(Lease.class, leaseId.getPrimaryKey());
         if (!Lease.Status.draft().contains(lease.version().status().getValue())) {
             throw new UserRuntimeException(i18n.tr("Invalid Lease State"));
@@ -119,7 +121,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
         Persistence.service().retrieve(service.version().items());
         for (ProductItem item : service.version().items()) {
             if (item.element().equals(unit)) {
-                setService(lease, unit.belongsTo().productCatalog(), service, item);
+                lease = setService(lease, unit.belongsTo().productCatalog(), service, item);
                 succeeded = true;
                 break;
             }
@@ -133,9 +135,11 @@ public class LeaseFacadeImpl implements LeaseFacade {
 
         lease.unit().set(unit);
         persistLease(lease);
+
+        return lease;
     }
 
-    private void setService(Lease lease, ProductCatalog catalog, Service service, ProductItem serviceItem) {
+    private Lease setService(Lease lease, ProductCatalog catalog, Service service, ProductItem serviceItem) {
         // set selected service:
         lease.version().leaseProducts().serviceItem().set(createBillableItem(serviceItem));
 
@@ -172,6 +176,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
                 }
             }
         }
+        return lease;
     }
 
     private BillableItem createBillableItem(ProductItem item) {

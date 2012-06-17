@@ -169,6 +169,8 @@ public class BillingLifecycleManager {
 
             bill.executionDate().setValue(new LogicalDate(SysDateManager.getSysDate()));
 
+            bill.latestBillInCycle().setValue(true);
+
             AbstractBillingManager manager = null;
 
             if (Status.Created == billingAccount.lease().version().status().getValue()) {//zeroCycle bill should be issued
@@ -190,7 +192,6 @@ public class BillingLifecycleManager {
             manager.processBill();
 
             bill.billStatus().setValue(Bill.BillStatus.Finished);
-            updateBillingCycleStats(bill, true);
 
         } catch (Throwable e) {
             log.error("Bill run error", e);
@@ -200,8 +201,9 @@ public class BillingLifecycleManager {
                 billCreationError = e.getMessage();
             }
             bill.billCreationError().setValue(billCreationError);
-            updateBillingCycleStats(bill, true);
         }
+
+        updateBillingCycleStats(bill, true);
         Persistence.service().persist(bill);
 
         return new BillCreationResult(bill);
@@ -485,6 +487,11 @@ public class BillingLifecycleManager {
             Bill previousBill = Persistence.service().retrieve(criteria);
 
             if (previousBill != null) {
+
+                //Define previous bill as not the latest
+                previousBill.latestBillInCycle().setValue(false);
+                Persistence.service().persist(previousBill);
+
                 switch (previousBill.billStatus().getValue()) {
                 case Failed:
                     BillingUtils.decrement(bill.billingCycle().failed());

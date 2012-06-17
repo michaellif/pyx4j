@@ -22,9 +22,9 @@ import com.propertyvista.domain.tenant.lease.Lease;
 
 public interface LeaseFacade {
 
-    void initLease(Lease lease);
+    Lease initLease(Lease lease);
 
-    void setUnit(Lease leaseId, AptUnit unitId);
+    Lease setUnit(Lease leaseId, AptUnit unitId);
 
     void persistLease(Lease lease);
 

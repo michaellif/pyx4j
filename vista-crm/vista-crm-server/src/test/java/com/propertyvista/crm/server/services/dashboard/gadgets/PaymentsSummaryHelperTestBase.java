@@ -74,7 +74,7 @@ public class PaymentsSummaryHelperTestBase extends VistaDBTestBase {
         tenant.customer().person().name().lastName().setValue("Foo");
         lease.version().tenants().add(tenant);
 
-        ServerSideFactory.create(LeaseFacade.class).initLease(lease);
+        lease = ServerSideFactory.create(LeaseFacade.class).initLease(lease);
 
         merchantAccountA = makeMerchantAccount("A");
         merchantAccountB = makeMerchantAccount("B");

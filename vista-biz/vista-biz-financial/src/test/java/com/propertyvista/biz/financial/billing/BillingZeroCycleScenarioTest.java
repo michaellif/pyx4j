@@ -43,7 +43,7 @@ public class BillingZeroCycleScenarioTest extends FinancialTestBase {
         SysDateManager.setSysDate("17-Mar-2011"); // create existing lease
 
         // When we create Existing Lease, the tenant is already living in the building
-        initLease("1-Jan-2011", "31-Dec-2011", new BigDecimal("300.00"));
+        initLease("1-Jan-2011", "31-Dec-2011", new BigDecimal("900.00"), new BigDecimal("300.00"));
 
         //==================== RUN 1 ======================//
 
@@ -60,11 +60,11 @@ public class BillingZeroCycleScenarioTest extends FinancialTestBase {
         billingPeriodEndDate("31-Mar-2011").
         numOfProductCharges(1).
         paymentReceivedAmount("0.00").
-        serviceCharge("930.30").
+        serviceCharge("900.00").
         recurringFeatureCharges("0.00").
         oneTimeFeatureCharges("0.00").
         depositAmount("0.00").
-        taxes("111.64").
+        taxes("108.00").
         totalDueAmount("300.00");
         // @formatter:on
 
@@ -87,9 +87,9 @@ public class BillingZeroCycleScenarioTest extends FinancialTestBase {
         numOfProductCharges(1).
         paymentReceivedAmount("-300.00").
         latePaymentFees("50.00"). // fined for 300.00 carry-forward owing
-        serviceCharge("930.30").
-        taxes("111.64").
-        totalDueAmount("1091.94");
+        serviceCharge("900.00").
+        taxes("108.00").
+        totalDueAmount("1058.00");
         // @formatter:on
 
         printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
@@ -100,7 +100,7 @@ public class BillingZeroCycleScenarioTest extends FinancialTestBase {
         SysDateManager.setSysDate("17-Mar-2011"); // create existing lease
 
         // When we create Existing Lease, the tenant is already living in the building
-        initLease("1-Jan-2011", "31-Dec-2011", new BigDecimal("-100.00"));
+        initLease("1-Jan-2011", "31-Dec-2011", new BigDecimal("900.00"), new BigDecimal("-100.00"));
 
         //==================== RUN 1 ======================//
 
@@ -117,11 +117,11 @@ public class BillingZeroCycleScenarioTest extends FinancialTestBase {
         billingPeriodEndDate("31-Mar-2011").
         numOfProductCharges(1).
         paymentReceivedAmount("0.00").
-        serviceCharge("930.30").
+        serviceCharge("900.00").
         recurringFeatureCharges("0.00").
         oneTimeFeatureCharges("0.00").
         depositAmount("0.00").
-        taxes("111.64").
+        taxes("108.00").
         totalDueAmount("-100.00");
         // @formatter:on
 
@@ -140,9 +140,9 @@ public class BillingZeroCycleScenarioTest extends FinancialTestBase {
         billingPeriodStartDate("1-Apr-2011").
         billingPeriodEndDate("30-Apr-2011").
         numOfProductCharges(1).
-        serviceCharge("930.30").
-        taxes("111.64").
-        totalDueAmount("941.94"); // 1041.94 -100
+        serviceCharge("900.00").
+        taxes("108.00").
+        totalDueAmount("908.00"); // 1041.94 -100
         // @formatter:on
 
         printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
