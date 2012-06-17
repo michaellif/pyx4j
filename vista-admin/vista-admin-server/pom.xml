@@ -7,7 +7,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-         <groupId>com.propertyvista</groupId>
+        <groupId>com.propertyvista</groupId>
         <artifactId>vista-admin</artifactId>
         <version>1.0.4-SNAPSHOT</version><!--vista-version-->
         <relativePath>../pom.xml</relativePath>
@@ -18,11 +18,11 @@
 
     <dependencies>
 
-		<!-- ensure proper version, NOT from gwt-dev.jar -->
-		<dependency>
-		    <groupId>commons-codec</groupId>
-		    <artifactId>commons-codec</artifactId>
-		</dependency>
+        <!-- ensure proper version, NOT from gwt-dev.jar -->
+        <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>com.propertyvista</groupId>
@@ -35,7 +35,7 @@
             <artifactId>vista-onboarding-interface</artifactId>
             <version>${project.version}</version>
         </dependency>
-        
+
         <dependency>
             <groupId>com.propertyvista</groupId>
             <artifactId>vista-domain-srv</artifactId>
@@ -96,14 +96,9 @@
         </dependency>
 
         <dependency>
-            <groupId>com.pyx4j</groupId>
-            <artifactId>pyx-essentials-server</artifactId>
-        </dependency>
-        
-        <dependency>
             <groupId>net.tanesha.recaptcha4j</groupId>
-	        <artifactId>recaptcha4j</artifactId>
-	    </dependency>
+            <artifactId>recaptcha4j</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>commons-fileupload</groupId>
@@ -126,7 +121,7 @@
             <scope>test</scope>
             <optional>true</optional>
         </dependency>
-        
+
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>servlet-api</artifactId>
