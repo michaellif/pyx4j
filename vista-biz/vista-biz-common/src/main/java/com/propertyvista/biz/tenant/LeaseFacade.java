@@ -26,9 +26,9 @@ public interface LeaseFacade {
 
     Lease setUnit(Lease lease, AptUnit unitId);
 
-    void persistLease(Lease lease);
+    Lease persistLease(Lease lease);
 
-    void saveAsFinal(Lease lease);
+    Lease saveAsFinal(Lease lease);
 
     void createMasterOnlineApplication(Key leaseId);
 

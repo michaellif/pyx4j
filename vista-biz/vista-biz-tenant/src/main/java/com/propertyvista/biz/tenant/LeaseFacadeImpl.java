@@ -97,9 +97,10 @@ public class LeaseFacadeImpl implements LeaseFacade {
         if (leaseDraft.unit().getPrimaryKey() != null) {
             ServerSideFactory.create(OccupancyFacade.class).reserve(leaseDraft.unit().getPrimaryKey(), leaseDraft);
             leaseDraft = setUnit(leaseDraft, leaseDraft.unit());
-            persistLease(leaseDraft);
+            return persistLease(leaseDraft);
+        } else {
+            return leaseDraft;
         }
-        return leaseDraft;
     }
 
     @Override
@@ -190,7 +191,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
     }
 
     @Override
-    public void persistLease(Lease lease) {
+    public Lease persistLease(Lease lease) {
         boolean isUnitChanged = false;
         boolean doReserve = false;
         boolean doUnreserve = false;
@@ -225,14 +226,16 @@ public class LeaseFacadeImpl implements LeaseFacade {
                 ServerSideFactory.create(OccupancyFacade.class).reserve(lease.unit().getPrimaryKey(), lease);
             }
         }
+        return lease;
     }
 
     @Override
-    public void saveAsFinal(Lease lease) {
+    public Lease saveAsFinal(Lease lease) {
         lease.saveAction().setValue(SaveAction.saveAsFinal);
-        persistLease(lease);
+        lease = persistLease(lease);
         // update unit rent price here:
         ServerSideFactory.create(ProductCatalogFacade.class).updateUnitRentPrice(lease);
+        return lease;
     }
 
     private void saveCustomers(Lease lease) {
