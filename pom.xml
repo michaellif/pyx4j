@@ -302,10 +302,10 @@
             </dependency>
 
             <dependency>
-				<groupId>org.apache.axis2</groupId>
-				<artifactId>axis2-adb</artifactId>
-				<version>${axis2Version}</version>
-				<exclusions>
+                <groupId>org.apache.axis2</groupId>
+                <artifactId>axis2-adb</artifactId>
+                <version>${axis2Version}</version>
+                <exclusions>
                     <exclusion><groupId>org.apache.ant</groupId><artifactId>ant</artifactId></exclusion>
                     <exclusion><groupId>org.apache.geronimo.specs</groupId><artifactId>geronimo-javamail_1.4_spec</artifactId></exclusion>
                     <exclusion><groupId>org.apache.geronimo.specs</groupId><artifactId>geronimo-activation_1.1_spec</artifactId></exclusion>
@@ -314,7 +314,7 @@
                     <exclusion><groupId>org.apache.geronimo.specs</groupId><artifactId>geronimo-ws-metadata_2.0_spec</artifactId></exclusion>
                     <exclusion><groupId>xerces</groupId><artifactId>xercesImpl</artifactId></exclusion>
                 </exclusions>
-			</dependency>
+            </dependency>
 
             <dependency>
                 <groupId>org.apache.axis2</groupId>
@@ -328,10 +328,10 @@
                 <version>${axis2Version}</version>
             </dependency>
 
-			<dependency>
-			    <groupId>com.sun.jersey</groupId>
-			    <artifactId>jersey-server</artifactId>
-			    <version>1.8</version>
+            <dependency>
+                <groupId>com.sun.jersey</groupId>
+                <artifactId>jersey-server</artifactId>
+                <version>1.8</version>
             </dependency>
 
         </dependencies>
@@ -342,8 +342,8 @@
             <plugins>
                 <plugin>
                     <groupId>org.apache.axis2</groupId>
-				    <artifactId>axis2-wsdl2code-maven-plugin</artifactId>
-				    <version>${axis2Version}</version>
+                    <artifactId>axis2-wsdl2code-maven-plugin</artifactId>
+                    <version>${axis2Version}</version>
                     <dependencies>
                         <dependency>
                             <groupId>org.apache.neethi</groupId>
@@ -478,11 +478,11 @@
         </profile>
 
         <profile>
-            <id>maven3</id>
+            <id>todo-try-with-maven3.1</id>
             <activation>
                 <file>
                     <!--  This employs that the basedir expression is only recognized by Maven 3.x (see MNG-2363) -->
-                    <exists>${basedir}</exists>
+                    <exists>off-${basedir}</exists>
                 </file>
             </activation>
                 <build>
@@ -490,7 +490,7 @@
                         <plugin>
                             <groupId>org.apache.maven.plugins</groupId>
                             <artifactId>maven-site-plugin</artifactId>
-                            <version>3.0</version>
+                            <version>3.1</version>
                             <executions>
                                 <execution>
                                     <id>attach-descriptor</id>
@@ -570,12 +570,12 @@
                                             <nonDeveloperLogins>
                                                 <nonDeveloperLogin>cruisecontrol</nonDeveloperLogin>
                                             </nonDeveloperLogins>
-                                            <!--systemProperties>
+                                            <systemProperties>
                                                 <property>
                                                     <name>java.util.logging.config.file</name>
                                                     <value>src/site/stat-scm-logging-error.properties</value>
                                                 </property>
-                                            </systemProperties-->
+                                            </systemProperties>
                                         </configuration>
                                     </plugin>
                                     <plugin>
@@ -596,5 +596,154 @@
         </profile>
 
     </profiles>
+
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-project-info-reports-plugin</artifactId>
+                <version>2.4</version>
+                <reportSets>
+                   <reportSet>
+                      <reports>
+                         <report>index</report>
+                         <report>dependencies</report>
+                         <report>dependency-convergence</report>
+                         <report>project-team</report>
+                         <report>plugin-management</report>
+                         <report>cim</report>
+                         <report>issue-tracking</report>
+                         <report>license</report>
+                         <report>scm</report>
+                         <report>modules</report>
+                         <report>summary</report>
+                      </reports>
+                   </reportSet>
+                </reportSets>
+                <configuration>
+                    <linkOnly>true</linkOnly>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.8.1</version>
+                <inherited>false</inherited>
+                <configuration>
+                    <quiet>true</quiet>
+                    <nohelp>true</nohelp>
+                </configuration>
+                <reportSets>
+                    <reportSet>
+                        <id>non-aggregate</id>
+                        <configuration>
+                        </configuration>
+                        <reports>
+                            <!--report>javadoc</report-->
+                        </reports>
+                    </reportSet>
+                    <reportSet>
+                        <id>aggregate</id>
+                        <configuration>
+                        </configuration>
+                        <reports>
+                            <report>aggregate</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-pmd-plugin</artifactId>
+                <version>2.7.1</version>
+                <configuration>
+                    <linkXref>true</linkXref>
+                    <minimumTokens>100</minimumTokens>
+                    <targetJdk>1.5</targetJdk>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jxr-plugin</artifactId>
+                <version>2.3</version>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>findbugs-maven-plugin</artifactId>
+                <version>2.4.0</version>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-report-plugin</artifactId>
+                <version>2.5</version>
+                <reportSets>
+                    <reportSet>
+                        <reports>
+                            <report>report-only</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
+            </plugin>
+
+            <!-- TODO list -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>taglist-maven-plugin</artifactId>
+                <version>2.4</version>
+            </plugin>
+
+            <plugin>
+                <groupId>net.sf</groupId>
+                <artifactId>stat-scm</artifactId>
+                <version>1.2.0</version>
+                <inherited>false</inherited>
+                <configuration>
+                    <excludes>
+                        <exclude>**/*.cvs</exclude>
+                        <exclude>**/*.po</exclude>
+                    </excludes>
+                    <nonDeveloperLogins>
+                        <nonDeveloperLogin>cruisecontrol</nonDeveloperLogin>
+                    </nonDeveloperLogins>
+                    <systemProperties>
+                        <property>
+                            <name>java.util.logging.config.file</name>
+                            <value>src/site/stat-scm-logging-error.properties</value>
+                        </property>
+                    </systemProperties>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-changelog-plugin</artifactId>
+                <version>2.2</version>
+                <inherited>false</inherited>
+                <configuration>
+                    <basedir>${basedir}</basedir>
+                </configuration>
+                <reportSets>
+                    <reportSet>
+                        <id>dual-report</id>
+                        <configuration>
+                            <type>range</type>
+                            <range>30</range>
+                        </configuration>
+                        <reports>
+                            <report>changelog</report>
+                            <report>file-activity</report>
+                            <report>dev-activity</report>
+                        </reports>
+                  </reportSet>
+                </reportSets>
+            </plugin>
+
+        </plugins>
+    </reporting>
 
 </project>
