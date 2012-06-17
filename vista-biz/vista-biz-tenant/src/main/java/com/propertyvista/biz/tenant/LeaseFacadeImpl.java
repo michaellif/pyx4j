@@ -97,14 +97,13 @@ public class LeaseFacadeImpl implements LeaseFacade {
         if (leaseDraft.unit().getPrimaryKey() != null) {
             ServerSideFactory.create(OccupancyFacade.class).reserve(leaseDraft.unit().getPrimaryKey(), leaseDraft);
             leaseDraft = setUnit(leaseDraft, leaseDraft.unit());
+            persistLease(leaseDraft);
         }
         return leaseDraft;
     }
 
     @Override
-    public Lease setUnit(Lease leaseId, AptUnit unitId) {
-        boolean inMemory = (leaseId.getInstanceValueClass() != Lease.class);
-        Lease lease = (inMemory ? leaseId : Persistence.secureRetrieveDraft(Lease.class, leaseId.getPrimaryKey()));
+    public Lease setUnit(Lease lease, AptUnit unitId) {
         if (!Lease.Status.draft().contains(lease.version().status().getValue())) {
             throw new UserRuntimeException(i18n.tr("Invalid Lease State"));
         }
@@ -137,10 +136,6 @@ public class LeaseFacadeImpl implements LeaseFacade {
 //        }
 
         lease.unit().set(unit);
-        if (!inMemory) {
-            persistLease(lease);
-        }
-
         return lease;
     }
 

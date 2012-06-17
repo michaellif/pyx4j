@@ -24,7 +24,7 @@ public interface LeaseFacade {
 
     Lease initLease(Lease lease);
 
-    Lease setUnit(Lease leaseId, AptUnit unitId);
+    Lease setUnit(Lease lease, AptUnit unitId);
 
     void persistLease(Lease lease);
 
