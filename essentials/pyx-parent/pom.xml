@@ -630,10 +630,11 @@
                     <version>1.0.7</version>
                 </plugin>
 -->
+
                 <plugin>
-                    <groupId>org.xnap.commons</groupId>
-                    <artifactId>maven-gettext-plugin</artifactId>
-                    <version>1.2.3</version>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-site-plugin</artifactId>
+                    <version>3.1</version>
                 </plugin>
 
                 <plugin>
