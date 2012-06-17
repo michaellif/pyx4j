@@ -54,6 +54,7 @@ public class PadCaledonDev {
 
         } catch (IOException e) {
             log.error("Error while saving file creation number", e);
+            throw new Error(e.getLocalizedMessage());
         }
     }
 
