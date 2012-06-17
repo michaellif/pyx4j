@@ -42,6 +42,7 @@ import com.pyx4j.entity.annotations.ManagedColumn;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Reference;
 import com.pyx4j.entity.annotations.Versioned;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.rdb.dialect.Dialect;
 import com.pyx4j.entity.rdb.dialect.NamingConvention;
 import com.pyx4j.entity.server.AdapterFactory;
@@ -407,7 +408,7 @@ public class EntityOperationsMeta {
             Class<Enum> enumValueClass = (Class<Enum>) valueClass;
             return new ValueAdapterEnum(dialect, enumValueClass);
         } else if (valueClass.equals(Boolean.class)) {
-            return new ValueAdapterBoolean(dialect);
+            return new ValueAdapterBoolean(dialect, memberMeta.isValidatorAnnotationPresent(NotNull.class));
         } else if (valueClass.equals(BigDecimal.class)) {
             return new ValueAdapterBigDecimal(dialect);
         } else if (valueClass.equals(Short.class)) {

@@ -29,14 +29,21 @@ import com.pyx4j.entity.rdb.dialect.Dialect;
 
 class ValueAdapterBoolean extends ValueAdapterPrimitive {
 
-    protected ValueAdapterBoolean(Dialect dialect) {
+    private final boolean isNotNull;
+
+    protected ValueAdapterBoolean(Dialect dialect, boolean isNotNull) {
         super(dialect, Boolean.class);
+        this.isNotNull = isNotNull;
     }
 
     @Override
     public int bindValue(PersistenceContext persistenceContext, PreparedStatement stmt, int parameterIndex, Object value) throws SQLException {
         if (value == null) {
-            stmt.setNull(parameterIndex, sqlType);
+            if (isNotNull) {
+                stmt.setBoolean(parameterIndex, Boolean.FALSE);
+            } else {
+                stmt.setNull(parameterIndex, sqlType);
+            }
         } else {
             stmt.setBoolean(parameterIndex, (Boolean) value);
         }
@@ -47,7 +54,11 @@ class ValueAdapterBoolean extends ValueAdapterPrimitive {
     public Object retrieveValue(ResultSet rs, String memberSqlName) throws SQLException {
         boolean value = rs.getBoolean(memberSqlName);
         if (rs.wasNull()) {
-            return null;
+            if (isNotNull) {
+                return Boolean.FALSE;
+            } else {
+                return null;
+            }
         } else {
             return value;
         }
