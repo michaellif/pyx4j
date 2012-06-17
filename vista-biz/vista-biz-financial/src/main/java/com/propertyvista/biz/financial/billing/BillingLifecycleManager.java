@@ -192,6 +192,15 @@ public class BillingLifecycleManager {
             manager.processBill();
 
             bill.billStatus().setValue(Bill.BillStatus.Finished);
+            updateBillingCycleStats(bill, true);
+            Persistence.service().persist(bill);
+
+            LeaseBillingPolicy leaseBillingPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(
+                    billingAccount.lease().unit().belongsTo(), LeaseBillingPolicy.class);
+
+            if (leaseBillingPolicy.confirmationMethod().getValue() == LeaseBillingPolicy.BillConfirmationMethod.automatic) {
+                confirmBill(bill);
+            }
 
         } catch (Throwable e) {
             log.error("Bill run error", e);
@@ -201,10 +210,9 @@ public class BillingLifecycleManager {
                 billCreationError = e.getMessage();
             }
             bill.billCreationError().setValue(billCreationError);
+            updateBillingCycleStats(bill, true);
+            Persistence.service().persist(bill);
         }
-
-        updateBillingCycleStats(bill, true);
-        Persistence.service().persist(bill);
 
         return new BillCreationResult(bill);
     }

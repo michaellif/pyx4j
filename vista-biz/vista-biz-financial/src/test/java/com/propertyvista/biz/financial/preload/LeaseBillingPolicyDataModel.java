@@ -61,6 +61,8 @@ public class LeaseBillingPolicyDataModel {
         nsfItem.fee().setValue(new BigDecimal(30.00));
         policy.nsfFees().add(nsfItem);
 
+        policy.confirmationMethod().setValue(config.billConfirmationMethod);
+
         policy.node().set(buildingDataModel.getBuilding());
 
         Persistence.service().persist(policy);

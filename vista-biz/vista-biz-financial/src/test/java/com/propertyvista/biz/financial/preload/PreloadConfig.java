@@ -13,7 +13,12 @@
  */
 package com.propertyvista.biz.financial.preload;
 
+import com.propertyvista.domain.policy.policies.LeaseBillingPolicy;
+
 public class PreloadConfig {
 
     public Integer defaultBillingCycleSartDay = 1;
+
+    public LeaseBillingPolicy.BillConfirmationMethod billConfirmationMethod = LeaseBillingPolicy.BillConfirmationMethod.manual;
+
 }
