@@ -241,6 +241,16 @@ public class PadProcessor {
         at.merchantBalance().setValue(summary.merchantBalance().getValue());
         at.fundsReleased().setValue(summary.fundsReleased().getValue());
 
+        // Find MerchantAccount
+        {
+            EntityQueryCriteria<MerchantAccount> criteria = EntityQueryCriteria.create(MerchantAccount.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().merchantTerminalId(), summary.merchantTerminalId()));
+            at.merchantAccount().set(Persistence.service().retrieve(criteria));
+            if (at.merchantAccount().isNull()) {
+                throw new Error("Merchant Account '" + summary.merchantTerminalId().getValue() + "' not found");
+            }
+        }
+
         Persistence.service().persist(at);
 
         for (final PadReconciliationDebitRecord debitRecord : summary.records()) {
