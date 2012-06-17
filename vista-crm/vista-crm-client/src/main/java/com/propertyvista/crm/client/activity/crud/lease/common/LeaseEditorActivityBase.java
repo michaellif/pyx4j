@@ -19,7 +19,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 import com.pyx4j.site.client.ui.crud.form.IEditorView;
 import com.pyx4j.site.rpc.CrudAppPlace;
@@ -43,12 +42,12 @@ public abstract class LeaseEditorActivityBase<DTO extends LeaseDTO> extends Edit
 
     @Override
     public void setSelectedUnit(AptUnit selected) {
-        ((LeaseCrudServiceBase<DTO>) getService()).setSelectededUnit(new DefaultAsyncCallback<VoidSerializable>() {
+        ((LeaseCrudServiceBase<DTO>) getService()).setSelectededUnit(new DefaultAsyncCallback<DTO>() {
             @Override
-            public void onSuccess(VoidSerializable result) {
-                populate();
+            public void onSuccess(DTO result) {
+                populateView(result);
             }
-        }, selected.getPrimaryKey(), getEntityId());
+        }, selected.getPrimaryKey(), getView().getValue());
     }
 
     @Override

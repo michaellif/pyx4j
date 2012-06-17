@@ -26,7 +26,6 @@ import com.pyx4j.entity.server.AbstractVersionedCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.crm.rpc.services.lease.LeaseCrudServiceBase;
@@ -162,11 +161,9 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
     }
 
     @Override
-    public void setSelectededUnit(AsyncCallback<VoidSerializable> callback, Key unitId, Key entityId) {
-        ServerSideFactory.create(LeaseFacade.class).setUnit(EntityFactory.createIdentityStub(Lease.class, entityId),
-                EntityFactory.createIdentityStub(AptUnit.class, unitId));
-        Persistence.service().commit();
-        callback.onSuccess(null);
+    public void setSelectededUnit(AsyncCallback<DTO> callback, Key unitId, DTO dto) {
+        ServerSideFactory.create(LeaseFacade.class).setUnit(dto, EntityFactory.createIdentityStub(AptUnit.class, unitId));
+        callback.onSuccess(dto);
     }
 
     @Override

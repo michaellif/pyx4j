@@ -103,7 +103,8 @@ public class LeaseFacadeImpl implements LeaseFacade {
 
     @Override
     public Lease setUnit(Lease leaseId, AptUnit unitId) {
-        Lease lease = Persistence.secureRetrieveDraft(Lease.class, leaseId.getPrimaryKey());
+        boolean inMemory = (leaseId.getInstanceValueClass() != Lease.class);
+        Lease lease = (inMemory ? leaseId : Persistence.secureRetrieveDraft(Lease.class, leaseId.getPrimaryKey()));
         if (!Lease.Status.draft().contains(lease.version().status().getValue())) {
             throw new UserRuntimeException(i18n.tr("Invalid Lease State"));
         }
@@ -122,7 +123,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
             Persistence.service().retrieve(service.version().items());
             for (ProductItem item : service.version().items()) {
                 if (item.element().equals(unit)) {
-                    lease = setService(lease, unit.belongsTo().productCatalog(), service, item);
+                    lease = setService(lease, unit, service, item);
                     succeeded = true;
                     break;
                 }
@@ -136,17 +137,21 @@ public class LeaseFacadeImpl implements LeaseFacade {
 //        }
 
         lease.unit().set(unit);
-        persistLease(lease);
+        if (!inMemory) {
+            persistLease(lease);
+        }
 
         return lease;
     }
 
-    private Lease setService(Lease lease, ProductCatalog catalog, Service service, ProductItem serviceItem) {
+    private Lease setService(Lease lease, AptUnit unit, Service service, ProductItem serviceItem) {
+        ProductCatalog catalog = unit.belongsTo().productCatalog();
+
         // set selected service:
         lease.version().leaseProducts().serviceItem().set(createBillableItem(serviceItem));
 
-        DepositPolicy depositPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(lease.unit().belongsTo(), DepositPolicy.class);
-
+        // find and fill deposits:
+        DepositPolicy depositPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(unit.belongsTo(), DepositPolicy.class);
         for (DepositPolicyItem item : depositPolicy.policyItems()) {
             if (item.productType().equals(serviceItem.type())) {
                 Deposit deposit = EntityFactory.create(Deposit.class);
