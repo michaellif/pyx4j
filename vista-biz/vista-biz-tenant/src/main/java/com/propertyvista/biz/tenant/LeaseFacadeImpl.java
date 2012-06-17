@@ -118,12 +118,14 @@ public class LeaseFacadeImpl implements LeaseFacade {
         criteria.add(PropertyCriterion.eq(criteria.proto().catalog(), unit.belongsTo().productCatalog()));
         criteria.add(PropertyCriterion.eq(criteria.proto().version().type(), lease.type()));
         Service service = Persistence.service().retrieve(criteria);
-        Persistence.service().retrieve(service.version().items());
-        for (ProductItem item : service.version().items()) {
-            if (item.element().equals(unit)) {
-                lease = setService(lease, unit.belongsTo().productCatalog(), service, item);
-                succeeded = true;
-                break;
+        if (service != null) {
+            Persistence.service().retrieve(service.version().items());
+            for (ProductItem item : service.version().items()) {
+                if (item.element().equals(unit)) {
+                    lease = setService(lease, unit.belongsTo().productCatalog(), service, item);
+                    succeeded = true;
+                    break;
+                }
             }
         }
 
