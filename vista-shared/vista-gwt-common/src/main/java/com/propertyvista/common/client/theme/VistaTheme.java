@@ -270,7 +270,6 @@ public class VistaTheme extends Theme {
         style.addProperty("color", ThemeColors.foreground, 0.2);
         style.addProperty("cursor", "default");
         addStyle(style);
-
     }
 
     protected void initComboBoxStyles() {

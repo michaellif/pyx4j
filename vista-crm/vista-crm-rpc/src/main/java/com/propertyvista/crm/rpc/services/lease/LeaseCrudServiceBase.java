@@ -21,13 +21,17 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.AbstractVersionedCrudService;
 
+import com.propertyvista.domain.financial.offering.ProductItem;
+import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.dto.LeaseDTO;
 
 public interface LeaseCrudServiceBase<DTO extends LeaseDTO> extends AbstractVersionedCrudService<DTO> {
 
-    void setSelectededUnit(AsyncCallback<DTO> callback, Key unitId, DTO dto);
+    void setSelectedUnit(AsyncCallback<DTO> callback, AptUnit unitId, DTO dto);
+
+    void setSelectedService(AsyncCallback<DTO> callback, ProductItem serviceId, DTO dto);
 
     void calculateChargeItemAdjustments(AsyncCallback<BigDecimal> callback, BillableItem item);
 

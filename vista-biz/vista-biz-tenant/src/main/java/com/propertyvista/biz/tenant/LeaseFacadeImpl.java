@@ -116,24 +116,25 @@ public class LeaseFacadeImpl implements LeaseFacade {
             throw new UserRuntimeException(i18n.tr("Invalid Lease State"));
         }
 
-        boolean succeeded = false;
         AptUnit unit = Persistence.secureRetrieve(AptUnit.class, unitId.getPrimaryKey());
         Persistence.service().retrieve(unit.belongsTo());
 
         assert !lease.isValueDetached();
 
+        boolean succeeded = false;
+        lease.unit().set(unit);
+
         EntityQueryCriteria<Service> criteria = new EntityQueryCriteria<Service>(Service.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().catalog(), unit.belongsTo().productCatalog()));
         criteria.add(PropertyCriterion.eq(criteria.proto().version().type(), lease.type()));
         servicesLoop: for (Service service : Persistence.service().query(criteria)) {
-
             EntityQueryCriteria<ProductItem> serviceCriteria = EntityQueryCriteria.create(ProductItem.class);
             serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().type(), ServiceItemType.class));
             serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().product(), service.version()));
             serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().element(), lease.unit()));
             ProductItem serviceItem = Persistence.service().retrieve(serviceCriteria);
             if (serviceItem != null) {
-                lease = setService(lease, unit, service, serviceItem);
+                setService(lease, serviceItem);
                 succeeded = true;
                 break servicesLoop;
             }
@@ -148,12 +149,20 @@ public class LeaseFacadeImpl implements LeaseFacade {
                     unit.getStringView(), unit.belongsTo().getStringView()));
         }
 
-        lease.unit().set(unit);
         return lease;
     }
 
-    private Lease setService(Lease lease, AptUnit unit, Service service, ProductItem serviceItem) {
-        ProductCatalog catalog = unit.belongsTo().productCatalog();
+    @Override
+    public Lease setService(Lease lease, ProductItem serviceId) {
+        if (!Lease.Status.draft().contains(lease.version().status().getValue())) {
+            throw new UserRuntimeException(i18n.tr("Invalid Lease State"));
+        }
+
+        ProductItem serviceItem = Persistence.secureRetrieve(ProductItem.class, serviceId.getPrimaryKey());
+
+        assert serviceItem != null;
+        assert !lease.isValueDetached();
+        assert !lease.unit().isNull();
 
         // set selected service:
         lease.version().leaseProducts().serviceItem().set(createBillableItem(serviceItem));
@@ -161,8 +170,24 @@ public class LeaseFacadeImpl implements LeaseFacade {
             DataDump.dumpToDirectory("lease-bug", "serviceItem", lease);
         }
 
-        // find and fill deposits:
-        DepositPolicy depositPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(unit.belongsTo(), DepositPolicy.class);
+        // find/load all necessary ingredients:
+        if (lease.unit().isValueDetached()) {
+            Persistence.service().retrieve(lease.unit());
+        }
+        if (lease.unit().belongsTo().isValueDetached()) {
+            Persistence.service().retrieve(lease.unit().belongsTo());
+        }
+
+        // Service by Service item:
+        Service.ServiceV service = null;
+        Persistence.service().retrieve(serviceItem.product());
+        if (serviceItem.product().getInstanceValueClass().equals(Service.ServiceV.class)) {
+            service = serviceItem.product().cast();
+        }
+        assert service != null;
+
+        // Deposits:
+        DepositPolicy depositPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(lease.unit().belongsTo(), DepositPolicy.class);
         for (DepositPolicyItem item : depositPolicy.policyItems()) {
             if (item.productType().equals(serviceItem.type())) {
                 Deposit deposit = EntityFactory.create(Deposit.class);
@@ -177,12 +202,13 @@ public class LeaseFacadeImpl implements LeaseFacade {
         lease.version().leaseProducts().featureItems().clear();
         lease.version().leaseProducts().concessions().clear();
 
+        ProductCatalog catalog = lease.unit().belongsTo().productCatalog();
         List<FeatureItemType> utilitiesToExclude = new ArrayList<FeatureItemType>(catalog.includedUtilities().size() + catalog.externalUtilities().size());
         utilitiesToExclude.addAll(catalog.includedUtilities());
         utilitiesToExclude.addAll(catalog.externalUtilities());
 
         // pre-populate utilities for the new service:
-        for (Feature feature : service.version().features()) {
+        for (Feature feature : service.features()) {
             for (ProductItem item : feature.version().items()) {
                 switch (feature.version().type().getValue()) {
                 case utility:
@@ -194,6 +220,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
                 }
             }
         }
+
         return lease;
     }
 
@@ -476,5 +503,4 @@ public class LeaseFacadeImpl implements LeaseFacade {
         lease.saveAction().setValue(SaveAction.saveAsFinal);
         Persistence.secureSave(lease);
     }
-
 }

@@ -17,12 +17,15 @@ import java.math.BigDecimal;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 
 public interface LeaseEditorPresenterBase {
 
     void setSelectedUnit(AptUnit selected);
+
+    void setSelectedService(ProductItem selected);
 
     void calculateChargeItemAdjustments(AsyncCallback<BigDecimal> callback, BillableItem item);
 }

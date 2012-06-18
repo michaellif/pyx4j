@@ -31,7 +31,7 @@ public interface LeaseProducts extends IEntity {
     BillableItem serviceItem();
 
     @Owned
-    @Caption(name = "Charge Items")
+    @Caption(name = "Features")
     IList<BillableItem> featureItems();
 
     @Versioned

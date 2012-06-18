@@ -17,6 +17,7 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 
 import com.propertyvista.domain.company.Employee;
+import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.Lease;
 
@@ -25,6 +26,8 @@ public interface LeaseFacade {
     Lease initLease(Lease lease);
 
     Lease setUnit(Lease lease, AptUnit unitId);
+
+    Lease setService(Lease lease, ProductItem serviceId);
 
     Lease persistLease(Lease lease);
 

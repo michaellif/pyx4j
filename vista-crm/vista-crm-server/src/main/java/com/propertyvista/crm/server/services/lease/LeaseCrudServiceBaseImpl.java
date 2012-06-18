@@ -26,6 +26,8 @@ import com.pyx4j.entity.server.AbstractVersionedCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.crm.rpc.services.lease.LeaseCrudServiceBase;
@@ -35,6 +37,7 @@ import com.propertyvista.domain.financial.offering.FeatureItemType;
 import com.propertyvista.domain.financial.offering.ProductCatalog;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.Service;
+import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.Guarantor;
@@ -75,6 +78,7 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
             // fill selected building by unit:
             dto.selectedBuilding().set(dto.unit().belongsTo());
             fillServiceEligibilityData(dto);
+            fillserviceItems(dto);
         }
 
         // calculate price adjustments:
@@ -161,8 +165,16 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
     }
 
     @Override
-    public void setSelectededUnit(AsyncCallback<DTO> callback, Key unitId, DTO dto) {
-        ServerSideFactory.create(LeaseFacade.class).setUnit(dto, EntityFactory.createIdentityStub(AptUnit.class, unitId));
+    public void setSelectedUnit(AsyncCallback<DTO> callback, AptUnit unitId, DTO dto) {
+        ServerSideFactory.create(LeaseFacade.class).setUnit(dto, unitId);
+        callback.onSuccess(dto);
+    }
+
+    @Override
+    public void setSelectedService(AsyncCallback<DTO> callback, ProductItem serviceId, DTO dto) {
+        ServerSideFactory.create(LeaseFacade.class).setService(dto, serviceId);
+        fillServiceEligibilityData(dto);
+        fillserviceItems(dto);
         callback.onSuccess(dto);
     }
 
@@ -254,5 +266,26 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
         }
 
         return (selectedService != null);
+    }
+
+    private void fillserviceItems(DTO currentValue) {
+        currentValue.selectedServiceItems().clear();
+
+        Persistence.service().retrieve(currentValue.unit().belongsTo());
+        EntityQueryCriteria<Service> criteria = new EntityQueryCriteria<Service>(Service.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().catalog(), currentValue.unit().belongsTo().productCatalog()));
+        criteria.add(PropertyCriterion.eq(criteria.proto().version().type(), currentValue.type()));
+        servicesLoop: for (Service service : Persistence.service().query(criteria)) {
+            EntityQueryCriteria<ProductItem> serviceCriteria = EntityQueryCriteria.create(ProductItem.class);
+            serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().type(), ServiceItemType.class));
+            serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().product(), service.version()));
+            serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().element(), currentValue.unit()));
+            serviceCriteria
+                    .add(PropertyCriterion.ne(serviceCriteria.proto().id(), currentValue.version().leaseProducts().serviceItem().item().getPrimaryKey()));
+            currentValue.selectedServiceItems().addAll(Persistence.service().query(serviceCriteria));
+            if (!currentValue.selectedServiceItems().isEmpty()) {
+                break servicesLoop;
+            }
+        }
     }
 }

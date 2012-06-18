@@ -40,7 +40,7 @@ public interface BillableItem extends IEntity {
     IPrimitive<String> uid();
 
     @ToString(index = 0)
-    @Caption(name = "Product Item")
+    @Caption(name = "Service Item")
     ProductItem item();
 
     @NotNull

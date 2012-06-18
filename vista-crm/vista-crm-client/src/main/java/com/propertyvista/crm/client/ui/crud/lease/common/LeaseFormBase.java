@@ -74,6 +74,7 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
         tabPanel.add(createDetailsTab(), i18n.tr("Details"));
         tabPanel.add(createTenantsTab(), i18n.tr("Tenants"));
         tabPanel.add(createGuarantorsTab(), i18n.tr("Guarantors"));
+        tabPanel.add(createProductsTab(), i18n.tr("Products"));
         tabPanel.add(createChargesTab(), i18n.tr("Charges"));
 
         return tabPanel;
@@ -258,14 +259,14 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
         return new ScrollPanel(main);
     }
 
-    private Widget createChargesTab() {
+    private Widget createProductsTab() {
         FormFlexPanel main = new FormFlexPanel();
 
         @SuppressWarnings("unchecked")
         IEditorView<DTO> leaseEditorView = (isEditable() ? (IEditorView<DTO>) getParentView() : null);
 
         int row = -1;
-        main.setH1(++row, 0, 2, i18n.tr("Information"));
+        main.setH1(++row, 0, 2, i18n.tr("Service"));
         main.setWidget(++row, 0, inject(proto().version().leaseProducts().serviceItem(), new BillableItemEditor(this, leaseEditorView, true)));
 
         main.setH1(++row, 0, 2, proto().version().leaseProducts().featureItems().getMeta().getCaption());
@@ -273,6 +274,12 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
 
         main.setH1(++row, 0, 2, proto().version().leaseProducts().concessions().getMeta().getCaption());
         main.setWidget(++row, 0, inject(proto().version().leaseProducts().concessions(), new ConcessionFolder(isEditable(), this)));
+
+        return new ScrollPanel(main);
+    }
+
+    private Widget createChargesTab() {
+        FormFlexPanel main = new FormFlexPanel();
 
         return new ScrollPanel(main);
     }

@@ -20,15 +20,12 @@ import java.util.List;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.client.CEntityForm;
 import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
-import com.pyx4j.entity.client.ui.CEntityHyperlink;
-import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.entity.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.entity.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -40,8 +37,11 @@ import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationFailure;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
-import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.crud.form.IEditorView;
+import com.pyx4j.site.client.ui.crud.misc.CEntitySelectorHyperlink;
+import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
+import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.editors.PetDataEditor;
@@ -96,23 +96,46 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
         FormFlexPanel main = new FormFlexPanel();
         int row = -1;
 
-        if (isEditable()) {
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().item(), new CEntityLabel<ProductItem>()), 25).build());
-        } else {
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().item(), new CEntityHyperlink<ProductItem>(new Command() {
-                @Override
-                public void execute() {
-                    if (getValue().item().product().isInstanceOf(Service.ServiceV.class)) {
-                        Service service = ((Service.ServiceV) getValue().item().product().cast()).holder();
-                        AppSite.getPlaceController().goTo(AppPlaceEntityMapper.resolvePlace(Service.class, service.getPrimaryKey()));
-                    } else if (getValue().item().product().isInstanceOf(Feature.FeatureV.class)) {
-                        Feature feature = ((Feature.FeatureV) getValue().item().product().cast()).holder();
-                        AppSite.getPlaceController().goTo(AppPlaceEntityMapper.resolvePlace(Feature.class, feature.getPrimaryKey()));
-                    }
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().item(), new CEntitySelectorHyperlink<ProductItem>() {
+            @Override
+            protected AppPlace getTargetPlace() {
+                if (getValue().product().isInstanceOf(Service.ServiceV.class)) {
+                    Service service = ((Service.ServiceV) getValue().product().cast()).holder();
+                    return AppPlaceEntityMapper.resolvePlace(Service.class, service.getPrimaryKey());
+                } else if (getValue().product().isInstanceOf(Feature.FeatureV.class)) {
+                    Feature feature = ((Feature.FeatureV) getValue().product().cast()).holder();
+                    return AppPlaceEntityMapper.resolvePlace(Feature.class, feature.getPrimaryKey());
+                } else {
+                    return null;
                 }
-            })), 25).build());
-        }
+            }
 
+            @Override
+            protected EntitySelectorListDialog<ProductItem> getSelectorDialog() {
+                return new EntitySelectorListDialog<ProductItem>(i18n.tr("Service Item Selection"), false, lease.getValue().selectedServiceItems()) {
+                    @Override
+                    public boolean onClickOk() {
+                        List<ProductItem> selectedItems = getSelectedItems();
+                        if (!selectedItems.isEmpty()) {
+                            ((LeaseEditorPresenterBase) leaseEditorView.getPresenter()).setSelectedService(selectedItems.get(0));
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    }
+
+                    @Override
+                    public void show() {
+                        if (lease.getValue().selectedBuilding() == null || lease.getValue().selectedBuilding().isNull()) {
+                            MessageDialog.warn(i18n.tr("Warning"), i18n.tr("You Must Select Unit First"));
+                        } else {
+                            super.show();
+                        }
+                    }
+                };
+
+            }
+        }), 25).build());
         get(proto().item()).setViewable(!isService);
 
         main.setWidget(row, 1, new DecoratorBuilder(inject(proto().agreedPrice()), 10).build());
