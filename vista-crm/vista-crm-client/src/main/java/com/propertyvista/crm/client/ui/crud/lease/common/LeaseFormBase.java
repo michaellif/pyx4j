@@ -61,6 +61,8 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
 
     protected final VistaTabLayoutPanel tabPanel = new VistaTabLayoutPanel(CrmTheme.defaultTabHeight, Unit.EM);
 
+    private Widget chargesTab;
+
     protected LeaseFormBase(Class<DTO> clazz) {
         this(clazz, false);
     }
@@ -75,7 +77,7 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
         tabPanel.add(createTenantsTab(), i18n.tr("Tenants"));
         tabPanel.add(createGuarantorsTab(), i18n.tr("Guarantors"));
         tabPanel.add(createProductsTab(), i18n.tr("Products"));
-        tabPanel.add(createChargesTab(), i18n.tr("Charges"));
+        tabPanel.add(chargesTab = createChargesTab(), i18n.tr("Charges"));
 
         return tabPanel;
     }
@@ -93,6 +95,8 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
     @Override
     protected void onPopulate() {
         super.onPopulate();
+
+        tabPanel.setTabVisible(chargesTab, getValue().version().status().getValue().isDraft());
 
         get(proto().version().completion()).setVisible(!getValue().version().completion().isNull());
 

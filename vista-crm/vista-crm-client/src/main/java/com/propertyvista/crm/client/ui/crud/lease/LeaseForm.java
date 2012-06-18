@@ -28,9 +28,7 @@ import com.propertyvista.misc.VistaTODO;
 
 public class LeaseForm extends LeaseFormBase<LeaseDTO> {
 
-    private Widget paymentsTab;
-
-    private Widget adjustmentTab;
+    private Widget adjustmentsTab, billsTab, paymentsTab, financialTab;
 
     public LeaseForm() {
         this(false);
@@ -46,14 +44,14 @@ public class LeaseForm extends LeaseFormBase<LeaseDTO> {
         createCommonContent();
 
         if (!VistaTODO.removedForProduction) {
-            tabPanel.add(adjustmentTab = isEditable() ? new HTML() : ((LeaseViewerView) getParentView()).getLeaseAdjustmentListerView().asWidget(),
+            tabPanel.add(adjustmentsTab = isEditable() ? new HTML() : ((LeaseViewerView) getParentView()).getLeaseAdjustmentListerView().asWidget(),
                     i18n.tr("Adjustments"));
             tabPanel.setLastTabDisabled(isEditable());
-            tabPanel.add(isEditable() ? new HTML() : ((LeaseViewerView) getParentView()).getBillListerView().asWidget(), i18n.tr("Bills"));
+            tabPanel.add(billsTab = isEditable() ? new HTML() : ((LeaseViewerView) getParentView()).getBillListerView().asWidget(), i18n.tr("Bills"));
             tabPanel.setLastTabDisabled(isEditable());
             tabPanel.add(paymentsTab = isEditable() ? new HTML() : ((LeaseViewerView) getParentView()).getPaymentListerView().asWidget(), i18n.tr("Payments"));
             tabPanel.setLastTabDisabled(isEditable());
-            tabPanel.add(isEditable() ? new HTML() : createFinancialTransactionHistoryTab(), i18n.tr("Financial Summary"));
+            tabPanel.add(financialTab = isEditable() ? new HTML() : createFinancialTransactionHistoryTab().asWidget(), i18n.tr("Financial Summary"));
             tabPanel.setLastTabDisabled(isEditable());
         }
 
@@ -65,8 +63,10 @@ public class LeaseForm extends LeaseFormBase<LeaseDTO> {
     protected void onPopulate() {
         super.onPopulate();
 
-        tabPanel.setTabDisabled(adjustmentTab, getValue().version().status().getValue().isDraft());
-        tabPanel.setTabDisabled(paymentsTab, getValue().version().status().getValue().isDraft());
+        tabPanel.setTabVisible(adjustmentsTab, !getValue().version().status().getValue().isDraft());
+        tabPanel.setTabVisible(billsTab, !getValue().version().status().getValue().isDraft());
+        tabPanel.setTabVisible(paymentsTab, !getValue().version().status().getValue().isDraft());
+        tabPanel.setTabVisible(financialTab, !getValue().version().status().getValue().isDraft());
 
         if (!isEditable()) {
             ((LeaseViewerView) getParentView()).getLeaseAdjustmentListerView().getLister().getDataTablePanel().getAddButton()

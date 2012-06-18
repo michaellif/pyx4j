@@ -128,6 +128,24 @@ public class VistaTabLayoutPanel extends TabLayoutPanel {
         }
     }
 
+    // visibility:
+
+    public boolean isTabVisible(Widget widget) {
+        return getTabWidget(widget).asWidget().getParent().isVisible();
+    }
+
+    public boolean isTabVisible(int index) {
+        return isTabVisible(getWidget(index).asWidget());
+    }
+
+    public void setTabVisible(Widget widget, boolean visible) {
+        getTabWidget(widget).asWidget().getParent().setVisible(visible);
+    }
+
+    public void setTabVisible(int index, boolean visible) {
+        setTabVisible(getWidget(index).asWidget(), visible);
+    }
+
     //
     // remove/clear method complements:
     //
