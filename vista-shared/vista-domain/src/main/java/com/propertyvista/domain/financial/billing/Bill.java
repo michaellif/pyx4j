@@ -205,10 +205,4 @@ public interface Bill extends IEntity {
     @ToString(index = 1)
     IPrimitive<BigDecimal> totalDueAmount();
 
-    class aaa {
-        String toString1(Bill bill) {
-            return bill.depositAmount().getStringView() + "Vasja";
-        }
-    }
-
 }
