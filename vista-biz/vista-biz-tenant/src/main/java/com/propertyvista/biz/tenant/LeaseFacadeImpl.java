@@ -99,6 +99,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
         Persistence.service().merge(leaseDraft);
 
         if (leaseDraft.unit().getPrimaryKey() != null) {
+            ServerSideFactory.create(OccupancyFacade.class).reserve(leaseDraft.unit().getPrimaryKey(), leaseDraft);
             leaseDraft = setUnit(leaseDraft, leaseDraft.unit());
             if (bugNo1549) {
                 DataDump.dumpToDirectory("lease-bug", "saving", leaseDraft);
