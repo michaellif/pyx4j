@@ -147,7 +147,7 @@ public class CaledonPadSftpClient {
             client.channel.cd(dst);
             client.channel.put(file.getAbsolutePath(), file.getName());
 
-            log.info("SFTP file {} transfer completed", file.getAbsolutePath());
+            log.info("SFTP file {} transfer completed to {}", file.getAbsolutePath(), sftpHost());
             return null;
         } catch (SftpException e) {
             log.error("SFTP error", e);
@@ -208,7 +208,7 @@ public class CaledonPadSftpClient {
                     if ((!dst.exists()) && (!dst2.exists())) {
                         client.channel.get(rFile.getFilename(), dst.getAbsolutePath());
                         lFiles.add(dst);
-                        log.info("SFTP file {} received", dst.getAbsolutePath());
+                        log.info("SFTP file {} received from {}", dst.getAbsolutePath(), sftpHost());
                         // Only one file  
                         break;
                     }
