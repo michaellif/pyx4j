@@ -23,7 +23,9 @@ import com.propertyvista.domain.tenant.lease.Lease;
 
 public interface BillingFacade {
 
-    BillCreationResult runBilling(Lease lease);
+    Bill runBilling(Lease lease);
+
+    Bill runBillingPreview(Lease lease);
 
     void runBilling(BillingCycle billingCycle, StatisticsRecord dynamicStatisticsRecord);
 

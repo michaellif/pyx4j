@@ -16,8 +16,6 @@ package com.propertyvista.biz.financial.billing;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.pyx4j.entity.server.Persistence;
-
 import com.propertyvista.biz.financial.InvoiceLineItemFactory;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.InvoiceAccountCharge;
@@ -100,13 +98,11 @@ public class BillingLeaseAdjustmentProcessor extends AbstractBillingProcessor {
     private void createPendingCharge(LeaseAdjustment adjustment) {
         InvoiceAccountCharge charge = InvoiceLineItemFactory.createInvoiceAccountCharge(adjustment);
         charge.dueDate().setValue(getBillingManager().getNextPeriodBill().dueDate().getValue());
-        Persistence.service().persist(charge);
         addCharge(charge);
     }
 
     private void createPendingCredit(LeaseAdjustment adjustment) {
         InvoiceAccountCredit credit = InvoiceLineItemFactory.createInvoiceAccountCredit(adjustment);
-        Persistence.service().persist(credit);
         addCredit(credit);
     }
 

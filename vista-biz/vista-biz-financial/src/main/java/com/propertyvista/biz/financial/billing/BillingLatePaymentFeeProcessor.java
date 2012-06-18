@@ -85,8 +85,6 @@ public class BillingLatePaymentFeeProcessor extends AbstractBillingProcessor {
         charge.description().setValue(i18n.tr("Late payment fee"));
         charge.debitType().setValue(DebitType.latePayment);
 
-        Persistence.service().persist(charge);
-
         getBillingManager().getNextPeriodBill().lineItems().add(charge);
 
         getBillingManager().getNextPeriodBill().latePaymentFees()

@@ -335,8 +335,6 @@ public class BillingProductChargeProcessor extends AbstractBillingProcessor {
             return;
         }
 
-        Persistence.service().persist(charge);
-
         if (BillingUtils.isService(charge.chargeSubLineItem().billableItem().item().product())) { //Service
             getBillingManager().getNextPeriodBill().serviceCharge().setValue(charge.amount().getValue());
         } else if (BillingUtils.isRecurringFeature(charge.chargeSubLineItem().billableItem().item().product())) { //Recurring Feature

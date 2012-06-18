@@ -15,7 +15,6 @@ package com.propertyvista.biz.financial.billing;
 
 import java.math.BigDecimal;
 
-import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -60,7 +59,6 @@ public class BillingCarryforwardProcessor extends AbstractBillingProcessor {
         zeroCycleBalance.billingAccount().set(getBillingManager().getNextPeriodBill().billingAccount());
         zeroCycleBalance.amount().setValue(initialBalance);
         zeroCycleBalance.description().setValue(i18n.tr("Carryforward Balance"));
-        Persistence.service().persist(zeroCycleBalance);
         getBillingManager().getNextPeriodBill().lineItems().add(zeroCycleBalance);
         getBillingManager().getNextPeriodBill().carryForwardCredit()
         .setValue(getBillingManager().getNextPeriodBill().carryForwardCredit().getValue().add(zeroCycleBalance.amount().getValue()));
