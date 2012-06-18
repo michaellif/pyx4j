@@ -217,7 +217,9 @@ public class ModelTest {
         String xml = sw.toString();
         log.info("\n" + xml);
 
-        ExampleClient.execute(transmit);
+        if (false) {
+            ExampleClient.execute(transmit);
+        }
 
     }
 }
