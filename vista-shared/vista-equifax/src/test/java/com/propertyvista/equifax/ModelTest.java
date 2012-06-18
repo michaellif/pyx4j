@@ -18,7 +18,6 @@ import java.math.BigInteger;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
-import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.namespace.QName;
 
@@ -60,17 +59,14 @@ import com.propertyvista.equifax.model.StrategyNumber;
 import com.propertyvista.equifax.model.TimeAtPresentAddress;
 import com.propertyvista.equifax.model.TimeAtPresentEmployer;
 import com.propertyvista.equifax.request.XmlCreator;
+import com.propertyvista.equifax.utils.ExampleClient;
 
 public class ModelTest {
 
     private final static Logger log = LoggerFactory.getLogger(ModelTest.class);
 
-    /**
-     * 
-     * @throws JAXBException
-     */
     @Test
-    public void testTransmit() throws JAXBException {
+    public void testTransmit() throws Exception {
         ObjectFactory factory = new ObjectFactory();
         CNConsAndCommRequestType transmit = factory.createCNConsAndCommRequestType();
 
@@ -220,5 +216,8 @@ public class ModelTest {
         m.marshal(element, sw);
         String xml = sw.toString();
         log.info("\n" + xml);
+
+        ExampleClient.execute(transmit);
+
     }
 }
