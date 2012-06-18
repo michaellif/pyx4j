@@ -34,6 +34,7 @@ import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.essentials.server.preloader.DataGenerator;
+import com.pyx4j.gwt.server.DateUtils;
 
 import com.propertyvista.admin.domain.pmc.OnboardingMerchantAccount;
 import com.propertyvista.config.VistaDeployment;
@@ -284,7 +285,9 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
             }
 
             Persistence.service().persist(building);
-            // Save Versioned Items
+            // Save Versioned Items, 
+            // Preload data in a past all for product catalog assignments in LaseSimulator
+            Persistence.service().setTransactionSystemTime(DateUtils.detectDateformat("2008-01-01"));
             for (Concession concession : building.productCatalog().concessions()) {
                 concession.saveAction().setValue(SaveAction.saveAsFinal);
                 Persistence.service().persist(concession);
