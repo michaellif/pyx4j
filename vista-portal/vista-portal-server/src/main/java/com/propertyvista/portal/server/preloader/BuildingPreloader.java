@@ -288,17 +288,21 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
             // Save Versioned Items, 
             // Preload data in a past all for product catalog assignments in LaseSimulator
             Persistence.service().setTransactionSystemTime(DateUtils.detectDateformat("2008-01-01"));
-            for (Concession concession : building.productCatalog().concessions()) {
-                concession.saveAction().setValue(SaveAction.saveAsFinal);
-                Persistence.service().persist(concession);
-            }
-            for (Feature feature : building.productCatalog().features()) {
-                feature.saveAction().setValue(SaveAction.saveAsFinal);
-                Persistence.service().persist(feature);
-            }
-            for (Service service : building.productCatalog().services()) {
-                service.saveAction().setValue(SaveAction.saveAsFinal);
-                Persistence.service().persist(service);
+            try {
+                for (Concession concession : building.productCatalog().concessions()) {
+                    concession.saveAction().setValue(SaveAction.saveAsFinal);
+                    Persistence.service().persist(concession);
+                }
+                for (Feature feature : building.productCatalog().features()) {
+                    feature.saveAction().setValue(SaveAction.saveAsFinal);
+                    Persistence.service().persist(feature);
+                }
+                for (Service service : building.productCatalog().services()) {
+                    service.saveAction().setValue(SaveAction.saveAsFinal);
+                    Persistence.service().persist(service);
+                }
+            } finally {
+                Persistence.service().setTransactionSystemTime(null);
             }
 
             //Do not publish until data is clean-up

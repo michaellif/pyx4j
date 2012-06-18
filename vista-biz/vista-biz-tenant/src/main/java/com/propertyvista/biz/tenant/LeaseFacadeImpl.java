@@ -44,6 +44,7 @@ import com.propertyvista.domain.financial.offering.FeatureItemType;
 import com.propertyvista.domain.financial.offering.ProductCatalog;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.Service;
+import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.domain.policy.policies.DepositPolicy;
 import com.propertyvista.domain.policy.policies.domain.DepositPolicyItem;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
@@ -125,21 +126,27 @@ public class LeaseFacadeImpl implements LeaseFacade {
         criteria.add(PropertyCriterion.eq(criteria.proto().catalog(), unit.belongsTo().productCatalog()));
         criteria.add(PropertyCriterion.eq(criteria.proto().version().type(), lease.type()));
         servicesLoop: for (Service service : Persistence.service().query(criteria)) {
-            Persistence.service().retrieve(service.version().items());
-            for (ProductItem item : service.version().items()) {
-                if (item.element().equals(unit)) {
-                    lease = setService(lease, unit, service, item);
-                    succeeded = true;
-                    break servicesLoop;
-                }
+
+            EntityQueryCriteria<ProductItem> serviceCriteria = EntityQueryCriteria.create(ProductItem.class);
+            serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().type(), ServiceItemType.class));
+            serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().product(), service.version()));
+            serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().element(), lease.unit()));
+            ProductItem serviceItem = Persistence.service().retrieve(serviceCriteria);
+            if (serviceItem != null) {
+                lease = setService(lease, unit, service, serviceItem);
+                succeeded = true;
+                break servicesLoop;
             }
         }
 
-// TODO : ensure preloaders do work with this!!        
-//        if (!succeeded) {
-//            throw new UserRuntimeException(i18n.tr("There no service for selected unit: {0} from Building: {1}", unit.getStringView(), unit.belongsTo()
-//                    .getStringView()));
-//        }
+        if (!succeeded) {
+            if (bugNo1549) {
+                DataDump.dumpToDirectory("lease-bug", "error", lease);
+                DataDump.dumpToDirectory("lease-bug", "error", unit);
+            }
+            throw new UserRuntimeException(i18n.tr("There no service ''{0}'' for selected unit: {1} from Building: {2}", lease.type().getStringView(),
+                    unit.getStringView(), unit.belongsTo().getStringView()));
+        }
 
         lease.unit().set(unit);
         return lease;
