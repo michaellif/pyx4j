@@ -58,9 +58,11 @@ public interface Lease extends IVersionedEntity<LeaseV> {
 
         Created,
 
-        ApplicationInProgress,
+        Application,
 
         Approved, // Application
+
+        Cancelled, //TODO Implement (unreserve unit)
 
         Active,
 
@@ -78,7 +80,7 @@ public interface Lease extends IVersionedEntity<LeaseV> {
         // state sets:
 
         public static Collection<Status> draft() {
-            return EnumSet.of(Created, ApplicationInProgress);
+            return EnumSet.of(Created, Application);
         }
 
         public static Collection<Status> current() {

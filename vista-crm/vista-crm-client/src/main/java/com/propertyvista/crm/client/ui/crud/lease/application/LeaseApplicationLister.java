@@ -76,7 +76,7 @@ public class LeaseApplicationLister extends ListerBase<LeaseApplicationDTO> {
     protected EntityListCriteria<LeaseApplicationDTO> updateCriteria(EntityListCriteria<LeaseApplicationDTO> criteria) {
         // TODO : set all that stuff in CRUD service:
         criteria.setVersionedCriteria(VersionedCriteria.onlyDraft);
-        criteria.add(PropertyCriterion.eq(criteria.proto().version().status(), Lease.Status.ApplicationInProgress));
+        criteria.add(PropertyCriterion.eq(criteria.proto().version().status(), Lease.Status.Application));
         return super.updateCriteria(criteria);
     }
 
@@ -89,7 +89,7 @@ public class LeaseApplicationLister extends ListerBase<LeaseApplicationDTO> {
         LeaseApplicationDTO newLease = EntityFactory.create(LeaseApplicationDTO.class);
         newLease.type().setValue(leaseType);
         newLease.paymentFrequency().setValue(PaymentFrequency.Monthly);
-        newLease.version().status().setValue(Lease.Status.ApplicationInProgress);
+        newLease.version().status().setValue(Lease.Status.Application);
         return newLease;
     }
 

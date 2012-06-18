@@ -83,7 +83,7 @@ public class LeadFacadeImpl implements LeadFacade {
         lease.leaseTo().setValue(new LogicalDate(leaseEnd));
 
         lease.version().expectedMoveIn().setValue(lead.moveInDate().getValue());
-        lease.version().status().setValue(Lease.Status.ApplicationInProgress);
+        lease.version().status().setValue(Lease.Status.Application);
 
         boolean asApplicant = true;
         for (Guest guest : lead.guests()) {

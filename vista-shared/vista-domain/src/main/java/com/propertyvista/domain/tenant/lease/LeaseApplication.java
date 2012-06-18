@@ -42,7 +42,7 @@ public interface LeaseApplication extends IEntity {
 
         Created, // Mapped to Lease status Created and ApplicationInProgress
 
-        OnlineApplicationInProgress,
+        OnlineApplication,
 
         PendingDecision,
 
@@ -50,7 +50,7 @@ public interface LeaseApplication extends IEntity {
 
         Declined, // Mapped to Lease status Closed
 
-        Cancelled; // Mapped to Lease status Closed
+        Cancelled; // Mapped to Lease status Cancelled
 
         @Override
         public String toString() {
@@ -60,7 +60,7 @@ public interface LeaseApplication extends IEntity {
         // state sets:
 
         public static Collection<Status> draft() {
-            return EnumSet.of(Created, OnlineApplicationInProgress, PendingDecision);
+            return EnumSet.of(Created, OnlineApplication, PendingDecision);
         }
 
         public static Collection<Status> current() {

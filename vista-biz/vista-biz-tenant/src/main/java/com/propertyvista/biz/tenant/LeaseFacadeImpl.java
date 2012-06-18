@@ -74,7 +74,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
         } else {
             switch (leaseDraft.version().status().getValue()) {
             case Created:
-            case ApplicationInProgress:
+            case Application:
                 break; // ok, allowed values...
             default:
                 leaseDraft.version().status().setValue(Lease.Status.Created);
@@ -99,7 +99,6 @@ public class LeaseFacadeImpl implements LeaseFacade {
         Persistence.service().merge(leaseDraft);
 
         if (leaseDraft.unit().getPrimaryKey() != null) {
-            ServerSideFactory.create(OccupancyFacade.class).reserve(leaseDraft.unit().getPrimaryKey(), leaseDraft);
             leaseDraft = setUnit(leaseDraft, leaseDraft.unit());
             if (bugNo1549) {
                 DataDump.dumpToDirectory("lease-bug", "saving", leaseDraft);
@@ -285,8 +284,8 @@ public class LeaseFacadeImpl implements LeaseFacade {
 
         ServerSideFactory.create(OnlineApplicationFacade.class).createMasterOnlineApplication(lease.leaseApplication().onlineApplication());
 
-        lease.leaseApplication().status().setValue(LeaseApplication.Status.OnlineApplicationInProgress);
-        lease.version().status().setValue(Lease.Status.ApplicationInProgress);
+        lease.leaseApplication().status().setValue(LeaseApplication.Status.OnlineApplication);
+        lease.version().status().setValue(Lease.Status.Application);
         Persistence.service().persist(lease);
     }
 
@@ -372,6 +371,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
 
     @Override
     public void verifyExistingLease(Lease leaseId) {
+
         Lease lease = Persistence.secureRetrieveDraft(Lease.class, leaseId.getPrimaryKey());
 
         ServerSideFactory.create(OccupancyFacade.class).approveLease(lease.unit().getPrimaryKey());
