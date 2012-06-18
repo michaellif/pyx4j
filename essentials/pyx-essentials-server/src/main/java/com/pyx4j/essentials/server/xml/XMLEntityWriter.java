@@ -53,6 +53,8 @@ public class XMLEntityWriter {
 
     private boolean emitAttachLevel = false;
 
+    private boolean emitXmlTransient = false;
+
     private boolean emitLogTransient = true;
 
     private final XMLEntityNamingConvention namingConvention;
@@ -146,6 +148,14 @@ public class XMLEntityWriter {
         this.emitAttachLevel = emitAttachLevel;
     }
 
+    public boolean isEmitXmlTransient() {
+        return emitXmlTransient;
+    }
+
+    public void setEmitXmlTransient(boolean emitXmlTransient) {
+        this.emitXmlTransient = emitXmlTransient;
+    }
+
     public boolean isEmitLogTransient() {
         return emitLogTransient;
     }
@@ -172,7 +182,7 @@ public class XMLEntityWriter {
 
     private void write(IEntity entity, String name, Map<String, String> attributes, @SuppressWarnings("rawtypes") Class<? extends IObject> declaredObjectClass,
             VerticalGraph graph) {
-        if (entity.getEntityMeta().getAnnotation(XmlTransient.class) != null) {
+        if (!isEmitXmlTransient() && entity.getEntityMeta().getAnnotation(XmlTransient.class) != null) {
             return;
         }
         if (!isEmitLogTransient()) {
@@ -232,7 +242,7 @@ public class XMLEntityWriter {
         EntityMeta em = entity.getEntityMeta();
         for (String memberName : em.getMemberNames()) {
             MemberMeta memberMeta = em.getMemberMeta(memberName);
-            if (memberMeta.getAnnotation(XmlTransient.class) != null) {
+            if (!isEmitXmlTransient() && memberMeta.getAnnotation(XmlTransient.class) != null) {
                 continue;
             }
             IObject<?> member = entity.getMember(memberName);

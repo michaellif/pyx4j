@@ -158,6 +158,7 @@ public class DataDump {
                 DumpXMLEntityWriter xmlWriter = new DumpXMLEntityWriter(xml);
                 xmlWriter.setEmitAttachLevel(true);
                 xmlWriter.setEmitLogTransient(false);
+                xmlWriter.setEmitXmlTransient(true);
                 if (item instanceof List) {
                     xml.start("list");
                     for (IEntity ent : (List<IEntity>) item) {
