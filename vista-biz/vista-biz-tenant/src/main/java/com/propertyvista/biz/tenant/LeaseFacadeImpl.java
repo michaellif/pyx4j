@@ -26,6 +26,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.essentials.server.dev.DataDump;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 
@@ -62,6 +63,8 @@ public class LeaseFacadeImpl implements LeaseFacade {
 
     private static final I18n i18n = I18n.get(LeaseFacadeImpl.class);
 
+    final boolean bugNo1549 = true;
+
     @Override
     public Lease initLease(Lease leaseDraft) {
         // let client supply initial status value:
@@ -97,6 +100,9 @@ public class LeaseFacadeImpl implements LeaseFacade {
         if (leaseDraft.unit().getPrimaryKey() != null) {
             ServerSideFactory.create(OccupancyFacade.class).reserve(leaseDraft.unit().getPrimaryKey(), leaseDraft);
             leaseDraft = setUnit(leaseDraft, leaseDraft.unit());
+            if (bugNo1549) {
+                DataDump.dumpToDirectory("lease-bug", "saving", leaseDraft);
+            }
             return persistLease(leaseDraft);
         } else {
             return leaseDraft;
@@ -144,6 +150,9 @@ public class LeaseFacadeImpl implements LeaseFacade {
 
         // set selected service:
         lease.version().leaseProducts().serviceItem().set(createBillableItem(serviceItem));
+        if (bugNo1549) {
+            DataDump.dumpToDirectory("lease-bug", "serviceItem", lease);
+        }
 
         // find and fill deposits:
         DepositPolicy depositPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(unit.belongsTo(), DepositPolicy.class);
