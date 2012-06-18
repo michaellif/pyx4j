@@ -118,14 +118,13 @@ public class LeaseFacadeImpl implements LeaseFacade {
         EntityQueryCriteria<Service> criteria = new EntityQueryCriteria<Service>(Service.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().catalog(), unit.belongsTo().productCatalog()));
         criteria.add(PropertyCriterion.eq(criteria.proto().version().type(), lease.type()));
-        Service service = Persistence.service().retrieve(criteria);
-        if (service != null) {
+        servicesLoop: for (Service service : Persistence.service().query(criteria)) {
             Persistence.service().retrieve(service.version().items());
             for (ProductItem item : service.version().items()) {
                 if (item.element().equals(unit)) {
                     lease = setService(lease, unit, service, item);
                     succeeded = true;
-                    break;
+                    break servicesLoop;
                 }
             }
         }
