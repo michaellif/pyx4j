@@ -33,7 +33,6 @@ import com.pyx4j.commons.RuntimeExceptionSerializable;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UserRuntimeException;
-import com.pyx4j.server.contexts.Context;
 
 public class ReCaptchaAntiBot extends LoginAttemptsCountAntiBot {
 
@@ -51,7 +50,7 @@ public class ReCaptchaAntiBot extends LoginAttemptsCountAntiBot {
         ReCaptcha rc = ReCaptchaFactory.newReCaptcha(publicKey, privateKey, false);
         ReCaptchaResponse captchaResponse;
         try {
-            captchaResponse = rc.checkAnswer(Context.getRequestRemoteAddr(), challenge, response);
+            captchaResponse = rc.checkAnswer(getRequestRemoteAddr(), challenge, response);
         } catch (ReCaptchaException e) {
             log.error("Error", e);
             throw new RuntimeExceptionSerializable(i18n.tr("reCAPTCHA Connection Failed"));

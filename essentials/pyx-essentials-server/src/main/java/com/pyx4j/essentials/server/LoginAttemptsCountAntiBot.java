@@ -27,6 +27,7 @@ import java.util.Map;
 import java.util.Vector;
 
 import com.pyx4j.commons.Consts;
+import com.pyx4j.server.contexts.Context;
 
 public abstract class LoginAttemptsCountAntiBot extends AbstractAntiBot {
 
@@ -56,6 +57,13 @@ public abstract class LoginAttemptsCountAntiBot extends AbstractAntiBot {
     }
 
     private static Map<String, InvalidLoginAttempts> cache = new HashMap<String, InvalidLoginAttempts>();
+
+    /**
+     * Allow to change IP address of request when accessing system via API
+     */
+    protected String getRequestRemoteAddr() {
+        return Context.getRequestRemoteAddr();
+    }
 
     @Override
     protected boolean onAuthenticationFailed(String email) {
