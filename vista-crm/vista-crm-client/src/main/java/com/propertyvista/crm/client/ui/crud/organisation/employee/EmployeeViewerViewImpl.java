@@ -29,6 +29,8 @@ public class EmployeeViewerViewImpl extends CrmViewerViewImplBase<EmployeeDTO> i
 
     private final Button passwordAction;
 
+    private final Button viewLoginLogAction;
+
     public EmployeeViewerViewImpl() {
         super(CrmSiteMap.Organization.Employee.class, new EmployeeForm(true));
 
@@ -40,12 +42,22 @@ public class EmployeeViewerViewImpl extends CrmViewerViewImplBase<EmployeeDTO> i
                         .getStringView());
             }
         });
+
+        viewLoginLogAction = new Button(i18n.tr("View Login History"), new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                ((EmployeeViewerView.Presenter) getPresenter()).goToLoginHistory(getForm().getValue().user());
+            }
+        });
+
         addHeaderToolbarTwoItem(passwordAction.asWidget());
+        addHeaderToolbarTwoItem(viewLoginLogAction.asWidget());
     }
 
     @Override
     public void populate(EmployeeDTO value) {
         super.populate(value);
         passwordAction.setVisible(presenter.canEdit());
+        viewLoginLogAction.setVisible(presenter.canEdit());
     }
 }

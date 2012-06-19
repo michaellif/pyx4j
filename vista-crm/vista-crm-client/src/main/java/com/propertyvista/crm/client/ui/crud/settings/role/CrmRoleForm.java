@@ -16,6 +16,8 @@ package com.propertyvista.crm.client.ui.crud.settings.role;
 import java.util.Arrays;
 import java.util.List;
 
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
@@ -32,11 +34,14 @@ import com.propertyvista.common.client.ui.decorations.VistaTableFolderDecorator;
 import com.propertyvista.crm.client.activity.crud.settings.role.CrmRoleBehaviorDTOListServiceImpl;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.security.CrmRole;
+import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.domain.security.VistaCrmBehaviorDTO;
 
 public class CrmRoleForm extends CrmEntityForm<CrmRole> {
 
     private static final I18n i18n = I18n.get(CrmRoleForm.class);
+
+    private boolean prevTwoStepVerificationValue;
 
     public CrmRoleForm() {
         this(false);
@@ -52,10 +57,44 @@ public class CrmRoleForm extends CrmEntityForm<CrmRole> {
         int row = -1;
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name())).labelWidth(10).componentWidth(20).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().description())).labelWidth(10).componentWidth(20).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().requireTwoStepVerificationOnLogin())).labelWidth(10).componentWidth(3).build());
         content.setH1(++row, 0, 1, proto().permissions().getMeta().getCaption());
         content.setWidget(++row, 0, inject(proto().permissions(), new CrmRolePermissionsFolder()));
+        get(proto().permissions()).addValueChangeHandler(new ValueChangeHandler<List<VistaCrmBehaviorDTO>>() {
+
+            @Override
+            public void onValueChange(ValueChangeEvent<List<VistaCrmBehaviorDTO>> event) {
+                enforceRequireTwoStepVerificationForEquifaxBehaviour();
+            }
+        });
 
         return content;
+    }
+
+    @Override
+    protected void onPopulate() {
+        super.onPopulate();
+
+        enforceRequireTwoStepVerificationForEquifaxBehaviour();
+    }
+
+    private void enforceRequireTwoStepVerificationForEquifaxBehaviour() {
+        boolean hasEquifax = false;
+
+        for (VistaCrmBehaviorDTO behaviour : getValue().permissions()) {
+            if (behaviour.behavior().getValue() == VistaCrmBehavior.Equifax) {
+                hasEquifax = true;
+                break;
+            }
+        }
+        if (hasEquifax) {
+            prevTwoStepVerificationValue = getValue().requireTwoStepVerificationOnLogin().isBooleanTrue();
+            get(proto().requireTwoStepVerificationOnLogin()).setValue(true);
+            get(proto().requireTwoStepVerificationOnLogin()).setEditable(false);
+        } else {
+            get(proto().requireTwoStepVerificationOnLogin()).setValue(prevTwoStepVerificationValue);
+            get(proto().requireTwoStepVerificationOnLogin()).setEditable(true);
+        }
     }
 
     private static class CrmRolePermissionsFolder extends VistaTableFolder<VistaCrmBehaviorDTO> {

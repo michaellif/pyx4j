@@ -28,6 +28,7 @@ import com.propertyvista.crm.client.ui.crud.viewfactories.OrganizationViewFactor
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.dto.company.EmployeeDTO;
 import com.propertyvista.crm.rpc.services.organization.CrmUserService;
+import com.propertyvista.domain.security.CrmUser;
 
 /**
  * This one should use separate service (just for self management)
@@ -44,6 +45,13 @@ public class AccountViewerActivity extends CrmViewerActivity<EmployeeDTO> implem
         passwordChangePlace.queryArg(PasswordChangeView.Presenter.PRINCIPAL_PK_ARG, userId.toString());
         passwordChangePlace.queryArg(PasswordChangeView.Presenter.PRINCIPAL_CLASS, PasswordChangeView.Presenter.PrincipalClass.EMPLOYEE.toString());
         AppSite.getPlaceController().goTo(passwordChangePlace);
+    }
+
+    @Override
+    public void goToLoginHistory(CrmUser userStub) {
+        AppPlace loginHistoryPlace = new CrmSiteMap.Organization.Employee.LoginHistory();
+        loginHistoryPlace.formPlace(userStub.getPrimaryKey());
+        AppSite.getPlaceController().goTo(loginHistoryPlace);
     }
 
 }

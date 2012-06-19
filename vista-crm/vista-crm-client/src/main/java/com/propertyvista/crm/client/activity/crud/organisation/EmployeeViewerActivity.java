@@ -29,6 +29,7 @@ import com.propertyvista.crm.client.ui.crud.viewfactories.OrganizationViewFactor
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.dto.company.EmployeeDTO;
 import com.propertyvista.crm.rpc.services.organization.EmployeeCrudService;
+import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 
 public class EmployeeViewerActivity extends CrmViewerActivity<EmployeeDTO> implements EmployeeViewerView.Presenter {
@@ -44,6 +45,13 @@ public class EmployeeViewerActivity extends CrmViewerActivity<EmployeeDTO> imple
         passwordChangePlace.queryArg(PasswordChangeView.Presenter.PRINCIPAL_NAME_ARG, userName);
         passwordChangePlace.queryArg(PasswordChangeView.Presenter.PRINCIPAL_CLASS, PasswordChangeView.Presenter.PrincipalClass.EMPLOYEE.toString());
         AppSite.getPlaceController().goTo(passwordChangePlace);
+    }
+
+    @Override
+    public void goToLoginHistory(CrmUser userStub) {
+        AppPlace loginHistoryPlace = new CrmSiteMap.Organization.Employee.LoginHistory();
+        loginHistoryPlace.formPlace(userStub.getPrimaryKey());
+        AppSite.getPlaceController().goTo(loginHistoryPlace);
     }
 
     @Override

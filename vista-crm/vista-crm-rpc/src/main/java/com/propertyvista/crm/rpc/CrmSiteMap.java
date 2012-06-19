@@ -280,6 +280,10 @@ public class CrmSiteMap implements SiteMap {
         @PlaceProperties(caption = "Employee")
         @NavigationItem(navigLabel = "Employees")
         public static class Employee extends CrmCrudAppPlace {
+
+            public static class LoginHistory extends CrmCrudAppPlace {
+
+            }
         }
 
         @PlaceProperties(caption = "Portfolio")

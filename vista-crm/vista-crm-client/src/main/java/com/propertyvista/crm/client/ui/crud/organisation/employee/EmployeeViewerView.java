@@ -17,12 +17,15 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.site.client.ui.crud.form.IViewerView;
 
 import com.propertyvista.crm.rpc.dto.company.EmployeeDTO;
+import com.propertyvista.domain.security.CrmUser;
 
 public interface EmployeeViewerView extends IViewerView<EmployeeDTO> {
 
     interface Presenter extends IViewerView.Presenter {
 
         void goToChangePassword(Key userId, String userName);
+
+        void goToLoginHistory(CrmUser userStub);
 
     }
 
