@@ -43,4 +43,5 @@ public interface LeaseDTO extends Lease {
 
     IList<Concession> selectedConcessions();
 
+    BillDTO billingPreview();
 }

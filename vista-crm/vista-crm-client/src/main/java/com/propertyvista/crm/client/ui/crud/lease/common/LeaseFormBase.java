@@ -42,6 +42,7 @@ import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.common.client.policy.ClientPolicyManager;
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
+import com.propertyvista.common.client.ui.components.editors.dto.bill.BillForm;
 import com.propertyvista.common.client.ui.validators.DateInPeriodValidation;
 import com.propertyvista.common.client.ui.validators.StartEndDateValidation;
 import com.propertyvista.crm.client.themes.CrmTheme;
@@ -284,6 +285,8 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
 
     private Widget createChargesTab() {
         FormFlexPanel main = new FormFlexPanel();
+
+        main.setWidget(0, 0, inject(proto().billingPreview(), new BillForm(true)));
 
         return new ScrollPanel(main);
     }

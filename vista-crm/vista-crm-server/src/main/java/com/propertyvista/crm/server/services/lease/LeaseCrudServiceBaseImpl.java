@@ -29,6 +29,8 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
+import com.propertyvista.biz.financial.billing.BillingFacade;
+import com.propertyvista.biz.financial.billing.BillingUtils;
 import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.crm.rpc.services.lease.LeaseCrudServiceBase;
 import com.propertyvista.crm.server.util.CrmAppContext;
@@ -100,6 +102,9 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
 
         // Need this for navigation
         Persistence.service().retrieve(dto.version().leaseProducts().serviceItem().item().product());
+
+        // create bill preview:
+        dto.billingPreview().set(BillingUtils.createBillPreviewDto(ServerSideFactory.create(BillingFacade.class).runBillingPreview(in)));
     }
 
     @Override

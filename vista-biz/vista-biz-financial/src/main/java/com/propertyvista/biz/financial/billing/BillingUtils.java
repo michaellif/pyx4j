@@ -108,6 +108,13 @@ public class BillingUtils {
         return billDTO;
     }
 
+    public static BillDTO createBillPreviewDto(Bill bill) {
+        BillDTO billDTO = new BillConverter().createDTO(bill);
+
+        enhanceBillDto(bill, billDTO);
+        return billDTO;
+    }
+
     public static void enhanceBillDto(Bill bill, BillDTO dto) {
         // set total values
         dto.serviceChargeLineItems().total().set(bill.serviceCharge());
