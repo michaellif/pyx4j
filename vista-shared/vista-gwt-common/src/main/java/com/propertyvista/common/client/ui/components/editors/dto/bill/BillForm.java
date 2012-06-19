@@ -31,17 +31,18 @@ public class BillForm extends CEntityDecoratableForm<BillDTO> {
 
     private static final I18n i18n = I18n.get(BillForm.class);
 
+    private final boolean justCurrentBill;
+
     public BillForm() {
-        this(true);
+        this(false);
     }
 
-    public BillForm(boolean viewMode) {
+    public BillForm(boolean justCurrentBill) {
         super(BillDTO.class);
+        this.justCurrentBill = justCurrentBill;
 
-        if (viewMode) {
-            setEditable(false);
-            setViewable(true);
-        }
+        setEditable(false);
+        setViewable(true);
     }
 
     @Override
@@ -51,35 +52,39 @@ public class BillForm extends CEntityDecoratableForm<BillDTO> {
         FormFlexPanel top = new FormFlexPanel();
         int row = -1;
 
-        top.setH1(++row, 0, 2, i18n.tr("Info"));
-        top.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingAccount().lease().unit())).build());
-        top.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingCycle().building())).build());
-        top.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingCycle().billingCycleStartDate())).build());
-        top.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingCycle().billingCycleEndDate())).build());
-        top.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingCycle().billingType().paymentFrequency())).build());
-        top.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingCycle().executionTargetDate())).build());
+        if (!justCurrentBill) {
+            top.setH1(++row, 0, 2, i18n.tr("Info"));
+            top.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingAccount().lease().unit())).build());
+            top.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingCycle().building())).build());
+            top.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingCycle().billingCycleStartDate())).build());
+            top.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingCycle().billingCycleEndDate())).build());
+            top.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingCycle().billingType().paymentFrequency())).build());
+            top.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingCycle().executionTargetDate())).build());
 
-        top.setH1(++row, 0, 2, i18n.tr("Status"));
-        top.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billSequenceNumber())).build());
-        top.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billType())).build());
-        top.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billStatus())).build());
-        top.setWidget(++row, 0, new DecoratorBuilder(inject(proto().rejectReason())).build());
+            top.setH1(++row, 0, 2, i18n.tr("Status"));
+            top.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billSequenceNumber())).build());
+            top.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billType())).build());
+            top.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billStatus())).build());
+            top.setWidget(++row, 0, new DecoratorBuilder(inject(proto().rejectReason())).build());
+        }
 
         // form bottom panel:
         FormFlexPanel bottom = new FormFlexPanel();
         row = -1;
 
-        bottom.setH1(++row, 0, 2, i18n.tr("Last Bill"));
-        bottom.setWidget(++row, 0, new DecoratorBuilder(inject(proto().balanceForwardAmount())).build());
-        bottom.setWidget(++row, 0, inject(proto().depositRefundLineItems(), new LineItemCollapsableViewer()));
-        bottom.setWidget(++row, 0, inject(proto().immediateAccountAdjustmentLineItems(), new LineItemCollapsableViewer()));
-        bottom.setWidget(++row, 0, inject(proto().nsfChargeLineItems(), new LineItemCollapsableViewer()));
-        bottom.setWidget(++row, 0, inject(proto().withdrawalLineItems(), new LineItemCollapsableViewer()));
-        bottom.setWidget(++row, 0, inject(proto().rejectedPaymentLineItems(), new LineItemCollapsableViewer()));
-        bottom.setWidget(++row, 0, inject(proto().paymentLineItems(), new LineItemCollapsableViewer()));
+        if (!justCurrentBill) {
+            bottom.setH1(++row, 0, 2, i18n.tr("Last Bill"));
+            bottom.setWidget(++row, 0, new DecoratorBuilder(inject(proto().balanceForwardAmount())).build());
+            bottom.setWidget(++row, 0, inject(proto().depositRefundLineItems(), new LineItemCollapsableViewer()));
+            bottom.setWidget(++row, 0, inject(proto().immediateAccountAdjustmentLineItems(), new LineItemCollapsableViewer()));
+            bottom.setWidget(++row, 0, inject(proto().nsfChargeLineItems(), new LineItemCollapsableViewer()));
+            bottom.setWidget(++row, 0, inject(proto().withdrawalLineItems(), new LineItemCollapsableViewer()));
+            bottom.setWidget(++row, 0, inject(proto().rejectedPaymentLineItems(), new LineItemCollapsableViewer()));
+            bottom.setWidget(++row, 0, inject(proto().paymentLineItems(), new LineItemCollapsableViewer()));
 
-        bottom.setHR(++row, 0, 2);
-        bottom.setWidget(++row, 0, new DecoratorBuilder(inject(proto().pastDueAmount())).build());
+            bottom.setHR(++row, 0, 2);
+            bottom.setWidget(++row, 0, new DecoratorBuilder(inject(proto().pastDueAmount())).build());
+        }
 
         bottom.setH1(++row, 0, 2, i18n.tr("Current Bill"));
         bottom.setHeight("50px");
