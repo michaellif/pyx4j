@@ -94,12 +94,13 @@ public class BillingDepositProcessor extends AbstractBillingProcessor {
                     invDeposit.amount().setValue(deposit.initialAmount().getValue());
                 } else if (ValueType.percentage == deposit.valueType().getValue()) {
                     //TODO consider real price of service or feature including concessions etc
-                    invDeposit.amount().setValue(deposit.initialAmount().getValue().multiply(billableItem.agreedPrice().getValue()));
+                    invDeposit.amount().setValue(
+                            deposit.initialAmount().getValue().multiply(billableItem.agreedPrice().getValue()).setScale(2, BigDecimal.ROUND_HALF_UP));
                 } else {
                     throw new Error("Unsupported ValueType");
                 }
 
-                invDeposit.taxTotal().setValue(new BigDecimal("0.00"));
+                invDeposit.taxTotal().setValue(BigDecimal.ZERO);
 
                 addDeposit(invDeposit);
             }
