@@ -21,7 +21,7 @@
 package com.pyx4j.essentials.server;
 
 import java.io.Serializable;
-import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Vector;
@@ -56,7 +56,9 @@ public abstract class LoginAttemptsCountAntiBot extends AbstractAntiBot {
         }
     }
 
-    private static Map<String, InvalidLoginAttempts> cache = new HashMap<String, InvalidLoginAttempts>();
+    private static Map<String, InvalidLoginAttempts> cacheByEmail = new Hashtable<String, InvalidLoginAttempts>();
+
+    private static Map<String, InvalidLoginAttempts> cacheByIp = new Hashtable<String, InvalidLoginAttempts>();
 
     /**
      * Allow to change IP address of request when accessing system via API
@@ -67,23 +69,40 @@ public abstract class LoginAttemptsCountAntiBot extends AbstractAntiBot {
 
     @Override
     protected boolean onAuthenticationFailed(String email) {
-        InvalidLoginAttempts la = cache.get(email);
-        if (la == null) {
-            la = new InvalidLoginAttempts();
-            cache.put(email, la);
+        InvalidLoginAttempts la1 = cacheByEmail.get(email);
+        if (la1 == null) {
+            la1 = new InvalidLoginAttempts();
+            cacheByEmail.put(email, la1);
         }
-        la.when.add(System.currentTimeMillis());
-        return la.isCaptchaRequired(loginFailureCountInterval());
+        la1.when.add(System.currentTimeMillis());
+
+        String ip = getRequestRemoteAddr();
+        InvalidLoginAttempts la2 = cacheByIp.get(ip);
+        if (la2 == null) {
+            la2 = new InvalidLoginAttempts();
+            cacheByIp.put(ip, la2);
+        }
+        la2.when.add(System.currentTimeMillis());
+
+        return la1.isCaptchaRequired(loginFailureCountInterval()) || la2.isCaptchaRequired(loginFailureCountInterval());
     }
 
     @Override
     protected boolean isCaptchaRequired(String email) {
-        InvalidLoginAttempts la = cache.get(email);
-        if (la == null) {
-            return false;
-        } else {
-            return la.isCaptchaRequired(loginFailureCountInterval());
+        {
+            InvalidLoginAttempts la = cacheByIp.get(getRequestRemoteAddr());
+            if ((la != null) && la.isCaptchaRequired(loginFailureCountInterval())) {
+                return true;
+            }
+        }
+
+        {
+            InvalidLoginAttempts la = cacheByEmail.get(email);
+            if (la == null) {
+                return false;
+            } else {
+                return la.isCaptchaRequired(loginFailureCountInterval());
+            }
         }
     }
-
 }
