@@ -29,7 +29,8 @@ import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.biz.tenant.OnlineApplicationFacade;
 import com.propertyvista.crm.rpc.dto.LeaseApplicationActionDTO;
-import com.propertyvista.crm.rpc.services.lease.LeaseApplicationCrudService;
+import com.propertyvista.crm.rpc.services.lease.LeaseApplicationViewerCrudService;
+import com.propertyvista.crm.server.services.lease.common.LeaseViewerCrudServiceBaseImpl;
 import com.propertyvista.crm.server.util.CrmAppContext;
 import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.Tenant;
@@ -41,11 +42,11 @@ import com.propertyvista.dto.TenantInfoDTO;
 import com.propertyvista.server.common.util.TenantConverter;
 import com.propertyvista.server.common.util.TenantRetriever;
 
-public class LeaseApplicationCrudServiceImpl extends LeaseCrudServiceBaseImpl<LeaseApplicationDTO> implements LeaseApplicationCrudService {
+public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<LeaseApplicationDTO> implements LeaseApplicationViewerCrudService {
 
-    private final static I18n i18n = I18n.get(LeaseApplicationCrudServiceImpl.class);
+    private final static I18n i18n = I18n.get(LeaseApplicationViewerCrudServiceImpl.class);
 
-    public LeaseApplicationCrudServiceImpl() {
+    public LeaseApplicationViewerCrudServiceImpl() {
         super(LeaseApplicationDTO.class);
     }
 
@@ -70,13 +71,6 @@ public class LeaseApplicationCrudServiceImpl extends LeaseCrudServiceBaseImpl<Le
         enhanceRetrievedCommon(in, dto);
     }
 
-    @Override
-    public void startOnlineApplication(AsyncCallback<VoidSerializable> callback, Key entityId) {
-        ServerSideFactory.create(LeaseFacade.class).createMasterOnlineApplication(entityId);
-        Persistence.service().commit();
-        callback.onSuccess(null);
-    }
-
     private void enhanceRetrievedCommon(Lease in, LeaseApplicationDTO dto) {
         dto.numberOfOccupants().setValue(dto.version().tenants().size());
         dto.numberOfGuarantors().setValue(dto.version().guarantors().size());
@@ -93,6 +87,13 @@ public class LeaseApplicationCrudServiceImpl extends LeaseCrudServiceBaseImpl<Le
                 dto.numberOfApplicants().setValue(dto.numberOfApplicants().getValue() + 1);
             }
         }
+    }
+
+    @Override
+    public void startOnlineApplication(AsyncCallback<VoidSerializable> callback, Key entityId) {
+        ServerSideFactory.create(LeaseFacade.class).createMasterOnlineApplication(entityId);
+        Persistence.service().commit();
+        callback.onSuccess(null);
     }
 
     @Override

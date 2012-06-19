@@ -41,7 +41,7 @@ import com.propertyvista.crm.rpc.services.billing.BillCrudService;
 import com.propertyvista.crm.rpc.services.billing.BillingExecutionService;
 import com.propertyvista.crm.rpc.services.billing.LeaseAdjustmentCrudService;
 import com.propertyvista.crm.rpc.services.billing.PaymentCrudService;
-import com.propertyvista.crm.rpc.services.lease.LeaseCrudService;
+import com.propertyvista.crm.rpc.services.lease.LeaseViewerCrudService;
 import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
@@ -63,7 +63,7 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
 
     @SuppressWarnings("unchecked")
     public LeaseViewerActivity(CrudAppPlace place) {
-        super(place, LeaseViewFactory.instance(LeaseViewerView.class), (AbstractCrudService<LeaseDTO>) GWT.create(LeaseCrudService.class));
+        super(place, LeaseViewFactory.instance(LeaseViewerView.class), (AbstractCrudService<LeaseDTO>) GWT.create(LeaseViewerCrudService.class));
 
         billLister = new ListerActivityBase<BillDataDTO>(place, ((LeaseViewerView) getView()).getBillListerView(),
                 GWT.<BillCrudService> create(BillCrudService.class), BillDataDTO.class);
@@ -135,7 +135,7 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
 
     @Override
     public void notice(LogicalDate date, LogicalDate moveOut) {
-        ((LeaseCrudService) getService()).notice(new DefaultAsyncCallback<VoidSerializable>() {
+        ((LeaseViewerCrudService) getService()).notice(new DefaultAsyncCallback<VoidSerializable>() {
             @Override
             public void onSuccess(VoidSerializable result) {
                 populate();
@@ -145,7 +145,7 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
 
     @Override
     public void cancelNotice() {
-        ((LeaseCrudService) getService()).cancelNotice(new DefaultAsyncCallback<VoidSerializable>() {
+        ((LeaseViewerCrudService) getService()).cancelNotice(new DefaultAsyncCallback<VoidSerializable>() {
             @Override
             public void onSuccess(VoidSerializable result) {
                 populate();
@@ -155,7 +155,7 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
 
     @Override
     public void evict(LogicalDate date, LogicalDate moveOut) {
-        ((LeaseCrudService) getService()).evict(new DefaultAsyncCallback<VoidSerializable>() {
+        ((LeaseViewerCrudService) getService()).evict(new DefaultAsyncCallback<VoidSerializable>() {
             @Override
             public void onSuccess(VoidSerializable result) {
                 populate();
@@ -165,7 +165,7 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
 
     @Override
     public void cancelEvict() {
-        ((LeaseCrudService) getService()).cancelEvict(new DefaultAsyncCallback<VoidSerializable>() {
+        ((LeaseViewerCrudService) getService()).cancelEvict(new DefaultAsyncCallback<VoidSerializable>() {
             @Override
             public void onSuccess(VoidSerializable result) {
                 populate();
@@ -175,7 +175,7 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
 
     @Override
     public void activate() {
-        ((LeaseCrudService) getService()).activate(new DefaultAsyncCallback<VoidSerializable>() {
+        ((LeaseViewerCrudService) getService()).activate(new DefaultAsyncCallback<VoidSerializable>() {
             @Override
             public void onSuccess(VoidSerializable result) {
                 setEntityIdAsCurrentKey();
@@ -186,7 +186,7 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
 
     @Override
     public void sendMail(List<LeaseParticipant> users, EmailTemplateType emailType) {
-        ((LeaseCrudService) getService()).sendMail(new DefaultAsyncCallback<String>() {
+        ((LeaseViewerCrudService) getService()).sendMail(new DefaultAsyncCallback<String>() {
             @Override
             public void onSuccess(String message) {
                 populate();

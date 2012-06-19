@@ -29,7 +29,7 @@ import com.propertyvista.crm.client.ui.crud.lease.application.LeaseApplicationVi
 import com.propertyvista.crm.client.ui.crud.viewfactories.LeaseViewFactory;
 import com.propertyvista.crm.rpc.dto.LeaseApplicationActionDTO;
 import com.propertyvista.crm.rpc.dto.LeaseApplicationActionDTO.Action;
-import com.propertyvista.crm.rpc.services.lease.LeaseApplicationCrudService;
+import com.propertyvista.crm.rpc.services.lease.LeaseApplicationViewerCrudService;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.dto.LeaseApplicationDTO;
 
@@ -40,14 +40,14 @@ public class LeaseApplicationViewerActivity extends LeaseViewerActivityBase<Leas
     @SuppressWarnings("unchecked")
     public LeaseApplicationViewerActivity(CrudAppPlace place) {
         super(place, LeaseViewFactory.instance(LeaseApplicationViewerView.class), (AbstractCrudService<LeaseApplicationDTO>) GWT
-                .create(LeaseApplicationCrudService.class));
+                .create(LeaseApplicationViewerCrudService.class));
     }
 
     // Actions:
 
     @Override
     public void startOnlineApplication() {
-        ((LeaseApplicationCrudService) getService()).startOnlineApplication(new DefaultAsyncCallback<VoidSerializable>() {
+        ((LeaseApplicationViewerCrudService) getService()).startOnlineApplication(new DefaultAsyncCallback<VoidSerializable>() {
             @Override
             public void onSuccess(VoidSerializable result) {
                 ((LeaseApplicationViewerView) getView()).reportStartOnlineApplicationSuccess();
@@ -59,7 +59,7 @@ public class LeaseApplicationViewerActivity extends LeaseViewerActivityBase<Leas
 
     @Override
     public void inviteUsers(List<LeaseParticipant> users) {
-        ((LeaseApplicationCrudService) getService()).inviteUsers(new DefaultAsyncCallback<String>() {
+        ((LeaseApplicationViewerCrudService) getService()).inviteUsers(new DefaultAsyncCallback<String>() {
             @Override
             public void onSuccess(String message) {
                 populate();
@@ -70,7 +70,7 @@ public class LeaseApplicationViewerActivity extends LeaseViewerActivityBase<Leas
 
     @Override
     public void applicationAction(final LeaseApplicationActionDTO action) {
-        ((LeaseApplicationCrudService) getService()).applicationAction(new DefaultAsyncCallback<VoidSerializable>() {
+        ((LeaseApplicationViewerCrudService) getService()).applicationAction(new DefaultAsyncCallback<VoidSerializable>() {
             @Override
             public void onSuccess(VoidSerializable result) {
                 if (action.action().getValue() == Action.Approve) {

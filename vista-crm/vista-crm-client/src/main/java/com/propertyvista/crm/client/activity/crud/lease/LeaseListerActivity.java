@@ -21,13 +21,13 @@ import com.pyx4j.site.client.activity.crud.ListerActivityBase;
 
 import com.propertyvista.crm.client.ui.crud.lease.LeaseListerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.LeaseViewFactory;
-import com.propertyvista.crm.rpc.services.lease.LeaseCrudService;
+import com.propertyvista.crm.rpc.services.lease.LeaseViewerCrudService;
 import com.propertyvista.dto.LeaseDTO;
 
 public class LeaseListerActivity extends ListerActivityBase<LeaseDTO> {
 
     @SuppressWarnings("unchecked")
     public LeaseListerActivity(Place place) {
-        super(place, LeaseViewFactory.instance(LeaseListerView.class), (AbstractCrudService<LeaseDTO>) GWT.create(LeaseCrudService.class), LeaseDTO.class);
+        super(place, LeaseViewFactory.instance(LeaseListerView.class), (AbstractCrudService<LeaseDTO>) GWT.create(LeaseViewerCrudService.class), LeaseDTO.class);
     }
 }

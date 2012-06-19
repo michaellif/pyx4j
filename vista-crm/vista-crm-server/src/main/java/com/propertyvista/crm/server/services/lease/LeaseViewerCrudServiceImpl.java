@@ -30,7 +30,8 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.tenant.LeaseFacade;
-import com.propertyvista.crm.rpc.services.lease.LeaseCrudService;
+import com.propertyvista.crm.rpc.services.lease.LeaseViewerCrudService;
+import com.propertyvista.crm.server.services.lease.common.LeaseViewerCrudServiceBaseImpl;
 import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.Tenant;
@@ -39,13 +40,12 @@ import com.propertyvista.domain.tenant.lease.Lease.CompletionType;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.domain.tenant.ptapp.MasterOnlineApplication;
 import com.propertyvista.dto.LeaseDTO;
-import com.propertyvista.dto.TransactionHistoryDTO;
 
-public class LeaseCrudServiceImpl extends LeaseCrudServiceBaseImpl<LeaseDTO> implements LeaseCrudService {
+public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<LeaseDTO> implements LeaseViewerCrudService {
 
-    private final static I18n i18n = I18n.get(LeaseCrudServiceImpl.class);
+    private final static I18n i18n = I18n.get(LeaseViewerCrudServiceImpl.class);
 
-    public LeaseCrudServiceImpl() {
+    public LeaseViewerCrudServiceImpl() {
         super(LeaseDTO.class);
     }
 
@@ -53,7 +53,7 @@ public class LeaseCrudServiceImpl extends LeaseCrudServiceBaseImpl<LeaseDTO> imp
     protected void enhanceRetrieved(Lease in, LeaseDTO dto) {
         super.enhanceRetrieved(in, dto);
 
-        dto.transactionHistory().set(retrieveTransactions(dto));
+        dto.transactionHistory().set(ServerSideFactory.create(ARFacade.class).getTransactionHistory(dto.billingAccount()));
     }
 
     @Override
@@ -144,10 +144,4 @@ public class LeaseCrudServiceImpl extends LeaseCrudServiceBaseImpl<LeaseDTO> imp
 
         callback.onSuccess(message);
     }
-
-    private TransactionHistoryDTO retrieveTransactions(LeaseDTO dto) {
-        TransactionHistoryDTO history = ServerSideFactory.create(ARFacade.class).getTransactionHistory(dto.billingAccount());
-        return history;
-    }
-
 }

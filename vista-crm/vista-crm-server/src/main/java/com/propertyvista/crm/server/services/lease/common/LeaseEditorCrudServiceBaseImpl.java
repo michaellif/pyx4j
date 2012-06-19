@@ -11,28 +11,25 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.crm.server.services.lease;
+package com.propertyvista.crm.server.services.lease.common;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.commons.Key;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.AbstractVersionedCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.biz.financial.billing.BillingFacade;
 import com.propertyvista.biz.financial.billing.BillingUtils;
 import com.propertyvista.biz.tenant.LeaseFacade;
-import com.propertyvista.crm.rpc.services.lease.LeaseCrudServiceBase;
+import com.propertyvista.crm.rpc.services.lease.common.LeaseEditorCrudServiceBase;
 import com.propertyvista.crm.server.util.CrmAppContext;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.FeatureItemType;
@@ -48,17 +45,16 @@ import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.ExecutionType;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.dto.LeaseApplicationDTO;
 import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.server.common.charges.PriceCalculationHelpers;
 
-public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends AbstractVersionedCrudServiceDtoImpl<Lease, DTO> implements
-        LeaseCrudServiceBase<DTO> {
+public abstract class LeaseEditorCrudServiceBaseImpl<DTO extends LeaseDTO> extends AbstractVersionedCrudServiceDtoImpl<Lease, DTO> implements
+        LeaseEditorCrudServiceBase<DTO> {
 
     private final boolean isApplication;
 
-    protected LeaseCrudServiceBaseImpl(Class<DTO> dtoClass) {
+    protected LeaseEditorCrudServiceBaseImpl(Class<DTO> dtoClass) {
         super(Lease.class, dtoClass);
         isApplication = dtoClass.equals(LeaseApplicationDTO.class);
     }
@@ -186,33 +182,6 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
     @Override
     public void calculateChargeItemAdjustments(AsyncCallback<BigDecimal> callback, BillableItem item) {
         callback.onSuccess(PriceCalculationHelpers.calculateChargeItemAdjustments(item));
-    }
-
-    @Override
-    public void retrieveUsers(AsyncCallback<Vector<LeaseParticipant>> callback, Key entityId) {
-        Lease lease = Persistence.service().retrieve(dboClass, (isApplication ? entityId.asDraftKey() : entityId));
-        if ((lease == null) || (lease.isNull())) {
-            throw new RuntimeException("Entity '" + EntityFactory.getEntityMeta(dboClass).getCaption() + "' " + entityId + " NotFound");
-        }
-
-        Vector<LeaseParticipant> users = new Vector<LeaseParticipant>();
-
-        Persistence.service().retrieve(lease.version().tenants());
-        for (Tenant tenant : lease.version().tenants()) {
-            Persistence.service().retrieve(tenant);
-            switch (tenant.role().getValue()) {
-            case Applicant:
-            case CoApplicant:
-                users.add(tenant);
-            }
-        }
-
-        Persistence.service().retrieve(lease.version().guarantors());
-        for (Guarantor guarantor : lease.version().guarantors()) {
-            users.add(guarantor);
-        }
-
-        callback.onSuccess(users);
     }
 
     // Internals:

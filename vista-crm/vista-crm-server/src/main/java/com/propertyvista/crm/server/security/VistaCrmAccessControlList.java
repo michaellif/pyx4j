@@ -49,7 +49,7 @@ import com.propertyvista.crm.rpc.services.dashboard.DashboardMetadataCrudService
 import com.propertyvista.crm.rpc.services.dashboard.DashboardMetadataService;
 import com.propertyvista.crm.rpc.services.dashboard.ReportMetadataCrudService;
 import com.propertyvista.crm.rpc.services.dashboard.ReportMetadataService;
-import com.propertyvista.crm.rpc.services.lease.LeaseCrudService;
+import com.propertyvista.crm.rpc.services.lease.LeaseViewerCrudService;
 import com.propertyvista.crm.rpc.services.organization.CrmUserService;
 import com.propertyvista.crm.rpc.services.organization.EmployeeCrudService;
 import com.propertyvista.crm.rpc.services.organization.ManagedCrmUserService;
@@ -190,7 +190,7 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(PersonScreeningCrudService.class));
 
         grant(VistaBasicBehavior.CRM, new EntityPermission(Lease.class, EntityPermission.ALL));
-        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(LeaseCrudService.class));
+        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(LeaseViewerCrudService.class));
 
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(ApplicationDocumentUploadService.class));
 

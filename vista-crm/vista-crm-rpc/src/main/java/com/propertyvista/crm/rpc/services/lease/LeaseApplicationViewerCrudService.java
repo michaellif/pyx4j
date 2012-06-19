@@ -21,10 +21,11 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.crm.rpc.dto.LeaseApplicationActionDTO;
+import com.propertyvista.crm.rpc.services.lease.common.LeaseViewerCrudServiceBase;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.dto.LeaseApplicationDTO;
 
-public interface LeaseApplicationCrudService extends LeaseCrudServiceBase<LeaseApplicationDTO> {
+public interface LeaseApplicationViewerCrudService extends LeaseViewerCrudServiceBase<LeaseApplicationDTO> {
 
     void startOnlineApplication(AsyncCallback<VoidSerializable> callback, Key entityId);
 

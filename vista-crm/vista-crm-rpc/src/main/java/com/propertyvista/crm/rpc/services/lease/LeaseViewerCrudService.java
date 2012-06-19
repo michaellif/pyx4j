@@ -21,11 +21,12 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
+import com.propertyvista.crm.rpc.services.lease.common.LeaseViewerCrudServiceBase;
 import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.dto.LeaseDTO;
 
-public interface LeaseCrudService extends LeaseCrudServiceBase<LeaseDTO> {
+public interface LeaseViewerCrudService extends LeaseViewerCrudServiceBase<LeaseDTO> {
 
     // TODO Move to new Service  LeaseOperationService
 
