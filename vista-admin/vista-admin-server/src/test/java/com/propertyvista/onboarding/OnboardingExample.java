@@ -163,6 +163,7 @@ public class OnboardingExample {
         r.interfaceEntity().setValue("rossul");
         r.interfaceEntityPassword().setValue("secret");
         r.requests().add(request);
+        request.requestRemoteAddr().setValue("10.1.1.1");
         return r;
     }
 
