@@ -24,6 +24,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.entity.shared.meta.MemberMeta;
+import com.pyx4j.server.contexts.Context;
 
 import com.propertyvista.admin.server.onboarding.rh.OnboardingRequestHandlerFactory;
 import com.propertyvista.admin.server.onboarding.rhf.RequestHandler;
@@ -31,6 +32,7 @@ import com.propertyvista.onboarding.RequestIO;
 import com.propertyvista.onboarding.RequestMessageIO;
 import com.propertyvista.onboarding.ResponseIO;
 import com.propertyvista.onboarding.ResponseMessageIO;
+import com.propertyvista.server.common.security.VistaAntiBot;
 
 class OnboardingProcessor {
 
@@ -63,6 +65,7 @@ class OnboardingProcessor {
     }
 
     private ResponseIO execute(RequestIO request) {
+        Context.getRequest().setAttribute(VistaAntiBot.REQUEST_IP_ATR, request.requestRemoteAddr().getValue());
         RequestHandler<RequestIO> requestHandler = new OnboardingRequestHandlerFactory().createRequestHandler(request);
         if (requestHandler != null) {
             ResponseIO response = requestHandler.execute(request);

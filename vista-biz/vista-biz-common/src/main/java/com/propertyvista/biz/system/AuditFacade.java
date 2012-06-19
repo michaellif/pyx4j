@@ -27,4 +27,8 @@ public interface AuditFacade {
 
     public void updated(IEntity entity);
 
+    public void read(IEntity entity);
+
+    public void info(String format, Object... args);
+
 }

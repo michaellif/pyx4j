@@ -40,7 +40,11 @@ public interface AuditRecord extends IEntity {
 
         Create,
 
+        Read,
+
         Update,
+
+        Info
 
     }
 
@@ -77,6 +81,8 @@ public interface AuditRecord extends IEntity {
     IPrimitive<VistaApplication> app();
 
     IPrimitive<Key> entityId();
+
+    IPrimitive<String> entityClass();
 
     IPrimitive<String> details();
 }

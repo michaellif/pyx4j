@@ -18,8 +18,11 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.essentials.server.ReCaptchaAntiBot;
+import com.pyx4j.server.contexts.Context;
 
 public class VistaAntiBot extends ReCaptchaAntiBot {
+
+    public static String REQUEST_IP_ATR = "com.propertyvista.api.RequestRemoteAddr";
 
     private final static Logger log = LoggerFactory.getLogger(VistaAntiBot.class);
 
@@ -29,6 +32,16 @@ public class VistaAntiBot extends ReCaptchaAntiBot {
             log.debug("Development CAPTCHA Ok");
         } else {
             super.assertCaptcha(challenge, response);
+        }
+    }
+
+    @Override
+    protected String getRequestRemoteAddr() {
+        Object ip = Context.getRequest().getAttribute(REQUEST_IP_ATR);
+        if (ip != null) {
+            return ip.toString();
+        } else {
+            return Context.getRequestRemoteAddr();
         }
     }
 }
