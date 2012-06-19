@@ -64,7 +64,17 @@ public class BillingLifecycleManager {
 
     private final static Logger log = LoggerFactory.getLogger(BillingLifecycleManager.class);
 
-    static Bill runBilling(Lease lease, boolean preview) {
+    static Bill runBilling(Lease leaseId, boolean preview) {
+        //TODO
+        //- Get final version or draft if no final version exists
+        //- final version can go with  preview = true or false
+        // - draft can go only with preview =  true
+
+        Lease lease = Persistence.service().retrieve(Lease.class, leaseId.getPrimaryKey().asCurrentKey());
+        if (lease.version().isNull()) {
+            lease = Persistence.service().retrieve(Lease.class, leaseId.getPrimaryKey().asDraftKey());
+        }
+
         lease = ensureInitBillingAccount(lease);
         BillingCycle billingCycle = getNextBillBillingCycle(lease);
         validateBillingRunPreconditions(billingCycle, lease);
@@ -304,7 +314,7 @@ public class BillingLifecycleManager {
     }
 
     /**
-     * Makes sure <code>lease.billingAccount()</code> is filled with the most recent billing account. Creates BillingAccount when needed.
+     * Set appropriate billingType if needed
      */
     static Lease ensureInitBillingAccount(Lease lease) {
         if (lease.leaseFrom().isNull()) {
@@ -320,8 +330,9 @@ public class BillingLifecycleManager {
         if (billingAccount.billingType().isNull()) {
             billingAccount.billingType().set(ensureBillingType(lease));
             Persistence.service().persist(billingAccount);
+            lease.billingAccount().set(billingAccount);
         }
-        return Persistence.service().retrieve(Lease.class, lease.getPrimaryKey());
+        return lease;
     }
 
     static Bill getLatestConfirmedBill(Lease lease) {

@@ -180,7 +180,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         Lease lease = retrieveLease();
 
         if (lease.version().isNull()) {
-            lease = Persistence.service().retrieve(Lease.class, lease.getPrimaryKey().asDraftKey());
+            lease = retrieveLeaseDraft();
         }
 
         DataDump.dump("leaseT", lease);

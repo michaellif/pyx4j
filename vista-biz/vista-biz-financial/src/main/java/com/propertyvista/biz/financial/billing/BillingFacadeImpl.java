@@ -24,13 +24,13 @@ import com.propertyvista.domain.tenant.lease.Lease;
 public class BillingFacadeImpl implements BillingFacade {
 
     @Override
-    public Bill runBilling(Lease lease) {
-        return BillingLifecycleManager.runBilling(lease, false);
+    public Bill runBilling(Lease leaseId) {
+        return BillingLifecycleManager.runBilling(leaseId, false);
     }
 
     @Override
-    public Bill runBillingPreview(Lease lease) {
-        return BillingLifecycleManager.runBilling(lease, true);
+    public Bill runBillingPreview(Lease leaseId) {
+        return BillingLifecycleManager.runBilling(leaseId, true);
     }
 
     @Override
