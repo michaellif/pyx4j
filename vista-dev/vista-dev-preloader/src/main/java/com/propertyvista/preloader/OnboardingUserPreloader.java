@@ -39,6 +39,7 @@ public class OnboardingUserPreloader extends AbstractDataPreloader {
 
     private static OnboardingUserCredential createOnboardingUser(String firstName, String lastName, String name, String email, String password,
             VistaOnboardingBehavior role, String onboardingAccountId) {
+        email = PasswordEncryptor.normalizeEmailAddress(email);
         OnboardingUser user = EntityFactory.create(OnboardingUser.class);
         user.firstName().setValue(firstName);
         user.lastName().setValue(lastName);
