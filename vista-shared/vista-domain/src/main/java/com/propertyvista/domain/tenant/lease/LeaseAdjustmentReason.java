@@ -30,7 +30,7 @@ import com.propertyvista.domain.financial.GlCode;
  * Corporate-wide reasons (AS defined 20 major)
  * 
  */
-@ToStringFormat("{0}, GL Code: {1}")
+@ToStringFormat("{0}{1,choice,null#|!null#, GL Code: {1}}")
 public interface LeaseAdjustmentReason extends IEntity {
 
     @I18n

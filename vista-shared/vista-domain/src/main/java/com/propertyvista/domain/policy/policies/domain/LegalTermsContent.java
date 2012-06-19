@@ -38,5 +38,4 @@ public interface LegalTermsContent extends IEntity {
     @Editor(type = Editor.EditorType.richtextarea)
     //TODO Blob
     IPrimitive<String> content();
-
 }
