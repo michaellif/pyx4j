@@ -293,14 +293,14 @@ public class LeaseFacadeImpl implements LeaseFacade {
         }
     }
 
-    private void updateApplicationReferencesToFinalVersionOfLase(Lease lease) {
+    private void updateApplicationReferencesToFinalVersionOfLease(Lease lease) {
         lease.leaseApplication().leaseOnApplication().set(lease);
         Persistence.service().persist(lease.leaseApplication());
     }
 
     @Override
     public void createMasterOnlineApplication(Key leaseId) {
-        Lease lease = Persistence.retrieveDraft(Lease.class, leaseId.asDraftKey());
+        Lease lease = Persistence.retrieveDraftForEdit(Lease.class, leaseId.asDraftKey());
 
         // Verify the status
         if (!Lease.Status.draft().contains(lease.version().status().getValue())) {
@@ -332,7 +332,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
         lease.saveAction().setValue(SaveAction.saveAsFinal);
         Persistence.secureSave(lease);
 
-        updateApplicationReferencesToFinalVersionOfLase(lease);
+        updateApplicationReferencesToFinalVersionOfLease(lease);
 
         ServerSideFactory.create(OccupancyFacade.class).approveLease(lease.unit().getPrimaryKey());
 
@@ -365,7 +365,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
 
         Persistence.secureSave(lease);
 
-        updateApplicationReferencesToFinalVersionOfLase(lease);
+        updateApplicationReferencesToFinalVersionOfLease(lease);
 
         ServerSideFactory.create(OccupancyFacade.class).unreserve(lease.unit().getPrimaryKey());
 
@@ -392,7 +392,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
 
         Persistence.secureSave(lease);
 
-        updateApplicationReferencesToFinalVersionOfLase(lease);
+        updateApplicationReferencesToFinalVersionOfLease(lease);
 
         ServerSideFactory.create(OccupancyFacade.class).unreserve(lease.unit().getPrimaryKey());
     }

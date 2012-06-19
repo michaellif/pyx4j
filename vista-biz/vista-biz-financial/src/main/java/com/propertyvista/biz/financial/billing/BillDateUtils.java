@@ -181,7 +181,7 @@ public class BillDateUtils {
 
     public static LogicalDate calculateBillingPeriodStartDate(Bill bill) {
         LogicalDate date = null;
-        if (Bill.BillType.Estimate == bill.billType().getValue() || Bill.BillType.First == bill.billType().getValue()) {
+        if (Bill.BillType.First == bill.billType().getValue()) {
             date = bill.billingAccount().lease().leaseFrom().getValue();
         } else if (Bill.BillType.Regular == bill.billType().getValue() || Bill.BillType.ZeroCycle == bill.billType().getValue()) {
             date = bill.billingCycle().billingCycleStartDate().getValue();

@@ -169,11 +169,27 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
 
         DataDump.dump("leaseT", lease);
 
-        ServerSideFactory.create(BillingFacade.class).runBilling(lease);
+        Bill bill = ServerSideFactory.create(BillingFacade.class).runBilling(lease);
 
-        Bill bill = ServerSideFactory.create(BillingFacade.class).getLatestBill(lease);
+        Persistence.service().commit();
 
         return confirmBill(bill, confirm, printBill);
+    }
+
+    protected Bill runBillingPreview() {
+        Lease lease = retrieveLease();
+
+        if (lease.version().isNull()) {
+            lease = Persistence.service().retrieve(Lease.class, lease.getPrimaryKey().asDraftKey());
+        }
+
+        DataDump.dump("leaseT", lease);
+
+        Bill bill = ServerSideFactory.create(BillingFacade.class).runBillingPreview(lease);
+
+        Persistence.service().commit();
+
+        return bill;
     }
 
     protected Bill confirmBill(Bill bill, boolean confirm, boolean printBill) {
@@ -212,6 +228,11 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         lease.leaseTo().setValue(FinancialTestsUtils.getDate(leaseDateTo));
 
         lease.billingAccount().carryforwardBalance().setValue(carryforwardBalance);
+        if (carryforwardBalance == null) {
+            lease.version().status().setValue(Lease.Status.Application);
+        } else {
+            lease.version().status().setValue(Lease.Status.Created);
+        }
 
         lease = ServerSideFactory.create(LeaseFacade.class).initLease(lease);
 
@@ -253,11 +274,15 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
     }
 
     protected Lease retrieveLease() {
-        return Persistence.service().retrieve(Lease.class, leaseDataModel.getLeaseKey());
+        return Persistence.service().retrieve(Lease.class, leaseDataModel.getLeaseKey().asCurrentKey());
+    }
+
+    protected Lease retrieveLeaseDraft() {
+        return Persistence.service().retrieve(Lease.class, leaseDataModel.getLeaseKey().asDraftKey());
     }
 
     protected Lease retrieveLeaseForEdit() {
-        return Persistence.retrieveDraft(Lease.class, leaseDataModel.getLeaseKey());
+        return Persistence.retrieveDraftForEdit(Lease.class, leaseDataModel.getLeaseKey());
     }
 
     protected BillableItem addParking(String effectiveDate, String expirationDate, SaveAction saveAction) {
@@ -461,6 +486,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
 
     protected void postPayment(PaymentRecord paymentRecord) {
         ServerSideFactory.create(ARFacade.class).postPayment(paymentRecord);
+        Persistence.service().commit();
     }
 
     protected PaymentRecord receiveAndPostPayment(String receivedDate, String amount) {
@@ -475,6 +501,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
 
     protected void rejectPayment(PaymentRecord paymentRecord, boolean applyNSF) {
         ServerSideFactory.create(ARFacade.class).rejectPayment(paymentRecord, applyNSF);
+        Persistence.service().commit();
     }
 
     private BillableItem findBillableItem(String billableItemId, Lease lease) {

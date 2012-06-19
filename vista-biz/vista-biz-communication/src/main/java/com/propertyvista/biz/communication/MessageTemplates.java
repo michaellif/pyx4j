@@ -116,7 +116,7 @@ public class MessageTemplates {
     }
 
     public static MailMessage createTenantInvitationEmail(LeaseParticipant leaseParticipant, EmailTemplateType emailType, String token) {
-        Lease lease = Persistence.retrieveDraft(Lease.class, leaseParticipant.leaseV().holder().getPrimaryKey());
+        Lease lease = Persistence.retrieveDraftForEdit(Lease.class, leaseParticipant.leaseV().holder().getPrimaryKey());
         CustomerUser user = Persistence.service().retrieve(CustomerUser.class, leaseParticipant.customer().user().getPrimaryKey());
 
         // get building policy node

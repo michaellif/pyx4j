@@ -60,6 +60,24 @@ public class BillingSunnyDayScenarioTest extends FinancialTestBase {
 
         //==================== RUN 1 ======================//
 
+        Bill billPreview = runBillingPreview();
+        // @formatter:off
+        new BillTester(billPreview).
+        billSequenceNumber(0).
+        previousBillSequenceNumber(null).
+        billType(Bill.BillType.First).
+        billingPeriodStartDate("23-Mar-2011").
+        billingPeriodEndDate("31-Mar-2011").
+        numOfProductCharges(4).
+        paymentReceivedAmount("0.00").
+        serviceCharge("262.83").
+        recurringFeatureCharges("34.27").
+        oneTimeFeatureCharges("0.00").
+        depositAmount("1130.30").
+        taxes("35.65").
+        totalDueAmount("1463.05");
+        // @formatter:on
+
         Bill bill = approveApplication();
 
         bill = confirmBill(bill, true, true);

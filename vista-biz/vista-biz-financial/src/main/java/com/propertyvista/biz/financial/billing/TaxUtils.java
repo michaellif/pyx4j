@@ -14,7 +14,6 @@
 package com.propertyvista.biz.financial.billing;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -25,6 +24,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
+import com.propertyvista.biz.financial.MoneyUtils;
 import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.domain.financial.billing.InvoiceChargeTax;
 import com.propertyvista.domain.financial.offering.ProductItemType;
@@ -58,7 +58,7 @@ public class TaxUtils {
                 if (!tax.compound().getValue()) {
                     InvoiceChargeTax chargeTax = EntityFactory.create(InvoiceChargeTax.class);
                     chargeTax.tax().set(tax);
-                    chargeTax.amount().setValue(baseAmount.multiply(tax.rate().getValue()).setScale(2, RoundingMode.HALF_UP));
+                    chargeTax.amount().setValue(MoneyUtils.round(baseAmount.multiply(tax.rate().getValue())));
                     chargeTaxes.add(chargeTax);
                     interimAmount = interimAmount.add(chargeTax.amount().getValue());
                 }
@@ -67,7 +67,7 @@ public class TaxUtils {
                 if (tax.compound().getValue()) {
                     InvoiceChargeTax chargeTax = EntityFactory.create(InvoiceChargeTax.class);
                     chargeTax.tax().set(tax);
-                    chargeTax.amount().setValue(interimAmount.multiply(tax.rate().getValue()).setScale(2, RoundingMode.HALF_UP));
+                    chargeTax.amount().setValue(MoneyUtils.round(interimAmount.multiply(tax.rate().getValue())));
                     chargeTaxes.add(chargeTax);
                     interimAmount = interimAmount.add(chargeTax.amount().getValue());
                 }

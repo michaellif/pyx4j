@@ -98,7 +98,7 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
         MasterOnlineApplication masterOnlineApplication = Persistence.service().retrieve(MasterOnlineApplication.class,
                 application.masterOnlineApplication().getPrimaryKey());
 
-        Lease lease = Persistence.retrieveDraft(Lease.class, masterOnlineApplication.leaseApplication().lease().getPrimaryKey());
+        Lease lease = Persistence.retrieveDraftForEdit(Lease.class, masterOnlineApplication.leaseApplication().lease().getPrimaryKey());
         for (Tenant tenant : lease.version().tenants()) {
             Persistence.service().retrieve(tenant);
             if (application.customer().equals(tenant.customer())) {

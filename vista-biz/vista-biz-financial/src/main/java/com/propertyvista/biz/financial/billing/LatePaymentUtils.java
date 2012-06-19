@@ -14,10 +14,10 @@
 package com.propertyvista.biz.financial.billing;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 
 import com.pyx4j.config.server.ServerSideFactory;
 
+import com.propertyvista.biz.financial.MoneyUtils;
 import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.domain.policy.policies.LeaseBillingPolicy;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -64,6 +64,6 @@ public class LatePaymentUtils {
             break;
         }
 
-        return fee.setScale(2, RoundingMode.HALF_UP);
+        return MoneyUtils.round(fee);
     }
 }

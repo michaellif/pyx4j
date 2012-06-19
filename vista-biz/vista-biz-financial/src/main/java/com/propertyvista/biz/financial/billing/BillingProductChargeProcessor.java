@@ -19,6 +19,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.biz.financial.MoneyUtils;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.financial.billing.InvoiceAdjustmentSubLineItem;
@@ -38,11 +39,6 @@ public class BillingProductChargeProcessor extends AbstractBillingProcessor {
 
     BillingProductChargeProcessor(AbstractBillingManager billingManager) {
         super(billingManager);
-
-        getBillingManager().getNextPeriodBill().serviceCharge().setValue(BigDecimal.ZERO);
-        getBillingManager().getNextPeriodBill().recurringFeatureCharges().setValue(BigDecimal.ZERO);
-        getBillingManager().getNextPeriodBill().oneTimeFeatureCharges().setValue(BigDecimal.ZERO);
-
     }
 
     @Override
@@ -279,7 +275,7 @@ public class BillingProductChargeProcessor extends AbstractBillingProcessor {
             }
 
             BigDecimal proration = ProrationUtils.prorate(overlap.getFromDate(), overlap.getToDate(), getBillingManager().getNextPeriodBill().billingCycle());
-            adjustment.amount().setValue(amount.multiply(proration).setScale(2, BigDecimal.ROUND_HALF_UP));
+            adjustment.amount().setValue(MoneyUtils.round(amount.multiply(proration)));
         }
 
         if (billableItemAdjustment.billableItem().item().type().isInstanceOf(FeatureItemType.class)) {
@@ -315,7 +311,7 @@ public class BillingProductChargeProcessor extends AbstractBillingProcessor {
         }
 
         BigDecimal proration = ProrationUtils.prorate(charge.fromDate().getValue(), charge.toDate().getValue(), cycle);
-        return charge.chargeSubLineItem().billableItem().agreedPrice().getValue().multiply(proration).setScale(2, BigDecimal.ROUND_HALF_UP);
+        return MoneyUtils.round(charge.chargeSubLineItem().billableItem().agreedPrice().getValue().multiply(proration));
     }
 
     private void calculateTax(InvoiceProductCharge charge) {

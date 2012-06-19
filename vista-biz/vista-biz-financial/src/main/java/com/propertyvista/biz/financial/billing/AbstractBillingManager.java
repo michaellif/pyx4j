@@ -65,28 +65,30 @@ abstract class AbstractBillingManager {
     void processBill() {
 
         //Set accumulating fields to 0 value
-        nextPeriodBill.depositRefundAmount().setValue(BigDecimal.ZERO);
-        nextPeriodBill.immediateAccountAdjustments().setValue(BigDecimal.ZERO);
-        nextPeriodBill.nsfCharges().setValue(BigDecimal.ZERO);
-        nextPeriodBill.withdrawalAmount().setValue(BigDecimal.ZERO);
-        nextPeriodBill.paymentRejectedAmount().setValue(BigDecimal.ZERO);
-        nextPeriodBill.paymentReceivedAmount().setValue(BigDecimal.ZERO);
+        nextPeriodBill.serviceCharge().setValue(new BigDecimal("0.00"));
 
-        nextPeriodBill.recurringFeatureCharges().setValue(BigDecimal.ZERO);
-        nextPeriodBill.oneTimeFeatureCharges().setValue(BigDecimal.ZERO);
-        nextPeriodBill.pendingAccountAdjustments().setValue(BigDecimal.ZERO);
-        nextPeriodBill.latePaymentFees().setValue(BigDecimal.ZERO);
-        nextPeriodBill.depositAmount().setValue(BigDecimal.ZERO);
-        nextPeriodBill.productCreditAmount().setValue(BigDecimal.ZERO);
-        nextPeriodBill.carryForwardCredit().setValue(BigDecimal.ZERO);
+        nextPeriodBill.depositRefundAmount().setValue(new BigDecimal("0.00"));
+        nextPeriodBill.immediateAccountAdjustments().setValue(new BigDecimal("0.00"));
+        nextPeriodBill.nsfCharges().setValue(new BigDecimal("0.00"));
+        nextPeriodBill.withdrawalAmount().setValue(new BigDecimal("0.00"));
+        nextPeriodBill.paymentRejectedAmount().setValue(new BigDecimal("0.00"));
+        nextPeriodBill.paymentReceivedAmount().setValue(new BigDecimal("0.00"));
 
-        nextPeriodBill.taxes().setValue(BigDecimal.ZERO);
+        nextPeriodBill.recurringFeatureCharges().setValue(new BigDecimal("0.00"));
+        nextPeriodBill.oneTimeFeatureCharges().setValue(new BigDecimal("0.00"));
+        nextPeriodBill.pendingAccountAdjustments().setValue(new BigDecimal("0.00"));
+        nextPeriodBill.latePaymentFees().setValue(new BigDecimal("0.00"));
+        nextPeriodBill.depositAmount().setValue(new BigDecimal("0.00"));
+        nextPeriodBill.productCreditAmount().setValue(new BigDecimal("0.00"));
+        nextPeriodBill.carryForwardCredit().setValue(new BigDecimal("0.00"));
+
+        nextPeriodBill.taxes().setValue(new BigDecimal("0.00"));
 
         Bill lastBill = BillingLifecycleManager.getLatestConfirmedBill(nextPeriodBill.billingAccount().lease());
         if (lastBill != null) {
             nextPeriodBill.balanceForwardAmount().setValue(lastBill.totalDueAmount().getValue());
         } else {
-            nextPeriodBill.balanceForwardAmount().setValue(BigDecimal.ZERO);
+            nextPeriodBill.balanceForwardAmount().setValue(new BigDecimal("0.00"));
         }
 
         List<AbstractBillingProcessor> processors = initProcessors();

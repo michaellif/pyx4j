@@ -65,31 +65,29 @@ public class BillingLifecycleManager {
     private final static Logger log = LoggerFactory.getLogger(BillingLifecycleManager.class);
 
     static Bill runBilling(Lease lease, boolean preview) {
-        BillingAccount billingAccount = ensureInitBillingAccount(lease);
+        lease = ensureInitBillingAccount(lease);
         BillingCycle billingCycle = getNextBillBillingCycle(lease);
-        validateBillingRunPreconditions(billingCycle, billingAccount);
-        return createBill(billingCycle, billingAccount, preview);
+        validateBillingRunPreconditions(billingCycle, lease);
+        return createBill(billingCycle, lease, preview);
     }
 
     static void runBilling(final BillingCycle billingCycle, StatisticsRecord dynamicStatisticsRecord) {
-        EntityQueryCriteria<BillingAccount> billingAccountCriteria = EntityQueryCriteria.create(BillingAccount.class);
-        billingAccountCriteria.add(PropertyCriterion.eq(billingAccountCriteria.proto().lease().unit().belongsTo(), billingCycle.building()));
-        billingAccountCriteria.add(PropertyCriterion.eq(billingAccountCriteria.proto().billingType(), billingCycle.billingType()));
-        ICursorIterator<BillingAccount> billingAccountIterator = Persistence.service().query(null, billingAccountCriteria, AttachLevel.Attached);
-        FilterIterator<BillingAccount> filteredbillingAccountIterator = new FilterIterator<BillingAccount>(billingAccountIterator,
-                new Filter<BillingAccount>() {
-
-                    @Override
-                    public boolean accept(BillingAccount billingAccount) {
-                        try {
-                            validateBillingRunPreconditions(billingCycle, billingAccount);
-                            return true;
-                        } catch (BillingException e) {
-                            return false;
-                        }
-                    }
-                });
-        runBilling(billingCycle, filteredbillingAccountIterator, true, dynamicStatisticsRecord);
+        EntityQueryCriteria<Lease> leaseCriteria = EntityQueryCriteria.create(Lease.class);
+        leaseCriteria.add(PropertyCriterion.eq(leaseCriteria.proto().unit().belongsTo(), billingCycle.building()));
+        leaseCriteria.add(PropertyCriterion.eq(leaseCriteria.proto().billingAccount().billingType(), billingCycle.billingType()));
+        ICursorIterator<Lease> leaseIterator = Persistence.service().query(null, leaseCriteria, AttachLevel.Attached);
+        FilterIterator<Lease> filteredLeaseIterator = new FilterIterator<Lease>(leaseIterator, new Filter<Lease>() {
+            @Override
+            public boolean accept(Lease lease) {
+                try {
+                    validateBillingRunPreconditions(billingCycle, lease);
+                    return true;
+                } catch (BillingException e) {
+                    return false;
+                }
+            }
+        });
+        runBilling(billingCycle, filteredLeaseIterator, true, dynamicStatisticsRecord);
     }
 
     static void runBilling(LogicalDate date, StatisticsRecord dynamicStatisticsRecord) {
@@ -107,14 +105,14 @@ public class BillingLifecycleManager {
         }
     }
 
-    private static void runBilling(BillingCycle billingCycle, Iterator<BillingAccount> billingAccounts, boolean manageTransactions,
+    private static void runBilling(BillingCycle billingCycle, Iterator<Lease> leasesIterator, boolean manageTransactions,
             StatisticsRecord dynamicStatisticsRecord) {
         if (manageTransactions) {
             Persistence.service().commit();
         }
         try {
-            while (billingAccounts.hasNext()) {
-                BillCreationResult result = new BillCreationResult(createBill(billingCycle, billingAccounts.next(), false));
+            while (leasesIterator.hasNext()) {
+                BillCreationResult result = new BillCreationResult(createBill(billingCycle, leasesIterator.next(), false));
                 appendStats(dynamicStatisticsRecord, result);
                 if (manageTransactions) {
                     Persistence.service().commit();
@@ -140,45 +138,48 @@ public class BillingLifecycleManager {
         }
     }
 
-    private static Bill createBill(BillingCycle billingCycle, BillingAccount billingAccount, boolean preview) {
+    private static Bill createBill(BillingCycle billingCycle, Lease lease, boolean preview) {
 
-        Persistence.service().retrieve(billingAccount.lease());
-        Persistence.service().retrieve(billingAccount.adjustments());
+        Persistence.service().retrieve(lease.billingAccount().adjustments());
 
         Bill bill = EntityFactory.create(Bill.class);
         try {
             bill.billStatus().setValue(Bill.BillStatus.Running);
-            bill.billingAccount().set(billingAccount);
+            bill.billingAccount().set(lease.billingAccount());
 
             if (preview) {
                 bill.billSequenceNumber().setValue(0);
             } else {
-                billingAccount.billCounter().setValue(billingAccount.billCounter().getValue() + 1);
-                Persistence.service().persist(billingAccount);
+                lease.billingAccount().billCounter().setValue(lease.billingAccount().billCounter().getValue() + 1);
+                Persistence.service().persist(lease.billingAccount());
 
-                bill.billSequenceNumber().setValue(billingAccount.billCounter().getValue());
+                bill.billSequenceNumber().setValue(lease.billingAccount().billCounter().getValue());
                 bill.latestBillInCycle().setValue(true);
             }
 
             bill.billingCycle().set(billingCycle);
 
-            Bill previousCycleBill = BillingLifecycleManager.getLatestConfirmedBill(billingAccount.lease());
+            Bill previousCycleBill = BillingLifecycleManager.getLatestConfirmedBill(lease);
             bill.previousCycleBill().set(previousCycleBill);
 
             bill.executionDate().setValue(new LogicalDate(SysDateManager.getSysDate()));
 
             AbstractBillingManager manager = null;
 
-            if (Status.Created == billingAccount.lease().version().status().getValue()) {//zeroCycle bill should be issued
+            if (lease.version().isNull()) {
+                throw new BillingException(i18n.tr("Can't find version of lease"));
+            }
+
+            if (Status.Created == lease.version().status().getValue()) {//zeroCycle bill should be issued
                 manager = new ZeroCycleBillingManager(bill);
-            } else if (Status.Approved == billingAccount.lease().version().status().getValue()) {// first bill should be issued
+            } else if (Status.Approved == lease.version().status().getValue() || Status.Application == lease.version().status().getValue()) {// first bill should be issued
                 manager = new FirstBillingManager(bill);
-            } else if (Status.Active == billingAccount.lease().version().status().getValue()) {
+            } else if (Status.Active == lease.version().status().getValue()) {
                 manager = new RegularBillingManager(bill);
-            } else if (Status.Completed == billingAccount.lease().version().status().getValue()) {// final bill should be issued
+            } else if (Status.Completed == lease.version().status().getValue()) {// final bill should be issued
                 manager = new FinalBillingManager(bill);
             } else {
-                throw new BillingException(i18n.tr("Billing can't run when lease is in status ''{0}''", billingAccount.lease().version().status().getValue()));
+                throw new BillingException(i18n.tr("Billing can't run when lease is in status ''{0}''", lease.version().status().getValue()));
             }
 
             manager.processBill();
@@ -191,8 +192,8 @@ public class BillingLifecycleManager {
 
                 Persistence.service().persist(bill);
 
-                LeaseBillingPolicy leaseBillingPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(
-                        billingAccount.lease().unit().belongsTo(), LeaseBillingPolicy.class);
+                LeaseBillingPolicy leaseBillingPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(lease.unit().belongsTo(),
+                        LeaseBillingPolicy.class);
 
                 if (leaseBillingPolicy.confirmationMethod().getValue() == LeaseBillingPolicy.BillConfirmationMethod.automatic) {
                     confirmBill(bill);
@@ -218,19 +219,17 @@ public class BillingLifecycleManager {
         return bill;
     }
 
-    private static void validateBillingRunPreconditions(BillingCycle billingCycle, BillingAccount billingAccount) {
+    private static void validateBillingRunPreconditions(BillingCycle billingCycle, Lease lease) {
 
-        Persistence.service().retrieve(billingAccount.lease());
-
-        if (!getNextBillBillingCycle(billingAccount.lease()).equals(billingCycle)) {
+        if (!getNextBillBillingCycle(lease).equals(billingCycle)) {
             throw new BillingException(i18n.tr("Bill can't be created for a given billing cycle"));
         }
 
-        if (billingAccount.lease().version().status().getValue() == Lease.Status.Closed) {
+        if (lease.version().status().getValue() == Lease.Status.Closed) {
             throw new BillingException("Lease is closed");
         }
 
-        Bill previousBill = BillingLifecycleManager.getLatestBill(billingAccount.lease());
+        Bill previousBill = BillingLifecycleManager.getLatestBill(lease);
         if (previousBill != null) {
             if (BillStatus.notConfirmed(previousBill.billStatus().getValue())) {
                 throw new BillingException(i18n.tr("Can't run billing on Account with non-confirmed bills"));
@@ -307,7 +306,7 @@ public class BillingLifecycleManager {
     /**
      * Makes sure <code>lease.billingAccount()</code> is filled with the most recent billing account. Creates BillingAccount when needed.
      */
-    static BillingAccount ensureInitBillingAccount(Lease lease) {
+    static Lease ensureInitBillingAccount(Lease lease) {
         if (lease.leaseFrom().isNull()) {
             throw new BillingException("'Lease from' date is not set");
         }
@@ -322,7 +321,7 @@ public class BillingLifecycleManager {
             billingAccount.billingType().set(ensureBillingType(lease));
             Persistence.service().persist(billingAccount);
         }
-        return billingAccount;
+        return Persistence.service().retrieve(Lease.class, lease.getPrimaryKey());
     }
 
     static Bill getLatestConfirmedBill(Lease lease) {

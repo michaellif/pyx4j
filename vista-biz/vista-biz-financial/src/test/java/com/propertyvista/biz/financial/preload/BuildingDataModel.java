@@ -136,7 +136,7 @@ public class BuildingDataModel {
     }
 
     public ProductItem generateResidentialUnitServiceItem() {
-        standardResidentialService = Persistence.retrieveDraft(Service.class, standardResidentialService.getPrimaryKey());
+        standardResidentialService = Persistence.retrieveDraftForEdit(Service.class, standardResidentialService.getPrimaryKey());
 
         ProductItem productItem = EntityFactory.create(ProductItem.class);
         productItem.type().set(serviceMeta.get(Service.ServiceType.residentialUnit).get(0));
@@ -209,7 +209,7 @@ public class BuildingDataModel {
         feature.saveAction().setValue(SaveAction.saveAsFinal);
         Persistence.service().persist(feature);
 
-        standardResidentialService = Persistence.retrieveDraft(Service.class, standardResidentialService.getPrimaryKey());
+        standardResidentialService = Persistence.retrieveDraftForEdit(Service.class, standardResidentialService.getPrimaryKey());
 
         standardResidentialService.version().features().add(feature);
         standardResidentialService.saveAction().setValue(SaveAction.saveAsFinal);

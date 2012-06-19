@@ -19,6 +19,7 @@ import java.util.List;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.biz.financial.MoneyUtils;
 import com.propertyvista.domain.financial.billing.InvoiceDebit.DebitType;
 import com.propertyvista.domain.financial.billing.InvoiceDeposit;
 import com.propertyvista.domain.financial.billing.InvoiceDepositRefund;
@@ -94,8 +95,7 @@ public class BillingDepositProcessor extends AbstractBillingProcessor {
                     invDeposit.amount().setValue(deposit.initialAmount().getValue());
                 } else if (ValueType.percentage == deposit.valueType().getValue()) {
                     //TODO consider real price of service or feature including concessions etc
-                    invDeposit.amount().setValue(
-                            deposit.initialAmount().getValue().multiply(billableItem.agreedPrice().getValue()).setScale(2, BigDecimal.ROUND_HALF_UP));
+                    invDeposit.amount().setValue(MoneyUtils.round(deposit.initialAmount().getValue().multiply(billableItem.agreedPrice().getValue())));
                 } else {
                     throw new Error("Unsupported ValueType");
                 }

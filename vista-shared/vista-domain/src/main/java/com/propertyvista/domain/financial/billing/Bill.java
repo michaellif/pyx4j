@@ -78,8 +78,6 @@ public interface Bill extends IEntity {
 
         ZeroCycle,
 
-        Estimate,
-
         First,
 
         Regular,
