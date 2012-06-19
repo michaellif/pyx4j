@@ -180,8 +180,14 @@ public class BillingLifecycleManager {
 
             if (Status.Created == lease.version().status().getValue()) {//zeroCycle bill should be issued
                 manager = new ZeroCycleBillingManager(bill);
-            } else if (Status.Approved == lease.version().status().getValue() || Status.Application == lease.version().status().getValue()) {// first bill should be issued
+            } else if (Status.Application == lease.version().status().getValue()) {
                 manager = new FirstBillingManager(bill);
+            } else if (Status.Approved == lease.version().status().getValue()) {// first bill should be issued
+                if (lease.billingAccount().carryforwardBalance().isNull()) {
+                    manager = new FirstBillingManager(bill);
+                } else {
+                    manager = new ZeroCycleBillingManager(bill);
+                }
             } else if (Status.Active == lease.version().status().getValue()) {
                 manager = new RegularBillingManager(bill);
             } else if (Status.Completed == lease.version().status().getValue()) {// final bill should be issued

@@ -256,7 +256,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         return ServerSideFactory.create(BillingFacade.class).getLatestBill(retrieveLease());
     }
 
-    protected Bill verifyExistingLease() {
+    protected Bill approveExistingLease() {
         ServerSideFactory.create(LeaseFacade.class).approveExistingLease(retrieveLease());
         return ServerSideFactory.create(BillingFacade.class).getLatestBill(retrieveLease());
     }

@@ -44,7 +44,7 @@ public class BillingExistingLeaseSunnyDayScenarioTest extends FinancialTestBase 
 
         initLease("1-Mar-2011", "31-Aug-2011", null, new BigDecimal("300.00"));
 
-        Bill bill = verifyExistingLease();
+        Bill bill = approveExistingLease();
 
         bill = confirmBill(bill, true, true);
 

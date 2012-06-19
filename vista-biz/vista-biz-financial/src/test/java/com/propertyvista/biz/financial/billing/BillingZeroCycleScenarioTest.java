@@ -47,7 +47,7 @@ public class BillingZeroCycleScenarioTest extends FinancialTestBase {
 
         //==================== RUN 1 ======================//
 
-        Bill bill = verifyExistingLease();
+        Bill bill = approveExistingLease();
 
         bill = confirmBill(bill, true, true);
 
@@ -104,7 +104,7 @@ public class BillingZeroCycleScenarioTest extends FinancialTestBase {
 
         //==================== RUN 1 ======================//
 
-        Bill bill = verifyExistingLease();
+        Bill bill = approveExistingLease();
 
         bill = confirmBill(bill, true, true);
 
