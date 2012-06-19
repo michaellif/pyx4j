@@ -45,4 +45,13 @@ public interface CrmRole extends IEntity {
 
     @MemberColumn(name = "rls")
     ISet<CrmRole> roles();
+
+    /**
+     * <b>Warning:</b> whenever this value is about to be used to implement some logic, if a role has {@link VistaCrmBehavior#Equifax} in {@link #behaviors()},
+     * the value this member
+     * holds should be IGNORED as treated as <code>true</code>.
+     */
+    @Caption(description = "Require additional authentication challenge when a user logs in to the CRM, for users with Equifax premission this option is mandatory and cannot be overriden.")
+    IPrimitive<Boolean> requireTwoStepVerificationOnLogin();
+
 }
