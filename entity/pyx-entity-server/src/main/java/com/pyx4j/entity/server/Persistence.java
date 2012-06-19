@@ -143,10 +143,10 @@ public class Persistence {
 
     public static <T extends IVersionedEntity<?>> T secureRetrieveDraft(Class<T> entityClass, Key primaryKey) {
         // TODO  vlads
-        return retrieveDraft(entityClass, primaryKey);
+        return retrieveDraftForEdit(entityClass, primaryKey);
     }
 
-    public static <T extends IVersionedEntity<?>> T retrieveDraft(Class<T> entityClass, Key primaryKey) {
+    public static <T extends IVersionedEntity<?>> T retrieveDraftForEdit(Class<T> entityClass, Key primaryKey) {
         T entity = service().retrieve(entityClass, primaryKey.asDraftKey());
         if (entity.version().isNull()) {
             entity = service().retrieve(entityClass, primaryKey.asCurrentKey());
