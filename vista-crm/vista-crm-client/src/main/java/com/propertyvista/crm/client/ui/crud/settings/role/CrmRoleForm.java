@@ -54,6 +54,7 @@ public class CrmRoleForm extends CrmEntityForm<CrmRole> {
     @Override
     public IsWidget createContent() {
         FormFlexPanel content = new FormFlexPanel();
+
         int row = -1;
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name())).labelWidth(10).componentWidth(20).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().description())).labelWidth(10).componentWidth(20).build());
