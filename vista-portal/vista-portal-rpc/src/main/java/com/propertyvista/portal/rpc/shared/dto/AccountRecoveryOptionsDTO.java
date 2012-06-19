@@ -14,12 +14,14 @@
 package com.propertyvista.portal.rpc.shared.dto;
 
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.security.SecurityQuestion;
 
+@Transient
 public interface AccountRecoveryOptionsDTO extends IEntity {
 
     IList<SecurityQuestion> securityQuestions();

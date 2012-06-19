@@ -27,6 +27,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Key;
 import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.config.shared.ClientSystemInfo;
 import com.pyx4j.entity.server.Persistence;
@@ -52,6 +53,7 @@ import com.pyx4j.security.shared.UserVisit;
 import com.pyx4j.server.contexts.Context;
 import com.pyx4j.server.contexts.Lifecycle;
 
+import com.propertyvista.biz.system.AuditFacade;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.security.AbstractUser;
 import com.propertyvista.domain.security.AbstractUserCredential;
@@ -154,21 +156,30 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
         }
         U user = users.get(0);
 
-        E cr = Persistence.service().retrieve(credentialClass, user.getPrimaryKey());
-        if (cr == null) {
-            throw new UserRuntimeException(i18n.tr("Invalid User Account. Please Contact Support"));
-        }
-        if (!cr.enabled().isBooleanTrue()) {
-            throw new UserRuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
-        }
+        boolean credentialsOk = false;
+        try {
 
-        if (!token.accessKey.equals(cr.accessKey().getValue())) {
-            AbstractAntiBot.authenticationFailed(token.email);
-            throw new UserRuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
-        }
+            E cr = Persistence.service().retrieve(credentialClass, user.getPrimaryKey());
+            if (cr == null) {
+                throw new UserRuntimeException(i18n.tr("Invalid User Account. Please Contact Support"));
+            }
+            if (!cr.enabled().isBooleanTrue()) {
+                throw new UserRuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
+            }
 
-        if ((new Date().after(cr.accessKeyExpire().getValue()))) {
-            throw new UserRuntimeException(i18n.tr("Token Has Expired"));
+            if (!token.accessKey.equals(cr.accessKey().getValue())) {
+                AbstractAntiBot.authenticationFailed(token.email);
+                throw new UserRuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
+            }
+
+            if ((new Date().after(cr.accessKeyExpire().getValue()))) {
+                throw new UserRuntimeException(i18n.tr("Token Has Expired"));
+            }
+            credentialsOk = true;
+        } finally {
+            if (!credentialsOk) {
+                ServerSideFactory.create(AuditFacade.class).loginFailed(user);
+            }
         }
 
         Set<Behavior> behaviors = new HashSet<Behavior>();
@@ -176,10 +187,13 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
         UserVisit visit = new UserVisit(user.getPrimaryKey(), user.name().getValue());
         visit.setEmail(user.email().getValue());
         log.info("authenticated {} as {}", user.email().getValue(), behaviors);
-        callback.onSuccess(createAuthenticationResponse(Lifecycle.beginSession(visit, behaviors)));
+
+        String sessionToken = Lifecycle.beginSession(visit, behaviors);
+        ServerSideFactory.create(AuditFacade.class).login();
+        callback.onSuccess(createAuthenticationResponse(sessionToken));
     }
 
-    public String beginSession(AuthenticationRequest request) {
+    protected String beginSession(AuthenticationRequest request) {
         if (honorSystemState()) {
             switch (SystemMaintenance.getState()) {
             case Unavailable:
@@ -207,21 +221,31 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
         }
         U user = users.get(0);
 
-        E cr = Persistence.service().retrieve(credentialClass, user.getPrimaryKey());
-        if (cr == null) {
-            throw new UserRuntimeException(i18n.tr("Invalid User Account. Please Contact Support"));
-        }
-        if (!cr.enabled().isBooleanTrue()) {
-            throw new UserRuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
-        }
-        if (!PasswordEncryptor.checkPassword(request.password().getValue(), cr.credential().getValue())) {
-            log.info("Invalid password for user {}", email);
-            if (AbstractAntiBot.authenticationFailed(email)) {
-                throw new ChallengeVerificationRequired(i18n.tr("Too Many Failed Log In Attempts"));
-            } else {
+        boolean credentialsOk = false;
+        E cr;
+        try {
+            cr = Persistence.service().retrieve(credentialClass, user.getPrimaryKey());
+            if (cr == null) {
+                throw new UserRuntimeException(i18n.tr("Invalid User Account. Please Contact Support"));
+            }
+            if (!cr.enabled().isBooleanTrue()) {
                 throw new UserRuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
             }
+            if (!PasswordEncryptor.checkPassword(request.password().getValue(), cr.credential().getValue())) {
+                log.info("Invalid password for user {}", email);
+                if (AbstractAntiBot.authenticationFailed(email)) {
+                    throw new ChallengeVerificationRequired(i18n.tr("Too Many Failed Log In Attempts"));
+                } else {
+                    throw new UserRuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
+                }
+            }
+            credentialsOk = true;
+        } finally {
+            if (!credentialsOk) {
+                ServerSideFactory.create(AuditFacade.class).loginFailed(user);
+            }
         }
+
         if (!cr.accessKey().isNull()) {
             cr.accessKey().setValue(null);
             Persistence.service().persist(cr);
@@ -232,7 +256,9 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
             behaviors.add(getPasswordChangeRequiredBehavior());
             UserVisit visit = new UserVisit(user.getPrimaryKey(), user.name().getValue());
             visit.setEmail(user.email().getValue());
-            return Lifecycle.beginSession(visit, behaviors);
+            String token = Lifecycle.beginSession(visit, behaviors);
+            ServerSideFactory.create(AuditFacade.class).login();
+            return token;
         } else {
             Set<Behavior> behaviors = new HashSet<Behavior>();
             behaviors.addAll(getBehaviors(cr));
@@ -282,7 +308,9 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
         UserVisit visit = new UserVisit(user.getPrimaryKey(), user.name().getValue());
         visit.setEmail(user.email().getValue());
         log.info("authenticated {} as {}", user.email().getValue(), behaviors);
-        return Lifecycle.beginSession(visit, behaviors);
+        String token = Lifecycle.beginSession(visit, behaviors);
+        ServerSideFactory.create(AuditFacade.class).login();
+        return token;
     }
 
     @Override
