@@ -114,6 +114,8 @@ public class ServletUtils {
             } else {
                 return request.getRemoteAddr();
             }
+        } else if (request == null) {
+            return null;
         } else {
             return request.getRemoteAddr();
         }
