@@ -41,7 +41,9 @@ import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.interfaces.importer.xml.ImportXMLEntityNamingConvention;
+import com.propertyvista.onboarding.RequestIO;
 import com.propertyvista.onboarding.RequestMessageIO;
+import com.propertyvista.onboarding.ResponseIO;
 import com.propertyvista.onboarding.ResponseMessageIO;
 
 @SuppressWarnings("serial")
@@ -85,7 +87,7 @@ public class OnboardingServiceServlet extends HttpServlet {
         } finally {
             IOUtils.closeQuietly(is);
         }
-        DataDump.dumpToDirectory("onboarding", "request", message);
+        DataDump.dumpToDirectory("onboarding", "request" + requestInfo(message), message);
 
         NamespaceManager.setNamespace(VistaNamespace.adminNamespace);
         OnboardingProcessor pp;
@@ -130,6 +132,7 @@ public class OnboardingServiceServlet extends HttpServlet {
         } else {
             try {
                 log.info("processed in {} reply {}", TimeUtils.secSince(start), responseMessage);
+                DataDump.dumpToDirectory("onboarding", "response" + responseInfo(responseMessage), responseMessage);
                 response.setContentType("text/xml");
                 replyWith(response, responseMessage);
             } catch (Throwable e) {
@@ -140,12 +143,31 @@ public class OnboardingServiceServlet extends HttpServlet {
 
     }
 
+    private String requestInfo(RequestMessageIO message) {
+        if (message.requests().size() == 1) {
+            RequestIO firstRequest = message.requests().get(0);
+            return "-" + firstRequest.getEntityMeta().getEntityClass().getSimpleName();
+        } else {
+            return "";
+        }
+    }
+
+    private String responseInfo(ResponseMessageIO responseMessage) {
+        if (responseMessage.responses().size() == 1) {
+            ResponseIO firstResponce = responseMessage.responses().get(0);
+            return "-" + firstResponce.getEntityMeta().getEntityClass().getSimpleName() + "-" + firstResponce.success().getValue(Boolean.FALSE);
+        } else {
+            return "";
+        }
+    }
+
     private void replyWithStatusCode(HttpServletResponse response, ResponseMessageIO.StatusCode statusCode, Throwable e) {
         ResponseMessageIO rm = EntityFactory.create(ResponseMessageIO.class);
         rm.status().setValue(statusCode);
         if ((e != null) && (ApplicationMode.isDevelopment())) {
             rm.errorMessage().setValue(e.getMessage());
         }
+        DataDump.dumpToDirectory("onboarding", "response-" + statusCode, rm);
         replyWith(response, rm);
     }
 
