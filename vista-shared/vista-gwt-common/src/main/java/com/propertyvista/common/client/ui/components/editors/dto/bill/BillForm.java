@@ -120,20 +120,23 @@ public class BillForm extends CEntityDecoratableForm<BillDTO> {
     protected void onPopulate() {
         super.onPopulate();
 
-        get(proto().rejectReason()).setVisible(getValue().billStatus().getValue() == BillStatus.Rejected);
-        if (getValue().productCreditAmount().getValue().compareTo(BigDecimal.ZERO) == 0)
-            get(proto().productCreditAmount()).setVisible(false);
-        if (getValue().latePaymentFees().getValue().compareTo(BigDecimal.ZERO) == 0)
-            get(proto().latePaymentFees()).setVisible(false);
-        if (getValue().carryForwardCredit().getValue().compareTo(BigDecimal.ZERO) == 0)
-            get(proto().carryForwardCredit()).setVisible(false);
+        if (!justCurrentBill) {
+            get(proto().rejectReason()).setVisible(getValue().billStatus().getValue() == BillStatus.Rejected);
+            if (getValue().productCreditAmount().getValue().compareTo(BigDecimal.ZERO) == 0)
+                get(proto().productCreditAmount()).setVisible(false);
+            if (getValue().latePaymentFees().getValue().compareTo(BigDecimal.ZERO) == 0)
+                get(proto().latePaymentFees()).setVisible(false);
+            if (getValue().carryForwardCredit().getValue().compareTo(BigDecimal.ZERO) == 0)
+                get(proto().carryForwardCredit()).setVisible(false);
 
-        hideLines(getValue().depositRefundLineItems(), proto().depositRefundLineItems());
-        hideLines(getValue().immediateAccountAdjustmentLineItems(), proto().immediateAccountAdjustmentLineItems());
-        hideLines(getValue().nsfChargeLineItems(), proto().nsfChargeLineItems());
-        hideLines(getValue().withdrawalLineItems(), proto().withdrawalLineItems());
-        hideLines(getValue().rejectedPaymentLineItems(), proto().rejectedPaymentLineItems());
-        hideLines(getValue().paymentLineItems(), proto().paymentLineItems());
+            hideLines(getValue().depositRefundLineItems(), proto().depositRefundLineItems());
+            hideLines(getValue().immediateAccountAdjustmentLineItems(), proto().immediateAccountAdjustmentLineItems());
+            hideLines(getValue().nsfChargeLineItems(), proto().nsfChargeLineItems());
+            hideLines(getValue().withdrawalLineItems(), proto().withdrawalLineItems());
+            hideLines(getValue().rejectedPaymentLineItems(), proto().rejectedPaymentLineItems());
+            hideLines(getValue().paymentLineItems(), proto().paymentLineItems());
+        }
+
         hideLines(getValue().serviceChargeLineItems(), proto().serviceChargeLineItems());
         hideLines(getValue().recurringFeatureChargeLineItems(), proto().recurringFeatureChargeLineItems());
         hideLines(getValue().onetimeFeatureChargeLineItems(), proto().onetimeFeatureChargeLineItems());
