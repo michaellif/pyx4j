@@ -211,6 +211,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
         for (Feature feature : service.features()) {
             for (ProductItem item : feature.version().items()) {
                 switch (feature.version().type().getValue()) {
+                case addOn:
                 case utility:
                     // filter out utilities included in price for selected building:
                     if (!utilitiesToExclude.contains(item.type())) {

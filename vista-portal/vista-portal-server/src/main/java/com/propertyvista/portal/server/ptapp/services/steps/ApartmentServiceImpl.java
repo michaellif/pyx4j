@@ -260,6 +260,7 @@ public class ApartmentServiceImpl implements ApartmentService {
                 for (Feature feature : service.version().features()) {
                     for (ProductItem item : feature.version().items()) {
                         switch (item.type().<FeatureItemType> cast().featureType().getValue()) {
+                        case addOn:
                         case utility:
                             if (!entity.includedUtilities().contains(item.type()) && !entity.externalUtilities().contains(item.type())) {
                                 entity.availableUtilities().add(item);
