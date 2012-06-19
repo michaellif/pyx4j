@@ -23,6 +23,8 @@ import com.propertyvista.domain.tenant.lease.Lease;
 
 public interface LeaseFacade {
 
+    // in-memory Lease object state interfaces:
+
     Lease initLease(Lease lease);
 
     Lease setUnit(Lease lease, AptUnit unitId);
@@ -33,6 +35,8 @@ public interface LeaseFacade {
 
     Lease saveAsFinal(Lease lease);
 
+    // DB-data Lease object state interfaces:
+
     void createMasterOnlineApplication(Key leaseId);
 
     void approveApplication(Lease leaseId, Employee decidedBy, String decisionReason);
@@ -40,6 +44,8 @@ public interface LeaseFacade {
     void declineApplication(Lease leaseId, Employee decidedBy, String decisionReason);
 
     void cancelApplication(Lease leaseId, Employee decidedBy, String decisionReason);
+
+    void verifyExistingLease(Lease leaseId);
 
     void activate(Key leaseId);
 
@@ -53,7 +59,4 @@ public interface LeaseFacade {
     void complete(Key leaseId);
 
     void close(Key leaseId);
-
-    void verifyExistingLease(Lease leaseId);
-
 }
