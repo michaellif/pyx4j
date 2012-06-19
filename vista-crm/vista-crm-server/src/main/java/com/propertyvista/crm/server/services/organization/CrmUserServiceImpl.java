@@ -19,12 +19,14 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 
 import com.propertyvista.crm.rpc.dto.company.EmployeeDTO;
 import com.propertyvista.crm.rpc.services.organization.CrmUserService;
 import com.propertyvista.crm.server.util.CrmAppContext;
 import com.propertyvista.domain.company.Employee;
+import com.propertyvista.domain.security.UserAuditingConfigurationDTO;
 import com.propertyvista.server.common.security.VistaContext;
 import com.propertyvista.server.domain.security.CrmUserCredential;
 
@@ -48,6 +50,9 @@ public class CrmUserServiceImpl extends AbstractCrudServiceDtoImpl<Employee, Emp
         dto.accessAllBuildings().set(crs.accessAllBuildings());
         dto.requireChangePasswordOnNextLogIn().setValue(crs.requiredPasswordChangeOnNextLogIn().getValue());
         dto.roles().addAll(crs.roles());
+
+        // TODO put auditing configuration here
+        dto.userAuditingConfiguration().set(EntityFactory.create(UserAuditingConfigurationDTO.class));
     }
 
     @Override

@@ -21,6 +21,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.security.CrmRole;
+import com.propertyvista.domain.security.UserAuditingConfigurationDTO;
 import com.propertyvista.domain.security.UserCredentialEditDTO;
 
 @Transient
@@ -35,4 +36,5 @@ public interface EmployeeDTO extends Employee, UserCredentialEditDTO {
 
     IList<CrmRole> roles();
 
+    UserAuditingConfigurationDTO userAuditingConfiguration();
 }

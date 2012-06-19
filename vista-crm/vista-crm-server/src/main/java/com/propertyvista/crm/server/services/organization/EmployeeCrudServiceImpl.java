@@ -32,6 +32,7 @@ import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.security.CrmRole;
 import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.security.OnboardingUser;
+import com.propertyvista.domain.security.UserAuditingConfigurationDTO;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.domain.security.VistaOnboardingBehavior;
 import com.propertyvista.server.common.security.PasswordEncryptor;
@@ -63,7 +64,10 @@ public class EmployeeCrudServiceImpl extends AbstractCrudServiceDtoImpl<Employee
             dto.accessAllBuildings().set(crs.accessAllBuildings());
             dto.requireChangePasswordOnNextLogIn().setValue(crs.requiredPasswordChangeOnNextLogIn().getValue());
             dto.roles().addAll(crs.roles());
+
+            dto.userAuditingConfiguration().set(EntityFactory.create(UserAuditingConfigurationDTO.class));
         }
+
     }
 
     @Override

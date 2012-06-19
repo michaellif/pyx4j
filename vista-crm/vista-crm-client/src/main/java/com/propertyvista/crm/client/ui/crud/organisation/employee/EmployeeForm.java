@@ -29,6 +29,7 @@ import com.pyx4j.security.shared.SecurityController;
 
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.common.client.ui.components.editors.NameEditor;
+import com.propertyvista.common.client.ui.components.security.UserAuditingConfigurationForm;
 import com.propertyvista.common.client.ui.validators.PastDateValidation;
 import com.propertyvista.crm.client.themes.CrmTheme;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
@@ -54,26 +55,27 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
     public IsWidget createContent() {
         tabPanel.add(createInfoTab(), i18n.tr("Personal Information"));
         tabPanel.add(createPrivilegesTab(), i18n.tr("Privileges"));
+        tabPanel.add(createAuditingConfigurationTab(), i18n.tr("Auditing Configuration"));
 
         tabPanel.setSize("100%", "100%");
         return tabPanel;
     }
 
-    public void enforceBehaviour() {
-        boolean isManager = SecurityController.checkBehavior(VistaCrmBehavior.Organization);
-        boolean isSelfManged = ClientContext.getUserVisit().getPrincipalPrimaryKey().equals(getValue().user().getPrimaryKey());
+    @Override
+    public void addValidations() {
+        super.addValidations();
+        get(proto().passwordConfirm()).addValueValidator(new EditableValueValidator<String>() {
+            @Override
+            public ValidationFailure isValid(CComponent<String, ?> component, String value) {
+                if (value.equals(get(proto().password()).getValue())) {
+                    return null;
+                } else {
+                    return new ValidationFailure(i18n.tr("The passwords don't match. Please retype the passwords."));
+                }
+            }
+        });
 
-        get(proto().enabled()).setVisible(isManager);
-        get(proto().requireChangePasswordOnNextLogIn()).setVisible(isManager);
-
-        get(proto().accessAllBuildings()).setViewable(!isManager);
-        get(proto().roles()).setEditable(!isSelfManged);
-
-        get(proto().portfolios()).setViewable(!isManager);
-        get(proto().portfolios()).setEditable(isManager);
-
-        get(proto().employees()).setViewable(!isManager);
-        get(proto().employees()).setEditable(isManager);
+        new PastDateValidation(get(proto().birthDate()));
     }
 
     @Override
@@ -84,18 +86,6 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
         get(proto().passwordConfirm()).setVisible(isNewEmployee());
 
         enforceBehaviour();
-    }
-
-    private boolean isNewEmployee() {
-        return getValue().id().isNull();
-    }
-
-    /**
-     * @return <code>true</code> if the current user is editing his own information
-     */
-    private boolean isSelfEditor() {
-        return (getValue() != null) && !isNewEmployee() && !getValue().user().isNull()
-                && EqualsHelper.equals(getValue().user().getPrimaryKey(), ClientContext.getUserVisit().getPrincipalPrimaryKey());
     }
 
     private IsWidget createInfoTab() {
@@ -121,6 +111,15 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().description()), 50).build());
 
         return new ScrollPanel(main);
+    }
+
+    private IsWidget createAuditingConfigurationTab() {
+
+        FormFlexPanel tabContent = new FormFlexPanel();
+        int row = -1;
+        tabContent.setWidget(++row, 0, inject(proto().userAuditingConfiguration(), new UserAuditingConfigurationForm()));
+
+        return tabContent;
     }
 
     @Override
@@ -164,21 +163,36 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
         return new ScrollPanel(main);
     }
 
-    @Override
-    public void addValidations() {
-        super.addValidations();
-        get(proto().passwordConfirm()).addValueValidator(new EditableValueValidator<String>() {
-            @Override
-            public ValidationFailure isValid(CComponent<String, ?> component, String value) {
-                if (value.equals(get(proto().password()).getValue())) {
-                    return null;
-                } else {
-                    return new ValidationFailure(i18n.tr("The passwords don't match. Please retype the passwords."));
-                }
-            }
-        });
+    private boolean isNewEmployee() {
+        return getValue().id().isNull();
+    }
 
-        new PastDateValidation(get(proto().birthDate()));
+    /**
+     * @return <code>true</code> if the current user is editing his own information
+     */
+    private boolean isSelfEditor() {
+        return (getValue() != null) && !isNewEmployee() && !getValue().user().isNull()
+                && EqualsHelper.equals(getValue().user().getPrimaryKey(), ClientContext.getUserVisit().getPrincipalPrimaryKey());
+    }
+
+    private void enforceBehaviour() {
+        boolean isManager = SecurityController.checkBehavior(VistaCrmBehavior.Organization);
+        boolean isSelfManged = ClientContext.getUserVisit().getPrincipalPrimaryKey().equals(getValue().user().getPrimaryKey());
+
+        get(proto().enabled()).setVisible(isManager);
+        get(proto().requireChangePasswordOnNextLogIn()).setVisible(isManager);
+
+        get(proto().accessAllBuildings()).setViewable(!isManager);
+        get(proto().roles()).setEditable(!isSelfManged);
+
+        get(proto().portfolios()).setViewable(!isManager);
+        get(proto().portfolios()).setEditable(isManager);
+
+        get(proto().employees()).setViewable(!isManager);
+        get(proto().employees()).setEditable(isManager);
+
+        get(proto().userAuditingConfiguration()).setEnabled(isSelfEditor() | isManager);
+
     }
 
 }
