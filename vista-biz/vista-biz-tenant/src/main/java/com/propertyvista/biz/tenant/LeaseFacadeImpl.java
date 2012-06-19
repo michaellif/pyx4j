@@ -336,12 +336,8 @@ public class LeaseFacadeImpl implements LeaseFacade {
         updateApplicationReferencesToFinalVersionOfLease(lease);
 
         ServerSideFactory.create(OccupancyFacade.class).approveLease(lease.unit().getPrimaryKey());
-
         ServerSideFactory.create(ProductCatalogFacade.class).updateUnitRentPrice(lease);
-
-        if (!VistaTODO.removedForProduction) {
-            ServerSideFactory.create(BillingFacade.class).runBilling(lease);
-        }
+        ServerSideFactory.create(BillingFacade.class).runBilling(lease);
 
         if (!lease.leaseApplication().onlineApplication().isNull()) {
             for (Tenant tenant : lease.version().tenants()) {
@@ -399,12 +395,11 @@ public class LeaseFacadeImpl implements LeaseFacade {
     }
 
     @Override
-    public void verifyExistingLease(Lease leaseId) {
-
+    public void approveExistingLease(Lease leaseId) {
         Lease lease = Persistence.secureRetrieveDraft(Lease.class, leaseId.getPrimaryKey());
+        lease.version().status().setValue(Lease.Status.Approved);
 
         ServerSideFactory.create(OccupancyFacade.class).approveLease(lease.unit().getPrimaryKey());
-
         ServerSideFactory.create(ProductCatalogFacade.class).updateUnitRentPrice(lease);
 
         lease.saveAction().setValue(SaveAction.saveAsFinal);
@@ -419,7 +414,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
         Lease lease = Persistence.secureRetrieveDraft(Lease.class, leaseId);
         // set lease status to active ONLY if first (latest till now) bill is confirmed: 
         // TODO
-        if (!VistaTODO.removedForProduction && lease.billingAccount().carryforwardBalance().isNull()
+        if (lease.billingAccount().carryforwardBalance().isNull()
                 && ServerSideFactory.create(BillingFacade.class).getLatestBill(lease).billStatus().getValue() != Bill.BillStatus.Confirmed) {
             throw new UserRuntimeException(i18n.tr("Please run and confirm first bill in order to activate the lease."));
         }

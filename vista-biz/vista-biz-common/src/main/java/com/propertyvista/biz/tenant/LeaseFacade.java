@@ -45,7 +45,7 @@ public interface LeaseFacade {
 
     void cancelApplication(Lease leaseId, Employee decidedBy, String decisionReason);
 
-    void verifyExistingLease(Lease leaseId);
+    void approveExistingLease(Lease leaseId);
 
     void activate(Key leaseId);
 
