@@ -27,8 +27,12 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.essentials.server.csv.EntityCSVReciver;
+import com.pyx4j.gwt.server.IOUtils;
 
+import com.propertyvista.biz.preloader.LocationsGenerator;
 import com.propertyvista.domain.security.CrmRole;
+import com.propertyvista.domain.security.SecurityQuestion;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.portal.server.preloader.util.BaseVistaDevDataPreloader;
 
@@ -112,6 +116,9 @@ public class CrmRolesPreloader extends BaseVistaDevDataPreloader {
         }
 
         //TODO Add roles reload with proper business names.
+
+        Persistence.service().persist(
+                EntityCSVReciver.create(SecurityQuestion.class).loadFile(IOUtils.resourceFileName("SecurityQuestion.csv", LocationsGenerator.class)));
 
         return "Created " + rolesCount + " Roles";
     }

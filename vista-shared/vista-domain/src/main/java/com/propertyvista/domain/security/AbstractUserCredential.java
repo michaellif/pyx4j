@@ -16,6 +16,7 @@ package com.propertyvista.domain.security;
 import java.util.Date;
 
 import com.pyx4j.entity.annotations.AbstractEntity;
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.GwtBlacklist;
 import com.pyx4j.entity.annotations.MemberColumn;
@@ -56,5 +57,12 @@ public interface AbstractUserCredential<E extends AbstractUser> extends IEntity 
 
     @RpcTransient
     IPrimitive<Date> accessKeyExpire();
+
+    @Caption(name = "Password Recovery email address")
+    IPrimitive<String> recoveryEmail();
+
+    IPrimitive<String> securityQuestion();
+
+    IPrimitive<String> securityAnswer();
 
 }
