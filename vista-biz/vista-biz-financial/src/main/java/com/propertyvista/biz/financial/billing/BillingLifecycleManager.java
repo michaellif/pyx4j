@@ -65,13 +65,11 @@ public class BillingLifecycleManager {
     private final static Logger log = LoggerFactory.getLogger(BillingLifecycleManager.class);
 
     static Bill runBilling(Lease leaseId, boolean preview) {
-        //TODO
-        //- Get final version or draft if no final version exists
-        //- final version can go with  preview = true or false
-        // - draft can go only with preview =  true
-
         Lease lease = Persistence.service().retrieve(Lease.class, leaseId.getPrimaryKey().asCurrentKey());
         if (lease.version().isNull()) {
+            if (!preview) {
+                throw new BillingException(i18n.tr("Lease is in draft state. Billing can run only in preview mode."));
+            }
             lease = Persistence.service().retrieve(Lease.class, leaseId.getPrimaryKey().asDraftKey());
         }
 
