@@ -32,11 +32,11 @@ import com.pyx4j.rpc.shared.UserRuntimeException;
 
 import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.biz.financial.billing.BillingFacade;
+import com.propertyvista.biz.financial.deposit.DepositFacade;
 import com.propertyvista.biz.financial.productcatalog.ProductCatalogFacade;
 import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.biz.occupancy.UnitTurnoverAnalysisFacade;
 import com.propertyvista.biz.policy.IdAssignmentFacade;
-import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.offering.Feature;
@@ -45,14 +45,11 @@ import com.propertyvista.domain.financial.offering.ProductCatalog;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
-import com.propertyvista.domain.policy.policies.DepositPolicy;
-import com.propertyvista.domain.policy.policies.domain.DepositPolicyItem;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lead.Lead;
 import com.propertyvista.domain.tenant.lease.BillableItem;
-import com.propertyvista.domain.tenant.lease.Deposit;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.CompletionType;
 import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
@@ -187,16 +184,8 @@ public class LeaseFacadeImpl implements LeaseFacade {
         assert service != null;
 
         // Deposits:
-        DepositPolicy depositPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(lease.unit().belongsTo(), DepositPolicy.class);
-        for (DepositPolicyItem item : depositPolicy.policyItems()) {
-            if (item.productType().equals(serviceItem.type())) {
-                Deposit deposit = EntityFactory.create(Deposit.class);
-                deposit.initialAmount().setValue(item.value().getValue());
-                deposit.valueType().setValue(item.valueType().getValue());
-                deposit.repaymentMode().setValue(item.repaymentMode().getValue());
-                lease.version().leaseProducts().serviceItem().deposits().add(deposit);
-            }
-        }
+        lease.version().leaseProducts().serviceItem().deposits()
+                .addAll(ServerSideFactory.create(DepositFacade.class).createRequiredDeposits(serviceItem.type(), lease));
 
         // clear current dependable data:
         lease.version().leaseProducts().featureItems().clear();

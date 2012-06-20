@@ -50,7 +50,7 @@ import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.domain.policy.dto.DepositPolicyDTO;
 import com.propertyvista.domain.policy.policies.domain.DepositPolicyItem;
 import com.propertyvista.domain.tenant.lease.Deposit;
-import com.propertyvista.domain.tenant.lease.Deposit.RepaymentMode;
+import com.propertyvista.domain.tenant.lease.Deposit.DepositType;
 
 public class DepositPolicyForm extends PolicyDTOTabPanelBasedForm<DepositPolicyDTO> {
 
@@ -119,7 +119,6 @@ public class DepositPolicyForm extends PolicyDTOTabPanelBasedForm<DepositPolicyD
 
                 row = -1;
                 content.setWidget(++row, 1, new DecoratorBuilder(inject(proto().description()), 20).build());
-                content.setWidget(++row, 1, new DecoratorBuilder(inject(proto().repaymentMode()), 20).build());
 
                 get(proto().valueType()).addValueChangeHandler(new ValueChangeHandler<Deposit.ValueType>() {
                     @Override
@@ -212,7 +211,7 @@ public class DepositPolicyForm extends PolicyDTOTabPanelBasedForm<DepositPolicyD
                 } else {
                     for (ProductItemType type : getSelectedItems()) {
                         DepositPolicyItem newItem = EntityFactory.create(DepositPolicyItem.class);
-                        newItem.repaymentMode().setValue(RepaymentMode.returnAtLeaseEnd);
+                        newItem.depositType().setValue(DepositType.SecurityDeposit);
                         newItem.productType().set(type);
                         DepositPolicyItemEditorFolder.this.addItem(newItem);
                     }

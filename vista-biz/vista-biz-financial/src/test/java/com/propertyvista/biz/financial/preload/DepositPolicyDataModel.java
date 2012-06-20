@@ -22,7 +22,7 @@ import com.propertyvista.domain.financial.offering.ProductItemType;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.domain.policy.policies.DepositPolicy;
 import com.propertyvista.domain.policy.policies.domain.DepositPolicyItem;
-import com.propertyvista.domain.tenant.lease.Deposit.RepaymentMode;
+import com.propertyvista.domain.tenant.lease.Deposit.DepositType;
 import com.propertyvista.domain.tenant.lease.Deposit.ValueType;
 
 public class DepositPolicyDataModel {
@@ -50,7 +50,7 @@ public class DepositPolicyDataModel {
                     item = EntityFactory.create(DepositPolicyItem.class);
                     item.value().setValue(new BigDecimal("1.0"));
                     item.valueType().setValue(ValueType.percentage);
-                    item.repaymentMode().setValue(RepaymentMode.returnAtLeaseEnd);
+                    item.depositType().setValue(DepositType.LastMonthDeposit);
                     item.productType().set(type);
                     break;
                 default:

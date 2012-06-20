@@ -43,22 +43,29 @@ public interface Deposit extends IEntity {
      * - additional coverage rules
      * - refund rules
      */
+    @I18n
     public enum DepositType {
         /*
+         * Move-In Deposit will is used as a guarantee of move-in intent and to cover any move-in damages.
+         * The remainder is used towards the first payment. Immediate Credit is issued on the First Bill.
+         */
+        MoveInDeposit,
+        /*
          * Security Deposit can be used to cover various damages; otherwise will cover the
-         * associated product fee and the reminder will be refunded according to the applicable policy
+         * associated product fee and the reminder will be refunded according to the applicable policy.
+         * Immediate Credit is issued 2 weeks (configurable) after the product expiration date.
          */
         SecurityDeposit,
         /*
          * Last Month Deposit can be used only to cover the last month payment and must be refunded in full
          * at the end of lease.
+         * Immediate Credit is issued on the Last Bill.
          */
-        LastMonthDeposit,
-        /*
-         * Move-In Deposit will is used to cover any move-in damages and the reminder is used
-         * towards the first payment
-         */
-        MoveInDeposit
+        LastMonthDeposit
+    }
+
+    public enum DepositStatus {
+        Created, Billed, Returned
     }
 
     @I18n
@@ -67,18 +74,6 @@ public interface Deposit extends IEntity {
         amount,
 
         percentage;
-
-        @Override
-        public String toString() {
-            return I18nEnum.toString(this);
-        }
-    }
-
-    @I18n
-    @XmlType(name = "RepaymentMode")
-    public enum RepaymentMode {
-
-        applyToFirstMonth, applyToLastMonth, returnAtLeaseEnd;
 
         @Override
         public String toString() {
@@ -97,6 +92,8 @@ public interface Deposit extends IEntity {
     //@JoinColumn
     BillableItem billableItem();
 
+    IPrimitive<DepositStatus> status();
+
     IPrimitive<LogicalDate> depositDate();
 
     IPrimitive<LogicalDate> refundDate();
@@ -112,13 +109,14 @@ public interface Deposit extends IEntity {
 
     @NotNull
     @ToString(index = 3)
-    IPrimitive<RepaymentMode> repaymentMode();
+    IPrimitive<DepositType> type();
 
     IPrimitive<BigDecimal> initialAmount();
 
     IPrimitive<BigDecimal> currentAmount();
 
     @Owned
+    @Detached
     IList<DepositInterestAdjustment> interestAdjustments();
 
     // internals:

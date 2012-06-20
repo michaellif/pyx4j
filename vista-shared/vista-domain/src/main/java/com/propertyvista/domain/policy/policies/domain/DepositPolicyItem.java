@@ -31,7 +31,6 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.propertyvista.domain.financial.offering.ProductItemType;
 import com.propertyvista.domain.policy.policies.DepositPolicy;
 import com.propertyvista.domain.tenant.lease.Deposit.DepositType;
-import com.propertyvista.domain.tenant.lease.Deposit.RepaymentMode;
 import com.propertyvista.domain.tenant.lease.Deposit.ValueType;
 
 @ToStringFormat("{2}, {1}, {0}, {3}")
@@ -46,9 +45,6 @@ public interface DepositPolicyItem extends IEntity {
 
     @OrderColumn
     IPrimitive<Integer> orderInPolicy();
-
-    @NotNull
-    IPrimitive<DepositType> depositType();
 
     /**
      * Could be null for security deposits
@@ -71,5 +67,8 @@ public interface DepositPolicyItem extends IEntity {
 
     @NotNull
     @ToString(index = 3)
-    IPrimitive<RepaymentMode> repaymentMode();
+    IPrimitive<DepositType> depositType();
+
+    @NotNull
+    IPrimitive<BigDecimal> annualInterestRate();
 }

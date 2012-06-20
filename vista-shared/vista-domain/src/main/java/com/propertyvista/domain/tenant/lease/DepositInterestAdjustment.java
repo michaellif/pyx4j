@@ -8,7 +8,7 @@
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
  * Created on Jun 14, 2012
- * @author dev_vista
+ * @author stanp
  * @version $Id$
  */
 package com.propertyvista.domain.tenant.lease;
