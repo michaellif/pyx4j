@@ -17,8 +17,10 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 
+import com.pyx4j.commons.Filter;
 import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
+import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.rdb.EntityPersistenceServiceRDB;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.ServerEntityFactory;
@@ -28,9 +30,6 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.essentials.rpc.report.ReportRequest;
-import com.pyx4j.essentials.server.download.Downloadable;
-import com.pyx4j.essentials.server.report.ReportTableCSVFormater;
-import com.pyx4j.essentials.server.report.ReportTableFormater;
 import com.pyx4j.essentials.server.report.SearchReportDeferredProcess;
 import com.pyx4j.server.contexts.NamespaceManager;
 
@@ -41,11 +40,8 @@ public class DBIntegrityCheckDeferredProcess extends SearchReportDeferredProcess
 
     private static final long serialVersionUID = 1L;
 
-    protected ReportTableFormater formater;
-
     public DBIntegrityCheckDeferredProcess(ReportRequest request) {
         super(request);
-        this.formater = new ReportTableCSVFormater();
     }
 
     @Override
@@ -80,6 +76,32 @@ public class DBIntegrityCheckDeferredProcess extends SearchReportDeferredProcess
     }
 
     private void commonNamespaceIntegrityCheck() {
+
+        exportTablesInfo(new Filter<Class<? extends IEntity>>() {
+
+            @Override
+            public boolean accept(Class<? extends IEntity> entityClass) {
+                return EntityPersistenceServiceRDB.allowNamespaceUse(entityClass);
+            }
+        });
+    }
+
+    private void specificNamespaceIntegrityCheck(String namespace) {
+        try {
+            NamespaceManager.setNamespace(namespace);
+            exportTablesInfo(new Filter<Class<? extends IEntity>>() {
+                @Override
+                public boolean accept(Class<? extends IEntity> entityClass) {
+                    Table table = entityClass.getAnnotation(Table.class);
+                    return ((table != null) && NamespaceManager.getNamespace().equals(table.namespace()));
+                }
+            });
+        } finally {
+            NamespaceManager.setNamespace(VistaNamespace.adminNamespace);
+        }
+    }
+
+    private void exportTablesInfo(Filter<Class<? extends IEntity>> filter) {
         EntityPersistenceServiceRDB srv = (EntityPersistenceServiceRDB) Persistence.service();
         List<String> allClasses = EntityClassFinder.getEntityClassesNames();
         TreeMap<String, Integer> tablesMap = new TreeMap<String, Integer>();
@@ -92,10 +114,12 @@ public class DBIntegrityCheckDeferredProcess extends SearchReportDeferredProcess
             if (meta.isTransient() || entityClass.getAnnotation(AbstractEntity.class) != null || entityClass.getAnnotation(EmbeddedEntity.class) != null) {
                 continue;
             }
-            if (!EntityPersistenceServiceRDB.allowNamespaceUse(entityClass)) {
-                continue;
-            }
-            if (srv.isTableExists(meta.getEntityClass())) {
+            if (filter.accept(entityClass)) {
+                if (!EntityPersistenceServiceRDB.allowNamespaceUse(entityClass)) {
+                    continue;
+                }
+                // TODO Review tables creation
+                //if (srv.isTableExists(meta.getEntityClass())) {
                 int keys = srv.count(EntityQueryCriteria.create(entityClass));
                 tablesMap.put(meta.getEntityClass().getSimpleName(), keys);
             }
@@ -107,20 +131,5 @@ public class DBIntegrityCheckDeferredProcess extends SearchReportDeferredProcess
             formater.cell(entry.getValue());
             formater.newRow();
         }
-    }
-
-    private void specificNamespaceIntegrityCheck(String namespace) {
-        try {
-            NamespaceManager.setNamespace(namespace);
-            //TODO
-        } finally {
-            NamespaceManager.setNamespace(VistaNamespace.adminNamespace);
-        }
-    }
-
-    @Override
-    protected void createDownloadable() {
-        Downloadable d = new Downloadable(formater.getBinaryData(), formater.getContentType());
-        d.save(getFileName());
     }
 }
