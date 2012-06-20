@@ -25,6 +25,7 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,6 +58,7 @@ import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
 import com.propertyvista.domain.tenant.lease.Lease.Status;
 import com.propertyvista.server.jobs.StatisticsUtils;
+import com.propertyvista.server.jobs.TaskRunner;
 
 public class BillingLifecycleManager {
 
@@ -421,7 +423,18 @@ public class BillingLifecycleManager {
                 previousBillingCycle.billingType().paymentFrequency().getValue(), previousBillingCycle.billingCycleStartDate().getValue()));
     }
 
-    private static BillingCycle ensureBillingCycle(BillingType billingType, Building building, LogicalDate billingCycleStartDate) {
+    private static BillingCycle ensureBillingCycle(final BillingType billingType, final Building building, final LogicalDate billingCycleStartDate) {
+        return TaskRunner.runAutonomousTransation(new Callable<BillingCycle>() {
+            @Override
+            public BillingCycle call() {
+                BillingCycle billingCycle = ensureBillingCycleTransaction(billingType, building, billingCycleStartDate);
+                Persistence.service().commit();
+                return billingCycle;
+            }
+        });
+    }
+
+    private synchronized static BillingCycle ensureBillingCycleTransaction(BillingType billingType, Building building, LogicalDate billingCycleStartDate) {
 
         EntityQueryCriteria<BillingCycle> criteria = EntityQueryCriteria.create(BillingCycle.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().billingType(), billingType));
