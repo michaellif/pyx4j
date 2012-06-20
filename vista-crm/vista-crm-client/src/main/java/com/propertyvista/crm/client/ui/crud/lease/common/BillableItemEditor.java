@@ -141,13 +141,24 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
         return main;
     }
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @SuppressWarnings({ "unchecked" })
     @Override
     protected void onPopulate() {
         super.onPopulate();
 
+        // tweak UI for ProductItem:
         if (!getValue().item().isEmpty()) {
-            if (getValue().item().type().isInstanceOf(FeatureItemType.class)) {
+            if (getValue().item().type().isInstanceOf(ServiceItemType.class)) {
+                // hide effective dates:
+                get(proto().effectiveDate()).setVisible(false);
+                get(proto().expirationDate()).setVisible(false);
+
+                if (isEditable()) {
+                    boolean isAgreed = !lease.getValue().approvalDate().isNull();
+                    get(proto().item()).setEditable(!isAgreed && !lease.getValue().selectedServiceItems().isEmpty());
+                    get(proto().agreedPrice()).setEditable(!isAgreed && lease.getValue().approvalDate().isNull());
+                }
+            } else if (getValue().item().type().isInstanceOf(FeatureItemType.class)) {
                 // show/hide(empty) effective dates:
                 get(proto().effectiveDate()).setVisible(isEditable() || !getValue().effectiveDate().isNull());
                 get(proto().expirationDate()).setVisible(isEditable() || !getValue().expirationDate().isNull());
@@ -160,16 +171,6 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
                         item.setRemovable(false);
                     }
                 }
-            } else if (getValue().item().type().isInstanceOf(ServiceItemType.class)) {
-                // hide effective dates:
-                get(proto().effectiveDate()).setVisible(false);
-                get(proto().expirationDate()).setVisible(false);
-
-                if (isEditable()) {
-                    boolean isAgreed = !lease.getValue().approvalDate().isNull();
-                    get(proto().item()).setEditable(!isAgreed && !lease.getValue().selectedServiceItems().isEmpty());
-                    get(proto().agreedPrice()).setEditable(!isAgreed && lease.getValue().approvalDate().isNull());
-                }
             }
 
             if (isViewable()) {
@@ -177,9 +178,6 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
             } else {
                 adjustmentPanel.setVisible(true);
             }
-
-            setExtraDataEditor();
-
         } else {// tweak UI for empty ProductItem:
             adjustmentPanel.setVisible(false);
         }
@@ -197,37 +195,47 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
         }
     }
 
-    @SuppressWarnings("unchecked")
-    private void setExtraDataEditor() {
-        @SuppressWarnings("rawtypes")
-        CEntityForm editor = null;
-        BillableItemExtraData extraData = getValue().extraData();
+    @Override
+    protected void propagateValue(BillableItem value, boolean fireEvent, boolean populate) {
+        setExtraDataEditor(value, populate);
+        super.propagateValue(value, fireEvent, populate);
+    }
 
-        // add extraData editor if necessary:
-        if (getValue().item().type().isInstanceOf(FeatureItemType.class)) {
-            switch (getValue().item().type().<FeatureItemType> cast().featureType().getValue()) {
-            case parking:
-                editor = new VehicleDataEditor();
-                if (extraData.isNull()) {
-                    extraData.set(EntityFactory.create(Vehicle.class));
-                }
-                break;
-            case pet:
-                editor = new PetDataEditor();
-                if (extraData.isNull()) {
-                    extraData.set(EntityFactory.create(Pet.class));
-                }
-                break;
-            }
+    @SuppressWarnings("unchecked")
+    private void setExtraDataEditor(BillableItem value, boolean populate) {
+
+        if (this.contains(proto().extraData())) {
+            this.unbind(proto().extraData());
+            extraDataPanel.setWidget(null);
         }
 
-        if (editor != null) {
-            if (this.contains(proto().extraData())) {
-                this.unbind(proto().extraData());
+        if (getValue() != null) {
+            // add extraData editor if necessary:
+            @SuppressWarnings("rawtypes")
+            CEntityForm editor = null;
+            BillableItemExtraData extraData = value.extraData();
+            if (getValue().item().type().isInstanceOf(FeatureItemType.class)) {
+                switch (getValue().item().type().<FeatureItemType> cast().featureType().getValue()) {
+                case parking:
+                    editor = new VehicleDataEditor();
+                    if (extraData.getInstanceValueClass() != Vehicle.class) {
+                        extraData.set(EntityFactory.create(Vehicle.class));
+                    }
+                    break;
+                case pet:
+                    editor = new PetDataEditor();
+                    if (extraData.getInstanceValueClass() != Pet.class) {
+                        extraData.set(EntityFactory.create(Pet.class));
+                    }
+                    break;
+                }
             }
-            this.inject(proto().extraData(), editor);
-            editor.populate(extraData.cast());
-            extraDataPanel.setWidget(editor);
+
+            if (editor != null) {
+                this.inject(proto().extraData(), editor);
+                editor.populate(extraData.cast());
+                extraDataPanel.setWidget(editor);
+            }
         }
     }
 

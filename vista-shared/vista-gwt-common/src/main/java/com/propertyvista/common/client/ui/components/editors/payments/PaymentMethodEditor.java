@@ -119,6 +119,7 @@ public class PaymentMethodEditor extends CEntityDecoratableForm<PaymentMethod> {
         get(proto().billingAddress()).setEditable(!getValue().sameAsCurrent().isBooleanTrue());
     }
 
+    @SuppressWarnings("unchecked")
     protected void selectPaymentDetailsEditor(PaymentType type, boolean populate) {
 
         if (this.contains(proto().details())) {
@@ -133,6 +134,7 @@ public class PaymentMethodEditor extends CEntityDecoratableForm<PaymentMethod> {
         }
 
         if (type != null && getValue() != null) {
+            @SuppressWarnings("rawtypes")
             CEntityForm editor = null;
             PaymentDetails details = getValue().details();
 
@@ -177,7 +179,6 @@ public class PaymentMethodEditor extends CEntityDecoratableForm<PaymentMethod> {
             if (editor != null) {
                 this.inject(proto().details(), editor);
                 editor.populate(details.cast());
-
                 paymentDetailsHolder.setWidget(editor);
             }
         }
