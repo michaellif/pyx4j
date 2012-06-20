@@ -16,7 +16,6 @@ package com.propertyvista.biz.financial.billing;
 import java.math.BigDecimal;
 import java.util.List;
 
-import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -28,7 +27,6 @@ import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.domain.financial.billing.InvoiceProductCharge;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Deposit;
-import com.propertyvista.domain.tenant.lease.Deposit.DepositStatus;
 import com.propertyvista.domain.tenant.lease.Deposit.ValueType;
 import com.propertyvista.portal.rpc.shared.BillingException;
 
@@ -88,27 +86,24 @@ public class BillingDepositProcessor extends AbstractBillingProcessor {
         //This is first time charge have been issued - add deposit
         if (nextCharge != null && currentCharge == null && !billableItem.deposits().isEmpty()) {
             for (Deposit deposit : billableItem.deposits()) {
-                InvoiceDeposit invDeposit = EntityFactory.create(InvoiceDeposit.class);
-                invDeposit.billingAccount().set(getBillingManager().getNextPeriodBill().billingAccount());
-                invDeposit.dueDate().setValue(getBillingManager().getNextPeriodBill().dueDate().getValue());
-                invDeposit.debitType().setValue(DebitType.deposit);
-                invDeposit.description().setValue(deposit.description().getStringView());
+                InvoiceDeposit invoiceDeposit = EntityFactory.create(InvoiceDeposit.class);
+                invoiceDeposit.billingAccount().set(getBillingManager().getNextPeriodBill().billingAccount());
+                invoiceDeposit.dueDate().setValue(getBillingManager().getNextPeriodBill().dueDate().getValue());
+                invoiceDeposit.debitType().setValue(DebitType.deposit);
+                invoiceDeposit.description().setValue(deposit.description().getStringView());
 
                 if (ValueType.amount == deposit.valueType().getValue()) {
-                    invDeposit.amount().setValue(deposit.initialAmount().getValue());
+                    invoiceDeposit.amount().setValue(deposit.initialAmount().getValue());
                 } else if (ValueType.percentage == deposit.valueType().getValue()) {
                     //TODO consider real price of service or feature including concessions etc
-                    invDeposit.amount().setValue(MoneyUtils.round(deposit.initialAmount().getValue().multiply(billableItem.agreedPrice().getValue())));
+                    invoiceDeposit.amount().setValue(MoneyUtils.round(deposit.initialAmount().getValue().multiply(billableItem.agreedPrice().getValue())));
                 } else {
                     throw new Error("Unsupported ValueType");
                 }
 
-                invDeposit.taxTotal().setValue(BigDecimal.ZERO);
+                invoiceDeposit.taxTotal().setValue(BigDecimal.ZERO);
 
-                addDeposit(invDeposit);
-
-                deposit.status().setValue(DepositStatus.Billed);
-                Persistence.service().persist(deposit);
+                addDeposit(invoiceDeposit);
             }
         }
     }
@@ -124,17 +119,17 @@ public class BillingDepositProcessor extends AbstractBillingProcessor {
         // getBillingManager().getNextPeriodBill().taxes().setValue(getBillingManager().getNextPeriodBill().taxes().getValue().add(deposit.taxTotal().getValue()));
     }
 
-    private void addDepositRefund(InvoiceDepositRefund depositRefund) {
-        getBillingManager().getNextPeriodBill().lineItems().add(depositRefund);
-        getBillingManager().getNextPeriodBill().depositRefundAmount()
-                .setValue(getBillingManager().getNextPeriodBill().depositRefundAmount().getValue().add(depositRefund.amount().getValue().negate()));
-    }
-
     private void attachDepositRefunds() {
         List<InvoiceLineItem> items = BillingUtils.getUnclaimedLineItems(getBillingManager().getNextPeriodBill().billingAccount());
         for (InvoiceDepositRefund payment : BillingUtils.getLineItemsForType(items, InvoiceDepositRefund.class)) {
             addDepositRefund(payment);
         }
+    }
+
+    private void addDepositRefund(InvoiceDepositRefund depositRefund) {
+        getBillingManager().getNextPeriodBill().lineItems().add(depositRefund);
+        getBillingManager().getNextPeriodBill().depositRefundAmount()
+                .setValue(getBillingManager().getNextPeriodBill().depositRefundAmount().getValue().add(depositRefund.amount().getValue().negate()));
     }
 
 }
