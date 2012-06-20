@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -28,6 +28,7 @@ import com.pyx4j.widgets.client.Button;
 import com.propertyvista.admin.client.ui.crud.AdminListerViewImplBase;
 import com.propertyvista.admin.rpc.AdminSiteMap;
 import com.propertyvista.admin.rpc.PmcDTO;
+import com.propertyvista.admin.rpc.services.DBIntegrityCheckService;
 import com.propertyvista.admin.rpc.services.PmcDataReportService;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 
@@ -63,6 +64,20 @@ public class PmcListerViewImpl extends AdminListerViewImplBase<PmcDTO> implement
                     ReportDialog d = new ReportDialog("Report", "Creating report...");
                     d.setDownloadServletPath(GWT.getModuleBaseURL() + DeploymentConsts.downloadServletMapping);
                     d.start(GWT.<ReportService<?>> create(PmcDataReportService.class), criteria);
+                }
+            });
+            addHeaderToolbarTwoItem(downloadFull);
+        }
+
+        {
+            Button downloadFull = new Button("DB integrity check.csv", new ClickHandler() {
+                @Override
+                public void onClick(ClickEvent event) {
+                    EntityQueryCriteria<PmcDTO> criteria = EntityQueryCriteria.create(PmcDTO.class);
+
+                    ReportDialog d = new ReportDialog("DB Summary", "Creating DB summary...");
+                    d.setDownloadServletPath(GWT.getModuleBaseURL() + DeploymentConsts.downloadServletMapping);
+                    d.start(GWT.<ReportService<?>> create(DBIntegrityCheckService.class), criteria);
                 }
             });
             addHeaderToolbarTwoItem(downloadFull);
