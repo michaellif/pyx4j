@@ -126,7 +126,7 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
 
                     @Override
                     public void show() {
-                        if (lease.getValue().selectedBuilding() == null || lease.getValue().selectedBuilding().isNull()) {
+                        if (lease.getValue().selectedBuilding().isNull()) {
                             MessageDialog.warn(i18n.tr("Warning"), i18n.tr("You Must Select Unit First"));
                         } else {
                             super.show();
