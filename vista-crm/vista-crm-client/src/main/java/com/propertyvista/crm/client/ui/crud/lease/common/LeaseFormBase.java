@@ -101,9 +101,10 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
 
         get(proto().version().completion()).setVisible(!getValue().version().completion().isNull());
 
-//        get(proto().version().moveOutNotice()).setVisible(!proto().version().moveOutNotice().isNull());
-//        get(proto().version().expectedMoveOut()).setVisible(!proto().version().expectedMoveOut().isNull());
-//        get(proto().version().actualMoveOut()).setVisible(!proto().version().moveOutNotice().isNull());
+        get(proto().version().moveOutNotice()).setVisible(!getValue().version().moveOutNotice().isNull());
+        get(proto().version().expectedMoveOut()).setVisible(!getValue().version().expectedMoveOut().isNull());
+
+        get(proto().approvalDate()).setVisible(!getValue().approvalDate().isNull());
 
         // disable some editing on signed lease:
         if (isEditable()) {
@@ -143,6 +144,12 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
             get(proto().leaseTo()).setViewable(isLeaseSigned);
 
             get(proto().unit()).setEditable(!isLeaseSigned);
+
+            get(proto().version().actualMoveOut()).setVisible(!getValue().version().expectedMoveOut().isNull());
+        } else {
+            get(proto().version().actualLeaseTo()).setVisible(!getValue().version().actualLeaseTo().isNull());
+            get(proto().version().actualMoveIn()).setVisible(!getValue().version().actualMoveIn().isNull());
+            get(proto().version().actualMoveOut()).setVisible(!getValue().version().actualMoveOut().isNull());
         }
     }
 
