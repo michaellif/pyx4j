@@ -49,6 +49,17 @@ public abstract class LeaseEditorCrudServiceBaseImpl<DTO extends LeaseDTO> exten
     }
 
     @Override
+    protected void enhanceRetrieved(Lease in, DTO dto) {
+        super.enhanceRetrieved(in, dto);
+
+        if (!dto.unit().isNull()) {
+            // fill runtime editor data:
+            fillServiceEligibilityData(dto);
+            fillserviceItems(dto);
+        }
+    }
+
+    @Override
     protected void create(Lease entity, DTO dto) {
         updateAdjustments(entity);
         ServerSideFactory.create(LeaseFacade.class).initLease(entity);
