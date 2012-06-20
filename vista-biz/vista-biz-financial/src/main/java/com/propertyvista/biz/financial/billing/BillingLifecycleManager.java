@@ -424,14 +424,18 @@ public class BillingLifecycleManager {
     }
 
     private static BillingCycle ensureBillingCycle(final BillingType billingType, final Building building, final LogicalDate billingCycleStartDate) {
-        return TaskRunner.runAutonomousTransation(new Callable<BillingCycle>() {
-            @Override
-            public BillingCycle call() {
-                BillingCycle billingCycle = ensureBillingCycleTransaction(billingType, building, billingCycleStartDate);
-                Persistence.service().commit();
-                return billingCycle;
-            }
-        });
+        if (false) {
+            return TaskRunner.runAutonomousTransation(new Callable<BillingCycle>() {
+                @Override
+                public BillingCycle call() {
+                    BillingCycle billingCycle = ensureBillingCycleTransaction(billingType, building, billingCycleStartDate);
+                    Persistence.service().commit();
+                    return billingCycle;
+                }
+            });
+        } else {
+            return ensureBillingCycleTransaction(billingType, building, billingCycleStartDate);
+        }
     }
 
     private synchronized static BillingCycle ensureBillingCycleTransaction(BillingType billingType, Building building, LogicalDate billingCycleStartDate) {
