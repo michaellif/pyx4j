@@ -50,8 +50,19 @@ public class DBIntegrityCheckDeferredProcess extends SearchReportDeferredProcess
     }
 
     @Override
-    public void cancel() {
-        canceled = true;
+    public void execute() {
+        boolean success = false;
+        try {
+            Persistence.service().startBackgroundProcessTransaction();
+            super.execute();
+            Persistence.service().commit();
+            success = true;
+        } finally {
+            if (!success) {
+                Persistence.service().rollback();
+            }
+            Persistence.service().endTransaction();
+        }
     }
 
     @Override
