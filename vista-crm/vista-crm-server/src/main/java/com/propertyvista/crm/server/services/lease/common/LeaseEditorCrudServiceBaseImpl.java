@@ -99,6 +99,8 @@ public abstract class LeaseEditorCrudServiceBaseImpl<DTO extends LeaseDTO> exten
     public void setSelectedUnit(AsyncCallback<DTO> callback, AptUnit unitId, DTO dto) {
         ServerSideFactory.create(LeaseFacade.class).setUnit(dto, unitId);
         dto.selectedBuilding().set(dto.unit().belongsTo());
+        fillServiceEligibilityData(dto);
+        fillserviceItems(dto);
         callback.onSuccess(dto);
     }
 
@@ -106,7 +108,6 @@ public abstract class LeaseEditorCrudServiceBaseImpl<DTO extends LeaseDTO> exten
     public void setSelectedService(AsyncCallback<DTO> callback, ProductItem serviceId, DTO dto) {
         ServerSideFactory.create(LeaseFacade.class).setService(dto, serviceId);
         fillServiceEligibilityData(dto);
-        fillserviceItems(dto);
         callback.onSuccess(dto);
     }
 
@@ -118,7 +119,6 @@ public abstract class LeaseEditorCrudServiceBaseImpl<DTO extends LeaseDTO> exten
     // Internals:
 
     private boolean fillServiceEligibilityData(DTO currentValue) {
-
         currentValue.selectedFeatureItems().clear();
         currentValue.selectedUtilityItems().clear();
         currentValue.selectedConcessions().clear();
