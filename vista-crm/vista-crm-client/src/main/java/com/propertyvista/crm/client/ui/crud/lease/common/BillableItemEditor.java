@@ -141,7 +141,7 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
         return main;
     }
 
-    @SuppressWarnings({ "unchecked" })
+    @SuppressWarnings("unchecked")
     @Override
     protected void onPopulate() {
         super.onPopulate();
@@ -154,6 +154,7 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
                 get(proto().expirationDate()).setVisible(false);
 
                 if (isEditable()) {
+                    // set editable just for non-agreed leases (and multiple service items):
                     boolean isAgreed = !lease.getValue().approvalDate().isNull();
                     get(proto().item()).setEditable(!isAgreed && !lease.getValue().selectedServiceItems().isEmpty());
                     get(proto().agreedPrice()).setEditable(!isAgreed && lease.getValue().approvalDate().isNull());
@@ -180,18 +181,6 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
             }
         } else {// tweak UI for empty ProductItem:
             adjustmentPanel.setVisible(false);
-        }
-    }
-
-    @Override
-    public void applyViewabilityRules() {
-        super.applyViewabilityRules();
-        if (adjustmentPanel != null && getValue() != null) {
-            if (isViewable() && !getValue().isNull()) {
-                adjustmentPanel.setVisible(!getValue().adjustments().isEmpty());
-            } else {
-                adjustmentPanel.setVisible(true);
-            }
         }
     }
 
