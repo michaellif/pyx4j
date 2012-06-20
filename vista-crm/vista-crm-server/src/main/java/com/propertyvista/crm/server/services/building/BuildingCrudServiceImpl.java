@@ -73,7 +73,7 @@ public class BuildingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Building
         }
 
         EntityQueryCriteria<FeatureItemType> featureItemCriteria = EntityQueryCriteria.create(FeatureItemType.class);
-        featureItemCriteria.add(PropertyCriterion.in(featureItemCriteria.proto().featureType(), Feature.FeatureType.addOn, Feature.FeatureType.utility));
+        featureItemCriteria.add(PropertyCriterion.in(featureItemCriteria.proto().featureType(), Feature.Type.addOn, Feature.Type.utility));
         dto.availableUtilities().addAll(Persistence.service().query(featureItemCriteria));
 
         // Geotagging:

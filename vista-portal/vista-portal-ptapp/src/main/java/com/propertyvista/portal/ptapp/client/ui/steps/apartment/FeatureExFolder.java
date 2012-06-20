@@ -34,13 +34,13 @@ public class FeatureExFolder extends VistaBoxFolder<BillableItem> {
 
     private static final I18n i18n = I18n.get(FeatureExFolder.class);
 
-    private final Feature.FeatureType type;
+    private final Feature.Type type;
 
     private final ApartmentViewForm apartmentViewForm;
 
     private int maxCount;
 
-    public FeatureExFolder(Feature.FeatureType type, ApartmentViewForm apartmentViewForm, boolean modifiable) {
+    public FeatureExFolder(Feature.Type type, ApartmentViewForm apartmentViewForm, boolean modifiable) {
         super(BillableItem.class, modifiable);
 
         this.type = type;

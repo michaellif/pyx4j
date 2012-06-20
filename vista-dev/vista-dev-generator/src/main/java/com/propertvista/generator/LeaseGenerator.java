@@ -182,7 +182,7 @@ public class LeaseGenerator extends DataGenerator {
             // pre-populate utilities for the new service:
             Persistence.service().retrieve(selectedService.version().features());
             for (Feature feature : selectedService.version().features()) {
-                if (Feature.FeatureType.utility.equals(feature.version().type().getValue())) {
+                if (Feature.Type.utility.equals(feature.version().type().getValue())) {
                     Persistence.service().retrieve(feature.version().items());
                     for (ProductItem item : feature.version().items()) {
                         if (!building.productCatalog().includedUtilities().contains(item.type())

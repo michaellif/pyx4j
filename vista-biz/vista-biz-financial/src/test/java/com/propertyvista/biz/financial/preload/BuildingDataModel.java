@@ -44,7 +44,7 @@ public class BuildingDataModel {
 
     private Map<Service.ServiceType, List<ServiceItemType>> serviceMeta;
 
-    private Map<Feature.FeatureType, List<FeatureItemType>> featureMeta;
+    private Map<Feature.Type, List<FeatureItemType>> featureMeta;
 
     private final ProductItemTypesDataModel productItemTypesDataModel;
 
@@ -96,7 +96,7 @@ public class BuildingDataModel {
 
     private void createServiceMeta() {
         serviceMeta = new HashMap<Service.ServiceType, List<ServiceItemType>>();
-        featureMeta = new HashMap<Feature.FeatureType, List<FeatureItemType>>();
+        featureMeta = new HashMap<Feature.Type, List<FeatureItemType>>();
 
         for (ServiceItemType serviceItemType : productItemTypesDataModel.getServiceItemTypes()) {
             if (!serviceMeta.containsKey(serviceItemType.serviceType().getValue())) {
@@ -152,12 +152,12 @@ public class BuildingDataModel {
     }
 
     private void generateFeatures() {
-        for (Feature.FeatureType serviceType : featureMeta.keySet()) {
+        for (Feature.Type serviceType : featureMeta.keySet()) {
             generateFeature(serviceType);
         }
     }
 
-    private void generateFeature(Feature.FeatureType type) {
+    private void generateFeature(Feature.Type type) {
         Feature feature = EntityFactory.create(Feature.class);
 
         feature.catalog().set(building.productCatalog());
@@ -170,7 +170,7 @@ public class BuildingDataModel {
         case parking:
             feature.version().recurring().setValue(true);
             for (Parking parking : building._Parkings()) {
-                for (ProductItemType productItemType : featureMeta.get(Feature.FeatureType.parking)) {
+                for (ProductItemType productItemType : featureMeta.get(Feature.Type.parking)) {
                     generateParkingFeatureItem(feature, parking, productItemType);
                 }
             }
@@ -178,26 +178,26 @@ public class BuildingDataModel {
         case locker:
             feature.version().recurring().setValue(true);
             for (LockerArea lockerArea : building._LockerAreas()) {
-                for (ProductItemType productItemType : featureMeta.get(Feature.FeatureType.locker)) {
+                for (ProductItemType productItemType : featureMeta.get(Feature.Type.locker)) {
                     generateLockerAreaFeatureItem(feature, lockerArea, productItemType);
                 }
             }
             break;
         case pet:
             feature.version().recurring().setValue(true);
-            for (ProductItemType productItemType : featureMeta.get(Feature.FeatureType.pet)) {
+            for (ProductItemType productItemType : featureMeta.get(Feature.Type.pet)) {
                 generatePetFeatureItem(feature, productItemType);
             }
             break;
         case addOn:
             feature.version().recurring().setValue(true);
-            for (ProductItemType productItemType : featureMeta.get(Feature.FeatureType.addOn)) {
+            for (ProductItemType productItemType : featureMeta.get(Feature.Type.addOn)) {
                 generateAddOnFeatureItem(feature, productItemType);
             }
             break;
         case booking:
             feature.version().recurring().setValue(false);
-            for (ProductItemType productItemType : featureMeta.get(Feature.FeatureType.booking)) {
+            for (ProductItemType productItemType : featureMeta.get(Feature.Type.booking)) {
                 generateBookingFeatureItem(feature, productItemType);
             }
             break;

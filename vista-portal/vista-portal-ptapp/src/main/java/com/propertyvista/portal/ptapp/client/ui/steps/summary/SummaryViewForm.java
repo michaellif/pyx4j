@@ -260,26 +260,26 @@ public class SummaryViewForm extends CEntityDecoratableForm<SummaryDTO> {
             setWidget(++row, 0, excludedPanel);
 
             chargedPanel.setH2(0, 0, 1, i18n.tr("Billed Utilities"));
-            chargedPanel.setWidget(1, 0, inject(proto().selectedUnit().agreedUtilities(), new FeatureFolder(Feature.FeatureType.utility, null, false)));
+            chargedPanel.setWidget(1, 0, inject(proto().selectedUnit().agreedUtilities(), new FeatureFolder(Feature.Type.utility, null, false)));
             setWidget(++row, 0, chargedPanel);
 
             int addonsRow = -1;
             addonsPanel.setH2(++addonsRow, 0, 1, i18n.tr("Add-Ons"));
 
             petsPanel.setH3(0, 0, 1, i18n.tr("Pets"));
-            petsPanel.setWidget(1, 0, inject(proto().selectedUnit().agreedPets(), new FeatureExFolder(Feature.FeatureType.pet, null, false)));
+            petsPanel.setWidget(1, 0, inject(proto().selectedUnit().agreedPets(), new FeatureExFolder(Feature.Type.pet, null, false)));
             addonsPanel.setWidget(++addonsRow, 0, petsPanel);
 
             parkingPanel.setH3(0, 0, 1, i18n.tr("Parking"));
-            parkingPanel.setWidget(1, 0, inject(proto().selectedUnit().agreedParking(), new FeatureExFolder(Feature.FeatureType.parking, null, false)));
+            parkingPanel.setWidget(1, 0, inject(proto().selectedUnit().agreedParking(), new FeatureExFolder(Feature.Type.parking, null, false)));
             addonsPanel.setWidget(++addonsRow, 0, parkingPanel);
 
             storagePanel.setH3(0, 0, 1, i18n.tr("Storage"));
-            storagePanel.setWidget(1, 0, inject(proto().selectedUnit().agreedStorage(), new FeatureFolder(Feature.FeatureType.locker, null, false)));
+            storagePanel.setWidget(1, 0, inject(proto().selectedUnit().agreedStorage(), new FeatureFolder(Feature.Type.locker, null, false)));
             addonsPanel.setWidget(++addonsRow, 0, storagePanel);
 
             otherPanel.setH3(0, 0, 1, i18n.tr("Other"));
-            otherPanel.setWidget(1, 0, inject(proto().selectedUnit().agreedOther(), new FeatureFolder(Feature.FeatureType.addOn, null, false)));
+            otherPanel.setWidget(1, 0, inject(proto().selectedUnit().agreedOther(), new FeatureFolder(Feature.Type.addOn, null, false)));
             addonsPanel.setWidget(++addonsRow, 0, otherPanel);
             setWidget(++row, 0, addonsPanel);
 

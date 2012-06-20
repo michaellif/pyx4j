@@ -21,5 +21,5 @@ import com.pyx4j.entity.shared.IPrimitive;
 public interface FeatureItemType extends ProductItemType {
 
     @NotNull
-    IPrimitive<Feature.FeatureType> featureType();
+    IPrimitive<Feature.Type> featureType();
 }

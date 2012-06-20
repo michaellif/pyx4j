@@ -40,25 +40,25 @@ public class ProductItemTypesGenerator {
         createChargeItemType("Garage", Service.ServiceType.garage, 5110);
         createChargeItemType("Storage", Service.ServiceType.storage, 5110);
 
-        createChargeItemType("Regular Parking", Feature.FeatureType.parking, 5110);
-        createChargeItemType("Wide Parking", Feature.FeatureType.parking, 5110);
-        createChargeItemType("Narrow Parking", Feature.FeatureType.parking, 5110);
-        createChargeItemType("Disabled Parking", Feature.FeatureType.parking, 5110);
-        createChargeItemType("Cat", Feature.FeatureType.pet, 5930);
-        createChargeItemType("Dog", Feature.FeatureType.pet, 5930);
-        createChargeItemType("Small Locker", Feature.FeatureType.locker, 5110);
-        createChargeItemType("Medium Locker", Feature.FeatureType.locker, 5110);
-        createChargeItemType("Large Locker", Feature.FeatureType.locker, 5110);
-        createChargeItemType("Fitness", Feature.FeatureType.addOn, 5110);
-        createChargeItemType("Pool", Feature.FeatureType.addOn, 5110);
-        createChargeItemType("Furnished", Feature.FeatureType.addOn, 5110);
-        createChargeItemType("Key", Feature.FeatureType.addOn, 6240);
-        createChargeItemType("Access Card", Feature.FeatureType.addOn, 6240);
-        createChargeItemType("Cable", Feature.FeatureType.addOn, 5110);
-        createChargeItemType("Water", Feature.FeatureType.utility, 6440);
-        createChargeItemType("Gas", Feature.FeatureType.utility, 5997);
-        createChargeItemType("Hydro", Feature.FeatureType.utility, 5998);
-        createChargeItemType("Booking", Feature.FeatureType.booking, 5934);
+        createChargeItemType("Regular Parking", Feature.Type.parking, 5110);
+        createChargeItemType("Wide Parking", Feature.Type.parking, 5110);
+        createChargeItemType("Narrow Parking", Feature.Type.parking, 5110);
+        createChargeItemType("Disabled Parking", Feature.Type.parking, 5110);
+        createChargeItemType("Cat", Feature.Type.pet, 5930);
+        createChargeItemType("Dog", Feature.Type.pet, 5930);
+        createChargeItemType("Small Locker", Feature.Type.locker, 5110);
+        createChargeItemType("Medium Locker", Feature.Type.locker, 5110);
+        createChargeItemType("Large Locker", Feature.Type.locker, 5110);
+        createChargeItemType("Fitness", Feature.Type.addOn, 5110);
+        createChargeItemType("Pool", Feature.Type.addOn, 5110);
+        createChargeItemType("Furnished", Feature.Type.addOn, 5110);
+        createChargeItemType("Key", Feature.Type.addOn, 6240);
+        createChargeItemType("Access Card", Feature.Type.addOn, 6240);
+        createChargeItemType("Cable", Feature.Type.addOn, 5110);
+        createChargeItemType("Water", Feature.Type.utility, 6440);
+        createChargeItemType("Gas", Feature.Type.utility, 5997);
+        createChargeItemType("Hydro", Feature.Type.utility, 5998);
+        createChargeItemType("Booking", Feature.Type.booking, 5934);
     }
 
     public List<ServiceItemType> getServiceItemTypes() {
@@ -78,7 +78,7 @@ public class ProductItemTypesGenerator {
         gdo.serviceItemTypes.add(type);
     }
 
-    private void createChargeItemType(String name, Feature.FeatureType featureType, int glCode) {
+    private void createChargeItemType(String name, Feature.Type featureType, int glCode) {
         FeatureItemType type = EntityFactory.create(FeatureItemType.class);
         type.name().setValue(name);
         type.featureType().setValue(featureType);

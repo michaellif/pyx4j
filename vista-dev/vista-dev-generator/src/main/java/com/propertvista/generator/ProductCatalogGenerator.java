@@ -78,8 +78,8 @@ public class ProductCatalogGenerator {
     }
 
     public List<Feature> createFeatures(ProductCatalog catalog) {
-        List<Feature> items = new ArrayList<Feature>(Feature.FeatureType.values().length);
-        for (Feature.FeatureType type : EnumSet.allOf(Feature.FeatureType.class)) {
+        List<Feature> items = new ArrayList<Feature>(Feature.Type.values().length);
+        for (Feature.Type type : EnumSet.allOf(Feature.Type.class)) {
             items.add(createFeature(catalog, type));
         }
         return items;
@@ -169,7 +169,7 @@ public class ProductCatalogGenerator {
         return items;
     }
 
-    private Feature createFeature(ProductCatalog catalog, Feature.FeatureType type) {
+    private Feature createFeature(ProductCatalog catalog, Feature.Type type) {
         Feature item = EntityFactory.create(Feature.class);
         item.catalog().set(catalog);
 
@@ -186,7 +186,7 @@ public class ProductCatalogGenerator {
         return item;
     }
 
-    private List<ProductItem> createFeatureItems(Feature.FeatureType type) {
+    private List<ProductItem> createFeatureItems(Feature.Type type) {
         List<FeatureItemType> allowedItemTypes = new ArrayList<FeatureItemType>();
         for (FeatureItemType itemType : getFeatureItemTypes()) {
             if (type.equals(itemType.featureType().getValue())) {
@@ -270,7 +270,7 @@ public class ProductCatalogGenerator {
     public List<FeatureItemType> createIncludedUtilities() {
         List<FeatureItemType> allowedItemTypes = new ArrayList<FeatureItemType>();
         for (FeatureItemType itemType : getFeatureItemTypes()) {
-            if (Feature.FeatureType.utility.equals(itemType.featureType().getValue())) {
+            if (Feature.Type.utility.equals(itemType.featureType().getValue())) {
                 allowedItemTypes.add(itemType);
             }
         }
@@ -289,7 +289,7 @@ public class ProductCatalogGenerator {
     public List<FeatureItemType> createExcludedUtilities(List<FeatureItemType> includedOnes) {
         List<FeatureItemType> allowedItemTypes = new ArrayList<FeatureItemType>();
         for (FeatureItemType itemType : getFeatureItemTypes()) {
-            if (Feature.FeatureType.utility.equals(itemType.featureType().getValue()) && !includedOnes.contains(itemType)) {
+            if (Feature.Type.utility.equals(itemType.featureType().getValue()) && !includedOnes.contains(itemType)) {
                 allowedItemTypes.add(itemType);
             }
         }

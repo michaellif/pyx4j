@@ -57,7 +57,7 @@ import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.BillingType;
 import com.propertyvista.domain.financial.offering.Feature;
-import com.propertyvista.domain.financial.offering.Feature.FeatureType;
+import com.propertyvista.domain.financial.offering.Feature.Type;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.payment.PaymentMethod;
@@ -286,33 +286,33 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
     }
 
     protected BillableItem addParking(String effectiveDate, String expirationDate, SaveAction saveAction) {
-        return addBillableItem(FeatureType.parking, effectiveDate, expirationDate, saveAction);
+        return addBillableItem(Type.parking, effectiveDate, expirationDate, saveAction);
     }
 
     protected BillableItem addParking(SaveAction saveAction) {
-        return addBillableItem(FeatureType.parking, saveAction);
+        return addBillableItem(Type.parking, saveAction);
     }
 
     protected BillableItem addLocker(String effectiveDate, String expirationDate, SaveAction saveAction) {
-        return addBillableItem(FeatureType.locker, effectiveDate, expirationDate, saveAction);
+        return addBillableItem(Type.locker, effectiveDate, expirationDate, saveAction);
     }
 
     protected BillableItem addLocker(SaveAction saveAction) {
-        return addBillableItem(FeatureType.locker, saveAction);
+        return addBillableItem(Type.locker, saveAction);
     }
 
     protected BillableItem addPet(String effectiveDate, String expirationDate, SaveAction saveAction) {
-        return addBillableItem(FeatureType.pet, effectiveDate, expirationDate, saveAction);
+        return addBillableItem(Type.pet, effectiveDate, expirationDate, saveAction);
     }
 
     protected BillableItem addPet(SaveAction saveAction) {
-        BillableItem billableItem = addBillableItem(FeatureType.pet, SaveAction.saveAsDraft);
+        BillableItem billableItem = addBillableItem(Type.pet, SaveAction.saveAsDraft);
         setDeposit(billableItem.uid().getValue(), DepositType.SecurityDeposit, saveAction);
         return billableItem;
     }
 
     protected BillableItem addBooking(String date, SaveAction saveAction) {
-        return addBillableItem(FeatureType.booking, date, date, saveAction);
+        return addBillableItem(Type.booking, date, date, saveAction);
     }
 
     protected void changeBillableItem(String billableItemId, String effectiveDate, String expirationDate, SaveAction saveAction) {
@@ -328,16 +328,16 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         Persistence.service().commit();
     }
 
-    private BillableItem addBillableItem(Feature.FeatureType featureType, SaveAction saveAction) {
+    private BillableItem addBillableItem(Feature.Type featureType, SaveAction saveAction) {
         Lease lease = Persistence.service().retrieve(Lease.class, leaseDataModel.getLeaseKey());
         return addBillableItem(featureType, lease.leaseFrom().getValue(), lease.leaseTo().getValue(), saveAction);
     }
 
-    private BillableItem addBillableItem(Feature.FeatureType featureType, String effectiveDate, String expirationDate, SaveAction saveAction) {
+    private BillableItem addBillableItem(Feature.Type featureType, String effectiveDate, String expirationDate, SaveAction saveAction) {
         return addBillableItem(featureType, FinancialTestsUtils.getDate(effectiveDate), FinancialTestsUtils.getDate(expirationDate), saveAction);
     }
 
-    private BillableItem addBillableItem(Feature.FeatureType featureType, LogicalDate effectiveDate, LogicalDate expirationDate, SaveAction saveAction) {
+    private BillableItem addBillableItem(Feature.Type featureType, LogicalDate effectiveDate, LogicalDate expirationDate, SaveAction saveAction) {
         Lease draftLease = retrieveLeaseForEdit();
 
         ProductItem serviceItem = leaseDataModel.getServiceItem();
