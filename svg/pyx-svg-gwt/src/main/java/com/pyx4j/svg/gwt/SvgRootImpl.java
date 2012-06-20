@@ -36,6 +36,8 @@ public class SvgRootImpl extends ComplexPanel implements SvgRoot {
         setElement(SvgDOM.createElementNS(SvgDOM.SVG_NAMESPACE, "svg"));
         id = DOM.createUniqueId();
         SvgDOM.setAttributeNS(getElement(), "id", id);
+        setWidth("100%");
+        setHeight("100%");
     }
 
     @Override
