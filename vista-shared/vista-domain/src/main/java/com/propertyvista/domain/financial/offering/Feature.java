@@ -41,14 +41,14 @@ public interface Feature extends Product, IVersionedEntity<FeatureV> {
 
         parking(true),
 
+        locker(true),
+
         pet(true),
 
         @Translate("Add-On")
         addOn(true),
 
         utility(true),
-
-        locker(true),
 
         booking(false);
 

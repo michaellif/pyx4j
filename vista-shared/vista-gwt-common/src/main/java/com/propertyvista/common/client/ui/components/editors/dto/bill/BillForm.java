@@ -31,7 +31,7 @@ public class BillForm extends CEntityDecoratableForm<BillDTO> {
 
     private static final I18n i18n = I18n.get(BillForm.class);
 
-    private final boolean justCurrentBill;
+    private final boolean justPreviewBill;
 
     public BillForm() {
         this(false);
@@ -39,7 +39,7 @@ public class BillForm extends CEntityDecoratableForm<BillDTO> {
 
     public BillForm(boolean justCurrentBill) {
         super(BillDTO.class);
-        this.justCurrentBill = justCurrentBill;
+        this.justPreviewBill = justCurrentBill;
 
         setEditable(false);
         setViewable(true);
@@ -52,7 +52,7 @@ public class BillForm extends CEntityDecoratableForm<BillDTO> {
         FormFlexPanel top = new FormFlexPanel();
         int row = -1;
 
-        if (!justCurrentBill) {
+        if (!justPreviewBill) {
             top.setH1(++row, 0, 2, i18n.tr("Info"));
             top.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingAccount().lease().unit())).build());
             top.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingCycle().building())).build());
@@ -72,7 +72,7 @@ public class BillForm extends CEntityDecoratableForm<BillDTO> {
         FormFlexPanel bottom = new FormFlexPanel();
         row = -1;
 
-        if (!justCurrentBill) {
+        if (!justPreviewBill) {
             bottom.setH1(++row, 0, 2, i18n.tr("Last Bill"));
             bottom.setWidget(++row, 0, new DecoratorBuilder(inject(proto().balanceForwardAmount())).build());
             bottom.setWidget(++row, 0, inject(proto().depositRefundLineItems(), new LineItemCollapsableViewer()));
@@ -120,7 +120,7 @@ public class BillForm extends CEntityDecoratableForm<BillDTO> {
     protected void onPopulate() {
         super.onPopulate();
 
-        if (!justCurrentBill) {
+        if (!justPreviewBill) {
             get(proto().rejectReason()).setVisible(getValue().billStatus().getValue() == BillStatus.Rejected);
             if (getValue().productCreditAmount().getValue().compareTo(BigDecimal.ZERO) == 0)
                 get(proto().productCreditAmount()).setVisible(false);
@@ -158,7 +158,7 @@ public class BillForm extends CEntityDecoratableForm<BillDTO> {
     }
 
     private void hideLines(InvoiceLineItemGroupDTO line, InvoiceLineItemGroupDTO line2) {
-        if (line.lineItems().size() == 0) {
+        if (line.lineItems().isEmpty()) {
             get(line2).setVisible(false);
         }
     }

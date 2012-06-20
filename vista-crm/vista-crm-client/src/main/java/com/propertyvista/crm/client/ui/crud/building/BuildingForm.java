@@ -122,7 +122,7 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         combinedtab.setWidget(row++, 0, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getFeatureListerView().asWidget());
         combinedtab.setH4(row++, 0, 2, i18n.tr("Concessions"));
         combinedtab.setWidget(row++, 0, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getConcessionListerView().asWidget());
-        tabPanel.add(new ScrollPanel(combinedtab), i18n.tr("Charges Catalog"));
+        tabPanel.add(new ScrollPanel(combinedtab), i18n.tr("Product Catalog"));
         tabPanel.setLastTabDisabled(isEditable());
 
         tabPanel.add(createContactTab(), i18n.tr("Contacts"));
@@ -314,14 +314,6 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         main.setH1(row++, 0, 2, proto().amenities().getMeta().getCaption());
         main.setWidget(row, 0, inject(proto().amenities(), new BuildingAmenityFolder()));
         main.getFlexCellFormatter().setColSpan(row++, 0, 2);
-
-        main.setH1(++row, 0, 2, i18n.tr("Included Utilities/Add-ons"));
-        main.setWidget(++row, 0, inject(proto().productCatalog().includedUtilities(), new UtilityFolder(this)));
-        main.getFlexCellFormatter().setColSpan(row, 0, 2);
-
-        main.setH1(++row, 0, 2, i18n.tr("Excluded Utilities/Add-ons"));
-        main.setWidget(++row, 0, inject(proto().productCatalog().externalUtilities(), new UtilityFolder(this)));
-        main.getFlexCellFormatter().setColSpan(row, 0, 2);
 
         main.getColumnFormatter().setWidth(0, "50%");
         main.getColumnFormatter().setWidth(1, "50%");

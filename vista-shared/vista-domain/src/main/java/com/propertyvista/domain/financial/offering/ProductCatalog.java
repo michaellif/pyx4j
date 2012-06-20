@@ -58,13 +58,4 @@ public interface ProductCatalog extends IEntity {
     @Owned(cascade = {})
     @Detached
     IList<Service> services();
-
-    // ----------------------------------------------------
-
-    // Utilities included in price and should be EXCLUDED from Lease Service Agreement 
-    IList<FeatureItemType> includedUtilities();
-
-    // Utilities provided by 3-d party and should be EXCLUDED from Lease Service Agreement 
-    IList<FeatureItemType> externalUtilities();
-
 }

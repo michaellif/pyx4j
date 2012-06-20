@@ -34,7 +34,6 @@ import com.propertyvista.domain.policy.policies.MiscPolicy;
 import com.propertyvista.domain.security.VistaCustomerBehavior;
 import com.propertyvista.portal.ptapp.client.PtAppSite;
 import com.propertyvista.portal.ptapp.client.resources.PortalResources;
-import com.propertyvista.portal.ptapp.client.ui.components.UtilityFolder;
 import com.propertyvista.portal.rpc.portal.ImageConsts.ThumbnailSize;
 import com.propertyvista.portal.rpc.ptapp.dto.ApartmentInfoDTO;
 
@@ -43,10 +42,6 @@ public class ApartmentViewForm extends CEntityDecoratableForm<ApartmentInfoDTO> 
     static I18n i18n = I18n.get(ApartmentViewForm.class);
 
     private final FormFlexPanel consessionPanel = new FormFlexPanel();
-
-    private final FormFlexPanel includedPanel = new FormFlexPanel();
-
-    private final FormFlexPanel excludedPanel = new FormFlexPanel();
 
     private final FormFlexPanel chargedPanel = new FormFlexPanel();
 
@@ -131,15 +126,7 @@ public class ApartmentViewForm extends CEntityDecoratableForm<ApartmentInfoDTO> 
         consessionPanel.setWidget(1, 0, inject(proto().concessions(), new ConcessionsFolder()));
         main.setWidget(++row, 0, consessionPanel);
 
-        includedPanel.setH1(0, 0, 1, i18n.tr("Included Utilities"));
-        includedPanel.setWidget(1, 0, inject(proto().includedUtilities(), new UtilityFolder()));
-        main.setWidget(++row, 0, includedPanel);
-
-        excludedPanel.setH1(0, 0, 1, i18n.tr("Excluded Utilities"));
-        excludedPanel.setWidget(1, 0, inject(proto().externalUtilities(), new UtilityFolder()));
-        main.setWidget(++row, 0, excludedPanel);
-
-        chargedPanel.setH1(0, 0, 1, i18n.tr("Billed Utilities"));
+        chargedPanel.setH1(0, 0, 1, i18n.tr("Utilities"));
         chargedPanel.setWidget(1, 0, inject(proto().agreedUtilities(), new FeatureFolder(Feature.Type.utility, this, false)));
         main.setWidget(++row, 0, chargedPanel);
 
@@ -176,8 +163,6 @@ public class ApartmentViewForm extends CEntityDecoratableForm<ApartmentInfoDTO> 
 
         //hide/show various panels depend on populated data:
         consessionPanel.setVisible(!getValue().concessions().isEmpty());
-        includedPanel.setVisible(!getValue().includedUtilities().isEmpty());
-        excludedPanel.setVisible(!getValue().externalUtilities().isEmpty());
         chargedPanel.setVisible(!getValue().agreedUtilities().isEmpty());
 
         petsPanel.setVisible(!getValue().agreedPets().isEmpty() || !getValue().availablePets().isEmpty());

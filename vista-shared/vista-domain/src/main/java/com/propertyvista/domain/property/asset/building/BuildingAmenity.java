@@ -69,6 +69,8 @@ public interface BuildingAmenity extends Amenity {
 
         garage,
 
+        gas,
+
         gate,
 
         groupExercise,
@@ -80,6 +82,8 @@ public interface BuildingAmenity extends Amenity {
         housekeeping,
 
         houseSitting,
+
+        hydro,
 
         laundry,
 
@@ -127,6 +131,8 @@ public interface BuildingAmenity extends Amenity {
         vintage,
 
         volleyballCourt,
+
+        water,
 
         other;
 

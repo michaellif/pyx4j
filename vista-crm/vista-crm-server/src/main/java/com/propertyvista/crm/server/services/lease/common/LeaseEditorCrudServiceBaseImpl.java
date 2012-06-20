@@ -14,8 +14,6 @@
 package com.propertyvista.crm.server.services.lease.common;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -28,7 +26,6 @@ import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.crm.rpc.services.lease.common.LeaseEditorCrudServiceBase;
 import com.propertyvista.crm.server.util.CrmAppContext;
 import com.propertyvista.domain.financial.offering.Feature;
-import com.propertyvista.domain.financial.offering.FeatureItemType;
 import com.propertyvista.domain.financial.offering.ProductCatalog;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.Service;
@@ -120,7 +117,6 @@ public abstract class LeaseEditorCrudServiceBaseImpl<DTO extends LeaseDTO> exten
 
     private boolean fillServiceEligibilityData(DTO currentValue) {
         currentValue.selectedFeatureItems().clear();
-        currentValue.selectedUtilityItems().clear();
         currentValue.selectedConcessions().clear();
 
         Building building = currentValue.selectedBuilding();
@@ -141,32 +137,20 @@ public abstract class LeaseEditorCrudServiceBaseImpl<DTO extends LeaseDTO> exten
             selectedService = serviceItem.product().cast();
         }
 
-        // fill related features/utilities and concession:
+        // fill related:
         if (selectedService != null) {
-            List<FeatureItemType> utilitiesToExclude = new ArrayList<FeatureItemType>(catalog.includedUtilities().size() + catalog.externalUtilities().size());
-            utilitiesToExclude.addAll(catalog.includedUtilities());
-            utilitiesToExclude.addAll(catalog.externalUtilities());
-
-            // fill features:
+            // features:
             Persistence.service().retrieve(selectedService.features());
             for (Feature feature : selectedService.features()) {
                 Persistence.service().retrieve(feature.version().items());
                 for (ProductItem item : feature.version().items()) {
-                    switch (feature.version().type().getValue()) {
-                    case addOn:
-                    case utility:
-                        // filter out utilities included in price for selected building:
-                        if (!utilitiesToExclude.contains(item.type())) {
-                            currentValue.selectedUtilityItems().add(item);
-                        }
-                        break;
-                    default:
+                    if (!item.isDefault().isBooleanTrue()) {
                         currentValue.selectedFeatureItems().add(item);
                     }
                 }
             }
 
-            // fill concessions:
+            // concessions:
             Persistence.service().retrieve(selectedService.concessions());
             currentValue.selectedConcessions().addAll(selectedService.concessions());
         }

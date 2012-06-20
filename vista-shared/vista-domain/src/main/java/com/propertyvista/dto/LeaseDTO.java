@@ -39,8 +39,6 @@ public interface LeaseDTO extends Lease {
 
     IList<ProductItem> selectedFeatureItems();
 
-    IList<ProductItem> selectedUtilityItems();
-
     IList<Concession> selectedConcessions();
 
     BillDTO billingPreview();

@@ -13,7 +13,6 @@
  */
 package com.propertyvista.biz.tenant;
 
-import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 
@@ -40,8 +39,6 @@ import com.propertyvista.biz.policy.IdAssignmentFacade;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.offering.Feature;
-import com.propertyvista.domain.financial.offering.FeatureItemType;
-import com.propertyvista.domain.financial.offering.ProductCatalog;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
@@ -187,22 +184,15 @@ public class LeaseFacadeImpl implements LeaseFacade {
         lease.version().leaseProducts().featureItems().clear();
         lease.version().leaseProducts().concessions().clear();
 
-        ProductCatalog catalog = lease.unit().belongsTo().productCatalog();
-        List<FeatureItemType> utilitiesToExclude = new ArrayList<FeatureItemType>(catalog.includedUtilities().size() + catalog.externalUtilities().size());
-        utilitiesToExclude.addAll(catalog.includedUtilities());
-        utilitiesToExclude.addAll(catalog.externalUtilities());
-
-        // pre-populate utilities for the new service:
+        // pre-populate mandatory features for the new service:
+        Persistence.service().retrieve(service.features());
         for (Feature feature : service.features()) {
-            for (ProductItem item : feature.version().items()) {
-                switch (feature.version().type().getValue()) {
-                case addOn:
-                case utility:
-                    // filter out utilities included in price for selected building:
-                    if (!utilitiesToExclude.contains(item.type())) {
+            if (feature.version().mandatory().isBooleanTrue()) {
+                Persistence.service().retrieve(feature.version().items());
+                for (ProductItem item : feature.version().items()) {
+                    if (item.isDefault().isBooleanTrue()) {
                         lease.version().leaseProducts().featureItems().add(createBillableItem(item, lease));
                     }
-                    break;
                 }
             }
         }

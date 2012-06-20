@@ -50,7 +50,6 @@ import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.dto.TenantFinancialDTO;
 import com.propertyvista.dto.TenantInfoDTO;
-import com.propertyvista.portal.ptapp.client.ui.components.UtilityFolder;
 import com.propertyvista.portal.ptapp.client.ui.steps.apartment.ConcessionsFolder;
 import com.propertyvista.portal.ptapp.client.ui.steps.apartment.FeatureExFolder;
 import com.propertyvista.portal.ptapp.client.ui.steps.apartment.FeatureFolder;
@@ -151,8 +150,6 @@ public class SummaryViewForm extends CEntityDecoratableForm<SummaryDTO> {
 
         //hide/show various panels depend on populated data:
         consessionPanel.setVisible(!getValue().selectedUnit().concessions().isEmpty());
-        includedPanel.setVisible(!getValue().selectedUnit().includedUtilities().isEmpty());
-        excludedPanel.setVisible(!getValue().selectedUnit().externalUtilities().isEmpty());
         chargedPanel.setVisible(!getValue().selectedUnit().agreedUtilities().isEmpty());
 
         petsPanel.setVisible(!getValue().selectedUnit().agreedPets().isEmpty());
@@ -251,15 +248,7 @@ public class SummaryViewForm extends CEntityDecoratableForm<SummaryDTO> {
             consessionPanel.setWidget(1, 0, inject(proto().selectedUnit().concessions(), new ConcessionsFolder()));
             setWidget(++row, 0, consessionPanel);
 
-            includedPanel.setH2(0, 0, 1, i18n.tr("Included Utilities"));
-            includedPanel.setWidget(1, 0, inject(proto().selectedUnit().includedUtilities(), new UtilityFolder()));
-            setWidget(++row, 0, includedPanel);
-
-            excludedPanel.setH2(0, 0, 1, i18n.tr("Excluded Utilities"));
-            excludedPanel.setWidget(1, 0, inject(proto().selectedUnit().externalUtilities(), new UtilityFolder()));
-            setWidget(++row, 0, excludedPanel);
-
-            chargedPanel.setH2(0, 0, 1, i18n.tr("Billed Utilities"));
+            chargedPanel.setH2(0, 0, 1, i18n.tr("Utilities"));
             chargedPanel.setWidget(1, 0, inject(proto().selectedUnit().agreedUtilities(), new FeatureFolder(Feature.Type.utility, null, false)));
             setWidget(++row, 0, chargedPanel);
 

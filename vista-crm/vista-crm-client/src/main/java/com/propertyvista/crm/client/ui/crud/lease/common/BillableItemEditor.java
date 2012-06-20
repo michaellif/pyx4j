@@ -49,6 +49,7 @@ import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.common.client.ui.validators.StartEndDateValidation;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.FeatureItemType;
+import com.propertyvista.domain.financial.offering.Product;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
@@ -165,7 +166,7 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
                 get(proto().expirationDate()).setVisible(isEditable() || !getValue().expirationDate().isNull());
 
                 get(proto().item()).setEditable(false);
-                if (getValue().item().type().<FeatureItemType> cast().featureType().getValue() == Feature.Type.utility) {
+                if (isMandatoryFeature(getValue().item().product())) {
                     // correct folder item:
                     if (getParent() instanceof CEntityFolderItem) {
                         CEntityFolderItem<BillableItem> item = (CEntityFolderItem<BillableItem>) getParent();
@@ -226,6 +227,10 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
                 extraDataPanel.setWidget(editor);
             }
         }
+    }
+
+    private boolean isMandatoryFeature(Product.ProductV product) {
+        return product.isInstanceOf(Feature.FeatureV.class) && ((Feature.FeatureV) product.cast()).mandatory().isBooleanTrue();
     }
 
     private class AdjustmentFolder extends VistaTableFolder<BillableItemAdjustment> {

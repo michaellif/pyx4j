@@ -209,9 +209,6 @@ public class ApartmentServiceImpl implements ApartmentService {
 
     private void fillServiceItems(ApartmentInfoDTO entity, Building building, Lease lease) {
 
-        entity.includedUtilities().clear();
-        entity.externalUtilities().clear();
-
         entity.agreedUtilities().clear();
         entity.availableUtilities().clear();
 
@@ -227,9 +224,6 @@ public class ApartmentServiceImpl implements ApartmentService {
         entity.concessions().clear();
 
         syncBuildingProductCatalog(lease.unit().belongsTo());
-
-        entity.includedUtilities().addAll(building.productCatalog().includedUtilities());
-        entity.externalUtilities().addAll(building.productCatalog().externalUtilities());
 
         // fill agreed items:
         for (BillableItem item : lease.version().leaseProducts().featureItems()) {
@@ -262,9 +256,7 @@ public class ApartmentServiceImpl implements ApartmentService {
                         switch (item.type().<FeatureItemType> cast().featureType().getValue()) {
                         case addOn:
                         case utility:
-                            if (!entity.includedUtilities().contains(item.type()) && !entity.externalUtilities().contains(item.type())) {
-                                entity.availableUtilities().add(item);
-                            }
+                            entity.availableUtilities().add(item);
                             break;
                         case pet:
                             entity.availablePets().add(item);

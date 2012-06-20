@@ -63,8 +63,6 @@ public class ProductCatalogGenerator {
         catalog.services().addAll(createServices(catalog));
         catalog.features().addAll(createFeatures(catalog));
         catalog.concessions().addAll(createConcessions(catalog));
-        catalog.includedUtilities().addAll(createIncludedUtilities());
-        catalog.externalUtilities().addAll(createExcludedUtilities(catalog.includedUtilities()));
 
         buildEligibilityMatrix(catalog);
     }
@@ -181,6 +179,11 @@ public class ProductCatalogGenerator {
         item.version().mandatory().setValue(RandomUtil.randomBoolean());
 
         item.version().items().addAll(createFeatureItems(type));
+        if (item.version().mandatory().isBooleanTrue()) {
+            // if feature is mandatory - the default item should be set!
+            ProductItem fi = RandomUtil.random(item.version().items());
+            fi.isDefault().setValue(Boolean.TRUE);
+        }
 
         item.saveAction().setValue(SaveAction.saveAsFinal);
         return item;

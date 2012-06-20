@@ -67,7 +67,7 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
     @Override
     protected void onPopulate() {
         super.onPopulate();
-        tabPanel.setTabDisabled(onlineStatusTab, getValue().leaseApplication().onlineApplication().isNull());
+        tabPanel.setTabDisabled(onlineStatusTab, tabPanel.isTabDisabled(onlineStatusTab) || getValue().leaseApplication().onlineApplication().isNull());
     }
 
     private Widget createInfoTab() {

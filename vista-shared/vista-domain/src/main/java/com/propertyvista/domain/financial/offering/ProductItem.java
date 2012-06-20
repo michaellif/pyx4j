@@ -15,6 +15,7 @@ package com.propertyvista.domain.financial.offering;
 
 import java.math.BigDecimal;
 
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
@@ -62,4 +63,7 @@ public interface ProductItem extends IEntity {
 
     @Detached
     BuildingElement element();
+
+    @Caption(name = "Default")
+    IPrimitive<Boolean> isDefault();
 }

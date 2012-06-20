@@ -28,10 +28,11 @@ import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CLabel;
+import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.ValidationFailure;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;
-import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.domain.financial.offering.Feature;
@@ -59,6 +60,7 @@ class FeatureItemFolder extends VistaTableFolder<ProductItem> {
         columns.add(new EntityFolderColumnDescriptor(proto().price(), "8em"));
         columns.add(new EntityFolderColumnDescriptor(proto().description(), "25em"));
         columns.add(new EntityFolderColumnDescriptor(proto().element(), "15em"));
+        columns.add(new EntityFolderColumnDescriptor(proto().isDefault(), "5em"));
         return columns;
     }
 
@@ -112,17 +114,6 @@ class FeatureItemFolder extends VistaTableFolder<ProductItem> {
                 if (parent.isEditable() && comp instanceof CEntityComboBox<?>) {
                     final CEntityComboBox<FeatureItemType> combo = (CEntityComboBox<FeatureItemType>) comp;
                     combo.addCriterion(PropertyCriterion.eq(combo.proto().featureType(), parent.getValue().version().type()));
-                    combo.addValueChangeHandler(new ValueChangeHandler<FeatureItemType>() {
-                        @Override
-                        public void onValueChange(ValueChangeEvent<FeatureItemType> event) {
-                            for (FeatureItemType item : parent.getValue().catalog().includedUtilities()) {
-                                if (item.equals(event.getValue())) {
-                                    MessageDialog.warn(i18n.tr("Note"), i18n.tr("The Selected Utility Type Is Included In The Price"));
-                                }
-                            }
-                        }
-                    });
-
 // TODO : preselect if single option:                    
 //                    combo.addOptionsChangeHandler(new OptionsChangeHandler<List<ProductItemType>>() {
 //                        @Override
@@ -137,5 +128,49 @@ class FeatureItemFolder extends VistaTableFolder<ProductItem> {
             }
             return comp;
         }
+
+        @Override
+        public void addValidations() {
+            super.addValidations();
+
+            get(proto().isDefault()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+                @Override
+                public void onValueChange(ValueChangeEvent<Boolean> event) {
+                    if (event.getValue().booleanValue()) {
+                        for (int i = 0; i < FeatureItemFolder.this.getItemCount(); ++i) {
+                            for (CComponent<?, ?> comp : FeatureItemFolder.this.getItem(i).getComponents()) {
+                                if (comp instanceof FeatureItemEditor && !comp.equals(FeatureItemEditor.this)) {
+                                    ((FeatureItemEditor) comp).get(proto().isDefault()).setValue(false);
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+    }
+
+    @Override
+    public void addValidations() {
+        super.addValidations();
+
+        this.addValueValidator(new EditableValueValidator<List<ProductItem>>() {
+            @Override
+            public ValidationFailure isValid(CComponent<List<ProductItem>, ?> component, List<ProductItem> value) {
+                if (value != null && parent.getValue().version().mandatory().isBooleanTrue()) {
+                    boolean defaultFound = false;
+                    for (ProductItem item : value) {
+                        if (item.isDefault().isBooleanTrue()) {
+                            defaultFound = true;
+                            break;
+                        }
+                    }
+                    if (!defaultFound) {
+                        return new ValidationFailure(i18n.tr("Default item should be selected"));
+                    }
+                }
+                return null;
+            }
+        });
     }
 }

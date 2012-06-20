@@ -28,7 +28,6 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.financial.offering.Concession;
 import com.propertyvista.domain.financial.offering.ProductItem;
-import com.propertyvista.domain.financial.offering.ProductItemType;
 import com.propertyvista.domain.media.Media;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.BillableItem;
@@ -64,10 +63,6 @@ public interface ApartmentInfoDTO extends IEntity {
     Media picture();
 
     // Service Catalog stuff:
-    IList<ProductItemType> includedUtilities();
-
-    IList<ProductItemType> externalUtilities();
-
     IList<BillableItem> agreedUtilities();
 
     IList<ProductItem> availableUtilities();

@@ -177,21 +177,19 @@ public class LeaseGenerator extends DataGenerator {
 
             Building building = lease.unit().belongsTo();
             Persistence.service().retrieve(building);
-
             Persistence.service().retrieve(building.productCatalog());
-            // pre-populate utilities for the new service:
+
+            // pre-populate mandatory features for the new service:
             Persistence.service().retrieve(selectedService.version().features());
             for (Feature feature : selectedService.version().features()) {
-                if (Feature.Type.utility.equals(feature.version().type().getValue())) {
+                if (feature.version().mandatory().isBooleanTrue()) {
                     Persistence.service().retrieve(feature.version().items());
                     for (ProductItem item : feature.version().items()) {
-                        if (!building.productCatalog().includedUtilities().contains(item.type())
-                                && !building.productCatalog().externalUtilities().contains(item.type())) {
+                        if (item.isDefault().isBooleanTrue()) {
                             lease.version().leaseProducts().featureItems().add(createBillableItem(item, lease.leaseFrom().getValue()));
                         }
                     }
                 }
-
             }
 
             // pre-populate concessions for the new service:

@@ -39,7 +39,6 @@ import com.propertyvista.crm.server.openapi.model.BuildingRS;
 import com.propertyvista.crm.server.openapi.model.BuildingsRS;
 import com.propertyvista.crm.server.openapi.model.FloorplanRS;
 import com.propertyvista.crm.server.openapi.model.util.Converter;
-import com.propertyvista.domain.financial.offering.ProductItemType;
 import com.propertyvista.domain.marketing.PublicVisibilityType;
 import com.propertyvista.domain.media.Media;
 import com.propertyvista.domain.property.PropertyManager;
@@ -160,10 +159,11 @@ public class BuildingsResource {
                     }
 
                     {
-                        Persistence.service().retrieve(building.productCatalog());
-                        for (ProductItemType utility : building.productCatalog().includedUtilities()) {
-                            buildingRS.includedUtilities.add(Converter.convertBuildingIncludedUtility(utility));
-                        }
+                        // TODO: get those utilities from building add-ons list?
+//                        Persistence.service().retrieve(building.productCatalog());
+//                        for (ProductItemType utility : building.productCatalog().includedUtilities()) {
+//                            buildingRS.includedUtilities.add(Converter.convertBuildingIncludedUtility(utility));
+//                        }
                     }
                 }
 
