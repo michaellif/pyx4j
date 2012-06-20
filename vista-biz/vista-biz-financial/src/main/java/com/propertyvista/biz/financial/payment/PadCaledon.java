@@ -199,7 +199,8 @@ public class PadCaledon {
         // Find and verify that previous file has acknowledgment
         {
             EntityQueryCriteria<PadFile> previousFileCriteria = EntityQueryCriteria.create(PadFile.class);
-            previousFileCriteria.add(PropertyCriterion.eq(previousFileCriteria.proto().fileCreationNumber(), String.valueOf(sequence.number().getValue())));
+            previousFileCriteria.add(PropertyCriterion.eq(previousFileCriteria.proto().fileCreationNumber(),
+                    fileCreationNumberFormat(useSimulator, sequence.number().getValue())));
             PadFile padFile = Persistence.service().retrieve(previousFileCriteria);
             if (padFile != null) {
                 if (!EnumSet.of(PadFile.PadFileStatus.Acknowledged, PadFile.PadFileStatus.Procesed, PadFile.PadFileStatus.Canceled).contains(
@@ -209,7 +210,7 @@ public class PadCaledon {
 
                 //If a file has rejected the corrected file must be submitted using the same file creation number.
                 if (PadFile.PadFileStatus.Canceled == padFile.status().getValue()) {
-                    return String.valueOf(sequence.number().getValue());
+                    return fileCreationNumberFormat(useSimulator, sequence.number().getValue());
                 }
             }
         }
@@ -223,7 +224,15 @@ public class PadCaledon {
         if ((!useSimulator) && ApplicationMode.isDevelopment()) {
             PadCaledonDev.saveFileCreationNumber(companyId, id);
         }
-        return String.valueOf(id);
+        return fileCreationNumberFormat(useSimulator, id);
+    }
+
+    private String fileCreationNumberFormat(boolean useSimulator, int value) {
+        if (useSimulator) {
+            return "s" + String.valueOf(value);
+        } else {
+            return String.valueOf(value);
+        }
     }
 
     public PadFile recivePadAcknowledgementFile() {
