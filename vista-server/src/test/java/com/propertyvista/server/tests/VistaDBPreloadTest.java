@@ -19,10 +19,13 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.server.dataimport.DataPreloaderCollection;
 import com.pyx4j.server.contexts.Lifecycle;
+import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.config.tests.VistaDBTestBase;
+import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.misc.VistaDataPreloaderParameter;
 import com.propertyvista.misc.VistaDevPreloadConfig;
+import com.propertyvista.portal.server.preloader.PmcCreatorDev;
 import com.propertyvista.portal.server.preloader.VistaDataPreloaders;
 
 public class VistaDBPreloadTest extends VistaDBTestBase {
@@ -36,6 +39,9 @@ public class VistaDBPreloadTest extends VistaDBTestBase {
 
         try {
             Lifecycle.startElevatedUserContext();
+            NamespaceManager.setNamespace(VistaNamespace.adminNamespace);
+            PmcCreatorDev.createPmc(VistaNamespace.demoNamespace);
+            NamespaceManager.setNamespace(VistaNamespace.demoNamespace);
             log.info(dp.preloadAll());
         } finally {
             Lifecycle.endElevatedUserContext();
