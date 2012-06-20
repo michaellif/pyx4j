@@ -337,6 +337,7 @@ public class BillingLifecycleManager {
         if (billingAccount.billingType().isNull()) {
             billingAccount.billingType().set(ensureBillingType(lease));
             Persistence.service().persist(billingAccount);
+            Persistence.service().commit();
             lease.billingAccount().set(billingAccount);
         }
         return lease;
