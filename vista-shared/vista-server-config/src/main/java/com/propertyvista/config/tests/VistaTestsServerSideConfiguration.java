@@ -107,7 +107,7 @@ public class VistaTestsServerSideConfiguration extends AbstractVistaServerSideCo
     }
 
     @Override
-    public String getDefaultBaseURLresidentPortal(boolean secure) {
+    public String getDefaultBaseURLresidentPortal(String pmcDnsName, boolean secure) {
         String url = getMainApplicationURL() + "r";
         if (secure) {
             return url;
@@ -117,12 +117,12 @@ public class VistaTestsServerSideConfiguration extends AbstractVistaServerSideCo
     }
 
     @Override
-    public String getDefaultBaseURLvistaCrm() {
+    public String getDefaultBaseURLvistaCrm(String pmcDnsName) {
         return getMainApplicationURL() + "c";
     }
 
     @Override
-    public String getDefaultBaseURLprospectPortal() {
+    public String getDefaultBaseURLprospectPortal(String pmcDnsName) {
         return getMainApplicationURL() + "p";
     }
 

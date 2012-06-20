@@ -82,41 +82,30 @@ public class VistaDeployment {
         default:
             throw new IllegalArgumentException();
         }
-        if (pmc != null) {
-            for (PmcDnsName alias : pmc.dnsNameAliases()) {
-                if (alias.target().getValue() == target) {
-                    if (secure && !alias.httpsEnabled().isBooleanTrue()) {
-                        // Fallback to default
-                        continue;
-                    }
-                    String protocol = "http://";
-                    if (secure) {
-                        protocol = "https://";
-                    }
-                    return protocol + alias.dnsName().getValue();
+        for (PmcDnsName alias : pmc.dnsNameAliases()) {
+            if (alias.target().getValue() == target) {
+                if (secure && !alias.httpsEnabled().isBooleanTrue()) {
+                    // Fallback to default
+                    continue;
                 }
+                String protocol = "http://";
+                if (secure) {
+                    protocol = "https://";
+                }
+                return protocol + alias.dnsName().getValue();
             }
         }
-
-        final String namespace = NamespaceManager.getNamespace();
-        try {
-            if (pmc != null) {
-                NamespaceManager.setNamespace(pmc.namespace().getValue());
-            }
-            switch (target) {
-            case prospectPortal:
-                return ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance()).getDefaultBaseURLprospectPortal();
-            case residentPortal:
-                return ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance()).getDefaultBaseURLresidentPortal(secure);
-            case vistaCrm:
-                return ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance()).getDefaultBaseURLvistaCrm();
-            default:
-                throw new IllegalArgumentException();
-            }
-        } finally {
-            NamespaceManager.setNamespace(namespace);
+        switch (target) {
+        case prospectPortal:
+            return ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance()).getDefaultBaseURLprospectPortal(pmc.dnsName().getValue());
+        case residentPortal:
+            return ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance())
+                    .getDefaultBaseURLresidentPortal(pmc.dnsName().getValue(), secure);
+        case vistaCrm:
+            return ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance()).getDefaultBaseURLvistaCrm(pmc.dnsName().getValue());
+        default:
+            throw new IllegalArgumentException();
         }
-
     }
 
     public static String getPortalGoogleAPIKey() {

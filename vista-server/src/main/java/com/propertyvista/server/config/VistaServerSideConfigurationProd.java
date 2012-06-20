@@ -17,7 +17,6 @@ import javax.servlet.ServletContext;
 
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.log4j.LoggerConfig;
-import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.portal.rpc.DeploymentConsts;
@@ -52,19 +51,19 @@ public class VistaServerSideConfigurationProd extends VistaServerSideConfigurati
     }
 
     @Override
-    public String getDefaultBaseURLvistaCrm() {
+    public String getDefaultBaseURLvistaCrm(String pmcDnsName) {
         switch (VistaDeployment.getSystemIdentification()) {
         case production:
-            return "https://" + NamespaceManager.getNamespace() + ".propertyvista.com/";
+            return "https://" + pmcDnsName + ".propertyvista.com/";
         case staging:
-            return "https://" + NamespaceManager.getNamespace() + ".staging02-crm.birchwoodsoftwaregroup.com/";
+            return "https://" + pmcDnsName + ".staging02-crm.birchwoodsoftwaregroup.com/";
         default:
-            return super.getDefaultBaseURLvistaCrm();
+            return super.getDefaultBaseURLvistaCrm(pmcDnsName);
         }
     }
 
     @Override
-    public String getDefaultBaseURLresidentPortal(boolean secure) {
+    public String getDefaultBaseURLresidentPortal(String pmcDnsName, boolean secure) {
         String protocol;
         if (secure) {
             protocol = "https://";
@@ -73,23 +72,23 @@ public class VistaServerSideConfigurationProd extends VistaServerSideConfigurati
         }
         switch (VistaDeployment.getSystemIdentification()) {
         case production:
-            return protocol + NamespaceManager.getNamespace() + ".residentportalsite.com/";
+            return protocol + pmcDnsName + ".residentportalsite.com/";
         case staging:
-            return protocol + NamespaceManager.getNamespace() + ".staging02.birchwoodsoftwaregroup.com/";
+            return protocol + pmcDnsName + ".staging02.birchwoodsoftwaregroup.com/";
         default:
-            return super.getDefaultBaseURLresidentPortal(secure);
+            return super.getDefaultBaseURLresidentPortal(pmcDnsName, secure);
         }
     }
 
     @Override
-    public String getDefaultBaseURLprospectPortal() {
+    public String getDefaultBaseURLprospectPortal(String pmcDnsName) {
         switch (VistaDeployment.getSystemIdentification()) {
         case production:
-            return "https://" + NamespaceManager.getNamespace() + ".prospectportalsite.com/";
+            return "https://" + pmcDnsName + ".prospectportalsite.com/";
         case staging:
-            return "https://" + NamespaceManager.getNamespace() + ".staging02-ptapp.birchwoodsoftwaregroup.com/";
+            return "https://" + pmcDnsName + ".staging02-ptapp.birchwoodsoftwaregroup.com/";
         default:
-            return super.getDefaultBaseURLvistaCrm();
+            return super.getDefaultBaseURLvistaCrm(pmcDnsName);
         }
     }
 

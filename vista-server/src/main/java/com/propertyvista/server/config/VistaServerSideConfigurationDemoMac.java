@@ -18,7 +18,6 @@ import javax.servlet.ServletContext;
 import com.pyx4j.config.server.IPersistenceConfiguration;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.log4j.LoggerConfig;
-import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.portal.rpc.DeploymentConsts;
 
@@ -70,24 +69,24 @@ public class VistaServerSideConfigurationDemoMac extends VistaServerSideConfigur
     }
 
     @Override
-    public String getDefaultBaseURLvistaCrm() {
-        return "http://" + NamespaceManager.getNamespace() + ".propertyvista.ca/";
+    public String getDefaultBaseURLvistaCrm(String pmcDnsName) {
+        return "http://" + pmcDnsName + ".propertyvista.ca/";
     }
 
     @Override
-    public String getDefaultBaseURLresidentPortal(boolean secure) {
+    public String getDefaultBaseURLresidentPortal(String pmcDnsName, boolean secure) {
         String protocol;
         if (secure) {
             protocol = "http://";
         } else {
             protocol = "http://";
         }
-        return protocol + NamespaceManager.getNamespace() + ".residentportalsite.ca/";
+        return protocol + pmcDnsName + ".residentportalsite.ca/";
     }
 
     @Override
-    public String getDefaultBaseURLprospectPortal() {
-        return "http://" + NamespaceManager.getNamespace() + ".prospectportalsite.ca/";
+    public String getDefaultBaseURLprospectPortal(String pmcDnsName) {
+        return "http://" + pmcDnsName + ".prospectportalsite.ca/";
     }
 
     @Override

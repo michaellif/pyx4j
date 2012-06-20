@@ -27,7 +27,8 @@ public class PmcLister extends ListerBase<PmcDTO> {
             new MemberColumnDescriptor.Builder(proto().name()).build(),
             new MemberColumnDescriptor.Builder(proto().dnsName()).build(),
             new MemberColumnDescriptor.Builder(proto().status()).build(),
-            new MemberColumnDescriptor.Builder(proto().created()).build()
+            new MemberColumnDescriptor.Builder(proto().created()).build(),
+            new MemberColumnDescriptor.Builder(proto().updated()).build()
         );//@formatter:on
     }
 }

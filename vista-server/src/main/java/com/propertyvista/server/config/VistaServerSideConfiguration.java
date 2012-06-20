@@ -102,23 +102,22 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
     }
 
     @Override
-    public String getDefaultBaseURLresidentPortal(boolean secure) {
+    public String getDefaultBaseURLresidentPortal(String pmcDnsName, boolean secure) {
         if (secure) {
-            return getApplicationDeploymentProtocol() + "://" + "portal." + NamespaceManager.getNamespace() + getApplicationURLNamespace()
-                    + DeploymentConsts.PORTAL_URL;
+            return getApplicationDeploymentProtocol() + "://" + "portal." + pmcDnsName + getApplicationURLNamespace() + DeploymentConsts.PORTAL_URL;
         } else {
-            return "http" + "://" + "portal." + NamespaceManager.getNamespace() + getApplicationURLNamespace() + DeploymentConsts.PORTAL_URL;
+            return "http" + "://" + "portal." + pmcDnsName + getApplicationURLNamespace() + DeploymentConsts.PORTAL_URL;
         }
     }
 
     @Override
-    public String getDefaultBaseURLvistaCrm() {
-        return getApplicationDeploymentProtocol() + "://" + "crm." + NamespaceManager.getNamespace() + getApplicationURLNamespace() + DeploymentConsts.CRM_URL;
+    public String getDefaultBaseURLvistaCrm(String pmcDnsName) {
+        return getApplicationDeploymentProtocol() + "://" + "crm." + pmcDnsName + getApplicationURLNamespace() + DeploymentConsts.CRM_URL;
     }
 
     @Override
-    public String getDefaultBaseURLprospectPortal() {
-        return getApplicationDeploymentProtocol() + "://" + "pt." + NamespaceManager.getNamespace() + getApplicationURLNamespace() + DeploymentConsts.PTAPP_URL;
+    public String getDefaultBaseURLprospectPortal(String pmcDnsName) {
+        return getApplicationDeploymentProtocol() + "://" + "pt." + pmcDnsName + getApplicationURLNamespace() + DeploymentConsts.PTAPP_URL;
     }
 
     @Override

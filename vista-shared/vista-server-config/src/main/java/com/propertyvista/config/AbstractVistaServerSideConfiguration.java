@@ -25,19 +25,19 @@ public abstract class AbstractVistaServerSideConfiguration extends EssentialsSer
      * This method should not be used directly since PMC may have custom DNS configuration
      * Use @see VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.TenantPortal, true);
      */
-    public abstract String getDefaultBaseURLresidentPortal(boolean secure);
+    public abstract String getDefaultBaseURLresidentPortal(String pmcDnsName, boolean secure);
 
     /**
      * This method should not be used directly since PMC may have custom DNS configuration
      * Use @see VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.CRM, true);
      */
-    public abstract String getDefaultBaseURLvistaCrm();
+    public abstract String getDefaultBaseURLvistaCrm(String pmcDnsName);
 
     /**
      * This method should not be used directly since PMC may have custom DNS configuration
      * Use @see VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.ProspectiveApp, true);
      */
-    public abstract String getDefaultBaseURLprospectPortal();
+    public abstract String getDefaultBaseURLprospectPortal(String pmcDnsName);
 
     /**
      * This method should not be used directly since PMC may have custom DNS configuration

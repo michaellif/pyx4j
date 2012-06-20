@@ -87,4 +87,7 @@ public interface Pmc extends IEntity {
     @ReadOnly
     IPrimitive<Date> created();
 
+    @Timestamp(Timestamp.Update.Updated)
+    IPrimitive<Date> updated();
+
 }
