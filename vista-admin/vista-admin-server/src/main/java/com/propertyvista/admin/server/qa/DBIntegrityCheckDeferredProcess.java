@@ -64,24 +64,26 @@ public class DBIntegrityCheckDeferredProcess extends SearchReportDeferredProcess
         formater.header("table");
         formater.header("count");
         formater.newRow();
+
+        specificNamespaceIntegrityCheck(VistaNamespace.adminNamespace);
+        specificNamespaceIntegrityCheck(VistaNamespace.expiringNamespace);
     }
 
     @Override
     protected void reportEntity(Pmc entity) {
         try {
             NamespaceManager.setNamespace(entity.namespace().getValue());
-            dbIntegrityCheck();
+            commonNamespaceIntegrityCheck();
         } finally {
             NamespaceManager.setNamespace(VistaNamespace.adminNamespace);
         }
     }
 
-    private void dbIntegrityCheck() {
+    private void commonNamespaceIntegrityCheck() {
         EntityPersistenceServiceRDB srv = (EntityPersistenceServiceRDB) Persistence.service();
         List<String> allClasses = EntityClassFinder.getEntityClassesNames();
         TreeMap<String, Integer> tablesMap = new TreeMap<String, Integer>();
         for (String className : allClasses) {
-
             if (className.toLowerCase().contains(".gae")) {
                 continue;
             }
@@ -104,6 +106,15 @@ public class DBIntegrityCheckDeferredProcess extends SearchReportDeferredProcess
             formater.cell(entry.getKey());
             formater.cell(entry.getValue());
             formater.newRow();
+        }
+    }
+
+    private void specificNamespaceIntegrityCheck(String namespace) {
+        try {
+            NamespaceManager.setNamespace(namespace);
+            //TODO
+        } finally {
+            NamespaceManager.setNamespace(VistaNamespace.adminNamespace);
         }
     }
 

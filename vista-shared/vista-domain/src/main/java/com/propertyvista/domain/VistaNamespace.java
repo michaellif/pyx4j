@@ -17,6 +17,8 @@ public interface VistaNamespace {
 
     public static final String adminNamespace = "_admin_";
 
+    public static final String expiringNamespace = "_expiring_";
+
     public static final String demoNamespace = DemoData.DemoPmc.vista.name();
 
 }
