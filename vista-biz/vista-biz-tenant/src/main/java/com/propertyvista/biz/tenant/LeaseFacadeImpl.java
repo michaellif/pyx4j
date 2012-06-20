@@ -50,12 +50,12 @@ import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lead.Lead;
 import com.propertyvista.domain.tenant.lease.BillableItem;
+import com.propertyvista.domain.tenant.lease.Deposit;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.CompletionType;
 import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
 import com.propertyvista.domain.tenant.lease.Lease.Status;
 import com.propertyvista.domain.tenant.lease.LeaseApplication;
-import com.propertyvista.misc.VistaTODO;
 
 public class LeaseFacadeImpl implements LeaseFacade {
 
@@ -162,7 +162,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
         assert !lease.unit().isNull();
 
         // set selected service:
-        lease.version().leaseProducts().serviceItem().set(createBillableItem(serviceItem));
+        lease.version().leaseProducts().serviceItem().set(createBillableItem(serviceItem, lease));
         if (bugNo1549) {
             DataDump.dumpToDirectory("lease-bug", "serviceItem", lease);
         }
@@ -183,10 +183,6 @@ public class LeaseFacadeImpl implements LeaseFacade {
         }
         assert service != null;
 
-        // Deposits:
-        lease.version().leaseProducts().serviceItem().deposits()
-                .addAll(ServerSideFactory.create(DepositFacade.class).createRequiredDeposits(serviceItem.type(), lease));
-
         // clear current dependable data:
         lease.version().leaseProducts().featureItems().clear();
         lease.version().leaseProducts().concessions().clear();
@@ -204,7 +200,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
                 case utility:
                     // filter out utilities included in price for selected building:
                     if (!utilitiesToExclude.contains(item.type())) {
-                        lease.version().leaseProducts().featureItems().add(createBillableItem(item));
+                        lease.version().leaseProducts().featureItems().add(createBillableItem(item, lease));
                     }
                     break;
                 }
@@ -214,11 +210,17 @@ public class LeaseFacadeImpl implements LeaseFacade {
         return lease;
     }
 
-    private BillableItem createBillableItem(ProductItem item) {
+    private BillableItem createBillableItem(ProductItem item, Lease lease) {
         BillableItem newItem = EntityFactory.create(BillableItem.class);
         newItem.item().set(item);
         newItem.agreedPrice().setValue(item.price().getValue());
         newItem._currentPrice().setValue(item.price().getValue());
+        // Deposits:
+        List<Deposit> deposits = ServerSideFactory.create(DepositFacade.class).createRequiredDeposits(item.type(), lease);
+        if (deposits != null) {
+            newItem.deposits().addAll(deposits);
+        }
+
         return newItem;
     }
 

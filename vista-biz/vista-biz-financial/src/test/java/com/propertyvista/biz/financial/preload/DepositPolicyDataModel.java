@@ -18,6 +18,7 @@ import java.math.BigDecimal;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 
+import com.propertyvista.domain.financial.offering.FeatureItemType;
 import com.propertyvista.domain.financial.offering.ProductItemType;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.domain.policy.policies.DepositPolicy;
@@ -48,16 +49,45 @@ public class DepositPolicyDataModel {
                 switch (serviceItemType.serviceType().getValue()) {
                 case residentialUnit:
                     item = EntityFactory.create(DepositPolicyItem.class);
-                    item.value().setValue(new BigDecimal("1.0"));
-                    item.valueType().setValue(ValueType.percentage);
                     item.depositType().setValue(DepositType.LastMonthDeposit);
-                    item.productType().set(type);
+                    item.valueType().setValue(ValueType.percentage);
+                    item.value().setValue(new BigDecimal("1.0"));
+                    item.description().setValue("Lease");
                     break;
                 default:
                     break;
                 }
+            } else if (type instanceof FeatureItemType) {
+                FeatureItemType featureItemType = (FeatureItemType) type;
+
+                switch (featureItemType.featureType().getValue()) {
+                case parking:
+                    item = EntityFactory.create(DepositPolicyItem.class);
+                    item.depositType().setValue(DepositType.SecurityDeposit);
+                    item.valueType().setValue(ValueType.percentage);
+                    item.value().setValue(new BigDecimal("1.0"));
+                    item.description().setValue("Parking");
+                    break;
+                case locker:
+                    item = EntityFactory.create(DepositPolicyItem.class);
+                    item.depositType().setValue(DepositType.SecurityDeposit);
+                    item.valueType().setValue(ValueType.percentage);
+                    item.value().setValue(new BigDecimal("1.0"));
+                    item.description().setValue("Locker");
+                    break;
+                case pet:
+                    item = EntityFactory.create(DepositPolicyItem.class);
+                    item.depositType().setValue(DepositType.SecurityDeposit);
+                    item.valueType().setValue(ValueType.amount);
+                    item.value().setValue(new BigDecimal("200.00"));
+                    item.description().setValue("Pet");
+                    break;
+                }
             }
+
             if (item != null) {
+                item.productType().set(type);
+                item.annualInterestRate().setValue(new BigDecimal("0.12"));
                 policy.policyItems().add(item);
             }
         }

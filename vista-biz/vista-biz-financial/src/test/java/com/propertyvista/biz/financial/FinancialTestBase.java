@@ -36,6 +36,7 @@ import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.billing.BillingFacade;
 import com.propertyvista.biz.financial.billing.BillingUtils;
 import com.propertyvista.biz.financial.billing.print.BillPrint;
+import com.propertyvista.biz.financial.deposit.DepositFacade;
 import com.propertyvista.biz.financial.preload.ARPolicyDataModel;
 import com.propertyvista.biz.financial.preload.BuildingDataModel;
 import com.propertyvista.biz.financial.preload.DepositPolicyDataModel;
@@ -67,7 +68,6 @@ import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.AdjustmentTy
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.ExecutionType;
 import com.propertyvista.domain.tenant.lease.Deposit;
 import com.propertyvista.domain.tenant.lease.Deposit.DepositType;
-import com.propertyvista.domain.tenant.lease.Deposit.ValueType;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment.Status;
@@ -307,7 +307,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
 
     protected BillableItem addPet(SaveAction saveAction) {
         BillableItem billableItem = addBillableItem(FeatureType.pet, SaveAction.saveAsDraft);
-        setDeposit(billableItem.uid().getValue(), "200", ValueType.amount, DepositType.SecurityDeposit, saveAction);
+        setDeposit(billableItem.uid().getValue(), DepositType.SecurityDeposit, saveAction);
         return billableItem;
     }
 
@@ -364,14 +364,13 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         return null;
     }
 
-    protected void setDeposit(String billableItemId, String value, ValueType valueType, DepositType depositType, SaveAction saveAction) {
+    protected void setDeposit(String billableItemId, DepositType depositType, SaveAction saveAction) {
         Lease lease = retrieveLeaseForEdit();
         BillableItem billableItem = findBillableItem(billableItemId, lease);
-        Deposit deposit = EntityFactory.create(Deposit.class);
-        deposit.initialAmount().setValue(new BigDecimal(value));
-        deposit.valueType().setValue(valueType);
-        deposit.type().setValue(depositType);
-        billableItem.deposits().add(deposit);
+        Deposit deposit = ServerSideFactory.create(DepositFacade.class).createDeposit(depositType, billableItem.item().type(), lease);
+        if (deposit != null) {
+            billableItem.deposits().add(deposit);
+        }
         lease.saveAction().setValue(saveAction);
         Persistence.service().persist(lease);
         Persistence.service().commit();

@@ -16,6 +16,7 @@ package com.propertyvista.biz.financial.billing;
 import java.math.BigDecimal;
 import java.util.List;
 
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -27,6 +28,7 @@ import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.domain.financial.billing.InvoiceProductCharge;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Deposit;
+import com.propertyvista.domain.tenant.lease.Deposit.DepositStatus;
 import com.propertyvista.domain.tenant.lease.Deposit.ValueType;
 import com.propertyvista.portal.rpc.shared.BillingException;
 
@@ -104,6 +106,9 @@ public class BillingDepositProcessor extends AbstractBillingProcessor {
                 invDeposit.taxTotal().setValue(BigDecimal.ZERO);
 
                 addDeposit(invDeposit);
+
+                deposit.status().setValue(DepositStatus.Billed);
+                Persistence.service().persist(deposit);
             }
         }
     }
