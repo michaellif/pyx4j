@@ -101,6 +101,10 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
 
         get(proto().version().completion()).setVisible(!getValue().version().completion().isNull());
 
+//        get(proto().version().moveOutNotice()).setVisible(!proto().version().moveOutNotice().isNull());
+//        get(proto().version().expectedMoveOut()).setVisible(!proto().version().expectedMoveOut().isNull());
+//        get(proto().version().actualMoveOut()).setVisible(!proto().version().moveOutNotice().isNull());
+
         // disable some editing on signed lease:
         if (isEditable()) {
             boolean isLeaseSigned = !getValue().approvalDate().isNull();
