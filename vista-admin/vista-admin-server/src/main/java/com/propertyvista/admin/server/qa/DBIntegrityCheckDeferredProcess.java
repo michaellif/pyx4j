@@ -102,6 +102,7 @@ public class DBIntegrityCheckDeferredProcess extends SearchReportDeferredProcess
     }
 
     private void exportTablesInfo(Filter<Class<? extends IEntity>> filter) {
+        ((EntityPersistenceServiceRDB) Persistence.service()).resetMapping();
         EntityPersistenceServiceRDB srv = (EntityPersistenceServiceRDB) Persistence.service();
         List<String> allClasses = EntityClassFinder.getEntityClassesNames();
         TreeMap<String, Integer> tablesMap = new TreeMap<String, Integer>();
@@ -118,12 +119,9 @@ public class DBIntegrityCheckDeferredProcess extends SearchReportDeferredProcess
                 if (!EntityPersistenceServiceRDB.allowNamespaceUse(entityClass)) {
                     continue;
                 }
-                // TODO Review tables creation
-                //if (srv.isTableExists(meta.getEntityClass())) {
                 int keys = srv.count(EntityQueryCriteria.create(entityClass));
                 tablesMap.put(meta.getEntityClass().getSimpleName(), keys);
             }
-
         }
         for (Entry<String, Integer> entry : tablesMap.entrySet()) {
             formater.cell(NamespaceManager.getNamespace());
