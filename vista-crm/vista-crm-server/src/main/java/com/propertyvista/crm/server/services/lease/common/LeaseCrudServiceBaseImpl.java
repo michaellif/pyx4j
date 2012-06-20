@@ -18,8 +18,6 @@ import com.pyx4j.entity.server.AbstractVersionedCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
 
-import com.propertyvista.biz.financial.billing.BillingFacade;
-import com.propertyvista.biz.financial.billing.BillingUtils;
 import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.Tenant;
@@ -71,11 +69,6 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
 
         // Need this for navigation
         Persistence.service().retrieve(dto.version().leaseProducts().serviceItem().item().product());
-
-        // create bill preview for draft leases/applications:
-        if (in.version().status().getValue().isDraft()) {
-            dto.billingPreview().set(BillingUtils.createBillPreviewDto(ServerSideFactory.create(BillingFacade.class).runBillingPreview(in)));
-        }
     }
 
     @Override

@@ -18,9 +18,12 @@ import java.util.Vector;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 
+import com.propertyvista.biz.financial.billing.BillingFacade;
+import com.propertyvista.biz.financial.billing.BillingUtils;
 import com.propertyvista.crm.rpc.services.lease.common.LeaseViewerCrudServiceBase;
 import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.Tenant;
@@ -36,6 +39,16 @@ public abstract class LeaseViewerCrudServiceBaseImpl<DTO extends LeaseDTO> exten
     protected LeaseViewerCrudServiceBaseImpl(Class<DTO> dtoClass) {
         super(dtoClass);
         isApplication = dtoClass.equals(LeaseApplicationDTO.class);
+    }
+
+    @Override
+    protected void enhanceRetrieved(Lease in, DTO dto) {
+        super.enhanceRetrieved(in, dto);
+
+        // create bill preview for draft leases/applications:
+        if (in.version().status().getValue().isDraft()) {
+            dto.billingPreview().set(BillingUtils.createBillPreviewDto(ServerSideFactory.create(BillingFacade.class).runBillingPreview(in)));
+        }
     }
 
     @Override
