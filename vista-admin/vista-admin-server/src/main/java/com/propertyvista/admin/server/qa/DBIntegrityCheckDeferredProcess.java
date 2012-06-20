@@ -14,6 +14,8 @@
 package com.propertyvista.admin.server.qa;
 
 import java.util.List;
+import java.util.Map.Entry;
+import java.util.TreeMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -165,8 +167,9 @@ public class DBIntegrityCheckDeferredProcess<E extends IEntity> implements IDefe
     private void dbIntegrityCheck() {
         EntityPersistenceServiceRDB srv = (EntityPersistenceServiceRDB) Persistence.service();
         List<String> allClasses = EntityClassFinder.getEntityClassesNames();
-
+        TreeMap<String, Integer> tablesMap = new TreeMap<String, Integer>();
         for (String className : allClasses) {
+
             if (className.toLowerCase().contains(".gae")) {
                 continue;
             }
@@ -180,15 +183,15 @@ public class DBIntegrityCheckDeferredProcess<E extends IEntity> implements IDefe
             }
             if (srv.isTableExists(meta.getEntityClass())) {
                 int keys = srv.count(EntityQueryCriteria.create(entityClass));
-                if (keys > 0) {
-                    formater.cell(NamespaceManager.getNamespace());
-                    formater.cell(meta.getEntityClass().getSimpleName());
-                    formater.cell(keys);
-                    formater.newRow();
-
-                }
+                tablesMap.put(meta.getEntityClass().getSimpleName(), keys);
             }
 
+        }
+        for (Entry<String, Integer> entry : tablesMap.entrySet()) {
+            formater.cell(NamespaceManager.getNamespace());
+            formater.cell(entry.getKey());
+            formater.cell(entry.getValue());
+            formater.newRow();
         }
     }
 
