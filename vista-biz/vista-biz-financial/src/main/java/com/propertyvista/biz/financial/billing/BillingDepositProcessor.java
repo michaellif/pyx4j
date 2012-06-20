@@ -28,6 +28,7 @@ import com.propertyvista.domain.financial.billing.InvoiceProductCharge;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Deposit;
 import com.propertyvista.domain.tenant.lease.Deposit.ValueType;
+import com.propertyvista.portal.rpc.shared.BillingException;
 
 public class BillingDepositProcessor extends AbstractBillingProcessor {
 

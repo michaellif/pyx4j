@@ -19,6 +19,7 @@ import java.text.ParseException;
 import com.propertyvista.biz.financial.FinancialTestsUtils;
 import com.propertyvista.config.tests.VistaDBTestBase;
 import com.propertyvista.domain.financial.BillingAccount;
+import com.propertyvista.portal.rpc.shared.BillingException;
 
 public class ProrationTest extends VistaDBTestBase {
 

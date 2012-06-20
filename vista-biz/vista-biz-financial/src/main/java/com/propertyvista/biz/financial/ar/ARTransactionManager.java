@@ -41,6 +41,7 @@ import com.propertyvista.domain.financial.billing.InvoicePaymentBackOut;
 import com.propertyvista.domain.policy.policies.ARPolicy;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.dto.TransactionHistoryDTO;
+import com.propertyvista.portal.rpc.shared.ARException;
 
 public class ARTransactionManager {
 

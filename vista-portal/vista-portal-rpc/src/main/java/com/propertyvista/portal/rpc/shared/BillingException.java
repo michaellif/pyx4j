@@ -11,18 +11,18 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.biz.financial.ar;
+package com.propertyvista.portal.rpc.shared;
 
 import com.pyx4j.rpc.shared.UserRuntimeException;
 
-public class ARException extends UserRuntimeException {
+public class BillingException extends UserRuntimeException {
 
     private static final long serialVersionUID = 1L;
 
-    public ARException() {
+    public BillingException() {
     }
 
-    public ARException(String message) {
+    public BillingException(String message) {
         super(message);
     }
 

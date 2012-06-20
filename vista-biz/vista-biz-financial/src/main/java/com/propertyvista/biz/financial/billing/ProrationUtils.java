@@ -27,6 +27,7 @@ import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.policy.policies.LeaseBillingPolicy;
 import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
+import com.propertyvista.portal.rpc.shared.BillingException;
 
 public class ProrationUtils {
 

@@ -27,6 +27,7 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.financial.SysDateManager;
 import com.propertyvista.domain.financial.billing.Bill;
+import com.propertyvista.portal.rpc.shared.BillingException;
 
 class RegularBillingManager extends AbstractBillingManager {
 

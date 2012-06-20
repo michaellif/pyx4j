@@ -32,6 +32,7 @@ import com.propertyvista.domain.financial.offering.FeatureItemType;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
+import com.propertyvista.portal.rpc.shared.BillingException;
 
 public class BillingProductChargeProcessor extends AbstractBillingProcessor {
 

@@ -27,6 +27,7 @@ import com.propertyvista.biz.financial.FinancialTestBase;
 import com.propertyvista.biz.financial.SysDateManager;
 import com.propertyvista.biz.financial.preload.PreloadConfig;
 import com.propertyvista.domain.financial.billing.Bill;
+import com.propertyvista.portal.rpc.shared.BillingException;
 
 public class BillingPeriodsTest extends FinancialTestBase {
 

@@ -20,6 +20,7 @@ import com.propertyvista.domain.financial.billing.InvoiceAccountCharge;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustmentReason;
+import com.propertyvista.portal.rpc.shared.ARException;
 
 public class ARLeaseAdjustmentProcessor extends AbstractARProcessor {
 
