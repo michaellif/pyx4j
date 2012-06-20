@@ -133,7 +133,7 @@ public class BillingUtils {
         // set detail lists
         for (InvoiceLineItem lineItem : bill.lineItems()) {
             // *** Current Bill list values ***
-            if (lineItem instanceof InvoiceProductCharge) {
+            if (lineItem.isInstanceOf(InvoiceProductCharge.class)) {
                 InvoiceProductCharge charge = (InvoiceProductCharge) lineItem;
                 ProductType prodType = charge.productType().getValue();
                 if (ProductType.service.equals(prodType)) {
@@ -143,33 +143,33 @@ public class BillingUtils {
                 } else if (ProductType.oneTimeFeature.equals(prodType)) {
                     dto.onetimeFeatureChargeLineItems().lineItems().add(charge);
                 }
-            } else if (lineItem instanceof InvoiceProductCredit) {
+            } else if (lineItem.isInstanceOf(InvoiceProductCredit.class)) {
                 dto.productCreditLineItems().lineItems().add(lineItem);
-            } else if (lineItem instanceof InvoiceDeposit) {
+            } else if (lineItem.isInstanceOf(InvoiceDeposit.class)) {
                 dto.depositLineItems().lineItems().add(lineItem);
-            } else if (lineItem instanceof InvoiceDepositRefund) {
+            } else if (lineItem.isInstanceOf(InvoiceDepositRefund.class)) {
                 dto.depositRefundLineItems().lineItems().add(lineItem);
-            } else if (lineItem instanceof InvoiceAccountCharge) {
+            } else if (lineItem.isInstanceOf(InvoiceAccountCharge.class)) {
                 LeaseAdjustment adjusment = ((InvoiceAccountCharge) lineItem).adjustment();
                 if (LeaseAdjustment.ExecutionType.immediate == adjusment.executionType().getValue()) {
                     dto.immediateAccountAdjustmentLineItems().lineItems().add(lineItem);
                 } else if (LeaseAdjustment.ExecutionType.pending == adjusment.executionType().getValue()) {
                     dto.pendingAccountAdjustmentLineItems().lineItems().add(lineItem);
                 }
-            } else if (lineItem instanceof InvoiceAccountCredit) {
+            } else if (lineItem.isInstanceOf(InvoiceAccountCredit.class)) {
                 LeaseAdjustment adjusment = ((InvoiceAccountCredit) lineItem).adjustment();
                 if (LeaseAdjustment.ExecutionType.immediate == adjusment.executionType().getValue()) {
                     dto.immediateAccountAdjustmentLineItems().lineItems().add(lineItem);
                 } else if (LeaseAdjustment.ExecutionType.pending == adjusment.executionType().getValue()) {
                     dto.pendingAccountAdjustmentLineItems().lineItems().add(lineItem);
                 }
-            } else if (lineItem instanceof InvoiceNSF) {
+            } else if (lineItem.isInstanceOf(InvoiceNSF.class)) {
                 dto.nsfChargeLineItems().lineItems().add(lineItem);
-            } else if (lineItem instanceof InvoiceWithdrawal) {
+            } else if (lineItem.isInstanceOf(InvoiceWithdrawal.class)) {
                 dto.withdrawalLineItems().lineItems().add(lineItem);
-            } else if (lineItem instanceof InvoicePayment) {
+            } else if (lineItem.isInstanceOf(InvoicePayment.class)) {
                 dto.paymentLineItems().lineItems().add(lineItem);
-            } else if (lineItem instanceof InvoicePaymentBackOut) {
+            } else if (lineItem.isInstanceOf(InvoicePaymentBackOut.class)) {
                 dto.rejectedPaymentLineItems().lineItems().add(lineItem);
             }
         }
