@@ -97,7 +97,7 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
     protected void onPopulate() {
         super.onPopulate();
 
-        tabPanel.setTabVisible(chargesTab, getValue().version().status().getValue().isDraft());
+        tabPanel.setTabVisible(chargesTab, !isEditable() && getValue().version().status().getValue().isDraft());
 
         get(proto().version().completion()).setVisible(!getValue().version().completion().isNull());
 
@@ -272,7 +272,7 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
 
         int row = -1;
         main.setH1(++row, 0, 2, i18n.tr("Service"));
-        main.setWidget(++row, 0, inject(proto().version().leaseProducts().serviceItem(), new BillableItemEditor(this, leaseEditorView, true)));
+        main.setWidget(++row, 0, inject(proto().version().leaseProducts().serviceItem(), new BillableItemEditor(this, leaseEditorView)));
 
         main.setH1(++row, 0, 2, proto().version().leaseProducts().featureItems().getMeta().getCaption());
         main.setWidget(++row, 0, inject(proto().version().leaseProducts().featureItems(), new BillableItemFolder(isEditable(), this, leaseEditorView)));

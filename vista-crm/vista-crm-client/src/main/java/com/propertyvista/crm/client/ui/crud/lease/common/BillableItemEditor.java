@@ -41,7 +41,6 @@ import com.pyx4j.site.client.ui.crud.form.IEditorView;
 import com.pyx4j.site.client.ui.crud.misc.CEntitySelectorHyperlink;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
 import com.pyx4j.site.rpc.AppPlace;
-import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.editors.PetDataEditor;
@@ -60,7 +59,6 @@ import com.propertyvista.domain.tenant.lease.BillableItemExtraData;
 import com.propertyvista.domain.tenant.lease.extradata.Pet;
 import com.propertyvista.domain.tenant.lease.extradata.Vehicle;
 import com.propertyvista.dto.LeaseDTO;
-import com.propertyvista.misc.VistaTODO;
 
 public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
 
@@ -74,16 +72,9 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
 
     private final IEditorView<? extends LeaseDTO> leaseEditorView;
 
-    private boolean isService = false;
-
     private CComponent<LogicalDate, ?> itemEffectiveDateEditor;
 
     private CComponent<LogicalDate, ?> itemExpirationDateEditor;
-
-    public BillableItemEditor(CEntityForm<? extends LeaseDTO> lease, IEditorView<? extends LeaseDTO> leaseEditorView, boolean isService) {
-        this(lease, leaseEditorView);
-        this.isService = isService;
-    }
 
     public BillableItemEditor(CEntityForm<? extends LeaseDTO> lease, IEditorView<? extends LeaseDTO> leaseEditorView) {
         super(BillableItem.class);
@@ -123,20 +114,10 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
                             return false;
                         }
                     }
-
-                    @Override
-                    public void show() {
-                        if (lease.getValue().selectedBuilding().isNull()) {
-                            MessageDialog.warn(i18n.tr("Warning"), i18n.tr("You Must Select Unit First"));
-                        } else {
-                            super.show();
-                        }
-                    }
                 };
 
             }
         }), 25).build());
-        get(proto().item()).setViewable(!isService);
 
         main.setWidget(row, 1, new DecoratorBuilder(inject(proto().agreedPrice()), 10).build());
         main.setWidget(++row, 0, new DecoratorBuilder(itemEffectiveDateEditor = (CComponent<LogicalDate, ?>) inject(proto().effectiveDate()), 9).build());
@@ -151,10 +132,8 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
         main.getColumnFormatter().setWidth(0, "50%");
         main.getColumnFormatter().setWidth(1, "50%");
 
-        if (!VistaTODO.operationDataRemovedForProduction) {
-            adjustmentPanel.setH3(0, 0, 1, i18n.tr("Adjustments"));
-            adjustmentPanel.setWidget(1, 0, inject(proto().adjustments(), new AdjustmentFolder()));
-        }
+        adjustmentPanel.setH3(0, 0, 1, i18n.tr("Adjustments"));
+        adjustmentPanel.setWidget(1, 0, inject(proto().adjustments(), new AdjustmentFolder()));
 
         get(proto().effectiveDate()).setVisible(false);
         get(proto().expirationDate()).setVisible(false);
@@ -173,6 +152,7 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
                 get(proto().effectiveDate()).setVisible(isEditable() || !getValue().effectiveDate().isNull());
                 get(proto().expirationDate()).setVisible(isEditable() || !getValue().expirationDate().isNull());
 
+                get(proto().item()).setEditable(false);
                 if (getValue().item().type().<FeatureItemType> cast().featureType().getValue() == Feature.FeatureType.utility) {
                     // correct folder item:
                     if (getParent() instanceof CEntityFolderItem) {
@@ -184,6 +164,12 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
                 // hide effective dates:
                 get(proto().effectiveDate()).setVisible(false);
                 get(proto().expirationDate()).setVisible(false);
+
+                if (isEditable()) {
+                    boolean isAgreed = !lease.getValue().approvalDate().isNull();
+                    get(proto().item()).setEditable(!isAgreed && !lease.getValue().selectedServiceItems().isEmpty());
+                    get(proto().agreedPrice()).setEditable(!isAgreed && lease.getValue().approvalDate().isNull());
+                }
             }
 
             if (isViewable()) {
@@ -192,41 +178,10 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
                 adjustmentPanel.setVisible(true);
             }
 
-            CEntityForm editor = null;
-            BillableItemExtraData extraData = getValue().extraData();
+            setExtraDataEditor();
 
-            // add extraData editor if necessary:
-            if (getValue().item().type().isInstanceOf(FeatureItemType.class)) {
-                switch (getValue().item().type().<FeatureItemType> cast().featureType().getValue()) {
-                case parking:
-                    editor = new VehicleDataEditor();
-                    if (extraData.isNull()) {
-                        extraData.set(EntityFactory.create(Vehicle.class));
-                    }
-                    break;
-                case pet:
-                    editor = new PetDataEditor();
-                    if (extraData.isNull()) {
-                        extraData.set(EntityFactory.create(Pet.class));
-                    }
-                    break;
-                }
-            }
-
-            if (editor != null) {
-                if (this.contains(proto().extraData())) {
-                    this.unbind(proto().extraData());
-                }
-                this.inject(proto().extraData(), editor);
-                editor.populate(extraData.cast());
-                extraDataPanel.setWidget(editor);
-            }
         } else {// tweak UI for empty ProductItem:
             adjustmentPanel.setVisible(false);
-        }
-
-        if (isEditable()) {
-            get(proto().agreedPrice()).setEditable(lease.getValue().approvalDate().isNull());
         }
     }
 
@@ -239,6 +194,40 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
             } else {
                 adjustmentPanel.setVisible(true);
             }
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    private void setExtraDataEditor() {
+        @SuppressWarnings("rawtypes")
+        CEntityForm editor = null;
+        BillableItemExtraData extraData = getValue().extraData();
+
+        // add extraData editor if necessary:
+        if (getValue().item().type().isInstanceOf(FeatureItemType.class)) {
+            switch (getValue().item().type().<FeatureItemType> cast().featureType().getValue()) {
+            case parking:
+                editor = new VehicleDataEditor();
+                if (extraData.isNull()) {
+                    extraData.set(EntityFactory.create(Vehicle.class));
+                }
+                break;
+            case pet:
+                editor = new PetDataEditor();
+                if (extraData.isNull()) {
+                    extraData.set(EntityFactory.create(Pet.class));
+                }
+                break;
+            }
+        }
+
+        if (editor != null) {
+            if (this.contains(proto().extraData())) {
+                this.unbind(proto().extraData());
+            }
+            this.inject(proto().extraData(), editor);
+            editor.populate(extraData.cast());
+            extraDataPanel.setWidget(editor);
         }
     }
 
