@@ -23,10 +23,12 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.site.client.activity.AppActivityMapper;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
-import com.propertyvista.crm.client.activity.AccountEditorActivity;
-import com.propertyvista.crm.client.activity.AccountViewerActivity;
 import com.propertyvista.crm.client.activity.AlertActivity;
 import com.propertyvista.crm.client.activity.MessageActivity;
+import com.propertyvista.crm.client.activity.crud.account.AccountEditorActivity;
+import com.propertyvista.crm.client.activity.crud.account.AccountRecoveryOptionsEditorActivity;
+import com.propertyvista.crm.client.activity.crud.account.AccountRecoveryOptionsViewerActivity;
+import com.propertyvista.crm.client.activity.crud.account.AccountViewerActivity;
 import com.propertyvista.crm.client.activity.crud.billing.BillViewerActivity;
 import com.propertyvista.crm.client.activity.crud.billing.adjustment.LeaseAdjustmentEditorActivity;
 import com.propertyvista.crm.client.activity.crud.billing.adjustment.LeaseAdjustmentViewerActivity;
@@ -915,6 +917,17 @@ public class MainActivityMapper implements AppActivityMapper {
                             activity = new ARPolicyViewerActivity(crudPlace);
                             break;
                         }
+
+                    } else if (place instanceof CrmSiteMap.Account.AccountRecoveryOptions) {
+                        switch (crudPlace.getType()) {
+                        case viewer:
+                            activity = new AccountRecoveryOptionsViewerActivity(crudPlace);
+                            break;
+                        case editor:
+                            activity = new AccountRecoveryOptionsEditorActivity(crudPlace);
+                            break;
+                        }
+
                     } // CRUD APP PLACE IF ENDS HERE
 
                 } else if (place instanceof CrmSiteMap.Report) {
@@ -924,6 +937,7 @@ public class MainActivityMapper implements AppActivityMapper {
 
                 } else if (place instanceof CrmSiteMap.PasswordChange) {
                     activity = new PasswordChangeActivity(place);
+
 // - Other:
                 } else if (place instanceof CrmSiteMap.Alert) {
                     activity = new AlertActivity(place);

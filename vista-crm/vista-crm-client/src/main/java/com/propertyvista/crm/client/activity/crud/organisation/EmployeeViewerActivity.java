@@ -59,4 +59,13 @@ public class EmployeeViewerActivity extends CrmViewerActivity<EmployeeDTO> imple
         return super.canEdit() & SecurityController.checkBehavior(VistaCrmBehavior.Organization);
     }
 
+    @Override
+    public void goToAccountRecoveryOptions(String password) {
+        // supposed to be implemented only for account activity
+    }
+
+    @Override
+    public boolean canGoToAccountRecoveryOptions() {
+        return false;
+    }
 }

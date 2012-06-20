@@ -15,7 +15,6 @@ package com.propertyvista.common.client.ui.components.security;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CComponent;
@@ -36,21 +35,18 @@ public class LoginNotificationsConfigurationForm extends CEntityDecoratableForm<
         FormFlexPanel contentPanel = new FormFlexPanel();
         int row = -1;
 
-        contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().isEmailNotificationEnabled()), 5).build());
-        get(proto().isEmailNotificationEnabled()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+        contentPanel.setWidget(++row, 0, inject(proto().isEmailNotificationEnabled()));
+        CComponent<Boolean, ?> isEmailNotificationEnabled = get(proto().isEmailNotificationEnabled());
+        isEmailNotificationEnabled.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
             public void onValueChange(ValueChangeEvent<Boolean> event) {
-                get(proto().email()).setVisible(Boolean.TRUE.equals(event.getValue())); // must use this syntax because not sure that value is never null
+                get(proto().email()).setEnabled(Boolean.TRUE.equals(event.getValue())); // must use this syntax because not sure that value is never null
             }
         });
-        contentPanel.setWidget(row, 1, inject(proto().email()));
-        CComponent<String, ?> email = get(proto().email());
-        email.setVisible(false);
-        email.asWidget().setWidth("20em");
-        contentPanel.setWidget(row, 2, new HTML("&nbsp")); // for proper layout of the components
 
-        contentPanel.getColumnFormatter().setWidth(0, "10em");
-        contentPanel.getColumnFormatter().setWidth(1, "20em");
+        contentPanel.setWidget(row, 1, new DecoratorBuilder(inject(proto().email())).labelWidth(5).build());
+        CComponent<String, ?> email = get(proto().email());
+        email.setVisible(true);
 
         return contentPanel;
     }
@@ -58,6 +54,6 @@ public class LoginNotificationsConfigurationForm extends CEntityDecoratableForm<
     @Override
     protected void onPopulate() {
         super.onPopulate();
-        get(proto().email()).setVisible(getValue().isEmailNotificationEnabled().isBooleanTrue());
+        get(proto().email()).setEnabled(getValue().isEmailNotificationEnabled().isBooleanTrue());
     }
 }

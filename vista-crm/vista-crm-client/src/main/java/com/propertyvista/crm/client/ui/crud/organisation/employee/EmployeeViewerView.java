@@ -27,6 +27,10 @@ public interface EmployeeViewerView extends IViewerView<EmployeeDTO> {
 
         void goToLoginHistory(CrmUser userStub);
 
+        boolean canGoToAccountRecoveryOptions();
+
+        void goToAccountRecoveryOptions(String password);
+
     }
 
 }

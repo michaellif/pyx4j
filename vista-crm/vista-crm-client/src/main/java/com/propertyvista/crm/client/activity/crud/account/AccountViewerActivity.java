@@ -11,7 +11,7 @@
  * @author vadims
  * @version $Id$
  */
-package com.propertyvista.crm.client.activity;
+package com.propertyvista.crm.client.activity.crud.account;
 
 import com.google.gwt.core.client.GWT;
 
@@ -52,6 +52,18 @@ public class AccountViewerActivity extends CrmViewerActivity<EmployeeDTO> implem
         AppPlace loginHistoryPlace = new CrmSiteMap.Organization.Employee.LoginHistory();
         loginHistoryPlace.formPlace(userStub.getPrimaryKey());
         AppSite.getPlaceController().goTo(loginHistoryPlace);
+    }
+
+    @Override
+    public void goToAccountRecoveryOptions(String password) {
+        CrudAppPlace place = new CrmSiteMap.Account.AccountRecoveryOptions().formViewerPlace(new Key(-1));
+        place.placeArg(CrmSiteMap.Account.AccountRecoveryOptions.PASSWORD_ARG_KEY, password);
+        AppSite.getPlaceController().goTo(place);
+    }
+
+    @Override
+    public boolean canGoToAccountRecoveryOptions() {
+        return true;
     }
 
 }

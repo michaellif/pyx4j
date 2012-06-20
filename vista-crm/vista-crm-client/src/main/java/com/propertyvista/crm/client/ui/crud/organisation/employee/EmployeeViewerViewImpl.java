@@ -18,6 +18,8 @@ import com.google.gwt.event.dom.client.ClickHandler;
 
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
+import com.pyx4j.widgets.client.PasswordTextBox;
+import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
@@ -30,6 +32,8 @@ public class EmployeeViewerViewImpl extends CrmViewerViewImplBase<EmployeeDTO> i
     private final Button passwordAction;
 
     private final Button viewLoginLogAction;
+
+    private final Button accountRecoveryOptionsAction;
 
     public EmployeeViewerViewImpl() {
         super(CrmSiteMap.Organization.Employee.class, new EmployeeForm(true));
@@ -50,14 +54,48 @@ public class EmployeeViewerViewImpl extends CrmViewerViewImplBase<EmployeeDTO> i
             }
         });
 
+        accountRecoveryOptionsAction = new Button(i18n.tr("Account Recovery Options"), new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                new GetPasswordDialog().show();
+
+            }
+        });
+
         addHeaderToolbarTwoItem(passwordAction.asWidget());
+        addHeaderToolbarTwoItem(accountRecoveryOptionsAction.asWidget());
         addHeaderToolbarTwoItem(viewLoginLogAction.asWidget());
     }
 
     @Override
     public void populate(EmployeeDTO value) {
         super.populate(value);
-        passwordAction.setVisible(presenter.canEdit());
-        viewLoginLogAction.setVisible(presenter.canEdit());
+        passwordAction.setVisible((getPresenter()).canEdit());
+        viewLoginLogAction.setVisible((getPresenter()).canEdit());
+        accountRecoveryOptionsAction.setVisible(((EmployeeViewerView.Presenter) getPresenter()).canGoToAccountRecoveryOptions());
+    }
+
+    private class GetPasswordDialog extends OkCancelDialog {
+
+        private final PasswordTextBox passwordBox;
+
+        public GetPasswordDialog() {
+            super(i18n.tr("Your password is required to proceed"));
+            passwordBox = new PasswordTextBox();
+            setBody(passwordBox);
+        }
+
+        @Override
+        public boolean onClickOk() {
+            ((EmployeeViewerView.Presenter) getPresenter()).goToAccountRecoveryOptions(passwordBox.getText());
+            return true;
+        }
+
+        @Override
+        public boolean onClickCancel() {
+            presenter.cancel();
+            return true;
+        }
+
     }
 }

@@ -30,7 +30,7 @@ public class CrmAccountRecoveryOptionsUserServiceImpl implements CrmAccountRecov
     @Override
     public void obtainRecoveryOptions(AsyncCallback<AccountRecoveryOptionsDTO> callback, AuthenticationRequest request) {
         AccountRecoveryOptionsDTO result = EntityFactory.create(AccountRecoveryOptionsDTO.class);
-        result.securityQuestions().addAll(Persistence.service().query(EntityQueryCriteria.create(SecurityQuestion.class)));
+        result.securityQuestionsSuggestions().addAll(Persistence.service().query(EntityQueryCriteria.create(SecurityQuestion.class)));
         callback.onSuccess(result);
     }
 

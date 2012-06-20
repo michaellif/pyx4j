@@ -328,6 +328,12 @@ public class CrmSiteMap implements SiteMap {
 
     @NavigationItem(navigLabel = "User Account")
     public static class Account extends CrmCrudAppPlace {
+
+        public static class AccountRecoveryOptions extends CrmCrudAppPlace {
+
+            public static final String PASSWORD_ARG_KEY = "password";
+        }
+
     }
 
     @NavigationItem(navigLabel = "Administration")

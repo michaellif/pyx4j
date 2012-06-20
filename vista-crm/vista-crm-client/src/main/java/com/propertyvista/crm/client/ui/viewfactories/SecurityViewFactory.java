@@ -17,6 +17,10 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.propertyvista.common.client.ui.components.login.PasswordResetRequestView;
 import com.propertyvista.common.client.ui.components.login.PasswordResetRequestViewImpl;
+import com.propertyvista.common.client.ui.components.security.AccountRecoveryOptionsEditorView;
+import com.propertyvista.common.client.ui.components.security.AccountRecoveryOptionsEditorViewImpl;
+import com.propertyvista.common.client.ui.components.security.AccountRecoveryOptionsViewerView;
+import com.propertyvista.common.client.ui.components.security.AccountRecoveryOptionsViewerViewImpl;
 import com.propertyvista.common.client.ui.components.security.PasswordChangeView;
 import com.propertyvista.common.client.ui.components.security.PasswordChangeViewImpl;
 import com.propertyvista.common.client.ui.components.security.PasswordResetView;
@@ -35,6 +39,10 @@ public class SecurityViewFactory extends ViewFactoryBase {
                 map.put(type, new PasswordResetViewImpl());
             } else if (PasswordResetRequestView.class.equals(type)) {
                 map.put(type, new PasswordResetRequestViewImpl());
+            } else if (AccountRecoveryOptionsViewerView.class.equals(type)) {
+                map.put(type, new AccountRecoveryOptionsViewerViewImpl());
+            } else if (AccountRecoveryOptionsEditorView.class.equals(type)) {
+                map.put(type, new AccountRecoveryOptionsEditorViewImpl());
             }
         }
 

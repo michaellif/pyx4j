@@ -15,6 +15,7 @@ package com.propertyvista.portal.rpc.shared.dto;
 
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -24,15 +25,22 @@ import com.propertyvista.domain.security.SecurityQuestion;
 @Transient
 public interface AccountRecoveryOptionsDTO extends IEntity {
 
-    IList<SecurityQuestion> securityQuestions();
+    /** this is additional authentication info, the server must use this field to perform additional check */
+    IPrimitive<String> password();
+
+    /** the list of suggestions that appear on the form when user wants to change a security question, filled by the server when user retrieves its old data */
+    IList<SecurityQuestion> securityQuestionsSuggestions();
 
     @Caption(name = "Password Recovery email address")
+    @NotNull
     IPrimitive<String> recoveryEmail();
 
     IPrimitive<String> mobilePhone();
 
+    @NotNull
     IPrimitive<String> securityQuestion();
 
+    @NotNull
     IPrimitive<String> securityAnswer();
 
 }
