@@ -168,6 +168,7 @@ public abstract class LeaseEditorCrudServiceBaseImpl<DTO extends LeaseDTO> exten
     @Override
     public void setSelectedUnit(AsyncCallback<DTO> callback, AptUnit unitId, DTO dto) {
         ServerSideFactory.create(LeaseFacade.class).setUnit(dto, unitId);
+        dto.selectedBuilding().set(dto.unit().belongsTo());
         callback.onSuccess(dto);
     }
 
