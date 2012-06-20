@@ -174,12 +174,7 @@ public class RemoteServiceServlet extends com.google.gwt.user.server.rpc.RemoteS
 
     @Override
     public Serializable execute(String serviceInterfaceClassName, Serializable serviceRequest, String userVisitHashCode) throws RuntimeException {
-        String realServiceName = null;
-        @SuppressWarnings("unchecked")
-        Map<String, String> servicePolicy = (Map<String, String>) Context.getRequest().getAttribute(SERVICE_INTERFACE_CLASSNAMES_REQUEST_ATTRIBUTE);
-        if (servicePolicy != null) {
-            realServiceName = servicePolicy.get(serviceInterfaceClassName);
-        }
+        String realServiceName = ServiceRegistry.decodeServiceInterfaceClassName(serviceInterfaceClassName);
         if (realServiceName != null) {
             serviceInterfaceClassName = realServiceName;
         } else if ((ServerSideConfiguration.instance().getEnvironmentType() == ServerSideConfiguration.EnvironmentType.GAEDevelopment)

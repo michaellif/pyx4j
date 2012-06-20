@@ -24,7 +24,6 @@ import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
-import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -61,19 +60,10 @@ public class IServiceAdapterImpl implements IServiceAdapter {
     @Override
     public Serializable execute(IServiceRequest request) {
 
-        String serviceInterfaceClassName;
-
         String serviceMethodName;
 
-        serviceInterfaceClassName = request.getServiceClassId();
-
         // decode IService class name and  Method
-        @SuppressWarnings("unchecked")
-        Map<String, String> servicePolicy = (Map<String, String>) Context.getRequest().getAttribute(
-                RemoteServiceServlet.SERVICE_INTERFACE_CLASSNAMES_REQUEST_ATTRIBUTE);
-        if (servicePolicy != null) {
-            serviceInterfaceClassName = servicePolicy.get(serviceInterfaceClassName);
-        }
+        String serviceInterfaceClassName = ServiceRegistry.decodeServiceInterfaceClassName(request.getServiceClassId());
 
         serviceMethodName = request.getServiceMethodId();
 

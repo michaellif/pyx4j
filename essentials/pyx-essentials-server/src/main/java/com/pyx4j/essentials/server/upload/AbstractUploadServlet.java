@@ -52,6 +52,7 @@ import com.pyx4j.essentials.server.deferred.DeferredProcessRegistry;
 import com.pyx4j.essentials.server.upload.UploadReciver.ProcessingStatus;
 import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.rpc.server.ServiceRegistry;
 import com.pyx4j.rpc.shared.IServiceExecutePermission;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.security.shared.SecurityController;
@@ -106,13 +107,12 @@ public abstract class AbstractUploadServlet extends HttpServlet {
                 out.println(i18n.tr("Invalid Request Type"));
                 return;
             }
-            String serviceClassId = request.getPathInfo().substring(1);
-            //TODO use "pyx.ServicePolicy", @see com.pyx4j.rpc.serve.RemoteServiceServlet
-            Class<UploadService<?, ?>> serviceClass = (Class<UploadService<?, ?>>) Class.forName(serviceClassId);
+            String serviceClassName = ServiceRegistry.decodeServiceInterfaceClassName(request.getPathInfo().substring(1));
+            Class<UploadService<?, ?>> serviceClass = (Class<UploadService<?, ?>>) Class.forName(serviceClassName);
             SecurityController.assertPermission(new IServiceExecutePermission(serviceClass));
             Class<? extends UploadReciver<?, ?>> reciverClass = mappedUploads.get(serviceClass);
             if (reciverClass == null) {
-                log.error("unmapped upload {}", serviceClassId);
+                log.error("unmapped upload {}", serviceClassName);
                 out.println("Invalid request");
                 return;
             }
