@@ -20,14 +20,10 @@ import java.util.List;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.config.server.ServerSideFactory;
-import com.pyx4j.entity.server.AbstractVersionedCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
-import com.propertyvista.biz.financial.billing.BillingFacade;
-import com.propertyvista.biz.financial.billing.BillingUtils;
 import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.crm.rpc.services.lease.common.LeaseEditorCrudServiceBase;
 import com.propertyvista.crm.server.util.CrmAppContext;
@@ -39,89 +35,17 @@ import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
-import com.propertyvista.domain.tenant.Guarantor;
-import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.ExecutionType;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.dto.LeaseApplicationDTO;
 import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.server.common.charges.PriceCalculationHelpers;
 
-public abstract class LeaseEditorCrudServiceBaseImpl<DTO extends LeaseDTO> extends AbstractVersionedCrudServiceDtoImpl<Lease, DTO> implements
-        LeaseEditorCrudServiceBase<DTO> {
-
-    private final boolean isApplication;
+public abstract class LeaseEditorCrudServiceBaseImpl<DTO extends LeaseDTO> extends LeaseCrudServiceBaseImpl<DTO> implements LeaseEditorCrudServiceBase<DTO> {
 
     protected LeaseEditorCrudServiceBaseImpl(Class<DTO> dtoClass) {
-        super(Lease.class, dtoClass);
-        isApplication = dtoClass.equals(LeaseApplicationDTO.class);
-    }
-
-    @Override
-    protected void bind() {
-        bindCompleateDBO();
-    }
-
-    @Override
-    protected void enhanceRetrieved(Lease in, DTO dto) {
-        enhanceRetrievedCommon(in, dto);
-
-        // load detached entities:
-        Persistence.service().retrieve(dto.billingAccount().adjustments());
-//      Persistence.service().retrieve(dto.documents());
-
-        if (!dto.unit().isNull()) {
-            // fill selected building by unit:
-            dto.selectedBuilding().set(dto.unit().belongsTo());
-            fillServiceEligibilityData(dto);
-            fillserviceItems(dto);
-        }
-
-        // calculate price adjustments:
-        PriceCalculationHelpers.calculateChargeItemAdjustments(dto.version().leaseProducts().serviceItem());
-        for (BillableItem item : dto.version().leaseProducts().featureItems()) {
-            PriceCalculationHelpers.calculateChargeItemAdjustments(item);
-
-            // Need this for navigation
-            Persistence.service().retrieve(item.item().product());
-        }
-
-        for (Tenant item : dto.version().tenants()) {
-            Persistence.service().retrieve(item.screening(), AttachLevel.ToStringMembers);
-        }
-
-        for (Guarantor item : dto.version().guarantors()) {
-            Persistence.service().retrieve(item.screening(), AttachLevel.ToStringMembers);
-        }
-
-        // Need this for navigation
-        Persistence.service().retrieve(dto.version().leaseProducts().serviceItem().item().product());
-
-        // create bill preview:
-        dto.billingPreview().set(BillingUtils.createBillPreviewDto(ServerSideFactory.create(BillingFacade.class).runBillingPreview(in)));
-    }
-
-    @Override
-    protected void enhanceListRetrieved(Lease in, DTO dto) {
-        enhanceRetrievedCommon(in, dto);
-    }
-
-    private void enhanceRetrievedCommon(Lease in, DTO dto) {
-        // load detached entities:
-        Persistence.service().retrieve(dto.unit());
-        Persistence.service().retrieve(dto.unit().belongsTo());
-
-        Persistence.service().retrieve(dto.version().tenants());
-        Persistence.service().retrieve(dto.version().guarantors());
-
-        Persistence.service().retrieve(dto.billingAccount());
-    }
-
-    @Override
-    protected void persist(Lease dbo, DTO in) {
-        throw new Error("Facade should be used");
+        super(dtoClass);
     }
 
     @Override
@@ -134,11 +58,6 @@ public abstract class LeaseEditorCrudServiceBaseImpl<DTO extends LeaseDTO> exten
     protected void save(Lease dbo, DTO in) {
         updateAdjustments(dbo);
         ServerSideFactory.create(LeaseFacade.class).persistLease(dbo);
-    }
-
-    @Override
-    protected void saveAsFinal(Lease entity) {
-        ServerSideFactory.create(LeaseFacade.class).saveAsFinal(entity);
     }
 
     private void updateAdjustments(Lease lease) {

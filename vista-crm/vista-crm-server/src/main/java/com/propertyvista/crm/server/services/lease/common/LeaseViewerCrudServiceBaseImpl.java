@@ -18,103 +18,24 @@ import java.util.Vector;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.config.server.ServerSideFactory;
-import com.pyx4j.entity.server.AbstractVersionedCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 
-import com.propertyvista.biz.financial.billing.BillingFacade;
-import com.propertyvista.biz.financial.billing.BillingUtils;
-import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.crm.rpc.services.lease.common.LeaseViewerCrudServiceBase;
 import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.Tenant;
-import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.dto.LeaseApplicationDTO;
 import com.propertyvista.dto.LeaseDTO;
-import com.propertyvista.server.common.charges.PriceCalculationHelpers;
 
-public abstract class LeaseViewerCrudServiceBaseImpl<DTO extends LeaseDTO> extends AbstractVersionedCrudServiceDtoImpl<Lease, DTO> implements
-        LeaseViewerCrudServiceBase<DTO> {
+public abstract class LeaseViewerCrudServiceBaseImpl<DTO extends LeaseDTO> extends LeaseCrudServiceBaseImpl<DTO> implements LeaseViewerCrudServiceBase<DTO> {
 
     private final boolean isApplication;
 
     protected LeaseViewerCrudServiceBaseImpl(Class<DTO> dtoClass) {
-        super(Lease.class, dtoClass);
+        super(dtoClass);
         isApplication = dtoClass.equals(LeaseApplicationDTO.class);
-    }
-
-    @Override
-    protected void bind() {
-        bindCompleateDBO();
-    }
-
-    @Override
-    protected void enhanceRetrieved(Lease in, DTO dto) {
-        enhanceRetrievedCommon(in, dto);
-
-        // load detached entities:
-        Persistence.service().retrieve(dto.billingAccount().adjustments());
-//      Persistence.service().retrieve(dto.documents());
-
-        if (!dto.unit().isNull()) {
-            // fill selected building by unit:
-            dto.selectedBuilding().set(dto.unit().belongsTo());
-        }
-
-        // calculate price adjustments:
-        PriceCalculationHelpers.calculateChargeItemAdjustments(dto.version().leaseProducts().serviceItem());
-        for (BillableItem item : dto.version().leaseProducts().featureItems()) {
-            PriceCalculationHelpers.calculateChargeItemAdjustments(item);
-
-            // Need this for navigation
-            Persistence.service().retrieve(item.item().product());
-        }
-
-        for (Tenant item : dto.version().tenants()) {
-            Persistence.service().retrieve(item.screening(), AttachLevel.ToStringMembers);
-        }
-
-        for (Guarantor item : dto.version().guarantors()) {
-            Persistence.service().retrieve(item.screening(), AttachLevel.ToStringMembers);
-        }
-
-        // Need this for navigation
-        Persistence.service().retrieve(dto.version().leaseProducts().serviceItem().item().product());
-
-        // create bill preview for draft leases/applications:
-        if (in.version().status().getValue().isDraft()) {
-            dto.billingPreview().set(BillingUtils.createBillPreviewDto(ServerSideFactory.create(BillingFacade.class).runBillingPreview(in)));
-        }
-    }
-
-    @Override
-    protected void enhanceListRetrieved(Lease in, DTO dto) {
-        enhanceRetrievedCommon(in, dto);
-    }
-
-    private void enhanceRetrievedCommon(Lease in, DTO dto) {
-        // load detached entities:
-        Persistence.service().retrieve(dto.unit());
-        Persistence.service().retrieve(dto.unit().belongsTo());
-
-        Persistence.service().retrieve(dto.version().tenants());
-        Persistence.service().retrieve(dto.version().guarantors());
-
-        Persistence.service().retrieve(dto.billingAccount());
-    }
-
-    @Override
-    protected void persist(Lease dbo, DTO in) {
-        throw new Error("Should not be called!");
-    }
-
-    @Override
-    protected void saveAsFinal(Lease entity) {
-        ServerSideFactory.create(LeaseFacade.class).saveAsFinal(entity);
     }
 
     @Override
