@@ -17,73 +17,40 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.pyx4j.commons.Consts;
-import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.rdb.EntityPersistenceServiceRDB;
-import com.pyx4j.entity.security.EntityPermission;
-import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.ServerEntityFactory;
 import com.pyx4j.entity.server.impl.EntityClassFinder;
-import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.meta.EntityMeta;
-import com.pyx4j.essentials.rpc.deferred.DeferredProcessProgressResponse;
-import com.pyx4j.essentials.rpc.report.DeferredReportProcessProgressResponse;
 import com.pyx4j.essentials.rpc.report.ReportRequest;
-import com.pyx4j.essentials.server.deferred.IDeferredProcess;
 import com.pyx4j.essentials.server.download.Downloadable;
 import com.pyx4j.essentials.server.report.ReportTableCSVFormater;
 import com.pyx4j.essentials.server.report.ReportTableFormater;
 import com.pyx4j.essentials.server.report.SearchReportDeferredProcess;
-import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.admin.domain.pmc.Pmc;
-import com.propertyvista.admin.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.domain.VistaNamespace;
 
-public class DBIntegrityCheckDeferredProcess<E extends IEntity> implements IDeferredProcess {
+public class DBIntegrityCheckDeferredProcess extends SearchReportDeferredProcess<Pmc> {
 
     private static final long serialVersionUID = 1L;
 
-    private static String filename = "DB_integrity_check.csv";
-
-    private final static Logger log = LoggerFactory.getLogger(SearchReportDeferredProcess.class);
-
     protected ReportTableFormater formater;
 
-    private final ReportRequest request;
-
-    private String encodedCursorReference;
-
-    protected final Class<? extends IEntity> entityClass;
-
-    private List<String> selectedMemberNames;
-
-    protected volatile boolean canceled;
-
-    private int maximum = 0;
-
-    private int fetchCount = 0;
-
-    private boolean fetchCompleate;
-
-    private boolean formatCompleate;
-
     public DBIntegrityCheckDeferredProcess(ReportRequest request) {
-        SecurityController.assertPermission(new EntityPermission(request.getCriteria().getEntityClass(), EntityPermission.READ));
-        this.request = request;
-        this.entityClass = request.getCriteria().getEntityClass();
+        super(request);
         this.formater = new ReportTableCSVFormater();
-        ((ReportTableCSVFormater) this.formater).setTimezoneOffset(request.getTimezoneOffset());
+    }
+
+    @Override
+    protected String getFileName() {
+        return "DB_integrity_check.csv";
     }
 
     @Override
@@ -92,60 +59,6 @@ public class DBIntegrityCheckDeferredProcess<E extends IEntity> implements IDefe
     }
 
     @Override
-    public void execute() {
-        if (canceled) {
-            return;
-        }
-        if (fetchCompleate) {
-            createDownloadable();
-            formatCompleate = true;
-        } else {
-            long start = System.currentTimeMillis();
-            Persistence.service().startTransaction();
-            try {
-                if (selectedMemberNames == null) {
-                    maximum = Persistence.service().count(request.getCriteria());
-                    createHeader();
-
-                }
-                @SuppressWarnings("unchecked")
-                ICursorIterator<Pmc> it = (ICursorIterator<Pmc>) Persistence.service().query(encodedCursorReference, request.getCriteria(),
-                        AttachLevel.Attached);
-                try {
-                    int currentFetchCount = 0;
-                    while (it.hasNext()) {
-                        Pmc ent = it.next();
-                        SecurityController.assertPermission(EntityPermission.permissionRead(ent.getValueClass()));
-                        reportEntity(ent);
-                        fetchCount++;
-                        currentFetchCount++;
-                        if (ServerSideConfiguration.instance().getEnvironmentType() != ServerSideConfiguration.EnvironmentType.LocalJVM) {
-                            if ((System.currentTimeMillis() - start > Consts.SEC2MSEC * 15) || (currentFetchCount > 200)) {
-                                log.warn("Executions time quota exceeded {}; rows {}", currentFetchCount, System.currentTimeMillis() - start);
-                                log.debug("fetch will continue rows {}; characters {}", fetchCount, formater.getBinaryDataSize());
-                                encodedCursorReference = it.encodedCursorReference();
-                                return;
-                            }
-                        }
-                        if (canceled) {
-                            log.debug("fetch canceled");
-                            break;
-                        }
-                    }
-                } finally {
-                    it.completeRetrieval();
-                }
-                log.debug("fetch complete rows {}; characters {}", fetchCount, formater.getBinaryDataSize());
-                fetchCompleate = true;
-            } finally {
-                Persistence.service().endTransaction();
-                if (canceled) {
-                    formater = null;
-                }
-            }
-        }
-    }
-
     protected void createHeader() {
         formater.header("pmc");
         formater.header("table");
@@ -153,12 +66,11 @@ public class DBIntegrityCheckDeferredProcess<E extends IEntity> implements IDefe
         formater.newRow();
     }
 
+    @Override
     protected void reportEntity(Pmc entity) {
         try {
-            if (entity.status().getValue().equals(PmcStatus.Active)) {
-                NamespaceManager.setNamespace(entity.namespace().getValue());
-                dbIntegrityCheck();
-            }
+            NamespaceManager.setNamespace(entity.namespace().getValue());
+            dbIntegrityCheck();
         } finally {
             NamespaceManager.setNamespace(VistaNamespace.adminNamespace);
         }
@@ -195,26 +107,9 @@ public class DBIntegrityCheckDeferredProcess<E extends IEntity> implements IDefe
         }
     }
 
+    @Override
     protected void createDownloadable() {
         Downloadable d = new Downloadable(formater.getBinaryData(), formater.getContentType());
-        d.save(filename);
-    }
-
-    @Override
-    public DeferredProcessProgressResponse status() {
-        if (formatCompleate) {
-            DeferredReportProcessProgressResponse r = new DeferredReportProcessProgressResponse();
-            r.setCompleted();
-            r.setDownloadLink(System.currentTimeMillis() + "/" + filename);
-            return r;
-        } else {
-            DeferredProcessProgressResponse r = new DeferredProcessProgressResponse();
-            r.setProgress(fetchCount);
-            r.setProgressMaximum(maximum);
-            if (canceled) {
-                r.setCanceled();
-            }
-            return r;
-        }
+        d.save(getFileName());
     }
 }

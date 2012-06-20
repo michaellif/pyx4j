@@ -16,11 +16,13 @@ package com.propertyvista.admin.server.services;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.essentials.rpc.report.ReportRequest;
 import com.pyx4j.essentials.server.deferred.DeferredProcessRegistry;
 import com.pyx4j.essentials.server.report.ReportServiceImpl;
 
 import com.propertyvista.admin.domain.pmc.Pmc;
+import com.propertyvista.admin.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.admin.rpc.PmcDTO;
 import com.propertyvista.admin.rpc.services.DBIntegrityCheckService;
 import com.propertyvista.admin.server.qa.DBIntegrityCheckDeferredProcess;
@@ -31,9 +33,10 @@ public class DBIntegrityCheckServiceImpl extends ReportServiceImpl<PmcDTO> imple
     @Override
     public void createDownload(AsyncCallback<String> callback, ReportRequest reportRequest) {
         ReportRequest reportdbo = new ReportRequest();
-        // TODO covert PmcDTO criteria to Pmc
-        reportdbo.setCriteria(EntityQueryCriteria.create(Pmc.class));
-
+        EntityQueryCriteria<Pmc> criteria = EntityQueryCriteria.create(Pmc.class);
+        criteria.add(PropertyCriterion.ne(criteria.proto().status(), PmcStatus.Created));
+        criteria.asc(criteria.proto().namespace());
+        reportdbo.setCriteria(criteria);
         callback.onSuccess(DeferredProcessRegistry.fork(new DBIntegrityCheckDeferredProcess(reportdbo), ThreadPoolNames.DOWNLOADS));
     }
 
