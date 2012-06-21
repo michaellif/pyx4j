@@ -34,9 +34,9 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.SelectionModel;
 import com.google.gwt.view.client.SingleSelectionModel;
 
-import com.pyx4j.widgets.client.dialog.OkDialog;
+import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
-public abstract class SelectEnumDialog<E extends Enum<E>> extends OkDialog {
+public abstract class SelectEnumDialog<E extends Enum<E>> extends OkCancelDialog {
     public static interface CellTemplate extends SafeHtmlTemplates {
         @Template("{0}")
         SafeHtml typeCell(String type);
@@ -83,6 +83,6 @@ public abstract class SelectEnumDialog<E extends Enum<E>> extends OkDialog {
     }
 
     public String defineWidth() {
-        return "30em";
+        return "25em";
     }
 }
