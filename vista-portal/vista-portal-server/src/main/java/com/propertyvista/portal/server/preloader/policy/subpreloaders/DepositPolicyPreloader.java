@@ -57,7 +57,7 @@ public class DepositPolicyPreloader extends AbstractPolicyPreloader<DepositPolic
             item.depositType().setValue(DepositType.SecurityDeposit);
             item.description().setValue(i18n.tr("Security Deposit"));
             item.value().setValue(new BigDecimal(RandomUtil.randomDouble(500.0)));
-            item.valueType().setValue(ValueType.amount);
+            item.valueType().setValue(ValueType.Amount);
             item.productType().set(pit);
             item.annualInterestRate().setValue(new BigDecimal(0.01 + RandomUtil.randomDouble(0.03)));
 
@@ -74,7 +74,7 @@ public class DepositPolicyPreloader extends AbstractPolicyPreloader<DepositPolic
                     item.depositType().setValue(DepositType.SecurityDeposit);
                     item.description().setValue(i18n.tr("First Month Parking"));
                     item.value().setValue(new BigDecimal(RandomUtil.randomDouble(1.0)));
-                    item.valueType().setValue(ValueType.percentage);
+                    item.valueType().setValue(ValueType.Percentage);
                     item.productType().set(pit);
                     item.annualInterestRate().setValue(new BigDecimal(0.01 + RandomUtil.randomDouble(0.03)));
 
@@ -85,7 +85,7 @@ public class DepositPolicyPreloader extends AbstractPolicyPreloader<DepositPolic
                     item.depositType().setValue(DepositType.SecurityDeposit);
                     item.description().setValue(i18n.tr("Last Month Locker"));
                     item.value().setValue(new BigDecimal(RandomUtil.randomDouble(1.0)));
-                    item.valueType().setValue(ValueType.percentage);
+                    item.valueType().setValue(ValueType.Percentage);
                     item.productType().set(pit);
                     item.annualInterestRate().setValue(new BigDecimal(0.01 + RandomUtil.randomDouble(0.03)));
 

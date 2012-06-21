@@ -50,7 +50,7 @@ public class DepositPolicyDataModel {
                 case residentialUnit:
                     item = EntityFactory.create(DepositPolicyItem.class);
                     item.depositType().setValue(DepositType.LastMonthDeposit);
-                    item.valueType().setValue(ValueType.percentage);
+                    item.valueType().setValue(ValueType.Percentage);
                     item.value().setValue(new BigDecimal("1.0"));
                     item.description().setValue("Lease");
                     break;
@@ -64,21 +64,21 @@ public class DepositPolicyDataModel {
                 case parking:
                     item = EntityFactory.create(DepositPolicyItem.class);
                     item.depositType().setValue(DepositType.SecurityDeposit);
-                    item.valueType().setValue(ValueType.percentage);
+                    item.valueType().setValue(ValueType.Percentage);
                     item.value().setValue(new BigDecimal("1.0"));
                     item.description().setValue("Parking");
                     break;
                 case locker:
                     item = EntityFactory.create(DepositPolicyItem.class);
                     item.depositType().setValue(DepositType.SecurityDeposit);
-                    item.valueType().setValue(ValueType.percentage);
+                    item.valueType().setValue(ValueType.Percentage);
                     item.value().setValue(new BigDecimal("1.0"));
                     item.description().setValue("Locker");
                     break;
                 case pet:
                     item = EntityFactory.create(DepositPolicyItem.class);
                     item.depositType().setValue(DepositType.SecurityDeposit);
-                    item.valueType().setValue(ValueType.amount);
+                    item.valueType().setValue(ValueType.Amount);
                     item.value().setValue(new BigDecimal("200.00"));
                     item.description().setValue("Pet");
                     break;

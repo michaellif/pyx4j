@@ -146,10 +146,10 @@ public class DepositPolicyForm extends PolicyDTOTabPanelBasedForm<DepositPolicyD
 
                 CComponent<?, ?> comp = null;
                 switch (valueType) {
-                case amount:
+                case Amount:
                     comp = new CMoneyField();
                     break;
-                case percentage:
+                case Percentage:
                     comp = new CPercentageField();
                     break;
                 }

@@ -44,6 +44,7 @@ public interface Deposit extends IEntity {
      * - refund rules
      */
     @I18n
+    @XmlType(name = "DepositType")
     public enum DepositType {
         /*
          * Move-In Deposit will is used as a guarantee of move-in intent and to cover any move-in damages.
@@ -61,19 +62,29 @@ public interface Deposit extends IEntity {
          * at the end of lease.
          * Immediate Credit is issued on the Last Bill.
          */
-        LastMonthDeposit
+        LastMonthDeposit;
+
+        @Override
+        public String toString() {
+            return I18nEnum.toString(this);
+        }
     }
 
+    @I18n
+    @XmlType(name = "DepositStatus")
     public enum DepositStatus {
-        Created, Billed, Returned
+        Created, Billed, Returned;
+
+        @Override
+        public String toString() {
+            return I18nEnum.toString(this);
+        }
     }
 
     @I18n
     @XmlType(name = "ValueType")
     public enum ValueType {
-        amount,
-
-        percentage;
+        Amount, Percentage;
 
         @Override
         public String toString() {
@@ -92,6 +103,7 @@ public interface Deposit extends IEntity {
     //@JoinColumn
     BillableItem billableItem();
 
+    @NotNull
     IPrimitive<DepositStatus> status();
 
     IPrimitive<LogicalDate> depositDate();
@@ -111,6 +123,7 @@ public interface Deposit extends IEntity {
     @ToString(index = 3)
     IPrimitive<DepositType> type();
 
+    @NotNull
     IPrimitive<BigDecimal> initialAmount();
 
     IPrimitive<BigDecimal> currentAmount();

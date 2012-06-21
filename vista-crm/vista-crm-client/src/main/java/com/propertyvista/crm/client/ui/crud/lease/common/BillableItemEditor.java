@@ -15,6 +15,7 @@ package com.propertyvista.crm.client.ui.crud.lease.common;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.EnumSet;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -40,6 +41,7 @@ import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.ui.crud.form.IEditorView;
 import com.pyx4j.site.client.ui.crud.misc.CEntitySelectorHyperlink;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
+import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
@@ -57,6 +59,10 @@ import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.ExecutionType;
 import com.propertyvista.domain.tenant.lease.BillableItemExtraData;
+import com.propertyvista.domain.tenant.lease.Deposit;
+import com.propertyvista.domain.tenant.lease.Deposit.DepositStatus;
+import com.propertyvista.domain.tenant.lease.Deposit.DepositType;
+import com.propertyvista.domain.tenant.lease.Deposit.ValueType;
 import com.propertyvista.domain.tenant.lease.extradata.Pet;
 import com.propertyvista.domain.tenant.lease.extradata.Vehicle;
 import com.propertyvista.dto.LeaseDTO;
@@ -68,6 +74,8 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
     private final SimplePanel extraDataPanel = new SimplePanel();
 
     private final FormFlexPanel adjustmentPanel = new FormFlexPanel();
+
+    private final FormFlexPanel depositPanel = new FormFlexPanel();
 
     private final CEntityForm<? extends LeaseDTO> lease;
 
@@ -130,11 +138,17 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
         main.setWidget(++row, 0, adjustmentPanel);
         main.getFlexCellFormatter().setColSpan(row, 0, 2);
 
+        main.setWidget(++row, 0, depositPanel);
+        main.getFlexCellFormatter().setColSpan(row, 0, 2);
+
         main.getColumnFormatter().setWidth(0, "50%");
         main.getColumnFormatter().setWidth(1, "50%");
 
         adjustmentPanel.setH3(0, 0, 1, i18n.tr("Adjustments"));
         adjustmentPanel.setWidget(1, 0, inject(proto().adjustments(), new AdjustmentFolder()));
+
+        depositPanel.setH3(0, 0, 1, i18n.tr("Deposits"));
+        depositPanel.setWidget(1, 0, inject(proto().deposits(), new DepositFolder()));
 
         get(proto().effectiveDate()).setVisible(false);
         get(proto().expirationDate()).setVisible(false);
@@ -177,11 +191,14 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
 
             if (isViewable()) {
                 adjustmentPanel.setVisible(!getValue().adjustments().isEmpty());
+                depositPanel.setVisible(!getValue().deposits().isEmpty());
             } else {
                 adjustmentPanel.setVisible(true);
+                depositPanel.setVisible(true);
             }
         } else {// tweak UI for empty ProductItem:
             adjustmentPanel.setVisible(false);
+            depositPanel.setVisible(false);
         }
     }
 
@@ -199,26 +216,24 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
             extraDataPanel.setWidget(null);
         }
 
-        if (getValue() != null) {
-            // add extraData editor if necessary:
+        if (getValue() != null && getValue().item().type().isInstanceOf(FeatureItemType.class)) {
             @SuppressWarnings("rawtypes")
             CEntityForm editor = null;
             BillableItemExtraData extraData = value.extraData();
-            if (getValue().item().type().isInstanceOf(FeatureItemType.class)) {
-                switch (getValue().item().type().<FeatureItemType> cast().featureType().getValue()) {
-                case parking:
-                    editor = new VehicleDataEditor();
-                    if (extraData.getInstanceValueClass() != Vehicle.class) {
-                        extraData.set(EntityFactory.create(Vehicle.class));
-                    }
-                    break;
-                case pet:
-                    editor = new PetDataEditor();
-                    if (extraData.getInstanceValueClass() != Pet.class) {
-                        extraData.set(EntityFactory.create(Pet.class));
-                    }
-                    break;
+
+            switch (getValue().item().type().<FeatureItemType> cast().featureType().getValue()) {
+            case parking:
+                editor = new VehicleDataEditor();
+                if (extraData.getInstanceValueClass() != Vehicle.class) {
+                    extraData.set(EntityFactory.create(Vehicle.class));
                 }
+                break;
+            case pet:
+                editor = new PetDataEditor();
+                if (extraData.getInstanceValueClass() != Pet.class) {
+                    extraData.set(EntityFactory.create(Pet.class));
+                }
+                break;
             }
 
             if (editor != null) {
@@ -389,5 +404,81 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
                 return null;
             }
         });
+    }
+
+    private class DepositFolder extends VistaTableFolder<Deposit> {
+
+        public DepositFolder() {
+            super(Deposit.class, i18n.tr("Deposit"), !BillableItemEditor.this.isViewable());
+        }
+
+        @Override
+        public List<EntityFolderColumnDescriptor> columns() {
+            ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
+            columns.add(new EntityFolderColumnDescriptor(proto().type(), "12em"));
+            columns.add(new EntityFolderColumnDescriptor(proto().status(), "8em"));
+            columns.add(new EntityFolderColumnDescriptor(proto().depositDate(), "9em"));
+            columns.add(new EntityFolderColumnDescriptor(proto().refundDate(), "9em"));
+            columns.add(new EntityFolderColumnDescriptor(proto().valueType(), "8em"));
+            columns.add(new EntityFolderColumnDescriptor(proto().initialAmount(), "7em"));
+            columns.add(new EntityFolderColumnDescriptor(proto().currentAmount(), "7em"));
+            columns.add(new EntityFolderColumnDescriptor(proto().description(), "15em"));
+            return columns;
+        }
+
+        @Override
+        public CComponent<?, ?> create(IObject<?> member) {
+            if (member instanceof Deposit) {
+                return new BillableItemDepositEditor();
+            }
+            return super.create(member);
+        }
+
+        @Override
+        protected void addItem() {
+            new SelectEnumDialog<DepositType>(i18n.tr("Select Deposit Type"), EnumSet.allOf(DepositType.class)) {
+                @Override
+                public boolean onClickOk() {
+                    addItem(createNewItem(getSelectedType()));
+                    return true;
+                }
+            }.show();
+        }
+
+        private Deposit createNewItem(DepositType type) {
+            Deposit deposit = EntityFactory.create(Deposit.class);
+            deposit.type().setValue(type);
+            deposit.status().setValue(DepositStatus.Created);
+            deposit.valueType().setValue(ValueType.Amount);
+
+//            List<Deposit> deposits = ServerSideFactory.create(DepositFacade.class).createRequiredDeposits(item.type(), lease);
+//            if (deposits != null) {
+//
+//            }
+
+            return deposit;
+        }
+
+        private class BillableItemDepositEditor extends CEntityFolderRowEditor<Deposit> {
+
+            public BillableItemDepositEditor() {
+                super(Deposit.class, columns());
+                setViewable(false);
+            }
+
+            @Override
+            protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
+                if (isEditable()) {
+                    if (column.getObject() == proto().type() || column.getObject() == proto().status() || column.getObject() == proto().depositDate()
+                            || column.getObject() == proto().refundDate() || column.getObject() == proto().currentAmount()) {
+                        CComponent<?, ?> comp = inject(column.getObject());
+                        comp.inheritEditable(false); // always not editable!
+                        comp.setEditable(false);
+                        return comp;
+                    }
+                }
+                return super.createCell(column);
+            }
+        }
     }
 }

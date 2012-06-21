@@ -57,9 +57,9 @@ public abstract class LeaseEditorCrudServiceBaseImpl<DTO extends LeaseDTO> exten
     }
 
     @Override
-    protected void create(Lease entity, DTO dto) {
-        updateAdjustments(entity);
-        ServerSideFactory.create(LeaseFacade.class).initLease(entity);
+    protected void create(Lease dbo, DTO dto) {
+        updateAdjustments(dbo);
+        ServerSideFactory.create(LeaseFacade.class).initLease(dbo);
     }
 
     @Override

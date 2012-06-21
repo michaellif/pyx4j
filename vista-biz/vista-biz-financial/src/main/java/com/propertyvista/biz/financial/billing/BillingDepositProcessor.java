@@ -92,9 +92,9 @@ public class BillingDepositProcessor extends AbstractBillingProcessor {
                 invoiceDeposit.debitType().setValue(DebitType.deposit);
                 invoiceDeposit.description().setValue(deposit.description().getStringView());
 
-                if (ValueType.amount == deposit.valueType().getValue()) {
+                if (ValueType.Amount == deposit.valueType().getValue()) {
                     invoiceDeposit.amount().setValue(deposit.initialAmount().getValue());
-                } else if (ValueType.percentage == deposit.valueType().getValue()) {
+                } else if (ValueType.Percentage == deposit.valueType().getValue()) {
                     //TODO consider real price of service or feature including concessions etc
                     invoiceDeposit.amount().setValue(MoneyUtils.round(deposit.initialAmount().getValue().multiply(billableItem.agreedPrice().getValue())));
                 } else {
