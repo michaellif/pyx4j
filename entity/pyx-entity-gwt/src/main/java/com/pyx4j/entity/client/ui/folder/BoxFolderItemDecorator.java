@@ -41,8 +41,11 @@ import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.gwt.commons.BrowserType;
+import com.pyx4j.i18n.shared.I18n;
 
 public class BoxFolderItemDecorator<E extends IEntity> extends BaseFolderItemDecorator<E> {
+
+    private static final I18n i18n = I18n.get(BoxFolderItemDecorator.class);
 
     public static enum DebugIds implements IDebugId {
         BoxFolderItemDecorator, ToolBar;
@@ -99,6 +102,12 @@ public class BoxFolderItemDecorator<E extends IEntity> extends BaseFolderItemDec
             public void onPropertyChange(PropertyChangeEvent event) {
                 if (event.getPropertyName() == PropertyName.repopulated) {
                     toolbar.update(expended);
+                } else if (event.getPropertyName() == PropertyName.valid) {
+                    if (folderItem.isValid()) {
+                        toolbar.setWarningMessage(null);
+                    } else {
+                        toolbar.setWarningMessage(i18n.tr("Some fields are not valid or mandatory but not set."));
+                    }
                 }
             }
         });

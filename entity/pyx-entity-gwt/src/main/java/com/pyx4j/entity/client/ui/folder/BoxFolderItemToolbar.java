@@ -28,7 +28,6 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.commons.IDebugId;
@@ -46,15 +45,15 @@ public class BoxFolderItemToolbar extends HorizontalPanel {
 
     private final BoxFolderItemDecorator<?> decorator;
 
-    private Widget actionsPanel;
-
     private final SimplePanel actionsPanelHolder;
 
     private final Image collapseImage;
 
     private final Label caption;
 
-    private final Image imageWarn;
+    private final Image warnImage;
+
+    private String warnMessage;
 
     private final Image titleIcon;
 
@@ -73,7 +72,7 @@ public class BoxFolderItemToolbar extends HorizontalPanel {
         collapseImage.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                decorator.setExpended(!decorator.isExpended());
+                setExpended(!decorator.isExpended());
             }
         });
 
@@ -87,7 +86,7 @@ public class BoxFolderItemToolbar extends HorizontalPanel {
         captionHolder.addDomHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                decorator.setExpended(!decorator.isExpended());
+                setExpended(!decorator.isExpended());
             }
         }, ClickEvent.getType());
 
@@ -107,11 +106,11 @@ public class BoxFolderItemToolbar extends HorizontalPanel {
         setCellVerticalAlignment(captionHolder, HorizontalPanel.ALIGN_MIDDLE);
         setCellWidth(captionHolder, "100%");
 
-        imageWarn = new Image(decorator.getImages().warn());
-        imageWarn.setVisible(false);
-        imageWarn.getElement().getStyle().setMargin(2, Unit.PX);
-        imageWarn.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.RIGHT);
-        add(imageWarn);
+        warnImage = new Image(decorator.getImages().warn());
+        warnImage.setVisible(false);
+        warnImage.getElement().getStyle().setMargin(2, Unit.PX);
+        warnImage.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.RIGHT);
+        add(warnImage);
 
         actionsPanelHolder = new SimplePanel();
         add(actionsPanelHolder);
@@ -120,10 +119,17 @@ public class BoxFolderItemToolbar extends HorizontalPanel {
 
         caption.ensureDebugId(new CompositeDebugId(IFolderDecorator.DecoratorsIds.BoxFolderItemToolbar, DebugIds.Caption).debugId());
         titleIcon.ensureDebugId(new CompositeDebugId(IFolderDecorator.DecoratorsIds.BoxFolderItemToolbar, DebugIds.TitleIcon).debugId());
-        imageWarn.ensureDebugId(new CompositeDebugId(IFolderDecorator.DecoratorsIds.BoxFolderItemToolbar, DebugIds.ImageWarn).debugId());
+        warnImage.ensureDebugId(new CompositeDebugId(IFolderDecorator.DecoratorsIds.BoxFolderItemToolbar, DebugIds.ImageWarn).debugId());
         collapseImage.ensureDebugId(new CompositeDebugId(IFolderDecorator.DecoratorsIds.BoxFolderItemToolbar, DebugIds.CollapseImage).debugId());
 
         update(decorator.isExpended());
+
+    }
+
+    private void setExpended(boolean expended) {
+        decorator.setExpended(expended);
+
+        showWarning();
 
     }
 
@@ -154,5 +160,22 @@ public class BoxFolderItemToolbar extends HorizontalPanel {
 
     public void setActionsBar(ItemActionsBar actionsPanel) {
         actionsPanelHolder.setWidget(actionsPanel);
+    }
+
+    public void setWarningMessage(String message) {
+        warnMessage = message;
+        showWarning();
+    }
+
+    private void showWarning() {
+        if (warnMessage != null) {
+            warnImage.setTitle(warnMessage);
+            if (!decorator.isExpended()) {
+                warnImage.setVisible(true);
+            }
+        } else {
+            warnImage.setTitle(null);
+            warnImage.setVisible(false);
+        }
     }
 }
