@@ -219,7 +219,7 @@ public class WidgetDecorator extends FlexTable {
 
     protected void renderValidationMessage() {
         if (component.isVisited() && !component.isValid()) {
-            validationLabel.setText(component.getValidationMessage());
+            validationLabel.setText(component.getValidationResults().getMessagesText(false, false));
         } else {
             validationLabel.setText(null);
         }

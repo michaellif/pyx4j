@@ -23,17 +23,20 @@ package com.pyx4j.forms.client.ui;
 import java.util.ArrayList;
 
 import com.pyx4j.commons.LoopCounter;
+import com.pyx4j.i18n.shared.I18n;
 
 public class ValidationResults {
 
-    private final ArrayList<String> messages = new ArrayList<String>();
+    private static final I18n i18n = I18n.get(ValidationResults.class);
+
+    private final ArrayList<Message> messages = new ArrayList<Message>();
 
     public ValidationResults() {
 
     }
 
-    public void appendValidationError(String message) {
-        messages.add(message);
+    public void appendValidationError(String title, String message, String location) {
+        messages.add(new Message(title, message, location));
     }
 
     public void appendValidationErrors(ValidationResults results) {
@@ -42,31 +45,31 @@ public class ValidationResults {
         }
     }
 
-    public ArrayList<String> getMessages() {
+    public ArrayList<Message> getMessages() {
         return messages;
     }
 
-    public String getMessagesText(boolean html) {
+    public String getMessagesText(boolean html, boolean showLocation) {
         StringBuilder messagesBuffer = new StringBuilder();
         LoopCounter c = new LoopCounter(messages);
         if (html) {
-            messagesBuffer.append("<ul>");
-            for (String m : messages) {
-                messagesBuffer.append("<li>").append(m).append("</li>");
+            messagesBuffer.append("<ul style='text-align:left'>");
+            for (Message m : messages) {
+                messagesBuffer.append("<li>").append(m.getMessageString(showLocation)).append("</li>");
             }
             messagesBuffer.append("</ul>");
         } else {
-            for (String m : messages) {
+            for (Message m : messages) {
                 switch (c.next()) {
                 case SINGLE:
-                    messagesBuffer.append(m);
+                    messagesBuffer.append(m.getMessageString(showLocation));
                     break;
                 case FIRST:
                 case ITEM:
-                    messagesBuffer.append("- ").append(m).append(";\n");
+                    messagesBuffer.append("- ").append(m.getMessageString(showLocation)).append(";\n");
                     break;
                 case LAST:
-                    messagesBuffer.append("- ").append(m);
+                    messagesBuffer.append("- ").append(m.getMessageString(showLocation));
                     break;
                 }
             }
@@ -76,5 +79,32 @@ public class ValidationResults {
 
     public boolean isValid() {
         return messages.size() == 0;
+    }
+
+    private class Message {
+
+        String title;
+
+        String description;
+
+        String location;
+
+        Message(String title, String description, String location) {
+            this.title = title;
+            this.description = description;
+            this.location = location;
+        }
+
+        public String getMessageString(boolean showLocation) {
+            StringBuilder builder = new StringBuilder();
+            if (title != null && !title.isEmpty()) {
+                builder.append("'");
+                if (showLocation && location != null && !location.isEmpty()) {
+                    builder.append(location).append("/");
+                }
+                builder.append(title).append("' ").append(i18n.tr("is not valid")).append(", ").append(description);
+            }
+            return builder.toString();
+        }
     }
 }

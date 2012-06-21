@@ -63,6 +63,8 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
 
     private String title;
 
+    private String locationHint;
+
     private String tooltip;
 
     private CContainer<?, ?> parent;
@@ -87,7 +89,7 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
 
     private IDebugId debugIdSuffix;
 
-    private String mandatoryValidationMessage = i18n.tr("This field is Mandatory");
+    private String mandatoryValidationMessage = i18n.tr("this field can't be empty");
 
     private DATA_TYPE value = null;
 
@@ -129,6 +131,15 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
     public void setTitle(String title) {
         this.title = title;
         PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.title);
+    }
+
+    public String getLocationHint() {
+        return locationHint;
+    }
+
+    public void setLocationHint(String locationHint) {
+        this.locationHint = locationHint;
+        PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.locationHint);
     }
 
     public String getWidth() {
@@ -574,9 +585,13 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
         return value1 == value2;
     }
 
-    public String getValidationMessage() {
-        return validationFailure == null ? null : validationFailure.getMessage();
+    public ValidationResults getValidationResults() {
+        ValidationResults results = new ValidationResults();
+        if (validationFailure != null) {
+            results.appendValidationError(getTitle(), validationFailure.getMessage(), getLocationHint());
 
+        }
+        return results;
     }
 
     public void setMandatoryValidationMessage(String message) {

@@ -32,7 +32,6 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
@@ -148,26 +147,13 @@ public abstract class CContainer<DATA_TYPE, WIDGET_TYPE extends Widget & INative
         return super.isValid();
     }
 
+    @Override
     public ValidationResults getValidationResults() {
-        ValidationResults validationResults = new ValidationResults();
-        String message = getValidationMessage();
-        if (message != null) {
-            if (CommonsStringUtils.isStringSet(getTitle())) {
-                validationResults.appendValidationError(i18n.tr("''{0}'' is not valid, {1}", getTitle(), message));
-            } else {
-                validationResults.appendValidationError(message);
-            }
-        }
-
+        ValidationResults validationResults = super.getValidationResults();
         if (getComponents() != null) {
             for (CComponent<?, ?> component : this.getComponents()) {
-                if (component.isValid()) {
-                    continue;
-                }
-                if (component instanceof CContainer<?, ?>) {
-                    validationResults.appendValidationErrors(((CContainer<?, ?>) component).getValidationResults());
-                } else if (component.isVisited()) {
-                    validationResults.appendValidationError(i18n.tr("Field ''{0}'' is not valid, {1}", component.getTitle(), component.getValidationMessage()));
+                if (!component.isValid() && component.isVisited()) {
+                    validationResults.appendValidationErrors(component.getValidationResults());
                 }
             }
         }
