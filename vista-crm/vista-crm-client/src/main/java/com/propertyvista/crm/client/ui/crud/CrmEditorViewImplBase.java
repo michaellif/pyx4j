@@ -52,7 +52,7 @@ public class CrmEditorViewImplBase<E extends IEntity> extends EditorViewImplBase
             public void onClick(ClickEvent event) {
                 getForm().setVisited(true);
                 if (!getForm().isValid()) {
-                    throw new UserRuntimeException(getForm().getValidationResults().getMessagesText(true));
+                    throw new UserRuntimeException(getForm().getValidationResults().getMessagesText(true, true));
                 }
                 getPresenter().apply();
             }
@@ -65,7 +65,7 @@ public class CrmEditorViewImplBase<E extends IEntity> extends EditorViewImplBase
             public void onClick(ClickEvent event) {
                 getForm().setVisited(true);
                 if (!getForm().isValid()) {
-                    throw new UserRuntimeException(getForm().getValidationResults().getMessagesText(true));
+                    throw new UserRuntimeException(getForm().getValidationResults().getMessagesText(true, true));
                 }
                 getPresenter().save();
             }

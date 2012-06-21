@@ -72,7 +72,7 @@ public class WizardStepViewImpl<E extends IEntity, T extends WizardStepPresenter
         form.setVisited(true);
         if (!form.isValid()) {
             Window.scrollTo(0, 0);
-            throw new UserRuntimeException(form.getValidationResults().getMessagesText(true));
+            throw new UserRuntimeException(form.getValidationResults().getMessagesText(true, false));
         }
 
         doAction();

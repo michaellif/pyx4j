@@ -61,7 +61,7 @@ public class BasicViewImpl<E extends IEntity> extends FlowPanel implements View<
             public void onClick(ClickEvent event) {
                 if (!form.isValid()) {
                     Window.scrollTo(0, 0);
-                    throw new UserRuntimeException(form.getValidationResults().getMessagesText(true));
+                    throw new UserRuntimeException(form.getValidationResults().getMessagesText(true, false));
                 } else {
                     presenter.save(form.getValue());
                 }

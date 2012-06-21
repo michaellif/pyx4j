@@ -86,7 +86,7 @@ public abstract class AbstractLoginViewImpl extends FormFlexPanel implements Log
     private void submit() {
         form.setVisited(true);
         if (!form.isValid()) {
-            throw new UserRuntimeException(form.getValidationResults().getMessagesText(true));
+            throw new UserRuntimeException(form.getValidationResults().getMessagesText(true, false));
         }
         presenter.login(form.getValue());
     }
