@@ -49,7 +49,7 @@ public class AccountViewerActivity extends CrmViewerActivity<EmployeeDTO> implem
 
     @Override
     public void goToLoginHistory(CrmUser userStub) {
-        AppPlace loginHistoryPlace = new CrmSiteMap.Organization.Employee.LoginHistory();
+        AppPlace loginHistoryPlace = new CrmSiteMap.Account.LoginAttemptsLog();
         loginHistoryPlace.formPlace(userStub.getPrimaryKey());
         AppSite.getPlaceController().goTo(loginHistoryPlace);
     }
@@ -57,7 +57,7 @@ public class AccountViewerActivity extends CrmViewerActivity<EmployeeDTO> implem
     @Override
     public void goToAccountRecoveryOptions(String password) {
         CrudAppPlace place = new CrmSiteMap.Account.AccountRecoveryOptions().formViewerPlace(new Key(-1));
-        place.placeArg(CrmSiteMap.Account.AccountRecoveryOptions.PASSWORD_ARG_KEY, password);
+        place.placeArg("password", password);
         AppSite.getPlaceController().goTo(place);
     }
 

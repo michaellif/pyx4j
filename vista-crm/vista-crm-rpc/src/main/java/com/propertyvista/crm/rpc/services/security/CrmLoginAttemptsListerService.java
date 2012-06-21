@@ -7,14 +7,16 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jun 19, 2012
+ * Created on Jun 21, 2012
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.common.client.ui.components.security;
+package com.propertyvista.crm.rpc.services.security;
 
-import com.google.gwt.user.client.ui.IsWidget;
+import com.pyx4j.entity.rpc.AbstractListService;
 
-public interface LoginAttemptsView extends IsWidget {
+import com.propertyvista.crm.rpc.dto.account.LoginAttemptDTO;
+
+public interface CrmLoginAttemptsListerService extends AbstractListService<LoginAttemptDTO> {
 
 }

@@ -58,6 +58,7 @@ import com.propertyvista.crm.rpc.services.policies.CrmPolicyRetrieveService;
 import com.propertyvista.crm.rpc.services.policies.policy.EmailTemplatesPolicyCrudService;
 import com.propertyvista.crm.rpc.services.pub.CrmAuthenticationService;
 import com.propertyvista.crm.rpc.services.security.CrmAccountRecoveryOptionsUserService;
+import com.propertyvista.crm.rpc.services.security.CrmLoginAttemptsListerService;
 import com.propertyvista.crm.rpc.services.security.CrmPasswordChangeUserService;
 import com.propertyvista.crm.rpc.services.security.CrmPasswordResetService;
 import com.propertyvista.crm.rpc.services.unit.UnitCrudService;
@@ -221,6 +222,7 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(PortfolioCrudService.class));
 
         grant(VistaCrmBehavior.Organization, new IServiceExecutePermission(ManagedCrmUserService.class));
+        grant(VistaCrmBehavior.Organization, new IServiceExecutePermission(CrmLoginAttemptsListerService.class));
 
 // -- Crm Users, Self management
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(CrmPasswordChangeUserService.class));

@@ -49,7 +49,7 @@ public class EmployeeViewerActivity extends CrmViewerActivity<EmployeeDTO> imple
 
     @Override
     public void goToLoginHistory(CrmUser userStub) {
-        AppPlace loginHistoryPlace = new CrmSiteMap.Organization.Employee.LoginHistory();
+        AppPlace loginHistoryPlace = new CrmSiteMap.Account.LoginAttemptsLog();
         loginHistoryPlace.formPlace(userStub.getPrimaryKey());
         AppSite.getPlaceController().goTo(loginHistoryPlace);
     }

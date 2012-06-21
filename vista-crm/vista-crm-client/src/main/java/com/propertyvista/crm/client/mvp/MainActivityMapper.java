@@ -29,6 +29,7 @@ import com.propertyvista.crm.client.activity.crud.account.AccountEditorActivity;
 import com.propertyvista.crm.client.activity.crud.account.AccountRecoveryOptionsEditorActivity;
 import com.propertyvista.crm.client.activity.crud.account.AccountRecoveryOptionsViewerActivity;
 import com.propertyvista.crm.client.activity.crud.account.AccountViewerActivity;
+import com.propertyvista.crm.client.activity.crud.account.LoginAttemptsListerActivity;
 import com.propertyvista.crm.client.activity.crud.billing.BillViewerActivity;
 import com.propertyvista.crm.client.activity.crud.billing.adjustment.LeaseAdjustmentEditorActivity;
 import com.propertyvista.crm.client.activity.crud.billing.adjustment.LeaseAdjustmentViewerActivity;
@@ -926,6 +927,14 @@ public class MainActivityMapper implements AppActivityMapper {
                         case editor:
                             activity = new AccountRecoveryOptionsEditorActivity(crudPlace);
                             break;
+                        }
+
+                    } else if (place instanceof CrmSiteMap.Account.LoginAttemptsLog) {
+                        switch (crudPlace.getType()) {
+                        case lister:
+                            activity = new LoginAttemptsListerActivity(crudPlace);
+                            break;
+
                         }
 
                     } // CRUD APP PLACE IF ENDS HERE

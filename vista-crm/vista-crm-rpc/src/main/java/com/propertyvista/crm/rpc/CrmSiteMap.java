@@ -281,9 +281,6 @@ public class CrmSiteMap implements SiteMap {
         @NavigationItem(navigLabel = "Employees")
         public static class Employee extends CrmCrudAppPlace {
 
-            public static class LoginHistory extends CrmCrudAppPlace {
-
-            }
         }
 
         @PlaceProperties(caption = "Portfolio")
@@ -331,7 +328,10 @@ public class CrmSiteMap implements SiteMap {
 
         public static class AccountRecoveryOptions extends CrmCrudAppPlace {
 
-            public static final String PASSWORD_ARG_KEY = "password";
+        }
+
+        public static class LoginAttemptsLog extends CrmCrudAppPlace {
+
         }
 
     }

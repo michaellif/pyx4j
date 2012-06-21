@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.server.util;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -61,14 +62,19 @@ public class EntityDto2DboCriteriaConverter<DBO extends IEntity, DTO extends IEn
 
     public Collection<Criterion> convertDTOSearchCriteria(Collection<Criterion> dtoSearchCriteria) {
         Collection<Criterion> dboFilters = new ArrayList<Criterion>();
+        if (dtoSearchCriteria == null) {
+            return dboFilters;
+        }
         for (Criterion cr : dtoSearchCriteria) {
             if (cr instanceof PropertyCriterion) {
                 PropertyCriterion propertyCriterion = (PropertyCriterion) cr;
-                Path dboPath = dboPath(new Path(propertyCriterion.getPropertyPath()));
-                if (dboPath == null) {
+                Path dtoPath = new Path(propertyCriterion.getPropertyPath());
+                PropertyMapper mapper = getMapperForPath(dtoPath);
+                if (mapper == null) {
                     throw new IllegalStateException("DTO property " + propertyCriterion.getPropertyPath().toString() + " is not bound to DBO property");
                 }
-                dboFilters.add(new PropertyCriterion(dboPath.toString(), propertyCriterion.getRestriction(), propertyCriterion.getValue()));
+                dboFilters.add(new PropertyCriterion(mapper.getDboMemberPath(dtoPath).toString(), propertyCriterion.getRestriction(), mapper
+                        .convertValue(propertyCriterion.getValue())));
 
             } else if (cr instanceof OrCriterion) {
                 OrCriterion criterion = new OrCriterion();
@@ -84,10 +90,14 @@ public class EntityDto2DboCriteriaConverter<DBO extends IEntity, DTO extends IEn
 
     public List<Sort> convertDTOSortingCriteria(List<Sort> dtoSortingCriteria) {
         List<Sort> dboSortingCriteria = new ArrayList<Sort>();
+        if (dtoSortingCriteria == null) {
+            return dboSortingCriteria;
+        }
         if (dtoSortingCriteria != null && !dtoSortingCriteria.isEmpty()) {
 
             for (Sort s : dtoSortingCriteria) {
-                Path dboPath = dboPath(new Path(s.getPropertyPath()));
+                Path dtoPath = new Path(s.getPropertyPath());
+                Path dboPath = getMapperForPath(dtoPath).getDboMemberPath(dtoPath);
                 if (dboPath == null) {
                     throw new IllegalStateException("DTO property " + s.getPropertyPath() + " is not bound to DBO property");
                 }
@@ -97,21 +107,23 @@ public class EntityDto2DboCriteriaConverter<DBO extends IEntity, DTO extends IEn
         return dboSortingCriteria;
     }
 
-    private Path dboPath(Path dtoPath) {
+    private PropertyMapper getMapperForPath(Path dtoPath) {
+        // TODO implement as a map 
         Path dboPath = null;
         for (PropertyMapper mapper : mappers) {
             dboPath = mapper.getDboMemberPath(dtoPath);
             if (dboPath != null) {
-                break;
+                return mapper;
             }
         }
-        return dboPath;
+        return null;
     }
 
     public static interface PropertyMapper {
 
         Path getDboMemberPath(Path dtoMemberPath);
 
+        Serializable convertValue(Serializable value);
     }
 
     private static class DtoBinderMapper implements PropertyMapper {
@@ -125,6 +137,11 @@ public class EntityDto2DboCriteriaConverter<DBO extends IEntity, DTO extends IEn
         @Override
         public Path getDboMemberPath(Path dtoMemberPath) {
             return binder.getBoundDboMemberPath(dtoMemberPath);
+        }
+
+        @Override
+        public Serializable convertValue(Serializable value) {
+            return value;
         }
 
     }

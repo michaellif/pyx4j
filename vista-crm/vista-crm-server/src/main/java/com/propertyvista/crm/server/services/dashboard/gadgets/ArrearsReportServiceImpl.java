@@ -15,6 +15,7 @@ package com.propertyvista.crm.server.services.dashboard.gadgets;
 
 import static com.propertyvista.crm.server.util.EntityDto2DboCriteriaConverter.makeMapper;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Collection;
@@ -69,8 +70,8 @@ public class ArrearsReportServiceImpl implements ArrearsReportService {
             bind(dtoProto.billingAccount().lease().unit().building().info().name(), dboProto.billingAccount().lease().unit().building().info().name());
             bind(dtoProto.billingAccount().lease().unit().building().info().address().streetNumber(), dboProto.billingAccount().lease().unit().building()
                     .info().address().streetNumber());
-            bind(dtoProto.billingAccount().lease().unit().building().info().address().streetName(), dboProto.billingAccount().lease().unit().building()
-                    .info().address().streetName());
+            bind(dtoProto.billingAccount().lease().unit().building().info().address().streetName(), dboProto.billingAccount().lease().unit().building().info()
+                    .address().streetName());
             bind(dtoProto.billingAccount().lease().unit().building().info().address().province().name(), dboProto.billingAccount().lease().unit().building()
                     .info().address().province().name());
             bind(dtoProto.billingAccount().lease().unit().building().info().address().country().name(), dboProto.billingAccount().lease().unit().building()
@@ -289,6 +290,11 @@ public class ArrearsReportServiceImpl implements ArrearsReportService {
                         return null;
                     }
                 }
+
+                @Override
+                public Serializable convertValue(Serializable value) {
+                    return value;
+                }
             };
         } else {
             bucketMapper = new PropertyMapper() {
@@ -300,6 +306,11 @@ public class ArrearsReportServiceImpl implements ArrearsReportService {
                     } else {
                         return null;
                     }
+                }
+
+                @Override
+                public Serializable convertValue(Serializable value) {
+                    return value;
                 }
             };
         }
