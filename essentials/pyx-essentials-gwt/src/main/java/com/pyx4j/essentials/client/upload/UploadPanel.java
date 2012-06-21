@@ -27,6 +27,7 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.user.client.ui.FileUpload;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -89,7 +90,7 @@ public class UploadPanel<U extends IEntity, R extends IEntity> extends SimplePan
     public UploadPanel(UploadService<U, R> service) {
         this.service = service;
         uploadForm = new FormPanel();
-        uploadForm.setAction("upload/" + ((IServiceBase) service).getServiceClassId());
+        uploadForm.setAction("upload/" + GWT.getModuleName() + "/" + ((IServiceBase) service).getServiceClassId());
         uploadForm.setEncoding(FormPanel.ENCODING_MULTIPART);
         uploadForm.setMethod(FormPanel.METHOD_POST);
         uploadForm.addSubmitCompleteHandler(this);
@@ -121,7 +122,7 @@ public class UploadPanel<U extends IEntity, R extends IEntity> extends SimplePan
             if (!path.endsWith("/")) {
                 path = path + "/";
             }
-            uploadForm.setAction(path + ((IServiceBase) service).getServiceClassId());
+            uploadForm.setAction(path + GWT.getModuleName() + "/" + ((IServiceBase) service).getServiceClassId());
         }
     }
 

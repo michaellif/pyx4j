@@ -63,7 +63,7 @@ public class IServiceAdapterImpl implements IServiceAdapter {
         String serviceMethodName;
 
         // decode IService class name and  Method
-        String serviceInterfaceClassName = ServiceRegistry.decodeServiceInterfaceClassName(request.getServiceClassId());
+        String serviceInterfaceClassName = ServicePolicy.decodeServiceInterfaceClassName(request.getServiceClassId());
 
         serviceMethodName = request.getServiceMethodId();
 

@@ -52,7 +52,7 @@ import com.pyx4j.essentials.server.deferred.DeferredProcessRegistry;
 import com.pyx4j.essentials.server.upload.UploadReciver.ProcessingStatus;
 import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.rpc.server.ServiceRegistry;
+import com.pyx4j.rpc.server.ServicePolicy;
 import com.pyx4j.rpc.shared.IServiceExecutePermission;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.security.shared.SecurityController;
@@ -107,7 +107,12 @@ public abstract class AbstractUploadServlet extends HttpServlet {
                 out.println(i18n.tr("Invalid Request Type"));
                 return;
             }
-            String serviceClassName = ServiceRegistry.decodeServiceInterfaceClassName(request.getPathInfo().substring(1));
+            String uploadPath = request.getPathInfo().substring(1);
+            int cIdEnd = uploadPath.lastIndexOf('/');
+            String moduleBaseURL = uploadPath.substring(0, cIdEnd + 1);
+            String serviceInterfaceId = uploadPath.substring(cIdEnd + 1);
+            ServicePolicy.loadServicePolicyToRequest(this.getServletContext(), moduleBaseURL);
+            String serviceClassName = ServicePolicy.decodeServiceInterfaceClassName(serviceInterfaceId);
             Class<UploadService<?, ?>> serviceClass = (Class<UploadService<?, ?>>) Class.forName(serviceClassName);
             SecurityController.assertPermission(new IServiceExecutePermission(serviceClass));
             Class<? extends UploadReciver<?, ?>> reciverClass = mappedUploads.get(serviceClass);

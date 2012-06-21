@@ -20,14 +20,9 @@
  */
 package com.pyx4j.rpc.server;
 
-import java.io.InputStream;
 import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.Map;
-import java.util.Properties;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -43,7 +38,6 @@ import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.server.rpc.IServiceFactory;
 import com.pyx4j.config.shared.ApplicationMode;
-import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.gwt.server.RequestDebug;
 import com.pyx4j.rpc.shared.DevInfoUnRecoverableRuntimeException;
 import com.pyx4j.rpc.shared.RemoteService;
@@ -57,10 +51,6 @@ public class RemoteServiceServlet extends com.google.gwt.user.server.rpc.RemoteS
     private static final Logger log = LoggerFactory.getLogger(RemoteServiceServlet.class);
 
     private RemoteService implementation;
-
-    private final transient Map<String, Map<String, String>> servicePolicyCache = new Hashtable<String, Map<String, String>>();
-
-    public static String SERVICE_INTERFACE_CLASSNAMES_REQUEST_ATTRIBUTE = "pyx.ServicePolicy";
 
     @Override
     public void init(ServletConfig config) throws ServletException {
@@ -89,60 +79,33 @@ public class RemoteServiceServlet extends com.google.gwt.user.server.rpc.RemoteS
     // GWT makes it impossible to Override any other method in RemoteServiceServlet and access moduleBaseURL from RCP request.
     @Override
     protected void onBeforeRequestDeserialized(String serializedRequest) {
+        // 6|1|12|http://localhost:8888/g.site/|2005C2913F3EF6EE0AB1510ECABAE604|_|
+        int beginModuleBaseURL = 0;
+        for (int i = 0; i < 3; i++) {
+            beginModuleBaseURL = serializedRequest.indexOf('|', beginModuleBaseURL) + 1;
+        }
+        String moduleBaseURL = serializedRequest.substring(beginModuleBaseURL, serializedRequest.indexOf('|', beginModuleBaseURL));
+        String modulePath;
         try {
-            // 6|1|12|http://localhost:8888/g.site/|2005C2913F3EF6EE0AB1510ECABAE604|_|
-            int beginModuleBaseURL = 0;
-            for (int i = 0; i < 3; i++) {
-                beginModuleBaseURL = serializedRequest.indexOf('|', beginModuleBaseURL) + 1;
-            }
-            String moduleBaseURL = serializedRequest.substring(beginModuleBaseURL, serializedRequest.indexOf('|', beginModuleBaseURL));
-            String modulePath = new URL(moduleBaseURL).getPath();
-
-            // Allow for redirected requests environments
-            String forwardedContext = Context.getRequest().getHeader("x-forwarded-context");
-            if (forwardedContext != null) {
-                modulePath = forwardedContext + modulePath;
-            }
-            String moduleRelativePath;
-            String contextPath = Context.getRequest().getContextPath();
-            if (modulePath.contains(contextPath)) {
-                moduleRelativePath = modulePath.substring(contextPath.length());
-            } else {
-                moduleRelativePath = modulePath;
-            }
-
-            Map<String, String> servicePolicy = servicePolicyCache.get(moduleRelativePath);
-            if (servicePolicy == null) {
-                InputStream is = this.getServletContext().getResourceAsStream(moduleRelativePath + "pyx-service-manifest.rpc");
-                if (is == null) {
-                    log.warn("service-manifest {} not found", moduleRelativePath);
-                } else {
-                    try {
-                        Properties prop = new Properties();
-                        prop.load(is);
-                        if (prop.size() == 0) {
-                            log.warn("service-manifest is empty");
-                        } else {
-                            log.debug("{} service-manifest has {} service", moduleRelativePath, prop.size());
-                        }
-                        servicePolicy = new HashMap<String, String>();
-                        for (Map.Entry<Object, Object> me : prop.entrySet()) {
-                            if ((me.getKey() instanceof String) && (me.getValue() instanceof String)) {
-                                servicePolicy.put((String) me.getKey(), (String) me.getValue());
-                            }
-                        }
-                        servicePolicyCache.put(moduleRelativePath, servicePolicy);
-                        log.trace("servicePolicy {}", servicePolicy);
-                    } finally {
-                        IOUtils.closeQuietly(is);
-                    }
-                }
-            }
-            Context.getRequest().setAttribute(SERVICE_INTERFACE_CLASSNAMES_REQUEST_ATTRIBUTE, servicePolicy);
-        } catch (Throwable t) {
-            log.error("unable to load service-manifest", t);
+            modulePath = new URL(moduleBaseURL).getPath();
+        } catch (MalformedURLException e) {
+            log.error("error", e);
             throw new IncompatibleRemoteServiceException();
         }
+
+        // Allow for redirected requests environments
+        String forwardedContext = Context.getRequest().getHeader("x-forwarded-context");
+        if (forwardedContext != null) {
+            modulePath = forwardedContext + modulePath;
+        }
+        String moduleRelativePath;
+        String contextPath = Context.getRequest().getContextPath();
+        if (modulePath.contains(contextPath)) {
+            moduleRelativePath = modulePath.substring(contextPath.length());
+        } else {
+            moduleRelativePath = modulePath;
+        }
+        ServicePolicy.loadServicePolicyToRequest(this.getServletContext(), moduleRelativePath);
     }
 
     @Override
@@ -174,7 +137,7 @@ public class RemoteServiceServlet extends com.google.gwt.user.server.rpc.RemoteS
 
     @Override
     public Serializable execute(String serviceInterfaceClassName, Serializable serviceRequest, String userVisitHashCode) throws RuntimeException {
-        String realServiceName = ServiceRegistry.decodeServiceInterfaceClassName(serviceInterfaceClassName);
+        String realServiceName = ServicePolicy.decodeServiceInterfaceClassName(serviceInterfaceClassName);
         if (realServiceName != null) {
             serviceInterfaceClassName = realServiceName;
         } else if ((ServerSideConfiguration.instance().getEnvironmentType() == ServerSideConfiguration.EnvironmentType.GAEDevelopment)

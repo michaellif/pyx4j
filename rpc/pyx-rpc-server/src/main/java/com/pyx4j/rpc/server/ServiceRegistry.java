@@ -28,10 +28,7 @@ import java.util.Vector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.rpc.shared.Service;
-import com.pyx4j.rpc.shared.UnRecoverableRuntimeException;
-import com.pyx4j.server.contexts.Context;
 
 public class ServiceRegistry {
 
@@ -41,19 +38,6 @@ public class ServiceRegistry {
 
     private ServiceRegistry() {
 
-    }
-
-    public static String decodeServiceInterfaceClassName(String serviceClassId) {
-        @SuppressWarnings("unchecked")
-        Map<String, String> servicePolicy = (Map<String, String>) Context.getRequest().getAttribute(
-                RemoteServiceServlet.SERVICE_INTERFACE_CLASSNAMES_REQUEST_ATTRIBUTE);
-        if (servicePolicy != null) {
-            return servicePolicy.get(serviceClassId);
-        } else if (ApplicationMode.isDevelopment()) {
-            return serviceClassId;
-        } else {
-            throw new UnRecoverableRuntimeException("Fatal system error");
-        }
     }
 
     public static void register(String name, Class<? extends Service<?, ?>> srv) {
