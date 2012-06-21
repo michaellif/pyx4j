@@ -68,7 +68,7 @@ public class PaymentReportServiceImpl implements PaymentReportService {
             @Override
             protected void bind() {
                 bind(dtoProto.merchantAccount().accountNumber(), dboProto.merchantAccount().accountNumber());
-                bind(dtoProto.billingAccount().lease().unit().belongsTo().propertyCode(), dboProto.billingAccount().lease().unit().belongsTo().propertyCode());
+                bind(dtoProto.billingAccount().lease().unit().building().propertyCode(), dboProto.billingAccount().lease().unit().building().propertyCode());
                 bind(dtoProto.billingAccount().lease().leaseId(), dboProto.billingAccount().lease().leaseId());
                 bind(dtoProto.paymentMethod().type(), dboProto.paymentMethod().type());
                 bind(dtoProto.paymentMethod().customer(), dboProto.paymentMethod().customer());
@@ -100,7 +100,7 @@ public class PaymentReportServiceImpl implements PaymentReportService {
         // set up search criteria
         criteria.add(PropertyCriterion.eq(criteria.proto().lastStatusChangeDate(), targetDate));
         if (!buildings.isEmpty()) {
-            criteria.add(PropertyCriterion.in(criteria.proto().billingAccount().lease().unit().belongsTo(), buildings));
+            criteria.add(PropertyCriterion.in(criteria.proto().billingAccount().lease().unit().building(), buildings));
         }
         if (!paymentTypeCriteria.isEmpty()) {
             criteria.add(PropertyCriterion.in(criteria.proto().paymentMethod().type(), paymentTypeCriteria));
@@ -186,7 +186,7 @@ public class PaymentReportServiceImpl implements PaymentReportService {
         Persistence.service().retrieve(paymentRecordDBO.billingAccount());
         Persistence.service().retrieve(paymentRecordDBO.billingAccount().lease());
         Persistence.service().retrieve(paymentRecordDBO.billingAccount().lease().unit());
-        Persistence.service().retrieve(paymentRecordDBO.billingAccount().lease().unit().belongsTo());
+        Persistence.service().retrieve(paymentRecordDBO.billingAccount().lease().unit().building());
         Persistence.service().retrieve(paymentRecordDBO.paymentMethod().customer());
 
         PaymentRecordForReportDTO paymentRecordDTO = dtoBinder.createDTO(paymentRecordDBO);

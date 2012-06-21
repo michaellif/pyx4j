@@ -171,7 +171,7 @@ public class BuildingImporter extends ImportPersister {
                     List<FloorplanAmenity> items = new Vector<FloorplanAmenity>();
                     for (FloorplanAmenityIO iIO : floorplanIO.amenities()) {
                         FloorplanAmenity i = new FloorplanAmenityConverter().createDBO(iIO);
-                        i.belongsTo().set(floorplan);
+                        i.floorplan().set(floorplan);
                         items.add(i);
                     }
                     Persistence.service().persist(items);
@@ -198,7 +198,7 @@ public class BuildingImporter extends ImportPersister {
                         }
 
                         AptUnit i = new AptUnitConverter().createDBO(aptUnitIO);
-                        i.belongsTo().set(building);
+                        i.building().set(building);
                         i.floorplan().set(floorplan);
                         i.info()._bathrooms().set(floorplan.bathrooms());
                         i.info()._bedrooms().set(floorplan.bedrooms());

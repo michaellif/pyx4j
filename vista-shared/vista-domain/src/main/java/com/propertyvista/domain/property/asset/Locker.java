@@ -51,7 +51,7 @@ public interface Locker extends IEntity {
     @ReadOnly
     @Detached
     @JoinColumn
-    LockerArea belongsTo();
+    LockerArea lockerArea();
 
     @ToString(index = 1)
     @MemberColumn(name = "spotType")

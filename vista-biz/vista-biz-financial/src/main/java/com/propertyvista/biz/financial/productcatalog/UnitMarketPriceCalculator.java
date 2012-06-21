@@ -53,7 +53,7 @@ public class UnitMarketPriceCalculator {
         // All units from this building
         {
             EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().belongsTo(), building));
+            criteria.add(PropertyCriterion.eq(criteria.proto().building(), building));
             units = Persistence.service().query(criteria);
         }
 

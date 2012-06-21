@@ -42,7 +42,7 @@ public class LeaseApplicationLister extends ListerBase<LeaseApplicationDTO> {
             new Builder(proto().leaseId()).build(),
             new Builder(proto().type()).build(),
             
-            new Builder(proto().unit().belongsTo().propertyCode()).build(),
+            new Builder(proto().unit().building().propertyCode()).build(),
             new Builder(proto().unit()).build(),
             
             new Builder(proto().leaseApplication().status(), true).build(),

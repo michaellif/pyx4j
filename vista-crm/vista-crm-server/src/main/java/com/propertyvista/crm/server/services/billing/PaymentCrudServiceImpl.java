@@ -72,13 +72,13 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
         Persistence.service().retrieve(dto.billingAccount());
         Persistence.service().retrieve(dto.billingAccount().lease());
         Persistence.service().retrieve(dto.billingAccount().lease().unit());
-        Persistence.service().retrieve(dto.billingAccount().lease().unit().belongsTo());
+        Persistence.service().retrieve(dto.billingAccount().lease().unit().building());
         Persistence.service().retrieve(dto.leaseParticipant());
         Persistence.service().retrieve(dto.paymentMethod());
 
         dto.leaseId().set(dto.billingAccount().lease().leaseId());
         dto.leaseStatus().set(dto.billingAccount().lease().version().status());
-        dto.propertyCode().set(dto.billingAccount().lease().unit().belongsTo().propertyCode());
+        dto.propertyCode().set(dto.billingAccount().lease().unit().building().propertyCode());
         dto.unitNumber().set(dto.billingAccount().lease().unit().info().number());
     }
 
@@ -107,14 +107,14 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
 
         Persistence.service().retrieve(billingAccount.lease());
         Persistence.service().retrieve(billingAccount.lease().unit());
-        Persistence.service().retrieve(billingAccount.lease().unit().belongsTo());
+        Persistence.service().retrieve(billingAccount.lease().unit().building());
 
         PaymentRecordDTO dto = EntityFactory.create(PaymentRecordDTO.class);
 
         dto.billingAccount().set(billingAccount);
         dto.leaseId().set(billingAccount.lease().leaseId());
         dto.leaseStatus().set(billingAccount.lease().version().status());
-        dto.propertyCode().set(billingAccount.lease().unit().belongsTo().propertyCode());
+        dto.propertyCode().set(billingAccount.lease().unit().building().propertyCode());
         dto.unitNumber().set(billingAccount.lease().unit().info().number());
         dto.participants().addAll(retrieveUsers(billingAccount.lease()));
 

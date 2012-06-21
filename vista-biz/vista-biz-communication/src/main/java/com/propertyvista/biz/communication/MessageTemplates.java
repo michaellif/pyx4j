@@ -88,8 +88,8 @@ public class MessageTemplates {
         Persistence.service().retrieve(tenantInLease.leaseV());
         Persistence.service().retrieve(tenantInLease.leaseV().holder());
         Persistence.service().retrieve(tenantInLease.leaseV().holder().unit());
-        Persistence.service().retrieve(tenantInLease.leaseV().holder().unit().belongsTo());
-        EmailTemplate emailTemplate = getEmailTemplate(type, tenantInLease.leaseV().holder().unit().belongsTo());
+        Persistence.service().retrieve(tenantInLease.leaseV().holder().unit().building());
+        EmailTemplate emailTemplate = getEmailTemplate(type, tenantInLease.leaseV().holder().unit().building());
 
         EmailTemplateContext context = EntityFactory.create(EmailTemplateContext.class);
         // populate context properties required by template type
@@ -121,8 +121,8 @@ public class MessageTemplates {
 
         // get building policy node
         Persistence.service().retrieve(lease.unit());
-        Persistence.service().retrieve(lease.unit().belongsTo());
-        Building building = lease.unit().belongsTo();
+        Persistence.service().retrieve(lease.unit().building());
+        Building building = lease.unit().building();
         if (building == null || building.isNull()) {
             throw new Error("No building found");
         }
@@ -168,8 +168,8 @@ public class MessageTemplates {
             Persistence.service().retrieve(til.leaseV());
             Persistence.service().retrieve(til.leaseV().holder());
             Persistence.service().retrieve(til.leaseV().holder().unit());
-            Persistence.service().retrieve(til.leaseV().holder().unit().belongsTo());
-            Building bldNode = til.leaseV().holder().unit().belongsTo();
+            Persistence.service().retrieve(til.leaseV().holder().unit().building());
+            Building bldNode = til.leaseV().holder().unit().building();
             if (bldNode != null && !bldNode.isNull()) {
                 policyNode = bldNode;
             }

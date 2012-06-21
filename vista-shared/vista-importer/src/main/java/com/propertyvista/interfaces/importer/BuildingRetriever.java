@@ -76,7 +76,7 @@ public class BuildingRetriever {
         //Get Amenity
         {
             EntityQueryCriteria<BuildingAmenity> criteria = EntityQueryCriteria.create(BuildingAmenity.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().belongsTo(), building));
+            criteria.add(PropertyCriterion.eq(criteria.proto().building(), building));
             for (BuildingAmenity amenity : Persistence.service().query(criteria)) {
                 buildingIO.amenities().add(new BuildingAmenityConverter().createDTO(amenity));
             }
@@ -84,7 +84,7 @@ public class BuildingRetriever {
         //Parking
         {
             EntityQueryCriteria<Parking> criteria = EntityQueryCriteria.create(Parking.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().belongsTo(), building));
+            criteria.add(PropertyCriterion.eq(criteria.proto().building(), building));
             for (Parking i : Persistence.service().query(criteria)) {
                 buildingIO.parkings().add(new ParkingConverter().createDTO(i));
             }
@@ -108,7 +108,7 @@ public class BuildingRetriever {
             //Get Amenity
             {
                 EntityQueryCriteria<FloorplanAmenity> criteria = EntityQueryCriteria.create(FloorplanAmenity.class);
-                criteria.add(PropertyCriterion.eq(criteria.proto().belongsTo(), floorplan));
+                criteria.add(PropertyCriterion.eq(criteria.proto().floorplan(), floorplan));
                 for (FloorplanAmenity amenity : Persistence.service().query(criteria)) {
                     floorplanIO.amenities().add(new FloorplanAmenityConverter().createDTO(amenity));
                 }
@@ -146,7 +146,7 @@ public class BuildingRetriever {
         //Parking
         {
             EntityQueryCriteria<Parking> criteria = EntityQueryCriteria.create(Parking.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().belongsTo(), building));
+            criteria.add(PropertyCriterion.eq(criteria.proto().building(), building));
             for (Parking i : Persistence.service().query(criteria)) {
                 buildingIO.parkings().add(new ParkingConverter().createDTO(i));
             }
@@ -155,7 +155,7 @@ public class BuildingRetriever {
         // Other Data
         {
             EntityQueryCriteria<Elevator> criteria = EntityQueryCriteria.create(Elevator.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().belongsTo(), building));
+            criteria.add(PropertyCriterion.eq(criteria.proto().building(), building));
             for (Elevator i : Persistence.service().query(criteria)) {
                 buildingIO.elevators().add(strip(i));
             }
@@ -163,7 +163,7 @@ public class BuildingRetriever {
 
         {
             EntityQueryCriteria<Boiler> criteria = EntityQueryCriteria.create(Boiler.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().belongsTo(), building));
+            criteria.add(PropertyCriterion.eq(criteria.proto().building(), building));
             for (Boiler i : Persistence.service().query(criteria)) {
                 buildingIO.boilers().add(strip(i));
             }
@@ -171,7 +171,7 @@ public class BuildingRetriever {
 
         {
             EntityQueryCriteria<Roof> criteria = EntityQueryCriteria.create(Roof.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().belongsTo(), building));
+            criteria.add(PropertyCriterion.eq(criteria.proto().building(), building));
             for (Roof i : Persistence.service().query(criteria)) {
                 buildingIO.roofs().add(strip(i));
             }
@@ -179,7 +179,7 @@ public class BuildingRetriever {
 
         {
             EntityQueryCriteria<LockerArea> criteria = EntityQueryCriteria.create(LockerArea.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().belongsTo(), building));
+            criteria.add(PropertyCriterion.eq(criteria.proto().building(), building));
             for (LockerArea i : Persistence.service().query(criteria)) {
                 buildingIO.lockerAreas().add(strip(i));
             }

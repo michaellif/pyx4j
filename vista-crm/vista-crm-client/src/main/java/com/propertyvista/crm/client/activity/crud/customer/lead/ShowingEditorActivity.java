@@ -43,7 +43,7 @@ public class ShowingEditorActivity extends EditorActivityBase<Showing> implement
                 Showing current = getView().getValue().duplicate();
 
                 current.unit().set(result);
-                current.building().set(result.belongsTo());
+                current.building().set(result.building());
 
                 populateView(current);
             }

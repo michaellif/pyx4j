@@ -34,7 +34,7 @@ public interface UnitTurnoverStats extends IEntity {
     @ReadOnly
     @JoinColumn
     @NotNull
-    Building belongsTo();
+    Building building();
 
     IPrimitive<LogicalDate> updatedOn();
 

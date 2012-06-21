@@ -27,7 +27,7 @@ public class PastLeaseLister extends ListerBase<LeaseDTO> {
         super(LeaseDTO.class, false);
 
         setColumnDescriptors(//@formatter:off
-            new Builder(proto().unit().belongsTo().propertyCode()).build(),
+            new Builder(proto().unit().building().propertyCode()).build(),
             new Builder(proto().unit()).build(),
             
             new Builder(proto().leaseId()).build(),

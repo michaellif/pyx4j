@@ -122,7 +122,7 @@ public interface FloorplanAmenity extends Amenity {
     @Detached
     @Indexed
     @JoinColumn
-    Floorplan belongsTo();
+    Floorplan floorplan();
 
     // internals:
     interface OrderId extends ColumnId {

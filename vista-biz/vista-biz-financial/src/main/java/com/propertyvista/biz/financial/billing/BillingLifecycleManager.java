@@ -84,7 +84,7 @@ public class BillingLifecycleManager {
 
     static void runBilling(final BillingCycle billingCycle, StatisticsRecord dynamicStatisticsRecord) {
         EntityQueryCriteria<Lease> leaseCriteria = EntityQueryCriteria.create(Lease.class);
-        leaseCriteria.add(PropertyCriterion.eq(leaseCriteria.proto().unit().belongsTo(), billingCycle.building()));
+        leaseCriteria.add(PropertyCriterion.eq(leaseCriteria.proto().unit().building(), billingCycle.building()));
         leaseCriteria.add(PropertyCriterion.eq(leaseCriteria.proto().billingAccount().billingType(), billingCycle.billingType()));
         ICursorIterator<Lease> leaseIterator = Persistence.service().query(null, leaseCriteria, AttachLevel.Attached);
         FilterIterator<Lease> filteredLeaseIterator = new FilterIterator<Lease>(leaseIterator, new Filter<Lease>() {
@@ -209,7 +209,7 @@ public class BillingLifecycleManager {
 
                 Persistence.service().persist(bill);
 
-                LeaseBillingPolicy leaseBillingPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(lease.unit().belongsTo(),
+                LeaseBillingPolicy leaseBillingPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(lease.unit().building(),
                         LeaseBillingPolicy.class);
 
                 if (leaseBillingPolicy.confirmationMethod().getValue() == LeaseBillingPolicy.BillConfirmationMethod.automatic) {
@@ -308,11 +308,11 @@ public class BillingLifecycleManager {
 
         if (previousBill == null) {
             if (billingAccount.carryforwardBalance().isNull()) {
-                return getNewLeaseInitialBillingCycle(billingAccount.billingType(), lease.unit().belongsTo(), lease.leaseFrom().getValue(), !billingAccount
+                return getNewLeaseInitialBillingCycle(billingAccount.billingType(), lease.unit().building(), lease.leaseFrom().getValue(), !billingAccount
                         .billingType().billingCycleStartDay().isNull());
 
             } else {
-                return getExistingLeaseInitialBillingCycle(billingAccount.billingType(), lease.unit().belongsTo(), lease.leaseFrom().getValue(), lease
+                return getExistingLeaseInitialBillingCycle(billingAccount.billingType(), lease.unit().building(), lease.leaseFrom().getValue(), lease
                         .creationDate().getValue(), !billingAccount.billingType().billingCycleStartDay().isNull());
             }
         } else {
@@ -371,7 +371,7 @@ public class BillingLifecycleManager {
         if (billingType.isNull()) {
             PaymentFrequency paymentFrequency = lease.paymentFrequency().getValue();
 
-            LeaseBillingPolicy leaseBillingPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(lease.unit().belongsTo(),
+            LeaseBillingPolicy leaseBillingPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(lease.unit().building(),
                     LeaseBillingPolicy.class);
             Integer billingCycleStartDay = leaseBillingPolicy.defaultBillingCycleSartDay().getValue();
             if (billingCycleStartDay == null) {

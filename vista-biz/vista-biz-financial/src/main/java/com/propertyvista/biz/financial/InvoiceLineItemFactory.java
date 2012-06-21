@@ -37,7 +37,7 @@ public class InvoiceLineItemFactory {
         charge.description().setValue(adjustment.reason().name().getValue());
         charge.debitType().setValue(DebitType.accountCharge);
 
-        calculateTax(charge, adjustment.billingAccount().lease().unit().belongsTo());
+        calculateTax(charge, adjustment.billingAccount().lease().unit().building());
 
         return charge;
 

@@ -111,7 +111,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
         }
 
         AptUnit unit = Persistence.secureRetrieve(AptUnit.class, unitId.getPrimaryKey());
-        Persistence.service().retrieve(unit.belongsTo());
+        Persistence.service().retrieve(unit.building());
 
         assert !lease.isValueDetached();
 
@@ -119,7 +119,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
         lease.unit().set(unit);
 
         EntityQueryCriteria<Service> criteria = new EntityQueryCriteria<Service>(Service.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().catalog(), unit.belongsTo().productCatalog()));
+        criteria.add(PropertyCriterion.eq(criteria.proto().catalog(), unit.building().productCatalog()));
         criteria.add(PropertyCriterion.eq(criteria.proto().version().type(), lease.type()));
         servicesLoop: for (Service service : Persistence.service().query(criteria)) {
             EntityQueryCriteria<ProductItem> serviceCriteria = EntityQueryCriteria.create(ProductItem.class);
@@ -140,7 +140,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
                 DataDump.dumpToDirectory("lease-bug", "error", unit);
             }
             throw new UserRuntimeException(i18n.tr("There no service ''{0}'' for selected unit: {1} from Building: {2}", lease.type().getStringView(),
-                    unit.getStringView(), unit.belongsTo().getStringView()));
+                    unit.getStringView(), unit.building().getStringView()));
         }
 
         return lease;
@@ -168,8 +168,8 @@ public class LeaseFacadeImpl implements LeaseFacade {
         if (lease.unit().isValueDetached()) {
             Persistence.service().retrieve(lease.unit());
         }
-        if (lease.unit().belongsTo().isValueDetached()) {
-            Persistence.service().retrieve(lease.unit().belongsTo());
+        if (lease.unit().building().isValueDetached()) {
+            Persistence.service().retrieve(lease.unit().building());
         }
 
         // Service by Service item:

@@ -67,7 +67,7 @@ public class UnitLister extends ListerBase<AptUnitDTO> {
                 public boolean onClickOk() {
                     if (!getSelectedItems().isEmpty()) {
                         AptUnitDTO newUnit = EntityFactory.create(AptUnitDTO.class);
-                        newUnit.belongsTo().set(getSelectedItems().get(0));
+                        newUnit.building().set(getSelectedItems().get(0));
                         getPresenter().editNew(getItemOpenPlaceClass(), newUnit);
                         return true;
                     } else {
@@ -80,7 +80,7 @@ public class UnitLister extends ListerBase<AptUnitDTO> {
                 @Override
                 public void onSuccess(BuildingDTO result) {
                     AptUnitDTO newUnit = EntityFactory.create(AptUnitDTO.class);
-                    newUnit.belongsTo().set(result.duplicate(Building.class));
+                    newUnit.building().set(result.duplicate(Building.class));
                     getPresenter().editNew(getItemOpenPlaceClass(), newUnit);
                 }
             }, parentBuildingPk, RetrieveTraget.View);

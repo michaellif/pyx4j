@@ -234,9 +234,9 @@ public class EmailTemplateRootObjectLoader {
         }
         if (lease.unit().isValueDetached()) {
             Persistence.service().retrieve(lease.unit());
-            Persistence.service().retrieve(lease.unit().belongsTo());
+            Persistence.service().retrieve(lease.unit().building());
         }
-        Building bld = lease.unit().belongsTo();
+        Building bld = lease.unit().building();
         if (bld == null || bld.isNull()) {
             throw new Error("Invalid context. No building found.");
         }

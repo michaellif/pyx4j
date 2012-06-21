@@ -96,7 +96,7 @@ class FeatureItemFolder extends VistaTableFolder<ProductItem> {
                 if (buildingElementClass != null) {
                     if (parent.isEditable()) {
                         CEntityComboBox<BuildingElement> combo = new CEntityComboBox(buildingElementClass);
-                        combo.addCriterion(PropertyCriterion.eq(combo.proto().belongsTo().productCatalog(), parent.getValue().catalog()));
+                        combo.addCriterion(PropertyCriterion.eq(combo.proto().building().productCatalog(), parent.getValue().catalog()));
                         comp = inject(column.getObject(), combo);
                     } else {
                         comp = inject(column.getObject(), new CEntityCrudHyperlink<BuildingElement>(AppPlaceEntityMapper.resolvePlace(buildingElementClass)));

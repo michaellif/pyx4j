@@ -33,7 +33,7 @@ public class SelectUnitListServiceImpl extends AbstractListServiceImpl<AptUnit> 
 
     @Override
     protected void enhanceListRetrieved(AptUnit entity, AptUnit dto) {
-        Persistence.service().retrieve(dto.belongsTo());
+        Persistence.service().retrieve(dto.building());
         Persistence.service().retrieve(dto.floorplan());
         // TODO actually just this is necessary, but it' doesn't implemented still:
         //Persistence.service().retrieve(entity.floorplan().name());

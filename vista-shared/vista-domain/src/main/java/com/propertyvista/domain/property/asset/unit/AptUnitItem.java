@@ -145,7 +145,7 @@ public interface AptUnitItem extends IEntity {
     @ReadOnly
     @Detached
     @JoinColumn
-    AptUnit belongsTo();
+    AptUnit aptUnit();
 
     // ----------- Info --------------------------
 

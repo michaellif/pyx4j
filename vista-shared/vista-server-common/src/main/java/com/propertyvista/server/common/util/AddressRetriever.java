@@ -32,10 +32,10 @@ public class AddressRetriever {
 
         Persistence.service().retrieve(participant.leaseV());
         Persistence.service().retrieve(participant.leaseV().holder());
-        Persistence.service().retrieve(participant.leaseV().holder().unit().belongsTo());
+        Persistence.service().retrieve(participant.leaseV().holder().unit().building());
 
         AddressStructured address = EntityFactory.create(AddressStructured.class);
-        address.set(participant.leaseV().holder().unit().belongsTo().info().address());
+        address.set(participant.leaseV().holder().unit().building().info().address());
         address.suiteNumber().set(participant.leaseV().holder().unit().info().number());
 
         callback.onSuccess(address);

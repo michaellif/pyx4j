@@ -53,7 +53,7 @@ public class BillingCycleViewerActivity extends CrmViewerActivity<BillingCycleDT
 
         leaseLister.clearPreDefinedFilters();
         BillingCycleLeaseDTO proto = EntityFactory.getEntityPrototype(BillingCycleLeaseDTO.class);
-        leaseLister.addPreDefinedFilter(PropertyCriterion.eq(proto.lease().unit().belongsTo(), result.building()));
+        leaseLister.addPreDefinedFilter(PropertyCriterion.eq(proto.lease().unit().building(), result.building()));
         leaseLister.addPreDefinedFilter(PropertyCriterion.eq(proto.lease().billingAccount().billingType(), result.billingType()));
         leaseLister.populate();
     }

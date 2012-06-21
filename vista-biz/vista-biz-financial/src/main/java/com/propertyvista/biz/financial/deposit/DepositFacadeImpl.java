@@ -49,7 +49,7 @@ public class DepositFacadeImpl implements DepositFacade {
     @Override
     public List<Deposit> createRequiredDeposits(ProductItemType productType, Lease lease) {
         // get policy
-        DepositPolicy depositPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(lease.unit().belongsTo(), DepositPolicy.class);
+        DepositPolicy depositPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(lease.unit().building(), DepositPolicy.class);
         List<Deposit> deposits = new ArrayList<Deposit>();
         for (DepositPolicyItem policyItem : depositPolicy.policyItems()) {
             if (!policyItem.productType().equals(productType)) {
@@ -107,7 +107,7 @@ public class DepositFacadeImpl implements DepositFacade {
 
     private DepositPolicyItem getPolicyItem(DepositType depositType, ProductItemType productType, Lease lease) {
         DepositPolicyItem policyItem = null;
-        DepositPolicy depositPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(lease.unit().belongsTo(), DepositPolicy.class);
+        DepositPolicy depositPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(lease.unit().building(), DepositPolicy.class);
         for (DepositPolicyItem pi : depositPolicy.policyItems()) {
             if (pi.depositType().getValue().equals(depositType) && pi.productType().equals(productType)) {
                 policyItem = pi;

@@ -31,7 +31,7 @@ public interface Level4 extends IEntity {
     @Detached
     @Indexed
     @JoinColumn
-    Level3 belongsTo();
+    Level3 level3();
 
     IPrimitive<String> x();
 

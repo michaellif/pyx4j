@@ -89,7 +89,7 @@ public class PropertyFinder {
             // count matched buildings
             Map<Key, MutableInt> amCounter = new HashMap<Key, MutableInt>();
             for (BuildingAmenity am : Persistence.service().query(amCriteria)) {
-                Key key = am.belongsTo().getPrimaryKey();
+                Key key = am.building().getPrimaryKey();
                 MutableInt count = amCounter.get(key);
                 if (count == null) {
                     amCounter.put(key, new MutableInt(1));
@@ -259,7 +259,7 @@ public class PropertyFinder {
         }
 
         EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().belongsTo(), bld));
+        criteria.add(PropertyCriterion.eq(criteria.proto().building(), bld));
         criteria.add(PropertyCriterion.eq(criteria.proto().floorplan(), fp));
         return Persistence.service().query(criteria);
     }
@@ -295,7 +295,7 @@ public class PropertyFinder {
         }
 
         EntityQueryCriteria<BuildingAmenity> criteria = EntityQueryCriteria.create(BuildingAmenity.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().belongsTo(), bld));
+        criteria.add(PropertyCriterion.eq(criteria.proto().building(), bld));
         return Persistence.service().query(criteria);
     }
 
@@ -323,7 +323,7 @@ public class PropertyFinder {
         }
 
         EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().belongsTo(), fp.building()));
+        criteria.add(PropertyCriterion.eq(criteria.proto().building(), fp.building()));
         criteria.add(PropertyCriterion.eq(criteria.proto().floorplan(), fp));
         return Persistence.service().query(criteria);
     }
@@ -333,7 +333,7 @@ public class PropertyFinder {
             return null;
         }
         EntityQueryCriteria<FloorplanAmenity> criteria = EntityQueryCriteria.create(FloorplanAmenity.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().belongsTo(), fp));
+        criteria.add(PropertyCriterion.eq(criteria.proto().floorplan(), fp));
         return Persistence.service().query(criteria);
     }
 

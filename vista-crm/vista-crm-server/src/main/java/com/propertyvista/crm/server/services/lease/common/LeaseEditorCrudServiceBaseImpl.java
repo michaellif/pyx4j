@@ -95,7 +95,7 @@ public abstract class LeaseEditorCrudServiceBaseImpl<DTO extends LeaseDTO> exten
     @Override
     public void setSelectedUnit(AsyncCallback<DTO> callback, AptUnit unitId, DTO dto) {
         ServerSideFactory.create(LeaseFacade.class).setUnit(dto, unitId);
-        dto.selectedBuilding().set(dto.unit().belongsTo());
+        dto.selectedBuilding().set(dto.unit().building());
         fillServiceEligibilityData(dto);
         fillserviceItems(dto);
         callback.onSuccess(dto);
@@ -161,9 +161,9 @@ public abstract class LeaseEditorCrudServiceBaseImpl<DTO extends LeaseDTO> exten
     private void fillserviceItems(DTO currentValue) {
         currentValue.selectedServiceItems().clear();
 
-        Persistence.service().retrieve(currentValue.unit().belongsTo());
+        Persistence.service().retrieve(currentValue.unit().building());
         EntityQueryCriteria<Service> criteria = new EntityQueryCriteria<Service>(Service.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().catalog(), currentValue.unit().belongsTo().productCatalog()));
+        criteria.add(PropertyCriterion.eq(criteria.proto().catalog(), currentValue.unit().building().productCatalog()));
         criteria.add(PropertyCriterion.eq(criteria.proto().version().type(), currentValue.type()));
         servicesLoop: for (Service service : Persistence.service().query(criteria)) {
             EntityQueryCriteria<ProductItem> serviceCriteria = EntityQueryCriteria.create(ProductItem.class);

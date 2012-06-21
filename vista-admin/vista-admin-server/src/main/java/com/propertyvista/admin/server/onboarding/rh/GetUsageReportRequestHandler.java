@@ -105,7 +105,7 @@ public class GetUsageReportRequestHandler extends AbstractRequestHandler<GetUsag
                 UsageRecordIO record = EntityFactory.create(UsageRecordIO.class);
 
                 EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
-                criteria.add(PropertyCriterion.eq(criteria.proto().belongsTo(), building));
+                criteria.add(PropertyCriterion.eq(criteria.proto().building(), building));
 
                 record.text().setValue(building.propertyCode().getValue());
                 record.value().setValue(Persistence.service().count(criteria));

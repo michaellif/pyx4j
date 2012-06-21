@@ -38,8 +38,8 @@ public class ShowingCrudServiceImpl extends AbstractCrudServiceImpl<Showing> imp
     @Override
     protected void enhanceRetrieved(Showing entity, Showing dto) {
         if (!dto.unit().isNull()) {
-            Persistence.service().retrieve(dto.unit().belongsTo(), AttachLevel.ToStringMembers);
-            dto.building().set(dto.unit().belongsTo());
+            Persistence.service().retrieve(dto.unit().building(), AttachLevel.ToStringMembers);
+            dto.building().set(dto.unit().building());
         }
     }
 
@@ -51,7 +51,7 @@ public class ShowingCrudServiceImpl extends AbstractCrudServiceImpl<Showing> imp
     @Override
     public void updateValue(AsyncCallback<AptUnit> callback, Key unitId) {
         AptUnit unit = Persistence.service().retrieve(AptUnit.class, unitId);
-        Persistence.service().retrieve(unit.belongsTo());
+        Persistence.service().retrieve(unit.building());
         callback.onSuccess(unit);
     }
 }

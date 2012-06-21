@@ -24,7 +24,7 @@ public class BuildingElementDatasetAccessRule implements DatasetAccessRule<Build
 
     @Override
     public void applyRule(EntityQueryCriteria<BuildingElement> criteria) {
-        criteria.add(PropertyCriterion.eq(criteria.proto().belongsTo().userAccess(), Context.getVisit().getUserVisit().getPrincipalPrimaryKey()));
+        criteria.add(PropertyCriterion.eq(criteria.proto().building().userAccess(), Context.getVisit().getUserVisit().getPrincipalPrimaryKey()));
     }
 
 }

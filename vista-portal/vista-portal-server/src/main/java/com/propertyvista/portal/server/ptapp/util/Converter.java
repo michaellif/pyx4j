@@ -66,7 +66,7 @@ public class Converter {
 
         List<FloorplanAmenity> amenities = new ArrayList<FloorplanAmenity>();
         EntityQueryCriteria<FloorplanAmenity> floorplanAmenityCriteria = EntityQueryCriteria.create(FloorplanAmenity.class);
-        floorplanAmenityCriteria.add(PropertyCriterion.eq(floorplanAmenityCriteria.proto().belongsTo(), from));
+        floorplanAmenityCriteria.add(PropertyCriterion.eq(floorplanAmenityCriteria.proto().floorplan(), from));
         amenities.addAll(Persistence.service().query(floorplanAmenityCriteria));
 
         for (FloorplanAmenity amenity : amenities) {
@@ -115,7 +115,7 @@ public class Converter {
 
             // list floorplan units
             EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().belongsTo(), fp.building().getPrimaryKey().asLong()));
+            criteria.add(PropertyCriterion.eq(criteria.proto().building(), fp.building().getPrimaryKey().asLong()));
             criteria.add(PropertyCriterion.eq(criteria.proto().floorplan(), fp));
             for (AptUnit unit : Persistence.service().query(criteria)) {
                 BigDecimal _prc = unit.financial()._marketRent().getValue();
@@ -151,7 +151,7 @@ public class Converter {
 
         // List of amenities
         EntityQueryCriteria<BuildingAmenity> amenitysCriteria = EntityQueryCriteria.create(BuildingAmenity.class);
-        amenitysCriteria.add(new PropertyCriterion(EntityFactory.getEntityPrototype(BuildingAmenity.class).belongsTo().getPath().toString(), Restriction.EQUAL,
+        amenitysCriteria.add(new PropertyCriterion(EntityFactory.getEntityPrototype(BuildingAmenity.class).building().getPath().toString(), Restriction.EQUAL,
                 from));
         for (BuildingAmenity amenity : Persistence.service().query(amenitysCriteria)) {
             AmenityDTO amntDTO = EntityFactory.create(AmenityDTO.class);

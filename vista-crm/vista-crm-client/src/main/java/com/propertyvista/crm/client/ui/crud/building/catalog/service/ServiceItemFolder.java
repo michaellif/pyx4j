@@ -84,7 +84,7 @@ class ServiceItemFolder extends VistaTableFolder<ProductItem> {
                 @Override
                 protected void setFilters(List<Criterion> filters) {
                     super.setFilters(filters);
-                    addFilter(PropertyCriterion.eq(EntityFactory.getEntityPrototype(AptUnit.class).belongsTo().productCatalog(), parent.getValue().catalog()));
+                    addFilter(PropertyCriterion.eq(EntityFactory.getEntityPrototype(AptUnit.class).building().productCatalog(), parent.getValue().catalog()));
                 }
 
                 @Override
@@ -155,7 +155,7 @@ class ServiceItemFolder extends VistaTableFolder<ProductItem> {
                 if (buildingElementClass != null) {
                     if (parent.isEditable()) {
                         CEntityComboBox<BuildingElement> combo = new CEntityComboBox(buildingElementClass);
-                        combo.addCriterion(PropertyCriterion.eq(combo.proto().belongsTo().productCatalog(), parent.getValue().catalog()));
+                        combo.addCriterion(PropertyCriterion.eq(combo.proto().building().productCatalog(), parent.getValue().catalog()));
                         comp = inject(column.getObject(), combo);
                         comp.setViewable(isViewable);
                     } else {

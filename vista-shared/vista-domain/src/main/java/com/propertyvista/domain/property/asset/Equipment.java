@@ -43,7 +43,7 @@ public interface Equipment extends LicensedWarrantedMaintained, Notes {
     @Detached
     @JoinColumn
     @XmlTransient
-    Building belongsTo();
+    Building building();
 
     @ToString(index = 0)
     @MemberColumn(name = "equipmentType")

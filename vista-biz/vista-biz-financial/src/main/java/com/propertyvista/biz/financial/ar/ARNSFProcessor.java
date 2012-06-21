@@ -36,7 +36,7 @@ public class ARNSFProcessor extends AbstractARProcessor {
         // get NSF policy data
         Persistence.service().retrieve(paymentRecord.billingAccount().lease());
         LeaseBillingPolicy leaseBillingPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(
-                paymentRecord.billingAccount().lease().unit().belongsTo(), LeaseBillingPolicy.class);
+                paymentRecord.billingAccount().lease().unit().building(), LeaseBillingPolicy.class);
 
         NsfFeeItem nsfItem = null;
         for (NsfFeeItem nsf : leaseBillingPolicy.nsfFees()) {

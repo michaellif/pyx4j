@@ -63,7 +63,7 @@ public class BuildingDataModel {
 
     public AptUnit generateResidentialUnit() {
         AptUnit unit = EntityFactory.create(AptUnit.class);
-        unit.belongsTo().set(building);
+        unit.building().set(building);
         Persistence.service().persist(unit);
         return unit;
     }

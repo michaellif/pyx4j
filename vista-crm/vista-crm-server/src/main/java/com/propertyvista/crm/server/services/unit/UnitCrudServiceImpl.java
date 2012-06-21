@@ -46,13 +46,13 @@ public class UnitCrudServiceImpl extends AbstractCrudServiceDtoImpl<AptUnit, Apt
     @Override
     protected void bind() {
         bindCompleateDBO();
-        bind(dtoProto.buildingCode(), dboProto.belongsTo().propertyCode());
+        bind(dtoProto.buildingCode(), dboProto.building().propertyCode());
     }
 
     @Override
     protected void enhanceRetrieved(AptUnit in, AptUnitDTO dto) {
         //TODO: calculate value here:
-        dto.buildingCode().set(Persistence.service().retrieve(Building.class, dto.belongsTo().getPrimaryKey()).propertyCode());
+        dto.buildingCode().set(Persistence.service().retrieve(Building.class, dto.building().getPrimaryKey()).propertyCode());
 
         // load detached entities:
         if (!dto.marketing().isValueDetached()) { // This is not called for now cince file is detached in annotation. see comments on this filed
@@ -66,7 +66,7 @@ public class UnitCrudServiceImpl extends AbstractCrudServiceDtoImpl<AptUnit, Apt
         dto.lease().set(Persistence.service().retrieve(criteria));
 
         Persistence.service().retrieve(dto.floorplan());
-        Persistence.service().retrieve(dto.belongsTo());
+        Persistence.service().retrieve(dto.building());
 
         // retrieve market rent prices
         retrieveServicePrices(dto);
@@ -75,7 +75,7 @@ public class UnitCrudServiceImpl extends AbstractCrudServiceDtoImpl<AptUnit, Apt
     @Override
     protected void enhanceListRetrieved(AptUnit in, AptUnitDTO dto) {
         //TODO: calculate value here:
-        dto.buildingCode().set(Persistence.service().retrieve(Building.class, dto.belongsTo().getPrimaryKey()).propertyCode());
+        dto.buildingCode().set(Persistence.service().retrieve(Building.class, dto.building().getPrimaryKey()).propertyCode());
 
         // load detached entities (temporary):
         Persistence.service().retrieve(dto.floorplan());
@@ -101,7 +101,7 @@ public class UnitCrudServiceImpl extends AbstractCrudServiceDtoImpl<AptUnit, Apt
 
     private void retrieveServicePrices(AptUnitDTO dto) {
         EntityQueryCriteria<Service> criteria = EntityQueryCriteria.create(Service.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().catalog().building(), dto.belongsTo()));
+        criteria.add(PropertyCriterion.eq(criteria.proto().catalog().building(), dto.building()));
         criteria.add(PropertyCriterion.in(criteria.proto().version().type(), SERVICES_PROVIDED_BY_UNIT));
 
         List<Service> services = Persistence.secureQuery(criteria);

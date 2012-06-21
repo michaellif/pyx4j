@@ -83,7 +83,7 @@ public class LeadCrudServiceImpl extends AbstractCrudServiceImpl<Lead> implement
         for (Showing showing : Persistence.secureQuery(criteria)) {
             if (!showing.result().isNull() && showing.result().getValue() == Showing.Result.interested) {
                 if (!units.contains(showing.unit())) {
-                    Persistence.service().retrieve(showing.unit().belongsTo(), AttachLevel.ToStringMembers);
+                    Persistence.service().retrieve(showing.unit().building(), AttachLevel.ToStringMembers);
                     units.add((AptUnit) showing.unit().detach());
                 }
             }

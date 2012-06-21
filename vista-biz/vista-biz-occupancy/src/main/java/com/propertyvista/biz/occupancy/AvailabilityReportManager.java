@@ -263,7 +263,7 @@ public class AvailabilityReportManager {
 
     private void setReferences(UnitAvailabilityStatus status) {
         status.unit().set(unit);
-        status.building().set(unit.belongsTo());
+        status.building().set(unit.building());
         status.floorplan().set(unit.floorplan());
 
         // TODO market rent (market rent should be fetched from building catalog

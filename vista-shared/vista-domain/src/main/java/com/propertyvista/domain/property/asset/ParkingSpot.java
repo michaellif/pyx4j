@@ -54,7 +54,7 @@ public interface ParkingSpot extends IEntity {
     @ReadOnly
     @Detached
     @JoinColumn
-    Parking belongsTo();
+    Parking parking();
 
     @ToString(index = 1)
     @MemberColumn(name = "spotType", modificationAdapters = { ParkingSpotCountersAdapter.class })

@@ -35,7 +35,7 @@ public interface Level2A extends IEntity, Level3Holder {
     @Detached
     @Indexed
     @JoinColumn
-    Level1 belongsTo();
+    Level1 level1();
 
     @Override
     @Owned

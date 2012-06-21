@@ -73,7 +73,7 @@ public class UnitsMerger {
             // try finding the same unit in existing list
             AptUnit existing = null;
             String importedName = imported.info().number().getValue();
-            String importedPropertyCode = imported.belongsTo().propertyCode().getValue();
+            String importedPropertyCode = imported.building().propertyCode().getValue();
             Building building = buildingsByCode.get(importedPropertyCode);
             if (building == null) {
                 log.warn("Downloaded unit references building {} that does not exist locally", importedPropertyCode);
@@ -81,7 +81,7 @@ public class UnitsMerger {
             }
 
             for (AptUnit unit : existingList) {
-                Building existingBuilding = buildingsById.get(unit.belongsTo().id().getValue());
+                Building existingBuilding = buildingsById.get(unit.building().id().getValue());
                 String existingPropertyCode = existingBuilding.propertyCode().getValue();
 
                 // first check that the buildings are the same
@@ -98,7 +98,7 @@ public class UnitsMerger {
                 }
             }
 
-            imported.belongsTo().set(building);
+            imported.building().set(building);
             if (existing == null) {
                 log.info("Downloaded new unit {} will be added to local database", importedName);
                 merged.add(imported);

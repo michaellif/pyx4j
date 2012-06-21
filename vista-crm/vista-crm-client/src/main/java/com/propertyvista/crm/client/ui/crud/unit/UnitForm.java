@@ -115,7 +115,7 @@ public class UnitForm extends CrmEntityForm<AptUnitDTO> {
         left.setWidget(
                 ++row,
                 0,
-                new DecoratorBuilder(inject(proto().belongsTo(), isEditable() ? new CEntityLabel<Building>() : new CEntityCrudHyperlink<Building>(
+                new DecoratorBuilder(inject(proto().building(), isEditable() ? new CEntityLabel<Building>() : new CEntityCrudHyperlink<Building>(
                         AppPlaceEntityMapper.resolvePlace(Building.class))), 20).build());
 
         left.setWidget(++row, 0,
@@ -244,7 +244,7 @@ public class UnitForm extends CrmEntityForm<AptUnitDTO> {
 
         @Override
         protected AbstractEntitySelectorDialog<Floorplan> getSelectorDialog() {
-            return new BuildingBoundFloorplanSelectorDialog(UnitForm.this.getValue().belongsTo().getPrimaryKey(), new DefaultAsyncCallback<Floorplan>() {
+            return new BuildingBoundFloorplanSelectorDialog(UnitForm.this.getValue().building().getPrimaryKey(), new DefaultAsyncCallback<Floorplan>() {
                 @Override
                 public void onSuccess(Floorplan result) {
                     get(UnitForm.this.proto().floorplan()).setValue(result);

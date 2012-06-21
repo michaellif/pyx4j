@@ -148,7 +148,7 @@ public interface BuildingAmenity extends Amenity {
     @Detached
     @Indexed
     @JoinColumn
-    Building belongsTo();
+    Building building();
 
     @OrderColumn
     IPrimitive<Integer> orderInBuilding();

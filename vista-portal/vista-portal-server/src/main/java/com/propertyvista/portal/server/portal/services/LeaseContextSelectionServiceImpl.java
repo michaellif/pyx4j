@@ -46,8 +46,8 @@ public class LeaseContextSelectionServiceImpl implements LeaseContextSelectionSe
             choice.unitView().set(lease.unit().duplicate());
             choice.unitView().setAttachLevel(AttachLevel.ToStringMembers);
 
-            Persistence.service().retrieve(lease.unit().belongsTo());
-            choice.address().set(lease.unit().belongsTo().info().address().duplicate());
+            Persistence.service().retrieve(lease.unit().building());
+            choice.address().set(lease.unit().building().info().address().duplicate());
 
             choices.add(choice);
         }

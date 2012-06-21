@@ -504,7 +504,7 @@ public class BuildingsGenerator {
             unit.details().add(createUnitDetailItem(RandomUtil.random(AptUnitItem.Type.values())));
         }
         for (AptUnitItem detail : unit.details()) {
-            detail.belongsTo().set(unit);
+            detail.aptUnit().set(unit);
         }
 
         AptUnitOccupancySegment occupancySegment = EntityFactory.create(AptUnitOccupancySegment.class);

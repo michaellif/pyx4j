@@ -182,7 +182,7 @@ public class UnitTurnoverAnalysisManagerTestBase {
         if (unit == null) {
             unit = EntityFactory.create(AptUnit.class);
             unit.info().number().setValue(number);
-            unit.belongsTo().set(building);
+            unit.building().set(building);
             unit.floorplan().set(floorplan);
             AptUnitOccupancySegment segment = EntityFactory.create(AptUnitOccupancySegment.class);
             segment.status().setValue(Status.available);

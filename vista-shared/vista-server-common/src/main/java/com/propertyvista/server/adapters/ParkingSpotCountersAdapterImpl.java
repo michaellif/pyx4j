@@ -26,7 +26,7 @@ public class ParkingSpotCountersAdapterImpl implements ParkingSpotCountersAdapte
     @Override
     public boolean allowModifications(ParkingSpot entity, MemberMeta meta, Object valueOrig, Object valueNew) {
         // comparing enums so != is OK
-        Parking parking = Persistence.service().retrieve(Parking.class, entity.belongsTo().getPrimaryKey());
+        Parking parking = Persistence.service().retrieve(Parking.class, entity.parking().getPrimaryKey());
         if (valueNew != null && valueOrig != valueNew) {
             if (valueOrig != null) {
                 ParkingSpot.Type typeOrig = (Type) valueOrig;

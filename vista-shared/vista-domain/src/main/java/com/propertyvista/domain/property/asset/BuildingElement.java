@@ -49,5 +49,5 @@ public interface BuildingElement extends IEntity {
     @XmlTransient
     @JoinColumn
     @Indexed(group = "b,10")
-    Building belongsTo();
+    Building building();
 }

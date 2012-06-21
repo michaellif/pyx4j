@@ -35,7 +35,7 @@ public class UnitTurnoverAnalysisFacadeImpl implements UnitTurnoverAnalysisFacad
 
         for (Key builidngPk : buildings) {
             EntityQueryCriteria<UnitTurnoverStats> criteria = EntityQueryCriteria.create(UnitTurnoverStats.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().belongsTo(), builidngPk));
+            criteria.add(PropertyCriterion.eq(criteria.proto().building(), builidngPk));
             criteria.add(PropertyCriterion.ge(criteria.proto().updatedOn(), beginningOfTheMonth));
             criteria.add(PropertyCriterion.le(criteria.proto().updatedOn(), asOf));
             criteria.desc(criteria.proto().updatedOn());
@@ -78,7 +78,7 @@ public class UnitTurnoverAnalysisFacadeImpl implements UnitTurnoverAnalysisFacad
         AptUnit unit = Persistence.secureRetrieve(AptUnit.class, unitPk);
         LogicalDate beginningOfTheMonth = new LogicalDate(when.getYear(), when.getMonth(), 1);
         EntityQueryCriteria<UnitTurnoverStats> criteria = EntityQueryCriteria.create(UnitTurnoverStats.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().belongsTo(), unit.belongsTo()));
+        criteria.add(PropertyCriterion.eq(criteria.proto().building(), unit.building()));
         criteria.add(PropertyCriterion.ge(criteria.proto().updatedOn(), beginningOfTheMonth));
         criteria.add(PropertyCriterion.le(criteria.proto().updatedOn(), when));
         criteria.desc(criteria.proto().updatedOn());
@@ -86,11 +86,11 @@ public class UnitTurnoverAnalysisFacadeImpl implements UnitTurnoverAnalysisFacad
 
         if (stats == null) {
             stats = EntityFactory.create(UnitTurnoverStats.class);
-            stats.belongsTo().set(unit.belongsTo());
+            stats.building().set(unit.building());
             stats.turnovers().setValue(1);
         } else {
             UnitTurnoverStats newStats = EntityFactory.create(UnitTurnoverStats.class);
-            newStats.belongsTo().set(unit.belongsTo());
+            newStats.building().set(unit.building());
             newStats.turnovers().setValue(stats.turnovers().getValue() + 1);
             stats = newStats;
         }

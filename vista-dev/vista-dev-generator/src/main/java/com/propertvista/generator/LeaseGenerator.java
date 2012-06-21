@@ -175,7 +175,7 @@ public class LeaseGenerator extends DataGenerator {
             Persistence.service().retrieve(serviceItem.product());
             Service selectedService = ((Service.ServiceV) serviceItem.product().cast()).holder();
 
-            Building building = lease.unit().belongsTo();
+            Building building = lease.unit().building();
             Persistence.service().retrieve(building);
             Persistence.service().retrieve(building.productCatalog());
 

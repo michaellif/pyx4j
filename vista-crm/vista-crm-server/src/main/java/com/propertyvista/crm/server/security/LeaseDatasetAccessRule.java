@@ -24,7 +24,7 @@ public class LeaseDatasetAccessRule implements DatasetAccessRule<Lease> {
 
     @Override
     public void applyRule(EntityQueryCriteria<Lease> criteria) {
-        criteria.add(PropertyCriterion.eq(criteria.proto().unit().belongsTo().userAccess(), Context.getVisit().getUserVisit().getPrincipalPrimaryKey()));
+        criteria.add(PropertyCriterion.eq(criteria.proto().unit().building().userAccess(), Context.getVisit().getUserVisit().getPrincipalPrimaryKey()));
     }
 
 }

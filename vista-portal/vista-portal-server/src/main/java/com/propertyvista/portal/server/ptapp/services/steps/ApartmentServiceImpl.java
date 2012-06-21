@@ -113,14 +113,14 @@ public class ApartmentServiceImpl implements ApartmentService {
         if (!Persistence.service().retrieve(lease.unit().floorplan())) {
             throw new Error("There is no unit Floor plan data!?.");
         }
-        if (!Persistence.service().retrieve(lease.unit().belongsTo())) {
+        if (!Persistence.service().retrieve(lease.unit().building())) {
             throw new Error("There is no unit building data!?.");
         }
         // fill DTO:
         ApartmentInfoDTO aptInfo = EntityFactory.create(ApartmentInfoDTO.class);
 
         // TODO actually landlord is not always a property manager, but right now it's the most accurate 
-        aptInfo.landlordName().setValue(lease.unit().belongsTo().propertyManager().name().getValue());
+        aptInfo.landlordName().setValue(lease.unit().building().propertyManager().name().getValue());
 
         aptInfo.floorplan().setValue(lease.unit().floorplan().marketingName().getValue());
         aptInfo.bedrooms().setValue(lease.unit().floorplan().bedrooms().getStringView());
@@ -144,12 +144,12 @@ public class ApartmentServiceImpl implements ApartmentService {
         String suiteNumber = lease.unit().info().number().getValue();
 
         aptInfo.suiteNumber().setValue(suiteNumber);
-        lease.unit().belongsTo().info().address().suiteNumber().setValue(suiteNumber); // this was just for the following copy
-        ADDRESS_CONVERTER.copyDBOtoDTO(lease.unit().belongsTo().info().address(), aptInfo.address());
+        lease.unit().building().info().address().suiteNumber().setValue(suiteNumber); // this was just for the following copy
+        ADDRESS_CONVERTER.copyDBOtoDTO(lease.unit().building().info().address(), aptInfo.address());
 
         // find picture:
-        Persistence.service().retrieve(lease.unit().belongsTo().media());
-        for (Media media : lease.unit().belongsTo().media()) {
+        Persistence.service().retrieve(lease.unit().building().media());
+        for (Media media : lease.unit().building().media()) {
             if (Media.Type.file == media.type().getValue()
                     && (PublicVisibilityType.tenant == media.visibility().getValue() || PublicVisibilityType.global == media.visibility().getValue())) {
                 aptInfo.picture().set(media);
@@ -158,7 +158,7 @@ public class ApartmentServiceImpl implements ApartmentService {
         }
 
         // serviceCatalog processing:
-        fillServiceItems(aptInfo, lease.unit().belongsTo(), lease);
+        fillServiceItems(aptInfo, lease.unit().building(), lease);
 
         // Lease data:
         aptInfo.leaseFrom().setValue(lease.leaseFrom().getValue());
@@ -223,7 +223,7 @@ public class ApartmentServiceImpl implements ApartmentService {
 
         entity.concessions().clear();
 
-        syncBuildingProductCatalog(lease.unit().belongsTo());
+        syncBuildingProductCatalog(lease.unit().building());
 
         // fill agreed items:
         for (BillableItem item : lease.version().leaseProducts().featureItems()) {

@@ -84,7 +84,7 @@ public class GetResidentTransactionsMapper {
     public void map(RTUnit unitFrom, Building building) {
         AptUnit unitTo = EntityFactory.create(AptUnit.class);
 
-        unitTo.belongsTo().set(building);
+        unitTo.building().set(building);
 
         // info
         Information info = unitFrom.getUnit().getInformation();

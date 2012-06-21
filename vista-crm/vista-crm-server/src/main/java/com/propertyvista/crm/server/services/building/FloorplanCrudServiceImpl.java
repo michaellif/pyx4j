@@ -90,7 +90,7 @@ public class FloorplanCrudServiceImpl extends AbstractCrudServiceDtoImpl<Floorpl
         {
             EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().floorplan().marketingName(), dbo.marketingName().getValue()));
-            criteria.add(PropertyCriterion.eq(criteria.proto().belongsTo(), dbo.building()));
+            criteria.add(PropertyCriterion.eq(criteria.proto().building(), dbo.building()));
             Integer orig = dbo.counters()._marketingUnitCount().getValue();
             dbo.counters()._marketingUnitCount().setValue(Persistence.service().count(criteria));
             if (!dbo.counters()._marketingUnitCount().getValue().equals(orig)) {
@@ -116,7 +116,7 @@ public class FloorplanCrudServiceImpl extends AbstractCrudServiceDtoImpl<Floorpl
             {
                 EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
                 criteria.add(PropertyCriterion.eq(criteria.proto().floorplan().marketingName(), origMarketingName));
-                criteria.add(PropertyCriterion.eq(criteria.proto().belongsTo(), dbo.building()));
+                criteria.add(PropertyCriterion.eq(criteria.proto().building(), dbo.building()));
                 newCount = Persistence.service().count(criteria);
             }
             EntityQueryCriteria<Floorplan> criteria = EntityQueryCriteria.create(Floorplan.class);

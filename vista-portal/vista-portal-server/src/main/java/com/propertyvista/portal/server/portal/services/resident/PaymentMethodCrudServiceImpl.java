@@ -54,7 +54,7 @@ public class PaymentMethodCrudServiceImpl extends AbstractCrudServiceImpl<Paymen
         Persistence.service().retrieve(tenantInLease.leaseV().holder().unit());
 
         entity.customer().set(tenantInLease.customer());
-        ServerSideFactory.create(PaymentFacade.class).persistPaymentMethod(tenantInLease.leaseV().holder().unit().belongsTo(), entity);
+        ServerSideFactory.create(PaymentFacade.class).persistPaymentMethod(tenantInLease.leaseV().holder().unit().building(), entity);
     }
 
     @Override
@@ -70,8 +70,8 @@ public class PaymentMethodCrudServiceImpl extends AbstractCrudServiceImpl<Paymen
         Tenant tenantInLease = TenantAppContext.getCurrentUserTenantInLease();
         Persistence.service().retrieve(tenantInLease.leaseV());
         Persistence.service().retrieve(tenantInLease.leaseV().holder().unit());
-        Persistence.service().retrieve(tenantInLease.leaseV().holder().unit().belongsTo());
-        AddressStructured address = tenantInLease.leaseV().holder().unit().belongsTo().info().address().duplicate();
+        Persistence.service().retrieve(tenantInLease.leaseV().holder().unit().building());
+        AddressStructured address = tenantInLease.leaseV().holder().unit().building().info().address().duplicate();
         address.suiteNumber().set(tenantInLease.leaseV().holder().unit().info().number());
         callback.onSuccess(address);
     }

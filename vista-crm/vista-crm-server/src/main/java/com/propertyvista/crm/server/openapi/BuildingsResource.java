@@ -136,7 +136,7 @@ public class BuildingsResource {
                     //Get Amenity
                     {
                         EntityQueryCriteria<BuildingAmenity> criteria = EntityQueryCriteria.create(BuildingAmenity.class);
-                        criteria.add(PropertyCriterion.eq(criteria.proto().belongsTo(), building));
+                        criteria.add(PropertyCriterion.eq(criteria.proto().building(), building));
                         for (BuildingAmenity amenity : Persistence.service().query(criteria)) {
                             buildingRS.amenities.add(Converter.convertBuildingAmenity(amenity));
                         }
@@ -144,7 +144,7 @@ public class BuildingsResource {
                     //Parking
                     {
                         EntityQueryCriteria<Parking> criteria = EntityQueryCriteria.create(Parking.class);
-                        criteria.add(PropertyCriterion.eq(criteria.proto().belongsTo(), building));
+                        criteria.add(PropertyCriterion.eq(criteria.proto().building(), building));
                         for (Parking i : Persistence.service().query(criteria)) {
                             buildingRS.parkings.add(Converter.convertParking(i));
                         }
@@ -219,7 +219,7 @@ public class BuildingsResource {
                     //Get Amenity
                     {
                         EntityQueryCriteria<FloorplanAmenity> criteria = EntityQueryCriteria.create(FloorplanAmenity.class);
-                        criteria.add(PropertyCriterion.eq(criteria.proto().belongsTo(), floorplan));
+                        criteria.add(PropertyCriterion.eq(criteria.proto().floorplan(), floorplan));
                         for (FloorplanAmenity amenity : Persistence.service().query(criteria)) {
                             floorplanRS.amenities.add(Converter.convertFloorplanAmenity(amenity));
                         }

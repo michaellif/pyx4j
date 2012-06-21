@@ -123,7 +123,7 @@ class ImportPersister {
             List<BuildingAmenity> items = new Vector<BuildingAmenity>();
             for (BuildingAmenityIO iIO : buildingIO.amenities()) {
                 BuildingAmenity i = new BuildingAmenityConverter().createDBO(iIO);
-                i.belongsTo().set(building);
+                i.building().set(building);
                 items.add(i);
             }
             Persistence.service().persist(items);
@@ -134,7 +134,7 @@ class ImportPersister {
             List<Parking> items = new Vector<Parking>();
             for (ParkingIO iIO : buildingIO.parkings()) {
                 Parking i = new ParkingConverter().createDBO(iIO);
-                i.belongsTo().set(building);
+                i.building().set(building);
                 items.add(i);
             }
             Persistence.service().persist(items);

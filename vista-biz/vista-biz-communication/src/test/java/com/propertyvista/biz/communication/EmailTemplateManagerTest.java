@@ -77,7 +77,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
 
     private SiteDescriptor siteDescriptor;
 
-    private final String copyright = "© Property Vista Software Inc. 2012";
+    private final String copyright = "ï¿½ Property Vista Software Inc. 2012";
 
     private final String company = "Property Vista";
 
@@ -547,7 +547,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
 
         // create lease
         AptUnit unit = EntityFactory.create(AptUnit.class);
-        unit.belongsTo().set(building);
+        unit.building().set(building);
         Persistence.service().persist(unit);
         lease = EntityFactory.create(Lease.class);
         lease.paymentFrequency().setValue(PaymentFrequency.Monthly);

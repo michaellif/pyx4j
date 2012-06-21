@@ -247,7 +247,7 @@ public class DashboardGenerator extends Dashboards {
         PaymentRecordForReportDTO proto = EntityFactory.create(PaymentRecordForReportDTO.class);
         return Arrays.asList(//@formatter:off
                 defColumn(proto.merchantAccount().accountNumber()).title(i18n.tr("Merchant Account")).build(),
-                defColumn(proto.billingAccount().lease().unit().belongsTo().propertyCode()).title(i18n.tr("Building")).build(),
+                defColumn(proto.billingAccount().lease().unit().building().propertyCode()).title(i18n.tr("Building")).build(),
                 defColumn(proto.billingAccount().lease().leaseId()).title(i18n.tr("Lease")).build(),
                 defColumn(proto.paymentMethod().customer()).title(i18n.tr("Tenant")).build(),                    
                 defColumn(proto.paymentMethod().type()).title(i18n.tr("Method")).build(),
@@ -284,13 +284,13 @@ public class DashboardGenerator extends Dashboards {
         LeaseArrearsSnapshotDTO proto = EntityFactory.getEntityPrototype(LeaseArrearsSnapshotDTO.class);
 
         return Arrays.asList(//@formatter:off
-                defColumn(proto.billingAccount().lease().unit().belongsTo().propertyCode()).visible(true).build(),
-                defColumn(proto.billingAccount().lease().unit().belongsTo().info().name()).title(i18n.tr("Building")).build(),
-                defColumn(proto.billingAccount().lease().unit().belongsTo().info().address().streetNumber()).visible(false).build(),
-                defColumn(proto.billingAccount().lease().unit().belongsTo().info().address().streetName()).visible(false).build(),                    
-                defColumn(proto.billingAccount().lease().unit().belongsTo().info().address().province().name()).visible(false).title(i18n.tr("Province")).build(),                    
-                defColumn(proto.billingAccount().lease().unit().belongsTo().info().address().country().name()).visible(false).title(i18n.tr("Country")).build(),                    
-                defColumn(proto.billingAccount().lease().unit().belongsTo().complex().name()).visible(false).title(i18n.tr("Complex")).build(),
+                defColumn(proto.billingAccount().lease().unit().building().propertyCode()).visible(true).build(),
+                defColumn(proto.billingAccount().lease().unit().building().info().name()).title(i18n.tr("Building")).build(),
+                defColumn(proto.billingAccount().lease().unit().building().info().address().streetNumber()).visible(false).build(),
+                defColumn(proto.billingAccount().lease().unit().building().info().address().streetName()).visible(false).build(),                    
+                defColumn(proto.billingAccount().lease().unit().building().info().address().province().name()).visible(false).title(i18n.tr("Province")).build(),                    
+                defColumn(proto.billingAccount().lease().unit().building().info().address().country().name()).visible(false).title(i18n.tr("Country")).build(),                    
+                defColumn(proto.billingAccount().lease().unit().building().complex().name()).visible(false).title(i18n.tr("Complex")).build(),
                 defColumn(proto.billingAccount().lease().unit().info().number()).title(i18n.tr("Unit")).build(),
                 defColumn(proto.billingAccount().lease().leaseId()).build(),
                 defColumn(proto.billingAccount().lease().leaseFrom()).build(),

@@ -63,7 +63,7 @@ public class ApplicationSelectionServiceImpl implements ApplicationSelectionServ
         view.unit().set(unit.duplicate());
         view.unit().setAttachLevel(AttachLevel.ToStringMembers);
 
-        Building building = Persistence.service().retrieve(Building.class, unit.belongsTo().getPrimaryKey());
+        Building building = Persistence.service().retrieve(Building.class, unit.building().getPrimaryKey());
         view.address().set(building.info().address().detach());
         return view;
     }

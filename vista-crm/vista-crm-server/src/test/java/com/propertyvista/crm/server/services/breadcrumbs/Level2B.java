@@ -32,7 +32,7 @@ public interface Level2B extends Level3Holder {
     @Detached
     @Indexed
     @JoinColumn
-    Level1 belongsTo();
+    Level1 level1();
 
     IPrimitive<String> name();
 

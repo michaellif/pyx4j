@@ -238,15 +238,15 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
             // fill Service Catalog with building elements:
 
             EntityQueryCriteria<Parking> buildingParkingsCriteria = EntityQueryCriteria.create(Parking.class);
-            buildingParkingsCriteria.add(PropertyCriterion.eq(buildingParkingsCriteria.proto().belongsTo(), building));
+            buildingParkingsCriteria.add(PropertyCriterion.eq(buildingParkingsCriteria.proto().building(), building));
             List<Parking> buildingParkings = Persistence.service().query(buildingParkingsCriteria);
 
             EntityQueryCriteria<LockerArea> buildingLockerCriteria = EntityQueryCriteria.create(LockerArea.class);
-            buildingLockerCriteria.add(PropertyCriterion.eq(buildingLockerCriteria.proto().belongsTo(), building));
+            buildingLockerCriteria.add(PropertyCriterion.eq(buildingLockerCriteria.proto().building(), building));
             List<LockerArea> buildingockers = Persistence.service().query(buildingLockerCriteria);
 
             EntityQueryCriteria<Roof> buildingRoofsCriteria = EntityQueryCriteria.create(Roof.class);
-            buildingRoofsCriteria.add(PropertyCriterion.eq(buildingRoofsCriteria.proto().belongsTo(), building));
+            buildingRoofsCriteria.add(PropertyCriterion.eq(buildingRoofsCriteria.proto().building(), building));
             List<Roof> buildingRoofs = Persistence.service().query(buildingRoofsCriteria);
 
             for (Service service : building.productCatalog().services()) {

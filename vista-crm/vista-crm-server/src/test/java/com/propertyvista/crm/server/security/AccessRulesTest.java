@@ -101,7 +101,7 @@ public class AccessRulesTest extends VistaDBTestBase {
 
         Lease lease = EntityFactory.create(Lease.class);
         lease.paymentFrequency().setValue(PaymentFrequency.Monthly);
-        Building building = lease.unit().belongsTo();
+        Building building = lease.unit().building();
         Persistence.service().persist(building);
         Persistence.service().persist(lease.unit());
 

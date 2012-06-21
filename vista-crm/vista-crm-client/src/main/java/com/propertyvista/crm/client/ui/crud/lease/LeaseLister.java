@@ -52,7 +52,7 @@ public class LeaseLister extends VersionedLister<LeaseDTO> {
             new Builder(proto().leaseId()).build(),
             new Builder(proto().type()).build(),
             
-            new Builder(proto().unit().belongsTo().propertyCode()).build(),
+            new Builder(proto().unit().building().propertyCode()).build(),
             new Builder(proto().unit()).build(),
             
             new Builder(proto().version().status()).build(),

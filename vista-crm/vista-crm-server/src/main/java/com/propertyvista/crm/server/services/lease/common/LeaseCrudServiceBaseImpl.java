@@ -47,7 +47,7 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
 
         if (!dto.unit().isNull()) {
             // fill selected building by unit:
-            dto.selectedBuilding().set(dto.unit().belongsTo());
+            dto.selectedBuilding().set(dto.unit().building());
         }
 
         // calculate price adjustments:
@@ -79,7 +79,7 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
     private void enhanceRetrievedCommon(Lease in, DTO dto) {
         // load detached entities:
         Persistence.service().retrieve(dto.unit());
-        Persistence.service().retrieve(dto.unit().belongsTo());
+        Persistence.service().retrieve(dto.unit().building());
 
         Persistence.service().retrieve(dto.version().tenants());
         Persistence.service().retrieve(dto.version().guarantors());

@@ -33,7 +33,7 @@ public interface Level3 extends IEntity {
     @Detached
     @Indexed
     @JoinColumn
-    Level3Holder belongsTo();
+    Level3Holder level3Holder();
 
     @Owned
     IList<Level4> owned4s();

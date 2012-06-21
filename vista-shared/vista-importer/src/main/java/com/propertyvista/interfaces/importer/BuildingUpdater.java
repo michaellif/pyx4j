@@ -213,7 +213,7 @@ public class BuildingUpdater extends ImportPersister {
                 boolean unitUpdated = false;
                 if (unit == null) {
                     unit = new AptUnitConverter().createDBO(aptUnitIO);
-                    unit.belongsTo().set(building);
+                    unit.building().set(building);
                     unit.floorplan().set(floorplan);
                     unitUpdated = true;
                     unitIsNew = true;
@@ -268,7 +268,7 @@ public class BuildingUpdater extends ImportPersister {
     public AptUnit requestUnit(AptUnitIO aptUnitIO, Building building, Floorplan floorplan) {
         AptUnit unit = null;
         EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().belongsTo(), building));
+        criteria.add(PropertyCriterion.eq(criteria.proto().building(), building));
         criteria.add(PropertyCriterion.eq(criteria.proto().info().number(), aptUnitIO.number().getValue()));
         if (floorplan != null) {
             criteria.add(PropertyCriterion.eq(criteria.proto().floorplan(), floorplan));
@@ -277,7 +277,7 @@ public class BuildingUpdater extends ImportPersister {
 
         if (units.size() == 0) {
             criteria = EntityQueryCriteria.create(AptUnit.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().belongsTo(), building));
+            criteria.add(PropertyCriterion.eq(criteria.proto().building(), building));
             aptUnitIO.number().setValue(AptUnitConverter.trimUnitNumber(aptUnitIO.number().getValue()));
             criteria.add(PropertyCriterion.eq(criteria.proto().info().number(), aptUnitIO.number().getValue()));
             if (floorplan != null) {

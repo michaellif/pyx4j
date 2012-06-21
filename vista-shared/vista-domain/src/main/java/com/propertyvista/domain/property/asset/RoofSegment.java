@@ -30,7 +30,7 @@ public interface RoofSegment extends IEntity {
     @ReadOnly
     @Detached
     @JoinColumn
-    Roof belongsTo();
+    Roof roof();
 
     @ToString(index = 0)
     IPrimitive<String> name();

@@ -65,11 +65,11 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
         Persistence.service().retrieve(dto.billingAccount());
         Persistence.service().retrieve(dto.billingAccount().lease());
         Persistence.service().retrieve(dto.billingAccount().lease().unit());
-        Persistence.service().retrieve(dto.billingAccount().lease().unit().belongsTo());
+        Persistence.service().retrieve(dto.billingAccount().lease().unit().building());
 
         dto.leaseId().set(dto.billingAccount().lease().leaseId());
         dto.leaseStatus().set(dto.billingAccount().lease().version().status());
-        dto.propertyCode().set(dto.billingAccount().lease().unit().belongsTo().propertyCode());
+        dto.propertyCode().set(dto.billingAccount().lease().unit().building().propertyCode());
         dto.unitNumber().set(dto.billingAccount().lease().unit().info().number());
 
         Persistence.service().retrieve(dto.paymentMethod());
@@ -100,7 +100,7 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
 
         Lease lease = tenant.leaseV().holder();
         Persistence.service().retrieve(lease.unit());
-        Persistence.service().retrieve(lease.unit().belongsTo());
+        Persistence.service().retrieve(lease.unit().building());
 
         PaymentRecordDTO dto = EntityFactory.create(PaymentRecordDTO.class);
 
@@ -108,7 +108,7 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
         dto.billingAccount().set(lease.billingAccount());
         dto.leaseId().set(lease.leaseId());
         dto.leaseStatus().set(lease.version().status());
-        dto.propertyCode().set(lease.unit().belongsTo().propertyCode());
+        dto.propertyCode().set(lease.unit().building().propertyCode());
         dto.unitNumber().set(lease.unit().info().number());
 
         // some default values:

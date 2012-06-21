@@ -59,7 +59,7 @@ public class LeadViewerViewImpl extends CrmViewerViewImplBase<Lead> implements L
                         new EntitySelectorListDialog<AptUnit>(i18n.tr("Select Unit To Lease"), false, result, new Formatter<AptUnit>() {
                             @Override
                             public String format(AptUnit entity) {
-                                return entity.belongsTo().getStringView() + ", " + i18n.tr("Unit") + " " + entity.getStringView();
+                                return entity.building().getStringView() + ", " + i18n.tr("Unit") + " " + entity.getStringView();
                             }
                         }) {
                             @Override

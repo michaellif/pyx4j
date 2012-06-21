@@ -65,17 +65,17 @@ public class ArrearsReportServiceImpl implements ArrearsReportService {
             bind(dtoProto.lmrToUnitRentDifference(), dboProto.lmrToUnitRentDifference());
 
             // references
-            bind(dtoProto.billingAccount().lease().unit().belongsTo().propertyCode(), dboProto.billingAccount().lease().unit().belongsTo().propertyCode());
-            bind(dtoProto.billingAccount().lease().unit().belongsTo().info().name(), dboProto.billingAccount().lease().unit().belongsTo().info().name());
-            bind(dtoProto.billingAccount().lease().unit().belongsTo().info().address().streetNumber(), dboProto.billingAccount().lease().unit().belongsTo()
+            bind(dtoProto.billingAccount().lease().unit().building().propertyCode(), dboProto.billingAccount().lease().unit().building().propertyCode());
+            bind(dtoProto.billingAccount().lease().unit().building().info().name(), dboProto.billingAccount().lease().unit().building().info().name());
+            bind(dtoProto.billingAccount().lease().unit().building().info().address().streetNumber(), dboProto.billingAccount().lease().unit().building()
                     .info().address().streetNumber());
-            bind(dtoProto.billingAccount().lease().unit().belongsTo().info().address().streetName(), dboProto.billingAccount().lease().unit().belongsTo()
+            bind(dtoProto.billingAccount().lease().unit().building().info().address().streetName(), dboProto.billingAccount().lease().unit().building()
                     .info().address().streetName());
-            bind(dtoProto.billingAccount().lease().unit().belongsTo().info().address().province().name(), dboProto.billingAccount().lease().unit().belongsTo()
+            bind(dtoProto.billingAccount().lease().unit().building().info().address().province().name(), dboProto.billingAccount().lease().unit().building()
                     .info().address().province().name());
-            bind(dtoProto.billingAccount().lease().unit().belongsTo().info().address().country().name(), dboProto.billingAccount().lease().unit().belongsTo()
+            bind(dtoProto.billingAccount().lease().unit().building().info().address().country().name(), dboProto.billingAccount().lease().unit().building()
                     .info().address().country().name());
-            bind(dtoProto.billingAccount().lease().unit().belongsTo().complex().name(), dboProto.billingAccount().lease().unit().belongsTo().complex().name());
+            bind(dtoProto.billingAccount().lease().unit().building().complex().name(), dboProto.billingAccount().lease().unit().building().complex().name());
             bind(dtoProto.billingAccount().lease().unit().info().number(), dboProto.billingAccount().lease().unit().info().number());
             bind(dtoProto.billingAccount().lease().leaseId(), dboProto.billingAccount().lease().leaseId());
             bind(dtoProto.billingAccount().lease().leaseFrom(), dboProto.billingAccount().lease().leaseFrom());
@@ -251,7 +251,7 @@ public class ArrearsReportServiceImpl implements ArrearsReportService {
         Persistence.service().retrieve(snapshot.billingAccount());
         Persistence.service().retrieve(snapshot.billingAccount().lease());
         Persistence.service().retrieve(snapshot.billingAccount().lease().unit());
-        Persistence.service().retrieve(snapshot.billingAccount().lease().unit().belongsTo());
+        Persistence.service().retrieve(snapshot.billingAccount().lease().unit().building());
 
         LeaseArrearsSnapshotDTO snapshotDTO = dtoBinder.createDTO(snapshot);
 

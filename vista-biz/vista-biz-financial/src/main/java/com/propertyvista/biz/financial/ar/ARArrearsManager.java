@@ -71,7 +71,7 @@ public class ARArrearsManager {
 
     private static BuildingArrearsSnapshot createArrearsSnapshot(Building building) {
         EntityQueryCriteria<BillingAccount> billingAccountsCriteria = EntityQueryCriteria.create(BillingAccount.class);
-        billingAccountsCriteria.add(PropertyCriterion.eq(billingAccountsCriteria.proto().lease().unit().belongsTo(), building));
+        billingAccountsCriteria.add(PropertyCriterion.eq(billingAccountsCriteria.proto().lease().unit().building(), building));
         Iterator<BillingAccount> billingAccountsIter = Persistence.service().query(null, billingAccountsCriteria, AttachLevel.IdOnly);
 
         // initialize accumulators - we accumulate aging buckets for each category separately in order to increase performance         
@@ -154,7 +154,7 @@ public class ARArrearsManager {
 
         EntityListCriteria<LeaseArrearsSnapshot> criteria = new EntityListCriteria<LeaseArrearsSnapshot>(LeaseArrearsSnapshot.class);
         if (!buildings.isEmpty()) {
-            criteria.add(PropertyCriterion.in(criteria.proto().billingAccount().lease().unit().belongsTo(), new Vector<Building>(buildings)));
+            criteria.add(PropertyCriterion.in(criteria.proto().billingAccount().lease().unit().building(), new Vector<Building>(buildings)));
         }
 
         // TODO this looks like a hack and i don't like it

@@ -74,13 +74,13 @@ public class ArrearsStatusGadget extends AbstractGadget<ArrearsStatusGadgetMetad
             settings.category().setValue(DebitType.total);
             LeaseArrearsSnapshotDTO proto = EntityFactory.getEntityPrototype(LeaseArrearsSnapshotDTO.class);
             settings.columnDescriptors().addAll(ColumnDescriptorConverter.asColumnDesciptorEntityList(Arrays.asList(//@formatter:off
-                    new MemberColumnDescriptor.Builder(proto.billingAccount().lease().unit().belongsTo().propertyCode()).visible(true).build(),
-                    new MemberColumnDescriptor.Builder(proto.billingAccount().lease().unit().belongsTo().info().name()).title(i18n.tr("Building")).build(),
-                    new MemberColumnDescriptor.Builder(proto.billingAccount().lease().unit().belongsTo().info().address().streetNumber()).visible(false).build(),
-                    new MemberColumnDescriptor.Builder(proto.billingAccount().lease().unit().belongsTo().info().address().streetName()).visible(false).build(),                    
-                    new MemberColumnDescriptor.Builder(proto.billingAccount().lease().unit().belongsTo().info().address().province().name()).visible(false).title(i18n.tr("Province")).build(),                    
-                    new MemberColumnDescriptor.Builder(proto.billingAccount().lease().unit().belongsTo().info().address().country().name()).visible(false).title(i18n.tr("Country")).build(),                    
-                    new MemberColumnDescriptor.Builder(proto.billingAccount().lease().unit().belongsTo().complex().name()).visible(false).title(i18n.tr("Complex")).build(),
+                    new MemberColumnDescriptor.Builder(proto.billingAccount().lease().unit().building().propertyCode()).visible(true).build(),
+                    new MemberColumnDescriptor.Builder(proto.billingAccount().lease().unit().building().info().name()).title(i18n.tr("Building")).build(),
+                    new MemberColumnDescriptor.Builder(proto.billingAccount().lease().unit().building().info().address().streetNumber()).visible(false).build(),
+                    new MemberColumnDescriptor.Builder(proto.billingAccount().lease().unit().building().info().address().streetName()).visible(false).build(),                    
+                    new MemberColumnDescriptor.Builder(proto.billingAccount().lease().unit().building().info().address().province().name()).visible(false).title(i18n.tr("Province")).build(),                    
+                    new MemberColumnDescriptor.Builder(proto.billingAccount().lease().unit().building().info().address().country().name()).visible(false).title(i18n.tr("Country")).build(),                    
+                    new MemberColumnDescriptor.Builder(proto.billingAccount().lease().unit().building().complex().name()).visible(false).title(i18n.tr("Complex")).build(),
                     new MemberColumnDescriptor.Builder(proto.billingAccount().lease().unit().info().number()).title(i18n.tr("Unit")).build(),
                     new MemberColumnDescriptor.Builder(proto.billingAccount().lease().leaseId()).build(),
                     new MemberColumnDescriptor.Builder(proto.billingAccount().lease().leaseFrom()).build(),
