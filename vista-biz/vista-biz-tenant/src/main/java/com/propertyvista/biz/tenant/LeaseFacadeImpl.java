@@ -61,47 +61,54 @@ public class LeaseFacadeImpl implements LeaseFacade {
     final boolean bugNo1549 = true;
 
     @Override
-    public Lease initLease(Lease leaseDraft) {
+    public Lease init(Lease lease) {
         // let client supply initial status value:
-        if (leaseDraft.version().status().isNull()) {
-            leaseDraft.version().status().setValue(Lease.Status.Created);
+        if (lease.version().status().isNull()) {
+            lease.version().status().setValue(Lease.Status.Created);
         } else {
-            switch (leaseDraft.version().status().getValue()) {
+            switch (lease.version().status().getValue()) {
             case Created:
             case Application:
                 break; // ok, allowed values...
             default:
-                leaseDraft.version().status().setValue(Lease.Status.Created);
+                lease.version().status().setValue(Lease.Status.Created);
             }
         }
-        //TODO
-        leaseDraft.paymentFrequency().setValue(PaymentFrequency.Monthly);
+
+        // TODO could be more variants in the future:
+        lease.paymentFrequency().setValue(PaymentFrequency.Monthly);
 
         // Create Application by default
-        leaseDraft.leaseApplication().status().setValue(LeaseApplication.Status.Created);
-        leaseDraft.leaseApplication().leaseOnApplication().set(leaseDraft);
+        lease.leaseApplication().status().setValue(LeaseApplication.Status.Created);
+        lease.leaseApplication().leaseOnApplication().set(lease);
 
-        saveCustomers(leaseDraft);
+        ServerSideFactory.create(IdAssignmentFacade.class).assignId(lease);
 
-        ServerSideFactory.create(IdAssignmentFacade.class).assignId(leaseDraft);
+        lease.billingAccount().accountNumber().setValue(ServerSideFactory.create(IdAssignmentFacade.class).createAccountNumber());
+        lease.billingAccount().billCounter().setValue(0);
 
-        leaseDraft.billingAccount().accountNumber().setValue(ServerSideFactory.create(IdAssignmentFacade.class).createAccountNumber());
-        leaseDraft.billingAccount().billCounter().setValue(0);
+        return lease;
+    }
 
-        Persistence.service().merge(leaseDraft.billingAccount());
+    @Override
+    public Lease initAndSave(Lease lease) {
 
-        Persistence.service().merge(leaseDraft);
+        init(lease);
 
-        if (leaseDraft.unit().getPrimaryKey() != null) {
-            ServerSideFactory.create(OccupancyFacade.class).reserve(leaseDraft.unit().getPrimaryKey(), leaseDraft);
-            leaseDraft = setUnit(leaseDraft, leaseDraft.unit());
+        saveCustomers(lease);
+        Persistence.service().merge(lease.billingAccount());
+        Persistence.service().merge(lease);
+
+        if (lease.unit().getPrimaryKey() != null) {
+            ServerSideFactory.create(OccupancyFacade.class).reserve(lease.unit().getPrimaryKey(), lease);
+            lease = setUnit(lease, lease.unit());
             if (bugNo1549) {
-                DataDump.dumpToDirectory("lease-bug", "saving", leaseDraft);
+                DataDump.dumpToDirectory("lease-bug", "saving", lease);
             }
-            return persistLease(leaseDraft);
-        } else {
-            return leaseDraft;
+            persist(lease);
         }
+
+        return lease;
     }
 
     @Override
@@ -200,12 +207,14 @@ public class LeaseFacadeImpl implements LeaseFacade {
         return lease;
     }
 
-    private BillableItem createBillableItem(ProductItem item, Lease lease) {
+    @Override
+    public BillableItem createBillableItem(ProductItem item, Lease lease) {
         BillableItem newItem = EntityFactory.create(BillableItem.class);
         newItem.item().set(item);
         newItem.agreedPrice().setValue(item.price().getValue());
         newItem._currentPrice().setValue(item.price().getValue());
-        // Deposits:
+
+        // Add Deposits if present for the product::
         List<Deposit> deposits = ServerSideFactory.create(DepositFacade.class).createRequiredDeposits(item.type(), lease);
         if (deposits != null) {
             newItem.deposits().addAll(deposits);
@@ -215,48 +224,53 @@ public class LeaseFacadeImpl implements LeaseFacade {
     }
 
     @Override
-    public Lease persistLease(Lease lease) {
-        boolean isUnitChanged = false;
+    public Lease persist(Lease lease) {
         boolean doReserve = false;
         boolean doUnreserve = false;
+        Lease origLease = null;
 
-        Lease origLease = Persistence.secureRetrieve(Lease.class, lease.getPrimaryKey().asCurrentKey());
-
-        // check if unit reservation has changed
-        if (!EqualsHelper.equals(origLease.unit().getPrimaryKey(), lease.unit().getPrimaryKey())) {
-            isUnitChanged = true;
-            // old lease has unit: o
-            // new lease has a unit: n
-            // !o & !n is impossible here, then we have:
-            // !o & n -> reserve
-            // o & n -> reserve           
-            //  o & !n -> unreserve
-            // o & n -> unreserve                
-            // hence:
-            // o -> unreserve                
-            // n -> reserve
-            doUnreserve = origLease.unit().getPrimaryKey() != null;
-            doReserve = lease.unit().getPrimaryKey() != null;
+        // existing lease - check if unit reservation has changed:
+        if (lease.getPrimaryKey() != null) {
+            origLease = Persistence.secureRetrieve(Lease.class, lease.getPrimaryKey().asCurrentKey());
+            if (!EqualsHelper.equals(origLease.unit().getPrimaryKey(), lease.unit().getPrimaryKey())) {
+                // old lease has unit: o
+                // new lease has a unit: n
+                // !o & !n is impossible here, then we have:
+                // !o & n -> reserve
+                // o & n -> reserve           
+                //  o & !n -> unreserve
+                // o & n -> unreserve                
+                // hence:
+                // o -> unreserve                
+                // n -> reserve
+                doUnreserve = origLease.unit().getPrimaryKey() != null;
+                doReserve = lease.unit().getPrimaryKey() != null;
+            }
+        } else { // newly created lease - reserve unit if set:
+            doReserve = !lease.unit().isNull();
         }
 
+        // actual persist:
         saveCustomers(lease);
+        Persistence.secureSave(lease.billingAccount());
         Persistence.secureSave(lease);
 
-        if (isUnitChanged) {
-            if (doUnreserve) {
-                ServerSideFactory.create(OccupancyFacade.class).unreserve(origLease.unit().getPrimaryKey());
-            }
-            if (doReserve) {
-                ServerSideFactory.create(OccupancyFacade.class).reserve(lease.unit().getPrimaryKey(), lease);
-            }
+        // update reservation if necessary:
+        if (doUnreserve) {
+            ServerSideFactory.create(OccupancyFacade.class).unreserve(origLease.unit().getPrimaryKey());
         }
+        if (doReserve) {
+            ServerSideFactory.create(OccupancyFacade.class).reserve(lease.unit().getPrimaryKey(), lease);
+        }
+
         return lease;
     }
 
     @Override
     public Lease saveAsFinal(Lease lease) {
         lease.saveAction().setValue(SaveAction.saveAsFinal);
-        lease = persistLease(lease);
+        lease = persist(lease);
+
         // update unit rent price here:
         ServerSideFactory.create(ProductCatalogFacade.class).updateUnitRentPrice(lease);
         return lease;

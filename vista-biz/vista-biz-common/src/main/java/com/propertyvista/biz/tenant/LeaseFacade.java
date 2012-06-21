@@ -19,19 +19,25 @@ import com.pyx4j.commons.LogicalDate;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 public interface LeaseFacade {
 
     // in-memory Lease object state interfaces:
 
-    Lease initLease(Lease lease);
+    Lease init(Lease lease);
+
+    @Deprecated
+    Lease initAndSave(Lease lease);
 
     Lease setUnit(Lease lease, AptUnit unitId);
 
     Lease setService(Lease lease, ProductItem serviceId);
 
-    Lease persistLease(Lease lease);
+    BillableItem createBillableItem(ProductItem item, Lease lease);
+
+    Lease persist(Lease lease);
 
     Lease saveAsFinal(Lease lease);
 

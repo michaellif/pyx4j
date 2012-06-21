@@ -234,7 +234,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
             lease.version().status().setValue(Lease.Status.Created);
         }
 
-        lease = ServerSideFactory.create(LeaseFacade.class).initLease(lease);
+        lease = ServerSideFactory.create(LeaseFacade.class).initAndSave(lease);
 
         if (agreedPrice != null) {
             lease.version().leaseProducts().serviceItem().agreedPrice().setValue(agreedPrice);
