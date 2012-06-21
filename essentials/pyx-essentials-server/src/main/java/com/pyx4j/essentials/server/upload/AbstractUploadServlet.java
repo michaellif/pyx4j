@@ -107,7 +107,7 @@ public abstract class AbstractUploadServlet extends HttpServlet {
                 out.println(i18n.tr("Invalid Request Type"));
                 return;
             }
-            String uploadPath = request.getPathInfo().substring(1);
+            String uploadPath = request.getPathInfo();
             int cIdEnd = uploadPath.lastIndexOf('/');
             String moduleBaseURL = uploadPath.substring(0, cIdEnd + 1);
             String serviceInterfaceId = uploadPath.substring(cIdEnd + 1);
