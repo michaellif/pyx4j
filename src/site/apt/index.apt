@@ -12,11 +12,11 @@ Property Vista
 
     * {{{http://jira.birchwoodsoftwaregroup.com/builds/browse/VISTA}Continuous integration (Bamboo)}};  {{{http://jira.birchwoodsoftwaregroup.com/builds-workplace/}Access to Build Working Directories}}
 
-    * {{{http://www22.birchwoodsoftwaregroup.com/}www22}} Nightly build Application; {{{http://www22.birchwoodsoftwaregroup.com/logs}logs}}
+    * {{{http://vista.22.birchwoodsoftwaregroup.com/}env22}} Nightly build Application; {{{http://www22.birchwoodsoftwaregroup.com/logs}logs}}
 
-    * {{{http://www33.birchwoodsoftwaregroup.com/}www33}} QA Test Application;  {{{http://www33.birchwoodsoftwaregroup.com/logs}logs}}
+    * {{{http://vista.33.birchwoodsoftwaregroup.com/}env33}} QA Test Application;  {{{http://www33.birchwoodsoftwaregroup.com/logs}logs}}
 
-    * {{{http://www44.birchwoodsoftwaregroup.com/}www44}} Customer Delivery Application (staging env)
+    * {{{http://vista.44.birchwoodsoftwaregroup.com/}env44}} Customer Delivery Application (staging env)
 
     * {{{http://dev.birchwoodsoftwaregroup.com/managedb/}dev.birchwoodsoftwaregroup.com/managedb/}} Testing Environment DB Browsing
 
