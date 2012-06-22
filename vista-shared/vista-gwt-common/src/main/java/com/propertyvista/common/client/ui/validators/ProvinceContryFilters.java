@@ -75,7 +75,6 @@ public class ProvinceContryFilters {
                     }
                     if (provinceComboIsMandatoryInitialy) {
                         provinceCombo.setEnabled(countryProvinceRequired.contains((event.getValue().name().getValue().toLowerCase())));
-                        provinceCombo.setVisited(true);
                     }
                 }
                 provinceCombo.refreshOptions();
