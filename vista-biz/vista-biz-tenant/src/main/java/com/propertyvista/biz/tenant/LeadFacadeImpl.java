@@ -96,7 +96,12 @@ public class LeadFacadeImpl implements LeadFacade {
             lease.version().tenants().add(tenantInLease);
             asApplicant = false;
         }
-        lease = ServerSideFactory.create(LeaseFacade.class).initAndSave(lease);
+        LeaseFacade leaseFacade = ServerSideFactory.create(LeaseFacade.class);
+        lease = leaseFacade.init(lease);
+		if (lease.unit().getPrimaryKey() == null) {
+			leaseFacade.setUnit(lease, lease.unit());
+		}
+        lease = leaseFacade.persist(lease);
 
         // mark Lead as converted:
         lead.lease().set(lease);

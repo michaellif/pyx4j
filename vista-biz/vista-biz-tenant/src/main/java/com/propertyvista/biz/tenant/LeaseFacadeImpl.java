@@ -91,27 +91,6 @@ public class LeaseFacadeImpl implements LeaseFacade {
     }
 
     @Override
-    public Lease initAndSave(Lease lease) {
-
-        init(lease);
-
-        saveCustomers(lease);
-        Persistence.service().merge(lease.billingAccount());
-        Persistence.service().merge(lease);
-
-        if (lease.unit().getPrimaryKey() != null) {
-            ServerSideFactory.create(OccupancyFacade.class).reserve(lease.unit().getPrimaryKey(), lease);
-            lease = setUnit(lease, lease.unit());
-            if (bugNo1549) {
-                DataDump.dumpToDirectory("lease-bug", "saving", lease);
-            }
-            persist(lease);
-        }
-
-        return lease;
-    }
-
-    @Override
     public Lease setUnit(Lease lease, AptUnit unitId) {
         if (!Lease.Status.draft().contains(lease.version().status().getValue())) {
             throw new UserRuntimeException(i18n.tr("Invalid Lease State"));

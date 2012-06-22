@@ -73,7 +73,13 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
 
             // Create normal Active Lease first for Shortcut users
             if (i <= DemoData.UserType.TENANT.getDefaultMax()) {
-                lease = ServerSideFactory.create(LeaseFacade.class).initAndSave(lease);
+                LeaseFacade leaseFacade = ServerSideFactory.create(LeaseFacade.class);
+                lease = leaseFacade.init(lease);
+				if (lease.unit().getPrimaryKey() != null) {
+					leaseFacade.setUnit(lease, lease.unit());
+				}
+                leaseFacade.persist(lease);
+
                 ServerSideFactory.create(LeaseFacade.class).approveApplication(lease, null, null);
                 //TODO
                 // ServerSideFactory.create(LeaseFacade.class).activate(lease.getPrimaryKey());
@@ -148,7 +154,8 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
                 mainTenant.preauthorizedPayment().set(mainTenant.customer().paymentMethods().iterator().next());
             }
 
-            ServerSideFactory.create(LeaseFacade.class).initAndSave(lease);
+            ServerSideFactory.create(LeaseFacade.class).init(lease);
+            ServerSideFactory.create(LeaseFacade.class).persist(lease);
             ServerSideFactory.create(LeaseFacade.class).createMasterOnlineApplication(lease.getPrimaryKey());
         }
 

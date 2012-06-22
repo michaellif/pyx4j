@@ -176,7 +176,9 @@ public class LeaseLifecycleSimulator {
 
         @Override
         public void exec() {
-            lease = leaseFacade().initAndSave(lease);
+            lease = leaseFacade().init(lease);
+			lease = leaseFacade().setUnit(lease, lease.unit());
+            lease = leaseFacade().persist(lease);
 
             // TODO change that to Employee Agent Decision
             queueEvent(hasImmideateApproval ? now() : rndBetween(now(), lease.leaseFrom().getValue()), new ApproveApplication(lease));

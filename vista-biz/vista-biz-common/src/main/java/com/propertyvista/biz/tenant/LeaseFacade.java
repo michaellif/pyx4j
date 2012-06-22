@@ -28,9 +28,6 @@ public interface LeaseFacade {
 
     Lease init(Lease lease);
 
-    @Deprecated
-    Lease initAndSave(Lease lease);
-
     Lease setUnit(Lease lease, AptUnit unitId);
 
     Lease setService(Lease lease, ProductItem serviceId);

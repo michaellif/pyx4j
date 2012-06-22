@@ -17,10 +17,13 @@ import static com.pyx4j.gwt.server.DateUtils.detectDateformat;
 
 import java.math.BigDecimal;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.security.shared.UserVisit;
+import com.pyx4j.unit.server.mock.TestLifecycle;
 
 import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.config.tests.VistaDBTestBase;
@@ -33,6 +36,8 @@ import com.propertyvista.domain.policy.policies.IdAssignmentPolicy;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdAssignmentType;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
+import com.propertyvista.domain.security.VistaBasicBehavior;
+import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.Lease;
 
@@ -47,6 +52,8 @@ public class PaymentsSummaryHelperTestBase extends VistaDBTestBase {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
+        TestLifecycle.testSession(new UserVisit(new Key(-101), "Neo The Accountant"), VistaCrmBehavior.Occupancy, VistaBasicBehavior.CRM);
+        TestLifecycle.beginRequest();
 
         OrganizationPoliciesNode policyNode = EntityFactory.create(OrganizationPoliciesNode.class);
         Persistence.service().persist(policyNode);
@@ -74,7 +81,11 @@ public class PaymentsSummaryHelperTestBase extends VistaDBTestBase {
         tenant.customer().person().name().lastName().setValue("Foo");
         lease.version().tenants().add(tenant);
 
-        lease = ServerSideFactory.create(LeaseFacade.class).initAndSave(lease);
+        lease = ServerSideFactory.create(LeaseFacade.class).init(lease);
+        if (lease.unit().getPrimaryKey() != null) {
+            ServerSideFactory.create(LeaseFacade.class).setUnit(lease, lease.unit());
+        }
+        lease = ServerSideFactory.create(LeaseFacade.class).persist(lease);
 
         merchantAccountA = makeMerchantAccount("A");
         merchantAccountB = makeMerchantAccount("B");
@@ -90,6 +101,7 @@ public class PaymentsSummaryHelperTestBase extends VistaDBTestBase {
         } finally {
             Persistence.service().commit();
             Persistence.service().endTransaction();
+            TestLifecycle.tearDown();
         }
     }
 
