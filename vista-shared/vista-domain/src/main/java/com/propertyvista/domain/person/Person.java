@@ -46,7 +46,6 @@ public interface Person extends IEntity {
     @EmbeddedEntity
     Name name();
 
-    @NotNull
     IPrimitive<Sex> sex();
 
     @Editor(type = EditorType.phone)
