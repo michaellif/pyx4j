@@ -100,6 +100,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
         Persistence.service().merge(lease);
 
         if (lease.unit().getPrimaryKey() != null) {
+            ServerSideFactory.create(OccupancyFacade.class).reserve(lease.unit().getPrimaryKey(), lease);
             lease = setUnit(lease, lease.unit());
             if (bugNo1549) {
                 DataDump.dumpToDirectory("lease-bug", "saving", lease);
@@ -353,7 +354,6 @@ public class LeaseFacadeImpl implements LeaseFacade {
         lease.leaseApplication().decisionDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
 
         lease.saveAction().setValue(SaveAction.saveAsFinal);
-
         Persistence.secureSave(lease);
 
         updateApplicationReferencesToFinalVersionOfLease(lease);
@@ -380,7 +380,6 @@ public class LeaseFacadeImpl implements LeaseFacade {
         lease.leaseApplication().decisionDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
 
         lease.saveAction().setValue(SaveAction.saveAsFinal);
-
         Persistence.secureSave(lease);
 
         updateApplicationReferencesToFinalVersionOfLease(lease);
