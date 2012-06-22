@@ -97,7 +97,7 @@ public class LeadFacadeImpl implements LeadFacade {
         }
         LeaseFacade leaseFacade = ServerSideFactory.create(LeaseFacade.class);
         lease = leaseFacade.init(lease);
-        if (unitId.getPrimaryKey() == null) {
+        if (unitId.getPrimaryKey() != null) {
             leaseFacade.setUnit(lease, unitId);
         }
         lease = leaseFacade.persist(lease);
