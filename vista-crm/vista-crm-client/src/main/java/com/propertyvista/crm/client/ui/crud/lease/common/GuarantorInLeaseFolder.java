@@ -140,6 +140,7 @@ public class GuarantorInLeaseFolder extends LeaseParticipantFolder<Guarantor> {
                 CEntityComboBox<PersonScreening> combo = (CEntityComboBox<PersonScreening>) get(proto().screening());
                 combo.resetCriteria();
                 combo.addCriterion(PropertyCriterion.eq(combo.proto().screene(), getValue().customer()));
+                combo.refreshOptions();
             }
 
             if (get(proto().tenant()) instanceof CComboBox<?>) {

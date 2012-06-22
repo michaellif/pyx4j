@@ -123,6 +123,7 @@ public abstract class IssueClassificationChoice<E extends IEntity> extends CEnti
         if (crit != null) {
             addCriterion(crit);
         }
+        resetOptions();
         super.retriveOptions(new AsyncOptionsReadyCallback<E>() {
             @Override
             public void onOptionsReady(List<E> opt) {

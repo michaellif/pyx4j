@@ -233,6 +233,7 @@ public class TenantInLeaseFolder extends LeaseParticipantFolder<Tenant> {
                 CEntityComboBox<PersonScreening> combo = (CEntityComboBox<PersonScreening>) get(proto().screening());
                 combo.resetCriteria();
                 combo.addCriterion(PropertyCriterion.eq(combo.proto().screene(), getValue().customer()));
+                combo.refreshOptions();
             }
         }
 
