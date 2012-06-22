@@ -250,8 +250,7 @@ public class MessageTemplates {
         EmailTemplate emailTemplate = emailTemplatePasswordRetrievalOnboardingUser();
         PasswordRequestAdminT pwdReqT = EntityFactory.create(PasswordRequestAdminT.class);
         pwdReqT.RequestorName().set(user.name());
-        pwdReqT.PasswordResetUrl().setValue(
-                AppPlaceInfo.absoluteUrl(onboardingSystemBaseUrl, AdminSiteMap.LoginWithToken.class, AuthenticationService.AUTH_TOKEN_ARG, token));
+        pwdReqT.PasswordResetUrl().setValue(passwordResetUrl(onboardingSystemBaseUrl, token));
         data.add(pwdReqT);
 
         MailMessage email = new MailMessage();
@@ -302,5 +301,18 @@ public class MessageTemplates {
                 EmailTemplateManager.getVarname(pwdReqT.PasswordResetUrl())
         )));//@formatter:on
         return template;
+    }
+
+    private static String passwordResetUrl(String onboardingSystemBaseUrl, String authToken) {
+        StringBuilder resetUrl = new StringBuilder();
+        resetUrl.append(onboardingSystemBaseUrl);
+        if (!onboardingSystemBaseUrl.contains("?")) {
+            resetUrl.append("?");
+        } else {
+            resetUrl.append("&");
+        }
+        resetUrl.append(AuthenticationService.AUTH_TOKEN_ARG).append("=").append(authToken);
+
+        return resetUrl.toString();
     }
 }
