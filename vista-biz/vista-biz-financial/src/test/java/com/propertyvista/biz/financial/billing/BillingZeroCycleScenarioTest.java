@@ -43,7 +43,7 @@ public class BillingZeroCycleScenarioTest extends FinancialTestBase {
         SysDateManager.setSysDate("17-Mar-2011"); // create existing lease
 
         // When we create Existing Lease, the tenant is already living in the building
-        initLease("1-Jan-2011", "31-Dec-2011", new BigDecimal("900.00"), new BigDecimal("300.00"));
+        setLeaseTerms("1-Jan-2011", "31-Dec-2011", new BigDecimal("900.00"), new BigDecimal("300.00"));
 
         //==================== RUN 1 ======================//
 
@@ -100,7 +100,7 @@ public class BillingZeroCycleScenarioTest extends FinancialTestBase {
         SysDateManager.setSysDate("17-Mar-2011"); // create existing lease
 
         // When we create Existing Lease, the tenant is already living in the building
-        initLease("1-Jan-2011", "31-Dec-2011", new BigDecimal("900.00"), new BigDecimal("-100.00"));
+        setLeaseTerms("1-Jan-2011", "31-Dec-2011", new BigDecimal("900.00"), new BigDecimal("-100.00"));
 
         //==================== RUN 1 ======================//
 

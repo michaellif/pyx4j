@@ -33,7 +33,7 @@ public class BillingPeriodsTest extends FinancialTestBase {
 
     public void testSequentialBillingCycleWithGlobalBillingPeriodStartDate() throws ParseException {
         preloadData();
-        initLease("23-Mar-2011", "3-Aug-2011");
+        setLeaseTerms("23-Mar-2011", "3-Aug-2011");
 
         //==================== RUN 1 ======================//
 
@@ -256,7 +256,7 @@ public class BillingPeriodsTest extends FinancialTestBase {
         PreloadConfig config = new PreloadConfig();
         config.defaultBillingCycleSartDay = null;
         preloadData(config);
-        initLease("23-Mar-2011", "3-Aug-2011");
+        setLeaseTerms("23-Mar-2011", "3-Aug-2011");
 
         //==================== RUN 1 ======================//
 
@@ -418,7 +418,7 @@ public class BillingPeriodsTest extends FinancialTestBase {
         PreloadConfig config = new PreloadConfig();
         config.defaultBillingCycleSartDay = null;
         preloadData(config);
-        initLease(day + "-Mar-2011", "3-Aug-2011");
+        setLeaseTerms(day + "-Mar-2011", "3-Aug-2011");
 
         //==================== RUN 1 ======================//
 

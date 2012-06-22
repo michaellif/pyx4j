@@ -42,7 +42,7 @@ public class BillingFullCycleServAdjMonScenarioTest extends FinancialTestBase {
 
     public void testScenario() {
 
-        initLease("28-Jan-2012", "16-Feb-2013");
+        setLeaseTerms("28-Jan-2012", "16-Feb-2013");
         addServiceAdjustment("-55.55", AdjustmentType.monetary, ExecutionType.inLease);
 
         //==================== RUN 1 ======================//

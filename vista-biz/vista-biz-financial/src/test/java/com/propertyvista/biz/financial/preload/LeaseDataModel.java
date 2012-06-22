@@ -18,11 +18,13 @@ import java.util.GregorianCalendar;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.shared.EntityFactory;
 
+import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.Service;
+import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
@@ -51,7 +53,6 @@ public class LeaseDataModel {
         lease = EntityFactory.create(Lease.class);
 
         lease.type().setValue(Service.ServiceType.residentialUnit);
-        lease.unit().set(serviceItem.element());
 
         lease.version().leaseProducts().serviceItem().agreedPrice().setValue(serviceItem.price().getValue());
         lease.leaseFrom().setValue(new LogicalDate(111, 1, 25));
@@ -67,7 +68,10 @@ public class LeaseDataModel {
 
         addTenants();
 
-        Persistence.service().persist(lease);
+        lease = ServerSideFactory.create(LeaseFacade.class).init(lease);
+        lease = ServerSideFactory.create(LeaseFacade.class).setUnit(lease, (AptUnit) serviceItem.element().cast());
+
+        ServerSideFactory.create(LeaseFacade.class).persist(lease);
     }
 
     private void addTenants() {
