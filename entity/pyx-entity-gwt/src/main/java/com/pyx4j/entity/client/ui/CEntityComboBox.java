@@ -106,15 +106,11 @@ public class CEntityComboBox<E extends IEntity> extends CComboBox<E> implements 
     }
 
     public EntityQueryCriteria<E> addCriterion(Criterion criterion) {
-        if (optionsLoaded) {
-            throw new RuntimeException();
-        }
         return this.criteria.add(criterion);
     }
 
     public void resetCriteria() {
         this.criteria.resetCriteria();
-        resetOptions();
     }
 
     public void setOptionsFilter(OptionsFilter<E> optionsFilter) {
@@ -160,6 +156,14 @@ public class CEntityComboBox<E extends IEntity> extends CComboBox<E> implements 
     public void resetOptions() {
         if (optionsLoaded) {
             optionsLoaded = false;
+        }
+    }
+
+    public void refreshOptions() {
+        resetOptions();
+        retriveOptions(null);
+        if (isWidgetCreated()) {
+            getWidget().refreshOptions();
         }
     }
 
@@ -338,8 +342,7 @@ public class CEntityComboBox<E extends IEntity> extends CComboBox<E> implements 
         super.propagateValue(value, fireEvent, populate);
         if (populate && optionsFilter != null || (criteria != null && criteria.getFilters() != null && !criteria.getFilters().isEmpty())) {
             // Fire options reload since optionsFilter may depend on other values in the model.
-            resetOptions();
-            retriveOptions(null);
+            refreshOptions();
         }
     }
 
