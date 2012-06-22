@@ -42,6 +42,7 @@ import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
+import com.propertyvista.domain.policy.framework.PolicyNode;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.Tenant;
@@ -92,14 +93,13 @@ public class LeaseFacadeImpl implements LeaseFacade {
 
     @Override
     public Lease setUnit(Lease lease, AptUnit unitId) {
+        assert !lease.isValueDetached();
         if (!Lease.Status.draft().contains(lease.version().status().getValue())) {
             throw new UserRuntimeException(i18n.tr("Invalid Lease State"));
         }
 
         AptUnit unit = Persistence.secureRetrieve(AptUnit.class, unitId.getPrimaryKey());
         Persistence.service().retrieve(unit.building());
-
-        assert !lease.isValueDetached();
 
         boolean succeeded = false;
         lease.unit().set(unit);
@@ -134,28 +134,37 @@ public class LeaseFacadeImpl implements LeaseFacade {
 
     @Override
     public Lease setService(Lease lease, ProductItem serviceId) {
+        assert !lease.isValueDetached();
         if (!Lease.Status.draft().contains(lease.version().status().getValue())) {
             throw new UserRuntimeException(i18n.tr("Invalid Lease State"));
         }
 
-        ProductItem serviceItem = Persistence.secureRetrieve(ProductItem.class, serviceId.getPrimaryKey());
-
-        assert serviceItem != null;
-        assert !lease.isValueDetached();
-        assert !lease.unit().isNull();
-
-        // set selected service:
-        lease.version().leaseProducts().serviceItem().set(createBillableItem(serviceItem, lease));
-        if (bugNo1549) {
-            DataDump.dumpToDirectory("lease-bug", "serviceItem", lease);
-        }
-
         // find/load all necessary ingredients:
+        ProductItem serviceItem = Persistence.secureRetrieve(ProductItem.class, serviceId.getPrimaryKey());
+        assert serviceItem != null;
+        if (serviceItem.element().isValueDetached()) {
+            Persistence.service().retrieve(serviceItem.element());
+        }
+        assert !lease.unit().isNull();
         if (lease.unit().isValueDetached()) {
             Persistence.service().retrieve(lease.unit());
         }
+        assert !lease.unit().building().isNull();
         if (lease.unit().building().isValueDetached()) {
             Persistence.service().retrieve(lease.unit().building());
+        }
+
+        // double check:
+        if (!lease.unit().equals(serviceItem.element())) {
+            throw new UserRuntimeException(i18n.tr("Invalid Unit/Service combination"));
+        }
+
+        PolicyNode node = lease.unit().building();
+
+        // set selected service:
+        lease.version().leaseProducts().serviceItem().set(createBillableItem(serviceItem, node));
+        if (bugNo1549) {
+            DataDump.dumpToDirectory("lease-bug", "serviceItem", lease);
         }
 
         // Service by Service item:
@@ -177,7 +186,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
                 Persistence.service().retrieve(feature.version().items());
                 for (ProductItem item : feature.version().items()) {
                     if (item.isDefault().isBooleanTrue()) {
-                        lease.version().leaseProducts().featureItems().add(createBillableItem(item, lease));
+                        lease.version().leaseProducts().featureItems().add(createBillableItem(item, node));
                     }
                 }
             }
@@ -187,14 +196,17 @@ public class LeaseFacadeImpl implements LeaseFacade {
     }
 
     @Override
-    public BillableItem createBillableItem(ProductItem item, Lease lease) {
+    public BillableItem createBillableItem(ProductItem itemId, PolicyNode node) {
+        ProductItem item = Persistence.secureRetrieve(ProductItem.class, itemId.getPrimaryKey());
+        assert item != null;
+
         BillableItem newItem = EntityFactory.create(BillableItem.class);
         newItem.item().set(item);
         newItem.agreedPrice().setValue(item.price().getValue());
         newItem._currentPrice().setValue(item.price().getValue());
 
         // Add Deposits if present for the product::
-        List<Deposit> deposits = ServerSideFactory.create(DepositFacade.class).createRequiredDeposits(item.type(), lease);
+        List<Deposit> deposits = ServerSideFactory.create(DepositFacade.class).createRequiredDeposits(item.type(), node);
         if (deposits != null) {
             newItem.deposits().addAll(deposits);
         }

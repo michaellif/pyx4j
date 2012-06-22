@@ -110,6 +110,11 @@ public abstract class LeaseEditorCrudServiceBaseImpl<DTO extends LeaseDTO> exten
     }
 
     @Override
+    public void createBillableItem(AsyncCallback<BillableItem> callback, ProductItem item, DTO dto) {
+        callback.onSuccess(ServerSideFactory.create(LeaseFacade.class).createBillableItem(item, dto.unit().building()));
+    }
+
+    @Override
     public void calculateChargeItemAdjustments(AsyncCallback<BigDecimal> callback, BillableItem item) {
         callback.onSuccess(PriceCalculationHelpers.calculateChargeItemAdjustments(item));
     }

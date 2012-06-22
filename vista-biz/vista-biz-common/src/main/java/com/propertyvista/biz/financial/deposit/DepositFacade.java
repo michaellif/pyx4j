@@ -16,10 +16,10 @@ package com.propertyvista.biz.financial.deposit;
 import java.util.List;
 
 import com.propertyvista.domain.financial.offering.ProductItemType;
+import com.propertyvista.domain.policy.framework.PolicyNode;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Deposit;
 import com.propertyvista.domain.tenant.lease.Deposit.DepositType;
-import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 
 public interface DepositFacade {
@@ -27,17 +27,17 @@ public interface DepositFacade {
      * Creates deposit instance based on the corresponding policy. DepositType may limit acceptable target
      * products, for example, LastMonthDeposit may only accept ServiceType products.
      */
-    Deposit createDeposit(DepositType depositType, ProductItemType productType, Lease lease);
+    Deposit createDeposit(DepositType depositType, ProductItemType productType, PolicyNode node);
 
     /*
      * Create all deposits required by the policy
      */
-    List<Deposit> createRequiredDeposits(ProductItemType productType, Lease lease);
+    List<Deposit> createRequiredDeposits(ProductItemType productType, PolicyNode node);
 
     /*
      * Every deposit must collect interest based on the corresponding policy rules and interest rates
      */
-    void collectInterest(Deposit deposit, Lease lease);
+    void collectInterest(Deposit deposit, PolicyNode node);
 
     /*
      * Request to cover expenses may be rejected based on the expense type, so the boolean is returned

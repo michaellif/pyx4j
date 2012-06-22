@@ -28,28 +28,28 @@ import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.propertyvista.biz.financial.SysDateManager;
 import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.domain.financial.offering.ProductItemType;
+import com.propertyvista.domain.policy.framework.PolicyNode;
 import com.propertyvista.domain.policy.policies.DepositPolicy;
 import com.propertyvista.domain.policy.policies.domain.DepositPolicyItem;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Deposit;
 import com.propertyvista.domain.tenant.lease.Deposit.DepositStatus;
 import com.propertyvista.domain.tenant.lease.Deposit.DepositType;
-import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 
 public class DepositFacadeImpl implements DepositFacade {
     private static final I18n i18n = I18n.get(DepositFacadeImpl.class);
 
     @Override
-    public Deposit createDeposit(DepositType depositType, ProductItemType productType, Lease lease) {
-        DepositPolicyItem policyItem = getPolicyItem(depositType, productType, lease);
+    public Deposit createDeposit(DepositType depositType, ProductItemType productType, PolicyNode node) {
+        DepositPolicyItem policyItem = getPolicyItem(depositType, productType, node);
         return (policyItem == null ? null : makeDeposit(policyItem));
     }
 
     @Override
-    public List<Deposit> createRequiredDeposits(ProductItemType productType, Lease lease) {
+    public List<Deposit> createRequiredDeposits(ProductItemType productType, PolicyNode node) {
         // get policy
-        DepositPolicy depositPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(lease.unit().building(), DepositPolicy.class);
+        DepositPolicy depositPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(node, DepositPolicy.class);
         List<Deposit> deposits = new ArrayList<Deposit>();
         for (DepositPolicyItem policyItem : depositPolicy.policyItems()) {
             if (!policyItem.productType().equals(productType)) {
@@ -62,8 +62,8 @@ public class DepositFacadeImpl implements DepositFacade {
     }
 
     @Override
-    public void collectInterest(Deposit deposit, Lease lease) {
-        DepositPolicyItem policyItem = getPolicyItem(deposit.type().getValue(), deposit.billableItem().item().type(), lease);
+    public void collectInterest(Deposit deposit, PolicyNode node) {
+        DepositPolicyItem policyItem = getPolicyItem(deposit.type().getValue(), deposit.billableItem().item().type(), node);
         if (policyItem == null) {
             throw new UserRuntimeException(i18n.tr("Could not find Policy Item for deposit {0}", deposit.getStringView()));
         }
@@ -105,9 +105,9 @@ public class DepositFacadeImpl implements DepositFacade {
         return deposit;
     }
 
-    private DepositPolicyItem getPolicyItem(DepositType depositType, ProductItemType productType, Lease lease) {
+    private DepositPolicyItem getPolicyItem(DepositType depositType, ProductItemType productType, PolicyNode node) {
         DepositPolicyItem policyItem = null;
-        DepositPolicy depositPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(lease.unit().building(), DepositPolicy.class);
+        DepositPolicy depositPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(node, DepositPolicy.class);
         for (DepositPolicyItem pi : depositPolicy.policyItems()) {
             if (pi.depositType().getValue().equals(depositType) && pi.productType().equals(productType)) {
                 policyItem = pi;

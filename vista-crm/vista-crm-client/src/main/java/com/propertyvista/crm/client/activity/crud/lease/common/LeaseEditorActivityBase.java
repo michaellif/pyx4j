@@ -63,6 +63,11 @@ public abstract class LeaseEditorActivityBase<DTO extends LeaseDTO> extends Edit
     }
 
     @Override
+    public void createBillableItem(AsyncCallback<BillableItem> callback, ProductItem item) {
+        ((LeaseEditorCrudServiceBase<DTO>) getService()).createBillableItem(callback, item, getView().getValue());
+    }
+
+    @Override
     public void calculateChargeItemAdjustments(AsyncCallback<BigDecimal> callback, BillableItem item) {
         ((LeaseEditorCrudServiceBase<DTO>) getService()).calculateChargeItemAdjustments(callback, item);
     }

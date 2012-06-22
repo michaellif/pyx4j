@@ -27,5 +27,7 @@ public interface LeaseEditorPresenterBase {
 
     void setSelectedService(ProductItem selected);
 
+    void createBillableItem(AsyncCallback<BillableItem> callback, ProductItem item);
+
     void calculateChargeItemAdjustments(AsyncCallback<BigDecimal> callback, BillableItem item);
 }
