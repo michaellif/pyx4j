@@ -42,4 +42,7 @@ public interface CashInfo extends PaymentDetails {
     @Caption(name = "Change Amount")
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> changeAmount();
+
+    @Editor(type = EditorType.textarea)
+    IPrimitive<BigDecimal> notes();
 }
