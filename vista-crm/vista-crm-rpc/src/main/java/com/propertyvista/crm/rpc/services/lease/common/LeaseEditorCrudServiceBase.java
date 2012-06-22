@@ -26,11 +26,11 @@ import com.propertyvista.dto.LeaseDTO;
 
 public interface LeaseEditorCrudServiceBase<DTO extends LeaseDTO> extends AbstractVersionedCrudService<DTO> {
 
-    void setSelectedUnit(AsyncCallback<DTO> callback, AptUnit unitId, DTO dto);
+    void setSelectedUnit(AsyncCallback<DTO> callback, AptUnit unitId, DTO currentValue);
 
-    void setSelectedService(AsyncCallback<DTO> callback, ProductItem serviceId, DTO dto);
+    void setSelectedService(AsyncCallback<DTO> callback, ProductItem serviceId, DTO currentValue);
 
-    void createBillableItem(AsyncCallback<BillableItem> callback, ProductItem itemId, DTO dto);
+    void createBillableItem(AsyncCallback<BillableItem> callback, ProductItem itemId, DTO currentValue);
 
     void calculateChargeItemAdjustments(AsyncCallback<BigDecimal> callback, BillableItem item);
 }

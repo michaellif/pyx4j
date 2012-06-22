@@ -24,13 +24,13 @@ import com.pyx4j.entity.client.CEntityForm;
 import com.pyx4j.entity.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.entity.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.entity.client.ui.folder.IFolderItemDecorator;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.ui.crud.form.IEditorView;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
@@ -81,11 +81,12 @@ public class BillableItemFolder extends VistaBoxFolder<BillableItem> {
                 @Override
                 public boolean onClickOk() {
                     for (ProductItem item : getSelectedItems()) {
-                        BillableItem newItem = EntityFactory.create(BillableItem.class);
-                        newItem.item().set(item);
-                        newItem.agreedPrice().setValue(item.price().getValue());
-                        newItem._currentPrice().setValue(item.price().getValue());
-                        addItem(newItem);
+                        ((LeaseEditorPresenterBase) leaseEditorView.getPresenter()).createBillableItem(new DefaultAsyncCallback<BillableItem>() {
+                            @Override
+                            public void onSuccess(BillableItem result) {
+                                addItem(result);
+                            }
+                        }, item);
                     }
                     return true;
                 }

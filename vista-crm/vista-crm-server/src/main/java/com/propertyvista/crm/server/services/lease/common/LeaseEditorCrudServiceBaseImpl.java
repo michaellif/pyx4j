@@ -94,24 +94,25 @@ public abstract class LeaseEditorCrudServiceBaseImpl<DTO extends LeaseDTO> exten
     }
 
     @Override
-    public void setSelectedUnit(AsyncCallback<DTO> callback, AptUnit unitId, DTO dto) {
-        ServerSideFactory.create(LeaseFacade.class).setUnit(dto, unitId);
-        dto.selectedBuilding().set(dto.unit().building());
-        fillServiceEligibilityData(dto);
-        fillserviceItems(dto);
-        callback.onSuccess(dto);
+    public void setSelectedUnit(AsyncCallback<DTO> callback, AptUnit unitId, DTO currentValue) {
+        ServerSideFactory.create(LeaseFacade.class).setUnit(currentValue, unitId);
+        currentValue.selectedBuilding().set(currentValue.unit().building());
+        fillServiceEligibilityData(currentValue);
+        fillserviceItems(currentValue);
+        callback.onSuccess(currentValue);
     }
 
     @Override
-    public void setSelectedService(AsyncCallback<DTO> callback, ProductItem serviceId, DTO dto) {
-        ServerSideFactory.create(LeaseFacade.class).setService(dto, serviceId);
-        fillServiceEligibilityData(dto);
-        callback.onSuccess(dto);
+    public void setSelectedService(AsyncCallback<DTO> callback, ProductItem serviceId, DTO currentValue) {
+        ServerSideFactory.create(LeaseFacade.class).setService(currentValue, serviceId);
+        fillServiceEligibilityData(currentValue);
+        callback.onSuccess(currentValue);
     }
 
     @Override
-    public void createBillableItem(AsyncCallback<BillableItem> callback, ProductItem item, DTO dto) {
-        callback.onSuccess(ServerSideFactory.create(LeaseFacade.class).createBillableItem(item, dto.unit().building()));
+    public void createBillableItem(AsyncCallback<BillableItem> callback, ProductItem item, DTO currentValue) {
+        assert !currentValue.selectedBuilding().isNull();
+        callback.onSuccess(ServerSideFactory.create(LeaseFacade.class).createBillableItem(item, currentValue.selectedBuilding()));
     }
 
     @Override

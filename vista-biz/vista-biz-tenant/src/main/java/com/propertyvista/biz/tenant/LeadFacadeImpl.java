@@ -77,7 +77,6 @@ public class LeadFacadeImpl implements LeadFacade {
 
         Lease lease = EntityFactory.create(Lease.class);
         lease.type().set(lead.leaseType());
-        lease.unit().set(unitId);
 
         lease.leaseFrom().setValue(lead.moveInDate().getValue());
         lease.leaseTo().setValue(new LogicalDate(leaseEnd));
@@ -98,9 +97,9 @@ public class LeadFacadeImpl implements LeadFacade {
         }
         LeaseFacade leaseFacade = ServerSideFactory.create(LeaseFacade.class);
         lease = leaseFacade.init(lease);
-		if (lease.unit().getPrimaryKey() == null) {
-			leaseFacade.setUnit(lease, lease.unit());
-		}
+        if (unitId.getPrimaryKey() == null) {
+            leaseFacade.setUnit(lease, unitId);
+        }
         lease = leaseFacade.persist(lease);
 
         // mark Lead as converted:
