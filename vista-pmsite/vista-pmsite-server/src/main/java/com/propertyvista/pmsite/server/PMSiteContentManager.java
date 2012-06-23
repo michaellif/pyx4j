@@ -497,4 +497,8 @@ public class PMSiteContentManager implements Serializable {
         }
         return slogan;
     }
+
+    public String poveredByUrl() {
+        return "http://www.properytvista.com";
+    }
 }

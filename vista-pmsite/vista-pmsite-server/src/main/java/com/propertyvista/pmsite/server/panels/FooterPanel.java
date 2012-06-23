@@ -18,6 +18,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -26,9 +27,11 @@ import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import com.pyx4j.config.shared.ApplicationMode;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.ref.City;
 import com.propertyvista.domain.site.AvailableLocale;
@@ -40,6 +43,8 @@ import com.propertyvista.pmsite.server.pages.AptListPage;
 public class FooterPanel extends Panel {
 
     private static final long serialVersionUID = 1L;
+
+    private static final I18n i18n = I18n.get(FooterPanel.class);
 
     public FooterPanel() {
         super("footer");
@@ -105,12 +110,27 @@ public class FooterPanel extends Panel {
 
         add(new LocalePanel("locale"));
 
-        Label copy = new Label("footer_legal", cm.getCopyrightInfo(siteLocale));
-        if (ApplicationMode.isDevelopment()) {
-            copy.setDefaultModelObject(copy.getDefaultModelObjectAsString() + "<br/>" + new Date());
-            copy.setEscapeModelStrings(false);
-        }
-
+        Label copy = new Label("footer_copyright", cm.getCopyrightInfo(siteLocale));
         add(copy);
+
+        ExternalLink poweredProd = new ExternalLink("powered_product", cm.poveredByUrl());
+        String title = i18n.tr("Property Management Software");
+        poweredProd.setBody(new Model<String>(title));
+        poweredProd.add(AttributeModifier.replace("title", title));
+        add(poweredProd);
+        Label poweredBy = new Label("powered_by", i18n.tr("powered by"));
+        add(poweredBy);
+        ExternalLink poweredLogo = new ExternalLink("powered_logo", cm.poveredByUrl());
+        title = "PropertyVista";
+        poweredLogo.add(AttributeModifier.replace("title", title));
+        add(poweredLogo);
+
+        Label devTs = new Label("dev_ts");
+        if (ApplicationMode.isDevelopment()) {
+            devTs.setDefaultModel(Model.of(new Date().toString()));
+        } else {
+            devTs.setVisible(false);
+        }
+        add(devTs);
     }
 }

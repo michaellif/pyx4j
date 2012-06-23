@@ -264,7 +264,7 @@ ul.footer_locations li {
 	color: inherit;
 }
 
-.footer_legal {
+.footer_copyright {
 	text-align: center;
 	line-height: 60px;
 }
@@ -304,6 +304,24 @@ ul.footer_locations li {
 	background-position: -96px 0;
 }
 
+.legal_poweredby {
+	text-align: center;
+	line-height: 20px;
+}
+.powered_product {
+	
+}
+.powered_by {
+	
+}
+.powered_logo {
+	background: url("images/vista.gif") no-repeat;
+	display:inline-block;
+	width: 100px; height: 20px;
+}
+/*
+ * Content
+ */
 .vista-pmsite-main .caption {
 	background-size: 100% 100%;
 	height: 80px;
