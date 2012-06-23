@@ -25,7 +25,7 @@ public class VistaServerSideConfigurationProdMain extends VistaServerSideConfigu
 
     @Override
     public String getApplicationEmailSender() {
-        return "\"Property Vista\" <noreply@propertyvista>";
+        return "\"Property Vista\" <no-reply@propertyvista>";
     }
 
     @Override
