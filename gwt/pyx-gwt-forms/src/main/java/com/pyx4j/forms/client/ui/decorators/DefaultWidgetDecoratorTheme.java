@@ -52,7 +52,7 @@ public class DefaultWidgetDecoratorTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", StyleName.WidgetDecoratorLabelHolder);
-        style.addProperty("padding-right", "10px");
+        style.addProperty("padding-right", "1em");
         addStyle(style);
 
         style = new Style(".", StyleName.WidgetDecoratorLabel);
