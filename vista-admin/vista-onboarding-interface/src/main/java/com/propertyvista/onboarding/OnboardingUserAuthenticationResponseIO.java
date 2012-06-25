@@ -46,6 +46,8 @@ public interface OnboardingUserAuthenticationResponseIO extends ResponseIO {
 
     IPrimitive<OnboardingRole> role();
 
+    IPrimitive<String> email();
+
     IPrimitive<String> onboardingAccountId();
 
     /**

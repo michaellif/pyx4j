@@ -150,6 +150,7 @@ public class OnboardingUserAuthenticationRequestHandler extends AbstractRequestH
                 } else {
                     response.role().setValue(OnboardingXMLUtils.convertRole(cr.behavior().getValue()));
                     response.onboardingAccountId().set(pmc.onboardingAccountId());
+                    response.email().setValue(user.email().getValue());
                     response.status().setValue(OnboardingUserAuthenticationResponseIO.AuthenticationStatusCode.OK);
                     return response;
                 }
@@ -174,10 +175,12 @@ public class OnboardingUserAuthenticationRequestHandler extends AbstractRequestH
             }
             if (cr.requiredPasswordChangeOnNextLogIn().isBooleanTrue()) {
                 response.status().setValue(OnboardingUserAuthenticationResponseIO.AuthenticationStatusCode.OK_PasswordChangeRequired);
+                response.email().setValue(user.email().getValue());
                 return response;
             } else {
                 response.role().setValue(OnboardingXMLUtils.convertRole(cr.behavior().getValue()));
                 response.onboardingAccountId().set(cr.onboardingAccountId());
+                response.email().setValue(user.email().getValue());
                 response.status().setValue(OnboardingUserAuthenticationResponseIO.AuthenticationStatusCode.OK);
                 return response;
             }

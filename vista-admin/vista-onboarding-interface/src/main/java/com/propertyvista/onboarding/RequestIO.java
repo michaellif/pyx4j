@@ -33,7 +33,10 @@ public interface RequestIO extends IEntity {
     /**
      * The Internet Protocol (IP) address of the client or last proxy that sent the request.
      */
+    @NotNull
     IPrimitive<String> requestRemoteAddr();
+
+    IPrimitive<String> remoteSessionId();
 
     @NotNull
     IPrimitive<String> onboardingAccountId();

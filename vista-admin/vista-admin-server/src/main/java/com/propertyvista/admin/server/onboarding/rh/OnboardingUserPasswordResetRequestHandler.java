@@ -109,6 +109,7 @@ public class OnboardingUserPasswordResetRequestHandler extends AbstractRequestHa
 
         response.role().setValue(OnboardingXMLUtils.convertRole(cr.behavior().getValue()));
         response.onboardingAccountId().set(cr.onboardingAccountId());
+        response.email().setValue(user.email().getValue());
         response.status().setValue(OnboardingUserAuthenticationResponseIO.AuthenticationStatusCode.OK);
         return response;
     }
