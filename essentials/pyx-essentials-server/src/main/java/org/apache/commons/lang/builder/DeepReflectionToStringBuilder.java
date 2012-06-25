@@ -49,6 +49,10 @@ public class DeepReflectionToStringBuilder extends ToStringBuilder {
 
     private static ThreadLocal<DeepReflectionToStringBuilder> builder = new ThreadLocal<DeepReflectionToStringBuilder>();
 
+    public static void removeThreadLocale() {
+        builder.remove();
+    }
+
     /**
      * <p>
      * Returns the registry of objects being traversed by the <code>reflectionToString</code> methods in the current thread.

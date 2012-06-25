@@ -151,7 +151,11 @@ public class DataDump {
             w = new FileWriter(f);
             switch (dataType) {
             case SerializableObject:
-                w.write(DeepReflectionToStringBuilder.toString(item, DeepToStringStyle.STYLE_NO_IDENTITY));
+                try {
+                    w.write(DeepReflectionToStringBuilder.toString(item, DeepToStringStyle.STYLE_NO_IDENTITY));
+                } finally {
+                    DeepReflectionToStringBuilder.removeThreadLocale();
+                }
                 break;
             default:
                 XMLStringWriter xml = new XMLStringWriter(Charset.forName("UTF-8"));
