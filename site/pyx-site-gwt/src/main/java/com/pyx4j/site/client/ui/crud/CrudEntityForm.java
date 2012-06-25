@@ -20,12 +20,18 @@
  */
 package com.pyx4j.site.client.ui.crud;
 
+import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.Widget;
+
 import com.pyx4j.entity.client.CEntityForm;
-import com.pyx4j.entity.client.EntityContainerScrollPanel;
 import com.pyx4j.entity.client.IDecorator;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.tabpanel.Tab;
+import com.pyx4j.widgets.client.tabpanel.TabPanel;
 
 public abstract class CrudEntityForm<E extends IEntity> extends CEntityForm<E> {
 
@@ -33,24 +39,25 @@ public abstract class CrudEntityForm<E extends IEntity> extends CEntityForm<E> {
 
     private IFormView<? extends IEntity> parentView;
 
-    public CrudEntityForm(Class<E> rootClass) {
-        this(rootClass, false);
+    private TabPanel tabPanel;
+
+    public CrudEntityForm(Class<E> rootClass, double tabHeight) {
+        this(rootClass, null, false, tabHeight);
     }
 
-    public CrudEntityForm(Class<E> rootClass, boolean viewMode) {
-        super(rootClass);
-        if (viewMode) {
-            setEditable(false);
-            setViewable(true);
-        }
+    public CrudEntityForm(Class<E> rootClass, boolean viewMode, double tabHeight) {
+        this(rootClass, null, viewMode, tabHeight);
     }
 
-    public CrudEntityForm(Class<E> rootClass, IEditableComponentFactory factory) {
-        this(rootClass, factory, false);
+    public CrudEntityForm(Class<E> rootClass, IEditableComponentFactory factory, double tabHeight) {
+        this(rootClass, factory, false, tabHeight);
     }
 
-    public CrudEntityForm(Class<E> rootClass, IEditableComponentFactory factory, boolean viewMode) {
+    public CrudEntityForm(Class<E> rootClass, IEditableComponentFactory factory, boolean viewMode, double tabHeight) {
         super(rootClass, factory);
+        tabPanel = new TabPanel(tabHeight, Unit.EM);
+        tabPanel.setSize("100%", "100%");
+
         if (viewMode) {
             setEditable(false);
             setViewable(true);
@@ -59,7 +66,49 @@ public abstract class CrudEntityForm<E extends IEntity> extends CEntityForm<E> {
 
     @Override
     protected IDecorator createDecorator() {
-        return new EntityContainerScrollPanel();
+        return null;
+    }
+
+    @Override
+    public IsWidget createContent() {
+
+        createTabs();
+
+        return tabPanel;
+    }
+
+    abstract protected void createTabs();
+
+    public Tab addTab(Widget content, String tabTitle) {
+        return addTab(content, tabTitle, true);
+    }
+
+    public Tab addTab(Widget content, String tabTitle, boolean scrolled) {
+        Tab tab = null;
+        if (scrolled) {
+            ScrollPanel scroll = new ScrollPanel(content);
+            tab = new Tab(scroll, tabTitle, null, false);
+        } else {
+            tab = new Tab(content, tabTitle, null, false);
+        }
+        tabPanel.add(tab);
+        return tab;
+    }
+
+    public void enableTab(Tab tab, boolean enabled) {
+        tabPanel.enableTab(tab, enabled);
+    }
+
+    public boolean isTabEnabled(Tab tab) {
+        return tabPanel.isTabEnabled(tab);
+    }
+
+    public void selectTab(Tab tab) {
+        tabPanel.selectTab(tab);
+    }
+
+    public void showTab(Tab tab, boolean show) {
+        tabPanel.showTab(tab, show);
     }
 
     public void setParentView(IFormView<? extends IEntity> parentView) {
@@ -71,11 +120,11 @@ public abstract class CrudEntityForm<E extends IEntity> extends CEntityForm<E> {
         return parentView;
     }
 
-    // default active tab mechanics:
     public void setActiveTab(int index) {
+        tabPanel.selectTab(index);
     }
 
     public int getActiveTab() {
-        return -1;
+        return tabPanel.getSelectedIndex();
     }
 }

@@ -97,7 +97,6 @@ public class TabPanel extends ResizeComposite implements HasWidgets, ProvidesRes
         deckPanel.add(tab);
         tabs.put(tab.getTabBarItem(), tab);
         tab.setParentTabPanel(this);
-        tab.setSelected();
     }
 
     public boolean remove(Tab tab) {
@@ -149,6 +148,10 @@ public class TabPanel extends ResizeComposite implements HasWidgets, ProvidesRes
         tabBar.onTabEnabled(tab, enabled);
     }
 
+    public boolean isTabEnabled(Tab tab) {
+        return tab.getTabBarItem().isEnabled();
+    }
+
     public boolean selectTab(Tab tab) {
 
         BeforeSelectionEvent<?> event = BeforeSelectionEvent.fire(this, tab);
@@ -165,7 +168,7 @@ public class TabPanel extends ResizeComposite implements HasWidgets, ProvidesRes
         return true;
     }
 
-    public void select(int index) {
+    public void selectTab(int index) {
         selectTab(tabs.get(tabBar.getTabBarItem(index)));
     }
 
@@ -175,6 +178,11 @@ public class TabPanel extends ResizeComposite implements HasWidgets, ProvidesRes
 
     public int getSelectedIndex() {
         return tabBar.getTabBarIndex(tabBar.getSelectedTabBarItem());
+    }
+
+    public void showTab(Tab tab, boolean show) {
+        // TODO Auto-generated method stub
+
     }
 
     public Collection<Tab> getTabs() {

@@ -67,10 +67,13 @@ public abstract class CEntityForm<E extends IEntity> extends CEntityContainer<E>
     private final Map<CComponent<?, ?>, Path> binding = new HashMap<CComponent<?, ?>, Path>();
 
     public CEntityForm(Class<E> clazz) {
-        this(clazz, new EntityFormComponentFactory());
+        this(clazz, null);
     }
 
     public CEntityForm(Class<E> clazz, IEditableComponentFactory factory) {
+        if (factory == null) {
+            factory = new EntityFormComponentFactory();
+        }
         this.entityPrototype = EntityFactory.getEntityPrototype(clazz);
         this.factory = factory;
         setDebugIdSuffix(new StringDebugId(GWTJava5Helper.getSimpleName(clazz)));

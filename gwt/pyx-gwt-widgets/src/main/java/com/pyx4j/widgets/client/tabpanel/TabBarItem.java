@@ -217,4 +217,8 @@ public class TabBarItem extends HorizontalPanel {
         return tab;
     }
 
+    public boolean isEnabled() {
+        return enabled;
+    }
+
 }
