@@ -30,6 +30,7 @@ import com.google.gwt.view.client.Range;
 
 import com.pyx4j.commons.ValidationUtils;
 import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
+import com.pyx4j.entity.client.IDecorator;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.forms.client.ui.CMonthYearPicker;
@@ -40,9 +41,10 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;
+import com.pyx4j.widgets.client.tabpanel.Tab;
+import com.pyx4j.widgets.client.tabpanel.TabPanel;
 
 import com.propertyvista.common.client.policy.ClientPolicyManager;
-import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.common.client.ui.components.editors.AddressStructuredEditor;
 import com.propertyvista.common.client.ui.components.editors.MarketingEditor;
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
@@ -66,7 +68,7 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
 
     private static final I18n i18n = I18n.get(BuildingForm.class);
 
-    private final VistaTabLayoutPanel tabPanel = new VistaTabLayoutPanel(CrmTheme.defaultTabHeight, Unit.EM);
+    private final TabPanel tabPanel = new TabPanel(CrmTheme.defaultTabHeight, Unit.EM);
 
     public BuildingForm() {
         this(false);
@@ -77,19 +79,32 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
     }
 
     @Override
+    protected IDecorator createDecorator() {
+        return null;
+    }
+
+    @Override
     public IsWidget createContent() {
 
-        tabPanel.add(isEditable() ? new HTML() : createDashboardTab(), i18n.tr("Dashboard"));
-        tabPanel.setLastTabDisabled(isEditable());
+        Tab tab = new Tab(isEditable() ? new HTML() : createDashboardTab(), i18n.tr("Dashboard"), null, false);
+        tabPanel.add(tab);
+        tabPanel.enableTab(tab, !isEditable());
 
-        tabPanel.add(createGeneralTab(), i18n.tr("General"));
-        tabPanel.add(createDetailsTab(), i18n.tr("Details"));
+        tab = new Tab(createGeneralTab(), i18n.tr("General"), null, false);
+        tabPanel.add(tab);
 
-        tabPanel.add(isEditable() ? new HTML() : new ScrollPanel(((BuildingViewerView) getParentView()).getFloorplanListerView().asWidget()),
-                i18n.tr("Floorplans"));
-        tabPanel.setLastTabDisabled(isEditable());
-        tabPanel.add(isEditable() ? new HTML() : new ScrollPanel(((BuildingViewerView) getParentView()).getUnitListerView().asWidget()), i18n.tr("Units"));
-        tabPanel.setLastTabDisabled(isEditable());
+        tab = new Tab(createDetailsTab(), i18n.tr("Details"), null, false);
+        tabPanel.add(tab);
+
+        tab = new Tab(isEditable() ? new HTML() : new ScrollPanel(((BuildingViewerView) getParentView()).getFloorplanListerView().asWidget()),
+                i18n.tr("Floorplans"), null, false);
+        tabPanel.add(tab);
+        tabPanel.enableTab(tab, !isEditable());
+
+        tab = new Tab(isEditable() ? new HTML() : new ScrollPanel(((BuildingViewerView) getParentView()).getUnitListerView().asWidget()), i18n.tr("Units"),
+                null, false);
+        tabPanel.add(tab);
+        tabPanel.enableTab(tab, !isEditable());
 
         FormFlexPanel combinedtab = new FormFlexPanel();
         int row = 0;
@@ -99,8 +114,10 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         combinedtab.setWidget(row++, 0, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getBoilerListerView().asWidget());
         combinedtab.setH4(row++, 0, 2, i18n.tr("Roofs"));
         combinedtab.setWidget(row++, 0, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getRoofListerView().asWidget());
-        tabPanel.add(new ScrollPanel(combinedtab), i18n.tr("Mechanicals"));
-        tabPanel.setLastTabDisabled(isEditable());
+
+        tab = new Tab(new ScrollPanel(combinedtab), i18n.tr("Mechanicals"), null, false);
+        tabPanel.add(tab);
+        tabPanel.enableTab(tab, !isEditable());
 
         combinedtab = new FormFlexPanel();
         row = 0;
@@ -108,11 +125,16 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         combinedtab.setWidget(row++, 0, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getParkingListerView().asWidget());
         combinedtab.setH4(row++, 0, 2, i18n.tr("Locker Areas"));
         combinedtab.setWidget(row++, 0, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getLockerAreaListerView().asWidget());
-        tabPanel.add(new ScrollPanel(combinedtab), i18n.tr("Add-Ons"));
-        tabPanel.setLastTabDisabled(isEditable());
 
-        tabPanel.add(createFinancialTab(), i18n.tr("Financial"));
-        tabPanel.add(createMarketingTab(), i18n.tr("Marketing"));
+        tab = new Tab(new ScrollPanel(combinedtab), i18n.tr("Add-Ons"), null, false);
+        tabPanel.add(tab);
+        tabPanel.enableTab(tab, !isEditable());
+
+        tab = new Tab(createFinancialTab(), i18n.tr("Financial"), null, false);
+        tabPanel.add(tab);
+
+        tab = new Tab(createMarketingTab(), i18n.tr("Marketing"), null, false);
+        tabPanel.add(tab);
 
         combinedtab = new FormFlexPanel();
         row = 0;
@@ -122,14 +144,21 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         combinedtab.setWidget(row++, 0, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getFeatureListerView().asWidget());
         combinedtab.setH4(row++, 0, 2, i18n.tr("Concessions"));
         combinedtab.setWidget(row++, 0, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getConcessionListerView().asWidget());
-        tabPanel.add(new ScrollPanel(combinedtab), i18n.tr("Product Catalog"));
-        tabPanel.setLastTabDisabled(isEditable());
 
-        tabPanel.add(createContactTab(), i18n.tr("Contacts"));
-        tabPanel.add(createNotesAndAttachmentsTab(), i18n.tr("Notes & Attachments"));
+        tab = new Tab(new ScrollPanel(combinedtab), i18n.tr("Product Catalog"), null, false);
+        tabPanel.add(tab);
+        tabPanel.enableTab(tab, !isEditable());
 
-        tabPanel.add(isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getBillingCycleListerView().asWidget(), i18n.tr("Billing Cycles"));
-        tabPanel.setLastTabDisabled(isEditable());
+        tab = new Tab(createContactTab(), i18n.tr("Contacts"), null, false);
+        tabPanel.add(tab);
+
+        tab = new Tab(createNotesAndAttachmentsTab(), i18n.tr("Notes & Attachments"), null, false);
+        tabPanel.add(tab);
+
+        tab = new Tab(isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getBillingCycleListerView().asWidget(), i18n.tr("Billing Cycles"),
+                null, false);
+        tabPanel.add(tab);
+        tabPanel.enableTab(tab, !isEditable());
 
         tabPanel.setSize("100%", "100%");
         return tabPanel;
@@ -202,7 +231,7 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
 
     @Override
     public void setActiveTab(int index) {
-        tabPanel.selectTab(index);
+        tabPanel.select(index);
     }
 
     @Override

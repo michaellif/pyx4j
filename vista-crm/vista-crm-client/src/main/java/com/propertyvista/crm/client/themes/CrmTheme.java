@@ -27,6 +27,7 @@ import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 import com.pyx4j.widgets.client.dashboard.CSSNames;
 import com.pyx4j.widgets.client.datepicker.DefaultDatePickerTheme;
 import com.pyx4j.widgets.client.dialog.DefaultDialogTheme;
+import com.pyx4j.widgets.client.tabpanel.DefaultTabTheme;
 
 import com.propertyvista.common.client.theme.BillingTheme;
 import com.propertyvista.common.client.theme.CrmSitePanelTheme;
@@ -90,6 +91,8 @@ public class CrmTheme extends VistaTheme {
         addTheme(new DefaultDataTableTheme());
         addTheme(new DefaultDialogTheme());
         addTheme(new DefaultCCOmponentsTheme());
+
+        addTheme(new DefaultTabTheme());
 
         addTheme(new CrmSitePanelTheme());
         addTheme(new DraggerMixin());
