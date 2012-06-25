@@ -22,12 +22,14 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
+import com.propertyvista.biz.financial.deposit.DepositFacade;
 import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.crm.rpc.services.lease.common.LeaseEditorCrudServiceBase;
 import com.propertyvista.crm.server.util.CrmAppContext;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ProductCatalog;
 import com.propertyvista.domain.financial.offering.ProductItem;
+import com.propertyvista.domain.financial.offering.ProductItemType;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -35,6 +37,8 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.ExecutionType;
+import com.propertyvista.domain.tenant.lease.Deposit;
+import com.propertyvista.domain.tenant.lease.Deposit.DepositType;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.server.common.charges.PriceCalculationHelpers;
@@ -113,6 +117,12 @@ public abstract class LeaseEditorCrudServiceBaseImpl<DTO extends LeaseDTO> exten
     public void createBillableItem(AsyncCallback<BillableItem> callback, ProductItem item, DTO currentValue) {
         assert !currentValue.selectedBuilding().isNull();
         callback.onSuccess(ServerSideFactory.create(LeaseFacade.class).createBillableItem(item, currentValue.selectedBuilding()));
+    }
+
+    @Override
+    public void createDeposit(AsyncCallback<Deposit> callback, DepositType depositType, ProductItemType productType, DTO currentValue) {
+        assert !currentValue.selectedBuilding().isNull();
+        callback.onSuccess(ServerSideFactory.create(DepositFacade.class).createDeposit(depositType, productType, currentValue.selectedBuilding()));
     }
 
     @Override

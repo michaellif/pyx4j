@@ -27,8 +27,11 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 import com.propertyvista.crm.client.ui.crud.lease.common.LeaseEditorPresenterBase;
 import com.propertyvista.crm.rpc.services.lease.common.LeaseEditorCrudServiceBase;
 import com.propertyvista.domain.financial.offering.ProductItem;
+import com.propertyvista.domain.financial.offering.ProductItemType;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.BillableItem;
+import com.propertyvista.domain.tenant.lease.Deposit;
+import com.propertyvista.domain.tenant.lease.Deposit.DepositType;
 import com.propertyvista.dto.LeaseDTO;
 
 public abstract class LeaseEditorActivityBase<DTO extends LeaseDTO> extends EditorActivityBase<DTO> implements LeaseEditorPresenterBase {
@@ -65,6 +68,11 @@ public abstract class LeaseEditorActivityBase<DTO extends LeaseDTO> extends Edit
     @Override
     public void createBillableItem(AsyncCallback<BillableItem> callback, ProductItem item) {
         ((LeaseEditorCrudServiceBase<DTO>) getService()).createBillableItem(callback, item, getView().getValue());
+    }
+
+    @Override
+    public void createDeposit(AsyncCallback<Deposit> callback, DepositType depositType, ProductItemType productType) {
+        ((LeaseEditorCrudServiceBase<DTO>) getService()).createDeposit(callback, depositType, productType, getView().getValue());
     }
 
     @Override

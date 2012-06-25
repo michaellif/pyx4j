@@ -20,6 +20,7 @@ import java.util.List;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 
@@ -36,6 +37,7 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationFailure;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.ui.crud.form.IEditorView;
 import com.pyx4j.site.client.ui.crud.misc.CEntitySelectorHyperlink;
@@ -420,26 +422,30 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
             new SelectEnumDialog<DepositType>(i18n.tr("Select Deposit Type"), EnumSet.allOf(DepositType.class)) {
                 @Override
                 public boolean onClickOk() {
-                    addItem(createNewItem(getSelectedType()));
+                    createNewItem(new DefaultAsyncCallback<Deposit>() {
+                        @Override
+                        public void onSuccess(Deposit result) {
+                            addItem(result);
+                        }
+                    }, getSelectedType());
                     return true;
                 }
             }.show();
         }
 
-        private Deposit createNewItem(DepositType type) {
-            Deposit deposit = EntityFactory.create(Deposit.class);
-            deposit.type().setValue(type);
-            deposit.status().setValue(DepositStatus.Created);
-            deposit.valueType().setValue(ValueType.Amount);
-
-//            ((LeaseEditorPresenterBase) leaseEditorView.getPresenter()).createRequiredDeposits(selectedItems.get(0), lease)();
-
-//            List<Deposit> deposits = ServerSideFactory.create(DepositFacade.class).createRequiredDeposits(item.type(), lease);
-//            if (deposits != null) {
-//
-//            }
-
-            return deposit;
+        private void createNewItem(final AsyncCallback<Deposit> callback, final DepositType type) {
+            ((LeaseEditorPresenterBase) leaseEditorView.getPresenter()).createDeposit(new DefaultAsyncCallback<Deposit>() {
+                @Override
+                public void onSuccess(Deposit result) {
+                    if (result == null) { // if there is no deposits of such type - create it 'on the fly':
+                        result = EntityFactory.create(Deposit.class);
+                        result.type().setValue(type);
+                        result.status().setValue(DepositStatus.Created);
+                        result.valueType().setValue(ValueType.Amount);
+                    }
+                    callback.onSuccess(result);
+                }
+            }, type, BillableItemEditor.this.getValue().item().type());
         }
 
         private class BillableItemDepositEditor extends CEntityFolderRowEditor<Deposit> {
