@@ -90,7 +90,6 @@ public class CrmLoginAttemptsListerServiceImpl implements CrmLoginAttemptsLister
                     @Override
                     public Serializable convertValue(Serializable value) {
                         return value;
-
                     }
                 }, new EntityDto2DboCriteriaConverter.PropertyMapper() {
 

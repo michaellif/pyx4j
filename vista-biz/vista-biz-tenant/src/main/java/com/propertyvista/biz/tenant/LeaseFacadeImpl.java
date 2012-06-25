@@ -36,6 +36,8 @@ import com.propertyvista.biz.financial.productcatalog.ProductCatalogFacade;
 import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.biz.occupancy.UnitTurnoverAnalysisFacade;
 import com.propertyvista.biz.policy.IdAssignmentFacade;
+import com.propertyvista.biz.validation.LeaseValidator;
+import com.propertyvista.biz.validation.ValidationFailure;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.offering.Feature;
@@ -307,6 +309,16 @@ public class LeaseFacadeImpl implements LeaseFacade {
     @Override
     public void approveApplication(Lease leaseId, Employee decidedBy, String decisionReason) {
         Lease lease = Persistence.secureRetrieveDraft(Lease.class, leaseId.getPrimaryKey());
+        LeaseValidator validator = new LeaseValidator();
+
+        if (false) {
+            List<ValidationFailure> failures = validator.isValidForActivation(lease);
+            System.out.println("lease validation results: ");
+            for (ValidationFailure failure : failures) {
+                System.out.println(failure.getMessage());
+            }
+            System.out.println("");
+        }
 
         lease.version().status().setValue(Lease.Status.Approved);
         lease.leaseApplication().status().setValue(LeaseApplication.Status.Approved);
