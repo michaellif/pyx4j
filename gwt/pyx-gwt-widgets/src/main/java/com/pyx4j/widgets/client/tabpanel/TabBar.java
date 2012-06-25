@@ -47,7 +47,7 @@ public class TabBar extends DockLayoutPanel {
 
     private final TabPanel tabPanel;
 
-    private Tab selectedTab;
+    private TabBarItem selectedTabBarItem;
 
     private final TabListTrigger tabListTrigger;
 
@@ -61,8 +61,10 @@ public class TabBar extends DockLayoutPanel {
 
         this.tabPanel = tabPanel;
 
+        setStyleName(DefaultTabTheme.StyleName.TabBar.name());
+
         tabListTrigger = new TabListTrigger();
-        tabListTrigger.setStyleName(TabPanel.StyleName.TabBarItem.name());
+        tabListTrigger.setStyleName(DefaultTabTheme.StyleName.TabBarItem.name());
 
         tabListTrigger.setVisible(false);
 
@@ -94,45 +96,40 @@ public class TabBar extends DockLayoutPanel {
 
     }
 
-    public void addTabBarItem(Tab tab) {
-        insertTabBarItem(tab, null);
+    public void add(TabBarItem item) {
+        insert(item, tabsHolder.getWidgetCount());
     }
 
-    public void insertTabBarItem(Tab tab, Tab beforeTab) {
-        if (beforeTab == null) {
-            tabsHolder.add(tab.getTabBarItem());
-        } else {
-            int beforeIndex = tabsHolder.getWidgetIndex(beforeTab.getTabBarItem());
-            tabsHolder.insert(tab.getTabBarItem(), beforeIndex);
-        }
+    public void insert(TabBarItem item, int beforeIndex) {
+        tabsHolder.insert(item, beforeIndex);
         layout();
     }
 
-    public void removeTabBarItem(Tab tab) {
-        if (tab == selectedTab) {
-            selectedTab = null;
+    public void remove(TabBarItem item) {
+        if (item == selectedTabBarItem) {
+            selectedTabBarItem = null;
         }
-        tabsHolder.remove(tab.getTabBarItem());
+        tabsHolder.remove(item);
         layout();
     }
 
-    public void onTabSelection(Tab tab) {
-        if (selectedTab != null) {
-            selectedTab.getTabBarItem().onSelected(false);
+    public void onTabSelected(TabBarItem item) {
+        if (selectedTabBarItem != null) {
+            selectedTabBarItem.onSelected(false);
         }
-        selectedTab = tab;
-        if (selectedTab != null) {
-            selectedTab.getTabBarItem().onSelected(true);
+        selectedTabBarItem = item;
+        if (selectedTabBarItem != null) {
+            selectedTabBarItem.onSelected(true);
         }
         ensureSelectedTabVisible();
     }
 
-    public void enableTab(Tab tab, boolean isEnabled) {
+    public void onTabEnabled(Tab tab, boolean isEnabled) {
         tab.getTabBarItem().onEnabled(isEnabled);
     }
 
-    public Tab getSelectedTab() {
-        return selectedTab;
+    public TabBarItem getSelectedTabBarItem() {
+        return selectedTabBarItem;
     }
 
     public Tab getFollowingTab(Tab tab) {
@@ -173,16 +170,17 @@ public class TabBar extends DockLayoutPanel {
     }
 
     private void ensureSelectedTabVisible() {
-        if (selectedTab == null) {
-            return;
-        } else if (getAbsoluteTop() - selectedTab.getTabBarItem().getAbsoluteTop() == 0) {
-            return;
-        } else {
-            TabBarItem item = (TabBarItem) tabsHolder.getWidget(0);
-            tabsHolder.remove(item);
-            tabsHolder.add(item);
-            ensureSelectedTabVisible();
-        }
+        //TODO
+//        if (selectedTabBarItem == null) {
+//            return;
+//        } else if (getAbsoluteTop() - selectedTabBarItem.getAbsoluteTop() == 0) {
+//            return;
+//        } else {
+//            TabBarItem item = (TabBarItem) tabsHolder.getWidget(0);
+//            tabsHolder.remove(item);
+//            tabsHolder.add(item);
+//            ensureSelectedTabVisible();
+//        }
     }
 
     public void layout() {
@@ -220,6 +218,14 @@ public class TabBar extends DockLayoutPanel {
     protected void onLoad() {
         super.onLoad();
         layout();
+    }
+
+    public int getTabBarIndex(TabBarItem selectedTabBarItem) {
+        return tabsHolder.getWidgetIndex(selectedTabBarItem);
+    }
+
+    public TabBarItem getTabBarItem(int index) {
+        return (TabBarItem) tabsHolder.getWidget(index);
     }
 
 }

@@ -20,11 +20,14 @@
  */
 package com.pyx4j.widgets.client.tabpanel;
 
-import java.util.HashSet;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.BeforeSelectionEvent;
 import com.google.gwt.event.logical.shared.BeforeSelectionHandler;
 import com.google.gwt.event.logical.shared.CloseEvent;
@@ -35,57 +38,70 @@ import com.google.gwt.event.logical.shared.HasSelectionHandlers;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.event.shared.EventHandler;
 import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.event.shared.SimpleEventBus;
+import com.google.gwt.user.client.ui.DeckLayoutPanel;
+import com.google.gwt.user.client.ui.HasWidgets;
+import com.google.gwt.user.client.ui.IndexedPanel;
+import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.LayoutPanel;
+import com.google.gwt.user.client.ui.ProvidesResize;
+import com.google.gwt.user.client.ui.ResizeComposite;
+import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.commons.css.IStyleDependent;
-import com.pyx4j.commons.css.IStyleName;
-import com.pyx4j.widgets.client.DeckLayoutPanel;
 import com.pyx4j.widgets.client.event.shared.BeforeCloseEvent;
 import com.pyx4j.widgets.client.event.shared.BeforeCloseHandler;
 import com.pyx4j.widgets.client.event.shared.HasBeforeCloseHandlers;
 
-public class TabPanel implements HasBeforeSelectionHandlers<Tab>, HasSelectionHandlers<Tab>, HasCloseHandlers<Tab>, HasBeforeCloseHandlers<Tab> {
+public class TabPanel extends ResizeComposite implements HasWidgets, ProvidesResize, IndexedPanel.ForIsWidget, HasBeforeSelectionHandlers<Tab>,
+        HasSelectionHandlers<Tab>, HasCloseHandlers<Tab>, HasBeforeCloseHandlers<Tab> {
 
     private static final Logger log = LoggerFactory.getLogger(TabPanel.class);
 
-    public static enum StyleName implements IStyleName {
-        Tab, TabPanelBottom, TabBarItem, TabBarItemLeft, TabBarItemRight, TabBarItemLabel, TabBarItemImage, TabList, TabListItem
-    }
-
-    public static enum StyleDependent implements IStyleDependent {
-        selected, disabled, hover
-    }
-
-    private final DeckLayoutPanel deck = new DeckLayoutPanel();
+    private final DeckLayoutPanel deckPanel;
 
     private final TabBar tabBar;
 
-    private final HashSet<Tab> tabs = new HashSet<Tab>();
+    private final HashMap<TabBarItem, Tab> tabs = new HashMap<TabBarItem, Tab>();
 
     private EventBus eventBus;
 
-    public TabPanel() {
+    public TabPanel(double barHeight, Unit barUnit) {
+
+        LayoutPanel panel = new LayoutPanel();
+        initWidget(panel);
+
+        setStyleName(DefaultTabTheme.StyleName.TabPanel.name());
+
         tabBar = new TabBar(this);
-        deck.setStyleName(StyleName.TabPanelBottom.name());
+
+        deckPanel = new DeckLayoutPanel();
+        deckPanel.setStyleName(DefaultTabTheme.StyleName.TabDeckPanel.name());
+
+        panel.add(tabBar);
+        panel.setWidgetLeftRight(tabBar, 0, Unit.PX, 0, Unit.PX);
+        panel.setWidgetTopHeight(tabBar, 0, Unit.PX, barHeight, barUnit);
+
+        panel.add(deckPanel);
+        panel.setWidgetLeftRight(deckPanel, 0, Unit.PX, 0, Unit.PX);
+        panel.setWidgetTopBottom(deckPanel, barHeight, barUnit, 0, Unit.PX);
+
     }
 
     public void add(Tab tab) {
-        insert(tab, null);
+        insert(tab, tabs.size());
     }
 
-    public void insert(Tab tab, Tab beforeTab) {
-        tabBar.insertTabBarItem(tab, beforeTab);
-        deck.add(tab);
-        tabs.add(tab);
+    public void insert(Tab tab, int beforeIndex) {
+        tabBar.insert(tab.getTabBarItem(), beforeIndex);
+        deckPanel.add(tab);
+        tabs.put(tab.getTabBarItem(), tab);
         tab.setParentTabPanel(this);
         tab.setSelected();
     }
 
     public boolean remove(Tab tab) {
-        if (!tabs.contains(tab)) {
+        if (!tabs.containsKey(tab.getTabBarItem())) {
             log.error("Tab can't be removed. TabPanel doesn't contain this Tab.");
             return false;
         }
@@ -101,16 +117,16 @@ public class TabPanel implements HasBeforeSelectionHandlers<Tab>, HasSelectionHa
             if (selectTab == null) {
                 selectTab = tabBar.getPrecedingTab(tab);
             }
-            select(selectTab);
+            selectTab(selectTab);
 
         }
 
-        tabBar.removeTabBarItem(tab);
-        deck.remove(tab);
-        tabs.remove(tab);
+        tabBar.remove(tab.getTabBarItem());
+        deckPanel.remove(tab);
+        tabs.remove(tab.getTabBarItem());
         tab.setParentTabPanel(null);
-        if (deck.getWidgetCount() == 0) {
-            deck.removeStyleName(StyleName.TabPanelBottom.name());
+        if (deckPanel.getWidgetCount() == 0) {
+            deckPanel.removeStyleName(DefaultTabTheme.StyleName.TabDeckPanel.name());
         }
 
         CloseEvent.fire(this, tab);
@@ -118,7 +134,22 @@ public class TabPanel implements HasBeforeSelectionHandlers<Tab>, HasSelectionHa
         return true;
     }
 
-    public boolean select(Tab tab) {
+    @Override
+    public boolean remove(int index) {
+        return remove(tabs.get(index));
+    }
+
+    @Override
+    public void clear() {
+        // TODO Auto-generated method stub
+
+    }
+
+    public void enableTab(Tab tab, boolean enabled) {
+        tabBar.onTabEnabled(tab, enabled);
+    }
+
+    public boolean selectTab(Tab tab) {
 
         BeforeSelectionEvent<?> event = BeforeSelectionEvent.fire(this, tab);
 
@@ -126,24 +157,32 @@ public class TabPanel implements HasBeforeSelectionHandlers<Tab>, HasSelectionHa
             return false;
         }
 
-        deck.showWidget(tab);
-        tabBar.onTabSelection(tab);
+        deckPanel.showWidget(tab);
+        tabBar.onTabSelected(tab.getTabBarItem());
 
         SelectionEvent.fire(this, tab);
 
         return true;
     }
 
-    public Tab getSelectedTab() {
-        return tabBar.getSelectedTab();
+    public void select(int index) {
+        selectTab(tabs.get(tabBar.getTabBarItem(index)));
     }
 
-    public HashSet<Tab> getTabs() {
-        return tabs;
+    public Tab getSelectedTab() {
+        return tabs.get(tabBar.getSelectedTabBarItem());
+    }
+
+    public int getSelectedIndex() {
+        return tabBar.getTabBarIndex(tabBar.getSelectedTabBarItem());
+    }
+
+    public Collection<Tab> getTabs() {
+        return tabs.values();
     }
 
     public DeckLayoutPanel getDeck() {
-        return deck;
+        return deckPanel;
     }
 
     public int size() {
@@ -174,19 +213,47 @@ public class TabPanel implements HasBeforeSelectionHandlers<Tab>, HasSelectionHa
         return addHandler(handler, CloseEvent.getType());
     }
 
-    protected final <H extends EventHandler> HandlerRegistration addHandler(final H handler, GwtEvent.Type<H> type) {
-        return ensureHandlers().addHandler(type, handler);
-    }
-
-    EventBus ensureHandlers() {
-        return eventBus == null ? eventBus = new SimpleEventBus() : eventBus;
-    }
-
     @Override
     public void fireEvent(GwtEvent<?> event) {
         if (eventBus != null) {
             eventBus.fireEventFromSource(event, this);
         }
+    }
+
+    @Override
+    public Widget getWidget(int index) {
+        return deckPanel.getWidget(index);
+    }
+
+    @Override
+    public int getWidgetCount() {
+        return deckPanel.getWidgetCount();
+    }
+
+    @Override
+    public int getWidgetIndex(Widget child) {
+        return getWidgetIndex(asWidgetOrNull(child));
+    }
+
+    @Override
+    public int getWidgetIndex(IsWidget child) {
+        return getWidgetIndex(asWidgetOrNull(child));
+    }
+
+    @Override
+    public void add(Widget w) {
+        throw new UnsupportedOperationException("Use TabPanel.add(Tab tab) instead");
+    }
+
+    @Override
+    public boolean remove(Widget w) {
+        throw new UnsupportedOperationException("Use TabPanel.remove(Tab tab) instead");
+    }
+
+    @Override
+    public Iterator<Widget> iterator() {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 }

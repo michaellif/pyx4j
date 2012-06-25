@@ -14,20 +14,32 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Oct 1, 2011
+ * Created on Jun 22, 2012
  * @author michaellif
  * @version $Id$
  */
 package com.pyx4j.entity.client;
 
-import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.ScrollPanel;
 
 import com.pyx4j.commons.IDebugId;
 
-public interface IDecorator<E extends CEntityContainer> extends IsWidget {
+public class EntityContainerScrollPanel<E extends CEntityContainer<?>> extends ScrollPanel implements IDecorator<E> {
 
-    void setComponent(E component);
+    public EntityContainerScrollPanel() {
+        setHeight("100%");
+        setWidth("100%");
+    }
 
-    void onSetDebugId(IDebugId parentDebugId);
+    @Override
+    public void setComponent(E component) {
+        setWidget(component.createContent());
+    }
+
+    @Override
+    public void onSetDebugId(IDebugId parentDebugId) {
+        // TODO Auto-generated method stub
+
+    }
 
 }

@@ -40,7 +40,6 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PopupPanel;
 
-import com.pyx4j.commons.css.Selector;
 import com.pyx4j.widgets.client.tabpanel.TabBar.TabListTrigger;
 
 public class TabListDropDown extends PopupPanel {
@@ -48,8 +47,6 @@ public class TabListDropDown extends PopupPanel {
     private final TabListTrigger trigger;
 
     private final FlowPanel itemsPanel;
-
-    private String stylePrefix;
 
     private HandlerRegistration resizeHandlerRegistration;
 
@@ -61,31 +58,24 @@ public class TabListDropDown extends PopupPanel {
         setWidget(itemsPanel);
     }
 
-    public void setStylePrefix(String stylePrefix) {
-        this.stylePrefix = stylePrefix;
-        setStyleName(Selector.getStyleName(stylePrefix, TabPanel.StyleName.TabList));
-    }
-
     public void showSelector() {
         itemsPanel.clear();
         List<Tab> allTabs = trigger.getAllTabs();
         for (final Tab tab : allTabs) {
             final Label item = new Label(tab.getTabTitle(), false);
-            item.setStyleName(Selector.getStyleName(stylePrefix, TabPanel.StyleName.TabListItem));
+            item.setStyleName(DefaultTabTheme.StyleName.TabListItem.name());
 
             item.addDomHandler(new MouseOverHandler() {
                 @Override
                 public void onMouseOver(MouseOverEvent event) {
-                    String dependentSuffix = Selector.getDependentName(TabPanel.StyleDependent.hover);
-                    item.addStyleDependentName(dependentSuffix);
+                    item.addStyleDependentName(DefaultTabTheme.StyleDependent.hover.name());
                 }
             }, MouseOverEvent.getType());
 
             item.addDomHandler(new MouseOutHandler() {
                 @Override
                 public void onMouseOut(MouseOutEvent event) {
-                    String dependentSuffix = Selector.getDependentName(TabPanel.StyleDependent.hover);
-                    item.removeStyleDependentName(dependentSuffix);
+                    item.removeStyleDependentName(DefaultTabTheme.StyleDependent.hover.name());
                 }
             }, MouseOutEvent.getType());
 

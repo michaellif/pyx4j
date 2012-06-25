@@ -21,6 +21,8 @@
 package com.pyx4j.site.client.ui.crud;
 
 import com.pyx4j.entity.client.CEntityForm;
+import com.pyx4j.entity.client.EntityContainerScrollPanel;
+import com.pyx4j.entity.client.IDecorator;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.i18n.shared.I18n;
@@ -53,6 +55,11 @@ public abstract class CrudEntityForm<E extends IEntity> extends CEntityForm<E> {
             setEditable(false);
             setViewable(true);
         }
+    }
+
+    @Override
+    protected IDecorator createDecorator() {
+        return new EntityContainerScrollPanel();
     }
 
     public void setParentView(IFormView<? extends IEntity> parentView) {

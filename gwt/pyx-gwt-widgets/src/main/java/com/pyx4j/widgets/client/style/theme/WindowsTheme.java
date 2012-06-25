@@ -20,17 +20,9 @@
  */
 package com.pyx4j.widgets.client.style.theme;
 
-import static com.pyx4j.widgets.client.tabpanel.TabPanel.StyleName.Tab;
-import static com.pyx4j.widgets.client.tabpanel.TabPanel.StyleName.TabBarItem;
-import static com.pyx4j.widgets.client.tabpanel.TabPanel.StyleName.TabBarItemLabel;
-import static com.pyx4j.widgets.client.tabpanel.TabPanel.StyleName.TabList;
-import static com.pyx4j.widgets.client.tabpanel.TabPanel.StyleName.TabListItem;
-import static com.pyx4j.widgets.client.tabpanel.TabPanel.StyleName.TabPanelBottom;
-
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.commons.css.CSSClass;
-import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.commons.css.Selector;
 import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.Theme;
@@ -38,7 +30,6 @@ import com.pyx4j.commons.css.ThemeColors;
 import com.pyx4j.widgets.client.ImageFactory;
 import com.pyx4j.widgets.client.dashboard.CSSNames;
 import com.pyx4j.widgets.client.datepicker.images.DatePickerImages;
-import com.pyx4j.widgets.client.tabpanel.TabPanel;
 
 public class WindowsTheme extends Theme {
 
@@ -57,8 +48,6 @@ public class WindowsTheme extends Theme {
         initStatusBarStyle();
         initProgressBarStyles();
         initMenuBarStyles();
-        initTopTabPanelStyles();
-        initBottomTabPanelStyles();
         initDialogBoxStyles();
         initGwtButtonStyles();
         initComboBoxStyles();
@@ -205,108 +194,6 @@ public class WindowsTheme extends Theme {
         style.addProperty("filter", "alpha(opacity=10)");
         style.addProperty("z-index", "20");
         addStyle(style);
-    }
-
-    private void initTopTabPanelStyles() {
-        Style style = new Style((IStyleName) Tab);
-        style.addProperty("margin-top", "2px");
-        style.addProperty("margin-left", "6px");
-        addStyle(style);
-
-        style = new Style((IStyleName) TabPanelBottom);
-        style.addProperty("padding", "2px");
-        style.addProperty("margin", "0px");
-        style.addProperty("background-color", ThemeColors.object1, 0.1);
-        addStyle(style);
-
-        style = new Style((IStyleName) TabBarItem);
-        style.addProperty("cursor", "pointer");
-        style.addProperty("cursor", "hand");
-        style.addProperty("height", "2em");
-        style.addProperty("text-align", "center");
-        style.addProperty("margin-right", "1px");
-        style.addProperty("margin-left", "1px");
-        style.addProperty("border-right", "1px solid");
-        style.addProperty("border-right-color", ThemeColors.contrast1);
-        style.addProperty("border-left", "1px solid");
-        style.addProperty("border-left-color", ThemeColors.contrast1);
-        style.addProperty("border-top", "1px solid");
-        style.addProperty("border-top-color", ThemeColors.contrast1);
-        style.addGradient(ThemeColors.object1, 0.1, ThemeColors.object1, 0.3);
-        addStyle(style);
-
-        style = new Style(TabBarItem, "-", TabPanel.StyleDependent.selected);
-        style.addProperty("cursor", "default");
-        style.addProperty("background", ThemeColors.contrast1);
-        style.addProperty("color", "white");
-        addStyle(style);
-
-        style = new Style(TabBarItem, TabPanel.StyleDependent.hover);
-        style.addProperty("background", ThemeColors.object1, 0.3);
-        addStyle(style);
-
-        style = new Style(".", TabBarItem, "-", TabPanel.StyleDependent.selected, " .", TabBarItemLabel);
-        //style.addProperty("color", ThemeColor.SELECTION_TEXT);
-        addStyle(style);
-
-        style = new Style((IStyleName) TabBarItemLabel);
-        style.addProperty("margin", "3px");
-        addStyle(style);
-
-        style = new Style((IStyleName) TabList);
-        style.addProperty("background-color", "white");
-        style.addProperty("border", "1px solid");
-        style.addProperty("border-color", ThemeColors.contrast1);
-        addStyle(style);
-
-        style = new Style((IStyleName) TabListItem);
-        style.addProperty("color", "black");
-        style.addProperty("padding", "4px 14px 4px 1px");
-        addStyle(style);
-
-        style = new Style(TabListItem, TabPanel.StyleDependent.hover);
-        style.addProperty("background", ThemeColors.contrast1);
-        style.addProperty("color", ThemeColors.contrast1, 0.1);
-        addStyle(style);
-
-    }
-
-    private void initBottomTabPanelStyles() {
-        String discriminator = ".BottomTab";
-        Style style = new Style(discriminator, " .", Tab);
-        style.addProperty("background-color", ThemeColors.contrast1);
-        addStyle(style);
-
-        style = new Style(discriminator, " .", TabPanelBottom);
-        style.addProperty("padding", "2px");
-        style.addProperty("margin", "0px");
-        addStyle(style);
-
-        style = new Style(discriminator, " .", TabBarItem);
-        style.addProperty("cursor", "pointer");
-        style.addProperty("cursor", "hand");
-        style.addProperty("text-align", "center");
-        style.addProperty("border-top", "1px solid");
-        style.addProperty("border-top-color", ThemeColors.contrast1);
-        style.addProperty("background-color", ThemeColors.object1, 0.3);
-        addStyle(style);
-
-        style = new Style(discriminator, TabBarItem, TabPanel.StyleDependent.selected);
-        style.addProperty("border-top", "1px solid");
-        style.addProperty("border-top-color", ThemeColors.object1, 0.1);
-        style.addProperty("cursor", "default");
-        style.addProperty("background-color", ThemeColors.object1, 0.1);
-        addStyle(style);
-
-        style = new Style("." + TabBarItem, "-", TabPanel.StyleDependent.selected, " .", TabBarItemLabel);
-        style.addProperty("color", "black");
-        addStyle(style);
-
-        style = new Style(discriminator, " .", TabBarItemLabel);
-        style.addProperty("margin-left", "2px");
-        style.addProperty("margin-right", "2px");
-        addStyle(style);
-
     }
 
     protected void initComboBoxStyles() {

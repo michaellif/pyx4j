@@ -42,7 +42,7 @@ public abstract class CEntityContainer<E extends IObject<?>> extends CContainer<
 
     public abstract IsWidget createContent();
 
-    protected IDecorator<? extends CEntityContainer<?>> createDecorator() {
+    protected IDecorator createDecorator() {
         return null;
     }
 

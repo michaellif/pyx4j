@@ -80,11 +80,11 @@ public class Tab extends LayoutPanel {
     }
 
     public void setSelected() {
-        parentTabPanel.select(this);
+        parentTabPanel.selectTab(this);
     }
 
     public boolean isSelected() {
-        return this.equals(parentTabPanel.getTabBar().getSelectedTab());
+        return this.equals(parentTabPanel.getTabBar().getSelectedTabBarItem());
     }
 
     public boolean isTabVisible() {

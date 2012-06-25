@@ -22,8 +22,6 @@ package com.pyx4j.site.client.ui.crud.form;
 
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.LayoutPanel;
-import com.google.gwt.user.client.ui.ScrollPanel;
-import com.google.gwt.user.client.ui.TabLayoutPanel;
 
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.site.client.ui.ViewImplBase;
@@ -64,11 +62,8 @@ public class FormViewImplBase<E extends IEntity> extends ViewImplBase implements
         LayoutPanel center = (LayoutPanel) getCenter();
         center.clear(); // remove current form...
 
-        if (form.getWidget().getWidget() instanceof TabLayoutPanel) {
-            center.add(this.form.getWidget());
-        } else {
-            center.add(new ScrollPanel(this.form.getWidget()));
-        }
+        center.add(this.form);
+
     }
 
     protected CrudEntityForm<E> getForm() {
