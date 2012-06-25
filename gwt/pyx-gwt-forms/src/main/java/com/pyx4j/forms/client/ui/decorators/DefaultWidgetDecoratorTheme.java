@@ -44,6 +44,7 @@ public class DefaultWidgetDecoratorTheme extends Theme {
 
     protected void initStyles() {
         Style style = new Style(".", StyleName.WidgetDecorator);
+        style.addProperty("border-spacing", "0");
         addStyle(style);
 
         style = new Style(".", StyleName.WidgetDecorator, "-", StyleDependent.readOnly);
