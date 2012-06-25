@@ -13,11 +13,6 @@
  */
 package com.propertyvista.crm.client.ui.crud.lease.common;
 
-import java.util.LinkedList;
-import java.util.List;
-
-import com.google.gwt.event.logical.shared.ValueChangeEvent;
-
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.client.CEntityForm;
@@ -44,8 +39,6 @@ public class BillableItemFolder extends VistaBoxFolder<BillableItem> {
 
     private static final I18n i18n = I18n.get(BillableItemFolder.class);
 
-    private final List<BillableItem> populatedValues = new LinkedList<BillableItem>();
-
     private final CEntityForm<? extends LeaseDTO> lease;
 
     private final IEditorView<? extends LeaseDTO> leaseEditorView;
@@ -66,10 +59,6 @@ public class BillableItemFolder extends VistaBoxFolder<BillableItem> {
     @Override
     protected void onPopulate() {
         super.onPopulate();
-
-        // memorize populated values: 
-        populatedValues.clear();
-        populatedValues.addAll(getValue());
     }
 
     @Override
@@ -91,18 +80,6 @@ public class BillableItemFolder extends VistaBoxFolder<BillableItem> {
                     return true;
                 }
             }.show();
-        }
-    }
-
-    @Override
-    protected void removeItem(CEntityFolderItem<BillableItem> item) {
-        if (!lease.getValue().approvalDate().isNull() && populatedValues.contains(item.getValue())) {
-            item.getValue().expirationDate().setValue(new LogicalDate());
-            item.setValue(item.getValue(), false);
-            item.setEditable(false);
-            ValueChangeEvent.fire(this, getValue());
-        } else {
-            super.removeItem(item);
         }
     }
 

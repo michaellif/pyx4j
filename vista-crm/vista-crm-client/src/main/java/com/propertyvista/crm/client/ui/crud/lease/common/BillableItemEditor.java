@@ -16,7 +16,6 @@ package com.propertyvista.crm.client.ui.crud.lease.common;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.EnumSet;
-import java.util.LinkedList;
 import java.util.List;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
@@ -250,8 +249,6 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
 
     private class AdjustmentFolder extends VistaTableFolder<BillableItemAdjustment> {
 
-        private final List<BillableItemAdjustment> populatedValues = new LinkedList<BillableItemAdjustment>();
-
         public AdjustmentFolder() {
             super(BillableItemAdjustment.class, i18n.tr("Adjustment"), !BillableItemEditor.this.isViewable());
         }
@@ -278,10 +275,6 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
         @Override
         protected void onPopulate() {
             super.onPopulate();
-
-            // memorize populated values:
-            populatedValues.clear();
-            populatedValues.addAll(getValue());
         }
 
         @Override
@@ -290,18 +283,6 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
                 newEntity.effectiveDate().setValue(new LogicalDate());
             }
             super.addItem(newEntity);
-        }
-
-        @Override
-        protected void removeItem(CEntityFolderItem<BillableItemAdjustment> item) {
-            if (!lease.getValue().approvalDate().isNull() && populatedValues.contains(item.getValue())) {
-                item.getValue().expirationDate().setValue(new LogicalDate());
-                item.setValue(item.getValue(), false);
-                item.setEditable(false);
-                ValueChangeEvent.fire(this, getValue());
-            } else {
-                super.removeItem(item);
-            }
         }
 
         private class BillableItemAdjustmentEditor extends CEntityFolderRowEditor<BillableItemAdjustment> {
