@@ -75,9 +75,9 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
             if (i <= DemoData.UserType.TENANT.getDefaultMax()) {
                 LeaseFacade leaseFacade = ServerSideFactory.create(LeaseFacade.class);
                 lease = leaseFacade.init(lease);
-				if (lease.unit().getPrimaryKey() != null) {
-					leaseFacade.setUnit(lease, lease.unit());
-				}
+                if (lease.unit().getPrimaryKey() != null) {
+                    leaseFacade.setUnit(lease, lease.unit());
+                }
                 leaseFacade.persist(lease);
 
                 ServerSideFactory.create(LeaseFacade.class).approveApplication(lease, null, null);
@@ -155,6 +155,9 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
             }
 
             ServerSideFactory.create(LeaseFacade.class).init(lease);
+            if (lease.unit().getPrimaryKey() != null) {
+                ServerSideFactory.create(LeaseFacade.class).setUnit(lease, lease.unit());
+            }
             ServerSideFactory.create(LeaseFacade.class).persist(lease);
             ServerSideFactory.create(LeaseFacade.class).createMasterOnlineApplication(lease.getPrimaryKey());
         }

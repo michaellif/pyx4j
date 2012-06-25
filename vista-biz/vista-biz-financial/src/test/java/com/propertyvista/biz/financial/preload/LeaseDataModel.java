@@ -70,8 +70,7 @@ public class LeaseDataModel {
 
         lease = ServerSideFactory.create(LeaseFacade.class).init(lease);
         lease = ServerSideFactory.create(LeaseFacade.class).setUnit(lease, (AptUnit) serviceItem.element().cast());
-
-        ServerSideFactory.create(LeaseFacade.class).persist(lease);
+        lease = ServerSideFactory.create(LeaseFacade.class).persist(lease);
     }
 
     private void addTenants() {
