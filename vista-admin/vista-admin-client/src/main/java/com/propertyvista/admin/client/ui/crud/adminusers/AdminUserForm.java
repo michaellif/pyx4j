@@ -17,8 +17,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import com.google.gwt.user.client.ui.IsWidget;
-
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -63,7 +61,7 @@ public class AdminUserForm extends AdminEntityForm<AdminUserDTO> {
     }
 
     @Override
-    public IsWidget createContent() {
+    public void createTabs() {
         FormFlexPanel content = new FormFlexPanel();
         int row = -1;
         content.setH1(++row, 0, 1, i18n.tr("General"));
@@ -78,7 +76,7 @@ public class AdminUserForm extends AdminEntityForm<AdminUserDTO> {
         content.setWidget(++row, 0,
                 new DecoratorBuilder(addVisibilityCondition(inject(proto().requireChangePasswordOnNextLogIn()), isSelfManagedUserCondition)).build());
 
-        return content;
+        selectTab(addTab(content, i18n.tr("General")));
     }
 
     @Override

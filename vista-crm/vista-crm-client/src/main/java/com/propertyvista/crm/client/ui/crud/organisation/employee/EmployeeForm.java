@@ -14,12 +14,10 @@
 package com.propertyvista.crm.client.ui.crud.organisation.employee;
 
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.commons.Key;
-import com.pyx4j.entity.client.IDecorator;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
@@ -27,6 +25,7 @@ import com.pyx4j.forms.client.validators.ValidationFailure;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.shared.SecurityController;
+import com.pyx4j.widgets.client.tabpanel.Tab;
 
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.common.client.ui.components.editors.NameEditor;
@@ -53,18 +52,12 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
     }
 
     @Override
-    protected IDecorator createDecorator() {
-        return null;
-    }
+    public void createTabs() {
+        Tab tab = addTab(createInfoTab(), i18n.tr("Personal Information"));
+        selectTab(tab);
 
-    @Override
-    public IsWidget createContent() {
-        tabPanel.add(createInfoTab(), i18n.tr("Personal Information"));
-        tabPanel.add(createPrivilegesTab(), i18n.tr("Privileges"));
-        tabPanel.add(createAuditingConfigurationTab(), i18n.tr("Auditing Configuration"));
-
-        tabPanel.setSize("100%", "100%");
-        return tabPanel;
+        addTab(createPrivilegesTab(), i18n.tr("Privileges"));
+        addTab(createAuditingConfigurationTab(), i18n.tr("Auditing Configuration"));
     }
 
     @Override
@@ -94,7 +87,7 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
         enforceBehaviour();
     }
 
-    private IsWidget createInfoTab() {
+    private Widget createInfoTab() {
         FormFlexPanel main = new FormFlexPanel();
 
         int row = -1;
@@ -116,10 +109,10 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
         main.setBR(++row, 0, 1);
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().description()), 50).build());
 
-        return new ScrollPanel(main);
+        return main;
     }
 
-    private IsWidget createAuditingConfigurationTab() {
+    private Widget createAuditingConfigurationTab() {
 
         FormFlexPanel tabContent = new FormFlexPanel();
         int row = -1;
@@ -138,35 +131,35 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
         return tabPanel.getSelectedIndex();
     }
 
-    private IsWidget createPrivilegesTab() {
+    private Widget createPrivilegesTab() {
 
-        FormFlexPanel main = new FormFlexPanel();
+        FormFlexPanel content = new FormFlexPanel();
 
         int row = -1;
-        main.setH1(++row, 0, 2, i18n.tr("Information"));
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().password()), 10).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().passwordConfirm()), 10).build());
+        content.setH1(++row, 0, 2, i18n.tr("Information"));
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().password()), 10).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().passwordConfirm()), 10).build());
 
-        main.setBR(++row, 0, 1);
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().enabled()), 5).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().requireChangePasswordOnNextLogIn()), 5).build());
+        content.setBR(++row, 0, 1);
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().enabled()), 5).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().requireChangePasswordOnNextLogIn()), 5).build());
 
-        main.setH1(++row, 0, 2, i18n.tr("Roles"));
-        main.setWidget(++row, 0, inject(proto().roles(), new CrmRoleFolder(isEditable())));
+        content.setH1(++row, 0, 2, i18n.tr("Roles"));
+        content.setWidget(++row, 0, inject(proto().roles(), new CrmRoleFolder(isEditable())));
 
-        main.setH1(++row, 0, 1, i18n.tr("Portfolios"));
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().accessAllBuildings()), 5).build());
-        main.setWidget(++row, 0, inject(proto().portfolios(), new PortfolioFolder(isEditable())));
+        content.setH1(++row, 0, 1, i18n.tr("Portfolios"));
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().accessAllBuildings()), 5).build());
+        content.setWidget(++row, 0, inject(proto().portfolios(), new PortfolioFolder(isEditable())));
 
-        main.setH1(++row, 0, 1, i18n.tr("Subordinates"));
-        main.setWidget(++row, 0, inject(proto().employees(), new EmployeeFolder(isEditable(), new ParentEmployeeGetter() {
+        content.setH1(++row, 0, 1, i18n.tr("Subordinates"));
+        content.setWidget(++row, 0, inject(proto().employees(), new EmployeeFolder(isEditable(), new ParentEmployeeGetter() {
             @Override
             public Key getParentId() {
                 return getValue() != null ? getValue().getPrimaryKey() : null;
             }
         })));
 
-        return new ScrollPanel(main);
+        return content;
     }
 
     private boolean isNewEmployee() {

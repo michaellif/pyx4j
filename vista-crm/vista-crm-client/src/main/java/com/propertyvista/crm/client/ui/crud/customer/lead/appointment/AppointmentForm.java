@@ -15,11 +15,8 @@ package com.propertyvista.crm.client.ui.crud.customer.lead.appointment;
 
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.entity.client.IDecorator;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -43,19 +40,12 @@ public class AppointmentForm extends CrmEntityForm<Appointment> {
     }
 
     @Override
-    protected IDecorator createDecorator() {
-        return null;
-    }
+    public void createTabs() {
 
-    @Override
-    public IsWidget createContent() {
+        selectTab(addTab(createGeneralTab(), i18n.tr("General")));
 
-        tabPanel.add(createGeneralTab(), i18n.tr("General"));
-        tabPanel.add(createShowingsTab(), i18n.tr("Showings"));
-        tabPanel.setLastTabDisabled(isEditable());
+        enableTab(addTab(createShowingsTab(), i18n.tr("Showings")), !isEditable());
 
-        tabPanel.setSize("100%", "100%");
-        return tabPanel;
     }
 
     @Override
@@ -85,12 +75,12 @@ public class AppointmentForm extends CrmEntityForm<Appointment> {
         main.getColumnFormatter().setWidth(0, "50%");
         main.getColumnFormatter().setWidth(1, "50%");
 
-        return new ScrollPanel(main);
+        return main;
     }
 
     private Widget createShowingsTab() {
         if (!isEditable()) {
-            return new ScrollPanel(((AppointmentViewerView) getParentView()).getShowingsListerView().asWidget());
+            return ((AppointmentViewerView) getParentView()).getShowingsListerView().asWidget();
         }
         return new HTML(); // just stub - not necessary for editing mode!..
     }

@@ -8,27 +8,28 @@
  */
 package com.propertyvista.admin.client.ui.crud.scheduler;
 
-import com.google.gwt.user.client.ui.IsWidget;
-
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.admin.client.ui.crud.AdminEntityForm;
 import com.propertyvista.admin.domain.scheduler.TriggerNotification;
 
 public class NotificationEditor extends AdminEntityForm<TriggerNotification> {
 
+    private static final I18n i18n = I18n.get(NotificationEditor.class);
+
     public NotificationEditor() {
         super(TriggerNotification.class);
     }
 
     @Override
-    public IsWidget createContent() {
-        FormFlexPanel main = new FormFlexPanel();
+    public void createTabs() {
+        FormFlexPanel content = new FormFlexPanel();
         int row = -1;
 
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().event()), 10).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().user()), 20).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().event()), 10).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().user()), 20).build());
 
-        return main;
+        selectTab(addTab(content, i18n.tr("General")));
     }
 }

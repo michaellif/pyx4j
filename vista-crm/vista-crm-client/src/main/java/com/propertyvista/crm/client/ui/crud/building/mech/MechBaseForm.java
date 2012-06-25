@@ -13,26 +13,19 @@
  */
 package com.propertyvista.crm.client.ui.crud.building.mech;
 
-import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.entity.client.IDecorator;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.tabpanel.Tab;
 
-import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.common.client.ui.components.editors.MaintenanceEditor;
 import com.propertyvista.common.client.ui.components.editors.WarrantyEditor;
-import com.propertyvista.crm.client.themes.CrmTheme;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.property.vendor.LicensedWarrantedMaintained;
 
 public abstract class MechBaseForm<E extends LicensedWarrantedMaintained> extends CrmEntityForm<E> {
 
     private static final I18n i18n = I18n.get(MechBaseForm.class);
-
-    protected final VistaTabLayoutPanel tabPanel = new VistaTabLayoutPanel(CrmTheme.defaultTabHeight, Unit.EM);
 
     protected MechBaseForm(Class<E> entityClass) {
         this(entityClass, false);
@@ -43,40 +36,25 @@ public abstract class MechBaseForm<E extends LicensedWarrantedMaintained> extend
     }
 
     @Override
-    protected IDecorator createDecorator() {
-        return null;
-    }
+    public void createTabs() {
 
-    @Override
-    public IsWidget createContent() {
+        Tab tab = addTab(createGeneralTab(), i18n.tr("General"));
+        selectTab(tab);
 
-        tabPanel.add(createGeneralTab(), i18n.tr("General"));
-        tabPanel.add(createWarrantyTab(), i18n.tr("Warranty"));
-        tabPanel.add(createMaintenantceTab(), i18n.tr("Maintenance"));
+        addTab(createWarrantyTab(), i18n.tr("Warranty"));
+        addTab(createMaintenantceTab(), i18n.tr("Maintenance"));
 
-        tabPanel.setSize("100%", "100%");
-        return tabPanel;
-    }
-
-    @Override
-    public void setActiveTab(int index) {
-        tabPanel.selectTab(index);
-    }
-
-    @Override
-    public int getActiveTab() {
-        return tabPanel.getSelectedIndex();
     }
 
     protected abstract Widget createGeneralTab();
 
     protected Widget createWarrantyTab() {
 
-        return new ScrollPanel(inject(proto().warranty(), new WarrantyEditor()).asWidget());
+        return inject(proto().warranty(), new WarrantyEditor()).asWidget();
     }
 
     protected Widget createMaintenantceTab() {
 
-        return new ScrollPanel(inject(proto().maintenance(), new MaintenanceEditor()).asWidget());
+        return inject(proto().maintenance(), new MaintenanceEditor()).asWidget();
     }
 }

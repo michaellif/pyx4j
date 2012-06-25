@@ -14,13 +14,12 @@
 package com.propertyvista.crm.client.ui.crud.building.catalog.service;
 
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.entity.client.IDecorator;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.tabpanel.Tab;
 
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.crm.client.themes.CrmTheme;
@@ -42,18 +41,13 @@ public class ServiceForm extends CrmEntityForm<Service> {
     }
 
     @Override
-    protected IDecorator createDecorator() {
-        return null;
-    }
+    public void createTabs() {
 
-    @Override
-    public IsWidget createContent() {
+        Tab tab = addTab(createGeneralTab(), i18n.tr("General"));
+        selectTab(tab);
 
-        tabPanel.add(createGeneralTab(), i18n.tr("General"));
-        tabPanel.add(createEligibilityTab(), i18n.tr("Eligibility"));
+        addTab(createEligibilityTab(), i18n.tr("Eligibility"));
 
-        tabPanel.setSize("100%", "100%");
-        return tabPanel;
     }
 
     @Override
@@ -66,7 +60,7 @@ public class ServiceForm extends CrmEntityForm<Service> {
         return tabPanel.getSelectedIndex();
     }
 
-    public IsWidget createGeneralTab() {
+    public Widget createGeneralTab() {
         FormFlexPanel main = new FormFlexPanel();
 
         int row = -1;
@@ -80,10 +74,10 @@ public class ServiceForm extends CrmEntityForm<Service> {
         main.setWidget(++row, 0, inject(proto().version().items(), new ServiceItemFolder(this)));
         main.getFlexCellFormatter().setColSpan(row, 0, 2);
 
-        return new ScrollPanel(main);
+        return main;
     }
 
-    public IsWidget createEligibilityTab() {
+    public Widget createEligibilityTab() {
         FormFlexPanel main = new FormFlexPanel();
 
         int row = -1;
@@ -93,6 +87,6 @@ public class ServiceForm extends CrmEntityForm<Service> {
         main.setH1(++row, 0, 1, i18n.tr("Concessions"));
         main.setWidget(++row, 0, inject(proto().version().concessions(), new ServiceConcessionFolder(isEditable(), this)));
 
-        return new ScrollPanel(main);
+        return main;
     }
 }

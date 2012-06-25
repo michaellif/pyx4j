@@ -13,15 +13,16 @@
  */
 package com.propertyvista.crm.client.ui.dashboard;
 
-import com.google.gwt.user.client.ui.IsWidget;
-
 import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 
 public class DashboardForm extends CrmEntityForm<DashboardMetadata> {
+
+    private static final I18n i18n = I18n.get(DashboardForm.class);
 
     public DashboardForm() {
         this(false);
@@ -32,16 +33,16 @@ public class DashboardForm extends CrmEntityForm<DashboardMetadata> {
     }
 
     @Override
-    public IsWidget createContent() {
-        FormFlexPanel main = new FormFlexPanel();
+    public void createTabs() {
+        FormFlexPanel content = new FormFlexPanel();
 
         int row = -1;
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().type(), new CEnumLabel()), 15).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 20).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().description()), 40).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().isFavorite()), 3).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().isShared()), 3).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().type(), new CEnumLabel()), 15).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 20).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().description()), 40).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().isFavorite()), 3).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().isShared()), 3).build());
 
-        return main;
+        selectTab(addTab(content, i18n.tr("General")));
     }
 }

@@ -13,15 +13,15 @@
  */
 package com.propertyvista.crm.client.ui.crud.settings.content.page;
 
-import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.ScrollPanel;
-
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.site.PageDescriptor;
 
 public class PageForm extends CrmEntityForm<PageDescriptor> {
+
+    private static final I18n i18n = I18n.get(PageForm.class);
 
     public PageForm() {
         this(false);
@@ -32,19 +32,19 @@ public class PageForm extends CrmEntityForm<PageDescriptor> {
     }
 
     @Override
-    public IsWidget createContent() {
-        FormFlexPanel main = new FormFlexPanel();
+    public void createTabs() {
+        FormFlexPanel content = new FormFlexPanel();
 
         int row = -1;
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 15).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 15).build());
 
-        main.setH1(++row, 0, 1, proto().content().getMeta().getCaption());
-        main.setWidget(++row, 0, inject(proto().content(), new PageContentFolder(this)));
+        content.setH1(++row, 0, 1, proto().content().getMeta().getCaption());
+        content.setWidget(++row, 0, inject(proto().content(), new PageContentFolder(this)));
 
-        main.setH1(++row, 0, 1, proto().childPages().getMeta().getCaption());
-        main.setWidget(++row, 0, inject(proto().childPages(), new PageDescriptorFolder(this)));
+        content.setH1(++row, 0, 1, proto().childPages().getMeta().getCaption());
+        content.setWidget(++row, 0, inject(proto().childPages(), new PageDescriptorFolder(this)));
 
-        return new ScrollPanel(main);
+        selectTab(addTab(content, i18n.tr("General")));
     }
 
     @Override

@@ -13,15 +13,15 @@
  */
 package com.propertyvista.crm.client.ui.crud.settings.financial.tax;
 
-import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.ScrollPanel;
-
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.financial.tax.Tax;
 
 public class TaxForm extends CrmEntityForm<Tax> {
+
+    private static final I18n i18n = I18n.get(TaxForm.class);
 
     public TaxForm() {
         this(false);
@@ -32,15 +32,16 @@ public class TaxForm extends CrmEntityForm<Tax> {
     }
 
     @Override
-    public IsWidget createContent() {
-        FormFlexPanel main = new FormFlexPanel();
+    public void createTabs() {
+        FormFlexPanel content = new FormFlexPanel();
 
         int row = -1;
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 25).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().authority()), 25).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().rate()), 7).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().compound()), 5).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 25).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().authority()), 25).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().rate()), 7).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().compound()), 5).build());
 
-        return new ScrollPanel(main);
+        selectTab(addTab(content, i18n.tr("General")));
+
     }
 }

@@ -13,15 +13,15 @@
  */
 package com.propertyvista.crm.client.ui.crud.settings.financial.glcode;
 
-import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.ScrollPanel;
-
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.financial.GlCodeCategory;
 
 public class GlCodeCategoryForm extends CrmEntityForm<GlCodeCategory> {
+
+    private static final I18n i18n = I18n.get(GlCodeCategoryForm.class);
 
     public GlCodeCategoryForm() {
         this(false);
@@ -32,15 +32,15 @@ public class GlCodeCategoryForm extends CrmEntityForm<GlCodeCategory> {
     }
 
     @Override
-    public IsWidget createContent() {
-        FormFlexPanel main = new FormFlexPanel();
+    public void createTabs() {
+        FormFlexPanel content = new FormFlexPanel();
         int row = 0;
-        main.setWidget(row++, 0, new DecoratorBuilder(inject(proto().categoryId()), 7).build());
-        main.setWidget(row++, 0, new DecoratorBuilder(inject(proto().description()), 25).build());
+        content.setWidget(row++, 0, new DecoratorBuilder(inject(proto().categoryId()), 7).build());
+        content.setWidget(row++, 0, new DecoratorBuilder(inject(proto().description()), 25).build());
 
-        main.setH3(row++, 0, 1, proto().glCodes().getMeta().getCaption());
-        main.setWidget(row++, 0, inject(proto().glCodes(), new GlCodeFolder(isEditable())));
+        content.setH3(row++, 0, 1, proto().glCodes().getMeta().getCaption());
+        content.setWidget(row++, 0, inject(proto().glCodes(), new GlCodeFolder(isEditable())));
 
-        return new ScrollPanel(main);
+        selectTab(addTab(content, i18n.tr("General")));
     }
 }

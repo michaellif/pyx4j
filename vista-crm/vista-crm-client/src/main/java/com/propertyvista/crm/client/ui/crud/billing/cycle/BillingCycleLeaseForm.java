@@ -17,8 +17,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.ScrollPanel;
 
 import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.folder.CEntityFolderRowEditor;
@@ -42,19 +40,19 @@ public class BillingCycleLeaseForm extends CrmEntityForm<BillingCycleLeaseDTO> {
     }
 
     @Override
-    public IsWidget createContent() {
-        FormFlexPanel main = new FormFlexPanel();
+    public void createTabs() {
+        FormFlexPanel content = new FormFlexPanel();
         int row = -1;
 
-        main.setH2(++row, 0, 1, i18n.tr("Statistics"));
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().nonConfirmedBills())).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().nonRunnedBills())).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().failedBills())).build());
+        content.setH2(++row, 0, 1, i18n.tr("Statistics"));
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().nonConfirmedBills())).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().nonRunnedBills())).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().failedBills())).build());
 
-        main.setH2(++row, 0, 1, i18n.tr("Bills"));
-        main.setWidget(++row, 0, inject(proto().bills(), new BillFolder()));
+        content.setH2(++row, 0, 1, i18n.tr("Bills"));
+        content.setWidget(++row, 0, inject(proto().bills(), new BillFolder()));
 
-        return new ScrollPanel(main);
+        selectTab(addTab(content, i18n.tr("General")));
     }
 
     private class BillFolder extends VistaTableFolder<Bill> {

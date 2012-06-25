@@ -19,6 +19,7 @@ import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
 import com.pyx4j.site.client.ui.crud.CrudEntityForm;
 
 import com.propertyvista.admin.client.ui.components.AdminEditorsComponentFactory;
+import com.propertyvista.common.client.theme.VistaTheme;
 
 public abstract class AdminEntityForm<E extends IEntity> extends CrudEntityForm<E> {
 
@@ -27,7 +28,7 @@ public abstract class AdminEntityForm<E extends IEntity> extends CrudEntityForm<
     }
 
     public AdminEntityForm(Class<E> rootClass, boolean viewMode) {
-        super(rootClass, new AdminEditorsComponentFactory(), viewMode);
+        super(rootClass, new AdminEditorsComponentFactory(), viewMode, VistaTheme.defaultTabHeight);
     }
 
     // decoration stuff:

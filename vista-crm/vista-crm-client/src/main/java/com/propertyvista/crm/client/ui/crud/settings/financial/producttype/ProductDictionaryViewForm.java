@@ -13,9 +13,6 @@
  */
 package com.propertyvista.crm.client.ui.crud.settings.financial.producttype;
 
-import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.ScrollPanel;
-
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -35,16 +32,16 @@ public class ProductDictionaryViewForm extends CrmEntityForm<ProductItemType> {
     }
 
     @Override
-    public IsWidget createContent() {
-        FormFlexPanel main = new FormFlexPanel();
+    public void createTabs() {
+        FormFlexPanel content = new FormFlexPanel();
 
         int row = -1;
-        main.setH1(++row, 0, 1, i18n.tr("Service Item Types"));
-        main.setWidget(++row, 0, ((ProductDictionaryView) getParentView()).getServiceListerView().asWidget());
+        content.setH1(++row, 0, 1, i18n.tr("Service Item Types"));
+        content.setWidget(++row, 0, ((ProductDictionaryView) getParentView()).getServiceListerView().asWidget());
 
-        main.setH1(++row, 0, 1, i18n.tr("Feature Item Types"));
-        main.setWidget(++row, 0, ((ProductDictionaryView) getParentView()).getFeatureListerView().asWidget());
+        content.setH1(++row, 0, 1, i18n.tr("Feature Item Types"));
+        content.setWidget(++row, 0, ((ProductDictionaryView) getParentView()).getFeatureListerView().asWidget());
 
-        return new ScrollPanel(main);
+        selectTab(addTab(content, i18n.tr("General")));
     }
 }

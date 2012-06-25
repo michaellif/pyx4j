@@ -13,8 +13,6 @@
  */
 package com.propertyvista.admin.client.ui.crud.simulation;
 
-import com.google.gwt.user.client.ui.IsWidget;
-
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -30,7 +28,7 @@ public class SimulationForm extends AdminEntityForm<SimulationDTO> {
     }
 
     @Override
-    public IsWidget createContent() {
+    public void createTabs() {
         FormFlexPanel content = new FormFlexPanel();
         int row = -1;
 
@@ -47,7 +45,8 @@ public class SimulationForm extends AdminEntityForm<SimulationDTO> {
 
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().usePadSimulator())).build());
 
-        return content;
+        selectTab(addTab(content, i18n.tr("General")));
+
     }
 
 }

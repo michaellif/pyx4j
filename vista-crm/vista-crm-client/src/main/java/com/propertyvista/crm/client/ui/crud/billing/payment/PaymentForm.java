@@ -21,7 +21,6 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.shared.EntityFactory;
@@ -96,13 +95,13 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
     }
 
     @Override
-    public IsWidget createContent() {
-        FormFlexPanel main = new FormFlexPanel();
+    public void createTabs() {
+        FormFlexPanel content = new FormFlexPanel();
 
-        main.setWidget(0, 0, createDetailsPanel());
-        main.setH1(1, 0, 1, i18n.tr("Payment Method"));
-        paymentMethodEditorSeparator = main.getWidget(1, 0);
-        main.setWidget(2, 0, inject(proto().paymentMethod(), paymentMethodEditor));
+        content.setWidget(0, 0, createDetailsPanel());
+        content.setH1(1, 0, 1, i18n.tr("Payment Method"));
+        paymentMethodEditorSeparator = content.getWidget(1, 0);
+        content.setWidget(2, 0, inject(proto().paymentMethod(), paymentMethodEditor));
 
         // tweaks:
         paymentMethodEditor.addTypeSelectionValueChangeHandler(new ValueChangeHandler<PaymentType>() {
@@ -112,7 +111,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
             }
         });
 
-        return new ScrollPanel(main);
+        selectTab(addTab(content, i18n.tr("General")));
     }
 
     private IsWidget createDetailsPanel() {

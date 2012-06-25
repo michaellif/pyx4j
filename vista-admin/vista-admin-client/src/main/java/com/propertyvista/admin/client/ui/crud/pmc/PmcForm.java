@@ -15,7 +15,6 @@ package com.propertyvista.admin.client.ui.crud.pmc;
 
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.ValidationUtils;
 import com.pyx4j.forms.client.ui.CHyperlink;
@@ -39,18 +38,18 @@ public class PmcForm extends AdminEntityForm<PmcDTO> {
     }
 
     @Override
-    public IsWidget createContent() {
-        FormFlexPanel main = new FormFlexPanel();
+    public void createTabs() {
+        FormFlexPanel content = new FormFlexPanel();
 
         int row = -1;
-        main.setH1(++row, 0, 2, i18n.tr("General"));
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().status()), 15).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().onboardingAccountId()), 15).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 15).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().namespace()), 15).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().dnsName()), 15).build());
+        content.setH1(++row, 0, 2, i18n.tr("General"));
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().status()), 15).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().onboardingAccountId()), 15).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 15).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().namespace()), 15).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().dnsName()), 15).build());
 
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().vistaCrmUrl(), new CHyperlink(new Command() {
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().vistaCrmUrl(), new CHyperlink(new Command() {
             @Override
             public void execute() {
                 String url = getValue().vistaCrmUrl().getValue();
@@ -66,7 +65,7 @@ public class PmcForm extends AdminEntityForm<PmcDTO> {
 
         })), 50).build());
 
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().residentPortalUrl(), new CHyperlink(new Command() {
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().residentPortalUrl(), new CHyperlink(new Command() {
             @Override
             public void execute() {
                 String url = getValue().residentPortalUrl().getValue();
@@ -82,7 +81,7 @@ public class PmcForm extends AdminEntityForm<PmcDTO> {
 
         })), 50).build());
 
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().prospectPortalUrl(), new CHyperlink(new Command() {
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().prospectPortalUrl(), new CHyperlink(new Command() {
             @Override
             public void execute() {
                 String url = getValue().prospectPortalUrl().getValue();
@@ -98,11 +97,11 @@ public class PmcForm extends AdminEntityForm<PmcDTO> {
 
         })), 50).build());
 
-        main.setH1(++row, 0, 2, proto().dnsNameAliases().getMeta().getCaption());
-        main.setWidget(++row, 0, inject(proto().dnsNameAliases(), new PmcDnsNameFolder(isEditable())));
-        main.getFlexCellFormatter().setColSpan(row, 0, 2);
+        content.setH1(++row, 0, 2, proto().dnsNameAliases().getMeta().getCaption());
+        content.setWidget(++row, 0, inject(proto().dnsNameAliases(), new PmcDnsNameFolder(isEditable())));
+        content.getFlexCellFormatter().setColSpan(row, 0, 2);
 
-        return main;
+        selectTab(addTab(content, i18n.tr("General")));
     }
 
     @Override

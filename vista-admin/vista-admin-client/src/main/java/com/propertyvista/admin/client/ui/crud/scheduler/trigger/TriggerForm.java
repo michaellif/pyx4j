@@ -13,29 +13,23 @@
  */
 package com.propertyvista.admin.client.ui.crud.scheduler.trigger;
 
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.tabpanel.Tab;
 
-import com.propertyvista.admin.client.themes.AdminTheme;
 import com.propertyvista.admin.client.ui.crud.AdminEntityForm;
 import com.propertyvista.admin.client.ui.crud.scheduler.NotificationFolder;
 import com.propertyvista.admin.domain.scheduler.Trigger;
 import com.propertyvista.admin.domain.scheduler.TriggerPmcSelectionType;
-import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 
 public class TriggerForm extends AdminEntityForm<Trigger> {
 
     private static final I18n i18n = I18n.get(TriggerForm.class);
-
-    protected final VistaTabLayoutPanel tabPanel = new VistaTabLayoutPanel(AdminTheme.defaultTabHeight, Unit.EM);
 
     public TriggerForm() {
         this(false);
@@ -46,14 +40,13 @@ public class TriggerForm extends AdminEntityForm<Trigger> {
     }
 
     @Override
-    public IsWidget createContent() {
-        tabPanel.add(createDetailsTab(), i18n.tr("Details"));
+    public void createTabs() {
+        Tab tab = addTab(createDetailsTab(), i18n.tr("Details"));
+        selectTab(tab);
 
-        tabPanel.add(isEditable() ? new HTML() : ((TriggerViewerView) getParentView()).getRunListerView().asWidget(), i18n.tr("Runs"));
-        tabPanel.setLastTabDisabled(isEditable());
+        tab = addTab(isEditable() ? new HTML() : ((TriggerViewerView) getParentView()).getRunListerView().asWidget(), i18n.tr("Runs"));
+        enableTab(tab, !isEditable());
 
-        tabPanel.setSize("100%", "100%");
-        return tabPanel;
     }
 
     private Widget createDetailsTab() {
@@ -90,7 +83,7 @@ public class TriggerForm extends AdminEntityForm<Trigger> {
             }
         });
 
-        return new ScrollPanel(main);
+        return main;
     }
 
     @Override

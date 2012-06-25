@@ -15,16 +15,14 @@ package com.propertyvista.crm.client.ui.crud.customer.guarantor;
 
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.entity.client.IDecorator;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.widgets.client.tabpanel.Tab;
 
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.common.client.ui.components.editors.NameEditor;
@@ -52,20 +50,16 @@ public class GuarantorForm extends CrmEntityForm<GuarantorDTO> {
     }
 
     @Override
-    protected IDecorator createDecorator() {
-        return null;
-    }
+    public void createTabs() {
 
-    @Override
-    public IsWidget createContent() {
+        Tab tab = addTab(createDetailsTab(), i18n.tr("Details"));
+        selectTab(tab);
 
-        tabPanel.add(createDetailsTab(), i18n.tr("Details"));
-        tabPanel.add(isEditable() ? new HTML() : ((GuarantorViewerView) getParentView()).getScreeningListerView().asWidget(), i18n.tr("Screening"));
-        tabPanel.setLastTabDisabled(isEditable());
-        tabPanel.add(createPaymentMethodsTab(), i18n.tr("Payment Methods"));
+        tab = addTab(isEditable() ? new HTML() : ((GuarantorViewerView) getParentView()).getScreeningListerView().asWidget(), i18n.tr("Screening"));
+        enableTab(tab, !isEditable());
 
-        tabPanel.setSize("100%", "100%");
-        return tabPanel;
+        addTab(createPaymentMethodsTab(), i18n.tr("Payment Methods"));
+
     }
 
     @Override
@@ -105,7 +99,7 @@ public class GuarantorForm extends CrmEntityForm<GuarantorDTO> {
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseV(), new CLeaseVHyperlink()), 35).customLabel(i18n.tr("Lease")).build());
         }
 
-        return new ScrollPanel(main);
+        return main;
     }
 
     private Widget createPaymentMethodsTab() {
@@ -133,7 +127,7 @@ public class GuarantorForm extends CrmEntityForm<GuarantorDTO> {
             }
         }));
 
-        return new ScrollPanel(main);
+        return main;
     }
 
     @Override

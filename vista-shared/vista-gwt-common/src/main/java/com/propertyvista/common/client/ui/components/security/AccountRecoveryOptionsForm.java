@@ -16,39 +16,42 @@ package com.propertyvista.common.client.ui.components.security;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.gwt.user.client.ui.IsWidget;
-
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CPasswordTextField;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.CrudEntityForm;
 
+import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.domain.security.SecurityQuestion;
 import com.propertyvista.portal.rpc.shared.dto.AccountRecoveryOptionsDTO;
 
 public class AccountRecoveryOptionsForm extends CrudEntityForm<AccountRecoveryOptionsDTO> {
 
+    private static final I18n i18n = I18n.get(AccountRecoveryOptionsForm.class);
+
     public AccountRecoveryOptionsForm() {
-        super(AccountRecoveryOptionsDTO.class);
+        super(AccountRecoveryOptionsDTO.class, VistaTheme.defaultTabHeight);
     }
 
     public AccountRecoveryOptionsForm(boolean viewMode) {
-        super(AccountRecoveryOptionsDTO.class, viewMode);
+        super(AccountRecoveryOptionsDTO.class, viewMode, VistaTheme.defaultTabHeight);
     }
 
     @Override
-    public IsWidget createContent() {
-        FormFlexPanel contentPanel = new FormFlexPanel();
+    protected void createTabs() {
+        FormFlexPanel content = new FormFlexPanel();
         int row = -1;
 
-        contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().recoveryEmail())).build());
-        contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().mobilePhone())).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().recoveryEmail())).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().mobilePhone())).build());
 
-        contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().securityQuestion())).build());
-        contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().securityAnswer(), new CPasswordTextField())).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().securityQuestion())).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().securityAnswer(), new CPasswordTextField())).build());
 
-        return contentPanel;
+        selectTab(addTab(content, i18n.tr("General")));
+
     }
 
     @Override

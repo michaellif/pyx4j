@@ -13,14 +13,15 @@
  */
 package com.propertyvista.admin.client.ui.crud.pmc;
 
-import com.google.gwt.user.client.ui.IsWidget;
-
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.admin.client.ui.crud.AdminEntityForm;
 import com.propertyvista.admin.rpc.PmcDTO;
 
 public class PmcFormNewItem extends AdminEntityForm<PmcDTO> {
+
+    private static final I18n i18n = I18n.get(PmcFormNewItem.class);
 
     public PmcFormNewItem() {
         this(false);
@@ -31,18 +32,18 @@ public class PmcFormNewItem extends AdminEntityForm<PmcDTO> {
     }
 
     @Override
-    public IsWidget createContent() {
-        FormFlexPanel main = new FormFlexPanel();
+    public void createTabs() {
+        FormFlexPanel content = new FormFlexPanel();
 
         int row = -1;
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 15).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().dnsName()), 15).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().name().firstName()), 15).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().name().lastName()), 15).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().email()), 15).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().password()), 15).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 15).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().dnsName()), 15).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().name().firstName()), 15).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().name().lastName()), 15).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().email()), 15).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().password()), 15).build());
 
-        return main;
+        selectTab(addTab(content, i18n.tr("General")));
     }
 
 }

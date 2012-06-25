@@ -13,7 +13,6 @@
  */
 package com.propertyvista.crm.client.ui.crud.building.mech;
 
-import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
@@ -63,7 +62,7 @@ public class ElevatorForm extends MechBaseForm<ElevatorDTO> {
         main.getColumnFormatter().setWidth(0, "50%");
         main.getColumnFormatter().setWidth(1, "50%");
 
-        return new ScrollPanel(main);
+        return main;
     }
 
     @Override

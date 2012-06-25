@@ -13,8 +13,6 @@
  */
 package com.propertyvista.admin.client.ui.crud.scheduler.run;
 
-import com.google.gwt.user.client.ui.IsWidget;
-
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -34,36 +32,37 @@ public class RunForm extends AdminEntityForm<Run> {
     }
 
     @Override
-    public IsWidget createContent() {
-        FormFlexPanel container = new FormFlexPanel();
+    public void createTabs() {
+        FormFlexPanel content = new FormFlexPanel();
         int row = -1;
 
-        container.setWidget(++row, 0, new DecoratorBuilder(inject(proto().trigger()), 15).build());
-        container.setWidget(++row, 0, new DecoratorBuilder(inject(proto().trigger().triggerType()), 15).build());
-        container.setWidget(++row, 0, new DecoratorBuilder(inject(proto().started()), 10).build());
-        container.setWidget(++row, 0, new DecoratorBuilder(inject(proto().created()), 10).build());
-        container.setWidget(++row, 0, new DecoratorBuilder(inject(proto().forDate()), 10).build());
-        container.setWidget(++row, 0, new DecoratorBuilder(inject(proto().status()), 15).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().trigger()), 15).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().trigger().triggerType()), 15).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().started()), 10).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().created()), 10).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().forDate()), 10).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().status()), 15).build());
 
-        container.setH2(++row, 0, 2, i18n.tr("Statistics"));
-        container.getFlexCellFormatter().setColSpan(row, 0, 2);
-        container.setWidget(++row, 0, new DecoratorBuilder(inject(proto().stats().total()), 10).build());
-        container.setWidget(++row, 0, new DecoratorBuilder(inject(proto().stats().processed()), 10).build());
-        container.setWidget(row, 1, new DecoratorBuilder(inject(proto().stats().amountProcessed()), 10).build());
-        container.setWidget(++row, 0, new DecoratorBuilder(inject(proto().stats().failed()), 10).build());
-        container.setWidget(row, 1, new DecoratorBuilder(inject(proto().stats().amountFailed()), 10).build());
-        container.setWidget(++row, 0, new DecoratorBuilder(inject(proto().stats().averageDuration()), 10).build());
-        container.setWidget(++row, 0, new DecoratorBuilder(inject(proto().stats().totalDuration()), 10).build());
+        content.setH2(++row, 0, 2, i18n.tr("Statistics"));
+        content.getFlexCellFormatter().setColSpan(row, 0, 2);
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().stats().total()), 10).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().stats().processed()), 10).build());
+        content.setWidget(row, 1, new DecoratorBuilder(inject(proto().stats().amountProcessed()), 10).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().stats().failed()), 10).build());
+        content.setWidget(row, 1, new DecoratorBuilder(inject(proto().stats().amountFailed()), 10).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().stats().averageDuration()), 10).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().stats().totalDuration()), 10).build());
 
-        container.setWidget(++row, 0, new DecoratorBuilder(inject(proto().stats().message()), 40).build());
-        container.setWidget(++row, 0, new DecoratorBuilder(inject(proto().errorMessage()), 40).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().stats().message()), 40).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().errorMessage()), 40).build());
 
-        container.setH2(++row, 0, 2, i18n.tr("Data"));
-        container.getFlexCellFormatter().setColSpan(row, 0, 2);
-        container.setWidget(++row, 0, ((RunViewerView) getParentView()).getRunDataListerView().asWidget());
-        container.getFlexCellFormatter().setColSpan(row, 0, 2);
+        content.setH2(++row, 0, 2, i18n.tr("Data"));
+        content.getFlexCellFormatter().setColSpan(row, 0, 2);
+        content.setWidget(++row, 0, ((RunViewerView) getParentView()).getRunDataListerView().asWidget());
+        content.getFlexCellFormatter().setColSpan(row, 0, 2);
 
-        return container;
+        selectTab(addTab(content, i18n.tr("General")));
+
     }
 
     @Override

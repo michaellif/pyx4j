@@ -20,8 +20,6 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
-import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.config.shared.ApplicationMode;
@@ -54,18 +52,18 @@ public class SiteForm extends CrmEntityForm<SiteDescriptorDTO> {
     }
 
     @Override
-    public IsWidget createContent() {
-        FormFlexPanel main = new FormFlexPanel();
+    public void createTabs() {
+        FormFlexPanel content = new FormFlexPanel();
 
         int row = 0;
 
-        main.setH1(row++, 0, 1, i18n.tr("Look And Feel"));
+        content.setH1(row++, 0, 1, i18n.tr("Look And Feel"));
         CComponent<?, ?> skinComp;
-        main.setWidget(row++, 0, new DecoratorBuilder(skinComp = inject(proto().skin()), 10).build());
-        main.setWidget(row++, 0, new DecoratorBuilder(inject(proto().sitePalette().object1()), 10).build());
-        main.setWidget(row++, 0, new DecoratorBuilder(inject(proto().sitePalette().object2()), 10).build());
-        main.setWidget(row++, 0, new DecoratorBuilder(inject(proto().sitePalette().contrast1()), 10).build());
-        main.setWidget(row++, 0, new DecoratorBuilder(inject(proto().sitePalette().contrast2()), 10).build());
+        content.setWidget(row++, 0, new DecoratorBuilder(skinComp = inject(proto().skin()), 10).build());
+        content.setWidget(row++, 0, new DecoratorBuilder(inject(proto().sitePalette().object1()), 10).build());
+        content.setWidget(row++, 0, new DecoratorBuilder(inject(proto().sitePalette().object2()), 10).build());
+        content.setWidget(row++, 0, new DecoratorBuilder(inject(proto().sitePalette().contrast1()), 10).build());
+        content.setWidget(row++, 0, new DecoratorBuilder(inject(proto().sitePalette().contrast2()), 10).build());
 
         if (skinComp instanceof CComboBox) {
             Collection<SiteDescriptor.Skin> skinOpt;
@@ -76,34 +74,35 @@ public class SiteForm extends CrmEntityForm<SiteDescriptorDTO> {
             }
             ((CComboBox<SiteDescriptor.Skin>) skinComp).setOptions(skinOpt);
         }
-        main.setWidget(row++, 0, new DecoratorBuilder(inject(proto().disableMapView()), 10).build());
-        main.setWidget(row++, 0, new DecoratorBuilder(inject(proto().disableBuildingDetails()), 10).build());
+        content.setWidget(row++, 0, new DecoratorBuilder(inject(proto().disableMapView()), 10).build());
+        content.setWidget(row++, 0, new DecoratorBuilder(inject(proto().disableBuildingDetails()), 10).build());
 
-        main.setH1(row++, 0, 1, proto().locales().getMeta().getCaption());
-        main.setWidget(row++, 0, inject(proto().locales(), new AvailableLocaleFolder(isEditable())));
+        content.setH1(row++, 0, 1, proto().locales().getMeta().getCaption());
+        content.setWidget(row++, 0, inject(proto().locales(), new AvailableLocaleFolder(isEditable())));
 
-        main.setH1(row++, 0, 1, proto().siteTitles().getMeta().getCaption());
-        main.setWidget(row++, 0, inject(proto().siteTitles(), new SiteTitlesFolder(isEditable())));
+        content.setH1(row++, 0, 1, proto().siteTitles().getMeta().getCaption());
+        content.setWidget(row++, 0, inject(proto().siteTitles(), new SiteTitlesFolder(isEditable())));
 
-        main.setH1(row++, 0, 1, proto().logo().getMeta().getCaption());
-        main.setWidget(row++, 0, inject(proto().logo(), new PortalImageResourceFolder(isEditable())));
+        content.setH1(row++, 0, 1, proto().logo().getMeta().getCaption());
+        content.setWidget(row++, 0, inject(proto().logo(), new PortalImageResourceFolder(isEditable())));
 
-        main.setH1(row++, 0, 1, proto().slogan().getMeta().getCaption());
-        main.setWidget(row++, 0, inject(proto().slogan(), new RichTextContentFolder(isEditable())));
+        content.setH1(row++, 0, 1, proto().slogan().getMeta().getCaption());
+        content.setWidget(row++, 0, inject(proto().slogan(), new RichTextContentFolder(isEditable())));
 
-        main.setH1(row++, 0, 1, proto().banner().getMeta().getCaption());
-        main.setWidget(row++, 0, inject(proto().banner(), new PortalImageResourceFolder(isEditable())));
+        content.setH1(row++, 0, 1, proto().banner().getMeta().getCaption());
+        content.setWidget(row++, 0, inject(proto().banner(), new PortalImageResourceFolder(isEditable())));
 
-        main.setH1(row++, 0, 1, proto().socialLinks().getMeta().getCaption());
-        main.setWidget(row++, 0, inject(proto().socialLinks(), new SocialLinkFolder(isEditable())));
+        content.setH1(row++, 0, 1, proto().socialLinks().getMeta().getCaption());
+        content.setWidget(row++, 0, inject(proto().socialLinks(), new SocialLinkFolder(isEditable())));
 
         // home page gadgets
-        main.setWidget(row++, 0, createGadgetPanel());
+        content.setWidget(row++, 0, createGadgetPanel());
 
-        main.setH1(row++, 0, 1, proto().childPages().getMeta().getCaption());
-        main.setWidget(row++, 0, inject(proto().childPages(), new SitePageDescriptorFolder(this)));
+        content.setH1(row++, 0, 1, proto().childPages().getMeta().getCaption());
+        content.setWidget(row++, 0, inject(proto().childPages(), new SitePageDescriptorFolder(this)));
 
-        return new ScrollPanel(main);
+        selectTab(addTab(content, i18n.tr("General")));
+
     }
 
     class GadgetSelectorDialog extends SelectEnumDialog<HomePageGadget.GadgetType> implements OkCancelOption {

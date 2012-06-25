@@ -13,9 +13,6 @@
  */
 package com.propertyvista.crm.client.ui.crud.unit;
 
-import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.ScrollPanel;
-
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -36,38 +33,40 @@ public class UnitItemForm extends CrmEntityForm<AptUnitItem> {
     }
 
     @Override
-    public IsWidget createContent() {
-        FormFlexPanel main = new FormFlexPanel();
+    public void createTabs() {
+        FormFlexPanel content = new FormFlexPanel();
 
         int row = -1;
-        main.setH1(++row, 0, 2, i18n.tr("Information"));
+        content.setH1(++row, 0, 2, i18n.tr("Information"));
 
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().type()), 10).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().description()), 35).build());
-        main.getFlexCellFormatter().setColSpan(row, 0, 2);
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().conditionNotes()), 50).build());
-        main.getFlexCellFormatter().setColSpan(row, 0, 2);
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().type()), 10).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().description()), 35).build());
+        content.getFlexCellFormatter().setColSpan(row, 0, 2);
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().conditionNotes()), 50).build());
+        content.getFlexCellFormatter().setColSpan(row, 0, 2);
 
-        main.setH1(++row, 0, 2, i18n.tr("Details"));
+        content.setH1(++row, 0, 2, i18n.tr("Details"));
 
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().wallColor()), 10).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().flooringType()), 10).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().flooringInstallDate()), 9).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().flooringValue()), 9).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().counterTopType()), 10).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().wallColor()), 10).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().flooringType()), 10).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().flooringInstallDate()), 9).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().flooringValue()), 9).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().counterTopType()), 10).build());
 
         row = 4;
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().counterTopInstallDate()), 9).build());
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().counterTopValue()), 9).build());
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().cabinetsType()), 10).build());
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().cabinetsInstallDate()), 9).build());
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().cabinetsValue()), 9).build());
+        content.setWidget(++row, 1, new DecoratorBuilder(inject(proto().counterTopInstallDate()), 9).build());
+        content.setWidget(++row, 1, new DecoratorBuilder(inject(proto().counterTopValue()), 9).build());
+        content.setWidget(++row, 1, new DecoratorBuilder(inject(proto().cabinetsType()), 10).build());
+        content.setWidget(++row, 1, new DecoratorBuilder(inject(proto().cabinetsInstallDate()), 9).build());
+        content.setWidget(++row, 1, new DecoratorBuilder(inject(proto().cabinetsValue()), 9).build());
 
-        main.getColumnFormatter().setWidth(0, "50%");
-        main.getColumnFormatter().setWidth(1, "50%");
+        content.getColumnFormatter().setWidth(0, "50%");
+        content.getColumnFormatter().setWidth(1, "50%");
 
         validateInstallDates();
-        return new ScrollPanel(main);
+
+        selectTab(addTab(content, i18n.tr("General")));
+
     }
 
     private void validateInstallDates() {

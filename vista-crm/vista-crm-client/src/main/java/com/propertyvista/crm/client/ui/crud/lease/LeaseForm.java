@@ -15,10 +15,9 @@ package com.propertyvista.crm.client.ui.crud.lease;
 
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.ScrollPanel;
-import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.widgets.client.tabpanel.Tab;
 
 import com.propertyvista.crm.client.ui.crud.lease.common.LeaseFormBase;
 import com.propertyvista.crm.client.ui.crud.lease.invoice.TransactionHistoryViewer;
@@ -28,7 +27,7 @@ import com.propertyvista.misc.VistaTODO;
 
 public class LeaseForm extends LeaseFormBase<LeaseDTO> {
 
-    private Widget adjustmentsTab, billsTab, paymentsTab, financialTab;
+    private Tab adjustmentsTab, billsTab, paymentsTab, financialTab;
 
     public LeaseForm() {
         this(false);
@@ -39,34 +38,35 @@ public class LeaseForm extends LeaseFormBase<LeaseDTO> {
     }
 
     @Override
-    public IsWidget createContent() {
+    public void createTabs() {
 
         createCommonContent();
 
         if (!VistaTODO.removedForProduction) {
-            tabPanel.add(adjustmentsTab = isEditable() ? new HTML() : ((LeaseViewerView) getParentView()).getLeaseAdjustmentListerView().asWidget(),
+            adjustmentsTab = addTab(isEditable() ? new HTML() : ((LeaseViewerView) getParentView()).getLeaseAdjustmentListerView().asWidget(),
                     i18n.tr("Adjustments"));
-            tabPanel.setLastTabDisabled(isEditable());
-            tabPanel.add(billsTab = isEditable() ? new HTML() : ((LeaseViewerView) getParentView()).getBillListerView().asWidget(), i18n.tr("Bills"));
-            tabPanel.setLastTabDisabled(isEditable());
-            tabPanel.add(paymentsTab = isEditable() ? new HTML() : ((LeaseViewerView) getParentView()).getPaymentListerView().asWidget(), i18n.tr("Payments"));
-            tabPanel.setLastTabDisabled(isEditable());
-            tabPanel.add(financialTab = isEditable() ? new HTML() : createFinancialTransactionHistoryTab().asWidget(), i18n.tr("Financial Summary"));
-            tabPanel.setLastTabDisabled(isEditable());
+            enableTab(adjustmentsTab, !isEditable());
+
+            billsTab = addTab(isEditable() ? new HTML() : ((LeaseViewerView) getParentView()).getBillListerView().asWidget(), i18n.tr("Bills"));
+            enableTab(billsTab, !isEditable());
+
+            paymentsTab = addTab(isEditable() ? new HTML() : ((LeaseViewerView) getParentView()).getPaymentListerView().asWidget(), i18n.tr("Payments"));
+            enableTab(paymentsTab, !isEditable());
+
+            financialTab = addTab(isEditable() ? new HTML() : createFinancialTransactionHistoryTab().asWidget(), i18n.tr("Financial Summary"));
+            enableTab(financialTab, !isEditable());
         }
 
-        tabPanel.setSize("100%", "100%");
-        return tabPanel;
     }
 
     @Override
     protected void onPopulate() {
         super.onPopulate();
 
-        tabPanel.setTabVisible(adjustmentsTab, !getValue().version().status().getValue().isDraft());
-        tabPanel.setTabVisible(billsTab, !getValue().version().status().getValue().isDraft());
-        tabPanel.setTabVisible(paymentsTab, !getValue().version().status().getValue().isDraft());
-        tabPanel.setTabVisible(financialTab, !getValue().version().status().getValue().isDraft());
+        showTab(adjustmentsTab, !getValue().version().status().getValue().isDraft());
+        showTab(billsTab, !getValue().version().status().getValue().isDraft());
+        showTab(paymentsTab, !getValue().version().status().getValue().isDraft());
+        showTab(financialTab, !getValue().version().status().getValue().isDraft());
 
         if (!isEditable()) {
             ((LeaseViewerView) getParentView()).getLeaseAdjustmentListerView().getLister().getDataTablePanel().getAddButton()
@@ -79,6 +79,6 @@ public class LeaseForm extends LeaseFormBase<LeaseDTO> {
     private IsWidget createFinancialTransactionHistoryTab() {
         FormFlexPanel financialTransactionHistory = new FormFlexPanel();
         financialTransactionHistory.setWidget(0, 0, inject(proto().transactionHistory(), new TransactionHistoryViewer()));
-        return new ScrollPanel(financialTransactionHistory);
+        return financialTransactionHistory;
     }
 }

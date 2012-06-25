@@ -13,8 +13,6 @@
  */
 package com.propertyvista.crm.client.ui.crud.lease.application;
 
-import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.folder.CEntityFolder;
@@ -22,6 +20,7 @@ import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.widgets.client.tabpanel.Tab;
 
 import com.propertyvista.common.client.ui.components.editors.dto.FinancialViewForm;
 import com.propertyvista.common.client.ui.components.editors.dto.InfoViewForm;
@@ -34,7 +33,7 @@ import com.propertyvista.dto.TenantInfoDTO;
 
 public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
 
-    private Widget onlineStatusTab;
+    private Tab onlineStatusTab;
 
     public LeaseApplicationForm() {
         this(false);
@@ -45,29 +44,28 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
     }
 
     @Override
-    public IsWidget createContent() {
+    public void createTabs() {
 
         createCommonContent();
 
-        tabPanel.add(createInfoTab(), i18n.tr("Information"));
-        tabPanel.setLastTabDisabled(isEditable());
-        tabPanel.add(createFinancialTab(), i18n.tr("Financial"));
-        tabPanel.setLastTabDisabled(isEditable());
+        Tab tab = addTab(createInfoTab(), i18n.tr("Information"));
+        enableTab(tab, !isEditable());
+
+        tab = addTab(createFinancialTab(), i18n.tr("Financial"));
+        enableTab(tab, !isEditable());
 
 // TODO: should be hidden until back end implementation:   
 //      tabPanel.add(createApprovalTab(), i18n.tr("Approval"));
 //        tabPanel.setLastTabDisabled(true);
-        tabPanel.add(onlineStatusTab = createOnlineStatusTab(), i18n.tr("Online Status Details"));
-        tabPanel.setLastTabDisabled(isEditable());
+        onlineStatusTab = addTab(createOnlineStatusTab(), i18n.tr("Online Status Details"));
+        enableTab(onlineStatusTab, !isEditable());
 
-        tabPanel.setSize("100%", "100%");
-        return tabPanel;
     }
 
     @Override
     protected void onPopulate() {
         super.onPopulate();
-        tabPanel.setTabDisabled(onlineStatusTab, tabPanel.isTabDisabled(onlineStatusTab) || getValue().leaseApplication().onlineApplication().isNull());
+        enableTab(onlineStatusTab, isTabEnabled(onlineStatusTab) || getValue().leaseApplication().onlineApplication().isNull());
     }
 
     private Widget createInfoTab() {
@@ -75,7 +73,7 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
 
         main.setWidget(0, 0, inject(proto().tenantInfo(), createTenantView()));
 
-        return new ScrollPanel(main);
+        return main;
     }
 
     private Widget createFinancialTab() {
@@ -83,7 +81,7 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
 
         main.setWidget(0, 0, inject(proto().tenantFinancials(), createFinancialView()));
 
-        return new ScrollPanel(main);
+        return main;
     }
 
     private CEntityFolder<TenantInfoDTO> createTenantView() {
@@ -131,7 +129,7 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
         main.setBR(++row, 0, 1);
         main.setWidget(++row, 0, inject(proto().tenantFinancials(), new TenantApprovalFolder(isEditable())));
 
-        return new ScrollPanel(main);
+        return main;
     }
 
     private Widget createOnlineStatusTab() {
@@ -146,6 +144,6 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
         main.setBR(++row, 0, 1);
         main.setWidget(++row, 0, inject(proto().masterApplicationStatus().individualApplications(), new ApplicationStatusFolder()));
 
-        return new ScrollPanel(main);
+        return main;
     }
 }

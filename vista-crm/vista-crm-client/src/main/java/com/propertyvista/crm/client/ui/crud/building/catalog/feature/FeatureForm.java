@@ -13,9 +13,6 @@
  */
 package com.propertyvista.crm.client.ui.crud.building.catalog.feature;
 
-import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.ScrollPanel;
-
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -36,28 +33,29 @@ public class FeatureForm extends CrmEntityForm<Feature> {
     }
 
     @Override
-    public IsWidget createContent() {
-        FormFlexPanel main = new FormFlexPanel();
+    public void createTabs() {
+        FormFlexPanel content = new FormFlexPanel();
 
         int row = -1;
-        main.setH1(++row, 0, 2, i18n.tr("Information"));
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().version().type(), new CLabel()), 10).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().version().name()), 10).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().version().description()), 50).build());
-        main.getFlexCellFormatter().setColSpan(row, 0, 2);
+        content.setH1(++row, 0, 2, i18n.tr("Information"));
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().version().type(), new CLabel()), 10).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().version().name()), 10).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().version().description()), 50).build());
+        content.getFlexCellFormatter().setColSpan(row, 0, 2);
 
-        main.setH1(++row, 0, 2, i18n.tr("Items"));
+        content.setH1(++row, 0, 2, i18n.tr("Items"));
 
-        main.setWidget(++row, 0, inject(proto().version().items(), new FeatureItemFolder(this)));
-        main.getFlexCellFormatter().setColSpan(row, 0, 2);
+        content.setWidget(++row, 0, inject(proto().version().items(), new FeatureItemFolder(this)));
+        content.getFlexCellFormatter().setColSpan(row, 0, 2);
 
         row = 0;
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().version().mandatory()), 4).build());
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().version().recurring()), 4).build());
+        content.setWidget(++row, 1, new DecoratorBuilder(inject(proto().version().mandatory()), 4).build());
+        content.setWidget(++row, 1, new DecoratorBuilder(inject(proto().version().recurring()), 4).build());
 
-        main.getColumnFormatter().setWidth(0, "50%");
-        main.getColumnFormatter().setWidth(1, "50%");
+        content.getColumnFormatter().setWidth(0, "50%");
+        content.getColumnFormatter().setWidth(1, "50%");
 
-        return new ScrollPanel(main);
+        selectTab(addTab(content, i18n.tr("General")));
+
     }
 }

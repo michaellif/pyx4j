@@ -16,20 +16,15 @@ package com.propertyvista.crm.client.ui.crud.floorplan;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
-import com.pyx4j.entity.client.IDecorator;
 import com.pyx4j.entity.client.ui.folder.CEntityFolder;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.tabpanel.Tab;
 
-import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
-import com.propertyvista.crm.client.themes.CrmTheme;
 import com.propertyvista.crm.client.ui.components.media.CrmMediaFolder;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.property.asset.FloorplanAmenity;
@@ -40,8 +35,6 @@ public class FloorplanForm extends CrmEntityForm<FloorplanDTO> {
 
     private static final I18n i18n = I18n.get(FloorplanForm.class);
 
-    private final VistaTabLayoutPanel tabPanel = new VistaTabLayoutPanel(CrmTheme.defaultTabHeight, Unit.EM);
-
     public FloorplanForm() {
         this(false);
     }
@@ -51,16 +44,11 @@ public class FloorplanForm extends CrmEntityForm<FloorplanDTO> {
     }
 
     @Override
-    protected IDecorator createDecorator() {
-        return null;
-    }
+    public void createTabs() {
+        Tab tab = addTab(createGeneralTab(), i18n.tr("General"));
+        selectTab(tab);
 
-    @Override
-    public IsWidget createContent() {
-        tabPanel.add(createGeneralTab(), i18n.tr("General"));
-        tabPanel.add(createMediaTab(), i18n.tr("Media"));
-        tabPanel.setSize("100%", "100%");
-        return tabPanel;
+        addTab(createMediaTab(), i18n.tr("Media"));
 
     }
 
@@ -83,7 +71,7 @@ public class FloorplanForm extends CrmEntityForm<FloorplanDTO> {
         int row = -1;
         main.setH1(++row, 0, 2, i18n.tr("Media Information"));
         main.setWidget(++row, 0, inject(proto().media(), new CrmMediaFolder(isEditable(), ImageTarget.Floorplan)));
-        return new ScrollPanel(main);
+        return main;
     }
 
     private Widget createGeneralTab() {
@@ -112,6 +100,6 @@ public class FloorplanForm extends CrmEntityForm<FloorplanDTO> {
         main.getColumnFormatter().setWidth(0, "60%");
         main.getColumnFormatter().setWidth(1, "40%");
 
-        return new ScrollPanel(main);
+        return main;
     }
 }

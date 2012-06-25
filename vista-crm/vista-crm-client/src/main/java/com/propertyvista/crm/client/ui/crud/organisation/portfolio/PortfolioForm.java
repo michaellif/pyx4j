@@ -16,9 +16,6 @@ package com.propertyvista.crm.client.ui.crud.organisation.portfolio;
 import java.util.Arrays;
 import java.util.List;
 
-import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.ScrollPanel;
-
 import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.entity.client.ui.folder.IFolderDecorator;
@@ -47,18 +44,19 @@ public class PortfolioForm extends CrmEntityForm<Portfolio> {
     }
 
     @Override
-    public IsWidget createContent() {
-        FormFlexPanel main = new FormFlexPanel();
+    public void createTabs() {
+        FormFlexPanel content = new FormFlexPanel();
 
         int row = -1;
-        main.setH1(++row, 0, 2, i18n.tr("Information"));
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 20).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().description()), 40).build());
+        content.setH1(++row, 0, 2, i18n.tr("Information"));
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 20).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().description()), 40).build());
 
-        main.setH1(++row, 0, 1, i18n.tr("Assigned Buildings"));
-        main.setWidget(++row, 0, inject(proto().buildings(), new BuildingFolder()));
+        content.setH1(++row, 0, 1, i18n.tr("Assigned Buildings"));
+        content.setWidget(++row, 0, inject(proto().buildings(), new BuildingFolder()));
 
-        return new ScrollPanel(main);
+        selectTab(addTab(content, i18n.tr("General")));
+
     }
 
     private class BuildingFolder extends VistaTableFolder<Building> {

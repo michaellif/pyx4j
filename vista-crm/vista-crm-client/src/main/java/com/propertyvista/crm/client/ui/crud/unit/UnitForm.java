@@ -24,13 +24,11 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
-import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.entity.client.IDecorator;
 import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
@@ -45,6 +43,7 @@ import com.pyx4j.site.client.ui.crud.misc.CEntitySelectorHyperlink;
 import com.pyx4j.site.client.ui.dialogs.AbstractEntitySelectorDialog;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
 import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.widgets.client.tabpanel.Tab;
 
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.common.client.ui.components.editors.MarketingEditor;
@@ -71,27 +70,21 @@ public class UnitForm extends CrmEntityForm<AptUnitDTO> {
     }
 
     @Override
-    protected IDecorator createDecorator() {
-        return null;
-    }
+    public void createTabs() {
 
-    @Override
-    public IsWidget createContent() {
+        Tab tab = addTab(createGeneralTab(), i18n.tr("General"));
+        selectTab(tab);
 
-        tabPanel.add(createGeneralTab(), i18n.tr("General"));
+        tab = addTab(isEditable() ? new HTML() : ((UnitViewerView) getParentView()).getUnitItemsListerView().asWidget(), i18n.tr("Details"));
+        enableTab(tab, !isEditable());
 
-        tabPanel.add(isEditable() ? new HTML() : new ScrollPanel(((UnitViewerView) getParentView()).getUnitItemsListerView().asWidget()), i18n.tr("Details"));
-        tabPanel.setLastTabDisabled(isEditable());
-        tabPanel.add(isEditable() ? new HTML() : new ScrollPanel(((UnitViewerView) getParentView()).getOccupanciesListerView().asWidget()),
-                i18n.tr("Occupancy"));
-        tabPanel.setLastTabDisabled(isEditable());
+        tab = addTab(isEditable() ? new HTML() : ((UnitViewerView) getParentView()).getOccupanciesListerView().asWidget(), i18n.tr("Occupancy"));
+        enableTab(tab, !isEditable());
 
 // TODO Hided till further investigation:
-//        tabPanel.add(createMarketingTab(), i18n.tr("Marketing"));
-        tabPanel.add(new ScrollPanel(new Label("Notes and attachments goes here... ")), i18n.tr("Notes & Attachments"));
+//        addTab(createMarketingTab(), i18n.tr("Marketing"));
+        addTab(new Label("Notes and attachments goes here... "), i18n.tr("Notes & Attachments"));
 
-        tabPanel.setSize("100%", "100%");
-        return tabPanel;
     }
 
     @Override

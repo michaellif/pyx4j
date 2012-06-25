@@ -13,8 +13,6 @@
  */
 package com.propertyvista.admin.client.ui.crud.onboardingusers;
 
-import com.google.gwt.user.client.ui.IsWidget;
-
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
@@ -38,7 +36,7 @@ public class OnboardingUserForm extends AdminEntityForm<OnboardingUserDTO> {
     }
 
     @Override
-    public IsWidget createContent() {
+    public void createTabs() {
         FormFlexPanel content = new FormFlexPanel();
         int row = -1;
         content.setH1(++row, 0, 1, i18n.tr("General"));
@@ -56,7 +54,7 @@ public class OnboardingUserForm extends AdminEntityForm<OnboardingUserDTO> {
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().enabled())).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().requireChangePasswordOnNextLogIn())).build());
 
-        return content;
+        selectTab(addTab(content, i18n.tr("General")));
     }
 
     @Override

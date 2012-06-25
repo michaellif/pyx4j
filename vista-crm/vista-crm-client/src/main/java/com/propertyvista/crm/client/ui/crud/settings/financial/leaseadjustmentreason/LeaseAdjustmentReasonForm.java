@@ -13,10 +13,8 @@
  */
 package com.propertyvista.crm.client.ui.crud.settings.financial.leaseadjustmentreason;
 
-import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.ScrollPanel;
-
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.ui.crud.misc.CEntitySelectorHyperlink;
 import com.pyx4j.site.client.ui.dialogs.AbstractEntitySelectorDialog;
@@ -29,6 +27,8 @@ import com.propertyvista.domain.tenant.lease.LeaseAdjustmentReason;
 
 public class LeaseAdjustmentReasonForm extends CrmEntityForm<LeaseAdjustmentReason> {
 
+    private static final I18n i18n = I18n.get(LeaseAdjustmentReasonForm.class);
+
     public LeaseAdjustmentReasonForm() {
         this(false);
     }
@@ -38,13 +38,13 @@ public class LeaseAdjustmentReasonForm extends CrmEntityForm<LeaseAdjustmentReas
     }
 
     @Override
-    public IsWidget createContent() {
-        FormFlexPanel main = new FormFlexPanel();
+    public void createTabs() {
+        FormFlexPanel content = new FormFlexPanel();
 
         int row = -1;
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 25).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().actionType()), 10).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().glCode(), new CEntitySelectorHyperlink<GlCode>() {
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 25).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().actionType()), 10).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().glCode(), new CEntitySelectorHyperlink<GlCode>() {
             @Override
             protected AppPlace getTargetPlace() {
                 return AppPlaceEntityMapper.resolvePlace(GlCode.class, getValue().glCodeCategory().getPrimaryKey());
@@ -64,6 +64,7 @@ public class LeaseAdjustmentReasonForm extends CrmEntityForm<LeaseAdjustmentReas
             }
         }), 25).build());
 
-        return new ScrollPanel(main);
+        selectTab(addTab(content, i18n.tr("General")));
+
     }
 }

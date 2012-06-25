@@ -13,9 +13,6 @@
  */
 package com.propertyvista.crm.client.ui.crud.organisation.vendor;
 
-import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.ScrollPanel;
-
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -37,17 +34,18 @@ public class VendorForm extends CrmEntityForm<Vendor> {
     }
 
     @Override
-    public IsWidget createContent() {
-        FormFlexPanel main = new FormFlexPanel();
+    public void createTabs() {
+        FormFlexPanel content = new FormFlexPanel();
 
         int row = -1;
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 20).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().type()), 20).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().website()), 35).build());
-        main.setH1(++row, 0, 2, i18n.tr("Phone Numbers"));
-        main.setWidget(++row, 0, inject(proto().phones(), new CompanyPhoneFolder(isEditable())));
-        main.setH1(++row, 0, 2, i18n.tr("Emails"));
-        main.setWidget(++row, 0, inject(proto().emails(), new EmailFolder(isEditable())));
-        return new ScrollPanel(main);
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 20).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().type()), 20).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().website()), 35).build());
+        content.setH1(++row, 0, 2, i18n.tr("Phone Numbers"));
+        content.setWidget(++row, 0, inject(proto().phones(), new CompanyPhoneFolder(isEditable())));
+        content.setH1(++row, 0, 2, i18n.tr("Emails"));
+        content.setWidget(++row, 0, inject(proto().emails(), new EmailFolder(isEditable())));
+
+        selectTab(addTab(content, i18n.tr("General")));
     }
 }

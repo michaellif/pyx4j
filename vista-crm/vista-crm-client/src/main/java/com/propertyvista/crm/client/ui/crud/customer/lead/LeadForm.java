@@ -20,11 +20,8 @@ import java.util.List;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.entity.client.IDecorator;
 import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
@@ -36,6 +33,7 @@ import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.ui.crud.misc.CEntitySelectorHyperlink;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
 import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.widgets.client.tabpanel.Tab;
 
 import com.propertyvista.common.client.policy.ClientPolicyManager;
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
@@ -66,20 +64,16 @@ public class LeadForm extends CrmEntityForm<Lead> {
     }
 
     @Override
-    protected IDecorator createDecorator() {
-        return null;
-    }
+    public void createTabs() {
 
-    @Override
-    public IsWidget createContent() {
+        Tab tab = addTab(createGuestsTab(), i18n.tr("Guests"));
+        selectTab(tab);
 
-        tabPanel.add(createGuestsTab(), i18n.tr("Guests"));
-        tabPanel.add(createDetailsTab(), i18n.tr("Details"));
-        tabPanel.add(createAppointmentsTab(), i18n.tr("Appointments"));
-        tabPanel.setLastTabDisabled(isEditable());
+        addTab(createDetailsTab(), i18n.tr("Details"));
 
-        tabPanel.setSize("100%", "100%");
-        return tabPanel;
+        tab = addTab(createAppointmentsTab(), i18n.tr("Appointments"));
+        enableTab(tab, !isEditable());
+
     }
 
     @Override
@@ -104,7 +98,7 @@ public class LeadForm extends CrmEntityForm<Lead> {
         main.setBR(++row, 0, 1);
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().comments()), 50).build());
 
-        return new ScrollPanel(main);
+        return main;
     }
 
     private Widget createDetailsTab() {
@@ -167,7 +161,7 @@ public class LeadForm extends CrmEntityForm<Lead> {
         get(proto().status()).setViewable(true);
         get(proto().createDate()).setViewable(true);
 
-        return new ScrollPanel(main);
+        return main;
     }
 
     @Override
@@ -209,7 +203,7 @@ public class LeadForm extends CrmEntityForm<Lead> {
 
     private Widget createAppointmentsTab() {
         if (!isEditable()) {
-            return new ScrollPanel(((LeadViewerView) getParentView()).getAppointmentsListerView().asWidget());
+            return ((LeadViewerView) getParentView()).getAppointmentsListerView().asWidget();
         }
         return new HTML(); // just stub - not necessary for editing mode!..
     }

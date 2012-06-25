@@ -18,13 +18,10 @@ import java.util.Date;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.client.CEntityForm;
-import com.pyx4j.entity.client.IDecorator;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
@@ -33,6 +30,7 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationFailure;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.tabpanel.Tab;
 
 import com.propertyvista.common.client.ui.components.IdUploaderFolder;
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
@@ -72,21 +70,16 @@ public class PersonScreeningForm extends CrmEntityForm<PersonScreening> {
     }
 
     @Override
-    protected IDecorator createDecorator() {
-        return null;
-    }
+    protected void createTabs() {
 
-    @Override
-    public IsWidget createContent() {
+        Tab tab = addTab(createIdentificationDocumentsTab(), i18n.tr("Identification Documents"));
+        selectTab(tab);
 
-        tabPanel.add(createIdentificationDocumentsTab(), i18n.tr("Identification Documents"));
-        tabPanel.add(createAddressesTab(), i18n.tr("Addresses"));
-        tabPanel.add(createlegalQuestionsTab(), proto().legalQuestions().getMeta().getCaption());
-        tabPanel.add(createIncomesTab(), i18n.tr("Incomes"));
-        tabPanel.add(createAssetsTab(), i18n.tr("Assets"));
+        addTab(createAddressesTab(), i18n.tr("Addresses"));
+        addTab(createlegalQuestionsTab(), proto().legalQuestions().getMeta().getCaption());
+        addTab(createIncomesTab(), i18n.tr("Incomes"));
+        addTab(createAssetsTab(), i18n.tr("Assets"));
 
-        tabPanel.setSize("100%", "100%");
-        return tabPanel;
     }
 
     @Override
@@ -170,7 +163,7 @@ public class PersonScreeningForm extends CrmEntityForm<PersonScreening> {
         int row = -1;
         main.setWidget(++row, 0, inject(proto().documents(), fileUpload = new IdUploaderFolder()));
 
-        return new ScrollPanel(main);
+        return main;
     }
 
     private Widget createAddressesTab() {
@@ -184,7 +177,7 @@ public class PersonScreeningForm extends CrmEntityForm<PersonScreening> {
         previousAddress.setWidget(1, 0, inject(proto().previousAddress(), new PriorAddressEditor()));
         main.setWidget(++row, 0, previousAddress);
 
-        return new ScrollPanel(main);
+        return main;
     }
 
     private Widget createlegalQuestionsTab() {
@@ -212,7 +205,7 @@ public class PersonScreeningForm extends CrmEntityForm<PersonScreening> {
         main.setWidget(row++, 0, new DecoratorBuilder(inject(proto().legalQuestions().filedBankruptcy()), 10, 45).labelAlignment(Alignment.left)
                 .useLabelSemicolon(false).build());
 
-        return new ScrollPanel(main);
+        return main;
     }
 
     private void enablePreviousAddress() {
@@ -226,7 +219,7 @@ public class PersonScreeningForm extends CrmEntityForm<PersonScreening> {
 
         main.setWidget(0, 0, inject(proto().incomes(), new PersonalIncomeFolder(isEditable())));
 
-        return new ScrollPanel(main);
+        return main;
     }
 
     private Widget createAssetsTab() {
@@ -234,6 +227,6 @@ public class PersonScreeningForm extends CrmEntityForm<PersonScreening> {
 
         main.setWidget(0, 0, inject(proto().assets(), new PersonalAssetFolder(isEditable())));
 
-        return new ScrollPanel(main);
+        return main;
     }
 }

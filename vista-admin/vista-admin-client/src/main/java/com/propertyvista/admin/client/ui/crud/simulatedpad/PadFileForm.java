@@ -13,8 +13,6 @@
  */
 package com.propertyvista.admin.client.ui.crud.simulatedpad;
 
-import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
@@ -36,7 +34,7 @@ public class PadFileForm extends AdminEntityForm<PadSimFile> {
     }
 
     @Override
-    public IsWidget createContent() {
+    public void createTabs() {
         FormFlexPanel content = new FormFlexPanel();
         int row = -1;
 
@@ -47,7 +45,7 @@ public class PadFileForm extends AdminEntityForm<PadSimFile> {
             content.setH1(++row, 0, 1, i18n.tr("Batches"));
             content.setWidget(++row, 0, ((PadFileViewerView) getParentView()).getBatchListerView().asWidget());
         }
-        return content;
+        selectTab(addTab(content, i18n.tr("General")));
     }
 
     private Widget createDetailsTab() {
@@ -71,6 +69,6 @@ public class PadFileForm extends AdminEntityForm<PadSimFile> {
 
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().fileAmount()), 10).build());
 
-        return new ScrollPanel(main);
+        return main;
     }
 }

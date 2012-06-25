@@ -51,8 +51,6 @@ public class CrmTheme extends VistaTheme {
 
     public static double defaultActionBarHeight = 2.9;
 
-    public static double defaultTabHeight = 2.6;
-
     public static enum TitleBarStyleName implements IStyleName {
         TitleBarBreadcrumb
     }

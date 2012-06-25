@@ -13,25 +13,20 @@
  */
 package com.propertyvista.crm.client.ui.crud.complex;
 
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.ValidationUtils;
-import com.pyx4j.entity.client.IDecorator;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationFailure;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.tabpanel.Tab;
 
-import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
-import com.propertyvista.crm.client.themes.CrmTheme;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.dto.ComplexDTO;
 
@@ -39,31 +34,23 @@ public class ComplexForm extends CrmEntityForm<ComplexDTO> {
 
     private static final I18n i18n = I18n.get(ComplexForm.class);
 
-    private final VistaTabLayoutPanel tabPanel;
-
     public ComplexForm() {
         this(false);
     }
 
     public ComplexForm(boolean viewMode) {
         super(ComplexDTO.class, viewMode);
-        tabPanel = new VistaTabLayoutPanel(CrmTheme.defaultTabHeight, Unit.EM);
     }
 
     @Override
-    protected IDecorator createDecorator() {
-        return null;
-    }
+    public void createTabs() {
+        Tab tab = addTab(isEditable() ? new HTML() : getParentComplexViewerView().getDashboardView().asWidget(), i18n.tr("Dashboard"));
+        enableTab(tab, !isEditable());
+        selectTab(tab);
 
-    @Override
-    public IsWidget createContent() {
-        tabPanel.add(isEditable() ? new HTML() : getParentComplexViewerView().getDashboardView(), i18n.tr("Dashboard"));
-        tabPanel.setLastTabDisabled(isEditable());
-        tabPanel.add(createGeneralPanel(), i18n.tr("General"));
-        tabPanel.add(createBuildingsPanel(), i18n.tr("Buildings"));
+        addTab(createGeneralPanel(), i18n.tr("General"));
+        addTab(createBuildingsPanel(), i18n.tr("Buildings"));
 
-        tabPanel.setSize("100%", "100%");
-        return tabPanel;
     }
 
     private Widget createGeneralPanel() {
@@ -104,7 +91,7 @@ public class ComplexForm extends CrmEntityForm<ComplexDTO> {
             })), 50).build());
         }
 
-        return new ScrollPanel(panel);
+        return panel;
     }
 
     private Widget createBuildingsPanel() {
@@ -112,20 +99,11 @@ public class ComplexForm extends CrmEntityForm<ComplexDTO> {
 
         panel.setWidget(0, 0, inject(proto().buildings(), new ComplexBuildingFolder(isEditable())));
 
-        return new ScrollPanel(panel);
+        return panel;
     }
 
     private ComplexViewerView getParentComplexViewerView() {
         return (ComplexViewerView) getParentView();
     }
 
-    @Override
-    public int getActiveTab() {
-        return tabPanel.getSelectedIndex();
-    }
-
-    @Override
-    public void setActiveTab(int index) {
-        tabPanel.selectTab(index);
-    }
 }

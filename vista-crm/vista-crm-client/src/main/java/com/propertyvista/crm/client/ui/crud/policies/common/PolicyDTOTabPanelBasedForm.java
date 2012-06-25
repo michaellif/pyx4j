@@ -20,15 +20,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.CPolymorphicEntityEditorTEMP;
-import com.pyx4j.entity.client.IDecorator;
 import com.pyx4j.entity.client.ui.CEntityComboBox;
 import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -38,9 +35,8 @@ import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.tabpanel.Tab;
 
-import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
-import com.propertyvista.crm.client.themes.CrmTheme;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
 import com.propertyvista.domain.policy.framework.PolicyDTOBase;
@@ -52,8 +48,6 @@ import com.propertyvista.domain.ref.Province;
 public abstract class PolicyDTOTabPanelBasedForm<POLICY_DTO extends PolicyDTOBase> extends CrmEntityForm<POLICY_DTO> {
 
     private static final I18n i18n = I18n.get(PolicyDTOTabPanelBasedForm.class);
-
-    private VistaTabLayoutPanel tabPanel;
 
     private CComboBox<NodeType> selectPolicyScopeBox;
 
@@ -77,32 +71,15 @@ public abstract class PolicyDTOTabPanelBasedForm<POLICY_DTO extends PolicyDTOBas
     }
 
     @Override
-    protected IDecorator createDecorator() {
-        return null;
-    }
+    public void createTabs() {
 
-    @Override
-    public IsWidget createContent() {
-        tabPanel = new VistaTabLayoutPanel(CrmTheme.defaultTabHeight, Unit.EM);
-        tabPanel.setSize("100%", "100%");
-
-        tabPanel.add(new ScrollPanel(createScopeTab()), i18n.tr("Scope"));
+        Tab tab = addTab(createScopeTab(), i18n.tr("Scope"));
+        selectTab(tab);
 
         for (TabDescriptor d : createCustomTabPanels()) {
-            tabPanel.add(new ScrollPanel(d.widget), d.caption);
+            addTab(d.widget, d.caption);
         }
 
-        return tabPanel;
-    }
-
-    @Override
-    public void setActiveTab(int index) {
-        tabPanel.selectTab(index);
-    }
-
-    @Override
-    public int getActiveTab() {
-        return tabPanel.getSelectedIndex();
     }
 
     protected abstract List<TabDescriptor> createCustomTabPanels();

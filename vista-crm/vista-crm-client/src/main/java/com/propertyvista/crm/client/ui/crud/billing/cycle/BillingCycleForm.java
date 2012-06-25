@@ -13,9 +13,6 @@
  */
 package com.propertyvista.crm.client.ui.crud.billing.cycle;
 
-import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.ScrollPanel;
-
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -31,25 +28,25 @@ class BillingCycleForm extends CrmEntityForm<BillingCycleDTO> {
     }
 
     @Override
-    public IsWidget createContent() {
-        FormFlexPanel main = new FormFlexPanel();
+    public void createTabs() {
+        FormFlexPanel content = new FormFlexPanel();
         int row = -1;
 
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingType())).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingCycleStartDate())).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingCycleEndDate())).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().executionTargetDate())).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingType())).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingCycleStartDate())).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingCycleEndDate())).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().executionTargetDate())).build());
 
-        main.setH2(++row, 0, 1, i18n.tr("Statistics"));
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().notRunned())).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().notConfirmed())).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().failed())).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().confirmed())).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().total())).build());
+        content.setH2(++row, 0, 1, i18n.tr("Statistics"));
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().notRunned())).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().notConfirmed())).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().failed())).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().confirmed())).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().total())).build());
 
-        main.setH2(++row, 0, 1, i18n.tr("Leases"));
-        main.setWidget(++row, 0, ((BillingCycleView) getParentView()).getLeaseListerView().asWidget());
+        content.setH2(++row, 0, 1, i18n.tr("Leases"));
+        content.setWidget(++row, 0, ((BillingCycleView) getParentView()).getLeaseListerView().asWidget());
 
-        return new ScrollPanel(main);
+        selectTab(addTab(content, i18n.tr("General")));
     }
 }

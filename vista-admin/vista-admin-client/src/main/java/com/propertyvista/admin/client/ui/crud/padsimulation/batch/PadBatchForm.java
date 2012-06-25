@@ -13,9 +13,6 @@
  */
 package com.propertyvista.admin.client.ui.crud.padsimulation.batch;
 
-import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.ScrollPanel;
-
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
@@ -38,7 +35,7 @@ public class PadBatchForm extends AdminEntityForm<PadSimBatch> {
     }
 
     @Override
-    public IsWidget createContent() {
+    public void createTabs() {
         FormFlexPanel content = new FormFlexPanel();
 
         int row = -1;
@@ -94,6 +91,6 @@ public class PadBatchForm extends AdminEntityForm<PadSimBatch> {
         content.setWidget(++row, 0, inject(proto().records(), new DebitRecordFolder(isEditable())));
         content.getFlexCellFormatter().setColSpan(row, 0, 2);
 
-        return new ScrollPanel(content);
+        selectTab(addTab(content, i18n.tr("General")));
     }
 }

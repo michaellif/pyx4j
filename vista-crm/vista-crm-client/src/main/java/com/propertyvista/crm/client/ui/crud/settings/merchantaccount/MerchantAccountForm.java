@@ -13,8 +13,6 @@
  */
 package com.propertyvista.crm.client.ui.crud.settings.merchantaccount;
 
-import com.google.gwt.user.client.ui.IsWidget;
-
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -38,7 +36,7 @@ public class MerchantAccountForm extends CrmEntityForm<MerchantAccount> {
     }
 
     @Override
-    public IsWidget createContent() {
+    public void createTabs() {
         FormFlexPanel content = new FormFlexPanel();
 
         int row = -1;
@@ -54,6 +52,7 @@ public class MerchantAccountForm extends CrmEntityForm<MerchantAccount> {
             get(proto().chargeDescription()).setViewable(false);
         }
 
-        return content;
+        selectTab(addTab(content, i18n.tr("General")));
+
     }
 }

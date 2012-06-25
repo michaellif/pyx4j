@@ -17,16 +17,18 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.EnumSet;
 
-import com.google.gwt.user.client.ui.IsWidget;
-
 import com.pyx4j.essentials.rpc.admin.SystemMaintenanceState;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.admin.client.ui.crud.AdminEntityForm;
+import com.propertyvista.common.client.ui.components.security.AccountRecoveryOptionsForm;
 import com.propertyvista.shared.VistaSystemIdentification;
 
 public class MaintenanceForm extends AdminEntityForm<SystemMaintenanceState> {
+
+    private static final I18n i18n = I18n.get(AccountRecoveryOptionsForm.class);
 
     public MaintenanceForm() {
         this(false);
@@ -37,19 +39,19 @@ public class MaintenanceForm extends AdminEntityForm<SystemMaintenanceState> {
     }
 
     @Override
-    public IsWidget createContent() {
-        FormFlexPanel main = new FormFlexPanel();
+    public void createTabs() {
+        FormFlexPanel content = new FormFlexPanel();
 
         int row = -1;
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().systemIdentification()), 10).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().inEffect()), 10).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().type()), 10).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().externalConnections()), 10).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().startDate()), 10).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().startTime()), 10).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().gracePeriod()), 10).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().duration()), 10).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().message()), 20).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().systemIdentification()), 10).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().inEffect()), 10).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().type()), 10).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().externalConnections()), 10).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().startDate()), 10).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().startTime()), 10).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().gracePeriod()), 10).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().duration()), 10).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().message()), 20).build());
 
         get(proto().inEffect()).setViewable(true);
 
@@ -59,6 +61,6 @@ public class MaintenanceForm extends AdminEntityForm<SystemMaintenanceState> {
         }
         ((CComboBox<String>) get(proto().systemIdentification())).setOptions(opt);
 
-        return main;
+        selectTab(addTab(content, i18n.tr("General")));
     }
 }

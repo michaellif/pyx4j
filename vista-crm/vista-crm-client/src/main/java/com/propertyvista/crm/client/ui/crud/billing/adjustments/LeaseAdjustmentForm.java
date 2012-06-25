@@ -18,8 +18,6 @@ import java.math.BigDecimal;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
-import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.LogicalDate;
@@ -27,6 +25,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CMoneyField;
 import com.pyx4j.forms.client.ui.CPercentageField;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.ui.crud.misc.CEntitySelectorHyperlink;
@@ -47,6 +46,8 @@ import com.propertyvista.domain.tenant.lease.LeaseAdjustmentReason;
 
 public class LeaseAdjustmentForm extends CrmEntityForm<LeaseAdjustment> {
 
+    private static final I18n i18n = I18n.get(LeaseAdjustmentForm.class);
+
     private final SimplePanel taxHolder = new SimplePanel();
 
     public LeaseAdjustmentForm() {
@@ -58,7 +59,7 @@ public class LeaseAdjustmentForm extends CrmEntityForm<LeaseAdjustment> {
     }
 
     @Override
-    public IsWidget createContent() {
+    public void createTabs() {
 
         FormFlexPanel left = new FormFlexPanel();
         int row = -1;
@@ -126,27 +127,27 @@ public class LeaseAdjustmentForm extends CrmEntityForm<LeaseAdjustment> {
             }
         });
 
-        FormFlexPanel main = new FormFlexPanel();
+        FormFlexPanel content = new FormFlexPanel();
 
-        main.setWidget(0, 0, left);
-        main.setWidget(0, 1, right);
-        main.getFlexCellFormatter().setVerticalAlignment(0, 0, HasVerticalAlignment.ALIGN_TOP);
-        main.getFlexCellFormatter().setVerticalAlignment(0, 1, HasVerticalAlignment.ALIGN_TOP);
+        content.setWidget(0, 0, left);
+        content.setWidget(0, 1, right);
+        content.getFlexCellFormatter().setVerticalAlignment(0, 0, HasVerticalAlignment.ALIGN_TOP);
+        content.getFlexCellFormatter().setVerticalAlignment(0, 1, HasVerticalAlignment.ALIGN_TOP);
 
         if (!isEditable()) {
             row = 0;
-            main.setHR(++row, 0, 2);
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().created()), 10).build());
-            main.setWidget(row, 1, new DecoratorBuilder(inject(proto().updated()), 10).build());
+            content.setHR(++row, 0, 2);
+            content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().created()), 10).build());
+            content.setWidget(row, 1, new DecoratorBuilder(inject(proto().updated()), 10).build());
 
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().createdBy()), 25).build());
-            main.setWidget(row, 1, new DecoratorBuilder(inject(proto().status()), 10).build());
+            content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().createdBy()), 25).build());
+            content.setWidget(row, 1, new DecoratorBuilder(inject(proto().status()), 10).build());
         }
 
-        main.getColumnFormatter().setWidth(0, "50%");
-        main.getColumnFormatter().setWidth(1, "50%");
+        content.getColumnFormatter().setWidth(0, "50%");
+        content.getColumnFormatter().setWidth(1, "50%");
 
-        return new ScrollPanel(main);
+        selectTab(addTab(content, i18n.tr("General")));
     }
 
     @Override

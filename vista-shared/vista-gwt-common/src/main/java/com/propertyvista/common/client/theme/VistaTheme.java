@@ -25,6 +25,8 @@ import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 
 public class VistaTheme extends Theme {
 
+    public static double defaultTabHeight = 2.6;
+
     public VistaTheme() {
 
     }

@@ -15,13 +15,9 @@ package com.propertyvista.crm.client.ui.crud.lease.common;
 
 import java.util.List;
 
-import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.client.IDecorator;
 import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.criterion.OrCriterion;
@@ -40,13 +36,12 @@ import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;
 import com.pyx4j.site.client.ui.crud.misc.CEntitySelectorHyperlink;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
 import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.widgets.client.tabpanel.Tab;
 
 import com.propertyvista.common.client.policy.ClientPolicyManager;
-import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.common.client.ui.components.editors.dto.bill.BillForm;
 import com.propertyvista.common.client.ui.validators.DateInPeriodValidation;
 import com.propertyvista.common.client.ui.validators.StartEndDateValidation;
-import com.propertyvista.crm.client.themes.CrmTheme;
 import com.propertyvista.crm.client.ui.components.boxes.UnitSelectorDialog;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.policy.policies.IdAssignmentPolicy;
@@ -61,9 +56,7 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
 
     protected static final I18n i18n = I18n.get(LeaseFormBase.class);
 
-    protected final VistaTabLayoutPanel tabPanel = new VistaTabLayoutPanel(CrmTheme.defaultTabHeight, Unit.EM);
-
-    private Widget chargesTab;
+    private Tab chargesTab;
 
     protected LeaseFormBase(Class<DTO> clazz) {
         this(clazz, false);
@@ -73,37 +66,23 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
         super(clazz, viewMode);
     }
 
-    @Override
-    protected IDecorator createDecorator() {
-        return null;
-    }
+    protected void createCommonContent() {
 
-    protected IsWidget createCommonContent() {
+        Tab tab = addTab(createDetailsTab(), i18n.tr("Details"));
+        selectTab(tab);
 
-        tabPanel.add(createDetailsTab(), i18n.tr("Details"));
-        tabPanel.add(createTenantsTab(), i18n.tr("Tenants"));
-        tabPanel.add(createGuarantorsTab(), i18n.tr("Guarantors"));
-        tabPanel.add(createProductsTab(), i18n.tr("Products"));
-        tabPanel.add(chargesTab = createChargesTab(), i18n.tr("Charges"));
+        addTab(createTenantsTab(), i18n.tr("Tenants"));
+        addTab(createGuarantorsTab(), i18n.tr("Guarantors"));
+        addTab(createProductsTab(), i18n.tr("Products"));
 
-        return tabPanel;
-    }
-
-    @Override
-    public void setActiveTab(int index) {
-        tabPanel.selectTab(index);
-    }
-
-    @Override
-    public int getActiveTab() {
-        return tabPanel.getSelectedIndex();
+        chargesTab = addTab(createChargesTab(), i18n.tr("Charges"));
     }
 
     @Override
     protected void onPopulate() {
         super.onPopulate();
 
-        tabPanel.setTabVisible(chargesTab, !isEditable() && getValue().version().status().getValue().isDraft());
+        showTab(chargesTab, !isEditable() && getValue().version().status().getValue().isDraft());
 
         get(proto().version().completion()).setVisible(!getValue().version().completion().isNull());
 
@@ -262,7 +241,7 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
         get(proto().creationDate()).setViewable(true);
         get(proto().approvalDate()).setViewable(true);
 
-        return new ScrollPanel(main);
+        return main;
     }
 
     private Widget createTenantsTab() {
@@ -270,7 +249,7 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
 
         main.setWidget(0, 0, inject(proto().version().tenants(), new TenantInLeaseFolder(this, isEditable())));
 
-        return new ScrollPanel(main);
+        return main;
     }
 
     private Widget createGuarantorsTab() {
@@ -278,7 +257,7 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
 
         main.setWidget(0, 0, inject(proto().version().guarantors(), new GuarantorInLeaseFolder(this, isEditable())));
 
-        return new ScrollPanel(main);
+        return main;
     }
 
     private Widget createProductsTab() {
@@ -297,7 +276,7 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
         main.setH1(++row, 0, 2, proto().version().leaseProducts().concessions().getMeta().getCaption());
         main.setWidget(++row, 0, inject(proto().version().leaseProducts().concessions(), new ConcessionFolder(isEditable(), this)));
 
-        return new ScrollPanel(main);
+        return main;
     }
 
     private Widget createChargesTab() {
@@ -305,7 +284,7 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
 
         main.setWidget(0, 0, inject(proto().billingPreview(), new BillForm(true)));
 
-        return new ScrollPanel(main);
+        return main;
     }
 
     @Override

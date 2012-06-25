@@ -15,11 +15,8 @@ package com.propertyvista.crm.client.ui.crud.maintenance;
 
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
-import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.entity.client.IDecorator;
 import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CDateLabel;
@@ -72,15 +69,9 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
     }
 
     @Override
-    protected IDecorator createDecorator() {
-        return null;
-    }
+    public void createTabs() {
+        selectTab(addTab(createGeneralTab(), i18n.tr("General")));
 
-    @Override
-    public IsWidget createContent() {
-        tabPanel.add(createGeneralTab(), i18n.tr("General"));
-        tabPanel.setSize("100%", "100%");
-        return tabPanel;
     }
 
     @Override
@@ -202,7 +193,7 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         main.getColumnFormatter().setWidth(0, "50%");
         main.getColumnFormatter().setWidth(1, "50%");
 
-        return new ScrollPanel(main);
+        return main;
     }
 
     @Override

@@ -17,11 +17,9 @@ import java.util.List;
 
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.entity.client.IDecorator;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.forms.client.ui.CComponent;
@@ -30,6 +28,7 @@ import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationFailure;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.widgets.client.tabpanel.Tab;
 
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.common.client.ui.components.editors.NameEditor;
@@ -59,21 +58,18 @@ public class TenantForm extends CrmEntityForm<TenantDTO> {
     }
 
     @Override
-    protected IDecorator createDecorator() {
-        return null;
-    }
+    public void createTabs() {
 
-    @Override
-    public IsWidget createContent() {
+        Tab tab = addTab(createDetailsTab(), i18n.tr("Details"));
+        selectTab(tab);
 
-        tabPanel.add(createDetailsTab(), i18n.tr("Details"));
-        tabPanel.add(createContactsTab(), i18n.tr("Contacts"));
-        tabPanel.add(isEditable() ? new HTML() : ((TenantViewerView) getParentView()).getScreeningListerView().asWidget(), i18n.tr("Screening"));
-        tabPanel.setLastTabDisabled(isEditable());
-        tabPanel.add(createPaymentMethodsTab(), i18n.tr("Payment Methods"));
+        addTab(createContactsTab(), i18n.tr("Contacts"));
 
-        tabPanel.setSize("100%", "100%");
-        return tabPanel;
+        tab = addTab(isEditable() ? new HTML() : ((TenantViewerView) getParentView()).getScreeningListerView().asWidget(), i18n.tr("Screening"));
+        enableTab(tab, !isEditable());
+
+        addTab(createPaymentMethodsTab(), i18n.tr("Payment Methods"));
+
     }
 
     @Override
@@ -114,7 +110,7 @@ public class TenantForm extends CrmEntityForm<TenantDTO> {
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().role()), 10).build());
         }
 
-        return new ScrollPanel(main);
+        return main;
     }
 
     private Widget createContactsTab() {
@@ -122,7 +118,7 @@ public class TenantForm extends CrmEntityForm<TenantDTO> {
 
         main.setWidget(0, 0, inject(proto().customer().emergencyContacts(), new EmergencyContactFolder(isEditable())));
 
-        return new ScrollPanel(main);
+        return main;
     }
 
     private Widget createPaymentMethodsTab() {

@@ -18,7 +18,6 @@ import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.Frame;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
@@ -48,16 +47,16 @@ public class EquifaxResultForm extends CrmEntityForm<EquifaxResult> {
     }
 
     @Override
-    public IsWidget createContent() {
-        FormFlexPanel main = new FormFlexPanel();
+    public void createTabs() {
+        FormFlexPanel content = new FormFlexPanel();
 
         resultHolder.setSize("100%", "60em");
 
         int row = -1;
-        main.setWidget(++row, 0, resultHolder);
+        content.setWidget(++row, 0, resultHolder);
 
-        main.setSize("100%", "100%");
-        return main;
+        selectTab(addTab(content, i18n.tr("General")));
+
     }
 
     @Override

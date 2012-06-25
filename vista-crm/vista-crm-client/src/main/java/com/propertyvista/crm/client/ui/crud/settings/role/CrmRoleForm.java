@@ -18,7 +18,6 @@ import java.util.List;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
@@ -52,7 +51,7 @@ public class CrmRoleForm extends CrmEntityForm<CrmRole> {
     }
 
     @Override
-    public IsWidget createContent() {
+    public void createTabs() {
         FormFlexPanel content = new FormFlexPanel();
 
         int row = -1;
@@ -69,7 +68,7 @@ public class CrmRoleForm extends CrmEntityForm<CrmRole> {
             }
         });
 
-        return content;
+        selectTab(addTab(content, i18n.tr("General")));
     }
 
     @Override

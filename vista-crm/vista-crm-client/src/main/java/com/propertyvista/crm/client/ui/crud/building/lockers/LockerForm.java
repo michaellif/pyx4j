@@ -13,15 +13,15 @@
  */
 package com.propertyvista.crm.client.ui.crud.building.lockers;
 
-import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.ScrollPanel;
-
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.property.asset.Locker;
 
 public class LockerForm extends CrmEntityForm<Locker> {
+
+    private static final I18n i18n = I18n.get(LockerForm.class);
 
     public LockerForm() {
         this(false);
@@ -32,13 +32,14 @@ public class LockerForm extends CrmEntityForm<Locker> {
     }
 
     @Override
-    public IsWidget createContent() {
-        FormFlexPanel main = new FormFlexPanel();
+    public void createTabs() {
+        FormFlexPanel content = new FormFlexPanel();
 
         int row = -1;
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 10).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().type()), 10).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 10).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().type()), 10).build());
 
-        return new ScrollPanel(main);
+        selectTab(addTab(content, i18n.tr("General")));
+
     }
 }

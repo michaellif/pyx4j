@@ -18,7 +18,6 @@ import java.util.Map;
 
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.entity.shared.EntityFactory;
@@ -42,7 +41,7 @@ import com.propertyvista.domain.site.gadgets.TestimonialsGadgetContent;
 public class HomePageGadgetForm extends CrmEntityForm<HomePageGadget> {
     private static final I18n i18n = I18n.get(HomePageGadgetForm.class);
 
-    private final SimplePanel mainPanel = new SimplePanel();
+    private final SimplePanel mainPanel;
 
     private final Map<GadgetType, CComponent<?, ?>> panelMap = new HashMap<GadgetType, CComponent<?, ?>>();
 
@@ -52,6 +51,9 @@ public class HomePageGadgetForm extends CrmEntityForm<HomePageGadget> {
 
     public HomePageGadgetForm(boolean viewMode) {
         super(HomePageGadget.class, viewMode);
+        mainPanel = new SimplePanel();
+        mainPanel.setSize("100%", "100%");
+
         panelMap.put(GadgetType.custom, getCustomContentEditor());
         panelMap.put(GadgetType.news, getNewsContentEditor());
         panelMap.put(GadgetType.testimonials, getTestimContentEditor());
@@ -59,7 +61,7 @@ public class HomePageGadgetForm extends CrmEntityForm<HomePageGadget> {
     }
 
     @Override
-    public IsWidget createContent() {
+    public void createTabs() {
         FormFlexPanel main = new FormFlexPanel();
 
         int row = 0;
@@ -69,9 +71,8 @@ public class HomePageGadgetForm extends CrmEntityForm<HomePageGadget> {
         main.setWidget(row++, 0, new DecoratorBuilder(inject(proto().status()), 10).build());
         main.setWidget(row++, 0, mainPanel);
 
-        mainPanel.setSize("100%", "100%");
+        selectTab(addTab(main, i18n.tr("General")));
 
-        return new ScrollPanel(main);
     }
 
     @Override

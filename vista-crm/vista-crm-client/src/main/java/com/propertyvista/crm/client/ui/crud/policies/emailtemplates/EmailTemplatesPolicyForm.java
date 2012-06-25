@@ -32,7 +32,6 @@ import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.PushButton;
 import com.google.gwt.user.client.ui.RichTextArea.Formatter;
-import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.UIObject;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -89,7 +88,7 @@ public class EmailTemplatesPolicyForm extends PolicyDTOTabPanelBasedForm<EmailTe
     // TODO this cannot be used because too many tabs are too wide and unable to fit in one sceen
     @Deprecated
     private TabDescriptor createEmailTemplateTab(IObject<?> template) {
-        return new TabDescriptor(new ScrollPanel(inject(template, new EmailTemplateEditorFolder()).asWidget()), template.getMeta().getCaption());
+        return new TabDescriptor(inject(template, new EmailTemplateEditorFolder()).asWidget(), template.getMeta().getCaption());
     }
 
     private static class EmailTemplateEditorFolder extends VistaBoxFolder<EmailTemplate> {

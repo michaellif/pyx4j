@@ -13,15 +13,15 @@
  */
 package com.propertyvista.admin.client.ui.crud.padsimulation.batch;
 
-import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.ScrollPanel;
-
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.admin.client.ui.crud.AdminEntityForm;
 import com.propertyvista.admin.domain.payment.pad.sim.PadSimDebitRecord;
 
 public class DebitRecordEditor extends AdminEntityForm<PadSimDebitRecord> {
+
+    private static final I18n i18n = I18n.get(DebitRecordEditor.class);
 
     public DebitRecordEditor() {
         this(false);
@@ -32,7 +32,7 @@ public class DebitRecordEditor extends AdminEntityForm<PadSimDebitRecord> {
     }
 
     @Override
-    public IsWidget createContent() {
+    public void createTabs() {
         FormFlexPanel content = new FormFlexPanel();
 
         int row = -1;
@@ -55,6 +55,6 @@ public class DebitRecordEditor extends AdminEntityForm<PadSimDebitRecord> {
         content.setWidget(++row, 1, new DecoratorBuilder(inject(proto().paymentDate()), 10).build());
         content.setWidget(++row, 1, new DecoratorBuilder(inject(proto().reasonText()), 10).build());
 
-        return new ScrollPanel(content);
+        selectTab(addTab(content, i18n.tr("General")));
     }
 }

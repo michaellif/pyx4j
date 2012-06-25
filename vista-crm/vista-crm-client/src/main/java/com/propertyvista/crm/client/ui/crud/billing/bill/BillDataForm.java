@@ -13,9 +13,6 @@
  */
 package com.propertyvista.crm.client.ui.crud.billing.bill;
 
-import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.ScrollPanel;
-
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -36,11 +33,10 @@ public class BillDataForm extends CrmEntityForm<BillDataDTO> {
     }
 
     @Override
-    public IsWidget createContent() {
-        FormFlexPanel main = new FormFlexPanel();
+    public void createTabs() {
+        FormFlexPanel content = new FormFlexPanel();
+        content.setWidget(0, 0, inject(proto().bill(), new BillForm()));
 
-        main.setWidget(0, 0, inject(proto().bill(), new BillForm()));
-
-        return new ScrollPanel(main);
+        selectTab(addTab(content, i18n.tr("General")));
     }
 }

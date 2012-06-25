@@ -17,19 +17,20 @@ import java.math.BigDecimal;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CMoneyField;
 import com.pyx4j.forms.client.ui.CPercentageField;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.financial.offering.Concession;
 
 public class ConcessionForm extends CrmEntityForm<Concession> {
+
+    private static final I18n i18n = I18n.get(ConcessionForm.class);
 
     private final SimplePanel valueHolder = new SimplePanel();
 
@@ -42,26 +43,26 @@ public class ConcessionForm extends CrmEntityForm<Concession> {
     }
 
     @Override
-    public IsWidget createContent() {
-        FormFlexPanel main = new FormFlexPanel();
+    public void createTabs() {
+        FormFlexPanel content = new FormFlexPanel();
 
         int row = -1;
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().version().type()), 12).build());
-        main.setWidget(++row, 0, valueHolder);
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().version().term()), 12).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().version().condition()), 10).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().version().mixable()), 5).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().version().type()), 12).build());
+        content.setWidget(++row, 0, valueHolder);
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().version().term()), 12).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().version().condition()), 10).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().version().mixable()), 5).build());
 
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().version().description()), 30).build());
-        main.getFlexCellFormatter().setColSpan(row, 0, 2);
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().version().description()), 30).build());
+        content.getFlexCellFormatter().setColSpan(row, 0, 2);
 
         row = -1;
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().version().effectiveDate()), 9).build());
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().version().expirationDate()), 9).build());
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().updated()), 10).build());
+        content.setWidget(++row, 1, new DecoratorBuilder(inject(proto().version().effectiveDate()), 9).build());
+        content.setWidget(++row, 1, new DecoratorBuilder(inject(proto().version().expirationDate()), 9).build());
+        content.setWidget(++row, 1, new DecoratorBuilder(inject(proto().updated()), 10).build());
 
-        main.getColumnFormatter().setWidth(0, "50%");
-        main.getColumnFormatter().setWidth(1, "50%");
+        content.getColumnFormatter().setWidth(0, "50%");
+        content.getColumnFormatter().setWidth(1, "50%");
 
         // tweak:
         get(proto().updated()).setViewable(true);
@@ -73,7 +74,8 @@ public class ConcessionForm extends CrmEntityForm<Concession> {
             }
         });
 
-        return new ScrollPanel(main);
+        selectTab(addTab(content, i18n.tr("General")));
+
     }
 
     @Override

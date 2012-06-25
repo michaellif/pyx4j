@@ -13,27 +13,20 @@
  */
 package com.propertyvista.crm.client.ui.crud.building.lockers;
 
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.entity.client.IDecorator;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.tabpanel.Tab;
 
-import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
-import com.propertyvista.crm.client.themes.CrmTheme;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.dto.LockerAreaDTO;
 
 public class LockerAreaForm extends CrmEntityForm<LockerAreaDTO> {
 
     private static final I18n i18n = I18n.get(LockerAreaForm.class);
-
-    private final VistaTabLayoutPanel tabPanel = new VistaTabLayoutPanel(CrmTheme.defaultTabHeight, Unit.EM);
 
     public LockerAreaForm() {
         this(false);
@@ -44,32 +37,18 @@ public class LockerAreaForm extends CrmEntityForm<LockerAreaDTO> {
     }
 
     @Override
-    protected IDecorator createDecorator() {
-        return null;
-    }
-
-    @Override
-    public IsWidget createContent() {
+    public void createTabs() {
 
 //        tabPanel.add(isEditable() ? new HTML() : ((LockerAreaView) getParentView()).getDashboardView().asWidget(), i18n.tr("Dashboard"));
-        tabPanel.add(createDetailsTab(), i18n.tr("Details"));
-        tabPanel.add(isEditable() ? new HTML() : new ScrollPanel(((LockerAreaViewerView) getParentView()).getLockerView().asWidget()), i18n.tr("Lockers"));
-        tabPanel.setLastTabDisabled(isEditable());
-        tabPanel.add(new ScrollPanel(new Label("Notes and attachments goes here... ")), i18n.tr("Notes & Attachments"));
-        tabPanel.setLastTabDisabled(isEditable());
+        Tab tab = addTab(createDetailsTab(), i18n.tr("Details"));
+        selectTab(tab);
 
-        tabPanel.setSize("100%", "100%");
-        return tabPanel;
-    }
+        tab = addTab(isEditable() ? new HTML() : ((LockerAreaViewerView) getParentView()).getLockerView().asWidget(), i18n.tr("Lockers"));
+        enableTab(tab, !isEditable());
 
-    @Override
-    public void setActiveTab(int index) {
-        tabPanel.selectTab(index);
-    }
+        tab = addTab(new Label("Notes and attachments goes here... "), i18n.tr("Notes & Attachments"));
+        enableTab(tab, !isEditable());
 
-    @Override
-    public int getActiveTab() {
-        return tabPanel.getSelectedIndex();
     }
 
     private Widget createDetailsTab() {
@@ -90,6 +69,6 @@ public class LockerAreaForm extends CrmEntityForm<LockerAreaDTO> {
         main.getColumnFormatter().setWidth(0, "55%");
         main.getColumnFormatter().setWidth(1, "45%");
 
-        return new ScrollPanel(main);
+        return main;
     }
 }

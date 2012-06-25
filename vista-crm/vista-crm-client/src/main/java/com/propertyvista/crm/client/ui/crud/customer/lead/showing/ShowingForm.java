@@ -15,8 +15,6 @@ package com.propertyvista.crm.client.ui.crud.customer.lead.showing;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.ScrollPanel;
 
 import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
@@ -26,6 +24,7 @@ import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;
 import com.pyx4j.site.client.ui.crud.misc.CEntitySelectorHyperlink;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
 import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.widgets.client.tabpanel.Tab;
 
 import com.propertyvista.crm.client.ui.components.boxes.UnitSelectorDialog;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
@@ -47,19 +46,19 @@ public class ShowingForm extends CrmEntityForm<Showing> {
     }
 
     @Override
-    public IsWidget createContent() {
-        FormFlexPanel main = new FormFlexPanel();
+    public void createTabs() {
+        FormFlexPanel content = new FormFlexPanel();
 
         int row = -1;
 
         if (isEditable()) {
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().building(), new CEntityLabel<Building>()), 20).build());
+            content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().building(), new CEntityLabel<Building>()), 20).build());
         } else {
-            main.setWidget(++row, 0,
+            content.setWidget(++row, 0,
                     new DecoratorBuilder(inject(proto().building(), new CEntityCrudHyperlink<Building>(AppPlaceEntityMapper.resolvePlace(Building.class))), 20)
                             .build());
         }
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().unit(), new CEntitySelectorHyperlink<AptUnit>() {
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().unit(), new CEntitySelectorHyperlink<AptUnit>() {
             @Override
             protected AppPlace getTargetPlace() {
                 return AppPlaceEntityMapper.resolvePlace(AptUnit.class, getValue().getPrimaryKey());
@@ -80,9 +79,9 @@ public class ShowingForm extends CrmEntityForm<Showing> {
         }), 20).build());
 
         row = -1;
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().status()), 12).build());
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().result()), 12).build());
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().reason()), 12).build());
+        content.setWidget(++row, 1, new DecoratorBuilder(inject(proto().status()), 12).build());
+        content.setWidget(++row, 1, new DecoratorBuilder(inject(proto().result()), 12).build());
+        content.setWidget(++row, 1, new DecoratorBuilder(inject(proto().reason()), 12).build());
 
         // tweak UI:
         get(proto().result()).addValueChangeHandler(new ValueChangeHandler<Showing.Result>() {
@@ -92,10 +91,11 @@ public class ShowingForm extends CrmEntityForm<Showing> {
             }
         });
 
-        main.getColumnFormatter().setWidth(0, "50%");
-        main.getColumnFormatter().setWidth(1, "50%");
+        content.getColumnFormatter().setWidth(0, "50%");
+        content.getColumnFormatter().setWidth(1, "50%");
 
-        return new ScrollPanel(main);
+        Tab tab = addTab(content, i18n.tr("General"));
+        selectTab(tab);
     }
 
     @Override
