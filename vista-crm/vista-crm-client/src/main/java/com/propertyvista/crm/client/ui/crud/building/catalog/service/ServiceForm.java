@@ -17,6 +17,7 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ScrollPanel;
 
+import com.pyx4j.entity.client.IDecorator;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -38,6 +39,11 @@ public class ServiceForm extends CrmEntityForm<Service> {
 
     public ServiceForm(boolean viewMode) {
         super(Service.class, viewMode);
+    }
+
+    @Override
+    protected IDecorator createDecorator() {
+        return null;
     }
 
     @Override

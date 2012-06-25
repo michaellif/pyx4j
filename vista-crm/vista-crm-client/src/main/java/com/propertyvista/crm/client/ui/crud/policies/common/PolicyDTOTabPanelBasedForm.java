@@ -28,6 +28,7 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.CPolymorphicEntityEditorTEMP;
+import com.pyx4j.entity.client.IDecorator;
 import com.pyx4j.entity.client.ui.CEntityComboBox;
 import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -73,6 +74,11 @@ public abstract class PolicyDTOTabPanelBasedForm<POLICY_DTO extends PolicyDTOBas
 
     public PolicyDTOTabPanelBasedForm(Class<POLICY_DTO> policyDTOClass, final boolean viewMode) {
         super(policyDTOClass, viewMode);
+    }
+
+    @Override
+    protected IDecorator createDecorator() {
+        return null;
     }
 
     @Override

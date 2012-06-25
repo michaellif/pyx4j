@@ -21,6 +21,7 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.client.IDecorator;
 import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.criterion.OrCriterion;
@@ -70,6 +71,11 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
 
     protected LeaseFormBase(Class<DTO> clazz, boolean viewMode) {
         super(clazz, viewMode);
+    }
+
+    @Override
+    protected IDecorator createDecorator() {
+        return null;
     }
 
     protected IsWidget createCommonContent() {

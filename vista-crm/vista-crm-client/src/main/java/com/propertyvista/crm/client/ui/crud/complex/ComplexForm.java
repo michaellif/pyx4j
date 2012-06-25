@@ -22,6 +22,7 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.ValidationUtils;
+import com.pyx4j.entity.client.IDecorator;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
@@ -47,6 +48,11 @@ public class ComplexForm extends CrmEntityForm<ComplexDTO> {
     public ComplexForm(boolean viewMode) {
         super(ComplexDTO.class, viewMode);
         tabPanel = new VistaTabLayoutPanel(CrmTheme.defaultTabHeight, Unit.EM);
+    }
+
+    @Override
+    protected IDecorator createDecorator() {
+        return null;
     }
 
     @Override

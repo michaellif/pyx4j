@@ -19,6 +19,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.entity.client.IDecorator;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
@@ -48,6 +49,11 @@ public class GuarantorForm extends CrmEntityForm<GuarantorDTO> {
 
     public GuarantorForm(boolean viewMode) {
         super(GuarantorDTO.class, viewMode);
+    }
+
+    @Override
+    protected IDecorator createDecorator() {
+        return null;
     }
 
     @Override

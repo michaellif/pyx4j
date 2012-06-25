@@ -19,6 +19,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.entity.client.IDecorator;
 import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CDateLabel;
@@ -68,6 +69,11 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
 
     public MaintenanceRequestForm(boolean viewMode) {
         super(MaintenanceRequestDTO.class, viewMode);
+    }
+
+    @Override
+    protected IDecorator createDecorator() {
+        return null;
     }
 
     @Override

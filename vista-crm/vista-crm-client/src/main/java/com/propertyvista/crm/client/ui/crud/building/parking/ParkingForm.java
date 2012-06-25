@@ -20,6 +20,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.entity.client.IDecorator;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -40,6 +41,11 @@ public class ParkingForm extends CrmEntityForm<ParkingDTO> {
 
     public ParkingForm(boolean viewMode) {
         super(ParkingDTO.class, viewMode);
+    }
+
+    @Override
+    protected IDecorator createDecorator() {
+        return null;
     }
 
     @Override

@@ -29,5 +29,7 @@ public interface LeaseEditorPresenterBase {
 
     void createBillableItem(AsyncCallback<BillableItem> callback, ProductItem item);
 
+//    void createRequiredDeposits(AsyncCallback<List<Deposit>> callback, ProductItem item);
+
     void calculateChargeItemAdjustments(AsyncCallback<BigDecimal> callback, BillableItem item);
 }

@@ -22,6 +22,7 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
+import com.pyx4j.entity.client.IDecorator;
 import com.pyx4j.entity.client.ui.folder.CEntityFolder;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -47,6 +48,11 @@ public class FloorplanForm extends CrmEntityForm<FloorplanDTO> {
 
     public FloorplanForm(boolean viewMode) {
         super(FloorplanDTO.class, viewMode);
+    }
+
+    @Override
+    protected IDecorator createDecorator() {
+        return null;
     }
 
     @Override

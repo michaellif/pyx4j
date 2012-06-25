@@ -432,6 +432,8 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
             deposit.status().setValue(DepositStatus.Created);
             deposit.valueType().setValue(ValueType.Amount);
 
+//            ((LeaseEditorPresenterBase) leaseEditorView.getPresenter()).createRequiredDeposits(selectedItems.get(0), lease)();
+
 //            List<Deposit> deposits = ServerSideFactory.create(DepositFacade.class).createRequiredDeposits(item.type(), lease);
 //            if (deposits != null) {
 //

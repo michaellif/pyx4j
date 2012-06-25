@@ -24,6 +24,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.client.CEntityForm;
+import com.pyx4j.entity.client.IDecorator;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
@@ -68,6 +69,11 @@ public class PersonScreeningForm extends CrmEntityForm<PersonScreening> {
 
     public PersonScreeningForm(boolean viewMode) {
         super(PersonScreening.class, viewMode);
+    }
+
+    @Override
+    protected IDecorator createDecorator() {
+        return null;
     }
 
     @Override

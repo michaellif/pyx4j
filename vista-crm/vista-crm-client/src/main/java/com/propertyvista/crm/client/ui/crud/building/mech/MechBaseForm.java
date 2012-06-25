@@ -18,6 +18,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.entity.client.IDecorator;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
@@ -39,6 +40,11 @@ public abstract class MechBaseForm<E extends LicensedWarrantedMaintained> extend
 
     protected MechBaseForm(Class<E> entityClass, boolean viewMode) {
         super(entityClass, viewMode);
+    }
+
+    @Override
+    protected IDecorator createDecorator() {
+        return null;
     }
 
     @Override

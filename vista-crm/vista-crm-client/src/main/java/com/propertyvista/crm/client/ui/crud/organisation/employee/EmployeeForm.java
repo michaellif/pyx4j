@@ -19,6 +19,7 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 
 import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.commons.Key;
+import com.pyx4j.entity.client.IDecorator;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
@@ -49,6 +50,11 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
 
     public EmployeeForm(boolean viewMode) {
         super(EmployeeDTO.class, viewMode);
+    }
+
+    @Override
+    protected IDecorator createDecorator() {
+        return null;
     }
 
     @Override
