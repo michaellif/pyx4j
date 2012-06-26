@@ -75,12 +75,12 @@ public class BillForm extends CEntityDecoratableForm<BillDTO> {
         if (!justPreviewBill) {
             bottom.setH1(++row, 0, 2, i18n.tr("Last Bill"));
             bottom.setWidget(++row, 0, new DecoratorBuilder(inject(proto().balanceForwardAmount())).build());
-            bottom.setWidget(++row, 0, inject(proto().depositRefundLineItems(), new LineItemCollapsableViewer()));
-            bottom.setWidget(++row, 0, inject(proto().immediateAccountAdjustmentLineItems(), new LineItemCollapsableViewer()));
-            bottom.setWidget(++row, 0, inject(proto().nsfChargeLineItems(), new LineItemCollapsableViewer()));
-            bottom.setWidget(++row, 0, inject(proto().withdrawalLineItems(), new LineItemCollapsableViewer()));
-            bottom.setWidget(++row, 0, inject(proto().rejectedPaymentLineItems(), new LineItemCollapsableViewer()));
-            bottom.setWidget(++row, 0, inject(proto().paymentLineItems(), new LineItemCollapsableViewer()));
+            bottom.setWidget(++row, 0, inject(proto().depositRefundLineItems(), new LineItemCollapsibleViewer()));
+            bottom.setWidget(++row, 0, inject(proto().immediateAccountAdjustmentLineItems(), new LineItemCollapsibleViewer()));
+            bottom.setWidget(++row, 0, inject(proto().nsfChargeLineItems(), new LineItemCollapsibleViewer()));
+            bottom.setWidget(++row, 0, inject(proto().withdrawalLineItems(), new LineItemCollapsibleViewer()));
+            bottom.setWidget(++row, 0, inject(proto().rejectedPaymentLineItems(), new LineItemCollapsibleViewer()));
+            bottom.setWidget(++row, 0, inject(proto().paymentLineItems(), new LineItemCollapsibleViewer()));
 
             bottom.setHR(++row, 0, 2);
             bottom.setWidget(++row, 0, new DecoratorBuilder(inject(proto().pastDueAmount())).build());
@@ -88,12 +88,12 @@ public class BillForm extends CEntityDecoratableForm<BillDTO> {
 
         bottom.setH1(++row, 0, 2, i18n.tr("Current Bill"));
         bottom.setHeight("50px");
-        bottom.setWidget(++row, 0, inject(proto().serviceChargeLineItems(), new LineItemCollapsableViewer()));
-        bottom.setWidget(++row, 0, inject(proto().recurringFeatureChargeLineItems(), new LineItemCollapsableViewer()));
-        bottom.setWidget(++row, 0, inject(proto().onetimeFeatureChargeLineItems(), new LineItemCollapsableViewer()));
-        bottom.setWidget(++row, 0, inject(proto().pendingAccountAdjustmentLineItems(), new LineItemCollapsableViewer()));
+        bottom.setWidget(++row, 0, inject(proto().serviceChargeLineItems(), new LineItemCollapsibleViewer()));
+        bottom.setWidget(++row, 0, inject(proto().recurringFeatureChargeLineItems(), new LineItemCollapsibleViewer()));
+        bottom.setWidget(++row, 0, inject(proto().onetimeFeatureChargeLineItems(), new LineItemCollapsibleViewer()));
+        bottom.setWidget(++row, 0, inject(proto().pendingAccountAdjustmentLineItems(), new LineItemCollapsibleViewer()));
         bottom.setWidget(++row, 0, new DecoratorBuilder(inject(proto().latePaymentFees())).build());
-        bottom.setWidget(++row, 0, inject(proto().depositLineItems(), new LineItemCollapsableViewer()));
+        bottom.setWidget(++row, 0, inject(proto().depositLineItems(), new LineItemCollapsibleViewer()));
         bottom.setWidget(++row, 0, new DecoratorBuilder(inject(proto().productCreditAmount())).build());
         bottom.setWidget(++row, 0, new DecoratorBuilder(inject(proto().carryForwardCredit())).build());
 

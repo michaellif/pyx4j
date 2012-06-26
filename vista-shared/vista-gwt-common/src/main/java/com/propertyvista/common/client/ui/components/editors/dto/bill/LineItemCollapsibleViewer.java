@@ -28,9 +28,9 @@ import com.propertyvista.domain.financial.billing.InvoiceProductCharge;
 import com.propertyvista.domain.financial.billing.InvoiceSubLineItem;
 import com.propertyvista.dto.InvoiceLineItemGroupDTO;
 
-public class LineItemCollapsableViewer extends CEntityCollapsableViewer<InvoiceLineItemGroupDTO> {
+public class LineItemCollapsibleViewer extends CEntityCollapsableViewer<InvoiceLineItemGroupDTO> {
 
-    public LineItemCollapsableViewer() {
+    public LineItemCollapsibleViewer() {
         super(VistaImages.INSTANCE);
         setWidth("46em");
     }
