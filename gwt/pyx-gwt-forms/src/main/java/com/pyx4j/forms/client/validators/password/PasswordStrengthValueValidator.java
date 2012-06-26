@@ -25,7 +25,7 @@ import java.util.EnumSet;
 
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
-import com.pyx4j.forms.client.validators.ValidationFailure;
+import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.forms.client.validators.password.PasswordStrengthRule.PasswordStrengthVerdict;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -47,12 +47,12 @@ public class PasswordStrengthValueValidator implements EditableValueValidator<St
     }
 
     @Override
-    public ValidationFailure isValid(CComponent<String, ?> component, String value) {
+    public ValidationError isValid(CComponent<String, ?> component, String value) {
         PasswordStrengthVerdict verdict = rule.getPasswordVerdict(value);
         if (acceptVerdict.contains(verdict)) {
             return null;
         } else {
-            return new ValidationFailure(i18n.tr("Password is {0}", verdict));
+            return new ValidationError(i18n.tr("Password is {0}", verdict));
         }
     }
 

@@ -26,7 +26,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.ValidationResults;
+import com.pyx4j.forms.client.validators.ValidationResults;
 
 public abstract class CEntityViewer<E extends IObject<?>> extends CEntityContainer<E> {
 

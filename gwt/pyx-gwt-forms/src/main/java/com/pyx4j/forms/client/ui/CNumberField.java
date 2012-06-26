@@ -24,7 +24,7 @@ import java.text.ParseException;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.forms.client.validators.TextBoxParserValidator;
-import com.pyx4j.forms.client.validators.ValidationFailure;
+import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
 public abstract class CNumberField<E extends Number> extends CTextFieldBase<E, NTextBox<E>> {
@@ -92,15 +92,15 @@ public abstract class CNumberField<E extends Number> extends CTextFieldBase<E, N
         }
 
         @Override
-        public ValidationFailure isValid(CComponent<E, ?> component, E value) {
-            ValidationFailure failure = super.isValid(component, value);
+        public ValidationError isValid(CComponent<E, ?> component, E value) {
+            ValidationError failure = super.isValid(component, value);
             if (failure == null) {
                 if (value == null) {
                     return null;
                 } else if (isInRange(value, from, to)) {
                     return null;
                 } else {
-                    return new ValidationFailure(i18n.tr("{0} Should Be In The Range Between {1} And {2}", dataTypeName(), from, to));
+                    return new ValidationError(i18n.tr("{0} Should Be In The Range Between {1} And {2}", dataTypeName(), from, to));
                 }
             } else {
                 return failure;

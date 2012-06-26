@@ -35,6 +35,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
+import com.pyx4j.forms.client.validators.ValidationResults;
 import com.pyx4j.i18n.shared.I18n;
 
 public abstract class CContainer<DATA_TYPE, WIDGET_TYPE extends Widget & INativeComponent<DATA_TYPE>> extends CComponent<DATA_TYPE, WIDGET_TYPE> {

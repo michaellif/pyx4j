@@ -34,8 +34,8 @@ public class RegexValidator<E> implements EditableValueValidator<E> {
     }
 
     @Override
-    public ValidationFailure isValid(CComponent<E, ?> component, E value) {
-        return (component.isValueEmpty() && !component.isMandatory()) || ((value != null) && (value.toString().matches(regex))) ? null : new ValidationFailure(
+    public ValidationError isValid(CComponent<E, ?> component, E value) {
+        return (component.isValueEmpty() && !component.isMandatory()) || ((value != null) && (value.toString().matches(regex))) ? null : new ValidationError(
                 getValidationMessage());
     }
 

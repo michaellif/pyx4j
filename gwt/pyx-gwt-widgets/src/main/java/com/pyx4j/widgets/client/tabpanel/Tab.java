@@ -107,6 +107,10 @@ public class Tab extends LayoutPanel {
         tabBarItem.onWarning(message);
     }
 
+    public String getTabWarning() {
+        return warning;
+    }
+
     public void close() {
         tabPanel.removeTab(this);
     }

@@ -66,14 +66,14 @@ public class EmailListTextBoxValidator implements EditableValueValidator<String>
     }
 
     @Override
-    public ValidationFailure isValid(CComponent<String, ?> component, String value) {
+    public ValidationError isValid(CComponent<String, ?> component, String value) {
         EmailAddress[] adr = parse(value);
         if (adr == null) {
             return null;
         } else {
             for (EmailAddress a : adr) {
                 if (!a.valid) {
-                    return new ValidationFailure(getValidationMessage(value));
+                    return new ValidationError(getValidationMessage(value));
                 }
             }
             return null;

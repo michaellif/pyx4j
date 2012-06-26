@@ -20,7 +20,7 @@
  */
 package com.pyx4j.forms.client.validators;
 
-public class MandatoryValidationFailure extends ValidationFailure {
+public class MandatoryValidationFailure extends ValidationError {
 
     public MandatoryValidationFailure(String message) {
         super(message);

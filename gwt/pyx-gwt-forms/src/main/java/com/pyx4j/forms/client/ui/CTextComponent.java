@@ -21,7 +21,7 @@
 package com.pyx4j.forms.client.ui;
 
 import com.pyx4j.forms.client.validators.EditableValueValidator;
-import com.pyx4j.forms.client.validators.ValidationFailure;
+import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.widgets.client.WatermarkComponent;
 
 public abstract class CTextComponent<DATA, WIDGET extends INativeFocusComponent<DATA>> extends CFocusComponent<DATA, WIDGET> {
@@ -76,12 +76,12 @@ public abstract class CTextComponent<DATA, WIDGET extends INativeFocusComponent<
         }
 
         @Override
-        public ValidationFailure isValid(CComponent<DATA, ?> component, DATA value) {
+        public ValidationError isValid(CComponent<DATA, ?> component, DATA value) {
             if (value == null) {
                 return null;
             }
             if (value instanceof String) {
-                return ((String) value).length() <= length ? null : new ValidationFailure(validationMessage);
+                return ((String) value).length() <= length ? null : new ValidationError(validationMessage);
             } else {
                 return null;
             }

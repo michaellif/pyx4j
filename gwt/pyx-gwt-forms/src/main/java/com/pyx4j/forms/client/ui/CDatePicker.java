@@ -28,7 +28,7 @@ import com.google.gwt.i18n.client.DateTimeFormat;
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.TextBoxParserValidator;
-import com.pyx4j.forms.client.validators.ValidationFailure;
+import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
 public class CDatePicker extends CTextFieldBase<Date, NDatePicker> {
@@ -92,12 +92,12 @@ public class CDatePicker extends CTextFieldBase<Date, NDatePicker> {
 
         @Override
         @SuppressWarnings("deprecation")
-        public ValidationFailure isValid(CComponent<Date, ?> component, Date value) {
+        public ValidationError isValid(CComponent<Date, ?> component, Date value) {
             Date selectedDate = getValue();
             if (selectedDate != null && !pastDateSelectionAllowed) {
                 Date now = new Date();
                 Date today = new Date(now.getYear(), now.getMonth(), now.getDate());
-                return selectedDate.compareTo(today) >= 0 ? null : new ValidationFailure(getValidationMessage());
+                return selectedDate.compareTo(today) >= 0 ? null : new ValidationError(getValidationMessage());
             } else {
                 return null;
             }

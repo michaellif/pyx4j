@@ -22,13 +22,13 @@ public class TextBoxParserValidator<E> implements EditableValueValidator<E> {
     }
 
     @Override
-    public ValidationFailure isValid(CComponent<E, ?> component, E value) {
+    public ValidationError isValid(CComponent<E, ?> component, E value) {
         if (component instanceof CTextFieldBase) {
             if (component.isWidgetCreated()) {
                 try {
                     component.getWidget().getNativeValue();
                 } catch (ParseException e) {
-                    return new ValidationFailure(e.getMessage());
+                    return new ValidationError(e.getMessage());
                 }
             }
         }

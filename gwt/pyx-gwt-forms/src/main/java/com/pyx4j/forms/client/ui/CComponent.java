@@ -50,7 +50,8 @@ import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.MandatoryValidationFailure;
 import com.pyx4j.forms.client.validators.MandatoryValidator;
-import com.pyx4j.forms.client.validators.ValidationFailure;
+import com.pyx4j.forms.client.validators.ValidationError;
+import com.pyx4j.forms.client.validators.ValidationResults;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -100,7 +101,7 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
 
     private boolean editing = false;
 
-    private ValidationFailure validationFailure;
+    private ValidationError validationError;
 
     public CComponent() {
         this(null);
@@ -348,7 +349,7 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
     }
 
     public boolean isMandatoryConditionMet() {
-        return !(validationFailure instanceof MandatoryValidationFailure);
+        return !(validationError instanceof MandatoryValidationFailure);
     }
 
     @Override
@@ -487,19 +488,30 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
     }
 
     public boolean isValid() {
-        return validationFailure == null;
+        return validationError == null;
     }
 
     public void revalidate() {
 
-        ValidationFailure newValidationFailure = null;
+        ValidationError newValidationError = null;
 
         if (isVisible() && isEditable() && isEnabled() && !isViewable()) {
-            newValidationFailure = getValidationResult();
+
+            if (validators != null) {
+                for (EditableValueValidator<? super DATA_TYPE> validator : validators) {
+                    ValidationError ve = validator.isValid((CComponent) this, getValue());
+                    if (ve != null) {
+                        ve.setTitle(getTitle());
+                        ve.setLocationHint(getLocationHint());
+                        newValidationError = ve;
+                    }
+                }
+            }
+
         }
 
-        if (newValidationFailure != validationFailure) {
-            validationFailure = newValidationFailure;
+        if (newValidationError != validationError) {
+            validationError = newValidationError;
             log.trace("CComponent.PropertyChangeEvent.valid fired from {}", shortDebugInfo());
             PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.valid);
         }
@@ -587,9 +599,8 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
 
     public ValidationResults getValidationResults() {
         ValidationResults results = new ValidationResults();
-        if (validationFailure != null) {
-            results.appendValidationError(getTitle(), validationFailure.getMessage(), getLocationHint());
-
+        if (validationError != null) {
+            results.appendValidationError(getTitle(), validationError.getMessage(), getLocationHint());
         }
         return results;
     }
@@ -636,19 +647,6 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
         if (validators != null) {
             validators.clear();
         }
-    }
-
-    @SuppressWarnings({ "rawtypes", "unchecked" })
-    private ValidationFailure getValidationResult() {
-        if (validators != null) {
-            for (EditableValueValidator<? super DATA_TYPE> validator : validators) {
-                ValidationFailure failure = validator.isValid((CComponent) this, getValue());
-                if (failure != null) {
-                    return failure;
-                }
-            }
-        }
-        return null;
     }
 
     @Override
