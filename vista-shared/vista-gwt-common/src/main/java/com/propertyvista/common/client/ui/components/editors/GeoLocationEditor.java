@@ -25,7 +25,7 @@ import com.pyx4j.forms.client.ui.IFormat;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
-import com.pyx4j.forms.client.validators.ValidationFailure;
+import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
@@ -60,8 +60,8 @@ public class GeoLocationEditor extends CEntityDecoratableForm<GeoLocation> {
         get(proto().latitude()).addValueValidator(new EditableValueValidator<Double>() {
 
             @Override
-            public ValidationFailure isValid(CComponent<Double, ?> component, Double value) {
-                return (value == null) || (value >= 0 && value <= 90) ? null : new ValidationFailure(i18n.tr("Latitude may be in range [0-90] degree"));
+            public ValidationError isValid(CComponent<Double, ?> component, Double value) {
+                return (value == null) || (value >= 0 && value <= 90) ? null : new ValidationError(i18n.tr("Latitude may be in range [0-90] degree"));
             }
 
         });
@@ -69,8 +69,8 @@ public class GeoLocationEditor extends CEntityDecoratableForm<GeoLocation> {
         get(proto().longitude()).addValueValidator(new EditableValueValidator<Double>() {
 
             @Override
-            public ValidationFailure isValid(CComponent<Double, ?> component, Double value) {
-                return (value == null) || (value >= 0 && value <= 180) ? null : new ValidationFailure(i18n.tr("Longitude may be in range [0-180] degree"));
+            public ValidationError isValid(CComponent<Double, ?> component, Double value) {
+                return (value == null) || (value >= 0 && value <= 180) ? null : new ValidationError(i18n.tr("Longitude may be in range [0-180] degree"));
             }
 
         });
@@ -78,9 +78,9 @@ public class GeoLocationEditor extends CEntityDecoratableForm<GeoLocation> {
         get(proto().latitudeType()).addValueValidator(new EditableValueValidator<LatitudeType>() {
 
             @Override
-            public ValidationFailure isValid(CComponent<LatitudeType, ?> component, LatitudeType value) {
+            public ValidationError isValid(CComponent<LatitudeType, ?> component, LatitudeType value) {
                 CComponent<Double, ?> latitude = get(proto().latitude());
-                return (value != null || latitude.getValue() == null) ? null : new ValidationFailure(i18n.tr("This field is Mandatory"));
+                return (value != null || latitude.getValue() == null) ? null : new ValidationError(i18n.tr("This field is Mandatory"));
             }
 
         });
@@ -88,9 +88,9 @@ public class GeoLocationEditor extends CEntityDecoratableForm<GeoLocation> {
         get(proto().longitudeType()).addValueValidator(new EditableValueValidator<LongitudeType>() {
 
             @Override
-            public ValidationFailure isValid(CComponent<LongitudeType, ?> component, LongitudeType value) {
+            public ValidationError isValid(CComponent<LongitudeType, ?> component, LongitudeType value) {
                 CComponent<Double, ?> longitude = get(proto().longitude());
-                return (value != null || longitude.getValue() == null) ? null : new ValidationFailure(i18n.tr("This field is Mandatory"));
+                return (value != null || longitude.getValue() == null) ? null : new ValidationError(i18n.tr("This field is Mandatory"));
             }
 
         });

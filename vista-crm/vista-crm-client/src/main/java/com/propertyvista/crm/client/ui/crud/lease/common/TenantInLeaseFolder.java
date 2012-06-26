@@ -33,7 +33,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CNumberField;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
-import com.pyx4j.forms.client.validators.ValidationFailure;
+import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
@@ -112,13 +112,13 @@ public class TenantInLeaseFolder extends LeaseParticipantFolder<Tenant> {
 
         this.addValueValidator(new EditableValueValidator<List<Tenant>>() {
             @Override
-            public ValidationFailure isValid(CComponent<List<Tenant>, ?> component, List<Tenant> value) {
+            public ValidationError isValid(CComponent<List<Tenant>, ?> component, List<Tenant> value) {
                 if (value != null) {
                     boolean applicant = false;
                     for (Tenant item : value) {
                         if (applicant) {
                             if (item.role().getValue() == LeaseParticipant.Role.Applicant) {
-                                return new ValidationFailure(i18n.tr("Just one applicant could be selected!"));
+                                return new ValidationError(i18n.tr("Just one applicant could be selected!"));
                             }
                         } else {
                             applicant = (item.role().getValue() == LeaseParticipant.Role.Applicant);
@@ -131,7 +131,7 @@ public class TenantInLeaseFolder extends LeaseParticipantFolder<Tenant> {
 
         this.addValueValidator(new EditableValueValidator<IList<Tenant>>() {
             @Override
-            public ValidationFailure isValid(CComponent<IList<Tenant>, ?> component, IList<Tenant> value) {
+            public ValidationError isValid(CComponent<IList<Tenant>, ?> component, IList<Tenant> value) {
                 if (value != null) {
                     if (!value.isEmpty()) {
                         int totalPrc = 0;
@@ -141,9 +141,9 @@ public class TenantInLeaseFolder extends LeaseParticipantFolder<Tenant> {
                                 totalPrc += p.intValue();
                             }
                         }
-                        return (totalPrc == 100 ? null : new ValidationFailure(i18n.tr("Sum Of all Percentages should be equal to 100%!")));
+                        return (totalPrc == 100 ? null : new ValidationError(i18n.tr("Sum Of all Percentages should be equal to 100%!")));
                     } else {
-                        return new ValidationFailure(i18n.tr("At least one Applicant should be present!"));
+                        return new ValidationError(i18n.tr("At least one Applicant should be present!"));
                     }
                 }
                 return null;

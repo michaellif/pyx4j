@@ -32,7 +32,7 @@ import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
-import com.pyx4j.forms.client.validators.ValidationFailure;
+import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
@@ -123,13 +123,13 @@ public class TenantFolder extends VistaTableFolder<TenantInLeaseDTO> {
             get(proto().customer().person().birthDate()).addValueValidator(new BirthdayDateValidator());
             get(proto().customer().person().birthDate()).addValueValidator(new EditableValueValidator<Date>() {
                 @Override
-                public ValidationFailure isValid(CComponent<Date, ?> component, Date value) {
+                public ValidationError isValid(CComponent<Date, ?> component, Date value) {
                     if (getValue() == null || getValue().isEmpty()) {
                         return null;
                     }
 
                     if (getValue().role().getValue() == LeaseParticipant.Role.Applicant) {
-                        return ValidationUtils.isOlderThen18(value) ? null : new ValidationFailure(i18n.tr("Applicant must be at least 18 years old"));
+                        return ValidationUtils.isOlderThen18(value) ? null : new ValidationError(i18n.tr("Applicant must be at least 18 years old"));
                     } else {
                         return null;
                     }

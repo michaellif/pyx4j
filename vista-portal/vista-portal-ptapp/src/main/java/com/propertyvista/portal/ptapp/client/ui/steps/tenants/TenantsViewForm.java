@@ -20,7 +20,7 @@ import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
-import com.pyx4j.forms.client.validators.ValidationFailure;
+import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityController;
 
@@ -55,18 +55,18 @@ public class TenantsViewForm extends CEntityForm<TenantInApplicationListDTO> {
         super.addValueValidator(new EditableValueValidator<TenantInApplicationListDTO>() {
 
             @Override
-            public ValidationFailure isValid(CComponent<TenantInApplicationListDTO, ?> component, TenantInApplicationListDTO value) {
-                return !EntityGraph.hasBusinessDuplicates(getValue().tenants()) ? null : new ValidationFailure(i18n.tr("Duplicate Tenants Specified"));
+            public ValidationError isValid(CComponent<TenantInApplicationListDTO, ?> component, TenantInApplicationListDTO value) {
+                return !EntityGraph.hasBusinessDuplicates(getValue().tenants()) ? null : new ValidationError(i18n.tr("Duplicate Tenants Specified"));
             }
 
         });
 
         super.addValueValidator(new EditableValueValidator<TenantInApplicationListDTO>() {
             @Override
-            public ValidationFailure isValid(CComponent<TenantInApplicationListDTO, ?> component, TenantInApplicationListDTO value) {
+            public ValidationError isValid(CComponent<TenantInApplicationListDTO, ?> component, TenantInApplicationListDTO value) {
                 int size = getValue().tenants().size();
                 return (size <= value.tenantsMaximum().getValue()) && ((value.tenantsMaximum().isNull() || (size <= value.tenantsMaximum().getValue()))) ? null
-                        : new ValidationFailure(i18n.tr("Your Selection Exceeded The Number Of Allowed Tenants"));
+                        : new ValidationError(i18n.tr("Your Selection Exceeded The Number Of Allowed Tenants"));
             }
         });
     }

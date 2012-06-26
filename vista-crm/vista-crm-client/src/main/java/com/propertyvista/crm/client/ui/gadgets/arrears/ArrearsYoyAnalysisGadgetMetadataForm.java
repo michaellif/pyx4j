@@ -18,7 +18,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
-import com.pyx4j.forms.client.validators.ValidationFailure;
+import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
@@ -41,14 +41,14 @@ public class ArrearsYoyAnalysisGadgetMetadataForm extends CEntityDecoratableForm
         p.setWidget(++row, 0, new DecoratorBuilder(inject(proto().yearsToCompare())).build());
         get(proto().yearsToCompare()).addValueValidator(new EditableValueValidator<Integer>() {
             @Override
-            public ValidationFailure isValid(CComponent<Integer, ?> component, Integer value) {
+            public ValidationError isValid(CComponent<Integer, ?> component, Integer value) {
                 if (value != null & value >= 0) {
                     if (value > ArrearsReportService.YOY_ANALYSIS_CHART_MAX_YEARS_AGO) {
-                        return new ValidationFailure(i18n.tr("Please enter a value between 0 and {0}", ArrearsReportService.YOY_ANALYSIS_CHART_MAX_YEARS_AGO));
+                        return new ValidationError(i18n.tr("Please enter a value between 0 and {0}", ArrearsReportService.YOY_ANALYSIS_CHART_MAX_YEARS_AGO));
                     }
                     return null;
                 } else {
-                    return new ValidationFailure(i18n.tr("Non-negative value expected"));
+                    return new ValidationError(i18n.tr("Non-negative value expected"));
                 }
             }
         });

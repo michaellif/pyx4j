@@ -33,7 +33,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
-import com.pyx4j.forms.client.validators.ValidationFailure;
+import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
@@ -162,11 +162,11 @@ public class PaymentViewForm extends CEntityDecoratableForm<PaymentInformationDT
 
         get(proto().depositAgree()).addValueValidator(new EditableValueValidator<Boolean>() {
             @Override
-            public ValidationFailure isValid(CComponent<Boolean, ?> component, Boolean value) {
+            public ValidationError isValid(CComponent<Boolean, ?> component, Boolean value) {
                 if (value == null) {
                     return null;
                 }
-                return value ? null : new ValidationFailure(i18n.tr("You should agree on the terms"));
+                return value ? null : new ValidationError(i18n.tr("You should agree on the terms"));
             }
         });
 

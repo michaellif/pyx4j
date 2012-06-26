@@ -35,7 +35,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
-import com.pyx4j.forms.client.validators.ValidationFailure;
+import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
@@ -306,12 +306,12 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
                 get(proto().effectiveDate()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().expirationDate())));
                 get(proto().effectiveDate()).addValueValidator(new EditableValueValidator<Date>() {
                     @Override
-                    public ValidationFailure isValid(CComponent<Date, ?> component, Date value) {
+                    public ValidationError isValid(CComponent<Date, ?> component, Date value) {
                         if (!(value == null) && !(itemEffectiveDateEditor.getValue() == null) && value.before(itemEffectiveDateEditor.getValue())) {
-                            return new ValidationFailure("The date should not precede the Item Effective date");
+                            return new ValidationError("The date should not precede the Item Effective date");
                         }
                         if (!(value == null) && (itemEffectiveDateEditor.getValue() == null) && value.before(lease.getValue().leaseFrom().getValue())) {
-                            return new ValidationFailure("The date should not precede the Lease Start date");
+                            return new ValidationError("The date should not precede the Lease Start date");
                         }
                         return null;
                     }
@@ -324,12 +324,12 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
                 get(proto().expirationDate()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().effectiveDate())));
                 get(proto().expirationDate()).addValueValidator(new EditableValueValidator<Date>() {
                     @Override
-                    public ValidationFailure isValid(CComponent<Date, ?> component, Date value) {
+                    public ValidationError isValid(CComponent<Date, ?> component, Date value) {
                         if (!(value == null) && !(itemExpirationDateEditor.getValue() == null) && value.after(itemExpirationDateEditor.getValue())) {
-                            return new ValidationFailure("The date should not exceed the Item Expiration date");
+                            return new ValidationError("The date should not exceed the Item Expiration date");
                         }
                         if (!(value == null) && (itemExpirationDateEditor.getValue() == null) && value.after(lease.getValue().leaseTo().getValue())) {
-                            return new ValidationFailure("The date should not exceed the Lease Expiration date");
+                            return new ValidationError("The date should not exceed the Lease Expiration date");
                         }
                         return null;
                     }
@@ -358,13 +358,13 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
         get(proto().effectiveDate()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().expirationDate())));
         get(proto().effectiveDate()).addValueValidator(new EditableValueValidator<Date>() {
             @Override
-            public ValidationFailure isValid(CComponent<Date, ?> component, Date value) {
+            public ValidationError isValid(CComponent<Date, ?> component, Date value) {
                 if (!(value == null) && value.before(lease.getValue().leaseFrom().getValue())) {
-                    return new ValidationFailure("The date should not precede the Lease Start date");
+                    return new ValidationError("The date should not precede the Lease Start date");
                 }
                 for (BillableItemAdjustment a : getValue().adjustments()) {
                     if (!(value == null) && !(a.effectiveDate().getValue() == null) && a.effectiveDate().getValue().before(value)) {
-                        return new ValidationFailure("One or more adjustments for this item start before the specificed date");
+                        return new ValidationError("One or more adjustments for this item start before the specificed date");
                     }
                 }
                 return null;
@@ -375,13 +375,13 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
         get(proto().expirationDate()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().effectiveDate())));
         get(proto().expirationDate()).addValueValidator(new EditableValueValidator<Date>() {
             @Override
-            public ValidationFailure isValid(CComponent<Date, ?> component, Date value) {
+            public ValidationError isValid(CComponent<Date, ?> component, Date value) {
                 if (!(value == null) && value.after(lease.getValue().leaseTo().getValue())) {
-                    return new ValidationFailure("The date should not exceed the Lease Expiration date");
+                    return new ValidationError("The date should not exceed the Lease Expiration date");
                 }
                 for (BillableItemAdjustment a : getValue().adjustments()) {
                     if (!(value == null) && !(a.expirationDate().getValue() == null) && a.expirationDate().getValue().after(value)) {
-                        return new ValidationFailure("One or more adjustments for this item expire after the specificed date");
+                        return new ValidationError("One or more adjustments for this item expire after the specificed date");
                     }
                 }
                 return null;

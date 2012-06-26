@@ -17,7 +17,7 @@ import java.util.Date;
 
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
-import com.pyx4j.forms.client.validators.ValidationFailure;
+import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
 public class BirthdayDateValidator implements EditableValueValidator<Date> {
@@ -25,11 +25,11 @@ public class BirthdayDateValidator implements EditableValueValidator<Date> {
     private static final I18n i18n = I18n.get(BirthdayDateValidator.class);
 
     @Override
-    public ValidationFailure isValid(CComponent<Date, ?> component, Date value) {
+    public ValidationError isValid(CComponent<Date, ?> component, Date value) {
         if (value == null) {
             return null;
         }
-        return value.before(new Date()) ? null : new ValidationFailure(i18n.tr("Future birthday date"));//yuriyl temp note: next birthday date? invalid birthday date?
+        return value.before(new Date()) ? null : new ValidationError(i18n.tr("Future birthday date"));//yuriyl temp note: next birthday date? invalid birthday date?
     }
 
 }

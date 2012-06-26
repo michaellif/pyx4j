@@ -18,7 +18,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
-import com.pyx4j.forms.client.validators.ValidationFailure;
+import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
@@ -48,9 +48,9 @@ public class InsuranceAlreadyAvailabileForm extends CEntityDecoratableForm<Exist
         addValueValidator(new EditableValueValidator<ExistingInsurance>() {
 
             @Override
-            public ValidationFailure isValid(CComponent<ExistingInsurance, ?> component, ExistingInsurance value) {
+            public ValidationError isValid(CComponent<ExistingInsurance, ?> component, ExistingInsurance value) {
                 if (!component.isValid()) {
-                    return new ValidationFailure(i18n.tr("Valid Proof of Insurance is Required prior to Move-In"));
+                    return new ValidationError(i18n.tr("Valid Proof of Insurance is Required prior to Move-In"));
                 } else {
                     return null;
                 }

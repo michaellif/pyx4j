@@ -24,7 +24,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
-import com.pyx4j.forms.client.validators.ValidationFailure;
+import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.SubsetSelector.Layout;
@@ -66,9 +66,9 @@ public class PaymentsSummaryGadgetMetadataForm extends CEntityDecoratableForm<Pa
         paymentStatusSelector.addValueValidator(new EditableValueValidator<Set<PaymentStatus>>() {
 
             @Override
-            public ValidationFailure isValid(CComponent<Set<PaymentStatus>, ?> component, Set<PaymentStatus> value) {
+            public ValidationError isValid(CComponent<Set<PaymentStatus>, ?> component, Set<PaymentStatus> value) {
                 if (value != null && value.isEmpty()) {
-                    return new ValidationFailure(i18n.tr("Please select at least one payment status option"));
+                    return new ValidationError(i18n.tr("Please select at least one payment status option"));
                 } else {
                     return null;
                 }

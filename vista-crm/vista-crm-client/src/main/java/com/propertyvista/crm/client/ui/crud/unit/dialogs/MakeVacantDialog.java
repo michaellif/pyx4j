@@ -23,7 +23,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CDatePicker;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
-import com.pyx4j.forms.client.validators.ValidationFailure;
+import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
@@ -58,9 +58,9 @@ public class MakeVacantDialog extends OkCancelDialog {
                     if (maxMakeVacantStartDay == null) {
                         validator = new EditableValueValidator<Date>() {
                             @Override
-                            public ValidationFailure isValid(CComponent<Date, ?> component, Date value) {
+                            public ValidationError isValid(CComponent<Date, ?> component, Date value) {
                                 if (value == null || value.before(minMakeVacantStartDay)) {
-                                    return new ValidationFailure(i18n.tr("please enter a date greater or equal to {0}", minMakeVacantStartDay));
+                                    return new ValidationError(i18n.tr("please enter a date greater or equal to {0}", minMakeVacantStartDay));
                                 } else {
                                     return null;
                                 }
@@ -69,9 +69,9 @@ public class MakeVacantDialog extends OkCancelDialog {
                     } else {
                         validator = new EditableValueValidator<Date>() {
                             @Override
-                            public ValidationFailure isValid(CComponent<Date, ?> component, Date value) {
+                            public ValidationError isValid(CComponent<Date, ?> component, Date value) {
                                 if (value == null || (value.before(minMakeVacantStartDay) | value.after(maxMakeVacantStartDay))) {
-                                    return new ValidationFailure(i18n.tr("please enter a between {0} and {1}", minMakeVacantStartDay, maxMakeVacantStartDay));
+                                    return new ValidationError(i18n.tr("please enter a between {0} and {1}", minMakeVacantStartDay, maxMakeVacantStartDay));
                                 } else {
                                     return null;
                                 }

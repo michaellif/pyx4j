@@ -21,7 +21,7 @@ import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
-import com.pyx4j.forms.client.validators.ValidationFailure;
+import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 
@@ -43,15 +43,15 @@ public class IdUploaderFolder extends VistaBoxFolder<IdentificationDocument> {
         super(IdentificationDocument.class);
         addValueValidator(new EditableValueValidator<IList<IdentificationDocument>>() {
             @Override
-            public ValidationFailure isValid(CComponent<IList<IdentificationDocument>, ?> component, IList<IdentificationDocument> value) {
+            public ValidationError isValid(CComponent<IList<IdentificationDocument>, ?> component, IList<IdentificationDocument> value) {
                 if (value != null) {
                     if (documentationPolicy != null) {
                         int numOfRemainingDocs = documentationPolicy.numberOfRequiredIDs().getValue() - getValue().size();
                         if (numOfRemainingDocs > 0) {
-                            return new ValidationFailure(i18n.tr("{0} more documents are required", numOfRemainingDocs));
+                            return new ValidationError(i18n.tr("{0} more documents are required", numOfRemainingDocs));
                         }
                     } else {
-                        return new ValidationFailure(i18n.tr("Validation Policy Not Available"));
+                        return new ValidationError(i18n.tr("Validation Policy Not Available"));
                     }
                 }
                 return null;
@@ -101,9 +101,9 @@ public class IdUploaderFolder extends VistaBoxFolder<IdentificationDocument> {
             docPagesFolder.addValueValidator(new EditableValueValidator<IList<ApplicationDocumentFile>>() {
 
                 @Override
-                public ValidationFailure isValid(CComponent<IList<ApplicationDocumentFile>, ?> component, IList<ApplicationDocumentFile> value) {
+                public ValidationError isValid(CComponent<IList<ApplicationDocumentFile>, ?> component, IList<ApplicationDocumentFile> value) {
                     if (value != null && value.size() < 1) {
-                        return new ValidationFailure(i18n.tr("at least one document file is required"));
+                        return new ValidationError(i18n.tr("at least one document file is required"));
                     } else {
                         return null;
                     }

@@ -16,7 +16,7 @@ package com.propertyvista.common.client.ui.validators;
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
-import com.pyx4j.forms.client.validators.ValidationFailure;
+import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.util.ValidationUtils;
@@ -26,9 +26,9 @@ public class CreditCardNumberValidator implements EditableValueValidator<String>
     private static final I18n i18n = I18n.get(CreditCardNumberValidator.class);
 
     @Override
-    public ValidationFailure isValid(CComponent<String, ?> component, String value) {
+    public ValidationError isValid(CComponent<String, ?> component, String value) {
         if (CommonsStringUtils.isStringSet(value)) {
-            return ValidationUtils.isCreditCardNumberValid(value) ? null : new ValidationFailure(i18n.tr("Invalid Credit Card Number"));
+            return ValidationUtils.isCreditCardNumberValid(value) ? null : new ValidationError(i18n.tr("Invalid Credit Card Number"));
         } else {
             return null;
         }

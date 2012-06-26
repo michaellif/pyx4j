@@ -18,7 +18,7 @@ import com.pyx4j.entity.client.CEntityForm;
 import com.pyx4j.entity.shared.Path;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
-import com.pyx4j.forms.client.validators.ValidationFailure;
+import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.ref.Country;
@@ -45,12 +45,12 @@ public class ZipCodeValueValidator implements EditableValueValidator<String> {
     }
 
     @Override
-    public ValidationFailure isValid(CComponent<String, ?> component, String value) {
+    public ValidationError isValid(CComponent<String, ?> component, String value) {
         String c = countryName();
         if ("Canada".equals(c)) {
-            return ValidationUtils.isCanadianPostalCodeValid(value) ? null : new ValidationFailure(i18n.tr("Invalid Canadian Postal Code"));
+            return ValidationUtils.isCanadianPostalCodeValid(value) ? null : new ValidationError(i18n.tr("Invalid Canadian Postal Code"));
         } else if ("United States".equals(c)) {
-            return ValidationUtils.isUSZipCodeValid(value) ? null : new ValidationFailure(i18n.tr("Invalid US Zip Code"));
+            return ValidationUtils.isUSZipCodeValid(value) ? null : new ValidationError(i18n.tr("Invalid US Zip Code"));
         } else {
             return null;
         }

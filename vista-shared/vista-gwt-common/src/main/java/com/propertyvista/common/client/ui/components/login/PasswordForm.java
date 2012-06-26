@@ -27,7 +27,7 @@ import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
-import com.pyx4j.forms.client.validators.ValidationFailure;
+import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.forms.client.validators.password.DefaultPasswordStrengthRule;
 import com.pyx4j.forms.client.validators.password.PasswordStrengthValueValidator;
 import com.pyx4j.forms.client.validators.password.PasswordStrengthWidget;
@@ -120,9 +120,9 @@ public class PasswordForm extends CEntityDecoratableForm<PasswordChangeRequest> 
     public void addValidations() {
         get(proto().newPasswordConfirm()).addValueValidator(new EditableValueValidator<String>() {
             @Override
-            public ValidationFailure isValid(CComponent<String, ?> component, String value) {
+            public ValidationError isValid(CComponent<String, ?> component, String value) {
                 if (value == null || !value.equals(get(proto().newPassword()).getValue())) {
-                    return new ValidationFailure(i18n.tr("The passwords don't match."));
+                    return new ValidationError(i18n.tr("The passwords don't match."));
                 } else {
                     return null;
                 }

@@ -33,7 +33,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
-import com.pyx4j.forms.client.validators.ValidationFailure;
+import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.CancelOption;
 import com.pyx4j.widgets.client.dialog.Dialog;
@@ -136,11 +136,11 @@ class SocialLinkFolder extends VistaBoxFolder<SocialLink> {
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().siteUrl()), 25).build());
             get(proto().siteUrl()).addValueValidator(new EditableValueValidator<String>() {
                 @Override
-                public ValidationFailure isValid(CComponent<String, ?> component, String url) {
+                public ValidationError isValid(CComponent<String, ?> component, String url) {
                     if (url == null || url.length() == 0) {
-                        return new ValidationFailure(i18n.tr("URL should not be empty"));
+                        return new ValidationError(i18n.tr("URL should not be empty"));
                     } else if (!ValidationUtils.isCorrectUrl(url)) {
-                        return new ValidationFailure(i18n.tr("Please use proper URL format"));
+                        return new ValidationError(i18n.tr("Please use proper URL format"));
                     }
                     return null;
                 }

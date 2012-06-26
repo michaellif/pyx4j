@@ -18,7 +18,7 @@ import java.util.Date;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
-import com.pyx4j.forms.client.validators.ValidationFailure;
+import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
 public class DateInPeriodValidation {
@@ -48,24 +48,24 @@ public class DateInPeriodValidation {
 
         value2.addValueValidator(new EditableValueValidator<Date>() {
             @Override
-            public ValidationFailure isValid(CComponent<Date, ?> component, Date value) {
+            public ValidationError isValid(CComponent<Date, ?> component, Date value) {
                 if (value2.getValue() == null || value3.getValue() == null) {
                     return null;
                 }
                 Date end = value3.getValue();
-                return (value != null) && !value.after(end) ? null : new ValidationFailure(msg);
+                return (value != null) && !value.after(end) ? null : new ValidationError(msg);
             }
 
         });
 
         value2.addValueValidator(new EditableValueValidator<Date>() {
             @Override
-            public ValidationFailure isValid(CComponent<Date, ?> component, Date value) {
+            public ValidationError isValid(CComponent<Date, ?> component, Date value) {
                 if (value1.getValue() == null || value2.getValue() == null) {
                     return null;
                 }
                 Date start = value1.getValue();
-                return (value != null) && !value.before(start) ? null : new ValidationFailure(msg);
+                return (value != null) && !value.before(start) ? null : new ValidationError(msg);
             }
 
         });

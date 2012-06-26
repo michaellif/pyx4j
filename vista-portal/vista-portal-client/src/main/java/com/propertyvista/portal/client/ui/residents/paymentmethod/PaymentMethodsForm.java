@@ -33,7 +33,7 @@ import com.pyx4j.forms.client.ui.CCheckBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
-import com.pyx4j.forms.client.validators.ValidationFailure;
+import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
@@ -120,7 +120,7 @@ public class PaymentMethodsForm extends CEntityForm<PaymentMethodListDTO> {
 
             this.addValueValidator(new EditableValueValidator<List<PaymentMethod>>() {
                 @Override
-                public ValidationFailure isValid(CComponent<List<PaymentMethod>, ?> component, List<PaymentMethod> value) {
+                public ValidationError isValid(CComponent<List<PaymentMethod>, ?> component, List<PaymentMethod> value) {
                     if (value != null && !value.isEmpty()) {
                         boolean primaryFound = false;
                         for (PaymentMethod item : value) {
@@ -130,7 +130,7 @@ public class PaymentMethodsForm extends CEntityForm<PaymentMethodListDTO> {
                             }
                         }
                         if (!primaryFound) {
-                            return new ValidationFailure(i18n.tr("Default payment should be selected"));
+                            return new ValidationError(i18n.tr("Default payment should be selected"));
                         }
                     }
                     return null;

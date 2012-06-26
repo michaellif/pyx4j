@@ -27,7 +27,7 @@ import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.Alignment;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
-import com.pyx4j.forms.client.validators.ValidationFailure;
+import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
@@ -108,12 +108,12 @@ public class PersonScreeningForm extends CrmEntityForm<PersonScreening> {
 
         previousAddressForm.get(previousAddressForm.proto().moveInDate()).addValueValidator(new EditableValueValidator<Date>() {
             @Override
-            public ValidationFailure isValid(CComponent<Date, ?> component, Date value) {
+            public ValidationError isValid(CComponent<Date, ?> component, Date value) {
                 if (value == null || getValue() == null) {
                     return null;
                 }
                 IPrimitive<LogicalDate> date = getValue().previousAddress().moveOutDate();
-                return (date.isNull() || value.before(date.getValue())) ? null : new ValidationFailure(i18n.tr("Move In Date must be less then Move Out Date"));
+                return (date.isNull() || value.before(date.getValue())) ? null : new ValidationError(i18n.tr("Move In Date must be less then Move Out Date"));
             }
 
         });
@@ -127,12 +127,12 @@ public class PersonScreeningForm extends CrmEntityForm<PersonScreening> {
 
         previousAddressForm.get(previousAddressForm.proto().moveOutDate()).addValueValidator(new EditableValueValidator<Date>() {
             @Override
-            public ValidationFailure isValid(CComponent<Date, ?> component, Date value) {
+            public ValidationError isValid(CComponent<Date, ?> component, Date value) {
                 if (value == null || getValue() == null) {
                     return null;
                 }
                 IPrimitive<LogicalDate> date = getValue().previousAddress().moveInDate();
-                return (date.isNull() || value.after(date.getValue())) ? null : new ValidationFailure(i18n
+                return (date.isNull() || value.after(date.getValue())) ? null : new ValidationError(i18n
                         .tr("Move Out Date must be greater then Move In Date"));
             }
 

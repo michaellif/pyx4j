@@ -23,12 +23,11 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.admin.client.ui.crud.AdminEntityForm;
-import com.propertyvista.common.client.ui.components.security.AccountRecoveryOptionsForm;
 import com.propertyvista.shared.VistaSystemIdentification;
 
 public class MaintenanceForm extends AdminEntityForm<SystemMaintenanceState> {
 
-    private static final I18n i18n = I18n.get(AccountRecoveryOptionsForm.class);
+    private static final I18n i18n = I18n.get(MaintenanceForm.class);
 
     public MaintenanceForm() {
         this(false);

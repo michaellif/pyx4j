@@ -23,7 +23,7 @@ import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CRichTextArea;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
-import com.pyx4j.forms.client.validators.ValidationFailure;
+import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
@@ -57,9 +57,9 @@ public class LegalTermsContentFolder extends VistaBoxFolder<LegalTermsContent> {
         super.addValidations();
         this.addValueValidator(new EditableValueValidator<IList<LegalTermsContent>>() {
             @Override
-            public ValidationFailure isValid(CComponent<IList<LegalTermsContent>, ?> component, IList<LegalTermsContent> value) {
+            public ValidationError isValid(CComponent<IList<LegalTermsContent>, ?> component, IList<LegalTermsContent> value) {
                 if (value == null || value.isEmpty()) {
-                    return new ValidationFailure(i18n.tr("At least one content item is necessary"));
+                    return new ValidationError(i18n.tr("At least one content item is necessary"));
                 } else {
                     return null;
                 }

@@ -29,7 +29,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
-import com.pyx4j.forms.client.validators.ValidationFailure;
+import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;
@@ -156,7 +156,7 @@ class FeatureItemFolder extends VistaTableFolder<ProductItem> {
 
         this.addValueValidator(new EditableValueValidator<List<ProductItem>>() {
             @Override
-            public ValidationFailure isValid(CComponent<List<ProductItem>, ?> component, List<ProductItem> value) {
+            public ValidationError isValid(CComponent<List<ProductItem>, ?> component, List<ProductItem> value) {
                 if (value != null && parent.getValue().version().mandatory().isBooleanTrue()) {
                     boolean defaultFound = false;
                     for (ProductItem item : value) {
@@ -166,7 +166,7 @@ class FeatureItemFolder extends VistaTableFolder<ProductItem> {
                         }
                     }
                     if (!defaultFound) {
-                        return new ValidationFailure(i18n.tr("Default item should be selected"));
+                        return new ValidationError(i18n.tr("Default item should be selected"));
                     }
                 }
                 return null;

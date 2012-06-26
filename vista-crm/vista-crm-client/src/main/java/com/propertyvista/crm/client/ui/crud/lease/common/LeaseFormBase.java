@@ -27,7 +27,7 @@ import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
-import com.pyx4j.forms.client.validators.ValidationFailure;
+import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
@@ -302,9 +302,9 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
 
         get(proto().version().tenants()).addValueValidator(new EditableValueValidator<List<Tenant>>() {
             @Override
-            public ValidationFailure isValid(CComponent<List<Tenant>, ?> component, List<Tenant> value) {
+            public ValidationError isValid(CComponent<List<Tenant>, ?> component, List<Tenant> value) {
                 if (value != null) {
-                    return (value.isEmpty() ? new ValidationFailure(i18n.tr("At least one tenant should be selected!")) : null);
+                    return (value.isEmpty() ? new ValidationError(i18n.tr("At least one tenant should be selected!")) : null);
                 }
                 return null;
             }

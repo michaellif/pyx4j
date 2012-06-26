@@ -30,7 +30,7 @@ import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.Alignment;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
-import com.pyx4j.forms.client.validators.ValidationFailure;
+import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityController;
 
@@ -195,12 +195,12 @@ public class InfoViewForm extends CEntityDecoratableForm<TenantInfoDTO> {
             get(proto().emergencyContacts()).addValueValidator(new EditableValueValidator<List<EmergencyContact>>() {
 
                 @Override
-                public ValidationFailure isValid(CComponent<List<EmergencyContact>, ?> component, List<EmergencyContact> value) {
+                public ValidationError isValid(CComponent<List<EmergencyContact>, ?> component, List<EmergencyContact> value) {
                     if (value == null || getValue() == null) {
                         return null;
                     }
 
-                    return !EntityGraph.hasBusinessDuplicates(getValue().emergencyContacts()) ? null : new ValidationFailure(i18n
+                    return !EntityGraph.hasBusinessDuplicates(getValue().emergencyContacts()) ? null : new ValidationError(i18n
                             .tr("Duplicate contacts specified"));
                 }
             });
@@ -222,7 +222,7 @@ public class InfoViewForm extends CEntityDecoratableForm<TenantInfoDTO> {
         value1.addValueValidator(new EditableValueValidator<Date>() {
 
             @Override
-            public ValidationFailure isValid(CComponent<Date, ?> component, Date value) {
+            public ValidationError isValid(CComponent<Date, ?> component, Date value) {
                 if (getValue() == null || getValue().isEmpty() || value2.getValue() == null) {
                     return null;
                 }
@@ -230,7 +230,7 @@ public class InfoViewForm extends CEntityDecoratableForm<TenantInfoDTO> {
                 Date date = value2.getValue();
                 long limit1 = date.getTime() + 2678400000L; //limits date1 to be within a month of date2
                 long limit2 = date.getTime() - 2678400000L;
-                return (date == null || (value.getTime() > limit2 && value.getTime() < limit1)) ? null : new ValidationFailure(message);
+                return (date == null || (value.getTime() > limit2 && value.getTime() < limit1)) ? null : new ValidationError(message);
             }
         });
     }

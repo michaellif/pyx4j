@@ -25,7 +25,7 @@ import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
-import com.pyx4j.forms.client.validators.ValidationFailure;
+import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
@@ -76,9 +76,9 @@ public class ScopeDialog extends OkCancelDialog {
                 get(proto().renovationEndsOn()).setVisible(false);
                 get(proto().renovationEndsOn()).addValueValidator(new EditableValueValidator<Date>() {
                     @Override
-                    public ValidationFailure isValid(CComponent<Date, ?> component, Date value) {
+                    public ValidationError isValid(CComponent<Date, ?> component, Date value) {
                         if (value.before(minRenoEndDay)) {
-                            return new ValidationFailure(i18n.tr("The minimal acceptable renovation date is {0}", minRenoEndDay));
+                            return new ValidationError(i18n.tr("The minimal acceptable renovation date is {0}", minRenoEndDay));
                         } else {
                             return null;
                         }

@@ -21,7 +21,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
-import com.pyx4j.forms.client.validators.ValidationFailure;
+import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
@@ -105,11 +105,11 @@ public class FeatureExFolder extends VistaBoxFolder<BillableItem> {
     public void addValidations() {
         addValueValidator(new EditableValueValidator<List<BillableItem>>() {
             @Override
-            public ValidationFailure isValid(CComponent<List<BillableItem>, ?> component, List<BillableItem> value) {
+            public ValidationError isValid(CComponent<List<BillableItem>, ?> component, List<BillableItem> value) {
                 if (value == null) {
                     return null;
                 }
-                return (value.size() < getMaxCount()) ? null : new ValidationFailure(i18n.tr("You cannot add more than {0} items here!", getMaxCount()));
+                return (value.size() < getMaxCount()) ? null : new ValidationError(i18n.tr("You cannot add more than {0} items here!", getMaxCount()));
             }
         });
         super.addValidations();

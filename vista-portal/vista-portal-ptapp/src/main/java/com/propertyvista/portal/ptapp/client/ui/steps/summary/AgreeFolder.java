@@ -27,7 +27,7 @@ import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CCheckBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
-import com.pyx4j.forms.client.validators.ValidationFailure;
+import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
@@ -115,8 +115,8 @@ public class AgreeFolder extends VistaTableFolder<IAgree> {
 
             get(proto().agree()).addValueValidator(new EditableValueValidator<Boolean>() {
                 @Override
-                public ValidationFailure isValid(CComponent<Boolean, ?> component, Boolean value) {
-                    return value == Boolean.TRUE ? null : new ValidationFailure(i18n.tr("You Must Agree To The Terms And Conditions To Continue"));
+                public ValidationError isValid(CComponent<Boolean, ?> component, Boolean value) {
+                    return value == Boolean.TRUE ? null : new ValidationError(i18n.tr("You Must Agree To The Terms And Conditions To Continue"));
                 }
             });
         }

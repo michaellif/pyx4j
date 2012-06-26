@@ -18,7 +18,7 @@ import java.util.Date;
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
-import com.pyx4j.forms.client.validators.ValidationFailure;
+import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
 public class FutureDateValidator implements EditableValueValidator<Date> {
@@ -36,7 +36,7 @@ public class FutureDateValidator implements EditableValueValidator<Date> {
     }
 
     @Override
-    public ValidationFailure isValid(CComponent<Date, ?> component, Date value) {
-        return (value == null) || !value.before(TimeUtils.today()) ? null : new ValidationFailure(message);
+    public ValidationError isValid(CComponent<Date, ?> component, Date value) {
+        return (value == null) || !value.before(TimeUtils.today()) ? null : new ValidationError(message);
     }
 }
