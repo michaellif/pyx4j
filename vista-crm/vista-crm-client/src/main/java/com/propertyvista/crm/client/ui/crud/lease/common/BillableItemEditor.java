@@ -445,7 +445,7 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
                     }
                     callback.onSuccess(result);
                 }
-            }, type, BillableItemEditor.this.getValue().item().type());
+            }, type, BillableItemEditor.this.getValue().item());
         }
 
         private class BillableItemDepositEditor extends CEntityFolderRowEditor<Deposit> {

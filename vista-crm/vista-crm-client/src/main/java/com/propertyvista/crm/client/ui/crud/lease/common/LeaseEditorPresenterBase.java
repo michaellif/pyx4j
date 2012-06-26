@@ -18,7 +18,6 @@ import java.math.BigDecimal;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.propertyvista.domain.financial.offering.ProductItem;
-import com.propertyvista.domain.financial.offering.ProductItemType;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Deposit;
@@ -26,13 +25,13 @@ import com.propertyvista.domain.tenant.lease.Deposit.DepositType;
 
 public interface LeaseEditorPresenterBase {
 
-    void setSelectedUnit(AptUnit selected);
+    void setSelectedUnit(AptUnit item);
 
-    void setSelectedService(ProductItem selected);
+    void setSelectedService(ProductItem item);
 
     void createBillableItem(AsyncCallback<BillableItem> callback, ProductItem item);
 
-    void createDeposit(AsyncCallback<Deposit> callback, DepositType depositType, ProductItemType productType);
+    void createDeposit(AsyncCallback<Deposit> callback, DepositType depositType, ProductItem item);
 
     void calculateChargeItemAdjustments(AsyncCallback<BigDecimal> callback, BillableItem item);
 }

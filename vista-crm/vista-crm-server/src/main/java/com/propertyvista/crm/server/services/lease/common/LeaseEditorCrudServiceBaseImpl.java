@@ -29,7 +29,6 @@ import com.propertyvista.crm.server.util.CrmAppContext;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ProductCatalog;
 import com.propertyvista.domain.financial.offering.ProductItem;
-import com.propertyvista.domain.financial.offering.ProductItemType;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -114,15 +113,17 @@ public abstract class LeaseEditorCrudServiceBaseImpl<DTO extends LeaseDTO> exten
     }
 
     @Override
-    public void createBillableItem(AsyncCallback<BillableItem> callback, ProductItem item, DTO currentValue) {
+    public void createBillableItem(AsyncCallback<BillableItem> callback, ProductItem productItemId, DTO currentValue) {
         assert !currentValue.selectedBuilding().isNull();
-        callback.onSuccess(ServerSideFactory.create(LeaseFacade.class).createBillableItem(item, currentValue.selectedBuilding()));
+        callback.onSuccess(ServerSideFactory.create(LeaseFacade.class).createBillableItem(productItemId, currentValue.selectedBuilding()));
     }
 
     @Override
-    public void createDeposit(AsyncCallback<Deposit> callback, DepositType depositType, ProductItemType productType, DTO currentValue) {
+    public void createDeposit(AsyncCallback<Deposit> callback, DepositType depositType, ProductItem productItemId, DTO currentValue) {
+        ProductItem productItem = Persistence.secureRetrieve(ProductItem.class, productItemId.getPrimaryKey());
+        assert productItem != null;
         assert !currentValue.selectedBuilding().isNull();
-        callback.onSuccess(ServerSideFactory.create(DepositFacade.class).createDeposit(depositType, productType, currentValue.selectedBuilding()));
+        callback.onSuccess(ServerSideFactory.create(DepositFacade.class).createDeposit(depositType, productItem.type(), currentValue.selectedBuilding()));
     }
 
     @Override

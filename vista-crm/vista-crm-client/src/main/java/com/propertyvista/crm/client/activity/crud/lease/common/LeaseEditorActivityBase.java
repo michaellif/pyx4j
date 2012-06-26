@@ -27,7 +27,6 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 import com.propertyvista.crm.client.ui.crud.lease.common.LeaseEditorPresenterBase;
 import com.propertyvista.crm.rpc.services.lease.common.LeaseEditorCrudServiceBase;
 import com.propertyvista.domain.financial.offering.ProductItem;
-import com.propertyvista.domain.financial.offering.ProductItemType;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Deposit;
@@ -46,33 +45,35 @@ public abstract class LeaseEditorActivityBase<DTO extends LeaseDTO> extends Edit
     }
 
     @Override
-    public void setSelectedUnit(AptUnit selected) {
+    public void setSelectedUnit(AptUnit item) {
         ((LeaseEditorCrudServiceBase<DTO>) getService()).setSelectedUnit(new DefaultAsyncCallback<DTO>() {
             @Override
             public void onSuccess(DTO result) {
                 populateView(result);
             }
-        }, EntityFactory.createIdentityStub(AptUnit.class, selected.getPrimaryKey()), getView().getValue());
+        }, EntityFactory.createIdentityStub(AptUnit.class, item.getPrimaryKey()), getView().getValue());
     }
 
     @Override
-    public void setSelectedService(ProductItem selected) {
+    public void setSelectedService(ProductItem item) {
         ((LeaseEditorCrudServiceBase<DTO>) getService()).setSelectedService(new DefaultAsyncCallback<DTO>() {
             @Override
             public void onSuccess(DTO result) {
                 populateView(result);
             }
-        }, EntityFactory.createIdentityStub(ProductItem.class, selected.getPrimaryKey()), getView().getValue());
+        }, EntityFactory.createIdentityStub(ProductItem.class, item.getPrimaryKey()), getView().getValue());
     }
 
     @Override
     public void createBillableItem(AsyncCallback<BillableItem> callback, ProductItem item) {
-        ((LeaseEditorCrudServiceBase<DTO>) getService()).createBillableItem(callback, item, getView().getValue());
+        ((LeaseEditorCrudServiceBase<DTO>) getService()).createBillableItem(callback,
+                EntityFactory.createIdentityStub(ProductItem.class, item.getPrimaryKey()), getView().getValue());
     }
 
     @Override
-    public void createDeposit(AsyncCallback<Deposit> callback, DepositType depositType, ProductItemType productType) {
-        ((LeaseEditorCrudServiceBase<DTO>) getService()).createDeposit(callback, depositType, productType, getView().getValue());
+    public void createDeposit(AsyncCallback<Deposit> callback, DepositType depositType, ProductItem item) {
+        ((LeaseEditorCrudServiceBase<DTO>) getService()).createDeposit(callback, depositType,
+                EntityFactory.createIdentityStub(ProductItem.class, item.getPrimaryKey()), getView().getValue());
     }
 
     @Override

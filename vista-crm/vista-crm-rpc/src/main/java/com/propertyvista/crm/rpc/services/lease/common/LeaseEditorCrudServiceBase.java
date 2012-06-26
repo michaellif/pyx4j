@@ -20,7 +20,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.entity.rpc.AbstractVersionedCrudService;
 
 import com.propertyvista.domain.financial.offering.ProductItem;
-import com.propertyvista.domain.financial.offering.ProductItemType;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Deposit;
@@ -33,9 +32,9 @@ public interface LeaseEditorCrudServiceBase<DTO extends LeaseDTO> extends Abstra
 
     void setSelectedService(AsyncCallback<DTO> callback, ProductItem serviceId, DTO currentValue);
 
-    void createBillableItem(AsyncCallback<BillableItem> callback, ProductItem itemId, DTO currentValue);
+    void createBillableItem(AsyncCallback<BillableItem> callback, ProductItem productItemId, DTO currentValue);
 
-    void createDeposit(AsyncCallback<Deposit> callback, DepositType depositType, ProductItemType productType, DTO currentValue);
+    void createDeposit(AsyncCallback<Deposit> callback, DepositType depositType, ProductItem productItemId, DTO currentValue);
 
     void calculateChargeItemAdjustments(AsyncCallback<BigDecimal> callback, BillableItem item);
 }
