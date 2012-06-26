@@ -38,6 +38,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
+import com.propertyvista.biz.financial.SysDateManager;
 import com.propertyvista.biz.occupancy.UnitTurnoverAnalysisFacade;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.AvailabilityReportService;
 import com.propertyvista.crm.server.util.SortingFactory;
@@ -220,7 +221,7 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
             criteria.add(PropertyCriterion.in(criteria.proto().building(), buildings));
         }
         if (toDate == null) {
-            toDate = new LogicalDate();
+            toDate = new LogicalDate(SysDateManager.getSysDate());
         }
         criteria.add(PropertyCriterion.le(criteria.proto().statusDate(), toDate));
         // use descending order of the status date in order to select the most recent statuses first

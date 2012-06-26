@@ -442,6 +442,7 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
                         result.type().setValue(type);
                         result.status().setValue(DepositStatus.Created);
                         result.valueType().setValue(ValueType.Amount);
+                        result.depositDate().setValue(new LogicalDate());
                     }
                     callback.onSuccess(result);
                 }

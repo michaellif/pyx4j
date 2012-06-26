@@ -28,6 +28,7 @@ import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.biz.financial.SysDateManager;
 import com.propertyvista.crm.server.services.dashboard.gadgets.PaymentReportServiceImpl;
 import com.propertyvista.crm.server.services.reports.DynamicTableTemplateReportModelBuilder;
 import com.propertyvista.crm.server.services.reports.GadgetReportModelCreator;
@@ -54,12 +55,13 @@ public class PaymentRecordsReportModelCreator implements GadgetReportModelCreato
 
         final PaymentRecordsGadgetMetadata paymentRecordsGadgetMetadata = gadgetMetadata.duplicate(PaymentRecordsGadgetMetadata.class);
         final LogicalDate targetDate = paymentRecordsGadgetMetadata.customizeTargetDate().isBooleanTrue() ? paymentRecordsGadgetMetadata.targetDate()
-                .getValue() : new LogicalDate();
+                .getValue() : new LogicalDate(SysDateManager.getSysDate());
         final Vector<PaymentType> paymentTypeCriteria = new Vector<PaymentType>(paymentRecordsGadgetMetadata.paymentMethodFilter().getValue());
         final Vector<PaymentRecord.PaymentStatus> paymentStatusCriteria = new Vector<PaymentRecord.PaymentStatus>(
                 paymentRecordsGadgetMetadata.paymentStatusFilter());
 
         new PaymentReportServiceImpl().paymentRecords(new AsyncCallback<EntitySearchResult<PaymentRecordForReportDTO>>() {
+
 
 
 

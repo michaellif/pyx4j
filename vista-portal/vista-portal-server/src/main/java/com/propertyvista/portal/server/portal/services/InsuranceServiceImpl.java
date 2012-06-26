@@ -27,6 +27,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.server.contexts.Context;
 
+import com.propertyvista.biz.financial.SysDateManager;
 import com.propertyvista.domain.policy.policies.domain.LegalTermsContent;
 import com.propertyvista.domain.tenant.ptapp.DigitalSignature;
 import com.propertyvista.portal.domain.ptapp.IAgree;
@@ -94,7 +95,7 @@ public class InsuranceServiceImpl implements InsuranceService {
         insurance.insuranceCertificateNumber().setValue("123-1235098A");
         insurance.personalLiability().setValue(new BigDecimal("10000000"));
         Calendar cal = GregorianCalendar.getInstance();
-        cal.setTime(new LogicalDate());
+        cal.setTime(new LogicalDate(SysDateManager.getSysDate()));
         cal.add(Calendar.YEAR, -1);
         insurance.insuranceStartDate().setValue(new LogicalDate(cal.getTime()));
 

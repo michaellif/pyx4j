@@ -38,6 +38,7 @@ import com.pyx4j.entity.shared.utils.EntityDtoBinder;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 
+import com.propertyvista.biz.financial.SysDateManager;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.ArrearsReportService;
 import com.propertyvista.crm.server.util.EntityDto2DboCriteriaConverter;
@@ -180,7 +181,7 @@ public class ArrearsReportServiceImpl implements ArrearsReportService {
             buildings = buildingsCriteria;
         }
 
-        final LogicalDate now = new LogicalDate();
+        final LogicalDate now = new LogicalDate(SysDateManager.getSysDate());
 
         final GregorianCalendar cal = new GregorianCalendar();
         cal.setTime(now);
@@ -231,7 +232,7 @@ public class ArrearsReportServiceImpl implements ArrearsReportService {
 
         BigDecimal totalArrears = new BigDecimal("0.00");
 
-        LogicalDate today = new LogicalDate();
+        LogicalDate today = new LogicalDate(SysDateManager.getSysDate());
 
         if (!asOf.after(today)) { // if we asked for the future value of total arrears return 0            
 

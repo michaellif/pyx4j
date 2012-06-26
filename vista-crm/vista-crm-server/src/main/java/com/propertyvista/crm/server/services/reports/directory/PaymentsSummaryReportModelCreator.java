@@ -32,6 +32,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.biz.financial.SysDateManager;
 import com.propertyvista.crm.server.services.dashboard.gadgets.PaymentReportServiceImpl;
 import com.propertyvista.crm.server.services.reports.DynamicTableTemplateReportModelBuilder;
 import com.propertyvista.crm.server.services.reports.GadgetReportModelCreator;
@@ -59,7 +60,7 @@ public class PaymentsSummaryReportModelCreator implements GadgetReportModelCreat
     public void createReportModel(final AsyncCallback<JasperReportModel> callback, GadgetMetadata gadgetMetadata, Vector<Key> selectedBuildings) {
         final PaymentsSummaryGadgetMetadata paymentsSummaryGadgetMetadata = gadgetMetadata.duplicate(PaymentsSummaryGadgetMetadata.class);
         final LogicalDate targetDate = paymentsSummaryGadgetMetadata.customizeDate().isBooleanTrue() ? paymentsSummaryGadgetMetadata.asOf().getValue()
-                : new LogicalDate();
+                : new LogicalDate(SysDateManager.getSysDate());
         final Vector<PaymentRecord.PaymentStatus> paymentStatusCriteria = new Vector<PaymentRecord.PaymentStatus>(paymentsSummaryGadgetMetadata.paymentStatus()
                 .getValue());
         final PaymentFeesDTO[] paymentFees = new PaymentFeesDTO[2];

@@ -25,6 +25,7 @@ import com.pyx4j.entity.report.JasperReportModel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.svg.j2se.SvgFactoryForBatik;
 
+import com.propertyvista.biz.financial.SysDateManager;
 import com.propertyvista.crm.server.services.dashboard.gadgets.AvailabilityReportServiceImpl;
 import com.propertyvista.crm.server.services.reports.GadgetReportModelCreator;
 import com.propertyvista.crm.server.services.reports.StaticTemplateReportModelBuilder;
@@ -54,7 +55,8 @@ public class TurnoverAnalysisChartReportModelCreator implements GadgetReportMode
     @Override
     public void createReportModel(final AsyncCallback<JasperReportModel> callback, GadgetMetadata gadgetMetadata, Vector<Key> selectedBuildings) {
         final TurnoverAnalysisMetadata turnoverAnalysisMetadata = (TurnoverAnalysisMetadata) gadgetMetadata;
-        final LogicalDate asOf = turnoverAnalysisMetadata.customizeDate().isBooleanTrue() ? turnoverAnalysisMetadata.asOf().getValue() : new LogicalDate();
+        final LogicalDate asOf = turnoverAnalysisMetadata.customizeDate().isBooleanTrue() ? turnoverAnalysisMetadata.asOf().getValue() : new LogicalDate(
+                SysDateManager.getSysDate());
 
         new AvailabilityReportServiceImpl().turnoverAnalysis(new AsyncCallback<Vector<UnitTurnoversPerIntervalDTO>>() {
 

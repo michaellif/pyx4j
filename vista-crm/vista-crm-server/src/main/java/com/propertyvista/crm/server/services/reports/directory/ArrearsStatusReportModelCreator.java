@@ -27,6 +27,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.biz.financial.SysDateManager;
 import com.propertyvista.crm.server.services.dashboard.gadgets.ArrearsReportServiceImpl;
 import com.propertyvista.crm.server.services.reports.DynamicTableTemplateReportModelBuilder;
 import com.propertyvista.crm.server.services.reports.GadgetReportModelCreator;
@@ -52,7 +53,7 @@ public class ArrearsStatusReportModelCreator implements GadgetReportModelCreator
     @Override
     public void createReportModel(final AsyncCallback<JasperReportModel> callback, GadgetMetadata gadgetMetadata, Vector<Key> selectedBuildings) {
         final ArrearsStatusGadgetMetadata metadata = gadgetMetadata.duplicate(ArrearsStatusGadgetMetadata.class);
-        final LogicalDate asOf = metadata.customizeDate().isBooleanTrue() ? metadata.asOf().getValue() : new LogicalDate();
+        final LogicalDate asOf = metadata.customizeDate().isBooleanTrue() ? metadata.asOf().getValue() : new LogicalDate(SysDateManager.getSysDate());
         final DebitType arrearsCategory = metadata.category().getValue();
         final Vector<Sort> sortingCriteria = new Vector<Sort>();
         if (!metadata.primarySortColumn().isNull()) {

@@ -27,6 +27,7 @@ import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.biz.financial.SysDateManager;
 import com.propertyvista.crm.server.services.dashboard.gadgets.ArrearsReportServiceImpl;
 import com.propertyvista.crm.server.services.reports.DynamicTableTemplateReportModelBuilder;
 import com.propertyvista.crm.server.services.reports.GadgetReportModelCreator;
@@ -51,7 +52,7 @@ public class ArrearsSummaryReportModelCreator implements GadgetReportModelCreato
     public void createReportModel(final AsyncCallback<JasperReportModel> callback, GadgetMetadata gadgetMetadata, Vector<Key> selectedBuildings) {
         final ArrearsSummaryGadgetMetadata arrearsSummaryGadgetMetadata = gadgetMetadata.duplicate(ArrearsSummaryGadgetMetadata.class);
         final LogicalDate asOf = arrearsSummaryGadgetMetadata.customizeDate().isBooleanTrue() ? arrearsSummaryGadgetMetadata.asOf().getValue()
-                : new LogicalDate();
+                : new LogicalDate(SysDateManager.getSysDate());
 
         AsyncCallback<EntitySearchResult<AgingBuckets>> serviceCallback = new AsyncCallback<EntitySearchResult<AgingBuckets>>() {
 
