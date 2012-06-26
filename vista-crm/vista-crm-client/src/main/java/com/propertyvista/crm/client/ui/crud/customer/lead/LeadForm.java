@@ -72,7 +72,7 @@ public class LeadForm extends CrmEntityForm<Lead> {
         addTab(createDetailsTab(), i18n.tr("Details"));
 
         tab = addTab(createAppointmentsTab(), i18n.tr("Appointments"));
-        enableTab(tab, !isEditable());
+        setTabEnabled(tab, !isEditable());
 
     }
 

@@ -56,7 +56,7 @@ public class GuarantorForm extends CrmEntityForm<GuarantorDTO> {
         selectTab(tab);
 
         tab = addTab(isEditable() ? new HTML() : ((GuarantorViewerView) getParentView()).getScreeningListerView().asWidget(), i18n.tr("Screening"));
-        enableTab(tab, !isEditable());
+        setTabEnabled(tab, !isEditable());
 
         addTab(createPaymentMethodsTab(), i18n.tr("Payment Methods"));
 

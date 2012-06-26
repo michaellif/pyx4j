@@ -45,7 +45,7 @@ public class ComplexForm extends CrmEntityForm<ComplexDTO> {
     @Override
     public void createTabs() {
         Tab tab = addTab(isEditable() ? new HTML() : getParentComplexViewerView().getDashboardView().asWidget(), i18n.tr("Dashboard"));
-        enableTab(tab, !isEditable());
+        setTabEnabled(tab, !isEditable());
         selectTab(tab);
 
         addTab(createGeneralPanel(), i18n.tr("General"));

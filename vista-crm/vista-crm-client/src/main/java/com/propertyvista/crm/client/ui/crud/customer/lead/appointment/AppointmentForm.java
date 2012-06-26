@@ -44,7 +44,7 @@ public class AppointmentForm extends CrmEntityForm<Appointment> {
 
         selectTab(addTab(createGeneralTab(), i18n.tr("General")));
 
-        enableTab(addTab(createShowingsTab(), i18n.tr("Showings")), !isEditable());
+        setTabEnabled(addTab(createShowingsTab(), i18n.tr("Showings")), !isEditable());
 
     }
 

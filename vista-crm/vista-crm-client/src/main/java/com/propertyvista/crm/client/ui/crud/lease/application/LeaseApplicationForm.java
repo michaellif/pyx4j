@@ -49,23 +49,23 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
         createCommonContent();
 
         Tab tab = addTab(createInfoTab(), i18n.tr("Information"));
-        enableTab(tab, !isEditable());
+        setTabEnabled(tab, !isEditable());
 
         tab = addTab(createFinancialTab(), i18n.tr("Financial"));
-        enableTab(tab, !isEditable());
+        setTabEnabled(tab, !isEditable());
 
 // TODO: should be hidden until back end implementation:   
 //      tabPanel.add(createApprovalTab(), i18n.tr("Approval"));
 //        tabPanel.setLastTabDisabled(true);
         onlineStatusTab = addTab(createOnlineStatusTab(), i18n.tr("Online Status Details"));
-        enableTab(onlineStatusTab, !isEditable());
+        setTabEnabled(onlineStatusTab, !isEditable());
 
     }
 
     @Override
     protected void onPopulate() {
         super.onPopulate();
-        enableTab(onlineStatusTab, isTabEnabled(onlineStatusTab) || getValue().leaseApplication().onlineApplication().isNull());
+        setTabEnabled(onlineStatusTab, isTabEnabled(onlineStatusTab) || getValue().leaseApplication().onlineApplication().isNull());
     }
 
     private Widget createInfoTab() {

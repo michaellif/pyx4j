@@ -44,10 +44,10 @@ public class LockerAreaForm extends CrmEntityForm<LockerAreaDTO> {
         selectTab(tab);
 
         tab = addTab(isEditable() ? new HTML() : ((LockerAreaViewerView) getParentView()).getLockerView().asWidget(), i18n.tr("Lockers"));
-        enableTab(tab, !isEditable());
+        setTabEnabled(tab, !isEditable());
 
         tab = addTab(new Label("Notes and attachments goes here... "), i18n.tr("Notes & Attachments"));
-        enableTab(tab, !isEditable());
+        setTabEnabled(tab, !isEditable());
 
     }
 

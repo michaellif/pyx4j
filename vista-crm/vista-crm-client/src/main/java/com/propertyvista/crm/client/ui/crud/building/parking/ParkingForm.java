@@ -43,10 +43,10 @@ public class ParkingForm extends CrmEntityForm<ParkingDTO> {
         selectTab(tab);
 
         tab = addTab(isEditable() ? new HTML() : ((ParkingViewerView) getParentView()).getSpotView().asWidget(), i18n.tr("Spots"));
-        enableTab(tab, !isEditable());
+        setTabEnabled(tab, !isEditable());
 
         tab = addTab(new Label("Notes and attachments goes here... "), i18n.tr("Notes & Attachments"));
-        enableTab(tab, !isEditable());
+        setTabEnabled(tab, !isEditable());
 
     }
 

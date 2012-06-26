@@ -76,10 +76,10 @@ public class UnitForm extends CrmEntityForm<AptUnitDTO> {
         selectTab(tab);
 
         tab = addTab(isEditable() ? new HTML() : ((UnitViewerView) getParentView()).getUnitItemsListerView().asWidget(), i18n.tr("Details"));
-        enableTab(tab, !isEditable());
+        setTabEnabled(tab, !isEditable());
 
         tab = addTab(isEditable() ? new HTML() : ((UnitViewerView) getParentView()).getOccupanciesListerView().asWidget(), i18n.tr("Occupancy"));
-        enableTab(tab, !isEditable());
+        setTabEnabled(tab, !isEditable());
 
 // TODO Hided till further investigation:
 //        addTab(createMarketingTab(), i18n.tr("Marketing"));

@@ -45,7 +45,7 @@ public class TriggerForm extends AdminEntityForm<Trigger> {
         selectTab(tab);
 
         tab = addTab(isEditable() ? new HTML() : ((TriggerViewerView) getParentView()).getRunListerView().asWidget(), i18n.tr("Runs"));
-        enableTab(tab, !isEditable());
+        setTabEnabled(tab, !isEditable());
 
     }
 

@@ -74,7 +74,7 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
     public void createTabs() {
 
         Tab tab = addTab(isEditable() ? new HTML() : createDashboardTab(), i18n.tr("Dashboard"), false);
-        enableTab(tab, !isEditable());
+        setTabEnabled(tab, !isEditable());
         selectTab(tab);
 
         addTab(createGeneralTab(), i18n.tr("General"));
@@ -82,10 +82,10 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         addTab(createDetailsTab(), i18n.tr("Details"));
 
         tab = addTab(isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getFloorplanListerView().asWidget(), i18n.tr("Floorplans"));
-        enableTab(tab, !isEditable());
+        setTabEnabled(tab, !isEditable());
 
         tab = addTab(isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getUnitListerView().asWidget(), i18n.tr("Units"));
-        enableTab(tab, !isEditable());
+        setTabEnabled(tab, !isEditable());
 
         FormFlexPanel combinedtab = new FormFlexPanel();
         int row = 0;
@@ -97,7 +97,7 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         combinedtab.setWidget(row++, 0, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getRoofListerView().asWidget());
 
         tab = addTab(combinedtab, i18n.tr("Mechanicals"));
-        enableTab(tab, !isEditable());
+        setTabEnabled(tab, !isEditable());
 
         combinedtab = new FormFlexPanel();
         row = 0;
@@ -107,7 +107,7 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         combinedtab.setWidget(row++, 0, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getLockerAreaListerView().asWidget());
 
         tab = addTab(combinedtab, i18n.tr("Add-Ons"));
-        enableTab(tab, !isEditable());
+        setTabEnabled(tab, !isEditable());
 
         addTab(createFinancialTab(), i18n.tr("Financial"));
 
@@ -123,14 +123,15 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         combinedtab.setWidget(row++, 0, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getConcessionListerView().asWidget());
 
         tab = addTab(combinedtab, i18n.tr("Product Catalog"));
-        enableTab(tab, !isEditable());
+        setTabEnabled(tab, !isEditable());
 
         addTab(createContactTab(), i18n.tr("Contacts"));
 
-        addTab(createNotesAndAttachmentsTab(), i18n.tr("Notes & Attachments"));
-
         tab = addTab(isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getBillingCycleListerView().asWidget(), i18n.tr("Billing Cycles"));
-        enableTab(tab, !isEditable());
+        setTabEnabled(tab, !isEditable());
+
+        tab = addTab(createNotesAndAttachmentsTab(), i18n.tr("Notes & Attachments"));
+        setTabVisible(tab, !isEditable());
 
     }
 

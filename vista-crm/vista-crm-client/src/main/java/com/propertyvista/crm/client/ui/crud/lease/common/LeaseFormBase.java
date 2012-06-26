@@ -82,7 +82,7 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
     protected void onPopulate() {
         super.onPopulate();
 
-        showTab(chargesTab, !isEditable() && getValue().version().status().getValue().isDraft());
+        setTabVisible(chargesTab, !isEditable() && getValue().version().status().getValue().isDraft());
 
         get(proto().version().completion()).setVisible(!getValue().version().completion().isNull());
 

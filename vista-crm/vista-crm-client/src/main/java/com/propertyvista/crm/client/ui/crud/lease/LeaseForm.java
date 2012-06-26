@@ -45,16 +45,16 @@ public class LeaseForm extends LeaseFormBase<LeaseDTO> {
         if (!VistaTODO.removedForProduction) {
             adjustmentsTab = addTab(isEditable() ? new HTML() : ((LeaseViewerView) getParentView()).getLeaseAdjustmentListerView().asWidget(),
                     i18n.tr("Adjustments"));
-            enableTab(adjustmentsTab, !isEditable());
+            setTabEnabled(adjustmentsTab, !isEditable());
 
             billsTab = addTab(isEditable() ? new HTML() : ((LeaseViewerView) getParentView()).getBillListerView().asWidget(), i18n.tr("Bills"));
-            enableTab(billsTab, !isEditable());
+            setTabEnabled(billsTab, !isEditable());
 
             paymentsTab = addTab(isEditable() ? new HTML() : ((LeaseViewerView) getParentView()).getPaymentListerView().asWidget(), i18n.tr("Payments"));
-            enableTab(paymentsTab, !isEditable());
+            setTabEnabled(paymentsTab, !isEditable());
 
             financialTab = addTab(isEditable() ? new HTML() : createFinancialTransactionHistoryTab().asWidget(), i18n.tr("Financial Summary"));
-            enableTab(financialTab, !isEditable());
+            setTabEnabled(financialTab, !isEditable());
         }
 
     }
@@ -63,10 +63,10 @@ public class LeaseForm extends LeaseFormBase<LeaseDTO> {
     protected void onPopulate() {
         super.onPopulate();
 
-        showTab(adjustmentsTab, !getValue().version().status().getValue().isDraft());
-        showTab(billsTab, !getValue().version().status().getValue().isDraft());
-        showTab(paymentsTab, !getValue().version().status().getValue().isDraft());
-        showTab(financialTab, !getValue().version().status().getValue().isDraft());
+        setTabVisible(adjustmentsTab, !getValue().version().status().getValue().isDraft());
+        setTabVisible(billsTab, !getValue().version().status().getValue().isDraft());
+        setTabVisible(paymentsTab, !getValue().version().status().getValue().isDraft());
+        setTabVisible(financialTab, !getValue().version().status().getValue().isDraft());
 
         if (!isEditable()) {
             ((LeaseViewerView) getParentView()).getLeaseAdjustmentListerView().getLister().getDataTablePanel().getAddButton()
