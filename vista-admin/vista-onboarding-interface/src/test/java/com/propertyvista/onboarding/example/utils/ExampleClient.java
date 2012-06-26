@@ -27,8 +27,13 @@ import com.propertyvista.onboarding.example.model.ResponseMessage;
 
 public class ExampleClient {
 
+    // env33
     //public static String serverUrl = "http://interfaces.birchwoodsoftwaregroup.com/onboarding";
 
+    // Production
+    //public static String serverUrl = "https://secure-interfaces.birchwoodsoftwaregroup.com/onboarding";
+
+    // env22
     //public static String serverUrl = "http://vista.22.birchwoodsoftwaregroup.com/public/onboarding";
 
     public static String serverUrl = "http://localhost:8888/vista/public/onboarding";
