@@ -54,49 +54,58 @@ public class TabListDropDown extends PopupPanel {
         super(true);
         this.trigger = trigger;
 
+        setStyleName(DefaultTabTheme.StyleName.TabList.name());
+
         itemsPanel = new FlowPanel();
         setWidget(itemsPanel);
+
     }
 
     public void showSelector() {
         itemsPanel.clear();
         List<Tab> allTabs = trigger.getAllTabs();
         for (final Tab tab : allTabs) {
+            if (!tab.isTabVisible()) {
+                continue;
+            }
             final Label item = new Label(tab.getTabTitle(), false);
             item.setStyleName(DefaultTabTheme.StyleName.TabListItem.name());
-
-            item.addDomHandler(new MouseOverHandler() {
-                @Override
-                public void onMouseOver(MouseOverEvent event) {
-                    item.addStyleDependentName(DefaultTabTheme.StyleDependent.hover.name());
-                }
-            }, MouseOverEvent.getType());
-
-            item.addDomHandler(new MouseOutHandler() {
-                @Override
-                public void onMouseOut(MouseOutEvent event) {
-                    item.removeStyleDependentName(DefaultTabTheme.StyleDependent.hover.name());
-                }
-            }, MouseOutEvent.getType());
 
             item.getElement().getStyle().setPadding(2, Unit.PX);
             item.getElement().getStyle().setPaddingLeft(4, Unit.PX);
             item.getElement().getStyle().setPaddingRight(4, Unit.PX);
-            if (tab.isSelected()) {
+            if (tab.isTabSelected()) {
                 item.getElement().getStyle().setFontWeight(FontWeight.BOLD);
             }
-            if (!tab.isTabVisible()) {
+            if (!tab.isTabExposed()) {
                 item.getElement().getStyle().setFontStyle(FontStyle.ITALIC);
             }
-            item.addClickHandler(new ClickHandler() {
+            if (tab.isTabEnabled()) {
+                item.addClickHandler(new ClickHandler() {
 
-                @Override
-                public void onClick(ClickEvent event) {
-                    trigger.selectTab(tab);
-                    hideSelector();
-                }
-            });
-            item.getElement().getStyle().setCursor(Cursor.POINTER);
+                    @Override
+                    public void onClick(ClickEvent event) {
+                        trigger.selectTab(tab);
+                        hideSelector();
+                    }
+                });
+                item.getElement().getStyle().setCursor(Cursor.POINTER);
+
+                item.addDomHandler(new MouseOverHandler() {
+                    @Override
+                    public void onMouseOver(MouseOverEvent event) {
+                        item.addStyleDependentName(DefaultTabTheme.StyleDependent.hover.name());
+                    }
+                }, MouseOverEvent.getType());
+
+                item.addDomHandler(new MouseOutHandler() {
+                    @Override
+                    public void onMouseOut(MouseOutEvent event) {
+                        item.removeStyleDependentName(DefaultTabTheme.StyleDependent.hover.name());
+                    }
+                }, MouseOutEvent.getType());
+
+            }
 
             itemsPanel.add(item);
         }

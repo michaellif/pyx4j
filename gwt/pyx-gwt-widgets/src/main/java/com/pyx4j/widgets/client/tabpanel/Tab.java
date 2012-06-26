@@ -32,7 +32,11 @@ public class Tab extends LayoutPanel {
 
     private TabPanel parentTabPanel;
 
-    private boolean modifyed;
+    private boolean enabled = true;
+
+    private boolean dirty = false;
+
+    private boolean visible = true;
 
     public Tab(ImageResource tabImage, boolean closable) {
         this(null, null, tabImage, closable);
@@ -63,32 +67,53 @@ public class Tab extends LayoutPanel {
         }
     }
 
-    public void setModifyed(boolean modifyed) {
-        this.modifyed = modifyed;
-        tabBarItem.onModifyed(modifyed);
+    public void setTabDirty(boolean dirty) {
+        this.dirty = dirty;
+        tabBarItem.onDirty(dirty);
         if (parentTabPanel != null) {
             parentTabPanel.getTabBar().layout();
         }
     }
 
-    public boolean isModifyed() {
-        return modifyed;
+    public boolean isTabDirty() {
+        return dirty;
     }
 
-    public void close() {
-        parentTabPanel.remove(this);
-    }
-
-    public void setSelected() {
-        parentTabPanel.selectTab(this);
-    }
-
-    public boolean isSelected() {
-        return this.equals(parentTabPanel.getTabBar().getSelectedTabBarItem());
+    public void setTabVisible(boolean visible) {
+        this.visible = visible;
+        tabBarItem.onVisible(visible);
+        if (parentTabPanel != null) {
+            parentTabPanel.getTabBar().layout();
+        }
     }
 
     public boolean isTabVisible() {
-        return parentTabPanel.getTabBar().isTabVisible(this);
+        return visible;
+    }
+
+    public void setTabEnabled(boolean enabled) {
+        this.enabled = enabled;
+        tabBarItem.onEnabled(enabled);
+    }
+
+    public boolean isTabEnabled() {
+        return enabled;
+    }
+
+    public void close() {
+        parentTabPanel.removeTab(this);
+    }
+
+    public void setTabSelected() {
+        parentTabPanel.selectTab(this);
+    }
+
+    public boolean isTabSelected() {
+        return this.equals(parentTabPanel.getSelectedTab());
+    }
+
+    public boolean isTabExposed() {
+        return parentTabPanel.getTabBar().isTabExposed(this);
     }
 
     protected void setParentTabPanel(TabPanel parentTabPanel) {

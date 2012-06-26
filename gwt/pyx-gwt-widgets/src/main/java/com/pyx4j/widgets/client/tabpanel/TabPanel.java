@@ -66,6 +66,8 @@ public class TabPanel extends ResizeComposite implements HasWidgets, ProvidesRes
 
     private EventBus eventBus;
 
+    private Tab selectedTab;
+
     public TabPanel(double barHeight, Unit barUnit) {
 
         LayoutPanel panel = new LayoutPanel();
@@ -88,18 +90,18 @@ public class TabPanel extends ResizeComposite implements HasWidgets, ProvidesRes
 
     }
 
-    public void add(Tab tab) {
-        insert(tab, tabs.size());
+    public void addTab(Tab tab) {
+        insertTab(tab, tabs.size());
     }
 
-    public void insert(Tab tab, int beforeIndex) {
+    public void insertTab(Tab tab, int beforeIndex) {
         tabBar.insert(tab.getTabBarItem(), beforeIndex);
         deckPanel.add(tab);
         tabs.put(tab.getTabBarItem(), tab);
         tab.setParentTabPanel(this);
     }
 
-    public boolean remove(Tab tab) {
+    public boolean removeTab(Tab tab) {
         if (!tabs.containsKey(tab.getTabBarItem())) {
             log.error("Tab can't be removed. TabPanel doesn't contain this Tab.");
             return false;
@@ -135,7 +137,7 @@ public class TabPanel extends ResizeComposite implements HasWidgets, ProvidesRes
 
     @Override
     public boolean remove(int index) {
-        return remove(tabs.get(index));
+        return removeTab(tabs.get(index));
     }
 
     @Override
@@ -144,12 +146,20 @@ public class TabPanel extends ResizeComposite implements HasWidgets, ProvidesRes
 
     }
 
-    public void enableTab(Tab tab, boolean enabled) {
-        tabBar.onTabEnabled(tab, enabled);
+    public void setTabEnabled(Tab tab, boolean enabled) {
+        tab.setTabEnabled(enabled);
     }
 
     public boolean isTabEnabled(Tab tab) {
-        return tab.getTabBarItem().isEnabled();
+        return tab.isTabEnabled();
+    }
+
+    public void setTabVisible(Tab tab, boolean visible) {
+        tab.setTabVisible(visible);
+    }
+
+    public boolean isTabVisible(Tab tab) {
+        return tab.isTabVisible();
     }
 
     public boolean selectTab(Tab tab) {
@@ -160,10 +170,13 @@ public class TabPanel extends ResizeComposite implements HasWidgets, ProvidesRes
             return false;
         }
 
-        deckPanel.showWidget(tab);
-        tabBar.onTabSelected(tab.getTabBarItem());
+        selectedTab = tab;
 
-        SelectionEvent.fire(this, tab);
+        deckPanel.showWidget(selectedTab);
+
+        tabBar.onTabSelected(selectedTab.getTabBarItem());
+
+        SelectionEvent.fire(this, selectedTab);
 
         return true;
     }
@@ -173,16 +186,11 @@ public class TabPanel extends ResizeComposite implements HasWidgets, ProvidesRes
     }
 
     public Tab getSelectedTab() {
-        return tabs.get(tabBar.getSelectedTabBarItem());
+        return selectedTab;
     }
 
     public int getSelectedIndex() {
-        return tabBar.getTabBarIndex(tabBar.getSelectedTabBarItem());
-    }
-
-    public void showTab(Tab tab, boolean show) {
-        // TODO Auto-generated method stub
-
+        return tabBar.getTabBarIndex(selectedTab.getTabBarItem());
     }
 
     public Collection<Tab> getTabs() {

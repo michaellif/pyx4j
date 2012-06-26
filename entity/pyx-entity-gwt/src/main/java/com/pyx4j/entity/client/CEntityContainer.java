@@ -61,9 +61,9 @@ public abstract class CEntityContainer<E extends IObject<?>> extends CContainer<
             asWidget();
             decorator = createDecorator();
             if (decorator == null) {
-                getWidget().setWidget(createContent());
+                getWidget().add(createContent());
             } else {
-                getWidget().setWidget(decorator);
+                getWidget().add(decorator);
                 decorator.setComponent(this);
             }
             addValidations();

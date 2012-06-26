@@ -37,7 +37,6 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 
-import com.pyx4j.commons.css.Selector;
 import com.pyx4j.widgets.client.ImageFactory;
 
 /**
@@ -48,7 +47,7 @@ public class TabBarItem extends HorizontalPanel {
 
     private final Label label;
 
-    private boolean modifyedMarker = false;
+    private boolean dirtyMarker = false;
 
     private final HTML leftSubpanel;
 
@@ -60,17 +59,12 @@ public class TabBarItem extends HorizontalPanel {
 
     private boolean selected;
 
-    private boolean enabled = true;
-
     public TabBarItem(final Tab tab, ImageResource tabImage, boolean closable) {
         super();
 
         this.tab = tab;
 
         sinkEvents(Event.ONCLICK);
-
-        getElement().getStyle().setProperty("display", "inline-block");
-        getElement().getStyle().setProperty("position", "relative");
 
         setStyleName(DefaultTabTheme.StyleName.TabBarItem.name());
 
@@ -143,8 +137,8 @@ public class TabBarItem extends HorizontalPanel {
 
             @Override
             public void onClick(ClickEvent event) {
-                if (enabled) {
-                    tab.setSelected();
+                if (tab.isTabEnabled()) {
+                    tab.setTabSelected();
                 }
             }
         }, ClickEvent.getType());
@@ -152,9 +146,8 @@ public class TabBarItem extends HorizontalPanel {
         addDomHandler(new MouseOverHandler() {
             @Override
             public void onMouseOver(MouseOverEvent event) {
-                if (!selected && enabled) {
-                    String dependentSuffix = Selector.getDependentName(DefaultTabTheme.StyleDependent.hover);
-                    addStyleDependentName(dependentSuffix);
+                if (!selected && tab.isTabEnabled()) {
+                    addStyleDependentName(DefaultTabTheme.StyleDependent.hover.name());
                 }
             }
         }, MouseOverEvent.getType());
@@ -162,8 +155,7 @@ public class TabBarItem extends HorizontalPanel {
         addDomHandler(new MouseOutHandler() {
             @Override
             public void onMouseOut(MouseOutEvent event) {
-                String dependentSuffix = Selector.getDependentName(DefaultTabTheme.StyleDependent.hover);
-                removeStyleDependentName(dependentSuffix);
+                removeStyleDependentName(DefaultTabTheme.StyleDependent.hover.name());
             }
         }, MouseOutEvent.getType());
 
@@ -175,12 +167,12 @@ public class TabBarItem extends HorizontalPanel {
 
     void onSelected(boolean selected) {
         this.selected = selected;
-        String dependentSuffix = Selector.getDependentName(DefaultTabTheme.StyleDependent.selected);
+        String dependentSuffix = DefaultTabTheme.StyleDependent.selected.name();
         if (selected) {
             addStyleDependentName(dependentSuffix);
             getWidget(0).addStyleDependentName(dependentSuffix);
             getWidget(1).addStyleDependentName(dependentSuffix);
-            removeStyleDependentName(Selector.getDependentName(DefaultTabTheme.StyleDependent.hover));
+            removeStyleDependentName(DefaultTabTheme.StyleDependent.hover.name());
         } else {
             removeStyleDependentName(dependentSuffix);
             getWidget(0).removeStyleDependentName(dependentSuffix);
@@ -189,8 +181,7 @@ public class TabBarItem extends HorizontalPanel {
     }
 
     void onEnabled(boolean enabled) {
-        this.enabled = enabled;
-        String dependentSuffix = Selector.getDependentName(DefaultTabTheme.StyleDependent.disabled);
+        String dependentSuffix = DefaultTabTheme.StyleDependent.disabled.name();
         if (!enabled) {
             addStyleDependentName(dependentSuffix);
             getWidget(0).addStyleDependentName(dependentSuffix);
@@ -202,23 +193,32 @@ public class TabBarItem extends HorizontalPanel {
         }
     }
 
-    public void onModifyed(boolean isModifyed) {
-        if (!modifyedMarker && isModifyed) {
+    public void onVisible(boolean visible) {
+        String dependentSuffix = DefaultTabTheme.StyleDependent.hidden.name();
+        if (!visible) {
+            addStyleDependentName(dependentSuffix);
+            getWidget(0).addStyleDependentName(dependentSuffix);
+            getWidget(1).addStyleDependentName(dependentSuffix);
+        } else {
+            removeStyleDependentName(dependentSuffix);
+            getWidget(0).removeStyleDependentName(dependentSuffix);
+            getWidget(1).removeStyleDependentName(dependentSuffix);
+        }
+    }
+
+    public void onDirty(boolean isDirty) {
+        if (!dirtyMarker && isDirty) {
             label.setText("*" + label.getText());
-            modifyedMarker = true;
-        } else if (modifyedMarker && !isModifyed) {
+            dirtyMarker = true;
+        } else if (dirtyMarker && !isDirty) {
             label.setText(label.getText().substring(1, label.getText().length()));
-            modifyedMarker = false;
+            dirtyMarker = false;
         }
 
     }
 
     public Tab getTab() {
         return tab;
-    }
-
-    public boolean isEnabled() {
-        return enabled;
     }
 
 }

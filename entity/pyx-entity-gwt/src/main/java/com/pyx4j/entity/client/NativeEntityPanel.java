@@ -20,7 +20,7 @@
  */
 package com.pyx4j.entity.client;
 
-import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.LayoutPanel;
 
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.entity.client.ui.folder.DefaultEntityFolderTheme;
@@ -29,7 +29,7 @@ import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.INativeComponent;
 
-public class NativeEntityPanel<E extends IObject<?>> extends SimplePanel implements INativeComponent<E> {
+public class NativeEntityPanel<E extends IObject<?>> extends LayoutPanel implements INativeComponent<E> {
 
     public NativeEntityPanel() {
     }

@@ -94,12 +94,12 @@ public abstract class CrudEntityForm<E extends IEntity> extends CEntityForm<E> {
         } else {
             tab = new Tab(content, tabTitle, null, false);
         }
-        tabPanel.add(tab);
+        tabPanel.addTab(tab);
         return tab;
     }
 
-    public void enableTab(Tab tab, boolean enabled) {
-        tabPanel.enableTab(tab, enabled);
+    public void setTabEnabled(Tab tab, boolean enabled) {
+        tabPanel.setTabEnabled(tab, enabled);
     }
 
     public boolean isTabEnabled(Tab tab) {
@@ -110,8 +110,8 @@ public abstract class CrudEntityForm<E extends IEntity> extends CEntityForm<E> {
         tabPanel.selectTab(tab);
     }
 
-    public void showTab(Tab tab, boolean show) {
-        tabPanel.showTab(tab, show);
+    public void setTabVisible(Tab tab, boolean show) {
+        tabPanel.setTabVisible(tab, show);
     }
 
     public void setParentView(IFormView<? extends IEntity> parentView) {

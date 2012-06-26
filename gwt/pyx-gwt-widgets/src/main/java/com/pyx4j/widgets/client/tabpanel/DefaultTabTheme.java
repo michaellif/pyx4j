@@ -33,7 +33,7 @@ public class DefaultTabTheme extends Theme {
     }
 
     public static enum StyleDependent implements IStyleDependent {
-        selected, disabled, hover
+        selected, disabled, hidden, hover
     }
 
     public DefaultTabTheme() {
@@ -53,6 +53,8 @@ public class DefaultTabTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", StyleName.TabBarItem);
+        style.addProperty("display", "inline-block");
+        style.addProperty("position", "relative");
         style.addProperty("cursor", "pointer");
         style.addProperty("cursor", "hand");
         style.addProperty("height", "100%");
@@ -87,6 +89,10 @@ public class DefaultTabTheme extends Theme {
         style.addProperty("cursor", "default");
         addStyle(style);
 
+        style = new Style(".", StyleName.TabBarItem, "-", StyleDependent.hidden);
+        style.addProperty("display", "none");
+        addStyle(style);
+
         style = new Style((IStyleName) StyleName.TabBarItemLabel);
         style.addProperty("margin", "3px");
         addStyle(style);
@@ -94,7 +100,7 @@ public class DefaultTabTheme extends Theme {
         style = new Style((IStyleName) StyleName.TabList);
         style.addProperty("background-color", "white");
         style.addProperty("border", "1px solid");
-        style.addProperty("border-color", ThemeColors.contrast1);
+        style.addProperty("border-color", ThemeColors.foreground, 0.6);
         addStyle(style);
 
         style = new Style((IStyleName) StyleName.TabListItem);
@@ -103,8 +109,8 @@ public class DefaultTabTheme extends Theme {
         addStyle(style);
 
         style = new Style(StyleName.TabListItem, StyleDependent.hover);
-        style.addProperty("background", ThemeColors.contrast1);
-        style.addProperty("color", ThemeColors.contrast1, 0.1);
+        style.addProperty("background", ThemeColors.foreground, 0.5);
+        style.addProperty("color", ThemeColors.foreground, 0);
         addStyle(style);
     }
 }

@@ -45,7 +45,7 @@ public abstract class CEntityViewer<E extends IObject<?>> extends CEntityContain
 
     protected void setContent(IsWidget widget) {
         asWidget();
-        getWidget().setWidget(widget);
+        getWidget().add(widget);
     }
 
     @Override
