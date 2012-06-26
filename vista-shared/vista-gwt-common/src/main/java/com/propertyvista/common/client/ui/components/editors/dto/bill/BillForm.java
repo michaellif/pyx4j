@@ -157,8 +157,6 @@ public class BillForm extends CEntityDecoratableForm<BillDTO> {
     }
 
     private void hideLines(InvoiceLineItemGroupDTO line, InvoiceLineItemGroupDTO line2) {
-        if (line.lineItems().isEmpty()) {
-            get(line2).setVisible(false);
-        }
+        get(line2).setVisible(!line.lineItems().isEmpty());
     }
 }
