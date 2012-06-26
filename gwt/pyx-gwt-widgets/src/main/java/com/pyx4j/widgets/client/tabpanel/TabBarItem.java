@@ -36,6 +36,7 @@ import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.widgets.client.ImageFactory;
 
@@ -55,9 +56,11 @@ public class TabBarItem extends HorizontalPanel {
 
     private Image icon;
 
+    private final SimplePanel warningImageHolder;
+
     private final Tab tab;
 
-    private boolean selected;
+    private boolean masked = false;
 
     public TabBarItem(final Tab tab, ImageResource tabImage, boolean closable) {
         super();
@@ -84,6 +87,11 @@ public class TabBarItem extends HorizontalPanel {
         label = new Label(tab.getTabTitle());
         label.setWordWrap(false);
         rightSubpanel.add(label);
+
+        warningImageHolder = new SimplePanel();
+
+        rightSubpanel.add(warningImageHolder);
+        rightSubpanel.setCellVerticalAlignment(warningImageHolder, HasVerticalAlignment.ALIGN_MIDDLE);
 
         if (closable) {
 
@@ -146,7 +154,7 @@ public class TabBarItem extends HorizontalPanel {
         addDomHandler(new MouseOverHandler() {
             @Override
             public void onMouseOver(MouseOverEvent event) {
-                if (!selected && tab.isTabEnabled()) {
+                if (!tab.isTabSelected() && tab.isTabEnabled()) {
                     addStyleDependentName(DefaultTabTheme.StyleDependent.hover.name());
                 }
             }
@@ -166,7 +174,6 @@ public class TabBarItem extends HorizontalPanel {
     }
 
     void onSelected(boolean selected) {
-        this.selected = selected;
         String dependentSuffix = DefaultTabTheme.StyleDependent.selected.name();
         if (selected) {
             addStyleDependentName(dependentSuffix);
@@ -197,12 +204,8 @@ public class TabBarItem extends HorizontalPanel {
         String dependentSuffix = DefaultTabTheme.StyleDependent.hidden.name();
         if (!visible) {
             addStyleDependentName(dependentSuffix);
-            getWidget(0).addStyleDependentName(dependentSuffix);
-            getWidget(1).addStyleDependentName(dependentSuffix);
         } else {
             removeStyleDependentName(dependentSuffix);
-            getWidget(0).removeStyleDependentName(dependentSuffix);
-            getWidget(1).removeStyleDependentName(dependentSuffix);
         }
     }
 
@@ -214,11 +217,38 @@ public class TabBarItem extends HorizontalPanel {
             label.setText(label.getText().substring(1, label.getText().length()));
             dirtyMarker = false;
         }
-
     }
 
     public Tab getTab() {
         return tab;
+    }
+
+    protected boolean isTabExposed() {
+        return (getTab().getTabPanel().getTabBar().getAbsoluteTop() - getAbsoluteTop() > -10);
+    }
+
+    private void setTabMasked(boolean masked) {
+        this.masked = masked;
+        String dependentSuffix = DefaultTabTheme.StyleDependent.masked.name();
+        if (masked) {
+            addStyleDependentName(dependentSuffix);
+        } else {
+            removeStyleDependentName(dependentSuffix);
+        }
+    }
+
+    private boolean isTabMasked() {
+        return masked;
+    }
+
+    void onWarning(String message) {
+        if (message == null) {
+            warningImageHolder.clear();
+        } else {
+            Image tabWarningImage = new Image(ImageFactory.getImages().tabWarning());
+            tabWarningImage.setTitle(message);
+            warningImageHolder.add(tabWarningImage);
+        }
     }
 
 }

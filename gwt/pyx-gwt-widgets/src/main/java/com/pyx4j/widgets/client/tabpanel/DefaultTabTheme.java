@@ -33,7 +33,7 @@ public class DefaultTabTheme extends Theme {
     }
 
     public static enum StyleDependent implements IStyleDependent {
-        selected, disabled, hidden, hover
+        selected, disabled, hidden, hover, masked
     }
 
     public DefaultTabTheme() {
@@ -90,6 +90,10 @@ public class DefaultTabTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", StyleName.TabBarItem, "-", StyleDependent.hidden);
+        style.addProperty("display", "none");
+        addStyle(style);
+
+        style = new Style(".", StyleName.TabBarItem, "-", StyleDependent.masked);
         style.addProperty("display", "none");
         addStyle(style);
 

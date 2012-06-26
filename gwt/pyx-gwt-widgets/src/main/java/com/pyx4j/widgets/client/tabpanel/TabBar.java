@@ -149,7 +149,7 @@ public class TabBar extends DockLayoutPanel {
     private void ensureTabListTriggerExposed() {
         boolean isTriggerVisible = false;
         for (int i = 0; i < tabsHolder.getWidgetCount(); i++) {
-            if (tabsHolder.getAbsoluteTop() - tabsHolder.getWidget(i).getAbsoluteTop() < -10) {
+            if (!((TabBarItem) tabsHolder.getWidget(i)).isTabExposed()) {
                 isTriggerVisible = true;
                 break;
             }
@@ -158,16 +158,10 @@ public class TabBar extends DockLayoutPanel {
     }
 
     private void ensureSelectedTabExposed() {
-//        if (selectedTabBarItem == null) {
-//            return;
-//        } else if (getAbsoluteTop() - selectedTabBarItem.getAbsoluteTop() >= -10) {
-//            return;
-//        } else {
-//            TabBarItem item = (TabBarItem) tabsHolder.getWidget(0);
-//            tabsHolder.remove(item);
-//            tabsHolder.add(item);
-//            ensureSelectedTabExposed();
-//        }
+        if (selectedTabBarItem == null) {
+            return;
+        }
+
     }
 
     public void layout() {
@@ -178,11 +172,6 @@ public class TabBar extends DockLayoutPanel {
                 ensureTabListTriggerExposed();
             }
         });
-    }
-
-    protected boolean isTabExposed(Tab tab) {
-        assert (tab != null);
-        return (getAbsoluteTop() - tab.getTabBarItem().getAbsoluteTop() > -10);
     }
 
     class TabListTrigger extends SimplePanel {

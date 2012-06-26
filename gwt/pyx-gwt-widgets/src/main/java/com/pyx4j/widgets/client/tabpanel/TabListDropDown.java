@@ -77,7 +77,7 @@ public class TabListDropDown extends PopupPanel {
             if (tab.isTabSelected()) {
                 item.getElement().getStyle().setFontWeight(FontWeight.BOLD);
             }
-            if (!tab.isTabExposed()) {
+            if (!tab.getTabBarItem().isTabExposed()) {
                 item.getElement().getStyle().setFontStyle(FontStyle.ITALIC);
             }
             if (tab.isTabEnabled()) {

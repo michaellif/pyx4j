@@ -98,7 +98,7 @@ public class TabPanel extends ResizeComposite implements HasWidgets, ProvidesRes
         tabBar.insert(tab.getTabBarItem(), beforeIndex);
         deckPanel.add(tab);
         tabs.put(tab.getTabBarItem(), tab);
-        tab.setParentTabPanel(this);
+        tab.setTabPanel(this);
     }
 
     public boolean removeTab(Tab tab) {
@@ -125,7 +125,7 @@ public class TabPanel extends ResizeComposite implements HasWidgets, ProvidesRes
         tabBar.remove(tab.getTabBarItem());
         deckPanel.remove(tab);
         tabs.remove(tab.getTabBarItem());
-        tab.setParentTabPanel(null);
+        tab.setTabPanel(null);
         if (deckPanel.getWidgetCount() == 0) {
             deckPanel.removeStyleName(DefaultTabTheme.StyleName.TabDeckPanel.name());
         }

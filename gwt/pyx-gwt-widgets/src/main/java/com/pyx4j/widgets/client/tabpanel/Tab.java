@@ -30,13 +30,15 @@ public class Tab extends LayoutPanel {
 
     private final TabBarItem tabBarItem;
 
-    private TabPanel parentTabPanel;
+    private TabPanel tabPanel;
 
     private boolean enabled = true;
 
     private boolean dirty = false;
 
     private boolean visible = true;
+
+    private String warning = null;
 
     public Tab(ImageResource tabImage, boolean closable) {
         this(null, null, tabImage, closable);
@@ -62,16 +64,16 @@ public class Tab extends LayoutPanel {
     public void setTabTitle(String tabTitle) {
         this.tabTitle = tabTitle;
         tabBarItem.onTabTitleChange(tabTitle);
-        if (parentTabPanel != null) {
-            parentTabPanel.getTabBar().layout();
+        if (tabPanel != null) {
+            tabPanel.getTabBar().layout();
         }
     }
 
     public void setTabDirty(boolean dirty) {
         this.dirty = dirty;
         tabBarItem.onDirty(dirty);
-        if (parentTabPanel != null) {
-            parentTabPanel.getTabBar().layout();
+        if (tabPanel != null) {
+            tabPanel.getTabBar().layout();
         }
     }
 
@@ -82,8 +84,8 @@ public class Tab extends LayoutPanel {
     public void setTabVisible(boolean visible) {
         this.visible = visible;
         tabBarItem.onVisible(visible);
-        if (parentTabPanel != null) {
-            parentTabPanel.getTabBar().layout();
+        if (tabPanel != null) {
+            tabPanel.getTabBar().layout();
         }
     }
 
@@ -100,24 +102,29 @@ public class Tab extends LayoutPanel {
         return enabled;
     }
 
+    public void setTabWarning(String message) {
+        this.warning = message;
+        tabBarItem.onWarning(message);
+    }
+
     public void close() {
-        parentTabPanel.removeTab(this);
+        tabPanel.removeTab(this);
     }
 
     public void setTabSelected() {
-        parentTabPanel.selectTab(this);
+        tabPanel.selectTab(this);
     }
 
     public boolean isTabSelected() {
-        return this.equals(parentTabPanel.getSelectedTab());
+        return this.equals(tabPanel.getSelectedTab());
     }
 
-    public boolean isTabExposed() {
-        return parentTabPanel.getTabBar().isTabExposed(this);
+    protected void setTabPanel(TabPanel tabPanel) {
+        this.tabPanel = tabPanel;
     }
 
-    protected void setParentTabPanel(TabPanel parentTabPanel) {
-        this.parentTabPanel = parentTabPanel;
+    protected TabPanel getTabPanel() {
+        return tabPanel;
     }
 
     protected TabBarItem getTabBarItem() {
