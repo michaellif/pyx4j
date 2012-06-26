@@ -16,6 +16,8 @@ package com.propertyvista.biz.validation;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.biz.validation.framework.ValidationFailure;
+
 public class NotNullValidationFailure implements ValidationFailure {
 
     private static final I18n i18n = I18n.get(NotNullValidationFailure.class);
@@ -30,4 +32,11 @@ public class NotNullValidationFailure implements ValidationFailure {
     public String getMessage() {
         return i18n.tr("{0} is mandatory", member.getMeta().getCaption());
     }
+
+    @Override
+    public IObject getProperty() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
 }

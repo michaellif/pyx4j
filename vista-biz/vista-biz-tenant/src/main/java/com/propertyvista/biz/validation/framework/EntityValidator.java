@@ -7,28 +7,16 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jun 25, 2012
+ * Created on Jun 26, 2012
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.biz.validation;
+package com.propertyvista.biz.validation.framework;
 
-import com.pyx4j.entity.shared.IObject;
+import java.util.Map;
 
-import com.propertyvista.biz.validation.framework.ValidationFailure;
+import com.pyx4j.entity.shared.IEntity;
 
-public class LengthValidationFailure implements ValidationFailure {
-
-    @Override
-    public String getMessage() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public IObject getProperty() {
-        // TODO Auto-generated method stub
-        return null;
-    }
+public interface EntityValidator<E extends IEntity> extends Validator<Map<String, Object>, E> {
 
 }

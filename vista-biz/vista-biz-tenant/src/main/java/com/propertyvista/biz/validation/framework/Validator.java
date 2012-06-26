@@ -7,14 +7,18 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jun 25, 2012
+ * Created on Jun 26, 2012
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.biz.validation;
+package com.propertyvista.biz.validation.framework;
 
-public interface ValidationFailure {
+import java.util.Set;
 
-    String getMessage();
+import com.pyx4j.entity.shared.IObject;
+
+public interface Validator<T, O extends IObject<T>> {
+
+    Set<ValidationFailure<?>> validate(O obj);
 
 }

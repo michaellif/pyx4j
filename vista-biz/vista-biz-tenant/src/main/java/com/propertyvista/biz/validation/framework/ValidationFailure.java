@@ -11,24 +11,14 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.biz.validation;
+package com.propertyvista.biz.validation.framework;
 
 import com.pyx4j.entity.shared.IObject;
 
-import com.propertyvista.biz.validation.framework.ValidationFailure;
+public interface ValidationFailure<T> {
 
-public class LengthValidationFailure implements ValidationFailure {
+    String getMessage();
 
-    @Override
-    public String getMessage() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public IObject getProperty() {
-        // TODO Auto-generated method stub
-        return null;
-    }
+    IObject<T> getProperty();
 
 }

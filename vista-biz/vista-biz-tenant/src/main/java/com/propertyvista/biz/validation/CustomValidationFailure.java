@@ -13,6 +13,10 @@
  */
 package com.propertyvista.biz.validation;
 
+import com.pyx4j.entity.shared.IObject;
+
+import com.propertyvista.biz.validation.framework.ValidationFailure;
+
 public class CustomValidationFailure implements ValidationFailure {
 
     private final String message;
@@ -24,6 +28,12 @@ public class CustomValidationFailure implements ValidationFailure {
     @Override
     public String getMessage() {
         return message;
+    }
+
+    @Override
+    public IObject getProperty() {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 }

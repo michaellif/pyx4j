@@ -27,6 +27,7 @@ import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.entity.shared.utils.EntityGraph.ApplyMethod;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.biz.validation.framework.ValidationFailure;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant.Role;

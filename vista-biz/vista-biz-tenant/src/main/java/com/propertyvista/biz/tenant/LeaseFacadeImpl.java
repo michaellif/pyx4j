@@ -37,7 +37,7 @@ import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.biz.occupancy.UnitTurnoverAnalysisFacade;
 import com.propertyvista.biz.policy.IdAssignmentFacade;
 import com.propertyvista.biz.validation.LeaseValidator;
-import com.propertyvista.biz.validation.ValidationFailure;
+import com.propertyvista.biz.validation.framework.ValidationFailure;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.offering.Feature;
