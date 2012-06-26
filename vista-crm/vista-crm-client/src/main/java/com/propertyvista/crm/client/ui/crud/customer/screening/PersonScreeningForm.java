@@ -15,7 +15,6 @@ package com.propertyvista.crm.client.ui.crud.customer.screening;
 
 import java.util.Date;
 
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.Widget;
@@ -33,13 +32,11 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
 import com.propertyvista.common.client.ui.components.IdUploaderFolder;
-import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.common.client.ui.components.editors.PriorAddressEditor;
 import com.propertyvista.common.client.ui.components.folders.PersonalAssetFolder;
 import com.propertyvista.common.client.ui.components.folders.PersonalIncomeFolder;
 import com.propertyvista.common.client.ui.validators.FutureDateValidation;
 import com.propertyvista.common.client.ui.validators.PastDateValidation;
-import com.propertyvista.crm.client.themes.CrmTheme;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.domain.tenant.PersonScreening;
@@ -48,8 +45,6 @@ import com.propertyvista.misc.BusinessRules;
 public class PersonScreeningForm extends CrmEntityForm<PersonScreening> {
 
     private static final I18n i18n = I18n.get(PersonScreeningForm.class);
-
-    private final VistaTabLayoutPanel tabPanel = new VistaTabLayoutPanel(CrmTheme.defaultTabHeight, Unit.EM);
 
     private final FormFlexPanel previousAddress = new FormFlexPanel() {
         @Override
@@ -80,16 +75,6 @@ public class PersonScreeningForm extends CrmEntityForm<PersonScreening> {
         addTab(createIncomesTab(), i18n.tr("Incomes"));
         addTab(createAssetsTab(), i18n.tr("Assets"));
 
-    }
-
-    @Override
-    public void setActiveTab(int index) {
-        tabPanel.selectTab(index);
-    }
-
-    @Override
-    public int getActiveTab() {
-        return tabPanel.getSelectedIndex();
     }
 
     @Override

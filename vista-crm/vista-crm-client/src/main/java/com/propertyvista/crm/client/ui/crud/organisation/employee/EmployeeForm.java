@@ -13,7 +13,6 @@
  */
 package com.propertyvista.crm.client.ui.crud.organisation.employee;
 
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.EqualsHelper;
@@ -27,11 +26,9 @@ import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
-import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.common.client.ui.components.editors.NameEditor;
 import com.propertyvista.common.client.ui.components.security.UserAuditingConfigurationForm;
 import com.propertyvista.common.client.ui.validators.PastDateValidation;
-import com.propertyvista.crm.client.themes.CrmTheme;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.crud.organisation.employee.EmployeeFolder.ParentEmployeeGetter;
 import com.propertyvista.crm.rpc.dto.company.EmployeeDTO;
@@ -40,8 +37,6 @@ import com.propertyvista.domain.security.VistaCrmBehavior;
 public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
 
     private static final I18n i18n = I18n.get(EmployeeForm.class);
-
-    private final VistaTabLayoutPanel tabPanel = new VistaTabLayoutPanel(CrmTheme.defaultTabHeight, Unit.EM);
 
     public EmployeeForm() {
         this(false);
@@ -119,16 +114,6 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
         tabContent.setWidget(++row, 0, inject(proto().userAuditingConfiguration(), new UserAuditingConfigurationForm()));
 
         return tabContent;
-    }
-
-    @Override
-    public void setActiveTab(int index) {
-        tabPanel.selectTab(index);
-    }
-
-    @Override
-    public int getActiveTab() {
-        return tabPanel.getSelectedIndex();
     }
 
     private Widget createPrivilegesTab() {

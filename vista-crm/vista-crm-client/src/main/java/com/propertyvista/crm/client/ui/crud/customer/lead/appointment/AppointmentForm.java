@@ -13,23 +13,18 @@
  */
 package com.propertyvista.crm.client.ui.crud.customer.lead.appointment;
 
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
-import com.propertyvista.crm.client.themes.CrmTheme;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.tenant.lead.Appointment;
 
 public class AppointmentForm extends CrmEntityForm<Appointment> {
 
     private static final I18n i18n = I18n.get(AppointmentForm.class);
-
-    private final VistaTabLayoutPanel tabPanel = new VistaTabLayoutPanel(CrmTheme.defaultTabHeight, Unit.EM);
 
     public AppointmentForm() {
         this(false);
@@ -46,16 +41,6 @@ public class AppointmentForm extends CrmEntityForm<Appointment> {
 
         setTabEnabled(addTab(createShowingsTab(), i18n.tr("Showings")), !isEditable());
 
-    }
-
-    @Override
-    public void setActiveTab(int index) {
-        tabPanel.selectTab(index);
-    }
-
-    @Override
-    public int getActiveTab() {
-        return tabPanel.getSelectedIndex();
     }
 
     private Widget createGeneralTab() {

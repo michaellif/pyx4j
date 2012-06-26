@@ -13,7 +13,6 @@
  */
 package com.propertyvista.crm.client.ui.crud.maintenance;
 
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -30,8 +29,6 @@ import com.pyx4j.site.client.ui.crud.misc.CEntitySelectorHyperlink;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.common.client.ui.components.IssueClassificationChoice;
-import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
-import com.propertyvista.crm.client.themes.CrmTheme;
 import com.propertyvista.crm.client.ui.components.boxes.TenantSelectorDialog;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.maintenance.IssueClassification;
@@ -45,8 +42,6 @@ import com.propertyvista.dto.MaintenanceRequestDTO;
 public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO> {
 
     private static final I18n i18n = I18n.get(MaintenanceRequestForm.class);
-
-    private final VistaTabLayoutPanel tabPanel = new VistaTabLayoutPanel(CrmTheme.defaultTabHeight, Unit.EM);
 
     private final FormFlexPanel statusPanel = new FormFlexPanel();
 
@@ -72,16 +67,6 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
     public void createTabs() {
         selectTab(addTab(createGeneralTab(), i18n.tr("General")));
 
-    }
-
-    @Override
-    public void setActiveTab(int index) {
-        tabPanel.selectTab(index);
-    }
-
-    @Override
-    public int getActiveTab() {
-        return tabPanel.getSelectedIndex();
     }
 
     private Widget createGeneralTab() {

@@ -13,7 +13,6 @@
  */
 package com.propertyvista.crm.client.ui.crud.building.catalog.service;
 
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.forms.client.ui.CLabel;
@@ -21,16 +20,12 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
-import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
-import com.propertyvista.crm.client.themes.CrmTheme;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.financial.offering.Service;
 
 public class ServiceForm extends CrmEntityForm<Service> {
 
     private static final I18n i18n = I18n.get(ServiceForm.class);
-
-    private final VistaTabLayoutPanel tabPanel = new VistaTabLayoutPanel(CrmTheme.defaultTabHeight, Unit.EM);
 
     public ServiceForm() {
         this(false);
@@ -48,16 +43,6 @@ public class ServiceForm extends CrmEntityForm<Service> {
 
         addTab(createEligibilityTab(), i18n.tr("Eligibility"));
 
-    }
-
-    @Override
-    public void setActiveTab(int index) {
-        tabPanel.selectTab(index);
-    }
-
-    @Override
-    public int getActiveTab() {
-        return tabPanel.getSelectedIndex();
     }
 
     public Widget createGeneralTab() {

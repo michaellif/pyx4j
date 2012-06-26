@@ -15,7 +15,6 @@ package com.propertyvista.crm.client.ui.crud.customer.tenant;
 
 import java.util.List;
 
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -30,11 +29,9 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
-import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 import com.propertyvista.common.client.ui.components.editors.NameEditor;
 import com.propertyvista.common.client.ui.components.folders.EmergencyContactFolder;
 import com.propertyvista.common.client.ui.validators.PastDateValidation;
-import com.propertyvista.crm.client.themes.CrmTheme;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.crud.customer.common.PaymentMethodFolder;
 import com.propertyvista.crm.client.ui.crud.lease.common.CLeaseVHyperlink;
@@ -46,8 +43,6 @@ import com.propertyvista.dto.TenantDTO;
 public class TenantForm extends CrmEntityForm<TenantDTO> {
 
     private static final I18n i18n = I18n.get(TenantForm.class);
-
-    private final VistaTabLayoutPanel tabPanel = new VistaTabLayoutPanel(CrmTheme.defaultTabHeight, Unit.EM);
 
     public TenantForm() {
         this(false);
@@ -76,16 +71,6 @@ public class TenantForm extends CrmEntityForm<TenantDTO> {
     protected void onPopulate() {
         super.onPopulate();
         get(proto().customer().person().email()).setMandatory(!getValue().customer().user().isNull());
-    }
-
-    @Override
-    public void setActiveTab(int index) {
-        tabPanel.selectTab(index);
-    }
-
-    @Override
-    public int getActiveTab() {
-        return tabPanel.getSelectedIndex();
     }
 
     private Widget createDetailsTab() {

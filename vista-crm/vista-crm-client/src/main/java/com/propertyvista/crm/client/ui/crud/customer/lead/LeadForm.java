@@ -18,7 +18,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -36,8 +35,6 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
 import com.propertyvista.common.client.policy.ClientPolicyManager;
-import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
-import com.propertyvista.crm.client.themes.CrmTheme;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.crud.lease.common.CLeaseHyperlink;
 import com.propertyvista.crm.rpc.services.selections.SelectFloorplanListService;
@@ -52,8 +49,6 @@ import com.propertyvista.domain.tenant.lease.Lease;
 public class LeadForm extends CrmEntityForm<Lead> {
 
     private static final I18n i18n = I18n.get(LeadForm.class);
-
-    private final VistaTabLayoutPanel tabPanel = new VistaTabLayoutPanel(CrmTheme.defaultTabHeight, Unit.EM);
 
     public LeadForm() {
         this(false);
@@ -74,16 +69,6 @@ public class LeadForm extends CrmEntityForm<Lead> {
         tab = addTab(createAppointmentsTab(), i18n.tr("Appointments"));
         setTabEnabled(tab, !isEditable());
 
-    }
-
-    @Override
-    public void setActiveTab(int index) {
-        tabPanel.selectTab(index);
-    }
-
-    @Override
-    public int getActiveTab() {
-        return tabPanel.getSelectedIndex();
     }
 
     private Widget createGuestsTab() {
