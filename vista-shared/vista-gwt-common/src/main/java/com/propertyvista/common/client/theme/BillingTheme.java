@@ -20,7 +20,20 @@ import com.pyx4j.commons.css.Theme;
 public class BillingTheme extends Theme {
 
     public static enum StyleName implements IStyleName {
-        BillingLineItem, BillingLineItemTitle, BillingLineItemAmount, BillingDetailItem, BillingDetailItemTitle, BillingDetailItemAmount, BillingDetailTotal, BillingDetailTotalAmount
+        //@formatter:off
+        BillingLineItem, 
+        BillingLineItemTitle, 
+        BillingLineItemAmount, 
+        
+        BillingDetailItem, 
+        BillingDetailItemDate, 
+        BillingDetailItemTitle, 
+        BillingDetailItemAmount, 
+        
+        BillingDetailTotal, 
+        BillingDetailTotalTitle, 
+        BillingDetailTotalAmount
+        //@formatter:on
     }
 
     public BillingTheme() {
@@ -29,38 +42,52 @@ public class BillingTheme extends Theme {
         style.addProperty("font-weight", "bold");
         addStyle(style);
 
-        style = new Style(".", StyleName.BillingLineItemAmount);
-        style.addProperty("color", "#666666");
-        style.addProperty("text-align", "right");
-//        style.addProperty("font-style", "normal");
+        style = new Style(".", StyleName.BillingLineItemTitle);
         addStyle(style);
 
+        style = new Style(".", StyleName.BillingLineItemAmount);
+        style.addProperty("color", "#666666");
+        style.addProperty("font-style", "normal");
+        style.addProperty("text-align", "right");
+        addStyle(style);
+        // ----------------------------------------------------
         style = new Style(".", StyleName.BillingDetailItem);
-        style.addProperty("margin", "99px");
         style.addProperty("color", "#B3B3B3");
         style.addProperty("font-style", "italic");
+        style.addProperty("text-align", "left");
+        addStyle(style);
+
+        style = new Style(".", StyleName.BillingDetailItemDate);
+        style.addProperty("padding-right", "1em");
         style.addProperty("text-align", "center");
         addStyle(style);
 
-        style = new Style(".", StyleName.BillingDetailItemAmount);
-        style.addProperty("text-align", "right");
-        style.addProperty("color", "#666666");
-        style.addProperty("font-weight", "bold");
-//        style.addProperty("font-style", "normal");
+        style = new Style(".", StyleName.BillingDetailItemTitle);
         addStyle(style);
 
+        style = new Style(".", StyleName.BillingDetailItemAmount);
+        style.addProperty("color", "#666666");
+//        style.addProperty("font-weight", "bold");
+//        style.addProperty("font-style", "normal");
+        style.addProperty("text-align", "right");
+        addStyle(style);
+        // ----------------------------------------------------
         style = new Style(".", StyleName.BillingDetailTotal);
-        style.addProperty("font-size", "12px");
         style.addProperty("color", "#B3B3B3");
+        style.addProperty("font-size", "12px");
         style.addProperty("font-weight", "bold");
+        style.addProperty("text-align", "left");
+        addStyle(style);
+
+        style = new Style(".", StyleName.BillingDetailTotalTitle);
         addStyle(style);
 
         style = new Style(".", StyleName.BillingDetailTotalAmount);
         style.addProperty("color", "#666666");
         style.addProperty("border-top", "1px solid black");
         style.addProperty("padding-top", "4px");
-        style.addProperty("text-align", "right");
         style.addProperty("font-style", "normal");
+        style.addProperty("text-align", "right");
         addStyle(style);
     }
 }

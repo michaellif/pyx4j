@@ -32,24 +32,46 @@ public class LineItemCollapsableViewer extends CEntityCollapsableViewer<InvoiceL
 
     public LineItemCollapsableViewer() {
         super(VistaImages.INSTANCE);
+        setWidth("46em");
+    }
+
+    @Override
+    public IsWidget createCollapsedContent(InvoiceLineItemGroupDTO value) {
+        FlexTable content = new FlexTable();
+
+        content.getColumnFormatter().setWidth(0, "80%"); //overrides FlexTable's width auto-management for cells
+        content.getColumnFormatter().setWidth(2, "20%");
+
+        int row = 0;
+        if (value != null && !value.total().isNull()) {
+            content.getFlexCellFormatter().setColSpan(row, 0, 2);
+            content.setWidget(row, 0, new HTML(value.getMeta().getCaption()));
+            content.setWidget(row, 2, new HTML(value.total().getStringView()));
+            // styling:
+            content.getRowFormatter().setStyleName(row, BillingTheme.StyleName.BillingLineItem.name());
+            content.getFlexCellFormatter().setStyleName(row, 0, BillingTheme.StyleName.BillingLineItemTitle.name());
+            content.getFlexCellFormatter().setStyleName(row, 2, BillingTheme.StyleName.BillingLineItemAmount.name());
+        }
+
+        content.setWidth("100%");
+        return content;
     }
 
     @Override
     public IsWidget createExpandedContent(InvoiceLineItemGroupDTO value) {
         FlexTable content = new FlexTable();
-        // details
-        content.setWidth("100%");
-        content.getColumnFormatter().setWidth(0, "750px"); //overrides FlexTable's width auto-management for cells
-        content.getColumnFormatter().setWidth(1, "400px");
+
+        content.getColumnFormatter().setWidth(0, "40%"); //overrides FlexTable's width auto-management for cells
+        content.getColumnFormatter().setWidth(1, "40%");
         content.getColumnFormatter().setWidth(2, "20%");
-        content.getElement().getStyle().setProperty("textAlign", "left");
+
         int row = 0;
         if (value != null && !value.total().isNull()) {
-            HTML caption = new HTML(value.getMeta().getCaption());
-            caption.setStyleName(BillingTheme.StyleName.BillingLineItemTitle.name());
+            content.setWidget(row, 0, new HTML(value.getMeta().getCaption()));
+            // styling:
             content.getRowFormatter().setStyleName(row, BillingTheme.StyleName.BillingLineItem.name());
-            content.getFlexCellFormatter().setColSpan(row, 0, 2);
-            content.setWidget(row, 0, caption);
+            content.getFlexCellFormatter().setStyleName(row, 0, BillingTheme.StyleName.BillingLineItemTitle.name());
+
             row++;
             if (value.lineItems() != null && value.lineItems().size() > 0) {
                 for (InvoiceLineItem item : value.lineItems()) {
@@ -77,27 +99,8 @@ public class LineItemCollapsableViewer extends CEntityCollapsableViewer<InvoiceL
             }
             addTotalRecord(content, row++, value.getMeta().getCaption(), value.total().getStringView());
         }
-        return content;
-    }
 
-    @Override
-    public IsWidget createCollapsedContent(InvoiceLineItemGroupDTO value) {
-        FlexTable content = new FlexTable();
-        // details
         content.setWidth("100%");
-        content.getColumnFormatter().setWidth(0, "80%"); //overrides FlexTable's width auto-management for cells
-        content.getColumnFormatter().setWidth(2, "20%");
-        int row = 0;
-        if (value != null && !value.total().isNull()) {
-            HTML caption = new HTML(value.getMeta().getCaption());
-            caption.setStyleName(BillingTheme.StyleName.BillingLineItemTitle.name());
-            HTML amount = new HTML(value.total().getStringView());
-            amount.setStyleName(BillingTheme.StyleName.BillingLineItemAmount.name());
-            content.getRowFormatter().setStyleName(row, BillingTheme.StyleName.BillingLineItem.name());
-            content.getFlexCellFormatter().setColSpan(row, 0, 2);
-            content.setWidget(row, 0, caption);
-            content.setWidget(row, 2, amount);
-        }
         return content;
     }
 
@@ -105,19 +108,20 @@ public class LineItemCollapsableViewer extends CEntityCollapsableViewer<InvoiceL
         table.setHTML(row, 0, date);
         table.setHTML(row, 1, description);
         table.setHTML(row, 2, amount);
-        table.getFlexCellFormatter().setStyleName(row, 2, BillingTheme.StyleName.BillingDetailItemAmount.name());
+        // styling:
         table.getRowFormatter().setStyleName(row, BillingTheme.StyleName.BillingDetailItem.name());
+        table.getFlexCellFormatter().setStyleName(row, 0, BillingTheme.StyleName.BillingDetailItemDate.name());
+        table.getFlexCellFormatter().setStyleName(row, 1, BillingTheme.StyleName.BillingDetailItemTitle.name());
+        table.getFlexCellFormatter().setStyleName(row, 2, BillingTheme.StyleName.BillingDetailItemAmount.name());
     }
 
     private void addTotalRecord(FlexTable table, int row, String description, String amount) {
-        HTML descHtml = new HTML(description);
-        descHtml.getElement().getStyle().setProperty("fontSize", "12px");
-        descHtml.getElement().getStyle().setProperty("fontWeight", "bold");
-        table.setWidget(row, 1, descHtml);
-        HTML amountHtml = new HTML(amount);
-        amountHtml.setStyleName(BillingTheme.StyleName.BillingDetailTotalAmount.name());
-        amountHtml.getElement().getStyle().setProperty("fontWeight", "bold");
-        table.setWidget(row, 2, amountHtml);
+        table.setHTML(row, 1, description);
+        table.setHTML(row, 2, amount);
+        // styling:
         table.getRowFormatter().setStyleName(row, BillingTheme.StyleName.BillingDetailTotal.name());
+        table.getFlexCellFormatter().setStyleName(row, 1, BillingTheme.StyleName.BillingDetailTotalTitle.name());
+        table.getFlexCellFormatter().setStyleName(row, 2, BillingTheme.StyleName.BillingDetailTotalAmount.name());
+
     }
 }
