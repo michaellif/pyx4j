@@ -223,7 +223,17 @@ public class TabBarItem extends HorizontalPanel {
         return tab;
     }
 
-    protected boolean isTabExposed() {
+    void onWarning(String message) {
+        if (message == null) {
+            warningImageHolder.clear();
+        } else {
+            Image tabWarningImage = new Image(ImageFactory.getImages().tabWarning());
+            tabWarningImage.setTitle(message);
+            warningImageHolder.add(tabWarningImage);
+        }
+    }
+
+    boolean isTabExposed() {
         return (getTab().getTabPanel().getTabBar().getAbsoluteTop() - getAbsoluteTop() > -10);
     }
 
@@ -239,16 +249,6 @@ public class TabBarItem extends HorizontalPanel {
 
     private boolean isTabMasked() {
         return masked;
-    }
-
-    void onWarning(String message) {
-        if (message == null) {
-            warningImageHolder.clear();
-        } else {
-            Image tabWarningImage = new Image(ImageFactory.getImages().tabWarning());
-            tabWarningImage.setTitle(message);
-            warningImageHolder.add(tabWarningImage);
-        }
     }
 
 }
