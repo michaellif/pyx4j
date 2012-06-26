@@ -134,7 +134,7 @@ public abstract class CPolymorphicEntityEditor<E extends IEntity> extends CEntit
 
         asWidget();
 
-        getWidget().add(decorator);
+        getWidget().setWidget(decorator);
 
         decorator.setEditor(this);
 

@@ -20,7 +20,9 @@
  */
 package com.pyx4j.entity.client;
 
-import com.google.gwt.user.client.ui.LayoutPanel;
+import com.google.gwt.user.client.ui.ProvidesResize;
+import com.google.gwt.user.client.ui.RequiresResize;
+import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.entity.client.ui.folder.DefaultEntityFolderTheme;
@@ -29,7 +31,7 @@ import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.INativeComponent;
 
-public class NativeEntityPanel<E extends IObject<?>> extends LayoutPanel implements INativeComponent<E> {
+public class NativeEntityPanel<E extends IObject<?>> extends SimplePanel implements INativeComponent<E>, RequiresResize, ProvidesResize {
 
     public NativeEntityPanel() {
     }
@@ -42,6 +44,13 @@ public class NativeEntityPanel<E extends IObject<?>> extends LayoutPanel impleme
     @Override
     public CComponent<?, ?> getCComponent() {
         return null;
+    }
+
+    @Override
+    public void onResize() {
+        if (getWidget() instanceof RequiresResize) {
+            ((RequiresResize) getWidget()).onResize();
+        }
     }
 
     @Override
