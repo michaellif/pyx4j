@@ -41,6 +41,8 @@ public abstract class CrudEntityForm<E extends IEntity> extends CEntityForm<E> {
 
     private TabPanel tabPanel;
 
+    private double tabHeight;
+
     public CrudEntityForm(Class<E> rootClass, double tabHeight) {
         this(rootClass, null, false, tabHeight);
     }
@@ -55,8 +57,7 @@ public abstract class CrudEntityForm<E extends IEntity> extends CEntityForm<E> {
 
     public CrudEntityForm(Class<E> rootClass, IEditableComponentFactory factory, boolean viewMode, double tabHeight) {
         super(rootClass, factory);
-        tabPanel = new TabPanel(tabHeight, Unit.EM);
-        tabPanel.setSize("100%", "100%");
+        this.tabHeight = tabHeight;
 
         if (viewMode) {
             setEditable(false);
@@ -71,6 +72,8 @@ public abstract class CrudEntityForm<E extends IEntity> extends CEntityForm<E> {
 
     @Override
     public IsWidget createContent() {
+        tabPanel = new TabPanel(tabHeight, Unit.EM);
+        tabPanel.setSize("100%", "100%");
 
         createTabs();
 
