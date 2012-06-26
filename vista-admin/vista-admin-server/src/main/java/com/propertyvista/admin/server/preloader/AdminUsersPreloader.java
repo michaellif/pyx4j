@@ -13,6 +13,9 @@
  */
 package com.propertyvista.admin.server.preloader;
 
+import org.apache.commons.lang.RandomStringUtils;
+import org.apache.commons.lang.math.RandomUtils;
+
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
@@ -57,12 +60,20 @@ class AdminUsersPreloader extends AbstractDataPreloader {
             }
         }
         cnt += 4;
-        createAdminUser("PropertyVista Support", "support@propertyvista.com", "support@propertyvista.com", VistaAdminBehavior.SystemAdmin);
-        createAdminUser("VladS", "vlads@propertyvista.com", "vlads@propertyvista.com", VistaAdminBehavior.SystemAdmin);
-        createAdminUser("VictorV", "vvassiliev@propertyvista.com", "vvassiliev@propertyvista.com", VistaAdminBehavior.SystemAdmin);
+        createAdminUser("PropertyVista Support", "support@propertyvista.com", rnd4prod("support@propertyvista.com"), VistaAdminBehavior.SystemAdmin);
+        createAdminUser("VladS", "vlads@propertyvista.com", rnd4prod("vlads@propertyvista.com"), VistaAdminBehavior.SystemAdmin);
+        createAdminUser("VictorV", "vvassiliev@propertyvista.com", rnd4prod("vvassiliev@propertyvista.com"), VistaAdminBehavior.SystemAdmin);
         createAdminUser("Onboarding API", "romans@rossul.com", "secret", VistaAdminBehavior.OnboardingApi);
 
         return "Created " + cnt + " Admin Users";
+    }
+
+    private String rnd4prod(String string) {
+        if (ApplicationMode.isDevelopment()) {
+            return string;
+        } else {
+            return RandomStringUtils.randomAlphanumeric(RandomUtils.nextInt(14) + 4);
+        }
     }
 
     @Override

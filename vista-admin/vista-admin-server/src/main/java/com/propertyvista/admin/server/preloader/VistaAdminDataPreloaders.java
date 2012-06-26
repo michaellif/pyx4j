@@ -23,10 +23,10 @@ public class VistaAdminDataPreloaders extends DataPreloaderCollection {
 
     public VistaAdminDataPreloaders() {
         add(new AdminUsersPreloader());
-        add(new OnboardingUserPreloader());
-        add(new OnboardingPmcPreloader());
         add(new TriggerPreloader());
         if (ApplicationMode.isDevelopment()) {
+            add(new OnboardingUserPreloader());
+            add(new OnboardingPmcPreloader());
             add(new DevelopmentSecurityPreloader());
         }
     }
