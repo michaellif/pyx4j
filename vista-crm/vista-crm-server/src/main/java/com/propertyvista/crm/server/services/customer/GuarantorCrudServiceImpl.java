@@ -20,15 +20,12 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.biz.financial.payment.PaymentFacade;
 import com.propertyvista.biz.tenant.CustomerFacade;
 import com.propertyvista.crm.rpc.services.customer.GuarantorCrudService;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.PaymentMethod;
-import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.dto.GuarantorDTO;
@@ -50,10 +47,6 @@ public class GuarantorCrudServiceImpl extends AbstractCrudServiceDtoImpl<Guarant
         // load detached data:
         Persistence.service().retrieve(dto.leaseV());
         Persistence.service().retrieve(dto.leaseV().holder(), AttachLevel.ToStringMembers);
-
-        // fill/update payment methods: 
-        dto.paymentMethods().clear();
-        dto.paymentMethods().addAll(ServerSideFactory.create(PaymentFacade.class).retrievePaymentMethods(entity));
     }
 
     @Override
@@ -66,16 +59,6 @@ public class GuarantorCrudServiceImpl extends AbstractCrudServiceDtoImpl<Guarant
     protected void persist(Guarantor entity, GuarantorDTO dto) {
         ServerSideFactory.create(CustomerFacade.class).persistCustomer(entity.customer());
         entity.role().setValue(LeaseParticipant.Role.Guarantor);
-
-        EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto()._Units().$()._Leases().$().versions(), entity.leaseV()));
-        Building building = Persistence.service().retrieve(criteria);
-
-        for (PaymentMethod paymentMethod : dto.paymentMethods()) {
-            paymentMethod.customer().set(entity.customer());
-            ServerSideFactory.create(PaymentFacade.class).persistPaymentMethod(building, paymentMethod);
-        }
-        super.persist(entity, dto);
     }
 
     @Override

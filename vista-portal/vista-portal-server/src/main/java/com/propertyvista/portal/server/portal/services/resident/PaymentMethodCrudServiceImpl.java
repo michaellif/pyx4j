@@ -48,6 +48,18 @@ public class PaymentMethodCrudServiceImpl extends AbstractCrudServiceImpl<Paymen
     }
 
     @Override
+    protected void enhanceListRetrieved(PaymentMethod entity, PaymentMethod dto) {
+        dto.isPreauthorized().setValue(entity.equals(TenantAppContext.getCurrentUserTenantInLease().preauthorizedPayment()));
+        super.enhanceListRetrieved(entity, dto);
+    }
+
+    @Override
+    protected void enhanceRetrieved(PaymentMethod entity, PaymentMethod dto) {
+        dto.isPreauthorized().setValue(entity.equals(TenantAppContext.getCurrentUserTenantInLease().preauthorizedPayment()));
+        super.enhanceRetrieved(entity, dto);
+    }
+
+    @Override
     protected void persist(PaymentMethod entity, PaymentMethod dto) {
         Tenant tenantInLease = TenantAppContext.getCurrentUserTenantInLease();
         Persistence.service().retrieve(tenantInLease.leaseV());
@@ -55,6 +67,10 @@ public class PaymentMethodCrudServiceImpl extends AbstractCrudServiceImpl<Paymen
 
         entity.customer().set(tenantInLease.customer());
         ServerSideFactory.create(PaymentFacade.class).persistPaymentMethod(tenantInLease.leaseV().holder().unit().building(), entity);
+        if (dto.isPreauthorized().isBooleanTrue()) {
+            tenantInLease.preauthorizedPayment().set(entity);
+            Persistence.service().merge(tenantInLease);
+        }
     }
 
     @Override

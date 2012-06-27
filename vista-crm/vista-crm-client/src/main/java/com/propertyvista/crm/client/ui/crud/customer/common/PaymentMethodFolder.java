@@ -17,7 +17,6 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.entity.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
@@ -57,12 +56,6 @@ public abstract class PaymentMethodFolder extends VistaBoxFolder<PaymentMethod> 
     }
 
     @Override
-    protected void removeItem(CEntityFolderItem<PaymentMethod> item) {
-        onPaymentMethodDetlete(item.getValue());
-        super.removeItem(item);
-    }
-
-    @Override
     public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof PaymentMethod) {
             return new PaymentMethodEditorEx();
@@ -79,7 +72,7 @@ public abstract class PaymentMethodFolder extends VistaBoxFolder<PaymentMethod> 
             // tune-up:
             setTypeSelectionVisible(false);
             setBillingAddressVisible(false);
-            setIsDefaultVisible(true);
+            setIsPreauthorizedVisible(true);
 
             return w;
         }
@@ -88,14 +81,14 @@ public abstract class PaymentMethodFolder extends VistaBoxFolder<PaymentMethod> 
         public void addValidations() {
             super.addValidations();
 
-            get(proto().isDefault()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+            get(proto().isPreauthorized()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
                 @Override
                 public void onValueChange(ValueChangeEvent<Boolean> event) {
                     if (event.getValue().booleanValue()) {
                         for (int i = 0; i < PaymentMethodFolder.this.getItemCount(); ++i) {
                             for (CComponent<?, ?> comp : PaymentMethodFolder.this.getItem(i).getComponents()) {
                                 if (comp instanceof PaymentMethodEditorEx && !comp.equals(PaymentMethodEditorEx.this)) {
-                                    ((PaymentMethodEditorEx) comp).get(proto().isDefault()).setValue(false, false);
+                                    ((PaymentMethodEditorEx) comp).get(proto().isPreauthorized()).setValue(false, false);
                                 }
                             }
                         }
@@ -111,8 +104,6 @@ public abstract class PaymentMethodFolder extends VistaBoxFolder<PaymentMethod> 
     }
 
     protected abstract void onBillingAddressSameAsCurrentOne(boolean set, CComponent<AddressStructured, ?> comp);
-
-    protected abstract void onPaymentMethodDetlete(PaymentMethod paymentMethod);
 
 //    @Override
 //    public void addValidations() {

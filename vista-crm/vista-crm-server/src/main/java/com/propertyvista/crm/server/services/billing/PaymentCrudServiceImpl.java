@@ -146,10 +146,8 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
         }
 
         PaymentMethod method = null;
-        for (PaymentMethod pm : ServerSideFactory.create(PaymentFacade.class).retrievePaymentMethods(payer)) {
-            if (pm.isDefault().isBooleanTrue()) {
-                method = pm;
-            }
+        if (payer.isInstanceOf(Tenant.class)) {
+            method = ((Tenant) payer).preauthorizedPayment();
         }
         callback.onSuccess(method); // null - means there is no default one!..
     }

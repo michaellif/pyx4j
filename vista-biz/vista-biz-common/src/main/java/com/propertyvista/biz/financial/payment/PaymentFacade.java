@@ -31,7 +31,7 @@ public interface PaymentFacade {
 
     PaymentRecord persistPayment(PaymentRecord paymentRecord);
 
-    PaymentRecord schedulePayment(PaymentRecord paymentStub);
+    PaymentRecord schedulePayment(PaymentRecord paymentId);
 
     /**
      * Cash: automatically -> Received (AR. Posted)
@@ -42,13 +42,13 @@ public interface PaymentFacade {
      * EFT: automatically -> Received (AR. Posted)
      * 
      */
-    PaymentRecord processPayment(PaymentRecord paymentStub);
+    PaymentRecord processPayment(PaymentRecord paymentId);
 
-    PaymentRecord cancel(PaymentRecord paymentStub);
+    PaymentRecord cancel(PaymentRecord paymentId);
 
-    PaymentRecord clear(PaymentRecord paymentStub);
+    PaymentRecord clear(PaymentRecord paymentId);
 
-    PaymentRecord reject(PaymentRecord paymentStub);
+    PaymentRecord reject(PaymentRecord paymentId);
 
     // TODO Gap: Make Refunds
 

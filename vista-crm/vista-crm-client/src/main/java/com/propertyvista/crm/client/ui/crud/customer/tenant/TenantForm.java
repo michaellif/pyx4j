@@ -36,7 +36,6 @@ import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.crud.customer.common.PaymentMethodFolder;
 import com.propertyvista.crm.client.ui.crud.lease.common.CLeaseVHyperlink;
 import com.propertyvista.domain.contact.AddressStructured;
-import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.domain.tenant.EmergencyContact;
 import com.propertyvista.dto.TenantDTO;
 
@@ -123,11 +122,6 @@ public class TenantForm extends CrmEntityForm<TenantDTO> {
                 } else {
                     comp.setValue(EntityFactory.create(AddressStructured.class), false);
                 }
-            }
-
-            @Override
-            protected void onPaymentMethodDetlete(PaymentMethod paymentMethod) {
-                ((TenantEditorView.Presenter) ((TenantEditorView) getParentView()).getPresenter()).deletePaymentMethod(paymentMethod);
             }
         }));
 

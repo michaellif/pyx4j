@@ -83,7 +83,7 @@ public class PaymentMethodsForm extends CEntityForm<PaymentMethodListDTO> {
             return Arrays.asList(//@formatter:off                    
                     new EntityFolderColumnDescriptor(proto().type(), "15em"), 
                     new EntityFolderColumnDescriptor(proto().details(), "20em"),
-                    new EntityFolderColumnDescriptor(proto().isDefault(), "5em")
+                    new EntityFolderColumnDescriptor(proto().isPreauthorized(), "5em")
             ); //@formatter:on
         }
 
@@ -124,7 +124,7 @@ public class PaymentMethodsForm extends CEntityForm<PaymentMethodListDTO> {
                     if (value != null && !value.isEmpty()) {
                         boolean primaryFound = false;
                         for (PaymentMethod item : value) {
-                            if (item.isDefault().isBooleanTrue()) {
+                            if (item.isPreauthorized().isBooleanTrue()) {
                                 primaryFound = true;
                                 break;
                             }
@@ -154,7 +154,7 @@ public class PaymentMethodsForm extends CEntityForm<PaymentMethodListDTO> {
                             presenter.editPaymentMethod(getValue());
                         }
                     });
-                } else if (member.equals(proto().isDefault())) {
+                } else if (member.equals(proto().isPreauthorized())) {
                     comp = new CCheckBox();
                     comp.inheritViewable(false);
                     comp.setViewable(false);
@@ -168,7 +168,7 @@ public class PaymentMethodsForm extends CEntityForm<PaymentMethodListDTO> {
             public void addValidations() {
                 super.addValidations();
 
-                get(proto().isDefault()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+                get(proto().isPreauthorized()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
                     @Override
                     public void onValueChange(ValueChangeEvent<Boolean> event) {
                         if (event.getValue().booleanValue()) {
@@ -176,7 +176,7 @@ public class PaymentMethodsForm extends CEntityForm<PaymentMethodListDTO> {
                             for (int i = 0; i < PaymentMethodFolder.this.getItemCount(); ++i) {
                                 for (CComponent<?, ?> comp : PaymentMethodFolder.this.getItem(i).getComponents()) {
                                     if (comp instanceof PaymentMethodEditorEx && !comp.equals(PaymentMethodEditorEx.this)) {
-                                        ((PaymentMethodEditorEx) comp).get(proto().isDefault()).setValue(false, false);
+                                        ((PaymentMethodEditorEx) comp).get(proto().isPreauthorized()).setValue(false, false);
                                         presenter.savePaymentMethod(((PaymentMethodEditorEx) comp).getValue());
                                     }
                                 }

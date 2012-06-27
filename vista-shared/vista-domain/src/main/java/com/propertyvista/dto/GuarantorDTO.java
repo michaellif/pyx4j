@@ -15,14 +15,10 @@ package com.propertyvista.dto;
 
 import com.pyx4j.entity.annotations.ExtendsDBO;
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.IList;
 
-import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.domain.tenant.Guarantor;
 
 @Transient
 @ExtendsDBO
 public interface GuarantorDTO extends Guarantor {
-
-    IList<PaymentMethod> paymentMethods();
 }

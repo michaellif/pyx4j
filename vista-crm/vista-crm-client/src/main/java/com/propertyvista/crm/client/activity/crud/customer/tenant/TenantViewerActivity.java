@@ -17,7 +17,6 @@ import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.activity.crud.ListerActivityBase;
@@ -40,12 +39,11 @@ public class TenantViewerActivity extends CrmViewerActivity<TenantDTO> implement
 
     private final IListerView.Presenter<PersonScreening> screeningLister;
 
-    @SuppressWarnings("unchecked")
     public TenantViewerActivity(CrudAppPlace place) {
-        super(place, CustomerViewFactory.instance(TenantViewerView.class), (AbstractCrudService<TenantDTO>) GWT.create(TenantCrudService.class));
+        super(place, CustomerViewFactory.instance(TenantViewerView.class), GWT.<TenantCrudService> create(TenantCrudService.class));
 
         screeningLister = new ListerActivityBase<PersonScreening>(place, ((TenantViewerView) getView()).getScreeningListerView(),
-                (AbstractCrudService<PersonScreening>) GWT.create(PersonScreeningCrudService.class), PersonScreening.class);
+                GWT.<PersonScreeningCrudService> create(PersonScreeningCrudService.class), PersonScreening.class);
     }
 
     @Override

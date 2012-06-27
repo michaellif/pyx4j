@@ -83,8 +83,8 @@ public class PaymentMethodEditor extends CEntityDecoratableForm<PaymentMethod> {
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().phone()), 12).build());
 
         main.setBR(++row, 0, 1);
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().isDefault())).build());
-        get(proto().isDefault()).setVisible(false);
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().isPreauthorized())).build());
+        get(proto().isPreauthorized()).setVisible(false);
 
         // tweak UI:
         get(proto().type()).addValueChangeHandler(new ValueChangeHandler<PaymentType>() {
@@ -234,13 +234,13 @@ public class PaymentMethodEditor extends CEntityDecoratableForm<PaymentMethod> {
         return get(proto().sameAsCurrent()).isEnabled();
     }
 
-    public void setIsDefaultVisible(boolean visible) {
-        get(proto().isDefault()).setVisible(visible);
+    public void setIsPreauthorizedVisible(boolean visible) {
+        get(proto().isPreauthorized()).setVisible(visible);
 
     }
 
-    public boolean isIsDefaultVisible() {
-        return get(proto().isDefault()).isVisible();
+    public boolean isIsPreauthorizedVisible() {
+        return get(proto().isPreauthorized()).isVisible();
     }
 
     public Collection<PaymentType> getPaymentOptions() {

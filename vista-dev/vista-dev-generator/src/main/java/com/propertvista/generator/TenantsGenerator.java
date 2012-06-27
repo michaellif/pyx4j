@@ -65,9 +65,6 @@ public class TenantsGenerator {
         for (int i = 0; i < 2; i++) {
             PaymentMethod m = EntityFactory.create(PaymentMethod.class);
             m.type().setValue(PaymentType.CreditCard);
-            if (i == 0) {
-                m.isDefault().setValue(Boolean.TRUE);
-            }
 
             // create new payment method details:
             CreditCardInfo details = EntityFactory.create(CreditCardInfo.class);

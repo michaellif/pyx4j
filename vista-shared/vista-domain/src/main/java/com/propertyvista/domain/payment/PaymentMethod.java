@@ -26,6 +26,7 @@ import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -33,7 +34,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.tenant.Customer;
 
-@ToStringFormat("{0} - {1} {2,choice,null#|1#Default}")
+@ToStringFormat("{0} - {1} {2,choice,null#|1#Preauthorized}")
 public interface PaymentMethod extends IEntity {
 
     @Detached
@@ -66,10 +67,6 @@ public interface PaymentMethod extends IEntity {
     @Editor(type = EditorType.phone)
     IPrimitive<String> phone();
 
-    @ToString(index = 2)
-    @Deprecated
-    IPrimitive<Boolean> isDefault();
-
     /**
      * Indicates if this method is one-time usage only and shouldn't be saved in DB.
      */
@@ -79,4 +76,12 @@ public interface PaymentMethod extends IEntity {
      * Indicates if this method is deleted (still persists in DB but not used anymore!).
      */
     IPrimitive<Boolean> isDeleted();
+
+    /**
+     * Run-time data - used for setup of Tenant's pre-authorized payment method.
+     */
+    @Transient
+    @ToString(index = 2)
+    @Caption(name = "Use for Preauthorized Payments")
+    IPrimitive<Boolean> isPreauthorized();
 }

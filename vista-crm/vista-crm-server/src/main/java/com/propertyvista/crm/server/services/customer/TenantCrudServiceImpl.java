@@ -54,6 +54,13 @@ public class TenantCrudServiceImpl extends AbstractCrudServiceDtoImpl<Tenant, Te
         // fill/update payment methods: 
         dto.paymentMethods().clear();
         dto.paymentMethods().addAll(ServerSideFactory.create(PaymentFacade.class).retrievePaymentMethods(entity));
+        // mark pre-authorized one:
+        for (PaymentMethod paymentMethod : dto.paymentMethods()) {
+            if (paymentMethod.equals(entity.preauthorizedPayment())) {
+                paymentMethod.isPreauthorized().setValue(Boolean.TRUE);
+                break;
+            }
+        }
     }
 
     @Override
@@ -66,14 +73,28 @@ public class TenantCrudServiceImpl extends AbstractCrudServiceDtoImpl<Tenant, Te
     protected void persist(Tenant entity, TenantDTO dto) {
         ServerSideFactory.create(CustomerFacade.class).persistCustomer(entity.customer());
 
+        // persist payment methods:
         EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
         criteria.add(PropertyCriterion.eq(criteria.proto()._Units().$()._Leases().$().versions(), entity.leaseV()));
         Building building = Persistence.service().retrieve(criteria);
 
+        // delete removed in UI:
+        for (PaymentMethod paymentMethod : ServerSideFactory.create(PaymentFacade.class).retrievePaymentMethods(entity)) {
+            if (!dto.paymentMethods().contains(paymentMethod)) {
+                ServerSideFactory.create(PaymentFacade.class).deletePaymentMethod(paymentMethod);
+            }
+        }
+
+        // save new/edited ones (and memorize pre-authorized method):
+        entity.preauthorizedPayment().set(null);
         for (PaymentMethod paymentMethod : dto.paymentMethods()) {
             paymentMethod.customer().set(entity.customer());
             ServerSideFactory.create(PaymentFacade.class).persistPaymentMethod(building, paymentMethod);
+            if (paymentMethod.isPreauthorized().isBooleanTrue()) {
+                entity.preauthorizedPayment().set(paymentMethod);
+            }
         }
+
         super.persist(entity, dto);
     }
 

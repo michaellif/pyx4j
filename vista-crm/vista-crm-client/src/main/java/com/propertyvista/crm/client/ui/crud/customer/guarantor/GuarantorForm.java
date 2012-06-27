@@ -16,20 +16,14 @@ package com.propertyvista.crm.client.ui.crud.customer.guarantor;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
 import com.propertyvista.common.client.ui.components.editors.NameEditor;
 import com.propertyvista.common.client.ui.validators.PastDateValidation;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
-import com.propertyvista.crm.client.ui.crud.customer.common.PaymentMethodFolder;
 import com.propertyvista.crm.client.ui.crud.lease.common.CLeaseVHyperlink;
-import com.propertyvista.domain.contact.AddressStructured;
-import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.dto.GuarantorDTO;
 
 public class GuarantorForm extends CrmEntityForm<GuarantorDTO> {
@@ -52,9 +46,6 @@ public class GuarantorForm extends CrmEntityForm<GuarantorDTO> {
 
         tab = addTab(isEditable() ? new HTML() : ((GuarantorViewerView) getParentView()).getScreeningListerView().asWidget(), i18n.tr("Screening"));
         setTabEnabled(tab, !isEditable());
-
-        addTab(createPaymentMethodsTab(), i18n.tr("Payment Methods"));
-
     }
 
     @Override
@@ -83,34 +74,6 @@ public class GuarantorForm extends CrmEntityForm<GuarantorDTO> {
 
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseV(), new CLeaseVHyperlink()), 35).customLabel(i18n.tr("Lease")).build());
         }
-
-        return main;
-    }
-
-    private Widget createPaymentMethodsTab() {
-        FormFlexPanel main = new FormFlexPanel();
-
-        main.setWidget(0, 0, inject(proto().paymentMethods(), new PaymentMethodFolder(isEditable()) {
-            @Override
-            protected void onBillingAddressSameAsCurrentOne(boolean set, final CComponent<AddressStructured, ?> comp) {
-                if (set) {
-                    ((GuarantorEditorView.Presenter) ((GuarantorEditorView) getParentView()).getPresenter())
-                            .getCurrentAddress(new DefaultAsyncCallback<AddressStructured>() {
-                                @Override
-                                public void onSuccess(AddressStructured result) {
-                                    comp.setValue(result, false);
-                                }
-                            });
-                } else {
-                    comp.setValue(EntityFactory.create(AddressStructured.class), false);
-                }
-            }
-
-            @Override
-            protected void onPaymentMethodDetlete(PaymentMethod paymentMethod) {
-                ((GuarantorEditorView.Presenter) ((GuarantorEditorView) getParentView()).getPresenter()).deletePaymentMethod(paymentMethod);
-            }
-        }));
 
         return main;
     }

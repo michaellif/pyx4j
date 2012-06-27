@@ -132,13 +132,7 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
 
     @Override
     public void getDefaultPaymentMethod(AsyncCallback<PaymentMethod> callback) {
-        PaymentMethod method = null;
-        for (PaymentMethod pm : ServerSideFactory.create(PaymentFacade.class).retrievePaymentMethods(TenantAppContext.getCurrentUserTenantInLease())) {
-            if (pm.isDefault().isBooleanTrue()) {
-                method = pm;
-            }
-        }
-        callback.onSuccess(method); // null - means there is no default one!..
+        callback.onSuccess(TenantAppContext.getCurrentUserTenantInLease().preauthorizedPayment()); // null - means there is no default one!..
     }
 
     @Override
