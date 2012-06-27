@@ -45,7 +45,7 @@ public class PMSiteFilter extends WicketFilter {
     @Override
     public void doFilter(final ServletRequest request, final ServletResponse response, final FilterChain chain) throws IOException, ServletException {
         if (shouldIgnoreUrl((HttpServletRequest) request)) {
-            log.debug("Ignoring request {}", ((HttpServletRequest) request).getRequestURL());
+            log.trace("Ignoring request {}", ((HttpServletRequest) request).getRequestURL());
             chain.doFilter(request, response);
         } else {
             super.doFilter(request, response, chain);
