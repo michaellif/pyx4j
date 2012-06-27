@@ -24,6 +24,7 @@ public class CheckAvailabilityRun {
         CheckAvailabilityRequest r = new CheckAvailabilityRequest();
         r.requestId = "TestCheckAvailabilityRun";
         r.dnsName = "test-properties";
+        r.requestRemoteAddr = "1.1.1.1";
 
         {
             RequestMessage rm = new RequestMessage();

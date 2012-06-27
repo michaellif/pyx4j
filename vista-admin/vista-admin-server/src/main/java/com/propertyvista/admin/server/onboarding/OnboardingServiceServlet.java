@@ -33,7 +33,7 @@ import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.essentials.server.dev.DataDump;
+import com.pyx4j.essentials.server.dev.EntityFileLogger;
 import com.pyx4j.essentials.server.xml.XMLEntityWriter;
 import com.pyx4j.essentials.server.xml.XMLStringWriter;
 import com.pyx4j.gwt.server.IOUtils;
@@ -87,7 +87,7 @@ public class OnboardingServiceServlet extends HttpServlet {
         } finally {
             IOUtils.closeQuietly(is);
         }
-        DataDump.dumpToDirectory("onboarding", "request" + requestInfo(message), message);
+        EntityFileLogger.log("onboarding", "request" + requestInfo(message), message);
 
         NamespaceManager.setNamespace(VistaNamespace.adminNamespace);
         OnboardingProcessor pp;
@@ -132,7 +132,7 @@ public class OnboardingServiceServlet extends HttpServlet {
         } else {
             try {
                 log.info("processed in {} reply {}", TimeUtils.secSince(start), responseMessage);
-                DataDump.dumpToDirectory("onboarding", "response" + responseInfo(responseMessage), responseMessage);
+                EntityFileLogger.log("onboarding", "response" + responseInfo(responseMessage), responseMessage);
                 response.setContentType("text/xml");
                 replyWith(response, responseMessage);
             } catch (Throwable e) {
@@ -167,7 +167,7 @@ public class OnboardingServiceServlet extends HttpServlet {
         if ((e != null) && (ApplicationMode.isDevelopment())) {
             rm.errorMessage().setValue(e.getMessage());
         }
-        DataDump.dumpToDirectory("onboarding", "response-" + statusCode, rm);
+        EntityFileLogger.log("onboarding", "response-" + statusCode, rm);
         replyWith(response, rm);
     }
 

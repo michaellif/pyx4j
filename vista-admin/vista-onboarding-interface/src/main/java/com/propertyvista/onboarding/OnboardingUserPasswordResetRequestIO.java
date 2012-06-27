@@ -33,6 +33,7 @@ public interface OnboardingUserPasswordResetRequestIO extends RequestIO {
     IPrimitive<String> token();
 
     @NotNull
+    @Transient(logTransient = true)
     IPrimitive<String> newPassword();
 
     /**

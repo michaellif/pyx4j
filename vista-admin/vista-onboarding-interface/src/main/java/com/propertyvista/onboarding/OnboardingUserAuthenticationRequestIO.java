@@ -33,6 +33,7 @@ public interface OnboardingUserAuthenticationRequestIO extends RequestIO {
     IPrimitive<String> email();
 
     @NotNull
+    @Transient(logTransient = true)
     IPrimitive<String> password();
 
     /**

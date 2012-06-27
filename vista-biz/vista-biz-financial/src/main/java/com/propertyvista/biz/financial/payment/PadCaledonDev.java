@@ -23,6 +23,8 @@ import java.util.Properties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.gwt.server.IOUtils;
+
 public class PadCaledonDev {
 
     private static final Logger log = LoggerFactory.getLogger(PadCaledonDev.class);
@@ -33,28 +35,32 @@ public class PadCaledonDev {
 
     static Properties getProperties(File file) {
         Properties props = new Properties();
+        FileInputStream is = null;
         try {
-            props.load(new FileInputStream(getFile()));
+            props.load(is = new FileInputStream(getFile()));
             return props;
         } catch (FileNotFoundException e) {
             log.error("File Not Found", e);
         } catch (IOException e) {
             log.error("IO Exception", e);
+        } finally {
+            IOUtils.closeQuietly(is);
         }
         return new Properties();
     }
 
     public static void saveFileCreationNumber(String companyId, int number) {
         Properties props = getProperties(getFile());
-
+        FileOutputStream out = null;
         try {
             String value = String.valueOf(number);
             props.setProperty(companyId, value);
-            props.store(new FileOutputStream(getFile()), null);
-
+            props.store(out = new FileOutputStream(getFile()), null);
         } catch (IOException e) {
             log.error("Error while saving file creation number", e);
             throw new Error(e.getLocalizedMessage());
+        } finally {
+            IOUtils.closeQuietly(out);
         }
     }
 

@@ -26,5 +26,11 @@ public abstract class Request {
     public String requestId;
 
     @XmlElement(required = true)
+    public String requestRemoteAddr;
+
+    @XmlElement
+    public String remoteSessionId;
+
+    @XmlElement(required = true)
     public String onboardingAccountId;
 }

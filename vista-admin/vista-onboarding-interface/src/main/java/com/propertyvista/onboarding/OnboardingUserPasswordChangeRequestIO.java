@@ -29,8 +29,10 @@ public interface OnboardingUserPasswordChangeRequestIO extends RequestIO {
     IPrimitive<String> email();
 
     @NotNull
+    @Transient(logTransient = true)
     IPrimitive<String> currentPassword();
 
     @NotNull
+    @Transient(logTransient = true)
     IPrimitive<String> newPassword();
 }
