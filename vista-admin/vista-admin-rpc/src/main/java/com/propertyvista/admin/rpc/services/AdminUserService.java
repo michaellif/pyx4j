@@ -13,11 +13,13 @@
  */
 package com.propertyvista.admin.rpc.services;
 
-import com.pyx4j.security.rpc.AbstractPasswordChangeService;
+import com.pyx4j.entity.rpc.AbstractCrudService;
+
+import com.propertyvista.admin.rpc.AdminUserDTO;
 
 /**
- * A service that lets an onboarding user change his own password
+ * Used for self administration only
  */
-public interface OnboardingUserPasswordChangeUserService extends AbstractPasswordChangeService {
+public interface AdminUserService extends AbstractCrudService<AdminUserDTO> {
 
 }

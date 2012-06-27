@@ -25,7 +25,8 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 import com.propertyvista.admin.client.activity.AlertActivity;
 import com.propertyvista.admin.client.activity.MessageActivity;
 import com.propertyvista.admin.client.activity.SettingsActivity;
-import com.propertyvista.admin.client.activity.crud.adminusers.AdminUserEditorActivity;
+import com.propertyvista.admin.client.activity.crud.account.AccountEditorActivity;
+import com.propertyvista.admin.client.activity.crud.account.AccountViewerActivity;
 import com.propertyvista.admin.client.activity.crud.adminusers.AdminUserListerActivity;
 import com.propertyvista.admin.client.activity.crud.adminusers.AdminUserViewerActivity;
 import com.propertyvista.admin.client.activity.crud.maintenance.MaintenanceEditorActivity;
@@ -164,7 +165,7 @@ public class MainActivityMapper implements AppActivityMapper {
                     } else if (place instanceof AdminSiteMap.Administration.AdminUsers) {
                         switch (crudPlace.getType()) {
                         case editor:
-                            activity = new AdminUserEditorActivity(crudPlace);
+                            activity = new AdminUserViewerActivity(crudPlace);
                             break;
                         case viewer:
                             activity = new AdminUserViewerActivity(crudPlace);
@@ -173,14 +174,22 @@ public class MainActivityMapper implements AppActivityMapper {
                             activity = new AdminUserListerActivity(crudPlace);
                             break;
                         }
+                    } else if (place instanceof AdminSiteMap.Account) {
+                        switch (crudPlace.getType()) {
+                        case editor:
+                            activity = new AccountEditorActivity(crudPlace);
+                            break;
+                        case viewer:
+                            activity = new AccountViewerActivity(crudPlace);
+                            break;
+                        }
                     }
+
 // - Settings:
                 } else if (place instanceof AdminSiteMap.Settings) {
                     activity = new SettingsActivity(place);
 
 // - Other:
-                } else if (place instanceof AdminSiteMap.Account) {
-                    // is supposed to be AdminUser*Activity for  AdminSiteMap.Administration.AdminUsers                    
                 } else if (place instanceof AdminSiteMap.Alert) {
                     activity = new AlertActivity(place);
                 } else if (place instanceof AdminSiteMap.Message) {

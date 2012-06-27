@@ -23,8 +23,6 @@ import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.client.SecurityControllerEvent;
 import com.pyx4j.security.client.SecurityControllerHandler;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.rpc.CrudAppPlace;
-import com.pyx4j.site.rpc.CrudAppPlace.Type;
 
 import com.propertyvista.admin.client.ui.TopRightActionsView;
 import com.propertyvista.admin.client.viewfactories.AdminVeiwFactory;
@@ -87,10 +85,7 @@ public class TopRightActionsActivity extends AbstractActivity implements TopRigh
 
     @Override
     public void showAccount() {
-        CrudAppPlace accountPlace = (CrudAppPlace) new AdminSiteMap.Administration.AdminUsers()
-                .formPlace(ClientContext.getUserVisit().getPrincipalPrimaryKey());
-        accountPlace.setType(Type.viewer);
-        AppSite.getPlaceController().goTo(accountPlace);
+        AppSite.getPlaceController().goTo(new AdminSiteMap.Account().formViewerPlace(ClientContext.getUserVisit().getPrincipalPrimaryKey()));
     }
 
     @Override

@@ -31,12 +31,12 @@ import com.propertyvista.admin.rpc.services.AdminPasswordChangeManagedService;
 import com.propertyvista.admin.rpc.services.AdminPasswordChangeUserService;
 import com.propertyvista.admin.rpc.services.AdminPasswordResetService;
 import com.propertyvista.admin.rpc.services.AdminUserCrudService;
+import com.propertyvista.admin.rpc.services.AdminUserService;
 import com.propertyvista.admin.rpc.services.DBIntegrityCheckService;
 import com.propertyvista.admin.rpc.services.ImportUploadService;
 import com.propertyvista.admin.rpc.services.MaintenanceCrudService;
 import com.propertyvista.admin.rpc.services.OnboardingUserCrudService;
 import com.propertyvista.admin.rpc.services.OnboardingUserPasswordChangeManagedService;
-import com.propertyvista.admin.rpc.services.OnboardingUserPasswordChangeUserService;
 import com.propertyvista.admin.rpc.services.PmcCrudService;
 import com.propertyvista.admin.rpc.services.PmcDataReportService;
 import com.propertyvista.admin.rpc.services.SimulationService;
@@ -67,6 +67,7 @@ public class VistaAdminAccessControlList extends ServletContainerAclBuilder {
 
         grant(VistaAdminBehavior.SystemAdmin, new IServiceExecutePermission(AdminPasswordChangeUserService.class));
         grant(VistaAdminBehavior.SystemAdmin, new IServiceExecutePermission(AdminPasswordChangeManagedService.class));
+        grant(VistaAdminBehavior.SystemAdmin, new IServiceExecutePermission(AdminUserService.class));
         grant(VistaAdminBehavior.SystemAdmin, new IServiceExecutePermission(AdminUserCrudService.class));
         grant(VistaAdminBehavior.SystemAdmin, new IServiceExecutePermission(OnboardingUserCrudService.class));
         grant(VistaAdminBehavior.SystemAdmin, new IServiceExecutePermission(OnboardingUserPasswordChangeManagedService.class));
@@ -92,11 +93,19 @@ public class VistaAdminAccessControlList extends ServletContainerAclBuilder {
             grant(VistaAdminBehavior.SystemAdmin, new IServiceExecutePermission(SimulatedDataPreloadService.class));
         }
 
+        // let Onboarding API change their own user info and own password        
+        grant(VistaAdminBehavior.OnboardingApi, new IServiceExecutePermission(AdminUserService.class));
         grant(VistaAdminBehavior.OnboardingApi, new IServiceExecutePermission(AdminPasswordChangeUserService.class));
+        grant(VistaAdminBehavior.OnboardingApi, new AdminUserAccountAccesRule(), AdminUserCredential.class);
+        grant(VistaAdminBehavior.OnboardingApi, new EntityPermission(AdminUserCredential.class, EntityPermission.ALL));
+
+        // let Onboarding API manage onboarding users
         grant(VistaAdminBehavior.OnboardingApi, new IServiceExecutePermission(OnboardingUserCrudService.class));
         grant(VistaAdminBehavior.OnboardingApi, new IServiceExecutePermission(OnboardingUserPasswordChangeManagedService.class));
+        grant(VistaAdminBehavior.OnboardingApi, new EntityPermission(OnboardingUserCredential.class, EntityPermission.ALL));
+
         grant(VistaAdminBehavior.OnboardingApi, new IServiceExecutePermission(PmcCrudService.class));
         grant(VistaAdminBehavior.OnboardingApi, new EntityPermission(Pmc.class, EntityPermission.READ));
-        grant(VistaAdminBehavior.OnboardingApi, new IServiceExecutePermission(OnboardingUserPasswordChangeUserService.class));
+
     }
 }

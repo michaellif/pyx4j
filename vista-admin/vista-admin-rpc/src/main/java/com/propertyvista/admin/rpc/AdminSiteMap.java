@@ -133,8 +133,7 @@ public class AdminSiteMap implements SiteMap {
     public static class Settings extends AppPlace {
     }
 
-    // Not sure this is required: users who want to change their account settings are being redirected to general user administration place 
     @NavigationItem(navigLabel = "Accounts")
-    public static class Account extends AppPlace {
+    public static class Account extends CrudAppPlace {
     }
 }
