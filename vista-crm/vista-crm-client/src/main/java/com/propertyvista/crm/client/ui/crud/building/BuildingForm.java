@@ -77,9 +77,9 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         setTabEnabled(tab, !isEditable());
         selectTab(tab);
 
-        addTab(createGeneralTab(), i18n.tr("General"));
+        addTab(createGeneralTab(i18n.tr("General")));
 
-        addTab(createDetailsTab(), i18n.tr("Details"));
+        addTab(createDetailsTab(i18n.tr("Details")));
 
         tab = addTab(isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getFloorplanListerView().asWidget(), i18n.tr("Floorplans"));
         setTabEnabled(tab, !isEditable());
@@ -109,9 +109,9 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         tab = addTab(combinedtab, i18n.tr("Add-Ons"));
         setTabEnabled(tab, !isEditable());
 
-        addTab(createFinancialTab(), i18n.tr("Financial"));
+        addTab(createFinancialTab(i18n.tr("Financial")));
 
-        addTab(createMarketingTab(), i18n.tr("Marketing"));
+        addTab(createMarketingTab(i18n.tr("Marketing")));
 
         combinedtab = new FormFlexPanel();
         row = 0;
@@ -125,7 +125,7 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         tab = addTab(combinedtab, i18n.tr("Product Catalog"));
         setTabEnabled(tab, !isEditable());
 
-        addTab(createContactTab(), i18n.tr("Contacts"));
+        addTab(createContactTab(i18n.tr("Contacts")));
 
         tab = addTab(isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getBillingCycleListerView().asWidget(), i18n.tr("Billing Cycles"));
         setTabEnabled(tab, !isEditable());
@@ -204,8 +204,8 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         return ((BuildingViewerView) getParentView()).getDashboardView().asWidget();
     }
 
-    private Widget createGeneralTab() {
-        FormFlexPanel main = new FormFlexPanel();
+    private FormFlexPanel createGeneralTab(String title) {
+        FormFlexPanel main = new FormFlexPanel(title);
 
         int row = 0;
         main.setH1(row++, 0, 2, i18n.tr("Building Summary"));
@@ -249,8 +249,8 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         return main;
     }
 
-    private Widget createDetailsTab() {
-        FormFlexPanel main = new FormFlexPanel();
+    private FormFlexPanel createDetailsTab(String title) {
+        FormFlexPanel main = new FormFlexPanel(title);
 
         int row = -1;
         main.setH1(++row, 0, 2, i18n.tr("Information"));
@@ -311,8 +311,8 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         return main;
     }
 
-    private Widget createFinancialTab() {
-        FormFlexPanel main = new FormFlexPanel();
+    private FormFlexPanel createFinancialTab(String title) {
+        FormFlexPanel main = new FormFlexPanel(title);
 
         int row = 0;
         main.setBR(row++, 0, 2);
@@ -330,8 +330,8 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         return main;
     }
 
-    private Widget createMarketingTab() {
-        FormFlexPanel main = new FormFlexPanel();
+    private FormFlexPanel createMarketingTab(String title) {
+        FormFlexPanel main = new FormFlexPanel(title);
 
         int row = 0;
         main.setH1(row++, 0, 2, i18n.tr("Marketing Summary"));
@@ -348,8 +348,8 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         return main;
     }
 
-    private Widget createContactTab() {
-        FormFlexPanel main = new FormFlexPanel();
+    private FormFlexPanel createContactTab(String title) {
+        FormFlexPanel main = new FormFlexPanel(title);
 
         main.setWidget(0, 0, inject(proto().contacts().organizationContacts(), new OrganizationContactFolder(isEditable())));
 
