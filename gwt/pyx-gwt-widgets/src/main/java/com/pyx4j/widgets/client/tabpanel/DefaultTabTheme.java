@@ -29,7 +29,7 @@ import com.pyx4j.commons.css.ThemeColors;
 public class DefaultTabTheme extends Theme {
 
     public static enum StyleName implements IStyleName {
-        TabPanel, TabDeckPanel, TabBar, TabBarItem, TabBarItemLeft, TabBarItemRight, TabBarItemLabel, TabBarItemImage, TabList, TabListItem
+        TabPanel, TabDeckPanel, TabBar, TabBarItem, TabBarItemLeft, TabBarItemRight, TabBarItemLabel, TabBarAction, TabBarItemImage, TabList, TabListItem
     }
 
     public static enum StyleDependent implements IStyleDependent {
@@ -95,6 +95,33 @@ public class DefaultTabTheme extends Theme {
 
         style = new Style(".", StyleName.TabBarItem, "-", StyleDependent.masked);
         style.addProperty("display", "none");
+        addStyle(style);
+
+        style = new Style(".", StyleName.TabBarAction);
+        style.addProperty("display", "inline-block");
+        style.addProperty("position", "relative");
+        style.addProperty("cursor", "pointer");
+        style.addProperty("cursor", "hand");
+        style.addProperty("height", "100%");
+        style.addProperty("text-align", "center");
+        style.addProperty("padding", "2px");
+        style.addProperty("margin-right", "1px");
+        style.addProperty("margin-left", "1px");
+        style.addProperty("margin-top", "3px");
+        style.addProperty("border-right", "1px solid");
+        style.addProperty("border-right-color", ThemeColors.foreground, 0.6);
+        style.addProperty("border-left", "1px solid");
+        style.addProperty("border-left-color", ThemeColors.foreground, 0.6);
+        style.addProperty("border-top", "1px solid");
+        style.addProperty("border-top-color", ThemeColors.foreground, 0.6);
+        style.addProperty("background", ThemeColors.object1, 1);
+        style.addProperty("color", ThemeColors.foreground, 0);
+        addStyle(style);
+
+        style = new Style(".", StyleName.TabBarAction, "-", StyleDependent.disabled);
+        style.addProperty("background", ThemeColors.object1, 0.6);
+        style.addProperty("color", ThemeColors.foreground, 0.2);
+        style.addProperty("cursor", "default");
         addStyle(style);
 
         style = new Style((IStyleName) StyleName.TabBarItemLabel);

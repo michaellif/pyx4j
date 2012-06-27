@@ -236,7 +236,7 @@ public class TabBarItem extends HorizontalPanel {
         return (getTab().getTabPanel().getTabBar().getAbsoluteTop() - getAbsoluteTop() > -10);
     }
 
-    private void setTabMasked(boolean masked) {
+    void setTabMasked(boolean masked) {
         this.masked = masked;
         String dependentSuffix = DefaultTabTheme.StyleDependent.masked.name();
         if (masked) {
@@ -246,7 +246,7 @@ public class TabBarItem extends HorizontalPanel {
         }
     }
 
-    private boolean isTabMasked() {
+    boolean isTabMasked() {
         return masked;
     }
 

@@ -29,8 +29,10 @@ import org.slf4j.LoggerFactory;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.MouseDownEvent;
+import com.google.gwt.event.dom.client.MouseDownHandler;
+import com.google.gwt.resources.client.ImageResource;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -47,9 +49,15 @@ public class TabBar extends DockLayoutPanel {
 
     private TabBarItem selectedTabBarItem;
 
-    private final TabListTrigger tabListTrigger;
+    private final TabListAction tabListAction;
+
+    private final TabBarAction slideLeftAction;
+
+    private final TabBarAction slideRightAction;
 
     private final TabListDropDown listAllTabsDropDown;
+
+    private int leftOverflowIndex = 0;
 
     /**
      * Creates an empty tab bar.
@@ -59,28 +67,44 @@ public class TabBar extends DockLayoutPanel {
 
         setStyleName(DefaultTabTheme.StyleName.TabBar.name());
 
-        tabListTrigger = new TabListTrigger();
-        tabListTrigger.setStyleName(DefaultTabTheme.StyleName.TabBarItem.name());
+        tabListAction = new TabListAction();
+        tabListAction.setVisible(false);
+        listAllTabsDropDown = new TabListDropDown(tabListAction);
 
-        tabListTrigger.setVisible(false);
-
-        tabListTrigger.setWidget(new Image(ImageFactory.getImages().moveTabbarRight()));
-
-        listAllTabsDropDown = new TabListDropDown(tabListTrigger);
-
-        tabListTrigger.addDomHandler(new ClickHandler() {
+        tabListAction.setComand(new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 if (listAllTabsDropDown.isShowing()) {
                     listAllTabsDropDown.hideSelector();
                 } else {
                     listAllTabsDropDown.showSelector();
                 }
             }
+        });
+        addEast(tabListAction, 30);
 
-        }, ClickEvent.getType());
+        slideRightAction = new TabBarAction(ImageFactory.getImages().moveTabbarRight());
+        slideRightAction.setVisible(false);
+        slideRightAction.setComand(new Command() {
+            @Override
+            public void execute() {
+                slideOneRight();
+                ensureScrollActionsExposed();
+            }
+        });
 
-        addEast(tabListTrigger, 30);
+        addEast(slideRightAction, 30);
+
+        slideLeftAction = new TabBarAction(ImageFactory.getImages().moveTabbarLeft());
+        slideLeftAction.setVisible(false);
+        slideLeftAction.setComand(new Command() {
+            @Override
+            public void execute() {
+                slideOneLeft();
+            }
+        });
+
+        addEast(slideLeftAction, 30);
 
         tabsHolder = new FlowPanel();
 
@@ -146,15 +170,22 @@ public class TabBar extends DockLayoutPanel {
         super.onResize();
     }
 
-    private void ensureTabListTriggerExposed() {
+    private void ensureScrollActionsExposed() {
         boolean isTriggerVisible = false;
-        for (int i = 0; i < tabsHolder.getWidgetCount(); i++) {
-            if (!((TabBarItem) tabsHolder.getWidget(i)).isTabExposed()) {
-                isTriggerVisible = true;
-                break;
+        if (leftOverflowIndex > 0) {
+            isTriggerVisible = true;
+        } else {
+            for (int i = 0; i < tabsHolder.getWidgetCount(); i++) {
+                if (!((TabBarItem) tabsHolder.getWidget(i)).isTabExposed()) {
+                    isTriggerVisible = true;
+                    break;
+                }
             }
         }
-        tabListTrigger.setVisible(isTriggerVisible);
+
+        tabListAction.setVisible(isTriggerVisible);
+        slideRightAction.setVisible(isTriggerVisible);
+        slideLeftAction.setVisible(isTriggerVisible);
     }
 
     private void ensureSelectedTabExposed() {
@@ -169,25 +200,9 @@ public class TabBar extends DockLayoutPanel {
             @Override
             public void execute() {
                 ensureSelectedTabExposed();
-                ensureTabListTriggerExposed();
+                ensureScrollActionsExposed();
             }
         });
-    }
-
-    class TabListTrigger extends SimplePanel {
-
-        List<Tab> getAllTabs() {
-            ArrayList<Tab> ordererList = new ArrayList<Tab>();
-            for (int i = 0; i < tabsHolder.getWidgetCount(); i++) {
-                ordererList.add(((TabBarItem) tabsHolder.getWidget(i)).getTab());
-            }
-            return ordererList;
-        }
-
-        public void selectTab(Tab tab) {
-            tab.setTabSelected();
-        }
-
     }
 
     @Override
@@ -208,4 +223,96 @@ public class TabBar extends DockLayoutPanel {
         return tabsHolder.getWidgetCount();
     }
 
+    protected boolean slideOneLeft() {
+        if (leftOverflowIndex < getTabBarCount() - 1) {
+            leftOverflowIndex++;
+            slideRightAction.setEnabled(true);
+            return slide();
+        } else {
+            return false;
+        }
+    }
+
+    protected boolean slideOneRight() {
+        if (leftOverflowIndex > 0) {
+            leftOverflowIndex--;
+            if (leftOverflowIndex == 0) {
+                slideRightAction.setEnabled(false);
+            }
+            return slide();
+        } else {
+            return false;
+        }
+    }
+
+    protected boolean slide() {
+        for (int i = 0; i < getTabBarCount(); i++) {
+            if (i < leftOverflowIndex) {
+                getTabBarItem(i).setTabMasked(true);
+            } else {
+                getTabBarItem(i).setTabMasked(false);
+            }
+        }
+        return true;
+    }
+
+    class TabBarAction extends SimplePanel {
+
+        private Command command;
+
+        private boolean enabled = true;
+
+        public TabBarAction(ImageResource imageResource) {
+
+            setWidget(new Image(imageResource));
+
+            setStyleName(DefaultTabTheme.StyleName.TabBarAction.name());
+
+            addDomHandler(new MouseDownHandler() {
+
+                @Override
+                public void onMouseDown(MouseDownEvent event) {
+                    if (enabled && command != null) {
+                        command.execute();
+                    }
+                }
+
+            }, MouseDownEvent.getType());
+        }
+
+        public void setEnabled(boolean enabled) {
+            this.enabled = enabled;
+            String dependentSuffix = DefaultTabTheme.StyleDependent.disabled.name();
+            if (!enabled) {
+                addStyleDependentName(dependentSuffix);
+            } else {
+                removeStyleDependentName(dependentSuffix);
+            }
+
+        }
+
+        public void setComand(Command command) {
+            this.command = command;
+        }
+    }
+
+    class TabListAction extends TabBarAction {
+
+        TabListAction() {
+            super(ImageFactory.getImages().tabbarDropDown());
+        }
+
+        List<Tab> getAllTabs() {
+            ArrayList<Tab> ordererList = new ArrayList<Tab>();
+            for (int i = 0; i < tabsHolder.getWidgetCount(); i++) {
+                ordererList.add(((TabBarItem) tabsHolder.getWidget(i)).getTab());
+            }
+            return ordererList;
+        }
+
+        public void selectTab(Tab tab) {
+            tab.setTabSelected();
+        }
+
+    }
 }

@@ -38,21 +38,22 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.PopupPanel;
 
-import com.pyx4j.widgets.client.tabpanel.TabBar.TabListTrigger;
+import com.pyx4j.widgets.client.DropDownPanel;
+import com.pyx4j.widgets.client.tabpanel.TabBar.TabListAction;
 
-public class TabListDropDown extends PopupPanel {
+public class TabListDropDown extends DropDownPanel {
 
-    private final TabListTrigger trigger;
+    private final TabListAction trigger;
 
     private final FlowPanel itemsPanel;
 
     private HandlerRegistration resizeHandlerRegistration;
 
-    TabListDropDown(TabListTrigger trigger) {
-        super(true);
+    TabListDropDown(TabListAction trigger) {
         this.trigger = trigger;
+
+        showRelativeTo(trigger);
 
         setStyleName(DefaultTabTheme.StyleName.TabList.name());
 
@@ -127,7 +128,9 @@ public class TabListDropDown extends PopupPanel {
 
     @Override
     public void hide(boolean autoClosed) {
-        resizeHandlerRegistration.removeHandler();
+        if (resizeHandlerRegistration != null) {
+            resizeHandlerRegistration.removeHandler();
+        }
         super.hide(autoClosed);
     }
 

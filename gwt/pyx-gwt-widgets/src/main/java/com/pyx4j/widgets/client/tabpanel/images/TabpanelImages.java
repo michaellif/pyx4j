@@ -37,8 +37,8 @@ public interface TabpanelImages extends ClientBundle {
     @Source("tabbar-right.png")
     ImageResource moveTabbarRight();
 
-    @Source("tabbar-empty.png")
-    ImageResource moveTabbarEmpty();
+    @Source("tabbar-down.png")
+    ImageResource tabbarDropDown();
 
     @Source("tabWarning.png")
     ImageResource tabWarning();
