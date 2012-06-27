@@ -155,6 +155,7 @@ public class PortalTheme extends VistaTheme {
         initGroupBoxStyle();
         initSiteViewStyles();
         initPropertyMarkerStyle();
+        initSuggestBoxStyle();
 
         if (VistaTODO.enableWelcomeWizardDemoMode) {
             initDisclosurePanelStyles();

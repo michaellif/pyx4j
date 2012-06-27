@@ -89,6 +89,8 @@ public class AdminTheme extends VistaTheme {
         initTabPanelStyles();
         initDialogBoxStyles();
         initMenuBarStyles();
+
+        initSuggestBoxStyle();
     }
 
     @Override

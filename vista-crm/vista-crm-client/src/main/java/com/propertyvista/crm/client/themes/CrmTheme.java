@@ -117,6 +117,9 @@ public class CrmTheme extends VistaTheme {
         initGadgetDirectoryStyles();
         initTransactionHistoryStyles();
         initArrearsViewStyles();
+
+        initSuggestBoxStyle();
+
     }
 
     @Override

@@ -78,6 +78,8 @@ public class PtAppTheme extends VistaTheme {
         initPaymentStepViewStyles();
         initMenuBarStyles();
 
+        initSuggestBoxStyle();
+
         if (VistaTODO.enableWelcomeWizardDemoMode) {
             //initWizardDemoFont();
             initDisclosurePanelStyles();

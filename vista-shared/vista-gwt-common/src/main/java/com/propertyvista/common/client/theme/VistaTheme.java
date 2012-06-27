@@ -550,7 +550,7 @@ public class VistaTheme extends Theme {
         Style style = new Style(".gwt-SuggestBoxPopup");
         style.addProperty("background-color", "white");
         style.addProperty("padding", "2px");
-        style.addProperty("border-color", ThemeColors.object1, 0.6);
+        style.addProperty("border-color", ThemeColors.foreground, 0.6);
         style.addProperty("border-style", "solid");
         style.addProperty("border-width", "1px");
         style.addProperty("cursor", "pointer");
@@ -561,7 +561,7 @@ public class VistaTheme extends Theme {
         addStyle(style);
 
         style = new Style(".gwt-SuggestBoxPopup .item-selected");
-        style.addProperty("background-color", "#ffc");
+        style.addProperty("background-color", ThemeColors.foreground, 0.3);
         addStyle(style);
 
     }
