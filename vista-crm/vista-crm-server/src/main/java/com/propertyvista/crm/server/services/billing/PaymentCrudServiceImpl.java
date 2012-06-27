@@ -40,7 +40,6 @@ import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
 import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.property.asset.building.Building;
-import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
@@ -211,11 +210,6 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
             case CoApplicant:
                 users.add(tenant);
             }
-        }
-
-        Persistence.service().retrieve(lease.version().guarantors());
-        for (Guarantor guarantor : lease.version().guarantors()) {
-            users.add(guarantor);
         }
 
         return users;

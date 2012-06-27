@@ -134,8 +134,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
 
             @Override
             protected AbstractEntitySelectorDialog<LeaseParticipant> getSelectorDialog() {
-                return new EntitySelectorListDialog<LeaseParticipant>(i18n.tr("Select Tenant/Guarantor To Pay"), false, PaymentForm.this.getValue()
-                        .participants()) {
+                return new EntitySelectorListDialog<LeaseParticipant>(i18n.tr("Select Tenant To Pay"), false, PaymentForm.this.getValue().participants()) {
 
                     @Override
                     public boolean onClickOk() {
