@@ -34,6 +34,7 @@ public interface RequestMessageIO extends IEntity {
      * You must provide your Interface password for every HTTP request.
      */
     @NotNull
+    @Transient(logTransient = true)
     IPrimitive<String> interfaceEntityPassword();
 
     /**
