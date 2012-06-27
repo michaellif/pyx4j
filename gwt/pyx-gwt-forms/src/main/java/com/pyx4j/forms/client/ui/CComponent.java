@@ -504,6 +504,7 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
                         ve.setTitle(getTitle());
                         ve.setLocationHint(getLocationHint());
                         newValidationError = ve;
+                        break;
                     }
                 }
             }

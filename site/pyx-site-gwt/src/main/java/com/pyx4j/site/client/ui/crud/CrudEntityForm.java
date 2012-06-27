@@ -29,6 +29,10 @@ import com.pyx4j.entity.client.CEntityForm;
 import com.pyx4j.entity.client.IDecorator;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.forms.client.events.PropertyChangeEvent;
+import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
+import com.pyx4j.forms.client.events.PropertyChangeHandler;
+import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 import com.pyx4j.widgets.client.tabpanel.TabPanel;
@@ -84,6 +88,23 @@ public abstract class CrudEntityForm<E extends IEntity> extends CEntityForm<E> {
 
     public Tab addTab(Widget content, String tabTitle) {
         return addTab(content, tabTitle, true);
+    }
+
+    public Tab addTab(final FormFlexPanel panel) {
+        final Tab tab = addTab(panel, panel.getTitle(), true);
+        panel.addPropertyChangeHandler(new PropertyChangeHandler() {
+            @Override
+            public void onPropertyChange(PropertyChangeEvent event) {
+                if (event.getPropertyName() == PropertyName.valid) {
+                    if (panel.isContentValid()) {
+                        tab.setTabWarning(null);
+                    } else {
+                        tab.setTabWarning(i18n.tr("Validation errors"));
+                    }
+                }
+            }
+        });
+        return tab;
     }
 
     public Tab addTab(Widget content, String tabTitle, boolean scrolled) {

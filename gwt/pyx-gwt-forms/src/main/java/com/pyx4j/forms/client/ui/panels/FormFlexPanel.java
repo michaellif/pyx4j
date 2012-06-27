@@ -32,19 +32,41 @@ import static com.pyx4j.forms.client.ui.panels.DefaultFormFlexPanelTheme.StyleNa
 import static com.pyx4j.forms.client.ui.panels.DefaultFormFlexPanelTheme.StyleName.FormFlexPanelH4Label;
 import static com.pyx4j.forms.client.ui.panels.DefaultFormFlexPanelTheme.StyleName.FormFlexPanelHR;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.forms.client.events.HasPropertyChangeHandlers;
+import com.pyx4j.forms.client.events.PropertyChangeEvent;
+import com.pyx4j.forms.client.events.PropertyChangeHandler;
+import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.NComponent;
 import com.pyx4j.forms.client.ui.panels.DefaultFormFlexPanelTheme.StyleName;
 
-public class FormFlexPanel extends FlexTable {
+public class FormFlexPanel extends FlexTable implements PropertyChangeHandler, HasPropertyChangeHandlers {
+
+    private final String title;
+
+    private final List<CComponent<?, ?>> components = new ArrayList<CComponent<?, ?>>();
+
+    public FormFlexPanel(String title) {
+        this.title = title;
+        setStyleName(FormFlexPanel.name());
+
+    }
 
     public FormFlexPanel() {
-        setStyleName(FormFlexPanel.name());
+        this(null);
     }
 
     public void setHR(int row, int col, int span) {
@@ -107,4 +129,55 @@ public class FormFlexPanel extends FlexTable {
 
         super.setWidget(row, col, header);
     }
+
+    @Override
+    public void setWidget(int row, int column, Widget widget) {
+        locateCComponents(widget);
+        super.setWidget(row, column, widget);
+    }
+
+    private void locateCComponents(Widget widget) {
+        if (widget instanceof NComponent) {
+            CComponent<?, ?> comp = ((NComponent) widget).getCComponent();
+            components.add(comp);
+            comp.addPropertyChangeHandler(this);
+            comp.setLocationHint(title);
+        } else if (widget instanceof HasWidgets) {
+            for (Iterator<Widget> iterator = ((HasWidgets) widget).iterator(); iterator.hasNext();) {
+                locateCComponents(iterator.next());
+            }
+        }
+    }
+
+    @Override
+    public void setWidget(int row, int column, IsWidget widget) {
+        setWidget(row, column, asWidgetOrNull(widget));
+    }
+
+    @Override
+    public String getTitle() {
+        return title;
+    }
+
+    @Override
+    public void onPropertyChange(PropertyChangeEvent event) {
+        PropertyChangeEvent.fire(this, event.getPropertyName());
+    }
+
+    @Override
+    public HandlerRegistration addPropertyChangeHandler(PropertyChangeHandler handler) {
+        return addHandler(handler, PropertyChangeEvent.getType());
+    }
+
+    public boolean isContentValid() {
+        boolean valid = true;
+        for (CComponent<?, ?> component : components) {
+            if (component.isVisited() && !component.isValid()) {
+                valid = false;
+                break;
+            }
+        }
+        return valid;
+    }
+
 }

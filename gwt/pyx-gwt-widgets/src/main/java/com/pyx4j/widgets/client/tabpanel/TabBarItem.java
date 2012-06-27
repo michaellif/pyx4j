@@ -224,9 +224,8 @@ public class TabBarItem extends HorizontalPanel {
     }
 
     void onWarning(String message) {
-        if (message == null) {
-            warningImageHolder.clear();
-        } else {
+        warningImageHolder.clear();
+        if (message != null) {
             Image tabWarningImage = new Image(ImageFactory.getImages().tabWarning());
             tabWarningImage.setTitle(message);
             warningImageHolder.add(tabWarningImage);
