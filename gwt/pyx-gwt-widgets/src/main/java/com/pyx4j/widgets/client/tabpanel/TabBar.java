@@ -204,4 +204,8 @@ public class TabBar extends DockLayoutPanel {
         return (TabBarItem) tabsHolder.getWidget(index);
     }
 
+    public int getTabBarCount() {
+        return tabsHolder.getWidgetCount();
+    }
+
 }

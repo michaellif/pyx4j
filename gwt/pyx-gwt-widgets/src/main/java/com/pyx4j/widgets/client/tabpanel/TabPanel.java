@@ -148,6 +148,9 @@ public class TabPanel extends ResizeComposite implements HasWidgets, ProvidesRes
 
     public void setTabEnabled(Tab tab, boolean enabled) {
         tab.setTabEnabled(enabled);
+        if (!enabled && tab == getSelectedTab()) {
+            selectFirstEnabled();
+        }
     }
 
     public boolean isTabEnabled(Tab tab) {
@@ -156,6 +159,9 @@ public class TabPanel extends ResizeComposite implements HasWidgets, ProvidesRes
 
     public void setTabVisible(Tab tab, boolean visible) {
         tab.setTabVisible(visible);
+        if (!visible && tab == getSelectedTab()) {
+            selectFirstEnabled();
+        }
     }
 
     public boolean isTabVisible(Tab tab) {
@@ -163,6 +169,15 @@ public class TabPanel extends ResizeComposite implements HasWidgets, ProvidesRes
     }
 
     public boolean selectTab(Tab tab) {
+
+        if (tab == null) {
+            throw new Error("Selected tab can't be null");
+        }
+
+        if (!isTabVisible(tab) || !isTabEnabled(tab)) {
+            selectFirstEnabled();
+            return true;
+        }
 
         BeforeSelectionEvent<?> event = BeforeSelectionEvent.fire(this, tab);
 
@@ -181,6 +196,16 @@ public class TabPanel extends ResizeComposite implements HasWidgets, ProvidesRes
         return true;
     }
 
+    protected void selectFirstEnabled() {
+        for (int i = 0; i < tabBar.getTabBarCount(); i++) {
+            Tab tab = tabs.get(tabBar.getTabBarItem(i));
+            if (isTabVisible(tab) && isTabEnabled(tab)) {
+                selectTab(tab);
+                return;
+            }
+        }
+    }
+
     public void selectTab(int index) {
         selectTab(tabs.get(tabBar.getTabBarItem(index)));
     }
@@ -190,6 +215,9 @@ public class TabPanel extends ResizeComposite implements HasWidgets, ProvidesRes
     }
 
     public int getSelectedIndex() {
+        if (selectedTab == null) {
+            return -1;
+        }
         return tabBar.getTabBarIndex(selectedTab.getTabBarItem());
     }
 
