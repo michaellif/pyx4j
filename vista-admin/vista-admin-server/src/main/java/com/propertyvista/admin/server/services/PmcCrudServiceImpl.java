@@ -21,12 +21,14 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.cache.CacheService;
+import com.pyx4j.entity.security.EntityPermission;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.rpc.shared.VoidSerializable;
+import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.admin.domain.pmc.OnboardingMerchantAccount;
@@ -113,6 +115,7 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
 
     @Override
     public void activate(AsyncCallback<PmcDTO> callback, Key entityId) {
+        SecurityController.assertPermission(EntityPermission.permissionUpdate(Pmc.class));
         Pmc pmc = Persistence.service().retrieve(entityClass, entityId);
 
         if (pmc.status().getValue() == PmcStatus.Created) // First time create preload
@@ -162,6 +165,8 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
 
     @Override
     public void suspend(AsyncCallback<PmcDTO> callback, Key entityId) {
+        SecurityController.assertPermission(EntityPermission.permissionUpdate(Pmc.class));
+
         Pmc pmc = Persistence.service().retrieve(entityClass, entityId);
         pmc.status().setValue(PmcStatus.Suspended);
         Persistence.service().persist(pmc);

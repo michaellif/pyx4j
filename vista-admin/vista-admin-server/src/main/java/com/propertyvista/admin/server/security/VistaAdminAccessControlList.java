@@ -90,5 +90,11 @@ public class VistaAdminAccessControlList extends ServletContainerAclBuilder {
         if (com.pyx4j.config.shared.ApplicationMode.isDevelopment()) {
             grant(VistaAdminBehavior.SystemAdmin, new IServiceExecutePermission(SimulatedDataPreloadService.class));
         }
+
+        grant(VistaAdminBehavior.OnboardingApi, new IServiceExecutePermission(AdminPasswordChangeUserService.class));
+        grant(VistaAdminBehavior.OnboardingApi, new IServiceExecutePermission(OnboardingUserCrudService.class));
+        grant(VistaAdminBehavior.OnboardingApi, new IServiceExecutePermission(OnboardingUserPasswordChangeManagedService.class));
+        grant(VistaAdminBehavior.OnboardingApi, new IServiceExecutePermission(PmcCrudService.class));
+        grant(VistaAdminBehavior.OnboardingApi, new EntityPermission(Pmc.class, EntityPermission.READ));
     }
 }
