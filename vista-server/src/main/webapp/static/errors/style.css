@@ -1,0 +1,3726 @@
+/*
+Theme Name:Property Vista
+Version:2.0
+Author:Rossul
+Author URI:http://www.rossul.com/
+*/
+/* === reset CSS === */
+html,body,div,span,h1,h2,h3,h4,h5,h6,p,a,dfn,em,font,img,strong,tt,var,center,dl,dt,dd,ol,ul,li,blockquote,form,label,legend,table,caption,tr,th,td,fieldset,abbr
+	{
+	margin: 0;
+	padding: 0;
+	border: none;
+	outline: none;
+	font-size: 100%;
+	vertical-align: baseline;
+	background: transparent;
+}
+
+th {
+	vertical-align: middle;
+}
+
+sub,sup {
+	font-size: 9px;
+}
+
+a {
+	text-decoration: none;
+}
+
+table {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+q {
+	quotes: none;
+}
+
+q:before {
+	content: "";
+}
+
+q:after {
+	content: "";
+}
+
+input:focus {
+	outline: none;
+}
+
+textarea:focus {
+	outline: none;
+}
+
+select:focus {
+	outline: none;
+}
+
+ol,ul {
+	list-style: none;
+}
+/* === end reset CSS === */
+body {
+	width: 100%;
+	background: #8d9fad url(https://static.propertyvista.com/errors/images/bg_body.jpg) repeat-x;
+	color: #000;
+	position: relative;
+	font: 14px/20px 'Droid Sans', sans-serif;
+}
+
+h1,h2,h3,h4,h5,h6 {
+	font-family: 'HelveticaNeueW01-77BdCn 692722', Helvetica, sans-serif;
+	font-weight: normal;
+	line-height: 1.1em;
+}
+
+input {
+	border: none;
+	font-family: 'Droid Sans', sans-serif;
+}
+
+select,textarea {
+	font-family: 'Droid Sans', sans-serif;
+	font-size: 14px;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+#skipNav {
+	position: absolute;
+	left: -9999px;
+}
+
+.header,.wrapper,.wrap_footer {
+	width: 940px;
+	margin: 0 auto;
+}
+
+.wrapper {
+	padding-bottom: 20px;
+}
+/*=================header======================*/
+.header {
+	height: 86px;
+	width: 920px;
+	border-bottom: 1px solid #607280;
+	border-left: 1px solid #607280;
+	border-right: 1px solid #607280;
+	box-shadow: 0 1px 0 #C5D2DC;
+	-webkit-box-shadow: 0 1px 0 #C5D2DC;
+	-moz-box-shadow: 0 1px 0 #C5D2DC;
+	-webkit-border-bottom-right-radius: 7px;
+	-webkit-border-bottom-left-radius: 7px;
+	-moz-border-radius-bottomright: 7px;
+	-moz-border-radius-bottomleft: 7px;
+	border-bottom-right-radius: 7px;
+	border-bottom-left-radius: 7px;
+	background: url(https://static.propertyvista.com/errors/images/bg_header.jpg) repeat-x;
+	padding-left: 20px;
+	position: relative;
+}
+
+.logo {
+	float: left;
+	width: 307px;
+	height: 72px;
+	margin-top: 7px;
+}
+
+.logo a {
+	background: url(https://static.propertyvista.com/errors/images/logo.png) no-repeat;
+	display: block;
+	width: 307px;
+	height: 72px;
+	text-indent: -9999px;
+}
+
+.main_menu {
+	float: right;
+}
+
+.main_menu li {
+	float: left;
+	padding: 35px 5px 0 5px;
+	position: relative;
+	z-index: 50;
+	background: url(https://static.propertyvista.com/errors/images/menu_delim.jpg) 0 98% no-repeat;
+}
+
+.main_menu li a.orange {
+	background: url(https://static.propertyvista.com/errors/images/sign-up.png) no-repeat 50% 40%;
+	overflow: hidden;
+	text-indent: -9898px;
+	width: 64px;
+}
+
+.main_menu li:first-child,.main_menu li .dropdown ul li:first-child {
+	background: none;
+}
+
+.main_menu li a {
+	font: normal 20px/42px 'HelveticaNeueW01-77BdCn 692722', Helvetica,
+		sans-serif;
+	color: #fff;
+	float: left;
+	padding: 0 22px 11px;
+	text-shadow: 0 -1px 0 #35434E;
+}
+
+.main_menu li a:hover {
+	text-decoration: none;
+}
+
+.main_menu li.active a {
+	background: url(https://static.propertyvista.com/errors/images/corner.png) 50% 100% no-repeat;
+}
+
+.main_menu li:hover .dropdown,.main_menu li.hover .dropdown {
+	display: block;
+}
+/*--lang--*/
+.lang {
+	position: absolute;
+	top: 0;
+	right: 0;
+	width: 467px;
+	z-index: 10000;
+	font-family: arial, sans-serif;
+	font-size: 12px;
+	text-shadow: 0 -1px 0 #35434E;
+}
+
+.lang ul {
+	float: left;
+}
+
+.lang ul li {
+	padding: 8px 7px 0;
+	float: left;
+}
+
+.lang li a {
+	color: #fff;
+}
+
+.lang a.login {
+	color: #fff;
+	float: right;
+	padding: 8px 0 0;
+	margin: 0 25px 0 0;
+}
+
+.lang li.active {
+	background: url(https://static.propertyvista.com/errors/images/top-pointer.png) no-repeat 50% 0;
+}
+/*=============dropdown_menu===========*/
+.dropdown {
+	display: none;
+	padding-top: 22px;
+	position: absolute;
+	top: 88px;
+	z-index: 100;
+	width: 347px;
+	left: -107px;
+	background: url(https://static.propertyvista.com/errors/images/bg_top_dd.png) no-repeat;
+}
+
+.main_menu li .dropdown .holder_dd {
+	padding-bottom: 7px;
+	background: url(https://static.propertyvista.com/errors/images/bg_btm_dd.png) 0 100% no-repeat;
+}
+
+.main_menu li .dropdown .holder_dd .inner_menu {
+	padding: 0 4px;
+	width: 339px;
+	background: url(https://static.propertyvista.com/errors/images/repeat_dd_y.png) repeat-y;
+	overflow: hidden;
+}
+
+.main_menu li .dropdown .holder_dd .inner_menu ul {
+	background: url(https://static.propertyvista.com/errors/images/repeat_dd.jpg) repeat-x;
+	overflow: hidden;
+}
+
+.main_menu li .dropdown ul li a {
+	font-size: 16px;
+	padding: 0;
+	float: none;
+	background: none;
+}
+
+.main_menu li .dropdown ul li {
+	background: url(https://static.propertyvista.com/errors/images/border_dd.jpg) no-repeat;
+	padding: 5px 5px 8px;
+	overflow: hidden;
+	float: none;
+	display: block;
+	text-align: center;
+}
+/*=============content==============*/
+.breadcrumbs {
+	min-height: 40px;
+	font: normal 18px/34px 'HelveticaNeueW01-77BdCn 692722', Helvetica,
+		sans-serif;
+	color: #3E566D;
+	margin-top: 2px;
+	padding-left: 7px;
+	text-shadow: 0 1px 0 #E2E8EE;
+	text-shadow: 0 -1px 0 #748390;
+	color: #fff;
+}
+
+.breadcrumbs a {
+	color: #3E566D;
+	text-shadow: 0 1px 0 #E2E8EE;
+}
+
+.breadcrumbs a:hover {
+	text-decoration: none;
+}
+
+.breadcrumbs span {
+	color: #3E566D;
+	text-shadow: 0 1px 0 #E2E8EE;
+	padding: 0 5px;
+}
+
+.slogan {
+	width: 100%;
+	padding: 10px 0 30px;
+}
+
+.slogan h1,.slogan  h3 {
+	font-size: 24px;
+	text-align: center;
+	color: #39525F;
+	line-height: 32px;
+	text-shadow: 0 1px 0 #E1E8ED;
+}
+
+.slogan h3 {
+	font-size: 18px;
+	line-height: 24px;
+}
+/*======tabs======*/
+.hide {
+	display: none;
+}
+
+#tabs {
+	width: 100%;
+	padding-bottom: 35px;
+}
+
+.title_tabs {
+	overflow: hidden;
+}
+
+.title_tabs li {
+	float: right;
+	-webkit-border-top-left-radius: 3px;
+	-webkit-border-top-right-radius: 3px;
+	-moz-border-radius-topleft: 3px;
+	-moz-border-radius-topright: 3px;
+	border-top-left-radius: 3px;
+	border-top-right-radius: 3px;
+	border: 1px solid #829BAF;
+	border-bottom: none;
+	position: relative;
+	z-index: 50;
+}
+
+.title_tabs li.first_tab {
+	float: left;
+}
+
+.title_tabs li a {
+	background: url(https://static.propertyvista.com/errors/images/bg_tabs.jpg) repeat-x;
+	float: left;
+	padding: 0 57px;
+	height: 56px;
+	line-height: 56px;
+	font-size: 20px;
+	color: #333;
+	-moz-border-radius-topleft: 3px;
+	-moz-border-radius-topright: 3px;
+	border-top-left-radius: 3px;
+	border-top-right-radius: 3px;
+	-webkit-border-top-left-radius: 3px;
+	-webkit-border-top-right-radius: 3px;
+}
+
+.title_tabs li.active {
+	border: 1px solid #59788E;
+	border-bottom: none;
+}
+
+.title_tabs li.active a {
+	background: url(https://static.propertyvista.com/errors/images/active_tab.jpg) repeat-x;
+}
+
+.tabs_content {
+	border: 1px solid #59788E;
+	-webkit-border-radius: 3px;
+	-webkit-border-top-left-radius: 0;
+	-moz-border-radius: 3px;
+	-moz-border-radius-topleft: 0;
+	border-radius: 3px;
+	border-top-left-radius: 0;
+	min-height: 577px;
+	background: #CCC url(https://static.propertyvista.com/errors/images/bg_content_tabs.jpg) repeat-x;
+	box-shadow: 0 1px 0 #BAC5CF;
+	-webkit-box-shadow: 0 1px 0 #BAC5CF;
+	-moz-box-shadow: 0 1px 0 #BAC5CF;
+	margin-top: -1px;
+	padding: 20px 20px 0;
+}
+/*===============excerpt=============*/
+.all_excerpts {
+	position: relative;
+	padding: 25px 0 35px;
+	overflow: hidden;
+}
+
+.excerpt1,.excerpt2 {
+	float: left;
+	position: relative;
+	width: 448px;
+	border: 1px solid #57768D;
+	-webkit-border-radius: 6px;
+	-moz-border-radius: 6px;
+	border-radius: 6px;
+	min-height: 620px;
+	background: #d5d5d5 url(https://static.propertyvista.com/errors/images/bg_main_excerpt.jpg) repeat-x;
+}
+
+.excerpt2,.excerpt2 img {
+	float: right;
+}
+
+.excerpt1 img {
+	float: left;
+}
+
+.head_excerpt {
+	overflow: hidden;
+	border-bottom: 1px solid #57758C;
+}
+
+.text_ex {
+	padding: 15px 35px 90px;
+}
+
+.text_ex p {
+	padding-bottom: 15px;
+}
+
+.text_ex h2 {
+	font-size: 33px;
+	line-height: 38px;
+	color: #333;
+	padding: 10px 0 29px;
+}
+
+.excerpt1 h2 {
+	text-align: left;
+}
+
+.excerpt2 h2 {
+	text-align: right;
+}
+
+.pvista {
+	display: block;
+	position: absolute;
+	width: 335px;
+	height: 213px;
+	top: -4px;
+	left: 32%;
+	z-index: 25;
+}
+
+.learn_more,.btn_form {
+	background: url(https://static.propertyvista.com/errors/images/btn_learn.png) no-repeat;
+	float: left;
+	margin-right: 5px;
+}
+
+.learn_more span,.btn_form span input {
+	color: #fff;
+	padding: 0 22px;
+	text-align: center;
+	text-shadow: 0 -1px 0 #BE6F37;
+	float: left;
+	height: 42px;
+	font: 400 18px/42px 'HelveticaNeueW01-77BdCn 692722', Helvetica,
+		sans-serif;
+	margin-right: -5px;
+	background: url(https://static.propertyvista.com/errors/images/btn_learn.png) 100% -42px no-repeat;
+}
+
+.learn_more:hover {
+	text-decoration: none;
+}
+/*=============holder===========*/
+.holder {
+	clear: both;
+	overflow: hidden;
+	padding-bottom: 3px;
+}
+
+.head_block {
+	padding-bottom: 25px;
+}
+
+.head_block h2,.head_block h2 a {
+	color: #fff;
+	font-size: 24px;
+	text-shadow: 0 -1px 0 #6B7983;
+}
+
+.left_part {
+	float: left;
+	width: 620px;
+	padding-bottom: 20px;
+}
+
+.left_column {
+	float: left;
+	width: 280px;
+}
+
+.list.stars li {
+	background: url(https://static.propertyvista.com/errors/images/star.png) 0 4px no-repeat;
+	padding: 0 0 20px 20px;
+}
+
+.list li {
+	padding: 0 0 20px;
+}
+
+.list.stars li a,.list li p a {
+	color: #000;
+}
+
+.right_column {
+	float: right;
+	width: 280px;
+}
+
+.date {
+	font-size: 16px;
+	text-shadow: 0 -1px 0 #7E8F9B;
+	font-weight: bold;
+	color: #c7d0d7;
+}
+
+.right_part {
+	float: right;
+	width: 300px;
+}
+
+.follow_links {
+	padding-bottom: 35px;
+	overflow: hidden;
+}
+
+.follow_links ul {
+	height: 40px;
+	overflow: hidden;
+}
+
+.follow_links ul li {
+	float: left;
+	padding-right: 10px;
+}
+
+.follow_links ul li a {
+	text-indent: -9999px;
+	display: block;
+	width: 40px;
+	height: 40px;
+}
+
+.youtube a {
+	background: url(https://static.propertyvista.com/errors/images/services.png) no-repeat;
+}
+
+.linkedin a {
+	background: url(https://static.propertyvista.com/errors/images/services.png) 0 -40px no-repeat;
+}
+
+.tweet a {
+	background: url(https://static.propertyvista.com/errors/images/services.png) 0 -80px no-repeat;
+}
+
+.facebook a {
+	background: url(https://static.propertyvista.com/errors/images/services.png) 0 -120px no-repeat;
+}
+
+.rss a {
+	background: url(https://static.propertyvista.com/errors/images/services.png) 0 -160px no-repeat;
+}
+
+.form_email {
+	clear: both;
+	background: url(https://static.propertyvista.com/errors/images/border_content.png) no-repeat;
+}
+
+.latest_tweets .head_block {
+	overflow: hidden;
+	padding-bottom: 20px;
+	background: url(https://static.propertyvista.com/errors/images/bird_tweet.jpg) 76% 100% no-repeat;
+}
+
+.latest_tweets .head_block h2 {
+	background-color: transparent;
+	float: left;
+}
+
+.latest_tweets .quotes {
+	margin-top: -2px;
+}
+
+.latest_tweets .quotes li {
+	background-color: #a0aebb;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	padding: 15px 20px;
+	margin-bottom: 10px;
+}
+
+.form_email {
+	padding-top: 25px;
+}
+
+.form_email label {
+	padding: 0 17px 0 5px;
+	font-size: 20px;
+	text-shadow: 0 1px 0 #AAB7C2;
+	line-height: 30px;
+}
+
+.mergeRow {
+	display: none;
+}
+
+.mc_merge_var {
+	float: left;
+}
+
+.mc_signup_submit,.mc_input,.inputs,.form_email label {
+	float: left;
+}
+
+.mc_error_msg {
+	color: #f00;
+	font-size: 16px;
+	text-align: center;
+	padding: 0 0 15px;
+	display: block;
+}
+
+.mc_input {
+	background: url(https://static.propertyvista.com/errors/images/input_email.png) no-repeat;
+	height: 33px;
+	width: 202px;
+	color: #999;
+	padding: 0 0 0 45px;
+	line-height: 32px;
+}
+
+.mc_signup_submit input {
+	background: url(https://static.propertyvista.com/errors/images/btn_send.png) no-repeat;
+	height: 33px;
+	width: 83px;
+	text-shadow: 0 -1px 0 #000;
+	color: #fff;
+	cursor: pointer;
+	padding-bottom: 2px;
+}
+/*============footer===========*/
+.wrap_footer {
+	height: 100px;
+}
+
+.footer {
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	background: url(https://static.propertyvista.com/errors/images/bg_footer_menu.jpg) repeat-x;
+	height: 49px;
+	padding: 0 20px 0 10px;
+	border: 1px solid #486177;
+	box-shadow: 0 1px 0 #C5D2DC;
+	-webkit-box-shadow: 0 1px 0 #C5D2DC;
+	-moz-box-shadow: 0 1px 0 #C5D2DC;
+}
+
+.footer_menu {
+	float: left;
+	padding: 10px 0;
+}
+
+.footer_menu li {
+	float: left;
+}
+
+.footer_menu li a {
+	float: left;
+	text-shadow: 0 -1px 0 #28343E;
+	color: #fff;
+	font-size: 13px;
+	padding: 0 12px;
+	font-weight: bold;
+	line-height: 28px;
+}
+
+.footer .copyright {
+	color: #000;
+	float: right;
+	padding: 10px 0;
+	line-height: 28px;
+	overflow: hidden;
+	font-size: 14px;
+}
+/*==============products==============*/
+.two_columns .content_products {
+	background: #dfdfdf url(https://static.propertyvista.com/errors/images/bg_content_products.jpg) 0 70px
+		repeat-x;
+	min-height: 457px;
+	border: 1px solid #59788E;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	overflow: hidden;
+}
+
+.head_content_products {
+	background: #e1e1e1 url(https://static.propertyvista.com/errors/images/bg_head_product.jpg) repeat-x;
+	min-height: 50px;
+	padding: 10px 0 10px 65px;
+	-webkit-border-top-left-radius: 5px;
+	-webkit-border-top-right-radius: 5px;
+	-moz-border-radius-topleft: 5px;
+	-moz-border-radius-topright: 5px;
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+	border-bottom: 1px solid #59778E;
+}
+
+.head_content_products h1 {
+	font-size: 24px;
+	text-shadow: 0 1px 0 #f8f8f8;
+	color: #39525F;
+	line-height: 46px;
+}
+
+.content_products .text_ex {
+	margin-left: 450px;
+	padding: 5px 25px 30px 13px;
+	width: 450px;
+}
+
+.content_products .text_ex p {
+	font-size: 16px;
+	line-height: 22px;
+}
+
+.content_products .text_ex h2 {
+	padding-bottom: 12px;
+}
+
+.left_img {
+	float: left;
+}
+
+.content_products img.left_img {
+	padding-top: 35px;
+}
+
+.two_columns .left_part,.solutions .left_part {
+	width: 460px;
+	float: left;
+}
+
+.two_columns .right_part,.solutions .right_part {
+	width: 460px;
+	float: right;
+}
+
+.block,.full_block {
+	background-color: #E7E7E7;
+	border: 1px solid #58778E;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	margin-top: 20px;
+	min-height: 230px;
+	padding: 15px 20px 0 20px;
+}
+
+.full_block {
+	background: #eaeaea url(https://static.propertyvista.com/errors/images/bg_full_block.jpg) repeat-x;
+	min-height: 240px;
+	padding: 0;
+	clear: both;
+	overflow: hidden;
+	margin: 0;
+	position: relative;
+}
+
+.block .img_links {
+	padding: 0 0 07px;
+	overflow: hidden;
+}
+
+.img_links a {
+	float: left;
+}
+
+.img_links a.btn_video {
+	float: right;
+}
+
+.block .text {
+	clear: both;
+}
+
+.text p {
+	padding-bottom: 15px;
+}
+
+.two_columns {
+	padding-bottom: 15px;
+}
+
+.btn_video {
+	background: url(https://static.propertyvista.com/errors/images/btn_video.png) no-repeat;
+	height: 46px;
+	color: #666;
+	margin: 5px 6px 0 0;
+	text-shadow: 0 1px 0 #F5F5F5;
+}
+
+.btn_video span {
+	margin-right: -6px;
+	min-width: 74px;
+	padding-left: 58px;
+	float: left;
+	font: 400 20px/46px 'HelveticaNeueW01-77BdCn 692722', Helvetica,
+		sans-serif;
+	background: url(https://static.propertyvista.com/errors/images/btn_video.png) 100% -46px no-repeat;
+}
+
+.btn_video:hover {
+	text-decoration: none;
+}
+
+.btn_prices {
+	background: url(https://static.propertyvista.com/errors/images/btn_blue.png) no-repeat;
+	height: 46px;
+	color: #fff;
+	margin: 0 6px 0 15px;
+	text-shadow: 0 -1px 0 #355a80;
+	float: left;
+}
+
+.btn_prices span {
+	margin-right: -6px;
+	float: left;
+	padding: 0 30px;
+	font: 400 20px/46px 'HelveticaNeueW01-77BdCn 692722', Helvetica,
+		sans-serif;
+	background: url(https://static.propertyvista.com/errors/images/btn_blue.png) 100% -46px no-repeat;
+}
+
+.btn_prices:hover {
+	text-decoration: none;
+}
+/*===============solutions==================*/
+.solutions .img_links {
+	width: 105px;
+	padding-top: 5px;
+	float: left;
+}
+
+.solutions .text {
+	margin-left: 105px;
+	clear: none;
+}
+
+.post .text h2,.text h2 {
+	color: #39525F;
+	font-size: 24px;
+	padding: 5px 0 10px;
+	text-shadow: 0 1px 0 #f8f8f8;
+}
+
+.full_block .img_links {
+	width: 380px;
+	text-align: left;
+	padding: 0;
+	height: 240px;
+}
+
+.full_block .text {
+	margin-left: 380px;
+	padding: 25px 25px 86px 0;
+}
+
+.full_block h1 {
+	font-size: 29px;
+	padding-bottom: 15px;
+	color: #333;
+}
+
+.full_block .buttons {
+	width: 533px;
+	overflow: hidden;
+	position: absolute;
+	bottom: 22px;
+	left: 380px;
+}
+
+.full_block .buttons .btn_video {
+	float: left;
+	margin-top: 0;
+}
+
+.full_block .buttons .learn_more {
+	position: static;
+	float: right;
+}
+/*=====================solutions_reit==============*/
+.solut_reit .block {
+	min-height: 270px;
+}
+/*=====================about==============*/
+.about .left_part {
+	width: 240px;
+}
+
+.content_about {
+	margin-left: 240px;
+}
+
+.content_about h1,.content_page h1,.post h2 {
+	font-size: 29px;
+	color: #333;
+	padding: 25px 0;
+	line-height: 1em;
+}
+
+.post h2 a {
+	color: #333;
+}
+
+.holder.about {
+	background: #e2e2e2 url(https://static.propertyvista.com/errors/images/bg_holder.jpg) repeat-x;
+	min-height: 448px;
+	border: 1px solid #58778E;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	overflow: visible;
+}
+
+.content_about .text {
+	padding: 0 80px 50px 0;
+}
+
+.left_menu {
+	padding-top: 17px;
+	margin-left: -1px;
+}
+
+.left_menu li {
+	padding: 8px 5px 8px 34px;
+}
+
+.left_menu li.active,.left_menu li:hover {
+	background: url(https://static.propertyvista.com/errors/images/corner_menu.png) 0 50% no-repeat;
+}
+
+.left_menu li a {
+	font: normal 20px 'HelveticaNeueW01-77BdCn 692722', Helvetica,
+		sans-serif;
+	color: #333;
+	padding: 5px;
+}
+
+.left_menu li:hover a {
+	text-decoration: none;
+}
+/*=====================partners==============*/
+.holder.about.partners {
+	min-height: 660px;
+	background: #ddd url(https://static.propertyvista.com/errors/images/bg_partners.jpg) repeat-x;
+}
+
+.text p a {
+	color: #06C;
+}
+
+.content_about .block_partner {
+	padding: 20px 0 0;
+}
+
+.content_about .block_partner .text {
+	padding: 0;
+	margin-left: 160px;
+}
+
+.block_partner .img_links {
+	width: 160px;
+	float: left;
+}
+/*=====================news==============*/
+.holder.about.news {
+	min-height: 1380px;
+	background: #d6d6d6 url(https://static.propertyvista.com/errors/images/bg_news.jpg) repeat-x;
+}
+
+.block_new {
+	padding: 10px 80px 0 0;
+}
+
+.block_new h2 {
+	color: #000;
+	font-size: 20px;
+	padding-bottom: 20px;
+}
+
+.block_new h2 a {
+	color: #000;
+}
+
+.block_new p {
+	padding-bottom: 20px;
+}
+
+.block_new p a {
+	font-size: 13px;
+}
+/*=====================contact_us==============*/
+.holder.about.contact {
+	background: #dfdfdf url(https://static.propertyvista.com/errors/images/bg_news.jpg) repeat-x;
+	min-height: 597px;
+}
+
+.holder.about.contact .text h3 {
+	font: normal 16px 'Droid Sans', sans-serif;
+	padding: 21px 0 19px;
+}
+
+.phone,.mail {
+	padding: 0 0 0 50px;
+}
+
+.phone {
+	background: url(https://static.propertyvista.com/errors/images/phone.png) no-repeat;
+	min-height: 29px;
+	line-height: 28px;
+	padding-bottom: 16px;
+}
+
+.mail strong {
+	font-size: 16px;
+	display: block;
+	padding-bottom: 3px;
+}
+
+.mail p a {
+	color: #000;
+}
+
+.mail {
+	background: url(https://static.propertyvista.com/errors/images/mail.png) no-repeat;
+}
+
+.text address {
+	font-style: normal;
+	padding-bottom: 12px;
+}
+/*=====================signup_form==============*/
+.holder.about.signup_form {
+	background: #DCDCDC url(https://static.propertyvista.com/errors/images/bg_news.jpg) repeat-x;
+	min-height: 597px;
+}
+
+.holder.about.signup_form .left_part {
+	padding-top: 30px;
+	text-align: center;
+}
+
+.contacts_form {
+	padding: 39px 0 50px;
+}
+
+.element {
+	padding: 5px 0 10px;
+	overflow: hidden;
+}
+
+.element input {
+	width: 300px;
+	border: 1px solid #ccc;
+	color: #333;
+	font-size: 16px;
+	padding: 3px 10px;
+	height: 21px;
+	box-shadow: 0 0 2px 3px #e9e9e9;
+	-moz-box-shadow: 0 0 2px 3px #e9e9e9;
+	-webkit-box-shadow: 0 0 2px 3px #e9e9e9;
+}
+
+.element label {
+	width: 150px;
+	padding-right: 25px;
+	line-height: 30px;
+	font-size: 14px;
+	color: #333;
+	float: left;
+	text-align: right;
+}
+
+.el-small input {
+	width: 98px;
+}
+
+.input_big {
+	float: left;
+}
+
+.element .input_big {
+	width: 367px;
+}
+
+.element .input220 {
+	width: 200px;
+}
+
+.element .input170 {
+	width: 150px;
+}
+
+.element .input100 {
+	width: 80px;
+}
+
+.btn_form {
+	margin: 30px 0 0 176px;
+}
+
+.btn_form input {
+	background: none;
+	cursor: pointer;
+	border: none;
+}
+
+.element.code {
+	padding-bottom: 40px;
+}
+/*======================custom_select===========================*/
+.selects a.selectBox {
+	float: left;
+	margin-right: 5px;
+}
+
+.selects a.selectBox:hover {
+	text-decoration: none;
+}
+
+.sel_wrap a.selectBox:hover,.sel_wrap1 a.selectBox:hover {
+	text-decoration: none;
+}
+/* Dropdown control */
+.selectBox-dropdown {
+	position: relative;
+	text-decoration: none;
+	outline: none;
+	vertical-align: middle;
+	display: inline-block;
+	color: #333 !important;
+	cursor: default;
+	line-height: 2.4;
+	font-size: 14px;
+}
+
+.sel_wrap .selectBox-dropdown {
+	width: 48px;
+	padding-right: 35px;
+	height: 34px !important;
+	background: url(https://static.propertyvista.com/errors/images/sel_state.png) no-repeat;
+}
+
+.selectBox-dropdown:focus,.selectBox-dropdown:focus .selectBox-arrow {
+	border-color: #666;
+}
+
+.selectBox-dropdown.selectBox-menuShowing {
+	-moz-border-radius-bottomleft: 0;
+	-moz-border-radius-bottomright: 0;
+	-webkit-border-bottom-left-radius: 0;
+	-webkit-border-bottom-right-radius: 0;
+	border-bottom-left-radius: 0;
+	border-bottom-right-radius: 0;
+}
+
+.selectBox-dropdown .selectBox-label {
+	width: 100%;
+	display: inline-block;
+	white-space: nowrap;
+	overflow: hidden;
+	padding: 0 0 0 1em;
+}
+
+.selectBox-dropdown .selectBox-arrow {
+	position: absolute;
+	top: 0;
+	right: 0;
+}
+
+.sel_wrap .selectBox-dropdown .selectBox-arrow {
+	width: 35px;
+	height: 34px !important;
+	background: url(https://static.propertyvista.com/errors/images/sel_state.png) 100% -34px no-repeat;
+}
+/* Dropdown menu */
+.selectBox-dropdown-menu {
+	position: absolute;
+	z-index: 99999;
+	max-height: 200px;
+	border: solid 1px #666;
+	background: #FFF;
+	-moz-box-shadow: 0 2px 6px rgba(0, 0, 0, .2);
+	-webkit-box-shadow: 0 2px 6px rgba(0, 0, 0, .2);
+	box-shadow: 0 2px 6px rgba(0, 0, 0, .2);
+	overflow: auto;
+}
+/* Inline control */
+.selectBox-inline {
+	outline: none;
+	border: solid 1px #b3ac84;
+	background: #FFF;
+	display: inline-block;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
+	overflow: auto;
+}
+
+.selects .selectBox-inline {
+	width: 176px;
+}
+
+.sel_people .selectBox-inline {
+	width: 85px;
+}
+
+.selectBox-inline:focus {
+	border-color: #666;
+}
+/* Options */
+.selectBox-options,.selectBox-options LI,.selectBox-options LI A {
+	list-style: none;
+	display: block;
+	cursor: default;
+	padding: 0;
+	margin: 0;
+}
+
+.selectBox-options LI A {
+	line-height: 1.5;
+	padding: 0 0.5em;
+	white-space: nowrap;
+	overflow: hidden;
+	color: #333;
+	font-size: 18px;
+	background: 6px center no-repeat;
+}
+
+.selectBox-options LI A:hover {
+	text-decoration: none;
+}
+
+.selectBox-options LI.selectBox-hover A {
+	background-color: #e7e8ea;
+}
+
+.selectBox-options LI.selectBox-disabled A {
+	color: #888;
+	background-color: transparent;
+}
+
+.selectBox-options LI.selectBox-selected A {
+	background-color: #ced0d2;
+}
+
+.selectBox-options .selectBox-optgroup {
+	color: #333;
+	background: #EEE;
+	font-weight: bold;
+	line-height: 1.5;
+	padding: 0 .3em;
+	white-space: nowrap;
+}
+/* Disabled state */
+.selectBox.selectBox-disabled {
+	color: #888 !important;
+}
+
+.selectBox-dropdown.selectBox-disabled .selectBox-arrow {
+	opacity: .5;
+	filter: alpha(opacity =       50);
+	border-color: #666;
+}
+
+.selectBox-inline.selectBox-disabled {
+	color: #888 !important;
+}
+
+.selectBox-inline.selectBox-disabled .selectBox-options A {
+	background-color: transparent !important;
+}
+
+.error-404 {
+	text-align: center;
+}
+
+.alignleft {
+	float: left;
+	margin: 0 15px 5px;
+}
+
+.alignright {
+	float: right;
+	margin: 0 0 5px 15px;
+}
+
+.aligncenter {
+	display: block;
+	margin: 0 auto 5px;
+}
+
+.content_page {
+	padding: 0 30px 10px;
+}
+
+.content_page ul {
+	padding: 0 0 15px 35px;
+	list-style: disc;
+}
+
+.content_page ol {
+	padding: 0 0 15px 35px;
+	list-style: decimal;
+}
+
+.button_box {
+	float: right;
+	width: 200px;
+}
+
+.button_box .fb-like {
+	float: left;
+}
+
+.button_box #___plusone_0 {
+	margin: 9px 0 0 !important;
+}
+
+.prise_content {
+	background-color: #e7e7e7;
+}
+
+.prise_content h2 {
+	color: #39525F;
+	font-size: 24px;
+	padding: 5px 0 10px;
+	text-shadow: 0 1px 0 #F8F8F8;
+}
+
+.prise_content p,.t_wrap {
+	padding-bottom: 15px;
+}
+
+.prise_content p {
+	font-size: 13px;
+	color: #666;
+}
+
+.t_wrap {
+	overflow: hidden;
+}
+
+.t_wrap table {
+	margin-left: -1px;
+}
+
+.t_wrap table tr th,.t_wrap table tr td {
+	vertical-align: middle;
+	text-align: center;
+	border: solid #ccc;
+	border-width: 0 0 1px 1px;
+	padding: 5px;
+}
+
+.t_wrap table tr td span {
+	font-size: 20px;
+	color: #666;
+}
+
+.t_wrap table tr td em {
+	font-style: normal;
+	font-size: 33px;
+	color: #CC2E2A;
+}
+
+.t_wrap table tr td strong {
+	font-weight: normal;
+	font-size: 25px;
+	color: #666;
+}
+
+.t_wrap table tr td small {
+	font-size: 12px;
+	color: #666;
+}
+
+.t_wrap table tr td strong,.t_wrap table tr td small,.t_wrap table tr td em,.t_wrap table tr td span
+	{
+	display: block;
+	line-height: 1.3em;
+	font-family: 'HelveticaNeueW01-77BdCn 692722', Helvetica, sans-serif;
+}
+
+.prise_content h2 {
+	padding: 0 0 25px;
+	text-align: center;
+}
+
+.content_about .text .learn_more {
+	position: static;
+}
+
+.post {
+	width: 100%;
+	overflow: hidden;
+	padding: 0 0 20px;
+}
+
+.post table {
+	border: solid #ccc;
+	border-width: 1px 1px 0 0;
+}
+
+.post table td,.post table th {
+	border: solid #ccc;
+	border-width: 0 0 1px 1px;
+}
+
+.content_about .post .text {
+	padding: 0;
+}
+
+body {
+	-webkit-text-size-adjust: 100%;
+}
+
+.center_part {
+	width: 460px;
+	padding-bottom: 20px;
+	margin: 0 auto;
+	clear: both;
+}
+/*--signup--*/
+.signup_wrap {
+	border: 1px solid #333;
+	background: #fff url(https://static.propertyvista.com/errors/images/signup-wrap.png) repeat-x 0 100%;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+}
+
+.signup {
+	background: url(https://static.propertyvista.com/errors/images/signup-bg.png) repeat-y;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+}
+
+#color_1 {
+	width: 187px;
+}
+
+#color_2 {
+	background: #d9d9d9;
+	width: 187px;
+}
+
+#color_3 {
+	background: #dcdcdc;
+	width: 187px;
+}
+
+#color_4 {
+	background: #e9e9e9;
+	width: 187px;
+}
+
+.signup table tr th {
+	padding: 25px 0;
+	color: #44535E;
+	font-size: 28px;
+	font-weight: 400;
+	line-height: 1.2em;
+	font-family: 'HelveticaNeueW01-77BdCn 692722', Helvetica, sans-serif;
+}
+
+.signup table tr td {
+	border-top: 1px dotted #c6c6c6;
+	padding: 25px 0;
+}
+
+.signup table tr.price_line td {
+	text-align: center;
+}
+
+.signup table tr td h4 {
+	font-size: 20px;
+	color: #39525F;
+	font-weight: bold;
+	text-shadow: 0 1px 0 #eee;
+}
+
+.signup table tr td h4 span {
+	font-weight: normal;
+}
+
+.signup table tr td h4.red {
+	color: #CC2D2A;
+	font-size: 24px;
+}
+
+.signup table tr td strong {
+	display: block;
+	text-align: center;
+	color: #333;
+	font-weight: normal;
+	font-family: 'HelveticaNeueW01-77BdCn 692722', Helvetica, sans-serif;
+}
+
+.signup table tr td ul {
+	padding: 0 0 0 30px;
+}
+
+.signup table tr td ul li {
+	padding: 0 0 5px 20px;
+	font-size: 13px;
+	line-height: 16px;
+	background: url(https://static.propertyvista.com/errors/images/bullet.png) no-repeat 0 3px;
+}
+/*--limit_info--*/
+.limit {
+	width: 100px;
+	padding: 8px 0 0 50px;
+}
+
+.limit:after {
+	height: 0;
+	clear: both;
+	content: "";
+	display: block
+}
+
+.limit_info {
+	display: none;
+	position: absolute;
+	top: -60px;
+	left: 15px;
+	padding: 0 0 0 11px;
+	width: 215px;
+}
+
+.limit_holder {
+	width: 185px;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	background: #5A7990;
+	padding: 15px 15px 0;
+	position: relative;
+}
+
+.limit span {
+	color: #39525F;
+	font-size: 12px;
+	line-height: 16px;
+	font-weight: bold;
+	float: left;
+}
+
+.limit_info_wrap {
+	float: left;
+	position: relative;
+	width: 16px;
+	height: 16px;
+	background: url(https://static.propertyvista.com/errors/images/limit_info.png) no-repeat;
+	margin: 0 0 0 5px;
+	cursor: pointer;
+}
+
+.limit_info_wrap:hover .limit_info {
+	display: block;
+}
+
+.limit_info_wrap span.pointer {
+	background: url(https://static.propertyvista.com/errors/images/limit_pointer.png) no-repeat;
+	display: block;
+	width: 8px;
+	height: 17px;
+	overflow: hidden;
+	text-indent: -9898px;
+	position: absolute;
+	top: 60px;
+	left: -8px;
+}
+
+.signup table tr td .limit_info ul {
+	padding: 0 0 0 15px;
+}
+
+.signup table tr td .limit_info ul li {
+	background: none;
+	padding: 0 0 15px;
+	list-style: disc;
+	color: #fff;
+	font-size: 12px;
+	line-height: 16px;
+	text-align: left;
+}
+
+.signup table tr td a.learn_more {
+	margin: 0 0 0 45px;
+}
+/*--signup_text--*/
+.signup_text {
+	overflow: hidden;
+	padding: 30px 60px;
+}
+
+.signtup_left {
+	float: left;
+	width: 260px;
+}
+
+.signtup_left h2 {
+	font-size: 30px;
+	color: #F2994C;
+}
+
+.signtup_left p {
+	font-size: 13px;
+	color: #666;
+}
+/*--signup_main--*/
+.signup_main {
+	float: left;
+	width: 510px;
+}
+
+.signup_main h1 {
+	font-size: 29px;
+	padding: 0 0 35px;
+}
+
+.signup_main p {
+	padding: 0 0 35px;
+}
+
+.signup_element {
+	width: 395px;
+	padding: 0 0 10px;
+}
+
+.signup_element label {
+	display: block;
+	padding: 0 0 2px 5px;
+}
+
+.signup_field {
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	border: 3px solid #e9e9e9;
+	width: 389px;
+	overflow: hidden;
+}
+
+.signup_field input {
+	width: 377px;
+	background: #fff;
+	padding: 5px;
+	font-size: 14px;
+	margin: 0;
+	float: left;
+	border: 1px solid #fff;
+}
+
+.form_element .signup_field {
+	width: auto;
+	float: left;
+}
+
+.captcha {
+	padding: 12px 0 30px;
+	width: 312px;
+	height: 123px;
+}
+
+.terms_check {
+	width: 100%;
+	overflow: hidden;
+	padding: 0 0 45px;
+}
+
+.terms_check input {
+	float: left;
+}
+
+.terms_check label {
+	float: left;
+	padding: 0 0 0 3px;
+}
+
+.terms_check label a {
+	color: #25A9E0;
+}
+
+.signup_submit {
+	width: 100%;
+	overflow: hidden;
+	padding: 0 0 25px;
+}
+
+.signup_submit .btn_form {
+	margin: 0;
+}
+
+.subscription {
+	width: 100%;
+	padding: 0 0 20px;
+}
+
+.subscription span {
+	display: block;
+	padding: 0 0 3px 3px;
+}
+
+.subscription ul {
+	width: 100%;
+	overflow: hidden;
+}
+
+.subscription ul li {
+	float: left;
+	padding: 0 20px 0 0;
+}
+
+.subscription ul li input {
+	float: left;
+}
+
+.subscription ul li label {
+	float: left;
+	font-weight: 600;
+	padding: 0 0 0 5px;
+}
+
+.error_block {
+	width: 100%;
+	overflow: hidden;
+	color: #f00;
+	padding: 0 0 30px 45px;
+	background: url(https://static.propertyvista.com/errors/images/error.png) no-repeat 10px 0;
+}
+
+.error_block h3 {
+	font-size: 16px;
+	padding: 0 0 18px;
+}
+
+.error_block ul {
+	padding: 0;
+}
+
+.error_block ul li {
+	padding: 0 0 5px 15px;
+	background: url(https://static.propertyvista.com/errors/images/error_bullet.png) no-repeat 5px 8px;
+}
+
+.error_f label {
+	color: #f00;
+}
+
+.error_f .signup_field input {
+	border-color: #f00;
+}
+
+.signup_full {
+	width: 100%;
+}
+
+.signup_select {
+	padding: 0 0 0 4px;
+}
+/*--units_box--*/
+.units_box {
+	width: 100%;
+	padding: 10px 0 20px;
+}
+
+.units_box h4 {
+	font-size: 14px;
+	padding: 0 0 15px 5px;
+	font-family: 'Droid Sans', sans-serif;
+	font-weight: bold;
+}
+
+.unit_element {
+	width: 100%;
+	overflow: hidden;
+	padding: 0 0 13px;
+}
+
+.unit_element label {
+	float: left;
+	width: 108px;
+	padding: 7px 0 0 5px;
+	font-family: 'HelveticaNeueW01-77BdCn 692722', Helvetica, sans-serif;
+}
+
+.unit_element .signup_field {
+	float: left;
+	width: 80px;
+}
+
+.unit_element .signup_field input {
+	width: 68px;
+}
+
+.unit_close {
+	float: left;
+	margin: 13px 0 0 14px;
+	width: 8px;
+	height: 9px;
+	overflow: hidden;
+	text-indent: -9898px;
+	background: url(https://static.propertyvista.com/errors/images/unit_close.png) no-repeat;
+}
+
+.add_unit {
+	font-weight: bold;
+	padding: 0 0 0 5px;
+}
+
+.add_unit a {
+	color: #25A9E0;
+	font-size: 13px;
+}
+/*********************************************
+Backend
+**********************************************/
+body.admin {
+	background: #fff url(https://static.propertyvista.com/errors/images/admin/admin_body.png) repeat-x;
+}
+
+body.admin a:hover {
+	text-decoration: none;
+	color: #FF8235;
+}
+
+.main {
+	width: 960px;
+	margin: 0 auto;
+}
+
+.admin .header {
+	height: 62px;
+	background: none;
+	border: none;
+	width: 100%;
+	box-shadow: none;
+	-moz-box-shadow: none;
+	-webkit-box-shadow: none;
+}
+
+.admin-logo,.admin-logo a {
+	display: block;
+	width: 180px;
+	height: 43px;
+}
+
+.admin-logo {
+	background: url(https://static.propertyvista.com/errors/images/admin/logo-admin.png) no-repeat;
+	position: absolute;
+	top: 3px;
+	left: 0;
+}
+
+.admin-logo a {
+	overflow: hidden;
+	text-indent: -9898px;
+}
+
+.user {
+	color: #fff;
+	font-size: 14px;
+	float: left;
+	line-height: 1.4em;
+	padding: 0 20px 0 40px;
+}
+
+.admin .lang {
+	width: auto;
+	float: right;
+	padding: 20px 20px 0 0;
+	font-size: 13px;
+}
+
+.admin .lang ul {
+	float: left;
+}
+
+.admin .lang ul li.active {
+	display: none;
+	background: none;
+}
+
+.admin .lang ul li a {
+	text-shadow: none;
+}
+
+.admin .lang ul li {
+	padding: 0;
+}
+
+.admin .lang .login {
+	text-shadow: none;
+	margin: 0;
+	padding: 0;
+}
+
+.admin .main_menu {
+	width: 100%;
+	height: 46px;
+	overflow: hidden;
+	float: none;
+}
+
+.admin .main_menu ul {
+	width: 100%;
+	overflow: hidden;
+}
+
+.admin .main_menu ul li {
+	height: 46px;
+	padding: 0 20px 0 0;
+	background: none;
+}
+
+.admin .main_menu ul li.last {
+	float: right;
+}
+
+.admin .main_menu ul li a {
+	font-size: 16px;
+	color: #5E7D94;
+	text-shadow: none;
+	padding: 0;
+	line-height: 46px;
+	height: 46px;
+}
+
+.admin .main_menu ul li.active a {
+	background: url(https://static.propertyvista.com/errors/images/admin/a_active.png) no-repeat 50% 100%;
+	/* color: #333; */
+}
+
+.admin .main_menu ul li strong {
+	font-size: 16px;
+	color: #B3C2CD;
+	text-shadow: none;
+	padding: 0;
+	line-height: 46px;
+	height: 46px;
+	font-weight: normal;
+	font-family: 'HelveticaNeueW01-77BdCn 692722', Helvetica, sans-serif;
+}
+
+.admin_content_wrap {
+	width: 100%;
+	margin: 35px 0;
+}
+
+.y_border {
+	background: url(https://static.propertyvista.com/errors/images/admin/a_border.png) repeat-y 218px 0;
+}
+
+.admin_content_wrap:after {
+	height: 0;
+	clear: both;
+	content: "";
+	display: block;
+}
+
+.admin .footer {
+	background: none;
+	border: none;
+	border-top: 1px solid #90AFC7;
+	padding: 10px 24px 40px;
+	box-shadow: none;
+	-moz-box-shadow: none;
+	-webkit-box-shadow: none;
+	-moz-border-radius: 0;
+	-webkit-border-radius: 0;
+	border-radius: 0;
+	height: auto;
+}
+
+.admin .footer span.copyright {
+	font-size: 12px;
+	color: #666;
+	padding: 0;
+	float: none;
+}
+
+.admin_sidebar {
+	float: left;
+	width: 218px;
+	padding: 13px 0;
+}
+
+.admin_menu {
+	width: 239px;
+	margin: 0 0 0 -21px;
+}
+
+.admin_menu ul li {
+	margin: 0 0 1px;
+}
+
+.admin_menu ul li.step a {
+	background: url(https://static.propertyvista.com/errors/images/admin/step.png) no-repeat 94% 5px;
+}
+
+.admin_menu ul li.active.step a {
+	background: #EDF1F5 url(https://static.propertyvista.com/errors/images/admin/step.png) no-repeat 94% 5px;
+}
+
+.admin_menu ul li a,.admin_menu ul li span {
+	display: block;
+	border: solid #fff;
+	border-width: 1px 0 1px 1px;
+	padding: 6px 44px 6px 22px;
+	color: #25A9DF;
+	font-size: 14px;
+	line-height: 16px;
+}
+
+.admin_menu ul li span {
+	color: #A7DDF2;
+}
+
+.admin_menu ul li.active a,.admin_menu ul li.active ul li.active a {
+	font-weight: bold;
+	color: #333;
+	border: solid #E7EAEC;
+	border-width: 1px 0 1px 1px;
+	background:#EDF1F5;
+}
+
+.admin_menu ul li.active ul li a {
+	background: none;
+	border: solid #fff;
+	border-width: 1px 0 1px 1px;
+	color: #25A9DF;
+	font-weight: normal;
+}
+
+.admin_menu ul li a:hover {
+	text-decoration: none;
+}
+
+.admin_menu ul ul {
+	padding: 7px 0 0;
+}
+
+.admin_menu ul ul li a {
+	padding-left: 58px;
+}
+
+.admin_menu ul ul li a span {
+	color: #333;
+	font-size: 12px;
+	display: inline;
+	padding: 0;
+	border: none;
+}
+
+.admin_menu ul ul li a:hover span {
+	color: #333;
+}
+
+.admin_content {
+	float: right;
+	width: 695px;
+	padding: 15px 0;
+	overflow: hidden;
+}
+
+.admin_content a {
+	color: #25A9DF;
+}
+
+.admin_title {
+	width: 100%;
+	overflow: hidden;
+	padding: 0 0 25px;
+}
+
+.admin_title h1 {
+	float: left;
+}
+
+.admin_content h1,.admin_content h2,.status_content h2 {
+	font-size: 20px;
+	color: #39525F;
+}
+
+.admin_search_wrap {
+	float: right;
+	width: 287px;
+}
+
+.admin_search_field {
+	float: left;
+	padding: 1px 0 0;
+	width: 202px;
+}
+
+.admin_content input[type=text],.admin_content input[type=email],.admin_content input[type=password]
+	{
+	border: 1px solid #ccc;
+}
+
+.admin_search_field input {
+	padding: 3px 5px;
+	width: 202px;
+	font-size: 14px;
+	font-family: Arial, Helvetica, sans-serif;
+	margin: 0;
+}
+
+.admin_search_btn {
+	float: right;
+	width: 60px;
+	height: 28px;
+	overflow: hidden;
+	background: url(https://static.propertyvista.com/errors/images/admin/a_search_btn.png) no-repeat;
+}
+
+.admin_search_btn:hover {
+	background-position: 0 -28px;
+}
+
+.admin_search_btn input {
+	display: block;
+	overflow: hidden;
+	text-indent: -9898px;
+	background: none;
+	font-size: 0;
+	width: 60px;
+	height: 28px;
+	cursor: pointer;
+}
+
+.admin_table {
+	width: 100%;
+	overflow: hidden;
+	padding: 0 0 60px;
+	line-height: 16px;
+}
+
+#col_1 {
+	width: 158px;
+}
+
+.admin_table table tr th {
+	background: #EFF2F4;
+	border-bottom: 1px solid #ccc;
+	font-weight: normal;
+	text-align: left;
+	font-size: 13px;
+	color: #666;
+	padding: 8px 13px;
+}
+
+.admin_table table tr th strong {
+	color: #000;
+}
+
+.admin_table table tr td {
+	padding: 13px;
+	border-bottom: 1px dotted #ccc;
+	font-size: 12px;
+	color: #666;
+	vertical-align: middle;
+}
+
+.admin_table table tr td a {
+	font-size: 14px;
+}
+
+.admin_table table tr:hover td,.admin_table table tr.active td {
+	background: #FFF5E5;
+}
+
+.gray {
+	color: #999;
+}
+
+.yellow {
+	color: #f90;
+}
+
+.green {
+	color: #396 !important;
+}
+
+.light_green {
+	color: #0c6;
+}
+
+.blue {
+	color: #25A9DF !important;
+}
+
+.admin_paging_wrap {
+	width: 100%;
+	overflow: hidden;
+	margin: -40px 0 0;
+	position: relative;
+}
+
+.a_paging_wrap {
+	float: right;
+	height: 20px;
+}
+
+.a_paging_wrap label {
+	float: left;
+	height: 20px;
+	line-height: 20px;
+	font-size: 12px;
+	color: #666;
+	padding: 0 10px 0 0;
+}
+
+.select_page {
+	float: left;
+}
+
+.page_list {
+	height: 20px;
+	float: left;
+	padding: 0 0 0 38px;
+}
+
+.page_list li {
+	height: 20px;
+	float: left;
+	font-size: 12px;
+	padding: 0 5px 0 0;
+}
+
+.page_list li a,.page_list li strong {
+	height: 20px;
+	line-height: 20px;
+	padding: 0 6px;
+	float: left;
+	color: #00A1DE;
+}
+
+.page_list li a:hover,.page_list li strong {
+	color: #000;
+	background: #A8ACB0;
+}
+
+.page_list li.next a,.page_list li.prev a {
+	width: 20px;
+	padding: 0;
+	overflow: hidden;
+	text-indent: -9898px;
+	background: url(https://static.propertyvista.com/errors/images/admin/prev.png) no-repeat;
+}
+
+.page_list li.next a {
+	background: url(https://static.propertyvista.com/errors/images/admin/next.png) no-repeat;
+}
+
+#col_2 {
+	width: 258px;
+}
+
+.small_btn {
+	font-weight: bold;
+	color: #fff !important;
+	font-size: 12px !important;
+	text-shadow: 0 1px 0 #666;
+	background: url(https://static.propertyvista.com/errors/images/admin/a_small_btn.png) no-repeat;
+	width: 68px;
+	height: 22px;
+	line-height: 22px;
+	text-align: center;
+	display: block;
+	margin: 0 auto;
+	text-shadow: 0 1px 0 #777;
+}
+
+button.small_btn {
+	font-weight: bold;
+	color: #fff !important;
+	font-size: 12px !important;
+	text-shadow: 0 1px 0 #666;
+	background: url(https://static.propertyvista.com/errors/images/admin/a_small_btn.png) no-repeat;
+	width: 68px;
+	height: 22px;
+	display: block;
+	margin: 0 auto;
+	border: none;
+	line-height: 1em;
+	padding: 0 0 3px;
+	cursor: pointer;
+}
+
+.small_btn:hover {
+	text-decoration: none;
+	color: #fff !important;
+	background-position: 0 -22px !important;
+}
+
+button.small_blue_btn,.small_blue_btn {
+	background: url(https://static.propertyvista.com/errors/images/admin/a_small_btn_blue.png) no-repeat;
+	height: 25px;
+	line-height: 25px;
+	width: 70px !important;
+	text-shadow: 0 1px 0 #777;
+}
+
+button.small_blue_btn:hover,.small_blue_btn:hover {
+	text-decoration: none;
+	color: #fff !important;
+	background-position: 0 -25px !important;
+}
+
+.admin_table table tr td select {
+	width: 210px;
+	padding: 4px 0;
+}
+
+#col_3 {
+	width: 357px;
+}
+
+#col_4 {
+	width: 465px;
+}
+
+.admin_content h2,.status_content h2 {
+	padding: 0 0 23px;
+}
+
+.admin_content h3,.status_content h3 {
+	font-size: 18px;
+	color: #5E7D93;
+	font-weight: normal;
+	padding: 0 0 15px;
+}
+
+.admin_table input[type=text] {
+	font-size: 13px;
+	color: #000;
+	font-family: Arial, Helvetica, sans-serif;
+	padding: 3px 5px;
+	width: 64px;
+}
+
+.admin_table table tr td em {
+	font-style: normal;
+	font-size: 13px;
+	color: #000;
+}
+
+.admin_table table tfoot {
+	border-top: 1px solid #999;
+}
+
+.admin_table table tfoot tr td {
+	border: none;
+	background: #F7F8F9;
+	text-align: center;
+	padding: 10px 13px;
+	font-size: 13px;
+	color: #000;
+}
+
+.admin_table table tfoot tr:hover td {
+	background: #F7F8F9;
+}
+
+.admin_table table tfoot tr th {
+	text-align: right;
+	border: none;
+	background: #F7F8F9;
+	padding: 10px 13px;
+	font-size: 13px;
+	color: #000;
+}
+
+.admin_table table tfoot tr.a_total td,.admin_table table tfoot tr.a_total th
+	{
+	font-size: 14px;
+	font-weight: bold;
+}
+
+#col_5 {
+	width: 208px;
+}
+
+select.small_select {
+	width: 75px !important;
+	padding: 4px 0;
+}
+
+input.blue_btn,input.orange_btn {
+	float: left;
+	font-family: 'HelveticaNeueW01-77BdCn 692722', Helvetica, sans-serif;
+	border: none;
+	background: url(https://static.propertyvista.com/errors/images/admin/a_blue_btn.png) no-repeat;
+	width: 109px;
+	height: 41px;
+	margin: 0 20px 0 0;
+	color: #fff;
+	padding: 0 0 5px;
+	font-size: 16px;
+	cursor: pointer;
+	text-shadow: 0 1px 0 #777;
+}
+
+input.orange_btn {
+	height: 38px;
+	padding: 0 0 2px;
+}
+
+input.blue_btn_pointer {
+	background: url(https://static.propertyvista.com/errors/images/admin/a_blue_btn_pointer.png) no-repeat;
+	width: 125px;
+}
+
+input.orange_btn {
+	background: url(https://static.propertyvista.com/errors/images/admin/a_orange_btn.png) no-repeat;
+}
+
+a.orange_btn,a.blue_btn {
+	float: left;
+	color: #fff;
+	font-size: 16px;
+	font-family: 'HelveticaNeueW01-77BdCn 692722', Helvetica, sans-serif;
+	background: url(https://static.propertyvista.com/errors/images/admin/a_orange_btn.png) no-repeat;
+	width: 107px;
+	height: 38px;
+	color: #fff;
+	text-align: center;
+	line-height: 38px;
+	margin: 0 20px 0 0;
+	text-shadow: 0 1px 0 #777;
+}
+
+a.blue_btn {
+	background: url(https://static.propertyvista.com/errors/images/admin/a_blue_btn.png) no-repeat;
+	width: 109px;
+	height: 41px;
+}
+
+.blue_btn:hover,.blue_btn_pointer:hover {
+	background-position: 0 -41px !important;
+}
+
+.orange_btn:hover {
+	background-position: 0 -38px !important;
+}
+
+a.orange_btn:hover,a.blue_btn:hover {
+	color: #fff !important;
+}
+
+.label_pv_admin {
+	width: 131px;
+	height: 131px;
+	overflow: hidden;
+	text-indent: -9898px;
+	display: block;
+	position: absolute;
+	top: 0;
+	left: 0;
+	background: url(https://static.propertyvista.com/errors/images/admin/pv_admin.png) no-repeat;
+}
+
+.admin_table table tr td strong a {
+	font-size: 12px;
+}
+
+.status_content {
+	width: 100%;
+	overflow: hidden;
+	padding: 40px 0;
+}
+
+.status_content h1 {
+	font-size: 20px;
+	color: #39525F;
+	padding: 0 0 20px;
+}
+
+.waiting_element {
+	width: 100%;
+	overflow: hidden;
+	padding: 0 0 60px;
+}
+
+.waiting_element img {
+	float: left;
+}
+
+.waiting_text {
+	float: right;
+	width: 560px;
+	padding: 0 320px 0 0;
+}
+
+.status_content p {
+	padding: 0 0 13px;
+	font-size: 13px;
+	color: #666;
+	line-height: 18px;
+}
+
+.status_content p.that {
+	padding: 13px 0 0 20px;
+}
+
+.form_box {
+	overflow: hidden;
+	width: 460px;
+	float: left;
+}
+
+.form_box_100 {
+	width: 100%;
+	float: none;
+}
+
+.form_box h1 {
+	padding: 0 0 30px;
+}
+
+.form_element {
+	width: 100%;
+	overflow: hidden;
+	padding: 0 0 16px;
+}
+
+.form_element label,.left_element strong {
+	display: block;
+	padding: 0 0 3px;
+}
+
+.form_element input[type=text],.form_element input[type=email],.form_element input[type=password]
+	{
+	padding: 5px;
+	font-size: 14px;
+	width: 380px;
+}
+
+.form_element .left_element input[type=text],.form_element .left_element input[type=email],.form_element .left_element input[type=password],.form_element .right_element input[type=text],.form_element .right_element input[type=email],.form_element .right_element input[type=password]
+	{
+	width: 173px;
+}
+
+.left_element {
+	float: left;
+	width: 207px;
+}
+
+.right_element {
+	float: left;
+}
+
+.right_element select {
+	width: 183px;
+	padding: 4px 0;
+}
+
+.form_element .left_element ul {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	width: 100%;
+	overflow: hidden;
+}
+
+.form_element .left_element ul li {
+	float: left;
+	padding: 0 25px 0 0;
+}
+
+.form_element .left_element ul li input {
+	float: left;
+	width: 16px;
+	height: 16px;
+	margin: 0;
+	padding: 0;
+}
+
+.form_element .left_element ul li label {
+	float: left;
+	line-height: 16px;
+	padding: 0 0 0 5px;
+}
+/*--status_table--*/
+.status_table {
+	width: 100%;
+	overflow: hidden;
+	padding: 0 0 55px;
+}
+
+#col_6 {
+	width: 209px;
+}
+
+#col_6 {
+	background: #F1F7E2;
+}
+
+.status_table table thead tr td {
+	padding: 0;
+	border: none;
+	background: #fff;
+}
+
+.last_color {
+	background: #EAF1DD;
+}
+
+.status_table table thead tr td h3 {
+	width: 209px;
+	height: 30px;
+	color: #fff;
+	font-size: 14px;
+	font-weight: bold;
+	line-height: 30px;
+	font-family: Arial, Helvetica, sans-serif;
+	text-transform: uppercase;
+	text-align: center;
+	overflow: hidden;
+	padding: 0;
+	background: url(https://static.propertyvista.com/errors/images/admin/table_h_bg.png) no-repeat;
+}
+
+.status_table table tr th {
+	background: #EFF2F4;
+	border-bottom: 1px solid #ccc;
+	font-weight: normal;
+	color: #666;
+	font-size: 13px;
+	padding: 10px 13px;
+	line-height: 16px;
+}
+
+.status_table table tfoot {
+	border-top: 1px solid #ccc;
+}
+
+.status_table table tfoot tr td {
+	border: dotted #ccc;
+	border-width: 1px 0 0;
+	background: #F7F8F9;
+}
+
+.status_table table tr td {
+	text-align: center;
+	padding: 13px;
+	vertical-align: middle;
+	border-bottom: 1px dotted #ccc;
+	color: #666;
+	font-size: 13px;
+	line-height: 16px;
+}
+
+.status_table table tr td:first-child {
+	text-align: left;
+}
+
+.status_table table tr td span,.status_table table tr td strong {
+	color: #333;
+	font-size: 14px;
+}
+
+.strikethrough {
+	color: #999 !important;
+	text-decoration: line-through;
+}
+
+.light_red {
+	color: #E56C32 !important;
+}
+
+.last_color {
+	background: #EAF1DD !important;
+}
+
+.options_wrap {
+	width: 100%;
+	overflow: hidden;
+}
+
+.options_box {
+	background: #DFE5E9;
+	margin: 0 0 24px;
+	padding: 30px 22px 0;
+}
+
+.status_content .options_box h2 {
+	padding: 0 0 18px;
+}
+
+.options_box ul {
+	width: 100%;
+	padding: 0 0 38px;
+}
+
+.options_box ul:after {
+	height: 0;
+	clear: both;
+	content: "";
+	display: block;
+}
+
+.options_box ul li {
+	float: left;
+	padding: 0 34px 0 0;
+}
+
+.options_box ul li input {
+	float: left;
+}
+
+.options_box ul li label {
+	float: left;
+	padding: 0 0 0 5px;
+}
+
+.options_box ul li .limit_info {
+	z-index: 100;
+}
+
+.options_box ul li .limit_info_wrap {
+	margin: 2px 0 0 8px;
+}
+
+.options_box ul li .limit_info_wrap ul {
+	color: #fff;
+	font-size: 12px;
+	line-height: 14px;
+	padding: 0 0 0 15px;
+	list-style: disc;
+	width: auto;
+}
+
+.options_box ul li .limit_info_wrap ul li {
+	float: none;
+	padding: 0 0 15px;
+}
+
+.a_btn_wrap {
+	padding: 20px 0 0;
+}
+
+.options_wrap .a_btn_wrap {
+	overflow: hidden;
+	padding: 0 0 22px 22px;
+}
+
+.form_box p {
+	color: #333;
+	font-size: 13px;
+	padding: 0 0 15px;
+	line-height: 15px;
+}
+
+.form_box p span {
+	display: block;
+	padding: 0 0 10px;
+}
+
+.help_txt p {
+	font-family: arial, sans-serif;
+}
+
+.help_txt p,.form_element label small {
+	color: #999;
+}
+
+.check_element {
+	width: 100%;
+	overflow: hidden;
+	padding: 0 0 20px;
+}
+
+.check_element input {
+	float: left;
+	width: 16px;
+	height: 16px;
+	margin: 0;
+	padding: 0;
+}
+
+.check_element label {
+	float: left;
+	line-height: 16px;
+	padding: 0 0 0 10px;
+}
+
+.step_sidebar {
+	width: 180px;
+	float: right;
+	background: #F2F5F7;
+	padding: 20px 0 15px;
+	margin: -15px 0 0;
+}
+
+.step_sidebar h3 {
+	padding: 0 15px 15px;
+	font-size: 16px;
+}
+
+.step_sidebar ol {
+	padding: 0 7px 0 1px;
+	list-style: none;
+}
+
+.step_sidebar ol li {
+	padding: 0 0 5px;
+	overflow: hidden;
+	width: 100%;
+}
+
+.step_sidebar ol li a {
+	display: table;
+	overflow: hidden;
+	height: 50px;
+	padding: 0 0 0 23px;
+	color: #668499;
+}
+
+.step_sidebar ol li a strong {
+	float: left;
+	font-size: 20px;
+	line-height: 50px;
+	width: 20px;
+	text-align: center;
+}
+
+.step_sidebar ol li a:hover strong {
+	color: #668499 !important;
+}
+
+.step_sidebar ol li a strong.check {
+	overflow: hidden;
+	height: 18px;
+	background: url(https://static.propertyvista.com/errors/images/admin/check.png) no-repeat;
+	margin: 16px 0 0;
+	text-indent: -9898px;
+}
+
+.step_sidebar ol li a span {
+	padding: 0 20px;
+	font-size: 13px;
+	line-height: 16px;
+	display: table-cell;
+	vertical-align: middle;
+	width: 85px;
+}
+
+.step_sidebar ol li a:hover {
+	text-decoration: none;
+}
+
+.step_sidebar ol li.active a {
+	background: #fff;
+	font-weight: bold;
+	color: #333;
+}
+
+.check_boxes {
+	width: 100%;
+	overflow: hidden;
+	padding: 0 0 20px;
+}
+
+.check_boxes strong,.radio_wrap strong,.season_check span {
+	display: block;
+	padding: 0 0 3px;
+}
+
+.check_boxes ul li {
+	width: 100%;
+	overflow: hidden;
+	padding: 0 0 5px;
+}
+
+input[type=radio],input[type=checkbox] {
+	float: left;
+	width: 16px;
+	height: 16px;
+	margin: 0;
+	padding: 0;
+}
+
+.check_boxes ul li label,.radio_wrap ul li label,.season_check ul li label,.left_check ul li label
+	{
+	float: left;
+	padding: 0 0 0 5px;
+	line-height: 16px;
+}
+
+.radio_wrap {
+	width: 100%;
+	overflow: hidden;
+	padding: 0 0 20px;
+}
+
+.radio_wrap ul {
+	width: 100%;
+	overflow: hidden;
+}
+
+.radio_wrap ul li {
+	float: left;
+	padding: 0 22px 0 0;
+}
+
+.season_check {
+	width: 100%;
+	overflow: hidden;
+	padding: 0 0 10px;
+}
+
+.width_100,.season_check ul,.left_check ul li {
+	width: 100%;
+	overflow: hidden;
+}
+
+.season_check ul li {
+	float: left;
+	padding: 0 0 10px 0;
+	width: 67px;
+}
+
+.left_check {
+	float: left;
+	width: 207px;
+}
+
+.left_check ul li {
+	padding: 0 0 5px;
+}
+
+.calendar {
+	float: left;
+}
+
+.calendar input[type=text] {
+	font-size: 14px;
+	padding: 5px 25px 5px 5px;
+	width: 153px;
+	background: url(https://static.propertyvista.com/errors/images/admin/calendar.png) no-repeat 97% 50%;
+}
+
+.form_element textarea {
+	width: 382px;
+	height: 71px;
+	resize: none;
+	border: 1px solid #ccc;
+	overflow: auto;
+	font-style: italic;
+	padding: 3px 0 3px 5px;
+}
+
+a.back {
+	float: left;
+	line-height: 41px;
+	font-size: 13px;
+}
+
+a.back span {
+	border-left: 1px solid #ccc;
+	padding: 0 0 0 10px;
+}
+
+.form_box h4 {
+	font-size: 16px;
+	padding: 0 0 15px;
+}
+
+.form_box dl {
+	width: 100%;
+	overflow: hidden;
+}
+
+.form_box dl dt {
+	float: left;
+	text-align: right;
+	width: 180px;
+}
+
+.form_box dl dd {
+	margin: 0 0 18px 207px;
+}
+
+.form_box dl dd address {
+	font-style: normal;
+	font-weight: bold;
+}
+
+.pdf_box {
+	width: 100%;
+	padding: 20px 0;
+}
+
+.pdf_element {
+	width: 100%;
+	overflow: hidden;
+	padding: 0 0 20px;
+	font-size: 13px;
+}
+
+a.pdf {
+	float: left;
+	height: 32px;
+	line-height: 32px;
+	padding: 0 0 0 40px;
+	background: url(https://static.propertyvista.com/errors/images/admin/pdf.png) no-repeat;
+}
+
+.pdf_element ul {
+	float: right;
+	height: 32px;
+}
+
+.pdf_element ul li {
+	float: left;
+	height: 32px;
+	line-height: 32px;
+	padding: 0 20px 0 0;
+}
+
+.pdf_element ul li a {
+	padding: 0 0 0 13px;
+	border-left: 1px solid #ccc;
+}
+
+.customInputFile {
+	background: url(https://static.propertyvista.com/errors/images/admin/file_btn.png) no-repeat;
+	width: 61px;
+	height: 29px;
+	overflow: hidden;
+	color: #333;
+	font-weight: bold;
+	font-size: 12px;
+	text-align: center;
+	line-height: 27px;
+}
+
+.file_element {
+	width: 61px;
+	height: 29px;
+	position: relative;
+}
+
+.customInputFileWrapper {
+	top: 0 !important;
+	left: 0 !important;
+}
+
+.transit_el {
+	float: left;
+	width: 110px;
+}
+
+.form_element .transit_el input {
+	width: 88px;
+}
+
+.bank_el {
+	float: left;
+	width: 100px;
+}
+
+.form_element .bank_el input {
+	width: 78px;
+}
+
+.account_el {
+	float: left;
+	width: 180px;
+}
+
+.form_element .account_el input {
+	width: 168px;
+}
+
+.form_element h6 {
+	font-family: 'Droid Sans', sans-serif;
+	font-size: 14px;
+	font-weight: bold;
+	padding: 0 0 10px;
+}
+
+.form_element h6.no_field {
+	padding: 8px 10px 5px;
+}
+
+a.info {
+	display: inline-block;
+	width: 15px;
+	height: 15px;
+	overflow: hidden;
+	text-indent: -9898px;
+	background: url(https://static.propertyvista.com/errors/images/admin/info_ico.png) no-repeat;
+}
+
+.check_list {
+	width: 100%;
+	overflow: hidden;
+}
+
+.check_list li {
+	width: 180px;
+	padding: 0 0 0 30px;
+	margin: 0 0 5px;
+	float: left;
+	background: url(https://static.propertyvista.com/errors/images/admin/check_list_ico.png) no-repeat 5px 50%;
+}
+
+.step_border {
+	border-top: 1px solid #F2F5F7;
+	padding: 15px 0 15px 46px;
+}
+
+.small_inp {
+	width: 78px !important;
+}
+
+.add_address {
+	display: block;
+	margin: 0 0 20px;
+}
+
+.file_wrap {
+	width: 245px;
+}
+
+.file_name {
+	float: left;
+	height: 24px;
+	line-height: 24px;
+	background: url(https://static.propertyvista.com/errors/images/admin/check.png) no-repeat 0 50%;
+	padding: 0 0 0 40px;
+	color: #333;
+	font-size: 13px;
+}
+
+.remove {
+	float: right;
+	height: 24px;
+	line-height: 24px;
+	font-size: 13px;
+}
+
+.status {
+	float: right;
+	width: 180px;
+	line-height: 26px;
+}
+
+.status span {
+	font-size: 13px;
+	color: #666;
+	padding: 0 26px 0 0;
+}
+
+.status strong {
+	font-size: 15px;
+}
+
+.status strong.status_active {
+	color: #396;
+}
+
+.block_info {
+	width: 100%;
+	overflow: hidden;
+	padding: 20px 0 15px;
+	border-top: 1px solid #ccc;
+}
+
+.active_block {
+	background: #F5F9E5;
+}
+
+.block_infp_left { /*width:372px;*/
+	width: 455px;
+	float: left;
+}
+
+.block_infp_left dl,.block_info_right dl {
+	width: 100%;
+	font-size: 13px;
+	color: #666;
+	line-height: 26px;
+}
+
+.block_infp_left dl:after,.block_info_right dl:after {
+	height: 0;
+	clear: both;
+	content: "";
+	display: block;
+}
+
+.block_infp_left dl dt,.block_info_right dl dt {
+	float: left;
+	text-align: right;
+	width: 94px;
+}
+
+.block_infp_left dl dd {
+	margin: 0 0 5px 111px;
+	overflow: hidden;
+}
+
+.block_info_right dl dd {
+	margin: 0 0 5px 111px;
+	overflow: hidden;
+	min-width: 90px;
+}
+
+.block_info_right dl dd a.small_gray_btn {
+	float: left;
+}
+
+.block_infp_left dl dd strong,.block_info_right dl dd strong {
+	width: 90px;
+	float: left;
+}
+
+.block_infp_left dl dd a {
+	padding: 0 0 0 15px;
+}
+
+.block_infp_left dl dd a.small_btn {
+	padding: 0;
+	margin: 2px 0 0 20px;
+	float: left;
+}
+
+.block_infp_left dl dd strong span,.block_infp_left dl dd strong a {
+	font-weight: normal;
+	padding: 0;
+}
+
+.block_info h5 {
+	font: 16px/26px 'Droid Sans', sans-serif;
+	color: #333;
+	font-weight: bold;
+	float: left;
+}
+
+.block_info_right {
+	width: 240px;
+	float: right;
+}
+
+.check_ico {
+	background: url(https://static.propertyvista.com/errors/images/admin/check_ico.png) no-repeat;
+	display: block;
+	width: 26px;
+	height: 22px;
+	overflow: hidden;
+	text-indent: -9898px;
+}
+
+a.small_gray_btn {
+	display: block;
+	width: 89px;
+	height: 23px;
+	text-align: center;
+	line-height: 23px;
+	text-decoration: none;
+	font-size: 13px;
+	color: #666;
+	padding: 0 !important;
+	font-family: 'HelveticaNeueW01-77BdCn 692722', Helvetica, sans-serif;
+	background: url(https://static.propertyvista.com/errors/images/admin/small_gray_btn.png) no-repeat;
+}
+
+a.small_gray_btn:hover {
+	background-position: 0 -23px;
+	text-decoration: none;
+	color: #666 !important;
+}
+
+.tab_box {
+	width: 100%;
+	overflow: hidden;
+	padding: 45px 0;
+}
+
+.tab_box_menu {
+	padding: 0 0 0 2px;
+	height: 38px;
+	border-bottom: 1px solid #ccc;
+}
+
+.tab_box_menu:after {
+	height: 0;
+	clear: both;
+	content: "";
+	display: block;
+}
+
+.tab_box_menu li {
+	height: 36px;
+	float: left;
+	bottom: -1px;
+	position: relative;
+	padding: 1px;
+}
+
+.tab_box_menu li a {
+	height: 36px;
+	float: left;
+	line-height: 38px;
+	padding: 0 23px;
+	font-size: 14px;
+}
+
+.tab_box_menu li.active {
+	padding: 0;
+	border: 1px solid #ccc;
+	border-bottom: 1px solid #fff;
+}
+
+.tab_box_menu li.active a {
+	color: #666;
+}
+
+.hide {
+	display: none;
+}
+
+.tab_box_el {
+	width: 100%;
+	padding: 40px 0;
+	overflow: hidden;
+}
+
+.profile_tab dl {
+	width: 100%;
+	overflow: hidden;
+	font-size: 14px;
+	color: #333;
+}
+
+.profile_tab dl dt {
+	float: left;
+	width: 180px;
+	text-align: right;
+}
+
+.profile_tab dl dd {
+	margin: 0 0 20px 226px;
+	font-weight: bold;
+}
+
+.profile_tab dl dd small {
+	font-weight: normal;
+}
+
+.profile_tab dl dd address {
+	font-style: normal;
+}
+
+.tab_box_el .admin_table {
+	padding: 0 0 44px;
+}
+
+.tab_box_el .admin_table span {
+	font-size: 14px;
+	color: #333;
+}
+
+.tab_box_el h4 {
+	font-size: 16px;
+	padding: 0 0 14px;
+	color: #333;
+}
+
+#col_7 {
+	width: 520px;
+}
+
+.tab_box_el .admin_table table tfoot tr td {
+	text-align: left;
+	font-weight: bold;
+	font-size: 14px;
+}
+
+.col_8 {
+	width: 575px;
+}
+
+th.option {
+	width: 510px !important;
+}
+
+.t_center {
+	text-align: center !important;
+}
+
+.col_9 {
+	width: 450px;
+}
+
+.equifax_table_info table tbody {
+	border-top: 1px dotted #ccc;
+}
+
+.equifax_table_info dl {
+	width: 100%;
+	overflow: hidden;
+	font-size: 14px;
+	line-height: 16px;
+	color: #333;
+}
+
+.equifax_table_info dl dt {
+	float: left;
+	text-align: right;
+	width: 185px;
+}
+
+.equifax_table_info dl dd {
+	font-weight: bold;
+	margin: 0 0 17px 225px;
+}
+
+.equifax_table_info dl dd address {
+	font-style: normal;
+}
+
+.equifax_table_info dl dd a {
+	font-weight: normal;
+}
+
+.equifax_table_info dl dd.m_b {
+	margin: 0 0 30px 225px;
+}
+
+.equifax_table_info table tr th,.equifax_table_info table tr td {
+	padding: 20px;
+	text-align: left;
+	font-weight: normal;
+}
+
+.equifax_table_info table tr td ul li {
+	padding: 0 0 12px;
+}
+
+.status_suspended {
+	color: #c00;
+}
+
+.suspended_block {
+	background: #F9EEE4;
+}
+
+.online_help {
+	width: 105px;
+	overflow: hidden;
+}
+
+.online_help input {
+	float: left;
+}
+
+a.help {
+	float: left;
+	background: url(https://static.propertyvista.com/errors/images/admin/pointer.png) no-repeat 50% 50%;
+	width: 10px;
+	height: 10px;
+	overflow: hidden;
+	text-indent: -9898px;
+	margin: 7px 0 0 7px;
+}
+
+.text_help {
+	width: 100%;
+	padding: 7px 0 0;
+	clear: both;
+}
+
+.text_help textarea {
+	border: 1px solid #ccc;
+	font-size: 12px;
+	line-height: 14px;
+	color: #999;
+	padding: 3px 0 3px 5px;
+	width: 98px;
+	height: 42px;
+	overflow: auto;
+	resize: none;
+}
+
+.setup_block {
+	background: #F1F9FC;
+}
+
+.col_7 {
+	width: 300px;
+}
+
+.tab_box_el .col_7 {
+	width: 220px;
+}
+
+.tab_box_el p {
+	color: #666;
+	font-size: 13px;
+	line-height: 18px;
+	padding: 0 0 13px;
+}
+
+.tab_box_el #col_6 {
+	width: 140px;
+}
+
+.tab_box_el .status_table table thead tr td h3 {
+	width: 140px;
+	background: #99b350;
+}
+
+.tab_box_el p.that {
+	padding: 10px 15px;
+}
+
+.no_border th,.no_border td {
+	border: none !important;
+}
+
+.no_border th {
+	padding-bottom: 0 !important;
+}
+
+.th_165 th {
+	width: 16.5% !important;
+}
+
+.th_20 th {
+	width: 20% !important;
+}
+
+.th_142 th {
+	width: 14.2% !important;
+}
+
+.error label {
+	color: #f00 !important;
+}
+
+.error input {
+	border-color: #f00 !important;
+}
+
+.error_box {
+	width: 100%;
+	overflow: hidden;
+	padding: 0 0 25px;
+	color: #f00;
+}
+
+.error_box h2 {
+	font-family: 'Droid Sans', sans-serif;
+	font-size: 15px;
+	font-weight: bold;
+	color: #f00;
+	background: url(https://static.propertyvista.com/errors/images/admin/error.png) no-repeat 0 2px;
+	padding: 0 0 10px 25px;
+}
+
+.error_box ul {
+	padding: 0 0 0 25px;
+	list-style: disc;
+}
+
+.error_box ul li {
+	padding: 0 0 5px;
+}
+
+.card_info {
+	width: 100%;
+	overflow: hidden;
+}
+
+.card_block {
+	border-top: 1px dotted #666;
+	margin: -1px 0 0;
+	padding: 25px 0;
+	width: 100%;
+}
+
+.card_box {
+	padding: 0 0 0 70px;
+	font-size: 13px;
+	color: #333;
+}
+
+.visa {
+	background: url(https://static.propertyvista.com/errors/images/admin/visa.png) no-repeat 0 50%;
+}
+
+.master_card {
+	background: url(https://static.propertyvista.com/errors/images/admin/master-card.png) no-repeat 0 50%;
+	color: #D93F3F;
+}
+
+.ico {
+	display: block;
+	width: 26px;
+	height: 23px;
+	overflow: hidden;
+	text-indent: -9898px;
+	background: url(https://static.propertyvista.com/errors/images/admin/ico.png) no-repeat;
+}
+
+.table_holder {
+	width: 100%;
+	padding: 35px 0;
+	overflow: hidden;
+}
+
+.col_10 {
+	width: 445px;
+}
+
+.table_holder .status_table table tr th:first-child {
+	text-align: left;
+}
+
+.table_holder p {
+	padding: 0 0 20px;
+}
+
+.form_calendar {
+	width: 100%;
+	overflow: hidden;
+	padding: 0 0 30px;
+}
+
+.form_calendar input[type=text] {
+	float: left;
+	padding: 5px 25px 5px 10px;
+	width: 70px;
+	margin: 0;
+	background: url(https://static.propertyvista.com/errors/images/admin/calendar.png) no-repeat 95% 50%;
+}
+
+.form_calendar label {
+	float: left;
+	font-size: 11px;
+	padding: 3px 10px;
+}
+
+.form_calendar input[type=submit] {
+	float: left;
+	margin: 2px 0 0 10px;
+	background: url(https://static.propertyvista.com/errors/images/admin/small_gray_btn.png) no-repeat;
+	width: 89px;
+	height: 23px;
+	overflow: hidden;
+	border: none;
+	cursor: pointer;
+	font-weight: bold;
+}
+
+.form_calendar input[type=submit]:hover {
+	background-position: 0 -23px;
+}
+
+#col_4_1 {
+	width: 310px;
+}
+
+.info_text a {
+	padding: 0 !important;
+}
+
+.info_text strong {
+	float: none !important;
+	width: auto !important;
+}
+
+.block_info address {
+	font-weight: bold;
+	font-style: normal;
+	line-height: 1.3em;
+	padding: 5px 0 0;
+}
+
+#col_50 {
+	width: 62%;
+}
+
+.w_215 {
+	width: 215px !important;
+}
+
+.btn_right {
+	width: 100%;
+	overflow: hidden;
+}
+
+.btn_right .a_btn_wrap {
+	float: right;
+}
+
+#col_40 {
+	width: 45%;
+}

@@ -31,6 +31,7 @@ import com.propertyvista.domain.site.SiteDescriptor;
 import com.propertyvista.domain.site.SiteTitles;
 import com.propertyvista.portal.rpc.portal.SiteDefinitionsDTO;
 import com.propertyvista.portal.rpc.portal.services.SiteThemeServices;
+import com.propertyvista.portal.rpc.shared.SiteWasNotSetUpUserRuntimeException;
 import com.propertyvista.shared.CompiledLocale;
 
 @IgnoreSessionToken
@@ -69,7 +70,7 @@ public class SiteThemeServicesImpl implements SiteThemeServices {
 
         SiteDescriptor descriptor = getSiteDescriptorFromCache();
         if (descriptor == null) {
-            throw new UserRuntimeException(i18n.tr("This property management site was not set-up yet"));
+            throw new SiteWasNotSetUpUserRuntimeException(i18n.tr("This property management site was not set-up yet"));
         }
         SiteDefinitionsDTO def = EntityFactory.create(SiteDefinitionsDTO.class);
         def.palette().setValue(descriptor.sitePalette().getValue());

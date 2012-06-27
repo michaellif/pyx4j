@@ -27,13 +27,14 @@ import com.pyx4j.entity.shared.criterion.OrCriterion;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.gwt.server.ServletUtils;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.admin.domain.pmc.Pmc;
 import com.propertyvista.admin.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.portal.rpc.DeploymentConsts;
+import com.propertyvista.portal.rpc.shared.SiteWasNotActivatedUserRuntimeException;
+import com.propertyvista.portal.rpc.shared.SiteWasNotSetUpUserRuntimeException;
 
 public class VistaNamespaceResolver implements NamespaceResolver {
 
@@ -110,7 +111,7 @@ public class VistaNamespaceResolver implements NamespaceResolver {
                 if (pmc != null) {
 
                     if (pmc.status().getValue() != PmcStatus.Active) {
-                        throw new UserRuntimeException(i18n.tr("This property management site was not activated yet"));
+                        throw new SiteWasNotActivatedUserRuntimeException(i18n.tr("This property management site was not activated yet"));
                     }
 
                     pmcNamespace = pmc.namespace().getValue();
@@ -127,7 +128,7 @@ public class VistaNamespaceResolver implements NamespaceResolver {
                     return VistaNamespace.demoNamespace;
                 }
             }
-            throw new UserRuntimeException(i18n.tr("This property management site was not set-up yet"));
+            throw new SiteWasNotSetUpUserRuntimeException(i18n.tr("This property management site was not set-up yet"));
         }
 
         // Avoid Query for every request

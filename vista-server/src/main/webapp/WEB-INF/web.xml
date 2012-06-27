@@ -108,7 +108,7 @@
         </init-param>
         <init-param>
             <param-name>ignoreUrls</param-name>
-            <param-value>/o/*,/public/*,/static/*,/media/site-resource/*,/admin/*,/crm/*,/portal/*,/ptapp/*,/rest/*,/demo/*,*.siteimgrc</param-value>
+            <param-value>/o/*,/public/*,/static/*,/static-errors/*,/media/site-resource/*,/admin/*,/crm/*,/portal/*,/ptapp/*,/rest/*,/demo/*,*.siteimgrc</param-value>
         </init-param>
     </filter>
 
@@ -116,7 +116,7 @@
         <filter-name>wicket.site</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
-    
+
 
     <!-- Servlets -->
 <!--
@@ -151,7 +151,7 @@
         <servlet-name>OpenIdServlet</servlet-name>
         <url-pattern>/ptapp/o/openid</url-pattern>
     </servlet-mapping>
-        
+
     <servlet>
         <servlet-name>StatusServlet</servlet-name>
         <servlet-class>com.propertyvista.server.ci.VistaStatusServlet</servlet-class>
@@ -171,7 +171,7 @@
         <servlet-name>StatusServlet</servlet-name>
         <url-pattern>/public/status</url-pattern>
     </servlet-mapping>
-    
+
     <servlet>
         <servlet-name>DebugServlet</servlet-name>
         <servlet-class>com.pyx4j.essentials.server.dev.DebugServlet</servlet-class>
@@ -191,7 +191,7 @@
         <servlet-name>DebugServlet</servlet-name>
         <url-pattern>/admin/debug/*</url-pattern>
     </servlet-mapping>
-    
+
     <servlet-mapping>
         <servlet-name>DebugServlet</servlet-name>
         <url-pattern>/crm/debug/*</url-pattern>
@@ -206,7 +206,7 @@
         <servlet-name>DebugServlet</servlet-name>
         <url-pattern>/public/debug/*</url-pattern>
     </servlet-mapping>
-            
+
     <servlet>
         <servlet-name>DBResetServlet</servlet-name>
         <servlet-class>com.propertyvista.server.ci.DBResetServlet</servlet-class>
@@ -221,7 +221,7 @@
         <servlet-name>DBResetServlet</servlet-name>
         <url-pattern>/admin/db-reset</url-pattern>
     </servlet-mapping>
-    
+
     <servlet>
         <servlet-name>VistaDevSessionServlet</servlet-name>
         <servlet-class>com.propertyvista.server.security.openId.VistaDevSessionServlet</servlet-class>
@@ -231,7 +231,7 @@
         <servlet-name>VistaDevSessionServlet</servlet-name>
         <url-pattern>/o/sim-sim-otkroisa</url-pattern>
     </servlet-mapping>
-    
+
     <servlet>
         <servlet-name>DeferredProcessTaskWorkerServlet</servlet-name>
         <servlet-class>com.pyx4j.essentials.server.deferred.DeferredProcessTaskWorkerServlet</servlet-class>
@@ -272,7 +272,7 @@
         <url-pattern>/crm/srv/*</url-pattern>
     </servlet-mapping>
 
-<!-- 
+<!--
     <servlet>
         <servlet-name>RemoteJ2SEServiceServlet</servlet-name>
         <servlet-class>com.pyx4j.rpc.server.RemoteJ2SEServiceServlet</servlet-class>
@@ -303,7 +303,7 @@
         <servlet-name>DownloadServlet</servlet-name>
         <url-pattern>/crm/download/*</url-pattern>
     </servlet-mapping>
-            
+
     <servlet-mapping>
         <servlet-name>DownloadServlet</servlet-name>
         <url-pattern>/ptapp/download/*</url-pattern>
@@ -318,7 +318,7 @@
         <servlet-name>VistaUploadServlet</servlet-name>
         <url-pattern>/admin/upload/*</url-pattern>
     </servlet-mapping>
-    
+
     <servlet-mapping>
         <servlet-name>VistaUploadServlet</servlet-name>
         <url-pattern>/crm/upload/*</url-pattern>
@@ -338,7 +338,7 @@
         <servlet-name>ApplicationDocumentServlet</servlet-name>
         <url-pattern>/application_document/*</url-pattern>
     </servlet-mapping>
-    
+
     <servlet>
         <servlet-name>SiteImageResourceServlet</servlet-name>
         <servlet-class>com.propertyvista.portal.server.upload.SiteImageResourceServlet</servlet-class>
@@ -348,7 +348,7 @@
         <servlet-name>SiteImageResourceServlet</servlet-name>
         <url-pattern>*.siteimgrc</url-pattern>
     </servlet-mapping>
-    
+
     <!--  need this for deployments where CRM is directly on root URL e.g. http://redridge.propertyvista.com/ -->
     <servlet-mapping>
         <servlet-name>ApplicationDocumentServlet</servlet-name>
@@ -374,18 +374,18 @@
     <servlet-mapping>
         <servlet-name>PublicMediaServlet</servlet-name>
         <url-pattern>/public/media/*</url-pattern>
-    </servlet-mapping>    
+    </servlet-mapping>
 
     <!--  need this for deployments where CRM is directly on root URL e.g. http://redridge.propertyvista.com/ -->
     <servlet-mapping>
         <servlet-name>PublicMediaServlet</servlet-name>
         <url-pattern>/crm/media/*</url-pattern>
-    </servlet-mapping>   
-    
+    </servlet-mapping>
+
     <servlet-mapping>
         <servlet-name>PublicMediaServlet</servlet-name>
         <url-pattern>/ptapp/media/*</url-pattern>
-    </servlet-mapping>   
+    </servlet-mapping>
 
 
     <servlet>
@@ -402,13 +402,13 @@
     <servlet-mapping>
         <servlet-name>SiteResourcesServlet</servlet-name>
         <url-pattern>/crm/site-resource/*</url-pattern>
-    </servlet-mapping>   
-    
+    </servlet-mapping>
+
     <servlet-mapping>
         <servlet-name>SiteResourcesServlet</servlet-name>
         <url-pattern>/ptapp/site-resource/*</url-pattern>
     </servlet-mapping>
-        
+
     <servlet>
         <servlet-name>ExportDownloadServlet</servlet-name>
         <servlet-class>com.propertyvista.admin.server.services.ExportDownloadServlet</servlet-class>
@@ -418,7 +418,7 @@
         <servlet-name>ExportDownloadServlet</servlet-name>
         <url-pattern>/admin/export.xml</url-pattern>
     </servlet-mapping>
-    
+
     <servlet>
         <servlet-name>VistaConfigInfoServlet</servlet-name>
         <servlet-class>com.propertyvista.admin.server.services.VistaConfigInfoServlet</servlet-class>
@@ -428,7 +428,7 @@
         <servlet-name>VistaConfigInfoServlet</servlet-name>
         <url-pattern>/admin/config</url-pattern>
     </servlet-mapping>
-    
+
     <servlet>
         <servlet-name>ServletContainerLoginServlet</servlet-name>
         <servlet-class>com.pyx4j.security.server.ServletContainerLoginServlet</servlet-class>
@@ -439,7 +439,7 @@
         <url-pattern>/_aj/*</url-pattern>
     </servlet-mapping>
 
-<!-- 
+<!--
     <servlet>
         <servlet-name>JerseyRESTService</servlet-name>
         <servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
@@ -449,17 +449,17 @@
         </init-param>
         <load-on-startup>1</load-on-startup>
     </servlet>
-    
+
     <servlet-mapping>
         <servlet-name>JerseyRESTService</servlet-name>
         <url-pattern>/rest/*</url-pattern>
-    </servlet-mapping>        
+    </servlet-mapping>
 
     <servlet-mapping>
         <servlet-name>JerseyRESTService</servlet-name>
         <url-pattern>/public/rest/*</url-pattern>
-    </servlet-mapping>   
--->    
+    </servlet-mapping>
+-->
     <servlet>
         <servlet-name>OnboardingSchemaServlet</servlet-name>
         <servlet-class>com.propertyvista.admin.server.onboarding.OnboardingSchemaServlet</servlet-class>
@@ -468,7 +468,7 @@
     <servlet-mapping>
         <servlet-name>OnboardingSchemaServlet</servlet-name>
         <url-pattern>/public/schema/onboarding/*</url-pattern>
-    </servlet-mapping>   
+    </servlet-mapping>
 
     <servlet>
         <servlet-name>OnboardingServiceServlet</servlet-name>
@@ -478,9 +478,9 @@
     <servlet-mapping>
         <servlet-name>OnboardingServiceServlet</servlet-name>
         <url-pattern>/public/onboarding/*</url-pattern>
-    </servlet-mapping>   
+    </servlet-mapping>
 
-    
+
     <welcome-file-list>
         <welcome-file>index.html</welcome-file>
     </welcome-file-list>
@@ -488,5 +488,30 @@
     <session-config>
         <session-timeout>240</session-timeout>
     </session-config>
+
+    <error-page>
+        <error-code>404</error-code>
+        <location>/static/errors/404.html</location>
+    </error-page>
+
+    <error-page>
+	    <error-code>500</error-code>
+        <location>/static/errors/500.html</location>
+    </error-page>
+
+    <error-page>
+        <exception-type>com.propertyvista.portal.rpc.shared.SiteWasNotActivatedUserRuntimeException</exception-type>
+        <location>/static/errors/not-activated.html</location>
+    </error-page>
+
+    <error-page>
+        <exception-type>com.propertyvista.portal.rpc.shared.SiteWasNotSetUpUserRuntimeException</exception-type>
+        <location>/static/errors/not-setup.html</location>
+	</error-page>
+
+    <error-page>
+        <exception-type>com.pyx4j.rpc.shared.ContainerHandledUserRuntimeException</exception-type>
+        <location>/static/errors/500.html</location>
+    </error-page>
 
 </web-app>

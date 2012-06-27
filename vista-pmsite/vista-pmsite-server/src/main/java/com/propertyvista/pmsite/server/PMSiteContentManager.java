@@ -32,7 +32,6 @@ import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.rpc.shared.UserRuntimeException;
 
 import com.propertyvista.domain.marketing.PublicVisibilityType;
 import com.propertyvista.domain.media.Media;
@@ -57,6 +56,7 @@ import com.propertyvista.pmsite.server.panels.NavigationItem;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.portal.rpc.portal.ImageConsts;
 import com.propertyvista.portal.rpc.portal.ImageConsts.ThumbnailSize;
+import com.propertyvista.portal.rpc.shared.SiteWasNotSetUpUserRuntimeException;
 import com.propertyvista.shared.CompiledLocale;
 
 public class PMSiteContentManager implements Serializable {
@@ -99,7 +99,7 @@ public class PMSiteContentManager implements Serializable {
             foundSiteDescriptor = null;
         }
         if (foundSiteDescriptor == null) {
-            throw new UserRuntimeException(i18n.tr("This property management site was not set-up yet"));
+            throw new SiteWasNotSetUpUserRuntimeException(i18n.tr("This property management site was not set-up yet"));
         }
         siteDescriptor = foundSiteDescriptor;
         for (PageDescriptor descriptor : siteDescriptor.childPages()) {
