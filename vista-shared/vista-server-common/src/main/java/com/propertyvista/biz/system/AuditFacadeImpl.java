@@ -136,7 +136,7 @@ public class AuditFacadeImpl implements AuditFacade {
         if (Context.getRequest() == null) {
             return null;
         } else {
-            Object ip = Context.getRequest().getAttribute(VistaAntiBot.REQUEST_IP_ATR);
+            Object ip = Context.getRequest().getAttribute(VistaAntiBot.REQUEST_IP_REQUEST_ATR);
             if (ip != null) {
                 return ip.toString();
             } else {

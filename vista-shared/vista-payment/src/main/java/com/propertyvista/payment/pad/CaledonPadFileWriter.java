@@ -20,13 +20,10 @@ import java.io.IOException;
 import java.io.Writer;
 import java.text.SimpleDateFormat;
 
-import com.pyx4j.config.shared.ApplicationMode;
-
 import com.propertyvista.admin.domain.payment.pad.PadBatch;
 import com.propertyvista.admin.domain.payment.pad.PadDebitRecord;
 import com.propertyvista.admin.domain.payment.pad.PadFile;
 import com.propertyvista.config.VistaDeployment;
-import com.propertyvista.shared.VistaSystemIdentification;
 
 public class CaledonPadFileWriter implements Closeable {
 
@@ -61,7 +58,7 @@ public class CaledonPadFileWriter implements Closeable {
         writer.append(fileCreationDate).append(",");
 
         String fileTypeIndicator = "TEST";
-        if ((!ApplicationMode.isDevelopment()) && (VistaSystemIdentification.production == VistaDeployment.getSystemIdentification())) {
+        if (VistaDeployment.isVistaProduction()) {
             fileTypeIndicator = "PROD";
         }
         writer.append(fileTypeIndicator).append(",");

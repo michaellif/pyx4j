@@ -20,9 +20,14 @@ import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.essentials.server.ReCaptchaAntiBot;
 import com.pyx4j.server.contexts.Context;
 
+import com.propertyvista.admin.domain.pmc.PmcDnsName.DnsNameTarget;
+import com.propertyvista.config.VistaDeployment;
+
 public class VistaAntiBot extends ReCaptchaAntiBot {
 
-    public static String REQUEST_IP_ATR = "com.propertyvista.api.RequestRemoteAddr";
+    public static String REQUEST_IP_REQUEST_ATR = "com.propertyvista.api.RequestRemoteAddr";
+
+    public static String API_TARGET_REQUEST_ATR = "com.propertyvista.api.ApiRequestTarget";
 
     private final static Logger log = LoggerFactory.getLogger(VistaAntiBot.class);
 
@@ -37,11 +42,43 @@ public class VistaAntiBot extends ReCaptchaAntiBot {
 
     @Override
     protected String getRequestRemoteAddr() {
-        Object ip = Context.getRequest().getAttribute(REQUEST_IP_ATR);
+        Object ip = Context.getRequest().getAttribute(REQUEST_IP_REQUEST_ATR);
         if (ip != null) {
             return ip.toString();
         } else {
             return Context.getRequestRemoteAddr();
+        }
+    }
+
+    public static void setApiRequestDnsNameTarget(DnsNameTarget target) {
+        Context.getRequest().setAttribute(API_TARGET_REQUEST_ATR, target);
+    }
+
+    public static String getRequestServerNameBase() {
+        DnsNameTarget target = (DnsNameTarget) Context.getRequest().getAttribute(API_TARGET_REQUEST_ATR);
+        if (target == null) {
+            String host = Context.getRequestServerName();
+            String[] parts = host.split("\\.");
+            if (parts.length >= 3) {
+                return parts[parts.length - 2] + "." + parts[parts.length - 1];
+            } else {
+                return "birchwoodsoftwaregroup.com";
+            }
+        } else {
+            if (!VistaDeployment.isVistaProduction()) {
+                return "birchwoodsoftwaregroup.com";
+            } else {
+                switch (target) {
+                case vistaCrm:
+                    return "propertyvista.com";
+                case prospectPortal:
+                    return "prospectportalsite.com";
+                case residentPortal:
+                    return "residentportalsite.com";
+                default:
+                    return "propertyvista.com";
+                }
+            }
         }
     }
 }

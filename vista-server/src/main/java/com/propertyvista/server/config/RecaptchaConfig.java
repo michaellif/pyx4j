@@ -16,7 +16,7 @@ package com.propertyvista.server.config;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.pyx4j.server.contexts.Context;
+import com.propertyvista.server.common.security.VistaAntiBot;
 
 public class RecaptchaConfig {
 
@@ -40,20 +40,11 @@ public class RecaptchaConfig {
     }
 
     public static String getReCaptchaPublicKey() {
-        return domainsMap.get(requestDnsBase()).recaptchaPublicKey;
+        return domainsMap.get(VistaAntiBot.getRequestServerNameBase()).recaptchaPublicKey;
     }
 
     public static String getReCaptchaPrivateKey() {
-        return domainsMap.get(requestDnsBase()).recaptchaPrivateKey;
+        return domainsMap.get(VistaAntiBot.getRequestServerNameBase()).recaptchaPrivateKey;
     }
 
-    private static String requestDnsBase() {
-        String host = Context.getRequestServerName();
-        String[] parts = host.split("\\.");
-        if (parts.length >= 3) {
-            return parts[parts.length - 2] + "." + parts[parts.length - 1];
-        } else {
-            return "birchwoodsoftwaregroup.com";
-        }
-    }
 }

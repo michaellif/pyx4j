@@ -26,6 +26,7 @@ import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.pyx4j.server.contexts.Context;
 
+import com.propertyvista.admin.domain.pmc.PmcDnsName.DnsNameTarget;
 import com.propertyvista.admin.server.onboarding.rh.OnboardingRequestHandlerFactory;
 import com.propertyvista.admin.server.onboarding.rhf.RequestHandler;
 import com.propertyvista.onboarding.RequestIO;
@@ -65,7 +66,7 @@ class OnboardingProcessor {
     }
 
     private ResponseIO execute(RequestIO request) {
-        Context.getRequest().setAttribute(VistaAntiBot.REQUEST_IP_ATR, request.requestRemoteAddr().getValue());
+        Context.getRequest().setAttribute(VistaAntiBot.REQUEST_IP_REQUEST_ATR, request.requestRemoteAddr().getValue());
         RequestHandler<RequestIO> requestHandler = new OnboardingRequestHandlerFactory().createRequestHandler(request);
         if (requestHandler != null) {
             ResponseIO response = requestHandler.execute(request);
@@ -89,6 +90,9 @@ class OnboardingProcessor {
         if (!message.messageId().isNull()) {
             rm.messageId().set(message.messageId());
         }
+
+        VistaAntiBot.setApiRequestDnsNameTarget(DnsNameTarget.vistaCrm);
+
         for (RequestIO request : message.requests()) {
             try {
                 rm.responses().add(execute(request));

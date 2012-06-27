@@ -14,6 +14,7 @@
 package com.propertyvista.config;
 
 import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
@@ -35,6 +36,10 @@ public class VistaDeployment {
             return VistaSystemIdentification.development;
         }
         return VistaSystemIdentification.valueOf(systemIdentification);
+    }
+
+    public static boolean isVistaProduction() {
+        return ((!ApplicationMode.isDevelopment()) && (VistaSystemIdentification.production == VistaDeployment.getSystemIdentification()));
     }
 
     public static Pmc getCurrentPmc() {
