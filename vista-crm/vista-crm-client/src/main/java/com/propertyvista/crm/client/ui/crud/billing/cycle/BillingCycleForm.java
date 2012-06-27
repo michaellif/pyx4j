@@ -13,11 +13,21 @@
  */
 package com.propertyvista.crm.client.ui.crud.billing.cycle;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+
+import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.AppSite;
+import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.widgets.client.Anchor;
 
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
+import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.dto.billing.BillingCycleDTO;
+import com.propertyvista.domain.financial.billing.Bill;
 
 class BillingCycleForm extends CrmEntityForm<BillingCycleDTO> {
 
@@ -37,16 +47,50 @@ class BillingCycleForm extends CrmEntityForm<BillingCycleDTO> {
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingCycleEndDate())).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().executionTargetDate())).build());
 
-        content.setH2(++row, 0, 1, i18n.tr("Statistics"));
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().notRunned())).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().notConfirmed())).build());
+        content.setH2(++row, 0, 2, i18n.tr("Statistics"));
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().failed())).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().confirmed())).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().total())).build());
+        content.setWidget(row, 1, new ViewLink(Bill.BillStatus.Failed));
 
-        content.setH2(++row, 0, 1, i18n.tr("Leases"));
-        content.setWidget(++row, 0, ((BillingCycleView) getParentView()).getLeaseListerView().asWidget());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().notConfirmed())).build());
+        content.setWidget(row, 1, new ViewLink(Bill.BillStatus.Finished));
+
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().confirmed())).build());
+        content.setWidget(row, 1, new ViewLink(Bill.BillStatus.Confirmed));
+
+        content.setBR(++row, 0, 2);
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().total())).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().notRunned())).build());
+
+        content.getColumnFormatter().setWidth(0, "50%");
+        content.getColumnFormatter().setWidth(1, "50%");
 
         selectTab(addTab(content, i18n.tr("General")));
+    }
+
+    // builder specifically for this form (enlarge default label width)
+    protected class DecoratorBuilder extends WidgetDecorator.Builder {
+
+        public DecoratorBuilder(CComponent<?, ?> component) {
+            super(component);
+            readOnlyMode(!isEditable());
+            labelWidth(20);
+            componentWidth(15);
+        }
+    }
+
+    private class ViewLink extends Anchor {
+        public ViewLink(final Bill.BillStatus billStatusValue) {
+            super(i18n.tr("View"));
+
+            addClickHandler(new ClickHandler() {
+                @Override
+                public void onClick(ClickEvent event) {
+                    AppPlace place = AppSite.getHistoryMapper().createPlace(CrmSiteMap.Finance.BillingCycle.Bills.class);
+                    place.placeArg(CrmSiteMap.Finance.BillingCycle.ARG_BC_ID, getValue().getPrimaryKey().toString());
+                    place.placeArg(CrmSiteMap.Finance.BillingCycle.ARG_BILL_STATUS, billStatusValue.name());
+                    AppSite.getPlaceController().goTo(place);
+                }
+            });
+        }
     }
 }

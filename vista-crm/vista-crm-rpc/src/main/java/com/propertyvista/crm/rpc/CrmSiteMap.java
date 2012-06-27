@@ -249,7 +249,15 @@ public class CrmSiteMap implements SiteMap {
         @NavigationItem(navigLabel = "BillingCycles")
         public static class BillingCycle extends CrmCrudAppPlace {
 
-            public static class Lease extends CrmCrudAppPlace {
+            public static final String ARG_BC_ID = "BcId";
+
+            public static final String ARG_BILL_STATUS = "BillStatus";
+
+            public static class Leases extends CrmCrudAppPlace {
+            }
+
+            public static class Bills extends CrmCrudAppPlace {
+
             }
         }
 

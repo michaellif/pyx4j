@@ -13,48 +13,19 @@
  */
 package com.propertyvista.crm.client.activity.crud.billing.cycle;
 
-import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
 
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
-import com.pyx4j.site.client.activity.crud.ListerActivityBase;
-import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.billing.cycle.BillingCycleView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.FinancialViewFactory;
 import com.propertyvista.crm.rpc.dto.billing.BillingCycleDTO;
-import com.propertyvista.crm.rpc.dto.billing.BillingCycleLeaseDTO;
 import com.propertyvista.crm.rpc.services.billing.BillingCycleCrudService;
-import com.propertyvista.crm.rpc.services.billing.BillingCycleLeaseCrudService;
 
 public class BillingCycleViewerActivity extends CrmViewerActivity<BillingCycleDTO> implements BillingCycleView.Presenter {
 
-    private final IListerView.Presenter<BillingCycleLeaseDTO> leaseLister;
-
     public BillingCycleViewerActivity(CrudAppPlace place) {
         super(place, FinancialViewFactory.instance(BillingCycleView.class), GWT.<BillingCycleCrudService> create(BillingCycleCrudService.class));
-
-        leaseLister = new ListerActivityBase<BillingCycleLeaseDTO>(place, ((BillingCycleView) getView()).getLeaseListerView(),
-                GWT.<BillingCycleLeaseCrudService> create(BillingCycleLeaseCrudService.class), BillingCycleLeaseDTO.class);
-    }
-
-    @Override
-    public void onStop() {
-        ((AbstractActivity) leaseLister).onStop();
-        super.onStop();
-    }
-
-    @Override
-    protected void onPopulateSuccess(BillingCycleDTO result) {
-        super.onPopulateSuccess(result);
-
-        leaseLister.clearPreDefinedFilters();
-        BillingCycleLeaseDTO proto = EntityFactory.getEntityPrototype(BillingCycleLeaseDTO.class);
-        leaseLister.addPreDefinedFilter(PropertyCriterion.eq(proto.lease().unit().building(), result.building()));
-        leaseLister.addPreDefinedFilter(PropertyCriterion.eq(proto.lease().billingAccount().billingType(), result.billingType()));
-        leaseLister.populate();
     }
 }

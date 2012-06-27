@@ -125,7 +125,7 @@ public class CrmEntityMapper {
         AppPlaceEntityMapper.register(PaymentRecord.class, CrmSiteMap.Finance.Payment.class, defaultImage);
         AppPlaceEntityMapper.register(LeaseAdjustment.class, CrmSiteMap.Finance.LeaseAdjustment.class, defaultImage);
         AppPlaceEntityMapper.register(AggregatedTransfer.class, CrmSiteMap.Finance.AggregatedTransfer.class, defaultImage);
-        AppPlaceEntityMapper.register(BillingCycleLeaseDTO.class, CrmSiteMap.Finance.BillingCycle.Lease.class, defaultImage);
+        AppPlaceEntityMapper.register(BillingCycleLeaseDTO.class, CrmSiteMap.Finance.BillingCycle.Leases.class, defaultImage);
 
         AppPlaceEntityMapper.register(Employee.class, CrmSiteMap.Organization.Employee.class, defaultImage);
         AppPlaceEntityMapper.register(Portfolio.class, CrmSiteMap.Organization.Portfolio.class, defaultImage);

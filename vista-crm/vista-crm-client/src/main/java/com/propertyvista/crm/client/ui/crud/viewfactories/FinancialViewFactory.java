@@ -18,6 +18,8 @@ import com.pyx4j.site.client.ui.crud.IView;
 
 import com.propertyvista.crm.client.ui.crud.billing.bill.BillViewerView;
 import com.propertyvista.crm.client.ui.crud.billing.bill.BillViewerViewImpl;
+import com.propertyvista.crm.client.ui.crud.billing.cycle.BillingCycleBillListerView;
+import com.propertyvista.crm.client.ui.crud.billing.cycle.BillingCycleBillListerViewImpl;
 import com.propertyvista.crm.client.ui.crud.billing.cycle.BillingCycleLeaseView;
 import com.propertyvista.crm.client.ui.crud.billing.cycle.BillingCycleLeaseViewImpl;
 import com.propertyvista.crm.client.ui.crud.billing.cycle.BillingCycleView;
@@ -37,6 +39,9 @@ public class FinancialViewFactory extends ViewFactoryBase {
         if (!map.containsKey(type)) {
             if (BillingCycleView.class.equals(type)) {
                 map.put(type, new BillingCycleViewImpl());
+
+            } else if (BillingCycleBillListerView.class.equals(type)) {
+                map.put(type, new BillingCycleBillListerViewImpl());
 
             } else if (BillingCycleLeaseView.class.equals(type)) {
                 map.put(type, new BillingCycleLeaseViewImpl());

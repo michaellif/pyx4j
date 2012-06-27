@@ -7,19 +7,16 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2012-06-09
+ * Created on 2011-05-09
  * @author Vlad
  * @version $Id$
  */
 package com.propertyvista.crm.client.ui.crud.billing.cycle;
 
-import com.pyx4j.site.client.ui.crud.form.IViewerView;
+import com.pyx4j.site.client.ui.crud.lister.IListerView;
 
-import com.propertyvista.crm.rpc.dto.billing.BillingCycleDTO;
+import com.propertyvista.crm.rpc.dto.billing.BillDataDTO;
 
-public interface BillingCycleView extends IViewerView<BillingCycleDTO> {
+public interface BillingCycleBillListerView extends IListerView<BillDataDTO> {
 
-    interface Presenter extends IViewerView.Presenter {
-
-    }
 }

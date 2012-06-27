@@ -20,6 +20,6 @@ import com.propertyvista.crm.rpc.dto.billing.BillingCycleLeaseDTO;
 public class BillingCycleLeaseViewImpl extends CrmViewerViewImplBase<BillingCycleLeaseDTO> implements BillingCycleLeaseView {
 
     public BillingCycleLeaseViewImpl() {
-        super(CrmSiteMap.Finance.BillingCycle.Lease.class, new BillingCycleLeaseForm(), true);
+        super(CrmSiteMap.Finance.BillingCycle.Leases.class, new BillingCycleLeaseForm(), true);
     }
 }

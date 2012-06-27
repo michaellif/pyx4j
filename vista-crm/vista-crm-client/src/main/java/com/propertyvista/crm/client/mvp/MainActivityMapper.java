@@ -33,6 +33,7 @@ import com.propertyvista.crm.client.activity.crud.account.LoginAttemptsListerAct
 import com.propertyvista.crm.client.activity.crud.billing.BillViewerActivity;
 import com.propertyvista.crm.client.activity.crud.billing.adjustment.LeaseAdjustmentEditorActivity;
 import com.propertyvista.crm.client.activity.crud.billing.adjustment.LeaseAdjustmentViewerActivity;
+import com.propertyvista.crm.client.activity.crud.billing.cycle.BillingCycleBillListerActivity;
 import com.propertyvista.crm.client.activity.crud.billing.cycle.BillingCycleLeaseViewerActivity;
 import com.propertyvista.crm.client.activity.crud.billing.cycle.BillingCycleViewerActivity;
 import com.propertyvista.crm.client.activity.crud.billing.payment.PaymentEditorActivity;
@@ -537,12 +538,11 @@ public class MainActivityMapper implements AppActivityMapper {
                             break;
                         }
 
-                    } else if (place instanceof CrmSiteMap.Finance.BillingCycle.Lease) {
-                        switch (crudPlace.getType()) {
-                        case viewer:
-                            activity = new BillingCycleLeaseViewerActivity(crudPlace);
-                            break;
-                        }
+                    } else if (place instanceof CrmSiteMap.Finance.BillingCycle.Bills) {
+                        activity = new BillingCycleBillListerActivity(crudPlace);
+
+                    } else if (place instanceof CrmSiteMap.Finance.BillingCycle.Leases) {
+                        activity = new BillingCycleLeaseViewerActivity(crudPlace);
 
                     } else if (place instanceof CrmSiteMap.Finance.Bill) {
                         switch (crudPlace.getType()) {
