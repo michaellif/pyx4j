@@ -14,7 +14,6 @@
 package com.propertyvista.crm.client.ui.crud.maintenance;
 
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
-import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CComponent;
@@ -65,12 +64,12 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
 
     @Override
     public void createTabs() {
-        selectTab(addTab(createGeneralTab(), i18n.tr("General")));
+        selectTab(addTab(createGeneralTab(i18n.tr("General"))));
 
     }
 
-    private Widget createGeneralTab() {
-        FormFlexPanel topLeft = new FormFlexPanel();
+    private FormFlexPanel createGeneralTab(String title) {
+        FormFlexPanel topLeft = new FormFlexPanel(title);
         int row = -1;
 
         topLeft.setWidget(++row, 0, new DecoratorBuilder(inject(proto().tenant(), new CEntitySelectorHyperlink<Tenant>() {

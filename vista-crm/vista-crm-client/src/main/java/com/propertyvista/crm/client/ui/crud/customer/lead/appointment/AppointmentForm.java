@@ -37,14 +37,14 @@ public class AppointmentForm extends CrmEntityForm<Appointment> {
     @Override
     public void createTabs() {
 
-        selectTab(addTab(createGeneralTab(), i18n.tr("General")));
+        selectTab(addTab(createGeneralTab(i18n.tr("General"))));
 
         setTabEnabled(addTab(createShowingsTab(), i18n.tr("Showings")), !isEditable());
 
     }
 
-    private Widget createGeneralTab() {
-        FormFlexPanel main = new FormFlexPanel();
+    private FormFlexPanel createGeneralTab(String title) {
+        FormFlexPanel main = new FormFlexPanel(title);
 
         int row = -1;
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().date()), 9).build());

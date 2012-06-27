@@ -13,8 +13,6 @@
  */
 package com.propertyvista.crm.client.ui.crud.building.catalog.service;
 
-import com.google.gwt.user.client.ui.Widget;
-
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -38,15 +36,15 @@ public class ServiceForm extends CrmEntityForm<Service> {
     @Override
     public void createTabs() {
 
-        Tab tab = addTab(createGeneralTab(), i18n.tr("General"));
+        Tab tab = addTab(createGeneralTab(i18n.tr("General")));
         selectTab(tab);
 
-        addTab(createEligibilityTab(), i18n.tr("Eligibility"));
+        addTab(createEligibilityTab(i18n.tr("Eligibility")));
 
     }
 
-    public Widget createGeneralTab() {
-        FormFlexPanel main = new FormFlexPanel();
+    public FormFlexPanel createGeneralTab(String title) {
+        FormFlexPanel main = new FormFlexPanel(title);
 
         int row = -1;
         main.setH1(++row, 0, 2, i18n.tr("Information"));
@@ -62,8 +60,8 @@ public class ServiceForm extends CrmEntityForm<Service> {
         return main;
     }
 
-    public Widget createEligibilityTab() {
-        FormFlexPanel main = new FormFlexPanel();
+    public FormFlexPanel createEligibilityTab(String title) {
+        FormFlexPanel main = new FormFlexPanel(title);
 
         int row = -1;
         main.setH1(++row, 0, 1, i18n.tr("Features"));

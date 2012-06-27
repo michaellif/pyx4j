@@ -13,8 +13,6 @@
  */
 package com.propertyvista.crm.client.ui.crud.organisation.employee;
 
-import com.google.gwt.user.client.ui.Widget;
-
 import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.commons.Key;
 import com.pyx4j.forms.client.ui.CComponent;
@@ -48,11 +46,11 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
 
     @Override
     public void createTabs() {
-        Tab tab = addTab(createInfoTab(), i18n.tr("Personal Information"));
+        Tab tab = addTab(createInfoTab(i18n.tr("Personal Information")));
         selectTab(tab);
 
-        addTab(createPrivilegesTab(), i18n.tr("Privileges"));
-        addTab(createAuditingConfigurationTab(), i18n.tr("Auditing Configuration"));
+        addTab(createPrivilegesTab(i18n.tr("Privileges")));
+        addTab(createAuditingConfigurationTab(i18n.tr("Auditing Configuration")));
     }
 
     @Override
@@ -82,8 +80,8 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
         enforceBehaviour();
     }
 
-    private Widget createInfoTab() {
-        FormFlexPanel main = new FormFlexPanel();
+    private FormFlexPanel createInfoTab(String title) {
+        FormFlexPanel main = new FormFlexPanel(title);
 
         int row = -1;
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().title()), 20).build());
@@ -107,18 +105,18 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
         return main;
     }
 
-    private Widget createAuditingConfigurationTab() {
+    private FormFlexPanel createAuditingConfigurationTab(String title) {
 
-        FormFlexPanel tabContent = new FormFlexPanel();
+        FormFlexPanel tabContent = new FormFlexPanel(title);
         int row = -1;
         tabContent.setWidget(++row, 0, inject(proto().userAuditingConfiguration(), new UserAuditingConfigurationForm()));
 
         return tabContent;
     }
 
-    private Widget createPrivilegesTab() {
+    private FormFlexPanel createPrivilegesTab(String title) {
 
-        FormFlexPanel content = new FormFlexPanel();
+        FormFlexPanel content = new FormFlexPanel(title);
 
         int row = -1;
         content.setH1(++row, 0, 2, i18n.tr("Information"));

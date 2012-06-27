@@ -16,8 +16,6 @@ package com.propertyvista.crm.client.ui.crud.customer.tenant;
 import java.util.List;
 
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.ScrollPanel;
-import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.utils.EntityGraph;
@@ -54,15 +52,15 @@ public class TenantForm extends CrmEntityForm<TenantDTO> {
     @Override
     public void createTabs() {
 
-        Tab tab = addTab(createDetailsTab(), i18n.tr("Details"));
+        Tab tab = addTab(createDetailsTab(i18n.tr("Details")));
         selectTab(tab);
 
-        addTab(createContactsTab(), i18n.tr("Contacts"));
+        addTab(createContactsTab(i18n.tr("Contacts")));
 
         tab = addTab(isEditable() ? new HTML() : ((TenantViewerView) getParentView()).getScreeningListerView().asWidget(), i18n.tr("Screening"));
         setTabEnabled(tab, !isEditable());
 
-        addTab(createPaymentMethodsTab(), i18n.tr("Payment Methods"));
+        addTab(createPaymentMethodsTab(i18n.tr("Payment Methods")));
 
     }
 
@@ -72,8 +70,8 @@ public class TenantForm extends CrmEntityForm<TenantDTO> {
         get(proto().customer().person().email()).setMandatory(!getValue().customer().user().isNull());
     }
 
-    private Widget createDetailsTab() {
-        FormFlexPanel main = new FormFlexPanel();
+    private FormFlexPanel createDetailsTab(String title) {
+        FormFlexPanel main = new FormFlexPanel(title);
 
         int row = -1;
         main.setWidget(++row, 0, inject(proto().customer().person().name(), new NameEditor(i18n.tr("Tenant"))));
@@ -97,16 +95,16 @@ public class TenantForm extends CrmEntityForm<TenantDTO> {
         return main;
     }
 
-    private Widget createContactsTab() {
-        FormFlexPanel main = new FormFlexPanel();
+    private FormFlexPanel createContactsTab(String title) {
+        FormFlexPanel main = new FormFlexPanel(title);
 
         main.setWidget(0, 0, inject(proto().customer().emergencyContacts(), new EmergencyContactFolder(isEditable())));
 
         return main;
     }
 
-    private Widget createPaymentMethodsTab() {
-        FormFlexPanel main = new FormFlexPanel();
+    private FormFlexPanel createPaymentMethodsTab(String title) {
+        FormFlexPanel main = new FormFlexPanel(title);
 
         main.setWidget(0, 0, inject(proto().paymentMethods(), new PaymentMethodFolder(isEditable()) {
             @Override
@@ -125,7 +123,7 @@ public class TenantForm extends CrmEntityForm<TenantDTO> {
             }
         }));
 
-        return new ScrollPanel(main);
+        return main;
     }
 
     @Override

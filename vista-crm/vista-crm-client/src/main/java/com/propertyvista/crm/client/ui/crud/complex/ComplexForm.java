@@ -16,7 +16,6 @@ package com.propertyvista.crm.client.ui.crud.complex;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.ValidationUtils;
 import com.pyx4j.forms.client.ui.CComponent;
@@ -48,13 +47,13 @@ public class ComplexForm extends CrmEntityForm<ComplexDTO> {
         setTabEnabled(tab, !isEditable());
         selectTab(tab);
 
-        addTab(createGeneralPanel(), i18n.tr("General"));
-        addTab(createBuildingsPanel(), i18n.tr("Buildings"));
+        addTab(createGeneralPanel(i18n.tr("General")));
+        addTab(createBuildingsPanel(i18n.tr("Buildings")));
 
     }
 
-    private Widget createGeneralPanel() {
-        FormFlexPanel panel = new FormFlexPanel();
+    private FormFlexPanel createGeneralPanel(String title) {
+        FormFlexPanel panel = new FormFlexPanel(title);
         int row = 0;
 
         panel.setWidget(row++, 0, (new DecoratorBuilder(inject(proto().name()))).build());
@@ -94,8 +93,8 @@ public class ComplexForm extends CrmEntityForm<ComplexDTO> {
         return panel;
     }
 
-    private Widget createBuildingsPanel() {
-        FormFlexPanel panel = new FormFlexPanel();
+    private FormFlexPanel createBuildingsPanel(String title) {
+        FormFlexPanel panel = new FormFlexPanel(title);
 
         panel.setWidget(0, 0, inject(proto().buildings(), new ComplexBuildingFolder(isEditable())));
 

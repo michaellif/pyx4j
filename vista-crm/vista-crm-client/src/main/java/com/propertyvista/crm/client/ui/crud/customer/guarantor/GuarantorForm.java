@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -14,7 +14,6 @@
 package com.propertyvista.crm.client.ui.crud.customer.guarantor;
 
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -41,7 +40,7 @@ public class GuarantorForm extends CrmEntityForm<GuarantorDTO> {
     @Override
     public void createTabs() {
 
-        Tab tab = addTab(createDetailsTab(), i18n.tr("Details"));
+        Tab tab = addTab(createDetailsTab(i18n.tr("Details")));
         selectTab(tab);
 
         tab = addTab(isEditable() ? new HTML() : ((GuarantorViewerView) getParentView()).getScreeningListerView().asWidget(), i18n.tr("Screening"));
@@ -54,8 +53,8 @@ public class GuarantorForm extends CrmEntityForm<GuarantorDTO> {
         get(proto().customer().person().email()).setMandatory(!getValue().customer().user().isNull());
     }
 
-    private Widget createDetailsTab() {
-        FormFlexPanel main = new FormFlexPanel();
+    private FormFlexPanel createDetailsTab(String title) {
+        FormFlexPanel main = new FormFlexPanel(title);
         int row = -1;
 
         main.setWidget(++row, 0, inject(proto().customer().person().name(), new NameEditor(i18n.tr("Guarantor"))));

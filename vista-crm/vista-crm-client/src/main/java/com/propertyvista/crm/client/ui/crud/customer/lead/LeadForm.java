@@ -61,18 +61,18 @@ public class LeadForm extends CrmEntityForm<Lead> {
     @Override
     public void createTabs() {
 
-        Tab tab = addTab(createGuestsTab(), i18n.tr("Guests"));
+        Tab tab = addTab(createGuestsTab(i18n.tr("Guests")));
         selectTab(tab);
 
-        addTab(createDetailsTab(), i18n.tr("Details"));
+        addTab(createDetailsTab(i18n.tr("Details")));
 
         tab = addTab(createAppointmentsTab(), i18n.tr("Appointments"));
         setTabEnabled(tab, !isEditable());
 
     }
 
-    private Widget createGuestsTab() {
-        FormFlexPanel main = new FormFlexPanel();
+    private FormFlexPanel createGuestsTab(String title) {
+        FormFlexPanel main = new FormFlexPanel(title);
 
         int row = -1;
         main.setWidget(++row, 0, inject(proto().guests(), new GuestFolder(isEditable())));
@@ -86,8 +86,8 @@ public class LeadForm extends CrmEntityForm<Lead> {
         return main;
     }
 
-    private Widget createDetailsTab() {
-        FormFlexPanel main = new FormFlexPanel();
+    private FormFlexPanel createDetailsTab(String title) {
+        FormFlexPanel main = new FormFlexPanel(title);
 
         int row = -1;
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leadId()), 20).build());
@@ -208,7 +208,7 @@ public class LeadForm extends CrmEntityForm<Lead> {
         @Override
         protected List<ColumnDescriptor> defineColumnDescriptors() {
             return Arrays.asList(//@formatter:off
-                    // building columns                    
+                    // building columns
                     new MemberColumnDescriptor.Builder(proto().building().propertyCode(), true).build(),
                     new MemberColumnDescriptor.Builder(proto().building().complex(), false).build(),
                     new MemberColumnDescriptor.Builder(proto().building().propertyManager(), false).build(),

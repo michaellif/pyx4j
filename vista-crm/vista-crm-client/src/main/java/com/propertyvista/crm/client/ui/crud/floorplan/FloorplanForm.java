@@ -16,8 +16,6 @@ package com.propertyvista.crm.client.ui.crud.floorplan;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.gwt.user.client.ui.Widget;
-
 import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.folder.CEntityFolder;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
@@ -45,10 +43,10 @@ public class FloorplanForm extends CrmEntityForm<FloorplanDTO> {
 
     @Override
     public void createTabs() {
-        Tab tab = addTab(createGeneralTab(), i18n.tr("General"));
+        Tab tab = addTab(createGeneralTab(i18n.tr("General")));
         selectTab(tab);
 
-        addTab(createMediaTab(), i18n.tr("Media"));
+        addTab(createMediaTab(i18n.tr("Media")));
 
     }
 
@@ -65,8 +63,8 @@ public class FloorplanForm extends CrmEntityForm<FloorplanDTO> {
         };
     }
 
-    private Widget createMediaTab() {
-        FormFlexPanel main = new FormFlexPanel();
+    private FormFlexPanel createMediaTab(String title) {
+        FormFlexPanel main = new FormFlexPanel(title);
 
         int row = -1;
         main.setH1(++row, 0, 2, i18n.tr("Media Information"));
@@ -74,8 +72,8 @@ public class FloorplanForm extends CrmEntityForm<FloorplanDTO> {
         return main;
     }
 
-    private Widget createGeneralTab() {
-        FormFlexPanel main = new FormFlexPanel();
+    private FormFlexPanel createGeneralTab(String title) {
+        FormFlexPanel main = new FormFlexPanel(title);
 
         int row = -1;
         main.setH1(++row, 0, 2, i18n.tr("Floorplan Information"));

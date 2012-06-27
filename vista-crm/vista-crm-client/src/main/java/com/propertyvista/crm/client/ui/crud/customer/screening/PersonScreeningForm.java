@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -17,7 +17,6 @@ import java.util.Date;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.client.CEntityForm;
@@ -67,13 +66,13 @@ public class PersonScreeningForm extends CrmEntityForm<PersonScreening> {
     @Override
     protected void createTabs() {
 
-        Tab tab = addTab(createIdentificationDocumentsTab(), i18n.tr("Identification Documents"));
+        Tab tab = addTab(createIdentificationDocumentsTab(i18n.tr("Identification Documents")));
         selectTab(tab);
 
-        addTab(createAddressesTab(), i18n.tr("Addresses"));
-        addTab(createlegalQuestionsTab(), proto().legalQuestions().getMeta().getCaption());
-        addTab(createIncomesTab(), i18n.tr("Incomes"));
-        addTab(createAssetsTab(), i18n.tr("Assets"));
+        addTab(createAddressesTab(i18n.tr("Addresses")));
+        addTab(createlegalQuestionsTab(proto().legalQuestions().getMeta().getCaption()));
+        addTab(createIncomesTab(i18n.tr("Incomes")));
+        addTab(createAssetsTab(i18n.tr("Assets")));
 
     }
 
@@ -99,7 +98,7 @@ public class PersonScreeningForm extends CrmEntityForm<PersonScreening> {
         new PastDateValidation(currentAddressForm.get(currentAddressForm.proto().moveInDate()));
         new FutureDateValidation(currentAddressForm.get(currentAddressForm.proto().moveOutDate()));
 
-        // ------------------------------------------------------------------------------------------------        
+        // ------------------------------------------------------------------------------------------------
 
         @SuppressWarnings("unchecked")
         final CEntityForm<PriorAddress> previousAddressForm = ((CEntityForm<PriorAddress>) get(proto().previousAddress()));
@@ -121,7 +120,7 @@ public class PersonScreeningForm extends CrmEntityForm<PersonScreening> {
         previousAddressForm.get(previousAddressForm.proto().moveInDate()).addValueChangeHandler(
                 new RevalidationTrigger<LogicalDate>(previousAddressForm.get(previousAddressForm.proto().moveOutDate())));
 
-        // ------------------------------------------------------------------------------------------------        
+        // ------------------------------------------------------------------------------------------------
 
         new PastDateValidation(previousAddressForm.get(previousAddressForm.proto().moveOutDate()));
 
@@ -132,8 +131,7 @@ public class PersonScreeningForm extends CrmEntityForm<PersonScreening> {
                     return null;
                 }
                 IPrimitive<LogicalDate> date = getValue().previousAddress().moveInDate();
-                return (date.isNull() || value.after(date.getValue())) ? null : new ValidationError(i18n
-                        .tr("Move Out Date must be greater then Move In Date"));
+                return (date.isNull() || value.after(date.getValue())) ? null : new ValidationError(i18n.tr("Move Out Date must be greater then Move In Date"));
             }
 
         });
@@ -142,8 +140,8 @@ public class PersonScreeningForm extends CrmEntityForm<PersonScreening> {
                 new RevalidationTrigger<LogicalDate>(previousAddressForm.get(previousAddressForm.proto().moveInDate())));
     }
 
-    private Widget createIdentificationDocumentsTab() {
-        FormFlexPanel main = new FormFlexPanel();
+    private FormFlexPanel createIdentificationDocumentsTab(String title) {
+        FormFlexPanel main = new FormFlexPanel(title);
 
         int row = -1;
         main.setWidget(++row, 0, inject(proto().documents(), fileUpload = new IdUploaderFolder()));
@@ -151,8 +149,8 @@ public class PersonScreeningForm extends CrmEntityForm<PersonScreening> {
         return main;
     }
 
-    private Widget createAddressesTab() {
-        FormFlexPanel main = new FormFlexPanel();
+    private FormFlexPanel createAddressesTab(String title) {
+        FormFlexPanel main = new FormFlexPanel(title);
 
         int row = -1;
         main.setH1(++row, 0, 1, proto().currentAddress().getMeta().getCaption());
@@ -165,8 +163,8 @@ public class PersonScreeningForm extends CrmEntityForm<PersonScreening> {
         return main;
     }
 
-    private Widget createlegalQuestionsTab() {
-        FormFlexPanel main = new FormFlexPanel();
+    private FormFlexPanel createlegalQuestionsTab(String title) {
+        FormFlexPanel main = new FormFlexPanel(title);
 
         int row = 0;
         main.setWidget(row++, 0,
@@ -199,16 +197,16 @@ public class PersonScreeningForm extends CrmEntityForm<PersonScreening> {
 
 // Financial: ------------------------------------------------------------------------------------------------
 
-    private Widget createIncomesTab() {
-        FormFlexPanel main = new FormFlexPanel();
+    private FormFlexPanel createIncomesTab(String title) {
+        FormFlexPanel main = new FormFlexPanel(title);
 
         main.setWidget(0, 0, inject(proto().incomes(), new PersonalIncomeFolder(isEditable())));
 
         return main;
     }
 
-    private Widget createAssetsTab() {
-        FormFlexPanel main = new FormFlexPanel();
+    private FormFlexPanel createAssetsTab(String title) {
+        FormFlexPanel main = new FormFlexPanel(title);
 
         main.setWidget(0, 0, inject(proto().assets(), new PersonalAssetFolder(isEditable())));
 

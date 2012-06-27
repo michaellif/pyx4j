@@ -52,7 +52,7 @@ public abstract class PolicyDTOTabPanelBasedForm<POLICY_DTO extends PolicyDTOBas
     private CComboBox<NodeType> selectPolicyScopeBox;
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
-    // This list MUST be ordered in descending order by the NodeType hierarchy 
+    // This list MUST be ordered in descending order by the NodeType hierarchy
     private static final List<NodeType> AVAILABLE_NODE_TYPES = Arrays.asList(//@formatter:off
             new NodeType.Builder(OrganizationPoliciesNode.class).hasOnlyOneInstance().build(),
 //          new NodeType.Builder(Country.class).build(),
@@ -73,7 +73,7 @@ public abstract class PolicyDTOTabPanelBasedForm<POLICY_DTO extends PolicyDTOBas
     @Override
     public void createTabs() {
 
-        Tab tab = addTab(createScopeTab(), i18n.tr("Scope"));
+        Tab tab = addTab(createScopeTab(i18n.tr("Scope")));
         selectTab(tab);
 
         for (TabDescriptor d : createCustomTabPanels()) {
@@ -84,8 +84,8 @@ public abstract class PolicyDTOTabPanelBasedForm<POLICY_DTO extends PolicyDTOBas
 
     protected abstract List<TabDescriptor> createCustomTabPanels();
 
-    private Widget createScopeTab() {
-        FormFlexPanel content = new FormFlexPanel();
+    private FormFlexPanel createScopeTab(String title) {
+        FormFlexPanel content = new FormFlexPanel(title);
         content.setHeight("3em");
         int row = -1;
 

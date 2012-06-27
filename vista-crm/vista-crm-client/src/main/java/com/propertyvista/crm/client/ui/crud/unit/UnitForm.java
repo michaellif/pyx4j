@@ -24,8 +24,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.ScrollPanel;
-import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.client.ui.CEntityLabel;
@@ -44,7 +42,6 @@ import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
-import com.propertyvista.common.client.ui.components.editors.MarketingEditor;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.rpc.services.selections.SelectFloorplanListService;
 import com.propertyvista.domain.property.asset.Floorplan;
@@ -67,7 +64,7 @@ public class UnitForm extends CrmEntityForm<AptUnitDTO> {
     @Override
     public void createTabs() {
 
-        Tab tab = addTab(createGeneralTab(), i18n.tr("General"));
+        Tab tab = addTab(createGeneralTab(i18n.tr("General")));
         selectTab(tab);
 
         tab = addTab(isEditable() ? new HTML() : ((UnitViewerView) getParentView()).getUnitItemsListerView().asWidget(), i18n.tr("Details"));
@@ -91,10 +88,10 @@ public class UnitForm extends CrmEntityForm<AptUnitDTO> {
         get(proto().financial()._unitRent()).setVisible(!getValue().financial()._unitRent().isNull());
     }
 
-    private Widget createGeneralTab() {
+    private FormFlexPanel createGeneralTab(String title) {
 
         int row = -1;
-        FormFlexPanel left = new FormFlexPanel();
+        FormFlexPanel left = new FormFlexPanel(title);
 
         left.setWidget(
                 ++row,
@@ -149,15 +146,7 @@ public class UnitForm extends CrmEntityForm<AptUnitDTO> {
         main.getColumnFormatter().setWidth(0, "40%");
         main.getColumnFormatter().setWidth(1, "60%");
 
-        return new ScrollPanel(main);
-    }
-
-    private Widget createMarketingTab() {
-        FormFlexPanel main = new FormFlexPanel();
-
-        main.setWidget(0, 0, inject(proto().marketing(), new MarketingEditor()));
-
-        return new ScrollPanel(main);
+        return main;
     }
 
     private static class BuildingBoundFloorplanSelectorDialog extends EntitySelectorTableDialog<Floorplan> {
@@ -166,7 +155,7 @@ public class UnitForm extends CrmEntityForm<AptUnitDTO> {
 
         static {
             Floorplan proto = EntityFactory.getEntityPrototype(Floorplan.class);
-            COLUMNS = Arrays.asList(//@formatter:off                    
+            COLUMNS = Arrays.asList(//@formatter:off
                     new MemberColumnDescriptor.Builder(proto.name()).build(),
                     new MemberColumnDescriptor.Builder(proto.marketingName(), false).build(),
                     new MemberColumnDescriptor.Builder(proto.floorCount()).build(),
@@ -175,7 +164,7 @@ public class UnitForm extends CrmEntityForm<AptUnitDTO> {
                     new MemberColumnDescriptor.Builder(proto.halfBath()).build(),
                     new MemberColumnDescriptor.Builder(proto.dens()).build(),
                     new MemberColumnDescriptor.Builder(proto.description(), false).build()
-            );//@formatter:on    
+            );//@formatter:on
         }
 
         private final AsyncCallback<Floorplan> onSelectedCallback;

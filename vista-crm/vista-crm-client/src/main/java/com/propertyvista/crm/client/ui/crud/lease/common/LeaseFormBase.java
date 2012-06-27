@@ -15,8 +15,6 @@ package com.propertyvista.crm.client.ui.crud.lease.common;
 
 import java.util.List;
 
-import com.google.gwt.user.client.ui.Widget;
-
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.entity.shared.criterion.Criterion;
@@ -68,14 +66,14 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
 
     protected void createCommonContent() {
 
-        Tab tab = addTab(createDetailsTab(), i18n.tr("Details"));
+        Tab tab = addTab(createDetailsTab(i18n.tr("Details")));
         selectTab(tab);
 
-        addTab(createTenantsTab(), i18n.tr("Tenants"));
-        addTab(createGuarantorsTab(), i18n.tr("Guarantors"));
-        addTab(createProductsTab(), i18n.tr("Products"));
+        addTab(createTenantsTab(i18n.tr("Tenants")));
+        addTab(createGuarantorsTab(i18n.tr("Guarantors")));
+        addTab(createProductsTab(i18n.tr("Products")));
 
-        chargesTab = addTab(createChargesTab(), i18n.tr("Charges"));
+        chargesTab = addTab(createChargesTab(i18n.tr("Charges")));
     }
 
     @Override
@@ -138,8 +136,8 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
         }
     }
 
-    private Widget createDetailsTab() {
-        FormFlexPanel main = new FormFlexPanel();
+    private FormFlexPanel createDetailsTab(String title) {
+        FormFlexPanel main = new FormFlexPanel(title);
 
         int row = -1;
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseId()), 15).build());
@@ -244,24 +242,24 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
         return main;
     }
 
-    private Widget createTenantsTab() {
-        FormFlexPanel main = new FormFlexPanel();
+    private FormFlexPanel createTenantsTab(String title) {
+        FormFlexPanel main = new FormFlexPanel(title);
 
         main.setWidget(0, 0, inject(proto().version().tenants(), new TenantInLeaseFolder(this, isEditable())));
 
         return main;
     }
 
-    private Widget createGuarantorsTab() {
-        FormFlexPanel main = new FormFlexPanel();
+    private FormFlexPanel createGuarantorsTab(String title) {
+        FormFlexPanel main = new FormFlexPanel(title);
 
         main.setWidget(0, 0, inject(proto().version().guarantors(), new GuarantorInLeaseFolder(this, isEditable())));
 
         return main;
     }
 
-    private Widget createProductsTab() {
-        FormFlexPanel main = new FormFlexPanel();
+    private FormFlexPanel createProductsTab(String title) {
+        FormFlexPanel main = new FormFlexPanel(title);
 
         @SuppressWarnings("unchecked")
         IEditorView<DTO> leaseEditorView = (isEditable() ? (IEditorView<DTO>) getParentView() : null);
@@ -279,8 +277,8 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
         return main;
     }
 
-    private Widget createChargesTab() {
-        FormFlexPanel main = new FormFlexPanel();
+    private FormFlexPanel createChargesTab(String title) {
+        FormFlexPanel main = new FormFlexPanel(title);
 
         main.setWidget(0, 0, inject(proto().billingPreview(), new BillForm(true)));
 
@@ -294,6 +292,11 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
         crossValidate(get(proto().leaseFrom()), get(proto().leaseTo()), null);
         crossValidate(get(proto().leaseFrom()), get(proto().version().actualLeaseTo()), null);
         crossValidate(get(proto().version().actualMoveIn()), get(proto().version().actualMoveOut()), null);
+//        DatesWithinMonth(get(proto().version().actualLeaseTo()), get(proto().leaseTo()), "Actual Lease To Date Should Be Within 30 Days Of Lease To Date");
+//        DatesWithinMonth(get(proto().version().actualMoveIn()), get(proto().version().expectedMoveIn()),
+//                "Actual Move In Date Should Be Within 30 Days Of Expected Move In Date");
+//        DatesWithinMonth(get(proto().version().actualMoveOut()), get(proto().version().expectedMoveOut()),
+//                "Actual Move Out Date Should Be Within 30 Days Of Expected Move Out Date");
 
         new DateInPeriodValidation(get(proto().leaseFrom()), get(proto().version().expectedMoveIn()), get(proto().leaseTo()),
                 i18n.tr("The Date Should Be Within The Lease Period"));
