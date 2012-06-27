@@ -32,6 +32,7 @@ import com.propertyvista.domain.financial.billing.InvoiceDebit;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.domain.financial.billing.LeaseArrearsSnapshot;
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.tenant.lease.Deposit;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.dto.TransactionHistoryDTO;
 
@@ -68,6 +69,11 @@ public class ARFacadeImpl implements ARFacade {
     @Override
     public void postImmediateAdjustment(LeaseAdjustment adjustment) {
         new ARLeaseAdjustmentProcessor().postImmediateAdjustment(adjustment);
+    }
+
+    @Override
+    public void postDepositRefund(Deposit deposit) {
+        new ARDepositProcessor().postDepositRefund(deposit);
     }
 
     @Override

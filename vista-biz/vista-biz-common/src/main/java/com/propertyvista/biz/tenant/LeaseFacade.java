@@ -18,7 +18,6 @@ import com.pyx4j.commons.LogicalDate;
 
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.financial.offering.ProductItem;
-import com.propertyvista.domain.policy.framework.PolicyNode;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -33,7 +32,7 @@ public interface LeaseFacade {
 
     Lease setService(Lease lease, ProductItem serviceId);
 
-    BillableItem createBillableItem(ProductItem itemId, PolicyNode node);
+    BillableItem createBillableItem(ProductItem itemId);
 
     Lease persist(Lease lease);
 

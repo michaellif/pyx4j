@@ -15,7 +15,7 @@ package com.propertyvista.biz.financial.deposit;
 
 import java.util.List;
 
-import com.propertyvista.domain.financial.offering.ProductItemType;
+import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.policy.framework.PolicyNode;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Deposit;
@@ -27,17 +27,17 @@ public interface DepositFacade {
      * Creates deposit instance based on the corresponding policy. DepositType may limit acceptable target
      * products, for example, LastMonthDeposit may only accept ServiceType products.
      */
-    Deposit createDeposit(DepositType depositType, ProductItemType productType, PolicyNode node);
+    public Deposit createDeposit(DepositType depositType, BillableItem billableItem, PolicyNode node);
 
     /*
      * Create all deposits required by the policy
      */
-    List<Deposit> createRequiredDeposits(ProductItemType productType, PolicyNode node);
+    public List<Deposit> createRequiredDeposits(BillableItem billableItem, PolicyNode node);
 
     /*
      * Every deposit must collect interest based on the corresponding policy rules and interest rates
      */
-    void collectInterest(Deposit deposit, PolicyNode node);
+    void collectInterest(PolicyNode node);
 
     /*
      * Request to cover expenses may be rejected based on the expense type, so the boolean is returned
@@ -51,5 +51,16 @@ public interface DepositFacade {
      */
     void onTargetProductChange(Deposit deposit);
 
-    List<Deposit> getReturnList();
+    /*
+     * SecurityDeposit - return with delay of N(policy) days;
+     * LastMonthDeposit - return 1 month before lease end;
+     * MoveInDeposit - return on first day of lease, we need to verify it doesn't create late payment fee;
+     */
+    void issueDepositRefunds(PolicyNode node);
+
+    /*
+     * Update related deposits to Billed status
+     */
+    void onValidateBill(Bill bill);
+
 }

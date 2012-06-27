@@ -71,9 +71,8 @@ public abstract class LeaseEditorActivityBase<DTO extends LeaseDTO> extends Edit
     }
 
     @Override
-    public void createDeposit(AsyncCallback<Deposit> callback, DepositType depositType, ProductItem item) {
-        ((LeaseEditorCrudServiceBase<DTO>) getService()).createDeposit(callback, depositType,
-                EntityFactory.createIdentityStub(ProductItem.class, item.getPrimaryKey()), getView().getValue());
+    public void createDeposit(AsyncCallback<Deposit> callback, DepositType depositType, BillableItem item) {
+        ((LeaseEditorCrudServiceBase<DTO>) getService()).createDeposit(callback, depositType, item, getView().getValue());
     }
 
     @Override

@@ -368,12 +368,12 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
     protected void setDeposit(String billableItemId, DepositType depositType, SaveAction saveAction) {
         Lease lease = retrieveLeaseForEdit();
         BillableItem billableItem = findBillableItem(billableItemId, lease);
-        Deposit deposit = ServerSideFactory.create(DepositFacade.class).createDeposit(depositType, billableItem.item().type(), lease.unit().building());
-        if (deposit != null) {
-            billableItem.deposits().add(deposit);
-        }
+        Deposit deposit = ServerSideFactory.create(DepositFacade.class).createDeposit(depositType, billableItem, lease.unit().building());
+        Persistence.service().retrieve(lease.billingAccount().deposits());
+        lease.billingAccount().deposits().add(deposit);
         lease.saveAction().setValue(saveAction);
         Persistence.service().persist(lease);
+        Persistence.service().merge(lease.billingAccount().deposits());
         Persistence.service().commit();
     }
 

@@ -44,6 +44,7 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.financial.SysDateManager;
 import com.propertyvista.biz.financial.ar.ARFacade;
+import com.propertyvista.biz.financial.deposit.DepositFacade;
 import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.domain.StatisticsRecord;
 import com.propertyvista.domain.financial.BillingAccount;
@@ -277,6 +278,8 @@ public class BillingLifecycleManager {
             Persistence.service().persist(bill);
 
             updateBillingCycleStats(bill, false);
+
+            ServerSideFactory.create(DepositFacade.class).onValidateBill(bill);
 
         } else {
             throw new BillingException("Bill is in status '" + bill.billStatus().getValue() + "'. Bill should be in 'Finished' state in order to verify it.");

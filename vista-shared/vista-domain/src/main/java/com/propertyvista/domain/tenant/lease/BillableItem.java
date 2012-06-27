@@ -67,9 +67,6 @@ public interface BillableItem extends IEntity {
     @Caption(description = "Empty value assumes Lease end date")
     IPrimitive<LogicalDate> expirationDate();
 
-    @Owned
-    IList<Deposit> deposits();
-
     /**
      * Current price: contractual price value (agreed price + adjustments),
      * should be recalculated (@link

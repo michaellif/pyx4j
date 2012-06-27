@@ -16,7 +16,10 @@ package com.propertyvista.biz.financial.billing;
 import java.math.BigDecimal;
 import java.util.List;
 
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.financial.MoneyUtils;
@@ -27,8 +30,8 @@ import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.domain.financial.billing.InvoiceProductCharge;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Deposit;
+import com.propertyvista.domain.tenant.lease.Deposit.DepositStatus;
 import com.propertyvista.domain.tenant.lease.Deposit.ValueType;
-import com.propertyvista.portal.rpc.shared.BillingException;
 
 public class BillingDepositProcessor extends AbstractBillingProcessor {
 
@@ -40,29 +43,25 @@ public class BillingDepositProcessor extends AbstractBillingProcessor {
 
     @Override
     protected void execute() {
-        createDeposits();
+        createInvoiceDeposits();
         attachDepositRefunds();
     }
 
-    private void createDeposits() {
+    private void createInvoiceDeposits() {
 
-        createDeposit(getBillingManager().getNextPeriodBill().billingAccount().lease().version().leaseProducts().serviceItem());
+        EntityQueryCriteria<Deposit> depositCriteria = EntityQueryCriteria.create(Deposit.class);
+        depositCriteria.add(PropertyCriterion.eq(depositCriteria.proto().billingAccount(), getBillingManager().getNextPeriodBill().billingAccount()));
+        depositCriteria.add(PropertyCriterion.eq(depositCriteria.proto().status(), DepositStatus.Created));
 
-        for (BillableItem billableItem : getBillingManager().getNextPeriodBill().billingAccount().lease().version().leaseProducts().featureItems()) {
-            if (billableItem.isNull()) {
-                throw new BillingException("Service Item is mandatory in lease");
-            }
-            createDeposit(billableItem);
+        for (Deposit deposit : Persistence.service().query(depositCriteria)) {
+            createInvoiceDeposit(deposit);
         }
     }
 
     //Deposit should be taken on a first billing period of the BillableItem
-    private void createDeposit(BillableItem billableItem) {
-
-        if (billableItem.deposits().isEmpty()) {
-            return;
-        }
-
+    private void createInvoiceDeposit(Deposit deposit) {
+        BillableItem billableItem = deposit.billableItem();
+        Persistence.service().retrieve(billableItem);
         InvoiceProductCharge nextCharge = null;
         InvoiceProductCharge currentCharge = null;
         for (InvoiceProductCharge charge : BillingUtils.getLineItemsForType(getBillingManager().getNextPeriodBill(), InvoiceProductCharge.class)) {
@@ -84,37 +83,36 @@ public class BillingDepositProcessor extends AbstractBillingProcessor {
         }
 
         //This is first time charge have been issued - add deposit
-        if (nextCharge != null && currentCharge == null && !billableItem.deposits().isEmpty()) {
-            for (Deposit deposit : billableItem.deposits()) {
-                InvoiceDeposit invoiceDeposit = EntityFactory.create(InvoiceDeposit.class);
-                invoiceDeposit.billingAccount().set(getBillingManager().getNextPeriodBill().billingAccount());
-                invoiceDeposit.dueDate().setValue(getBillingManager().getNextPeriodBill().dueDate().getValue());
-                invoiceDeposit.debitType().setValue(DebitType.deposit);
-                invoiceDeposit.description().setValue(deposit.description().getStringView());
+        if (nextCharge != null && currentCharge == null) {
+            InvoiceDeposit invoiceDeposit = EntityFactory.create(InvoiceDeposit.class);
+            invoiceDeposit.billingAccount().set(getBillingManager().getNextPeriodBill().billingAccount());
+            invoiceDeposit.dueDate().setValue(getBillingManager().getNextPeriodBill().dueDate().getValue());
+            invoiceDeposit.debitType().setValue(DebitType.deposit);
+            invoiceDeposit.description().setValue(deposit.description().getStringView());
 
-                if (ValueType.Amount == deposit.valueType().getValue()) {
-                    invoiceDeposit.amount().setValue(deposit.initialAmount().getValue());
-                } else if (ValueType.Percentage == deposit.valueType().getValue()) {
-                    //TODO consider real price of service or feature including concessions etc
-                    invoiceDeposit.amount().setValue(MoneyUtils.round(deposit.initialAmount().getValue().multiply(billableItem.agreedPrice().getValue())));
-                } else {
-                    throw new Error("Unsupported ValueType");
-                }
-
-                invoiceDeposit.taxTotal().setValue(BigDecimal.ZERO);
-
-                addDeposit(invoiceDeposit);
+            if (ValueType.Amount == deposit.valueType().getValue()) {
+                invoiceDeposit.amount().setValue(deposit.initialAmount().getValue());
+            } else if (ValueType.Percentage == deposit.valueType().getValue()) {
+                //TODO consider real price of service or feature including concessions etc
+                invoiceDeposit.amount().setValue(MoneyUtils.round(deposit.initialAmount().getValue().multiply(billableItem.agreedPrice().getValue())));
+            } else {
+                throw new Error("Unsupported ValueType");
             }
+
+            invoiceDeposit.taxTotal().setValue(BigDecimal.ZERO);
+            invoiceDeposit.deposit().set(deposit);
+
+            addInvoiceDeposit(invoiceDeposit);
         }
     }
 
-    private void addDeposit(InvoiceDeposit deposit) {
-        if (deposit == null) {
+    private void addInvoiceDeposit(InvoiceDeposit invoiceDeposit) {
+        if (invoiceDeposit == null) {
             return;
         }
         getBillingManager().getNextPeriodBill().depositAmount()
-                .setValue(getBillingManager().getNextPeriodBill().depositAmount().getValue().add(deposit.amount().getValue()));
-        getBillingManager().getNextPeriodBill().lineItems().add(deposit);
+                .setValue(getBillingManager().getNextPeriodBill().depositAmount().getValue().add(invoiceDeposit.amount().getValue()));
+        getBillingManager().getNextPeriodBill().lineItems().add(invoiceDeposit);
         //TODO
         // getBillingManager().getNextPeriodBill().taxes().setValue(getBillingManager().getNextPeriodBill().taxes().getValue().add(deposit.taxTotal().getValue()));
     }
@@ -131,5 +129,4 @@ public class BillingDepositProcessor extends AbstractBillingProcessor {
         getBillingManager().getNextPeriodBill().depositRefundAmount()
                 .setValue(getBillingManager().getNextPeriodBill().depositRefundAmount().getValue().add(depositRefund.amount().getValue().negate()));
     }
-
 }

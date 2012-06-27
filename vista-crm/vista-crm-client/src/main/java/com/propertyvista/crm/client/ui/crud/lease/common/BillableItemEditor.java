@@ -148,8 +148,9 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
         adjustmentPanel.setH3(0, 0, 1, i18n.tr("Adjustments"));
         adjustmentPanel.setWidget(1, 0, inject(proto().adjustments(), new AdjustmentFolder()));
 
-        depositPanel.setH3(0, 0, 1, i18n.tr("Deposits"));
-        depositPanel.setWidget(1, 0, inject(proto().deposits(), new DepositFolder()));
+// TODO - please follow up on deposit changes
+//        depositPanel.setH3(0, 0, 1, i18n.tr("Deposits"));
+//        depositPanel.setWidget(1, 0, inject(proto().deposits(), new DepositFolder()));
 
         get(proto().effectiveDate()).setVisible(false);
         get(proto().expirationDate()).setVisible(false);
@@ -192,7 +193,8 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
 
             if (isViewable()) {
                 adjustmentPanel.setVisible(!getValue().adjustments().isEmpty());
-                depositPanel.setVisible(!getValue().deposits().isEmpty());
+// TODO - please follow up on deposit changes
+//                depositPanel.setVisible(!getValue().deposits().isEmpty());
             } else {
                 adjustmentPanel.setVisible(true);
                 depositPanel.setVisible(true);
@@ -446,7 +448,7 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
                     }
                     callback.onSuccess(result);
                 }
-            }, type, BillableItemEditor.this.getValue().item());
+            }, type, BillableItemEditor.this.getValue());
         }
 
         private class BillableItemDepositEditor extends CEntityFolderRowEditor<Deposit> {

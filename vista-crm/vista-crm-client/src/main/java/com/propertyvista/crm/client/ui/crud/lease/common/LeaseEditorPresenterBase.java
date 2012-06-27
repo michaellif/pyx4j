@@ -31,7 +31,7 @@ public interface LeaseEditorPresenterBase {
 
     void createBillableItem(AsyncCallback<BillableItem> callback, ProductItem item);
 
-    void createDeposit(AsyncCallback<Deposit> callback, DepositType depositType, ProductItem item);
+    void createDeposit(AsyncCallback<Deposit> callback, DepositType depositType, BillableItem item);
 
     void calculateChargeItemAdjustments(AsyncCallback<BigDecimal> callback, BillableItem item);
 }

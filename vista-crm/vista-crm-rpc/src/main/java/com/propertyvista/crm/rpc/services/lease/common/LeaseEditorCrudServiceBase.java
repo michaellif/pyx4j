@@ -34,7 +34,7 @@ public interface LeaseEditorCrudServiceBase<DTO extends LeaseDTO> extends Abstra
 
     void createBillableItem(AsyncCallback<BillableItem> callback, ProductItem productItemId, DTO currentValue);
 
-    void createDeposit(AsyncCallback<Deposit> callback, DepositType depositType, ProductItem productItemId, DTO currentValue);
+    void createDeposit(AsyncCallback<Deposit> callback, DepositType depositType, BillableItem item, DTO currentValue);
 
     void calculateChargeItemAdjustments(AsyncCallback<BigDecimal> callback, BillableItem item);
 }

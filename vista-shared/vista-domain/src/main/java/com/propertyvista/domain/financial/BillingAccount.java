@@ -34,6 +34,7 @@ import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.BillingType;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.domain.financial.billing.LeaseArrearsSnapshot;
+import com.propertyvista.domain.tenant.lease.Deposit;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 
@@ -83,6 +84,11 @@ public interface BillingAccount extends IEntity {
     @Caption(name = "Lease Adjustments")
     @Detached()
     IList<LeaseAdjustment> adjustments();
+
+    @Owned(cascade = {})
+    @Detached
+    @OrderBy(Deposit.OrderId.class)
+    IList<Deposit> deposits();
 
     IPrimitive<ProrationMethod> prorationMethod();
 

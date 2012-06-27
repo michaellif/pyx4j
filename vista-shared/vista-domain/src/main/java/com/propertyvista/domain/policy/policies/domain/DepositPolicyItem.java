@@ -71,4 +71,6 @@ public interface DepositPolicyItem extends IEntity {
 
     @NotNull
     IPrimitive<BigDecimal> annualInterestRate();
+
+    IPrimitive<Integer> securityDepositRefundWindow();
 }

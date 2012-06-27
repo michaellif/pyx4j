@@ -115,15 +115,13 @@ public abstract class LeaseEditorCrudServiceBaseImpl<DTO extends LeaseDTO> exten
     @Override
     public void createBillableItem(AsyncCallback<BillableItem> callback, ProductItem productItemId, DTO currentValue) {
         assert !currentValue.selectedBuilding().isNull();
-        callback.onSuccess(ServerSideFactory.create(LeaseFacade.class).createBillableItem(productItemId, currentValue.selectedBuilding()));
+        callback.onSuccess(ServerSideFactory.create(LeaseFacade.class).createBillableItem(productItemId));
     }
 
     @Override
-    public void createDeposit(AsyncCallback<Deposit> callback, DepositType depositType, ProductItem productItemId, DTO currentValue) {
-        ProductItem productItem = Persistence.secureRetrieve(ProductItem.class, productItemId.getPrimaryKey());
-        assert productItem != null;
+    public void createDeposit(AsyncCallback<Deposit> callback, DepositType depositType, BillableItem item, DTO currentValue) {
         assert !currentValue.selectedBuilding().isNull();
-        callback.onSuccess(ServerSideFactory.create(DepositFacade.class).createDeposit(depositType, productItem.type(), currentValue.selectedBuilding()));
+        callback.onSuccess(ServerSideFactory.create(DepositFacade.class).createDeposit(depositType, item, currentValue.selectedBuilding()));
     }
 
     @Override
