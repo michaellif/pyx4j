@@ -82,6 +82,6 @@ public interface PaymentMethod extends IEntity {
      */
     @Transient
     @ToString(index = 2)
-    @Caption(name = "Use for Preauthorized Payments")
+    @Caption(name = "Pre-authorized")
     IPrimitive<Boolean> isPreauthorized();
 }
