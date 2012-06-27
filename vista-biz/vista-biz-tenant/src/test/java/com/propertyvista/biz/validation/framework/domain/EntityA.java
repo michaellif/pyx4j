@@ -14,6 +14,7 @@
 package com.propertyvista.biz.validation.framework.domain;
 
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
 public interface EntityA extends IEntity {
@@ -21,5 +22,7 @@ public interface EntityA extends IEntity {
     IPrimitive<String> str();
 
     EntityB child();
+
+    IList<EntityB> children();
 
 }

@@ -7,18 +7,18 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jun 25, 2012
+ * Created on Jun 26, 2012
  * @author ArtyomB
  * @version $Id$
  */
 package com.propertyvista.biz.validation.framework;
 
-import com.pyx4j.entity.shared.IObject;
+import java.util.Collection;
+import java.util.Map;
 
-public interface ValidationFailure<T extends IObject<?>> {
+import com.pyx4j.entity.shared.ICollection;
+import com.pyx4j.entity.shared.IEntity;
 
-    String getMessage();
-
-    T getProperty();
+public interface CollectionValidator<E extends IEntity, C extends Collection<Map<String, Object>>> extends Validator<C, ICollection<E, C>> {
 
 }

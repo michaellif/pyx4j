@@ -20,7 +20,6 @@ import junit.framework.TestCase;
 
 import com.pyx4j.entity.shared.EntityFactory;
 
-import com.propertyvista.biz.validation.framework.CompositeEntityValidator;
 import com.propertyvista.biz.validation.framework.ValidationFailure;
 import com.propertyvista.biz.validation.framework.domain.EntityA;
 import com.propertyvista.biz.validation.framework.domain.EntityB;
@@ -33,6 +32,7 @@ public class CompositeEntityValidatorTest extends TestCase {
             protected void init() {
                 bind(proto().str(), new NotNullValidator());
                 bind(proto().child().value(), new NotNullValidator());
+                bind(proto().children(), new NotEmptyValidator());
             }
         };
 
@@ -40,6 +40,9 @@ public class CompositeEntityValidatorTest extends TestCase {
         EntityA a = EntityFactory.create(EntityA.class);
 
         a.child().set(b);
+
+        EntityB b1 = EntityFactory.create(EntityB.class);
+        a.children().add(b1);
 
         {
             Set<ValidationFailure<?>> failures = compositeValidator.validate(a);
@@ -54,6 +57,17 @@ public class CompositeEntityValidatorTest extends TestCase {
 
             ValidationFailure<?> failure = failures.iterator().next();
             Assert.assertEquals(a.str(), failure.getProperty());
+        }
+
+        a.str().setValue("foo");
+        a.children().clear();
+
+        {
+            Set<ValidationFailure<?>> failures = compositeValidator.validate(a);
+            Assert.assertEquals(1, failures.size());
+
+            ValidationFailure<?> failure = failures.iterator().next();
+            Assert.assertEquals(a.children(), failure.getProperty());
         }
     }
 }

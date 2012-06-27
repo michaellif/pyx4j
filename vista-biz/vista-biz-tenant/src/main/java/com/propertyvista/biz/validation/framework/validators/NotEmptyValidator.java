@@ -13,31 +13,33 @@
  */
 package com.propertyvista.biz.validation.framework.validators;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
+import com.pyx4j.entity.shared.ICollection;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.biz.validation.framework.CollectionValidator;
 import com.propertyvista.biz.validation.framework.SimpleValidationFailure;
 import com.propertyvista.biz.validation.framework.ValidationFailure;
-import com.propertyvista.biz.validation.framework.Validator;
 
-public class NotNullValidator<T, O extends IObject<T>> implements Validator<T, O> {
+public class NotEmptyValidator<E extends IEntity, C extends Collection<Map<String, Object>>> implements CollectionValidator<E, C> {
 
-    private static final I18n i18n = I18n.get(NotNullValidator.class);
+    private static final I18n i18n = I18n.get(NotEmptyValidator.class);
 
     @Override
-    public Set<ValidationFailure<?>> validate(O obj) {
-        if (obj.isNull()) {
-            String caption = (obj instanceof IEntity) ? ((IEntity) obj).getEntityMeta().getCaption() : obj.getMeta().getCaption();
+    public Set<ValidationFailure<?>> validate(ICollection<E, C> obj) {
+        if (obj.isEmpty()) {
             Set<ValidationFailure<?>> result = new HashSet<ValidationFailure<?>>();
-            result.add(new SimpleValidationFailure(obj, i18n.tr("{0} must is mandatory", caption)));
+            result.add(new SimpleValidationFailure(obj, i18n.tr("{0} must have at least one element", obj.getMeta().getCaption())));
             return result;
         } else {
             return Collections.EMPTY_SET;
         }
     }
+
 }

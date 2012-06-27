@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.biz.validation.framework;
+package com.propertyvista.biz.validation.framework.validators;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -23,6 +23,10 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.Path;
+
+import com.propertyvista.biz.validation.framework.EntityValidator;
+import com.propertyvista.biz.validation.framework.ValidationFailure;
+import com.propertyvista.biz.validation.framework.Validator;
 
 public abstract class CompositeEntityValidator<E extends IEntity> implements EntityValidator<E> {
 
