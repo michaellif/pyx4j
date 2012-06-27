@@ -92,7 +92,7 @@ public class TabBar extends DockLayoutPanel {
                 ensureScrollActionsExposed();
             }
         });
-
+        slideRightAction.setEnabled(false);
         addEast(slideRightAction, 30);
 
         slideLeftAction = new TabBarAction(ImageFactory.getImages().moveTabbarLeft());
@@ -175,12 +175,7 @@ public class TabBar extends DockLayoutPanel {
         if (leftOverflowIndex > 0) {
             isTriggerVisible = true;
         } else {
-            for (int i = 0; i < tabsHolder.getWidgetCount(); i++) {
-                if (!((TabBarItem) tabsHolder.getWidget(i)).isTabExposed()) {
-                    isTriggerVisible = true;
-                    break;
-                }
-            }
+            isTriggerVisible = isTabBarWrapped();
         }
 
         tabListAction.setVisible(isTriggerVisible);
@@ -188,9 +183,35 @@ public class TabBar extends DockLayoutPanel {
         slideLeftAction.setVisible(isTriggerVisible);
     }
 
+    private boolean isTabBarWrapped() {
+        for (int i = 0; i < tabsHolder.getWidgetCount(); i++) {
+            if (!((TabBarItem) tabsHolder.getWidget(i)).isTabExposed()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     private void ensureSelectedTabExposed() {
         if (selectedTabBarItem == null) {
             return;
+        }
+
+        if (!selectedTabBarItem.isTabMasked() && selectedTabBarItem.isTabExposed()) {
+            return;
+        }
+
+        int index = getTabBarIndex(selectedTabBarItem);
+
+        if (index < leftOverflowIndex) {
+            int steps = leftOverflowIndex - index;
+            for (int i = 0; i < steps; i++) {
+                slideOneRight();
+            }
+        } else {
+            do {
+                slideOneLeft();
+            } while (!selectedTabBarItem.isTabExposed());
         }
 
     }
@@ -201,6 +222,7 @@ public class TabBar extends DockLayoutPanel {
             public void execute() {
                 ensureSelectedTabExposed();
                 ensureScrollActionsExposed();
+                slideLeftAction.setEnabled(isTabBarWrapped());
             }
         });
     }
@@ -227,6 +249,9 @@ public class TabBar extends DockLayoutPanel {
         if (leftOverflowIndex < getTabBarCount() - 1) {
             leftOverflowIndex++;
             slideRightAction.setEnabled(true);
+            if (!isTabBarWrapped()) {
+                slideLeftAction.setEnabled(false);
+            }
             return slide();
         } else {
             return false;
@@ -236,6 +261,7 @@ public class TabBar extends DockLayoutPanel {
     protected boolean slideOneRight() {
         if (leftOverflowIndex > 0) {
             leftOverflowIndex--;
+            slideLeftAction.setEnabled(true);
             if (leftOverflowIndex == 0) {
                 slideRightAction.setEnabled(false);
             }
