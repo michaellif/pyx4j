@@ -36,6 +36,7 @@ import com.propertyvista.admin.rpc.services.ImportUploadService;
 import com.propertyvista.admin.rpc.services.MaintenanceCrudService;
 import com.propertyvista.admin.rpc.services.OnboardingUserCrudService;
 import com.propertyvista.admin.rpc.services.OnboardingUserPasswordChangeManagedService;
+import com.propertyvista.admin.rpc.services.OnboardingUserPasswordChangeUserService;
 import com.propertyvista.admin.rpc.services.PmcCrudService;
 import com.propertyvista.admin.rpc.services.PmcDataReportService;
 import com.propertyvista.admin.rpc.services.SimulationService;
@@ -96,5 +97,6 @@ public class VistaAdminAccessControlList extends ServletContainerAclBuilder {
         grant(VistaAdminBehavior.OnboardingApi, new IServiceExecutePermission(OnboardingUserPasswordChangeManagedService.class));
         grant(VistaAdminBehavior.OnboardingApi, new IServiceExecutePermission(PmcCrudService.class));
         grant(VistaAdminBehavior.OnboardingApi, new EntityPermission(Pmc.class, EntityPermission.READ));
+        grant(VistaAdminBehavior.OnboardingApi, new IServiceExecutePermission(OnboardingUserPasswordChangeUserService.class));
     }
 }
