@@ -78,8 +78,8 @@ public class NavigActivity extends AbstractActivity implements NavigView.MainNav
         // Administration
         folder = new NavigFolder("System Administration");
         folder.addNavigItem(new AdminSiteMap.Administration.Maintenance());
+        folder.addNavigItem(new AdminSiteMap.Administration.Simulation());
         if (ApplicationMode.isDevelopment()) {
-            folder.addNavigItem(new AdminSiteMap.Administration.Simulation());
             folder.addNavigItem(new AdminSiteMap.Administration.SimulatedDataPreload());
             folder.addNavigItem(new AdminSiteMap.Administration.PadSimulation.PadSimFile());
         }
