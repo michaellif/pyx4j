@@ -30,6 +30,7 @@ public class UpdateBankAccountInfoRun {
 
         UpdateBankAccountInfoRequest request = new UpdateBankAccountInfoRequest();
         request.onboardingAccountId = "onb_vista";
+        request.onboardingAccountId = "2";
 
         {
             BankAccountInfo bai = new BankAccountInfo();
@@ -76,6 +77,7 @@ public class UpdateBankAccountInfoRun {
         }
 
         request = new UpdateBankAccountInfoRequest();
+        request.requestRemoteAddr = "1.1.1.1";
         request.onboardingAccountId = "2";
 
         {

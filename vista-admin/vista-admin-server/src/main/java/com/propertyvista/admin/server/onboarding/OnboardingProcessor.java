@@ -13,17 +13,19 @@
  */
 package com.propertyvista.admin.server.onboarding;
 
+import java.util.Iterator;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.config.shared.ApplicationMode;
-import com.pyx4j.entity.annotations.Length;
-import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.ICollection;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.meta.EntityMeta;
-import com.pyx4j.entity.shared.meta.MemberMeta;
+import com.pyx4j.entity.shared.validator.EntityValidator;
 import com.pyx4j.server.contexts.Context;
 
 import com.propertyvista.admin.domain.pmc.PmcDnsName.DnsNameTarget;
@@ -47,19 +49,29 @@ class OnboardingProcessor {
             RequestIO entity = request.cast();
             EntityMeta em = entity.getEntityMeta();
             for (String memberName : em.getMemberNames()) {
-                MemberMeta memberMeta = em.getMemberMeta(memberName);
                 IObject<?> member = entity.getMember(memberName);
-                if ((memberMeta.isValidatorAnnotationPresent(NotNull.class)) && (member.isNull())) {
-                    return new Error(member.getPath() + " is required");
-                }
-
-                if (memberMeta.isValidatorAnnotationPresent(Length.class) && memberMeta.getValueClass().equals(String.class)) {
-                    String value = (String) member.getValue();
-                    if ((value != null) && (value.length() > memberMeta.getLength())) {
-                        return new Error("Length of member " + member.getPath() + " is greater then required");
+                switch (member.getMeta().getObjectClassType()) {
+                case Entity:
+                    try {
+                        EntityValidator.validate((IEntity) member);
+                    } catch (RuntimeException e) {
+                        return new Error(member.getPath() + " " + e.getMessage());
                     }
+                    break;
+                case EntityList:
+                case EntitySet:
+                    @SuppressWarnings("unchecked")
+                    Iterator<IEntity> lit = ((ICollection<IEntity, ?>) member).iterator();
+                    while (lit.hasNext()) {
+                        IEntity ent = lit.next();
+                        try {
+                            EntityValidator.validate(ent);
+                        } catch (RuntimeException e) {
+                            return new Error(ent.getPath() + " " + e.getMessage());
+                        }
+                    }
+                    break;
                 }
-
             }
         }
         return null;
