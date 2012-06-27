@@ -186,7 +186,7 @@ public class ARTransactionManager {
             EntityQueryCriteria<InvoiceCredit> criteria = EntityQueryCriteria.create(InvoiceCredit.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().billingAccount(), billingAccount));
             // do not include incoming credit
-            criteria.add(PropertyCriterion.gt(criteria.proto().id(), credit.id()));
+            criteria.add(PropertyCriterion.ge(criteria.proto().id(), credit.id()));
             criteria.asc(criteria.proto().id());
             lineItems = Persistence.service().query(criteria);
         }

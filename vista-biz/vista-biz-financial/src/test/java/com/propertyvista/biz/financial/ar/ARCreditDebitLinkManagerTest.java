@@ -22,12 +22,16 @@ package com.propertyvista.biz.financial.ar;
 
 import java.math.BigDecimal;
 
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
 
 import com.propertyvista.biz.financial.FinancialTestBase;
 import com.propertyvista.biz.financial.SysDateManager;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.Bill;
+import com.propertyvista.domain.financial.billing.DebitCreditLink;
+import com.propertyvista.domain.financial.billing.InvoiceDebit;
+import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 
 public class ARCreditDebitLinkManagerTest extends FinancialTestBase {
 
@@ -48,6 +52,20 @@ public class ARCreditDebitLinkManagerTest extends FinancialTestBase {
         Bill bill = approveApplication();
 
         bill = confirmBill(bill, true, true);
+
+        InvoiceDebit invoiceDebit = null;
+        InvoiceDebit invoiceDebitParking = null;
+        InvoiceDebit invoiceDebitLease = null;
+        for (InvoiceLineItem item : bill.lineItems()) {
+            if (item.isInstanceOf(InvoiceDebit.class)) {
+                invoiceDebit = item.cast();
+                if (invoiceDebit.debitType().getValue().compareTo(InvoiceDebit.DebitType.parking) == 0) {
+                    invoiceDebitParking = invoiceDebit;
+                } else if (invoiceDebit.debitType().getValue().compareTo(InvoiceDebit.DebitType.lease) == 0) {
+                    invoiceDebitLease = invoiceDebit;
+                }
+            }
+        }
 
         // @formatter:off
         new TransactionHistoryTester(retrieveLease().billingAccount()).
@@ -78,12 +96,25 @@ public class ARCreditDebitLinkManagerTest extends FinancialTestBase {
         activateLease();
 
         SysDateManager.setSysDate("18-Mar-2011");
-        runBilling(true, false);
+        bill = runBilling(true, false);
 
         printTransactionHistory(ARTransactionManager.getTransactionHistory(retrieveLease().billingAccount()));
 
         SysDateManager.setSysDate("25-Mar-2011");
-        receiveAndPostPayment("25-Mar-2011", "301.00");
+
+        PaymentRecord payment2 = receiveAndPostPayment("25-Mar-2011", "301.00");
+        Persistence.service().retrieve(invoiceDebitParking);
+        DebitCreditLink link = createHardDebitCreditLink(payment2, invoiceDebitParking, "89.60");
+        Persistence.service().retrieve(invoiceDebitLease);
+        createHardDebitCreditLink(payment, invoiceDebitLease, "149.00");
+
+        printTransactionHistory(ARTransactionManager.getTransactionHistory(retrieveLease().billingAccount()));
+
+        SysDateManager.setSysDate("31-Mar-2011");
+
+        removeHardLink(link);
+        Persistence.service().retrieve(invoiceDebitLease);
+        createHardDebitCreditLink(payment, invoiceDebitLease, "151.00");
 
         printTransactionHistory(ARTransactionManager.getTransactionHistory(retrieveLease().billingAccount()));
 

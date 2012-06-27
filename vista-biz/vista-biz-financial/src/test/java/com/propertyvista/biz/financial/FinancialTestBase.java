@@ -56,6 +56,8 @@ import com.propertyvista.config.tests.VistaDBTestBase;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.BillingType;
+import com.propertyvista.domain.financial.billing.DebitCreditLink;
+import com.propertyvista.domain.financial.billing.InvoiceDebit;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.Feature.Type;
 import com.propertyvista.domain.financial.offering.ProductItem;
@@ -495,6 +497,14 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         PaymentRecord paymentRecord = receivePayment(receivedDate, null, amount, type); // TODO : find leaseParticipant, if nedded here!.. 
         postPayment(paymentRecord);
         return paymentRecord;
+    }
+
+    protected DebitCreditLink createHardDebitCreditLink(PaymentRecord paymentRecord, InvoiceDebit debit, String targetAmount) {
+        return ServerSideFactory.create(ARFacade.class).createHardLink(paymentRecord, debit, new BigDecimal(targetAmount));
+    }
+
+    protected void removeHardLink(DebitCreditLink link) {
+        ServerSideFactory.create(ARFacade.class).removeHardLink(link);
     }
 
     protected void rejectPayment(PaymentRecord paymentRecord, boolean applyNSF) {

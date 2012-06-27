@@ -26,6 +26,7 @@ import com.propertyvista.biz.financial.billing.BillingUtils;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.BuildingArrearsSnapshot;
+import com.propertyvista.domain.financial.billing.DebitCreditLink;
 import com.propertyvista.domain.financial.billing.InvoiceCredit;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
@@ -44,6 +45,16 @@ public class ARFacadeImpl implements ARFacade {
     @Override
     public void postPayment(PaymentRecord paymentRecord) {
         new ARPaymentProcessor().postPayment(paymentRecord);
+    }
+
+    @Override
+    public DebitCreditLink createHardLink(PaymentRecord paymentRecord, InvoiceDebit debit, BigDecimal amount) {
+        return ARCreditDebitLinkManager.createHardLink(paymentRecord, debit, amount);
+    }
+
+    @Override
+    public void removeHardLink(DebitCreditLink link) {
+        new ARCreditDebitLinkManager().removeHardLink(link);
     }
 
     @Override

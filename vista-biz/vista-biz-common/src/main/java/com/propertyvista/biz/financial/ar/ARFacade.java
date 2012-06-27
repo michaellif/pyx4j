@@ -25,6 +25,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.BuildingArrearsSnapshot;
+import com.propertyvista.domain.financial.billing.DebitCreditLink;
 import com.propertyvista.domain.financial.billing.InvoiceCredit;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
@@ -38,6 +39,10 @@ public interface ARFacade {
     void postInvoiceLineItem(InvoiceLineItem invoiceLineItem);
 
     void postPayment(PaymentRecord payment);
+
+    DebitCreditLink createHardLink(PaymentRecord paymentRecord, InvoiceDebit debit, BigDecimal amount);
+
+    void removeHardLink(DebitCreditLink link);
 
     void rejectPayment(PaymentRecord payment, boolean applyNSF);
 
