@@ -41,6 +41,7 @@ import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.gwt.server.RequestDebug;
 import com.pyx4j.i18n.server.I18nManager;
 import com.pyx4j.log4j.LoggerConfig;
+import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.server.contexts.AntiDoS.AccessCounter;
 
 /**
@@ -99,13 +100,15 @@ public class LifecycleFilter implements Filter {
                         LoggerConfig.mdcPut(LoggerConfig.MDC_sessionNum, session.getId());
                     }
 
-                    try {
-                        chain.doFilter(request, response);
-                    } catch (Throwable t) {
-                        log.error("return http error {}", t);
-                        if (ServerSideConfiguration.instance().isDevelopmentBehavior()) {
-                            RequestDebug.debug(request);
-                            httpresponse.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, ApplicationMode.DEV + t.getMessage());
+                    chain.doFilter(request, response);
+                } catch (Throwable t) {
+                    log.error("return http error {}", t);
+                    if (ServerSideConfiguration.instance().isDevelopmentBehavior()) {
+                        RequestDebug.debug(request);
+                        httpresponse.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, ApplicationMode.DEV + t.getMessage());
+                    } else {
+                        if (t instanceof UserRuntimeException) {
+                            httpresponse.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, t.getMessage());
                         } else {
                             httpresponse.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
                         }
