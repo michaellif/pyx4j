@@ -56,7 +56,8 @@ public class VistaNamespaceResolver implements NamespaceResolver {
             if ((httprequest.getServletPath().startsWith("/" + DeploymentConsts.ADMIN_URL) || httprequest.getServletPath().startsWith("/public/onboarding"))) {
                 return VistaNamespace.adminNamespace;
             }
-            if (httprequest.getServletPath().startsWith("/public/schema") || httprequest.getServletPath().startsWith("/public/status")) {
+            if (httprequest.getServletPath().startsWith("/public/schema") || httprequest.getServletPath().startsWith("/static/")
+                    || httprequest.getServletPath().startsWith("/public/status")) {
                 return "_";
             }
         }
