@@ -7,19 +7,21 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2012-06-09
+ * Created on 2011-05-09
  * @author Vlad
  * @version $Id$
  */
 package com.propertyvista.crm.client.ui.crud.billing.cycle;
 
-import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
+import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
+import com.propertyvista.crm.client.ui.crud.lease.LeaseLister;
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.crm.rpc.dto.billing.BillingCycleLeaseDTO;
+import com.propertyvista.dto.LeaseDTO;
 
-public class BillingCycleLeaseViewImpl extends CrmViewerViewImplBase<BillingCycleLeaseDTO> implements BillingCycleLeaseView {
+public class BillingCycleLeaseListerViewImpl extends CrmListerViewImplBase<LeaseDTO> implements BillingCycleLeaseListerView {
 
-    public BillingCycleLeaseViewImpl() {
-        super(CrmSiteMap.Finance.BillingCycle.Leases.class, new BillingCycleLeaseForm(), true);
+    public BillingCycleLeaseListerViewImpl() {
+        super(CrmSiteMap.Tenants.Lease.class);
+        setLister(new LeaseLister());
     }
 }

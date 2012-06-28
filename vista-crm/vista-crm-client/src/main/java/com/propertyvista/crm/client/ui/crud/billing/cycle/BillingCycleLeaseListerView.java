@@ -7,16 +7,16 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2012-06-09
+ * Created on 2011-05-09
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.rpc.services.billing;
+package com.propertyvista.crm.client.ui.crud.billing.cycle;
 
-import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.site.client.ui.crud.lister.IListerView;
 
-import com.propertyvista.crm.rpc.dto.billing.BillingCycleLeaseDTO;
+import com.propertyvista.dto.LeaseDTO;
 
-public interface BillingCycleLeaseCrudService extends AbstractCrudService<BillingCycleLeaseDTO> {
+public interface BillingCycleLeaseListerView extends IListerView<LeaseDTO> {
 
 }

@@ -49,20 +49,22 @@ class BillingCycleForm extends CrmEntityForm<BillingCycleDTO> {
 
         content.setH2(++row, 0, 2, i18n.tr("Statistics"));
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().failed())).build());
-        content.setWidget(row, 1, new ViewLink(Bill.BillStatus.Failed));
+        content.setWidget(row, 1, new ViewBillsLink(Bill.BillStatus.Failed));
 
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().rejected())).build());
-        content.setWidget(row, 1, new ViewLink(Bill.BillStatus.Rejected));
+        content.setWidget(row, 1, new ViewBillsLink(Bill.BillStatus.Rejected));
 
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().notConfirmed())).build());
-        content.setWidget(row, 1, new ViewLink(Bill.BillStatus.Finished));
+        content.setWidget(row, 1, new ViewBillsLink(Bill.BillStatus.Finished));
 
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().confirmed())).build());
-        content.setWidget(row, 1, new ViewLink(Bill.BillStatus.Confirmed));
+        content.setWidget(row, 1, new ViewBillsLink(Bill.BillStatus.Confirmed));
 
         content.setBR(++row, 0, 2);
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().total())).build());
+        content.setWidget(row, 1, new ViewLeasesLink(false));
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().notRun())).build());
+        content.setWidget(row, 1, new ViewLeasesLink(true));
 
         content.getColumnFormatter().setWidth(0, "40%");
         content.getColumnFormatter().setWidth(1, "60%");
@@ -81,8 +83,8 @@ class BillingCycleForm extends CrmEntityForm<BillingCycleDTO> {
         }
     }
 
-    private class ViewLink extends Anchor {
-        public ViewLink(final Bill.BillStatus billStatusValue) {
+    private class ViewBillsLink extends Anchor {
+        public ViewBillsLink(final Bill.BillStatus billStatusValue) {
             super(i18n.tr("View"));
 
             addClickHandler(new ClickHandler() {
@@ -91,6 +93,24 @@ class BillingCycleForm extends CrmEntityForm<BillingCycleDTO> {
                     AppPlace place = new CrmSiteMap.Finance.BillingCycle.Bills();
                     place.queryArg(CrmSiteMap.Finance.BillingCycle.ARG_BC_ID, getValue().getPrimaryKey().toString());
                     place.queryArg(CrmSiteMap.Finance.BillingCycle.ARG_BILL_STATUS, billStatusValue.name());
+                    AppSite.getPlaceController().goTo(place);
+                }
+            });
+        }
+    }
+
+    private class ViewLeasesLink extends Anchor {
+        public ViewLeasesLink(final Boolean notRun) {
+            super(i18n.tr("View"));
+
+            addClickHandler(new ClickHandler() {
+                @Override
+                public void onClick(ClickEvent event) {
+                    AppPlace place = new CrmSiteMap.Finance.BillingCycle.Leases();
+                    if (notRun) {
+                        place.queryArg(CrmSiteMap.Finance.BillingCycle.ARG_BC_ID, getValue().getPrimaryKey().toString());
+                    }
+                    place.queryArg(CrmSiteMap.Finance.BillingCycle.ARG_BT_ID, getValue().billingType().getPrimaryKey().toString());
                     AppSite.getPlaceController().goTo(place);
                 }
             });

@@ -20,8 +20,8 @@ import com.propertyvista.crm.client.ui.crud.billing.bill.BillViewerView;
 import com.propertyvista.crm.client.ui.crud.billing.bill.BillViewerViewImpl;
 import com.propertyvista.crm.client.ui.crud.billing.cycle.BillingCycleBillListerView;
 import com.propertyvista.crm.client.ui.crud.billing.cycle.BillingCycleBillListerViewImpl;
-import com.propertyvista.crm.client.ui.crud.billing.cycle.BillingCycleLeaseView;
-import com.propertyvista.crm.client.ui.crud.billing.cycle.BillingCycleLeaseViewImpl;
+import com.propertyvista.crm.client.ui.crud.billing.cycle.BillingCycleLeaseListerView;
+import com.propertyvista.crm.client.ui.crud.billing.cycle.BillingCycleLeaseListerViewImpl;
 import com.propertyvista.crm.client.ui.crud.billing.cycle.BillingCycleView;
 import com.propertyvista.crm.client.ui.crud.billing.cycle.BillingCycleViewImpl;
 import com.propertyvista.crm.client.ui.crud.billing.payment.PaymentEditorView;
@@ -43,8 +43,8 @@ public class FinancialViewFactory extends ViewFactoryBase {
             } else if (BillingCycleBillListerView.class.equals(type)) {
                 map.put(type, new BillingCycleBillListerViewImpl());
 
-            } else if (BillingCycleLeaseView.class.equals(type)) {
-                map.put(type, new BillingCycleLeaseViewImpl());
+            } else if (BillingCycleLeaseListerView.class.equals(type)) {
+                map.put(type, new BillingCycleLeaseListerViewImpl());
 
             } else if (BillViewerView.class.equals(type)) {
                 map.put(type, new BillViewerViewImpl());

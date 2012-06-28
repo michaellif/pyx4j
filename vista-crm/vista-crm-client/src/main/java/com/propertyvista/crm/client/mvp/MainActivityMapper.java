@@ -34,7 +34,7 @@ import com.propertyvista.crm.client.activity.crud.billing.BillViewerActivity;
 import com.propertyvista.crm.client.activity.crud.billing.adjustment.LeaseAdjustmentEditorActivity;
 import com.propertyvista.crm.client.activity.crud.billing.adjustment.LeaseAdjustmentViewerActivity;
 import com.propertyvista.crm.client.activity.crud.billing.cycle.BillingCycleBillListerActivity;
-import com.propertyvista.crm.client.activity.crud.billing.cycle.BillingCycleLeaseViewerActivity;
+import com.propertyvista.crm.client.activity.crud.billing.cycle.BillingCycleLeaseListerActivity;
 import com.propertyvista.crm.client.activity.crud.billing.cycle.BillingCycleViewerActivity;
 import com.propertyvista.crm.client.activity.crud.billing.payment.PaymentEditorActivity;
 import com.propertyvista.crm.client.activity.crud.billing.payment.PaymentViewerActivity;
@@ -542,7 +542,7 @@ public class MainActivityMapper implements AppActivityMapper {
                         activity = new BillingCycleBillListerActivity(crudPlace);
 
                     } else if (place instanceof CrmSiteMap.Finance.BillingCycle.Leases) {
-                        activity = new BillingCycleLeaseViewerActivity(crudPlace);
+                        activity = new BillingCycleLeaseListerActivity(crudPlace);
 
                     } else if (place instanceof CrmSiteMap.Finance.Bill) {
                         switch (crudPlace.getType()) {

@@ -251,6 +251,8 @@ public class CrmSiteMap implements SiteMap {
 
             public static final String ARG_BC_ID = "BcId";
 
+            public static final String ARG_BT_ID = "BtId";
+
             public static final String ARG_BILL_STATUS = "BillStatus";
 
             public static class Leases extends CrmCrudAppPlace {
