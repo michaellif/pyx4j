@@ -47,7 +47,8 @@ public class BillingCycleCrudServiceImpl extends AbstractCrudServiceDtoImpl<Bill
 
         EntityQueryCriteria<BillingAccount> criteriaNotRun = EntityQueryCriteria.create(BillingAccount.class);
         criteriaNotRun.add(PropertyCriterion.eq(criteriaNotRun.proto().billingType(), entity.billingType()));
-        criteriaNotRun.add(PropertyCriterion.ne(criteriaNotRun.proto().bills().$().billingCycle(), entity));
+        criteriaNotRun.add(PropertyCriterion.notExists(criteriaNotRun.proto().bills()));
+        criteriaNotRun.add(PropertyCriterion.eq(criteriaNotRun.proto().bills().$().billingCycle(), entity));
 
         dto.notRun().setValue((long) Persistence.service().query(criteriaNotRun).size());
     }
