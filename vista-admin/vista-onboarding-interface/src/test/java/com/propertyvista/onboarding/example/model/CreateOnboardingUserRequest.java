@@ -25,7 +25,11 @@ public class CreateOnboardingUserRequest extends Request {
 
     @NotNull
     @XmlElement
-    public String name;
+    public String firstName;
+
+    @NotNull
+    @XmlElement
+    public String lastName;
 
     @NotNull
     @XmlElement

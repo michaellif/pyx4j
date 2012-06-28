@@ -31,7 +31,7 @@ public class OnboardingUserSendPasswordResetTokenRequestRun {
          */
         CreateOnboardingUserRequest createRequest = new CreateOnboardingUserRequest();
         createRequest.requestId = "OnboardingUserAuthenticationRun";
-        createRequest.name = "Bob " + new Date().toString();
+        createRequest.firstName = "Bob " + new Date().toString();
         createRequest.email = "123@rogers.com";
         createRequest.password = "pwd~" + String.valueOf(System.currentTimeMillis());
         createRequest.onboardingAccountId = "acc351";

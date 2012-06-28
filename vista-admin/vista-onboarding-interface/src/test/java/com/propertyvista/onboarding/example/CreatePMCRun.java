@@ -34,7 +34,8 @@ public class CreatePMCRun {
         CreateOnboardingUserRequest user = new CreateOnboardingUserRequest();
         user.email = String.valueOf(System.currentTimeMillis()) + "@test.com";
         user.password = "pwd~" + String.valueOf(System.currentTimeMillis());
-        user.name = "Bob " + new Date().toString();
+        user.firstName = "Bob " + new Date().toString();
+        user.lastName = "McAdams";
         user.onboardingAccountId = "acc" + System.nanoTime();
         user.requestId = "CreateOnboardingUserRequest";
         user.requestRemoteAddr = "1.1.1.1";

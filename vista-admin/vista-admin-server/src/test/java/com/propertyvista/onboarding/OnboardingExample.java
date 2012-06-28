@@ -77,6 +77,18 @@ public class OnboardingExample {
 
         {
             cnt++;
+            CreateOnboardingUserRequestIO r = EntityFactory.create(CreateOnboardingUserRequestIO.class);
+            r.firstName().setValue("Bob");
+            r.lastName().setValue("Marley");
+            r.email().setValue("bob@pv.com");
+            r.password().setValue("secret");
+            RequestMessageIO rm = createExampleRequest(r);
+            writeXML(rm, cnt + "-request-CreateUser.xml");
+            writeXML(createExampleResponse(), cnt + "-response-CreateUser.xml");
+        }
+
+        {
+            cnt++;
             UpdateAccountInfoRequestIO r = EntityFactory.create(UpdateAccountInfoRequestIO.class);
             r.onboardingAccountId().setValue("star");
             createAccountInfoIO(r.accountInfo());
