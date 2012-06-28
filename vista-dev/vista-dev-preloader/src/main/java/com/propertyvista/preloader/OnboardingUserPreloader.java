@@ -13,6 +13,7 @@
  */
 package com.propertyvista.preloader;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -26,18 +27,11 @@ public class OnboardingUserPreloader extends AbstractDataPreloader {
 
     public static OnboardingUserCredential createOnboardingUser(String firstName, String lastName, String email, String password, VistaOnboardingBehavior role,
             String onboardingAccountId) {
-
-        return createOnboardingUser(firstName, lastName, firstName + " " + lastName, email, password, role, onboardingAccountId);
-
-    }
-
-    private static OnboardingUserCredential createOnboardingUser(String firstName, String lastName, String name, String email, String password,
-            VistaOnboardingBehavior role, String onboardingAccountId) {
         email = PasswordEncryptor.normalizeEmailAddress(email);
         OnboardingUser user = EntityFactory.create(OnboardingUser.class);
         user.firstName().setValue(firstName);
         user.lastName().setValue(lastName);
-        user.name().setValue(name);
+        user.name().setValue(CommonsStringUtils.nvl_concat(firstName, lastName, " "));
         user.email().setValue(email);
         Persistence.service().persist(user);
 

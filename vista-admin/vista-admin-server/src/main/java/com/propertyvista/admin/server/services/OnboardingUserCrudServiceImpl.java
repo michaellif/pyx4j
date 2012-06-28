@@ -12,6 +12,7 @@ import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.entity.shared.utils.EntityFromatUtils;
 import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.admin.domain.pmc.Pmc;
@@ -31,6 +32,8 @@ public class OnboardingUserCrudServiceImpl extends AbstractCrudServiceDtoImpl<On
 
     @Override
     protected void bind() {
+        bind(dtoProto.firstName(), dboProto.user().firstName());
+        bind(dtoProto.lastName(), dboProto.user().lastName());
         bind(dtoProto.name(), dboProto.user().name());
         bind(dtoProto.email(), dboProto.user().email());
         bind(dtoProto.created(), dboProto.user().created());
@@ -71,9 +74,11 @@ public class OnboardingUserCrudServiceImpl extends AbstractCrudServiceDtoImpl<On
         Persistence.service().retrieve(entity.user());
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     protected void persist(OnboardingUserCredential dbo, OnboardingUserDTO dto) {
         dbo.user().email().setValue(PasswordEncryptor.normalizeEmailAddress(dto.email().getValue()));
+        dbo.user().name().setValue(EntityFromatUtils.nvl_concat(" ", dbo.user().firstName(), dbo.user().lastName()));
         Persistence.service().merge(dbo.user());
 
         if (dbo.getPrimaryKey() == null) {
