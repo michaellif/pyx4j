@@ -44,17 +44,19 @@ class OnboardingProcessor {
     public Throwable isValid(RequestMessageIO message) {
         for (RequestIO request : message.requests()) {
             RequestIO entity = request.cast();
+            EntityValidator.validate(entity);
             EntityMeta em = entity.getEntityMeta();
-            for (String memberName : em.getMemberNames()) {
-                IObject<?> member = entity.getMember(memberName);
-                switch (member.getMeta().getObjectClassType()) {
-                case Entity:
-                    try {
-                        EntityValidator.validate((IEntity) member);
-                    } catch (RuntimeException e) {
-                        return new Error(member.getPath() + " " + e.getMessage());
-                    }
-                    break;
+            if (false) {
+                for (String memberName : em.getMemberNames()) {
+                    IObject<?> member = entity.getMember(memberName);
+                    switch (member.getMeta().getObjectClassType()) {
+                    case Entity:
+                        try {
+                            EntityValidator.validate((IEntity) member);
+                        } catch (RuntimeException e) {
+                            return new Error(member.getPath() + " " + e.getMessage());
+                        }
+                        break;
 //                case EntityList:
 //                case EntitySet:
 //                    @SuppressWarnings("unchecked")
@@ -68,6 +70,7 @@ class OnboardingProcessor {
 //                        }
 //                    }
 //                    break;
+                    }
                 }
             }
         }
