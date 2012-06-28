@@ -56,7 +56,9 @@ public class BillingCycleLeaseListerActivity extends ListerActivityBase<LeaseDTO
         addPreDefinedFilter(PropertyCriterion.eq(proto.billingAccount().billingType(), EntityFactory.createIdentityStub(BillingType.class, billingTypeId)));
         if (billingCycleId != null) {
             // add 'not run' criteria here:
-//            addPreDefinedFilter(PropertyCriterion.eq(proto.bill().billStatus(), billStatusValue));
+            addPreDefinedFilter(PropertyCriterion.eq(proto.billingAccount().bills().$().billingCycle(),
+                    EntityFactory.createIdentityStub(BillingType.class, billingCycleId)));
+            addPreDefinedFilter(PropertyCriterion.notExists(proto.billingAccount().bills()));
         }
         super.populate();
     }
