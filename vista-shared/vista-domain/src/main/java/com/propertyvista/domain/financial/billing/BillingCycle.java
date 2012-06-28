@@ -23,7 +23,6 @@ import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
-import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
@@ -69,11 +68,9 @@ public interface BillingCycle extends IEntity {
     @Caption(name = "Confirmed Bills Number")
     IPrimitive<Long> confirmed();
 
-    @Transient
     @Caption(name = "Total Bills Number")
     IPrimitive<Long> total();
 
-    @Transient
     @Caption(name = "Leases With Non Run Bills")
     IPrimitive<Long> notRunned();
 

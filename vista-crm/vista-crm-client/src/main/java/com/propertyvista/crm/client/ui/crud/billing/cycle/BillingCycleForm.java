@@ -86,8 +86,8 @@ class BillingCycleForm extends CrmEntityForm<BillingCycleDTO> {
                 @Override
                 public void onClick(ClickEvent event) {
                     AppPlace place = AppSite.getHistoryMapper().createPlace(CrmSiteMap.Finance.BillingCycle.Bills.class);
-                    place.placeArg(CrmSiteMap.Finance.BillingCycle.ARG_BC_ID, getValue().getPrimaryKey().toString());
-                    place.placeArg(CrmSiteMap.Finance.BillingCycle.ARG_BILL_STATUS, billStatusValue.name());
+                    place.queryArg(CrmSiteMap.Finance.BillingCycle.ARG_BC_ID, getValue().getPrimaryKey().toString());
+                    place.queryArg(CrmSiteMap.Finance.BillingCycle.ARG_BILL_STATUS, billStatusValue.name());
                     AppSite.getPlaceController().goTo(place);
                 }
             });

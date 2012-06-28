@@ -16,12 +16,9 @@ package com.propertyvista.crm.server.services.billing;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.crm.rpc.dto.billing.BillingCycleDTO;
 import com.propertyvista.crm.rpc.services.billing.BillingCycleCrudService;
-import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.BillingCycle;
 
 public class BillingCycleCrudServiceImpl extends AbstractCrudServiceDtoImpl<BillingCycle, BillingCycleDTO> implements BillingCycleCrudService {
@@ -40,9 +37,9 @@ public class BillingCycleCrudServiceImpl extends AbstractCrudServiceDtoImpl<Bill
         enhanceListRetrieved(entity, dto);
         Persistence.service().retrieve(dto.building(), AttachLevel.ToStringMembers);
 
-        EntityQueryCriteria<Bill> criteria = EntityQueryCriteria.create(Bill.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().billingAccount().billingType(), entity.billingType()));
-        dto.total().setValue((long) Persistence.service().query(criteria).size());
+//        EntityQueryCriteria<Bill> criteria = EntityQueryCriteria.create(Bill.class);
+//        criteria.add(PropertyCriterion.eq(criteria.proto().billingAccount().billingType(), entity.billingType()));
+//        dto.total().setValue((long) Persistence.service().query(criteria).size());
     }
 
     @Override
