@@ -13,15 +13,12 @@
  */
 package com.propertyvista.admin.server.onboarding;
 
-import java.util.Iterator;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.ICollection;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.meta.EntityMeta;
@@ -58,19 +55,19 @@ class OnboardingProcessor {
                         return new Error(member.getPath() + " " + e.getMessage());
                     }
                     break;
-                case EntityList:
-                case EntitySet:
-                    @SuppressWarnings("unchecked")
-                    Iterator<IEntity> lit = ((ICollection<IEntity, ?>) member).iterator();
-                    while (lit.hasNext()) {
-                        IEntity ent = lit.next();
-                        try {
-                            EntityValidator.validate(ent);
-                        } catch (RuntimeException e) {
-                            return new Error(ent.getPath() + " " + e.getMessage());
-                        }
-                    }
-                    break;
+//                case EntityList:
+//                case EntitySet:
+//                    @SuppressWarnings("unchecked")
+//                    Iterator<IEntity> lit = ((ICollection<IEntity, ?>) member).iterator();
+//                    while (lit.hasNext()) {
+//                        IEntity ent = lit.next();
+//                        try {
+//                            EntityValidator.validate(ent);
+//                        } catch (RuntimeException e) {
+//                            return new Error(ent.getPath() + " " + e.getMessage());
+//                        }
+//                    }
+//                    break;
                 }
             }
         }
