@@ -2021,7 +2021,7 @@ body.admin a:hover {
 }
 
 .admin_menu ul li.active.step a {
-	background: #EDF1F5 url(https://static.propertyvista.com/errors/images/admin/step.png) no-repeat 94% 5px;
+	background: #EDF1F5 url(images/admin/step.png) no-repeat 94% 5px;
 }
 
 .admin_menu ul li a,.admin_menu ul li span {
