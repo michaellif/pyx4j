@@ -16,7 +16,6 @@ package com.propertyvista.common.client.ui.components.login;
 import java.util.Arrays;
 
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.EqualsHelper;
@@ -68,28 +67,26 @@ public class PasswordForm extends CEntityDecoratableForm<PasswordChangeRequest> 
 
     @Override
     public IsWidget createContent() {
+
         FormFlexPanel main = new FormFlexPanel();
-        main.setWidth("100%");
+        main.setWidth("40em");
+        main.setStyleName(HorizontalAlignCenterMixin.StyleName.HorizontalAlignCenter.name(), true);
 
         int row = -1;
 
         if (type.equals(Type.CHANGE)) {
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().currentPassword())).componentWidth(15).labelWidth(15).build());
-            main.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
             main.getFlexCellFormatter().getElement(row, 0).getStyle().setPaddingBottom(1., Unit.EM);
         }
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().newPassword())).componentWidth(15).labelWidth(15).build());
-        main.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
+
+        passwordStrengthWidget = new PasswordStrengthWidget(passwordStrengthRule);
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().newPassword())).componentWidth(15).labelWidth(15).assistantWidget(passwordStrengthWidget)
+                .build());
 
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().newPasswordConfirm())).componentWidth(15).labelWidth(15).build());
-        main.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
-
-        main.setWidget(++row, 0, passwordStrengthWidget = new PasswordStrengthWidget(passwordStrengthRule));
-        main.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
 
         if (type.equals(Type.CHANGE)) {
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().requireChangePasswordOnNextSignIn())).componentWidth(15).labelWidth(15).build());
-            main.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
         }
 
         return main;
