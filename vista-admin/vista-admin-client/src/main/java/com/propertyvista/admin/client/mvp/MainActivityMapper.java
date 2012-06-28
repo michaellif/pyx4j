@@ -27,6 +27,7 @@ import com.propertyvista.admin.client.activity.MessageActivity;
 import com.propertyvista.admin.client.activity.SettingsActivity;
 import com.propertyvista.admin.client.activity.crud.account.AccountEditorActivity;
 import com.propertyvista.admin.client.activity.crud.account.AccountViewerActivity;
+import com.propertyvista.admin.client.activity.crud.adminusers.AdminUserEditorActivity;
 import com.propertyvista.admin.client.activity.crud.adminusers.AdminUserListerActivity;
 import com.propertyvista.admin.client.activity.crud.adminusers.AdminUserViewerActivity;
 import com.propertyvista.admin.client.activity.crud.maintenance.MaintenanceEditorActivity;
@@ -165,7 +166,7 @@ public class MainActivityMapper implements AppActivityMapper {
                     } else if (place instanceof AdminSiteMap.Administration.AdminUsers) {
                         switch (crudPlace.getType()) {
                         case editor:
-                            activity = new AdminUserViewerActivity(crudPlace);
+                            activity = new AdminUserEditorActivity(crudPlace);
                             break;
                         case viewer:
                             activity = new AdminUserViewerActivity(crudPlace);
