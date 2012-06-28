@@ -56,13 +56,13 @@ class BillingCycleForm extends CrmEntityForm<BillingCycleDTO> {
 
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().confirmed())).build());
         content.setWidget(row, 1, new ViewLink(Bill.BillStatus.Confirmed));
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().total())).build());
 
         content.setBR(++row, 0, 2);
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().total())).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().notRunned())).build());
 
-        content.getColumnFormatter().setWidth(0, "50%");
-        content.getColumnFormatter().setWidth(1, "50%");
+        content.getColumnFormatter().setWidth(0, "40%");
+        content.getColumnFormatter().setWidth(1, "60%");
 
         selectTab(addTab(content, i18n.tr("General")));
     }

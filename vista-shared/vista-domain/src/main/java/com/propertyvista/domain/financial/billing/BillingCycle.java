@@ -70,11 +70,11 @@ public interface BillingCycle extends IEntity {
     IPrimitive<Long> confirmed();
 
     @Transient
-    @Caption(name = "Total Leases")
+    @Caption(name = "Total Bills Number")
     IPrimitive<Long> total();
 
     @Transient
-    @Caption(name = "Leases With Non Runned Bills")
+    @Caption(name = "Leases With Non Run Bills")
     IPrimitive<Long> notRunned();
 
 }
