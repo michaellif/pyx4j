@@ -19,6 +19,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.rdb.EntityPersistenceServiceRDB;
 import com.pyx4j.entity.rdb.RDBUtils;
@@ -125,7 +126,7 @@ public class PmcCreator {
         }
         CrmUser user = EntityFactory.create(CrmUser.class);
 
-        user.name().setValue(firstName + " " + firstName);
+        user.name().setValue(CommonsStringUtils.nvl_concat(firstName, lastName, " "));
         user.email().setValue(email);
 
         Persistence.service().persist(user);
