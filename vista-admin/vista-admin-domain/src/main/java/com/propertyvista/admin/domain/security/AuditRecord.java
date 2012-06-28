@@ -27,38 +27,12 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.VistaNamespace;
+import com.propertyvista.domain.security.AuditRecordEventType;
+import com.propertyvista.domain.security.VistaApplication;
 
 @Table(namespace = VistaNamespace.adminNamespace)
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 public interface AuditRecord extends IEntity {
-
-    public static enum EventType {
-
-        Login,
-
-        LoginFailed,
-
-        Create,
-
-        Read,
-
-        Update,
-
-        Info
-
-    }
-
-    public enum VistaApplication {
-
-        admin,
-
-        crm,
-
-        resident,
-
-        prospect;
-
-    }
 
     @Length(63)
     @Indexed(group = { "f,2" })
@@ -76,7 +50,7 @@ public interface AuditRecord extends IEntity {
     @Timestamp(Timestamp.Update.Created)
     IPrimitive<Date> created();
 
-    IPrimitive<EventType> event();
+    IPrimitive<AuditRecordEventType> event();
 
     IPrimitive<VistaApplication> app();
 

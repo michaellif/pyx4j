@@ -21,22 +21,11 @@ import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.i18n.annotations.I18n;
-import com.pyx4j.i18n.shared.I18nEnum;
+
+import com.propertyvista.domain.security.AuditRecordEventType;
 
 @Transient
 public interface LoginAttemptDTO extends IEntity {
-
-    @I18n
-    enum LoginOutcome {
-
-        success, failed;
-
-        @Override
-        public String toString() {
-            return I18nEnum.toString(this);
-        };
-    }
 
     @Caption(name = "When")
     IPrimitive<Date> time();
@@ -44,7 +33,7 @@ public interface LoginAttemptDTO extends IEntity {
     @Length(16)
     IPrimitive<String> remoteAddress();
 
-    IPrimitive<LoginOutcome> outcome();
+    IPrimitive<AuditRecordEventType> outcome();
 
     /** This is not for display, just a hack to bind criteria: never supposed to contain any data */
     IPrimitive<Key> userKey();

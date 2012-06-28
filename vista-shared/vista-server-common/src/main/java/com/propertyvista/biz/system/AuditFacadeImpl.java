@@ -26,9 +26,9 @@ import com.pyx4j.server.contexts.NamespaceManager;
 import com.pyx4j.server.contexts.Visit;
 
 import com.propertyvista.admin.domain.security.AuditRecord;
-import com.propertyvista.admin.domain.security.AuditRecord.EventType;
 import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.domain.security.AbstractUser;
+import com.propertyvista.domain.security.AuditRecordEventType;
 import com.propertyvista.server.common.security.VistaAntiBot;
 import com.propertyvista.server.jobs.TaskRunner;
 
@@ -36,7 +36,7 @@ public class AuditFacadeImpl implements AuditFacade {
 
     @Override
     public void login() {
-        record(EventType.Login, null);
+        record(AuditRecordEventType.Login, null);
         Persistence.service().commit();
     }
 
@@ -50,7 +50,7 @@ public class AuditFacadeImpl implements AuditFacade {
                 AuditRecord record = EntityFactory.create(AuditRecord.class);
                 record.namespace().setValue(namespace);
                 record.remoteAddr().setValue(ip);
-                record.event().setValue(EventType.LoginFailed);
+                record.event().setValue(AuditRecordEventType.LoginFailed);
                 record.user().setValue(user.getPrimaryKey());
                 Persistence.service().persist(record);
                 Persistence.service().commit();
@@ -61,20 +61,20 @@ public class AuditFacadeImpl implements AuditFacade {
 
     @Override
     public void created(IEntity entity) {
-        record(EventType.Create, entity);
+        record(AuditRecordEventType.Create, entity);
     }
 
     @Override
     public void updated(IEntity entity) {
-        record(EventType.Update, entity);
+        record(AuditRecordEventType.Update, entity);
     }
 
     @Override
     public void read(IEntity entity) {
-        record(EventType.Read, entity);
+        record(AuditRecordEventType.Read, entity);
     }
 
-    private void record(final EventType event, final IEntity entity) {
+    private void record(final AuditRecordEventType event, final IEntity entity) {
         final String namespace = NamespaceManager.getNamespace();
         final String ip = getRequestRemoteAddr();
         TaskRunner.runAutonomousTransation(VistaNamespace.adminNamespace, new Callable<Void>() {
@@ -107,7 +107,7 @@ public class AuditFacadeImpl implements AuditFacade {
                 AuditRecord record = EntityFactory.create(AuditRecord.class);
                 record.namespace().setValue(namespace);
                 record.remoteAddr().setValue(ip);
-                record.event().setValue(EventType.Info);
+                record.event().setValue(AuditRecordEventType.Info);
                 record.details().setValue(details);
                 record.user().setValue(getPrincipalPrimaryKey());
                 Persistence.service().persist(record);
