@@ -81,6 +81,8 @@ public class OnboardingUserAuthenticationRun {
                     System.out.println("Authentication status : " + authResponse.status);
                     System.out.println("Onboarding Account Id : " + authResponse.onboardingAccountId);
                 }
+            } else {
+                throw new AssertionError(response.status);
             }
         }
     }

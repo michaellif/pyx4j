@@ -55,6 +55,8 @@ public class CreatePMCRun {
                 System.out.println("echo requestId    : " + response.responses.get(0).requestId);
                 System.out.println("response Code     : " + response.responses.get(0).success);
                 System.out.println("response Message  : " + response.responses.get(0).errorMessage);
+            } else {
+                throw new AssertionError(response.status);
             }
         }
 
@@ -62,6 +64,7 @@ public class CreatePMCRun {
         resDnsNamereq.requestId = "TestCreatePMCRun";
         resDnsNamereq.dnsName = "test" + String.valueOf(System.currentTimeMillis());
         resDnsNamereq.onboardingAccountId = user.onboardingAccountId;
+        resDnsNamereq.requestRemoteAddr = "1.1.1.1";
 
         {
             RequestMessage rm = new RequestMessage();
@@ -79,6 +82,8 @@ public class CreatePMCRun {
                 System.out.println("echo requestId    : " + response.responses.get(0).requestId);
                 System.out.println("response Code     : " + response.responses.get(0).success);
                 System.out.println("response Message  : " + response.responses.get(0).errorMessage);
+            } else {
+                throw new AssertionError(response.status);
             }
         }
 
@@ -90,6 +95,7 @@ public class CreatePMCRun {
         r.onboardingAccountId = resDnsNamereq.onboardingAccountId;
 //resDnsNamereq.onboardingAccountId;
         r.requestId = "CreatePMCRequest";
+        r.requestRemoteAddr = "1.1.1.1";
 
         {
             RequestMessage rm = new RequestMessage();
@@ -113,6 +119,8 @@ public class CreatePMCRun {
                     System.out.println("residentPortalUrl : " + resp.residentPortalUrl);
                     System.out.println("prospectPortalUrl : " + resp.prospectPortalUrl);
                 }
+            } else {
+                throw new AssertionError(response.status);
             }
         }
 
@@ -120,6 +128,7 @@ public class CreatePMCRun {
          * Authenticate using this user
          */
         OnboardingUserAuthenticationRequest authRequest = new OnboardingUserAuthenticationRequest();
+        authRequest.requestRemoteAddr = "1.1.1.1";
         {
             authRequest.email = user.email;
             authRequest.password = user.password;
@@ -146,10 +155,13 @@ public class CreatePMCRun {
                     System.out.println("Authentication status : " + authResponse.status);
                     System.out.println("Onboarding Account Id : " + authResponse.onboardingAccountId);
                 }
+            } else {
+                throw new AssertionError(response.status);
             }
         }
 
         GetSatisfactionFastpassUrlRequest gsur = new GetSatisfactionFastpassUrlRequest();
+        gsur.requestRemoteAddr = "1.1.1.1";
         {
             gsur.email = user.email;
             gsur.onboardingAccountId = user.onboardingAccountId;
@@ -177,6 +189,8 @@ public class CreatePMCRun {
                     GetSatisfactionFastpassUrlResponse resp = (GetSatisfactionFastpassUrlResponse) response.responses.get(0);
                     System.out.println("Fastpass Authentication Url : " + resp.fastpassAuthenticationUrl);
                 }
+            } else {
+                throw new AssertionError(response.status);
             }
         }
     }

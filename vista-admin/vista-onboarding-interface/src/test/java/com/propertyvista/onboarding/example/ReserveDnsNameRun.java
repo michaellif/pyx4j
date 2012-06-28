@@ -25,6 +25,7 @@ public class ReserveDnsNameRun {
         r.requestId = "TestCreatePMCRun";
         r.dnsName = "test" + String.valueOf(System.currentTimeMillis());
         r.onboardingAccountId = "TestAccId" + String.valueOf(System.currentTimeMillis());
+        r.requestRemoteAddr = "1.1.1.1";
 
         {
             RequestMessage rm = new RequestMessage();
@@ -41,6 +42,8 @@ public class ReserveDnsNameRun {
                 System.out.println("echo requestId    : " + response.responses.get(0).requestId);
                 System.out.println("response Code     : " + response.responses.get(0).success);
                 System.out.println("response Message  : " + response.responses.get(0).errorMessage);
+            } else {
+                throw new AssertionError(response.status);
             }
         }
     }
