@@ -65,8 +65,7 @@ public class TriggerViewerActivity extends AdminViewerActivity<Trigger> implemen
         GWT.<TriggerCrudService> create(TriggerCrudService.class).runImmediately(new DefaultAsyncCallback<Run>() {
             @Override
             public void onSuccess(Run result) {
-                AppSite.getPlaceController().goTo(
-                        AppSite.getHistoryMapper().createPlace(AdminSiteMap.Management.Run.class).formViewerPlace(result.getPrimaryKey()));
+                AppSite.getPlaceController().goTo(new AdminSiteMap.Management.Run().formViewerPlace(result.getPrimaryKey()));
             }
         }, EntityFactory.createIdentityStub(Trigger.class, getEntityId()));
     }
@@ -76,8 +75,7 @@ public class TriggerViewerActivity extends AdminViewerActivity<Trigger> implemen
         GWT.<TriggerCrudService> create(TriggerCrudService.class).runForDate(new DefaultAsyncCallback<Run>() {
             @Override
             public void onSuccess(Run result) {
-                AppSite.getPlaceController().goTo(
-                        AppSite.getHistoryMapper().createPlace(AdminSiteMap.Management.Run.class).formViewerPlace(result.getPrimaryKey()));
+                AppSite.getPlaceController().goTo(new AdminSiteMap.Management.Run().formViewerPlace(result.getPrimaryKey()));
             }
         }, EntityFactory.createIdentityStub(Trigger.class, getEntityId()), date.date().getValue());
     }

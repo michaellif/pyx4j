@@ -34,6 +34,6 @@ public class BillingCycleLeaseViewerActivity extends CrmViewerActivity<BillingCy
 
     @Override
     public void viewBill(Bill bill) {
-        AppSite.getPlaceController().goTo(AppSite.getHistoryMapper().createPlace(CrmSiteMap.Finance.Bill.class).formViewerPlace(bill.getPrimaryKey()));
+        AppSite.getPlaceController().goTo(new CrmSiteMap.Finance.Bill().formViewerPlace(bill.getPrimaryKey()));
     }
 }

@@ -68,9 +68,7 @@ public class PortfolioFolder extends VistaTableFolder<Portfolio> {
                             comp = new CHyperlink(new Command() {
                                 @Override
                                 public void execute() {
-                                    AppSite.getPlaceController().goTo(
-                                            AppSite.getHistoryMapper().createPlace(CrmSiteMap.Organization.Portfolio.class)
-                                                    .formViewerPlace(getValue().id().getValue()));
+                                    AppSite.getPlaceController().goTo(new CrmSiteMap.Organization.Portfolio().formViewerPlace(getValue().id().getValue()));
                                 }
                             });
                             comp = inject(column.getObject(), comp);

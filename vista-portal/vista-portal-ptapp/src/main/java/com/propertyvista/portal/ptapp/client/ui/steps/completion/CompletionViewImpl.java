@@ -32,7 +32,7 @@ import com.pyx4j.site.client.AppSite;
 import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.portal.ptapp.client.resources.PortalResources;
-import com.propertyvista.portal.rpc.ptapp.PtSiteMap.ApplicationStatus;
+import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 import com.propertyvista.portal.rpc.ptapp.services.PtAuthenticationService;
 
 public class CompletionViewImpl extends FlowPanel implements CompletionView {
@@ -60,7 +60,7 @@ public class CompletionViewImpl extends FlowPanel implements CompletionView {
         viewAction.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                AppSite.getPlaceController().goTo(AppSite.getHistoryMapper().createPlace(ApplicationStatus.class));
+                AppSite.getPlaceController().goTo(new PtSiteMap.ApplicationStatus());
             }
         });
         actions.add(viewAction);

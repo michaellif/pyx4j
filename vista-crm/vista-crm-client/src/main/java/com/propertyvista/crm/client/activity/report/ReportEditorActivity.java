@@ -66,7 +66,7 @@ public class ReportEditorActivity extends EditorActivityBase<DashboardMetadata> 
 
     @Override
     protected void goToViewer(Key entityID) {
-        CrudAppPlace place = AppSite.getHistoryMapper().createPlace(CrmSiteMap.Report.Management.class);
+        CrudAppPlace place = new CrmSiteMap.Report.Management();
         place.setType(Type.lister);
         AppSite.getPlaceController().goTo(place);
     }

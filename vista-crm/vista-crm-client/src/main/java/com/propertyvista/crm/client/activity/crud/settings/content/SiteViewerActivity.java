@@ -37,13 +37,13 @@ public class SiteViewerActivity extends CrmViewerActivity<SiteDescriptorDTO> imp
 
     @Override
     public void viewChild(Key id) {
-        AppSite.getPlaceController().goTo(AppSite.getHistoryMapper().createPlace(CrmSiteMap.Settings.Page.class).formViewerPlace(id));
+        AppSite.getPlaceController().goTo(new CrmSiteMap.Settings.Page().formViewerPlace(id));
     }
 
     @Override
     public void editNew(Key parentid) {
         AppSite.getPlaceController().goTo(
-                AppSite.getHistoryMapper().createPlace(CrmSiteMap.Settings.Page.class).formNewItemPlace(parentid)
-                        .queryArg(PageEditor.Presenter.URL_PARAM_PAGE_PARENT, PageEditor.Presenter.PageParent.site.name()));
+                new CrmSiteMap.Settings.Page().formNewItemPlace(parentid).queryArg(PageEditor.Presenter.URL_PARAM_PAGE_PARENT,
+                        PageEditor.Presenter.PageParent.site.name()));
     }
 }

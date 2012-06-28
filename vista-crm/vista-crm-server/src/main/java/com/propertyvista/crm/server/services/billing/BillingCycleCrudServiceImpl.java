@@ -22,6 +22,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.propertyvista.crm.rpc.dto.billing.BillingCycleDTO;
 import com.propertyvista.crm.rpc.services.billing.BillingCycleCrudService;
 import com.propertyvista.domain.financial.BillingAccount;
+import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.BillingCycle;
 
 public class BillingCycleCrudServiceImpl extends AbstractCrudServiceDtoImpl<BillingCycle, BillingCycleDTO> implements BillingCycleCrudService {
@@ -47,10 +48,20 @@ public class BillingCycleCrudServiceImpl extends AbstractCrudServiceDtoImpl<Bill
 
         EntityQueryCriteria<BillingAccount> criteriaNotRun = EntityQueryCriteria.create(BillingAccount.class);
         criteriaNotRun.add(PropertyCriterion.eq(criteriaNotRun.proto().billingType(), entity.billingType()));
-        criteriaNotRun.add(PropertyCriterion.notExists(criteriaNotRun.proto().bills()));
-        criteriaNotRun.add(PropertyCriterion.eq(criteriaNotRun.proto().bills().$().billingCycle(), entity));
+//        criteriaNotRun.add(PropertyCriterion.eq(criteriaNotRun.proto().bills().$().billingCycle(), entity));
+//        criteriaNotRun.add(PropertyCriterion.notExists(criteriaNotRun.proto().bills()));
+        long counter = 0;
+        for (BillingAccount ba : Persistence.service().query(criteriaNotRun)) {
+            Persistence.service().retrieve(ba.bills());
+            for (Bill bill : ba.bills()) {
+                if (!bill.billingCycle().equals(entity)) {
+                    ++counter;
+                    break;
+                }
+            }
+        }
 
-        dto.notRun().setValue((long) Persistence.service().query(criteriaNotRun).size());
+        dto.notRun().setValue(counter);
     }
 
     @Override

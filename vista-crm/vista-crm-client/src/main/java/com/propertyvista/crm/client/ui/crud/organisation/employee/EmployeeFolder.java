@@ -80,9 +80,7 @@ public class EmployeeFolder extends VistaTableFolder<Employee> {
                             comp = inject(column.getObject(), new CEntityHyperlink<Name>(new Command() {
                                 @Override
                                 public void execute() {
-                                    AppSite.getPlaceController().goTo(
-                                            AppSite.getHistoryMapper().createPlace(CrmSiteMap.Organization.Employee.class)
-                                                    .formViewerPlace(getValue().id().getValue()));
+                                    AppSite.getPlaceController().goTo(new CrmSiteMap.Organization.Employee().formViewerPlace(getValue().id().getValue()));
                                 }
                             }));
                         }
