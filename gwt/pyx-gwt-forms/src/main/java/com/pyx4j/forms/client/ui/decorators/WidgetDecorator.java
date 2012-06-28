@@ -71,6 +71,8 @@ public class WidgetDecorator extends FlexTable {
 
     private final SimplePanel infoImageHolder;
 
+    private final SimplePanel assistantWidgetHolder;
+
     private Image mandatoryImage;
 
     private final Label validationLabel;
@@ -163,9 +165,13 @@ public class WidgetDecorator extends FlexTable {
         validationLabel = new Label();
         validationLabel.setStyleName(WidgetDecoratorValidationLabel.name());
 
+        assistantWidgetHolder = new SimplePanel();
+        assistantWidgetHolder.setWidget(builder.assistantWidget);
+
         contentPanel = new HorizontalPanel();
         contentPanel.setStyleName(WidgetDecoratorContentPanel.name());
         contentPanel.add(componentHolder);
+        contentPanel.add(assistantWidgetHolder);
         contentPanel.add(infoImageHolder);
         if (builder.readOnlyMode) {
             addStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.readOnly.name());
@@ -257,6 +263,8 @@ public class WidgetDecorator extends FlexTable {
 
         private String customLabel;
 
+        private Widget assistantWidget;
+
         private boolean useLabelSemicolon = true;
 
         private boolean readOnlyMode = false;
@@ -305,6 +313,11 @@ public class WidgetDecorator extends FlexTable {
 
         public Builder customLabel(String customLabel) {
             this.customLabel = customLabel;
+            return this;
+        }
+
+        public Builder assistantWidget(Widget assistantWidget) {
+            this.assistantWidget = assistantWidget;
             return this;
         }
 

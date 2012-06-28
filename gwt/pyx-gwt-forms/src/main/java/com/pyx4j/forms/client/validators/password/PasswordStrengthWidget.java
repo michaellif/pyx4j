@@ -20,13 +20,13 @@
  */
 package com.pyx4j.forms.client.validators.password;
 
-import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.forms.client.validators.password.PasswordStrengthRule.PasswordStrengthVerdict;
 import com.pyx4j.i18n.shared.I18n;
 
-public class PasswordStrengthWidget extends HorizontalPanel {
+public class PasswordStrengthWidget extends SimplePanel {
 
     private static I18n i18n = I18n.get(PasswordStrengthWidget.class);
 
@@ -36,8 +36,8 @@ public class PasswordStrengthWidget extends HorizontalPanel {
 
     public PasswordStrengthWidget(PasswordStrengthRule rule) {
         this.rule = rule;
-        this.add(new Label(i18n.tr("Password strength:")));
-        this.add(indicator = new Label());
+        setWidget(indicator = new Label());
+        indicator.getElement().getStyle().setProperty("paddingLeft", "10px");
     }
 
     public void setValue(PasswordStrengthVerdict verdict) {
