@@ -460,8 +460,6 @@ public class BillingLifecycleManager {
             billingCycle.failed().setValue(0L);
             billingCycle.rejected().setValue(0L);
             billingCycle.confirmed().setValue(0L);
-            billingCycle.total().setValue(0L);
-            billingCycle.notRunned().setValue(0L);
 
             Persistence.service().persist(billingCycle);
         }

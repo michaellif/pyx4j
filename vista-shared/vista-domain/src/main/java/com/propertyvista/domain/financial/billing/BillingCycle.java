@@ -56,22 +56,15 @@ public interface BillingCycle extends IEntity {
     // Statistics:
     //TODO 1 add stats
 
-    @Caption(name = "Non Confirmed Bills Number")
-    IPrimitive<Long> notConfirmed();
-
     @Caption(name = "Failed Bills Number")
     IPrimitive<Long> failed();
 
     @Caption(name = "Rejected Bills Number")
     IPrimitive<Long> rejected();
 
+    @Caption(name = "Non Confirmed Bills Number")
+    IPrimitive<Long> notConfirmed();
+
     @Caption(name = "Confirmed Bills Number")
     IPrimitive<Long> confirmed();
-
-    @Caption(name = "Total Bills Number")
-    IPrimitive<Long> total();
-
-    @Caption(name = "Leases With Non Run Bills")
-    IPrimitive<Long> notRunned();
-
 }

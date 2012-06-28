@@ -16,9 +16,12 @@ package com.propertyvista.crm.server.services.billing;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.crm.rpc.dto.billing.BillingCycleDTO;
 import com.propertyvista.crm.rpc.services.billing.BillingCycleCrudService;
+import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.billing.BillingCycle;
 
 public class BillingCycleCrudServiceImpl extends AbstractCrudServiceDtoImpl<BillingCycle, BillingCycleDTO> implements BillingCycleCrudService {
@@ -37,9 +40,16 @@ public class BillingCycleCrudServiceImpl extends AbstractCrudServiceDtoImpl<Bill
         enhanceListRetrieved(entity, dto);
         Persistence.service().retrieve(dto.building(), AttachLevel.ToStringMembers);
 
-//        EntityQueryCriteria<Bill> criteria = EntityQueryCriteria.create(Bill.class);
-//        criteria.add(PropertyCriterion.eq(criteria.proto().billingAccount().billingType(), entity.billingType()));
-//        dto.total().setValue((long) Persistence.service().query(criteria).size());
+        // calculate statistics on leases:
+        EntityQueryCriteria<BillingAccount> criteriaTotal = EntityQueryCriteria.create(BillingAccount.class);
+        criteriaTotal.add(PropertyCriterion.eq(criteriaTotal.proto().billingType(), entity.billingType()));
+        dto.total().setValue((long) Persistence.service().query(criteriaTotal).size());
+
+        EntityQueryCriteria<BillingAccount> criteriaNotRun = EntityQueryCriteria.create(BillingAccount.class);
+        criteriaNotRun.add(PropertyCriterion.eq(criteriaNotRun.proto().billingType(), entity.billingType()));
+        criteriaNotRun.add(PropertyCriterion.ne(criteriaNotRun.proto().bills().$().billingCycle(), entity));
+
+        dto.notRun().setValue((long) Persistence.service().query(criteriaNotRun).size());
     }
 
     @Override
