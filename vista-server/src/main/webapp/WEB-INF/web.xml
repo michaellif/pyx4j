@@ -493,6 +493,11 @@
         <error-code>404</error-code>
         <location>/static/errors/404.html</location>
     </error-page>
+	
+	<error-page>
+        <error-code>412</error-code>
+        <location>/static/errors/412.html</location>
+    </error-page>
 
     <error-page>
 	    <error-code>500</error-code>
@@ -513,5 +518,6 @@
         <exception-type>com.pyx4j.rpc.shared.ContainerHandledUserRuntimeException</exception-type>
         <location>/static/errors/500.html</location>
     </error-page>
+
 
 </web-app>
