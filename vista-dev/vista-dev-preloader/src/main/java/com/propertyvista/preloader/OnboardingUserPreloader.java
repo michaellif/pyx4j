@@ -24,12 +24,6 @@ import com.propertyvista.server.common.security.PasswordEncryptor;
 
 public class OnboardingUserPreloader extends AbstractDataPreloader {
 
-    public static OnboardingUserCredential createOnboardingUser(String name, String email, String password, VistaOnboardingBehavior role,
-            String onboardingAccountId) {
-
-        return createOnboardingUser(null, null, name, email, password, role, onboardingAccountId);
-    }
-
     public static OnboardingUserCredential createOnboardingUser(String firstName, String lastName, String email, String password, VistaOnboardingBehavior role,
             String onboardingAccountId) {
 
@@ -67,9 +61,9 @@ public class OnboardingUserPreloader extends AbstractDataPreloader {
 
     @Override
     public String create() {
-        createOnboardingUser("PV Admin", "pvtestadm1n@gmail.com", "12345", VistaOnboardingBehavior.OnboardingAdministrator, null);
-        createOnboardingUser("Equifax Admin", "pvtestequifax@gmail.com", "12345", VistaOnboardingBehavior.Equifax, null);
-        createOnboardingUser("Caledon Admin", "pvtestcaledon@gmail.com", "12345", VistaOnboardingBehavior.Caledon, null);
+        createOnboardingUser("PV Admin", "", "pvtestadm1n@gmail.com", "12345", VistaOnboardingBehavior.OnboardingAdministrator, null);
+        createOnboardingUser("Equifax Admin", "", "pvtestequifax@gmail.com", "12345", VistaOnboardingBehavior.Equifax, null);
+        createOnboardingUser("Caledon Admin", "", "pvtestcaledon@gmail.com", "12345", VistaOnboardingBehavior.Caledon, null);
 
         return "Created " + 3 + " Onboarding Users";
     }

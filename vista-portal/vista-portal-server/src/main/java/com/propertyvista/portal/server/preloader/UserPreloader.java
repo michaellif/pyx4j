@@ -160,7 +160,8 @@ public class UserPreloader extends BaseVistaDevDataPreloader {
                 final OnboardingUserCredential userCred = TaskRunner.runInAdminNamespace(new Callable<OnboardingUserCredential>() {
                     @Override
                     public OnboardingUserCredential call() {
-                        return OnboardingUserPreloader.createOnboardingUser(emp.name().getStringView(), email, email, VistaOnboardingBehavior.Client, null);
+                        return OnboardingUserPreloader.createOnboardingUser(emp.name().firstName().getStringView(), emp.name().lastName().getStringView(),
+                                email, email, VistaOnboardingBehavior.Client, null);
                     }
                 });
 

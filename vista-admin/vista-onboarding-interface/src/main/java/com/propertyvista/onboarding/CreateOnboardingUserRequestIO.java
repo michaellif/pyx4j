@@ -23,7 +23,10 @@ import com.pyx4j.i18n.annotations.I18n;
 public interface CreateOnboardingUserRequestIO extends RequestIO {
 
     @NotNull
-    IPrimitive<String> name();
+    IPrimitive<String> firstName();
+
+    @NotNull
+    IPrimitive<String> lastName();
 
     @NotNull
     IPrimitive<String> email();

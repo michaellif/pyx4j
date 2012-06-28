@@ -37,8 +37,8 @@ public class CreateOnboardingUserRequestHandler extends AbstractRequestHandler<C
         log.info("User {} requested {} for email {}", new Object[] { request.onboardingAccountId().getValue(), "CreateOnboardingUser",
                 request.email().getValue() });
 
-        OnboardingUserPreloader.createOnboardingUser(request.name().getValue(), request.email().getValue(), request.password().getValue(),
-                VistaOnboardingBehavior.ProspectiveClient, request.onboardingAccountId().getValue());
+        OnboardingUserPreloader.createOnboardingUser(request.firstName().getValue(), request.lastName().getValue(), request.email().getValue(), request
+                .password().getValue(), VistaOnboardingBehavior.ProspectiveClient, request.onboardingAccountId().getValue());
 
         ResponseIO response = EntityFactory.create(ResponseIO.class);
         response.success().setValue(Boolean.TRUE);
