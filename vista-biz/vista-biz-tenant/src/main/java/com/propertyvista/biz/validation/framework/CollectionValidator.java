@@ -13,12 +13,13 @@
  */
 package com.propertyvista.biz.validation.framework;
 
-import java.util.Collection;
-import java.util.Map;
+import java.util.Set;
 
 import com.pyx4j.entity.shared.ICollection;
 import com.pyx4j.entity.shared.IEntity;
 
-public interface CollectionValidator<E extends IEntity, C extends Collection<Map<String, Object>>> extends Validator<C, ICollection<E, C>> {
+public interface CollectionValidator<E extends IEntity> {
+
+    Set<ValidationFailure> validate(ICollection<E, ?> collection);
 
 }

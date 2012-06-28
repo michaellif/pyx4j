@@ -13,10 +13,12 @@
  */
 package com.propertyvista.biz.validation.framework;
 
-import java.util.Map;
+import java.util.Set;
 
 import com.pyx4j.entity.shared.IEntity;
 
-public interface EntityValidator<E extends IEntity> extends Validator<Map<String, Object>, E> {
+public interface EntityValidator<E extends IEntity> {
+
+    Set<ValidationFailure> validate(E entity);
 
 }

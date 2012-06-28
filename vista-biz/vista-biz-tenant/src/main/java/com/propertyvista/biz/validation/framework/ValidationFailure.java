@@ -15,10 +15,10 @@ package com.propertyvista.biz.validation.framework;
 
 import com.pyx4j.entity.shared.IObject;
 
-public interface ValidationFailure<T extends IObject<?>> {
+public interface ValidationFailure {
 
     String getMessage();
 
-    T getProperty();
+    IObject<?> getProperty();
 
 }

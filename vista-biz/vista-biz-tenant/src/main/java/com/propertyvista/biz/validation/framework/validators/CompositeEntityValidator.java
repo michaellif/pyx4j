@@ -20,32 +20,57 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.ICollection;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.Path;
 
+import com.propertyvista.biz.validation.framework.CollectionValidator;
 import com.propertyvista.biz.validation.framework.EntityValidator;
+import com.propertyvista.biz.validation.framework.MemberValidator;
+import com.propertyvista.biz.validation.framework.PrimitiveValidator;
 import com.propertyvista.biz.validation.framework.ValidationFailure;
-import com.propertyvista.biz.validation.framework.Validator;
 
 public abstract class CompositeEntityValidator<E extends IEntity> implements EntityValidator<E> {
 
     private final E proto;
 
-    private final Map<Path, Validator> validators;
+    private final Map<Path, MemberValidator> memberValidators;
+
+    private final Map<Path, PrimitiveValidator> primitiveValidators;
+
+    private final Map<Path, EntityValidator> entityValidators;
+
+    private final Map<Path, CollectionValidator> collectionValidators;
 
     public CompositeEntityValidator(Class<E> entityClassLiteral) {
-        this.validators = new HashMap<Path, Validator>();
+        this.memberValidators = new HashMap<Path, MemberValidator>();
+        this.primitiveValidators = new HashMap<Path, PrimitiveValidator>();
+        this.entityValidators = new HashMap<Path, EntityValidator>();
+        this.collectionValidators = new HashMap<Path, CollectionValidator>();
         this.proto = EntityFactory.create(entityClassLiteral);
         init();
     }
 
     @Override
-    public final java.util.Set<ValidationFailure<?>> validate(E obj) {
-        Set<ValidationFailure<?>> failures = new HashSet<ValidationFailure<?>>();
+    public final Set<ValidationFailure> validate(E obj) {
+        Set<ValidationFailure> failures = new HashSet<ValidationFailure>();
 
-        for (Entry<Path, Validator> entry : validators.entrySet()) {
-            Set<ValidationFailure<?>> subFailures = entry.getValue().validate(obj.getMember(entry.getKey()));
+        for (Entry<Path, MemberValidator> entry : memberValidators.entrySet()) {
+            Set<ValidationFailure> subFailures = entry.getValue().validate(obj.getMember(entry.getKey()));
+            failures.addAll(subFailures);
+        }
+        for (Entry<Path, PrimitiveValidator> entry : primitiveValidators.entrySet()) {
+            Set<ValidationFailure> subFailures = entry.getValue().validate((IPrimitive) obj.getMember(entry.getKey()));
+            failures.addAll(subFailures);
+        }
+        for (Entry<Path, EntityValidator> entry : entityValidators.entrySet()) {
+            Set<ValidationFailure> subFailures = entry.getValue().validate((IEntity) obj.getMember(entry.getKey()));
+            failures.addAll(subFailures);
+        }
+        for (Entry<Path, CollectionValidator> entry : collectionValidators.entrySet()) {
+            Set<ValidationFailure> subFailures = entry.getValue().validate((ICollection) obj.getMember(entry.getKey()));
             failures.addAll(subFailures);
         }
 
@@ -58,7 +83,20 @@ public abstract class CompositeEntityValidator<E extends IEntity> implements Ent
 
     protected abstract void init();
 
-    protected final <T> void bind(IObject<T> member, Validator<T, IObject<T>> validator) {
-        validators.put(member.getPath(), validator);
-    };
+    protected final void bind(IObject<?> member, MemberValidator validator) {
+        memberValidators.put(member.getPath(), validator);
+    }
+
+    protected final <T extends Object> void bind(IPrimitive<T> primitiveMember, PrimitiveValidator<T> validator) {
+        primitiveValidators.put(primitiveMember.getPath(), validator);
+    }
+
+    protected final <T extends IEntity> void bind(T member, EntityValidator<T> validator) {
+        entityValidators.put(member.getPath(), validator);
+    }
+
+    protected final <T extends IEntity> void bind(ICollection<T, ?> member, CollectionValidator<T> validator) {
+        collectionValidators.put(member.getPath(), validator);
+    }
+
 }

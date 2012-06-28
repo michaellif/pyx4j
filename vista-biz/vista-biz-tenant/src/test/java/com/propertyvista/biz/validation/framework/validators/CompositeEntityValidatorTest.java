@@ -16,7 +16,8 @@ package com.propertyvista.biz.validation.framework.validators;
 import java.util.Set;
 
 import junit.framework.Assert;
-import junit.framework.TestCase;
+
+import org.junit.Test;
 
 import com.pyx4j.entity.shared.EntityFactory;
 
@@ -24,15 +25,16 @@ import com.propertyvista.biz.validation.framework.ValidationFailure;
 import com.propertyvista.biz.validation.framework.domain.EntityA;
 import com.propertyvista.biz.validation.framework.domain.EntityB;
 
-public class CompositeEntityValidatorTest extends TestCase {
+public class CompositeEntityValidatorTest {
 
+    @Test
     public void testCompositeEntityValidator() {
         CompositeEntityValidator<EntityA> compositeValidator = new CompositeEntityValidator<EntityA>(EntityA.class) {
             @Override
             protected void init() {
                 bind(proto().str(), new NotNullValidator());
                 bind(proto().child().value(), new NotNullValidator());
-                bind(proto().children(), new NotEmptyValidator());
+                bind(proto().children(), new NotEmptyValidator<EntityB>());
             }
         };
 
@@ -45,17 +47,17 @@ public class CompositeEntityValidatorTest extends TestCase {
         a.children().add(b1);
 
         {
-            Set<ValidationFailure<?>> failures = compositeValidator.validate(a);
+            Set<ValidationFailure> failures = compositeValidator.validate(a);
             Assert.assertEquals(2, failures.size());
         }
 
         a.child().value().setValue(1);
 
         {
-            Set<ValidationFailure<?>> failures = compositeValidator.validate(a);
+            Set<ValidationFailure> failures = compositeValidator.validate(a);
             Assert.assertEquals(1, failures.size());
 
-            ValidationFailure<?> failure = failures.iterator().next();
+            ValidationFailure failure = failures.iterator().next();
             Assert.assertEquals(a.str(), failure.getProperty());
         }
 
@@ -63,10 +65,10 @@ public class CompositeEntityValidatorTest extends TestCase {
         a.children().clear();
 
         {
-            Set<ValidationFailure<?>> failures = compositeValidator.validate(a);
+            Set<ValidationFailure> failures = compositeValidator.validate(a);
             Assert.assertEquals(1, failures.size());
 
-            ValidationFailure<?> failure = failures.iterator().next();
+            ValidationFailure failure = failures.iterator().next();
             Assert.assertEquals(a.children(), failure.getProperty());
         }
     }

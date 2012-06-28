@@ -21,23 +21,23 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.biz.validation.framework.MemberValidator;
 import com.propertyvista.biz.validation.framework.SimpleValidationFailure;
 import com.propertyvista.biz.validation.framework.ValidationFailure;
-import com.propertyvista.biz.validation.framework.Validator;
 
-public class NotNullValidator<T, O extends IObject<T>> implements Validator<T, O> {
+public class NotNullValidator implements MemberValidator {
 
     private static final I18n i18n = I18n.get(NotNullValidator.class);
 
     @Override
-    public Set<ValidationFailure<?>> validate(O obj) {
-        if (obj.isNull()) {
-            String caption = (obj instanceof IEntity) ? ((IEntity) obj).getEntityMeta().getCaption() : obj.getMeta().getCaption();
-            Set<ValidationFailure<?>> result = new HashSet<ValidationFailure<?>>();
-            result.add(new SimpleValidationFailure(obj, i18n.tr("{0} must is mandatory", caption)));
+    public Set<ValidationFailure> validate(IObject<?> member) {
+        if (member.isNull()) {
+            String caption = (member instanceof IEntity) ? ((IEntity) member).getEntityMeta().getCaption() : member.getMeta().getCaption();
+            Set<ValidationFailure> result = new HashSet<ValidationFailure>();
+            result.add(new SimpleValidationFailure(member, i18n.tr("{0} must is mandatory", caption)));
             return result;
         } else {
-            return Collections.EMPTY_SET;
+            return Collections.emptySet();
         }
     }
 }

@@ -15,9 +15,9 @@ package com.propertyvista.biz.validation.framework;
 
 import com.pyx4j.entity.shared.IObject;
 
-@SuppressWarnings("rawtypes")
 public class SimpleValidationFailure implements ValidationFailure {
 
+    @SuppressWarnings("rawtypes")
     private final IObject property;
 
     private final String message;
@@ -32,6 +32,7 @@ public class SimpleValidationFailure implements ValidationFailure {
         return message;
     }
 
+    @SuppressWarnings("rawtypes")
     @Override
     public IObject getProperty() {
         return property;

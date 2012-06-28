@@ -7,8 +7,8 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jun 26, 2012
- * @author ArtyomB
+ * Created on Jun 28, 2012
+ * @author Artyom
  * @version $Id$
  */
 package com.propertyvista.biz.validation.framework;
@@ -17,8 +17,7 @@ import java.util.Set;
 
 import com.pyx4j.entity.shared.IObject;
 
-public interface Validator<T, O extends IObject<T>> {
+public interface MemberValidator {
 
-    Set<ValidationFailure<?>> validate(O obj);
-
+    Set<ValidationFailure> validate(IObject<?> member);
 }

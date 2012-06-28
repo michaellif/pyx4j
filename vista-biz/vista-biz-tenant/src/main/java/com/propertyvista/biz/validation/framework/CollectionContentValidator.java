@@ -13,16 +13,14 @@
  */
 package com.propertyvista.biz.validation.framework;
 
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.Set;
 
 import com.pyx4j.entity.shared.ICollection;
 import com.pyx4j.entity.shared.IEntity;
 
-public class CollectionContentValidator<E extends IEntity, C extends Collection<Map<String, Object>>> implements CollectionValidator<E, C> {
+public class CollectionContentValidator<E extends IEntity> implements CollectionValidator<E> {
 
     private final EntityValidator<E> itemValidator;
 
@@ -31,8 +29,8 @@ public class CollectionContentValidator<E extends IEntity, C extends Collection<
     }
 
     @Override
-    public Set<ValidationFailure<?>> validate(ICollection<E, C> obj) {
-        Set<ValidationFailure<?>> result = new HashSet<ValidationFailure<?>>();
+    public Set<ValidationFailure> validate(ICollection<E, ?> obj) {
+        Set<ValidationFailure> result = new HashSet<ValidationFailure>();
         Iterator<E> i = obj.iterator();
         while (i.hasNext()) {
             result.addAll(itemValidator.validate(i.next()));

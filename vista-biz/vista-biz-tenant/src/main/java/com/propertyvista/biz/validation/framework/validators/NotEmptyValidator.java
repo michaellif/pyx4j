@@ -13,10 +13,8 @@
  */
 package com.propertyvista.biz.validation.framework.validators;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 import com.pyx4j.entity.shared.ICollection;
@@ -27,18 +25,18 @@ import com.propertyvista.biz.validation.framework.CollectionValidator;
 import com.propertyvista.biz.validation.framework.SimpleValidationFailure;
 import com.propertyvista.biz.validation.framework.ValidationFailure;
 
-public class NotEmptyValidator<E extends IEntity, C extends Collection<Map<String, Object>>> implements CollectionValidator<E, C> {
+public class NotEmptyValidator<E extends IEntity> implements CollectionValidator<E> {
 
     private static final I18n i18n = I18n.get(NotEmptyValidator.class);
 
     @Override
-    public Set<ValidationFailure<?>> validate(ICollection<E, C> obj) {
+    public Set<ValidationFailure> validate(ICollection<E, ?> obj) {
         if (obj.isEmpty()) {
-            Set<ValidationFailure<?>> result = new HashSet<ValidationFailure<?>>();
+            Set<ValidationFailure> result = new HashSet<ValidationFailure>();
             result.add(new SimpleValidationFailure(obj, i18n.tr("{0} must have at least one element", obj.getMeta().getCaption())));
             return result;
         } else {
-            return Collections.EMPTY_SET;
+            return Collections.emptySet();
         }
     }
 

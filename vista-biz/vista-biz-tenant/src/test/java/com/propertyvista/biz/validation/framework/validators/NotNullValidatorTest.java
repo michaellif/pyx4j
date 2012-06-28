@@ -16,15 +16,17 @@ package com.propertyvista.biz.validation.framework.validators;
 import java.util.Set;
 
 import junit.framework.Assert;
-import junit.framework.TestCase;
+
+import org.junit.Test;
 
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.biz.validation.framework.ValidationFailure;
 import com.propertyvista.biz.validation.framework.domain.EntityA;
 
-public class NotNullValidatorTest extends TestCase {
+public class NotNullValidatorTest {
 
+    @Test
     public void testNotNullValidator() {
 
         EntityA a = EntityFactory.create(EntityA.class);
@@ -32,15 +34,14 @@ public class NotNullValidatorTest extends TestCase {
         NotNullValidator notNullValidator = new NotNullValidator();
 
         {
-            Set<ValidationFailure<?>> failures = notNullValidator.validate(a.str());
+            Set<ValidationFailure> failures = notNullValidator.validate(a.str());
             Assert.assertEquals("must have one failure", 1, failures.size());
         }
 
-        a.str().setValue("test");
-
+        a.str().setValue("test should not fail");
         {
-            Set<ValidationFailure<?>> failures = notNullValidator.validate(a.str());
-            Assert.assertEquals(0, failures.size());
+            Set<ValidationFailure> failures = notNullValidator.validate(a.str());
+            Assert.assertEquals("must have no failures", 0, failures.size());
         }
 
     }
