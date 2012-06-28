@@ -22,7 +22,6 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.biz.financial.MoneyUtils;
 import com.propertyvista.domain.financial.billing.InvoiceDebit.DebitType;
 import com.propertyvista.domain.financial.billing.InvoiceDeposit;
 import com.propertyvista.domain.financial.billing.InvoiceDepositRefund;
@@ -31,7 +30,6 @@ import com.propertyvista.domain.financial.billing.InvoiceProductCharge;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Deposit;
 import com.propertyvista.domain.tenant.lease.Deposit.DepositStatus;
-import com.propertyvista.domain.tenant.lease.Deposit.ValueType;
 
 public class BillingDepositProcessor extends AbstractBillingProcessor {
 
@@ -89,16 +87,7 @@ public class BillingDepositProcessor extends AbstractBillingProcessor {
             invoiceDeposit.dueDate().setValue(getBillingManager().getNextPeriodBill().dueDate().getValue());
             invoiceDeposit.debitType().setValue(DebitType.deposit);
             invoiceDeposit.description().setValue(deposit.description().getStringView());
-
-            if (ValueType.Amount == deposit.valueType().getValue()) {
-                invoiceDeposit.amount().setValue(deposit.initialAmount().getValue());
-            } else if (ValueType.Percentage == deposit.valueType().getValue()) {
-                //TODO consider real price of service or feature including concessions etc
-                invoiceDeposit.amount().setValue(MoneyUtils.round(deposit.initialAmount().getValue().multiply(billableItem.agreedPrice().getValue())));
-            } else {
-                throw new Error("Unsupported ValueType");
-            }
-
+            invoiceDeposit.amount().setValue(deposit.initialAmount().getValue());
             invoiceDeposit.taxTotal().setValue(BigDecimal.ZERO);
             invoiceDeposit.deposit().set(deposit);
 

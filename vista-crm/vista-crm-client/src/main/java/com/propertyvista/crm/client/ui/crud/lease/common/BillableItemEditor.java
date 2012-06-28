@@ -63,7 +63,6 @@ import com.propertyvista.domain.tenant.lease.BillableItemExtraData;
 import com.propertyvista.domain.tenant.lease.Deposit;
 import com.propertyvista.domain.tenant.lease.Deposit.DepositStatus;
 import com.propertyvista.domain.tenant.lease.Deposit.DepositType;
-import com.propertyvista.domain.tenant.lease.Deposit.ValueType;
 import com.propertyvista.domain.tenant.lease.extradata.Pet;
 import com.propertyvista.domain.tenant.lease.extradata.Vehicle;
 import com.propertyvista.dto.LeaseDTO;
@@ -404,7 +403,6 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
             columns.add(new EntityFolderColumnDescriptor(proto().status(), "8em"));
             columns.add(new EntityFolderColumnDescriptor(proto().depositDate(), "9em"));
             columns.add(new EntityFolderColumnDescriptor(proto().refundDate(), "9em"));
-            columns.add(new EntityFolderColumnDescriptor(proto().valueType(), "8em"));
             columns.add(new EntityFolderColumnDescriptor(proto().initialAmount(), "7em"));
             columns.add(new EntityFolderColumnDescriptor(proto().currentAmount(), "7em"));
             columns.add(new EntityFolderColumnDescriptor(proto().description(), "15em"));
@@ -443,7 +441,6 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
                         result = EntityFactory.create(Deposit.class);
                         result.type().setValue(type);
                         result.status().setValue(DepositStatus.Created);
-                        result.valueType().setValue(ValueType.Amount);
                         result.depositDate().setValue(new LogicalDate());
                     }
                     callback.onSuccess(result);

@@ -117,11 +117,7 @@ public interface Deposit extends IEntity {
     IPrimitive<LogicalDate> refundDate();
 
     @NotNull
-    @ToString(index = 1)
-    IPrimitive<ValueType> valueType();
-
-    @NotNull
-    @Length(20)
+    @Length(40)
     @ToString(index = 2)
     IPrimitive<String> description();
 

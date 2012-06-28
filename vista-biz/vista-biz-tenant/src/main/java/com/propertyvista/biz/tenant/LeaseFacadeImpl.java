@@ -196,7 +196,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
                     if (item.isDefault().isBooleanTrue()) {
                         billableItem = createBillableItem(item);
                         lease.version().leaseProducts().featureItems().add(billableItem);
-                        deposits = ServerSideFactory.create(DepositFacade.class).createRequiredDeposits(billableItem, node);
+                        deposits = createBillableItemDeposits(billableItem, node);
                         if (deposits != null) {
                             lease.billingAccount().deposits().addAll(deposits);
                         }
@@ -219,6 +219,11 @@ public class LeaseFacadeImpl implements LeaseFacade {
         newItem._currentPrice().setValue(item.price().getValue());
 
         return newItem;
+    }
+
+    @Override
+    public List<Deposit> createBillableItemDeposits(BillableItem item, PolicyNode node) {
+        return ServerSideFactory.create(DepositFacade.class).createRequiredDeposits(item, node);
     }
 
     @Override

@@ -46,6 +46,7 @@ import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Deposit;
 import com.propertyvista.domain.tenant.lease.Deposit.DepositStatus;
 import com.propertyvista.domain.tenant.lease.Deposit.DepositType;
+import com.propertyvista.domain.tenant.lease.Deposit.ValueType;
 import com.propertyvista.domain.tenant.lease.DepositInterestAdjustment;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 
@@ -55,11 +56,11 @@ public class DepositFacadeImpl implements DepositFacade {
     class DepositPolicyKey {
         private final DepositType depositType;
 
-        private final ProductItemType productType;
+        private final String productType;
 
         public DepositPolicyKey(DepositType depositType, ProductItemType productType) {
             this.depositType = depositType;
-            this.productType = productType;
+            this.productType = productType.name().getValue();
         }
 
         @Override
@@ -112,6 +113,7 @@ public class DepositFacadeImpl implements DepositFacade {
         depositCriteria.add(PropertyCriterion.eq(depositCriteria.proto().status(), DepositStatus.Billed));
         // TODO - do we want to check for last adjustment date?
         for (Deposit deposit : Persistence.service().query(depositCriteria)) {
+            Persistence.service().retrieve(deposit.billableItem());
             DepositPolicyItem policyItem = policyMatrix.get(new DepositPolicyKey(deposit.type().getValue(), deposit.billableItem().item().type()));
             if (policyItem == null) {
                 throw new UserRuntimeException(i18n.tr("Could not find Policy Item for deposit {0}", deposit.getStringView()));
@@ -158,12 +160,12 @@ public class DepositFacadeImpl implements DepositFacade {
         // LastMonthDeposit - return one month prior the end of lease
         Calendar calendar = new GregorianCalendar();
         calendar.setTime(Persistence.service().getTransactionSystemTime());
-        calendar.add(Calendar.MONTH, -1);
-        Date dueDate = calendar.getTime(); // roll back one month
+        calendar.add(Calendar.MONTH, 1);
+        Date dueDate = calendar.getTime(); // roll forward one month
         orCrit.left(PropertyCriterion.eq(depositCriteria.proto().type(), DepositType.LastMonthDeposit));
-        orCrit.left(PropertyCriterion.le(depositCriteria.proto().billableItem().expirationDate(), dueDate));
+        orCrit.left(PropertyCriterion.le(depositCriteria.proto().billingAccount().lease().leaseTo(), dueDate));
 
-        // SecurityDeposit - return after the product expiration - check policy for refund window
+        // SecurityDeposit - return after product expiration - check policy for refund window
         orCrit.right(PropertyCriterion.eq(depositCriteria.proto().type(), DepositType.SecurityDeposit));
         orCrit.right(PropertyCriterion.le(depositCriteria.proto().billableItem().expirationDate(), Persistence.service().getTransactionSystemTime()));
 
@@ -175,6 +177,7 @@ public class DepositFacadeImpl implements DepositFacade {
         ARFacade arFacade = ServerSideFactory.create(ARFacade.class);
         Map<DepositPolicyKey, DepositPolicyItem> policyMatrix = getDepositPolicyMatrix(node);
         for (Deposit deposit : depositsDue) {
+            Persistence.service().retrieve(deposit.billableItem());
             switch (deposit.type().getValue()) {
             case MoveInDeposit:
             case LastMonthDeposit:
@@ -182,13 +185,16 @@ public class DepositFacadeImpl implements DepositFacade {
                 arFacade.postDepositRefund(deposit);
                 break;
             case SecurityDeposit:
+                Persistence.service().retrieve(deposit.billableItem());
                 DepositPolicyItem policyItem = policyMatrix.get(new DepositPolicyKey(deposit.type().getValue(), deposit.billableItem().item().type()));
                 if (policyItem == null) {
                     throw new UserRuntimeException(i18n.tr("Could not find Policy Item for deposit {0}", deposit.getStringView()));
                 } else {
                     // see if we are past the refund window
                     calendar.setTime(Persistence.service().getTransactionSystemTime());
-                    calendar.add(Calendar.DAY_OF_MONTH, -policyItem.securityDepositRefundWindow().getValue());
+                    if (!policyItem.securityDepositRefundWindow().isNull()) {
+                        calendar.add(Calendar.DAY_OF_MONTH, -policyItem.securityDepositRefundWindow().getValue());
+                    }
                     dueDate = calendar.getTime();
                     if (!deposit.billableItem().expirationDate().getValue().after(dueDate)) {
                         arFacade.postDepositRefund(deposit);
@@ -224,9 +230,14 @@ public class DepositFacadeImpl implements DepositFacade {
     private Deposit makeDeposit(DepositPolicyItem policyItem, BillableItem billableItem) {
         Deposit deposit = EntityFactory.create(Deposit.class);
         deposit.type().set(policyItem.depositType());
-        deposit.initialAmount().set(policyItem.value());
+        if (ValueType.Amount == policyItem.valueType().getValue()) {
+            deposit.initialAmount().setValue(policyItem.value().getValue());
+        } else if (ValueType.Percentage == policyItem.valueType().getValue()) {
+            deposit.initialAmount().setValue(MoneyUtils.round(policyItem.value().getValue().multiply(billableItem.agreedPrice().getValue())));
+        } else {
+            throw new Error("Unsupported ValueType");
+        }
         deposit.currentAmount().set(deposit.initialAmount());
-        deposit.valueType().set(policyItem.valueType());
         deposit.description().set(policyItem.description());
         deposit.status().setValue(DepositStatus.Created);
         deposit.depositDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));

@@ -61,7 +61,7 @@ public interface DepositPolicyItem extends IEntity {
     IPrimitive<ValueType> valueType();
 
     @NotNull
-    @Length(20)
+    @Length(40)
     @ToString(index = 2)
     IPrimitive<String> description();
 

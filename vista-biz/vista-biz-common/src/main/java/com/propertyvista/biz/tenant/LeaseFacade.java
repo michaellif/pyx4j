@@ -13,13 +13,17 @@
  */
 package com.propertyvista.biz.tenant;
 
+import java.util.List;
+
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.financial.offering.ProductItem;
+import com.propertyvista.domain.policy.framework.PolicyNode;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.BillableItem;
+import com.propertyvista.domain.tenant.lease.Deposit;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 public interface LeaseFacade {
@@ -33,6 +37,8 @@ public interface LeaseFacade {
     Lease setService(Lease lease, ProductItem serviceId);
 
     BillableItem createBillableItem(ProductItem itemId);
+
+    List<Deposit> createBillableItemDeposits(BillableItem item, PolicyNode node);
 
     Lease persist(Lease lease);
 
