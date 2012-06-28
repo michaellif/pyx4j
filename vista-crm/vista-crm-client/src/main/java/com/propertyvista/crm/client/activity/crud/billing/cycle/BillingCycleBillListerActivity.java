@@ -54,9 +54,9 @@ public class BillingCycleBillListerActivity extends ListerActivityBase<BillDataD
     @Override
     public void populate() {
         clearPreDefinedFilters();
-        Bill proto = EntityFactory.getEntityPrototype(Bill.class);
-        addPreDefinedFilter(PropertyCriterion.eq(proto.billingCycle(), EntityFactory.createIdentityStub(BillingCycle.class, billingCycleId)));
-        addPreDefinedFilter(PropertyCriterion.eq(proto.billStatus(), billStatusValue));
+        BillDataDTO proto = EntityFactory.getEntityPrototype(BillDataDTO.class);
+        addPreDefinedFilter(PropertyCriterion.eq(proto.bill().billingCycle(), EntityFactory.createIdentityStub(BillingCycle.class, billingCycleId)));
+        addPreDefinedFilter(PropertyCriterion.eq(proto.bill().billStatus(), billStatusValue));
         super.populate();
     }
 }
