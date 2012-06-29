@@ -49,6 +49,8 @@ import com.propertyvista.misc.VistaTODO;
 
 public class LeaseLifecycleSimulator {
 
+    private final static boolean isDebugged = false;
+
     private final static Random RND = new Random(1);
 
     // TODO define these as customizable parameters via builder
@@ -177,9 +179,14 @@ public class LeaseLifecycleSimulator {
         @Override
         public void exec() {
             lease = leaseFacade().init(lease);
-			lease = leaseFacade().setUnit(lease, lease.unit());
+            lease = leaseFacade().setUnit(lease, lease.unit());
             lease = leaseFacade().persist(lease);
-
+            if (isDebugged) {
+                System.out.println("" + now() + " created lease: " + lease.leaseId().getValue() + " " + lease.leaseFrom().getValue() + " - "
+                        + lease.leaseTo().getValue());
+                System.out.println(lease.toString());
+                System.out.println("***");
+            }
             // TODO change that to Employee Agent Decision
             queueEvent(hasImmideateApproval ? now() : rndBetween(now(), lease.leaseFrom().getValue()), new ApproveApplication(lease));
         }
@@ -194,6 +201,12 @@ public class LeaseLifecycleSimulator {
         @Override
         public void exec() {
             leaseFacade().approveApplication(lease, null, "simulation");
+
+            if (isDebugged) {
+                System.out.println("" + now() + " approved lease: " + lease.leaseId().getValue() + " " + lease.leaseFrom().getValue() + " - "
+                        + lease.leaseTo().getValue());
+                System.out.println("***");
+            }
 
             if (!VistaTODO.removedForProduction) {
                 BillingFacade billingFacade = ServerSideFactory.create(BillingFacade.class);
@@ -213,6 +226,11 @@ public class LeaseLifecycleSimulator {
         @Override
         public void exec() {
             leaseFacade().activate(lease.getPrimaryKey());
+            if (isDebugged) {
+                System.out.println("" + now() + " activated lease: " + lease.leaseId().getValue() + " " + lease.leaseFrom().getValue() + " - "
+                        + lease.leaseTo().getValue());
+                System.out.println("***");
+            }
 
             if (runBilling) {
                 queueReccurentBilling();
@@ -276,6 +294,9 @@ public class LeaseLifecycleSimulator {
 
             if (bill != null && !bill.totalDueAmount().getValue().equals(BigDecimal.ZERO)) {
                 BigDecimal amount = tenantAgent.pay(bill);
+                if (isDebugged) {
+                    System.out.println("" + now() + " payed " + amount);
+                }
                 PaymentRecord payment = receivePayment(amount);
                 if (payment != null) {
                     ServerSideFactory.create(ARFacade.class).postPayment(payment);
@@ -360,6 +381,12 @@ public class LeaseLifecycleSimulator {
                         BillingFacade billing = ServerSideFactory.create(BillingFacade.class);
                         billing.runBilling(lease);
                         billing.confirmBill(billing.getLatestBill(lease));
+
+                        if (isDebugged) {
+                            System.out.println("" + now() + " executed run billing lease: " + lease.leaseId().getValue() + " " + lease.leaseFrom().getValue()
+                                    + " - " + lease.leaseTo().getValue());
+                            System.out.println("***");
+                        }
 
                         Calendar cal = Calendar.getInstance();
                         cal.setTime(now());

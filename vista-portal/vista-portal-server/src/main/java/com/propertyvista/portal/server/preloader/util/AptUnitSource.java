@@ -63,6 +63,7 @@ public class AptUnitSource {
 
         EntityQueryCriteria<AptUnit> ucriteria = new EntityQueryCriteria<AptUnit>(AptUnit.class);
         ucriteria.add(PropertyCriterion.eq(ucriteria.proto().building(), building));
+        ucriteria.asc(ucriteria.proto().info().number().getPath().toString());
         units = Persistence.service().query(ucriteria);
         if (units.size() == 0) {
             nextBuilding();

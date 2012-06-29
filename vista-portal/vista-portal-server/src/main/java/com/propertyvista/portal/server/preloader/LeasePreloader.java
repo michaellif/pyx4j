@@ -110,10 +110,9 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
                     simBuilder.availabilityTermConstraints(0l, 0l);
                     simBuilder.reservedTermConstraints(0l, 0l);
                     simBuilder.approveImmidately();
-
                 }
-
                 simBuilder.create().generateRandomLifeCycle(lease);
+
             }
 
             numCreated++;
