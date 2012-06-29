@@ -20,6 +20,7 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
+import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.biz.financial.billing.BillingFacade;
 import com.propertyvista.biz.financial.billing.BillingUtils;
@@ -55,25 +56,15 @@ public class BillCrudServiceImpl extends AbstractCrudServiceDtoImpl<Bill, BillDa
 
     @Override
     public void confirm(AsyncCallback<BillDataDTO> callback, Key entityId) {
-        Bill bill = Persistence.service().retrieve(Bill.class, entityId);
-        if (bill != null) {
-            ServerSideFactory.create(BillingFacade.class).confirmBill(bill);
-            Persistence.service().commit();
-            super.retrieve(callback, entityId, RetrieveTraget.View);
-        } else {
-            throw new IllegalArgumentException();
-        }
+        ServerSideFactory.create(BillingFacade.class).confirmBill(EntityFactory.createIdentityStub(Bill.class, entityId));
+        Persistence.service().commit();
+        super.retrieve(callback, entityId, RetrieveTraget.View);
     }
 
     @Override
     public void reject(AsyncCallback<BillDataDTO> callback, Key entityId, String reason) {
-        Bill bill = Persistence.service().retrieve(Bill.class, entityId);
-        if (bill != null) {
-            ServerSideFactory.create(BillingFacade.class).rejectBill(bill);
-            Persistence.service().commit();
-            super.retrieve(callback, entityId, RetrieveTraget.View);
-        } else {
-            throw new IllegalArgumentException();
-        }
+        ServerSideFactory.create(BillingFacade.class).rejectBill(EntityFactory.createIdentityStub(Bill.class, entityId));
+        Persistence.service().commit();
+        super.retrieve(callback, entityId, RetrieveTraget.View);
     }
 }

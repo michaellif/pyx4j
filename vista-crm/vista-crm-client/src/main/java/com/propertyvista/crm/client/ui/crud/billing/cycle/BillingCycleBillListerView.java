@@ -26,5 +26,9 @@ public interface BillingCycleBillListerView extends IListerView<BillDataDTO> {
         void confirm(List<BillDataDTO> bills);
 
         void reject(List<BillDataDTO> bills, String reason);
+
+        void print(List<BillDataDTO> bills);
     }
+
+    void setActionButtonsVisible(boolean visible);
 }

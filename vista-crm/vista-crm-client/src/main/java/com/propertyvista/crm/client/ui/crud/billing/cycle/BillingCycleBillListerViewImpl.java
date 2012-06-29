@@ -36,6 +36,8 @@ public class BillingCycleBillListerViewImpl extends CrmListerViewImplBase<BillDa
 
     private final Button rejectAction;
 
+    private final Button print;
+
     public BillingCycleBillListerViewImpl() {
         super(CrmSiteMap.Finance.Bill.class);
         setLister(new BillingCycleBillLister());
@@ -68,6 +70,21 @@ public class BillingCycleBillListerViewImpl extends CrmListerViewImplBase<BillDa
             }
         });
         addHeaderToolbarTwoItem(rejectAction.asWidget());
+
+        print = new Button(i18n.tr("Print Selected"), new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                ((BillingCycleBillListerView.Presenter) getPresenter()).print(getLister().getDataTablePanel().getDataTable().getCheckedItems());
+            }
+        });
+        addHeaderToolbarTwoItem(print.asWidget());
+
+    }
+
+    @Override
+    public void setActionButtonsVisible(boolean visible) {
+        approveAction.setVisible(visible);
+        rejectAction.setVisible(visible);
     }
 
     private abstract class ActionBox extends OkCancelDialog {

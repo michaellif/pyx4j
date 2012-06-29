@@ -20,7 +20,9 @@ import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.essentials.client.ReportDialog;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.client.activity.crud.ListerActivityBase;
@@ -30,6 +32,7 @@ import com.propertyvista.crm.client.ui.crud.billing.cycle.BillingCycleBillLister
 import com.propertyvista.crm.client.ui.crud.viewfactories.FinancialViewFactory;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.dto.billing.BillDataDTO;
+import com.propertyvista.crm.rpc.services.billing.BillPrintService;
 import com.propertyvista.crm.rpc.services.billing.BillingCycleBillListService;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.BillingCycle;
@@ -54,6 +57,8 @@ public class BillingCycleBillListerActivity extends ListerActivityBase<BillDataD
 
         assert billingCycleId != null;
         assert billStatusValue != null;
+
+        ((BillingCycleBillListerView) getView()).setActionButtonsVisible(billStatusValue == Bill.BillStatus.Finished);
     }
 
     @Override
@@ -83,5 +88,14 @@ public class BillingCycleBillListerActivity extends ListerActivityBase<BillDataD
                 populate();
             }
         }, new Vector<BillDataDTO>(bills), reason);
+    }
+
+    @Override
+    public void print(List<BillDataDTO> bills) {
+        for (BillDataDTO bill : bills) {
+            EntityQueryCriteria<Bill> criteria = new EntityQueryCriteria<Bill>(Bill.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().id(), bill.bill()));
+            new ReportDialog("Bill", "Creating Bill...").start(GWT.<BillPrintService> create(BillPrintService.class), criteria);
+        }
     }
 }
