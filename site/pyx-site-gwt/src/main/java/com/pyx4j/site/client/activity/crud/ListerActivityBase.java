@@ -78,6 +78,10 @@ public class ListerActivityBase<E extends IEntity> extends AbstractActivity impl
         super.onStop();
     }
 
+    public IListerView<E> getView() {
+        return view;
+    }
+
     public AbstractListService<E> getService() {
         return service;
     }
