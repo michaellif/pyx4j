@@ -24,7 +24,7 @@ import com.pyx4j.entity.shared.IEntity;
 
 public class ViewerViewImplBase<E extends IEntity> extends FormViewImplBase<E> implements IViewerView<E> {
 
-    protected IViewerView.Presenter presenter;
+    private IViewerView.Presenter presenter;
 
     public ViewerViewImplBase() {
         super();
