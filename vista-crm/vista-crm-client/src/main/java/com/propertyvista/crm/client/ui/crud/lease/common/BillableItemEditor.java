@@ -15,12 +15,10 @@ package com.propertyvista.crm.client.ui.crud.lease.common;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.EnumSet;
 import java.util.List;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 
@@ -37,12 +35,10 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.ui.crud.form.IEditorView;
 import com.pyx4j.site.client.ui.crud.misc.CEntitySelectorHyperlink;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
-import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
@@ -60,16 +56,13 @@ import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.ExecutionType;
 import com.propertyvista.domain.tenant.lease.BillableItemExtraData;
-import com.propertyvista.domain.tenant.lease.Deposit;
-import com.propertyvista.domain.tenant.lease.Deposit.DepositStatus;
-import com.propertyvista.domain.tenant.lease.Deposit.DepositType;
 import com.propertyvista.domain.tenant.lease.extradata.Pet;
 import com.propertyvista.domain.tenant.lease.extradata.Vehicle;
 import com.propertyvista.dto.LeaseDTO;
 
 public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
 
-    private static final I18n i18n = I18n.get(BillableItemEditor.class);
+    static final I18n i18n = I18n.get(BillableItemEditor.class);
 
     private final SimplePanel extraDataPanel = new SimplePanel();
 
@@ -116,7 +109,7 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
                     @Override
                     public boolean onClickOk() {
                         List<ProductItem> selectedItems = getSelectedItems();
-                        if (!selectedItems.isEmpty()) {
+                        if (!selectedItems.isEmpty() && leaseEditorView != null) {
                             ((LeaseEditorPresenterBase) leaseEditorView.getPresenter()).setSelectedService(selectedItems.get(0));
                             return true;
                         } else {
@@ -146,10 +139,6 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
 
         adjustmentPanel.setH3(0, 0, 1, i18n.tr("Adjustments"));
         adjustmentPanel.setWidget(1, 0, inject(proto().adjustments(), new AdjustmentFolder()));
-
-// TODO - please follow up on deposit changes
-//        depositPanel.setH3(0, 0, 1, i18n.tr("Deposits"));
-//        depositPanel.setWidget(1, 0, inject(proto().deposits(), new DepositFolder()));
 
         get(proto().effectiveDate()).setVisible(false);
         get(proto().expirationDate()).setVisible(false);
@@ -388,86 +377,5 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
                 return null;
             }
         });
-    }
-
-    private class DepositFolder extends VistaTableFolder<Deposit> {
-
-        public DepositFolder() {
-            super(Deposit.class, i18n.tr("Deposit"), !BillableItemEditor.this.isViewable());
-        }
-
-        @Override
-        public List<EntityFolderColumnDescriptor> columns() {
-            ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
-            columns.add(new EntityFolderColumnDescriptor(proto().type(), "12em"));
-            columns.add(new EntityFolderColumnDescriptor(proto().status(), "8em"));
-            columns.add(new EntityFolderColumnDescriptor(proto().depositDate(), "9em"));
-            columns.add(new EntityFolderColumnDescriptor(proto().refundDate(), "9em"));
-            columns.add(new EntityFolderColumnDescriptor(proto().initialAmount(), "7em"));
-            columns.add(new EntityFolderColumnDescriptor(proto().currentAmount(), "7em"));
-            columns.add(new EntityFolderColumnDescriptor(proto().description(), "15em"));
-            return columns;
-        }
-
-        @Override
-        public CComponent<?, ?> create(IObject<?> member) {
-            if (member instanceof Deposit) {
-                return new BillableItemDepositEditor();
-            }
-            return super.create(member);
-        }
-
-        @Override
-        protected void addItem() {
-            new SelectEnumDialog<DepositType>(i18n.tr("Select Deposit Type"), EnumSet.allOf(DepositType.class)) {
-                @Override
-                public boolean onClickOk() {
-                    createNewItem(new DefaultAsyncCallback<Deposit>() {
-                        @Override
-                        public void onSuccess(Deposit result) {
-                            addItem(result);
-                        }
-                    }, getSelectedType());
-                    return true;
-                }
-            }.show();
-        }
-
-        private void createNewItem(final AsyncCallback<Deposit> callback, final DepositType type) {
-            ((LeaseEditorPresenterBase) leaseEditorView.getPresenter()).createDeposit(new DefaultAsyncCallback<Deposit>() {
-                @Override
-                public void onSuccess(Deposit result) {
-                    if (result == null) { // if there is no deposits of such type - create it 'on the fly':
-                        result = EntityFactory.create(Deposit.class);
-                        result.type().setValue(type);
-                        result.status().setValue(DepositStatus.Created);
-                        result.depositDate().setValue(new LogicalDate());
-                    }
-                    callback.onSuccess(result);
-                }
-            }, type, BillableItemEditor.this.getValue());
-        }
-
-        private class BillableItemDepositEditor extends CEntityFolderRowEditor<Deposit> {
-
-            public BillableItemDepositEditor() {
-                super(Deposit.class, columns());
-                setViewable(false);
-            }
-
-            @Override
-            protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
-                if (isEditable()) {
-                    if (column.getObject() == proto().type() || column.getObject() == proto().status() || column.getObject() == proto().depositDate()
-                            || column.getObject() == proto().refundDate() || column.getObject() == proto().currentAmount()) {
-                        CComponent<?, ?> comp = inject(column.getObject());
-                        comp.inheritEditable(false); // always not editable!
-                        comp.setEditable(false);
-                        return comp;
-                    }
-                }
-                return super.createCell(column);
-            }
-        }
     }
 }

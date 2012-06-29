@@ -72,6 +72,7 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
         addTab(createTenantsTab(i18n.tr("Tenants")));
         addTab(createGuarantorsTab(i18n.tr("Guarantors")));
         addTab(createProductsTab(i18n.tr("Products")));
+        addTab(createDepositsTab(i18n.tr("Deposits")));
 
         chargesTab = addTab(createChargesTab(i18n.tr("Charges")));
     }
@@ -273,6 +274,17 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
 
         main.setH1(++row, 0, 2, proto().version().leaseProducts().concessions().getMeta().getCaption());
         main.setWidget(++row, 0, inject(proto().version().leaseProducts().concessions(), new ConcessionFolder(isEditable(), this)));
+
+        return main;
+    }
+
+    private FormFlexPanel createDepositsTab(String title) {
+        FormFlexPanel main = new FormFlexPanel(title);
+
+        @SuppressWarnings("unchecked")
+        IEditorView<DTO> leaseEditorView = (isEditable() ? (IEditorView<DTO>) getParentView() : null);
+
+        main.setWidget(0, 0, inject(proto().billingAccount().deposits(), new DepositFolder(this, leaseEditorView, isEditable())));
 
         return main;
     }
