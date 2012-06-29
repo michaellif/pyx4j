@@ -13,8 +13,10 @@
  */
 package com.propertyvista.biz.validation.framework.validators;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -36,42 +38,55 @@ public abstract class CompositeEntityValidator<E extends IEntity> implements Ent
 
     private final E proto;
 
-    private final Map<Path, MemberValidator> memberValidators;
+    private final Map<Path, Collection<MemberValidator>> memberValidators;
 
-    private final Map<Path, PrimitiveValidator> primitiveValidators;
+    @SuppressWarnings("rawtypes")
+    private final Map<Path, Collection<PrimitiveValidator>> primitiveValidators;
 
-    private final Map<Path, EntityValidator> entityValidators;
+    @SuppressWarnings("rawtypes")
+    private final Map<Path, Collection<EntityValidator>> entityValidators;
 
-    private final Map<Path, CollectionValidator> collectionValidators;
+    @SuppressWarnings("rawtypes")
+    private final Map<Path, Collection<CollectionValidator>> collectionValidators;
 
+    @SuppressWarnings("rawtypes")
     public CompositeEntityValidator(Class<E> entityClassLiteral) {
-        this.memberValidators = new HashMap<Path, MemberValidator>();
-        this.primitiveValidators = new HashMap<Path, PrimitiveValidator>();
-        this.entityValidators = new HashMap<Path, EntityValidator>();
-        this.collectionValidators = new HashMap<Path, CollectionValidator>();
+        this.memberValidators = new HashMap<Path, Collection<MemberValidator>>();
+        this.primitiveValidators = new HashMap<Path, Collection<PrimitiveValidator>>();
+        this.entityValidators = new HashMap<Path, Collection<EntityValidator>>();
+        this.collectionValidators = new HashMap<Path, Collection<CollectionValidator>>();
         this.proto = EntityFactory.create(entityClassLiteral);
         init();
     }
 
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
     public final Set<ValidationFailure> validate(E obj) {
         Set<ValidationFailure> failures = new HashSet<ValidationFailure>();
 
-        for (Entry<Path, MemberValidator> entry : memberValidators.entrySet()) {
-            Set<ValidationFailure> subFailures = entry.getValue().validate(obj.getMember(entry.getKey()));
-            failures.addAll(subFailures);
+        for (Entry<Path, Collection<MemberValidator>> entry : memberValidators.entrySet()) {
+            for (MemberValidator validator : entry.getValue()) {
+                Set<ValidationFailure> subFailures = validator.validate(obj.getMember(entry.getKey()));
+                failures.addAll(subFailures);
+            }
         }
-        for (Entry<Path, PrimitiveValidator> entry : primitiveValidators.entrySet()) {
-            Set<ValidationFailure> subFailures = entry.getValue().validate((IPrimitive) obj.getMember(entry.getKey()));
-            failures.addAll(subFailures);
+        for (Entry<Path, Collection<PrimitiveValidator>> entry : primitiveValidators.entrySet()) {
+            for (PrimitiveValidator validator : entry.getValue()) {
+                Set<ValidationFailure> subFailures = validator.validate((IPrimitive) obj.getMember(entry.getKey()));
+                failures.addAll(subFailures);
+            }
         }
-        for (Entry<Path, EntityValidator> entry : entityValidators.entrySet()) {
-            Set<ValidationFailure> subFailures = entry.getValue().validate((IEntity) obj.getMember(entry.getKey()));
-            failures.addAll(subFailures);
+        for (Entry<Path, Collection<EntityValidator>> entry : entityValidators.entrySet()) {
+            for (EntityValidator validator : entry.getValue()) {
+                Set<ValidationFailure> subFailures = validator.validate((IEntity) obj.getMember(entry.getKey()));
+                failures.addAll(subFailures);
+            }
         }
-        for (Entry<Path, CollectionValidator> entry : collectionValidators.entrySet()) {
-            Set<ValidationFailure> subFailures = entry.getValue().validate((ICollection) obj.getMember(entry.getKey()));
-            failures.addAll(subFailures);
+        for (Entry<Path, Collection<CollectionValidator>> entry : collectionValidators.entrySet()) {
+            for (CollectionValidator validator : entry.getValue()) {
+                Set<ValidationFailure> subFailures = validator.validate((ICollection) obj.getMember(entry.getKey()));
+                failures.addAll(subFailures);
+            }
         }
 
         return failures;
@@ -81,22 +96,39 @@ public abstract class CompositeEntityValidator<E extends IEntity> implements Ent
         return proto;
     }
 
+    /**
+     * Override this method to create validator bindings using <code>bind()</code>
+     */
     protected abstract void init();
 
     protected final void bind(IObject<?> member, MemberValidator validator) {
-        memberValidators.put(member.getPath(), validator);
+        bind(memberValidators, member, validator);
     }
 
     protected final <T extends Object> void bind(IPrimitive<T> primitiveMember, PrimitiveValidator<T> validator) {
-        primitiveValidators.put(primitiveMember.getPath(), validator);
+        bind(primitiveValidators, primitiveMember, validator);
     }
 
     protected final <T extends IEntity> void bind(T member, EntityValidator<T> validator) {
-        entityValidators.put(member.getPath(), validator);
+        bind(entityValidators, member, validator);
     }
 
     protected final <T extends IEntity> void bind(ICollection<T, ?> member, CollectionValidator<T> validator) {
-        collectionValidators.put(member.getPath(), validator);
+        bind(collectionValidators, member, validator);
     }
 
+    /**
+     * Bind validator for the entities contained in the collection
+     */
+    protected final <T extends IEntity> void bind(ICollection<T, ?> member, EntityValidator<T> itemValidator) {
+        bind(collectionValidators, member, new CollectionContentValidator<T>(itemValidator));
+    }
+
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    private final static void bind(Map map, IObject<?> member, Object validator) {
+        if (!map.containsKey(member.getPath())) {
+            map.put(member.getPath(), new LinkedList());
+        }
+        ((LinkedList) map.get(member.getPath())).add(validator);
+    }
 }

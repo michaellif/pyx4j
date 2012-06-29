@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.biz.validation.framework;
+package com.propertyvista.biz.validation.framework.validators;
 
 import java.util.HashSet;
 import java.util.Iterator;
@@ -19,6 +19,10 @@ import java.util.Set;
 
 import com.pyx4j.entity.shared.ICollection;
 import com.pyx4j.entity.shared.IEntity;
+
+import com.propertyvista.biz.validation.framework.CollectionValidator;
+import com.propertyvista.biz.validation.framework.EntityValidator;
+import com.propertyvista.biz.validation.framework.ValidationFailure;
 
 public class CollectionContentValidator<E extends IEntity> implements CollectionValidator<E> {
 

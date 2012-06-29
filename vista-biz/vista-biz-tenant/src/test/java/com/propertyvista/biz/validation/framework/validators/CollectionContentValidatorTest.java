@@ -13,7 +13,6 @@
  */
 package com.propertyvista.biz.validation.framework.validators;
 
-import java.util.HashSet;
 import java.util.Set;
 
 import org.junit.Assert;
@@ -21,26 +20,11 @@ import org.junit.Test;
 
 import com.pyx4j.entity.shared.EntityFactory;
 
-import com.propertyvista.biz.validation.framework.CollectionContentValidator;
-import com.propertyvista.biz.validation.framework.EntityValidator;
-import com.propertyvista.biz.validation.framework.SimpleValidationFailure;
 import com.propertyvista.biz.validation.framework.ValidationFailure;
 import com.propertyvista.biz.validation.framework.domain.EntityA;
 import com.propertyvista.biz.validation.framework.domain.EntityB;
 
 public class CollectionContentValidatorTest {
-
-    // validates that value is zero
-    private static class TestEntityValidator implements EntityValidator<EntityB> {
-        @Override
-        public Set<ValidationFailure> validate(EntityB entity) {
-            Set<ValidationFailure> result = new HashSet<ValidationFailure>();
-            if (entity.isNull() || !entity.value().getValue().equals(new Integer(0))) {
-                result.add(new SimpleValidationFailure(entity, "value should be equal to zero"));
-            }
-            return result;
-        }
-    }
 
     @Test
     public void testCollectionsContetnValidator() {

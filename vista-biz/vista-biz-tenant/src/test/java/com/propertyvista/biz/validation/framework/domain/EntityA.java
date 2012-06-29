@@ -23,6 +23,8 @@ public interface EntityA extends IEntity {
 
     EntityB child();
 
+    EntityC anotherChild();
+
     IList<EntityB> children();
 
 }
