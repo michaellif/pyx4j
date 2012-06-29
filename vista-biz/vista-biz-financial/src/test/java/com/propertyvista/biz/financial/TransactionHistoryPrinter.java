@@ -43,8 +43,8 @@ public class TransactionHistoryPrinter {
             out.write("\nCurrent Balance: " + transactionHistory.currentBalanceAmount().getValue());
             out.newLine();
             out.newLine();
-            out.write(convertToCell("Date", 14, true) + convertToCell("Description", 60, true) + convertToCell("Debits", 14, true)
-                    + convertToCell("Credits", 14, true));
+            out.write(convertToCell("Post Date", 14, true) + convertToCell("Due Date", 14, true) + convertToCell("Description", 60, true)
+                    + convertToCell("Debits", 14, true) + convertToCell("Credits", 14, true));
             out.newLine();
 
             for (InvoiceLineItem lineItem : transactionHistory.lineItems()) {
@@ -77,17 +77,20 @@ public class TransactionHistoryPrinter {
 
         String debits = null;
         String credits = null;
+        String dueDate = null;
         if (lineItem.isInstanceOf(InvoiceDebit.class)) {
             InvoiceDebit invoiceDebit = lineItem.cast();
             debits = convertToCell(lineItem.amount().getValue().add(invoiceDebit.taxTotal().getValue()).toString(), 14, true);
             credits = convertToCell("", 14, true);
+            dueDate = convertToCell(invoiceDebit.dueDate().getValue().toString(), 14, true);
         } else if (lineItem.isInstanceOf(InvoiceCredit.class)) {
             debits = convertToCell("", 14, true);
             credits = convertToCell(lineItem.amount().getValue().negate().toString(), 14, true);
+            dueDate = convertToCell("", 14, true);
         } else {
             throw new IllegalArgumentException();
         }
-        return convertToCell(lineItem.postDate().getValue().toString(), 14, true)
+        return convertToCell(lineItem.postDate().getValue().toString(), 14, true) + dueDate
                 + convertToCell(lineItem.description().isNull() ? "" : lineItem.description().getValue().toString(), 60, true) + debits + credits;
     }
 

@@ -63,5 +63,4 @@ public class ARNSFProcessor extends AbstractARProcessor {
 
         ARTransactionManager.postInvoiceLineItem(charge);
     }
-
 }

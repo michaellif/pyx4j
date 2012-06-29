@@ -99,7 +99,7 @@ public class BillingLifecycleManager {
                 }
             }
         });
-        runBilling(billingCycle, filteredLeaseIterator, true, dynamicStatisticsRecord);
+        runBilling(billingCycle, filteredLeaseIterator, dynamicStatisticsRecord);
     }
 
     static void runBilling(LogicalDate date, StatisticsRecord dynamicStatisticsRecord) {
@@ -117,26 +117,19 @@ public class BillingLifecycleManager {
         }
     }
 
-    private static void runBilling(BillingCycle billingCycle, Iterator<Lease> leasesIterator, boolean manageTransactions,
-            StatisticsRecord dynamicStatisticsRecord) {
-        if (manageTransactions) {
-            Persistence.service().commit();
-        }
+    private static void runBilling(BillingCycle billingCycle, Iterator<Lease> leasesIterator, StatisticsRecord dynamicStatisticsRecord) {
+        Persistence.service().commit();
         try {
             while (leasesIterator.hasNext()) {
                 BillCreationResult result = new BillCreationResult(createBill(billingCycle, leasesIterator.next(), false));
                 appendStats(dynamicStatisticsRecord, result);
-                if (manageTransactions) {
-                    Persistence.service().commit();
-                }
+                Persistence.service().commit();
             }
         } catch (Throwable e) {
             Persistence.service().rollback();
             log.error("Bill run error", e);
             appendStats(dynamicStatisticsRecord, new BillCreationResult(i18n.tr("Bill run error")));
-            if (manageTransactions) {
-                Persistence.service().commit();
-            }
+            Persistence.service().commit();
         }
     }
 

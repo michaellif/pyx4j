@@ -27,16 +27,33 @@ public class ARDateUtils {
     private static final I18n i18n = I18n.get(ARDateUtils.class);
 
     static LogicalDate calculateDueDate(BillingAccount billingAccount) {
-        // TODO - this is used to set the due date for immediate charges, which is the start date of
-        // next bill, in case it's coming in time. If not, all kind of aspects must be accounted...
-        // For now we just return the next billing period start date
-        Calendar dueDate = new GregorianCalendar();
-        int dayOfMonth = billingAccount.billingType().billingCycleStartDay().getValue();
-        dueDate.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-        if (dueDate.before(SysDateManager.getSysDate())) {
-            dueDate.add(Calendar.MONTH, 1);
+        return calculateDueDate(billingAccount, new LogicalDate(SysDateManager.getSysDate()));
+    }
+
+    static LogicalDate calculateDueDate(BillingAccount billingAccount, LogicalDate postDate) {
+        LogicalDate dueDate = null;
+
+        switch (billingAccount.billingType().paymentFrequency().getValue()) {
+        case Monthly:
+            Calendar calendar = new GregorianCalendar();
+            calendar.setTime(postDate);
+            int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
+            while (dayOfMonth != billingAccount.billingType().billingCycleStartDay().getValue()) {
+                calendar.add(Calendar.DATE, 1);
+                dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
+            }
+            dueDate = new LogicalDate(calendar.getTime());
+            break;
+        case Weekly:
+        case BiWeekly:
+        case SemiMonthly:
+        case SemiAnnyally:
+        case Annually:
+            //TODO
+            throw new Error("Not implemented");
         }
-        return new LogicalDate(dueDate.getTime());
+
+        return dueDate;
     }
 
 }
