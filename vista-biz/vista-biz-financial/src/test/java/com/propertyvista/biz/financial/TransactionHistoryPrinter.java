@@ -82,7 +82,11 @@ public class TransactionHistoryPrinter {
             InvoiceDebit invoiceDebit = lineItem.cast();
             debits = convertToCell(lineItem.amount().getValue().add(invoiceDebit.taxTotal().getValue()).toString(), 14, true);
             credits = convertToCell("", 14, true);
-            dueDate = convertToCell(invoiceDebit.dueDate().getValue().toString(), 14, true);
+            if (invoiceDebit.dueDate().getValue() == null) {
+                dueDate = convertToCell("N/A", 14, true);
+            } else {
+                dueDate = convertToCell(invoiceDebit.dueDate().getValue().toString(), 14, true);
+            }
         } else if (lineItem.isInstanceOf(InvoiceCredit.class)) {
             debits = convertToCell("", 14, true);
             credits = convertToCell(lineItem.amount().getValue().negate().toString(), 14, true);

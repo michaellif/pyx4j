@@ -37,12 +37,56 @@ public class BillingLeaseOnlyScenarioTest extends FinancialTestBase {
 
     public void testScenario() {
 
+        SysDateManager.setSysDate("15-Feb-2011");
+
+        setLeaseTerms("3-Mar-2011", "31-Aug-2011");
+
+        Bill bill = runBillingPreview();
+
+        // @formatter:off
+        new BillTester(bill).
+        billSequenceNumber(0).
+        previousBillSequenceNumber(null).
+        billType(Bill.BillType.First).
+        billingPeriodStartDate("3-Mar-2011").
+        billingPeriodEndDate("31-Mar-2011").
+        numOfProductCharges(1).
+        paymentReceivedAmount("0.00").
+        serviceCharge("840.27").
+        recurringFeatureCharges("0.00").
+        oneTimeFeatureCharges("0.00").
+        depositAmount("930.30").
+        taxes("100.83").
+        totalDueAmount("1871.40");
+        // @formatter:on
+
+        SysDateManager.setSysDate("16-Feb-2011");
+
         setLeaseTerms("1-Mar-2011", "31-Aug-2011");
+
+        bill = runBillingPreview();
+
+        // @formatter:off
+        new BillTester(bill).
+        billSequenceNumber(0).
+        previousBillSequenceNumber(null).
+        billType(Bill.BillType.First).
+        billingPeriodStartDate("1-Mar-2011").
+        billingPeriodEndDate("31-Mar-2011").
+        numOfProductCharges(1).
+        paymentReceivedAmount("0.00").
+        serviceCharge("930.30").
+        recurringFeatureCharges("0.00").
+        oneTimeFeatureCharges("0.00").
+        depositAmount("930.30").
+        taxes("111.64").
+        totalDueAmount("1972.24");
+        // @formatter:on
 
         //==================== RUN 1 ======================//
 
         SysDateManager.setSysDate("17-Feb-2011");
-        Bill bill = approveApplication();
+        bill = approveApplication();
 
         bill = confirmBill(bill, true, true);
 
