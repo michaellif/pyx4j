@@ -34,7 +34,6 @@ import com.propertyvista.admin.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.portal.rpc.shared.SiteWasNotActivatedUserRuntimeException;
-import com.propertyvista.portal.rpc.shared.SiteWasNotSetUpUserRuntimeException;
 
 public class VistaNamespaceResolver implements NamespaceResolver {
 
@@ -95,7 +94,7 @@ public class VistaNamespaceResolver implements NamespaceResolver {
         String pmcNamespace;
         try {
             NamespaceManager.setNamespace(VistaNamespace.adminNamespace);
-            pmcNamespace = CacheService.get("NamespaceResolver." + host);
+            pmcNamespace = CacheService.get(VistaNamespaceResolver.class.getName() + "." + host);
             if (pmcNamespace == null) {
                 EntityQueryCriteria<Pmc> criteria = EntityQueryCriteria.create(Pmc.class);
                 if (namespaceProposal != null) {
@@ -109,35 +108,30 @@ public class VistaNamespaceResolver implements NamespaceResolver {
                 }
                 Pmc pmc = Persistence.service().retrieve(criteria);
                 if (pmc != null) {
-
                     if (pmc.status().getValue() != PmcStatus.Active) {
-                        throw new SiteWasNotActivatedUserRuntimeException(i18n.tr("This property management site was not activated yet"));
+                        // Avoid Query for every request
+                        pmcNamespace = "_";
+                    } else {
+                        pmcNamespace = pmc.namespace().getValue();
                     }
-
-                    pmcNamespace = pmc.namespace().getValue();
-                    CacheService.put("NamespaceResolver." + host, pmcNamespace);
+                } else {
+                    pmcNamespace = "_";
                 }
+                CacheService.put(VistaNamespaceResolver.class.getName() + "." + host, pmcNamespace);
             }
         } finally {
             NamespaceManager.remove();
         }
 
-        if (pmcNamespace == null) {
+        if ((pmcNamespace == null) || ("_".equals(pmcNamespace))) {
             if (httprequest.getServletPath() != null) {
                 if (httprequest.getServletPath().startsWith("/o/db-reset")) {
                     return VistaNamespace.demoNamespace;
                 }
             }
-            throw new SiteWasNotSetUpUserRuntimeException(i18n.tr("This property management site was not set-up yet"));
+            throw new SiteWasNotActivatedUserRuntimeException(i18n.tr("This property management site was not activated yet"));
+        } else {
+            return pmcNamespace;
         }
-
-        // Avoid Query for every request
-        try {
-            NamespaceManager.setNamespace(VistaNamespace.adminNamespace);
-            CacheService.put(host, pmcNamespace);
-        } finally {
-            NamespaceManager.remove();
-        }
-        return pmcNamespace;
     }
 }
