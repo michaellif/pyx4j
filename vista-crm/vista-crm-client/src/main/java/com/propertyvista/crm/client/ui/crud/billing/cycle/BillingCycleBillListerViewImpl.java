@@ -74,7 +74,9 @@ public class BillingCycleBillListerViewImpl extends CrmListerViewImplBase<BillDa
         print = new Button(i18n.tr("Print Selected"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                ((BillingCycleBillListerView.Presenter) getPresenter()).print(getLister().getDataTablePanel().getDataTable().getCheckedItems());
+                if (!getLister().getDataTablePanel().getDataTable().getCheckedItems().isEmpty()) {
+                    ((BillingCycleBillListerView.Presenter) getPresenter()).print(getLister().getDataTablePanel().getDataTable().getCheckedItems());
+                }
             }
         });
         addHeaderToolbarTwoItem(print.asWidget());
