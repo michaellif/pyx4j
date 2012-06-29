@@ -198,7 +198,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         if (confirm) {
             bill = ServerSideFactory.create(BillingFacade.class).confirmBill(bill);
         } else {
-            bill = ServerSideFactory.create(BillingFacade.class).rejectBill(bill);
+            bill = ServerSideFactory.create(BillingFacade.class).rejectBill(bill, "Just test");
         }
 
         Persistence.service().commit();

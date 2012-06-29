@@ -253,8 +253,11 @@ public class BillingLifecycleManager {
         return verifyBill(billStub, BillStatus.Confirmed);
     }
 
-    static Bill rejectBill(Bill billStub) {
-        return verifyBill(billStub, BillStatus.Rejected);
+    static Bill rejectBill(Bill billStub, String reason) {
+        Bill bill = verifyBill(billStub, BillStatus.Rejected);
+        bill.rejectReason().setValue(reason);
+        Persistence.service().persist(bill);
+        return bill;
     }
 
     private static Bill verifyBill(Bill billStub, BillStatus billStatus) {

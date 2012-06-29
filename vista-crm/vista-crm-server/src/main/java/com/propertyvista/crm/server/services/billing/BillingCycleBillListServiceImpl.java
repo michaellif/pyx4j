@@ -50,7 +50,7 @@ public class BillingCycleBillListServiceImpl extends AbstractListServiceDtoImpl<
     @Override
     public void reject(AsyncCallback<VoidSerializable> callback, Vector<BillDataDTO> bills, String reason) {
         for (BillDataDTO bill : bills) {
-            ServerSideFactory.create(BillingFacade.class).rejectBill(bill.bill());
+            ServerSideFactory.create(BillingFacade.class).rejectBill(bill.bill(), reason);
             Persistence.service().commit();
         }
         callback.onSuccess(null);

@@ -37,7 +37,7 @@ public interface BillingFacade {
 
     Bill confirmBill(Bill billStub);
 
-    Bill rejectBill(Bill billStub);
+    Bill rejectBill(Bill billStub, String reason);
 
     // Processes
     void runBilling(LogicalDate date, StatisticsRecord dynamicStatisticsRecord);

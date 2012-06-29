@@ -63,7 +63,7 @@ public class BillCrudServiceImpl extends AbstractCrudServiceDtoImpl<Bill, BillDa
 
     @Override
     public void reject(AsyncCallback<BillDataDTO> callback, Key entityId, String reason) {
-        ServerSideFactory.create(BillingFacade.class).rejectBill(EntityFactory.createIdentityStub(Bill.class, entityId));
+        ServerSideFactory.create(BillingFacade.class).rejectBill(EntityFactory.createIdentityStub(Bill.class, entityId), reason);
         Persistence.service().commit();
         super.retrieve(callback, entityId, RetrieveTraget.View);
     }
