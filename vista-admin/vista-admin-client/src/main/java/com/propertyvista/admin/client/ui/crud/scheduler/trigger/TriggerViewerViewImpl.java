@@ -55,7 +55,7 @@ public class TriggerViewerViewImpl extends AdminViewerViewImplBase<Trigger> impl
         Button refresh = new Button(i18n.tr("Refresh"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                ((TriggerViewerView.Presenter) presenter).refresh();
+                ((TriggerViewerView.Presenter) getPresenter()).refresh();
             }
         });
         addHeaderToolbarTwoItem(refresh.asWidget());
@@ -63,7 +63,7 @@ public class TriggerViewerViewImpl extends AdminViewerViewImplBase<Trigger> impl
         runImmediately = new Button(i18n.tr("Run Immediatly"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                ((TriggerViewerView.Presenter) presenter).runImmediately();
+                ((TriggerViewerView.Presenter) getPresenter()).runImmediately();
             }
         });
         addHeaderToolbarTwoItem(runImmediately.asWidget());
@@ -74,7 +74,7 @@ public class TriggerViewerViewImpl extends AdminViewerViewImplBase<Trigger> impl
                 new ScheduleBox() {
                     @Override
                     public boolean onClickOk() {
-                        ((TriggerViewerView.Presenter) presenter).runForDate(getValue());
+                        ((TriggerViewerView.Presenter) getPresenter()).runForDate(getValue());
                         return true;
                     }
                 }.show();

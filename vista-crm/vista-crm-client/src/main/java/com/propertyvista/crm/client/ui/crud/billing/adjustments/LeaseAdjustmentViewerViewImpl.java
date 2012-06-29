@@ -36,7 +36,7 @@ public class LeaseAdjustmentViewerViewImpl extends CrmViewerViewImplBase<LeaseAd
         submitAction = new Button(i18n.tr("Submit"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                ((LeaseAdjustmentViewerView.Presenter) presenter).submitAdjustment();
+                ((LeaseAdjustmentViewerView.Presenter) getPresenter()).submitAdjustment();
             }
         });
         addHeaderToolbarTwoItem(submitAction.asWidget());

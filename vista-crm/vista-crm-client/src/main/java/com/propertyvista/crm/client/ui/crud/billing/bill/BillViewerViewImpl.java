@@ -41,52 +41,52 @@ public class BillViewerViewImpl extends CrmViewerViewImplBase<BillDataDTO> imple
 
     private final Button approveAction;
 
-    private final Button declineAction;
+    private final Button rejectAction;
 
-    private final Button print;
+    private final Button printAction;
 
     public BillViewerViewImpl() {
         super(CrmSiteMap.Finance.Bill.class, new BillDataForm(true), true);
 
         // Add actions:
 
-        print = new Button(PRINT, new ClickHandler() {
+        printAction = new Button(PRINT, new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                ((BillViewerView.Presenter) presenter).print();
+                ((BillViewerView.Presenter) getPresenter()).print();
             }
         });
-        addHeaderToolbarTwoItem(print.asWidget());
+        addHeaderToolbarTwoItem(printAction.asWidget());
 
         approveAction = new Button(APPROVE, new ClickHandler() {
 
             @Override
             public void onClick(ClickEvent event) {
-                ((BillViewerView.Presenter) presenter).confirm();
+                ((BillViewerView.Presenter) getPresenter()).confirm();
             }
         });
         addHeaderToolbarTwoItem(approveAction.asWidget());
 
-        declineAction = new Button(DECLINE, new ClickHandler() {
+        rejectAction = new Button(DECLINE, new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 new ActionBox(DECLINE) {
                     @Override
                     public boolean onClickOk() {
-                        ((BillViewerView.Presenter) presenter).reject(getReason());
+                        ((BillViewerView.Presenter) getPresenter()).reject(getReason());
                         return true;
                     }
                 }.show();
             }
         });
-        addHeaderToolbarTwoItem(declineAction.asWidget());
+        addHeaderToolbarTwoItem(rejectAction.asWidget());
 
     }
 
     @Override
     public void populate(BillDataDTO value) {
         approveAction.setVisible(value.bill().billStatus().getValue() == BillStatus.Finished);
-        declineAction.setVisible(value.bill().billStatus().getValue() == BillStatus.Finished);
+        rejectAction.setVisible(value.bill().billStatus().getValue() == BillStatus.Finished);
         super.populate(value);
     }
 

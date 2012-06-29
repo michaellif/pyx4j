@@ -63,7 +63,7 @@ public class PmcViewerViewImpl extends AdminViewerViewImplBase<PmcDTO> implement
 
             @Override
             public void onClick(ClickEvent event) {
-                ((PmcViewerActivity) presenter).resetCache();
+                ((PmcViewerActivity) getPresenter()).resetCache();
             }
         });
         addHeaderToolbarTwoItem(resetCache);
@@ -72,7 +72,7 @@ public class PmcViewerViewImpl extends AdminViewerViewImplBase<PmcDTO> implement
 
             @Override
             public void onClick(ClickEvent event) {
-                ((PmcViewerActivity) presenter).suspend();
+                ((PmcViewerActivity) getPresenter()).suspend();
             }
         });
         addHeaderToolbarTwoItem(suspendBtn);
@@ -81,7 +81,7 @@ public class PmcViewerViewImpl extends AdminViewerViewImplBase<PmcDTO> implement
 
             @Override
             public void onClick(ClickEvent event) {
-                ((PmcViewerActivity) presenter).activate();
+                ((PmcViewerActivity) getPresenter()).activate();
 
             }
         });

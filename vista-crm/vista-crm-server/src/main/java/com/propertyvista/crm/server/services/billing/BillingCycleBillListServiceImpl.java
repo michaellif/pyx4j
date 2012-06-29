@@ -13,8 +13,16 @@
  */
 package com.propertyvista.crm.server.services.billing;
 
-import com.pyx4j.entity.server.AbstractListServiceDtoImpl;
+import java.util.Vector;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
+import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.server.AbstractListServiceDtoImpl;
+import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.rpc.shared.VoidSerializable;
+
+import com.propertyvista.biz.financial.billing.BillingFacade;
 import com.propertyvista.crm.rpc.dto.billing.BillDataDTO;
 import com.propertyvista.crm.rpc.services.billing.BillingCycleBillListService;
 import com.propertyvista.domain.financial.billing.Bill;
@@ -28,5 +36,23 @@ public class BillingCycleBillListServiceImpl extends AbstractListServiceDtoImpl<
     @Override
     protected void bind() {
         bind(dboClass, dtoProto.bill(), dboProto);
+    }
+
+    @Override
+    public void confirm(AsyncCallback<VoidSerializable> callback, Vector<BillDataDTO> bills) {
+        for (BillDataDTO bill : bills) {
+            ServerSideFactory.create(BillingFacade.class).confirmBill(bill.bill());
+            Persistence.service().commit();
+        }
+        callback.onSuccess(null);
+    }
+
+    @Override
+    public void reject(AsyncCallback<VoidSerializable> callback, Vector<BillDataDTO> bills, String reason) {
+        for (BillDataDTO bill : bills) {
+            ServerSideFactory.create(BillingFacade.class).rejectBill(bill.bill());
+            Persistence.service().commit();
+        }
+        callback.onSuccess(null);
     }
 }

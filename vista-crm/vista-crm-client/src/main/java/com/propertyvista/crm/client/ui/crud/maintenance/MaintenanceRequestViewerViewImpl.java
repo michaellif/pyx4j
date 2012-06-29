@@ -56,7 +56,7 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
                 new ScheduleBox() {
                     @Override
                     public boolean onClickOk() {
-                        ((MaintenanceRequestViewerView.Presenter) presenter).scheduleAction(getValue());
+                        ((MaintenanceRequestViewerView.Presenter) getPresenter()).scheduleAction(getValue());
                         return true;
                     }
                 }.show();
@@ -67,7 +67,7 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
         resolveAction = new Button(i18n.tr("Resolve"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                ((MaintenanceRequestViewerView.Presenter) presenter).resolveAction();
+                ((MaintenanceRequestViewerView.Presenter) getPresenter()).resolveAction();
             }
         });
         addHeaderToolbarTwoItem(resolveAction.asWidget());
@@ -78,7 +78,7 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
                 new RateBox(getForm().getValue().surveyResponse()) {
                     @Override
                     public boolean onClickOk() {
-                        ((MaintenanceRequestViewerView.Presenter) presenter).rateAction(getValue());
+                        ((MaintenanceRequestViewerView.Presenter) getPresenter()).rateAction(getValue());
                         return true;
                     }
                 }.show();
@@ -92,7 +92,7 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
                 MessageDialog.confirm(i18n.tr("Cancel"), i18n.tr("Do you really want to cancel the request?"), new Command() {
                     @Override
                     public void execute() {
-                        ((MaintenanceRequestViewerView.Presenter) presenter).cancelAction();
+                        ((MaintenanceRequestViewerView.Presenter) getPresenter()).cancelAction();
                     }
                 });
             }

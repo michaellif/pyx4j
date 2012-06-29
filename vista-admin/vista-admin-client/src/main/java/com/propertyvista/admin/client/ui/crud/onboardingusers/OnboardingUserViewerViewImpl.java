@@ -46,6 +46,6 @@ public class OnboardingUserViewerViewImpl extends AdminViewerViewImplBase<Onboar
     @Override
     public void populate(OnboardingUserDTO value) {
         super.populate(value);
-        passwordAction.setVisible(presenter.canEdit());
+        passwordAction.setVisible(getPresenter().canEdit());
     }
 }

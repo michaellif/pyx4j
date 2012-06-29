@@ -58,7 +58,7 @@ public class AggregatedTransferViewerViewImpl extends CrmViewerViewImplBase<Aggr
                 MessageDialog.confirm(i18n.tr("Cancel"), i18n.tr("Do you really want to cancel the transaction?"), new Command() {
                     @Override
                     public void execute() {
-                        ((AggregatedTransferViewerView.Presenter) presenter).cancelAction();
+                        ((AggregatedTransferViewerView.Presenter) getPresenter()).cancelAction();
                     }
                 });
             }

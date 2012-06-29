@@ -13,10 +13,18 @@
  */
 package com.propertyvista.crm.client.ui.crud.billing.cycle;
 
+import java.util.List;
+
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 
 import com.propertyvista.crm.rpc.dto.billing.BillDataDTO;
 
 public interface BillingCycleBillListerView extends IListerView<BillDataDTO> {
 
+    interface Presenter extends IListerView.Presenter<BillDataDTO> {
+
+        void confirm(List<BillDataDTO> bills);
+
+        void reject(List<BillDataDTO> bills, String reason);
+    }
 }

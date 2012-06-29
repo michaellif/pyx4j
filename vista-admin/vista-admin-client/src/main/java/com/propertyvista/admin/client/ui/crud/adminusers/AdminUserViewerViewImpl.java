@@ -46,6 +46,6 @@ public class AdminUserViewerViewImpl extends AdminViewerViewImplBase<AdminUserDT
     @Override
     public void populate(AdminUserDTO value) {
         super.populate(value);
-        passwordAction.setVisible(presenter.canEdit());
+        passwordAction.setVisible(getPresenter().canEdit());
     }
 }

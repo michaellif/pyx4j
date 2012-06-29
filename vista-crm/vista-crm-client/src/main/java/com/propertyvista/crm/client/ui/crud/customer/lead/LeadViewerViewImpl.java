@@ -52,7 +52,7 @@ public class LeadViewerViewImpl extends CrmViewerViewImplBase<Lead> implements L
         convertAction = new Button(i18n.tr("Convert to Lease"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                ((LeadViewerView.Presenter) presenter).getInterestedUnits(new DefaultAsyncCallback<List<AptUnit>>() {
+                ((LeadViewerView.Presenter) getPresenter()).getInterestedUnits(new DefaultAsyncCallback<List<AptUnit>>() {
                     @Override
                     public void onSuccess(List<AptUnit> result) {
                         int i = result.size();
@@ -64,7 +64,7 @@ public class LeadViewerViewImpl extends CrmViewerViewImplBase<Lead> implements L
                         }) {
                             @Override
                             public boolean onClickOk() {
-                                ((LeadViewerView.Presenter) presenter).convertToLease(getSelectedItems().get(0).getPrimaryKey());
+                                ((LeadViewerView.Presenter) getPresenter()).convertToLease(getSelectedItems().get(0).getPrimaryKey());
                                 return true;
                             }
 
@@ -86,7 +86,7 @@ public class LeadViewerViewImpl extends CrmViewerViewImplBase<Lead> implements L
                 MessageDialog.confirm(i18n.tr("Confirm"), i18n.tr("Do you really want to close the Lead?"), new Command() {
                     @Override
                     public void execute() {
-                        ((LeadViewerView.Presenter) presenter).close();
+                        ((LeadViewerView.Presenter) getPresenter()).close();
                     }
                 });
             }

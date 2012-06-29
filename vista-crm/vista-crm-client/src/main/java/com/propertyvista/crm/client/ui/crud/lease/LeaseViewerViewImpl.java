@@ -97,13 +97,13 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
         sendMail = new Button(i18n.tr("Send Mail..."), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                ((LeaseViewerView.Presenter) presenter).retrieveUsers(new DefaultAsyncCallback<List<LeaseParticipant>>() {
+                ((LeaseViewerView.Presenter) getPresenter()).retrieveUsers(new DefaultAsyncCallback<List<LeaseParticipant>>() {
                     @Override
                     public void onSuccess(List<LeaseParticipant> result) {
                         new SendMailBox(result) {
                             @Override
                             public boolean onClickOk() {
-                                ((LeaseViewerView.Presenter) presenter).sendMail(getSelectedItems(), getEmailType());
+                                ((LeaseViewerView.Presenter) getPresenter()).sendMail(getSelectedItems(), getEmailType());
                                 return true;
                             }
                         }.show();
@@ -116,7 +116,7 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
         runBill = new Button(i18n.tr("Run Bill"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                ((LeaseViewerView.Presenter) presenter).startBilling();
+                ((LeaseViewerView.Presenter) getPresenter()).startBilling();
             }
         });
         addHeaderToolbarTwoItem(runBill.asWidget());
@@ -127,8 +127,8 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
                 new TermLeaseBox(CompletionType.Notice) {
                     @Override
                     public boolean onClickOk() {
-                        ((LeaseViewerView.Presenter) presenter).notice(getValue().version().moveOutNotice().getValue(), getValue().version().expectedMoveOut()
-                                .getValue());
+                        ((LeaseViewerView.Presenter) getPresenter()).notice(getValue().version().moveOutNotice().getValue(), getValue().version()
+                                .expectedMoveOut().getValue());
                         return true;
                     }
                 }.show();
@@ -139,7 +139,7 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
         cancelNotice = new Button(i18n.tr("Cancel Notice"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                ((LeaseViewerView.Presenter) presenter).cancelNotice();
+                ((LeaseViewerView.Presenter) getPresenter()).cancelNotice();
             }
         });
         addHeaderToolbarTwoItem(cancelNotice.asWidget());
@@ -150,8 +150,8 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
                 new TermLeaseBox(CompletionType.Eviction) {
                     @Override
                     public boolean onClickOk() {
-                        ((LeaseViewerView.Presenter) presenter).evict(getValue().version().moveOutNotice().getValue(), getValue().version().expectedMoveOut()
-                                .getValue());
+                        ((LeaseViewerView.Presenter) getPresenter()).evict(getValue().version().moveOutNotice().getValue(), getValue().version()
+                                .expectedMoveOut().getValue());
                         return true;
                     }
                 }.show();
@@ -162,7 +162,7 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
         cancelEvict = new Button(i18n.tr("Cancel Evict"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                ((LeaseViewerView.Presenter) presenter).cancelEvict();
+                ((LeaseViewerView.Presenter) getPresenter()).cancelEvict();
             }
         });
         addHeaderToolbarTwoItem(cancelEvict.asWidget());
@@ -170,7 +170,7 @@ public class LeaseViewerViewImpl extends CrmViewerViewImplBase<LeaseDTO> impleme
         activate = new Button(i18n.tr("Activate"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                ((LeaseViewerView.Presenter) presenter).activate();
+                ((LeaseViewerView.Presenter) getPresenter()).activate();
             }
         });
         addHeaderToolbarTwoItem(activate.asWidget());

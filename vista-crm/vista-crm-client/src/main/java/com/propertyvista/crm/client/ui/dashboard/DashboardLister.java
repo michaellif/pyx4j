@@ -42,7 +42,6 @@ public class DashboardLister extends ListerBase<DashboardMetadata> {
                     public void onConfirmed() {
                         for (DashboardMetadata item : getDataTablePanel().getDataTable().getCheckedItems()) {
                             getPresenter().delete(item.getPrimaryKey());
-
                         }
                     }
 

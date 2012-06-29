@@ -77,7 +77,7 @@ public class LeaseApplicationViewerViewImpl extends CrmViewerViewImplBase<LeaseA
         onlineApplication = new Button(i18n.tr("Start Online Application"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                ((LeaseApplicationViewerView.Presenter) presenter).startOnlineApplication();
+                ((LeaseApplicationViewerView.Presenter) getPresenter()).startOnlineApplication();
             }
         });
         addHeaderToolbarTwoItem(onlineApplication.asWidget());
@@ -85,14 +85,14 @@ public class LeaseApplicationViewerViewImpl extends CrmViewerViewImplBase<LeaseA
         inviteAction = new Button(INVITE, new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                ((LeaseApplicationViewerView.Presenter) presenter).retrieveUsers(new DefaultAsyncCallback<List<LeaseParticipant>>() {
+                ((LeaseApplicationViewerView.Presenter) getPresenter()).retrieveUsers(new DefaultAsyncCallback<List<LeaseParticipant>>() {
                     @Override
                     public void onSuccess(List<LeaseParticipant> result) {
                         new EntitySelectorListDialog<LeaseParticipant>(i18n.tr("Select Tenants/Guarantors To Send An Invitation To"), true, result) {
 
                             @Override
                             public boolean onClickOk() {
-                                ((LeaseApplicationViewerView.Presenter) presenter).inviteUsers(getSelectedItems());
+                                ((LeaseApplicationViewerView.Presenter) getPresenter()).inviteUsers(getSelectedItems());
                                 return true;
                             }
                         }.show();
@@ -105,7 +105,7 @@ public class LeaseApplicationViewerViewImpl extends CrmViewerViewImplBase<LeaseA
         checkAction = new Button(i18n.tr("Credit Check"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                ((LeaseApplicationViewerView.Presenter) presenter).retrieveUsers(new DefaultAsyncCallback<List<LeaseParticipant>>() {
+                ((LeaseApplicationViewerView.Presenter) getPresenter()).retrieveUsers(new DefaultAsyncCallback<List<LeaseParticipant>>() {
                     @Override
                     public void onSuccess(List<LeaseParticipant> result) {
                         new EntitySelectorListDialog<LeaseParticipant>(i18n.tr("Select Tenants/Guarantors To Check"), true, result) {
@@ -131,7 +131,7 @@ public class LeaseApplicationViewerViewImpl extends CrmViewerViewImplBase<LeaseA
                     new ActionBox(APPROVE) {
                         @Override
                         public boolean onClickOk() {
-                            ((LeaseApplicationViewerView.Presenter) presenter).applicationAction(updateValue(Action.Approve));
+                            ((LeaseApplicationViewerView.Presenter) getPresenter()).applicationAction(updateValue(Action.Approve));
                             return true;
                         }
                     }.show();
@@ -142,7 +142,7 @@ public class LeaseApplicationViewerViewImpl extends CrmViewerViewImplBase<LeaseA
             moreInfoAction = new Button(MORE_INFO, new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
-                    ((LeaseApplicationViewerView.Presenter) presenter).retrieveUsers(new DefaultAsyncCallback<List<LeaseParticipant>>() {
+                    ((LeaseApplicationViewerView.Presenter) getPresenter()).retrieveUsers(new DefaultAsyncCallback<List<LeaseParticipant>>() {
                         @Override
                         public void onSuccess(List<LeaseParticipant> result) {
                             new EntitySelectorListDialog<LeaseParticipant>(i18n.tr("Select Tenants/Guarantors To Acquire Info"), true, result) {
@@ -165,7 +165,7 @@ public class LeaseApplicationViewerViewImpl extends CrmViewerViewImplBase<LeaseA
                     new ActionBox(DECLINE) {
                         @Override
                         public boolean onClickOk() {
-                            ((LeaseApplicationViewerView.Presenter) presenter).applicationAction(updateValue(Action.Decline));
+                            ((LeaseApplicationViewerView.Presenter) getPresenter()).applicationAction(updateValue(Action.Decline));
                             return true;
                         }
                     }.show();
@@ -180,7 +180,7 @@ public class LeaseApplicationViewerViewImpl extends CrmViewerViewImplBase<LeaseA
                 new ActionBox(CANCEL) {
                     @Override
                     public boolean onClickOk() {
-                        ((LeaseApplicationViewerView.Presenter) presenter).applicationAction(updateValue(Action.Cancel));
+                        ((LeaseApplicationViewerView.Presenter) getPresenter()).applicationAction(updateValue(Action.Cancel));
                         return true;
                     }
                 }.show();

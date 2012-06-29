@@ -43,7 +43,7 @@ public class PaymentViewerViewImpl extends CrmViewerViewImplBase<PaymentRecordDT
         cancelAction = new Button(i18n.tr("Cancel"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                ((PaymentViewerView.Presenter) presenter).cancelPayment();
+                ((PaymentViewerView.Presenter) getPresenter()).cancelPayment();
             }
         });
         addHeaderToolbarTwoItem(cancelAction.asWidget());
@@ -51,7 +51,7 @@ public class PaymentViewerViewImpl extends CrmViewerViewImplBase<PaymentRecordDT
         rejectAction = new Button(i18n.tr("Reject"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                ((PaymentViewerView.Presenter) presenter).rejectPayment();
+                ((PaymentViewerView.Presenter) getPresenter()).rejectPayment();
             }
         });
         addHeaderToolbarTwoItem(rejectAction.asWidget());
@@ -59,7 +59,7 @@ public class PaymentViewerViewImpl extends CrmViewerViewImplBase<PaymentRecordDT
         clearAction = new Button(i18n.tr("Clear"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                ((PaymentViewerView.Presenter) presenter).clearPayment();
+                ((PaymentViewerView.Presenter) getPresenter()).clearPayment();
             }
         });
         addHeaderToolbarTwoItem(clearAction.asWidget());
@@ -67,7 +67,7 @@ public class PaymentViewerViewImpl extends CrmViewerViewImplBase<PaymentRecordDT
         processAction = new Button(i18n.tr("Process"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                ((PaymentViewerView.Presenter) presenter).processPayment();
+                ((PaymentViewerView.Presenter) getPresenter()).processPayment();
             }
         });
         processAction.addStyleName(DefaultSiteCrudPanelsTheme.StyleName.HighlightedButton.name());

@@ -13,11 +13,16 @@
  */
 package com.propertyvista.crm.client.activity.crud.billing.cycle;
 
+import java.util.List;
+import java.util.Vector;
+
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.client.activity.crud.ListerActivityBase;
 import com.pyx4j.site.rpc.AppPlace;
 
@@ -29,7 +34,7 @@ import com.propertyvista.crm.rpc.services.billing.BillingCycleBillListService;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.BillingCycle;
 
-public class BillingCycleBillListerActivity extends ListerActivityBase<BillDataDTO> {
+public class BillingCycleBillListerActivity extends ListerActivityBase<BillDataDTO> implements BillingCycleBillListerView.Presenter {
 
     private Key billingCycleId;
 
@@ -58,5 +63,25 @@ public class BillingCycleBillListerActivity extends ListerActivityBase<BillDataD
         addPreDefinedFilter(PropertyCriterion.eq(proto.bill().billingCycle(), EntityFactory.createIdentityStub(BillingCycle.class, billingCycleId)));
         addPreDefinedFilter(PropertyCriterion.eq(proto.bill().billStatus(), billStatusValue));
         super.populate();
+    }
+
+    @Override
+    public void confirm(List<BillDataDTO> bills) {
+        ((BillingCycleBillListService) getService()).confirm(new DefaultAsyncCallback<VoidSerializable>() {
+            @Override
+            public void onSuccess(VoidSerializable result) {
+                populate();
+            }
+        }, new Vector<BillDataDTO>(bills));
+    }
+
+    @Override
+    public void reject(List<BillDataDTO> bills, String reason) {
+        ((BillingCycleBillListService) getService()).reject(new DefaultAsyncCallback<VoidSerializable>() {
+            @Override
+            public void onSuccess(VoidSerializable result) {
+                populate();
+            }
+        }, new Vector<BillDataDTO>(bills), reason);
     }
 }

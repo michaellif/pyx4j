@@ -43,7 +43,7 @@ public class AdminViewerViewImplBase<E extends IEntity> extends ViewerViewImplBa
             Button btnEdit = new Button(i18n.tr("Edit"), new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
-                    presenter.edit();
+                    getPresenter().edit();
                 }
             });
 

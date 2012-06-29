@@ -93,7 +93,7 @@ public class EmployeeViewerViewImpl extends CrmViewerViewImplBase<EmployeeDTO> i
 
         @Override
         public boolean onClickCancel() {
-            presenter.cancel();
+            getPresenter().cancel();
             return true;
         }
 

@@ -84,7 +84,7 @@ public class UnitViewerViewImpl extends CrmViewerViewImplBase<AptUnitDTO> implem
         scopeAction = new Button(i18n.tr("Scope..."), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                new ScopeDialog((UnitViewerView.Presenter) presenter, canScopeAvailable, canScopeOffMarket, minRenovationEndDate) {
+                new ScopeDialog((UnitViewerView.Presenter) getPresenter(), canScopeAvailable, canScopeOffMarket, minRenovationEndDate) {
                 }.show();
             }
         });
@@ -94,7 +94,7 @@ public class UnitViewerViewImpl extends CrmViewerViewImplBase<AptUnitDTO> implem
         makeVacantAction = new Button(i18n.tr("Make Vacant..."), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                new MakeVacantDialog((com.propertyvista.crm.client.ui.crud.unit.UnitViewerView.Presenter) presenter, minMakeVacantStartDay,
+                new MakeVacantDialog((com.propertyvista.crm.client.ui.crud.unit.UnitViewerView.Presenter) getPresenter(), minMakeVacantStartDay,
                         maxMakeVacantStartDay) {
                 }.show();
             }

@@ -65,7 +65,7 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
             editButton = new Button(i18n.tr("Edit"), new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
-                    presenter.edit();
+                    getPresenter().edit();
                 }
             });
             addHeaderToolbarTwoItem(editButton);
@@ -157,7 +157,7 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
                 new VersionSelectorDialog<V>(entityVersionClass, getForm().getValue().getPrimaryKey()) {
                     @Override
                     public boolean onClickOk() {
-                        presenter.view(getSelectedVersionId());
+                        getPresenter().view(getSelectedVersionId());
                         return true;
                     }
 
@@ -173,7 +173,7 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
         finalizeButton = new Button(i18n.tr("Finalize"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                presenter.approveFinal();
+                getPresenter().approveFinal();
             }
         });
         addHeaderToolbarTwoItem(finalizeButton.asWidget());
