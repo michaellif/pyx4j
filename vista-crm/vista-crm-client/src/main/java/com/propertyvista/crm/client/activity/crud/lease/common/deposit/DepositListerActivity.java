@@ -60,6 +60,7 @@ public class DepositListerActivity extends ListerActivityBase<Deposit> implement
                     result.type().setValue(depositType);
                     result.status().setValue(DepositStatus.Created);
                     result.depositDate().setValue(new LogicalDate());
+                    result.billingAccount().set(EntityFactory.createIdentityStub(BillingAccount.class, getParent()));
                 }
                 callback.onSuccess(result);
             }
