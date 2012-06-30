@@ -15,7 +15,6 @@ package com.propertyvista.crm.client.activity.crud.lease.application;
 
 import com.google.gwt.core.client.GWT;
 
-import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.activity.crud.lease.common.LeaseEditorActivityBase;
@@ -26,9 +25,8 @@ import com.propertyvista.dto.LeaseApplicationDTO;
 
 public class LeaseApplicationEditorActivity extends LeaseEditorActivityBase<LeaseApplicationDTO> implements LeaseApplicationEditorView.Presenter {
 
-    @SuppressWarnings("unchecked")
     public LeaseApplicationEditorActivity(CrudAppPlace place) {
-        super(place, LeaseViewFactory.instance(LeaseApplicationEditorView.class), (AbstractCrudService<LeaseApplicationDTO>) GWT
-                .create(LeaseApplicationEditorCrudService.class), LeaseApplicationDTO.class);
+        super(place, LeaseViewFactory.instance(LeaseApplicationEditorView.class), GWT
+                .<LeaseApplicationEditorCrudService> create(LeaseApplicationEditorCrudService.class), LeaseApplicationDTO.class);
     }
 }

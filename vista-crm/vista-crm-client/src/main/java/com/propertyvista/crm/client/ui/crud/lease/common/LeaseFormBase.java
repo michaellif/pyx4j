@@ -15,6 +15,8 @@ package com.propertyvista.crm.client.ui.crud.lease.common;
 
 import java.util.List;
 
+import com.google.gwt.user.client.ui.HTML;
+
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.entity.shared.criterion.Criterion;
@@ -64,6 +66,7 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
         super(clazz, viewMode);
     }
 
+    @SuppressWarnings("unchecked")
     protected void createCommonContent() {
 
         Tab tab = addTab(createDetailsTab(i18n.tr("Details")));
@@ -72,7 +75,9 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
         addTab(createTenantsTab(i18n.tr("Tenants")));
         addTab(createGuarantorsTab(i18n.tr("Guarantors")));
         addTab(createProductsTab(i18n.tr("Products")));
-        addTab(createDepositsTab(i18n.tr("Deposits")));
+//        addTab(createDepositsTab(i18n.tr("Deposits")));
+        tab = addTab(isEditable() ? new HTML() : ((LeaseViewerViewBase<DTO>) getParentView()).getDepositListerView().asWidget(), i18n.tr("Deposits"));
+        setTabEnabled(tab, !isEditable());
 
         chargesTab = addTab(createChargesTab(i18n.tr("Charges")));
     }

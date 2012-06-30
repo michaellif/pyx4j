@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
+import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.commons.LogicalDate;
@@ -76,6 +77,14 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
     }
 
     @Override
+    public void onStop() {
+        ((AbstractActivity) billLister).onStop();
+        ((AbstractActivity) paymentLister).onStop();
+        ((AbstractActivity) leaseAdjustmentLister).onStop();
+        super.onStop();
+    }
+
+    @Override
     protected void onPopulateSuccess(LeaseDTO result) {
         super.onPopulateSuccess(result);
 
@@ -93,19 +102,11 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
     }
 
     protected void populatePayments(Lease result) {
-        List<Criterion> preDefinedFilters = new ArrayList<Criterion>();
-        preDefinedFilters.add(PropertyCriterion.eq(EntityFactory.getEntityPrototype(PaymentRecordDTO.class).billingAccount().id(), result.billingAccount()
-                .getPrimaryKey()));
-        paymentLister.setPreDefinedFilters(preDefinedFilters);
         paymentLister.setParent(result.billingAccount().getPrimaryKey());
         paymentLister.populate();
     }
 
     protected void populateLeaseAdjustments(Lease result) {
-        List<Criterion> preDefinedFilters = new ArrayList<Criterion>();
-        preDefinedFilters.add(PropertyCriterion.eq(EntityFactory.getEntityPrototype(LeaseAdjustment.class).billingAccount().id(), result.billingAccount()
-                .getPrimaryKey()));
-        leaseAdjustmentLister.setPreDefinedFilters(preDefinedFilters);
         leaseAdjustmentLister.setParent(result.billingAccount().getPrimaryKey());
         leaseAdjustmentLister.populate();
     }

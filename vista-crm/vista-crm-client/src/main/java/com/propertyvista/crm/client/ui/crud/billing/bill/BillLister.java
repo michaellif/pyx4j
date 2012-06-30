@@ -22,7 +22,6 @@ public class BillLister extends ListerBase<BillDataDTO> {
 
     public BillLister() {
         super(BillDataDTO.class, false);
-        getDataTablePanel().getDataTable().setHasCheckboxColumn(false);
 
         setColumnDescriptors(//@formatter:off
             new MemberColumnDescriptor.Builder(proto().bill().billType()).build(),

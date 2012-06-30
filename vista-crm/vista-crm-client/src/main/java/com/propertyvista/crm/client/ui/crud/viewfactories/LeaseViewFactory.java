@@ -34,6 +34,10 @@ import com.propertyvista.crm.client.ui.crud.lease.application.LeaseApplicationLi
 import com.propertyvista.crm.client.ui.crud.lease.application.LeaseApplicationListerViewImpl;
 import com.propertyvista.crm.client.ui.crud.lease.application.LeaseApplicationViewerView;
 import com.propertyvista.crm.client.ui.crud.lease.application.LeaseApplicationViewerViewImpl;
+import com.propertyvista.crm.client.ui.crud.lease.common.deposit.DepositEditorView;
+import com.propertyvista.crm.client.ui.crud.lease.common.deposit.DepositEditorViewImpl;
+import com.propertyvista.crm.client.ui.crud.lease.common.deposit.DepositViewerView;
+import com.propertyvista.crm.client.ui.crud.lease.common.deposit.DepositViewerViewImpl;
 
 public class LeaseViewFactory extends ViewFactoryBase {
 
@@ -60,6 +64,11 @@ public class LeaseViewFactory extends ViewFactoryBase {
                 map.put(type, new LeaseAdjustmentViewerViewImpl());
             } else if (LeaseAdjustmentEditorView.class.equals(type)) {
                 map.put(type, new LeaseAdjustmentEditorViewImpl());
+
+            } else if (DepositViewerView.class.equals(type)) {
+                map.put(type, new DepositViewerViewImpl());
+            } else if (DepositEditorView.class.equals(type)) {
+                map.put(type, new DepositEditorViewImpl());
             }
         }
         @SuppressWarnings("unchecked")

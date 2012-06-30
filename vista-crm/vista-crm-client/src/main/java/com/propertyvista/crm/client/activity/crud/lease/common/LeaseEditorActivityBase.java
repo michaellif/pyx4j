@@ -17,7 +17,6 @@ import java.math.BigDecimal;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.activity.crud.EditorActivityBase;
@@ -35,7 +34,7 @@ import com.propertyvista.dto.LeaseDTO;
 
 public abstract class LeaseEditorActivityBase<DTO extends LeaseDTO> extends EditorActivityBase<DTO> implements LeaseEditorPresenterBase {
 
-    public LeaseEditorActivityBase(CrudAppPlace place, IEditorView<DTO> view, AbstractCrudService<DTO> service, Class<DTO> entityClass) {
+    public LeaseEditorActivityBase(CrudAppPlace place, IEditorView<DTO> view, LeaseEditorCrudServiceBase<DTO> service, Class<DTO> entityClass) {
         super(place, view, service, entityClass);
     }
 

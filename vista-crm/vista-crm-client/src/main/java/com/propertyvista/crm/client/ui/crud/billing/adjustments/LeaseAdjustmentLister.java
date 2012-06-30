@@ -22,7 +22,6 @@ public class LeaseAdjustmentLister extends ListerBase<LeaseAdjustment> {
 
     public LeaseAdjustmentLister() {
         super(LeaseAdjustment.class, true);
-        getDataTablePanel().getDataTable().setHasCheckboxColumn(false);
 
         setColumnDescriptors(//@formatter:off
             new MemberColumnDescriptor.Builder(proto().reason().actionType()).build(),

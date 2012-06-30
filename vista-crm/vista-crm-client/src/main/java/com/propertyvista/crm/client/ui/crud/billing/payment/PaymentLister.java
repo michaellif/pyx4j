@@ -25,7 +25,6 @@ public class PaymentLister extends ListerBase<PaymentRecordDTO> {
 
     public PaymentLister() {
         super(PaymentRecordDTO.class, true);
-        getDataTablePanel().getDataTable().setHasCheckboxColumn(false);
 
         setColumnDescriptors(//@formatter:off
             new MemberColumnDescriptor.Builder(proto().id()).build(),

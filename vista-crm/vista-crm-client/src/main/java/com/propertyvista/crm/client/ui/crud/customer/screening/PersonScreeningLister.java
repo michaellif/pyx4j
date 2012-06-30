@@ -22,7 +22,6 @@ public class PersonScreeningLister extends ListerBase<PersonScreening> {
 
     public PersonScreeningLister() {
         super(PersonScreening.class, true);
-        getDataTablePanel().getDataTable().setHasCheckboxColumn(false);
 
         setColumnDescriptors(//@formatter:off
             new MemberColumnDescriptor.Builder(proto().createDate()).build(),
