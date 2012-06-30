@@ -25,6 +25,7 @@ import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
+import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IEntity;
@@ -63,14 +64,17 @@ public interface Appointment extends IEntity {
 
     @NotNull
     @Format("MM/dd/yyyy")
+    @ToString(index = 0)
     @MemberColumn(name = "appointmentDate")
     IPrimitive<LogicalDate> date();
 
     @NotNull
+    @ToString(index = 1)
     @MemberColumn(name = "appointmentTime")
     @Editor(type = EditorType.timepicker)
     IPrimitive<Time> time();
 
+    @ToString(index = 2)
     IPrimitive<String> address();
 
     Employee agent();
@@ -81,6 +85,7 @@ public interface Appointment extends IEntity {
     @Editor(type = EditorType.email)
     IPrimitive<String> email();
 
+    @ToString(index = 3)
     IPrimitive<Status> status();
 
     // ----------------------------------------------------

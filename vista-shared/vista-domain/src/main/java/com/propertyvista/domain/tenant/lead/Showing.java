@@ -17,6 +17,7 @@ import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
+import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
@@ -84,10 +85,13 @@ public interface Showing extends IEntity {
     Building building();
 
     @NotNull
+    @ToString(index = 0)
     AptUnit unit();
 
+    @ToString(index = 1)
     IPrimitive<Status> status();
 
+    @ToString(index = 2)
     IPrimitive<Result> result();
 
     IPrimitive<Reason> reason();
