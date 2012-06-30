@@ -15,7 +15,6 @@ package com.propertyvista.crm.server.services.billing;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.essentials.server.deferred.DeferredProcessRegistry;
 
@@ -28,9 +27,8 @@ import com.propertyvista.domain.tenant.lease.Lease;
 public class BillingExecutionServiceImpl implements BillingExecutionService {
 
     @Override
-    public void startBilling(AsyncCallback<String> callback, Key leaseEntityId) {
-        Lease lease = Persistence.secureRetrieve(Lease.class, leaseEntityId);
-        callback.onSuccess(DeferredProcessRegistry.fork(new BillLeaseDeferredProcess(lease), ThreadPoolNames.BILL_SINGLE));
+    public void startBilling(AsyncCallback<String> callback, Lease leaseId) {
+        callback.onSuccess(DeferredProcessRegistry.fork(new BillLeaseDeferredProcess(leaseId), ThreadPoolNames.BILL_SINGLE));
     }
 
     @Override

@@ -15,15 +15,16 @@ package com.propertyvista.crm.rpc.services.billing;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.commons.Key;
 import com.pyx4j.rpc.shared.IService;
+
+import com.propertyvista.domain.tenant.lease.Lease;
 
 public interface BillingExecutionService extends IService {
 
     /**
      * Run single bill
      */
-    void startBilling(AsyncCallback<String> callback, Key leaseEntityId);
+    void startBilling(AsyncCallback<String> callback, Lease leaseEntityId);
 
     /**
      * Run single billing for selected Building

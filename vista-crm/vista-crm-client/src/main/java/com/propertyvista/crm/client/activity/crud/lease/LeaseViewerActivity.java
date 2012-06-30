@@ -130,7 +130,7 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
                 d.show();
                 d.startProgress(deferredCorrelationId);
             }
-        }, getEntityId());
+        }, EntityFactory.createIdentityStub(Lease.class, getEntityId()));
 
     }
 
