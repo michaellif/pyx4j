@@ -32,7 +32,7 @@ public class BillingExecutionServiceImpl implements BillingExecutionService {
     }
 
     @Override
-    public void startBilling(AsyncCallback<String> callback, StartBuildingBillingDTO startBuildingBilling) {
+    public void startBilling2(AsyncCallback<String> callback, StartBuildingBillingDTO startBuildingBilling) {
         Building building = Persistence.secureRetrieve(Building.class, startBuildingBilling.buildingId().getValue());
         callback.onSuccess(DeferredProcessRegistry.fork(new BillBuildingDeferredProcess(building, startBuildingBilling), ThreadPoolNames.BILL_BUILDING));
     }

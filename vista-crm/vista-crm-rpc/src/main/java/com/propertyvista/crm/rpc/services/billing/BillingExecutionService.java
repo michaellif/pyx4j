@@ -29,6 +29,6 @@ public interface BillingExecutionService extends IService {
     /**
      * Run single billing for selected Building
      */
-    void startBilling(AsyncCallback<String> callback, StartBuildingBillingDTO startBuildingBilling);
+    void startBilling2(AsyncCallback<String> callback, StartBuildingBillingDTO startBuildingBilling);
 
 }
