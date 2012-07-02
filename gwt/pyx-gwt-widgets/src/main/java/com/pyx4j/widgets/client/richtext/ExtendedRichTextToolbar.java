@@ -362,6 +362,7 @@ public class ExtendedRichTextToolbar extends Composite {
         pb.addClickHandler(handler);
         pb.addBlurHandler(handler);
         pb.setTitle(tip);
+        pb.setStyleName(DefaultRichTextEditorTheme.StyleName.rtePushButton.name());
         return pb;
     }
 
@@ -370,6 +371,7 @@ public class ExtendedRichTextToolbar extends Composite {
         tb.addClickHandler(handler);
         tb.addBlurHandler(handler);
         tb.setTitle(tip);
+        tb.setStyleName(DefaultRichTextEditorTheme.StyleName.rteToggleButton.name());
         return tb;
     }
 
