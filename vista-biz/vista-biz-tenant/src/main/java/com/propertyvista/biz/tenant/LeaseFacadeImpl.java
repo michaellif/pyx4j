@@ -255,6 +255,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
         saveCustomers(lease);
         Persistence.secureSave(lease.billingAccount());
         Persistence.secureSave(lease);
+        Persistence.service().retrieve(lease.billingAccount().deposits());
         Persistence.service().merge(lease.billingAccount().deposits());
 
         // update reservation if necessary:

@@ -70,9 +70,9 @@ public class BillingBulkRunTest extends FinancialTestBase {
         serviceCharge("262.83").
         recurringFeatureCharges("34.27").
         oneTimeFeatureCharges("0.00").
-        depositAmount("1130.30").
+        depositAmount("1270.30").
         taxes("35.65").
-        totalDueAmount("1463.05");
+        totalDueAmount("1603.05");
         // @formatter:on
 
         }

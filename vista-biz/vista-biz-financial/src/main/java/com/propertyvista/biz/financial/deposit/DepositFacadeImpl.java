@@ -240,7 +240,7 @@ public class DepositFacadeImpl implements DepositFacade {
         deposit.currentAmount().set(deposit.initialAmount());
         deposit.description().set(policyItem.description());
         deposit.status().setValue(DepositStatus.Created);
-        deposit.depositDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
+        deposit.depositDate().set(billableItem.effectiveDate());
         deposit.billableItem().set(billableItem);
         return deposit;
     }

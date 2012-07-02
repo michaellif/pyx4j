@@ -24,6 +24,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.math.BigDecimal;
+import java.util.List;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
@@ -308,7 +309,6 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
 
     protected BillableItem addPet(SaveAction saveAction) {
         BillableItem billableItem = addBillableItem(Type.pet, SaveAction.saveAsDraft);
-        setDeposit(billableItem.uid().getValue(), DepositType.SecurityDeposit, saveAction);
         return billableItem;
     }
 
@@ -346,17 +346,22 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         Persistence.service().retrieve(service.features());
         for (Feature feature : service.features()) {
             if (featureType.equals(feature.version().type().getValue()) && feature.version().items().size() != 0) {
-                BillableItem billableItem = EntityFactory.create(BillableItem.class);
-                Persistence.service().retrieve(feature.version().items().get(0));
-                billableItem.item().set(feature.version().items().get(0));
-                billableItem.agreedPrice().setValue(billableItem.item().price().getValue());
+                LeaseFacade leaseFacade = ServerSideFactory.create(LeaseFacade.class);
+                BillableItem billableItem = leaseFacade.createBillableItem(feature.version().items().get(0));
 
                 billableItem.effectiveDate().setValue(effectiveDate);
                 billableItem.expirationDate().setValue(expirationDate);
                 draftLease.version().leaseProducts().featureItems().add(billableItem);
 
+                List<Deposit> deposits = leaseFacade.createBillableItemDeposits(billableItem, draftLease.unit().building());
+                if (deposits != null) {
+                    draftLease.billingAccount().deposits().addAll(deposits);
+                }
+
                 draftLease.saveAction().setValue(saveAction);
-                Persistence.service().persist(draftLease);
+                leaseFacade.persist(draftLease);
+//                Persistence.service().persist(draftLease);
+//                Persistence.service().merge(draftLease.billingAccount().deposits());
                 Persistence.service().commit();
 
                 return billableItem;

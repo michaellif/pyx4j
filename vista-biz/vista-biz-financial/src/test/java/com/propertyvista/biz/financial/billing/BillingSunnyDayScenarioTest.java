@@ -73,9 +73,9 @@ public class BillingSunnyDayScenarioTest extends FinancialTestBase {
         serviceCharge("262.83").
         recurringFeatureCharges("34.27").
         oneTimeFeatureCharges("0.00").
-        depositAmount("1130.30").
+        depositAmount("1270.30").
         taxes("35.65").
-        totalDueAmount("1463.05");
+        totalDueAmount("1603.05");
         // @formatter:on
 
         Bill bill = approveApplication();
@@ -94,16 +94,16 @@ public class BillingSunnyDayScenarioTest extends FinancialTestBase {
         serviceCharge("262.83").
         recurringFeatureCharges("34.27").
         oneTimeFeatureCharges("0.00").
-        depositAmount("1130.30").
+        depositAmount("1270.30").
         taxes("35.65").
-        totalDueAmount("1463.05");
+        totalDueAmount("1603.05");
         // @formatter:on
 
         //==================== RUN 2 ======================//
 
         SysDateManager.setSysDate("18-Mar-2011");
 
-        receiveAndPostPayment("18-Mar-2011", "1463.05");
+        receiveAndPostPayment("18-Mar-2011", "1603.05");
 
         activateLease();
 
@@ -117,16 +117,16 @@ public class BillingSunnyDayScenarioTest extends FinancialTestBase {
         billingPeriodStartDate("1-Apr-2011").
         billingPeriodEndDate("30-Apr-2011").
         numOfProductCharges(5).
-        paymentReceivedAmount("-1463.05").
+        paymentReceivedAmount("-1603.05").
         serviceCharge("905.30").
         recurringFeatureCharges("136.66").
         oneTimeFeatureCharges("0.00").
         taxes("125.04").
-        totalDueAmount("1167.00");
+        totalDueAmount("1247.00");
         // @formatter:on
 
         receiveAndPostPayment("19-Mar-2011", "1067.00");
-        receiveAndPostPayment("20-Mar-2011", "100.00");
+        receiveAndPostPayment("20-Mar-2011", "180.00");
 
         //==================== RUN 3 ======================//
 
@@ -145,7 +145,7 @@ public class BillingSunnyDayScenarioTest extends FinancialTestBase {
         billingPeriodStartDate("1-May-2011").
         billingPeriodEndDate("31-May-2011").
         numOfProductCharges(7).
-        paymentReceivedAmount("-1167.00").
+        paymentReceivedAmount("-1247.00").
         serviceCharge("905.30").
         recurringFeatureCharges("188.00").
         oneTimeFeatureCharges("200.00").

@@ -69,8 +69,8 @@ public class ARCreditDebitLinkManagerTest extends FinancialTestBase {
 
         // @formatter:off
         new TransactionHistoryTester(retrieveLease().billingAccount()).
-        lineItemSize(3).
-        notCoveredDebitLineItemSize(3).
+        lineItemSize(4).
+        notCoveredDebitLineItemSize(4).
         notConsumedCreditInvoiceItemSize(0).
         outstandingDebit(new BigDecimal("1041.94"), 0).
         outstandingDebit(new BigDecimal("89.60"), 1).
@@ -82,8 +82,8 @@ public class ARCreditDebitLinkManagerTest extends FinancialTestBase {
 
         // @formatter:off
         new TransactionHistoryTester(retrieveLease().billingAccount()).
-        lineItemSize(4).
-        notCoveredDebitLineItemSize(3).
+        lineItemSize(5).
+        notCoveredDebitLineItemSize(4).
         notConsumedCreditInvoiceItemSize(0).
         outstandingDebit(new BigDecimal("741.94"), 0).
         outstandingDebit(new BigDecimal("89.60"), 1).

@@ -40,8 +40,8 @@ public class ArrearsSnapshotTest extends ArrearsSnapshotTestBase {
         // TODO these values were copied from ARSunnyDayScenarioTest: I have no idea how they were calculated (part the lease month?), need to ask Michael  
         assertArrearsDebitType(DebitType.lease, "302.50", "0.00", "0.00", "0.00", "0.00");
         assertArrearsDebitType(DebitType.parking, "26.02", "0.00", "0.00", "0.00", "0.00");
-        assertArrearsDebitType(DebitType.deposit, "930.30", "0.00", "0.00", "0.00", "0.00"); // TODO how deposit is calulcated???
-        assertArrearsTotal("1258.82", "0.00", "0.00", "0.00", "0.00");
+        assertArrearsDebitType(DebitType.deposit, "1010.30", "0.00", "0.00", "0.00", "0.00"); // TODO how deposit is calulcated???
+        assertArrearsTotal("1338.82", "0.00", "0.00", "0.00", "0.00");
 
         // arrears are not supposed to change until the due date
         setSysDate("19-Mar-2011");
@@ -65,8 +65,8 @@ public class ArrearsSnapshotTest extends ArrearsSnapshotTestBase {
         assertArrearsSnapshotStart("23-Mar-2011");
         assertArrearsDebitType(DebitType.lease, "302.50", "0.00", "0.00", "0.00", "0.00");
         assertArrearsDebitType(DebitType.parking, "26.02", "0.00", "0.00", "0.00", "0.00");
-        assertArrearsDebitType(DebitType.deposit, "930.30", "0.00", "0.00", "0.00", "0.00");
-        assertArrearsTotal("1258.82", "0.00", "0.00", "0.00", "0.00");
+        assertArrearsDebitType(DebitType.deposit, "1010.30", "0.00", "0.00", "0.00", "0.00");
+        assertArrearsTotal("1338.82", "0.00", "0.00", "0.00", "0.00");
 
         // here also nothing is supposed to change
         setSysDate("27-Mar-2011");
@@ -83,9 +83,9 @@ public class ArrearsSnapshotTest extends ArrearsSnapshotTestBase {
         assertArrearsSnapshotStart("28-Apr-2011");
         assertArrearsDebitType(DebitType.lease, "1041.94", "302.50", "0.00", "0.00", "0.00");
         assertArrearsDebitType(DebitType.parking, "89.60", "26.02", "0.00", "0.00", "0.00");
-        assertArrearsDebitType(DebitType.deposit, "0.00", "930.30", "0.00", "0.00", "0.00");
+        assertArrearsDebitType(DebitType.deposit, "0.00", "1010.30", "0.00", "0.00", "0.00");
         assertArrearsDebitType(DebitType.latePayment, "50.00", "0.00", "0.00", "0.00", "0.00");
-        assertArrearsTotal("1181.54", "1258.82", "0.00", "0.00", "0.00");
+        assertArrearsTotal("1181.54", "1338.82", "0.00", "0.00", "0.00");
 
         setSysDate("01-Apr-2011");
         updateArrearsHistory();

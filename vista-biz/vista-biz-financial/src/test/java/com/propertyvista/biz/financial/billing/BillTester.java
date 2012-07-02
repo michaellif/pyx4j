@@ -141,6 +141,11 @@ public class BillTester extends Tester {
         return this;
     }
 
+    public BillTester depositRefundAmount(String value) {
+        assertEquals("Deposit Refund Amount", new BigDecimal(value), bill.depositRefundAmount().getValue());
+        return this;
+    }
+
     public BillTester totalDueAmount(String value) {
         assertEquals("Total Due Amount", new BigDecimal(value), bill.totalDueAmount().getValue());
         return this;

@@ -48,6 +48,7 @@ class RegularBillingManager extends AbstractBillingManager {
         return Arrays.asList(new AbstractBillingProcessor[] {
                 
                 new BillingProductChargeProcessor(this),
+                new BillingDepositProcessor(this),
                 new BillingLeaseAdjustmentProcessor(this), 
                 new BillingPaymentProcessor(this), 
                 /** Should run last **/

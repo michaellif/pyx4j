@@ -51,12 +51,12 @@ public class TransactionHistoryTester extends Tester {
     }
 
     public TransactionHistoryTester notCoveredDebitLineItemSize(int size) {
-        assertEquals("Line item size", size, notCoveredDebitInvoiceLineItems.size());
+        assertEquals("Not Covered Debit Line items", size, notCoveredDebitInvoiceLineItems.size());
         return this;
     }
 
     public TransactionHistoryTester notConsumedCreditInvoiceItemSize(int size) {
-        assertEquals("Line item size", size, notConsumedCreditInvoiceLineItems.size());
+        assertEquals("Not Consumed Credit Invoice Items", size, notConsumedCreditInvoiceLineItems.size());
         return this;
     }
 
@@ -76,19 +76,19 @@ public class TransactionHistoryTester extends Tester {
     }
 
     public TransactionHistoryTester outstandingDebit(BigDecimal amount, int index) {
-        assertEquals("Line item amount", amount, ((InvoiceDebit) transactionHistory.lineItems().get(index)).outstandingDebit().getValue());
+        assertEquals("Outstanding Debit amount", amount, ((InvoiceDebit) transactionHistory.lineItems().get(index)).outstandingDebit().getValue());
         return this;
     }
 
     public TransactionHistoryTester outstandingCredit(BigDecimal amount, int index) {
-        assertEquals("Line item amount", amount, ((InvoiceCredit) transactionHistory.lineItems().get(index)).outstandingCredit().getValue());
+        assertEquals("Outstanding Credit amount", amount, ((InvoiceCredit) transactionHistory.lineItems().get(index)).outstandingCredit().getValue());
         return this;
     }
 
     public TransactionHistoryTester agingBucketsCurrent(BigDecimal amount, DebitType debitType) {
         AgingBuckets buckets = getAgingBucketsOfType(debitType);
         if (buckets != null) {
-            assertEquals("Current amount", amount, buckets.bucketCurrent().getValue());
+            assertEquals("Aging Buckets Current amount", amount, buckets.bucketCurrent().getValue());
         } else {
             throw new Error("Buckets for debit type " + debitType + " don't exist");
         }
