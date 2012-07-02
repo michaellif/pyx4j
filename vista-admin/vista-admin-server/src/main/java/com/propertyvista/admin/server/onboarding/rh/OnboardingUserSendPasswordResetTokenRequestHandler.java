@@ -45,7 +45,7 @@ public class OnboardingUserSendPasswordResetTokenRequestHandler extends Abstract
 
     @Override
     public ResponseIO execute(OnboardingUserSendPasswordResetTokenRequestIO request) {
-        log.info("User {} requested {}", new Object[] { request.onboardingAccountId().getValue(), "OnboardingUserSendPasswordResetToken" });
+        log.info("User {} requested {}", new Object[] { request.email().getValue(), "OnboardingUserSendPasswordResetToken" });
 
         ResponseIO response = EntityFactory.create(ResponseIO.class);
         response.success().setValue(Boolean.TRUE);

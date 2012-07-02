@@ -51,7 +51,7 @@ public class OnboardingUserPasswordResetRequestHandler extends AbstractRequestHa
 
     @Override
     public ResponseIO execute(OnboardingUserPasswordResetRequestIO request) {
-        log.info("User {} requested {}", new Object[] { request.onboardingAccountId().getValue(), "OnboardingUserPasswordReset" });
+        log.info("API requested {}", new Object[] { "OnboardingUserPasswordReset" });
 
         OnboardingUserAuthenticationResponseIO response = EntityFactory.create(OnboardingUserAuthenticationResponseIO.class);
         response.success().setValue(Boolean.TRUE);

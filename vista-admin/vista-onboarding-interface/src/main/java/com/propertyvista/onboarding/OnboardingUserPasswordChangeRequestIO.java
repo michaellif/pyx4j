@@ -13,6 +13,8 @@
  */
 package com.propertyvista.onboarding;
 
+import javax.xml.bind.annotation.XmlTransient;
+
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -35,4 +37,11 @@ public interface OnboardingUserPasswordChangeRequestIO extends RequestIO {
     @NotNull
     @Transient(logTransient = true)
     IPrimitive<String> newPassword();
+
+    /**
+     * Do not send it, IT will ignored
+     */
+    @Override
+    @XmlTransient
+    IPrimitive<String> onboardingAccountId();
 }
