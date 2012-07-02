@@ -24,7 +24,6 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 
-import com.propertyvista.admin.domain.pmc.Pmc;
 import com.propertyvista.admin.domain.security.OnboardingUserCredential;
 import com.propertyvista.admin.server.onboarding.rhf.AbstractRequestHandler;
 import com.propertyvista.onboarding.GetSatisfactionFastpassUrlRequestIO;
@@ -44,7 +43,7 @@ public class GetSatisfactionFastpassUrlHandler extends AbstractRequestHandler<Ge
 
     @Override
     public ResponseIO execute(GetSatisfactionFastpassUrlRequestIO request) {
-        log.info("User {} {} requested {}", new Object[] { request.onboardingAccountId().getValue(), request.email().getValue(), "GetSatisfactionFastpassUrl" });
+        log.info("User {} requested {}", new Object[] { request.email().getValue(), "GetSatisfactionFastpassUrl" });
 
         GetSatisfactionFastpassUrlResponseIO response = EntityFactory.create(GetSatisfactionFastpassUrlResponseIO.class);
 
@@ -68,11 +67,7 @@ public class GetSatisfactionFastpassUrlHandler extends AbstractRequestHandler<Ge
             Persistence.service().retrieve(credential.user());
             name = credential.user().name().getValue();
 
-            EntityQueryCriteria<Pmc> pmcCrt = EntityQueryCriteria.create(Pmc.class);
-            pmcCrt.add(PropertyCriterion.eq(pmcCrt.proto().onboardingAccountId(), request.onboardingAccountId().getValue()));
-            Pmc pmc = Persistence.service().retrieve(pmcCrt);
-
-            uid = UserAccessUtils.getUserUUID(pmc, credential);
+            uid = UserAccessUtils.getUserUUID(credential.pmc(), credential);
         }
 
         String url;

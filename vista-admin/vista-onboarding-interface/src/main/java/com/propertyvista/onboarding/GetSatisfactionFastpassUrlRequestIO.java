@@ -13,6 +13,8 @@
  */
 package com.propertyvista.onboarding;
 
+import javax.xml.bind.annotation.XmlTransient;
+
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -27,4 +29,10 @@ public interface GetSatisfactionFastpassUrlRequestIO extends RequestIO {
 
     IPrimitive<Boolean> secureUrl();
 
+    /**
+     * Do not send it
+     */
+    @Override
+    @XmlTransient
+    IPrimitive<String> onboardingAccountId();
 }
