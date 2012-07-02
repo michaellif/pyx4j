@@ -150,14 +150,18 @@ public class EmailTemplatesPolicyForm extends PolicyDTOTabPanelBasedForm<EmailTe
                     editor.getWidget().getEditor().setCustomAction(new RichTextAction() {
                         @Override
                         public void perform(final Formatter formatter, final Command onComplete) {
-                            vm.setSelectionHandler(new Command() {
-                                @Override
-                                public void execute() {
-                                    formatter.insertHTML(vm.getSelectedValue());
-                                    onComplete.execute();
-                                }
-                            });
-                            vm.showBelow(pb);
+                            if (vm.isShowing()) {
+                                vm.hide();
+                            } else {
+                                vm.setSelectionHandler(new Command() {
+                                    @Override
+                                    public void execute() {
+                                        formatter.insertHTML(vm.getSelectedValue());
+                                        onComplete.execute();
+                                    }
+                                });
+                                vm.showBelow(pb);
+                            }
                         }
                     });
                     // change template object list when template type selection changes
@@ -217,6 +221,7 @@ public class EmailTemplatesPolicyForm extends PolicyDTOTabPanelBasedForm<EmailTe
 
                         add(menu);
                     }
+                    addAutoHidePartner(target.getElement());
                     showRelativeTo(target);
                 }
 
