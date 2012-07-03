@@ -25,7 +25,7 @@ import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.property.asset.building.Building;
 
-@ToStringFormat("{0}: {2}: {1}")
+@ToStringFormat("{0}: {1}: {2}")
 public interface MerchantAccount extends AbstractMerchantAccount {
 
     @I18n
