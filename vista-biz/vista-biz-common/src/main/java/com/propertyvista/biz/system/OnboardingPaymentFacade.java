@@ -16,6 +16,9 @@ package com.propertyvista.biz.system;
 import com.propertyvista.onboarding.BankAccountInfo;
 import com.propertyvista.onboarding.BankAccountInfoApproval;
 
+/**
+ * BankAccount management
+ */
 public interface OnboardingPaymentFacade {
 
     public void updateBankAccountInfo(String onboardingAccountId, BankAccountInfo requestAcc);

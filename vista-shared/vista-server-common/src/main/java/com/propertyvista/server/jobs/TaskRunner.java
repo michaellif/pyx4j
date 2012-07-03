@@ -30,9 +30,13 @@ import com.propertyvista.domain.VistaNamespace;
 public class TaskRunner {
 
     public static <T> T runInAdminNamespace(final Callable<T> task) {
+        return runInTargetNamespace(VistaNamespace.adminNamespace, task);
+    }
+
+    public static <T> T runInTargetNamespace(final String targetNamespace, final Callable<T> task) {
         final String namespace = NamespaceManager.getNamespace();
         try {
-            NamespaceManager.setNamespace(VistaNamespace.adminNamespace);
+            NamespaceManager.setNamespace(targetNamespace);
             try {
                 return task.call();
             } catch (Exception e) {
