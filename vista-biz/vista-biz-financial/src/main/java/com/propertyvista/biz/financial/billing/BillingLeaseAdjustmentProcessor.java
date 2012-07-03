@@ -88,34 +88,32 @@ public class BillingLeaseAdjustmentProcessor extends AbstractBillingProcessor {
     }
 
     private void attachImmediateCredit(InvoiceAccountCredit credit) {
-        addCredit(credit);
+        Bill bill = getBillingManager().getNextPeriodBill();
+        bill.immediateAccountAdjustments().setValue(bill.immediateAccountAdjustments().getValue().add(credit.amount().getValue()));
+        bill.lineItems().add(credit);
     }
 
     private void attachImmediateCharge(InvoiceAccountCharge charge) {
-        addCharge(charge);
+        Bill bill = getBillingManager().getNextPeriodBill();
+        bill.immediateAccountAdjustments().setValue(
+                bill.immediateAccountAdjustments().getValue().add(charge.amount().getValue()).add(charge.taxTotal().getValue()));
+        bill.lineItems().add(charge);
     }
 
     private void createPendingCharge(LeaseAdjustment adjustment) {
         InvoiceAccountCharge charge = InvoiceLineItemFactory.createInvoiceAccountCharge(adjustment);
         charge.dueDate().setValue(getBillingManager().getNextPeriodBill().dueDate().getValue());
-        addCharge(charge);
-    }
-
-    private void createPendingCredit(LeaseAdjustment adjustment) {
-        InvoiceAccountCredit credit = InvoiceLineItemFactory.createInvoiceAccountCredit(adjustment);
-        addCredit(credit);
-    }
-
-    private void addCharge(InvoiceAccountCharge charge) {
         Bill bill = getBillingManager().getNextPeriodBill();
         bill.pendingAccountAdjustments().setValue(bill.pendingAccountAdjustments().getValue().add(charge.amount().getValue()));
         bill.lineItems().add(charge);
         bill.taxes().setValue(bill.taxes().getValue().add(charge.taxTotal().getValue()));
     }
 
-    private void addCredit(InvoiceAccountCredit credit) {
+    private void createPendingCredit(LeaseAdjustment adjustment) {
+        InvoiceAccountCredit credit = InvoiceLineItemFactory.createInvoiceAccountCredit(adjustment);
         Bill bill = getBillingManager().getNextPeriodBill();
         bill.pendingAccountAdjustments().setValue(bill.pendingAccountAdjustments().getValue().add(credit.amount().getValue()));
         bill.lineItems().add(credit);
     }
+
 }

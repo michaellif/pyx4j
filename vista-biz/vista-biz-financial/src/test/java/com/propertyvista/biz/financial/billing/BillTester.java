@@ -96,6 +96,11 @@ public class BillTester extends Tester {
         return this;
     }
 
+    public BillTester immediateAccountAdjustments(String value) {
+        assertEquals("Immediate Account Adjustments", new BigDecimal(value), bill.immediateAccountAdjustments().getValue());
+        return this;
+    }
+
     public BillTester serviceCharge(String value) {
         assertEquals("Service Charge", new BigDecimal(value), bill.serviceCharge().getValue());
         return this;

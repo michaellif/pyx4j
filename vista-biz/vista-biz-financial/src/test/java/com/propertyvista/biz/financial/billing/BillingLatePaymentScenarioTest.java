@@ -113,7 +113,7 @@ public class BillingLatePaymentScenarioTest extends FinancialTestBase {
         serviceCharge("930.30").
         oneTimeFeatureCharges("100.00").
         latePaymentFees("50.00").
-        taxes("135.64"). // 12% (930.30 + 100 + 100) = 135.64
+        taxes("123.64"). // 12% (930.30 + 100) = 135.64
         totalDueAmount("1015.94"); // 930.30 +100 +100 +135.64 -300 +50
         // @formatter:on
 
@@ -161,7 +161,7 @@ public class BillingLatePaymentScenarioTest extends FinancialTestBase {
         new BillTester(bill).
         paymentReceivedAmount("-1191.94").
         serviceCharge("930.30").
-        taxes("123.64"). // 12% of (930.30 + 100)
+        taxes("111.64"). // 12% of (930.30)
         latePaymentFees("50.00").
         totalDueAmount("1103.94"); // 930.30 +100 +123.64 +50 -100
         // @formatter:on

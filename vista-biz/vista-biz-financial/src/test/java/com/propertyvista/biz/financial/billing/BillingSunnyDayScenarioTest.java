@@ -43,7 +43,7 @@ public class BillingSunnyDayScenarioTest extends FinancialTestBase {
 
         SysDateManager.setSysDate("17-Mar-2011");
 
-        setLeaseTerms("23-Mar-2011", "03-Aug-2011");
+        setLeaseTerms("22-Mar-2011", "03-Aug-2011");
         addServiceAdjustment("-25", AdjustmentType.monetary, ExecutionType.inLease);
 
         BillableItem parking1 = addParking(SaveAction.saveAsDraft);
@@ -61,6 +61,26 @@ public class BillingSunnyDayScenarioTest extends FinancialTestBase {
         //==================== RUN 1 ======================//
 
         Bill billPreview = runBillingPreview();
+        // @formatter:off
+        new BillTester(billPreview).
+        billSequenceNumber(0).
+        previousBillSequenceNumber(null).
+        billType(Bill.BillType.First).
+        billingPeriodStartDate("22-Mar-2011").
+        billingPeriodEndDate("31-Mar-2011").
+        numOfProductCharges(4).
+        paymentReceivedAmount("0.00").
+        serviceCharge("292.04").
+        recurringFeatureCharges("38.06").
+        oneTimeFeatureCharges("0.00").
+        depositAmount("1270.30").
+        taxes("39.61").
+        totalDueAmount("1640.01");
+        // @formatter:on
+
+        setLeaseTerms("23-Mar-2011", "03-Aug-2011");
+
+        billPreview = runBillingPreview();
         // @formatter:off
         new BillTester(billPreview).
         billSequenceNumber(0).
@@ -244,6 +264,8 @@ public class BillingSunnyDayScenarioTest extends FinancialTestBase {
 
         completeLease();
 
+        addAccountCharge("140.00");
+
         bill = runBilling(true, true);
 
         // @formatter:off
@@ -252,6 +274,7 @@ public class BillingSunnyDayScenarioTest extends FinancialTestBase {
         previousBillSequenceNumber(6).
         billType(Bill.BillType.Final).
         paymentReceivedAmount("-118.49").
+        immediateAccountAdjustments("156.80").
         billingPeriodStartDate(null).
         billingPeriodEndDate(null);
         // @formatter:on
