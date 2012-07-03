@@ -13,8 +13,12 @@
  */
 package com.propertyvista.biz.tenant;
 
+import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
+import java.util.Set;
+
+import org.apache.commons.lang.StringUtils;
 
 import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.commons.Key;
@@ -36,6 +40,8 @@ import com.propertyvista.biz.financial.productcatalog.ProductCatalogFacade;
 import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.biz.occupancy.UnitTurnoverAnalysisFacade;
 import com.propertyvista.biz.policy.IdAssignmentFacade;
+import com.propertyvista.biz.validation.framework.ValidationFailure;
+import com.propertyvista.biz.validation.validators.LeaseApprovalValidator;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.offering.Feature;
@@ -54,6 +60,7 @@ import com.propertyvista.domain.tenant.lease.Lease.CompletionType;
 import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
 import com.propertyvista.domain.tenant.lease.Lease.Status;
 import com.propertyvista.domain.tenant.lease.LeaseApplication;
+import com.propertyvista.misc.VistaTODO;
 
 public class LeaseFacadeImpl implements LeaseFacade {
 
@@ -319,6 +326,19 @@ public class LeaseFacadeImpl implements LeaseFacade {
     @Override
     public void approveApplication(Lease leaseId, Employee decidedBy, String decisionReason) {
         Lease lease = Persistence.secureRetrieveDraft(Lease.class, leaseId.getPrimaryKey());
+        Persistence.service().retrieve(lease.version().tenants());
+
+        Set<ValidationFailure> validationFailures = new LeaseApprovalValidator().validate(lease);
+        if (!validationFailures.isEmpty()) {
+            List<String> errorMessages = new ArrayList<String>();
+            for (ValidationFailure failure : validationFailures) {
+                errorMessages.add(failure.getMessage());
+            }
+            String errorsRoster = StringUtils.join(errorMessages, ",\n");
+            if (VistaTODO.enableLeaseApprovalValidation) {
+                throw new UserRuntimeException(i18n.tr("This lease cannot be approved due to following validation errors:\n{0}", errorsRoster));
+            }
+        }
 
         lease.version().status().setValue(Lease.Status.Approved);
         lease.leaseApplication().status().setValue(LeaseApplication.Status.Approved);

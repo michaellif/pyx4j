@@ -53,4 +53,9 @@ public class SimpleValidationFailure implements ValidationFailure {
         return property.hashCode() ^ message.hashCode();
     }
 
+    @Override
+    public String toString() {
+        return getMessage();
+    }
+
 }

@@ -34,7 +34,7 @@ public class NotNullValidator implements MemberValidator {
         if (member.isNull()) {
             String caption = (member instanceof IEntity) ? ((IEntity) member).getEntityMeta().getCaption() : member.getMeta().getCaption();
             Set<ValidationFailure> result = new HashSet<ValidationFailure>();
-            result.add(new SimpleValidationFailure(member, i18n.tr("{0} must is mandatory", caption)));
+            result.add(new SimpleValidationFailure(member, i18n.tr("{0} is mandatory", caption)));
             return result;
         } else {
             return Collections.emptySet();
