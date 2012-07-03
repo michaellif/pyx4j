@@ -60,6 +60,19 @@ public abstract class CrudAppPlace extends AppPlace {
         return Type.valueOf(getFirstArg(ARG_NAME_CRUD_TYPE));
     }
 
+    public CrudAppPlace formListerPlace() {
+        setType(Type.lister);
+        return this;
+    }
+
+    public CrudAppPlace formListerPlace(Key parentID) {
+        setType(Type.lister);
+        if (parentID != null) {
+            placeArg(ARG_NAME_PARENT_ID, parentID.toString());
+        }
+        return this;
+    }
+
     public CrudAppPlace formViewerPlace(Key itemID) {
         setType(Type.viewer);
         return (CrudAppPlace) formPlace(itemID);
