@@ -32,6 +32,7 @@ public class OnboardingRequestHandlerFactory extends RequestHandlerFactory {
         bind(OnboardingUserPasswordResetRequestHandler.class);
         bind(ReserveDnsNameRequestHandler.class);
         bind(UpdateBankAccountInfoRequestHandler.class);
+        bind(ApproveBankAccountInfoRequestHandler.class);
         bind(GetUsageReportRequestHandler.class);
         bind(UpdatePaymentTypeFeesRequestHandler.class);
         bind(UpdatePmcEquifaxInfoRequestHandler.class);

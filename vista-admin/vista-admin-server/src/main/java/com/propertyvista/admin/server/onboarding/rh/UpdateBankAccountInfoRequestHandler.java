@@ -36,6 +36,7 @@ import com.propertyvista.onboarding.ResponseIO;
 import com.propertyvista.onboarding.UpdateBankAccountInfoRequestIO;
 
 public class UpdateBankAccountInfoRequestHandler extends AbstractRequestHandler<UpdateBankAccountInfoRequestIO> {
+
     private final static Logger log = LoggerFactory.getLogger(UpdateBankAccountInfoRequestHandler.class);
 
     public UpdateBankAccountInfoRequestHandler() {
@@ -54,29 +55,29 @@ public class UpdateBankAccountInfoRequestHandler extends AbstractRequestHandler<
 
         List<OnboardingMerchantAccount> updatedAccount = new ArrayList<OnboardingMerchantAccount>();
 
-        for (BankAccountInfo acc : request.accounts()) {
+        for (BankAccountInfo requestAcc : request.accounts()) {
             EntityQueryCriteria<OnboardingMerchantAccount> crmerch = EntityQueryCriteria.create(OnboardingMerchantAccount.class);
             crmerch.add(PropertyCriterion.eq(crmerch.proto().onboardingAccountId(), request.onboardingAccountId().getValue()));
-            crmerch.add(PropertyCriterion.eq(crmerch.proto().onboardingBankAccountId(), acc.onboardingBankAccountId().getValue()));
+            crmerch.add(PropertyCriterion.eq(crmerch.proto().onboardingBankAccountId(), requestAcc.onboardingBankAccountId().getValue()));
 
-            OnboardingMerchantAccount macc = Persistence.service().retrieve(crmerch);
-            if (macc == null) {
-                macc = EntityFactory.create(OnboardingMerchantAccount.class);
-                macc.onboardingAccountId().setValue(request.onboardingAccountId().getValue());
-                macc.onboardingBankAccountId().setValue(acc.onboardingBankAccountId().getValue());
+            OnboardingMerchantAccount omacc = Persistence.service().retrieve(crmerch);
+            if (omacc == null) {
+                omacc = EntityFactory.create(OnboardingMerchantAccount.class);
+                omacc.onboardingAccountId().setValue(request.onboardingAccountId().getValue());
+                omacc.onboardingBankAccountId().setValue(requestAcc.onboardingBankAccountId().getValue());
             }
 
             if (pmc != null) {
-                macc.pmc().set(pmc);
+                omacc.pmc().set(pmc);
             }
 
-            macc.bankId().setValue(acc.bankId().getValue());
-            macc.branchTransitNumber().setValue(acc.branchTransitNumber().getValue());
-            macc.accountNumber().setValue(acc.accountNumber().getValue());
-            macc.chargeDescription().setValue(acc.chargeDescription().getValue());
-            macc.merchantTerminalId().setValue(acc.terminalId().getValue());
-            Persistence.service().persist(macc);
-            updatedAccount.add(macc);
+            omacc.bankId().setValue(requestAcc.bankId().getValue());
+            omacc.branchTransitNumber().setValue(requestAcc.branchTransitNumber().getValue());
+            omacc.accountNumber().setValue(requestAcc.accountNumber().getValue());
+            omacc.chargeDescription().setValue(requestAcc.chargeDescription().getValue());
+            omacc.merchantTerminalId().setValue(requestAcc.terminalId().getValue());
+            Persistence.service().persist(omacc);
+            updatedAccount.add(omacc);
         }
 
         // See if PMC is created, Then copy the same data to Pmc namespace
