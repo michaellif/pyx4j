@@ -17,8 +17,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
-import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.forms.client.ui.CComponent;
 
 import com.propertyvista.domain.charges.ChargeLine;
 
@@ -28,11 +26,6 @@ public class ChargeLineFolder extends VistaTableFolder<ChargeLine> {
         super(ChargeLine.class, false);
         setAddable(false);
         setRemovable(false);
-    }
-
-    @Override
-    public CComponent<?, ?> create(IObject<?> member) {
-        return super.create(member);
     }
 
     @Override
