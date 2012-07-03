@@ -3,6 +3,7 @@
 	<property name="ireport.zoom" value="1.2100000000000029"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
+	<parameter name="TAX_INCLUDED" class="java.lang.Boolean"/>
 	<field name="amount" class="java.math.BigDecimal"/>
 	<field name="description" class="java.lang.String"/>
 	<field name="_THIS" class="com.propertyvista.domain.financial.billing.InvoiceLineItem"/>
@@ -16,7 +17,7 @@
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font isBold="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{amount}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{TAX_INCLUDED}?$P{REPORT_SCRIPTLET}.getAmountWithTax($F{_THIS}):$F{amount}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="16" y="0" width="84" height="20"/>

@@ -113,6 +113,9 @@
 			<printWhenExpression><![CDATA[$F{immediateAccountAdjustmentLineItems}.lineItems().size()>0]]></printWhenExpression>
 			<subreport isUsingCache="true" runToBottom="false">
 				<reportElement x="0" y="0" width="380" height="23"/>
+				<subreportParameter name="TAX_INCLUDED">
+					<subreportParameterExpression><![CDATA[true]]></subreportParameterExpression>
+				</subreportParameter>
 				<dataSourceExpression><![CDATA[new com.pyx4j.entity.report.JRIEntityCollectionDataSource($F{immediateAccountAdjustmentLineItems}.lineItems())]]></dataSourceExpression>
 				<subreportExpression><![CDATA[com.pyx4j.entity.report.JasperReportFactory.create("com.propertyvista.biz.financial.billing.print.LineItem")]]></subreportExpression>
 			</subreport>
@@ -306,11 +309,11 @@
 		</band>
 		<band height="31">
 			<staticText>
-				<reportElement x="0" y="11" width="380" height="20"/>
+				<reportElement x="0" y="11" width="280" height="20"/>
 				<textElement verticalAlignment="Middle">
 					<font size="12" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Balance from the last bill]]></text>
+				<text><![CDATA[Balance from the last bill (including taxes)]]></text>
 			</staticText>
 			<textField>
 				<reportElement x="280" y="11" width="100" height="20"/>

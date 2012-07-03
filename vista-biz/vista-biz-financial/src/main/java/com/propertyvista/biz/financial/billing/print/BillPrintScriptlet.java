@@ -13,22 +13,19 @@
  */
 package com.propertyvista.biz.financial.billing.print;
 
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
 
 import net.sf.jasperreports.engine.JRDefaultScriptlet;
 import net.sf.jasperreports.engine.JRScriptletException;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.shared.IList;
 
-import com.propertyvista.biz.financial.billing.BillingUtils;
 import com.propertyvista.domain.financial.billing.InvoiceAccountCharge;
 import com.propertyvista.domain.financial.billing.InvoiceAccountCredit;
+import com.propertyvista.domain.financial.billing.InvoiceDebit;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.domain.financial.billing.InvoiceProductCharge;
-import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 
 public class BillPrintScriptlet extends JRDefaultScriptlet {
 
@@ -65,23 +62,11 @@ public class BillPrintScriptlet extends JRDefaultScriptlet {
         return "";
     }
 
-    public List<InvoiceLineItem> getImmediateLeaseAdjustment(IList<InvoiceLineItem> lineItems) {
-        return getLeaseAdjustment(lineItems, LeaseAdjustment.ExecutionType.immediate);
-    }
-
-    private List<InvoiceLineItem> getLeaseAdjustment(IList<InvoiceLineItem> lineItems, LeaseAdjustment.ExecutionType type) {
-        List<InvoiceLineItem> adjustments = new ArrayList<InvoiceLineItem>();
-        for (InvoiceAccountCharge charge : BillingUtils.getLineItemsForType(lineItems, InvoiceAccountCharge.class)) {
-            if (type.equals(charge.adjustment().executionType().getValue())) {
-                adjustments.add(charge);
-            }
+    public BigDecimal getAmountWithTax(InvoiceLineItem lineItem) throws JRScriptletException {
+        if (lineItem instanceof InvoiceDebit) {
+            return lineItem.amount().getValue().add(((InvoiceDebit) lineItem).taxTotal().getValue());
+        } else {
+            return lineItem.amount().getValue();
         }
-        for (InvoiceAccountCredit credit : BillingUtils.getLineItemsForType(lineItems, InvoiceAccountCredit.class)) {
-            if (type.equals(credit.adjustment().executionType().getValue())) {
-                adjustments.add(credit);
-            }
-        }
-        return adjustments;
     }
-
 }
