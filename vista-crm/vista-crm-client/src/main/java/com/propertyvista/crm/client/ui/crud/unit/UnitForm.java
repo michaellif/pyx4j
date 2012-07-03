@@ -24,6 +24,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.client.ui.CEntityLabel;
@@ -43,6 +44,7 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
+import com.propertyvista.crm.client.ui.notesandattachments.NotesAndAttachmentsForm;
 import com.propertyvista.crm.rpc.services.selections.SelectFloorplanListService;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -75,8 +77,8 @@ public class UnitForm extends CrmEntityForm<AptUnitDTO> {
 
 // TODO Hided till further investigation:
 //        addTab(createMarketingTab(), i18n.tr("Marketing"));
-        addTab(new Label("Notes and attachments goes here... "), i18n.tr("Notes & Attachments"));
 
+        tab = addTab(createNotesAndAttachmentsTab(i18n.tr("Notes & Attachments")) );
     }
 
     @Override
@@ -149,6 +151,13 @@ public class UnitForm extends CrmEntityForm<AptUnitDTO> {
         return main;
     }
 
+    private FormFlexPanel createNotesAndAttachmentsTab(String title) {
+        FormFlexPanel main = new FormFlexPanel(title);
+        int row = -1;
+        main.setWidget(++row, 0, inject(proto().notesAndAttachments(), new NotesAndAttachmentsForm()));
+        return main;
+    }
+    
     private static class BuildingBoundFloorplanSelectorDialog extends EntitySelectorTableDialog<Floorplan> {
 
         private static final List<ColumnDescriptor> COLUMNS;

@@ -56,6 +56,5 @@ public class FeatureForm extends CrmEntityForm<Feature> {
         content.getColumnFormatter().setWidth(1, "50%");
 
         selectTab(addTab(content, i18n.tr("General")));
-
     }
 }
