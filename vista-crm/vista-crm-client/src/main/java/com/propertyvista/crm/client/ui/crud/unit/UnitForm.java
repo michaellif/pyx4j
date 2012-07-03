@@ -91,7 +91,7 @@ public class UnitForm extends CrmEntityForm<AptUnitDTO> {
     private FormFlexPanel createGeneralTab(String title) {
 
         int row = -1;
-        FormFlexPanel left = new FormFlexPanel(title);
+        FormFlexPanel left = new FormFlexPanel();
 
         left.setWidget(
                 ++row,
@@ -136,7 +136,7 @@ public class UnitForm extends CrmEntityForm<AptUnitDTO> {
         get(proto().info()._bathrooms()).setViewable(true);
 
         // form main panel from those two:
-        FormFlexPanel main = new FormFlexPanel();
+        FormFlexPanel main = new FormFlexPanel(title);
 
         main.setWidget(0, 0, left);
         main.setWidget(0, 1, right);
