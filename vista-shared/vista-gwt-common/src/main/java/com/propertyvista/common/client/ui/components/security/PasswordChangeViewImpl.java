@@ -13,6 +13,8 @@
  */
 package com.propertyvista.common.client.ui.components.security;
 
+import java.util.List;
+
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -32,7 +34,7 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.rpc.PasswordChangeRequest;
 
-import com.propertyvista.common.client.ui.components.login.PasswordForm;
+import com.propertyvista.common.client.ui.components.login.PasswordChangeForm;
 
 public class PasswordChangeViewImpl implements PasswordChangeView {
 
@@ -40,7 +42,7 @@ public class PasswordChangeViewImpl implements PasswordChangeView {
 
     private Presenter presenter;
 
-    private final PasswordForm form;
+    private final PasswordChangeForm form;
 
     private final HTML userNameLabel;
 
@@ -53,7 +55,7 @@ public class PasswordChangeViewImpl implements PasswordChangeView {
         userNameLabel = new HTML();
         content.setWidget(++row, 0, userNameLabel);
         content.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
-        form = new PasswordForm(PasswordForm.Type.CHANGE);
+        form = new PasswordChangeForm();
         form.initContent();
         form.setWidth("100%");
         content.setWidget(++row, 0, form);
@@ -108,6 +110,21 @@ public class PasswordChangeViewImpl implements PasswordChangeView {
     @Override
     public void reset() {
         form.reset();
+    }
+
+    @Override
+    public void setAskForCurrentPassword(boolean isCurrentPasswordRequired) {
+        form.setAskForCurrentPassword(isCurrentPasswordRequired);
+    }
+
+    @Override
+    public void setAskForRequireChangePasswordOnNextSignIn(boolean isRequireChangePasswordOnNextSignInRequired) {
+        form.setAskForRequireChangePasswordOnNextSignIn(isRequireChangePasswordOnNextSignInRequired);
+    }
+
+    @Override
+    public void setDictionary(List<String> dictionary) {
+        form.setDictionary(dictionary);
     }
 
 }

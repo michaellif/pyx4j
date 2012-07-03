@@ -13,12 +13,13 @@
  */
 package com.propertyvista.common.client.ui.components.login;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.forms.client.events.NValueChangeEvent;
 import com.pyx4j.forms.client.events.NValueChangeHandler;
 import com.pyx4j.forms.client.ui.CComponent;
@@ -31,38 +32,35 @@ import com.pyx4j.forms.client.validators.password.DefaultPasswordStrengthRule;
 import com.pyx4j.forms.client.validators.password.PasswordStrengthValueValidator;
 import com.pyx4j.forms.client.validators.password.PasswordStrengthWidget;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.rpc.PasswordChangeRequest;
 
 import com.propertyvista.common.client.theme.HorizontalAlignCenterMixin;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 
-public class PasswordForm extends CEntityDecoratableForm<PasswordChangeRequest> {
+public class PasswordChangeForm extends CEntityDecoratableForm<PasswordChangeRequest> {
 
-    private final static I18n i18n = I18n.get(PasswordForm.class);
-
-    public enum Type {
-        CHANGE, RESET
-    }
-
-    private final Type type;
+    private final static I18n i18n = I18n.get(PasswordChangeForm.class);
 
     private PasswordStrengthWidget passwordStrengthWidget;
 
     private final DefaultPasswordStrengthRule passwordStrengthRule;
 
-    public PasswordForm(Type type) {
+    private boolean isCurrentPasswordRequired;
+
+    private boolean isRequireChangePasswordOnNextSignInRequired;
+
+    private List<String> dictionary;
+
+    public PasswordChangeForm(List<String> dictionary, boolean isCurrentPasswordRequired, boolean isRequireChangePasswordOnNextSignInRequired) {
         super(PasswordChangeRequest.class);
-        this.type = type;
         this.passwordStrengthRule = new DefaultPasswordStrengthRule();
+        this.isCurrentPasswordRequired = isCurrentPasswordRequired;
+        this.isRequireChangePasswordOnNextSignInRequired = isRequireChangePasswordOnNextSignInRequired;
+        setDictionary(dictionary);
     }
 
-    @Override
-    protected void onWidgetCreated() {
-        super.onWidgetCreated();
-        asWidget().setStyleName(HorizontalAlignCenterMixin.StyleName.HorizontalAlignCenter.name(), true);
-        asWidget().getElement().getStyle().setMarginTop(50, Unit.PX);
-        asWidget().getElement().getStyle().setMarginBottom(50, Unit.PX);
+    public PasswordChangeForm() {
+        this(null, true, true);
     }
 
     @Override
@@ -74,43 +72,17 @@ public class PasswordForm extends CEntityDecoratableForm<PasswordChangeRequest> 
 
         int row = -1;
 
-        if (type.equals(Type.CHANGE)) {
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().currentPassword())).componentWidth(15).labelWidth(15).build());
-            main.getFlexCellFormatter().getElement(row, 0).getStyle().setPaddingBottom(1., Unit.EM);
-        }
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().currentPassword())).componentWidth(15).labelWidth(15).build());
+        main.getFlexCellFormatter().getElement(row, 0).getStyle().setPaddingBottom(1., Unit.EM);
 
         passwordStrengthWidget = new PasswordStrengthWidget(passwordStrengthRule);
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().newPassword())).componentWidth(15).labelWidth(15).assistantWidget(passwordStrengthWidget)
                 .build());
-
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().newPasswordConfirm())).componentWidth(15).labelWidth(15).build());
 
-        if (type.equals(Type.CHANGE)) {
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().requireChangePasswordOnNextSignIn())).componentWidth(15).labelWidth(15).build());
-        }
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().requireChangePasswordOnNextSignIn())).componentWidth(15).labelWidth(15).build());
 
         return main;
-    }
-
-    @Override
-    protected void onPopulate() {
-        super.onPopulate();
-        boolean self = isSelfAdmin();
-        if (type.equals(Type.CHANGE)) {
-            get(proto().currentPassword()).setVisible(self);
-            get(proto().requireChangePasswordOnNextSignIn()).setVisible(!self);
-        }
-        if (self) {
-            passwordStrengthRule.setDictionary(Arrays.asList(ClientContext.getUserVisit().getName(), ClientContext.getUserVisit().getEmail()));
-        } else {
-            //TODO Artyom get the name from title to here.
-            //passwordStrengthRule.setDictionary("other user name");
-        }
-
-    }
-
-    private boolean isSelfAdmin() {
-        return getValue().userPk().isNull() || EqualsHelper.equals(getValue().userPk().getValue(), ClientContext.getUserVisit().getPrincipalPrimaryKey());
     }
 
     @Override
@@ -137,6 +109,43 @@ public class PasswordForm extends CEntityDecoratableForm<PasswordChangeRequest> 
         });
 
         get(proto().newPassword()).addValueValidator(new PasswordStrengthValueValidator(passwordStrengthRule));
+    }
+
+    public void setAskForCurrentPassword(boolean isCurrentPasswordRequired) {
+        this.isCurrentPasswordRequired = isCurrentPasswordRequired;
+        get(proto().currentPassword()).setVisible(this.isCurrentPasswordRequired);
+    }
+
+    public void setAskForRequireChangePasswordOnNextSignIn(boolean isRequireChangePasswordOnNextSignInRequired) {
+        this.isRequireChangePasswordOnNextSignInRequired = isRequireChangePasswordOnNextSignInRequired;
+        get(proto().requireChangePasswordOnNextSignIn()).setVisible(this.isRequireChangePasswordOnNextSignInRequired);
+    }
+
+    public void setDictionary(List<String> dictionary) {
+        if (dictionary != null) {
+            this.dictionary = new ArrayList<String>(dictionary);
+        } else {
+            this.dictionary = Collections.emptyList();
+        }
+        passwordStrengthRule.setDictionary(this.dictionary);
+    }
+
+    @Override
+    protected void onPopulate() {
+        super.onPopulate();
+
+        get(proto().currentPassword()).setVisible(isCurrentPasswordRequired);
+        get(proto().requireChangePasswordOnNextSignIn()).setVisible(isRequireChangePasswordOnNextSignInRequired);
+
+        passwordStrengthRule.setDictionary(dictionary);
+    }
+
+    @Override
+    protected void onWidgetCreated() {
+        super.onWidgetCreated();
+        asWidget().setStyleName(HorizontalAlignCenterMixin.StyleName.HorizontalAlignCenter.name(), true);
+        asWidget().getElement().getStyle().setMarginTop(50, Unit.PX);
+        asWidget().getElement().getStyle().setMarginBottom(50, Unit.PX);
     }
 
 }

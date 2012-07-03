@@ -13,6 +13,8 @@
  */
 package com.propertyvista.crm.client.activity.security;
 
+import java.util.Arrays;
+
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
@@ -49,8 +51,9 @@ public class PasswordChangeActivity extends AbstractActivity implements Password
 
     private final PasswordChangeView.Presenter.PrincipalClass principalClass;
 
-    public PasswordChangeActivity(Place place) {
+    private final String userName;
 
+    public PasswordChangeActivity(Place place) {
         view = SecurityViewFactory.instance(PasswordChangeView.class);
         view.setPresenter(this);
 
@@ -69,13 +72,20 @@ public class PasswordChangeActivity extends AbstractActivity implements Password
             History.back();
             throw new Error("wrong principal information", ex);
         }
-        String userName = isSelfAdmin() ? null : ((AppPlace) place).getFirstArg(PRINCIPAL_NAME_ARG);
-        view.initialize(userPk, userName);
+        userName = isSelfAdmin() ? null : ((AppPlace) place).getFirstArg(PRINCIPAL_NAME_ARG);
 
     }
 
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
+        view.setAskForCurrentPassword(isSelfAdmin());
+        view.setAskForRequireChangePasswordOnNextSignIn(!isSelfAdmin());
+        if (isSelfAdmin()) {
+            view.setDictionary(Arrays.asList(ClientContext.getUserVisit().getName(), ClientContext.getUserVisit().getEmail()));
+        } else {
+            view.setDictionary(Arrays.asList(userName));
+        }
+        view.initialize(userPk, userName);
         panel.setWidget(view);
     }
 
@@ -109,7 +119,7 @@ public class PasswordChangeActivity extends AbstractActivity implements Password
     }
 
     private boolean isSelfAdmin() {
-        return EqualsHelper.equals(userPk, ClientContext.getUserVisit().getPrincipalPrimaryKey());
+        return (principalClass == PrincipalClass.EMPLOYEE) & EqualsHelper.equals(userPk, ClientContext.getUserVisit().getPrincipalPrimaryKey());
     }
 
 }

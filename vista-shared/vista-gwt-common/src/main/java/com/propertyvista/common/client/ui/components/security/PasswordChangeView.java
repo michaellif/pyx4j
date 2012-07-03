@@ -13,6 +13,8 @@
  */
 package com.propertyvista.common.client.ui.components.security;
 
+import java.util.List;
+
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.Key;
@@ -47,4 +49,10 @@ public interface PasswordChangeView extends IsWidget {
     public void initialize(Key userPk, String userName);
 
     public PasswordChangeRequest getValue();
+
+    void setAskForCurrentPassword(boolean isCurrentPasswordRequired);
+
+    void setAskForRequireChangePasswordOnNextSignIn(boolean isRequireChangePasswordOnNextSignInRequired);
+
+    void setDictionary(List<String> dictionary);
 }

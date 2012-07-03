@@ -22,7 +22,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.pyx4j.essentials.client.crud.CrudDebugId;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.common.client.ui.components.login.PasswordForm;
+import com.propertyvista.common.client.ui.components.login.PasswordResetForm;
 
 public class PasswordResetViewImpl extends VerticalPanel implements PasswordResetView {
 
@@ -30,12 +30,12 @@ public class PasswordResetViewImpl extends VerticalPanel implements PasswordRese
 
     private Presenter presenter;
 
-    private final PasswordForm form;
+    private final PasswordResetForm form;
 
     public PasswordResetViewImpl() {
         setWidth("100%");
         setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
-        form = new PasswordForm(PasswordForm.Type.RESET);
+        form = new PasswordResetForm();
         form.initContent();
         add(form);
 

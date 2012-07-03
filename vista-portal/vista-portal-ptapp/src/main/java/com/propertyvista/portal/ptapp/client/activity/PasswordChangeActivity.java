@@ -13,6 +13,8 @@
  */
 package com.propertyvista.portal.ptapp.client.activity;
 
+import java.util.Arrays;
+
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
@@ -41,11 +43,14 @@ public class PasswordChangeActivity extends AbstractActivity implements Password
     public PasswordChangeActivity(Place place) {
         view = PtAppViewFactory.instance(PasswordChangeView.class);
         view.setPresenter(this);
-        view.initialize(ClientContext.getUserVisit().getPrincipalPrimaryKey(), null);
     }
 
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
+        view.setAskForCurrentPassword(false);
+        view.setAskForRequireChangePasswordOnNextSignIn(true);
+        view.setDictionary(Arrays.asList(ClientContext.getUserVisit().getName(), ClientContext.getUserVisit().getEmail()));
+        view.initialize(ClientContext.getUserVisit().getPrincipalPrimaryKey(), null);
         panel.setWidget(view);
     }
 
