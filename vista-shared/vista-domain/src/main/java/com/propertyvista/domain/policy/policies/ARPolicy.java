@@ -25,6 +25,7 @@ import com.propertyvista.domain.policy.framework.LowestApplicableNode;
 import com.propertyvista.domain.policy.framework.Policy;
 import com.propertyvista.domain.property.asset.building.Building;
 
+@Caption(name = "Aging Priority")
 @DiscriminatorValue("DepositPolicy")
 @LowestApplicableNode(value = Building.class)
 public interface ARPolicy extends Policy {

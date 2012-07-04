@@ -430,8 +430,8 @@ public class CrmSiteMap implements SiteMap {
 
             }
 
-            @PlaceProperties(caption = "AR")
-            @NavigationItem(navigLabel = "AR")
+            @PlaceProperties(caption = "Aging Priority")
+            @NavigationItem(navigLabel = "Aging Priority")
             public static class AR extends CrmCrudAppPlace {
 
             }
