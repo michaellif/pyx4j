@@ -47,9 +47,8 @@ public class DepositPolicyPreloader extends AbstractPolicyPreloader<DepositPolic
         DepositPolicy policy = EntityFactory.create(DepositPolicy.class);
 
         EntityQueryCriteria<ServiceItemType> srvType = EntityQueryCriteria.create(ServiceItemType.class);
-        srvType.add(new OrCriterion(PropertyCriterion.eq(srvType.proto().serviceType(), Service.ServiceType.commercialUnit), new OrCriterion(PropertyCriterion
-                .eq(srvType.proto().serviceType(), Service.ServiceType.residentialUnit), PropertyCriterion.eq(srvType.proto().serviceType(),
-                Service.ServiceType.residentialShortTermUnit))));
+        srvType.add(new OrCriterion(PropertyCriterion.eq(srvType.proto().serviceType(), Service.ServiceType.commercialUnit), PropertyCriterion.eq(srvType
+                .proto().serviceType(), Service.ServiceType.residentialUnit)));
         List<ServiceItemType> services = Persistence.service().query(srvType);
         for (ServiceItemType pit : services) {
 

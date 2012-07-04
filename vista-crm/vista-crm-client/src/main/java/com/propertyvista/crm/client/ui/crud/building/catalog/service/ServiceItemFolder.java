@@ -37,9 +37,6 @@ import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.domain.property.asset.BuildingElement;
-import com.propertyvista.domain.property.asset.LockerArea;
-import com.propertyvista.domain.property.asset.Parking;
-import com.propertyvista.domain.property.asset.Roof;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 
 class ServiceItemFolder extends VistaTableFolder<ProductItem> {
@@ -74,7 +71,8 @@ class ServiceItemFolder extends VistaTableFolder<ProductItem> {
         EntitySelectorTableDialog<?> buildingElementSelectionBox = null;
         switch (parent.getValue().version().type().getValue()) {
         case residentialUnit:
-        case residentialShortTermUnit:
+// VISTA-1622 - CRM:Product Dictionary:Service item Types - delete not supported
+//        case residentialShortTermUnit:
         case commercialUnit:
             List<AptUnit> alreadySelected = new ArrayList<AptUnit>(getValue().size());
             for (ProductItem item : getValue()) {
@@ -93,12 +91,14 @@ class ServiceItemFolder extends VistaTableFolder<ProductItem> {
                 }
             };
             break;
-        case garage:
-            break;
-        case storage:
-            break;
-        case roof:
-            break;
+
+// VISTA-1622 - CRM:Product Dictionary:Service item Types - delete not supported
+//        case garage:
+//            break;
+//        case storage:
+//            break;
+//        case roof:
+//            break;
         }
 
         if (buildingElementSelectionBox != null) {
@@ -134,20 +134,22 @@ class ServiceItemFolder extends VistaTableFolder<ProductItem> {
             Class<? extends IEntity> buildingElementClass = null;
             switch (parent.getValue().version().type().getValue()) {
             case residentialUnit:
-            case residentialShortTermUnit:
+// VISTA-1622 - CRM:Product Dictionary:Service item Types - delete not supported
+//            case residentialShortTermUnit:
             case commercialUnit:
                 buildingElementClass = AptUnit.class;
                 isViewable = true;
                 break;
-            case garage:
-                buildingElementClass = Parking.class;
-                break;
-            case storage:
-                buildingElementClass = LockerArea.class;
-                break;
-            case roof:
-                buildingElementClass = Roof.class;
-                break;
+// VISTA-1622 - CRM:Product Dictionary:Service item Types - delete not supported
+//            case garage:
+//                buildingElementClass = Parking.class;
+//                break;
+//            case storage:
+//                buildingElementClass = LockerArea.class;
+//                break;
+//            case roof:
+//                buildingElementClass = Roof.class;
+//                break;
             }
 
             CComponent<?, ?> comp;

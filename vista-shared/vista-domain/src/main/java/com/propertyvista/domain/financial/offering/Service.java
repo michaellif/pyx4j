@@ -43,17 +43,20 @@ public interface Service extends Product, IVersionedEntity<ServiceV> {
 
         residentialUnit,
 
-        commercialUnit,
+        commercialUnit;
 
-        residentialShortTermUnit,
-
-        roof,
-
-        sundry,
-
-        garage,
-
-        storage;
+        /*
+         * VISTA-1622 - CRM:Product Dictionary:Service item Types - delete not supported
+         * residentialShortTermUnit,
+         * 
+         * roof,
+         * 
+         * sundry,
+         * 
+         * garage,
+         * 
+         * storage;
+         */
 
         @Override
         public String toString() {

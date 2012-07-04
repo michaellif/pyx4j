@@ -40,11 +40,13 @@ public class ProductItemTypesDataModel {
         generateChargeItemType("Regular Residential Unit", Service.ServiceType.residentialUnit);
         generateChargeItemType("Ocean View Residential Unit", Service.ServiceType.residentialUnit);
         generateChargeItemType("Regular Commercial Unit", Service.ServiceType.commercialUnit);
-        generateChargeItemType("Regular Short Term Residential Unit", Service.ServiceType.residentialShortTermUnit);
-        generateChargeItemType("Roof Spot", Service.ServiceType.roof);
-        generateChargeItemType("Billboard", Service.ServiceType.sundry);
-        generateChargeItemType("Garage", Service.ServiceType.garage);
-        generateChargeItemType("Storage", Service.ServiceType.storage);
+
+// VISTA-1622 - CRM:Product Dictionary:Service item Types - delete not supported
+//        generateChargeItemType("Regular Short Term Residential Unit", Service.ServiceType.residentialShortTermUnit);
+//        generateChargeItemType("Roof Spot", Service.ServiceType.roof);
+//        generateChargeItemType("Billboard", Service.ServiceType.sundry);
+//        generateChargeItemType("Garage", Service.ServiceType.garage);
+//        generateChargeItemType("Storage", Service.ServiceType.storage);
 
         generateChargeItemType("Regular Parking", Feature.Type.parking);
         generateChargeItemType("Wide Parking", Feature.Type.parking);

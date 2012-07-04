@@ -36,8 +36,8 @@ import com.propertyvista.dto.AptUnitServicePriceDTO;
 
 public class UnitCrudServiceImpl extends AbstractCrudServiceDtoImpl<AptUnit, AptUnitDTO> implements UnitCrudService {
 
-    private static final Vector<Service.ServiceType> SERVICES_PROVIDED_BY_UNIT = new Vector<Service.ServiceType>(Arrays.asList(Service.ServiceType.residentialUnit,
-            Service.ServiceType.residentialShortTermUnit, Service.ServiceType.commercialUnit));
+    private static final Vector<Service.ServiceType> SERVICES_PROVIDED_BY_UNIT = new Vector<Service.ServiceType>(Arrays.asList(
+            Service.ServiceType.residentialUnit, Service.ServiceType.commercialUnit));
 
     public UnitCrudServiceImpl() {
         super(AptUnit.class, AptUnitDTO.class);

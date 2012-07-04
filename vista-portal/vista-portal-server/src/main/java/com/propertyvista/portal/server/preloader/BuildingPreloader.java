@@ -249,25 +249,26 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
             buildingRoofsCriteria.add(PropertyCriterion.eq(buildingRoofsCriteria.proto().building(), building));
             List<Roof> buildingRoofs = Persistence.service().query(buildingRoofsCriteria);
 
-            for (Service service : building.productCatalog().services()) {
-                switch (service.version().type().getValue()) {
-                case garage:
-                    for (ProductItem item : service.version().items()) {
-                        item.element().set(RandomUtil.random(buildingParkings));
-                    }
-                    break;
-                case storage:
-                    for (ProductItem item : service.version().items()) {
-                        item.element().set(RandomUtil.random(buildingockers));
-                    }
-                    break;
-                case roof:
-                    for (ProductItem item : service.version().items()) {
-                        item.element().set(RandomUtil.random(buildingRoofs));
-                    }
-                    break;
-                }
-            }
+// VISTA-1622 - CRM:Product Dictionary:Service item Types - delete not supported
+//            for (Service service : building.productCatalog().services()) {
+//                switch (service.version().type().getValue()) {
+//                case garage:
+//                    for (ProductItem item : service.version().items()) {
+//                        item.element().set(RandomUtil.random(buildingParkings));
+//                    }
+//                    break;
+//                case storage:
+//                    for (ProductItem item : service.version().items()) {
+//                        item.element().set(RandomUtil.random(buildingockers));
+//                    }
+//                    break;
+//                case roof:
+//                    for (ProductItem item : service.version().items()) {
+//                        item.element().set(RandomUtil.random(buildingRoofs));
+//                    }
+//                    break;
+//                }
+//            }
 
             for (Feature feature : building.productCatalog().features()) {
                 switch (feature.version().type().getValue()) {
