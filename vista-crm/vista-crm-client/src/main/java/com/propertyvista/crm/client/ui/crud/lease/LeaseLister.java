@@ -47,6 +47,7 @@ public class LeaseLister extends VersionedLister<LeaseDTO> {
 
     public LeaseLister() {
         super(LeaseDTO.class, true);
+        getDataTablePanel().getAddButton().setCaption(i18n.tr("Add Existing Lease"));
 
         setColumnDescriptors(//@formatter:off
             new Builder(proto().leaseId()).build(),
