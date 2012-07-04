@@ -21,6 +21,7 @@ import com.google.gwt.user.client.Command;
 
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.pyx4j.site.client.ui.crud.lister.ListerInternalViewImplBase;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
@@ -114,10 +115,10 @@ public class LeadViewerViewImpl extends CrmViewerViewImplBase<Lead> implements L
 
     @Override
     public boolean onConvertionFail(Throwable caught) {
-        if (caught instanceof Error) {
-            MessageDialog.error(i18n.tr("Error"), caught.getMessage());
+        if (caught instanceof UserRuntimeException) {
+            MessageDialog.info(i18n.tr("Conversion failed"), caught.getMessage());
         } else {
-            MessageDialog.error(i18n.tr("Error"), i18n.tr("Conversion is failed!"));
+            MessageDialog.error(i18n.tr("Error"), i18n.tr("Conversion failed due to system error"));
         }
         return true;
     }
