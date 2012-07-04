@@ -53,7 +53,7 @@ public class PersonalIncomeFolder extends VistaBoxFolder<PersonalIncome> {
                         case fulltime:
                         case parttime:
                             return (income.employer().ends().getValue().getTime() - income.employer().starts().getValue().getTime()) > 365 * 24 * 60 * 60
-                                    * 1000l ? null : new ValidationError(i18n.tr("You need to enter previous employment information"));
+                                    * 1000l ? null : new ValidationError(component, i18n.tr("You need to enter previous employment information"));
                             // valid, if more than 1 year, otherwise - previous employment needed! 
                         }
                     }

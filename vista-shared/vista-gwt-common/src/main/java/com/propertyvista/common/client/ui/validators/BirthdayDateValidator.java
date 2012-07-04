@@ -29,7 +29,7 @@ public class BirthdayDateValidator implements EditableValueValidator<Date> {
         if (value == null) {
             return null;
         }
-        return value.before(new Date()) ? null : new ValidationError(i18n.tr("Future birthday date"));//yuriyl temp note: next birthday date? invalid birthday date?
+        return value.before(new Date()) ? null : new ValidationError(component, i18n.tr("Future birthday date"));//yuriyl temp note: next birthday date? invalid birthday date?
     }
 
 }

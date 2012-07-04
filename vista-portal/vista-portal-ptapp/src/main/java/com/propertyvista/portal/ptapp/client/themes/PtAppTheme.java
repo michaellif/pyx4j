@@ -21,7 +21,7 @@ import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.ThemeColors;
 import com.pyx4j.entity.client.ui.datatable.DefaultDataTableTheme;
 import com.pyx4j.entity.client.ui.folder.DefaultEntityFolderTheme;
-import com.pyx4j.forms.client.ui.DefaultCCOmponentsTheme;
+import com.pyx4j.forms.client.ui.DefaultCComponentsTheme;
 import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
 import com.pyx4j.forms.client.ui.panels.DefaultFormFlexPanelTheme;
 import com.pyx4j.widgets.client.DefaultWidgetsTheme;
@@ -61,7 +61,7 @@ public class PtAppTheme extends VistaTheme {
         addTheme(new DefaultDatePickerTheme());
         addTheme(new DefaultDialogTheme());
         addTheme(new DefaultDataTableTheme());
-        addTheme(new DefaultCCOmponentsTheme());
+        addTheme(new DefaultCComponentsTheme());
 
         addTheme(new PtAppSitePanelTheme());
         addTheme(new NewPaymentMethodEditorTheme());

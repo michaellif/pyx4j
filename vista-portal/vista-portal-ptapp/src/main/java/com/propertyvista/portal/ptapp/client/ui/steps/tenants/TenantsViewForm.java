@@ -56,7 +56,7 @@ public class TenantsViewForm extends CEntityForm<TenantInApplicationListDTO> {
 
             @Override
             public ValidationError isValid(CComponent<TenantInApplicationListDTO, ?> component, TenantInApplicationListDTO value) {
-                return !EntityGraph.hasBusinessDuplicates(getValue().tenants()) ? null : new ValidationError(i18n.tr("Duplicate Tenants Specified"));
+                return !EntityGraph.hasBusinessDuplicates(getValue().tenants()) ? null : new ValidationError(component, i18n.tr("Duplicate Tenants Specified"));
             }
 
         });
@@ -66,7 +66,7 @@ public class TenantsViewForm extends CEntityForm<TenantInApplicationListDTO> {
             public ValidationError isValid(CComponent<TenantInApplicationListDTO, ?> component, TenantInApplicationListDTO value) {
                 int size = getValue().tenants().size();
                 return (size <= value.tenantsMaximum().getValue()) && ((value.tenantsMaximum().isNull() || (size <= value.tenantsMaximum().getValue()))) ? null
-                        : new ValidationError(i18n.tr("Your Selection Exceeded The Number Of Allowed Tenants"));
+                        : new ValidationError(component, i18n.tr("Your Selection Exceeded The Number Of Allowed Tenants"));
             }
         });
     }

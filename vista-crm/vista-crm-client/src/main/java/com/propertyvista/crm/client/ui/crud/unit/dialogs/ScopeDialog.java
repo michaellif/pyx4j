@@ -78,7 +78,7 @@ public class ScopeDialog extends OkCancelDialog {
                     @Override
                     public ValidationError isValid(CComponent<Date, ?> component, Date value) {
                         if (value.before(minRenoEndDay)) {
-                            return new ValidationError(i18n.tr("The minimal acceptable renovation date is {0}", minRenoEndDay));
+                            return new ValidationError(component, i18n.tr("The minimal acceptable renovation date is {0}", minRenoEndDay));
                         } else {
                             return null;
                         }

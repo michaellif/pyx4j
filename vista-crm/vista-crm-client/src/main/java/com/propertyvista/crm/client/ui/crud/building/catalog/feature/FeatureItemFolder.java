@@ -166,7 +166,7 @@ class FeatureItemFolder extends VistaTableFolder<ProductItem> {
                         }
                     }
                     if (!defaultFound) {
-                        return new ValidationError(i18n.tr("Default item should be selected"));
+                        return new ValidationError(component, i18n.tr("Default item should be selected"));
                     }
                 }
                 return null;

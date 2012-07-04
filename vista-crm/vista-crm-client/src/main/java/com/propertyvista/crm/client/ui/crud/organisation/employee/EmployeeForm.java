@@ -62,7 +62,7 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
                 if (value.equals(get(proto().password()).getValue())) {
                     return null;
                 } else {
-                    return new ValidationError(i18n.tr("The passwords don't match. Please retype the passwords."));
+                    return new ValidationError(component, i18n.tr("The passwords don't match. Please retype the passwords."));
                 }
             }
         });

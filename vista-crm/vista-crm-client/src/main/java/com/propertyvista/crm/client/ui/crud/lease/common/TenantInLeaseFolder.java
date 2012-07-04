@@ -118,7 +118,7 @@ public class TenantInLeaseFolder extends LeaseParticipantFolder<Tenant> {
                     for (Tenant item : value) {
                         if (applicant) {
                             if (item.role().getValue() == LeaseParticipant.Role.Applicant) {
-                                return new ValidationError(i18n.tr("Just one applicant could be selected!"));
+                                return new ValidationError(component, i18n.tr("Just one applicant could be selected!"));
                             }
                         } else {
                             applicant = (item.role().getValue() == LeaseParticipant.Role.Applicant);
@@ -141,9 +141,9 @@ public class TenantInLeaseFolder extends LeaseParticipantFolder<Tenant> {
                                 totalPrc += p.intValue();
                             }
                         }
-                        return (totalPrc == 100 ? null : new ValidationError(i18n.tr("Sum Of all Percentages should be equal to 100%!")));
+                        return (totalPrc == 100 ? null : new ValidationError(component, i18n.tr("Sum Of all Percentages should be equal to 100%!")));
                     } else {
-                        return new ValidationError(i18n.tr("At least one Applicant should be present!"));
+                        return new ValidationError(component, i18n.tr("At least one Applicant should be present!"));
                     }
                 }
                 return null;

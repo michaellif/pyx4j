@@ -116,7 +116,7 @@ public class SignatureFolder extends VistaBoxFolder<DigitalSignature> {
                         return null;
                     }
 
-                    return DigitalSignatureValidation.isSignatureValid(getValue().person().person(), value) ? null : new ValidationError(i18n
+                    return DigitalSignatureValidation.isSignatureValid(getValue().person().person(), value) ? null : new ValidationError(component, i18n
                             .tr("Digital Signature Must Match Your Name On File"));
                 }
 

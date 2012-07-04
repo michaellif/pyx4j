@@ -166,7 +166,7 @@ public class PaymentViewForm extends CEntityDecoratableForm<PaymentInformationDT
                 if (value == null) {
                     return null;
                 }
-                return value ? null : new ValidationError(i18n.tr("You should agree on the terms"));
+                return value ? null : new ValidationError(component, i18n.tr("You should agree on the terms"));
             }
         });
 

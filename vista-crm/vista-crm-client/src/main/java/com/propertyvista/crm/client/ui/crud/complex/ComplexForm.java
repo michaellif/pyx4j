@@ -67,7 +67,7 @@ public class ComplexForm extends CrmEntityForm<ComplexDTO> {
                         if (ValidationUtils.isSimpleUrl(url)) {
                             return null;
                         } else {
-                            return new ValidationError(i18n.tr("Please use proper URL format, e.g. www.propertyvista.com"));
+                            return new ValidationError(component, i18n.tr("Please use proper URL format, e.g. www.propertyvista.com"));
                         }
                     }
                     return null;

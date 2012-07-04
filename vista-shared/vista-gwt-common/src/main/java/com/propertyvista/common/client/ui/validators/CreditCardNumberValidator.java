@@ -28,7 +28,7 @@ public class CreditCardNumberValidator implements EditableValueValidator<String>
     @Override
     public ValidationError isValid(CComponent<String, ?> component, String value) {
         if (CommonsStringUtils.isStringSet(value)) {
-            return ValidationUtils.isCreditCardNumberValid(value) ? null : new ValidationError(i18n.tr("Invalid Credit Card Number"));
+            return ValidationUtils.isCreditCardNumberValid(value) ? null : new ValidationError(component, i18n.tr("Invalid Credit Card Number"));
         } else {
             return null;
         }

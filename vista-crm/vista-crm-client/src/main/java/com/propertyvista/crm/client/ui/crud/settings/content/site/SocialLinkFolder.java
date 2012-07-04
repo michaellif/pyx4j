@@ -138,9 +138,9 @@ class SocialLinkFolder extends VistaBoxFolder<SocialLink> {
                 @Override
                 public ValidationError isValid(CComponent<String, ?> component, String url) {
                     if (url == null || url.length() == 0) {
-                        return new ValidationError(i18n.tr("URL should not be empty"));
+                        return new ValidationError(component, i18n.tr("URL should not be empty"));
                     } else if (!ValidationUtils.isCorrectUrl(url)) {
-                        return new ValidationError(i18n.tr("Please use proper URL format"));
+                        return new ValidationError(component, i18n.tr("Please use proper URL format"));
                     }
                     return null;
                 }

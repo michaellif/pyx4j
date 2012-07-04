@@ -148,7 +148,7 @@ public class ComplexBuildingFolder extends VistaTableFolder<Building> {
                         }
                     }
                     if (!primaryFound) {
-                        return new ValidationError(i18n.tr("Primary building should be selected"));
+                        return new ValidationError(component, i18n.tr("Primary building should be selected"));
                     }
                 }
                 return null;

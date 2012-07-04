@@ -31,7 +31,7 @@ public class OldAgeValidator implements EditableValueValidator<Date> {
             return null;
         }
         Date current = new Date();
-        return current.getYear() - value.getYear() < 150 ? null : new ValidationError(i18n.tr("Age cannot be greater than 150 years"));
+        return current.getYear() - value.getYear() < 150 ? null : new ValidationError(component, i18n.tr("Age cannot be greater than 150 years"));
     }
 
 }

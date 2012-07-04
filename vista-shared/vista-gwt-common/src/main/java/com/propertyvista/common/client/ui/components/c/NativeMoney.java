@@ -35,7 +35,7 @@ import com.pyx4j.commons.css.IStyleDependent;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.DefaultCCOmponentsTheme;
+import com.pyx4j.forms.client.ui.DefaultCComponentsTheme;
 import com.pyx4j.forms.client.ui.INativeTextComponent;
 import com.pyx4j.forms.client.ui.NativeTextBox;
 
@@ -151,12 +151,12 @@ public class NativeMoney extends SimplePanel implements Focusable, INativeTextCo
     @Override
     public void onPropertyChange(PropertyChangeEvent event) {
         if (event.isEventOfType(PropertyName.repopulated)) {
-            amount.removeStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.invalid.name());
+            amount.removeStyleDependentName(DefaultCComponentsTheme.StyleDependent.invalid.name());
         } else if (event.isEventOfType(PropertyName.valid, PropertyName.visited)) {
             if (cComponent.isValid()) {
-                amount.removeStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.invalid.name());
+                amount.removeStyleDependentName(DefaultCComponentsTheme.StyleDependent.invalid.name());
             } else if (cComponent.isVisited()) {
-                amount.addStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.invalid.name());
+                amount.addStyleDependentName(DefaultCComponentsTheme.StyleDependent.invalid.name());
             }
         }
     }

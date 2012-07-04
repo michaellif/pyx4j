@@ -116,7 +116,8 @@ public class AgreeFolder extends VistaTableFolder<IAgree> {
             get(proto().agree()).addValueValidator(new EditableValueValidator<Boolean>() {
                 @Override
                 public ValidationError isValid(CComponent<Boolean, ?> component, Boolean value) {
-                    return value == Boolean.TRUE ? null : new ValidationError(i18n.tr("You Must Agree To The Terms And Conditions To Continue"));
+                    return value == Boolean.TRUE ? null : new ValidationError(get(proto().agree()), i18n
+                            .tr("You Must Agree To The Terms And Conditions To Continue"));
                 }
             });
         }

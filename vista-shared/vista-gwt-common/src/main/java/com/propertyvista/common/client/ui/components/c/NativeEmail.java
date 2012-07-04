@@ -35,7 +35,7 @@ import com.pyx4j.commons.css.Selector;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.DefaultCCOmponentsTheme;
+import com.pyx4j.forms.client.ui.DefaultCComponentsTheme;
 import com.pyx4j.forms.client.ui.INativeFocusComponent;
 import com.pyx4j.widgets.client.TextBox;
 
@@ -170,12 +170,12 @@ public class NativeEmail extends SimplePanel implements INativeFocusComponent<Em
     @Override
     public void onPropertyChange(PropertyChangeEvent event) {
         if (event.isEventOfType(PropertyName.repopulated)) {
-            removeStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.invalid.name());
+            removeStyleDependentName(DefaultCComponentsTheme.StyleDependent.invalid.name());
         } else if (event.isEventOfType(PropertyName.valid, PropertyName.visited)) {
             if (cComponent.isValid()) {
-                removeStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.invalid.name());
+                removeStyleDependentName(DefaultCComponentsTheme.StyleDependent.invalid.name());
             } else if (cComponent.isVisited()) {
-                addStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.invalid.name());
+                addStyleDependentName(DefaultCComponentsTheme.StyleDependent.invalid.name());
             }
         }
     }

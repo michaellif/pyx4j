@@ -130,7 +130,7 @@ public class PaymentMethodsForm extends CEntityForm<PaymentMethodListDTO> {
                             }
                         }
                         if (!primaryFound) {
-                            return new ValidationError(i18n.tr("Default payment should be selected"));
+                            return new ValidationError(component, i18n.tr("Default payment should be selected"));
                         }
                     }
                     return null;

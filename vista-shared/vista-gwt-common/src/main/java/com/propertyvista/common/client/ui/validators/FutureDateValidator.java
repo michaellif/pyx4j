@@ -37,6 +37,6 @@ public class FutureDateValidator implements EditableValueValidator<Date> {
 
     @Override
     public ValidationError isValid(CComponent<Date, ?> component, Date value) {
-        return (value == null) || !value.before(TimeUtils.today()) ? null : new ValidationError(message);
+        return (value == null) || !value.before(TimeUtils.today()) ? null : new ValidationError(component, message);
     }
 }

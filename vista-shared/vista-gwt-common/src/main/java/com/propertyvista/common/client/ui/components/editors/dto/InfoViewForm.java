@@ -200,7 +200,7 @@ public class InfoViewForm extends CEntityDecoratableForm<TenantInfoDTO> {
                         return null;
                     }
 
-                    return !EntityGraph.hasBusinessDuplicates(getValue().emergencyContacts()) ? null : new ValidationError(i18n
+                    return !EntityGraph.hasBusinessDuplicates(getValue().emergencyContacts()) ? null : new ValidationError(component, i18n
                             .tr("Duplicate contacts specified"));
                 }
             });
@@ -230,7 +230,7 @@ public class InfoViewForm extends CEntityDecoratableForm<TenantInfoDTO> {
                 Date date = value2.getValue();
                 long limit1 = date.getTime() + 2678400000L; //limits date1 to be within a month of date2
                 long limit2 = date.getTime() - 2678400000L;
-                return (date == null || (value.getTime() > limit2 && value.getTime() < limit1)) ? null : new ValidationError(message);
+                return (date == null || (value.getTime() > limit2 && value.getTime() < limit1)) ? null : new ValidationError(component, message);
             }
         });
     }

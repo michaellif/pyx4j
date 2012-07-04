@@ -48,10 +48,10 @@ public class IdUploaderFolder extends VistaBoxFolder<IdentificationDocument> {
                     if (documentationPolicy != null) {
                         int numOfRemainingDocs = documentationPolicy.numberOfRequiredIDs().getValue() - getValue().size();
                         if (numOfRemainingDocs > 0) {
-                            return new ValidationError(i18n.tr("{0} more documents are required", numOfRemainingDocs));
+                            return new ValidationError(component, i18n.tr("{0} more documents are required", numOfRemainingDocs));
                         }
                     } else {
-                        return new ValidationError(i18n.tr("Validation Policy Not Available"));
+                        return new ValidationError(component, i18n.tr("Validation Policy Not Available"));
                     }
                 }
                 return null;
@@ -103,7 +103,7 @@ public class IdUploaderFolder extends VistaBoxFolder<IdentificationDocument> {
                 @Override
                 public ValidationError isValid(CComponent<IList<ApplicationDocumentFile>, ?> component, IList<ApplicationDocumentFile> value) {
                     if (value != null && value.size() < 1) {
-                        return new ValidationError(i18n.tr("at least one document file is required"));
+                        return new ValidationError(component, i18n.tr("at least one document file is required"));
                     } else {
                         return null;
                     }

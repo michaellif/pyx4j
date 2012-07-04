@@ -109,7 +109,8 @@ public class FeatureExFolder extends VistaBoxFolder<BillableItem> {
                 if (value == null) {
                     return null;
                 }
-                return (value.size() < getMaxCount()) ? null : new ValidationError(i18n.tr("You cannot add more than {0} items here!", getMaxCount()));
+                return (value.size() < getMaxCount()) ? null : new ValidationError(component,
+                        i18n.tr("You cannot add more than {0} items here!", getMaxCount()));
             }
         });
         super.addValidations();

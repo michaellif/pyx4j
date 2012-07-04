@@ -53,7 +53,7 @@ public class DateInPeriodValidation {
                     return null;
                 }
                 Date end = value3.getValue();
-                return (value != null) && !value.after(end) ? null : new ValidationError(msg);
+                return (value != null) && !value.after(end) ? null : new ValidationError(component, msg);
             }
 
         });
@@ -65,7 +65,7 @@ public class DateInPeriodValidation {
                     return null;
                 }
                 Date start = value1.getValue();
-                return (value != null) && !value.before(start) ? null : new ValidationError(msg);
+                return (value != null) && !value.before(start) ? null : new ValidationError(component, msg);
             }
 
         });

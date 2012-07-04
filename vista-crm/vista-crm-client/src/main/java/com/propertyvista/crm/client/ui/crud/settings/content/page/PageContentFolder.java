@@ -102,7 +102,7 @@ class PageContentFolder extends VistaBoxFolder<PageContent> {
                 if (value == null) {
                     return null;
                 }
-                return !value.isEmpty() ? null : new ValidationError(i18n.tr("At least one content item is necessary"));
+                return !value.isEmpty() ? null : new ValidationError(component, i18n.tr("At least one content item is necessary"));
             }
         });
     }

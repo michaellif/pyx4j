@@ -68,7 +68,7 @@ public class PaymentsSummaryGadgetMetadataForm extends CEntityDecoratableForm<Pa
             @Override
             public ValidationError isValid(CComponent<Set<PaymentStatus>, ?> component, Set<PaymentStatus> value) {
                 if (value != null && value.isEmpty()) {
-                    return new ValidationError(i18n.tr("Please select at least one payment status option"));
+                    return new ValidationError(component, i18n.tr("Please select at least one payment status option"));
                 } else {
                     return null;
                 }

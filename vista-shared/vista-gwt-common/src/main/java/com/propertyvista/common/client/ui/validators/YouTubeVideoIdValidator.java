@@ -35,7 +35,7 @@ public class YouTubeVideoIdValidator implements EditableValueValidator<String> {
             }
         }
         value = value.trim();
-        return value.matches("[a-zA-Z0-9_-]{11}") ? null : new ValidationError(i18n.tr("This Is Not A Valid YouTube Video ID"));
+        return value.matches("[a-zA-Z0-9_-]{11}") ? null : new ValidationError(component, i18n.tr("This Is Not A Valid YouTube Video ID"));
     }
 
 }

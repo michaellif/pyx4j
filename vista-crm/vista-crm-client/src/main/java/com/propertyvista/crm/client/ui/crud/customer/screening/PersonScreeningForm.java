@@ -112,7 +112,8 @@ public class PersonScreeningForm extends CrmEntityForm<PersonScreening> {
                     return null;
                 }
                 IPrimitive<LogicalDate> date = getValue().previousAddress().moveOutDate();
-                return (date.isNull() || value.before(date.getValue())) ? null : new ValidationError(i18n.tr("Move In Date must be less then Move Out Date"));
+                return (date.isNull() || value.before(date.getValue())) ? null : new ValidationError(component, i18n
+                        .tr("Move In Date must be less then Move Out Date"));
             }
 
         });
@@ -131,7 +132,8 @@ public class PersonScreeningForm extends CrmEntityForm<PersonScreening> {
                     return null;
                 }
                 IPrimitive<LogicalDate> date = getValue().previousAddress().moveInDate();
-                return (date.isNull() || value.after(date.getValue())) ? null : new ValidationError(i18n.tr("Move Out Date must be greater then Move In Date"));
+                return (date.isNull() || value.after(date.getValue())) ? null : new ValidationError(component, i18n
+                        .tr("Move Out Date must be greater then Move In Date"));
             }
 
         });

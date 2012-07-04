@@ -80,7 +80,7 @@ public class PasswordResetForm extends CEntityDecoratableForm<PasswordChangeRequ
             @Override
             public ValidationError isValid(CComponent<String, ?> component, String value) {
                 if (value == null || !value.equals(get(proto().newPassword()).getValue())) {
-                    return new ValidationError(i18n.tr("The passwords don't match."));
+                    return new ValidationError(component, i18n.tr("The passwords don't match."));
                 } else {
                     return null;
                 }

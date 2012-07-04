@@ -324,7 +324,7 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
             @Override
             public ValidationError isValid(CComponent<List<Tenant>, ?> component, List<Tenant> value) {
                 if (value != null) {
-                    return (value.isEmpty() ? new ValidationError(i18n.tr("At least one tenant should be selected!")) : null);
+                    return (value.isEmpty() ? new ValidationError(component, i18n.tr("At least one tenant should be selected!")) : null);
                 }
                 return null;
             }

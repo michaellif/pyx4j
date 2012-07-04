@@ -61,7 +61,8 @@ public class GeoLocationEditor extends CEntityDecoratableForm<GeoLocation> {
 
             @Override
             public ValidationError isValid(CComponent<Double, ?> component, Double value) {
-                return (value == null) || (value >= 0 && value <= 90) ? null : new ValidationError(i18n.tr("Latitude may be in range [0-90] degree"));
+                return (value == null) || (value >= 0 && value <= 90) ? null
+                        : new ValidationError(component, i18n.tr("Latitude may be in range [0-90] degree"));
             }
 
         });
@@ -70,7 +71,8 @@ public class GeoLocationEditor extends CEntityDecoratableForm<GeoLocation> {
 
             @Override
             public ValidationError isValid(CComponent<Double, ?> component, Double value) {
-                return (value == null) || (value >= 0 && value <= 180) ? null : new ValidationError(i18n.tr("Longitude may be in range [0-180] degree"));
+                return (value == null) || (value >= 0 && value <= 180) ? null : new ValidationError(component, i18n
+                        .tr("Longitude may be in range [0-180] degree"));
             }
 
         });
@@ -80,7 +82,7 @@ public class GeoLocationEditor extends CEntityDecoratableForm<GeoLocation> {
             @Override
             public ValidationError isValid(CComponent<LatitudeType, ?> component, LatitudeType value) {
                 CComponent<Double, ?> latitude = get(proto().latitude());
-                return (value != null || latitude.getValue() == null) ? null : new ValidationError(i18n.tr("This field is Mandatory"));
+                return (value != null || latitude.getValue() == null) ? null : new ValidationError(component, i18n.tr("This field is Mandatory"));
             }
 
         });
@@ -90,7 +92,7 @@ public class GeoLocationEditor extends CEntityDecoratableForm<GeoLocation> {
             @Override
             public ValidationError isValid(CComponent<LongitudeType, ?> component, LongitudeType value) {
                 CComponent<Double, ?> longitude = get(proto().longitude());
-                return (value != null || longitude.getValue() == null) ? null : new ValidationError(i18n.tr("This field is Mandatory"));
+                return (value != null || longitude.getValue() == null) ? null : new ValidationError(component, i18n.tr("This field is Mandatory"));
             }
 
         });

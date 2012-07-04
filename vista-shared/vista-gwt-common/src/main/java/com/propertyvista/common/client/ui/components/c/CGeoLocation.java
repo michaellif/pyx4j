@@ -55,13 +55,13 @@ public class CGeoLocation extends CComponent<GeoLocation, NativeGeoLocation> {
                 if (!value.latitude().isNull()) {
                     if (value.latitude().getValue() < 0 || value.latitude().getValue() > 90) {
                         validationMessage = "Latitude may be in range [0-90] degree";
-                        return new ValidationError(validationMessage);
+                        return new ValidationError(component, validationMessage);
                     }
                 }
                 if (!value.longitude().isNull()) {
                     if (value.longitude().getValue() < 0 || value.longitude().getValue() > 180) {
                         validationMessage = "Longitude may be in range [0-180] degree";
-                        return new ValidationError(validationMessage);
+                        return new ValidationError(component, validationMessage);
                     }
                 }
             }

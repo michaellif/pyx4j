@@ -40,7 +40,6 @@ import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.common.client.ui.validators.BirthdayDateValidator;
 import com.propertyvista.common.client.ui.validators.OldAgeValidator;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
-import com.propertyvista.domain.tenant.lease.LeaseParticipant.Role;
 import com.propertyvista.domain.util.ValidationUtils;
 import com.propertyvista.dto.TenantInLeaseDTO;
 
@@ -129,7 +128,7 @@ public class TenantFolder extends VistaTableFolder<TenantInLeaseDTO> {
                     }
 
                     if (getValue().role().getValue() == LeaseParticipant.Role.Applicant) {
-                        return ValidationUtils.isOlderThen18(value) ? null : new ValidationError(i18n.tr("Applicant must be at least 18 years old"));
+                        return ValidationUtils.isOlderThen18(value) ? null : new ValidationError(component, i18n.tr("Applicant must be at least 18 years old"));
                     } else {
                         return null;
                     }
@@ -168,7 +167,8 @@ public class TenantFolder extends VistaTableFolder<TenantInLeaseDTO> {
                             return;
                         }
 
-                        if (LeaseParticipant.Role.Dependent == event.getValue() && !ValidationUtils.isOlderThen18(get(proto().customer().person().birthDate()).getValue())) {
+                        if (LeaseParticipant.Role.Dependent == event.getValue()
+                                && !ValidationUtils.isOlderThen18(get(proto().customer().person().birthDate()).getValue())) {
                             setMandatoryDependant();
                         }
                     }

@@ -135,7 +135,7 @@ public class TenantForm extends CrmEntityForm<TenantDTO> {
                 if (value == null || getValue() == null) {
                     return null;
                 }
-                return !EntityGraph.hasBusinessDuplicates(getValue().customer().emergencyContacts()) ? null : new ValidationError(i18n
+                return !EntityGraph.hasBusinessDuplicates(getValue().customer().emergencyContacts()) ? null : new ValidationError(component, i18n
                         .tr("Duplicate contacts specified"));
             }
 

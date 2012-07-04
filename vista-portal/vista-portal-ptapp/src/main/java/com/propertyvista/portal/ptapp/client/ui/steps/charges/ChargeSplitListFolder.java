@@ -36,7 +36,6 @@ import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.common.client.ui.decorations.DecorationUtils;
 import com.propertyvista.domain.person.Name;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
-import com.propertyvista.domain.tenant.lease.LeaseParticipant.Role;
 import com.propertyvista.portal.domain.ptapp.TenantCharge;
 
 public class ChargeSplitListFolder extends VistaTableFolder<TenantCharge> {
@@ -88,7 +87,7 @@ public class ChargeSplitListFolder extends VistaTableFolder<TenantCharge> {
                         totalPrc += p.intValue();
                     }
                 }
-                return totalPrc <= 100 ? null : new ValidationError(i18n.tr("Sum Of All Percentages Cannot Exceed 100%"));
+                return totalPrc <= 100 ? null : new ValidationError(component, i18n.tr("Sum Of All Percentages Cannot Exceed 100%"));
             }
         });
     }

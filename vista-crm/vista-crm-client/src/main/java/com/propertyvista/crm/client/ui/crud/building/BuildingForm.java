@@ -130,7 +130,7 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         tab = addTab(isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getBillingCycleListerView().asWidget(), i18n.tr("Billing Cycles"));
         setTabEnabled(tab, !isEditable());
 
-        tab = addTab(createNotesAndAttachmentsTab(i18n.tr("Notes & Attachments")) );
+        tab = addTab(createNotesAndAttachmentsTab(i18n.tr("Notes & Attachments")));
     }
 
     @Override
@@ -274,7 +274,7 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
                         if (ValidationUtils.isSimpleUrl(url)) {
                             return null;
                         } else {
-                            return new ValidationError(i18n.tr("Please use proper URL format, e.g. www.propertyvista.com"));
+                            return new ValidationError(component, i18n.tr("Please use proper URL format, e.g. www.propertyvista.com"));
                         }
                     }
                     return null;

@@ -124,7 +124,7 @@ public class LeaseLister extends VersionedLister<LeaseDTO> {
             balance.addValueValidator(new EditableValueValidator<BigDecimal>() {
                 @Override
                 public ValidationError isValid(CComponent<BigDecimal, ?> component, BigDecimal value) {
-                    return (value == null ? new ValidationError(i18n.tr("Initial balance value shoud be entered!")) : null);
+                    return (value == null ? new ValidationError(component, i18n.tr("Initial balance value shoud be entered!")) : null);
                 }
             });
             Widget w;

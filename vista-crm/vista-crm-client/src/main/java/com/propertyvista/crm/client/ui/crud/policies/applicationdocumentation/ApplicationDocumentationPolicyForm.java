@@ -68,9 +68,9 @@ public class ApplicationDocumentationPolicyForm extends PolicyDTOTabPanelBasedFo
             @Override
             public ValidationError isValid(CComponent<Integer, ?> component, Integer value) {
                 if (value == null || value == 0) {
-                    return new ValidationError(i18n.tr("At least one ID is required"));
+                    return new ValidationError(component, i18n.tr("At least one ID is required"));
                 } else if (getValue() != null && (getValue().allowedIDs().isEmpty() || value > getValue().allowedIDs().size())) {
-                    return new ValidationError(i18n.tr("The number of required IDs must not exceed the number of allowed IDs"));
+                    return new ValidationError(component, i18n.tr("The number of required IDs must not exceed the number of allowed IDs"));
                 } else {
                     return null;
                 }

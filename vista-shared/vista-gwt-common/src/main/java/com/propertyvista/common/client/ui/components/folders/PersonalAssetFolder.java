@@ -67,7 +67,8 @@ public class PersonalAssetFolder extends VistaTableFolder<PersonalAsset> {
             get(proto().percent()).addValueValidator(new EditableValueValidator<Double>() {
                 @Override
                 public ValidationError isValid(CComponent<Double, ?> component, Double value) {
-                    return (value == null) || ((value >= 0) && (value <= 100)) ? null : new ValidationError(i18n.tr("Value Should Be In Range Of 0-100%"));
+                    return (value == null) || ((value >= 0) && (value <= 100)) ? null : new ValidationError(component, i18n
+                            .tr("Value Should Be In Range Of 0-100%"));
                 }
 
             });
