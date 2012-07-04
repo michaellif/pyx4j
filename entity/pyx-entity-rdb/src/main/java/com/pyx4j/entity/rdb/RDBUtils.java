@@ -294,6 +294,9 @@ public class RDBUtils implements Closeable {
             if (meta.isTransient() || entityClass.getAnnotation(AbstractEntity.class) != null) {
                 continue;
             }
+            if (!EntityPersistenceServiceRDB.allowNamespaceUse(entityClass)) {
+                continue;
+            }
             if (srv.isTableExists(meta.getEntityClass())) {
                 @SuppressWarnings({ "rawtypes", "unchecked" })
                 EntityQueryCriteria<?> criteria = new EntityQueryCriteria(entityClass);
