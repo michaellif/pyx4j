@@ -21,13 +21,14 @@ import com.pyx4j.site.client.activity.crud.ListerActivityBase;
 
 import com.propertyvista.crm.client.ui.crud.customer.lead.showing.ShowingListerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.MarketingViewFactory;
+import com.propertyvista.crm.rpc.dto.tenant.ShowingDTO;
 import com.propertyvista.crm.rpc.services.customer.lead.ShowingCrudService;
-import com.propertyvista.domain.tenant.lead.Showing;
 
-public class ShowingListerActivity extends ListerActivityBase<Showing> {
+public class ShowingListerActivity extends ListerActivityBase<ShowingDTO> {
 
     @SuppressWarnings("unchecked")
     public ShowingListerActivity(Place place) {
-        super(place, MarketingViewFactory.instance(ShowingListerView.class), (AbstractCrudService<Showing>) GWT.create(ShowingCrudService.class), Showing.class);
+        super(place, MarketingViewFactory.instance(ShowingListerView.class), (AbstractCrudService<ShowingDTO>) GWT.create(ShowingCrudService.class),
+                ShowingDTO.class);
     }
 }

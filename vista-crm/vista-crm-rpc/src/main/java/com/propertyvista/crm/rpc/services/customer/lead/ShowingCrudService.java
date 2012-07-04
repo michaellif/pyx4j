@@ -18,10 +18,13 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 
+import com.propertyvista.crm.rpc.dto.tenant.ShowingDTO;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
-import com.propertyvista.domain.tenant.lead.Showing;
+import com.propertyvista.domain.tenant.lead.Appointment;
 
-public interface ShowingCrudService extends AbstractCrudService<Showing> {
+public interface ShowingCrudService extends AbstractCrudService<ShowingDTO> {
+
+    void createNew(AsyncCallback<ShowingDTO> callback, Appointment parentAppointmentStub);
 
     void updateValue(AsyncCallback<AptUnit> callback, Key unitId);
 }

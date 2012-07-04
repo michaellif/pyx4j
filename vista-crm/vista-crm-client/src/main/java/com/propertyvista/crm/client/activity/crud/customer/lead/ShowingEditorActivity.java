@@ -17,21 +17,24 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.ui.crud.customer.lead.showing.ShowingEditorView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.MarketingViewFactory;
+import com.propertyvista.crm.rpc.dto.tenant.ShowingDTO;
 import com.propertyvista.crm.rpc.services.customer.lead.ShowingCrudService;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
-import com.propertyvista.domain.tenant.lead.Showing;
+import com.propertyvista.domain.tenant.lead.Appointment;
 
-public class ShowingEditorActivity extends EditorActivityBase<Showing> implements ShowingEditorView.Presenter {
+public class ShowingEditorActivity extends EditorActivityBase<ShowingDTO> implements ShowingEditorView.Presenter {
 
     @SuppressWarnings("unchecked")
     public ShowingEditorActivity(CrudAppPlace place) {
-        super(place, MarketingViewFactory.instance(ShowingEditorView.class), (AbstractCrudService<Showing>) GWT.create(ShowingCrudService.class), Showing.class);
+        super(place, MarketingViewFactory.instance(ShowingEditorView.class), (AbstractCrudService<ShowingDTO>) GWT.create(ShowingCrudService.class),
+                ShowingDTO.class);
     }
 
     @Override
@@ -40,7 +43,7 @@ public class ShowingEditorActivity extends EditorActivityBase<Showing> implement
 
             @Override
             public void onSuccess(AptUnit result) {
-                Showing current = getView().getValue().duplicate();
+                ShowingDTO current = getView().getValue().duplicate();
 
                 current.unit().set(result);
                 current.building().set(result.building());
@@ -53,5 +56,24 @@ public class ShowingEditorActivity extends EditorActivityBase<Showing> implement
                 throw new UnrecoverableClientError(caught);
             }
         }, selected.getPrimaryKey());
+    }
+
+    @Override
+    protected void createNewEntity(final AsyncCallback<ShowingDTO> callback) {
+
+        super.createNewEntity(new AsyncCallback<ShowingDTO>() {
+
+            @Override
+            public void onSuccess(ShowingDTO result) {
+                Appointment parentAppointmentStub = EntityFactory.create(Appointment.class);
+                parentAppointmentStub.setPrimaryKey(getParentId());
+                ((ShowingCrudService) getService()).createNew(callback, parentAppointmentStub);
+            }
+
+            @Override
+            public void onFailure(Throwable caught) {
+                callback.onFailure(caught);
+            }
+        });
     }
 }

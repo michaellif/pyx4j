@@ -15,9 +15,9 @@ package com.propertyvista.crm.client.ui.crud.customer.lead.showing;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap.Marketing;
-import com.propertyvista.domain.tenant.lead.Showing;
+import com.propertyvista.crm.rpc.dto.tenant.ShowingDTO;
 
-public class ShowingViewerViewImpl extends CrmViewerViewImplBase<Showing> implements ShowingViewerView {
+public class ShowingViewerViewImpl extends CrmViewerViewImplBase<ShowingDTO> implements ShowingViewerView {
 
     public ShowingViewerViewImpl() {
         super(Marketing.Showing.class, new ShowingForm(true));

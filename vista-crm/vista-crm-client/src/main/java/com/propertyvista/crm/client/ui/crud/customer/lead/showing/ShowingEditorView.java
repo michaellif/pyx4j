@@ -15,10 +15,10 @@ package com.propertyvista.crm.client.ui.crud.customer.lead.showing;
 
 import com.pyx4j.site.client.ui.crud.form.IEditorView;
 
+import com.propertyvista.crm.rpc.dto.tenant.ShowingDTO;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
-import com.propertyvista.domain.tenant.lead.Showing;
 
-public interface ShowingEditorView extends IEditorView<Showing> {
+public interface ShowingEditorView extends IEditorView<ShowingDTO> {
 
     interface Presenter extends IEditorView.Presenter {
 

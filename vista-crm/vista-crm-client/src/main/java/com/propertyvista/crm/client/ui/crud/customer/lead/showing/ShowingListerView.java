@@ -15,8 +15,8 @@ package com.propertyvista.crm.client.ui.crud.customer.lead.showing;
 
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 
-import com.propertyvista.domain.tenant.lead.Showing;
+import com.propertyvista.crm.rpc.dto.tenant.ShowingDTO;
 
-public interface ShowingListerView extends IListerView<Showing> {
+public interface ShowingListerView extends IListerView<ShowingDTO> {
 
 }

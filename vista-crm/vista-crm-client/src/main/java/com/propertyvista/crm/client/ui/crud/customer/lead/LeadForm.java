@@ -117,7 +117,9 @@ public class LeadForm extends CrmEntityForm<Lead> {
                             return false;
                         }
                     }
+
                 };
+
             }
         }), 20).build());
 
