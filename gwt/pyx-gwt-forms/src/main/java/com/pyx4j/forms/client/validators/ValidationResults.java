@@ -38,11 +38,11 @@ public class ValidationResults {
 
     public void appendValidationErrors(ValidationResults results) {
         if (results != null) {
-            validationErrors.addAll(results.getMessages());
+            validationErrors.addAll(results.getValidationErrors());
         }
     }
 
-    public ArrayList<ValidationError> getMessages() {
+    public ArrayList<ValidationError> getValidationErrors() {
         return validationErrors;
     }
 

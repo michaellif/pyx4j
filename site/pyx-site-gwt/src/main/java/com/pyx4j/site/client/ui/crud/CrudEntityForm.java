@@ -99,7 +99,7 @@ public abstract class CrudEntityForm<E extends IEntity> extends CEntityForm<E> {
                     if (panel.isContentValid()) {
                         tab.setTabWarning(null);
                     } else {
-                        tab.setTabWarning(i18n.tr("Validation errors"));
+                        tab.setTabWarning(panel.getValidationMessage());
                     }
                 }
             }

@@ -52,8 +52,13 @@ import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.INativeComponent;
 import com.pyx4j.forms.client.ui.panels.DefaultFormFlexPanelTheme.StyleName;
+import com.pyx4j.forms.client.validators.ValidationError;
+import com.pyx4j.forms.client.validators.ValidationResults;
+import com.pyx4j.i18n.shared.I18n;
 
 public class FormFlexPanel extends FlexTable implements PropertyChangeHandler, HasPropertyChangeHandlers {
+
+    private static final I18n i18n = I18n.get(FormFlexPanel.class);
 
     private final String title;
 
@@ -178,6 +183,31 @@ public class FormFlexPanel extends FlexTable implements PropertyChangeHandler, H
             }
         }
         return valid;
+    }
+
+    public String getValidationMessage() {
+        ValidationResults validationResults = new ValidationResults();
+        for (CComponent<?, ?> component : components) {
+            if (!component.isValid() && component.isVisited()) {
+                validationResults.appendValidationErrors(component.getValidationResults());
+            }
+        }
+        return getMessagesText(validationResults);
+    }
+
+    public String getMessagesText(ValidationResults validationResults) {
+        StringBuilder messagesBuffer = new StringBuilder();
+        ArrayList<ValidationError> validationErrors = validationResults.getValidationErrors();
+
+        if (validationErrors.size() > 1) {
+            messagesBuffer.append(i18n.tr("error 1 of {0}", (validationErrors.size() - 1))).append(" - ");
+        }
+
+        if (validationErrors.size() > 0) {
+            messagesBuffer.append(validationErrors.get(0).getMessageString(false));
+        }
+
+        return messagesBuffer.toString();
     }
 
 }
