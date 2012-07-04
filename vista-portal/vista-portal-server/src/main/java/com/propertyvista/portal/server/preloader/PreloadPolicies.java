@@ -28,15 +28,15 @@ import com.propertyvista.portal.server.preloader.policy.util.SimplePoliciesPrelo
 public class PreloadPolicies extends SimplePoliciesPreloader {
 
     public PreloadPolicies(boolean isProduction) {
-        if (isProduction) {
-            add(new ARPolicyPreloader());
-            add(new ApplicationDocumentationPolicyPreloader());
-            add(new EmailTemplatesPolicyPreloader());
-            add(new IdAssignmentPolicyPreloader());
-            add(new LeaseBillingPolicyPreloader());
-            add(new LeaseTermsPolicyPreloader());
-            add(new MiscPolicyPreloader());
-        } else {
+        add(new ARPolicyPreloader());
+        add(new ApplicationDocumentationPolicyPreloader());
+        add(new EmailTemplatesPolicyPreloader());
+        add(new IdAssignmentPolicyPreloader());
+        add(new LeaseBillingPolicyPreloader());
+        add(new LeaseTermsPolicyPreloader());
+        add(new MiscPolicyPreloader());
+
+        if (!isProduction) {
             add(new DepositPolicyPreloader());
             add(new LeaseAdjustmentPolicyPreloader());
             add(new ProductTaxPolicyPreloader());
