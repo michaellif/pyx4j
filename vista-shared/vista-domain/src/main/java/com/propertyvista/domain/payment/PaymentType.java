@@ -54,6 +54,10 @@ public enum PaymentType {
         return EnumSet.of(Echeck, CreditCard);
     }
 
+    public static EnumSet<PaymentType> avalableForNsf() {
+        return EnumSet.of(Check, Echeck, EFT, CreditCard);
+    }
+
     // grouping:
 
     public boolean isTransactable() {

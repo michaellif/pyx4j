@@ -131,7 +131,7 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
 
         @Override
         protected void addItem() {
-            EnumSet<PaymentType> values = EnumSet.allOf(PaymentType.class);
+            EnumSet<PaymentType> values = PaymentType.avalableForNsf();
             for (NsfFeeItem item : getValue()) {
                 if (values.contains(item.paymentType().getValue())) {
                     values.remove(item.paymentType().getValue());
