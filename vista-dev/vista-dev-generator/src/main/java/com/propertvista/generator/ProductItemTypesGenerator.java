@@ -34,12 +34,14 @@ public class ProductItemTypesGenerator {
         // preload types:
         createChargeItemType("Residential Unit", Service.ServiceType.residentialUnit, 5110);
         createChargeItemType("Commercial Unit", Service.ServiceType.commercialUnit, 5110);
-        createChargeItemType("Short Term Residential Unit", Service.ServiceType.residentialShortTermUnit, 5110);
-        createChargeItemType("Roof Spot", Service.ServiceType.roof, 5110);
-        createChargeItemType("Billboard", Service.ServiceType.sundry, 5110);
-        createChargeItemType("Garage", Service.ServiceType.garage, 5110);
-        createChargeItemType("Storage", Service.ServiceType.storage, 5110);
-
+/*
+ * VISTA-1622 - CRM:Product Dictionary:Service item Types - delete not supported
+ * createChargeItemType("Short Term Residential Unit", Service.ServiceType.residentialShortTermUnit, 5110);
+ * createChargeItemType("Roof Spot", Service.ServiceType.roof, 5110);
+ * createChargeItemType("Billboard", Service.ServiceType.sundry, 5110);
+ * createChargeItemType("Garage", Service.ServiceType.garage, 5110);
+ * createChargeItemType("Storage", Service.ServiceType.storage, 5110);
+ */
         createChargeItemType("Regular Parking", Feature.Type.parking, 5110);
         createChargeItemType("Wide Parking", Feature.Type.parking, 5110);
         createChargeItemType("Narrow Parking", Feature.Type.parking, 5110);
