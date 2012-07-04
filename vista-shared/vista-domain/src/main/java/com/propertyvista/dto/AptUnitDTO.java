@@ -27,7 +27,7 @@ public interface AptUnitDTO extends AptUnit {
 
     IPrimitive<String> buildingCode();
 
-    IList<AptUnitServicePriceDTO> maketPrices();
+    IList<AptUnitServicePriceDTO> marketPrices();
 
     Lease lease();
 }

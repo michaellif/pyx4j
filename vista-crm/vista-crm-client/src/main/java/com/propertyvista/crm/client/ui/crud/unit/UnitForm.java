@@ -116,8 +116,8 @@ public class UnitForm extends CrmEntityForm<AptUnitDTO> {
         left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().financial()._unitRent()), 7).build());
 //        left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().financial()._marketRent()), 10).build());
 
-        left.setH3(++row, 0, 1, proto().maketPrices().getMeta().getCaption());
-        left.setWidget(++row, 0, inject(proto().maketPrices(), new UnitServicePriceFolder()));
+        left.setH3(++row, 0, 1, proto().marketPrices().getMeta().getCaption());
+        left.setWidget(++row, 0, inject(proto().marketPrices(), new UnitServicePriceFolder()));
 
         row = -1;
         FormFlexPanel right = new FormFlexPanel();
