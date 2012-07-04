@@ -83,6 +83,16 @@ public class TabBar extends DockLayoutPanel {
         });
         addEast(tabListAction, 30);
 
+        slideLeftAction = new TabBarAction(ImageFactory.getImages().moveTabbarLeft());
+        slideLeftAction.setVisible(false);
+        slideLeftAction.setComand(new Command() {
+            @Override
+            public void execute() {
+                slideOneLeft();
+            }
+        });
+        addEast(slideLeftAction, 30);
+
         slideRightAction = new TabBarAction(ImageFactory.getImages().moveTabbarRight());
         slideRightAction.setVisible(false);
         slideRightAction.setComand(new Command() {
@@ -94,17 +104,6 @@ public class TabBar extends DockLayoutPanel {
         });
         slideRightAction.setEnabled(false);
         addEast(slideRightAction, 30);
-
-        slideLeftAction = new TabBarAction(ImageFactory.getImages().moveTabbarLeft());
-        slideLeftAction.setVisible(false);
-        slideLeftAction.setComand(new Command() {
-            @Override
-            public void execute() {
-                slideOneLeft();
-            }
-        });
-
-        addEast(slideLeftAction, 30);
 
         tabsHolder = new FlowPanel();
 

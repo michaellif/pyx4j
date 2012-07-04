@@ -32,10 +32,10 @@ public interface TabpanelImages extends ClientBundle {
     ImageResource closeTabFocused();
 
     @Source("tabbar-left.png")
-    ImageResource moveTabbarLeft();
+    ImageResource moveTabbarRight();
 
     @Source("tabbar-right.png")
-    ImageResource moveTabbarRight();
+    ImageResource moveTabbarLeft();
 
     @Source("tabbar-down.png")
     ImageResource tabbarDropDown();
