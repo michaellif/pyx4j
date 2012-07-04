@@ -50,7 +50,7 @@ import com.pyx4j.forms.client.events.HasPropertyChangeHandlers;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.NComponent;
+import com.pyx4j.forms.client.ui.INativeComponent;
 import com.pyx4j.forms.client.ui.panels.DefaultFormFlexPanelTheme.StyleName;
 
 public class FormFlexPanel extends FlexTable implements PropertyChangeHandler, HasPropertyChangeHandlers {
@@ -137,8 +137,8 @@ public class FormFlexPanel extends FlexTable implements PropertyChangeHandler, H
     }
 
     private void locateCComponents(Widget widget) {
-        if (widget instanceof NComponent) {
-            CComponent<?, ?> comp = ((NComponent) widget).getCComponent();
+        if (widget instanceof INativeComponent) {
+            CComponent<?, ?> comp = ((INativeComponent<?>) widget).getCComponent();
             components.add(comp);
             comp.addPropertyChangeHandler(this);
             comp.setLocationHint(title);

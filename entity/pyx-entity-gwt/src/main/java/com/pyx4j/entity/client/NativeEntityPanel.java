@@ -33,7 +33,10 @@ import com.pyx4j.forms.client.ui.INativeComponent;
 
 public class NativeEntityPanel<E extends IObject<?>> extends SimplePanel implements INativeComponent<E>, RequiresResize, ProvidesResize {
 
-    public NativeEntityPanel() {
+    private final CEntityContainer<?> container;
+
+    public NativeEntityPanel(CEntityContainer<?> container) {
+        this.container = container;
     }
 
     @Override
@@ -43,7 +46,7 @@ public class NativeEntityPanel<E extends IObject<?>> extends SimplePanel impleme
 
     @Override
     public CComponent<?, ?> getCComponent() {
-        return null;
+        return container;
     }
 
     @Override

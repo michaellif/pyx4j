@@ -38,7 +38,7 @@ public abstract class CEntityViewer<E extends IObject<?>> extends CEntityContain
 
     @Override
     protected NativeEntityPanel<E> createWidget() {
-        return new NativeEntityPanel<E>();
+        return new NativeEntityPanel<E>(this);
     }
 
     public abstract IsWidget createContent(E value);

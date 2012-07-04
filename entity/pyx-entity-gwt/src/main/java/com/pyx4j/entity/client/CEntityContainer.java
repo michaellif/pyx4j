@@ -52,7 +52,7 @@ public abstract class CEntityContainer<E extends IObject<?>> extends CContainer<
 
     @Override
     protected NativeEntityPanel<E> createWidget() {
-        return new NativeEntityPanel<E>();
+        return new NativeEntityPanel<E>(this);
     }
 
     public void initContent() {
