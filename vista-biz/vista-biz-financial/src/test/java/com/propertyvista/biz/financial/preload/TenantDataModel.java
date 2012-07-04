@@ -13,6 +13,9 @@
  */
 package com.propertyvista.biz.financial.preload;
 
+import java.util.GregorianCalendar;
+
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
@@ -34,6 +37,11 @@ public class TenantDataModel {
         tenant.person().sex().setValue(Sex.Male);
         tenant.person().mobilePhone().setValue("647-555-5555");
         tenant.person().homePhone().setValue("647-333-7777");
+        GregorianCalendar calendar = new GregorianCalendar();
+        calendar.set(calendar.YEAR, 1980);
+        calendar.set(calendar.MONTH, 1);
+        calendar.set(calendar.DAY_OF_MONTH, 1);
+        tenant.person().birthDate().setValue(new LogicalDate(calendar.getTime()));
         Persistence.service().persist(tenant);
     }
 
