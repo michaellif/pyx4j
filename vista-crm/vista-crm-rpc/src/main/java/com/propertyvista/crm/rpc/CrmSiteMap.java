@@ -400,8 +400,8 @@ public class CrmSiteMap implements SiteMap {
 //
 //            }
 
-            @PlaceProperties(caption = "Adjustment Policies")
-            @NavigationItem(navigLabel = "Adjustment Policies")
+            @PlaceProperties(caption = "Lease Adjustment")
+            @NavigationItem(navigLabel = "Lease Adjustment")
             public static class LeaseAdjustmentPolicy extends CrmCrudAppPlace {
 
             }

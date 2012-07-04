@@ -69,19 +69,19 @@ public class NavigSettingsActivity extends AbstractActivity implements NavigView
         list.add(folder);
 
         folder = new NavigFolder(i18n.tr("Policies"));
+        folder.addNavigItem(new CrmSiteMap.Settings.Policies.AR());
         folder.addNavigItem(new CrmSiteMap.Settings.Policies.ApplicationDocumentation());
 // VISTA-1627 CRM:Delete: Background Check policy as currently not in use  
 //        folder.addNavigItem(new CrmSiteMap.Settings.Policies.BackgroundCheck());
         folder.addNavigItem(new CrmSiteMap.Settings.Policies.Deposits());
         folder.addNavigItem(new CrmSiteMap.Settings.Policies.EmailTemplates());
         folder.addNavigItem(new CrmSiteMap.Settings.Policies.IdAssignment());
+        folder.addNavigItem(new CrmSiteMap.Settings.Policies.LeaseAdjustmentPolicy());
         folder.addNavigItem(new CrmSiteMap.Settings.Policies.LeaseBilling());
         folder.addNavigItem(new CrmSiteMap.Settings.Policies.LeaseTerms());
-        folder.addNavigItem(new CrmSiteMap.Settings.Policies.ProductTax());
-        folder.addNavigItem(new CrmSiteMap.Settings.Policies.LeaseAdjustmentPolicy());
-        folder.addNavigItem(new CrmSiteMap.Settings.Policies.AR());
         folder.addNavigItem(new CrmSiteMap.Settings.Policies.Misc());
 //      folder.addNavigItem(new CrmSiteMap.Settings.Policies.PetPolicy());
+        folder.addNavigItem(new CrmSiteMap.Settings.Policies.ProductTax());
         list.add(folder);
 
         return list;
