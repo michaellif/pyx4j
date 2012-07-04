@@ -145,7 +145,6 @@ public interface Concession extends IVersionedEntity<ConcessionV> {
         @NotNull
         IPrimitive<Integer> productItemQuantity();
 
-        @NotNull
         IPrimitive<Boolean> mixable();
 
         @Format("MM/dd/yyyy")

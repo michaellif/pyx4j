@@ -83,7 +83,6 @@ public interface Feature extends Product, IVersionedEntity<FeatureV> {
         @NotNull
         IPrimitive<Boolean> recurring();
 
-        @NotNull
         IPrimitive<Boolean> mandatory();
     }
 }
