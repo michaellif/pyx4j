@@ -81,15 +81,15 @@ public class NMonthYearPicker extends NFocusComponent<Date, MonthYearPicker, CMo
         super.setEnabled(enabled);
         if (getEditor() != null) {
             if (enabled) {
-                getEditor().getYearSelector().removeStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.disabled.name());
+                getEditor().getYearSelector().removeStyleDependentName(DefaultCComponentsTheme.StyleDependent.disabled.name());
             } else {
-                getEditor().getYearSelector().addStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.disabled.name());
+                getEditor().getYearSelector().addStyleDependentName(DefaultCComponentsTheme.StyleDependent.disabled.name());
             }
             if (!getCComponent().isYearOnly()) {
                 if (enabled) {
-                    getEditor().getMonthSelector().removeStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.disabled.name());
+                    getEditor().getMonthSelector().removeStyleDependentName(DefaultCComponentsTheme.StyleDependent.disabled.name());
                 } else {
-                    getEditor().getMonthSelector().addStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.disabled.name());
+                    getEditor().getMonthSelector().addStyleDependentName(DefaultCComponentsTheme.StyleDependent.disabled.name());
                 }
             }
         }
@@ -100,15 +100,15 @@ public class NMonthYearPicker extends NFocusComponent<Date, MonthYearPicker, CMo
         super.setEditable(editable);
         if (getEditor() != null) {
             if (editable) {
-                getEditor().getYearSelector().removeStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.readonly.name());
+                getEditor().getYearSelector().removeStyleDependentName(DefaultCComponentsTheme.StyleDependent.readonly.name());
             } else {
-                getEditor().getYearSelector().addStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.readonly.name());
+                getEditor().getYearSelector().addStyleDependentName(DefaultCComponentsTheme.StyleDependent.readonly.name());
             }
             if (!getCComponent().isYearOnly()) {
                 if (editable) {
-                    getEditor().getMonthSelector().removeStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.readonly.name());
+                    getEditor().getMonthSelector().removeStyleDependentName(DefaultCComponentsTheme.StyleDependent.readonly.name());
                 } else {
-                    getEditor().getMonthSelector().addStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.readonly.name());
+                    getEditor().getMonthSelector().addStyleDependentName(DefaultCComponentsTheme.StyleDependent.readonly.name());
                 }
             }
         }
@@ -119,23 +119,23 @@ public class NMonthYearPicker extends NFocusComponent<Date, MonthYearPicker, CMo
         super.onPropertyChange(event);
         if (getEditor() != null) {
             if (event.isEventOfType(PropertyName.repopulated)) {
-                getEditor().getYearSelector().removeStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.invalid.name());
+                getEditor().getYearSelector().removeStyleDependentName(DefaultCComponentsTheme.StyleDependent.invalid.name());
             } else if (event.isEventOfType(PropertyName.valid, PropertyName.visited, PropertyName.repopulated)) {
                 if (getCComponent().isValid()) {
-                    getEditor().getYearSelector().removeStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.invalid.name());
+                    getEditor().getYearSelector().removeStyleDependentName(DefaultCComponentsTheme.StyleDependent.invalid.name());
                 } else if (getCComponent().isVisited()) {
-                    getEditor().getYearSelector().addStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.invalid.name());
+                    getEditor().getYearSelector().addStyleDependentName(DefaultCComponentsTheme.StyleDependent.invalid.name());
                 }
             }
 
             if (!getCComponent().isYearOnly()) {
                 if (event.isEventOfType(PropertyName.repopulated)) {
-                    getEditor().getMonthSelector().removeStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.invalid.name());
+                    getEditor().getMonthSelector().removeStyleDependentName(DefaultCComponentsTheme.StyleDependent.invalid.name());
                 } else if (event.isEventOfType(PropertyName.valid, PropertyName.visited, PropertyName.repopulated)) {
                     if (getCComponent().isValid()) {
-                        getEditor().getMonthSelector().removeStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.invalid.name());
+                        getEditor().getMonthSelector().removeStyleDependentName(DefaultCComponentsTheme.StyleDependent.invalid.name());
                     } else if (getCComponent().isVisited()) {
-                        getEditor().getMonthSelector().addStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.invalid.name());
+                        getEditor().getMonthSelector().addStyleDependentName(DefaultCComponentsTheme.StyleDependent.invalid.name());
                     }
                 }
             }

@@ -100,7 +100,7 @@ public abstract class CNumberField<E extends Number> extends CTextFieldBase<E, N
                 } else if (isInRange(value, from, to)) {
                     return null;
                 } else {
-                    return new ValidationError(i18n.tr("{0} Should Be In The Range Between {1} And {2}", dataTypeName(), from, to));
+                    return new ValidationError(CNumberField.this, i18n.tr("{0} Should Be In The Range Between {1} And {2}", dataTypeName(), from, to));
                 }
             } else {
                 return failure;

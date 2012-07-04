@@ -28,7 +28,7 @@ public class TextBoxParserValidator<E> implements EditableValueValidator<E> {
                 try {
                     component.getWidget().getNativeValue();
                 } catch (ParseException e) {
-                    return new ValidationError(e.getMessage());
+                    return new ValidationError(component, e.getMessage());
                 }
             }
         }

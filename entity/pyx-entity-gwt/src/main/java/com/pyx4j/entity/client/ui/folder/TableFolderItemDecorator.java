@@ -37,6 +37,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
+import com.pyx4j.forms.client.ui.DefaultCComponentsTheme;
 
 public class TableFolderItemDecorator<E extends IEntity> extends BaseFolderItemDecorator<E> {
 
@@ -73,7 +74,7 @@ public class TableFolderItemDecorator<E extends IEntity> extends BaseFolderItemD
         setWidget(mainPanel);
 
         validationMessageHolder = new HTML();
-        validationMessageHolder.getElement().getStyle().setColor("red");
+        validationMessageHolder.setStyleName(DefaultCComponentsTheme.StyleName.ValidationLabel.name());
         mainPanel.add(validationMessageHolder, DockPanel.SOUTH);
 
         actionsPanelHolder = new SimplePanel();

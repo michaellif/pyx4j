@@ -25,6 +25,7 @@ import static com.pyx4j.entity.client.ui.folder.DefaultEntityFolderTheme.StyleNa
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.SimplePanel;
 
@@ -34,7 +35,9 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
+import com.pyx4j.forms.client.ui.DefaultCComponentsTheme;
 import com.pyx4j.forms.client.ui.FormNavigationDebugId;
+import com.pyx4j.forms.client.validators.ValidationResults;
 import com.pyx4j.gwt.commons.HandlerRegistrationGC;
 import com.pyx4j.widgets.client.Button;
 
@@ -46,10 +49,16 @@ public abstract class BaseFolderDecorator<E extends IEntity> extends FlowPanel i
 
     private boolean addable;
 
+    private final HTML validationMessageHolder;
+
     public BaseFolderDecorator(EntityFolderImages images, String title, boolean addable) {
         this.addable = addable;
         addButton = new Button(new Image(images.addButton().regular()), title);
         addButton.setStyleName(EntityFolderAddButton.name());
+
+        validationMessageHolder = new HTML();
+        validationMessageHolder.setStyleName(DefaultCComponentsTheme.StyleName.ValidationLabel.name());
+
     }
 
     protected SimplePanel getContainer() {
@@ -58,6 +67,10 @@ public abstract class BaseFolderDecorator<E extends IEntity> extends FlowPanel i
 
     protected Button getAddButton() {
         return addButton;
+    }
+
+    protected HTML getValidationMessageHolder() {
+        return validationMessageHolder;
     }
 
     protected boolean isAddable() {
@@ -87,6 +100,11 @@ public abstract class BaseFolderDecorator<E extends IEntity> extends FlowPanel i
             public void onPropertyChange(PropertyChangeEvent event) {
                 if (event.getPropertyName() == PropertyName.debugId) {
                     onSetDebugId(folder.getDebugId());
+                }
+                if (event.isEventOfType(PropertyName.valid, PropertyName.visited, PropertyName.repopulated)) {
+                    ValidationResults validationResults = folder.getValidationResults();
+                    ValidationResults results = validationResults.getValidationResultsByOriginator(folder);
+                    validationMessageHolder.setHTML(results.getMessagesText(true, false));
                 }
             }
         });

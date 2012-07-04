@@ -20,46 +20,43 @@
  */
 package com.pyx4j.forms.client.validators;
 
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.i18n.shared.I18n;
 
 public class ValidationError {
 
     private static final I18n i18n = I18n.get(ValidationError.class);
 
-    private String title;
+    private final CComponent<?, ?> originator;
 
     private String message;
 
     private String locationHint;
 
-    public ValidationError(String title, String message, String locationHint) {
-        this.title = title;
+    public ValidationError(CComponent<?, ?> originator, String message, String locationHint) {
+        this.originator = originator;
         this.message = message;
         this.locationHint = locationHint;
     }
 
-    public ValidationError(String message) {
-        this(null, message, null);
+    public ValidationError(CComponent<?, ?> component, String message) {
+        this(component, message, null);
     }
 
     public String getMessageString(boolean showLocation) {
         StringBuilder builder = new StringBuilder();
-        if (title != null && !title.isEmpty()) {
+        if (originator.getTitle() != null && !originator.getTitle().isEmpty()) {
             builder.append("'");
             if (showLocation && locationHint != null && !locationHint.isEmpty()) {
                 builder.append(locationHint).append("/");
             }
-            builder.append(title).append("' ").append(i18n.tr("is not valid")).append(", ").append(message);
+            builder.append(originator.getTitle()).append("' ").append(i18n.tr("is not valid")).append(", ").append(message);
         }
         return builder.toString();
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
     public String getTitle() {
-        return title;
+        return originator.getTitle();
     }
 
     public void setMessage(String message) {
@@ -78,4 +75,7 @@ public class ValidationError {
         return locationHint;
     }
 
+    public CComponent<?, ?> getOriginator() {
+        return originator;
+    }
 }

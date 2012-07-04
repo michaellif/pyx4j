@@ -219,7 +219,7 @@ public class CEntityComboBox<E extends IEntity> extends CComboBox<E> implements 
 
                     @Override
                     public ValidationError isValid(CComponent<E, ?> component, E value) {
-                        return !isUnavailable ? null : new ValidationError(i18n.tr("Reference data unavailable"));
+                        return !isUnavailable ? null : new ValidationError(component, i18n.tr("Reference data unavailable"));
                     }
                 };
             }

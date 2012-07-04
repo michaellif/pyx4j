@@ -81,7 +81,7 @@ public abstract class CTextComponent<DATA, WIDGET extends INativeFocusComponent<
                 return null;
             }
             if (value instanceof String) {
-                return ((String) value).length() <= length ? null : new ValidationError(validationMessage);
+                return ((String) value).length() <= length ? null : new ValidationError(CTextComponent.this, validationMessage);
             } else {
                 return null;
             }

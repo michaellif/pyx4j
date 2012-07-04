@@ -128,6 +128,8 @@ public class TableFolderDecorator<E extends IEntity> extends BaseFolderDecorator
             add(getAddButton());
         }
 
+        add(getValidationMessageHolder());
+
     }
 
     @Override

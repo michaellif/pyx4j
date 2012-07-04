@@ -23,17 +23,17 @@ package com.pyx4j.forms.client.validators;
 import java.util.ArrayList;
 
 import com.pyx4j.commons.LoopCounter;
+import com.pyx4j.forms.client.ui.CComponent;
 
 public class ValidationResults {
 
     private final ArrayList<ValidationError> validationErrors = new ArrayList<ValidationError>();
 
     public ValidationResults() {
-
     }
 
-    public void appendValidationError(String title, String message, String location) {
-        validationErrors.add(new ValidationError(title, message, location));
+    public void appendValidationError(CComponent<?, ?> component, String message, String location) {
+        validationErrors.add(new ValidationError(component, message, location));
     }
 
     public void appendValidationErrors(ValidationResults results) {
@@ -42,8 +42,22 @@ public class ValidationResults {
         }
     }
 
+    public void appendValidationError(ValidationError error) {
+        validationErrors.add(error);
+    }
+
     public ArrayList<ValidationError> getValidationErrors() {
         return validationErrors;
+    }
+
+    public ValidationResults getValidationResultsByOriginator(CComponent<?, ?> component) {
+        ValidationResults results = new ValidationResults();
+        for (ValidationError validationError : validationErrors) {
+            if (component == validationError.getOriginator()) {
+                results.appendValidationError(validationError);
+            }
+        }
+        return results;
     }
 
     public String getMessagesText(boolean html, boolean showLocation) {

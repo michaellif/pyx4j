@@ -27,17 +27,17 @@ import com.pyx4j.commons.css.Theme;
 import com.pyx4j.commons.css.ThemeColors;
 import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 
-public class DefaultCCOmponentsTheme extends Theme {
+public class DefaultCComponentsTheme extends Theme {
 
     public static enum StyleName implements IStyleName {
-        TriggerPannel
+        TriggerPannel, ValidationLabel
     }
 
     public static enum StyleDependent implements IStyleDependent {
         disabled, readonly, invalid
     }
 
-    public DefaultCCOmponentsTheme() {
+    public DefaultCComponentsTheme() {
         initStyles();
     }
 
@@ -45,6 +45,7 @@ public class DefaultCCOmponentsTheme extends Theme {
         initTextBoxStyle();
         initListBoxStyle();
         initTriggerButtonStyle();
+        initValidationLabelStyle();
     }
 
     protected void initTextBoxStyle() {
@@ -102,4 +103,9 @@ public class DefaultCCOmponentsTheme extends Theme {
 
     }
 
+    protected void initValidationLabelStyle() {
+        Style style = new Style(".", StyleName.ValidationLabel);
+        style.addProperty("color", "red");
+        addStyle(style);
+    }
 }

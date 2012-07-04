@@ -174,7 +174,7 @@ public class EntityIFormWithoutLists extends CEntityForm<EntityI> {
             @Override
             public ValidationError isValid(CComponent<String, ?> component, String value) {
                 return CommonsStringUtils.equals(get(proto().enterPassword()).getValue(), get(proto().confirmPassword()).getValue()) ? null
-                        : new ValidationError("Passwords do not match.");
+                        : new ValidationError(component, "Passwords do not match.");
             }
 
         };

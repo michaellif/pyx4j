@@ -31,7 +31,7 @@ public class DefaultWidgetDecoratorTheme extends Theme {
     public static enum StyleName implements IStyleName {
         WidgetDecorator, WidgetDecoratorLabelHolder, WidgetDecoratorLabel, WidgetDecoratorMandatoryImage, WidgetDecoratorInfoImage,
 
-        WidgetDecoratorValidationLabel, WidgetDecoratorContentPanel, WidgetDecoratorComponent, WidgetDecoratorComponentHolder
+        WidgetDecoratorContentPanel, WidgetDecoratorComponent, WidgetDecoratorComponentHolder
     }
 
     public static enum StyleDependent implements IStyleDependent {
@@ -81,10 +81,6 @@ public class DefaultWidgetDecoratorTheme extends Theme {
 
         style = new Style(".", StyleName.WidgetDecorator, "-", StyleDependent.noMandatoryStar, " .", StyleName.WidgetDecoratorMandatoryImage, " ", "img");
         style.addProperty("display", "none");
-        addStyle(style);
-
-        style = new Style(".", StyleName.WidgetDecoratorValidationLabel);
-        style.addProperty("color", "red");
         addStyle(style);
 
         style = new Style(".", StyleName.WidgetDecoratorContentPanel);

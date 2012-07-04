@@ -73,7 +73,7 @@ public class EmailListTextBoxValidator implements EditableValueValidator<String>
         } else {
             for (EmailAddress a : adr) {
                 if (!a.valid) {
-                    return new ValidationError(getValidationMessage(value));
+                    return new ValidationError(component, getValidationMessage(value));
                 }
             }
             return null;

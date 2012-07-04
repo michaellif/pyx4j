@@ -20,10 +20,12 @@
  */
 package com.pyx4j.forms.client.validators;
 
+import com.pyx4j.forms.client.ui.CComponent;
+
 public class MandatoryValidationFailure extends ValidationError {
 
-    public MandatoryValidationFailure(String message) {
-        super(message);
+    public MandatoryValidationFailure(CComponent<?, ?> component, String message) {
+        super(component, message);
     }
 
 }

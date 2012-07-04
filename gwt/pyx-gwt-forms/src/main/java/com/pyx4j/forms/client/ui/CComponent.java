@@ -501,7 +501,6 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
                 for (EditableValueValidator<? super DATA_TYPE> validator : validators) {
                     ValidationError ve = validator.isValid((CComponent) this, getValue());
                     if (ve != null) {
-                        ve.setTitle(getTitle());
                         ve.setLocationHint(getLocationHint());
                         newValidationError = ve;
                         break;
@@ -600,8 +599,8 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
 
     public ValidationResults getValidationResults() {
         ValidationResults results = new ValidationResults();
-        if (validationError != null) {
-            results.appendValidationError(getTitle(), validationError.getMessage(), getLocationHint());
+        if (validationError != null && !isValid() && isVisited()) {
+            results.appendValidationError(this, validationError.getMessage(), getLocationHint());
         }
         return results;
     }

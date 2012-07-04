@@ -97,7 +97,7 @@ public class CDatePicker extends CTextFieldBase<Date, NDatePicker> {
             if (selectedDate != null && !pastDateSelectionAllowed) {
                 Date now = new Date();
                 Date today = new Date(now.getYear(), now.getMonth(), now.getDate());
-                return selectedDate.compareTo(today) >= 0 ? null : new ValidationError(getValidationMessage());
+                return selectedDate.compareTo(today) >= 0 ? null : new ValidationError(CDatePicker.this, getValidationMessage());
             } else {
                 return null;
             }

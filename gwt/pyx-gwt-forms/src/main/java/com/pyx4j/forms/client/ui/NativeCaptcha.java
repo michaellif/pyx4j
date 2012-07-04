@@ -118,12 +118,12 @@ public class NativeCaptcha extends CaptchaComposite implements INativeFocusCompo
     @Override
     public void onPropertyChange(PropertyChangeEvent event) {
         if (event.isEventOfType(PropertyName.repopulated)) {
-            getResponseTextBox().removeStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.invalid.name());
+            getResponseTextBox().removeStyleDependentName(DefaultCComponentsTheme.StyleDependent.invalid.name());
         } else if (event.isEventOfType(PropertyName.valid, PropertyName.visited)) {
             if (component.isValid()) {
-                getResponseTextBox().removeStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.invalid.name());
+                getResponseTextBox().removeStyleDependentName(DefaultCComponentsTheme.StyleDependent.invalid.name());
             } else if (component.isVisited()) {
-                getResponseTextBox().addStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.invalid.name());
+                getResponseTextBox().addStyleDependentName(DefaultCComponentsTheme.StyleDependent.invalid.name());
             }
         }
     }

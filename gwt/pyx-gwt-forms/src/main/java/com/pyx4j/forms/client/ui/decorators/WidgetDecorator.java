@@ -28,7 +28,6 @@ import static com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme.S
 import static com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme.StyleName.WidgetDecoratorLabel;
 import static com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme.StyleName.WidgetDecoratorLabelHolder;
 import static com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme.StyleName.WidgetDecoratorMandatoryImage;
-import static com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme.StyleName.WidgetDecoratorValidationLabel;
 
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -51,6 +50,7 @@ import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.Cursor;
+import com.pyx4j.forms.client.ui.DefaultCComponentsTheme;
 
 public class WidgetDecorator extends FlexTable {
 
@@ -163,7 +163,7 @@ public class WidgetDecorator extends FlexTable {
         componentHolder.add(nativeComponent);
 
         validationLabel = new Label();
-        validationLabel.setStyleName(WidgetDecoratorValidationLabel.name());
+        validationLabel.setStyleName(DefaultCComponentsTheme.StyleName.ValidationLabel.name());
 
         assistantWidgetHolder = new SimplePanel();
         assistantWidgetHolder.setWidget(builder.assistantWidget);

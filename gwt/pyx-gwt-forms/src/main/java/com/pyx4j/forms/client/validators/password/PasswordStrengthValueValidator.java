@@ -52,7 +52,7 @@ public class PasswordStrengthValueValidator implements EditableValueValidator<St
         if (acceptVerdict.contains(verdict)) {
             return null;
         } else {
-            return new ValidationError(i18n.tr("Password is {0}", verdict));
+            return new ValidationError(component, i18n.tr("Password is {0}", verdict));
         }
     }
 

@@ -66,9 +66,9 @@ public class NativeTextBox<E> extends TextBox implements INativeTextComponent<E>
     public void setEnabled(boolean enabled) {
         super.setEnabled(enabled);
         if (enabled) {
-            removeStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.disabled.name());
+            removeStyleDependentName(DefaultCComponentsTheme.StyleDependent.disabled.name());
         } else {
-            addStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.disabled.name());
+            addStyleDependentName(DefaultCComponentsTheme.StyleDependent.disabled.name());
         }
     }
 
@@ -76,9 +76,9 @@ public class NativeTextBox<E> extends TextBox implements INativeTextComponent<E>
     public void setEditable(boolean editable) {
         super.setReadOnly(!editable);
         if (editable) {
-            removeStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.readonly.name());
+            removeStyleDependentName(DefaultCComponentsTheme.StyleDependent.readonly.name());
         } else {
-            addStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.readonly.name());
+            addStyleDependentName(DefaultCComponentsTheme.StyleDependent.readonly.name());
         }
 
     }
@@ -108,12 +108,12 @@ public class NativeTextBox<E> extends TextBox implements INativeTextComponent<E>
     @Override
     public void onPropertyChange(PropertyChangeEvent event) {
         if (event.isEventOfType(PropertyName.repopulated)) {
-            removeStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.invalid.name());
+            removeStyleDependentName(DefaultCComponentsTheme.StyleDependent.invalid.name());
         } else if (event.isEventOfType(PropertyName.valid, PropertyName.visited)) {
             if (delegate.getCComponent().isValid()) {
-                removeStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.invalid.name());
+                removeStyleDependentName(DefaultCComponentsTheme.StyleDependent.invalid.name());
             } else if (delegate.getCComponent().isVisited()) {
-                addStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.invalid.name());
+                addStyleDependentName(DefaultCComponentsTheme.StyleDependent.invalid.name());
             }
         }
     }

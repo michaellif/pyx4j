@@ -48,6 +48,8 @@ public class BoxFolderDecorator<E extends IEntity> extends BaseFolderDecorator<E
         if (isAddable()) {
             add(getAddButton());
         }
+
+        add(getValidationMessageHolder());
     }
 
     @Override

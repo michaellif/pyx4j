@@ -158,9 +158,9 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
         if (getEditor() != null) {
             getEditor().setEnabled(enabled);
             if (enabled) {
-                getEditor().removeStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.disabled.name());
+                getEditor().removeStyleDependentName(DefaultCComponentsTheme.StyleDependent.disabled.name());
             } else {
-                getEditor().addStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.disabled.name());
+                getEditor().addStyleDependentName(DefaultCComponentsTheme.StyleDependent.disabled.name());
             }
         }
     }
@@ -184,9 +184,9 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
         if (getEditor() != null) {
             getEditor().setEditable(editable);
             if (editable) {
-                getEditor().removeStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.readonly.name());
+                getEditor().removeStyleDependentName(DefaultCComponentsTheme.StyleDependent.readonly.name());
             } else {
-                getEditor().addStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.readonly.name());
+                getEditor().addStyleDependentName(DefaultCComponentsTheme.StyleDependent.readonly.name());
             }
         }
     }
@@ -224,12 +224,12 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
     public void onPropertyChange(PropertyChangeEvent event) {
         if (getEditor() != null) {
             if (event.isEventOfType(PropertyName.repopulated)) {
-                getEditor().removeStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.invalid.name());
+                getEditor().removeStyleDependentName(DefaultCComponentsTheme.StyleDependent.invalid.name());
             } else if (event.isEventOfType(PropertyName.valid, PropertyName.visited)) {
                 if (getCComponent().isValid()) {
-                    getEditor().removeStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.invalid.name());
+                    getEditor().removeStyleDependentName(DefaultCComponentsTheme.StyleDependent.invalid.name());
                 } else if (getCComponent().isVisited()) {
-                    getEditor().addStyleDependentName(DefaultCCOmponentsTheme.StyleDependent.invalid.name());
+                    getEditor().addStyleDependentName(DefaultCComponentsTheme.StyleDependent.invalid.name());
                 }
             }
         }
