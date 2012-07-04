@@ -70,7 +70,8 @@ public class NavigSettingsActivity extends AbstractActivity implements NavigView
 
         folder = new NavigFolder(i18n.tr("Policies"));
         folder.addNavigItem(new CrmSiteMap.Settings.Policies.ApplicationDocumentation());
-        folder.addNavigItem(new CrmSiteMap.Settings.Policies.BackgroundCheck());
+// VISTA-1627 CRM:Delete: Background Check policy as currently not in use  
+//        folder.addNavigItem(new CrmSiteMap.Settings.Policies.BackgroundCheck());
         folder.addNavigItem(new CrmSiteMap.Settings.Policies.Deposits());
         folder.addNavigItem(new CrmSiteMap.Settings.Policies.EmailTemplates());
         folder.addNavigItem(new CrmSiteMap.Settings.Policies.IdAssignment());
