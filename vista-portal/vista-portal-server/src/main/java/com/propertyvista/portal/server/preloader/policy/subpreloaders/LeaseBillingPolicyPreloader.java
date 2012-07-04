@@ -52,12 +52,17 @@ public class LeaseBillingPolicyPreloader extends AbstractPolicyPreloader<LeaseBi
         policy.lateFee().set(lateFee);
 
         NsfFeeItem nsfItem = EntityFactory.create(NsfFeeItem.class);
-        nsfItem.paymentType().setValue(PaymentType.Cash);
+        nsfItem.paymentType().setValue(PaymentType.Check);
+        nsfItem.fee().setValue(new BigDecimal(30.00));
+        policy.nsfFees().add(nsfItem);
+
+        nsfItem = EntityFactory.create(NsfFeeItem.class);
+        nsfItem.paymentType().setValue(PaymentType.Echeck);
         nsfItem.fee().setValue(new BigDecimal(100.00));
         policy.nsfFees().add(nsfItem);
 
         nsfItem = EntityFactory.create(NsfFeeItem.class);
-        nsfItem.paymentType().setValue(PaymentType.Check);
+        nsfItem.paymentType().setValue(PaymentType.CreditCard);
         nsfItem.fee().setValue(new BigDecimal(30.00));
         policy.nsfFees().add(nsfItem);
 
