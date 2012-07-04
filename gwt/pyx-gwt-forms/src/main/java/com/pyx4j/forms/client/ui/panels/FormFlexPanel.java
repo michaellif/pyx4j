@@ -200,7 +200,7 @@ public class FormFlexPanel extends FlexTable implements PropertyChangeHandler, H
         ArrayList<ValidationError> validationErrors = validationResults.getValidationErrors();
 
         if (validationErrors.size() > 1) {
-            messagesBuffer.append(i18n.tr("error 1 of {0}", (validationErrors.size() - 1))).append(" - ");
+            messagesBuffer.append(i18n.tr("error 1 of {0}", (validationErrors.size()))).append(" - ");
         }
 
         if (validationErrors.size() > 0) {
