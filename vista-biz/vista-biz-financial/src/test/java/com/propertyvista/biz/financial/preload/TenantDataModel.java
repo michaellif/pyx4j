@@ -17,6 +17,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 
+import com.propertyvista.domain.person.Person.Sex;
 import com.propertyvista.domain.tenant.Customer;
 
 public class TenantDataModel {
@@ -28,7 +29,11 @@ public class TenantDataModel {
 
     public void generate() {
         tenant = EntityFactory.create(Customer.class);
-
+        tenant.person().name().firstName().setValue("Robinson");
+        tenant.person().name().lastName().setValue("Crusoe");
+        tenant.person().sex().setValue(Sex.Male);
+        tenant.person().mobilePhone().setValue("647-555-5555");
+        tenant.person().homePhone().setValue("647-333-7777");
         Persistence.service().persist(tenant);
     }
 

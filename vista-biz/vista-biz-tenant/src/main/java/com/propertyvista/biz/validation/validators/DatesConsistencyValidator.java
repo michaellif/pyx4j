@@ -7,7 +7,7 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jul 3, 2012
+ * Created on 2012-07-04
  * @author ArtyomB
  * @version $Id$
  */
@@ -22,21 +22,22 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.biz.validation.framework.EntityValidator;
 import com.propertyvista.biz.validation.framework.SimpleValidationFailure;
 import com.propertyvista.biz.validation.framework.ValidationFailure;
-import com.propertyvista.domain.person.Person;
+import com.propertyvista.domain.tenant.lease.Lease;
 
-public class HasPhoneValidator implements EntityValidator<Person> {
+public class DatesConsistencyValidator implements EntityValidator<Lease> {
 
-    private static final I18n i18n = I18n.get(HasPhoneValidator.class);
+    private static final I18n i18n = I18n.get(DatesConsistencyValidator.class);
 
     @Override
-    public Set<ValidationFailure> validate(Person entity) {
-        if (entity.homePhone().isNull() | entity.mobilePhone().isNull()) {
-            Set<ValidationFailure> validationFailures = new HashSet<ValidationFailure>();
-            validationFailures.add(new SimpleValidationFailure(entity, i18n.tr("Either home or mobile phone is required")));
-            return validationFailures;
+    public Set<ValidationFailure> validate(Lease lease) {
+        if (lease.leaseTo().isNull() || lease.leaseFrom().isNull() || lease.leaseFrom().getValue().after(lease.leaseTo().getValue())) {
+            Set<ValidationFailure> validationFailure = new HashSet<ValidationFailure>();
+            validationFailure.add(new SimpleValidationFailure(lease, i18n.tr("\"{0}\" date must be before \"{1}\" date", lease.leaseFrom().getMeta()
+                    .getCaption(), lease.leaseTo().getMeta().getCaption())));
+            return validationFailure;
         } else {
             return Collections.emptySet();
         }
-    }
 
+    }
 }

@@ -19,7 +19,7 @@ import com.propertyvista.biz.validation.framework.validators.ValueConstraintVali
 import com.propertyvista.domain.tenant.lease.Lease;
 
 /**
- * This class defines/validates the conditions a lease must meet prior to approval
+ * This class defines/validates the conditions that must be met by a lease to get an approval.
  */
 public class LeaseApprovalValidator extends CompositeEntityValidator<Lease> {
 
@@ -29,12 +29,11 @@ public class LeaseApprovalValidator extends CompositeEntityValidator<Lease> {
 
     @Override
     protected void init() {
-        bind(proto().version().status(), new ValueConstraintValidator<Lease.Status>(Lease.Status.Application));
+        bind(proto().version().status(), new ValueConstraintValidator<Lease.Status>(Lease.Status.Application, Lease.Status.Created));
+
         bind(proto().type(), new NotNullValidator());
         bind(proto().unit(), new NotNullValidator());
         bind(proto().paymentFrequency(), new NotNullValidator());
-
-        // not reserved validator for proto().unit()
 
         bind(proto().leaseFrom(), new NotNullValidator());
         bind(proto().leaseTo(), new NotNullValidator());
@@ -44,5 +43,6 @@ public class LeaseApprovalValidator extends CompositeEntityValidator<Lease> {
 
         bind(proto().version().leaseProducts().serviceItem(), new NotNullValidator());
 
+        bind(proto(), new DatesConsistencyValidator());
     }
 }

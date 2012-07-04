@@ -52,8 +52,10 @@ public class ValueConstraintValidator<T extends Object> implements PrimitiveVali
             return Collections.emptySet();
         } else {
             Set<ValidationFailure> validationFailure = new HashSet<ValidationFailure>();
-            validationFailure.add(new SimpleValidationFailure(primitive, i18n.tr("{0} is expected to be one of {1}", primitive.getMeta().getCaption(),
-                    StringUtils.join(acceptableValues, ", "))));
+            String message = acceptableValues.length > 1 ? i18n.tr("{0} is expected to be one of: \"{1}\", but is \"{2}\"", primitive.getMeta().getCaption(),
+                    StringUtils.join(acceptableValues, ", "), primitive.getValue()) : i18n.tr("{0} is expected to be \"{1}\", but is \"{2}\"", primitive
+                    .getMeta().getCaption(), acceptableValues[0], primitive.getValue());
+            validationFailure.add(new SimpleValidationFailure(primitive, message));
             return validationFailure;
         }
     }

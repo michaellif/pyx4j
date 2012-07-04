@@ -23,7 +23,7 @@ public interface VistaTODO {
     /**
      * For now to avoid the test failures because they create leases with no sufficient data for lease approval
      */
-    public static final boolean enableLeaseApprovalValidation = false;
+    public static final boolean enableLeaseApprovalValidation = true;
 
     public static boolean removedForProduction = false;
 
