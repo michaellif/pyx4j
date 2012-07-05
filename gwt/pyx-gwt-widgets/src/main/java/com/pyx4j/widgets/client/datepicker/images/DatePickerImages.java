@@ -35,8 +35,8 @@ public interface DatePickerImages extends ClientBundle {
     ImageResource monthSelectorBackground();
 
     @Source("YearNext.png")
-    ImageResource yearPrevious();
+    ImageResource yearNext();
 
     @Source("YearPrevious.png")
-    ImageResource yearNext();
+    ImageResource yearPrevious();
 }

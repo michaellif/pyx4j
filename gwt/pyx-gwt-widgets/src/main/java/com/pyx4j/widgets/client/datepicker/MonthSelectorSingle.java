@@ -59,6 +59,10 @@ public class MonthSelectorSingle extends MonthSelectorExtended {
 
     private final int yearNavigationColumn = 4;
 
+    private final int nextYearRow = 0;
+
+    private final int previousYearRow = 1;
+
     public MonthSelectorSingle(Date minDate, Date maxDate) {
         super(minDate, maxDate);
     }
@@ -102,7 +106,7 @@ public class MonthSelectorSingle extends MonthSelectorExtended {
         // Set up backwards year
         backwardsYear = new HoldableImage(resource.yearPrevious(), 300);
         backwardsYear.ensureDebugId(DatePickerIDs.MonthSelectorButton_BackwardsYear.debugId());
-        backwardsYear.addStyleName(DefaultDatePickerTheme.StyleDependent.top.name());
+        backwardsYear.addStyleName(DefaultDatePickerTheme.StyleDependent.bottom.name());
         backwardsYear.addHoldElapsedHandler(new HoldElapsedEventHandler() {
 
             @Override
@@ -114,7 +118,7 @@ public class MonthSelectorSingle extends MonthSelectorExtended {
 
         forwardsYear = new HoldableImage(resource.yearNext(), 300);
         forwardsYear.ensureDebugId(DatePickerIDs.MonthSelectorButton_ForwardYear.debugId());
-        forwardsYear.addStyleName(DefaultDatePickerTheme.StyleDependent.bottom.name());
+        forwardsYear.addStyleName(DefaultDatePickerTheme.StyleDependent.top.name());
         forwardsYear.addHoldElapsedHandler(new HoldElapsedEventHandler() {
 
             @Override
@@ -136,8 +140,8 @@ public class MonthSelectorSingle extends MonthSelectorExtended {
         grid.setWidget(0, nextMonthColumn, forwards);
         grid.setWidget(0, dateYearColumn, lblYear);
 
-        yearGrid.setWidget(0, 0, backwardsYear);
-        yearGrid.setWidget(1, 0, forwardsYear);
+        yearGrid.setWidget(nextYearRow, 0, forwardsYear);
+        yearGrid.setWidget(previousYearRow, 0, backwardsYear);
 
         grid.setWidget(0, yearNavigationColumn, yearGrid);
 
