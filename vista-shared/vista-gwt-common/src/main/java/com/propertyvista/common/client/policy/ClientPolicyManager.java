@@ -138,6 +138,7 @@ public class ClientPolicyManager {
     // helpers-specializations:
 
     public static void setIdComponentEditabilityByPolicy(final IdTarget idTarget, final CComponent<String, ?> idComp, final Key entityKey) {
+        idComp.setVisible(true);
         idComp.setViewable(false);
         ClientPolicyManager.obtainEffectivePolicy(ClientPolicyManager.getOrganizationPoliciesNode(), IdAssignmentPolicy.class,
                 new DefaultAsyncCallback<IdAssignmentPolicy>() {
@@ -156,6 +157,7 @@ public class ClientPolicyManager {
                             case generatedAlphaNumeric:
                             case generatedNumber:
                                 idComp.setViewable(true);
+                                idComp.setVisible(entityKey != null);
                                 break;
                             case userEditable:
                                 idComp.setViewable(false);
