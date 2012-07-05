@@ -288,4 +288,71 @@ public class AptUnitOccupancyManagerTest extends AptUnitOccupancyManagerTestBase
         expect().from("2011-05-20").toTheEndOfTime().status(Status.leased).withLease(lease).x();
     }
 
+    @Test
+    public void testMigrateStart() {
+        setup().fromTheBeginning().toTheEndOfTime().status(Status.vacant).x();
+
+        now("2001-01-05");
+
+        Lease lease;
+        getUOM().migrateStart(unitStub(), lease = createLease("2000-01-01", "2012-12-31"));
+
+        expect().fromTheBeginning().to("2001-01-04").status(Status.vacant).x();
+        expect().from("2001-01-05").toTheEndOfTime().status(Status.migrated).withLease(lease).x();
+    }
+
+    @Test
+    public void testMigrateApprove() {
+        Lease lease = createLease("2000-01-01", "2012-12-31");
+        setup().fromTheBeginning().to("2001-01-04").status(Status.vacant).x();
+        setup().from("2001-01-05").toTheEndOfTime().status(Status.migrated).withLease(lease).x();
+
+        now("2001-01-20");
+        getUOM().migrateApprove(unitStub());
+
+        expect().fromTheBeginning().to("2001-01-04").status(Status.vacant).x();
+        expect().from("2001-01-05").to("2001-01-19").status(Status.migrated).withLease(lease).x();
+        expect().from("2001-01-20").toTheEndOfTime().status(Status.leased).withLease(lease).x();
+    }
+
+    @Test
+    public void testMigrateApproveOnTheSameDay() {
+        Lease lease = createLease("2000-01-01", "2012-12-31");
+        setup().fromTheBeginning().to("2001-01-04").status(Status.vacant).x();
+        setup().from("2001-01-05").toTheEndOfTime().status(Status.migrated).withLease(lease).x();
+
+        now("2001-01-05");
+        getUOM().migrateApprove(unitStub());
+
+        expect().fromTheBeginning().to("2001-01-04").status(Status.vacant).x();
+        expect().from("2001-01-05").toTheEndOfTime().status(Status.leased).withLease(lease).x();
+    }
+
+    @Test
+    public void testMigrateCancel() {
+        Lease lease = createLease("2000-01-01", "2012-12-31");
+        setup().fromTheBeginning().to("2001-01-04").status(Status.vacant).x();
+        setup().from("2001-01-05").toTheEndOfTime().status(Status.migrated).withLease(lease).x();
+
+        now("2001-01-20");
+        getUOM().migrateCancel(unitStub());
+
+        expect().fromTheBeginning().to("2001-01-04").status(Status.vacant).x();
+        expect().from("2001-01-05").to("2001-01-19").status(Status.migrated).withLease(lease).x();
+        expect().from("2001-01-20").toTheEndOfTime().status(Status.vacant).x();
+    }
+
+    @Test
+    public void testMigrateCancelOnTheSameDay() {
+        Lease lease = createLease("2000-01-01", "2012-12-31");
+        setup().fromTheBeginning().to("2001-01-04").status(Status.vacant).x();
+        setup().from("2001-01-05").toTheEndOfTime().status(Status.migrated).withLease(lease).x();
+
+        now("2001-01-05");
+        getUOM().migrateCancel(unitStub());
+
+        expect().fromTheBeginning().toTheEndOfTime().status(Status.vacant).x();
+        // TODO test unit is available from specific date
+    }
+
 }

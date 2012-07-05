@@ -91,6 +91,12 @@ public class AptUnitOccupancyManagerTestBase {
         TestLifecycle.tearDown();
     }
 
+    protected AptUnit unitStub() {
+        unit = EntityFactory.create(AptUnit.class);
+        unit.setPrimaryKey(unitId);
+        return unit;
+    }
+
     protected void now(String nowDate) {
         Persistence.service().setTransactionSystemTime(asDate(nowDate));
     }
@@ -207,7 +213,8 @@ public class AptUnitOccupancyManagerTestBase {
         }
 
         public T withLease(Lease lease) {
-            if (segment.status().getValue().equals(Status.leased) | segment.status().getValue().equals(Status.reserved)) {
+            if (segment.status().getValue().equals(Status.leased) | segment.status().getValue().equals(Status.reserved)
+                    | segment.status().getValue().equals(Status.migrated)) {
                 segment.lease().set(lease);
                 return self();
             } else {
@@ -239,6 +246,10 @@ public class AptUnitOccupancyManagerTestBase {
                         Status.leased));
             }
             if (segment.status().getValue().equals(Status.reserved) & segment.lease().isNull()) {
+                throw new IllegalStateException(SimpleMessageFormat.format("{0} was not set for {1} unit", segment.lease().getMeta().getCaption(),
+                        Status.leased));
+            }
+            if (segment.status().getValue().equals(Status.migrated) & segment.lease().isNull()) {
                 throw new IllegalStateException(SimpleMessageFormat.format("{0} was not set for {1} unit", segment.lease().getMeta().getCaption(),
                         Status.leased));
             }

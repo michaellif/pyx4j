@@ -33,6 +33,18 @@ public interface OccupancyFacade {
 
     void setupNewUnit(AptUnit unit);
 
+    void migrateStart(AptUnit unitStub, Lease leaseStub);
+
+    boolean isMigrateStartAvailable(AptUnit unitStub);
+
+    void migrateApprove(AptUnit unitStub);
+
+    boolean isMigrateApproveAvailable(AptUnit unitStub);
+
+    void migrateCancel(AptUnit unitStub);
+
+    boolean isMigrateCancelAvailable(AptUnit unitStub);
+
     /**
      * Applied to {@link Status#vacant}: convert's it to offMarket
      * 

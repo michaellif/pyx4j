@@ -43,6 +43,11 @@ public interface AptUnitOccupancySegment extends IEntity {
         available,
 
         /**
+         * a transitional state for imported units, i.e. it's most probably lease, but awaiting final approval to become actually leased
+         */
+        migrated,
+
+        /**
          * unit has lease that starts in the future and is not available for another lease
          * (from the point of view of availability report it's leased, not in "net exposure")
          */
