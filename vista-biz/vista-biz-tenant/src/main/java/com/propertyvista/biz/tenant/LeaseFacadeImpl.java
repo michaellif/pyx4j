@@ -259,7 +259,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
         }
 
         // actual persist:
-        saveCustomers(lease);
+        persistCustomers(lease);
         Persistence.secureSave(lease.billingAccount());
         Persistence.secureSave(lease);
         Persistence.service().retrieve(lease.billingAccount().deposits());
@@ -286,13 +286,19 @@ public class LeaseFacadeImpl implements LeaseFacade {
         return lease;
     }
 
-    private void saveCustomers(Lease lease) {
+    private void persistCustomers(Lease lease) {
         for (Tenant tenant : lease.version().tenants()) {
+            if (tenant.id().isNull()) {
+                ServerSideFactory.create(IdAssignmentFacade.class).assignId(tenant);
+            }
             if (!tenant.customer().isValueDetached()) {
                 ServerSideFactory.create(CustomerFacade.class).persistCustomer(tenant.customer());
             }
         }
         for (Guarantor guarantor : lease.version().guarantors()) {
+            if (guarantor.id().isNull()) {
+                ServerSideFactory.create(IdAssignmentFacade.class).assignId(guarantor);
+            }
             if (!guarantor.customer().isValueDetached()) {
                 ServerSideFactory.create(CustomerFacade.class).persistCustomer(guarantor.customer());
             }
