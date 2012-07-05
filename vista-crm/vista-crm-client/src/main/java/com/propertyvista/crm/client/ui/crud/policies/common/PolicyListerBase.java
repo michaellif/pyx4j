@@ -20,7 +20,6 @@ import java.util.Queue;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.Command;
 
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
@@ -100,18 +99,12 @@ public abstract class PolicyListerBase<P extends PolicyDTOBase> extends ListerBa
         return deleteButton;
     }
 
-    public void validateAndRemoveRecursively(final Queue<P> itemsToRemove) {
+    private void validateAndRemoveRecursively(final Queue<P> itemsToRemove) {
         if (!itemsToRemove.isEmpty()) {
             final P item = itemsToRemove.poll();
-            if (item.isInstanceOf(OrganizationPoliciesNode.class)) {
-                MessageDialog.confirm(i18n.tr("Policy Removal Confirmation"), i18n.tr("Are you sure it's ok to remove the policy for the whole company?"),
-                        new Command() {
-                            @Override
-                            public void execute() {
-                                getPresenter().delete(item.getPrimaryKey());
-                                validateAndRemoveRecursively(itemsToRemove);
-                            }
-                        });
+            if (item.node().isInstanceOf(OrganizationPoliciesNode.class)) {
+                MessageDialog.info(i18n.tr("Deletion of the organization policy is forbidden"));
+                validateAndRemoveRecursively(itemsToRemove);
             } else {
                 getPresenter().delete(item.getPrimaryKey());
                 validateAndRemoveRecursively(itemsToRemove);
