@@ -288,16 +288,20 @@ public class LeaseFacadeImpl implements LeaseFacade {
 
     private void persistCustomers(Lease lease) {
         for (Tenant tenant : lease.version().tenants()) {
-            if (tenant.id().isNull()) {
-                ServerSideFactory.create(IdAssignmentFacade.class).assignId(tenant);
+            if (!tenant.isValueDetached()) {
+                if (tenant.id().isNull()) {
+                    ServerSideFactory.create(IdAssignmentFacade.class).assignId(tenant);
+                }
             }
             if (!tenant.customer().isValueDetached()) {
                 ServerSideFactory.create(CustomerFacade.class).persistCustomer(tenant.customer());
             }
         }
         for (Guarantor guarantor : lease.version().guarantors()) {
-            if (guarantor.id().isNull()) {
-                ServerSideFactory.create(IdAssignmentFacade.class).assignId(guarantor);
+            if (!guarantor.isValueDetached()) {
+                if (guarantor.id().isNull()) {
+                    ServerSideFactory.create(IdAssignmentFacade.class).assignId(guarantor);
+                }
             }
             if (!guarantor.customer().isValueDetached()) {
                 ServerSideFactory.create(CustomerFacade.class).persistCustomer(guarantor.customer());
