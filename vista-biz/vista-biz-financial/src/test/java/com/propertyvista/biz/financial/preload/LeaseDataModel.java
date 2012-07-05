@@ -21,6 +21,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.shared.EntityFactory;
 
+import com.propertyvista.biz.policy.IdAssignmentFacade;
 import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.Service;
@@ -75,6 +76,7 @@ public class LeaseDataModel {
 
     private void addTenants() {
         Tenant tenantInLease = EntityFactory.create(Tenant.class);
+        ServerSideFactory.create(IdAssignmentFacade.class).assignId(tenantInLease);
         tenantInLease.customer().set(tenantDataModel.getTenant());
         tenantInLease.role().setValue(LeaseParticipant.Role.Applicant);
         lease.version().tenants().add(tenantInLease);

@@ -47,9 +47,7 @@ import com.propertyvista.common.client.ui.validators.PastDateValidation;
 import com.propertyvista.crm.client.ui.components.media.CrmMediaFolder;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.notesandattachments.NotesAndAttachmentsForm;
-import com.propertyvista.domain.policy.policies.IdAssignmentPolicy;
 import com.propertyvista.domain.policy.policies.MiscPolicy;
-import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
 import com.propertyvista.domain.property.PropertyContact;
 import com.propertyvista.domain.property.PropertyPhone;
@@ -139,35 +137,7 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
 
         // tweak property code editing UI:
         if (isEditable()) {
-            get(proto().propertyCode()).setViewable(false);
-            ClientPolicyManager.obtainEffectivePolicy(ClientPolicyManager.getOrganizationPoliciesNode(), IdAssignmentPolicy.class,
-                    new DefaultAsyncCallback<IdAssignmentPolicy>() {
-                        @Override
-                        public void onSuccess(IdAssignmentPolicy result) {
-                            IdAssignmentItem targetItem = null;
-                            for (IdAssignmentItem item : result.itmes()) {
-                                if (item.target().getValue() == IdTarget.propertyCode) {
-                                    targetItem = item;
-                                    break;
-                                }
-                            }
-
-                            if (targetItem != null) {
-                                switch (targetItem.type().getValue()) {
-                                case generatedAlphaNumeric:
-                                case generatedNumber:
-                                    get(proto().propertyCode()).setViewable(true);
-                                    break;
-                                case userEditable:
-                                    get(proto().propertyCode()).setViewable(false);
-                                    break;
-                                case userAssigned:
-                                    get(proto().propertyCode()).setViewable(getValue().getPrimaryKey() != null);
-                                    break;
-                                }
-                            }
-                        }
-                    });
+            ClientPolicyManager.setIdComponentEditabilityByPolicy(IdTarget.propertyCode, get(proto().propertyCode()), getValue().getPrimaryKey());
 
             ClientPolicyManager.obtainEffectivePolicy(ClientPolicyManager.getOrganizationPoliciesNode(), MiscPolicy.class,
                     new DefaultAsyncCallback<MiscPolicy>() {

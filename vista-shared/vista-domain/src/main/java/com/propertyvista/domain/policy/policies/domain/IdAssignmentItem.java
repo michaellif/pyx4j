@@ -42,6 +42,8 @@ public interface IdAssignmentItem extends IEntity {
 
         tenant,
 
+        guarantor,
+
         lead,
 
         accountNumber;

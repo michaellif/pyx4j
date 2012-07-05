@@ -15,6 +15,8 @@ package com.propertyvista.biz.policy;
 
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.Customer;
+import com.propertyvista.domain.tenant.Guarantor;
+import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lead.Lead;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.ptapp.MasterOnlineApplication;
@@ -30,6 +32,10 @@ public interface IdAssignmentFacade {
     void assignId(Customer customer);
 
     void assignId(Lease lease);
+
+    void assignId(Tenant tenant);
+
+    void assignId(Guarantor guarantor);
 
     String createAccountNumber();
 

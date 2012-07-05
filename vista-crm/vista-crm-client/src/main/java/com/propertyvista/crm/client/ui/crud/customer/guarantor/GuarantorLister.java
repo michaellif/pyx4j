@@ -27,7 +27,7 @@ public class GuarantorLister extends ListerBase<GuarantorDTO> {
         super(GuarantorDTO.class, false);
 
         setColumnDescriptors(//@formatter:off
-            new Builder(proto().customer().customerId(), false).build(),
+            new Builder(proto().participantId()).build(),
             
             new Builder(proto().customer().person().name()).searchable(false).build(),
             new Builder(proto().customer().person().name().firstName(), false).build(),

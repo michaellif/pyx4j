@@ -19,6 +19,7 @@ import org.junit.Before;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -31,6 +32,7 @@ import com.propertyvista.biz.occupancy.AptUnitOccupancyManagerHelper;
 import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.biz.occupancy.SplittingHandler;
 import com.propertyvista.biz.occupancy.UnitTurnoverAnalysisFacade;
+import com.propertyvista.biz.policy.IdAssignmentFacade;
 import com.propertyvista.config.tests.VistaTestDBSetup;
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus;
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitTurnoverStats;
@@ -139,6 +141,7 @@ public class UnitTurnoverAnalysisManagerTestBase {
         lease.paymentFrequency().setValue(PaymentFrequency.Monthly);
 
         Tenant tenantInLease = EntityFactory.create(Tenant.class);
+        ServerSideFactory.create(IdAssignmentFacade.class).assignId(tenantInLease);
         tenantInLease.leaseV().set(lease.version());
         tenantInLease.customer().set(tenant);
         tenantInLease.orderInLease().setValue(1);

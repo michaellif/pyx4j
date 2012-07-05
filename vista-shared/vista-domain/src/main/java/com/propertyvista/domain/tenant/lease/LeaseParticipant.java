@@ -63,12 +63,17 @@ public interface LeaseParticipant extends IEntity {
     }
 
     @NotNull
-    @ReadOnly
     @ToString(index = 0)
+    @Caption(name = "Id")
+    IPrimitive<String> participantId();
+
+    @NotNull
+    @ReadOnly
+    @ToString(index = 1)
     Customer customer();
 
     @NotNull
-    @ToString(index = 1)
+    @ToString(index = 2)
     @MemberColumn(name = "participantRole")
     IPrimitive<Role> role();
 

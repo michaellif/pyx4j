@@ -19,10 +19,12 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
+import com.propertyvista.common.client.policy.ClientPolicyManager;
 import com.propertyvista.common.client.ui.components.editors.NameEditor;
 import com.propertyvista.common.client.ui.validators.PastDateValidation;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.crud.lease.common.CLeaseVHyperlink;
+import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
 import com.propertyvista.dto.GuarantorDTO;
 
 public class GuarantorForm extends CrmEntityForm<GuarantorDTO> {
@@ -45,6 +47,10 @@ public class GuarantorForm extends CrmEntityForm<GuarantorDTO> {
 
         tab = addTab(isEditable() ? new HTML() : ((GuarantorViewerView) getParentView()).getScreeningListerView().asWidget(), i18n.tr("Screening"));
         setTabEnabled(tab, !isEditable());
+
+        if (isEditable()) {
+            ClientPolicyManager.setIdComponentEditabilityByPolicy(IdTarget.guarantor, get(proto().participantId()), getValue().getPrimaryKey());
+        }
     }
 
     @Override
@@ -57,6 +63,7 @@ public class GuarantorForm extends CrmEntityForm<GuarantorDTO> {
         FormFlexPanel main = new FormFlexPanel(title);
         int row = -1;
 
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().participantId()), 7).build());
         main.setWidget(++row, 0, inject(proto().customer().person().name(), new NameEditor(i18n.tr("Guarantor"))));
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().sex()), 7).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().birthDate()), 9).build());

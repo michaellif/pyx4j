@@ -105,6 +105,7 @@ public class LeadFacadeImpl implements LeadFacade {
             customer.person().set(guest.person());
 
             Tenant tenantInLease = EntityFactory.create(Tenant.class);
+            ServerSideFactory.create(IdAssignmentFacade.class).assignId(tenantInLease);
             tenantInLease.customer().set(customer);
             tenantInLease.role().setValue(asApplicant ? LeaseParticipant.Role.Applicant : LeaseParticipant.Role.CoApplicant);
             lease.version().tenants().add(tenantInLease);

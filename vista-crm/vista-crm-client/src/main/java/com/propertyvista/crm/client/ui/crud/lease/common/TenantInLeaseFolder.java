@@ -36,8 +36,10 @@ import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.common.client.policy.ClientPolicyManager;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.editors.NameEditor;
+import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.PersonRelationship;
 import com.propertyvista.domain.tenant.PersonScreening;
@@ -69,10 +71,10 @@ public class TenantInLeaseFolder extends LeaseParticipantFolder<Tenant> {
 
     @Override
     protected void addParticipants(List<Customer> customers) {
-        for (Customer tenant : customers) {
+        for (Customer customer : customers) {
             Tenant newTenantInLease = EntityFactory.create(Tenant.class);
             newTenantInLease.leaseV().setPrimaryKey(lease.getValue().version().getPrimaryKey());
-            newTenantInLease.customer().set(tenant);
+            newTenantInLease.customer().set(customer);
             if (!isApplicantPresent()) {
                 newTenantInLease.role().setValue(LeaseParticipant.Role.Applicant);
                 newTenantInLease.relationship().setValue(PersonRelationship.Other); // just not leave it empty - it's mandatory field!
@@ -164,6 +166,7 @@ public class TenantInLeaseFolder extends LeaseParticipantFolder<Tenant> {
 
             FormFlexPanel left = new FormFlexPanel();
             int row = -1;
+            left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().participantId()), 7).build());
             left.setWidget(++row, 0, inject(proto().customer().person().name(), new NameEditor(i18n.tr("Tenant"), Tenant.class) {
                 @Override
                 public Key getLinkKey() {
@@ -210,6 +213,10 @@ public class TenantInLeaseFolder extends LeaseParticipantFolder<Tenant> {
             super.onPopulate();
 
             get(proto().customer().person().email()).setMandatory(!getValue().customer().user().isNull());
+
+            if (isEditable()) {
+                ClientPolicyManager.setIdComponentEditabilityByPolicy(IdTarget.tenant, get(proto().participantId()), getValue().getPrimaryKey());
+            }
 
             boolean applicant = (getValue().role().getValue() == LeaseParticipant.Role.Applicant);
             if (applicant) {

@@ -178,6 +178,7 @@ public interface Lease extends IVersionedEntity<LeaseV> {
 
     @NotNull
     @ToString(index = 0)
+    @Caption(name = "Id")
     IPrimitive<String> leaseId();
 
     @NotNull

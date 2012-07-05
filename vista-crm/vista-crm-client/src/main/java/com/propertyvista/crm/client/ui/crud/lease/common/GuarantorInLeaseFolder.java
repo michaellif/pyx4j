@@ -28,8 +28,10 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.common.client.policy.ClientPolicyManager;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.editors.NameEditor;
+import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.PersonRelationship;
@@ -61,10 +63,10 @@ public class GuarantorInLeaseFolder extends LeaseParticipantFolder<Guarantor> {
 
     @Override
     protected void addParticipants(List<Customer> customers) {
-        for (Customer tenant : customers) {
+        for (Customer customer : customers) {
             Guarantor newGuarantorInLease = EntityFactory.create(Guarantor.class);
             newGuarantorInLease.leaseV().setPrimaryKey(lease.getValue().version().getPrimaryKey());
-            newGuarantorInLease.customer().set(tenant);
+            newGuarantorInLease.customer().set(customer);
             newGuarantorInLease.role().setValue(LeaseParticipant.Role.Guarantor);
             newGuarantorInLease.relationship().setValue(PersonRelationship.Other); // just not leave it empty - it's mandatory field!
             addItem(newGuarantorInLease);
@@ -91,6 +93,7 @@ public class GuarantorInLeaseFolder extends LeaseParticipantFolder<Guarantor> {
 
             FormFlexPanel left = new FormFlexPanel();
             int row = -1;
+            left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().participantId()), 7).build());
             left.setWidget(++row, 0, inject(proto().customer().person().name(), new NameEditor(i18n.tr("Guarantor"), Guarantor.class) {
                 @Override
                 public Key getLinkKey() {
@@ -99,7 +102,6 @@ public class GuarantorInLeaseFolder extends LeaseParticipantFolder<Guarantor> {
             }));
             left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().sex()), 7).build());
             left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().birthDate()), 9).build());
-            left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().relationship()), 15).build());
             left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().screening()), 9).customLabel(i18n.tr("Use Screening From")).build());
             left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().tenant(), new CComboBox<Tenant>() {
                 @Override
@@ -110,7 +112,8 @@ public class GuarantorInLeaseFolder extends LeaseParticipantFolder<Guarantor> {
                         return o.getStringView();
                     }
                 }
-            }), 25).customLabel(i18n.tr("Referred by Tenant")).build());
+            }), 25).build());
+            left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().relationship()), 15).build());
 
             FormFlexPanel right = new FormFlexPanel();
             row = -1;
@@ -134,6 +137,10 @@ public class GuarantorInLeaseFolder extends LeaseParticipantFolder<Guarantor> {
             super.onPopulate();
 
             get(proto().customer().person().email()).setMandatory(!getValue().customer().user().isNull());
+
+            if (isEditable()) {
+                ClientPolicyManager.setIdComponentEditabilityByPolicy(IdTarget.guarantor, get(proto().participantId()), getValue().getPrimaryKey());
+            }
 
             if (get(proto().screening()) instanceof CEntityComboBox<?>) {
                 @SuppressWarnings("unchecked")

@@ -27,7 +27,7 @@ public class TenantLister extends ListerBase<TenantDTO> {
         super(TenantDTO.class, false);
 
         setColumnDescriptors(//@formatter:off
-            new Builder(proto().customer().customerId(), false).build(),
+            new Builder(proto().participantId()).build(),
             new Builder(proto().role()).build(),
             
             new Builder(proto().customer().person().name()).searchable(false).build(),

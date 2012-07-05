@@ -29,7 +29,6 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.ui.crud.form.IEditorView;
 import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;
@@ -44,8 +43,6 @@ import com.propertyvista.common.client.ui.validators.DateInPeriodValidation;
 import com.propertyvista.common.client.ui.validators.StartEndDateValidation;
 import com.propertyvista.crm.client.ui.components.boxes.UnitSelectorDialog;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
-import com.propertyvista.domain.policy.policies.IdAssignmentPolicy;
-import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
@@ -99,35 +96,7 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
         if (isEditable()) {
             boolean isLeaseSigned = !getValue().approvalDate().isNull();
 
-            get(proto().leaseId()).setViewable(false);
-            ClientPolicyManager.obtainEffectivePolicy(ClientPolicyManager.getOrganizationPoliciesNode(), IdAssignmentPolicy.class,
-                    new DefaultAsyncCallback<IdAssignmentPolicy>() {
-                        @Override
-                        public void onSuccess(IdAssignmentPolicy result) {
-                            IdAssignmentItem targetItem = null;
-                            for (IdAssignmentItem item : result.itmes()) {
-                                if (item.target().getValue() == IdTarget.lease) {
-                                    targetItem = item;
-                                    break;
-                                }
-                            }
-
-                            if (targetItem != null) {
-                                switch (targetItem.type().getValue()) {
-                                case generatedAlphaNumeric:
-                                case generatedNumber:
-                                    get(proto().leaseId()).setViewable(true);
-                                    break;
-                                case userEditable:
-                                    get(proto().leaseId()).setViewable(false);
-                                    break;
-                                case userAssigned:
-                                    get(proto().leaseId()).setViewable(getValue().getPrimaryKey() != null);
-                                    break;
-                                }
-                            }
-                        }
-                    });
+            ClientPolicyManager.setIdComponentEditabilityByPolicy(IdTarget.lease, get(proto().leaseId()), getValue().getPrimaryKey());
 
             get(proto().leaseFrom()).setViewable(isLeaseSigned);
             get(proto().leaseTo()).setViewable(isLeaseSigned);

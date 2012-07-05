@@ -27,7 +27,6 @@ import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.ui.crud.misc.CEntitySelectorHyperlink;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
@@ -38,8 +37,6 @@ import com.propertyvista.common.client.policy.ClientPolicyManager;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.crud.lease.common.CLeaseHyperlink;
 import com.propertyvista.crm.rpc.services.selections.SelectFloorplanListService;
-import com.propertyvista.domain.policy.policies.IdAssignmentPolicy;
-import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -157,35 +154,10 @@ public class LeadForm extends CrmEntityForm<Lead> {
 
         get(proto().lease()).setVisible(!getValue().lease().isNull());
 
-        get(proto().leadId()).setViewable(false);
-        ClientPolicyManager.obtainEffectivePolicy(ClientPolicyManager.getOrganizationPoliciesNode(), IdAssignmentPolicy.class,
-                new DefaultAsyncCallback<IdAssignmentPolicy>() {
-                    @Override
-                    public void onSuccess(IdAssignmentPolicy result) {
-                        IdAssignmentItem targetItem = null;
-                        for (IdAssignmentItem item : result.itmes()) {
-                            if (item.target().getValue() == IdTarget.lead) {
-                                targetItem = item;
-                                break;
-                            }
-                        }
+        if (isEditable()) {
+            ClientPolicyManager.setIdComponentEditabilityByPolicy(IdTarget.lead, get(proto().leadId()), getValue().getPrimaryKey());
+        }
 
-                        if (targetItem != null) {
-                            switch (targetItem.type().getValue()) {
-                            case generatedAlphaNumeric:
-                            case generatedNumber:
-                                get(proto().leadId()).setViewable(true);
-                                break;
-                            case userEditable:
-                                get(proto().leadId()).setViewable(false);
-                                break;
-                            case userAssigned:
-                                get(proto().leadId()).setViewable(getValue().getPrimaryKey() != null);
-                                break;
-                            }
-                        }
-                    }
-                });
     }
 
     private Widget createAppointmentsTab() {

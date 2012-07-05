@@ -29,6 +29,8 @@ import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdAssign
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.Customer;
+import com.propertyvista.domain.tenant.Guarantor;
+import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lead.Lead;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.ptapp.MasterOnlineApplication;
@@ -75,50 +77,35 @@ public class IdAssignmentFacadeImpl implements IdAssignmentFacade {
         }
     }
 
+    @Override
+    public void assignId(Tenant tenant) {
+        if (needsGeneratedId(IdTarget.tenant)) {
+            tenant.participantId().setValue(getId(IdTarget.tenant));
+        }
+    }
+
+    @Override
+    public void assignId(Guarantor guarantor) {
+        if (needsGeneratedId(IdTarget.guarantor)) {
+            guarantor.participantId().setValue(getId(IdTarget.guarantor));
+        }
+    }
+
+    @Override
+    public String createAccountNumber() {
+        return AccountNumberSequence.getNextSequence();
+    }
+
+    // internals:
+
     private static boolean needsGeneratedId(IdAssignmentItem.IdTarget target) {
-        IdAssignmentPolicy policy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(EntityFactory.create(OrganizationPoliciesNode.class),
-                IdAssignmentPolicy.class);
-
-        if (policy == null) {
-            throw new InvalidParameterException("Node OrganizationPoliciesNode has no : " + IdAssignmentPolicy.TO_STRING_ATTR + " assigned");
-        }
-
-        IdAssignmentItem targetItem = null;
-        for (IdAssignmentItem item : policy.itmes()) {
-            if (item.target().getValue() == target) {
-                targetItem = item;
-
-                break;
-            }
-        }
-
-        if (targetItem == null) {
-            throw new InvalidParameterException("No item for target: " + target.toString());
-        }
+        IdAssignmentItem targetItem = getIdAssignmentItem(target);
 
         return targetItem.type().getValue() == IdAssignmentType.generatedNumber || targetItem.type().getValue() == IdAssignmentType.generatedAlphaNumeric;
     }
 
     private static String getId(final IdAssignmentItem.IdTarget target) {
-        IdAssignmentPolicy policy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(EntityFactory.create(OrganizationPoliciesNode.class),
-                IdAssignmentPolicy.class);
-
-        if (policy == null) {
-            throw new InvalidParameterException("Node OrganizationPoliciesNode has no : " + IdAssignmentPolicy.TO_STRING_ATTR + " assigned");
-        }
-
-        IdAssignmentItem targetItem = null;
-        for (IdAssignmentItem item : policy.itmes()) {
-            if (item.target().getValue() == target) {
-                targetItem = item;
-
-                break;
-            }
-        }
-
-        if (targetItem == null) {
-            throw new InvalidParameterException("No item for target: " + target.toString());
-        }
+        IdAssignmentItem targetItem = getIdAssignmentItem(target);
 
         Long nextId = TaskRunner.runAutonomousTransation(new Callable<Long>() {
             @Override
@@ -154,6 +141,28 @@ public class IdAssignmentFacadeImpl implements IdAssignmentFacade {
         return res;
     }
 
+    private static IdAssignmentItem getIdAssignmentItem(final IdAssignmentItem.IdTarget target) {
+        IdAssignmentPolicy policy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(EntityFactory.create(OrganizationPoliciesNode.class),
+                IdAssignmentPolicy.class);
+
+        if (policy == null) {
+            throw new InvalidParameterException("Node OrganizationPoliciesNode has no : " + IdAssignmentPolicy.TO_STRING_ATTR + " assigned");
+        }
+
+        IdAssignmentItem targetItem = null;
+        for (IdAssignmentItem item : policy.itmes()) {
+            if (item.target().getValue() == target) {
+                targetItem = item;
+                break;
+            }
+        }
+
+        if (targetItem == null) {
+            throw new InvalidParameterException("No item for target: " + target.toString());
+        }
+        return targetItem;
+    }
+
     private static void generatedAlphabetical(final StringBuffer res, long val) {
         long div = val / codes.length;
         long mod = val % codes.length;
@@ -167,11 +176,6 @@ public class IdAssignmentFacadeImpl implements IdAssignmentFacade {
         } else {
             res.append(codes[(int) mod - 1]);
         }
-    }
-
-    @Override
-    public String createAccountNumber() {
-        return AccountNumberSequence.getNextSequence();
     }
 
 }

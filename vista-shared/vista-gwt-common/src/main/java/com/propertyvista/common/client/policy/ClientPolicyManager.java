@@ -18,7 +18,9 @@ import java.util.Map;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.client.RPCManager;
 import com.pyx4j.rpc.client.SystemNotificationEvent;
@@ -30,6 +32,9 @@ import com.pyx4j.security.client.SecurityControllerHandler;
 import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
 import com.propertyvista.domain.policy.framework.Policy;
 import com.propertyvista.domain.policy.framework.PolicyNode;
+import com.propertyvista.domain.policy.policies.IdAssignmentPolicy;
+import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem;
+import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
 import com.propertyvista.portal.rpc.PolicyDataSystemNotification;
 import com.propertyvista.portal.rpc.shared.services.PolicyRetrieveService;
 
@@ -128,5 +133,39 @@ public class ClientPolicyManager {
     protected static void invalidate() {
         cache.clear();
         organizationPoliciesNode = null;
+    }
+
+    // helpers-specializations:
+
+    public static void setIdComponentEditabilityByPolicy(final IdTarget idTarget, final CComponent<String, ?> idComp, final Key entityKey) {
+        idComp.setViewable(false);
+        ClientPolicyManager.obtainEffectivePolicy(ClientPolicyManager.getOrganizationPoliciesNode(), IdAssignmentPolicy.class,
+                new DefaultAsyncCallback<IdAssignmentPolicy>() {
+                    @Override
+                    public void onSuccess(IdAssignmentPolicy result) {
+                        IdAssignmentItem targetItem = null;
+                        for (IdAssignmentItem item : result.itmes()) {
+                            if (item.target().getValue() == idTarget) {
+                                targetItem = item;
+                                break;
+                            }
+                        }
+
+                        if (targetItem != null) {
+                            switch (targetItem.type().getValue()) {
+                            case generatedAlphaNumeric:
+                            case generatedNumber:
+                                idComp.setViewable(true);
+                                break;
+                            case userEditable:
+                                idComp.setViewable(false);
+                                break;
+                            case userAssigned:
+                                idComp.setViewable(entityKey != null);
+                                break;
+                            }
+                        }
+                    }
+                });
     }
 }

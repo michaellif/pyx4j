@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.SimpleMessageFormat;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
@@ -38,6 +39,7 @@ import com.propertyvista.biz.communication.mail.template.model.PasswordRequestCr
 import com.propertyvista.biz.communication.mail.template.model.PasswordRequestProspectT;
 import com.propertyvista.biz.communication.mail.template.model.PasswordRequestTenantT;
 import com.propertyvista.biz.communication.mail.template.model.PortalLinksT;
+import com.propertyvista.biz.policy.IdAssignmentFacade;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.config.tests.VistaDBTestBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
@@ -564,6 +566,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
         tenant.user().set(user);
         Persistence.service().persist(tenant);
         mainAplt = EntityFactory.create(Tenant.class);
+        ServerSideFactory.create(IdAssignmentFacade.class).assignId(mainAplt);
         mainAplt.customer().set(tenant);
         mainAplt.role().setValue(LeaseParticipant.Role.Applicant);
         mainAplt.leaseV().set(lease.version());
@@ -577,6 +580,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
         tenant.user().set(user);
         Persistence.service().persist(tenant);
         coAplt = EntityFactory.create(Tenant.class);
+        ServerSideFactory.create(IdAssignmentFacade.class).assignId(coAplt);
         coAplt.customer().set(tenant);
         coAplt.role().setValue(LeaseParticipant.Role.CoApplicant);
         coAplt.application().set(mainApp);

@@ -27,6 +27,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
+import com.propertyvista.common.client.policy.ClientPolicyManager;
 import com.propertyvista.common.client.ui.components.editors.NameEditor;
 import com.propertyvista.common.client.ui.components.folders.EmergencyContactFolder;
 import com.propertyvista.common.client.ui.validators.PastDateValidation;
@@ -34,6 +35,7 @@ import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.crud.customer.common.PaymentMethodFolder;
 import com.propertyvista.crm.client.ui.crud.lease.common.CLeaseVHyperlink;
 import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
 import com.propertyvista.domain.tenant.EmergencyContact;
 import com.propertyvista.dto.TenantDTO;
 
@@ -68,12 +70,17 @@ public class TenantForm extends CrmEntityForm<TenantDTO> {
     protected void onPopulate() {
         super.onPopulate();
         get(proto().customer().person().email()).setMandatory(!getValue().customer().user().isNull());
+
+        if (isEditable()) {
+            ClientPolicyManager.setIdComponentEditabilityByPolicy(IdTarget.tenant, get(proto().participantId()), getValue().getPrimaryKey());
+        }
     }
 
     private FormFlexPanel createDetailsTab(String title) {
         FormFlexPanel main = new FormFlexPanel(title);
 
         int row = -1;
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().participantId()), 7).build());
         main.setWidget(++row, 0, inject(proto().customer().person().name(), new NameEditor(i18n.tr("Tenant"))));
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().sex()), 7).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().birthDate()), 9).build());
