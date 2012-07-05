@@ -104,6 +104,7 @@ public interface Lead extends IEntity {
     @ToString(index = 0)
     IPrimitive<String> leadId();
 
+    @NotNull
     @ToString(index = 1)
     @Caption(name = "Move-in date")
     IPrimitive<LogicalDate> moveInDate();

@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.biz.validation.validators;
+package com.propertyvista.biz.validation.validators.lease;
 
 import java.util.Collections;
 import java.util.HashSet;

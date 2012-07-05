@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.biz.validation.validators;
+package com.propertyvista.biz.validation.validators.lease;
 
 import com.propertyvista.biz.validation.framework.validators.CompositeEntityValidator;
 import com.propertyvista.biz.validation.framework.validators.NotNullValidator;

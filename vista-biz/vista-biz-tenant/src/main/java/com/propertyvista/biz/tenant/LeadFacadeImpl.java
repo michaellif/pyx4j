@@ -13,7 +13,12 @@
  */
 package com.propertyvista.biz.tenant;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.Set;
+
+import org.apache.commons.lang.StringUtils;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
@@ -25,6 +30,8 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 
 import com.propertyvista.biz.policy.IdAssignmentFacade;
+import com.propertyvista.biz.validation.framework.ValidationFailure;
+import com.propertyvista.biz.validation.validators.lead.LeadValidator;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.Tenant;
@@ -55,8 +62,16 @@ public class LeadFacadeImpl implements LeadFacade {
         if (!lead.lease().isNull()) {
             throw new UserRuntimeException(i18n.tr("The Lead is converted to Lease already!"));
         }
-        if (lead.leaseType().isNull()) {
-            throw new UserRuntimeException(i18n.tr("The {0} should be selected", lead.leaseType().getMeta().getCaption()));
+
+        Set<ValidationFailure> validationFailures = new LeadValidator().validate(lead);
+
+        if (!validationFailures.isEmpty()) {
+            List<String> errorMessages = new ArrayList<String>();
+            for (ValidationFailure failure : validationFailures) {
+                errorMessages.add(failure.getMessage());
+            }
+            String errorsRoster = StringUtils.join(errorMessages, ",\n");
+            throw new UserRuntimeException(i18n.tr("Unable to convert lead due to the following validation errors:\n{0}", errorsRoster));
         }
 
         Date leaseEnd = null;
