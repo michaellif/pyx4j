@@ -14,11 +14,11 @@
 package com.propertyvista.admin.client.activity.crud.simulatedpad;
 
 import java.math.BigDecimal;
-import java.util.Date;
 
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
@@ -69,7 +69,7 @@ public class PadBatchEditorActivity extends EditorActivityBase<PadSimBatch> impl
         for (PadSimDebitRecord record : padBatch.records()) {
             if (record.acknowledgmentStatusCode().isNull()) {
                 if (record.paymentDate().isNull()) {
-                    record.paymentDate().setValue(PadSimUtils.formatDate(new Date()));
+                    record.paymentDate().setValue(PadSimUtils.formatDate(ClientContext.getServerDate()));
                 }
                 if (record.reconciliationStatus().isNull()) {
                     record.reconciliationStatus().setValue(TransactionReconciliationStatus.PROCESSED);

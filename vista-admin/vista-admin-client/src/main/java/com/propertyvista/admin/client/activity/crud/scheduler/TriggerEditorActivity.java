@@ -13,13 +13,12 @@
  */
 package com.propertyvista.admin.client.activity.crud.scheduler;
 
-import java.util.Date;
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
@@ -39,7 +38,7 @@ public class TriggerEditorActivity extends EditorActivityBase<Trigger> {
     @Override
     protected void createNewEntity(AsyncCallback<Trigger> callback) {
         Trigger process = EntityFactory.create(getEntityClass());
-        process.created().setValue(new Date());
+        process.created().setValue(ClientContext.getServerDate());
         callback.onSuccess(process);
     }
 
