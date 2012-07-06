@@ -57,8 +57,7 @@ public class AgreeFolder extends VistaTableFolder<IAgree> {
 
     @Override
     public List<EntityFolderColumnDescriptor> columns() {
-        //@formatter:off
-      return Arrays.asList(
+        return Arrays.asList(//@formatter:off
               new EntityFolderColumnDescriptor(proto().person().name(), "30em"),
               new EntityFolderColumnDescriptor(proto().agree(), "5em"));
         //@formatter:on

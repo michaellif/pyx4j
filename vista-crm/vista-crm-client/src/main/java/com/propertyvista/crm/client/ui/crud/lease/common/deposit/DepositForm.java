@@ -48,6 +48,10 @@ public class DepositForm extends CrmEntityForm<Deposit> {
 
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().description()), 25).build());
 
+        content.setH2(++row, 0, 2, proto().interestAdjustments().getMeta().getCaption());
+        content.setWidget(++row, 0, inject(proto().interestAdjustments(), new DepositInterestAdjustmentFolder(isEditable())));
+        content.getFlexCellFormatter().setColSpan(row, 0, 2);
+
         // tweaking:
         get(proto().type()).setEditable(false);
         get(proto().status()).setEditable(false);

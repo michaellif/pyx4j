@@ -43,6 +43,14 @@ public class DepositCrudServiceImpl extends AbstractCrudServiceImpl<Deposit> imp
     }
 
     @Override
+    protected void enhanceRetrieved(Deposit entity, Deposit dto) {
+        super.enhanceRetrieved(entity, dto);
+
+        // load detached:
+        Persistence.service().retrieve(dto.interestAdjustments());
+    }
+
+    @Override
     public void getLeaseBillableItems(AsyncCallback<Vector<BillableItem>> callback, BillingAccount billingAccountId) {
         Vector<BillableItem> items = new Vector<BillableItem>();
 
