@@ -21,6 +21,9 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.ColumnId;
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Length;
@@ -119,6 +122,7 @@ public interface Deposit extends IEntity {
     @NotNull
     @Length(40)
     @ToString(index = 2)
+    @Editor(type = EditorType.textarea)
     IPrimitive<String> description();
 
     @NotNull
@@ -126,8 +130,12 @@ public interface Deposit extends IEntity {
     IPrimitive<DepositType> type();
 
     @NotNull
+    @Format("#0.00")
+    @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> initialAmount();
 
+    @Format("#0.00")
+    @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> currentAmount();
 
     @Owned

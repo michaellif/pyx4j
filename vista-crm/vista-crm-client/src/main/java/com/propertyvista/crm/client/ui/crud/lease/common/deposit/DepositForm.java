@@ -38,7 +38,7 @@ public class DepositForm extends CrmEntityForm<Deposit> {
 
         int row = -1;
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().type()), 12).build());
-        content.setWidget(row, 1, new DecoratorBuilder(inject(proto().status()), 8).build());
+        content.setWidget(row, 1, new DecoratorBuilder(inject(proto().status()), 9).build());
 
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().depositDate()), 9).build());
         content.setWidget(row, 1, new DecoratorBuilder(inject(proto().refundDate()), 9).build());

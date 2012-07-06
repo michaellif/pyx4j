@@ -16,13 +16,19 @@ package com.propertyvista.domain.tenant.lease;
 import java.math.BigDecimal;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 public interface DepositInterestAdjustment extends IEntity {
+
     IPrimitive<LogicalDate> date();
 
     IPrimitive<BigDecimal> interestRate();
 
+    @Format("#0.00")
+    @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> amount();
 }
