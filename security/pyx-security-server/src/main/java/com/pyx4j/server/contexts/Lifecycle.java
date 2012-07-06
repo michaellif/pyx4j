@@ -97,8 +97,7 @@ public class Lifecycle {
         }
 
         //log.debug("beginRequest, took {}ms", (int) (System.nanoTime() - start) / Consts.MSEC2NANO);
-        LifecycleListener lifecycleListener = ServerSideConfiguration.instance().getLifecycleListener();
-        if (lifecycleListener != null) {
+        for (LifecycleListener lifecycleListener : ServerSideConfiguration.instance().getLifecycleListeners()) {
             lifecycleListener.onRequestBegin();
         }
     }
@@ -132,8 +131,7 @@ public class Lifecycle {
     }
 
     public static void endContext() {
-        LifecycleListener lifecycleListener = ServerSideConfiguration.instance().getLifecycleListener();
-        if (lifecycleListener != null) {
+        for (LifecycleListener lifecycleListener : ServerSideConfiguration.instance().getLifecycleListeners()) {
             lifecycleListener.onContextEnd();
         }
         Context.remove();
@@ -150,8 +148,8 @@ public class Lifecycle {
             c.setMaxAge(0);
             Context.getResponse().addCookie(c);
         }
-        LifecycleListener lifecycleListener = ServerSideConfiguration.instance().getLifecycleListener();
-        if (lifecycleListener != null) {
+
+        for (LifecycleListener lifecycleListener : ServerSideConfiguration.instance().getLifecycleListeners()) {
             lifecycleListener.onRequestEnd();
         }
     }

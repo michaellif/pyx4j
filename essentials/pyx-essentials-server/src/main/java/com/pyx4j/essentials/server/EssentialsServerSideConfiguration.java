@@ -20,6 +20,9 @@
  */
 package com.pyx4j.essentials.server;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 import com.pyx4j.config.server.LifecycleListener;
 import com.pyx4j.config.server.LocaleResolver;
 import com.pyx4j.config.server.ServerSideConfiguration;
@@ -40,8 +43,10 @@ public class EssentialsServerSideConfiguration extends ServerSideConfiguration {
     }
 
     @Override
-    public LifecycleListener getLifecycleListener() {
-        return new PersistenceContextLifecycleListener() {
+    public Collection<LifecycleListener> getLifecycleListeners() {
+        Collection<LifecycleListener> rc = new ArrayList<LifecycleListener>(super.getLifecycleListeners());
+
+        rc.add(new PersistenceContextLifecycleListener() {
             @Override
             public void onRequestBegin() {
                 super.onRequestBegin();
@@ -50,7 +55,9 @@ public class EssentialsServerSideConfiguration extends ServerSideConfiguration {
                     Persistence.service().setTransactionUserKey(visit.getUserVisit().getPrincipalPrimaryKey());
                 }
             }
-        };
+        });
+
+        return rc;
     }
 
     public DataPreloaderCollection getDataPreloaders() {

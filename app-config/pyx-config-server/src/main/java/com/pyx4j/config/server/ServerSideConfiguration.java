@@ -20,6 +20,7 @@
  */
 package com.pyx4j.config.server;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
@@ -161,8 +162,8 @@ public class ServerSideConfiguration {
         return null;
     }
 
-    public LifecycleListener getLifecycleListener() {
-        return null;
+    public Collection<LifecycleListener> getLifecycleListeners() {
+        return Collections.emptyList();
     }
 
     /**

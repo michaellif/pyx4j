@@ -180,8 +180,7 @@ public class IServiceAdapterImpl implements IServiceAdapter {
 
             if (callback.caught != null) {
                 log.error("Error", callback.caught);
-                LifecycleListener lifecycleListener = ServerSideConfiguration.instance().getLifecycleListener();
-                if (lifecycleListener != null) {
+                for (LifecycleListener lifecycleListener : ServerSideConfiguration.instance().getLifecycleListeners()) {
                     lifecycleListener.onRequestError();
                 }
                 if (callback.caught instanceof RuntimeException) {
@@ -203,8 +202,7 @@ public class IServiceAdapterImpl implements IServiceAdapter {
         } catch (InvocationTargetException e) {
             log.error("Service call error\n{}\n for user:" + Context.getVisit(), Trace.clickableClassLocation(serviceInstance.getClass()), e.getCause());
 
-            LifecycleListener lifecycleListener = ServerSideConfiguration.instance().getLifecycleListener();
-            if (lifecycleListener != null) {
+            for (LifecycleListener lifecycleListener : ServerSideConfiguration.instance().getLifecycleListeners()) {
                 lifecycleListener.onRequestError();
             }
 
@@ -219,8 +217,7 @@ public class IServiceAdapterImpl implements IServiceAdapter {
             }
         } finally {
             // call Persistence.service().endTransaction();
-            LifecycleListener lifecycleListener = ServerSideConfiguration.instance().getLifecycleListener();
-            if (lifecycleListener != null) {
+            for (LifecycleListener lifecycleListener : ServerSideConfiguration.instance().getLifecycleListeners()) {
                 boolean success = false;
                 try {
                     lifecycleListener.onRequestEnd();
@@ -231,7 +228,6 @@ public class IServiceAdapterImpl implements IServiceAdapter {
                     }
                 }
             }
-
         }
     }
 }
