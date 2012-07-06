@@ -29,6 +29,7 @@ import com.propertyvista.common.client.ClentNavigUtils;
 import com.propertyvista.common.client.Message;
 import com.propertyvista.common.client.VistaSite;
 import com.propertyvista.common.client.VistaUnrecoverableErrorHandler;
+import com.propertyvista.common.client.config.VistaFeaturesCustomizationClient;
 import com.propertyvista.common.client.theme.VistaPalette;
 import com.propertyvista.portal.client.themes.PortalTheme;
 import com.propertyvista.portal.client.ui.PortalScreen;
@@ -77,6 +78,7 @@ public class PortalSite extends VistaSite {
                             @Override
                             public void onSuccess(SiteDefinitionsDTO descriptor) {
                                 StyleManger.installTheme(new PortalTheme(descriptor.skin().getValue()), new VistaPalette(descriptor.palette()));
+                                VistaFeaturesCustomizationClient.setVistaFeatures(descriptor.features());
                             }
                         }, ClentNavigUtils.getCurrentLocale());
                         getHistoryHandler().handleCurrentHistory();

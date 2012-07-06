@@ -36,6 +36,7 @@ import com.propertyvista.common.client.ClentNavigUtils;
 import com.propertyvista.common.client.Message;
 import com.propertyvista.common.client.VistaSite;
 import com.propertyvista.common.client.VistaUnrecoverableErrorHandler;
+import com.propertyvista.common.client.config.VistaFeaturesCustomizationClient;
 import com.propertyvista.common.client.policy.ClientPolicyManager;
 import com.propertyvista.common.client.theme.VistaPalette;
 import com.propertyvista.portal.ptapp.client.themes.PtAppTheme;
@@ -99,6 +100,7 @@ public class PtAppSite extends VistaSite {
                 com.propertyvista.portal.ptapp.client.ui.LogoViewImpl.temporaryWayToSetTitle(descriptor.siteTitles().prospectPortalTitle().getStringView());
                 Window.setTitle(pmcName = descriptor.siteTitles().prospectPortalTitle().getStringView());
                 StyleManger.installTheme(new PtAppTheme(), new VistaPalette(descriptor.palette()));
+                VistaFeaturesCustomizationClient.setVistaFeatures(descriptor.features());
                 obtainAuthenticationData();
             }
 

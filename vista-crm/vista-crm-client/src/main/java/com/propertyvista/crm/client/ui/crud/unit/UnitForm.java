@@ -23,8 +23,6 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.client.ui.CEntityLabel;
@@ -50,6 +48,7 @@ import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.dto.AptUnitDTO;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public class UnitForm extends CrmEntityForm<AptUnitDTO> {
 
@@ -78,7 +77,7 @@ public class UnitForm extends CrmEntityForm<AptUnitDTO> {
 // TODO Hided till further investigation:
 //        addTab(createMarketingTab(), i18n.tr("Marketing"));
 
-        tab = addTab(createNotesAndAttachmentsTab(i18n.tr("Notes & Attachments")) );
+        tab = addTab(createNotesAndAttachmentsTab(i18n.tr("Notes & Attachments")));
     }
 
     @Override
@@ -131,7 +130,9 @@ public class UnitForm extends CrmEntityForm<AptUnitDTO> {
         right.setWidget(++row, 1, new DecoratorBuilder(inject(proto().info().areaUnits()), 8).build());
 
         // tweak UI:
-        get(proto()._availableForRent()).setViewable(true);
+        if (VistaFeatures.instance().occupancyModel()) {
+            get(proto()._availableForRent()).setViewable(true);
+        }
         get(proto().financial()._unitRent()).setViewable(true);
 //        get(proto().financial()._marketRent()).setViewable(true);
         get(proto().info()._bedrooms()).setViewable(true);
@@ -157,7 +158,7 @@ public class UnitForm extends CrmEntityForm<AptUnitDTO> {
         main.setWidget(++row, 0, inject(proto().notesAndAttachments(), new NotesAndAttachmentsForm()));
         return main;
     }
-    
+
     private static class BuildingBoundFloorplanSelectorDialog extends EntitySelectorTableDialog<Floorplan> {
 
         private static final List<ColumnDescriptor> COLUMNS;

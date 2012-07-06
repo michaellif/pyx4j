@@ -30,17 +30,17 @@ public class VistaFeatures {
 
         @Override
         public boolean occupancyModel() {
-            return threadLocale.get().occupancyModel().getValue();
+            return threadLocale.get().occupancyModel().getValue(Boolean.FALSE);
         }
 
         @Override
         public boolean productCatalog() {
-            return threadLocale.get().productCatalog().getValue();
+            return threadLocale.get().productCatalog().getValue(Boolean.FALSE);
         }
 
         @Override
         public boolean xmlSiteExport() {
-            return threadLocale.get().xmlSiteExport().getValue();
+            return threadLocale.get().xmlSiteExport().getValue(Boolean.FALSE);
         }
 
         public static PmcVistaFeatures getCurrentVistaFeatures() {

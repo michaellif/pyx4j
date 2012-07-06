@@ -13,26 +13,32 @@
  */
 package com.propertyvista.common.client.config;
 
+import com.pyx4j.entity.shared.EntityFactory;
+
+import com.propertyvista.domain.settings.PmcVistaFeatures;
 import com.propertyvista.shared.config.VistaFeatures.VistaFeaturesCustomization;
 
 public class VistaFeaturesCustomizationClient implements VistaFeaturesCustomization {
 
+    private static PmcVistaFeatures features = EntityFactory.create(PmcVistaFeatures.class);
+
     @Override
     public boolean occupancyModel() {
-        // TODO Auto-generated method stub
-        return false;
+        return features.occupancyModel().getValue(Boolean.FALSE);
     }
 
     @Override
     public boolean productCatalog() {
-        // TODO Auto-generated method stub
-        return false;
+        return features.productCatalog().getValue(Boolean.FALSE);
     }
 
     @Override
     public boolean xmlSiteExport() {
-        // TODO Auto-generated method stub
-        return false;
+        return features.xmlSiteExport().getValue(Boolean.FALSE);
+    }
+
+    public static void setVistaFeatures(PmcVistaFeatures features) {
+        VistaFeaturesCustomizationClient.features = features;
     }
 
 }
