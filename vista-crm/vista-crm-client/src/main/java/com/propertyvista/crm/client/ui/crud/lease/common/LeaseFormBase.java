@@ -13,11 +13,13 @@
  */
 package com.propertyvista.crm.client.ui.crud.lease.common;
 
+import java.util.Date;
 import java.util.List;
 
 import com.google.gwt.user.client.ui.HTML;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
@@ -161,16 +163,17 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
                 return new UnitSelectorDialog() {
                     @Override
                     protected void setFilters(List<Criterion> filters) {
-                        DTO currentValue = LeaseFormBase.this.getValue();
-                        boolean existingLease = (currentValue.version().status().getValue() == Lease.Status.Created);
-
                         assert (filters != null);
 
-                        if (existingLease) {
+                        DTO currentValue = LeaseFormBase.this.getValue();
+                        if (currentValue.version().status().getValue() == Lease.Status.Created) { // existing lease:
+
                             filters.add(PropertyCriterion.eq(proto().unitOccupancySegments().$().status(), AptUnitOccupancySegment.Status.vacant));
                             filters.add(PropertyCriterion.eq(proto().unitOccupancySegments().$().dateTo(), new LogicalDate(1100, 0, 1)));
                             filters.add(PropertyCriterion.le(proto().unitOccupancySegments().$().dateFrom(), ClientContext.getServerDate()));
-                        } else {
+
+                        } else if (currentValue.version().status().getValue() == Lease.Status.Application) { // lease application:
+
                             filters.add(PropertyCriterion.eq(proto().unitOccupancySegments().$().status(), AptUnitOccupancySegment.Status.available));
                             filters.add(PropertyCriterion.eq(proto().unitOccupancySegments().$().dateTo(), new LogicalDate(1100, 0, 1)));
                             if (!currentValue.leaseFrom().isNull()) {
@@ -293,6 +296,20 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
 //                "Actual Move In Date Should Be Within 30 Days Of Expected Move In Date");
 //        DatesWithinMonth(get(proto().version().actualMoveOut()), get(proto().version().expectedMoveOut()),
 //                "Actual Move Out Date Should Be Within 30 Days Of Expected Move Out Date");
+
+        get(proto().leaseFrom()).addValueValidator(new EditableValueValidator<Date>() {
+            @Override
+            public ValidationError isValid(CComponent<Date, ?> component, Date value) {
+                if (value != null) {
+                    if (getValue().version().status().getValue() == Lease.Status.Created) { // existing lease:
+                        return !value.after(TimeUtils.today()) ? null : new ValidationError(component, i18n.tr("The Date Must Be Earlier Than Today's Date"));
+                    } else if (getValue().version().status().getValue() == Lease.Status.Application) { // lease application:
+                        return !value.before(TimeUtils.today()) ? null : new ValidationError(component, i18n.tr("The Date Must Be Later Than Today's Date"));
+                    }
+                }
+                return null;
+            }
+        });
 
         new DateInPeriodValidation(get(proto().leaseFrom()), get(proto().version().expectedMoveIn()), get(proto().leaseTo()),
                 i18n.tr("The Date Should Be Within The Lease Period"));

@@ -25,7 +25,7 @@ public class FutureDateValidator implements EditableValueValidator<Date> {
 
     private static final I18n i18n = I18n.get(FutureDateValidator.class);
 
-    private String message = i18n.tr("The Date Must Be Later Than Today's Date");
+    private final String message;
 
     public FutureDateValidator() {
         this(i18n.tr("The Date Must Be Later Than Today's Date"));
