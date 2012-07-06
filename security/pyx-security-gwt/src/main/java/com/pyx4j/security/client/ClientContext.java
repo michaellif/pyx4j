@@ -20,6 +20,7 @@
  */
 package com.pyx4j.security.client;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -150,6 +151,11 @@ public class ClientContext {
 
     public static ClientSystemInfo getClientSystemInfo() {
         return clientSystemInfo;
+    }
+
+    public static Date getServerDate() {
+        long timeDelta = ClientContext.getClientSystemInfo().getServerTimeDelta();
+        return new Date(System.currentTimeMillis() - timeDelta);
     }
 
     public static int visitHashCode() {
