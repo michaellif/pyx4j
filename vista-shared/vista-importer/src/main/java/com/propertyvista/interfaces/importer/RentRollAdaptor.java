@@ -27,6 +27,7 @@ import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
@@ -65,9 +66,7 @@ public class RentRollAdaptor implements ImportAdapter {
     public static Set<String> strings = new HashSet<String>(Arrays.asList("misc", "roof", "strg", "sign1", "nonrespk", "nrp01", "nrp02", "nrp03", "nrp04",
             "nrp05", "nrp06", "current/notice/vacant residents", "nrp-02", "roof1", "roof2", "roof3", "roof4")); // add erroneous "apt numbers" here (lower case)
 
-    private final List<BuildingIO> buildings = new LinkedList<BuildingIO>();
-
-    private Map<String, BuildingIO> buildingList = new HashMap<String, BuildingIO>();
+    private final List<BuildingIO> buildings = new ArrayList<BuildingIO>();
 
     @Override
     public ImportIO parse(byte[] data, DownloadFormat format) {
@@ -173,6 +172,9 @@ public class RentRollAdaptor implements ImportAdapter {
                 buildings.addAll(verifiedBuildings);
                 building = EntityFactory.create(BuildingIO.class);
 // assume document is properly formatted, if unit number == null the line does not contain valid  data
+
+                //Star over with new building
+                building = EntityFactory.create(BuildingIO.class);
             }
         }
     }
@@ -189,10 +191,10 @@ public class RentRollAdaptor implements ImportAdapter {
 
     private Collection<BuildingIO> splitComplexes(BuildingIO building) { //sorts complexes that contain multiple buildings under the same externalId. Assumes either all units are with hyphen or none.
         Iterator<AptUnitIO> it = building.units().iterator();
-        buildingList = new HashMap<String, BuildingIO>();
+        Map<String, BuildingIO> buildingList = new HashMap<String, BuildingIO>();
         while (it.hasNext()) {
             AptUnitIO unit = it.next();
-            BuildingIO b = getBuildingForUnitNumber(building.externalId().getValue(), unit.number().getValue());
+            BuildingIO b = getBuildingForUnitNumber(buildingList, building.externalId().getValue(), unit.number().getValue());
             if (b != null) {
                 it.remove();
                 b.units().add(unit);
@@ -205,7 +207,7 @@ public class RentRollAdaptor implements ImportAdapter {
         return buildingList.values();
     }
 
-    private BuildingIO getBuildingForUnitNumber(String externalId, String unitNumber) {
+    private BuildingIO getBuildingForUnitNumber(Map<String, BuildingIO> buildingList, String externalId, String unitNumber) {
         if (unitNumber.contains("-")) {
             isInComplex = true;
             String[] t = unitNumber.split("-");

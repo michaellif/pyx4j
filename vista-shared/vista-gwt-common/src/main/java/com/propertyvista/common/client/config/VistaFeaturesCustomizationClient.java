@@ -33,6 +33,11 @@ public class VistaFeaturesCustomizationClient implements VistaFeaturesCustomizat
     }
 
     @Override
+    public boolean leases() {
+        return features.leases().getValue(Boolean.FALSE);
+    }
+
+    @Override
     public boolean xmlSiteExport() {
         return features.xmlSiteExport().getValue(Boolean.FALSE);
     }

@@ -45,6 +45,7 @@ public class PmcCreatorDev {
 
         pmc.features().occupancyModel().setValue(Boolean.TRUE);
         pmc.features().productCatalog().setValue(Boolean.TRUE);
+        pmc.features().leases().setValue(Boolean.TRUE);
         pmc.features().xmlSiteExport().setValue(Boolean.TRUE);
 
         Persistence.service().persist(pmc);

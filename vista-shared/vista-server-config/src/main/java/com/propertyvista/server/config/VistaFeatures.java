@@ -28,6 +28,10 @@ public class VistaFeatures {
 
     public static final class VistaFeaturesCustomizationImpl implements VistaFeaturesCustomization {
 
+        public static PmcVistaFeatures getCurrentVistaFeatures() {
+            return threadLocale.get();
+        }
+
         @Override
         public boolean occupancyModel() {
             return threadLocale.get().occupancyModel().getValue(Boolean.FALSE);
@@ -39,12 +43,13 @@ public class VistaFeatures {
         }
 
         @Override
-        public boolean xmlSiteExport() {
-            return threadLocale.get().xmlSiteExport().getValue(Boolean.FALSE);
+        public boolean leases() {
+            return threadLocale.get().leases().getValue(Boolean.FALSE);
         }
 
-        public static PmcVistaFeatures getCurrentVistaFeatures() {
-            return threadLocale.get();
+        @Override
+        public boolean xmlSiteExport() {
+            return threadLocale.get().xmlSiteExport().getValue(Boolean.FALSE);
         }
 
     }

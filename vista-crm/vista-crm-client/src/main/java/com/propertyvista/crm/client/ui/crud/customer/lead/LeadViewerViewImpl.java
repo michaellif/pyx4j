@@ -36,6 +36,7 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lead.Appointment;
 import com.propertyvista.domain.tenant.lead.Lead;
 import com.propertyvista.domain.tenant.lead.Lead.Status;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public class LeadViewerViewImpl extends CrmViewerViewImplBase<Lead> implements LeadViewerView {
 
@@ -102,7 +103,7 @@ public class LeadViewerViewImpl extends CrmViewerViewImplBase<Lead> implements L
 
     @Override
     public void populate(Lead value) {
-        convertAction.setVisible(value.status().getValue() != Status.closed && value.lease().isNull());
+        convertAction.setVisible(VistaFeatures.instance().leases() && value.status().getValue() != Status.closed && value.lease().isNull());
         closeAction.setVisible(value.status().getValue() != Status.closed);
         super.populate(value);
     }

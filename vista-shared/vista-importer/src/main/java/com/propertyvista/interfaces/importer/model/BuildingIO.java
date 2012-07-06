@@ -14,6 +14,7 @@
 package com.propertyvista.interfaces.importer.model;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
@@ -38,8 +39,10 @@ import com.propertyvista.domain.property.asset.building.BuildingInfo.WaterSupply
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 public interface BuildingIO extends IEntity {
 
+    @ToString
     IPrimitive<String> propertyCode();
 
+    @ToString
     IPrimitive<String> externalId();
 
     IPrimitive<String> legalName();

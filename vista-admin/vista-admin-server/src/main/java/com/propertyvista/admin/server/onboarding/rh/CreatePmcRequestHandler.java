@@ -75,6 +75,7 @@ public class CreatePmcRequestHandler extends AbstractRequestHandler<CreatePMCReq
 
         pmc.features().occupancyModel().setValue(Boolean.TRUE);
         pmc.features().productCatalog().setValue(Boolean.TRUE);
+        pmc.features().leases().setValue(Boolean.TRUE);
         pmc.features().xmlSiteExport().setValue(Boolean.FALSE);
 
         // TODO For future

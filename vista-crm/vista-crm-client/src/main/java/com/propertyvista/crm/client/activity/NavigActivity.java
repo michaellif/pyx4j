@@ -36,6 +36,7 @@ import com.propertyvista.crm.client.ui.viewfactories.CrmVeiwFactory;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.dashboard.DashboardMetadataService;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public class NavigActivity extends AbstractActivity implements NavigView.MainNavigPresenter, BoardUpdateHandler {
 
@@ -87,23 +88,27 @@ public class NavigActivity extends AbstractActivity implements NavigView.MainNav
         list.add(folder);
 
         //Tenants
-        folder = new NavigFolder(i18n.tr("Tenants & Leases"), CrmImages.INSTANCE.tenantsNormal(), CrmImages.INSTANCE.tenantsHover(),
-                CrmImages.INSTANCE.tenantsActive());
-        folder.addNavigItem(new CrmSiteMap.Tenants.Lease());
-        folder.addNavigItem(new CrmSiteMap.Tenants.Tenant());
-        folder.addNavigItem(new CrmSiteMap.Tenants.Guarantor());
-        folder.addNavigItem(new CrmSiteMap.Tenants.MaintenanceRequest());
-        folder.addNavigItem(new CrmSiteMap.Tenants.PastTenant());
-        folder.addNavigItem(new CrmSiteMap.Tenants.PastGuarantor());
-        folder.addNavigItem(new CrmSiteMap.Tenants.PastLease());
-        list.add(folder);
+        if (VistaFeatures.instance().leases()) {
+            folder = new NavigFolder(i18n.tr("Tenants & Leases"), CrmImages.INSTANCE.tenantsNormal(), CrmImages.INSTANCE.tenantsHover(),
+                    CrmImages.INSTANCE.tenantsActive());
+            folder.addNavigItem(new CrmSiteMap.Tenants.Lease());
+            folder.addNavigItem(new CrmSiteMap.Tenants.Tenant());
+            folder.addNavigItem(new CrmSiteMap.Tenants.Guarantor());
+            folder.addNavigItem(new CrmSiteMap.Tenants.MaintenanceRequest());
+            folder.addNavigItem(new CrmSiteMap.Tenants.PastTenant());
+            folder.addNavigItem(new CrmSiteMap.Tenants.PastGuarantor());
+            folder.addNavigItem(new CrmSiteMap.Tenants.PastLease());
+            list.add(folder);
+        }
 
         //Marketing
         folder = new NavigFolder(i18n.tr("Marketing & Rentals"), CrmImages.INSTANCE.marketingNormal(), CrmImages.INSTANCE.marketingHover(),
                 CrmImages.INSTANCE.marketingActive());
         folder.addNavigItem(new CrmSiteMap.Marketing.Lead());
-        folder.addNavigItem(new CrmSiteMap.Tenants.LeaseApplication());
-        folder.addNavigItem(new CrmSiteMap.Marketing.FutureTenant());
+        if (VistaFeatures.instance().leases()) {
+            folder.addNavigItem(new CrmSiteMap.Tenants.LeaseApplication());
+            folder.addNavigItem(new CrmSiteMap.Marketing.FutureTenant());
+        }
         list.add(folder);
 
         //LegalAndCollections
@@ -112,9 +117,12 @@ public class NavigActivity extends AbstractActivity implements NavigView.MainNav
         list.add(folder);
 
         //Finance
-        folder = new NavigFolder(i18n.tr("Finance"), CrmImages.INSTANCE.financeNormal(), CrmImages.INSTANCE.financeHover(), CrmImages.INSTANCE.financeActive());
-        folder.addNavigItem(new CrmSiteMap.Finance.AggregatedTransfer());
-        list.add(folder);
+        if (VistaFeatures.instance().productCatalog()) {
+            folder = new NavigFolder(i18n.tr("Finance"), CrmImages.INSTANCE.financeNormal(), CrmImages.INSTANCE.financeHover(),
+                    CrmImages.INSTANCE.financeActive());
+            folder.addNavigItem(new CrmSiteMap.Finance.AggregatedTransfer());
+            list.add(folder);
+        }
 
         //Organization
         folder = new NavigFolder(i18n.tr("Organization"), CrmImages.INSTANCE.companyNormal(), CrmImages.INSTANCE.companyHover(),

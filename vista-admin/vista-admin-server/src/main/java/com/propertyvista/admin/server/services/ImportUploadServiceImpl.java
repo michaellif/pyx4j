@@ -142,7 +142,7 @@ public class ImportUploadServiceImpl extends UploadServiceImpl<PmcImportDTO, IEn
             SharedGeoLocator.setMode(Mode.updateCache);
             ImportCounters counters = new ImportCounters();
             for (BuildingIO building : importIO.buildings()) {
-                log.debug("processing building {} {}", count + "/" + importIO.buildings().size(), building.propertyCode().getValue());
+                log.debug("processing building {} {}", count + "/" + importIO.buildings().size(), building.getStringView());
                 switch (importDTO.type().getValue()) {
                 case newData:
                     counters.add(new BuildingImporter().persist(building, mediaConfig));
@@ -158,6 +158,7 @@ public class ImportUploadServiceImpl extends UploadServiceImpl<PmcImportDTO, IEn
                 Persistence.service().commit();
                 count++;
                 process.status().setProgress(count);
+                log.info("building {} updated", building.getStringView());
             }
             switch (importDTO.type().getValue()) {
             case newData:

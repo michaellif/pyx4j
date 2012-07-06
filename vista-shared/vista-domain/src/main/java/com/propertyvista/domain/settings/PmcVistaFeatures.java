@@ -32,6 +32,9 @@ public interface PmcVistaFeatures extends IEntity {
     IPrimitive<Boolean> productCatalog();
 
     @NotNull
+    IPrimitive<Boolean> leases();
+
+    @NotNull
     IPrimitive<Boolean> xmlSiteExport();
 
 }

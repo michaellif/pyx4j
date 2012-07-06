@@ -18,6 +18,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IList;
@@ -46,8 +49,11 @@ import com.propertyvista.interfaces.importer.model.FloorplanAmenityIO;
 import com.propertyvista.interfaces.importer.model.FloorplanIO;
 import com.propertyvista.interfaces.importer.model.MediaIO;
 import com.propertyvista.portal.rpc.portal.ImageConsts.ImageTarget;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public class BuildingImporter extends ImportPersister {
+
+    private final static Logger log = LoggerFactory.getLogger(BuildingImporter.class);
 
     private static final I18n i18n = I18n.get(BuildingImporter.class);
 
@@ -205,14 +211,16 @@ public class BuildingImporter extends ImportPersister {
                         i.info().floor().set(aptUnitIO.floor());
                         items.add(i);
 
-                        for (AptUnitOccupancyIO occupancyIO : aptUnitIO.AptUnitOccupancySegment()) {
-                            AptUnitOccupancySegment occupancySegment = EntityFactory.create(AptUnitOccupancySegment.class);
-                            occupancySegment.dateFrom().setValue(occupancyIO.dateFrom().getValue());
-                            occupancySegment.dateTo().setValue(occupancyIO.dateTo().getValue());
-                            occupancySegment.status().setValue(occupancyIO.status().getValue());
-                            occupancySegment.offMarket().setValue(occupancyIO.offMarket().getValue());
-                            i.unitOccupancySegments().add(occupancySegment);
-                            occupancySegment.unit().set(i);
+                        if (VistaFeatures.instance().occupancyModel()) {
+                            for (AptUnitOccupancyIO occupancyIO : aptUnitIO.AptUnitOccupancySegment()) {
+                                AptUnitOccupancySegment occupancySegment = EntityFactory.create(AptUnitOccupancySegment.class);
+                                occupancySegment.dateFrom().setValue(occupancyIO.dateFrom().getValue());
+                                occupancySegment.dateTo().setValue(occupancyIO.dateTo().getValue());
+                                occupancySegment.status().setValue(occupancyIO.status().getValue());
+                                occupancySegment.offMarket().setValue(occupancyIO.offMarket().getValue());
+                                i.unitOccupancySegments().add(occupancySegment);
+                                occupancySegment.unit().set(i);
+                            }
                         }
 
                     }
@@ -220,31 +228,36 @@ public class BuildingImporter extends ImportPersister {
                     Persistence.service().merge(items);
                     counters.units += items.size();
 
-                    EntityQueryCriteria<ServiceItemType> serviceCriteria = EntityQueryCriteria.create(ServiceItemType.class);
-                    serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().serviceType(), Service.ServiceType.residentialUnit));
-                    ServiceItemType productType = Persistence.service().retrieve(serviceCriteria);
+                    if (VistaFeatures.instance().productCatalog()) {
+                        EntityQueryCriteria<ServiceItemType> serviceCriteria = EntityQueryCriteria.create(ServiceItemType.class);
+                        serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().serviceType(), Service.ServiceType.residentialUnit));
+                        ServiceItemType productType = Persistence.service().retrieve(serviceCriteria);
 
-                    for (AptUnit unit : items) {
-                        ProductItem product = EntityFactory.create(ProductItem.class);
-                        BigDecimal price = unit.financial()._marketRent().getValue();
-                        product.type().set(productType);
-                        product.price().setValue(price);
-                        product.description().setValue(Service.ServiceType.residentialUnit.toString() + " description");
-                        product.element().set(unit);
+                        for (AptUnit unit : items) {
+                            ProductItem product = EntityFactory.create(ProductItem.class);
+                            BigDecimal price = unit.financial()._marketRent().getValue();
+                            product.type().set(productType);
+                            product.price().setValue(price);
+                            product.description().setValue(Service.ServiceType.residentialUnit.toString() + " description");
+                            product.element().set(unit);
 
-                        products.add(product);
+                            products.add(product);
+                        }
                     }
                 }
             }
         }
-        List<Service> services = new ArrayList<Service>();
-        Service service = EntityFactory.create(Service.class);
-        service.version().type().setValue(Service.ServiceType.residentialUnit);
-        service.version().items().addAll(products);
-        service.catalog().set(building.productCatalog());
-        services.add(service);
 
-        Persistence.service().persist(services);
+        if (VistaFeatures.instance().productCatalog()) {
+            List<Service> services = new ArrayList<Service>();
+            Service service = EntityFactory.create(Service.class);
+            service.version().type().setValue(Service.ServiceType.residentialUnit);
+            service.version().items().addAll(products);
+            service.catalog().set(building.productCatalog());
+            services.add(service);
+
+            Persistence.service().persist(services);
+        }
 
         return counters;
     }

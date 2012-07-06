@@ -87,8 +87,10 @@ public class UnitForm extends CrmEntityForm<AptUnitDTO> {
         super.onPopulate();
 
         get(proto().lease()).setVisible(!getValue().lease().isNull());
-        get(proto()._availableForRent()).setVisible(!getValue()._availableForRent().isNull());
-        get(proto().financial()._unitRent()).setVisible(!getValue().financial()._unitRent().isNull());
+        if (VistaFeatures.instance().occupancyModel()) {
+            get(proto()._availableForRent()).setVisible(!getValue()._availableForRent().isNull());
+            get(proto().financial()._unitRent()).setVisible(!getValue().financial()._unitRent().isNull());
+        }
     }
 
     private FormFlexPanel createGeneralTab(String title) {

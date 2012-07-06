@@ -26,6 +26,8 @@ public class VistaFeatures {
 
         boolean productCatalog();
 
+        boolean leases();
+
         boolean xmlSiteExport();
     }
 
