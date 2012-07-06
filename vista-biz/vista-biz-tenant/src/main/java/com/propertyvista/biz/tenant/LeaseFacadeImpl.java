@@ -70,7 +70,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
 
     @Override
     public Lease init(Lease lease) {
-        // let client supply initial status value:
+        // check client supplied initial status value:
         if (lease.version().status().isNull()) {
             throw new IllegalStateException(i18n.tr("Invalid Lease State"));
         } else {
