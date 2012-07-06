@@ -21,7 +21,9 @@ import com.propertvista.generator.LeaseGenerator;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.server.Persistence;
 
+import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.domain.DemoData;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
@@ -76,6 +78,9 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
             if (i <= DemoData.UserType.TENANT.getDefaultMax()) {
                 LeaseFacade leaseFacade = ServerSideFactory.create(LeaseFacade.class);
                 lease.version().status().setValue(Status.Application);
+                Persistence.service().setTransactionSystemTime(lease.leaseFrom().getValue());
+                ServerSideFactory.create(OccupancyFacade.class).scopeAvailable(lease.unit().getPrimaryKey());
+
                 lease = leaseFacade.init(lease);
                 if (lease.unit().getPrimaryKey() != null) {
                     leaseFacade.setUnit(lease, lease.unit());
@@ -84,7 +89,8 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
 
                 ServerSideFactory.create(LeaseFacade.class).approveApplication(lease, null, null);
                 //TODO
-                // ServerSideFactory.create(LeaseFacade.class).activate(lease.getPrimaryKey());
+                // ServerSideFactory.create(LeaseFacade.class).activate(lease.getPrimaryKey()
+                Persistence.service().setTransactionSystemTime(null);
             } else {
                 LeaseLifecycleSimulatorBuilder simBuilder = LeaseLifecycleSimulator.sim();
 
@@ -155,12 +161,13 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
                 mainTenant.preauthorizedPayment().set(mainTenant.customer().paymentMethods().iterator().next());
             }
 
+            Persistence.service().setTransactionSystemTime(lease.leaseFrom().getValue());
+            ServerSideFactory.create(OccupancyFacade.class).scopeAvailable(lease.unit().getPrimaryKey());
             ServerSideFactory.create(LeaseFacade.class).init(lease);
-            if (lease.unit().getPrimaryKey() != null) {
-                ServerSideFactory.create(LeaseFacade.class).setUnit(lease, lease.unit());
-            }
+            ServerSideFactory.create(LeaseFacade.class).setUnit(lease, lease.unit());
             ServerSideFactory.create(LeaseFacade.class).persist(lease);
             ServerSideFactory.create(LeaseFacade.class).createMasterOnlineApplication(lease.getPrimaryKey());
+            Persistence.service().setTransactionSystemTime(null);
         }
 
         StringBuilder b = new StringBuilder();

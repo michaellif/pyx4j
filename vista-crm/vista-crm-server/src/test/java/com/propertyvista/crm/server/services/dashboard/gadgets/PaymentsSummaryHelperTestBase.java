@@ -80,7 +80,7 @@ public class PaymentsSummaryHelperTestBase extends VistaDBTestBase {
         tenant.customer().person().name().firstName().setValue("Foo");
         tenant.customer().person().name().lastName().setValue("Foo");
         lease.version().tenants().add(tenant);
-
+        lease.version().status().setValue(Lease.Status.Created);
         lease = ServerSideFactory.create(LeaseFacade.class).init(lease);
         if (lease.unit().getPrimaryKey() != null) {
             ServerSideFactory.create(LeaseFacade.class).setUnit(lease, lease.unit());

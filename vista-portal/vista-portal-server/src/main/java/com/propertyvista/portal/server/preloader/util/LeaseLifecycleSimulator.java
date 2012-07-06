@@ -33,6 +33,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.billing.BillingFacade;
+import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.Bill;
@@ -110,9 +111,14 @@ public class LeaseLifecycleSimulator {
     }
 
     public void generateRandomLifeCycle(Lease lease) {
-        if (lease.unit()._availableForRent().isNull()) {
-            return;
+
+        Persistence.service().setTransactionSystemTime(simStart);
+        if (!ServerSideFactory.create(OccupancyFacade.class).isScopeAvailableAvailable(lease.unit().getPrimaryKey())) {
+            Persistence.service().setTransactionSystemTime(null);
+            throw new IllegalStateException("lease simulation cannot be started because the unit is not available");
         }
+
+        ServerSideFactory.create(OccupancyFacade.class).scopeAvailable(lease.unit().getPrimaryKey());
 
         LogicalDate reservedOn = add(max(simStart, lease.unit()._availableForRent().getValue()), rndBetween(minAvailableTerm, maxAvailableTerm));
 
