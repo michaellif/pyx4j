@@ -302,9 +302,11 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
             public ValidationError isValid(CComponent<Date, ?> component, Date value) {
                 if (value != null) {
                     if (getValue().version().status().getValue() == Lease.Status.Created) { // existing lease:
-                        return !value.after(TimeUtils.today()) ? null : new ValidationError(component, i18n.tr("The Date Must Be Earlier Than Today's Date"));
+                        return value.before(TimeUtils.today()) ? null : new ValidationError(component, i18n.tr("The Date Must Be Earlier Than Today's Date"));
                     } else if (getValue().version().status().getValue() == Lease.Status.Application) { // lease application:
-                        return !value.before(TimeUtils.today()) ? null : new ValidationError(component, i18n.tr("The Date Must Be Later Than Today's Date"));
+                        Date dateToCompare = getValue().creationDate().isNull() ? TimeUtils.today() : getValue().creationDate().getValue();
+                        return !value.before(dateToCompare) ? null : new ValidationError(component, i18n
+                                .tr("The Date Must Be Later Than Or Equal To Application Creaion Date"));
                     }
                 }
                 return null;

@@ -99,8 +99,8 @@ public class LeaseLister extends VersionedLister<LeaseDTO> {
         LeaseDTO newLease = EntityFactory.create(LeaseDTO.class);
         newLease.type().setValue(leaseType);
         newLease.paymentFrequency().setValue(PaymentFrequency.Monthly);
-        newLease.billingAccount().carryforwardBalance().setValue(balance);
         newLease.version().status().setValue(Lease.Status.Created);
+        newLease.billingAccount().carryforwardBalance().setValue(balance);
         return newLease;
     }
 
