@@ -70,7 +70,7 @@ public class LeaseGenerator extends DataGenerator {
 
     public Lease createLease(AptUnit unit) {
         Lease lease = EntityFactory.create(Lease.class);
-
+        lease.version().status().setValue(Lease.Status.Application);
         lease.unit().set(unit);
 
         LogicalDate effectiveAvailableForRent = new LogicalDate(Math.max(unit._availableForRent().getValue().getTime(), RandomUtil

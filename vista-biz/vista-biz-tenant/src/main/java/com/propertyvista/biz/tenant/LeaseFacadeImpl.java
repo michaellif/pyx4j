@@ -72,14 +72,14 @@ public class LeaseFacadeImpl implements LeaseFacade {
     public Lease init(Lease lease) {
         // let client supply initial status value:
         if (lease.version().status().isNull()) {
-            lease.version().status().setValue(Lease.Status.Created);
+            throw new IllegalStateException(i18n.tr("Invalid Lease State"));
         } else {
             switch (lease.version().status().getValue()) {
             case Created:
             case Application:
                 break; // ok, allowed values...
             default:
-                lease.version().status().setValue(Lease.Status.Created);
+                throw new IllegalStateException(i18n.tr("Invalid Lease State"));
             }
         }
 
