@@ -71,8 +71,10 @@ public class UnitForm extends CrmEntityForm<AptUnitDTO> {
         tab = addTab(isEditable() ? new HTML() : ((UnitViewerView) getParentView()).getUnitItemsListerView().asWidget(), i18n.tr("Details"));
         setTabEnabled(tab, !isEditable());
 
-        tab = addTab(isEditable() ? new HTML() : ((UnitViewerView) getParentView()).getOccupanciesListerView().asWidget(), i18n.tr("Occupancy"));
-        setTabEnabled(tab, !isEditable());
+        if (VistaFeatures.instance().occupancyModel()) {
+            tab = addTab(isEditable() ? new HTML() : ((UnitViewerView) getParentView()).getOccupanciesListerView().asWidget(), i18n.tr("Occupancy"));
+            setTabEnabled(tab, !isEditable());
+        }
 
 // TODO Hided till further investigation:
 //        addTab(createMarketingTab(), i18n.tr("Marketing"));
@@ -113,10 +115,13 @@ public class UnitForm extends CrmEntityForm<AptUnitDTO> {
                         .build());
         left.setWidget(++row, 0, new DecoratorBuilder(inject(proto()._availableForRent()), 9).build());
         left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().financial()._unitRent()), 7).build());
-//        left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().financial()._marketRent()), 10).build());
 
-        left.setH3(++row, 0, 1, proto().marketPrices().getMeta().getCaption());
-        left.setWidget(++row, 0, inject(proto().marketPrices(), new UnitServicePriceFolder()));
+        if (VistaFeatures.instance().productCatalog()) {
+            left.setH3(++row, 0, 1, proto().marketPrices().getMeta().getCaption());
+            left.setWidget(++row, 0, inject(proto().marketPrices(), new UnitServicePriceFolder()));
+        } else {
+            left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().financial()._marketRent()), 10).build());
+        }
 
         row = -1;
         FormFlexPanel right = new FormFlexPanel();
@@ -133,7 +138,9 @@ public class UnitForm extends CrmEntityForm<AptUnitDTO> {
         if (VistaFeatures.instance().occupancyModel()) {
             get(proto()._availableForRent()).setViewable(true);
         }
-        get(proto().financial()._unitRent()).setViewable(true);
+        if (VistaFeatures.instance().productCatalog()) {
+            get(proto().financial()._unitRent()).setViewable(true);
+        }
 //        get(proto().financial()._marketRent()).setViewable(true);
         get(proto().info()._bedrooms()).setViewable(true);
         get(proto().info()._bathrooms()).setViewable(true);

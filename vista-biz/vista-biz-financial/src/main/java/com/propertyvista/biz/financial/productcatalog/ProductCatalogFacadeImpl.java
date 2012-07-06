@@ -15,6 +15,9 @@ package com.propertyvista.biz.financial.productcatalog;
 
 import java.math.BigDecimal;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
@@ -23,17 +26,28 @@ import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public class ProductCatalogFacadeImpl implements ProductCatalogFacade {
 
+    private final static Logger log = LoggerFactory.getLogger(ProductCatalogFacadeImpl.class);
+
     @Override
     public void updateUnitMarketPrice(Building building) {
-        UnitMarketPriceCalculator.updateUnitMarketPrice(building);
+        if (VistaFeatures.instance().productCatalog()) {
+            UnitMarketPriceCalculator.updateUnitMarketPrice(building);
+        } else {
+            log.info("productCatalog feature disabled");
+        }
     }
 
     @Override
     public void updateUnitMarketPrice(Service service) {
-        UnitMarketPriceCalculator.updateUnitMarketPrice(service);
+        if (VistaFeatures.instance().productCatalog()) {
+            UnitMarketPriceCalculator.updateUnitMarketPrice(service);
+        } else {
+            log.info("productCatalog feature disabled");
+        }
     }
 
     /*
