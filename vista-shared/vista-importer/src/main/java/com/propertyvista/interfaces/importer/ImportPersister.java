@@ -124,6 +124,7 @@ class ImportPersister {
             for (BuildingAmenityIO iIO : buildingIO.amenities()) {
                 BuildingAmenity i = new BuildingAmenityConverter().createDBO(iIO);
                 i.building().set(building);
+                i.orderInBuilding().setValue(items.size());
                 items.add(i);
             }
             Persistence.service().persist(items);
