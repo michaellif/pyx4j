@@ -72,6 +72,9 @@ public interface SiteDescriptor extends Descriptor {
     @Caption(name = "Resident Portal Skin")
     IPrimitive<Skin> skin();
 
+    @Caption(name = "Portal Enabled")
+    IPrimitive<Boolean> enabled();
+
     IPrimitive<Boolean> disableMapView();
 
     IPrimitive<Boolean> disableBuildingDetails();

@@ -50,6 +50,7 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.util.DomainUtil;
+import com.propertyvista.shared.config.VistaFeatures;
 
 @Path("/buildings")
 public class BuildingsResource {
@@ -65,6 +66,9 @@ public class BuildingsResource {
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public BuildingsRS listBuildings(@QueryParam("pm") String propertyManagerName) {
+        if (!VistaFeatures.instance().xmlSiteExport()) {
+            return new BuildingsRS();
+        }
 
         long start = System.currentTimeMillis();
         BuildingsRS buildingsRS = new BuildingsRS();

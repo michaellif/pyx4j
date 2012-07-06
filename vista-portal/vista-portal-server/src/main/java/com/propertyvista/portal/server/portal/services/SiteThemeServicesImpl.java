@@ -27,6 +27,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.IgnoreSessionToken;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 
+import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.site.SiteDescriptor;
 import com.propertyvista.domain.site.SiteTitles;
 import com.propertyvista.portal.rpc.portal.SiteDefinitionsDTO;
@@ -75,6 +76,8 @@ public class SiteThemeServicesImpl implements SiteThemeServices {
         SiteDefinitionsDTO def = EntityFactory.create(SiteDefinitionsDTO.class);
         def.palette().setValue(descriptor.sitePalette().getValue());
         def.skin().setValue(descriptor.skin().getValue());
+
+        def.features().set(VistaDeployment.getCurrentVistaFeatures());
 
         // TODO different resources base on locale
         if (descriptor.logo().size() > 0) {

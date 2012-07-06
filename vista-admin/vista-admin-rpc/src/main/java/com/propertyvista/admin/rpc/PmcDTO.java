@@ -28,6 +28,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.propertyvista.admin.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.admin.domain.pmc.PmcDnsName;
 import com.propertyvista.domain.person.Person;
+import com.propertyvista.domain.settings.PmcVistaFeatures;
 
 @Transient
 @Caption(name = "Property Management Company (PMC)")
@@ -48,6 +49,8 @@ public interface PmcDTO extends IEntity {
     IPrimitive<String> dnsName();
 
     IList<PmcDnsName> dnsNameAliases();
+
+    PmcVistaFeatures features();
 
     @ReadOnly
     @Editor(type = Editor.EditorType.label)

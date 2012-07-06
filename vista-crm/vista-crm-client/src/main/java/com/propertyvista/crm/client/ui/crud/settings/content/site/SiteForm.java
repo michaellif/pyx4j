@@ -58,6 +58,8 @@ public class SiteForm extends CrmEntityForm<SiteDescriptorDTO> {
         int row = 0;
 
         content.setH1(row++, 0, 1, i18n.tr("Look And Feel"));
+        content.setWidget(row++, 0, new DecoratorBuilder(inject(proto().enabled()), 10).build());
+
         CComponent<?, ?> skinComp;
         content.setWidget(row++, 0, new DecoratorBuilder(skinComp = inject(proto().skin()), 10).build());
         content.setWidget(row++, 0, new DecoratorBuilder(inject(proto().sitePalette().object1()), 10).build());

@@ -131,6 +131,7 @@ public abstract class AbstractSitePreloader extends AbstractVistaDataPreloader {
         site.sitePalette().background().setValue(background());
         site.sitePalette().foreground().setValue(foreground());
 
+        site.enabled().setValue(Boolean.TRUE);
         site.disableMapView().setValue(Boolean.TRUE);
 
         {

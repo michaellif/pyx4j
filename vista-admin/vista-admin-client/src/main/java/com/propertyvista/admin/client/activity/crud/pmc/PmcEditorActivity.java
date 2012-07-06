@@ -14,8 +14,10 @@
 package com.propertyvista.admin.client.activity.crud.pmc;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
@@ -28,8 +30,18 @@ public class PmcEditorActivity extends EditorActivityBase<PmcDTO> {
 
     @SuppressWarnings("unchecked")
     public PmcEditorActivity(CrudAppPlace place) {
-        super(place, (PmcEditorView) ManagementVeiwFactory.instance(PmcEditorView.class), (AbstractCrudService<PmcDTO>) GWT.create(PmcCrudService.class),
-                PmcDTO.class);
+        super(place, ManagementVeiwFactory.instance(PmcEditorView.class), (AbstractCrudService<PmcDTO>) GWT.create(PmcCrudService.class), PmcDTO.class);
 
+    }
+
+    @Override
+    protected void createNewEntity(AsyncCallback<PmcDTO> callback) {
+        PmcDTO entity = EntityFactory.create(getEntityClass());
+
+        entity.features().occupancyModel().setValue(Boolean.TRUE);
+        entity.features().productCatalog().setValue(Boolean.TRUE);
+        entity.features().xmlSiteExport().setValue(Boolean.FALSE);
+
+        callback.onSuccess(entity);
     }
 }

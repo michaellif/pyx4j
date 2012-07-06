@@ -439,7 +439,6 @@
         <url-pattern>/_aj/*</url-pattern>
     </servlet-mapping>
 
-<!--
     <servlet>
         <servlet-name>JerseyRESTService</servlet-name>
         <servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
@@ -452,14 +451,9 @@
 
     <servlet-mapping>
         <servlet-name>JerseyRESTService</servlet-name>
-        <url-pattern>/rest/*</url-pattern>
-    </servlet-mapping>
-
-    <servlet-mapping>
-        <servlet-name>JerseyRESTService</servlet-name>
         <url-pattern>/public/rest/*</url-pattern>
     </servlet-mapping>
--->
+
     <servlet>
         <servlet-name>OnboardingSchemaServlet</servlet-name>
         <servlet-class>com.propertyvista.admin.server.onboarding.OnboardingSchemaServlet</servlet-class>

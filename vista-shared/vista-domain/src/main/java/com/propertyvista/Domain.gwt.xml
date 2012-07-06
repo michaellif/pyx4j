@@ -9,6 +9,10 @@
     <source path="misc"/>
     <source path="shared"/>
     
+    <replace-with class="com.propertyvista.common.client.config.VistaFeaturesCustomizationClient">
+      <when-type-is class="com.propertyvista.shared.client.VistaFeatures.VistaFeaturesCustomization"/>
+     </replace-with>
+    
     <extend-configuration-property name="rpc.blacklist" value="com.propertyvista.domain.security.AbstractUserCredential" />
     
 </module>

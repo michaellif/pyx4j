@@ -26,6 +26,8 @@ import com.propertyvista.admin.domain.pmc.PmcDnsName;
 import com.propertyvista.admin.domain.pmc.PmcDnsName.DnsNameTarget;
 import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.domain.security.VistaBasicBehavior;
+import com.propertyvista.domain.settings.PmcVistaFeatures;
+import com.propertyvista.server.config.VistaFeatures;
 import com.propertyvista.shared.VistaSystemIdentification;
 
 public class VistaDeployment {
@@ -53,6 +55,10 @@ public class VistaDeployment {
         } finally {
             NamespaceManager.setNamespace(namespace);
         }
+    }
+
+    public static PmcVistaFeatures getCurrentVistaFeatures() {
+        return VistaFeatures.VistaFeaturesCustomizationImpl.getCurrentVistaFeatures();
     }
 
     /**

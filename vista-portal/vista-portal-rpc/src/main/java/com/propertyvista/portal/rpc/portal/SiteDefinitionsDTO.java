@@ -18,6 +18,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
+import com.propertyvista.domain.settings.PmcVistaFeatures;
 import com.propertyvista.domain.site.SiteDescriptor.Skin;
 import com.propertyvista.domain.site.SitePalette;
 import com.propertyvista.domain.site.SiteTitles;
@@ -34,4 +35,5 @@ public interface SiteDefinitionsDTO extends IEntity {
 
     IPrimitive<Boolean> logoAvalable();
 
+    PmcVistaFeatures features();
 }

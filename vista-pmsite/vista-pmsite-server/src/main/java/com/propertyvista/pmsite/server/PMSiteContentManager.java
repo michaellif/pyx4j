@@ -98,7 +98,7 @@ public class PMSiteContentManager implements Serializable {
         } catch (NamespaceNotFoundException e) {
             foundSiteDescriptor = null;
         }
-        if (foundSiteDescriptor == null) {
+        if ((foundSiteDescriptor == null) || (!foundSiteDescriptor.enabled().getValue(Boolean.FALSE))) {
             throw new SiteWasNotSetUpUserRuntimeException(i18n.tr("This property management site was not set-up yet"));
         }
         siteDescriptor = foundSiteDescriptor;

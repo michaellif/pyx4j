@@ -37,6 +37,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.rpc.report.DownloadFormat;
@@ -52,6 +55,8 @@ import com.propertyvista.interfaces.importer.model.BuildingIO;
 import com.propertyvista.interfaces.importer.model.ImportIO;
 
 public class RentRollAdaptor implements ImportAdapter {
+
+    private final static Logger log = LoggerFactory.getLogger(RentRollAdaptor.class);
 
     private boolean isInComplex = false; //if in complex, unitNumber "1-A" splits into building = building(b1), unit A. Otherwise it's unit 1-A
 
@@ -93,8 +98,8 @@ public class RentRollAdaptor implements ImportAdapter {
                 }
             }
 
-            System.out.println("Exported " + importIO.buildings().size() + " buildings");
-            System.out.println("Exported " + unitCount + " units");
+            log.debug("Loaded {} buildings", importIO.buildings().size());
+            log.debug("Loaded {} units", unitCount);
             return importIO;
         } catch (IOException e) {
             throw new Error(e);

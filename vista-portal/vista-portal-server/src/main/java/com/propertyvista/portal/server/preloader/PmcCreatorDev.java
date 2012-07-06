@@ -43,6 +43,10 @@ public class PmcCreatorDev {
         pmc.namespace().setValue(pmcName.replace('-', '_'));
         pmc.onboardingAccountId().setValue("onb_" + pmc.namespace().getValue());
 
+        pmc.features().occupancyModel().setValue(Boolean.TRUE);
+        pmc.features().productCatalog().setValue(Boolean.TRUE);
+        pmc.features().xmlSiteExport().setValue(Boolean.TRUE);
+
         Persistence.service().persist(pmc);
 
         if (accountImport == null) {

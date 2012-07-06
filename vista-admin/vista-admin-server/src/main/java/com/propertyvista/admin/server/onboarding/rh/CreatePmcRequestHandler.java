@@ -73,6 +73,10 @@ public class CreatePmcRequestHandler extends AbstractRequestHandler<CreatePMCReq
         pmc.name().setValue(request.name().getValue());
         pmc.onboardingAccountId().setValue(request.onboardingAccountId().getValue());
 
+        pmc.features().occupancyModel().setValue(Boolean.TRUE);
+        pmc.features().productCatalog().setValue(Boolean.TRUE);
+        pmc.features().xmlSiteExport().setValue(Boolean.FALSE);
+
         // TODO For future
 //        for (String dndAlias : request.dnsNameAliases()) {
 //

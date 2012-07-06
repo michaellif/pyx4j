@@ -33,6 +33,7 @@ import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.VistaNamespace;
+import com.propertyvista.domain.settings.PmcVistaFeatures;
 
 @Table(prefix = "admin", namespace = VistaNamespace.adminNamespace)
 @Caption(name = "PMC")
@@ -63,6 +64,9 @@ public interface Pmc extends IEntity {
 
     @Owned
     IList<PmcDnsName> dnsNameAliases();
+
+    @Owned
+    PmcVistaFeatures features();
 
     @Owned
     @Detached(level = AttachLevel.Detached)

@@ -37,13 +37,13 @@ import com.propertyvista.domain.financial.offering.ProductItemType;
 import com.propertyvista.domain.marketing.AdvertisingBlurb;
 import com.propertyvista.domain.marketing.Marketing;
 import com.propertyvista.domain.marketing.PublicVisibilityType;
-import com.propertyvista.domain.marketing.yield.Amenity;
 import com.propertyvista.domain.media.Media;
 import com.propertyvista.domain.property.PropertyContact;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.FloorplanAmenity;
 import com.propertyvista.domain.property.asset.Parking;
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.property.asset.building.BuildingAmenity;
 import com.propertyvista.domain.property.asset.building.BuildingInfo;
 
 public class Converter {
@@ -173,10 +173,14 @@ public class Converter {
         return to;
     }
 
-    public static AmenityRS convertBuildingAmenity(Amenity from) {
+    public static AmenityRS convertBuildingAmenity(BuildingAmenity from) {
         AmenityRS to = new AmenityRS();
 
-        to.name = from.name().getStringView();
+        if (!from.name().isNull()) {
+            to.name = from.name().getStringView();
+        } else {
+            to.name = from.type().getStringView();
+        }
         to.description = from.description().getStringView();
 
         return to;
@@ -202,7 +206,11 @@ public class Converter {
     public static AmenityRS convertFloorplanAmenity(FloorplanAmenity from) {
         AmenityRS to = new AmenityRS();
 
-        to.name = from.name().getStringView();
+        if (!from.name().isNull()) {
+            to.name = from.name().getStringView();
+        } else {
+            to.name = from.type().getStringView();
+        }
         to.description = from.description().getStringView();
 
         return to;

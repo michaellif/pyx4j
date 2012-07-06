@@ -13,9 +13,22 @@
  */
 package com.propertyvista.config;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
+import com.pyx4j.config.server.LifecycleListener;
 import com.pyx4j.essentials.server.EssentialsServerSideConfiguration;
 
+import com.propertyvista.server.config.VistaFeaturesLifecycleListener;
+
 public abstract class AbstractVistaServerSideConfiguration extends EssentialsServerSideConfiguration {
+
+    @Override
+    public Collection<LifecycleListener> getLifecycleListeners() {
+        Collection<LifecycleListener> rc = new ArrayList<LifecycleListener>(super.getLifecycleListeners());
+        rc.add(new VistaFeaturesLifecycleListener());
+        return rc;
+    }
 
     public abstract boolean openDBReset();
 
