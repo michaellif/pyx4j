@@ -80,7 +80,7 @@ public interface AptUnit extends BuildingElement, PolicyNode, NotesAndAttachment
 
     @Owned
     @Detached(level = AttachLevel.Detached)
-    ISet<AptUnitOccupancySegment> _AptUnitOccupancySegment();
+    ISet<AptUnitOccupancySegment> unitOccupancySegments();
 
     // ----------------------------------------------------
     // internals:

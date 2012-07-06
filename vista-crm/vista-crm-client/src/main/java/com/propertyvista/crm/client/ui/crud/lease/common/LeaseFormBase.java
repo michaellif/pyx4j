@@ -20,7 +20,6 @@ import com.google.gwt.user.client.ui.HTML;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.entity.shared.criterion.Criterion;
-import com.pyx4j.entity.shared.criterion.OrCriterion;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEnumLabel;
@@ -29,6 +28,7 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.ui.crud.form.IEditorView;
 import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;
@@ -46,7 +46,9 @@ import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.dto.LeaseDTO;
 
 public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<DTO> {
@@ -160,16 +162,24 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
                     @Override
                     protected void setFilters(List<Criterion> filters) {
                         DTO currentValue = LeaseFormBase.this.getValue();
-                        if (!currentValue.leaseFrom().isNull() && filters != null) {
-                            OrCriterion or = new OrCriterion();
-                            // filter out already leased units (null) and not available by date:
-                            or.right(PropertyCriterion.le(proto()._availableForRent(), currentValue.leaseFrom().getValue()));
-                            or.left(PropertyCriterion.notExists(proto()._AptUnitOccupancySegment()));
+                        boolean existingLease = (currentValue.version().status().getValue() == Lease.Status.Created);
 
-                            filters.add(or);
+                        assert (filters != null);
 
-//                            filters.add(PropertyCriterion.le(proto()._availableForRent(), currentValue.leaseFrom().getValue()));
+                        if (existingLease) {
+                            filters.add(PropertyCriterion.eq(proto().unitOccupancySegments().$().status(), AptUnitOccupancySegment.Status.vacant));
+                            filters.add(PropertyCriterion.eq(proto().unitOccupancySegments().$().dateTo(), new LogicalDate(1100, 0, 1)));
+                            filters.add(PropertyCriterion.le(proto().unitOccupancySegments().$().dateFrom(), ClientContext.getServerDate()));
+                        } else {
+                            filters.add(PropertyCriterion.eq(proto().unitOccupancySegments().$().status(), AptUnitOccupancySegment.Status.available));
+                            filters.add(PropertyCriterion.eq(proto().unitOccupancySegments().$().dateTo(), new LogicalDate(1100, 0, 1)));
+                            if (!currentValue.leaseFrom().isNull()) {
+                                filters.add(PropertyCriterion.le(proto().unitOccupancySegments().$().dateFrom(), currentValue.leaseFrom().getValue()));
+                            } else {
+                                filters.add(PropertyCriterion.le(proto().unitOccupancySegments().$().dateFrom(), ClientContext.getServerDate()));
+                            }
                         }
+
                         super.setFilters(filters);
                     };
 

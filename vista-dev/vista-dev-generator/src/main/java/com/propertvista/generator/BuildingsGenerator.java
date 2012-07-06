@@ -514,7 +514,7 @@ public class BuildingsGenerator {
         occupancySegment.status().setValue(AptUnitOccupancySegment.Status.available);
         unit._availableForRent().setValue(occupancySegment.dateFrom().getValue());
         occupancySegment.description().setValue(RandomUtil.randomLetters(25).toLowerCase());
-        unit._AptUnitOccupancySegment().add(occupancySegment);
+        unit.unitOccupancySegments().add(occupancySegment);
 
         unit.floorplan().set(floorplan);
 

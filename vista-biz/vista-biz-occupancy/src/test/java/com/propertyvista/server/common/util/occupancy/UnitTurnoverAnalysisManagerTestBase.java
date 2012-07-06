@@ -188,7 +188,7 @@ public class UnitTurnoverAnalysisManagerTestBase {
             segment.status().setValue(Status.available);
             segment.dateFrom().setValue(OccupancyFacade.MIN_DATE);
             segment.dateTo().setValue(OccupancyFacade.MAX_DATE);
-            unit._AptUnitOccupancySegment().add(segment);
+            unit.unitOccupancySegments().add(segment);
             Persistence.service().merge(unit);
         }
         return unit;

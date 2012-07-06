@@ -211,7 +211,7 @@ public class BuildingImporter extends ImportPersister {
                             occupancySegment.dateTo().setValue(occupancyIO.dateTo().getValue());
                             occupancySegment.status().setValue(occupancyIO.status().getValue());
                             occupancySegment.offMarket().setValue(occupancyIO.offMarket().getValue());
-                            i._AptUnitOccupancySegment().add(occupancySegment);
+                            i.unitOccupancySegments().add(occupancySegment);
                             occupancySegment.unit().set(i);
                         }
 
