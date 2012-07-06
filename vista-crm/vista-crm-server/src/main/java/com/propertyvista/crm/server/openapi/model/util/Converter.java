@@ -22,7 +22,6 @@ import com.propertyvista.crm.server.openapi.model.AddressRS;
 import com.propertyvista.crm.server.openapi.model.AdvertisingBlurbRS;
 import com.propertyvista.crm.server.openapi.model.AmenityRS;
 import com.propertyvista.crm.server.openapi.model.BuildingInfoRS;
-import com.propertyvista.crm.server.openapi.model.BuildingInfoRS.BuildingType;
 import com.propertyvista.crm.server.openapi.model.BuildingRS;
 import com.propertyvista.crm.server.openapi.model.BuildingsRS;
 import com.propertyvista.crm.server.openapi.model.FloorplanRS;
@@ -118,7 +117,9 @@ public class Converter {
 
         to.name = from.name().getStringView();
         to.address = convertAddress(from.address());
-        to.buildingType = BuildingType.valueOf(from.type().getValue().name());
+        if (!from.type().isNull()) {
+            to.buildingType = BuildingInfoRS.BuildingType.valueOf(from.type().getValue().name());
+        }
         if (!from.shape().isNull()) {
             to.shape = from.shape().getValue().name();
         }
