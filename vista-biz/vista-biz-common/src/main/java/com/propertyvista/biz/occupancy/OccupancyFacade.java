@@ -28,22 +28,19 @@ public interface OccupancyFacade {
 
     public static final LogicalDate MAX_DATE = new LogicalDate(1100, 0, 1); // 3000-1-1
 
-    @Deprecated
-    public static final boolean TODO = true;
-
     void setupNewUnit(AptUnit unit);
 
     void migrateStart(AptUnit unitStub, Lease leaseStub);
 
     boolean isMigrateStartAvailable(AptUnit unitStub);
 
-    void migrateApprove(AptUnit unitStub);
+    void migratedApprove(AptUnit unitStub);
 
-    boolean isMigrateApproveAvailable(AptUnit unitStub);
+    boolean isMigratedApproveAvailable(AptUnit unitStub);
 
-    void migrateCancel(AptUnit unitStub);
+    void migratedCancel(AptUnit unitStub);
 
-    boolean isMigrateCancelAvailable(AptUnit unitStub);
+    boolean isMigratedCancelAvailable(AptUnit unitStub);
 
     /**
      * Applied to {@link Status#vacant}: convert's it to offMarket

@@ -44,6 +44,7 @@ import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.CompletionType;
+import com.propertyvista.domain.tenant.lease.Lease.Status;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.misc.VistaTODO;
 
@@ -178,6 +179,7 @@ public class LeaseLifecycleSimulator {
 
         @Override
         public void exec() {
+            lease.version().status().setValue(Status.Application);
             lease = leaseFacade().init(lease);
             lease = leaseFacade().setUnit(lease, lease.unit());
             lease = leaseFacade().persist(lease);

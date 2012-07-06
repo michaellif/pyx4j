@@ -23,6 +23,7 @@ import org.apache.commons.lang.StringUtils;
 import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -60,7 +61,6 @@ import com.propertyvista.domain.tenant.lease.Lease.CompletionType;
 import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
 import com.propertyvista.domain.tenant.lease.Lease.Status;
 import com.propertyvista.domain.tenant.lease.LeaseApplication;
-import com.propertyvista.misc.VistaTODO;
 
 public class LeaseFacadeImpl implements LeaseFacade {
 
@@ -233,29 +233,23 @@ public class LeaseFacadeImpl implements LeaseFacade {
 
     @Override
     public Lease persist(Lease lease) {
+        boolean isNewLease = lease.getPrimaryKey() == null;
+
+        Lease previousLeaseEdition = null;
         boolean doReserve = false;
         boolean doUnreserve = false;
-        Lease origLease = null;
 
-        // existing lease - check if unit reservation has changed:
-        if (lease.getPrimaryKey() != null) {
-            origLease = Persistence.secureRetrieve(Lease.class, lease.getPrimaryKey().asCurrentKey());
-            if (!EqualsHelper.equals(origLease.unit().getPrimaryKey(), lease.unit().getPrimaryKey())) {
-                // old lease has unit: o
-                // new lease has a unit: n
-                // !o & !n is impossible here, then we have:
-                // !o & n -> reserve
-                // o & n -> reserve           
-                //  o & !n -> unreserve
-                // o & n -> unreserve                
-                // hence:
-                // o -> unreserve                
-                // n -> reserve
-                doUnreserve = origLease.unit().getPrimaryKey() != null;
-                doReserve = lease.unit().getPrimaryKey() != null;
+        if (lease.version().status().getValue() == Status.Application | lease.version().status().getValue() == Status.Created) {
+            if (isNewLease) {
+                doReserve = !lease.unit().isNull();
+            } else {
+                previousLeaseEdition = Persistence.secureRetrieve(Lease.class, lease.getPrimaryKey().asCurrentKey());
+
+                if (!EqualsHelper.equals(previousLeaseEdition.unit().getPrimaryKey(), lease.unit().getPrimaryKey())) {
+                    doUnreserve = previousLeaseEdition.unit().getPrimaryKey() != null;
+                    doReserve = lease.unit().getPrimaryKey() != null;
+                }
             }
-        } else { // newly created lease - reserve unit if set:
-            doReserve = !lease.unit().isNull();
         }
 
         // actual persist:
@@ -267,10 +261,31 @@ public class LeaseFacadeImpl implements LeaseFacade {
 
         // update reservation if necessary:
         if (doUnreserve) {
-            ServerSideFactory.create(OccupancyFacade.class).unreserve(origLease.unit().getPrimaryKey());
+            switch (lease.version().status().getValue()) {
+            case Application:
+                ServerSideFactory.create(OccupancyFacade.class).unreserve(previousLeaseEdition.unit().getPrimaryKey());
+                break;
+            case Created:
+                ServerSideFactory.create(OccupancyFacade.class).migratedCancel(previousLeaseEdition.unit().<AptUnit> createIdentityStub());
+                break;
+            default:
+                throw new IllegalStateException(SimpleMessageFormat.format("it's not allowed to unset unit while lease's state is \"{0}\"", lease.version()
+                        .status().getValue()));
+            }
+
         }
         if (doReserve) {
-            ServerSideFactory.create(OccupancyFacade.class).reserve(lease.unit().getPrimaryKey(), lease);
+            switch (lease.version().status().getValue()) {
+            case Application:
+                ServerSideFactory.create(OccupancyFacade.class).reserve(lease.unit().getPrimaryKey(), lease);
+                break;
+            case Created:
+                ServerSideFactory.create(OccupancyFacade.class).migrateStart(lease.unit().<AptUnit> createIdentityStub(), lease);
+                break;
+            default:
+                throw new IllegalStateException(SimpleMessageFormat.format("it's not allowed to set unit while lease's state is \"{0}\"", lease.version()
+                        .status().getValue()));
+            }
         }
 
         return lease;
@@ -345,9 +360,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
                 errorMessages.add(failure.getMessage());
             }
             String errorsRoster = StringUtils.join(errorMessages, ",\n");
-            if (VistaTODO.enableLeaseApprovalValidation) {
-                throw new UserRuntimeException(i18n.tr("This lease cannot be approved due to following validation errors:\n{0}", errorsRoster));
-            }
+            throw new UserRuntimeException(i18n.tr("This lease cannot be approved due to following validation errors:\n{0}", errorsRoster));
         }
 
         lease.version().status().setValue(Lease.Status.Approved);
@@ -425,7 +438,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
         Lease lease = Persistence.secureRetrieveDraft(Lease.class, leaseId.getPrimaryKey());
         lease.version().status().setValue(Lease.Status.Approved);
 
-        ServerSideFactory.create(OccupancyFacade.class).approveLease(lease.unit().getPrimaryKey());
+        ServerSideFactory.create(OccupancyFacade.class).migratedApprove(lease.unit().<AptUnit> createIdentityStub());
         ServerSideFactory.create(ProductCatalogFacade.class).updateUnitRentPrice(lease);
 
         lease.saveAction().setValue(SaveAction.saveAsFinal);
@@ -514,7 +527,6 @@ public class LeaseFacadeImpl implements LeaseFacade {
 
         lease.saveAction().setValue(SaveAction.saveAsFinal);
         Persistence.secureSave(lease);
-
     }
 
     @Override

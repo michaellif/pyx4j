@@ -43,6 +43,7 @@ import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySe
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.Status;
 import com.propertyvista.domain.property.asset.unit.occupancy.opconstraints.MakeVacantConstraintsDTO;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.misc.VistaTODO;
 
 public class OccupancyFacadeImpl implements OccupancyFacade {
 
@@ -64,6 +65,11 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
     @Override
     public void scopeAvailable(Key unitPk) {
         LogicalDate now = new LogicalDate(Persistence.service().getTransactionSystemTime());
+
+        if (!isInProductCatalog(unitPk)) {
+            throw new UserRuntimeException(i18n.tr("Unable to make this unit available because the unit is not present product catalog"));
+        }
+
         if (AptUnitOccupancyManagerHelper.isOccupancyListEmpty(unitPk)) {
             createAvailableSegment(unitPk, now);
             return; // newly created unit case!..
@@ -242,11 +248,9 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
         LogicalDate leaseFrom = lease.leaseFrom().getValue();
         LogicalDate now = new LogicalDate(Persistence.service().getTransactionSystemTime());
 
-        // TODO fix the tests that fail due this (tomorrow)
-        if (false) {
-            if (leaseFrom.before(now)) {
-                throw new UserRuntimeException(i18n.tr("Operation 'reserve unit' is not permitted, the lease from date is in the past"));
-            }
+        if (VistaTODO.checkLeaseDatesOnUnitReservation & leaseFrom.before(now)) {
+            throw new IllegalStateException(i18n.tr("Operation 'reserve unit' is not permitted, the lease from date ({0}) is before the present date ({1})",
+                    leaseFrom, now));
         }
 
         if (AptUnitOccupancyManagerHelper.isOccupancyListEmpty(unitPk)) {
@@ -547,34 +551,13 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
         }
     }
 
-    private void updateUnitAvailableFrom(Key unitPk, LogicalDate newAvaialbleFrom) {
-        AptUnit unit = Persistence.service().retrieve(AptUnit.class, unitPk);
-        unit._availableForRent().setValue(newAvaialbleFrom);
-        unit.financial()._unitRent().setValue(null);
-        Persistence.secureSave(unit);
-    }
-
-    /*
-     * Used in work-flow logic for newly created units in case of assigning them to the existing (pre-dated) lease!
-     */
-    private void createAvailableSegment(Key unitPk, LogicalDate from) {
-        AptUnitOccupancySegment segment = EntityFactory.create(AptUnitOccupancySegment.class);
-        segment.status().setValue(Status.available);
-        segment.dateFrom().setValue(from);
-        segment.dateTo().setValue(OccupancyFacade.MAX_DATE);
-        segment.lease().setValue(null);
-        segment.unit().setPrimaryKey(unitPk);
-        updateUnitAvailableFrom(unitPk, segment.dateFrom().getValue());
-        Persistence.service().merge(segment);
-    }
-
     @Override
     public void migrateStart(AptUnit unitStub, final Lease leaseStub) {
 
         LogicalDate now = new LogicalDate(Persistence.service().getTransactionSystemTime());
 
         if (!isMigrateStartAvailable(unitStub)) {
-            throw new UserRuntimeException(i18n.tr("Operation 'migrate start' is not permitted"));
+            throw new IllegalStateException(i18n.tr("Operation 'migrate start' is not permitted"));
         }
         split(unitStub, now, new SplittingHandler() {
             @Override
@@ -591,10 +574,10 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
     }
 
     @Override
-    public void migrateApprove(AptUnit unitStub) {
+    public void migratedApprove(AptUnit unitStub) {
 
-        if (!isMigrateApproveAvailable(unitStub)) {
-            throw new UserRuntimeException(i18n.tr("Operation 'migrate approve' is not permitted"));
+        if (!isMigratedApproveAvailable(unitStub)) {
+            throw new IllegalStateException(i18n.tr("Operation 'migrate approve' is not permitted"));
         }
 
         LogicalDate now = new LogicalDate(Persistence.service().getTransactionSystemTime());
@@ -612,9 +595,9 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
     }
 
     @Override
-    public void migrateCancel(AptUnit unitStub) {
-        if (!isMigrateCancelAvailable(unitStub)) {
-            throw new UserRuntimeException(i18n.tr("Operation 'migrate cancel' is not permitted"));
+    public void migratedCancel(AptUnit unitStub) {
+        if (!isMigratedCancelAvailable(unitStub)) {
+            throw new IllegalStateException(i18n.tr("Operation 'migrate cancel' is not permitted"));
         }
 
         LogicalDate now = new LogicalDate(Persistence.service().getTransactionSystemTime());
@@ -651,20 +634,51 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
     public boolean isMigrateStartAvailable(AptUnit unitStub) {
         LogicalDate now = new LogicalDate(Persistence.service().getTransactionSystemTime());
         AptUnitOccupancySegment unitOccupancySegment = retrieveOccupancySegment(unitStub, now);
-        return (unitOccupancySegment.status().getValue() == Status.vacant) & unitOccupancySegment.dateTo().getValue().equals(OccupancyFacade.MAX_DATE);
+        return unitOccupancySegment != null
+                && (((unitOccupancySegment.status().getValue() == Status.vacant) | (unitOccupancySegment.status().getValue() == Status.available)) & unitOccupancySegment
+                        .dateTo().getValue().equals(OccupancyFacade.MAX_DATE));
     }
 
     @Override
-    public boolean isMigrateApproveAvailable(AptUnit unitStub) {
+    public boolean isMigratedApproveAvailable(AptUnit unitStub) {
         LogicalDate now = new LogicalDate(Persistence.service().getTransactionSystemTime());
         AptUnitOccupancySegment unitOccupancySegment = retrieveOccupancySegment(unitStub, now);
-        return (unitOccupancySegment.status().getValue() == Status.migrated) & unitOccupancySegment.dateTo().getValue().equals(OccupancyFacade.MAX_DATE);
+        return unitOccupancySegment != null
+                && ((unitOccupancySegment.status().getValue() == Status.migrated) & unitOccupancySegment.dateTo().getValue().equals(OccupancyFacade.MAX_DATE));
     }
 
     @Override
-    public boolean isMigrateCancelAvailable(AptUnit unitStub) {
+    public boolean isMigratedCancelAvailable(AptUnit unitStub) {
         LogicalDate now = new LogicalDate(Persistence.service().getTransactionSystemTime());
         AptUnitOccupancySegment unitOccupancySegment = retrieveOccupancySegment(unitStub, now);
-        return (unitOccupancySegment.status().getValue() == Status.migrated) & unitOccupancySegment.dateTo().getValue().equals(OccupancyFacade.MAX_DATE);
+        return unitOccupancySegment != null
+                && ((unitOccupancySegment.status().getValue() == Status.migrated) & unitOccupancySegment.dateTo().getValue().equals(OccupancyFacade.MAX_DATE));
     }
+
+    private void updateUnitAvailableFrom(Key unitPk, LogicalDate newAvaialbleFrom) {
+        AptUnit unit = Persistence.service().retrieve(AptUnit.class, unitPk);
+        unit._availableForRent().setValue(newAvaialbleFrom);
+        unit.financial()._unitRent().setValue(null);
+        Persistence.secureSave(unit);
+    }
+
+    private boolean isInProductCatalog(Key unitPk) {
+        // TODO 
+        return true;
+    }
+
+    /*
+     * Used in work-flow logic for newly created units in case of assigning them to the existing (pre-dated) lease!
+     */
+    private void createAvailableSegment(Key unitPk, LogicalDate from) {
+        AptUnitOccupancySegment segment = EntityFactory.create(AptUnitOccupancySegment.class);
+        segment.status().setValue(Status.available);
+        segment.dateFrom().setValue(from);
+        segment.dateTo().setValue(OccupancyFacade.MAX_DATE);
+        segment.lease().setValue(null);
+        segment.unit().setPrimaryKey(unitPk);
+        updateUnitAvailableFrom(unitPk, segment.dateFrom().getValue());
+        Persistence.service().merge(segment);
+    }
+
 }

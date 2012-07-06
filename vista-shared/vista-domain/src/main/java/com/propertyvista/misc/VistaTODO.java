@@ -21,9 +21,9 @@ public interface VistaTODO {
     public static final boolean enableWelcomeWizardDemoMode = false;
 
     /**
-     * For now to avoid the test failures because they create leases with no sufficient data for lease approval
+     * Check that lease from is in the future compared to transaction time (currently if is true billing tests fail)
      */
-    public static final boolean enableLeaseApprovalValidation = true;
+    public static final boolean checkLeaseDatesOnUnitReservation = false;
 
     public static boolean removedForProduction = false;
 

@@ -56,6 +56,9 @@ public interface Lease extends IVersionedEntity<LeaseV> {
     @XmlType(name = "LeaseStatus")
     public enum Status {
 
+        /**
+         * Existing (imported) lease that is in was just created but pending approval to become 'Active' and participate in billing.
+         */
         Created,
 
         Application,

@@ -29,6 +29,7 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
+import com.propertyvista.domain.tenant.lease.Lease.Status;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 
 public class LeaseDataModel {
@@ -70,6 +71,7 @@ public class LeaseDataModel {
         addTenants();
 
         lease = ServerSideFactory.create(LeaseFacade.class).init(lease);
+        lease.version().status().setValue(Status.Application);
         lease = ServerSideFactory.create(LeaseFacade.class).setUnit(lease, (AptUnit) serviceItem.element().cast());
         lease = ServerSideFactory.create(LeaseFacade.class).persist(lease);
     }

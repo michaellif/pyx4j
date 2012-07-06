@@ -308,7 +308,7 @@ public class AptUnitOccupancyManagerTest extends AptUnitOccupancyManagerTestBase
         setup().from("2001-01-05").toTheEndOfTime().status(Status.migrated).withLease(lease).x();
 
         now("2001-01-20");
-        getUOM().migrateApprove(unitStub());
+        getUOM().migratedApprove(unitStub());
 
         expect().fromTheBeginning().to("2001-01-04").status(Status.vacant).x();
         expect().from("2001-01-05").to("2001-01-19").status(Status.migrated).withLease(lease).x();
@@ -322,7 +322,7 @@ public class AptUnitOccupancyManagerTest extends AptUnitOccupancyManagerTestBase
         setup().from("2001-01-05").toTheEndOfTime().status(Status.migrated).withLease(lease).x();
 
         now("2001-01-05");
-        getUOM().migrateApprove(unitStub());
+        getUOM().migratedApprove(unitStub());
 
         expect().fromTheBeginning().to("2001-01-04").status(Status.vacant).x();
         expect().from("2001-01-05").toTheEndOfTime().status(Status.leased).withLease(lease).x();
@@ -335,7 +335,7 @@ public class AptUnitOccupancyManagerTest extends AptUnitOccupancyManagerTestBase
         setup().from("2001-01-05").toTheEndOfTime().status(Status.migrated).withLease(lease).x();
 
         now("2001-01-20");
-        getUOM().migrateCancel(unitStub());
+        getUOM().migratedCancel(unitStub());
 
         expect().fromTheBeginning().to("2001-01-04").status(Status.vacant).x();
         expect().from("2001-01-05").to("2001-01-19").status(Status.migrated).withLease(lease).x();
@@ -349,7 +349,7 @@ public class AptUnitOccupancyManagerTest extends AptUnitOccupancyManagerTestBase
         setup().from("2001-01-05").toTheEndOfTime().status(Status.migrated).withLease(lease).x();
 
         now("2001-01-05");
-        getUOM().migrateCancel(unitStub());
+        getUOM().migratedCancel(unitStub());
 
         expect().fromTheBeginning().toTheEndOfTime().status(Status.vacant).x();
         // TODO test unit is available from specific date

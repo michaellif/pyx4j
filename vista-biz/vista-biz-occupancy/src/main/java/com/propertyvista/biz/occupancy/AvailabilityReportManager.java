@@ -112,6 +112,9 @@ public class AvailabilityReportManager {
             case offMarket:
                 offMarket(status);
                 break;
+            case migrated:
+                leased(status, current, future);
+                break;
             }
 
             setReferences(status);
@@ -302,4 +305,5 @@ public class AvailabilityReportManager {
         criteria.add(PropertyCriterion.ge(criteria.proto().statusDate(), startingOn));
         Persistence.service().delete(criteria);
     }
+
 }

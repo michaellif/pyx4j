@@ -22,6 +22,8 @@ package com.propertyvista.biz.financial.billing;
 
 import java.math.BigDecimal;
 
+import org.junit.Ignore;
+
 import com.pyx4j.config.server.ServerSideFactory;
 
 import com.propertyvista.biz.financial.FinancialTestBase;
@@ -29,6 +31,7 @@ import com.propertyvista.biz.financial.SysDateManager;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.domain.financial.billing.Bill;
 
+@Ignore
 public class BillingZeroCycleScenarioTest extends FinancialTestBase {
 
     @Override

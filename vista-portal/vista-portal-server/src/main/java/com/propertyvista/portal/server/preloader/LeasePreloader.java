@@ -28,6 +28,7 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.Lease.Status;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.portal.server.preloader.util.AptUnitSource;
 import com.propertyvista.portal.server.preloader.util.BaseVistaDevDataPreloader;
@@ -74,6 +75,7 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
             // Create normal Active Lease first for Shortcut users
             if (i <= DemoData.UserType.TENANT.getDefaultMax()) {
                 LeaseFacade leaseFacade = ServerSideFactory.create(LeaseFacade.class);
+                lease.version().status().setValue(Status.Application);
                 lease = leaseFacade.init(lease);
                 if (lease.unit().getPrimaryKey() != null) {
                     leaseFacade.setUnit(lease, lease.unit());
