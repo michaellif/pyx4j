@@ -32,10 +32,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.commons.css.IStyleDependent;
-import com.pyx4j.forms.client.events.PropertyChangeEvent;
-import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.DefaultCComponentsTheme;
 import com.pyx4j.forms.client.ui.INativeTextComponent;
 import com.pyx4j.forms.client.ui.NativeTextBox;
 
@@ -146,19 +143,6 @@ public class NativeMoney extends SimplePanel implements Focusable, INativeTextCo
     public boolean isViewable() {
         // TODO Auto-generated method stub
         return false;
-    }
-
-    @Override
-    public void onPropertyChange(PropertyChangeEvent event) {
-        if (event.isEventOfType(PropertyName.repopulated)) {
-            amount.removeStyleDependentName(DefaultCComponentsTheme.StyleDependent.invalid.name());
-        } else if (event.isEventOfType(PropertyName.valid, PropertyName.visited)) {
-            if (cComponent.isValid()) {
-                amount.removeStyleDependentName(DefaultCComponentsTheme.StyleDependent.invalid.name());
-            } else if (cComponent.isVisited()) {
-                amount.addStyleDependentName(DefaultCComponentsTheme.StyleDependent.invalid.name());
-            }
-        }
     }
 
     @Override

@@ -22,7 +22,6 @@ import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.IDebugId;
-import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.INativeComponent;
 import com.pyx4j.forms.client.ui.TriggerComponent;
@@ -122,12 +121,6 @@ public class NativeFileUploader extends TriggerComponent<File> implements INativ
     public File getNativeValue() throws ParseException {
         // TODO Auto-generated method stub
         return null;
-    }
-
-    @Override
-    public void onPropertyChange(PropertyChangeEvent event) {
-        // TODO Auto-generated method stub
-
     }
 
     @Override

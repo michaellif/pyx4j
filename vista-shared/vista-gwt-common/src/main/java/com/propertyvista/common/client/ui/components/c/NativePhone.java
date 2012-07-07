@@ -33,10 +33,7 @@ import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.commons.css.IStyleDependent;
 import com.pyx4j.commons.css.Selector;
-import com.pyx4j.forms.client.events.PropertyChangeEvent;
-import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.DefaultCComponentsTheme;
 import com.pyx4j.forms.client.ui.INativeFocusComponent;
 import com.pyx4j.widgets.client.TextBox;
 
@@ -180,19 +177,6 @@ public class NativePhone extends SimplePanel implements INativeFocusComponent<Ph
     public boolean isViewable() {
         // TODO Auto-generated method stub
         return false;
-    }
-
-    @Override
-    public void onPropertyChange(PropertyChangeEvent event) {
-        if (event.isEventOfType(PropertyName.repopulated)) {
-            removeStyleDependentName(DefaultCComponentsTheme.StyleDependent.invalid.name());
-        } else if (event.isEventOfType(PropertyName.valid, PropertyName.visited)) {
-            if (cComponent.isValid()) {
-                removeStyleDependentName(DefaultCComponentsTheme.StyleDependent.invalid.name());
-            } else if (cComponent.isVisited()) {
-                addStyleDependentName(DefaultCComponentsTheme.StyleDependent.invalid.name());
-            }
-        }
     }
 
     @Override
