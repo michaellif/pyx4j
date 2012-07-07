@@ -52,7 +52,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.Cursor;
 import com.pyx4j.forms.client.ui.DefaultCComponentsTheme;
 
-public class WidgetDecorator extends FlexTable {
+public class WidgetDecorator extends FlexTable implements IDecorator<CComponent<?, ?>> {
 
     public enum DebugIds implements IDebugId {
         Label, InfoImageHolder, InfoImage, MandatoryImage, ValidationLabel;
@@ -63,7 +63,7 @@ public class WidgetDecorator extends FlexTable {
         }
     }
 
-    private final CComponent<?, ?> component;
+    private CComponent<?, ?> component;
 
     private final Label label;
 
@@ -89,7 +89,7 @@ public class WidgetDecorator extends FlexTable {
 
         setStyleName(WidgetDecorator.name());
 
-        this.component = builder.component;
+        setComponent(builder.component);
         final Widget nativeComponent = component.asWidget();
         nativeComponent.addStyleName(WidgetDecoratorComponent.name());
 
@@ -337,5 +337,17 @@ public class WidgetDecorator extends FlexTable {
     @Deprecated
     public static WidgetDecorator build(CComponent<?, ?> component, double labelWidth, double componentWidth) {
         return new WidgetDecorator.Builder(component).labelWidth(labelWidth).componentWidth(componentWidth).build();
+    }
+
+    @Override
+    public void setComponent(CComponent<?, ?> component) {
+        this.component = component;
+
+    }
+
+    @Override
+    public void onSetDebugId(IDebugId parentDebugId) {
+        // TODO Auto-generated method stub
+
     }
 }

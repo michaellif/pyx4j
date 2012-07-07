@@ -18,13 +18,14 @@
  * @author michaellif
  * @version $Id$
  */
-package com.pyx4j.entity.client;
+package com.pyx4j.forms.client.ui.decorators;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.IDebugId;
+import com.pyx4j.forms.client.ui.CComponent;
 
-public interface IDecorator<E extends CEntityContainer> extends IsWidget {
+public interface IDecorator<E extends CComponent<?, ?>> extends IsWidget {
 
     void setComponent(E component);
 

@@ -35,13 +35,13 @@ import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.entity.client.CEntityContainer;
 import com.pyx4j.entity.client.CEntityForm;
-import com.pyx4j.entity.client.IDecorator;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CContainer;
+import com.pyx4j.forms.client.ui.decorators.IDecorator;
 import com.pyx4j.widgets.client.IconButton;
 
 public abstract class CEntityFolderItem<E extends IEntity> extends CEntityContainer<E> {

@@ -23,6 +23,7 @@ package com.pyx4j.entity.client;
 import com.google.gwt.user.client.ui.ScrollPanel;
 
 import com.pyx4j.commons.IDebugId;
+import com.pyx4j.forms.client.ui.decorators.IDecorator;
 
 public class EntityContainerScrollPanel<E extends CEntityContainer<?>> extends ScrollPanel implements IDecorator<E> {
 
