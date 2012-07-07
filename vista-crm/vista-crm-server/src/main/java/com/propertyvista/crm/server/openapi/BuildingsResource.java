@@ -238,6 +238,15 @@ public class BuildingsResource {
                     }
 
                 }
+
+                // There is a bug in PHP site: it do not show Building Amenities in on building details page, It just show aggregated from floorplans
+                if (true) {
+                    if (!buildingRS.floorplans.isEmpty()) {
+                        FloorplanRS firstFloorplan = buildingRS.floorplans.get(0);
+                        firstFloorplan.amenities.addAll(buildingRS.amenities);
+                    }
+                }
+
             } catch (Throwable t) {
                 log.error("Error converting building {}", building, t);
                 if (ServerSideConfiguration.instance().isDevelopmentBehavior()) {
