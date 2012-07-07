@@ -144,16 +144,6 @@ public class WidgetDecorator extends FlexTable {
                 } else if (event.isEventOfType(PropertyName.valid, PropertyName.visited, PropertyName.repopulated, PropertyName.enabled, PropertyName.editable)) {
                     renderValidationMessage();
                     renderMandatoryStar();
-
-                    if (event.isEventOfType(PropertyName.repopulated)) {
-                        component.asWidget().removeStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.invalid.name());
-                    } else if (event.isEventOfType(PropertyName.valid, PropertyName.visited)) {
-                        if (component.isValid()) {
-                            component.asWidget().removeStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.invalid.name());
-                        } else if (component.isVisited()) {
-                            component.asWidget().addStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.invalid.name());
-                        }
-                    }
                 }
             }
         });
@@ -236,13 +226,16 @@ public class WidgetDecorator extends FlexTable {
     protected void renderValidationMessage() {
         if (component.isVisited() && !component.isValid()) {
             validationLabel.setText(component.getValidationResults().getMessagesText(false, false));
+            component.asWidget().addStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.invalid.name());
         } else {
             validationLabel.setText(null);
+            component.asWidget().removeStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.invalid.name());
         }
 
         if (component.getDebugId() != null) {
             validationLabel.ensureDebugId(new CompositeDebugId(component.getDebugId(), DebugIds.ValidationLabel).debugId());
         }
+
     }
 
     protected void renderTooltip() {

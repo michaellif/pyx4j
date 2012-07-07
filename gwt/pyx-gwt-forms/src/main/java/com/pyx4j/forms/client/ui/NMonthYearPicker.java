@@ -22,6 +22,8 @@ package com.pyx4j.forms.client.ui;
 
 import java.util.Date;
 
+import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.view.client.Range;
@@ -53,6 +55,13 @@ public class NMonthYearPicker extends NFocusComponent<Date, MonthYearPicker, CMo
     protected void onEditorCreate() {
         super.onEditorCreate();
         getEditor().setYearRange(getCComponent().getYearRange());
+        getEditor().addChangeHandler(new ChangeHandler() {
+
+            @Override
+            public void onChange(ChangeEvent event) {
+                getCComponent().onEditingStop();
+            }
+        });
     }
 
     @Override

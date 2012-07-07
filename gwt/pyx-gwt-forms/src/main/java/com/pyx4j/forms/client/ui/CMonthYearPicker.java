@@ -54,4 +54,10 @@ public class CMonthYearPicker extends CFocusComponent<Date, NMonthYearPicker> {
     public Range getYearRange() {
         return yearRange;
     }
+
+    @Override
+    public void onEditingStop() {
+        System.out.println("++++++++++++++++++=");
+        super.onEditingStop();
+    }
 }
