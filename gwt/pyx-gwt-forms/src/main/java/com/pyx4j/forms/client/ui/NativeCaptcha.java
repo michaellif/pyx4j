@@ -32,8 +32,6 @@ import com.pyx4j.commons.IDebugId;
 import com.pyx4j.commons.Pair;
 import com.pyx4j.commons.css.IStyleDependent;
 import com.pyx4j.config.shared.ApplicationMode;
-import com.pyx4j.forms.client.events.PropertyChangeEvent;
-import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.widgets.client.CaptchaComposite;
 
 public class NativeCaptcha extends CaptchaComposite implements INativeFocusComponent<Pair<String, String>> {
@@ -113,19 +111,6 @@ public class NativeCaptcha extends CaptchaComposite implements INativeFocusCompo
     @Override
     public void setEnabled(boolean enabled) {
 
-    }
-
-    @Override
-    public void onPropertyChange(PropertyChangeEvent event) {
-        if (event.isEventOfType(PropertyName.repopulated)) {
-            getResponseTextBox().removeStyleDependentName(DefaultCComponentsTheme.StyleDependent.invalid.name());
-        } else if (event.isEventOfType(PropertyName.valid, PropertyName.visited)) {
-            if (component.isValid()) {
-                getResponseTextBox().removeStyleDependentName(DefaultCComponentsTheme.StyleDependent.invalid.name());
-            } else if (component.isVisited()) {
-                getResponseTextBox().addStyleDependentName(DefaultCComponentsTheme.StyleDependent.invalid.name());
-            }
-        }
     }
 
     @Override

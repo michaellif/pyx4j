@@ -23,7 +23,6 @@ package com.pyx4j.forms.client.ui;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.IDebugId;
-import com.pyx4j.forms.client.events.PropertyChangeEvent;
 
 public class NativeViewer<E> extends SimplePanel implements INativeComponent<E> {
 
@@ -83,11 +82,6 @@ public class NativeViewer<E> extends SimplePanel implements INativeComponent<E> 
     protected void onUnload() {
         super.onUnload();
         DomDebug.detachWidget();
-    }
-
-    @Override
-    public void onPropertyChange(PropertyChangeEvent event) {
-        // do nothing - actually it's valid always...
     }
 
     @Override

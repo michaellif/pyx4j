@@ -29,7 +29,6 @@ import com.google.gwt.user.client.ui.Anchor;
 
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.commons.css.CSSClass;
-import com.pyx4j.forms.client.events.PropertyChangeEvent;
 
 public class NativeHyperlink<E> extends Anchor implements INativeReference<E> {
 
@@ -120,11 +119,6 @@ public class NativeHyperlink<E> extends Anchor implements INativeReference<E> {
     @Override
     public E getNativeValue() {
         return null;
-    }
-
-    @Override
-    public void onPropertyChange(PropertyChangeEvent event) {
-        // do nothing - actually it's valid always...
     }
 
     @Override

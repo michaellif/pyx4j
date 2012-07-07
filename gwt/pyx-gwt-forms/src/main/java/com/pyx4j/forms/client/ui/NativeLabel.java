@@ -28,7 +28,6 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.HTML;
 
 import com.pyx4j.commons.IDebugId;
-import com.pyx4j.forms.client.events.PropertyChangeEvent;
 
 public class NativeLabel<E> extends HTML implements INativeReference<E> {
 
@@ -116,11 +115,6 @@ public class NativeLabel<E> extends HTML implements INativeReference<E> {
     protected void onUnload() {
         super.onUnload();
         DomDebug.detachWidget();
-    }
-
-    @Override
-    public void onPropertyChange(PropertyChangeEvent event) {
-        // do nothing - actually it's valid always...
     }
 
     @Override

@@ -27,7 +27,6 @@ import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 
-import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.ui.CListBox.ListBoxDisplayProperties;
 import com.pyx4j.forms.client.validators.HasRequiredValueValidationMessage;
 import com.pyx4j.widgets.client.dialog.Dialog;
@@ -97,10 +96,6 @@ public abstract class ListSelectionPopup<E> extends Dialog {
         @Override
         public CComponent<?, ?> getCComponent() {
             return null;
-        }
-
-        @Override
-        public void onPropertyChange(PropertyChangeEvent event) {
         }
 
         @Override

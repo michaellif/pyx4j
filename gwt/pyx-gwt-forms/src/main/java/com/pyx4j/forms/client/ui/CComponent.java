@@ -393,7 +393,6 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
             widget.setDebugId(debugId);
         }
 
-        this.addPropertyChangeHandler(widget);
     }
 
     public boolean isWidgetCreated() {

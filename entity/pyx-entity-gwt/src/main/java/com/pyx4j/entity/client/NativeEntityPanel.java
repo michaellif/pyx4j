@@ -27,7 +27,6 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.entity.client.ui.folder.DefaultEntityFolderTheme;
 import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.INativeComponent;
 
@@ -94,10 +93,6 @@ public class NativeEntityPanel<E extends IObject<?>> extends SimplePanel impleme
 
     @Override
     public void setNativeValue(E value) {
-    }
-
-    @Override
-    public void onPropertyChange(PropertyChangeEvent event) {
     }
 
     @Override

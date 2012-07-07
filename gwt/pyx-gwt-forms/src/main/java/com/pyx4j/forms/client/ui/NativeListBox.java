@@ -30,7 +30,6 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.ListBox;
 
 import com.pyx4j.commons.IDebugId;
-import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.ui.CListBox.ListBoxDisplayProperties;
 
 //TODO doesn't follow convention on calling onEditStop+update
@@ -166,10 +165,6 @@ public class NativeListBox<E> extends TriggerComponent<List<E>> implements INati
     @Override
     public CListBox<E> getCComponent() {
         return cListBox;
-    }
-
-    @Override
-    public void onPropertyChange(PropertyChangeEvent event) {
     }
 
     @Override

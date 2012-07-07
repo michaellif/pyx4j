@@ -26,8 +26,6 @@ import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.view.client.Range;
 
-import com.pyx4j.forms.client.events.PropertyChangeEvent;
-import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.MonthYearPicker;
 
@@ -109,34 +107,6 @@ public class NMonthYearPicker extends NFocusComponent<Date, MonthYearPicker, CMo
                     getEditor().getMonthSelector().removeStyleDependentName(DefaultCComponentsTheme.StyleDependent.readonly.name());
                 } else {
                     getEditor().getMonthSelector().addStyleDependentName(DefaultCComponentsTheme.StyleDependent.readonly.name());
-                }
-            }
-        }
-    }
-
-    @Override
-    public void onPropertyChange(PropertyChangeEvent event) {
-        super.onPropertyChange(event);
-        if (getEditor() != null) {
-            if (event.isEventOfType(PropertyName.repopulated)) {
-                getEditor().getYearSelector().removeStyleDependentName(DefaultCComponentsTheme.StyleDependent.invalid.name());
-            } else if (event.isEventOfType(PropertyName.valid, PropertyName.visited, PropertyName.repopulated)) {
-                if (getCComponent().isValid()) {
-                    getEditor().getYearSelector().removeStyleDependentName(DefaultCComponentsTheme.StyleDependent.invalid.name());
-                } else if (getCComponent().isVisited()) {
-                    getEditor().getYearSelector().addStyleDependentName(DefaultCComponentsTheme.StyleDependent.invalid.name());
-                }
-            }
-
-            if (!getCComponent().isYearOnly()) {
-                if (event.isEventOfType(PropertyName.repopulated)) {
-                    getEditor().getMonthSelector().removeStyleDependentName(DefaultCComponentsTheme.StyleDependent.invalid.name());
-                } else if (event.isEventOfType(PropertyName.valid, PropertyName.visited, PropertyName.repopulated)) {
-                    if (getCComponent().isValid()) {
-                        getEditor().getMonthSelector().removeStyleDependentName(DefaultCComponentsTheme.StyleDependent.invalid.name());
-                    } else if (getCComponent().isVisited()) {
-                        getEditor().getMonthSelector().addStyleDependentName(DefaultCComponentsTheme.StyleDependent.invalid.name());
-                    }
                 }
             }
         }

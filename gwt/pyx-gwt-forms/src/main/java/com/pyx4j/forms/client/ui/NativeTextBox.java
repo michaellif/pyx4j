@@ -23,8 +23,6 @@ package com.pyx4j.forms.client.ui;
 import java.text.ParseException;
 
 import com.pyx4j.commons.IDebugId;
-import com.pyx4j.forms.client.events.PropertyChangeEvent;
-import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.widgets.client.TextBox;
 
 @Deprecated
@@ -103,19 +101,6 @@ public class NativeTextBox<E> extends TextBox implements INativeTextComponent<E>
     protected void onUnload() {
         super.onUnload();
         DomDebug.detachWidget();
-    }
-
-    @Override
-    public void onPropertyChange(PropertyChangeEvent event) {
-        if (event.isEventOfType(PropertyName.repopulated)) {
-            removeStyleDependentName(DefaultCComponentsTheme.StyleDependent.invalid.name());
-        } else if (event.isEventOfType(PropertyName.valid, PropertyName.visited)) {
-            if (delegate.getCComponent().isValid()) {
-                removeStyleDependentName(DefaultCComponentsTheme.StyleDependent.invalid.name());
-            } else if (delegate.getCComponent().isVisited()) {
-                addStyleDependentName(DefaultCComponentsTheme.StyleDependent.invalid.name());
-            }
-        }
     }
 
     @Override

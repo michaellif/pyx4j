@@ -34,7 +34,7 @@ public class DefaultCComponentsTheme extends Theme {
     }
 
     public static enum StyleDependent implements IStyleDependent {
-        disabled, readonly, invalid
+        disabled, readonly
     }
 
     public DefaultCComponentsTheme() {
@@ -62,13 +62,6 @@ public class DefaultCComponentsTheme extends Theme {
         style.addProperty("background-color", ThemeColors.foreground, 0);
         addStyle(style);
 
-        style = new Style(".", DefaultWidgetsTheme.StyleName.TextBox, "-", StyleDependent.invalid);
-        style.addProperty("border-width", "1px");
-        style.addProperty("border-style", "solid");
-        style.addProperty("border-color", "#f79494");
-        style.addProperty("background-color", "#f8d8d8");
-        addStyle(style);
-
     }
 
     protected void initListBoxStyle() {
@@ -84,12 +77,6 @@ public class DefaultCComponentsTheme extends Theme {
         style.addProperty("background-color", ThemeColors.foreground, 0.3);
         addStyle(style);
 
-        style = new Style(".", DefaultWidgetsTheme.StyleName.ListBox, "-", StyleDependent.invalid);
-        style.addProperty("border-width", "1px");
-        style.addProperty("border-style", "solid");
-        style.addProperty("border-color", "#f79494");
-        style.addProperty("background-color", "#f8d8d8");
-        addStyle(style);
     }
 
     protected void initTriggerButtonStyle() {

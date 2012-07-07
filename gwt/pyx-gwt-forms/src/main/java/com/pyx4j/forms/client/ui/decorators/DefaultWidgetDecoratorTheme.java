@@ -25,6 +25,7 @@ import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.Theme;
 import com.pyx4j.commons.css.ThemeColors;
+import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 
 public class DefaultWidgetDecoratorTheme extends Theme {
 
@@ -35,7 +36,7 @@ public class DefaultWidgetDecoratorTheme extends Theme {
     }
 
     public static enum StyleDependent implements IStyleDependent {
-        readOnly, noMandatoryStar
+        readOnly, noMandatoryStar, invalid
     }
 
     public DefaultWidgetDecoratorTheme() {
@@ -92,5 +93,18 @@ public class DefaultWidgetDecoratorTheme extends Theme {
         style = new Style(".", StyleName.WidgetDecoratorComponent);
         addStyle(style);
 
+        style = new Style(".", StyleName.WidgetDecoratorComponent, "-", StyleDependent.invalid, " .", DefaultWidgetsTheme.StyleName.TextBox);
+        style.addProperty("border-width", "1px");
+        style.addProperty("border-style", "solid");
+        style.addProperty("border-color", "#f79494");
+        style.addProperty("background-color", "#f8d8d8");
+        addStyle(style);
+
+        style = new Style(".", StyleName.WidgetDecoratorComponent, "-", StyleDependent.invalid, " .", DefaultWidgetsTheme.StyleName.ListBox);
+        style.addProperty("border-width", "1px");
+        style.addProperty("border-style", "solid");
+        style.addProperty("border-color", "#f79494");
+        style.addProperty("background-color", "#f8d8d8");
+        addStyle(style);
     }
 }

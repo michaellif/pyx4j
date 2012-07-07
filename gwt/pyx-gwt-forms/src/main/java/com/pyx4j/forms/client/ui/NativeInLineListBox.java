@@ -26,7 +26,6 @@ import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 
-import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.ui.CListBox.ListBoxDisplayProperties;
 
 public class NativeInLineListBox<E> extends NativeListSelectionComposite<E> {
@@ -60,10 +59,6 @@ public class NativeInLineListBox<E> extends NativeListSelectionComposite<E> {
     @Override
     public void onNativeValueChange(List<E> values) {
         cListBox.setValue(values);
-    }
-
-    @Override
-    public void onPropertyChange(PropertyChangeEvent event) {
     }
 
     @Override

@@ -25,8 +25,6 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.IDebugId;
-import com.pyx4j.forms.client.events.PropertyChangeEvent;
-import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.GroupFocusHandler;
 import com.pyx4j.widgets.client.IWidget;
@@ -217,21 +215,6 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
         }
         if (getViewer() != null) {
             getViewer().ensureDebugId(debugId.debugId());
-        }
-    }
-
-    @Override
-    public void onPropertyChange(PropertyChangeEvent event) {
-        if (getEditor() != null) {
-            if (event.isEventOfType(PropertyName.repopulated)) {
-                getEditor().removeStyleDependentName(DefaultCComponentsTheme.StyleDependent.invalid.name());
-            } else if (event.isEventOfType(PropertyName.valid, PropertyName.visited)) {
-                if (getCComponent().isValid()) {
-                    getEditor().removeStyleDependentName(DefaultCComponentsTheme.StyleDependent.invalid.name());
-                } else if (getCComponent().isVisited()) {
-                    getEditor().addStyleDependentName(DefaultCComponentsTheme.StyleDependent.invalid.name());
-                }
-            }
         }
     }
 
