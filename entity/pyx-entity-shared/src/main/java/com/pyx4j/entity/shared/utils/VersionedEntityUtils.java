@@ -21,6 +21,7 @@
 package com.pyx4j.entity.shared.utils;
 
 import com.pyx4j.entity.shared.IVersionData;
+import com.pyx4j.entity.shared.IVersionedEntity;
 
 public class VersionedEntityUtils {
 
@@ -28,5 +29,10 @@ public class VersionedEntityUtils {
         entity.versionNumber().setValue(null);
         entity.fromDate().setValue(null);
         entity.toDate().setValue(null);
+    }
+
+    public static <T extends IVersionedEntity<?>> boolean isCurrent(T entity) {
+        assert !entity.version().isNull();
+        return entity.version().toDate().isNull();
     }
 }

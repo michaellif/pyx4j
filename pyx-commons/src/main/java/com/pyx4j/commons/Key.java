@@ -84,6 +84,13 @@ public class Key implements java.io.Serializable {
         return (getVersion() == VERSION_DRAFT);
     }
 
+    /**
+     * This may be return inconsistent results if you retrieve the entity by version.
+     * The returned key of Entity does not know if entity retrieved is current.
+     * Cause the retrieval procedure do not change the Key!
+     * 
+     * use VersionedEntityUtils.isCurrent(entity)
+     */
     public boolean isCurrent() {
         return (getVersion() == VERSION_CURRENT);
     }
