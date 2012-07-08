@@ -157,13 +157,11 @@ public class DepositFacadeImpl implements DepositFacade {
         OrCriterion orCrit = new OrCriterion();
         depositCriteria.or(PropertyCriterion.eq(depositCriteria.proto().type(), DepositType.MoveInDeposit), orCrit);
 
-        // LastMonthDeposit - return one month prior the end of lease
-        Calendar calendar = new GregorianCalendar();
-        calendar.setTime(Persistence.service().getTransactionSystemTime());
-        calendar.add(Calendar.MONTH, 1);
-        Date dueDate = calendar.getTime(); // roll forward one month
+        // LastMonthDeposit - refund must appear on the last month bill so normally deposits will be issued by
+        // the BillingDepositProcessor. However, if for some reason that did not happen we will pick up those
+        // deposits here to ensure they get into the final bill.
         orCrit.left(PropertyCriterion.eq(depositCriteria.proto().type(), DepositType.LastMonthDeposit));
-        orCrit.left(PropertyCriterion.le(depositCriteria.proto().billingAccount().lease().leaseTo(), dueDate));
+        orCrit.left(PropertyCriterion.le(depositCriteria.proto().billableItem().expirationDate(), Persistence.service().getTransactionSystemTime()));
 
         // SecurityDeposit - return after product expiration - check policy for refund window
         orCrit.right(PropertyCriterion.eq(depositCriteria.proto().type(), DepositType.SecurityDeposit));
@@ -190,12 +188,13 @@ public class DepositFacadeImpl implements DepositFacade {
                 if (policyItem == null) {
                     throw new UserRuntimeException(i18n.tr("Could not find Policy Item for deposit {0}", deposit.getStringView()));
                 } else {
+                    Calendar calendar = new GregorianCalendar();
                     // see if we are past the refund window
                     calendar.setTime(Persistence.service().getTransactionSystemTime());
                     if (!policyItem.securityDepositRefundWindow().isNull()) {
                         calendar.add(Calendar.DAY_OF_MONTH, -policyItem.securityDepositRefundWindow().getValue());
                     }
-                    dueDate = calendar.getTime();
+                    Date dueDate = calendar.getTime();
                     if (!deposit.billableItem().expirationDate().getValue().after(dueDate)) {
                         arFacade.postDepositRefund(deposit);
                     }

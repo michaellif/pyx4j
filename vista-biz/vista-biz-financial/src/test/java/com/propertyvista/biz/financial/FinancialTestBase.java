@@ -24,6 +24,10 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.math.BigDecimal;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.List;
 
 import com.pyx4j.commons.LogicalDate;
@@ -32,6 +36,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
 import com.pyx4j.essentials.server.dev.DataDump;
+import com.pyx4j.gwt.server.DateUtils;
 
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.billing.BillingFacade;
@@ -65,6 +70,7 @@ import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
+import com.propertyvista.domain.policy.framework.PolicyNode;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.AdjustmentType;
@@ -87,6 +93,35 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
     protected LeaseAdjustmentReasonDataModel leaseAdjustmentReasonDataModel;
 
     protected ARPolicyDataModel arPolicyDataModel;
+
+    public interface Task {
+        void execute();
+    }
+
+    public class Schedule {
+        private final int[] fields = new int[Calendar.FIELD_COUNT];
+
+        public Schedule set(int field, int value) {
+            fields[field] = value;
+            return this;
+        }
+
+        public int[] getFields() {
+            return fields;
+        }
+
+        public boolean match(Calendar cal) {
+            int match = 0;
+            for (int field = 0; field < fields.length; field++) {
+                if (fields[field] == 0 || fields[field] == cal.get(field)) {
+                    match += 1;
+                }
+            }
+            return (match == fields.length);
+        }
+    }
+
+    private final HashMap<Schedule, Task> taskSchedule = new HashMap<Schedule, Task>();
 
     @Override
     protected void setUp() throws Exception {
@@ -559,5 +594,74 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         }
         File file = new File(dir, prefix + "-" + transactionHistory.issueDate().getValue() + ext);
         return file.getAbsolutePath();
+    }
+
+    protected void clearSchedle() {
+        taskSchedule.clear();
+    }
+
+    protected void scheduleTask(Task task, String... dates) {
+        for (String dateStr : dates) {
+            Schedule entry = new Schedule();
+            Calendar cal = GregorianCalendar.getInstance();
+            cal.setTime(DateUtils.detectDateformat(dateStr));
+            entry.set(Calendar.DAY_OF_MONTH, cal.get(Calendar.DAY_OF_MONTH));
+            entry.set(Calendar.MONTH, cal.get(Calendar.MONTH));
+            entry.set(Calendar.YEAR, cal.get(Calendar.YEAR));
+            taskSchedule.put(entry, task);
+        }
+    }
+
+    protected void scheduleTask(Task task, Schedule entry) {
+        taskSchedule.put(entry, task);
+    }
+
+    protected void setDate(String dateStr) {
+        SysDateManager.setSysDate(dateStr);
+    }
+
+    protected void advanceDate(String dateStr) {
+        Date curDate = SysDateManager.getSysDate();
+        Date setDate = DateUtils.detectDateformat(dateStr);
+        if (setDate.before(curDate)) {
+            throw new Error("Can't go back in time from " + curDate.toString() + " to " + setDate.toString());
+        }
+        // run tasks scheduled before the set date
+        Calendar calTo = GregorianCalendar.getInstance();
+        calTo.setTime(setDate);
+        Calendar cal = GregorianCalendar.getInstance();
+        cal.setTime(curDate);
+        while (cal.before(calTo)) {
+            cal.add(Calendar.DATE, 1);
+            for (Schedule entry : taskSchedule.keySet()) {
+                if (!entry.match(cal)) {
+                    continue;
+                }
+                Task task = taskSchedule.get(entry);
+                if (task != null) {
+                    SysDateManager.setSysDate(cal.getTime());
+                    task.execute();
+                }
+            }
+        }
+        SysDateManager.setSysDate(setDate);
+    }
+
+    protected void setDepositBatchProcess(final PolicyNode node) {
+        final DepositFacade facade = ServerSideFactory.create(DepositFacade.class);
+        // schedule deposit interest adjustment batch process to run on 1st of each month
+        scheduleTask(new Task() {
+            @Override
+            public void execute() {
+                facade.collectInterest(node);
+            }
+        }, new Schedule().set(Calendar.DAY_OF_MONTH, 1));
+        // schedule deposit refund batch process to run every day
+        scheduleTask(new Task() {
+            @Override
+            public void execute() {
+                facade.issueDepositRefunds(node);
+            }
+        }, new Schedule());
     }
 }

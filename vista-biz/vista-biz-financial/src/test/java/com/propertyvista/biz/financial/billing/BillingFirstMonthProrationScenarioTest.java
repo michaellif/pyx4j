@@ -62,8 +62,9 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
         numOfProductCharges(1).
         serviceCharge("874.75").
         depositAmount("930.30").
+        depositRefundAmount("-930.30").
         taxes("104.97").
-        totalDueAmount("1910.02");
+        totalDueAmount("979.72");
         // @formatter:on
 
         // printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
@@ -90,8 +91,9 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
         numOfProductCharges(1).
         serviceCharge("846.53").
         depositAmount("930.30").
+        depositRefundAmount("-930.30").
         taxes("101.58").
-        totalDueAmount("1878.41");
+        totalDueAmount("948.11");
         // @formatter:on
 
         // printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
@@ -109,9 +111,20 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
 
         bill = confirmBill(bill, true, true);
 
-        new BillTester(bill).billSequenceNumber(1).previousBillSequenceNumber(null).billType(Bill.BillType.First).billingPeriodStartDate("17-Jan-2012")
-                .billingPeriodEndDate("14-Feb-2012").numOfProductCharges(1).serviceCharge("818.31").depositAmount("930.30").taxes("98.20")
-                .totalDueAmount("1846.81");
+        // @formatter:off
+        new BillTester(bill).
+        billSequenceNumber(1).
+        previousBillSequenceNumber(null).
+        billType(Bill.BillType.First).
+        billingPeriodStartDate("17-Jan-2012").
+        billingPeriodEndDate("14-Feb-2012").
+        numOfProductCharges(1).
+        serviceCharge("818.31").
+        depositAmount("930.30").
+        depositRefundAmount("-930.30").
+        taxes("98.20").
+        totalDueAmount("916.51");
+        // @formatter:on
 
         // printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
 
@@ -136,8 +149,9 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
         numOfProductCharges(1).
         serviceCharge("790.10").
         depositAmount("930.30").
+        depositRefundAmount("-930.30").
         taxes("94.81").
-        totalDueAmount("1815.21");
+        totalDueAmount("884.91");
         // @formatter:on
 
         // printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
@@ -164,8 +178,9 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
         numOfProductCharges(1).
         serviceCharge("761.88").
         depositAmount("930.30").
+        depositRefundAmount("-930.30").
         taxes("91.43").
-        totalDueAmount("1783.61");
+        totalDueAmount("853.31");
         // @formatter:on
 
         // printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
@@ -184,16 +199,27 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
 
         bill = confirmBill(bill, true, true);
 
-        new BillTester(bill).billSequenceNumber(1).previousBillSequenceNumber(null).billType(Bill.BillType.First).billingPeriodStartDate("20-Jan-2012")
-                .billingPeriodEndDate("14-Feb-2012").numOfProductCharges(1).serviceCharge("733.66").depositAmount("930.30").taxes("88.04")
-                .totalDueAmount("1752.00");
         // @formatter:off
+        new BillTester(bill).
+        billSequenceNumber(1).
+        previousBillSequenceNumber(null).
+        billType(Bill.BillType.First).
+        billingPeriodStartDate("20-Jan-2012").
+        billingPeriodEndDate("14-Feb-2012").
+        numOfProductCharges(1).
+        serviceCharge("733.66").
+        depositAmount("930.30").
+        depositRefundAmount("-930.30").
+        taxes("88.04").
+        totalDueAmount("821.70");
+        // @formatter:on
 
         // printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
 
     }
+
     public void testScenario7()
-    
+
     {
 
         setLeaseTerms("21-Jan-2012", "14-Feb-2012");
@@ -204,7 +230,9 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
 
         bill = confirmBill(bill, true, true);
 
-        new BillTester(bill).billSequenceNumber(1).
+        // @formatter:off
+        new BillTester(bill).
+        billSequenceNumber(1).
         previousBillSequenceNumber(null).
         billType(Bill.BillType.First).
         billingPeriodStartDate("21-Jan-2012").
@@ -212,15 +240,17 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
         numOfProductCharges(1).
         serviceCharge("705.44").
         depositAmount("930.30").
+        depositRefundAmount("-930.30").
         taxes("84.65").
-        totalDueAmount("1720.39");
-        // @formatter:off
+        totalDueAmount("790.09");
+        // @formatter:on
 
         // printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
 
     }
+
     public void testScenario8()
-    
+
     {
 
         setLeaseTerms("22-Jan-2012", "14-Feb-2012");
@@ -231,6 +261,7 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
 
         bill = confirmBill(bill, true, true);
 
+        // @formatter:off
         new BillTester(bill).billSequenceNumber(1).
         previousBillSequenceNumber(null).
         billType(Bill.BillType.First).
@@ -239,15 +270,17 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
         numOfProductCharges(1).
         serviceCharge("677.22").
         depositAmount("930.30").
+        depositRefundAmount("-930.30").
         taxes("81.27").
-        totalDueAmount("1688.79");
-        // @formatter:off
+        totalDueAmount("758.49");
+        // @formatter:on
 
         // printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
 
     }
-    public void testScenario9() 
-    
+
+    public void testScenario9()
+
     {
 
         setLeaseTerms("23-Jan-2012", "14-Feb-2012");
@@ -258,6 +291,7 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
 
         bill = confirmBill(bill, true, true);
 
+        // @formatter:off
         new BillTester(bill).billSequenceNumber(1).
         previousBillSequenceNumber(null).
         billType(Bill.BillType.First).
@@ -266,15 +300,17 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
         numOfProductCharges(1).
         serviceCharge("649.01").
         depositAmount("930.30").
+        depositRefundAmount("-930.30").
         taxes("77.88").
-        totalDueAmount("1657.19");
-        // @formatter:off
+        totalDueAmount("726.89");
+        // @formatter:on
 
         // printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
 
     }
-    public void testScenario10() 
-    
+
+    public void testScenario10()
+
     {
 
         setLeaseTerms("24-Jan-2012", "14-Feb-2012");
@@ -285,6 +321,7 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
 
         bill = confirmBill(bill, true, true);
 
+        // @formatter:off
         new BillTester(bill).billSequenceNumber(1).
         previousBillSequenceNumber(null).
         billType(Bill.BillType.First).
@@ -293,15 +330,17 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
         numOfProductCharges(1).
         serviceCharge("620.79").
         depositAmount("930.30").
+        depositRefundAmount("-930.30").
         taxes("74.49").
-        totalDueAmount("1625.58");
-        // @formatter:off
+        totalDueAmount("695.28");
+        // @formatter:on
 
         // printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
 
     }
-    public void testScenario11() 
-    
+
+    public void testScenario11()
+
     {
 
         setLeaseTerms("25-Jan-2012", "14-Feb-2012");
@@ -312,6 +351,7 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
 
         bill = confirmBill(bill, true, true);
 
+        // @formatter:off
         new BillTester(bill).billSequenceNumber(1).
         previousBillSequenceNumber(null).
         billType(Bill.BillType.First).
@@ -320,15 +360,17 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
         numOfProductCharges(1).
         serviceCharge("592.57").
         depositAmount("930.30").
+        depositRefundAmount("-930.30").
         taxes("71.11").
-        totalDueAmount("1593.98");
-        // @formatter:off
+        totalDueAmount("663.68");
+        // @formatter:on
 
         // printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
 
     }
-    public void testScenario12() 
-    
+
+    public void testScenario12()
+
     {
 
         setLeaseTerms("26-Jan-2012", "14-Feb-2012");
@@ -339,6 +381,7 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
 
         bill = confirmBill(bill, true, true);
 
+        // @formatter:off
         new BillTester(bill).billSequenceNumber(1).
         previousBillSequenceNumber(null).
         billType(Bill.BillType.First).
@@ -347,15 +390,17 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
         numOfProductCharges(1).
         serviceCharge("564.35").
         depositAmount("930.30").
+        depositRefundAmount("-930.30").
         taxes("67.72").
-        totalDueAmount("1562.37");
-        // @formatter:off
+        totalDueAmount("632.07");
+        // @formatter:on
 
         // printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
 
     }
-    public void testScenario13() 
-    
+
+    public void testScenario13()
+
     {
 
         setLeaseTerms("27-Jan-2012", "14-Feb-2012");
@@ -366,6 +411,7 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
 
         bill = confirmBill(bill, true, true);
 
+        // @formatter:off
         new BillTester(bill).billSequenceNumber(1).
         previousBillSequenceNumber(null).
         billType(Bill.BillType.First).
@@ -374,15 +420,17 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
         numOfProductCharges(1).
         serviceCharge("536.13").
         depositAmount("930.30").
+        depositRefundAmount("-930.30").
         taxes("64.34").
-        totalDueAmount("1530.77");
-        // @formatter:off
+        totalDueAmount("600.47");
+        // @formatter:on
 
         // printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
 
     }
-    public void testScenario14() 
-    
+
+    public void testScenario14()
+
     {
 
         setLeaseTerms("28-Jan-2012", "14-Feb-2012");
@@ -393,6 +441,7 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
 
         bill = confirmBill(bill, true, true);
 
+        // @formatter:off
         new BillTester(bill).billSequenceNumber(1).
         previousBillSequenceNumber(null).
         billType(Bill.BillType.First).
@@ -401,15 +450,17 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
         numOfProductCharges(1).
         serviceCharge("507.92").
         depositAmount("930.30").
+        depositRefundAmount("-930.30").
         taxes("60.95").
-        totalDueAmount("1499.17");
-        // @formatter:off
+        totalDueAmount("568.87");
+        // @formatter:on
 
         // printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
 
     }
-    public void testScenario15() 
-    
+
+    public void testScenario15()
+
     {
 
         setLeaseTerms("29-Jan-2012", "14-Feb-2012");
@@ -420,6 +471,7 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
 
         bill = confirmBill(bill, true, true);
 
+        // @formatter:off
         new BillTester(bill).billSequenceNumber(1).
         previousBillSequenceNumber(null).
         billType(Bill.BillType.First).
@@ -428,15 +480,17 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
         numOfProductCharges(1).
         serviceCharge("479.70").
         depositAmount("930.30").
+        depositRefundAmount("-930.30").
         taxes("57.56").
-        totalDueAmount("1467.56");
-        // @formatter:off
+        totalDueAmount("537.26");
+        // @formatter:on
 
         // printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
 
     }
+
     public void testScenario16()
-    
+
     {
 
         setLeaseTerms("30-Jan-2012", "14-Feb-2012");
@@ -447,6 +501,7 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
 
         bill = confirmBill(bill, true, true);
 
+        // @formatter:off
         new BillTester(bill).billSequenceNumber(1).
         previousBillSequenceNumber(null).
         billType(Bill.BillType.First).
@@ -455,15 +510,17 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
         numOfProductCharges(1).
         serviceCharge("451.48").
         depositAmount("930.30").
+        depositRefundAmount("-930.30").
         taxes("54.18").
-        totalDueAmount("1435.96");
-        // @formatter:off
+        totalDueAmount("505.66");
+        // @formatter:on
 
         // printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
 
     }
-    public void testScenario17() 
-    
+
+    public void testScenario17()
+
     {
 
         setLeaseTerms("31-Jan-2012", "14-Feb-2012");
@@ -474,6 +531,7 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
 
         bill = confirmBill(bill, true, true);
 
+        // @formatter:off
         new BillTester(bill).billSequenceNumber(1).
         previousBillSequenceNumber(null).
         billType(Bill.BillType.First).
@@ -482,15 +540,17 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
         numOfProductCharges(1).
         serviceCharge("423.27").
         depositAmount("930.30").
+        depositRefundAmount("-930.30").
         taxes("50.79").
-        totalDueAmount("1404.36");
-        // @formatter:off
+        totalDueAmount("474.06");
+        // @formatter:on
 
         // printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
 
     }
+
     public void testScenario18()
-    
+
     {
 
         setLeaseTerms("01-Feb-2012", "14-Feb-2012");
@@ -501,6 +561,7 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
 
         bill = confirmBill(bill, true, true);
 
+        // @formatter:off
         new BillTester(bill).billSequenceNumber(1).
         previousBillSequenceNumber(null).
         billType(Bill.BillType.First).
@@ -509,15 +570,17 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
         numOfProductCharges(1).
         serviceCharge("395.05").
         depositAmount("930.30").
+        depositRefundAmount("-930.30").
         taxes("47.41").
-        totalDueAmount("1372.76");
-        // @formatter:off
+        totalDueAmount("442.46");
+        // @formatter:on
 
         // printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
 
     }
-    public void testScenario19() 
-    
+
+    public void testScenario19()
+
     {
 
         setLeaseTerms("02-Feb-2012", "14-Feb-2012");
@@ -528,6 +591,7 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
 
         bill = confirmBill(bill, true, true);
 
+        // @formatter:off
         new BillTester(bill).billSequenceNumber(1).
         previousBillSequenceNumber(null).
         billType(Bill.BillType.First).
@@ -536,15 +600,17 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
         numOfProductCharges(1).
         serviceCharge("366.83").
         depositAmount("930.30").
+        depositRefundAmount("-930.30").
         taxes("44.02").
-        totalDueAmount("1341.15");
-        // @formatter:off
+        totalDueAmount("410.85");
+        // @formatter:on
 
         // printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
 
     }
+
     public void testScenario20()
-    
+
     {
 
         setLeaseTerms("02-Feb-2012", "14-Feb-2012");
@@ -555,6 +621,7 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
 
         bill = confirmBill(bill, true, true);
 
+        // @formatter:off
         new BillTester(bill).billSequenceNumber(1).
         previousBillSequenceNumber(null).
         billType(Bill.BillType.First).
@@ -563,16 +630,17 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
         numOfProductCharges(1).
         serviceCharge("366.83").
         depositAmount("930.30").
+        depositRefundAmount("-930.30").
         taxes("44.02").
-        totalDueAmount("1341.15");
-        // @formatter:off
+        totalDueAmount("410.85");
+        // @formatter:on
 
         // printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
 
     }
- 
+
     public void testScenario21()
-    
+
     {
 
         setLeaseTerms("03-Feb-2012", "14-Feb-2012");
@@ -583,6 +651,7 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
 
         bill = confirmBill(bill, true, true);
 
+        // @formatter:off
         new BillTester(bill).billSequenceNumber(1).
         previousBillSequenceNumber(null).
         billType(Bill.BillType.First).
@@ -591,16 +660,17 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
         numOfProductCharges(1).
         serviceCharge("338.62").
         depositAmount("930.30").
+        depositRefundAmount("-930.30").
         taxes("40.63").
-        totalDueAmount("1309.55");
-        // @formatter:off
+        totalDueAmount("379.25");
+        // @formatter:on
 
         // printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
 
     }
-    
-public void testScenario22()
-    
+
+    public void testScenario22()
+
     {
 
         setLeaseTerms("04-Feb-2012", "14-Feb-2012");
@@ -611,6 +681,7 @@ public void testScenario22()
 
         bill = confirmBill(bill, true, true);
 
+        // @formatter:off
         new BillTester(bill).billSequenceNumber(1).
         previousBillSequenceNumber(null).
         billType(Bill.BillType.First).
@@ -619,25 +690,28 @@ public void testScenario22()
         numOfProductCharges(1).
         serviceCharge("310.40").
         depositAmount("930.30").
+        depositRefundAmount("-930.30").
         taxes("37.25").
-        totalDueAmount("1277.95");
-        // @formatter:off
+        totalDueAmount("347.65");
+        // @formatter:on
 
         // printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
 
     }
-public void testScenario23()
 
-{
+    public void testScenario23()
 
-    setLeaseTerms("05-Feb-2012", "14-Feb-2012");
-    addServiceAdjustment("-55.55", AdjustmentType.monetary, ExecutionType.inLease);
+    {
 
-    SysDateManager.setSysDate("01-Jan-2012");
-    Bill bill = approveApplication();
+        setLeaseTerms("05-Feb-2012", "14-Feb-2012");
+        addServiceAdjustment("-55.55", AdjustmentType.monetary, ExecutionType.inLease);
 
-    bill = confirmBill(bill, true, true);
+        SysDateManager.setSysDate("01-Jan-2012");
+        Bill bill = approveApplication();
 
+        bill = confirmBill(bill, true, true);
+
+        // @formatter:off
     new BillTester(bill).billSequenceNumber(1).
     previousBillSequenceNumber(null).
     billType(Bill.BillType.First).
@@ -646,25 +720,28 @@ public void testScenario23()
     numOfProductCharges(1).
     serviceCharge("282.18").
     depositAmount("930.30").
+    depositRefundAmount("-930.30").
     taxes("33.86").
-    totalDueAmount("1246.34");
-    // @formatter:off
+    totalDueAmount("316.04");
+    // @formatter:on
 
-    // printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
+        // printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
 
-}
-public void testScenario24()
+    }
 
-{
+    public void testScenario24()
 
-    setLeaseTerms("06-Feb-2012", "14-Feb-2012");
-    addServiceAdjustment("-55.55", AdjustmentType.monetary, ExecutionType.inLease);
+    {
 
-    SysDateManager.setSysDate("01-Jan-2012");
-    Bill bill = approveApplication();
+        setLeaseTerms("06-Feb-2012", "14-Feb-2012");
+        addServiceAdjustment("-55.55", AdjustmentType.monetary, ExecutionType.inLease);
 
-    bill = confirmBill(bill, true, true);
+        SysDateManager.setSysDate("01-Jan-2012");
+        Bill bill = approveApplication();
 
+        bill = confirmBill(bill, true, true);
+
+        // @formatter:off
     new BillTester(bill).billSequenceNumber(1).
     previousBillSequenceNumber(null).
     billType(Bill.BillType.First).
@@ -673,25 +750,28 @@ public void testScenario24()
     numOfProductCharges(1).
     serviceCharge("253.96").
     depositAmount("930.30").
+    depositRefundAmount("-930.30").
     taxes("30.48").
-    totalDueAmount("1214.74");
-    // @formatter:off
+    totalDueAmount("284.44");
+    // @formatter:on
 
-    // printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
+        // printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
 
-}
-public void testScenario25()
+    }
 
-{
+    public void testScenario25()
 
-    setLeaseTerms("07-Feb-2012", "14-Feb-2012");
-    addServiceAdjustment("-55.55", AdjustmentType.monetary, ExecutionType.inLease);
+    {
 
-    SysDateManager.setSysDate("01-Jan-2012");
-    Bill bill = approveApplication();
+        setLeaseTerms("07-Feb-2012", "14-Feb-2012");
+        addServiceAdjustment("-55.55", AdjustmentType.monetary, ExecutionType.inLease);
 
-    bill = confirmBill(bill, true, true);
+        SysDateManager.setSysDate("01-Jan-2012");
+        Bill bill = approveApplication();
 
+        bill = confirmBill(bill, true, true);
+
+        // @formatter:off
     new BillTester(bill).billSequenceNumber(1).
     previousBillSequenceNumber(null).
     billType(Bill.BillType.First).
@@ -700,25 +780,28 @@ public void testScenario25()
     numOfProductCharges(1).
     serviceCharge("225.74").
     depositAmount("930.30").
+    depositRefundAmount("-930.30").
     taxes("27.09").
-    totalDueAmount("1183.13");
-    // @formatter:off
+    totalDueAmount("252.83");
+    // @formatter:on
 
-    // printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
+        // printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
 
-}
-public void testScenario26()
+    }
 
-{
+    public void testScenario26()
 
-    setLeaseTerms("08-Feb-2012", "14-Feb-2012");
-    addServiceAdjustment("-55.55", AdjustmentType.monetary, ExecutionType.inLease);
+    {
 
-    SysDateManager.setSysDate("01-Jan-2012");
-    Bill bill = approveApplication();
+        setLeaseTerms("08-Feb-2012", "14-Feb-2012");
+        addServiceAdjustment("-55.55", AdjustmentType.monetary, ExecutionType.inLease);
 
-    bill = confirmBill(bill, true, true);
+        SysDateManager.setSysDate("01-Jan-2012");
+        Bill bill = approveApplication();
 
+        bill = confirmBill(bill, true, true);
+
+        // @formatter:off
     new BillTester(bill).billSequenceNumber(1).
     previousBillSequenceNumber(null).
     billType(Bill.BillType.First).
@@ -727,25 +810,28 @@ public void testScenario26()
     numOfProductCharges(1).
     serviceCharge("197.53").
     depositAmount("930.30").
+    depositRefundAmount("-930.30").
     taxes("23.70").
-    totalDueAmount("1151.53");
-    // @formatter:off
+    totalDueAmount("221.23");
+    // @formatter:on
 
-    // printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
+        // printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
 
-}
-public void testScenario27()
+    }
 
-{
+    public void testScenario27()
 
-    setLeaseTerms("09-Feb-2012", "14-Feb-2012");
-    addServiceAdjustment("-55.55", AdjustmentType.monetary, ExecutionType.inLease);
+    {
 
-    SysDateManager.setSysDate("01-Jan-2012");
-    Bill bill = approveApplication();
+        setLeaseTerms("09-Feb-2012", "14-Feb-2012");
+        addServiceAdjustment("-55.55", AdjustmentType.monetary, ExecutionType.inLease);
 
-    bill = confirmBill(bill, true, true);
+        SysDateManager.setSysDate("01-Jan-2012");
+        Bill bill = approveApplication();
 
+        bill = confirmBill(bill, true, true);
+
+        // @formatter:off
     new BillTester(bill).billSequenceNumber(1).
     previousBillSequenceNumber(null).
     billType(Bill.BillType.First).
@@ -754,25 +840,28 @@ public void testScenario27()
     numOfProductCharges(1).
     serviceCharge("169.31").
     depositAmount("930.30").
+    depositRefundAmount("-930.30").
     taxes("20.32").
-    totalDueAmount("1119.93");
-    // @formatter:off
+    totalDueAmount("189.63");
+    // @formatter:on
 
-    // printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
+        // printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
 
-}
-public void testScenario28()
+    }
 
-{
+    public void testScenario28()
 
-    setLeaseTerms("10-Feb-2012", "14-Feb-2012");
-    addServiceAdjustment("-55.55", AdjustmentType.monetary, ExecutionType.inLease);
+    {
 
-    SysDateManager.setSysDate("01-Jan-2012");
-    Bill bill = approveApplication();
+        setLeaseTerms("10-Feb-2012", "14-Feb-2012");
+        addServiceAdjustment("-55.55", AdjustmentType.monetary, ExecutionType.inLease);
 
-    bill = confirmBill(bill, true, true);
+        SysDateManager.setSysDate("01-Jan-2012");
+        Bill bill = approveApplication();
 
+        bill = confirmBill(bill, true, true);
+
+        // @formatter:off
     new BillTester(bill).billSequenceNumber(1).
     previousBillSequenceNumber(null).
     billType(Bill.BillType.First).
@@ -781,25 +870,28 @@ public void testScenario28()
     numOfProductCharges(1).
     serviceCharge("141.09").
     depositAmount("930.30").
+    depositRefundAmount("-930.30").
     taxes("16.93").
-    totalDueAmount("1088.32");
-    // @formatter:off
+    totalDueAmount("158.02");
+    // @formatter:on
 
-    // printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
+        // printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
 
-}
-public void testScenario29()
+    }
 
-{
+    public void testScenario29()
 
-    setLeaseTerms("11-Feb-2012", "14-Feb-2012");
-    addServiceAdjustment("-55.55", AdjustmentType.monetary, ExecutionType.inLease);
+    {
 
-    SysDateManager.setSysDate("01-Jan-2012");
-    Bill bill = approveApplication();
+        setLeaseTerms("11-Feb-2012", "14-Feb-2012");
+        addServiceAdjustment("-55.55", AdjustmentType.monetary, ExecutionType.inLease);
 
-    bill = confirmBill(bill, true, true);
+        SysDateManager.setSysDate("01-Jan-2012");
+        Bill bill = approveApplication();
 
+        bill = confirmBill(bill, true, true);
+
+        // @formatter:off
     new BillTester(bill).billSequenceNumber(1).
     previousBillSequenceNumber(null).
     billType(Bill.BillType.First).
@@ -808,25 +900,28 @@ public void testScenario29()
     numOfProductCharges(1).
     serviceCharge("112.87").
     depositAmount("930.30").
+    depositRefundAmount("-930.30").
     taxes("13.54").
-    totalDueAmount("1056.71");
-    // @formatter:off
+    totalDueAmount("126.41");
+    // @formatter:on
 
-    // printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
+        // printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
 
-}
-public void testScenario30()
+    }
 
-{
+    public void testScenario30()
 
-    setLeaseTerms("12-Feb-2012", "14-Feb-2012");
-    addServiceAdjustment("-55.55", AdjustmentType.monetary, ExecutionType.inLease);
+    {
 
-    SysDateManager.setSysDate("01-Jan-2012");
-    Bill bill = approveApplication();
+        setLeaseTerms("12-Feb-2012", "14-Feb-2012");
+        addServiceAdjustment("-55.55", AdjustmentType.monetary, ExecutionType.inLease);
 
-    bill = confirmBill(bill, true, true);
+        SysDateManager.setSysDate("01-Jan-2012");
+        Bill bill = approveApplication();
 
+        bill = confirmBill(bill, true, true);
+
+        // @formatter:off
     new BillTester(bill).billSequenceNumber(1).
     previousBillSequenceNumber(null).
     billType(Bill.BillType.First).
@@ -835,25 +930,28 @@ public void testScenario30()
     numOfProductCharges(1).
     serviceCharge("84.65").
     depositAmount("930.30").
+    depositRefundAmount("-930.30").
     taxes("10.16").
-    totalDueAmount("1025.11");
-    // @formatter:off
+    totalDueAmount("94.81");
+    // @formatter:on
 
-    // printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
+        // printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
 
-}
-public void testScenario31()
+    }
 
-{
+    public void testScenario31()
 
-    setLeaseTerms("13-Feb-2012", "14-Feb-2012");
-    addServiceAdjustment("-55.55", AdjustmentType.monetary, ExecutionType.inLease);
+    {
 
-    SysDateManager.setSysDate("01-Jan-2012");
-    Bill bill = approveApplication();
+        setLeaseTerms("13-Feb-2012", "14-Feb-2012");
+        addServiceAdjustment("-55.55", AdjustmentType.monetary, ExecutionType.inLease);
 
-    bill = confirmBill(bill, true, true);
+        SysDateManager.setSysDate("01-Jan-2012");
+        Bill bill = approveApplication();
 
+        bill = confirmBill(bill, true, true);
+
+        // @formatter:off
     new BillTester(bill).billSequenceNumber(1).
     previousBillSequenceNumber(null).
     billType(Bill.BillType.First).
@@ -862,9 +960,10 @@ public void testScenario31()
     numOfProductCharges(1).
     serviceCharge("56.44").
     depositAmount("930.30").
+    depositRefundAmount("-930.30").
     taxes("6.77").
-    totalDueAmount("993.51");
-    // @formatter:off
+    totalDueAmount("63.21");
+    // @formatter:on
 
         // printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
 
@@ -882,6 +981,7 @@ public void testScenario31()
 
         bill = confirmBill(bill, true, true);
 
+        // @formatter:off
         new BillTester(bill).billSequenceNumber(1).
         previousBillSequenceNumber(null).
         billType(Bill.BillType.First).
@@ -890,11 +990,12 @@ public void testScenario31()
         numOfProductCharges(1).
         serviceCharge("28.22").
         depositAmount("930.30").
+        depositRefundAmount("-930.30").
         taxes("3.39").
-        totalDueAmount("961.91");
-        // @formatter:off
+        totalDueAmount("31.61");
+        // @formatter:on
 
-    // printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
+        // printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
 
-}
+    }
 }

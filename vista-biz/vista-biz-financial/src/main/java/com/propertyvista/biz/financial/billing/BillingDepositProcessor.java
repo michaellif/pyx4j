@@ -16,12 +16,15 @@ package com.propertyvista.biz.financial.billing;
 import java.math.BigDecimal;
 import java.util.List;
 
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.biz.financial.ar.ARFacade;
+import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.InvoiceDebit.DebitType;
 import com.propertyvista.domain.financial.billing.InvoiceDeposit;
 import com.propertyvista.domain.financial.billing.InvoiceDepositRefund;
@@ -30,6 +33,7 @@ import com.propertyvista.domain.financial.billing.InvoiceProductCharge;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Deposit;
 import com.propertyvista.domain.tenant.lease.Deposit.DepositStatus;
+import com.propertyvista.domain.tenant.lease.Deposit.DepositType;
 
 public class BillingDepositProcessor extends AbstractBillingProcessor {
 
@@ -42,6 +46,7 @@ public class BillingDepositProcessor extends AbstractBillingProcessor {
     @Override
     protected void execute() {
         createInvoiceDeposits();
+        crateDepositRefunds();
         attachDepositRefunds();
     }
 
@@ -106,6 +111,19 @@ public class BillingDepositProcessor extends AbstractBillingProcessor {
         // getBillingManager().getNextPeriodBill().taxes().setValue(getBillingManager().getNextPeriodBill().taxes().getValue().add(deposit.taxTotal().getValue()));
     }
 
+    private void crateDepositRefunds() {
+        // LastMonthDeposit - if this is the last month bill, post the refund
+        Bill nextBill = getBillingManager().getNextPeriodBill();
+        if (!nextBill.billingPeriodEndDate().getValue().before(nextBill.billingAccount().lease().leaseTo().getValue())) {
+            Persistence.service().retrieve(nextBill.billingAccount().deposits());
+            for (Deposit deposit : nextBill.billingAccount().deposits()) {
+                if (DepositType.LastMonthDeposit.equals(deposit.type().getValue())) {
+                    ServerSideFactory.create(ARFacade.class).postDepositRefund(deposit);
+                }
+            }
+        }
+    }
+
     private void attachDepositRefunds() {
         List<InvoiceLineItem> items = BillingUtils.getUnclaimedLineItems(getBillingManager().getNextPeriodBill().billingAccount());
         for (InvoiceDepositRefund payment : BillingUtils.getLineItemsForType(items, InvoiceDepositRefund.class)) {
@@ -114,8 +132,8 @@ public class BillingDepositProcessor extends AbstractBillingProcessor {
     }
 
     private void addDepositRefund(InvoiceDepositRefund depositRefund) {
-        getBillingManager().getNextPeriodBill().lineItems().add(depositRefund);
-        getBillingManager().getNextPeriodBill().depositRefundAmount()
-                .setValue(getBillingManager().getNextPeriodBill().depositRefundAmount().getValue().add(depositRefund.amount().getValue().negate()));
+        Bill bill = getBillingManager().getNextPeriodBill();
+        bill.lineItems().add(depositRefund);
+        bill.depositRefundAmount().setValue(bill.depositRefundAmount().getValue().add(depositRefund.amount().getValue()));
     }
 }

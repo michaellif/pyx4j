@@ -418,8 +418,9 @@ public class BillingFullCycleServAdjMonScenarioTest extends FinancialTestBase {
         serviceCharge("62.48").
         recurringFeatureCharges("0.00").
         oneTimeFeatureCharges("0.00").
+        depositRefundAmount("-930.30").
         taxes("7.50").
-        totalDueAmount("-812.78");
+        totalDueAmount("-1743.08");
         // @formatter:off
 
         // printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));

@@ -17,7 +17,6 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
 
 import com.propertyvista.biz.financial.FinancialTestBase;
-import com.propertyvista.biz.financial.SysDateManager;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.billing.BillTester;
 import com.propertyvista.domain.financial.billing.Bill;
@@ -32,19 +31,19 @@ public class DepositFullCycleScenarioTest extends FinancialTestBase {
 
     public void testScenario() {
 
-        SysDateManager.setSysDate("17-Feb-2012");
+        setDate("17-Feb-2012");
 
-        setLeaseTerms("01-Mar-2012", "31-Jun-2012");
+        setLeaseTerms("01-Mar-2012", "31-May-2012");
         addParking(SaveAction.saveAsDraft);
         addParking("01-Apr-2012", "30-Apr-2012", SaveAction.saveAsDraft);
         addLocker(SaveAction.saveAsDraft);
         addPet("01-Mar-2012", "31-Mar-2012", SaveAction.saveAsDraft);
 
-        DepositFacade depositFacade = ServerSideFactory.create(DepositFacade.class);
+        setDepositBatchProcess(retrieveLease().unit().building());
 
         //==================== RUN 1 - SERVICE AND FEATURE DEPOSITS TAKEN ======================//
 
-        SysDateManager.setSysDate("18-Feb-2012");
+        advanceDate("18-Feb-2012");
         Bill bill = approveApplication();
 
         bill = confirmBill(bill, true, true);
@@ -68,18 +67,14 @@ public class DepositFullCycleScenarioTest extends FinancialTestBase {
         totalDueAmount("2491.44");
         // @formatter:on
 
-        SysDateManager.setSysDate("01-Mar-2012");
-        depositFacade.collectInterest(retrieveLease().unit().building());
-        depositFacade.issueDepositRefunds(retrieveLease().unit().building());
-
         //==================== RUN 2 - SECOND PARKING DEPOSIT TAKEN ======================//
 
         activateLease();
 
-        SysDateManager.setSysDate("01-Mar-2012");
+        advanceDate("01-Mar-2012");
         receiveAndPostPayment("01-Mar-2012", "2491.44");
 
-        SysDateManager.setSysDate("18-Mar-2012");
+        advanceDate("18-Mar-2012");
 
         bill = runBilling(true, true);
 
@@ -99,16 +94,12 @@ public class DepositFullCycleScenarioTest extends FinancialTestBase {
         totalDueAmount("1368.34");
         // @formatter:on
 
-        SysDateManager.setSysDate("01-Apr-2012");
-        depositFacade.collectInterest(retrieveLease().unit().building());
-        depositFacade.issueDepositRefunds(retrieveLease().unit().building());
-
         //==================== RUN 3 - PET DEPOSIT REFUND WITH ONE INTEREST ADJ ======================//
 
-        SysDateManager.setSysDate("01-Apr-2012");
+        advanceDate("01-Apr-2012");
         receiveAndPostPayment("01-Apr-2012", "1288.34");
 
-        SysDateManager.setSysDate("18-Apr-2012");
+        advanceDate("18-Apr-2012");
 
         bill = runBilling(true, true);
 
@@ -121,30 +112,18 @@ public class DepositFullCycleScenarioTest extends FinancialTestBase {
         numOfProductCharges(3).
         serviceCharge("930.30").
         recurringFeatureCharges("140.00").
-        depositRefundAmount("204.02").
+        depositRefundAmount("-1151.00").
         latePaymentFees("0.00").
         taxes("128.44").
-        totalDueAmount("1482.76");
+        totalDueAmount("127.74");
         // @formatter:on
-
-        SysDateManager.setSysDate("01-May-2012");
-        depositFacade.collectInterest(retrieveLease().unit().building());
-        depositFacade.issueDepositRefunds(retrieveLease().unit().building());
 
         //==================== RUN final - SVC AND FEATURE REFUNDS (see history dump) ======================//
 
-        SysDateManager.setSysDate("01-May-2012");
-        receiveAndPostPayment("01-May-2012", "1482.76");
+        advanceDate("01-May-2012");
+        receiveAndPostPayment("01-May-2012", "127.74");
 
-        SysDateManager.setSysDate("01-Jun-2012");
-        depositFacade.collectInterest(retrieveLease().unit().building());
-        depositFacade.issueDepositRefunds(retrieveLease().unit().building());
-
-        SysDateManager.setSysDate("01-Jul-2012");
-        depositFacade.collectInterest(retrieveLease().unit().building());
-        depositFacade.issueDepositRefunds(retrieveLease().unit().building());
-
-        SysDateManager.setSysDate("18-May-2012");
+        advanceDate("18-May-2012");
 
         completeLease();
 
