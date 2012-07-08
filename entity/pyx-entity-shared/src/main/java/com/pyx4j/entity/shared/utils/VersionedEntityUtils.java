@@ -33,6 +33,7 @@ public class VersionedEntityUtils {
 
     public static <T extends IVersionedEntity<?>> boolean isCurrent(T entity) {
         assert !entity.version().isNull();
-        return entity.version().toDate().isNull();
+        return (entity.getPrimaryKey() != null) && !entity.getPrimaryKey().isDraft() && entity.version().toDate().isNull()
+                && !entity.version().fromDate().isNull();
     }
 }
