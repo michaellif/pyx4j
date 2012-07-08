@@ -25,6 +25,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.shared.utils.VersionedEntityUtils;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
@@ -198,7 +199,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         if (!value.unit().isNull()) {
             CompletionType completion = value.version().completion().getValue();
 
-            if (value.getPrimaryKey().isCurrent()) {
+            if (VersionedEntityUtils.isCurrent(value)) {
                 sendMail.setVisible(true);
                 runBill.setVisible(status.isCurrent());
                 notice.setVisible(status == Status.Active && completion == null);
