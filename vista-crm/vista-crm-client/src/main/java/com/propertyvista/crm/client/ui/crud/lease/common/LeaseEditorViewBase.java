@@ -41,4 +41,7 @@ public interface LeaseEditorViewBase<DTO extends LeaseDTO> extends IEditorView<D
         void calculateChargeItemAdjustments(AsyncCallback<BigDecimal> callback, BillableItem item);
     }
 
+    void updateUnitValue(DTO value);
+
+    void updateServiceValue(DTO value);
 }

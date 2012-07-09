@@ -13,15 +13,14 @@
  */
 package com.propertyvista.crm.client.ui.crud.lease;
 
-import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
+import com.propertyvista.crm.client.ui.crud.lease.common.LeaseEditorViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.dto.LeaseDTO;
 
-public class LeaseEditorViewImpl extends CrmEditorViewImplBase<LeaseDTO> implements LeaseEditorView {
+public class LeaseEditorViewImpl extends LeaseEditorViewImplBase<LeaseDTO> implements LeaseEditorView {
 
     public LeaseEditorViewImpl() {
         super(CrmSiteMap.Tenants.Lease.class);
         setForm(new LeaseForm());
     }
-
 }

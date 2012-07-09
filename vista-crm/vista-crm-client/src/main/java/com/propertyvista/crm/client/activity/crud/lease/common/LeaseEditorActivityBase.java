@@ -48,7 +48,7 @@ public abstract class LeaseEditorActivityBase<DTO extends LeaseDTO> extends Edit
         ((LeaseEditorCrudServiceBase<DTO>) getService()).setSelectedUnit(new DefaultAsyncCallback<DTO>() {
             @Override
             public void onSuccess(DTO result) {
-                populateView(result);
+                ((LeaseEditorViewBase<DTO>) getView()).updateUnitValue(result);
             }
         }, EntityFactory.createIdentityStub(AptUnit.class, item.getPrimaryKey()), getView().getValue());
     }
@@ -58,7 +58,7 @@ public abstract class LeaseEditorActivityBase<DTO extends LeaseDTO> extends Edit
         ((LeaseEditorCrudServiceBase<DTO>) getService()).setSelectedService(new DefaultAsyncCallback<DTO>() {
             @Override
             public void onSuccess(DTO result) {
-                populateView(result);
+                ((LeaseEditorViewBase<DTO>) getView()).updateServiceValue(result);
             }
         }, EntityFactory.createIdentityStub(ProductItem.class, item.getPrimaryKey()), getView().getValue());
     }
