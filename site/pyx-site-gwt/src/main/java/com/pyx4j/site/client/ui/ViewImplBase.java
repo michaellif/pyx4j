@@ -104,7 +104,7 @@ public class ViewImplBase extends DockLayoutPanel {
         if (footerToolbar.getWidgetCount() == 0) {
             setWidgetSize(footerToolbarHolder, footerToolbarHeight);
         }
-        footerToolbar.addItem(widget);
+        footerToolbar.addItem(widget, true);
     }
 
     public void setHeaderToolbarOneHeight(int headerToolbarOneHeight) {
