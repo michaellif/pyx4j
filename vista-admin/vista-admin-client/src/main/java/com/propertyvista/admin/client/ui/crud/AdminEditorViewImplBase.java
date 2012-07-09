@@ -48,6 +48,14 @@ public class AdminEditorViewImplBase<E extends IEntity> extends EditorViewImplBa
 
         setCaption(defaultCaption);
 
+        AnchorButton btnCancel = new AnchorButton(i18n.tr("Cancel"), new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                getPresenter().cancel();
+            }
+        });
+        addFooterToolbarItem(btnCancel);
+
         btnApply = new Button(i18n.tr("Apply"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
@@ -71,14 +79,6 @@ public class AdminEditorViewImplBase<E extends IEntity> extends EditorViewImplBa
             }
         });
         addFooterToolbarItem(btnSave);
-
-        AnchorButton btnCancel = new AnchorButton(i18n.tr("Cancel"), new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                getPresenter().cancel();
-            }
-        });
-        addFooterToolbarItem(btnCancel);
 
         enableButtons(false);
     }
