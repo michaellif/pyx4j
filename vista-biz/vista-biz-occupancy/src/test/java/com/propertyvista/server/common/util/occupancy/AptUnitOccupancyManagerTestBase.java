@@ -13,6 +13,7 @@
  */
 package com.propertyvista.server.common.util.occupancy;
 
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Iterator;
@@ -29,6 +30,7 @@ import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.VersionedCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
@@ -38,6 +40,10 @@ import com.pyx4j.unit.server.mock.TestLifecycle;
 import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.config.tests.VistaTestDBSetup;
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus;
+import com.propertyvista.domain.financial.offering.ProductItem;
+import com.propertyvista.domain.financial.offering.Service;
+import com.propertyvista.domain.financial.offering.Service.ServiceType;
+import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.OffMarketType;
@@ -61,6 +67,8 @@ public class AptUnitOccupancyManagerTestBase {
 
     List<AptUnitOccupancySegment> expectedTimeline = null;
 
+    private static int gensymCount = 1;
+
     @Before
     public void setUp() {
         VistaTestDBSetup.init();
@@ -75,15 +83,42 @@ public class AptUnitOccupancyManagerTestBase {
             Persistence.service().delete(leaseCriteria);
         }
         Persistence.service().delete(new EntityQueryCriteria<AptUnit>(AptUnit.class));
+//        Persistence.service().delete(new EntityQueryCriteria<Building>(Building.class));
+        Persistence.service().setTransactionSystemTime(asDate("1900-01-01"));
+
+        ServiceItemType type = EntityFactory.create(ServiceItemType.class);
+        type.serviceType().setValue(ServiceType.residentialUnit);
+        type.name().setValue("residential unit for every child");
+        Persistence.service().merge(type);
 
         unit = EntityFactory.create(AptUnit.class);
-        unit.info().number().setValue("1");
-        unit.building().propertyCode().setValue("2");
+        unit.info().number().setValue("" + (++gensymCount));
+        unit.building().propertyCode().setValue("" + (++gensymCount));
         Persistence.service().merge(unit.building());
         Persistence.service().merge(unit);
+
+        Service service = EntityFactory.create(Service.class);
+        service.version().type().setValue(ServiceType.residentialUnit);
+        service.version().name().setValue("Residential Unit Service");
+        service.version().description().setValue("Residential Unit Descriptio");
+
+        ProductItem serviceItem = EntityFactory.create(ProductItem.class);
+        serviceItem.element().set(unit);
+        serviceItem.price().setValue(new BigDecimal("1000.00"));
+        serviceItem.type().set(type);
+        serviceItem.description().setValue("a mockup unit");
+
+        service.version().items().add(serviceItem);
+        service.saveAction().setValue(SaveAction.saveAsFinal);
+
+        unit.building().productCatalog().services().add(service);
+        Persistence.service().merge(service);
+        Persistence.service().merge(unit.building().productCatalog());
         unitId = unit.getPrimaryKey();
 
         expectedTimeline = new LinkedList<AptUnitOccupancySegment>();
+        Persistence.service().commit();
+        Persistence.service().setTransactionSystemTime(null);
     }
 
     @After

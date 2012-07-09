@@ -25,6 +25,7 @@ import java.util.Arrays;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Vector;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
@@ -37,6 +38,8 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 
 import com.propertyvista.biz.occupancy.AptUnitOccupancyManagerHelper.MergeHandler;
+import com.propertyvista.domain.financial.offering.ProductItem;
+import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.OffMarketType;
@@ -48,6 +51,9 @@ import com.propertyvista.misc.VistaTODO;
 public class OccupancyFacadeImpl implements OccupancyFacade {
 
     private static final I18n i18n = I18n.get(OccupancyFacadeImpl.class);
+
+    private static final Vector<Service.ServiceType> SERVICES_PROVIDED_BY_UNIT = new Vector<Service.ServiceType>(Arrays.asList(
+            Service.ServiceType.residentialUnit, Service.ServiceType.commercialUnit));
 
     @Override
     public void setupNewUnit(AptUnit unit) {
@@ -67,7 +73,7 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
         LogicalDate now = new LogicalDate(Persistence.service().getTransactionSystemTime());
 
         if (!isInProductCatalog(unitPk)) {
-            throw new UserRuntimeException(i18n.tr("Unable to make this unit available because the unit is not present product catalog"));
+            throw new UserRuntimeException(i18n.tr("Unable to make this unit available because the unit is not present in product catalog"));
         }
 
         if (AptUnitOccupancyManagerHelper.isOccupancyListEmpty(unitPk)) {
@@ -663,8 +669,25 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
     }
 
     private boolean isInProductCatalog(Key unitPk) {
-        // TODO 
-        return true;
+
+        AptUnit unit = Persistence.service().retrieve(AptUnit.class, unitPk);
+
+        EntityQueryCriteria<Service> criteria = EntityQueryCriteria.create(Service.class);
+
+        criteria.add(PropertyCriterion.eq(criteria.proto().catalog().building(), unit.building()));
+        criteria.add(PropertyCriterion.in(criteria.proto().version().type(), SERVICES_PROVIDED_BY_UNIT));
+
+        List<Service> services = Persistence.secureQuery(criteria);
+        for (Service service : services) {
+            Persistence.service().retrieve(service.version().items());
+            for (ProductItem item : service.version().items()) {
+                if (item.element().getInstanceValueClass().equals(AptUnit.class) & item.element().getPrimaryKey().equals(unitPk)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     /*
