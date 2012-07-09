@@ -38,6 +38,11 @@ public class VistaFeaturesCustomizationClient implements VistaFeaturesCustomizat
     }
 
     @Override
+    public boolean onlineApplication() {
+        return features.onlineApplication().getValue(Boolean.FALSE);
+    }
+
+    @Override
     public boolean xmlSiteExport() {
         return features.xmlSiteExport().getValue(Boolean.FALSE);
     }
@@ -45,5 +50,4 @@ public class VistaFeaturesCustomizationClient implements VistaFeaturesCustomizat
     public static void setVistaFeatures(PmcVistaFeatures features) {
         VistaFeaturesCustomizationClient.features = features;
     }
-
 }

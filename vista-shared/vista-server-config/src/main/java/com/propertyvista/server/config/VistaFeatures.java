@@ -48,10 +48,14 @@ public class VistaFeatures {
         }
 
         @Override
+        public boolean onlineApplication() {
+            return threadLocale.get().onlineApplication().getValue(Boolean.FALSE);
+        }
+
+        @Override
         public boolean xmlSiteExport() {
             return threadLocale.get().xmlSiteExport().getValue(Boolean.FALSE);
         }
-
     }
 
     static void removeThreadLocale() {

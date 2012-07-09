@@ -28,6 +28,8 @@ public class VistaFeatures {
 
         boolean leases();
 
+        boolean onlineApplication();
+
         boolean xmlSiteExport();
     }
 

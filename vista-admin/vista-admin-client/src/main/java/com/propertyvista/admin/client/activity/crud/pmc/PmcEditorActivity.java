@@ -41,6 +41,7 @@ public class PmcEditorActivity extends EditorActivityBase<PmcDTO> {
         entity.features().occupancyModel().setValue(Boolean.TRUE);
         entity.features().productCatalog().setValue(Boolean.TRUE);
         entity.features().leases().setValue(Boolean.TRUE);
+        entity.features().onlineApplication().setValue(Boolean.FALSE);
         entity.features().xmlSiteExport().setValue(Boolean.FALSE);
 
         callback.onSuccess(entity);

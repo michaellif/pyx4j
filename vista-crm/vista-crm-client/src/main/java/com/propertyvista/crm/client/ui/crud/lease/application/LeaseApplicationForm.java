@@ -30,6 +30,7 @@ import com.propertyvista.crm.client.ui.crud.lease.common.LeaseFormBase;
 import com.propertyvista.dto.LeaseApplicationDTO;
 import com.propertyvista.dto.TenantFinancialDTO;
 import com.propertyvista.dto.TenantInfoDTO;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
 
@@ -54,18 +55,23 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
         tab = addTab(createFinancialTab(), i18n.tr("Financial"));
         setTabEnabled(tab, !isEditable());
 
-// TODO: should be hidden until back end implementation:   
+// TODO : credit check (Equifax) isn't implemented yet (see LeaseApplicationViewerViewImpl)!        
 //      tabPanel.add(createApprovalTab(), i18n.tr("Approval"));
 //        tabPanel.setLastTabDisabled(true);
-        onlineStatusTab = addTab(createOnlineStatusTab(), i18n.tr("Online Status Details"));
-        setTabEnabled(onlineStatusTab, !isEditable());
 
+        if (VistaFeatures.instance().onlineApplication()) {
+            onlineStatusTab = addTab(createOnlineStatusTab(), i18n.tr("Online Status Details"));
+            setTabEnabled(onlineStatusTab, !isEditable());
+        }
     }
 
     @Override
     protected void onPopulate() {
         super.onPopulate();
-        setTabEnabled(onlineStatusTab, isTabEnabled(onlineStatusTab) || getValue().leaseApplication().onlineApplication().isNull());
+
+        if (VistaFeatures.instance().onlineApplication()) {
+            setTabEnabled(onlineStatusTab, isTabEnabled(onlineStatusTab) || getValue().leaseApplication().onlineApplication().isNull());
+        }
     }
 
     private Widget createInfoTab() {

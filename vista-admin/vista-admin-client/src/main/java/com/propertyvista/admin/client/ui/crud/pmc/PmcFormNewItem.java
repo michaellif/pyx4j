@@ -49,6 +49,7 @@ public class PmcFormNewItem extends AdminEntityForm<PmcDTO> {
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().features().occupancyModel()), 15).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().features().productCatalog()), 15).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().features().leases()), 15).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().features().onlineApplication()), 15).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().features().xmlSiteExport()), 15).build());
     }
 

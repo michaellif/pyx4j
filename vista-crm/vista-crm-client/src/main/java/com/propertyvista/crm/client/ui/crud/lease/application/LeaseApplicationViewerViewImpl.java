@@ -38,6 +38,7 @@ import com.propertyvista.crm.rpc.dto.LeaseApplicationActionDTO.Action;
 import com.propertyvista.domain.tenant.lease.LeaseApplication.Status;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.dto.LeaseApplicationDTO;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<LeaseApplicationDTO> implements LeaseApplicationViewerView {
 
@@ -81,7 +82,9 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
                 ((LeaseApplicationViewerView.Presenter) getPresenter()).startOnlineApplication();
             }
         });
-        addHeaderToolbarTwoItem(onlineApplication.asWidget());
+        if (VistaFeatures.instance().onlineApplication()) {
+            addHeaderToolbarTwoItem(onlineApplication.asWidget());
+        }
 
         inviteAction = new Button(INVITE, new ClickHandler() {
             @Override
@@ -101,7 +104,9 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
                 });
             }
         });
-        addHeaderToolbarTwoItem(inviteAction.asWidget());
+        if (VistaFeatures.instance().onlineApplication()) {
+            addHeaderToolbarTwoItem(inviteAction.asWidget());
+        }
 
         checkAction = new Button(i18n.tr("Credit Check"), new ClickHandler() {
             @Override
@@ -121,7 +126,8 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
                 });
             }
         });
-        addHeaderToolbarTwoItem(checkAction.asWidget());
+// TODO : credit check (Equifax) isn't implemented yet (see LeaseApplicationForm)!          
+//        addHeaderToolbarTwoItem(checkAction.asWidget());
 
         // TODO Move Lease
         {
