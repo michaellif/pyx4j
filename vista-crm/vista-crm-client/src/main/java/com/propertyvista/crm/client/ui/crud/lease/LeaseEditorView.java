@@ -13,13 +13,11 @@
  */
 package com.propertyvista.crm.client.ui.crud.lease;
 
-import com.pyx4j.site.client.ui.crud.form.IEditorView;
-
-import com.propertyvista.crm.client.ui.crud.lease.common.LeaseEditorPresenterBase;
+import com.propertyvista.crm.client.ui.crud.lease.common.LeaseEditorViewBase;
 import com.propertyvista.dto.LeaseDTO;
 
-public interface LeaseEditorView extends IEditorView<LeaseDTO> {
+public interface LeaseEditorView extends LeaseEditorViewBase<LeaseDTO> {
 
-    interface Presenter extends IEditorView.Presenter, LeaseEditorPresenterBase {
+    interface Presenter extends LeaseEditorViewBase.Presenter {
     }
 }

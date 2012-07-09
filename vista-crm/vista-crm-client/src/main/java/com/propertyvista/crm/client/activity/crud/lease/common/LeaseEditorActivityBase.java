@@ -23,7 +23,7 @@ import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 import com.pyx4j.site.client.ui.crud.form.IEditorView;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
-import com.propertyvista.crm.client.ui.crud.lease.common.LeaseEditorPresenterBase;
+import com.propertyvista.crm.client.ui.crud.lease.common.LeaseEditorViewBase;
 import com.propertyvista.crm.rpc.services.lease.common.LeaseEditorCrudServiceBase;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
@@ -32,7 +32,7 @@ import com.propertyvista.domain.tenant.lease.Deposit;
 import com.propertyvista.domain.tenant.lease.Deposit.DepositType;
 import com.propertyvista.dto.LeaseDTO;
 
-public abstract class LeaseEditorActivityBase<DTO extends LeaseDTO> extends EditorActivityBase<DTO> implements LeaseEditorPresenterBase {
+public abstract class LeaseEditorActivityBase<DTO extends LeaseDTO> extends EditorActivityBase<DTO> implements LeaseEditorViewBase.Presenter {
 
     public LeaseEditorActivityBase(CrudAppPlace place, IEditorView<DTO> view, LeaseEditorCrudServiceBase<DTO> service, Class<DTO> entityClass) {
         super(place, view, service, entityClass);

@@ -113,7 +113,7 @@ class DepositFolder extends VistaTableFolder<Deposit> {
 
     private void createNewItem(final AsyncCallback<Deposit> callback, final DepositType type, BillableItem billableItem) {
         if (leaseEditorView != null) {
-            ((LeaseEditorPresenterBase) leaseEditorView.getPresenter()).createDeposit(new DefaultAsyncCallback<Deposit>() {
+            ((LeaseEditorViewBase.Presenter) leaseEditorView.getPresenter()).createDeposit(new DefaultAsyncCallback<Deposit>() {
                 @Override
                 public void onSuccess(Deposit result) {
                     if (result == null) { // if there is no deposits of such type - create it 'on the fly':

@@ -70,7 +70,7 @@ public class BillableItemFolder extends VistaBoxFolder<BillableItem> {
                 @Override
                 public boolean onClickOk() {
                     for (ProductItem item : getSelectedItems()) {
-                        ((LeaseEditorPresenterBase) leaseEditorView.getPresenter()).createBillableItem(new DefaultAsyncCallback<BillableItem>() {
+                        ((LeaseEditorViewBase.Presenter) leaseEditorView.getPresenter()).createBillableItem(new DefaultAsyncCallback<BillableItem>() {
                             @Override
                             public void onSuccess(BillableItem result) {
                                 addItem(result);
