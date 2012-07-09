@@ -47,6 +47,14 @@ public class CrmEditorViewImplBase<E extends IEntity> extends EditorViewImplBase
         defaultCaption = (placeClass != null ? AppSite.getHistoryMapper().getPlaceInfo(placeClass).getCaption() : "");
         setCaption(defaultCaption);
 
+        AnchorButton btnCancel = new AnchorButton(i18n.tr("Cancel"), new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                getPresenter().cancel();
+            }
+        });
+        addFooterToolbarItem(btnCancel);
+
         btnApply = new Button(i18n.tr("Apply"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
@@ -71,14 +79,6 @@ public class CrmEditorViewImplBase<E extends IEntity> extends EditorViewImplBase
             }
         });
         addFooterToolbarItem(btnSave);
-
-        AnchorButton btnCancel = new AnchorButton(i18n.tr("Cancel"), new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                getPresenter().cancel();
-            }
-        });
-        addFooterToolbarItem(btnCancel);
 
         enableButtons(false);
     }

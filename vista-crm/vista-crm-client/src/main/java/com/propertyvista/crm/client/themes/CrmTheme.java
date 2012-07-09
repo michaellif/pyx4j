@@ -362,6 +362,7 @@ public class CrmTheme extends VistaTheme {
         style.addProperty("color", ThemeColors.object1, 0.95);
         style.addProperty("font-size", "1.1em");
         style.addProperty("font-weight", "bolder");
+        style.addProperty("padding", "3px 6px");
         addStyle(style);
 
         style = new Style(buttonEx + ":hover");
