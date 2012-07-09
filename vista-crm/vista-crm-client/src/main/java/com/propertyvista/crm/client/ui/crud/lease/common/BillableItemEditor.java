@@ -199,6 +199,14 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
         super.propagateValue(value, fireEvent, populate);
     }
 
+    @Override
+    protected BillableItem preprocessValue(BillableItem value, boolean fireEvent, boolean populate) {
+        if (!isValueEmpty()) {
+            return super.preprocessValue(value, fireEvent, populate);
+        }
+        return value;
+    }
+
     @SuppressWarnings("unchecked")
     private void setExtraDataEditor(BillableItem value, boolean populate) {
 
@@ -225,6 +233,8 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
                     extraData.set(EntityFactory.create(Pet.class));
                 }
                 break;
+            default:
+                // ok - there is no extra-data for other types!.. 
             }
 
             if (editor != null) {

@@ -57,11 +57,6 @@ public class BillableItemFolder extends VistaBoxFolder<BillableItem> {
     }
 
     @Override
-    protected void onPopulate() {
-        super.onPopulate();
-    }
-
-    @Override
     protected void addItem() {
         if (lease.getValue().version().leaseProducts().serviceItem().isNull()) {
             MessageDialog.warn(i18n.tr("Warning"), i18n.tr("You Must Select A Service Item First"));
