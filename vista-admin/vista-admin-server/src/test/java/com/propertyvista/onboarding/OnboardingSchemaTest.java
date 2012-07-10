@@ -17,12 +17,13 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 
+import org.junit.Test;
+
 import com.pyx4j.essentials.server.xml.XMLEntitySchemaWriter;
 
-import com.propertyvista.config.tests.VistaDBTestBase;
+public class OnboardingSchemaTest {
 
-public class OnboardingSchemaTest extends VistaDBTestBase {
-
+    @Test
     public void testOnboardingSchema() throws FileNotFoundException {
         XMLEntitySchemaWriter.printSchema(new FileOutputStream(new File("target", "onboarding.xsd")), false, RequestMessageIO.class, ResponseMessageIO.class);
     }
