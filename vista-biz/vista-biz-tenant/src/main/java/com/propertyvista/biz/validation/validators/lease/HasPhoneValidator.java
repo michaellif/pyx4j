@@ -30,9 +30,9 @@ public class HasPhoneValidator implements EntityValidator<Person> {
 
     @Override
     public Set<ValidationFailure> validate(Person entity) {
-        if (entity.homePhone().isNull() | entity.mobilePhone().isNull()) {
+        if (entity.homePhone().isNull() & entity.mobilePhone().isNull()) {
             Set<ValidationFailure> validationFailures = new HashSet<ValidationFailure>();
-            validationFailures.add(new SimpleValidationFailure(entity, i18n.tr("Either home or mobile phone is required")));
+            validationFailures.add(new SimpleValidationFailure(entity, i18n.tr("Either home phone or mobile phone is required")));
             return validationFailures;
         } else {
             return Collections.emptySet();
