@@ -89,7 +89,7 @@ public class WidgetDecorator extends FlexTable implements IDecorator<CComponent<
 
         setStyleName(WidgetDecorator.name());
 
-        setComponent(builder.component);
+        builder.component.setDecorator(this);
         final Widget nativeComponent = component.asWidget();
         nativeComponent.addStyleName(WidgetDecoratorComponent.name());
 
@@ -141,7 +141,8 @@ public class WidgetDecorator extends FlexTable implements IDecorator<CComponent<
                     label.setText(component.getTitle() + ":");
                 } else if (event.getPropertyName() == PropertyChangeEvent.PropertyName.tooltip) {
                     renderTooltip();
-                } else if (event.isEventOfType(PropertyName.valid, PropertyName.visited, PropertyName.repopulated, PropertyName.enabled, PropertyName.editable)) {
+                } else if (event.isEventOfType(PropertyName.valid, PropertyName.visited, PropertyName.showErrorsUnconditional, PropertyName.repopulated,
+                        PropertyName.enabled, PropertyName.editable)) {
                     renderValidationMessage();
                     renderMandatoryStar();
                 }
@@ -224,7 +225,7 @@ public class WidgetDecorator extends FlexTable implements IDecorator<CComponent<
     }
 
     protected void renderValidationMessage() {
-        if (component.isVisited() && !component.isValid()) {
+        if ((this.component.isUnconditionalValidationErrorRendering() || component.isVisited()) && !component.isValid()) {
             validationLabel.setText(component.getValidationResults().getMessagesText(false, false));
             component.asWidget().addStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.invalid.name());
         } else {
@@ -350,4 +351,5 @@ public class WidgetDecorator extends FlexTable implements IDecorator<CComponent<
         // TODO Auto-generated method stub
 
     }
+
 }

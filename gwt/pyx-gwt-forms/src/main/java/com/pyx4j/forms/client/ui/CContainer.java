@@ -137,6 +137,16 @@ public abstract class CContainer<DATA_TYPE, WIDGET_TYPE extends Widget & INative
     }
 
     @Override
+    public void setUnconditionalValidationErrorRendering(boolean flag) {
+        super.setUnconditionalValidationErrorRendering(flag);
+        if (getComponents() != null) {
+            for (CComponent<?, ?> ccomponent : getComponents()) {
+                ((CComponent<?, ?>) ccomponent).setUnconditionalValidationErrorRendering(flag);
+            }
+        }
+    }
+
+    @Override
     public boolean isValid() {
         if (getComponents() != null) {
             for (CComponent<?, ?> ccomponent : getComponents()) {
@@ -153,7 +163,7 @@ public abstract class CContainer<DATA_TYPE, WIDGET_TYPE extends Widget & INative
         ValidationResults validationResults = super.getValidationResults();
         if (getComponents() != null) {
             for (CComponent<?, ?> component : this.getComponents()) {
-                if (!component.isValid() && component.isVisited()) {
+                if (!component.isValid()) {
                     validationResults.appendValidationErrors(component.getValidationResults());
                 }
             }

@@ -47,6 +47,7 @@ import com.pyx4j.commons.IDebugId;
 import com.pyx4j.forms.client.events.HasPropertyChangeHandlers;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
+import com.pyx4j.forms.client.ui.decorators.IDecorator;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.MandatoryValidationFailure;
 import com.pyx4j.forms.client.validators.MandatoryValidator;
@@ -102,6 +103,10 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
     private boolean editing = false;
 
     private ValidationError validationError;
+
+    private IDecorator decorator;
+
+    private boolean unconditionalValidationErrorRendering;
 
     public CComponent() {
         this(null);
@@ -494,7 +499,7 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
 
         ValidationError newValidationError = null;
 
-        if (isVisible() && isEditable() && isEnabled() && !isViewable()) {
+        if ((isUnconditionalValidationErrorRendering() || isVisible()) && isEditable() && isEnabled() && !isViewable()) {
 
             if (validators != null) {
                 for (EditableValueValidator<? super DATA_TYPE> validator : validators) {
@@ -598,7 +603,7 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
 
     public ValidationResults getValidationResults() {
         ValidationResults results = new ValidationResults();
-        if (validationError != null && !isValid() && isVisited()) {
+        if (validationError != null && !isValid()) {
             results.appendValidationError(this, validationError.getMessage(), getLocationHint());
         }
         return results;
@@ -698,4 +703,23 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
         }
     }
 
+    public IDecorator getDecorator() {
+        return decorator;
+    }
+
+    public void setDecorator(IDecorator decorator) {
+        this.decorator = decorator;
+        decorator.setComponent(this);
+    }
+
+    public void setUnconditionalValidationErrorRendering(boolean flag) {
+        if (flag != unconditionalValidationErrorRendering) {
+            unconditionalValidationErrorRendering = flag;
+            PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.showErrorsUnconditional);
+        }
+    }
+
+    public boolean isUnconditionalValidationErrorRendering() {
+        return unconditionalValidationErrorRendering;
+    }
 }

@@ -32,8 +32,6 @@ import com.pyx4j.forms.client.ui.decorators.IDecorator;
 
 public abstract class CEntityContainer<E extends IObject<?>> extends CContainer<E, NativeEntityPanel<E>> implements IEditableComponentFactory {
 
-    private IDecorator decorator;
-
     private ImageResource icon;
 
     private boolean initiated = false;
@@ -45,6 +43,11 @@ public abstract class CEntityContainer<E extends IObject<?>> extends CContainer<
 
     protected IDecorator createDecorator() {
         return null;
+    }
+
+    @Override
+    public void setDecorator(IDecorator decorator) {
+        throw new Error("Use createDecorator() instead");
     }
 
     public Panel getContainer() {
@@ -60,20 +63,16 @@ public abstract class CEntityContainer<E extends IObject<?>> extends CContainer<
         assert initiated == false;
         if (!initiated) {
             asWidget();
-            decorator = createDecorator();
+            IDecorator decorator = createDecorator();
             if (decorator == null) {
                 getWidget().setWidget(createContent());
             } else {
-                getWidget().setWidget(decorator);
-                decorator.setComponent(this);
+                super.setDecorator(decorator);
+                getWidget().setWidget(getDecorator());
             }
             addValidations();
             initiated = true;
         }
-    }
-
-    public IDecorator getDecorator() {
-        return decorator;
     }
 
     public void setIcon(ImageResource icon) {
@@ -86,7 +85,7 @@ public abstract class CEntityContainer<E extends IObject<?>> extends CContainer<
 
     @Override
     public boolean isVisited() {
-        return true;
+        return false;
     }
 
     @Override

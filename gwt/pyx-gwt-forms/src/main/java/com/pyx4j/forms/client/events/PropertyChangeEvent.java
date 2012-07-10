@@ -56,7 +56,9 @@ public class PropertyChangeEvent extends GwtEvent<PropertyChangeHandler> {
 
         visited,
 
-        repopulated
+        repopulated,
+
+        showErrorsUnconditional
 
     };
 

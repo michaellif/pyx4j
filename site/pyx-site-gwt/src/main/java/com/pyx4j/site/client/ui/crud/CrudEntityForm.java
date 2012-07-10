@@ -95,7 +95,7 @@ public abstract class CrudEntityForm<E extends IEntity> extends CEntityForm<E> {
         panel.addPropertyChangeHandler(new PropertyChangeHandler() {
             @Override
             public void onPropertyChange(PropertyChangeEvent event) {
-                if (event.getPropertyName() == PropertyName.valid) {
+                if (event.isEventOfType(PropertyName.valid, PropertyName.repopulated, PropertyName.showErrorsUnconditional)) {
                     if (panel.isContentValid()) {
                         tab.setTabWarning(null);
                     } else {

@@ -96,6 +96,7 @@ public class TableFolderItemDecorator<E extends IEntity> extends BaseFolderItemD
                     validationMessageHolder.setHTML(folderItem.getValidationResults().getMessagesText(true, false));
                 }
             }
+
         });
     }
 

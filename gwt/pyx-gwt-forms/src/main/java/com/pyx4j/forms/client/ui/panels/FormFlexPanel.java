@@ -177,7 +177,7 @@ public class FormFlexPanel extends FlexTable implements PropertyChangeHandler, H
     public boolean isContentValid() {
         boolean valid = true;
         for (CComponent<?, ?> component : components) {
-            if (component.isVisited() && !component.isValid()) {
+            if ((component.isUnconditionalValidationErrorRendering() || component.isVisited()) && !component.isValid()) {
                 valid = false;
                 break;
             }
@@ -188,7 +188,7 @@ public class FormFlexPanel extends FlexTable implements PropertyChangeHandler, H
     public String getValidationMessage() {
         ValidationResults validationResults = new ValidationResults();
         for (CComponent<?, ?> component : components) {
-            if (!component.isValid() && component.isVisited()) {
+            if ((component.isUnconditionalValidationErrorRendering() || component.isVisited()) && !component.isValid()) {
                 validationResults.appendValidationErrors(component.getValidationResults());
             }
         }
