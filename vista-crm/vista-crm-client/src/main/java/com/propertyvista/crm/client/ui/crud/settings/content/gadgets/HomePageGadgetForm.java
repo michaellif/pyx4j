@@ -76,7 +76,7 @@ public class HomePageGadgetForm extends CrmEntityForm<HomePageGadget> {
     }
 
     @Override
-    protected void propagateValue(HomePageGadget value, boolean fireEvent, boolean populate) {
+    protected void onValuePropagation(HomePageGadget value, boolean fireEvent, boolean populate) {
         // set content panel here
         HomePageGadget gadget = value;
         if (gadget != null && !gadget.type().isNull()) {
@@ -98,7 +98,7 @@ public class HomePageGadgetForm extends CrmEntityForm<HomePageGadget> {
                 }
             }
         }
-        super.propagateValue(value, fireEvent, populate);
+        super.onValuePropagation(value, fireEvent, populate);
     }
 
     private CComponent<?, ?> getCustomContentEditor() {

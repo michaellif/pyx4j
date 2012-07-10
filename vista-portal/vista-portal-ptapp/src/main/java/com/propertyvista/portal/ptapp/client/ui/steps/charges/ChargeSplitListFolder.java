@@ -127,8 +127,8 @@ public class ChargeSplitListFolder extends VistaTableFolder<TenantCharge> {
         }
 
         @Override
-        protected void propagateValue(TenantCharge entity, boolean fireEvent, boolean populate) {
-            super.propagateValue(entity, fireEvent, populate);
+        protected void onValuePropagation(TenantCharge entity, boolean fireEvent, boolean populate) {
+            super.onValuePropagation(entity, fireEvent, populate);
             if ((getValue().tenant().role().getValue() == LeaseParticipant.Role.Applicant)) {
                 get(proto().tenant().percentage()).setEditable(false);
                 get(proto().tenant().percentage()).setViewable(true);

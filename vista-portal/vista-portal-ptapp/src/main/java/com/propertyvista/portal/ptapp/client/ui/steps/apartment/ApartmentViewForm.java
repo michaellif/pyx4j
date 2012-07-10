@@ -152,11 +152,8 @@ public class ApartmentViewForm extends CEntityDecoratableForm<ApartmentInfoDTO> 
     }
 
     @Override
-    protected void onSetValue(boolean populate) {
-        super.onSetValue(populate);
-        if (isValueEmpty()) {
-            return;
-        }
+    protected void onValueSet(boolean populate) {
+        super.onValueSet(populate);
 
         // generate welcome message for logged user:
         welcome.setHTML(HtmlUtils.h3(i18n.tr("Welcome") + " " + ClientContext.getUserVisit().getName() + "!<br>" + i18n.tr("Thank you for choosing") + " "

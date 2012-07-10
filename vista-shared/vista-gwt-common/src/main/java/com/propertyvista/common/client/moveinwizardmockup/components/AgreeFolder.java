@@ -102,11 +102,8 @@ public class AgreeFolder extends VistaTableFolder<IAgree> {
         }
 
         @Override
-        protected void onSetValue(boolean populate) {
-            super.onSetValue(populate);
-            if (isValueEmpty()) {
-                return;
-            }
+        protected void onValueSet(boolean populate) {
+            super.onValueSet(populate);
 
             if (editable) {
                 get(proto().agree()).setEditable(!getValue().agree().isBooleanTrue());

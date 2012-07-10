@@ -131,11 +131,8 @@ public class PasswordChangeForm extends CEntityDecoratableForm<PasswordChangeReq
     }
 
     @Override
-    protected void onSetValue(boolean populate) {
-        super.onSetValue(populate);
-        if (isValueEmpty()) {
-            return;
-        }
+    protected void onValueSet(boolean populate) {
+        super.onValueSet(populate);
 
         get(proto().currentPassword()).setVisible(isCurrentPasswordRequired);
         get(proto().requireChangePasswordOnNextSignIn()).setVisible(isRequireChangePasswordOnNextSignInRequired);

@@ -64,11 +64,8 @@ public class UnitOccupancyForm extends CrmEntityForm<AptUnitOccupancySegment> {
     }
 
     @Override
-    protected void onSetValue(boolean populate) {
-        super.onSetValue(populate);
-        if (isValueEmpty()) {
-            return;
-        }
+    protected void onValueSet(boolean populate) {
+        super.onValueSet(populate);
 
         if (getValue().isNull()) {
             get(proto().offMarket()).setVisible(false);

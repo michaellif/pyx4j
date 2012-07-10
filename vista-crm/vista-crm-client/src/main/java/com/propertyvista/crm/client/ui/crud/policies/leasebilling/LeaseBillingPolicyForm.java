@@ -109,11 +109,8 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
     }
 
     @Override
-    protected void onSetValue(boolean populate) {
-        super.onSetValue(populate);
-        if (isValueEmpty()) {
-            return;
-        }
+    protected void onValueSet(boolean populate) {
+        super.onValueSet(populate);
 
         get(proto().defaultBillingCycleSartDay()).setEnabled(getValue().useDefaultBillingCycleSartDay().getValue());
     }

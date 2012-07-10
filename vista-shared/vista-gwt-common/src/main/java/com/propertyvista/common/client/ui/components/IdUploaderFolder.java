@@ -61,13 +61,13 @@ public class IdUploaderFolder extends VistaBoxFolder<IdentificationDocument> {
     }
 
     @Override
-    protected void onSetValue(final boolean populate) {
+    protected void onValueSet(final boolean populate) {
         ClientPolicyManager.obtainEffectivePolicy(ClientPolicyManager.getOrganizationPoliciesNode(), ApplicationDocumentationPolicy.class,
                 new DefaultAsyncCallback<ApplicationDocumentationPolicy>() {
                     @Override
                     public void onSuccess(ApplicationDocumentationPolicy result) {
                         documentationPolicy = result;
-                        IdUploaderFolder.super.onSetValue(populate);
+                        IdUploaderFolder.super.onValueSet(populate);
                     }
                 });
     }

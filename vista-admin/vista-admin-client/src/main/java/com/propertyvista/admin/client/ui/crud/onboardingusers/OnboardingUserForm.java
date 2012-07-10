@@ -59,11 +59,8 @@ public class OnboardingUserForm extends AdminEntityForm<OnboardingUserDTO> {
     }
 
     @Override
-    protected void onSetValue(boolean populate) {
-        super.onSetValue(populate);
-        if (isValueEmpty()) {
-            return;
-        }
+    protected void onValueSet(boolean populate) {
+        super.onValueSet(populate);
 
         get(proto().password()).setVisible(isNewUser());
         get(proto().passwordConfirm()).setVisible(isNewUser());

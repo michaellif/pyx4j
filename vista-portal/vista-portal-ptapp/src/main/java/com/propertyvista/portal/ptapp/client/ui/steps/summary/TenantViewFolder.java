@@ -79,11 +79,8 @@ public class TenantViewFolder extends VistaTableFolder<TenantInLeaseDTO> {
         }
 
         @Override
-        protected void onSetValue(boolean populate) {
-            super.onSetValue(populate);
-            if (isValueEmpty()) {
-                return;
-            }
+        protected void onValueSet(boolean populate) {
+            super.onValueSet(populate);
 
             if (getValue().role().getValue() == LeaseParticipant.Role.Applicant) {
                 relationship.setVisible(false);

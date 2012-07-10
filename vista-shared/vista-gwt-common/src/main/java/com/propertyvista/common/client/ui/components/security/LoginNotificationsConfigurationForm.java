@@ -52,11 +52,8 @@ public class LoginNotificationsConfigurationForm extends CEntityDecoratableForm<
     }
 
     @Override
-    protected void onSetValue(boolean populate) {
-        super.onSetValue(populate);
-        if (isValueEmpty()) {
-            return;
-        }
+    protected void onValueSet(boolean populate) {
+        super.onValueSet(populate);
 
         get(proto().email()).setEnabled(getValue().isEmailNotificationEnabled().isBooleanTrue());
     }

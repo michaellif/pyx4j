@@ -251,11 +251,8 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
     }
 
     @Override
-    protected void onSetValue(boolean populate) {
-        super.onSetValue(populate);
-        if (isValueEmpty()) {
-            return;
-        }
+    protected void onValueSet(boolean populate) {
+        super.onValueSet(populate);
 
         get(proto().id()).setVisible(!getValue().id().isNull());
         get(proto().paymentSelect()).setVisible(!isViewable() && !getValue().leaseParticipant().isNull());

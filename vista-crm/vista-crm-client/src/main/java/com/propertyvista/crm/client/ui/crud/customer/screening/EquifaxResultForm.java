@@ -60,11 +60,8 @@ public class EquifaxResultForm extends CrmEntityForm<EquifaxResult> {
     }
 
     @Override
-    protected void onSetValue(boolean populate) {
-        super.onSetValue(populate);
-        if (isValueEmpty()) {
-            return;
-        }
+    protected void onValueSet(boolean populate) {
+        super.onValueSet(populate);
 
         switch (getValue().suggestedDecision().getValue()) {
         case Approve:

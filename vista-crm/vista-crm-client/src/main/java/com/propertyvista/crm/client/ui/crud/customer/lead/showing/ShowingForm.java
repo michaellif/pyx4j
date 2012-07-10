@@ -118,11 +118,8 @@ public class ShowingForm extends CrmEntityForm<ShowingDTO> {
     }
 
     @Override
-    protected void onSetValue(boolean populate) {
-        super.onSetValue(populate);
-        if (isValueEmpty()) {
-            return;
-        }
+    protected void onValueSet(boolean populate) {
+        super.onValueSet(populate);
 
         get(proto().reason()).setVisible(Showing.Result.notInterested.equals(getValue().result().getValue()));
     }

@@ -186,6 +186,10 @@ public class TransactionHistoryViewer extends CEntityViewer<TransactionHistoryDT
 
     private void drawArrears(AgingBuckets bucket, FormFlexPanel panel, int row) {
 
+        if (bucket.isNull()) {
+            return;
+        }
+
         panel.setHTML(row, 0, toSafeHtml(bucket.debitType().getStringView()));
         panel.setHTML(row, 1, toSafeHtml(NUMBER_FORMAT.format(bucket.bucketCurrent().getValue())));
         panel.setHTML(row, 2, toSafeHtml(NUMBER_FORMAT.format(bucket.bucket30().getValue())));

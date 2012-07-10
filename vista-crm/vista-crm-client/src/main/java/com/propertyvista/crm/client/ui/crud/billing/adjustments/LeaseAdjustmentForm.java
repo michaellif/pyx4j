@@ -158,11 +158,8 @@ public class LeaseAdjustmentForm extends CrmEntityForm<LeaseAdjustment> {
     }
 
     @Override
-    protected void onSetValue(boolean populate) {
-        super.onSetValue(populate);
-        if (isValueEmpty()) {
-            return;
-        }
+    protected void onValueSet(boolean populate) {
+        super.onValueSet(populate);
 
         bindValueEditor(getValue().taxType().getValue(), true);
         recalculateTaxesAndTotal();

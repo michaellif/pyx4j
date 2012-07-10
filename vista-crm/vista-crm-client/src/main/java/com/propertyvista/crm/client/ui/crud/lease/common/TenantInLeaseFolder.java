@@ -209,11 +209,8 @@ public class TenantInLeaseFolder extends LeaseParticipantFolder<Tenant> {
 
         @SuppressWarnings("unchecked")
         @Override
-        protected void onSetValue(boolean populate) {
-            super.onSetValue(populate);
-            if (isValueEmpty()) {
-                return;
-            }
+        protected void onValueSet(boolean populate) {
+            super.onValueSet(populate);
 
             get(proto().customer().person().email()).setMandatory(!getValue().customer().user().isNull());
 

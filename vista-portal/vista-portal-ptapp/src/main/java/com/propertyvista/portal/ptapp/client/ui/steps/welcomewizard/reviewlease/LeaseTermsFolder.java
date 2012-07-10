@@ -101,11 +101,8 @@ public class LeaseTermsFolder extends VistaBoxFolder<LegalTermsDescriptorDTO> {
         }
 
         @Override
-        protected void onSetValue(boolean populate) {
-            super.onSetValue(populate);
-            if (isValueEmpty()) {
-                return;
-            }
+        protected void onValueSet(boolean populate) {
+            super.onValueSet(populate);
 
             main.setH2(0, 0, 1, getValue().content().localizedCaption().getValue());
         }

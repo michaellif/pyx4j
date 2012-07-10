@@ -66,11 +66,8 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
     }
 
     @Override
-    protected void onSetValue(boolean populate) {
-        super.onSetValue(populate);
-        if (isValueEmpty()) {
-            return;
-        }
+    protected void onValueSet(boolean populate) {
+        super.onValueSet(populate);
 
         if (VistaFeatures.instance().onlineApplication()) {
             setTabEnabled(onlineStatusTab, isTabEnabled(onlineStatusTab) || getValue().leaseApplication().onlineApplication().isNull());

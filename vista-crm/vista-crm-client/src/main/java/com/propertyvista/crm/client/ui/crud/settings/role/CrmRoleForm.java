@@ -72,11 +72,8 @@ public class CrmRoleForm extends CrmEntityForm<CrmRole> {
     }
 
     @Override
-    protected void onSetValue(boolean populate) {
-        super.onSetValue(populate);
-        if (isValueEmpty()) {
-            return;
-        }
+    protected void onValueSet(boolean populate) {
+        super.onValueSet(populate);
 
         enforceRequireTwoStepVerificationForEquifaxBehaviour();
     }

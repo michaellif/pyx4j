@@ -162,11 +162,8 @@ public abstract class PolicyDTOTabPanelBasedForm<POLICY_DTO extends PolicyDTOBas
     }
 
     @Override
-    protected void onSetValue(boolean populate) {
-        super.onSetValue(populate);
-        if (isValueEmpty()) {
-            return;
-        }
+    protected void onValueSet(boolean populate) {
+        super.onValueSet(populate);
 
         selectPolicyScopeBox.setOptions(assignableTypes(AVAILABLE_NODE_TYPES));
         selectPolicyScopeBox.setEditable(selectPolicyScopeBox.getOptions().size() > 1);

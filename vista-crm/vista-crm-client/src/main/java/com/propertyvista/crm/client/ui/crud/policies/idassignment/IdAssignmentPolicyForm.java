@@ -109,11 +109,8 @@ public class IdAssignmentPolicyForm extends PolicyDTOTabPanelBasedForm<IdAssignm
             }
 
             @Override
-            protected void onSetValue(boolean populate) {
-                super.onSetValue(populate);
-                if (isValueEmpty()) {
-                    return;
-                }
+            protected void onValueSet(boolean populate) {
+                super.onValueSet(populate);
 
                 if (getValue().target().getValue() == IdTarget.application) {
                     CComboBox<IdAssignmentType> combo = (CComboBox<IdAssignmentType>) get(proto().type());

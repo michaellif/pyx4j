@@ -69,12 +69,8 @@ class PageContentFolder extends VistaBoxFolder<PageContent> {
     }
 
     @Override
-    protected void onSetValue(boolean populate) {
-        super.onSetValue(populate);
-        if (isValueEmpty()) {
-            return;
-        }
-
+    protected void onValueSet(boolean populate) {
+        super.onValueSet(populate);
         updateUsedLocales();
     }
 
@@ -151,11 +147,8 @@ class PageContentFolder extends VistaBoxFolder<PageContent> {
         }
 
         @Override
-        protected void onSetValue(boolean populate) {
-            super.onSetValue(populate);
-            if (isValueEmpty()) {
-                return;
-            }
+        protected void onValueSet(boolean populate) {
+            super.onValueSet(populate);
 
             boolean staticPage = getValue().descriptor().type().getValue() == PageDescriptor.Type.staticContent;
             get(proto().content()).setVisible(staticPage);

@@ -54,11 +54,8 @@ public class EmergencyContactFolder extends VistaBoxFolder<EmergencyContact> {
     }
 
     @Override
-    protected void onSetValue(boolean populate) {
-        super.onSetValue(populate);
-        if (isValueEmpty()) {
-            return;
-        }
+    protected void onValueSet(boolean populate) {
+        super.onValueSet(populate);
 
         if (modifyable && getValue().isEmpty()) {
             addItem(); // at least one Emergency Contact should be present!..

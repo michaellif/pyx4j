@@ -115,11 +115,8 @@ public class BillForm extends CEntityDecoratableForm<BillDTO> {
     }
 
     @Override
-    protected void onSetValue(boolean populate) {
-        super.onSetValue(populate);
-        if (isValueEmpty()) {
-            return;
-        }
+    protected void onValueSet(boolean populate) {
+        super.onValueSet(populate);
 
 //        billPanel.setVisible(getValue().billStatus().getValue() != BillStatus.Failed);
 

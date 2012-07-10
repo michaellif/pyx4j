@@ -80,11 +80,8 @@ public class PersonalIncomeEditor extends CEntityDecoratableForm<PersonalIncome>
     }
 
     @Override
-    protected void onSetValue(boolean populate) {
-        super.onSetValue(populate);
-        if (isValueEmpty()) {
-            return;
-        }
+    protected void onValueSet(boolean populate) {
+        super.onValueSet(populate);
 
         setVisibility(getValue().incomeSource().getValue());
     }
