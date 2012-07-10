@@ -201,8 +201,8 @@ public abstract class CPolymorphicEntityEditor<E extends IEntity> extends CEntit
 //    }
 
     @Override
-    public void propagateValue(E value, boolean fireEvent, boolean populate) {
-        super.propagateValue(value, fireEvent, populate);
+    public void onValuePropagation(E value, boolean fireEvent, boolean populate) {
+        super.onValuePropagation(value, fireEvent, populate);
         setComponentsValue(value, fireEvent, populate);
     }
 

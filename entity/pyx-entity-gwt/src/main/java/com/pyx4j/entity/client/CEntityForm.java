@@ -191,7 +191,7 @@ public abstract class CEntityForm<E extends IEntity> extends CEntityContainer<E>
 
     @Override
     @SuppressWarnings("unchecked")
-    protected void propagateValue(E value, boolean fireEvent, boolean populate) {
+    protected void onValuePropagation(E value, boolean fireEvent, boolean populate) {
         assert (value == null) || proto().isAssignableFrom(value.getInstanceValueClass()) : "Trying to set value of a wrong type, expected "
                 + proto().getValueClass() + ", got " + value.getInstanceValueClass();
         if (populate) {
@@ -200,7 +200,7 @@ public abstract class CEntityForm<E extends IEntity> extends CEntityContainer<E>
                 this.origEntity = (E) value.duplicate();
             }
         }
-        super.propagateValue(value, fireEvent, populate);
+        super.onValuePropagation(value, fireEvent, populate);
 
     }
 
@@ -271,7 +271,7 @@ public abstract class CEntityForm<E extends IEntity> extends CEntityContainer<E>
         this.origEntity = null;
         setVisited(false);
         setUnconditionalValidationErrorRendering(false);
-        setValue(null, false, false);
+        super.reset();
     }
 
     public boolean isDirty() {

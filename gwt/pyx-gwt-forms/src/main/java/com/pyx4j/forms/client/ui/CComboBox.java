@@ -194,8 +194,8 @@ public class CComboBox<E> extends CFocusComponent<E, NComboBox<E>> implements Ha
     }
 
     @Override
-    protected void propagateValue(E value, boolean fireEvent, boolean populate) {
-        super.propagateValue(value, fireEvent, populate);
+    protected void onValuePropagation(E value, boolean fireEvent, boolean populate) {
+        super.onValuePropagation(value, fireEvent, populate);
         if (populate) {
             getWidget().setPopulatedValue(value);
         }

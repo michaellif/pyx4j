@@ -338,8 +338,8 @@ public class CEntityComboBox<E extends IEntity> extends CComboBox<E> implements 
     }
 
     @Override
-    protected void propagateValue(E value, boolean fireEvent, boolean populate) {
-        super.propagateValue(value, fireEvent, populate);
+    protected void onValuePropagation(E value, boolean fireEvent, boolean populate) {
+        super.onValuePropagation(value, fireEvent, populate);
         if (populate && optionsFilter != null || (criteria != null && criteria.getFilters() != null && !criteria.getFilters().isEmpty())) {
             // Fire options reload since optionsFilter may depend on other values in the model.
             refreshOptions();
