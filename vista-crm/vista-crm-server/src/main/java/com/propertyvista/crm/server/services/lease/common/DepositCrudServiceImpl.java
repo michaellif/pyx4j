@@ -47,6 +47,7 @@ public class DepositCrudServiceImpl extends AbstractCrudServiceImpl<Deposit> imp
         super.enhanceRetrieved(entity, dto);
 
         // load detached:
+        Persistence.service().retrieve(dto.billableItem());
         Persistence.service().retrieve(dto.interestAdjustments());
     }
 

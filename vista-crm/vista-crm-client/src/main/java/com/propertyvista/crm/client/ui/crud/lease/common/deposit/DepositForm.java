@@ -33,10 +33,12 @@ public class DepositForm extends CrmEntityForm<Deposit> {
 
     @Override
     public void createTabs() {
-
         FormFlexPanel content = new FormFlexPanel();
 
         int row = -1;
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billableItem()), 30).build());
+        content.getFlexCellFormatter().setColSpan(row, 0, 2);
+
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().type()), 12).build());
         content.setWidget(row, 1, new DecoratorBuilder(inject(proto().status()), 9).build());
 
