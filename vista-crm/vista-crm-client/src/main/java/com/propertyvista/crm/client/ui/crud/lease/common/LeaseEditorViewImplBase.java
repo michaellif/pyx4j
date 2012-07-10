@@ -26,20 +26,13 @@ public class LeaseEditorViewImplBase<DTO extends LeaseDTO> extends CrmEditorView
 
     @Override
     public void updateUnitValue(DTO value) {
-        LeaseFormBase<DTO> form = (LeaseFormBase<DTO>) getForm();
-
-        form.get(form.proto().unit()).setValue(value.unit());
-        form.get(form.proto().selectedBuilding()).setValue(value.selectedBuilding());
-
-        updateServiceValue(value);
+        // TODO Auto-generated method stub
+        populate(value);
     }
 
     @Override
     public void updateServiceValue(DTO value) {
-        LeaseFormBase<DTO> form = (LeaseFormBase<DTO>) getForm();
-
-        form.get(form.proto().version().leaseProducts().serviceItem()).setValue(value.version().leaseProducts().serviceItem());
-        form.get(form.proto().version().leaseProducts().featureItems()).setValue(value.version().leaseProducts().featureItems());
-        form.get(form.proto().version().leaseProducts().concessions()).setValue(value.version().leaseProducts().concessions());
+        // TODO Auto-generated method stub
+        populate(value);
     }
 }
