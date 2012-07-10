@@ -15,8 +15,8 @@ package com.propertyvista.portal.ptapp.client.ui.steps.welcomewizard.insurance;
 
 import com.google.gwt.user.client.Command;
 
+import com.propertyvista.domain.moveinwizardmockup.InsuranceDTO;
 import com.propertyvista.portal.ptapp.client.ui.steps.WizardStepViewImpl;
-import com.propertyvista.portal.rpc.ptapp.dto.welcomewizard.InsuranceDTO;
 
 public class InsuranceViewImpl extends WizardStepViewImpl<InsuranceDTO, InsurancePresenter> implements InsuranceView {
 

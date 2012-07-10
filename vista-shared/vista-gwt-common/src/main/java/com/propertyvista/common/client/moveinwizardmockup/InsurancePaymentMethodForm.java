@@ -11,7 +11,7 @@
  * @author Dad
  * @version $Id$
  */
-package com.propertyvista.portal.client.ui.residents.insurancemockup.forms;
+package com.propertyvista.common.client.moveinwizardmockup;
 
 import java.util.Date;
 
@@ -39,10 +39,10 @@ import com.propertyvista.common.client.theme.NewPaymentMethodEditorTheme;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.editors.AddressSimpleEditor;
 import com.propertyvista.domain.contact.AddressSimple;
+import com.propertyvista.domain.moveinwizardmockup.InsurancePaymentMethodDTO;
+import com.propertyvista.domain.moveinwizardmockup.InsurancePaymentMethodDTO.PaymentMethod;
 import com.propertyvista.domain.payment.CreditCardInfo;
 import com.propertyvista.domain.payment.PaymentType;
-import com.propertyvista.portal.rpc.ptapp.dto.welcomewizard.InsurancePaymentMethodDTO;
-import com.propertyvista.portal.rpc.ptapp.dto.welcomewizard.InsurancePaymentMethodDTO.PaymentMethod;
 
 public class InsurancePaymentMethodForm extends CEntityDecoratableForm<InsurancePaymentMethodDTO> {
 

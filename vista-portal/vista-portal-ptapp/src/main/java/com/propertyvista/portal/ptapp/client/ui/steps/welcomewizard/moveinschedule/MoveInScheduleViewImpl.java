@@ -13,8 +13,8 @@
  */
 package com.propertyvista.portal.ptapp.client.ui.steps.welcomewizard.moveinschedule;
 
+import com.propertyvista.domain.moveinwizardmockup.MoveInScheduleDTO;
 import com.propertyvista.portal.ptapp.client.ui.steps.WizardStepViewImpl;
-import com.propertyvista.portal.rpc.ptapp.dto.welcomewizard.MoveInScheduleDTO;
 
 public class MoveInScheduleViewImpl extends WizardStepViewImpl<MoveInScheduleDTO, MoveInSchedulePresenter> implements MoveInScheduleView {
 

@@ -24,14 +24,14 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.server.contexts.Context;
 
+import com.propertyvista.domain.moveinwizardmockup.InsuranceDTO;
+import com.propertyvista.domain.moveinwizardmockup.InsurancePaymentMethodDTO.PaymentMethod;
+import com.propertyvista.domain.moveinwizardmockup.PurchaseInsuranceDTO.FormOfCoverage;
+import com.propertyvista.domain.moveinwizardmockup.PurchaseInsuranceDTO.HomeBuisnessOptions;
 import com.propertyvista.domain.policy.policies.domain.LegalTermsContent;
 import com.propertyvista.domain.tenant.ptapp.DigitalSignature;
-import com.propertyvista.portal.domain.ptapp.IAgree;
-import com.propertyvista.portal.rpc.ptapp.dto.LegalTermsDescriptorDTO;
-import com.propertyvista.portal.rpc.ptapp.dto.welcomewizard.InsuranceDTO;
-import com.propertyvista.portal.rpc.ptapp.dto.welcomewizard.InsurancePaymentMethodDTO.PaymentMethod;
-import com.propertyvista.portal.rpc.ptapp.dto.welcomewizard.PurchaseInsuranceDTO.FormOfCoverage;
-import com.propertyvista.portal.rpc.ptapp.dto.welcomewizard.PurchaseInsuranceDTO.HomeBuisnessOptions;
+import com.propertyvista.domain.tenant.ptapp.IAgree;
+import com.propertyvista.dto.LegalTermsDescriptorDTO;
 import com.propertyvista.portal.rpc.ptapp.services.steps.welcomewizard.InsuranceService;
 
 public class InsuranceServiceImpl implements InsuranceService {

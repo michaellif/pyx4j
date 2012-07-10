@@ -17,7 +17,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.rpc.shared.IService;
 
-import com.propertyvista.portal.rpc.portal.dto.insurancemockup.TenantInsuranceDTO;
+import com.propertyvista.domain.moveinwizardmockup.TenantInsuranceDTO;
 
 /**
  * @deprecated This is just a MOCK UP

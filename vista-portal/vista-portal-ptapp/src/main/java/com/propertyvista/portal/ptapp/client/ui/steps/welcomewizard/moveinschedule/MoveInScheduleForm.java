@@ -33,10 +33,10 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
-import com.propertyvista.portal.rpc.ptapp.dto.welcomewizard.MoveInScheduleDTO;
-import com.propertyvista.portal.rpc.ptapp.dto.welcomewizard.ScheduleDTO;
-import com.propertyvista.portal.rpc.ptapp.dto.welcomewizard.TimeSegmentDTO;
-import com.propertyvista.portal.rpc.ptapp.dto.welcomewizard.TimeSegmentDTO.Status;
+import com.propertyvista.domain.moveinwizardmockup.MoveInScheduleDTO;
+import com.propertyvista.domain.moveinwizardmockup.ScheduleDTO;
+import com.propertyvista.domain.moveinwizardmockup.TimeSegmentDTO;
+import com.propertyvista.domain.moveinwizardmockup.TimeSegmentDTO.Status;
 
 public class MoveInScheduleForm extends CEntityDecoratableForm<MoveInScheduleDTO> {
 

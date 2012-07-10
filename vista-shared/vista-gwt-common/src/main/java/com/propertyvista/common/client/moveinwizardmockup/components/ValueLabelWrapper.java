@@ -11,9 +11,9 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.portal.ptapp.client.ui.steps.welcomewizard.insurance.components;
+package com.propertyvista.common.client.moveinwizardmockup.components;
 
-import static com.propertyvista.portal.ptapp.client.ui.steps.welcomewizard.insurance.components.Utils.formatMoney;
+import static com.propertyvista.common.client.moveinwizardmockup.components.Utils.formatMoney;
 
 public class ValueLabelWrapper {
 

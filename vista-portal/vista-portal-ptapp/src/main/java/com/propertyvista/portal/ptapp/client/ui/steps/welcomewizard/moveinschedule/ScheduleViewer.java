@@ -38,9 +38,9 @@ import com.pyx4j.forms.client.ui.CDatePicker;
 import com.pyx4j.forms.client.ui.CTimeField;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.portal.rpc.ptapp.dto.welcomewizard.ScheduleDTO;
-import com.propertyvista.portal.rpc.ptapp.dto.welcomewizard.TimeSegmentDTO;
-import com.propertyvista.portal.rpc.ptapp.dto.welcomewizard.TimeSegmentDTO.Status;
+import com.propertyvista.domain.moveinwizardmockup.ScheduleDTO;
+import com.propertyvista.domain.moveinwizardmockup.TimeSegmentDTO;
+import com.propertyvista.domain.moveinwizardmockup.TimeSegmentDTO.Status;
 
 public class ScheduleViewer extends CEntityViewer<ScheduleDTO> {
 

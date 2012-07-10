@@ -28,18 +28,18 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.server.contexts.Context;
 
 import com.propertyvista.biz.financial.SysDateManager;
+import com.propertyvista.domain.moveinwizardmockup.ExistingInsurance;
+import com.propertyvista.domain.moveinwizardmockup.InsuranceDTO;
+import com.propertyvista.domain.moveinwizardmockup.InsurancePaymentMethodDTO.PaymentMethod;
+import com.propertyvista.domain.moveinwizardmockup.PurchaseInsuranceDTO.FormOfCoverage;
+import com.propertyvista.domain.moveinwizardmockup.PurchaseInsuranceDTO.HomeBuisnessOptions;
+import com.propertyvista.domain.moveinwizardmockup.TenantInsuranceDTO;
+import com.propertyvista.domain.moveinwizardmockup.TenantInsuranceDTO.InsuranceStatus;
 import com.propertyvista.domain.policy.policies.domain.LegalTermsContent;
 import com.propertyvista.domain.tenant.ptapp.DigitalSignature;
-import com.propertyvista.portal.domain.ptapp.IAgree;
-import com.propertyvista.portal.rpc.portal.dto.insurancemockup.TenantInsuranceDTO;
-import com.propertyvista.portal.rpc.portal.dto.insurancemockup.TenantInsuranceDTO.InsuranceStatus;
+import com.propertyvista.domain.tenant.ptapp.IAgree;
+import com.propertyvista.dto.LegalTermsDescriptorDTO;
 import com.propertyvista.portal.rpc.portal.services.InsuranceService;
-import com.propertyvista.portal.rpc.ptapp.dto.LegalTermsDescriptorDTO;
-import com.propertyvista.portal.rpc.ptapp.dto.welcomewizard.ExistingInsurance;
-import com.propertyvista.portal.rpc.ptapp.dto.welcomewizard.InsuranceDTO;
-import com.propertyvista.portal.rpc.ptapp.dto.welcomewizard.InsurancePaymentMethodDTO.PaymentMethod;
-import com.propertyvista.portal.rpc.ptapp.dto.welcomewizard.PurchaseInsuranceDTO.FormOfCoverage;
-import com.propertyvista.portal.rpc.ptapp.dto.welcomewizard.PurchaseInsuranceDTO.HomeBuisnessOptions;
 import com.propertyvista.portal.server.portal.TenantAppContext;
 import com.propertyvista.portal.server.ptapp.services.steps.welcomewizard.WelcomeWizardDemoData;
 
@@ -108,29 +108,41 @@ public class InsuranceServiceImpl implements InsuranceService {
         InsuranceDTO insurance = EntityFactory.create(InsuranceDTO.class);
 
         // INSURANCE PURCHASE PART INITIALIZATION
-        insurance.purchaseInsurance().personalContentsLimit().setValue(asMoney(80000));
-        insurance.purchaseInsurance().propertyAwayFromPremises().setValue(asMoney(10000));
-        insurance.purchaseInsurance().additionalLivingExpenses().setValue(asMoney(40000));
+        insurance.purchaseInsurance().personalContentsLimit().setValue(asMoney(60000));
 
-        insurance.purchaseInsurance().deductible().setValue(asMoney(500));
+        if (false) {
+            insurance.purchaseInsurance().propertyAwayFromPremises().setValue(asMoney(10000));
+            insurance.purchaseInsurance().additionalLivingExpenses().setValue(asMoney(40000));
+        }
+
+        insurance.purchaseInsurance().deductible().setValue(asMoney(250));
 
         insurance.purchaseInsurance().formOfCoverage().setValue(FormOfCoverage.basicCoverage);
 
         insurance.purchaseInsurance().jewleryAndArt().setValue(asMoney(5000));
         insurance.purchaseInsurance().sportsEquipment().setValue(asMoney(2000));
         insurance.purchaseInsurance().electronics().setValue(asMoney(6000));
-        insurance.purchaseInsurance().moneyOrGiftGardsOrGiftCertificates().setValue(asMoney(500));
-        insurance.purchaseInsurance().securities().setValue(asMoney(500));
-        insurance.purchaseInsurance().utilityTraders().setValue(asMoney(2000));
-        insurance.purchaseInsurance().spareAutomobileParts().setValue(asMoney(2000));
-        insurance.purchaseInsurance().coinBanknoteOrStampCollections().setValue(asMoney(2000));
-        insurance.purchaseInsurance().collectibleCardsAndComics().setValue(asMoney(2000));
+        insurance.purchaseInsurance().sewerBackUp().setValue(asMoney(10000));
 
-        insurance.purchaseInsurance().freezerFoodSpoilage().setValue(asMoney(1000));
-        insurance.purchaseInsurance().animalsBirdsAndFish().setValue(asMoney(1000));
+        if (false) {
+            insurance.purchaseInsurance().moneyOrGiftGardsOrGiftCertificates().setValue(asMoney(500));
+            insurance.purchaseInsurance().securities().setValue(asMoney(500));
+            insurance.purchaseInsurance().utilityTraders().setValue(asMoney(2000));
+            insurance.purchaseInsurance().spareAutomobileParts().setValue(asMoney(2000));
+            insurance.purchaseInsurance().coinBanknoteOrStampCollections().setValue(asMoney(2000));
+            insurance.purchaseInsurance().collectibleCardsAndComics().setValue(asMoney(2000));
+        }
+
+        if (false) {
+            insurance.purchaseInsurance().freezerFoodSpoilage().setValue(asMoney(1000));
+            insurance.purchaseInsurance().animalsBirdsAndFish().setValue(asMoney(1000));
+        }
+
         insurance.purchaseInsurance().personalLiability().setValue(asMoney(5000000));
 
-        insurance.purchaseInsurance().homeBuiness().setValue(HomeBuisnessOptions.no);
+        if (false) {
+            insurance.purchaseInsurance().homeBuiness().setValue(HomeBuisnessOptions.no);
+        }
         insurance.purchaseInsurance().numOfPrevClaims().setValue(0);
 
         insurance.purchaseInsurance().paymentMethod().paymentMethod().setValue(PaymentMethod.Visa);

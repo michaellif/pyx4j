@@ -20,9 +20,9 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 
+import com.propertyvista.domain.moveinwizardmockup.TenantInsuranceDTO;
 import com.propertyvista.portal.client.ui.residents.insurancemockup.InsuranceView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
-import com.propertyvista.portal.rpc.portal.dto.insurancemockup.TenantInsuranceDTO;
 import com.propertyvista.portal.rpc.portal.services.InsuranceService;
 
 public class InsuranceActivity extends AbstractActivity implements InsuranceView.Presenter {

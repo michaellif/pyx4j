@@ -11,7 +11,7 @@
  * @author vladlouk
  * @version $Id$
  */
-package com.propertyvista.portal.client.ui.residents.insurancemockup.forms;
+package com.propertyvista.common.client.moveinwizardmockup.components;
 
 import java.util.Arrays;
 import java.util.List;
@@ -57,7 +57,8 @@ public class AgreeFolder extends VistaTableFolder<IAgree> {
 
     @Override
     public List<EntityFolderColumnDescriptor> columns() {
-        return Arrays.asList(//@formatter:off
+        //@formatter:off
+      return Arrays.asList(
               new EntityFolderColumnDescriptor(proto().person().name(), "30em"),
               new EntityFolderColumnDescriptor(proto().agree(), "5em"));
         //@formatter:on

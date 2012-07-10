@@ -31,10 +31,11 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
 
+import com.propertyvista.common.client.moveinwizardmockup.InsurancePurchaseForm;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
+import com.propertyvista.domain.moveinwizardmockup.InsuranceDTO;
 import com.propertyvista.portal.ptapp.client.resources.welcomewizard.WelcomeWizardImages;
 import com.propertyvista.portal.ptapp.client.resources.welcomewizard.WelcomeWizardResources;
-import com.propertyvista.portal.rpc.ptapp.dto.welcomewizard.InsuranceDTO;
 
 public class InsuranceForm extends CEntityDecoratableForm<InsuranceDTO> {
 

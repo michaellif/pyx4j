@@ -15,8 +15,8 @@ package com.propertyvista.portal.ptapp.client.ui.steps.welcomewizard.reviewlease
 
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.domain.moveinwizardmockup.LeaseReviewDTO;
 import com.propertyvista.portal.ptapp.client.ui.steps.WizardStepViewImpl;
-import com.propertyvista.portal.rpc.ptapp.dto.welcomewizard.LeaseReviewDTO;
 
 public class LeaseReviewViewImpl extends WizardStepViewImpl<LeaseReviewDTO, LeaseReviewPresenter> {
 

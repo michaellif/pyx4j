@@ -11,7 +11,7 @@
  * @author vladlouk
  * @version $Id$
  */
-package com.propertyvista.portal.ptapp.client.ui.steps.summary;
+package com.propertyvista.common.client.moveinwizardmockup.components;
 
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ScrollPanel;
@@ -30,9 +30,9 @@ import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.dto.LegalTermsDescriptorDTO;
 
-public class LeaseTemsFolder extends VistaBoxFolder<LegalTermsDescriptorDTO> {
+public class LeaseTermsFolder extends VistaBoxFolder<LegalTermsDescriptorDTO> {
 
-    private static final I18n i18n = I18n.get(LeaseTemsFolder.class);
+    private static final I18n i18n = I18n.get(LeaseTermsFolder.class);
 
     public final static String DEFAULT_STYLE_PREFIX = "LeaseTemsFolder";
 
@@ -46,7 +46,7 @@ public class LeaseTemsFolder extends VistaBoxFolder<LegalTermsDescriptorDTO> {
 
     private final boolean editable;
 
-    public LeaseTemsFolder(boolean modifiable) {
+    public LeaseTermsFolder(boolean modifiable) {
         super(LegalTermsDescriptorDTO.class, false);
         this.editable = modifiable;
     }
@@ -68,18 +68,21 @@ public class LeaseTemsFolder extends VistaBoxFolder<LegalTermsDescriptorDTO> {
 
     private class LeaseTermsEditor extends CEntityDecoratableForm<LegalTermsDescriptorDTO> {
 
+        private FormFlexPanel main;
+
         public LeaseTermsEditor() {
             super(LegalTermsDescriptorDTO.class);
         }
 
         @Override
         public IsWidget createContent() {
-            FormFlexPanel main = new FormFlexPanel();
+            main = new FormFlexPanel();
 
             int row = -1;
             CLabel content = new CLabel();
             content.setAllowHtml(true);
             ScrollPanel scroll = new ScrollPanel(inject(proto().content().content(), content).asWidget());
+            main.setH2(++row, 0, 1, "");
             main.setWidget(++row, 0, scroll);
             main.setBR(++row, 0, 1);
             main.setWidget(++row, 0, inject(proto().agrees(), new AgreeFolder(editable)));
@@ -94,6 +97,16 @@ public class LeaseTemsFolder extends VistaBoxFolder<LegalTermsDescriptorDTO> {
             main.setWidth("100%");
 
             return main;
+        }
+
+        @Override
+        protected void onSetValue(boolean populate) {
+            super.onSetValue(populate);
+            if (isValueEmpty()) {
+                return;
+            }
+
+            main.setH2(0, 0, 1, getValue().content().localizedCaption().getValue());
         }
     }
 }

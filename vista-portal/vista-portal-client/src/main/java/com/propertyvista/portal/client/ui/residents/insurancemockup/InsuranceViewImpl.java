@@ -19,14 +19,14 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.entity.client.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
+import com.propertyvista.domain.moveinwizardmockup.InsuranceDTO;
+import com.propertyvista.domain.moveinwizardmockup.TenantInsuranceDTO;
+import com.propertyvista.domain.moveinwizardmockup.TenantInsuranceDTO.InsuranceStatus;
 import com.propertyvista.portal.client.ui.residents.insurancemockup.components.InsuranceMessagePanel;
 import com.propertyvista.portal.client.ui.residents.insurancemockup.forms.InsuranceAlreadyAvailabileForm;
 import com.propertyvista.portal.client.ui.residents.insurancemockup.forms.TenantSureInsuranceForm;
 import com.propertyvista.portal.client.ui.residents.insurancemockup.forms.UnknownInsuranceForm;
 import com.propertyvista.portal.client.ui.residents.insurancemockup.resources.InsuranceMockupResources;
-import com.propertyvista.portal.rpc.portal.dto.insurancemockup.TenantInsuranceDTO;
-import com.propertyvista.portal.rpc.portal.dto.insurancemockup.TenantInsuranceDTO.InsuranceStatus;
-import com.propertyvista.portal.rpc.ptapp.dto.welcomewizard.InsuranceDTO;
 
 public class InsuranceViewImpl implements InsuranceView {
 

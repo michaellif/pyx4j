@@ -24,6 +24,7 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
+import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.portal.client.ui.NavigView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.Residents;
@@ -53,7 +54,7 @@ public class NavigActivity extends AbstractActivity implements NavigView.NavigPr
         items.add(new Residents.PaymentMethods());
         items.add(new Residents.PersonalInformation());
 
-        if (false) { // this is just mock-up!..
+        if (VistaTODO.enableWelcomeWizardDemoMode) { // this is just mock-up!..
             items.add(new Residents.Insurance());
         }
 

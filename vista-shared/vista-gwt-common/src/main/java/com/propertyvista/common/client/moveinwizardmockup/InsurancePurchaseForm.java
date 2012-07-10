@@ -11,9 +11,9 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.portal.ptapp.client.ui.steps.welcomewizard.insurance;
+package com.propertyvista.common.client.moveinwizardmockup;
 
-import static com.propertyvista.portal.ptapp.client.ui.steps.welcomewizard.insurance.components.Utils.asBigDecimals;
+import static com.propertyvista.common.client.moveinwizardmockup.components.Utils.asBigDecimals;
 
 import java.math.BigDecimal;
 import java.text.ParseException;
@@ -35,14 +35,14 @@ import com.pyx4j.forms.client.ui.IFormat;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.common.client.moveinwizardmockup.components.FormattableCombo;
+import com.propertyvista.common.client.moveinwizardmockup.components.LeaseTermsFolder;
+import com.propertyvista.common.client.moveinwizardmockup.components.MoneyLabeledCombo;
+import com.propertyvista.common.client.moveinwizardmockup.components.MultiDisclosurePanel;
+import com.propertyvista.common.client.moveinwizardmockup.components.SignatureFolder;
+import com.propertyvista.common.client.moveinwizardmockup.components.Utils;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
-import com.propertyvista.portal.ptapp.client.ui.steps.summary.SignatureFolder;
-import com.propertyvista.portal.ptapp.client.ui.steps.welcomewizard.insurance.components.FormattableCombo;
-import com.propertyvista.portal.ptapp.client.ui.steps.welcomewizard.insurance.components.MoneyLabeledCombo;
-import com.propertyvista.portal.ptapp.client.ui.steps.welcomewizard.insurance.components.MultiDisclosurePanel;
-import com.propertyvista.portal.ptapp.client.ui.steps.welcomewizard.insurance.components.Utils;
-import com.propertyvista.portal.ptapp.client.ui.steps.welcomewizard.reviewlease.LeaseTermsFolder;
-import com.propertyvista.portal.rpc.ptapp.dto.welcomewizard.PurchaseInsuranceDTO;
+import com.propertyvista.domain.moveinwizardmockup.PurchaseInsuranceDTO;
 
 public class InsurancePurchaseForm extends CEntityDecoratableForm<PurchaseInsuranceDTO> {
 

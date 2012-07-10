@@ -26,7 +26,7 @@ import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
-import com.propertyvista.portal.rpc.ptapp.dto.welcomewizard.TimeSegmentDTO;
+import com.propertyvista.domain.moveinwizardmockup.TimeSegmentDTO;
 
 @Deprecated
 public class ScheduleFolder extends VistaTableFolder<TimeSegmentDTO> {

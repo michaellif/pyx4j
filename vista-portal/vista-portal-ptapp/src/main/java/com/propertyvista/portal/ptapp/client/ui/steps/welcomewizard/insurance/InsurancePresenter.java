@@ -13,8 +13,8 @@
  */
 package com.propertyvista.portal.ptapp.client.ui.steps.welcomewizard.insurance;
 
+import com.propertyvista.domain.moveinwizardmockup.InsuranceDTO;
 import com.propertyvista.portal.ptapp.client.ui.steps.WizardStepPresenter;
-import com.propertyvista.portal.rpc.ptapp.dto.welcomewizard.InsuranceDTO;
 
 public interface InsurancePresenter extends WizardStepPresenter<InsuranceDTO> {
 

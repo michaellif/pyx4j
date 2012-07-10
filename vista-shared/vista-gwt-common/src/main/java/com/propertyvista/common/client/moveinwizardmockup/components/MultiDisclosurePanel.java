@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.portal.ptapp.client.ui.steps.welcomewizard.insurance.components;
+package com.propertyvista.common.client.moveinwizardmockup.components;
 
 import java.util.ArrayList;
 

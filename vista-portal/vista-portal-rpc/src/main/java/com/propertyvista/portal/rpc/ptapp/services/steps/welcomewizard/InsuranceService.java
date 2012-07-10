@@ -13,7 +13,7 @@
  */
 package com.propertyvista.portal.rpc.ptapp.services.steps.welcomewizard;
 
-import com.propertyvista.portal.rpc.ptapp.dto.welcomewizard.InsuranceDTO;
+import com.propertyvista.domain.moveinwizardmockup.InsuranceDTO;
 import com.propertyvista.portal.rpc.ptapp.services.steps.AbstractWizardService;
 
 public interface InsuranceService extends AbstractWizardService<InsuranceDTO> {

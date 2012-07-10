@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.portal.rpc.ptapp.dto.welcomewizard;
+package com.propertyvista.domain.moveinwizardmockup;
 
 import java.sql.Time;
 

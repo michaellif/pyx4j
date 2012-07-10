@@ -7,22 +7,30 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on May 3, 2012
+ * Created on May 10, 2012
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.portal.rpc.ptapp.dto.welcomewizard;
+package com.propertyvista.domain.moveinwizardmockup;
 
-import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
+
 @Transient
-public interface ScheduleDTO extends IEntity {
+public interface TenantInsuranceDTO extends IEntity {
 
-    IPrimitive<LogicalDate> scheduleDate();
+    public enum InsuranceStatus {
 
-    IList<TimeSegmentDTO> schedule();
+        unknown, tenantSure, independant;
+
+    }
+
+    IPrimitive<InsuranceStatus> status();
+
+    InsuranceDTO newInsuranceRequest();
+
+    ExistingInsurance independant();
+
 }

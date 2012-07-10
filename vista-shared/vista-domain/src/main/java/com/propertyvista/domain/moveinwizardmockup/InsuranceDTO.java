@@ -7,27 +7,27 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jan 4, 2012
- * @author vladlouk
+ * Created on Apr 16, 2012
+ * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.portal.domain.ptapp;
+package com.propertyvista.domain.moveinwizardmockup;
 
 import com.pyx4j.entity.annotations.Caption;
-import com.pyx4j.entity.annotations.ReadOnly;
-import com.pyx4j.entity.annotations.validator.NotNull;
+import com.pyx4j.entity.annotations.EmbeddedEntity;
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.person.Person;
+@Transient
+public interface InsuranceDTO extends IEntity {
 
-public interface IAgree extends IEntity {
+    @Caption(name = "I (We) Already Have Tenant Insurance")
+    IPrimitive<Boolean> alreadyHaveInsurance();
 
-    @NotNull
-    @ReadOnly
-    Person person();
+    @EmbeddedEntity
+    PurchaseInsuranceDTO purchaseInsurance();
 
-    @NotNull
-    @Caption(name = "I Agree")
-    IPrimitive<Boolean> agree();
+    @EmbeddedEntity
+    ExistingInsurance existingInsurance();
 }

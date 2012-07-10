@@ -15,7 +15,7 @@ package com.propertyvista.portal.client.ui.residents.insurancemockup;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.propertyvista.portal.rpc.portal.dto.insurancemockup.TenantInsuranceDTO;
+import com.propertyvista.domain.moveinwizardmockup.TenantInsuranceDTO;
 
 public interface InsuranceView extends IsWidget {
 

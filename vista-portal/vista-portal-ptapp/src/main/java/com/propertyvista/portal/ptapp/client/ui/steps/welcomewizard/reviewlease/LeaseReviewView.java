@@ -13,8 +13,8 @@
  */
 package com.propertyvista.portal.ptapp.client.ui.steps.welcomewizard.reviewlease;
 
+import com.propertyvista.domain.moveinwizardmockup.LeaseReviewDTO;
 import com.propertyvista.portal.ptapp.client.ui.steps.WizardStepView;
-import com.propertyvista.portal.rpc.ptapp.dto.welcomewizard.LeaseReviewDTO;
 
 public interface LeaseReviewView extends WizardStepView<LeaseReviewDTO, LeaseReviewPresenter> {
 

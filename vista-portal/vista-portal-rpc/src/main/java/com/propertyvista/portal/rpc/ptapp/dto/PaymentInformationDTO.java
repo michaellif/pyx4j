@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.rpc.ptapp.dto;
 
+import com.propertyvista.dto.LegalTermsDescriptorDTO;
 import com.propertyvista.portal.domain.ptapp.PaymentInformation;
 import com.pyx4j.entity.annotations.Transient;
 

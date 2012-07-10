@@ -22,7 +22,7 @@ import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
-import com.propertyvista.portal.rpc.ptapp.dto.welcomewizard.ExistingInsurance;
+import com.propertyvista.domain.moveinwizardmockup.ExistingInsurance;
 
 public class InsuranceAlreadyAvailabileForm extends CEntityDecoratableForm<ExistingInsurance> {
 

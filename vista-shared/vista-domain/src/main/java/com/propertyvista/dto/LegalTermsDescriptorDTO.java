@@ -7,20 +7,30 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Apr 13, 2012
- * @author ArtyomB
+ * Created on Jan 4, 2012
+ * @author vladlouk
  * @version $Id$
  */
-package com.propertyvista.portal.rpc.ptapp.dto.welcomewizard;
+package com.propertyvista.dto;
 
+import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.portal.rpc.ptapp.dto.LegalTermsDescriptorDTO;
+import com.propertyvista.domain.policy.policies.domain.LegalTermsContent;
+import com.propertyvista.domain.tenant.ptapp.IAgree;
 
 @Transient
-public interface LeaseReviewDTO extends IEntity {
+public interface LegalTermsDescriptorDTO extends IEntity {
 
-    IList<LegalTermsDescriptorDTO> leaseAgreementTerms();
+    @ToString(index = 0)
+    IPrimitive<String> name();
+
+    IPrimitive<String> description();
+
+    LegalTermsContent content();
+
+    IList<IAgree> agrees();
 }

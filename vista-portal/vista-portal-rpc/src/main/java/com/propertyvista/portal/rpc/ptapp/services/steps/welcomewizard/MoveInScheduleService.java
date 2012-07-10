@@ -13,7 +13,7 @@
  */
 package com.propertyvista.portal.rpc.ptapp.services.steps.welcomewizard;
 
-import com.propertyvista.portal.rpc.ptapp.dto.welcomewizard.MoveInScheduleDTO;
+import com.propertyvista.domain.moveinwizardmockup.MoveInScheduleDTO;
 import com.propertyvista.portal.rpc.ptapp.services.steps.AbstractWizardService;
 
 public interface MoveInScheduleService extends AbstractWizardService<MoveInScheduleDTO> {

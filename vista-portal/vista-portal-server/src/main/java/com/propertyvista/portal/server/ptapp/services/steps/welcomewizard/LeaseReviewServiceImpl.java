@@ -21,9 +21,9 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.EntityFactory;
 
-import com.propertyvista.portal.domain.ptapp.IAgree;
-import com.propertyvista.portal.rpc.ptapp.dto.LegalTermsDescriptorDTO;
-import com.propertyvista.portal.rpc.ptapp.dto.welcomewizard.LeaseReviewDTO;
+import com.propertyvista.domain.moveinwizardmockup.LeaseReviewDTO;
+import com.propertyvista.domain.tenant.ptapp.IAgree;
+import com.propertyvista.dto.LegalTermsDescriptorDTO;
 import com.propertyvista.portal.rpc.ptapp.services.steps.welcomewizard.LeaseReviewService;
 
 public class LeaseReviewServiceImpl implements LeaseReviewService {

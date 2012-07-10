@@ -7,32 +7,27 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on May 10, 2012
- * @author ArtyomB
+ * Created on Jan 4, 2012
+ * @author vladlouk
  * @version $Id$
  */
-package com.propertyvista.portal.rpc.portal.dto.insurancemockup;
+package com.propertyvista.domain.tenant.ptapp;
 
-import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.ReadOnly;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.portal.rpc.ptapp.dto.welcomewizard.ExistingInsurance;
-import com.propertyvista.portal.rpc.ptapp.dto.welcomewizard.InsuranceDTO;
+import com.propertyvista.domain.person.Person;
 
-@Transient
-public interface TenantInsuranceDTO extends IEntity {
+public interface IAgree extends IEntity {
 
-    public enum InsuranceStatus {
+    @NotNull
+    @ReadOnly
+    Person person();
 
-        unknown, tenantSure, independant;
-
-    }
-
-    IPrimitive<InsuranceStatus> status();
-
-    InsuranceDTO newInsuranceRequest();
-
-    ExistingInsurance independant();
-
+    @NotNull
+    @Caption(name = "I Agree")
+    IPrimitive<Boolean> agree();
 }

@@ -7,30 +7,22 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jan 4, 2012
- * @author vladlouk
+ * Created on May 3, 2012
+ * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.portal.rpc.ptapp.dto;
+package com.propertyvista.domain.moveinwizardmockup;
 
-import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.policy.policies.domain.LegalTermsContent;
-import com.propertyvista.portal.domain.ptapp.IAgree;
-
 @Transient
-public interface LegalTermsDescriptorDTO extends IEntity {
+public interface ScheduleDTO extends IEntity {
 
-    @ToString(index = 0)
-    IPrimitive<String> name();
+    IPrimitive<LogicalDate> scheduleDate();
 
-    IPrimitive<String> description();
-
-    LegalTermsContent content();
-
-    IList<IAgree> agrees();
+    IList<TimeSegmentDTO> schedule();
 }

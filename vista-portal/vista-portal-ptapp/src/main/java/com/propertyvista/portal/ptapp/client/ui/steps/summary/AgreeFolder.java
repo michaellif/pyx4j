@@ -32,7 +32,7 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.domain.person.Name;
-import com.propertyvista.portal.domain.ptapp.IAgree;
+import com.propertyvista.domain.tenant.ptapp.IAgree;
 
 public class AgreeFolder extends VistaTableFolder<IAgree> {
 

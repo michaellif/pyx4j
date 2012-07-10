@@ -11,20 +11,31 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.portal.ptapp.client.ui.steps.welcomewizard.insurance.components;
-
-import java.util.ArrayList;
-import java.util.List;
+package com.propertyvista.common.client.moveinwizardmockup.components;
 
 import com.pyx4j.forms.client.ui.CComboBox;
+import com.pyx4j.forms.client.ui.IFormat;
 
-public class ValueLabelCombo extends CComboBox<ValueLabelWrapper> {
+public class FormattableCombo<E> extends CComboBox<E> {
 
-    public ValueLabelCombo(String label, Integer... options) {
-        List<ValueLabelWrapper> wrappedOptions = new ArrayList<ValueLabelWrapper>(options.length);
-        for (Integer value : options) {
-            wrappedOptions.add(new ValueLabelWrapper(value, label));
-        }
-        setOptions(wrappedOptions);
+    private final IFormat<E> format;
+
+    public FormattableCombo(IFormat<E> format) {
+        this.format = format;
     }
+
+    @Override
+    public String getItemName(E o) {
+        return format.format(o);
+    };
+
+    @Override
+    public boolean isValuesEquals(E value1, E value2) {
+        if (value1 == null | value2 == null) {
+            return value1 == value2;
+        } else {
+            return value1.equals(value2);
+        }
+    }
+
 }

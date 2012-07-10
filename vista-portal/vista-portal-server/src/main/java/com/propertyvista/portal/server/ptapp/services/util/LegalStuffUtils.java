@@ -23,7 +23,7 @@ import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.domain.policy.policies.LeaseTermsPolicy;
 import com.propertyvista.domain.policy.policies.domain.LegalTermsContent;
 import com.propertyvista.domain.policy.policies.domain.LegalTermsDescriptor;
-import com.propertyvista.portal.rpc.ptapp.dto.LegalTermsDescriptorDTO;
+import com.propertyvista.dto.LegalTermsDescriptorDTO;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
 
 public class LegalStuffUtils {

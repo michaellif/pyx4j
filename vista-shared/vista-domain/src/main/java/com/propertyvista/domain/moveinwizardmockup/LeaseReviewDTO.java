@@ -7,27 +7,20 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Apr 16, 2012
+ * Created on Apr 13, 2012
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.portal.rpc.ptapp.dto.welcomewizard;
+package com.propertyvista.domain.moveinwizardmockup;
 
-import com.pyx4j.entity.annotations.Caption;
-import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.shared.IList;
+
+import com.propertyvista.dto.LegalTermsDescriptorDTO;
 
 @Transient
-public interface InsuranceDTO extends IEntity {
+public interface LeaseReviewDTO extends IEntity {
 
-    @Caption(name = "I (We) Already Have Tenant Insurance")
-    IPrimitive<Boolean> alreadyHaveInsurance();
-
-    @EmbeddedEntity
-    PurchaseInsuranceDTO purchaseInsurance();
-
-    @EmbeddedEntity
-    ExistingInsurance existingInsurance();
+    IList<LegalTermsDescriptorDTO> leaseAgreementTerms();
 }
