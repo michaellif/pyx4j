@@ -116,9 +116,9 @@ public class InsuranceServiceImpl implements InsuranceService {
 
         insurance.purchaseInsurance().formOfCoverage().setValue(FormOfCoverage.basicCoverage);
 
-        insurance.purchaseInsurance().jewleryAndFurs().setValue(asMoney(5000));
-        insurance.purchaseInsurance().bicycles().setValue(asMoney(2000));
-        insurance.purchaseInsurance().personalComputers().setValue(asMoney(6000));
+        insurance.purchaseInsurance().jewleryAndArt().setValue(asMoney(5000));
+        insurance.purchaseInsurance().sportsEquipment().setValue(asMoney(2000));
+        insurance.purchaseInsurance().electronics().setValue(asMoney(6000));
         insurance.purchaseInsurance().moneyOrGiftGardsOrGiftCertificates().setValue(asMoney(500));
         insurance.purchaseInsurance().securities().setValue(asMoney(500));
         insurance.purchaseInsurance().utilityTraders().setValue(asMoney(2000));

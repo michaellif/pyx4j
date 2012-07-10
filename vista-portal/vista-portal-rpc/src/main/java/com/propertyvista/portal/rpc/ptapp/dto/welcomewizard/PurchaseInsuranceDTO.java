@@ -79,14 +79,14 @@ public interface PurchaseInsuranceDTO extends IEntity {
     IPrimitive<FormOfCoverage> formOfCoverage();
 
     // Section: Special Limities (per Claim)
-    @Caption(name = "Jewlery & Furs", description = "TBD")
-    IPrimitive<BigDecimal> jewleryAndFurs();
+    @Caption(name = "Jewlery & Art")
+    IPrimitive<BigDecimal> jewleryAndArt();
 
-    @Caption(description = "TBD")
-    IPrimitive<BigDecimal> bicycles();
+    IPrimitive<BigDecimal> sportsEquipment();
 
-    @Caption(description = "TBD")
-    IPrimitive<BigDecimal> personalComputers();
+    IPrimitive<BigDecimal> electronics();
+
+    IPrimitive<BigDecimal> sewerBackUp();
 
     @Caption(name = "Money, Gift Cards, or Gift Certificates", description = "TBD")
     IPrimitive<BigDecimal> moneyOrGiftGardsOrGiftCertificates();

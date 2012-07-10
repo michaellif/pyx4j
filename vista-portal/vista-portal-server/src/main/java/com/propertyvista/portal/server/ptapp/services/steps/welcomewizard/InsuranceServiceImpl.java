@@ -69,29 +69,41 @@ public class InsuranceServiceImpl implements InsuranceService {
         InsuranceDTO insurance = EntityFactory.create(InsuranceDTO.class);
 
         // INSURANCE PURCHASE PART INITIALIZATION
-        insurance.purchaseInsurance().personalContentsLimit().setValue(asMoney(80000));
-        insurance.purchaseInsurance().propertyAwayFromPremises().setValue(asMoney(10000));
-        insurance.purchaseInsurance().additionalLivingExpenses().setValue(asMoney(40000));
+        insurance.purchaseInsurance().personalContentsLimit().setValue(asMoney(60000));
 
-        insurance.purchaseInsurance().deductible().setValue(asMoney(500));
+        if (false) {
+            insurance.purchaseInsurance().propertyAwayFromPremises().setValue(asMoney(10000));
+            insurance.purchaseInsurance().additionalLivingExpenses().setValue(asMoney(40000));
+        }
+
+        insurance.purchaseInsurance().deductible().setValue(asMoney(250));
 
         insurance.purchaseInsurance().formOfCoverage().setValue(FormOfCoverage.basicCoverage);
 
-        insurance.purchaseInsurance().jewleryAndFurs().setValue(asMoney(5000));
-        insurance.purchaseInsurance().bicycles().setValue(asMoney(2000));
-        insurance.purchaseInsurance().personalComputers().setValue(asMoney(6000));
-        insurance.purchaseInsurance().moneyOrGiftGardsOrGiftCertificates().setValue(asMoney(500));
-        insurance.purchaseInsurance().securities().setValue(asMoney(500));
-        insurance.purchaseInsurance().utilityTraders().setValue(asMoney(2000));
-        insurance.purchaseInsurance().spareAutomobileParts().setValue(asMoney(2000));
-        insurance.purchaseInsurance().coinBanknoteOrStampCollections().setValue(asMoney(2000));
-        insurance.purchaseInsurance().collectibleCardsAndComics().setValue(asMoney(2000));
+        insurance.purchaseInsurance().jewleryAndArt().setValue(asMoney(5000));
+        insurance.purchaseInsurance().sportsEquipment().setValue(asMoney(2000));
+        insurance.purchaseInsurance().electronics().setValue(asMoney(6000));
+        insurance.purchaseInsurance().sewerBackUp().setValue(asMoney(10000));
 
-        insurance.purchaseInsurance().freezerFoodSpoilage().setValue(asMoney(1000));
-        insurance.purchaseInsurance().animalsBirdsAndFish().setValue(asMoney(1000));
+        if (false) {
+            insurance.purchaseInsurance().moneyOrGiftGardsOrGiftCertificates().setValue(asMoney(500));
+            insurance.purchaseInsurance().securities().setValue(asMoney(500));
+            insurance.purchaseInsurance().utilityTraders().setValue(asMoney(2000));
+            insurance.purchaseInsurance().spareAutomobileParts().setValue(asMoney(2000));
+            insurance.purchaseInsurance().coinBanknoteOrStampCollections().setValue(asMoney(2000));
+            insurance.purchaseInsurance().collectibleCardsAndComics().setValue(asMoney(2000));
+        }
+
+        if (false) {
+            insurance.purchaseInsurance().freezerFoodSpoilage().setValue(asMoney(1000));
+            insurance.purchaseInsurance().animalsBirdsAndFish().setValue(asMoney(1000));
+        }
+
         insurance.purchaseInsurance().personalLiability().setValue(asMoney(5000000));
 
-        insurance.purchaseInsurance().homeBuiness().setValue(HomeBuisnessOptions.no);
+        if (false) {
+            insurance.purchaseInsurance().homeBuiness().setValue(HomeBuisnessOptions.no);
+        }
         insurance.purchaseInsurance().numOfPrevClaims().setValue(0);
 
         insurance.purchaseInsurance().paymentMethod().paymentMethod().setValue(PaymentMethod.Visa);

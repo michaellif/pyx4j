@@ -110,9 +110,9 @@ public class InsurancePurchaseForm extends CEntityDecoratableForm<PurchaseInsura
         coverageTerms.setWidget(++irow, 0, new DecoratorBuilder(inject(proto().formOfCoverage())).build());
 
         coverageTerms.setH2(++irow, 0, 1, i18n.tr("Special Limites (per Claim)"));
-        coverageTerms.setWidget(++irow, 0, new DecoratorBuilder(inject(proto().jewleryAndFurs(), new LimitCombo(JEWLERY_AND_FURS_OPTIONS))).build());
-        coverageTerms.setWidget(++irow, 0, new DecoratorBuilder(inject(proto().bicycles(), new LimitCombo(BYCICLES_OPTIONS))).build());
-        coverageTerms.setWidget(++irow, 0, new DecoratorBuilder(inject(proto().personalComputers(), new LimitCombo(PERSONAL_COMPUTERS_OPTIONS))).build());
+        coverageTerms.setWidget(++irow, 0, new DecoratorBuilder(inject(proto().jewleryAndArt(), new LimitCombo(JEWLERY_AND_FURS_OPTIONS))).build());
+        coverageTerms.setWidget(++irow, 0, new DecoratorBuilder(inject(proto().sportsEquipment(), new LimitCombo(BYCICLES_OPTIONS))).build());
+        coverageTerms.setWidget(++irow, 0, new DecoratorBuilder(inject(proto().electronics(), new LimitCombo(PERSONAL_COMPUTERS_OPTIONS))).build());
         coverageTerms.setWidget(++irow, 0,
                 new DecoratorBuilder(inject(proto().moneyOrGiftGardsOrGiftCertificates(), new LimitCombo(MONEY_GIFT_CARDS_AND_CERTIFICATES_OPTIONS))).build());
         coverageTerms.setWidget(++irow, 0, new DecoratorBuilder(inject(proto().securities(), new LimitCombo(SECURITIES_OPTIONS))).build());
