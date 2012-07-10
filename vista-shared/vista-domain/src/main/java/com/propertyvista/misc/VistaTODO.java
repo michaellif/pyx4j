@@ -18,7 +18,7 @@ public interface VistaTODO {
     /**
      * Set <code>true</code> to let PtApp show a demo wizard for approved tenants
      */
-    public static final boolean enableWelcomeWizardDemoMode = true;
+    public static final boolean enableWelcomeWizardDemoMode = false;
 
     /**
      * Check that lease from is in the future compared to transaction time (currently if is true billing tests fail)
