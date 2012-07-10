@@ -58,8 +58,8 @@ public class CrmEditorViewImplBase<E extends IEntity> extends EditorViewImplBase
         btnApply = new Button(i18n.tr("Apply"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                getForm().setVisited(true);
                 if (!getForm().isValid()) {
+                    getForm().setUnconditionalValidationErrorRendering(true);
                     throw new UserRuntimeException(getForm().getValidationResults().getMessagesText(true, true));
                 }
                 getPresenter().apply();
@@ -71,8 +71,8 @@ public class CrmEditorViewImplBase<E extends IEntity> extends EditorViewImplBase
         btnSave = new Button(i18n.tr("Save"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                getForm().setVisited(true);
                 if (!getForm().isValid()) {
+                    getForm().setUnconditionalValidationErrorRendering(true);
                     throw new UserRuntimeException(getForm().getValidationResults().getMessagesText(true, true));
                 }
                 getPresenter().save();

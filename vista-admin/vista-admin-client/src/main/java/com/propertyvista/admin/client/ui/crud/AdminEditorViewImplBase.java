@@ -59,8 +59,8 @@ public class AdminEditorViewImplBase<E extends IEntity> extends EditorViewImplBa
         btnApply = new Button(i18n.tr("Apply"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                getForm().setVisited(true);
                 if (!getForm().isValid()) {
+                    getForm().setUnconditionalValidationErrorRendering(true);
                     throw new UserRuntimeException(getForm().getValidationResults().getMessagesText(true, false));
                 }
                 AdminEditorViewImplBase.this.getPresenter().apply();
@@ -71,8 +71,8 @@ public class AdminEditorViewImplBase<E extends IEntity> extends EditorViewImplBa
         btnSave = new Button(i18n.tr("Save"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                getForm().setVisited(true);
                 if (!getForm().isValid()) {
+                    getForm().setUnconditionalValidationErrorRendering(true);
                     throw new UserRuntimeException(getForm().getValidationResults().getMessagesText(true, false));
                 }
                 getPresenter().save();

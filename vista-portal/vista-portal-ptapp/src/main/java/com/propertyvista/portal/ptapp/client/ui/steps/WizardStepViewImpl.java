@@ -69,8 +69,8 @@ public class WizardStepViewImpl<E extends IEntity, T extends WizardStepPresenter
 
     protected void onAction() {
         AppSite.getEventBus().fireEvent(new UserMessageEvent(null, null, null));
-        form.setVisited(true);
         if (!form.isValid()) {
+            form.setUnconditionalValidationErrorRendering(true);
             Window.scrollTo(0, 0);
             throw new UserRuntimeException(form.getValidationResults().getMessagesText(true, false));
         }
