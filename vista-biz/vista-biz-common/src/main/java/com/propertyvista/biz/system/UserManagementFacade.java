@@ -13,6 +13,15 @@
  */
 package com.propertyvista.biz.system;
 
-public interface CrmUserManagementFacade {
+import com.pyx4j.security.rpc.PasswordChangeRequest;
+
+import com.propertyvista.domain.security.AbstractUser;
+import com.propertyvista.domain.security.AbstractUserCredential;
+
+public interface UserManagementFacade {
+
+    <E extends AbstractUserCredential<? extends AbstractUser>> void selfChangePassword(Class<E> credentialClass, PasswordChangeRequest request);
+
+    <E extends AbstractUserCredential<? extends AbstractUser>> void managedSetPassword(Class<E> credentialClass, PasswordChangeRequest request);
 
 }
