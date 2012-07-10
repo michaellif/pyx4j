@@ -33,6 +33,7 @@ import com.propertyvista.admin.domain.security.OnboardingUserCredential;
 import com.propertyvista.admin.server.onboarding.OnboardingXMLUtils;
 import com.propertyvista.admin.server.onboarding.rhf.AbstractRequestHandler;
 import com.propertyvista.domain.security.OnboardingUser;
+import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.onboarding.OnboardingUserAuthenticationResponseIO;
 import com.propertyvista.onboarding.OnboardingUserPasswordResetRequestIO;
 import com.propertyvista.onboarding.ResponseIO;
@@ -84,6 +85,10 @@ public class OnboardingUserPasswordResetRequestHandler extends AbstractRequestHa
             response.status().setValue(OnboardingUserAuthenticationResponseIO.AuthenticationStatusCode.PermissionDenied);
             return response;
         }
+        // TODO verify CRM user enabled if 
+        if (VistaTODO.VISTA_1588) {
+            log.warn("TODO - implement CRM User/OnboardingUser synchronization");
+        }
 
         if (!token.accessKey.equals(cr.accessKey().getValue())) {
             AbstractAntiBot.authenticationFailed(token.email);
@@ -100,6 +105,9 @@ public class OnboardingUserPasswordResetRequestHandler extends AbstractRequestHa
         request.securityAnswer();
 
         // TODO change CRM user if one exists
+        if (VistaTODO.VISTA_1588) {
+            log.warn("TODO - implement CRM User/OnboardingUser syncronization");
+        }
         if (PasswordEncryptor.checkPassword(request.newPassword().getValue(), cr.credential().getValue())) {
             throw new UserRuntimeException(i18n.tr("Your password cannot repeat your previous password"));
         }

@@ -13,15 +13,35 @@
  */
 package com.propertyvista.admin.server.services;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
+import com.pyx4j.rpc.shared.VoidSerializable;
+import com.pyx4j.security.rpc.PasswordChangeRequest;
+
 import com.propertyvista.admin.domain.security.OnboardingUserCredential;
 import com.propertyvista.admin.rpc.services.OnboardingUserPasswordChangeManagedService;
+import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.server.common.security.VistaManagedPasswordChangeServiceImpl;
 
 public class OnboardingUserPasswordChangeManagedServiceImpl extends VistaManagedPasswordChangeServiceImpl<OnboardingUserCredential> implements
         OnboardingUserPasswordChangeManagedService {
 
+    private final static Logger log = LoggerFactory.getLogger(OnboardingUserPasswordChangeManagedServiceImpl.class);
+
     public OnboardingUserPasswordChangeManagedServiceImpl() {
         super(OnboardingUserCredential.class);
+    }
+
+    @Override
+    public void changePassword(AsyncCallback<VoidSerializable> callback, PasswordChangeRequest request) {
+        // TODO USe CRM use if exists
+        if (VistaTODO.VISTA_1588) {
+            log.warn("TODO - implement CRM User/OnboardingUser synchronization");
+        }
+        super.changePassword(callback, request);
     }
 
 }

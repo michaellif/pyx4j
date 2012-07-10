@@ -30,14 +30,14 @@ import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.propertyvista.admin.domain.security.OnboardingUserCredential;
 import com.propertyvista.admin.server.onboarding.rhf.AbstractRequestHandler;
 import com.propertyvista.domain.security.OnboardingUser;
+import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.onboarding.OnboardingUserPasswordChangeRequestIO;
-import com.propertyvista.onboarding.OnboardingUserPasswordResetRequestIO;
 import com.propertyvista.onboarding.ResponseIO;
 import com.propertyvista.server.common.security.PasswordEncryptor;
 
 public class OnboardingUserPasswordChangeRequestHandler extends AbstractRequestHandler<OnboardingUserPasswordChangeRequestIO> {
 
-    private final static Logger log = LoggerFactory.getLogger(OnboardingUserPasswordResetRequestIO.class);
+    private final static Logger log = LoggerFactory.getLogger(OnboardingUserPasswordChangeRequestHandler.class);
 
     private static final I18n i18n = I18n.get(OnboardingUserPasswordResetRequestHandler.class);
 
@@ -72,6 +72,11 @@ public class OnboardingUserPasswordChangeRequestHandler extends AbstractRequestH
         if (!cr.enabled().isBooleanTrue()) {
             response.success().setValue(Boolean.FALSE);
             return response;
+        }
+
+        // TODO USe CRM use if exists
+        if (VistaTODO.VISTA_1588) {
+            log.warn("TODO - implement CRM User/OnboardingUser synchronization");
         }
 
         if (!PasswordEncryptor.checkPassword(request.currentPassword().getValue(), cr.credential().getValue())) {
