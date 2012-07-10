@@ -68,8 +68,6 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
 
     private final FormFlexPanel adjustmentPanel = new FormFlexPanel();
 
-    private final FormFlexPanel depositPanel = new FormFlexPanel();
-
     private final CEntityForm<? extends LeaseDTO> lease;
 
     private final IEditorView<? extends LeaseDTO> leaseEditorView;
@@ -131,9 +129,6 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
         main.setWidget(++row, 0, adjustmentPanel);
         main.getFlexCellFormatter().setColSpan(row, 0, 2);
 
-        main.setWidget(++row, 0, depositPanel);
-        main.getFlexCellFormatter().setColSpan(row, 0, 2);
-
         main.getColumnFormatter().setWidth(0, "50%");
         main.getColumnFormatter().setWidth(1, "50%");
 
@@ -181,15 +176,11 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
 
             if (isViewable()) {
                 adjustmentPanel.setVisible(!getValue().adjustments().isEmpty());
-// TODO - please follow up on deposit changes
-//                depositPanel.setVisible(!getValue().deposits().isEmpty());
             } else {
                 adjustmentPanel.setVisible(true);
-                depositPanel.setVisible(true);
             }
         } else {// tweak UI for empty ProductItem:
             adjustmentPanel.setVisible(false);
-            depositPanel.setVisible(false);
         }
     }
 
