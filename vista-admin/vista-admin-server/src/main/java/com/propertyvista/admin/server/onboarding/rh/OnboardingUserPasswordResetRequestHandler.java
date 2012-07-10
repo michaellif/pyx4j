@@ -96,6 +96,10 @@ public class OnboardingUserPasswordResetRequestHandler extends AbstractRequestHa
             return response;
         }
 
+        // TODO verify securityAnswer
+        request.securityAnswer();
+
+        // TODO change CRM user if one exists
         if (PasswordEncryptor.checkPassword(request.newPassword().getValue(), cr.credential().getValue())) {
             throw new UserRuntimeException(i18n.tr("Your password cannot repeat your previous password"));
         }

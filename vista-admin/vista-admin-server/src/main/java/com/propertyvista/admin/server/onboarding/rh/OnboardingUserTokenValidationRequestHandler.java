@@ -29,6 +29,7 @@ import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.propertyvista.admin.domain.security.OnboardingUserCredential;
 import com.propertyvista.admin.server.onboarding.rhf.AbstractRequestHandler;
 import com.propertyvista.domain.security.OnboardingUser;
+import com.propertyvista.onboarding.OnboardingUserPasswordResetQuestionResponseIO;
 import com.propertyvista.onboarding.OnboardingUserTokenValidationRequestIO;
 import com.propertyvista.onboarding.ResponseIO;
 import com.propertyvista.server.common.security.AccessKey;
@@ -46,7 +47,7 @@ public class OnboardingUserTokenValidationRequestHandler extends AbstractRequest
     public ResponseIO execute(OnboardingUserTokenValidationRequestIO request) {
         log.info("API requested {}", new Object[] { "OnboardingUserTokenValidation" });
 
-        ResponseIO response = EntityFactory.create(ResponseIO.class);
+        OnboardingUserPasswordResetQuestionResponseIO response = EntityFactory.create(OnboardingUserPasswordResetQuestionResponseIO.class);
 
         AccessKey.TokenParser token = new AccessKey.TokenParser(request.token().getValue());
         String email = PasswordEncryptor.normalizeEmailAddress(token.email);
@@ -84,6 +85,10 @@ public class OnboardingUserTokenValidationRequestHandler extends AbstractRequest
         }
 
         response.success().setValue(Boolean.TRUE);
+
+        // TODO If CRM user exists send the question
+        response.securityQuestion().setValue(null);
+
         return response;
 
     }

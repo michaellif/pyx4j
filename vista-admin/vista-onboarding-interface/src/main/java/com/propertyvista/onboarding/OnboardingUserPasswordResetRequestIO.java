@@ -32,6 +32,8 @@ public interface OnboardingUserPasswordResetRequestIO extends RequestIO {
     @NotNull
     IPrimitive<String> token();
 
+    IPrimitive<String> securityAnswer();
+
     @NotNull
     @Transient(logTransient = true)
     IPrimitive<String> newPassword();

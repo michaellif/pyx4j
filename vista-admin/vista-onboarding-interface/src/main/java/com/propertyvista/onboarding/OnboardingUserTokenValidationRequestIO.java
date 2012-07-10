@@ -20,6 +20,11 @@ import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
+/**
+ * 
+ * Response: @see OnboardingUserPasswordResetQuestionResponseIO
+ * 
+ */
 @Transient
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 public interface OnboardingUserTokenValidationRequestIO extends RequestIO {
