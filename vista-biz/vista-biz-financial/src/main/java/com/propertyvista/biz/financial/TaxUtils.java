@@ -39,8 +39,15 @@ import com.propertyvista.domain.tenant.lease.LeaseAdjustmentReason;
 
 public class TaxUtils {
 
-    public static BigDecimal calculateCombinedTaxes(List<InvoiceDebit> debits, Building building) {
+    public static BigDecimal calculateCombinedTax(List<InvoiceDebit> debits, Building building) {
         //TODO
+        // 1. calc tax on the combined totals of the given list of debits; note following:
+        //    a) composite tax (T1 + T2 + ...) - tax of each type is calculated on the total amount of charges the tax
+        //       is applicable for;
+        //    b) compound tax (T1 * (T2 * (...))) - for now only 1 level possible (see Tax.compound()); compound tax
+        //       applied after all non-compound taxes;
+        // 2. compare to the sum of taxes for each debit; balance the diff by adjusting the biggest taxTotal (pennyFix)
+        // 3. return tax amount
         return null;
     }
 
