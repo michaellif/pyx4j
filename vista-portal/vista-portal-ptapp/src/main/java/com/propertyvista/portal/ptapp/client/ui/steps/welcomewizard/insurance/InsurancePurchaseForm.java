@@ -223,34 +223,35 @@ public class InsurancePurchaseForm extends CEntityDecoratableForm<PurchaseInsura
 
     private BigDecimal calculatePremium() {
 
-        BigDecimal baseRate = valueOf(proto().personalContentsLimit()).multiply(new BigDecimal("0.006"));
+        BigDecimal baseRate = bigDecimalOf(proto().personalContentsLimit()).multiply(new BigDecimal("0.006"));
 
         BigDecimal claimsFreeCreditFactor = null;
-        if (valueOf(proto().numOfPrevClaims()) == 1) {
+        if (integerOf(proto().numOfPrevClaims()) == 1) {
             claimsFreeCreditFactor = BigDecimal.ZERO;
-        } else if (valueOf(proto().personalContentsLimit()).equals(new BigDecimal("40000"))) {
+        } else if (bigDecimalOf(proto().personalContentsLimit()).equals(new BigDecimal("40000"))) {
             claimsFreeCreditFactor = new BigDecimal("0.0005");
-        } else if (valueOf(proto().personalContentsLimit()).equals(new BigDecimal("50000"))) {
+        } else if (bigDecimalOf(proto().personalContentsLimit()).equals(new BigDecimal("50000"))) {
             claimsFreeCreditFactor = new BigDecimal("0.001");
-        } else if (valueOf(proto().personalContentsLimit()).equals(new BigDecimal("60000"))) {
+        } else if (bigDecimalOf(proto().personalContentsLimit()).equals(new BigDecimal("60000"))) {
             claimsFreeCreditFactor = new BigDecimal("0.002");
         } else {
             claimsFreeCreditFactor = BigDecimal.ZERO;
         }
 
         BigDecimal alarmCreditFactor = new BigDecimal("0.05");
-        BigDecimal largeDeductibleCreditFactor = (valueOf(proto().deductible()).compareTo(new BigDecimal(250)) <= 0) ? BigDecimal.ZERO : new BigDecimal("0.05");
+        BigDecimal largeDeductibleCreditFactor = (bigDecimalOf(proto().deductible()).compareTo(new BigDecimal(250)) <= 0) ? BigDecimal.ZERO : new BigDecimal(
+                "0.05");
 
-        BigDecimal oneClaimSurchargeFactor = new BigDecimal("0.05").multiply(new BigDecimal(valueOf(proto().numOfPrevClaims())));
+        BigDecimal oneClaimSurchargeFactor = new BigDecimal("0.05").multiply(new BigDecimal(integerOf(proto().numOfPrevClaims())));
         BigDecimal nonSprinkledSurchargeFactor = new BigDecimal("0.1");
         BigDecimal bcEarthquakeSurchargeFactor = new BigDecimal("0.1");
 
         BigDecimal liabliltyRate = BigDecimal.ZERO;
-        if (valueOf(proto().personalLiability()).compareTo(new BigDecimal("1000000")) == 0) {
+        if (bigDecimalOf(proto().personalLiability()).compareTo(new BigDecimal("1000000")) == 0) {
             liabliltyRate = new BigDecimal("100.00");
-        } else if (valueOf(proto().personalLiability()).compareTo(new BigDecimal("2000000")) == 0) {
+        } else if (bigDecimalOf(proto().personalLiability()).compareTo(new BigDecimal("2000000")) == 0) {
             liabliltyRate = new BigDecimal("125.00");
-        } else if (valueOf(proto().personalLiability()).compareTo(new BigDecimal("5000000")) == 0) {
+        } else if (bigDecimalOf(proto().personalLiability()).compareTo(new BigDecimal("5000000")) == 0) {
             liabliltyRate = new BigDecimal("200.00");
         }
 
@@ -270,7 +271,7 @@ public class InsurancePurchaseForm extends CEntityDecoratableForm<PurchaseInsura
 
     private BigDecimal totalCoverage() {
         BigDecimal[] coverageItems = new BigDecimal[] {//@formatter:off
-                valueOf(proto().personalContentsLimit()),
+                bigDecimalOf(proto().personalContentsLimit()),
         };//@formatter:on
 
         BigDecimal total = BigDecimal.ZERO;
@@ -280,12 +281,12 @@ public class InsurancePurchaseForm extends CEntityDecoratableForm<PurchaseInsura
         return total;
     }
 
-    private BigDecimal valueOf(IPrimitive<BigDecimal> object) {
+    private BigDecimal bigDecimalOf(IPrimitive<BigDecimal> object) {
         BigDecimal value = ((CComponent<BigDecimal, ?>) (get(object))).getValue();
         return value != null ? value : BigDecimal.ZERO;
     }
 
-    private Integer valueOf(IPrimitive<Integer> object) {
+    private Integer integerOf(IPrimitive<Integer> object) {
         Integer value = ((CComponent<Integer, ?>) (get(object))).getValue();
         return value != null ? value : 0;
     }
@@ -293,7 +294,7 @@ public class InsurancePurchaseForm extends CEntityDecoratableForm<PurchaseInsura
     private void recalculateSummary() {
         get(proto().monthlyInsurancePremium()).setValue(calculatePremium());
         get(proto().totalCoverage()).setValue(totalCoverage());
-        get(proto().totalPersonalLiability()).setValue(valueOf(proto().personalLiability()));
+        get(proto().totalPersonalLiability()).setValue(bigDecimalOf(proto().personalLiability()));
     }
 
     private class CoverageAmountCombo extends MoneyLabeledCombo {
