@@ -40,6 +40,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.entity.shared.meta.MemberMeta;
+import com.pyx4j.essentials.server.preloader.DataGenerator;
 import com.pyx4j.geo.GeoPoint;
 
 public class XMLEntityModelWriter {
@@ -47,6 +48,8 @@ public class XMLEntityModelWriter {
     protected final XMLStringWriter xml;
 
     private boolean emitId = true;
+
+    private boolean emitExample = false;
 
     private final XMLEntityNamingConvention entityName;
 
@@ -57,6 +60,22 @@ public class XMLEntityModelWriter {
     public XMLEntityModelWriter(XMLStringWriter xml, XMLEntityNamingConvention entityName) {
         this.xml = xml;
         this.entityName = entityName;
+    }
+
+    public boolean isEmitId() {
+        return emitId;
+    }
+
+    public void setEmitId(boolean emitId) {
+        this.emitId = emitId;
+    }
+
+    public boolean isEmitExample() {
+        return emitExample;
+    }
+
+    public void setEmitExample(boolean emitExample) {
+        this.emitExample = emitExample;
     }
 
     public void writeRoot(IEntity entity, Map<String, String> attributes) {
@@ -158,7 +177,11 @@ public class XMLEntityModelWriter {
     @SuppressWarnings({ "unchecked", "rawtypes" })
     protected String getValueClassAsString(Class<?> valueClass) {
         if (valueClass.isEnum()) {
-            return allEnums((Class<Enum>) valueClass);
+            if (isEmitExample()) {
+                return DataGenerator.randomEnum((Class<Enum>) valueClass).name();
+            } else {
+                return allEnums((Class<Enum>) valueClass);
+            }
         } else {
             return valueClass.getSimpleName();
         }
@@ -184,11 +207,4 @@ public class XMLEntityModelWriter {
         }
     }
 
-    public boolean isEmitId() {
-        return emitId;
-    }
-
-    public void setEmitId(boolean emitId) {
-        this.emitId = emitId;
-    }
 }
