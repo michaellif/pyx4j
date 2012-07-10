@@ -66,8 +66,11 @@ public class RunForm extends AdminEntityForm<Run> {
     }
 
     @Override
-    protected void onPopulate() {
-        super.onPopulate();
+    protected void onSetValue(boolean populate) {
+        super.onSetValue(populate);
+        if (isValueEmpty()) {
+            return;
+        }
 
         get(proto().errorMessage()).setVisible(!getValue().errorMessage().isNull());
     }

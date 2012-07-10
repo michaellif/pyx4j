@@ -136,8 +136,11 @@ public class InsurancePurchaseForm extends CEntityDecoratableForm<PurchaseInsura
     }
 
     @Override
-    protected void onPopulate() {
-        super.onPopulate();
+    protected void onSetValue(boolean populate) {
+        super.onSetValue(populate);
+        if (isValueEmpty()) {
+            return;
+        }
 
         // TODO: this is kind of hack to set the quoteTotalPanel to the correct position, but it works 
         quoteTotalPanel.getElement().getStyle().setPosition(Position.FIXED);

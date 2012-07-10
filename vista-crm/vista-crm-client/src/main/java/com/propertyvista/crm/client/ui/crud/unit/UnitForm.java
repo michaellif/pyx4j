@@ -83,8 +83,11 @@ public class UnitForm extends CrmEntityForm<AptUnitDTO> {
     }
 
     @Override
-    protected void onPopulate() {
-        super.onPopulate();
+    protected void onSetValue(boolean populate) {
+        super.onSetValue(populate);
+        if (isValueEmpty()) {
+            return;
+        }
 
         get(proto().lease()).setVisible(!getValue().lease().isNull());
         if (VistaFeatures.instance().occupancyModel()) {

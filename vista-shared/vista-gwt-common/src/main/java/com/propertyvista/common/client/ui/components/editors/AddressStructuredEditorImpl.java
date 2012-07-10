@@ -121,8 +121,12 @@ public abstract class AddressStructuredEditorImpl<A extends AddressStructured> e
     }
 
     @Override
-    protected void onPopulate() {
-        super.onPopulate();
+    protected void onSetValue(boolean populate) {
+        super.onSetValue(populate);
+        if (isValueEmpty()) {
+            return;
+        }
+
         checkCountry();
     }
 

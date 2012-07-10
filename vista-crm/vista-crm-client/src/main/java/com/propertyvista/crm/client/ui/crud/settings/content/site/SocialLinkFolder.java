@@ -66,7 +66,12 @@ class SocialLinkFolder extends VistaBoxFolder<SocialLink> {
     }
 
     @Override
-    protected void onPopulate() {
+    protected void onSetValue(boolean populate) {
+        super.onSetValue(populate);
+        if (isValueEmpty()) {
+            return;
+        }
+
         updateUsedSites();
     }
 

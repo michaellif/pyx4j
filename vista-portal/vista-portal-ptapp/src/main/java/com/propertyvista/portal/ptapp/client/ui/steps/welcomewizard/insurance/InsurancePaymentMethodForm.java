@@ -66,11 +66,6 @@ public class InsurancePaymentMethodForm extends CEntityDecoratableForm<Insurance
     }
 
     @Override
-    protected void onPopulate() {
-        super.onPopulate();
-    }
-
-    @Override
     public IsWidget createContent() {
 
         FormFlexPanel container = new FormFlexPanel();

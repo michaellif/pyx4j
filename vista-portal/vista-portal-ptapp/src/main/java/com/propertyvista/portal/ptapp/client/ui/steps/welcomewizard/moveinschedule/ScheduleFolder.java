@@ -80,8 +80,12 @@ public class ScheduleFolder extends VistaTableFolder<TimeSegmentDTO> {
         }
 
         @Override
-        protected void onPopulate() {
-            super.onPopulate();
+        protected void onSetValue(boolean populate) {
+            super.onSetValue(populate);
+            if (isValueEmpty()) {
+                return;
+            }
+
             if (false) {
                 // TODO add special theme
                 if (!getValue().status().isNull()) {

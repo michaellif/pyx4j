@@ -271,8 +271,11 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
                 }
 
                 @Override
-                protected void onPopulate() {
-                    super.onPopulate();
+                protected void onSetValue(boolean populate) {
+                    super.onSetValue(populate);
+                    if (isValueEmpty()) {
+                        return;
+                    }
 
                     if (getValue().version().moveOutNotice().isNull()) {
                         get(proto().version().moveOutNotice()).setValue(new LogicalDate());

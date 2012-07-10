@@ -55,8 +55,12 @@ public class AccountRecoveryOptionsForm extends CrudEntityForm<AccountRecoveryOp
     }
 
     @Override
-    protected void onPopulate() {
-        super.onPopulate();
+    protected void onSetValue(boolean populate) {
+        super.onSetValue(populate);
+        if (isValueEmpty()) {
+            return;
+        }
+
         List<String> suggestedSecurityQuestions = new ArrayList<String>();
         for (SecurityQuestion q : getValue().securityQuestionsSuggestions()) {
             suggestedSecurityQuestions.add(q.question().getValue());

@@ -143,8 +143,11 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
 
     @SuppressWarnings("unchecked")
     @Override
-    protected void onPopulate() {
-        super.onPopulate();
+    protected void onSetValue(boolean populate) {
+        super.onSetValue(populate);
+        if (isValueEmpty()) {
+            return;
+        }
 
         // tweak UI for ProductItem:
         if (!getValue().item().isEmpty()) {
@@ -263,11 +266,6 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
                 return new BillableItemAdjustmentEditor();
             }
             return super.create(member);
-        }
-
-        @Override
-        protected void onPopulate() {
-            super.onPopulate();
         }
 
         @Override

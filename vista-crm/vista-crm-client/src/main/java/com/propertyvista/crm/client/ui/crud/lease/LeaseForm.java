@@ -60,8 +60,11 @@ public class LeaseForm extends LeaseFormBase<LeaseDTO> {
     }
 
     @Override
-    protected void onPopulate() {
-        super.onPopulate();
+    protected void onSetValue(boolean populate) {
+        super.onSetValue(populate);
+        if (isValueEmpty()) {
+            return;
+        }
 
         setTabVisible(adjustmentsTab, !getValue().version().status().getValue().isDraft());
         setTabVisible(billsTab, !getValue().version().status().getValue().isDraft());

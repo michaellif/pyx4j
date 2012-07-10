@@ -112,8 +112,11 @@ public class PmcForm extends AdminEntityForm<PmcDTO> {
     }
 
     @Override
-    protected void onPopulate() {
-        super.onPopulate();
+    protected void onSetValue(boolean populate) {
+        super.onSetValue(populate);
+        if (isValueEmpty()) {
+            return;
+        }
 
         get(proto().status()).setViewable(true);
 

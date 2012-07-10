@@ -112,8 +112,11 @@ public class PaymentMethodEditor extends CEntityDecoratableForm<PaymentMethod> {
     }
 
     @Override
-    protected void onPopulate() {
-        super.onPopulate();
+    protected void onSetValue(boolean populate) {
+        super.onSetValue(populate);
+        if (isValueEmpty()) {
+            return;
+        }
 
         get(proto().sameAsCurrent()).setVisible(!isViewable());
         get(proto().billingAddress()).setEditable(!getValue().sameAsCurrent().isBooleanTrue());

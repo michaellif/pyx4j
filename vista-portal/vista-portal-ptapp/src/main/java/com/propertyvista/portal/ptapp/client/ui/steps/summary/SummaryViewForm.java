@@ -145,8 +145,11 @@ public class SummaryViewForm extends CEntityDecoratableForm<SummaryDTO> {
     }
 
     @Override
-    protected void onPopulate() {
-        super.onPopulate();
+    protected void onSetValue(boolean populate) {
+        super.onSetValue(populate);
+        if (isValueEmpty()) {
+            return;
+        }
 
         //hide/show various panels depend on populated data:
         consessionPanel.setVisible(!getValue().selectedUnit().concessions().isEmpty());

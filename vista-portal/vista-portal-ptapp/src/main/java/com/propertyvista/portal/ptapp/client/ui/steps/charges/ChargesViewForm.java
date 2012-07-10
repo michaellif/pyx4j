@@ -92,8 +92,12 @@ public class ChargesViewForm extends CEntityDecoratableForm<Charges> {
     }
 
     @Override
-    protected void onPopulate() {
-        super.onPopulate();
+    protected void onSetValue(boolean populate) {
+        super.onSetValue(populate);
+        if (isValueEmpty()) {
+            return;
+        }
+
         splitCharges.setVisible(getValue().paymentSplitCharges().charges().size() > 1);
     }
 
@@ -141,8 +145,12 @@ public class ChargesViewForm extends CEntityDecoratableForm<Charges> {
         }
 
         @Override
-        protected void onPopulate() {
-            super.onPopulate();
+        protected void onSetValue(boolean populate) {
+            super.onSetValue(populate);
+            if (isValueEmpty()) {
+                return;
+            }
+
             this.asWidget().setVisible(!getValue().charges().isEmpty());
         }
     }

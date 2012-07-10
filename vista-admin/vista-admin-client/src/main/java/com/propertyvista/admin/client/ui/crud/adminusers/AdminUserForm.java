@@ -80,8 +80,12 @@ public class AdminUserForm extends AdminEntityForm<AdminUserDTO> {
     }
 
     @Override
-    protected void onPopulate() {
-        super.onPopulate();
+    protected void onSetValue(boolean populate) {
+        super.onSetValue(populate);
+        if (isValueEmpty()) {
+            return;
+        }
+
         for (Entry<CComponent<?, ?>, Condition> entry : conditionalVisibilityMap.entrySet()) {
             entry.getKey().setVisible(entry.getValue().isVisible());
         }

@@ -69,8 +69,11 @@ class FeatureExEditor extends CEntityDecoratableForm<BillableItem> {
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
-    protected void onPopulate() {
-        super.onPopulate();
+    protected void onSetValue(boolean populate) {
+        super.onSetValue(populate);
+        if (isValueEmpty()) {
+            return;
+        }
 
         if (!getValue().item().isEmpty()) {
             CEntityForm editor = null;

@@ -27,7 +27,6 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.domain.person.Name;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
-import com.propertyvista.domain.tenant.lease.LeaseParticipant.Role;
 import com.propertyvista.dto.TenantInLeaseDTO;
 
 public class TenantViewFolder extends VistaTableFolder<TenantInLeaseDTO> {
@@ -80,8 +79,11 @@ public class TenantViewFolder extends VistaTableFolder<TenantInLeaseDTO> {
         }
 
         @Override
-        protected void onPopulate() {
-            super.onPopulate();
+        protected void onSetValue(boolean populate) {
+            super.onSetValue(populate);
+            if (isValueEmpty()) {
+                return;
+            }
 
             if (getValue().role().getValue() == LeaseParticipant.Role.Applicant) {
                 relationship.setVisible(false);

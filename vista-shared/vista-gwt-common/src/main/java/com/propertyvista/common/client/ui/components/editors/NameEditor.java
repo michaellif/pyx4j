@@ -93,8 +93,11 @@ public class NameEditor extends CEntityDecoratableForm<Name> {
     }
 
     @Override
-    protected void onPopulate() {
-        super.onPopulate();
+    protected void onSetValue(boolean populate) {
+        super.onSetValue(populate);
+        if (isValueEmpty()) {
+            return;
+        }
 
         if (!isEditable()) {
             viewComp.setValue(getValue());

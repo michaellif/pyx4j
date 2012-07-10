@@ -96,8 +96,12 @@ public class PaymentRecordsGadgetMetadataForm extends CEntityDecoratableForm<Pay
     }
 
     @Override
-    protected void onPopulate() {
-        super.onPopulate();
+    protected void onSetValue(boolean populate) {
+        super.onSetValue(populate);
+        if (isValueEmpty()) {
+            return;
+        }
+
         get(proto().targetDate()).setVisible(getValue().customizeTargetDate().isBooleanTrue());
     }
 }

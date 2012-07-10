@@ -106,8 +106,12 @@ public class MoveInScheduleForm extends CEntityDecoratableForm<MoveInScheduleDTO
     }
 
     @Override
-    protected void onPopulate() {
-        super.onPopulate();
+    protected void onSetValue(boolean populate) {
+        super.onSetValue(populate);
+        if (isValueEmpty()) {
+            return;
+        }
+
         repopulateMessage();
     }
 

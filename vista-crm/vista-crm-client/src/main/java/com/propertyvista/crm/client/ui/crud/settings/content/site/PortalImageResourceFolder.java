@@ -69,7 +69,12 @@ public class PortalImageResourceFolder extends VistaBoxFolder<PortalImageResourc
     }
 
     @Override
-    protected void onPopulate() {
+    protected void onSetValue(boolean populate) {
+        super.onSetValue(populate);
+        if (isValueEmpty()) {
+            return;
+        }
+
         updateUsedLocales();
     }
 
@@ -183,8 +188,12 @@ public class PortalImageResourceFolder extends VistaBoxFolder<PortalImageResourc
         }
 
         @Override
-        public void onPopulate() {
-            super.onPopulate();
+        protected void onSetValue(boolean populate) {
+            super.onSetValue(populate);
+            if (isValueEmpty()) {
+                return;
+            }
+
             thumb.setUrl(MediaUtils.createSiteImageResourceUrl(getValue().imageResource()));
         }
     }

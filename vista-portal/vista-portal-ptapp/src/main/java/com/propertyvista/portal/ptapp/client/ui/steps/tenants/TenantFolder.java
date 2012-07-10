@@ -84,8 +84,11 @@ public class TenantFolder extends VistaTableFolder<TenantInLeaseDTO> {
 
         @SuppressWarnings("unchecked")
         @Override
-        protected void onPopulate() {
-            super.onPopulate();
+        protected void onSetValue(boolean populate) {
+            super.onSetValue(populate);
+            if (isValueEmpty()) {
+                return;
+            }
 
             applicant = (getValue().role().getValue() == LeaseParticipant.Role.Applicant);
             if (applicant) {

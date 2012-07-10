@@ -149,15 +149,17 @@ public class LeadForm extends CrmEntityForm<Lead> {
     }
 
     @Override
-    protected void onPopulate() {
-        super.onPopulate();
+    protected void onSetValue(boolean populate) {
+        super.onSetValue(populate);
+        if (isValueEmpty()) {
+            return;
+        }
 
         get(proto().lease()).setVisible(!getValue().lease().isNull());
 
         if (isEditable()) {
             ClientPolicyManager.setIdComponentEditabilityByPolicy(IdTarget.lead, get(proto().leadId()), getValue().getPrimaryKey());
         }
-
     }
 
     private Widget createAppointmentsTab() {

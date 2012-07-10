@@ -132,8 +132,11 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
     }
 
     @Override
-    protected void onPopulate() {
-        super.onPopulate();
+    protected void onSetValue(boolean populate) {
+        super.onSetValue(populate);
+        if (isValueEmpty()) {
+            return;
+        }
 
         // tweak property code editing UI:
         if (isEditable()) {

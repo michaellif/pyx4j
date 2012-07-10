@@ -110,8 +110,12 @@ public class PasswordResetForm extends CEntityDecoratableForm<PasswordChangeRequ
     }
 
     @Override
-    protected void onPopulate() {
-        super.onPopulate();
+    protected void onSetValue(boolean populate) {
+        super.onSetValue(populate);
+        if (isValueEmpty()) {
+            return;
+        }
+
         passwordStrengthRule.setDictionary(dictionary);
     }
 

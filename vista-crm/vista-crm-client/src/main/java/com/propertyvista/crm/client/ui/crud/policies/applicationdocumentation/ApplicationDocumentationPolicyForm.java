@@ -43,11 +43,6 @@ public class ApplicationDocumentationPolicyForm extends PolicyDTOTabPanelBasedFo
     }
 
     @Override
-    protected void onPopulate() {
-        super.onPopulate();
-    }
-
-    @Override
     protected List<com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedForm.TabDescriptor> createCustomTabPanels() {
         return Arrays.asList(new TabDescriptor(createEdtorFormTab(), i18n.tr("Settings")));
     }

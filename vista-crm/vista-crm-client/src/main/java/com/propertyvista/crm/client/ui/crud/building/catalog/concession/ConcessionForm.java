@@ -79,8 +79,11 @@ public class ConcessionForm extends CrmEntityForm<Concession> {
     }
 
     @Override
-    protected void onPopulate() {
-        super.onPopulate();
+    protected void onSetValue(boolean populate) {
+        super.onSetValue(populate);
+        if (isValueEmpty()) {
+            return;
+        }
 
         if (getValue() != null) {
             bindValueEditor(getValue().version().type().getValue(), true);
