@@ -555,8 +555,8 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
         if (populate) {
             setVisited(false);
             PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.repopulated);
-            onPopulate();
         }
+        onSetValue(populate);
     }
 
     public final void setValue(DATA_TYPE value, boolean fireEvent) {
@@ -579,7 +579,7 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
         setValue(value, false, true);
     }
 
-    protected void onPopulate() {
+    protected void onSetValue(boolean populate) {
     }
 
     protected void propagateValue(DATA_TYPE value, boolean fireEvent, boolean populate) {

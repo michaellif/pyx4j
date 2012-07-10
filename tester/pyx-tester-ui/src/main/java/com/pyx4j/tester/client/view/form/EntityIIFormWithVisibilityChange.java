@@ -74,8 +74,12 @@ public class EntityIIFormWithVisibilityChange extends CEntityForm<EntityII> {
     }
 
     @Override
-    protected void onPopulate() {
-        super.onPopulate();
+    protected void onSetValue(boolean populate) {
+        super.onSetValue(populate);
+        if (isValueEmpty()) {
+            return;
+        }
+
         setVisibility(getValue().optionalEnum().getValue());
     }
 
