@@ -11,11 +11,10 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.biz.financial.billing;
+package com.propertyvista.biz.financial;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import com.pyx4j.config.server.ServerSideFactory;
@@ -24,9 +23,11 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
-import com.propertyvista.biz.financial.MoneyUtils;
 import com.propertyvista.biz.policy.PolicyFacade;
+import com.propertyvista.domain.financial.billing.InvoiceAccountCharge;
 import com.propertyvista.domain.financial.billing.InvoiceChargeTax;
+import com.propertyvista.domain.financial.billing.InvoiceDebit;
+import com.propertyvista.domain.financial.billing.InvoiceProductCharge;
 import com.propertyvista.domain.financial.offering.ProductItemType;
 import com.propertyvista.domain.financial.tax.Tax;
 import com.propertyvista.domain.policy.policies.LeaseAdjustmentPolicy;
@@ -38,13 +39,38 @@ import com.propertyvista.domain.tenant.lease.LeaseAdjustmentReason;
 
 public class TaxUtils {
 
+    public static BigDecimal calculateCombinedTaxes(List<InvoiceDebit> debits, Building building) {
+        //TODO
+        return null;
+    }
+
+    public static void calculateProductChargeTaxes(InvoiceProductCharge charge, Building building) {
+        if (!charge.amount().isNull()) {
+            charge.taxes().addAll(TaxUtils.calculateTaxes(charge.amount().getValue(), charge.chargeSubLineItem().billableItem().item().type(), building));
+        }
+        charge.taxTotal().setValue(BigDecimal.ZERO);
+        for (InvoiceChargeTax chargeTax : charge.taxes()) {
+            charge.taxTotal().setValue(charge.taxTotal().getValue().add(chargeTax.amount().getValue()));
+        }
+    }
+
+    public static void calculateAccountChargeTax(InvoiceAccountCharge charge, Building building) {
+        if (!charge.amount().isNull()) {
+            charge.taxes().addAll(TaxUtils.calculateTaxes(charge.amount().getValue(), charge.adjustment().reason(), building));
+        }
+        charge.taxTotal().setValue(BigDecimal.ZERO);
+        for (InvoiceChargeTax chargeTax : charge.taxes()) {
+            charge.taxTotal().setValue(charge.taxTotal().getValue().add(chargeTax.amount().getValue()));
+        }
+    }
+
     //TODO Calculate taxes for specific day
     public static List<InvoiceChargeTax> calculateTaxes(final BigDecimal baseAmount, ProductItemType productItemType, Building building) {
         List<Tax> taxes = retrieveTaxesForProductItemType(productItemType, building);
         return calculateTaxes(baseAmount, taxes);
     }
 
-    public static Collection<? extends InvoiceChargeTax> calculateTaxes(BigDecimal baseAmount, LeaseAdjustmentReason reason, Building building) {
+    public static List<InvoiceChargeTax> calculateTaxes(BigDecimal baseAmount, LeaseAdjustmentReason reason, Building building) {
         List<Tax> taxes = retrieveTaxesForAdjustmentReason(reason, building);
         return calculateTaxes(baseAmount, taxes);
     }

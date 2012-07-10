@@ -13,16 +13,11 @@
  */
 package com.propertyvista.biz.financial;
 
-import java.math.BigDecimal;
-
 import com.pyx4j.entity.shared.EntityFactory;
 
-import com.propertyvista.biz.financial.billing.TaxUtils;
 import com.propertyvista.domain.financial.billing.InvoiceAccountCharge;
 import com.propertyvista.domain.financial.billing.InvoiceAccountCredit;
-import com.propertyvista.domain.financial.billing.InvoiceChargeTax;
 import com.propertyvista.domain.financial.billing.InvoiceDebit.DebitType;
-import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 
 public class InvoiceLineItemFactory {
@@ -37,7 +32,7 @@ public class InvoiceLineItemFactory {
         charge.description().setValue(adjustment.reason().name().getValue());
         charge.debitType().setValue(DebitType.accountCharge);
 
-        calculateTax(charge, adjustment.billingAccount().lease().unit().building());
+        TaxUtils.calculateAccountChargeTax(charge, adjustment.billingAccount().lease().unit().building());
 
         return charge;
 
@@ -55,13 +50,4 @@ public class InvoiceLineItemFactory {
         return credit;
     }
 
-    static private void calculateTax(InvoiceAccountCharge charge, Building building) {
-        if (!charge.amount().isNull()) {
-            charge.taxes().addAll(TaxUtils.calculateTaxes(charge.amount().getValue(), charge.adjustment().reason(), building));
-        }
-        charge.taxTotal().setValue(BigDecimal.ZERO);
-        for (InvoiceChargeTax chargeTax : charge.taxes()) {
-            charge.taxTotal().setValue(charge.taxTotal().getValue().add(chargeTax.amount().getValue()));
-        }
-    }
 }

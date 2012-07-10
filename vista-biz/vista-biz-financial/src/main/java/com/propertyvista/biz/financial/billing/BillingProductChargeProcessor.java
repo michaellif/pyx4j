@@ -20,10 +20,10 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.financial.MoneyUtils;
+import com.propertyvista.biz.financial.TaxUtils;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.financial.billing.InvoiceAdjustmentSubLineItem;
-import com.propertyvista.domain.financial.billing.InvoiceChargeTax;
 import com.propertyvista.domain.financial.billing.InvoiceConcessionSubLineItem;
 import com.propertyvista.domain.financial.billing.InvoiceDebit.DebitType;
 import com.propertyvista.domain.financial.billing.InvoiceProductCharge;
@@ -219,7 +219,7 @@ public class BillingProductChargeProcessor extends AbstractBillingProcessor {
             charge.amount().setValue(charge.amount().getValue().add(subLineItem.amount().getValue()));
         }
 
-        calculateTax(charge);
+        TaxUtils.calculateProductChargeTaxes(charge, getBillingManager().getNextPeriodBill().billingCycle().building());
 
         charge.description().setValue(charge.chargeSubLineItem().billableItem().item().description().getStringView());
 
@@ -313,18 +313,6 @@ public class BillingProductChargeProcessor extends AbstractBillingProcessor {
 
         BigDecimal proration = ProrationUtils.prorate(charge.fromDate().getValue(), charge.toDate().getValue(), cycle);
         return MoneyUtils.round(charge.chargeSubLineItem().billableItem().agreedPrice().getValue().multiply(proration));
-    }
-
-    private void calculateTax(InvoiceProductCharge charge) {
-        if (!charge.amount().isNull()) {
-            charge.taxes().addAll(
-                    TaxUtils.calculateTaxes(charge.amount().getValue(), charge.chargeSubLineItem().billableItem().item().type(), getBillingManager()
-                            .getNextPeriodBill().billingCycle().building()));
-        }
-        charge.taxTotal().setValue(BigDecimal.ZERO);
-        for (InvoiceChargeTax chargeTax : charge.taxes()) {
-            charge.taxTotal().setValue(charge.taxTotal().getValue().add(chargeTax.amount().getValue()));
-        }
     }
 
     private void addCharge(InvoiceProductCharge charge) {

@@ -11,7 +11,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.biz.financial.billing;
+package com.propertyvista.biz.financial;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -21,6 +21,7 @@ import java.util.List;
 
 import com.pyx4j.entity.shared.EntityFactory;
 
+import com.propertyvista.biz.financial.TaxUtils;
 import com.propertyvista.config.tests.VistaDBTestBase;
 import com.propertyvista.domain.financial.billing.InvoiceChargeTax;
 import com.propertyvista.domain.financial.tax.Tax;
