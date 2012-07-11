@@ -36,11 +36,7 @@ public class AptUnitSource {
     }
 
     public AptUnit next() {
-        AptUnit unit;
-        do {
-            unit = nextUnit();
-        } while (unit._availableForRent().isNull());
-        return unit;
+        return nextUnit();
     }
 
     private AptUnit nextUnit() {

@@ -113,12 +113,14 @@ public class LeaseLifecycleSimulator {
     public void generateRandomLifeCycle(Lease lease) {
 
         Persistence.service().setTransactionSystemTime(simStart);
-        if (!ServerSideFactory.create(OccupancyFacade.class).isScopeAvailableAvailable(lease.unit().getPrimaryKey())) {
-            Persistence.service().setTransactionSystemTime(null);
-            throw new IllegalStateException("lease simulation cannot be started because the unit is not available");
+        if (lease.unit()._availableForRent().isNull()) {
+            if (!ServerSideFactory.create(OccupancyFacade.class).isScopeAvailableAvailable(lease.unit().getPrimaryKey())) {
+                Persistence.service().setTransactionSystemTime(null);
+                throw new IllegalStateException("lease simulation cannot be started because the unit is not available");
+            } else {
+                ServerSideFactory.create(OccupancyFacade.class).scopeAvailable(lease.unit().getPrimaryKey());
+            }
         }
-
-        ServerSideFactory.create(OccupancyFacade.class).scopeAvailable(lease.unit().getPrimaryKey());
 
         LogicalDate reservedOn = add(max(simStart, lease.unit()._availableForRent().getValue()), rndBetween(minAvailableTerm, maxAvailableTerm));
 

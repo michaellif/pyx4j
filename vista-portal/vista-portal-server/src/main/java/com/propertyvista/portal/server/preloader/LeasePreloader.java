@@ -22,11 +22,13 @@ import com.propertvista.generator.LeaseGenerator;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.domain.DemoData;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -53,7 +55,8 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
         Customer dualTenantCustomer = null;
         for (int i = 0; i < config().numTenants; i++) {
 
-            AptUnit unit = aptUnitSource.next();
+            AptUnit unit = makeAvailable(aptUnitSource.next());
+
             Lease lease = generator.createLease(unit);
             LeaseGenerator.attachDocumentData(lease);
             LeaseGenerator.assigneLeaseProducts(lease);
@@ -76,9 +79,6 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
 
             // Create normal Active Lease first for Shortcut users
             if (i <= DemoData.UserType.TENANT.getDefaultMax()) {
-                Persistence.service().setTransactionSystemTime(lease.leaseFrom().getValue());
-                ServerSideFactory.create(OccupancyFacade.class).scopeAvailable(lease.unit().getPrimaryKey());
-                Persistence.service().setTransactionSystemTime(null);
 
                 LeaseFacade leaseFacade = ServerSideFactory.create(LeaseFacade.class);
                 lease.version().status().setValue(Status.Application);
@@ -129,6 +129,8 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
         for (int i = 0; i < config().numPotentialTenants; i++) {
 
             AptUnit unit = aptUnitSource.next();
+            unit = makeAvailable(unit);
+
             Lease lease = generator.createLease(unit);
             LeaseGenerator.attachDocumentData(lease);
 
@@ -161,7 +163,6 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
             }
 
             Persistence.service().setTransactionSystemTime(lease.leaseFrom().getValue());
-            ServerSideFactory.create(OccupancyFacade.class).scopeAvailable(lease.unit().getPrimaryKey());
             ServerSideFactory.create(LeaseFacade.class).init(lease);
             ServerSideFactory.create(LeaseFacade.class).setUnit(lease, lease.unit());
             ServerSideFactory.create(LeaseFacade.class).persist(lease);
@@ -172,6 +173,22 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
         StringBuilder b = new StringBuilder();
         b.append("Created " + numCreated + " leases");
         return b.toString();
+    }
+
+    private AptUnit makeAvailable(AptUnit unit) {
+        Persistence.service().setTransactionSystemTime(getVacantFromDate(unit));
+        ServerSideFactory.create(OccupancyFacade.class).scopeAvailable(unit.getPrimaryKey());
+        Persistence.service().setTransactionSystemTime(null);
+        return Persistence.service().retrieve(AptUnit.class, unit.getPrimaryKey());
+    }
+
+    private LogicalDate getVacantFromDate(AptUnit unit) {
+        AptUnitOccupancySegment segment = Persistence.service().retrieve(EntityQueryCriteria.create(AptUnitOccupancySegment.class));
+        if (segment == null || segment.status().getValue() != AptUnitOccupancySegment.Status.vacant) {
+            throw new IllegalStateException("the unit must be vacant");
+        } else {
+            return new LogicalDate(segment.dateFrom().getValue());
+        }
     }
 
     @Override

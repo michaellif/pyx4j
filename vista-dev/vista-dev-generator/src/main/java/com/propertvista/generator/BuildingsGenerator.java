@@ -512,7 +512,7 @@ public class BuildingsGenerator {
         occupancySegment.dateFrom().setValue(RandomUtil.randomLogicalDate(2010, 2012));
         occupancySegment.dateTo().setValue(OccupancyFacade.MAX_DATE);
         occupancySegment.status().setValue(AptUnitOccupancySegment.Status.vacant);
-        unit._availableForRent().setValue(occupancySegment.dateFrom().getValue());
+        unit._availableForRent().setValue(null);
         occupancySegment.description().setValue(RandomUtil.randomLetters(25).toLowerCase());
         unit.unitOccupancySegments().add(occupancySegment);
 
