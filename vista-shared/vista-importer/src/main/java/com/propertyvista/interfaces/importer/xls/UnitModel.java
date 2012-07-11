@@ -22,6 +22,7 @@ public interface UnitModel extends IEntity {
     @ImportColumn(names = { "Property", "Property Code" })
     IPrimitive<String> property();
 
+    @ImportColumn(names = { "Unit", "Unit#" })
     IPrimitive<String> unit();
 
     IPrimitive<String> unitType();

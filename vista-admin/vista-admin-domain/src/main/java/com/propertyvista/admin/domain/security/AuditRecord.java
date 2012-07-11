@@ -43,7 +43,7 @@ public interface AuditRecord extends IEntity {
     @Caption(name = "Modified by")
     IPrimitive<Key> user();
 
-    @Length(16)
+    @Length(39)
     IPrimitive<String> remoteAddr();
 
     @Caption(name = "When")

@@ -27,11 +27,17 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.essentials.rpc.report.DownloadFormat;
 import com.pyx4j.essentials.server.xml.XMLEntityParser;
 
+import com.propertyvista.crm.rpc.dto.ImportUploadDTO;
 import com.propertyvista.dto.ImportDataFormatType;
 import com.propertyvista.interfaces.importer.model.ImportIO;
 import com.propertyvista.interfaces.importer.parser.RentRollImportParser;
 import com.propertyvista.interfaces.importer.parser.UnitAvailabilityImportParser;
 import com.propertyvista.interfaces.importer.parser.VistaXMLImportParser;
+import com.propertyvista.interfaces.importer.processor.ImportProcessor;
+import com.propertyvista.interfaces.importer.processor.ImportProcessorBuildingUpdater;
+import com.propertyvista.interfaces.importer.processor.ImportProcessorFlatFloorplanAndUnits;
+import com.propertyvista.interfaces.importer.processor.ImportProcessorInitialImport;
+import com.propertyvista.interfaces.importer.processor.ImportProcessorUpdateUnitAvailability;
 import com.propertyvista.interfaces.importer.xml.ImportXMLEntityFactory;
 
 public class ImportUtils {
@@ -45,7 +51,23 @@ public class ImportUtils {
         case unitAvailability:
             return new UnitAvailabilityImportParser().parse(data, format);
         default:
-            throw new Error("Unsupported adapter type");
+            throw new Error("Unsupported DataFormatType type");
+        }
+    }
+
+    public static ImportProcessor createImportProcessor(ImportUploadDTO uploadRequestInfo, ImportIO importIO) {
+
+        switch (uploadRequestInfo.type().getValue()) {
+        case updateUnitAvailability:
+            return new ImportProcessorUpdateUnitAvailability();
+        case newData:
+            return new ImportProcessorInitialImport();
+        case updateData:
+            return new ImportProcessorBuildingUpdater();
+        case flatFloorplanAndUnits:
+            return new ImportProcessorFlatFloorplanAndUnits();
+        default:
+            throw new Error("Unsupported import type");
         }
     }
 

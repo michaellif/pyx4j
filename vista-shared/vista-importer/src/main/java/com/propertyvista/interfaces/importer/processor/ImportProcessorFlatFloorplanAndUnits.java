@@ -20,12 +20,20 @@ import com.propertyvista.crm.rpc.dto.ImportUploadDTO;
 import com.propertyvista.crm.rpc.dto.ImportUploadResponseDTO;
 import com.propertyvista.interfaces.importer.model.ImportIO;
 
-public interface ImportProcessor {
+public class ImportProcessorFlatFloorplanAndUnits implements ImportProcessor {
 
+    @Override
     public boolean validate(ImportIO data, DeferredProcessProgressResponse status, ImportUploadDTO uploadRequestInfo,
-            UploadResponse<ImportUploadResponseDTO> response);
+            UploadResponse<ImportUploadResponseDTO> response) {
+        // TODO Auto-generated method stub
+        return false;
+    }
 
+    @Override
     public void persist(ImportIO data, DeferredProcessProgressResponse status, ImportUploadDTO uploadRequestInfo,
-            UploadResponse<ImportUploadResponseDTO> response);
+            UploadResponse<ImportUploadResponseDTO> response) {
+        // TODO Auto-generated method stub
+
+    }
 
 }

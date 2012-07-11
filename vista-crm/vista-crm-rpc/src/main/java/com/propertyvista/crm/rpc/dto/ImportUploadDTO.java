@@ -33,7 +33,9 @@ public interface ImportUploadDTO extends IEntity {
 
         updateData,
 
-        updateUnitAvailability;
+        updateUnitAvailability,
+
+        flatFloorplanAndUnits;
 
         @Override
         public String toString() {

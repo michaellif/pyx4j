@@ -14,6 +14,7 @@
 package com.propertyvista.onboarding;
 
 import com.pyx4j.entity.annotations.AbstractEntity;
+import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
@@ -34,6 +35,7 @@ public interface RequestIO extends IEntity {
      * The Internet Protocol (IP) address of the client or last proxy that sent the request.
      */
     @NotNull
+    @Length(39)
     IPrimitive<String> requestRemoteAddr();
 
     IPrimitive<String> remoteSessionId();

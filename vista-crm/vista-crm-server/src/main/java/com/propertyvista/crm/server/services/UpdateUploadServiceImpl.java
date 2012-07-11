@@ -22,6 +22,7 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.essentials.rpc.report.DownloadFormat;
 import com.pyx4j.essentials.rpc.upload.UploadResponse;
+import com.pyx4j.essentials.server.deferred.DeferredProcessRegistry;
 import com.pyx4j.essentials.server.deferred.DeferredProcessorThread;
 import com.pyx4j.essentials.server.upload.UploadData;
 import com.pyx4j.essentials.server.upload.UploadDeferredProcess;
@@ -30,11 +31,13 @@ import com.pyx4j.i18n.annotations.I18nComment;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.server.contexts.NamespaceManager;
 
+import com.propertyvista.config.ThreadPoolNames;
 import com.propertyvista.crm.rpc.dto.ImportUploadDTO;
 import com.propertyvista.crm.rpc.dto.ImportUploadResponseDTO;
 import com.propertyvista.crm.rpc.services.UpdateUploadService;
 import com.propertyvista.interfaces.importer.BuildingUpdater;
 import com.propertyvista.interfaces.importer.ImportCounters;
+import com.propertyvista.interfaces.importer.ImportUploadDeferredProcess;
 import com.propertyvista.interfaces.importer.ImportUtils;
 import com.propertyvista.interfaces.importer.converter.MediaConfig;
 import com.propertyvista.interfaces.importer.model.BuildingIO;
@@ -63,7 +66,22 @@ public class UpdateUploadServiceImpl extends UploadServiceImpl<ImportUploadDTO, 
     }
 
     @Override
+    protected UploadDeferredProcess<ImportUploadDTO, ImportUploadResponseDTO> createUploadDeferredProcess(ImportUploadDTO data) {
+        return new ImportUploadDeferredProcess(data);
+    }
+
+    @Override
     public ProcessingStatus onUploadRecived(final UploadData data, final UploadDeferredProcess<ImportUploadDTO, ImportUploadResponseDTO> process,
+            final UploadResponse<ImportUploadResponseDTO> response) {
+        process.getData().type().setValue(ImportUploadDTO.ImportType.updateUnitAvailability);
+        process.onUploadRecived(data, response);
+        DeferredProcessRegistry.start(data.deferredCorrelationId, process, ThreadPoolNames.IMPORTS);
+        return ProcessingStatus.processWillContinue;
+
+    }
+
+    @Deprecated
+    public ProcessingStatus OLD_onUploadRecived(final UploadData data, final UploadDeferredProcess<ImportUploadDTO, ImportUploadResponseDTO> process,
             final UploadResponse<ImportUploadResponseDTO> response) {
         final String namespace = NamespaceManager.getNamespace();
 

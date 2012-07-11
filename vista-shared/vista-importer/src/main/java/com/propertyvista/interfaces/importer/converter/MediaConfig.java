@@ -13,6 +13,10 @@
  */
 package com.propertyvista.interfaces.importer.converter;
 
+import com.pyx4j.server.contexts.NamespaceManager;
+
+import com.propertyvista.crm.rpc.dto.ImportUploadDTO;
+
 public class MediaConfig {
 
     public String baseFolder;
@@ -23,4 +27,10 @@ public class MediaConfig {
 
     public boolean mimizePreloadDataSize = true;
 
+    public static MediaConfig create(ImportUploadDTO importDTO) {
+        MediaConfig mediaConfig = new MediaConfig();
+        mediaConfig.baseFolder = "data/export/images/" + NamespaceManager.getNamespace();
+        mediaConfig.ignoreMissingMedia = importDTO.ignoreMissingMedia().isBooleanTrue();
+        return mediaConfig;
+    }
 }

@@ -13,22 +13,35 @@
  */
 package com.propertyvista.interfaces.importer;
 
+import org.apache.commons.io.FilenameUtils;
+
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.essentials.rpc.report.DownloadFormat;
+import com.pyx4j.essentials.rpc.upload.UploadResponse;
+import com.pyx4j.essentials.server.upload.UploadData;
 import com.pyx4j.essentials.server.upload.UploadDeferredProcess;
 
 import com.propertyvista.crm.rpc.dto.ImportUploadDTO;
 import com.propertyvista.crm.rpc.dto.ImportUploadResponseDTO;
+import com.propertyvista.interfaces.importer.model.ImportIO;
+import com.propertyvista.interfaces.importer.processor.ImportProcessor;
 
 public class ImportUploadDeferredProcess extends UploadDeferredProcess<ImportUploadDTO, ImportUploadResponseDTO> {
 
     private static final long serialVersionUID = 1L;
 
+    private byte[] binaryData;
+
+    private UploadResponse<ImportUploadResponseDTO> response;
+
     public ImportUploadDeferredProcess(ImportUploadDTO data) {
         super(data);
     }
 
-    public void setBinary(byte[] binaryBata) {
-
+    @Override
+    public void onUploadRecived(final UploadData data, final UploadResponse<ImportUploadResponseDTO> response) {
+        binaryData = data.data;
+        this.response = response;
     }
 
     @Override
@@ -36,8 +49,12 @@ public class ImportUploadDeferredProcess extends UploadDeferredProcess<ImportUpl
         boolean success = false;
         try {
             Persistence.service().startBackgroundProcessTransaction();
-            super.execute();
-            Persistence.service().commit();
+            executeImport();
+            if (status().isCanceled()) {
+                Persistence.service().rollback();
+            } else {
+                Persistence.service().commit();
+            }
             success = true;
         } finally {
             if (!success) {
@@ -47,4 +64,13 @@ public class ImportUploadDeferredProcess extends UploadDeferredProcess<ImportUpl
         }
     }
 
+    private void executeImport() {
+        ImportIO importIO = ImportUtils.parse(getData().dataFormat().getValue(), binaryData,
+                DownloadFormat.valueByExtension(FilenameUtils.getExtension(response.fileName)));
+        ImportProcessor importProcessor = ImportUtils.createImportProcessor(getData(), importIO);
+        if (importProcessor.validate(importIO, status(), getData(), response)) {
+            importProcessor.persist(importIO, status(), getData(), response);
+        }
+        status().setCompleted();
+    }
 }

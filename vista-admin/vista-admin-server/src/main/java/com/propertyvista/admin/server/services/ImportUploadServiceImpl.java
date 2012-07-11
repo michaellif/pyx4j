@@ -26,6 +26,7 @@ import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.essentials.rpc.report.DownloadFormat;
 import com.pyx4j.essentials.rpc.upload.UploadResponse;
+import com.pyx4j.essentials.server.deferred.DeferredProcessRegistry;
 import com.pyx4j.essentials.server.deferred.DeferredProcessorThread;
 import com.pyx4j.essentials.server.upload.UploadData;
 import com.pyx4j.essentials.server.upload.UploadDeferredProcess;
@@ -34,12 +35,14 @@ import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.admin.domain.pmc.Pmc;
 import com.propertyvista.admin.rpc.services.ImportUploadService;
+import com.propertyvista.config.ThreadPoolNames;
 import com.propertyvista.crm.rpc.dto.ImportUploadDTO;
 import com.propertyvista.crm.rpc.dto.ImportUploadResponseDTO;
 import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.interfaces.importer.BuildingImporter;
 import com.propertyvista.interfaces.importer.BuildingUpdater;
 import com.propertyvista.interfaces.importer.ImportCounters;
+import com.propertyvista.interfaces.importer.ImportUploadDeferredProcess;
 import com.propertyvista.interfaces.importer.ImportUtils;
 import com.propertyvista.interfaces.importer.converter.MediaConfig;
 import com.propertyvista.interfaces.importer.model.BuildingIO;
@@ -67,7 +70,30 @@ public class ImportUploadServiceImpl extends UploadServiceImpl<ImportUploadDTO, 
     }
 
     @Override
+    protected UploadDeferredProcess<ImportUploadDTO, ImportUploadResponseDTO> createUploadDeferredProcess(ImportUploadDTO data) {
+        return new ImportUploadDeferredProcess(data);
+    }
+
+    @Override
     public ProcessingStatus onUploadRecived(final UploadData data, final UploadDeferredProcess<ImportUploadDTO, ImportUploadResponseDTO> process,
+            final UploadResponse<ImportUploadResponseDTO> response) {
+
+        process.onUploadRecived(data, response);
+
+        Pmc pmc = Persistence.service().retrieve(Pmc.class, process.getData().id().getValue());
+        if (pmc == null) {
+            throw new Error("PMC Not found");
+        }
+        NamespaceManager.setNamespace(pmc.namespace().getValue());
+
+        DeferredProcessRegistry.start(data.deferredCorrelationId, process, ThreadPoolNames.IMPORTS);
+
+        return ProcessingStatus.processWillContinue;
+
+    }
+
+    @Deprecated
+    public ProcessingStatus OLD_onUploadRecived(final UploadData data, final UploadDeferredProcess<ImportUploadDTO, ImportUploadResponseDTO> process,
             final UploadResponse<ImportUploadResponseDTO> response) {
 
         //TODO This is not the very best example how to for execution on server. VladS - Change!
@@ -94,6 +120,7 @@ public class ImportUploadServiceImpl extends UploadServiceImpl<ImportUploadDTO, 
         return ProcessingStatus.processWillContinue;
     }
 
+    @Deprecated
     private static void runImport(UploadData data, UploadDeferredProcess<ImportUploadDTO, ImportUploadResponseDTO> process,
             UploadResponse<ImportUploadResponseDTO> response) {
         try {
