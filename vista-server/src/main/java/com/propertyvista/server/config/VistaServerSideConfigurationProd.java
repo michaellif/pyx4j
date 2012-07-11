@@ -15,6 +15,8 @@ package com.propertyvista.server.config;
 
 import javax.servlet.ServletContext;
 
+import com.pyx4j.config.server.IMailServiceConfigConfiguration;
+import com.pyx4j.config.server.IPersistenceConfiguration;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.log4j.LoggerConfig;
 
@@ -26,7 +28,9 @@ public class VistaServerSideConfigurationProd extends VistaServerSideConfigurati
     @Override
     public ServerSideConfiguration selectInstanceByContextName(ServletContext servletContext, String contextName) {
         // This environment selector defined in tomcatX.wrapper.conf -Dcom.pyx4j.appConfig=Prod
-        if ("vista-pangroup".equals(contextName)) {
+        if ("vista".equals(contextName)) {
+            return this;
+        } else if ("vista-pangroup".equals(contextName)) {
             return new VistaServerSideConfigurationProdPangroup();
         } else if ("vista-main".equals(contextName)) {
             return new VistaServerSideConfigurationProdMain();
@@ -107,6 +111,30 @@ public class VistaServerSideConfigurationProd extends VistaServerSideConfigurati
     @Override
     public String getCaledonCompanyId() {
         return "BIRCHWOOD";
+    }
+
+    @Override
+    public String getApplicationURLNamespace() {
+        return ".prod02.birchwoodsoftwaregroup.com/";
+    }
+
+    @Override
+    public String getApplicationEmailSender() {
+        return "\"Property Vista\" <no-reply@propertyvista>";
+    }
+
+    @Override
+    public IMailServiceConfigConfiguration getMailServiceConfigConfiguration() {
+        return VistaSMTPMailServiceConfig.getGmailConfig("prod-");
+    }
+
+    @Override
+    public IPersistenceConfiguration getPersistenceConfiguration() {
+        if (getConfigProperties().getValue("db.type").equals("PostgreSQL")) {
+            return new VistaConfigurationPostgreSQLProperties(getConfigDirectory(), getConfigProperties().getProperties());
+        } else {
+            return new VistaConfigurationMySQLProperties(getConfigDirectory(), getConfigProperties().getProperties());
+        }
     }
 
 }
