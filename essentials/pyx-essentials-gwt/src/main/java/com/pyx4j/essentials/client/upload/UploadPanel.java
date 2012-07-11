@@ -50,6 +50,7 @@ import com.pyx4j.essentials.rpc.upload.UploadService;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.client.IServiceBase;
+import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 public class UploadPanel<U extends IEntity, R extends IEntity> extends SimplePanel implements FormPanel.SubmitCompleteHandler, FormPanel.SubmitHandler,
@@ -165,6 +166,14 @@ public class UploadPanel<U extends IEntity, R extends IEntity> extends SimplePan
     }
 
     public final void uploadCancel() {
+        if (uploadId != null) {
+            service.cancelUpload(new DefaultAsyncCallback<VoidSerializable>() {
+                @Override
+                public void onSuccess(VoidSerializable result) {
+                }
+            }, uploadId);
+        }
+
         deferredProgressPanel.cancelProgress();
         onUploadCancel();
         reset();

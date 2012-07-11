@@ -87,6 +87,14 @@ public class DeferredProcessRegistry {
         return deferredCorrelationId;
     }
 
+    public static synchronized void start(String deferredCorrelationId, IDeferredProcess process, String threadPoolName) {
+        DeferredProcessInfo info = getMap().get(deferredCorrelationId);
+        //TODO use ThreadPools
+        Thread t = new DeferredProcessWorkThread(threadPoolName + deferredCorrelationId, info);
+        t.setDaemon(true);
+        t.start();
+    }
+
     public static synchronized IDeferredProcess get(String deferredCorrelationId) {
         return getMap().get(deferredCorrelationId).process;
     }

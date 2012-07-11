@@ -41,8 +41,7 @@ public abstract class UploadServiceImpl<U extends IEntity, R extends IEntity> im
 
     private static final I18n i18n = I18n.get(UploadServiceImpl.class);
 
-    protected void onpPepareUpload(U data, UploadId id) {
-
+    protected void onPepareUpload(U data, UploadId id) {
     }
 
     @Override
@@ -50,11 +49,15 @@ public abstract class UploadServiceImpl<U extends IEntity, R extends IEntity> im
         callback.onSuccess(getMaxSize());
     }
 
+    protected UploadDeferredProcess<U, R> createUploadDeferredProcess(U data) {
+        return new UploadDeferredProcess<U, R>(data);
+    }
+
     @Override
     public void prepareUpload(AsyncCallback<UploadId> callback, U data) {
         UploadId id = new UploadId();
-        onpPepareUpload(data, id);
-        id.setDeferredCorrelationId(DeferredProcessRegistry.register(new UploadDeferredProcess<U, R>(data)));
+        onPepareUpload(data, id);
+        id.setDeferredCorrelationId(DeferredProcessRegistry.register(createUploadDeferredProcess(data)));
         callback.onSuccess(id);
     }
 
