@@ -87,8 +87,8 @@ public class MaintenanceRequestForm extends CEntityDecoratableForm<MaintenanceRe
     }
 
     @Override
-    public void reset() {
+    public void onReset() {
         mainChoice.init();
-        super.reset();
+        super.onReset();
     }
 }
