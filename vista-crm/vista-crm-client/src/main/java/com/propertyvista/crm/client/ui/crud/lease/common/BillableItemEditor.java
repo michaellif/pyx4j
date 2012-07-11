@@ -186,8 +186,8 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
 
     @Override
     protected void onValuePropagation(BillableItem value, boolean fireEvent, boolean populate) {
-        setExtraDataEditor(value, populate);
         super.onValuePropagation(value, fireEvent, populate);
+        setExtraDataEditor(value, populate);
     }
 
     @Override
@@ -293,11 +293,13 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
                 get(proto().effectiveDate()).addValueValidator(new EditableValueValidator<Date>() {
                     @Override
                     public ValidationError isValid(CComponent<Date, ?> component, Date value) {
-                        if (!(value == null) && !(itemEffectiveDateEditor.getValue() == null) && value.before(itemEffectiveDateEditor.getValue())) {
-                            return new ValidationError(component, "The date should not precede the Item Effective date");
-                        }
-                        if (!(value == null) && (itemEffectiveDateEditor.getValue() == null) && value.before(lease.getValue().leaseFrom().getValue())) {
-                            return new ValidationError(component, "The date should not precede the Lease Start date");
+                        if (value != null) {
+                            if ((itemEffectiveDateEditor.getValue() != null) && value.before(itemEffectiveDateEditor.getValue())) {
+                                return new ValidationError(component, "The date should not precede the Item Effective date");
+                            }
+                            if ((lease.getValue().leaseFrom().getValue() != null) && value.before(lease.getValue().leaseFrom().getValue())) {
+                                return new ValidationError(component, "The date should not precede the Lease Start date");
+                            }
                         }
                         return null;
                     }
@@ -311,15 +313,16 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
                 get(proto().expirationDate()).addValueValidator(new EditableValueValidator<Date>() {
                     @Override
                     public ValidationError isValid(CComponent<Date, ?> component, Date value) {
-                        if (!(value == null) && !(itemExpirationDateEditor.getValue() == null) && value.after(itemExpirationDateEditor.getValue())) {
-                            return new ValidationError(component, "The date should not exceed the Item Expiration date");
-                        }
-                        if (!(value == null) && (itemExpirationDateEditor.getValue() == null) && value.after(lease.getValue().leaseTo().getValue())) {
-                            return new ValidationError(component, "The date should not exceed the Lease Expiration date");
+                        if (value != null) {
+                            if (itemExpirationDateEditor.getValue() != null && value.after(itemExpirationDateEditor.getValue())) {
+                                return new ValidationError(component, "The date should not exceed the Item Expiration date");
+                            }
+                            if (lease.getValue().leaseTo().getValue() != null && value.after(lease.getValue().leaseTo().getValue())) {
+                                return new ValidationError(component, "The date should not exceed the Lease Expiration date");
+                            }
                         }
                         return null;
                     }
-
                 });
 
                 get(proto().executionType()).addValueChangeHandler(new ValueChangeHandler<BillableItemAdjustment.ExecutionType>() {
@@ -345,12 +348,14 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
         get(proto().effectiveDate()).addValueValidator(new EditableValueValidator<Date>() {
             @Override
             public ValidationError isValid(CComponent<Date, ?> component, Date value) {
-                if (!(value == null) && value.before(lease.getValue().leaseFrom().getValue())) {
-                    return new ValidationError(component, "The date should not precede the Lease Start date");
-                }
-                for (BillableItemAdjustment a : getValue().adjustments()) {
-                    if (!(value == null) && !(a.effectiveDate().getValue() == null) && a.effectiveDate().getValue().before(value)) {
-                        return new ValidationError(component, "One or more adjustments for this item start before the specificed date");
+                if (value != null) {
+                    if (lease.getValue().leaseTo().getValue() != null && value.before(lease.getValue().leaseFrom().getValue())) {
+                        return new ValidationError(component, "The date should not precede the Lease Start date");
+                    }
+                    for (BillableItemAdjustment a : getValue().adjustments()) {
+                        if (a.effectiveDate().getValue() != null && a.effectiveDate().getValue().before(value)) {
+                            return new ValidationError(component, "One or more adjustments for this item start before the specificed date");
+                        }
                     }
                 }
                 return null;
@@ -362,12 +367,14 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
         get(proto().expirationDate()).addValueValidator(new EditableValueValidator<Date>() {
             @Override
             public ValidationError isValid(CComponent<Date, ?> component, Date value) {
-                if (!(value == null) && value.after(lease.getValue().leaseTo().getValue())) {
-                    return new ValidationError(component, "The date should not exceed the Lease Expiration date");
-                }
-                for (BillableItemAdjustment a : getValue().adjustments()) {
-                    if (!(value == null) && !(a.expirationDate().getValue() == null) && a.expirationDate().getValue().after(value)) {
-                        return new ValidationError(component, "One or more adjustments for this item expire after the specificed date");
+                if (value != null) {
+                    if (lease.getValue().leaseTo().getValue() != null && value.after(lease.getValue().leaseTo().getValue())) {
+                        return new ValidationError(component, "The date should not exceed the Lease Expiration date");
+                    }
+                    for (BillableItemAdjustment a : getValue().adjustments()) {
+                        if (a.expirationDate().getValue() != null && a.expirationDate().getValue().after(value)) {
+                            return new ValidationError(component, "One or more adjustments for this item expire after the specificed date");
+                        }
                     }
                 }
                 return null;
