@@ -13,10 +13,10 @@
  */
 package com.propertyvista.onboarding.example;
 
-import com.propertyvista.onboarding.example.model.BankAccountInfo;
+import com.propertyvista.onboarding.example.model.ApproveBankAccountInfoRequest;
+import com.propertyvista.onboarding.example.model.BankAccountInfoApproval;
 import com.propertyvista.onboarding.example.model.RequestMessage;
 import com.propertyvista.onboarding.example.model.ResponseMessage;
-import com.propertyvista.onboarding.example.model.UpdateBankAccountInfoRequest;
 import com.propertyvista.onboarding.example.utils.ExampleClient;
 
 public class UpdateBankAccountInfoRun {
@@ -28,33 +28,75 @@ public class UpdateBankAccountInfoRun {
         int cnt = 2;
         int num = 0;
 
-        UpdateBankAccountInfoRequest request = new UpdateBankAccountInfoRequest();
-        request.onboardingAccountId = "onb_vista";
-        request.onboardingAccountId = "2";
+//        UpdateBankAccountInfoRequest request = new UpdateBankAccountInfoRequest();
+//        request.requestRemoteAddr = "1.1.1.1";
+//        request.onboardingAccountId = "2";
+//
+//        {
+//            BankAccountInfo bai = new BankAccountInfo();
+//            bai.onboardingBankAccountId = "onb_003";
+//            bai.bankId = "8";
+//            bai.branchTransitNumber = "98765";
+//            bai.accountNumber = "258963";
+//            bai.chargeDescription = "Pay for PMC 1-5";
+//            request.accounts.add(bai);
+//        }
+//
+//        {
+//            BankAccountInfo bai = new BankAccountInfo();
+//            bai.onboardingBankAccountId = "onb_004";
+//            bai.bankId = "9";
+//            bai.branchTransitNumber = "54874";
+//            bai.accountNumber = "123456987123";
+//            bai.chargeDescription = "Pay for PMC 1-5";
+//
+//            request.accounts.add(bai);
+//        }
+//
+//        {
+//            RequestMessage rm = new RequestMessage();
+//            rm.interfaceEntity = ExampleClient.interfaceEntity;
+//            rm.interfaceEntityPassword = ExampleClient.interfaceEntityPassword;
+//
+//            rm.addRequest(request);
+//
+//            ResponseMessage response = ExampleClient.execute(rm);
+//
+//            System.out.println("response Status   : " + response.status);
+//            System.out.println("response Message  : " + response.errorMessage);
+//
+//            if (response.status == ResponseMessage.StatusCode.OK) {
+//                System.out.println("echo requestId    : " + response.responses.get(0).requestId);
+//                System.out.println("response Code     : " + response.responses.get(0).success);
+//                System.out.println("response Message  : " + response.responses.get(0).errorMessage);
+//            }
+//        }
+
+        ApproveBankAccountInfoRequest requestA = new ApproveBankAccountInfoRequest();
+        requestA.requestRemoteAddr = "1.1.1.1";
+        requestA.onboardingAccountId = "2";
 
         {
-            BankAccountInfo bai = new BankAccountInfo();
+            BankAccountInfoApproval bai = new BankAccountInfoApproval();
             bai.onboardingBankAccountId = "onb_003";
-            bai.terminalId = "1235" + num;
-            bai.bankId = "3";
+            bai.terminalId = "AAAAAA";
+            bai.bankId = "8";
             bai.branchTransitNumber = "98765";
             bai.accountNumber = "258963";
-            bai.chargeDescription = "Pay for vista 0";
-            request.accounts.add(bai);
-            num++;
+            bai.chargeDescription = "Pay for PMC 1-5";
+            requestA.accounts.add(bai);
         }
 
         {
-            BankAccountInfo bai = new BankAccountInfo();
+            BankAccountInfoApproval bai = new BankAccountInfoApproval();
             bai.onboardingBankAccountId = "onb_004";
-            bai.terminalId = "1235" + num;
-            bai.bankId = "4";
+            bai.terminalId = "BBBBBB";
+            bai.bankId = "9";
             bai.branchTransitNumber = "54874";
             bai.accountNumber = "123456987123";
-            bai.chargeDescription = "Pay for vista 1";
+            bai.chargeDescription = "Pay for PMC 1-5";
 
-            request.accounts.add(bai);
-            num++;
+            requestA.accounts.add(bai);
         }
 
         {
@@ -62,53 +104,7 @@ public class UpdateBankAccountInfoRun {
             rm.interfaceEntity = ExampleClient.interfaceEntity;
             rm.interfaceEntityPassword = ExampleClient.interfaceEntityPassword;
 
-            rm.addRequest(request);
-
-            ResponseMessage response = ExampleClient.execute(rm);
-
-            System.out.println("response Status   : " + response.status);
-            System.out.println("response Message  : " + response.errorMessage);
-
-            if (response.status == ResponseMessage.StatusCode.OK) {
-                System.out.println("echo requestId    : " + response.responses.get(0).requestId);
-                System.out.println("response Code     : " + response.responses.get(0).success);
-                System.out.println("response Message  : " + response.responses.get(0).errorMessage);
-            }
-        }
-
-        request = new UpdateBankAccountInfoRequest();
-        request.requestRemoteAddr = "1.1.1.1";
-        request.onboardingAccountId = "2";
-
-        {
-            BankAccountInfo bai = new BankAccountInfo();
-            bai.onboardingBankAccountId = "onb_003";
-            bai.terminalId = "BIRCHWT2";
-            bai.bankId = "3";
-            bai.branchTransitNumber = "98765";
-            bai.accountNumber = "258963";
-            bai.chargeDescription = "Pay for PMC 1-5";
-            request.accounts.add(bai);
-        }
-
-        {
-            BankAccountInfo bai = new BankAccountInfo();
-            bai.onboardingBankAccountId = "onb_004";
-            bai.terminalId = "BIRCHWT3";
-            bai.bankId = "4";
-            bai.branchTransitNumber = "54874";
-            bai.accountNumber = "123456987123";
-            bai.chargeDescription = "Pay for PMC 1-5";
-
-            request.accounts.add(bai);
-        }
-
-        {
-            RequestMessage rm = new RequestMessage();
-            rm.interfaceEntity = ExampleClient.interfaceEntity;
-            rm.interfaceEntityPassword = ExampleClient.interfaceEntityPassword;
-
-            rm.addRequest(request);
+            rm.addRequest(requestA);
 
             ResponseMessage response = ExampleClient.execute(rm);
 

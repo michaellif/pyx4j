@@ -21,6 +21,7 @@ import com.propertyvista.onboarding.AccountInfoIO;
 import com.propertyvista.onboarding.ActivatePMCRequestIO;
 import com.propertyvista.onboarding.ApproveBankAccountInfoRequestIO;
 import com.propertyvista.onboarding.BankAccountInfo;
+import com.propertyvista.onboarding.BankAccountInfoApproval;
 import com.propertyvista.onboarding.CaptchaIO;
 import com.propertyvista.onboarding.CheckAvailabilityRequestIO;
 import com.propertyvista.onboarding.CreateOnboardingUserRequestIO;
@@ -74,6 +75,7 @@ public class OnboardingRequestXMLEntityFactory extends XMLEntityFactoryStrict {
         bind(UpdateBankAccountInfoRequestIO.class);
         bind(ApproveBankAccountInfoRequestIO.class);
         bind(BankAccountInfo.class);
+        bind(BankAccountInfoApproval.class);
         bind(UpdatePaymentTypeFeesRequestIO.class);
         bind(UpdatePmcEquifaxInfoRequestIO.class);
         bind(GetSatisfactionFastpassUrlRequestIO.class);
