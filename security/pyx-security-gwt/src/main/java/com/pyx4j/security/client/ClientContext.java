@@ -38,6 +38,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.TimeUtils;
+import com.pyx4j.config.client.CleintApplicationBackendConfig;
 import com.pyx4j.config.client.ClientApplicationVersion;
 import com.pyx4j.config.shared.ClientSystemInfo;
 import com.pyx4j.gwt.commons.BrowserType;
@@ -414,6 +415,7 @@ public class ClientContext {
                 @Override
                 public void onSuccess(AuthenticationResponse result) {
                     ClientContext.getClientSystemInfo().setServerTimeDelta(System.currentTimeMillis() - result.getServertTime());
+                    CleintApplicationBackendConfig.setProductionBackend(result.isProductionBackend());
                     log.debug("Client/Server time delta {}", ClientContext.getClientSystemInfo().getServerTimeDelta());
                     ClientContext.authenticated(result);
                     if (onAuthenticationAvailable != null) {
@@ -443,6 +445,7 @@ public class ClientContext {
             @Override
             public void onSuccess(AuthenticationResponse result) {
                 ClientContext.getClientSystemInfo().setServerTimeDelta(System.currentTimeMillis() - result.getServertTime());
+                CleintApplicationBackendConfig.setProductionBackend(result.isProductionBackend());
                 log.debug("Client/Server time delta {}", ClientContext.getClientSystemInfo().getServerTimeDelta());
                 ClientContext.authenticated(result);
                 callback.onSuccess(isAuthenticated());

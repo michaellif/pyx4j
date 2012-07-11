@@ -41,5 +41,10 @@ public class ApplicationBackend {
         public int getDefaultDataStringLength() {
             return com.pyx4j.config.shared.ApplicationBackend.GAE_ORDINARY_STRING_LENGTH_MAX;
         }
+
+        @Override
+        public boolean isProductionBackend() {
+            return ServerSideConfiguration.instance().isProductionBackend();
+        }
     }
 }

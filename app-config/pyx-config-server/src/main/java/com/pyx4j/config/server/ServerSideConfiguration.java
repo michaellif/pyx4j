@@ -95,6 +95,10 @@ public class ServerSideConfiguration {
         return true;
     }
 
+    public boolean isProductionBackend() {
+        return false;
+    }
+
     public IServiceFactory getRPCServiceFactory() {
         return null;
     }

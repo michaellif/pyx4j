@@ -41,19 +41,7 @@ public class ApplicationBackend {
          */
         int getDefaultDataStringLength();
 
-    }
-
-    public static final class ApplicationBackendConfigGae implements ApplicationBackendConfig {
-
-        @Override
-        public ApplicationBackendType getBackendType() {
-            return ApplicationBackendType.GAE;
-        }
-
-        @Override
-        public int getDefaultDataStringLength() {
-            return GAE_ORDINARY_STRING_LENGTH_MAX;
-        }
+        boolean isProductionBackend();
 
     }
 
@@ -77,5 +65,9 @@ public class ApplicationBackend {
 
     public static final int getDefaultDataStringLength() {
         return impl.getDefaultDataStringLength();
+    }
+
+    public static final boolean isProductionBackend() {
+        return impl.isProductionBackend();
     }
 }

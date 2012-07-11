@@ -46,6 +46,8 @@ public class AuthenticationResponse implements Serializable {
 
     private boolean datastoreReadOnly;
 
+    private boolean productionBackend;
+
     private long servertTime;
 
     private SystemWallMessage systemWallMessage;
@@ -108,6 +110,14 @@ public class AuthenticationResponse implements Serializable {
 
     public void setDatastoreReadOnly(boolean datastoreReadOnly) {
         this.datastoreReadOnly = datastoreReadOnly;
+    }
+
+    public boolean isProductionBackend() {
+        return productionBackend;
+    }
+
+    public void setProductionBackend(boolean productionBackend) {
+        this.productionBackend = productionBackend;
     }
 
     public String getSessionToken() {
