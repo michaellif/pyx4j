@@ -43,6 +43,8 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
 
     private final CHyperlink settings;
 
+    private final HTML thisIsProduction;
+
     private final HorizontalPanel locales;
 
     private CompiledLocale language;
@@ -70,6 +72,14 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
         HorizontalPanel container = new HorizontalPanel();
         container.getElement().getStyle().setFloat(Style.Float.RIGHT);
         container.setSize("30%", "100%");
+
+        thisIsProduction = new HTML("This is PRODUCTION SUPPORT!!!");
+        thisIsProduction.getElement().getStyle().setColor("red");
+        thisIsProduction.getElement().getStyle().setFontWeight(FontWeight.BOLD);
+        thisIsProduction.getElement().getStyle().setFontSize(30, Unit.PX);
+        thisIsProduction.getElement().getStyle().setMarginLeft(1, Unit.EM);
+        thisIsProduction.getElement().getStyle().setMarginRight(1, Unit.EM);
+        thisIsProduction.setVisible(false);
 
         greetings = new HTML("");
         greetings.getElement().getStyle().setDisplay(Display.INLINE);
@@ -177,6 +187,7 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
 //        alertwr.getElement().setAttribute("style", "min-width:3em");
 //        alertwr.add(alert);
 
+        container.add(thisIsProduction);
         container.add(greetings);
         container.add(account);
         container.add(settings);
@@ -243,5 +254,10 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
             MenuItem item = new MenuItem(compiledLocale.getNativeDisplayName(), changeLanguage);
             languages.addItem(item);
         }
+    }
+
+    @Override
+    public void setDisplayThisIsProductionWarning(boolean displayThisIsProductionWarning) {
+        thisIsProduction.setVisible(displayThisIsProductionWarning);
     }
 }

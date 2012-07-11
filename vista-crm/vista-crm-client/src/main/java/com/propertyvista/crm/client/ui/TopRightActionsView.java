@@ -40,4 +40,6 @@ public interface TopRightActionsView extends IsWidget {
     void onLogedIn(String userName);
 
     void setAvailableLocales(List<CompiledLocale> locales);
+
+    void setDisplayThisIsProductionWarning(boolean displayThisIsProductionWarning);
 }

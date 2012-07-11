@@ -20,6 +20,7 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
+import com.pyx4j.config.shared.ApplicationBackend;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.client.ContextChangeEvent;
@@ -74,6 +75,7 @@ public class TopRightActionsActivity extends AbstractActivity implements TopRigh
     private void updateAuthenticatedView() {
         if (ClientContext.isAuthenticated()) {
             view.onLogedIn(ClientContext.getUserVisit().getName());
+            view.setDisplayThisIsProductionWarning(ApplicationBackend.isProductionBackend());
         } else {
             view.onLogedOut();
         }
