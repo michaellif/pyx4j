@@ -76,21 +76,20 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
 
             // Create normal Active Lease first for Shortcut users
             if (i <= DemoData.UserType.TENANT.getDefaultMax()) {
-                LeaseFacade leaseFacade = ServerSideFactory.create(LeaseFacade.class);
-                lease.version().status().setValue(Status.Application);
                 Persistence.service().setTransactionSystemTime(lease.leaseFrom().getValue());
                 ServerSideFactory.create(OccupancyFacade.class).scopeAvailable(lease.unit().getPrimaryKey());
+                Persistence.service().setTransactionSystemTime(null);
 
+                LeaseFacade leaseFacade = ServerSideFactory.create(LeaseFacade.class);
+                lease.version().status().setValue(Status.Application);
                 lease = leaseFacade.init(lease);
-                if (lease.unit().getPrimaryKey() != null) {
-                    leaseFacade.setUnit(lease, lease.unit());
-                }
-                leaseFacade.persist(lease);
+                lease = leaseFacade.setUnit(lease, lease.unit());
+                lease = leaseFacade.persist(lease);
 
                 ServerSideFactory.create(LeaseFacade.class).approveApplication(lease, null, null);
                 //TODO
                 // ServerSideFactory.create(LeaseFacade.class).activate(lease.getPrimaryKey()
-                Persistence.service().setTransactionSystemTime(null);
+
             } else {
                 LeaseLifecycleSimulatorBuilder simBuilder = LeaseLifecycleSimulator.sim();
 
