@@ -13,14 +13,22 @@
  */
 package com.propertyvista.interfaces.importer.processor;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.pyx4j.essentials.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.essentials.rpc.upload.UploadResponse;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.crm.rpc.dto.ImportUploadDTO;
 import com.propertyvista.crm.rpc.dto.ImportUploadResponseDTO;
 import com.propertyvista.interfaces.importer.model.ImportIO;
 
 public class ImportProcessorFlatFloorplanAndUnits implements ImportProcessor {
+
+    private static final I18n i18n = I18n.get(ImportProcessorFlatFloorplanAndUnits.class);
+
+    private final static Logger log = LoggerFactory.getLogger(ImportProcessorFlatFloorplanAndUnits.class);
 
     @Override
     public boolean validate(ImportIO data, DeferredProcessProgressResponse status, ImportUploadDTO uploadRequestInfo,

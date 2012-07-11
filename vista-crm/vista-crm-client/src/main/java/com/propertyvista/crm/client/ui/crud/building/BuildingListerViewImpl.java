@@ -25,6 +25,7 @@ import com.propertyvista.crm.client.ui.crud.UpdateUploadDialog;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.dto.BuildingDTO;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public class BuildingListerViewImpl extends CrmListerViewImplBase<BuildingDTO> implements BuildingListerView {
 
@@ -36,15 +37,15 @@ public class BuildingListerViewImpl extends CrmListerViewImplBase<BuildingDTO> i
         super(CrmSiteMap.Properties.Building.class);
         setLister(new BuildingLister());
 
-        if (SecurityController.checkBehavior(VistaCrmBehavior.PropertyVistaSupport)) {
-            upload = new Button(i18n.tr("\u24CB Upload Update"), new ClickHandler() {
+        if ((!VistaFeatures.instance().leases() && SecurityController.checkBehavior(VistaCrmBehavior.PropertyManagement))
+                || SecurityController.checkBehavior(VistaCrmBehavior.PropertyVistaSupport)) {
+            upload = new Button(i18n.tr("Upload Update"), new ClickHandler() {
 
                 @Override
                 public void onClick(ClickEvent event) {
                     UpdateUploadDialog.show();
                 }
             });
-
             addHeaderToolbarTwoItem(upload);
         }
 
