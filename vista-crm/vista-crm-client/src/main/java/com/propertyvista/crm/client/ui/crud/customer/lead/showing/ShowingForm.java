@@ -35,6 +35,7 @@ import com.pyx4j.widgets.client.tabpanel.Tab;
 import com.propertyvista.crm.client.ui.components.boxes.UnitSelectorDialog;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.rpc.dto.tenant.ShowingDTO;
+import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
@@ -66,6 +67,13 @@ public class ShowingForm extends CrmEntityForm<ShowingDTO> {
                     new DecoratorBuilder(inject(proto().building(), new CEntityCrudHyperlink<Building>(AppPlaceEntityMapper.resolvePlace(Building.class))), 20)
                             .build());
         }
+        if (isEditable()) {
+            content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().floorplan(), new CEntityLabel<Floorplan>()), 20).build());
+        } else {
+            content.setWidget(++row, 0,
+                    new DecoratorBuilder(inject(proto().floorplan(), new CEntityCrudHyperlink<Floorplan>(AppPlaceEntityMapper.resolvePlace(Floorplan.class))),
+                            20).build());
+        }
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().unit(), new CEntitySelectorHyperlink<AptUnit>() {
             @Override
             protected AppPlace getTargetPlace() {
@@ -85,7 +93,7 @@ public class ShowingForm extends CrmEntityForm<ShowingDTO> {
 
                     @Override
                     protected void setFilters(List<Criterion> filters) {
-                        filters.add(PropertyCriterion.eq(proto().building(), ShowingForm.this.getValue().building()));
+                        filters.add(PropertyCriterion.eq(proto().floorplan(), ShowingForm.this.getValue().floorplan()));
 
                         filters.add(PropertyCriterion.eq(proto().unitOccupancySegments().$().status(), AptUnitOccupancySegment.Status.available));
                         filters.add(PropertyCriterion.eq(proto().unitOccupancySegments().$().dateTo(), new LogicalDate(1100, 0, 1)));

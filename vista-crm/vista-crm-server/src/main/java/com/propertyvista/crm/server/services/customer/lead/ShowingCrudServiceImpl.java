@@ -70,6 +70,8 @@ public class ShowingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Showing, 
     private static void retrieveUnitFilterCriteria(ShowingDTO showingDTO) {
         Appointment appointment = Persistence.secureRetrieve(Appointment.class, showingDTO.appointment().getPrimaryKey());
         Persistence.service().retrieve(appointment.lead());
+
+        showingDTO.floorplan().set(appointment.lead().floorplan());
         showingDTO.moveInDate().setValue(appointment.lead().moveInDate().getValue());
         showingDTO.building().set(Persistence.service().retrieve(Building.class, appointment.lead().floorplan().building().getPrimaryKey()));
     }
@@ -80,5 +82,4 @@ public class ShowingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Showing, 
             dto.building().set(dto.unit().building());
         }
     }
-
 }

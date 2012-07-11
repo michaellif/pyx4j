@@ -18,6 +18,7 @@ import com.pyx4j.entity.annotations.ExtendsDBO;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IPrimitive;
 
+import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lead.Showing;
 
@@ -29,6 +30,8 @@ public interface ShowingDTO extends Showing {
      * Unit filter data for unit selection dialog
      */
     Building building();
+
+    Floorplan floorplan();
 
     IPrimitive<LogicalDate> moveInDate();
 }
