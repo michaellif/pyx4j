@@ -62,7 +62,7 @@ public class AdminUserForm extends AdminEntityForm<AdminUserDTO> {
 
     @Override
     public void createTabs() {
-        FormFlexPanel content = new FormFlexPanel();
+        FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));
         int row = -1;
         content.setH1(++row, 0, 1, i18n.tr("General"));
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name())).build());
@@ -76,7 +76,7 @@ public class AdminUserForm extends AdminEntityForm<AdminUserDTO> {
         content.setWidget(++row, 0,
                 new DecoratorBuilder(addVisibilityCondition(inject(proto().requireChangePasswordOnNextLogIn()), isSelfManagedUserCondition)).build());
 
-        selectTab(addTab(content, i18n.tr("General")));
+        selectTab(addTab(content));
     }
 
     @Override

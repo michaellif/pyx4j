@@ -45,7 +45,7 @@ public class PortfolioForm extends CrmEntityForm<Portfolio> {
 
     @Override
     public void createTabs() {
-        FormFlexPanel content = new FormFlexPanel();
+        FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));
 
         int row = -1;
         content.setH1(++row, 0, 2, i18n.tr("Information"));
@@ -55,7 +55,7 @@ public class PortfolioForm extends CrmEntityForm<Portfolio> {
         content.setH1(++row, 0, 1, i18n.tr("Assigned Buildings"));
         content.setWidget(++row, 0, inject(proto().buildings(), new BuildingFolder()));
 
-        selectTab(addTab(content, i18n.tr("General")));
+        selectTab(addTab(content));
 
     }
 

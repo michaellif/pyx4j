@@ -33,7 +33,7 @@ public class RunForm extends AdminEntityForm<Run> {
 
     @Override
     public void createTabs() {
-        FormFlexPanel content = new FormFlexPanel();
+        FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));
         int row = -1;
 
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().trigger()), 15).build());
@@ -61,7 +61,7 @@ public class RunForm extends AdminEntityForm<Run> {
         content.setWidget(++row, 0, ((RunViewerView) getParentView()).getRunDataListerView().asWidget());
         content.getFlexCellFormatter().setColSpan(row, 0, 2);
 
-        selectTab(addTab(content, i18n.tr("General")));
+        selectTab(addTab(content));
 
     }
 

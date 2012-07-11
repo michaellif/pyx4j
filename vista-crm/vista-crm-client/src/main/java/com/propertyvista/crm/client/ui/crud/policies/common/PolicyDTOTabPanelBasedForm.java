@@ -23,7 +23,6 @@ import java.util.Map;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.CEntityForm;
 import com.pyx4j.entity.client.ui.CEntityComboBox;
@@ -77,13 +76,13 @@ public abstract class PolicyDTOTabPanelBasedForm<POLICY_DTO extends PolicyDTOBas
         Tab tab = addTab(createScopeTab(i18n.tr("Scope")));
         selectTab(tab);
 
-        for (TabDescriptor d : createCustomTabPanels()) {
-            addTab(d.widget, d.caption);
+        for (FormFlexPanel d : createCustomTabPanels()) {
+            addTab(d);
         }
 
     }
 
-    protected abstract List<TabDescriptor> createCustomTabPanels();
+    protected abstract List<FormFlexPanel> createCustomTabPanels();
 
     private FormFlexPanel createScopeTab(String title) {
         FormFlexPanel content = new FormFlexPanel(title);
@@ -273,18 +272,6 @@ public abstract class PolicyDTOTabPanelBasedForm<POLICY_DTO extends PolicyDTOBas
             });
 
             return content;
-        }
-    }
-
-    public static class TabDescriptor {
-
-        public final Widget widget;
-
-        public final String caption;
-
-        public TabDescriptor(Widget widget, String caption) {
-            this.widget = widget;
-            this.caption = caption;
         }
     }
 

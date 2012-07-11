@@ -38,7 +38,7 @@ public class UnitOccupancyForm extends CrmEntityForm<AptUnitOccupancySegment> {
 
     @Override
     public void createTabs() {
-        FormFlexPanel content = new FormFlexPanel();
+        FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));
 
         int row = -1;
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().dateFrom()), 9).build());
@@ -59,7 +59,7 @@ public class UnitOccupancyForm extends CrmEntityForm<AptUnitOccupancySegment> {
         get(proto().offMarket()).setVisible(false);
         get(proto().lease()).setVisible(false);
 
-        selectTab(addTab(content, i18n.tr("General")));
+        selectTab(addTab(content));
 
     }
 

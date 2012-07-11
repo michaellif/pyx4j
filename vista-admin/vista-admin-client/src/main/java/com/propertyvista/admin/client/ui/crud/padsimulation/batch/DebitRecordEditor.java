@@ -33,7 +33,7 @@ public class DebitRecordEditor extends AdminEntityForm<PadSimDebitRecord> {
 
     @Override
     public void createTabs() {
-        FormFlexPanel content = new FormFlexPanel();
+        FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));
 
         int row = -1;
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().amount()), 10).build());
@@ -55,6 +55,6 @@ public class DebitRecordEditor extends AdminEntityForm<PadSimDebitRecord> {
         content.setWidget(++row, 1, new DecoratorBuilder(inject(proto().paymentDate()), 10).build());
         content.setWidget(++row, 1, new DecoratorBuilder(inject(proto().reasonText()), 10).build());
 
-        selectTab(addTab(content, i18n.tr("General")));
+        selectTab(addTab(content));
     }
 }

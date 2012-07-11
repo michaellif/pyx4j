@@ -15,6 +15,7 @@ package com.propertyvista.crm.client.ui.crud.building.mech;
 
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
@@ -38,7 +39,7 @@ public abstract class MechBaseForm<E extends LicensedWarrantedMaintained> extend
     @Override
     public void createTabs() {
 
-        Tab tab = addTab(createGeneralTab(), i18n.tr("General"));
+        Tab tab = addTab(createGeneralTab());
         selectTab(tab);
 
         addTab(createWarrantyTab(), i18n.tr("Warranty"));
@@ -46,7 +47,7 @@ public abstract class MechBaseForm<E extends LicensedWarrantedMaintained> extend
 
     }
 
-    protected abstract Widget createGeneralTab();
+    protected abstract FormFlexPanel createGeneralTab();
 
     protected Widget createWarrantyTab() {
 

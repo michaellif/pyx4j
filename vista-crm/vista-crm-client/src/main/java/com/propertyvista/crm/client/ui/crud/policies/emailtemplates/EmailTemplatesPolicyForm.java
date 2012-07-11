@@ -33,7 +33,6 @@ import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.PushButton;
 import com.google.gwt.user.client.ui.RichTextArea.Formatter;
 import com.google.gwt.user.client.ui.UIObject;
-import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
@@ -70,25 +69,17 @@ public class EmailTemplatesPolicyForm extends PolicyDTOTabPanelBasedForm<EmailTe
     }
 
     @Override
-    protected List<com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedForm.TabDescriptor> createCustomTabPanels() {
-        return Arrays.asList(//@formatter:off
-                new TabDescriptor(createEmailTemplatesPanel(), i18n.tr("Templates"))
-        );//@formatter:on
+    protected List<FormFlexPanel> createCustomTabPanels() {
+        return Arrays.asList(createEmailTemplatesPanel());
     }
 
-    private Widget createEmailTemplatesPanel() {
-        FormFlexPanel panel = new FormFlexPanel();
+    private FormFlexPanel createEmailTemplatesPanel() {
+        FormFlexPanel panel = new FormFlexPanel(i18n.tr("Templates"));
         int row = -1;
 
         panel.setWidget(++row, 0, inject(proto().templates(), new EmailTemplateEditorFolder()));
 
         return panel;
-    }
-
-    // TODO this cannot be used because too many tabs are too wide and unable to fit in one sceen
-    @Deprecated
-    private TabDescriptor createEmailTemplateTab(IObject<?> template) {
-        return new TabDescriptor(inject(template, new EmailTemplateEditorFolder()).asWidget(), template.getMeta().getCaption());
     }
 
     private static class EmailTemplateEditorFolder extends VistaBoxFolder<EmailTemplate> {

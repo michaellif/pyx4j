@@ -16,8 +16,6 @@ package com.propertyvista.crm.client.ui.crud.policies.applicationdocumentation;
 import java.util.Arrays;
 import java.util.List;
 
-import com.google.gwt.user.client.ui.Widget;
-
 import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
@@ -43,12 +41,12 @@ public class ApplicationDocumentationPolicyForm extends PolicyDTOTabPanelBasedFo
     }
 
     @Override
-    protected List<com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedForm.TabDescriptor> createCustomTabPanels() {
-        return Arrays.asList(new TabDescriptor(createEdtorFormTab(), i18n.tr("Settings")));
+    protected List<FormFlexPanel> createCustomTabPanels() {
+        return Arrays.asList(createEdtorFormTab());
     }
 
-    private Widget createEdtorFormTab() {
-        FormFlexPanel content = new FormFlexPanel();
+    private FormFlexPanel createEdtorFormTab() {
+        FormFlexPanel content = new FormFlexPanel(i18n.tr("Settings"));
         int row = -1;
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().allowedIDs(), new IdentificationDocumentFolder())).componentWidth(30).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().numberOfRequiredIDs())).componentWidth(3).build());

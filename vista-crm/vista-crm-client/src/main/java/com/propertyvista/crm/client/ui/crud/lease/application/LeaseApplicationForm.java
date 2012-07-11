@@ -49,10 +49,10 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
 
         createCommonContent();
 
-        Tab tab = addTab(createInfoTab(), i18n.tr("Information"));
+        Tab tab = addTab(createInfoTab());
         setTabEnabled(tab, !isEditable());
 
-        tab = addTab(createFinancialTab(), i18n.tr("Financial"));
+        tab = addTab(createFinancialTab());
         setTabEnabled(tab, !isEditable());
 
 // TODO : credit check (Equifax) isn't implemented yet (see LeaseApplicationViewerViewImpl)!        
@@ -60,7 +60,7 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
 //        tabPanel.setLastTabDisabled(true);
 
         if (VistaFeatures.instance().onlineApplication()) {
-            onlineStatusTab = addTab(createOnlineStatusTab(), i18n.tr("Online Status Details"));
+            onlineStatusTab = addTab(createOnlineStatusTab());
             setTabEnabled(onlineStatusTab, !isEditable());
         }
     }
@@ -74,16 +74,16 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
         }
     }
 
-    private Widget createInfoTab() {
-        FormFlexPanel main = new FormFlexPanel();
+    private FormFlexPanel createInfoTab() {
+        FormFlexPanel main = new FormFlexPanel(i18n.tr("Information"));
 
         main.setWidget(0, 0, inject(proto().tenantInfo(), createTenantView()));
 
         return main;
     }
 
-    private Widget createFinancialTab() {
-        FormFlexPanel main = new FormFlexPanel();
+    private FormFlexPanel createFinancialTab() {
+        FormFlexPanel main = new FormFlexPanel(i18n.tr("Financial"));
 
         main.setWidget(0, 0, inject(proto().tenantFinancials(), createFinancialView()));
 
@@ -138,8 +138,8 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
         return main;
     }
 
-    private Widget createOnlineStatusTab() {
-        FormFlexPanel main = new FormFlexPanel();
+    private FormFlexPanel createOnlineStatusTab() {
+        FormFlexPanel main = new FormFlexPanel(i18n.tr("Online Status Details"));
 
         int row = -1;
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseApplication().onlineApplication().status()), 15).labelWidth(20).build());

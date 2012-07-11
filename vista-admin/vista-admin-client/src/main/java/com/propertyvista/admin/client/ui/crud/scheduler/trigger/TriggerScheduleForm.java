@@ -40,7 +40,7 @@ public class TriggerScheduleForm extends AdminEntityForm<TriggerSchedule> {
 
     @Override
     public void createTabs() {
-        FormFlexPanel content = new FormFlexPanel();
+        FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));
 
         int row = -1;
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().repeatType()), 12).build());
@@ -57,7 +57,7 @@ public class TriggerScheduleForm extends AdminEntityForm<TriggerSchedule> {
             ((CComboBox<ScheduleType>) get(proto().repeatType())).setOptions(ScheduleType.uiSet());
         }
 
-        selectTab(addTab(content, i18n.tr("General")));
+        selectTab(addTab(content));
     }
 
     @Override

@@ -35,7 +35,7 @@ public class PadFileForm extends AdminEntityForm<PadSimFile> {
 
     @Override
     public void createTabs() {
-        FormFlexPanel content = new FormFlexPanel();
+        FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));
         int row = -1;
 
         content.setH1(++row, 0, 1, i18n.tr("File Details"));
@@ -45,7 +45,7 @@ public class PadFileForm extends AdminEntityForm<PadSimFile> {
             content.setH1(++row, 0, 1, i18n.tr("Batches"));
             content.setWidget(++row, 0, ((PadFileViewerView) getParentView()).getBatchListerView().asWidget());
         }
-        selectTab(addTab(content, i18n.tr("General")));
+        selectTab(addTab(content));
     }
 
     private Widget createDetailsTab() {

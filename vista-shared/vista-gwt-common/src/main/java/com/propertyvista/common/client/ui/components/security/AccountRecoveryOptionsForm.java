@@ -41,7 +41,7 @@ public class AccountRecoveryOptionsForm extends CrudEntityForm<AccountRecoveryOp
 
     @Override
     protected void createTabs() {
-        FormFlexPanel content = new FormFlexPanel();
+        FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));
         int row = -1;
 
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().recoveryEmail())).build());
@@ -50,7 +50,7 @@ public class AccountRecoveryOptionsForm extends CrudEntityForm<AccountRecoveryOp
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().securityQuestion())).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().securityAnswer(), new CPasswordTextField())).build());
 
-        selectTab(addTab(content, i18n.tr("General")));
+        selectTab(addTab(content));
 
     }
 

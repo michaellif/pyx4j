@@ -35,7 +35,7 @@ public class VendorForm extends CrmEntityForm<Vendor> {
 
     @Override
     public void createTabs() {
-        FormFlexPanel content = new FormFlexPanel();
+        FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));
 
         int row = -1;
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 20).build());
@@ -46,6 +46,6 @@ public class VendorForm extends CrmEntityForm<Vendor> {
         content.setH1(++row, 0, 2, i18n.tr("Emails"));
         content.setWidget(++row, 0, inject(proto().emails(), new EmailFolder(isEditable())));
 
-        selectTab(addTab(content, i18n.tr("General")));
+        selectTab(addTab(content));
     }
 }

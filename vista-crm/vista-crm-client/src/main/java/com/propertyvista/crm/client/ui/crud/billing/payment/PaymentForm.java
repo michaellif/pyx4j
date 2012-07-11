@@ -96,7 +96,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
 
     @Override
     public void createTabs() {
-        FormFlexPanel content = new FormFlexPanel();
+        FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));
 
         content.setWidget(0, 0, createDetailsPanel());
         content.setH1(1, 0, 1, i18n.tr("Payment Method"));
@@ -111,7 +111,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
             }
         });
 
-        selectTab(addTab(content, i18n.tr("General")));
+        selectTab(addTab(content));
     }
 
     private IsWidget createDetailsPanel() {

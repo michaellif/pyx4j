@@ -24,7 +24,6 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
@@ -65,14 +64,12 @@ public class DepositPolicyForm extends PolicyDTOTabPanelBasedForm<DepositPolicyD
     }
 
     @Override
-    protected List<com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedForm.TabDescriptor> createCustomTabPanels() {
-        return Arrays.asList(//@formatter:off
-                new TabDescriptor(createItemsPanel(), i18n.tr("Items"))
-        );//@formatter:on
+    protected List<FormFlexPanel> createCustomTabPanels() {
+        return Arrays.asList(createItemsPanel());
     }
 
-    private Widget createItemsPanel() {
-        FormFlexPanel panel = new FormFlexPanel();
+    private FormFlexPanel createItemsPanel() {
+        FormFlexPanel panel = new FormFlexPanel(i18n.tr("Items"));
         int row = -1;
 
         panel.setWidget(++row, 0, inject(proto().policyItems(), new DepositPolicyItemEditorFolder()));

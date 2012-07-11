@@ -39,7 +39,7 @@ class BillingCycleForm extends CrmEntityForm<BillingCycleDTO> {
 
     @Override
     public void createTabs() {
-        FormFlexPanel content = new FormFlexPanel();
+        FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));
         int row = -1;
 
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingType())).build());
@@ -69,7 +69,7 @@ class BillingCycleForm extends CrmEntityForm<BillingCycleDTO> {
         content.getColumnFormatter().setWidth(0, "40%");
         content.getColumnFormatter().setWidth(1, "60%");
 
-        selectTab(addTab(content, i18n.tr("General")));
+        selectTab(addTab(content));
     }
 
     // builder specifically for this form (enlarge default label width)

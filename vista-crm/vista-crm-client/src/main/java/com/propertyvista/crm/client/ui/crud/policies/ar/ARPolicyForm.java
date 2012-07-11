@@ -16,8 +16,6 @@ package com.propertyvista.crm.client.ui.crud.policies.ar;
 import java.util.Arrays;
 import java.util.List;
 
-import com.google.gwt.user.client.ui.Widget;
-
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -37,12 +35,12 @@ public class ARPolicyForm extends PolicyDTOTabPanelBasedForm<ARPolicyDTO> {
     }
 
     @Override
-    protected List<PolicyDTOTabPanelBasedForm.TabDescriptor> createCustomTabPanels() {
-        return Arrays.asList(new TabDescriptor(createARPoliciesTab(), i18n.tr("AR Settings")));
+    protected List<FormFlexPanel> createCustomTabPanels() {
+        return Arrays.asList(createARPoliciesTab());
     }
 
-    private Widget createARPoliciesTab() {
-        FormFlexPanel content = new FormFlexPanel();
+    private FormFlexPanel createARPoliciesTab() {
+        FormFlexPanel content = new FormFlexPanel(i18n.tr("AR Settings"));
         int row = -1;
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().creditDebitRule())).labelWidth(20).componentWidth(20).build());
 

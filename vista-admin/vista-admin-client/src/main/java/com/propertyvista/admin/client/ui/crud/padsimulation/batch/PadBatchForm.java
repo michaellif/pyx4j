@@ -36,7 +36,7 @@ public class PadBatchForm extends AdminEntityForm<PadSimBatch> {
 
     @Override
     public void createTabs() {
-        FormFlexPanel content = new FormFlexPanel();
+        FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));
 
         int row = -1;
 
@@ -91,6 +91,6 @@ public class PadBatchForm extends AdminEntityForm<PadSimBatch> {
         content.setWidget(++row, 0, inject(proto().records(), new DebitRecordFolder(isEditable())));
         content.getFlexCellFormatter().setColSpan(row, 0, 2);
 
-        selectTab(addTab(content, i18n.tr("General")));
+        selectTab(addTab(content));
     }
 }

@@ -16,8 +16,6 @@ package com.propertyvista.crm.client.ui.crud.policies.backgroundcheck;
 import java.util.Arrays;
 import java.util.List;
 
-import com.google.gwt.user.client.ui.Widget;
-
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -37,14 +35,14 @@ public class BackgroundCheckPolicyForm extends PolicyDTOTabPanelBasedForm<Backgr
     }
 
     @Override
-    protected List<com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedForm.TabDescriptor> createCustomTabPanels() {
+    protected List<FormFlexPanel> createCustomTabPanels() {
         return Arrays.asList(//@formatter:off
-                new TabDescriptor(createItemsPanel(), i18n.tr("Policy"))
+                createItemsPanel()
         );//@formatter:on
     }
 
-    private Widget createItemsPanel() {
-        FormFlexPanel panel = new FormFlexPanel();
+    private FormFlexPanel createItemsPanel() {
+        FormFlexPanel panel = new FormFlexPanel(i18n.tr("Policy"));
         int row = -1;
 
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().bankruptcy()), 5).build());

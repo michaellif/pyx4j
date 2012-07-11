@@ -20,7 +20,6 @@ import java.util.List;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -49,16 +48,16 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
     }
 
     @Override
-    protected List<TabDescriptor> createCustomTabPanels() {
+    protected List<FormFlexPanel> createCustomTabPanels() {
         return Arrays.asList(//@formatter:off
-                new TabDescriptor(createBillingPanel(), i18n.tr("Billing")),
-                new TabDescriptor(createLateFeesPanel(), i18n.tr("Late Fee")),
-                new TabDescriptor(createNsfFeesPanel(), i18n.tr("NSF Fee"))
+                createBillingPanel(),
+                createLateFeesPanel(),
+               createNsfFeesPanel()
         );//@formatter:on
     }
 
-    private Widget createBillingPanel() {
-        FormFlexPanel panel = new FormFlexPanel();
+    private FormFlexPanel createBillingPanel() {
+        FormFlexPanel panel = new FormFlexPanel(i18n.tr("Billing"));
 
         int row = -1;
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().prorationMethod()), 10).build());
@@ -83,8 +82,8 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
         return panel;
     }
 
-    private Widget createLateFeesPanel() {
-        FormFlexPanel panel = new FormFlexPanel();
+    private FormFlexPanel createLateFeesPanel() {
+        FormFlexPanel panel = new FormFlexPanel(i18n.tr("Late Fee"));
 
         int row = -1;
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().lateFee().baseFeeType()), 10).build());
@@ -100,8 +99,8 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
         return panel;
     }
 
-    private Widget createNsfFeesPanel() {
-        FormFlexPanel panel = new FormFlexPanel();
+    private FormFlexPanel createNsfFeesPanel() {
+        FormFlexPanel panel = new FormFlexPanel(i18n.tr("NSF Fee"));
 
         panel.setWidget(0, 0, inject(proto().nsfFees(), new NsfFeeItemFolder(isEditable())));
 

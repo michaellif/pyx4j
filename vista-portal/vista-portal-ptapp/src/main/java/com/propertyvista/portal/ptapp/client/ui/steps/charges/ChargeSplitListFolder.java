@@ -16,10 +16,6 @@ package com.propertyvista.portal.ptapp.client.ui.steps.charges;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.Widget;
-
 import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.entity.client.ui.folder.CEntityFolderRowEditor;
@@ -33,7 +29,6 @@ import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
-import com.propertyvista.common.client.ui.decorations.DecorationUtils;
 import com.propertyvista.domain.person.Name;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.portal.domain.ptapp.TenantCharge;
@@ -111,20 +106,21 @@ public class ChargeSplitListFolder extends VistaTableFolder<TenantCharge> {
             return super.createCell(column);
         }
 
-        @Override
-        protected Widget createCellDecorator(EntityFolderColumnDescriptor column, CComponent<?, ?> component, String width) {
-            Widget w = super.createCellDecorator(column, component, width);
-
-            if (column.getObject() == proto().tenant().percentage()) {
-                FlowPanel wrap = new FlowPanel();
-                wrap.add(DecorationUtils.inline(w, "3em", "right"));
-                wrap.add(DecorationUtils.inline(new HTML("%"), "1em"));
-                wrap.setWidth(width);
-                return wrap;
-            }
-
-            return w;
-        }
+//TODO tenant().percentage() - use CPercentageField
+//        @Override
+//        protected Widget createCellDecorator(EntityFolderColumnDescriptor column, CComponent<?, ?> component, String width) {
+//            Widget w = super.createCellDecorator(column, component, width);
+//
+//            if (column.getObject() == proto().tenant().percentage()) {
+//                FlowPanel wrap = new FlowPanel();
+//                wrap.add(DecorationUtils.inline(w, "3em", "right"));
+//                wrap.add(DecorationUtils.inline(new HTML("%"), "1em"));
+//                wrap.setWidth(width);
+//                return wrap;
+//            }
+//
+//            return w;
+//        }
 
         @Override
         protected void onValuePropagation(TenantCharge entity, boolean fireEvent, boolean populate) {

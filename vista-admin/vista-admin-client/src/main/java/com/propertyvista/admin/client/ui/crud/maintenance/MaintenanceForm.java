@@ -39,7 +39,7 @@ public class MaintenanceForm extends AdminEntityForm<SystemMaintenanceState> {
 
     @Override
     public void createTabs() {
-        FormFlexPanel content = new FormFlexPanel();
+        FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));
 
         int row = -1;
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().systemIdentification()), 10).build());
@@ -60,6 +60,6 @@ public class MaintenanceForm extends AdminEntityForm<SystemMaintenanceState> {
         }
         ((CComboBox<String>) get(proto().systemIdentification())).setOptions(opt);
 
-        selectTab(addTab(content, i18n.tr("General")));
+        selectTab(addTab(content));
     }
 }

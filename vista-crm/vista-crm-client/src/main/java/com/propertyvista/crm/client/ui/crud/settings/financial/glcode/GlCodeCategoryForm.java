@@ -33,7 +33,7 @@ public class GlCodeCategoryForm extends CrmEntityForm<GlCodeCategory> {
 
     @Override
     public void createTabs() {
-        FormFlexPanel content = new FormFlexPanel();
+        FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));
         int row = 0;
         content.setWidget(row++, 0, new DecoratorBuilder(inject(proto().categoryId()), 7).build());
         content.setWidget(row++, 0, new DecoratorBuilder(inject(proto().description()), 25).build());
@@ -41,6 +41,6 @@ public class GlCodeCategoryForm extends CrmEntityForm<GlCodeCategory> {
         content.setH3(row++, 0, 1, proto().glCodes().getMeta().getCaption());
         content.setWidget(row++, 0, inject(proto().glCodes(), new GlCodeFolder(isEditable())));
 
-        selectTab(addTab(content, i18n.tr("General")));
+        selectTab(addTab(content));
     }
 }

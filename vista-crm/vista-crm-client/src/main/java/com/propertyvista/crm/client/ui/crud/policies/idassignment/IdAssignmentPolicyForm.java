@@ -17,8 +17,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import com.google.gwt.user.client.ui.Widget;
-
 import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.entity.shared.IObject;
@@ -49,14 +47,12 @@ public class IdAssignmentPolicyForm extends PolicyDTOTabPanelBasedForm<IdAssignm
     }
 
     @Override
-    protected List<com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedForm.TabDescriptor> createCustomTabPanels() {
-        return Arrays.asList(//@formatter:off
-                new TabDescriptor(createItemsPanel(), i18n.tr("Items"))
-        );//@formatter:on
+    protected List<FormFlexPanel> createCustomTabPanels() {
+        return Arrays.asList(createItemsPanel());
     }
 
-    private Widget createItemsPanel() {
-        FormFlexPanel panel = new FormFlexPanel();
+    private FormFlexPanel createItemsPanel() {
+        FormFlexPanel panel = new FormFlexPanel(i18n.tr("Items"));
         int row = -1;
 
         panel.setWidget(++row, 0, inject(proto().itmes(), new IdAssignmentItemFolder(isEditable())));

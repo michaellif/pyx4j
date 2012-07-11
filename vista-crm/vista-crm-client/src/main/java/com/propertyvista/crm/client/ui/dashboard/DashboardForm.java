@@ -34,7 +34,7 @@ public class DashboardForm extends CrmEntityForm<DashboardMetadata> {
 
     @Override
     public void createTabs() {
-        FormFlexPanel content = new FormFlexPanel();
+        FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));
 
         int row = -1;
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().type(), new CEnumLabel()), 15).build());
@@ -43,6 +43,6 @@ public class DashboardForm extends CrmEntityForm<DashboardMetadata> {
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().isFavorite()), 3).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().isShared()), 3).build());
 
-        selectTab(addTab(content, i18n.tr("General")));
+        selectTab(addTab(content));
     }
 }

@@ -37,7 +37,7 @@ public class MerchantAccountForm extends CrmEntityForm<MerchantAccount> {
 
     @Override
     public void createTabs() {
-        FormFlexPanel content = new FormFlexPanel();
+        FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));
 
         int row = -1;
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().status()), 25).build());
@@ -52,7 +52,7 @@ public class MerchantAccountForm extends CrmEntityForm<MerchantAccount> {
             get(proto().chargeDescription()).setViewable(false);
         }
 
-        selectTab(addTab(content, i18n.tr("General")));
+        selectTab(addTab(content));
 
     }
 }

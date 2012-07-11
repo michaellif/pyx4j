@@ -16,8 +16,6 @@ package com.propertyvista.crm.client.ui.crud.policies.leaseterms;
 import java.util.Arrays;
 import java.util.List;
 
-import com.google.gwt.user.client.ui.Widget;
-
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
@@ -38,35 +36,35 @@ public class LeaseTermsPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseTermsP
     }
 
     @Override
-    protected List<com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedForm.TabDescriptor> createCustomTabPanels() {
+    protected List<FormFlexPanel> createCustomTabPanels() {
         return Arrays.asList(//@formatter:off
-            new TabDescriptor(createTenantSummaryTermsPanel(), proto().tenantSummaryTerms().getMeta().getCaption()),
-            new TabDescriptor(createGuarantorSummaryTermsPanel(), proto().guarantorSummaryTerms().getMeta().getCaption()),
-            new TabDescriptor(createOneTimePaymentTermsPanel(), proto().oneTimePaymentTerms().getMeta().getCaption()),
-            new TabDescriptor(createRecurrentPaymentTermsPanel(), proto().recurrentPaymentTerms().getMeta().getCaption())
+            createTenantSummaryTermsPanel(),
+            createGuarantorSummaryTermsPanel(),
+            createOneTimePaymentTermsPanel(), 
+            createRecurrentPaymentTermsPanel()
         );//@formatter:on
     }
 
-    private Widget createTenantSummaryTermsPanel() {
-        FormFlexPanel container = new FormFlexPanel();
+    private FormFlexPanel createTenantSummaryTermsPanel() {
+        FormFlexPanel container = new FormFlexPanel(proto().tenantSummaryTerms().getMeta().getCaption());
         container.setWidget(0, 0, inject(proto().tenantSummaryTerms(), new LegalTermsDescriptorFolder(isEditable())));
         return container;
     }
 
-    private Widget createGuarantorSummaryTermsPanel() {
-        FormFlexPanel container = new FormFlexPanel();
+    private FormFlexPanel createGuarantorSummaryTermsPanel() {
+        FormFlexPanel container = new FormFlexPanel(proto().guarantorSummaryTerms().getMeta().getCaption());
         container.setWidget(0, 0, inject(proto().guarantorSummaryTerms(), new LegalTermsDescriptorFolder(isEditable())));
         return container;
     }
 
-    private Widget createOneTimePaymentTermsPanel() {
-        FormFlexPanel container = new FormFlexPanel();
+    private FormFlexPanel createOneTimePaymentTermsPanel() {
+        FormFlexPanel container = new FormFlexPanel(proto().oneTimePaymentTerms().getMeta().getCaption());
         container.setWidget(0, 0, inject(proto().oneTimePaymentTerms(), new LegalTermsForm(isEditable())));
         return container;
     }
 
-    private Widget createRecurrentPaymentTermsPanel() {
-        FormFlexPanel container = new FormFlexPanel();
+    private FormFlexPanel createRecurrentPaymentTermsPanel() {
+        FormFlexPanel container = new FormFlexPanel(proto().recurrentPaymentTerms().getMeta().getCaption());
         container.setWidget(0, 0, inject(proto().recurrentPaymentTerms(), new LegalTermsForm(isEditable())));
         return container;
     }

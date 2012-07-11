@@ -33,7 +33,7 @@ public class ProductDictionaryViewForm extends CrmEntityForm<ProductItemType> {
 
     @Override
     public void createTabs() {
-        FormFlexPanel content = new FormFlexPanel();
+        FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));
 
         int row = -1;
         content.setH1(++row, 0, 1, i18n.tr("Service Item Types"));
@@ -42,6 +42,6 @@ public class ProductDictionaryViewForm extends CrmEntityForm<ProductItemType> {
         content.setH1(++row, 0, 1, i18n.tr("Feature Item Types"));
         content.setWidget(++row, 0, ((ProductDictionaryView) getParentView()).getFeatureListerView().asWidget());
 
-        selectTab(addTab(content, i18n.tr("General")));
+        selectTab(addTab(content));
     }
 }

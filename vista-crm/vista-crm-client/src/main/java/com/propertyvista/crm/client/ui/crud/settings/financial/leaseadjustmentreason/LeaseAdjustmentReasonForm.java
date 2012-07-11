@@ -39,7 +39,7 @@ public class LeaseAdjustmentReasonForm extends CrmEntityForm<LeaseAdjustmentReas
 
     @Override
     public void createTabs() {
-        FormFlexPanel content = new FormFlexPanel();
+        FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));
 
         int row = -1;
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 25).build());
@@ -64,7 +64,7 @@ public class LeaseAdjustmentReasonForm extends CrmEntityForm<LeaseAdjustmentReas
             }
         }), 25).build());
 
-        selectTab(addTab(content, i18n.tr("General")));
+        selectTab(addTab(content));
 
     }
 }

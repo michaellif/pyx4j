@@ -33,7 +33,7 @@ public class DepositForm extends CrmEntityForm<Deposit> {
 
     @Override
     public void createTabs() {
-        FormFlexPanel content = new FormFlexPanel();
+        FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));
 
         int row = -1;
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billableItem()), 30).build());
@@ -64,6 +64,6 @@ public class DepositForm extends CrmEntityForm<Deposit> {
         content.getColumnFormatter().setWidth(0, "50%");
         content.getColumnFormatter().setWidth(1, "50%");
 
-        selectTab(addTab(content, i18n.tr("General")));
+        selectTab(addTab(content));
     }
 }

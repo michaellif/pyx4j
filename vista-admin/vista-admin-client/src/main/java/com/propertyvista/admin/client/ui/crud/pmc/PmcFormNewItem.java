@@ -33,7 +33,7 @@ public class PmcFormNewItem extends AdminEntityForm<PmcDTO> {
 
     @Override
     public void createTabs() {
-        FormFlexPanel content = new FormFlexPanel();
+        FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));
 
         int row = -1;
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 15).build());
@@ -43,14 +43,15 @@ public class PmcFormNewItem extends AdminEntityForm<PmcDTO> {
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().email()), 15).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().password()), 15).build());
 
-        selectTab(addTab(content, i18n.tr("General")));
-
         content.setH1(++row, 0, 2, proto().features().getMeta().getCaption());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().features().occupancyModel()), 15).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().features().productCatalog()), 15).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().features().leases()), 15).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().features().onlineApplication()), 15).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().features().xmlSiteExport()), 15).build());
+
+        selectTab(addTab(content));
+
     }
 
 }

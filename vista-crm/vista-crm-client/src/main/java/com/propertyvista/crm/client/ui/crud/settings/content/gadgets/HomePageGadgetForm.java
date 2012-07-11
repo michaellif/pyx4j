@@ -62,7 +62,7 @@ public class HomePageGadgetForm extends CrmEntityForm<HomePageGadget> {
 
     @Override
     public void createTabs() {
-        FormFlexPanel main = new FormFlexPanel();
+        FormFlexPanel main = new FormFlexPanel(i18n.tr("General"));
 
         int row = 0;
         main.setH1(row++, 0, 1, i18n.tr("General"));
@@ -71,7 +71,7 @@ public class HomePageGadgetForm extends CrmEntityForm<HomePageGadget> {
         main.setWidget(row++, 0, new DecoratorBuilder(inject(proto().status()), 10).build());
         main.setWidget(row++, 0, mainPanel);
 
-        selectTab(addTab(main, i18n.tr("General")));
+        selectTab(addTab(main));
 
     }
 

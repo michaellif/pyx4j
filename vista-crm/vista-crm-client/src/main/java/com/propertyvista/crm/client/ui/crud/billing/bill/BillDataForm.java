@@ -34,9 +34,9 @@ public class BillDataForm extends CrmEntityForm<BillDataDTO> {
 
     @Override
     public void createTabs() {
-        FormFlexPanel content = new FormFlexPanel();
+        FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));
         content.setWidget(0, 0, inject(proto().bill(), new BillForm()));
 
-        selectTab(addTab(content, i18n.tr("General")));
+        selectTab(addTab(content));
     }
 }

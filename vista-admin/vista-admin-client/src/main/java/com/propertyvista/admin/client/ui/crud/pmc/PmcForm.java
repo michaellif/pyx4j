@@ -39,7 +39,7 @@ public class PmcForm extends AdminEntityForm<PmcDTO> {
 
     @Override
     public void createTabs() {
-        FormFlexPanel content = new FormFlexPanel();
+        FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));
 
         int row = -1;
         content.setH1(++row, 0, 2, i18n.tr("General"));
@@ -108,7 +108,7 @@ public class PmcForm extends AdminEntityForm<PmcDTO> {
         content.setWidget(++row, 0, inject(proto().dnsNameAliases(), new PmcDnsNameFolder(isEditable())));
         content.getFlexCellFormatter().setColSpan(row, 0, 2);
 
-        selectTab(addTab(content, i18n.tr("General")));
+        selectTab(addTab(content));
     }
 
     @Override

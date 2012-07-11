@@ -16,8 +16,6 @@ package com.propertyvista.crm.client.ui.crud.policies.pet;
 import java.util.Arrays;
 import java.util.List;
 
-import com.google.gwt.user.client.ui.Widget;
-
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -37,12 +35,12 @@ public class PetPolicyForm extends PolicyDTOTabPanelBasedForm<PetPolicyDTO> {
     }
 
     @Override
-    protected List<PolicyDTOTabPanelBasedForm.TabDescriptor> createCustomTabPanels() {
-        return Arrays.asList(new TabDescriptor(createSettignsForm(), i18n.tr("Pet Limits")));
+    protected List<FormFlexPanel> createCustomTabPanels() {
+        return Arrays.asList(createSettignsForm());
     }
 
-    private Widget createSettignsForm() {
-        FormFlexPanel content = new FormFlexPanel();
+    private FormFlexPanel createSettignsForm() {
+        FormFlexPanel content = new FormFlexPanel(i18n.tr("Pet Limits"));
         content.setWidget(0, 0, inject(proto().constraints(), new PetConstraintsFolder()));
         return content;
     }

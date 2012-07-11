@@ -13,8 +13,6 @@
  */
 package com.propertyvista.crm.client.ui.crud.building.mech;
 
-import com.google.gwt.user.client.ui.Widget;
-
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -34,8 +32,8 @@ public class RoofForm extends MechBaseForm<RoofDTO> {
     }
 
     @Override
-    protected Widget createGeneralTab() {
-        FormFlexPanel main = new FormFlexPanel();
+    protected FormFlexPanel createGeneralTab() {
+        FormFlexPanel main = new FormFlexPanel(i18n.tr("General"));
 
         int row = -1;
         main.setH1(++row, 0, 2, i18n.tr("Information"));

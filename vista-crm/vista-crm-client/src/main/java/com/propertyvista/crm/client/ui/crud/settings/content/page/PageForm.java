@@ -33,7 +33,7 @@ public class PageForm extends CrmEntityForm<PageDescriptor> {
 
     @Override
     public void createTabs() {
-        FormFlexPanel content = new FormFlexPanel();
+        FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));
 
         int row = -1;
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 15).build());
@@ -44,7 +44,7 @@ public class PageForm extends CrmEntityForm<PageDescriptor> {
         content.setH1(++row, 0, 1, proto().childPages().getMeta().getCaption());
         content.setWidget(++row, 0, inject(proto().childPages(), new PageDescriptorFolder(this)));
 
-        selectTab(addTab(content, i18n.tr("General")));
+        selectTab(addTab(content));
     }
 
     @Override

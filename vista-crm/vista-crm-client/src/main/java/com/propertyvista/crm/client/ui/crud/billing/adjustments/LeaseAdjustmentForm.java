@@ -127,7 +127,7 @@ public class LeaseAdjustmentForm extends CrmEntityForm<LeaseAdjustment> {
             }
         });
 
-        FormFlexPanel content = new FormFlexPanel();
+        FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));
 
         content.setWidget(0, 0, left);
         content.setWidget(0, 1, right);
@@ -147,7 +147,7 @@ public class LeaseAdjustmentForm extends CrmEntityForm<LeaseAdjustment> {
         content.getColumnFormatter().setWidth(0, "50%");
         content.getColumnFormatter().setWidth(1, "50%");
 
-        selectTab(addTab(content, i18n.tr("General")));
+        selectTab(addTab(content));
     }
 
     @Override

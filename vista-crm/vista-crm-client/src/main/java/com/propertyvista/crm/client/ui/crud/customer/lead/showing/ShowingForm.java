@@ -53,7 +53,7 @@ public class ShowingForm extends CrmEntityForm<ShowingDTO> {
 
     @Override
     public void createTabs() {
-        FormFlexPanel content = new FormFlexPanel();
+        FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));
 
         int row = -1;
 
@@ -113,7 +113,7 @@ public class ShowingForm extends CrmEntityForm<ShowingDTO> {
         content.getColumnFormatter().setWidth(0, "50%");
         content.getColumnFormatter().setWidth(1, "50%");
 
-        Tab tab = addTab(content, i18n.tr("General"));
+        Tab tab = addTab(content);
         selectTab(tab);
     }
 

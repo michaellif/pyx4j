@@ -53,7 +53,7 @@ public class SiteForm extends CrmEntityForm<SiteDescriptorDTO> {
 
     @Override
     public void createTabs() {
-        FormFlexPanel content = new FormFlexPanel();
+        FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));
 
         int row = 0;
 
@@ -103,7 +103,7 @@ public class SiteForm extends CrmEntityForm<SiteDescriptorDTO> {
         content.setH1(row++, 0, 1, proto().childPages().getMeta().getCaption());
         content.setWidget(row++, 0, inject(proto().childPages(), new SitePageDescriptorFolder(this)));
 
-        selectTab(addTab(content, i18n.tr("General")));
+        selectTab(addTab(content));
 
     }
 

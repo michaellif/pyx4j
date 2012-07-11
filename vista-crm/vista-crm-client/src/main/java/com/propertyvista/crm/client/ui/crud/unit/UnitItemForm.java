@@ -34,7 +34,7 @@ public class UnitItemForm extends CrmEntityForm<AptUnitItem> {
 
     @Override
     public void createTabs() {
-        FormFlexPanel content = new FormFlexPanel();
+        FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));
 
         int row = -1;
         content.setH1(++row, 0, 2, i18n.tr("Information"));
@@ -65,7 +65,7 @@ public class UnitItemForm extends CrmEntityForm<AptUnitItem> {
 
         validateInstallDates();
 
-        selectTab(addTab(content, i18n.tr("General")));
+        selectTab(addTab(content));
 
     }
 

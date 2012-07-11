@@ -17,7 +17,6 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.Range;
 
 import com.pyx4j.forms.client.ui.CComponent;
@@ -41,12 +40,12 @@ public class MiscPolicyForm extends PolicyDTOTabPanelBasedForm<MiscPolicyDTO> {
     }
 
     @Override
-    protected List<PolicyDTOTabPanelBasedForm.TabDescriptor> createCustomTabPanels() {
-        return Arrays.asList(new TabDescriptor(createMiscPoliciesTab(), i18n.tr("Misc Settings")));
+    protected List<FormFlexPanel> createCustomTabPanels() {
+        return Arrays.asList(createMiscPoliciesTab());
     }
 
-    private Widget createMiscPoliciesTab() {
-        FormFlexPanel content = new FormFlexPanel();
+    private FormFlexPanel createMiscPoliciesTab() {
+        FormFlexPanel content = new FormFlexPanel(i18n.tr("Misc Settings"));
         int row = -1;
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().maxParkingSpots())).labelWidth(20).componentWidth(3).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().maxLockers())).labelWidth(20).componentWidth(3).build());

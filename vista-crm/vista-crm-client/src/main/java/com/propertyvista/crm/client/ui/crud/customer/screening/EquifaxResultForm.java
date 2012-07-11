@@ -48,14 +48,14 @@ public class EquifaxResultForm extends CrmEntityForm<EquifaxResult> {
 
     @Override
     public void createTabs() {
-        FormFlexPanel content = new FormFlexPanel();
+        FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));
 
         resultHolder.setSize("100%", "60em");
 
         int row = -1;
         content.setWidget(++row, 0, resultHolder);
 
-        selectTab(addTab(content, i18n.tr("General")));
+        selectTab(addTab(content));
 
     }
 

@@ -19,7 +19,6 @@ import java.util.Vector;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
@@ -53,14 +52,12 @@ public class LeaseAdjustmentPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseA
     }
 
     @Override
-    protected List<com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedForm.TabDescriptor> createCustomTabPanels() {
-        return Arrays.asList(//@formatter:off
-                new TabDescriptor(createItemsPanel(), i18n.tr("Items"))
-        );//@formatter:on
+    protected List<FormFlexPanel> createCustomTabPanels() {
+        return Arrays.asList(createItemsPanel());
     }
 
-    private Widget createItemsPanel() {
-        FormFlexPanel panel = new FormFlexPanel();
+    private FormFlexPanel createItemsPanel() {
+        FormFlexPanel panel = new FormFlexPanel(i18n.tr("Items"));
 
         int row = -1;
         panel.setWidget(++row, 0, inject(proto().policyItems(), new LeaseAdjustmentPolicyItemFolder(isEditable())));
