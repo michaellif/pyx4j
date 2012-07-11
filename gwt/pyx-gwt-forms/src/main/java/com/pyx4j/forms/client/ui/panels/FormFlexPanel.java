@@ -141,6 +141,11 @@ public class FormFlexPanel extends FlexTable implements PropertyChangeHandler, H
         super.setWidget(row, column, widget);
     }
 
+    @Override
+    public void setWidget(int row, int column, IsWidget widget) {
+        setWidget(row, column, asWidgetOrNull(widget));
+    }
+
     private void locateCComponents(Widget widget) {
         if (widget instanceof INativeComponent) {
             CComponent<?, ?> comp = ((INativeComponent<?>) widget).getCComponent();
@@ -152,11 +157,6 @@ public class FormFlexPanel extends FlexTable implements PropertyChangeHandler, H
                 locateCComponents(iterator.next());
             }
         }
-    }
-
-    @Override
-    public void setWidget(int row, int column, IsWidget widget) {
-        setWidget(row, column, asWidgetOrNull(widget));
     }
 
     @Override

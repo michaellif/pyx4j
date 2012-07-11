@@ -20,6 +20,9 @@
  */
 package com.pyx4j.entity.client.ui.folder;
 
+import static com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme.StyleName.WidgetDecorator;
+import static com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme.StyleName.WidgetDecoratorComponent;
+
 import java.util.List;
 
 import com.google.gwt.dom.client.Style.Unit;
@@ -28,11 +31,17 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.commons.IDebugId;
 import com.pyx4j.entity.client.CEntityForm;
 import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.forms.client.events.PropertyChangeEvent;
+import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
+import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CCheckBox;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
+import com.pyx4j.forms.client.ui.decorators.IDecorator;
 
 public class CEntityFolderRowEditor<E extends IEntity> extends CEntityForm<E> {
 
@@ -52,18 +61,10 @@ public class CEntityFolderRowEditor<E extends IEntity> extends CEntityForm<E> {
                 component.setViewable(true);
             }
             component.setWidth("100%");
-            main.add(createCellDecorator(column, component, column.getWidth()));
+            component.setDecorator(new CellDecorator(column.getWidth()));
+            main.add(component.getDecorator());
         }
         return main;
-    }
-
-    protected Widget createCellDecorator(EntityFolderColumnDescriptor column, CComponent<?, ?> component, String width) {
-        SimplePanel wrapper = new SimplePanel();
-        wrapper.getElement().getStyle().setPaddingLeft(3, Unit.PX);
-        wrapper.getElement().getStyle().setPaddingRight(3, Unit.PX);
-        wrapper.setWidth(width);
-        wrapper.setWidget(component);
-        return wrapper;
     }
 
     protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
@@ -77,4 +78,53 @@ public class CEntityFolderRowEditor<E extends IEntity> extends CEntityForm<E> {
         return comp;
     }
 
+    class CellDecorator extends SimplePanel implements IDecorator<CComponent<?, ?>> {
+
+        private CComponent<?, ?> component;
+
+        protected CellDecorator(String width) {
+
+            getElement().getStyle().setPaddingLeft(3, Unit.PX);
+            getElement().getStyle().setPaddingRight(3, Unit.PX);
+            setWidth(width);
+            setWidget(component);
+
+            setStyleName(WidgetDecorator.name());
+
+        }
+
+        @Override
+        public void setComponent(final CComponent<?, ?> component) {
+            this.component = component;
+            setWidget(component);
+            final Widget nativeComponent = component.asWidget();
+            nativeComponent.addStyleName(WidgetDecoratorComponent.name());
+
+            component.addPropertyChangeHandler(new PropertyChangeHandler() {
+                @Override
+                public void onPropertyChange(PropertyChangeEvent event) {
+                    if (event.isEventOfType(PropertyName.valid, PropertyName.visited, PropertyName.showErrorsUnconditional, PropertyName.repopulated,
+                            PropertyName.enabled, PropertyName.editable)) {
+                        if ((component.isUnconditionalValidationErrorRendering() || component.isVisited()) && !component.isValid()) {
+                            component.asWidget().addStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.invalid.name());
+                        } else {
+                            component.asWidget().removeStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.invalid.name());
+                        }
+                    }
+                }
+            });
+
+        }
+
+        public CComponent<?, ?> getComnponent() {
+            return component;
+        }
+
+        @Override
+        public void onSetDebugId(IDebugId parentDebugId) {
+            // TODO Auto-generated method stub
+
+        }
+
+    }
 }

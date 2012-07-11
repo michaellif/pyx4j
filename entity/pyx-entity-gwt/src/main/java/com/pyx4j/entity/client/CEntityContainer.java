@@ -85,7 +85,7 @@ public abstract class CEntityContainer<E extends IObject<?>> extends CContainer<
 
     @Override
     public boolean isVisited() {
-        return false;
+        return true;
     }
 
     @Override
