@@ -16,7 +16,7 @@
     
     <source path="client"/>
     
-    <replace-with class="com.pyx4j.config.client.CleintApplicationBackendConfigRDB">
+    <replace-with class="com.pyx4j.config.client.ClientApplicationBackendConfigRDB">
         <when-type-is class="com.pyx4j.config.shared.ApplicationBackend.ApplicationBackendConfig"/>
     </replace-with>
     
