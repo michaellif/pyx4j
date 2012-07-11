@@ -33,6 +33,7 @@ import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.tabpanel.Tab;
@@ -118,8 +119,6 @@ public abstract class PolicyDTOTabPanelBasedForm<POLICY_DTO extends PolicyDTOBas
 
         content.setWidget(++row, 0, new DecoratorBuilder(selectPolicyScopeBox).customLabel(i18n.tr("Scope")).labelWidth(8).componentWidth(10).build());
         content.setWidget(++row, 0, inject(proto().node(), new PolicyNodeEditor()));
-//        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().node(), new PolicyNodeEditor())).customLabel(i18n.tr("Applied to")).labelWidth(8)
-//                .componentWidth(15).build());
         if (isEditable()) {
             get(proto().node()).inheritViewable(false);
         }
@@ -250,7 +249,8 @@ public abstract class PolicyDTOTabPanelBasedForm<POLICY_DTO extends PolicyDTOBas
 
             int row = -1;
             for (CComponent<?, ?> nodeComponent : nodeTypeToComponentMap.values()) {
-                content.setWidget(++row, 0, nodeComponent);
+                content.setWidget(++row, 0, new WidgetDecorator.Builder(nodeComponent).customLabel(i18n.tr("Applied to")).labelWidth(8).componentWidth(15)
+                        .build());
             }
 
             addPropertyChangeHandler(new PropertyChangeHandler() {
@@ -274,7 +274,6 @@ public abstract class PolicyDTOTabPanelBasedForm<POLICY_DTO extends PolicyDTOBas
 
             return content;
         }
-
     }
 
     public static class TabDescriptor {
