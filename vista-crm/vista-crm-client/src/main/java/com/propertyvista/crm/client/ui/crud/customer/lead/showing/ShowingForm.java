@@ -18,11 +18,13 @@ import java.util.List;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;
 import com.pyx4j.site.client.ui.crud.misc.CEntitySelectorHyperlink;
@@ -35,7 +37,7 @@ import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.rpc.dto.tenant.ShowingDTO;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
-import com.propertyvista.domain.ref.Province;
+import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 import com.propertyvista.domain.tenant.lead.Showing;
 import com.propertyvista.domain.tenant.lead.Showing.Result;
 
@@ -83,13 +85,16 @@ public class ShowingForm extends CrmEntityForm<ShowingDTO> {
 
                     @Override
                     protected void setFilters(List<Criterion> filters) {
+                        filters.add(PropertyCriterion.eq(proto().building(), ShowingForm.this.getValue().building()));
 
-                        Province province = ShowingForm.this.getValue().province();
-                        String city = ShowingForm.this.getValue().city().getValue();
-
-                        filters.add(PropertyCriterion.eq(proto().building().info().address().province(), province));
-                        filters.add(PropertyCriterion.eq(proto().building().info().address().city(), city));
-
+                        filters.add(PropertyCriterion.eq(proto().unitOccupancySegments().$().status(), AptUnitOccupancySegment.Status.available));
+                        filters.add(PropertyCriterion.eq(proto().unitOccupancySegments().$().dateTo(), new LogicalDate(1100, 0, 1)));
+                        if (!ShowingForm.this.getValue().moveInDate().isNull()) {
+                            filters.add(PropertyCriterion.le(proto().unitOccupancySegments().$().dateFrom(), ShowingForm.this.getValue().moveInDate()
+                                    .getValue()));
+                        } else {
+                            filters.add(PropertyCriterion.le(proto().unitOccupancySegments().$().dateFrom(), ClientContext.getServerDate()));
+                        }
                         super.setFilters(filters);
                     }
                 };

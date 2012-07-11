@@ -13,11 +13,12 @@
  */
 package com.propertyvista.crm.rpc.dto.tenant;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.ExtendsDBO;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.ref.Province;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lead.Showing;
 
 @Transient
@@ -25,13 +26,9 @@ import com.propertyvista.domain.tenant.lead.Showing;
 public interface ShowingDTO extends Showing {
 
     /**
-     * Used to hold province used as filter for unit selection dialog
+     * Unit filter data for unit selection dialog
      */
-    Province province();
+    Building building();
 
-    /**
-     * Used to hold city used as filter for unit selection dialog
-     */
-    IPrimitive<String> city();
-
+    IPrimitive<LogicalDate> moveInDate();
 }
