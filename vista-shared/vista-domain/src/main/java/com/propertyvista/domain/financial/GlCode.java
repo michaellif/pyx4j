@@ -13,6 +13,8 @@
  */
 package com.propertyvista.domain.financial;
 
+import java.util.Date;
+
 import com.pyx4j.entity.annotations.ColumnId;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
@@ -22,6 +24,7 @@ import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
+import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.validator.NotNull;
@@ -55,4 +58,7 @@ public interface GlCode extends IEntity {
 
     @OrderColumn(OrderId.class)
     IPrimitive<Integer> orderInParent();
+
+    @Timestamp
+    IPrimitive<Date> updated();
 }

@@ -13,8 +13,11 @@
  */
 package com.propertyvista.domain.tenant.lease;
 
+import java.util.Date;
+
 import javax.xml.bind.annotation.XmlType;
 
+import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.validator.NotNull;
@@ -53,4 +56,7 @@ public interface LeaseAdjustmentReason extends IEntity {
     @NotNull
     @ToString(index = 1)
     GlCode glCode();
+
+    @Timestamp
+    IPrimitive<Date> updated();
 }
