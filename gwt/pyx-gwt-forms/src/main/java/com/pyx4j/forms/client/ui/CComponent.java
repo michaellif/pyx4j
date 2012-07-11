@@ -521,13 +521,13 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
         }
     }
 
-    public void reset() {
+    public final void reset() {
         this.value = null;
         setNativeValue(null);
         if (getParent() != null) {
             getParent().updateContainer(this, value);
         }
-        onValuePropagation(this.value, false, false);
+        onReset();
         setVisited(false);
         PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.reset);
     }
@@ -590,6 +590,9 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
     }
 
     protected void onValuePropagation(DATA_TYPE value, boolean fireEvent, boolean populate) {
+    }
+
+    protected void onReset() {
     }
 
     protected DATA_TYPE preprocessValue(DATA_TYPE value, boolean fireEvent, boolean populate) {

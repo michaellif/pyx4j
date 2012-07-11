@@ -159,6 +159,18 @@ public abstract class CContainer<DATA_TYPE, WIDGET_TYPE extends Widget & INative
     }
 
     @Override
+    protected void onReset() {
+        if (getComponents() != null) {
+            for (CComponent<?, ?> ccomponent : getComponents()) {
+                if (!ccomponent.isValid()) {
+                    ccomponent.reset();
+                }
+            }
+        }
+        super.onReset();
+    }
+
+    @Override
     public ValidationResults getValidationResults() {
         ValidationResults validationResults = super.getValidationResults();
         if (getComponents() != null) {

@@ -267,11 +267,10 @@ public abstract class CEntityForm<E extends IEntity> extends CEntityContainer<E>
     }
 
     @Override
-    public void reset() {
+    public void onReset() {
+        super.onReset();
         this.origEntity = null;
-        setVisited(false);
         setUnconditionalValidationErrorRendering(false);
-        super.reset();
     }
 
     public boolean isDirty() {
