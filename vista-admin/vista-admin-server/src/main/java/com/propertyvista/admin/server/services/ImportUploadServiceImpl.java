@@ -24,7 +24,6 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.commons.ConverterUtils;
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.essentials.rpc.report.DownloadFormat;
 import com.pyx4j.essentials.rpc.upload.UploadResponse;
 import com.pyx4j.essentials.server.deferred.DeferredProcessorThread;
@@ -34,8 +33,9 @@ import com.pyx4j.essentials.server.upload.UploadServiceImpl;
 import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.admin.domain.pmc.Pmc;
-import com.propertyvista.admin.rpc.PmcImportDTO;
 import com.propertyvista.admin.rpc.services.ImportUploadService;
+import com.propertyvista.crm.rpc.dto.ImportUploadDTO;
+import com.propertyvista.crm.rpc.dto.ImportUploadResponseDTO;
 import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.interfaces.importer.BuildingImporter;
 import com.propertyvista.interfaces.importer.BuildingUpdater;
@@ -47,7 +47,7 @@ import com.propertyvista.interfaces.importer.model.ImportIO;
 import com.propertyvista.server.common.reference.geo.GeoLocator.Mode;
 import com.propertyvista.server.common.reference.geo.SharedGeoLocator;
 
-public class ImportUploadServiceImpl extends UploadServiceImpl<PmcImportDTO, IEntity> implements ImportUploadService {
+public class ImportUploadServiceImpl extends UploadServiceImpl<ImportUploadDTO, ImportUploadResponseDTO> implements ImportUploadService {
 
     private final static Logger log = LoggerFactory.getLogger(ImportUploadServiceImpl.class);
 
@@ -67,8 +67,8 @@ public class ImportUploadServiceImpl extends UploadServiceImpl<PmcImportDTO, IEn
     }
 
     @Override
-    public ProcessingStatus onUploadRecived(final UploadData data, final UploadDeferredProcess<PmcImportDTO, IEntity> process,
-            final UploadResponse<IEntity> response) {
+    public ProcessingStatus onUploadRecived(final UploadData data, final UploadDeferredProcess<ImportUploadDTO, ImportUploadResponseDTO> process,
+            final UploadResponse<ImportUploadResponseDTO> response) {
 
         //TODO This is not the very best example how to for execution on server. VladS - Change!
         Thread t = new DeferredProcessorThread("Import", process, new Runnable() {
@@ -94,9 +94,10 @@ public class ImportUploadServiceImpl extends UploadServiceImpl<PmcImportDTO, IEn
         return ProcessingStatus.processWillContinue;
     }
 
-    private static void runImport(UploadData data, UploadDeferredProcess<PmcImportDTO, IEntity> process, UploadResponse<IEntity> response) {
+    private static void runImport(UploadData data, UploadDeferredProcess<ImportUploadDTO, ImportUploadResponseDTO> process,
+            UploadResponse<ImportUploadResponseDTO> response) {
         try {
-            PmcImportDTO importDTO = process.getData();
+            ImportUploadDTO importDTO = process.getData();
             if (importDTO.id().isNull()) {
                 throw new Error();
             }
@@ -110,16 +111,16 @@ public class ImportUploadServiceImpl extends UploadServiceImpl<PmcImportDTO, IEn
             MediaConfig mediaConfig = new MediaConfig();
             mediaConfig.baseFolder = "data/export/images/" + NamespaceManager.getNamespace();
 
-            ImportIO importIO = ImportUtils.parse(importDTO.adapterType().getValue(), data.data,
+            ImportIO importIO = ImportUtils.parse(importDTO.dataFormat().getValue(), data.data,
                     DownloadFormat.valueByExtension(FilenameUtils.getExtension(response.fileName)));
             process.status().setProgress(0);
             process.status().setProgressMaximum(importIO.buildings().size());
 
             int count = 0;
-            if (!importDTO.type().getValue().equals(PmcImportDTO.ImportType.updateUnitAvailability)) {
+            if (!importDTO.type().getValue().equals(ImportUploadDTO.ImportType.updateUnitAvailability)) {
                 List<String> messages = new Vector<String>();
                 for (BuildingIO building : importIO.buildings()) {
-                    if (importDTO.type().getValue().equals(PmcImportDTO.ImportType.updateData)) {
+                    if (importDTO.type().getValue().equals(ImportUploadDTO.ImportType.updateData)) {
                         messages.addAll(new BuildingImporter().verifyExists(building, mediaConfig));
                     }
 

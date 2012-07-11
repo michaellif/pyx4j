@@ -11,13 +11,27 @@
  * @author yuriyl
  * @version $Id$
  */
-package com.propertyvista.interfaces.importer;
+package com.propertyvista.interfaces.importer.parser;
+
+import java.io.ByteArrayInputStream;
+
+import org.xml.sax.InputSource;
 
 import com.pyx4j.essentials.rpc.report.DownloadFormat;
 
+import com.propertyvista.interfaces.importer.ImportUtils;
 import com.propertyvista.interfaces.importer.model.ImportIO;
 
-public interface ImportAdapter {
+public class VistaXMLImportParser implements ImportParser {
 
-    public ImportIO parse(byte[] data, DownloadFormat format);
+    @Override
+    public ImportIO parse(byte[] data, DownloadFormat format) {
+        switch (format) {
+        case XML:
+            return ImportUtils.parse(ImportIO.class, new InputSource(new ByteArrayInputStream(data)));
+        default:
+            throw new Error("Unsupported file format");
+        }
+    }
+
 }

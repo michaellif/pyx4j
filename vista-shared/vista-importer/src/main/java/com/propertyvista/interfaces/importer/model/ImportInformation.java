@@ -7,35 +7,37 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2012-07-09
+ * Created on 2012-07-11
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.interfaces.importer.xls;
+package com.propertyvista.interfaces.importer.model;
 
+import javax.xml.bind.annotation.XmlTransient;
+
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.essentials.server.csv.ImportColumn;
+import com.pyx4j.i18n.annotations.I18n;
 
-public interface UnitModel extends IEntity {
+/**
+ * Operations information for data derived form XLS files
+ */
+@Transient
+@XmlTransient
+@I18n(strategy = I18n.I18nStrategy.IgnoreAll)
+public interface ImportInformation extends IEntity {
 
-    @ImportColumn(names = { "Property", "Property Code" })
-    IPrimitive<String> property();
+    @ImportColumn(ignore = true)
+    IPrimitive<String> sheet();
 
-    IPrimitive<String> unit();
+    @ImportColumn(ignore = true)
+    IPrimitive<Integer> row();
 
-    IPrimitive<String> unitType();
+    @ImportColumn(ignore = true)
+    IPrimitive<Boolean> invalid();
 
-    IPrimitive<String> unitSqFt();
-
-    // Rent Role Update
-
-    IPrimitive<String> marketRent();
-
-    IPrimitive<String> newMarketRent();
-
-    IPrimitive<String> status();
-
-    IPrimitive<String> date();
-
+    @ImportColumn(ignore = true)
+    IPrimitive<String> message();
 }

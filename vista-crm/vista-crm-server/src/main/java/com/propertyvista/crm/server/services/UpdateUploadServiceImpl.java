@@ -20,7 +20,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.SimpleMessageFormat;
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.essentials.rpc.report.DownloadFormat;
 import com.pyx4j.essentials.rpc.upload.UploadResponse;
 import com.pyx4j.essentials.server.deferred.DeferredProcessorThread;
@@ -31,7 +30,8 @@ import com.pyx4j.i18n.annotations.I18nComment;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.server.contexts.NamespaceManager;
 
-import com.propertyvista.crm.rpc.dto.UpdateUploadDTO;
+import com.propertyvista.crm.rpc.dto.ImportUploadDTO;
+import com.propertyvista.crm.rpc.dto.ImportUploadResponseDTO;
 import com.propertyvista.crm.rpc.services.UpdateUploadService;
 import com.propertyvista.interfaces.importer.BuildingUpdater;
 import com.propertyvista.interfaces.importer.ImportCounters;
@@ -40,7 +40,7 @@ import com.propertyvista.interfaces.importer.converter.MediaConfig;
 import com.propertyvista.interfaces.importer.model.BuildingIO;
 import com.propertyvista.interfaces.importer.model.ImportIO;
 
-public class UpdateUploadServiceImpl extends UploadServiceImpl<UpdateUploadDTO, IEntity> implements UpdateUploadService {
+public class UpdateUploadServiceImpl extends UploadServiceImpl<ImportUploadDTO, ImportUploadResponseDTO> implements UpdateUploadService {
 
     private static final I18n i18n = I18n.get(MediaUploadServiceImpl.class);
 
@@ -63,8 +63,8 @@ public class UpdateUploadServiceImpl extends UploadServiceImpl<UpdateUploadDTO, 
     }
 
     @Override
-    public ProcessingStatus onUploadRecived(final UploadData data, final UploadDeferredProcess<UpdateUploadDTO, IEntity> process,
-            final UploadResponse<IEntity> response) {
+    public ProcessingStatus onUploadRecived(final UploadData data, final UploadDeferredProcess<ImportUploadDTO, ImportUploadResponseDTO> process,
+            final UploadResponse<ImportUploadResponseDTO> response) {
         final String namespace = NamespaceManager.getNamespace();
 
         //TODO This is not the very best example how to for execution on server. VladS - Change!
@@ -81,9 +81,10 @@ public class UpdateUploadServiceImpl extends UploadServiceImpl<UpdateUploadDTO, 
         return ProcessingStatus.processWillContinue;
     }
 
-    private static void runImport(UploadData data, UploadDeferredProcess<UpdateUploadDTO, IEntity> process, UploadResponse<IEntity> response) {
+    private static void runImport(UploadData data, UploadDeferredProcess<ImportUploadDTO, ImportUploadResponseDTO> process,
+            UploadResponse<ImportUploadResponseDTO> response) {
 
-        ImportIO importIO = ImportUtils.parse(process.getData().adapterType().getValue(), data.data,
+        ImportIO importIO = ImportUtils.parse(process.getData().dataFormat().getValue(), data.data,
                 DownloadFormat.valueByExtension(FilenameUtils.getExtension(response.fileName)));
 
         process.status().setProgress(0);

@@ -18,7 +18,7 @@
  * @author yuriyl
  * @version $Id$
  */
-package com.propertyvista.interfaces.importer;
+package com.propertyvista.interfaces.importer.parser;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -54,14 +54,15 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.interfaces.importer.model.AptUnitIO;
 import com.propertyvista.interfaces.importer.model.BuildingIO;
 import com.propertyvista.interfaces.importer.model.ImportIO;
+import com.propertyvista.interfaces.importer.xls.RentRollCSV;
 
-public class RentRollAdaptor implements ImportAdapter {
+public class RentRollImportParser implements ImportParser {
 
-    private final static Logger log = LoggerFactory.getLogger(RentRollAdaptor.class);
+    private final static Logger log = LoggerFactory.getLogger(RentRollImportParser.class);
 
     private boolean isInComplex = false; //if in complex, unitNumber "1-A" splits into building = building(b1), unit A. Otherwise it's unit 1-A
 
-    private static final I18n i18n = I18n.get(RentRollAdaptor.class);
+    private static final I18n i18n = I18n.get(RentRollImportParser.class);
 
     public static Set<String> strings = new HashSet<String>(Arrays.asList("misc", "roof", "strg", "sign1", "nonrespk", "nrp01", "nrp02", "nrp03", "nrp04",
             "nrp05", "nrp06", "current/notice/vacant residents", "nrp-02", "roof1", "roof2", "roof3", "roof4")); // add erroneous "apt numbers" here (lower case)

@@ -15,6 +15,8 @@ package com.propertyvista.interfaces.importer.model;
 
 import java.math.BigDecimal;
 
+import javax.xml.bind.annotation.XmlTransient;
+
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
@@ -33,6 +35,9 @@ import com.propertyvista.domain.property.asset.AreaMeasurementUnit;
 @Transient
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 public interface AptUnitIO extends IEntity {
+
+    @XmlTransient
+    ImportInformation _import();
 
     IPrimitive<String> number();
 

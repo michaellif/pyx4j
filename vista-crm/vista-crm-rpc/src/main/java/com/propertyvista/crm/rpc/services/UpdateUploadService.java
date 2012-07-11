@@ -16,13 +16,13 @@ package com.propertyvista.crm.rpc.services;
 import java.util.Collection;
 import java.util.EnumSet;
 
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.essentials.rpc.report.DownloadFormat;
 import com.pyx4j.essentials.rpc.upload.UploadService;
 
-import com.propertyvista.crm.rpc.dto.UpdateUploadDTO;
+import com.propertyvista.crm.rpc.dto.ImportUploadDTO;
+import com.propertyvista.crm.rpc.dto.ImportUploadResponseDTO;
 
-public interface UpdateUploadService extends UploadService<UpdateUploadDTO, IEntity> {
+public interface UpdateUploadService extends UploadService<ImportUploadDTO, ImportUploadResponseDTO> {
 
     public static final Collection<DownloadFormat> supportedFormats = EnumSet.of(DownloadFormat.XML, DownloadFormat.CSV, DownloadFormat.XLS,
             DownloadFormat.XLSX);

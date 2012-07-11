@@ -7,35 +7,19 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2012-07-09
+ * Created on 2012-07-11
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.interfaces.importer.xls;
+package com.propertyvista.crm.rpc.dto;
 
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.essentials.server.csv.ImportColumn;
 
-public interface UnitModel extends IEntity {
+@Transient
+public interface ImportUploadResponseDTO extends IEntity {
 
-    @ImportColumn(names = { "Property", "Property Code" })
-    IPrimitive<String> property();
-
-    IPrimitive<String> unit();
-
-    IPrimitive<String> unitType();
-
-    IPrimitive<String> unitSqFt();
-
-    // Rent Role Update
-
-    IPrimitive<String> marketRent();
-
-    IPrimitive<String> newMarketRent();
-
-    IPrimitive<String> status();
-
-    IPrimitive<String> date();
+    IPrimitive<String> resultUrl();
 
 }

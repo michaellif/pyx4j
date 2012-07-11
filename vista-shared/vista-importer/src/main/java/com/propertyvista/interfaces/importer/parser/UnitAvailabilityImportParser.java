@@ -1,5 +1,5 @@
 /*
- * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
+ * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
  * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
  * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
@@ -7,25 +7,21 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jan 26, 2012
+ * Created on 2012-07-11
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.dto;
+package com.propertyvista.interfaces.importer.parser;
 
-import com.pyx4j.i18n.annotations.I18n;
-import com.pyx4j.i18n.shared.I18nEnum;
+import com.pyx4j.essentials.rpc.report.DownloadFormat;
 
-@I18n
-public enum ImportAdapterType {
+import com.propertyvista.interfaces.importer.model.ImportIO;
 
-    vista,
-
-    rentRoll;
+public class UnitAvailabilityImportParser implements ImportParser {
 
     @Override
-    public String toString() {
-        return I18nEnum.toString(this);
+    public ImportIO parse(byte[] data, DownloadFormat format) {
+        return null;
     }
 
 }

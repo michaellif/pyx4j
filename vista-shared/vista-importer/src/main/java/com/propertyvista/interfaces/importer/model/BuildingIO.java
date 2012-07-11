@@ -13,6 +13,8 @@
  */
 package com.propertyvista.interfaces.importer.model;
 
+import javax.xml.bind.annotation.XmlTransient;
+
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.Transient;
@@ -38,6 +40,9 @@ import com.propertyvista.domain.property.asset.building.BuildingInfo.WaterSupply
 @Transient
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 public interface BuildingIO extends IEntity {
+
+    @XmlTransient
+    ImportInformation _import();
 
     @ToString
     IPrimitive<String> propertyCode();

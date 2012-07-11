@@ -20,7 +20,6 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.entity.client.CEntityForm;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.essentials.client.upload.UploadPanel;
 import com.pyx4j.essentials.rpc.upload.UploadResponse;
 import com.pyx4j.essentials.rpc.upload.UploadService;
@@ -33,18 +32,20 @@ import com.pyx4j.widgets.client.dialog.OkCancelOption;
 import com.pyx4j.widgets.client.dialog.OkOptionText;
 
 import com.propertyvista.admin.rpc.PmcDTO;
-import com.propertyvista.admin.rpc.PmcImportDTO;
 import com.propertyvista.admin.rpc.services.ImportUploadService;
-import com.propertyvista.dto.ImportAdapterType;
+import com.propertyvista.common.client.ui.components.DownloadLinkDialog;
+import com.propertyvista.crm.rpc.dto.ImportUploadDTO;
+import com.propertyvista.crm.rpc.dto.ImportUploadResponseDTO;
+import com.propertyvista.dto.ImportDataFormatType;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 
 public class ImportUploadDialog extends VerticalPanel implements OkCancelOption, OkOptionText {
 
     private static final I18n i18n = I18n.get(ImportUploadDialog.class);
 
-    private final CEntityForm<PmcImportDTO> form;
+    private final CEntityForm<ImportUploadDTO> form;
 
-    private final UploadPanel<PmcImportDTO, IEntity> uploadPanel;
+    private final UploadPanel<ImportUploadDTO, ImportUploadResponseDTO> uploadPanel;
 
     private final Dialog dialog;
 
@@ -52,9 +53,10 @@ public class ImportUploadDialog extends VerticalPanel implements OkCancelOption,
     private ImportUploadDialog(PmcDTO pmc) {
         dialog = new Dialog(i18n.tr("Upload Import"), this, null);
 
-        uploadPanel = new UploadPanel<PmcImportDTO, IEntity>((UploadService<PmcImportDTO, IEntity>) GWT.create(ImportUploadService.class)) {
+        uploadPanel = new UploadPanel<ImportUploadDTO, ImportUploadResponseDTO>(
+                (UploadService<ImportUploadDTO, ImportUploadResponseDTO>) GWT.create(ImportUploadService.class)) {
             @Override
-            protected PmcImportDTO getUploadData() {
+            protected ImportUploadDTO getUploadData() {
                 return form.getValue();
             }
 
@@ -71,9 +73,14 @@ public class ImportUploadDialog extends VerticalPanel implements OkCancelOption,
             }
 
             @Override
-            protected void onUploadComplete(UploadResponse<IEntity> serverUploadResponse) {
+            protected void onUploadComplete(UploadResponse<ImportUploadResponseDTO> serverUploadResponse) {
                 dialog.hide();
-                MessageDialog.info(i18n.tr("Upload Complete"), serverUploadResponse.message);
+                if (serverUploadResponse.data == null || serverUploadResponse.data.resultUrl().isNull()) {
+                    MessageDialog.info(i18n.tr("Upload Complete"), serverUploadResponse.message);
+                } else {
+                    new DownloadLinkDialog(i18n.tr("Upload Complete"), serverUploadResponse.message, i18n.tr("Download processing results"),
+                            serverUploadResponse.data.resultUrl().getValue()).show();
+                }
             }
 
         };
@@ -83,7 +90,7 @@ public class ImportUploadDialog extends VerticalPanel implements OkCancelOption,
         uploadPanel.getElement().getStyle().setMarginTop(50, Style.Unit.PX);
         uploadPanel.getElement().getStyle().setPaddingLeft(35, Style.Unit.PX);
 
-        form = new CEntityForm<PmcImportDTO>(PmcImportDTO.class) {
+        form = new CEntityForm<ImportUploadDTO>(ImportUploadDTO.class) {
             @Override
             public IsWidget createContent() {
                 FormFlexPanel main = new FormFlexPanel();
@@ -91,15 +98,15 @@ public class ImportUploadDialog extends VerticalPanel implements OkCancelOption,
                 int row = -1;
                 main.setWidget(++row, 0, uploadPanel);
                 main.setWidget(++row, 0, new WidgetDecorator.Builder(inject(proto().type())).componentWidth(10).build());
-                main.setWidget(++row, 0, new WidgetDecorator.Builder(inject(proto().adapterType())).componentWidth(10).build());
+                main.setWidget(++row, 0, new WidgetDecorator.Builder(inject(proto().dataFormat())).componentWidth(10).build());
                 main.setWidget(++row, 0, new WidgetDecorator.Builder(inject(proto().ignoreMissingMedia())).componentWidth(10).build());
                 return main;
             }
         };
-        PmcImportDTO defaultSettings = EntityFactory.create(PmcImportDTO.class);
+        ImportUploadDTO defaultSettings = EntityFactory.create(ImportUploadDTO.class);
         defaultSettings.setPrimaryKey(pmc.getPrimaryKey());
-        defaultSettings.type().setValue(PmcImportDTO.ImportType.newData);
-        defaultSettings.adapterType().setValue(ImportAdapterType.vista);
+        defaultSettings.type().setValue(ImportUploadDTO.ImportType.newData);
+        defaultSettings.dataFormat().setValue(ImportDataFormatType.vista);
 
         form.initContent();
         form.populate(defaultSettings);

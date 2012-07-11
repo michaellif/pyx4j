@@ -20,7 +20,6 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.entity.client.CEntityForm;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.essentials.client.upload.UploadPanel;
 import com.pyx4j.essentials.rpc.upload.UploadResponse;
 import com.pyx4j.essentials.rpc.upload.UploadService;
@@ -32,18 +31,20 @@ import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.dialog.OkCancelOption;
 import com.pyx4j.widgets.client.dialog.OkOptionText;
 
-import com.propertyvista.crm.rpc.dto.UpdateUploadDTO;
+import com.propertyvista.common.client.ui.components.DownloadLinkDialog;
+import com.propertyvista.crm.rpc.dto.ImportUploadDTO;
+import com.propertyvista.crm.rpc.dto.ImportUploadResponseDTO;
 import com.propertyvista.crm.rpc.services.UpdateUploadService;
-import com.propertyvista.dto.ImportAdapterType;
+import com.propertyvista.dto.ImportDataFormatType;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 
 public class UpdateUploadDialog extends VerticalPanel implements OkCancelOption, OkOptionText {
 
     private static final I18n i18n = I18n.get(UpdateUploadDialog.class);
 
-    private final CEntityForm<UpdateUploadDTO> form;
+    private final CEntityForm<ImportUploadDTO> form;
 
-    private final UploadPanel<UpdateUploadDTO, IEntity> uploadPanel;
+    private final UploadPanel<ImportUploadDTO, ImportUploadResponseDTO> uploadPanel;
 
     private final Dialog dialog;
 
@@ -51,9 +52,10 @@ public class UpdateUploadDialog extends VerticalPanel implements OkCancelOption,
     private UpdateUploadDialog() {
         dialog = new Dialog(i18n.tr("Upload Update"), this, null);
 
-        uploadPanel = new UploadPanel<UpdateUploadDTO, IEntity>((UploadService<UpdateUploadDTO, IEntity>) GWT.create(UpdateUploadService.class)) {
+        uploadPanel = new UploadPanel<ImportUploadDTO, ImportUploadResponseDTO>(
+                (UploadService<ImportUploadDTO, ImportUploadResponseDTO>) GWT.create(UpdateUploadService.class)) {
             @Override
-            protected UpdateUploadDTO getUploadData() {
+            protected ImportUploadDTO getUploadData() {
                 return form.getValue();
             }
 
@@ -70,9 +72,14 @@ public class UpdateUploadDialog extends VerticalPanel implements OkCancelOption,
             }
 
             @Override
-            protected void onUploadComplete(UploadResponse<IEntity> serverUploadResponse) {
+            protected void onUploadComplete(UploadResponse<ImportUploadResponseDTO> serverUploadResponse) {
                 dialog.hide();
-                MessageDialog.info(i18n.tr("Upload Complete"), serverUploadResponse.message);
+                if (serverUploadResponse.data == null || serverUploadResponse.data.resultUrl().isNull()) {
+                    MessageDialog.info(i18n.tr("Upload Complete"), serverUploadResponse.message);
+                } else {
+                    new DownloadLinkDialog(i18n.tr("Upload Complete"), serverUploadResponse.message, i18n.tr("Download processing results"),
+                            serverUploadResponse.data.resultUrl().getValue()).show();
+                }
             }
 
         };
@@ -82,19 +89,25 @@ public class UpdateUploadDialog extends VerticalPanel implements OkCancelOption,
         uploadPanel.getElement().getStyle().setMarginTop(50, Style.Unit.PX);
         uploadPanel.getElement().getStyle().setPaddingLeft(35, Style.Unit.PX);
 
-        form = new CEntityForm<UpdateUploadDTO>(UpdateUploadDTO.class) {
+        form = new CEntityForm<ImportUploadDTO>(ImportUploadDTO.class) {
             @Override
             public IsWidget createContent() {
                 FormFlexPanel main = new FormFlexPanel();
 
                 int row = -1;
                 main.setWidget(++row, 0, uploadPanel);
-                main.setWidget(++row, 0, new WidgetDecorator.Builder(inject(proto().adapterType())).componentWidth(10).build());
+                main.setWidget(++row, 0, new WidgetDecorator.Builder(inject(proto().dataFormat())).componentWidth(10).build());
                 return main;
             }
+
+            @Override
+            public void addValidations() {
+                super.addValidations();
+                get(proto().dataFormat()).setEditable(false);
+            }
         };
-        UpdateUploadDTO defaultSettings = EntityFactory.create(UpdateUploadDTO.class);
-        defaultSettings.adapterType().setValue(ImportAdapterType.vista);
+        ImportUploadDTO defaultSettings = EntityFactory.create(ImportUploadDTO.class);
+        defaultSettings.dataFormat().setValue(ImportDataFormatType.unitAvailability);
 
         form.initContent();
         form.populate(defaultSettings);

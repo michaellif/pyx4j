@@ -27,18 +27,23 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.essentials.rpc.report.DownloadFormat;
 import com.pyx4j.essentials.server.xml.XMLEntityParser;
 
-import com.propertyvista.dto.ImportAdapterType;
+import com.propertyvista.dto.ImportDataFormatType;
 import com.propertyvista.interfaces.importer.model.ImportIO;
+import com.propertyvista.interfaces.importer.parser.RentRollImportParser;
+import com.propertyvista.interfaces.importer.parser.UnitAvailabilityImportParser;
+import com.propertyvista.interfaces.importer.parser.VistaXMLImportParser;
 import com.propertyvista.interfaces.importer.xml.ImportXMLEntityFactory;
 
 public class ImportUtils {
 
-    public static ImportIO parse(ImportAdapterType importAdapterType, byte[] data, DownloadFormat format) {
+    public static ImportIO parse(ImportDataFormatType importAdapterType, byte[] data, DownloadFormat format) {
         switch (importAdapterType) {
         case vista:
-            return new VistaXMLImportAdapter().parse(data, format);
+            return new VistaXMLImportParser().parse(data, format);
         case rentRoll:
-            return new RentRollAdaptor().parse(data, format);
+            return new RentRollImportParser().parse(data, format);
+        case unitAvailability:
+            return new UnitAvailabilityImportParser().parse(data, format);
         default:
             throw new Error("Unsupported adapter type");
         }
