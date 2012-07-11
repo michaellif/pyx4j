@@ -34,6 +34,7 @@ import com.pyx4j.security.shared.AclRevalidator;
 import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
+import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.misc.VistaDevPreloadConfig;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.portal.server.preloader.VistaDataPreloaders;
@@ -189,6 +190,11 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
     @Override
     public boolean isDevelopmentBehavior() {
         return true;
+    }
+
+    @Override
+    public boolean isProductionBackend() {
+        return VistaDeployment.isVistaProduction();
     }
 
     @Override

@@ -16,6 +16,10 @@
     
     <source path="client"/>
     
+    <replace-with class="com.pyx4j.config.client.CleintApplicationBackendConfigRDB">
+        <when-type-is class="com.pyx4j.config.shared.ApplicationBackend.ApplicationBackendConfig"/>
+    </replace-with>
+    
     <extend-configuration-property name="rpc.blacklist" value="gwtupload.client.*" />
     
 </module>
