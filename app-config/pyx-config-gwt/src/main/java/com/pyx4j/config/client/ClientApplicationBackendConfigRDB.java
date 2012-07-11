@@ -22,7 +22,7 @@ package com.pyx4j.config.client;
 
 import com.pyx4j.config.shared.ApplicationBackend.ApplicationBackendType;
 
-public class CleintApplicationBackendConfigGae extends CleintApplicationBackendConfig {
+public class ClientApplicationBackendConfigRDB extends ClientApplicationBackendConfig {
 
     @Override
     public ApplicationBackendType getBackendType() {

@@ -22,7 +22,7 @@ package com.pyx4j.config.client;
 
 import com.pyx4j.config.shared.ApplicationBackend.ApplicationBackendConfig;
 
-public abstract class CleintApplicationBackendConfig implements ApplicationBackendConfig {
+public abstract class ClientApplicationBackendConfig implements ApplicationBackendConfig {
 
     private static boolean productionBackend;
 
@@ -37,7 +37,7 @@ public abstract class CleintApplicationBackendConfig implements ApplicationBacke
     }
 
     public static void setProductionBackend(boolean productionBackend) {
-        CleintApplicationBackendConfig.productionBackend = productionBackend;
+        ClientApplicationBackendConfig.productionBackend = productionBackend;
     }
 
 }
