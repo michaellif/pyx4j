@@ -15,20 +15,21 @@ package com.propertyvista.dto;
 
 import com.pyx4j.entity.annotations.ExtendsDBO;
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.IPrimitive;
 
+import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.property.asset.Complex;
+import com.propertyvista.domain.property.asset.building.Building;
 
 @Transient
 @ExtendsDBO
 public interface ComplexDTO extends Complex {
 
     /** Contact info of complex's primary building */
-    IPrimitive<String> primaryBuilding();
+    Building primaryBuilding();
 
 //    BuildingContactInfo contactInfo();
 
-    IPrimitive<String> city();
+    AddressStructured address();
 
 //
 //    /** Address of complex's primary building */

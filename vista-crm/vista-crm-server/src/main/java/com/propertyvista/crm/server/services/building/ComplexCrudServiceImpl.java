@@ -91,9 +91,9 @@ public class ComplexCrudServiceImpl extends AbstractCrudServiceDtoImpl<Complex, 
         EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().complex(), entity));
         criteria.add(PropertyCriterion.eq(criteria.proto().complexPrimary(), true));
-        Building b = Persistence.secureRetrieve(criteria);
-        if (b != null) {
-            dto.primaryBuilding().setValue(b.getStringView());
+        dto.primaryBuilding().set(Persistence.secureRetrieve(criteria));
+        if (!dto.primaryBuilding().isNull()) {
+            dto.address().set(dto.primaryBuilding().info().address());
         }
     }
 
