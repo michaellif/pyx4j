@@ -93,7 +93,7 @@ public class ShowingForm extends CrmEntityForm<ShowingDTO> {
 
                     @Override
                     protected void setFilters(List<Criterion> filters) {
-                        filters.add(PropertyCriterion.eq(proto().floorplan(), ShowingForm.this.getValue().floorplan()));
+                        filters.add(PropertyCriterion.eq(proto().building(), ShowingForm.this.getValue().building()));
 
                         filters.add(PropertyCriterion.eq(proto().unitOccupancySegments().$().status(), AptUnitOccupancySegment.Status.available));
                         filters.add(PropertyCriterion.eq(proto().unitOccupancySegments().$().dateTo(), new LogicalDate(1100, 0, 1)));
