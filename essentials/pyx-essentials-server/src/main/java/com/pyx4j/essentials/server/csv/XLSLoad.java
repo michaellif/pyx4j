@@ -36,18 +36,25 @@ import org.apache.poi.ss.usermodel.Row;
 
 public class XLSLoad {
 
+    private final HSSFWorkbook wb;
+
     private final HSSFDataFormatter formatter;
 
     public static void loadFile(InputStream is, CSVReciver reciver) {
         try {
-            POIFSFileSystem fs = new POIFSFileSystem(is);
-            HSSFWorkbook wb = new HSSFWorkbook(fs);
-            HSSFSheet sheet = wb.getSheetAt(0);
-
-            new XLSLoad().loadSheet(sheet, reciver);
-
+            XLSLoad l = new XLSLoad(is);
+            HSSFSheet sheet = l.wb.getSheetAt(0);
+            l.loadSheet(sheet, reciver);
         } catch (IOException ioe) {
             throw new RuntimeException("Load file error", ioe);
+        }
+    }
+
+    public XLSLoad(InputStream is) throws IOException {
+        try {
+            formatter = new HSSFDataFormatter();
+            POIFSFileSystem fs = new POIFSFileSystem(is);
+            wb = new HSSFWorkbook(fs);
         } finally {
             try {
                 if (is != null) {
@@ -59,8 +66,17 @@ public class XLSLoad {
         }
     }
 
-    public XLSLoad() {
-        formatter = new HSSFDataFormatter();
+    public int getNumberOfSheets() {
+        return wb.getNumberOfSheets();
+    }
+
+    public String getSheetName(int sheetNumber) {
+        return wb.getSheetAt(sheetNumber).getSheetName();
+    }
+
+    public void loadSheet(int sheetNumber, CSVReciver reciver) {
+        HSSFSheet sheet = wb.getSheetAt(sheetNumber);
+        loadSheet(sheet, reciver);
     }
 
     public void loadSheet(HSSFSheet sheet, CSVReciver reciver) {
