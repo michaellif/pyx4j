@@ -560,7 +560,7 @@
         <profile>
             <id>deploy-target-prod02main</id>
             <properties>
-                <deployContext>vista-main</deployContext>
+                <deployContext>vista</deployContext>
                 <vista-tomcat-url>http://staging02.birchwoodsoftwaregroup.com</vista-tomcat-url>
                 <vista-app-ping-url>${vista-tomcat-url}/${deployContext}</vista-app-ping-url>
             </properties>
