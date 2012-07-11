@@ -26,11 +26,11 @@ import com.propertyvista.domain.policy.policies.domain.LeaseAdjustmentPolicyItem
 import com.propertyvista.domain.tenant.lease.LeaseAdjustmentReason;
 import com.propertyvista.portal.server.preloader.policy.util.AbstractPolicyPreloader;
 
-public class LeaseAdjustmentPolicyPreloader extends AbstractPolicyPreloader<LeaseAdjustmentPolicy> {
+public class MockupLeaseAdjustmentPolicyPreloader extends AbstractPolicyPreloader<LeaseAdjustmentPolicy> {
 
-    private final static I18n i18n = I18n.get(LeaseAdjustmentPolicyPreloader.class);
+    private final static I18n i18n = I18n.get(MockupLeaseAdjustmentPolicyPreloader.class);
 
-    public LeaseAdjustmentPolicyPreloader() {
+    public MockupLeaseAdjustmentPolicyPreloader() {
         super(LeaseAdjustmentPolicy.class);
     }
 

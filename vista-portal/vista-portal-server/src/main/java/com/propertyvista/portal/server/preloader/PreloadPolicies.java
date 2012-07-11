@@ -18,10 +18,13 @@ import com.propertyvista.portal.server.preloader.policy.subpreloaders.Applicatio
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.DepositPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.EmailTemplatesPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.IdAssignmentPolicyPreloader;
-import com.propertyvista.portal.server.preloader.policy.subpreloaders.LeaseAdjustmentPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.LeaseBillingPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.LeaseTermsPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.MiscPolicyPreloader;
+import com.propertyvista.portal.server.preloader.policy.subpreloaders.MockupDepositPolicyPreloader;
+import com.propertyvista.portal.server.preloader.policy.subpreloaders.MockupLeaseAdjustmentPolicyPreloader;
+import com.propertyvista.portal.server.preloader.policy.subpreloaders.MockupLeaseBillingPolicyPreloader;
+import com.propertyvista.portal.server.preloader.policy.subpreloaders.MockupProductTaxPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.ProductTaxPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.util.SimplePoliciesPreloader;
 
@@ -32,14 +35,19 @@ public class PreloadPolicies extends SimplePoliciesPreloader {
         add(new ApplicationDocumentationPolicyPreloader());
         add(new EmailTemplatesPolicyPreloader());
         add(new IdAssignmentPolicyPreloader());
-        add(new LeaseBillingPolicyPreloader());
         add(new LeaseTermsPolicyPreloader());
         add(new MiscPolicyPreloader());
 
-        if (!isProduction) {
+        if (isProduction) {
+            add(new ProductTaxPolicyPreloader());
             add(new DepositPolicyPreloader());
             add(new LeaseAdjustmentPolicyPreloader());
-            add(new ProductTaxPolicyPreloader());
+            add(new LeaseBillingPolicyPreloader());
+        } else {
+            add(new MockupProductTaxPolicyPreloader());
+            add(new MockupDepositPolicyPreloader());
+            add(new MockupLeaseAdjustmentPolicyPreloader());
+            add(new MockupLeaseBillingPolicyPreloader());
         }
     }
 }

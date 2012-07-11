@@ -11,22 +11,22 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.portal.server.preloader.policy.subpreloaders;
+package com.propertyvista.portal.server.preloader;
 
 import com.pyx4j.entity.shared.EntityFactory;
 
-import com.propertyvista.domain.policy.policies.ProductTaxPolicy;
+import com.propertyvista.domain.policy.policies.LeaseAdjustmentPolicy;
 import com.propertyvista.portal.server.preloader.policy.util.AbstractPolicyPreloader;
 
-public class ProductTaxPolicyPreloader extends AbstractPolicyPreloader<ProductTaxPolicy> {
+public class LeaseAdjustmentPolicyPreloader extends AbstractPolicyPreloader<LeaseAdjustmentPolicy> {
 
-    public ProductTaxPolicyPreloader() {
-        super(ProductTaxPolicy.class);
+    public LeaseAdjustmentPolicyPreloader() {
+        super(LeaseAdjustmentPolicy.class);
     }
 
     @Override
-    protected ProductTaxPolicy createPolicy(StringBuilder log) {
-        ProductTaxPolicy policy = EntityFactory.create(ProductTaxPolicy.class);
+    protected LeaseAdjustmentPolicy createPolicy(StringBuilder log) {
+        LeaseAdjustmentPolicy policy = EntityFactory.create(LeaseAdjustmentPolicy.class);
         log.append(policy.getStringView());
         return policy;
     }
