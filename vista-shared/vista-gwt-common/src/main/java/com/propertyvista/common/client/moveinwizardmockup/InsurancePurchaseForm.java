@@ -82,7 +82,9 @@ public class InsurancePurchaseForm extends CEntityDecoratableForm<PurchaseInsura
 
     private final Command onPurchaseConfirmed;
 
-    public InsurancePurchaseForm(Command onPurchaseConfirmed) {
+    private final boolean useFloatingQuote;
+
+    public InsurancePurchaseForm(boolean useFloatingQuote, Command onPurchaseConfirmed) {
         super(PurchaseInsuranceDTO.class);
         this.summaryRecalculationRequiredHandler = new ValueChangeHandler() {
             @Override
@@ -91,6 +93,7 @@ public class InsurancePurchaseForm extends CEntityDecoratableForm<PurchaseInsura
             }
         };
         this.onPurchaseConfirmed = onPurchaseConfirmed;
+        this.useFloatingQuote = useFloatingQuote;
     }
 
     public void setQuoteTotalPanelVisibility(boolean isVisible) {
@@ -114,23 +117,9 @@ public class InsurancePurchaseForm extends CEntityDecoratableForm<PurchaseInsura
         int row = -1;
         content.setWidget(++row, 0, sections);
 
-        quoteTotalPanel = new VerticalPanel();
-        quoteTotalPanel.setWidth("20em");
-        quoteTotalPanel.getElement().getStyle().setBackgroundColor("#FFFFFF");
-        quoteTotalPanel.getElement().getStyle().setProperty("borderStyle", "outset");
-        quoteTotalPanel.getElement().getStyle().setProperty("borderRadius", "5px");
-        quoteTotalPanel.getElement().getStyle().setBorderColor("#000000");
-        quoteTotalPanel.getElement().getStyle().setBorderWidth(1, Unit.PX);
-
-        {
-            quoteTotalPanel.add(new DecoratorBuilder(inject(proto().monthlyInsurancePremium()), 10).build());
-            get(proto().monthlyInsurancePremium()).setViewable(true);
-            quoteTotalPanel.add(new DecoratorBuilder(inject(proto().totalCoverage()), 10).build());
-            get(proto().totalCoverage()).setViewable(true);
-            quoteTotalPanel.add(new DecoratorBuilder(inject(proto().totalPersonalLiability()), 10).build());
-            get(proto().totalPersonalLiability()).setViewable(true);
+        if (useFloatingQuote) {
+            content.setWidget(0, 1, createQuoteTotalPanel());
         }
-        content.setWidget(0, 1, quoteTotalPanel);
 
         return content;
     }
@@ -139,10 +128,12 @@ public class InsurancePurchaseForm extends CEntityDecoratableForm<PurchaseInsura
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
 
-        // TODO: this is kind of hack to set the quoteTotalPanel to the correct position, but it works 
-        quoteTotalPanel.getElement().getStyle().setPosition(Position.FIXED);
-        quoteTotalPanel.getElement().getStyle().setTop(50, Unit.PCT);
-        quoteTotalPanel.getElement().getStyle().setLeft(quoteTotalPanel.getElement().getAbsoluteLeft() + 10, Unit.PX);
+        if (useFloatingQuote) {
+            // TODO: this is kind of hack to set the quoteTotalPanel to the correct position, but it works 
+            quoteTotalPanel.getElement().getStyle().setPosition(Position.FIXED);
+            quoteTotalPanel.getElement().getStyle().setTop(50, Unit.PCT);
+            quoteTotalPanel.getElement().getStyle().setLeft(quoteTotalPanel.getElement().getAbsoluteLeft() + 10, Unit.PX);
+        }
 
         recalculateSummary();
     }
@@ -212,10 +203,34 @@ public class InsurancePurchaseForm extends CEntityDecoratableForm<PurchaseInsura
 
         coverageTerms.setWidget(++irow, 0, new DecoratorBuilder(inject(proto().numOfPrevClaims(), new NumberOfPreviousClaimsCombo())).build());
 
+        if (!useFloatingQuote) {
+            coverageTerms.setH2(++irow, 0, 1, "");
+            coverageTerms.setWidget(++irow, 0, createQuoteTotalPanel());
+        }
         coverageTerms.setWidget(++irow, 0, inject(proto().digitalSignatures(), new SignatureFolder(true)));
         coverageTerms.getFlexCellFormatter().setColSpan(irow, 0, 2);
 
         return coverageTerms;
+    }
+
+    private Widget createQuoteTotalPanel() {
+        quoteTotalPanel = new VerticalPanel();
+        quoteTotalPanel.setWidth("20em");
+        quoteTotalPanel.getElement().getStyle().setBackgroundColor("#FFFFFF");
+        quoteTotalPanel.getElement().getStyle().setProperty("borderStyle", "outset");
+        quoteTotalPanel.getElement().getStyle().setProperty("borderRadius", "5px");
+        quoteTotalPanel.getElement().getStyle().setBorderColor("#000000");
+        quoteTotalPanel.getElement().getStyle().setBorderWidth(1, Unit.PX);
+
+        {
+            quoteTotalPanel.add(new DecoratorBuilder(inject(proto().monthlyInsurancePremium()), 10).build());
+            get(proto().monthlyInsurancePremium()).setViewable(true);
+            quoteTotalPanel.add(new DecoratorBuilder(inject(proto().totalCoverage()), 10).build());
+            get(proto().totalCoverage()).setViewable(true);
+            quoteTotalPanel.add(new DecoratorBuilder(inject(proto().totalPersonalLiability()), 10).build());
+            get(proto().totalPersonalLiability()).setViewable(true);
+        }
+        return quoteTotalPanel;
     }
 
     private BigDecimal calculatePremium() {

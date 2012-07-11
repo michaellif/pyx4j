@@ -129,14 +129,11 @@ public class InsurancePaymentMethodForm extends CEntityDecoratableForm<Insurance
             @Override
             public void onValueChange(ValueChangeEvent<Boolean> event) {
                 onBillingAddressSameAsCurrentOne(event.getValue());
-                billingAddress.setEditable(!event.getValue());
-                billingAddress.setVisible(!event.getValue());
-
-                currentAddress.setVisible(event.getValue());
             }
         });
 
         container.setWidget(++row, 0, inject(proto().billingAddress(), billingAddress = new AddressSimpleEditor()));
+        billingAddress.setMandatory(false);
         container.getFlexCellFormatter().setColSpan(row, 0, 3);
         container.setWidget(++row, 0, inject(proto().currentAddress(), currentAddress = new AddressSimpleEditor()));
         container.getFlexCellFormatter().setColSpan(row, 0, 3);
@@ -156,8 +153,11 @@ public class InsurancePaymentMethodForm extends CEntityDecoratableForm<Insurance
 
     }
 
-    public void onBillingAddressSameAsCurrentOne(boolean set) {
-        // Implements meaningful in derived classes...
+    public void onBillingAddressSameAsCurrentOne(boolean isBillingAddressSameAsCurrent) {
+        billingAddress.setEditable(!isBillingAddressSameAsCurrent);
+        billingAddress.setVisible(!isBillingAddressSameAsCurrent);
+        billingAddress.setEnabled(!isBillingAddressSameAsCurrent);
+        currentAddress.setVisible(isBillingAddressSameAsCurrent);
     }
 
     private CEntityForm<CreditCardInfo> createCreditCardInfoEditor() {
@@ -165,11 +165,6 @@ public class InsurancePaymentMethodForm extends CEntityDecoratableForm<Insurance
             @Override
             public IsWidget createContent() {
                 FlowPanel panel = new FlowPanel();
-//                panel.add(new InnerPanelWidgetDecorator(inject(proto().number())));                
-//                panel.add(new InnerPanelWidgetDecorator(inject(proto().expiryDate())));
-//                panel.add(new InnerPanelWidgetDecorator(inject(proto().nameOn())));
-//                panel.add(new InnerPanelWidgetDecorator(inject(proto().securityCode())));
-////                panel.add(new InnerPanelWidgetDecorator(inject(proto().bankPhone())));
                 addNotMandatory(panel, proto().number());
                 addNotMandatory(panel, proto().expiryDate());
                 addNotMandatory(panel, proto().nameOn());
@@ -190,22 +185,6 @@ public class InsurancePaymentMethodForm extends CEntityDecoratableForm<Insurance
                     @SuppressWarnings("deprecation")
                     int y = 1900 + now.getYear();
                     ((CMonthYearPicker) comp).setYearRange(new Range(y, 10));
-
-//                    ((CMonthYearPicker) comp).addValueValidator(new EditableValueValidator<Date>() {
-//
-//                        @Override
-//                        public ValidationFailure isValid(CComponent<Date, ?> component, Date value) {
-//                            if (value == null) {
-//                                return null;
-//                            } else {
-//                                Date now = new Date();
-//                                @SuppressWarnings("deprecation")
-//                                Date thisMonth = new Date(now.getYear(), now.getMonth(), 1);
-//                                return value.compareTo(thisMonth) >= 0 ? null : new ValidationFailure(i18n.tr("Card expiry should be a future date"));
-//                            }
-//                        }
-//
-//                    });
                 }
                 return comp;
             }
@@ -213,7 +192,6 @@ public class InsurancePaymentMethodForm extends CEntityDecoratableForm<Insurance
             @Override
             public void addValidations() {
                 super.addValidations();
-//                get(proto().number()).addValueValidator(new CreditCardNumberValidator());
             }
         };
     }

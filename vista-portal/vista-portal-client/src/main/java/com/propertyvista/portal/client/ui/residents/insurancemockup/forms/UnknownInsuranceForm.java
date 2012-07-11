@@ -63,7 +63,7 @@ public class UnknownInsuranceForm extends CEntityDecoratableForm<InsuranceDTO> {
         content.setWidget(++row, 0, new InsuranceMessagePanel(new HTML(InsuranceMockupResources.INSTANCE.youMustObtainInsuranceMessage().getText())));
 
         content.getRowFormatter().getElement(row).getStyle().setPaddingBottom(10, Unit.PX);
-        content.setWidget(++row, 0, inject(proto().purchaseInsurance(), new InsurancePurchaseForm(new Command() {
+        content.setWidget(++row, 0, inject(proto().purchaseInsurance(), new InsurancePurchaseForm(false, new Command() {
 
             @Override
             public void execute() {
