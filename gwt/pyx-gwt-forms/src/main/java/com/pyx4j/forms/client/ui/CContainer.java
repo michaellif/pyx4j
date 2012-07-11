@@ -162,9 +162,7 @@ public abstract class CContainer<DATA_TYPE, WIDGET_TYPE extends Widget & INative
     protected void onReset() {
         if (getComponents() != null) {
             for (CComponent<?, ?> ccomponent : getComponents()) {
-                if (!ccomponent.isValid()) {
-                    ccomponent.reset();
-                }
+                ccomponent.reset();
             }
         }
         super.onReset();

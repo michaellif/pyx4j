@@ -364,4 +364,9 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
         }
     }
 
+    @Override
+    protected void onReset() {
+        container.clear();
+        itemsList.clear();
+    };
 }
