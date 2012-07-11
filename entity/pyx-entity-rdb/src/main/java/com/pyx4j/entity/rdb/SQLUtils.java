@@ -32,6 +32,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.config.server.Trace;
+import com.pyx4j.entity.rdb.dialect.Dialect;
 
 public class SQLUtils {
 
@@ -62,6 +63,10 @@ public class SQLUtils {
             }
         } catch (Throwable e) {
         }
+    }
+
+    public static String debugInfo(Dialect dialect, ResultSet resultSet) throws SQLException {
+        return "TODO 'TableName'" + " id = " + resultSet.getLong(dialect.getNamingConvention().sqlIdColumnName());
     }
 
     public static void logAndClearWarnings(Connection connection) throws SQLException {

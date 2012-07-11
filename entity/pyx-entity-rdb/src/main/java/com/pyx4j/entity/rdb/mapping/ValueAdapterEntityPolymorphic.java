@@ -35,6 +35,7 @@ import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Inheritance;
 import com.pyx4j.entity.rdb.PersistenceContext;
+import com.pyx4j.entity.rdb.SQLUtils;
 import com.pyx4j.entity.rdb.dialect.Dialect;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
@@ -46,6 +47,8 @@ public class ValueAdapterEntityPolymorphic implements ValueAdapter {
 
     protected int sqlTypeDiscriminator;
 
+    protected final Dialect dialect;
+
     private final Map<String, Class<? extends IEntity>> impClasses = new HashMap<String, Class<? extends IEntity>>();
 
     private final String discriminatorColumnNameSufix;
@@ -53,6 +56,7 @@ public class ValueAdapterEntityPolymorphic implements ValueAdapter {
     private final boolean singlePkRoot;
 
     protected ValueAdapterEntityPolymorphic(Dialect dialect, Class<? extends IEntity> entityClass) {
+        this.dialect = dialect;
         sqlTypeKey = dialect.getTargetSqlType(Long.class);
         sqlTypeDiscriminator = dialect.getTargetSqlType(String.class);
         discriminatorColumnNameSufix = dialect.getNamingConvention().sqlDiscriminatorColumnNameSufix();
@@ -137,7 +141,13 @@ public class ValueAdapterEntityPolymorphic implements ValueAdapter {
             return null;
         } else {
             String discriminatorValue = rs.getString(memberSqlName + discriminatorColumnNameSufix);
+            if (discriminatorValue == null) {
+                throw new Error("Missing discriminatorValue '" + memberSqlName + discriminatorColumnNameSufix + "' " + SQLUtils.debugInfo(dialect, rs));
+            }
             Class<? extends IEntity> entityClass = impClasses.get(discriminatorValue);
+            if (entityClass == null) {
+                throw new Error("Unmaped discriminator '" + discriminatorValue + "' " + SQLUtils.debugInfo(dialect, rs));
+            }
             IEntity entityValue = EntityFactory.create(entityClass);
             entityValue.setPrimaryKey(new Key(value));
             entityValue.setValueDetached();
