@@ -25,7 +25,7 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.entity.client.CPolymorphicEntityEditorTEMP;
+import com.pyx4j.entity.client.CEntityForm;
 import com.pyx4j.entity.client.ui.CEntityComboBox;
 import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -117,8 +117,9 @@ public abstract class PolicyDTOTabPanelBasedForm<POLICY_DTO extends PolicyDTOBas
         });
 
         content.setWidget(++row, 0, new DecoratorBuilder(selectPolicyScopeBox).customLabel(i18n.tr("Scope")).labelWidth(8).componentWidth(10).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().node(), new PolicyNodeEditor())).customLabel(i18n.tr("Applied to")).labelWidth(8)
-                .componentWidth(15).build());
+        content.setWidget(++row, 0, inject(proto().node(), new PolicyNodeEditor()));
+//        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().node(), new PolicyNodeEditor())).customLabel(i18n.tr("Applied to")).labelWidth(8)
+//                .componentWidth(15).build());
         if (isEditable()) {
             get(proto().node()).inheritViewable(false);
         }
@@ -199,7 +200,7 @@ public abstract class PolicyDTOTabPanelBasedForm<POLICY_DTO extends PolicyDTOBas
      * 
      * @author ArtyomB
      */
-    private static class PolicyNodeEditor extends CPolymorphicEntityEditorTEMP<PolicyNode> {
+    private static class PolicyNodeEditor extends CEntityForm<PolicyNode> {
 
         private Map<Class<? extends PolicyNode>, CComponent<?, ?>> nodeTypeToComponentMap;
 
