@@ -49,10 +49,11 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
 
         createCommonContent();
 
-        Tab tab = addTab(createInfoTab());
-        setTabEnabled(tab, !isEditable());
+        //TODO
+//        Tab tab = addTab(createInfoTab());
+//        setTabEnabled(tab, !isEditable());
 
-        tab = addTab(createFinancialTab());
+        Tab tab = addTab(createFinancialTab());
         setTabEnabled(tab, !isEditable());
 
 // TODO : credit check (Equifax) isn't implemented yet (see LeaseApplicationViewerViewImpl)!        
