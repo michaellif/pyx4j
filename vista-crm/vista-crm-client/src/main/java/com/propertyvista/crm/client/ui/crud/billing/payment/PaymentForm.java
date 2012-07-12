@@ -345,7 +345,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
                 get(proto().addThisPaymentMethodToProfile()).setValue(Boolean.TRUE);
                 if (!getValue().electronicPaymentsAllowed().getValue(Boolean.FALSE)) {
                     MessageDialog.warn(i18n.tr("Warning"),
-                            i18n.tr("Merchant account is not setup to recive Electronic Payments\nThe payment would be processes once account is activated"));
+                            i18n.tr("Merchant account is not setup to receive Electronic Payments\nThe payment would be processes once account is activated"));
                 }
                 break;
             }
