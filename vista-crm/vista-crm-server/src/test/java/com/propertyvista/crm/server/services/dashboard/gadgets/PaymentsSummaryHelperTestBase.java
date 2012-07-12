@@ -71,6 +71,12 @@ public class PaymentsSummaryHelperTestBase extends VistaDBTestBase {
             tenantAssignmentItem.type().setValue(IdAssignmentType.generatedNumber);
             idAssignmentPolicy.itmes().add(tenantAssignmentItem);
         }
+        {
+            IdAssignmentItem tenantAssignmentItem = idAssignmentPolicy.itmes().$();
+            tenantAssignmentItem.target().setValue(IdTarget.customer);
+            tenantAssignmentItem.type().setValue(IdAssignmentType.generatedNumber);
+            idAssignmentPolicy.itmes().add(tenantAssignmentItem);
+        }
 
         Persistence.service().persist(idAssignmentPolicy);
 
