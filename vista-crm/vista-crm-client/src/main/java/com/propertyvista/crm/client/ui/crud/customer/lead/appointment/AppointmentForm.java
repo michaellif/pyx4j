@@ -36,11 +36,8 @@ public class AppointmentForm extends CrmEntityForm<Appointment> {
 
     @Override
     public void createTabs() {
-
         selectTab(addTab(createGeneralTab(i18n.tr("General"))));
-
         setTabEnabled(addTab(createShowingsTab(), i18n.tr("Showings")), !isEditable());
-
     }
 
     private FormFlexPanel createGeneralTab(String title) {
@@ -56,6 +53,9 @@ public class AppointmentForm extends CrmEntityForm<Appointment> {
         main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().agent()), 20).build());
         main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().phone()), 20).customLabel(i18n.tr("Agent Phone")).build());
         main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().email()), 20).customLabel(i18n.tr("Agent Email")).build());
+
+        // tweak UI:
+        get(proto().status()).setViewable(true);
 
         main.getColumnFormatter().setWidth(0, "50%");
         main.getColumnFormatter().setWidth(1, "50%");

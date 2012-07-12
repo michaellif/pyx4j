@@ -14,8 +14,10 @@
 package com.propertyvista.crm.client.activity.crud.customer.lead;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
@@ -30,5 +32,12 @@ public class AppointmentEditorActivity extends EditorActivityBase<Appointment> {
     public AppointmentEditorActivity(CrudAppPlace place) {
         super(place, MarketingViewFactory.instance(AppointmentEditorView.class), (AbstractCrudService<Appointment>) GWT.create(AppointmentCrudService.class),
                 Appointment.class);
+    }
+
+    @Override
+    protected void createNewEntity(AsyncCallback<Appointment> callback) {
+        Appointment entity = EntityFactory.create(getEntityClass());
+        entity.status().setValue(Appointment.Status.planned);
+        callback.onSuccess(entity);
     }
 }
