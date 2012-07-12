@@ -16,12 +16,17 @@ package com.propertyvista.biz.financial.payment;
 import java.util.List;
 
 import com.propertyvista.domain.financial.AggregatedTransfer;
+import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 
 public interface PaymentFacade {
+
+    boolean isPaymentsAllowed(BillingAccount billingAccountId);
+
+    boolean isElectronicPaymentsAllowed(BillingAccount billingAccountId);
 
     PaymentMethod persistPaymentMethod(Building building, PaymentMethod paymentMethod);
 

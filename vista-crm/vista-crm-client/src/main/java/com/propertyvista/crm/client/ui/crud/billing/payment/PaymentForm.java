@@ -37,6 +37,7 @@ import com.pyx4j.site.client.ui.dialogs.AbstractEntitySelectorDialog;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.RadioGroup;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.components.editors.payments.PaymentMethodEditor;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
@@ -342,6 +343,10 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
             case CreditCard:
             case Echeck:
                 get(proto().addThisPaymentMethodToProfile()).setValue(Boolean.TRUE);
+                if (!getValue().electronicPaymentsAllowed().getValue(Boolean.FALSE)) {
+                    MessageDialog.warn(i18n.tr("Warning"),
+                            i18n.tr("Merchant account is not setup to recive Electronic Payments\nThe payment would be processes once account is activated"));
+                }
                 break;
             }
         }

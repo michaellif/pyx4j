@@ -27,6 +27,7 @@ import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.domain.financial.AggregatedTransfer;
 import com.propertyvista.domain.financial.AggregatedTransfer.AggregatedTransferStatus;
+import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
 import com.propertyvista.domain.payment.CreditCardInfo;
@@ -38,6 +39,16 @@ import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 public class PaymentFacadeImpl implements PaymentFacade {
 
     private static final I18n i18n = I18n.get(PaymentFacadeImpl.class);
+
+    @Override
+    public boolean isPaymentsAllowed(BillingAccount billingAccountId) {
+        return PaymentUtils.isPaymentsAllowed(billingAccountId);
+    }
+
+    @Override
+    public boolean isElectronicPaymentsAllowed(BillingAccount billingAccountId) {
+        return PaymentUtils.isElectronicPaymentsAllowed(billingAccountId);
+    }
 
     @Override
     public PaymentMethod persistPaymentMethod(Building building, PaymentMethod paymentMethod) {

@@ -28,6 +28,8 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.rpc.shared.UserRuntimeException;
 
 import com.propertyvista.biz.financial.SysDateManager;
 import com.propertyvista.biz.financial.ar.ARFacade;
@@ -48,6 +50,8 @@ import com.propertyvista.server.common.util.AddressRetriever;
 
 public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRecord, PaymentRecordDTO> implements PaymentCrudService {
 
+    private static final I18n i18n = I18n.get(PaymentCrudServiceImpl.class);
+
     public PaymentCrudServiceImpl() {
         super(PaymentRecord.class, PaymentRecordDTO.class);
     }
@@ -63,6 +67,7 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
         enhanceListRetrieved(entity, dto);
 
         dto.participants().addAll(retrieveUsers(dto.billingAccount().lease()));
+        dto.electronicPaymentsAllowed().setValue(ServerSideFactory.create(PaymentFacade.class).isElectronicPaymentsAllowed(dto.billingAccount()));
     }
 
     @Override
@@ -105,6 +110,10 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
             throw new RuntimeException("Entity '" + EntityFactory.getEntityMeta(BillingAccount.class).getCaption() + "' " + parentId + " NotFound");
         }
 
+        if (!ServerSideFactory.create(PaymentFacade.class).isPaymentsAllowed(billingAccount)) {
+            throw new UserRuntimeException(i18n.tr("No merchantAccount assigned to building to create the payment"));
+        }
+
         Persistence.service().retrieve(billingAccount.lease());
         Persistence.service().retrieve(billingAccount.lease().unit());
         Persistence.service().retrieve(billingAccount.lease().unit().building());
@@ -121,6 +130,8 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
         // some default values:
         dto.paymentStatus().setValue(PaymentStatus.Submitted);
         dto.createdDate().setValue(new LogicalDate(SysDateManager.getSysDate()));
+
+        dto.electronicPaymentsAllowed().setValue(ServerSideFactory.create(PaymentFacade.class).isElectronicPaymentsAllowed(billingAccount));
 
         // calculate current balance:
         dto.amount().setValue(ServerSideFactory.create(ARFacade.class).getCurrentBalance(billingAccount));

@@ -56,6 +56,8 @@ public interface PaymentRecordDTO extends PaymentRecord {
     @NotNull
     IPrimitive<PaymentSelect> paymentSelect();
 
+    IPrimitive<Boolean> electronicPaymentsAllowed();
+
     IPrimitive<Boolean> addThisPaymentMethodToProfile();
 
     @NotNull

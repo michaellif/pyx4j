@@ -19,6 +19,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 
+import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.payment.PaymentMethod;
@@ -30,11 +31,23 @@ class PaymentUtils {
     private static final I18n i18n = I18n.get(PaymentUtils.class);
 
     static boolean isElectronicPaymentsAllowed(MerchantAccount merchantAccount) {
-        if (merchantAccount.invalid().getValue(Boolean.TRUE)) {
+        if ((merchantAccount == null) || merchantAccount.invalid().getValue(Boolean.TRUE)) {
             return false;
         } else {
             return !merchantAccount.merchantTerminalId().isNull();
         }
+    }
+
+    public static boolean isPaymentsAllowed(BillingAccount billingAccountId) {
+        EntityQueryCriteria<MerchantAccount> criteria = EntityQueryCriteria.create(MerchantAccount.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto()._buildings().$()._Units().$()._Leases().$().billingAccount(), billingAccountId));
+        return Persistence.service().retrieve(criteria) != null;
+    }
+
+    public static boolean isElectronicPaymentsAllowed(BillingAccount billingAccountId) {
+        EntityQueryCriteria<MerchantAccount> criteria = EntityQueryCriteria.create(MerchantAccount.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto()._buildings().$()._Units().$()._Leases().$().billingAccount(), billingAccountId));
+        return isElectronicPaymentsAllowed(Persistence.service().retrieve(criteria));
     }
 
     static MerchantAccount retrieveMerchantAccount(PaymentRecord paymentRecord) {
