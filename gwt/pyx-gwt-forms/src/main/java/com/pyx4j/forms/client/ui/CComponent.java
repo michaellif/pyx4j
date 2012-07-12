@@ -499,7 +499,7 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
 
         ValidationError newValidationError = null;
 
-        if ((isUnconditionalValidationErrorRendering() || isVisible()) && isEditable() && isEnabled() && !isViewable()) {
+        if (isVisible() && isEditable() && isEnabled() && !isViewable()) {
 
             if (validators != null) {
                 for (EditableValueValidator<? super DATA_TYPE> validator : validators) {

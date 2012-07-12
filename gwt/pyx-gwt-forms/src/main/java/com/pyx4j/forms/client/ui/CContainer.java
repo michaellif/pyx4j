@@ -85,9 +85,8 @@ public abstract class CContainer<DATA_TYPE, WIDGET_TYPE extends Widget & INative
                         public void execute() {
                             if (event.isEventOfType(PropertyName.valid)) {
                                 log.trace("CContainer.onPropertyChange fired from {}. Changed property is {}.", shortDebugInfo(), event.getPropertyName());
-                                revalidate();
+                                revalidateContainerOnly();
                                 PropertyChangeEvent.fire(CContainer.this, PropertyChangeEvent.PropertyName.valid);
-
                             }
                             sheduled = false;
                         }
@@ -106,7 +105,7 @@ public abstract class CContainer<DATA_TYPE, WIDGET_TYPE extends Widget & INative
                     Scheduler.get().scheduleFinally(new Scheduler.ScheduledCommand() {
                         @Override
                         public void execute() {
-                            revalidate();
+                            revalidateContainerOnly();
                             log.trace("CContainer.onValueChange fired from {}", shortDebugInfo());
                             ValueChangeEvent.fire(CContainer.this, getValue());
                             sheduled = false;
@@ -221,4 +220,17 @@ public abstract class CContainer<DATA_TYPE, WIDGET_TYPE extends Widget & INative
         }
     }
 
+    @Override
+    public void revalidate() {
+        if (getComponents() != null) {
+            for (CComponent<?, ?> component : getComponents()) {
+                component.revalidate();
+            }
+        }
+        super.revalidate();
+    }
+
+    private void revalidateContainerOnly() {
+        super.revalidate();
+    }
 }
