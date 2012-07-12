@@ -52,9 +52,7 @@ public class ShowingEditorActivity extends EditorActivityBase<ShowingDTO> implem
         super.createNewEntity(new DefaultAsyncCallback<ShowingDTO>() {
             @Override
             public void onSuccess(ShowingDTO result) {
-                Appointment parentAppointmentStub = EntityFactory.create(Appointment.class);
-                parentAppointmentStub.setPrimaryKey(getParentId());
-                ((ShowingCrudService) getService()).createNew(callback, parentAppointmentStub);
+                ((ShowingCrudService) getService()).createNew(callback, EntityFactory.createIdentityStub(Appointment.class, getParentId()));
             }
         });
     }

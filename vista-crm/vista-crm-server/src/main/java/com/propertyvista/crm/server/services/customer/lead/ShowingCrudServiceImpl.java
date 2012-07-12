@@ -54,6 +54,14 @@ public class ShowingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Showing, 
     }
 
     @Override
+    protected void save(Showing entity, ShowingDTO dto) {
+        if (!entity.result().isNull()) {
+            entity.status().setValue(Showing.Status.seen);
+        }
+        super.save(entity, dto);
+    }
+
+    @Override
     public void updateValue(AsyncCallback<AptUnit> callback, Key unitId) {
         AptUnit unit = Persistence.service().retrieve(AptUnit.class, unitId);
         Persistence.service().retrieve(unit.building(), AttachLevel.ToStringMembers);
@@ -65,8 +73,8 @@ public class ShowingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Showing, 
     public void createNew(AsyncCallback<ShowingDTO> callback, Appointment parentAppointmentStub) {
         ShowingDTO newShowing = EntityFactory.create(ShowingDTO.class);
         newShowing.appointment().set(parentAppointmentStub);
+        newShowing.status().setValue(Showing.Status.planned);
         retrieveUnitFilterCriteria(newShowing);
-
         callback.onSuccess(newShowing);
     }
 

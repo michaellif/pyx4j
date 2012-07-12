@@ -139,6 +139,7 @@ public class ShowingForm extends CrmEntityForm<ShowingDTO> {
         content.setWidget(++row, 1, new DecoratorBuilder(inject(proto().reason()), 12).build());
 
         // tweak UI:
+        get(proto().status()).setViewable(true);
         get(proto().result()).addValueChangeHandler(new ValueChangeHandler<Showing.Result>() {
             @Override
             public void onValueChange(ValueChangeEvent<Result> event) {
@@ -157,6 +158,13 @@ public class ShowingForm extends CrmEntityForm<ShowingDTO> {
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
 
-        get(proto().reason()).setVisible(Showing.Result.notInterested.equals(getValue().result().getValue()));
+        get(proto().reason()).setVisible(getValue().result().getValue() == Showing.Result.notInterested);
+
+        if (isEditable()) {
+            get(proto().unit()).setEditable(getValue().status().getValue() != Showing.Status.seen);
+
+            get(proto().result()).setEditable(getValue().status().getValue() != Showing.Status.seen);
+            get(proto().reason()).setEditable(getValue().status().getValue() != Showing.Status.seen);
+        }
     }
 }

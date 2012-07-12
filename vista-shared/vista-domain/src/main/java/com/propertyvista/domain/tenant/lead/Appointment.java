@@ -85,6 +85,7 @@ public interface Appointment extends IEntity {
     @Editor(type = EditorType.email)
     IPrimitive<String> email();
 
+    @NotNull
     @ToString(index = 3)
     IPrimitive<Status> status();
 

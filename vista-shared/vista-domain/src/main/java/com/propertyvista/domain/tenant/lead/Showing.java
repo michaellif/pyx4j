@@ -82,6 +82,7 @@ public interface Showing extends IEntity {
     @ToString(index = 0)
     AptUnit unit();
 
+    @NotNull
     @ToString(index = 1)
     IPrimitive<Status> status();
 
