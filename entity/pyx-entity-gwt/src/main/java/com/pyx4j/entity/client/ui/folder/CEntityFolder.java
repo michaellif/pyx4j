@@ -372,4 +372,9 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
         container.clear();
         itemsList.clear();
     };
+
+    @Override
+    public boolean isVisited() {
+        return false;
+    }
 }
