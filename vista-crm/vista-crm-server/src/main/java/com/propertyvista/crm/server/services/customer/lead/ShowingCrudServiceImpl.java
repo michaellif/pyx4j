@@ -26,6 +26,7 @@ import com.propertyvista.crm.rpc.services.customer.lead.ShowingCrudService;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lead.Appointment;
+import com.propertyvista.domain.tenant.lead.Lead;
 import com.propertyvista.domain.tenant.lead.Showing;
 
 public class ShowingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Showing, ShowingDTO> implements ShowingCrudService {
@@ -89,5 +90,13 @@ public class ShowingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Showing, 
         showingDTO.moveInDate().setValue(appointment.lead().moveInDate().getValue());
         showingDTO.building().set(
                 Persistence.service().retrieve(Building.class, appointment.lead().floorplan().building().getPrimaryKey(), AttachLevel.ToStringMembers));
+    }
+
+    @Override
+    public void getActiveState(AsyncCallback<Boolean> callback, Appointment appointmentId) {
+        Persistence.service().retrieve(appointmentId);
+        Persistence.service().retrieve(appointmentId.lead());
+
+        callback.onSuccess(appointmentId.status().getValue() != Appointment.Status.complete && appointmentId.lead().status().getValue() != Lead.Status.closed);
     }
 }

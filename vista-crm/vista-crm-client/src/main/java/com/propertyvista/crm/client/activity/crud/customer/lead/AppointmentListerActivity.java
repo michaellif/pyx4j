@@ -37,10 +37,10 @@ public class AppointmentListerActivity extends ListerActivityBase<Appointment> {
     public void populate() {
         super.populate();
 
-        ((AppointmentCrudService) getService()).getParentState(new DefaultAsyncCallback<Lead.Status>() {
+        ((AppointmentCrudService) getService()).getActiveState(new DefaultAsyncCallback<Boolean>() {
             @Override
-            public void onSuccess(Lead.Status result) {
-                ((AppointmentListerView) getView()).setAddNewVisible(result != Lead.Status.closed);
+            public void onSuccess(Boolean result) {
+                ((AppointmentListerView) getView()).setAddNewVisible(result);
             }
         }, EntityFactory.createIdentityStub(Lead.class, getParent()));
     }

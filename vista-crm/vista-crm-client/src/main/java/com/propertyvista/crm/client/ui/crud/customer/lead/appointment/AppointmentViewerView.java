@@ -14,9 +14,8 @@
 package com.propertyvista.crm.client.ui.crud.customer.lead.appointment;
 
 import com.pyx4j.site.client.ui.crud.form.IViewerView;
-import com.pyx4j.site.client.ui.crud.lister.IListerView;
 
-import com.propertyvista.crm.rpc.dto.tenant.ShowingDTO;
+import com.propertyvista.crm.client.ui.crud.customer.lead.showing.ShowingListerView;
 import com.propertyvista.domain.tenant.lead.Appointment;
 
 public interface AppointmentViewerView extends IViewerView<Appointment> {
@@ -24,5 +23,5 @@ public interface AppointmentViewerView extends IViewerView<Appointment> {
     interface Presenter extends IViewerView.Presenter {
     }
 
-    IListerView<ShowingDTO> getShowingsListerView();
+    ShowingListerView getShowingsListerView();
 }

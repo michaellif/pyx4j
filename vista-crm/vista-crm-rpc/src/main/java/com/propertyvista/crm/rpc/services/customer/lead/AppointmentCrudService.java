@@ -22,5 +22,5 @@ import com.propertyvista.domain.tenant.lead.Lead;
 
 public interface AppointmentCrudService extends AbstractCrudService<Appointment> {
 
-    void getParentState(AsyncCallback<Lead.Status> callback, Lead leadId);
+    void getActiveState(AsyncCallback<Boolean> callback, Lead leadId);
 }

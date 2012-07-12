@@ -13,14 +13,18 @@
  */
 package com.propertyvista.crm.client.ui.crud.customer.lead.showing;
 
-import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
-import com.propertyvista.crm.rpc.CrmSiteMap.Marketing;
+import com.pyx4j.site.client.ui.crud.lister.ListerInternalViewImplBase;
+
 import com.propertyvista.crm.rpc.dto.tenant.ShowingDTO;
 
-public class ShowingListerViewImpl extends CrmListerViewImplBase<ShowingDTO> implements ShowingListerView {
+public class ShowingListerViewImpl extends ListerInternalViewImplBase<ShowingDTO> implements ShowingListerView {
 
     public ShowingListerViewImpl() {
-        super(Marketing.Showing.class);
-        setLister(new ShowingLister());
+        super(new ShowingLister());
+    }
+
+    @Override
+    public void setAddNewVisible(boolean visible) {
+        getLister().getDataTablePanel().getAddButton().setVisible(visible);
     }
 }

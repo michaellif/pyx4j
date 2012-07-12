@@ -19,4 +19,5 @@ import com.propertyvista.crm.rpc.dto.tenant.ShowingDTO;
 
 public interface ShowingListerView extends IListerView<ShowingDTO> {
 
+    void setAddNewVisible(boolean visible);
 }

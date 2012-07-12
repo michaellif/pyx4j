@@ -27,4 +27,6 @@ public interface ShowingCrudService extends AbstractCrudService<ShowingDTO> {
     void createNew(AsyncCallback<ShowingDTO> callback, Appointment parentAppointmentStub);
 
     void updateValue(AsyncCallback<AptUnit> callback, Key unitId);
+
+    void getActiveState(AsyncCallback<Boolean> callback, Appointment appointmentId);
 }

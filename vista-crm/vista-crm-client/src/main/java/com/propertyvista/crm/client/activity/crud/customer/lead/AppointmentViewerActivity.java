@@ -17,7 +17,6 @@ import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
-import com.pyx4j.site.client.activity.crud.ListerActivityBase;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
@@ -26,7 +25,6 @@ import com.propertyvista.crm.client.ui.crud.customer.lead.appointment.Appointmen
 import com.propertyvista.crm.client.ui.crud.viewfactories.MarketingViewFactory;
 import com.propertyvista.crm.rpc.dto.tenant.ShowingDTO;
 import com.propertyvista.crm.rpc.services.customer.lead.AppointmentCrudService;
-import com.propertyvista.crm.rpc.services.customer.lead.ShowingCrudService;
 import com.propertyvista.domain.tenant.lead.Appointment;
 
 public class AppointmentViewerActivity extends CrmViewerActivity<Appointment> implements AppointmentViewerView.Presenter {
@@ -37,9 +35,7 @@ public class AppointmentViewerActivity extends CrmViewerActivity<Appointment> im
     public AppointmentViewerActivity(CrudAppPlace place) {
         super(place, MarketingViewFactory.instance(AppointmentViewerView.class), (AbstractCrudService<Appointment>) GWT.create(AppointmentCrudService.class));
 
-        showingsLister = new ListerActivityBase<ShowingDTO>(place, ((AppointmentViewerView) getView()).getShowingsListerView(),
-                (AbstractCrudService<ShowingDTO>) GWT.create(ShowingCrudService.class), ShowingDTO.class);
-
+        showingsLister = new ShowingListerActivity(place, ((AppointmentViewerView) getView()).getShowingsListerView());
     }
 
     @Override
