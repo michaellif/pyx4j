@@ -35,6 +35,7 @@ import com.propertyvista.interfaces.importer.model.ImportIO;
 import com.propertyvista.interfaces.importer.model.MarketingIO;
 import com.propertyvista.interfaces.importer.model.MediaIO;
 import com.propertyvista.interfaces.importer.model.ParkingIO;
+import com.propertyvista.interfaces.importer.model.UtilityIO;
 
 public class ImportXMLEntityFactory extends XMLEntityFactoryStrict {
 
@@ -56,6 +57,7 @@ public class ImportXMLEntityFactory extends XMLEntityFactoryStrict {
         bind(MarketingIO.class);
         bind(MediaIO.class);
         bind(ParkingIO.class);
+        bind(UtilityIO.class);
         bind(AptUnitOccupancyIO.class);
 
         // Taken from domain directly

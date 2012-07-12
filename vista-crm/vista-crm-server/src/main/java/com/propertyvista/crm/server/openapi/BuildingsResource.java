@@ -84,6 +84,7 @@ public class BuildingsResource {
             }
             buildingCriteria.add(PropertyCriterion.eq(buildingCriteria.proto().propertyManager(), propertyManager));
         }
+        buildingCriteria.asc(buildingCriteria.proto().propertyCode());
         List<Building> buildings = service.query(buildingCriteria);
 
         Map<Complex, BuildingRS> complexes = new Hashtable<Complex, BuildingRS>();

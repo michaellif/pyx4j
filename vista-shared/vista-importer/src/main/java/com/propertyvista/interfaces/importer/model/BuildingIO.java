@@ -104,6 +104,10 @@ public interface BuildingIO extends IEntity {
 
     IList<BuildingAmenityIO> amenities();
 
+    IList<UtilityIO> includedUtilities();
+
+    IList<UtilityIO> externalUtilities();
+
     IList<MediaIO> medias();
 
     // Other Data

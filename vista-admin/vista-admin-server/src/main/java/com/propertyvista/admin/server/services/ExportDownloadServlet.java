@@ -83,6 +83,7 @@ public class ExportDownloadServlet extends HttpServlet {
             if (CommonsStringUtils.isStringSet(propertyManager)) {
                 buildingCriteria.add(PropertyCriterion.eq(buildingCriteria.proto().propertyManager().name(), propertyManager));
             }
+            buildingCriteria.asc(buildingCriteria.proto().propertyCode());
 
             List<Building> buildings = Persistence.service().query(buildingCriteria);
             for (Building building : buildings) {
