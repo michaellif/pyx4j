@@ -26,6 +26,10 @@ public class MediaItemValidator implements EditableValueValidator<Media> {
 
     @Override
     public ValidationError isValid(CComponent<Media, ?> component, Media value) {
+        if (value == null) {
+            return null;
+        }
+
         boolean valid = true;
         if (value.type().isNull()) {
             valid = false;
