@@ -99,7 +99,6 @@ public abstract class LeaseEditorCrudServiceBaseImpl<DTO extends LeaseDTO> exten
     @Override
     public void setSelectedUnit(AsyncCallback<DTO> callback, AptUnit unitId, DTO currentValue) {
         ServerSideFactory.create(LeaseFacade.class).setUnit(currentValue, unitId);
-        currentValue.selectedBuilding().set(currentValue.unit().building());
         fillServiceEligibilityData(currentValue);
         fillserviceItems(currentValue);
         callback.onSuccess(currentValue);
@@ -114,14 +113,13 @@ public abstract class LeaseEditorCrudServiceBaseImpl<DTO extends LeaseDTO> exten
 
     @Override
     public void createBillableItem(AsyncCallback<BillableItem> callback, ProductItem productItemId, DTO currentValue) {
-        assert !currentValue.selectedBuilding().isNull();
         callback.onSuccess(ServerSideFactory.create(LeaseFacade.class).createBillableItem(productItemId));
     }
 
     @Override
     public void createDeposit(AsyncCallback<Deposit> callback, DepositType depositType, BillableItem item, DTO currentValue) {
-        assert !currentValue.selectedBuilding().isNull();
-        callback.onSuccess(ServerSideFactory.create(DepositFacade.class).createDeposit(depositType, item, currentValue.selectedBuilding()));
+        assert !currentValue.unit().isNull();
+        callback.onSuccess(ServerSideFactory.create(DepositFacade.class).createDeposit(depositType, item, currentValue.unit().building()));
     }
 
     @Override
@@ -135,7 +133,8 @@ public abstract class LeaseEditorCrudServiceBaseImpl<DTO extends LeaseDTO> exten
         currentValue.selectedFeatureItems().clear();
         currentValue.selectedConcessions().clear();
 
-        Building building = currentValue.selectedBuilding();
+        assert !currentValue.unit().isNull();
+        Building building = currentValue.unit().building();
         if (building == null || building.isNull()) {
             return false;
         }

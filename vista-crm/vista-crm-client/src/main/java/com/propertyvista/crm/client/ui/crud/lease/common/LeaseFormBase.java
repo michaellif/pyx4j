@@ -143,12 +143,12 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
 
         main.setBR(++row, 0, 1);
         if (isEditable()) {
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().selectedBuilding(), new CEntityLabel<Building>()), 20).build());
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().unit().building(), new CEntityLabel<Building>()), 20).build());
         } else {
             main.setWidget(
                     ++row,
                     0,
-                    new DecoratorBuilder(inject(proto().selectedBuilding(),
+                    new DecoratorBuilder(inject(proto().unit().building(),
                             new CEntityCrudHyperlink<Building>(AppPlaceEntityMapper.resolvePlace(Building.class))), 20).build());
         }
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().unit(), new CEntitySelectorHyperlink<AptUnit>() {

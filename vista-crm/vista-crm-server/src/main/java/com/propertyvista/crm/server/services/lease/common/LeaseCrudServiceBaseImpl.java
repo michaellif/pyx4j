@@ -48,7 +48,7 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
 
         if (!dto.unit().isNull()) {
             // fill selected building by unit:
-            dto.selectedBuilding().set(dto.unit().building());
+            Persistence.service().retrieve(dto.unit().building(), AttachLevel.ToStringMembers);
         }
 
         // calculate price adjustments:

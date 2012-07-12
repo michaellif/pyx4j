@@ -13,22 +13,17 @@
  */
 package com.propertyvista.dto;
 
-import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.ExtendsDBO;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IList;
 
 import com.propertyvista.domain.financial.offering.Concession;
 import com.propertyvista.domain.financial.offering.ProductItem;
-import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 @Transient
 @ExtendsDBO
 public interface LeaseDTO extends Lease {
-
-    @Detached
-    Building selectedBuilding();
 
     TransactionHistoryDTO transactionHistory();
 
