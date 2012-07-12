@@ -184,6 +184,7 @@ public abstract class CEntityForm<E extends IEntity> extends CEntityContainer<E>
             return value;
         } else {
             E modelValue = getValue();
+            assert modelValue != null : "Null model value for: " + proto().getValueClass();
             modelValue.set(value);
             return modelValue;
         }
