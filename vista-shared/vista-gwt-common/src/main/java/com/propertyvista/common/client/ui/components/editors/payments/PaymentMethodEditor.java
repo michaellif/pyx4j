@@ -107,8 +107,16 @@ public class PaymentMethodEditor extends CEntityDecoratableForm<PaymentMethod> {
 
     @Override
     protected void onValuePropagation(PaymentMethod value, boolean fireEvent, boolean populate) {
-        selectPaymentDetailsEditor(value != null ? value.type().getValue() : null, populate);
         super.onValuePropagation(value, fireEvent, populate);
+        selectPaymentDetailsEditor(value != null ? value.type().getValue() : null, populate);
+    }
+
+    @Override
+    protected PaymentMethod preprocessValue(PaymentMethod value, boolean fireEvent, boolean populate) {
+        if (!isValueEmpty()) {
+            return super.preprocessValue(value, fireEvent, populate);
+        }
+        return value;
     }
 
     @Override
@@ -173,6 +181,10 @@ public class PaymentMethodEditor extends CEntityDecoratableForm<PaymentMethod> {
                     details.set(EntityFactory.create(InteracInfo.class));
                 }
                 setBillingAddressVisible(false);
+                break;
+            case EFT:
+                break;
+            default:
                 break;
             }
 

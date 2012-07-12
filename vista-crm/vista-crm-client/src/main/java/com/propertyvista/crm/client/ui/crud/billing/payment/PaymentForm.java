@@ -233,7 +233,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
                 paymentMethodEditorSeparator.setVisible(event.getValue() != null);
                 if (event.getValue() != null) {
                     paymentMethodEditor.setViewable(true);
-                    paymentMethodEditor.setValue(event.getValue(), false);
+                    paymentMethodEditor.populate(event.getValue());
                 }
             }
         });
