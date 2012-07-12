@@ -28,6 +28,7 @@ import com.propertyvista.domain.maintenance.IssueClassification;
 import com.propertyvista.domain.maintenance.IssueElement;
 import com.propertyvista.domain.maintenance.IssueRepairSubject;
 import com.propertyvista.domain.maintenance.IssueSubjectDetails;
+import com.propertyvista.domain.property.asset.Utility;
 import com.propertyvista.domain.ref.PhoneProvider;
 import com.propertyvista.portal.server.preloader.ido.MaintenanceTreeImport;
 
@@ -49,6 +50,7 @@ public class RefferenceDataPreloader extends AbstractDataPreloader {
     @Override
     public String create() {
         createNamed(PhoneProvider.class, "Rogers", "Bell", "Telus", "Fido", "Mobilicity", "Primus", "Télébec", "Virgin Mobile", "Wind Mobile");
+        createNamed(Utility.class, "Gas", "Water", "Hydro");
         createIssueClassifications();
         return null;
     }

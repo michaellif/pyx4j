@@ -57,6 +57,7 @@ import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.LockerArea;
 import com.propertyvista.domain.property.asset.Parking;
 import com.propertyvista.domain.property.asset.Roof;
+import com.propertyvista.domain.property.asset.Utility;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.security.CrmUserBuildings;
@@ -127,6 +128,12 @@ public interface Building extends PolicyNode, NotesAndAttachmentsNode {
     @Owned
     @Detached(level = AttachLevel.Detached)
     IList<BuildingAmenity> amenities();
+
+    @Detached(level = AttachLevel.Detached)
+    IList<Utility> includedUtilities();
+
+    @Detached(level = AttachLevel.Detached)
+    IList<Utility> externalUtilities();
 
     @Detached(level = AttachLevel.Detached)
     @Owned

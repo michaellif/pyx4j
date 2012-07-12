@@ -23,6 +23,9 @@ import java.util.Random;
 import com.propertvista.generator.PreloadData;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.server.PersistenceServicesFactory;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.essentials.server.preloader.DataGenerator;
 import com.pyx4j.gwt.server.DateUtils;
 
@@ -104,6 +107,11 @@ public class RandomUtil extends DataGenerator {
             }
             return result;
         }
+    }
+
+    public static <T extends IEntity> T randomRetrieveNamed(Class<T> clazz, int resultsToRemeber) {
+        EntityQueryCriteria<T> criteria = EntityQueryCriteria.create(clazz);
+        return random(PersistenceServicesFactory.getPersistenceService().query(criteria), clazz.getName(), resultsToRemeber);
     }
 
 }

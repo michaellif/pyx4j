@@ -51,6 +51,14 @@ public class BuildingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Building
     }
 
     @Override
+    protected void retrievedSingle(Building entity, RetrieveTraget retrieveTraget) {
+        super.retrievedSingle(entity, retrieveTraget);
+        Persistence.service().retrieveMember(entity.amenities());
+        Persistence.service().retrieveMember(entity.includedUtilities());
+        Persistence.service().retrieveMember(entity.externalUtilities());
+    }
+
+    @Override
     protected void enhanceRetrieved(Building in, BuildingDTO dto) {
         // load detached entities/lists. Update other places: BuildingsResource and BuildingRetriever
         Persistence.service().retrieve(dto.media());
@@ -59,8 +67,6 @@ public class BuildingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Building
         Persistence.service().retrieve(dto.contacts().organizationContacts());
         Persistence.service().retrieve(dto.marketing().adBlurbs());
         Persistence.service().retrieve(dto.dashboard());
-        Persistence.service().retrieveMember(in.amenities());
-        dto.amenities().set(in.amenities());
 
         if (dto.dashboard().isEmpty()) {
             // load first building  dashoard by default:
