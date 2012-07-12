@@ -88,7 +88,7 @@ public class TaxUtils {
         if (taxes != null) {
             BigDecimal interimAmount = baseAmount;
             for (Tax tax : taxes) {
-                if (!tax.compound().getValue()) {
+                if (!tax.compound().isBooleanTrue()) {
                     InvoiceChargeTax chargeTax = EntityFactory.create(InvoiceChargeTax.class);
                     chargeTax.tax().set(tax);
                     chargeTax.amount().setValue(MoneyUtils.round(baseAmount.multiply(tax.rate().getValue())));
@@ -97,7 +97,7 @@ public class TaxUtils {
                 }
             }
             for (Tax tax : taxes) {
-                if (tax.compound().getValue()) {
+                if (tax.compound().isBooleanTrue()) {
                     InvoiceChargeTax chargeTax = EntityFactory.create(InvoiceChargeTax.class);
                     chargeTax.tax().set(tax);
                     chargeTax.amount().setValue(MoneyUtils.round(interimAmount.multiply(tax.rate().getValue())));
