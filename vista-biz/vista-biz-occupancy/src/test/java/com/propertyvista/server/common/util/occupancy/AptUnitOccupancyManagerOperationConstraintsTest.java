@@ -124,6 +124,34 @@ public class AptUnitOccupancyManagerOperationConstraintsTest extends AptUnitOccu
     }
 
     @Test
+    public void testGetMakeVacantConstraintsWhenRenovated() {
+        Lease lease = createLease("2010-01-01", "2010-01-02");
+        setup().from("2010-01-01").to("2010-01-02").status(Status.leased).withLease(lease).x();
+        setup().from("2010-01-03").to("2010-02-05").status(Status.renovation).x();
+        setup().from("2010-02-06").toTheEndOfTime().status(Status.available).x();
+
+        now("2010-01-01");
+        MakeVacantConstraintsDTO constraints = getUOM().getMakeVacantConstraints(unitId);
+        Assert.assertEquals(asDate("2010-01-03"), constraints.minVacantFrom().getValue());
+        Assert.assertEquals(asDate("2010-02-06"), constraints.maxVacantFrom().getValue());
+
+        now("2010-02-01");
+        constraints = getUOM().getMakeVacantConstraints(unitId);
+        Assert.assertEquals(asDate("2010-02-01"), constraints.minVacantFrom().getValue());
+        Assert.assertEquals(asDate("2010-02-06"), constraints.maxVacantFrom().getValue());
+
+        now("2010-02-06");
+        constraints = getUOM().getMakeVacantConstraints(unitId);
+        Assert.assertEquals(asDate("2010-02-06"), constraints.minVacantFrom().getValue());
+        Assert.assertEquals(asDate("2010-02-06"), constraints.maxVacantFrom().getValue());
+
+        now("2010-02-10");
+        constraints = getUOM().getMakeVacantConstraints(unitId);
+        Assert.assertEquals(asDate("2010-02-10"), constraints.minVacantFrom().getValue());
+        Assert.assertEquals(asDate("2010-02-10"), constraints.maxVacantFrom().getValue());
+    }
+
+    @Test
     public void testgetMakeVacantConstraintsWhenMaxIsLimitedByVacant() {
         Lease lease = createLease("2010-01-01", "2010-01-02");
         setup().from("2010-01-01").to("2010-01-02").status(Status.leased).withLease(lease).x();

@@ -223,26 +223,42 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
             throw new IllegalArgumentException(SimpleMessageFormat.format("vacantFrom {0} doesn't match the constraints", vacantFrom));
         }
 
-        AptUnitOccupancySegment makeVacantStartSegment = retrieveOccupancySegment(unitPk, vacantFrom);
-        AptUnitOccupancySegment vacantSegment = split(makeVacantStartSegment, vacantFrom, new SplittingHandler() {
-            @Override
-            public void updateBeforeSplitPointSegment(AptUnitOccupancySegment segment) throws IllegalStateException {
+        GregorianCalendar cal = new GregorianCalendar();
+        cal.setTime(vacantFrom);
+        cal.add(GregorianCalendar.DAY_OF_YEAR, -1);
 
-            }
+        AptUnitOccupancySegment vacantSegment = null;
 
-            @Override
-            public void updateAfterSplitPointSegment(AptUnitOccupancySegment segment) {
-                segment.status().setValue(Status.vacant);
-                segment.offMarket().setValue(null);
-                segment.dateTo().setValue(OccupancyFacade.MAX_DATE);
+        AptUnitOccupancySegment preMakeVacantDateSegment = retrieveOccupancySegment(unitPk, new LogicalDate(cal.getTime()));
+        if (preMakeVacantDateSegment.status().getValue() == Status.vacant) {
+            vacantSegment = preMakeVacantDateSegment;
+            vacantSegment.dateTo().setValue(OccupancyFacade.MAX_DATE);
+            Persistence.service().merge(vacantSegment);
+        } else {
+            AptUnitOccupancySegment makeVacantStartSegment = retrieveOccupancySegment(unitPk, vacantFrom);
+            vacantSegment = split(makeVacantStartSegment, vacantFrom, new SplittingHandler() {
+                @Override
+                public void updateBeforeSplitPointSegment(AptUnitOccupancySegment segment) throws IllegalStateException {
+
+                }
+
+                @Override
+                public void updateAfterSplitPointSegment(AptUnitOccupancySegment segment) {
+                    segment.status().setValue(Status.vacant);
+                    segment.offMarket().setValue(null);
+                    segment.dateTo().setValue(OccupancyFacade.MAX_DATE);
+                }
+            });
+            if (vacantSegment == null) {
+                vacantSegment = makeVacantStartSegment;
             }
-        });
+        }
 
         // now remove the rest
         EntityQueryCriteria<AptUnitOccupancySegment> deleteCriteria = EntityQueryCriteria.create(AptUnitOccupancySegment.class);
         deleteCriteria.add(PropertyCriterion.eq(deleteCriteria.proto().unit(), unitPk));
         deleteCriteria.add(PropertyCriterion.ge(deleteCriteria.proto().dateTo(), vacantFrom));
-        deleteCriteria.add(PropertyCriterion.ne(deleteCriteria.proto().id(), vacantSegment.id().getValue()));
+        deleteCriteria.add(PropertyCriterion.ne(deleteCriteria.proto().id(), vacantSegment.getPrimaryKey()));
         Persistence.service().delete(deleteCriteria);
 
         updateUnitAvailableFrom(unitPk, null);
@@ -448,13 +464,14 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
                 return null;
             }
             if (minVacantFromCandidate == null) {
-                if (segStatus == Status.offMarket | segStatus == Status.available) {
+                if (segStatus == Status.offMarket | segStatus == Status.available | segStatus == Status.renovation) {
                     LogicalDate segStart = segment.dateFrom().getValue();
                     minVacantFromCandidate = segStart.before(start) ? start : segStart;
                 }
             }
             switch (segStatus) {
             case offMarket:
+            case renovation:
                 maxVacantFromCandidate = segment.dateTo().getValue();
                 break;
             case available:

@@ -274,6 +274,20 @@ public class AptUnitOccupancyManagerTest extends AptUnitOccupancyManagerTestBase
     }
 
     @Test
+    public void testMakeVacantJoinsSegments() {
+        setup().fromTheBeginning().to("2011-05-19").status(Status.vacant).x();
+        setup().from("2011-05-20").to("2011-07-19").status(Status.offMarket).withOffMarketType(OffMarketType.down).x();
+        setup().from("2011-07-20").toTheEndOfTime().status(Status.available).x();
+
+        now("2011-05-01");
+
+        getUOM().makeVacant(unitId, asDate("2011-05-20"));
+
+        expect().fromTheBeginning().toTheEndOfTime().status(Status.vacant).x();
+        assertExpectedTimeline();
+    }
+
+    @Test
     public void testCancelEndLease() {
         Lease lease = createLease("2011-05-20", "2012-12-31");
         setup().fromTheBeginning().to("2011-05-19").status(Status.vacant).x();
