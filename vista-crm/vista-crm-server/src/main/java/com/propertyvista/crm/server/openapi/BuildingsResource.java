@@ -165,7 +165,7 @@ public class BuildingsResource {
                     }
 
                     {
-                        Persistence.service().retrieve(building.includedUtilities());
+                        Persistence.service().retrieveMember(building.includedUtilities());
                         for (Utility utility : building.includedUtilities()) {
                             buildingRS.includedUtilities.add(Converter.convertBuildingIncludedUtility(utility));
                         }
