@@ -141,9 +141,8 @@ public class BuildingsResource {
                 if (exportBuildingInfo) {
                     //Get Amenity
                     {
-                        EntityQueryCriteria<BuildingAmenity> criteria = EntityQueryCriteria.create(BuildingAmenity.class);
-                        criteria.add(PropertyCriterion.eq(criteria.proto().building(), building));
-                        for (BuildingAmenity amenity : Persistence.service().query(criteria)) {
+                        Persistence.service().retrieveMember(building.amenities());
+                        for (BuildingAmenity amenity : building.amenities()) {
                             buildingRS.amenities.add(Converter.convertBuildingAmenity(amenity));
                         }
                     }
@@ -174,6 +173,7 @@ public class BuildingsResource {
 
                 EntityQueryCriteria<Floorplan> floorplanCriteria = EntityQueryCriteria.create(Floorplan.class);
                 floorplanCriteria.add(PropertyCriterion.eq(floorplanCriteria.proto().building(), building));
+                floorplanCriteria.asc(floorplanCriteria.proto().id());
                 List<Floorplan> floorplans = service.query(floorplanCriteria);
                 nextFloorplan: for (Floorplan floorplan : floorplans) {
                     FloorplanRS floorplanRS = Converter.convertFloorplan(floorplan);
