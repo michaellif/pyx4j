@@ -395,7 +395,10 @@ public abstract class CEntityForm<E extends IEntity> extends CEntityContainer<E>
 
     @Override
     public String toString() {
-        return super.toString() + "; dirty=" + isDirty();
+        if (getParent() == null) {
+            return super.toString() + "; dirty=" + isDirty();
+        }
+        return super.toString();
     }
 
     @Override

@@ -45,12 +45,18 @@ public class ValidationError {
 
     public String getMessageString(boolean showLocation) {
         StringBuilder builder = new StringBuilder();
-        if (originator.getTitle() != null && !originator.getTitle().isEmpty()) {
+        String title = originator.getTitle();
+        if (title != null && title.isEmpty()) {
+            title = null;
+        }
+        if (title != null) {
             builder.append("'");
             if (showLocation && locationHint != null && !locationHint.isEmpty()) {
                 builder.append(locationHint).append("/");
             }
-            builder.append(originator.getTitle()).append("' ").append(i18n.tr("is not valid")).append(", ").append(message);
+            builder.append(title).append("' ").append(i18n.tr("is not valid")).append(", ").append(message);
+        } else {
+            builder.append(i18n.tr("Field is not valid")).append(", ").append(message);
         }
         return builder.toString();
     }
