@@ -366,6 +366,9 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
 
     @Override
     protected void onReset() {
+        for (CComponent<?, ?> component : new ArrayList<CComponent<?, ?>>(getComponents())) {
+            abandon(component);
+        }
         container.clear();
         itemsList.clear();
     };
