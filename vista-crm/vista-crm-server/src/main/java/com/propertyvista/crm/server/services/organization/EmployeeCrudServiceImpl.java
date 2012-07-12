@@ -175,57 +175,63 @@ public class EmployeeCrudServiceImpl extends AbstractCrudServiceDtoImpl<Employee
                 onbUser = TaskRunner.runInAdminNamespace(new Callable<OnboardingUser>() {
                     @Override
                     public OnboardingUser call() {
-                        return Persistence.service().retrieve(OnboardingUser.class, onbUserCred.user().getPrimaryKey());
+                        if (onbUserCred != null) {
+                            return Persistence.service().retrieve(OnboardingUser.class, onbUserCred.user().getPrimaryKey());
+                        } else {
+                            return null;
+                        }
                     }
                 });
             }
 
-            if (isPropVistaAccOwnerSet) {
-                onbUser.firstName().setValue(in.name().firstName().getValue());
-                onbUser.lastName().setValue(in.name().lastName().getValue());
-                onbUser.name().setValue(user.name().getValue());
-                onbUser.email().setValue(user.email().getValue());
+            if (onbUser != null) {
+                if (isPropVistaAccOwnerSet) {
+                    onbUser.firstName().setValue(in.name().firstName().getValue());
+                    onbUser.lastName().setValue(in.name().lastName().getValue());
+                    onbUser.name().setValue(user.name().getValue());
+                    onbUser.email().setValue(user.email().getValue());
 
-                onbUserCred.crmUser().setValue(user.getPrimaryKey());
-                onbUserCred.behavior().setValue(VistaOnboardingBehavior.Client);
-                onbUserCred.credential().setValue(PasswordEncryptor.encryptPassword(in.password().getValue()));
-                onbUserCred.enabled().setValue(in.enabled().getValue());
-                onbUserCred.onboardingAccountId().setValue(null);
-                onbUserCred.requiredPasswordChangeOnNextLogIn().setValue(in.requireChangePasswordOnNextLogIn().getValue());
-                onbUserCred.interfaceUid().setValue(credential.interfaceUid().getValue());
+                    onbUserCred.crmUser().setValue(user.getPrimaryKey());
+                    onbUserCred.behavior().setValue(VistaOnboardingBehavior.Client);
+                    onbUserCred.credential().setValue(PasswordEncryptor.encryptPassword(in.password().getValue()));
+                    onbUserCred.enabled().setValue(in.enabled().getValue());
+                    onbUserCred.onboardingAccountId().setValue(null);
+                    onbUserCred.requiredPasswordChangeOnNextLogIn().setValue(in.requireChangePasswordOnNextLogIn().getValue());
+                    onbUserCred.interfaceUid().setValue(credential.interfaceUid().getValue());
 
-                Boolean res = TaskRunner.runInAdminNamespace(new Callable<Boolean>() {
-                    @Override
-                    public Boolean call() throws Exception {
-                        Persistence.service().persist(onbUser);
+                    Boolean res = TaskRunner.runInAdminNamespace(new Callable<Boolean>() {
+                        @Override
+                        public Boolean call() throws Exception {
+                            Persistence.service().persist(onbUser);
 
-                        onbUserCred.pmc().set(pmc);
-                        onbUserCred.setPrimaryKey(onbUser.getPrimaryKey());
+                            onbUserCred.pmc().set(pmc);
+                            onbUserCred.setPrimaryKey(onbUser.getPrimaryKey());
 
-                        onbUserCred.user().set(onbUser);
+                            onbUserCred.user().set(onbUser);
 
-                        Persistence.service().persist(onbUserCred);
-                        return Boolean.TRUE;
+                            Persistence.service().persist(onbUserCred);
+                            return Boolean.TRUE;
+                        }
+                    });
+
+                    if (res == Boolean.TRUE) {
+                        credential.onboardingUser().setValue(onbUser.getPrimaryKey());
+                        Persistence.service().persist(credential);
                     }
-                });
 
-                if (res == Boolean.TRUE) {
-                    credential.onboardingUser().setValue(onbUser.getPrimaryKey());
-                    Persistence.service().persist(credential);
+                } else { // Delete if role removed
+                    TaskRunner.runInAdminNamespace(new Callable<Void>() {
+                        @Override
+                        public Void call() throws Exception {
+                            if (onbUserCred.getPrimaryKey() != null)
+                                Persistence.service().delete(OnboardingUserCredential.class, onbUserCred.getPrimaryKey());
+
+                            if (onbUser.getPrimaryKey() != null)
+                                Persistence.service().delete(OnboardingUser.class, onbUser.getPrimaryKey());
+                            return null;
+                        }
+                    });
                 }
-
-            } else { // Delete if role removed
-                TaskRunner.runInAdminNamespace(new Callable<Void>() {
-                    @Override
-                    public Void call() throws Exception {
-                        if (onbUserCred.getPrimaryKey() != null)
-                            Persistence.service().delete(OnboardingUserCredential.class, onbUserCred.getPrimaryKey());
-
-                        if (onbUser.getPrimaryKey() != null)
-                            Persistence.service().delete(OnboardingUser.class, onbUser.getPrimaryKey());
-                        return null;
-                    }
-                });
             }
         }
     }
