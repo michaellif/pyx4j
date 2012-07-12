@@ -58,6 +58,7 @@ public class InsurancePaymentMethodForm extends CEntityDecoratableForm<Insurance
 
     public InsurancePaymentMethodForm() {
         this(false);
+        setMandatory(false);
     }
 
     public InsurancePaymentMethodForm(boolean twoColumns) {

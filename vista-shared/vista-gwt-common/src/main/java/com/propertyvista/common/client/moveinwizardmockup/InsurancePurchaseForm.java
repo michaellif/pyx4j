@@ -16,14 +16,17 @@ package com.propertyvista.common.client.moveinwizardmockup;
 import static com.propertyvista.common.client.moveinwizardmockup.components.Utils.asBigDecimals;
 
 import java.math.BigDecimal;
+import java.math.MathContext;
 import java.text.ParseException;
 import java.util.Arrays;
 
+import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -83,6 +86,8 @@ public class InsurancePurchaseForm extends CEntityDecoratableForm<PurchaseInsura
     private final Command onPurchaseConfirmed;
 
     private final boolean useFloatingQuote;
+
+    private HTML tooManyPreviousClaimsMessage;
 
     public InsurancePurchaseForm(boolean useFloatingQuote, Command onPurchaseConfirmed) {
         super(PurchaseInsuranceDTO.class);
@@ -225,6 +230,15 @@ public class InsurancePurchaseForm extends CEntityDecoratableForm<PurchaseInsura
         {
             quoteTotalPanel.add(new DecoratorBuilder(inject(proto().monthlyInsurancePremium()), 10).build());
             get(proto().monthlyInsurancePremium()).setViewable(true);
+
+            tooManyPreviousClaimsMessage = new HTML(i18n.tr("Please call 1888-XXXX-XXX for a custom quote"));
+            tooManyPreviousClaimsMessage.setVisible(false);
+            tooManyPreviousClaimsMessage.getElement().getStyle().setWidth(100, Unit.PCT);
+            tooManyPreviousClaimsMessage.getElement().getStyle().setFontWeight(FontWeight.BOLD);
+            tooManyPreviousClaimsMessage.getElement().getStyle().setProperty("textAlign", "center");
+
+            quoteTotalPanel.add(tooManyPreviousClaimsMessage);
+
             quoteTotalPanel.add(new DecoratorBuilder(inject(proto().totalCoverage()), 10).build());
             get(proto().totalCoverage()).setViewable(true);
             quoteTotalPanel.add(new DecoratorBuilder(inject(proto().totalPersonalLiability()), 10).build());
@@ -304,7 +318,8 @@ public class InsurancePurchaseForm extends CEntityDecoratableForm<PurchaseInsura
     }
 
     private void recalculateSummary() {
-        get(proto().monthlyInsurancePremium()).setValue(calculatePremium());
+        BigDecimal monthlyPremium = calculatePremium().divide(new BigDecimal("12.00"), new MathContext(2));
+        get(proto().monthlyInsurancePremium()).setValue(monthlyPremium);
         get(proto().totalCoverage()).setValue(totalCoverage());
         get(proto().totalPersonalLiability()).setValue(bigDecimalOf(proto().personalLiability()));
     }
@@ -373,6 +388,13 @@ public class InsurancePurchaseForm extends CEntityDecoratableForm<PurchaseInsura
             });
             setOptions(Arrays.asList(0, 1, 2, 3, 4, 5));
             addValueChangeHandler((ValueChangeHandler<Integer>) summaryRecalculationRequiredHandler);
+            addValueChangeHandler(new ValueChangeHandler<Integer>() {
+                @Override
+                public void onValueChange(ValueChangeEvent<Integer> event) {
+                    get(proto().monthlyInsurancePremium()).setVisible(event.getValue() <= 1);
+                    tooManyPreviousClaimsMessage.setVisible(event.getValue() > 1);
+                }
+            });
         }
 
     }
