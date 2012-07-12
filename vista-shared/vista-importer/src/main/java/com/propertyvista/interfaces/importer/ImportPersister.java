@@ -31,6 +31,7 @@ import com.propertyvista.domain.marketing.PublicVisibilityType;
 import com.propertyvista.domain.property.asset.Complex;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.Parking;
+import com.propertyvista.domain.property.asset.Utility;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
 import com.propertyvista.domain.property.asset.building.BuildingInfo;
@@ -40,11 +41,13 @@ import com.propertyvista.interfaces.importer.converter.FloorplanConverter;
 import com.propertyvista.interfaces.importer.converter.MediaConfig;
 import com.propertyvista.interfaces.importer.converter.MediaConverter;
 import com.propertyvista.interfaces.importer.converter.ParkingConverter;
+import com.propertyvista.interfaces.importer.converter.UtilityConverter;
 import com.propertyvista.interfaces.importer.model.BuildingAmenityIO;
 import com.propertyvista.interfaces.importer.model.BuildingIO;
 import com.propertyvista.interfaces.importer.model.FloorplanIO;
 import com.propertyvista.interfaces.importer.model.MediaIO;
 import com.propertyvista.interfaces.importer.model.ParkingIO;
+import com.propertyvista.interfaces.importer.model.UtilityIO;
 import com.propertyvista.portal.rpc.portal.ImageConsts.ImageTarget;
 import com.propertyvista.server.common.reference.PublicDataUpdater;
 import com.propertyvista.server.common.reference.geo.SharedGeoLocator;
@@ -115,6 +118,16 @@ class ImportPersister {
             }
         }
 
+        //Utility
+        {
+            for (UtilityIO utilityIO : buildingIO.includedUtilities()) {
+                building.includedUtilities().add(createUtility(utilityIO));
+            }
+            for (UtilityIO utilityIO : buildingIO.externalUtilities()) {
+                building.externalUtilities().add(createUtility(utilityIO));
+            }
+        }
+
         Persistence.service().persist(building);
         PublicDataUpdater.updateIndexData(building);
 
@@ -177,5 +190,18 @@ class ImportPersister {
 
         Persistence.service().persist(floorplan);
         return floorplan;
+    }
+
+    protected Utility createUtility(UtilityIO utilityIO) {
+        Utility utility = new UtilityConverter().createDBO(utilityIO);
+        EntityQueryCriteria<Utility> criteria = EntityQueryCriteria.create(Utility.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().name(), utilityIO.name()));
+        Utility utilityExists = Persistence.service().retrieve(criteria);
+        if (utilityExists != null) {
+            return utilityExists;
+        } else {
+            Persistence.service().persist(utility);
+            return utility;
+        }
     }
 }
