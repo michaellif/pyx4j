@@ -46,6 +46,7 @@ import com.propertyvista.domain.property.asset.Complex;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.FloorplanAmenity;
 import com.propertyvista.domain.property.asset.Parking;
+import com.propertyvista.domain.property.asset.Utility;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
@@ -163,11 +164,10 @@ public class BuildingsResource {
                     }
 
                     {
-                        // TODO: get those utilities from building add-ons list?
-//                        Persistence.service().retrieve(building.productCatalog());
-//                        for (ProductItemType utility : building.productCatalog().includedUtilities()) {
-//                            buildingRS.includedUtilities.add(Converter.convertBuildingIncludedUtility(utility));
-//                        }
+                        Persistence.service().retrieve(building.includedUtilities());
+                        for (Utility utility : building.includedUtilities()) {
+                            buildingRS.includedUtilities.add(Converter.convertBuildingIncludedUtility(utility));
+                        }
                     }
                 }
 
