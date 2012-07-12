@@ -17,6 +17,7 @@ import static com.propertyvista.common.client.moveinwizardmockup.components.Util
 
 import java.math.BigDecimal;
 import java.math.MathContext;
+import java.math.RoundingMode;
 import java.text.ParseException;
 import java.util.Arrays;
 
@@ -318,7 +319,8 @@ public class InsurancePurchaseForm extends CEntityDecoratableForm<PurchaseInsura
     }
 
     private void recalculateSummary() {
-        BigDecimal monthlyPremium = calculatePremium().divide(new BigDecimal("12.00"), new MathContext(2));
+        BigDecimal monthlyPremium = calculatePremium().setScale(2, BigDecimal.ROUND_HALF_UP).divide(
+                new BigDecimal("12.00").setScale(2, BigDecimal.ROUND_HALF_UP), new MathContext(4, RoundingMode.HALF_UP));
         get(proto().monthlyInsurancePremium()).setValue(monthlyPremium);
         get(proto().totalCoverage()).setValue(totalCoverage());
         get(proto().totalPersonalLiability()).setValue(bigDecimalOf(proto().personalLiability()));
