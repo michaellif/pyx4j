@@ -33,17 +33,25 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.FIFO;
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.shared.ObjectClassType;
 import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.meta.EntityMeta;
+import com.pyx4j.entity.shared.meta.MemberMeta;
+import com.pyx4j.essentials.rpc.ImportColumn;
 import com.pyx4j.gwt.server.DateUtils;
+import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.rpc.shared.UserRuntimeException;
 
 public class EntityCSVReciver<E extends IEntity> implements CSVReciver {
 
     private final static Logger log = LoggerFactory.getLogger(EntityCSVReciver.class);
+
+    private static final I18n i18n = I18n.get(EntityCSVReciver.class);
 
     private final Class<E> entityClass;
 
@@ -53,11 +61,17 @@ public class EntityCSVReciver<E extends IEntity> implements CSVReciver {
 
     private boolean headerIgnoreCase = false;
 
+    private boolean verifyRequiredHeaders = false;
+
+    private boolean verifyRequiredValues = false;
+
     private int headerLinesCount = 1;
 
     private int headersMatchMinimum = 1;
 
     private FIFO<String[]> headersStack;
+
+    private int currentRow = 0;
 
     public EntityCSVReciver(Class<E> entityClass) {
         this.entityClass = entityClass;
@@ -92,6 +106,26 @@ public class EntityCSVReciver<E extends IEntity> implements CSVReciver {
 
     public void setHeaderIgnoreCase(boolean headerIgnoreCase) {
         this.headerIgnoreCase = headerIgnoreCase;
+    }
+
+    public boolean isVerifyRequiredHeaders() {
+        return verifyRequiredHeaders;
+    }
+
+    public void setVerifyRequiredHeaders(boolean verifyRequiredHeaders) {
+        this.verifyRequiredHeaders = verifyRequiredHeaders;
+    }
+
+    public boolean isVerifyRequiredValues() {
+        return verifyRequiredValues;
+    }
+
+    public void setVerifyRequiredValues(boolean verifyRequiredValues) {
+        this.verifyRequiredValues = verifyRequiredValues;
+    }
+
+    public int getCurrentRow() {
+        return currentRow;
     }
 
     private String[] combineHeader(String[] headers) {
@@ -135,6 +169,7 @@ public class EntityCSVReciver<E extends IEntity> implements CSVReciver {
 
     @Override
     public boolean onHeader(String[] headers) {
+        currentRow++;
         log.debug("headers {}", (Object) headers);
 
         String[] headersCombined = combineHeader(headers);
@@ -148,11 +183,15 @@ public class EntityCSVReciver<E extends IEntity> implements CSVReciver {
         for (String memberName : em.getMemberNames()) {
             IObject<?> member = entity.getMember(memberName);
             if (member instanceof IPrimitive<?>) {
-                String name = columnName(member);
-                if (isHeaderIgnoreCase()) {
-                    name = name.toLowerCase(Locale.ENGLISH);
+                String names[] = columnNames(member);
+                if (names != null) {
+                    for (String name : names) {
+                        if (isHeaderIgnoreCase()) {
+                            name = name.toLowerCase(Locale.ENGLISH);
+                        }
+                        membersNames.put(name, member.getPath());
+                    }
                 }
-                membersNames.put(name, member.getPath());
             }
         }
         int headersFound = 0;
@@ -198,11 +237,43 @@ public class EntityCSVReciver<E extends IEntity> implements CSVReciver {
                 headersPath.add(null);
             }
         }
-        return (getHeadersMatchMinimum() <= headersFound);
+        if (getHeadersMatchMinimum() <= headersFound) {
+            if (isVerifyRequiredHeaders()) {
+                verifyRequiredHeaders();
+            }
+            return true;
+        } else {
+            return false;
+        }
     }
 
-    protected String columnName(IObject<?> member) {
-        return member.getMeta().getCaption();
+    protected String[] columnNames(IObject<?> member) {
+        ImportColumn importColumn = member.getMeta().getAnnotation(ImportColumn.class);
+        if (importColumn == null) {
+            return new String[] { member.getMeta().getCaption() };
+        } else if (importColumn.ignore()) {
+            return null;
+        } else {
+            return importColumn.names();
+        }
+    }
+
+    private void verifyRequiredHeaders() {
+        E entity = EntityFactory.create(entityClass);
+        EntityMeta em = entity.getEntityMeta();
+        for (String memberName : em.getMemberNames()) {
+            IObject<?> member = entity.getMember(memberName);
+            MemberMeta memberMeta = member.getMeta();
+            if ((memberMeta.getObjectClassType() == ObjectClassType.Primitive) && (memberMeta.getAnnotation(NotNull.class) != null)) {
+                ImportColumn importColumn = member.getMeta().getAnnotation(ImportColumn.class);
+                if ((importColumn != null) && (importColumn.ignore())) {
+                    continue;
+                }
+                if (!headersPath.contains(member.getPath())) {
+                    throw new UserRuntimeException(i18n.tr("Missing required column ''{0}''", memberMeta.getCaption()));
+                }
+            }
+        }
     }
 
     @Override
@@ -213,6 +284,7 @@ public class EntityCSVReciver<E extends IEntity> implements CSVReciver {
     @SuppressWarnings("unchecked")
     @Override
     public void onRow(String[] value) {
+        currentRow++;
         //log.debug("value line {}", (Object) value);
         E entity = EntityFactory.create(entityClass);
 
@@ -229,7 +301,25 @@ public class EntityCSVReciver<E extends IEntity> implements CSVReciver {
             }
         }
 
-        list.add(entity);
+        onRow(entity);
+    }
+
+    public void onRow(E entity) {
+        if (!entity.isNull()) {
+            if (isVerifyRequiredValues()) {
+                for (Path path : headersPath) {
+                    if (path != null) {
+                        @SuppressWarnings("rawtypes")
+                        IPrimitive primitive = (IPrimitive<?>) entity.getMember(path);
+                        if (primitive.isNull() && (primitive.getMeta().getAnnotation(NotNull.class) != null)) {
+                            throw new UserRuntimeException(i18n.tr("Missing required value for column ''{0}'' in row {1}", primitive.getMeta().getCaption(),
+                                    getCurrentRow()));
+                        }
+                    }
+                }
+            }
+            list.add(entity);
+        }
     }
 
     protected Object parsValue(IPrimitive<?> primitive, String value) {

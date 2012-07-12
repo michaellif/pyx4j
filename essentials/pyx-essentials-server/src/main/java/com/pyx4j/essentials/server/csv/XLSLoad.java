@@ -27,34 +27,47 @@ import java.util.List;
 import java.util.Vector;
 
 import org.apache.poi.hssf.usermodel.HSSFDataFormatter;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.rpc.shared.UserRuntimeException;
 
 public class XLSLoad {
 
-    private final HSSFWorkbook wb;
+    private static final I18n i18n = I18n.get(XLSLoad.class);
 
-    private final HSSFDataFormatter formatter;
+    private final Workbook wb;
 
-    public static void loadFile(InputStream is, CSVReciver reciver) {
+    private final DataFormatter formatter;
+
+    public static void loadFile(InputStream is, boolean xlsx, CSVReciver reciver) {
         try {
-            XLSLoad l = new XLSLoad(is);
-            HSSFSheet sheet = l.wb.getSheetAt(0);
+            XLSLoad l = new XLSLoad(is, xlsx);
+            Sheet sheet = l.wb.getSheetAt(0);
             l.loadSheet(sheet, reciver);
         } catch (IOException ioe) {
             throw new RuntimeException("Load file error", ioe);
         }
     }
 
-    public XLSLoad(InputStream is) throws IOException {
+    public XLSLoad(InputStream is, boolean xlsx) throws IOException {
         try {
-            formatter = new HSSFDataFormatter();
-            POIFSFileSystem fs = new POIFSFileSystem(is);
-            wb = new HSSFWorkbook(fs);
+            if (xlsx) {
+                formatter = new HSSFDataFormatter();
+                wb = new XSSFWorkbook(is);
+            } else {
+                formatter = new HSSFDataFormatter();
+                POIFSFileSystem fs = new POIFSFileSystem(is);
+                wb = new HSSFWorkbook(fs);
+            }
         } finally {
             try {
                 if (is != null) {
@@ -75,18 +88,20 @@ public class XLSLoad {
     }
 
     public void loadSheet(int sheetNumber, CSVReciver reciver) {
-        HSSFSheet sheet = wb.getSheetAt(sheetNumber);
+        Sheet sheet = wb.getSheetAt(sheetNumber);
         loadSheet(sheet, reciver);
     }
 
-    public void loadSheet(HSSFSheet sheet, CSVReciver reciver) {
+    public void loadSheet(Sheet sheet, CSVReciver reciver) {
         int lineNumber = 0;
         try {
             boolean header = true;
             for (Row row : sheet) {
                 lineNumber++;
                 List<String> values = new Vector<String>();
-                for (Cell cell : row) {
+                short cells = row.getLastCellNum();
+                for (int cellnum = 0; cellnum < cells; cellnum++) {
+                    Cell cell = row.getCell(cellnum, Row.RETURN_BLANK_AS_NULL);
                     values.add(getCellStringValue(cell));
                 }
                 if (header) {
@@ -97,12 +112,17 @@ public class XLSLoad {
                     reciver.onRow(values.toArray(new String[values.size()]));
                 }
             }
+        } catch (UserRuntimeException e) {
+            throw e;
         } catch (Throwable e) {
-            throw new RuntimeException("Load file error, Line# " + lineNumber, e);
+            throw new UserRuntimeException(i18n.tr("Load file error ''{0}'', row # {1}", e.getMessage(), lineNumber));
         }
     }
 
     protected String getCellStringValue(Cell cell) {
+        if (cell == null) {
+            return "";
+        }
         switch (cell.getCellType()) {
         case Cell.CELL_TYPE_BLANK:
             return "";
