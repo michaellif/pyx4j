@@ -79,6 +79,7 @@ public class BuildingRetriever {
         {
             EntityQueryCriteria<BuildingAmenity> criteria = EntityQueryCriteria.create(BuildingAmenity.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().building(), building));
+            criteria.asc(criteria.proto().id());
             for (BuildingAmenity amenity : Persistence.service().query(criteria)) {
                 buildingIO.amenities().add(new BuildingAmenityConverter().createDTO(amenity));
             }
@@ -92,15 +93,6 @@ public class BuildingRetriever {
             }
             for (Utility utility : building.externalUtilities()) {
                 buildingIO.externalUtilities().add(new UtilityConverter().createDTO(utility));
-            }
-        }
-
-        //Parking
-        {
-            EntityQueryCriteria<Parking> criteria = EntityQueryCriteria.create(Parking.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().building(), building));
-            for (Parking i : Persistence.service().query(criteria)) {
-                buildingIO.parkings().add(new ParkingConverter().createDTO(i));
             }
         }
 
@@ -123,6 +115,7 @@ public class BuildingRetriever {
             {
                 EntityQueryCriteria<FloorplanAmenity> criteria = EntityQueryCriteria.create(FloorplanAmenity.class);
                 criteria.add(PropertyCriterion.eq(criteria.proto().floorplan(), floorplan));
+                criteria.asc(criteria.proto().id());
                 for (FloorplanAmenity amenity : Persistence.service().query(criteria)) {
                     floorplanIO.amenities().add(new FloorplanAmenityConverter().createDTO(amenity));
                 }
