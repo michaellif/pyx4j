@@ -80,7 +80,7 @@ public class LeadViewerViewImpl extends CrmViewerViewImplBase<Lead> implements L
         });
         addHeaderToolbarTwoItem(convertAction);
 
-        closeAction = new Button(i18n.tr("Close Lead"), new ClickHandler() {
+        closeAction = new Button(i18n.tr("Close"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 MessageDialog.confirm(i18n.tr("Confirm"), i18n.tr("Do you really want to close the Lead?"), new Command() {

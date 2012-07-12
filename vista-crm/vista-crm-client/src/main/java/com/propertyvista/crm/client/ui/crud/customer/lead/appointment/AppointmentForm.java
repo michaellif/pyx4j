@@ -48,6 +48,8 @@ public class AppointmentForm extends CrmEntityForm<Appointment> {
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().time()), 7).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().address()), 25).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().status()), 9).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().closeReason()), 25).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().notes()), 25).build());
 
         row = -1;
         main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().agent()), 20).build());
@@ -56,6 +58,7 @@ public class AppointmentForm extends CrmEntityForm<Appointment> {
 
         // tweak UI:
         get(proto().status()).setViewable(true);
+        get(proto().closeReason()).setViewable(true);
 
         main.getColumnFormatter().setWidth(0, "50%");
         main.getColumnFormatter().setWidth(1, "50%");
@@ -68,5 +71,12 @@ public class AppointmentForm extends CrmEntityForm<Appointment> {
             return ((AppointmentViewerView) getParentView()).getShowingsListerView().asWidget();
         }
         return new HTML(); // just stub - not necessary for editing mode!..
+    }
+
+    @Override
+    protected void onValueSet(boolean populate) {
+        super.onValueSet(populate);
+
+        get(proto().closeReason()).setVisible(getValue().status().getValue() == Appointment.Status.closed);
     }
 }

@@ -16,6 +16,7 @@ package com.propertyvista.crm.rpc.services.customer.lead;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.domain.tenant.lead.Appointment;
 import com.propertyvista.domain.tenant.lead.Lead;
@@ -23,4 +24,6 @@ import com.propertyvista.domain.tenant.lead.Lead;
 public interface AppointmentCrudService extends AbstractCrudService<Appointment> {
 
     void getActiveState(AsyncCallback<Boolean> callback, Lead leadId);
+
+    void close(AsyncCallback<VoidSerializable> callback, String reason, Appointment appointmentId);
 }

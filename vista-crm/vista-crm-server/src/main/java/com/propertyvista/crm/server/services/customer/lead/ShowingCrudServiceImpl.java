@@ -97,6 +97,6 @@ public class ShowingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Showing, 
         Persistence.service().retrieve(appointmentId);
         Persistence.service().retrieve(appointmentId.lead());
 
-        callback.onSuccess(appointmentId.status().getValue() != Appointment.Status.complete && appointmentId.lead().status().getValue() != Lead.Status.closed);
+        callback.onSuccess(appointmentId.status().getValue() != Appointment.Status.closed && appointmentId.lead().status().getValue() != Lead.Status.closed);
     }
 }

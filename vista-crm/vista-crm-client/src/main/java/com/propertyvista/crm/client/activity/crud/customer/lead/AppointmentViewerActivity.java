@@ -17,6 +17,9 @@ import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
@@ -50,5 +53,15 @@ public class AppointmentViewerActivity extends CrmViewerActivity<Appointment> im
     public void onStop() {
         ((AbstractActivity) showingsLister).onStop();
         super.onStop();
+    }
+
+    @Override
+    public void close(String reason) {
+        ((AppointmentCrudService) getService()).close(new DefaultAsyncCallback<VoidSerializable>() {
+            @Override
+            public void onSuccess(VoidSerializable result) {
+                populate();
+            }
+        }, reason, EntityFactory.createIdentityStub(Appointment.class, getEntityId()));
     }
 }

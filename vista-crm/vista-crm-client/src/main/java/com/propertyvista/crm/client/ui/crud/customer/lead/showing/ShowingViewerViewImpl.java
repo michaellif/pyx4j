@@ -32,6 +32,6 @@ public class ShowingViewerViewImpl extends CrmViewerViewImplBase<ShowingDTO> imp
 
         getEditButton().setEnabled(value.status().getValue() != Showing.Status.seen);
         getEditButton().setVisible(
-                value.appointment().status().getValue() != Appointment.Status.complete && value.appointment().lead().status().getValue() != Lead.Status.closed);
+                value.appointment().status().getValue() != Appointment.Status.closed && value.appointment().lead().status().getValue() != Lead.Status.closed);
     }
 }

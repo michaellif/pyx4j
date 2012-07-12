@@ -44,9 +44,7 @@ public interface Appointment extends IEntity {
 
         planned,
 
-        noShow,
-
-        complete;
+        closed;
 
         @Override
         public String toString() {
@@ -88,6 +86,11 @@ public interface Appointment extends IEntity {
     @NotNull
     @ToString(index = 3)
     IPrimitive<Status> status();
+
+    IPrimitive<String> closeReason();
+
+    @Editor(type = EditorType.textarea)
+    IPrimitive<String> notes();
 
     // ----------------------------------------------------
     // parent <-> child relationship:

@@ -21,6 +21,8 @@ import com.propertyvista.domain.tenant.lead.Appointment;
 public interface AppointmentViewerView extends IViewerView<Appointment> {
 
     interface Presenter extends IViewerView.Presenter {
+
+        void close(String reason);
     }
 
     ShowingListerView getShowingsListerView();
