@@ -65,8 +65,8 @@ public class IdAssignmentFacadeImpl implements IdAssignmentFacade {
 
     @Override
     public void assignId(Customer customer) {
-        if (customer.id().isNull() && needsGeneratedId(IdTarget.tenant)) {
-            customer.customerId().setValue(getId(IdTarget.tenant));
+        if (customer.id().isNull() && needsGeneratedId(IdTarget.customer)) {
+            customer.customerId().setValue(getId(IdTarget.customer));
         }
     }
 

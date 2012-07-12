@@ -40,6 +40,8 @@ public interface IdAssignmentItem extends IEntity {
 
         application,
 
+        customer,
+
         tenant,
 
         guarantor,

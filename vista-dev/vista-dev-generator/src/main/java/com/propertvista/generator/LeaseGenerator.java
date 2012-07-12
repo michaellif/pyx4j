@@ -19,14 +19,12 @@ import com.propertvista.generator.util.CommonsGenerator;
 import com.propertvista.generator.util.RandomUtil;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.essentials.server.preloader.DataGenerator;
 
-import com.propertyvista.biz.policy.IdAssignmentFacade;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.Service;
@@ -96,7 +94,6 @@ public class LeaseGenerator extends DataGenerator {
 
     private void addTenants(Lease lease) {
         Tenant mainTenant = EntityFactory.create(Tenant.class);
-        ServerSideFactory.create(IdAssignmentFacade.class).assignId(mainTenant);
         mainTenant.customer().set(customerGenerator.createCustomer());
         mainTenant.customer().emergencyContacts().addAll(customerGenerator.createEmergencyContacts());
         mainTenant.customer()._PersonScreenings().add(screeningGenerator.createScreening());
@@ -107,7 +104,6 @@ public class LeaseGenerator extends DataGenerator {
 
         addPreathorisedPaymentMethod(mainTenant);
         Guarantor guarantor = EntityFactory.create(Guarantor.class);
-        ServerSideFactory.create(IdAssignmentFacade.class).assignId(guarantor);
         guarantor.customer().set(customerGenerator.createCustomer());
         guarantor.screening().set(screeningGenerator.createScreening());
         guarantor.customer()._PersonScreenings().add(guarantor.screening());
@@ -119,7 +115,6 @@ public class LeaseGenerator extends DataGenerator {
         int maxTenants = RandomUtil.randomInt(config.numTenantsInLease);
         for (int t = 0; t < maxTenants; t++) {
             Tenant tenant = EntityFactory.create(Tenant.class);
-            ServerSideFactory.create(IdAssignmentFacade.class).assignId(tenant);
             tenant.customer().set(customerGenerator.createCustomer());
             tenant.customer().emergencyContacts().addAll(customerGenerator.createEmergencyContacts());
             tenant.screening().set(screeningGenerator.createScreening());
