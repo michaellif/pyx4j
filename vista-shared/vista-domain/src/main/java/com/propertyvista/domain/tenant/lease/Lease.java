@@ -97,7 +97,7 @@ public interface Lease extends IVersionedEntity<LeaseV> {
         }
 
         public static Collection<Status> former() {
-            return EnumSet.of(Completed, FinalBillIssued, Closed);
+            return EnumSet.of(Completed, Closed);
         }
 
         // states:
