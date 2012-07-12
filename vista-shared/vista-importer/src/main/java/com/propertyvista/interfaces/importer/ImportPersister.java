@@ -20,6 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
@@ -28,6 +29,9 @@ import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.company.OrganizationContact;
 import com.propertyvista.domain.marketing.PublicVisibilityType;
+import com.propertyvista.domain.property.PropertyContact;
+import com.propertyvista.domain.property.PropertyContact.PropertyContactType;
+import com.propertyvista.domain.property.PropertyPhone;
 import com.propertyvista.domain.property.asset.Complex;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.Parking;
@@ -104,6 +108,28 @@ class ImportPersister {
 
         if (building.info().address().location().isNull()) {
             SharedGeoLocator.populateGeo(building.info().address());
+        }
+
+        if (!buildingIO.email().isNull()) {
+            // Adding email to existing contact
+            PropertyContact contact;
+            if (!building.contacts().propertyContacts().isEmpty()) {
+                contact = building.contacts().propertyContacts().get(0);
+            } else {
+                contact = EntityFactory.create(PropertyContact.class);
+                building.contacts().propertyContacts().add(contact);
+            }
+
+            contact.email().setValue(buildingIO.email().getValue());
+        }
+
+        for (int i = 0; i < buildingIO.phones().size(); i++) {
+            // building phones are added to PropertyContacts, so there must be at least as many PropertyCOntacts as phones
+            PropertyPhone phone = buildingIO.phones().get(i);
+            if (!phone.designation().isNull() && phone.designation().getValue().equals(PropertyPhone.DesignationType.office)) {
+                PropertyContact contact = building.contacts().propertyContacts().get(i);
+                contact.type().setValue(PropertyContactType.mainOffice);
+            }
         }
 
         // Media
