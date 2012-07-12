@@ -174,28 +174,25 @@ public class FormFlexPanel extends FlexTable implements PropertyChangeHandler, H
         return addHandler(handler, PropertyChangeEvent.getType());
     }
 
-    public boolean isContentValid() {
-        boolean valid = true;
+    public ValidationResults getValidationResults() {
+        ValidationResults results = new ValidationResults();
         for (CComponent<?, ?> component : components) {
-            if ((component.isUnconditionalValidationErrorRendering() || component.isVisited()) && !component.isValid()) {
-                valid = false;
-                break;
+            if (component.isUnconditionalValidationErrorRendering()) {
+                results.appendValidationErrors(component.getValidationResults());
+            } else {
+                ArrayList<ValidationError> errors = component.getValidationResults().getValidationErrors();
+                for (ValidationError validationError : errors) {
+                    CComponent<?, ?> originator = validationError.getOriginator();
+                    if ((originator.isUnconditionalValidationErrorRendering() || originator.isVisited()) && !originator.isValid()) {
+                        results.appendValidationError(validationError);
+                    }
+                }
             }
         }
-        return valid;
+        return results;
     }
 
-    public String getValidationMessage() {
-        ValidationResults validationResults = new ValidationResults();
-        for (CComponent<?, ?> component : components) {
-            if ((component.isUnconditionalValidationErrorRendering() || component.isVisited()) && !component.isValid()) {
-                validationResults.appendValidationErrors(component.getValidationResults());
-            }
-        }
-        return getMessagesText(validationResults);
-    }
-
-    public String getMessagesText(ValidationResults validationResults) {
+    public static String getMessagesText(ValidationResults validationResults) {
         StringBuilder messagesBuffer = new StringBuilder();
         ArrayList<ValidationError> validationErrors = validationResults.getValidationErrors();
 

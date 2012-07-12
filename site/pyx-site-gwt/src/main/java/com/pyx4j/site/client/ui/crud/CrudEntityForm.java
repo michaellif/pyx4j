@@ -33,6 +33,7 @@ import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.decorators.IDecorator;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.validators.ValidationResults;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 import com.pyx4j.widgets.client.tabpanel.TabPanel;
@@ -96,10 +97,11 @@ public abstract class CrudEntityForm<E extends IEntity> extends CEntityForm<E> {
             @Override
             public void onPropertyChange(PropertyChangeEvent event) {
                 if (event.isEventOfType(PropertyName.valid, PropertyName.repopulated, PropertyName.showErrorsUnconditional)) {
-                    if (panel.isContentValid()) {
+                    ValidationResults validationResults = panel.getValidationResults();
+                    if (validationResults.isValid()) {
                         tab.setTabWarning(null);
                     } else {
-                        tab.setTabWarning(panel.getValidationMessage());
+                        tab.setTabWarning(FormFlexPanel.getMessagesText(validationResults));
                     }
                 }
             }
