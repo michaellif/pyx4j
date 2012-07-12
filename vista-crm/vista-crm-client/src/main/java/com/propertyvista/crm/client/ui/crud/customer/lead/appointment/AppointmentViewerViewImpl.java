@@ -21,6 +21,7 @@ import com.propertyvista.crm.client.ui.crud.customer.lead.showing.ShowingLister;
 import com.propertyvista.crm.rpc.CrmSiteMap.Marketing;
 import com.propertyvista.crm.rpc.dto.tenant.ShowingDTO;
 import com.propertyvista.domain.tenant.lead.Appointment;
+import com.propertyvista.domain.tenant.lead.Lead;
 
 public class AppointmentViewerViewImpl extends CrmViewerViewImplBase<Appointment> implements AppointmentViewerView {
 
@@ -38,5 +39,13 @@ public class AppointmentViewerViewImpl extends CrmViewerViewImplBase<Appointment
     @Override
     public IListerView<ShowingDTO> getShowingsListerView() {
         return showingsLister;
+    }
+
+    @Override
+    public void populate(Appointment value) {
+        super.populate(value);
+
+        getEditButton().setEnabled(value.status().getValue() != Appointment.Status.complete);
+        getEditButton().setVisible(value.lead().status().getValue() != Lead.Status.closed);
     }
 }

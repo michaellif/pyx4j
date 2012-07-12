@@ -13,10 +13,15 @@
  */
 package com.propertyvista.crm.server.services.customer.lead;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
 import com.pyx4j.entity.server.AbstractCrudServiceImpl;
+import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.crm.rpc.services.customer.lead.AppointmentCrudService;
 import com.propertyvista.domain.tenant.lead.Appointment;
+import com.propertyvista.domain.tenant.lead.Lead;
+import com.propertyvista.domain.tenant.lead.Lead.Status;
 
 public class AppointmentCrudServiceImpl extends AbstractCrudServiceImpl<Appointment> implements AppointmentCrudService {
 
@@ -27,5 +32,17 @@ public class AppointmentCrudServiceImpl extends AbstractCrudServiceImpl<Appointm
     @Override
     protected void bind() {
         bindCompleateDBO();
+    }
+
+    @Override
+    protected void enhanceRetrieved(Appointment entity, Appointment dto) {
+        super.enhanceRetrieved(entity, dto);
+        Persistence.service().retrieve(dto.lead());
+    }
+
+    @Override
+    public void getParentState(AsyncCallback<Status> callback, Lead leadId) {
+        Persistence.service().retrieve(leadId);
+        callback.onSuccess(leadId.status().getValue());
     }
 }

@@ -22,18 +22,16 @@ import com.google.gwt.user.client.Command;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.UserRuntimeException;
-import com.pyx4j.site.client.ui.crud.lister.IListerView;
-import com.pyx4j.site.client.ui.crud.lister.ListerInternalViewImplBase;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog.Formatter;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
-import com.propertyvista.crm.client.ui.crud.customer.lead.appointment.AppointmentLister;
+import com.propertyvista.crm.client.ui.crud.customer.lead.appointment.AppointmentListerView;
+import com.propertyvista.crm.client.ui.crud.customer.lead.appointment.AppointmentListerViewImpl;
 import com.propertyvista.crm.rpc.CrmSiteMap.Marketing;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
-import com.propertyvista.domain.tenant.lead.Appointment;
 import com.propertyvista.domain.tenant.lead.Lead;
 import com.propertyvista.domain.tenant.lead.Lead.Status;
 import com.propertyvista.shared.config.VistaFeatures;
@@ -46,7 +44,7 @@ public class LeadViewerViewImpl extends CrmViewerViewImplBase<Lead> implements L
 
     private final Button closeAction;
 
-    private final IListerView<Appointment> appointmentLister;
+    private final AppointmentListerView appointmentLister = new AppointmentListerViewImpl();
 
     public LeadViewerViewImpl() {
         super(Marketing.Lead.class);
@@ -95,17 +93,18 @@ public class LeadViewerViewImpl extends CrmViewerViewImplBase<Lead> implements L
         });
         addHeaderToolbarTwoItem(closeAction.asWidget());
 
-        appointmentLister = new ListerInternalViewImplBase<Appointment>(new AppointmentLister());
-
         // set main form here:
         setForm(new LeadForm(true));
     }
 
     @Override
     public void populate(Lead value) {
+        super.populate(value);
+
         convertAction.setVisible(VistaFeatures.instance().leases() && value.status().getValue() != Status.closed && value.lease().isNull());
         closeAction.setVisible(value.status().getValue() != Status.closed);
-        super.populate(value);
+
+        getEditButton().setVisible(value.status().getValue() != Lead.Status.closed);
     }
 
     @Override
@@ -125,7 +124,7 @@ public class LeadViewerViewImpl extends CrmViewerViewImplBase<Lead> implements L
     }
 
     @Override
-    public IListerView<Appointment> getAppointmentsListerView() {
+    public AppointmentListerView getAppointmentsListerView() {
         return appointmentLister;
     }
 }

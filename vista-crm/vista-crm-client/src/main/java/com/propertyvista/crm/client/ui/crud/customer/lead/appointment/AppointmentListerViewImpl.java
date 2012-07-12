@@ -13,14 +13,18 @@
  */
 package com.propertyvista.crm.client.ui.crud.customer.lead.appointment;
 
-import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
-import com.propertyvista.crm.rpc.CrmSiteMap.Marketing;
+import com.pyx4j.site.client.ui.crud.lister.ListerInternalViewImplBase;
+
 import com.propertyvista.domain.tenant.lead.Appointment;
 
-public class AppointmentListerViewImpl extends CrmListerViewImplBase<Appointment> implements AppointmentListerView {
+public class AppointmentListerViewImpl extends ListerInternalViewImplBase<Appointment> implements AppointmentListerView {
 
     public AppointmentListerViewImpl() {
-        super(Marketing.Appointment.class);
-        setLister(new AppointmentLister());
+        super(new AppointmentLister());
+    }
+
+    @Override
+    public void setAddNewVisible(boolean visible) {
+        getLister().getDataTablePanel().getAddButton().setVisible(visible);
     }
 }

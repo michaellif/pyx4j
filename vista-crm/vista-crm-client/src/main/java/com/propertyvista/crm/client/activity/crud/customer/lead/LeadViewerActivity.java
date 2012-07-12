@@ -24,14 +24,12 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
-import com.pyx4j.site.client.activity.crud.ListerActivityBase;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.customer.lead.LeadViewerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.MarketingViewFactory;
-import com.propertyvista.crm.rpc.services.customer.lead.AppointmentCrudService;
 import com.propertyvista.crm.rpc.services.customer.lead.LeadCrudService;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lead.Appointment;
@@ -44,8 +42,7 @@ public class LeadViewerActivity extends CrmViewerActivity<Lead> implements LeadV
     public LeadViewerActivity(CrudAppPlace place) {
         super(place, MarketingViewFactory.instance(LeadViewerView.class), GWT.<LeadCrudService> create(LeadCrudService.class));
 
-        appointmentsLister = new ListerActivityBase<Appointment>(place, ((LeadViewerView) getView()).getAppointmentsListerView(),
-                GWT.<AppointmentCrudService> create(AppointmentCrudService.class), Appointment.class);
+        appointmentsLister = new AppointmentListerActivity(place, ((LeadViewerView) getView()).getAppointmentsListerView());
     }
 
     @Override

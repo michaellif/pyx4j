@@ -36,14 +36,10 @@ import com.propertyvista.crm.client.ui.crud.customer.lead.LeadViewerView;
 import com.propertyvista.crm.client.ui.crud.customer.lead.LeadViewerViewImpl;
 import com.propertyvista.crm.client.ui.crud.customer.lead.appointment.AppointmentEditorView;
 import com.propertyvista.crm.client.ui.crud.customer.lead.appointment.AppointmentEditorViewImpl;
-import com.propertyvista.crm.client.ui.crud.customer.lead.appointment.AppointmentListerView;
-import com.propertyvista.crm.client.ui.crud.customer.lead.appointment.AppointmentListerViewImpl;
 import com.propertyvista.crm.client.ui.crud.customer.lead.appointment.AppointmentViewerView;
 import com.propertyvista.crm.client.ui.crud.customer.lead.appointment.AppointmentViewerViewImpl;
 import com.propertyvista.crm.client.ui.crud.customer.lead.showing.ShowingEditorView;
 import com.propertyvista.crm.client.ui.crud.customer.lead.showing.ShowingEditorViewImpl;
-import com.propertyvista.crm.client.ui.crud.customer.lead.showing.ShowingListerView;
-import com.propertyvista.crm.client.ui.crud.customer.lead.showing.ShowingListerViewImpl;
 import com.propertyvista.crm.client.ui.crud.customer.lead.showing.ShowingViewerView;
 import com.propertyvista.crm.client.ui.crud.customer.lead.showing.ShowingViewerViewImpl;
 import com.propertyvista.crm.client.ui.crud.customer.tenant.FutureTenantListerView;
@@ -73,15 +69,11 @@ public class MarketingViewFactory extends ViewFactoryBase {
             } else if (LeadEditorView.class.equals(type)) {
                 map.put(type, new LeadEditorViewImpl());
 
-            } else if (AppointmentListerView.class.equals(type)) {
-                map.put(type, new AppointmentListerViewImpl());
             } else if (AppointmentViewerView.class.equals(type)) {
                 map.put(type, new AppointmentViewerViewImpl());
             } else if (AppointmentEditorView.class.equals(type)) {
                 map.put(type, new AppointmentEditorViewImpl());
 
-            } else if (ShowingListerView.class.equals(type)) {
-                map.put(type, new ShowingListerViewImpl());
             } else if (ShowingViewerView.class.equals(type)) {
                 map.put(type, new ShowingViewerViewImpl());
             } else if (ShowingEditorView.class.equals(type)) {

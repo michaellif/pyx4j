@@ -51,6 +51,9 @@ public class ShowingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Showing, 
             Persistence.service().retrieve(dto.unit().building(), AttachLevel.ToStringMembers);
             Persistence.service().retrieve(dto.unit().floorplan(), AttachLevel.ToStringMembers);
         }
+
+        Persistence.service().retrieve(dto.appointment());
+        Persistence.service().retrieve(dto.appointment().lead());
     }
 
     @Override

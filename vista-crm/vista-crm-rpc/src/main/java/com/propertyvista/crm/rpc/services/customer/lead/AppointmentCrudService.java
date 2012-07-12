@@ -13,9 +13,14 @@
  */
 package com.propertyvista.crm.rpc.services.customer.lead;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
 import com.pyx4j.entity.rpc.AbstractCrudService;
 
 import com.propertyvista.domain.tenant.lead.Appointment;
+import com.propertyvista.domain.tenant.lead.Lead;
 
 public interface AppointmentCrudService extends AbstractCrudService<Appointment> {
+
+    void getParentState(AsyncCallback<Lead.Status> callback, Lead leadId);
 }

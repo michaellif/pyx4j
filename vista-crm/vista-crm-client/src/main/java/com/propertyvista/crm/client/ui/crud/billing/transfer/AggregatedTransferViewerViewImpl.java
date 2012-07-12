@@ -64,7 +64,6 @@ public class AggregatedTransferViewerViewImpl extends CrmViewerViewImplBase<Aggr
             }
         });
         addHeaderToolbarTwoItem(cancelAction.asWidget());
-
     }
 
     @Override

@@ -17,18 +17,31 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.activity.crud.ListerActivityBase;
 
 import com.propertyvista.crm.client.ui.crud.customer.lead.appointment.AppointmentListerView;
-import com.propertyvista.crm.client.ui.crud.viewfactories.MarketingViewFactory;
 import com.propertyvista.crm.rpc.services.customer.lead.AppointmentCrudService;
 import com.propertyvista.domain.tenant.lead.Appointment;
+import com.propertyvista.domain.tenant.lead.Lead;
 
 public class AppointmentListerActivity extends ListerActivityBase<Appointment> {
 
     @SuppressWarnings("unchecked")
-    public AppointmentListerActivity(Place place) {
-        super(place, MarketingViewFactory.instance(AppointmentListerView.class), (AbstractCrudService<Appointment>) GWT.create(AppointmentCrudService.class),
-                Appointment.class);
+    public AppointmentListerActivity(Place place, AppointmentListerView view) {
+        super(place, view, (AbstractCrudService<Appointment>) GWT.create(AppointmentCrudService.class), Appointment.class);
+    }
+
+    @Override
+    public void populate() {
+        super.populate();
+
+        ((AppointmentCrudService) getService()).getParentState(new DefaultAsyncCallback<Lead.Status>() {
+            @Override
+            public void onSuccess(Lead.Status result) {
+                ((AppointmentListerView) getView()).setAddNewVisible(result != Lead.Status.closed);
+            }
+        }, EntityFactory.createIdentityStub(Lead.class, getParent()));
     }
 }

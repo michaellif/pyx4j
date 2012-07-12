@@ -19,4 +19,5 @@ import com.propertyvista.domain.tenant.lead.Appointment;
 
 public interface AppointmentListerView extends IListerView<Appointment> {
 
+    void setAddNewVisible(boolean visible);
 }

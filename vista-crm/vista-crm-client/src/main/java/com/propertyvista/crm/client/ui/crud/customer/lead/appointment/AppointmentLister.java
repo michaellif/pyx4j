@@ -30,7 +30,5 @@ public class AppointmentLister extends ListerBase<Appointment> {
                 new MemberColumnDescriptor.Builder(proto().email()).build(),
                 new MemberColumnDescriptor.Builder(proto().status()).build()
         );//@formatter:on
-
     }
-
 }
