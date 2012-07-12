@@ -46,14 +46,15 @@ public class LeadFacadeImpl implements LeadFacade {
     private static final I18n i18n = I18n.get(LeadFacadeImpl.class);
 
     @Override
-    public void createLead(Lead lead) {
+    public Lead init(Lead lead) {
         ServerSideFactory.create(IdAssignmentFacade.class).assignId(lead);
-        Persistence.service().merge(lead);
+        return lead;
     }
 
     @Override
-    public void persistLead(Lead lead) {
+    public Lead persist(Lead lead) {
         Persistence.service().merge(lead);
+        return lead;
     }
 
     @Override
@@ -130,5 +131,4 @@ public class LeadFacadeImpl implements LeadFacade {
         lead.status().setValue(Status.closed);
         Persistence.secureSave(lead);
     }
-
 }

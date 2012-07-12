@@ -27,6 +27,7 @@ import com.propertyvista.crm.client.ui.crud.customer.lead.LeadEditorView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.MarketingViewFactory;
 import com.propertyvista.crm.rpc.services.customer.lead.LeadCrudService;
 import com.propertyvista.domain.property.asset.Floorplan;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lead.Lead;
 import com.propertyvista.domain.tenant.lead.Lead.Status;
 
@@ -39,15 +40,10 @@ public class LeadEditorActivity extends EditorActivityBase<Lead> implements Lead
 
     @Override
     public void setSelectedFloorplan(Floorplan selected) {
-        ((LeadCrudService) getService()).setSelectedFloorplan(new DefaultAsyncCallback<Floorplan>() {
+        ((LeadCrudService) getService()).getFloorplanBuilding(new DefaultAsyncCallback<Building>() {
             @Override
-            public void onSuccess(Floorplan item) {
-                Lead currentValue = getView().getValue().duplicate();
-
-                currentValue.building().set(item.building());
-                currentValue.floorplan().set(item);
-
-                populateView(currentValue);
+            public void onSuccess(Building item) {
+                ((LeadEditorView) getView()).setFloorplanBuilding(item);
             }
         }, selected.getPrimaryKey());
     }

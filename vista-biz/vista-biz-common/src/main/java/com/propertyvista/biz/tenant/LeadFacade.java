@@ -20,12 +20,15 @@ import com.propertyvista.domain.tenant.lead.Lead;
 
 public interface LeadFacade {
 
-    void createLead(Lead lead);
+    // in-memory Lease object state interfaces:
 
-    void persistLead(Lead lead);
+    Lead init(Lead lead);
+
+    Lead persist(Lead lead);
+
+    // DB-data Lease object state interfaces:
 
     void convertToApplication(Key leadId, AptUnit unitId);
 
     void close(Key leadId);
-
 }

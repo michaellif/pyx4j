@@ -25,6 +25,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.biz.policy.IdAssignmentFacade;
+import com.propertyvista.biz.tenant.LeadFacade;
 import com.propertyvista.domain.DemoData;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.property.asset.Floorplan;
@@ -72,12 +73,13 @@ public class PreloadNewTenantsAndLeads extends BaseVistaDevDataPreloader {
         // Leads:
         List<Lead> leads = generator.createLeads(config().numLeads);
         for (Lead lead : leads) {
+            ServerSideFactory.create(LeadFacade.class).init(lead);
+
             lead.floorplan().set(RandomUtil.random(floorplans));
             lead.building().set(lead.floorplan().building());
-
             lead.agent().set(RandomUtil.random(employees));
 
-            Persistence.service().persist(lead);
+            ServerSideFactory.create(LeadFacade.class).persist(lead);
 
             EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().floorplan(), lead.floorplan()));

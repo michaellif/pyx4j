@@ -92,7 +92,8 @@ public class InquiryPanel extends Panel {
                     lead.floorplan().id().setValue(new Key(fpId));
                 }
                 lead.createDate().setValue(new LogicalDate(SysDateManager.getSysDate()));
-                ServerSideFactory.create(LeadFacade.class).createLead(lead);
+                ServerSideFactory.create(LeadFacade.class).init(lead);
+                ServerSideFactory.create(LeadFacade.class).persist(lead);
                 Persistence.service().commit();
                 PageParameters params = new PageParameters();
                 if (fp != null) {

@@ -15,6 +15,7 @@ package com.propertyvista.crm.client.ui.crud.customer.lead;
 
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap.Marketing;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lead.Lead;
 
 public class LeadEditorViewImpl extends CrmEditorViewImplBase<Lead> implements LeadEditorView {
@@ -23,4 +24,9 @@ public class LeadEditorViewImpl extends CrmEditorViewImplBase<Lead> implements L
         super(Marketing.Lead.class, new LeadForm());
     }
 
+    @Override
+    public void setFloorplanBuilding(Building selected) {
+        LeadForm form = (LeadForm) getForm();
+        form.get(form.proto().building()).setValue(selected);
+    }
 }

@@ -30,6 +30,7 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 import com.propertyvista.biz.tenant.LeadFacade;
 import com.propertyvista.crm.rpc.services.customer.lead.LeadCrudService;
 import com.propertyvista.domain.property.asset.Floorplan;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lead.Lead;
 import com.propertyvista.domain.tenant.lead.Showing;
@@ -68,10 +69,10 @@ public class LeadCrudServiceImpl extends AbstractCrudServiceImpl<Lead> implement
     }
 
     @Override
-    public void setSelectedFloorplan(AsyncCallback<Floorplan> callback, Key floorplanId) {
+    public void getFloorplanBuilding(AsyncCallback<Building> callback, Key floorplanId) {
         Floorplan item = Persistence.service().retrieve(Floorplan.class, floorplanId);
         Persistence.service().retrieve(item.building());
-        callback.onSuccess(item);
+        callback.onSuccess((Building) item.building().detach());
     }
 
     @Override
@@ -112,13 +113,13 @@ public class LeadCrudServiceImpl extends AbstractCrudServiceImpl<Lead> implement
     }
 
     @Override
-    protected void create(Lead entity, Lead dto) {
-        ServerSideFactory.create(LeadFacade.class).createLead(entity);
+    protected void create(Lead dbo, Lead dto) {
+        ServerSideFactory.create(LeadFacade.class).init(dbo);
+        ServerSideFactory.create(LeadFacade.class).persist(dbo);
     }
 
     @Override
     protected void save(Lead dbo, Lead in) {
-        ServerSideFactory.create(LeadFacade.class).persistLead(dbo);
+        ServerSideFactory.create(LeadFacade.class).persist(dbo);
     }
-
 }
