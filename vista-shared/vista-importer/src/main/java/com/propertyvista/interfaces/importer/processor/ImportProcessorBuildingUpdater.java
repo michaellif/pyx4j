@@ -43,6 +43,7 @@ public class ImportProcessorBuildingUpdater implements ImportProcessor {
     public boolean validate(ImportIO data, DeferredProcessProgressResponse status, ImportUploadDTO uploadRequestInfo,
             UploadResponse<ImportUploadResponseDTO> response) {
 
+        status.setProgressMaximum(data.buildings().size() * 2);
         MediaConfig mediaConfig = MediaConfig.create(uploadRequestInfo);
         List<String> messages = new Vector<String>();
         int count = 0;
@@ -70,6 +71,7 @@ public class ImportProcessorBuildingUpdater implements ImportProcessor {
             UploadResponse<ImportUploadResponseDTO> response) {
         SharedGeoLocator.setMode(Mode.updateCache);
         ImportCounters counters = new ImportCounters();
+        status.setProgressMaximum(data.buildings().size() * 2);
         MediaConfig mediaConfig = MediaConfig.create(uploadRequestInfo);
         int count = 0;
         try {
@@ -77,7 +79,7 @@ public class ImportProcessorBuildingUpdater implements ImportProcessor {
                 log.debug("processing building {} {}", count + "/" + data.buildings().size(), building.getStringView());
                 counters.add(new BuildingUpdater().updateData(building, mediaConfig));
                 count++;
-                status.setProgress(count);
+                status.setProgress(data.buildings().size() + count);
                 log.info("building {} updated", building.getStringView());
                 if (status.isCanceled()) {
                     break;
