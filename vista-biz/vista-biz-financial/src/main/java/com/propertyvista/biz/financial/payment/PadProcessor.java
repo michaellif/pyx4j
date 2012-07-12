@@ -50,7 +50,7 @@ public class PadProcessor {
 
     boolean processPayment(final PaymentRecord paymentRecord, final PadFile padFile) {
         MerchantAccount merchantAccount = PaymentUtils.retrieveMerchantAccount(paymentRecord);
-        if (merchantAccount == null) {
+        if ((merchantAccount == null) || (!PaymentUtils.isElectronicPaymentsAllowed(merchantAccount))) {
             return false;
         }
         paymentRecord.merchantAccount().set(merchantAccount);

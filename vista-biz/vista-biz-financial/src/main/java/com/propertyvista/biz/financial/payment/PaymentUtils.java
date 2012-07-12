@@ -13,7 +13,6 @@
  */
 package com.propertyvista.biz.financial.payment;
 
-import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
@@ -30,16 +29,18 @@ class PaymentUtils {
 
     private static final I18n i18n = I18n.get(PaymentUtils.class);
 
+    static boolean isElectronicPaymentsAllowed(MerchantAccount merchantAccount) {
+        if (merchantAccount.invalid().getValue(Boolean.TRUE)) {
+            return false;
+        } else {
+            return !merchantAccount.merchantTerminalId().isNull();
+        }
+    }
+
     static MerchantAccount retrieveMerchantAccount(PaymentRecord paymentRecord) {
         EntityQueryCriteria<MerchantAccount> criteria = EntityQueryCriteria.create(MerchantAccount.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().invalid(), Boolean.FALSE));
         criteria.add(PropertyCriterion.eq(criteria.proto()._buildings().$()._Units().$()._Leases().$().billingAccount(), paymentRecord.billingAccount()));
-        for (MerchantAccount merchantAccount : Persistence.service().query(criteria)) {
-            if (!merchantAccount.merchantTerminalId().isNull()) {
-                return merchantAccount;
-            }
-        }
-        return null;
+        return Persistence.service().retrieve(criteria);
     }
 
     static MerchantAccount retrieveValidMerchantAccount(PaymentRecord paymentRecord) {

@@ -141,7 +141,10 @@ public class PaymentFacadeImpl implements PaymentFacade {
         }
 
         paymentRecord.lastStatusChangeDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
-        paymentRecord.merchantAccount().set(PaymentUtils.retrieveValidMerchantAccount(paymentRecord));
+        paymentRecord.merchantAccount().set(PaymentUtils.retrieveMerchantAccount(paymentRecord));
+        if (paymentRecord.merchantAccount().isNull()) {
+            throw new UserRuntimeException(i18n.tr("No merchantAccount found to process the payment"));
+        }
 
         switch (paymentRecord.paymentMethod().type().getValue()) {
         case Cash:
@@ -212,7 +215,11 @@ public class PaymentFacadeImpl implements PaymentFacade {
         case Echeck:
         case EFT:
         case CreditCard:
+        case Interac:
             throw new IllegalArgumentException("Electronic PaymentMethod:" + paymentRecord.paymentMethod().type().getStringView());
+        case Cash:
+        case Check:
+            break;
         }
 
         paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Cleared);
@@ -232,7 +239,11 @@ public class PaymentFacadeImpl implements PaymentFacade {
         case Echeck:
         case EFT:
         case CreditCard:
+        case Interac:
             throw new IllegalArgumentException("Electronic PaymentMethod:" + paymentRecord.paymentMethod().type().getStringView());
+        case Cash:
+        case Check:
+            break;
         }
 
         paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Rejected);
@@ -247,6 +258,8 @@ public class PaymentFacadeImpl implements PaymentFacade {
         case Cash:
             ServerSideFactory.create(ARFacade.class).rejectPayment(paymentRecord, false);
             break;
+        default:
+            throw new IllegalArgumentException("PaymentMethod:" + paymentRecord.paymentMethod().type().getStringView());
         }
         return paymentRecord;
     }
