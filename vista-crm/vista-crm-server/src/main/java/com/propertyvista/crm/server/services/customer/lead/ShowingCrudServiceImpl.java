@@ -41,20 +41,23 @@ public class ShowingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Showing, 
 
     @Override
     protected void enhanceRetrieved(Showing entity, ShowingDTO dto) {
-        retrieveBuilding(dto);
+        enhanceListRetrieved(entity, dto);
         retrieveUnitFilterCriteria(dto);
     }
 
     @Override
     protected void enhanceListRetrieved(Showing entity, ShowingDTO dto) {
-        retrieveBuilding(dto);
+        if (!dto.unit().isNull()) {
+            Persistence.service().retrieve(dto.unit().building(), AttachLevel.ToStringMembers);
+            Persistence.service().retrieve(dto.unit().floorplan(), AttachLevel.ToStringMembers);
+        }
     }
 
     @Override
     public void updateValue(AsyncCallback<AptUnit> callback, Key unitId) {
         AptUnit unit = Persistence.service().retrieve(AptUnit.class, unitId);
-        Persistence.service().retrieve(unit.building());
-
+        Persistence.service().retrieve(unit.building(), AttachLevel.ToStringMembers);
+        Persistence.service().retrieve(unit.floorplan(), AttachLevel.ToStringMembers);
         callback.onSuccess(unit);
     }
 
@@ -73,13 +76,7 @@ public class ShowingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Showing, 
 
         showingDTO.floorplan().set(appointment.lead().floorplan());
         showingDTO.moveInDate().setValue(appointment.lead().moveInDate().getValue());
-        showingDTO.building().set(Persistence.service().retrieve(Building.class, appointment.lead().floorplan().building().getPrimaryKey()));
-    }
-
-    private static void retrieveBuilding(ShowingDTO dto) {
-        if (!dto.unit().isNull()) {
-            Persistence.service().retrieve(dto.unit().building(), AttachLevel.ToStringMembers);
-            dto.building().set(dto.unit().building());
-        }
+        showingDTO.building().set(
+                Persistence.service().retrieve(Building.class, appointment.lead().floorplan().building().getPrimaryKey(), AttachLevel.ToStringMembers));
     }
 }

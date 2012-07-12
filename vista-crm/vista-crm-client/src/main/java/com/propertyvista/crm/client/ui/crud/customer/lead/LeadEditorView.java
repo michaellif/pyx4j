@@ -16,7 +16,6 @@ package com.propertyvista.crm.client.ui.crud.customer.lead;
 import com.pyx4j.site.client.ui.crud.form.IEditorView;
 
 import com.propertyvista.domain.property.asset.Floorplan;
-import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lead.Lead;
 
 public interface LeadEditorView extends IEditorView<Lead> {
@@ -26,5 +25,5 @@ public interface LeadEditorView extends IEditorView<Lead> {
         void setSelectedFloorplan(Floorplan selected);
     }
 
-    void setFloorplanBuilding(Building selected);
+    void setFloorplanData(Floorplan selected);
 }

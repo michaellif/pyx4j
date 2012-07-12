@@ -24,13 +24,11 @@ public class ShowingLister extends ListerBase<ShowingDTO> {
         super(ShowingDTO.class, true);
 
         setColumnDescriptors(//@formatter:off
-            new MemberColumnDescriptor.Builder(proto().building()).build(),
+            new MemberColumnDescriptor.Builder(proto().unit().building()).build(),
             new MemberColumnDescriptor.Builder(proto().unit()).build(),
             new MemberColumnDescriptor.Builder(proto().status()).build(),
             new MemberColumnDescriptor.Builder(proto().result()).build(),
             new MemberColumnDescriptor.Builder(proto().reason()).build()
         );//@formatter:on
-
     }
-
 }

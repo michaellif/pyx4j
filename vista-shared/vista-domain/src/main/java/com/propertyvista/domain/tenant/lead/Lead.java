@@ -21,7 +21,6 @@ import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.Timestamp.Update;
 import com.pyx4j.entity.annotations.ToString;
-import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IEntity;
@@ -36,7 +35,6 @@ import com.pyx4j.i18n.shared.I18nEnum;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.property.asset.Floorplan;
-import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 @I18nComment(value = "Potential customer", target = I18nComment.I18nCommentTarget.This)
@@ -116,10 +114,6 @@ public interface Lead extends IEntity {
     @NotNull
     @ToString(index = 3)
     IPrimitive<Service.ServiceType> leaseType();
-
-    @Transient
-    // calculated from selected floorplan below!
-    Building building();
 
     @NotNull
     Floorplan floorplan();

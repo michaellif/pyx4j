@@ -16,6 +16,7 @@ package com.propertyvista.crm.client.ui.crud.customer.lead.showing;
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap.Marketing;
 import com.propertyvista.crm.rpc.dto.tenant.ShowingDTO;
+import com.propertyvista.domain.property.asset.unit.AptUnit;
 
 public class ShowingEditorViewImpl extends CrmEditorViewImplBase<ShowingDTO> implements ShowingEditorView {
 
@@ -24,4 +25,11 @@ public class ShowingEditorViewImpl extends CrmEditorViewImplBase<ShowingDTO> imp
         setForm(new ShowingForm());
     }
 
+    @Override
+    public void setUnitData(AptUnit selected) {
+        ShowingForm form = (ShowingForm) getForm();
+        form.get(form.proto().unit()).setValue(selected);
+        form.get(form.proto().unit().building()).setValue(selected.building());
+        form.get(form.proto().unit().floorplan()).setValue(selected.floorplan());
+    }
 }

@@ -21,13 +21,13 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
-import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lead.Lead;
 
 public interface LeadCrudService extends AbstractCrudService<Lead> {
 
-    void getFloorplanBuilding(AsyncCallback<Building> callback, Key floorplanId);
+    void updateValue(AsyncCallback<Floorplan> callback, Key floorplanId);
 
     void getInterestedUnits(AsyncCallback<Vector<AptUnit>> callback, Key leadId);
 

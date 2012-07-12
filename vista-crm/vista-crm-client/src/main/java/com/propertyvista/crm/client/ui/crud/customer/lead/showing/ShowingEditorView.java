@@ -25,4 +25,5 @@ public interface ShowingEditorView extends IEditorView<ShowingDTO> {
         void setSelectedUnit(AptUnit selected);
     }
 
+    void setUnitData(AptUnit selected);
 }

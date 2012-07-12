@@ -30,7 +30,6 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 import com.propertyvista.biz.tenant.LeadFacade;
 import com.propertyvista.crm.rpc.services.customer.lead.LeadCrudService;
 import com.propertyvista.domain.property.asset.Floorplan;
-import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lead.Lead;
 import com.propertyvista.domain.tenant.lead.Showing;
@@ -49,11 +48,10 @@ public class LeadCrudServiceImpl extends AbstractCrudServiceImpl<Lead> implement
 
     @Override
     protected void enhanceRetrieved(Lead entity, Lead dto) {
-        if (!entity.floorplan().isNull()) {
-            Persistence.service().retrieve(entity.floorplan().building());
-            dto.building().set(entity.floorplan().building());
+        if (!dto.floorplan().isNull()) {
+            Persistence.service().retrieve(dto.floorplan().building(), AttachLevel.ToStringMembers);
         }
-        if (!entity.lease().isNull()) {
+        if (!dto.lease().isNull()) {
             Persistence.service().retrieve(dto.lease());
             if (dto.lease().version().isNull()) { // load draft if there is no version still:
                 dto.lease().set(Persistence.service().retrieve(Lease.class, dto.lease().getPrimaryKey().asDraftKey()));
@@ -69,10 +67,10 @@ public class LeadCrudServiceImpl extends AbstractCrudServiceImpl<Lead> implement
     }
 
     @Override
-    public void getFloorplanBuilding(AsyncCallback<Building> callback, Key floorplanId) {
+    public void updateValue(AsyncCallback<Floorplan> callback, Key floorplanId) {
         Floorplan item = Persistence.service().retrieve(Floorplan.class, floorplanId);
-        Persistence.service().retrieve(item.building());
-        callback.onSuccess((Building) item.building().detach());
+        Persistence.service().retrieve(item.building(), AttachLevel.ToStringMembers);
+        callback.onSuccess(item);
     }
 
     @Override
@@ -113,7 +111,7 @@ public class LeadCrudServiceImpl extends AbstractCrudServiceImpl<Lead> implement
     }
 
     @Override
-    protected void create(Lead dbo, Lead dto) {
+    protected void create(Lead dbo, Lead in) {
         ServerSideFactory.create(LeadFacade.class).init(dbo);
         ServerSideFactory.create(LeadFacade.class).persist(dbo);
     }

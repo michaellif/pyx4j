@@ -76,7 +76,6 @@ public class PreloadNewTenantsAndLeads extends BaseVistaDevDataPreloader {
             ServerSideFactory.create(LeadFacade.class).init(lead);
 
             lead.floorplan().set(RandomUtil.random(floorplans));
-            lead.building().set(lead.floorplan().building());
             lead.agent().set(RandomUtil.random(employees));
 
             ServerSideFactory.create(LeadFacade.class).persist(lead);

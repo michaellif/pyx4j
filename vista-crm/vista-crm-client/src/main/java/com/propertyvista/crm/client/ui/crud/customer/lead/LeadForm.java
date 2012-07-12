@@ -93,11 +93,13 @@ public class LeadForm extends CrmEntityForm<Lead> {
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().moveInDate()), 9).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseTerm()), 9).build());
         if (isEditable()) {
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().building(), new CEntityLabel<Building>()), 20).build());
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().floorplan().building(), new CEntityLabel<Building>()), 20).build());
         } else {
-            main.setWidget(++row, 0,
-                    new DecoratorBuilder(inject(proto().building(), new CEntityCrudHyperlink<Building>(AppPlaceEntityMapper.resolvePlace(Building.class))), 20)
-                            .build());
+            main.setWidget(
+                    ++row,
+                    0,
+                    new DecoratorBuilder(inject(proto().floorplan().building(),
+                            new CEntityCrudHyperlink<Building>(AppPlaceEntityMapper.resolvePlace(Building.class))), 20).build());
         }
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().floorplan(), new CEntitySelectorHyperlink<Floorplan>() {
             @Override

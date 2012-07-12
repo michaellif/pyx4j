@@ -18,7 +18,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.gwt.commons.UnrecoverableClientError;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
@@ -39,40 +39,22 @@ public class ShowingEditorActivity extends EditorActivityBase<ShowingDTO> implem
 
     @Override
     public void setSelectedUnit(AptUnit selected) {
-        ((ShowingCrudService) getService()).updateValue(new AsyncCallback<AptUnit>() {
-
+        ((ShowingCrudService) getService()).updateValue(new DefaultAsyncCallback<AptUnit>() {
             @Override
             public void onSuccess(AptUnit result) {
-                ShowingDTO current = getView().getValue().duplicate();
-
-                current.unit().set(result);
-                current.building().set(result.building());
-
-                populateView(current);
-            }
-
-            @Override
-            public void onFailure(Throwable caught) {
-                throw new UnrecoverableClientError(caught);
+                ((ShowingEditorView) getView()).setUnitData(result);
             }
         }, selected.getPrimaryKey());
     }
 
     @Override
     protected void createNewEntity(final AsyncCallback<ShowingDTO> callback) {
-
-        super.createNewEntity(new AsyncCallback<ShowingDTO>() {
-
+        super.createNewEntity(new DefaultAsyncCallback<ShowingDTO>() {
             @Override
             public void onSuccess(ShowingDTO result) {
                 Appointment parentAppointmentStub = EntityFactory.create(Appointment.class);
                 parentAppointmentStub.setPrimaryKey(getParentId());
                 ((ShowingCrudService) getService()).createNew(callback, parentAppointmentStub);
-            }
-
-            @Override
-            public void onFailure(Throwable caught) {
-                callback.onFailure(caught);
             }
         });
     }
