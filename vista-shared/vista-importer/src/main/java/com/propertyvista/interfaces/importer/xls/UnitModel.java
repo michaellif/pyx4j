@@ -16,7 +16,7 @@ package com.propertyvista.interfaces.importer.xls;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.essentials.server.csv.ImportColumn;
+import com.pyx4j.essentials.rpc.ImportColumn;
 
 public interface UnitModel extends IEntity {
 

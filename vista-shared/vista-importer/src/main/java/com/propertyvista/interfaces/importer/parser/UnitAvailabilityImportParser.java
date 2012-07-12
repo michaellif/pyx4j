@@ -50,16 +50,20 @@ public class UnitAvailabilityImportParser implements ImportParser {
 
         XLSLoad loader;
         try {
-            loader = new XLSLoad(new ByteArrayInputStream(data));
+            loader = new XLSLoad(new ByteArrayInputStream(data), format == DownloadFormat.XLSX);
         } catch (IOException e) {
             log.error("XLSLoad error", e);
-            throw new UserRuntimeException(i18n.tr("Unable to read Excel File, {1}", e.getMessage()));
+            throw new UserRuntimeException(i18n.tr("Unable to read Excel File, {0}", e.getMessage()));
         }
 
         int sheets = loader.getNumberOfSheets();
         for (int sheetNumber = 0; sheetNumber < sheets; sheetNumber++) {
             EntityCSVReciver<UnitModel> reciver = new UnitModelCSVReciver();
-            loader.loadSheet(sheetNumber, reciver);
+            try {
+                loader.loadSheet(sheetNumber, reciver);
+            } catch (UserRuntimeException e) {
+                throw new UserRuntimeException(i18n.tr("{0} on sheet ''{1}''", e.getMessage(), loader.getSheetName(sheetNumber)));
+            }
             convertUnits(reciver.getEntities());
         }
 
@@ -72,8 +76,9 @@ public class UnitAvailabilityImportParser implements ImportParser {
             super(UnitModel.class);
             this.setHeaderLinesCount(2);
             this.setHeadersMatchMinimum(3);
+            this.setVerifyRequiredHeaders(true);
+            this.setVerifyRequiredValues(true);
         }
-
     }
 
     private void convertUnits(List<UnitModel> entities) {

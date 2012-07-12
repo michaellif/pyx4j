@@ -110,14 +110,14 @@ public class RentRollImportParser implements ImportParser {
      * @param args
      * @throws IOException
      */
-    private void readTenantRoster(byte[] fileName, DownloadFormat type) throws IOException {
+    private void readTenantRoster(byte[] fileName, DownloadFormat format) throws IOException {
 
         EntityCSVReciver<RentRollCSV> csv = EntityCSVReciver.create(RentRollCSV.class);
         csv.setHeaderLinesCount(2);
         csv.setHeadersMatchMinimum(EntityFactory.getEntityMeta(RentRollCSV.class).getMemberNames().size());
         InputStream is = new ByteArrayInputStream(fileName);
 
-        if (type.name().equals("CSV")) {
+        if (format.name().equals("CSV")) {
             try {
                 CSVParser parser = new CSVParser();
                 parser.setAllowComments(false);
@@ -127,7 +127,7 @@ public class RentRollImportParser implements ImportParser {
             }
         } else {
             try {
-                XLSLoad.loadFile(is, csv);
+                XLSLoad.loadFile(is, format == DownloadFormat.XLSX, csv);
             } finally {
                 IOUtils.closeQuietly(is);
             }

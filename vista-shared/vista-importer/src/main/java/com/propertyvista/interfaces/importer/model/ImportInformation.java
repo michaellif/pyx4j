@@ -18,7 +18,7 @@ import javax.xml.bind.annotation.XmlTransient;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.essentials.server.csv.ImportColumn;
+import com.pyx4j.essentials.rpc.ImportColumn;
 import com.pyx4j.i18n.annotations.I18n;
 
 /**

@@ -34,7 +34,6 @@ import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.domain.financial.tax.Tax;
 import com.propertyvista.domain.ref.Province;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustmentReason;
-import com.propertyvista.domain.tenant.lease.LeaseAdjustmentReason.ActionType;
 
 public class ProductCatalogPreloader extends AbstractDataPreloader {
 
@@ -98,7 +97,6 @@ public class ProductCatalogPreloader extends AbstractDataPreloader {
 
         // Assignee GL references
         for (LeaseAdjustmentReason i : reasons) {
-            i.actionType().setValue(ActionType.charge);
             EntityQueryCriteria<GlCode> criteria = EntityQueryCriteria.create(GlCode.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().codeId(), i.glCode().codeId()));
             i.glCode().set(Persistence.service().retrieve(criteria));
