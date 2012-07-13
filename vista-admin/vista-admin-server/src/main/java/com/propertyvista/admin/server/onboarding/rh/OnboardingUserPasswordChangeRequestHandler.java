@@ -26,14 +26,19 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.essentials.server.AbstractAntiBot;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UserRuntimeException;
+import com.pyx4j.server.contexts.NamespaceManager;
 
+import com.propertyvista.admin.domain.pmc.Pmc;
+import com.propertyvista.admin.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.admin.domain.security.OnboardingUserCredential;
 import com.propertyvista.admin.server.onboarding.rhf.AbstractRequestHandler;
 import com.propertyvista.domain.security.OnboardingUser;
+import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.onboarding.OnboardingUserPasswordChangeRequestIO;
 import com.propertyvista.onboarding.ResponseIO;
 import com.propertyvista.server.common.security.PasswordEncryptor;
+import com.propertyvista.server.domain.security.CrmUserCredential;
 
 public class OnboardingUserPasswordChangeRequestHandler extends AbstractRequestHandler<OnboardingUserPasswordChangeRequestIO> {
 
@@ -79,16 +84,69 @@ public class OnboardingUserPasswordChangeRequestHandler extends AbstractRequestH
             log.warn("TODO - implement CRM User/OnboardingUser synchronization");
         }
 
-        if (!PasswordEncryptor.checkPassword(request.currentPassword().getValue(), cr.credential().getValue())) {
-            AbstractAntiBot.authenticationFailed(email);
-            log.info("Invalid password for user {}", email);
-            response.success().setValue(Boolean.FALSE);
+        boolean validateAgainstOnboarding = true;
+
+        if (cr.pmc().getPrimaryKey() != null) {
+            Pmc pmc = Persistence.service().retrieve(Pmc.class, cr.pmc().getPrimaryKey());
+
+            if (pmc.status().getValue() != PmcStatus.Created) {
+                String curNameSpace = NamespaceManager.getNamespace();
+
+                try {
+                    NamespaceManager.setNamespace(pmc.namespace().getValue());
+
+                    EntityQueryCriteria<CrmUserCredential> crmUCrt = EntityQueryCriteria.create(CrmUserCredential.class);
+                    crmUCrt.add(PropertyCriterion.eq(crmUCrt.proto().roles().$().behaviors(), VistaCrmBehavior.PropertyVistaAccountOwner));
+                    crmUCrt.add(PropertyCriterion.eq(crmUCrt.proto().onboardingUser(), cr.getPrimaryKey()));
+                    CrmUserCredential credential = Persistence.service().retrieve(crmUCrt);
+
+                    if (credential != null) {
+                        if (!PasswordEncryptor.checkPassword(request.currentPassword().getValue(), credential.credential().getValue())) {
+                            AbstractAntiBot.authenticationFailed(email);
+                            log.info("Invalid password for user {}", email);
+                            response.success().setValue(Boolean.FALSE);
+
+                            return response;
+                        }
+
+                        if (PasswordEncryptor.checkPassword(request.newPassword().getValue(), credential.credential().getValue())) {
+                            log.info("Invalid new password for user {}", email);
+                            response.errorMessage().setValue(i18n.tr("Your password cannot repeat your previous password"));
+                            response.success().setValue(Boolean.FALSE);
+
+                            return response;
+                        }
+
+                        credential.credential().setValue(PasswordEncryptor.encryptPassword(request.newPassword().getValue()));
+                        credential.requiredPasswordChangeOnNextLogIn().setValue(Boolean.FALSE);
+                        Persistence.service().persist(credential);
+                        Persistence.service().commit();
+
+                        validateAgainstOnboarding = false;
+                    }
+
+                } finally {
+                    NamespaceManager.setNamespace(curNameSpace);
+                }
+            }
         }
 
-        if (PasswordEncryptor.checkPassword(request.newPassword().getValue(), cr.credential().getValue())) {
-            log.info("Invalid new password for user {}", email);
-            response.errorMessage().setValue(i18n.tr("Your password cannot repeat your previous password"));
-            response.success().setValue(Boolean.FALSE);
+        if (validateAgainstOnboarding) {
+            if (!PasswordEncryptor.checkPassword(request.currentPassword().getValue(), cr.credential().getValue())) {
+                AbstractAntiBot.authenticationFailed(email);
+                log.info("Invalid password for user {}", email);
+                response.success().setValue(Boolean.FALSE);
+
+                return response;
+            }
+
+            if (PasswordEncryptor.checkPassword(request.newPassword().getValue(), cr.credential().getValue())) {
+                log.info("Invalid new password for user {}", email);
+                response.errorMessage().setValue(i18n.tr("Your password cannot repeat your previous password"));
+                response.success().setValue(Boolean.FALSE);
+
+                return response;
+            }
         }
 
         cr.accessKey().setValue(null);
