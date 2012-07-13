@@ -66,7 +66,7 @@ public abstract class CContainer<DATA_TYPE, WIDGET_TYPE extends Widget & INative
         setComponentsValue(value, fireEvent, populate);
     }
 
-    protected <T> void updateContainer(CComponent<T, ?> component, T value) {
+    protected <T> void updateContainer(CComponent<T, ?> component) {
 
     }
 

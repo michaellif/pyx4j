@@ -525,7 +525,7 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
         this.value = null;
         setNativeValue(null);
         if (getParent() != null) {
-            getParent().updateContainer(this, value);
+            getParent().updateContainer(this);
         }
         onReset();
         setVisited(false);
@@ -540,7 +540,7 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
                 setNativeValue(value);
             }
             if (getParent() != null) {
-                getParent().updateContainer(this, value);
+                getParent().updateContainer(this);
             }
             ValueChangeEvent.fire(this, value);
         }
@@ -552,7 +552,7 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
             setNativeValue(this.value);
             revalidate();
             if (getParent() != null) {
-                getParent().updateContainer(this, value);
+                getParent().updateContainer(this);
             }
             if (fireEvent) {
                 ValueChangeEvent.fire(this, this.value);
