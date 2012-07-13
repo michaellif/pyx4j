@@ -411,6 +411,9 @@ public abstract class CEntityForm<E extends IEntity> extends CEntityContainer<E>
                 if (value instanceof IEntity) {
                     // Process on the object level to avoid Polymorphic problems
                     ((IEntity) getValue().getMember(memberPath)).set((IEntity) value);
+                } else if (value instanceof IList) {
+                    // Process on the object level to avoid Polymorphic problems
+                    ((IList<?>) getValue().getMember(memberPath)).set((IList) value);
                 }
             }
         } else {
