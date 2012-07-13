@@ -24,7 +24,6 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.entity.client.CEntityForm;
 import com.pyx4j.entity.client.ui.CEntityComboBox;
 import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -32,11 +31,11 @@ import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
+import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
 import com.propertyvista.domain.policy.framework.PolicyDTOBase;
@@ -92,8 +91,8 @@ public abstract class PolicyDTOTabPanelBasedForm<POLICY_DTO extends PolicyDTOBas
         selectPolicyScopeBox = new CComboBox<NodeType>();
         selectPolicyScopeBox.setEditable(isEditable());
         selectPolicyScopeBox.inheritViewable(false);
-        selectPolicyScopeBox.setOptions(AVAILABLE_NODE_TYPES);
         selectPolicyScopeBox.setMandatory(true);
+        selectPolicyScopeBox.setOptions(AVAILABLE_NODE_TYPES);
         // add value change handler that resets the node when node type is changed
         selectPolicyScopeBox.addValueChangeHandler(new ValueChangeHandler<NodeType>() {
             @Override
@@ -198,7 +197,7 @@ public abstract class PolicyDTOTabPanelBasedForm<POLICY_DTO extends PolicyDTOBas
      * 
      * @author ArtyomB
      */
-    private static class PolicyNodeEditor extends CEntityForm<PolicyNode> {
+    private static class PolicyNodeEditor extends CEntityDecoratableForm<PolicyNode> {
 
         private Map<Class<? extends PolicyNode>, CComponent<?, ?>> nodeTypeToComponentMap;
 
@@ -248,8 +247,7 @@ public abstract class PolicyDTOTabPanelBasedForm<POLICY_DTO extends PolicyDTOBas
 
             int row = -1;
             for (CComponent<?, ?> nodeComponent : nodeTypeToComponentMap.values()) {
-                content.setWidget(++row, 0, new WidgetDecorator.Builder(nodeComponent).customLabel(i18n.tr("Applied to")).labelWidth(8).componentWidth(15)
-                        .build());
+                content.setWidget(++row, 0, new DecoratorBuilder(nodeComponent).customLabel(i18n.tr("Applied to")).labelWidth(8).componentWidth(15).build());
             }
 
             addPropertyChangeHandler(new PropertyChangeHandler() {

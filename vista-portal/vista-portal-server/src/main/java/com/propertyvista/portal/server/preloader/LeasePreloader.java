@@ -184,7 +184,7 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
 
     private LogicalDate getVacantFromDate(AptUnit unit) {
         AptUnitOccupancySegment segment = Persistence.service().retrieve(EntityQueryCriteria.create(AptUnitOccupancySegment.class));
-        if (segment == null || segment.status().getValue() != AptUnitOccupancySegment.Status.vacant) {
+        if (segment == null || segment.status().getValue() != AptUnitOccupancySegment.Status.pending) {
             throw new IllegalStateException("the unit must be vacant");
         } else {
             return new LogicalDate(segment.dateFrom().getValue());

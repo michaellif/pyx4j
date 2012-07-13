@@ -43,7 +43,7 @@ public interface OccupancyFacade {
     boolean isMigratedCancelAvailable(AptUnit unitStub);
 
     /**
-     * Applied to {@link Status#vacant}: convert's it to offMarket
+     * Applied to {@link Status#pending}: convert's it to offMarket
      * 
      * @param unit
      * @param type
@@ -54,7 +54,7 @@ public interface OccupancyFacade {
     boolean isScopeOffMarketAvailable(Key unitId);
 
     /**
-     * Applied to {@link Status#vacant}
+     * Applied to {@link Status#pending}
      * 
      * @param renovationEndDate
      */
@@ -66,7 +66,7 @@ public interface OccupancyFacade {
     LogicalDate isRenovationAvailable(Key unitId);
 
     /**
-     * Converts {@link Status#vacant} to {@link Status#available} from now to the future (the past part of the vacant segment stays vacant). At most one
+     * Converts {@link Status#pending} to {@link Status#available} from now to the future (the past part of the vacant segment stays vacant). At most one
      * vacant/availble segment can be present in the present to future timeline.
      */
     void scopeAvailable(Key unitId);
@@ -108,7 +108,7 @@ public interface OccupancyFacade {
     boolean isApproveLeaseAvaialble(Key unitId);
 
     /**
-     * Source: CRM/Lease form/Button or Portal (becomes {@link Status#vacant})).
+     * Source: CRM/Lease form/Button or Portal (becomes {@link Status#pending})).
      */
     void endLease(Key unitId);
 

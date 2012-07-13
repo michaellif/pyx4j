@@ -42,7 +42,7 @@ public class AptUnitOccupancyManagerHelperTest extends AptUnitOccupancyManagerTe
         AptUnitOccupancyManagerHelper.merge(getUnit(), OccupancyFacade.MIN_DATE, asList(Status.available), new MergeHandler() {
             @Override
             public void onMerged(AptUnitOccupancySegment merged, AptUnitOccupancySegment s1, AptUnitOccupancySegment s2) {
-                merged.status().setValue(Status.vacant);
+                merged.status().setValue(Status.pending);
             }
 
             @Override
@@ -51,22 +51,22 @@ public class AptUnitOccupancyManagerHelperTest extends AptUnitOccupancyManagerTe
             }
         });
 
-        expect().fromTheBeginning().toTheEndOfTime().status(Status.vacant).x();
+        expect().fromTheBeginning().toTheEndOfTime().status(Status.pending).x();
         assertExpectedTimeline();
     }
 
     public void testMergeTwoMerges() {
         setup().fromTheBeginning().to("2010-05-01").status(Status.available).x();
-        setup().from("2010-05-02").to("2010-12-31").status(Status.vacant).x();
-        setup().from("2011-01-01").to("2012-12-31").status(Status.vacant).x();
+        setup().from("2010-05-02").to("2010-12-31").status(Status.pending).x();
+        setup().from("2011-01-01").to("2012-12-31").status(Status.pending).x();
         setup().from("2013-01-01").to("2013-05-01").status(Status.available).x();
-        setup().from("2013-05-02").to("2013-12-31").status(Status.vacant).x();
-        setup().from("2014-01-01").to("2014-12-31").status(Status.vacant).x();
+        setup().from("2013-05-02").to("2013-12-31").status(Status.pending).x();
+        setup().from("2014-01-01").to("2014-12-31").status(Status.pending).x();
         setup().from("2015-01-01").toTheEndOfTime().status(Status.available).x();
 
         now("2011-10-01");
 
-        AptUnitOccupancyManagerHelper.merge(getUnit(), OccupancyFacade.MIN_DATE, asList(Status.vacant), new MergeHandler() {
+        AptUnitOccupancyManagerHelper.merge(getUnit(), OccupancyFacade.MIN_DATE, asList(Status.pending), new MergeHandler() {
             @Override
             public void onMerged(AptUnitOccupancySegment merged, AptUnitOccupancySegment s1, AptUnitOccupancySegment s2) {
                 merged.status().setValue(Status.offMarket);
@@ -89,16 +89,16 @@ public class AptUnitOccupancyManagerHelperTest extends AptUnitOccupancyManagerTe
 
     public void testMergeAll() {
         setup().fromTheBeginning().to("2010-05-01").status(Status.available).x();
-        setup().from("2010-05-02").to("2010-12-31").status(Status.vacant).x();
-        setup().from("2011-01-01").to("2012-12-31").status(Status.vacant).x();
+        setup().from("2010-05-02").to("2010-12-31").status(Status.pending).x();
+        setup().from("2011-01-01").to("2012-12-31").status(Status.pending).x();
         setup().from("2013-01-01").to("2013-05-01").status(Status.available).x();
-        setup().from("2013-05-02").to("2013-12-31").status(Status.vacant).x();
-        setup().from("2014-01-01").to("2014-12-31").status(Status.vacant).x();
+        setup().from("2013-05-02").to("2013-12-31").status(Status.pending).x();
+        setup().from("2014-01-01").to("2014-12-31").status(Status.pending).x();
         setup().from("2015-01-01").toTheEndOfTime().status(Status.available).x();
 
         now("2010-04-20");
 
-        AptUnitOccupancyManagerHelper.merge(getUnit(), OccupancyFacade.MIN_DATE, asList(Status.vacant, Status.available), new MergeHandler() {
+        AptUnitOccupancyManagerHelper.merge(getUnit(), OccupancyFacade.MIN_DATE, asList(Status.pending, Status.available), new MergeHandler() {
             @Override
             public void onMerged(AptUnitOccupancySegment merged, AptUnitOccupancySegment s1, AptUnitOccupancySegment s2) {
                 merged.status().setValue(Status.offMarket);

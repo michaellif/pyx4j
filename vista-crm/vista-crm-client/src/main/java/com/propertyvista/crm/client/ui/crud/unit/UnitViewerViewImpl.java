@@ -24,7 +24,7 @@ import com.pyx4j.site.client.ui.crud.lister.ListerInternalViewImplBase;
 import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
-import com.propertyvista.crm.client.ui.crud.unit.dialogs.MakeVacantDialog;
+import com.propertyvista.crm.client.ui.crud.unit.dialogs.MakePendingDialog;
 import com.propertyvista.crm.client.ui.crud.unit.dialogs.ScopeDialog;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.property.asset.unit.AptUnitItem;
@@ -42,7 +42,7 @@ public class UnitViewerViewImpl extends CrmViewerViewImplBase<AptUnitDTO> implem
 
     private Button scopeAction;
 
-    private Button makeVacantAction;
+    private Button makePendingAction;
 
     private boolean canScopeOffMarket;
 
@@ -50,9 +50,9 @@ public class UnitViewerViewImpl extends CrmViewerViewImplBase<AptUnitDTO> implem
 
     private LogicalDate minRenovationEndDate;
 
-    private LogicalDate minMakeVacantStartDay;
+    private LogicalDate minMakePendingStartDay;
 
-    private LogicalDate maxMakeVacantStartDay;
+    private LogicalDate maxMakePendingStartDay;
 
     public enum DebugIds implements IDebugId {
 
@@ -91,16 +91,16 @@ public class UnitViewerViewImpl extends CrmViewerViewImplBase<AptUnitDTO> implem
         scopeAction.ensureDebugId(DebugIds.unitViewerViewScopeAction.debugId());
         addHeaderToolbarTwoItem(scopeAction);
 
-        makeVacantAction = new Button(i18n.tr("Make Vacant..."), new ClickHandler() {
+        makePendingAction = new Button(i18n.tr("Make Pending..."), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                new MakeVacantDialog((com.propertyvista.crm.client.ui.crud.unit.UnitViewerView.Presenter) getPresenter(), minMakeVacantStartDay,
-                        maxMakeVacantStartDay) {
+                new MakePendingDialog((com.propertyvista.crm.client.ui.crud.unit.UnitViewerView.Presenter) getPresenter(), minMakePendingStartDay,
+                        maxMakePendingStartDay) {
                 }.show();
             }
         });
-        makeVacantAction.ensureDebugId(DebugIds.unitViewerViewMakeVacantAction.debugId());
-        addHeaderToolbarTwoItem(makeVacantAction);
+        makePendingAction.ensureDebugId(DebugIds.unitViewerViewMakeVacantAction.debugId());
+        addHeaderToolbarTwoItem(makePendingAction);
     }
 
     @Override
@@ -130,10 +130,10 @@ public class UnitViewerViewImpl extends CrmViewerViewImplBase<AptUnitDTO> implem
 
     @Override
     public void setMakeVacantConstraints(MakeVacantConstraintsDTO constraints) {
-        makeVacantAction.setVisible(constraints != null);
+        makePendingAction.setVisible(constraints != null);
         if (constraints != null) {
-            this.minMakeVacantStartDay = constraints.minVacantFrom().getValue();
-            this.maxMakeVacantStartDay = constraints.maxVacantFrom().getValue();
+            this.minMakePendingStartDay = constraints.minVacantFrom().getValue();
+            this.maxMakePendingStartDay = constraints.maxVacantFrom().getValue();
         }
     }
 }

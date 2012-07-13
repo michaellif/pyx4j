@@ -26,7 +26,7 @@ public class AptUnitOccupancyManagerOperationConstraintsTest extends AptUnitOccu
     @Test
     public void testIsScopeOffMarketAvailableWhenAvaialble() {
         setup().from("2010-01-01").to("2010-05-01").status(Status.offMarket).withOffMarketType(OffMarketType.down).x();
-        setup().from("2010-05-02").toTheEndOfTime().status(Status.vacant).x();
+        setup().from("2010-05-02").toTheEndOfTime().status(Status.pending).x();
 
         now("2010-04-30");
         Assert.assertTrue(getUOM().isScopeOffMarketAvailable(unitId));
@@ -50,7 +50,7 @@ public class AptUnitOccupancyManagerOperationConstraintsTest extends AptUnitOccu
     @Test
     public void testIsRenovationAvailableWhenAvailable() {
         setup().from("2010-01-01").to("2010-05-01").status(Status.offMarket).withOffMarketType(OffMarketType.down).x();
-        setup().from("2010-05-02").toTheEndOfTime().status(Status.vacant).x();
+        setup().from("2010-05-02").toTheEndOfTime().status(Status.pending).x();
 
         now("2010-04-30");
         Assert.assertEquals(asDate("2010-05-02"), getUOM().isRenovationAvailable(unitId));
@@ -74,7 +74,7 @@ public class AptUnitOccupancyManagerOperationConstraintsTest extends AptUnitOccu
     @Test
     public void testIsScopeAvailableAvailableWhenAvaialble() {
         setup().from("2010-01-01").to("2010-05-01").status(Status.offMarket).withOffMarketType(OffMarketType.down).x();
-        setup().from("2010-05-02").toTheEndOfTime().status(Status.vacant).x();
+        setup().from("2010-05-02").toTheEndOfTime().status(Status.pending).x();
 
         now("2010-04-30");
         Assert.assertTrue(getUOM().isScopeAvailableAvailable(unitId));
@@ -156,7 +156,7 @@ public class AptUnitOccupancyManagerOperationConstraintsTest extends AptUnitOccu
         Lease lease = createLease("2010-01-01", "2010-01-02");
         setup().from("2010-01-01").to("2010-01-02").status(Status.leased).withLease(lease).x();
         setup().from("2010-01-03").to("2010-02-05").status(Status.offMarket).withOffMarketType(OffMarketType.down).x();
-        setup().from("2010-02-06").toTheEndOfTime().status(Status.vacant).x();
+        setup().from("2010-02-06").toTheEndOfTime().status(Status.pending).x();
 
         now("2010-01-01");
         MakeVacantConstraintsDTO constraints = getUOM().getMakeVacantConstraints(unitId);
@@ -258,7 +258,7 @@ public class AptUnitOccupancyManagerOperationConstraintsTest extends AptUnitOccu
     @Test
     public void testIsReserveAvailableWhenNotAvailable() {
         setup().from("2010-01-01").to("2010-01-10").status(Status.offMarket).withOffMarketType(OffMarketType.down).x();
-        setup().from("2010-01-11").toTheEndOfTime().status(Status.vacant).x();
+        setup().from("2010-01-11").toTheEndOfTime().status(Status.pending).x();
 
         now("2010-01-01");
         Assert.assertNull(getUOM().isReserveAvailable(unitId));

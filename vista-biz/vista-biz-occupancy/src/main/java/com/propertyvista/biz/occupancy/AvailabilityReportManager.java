@@ -94,7 +94,7 @@ public class AvailabilityReportManager {
             status.statusDate().setValue(current.dateFrom().getValue());
 
             switch (current.status().getValue()) {
-            case vacant:
+            case pending:
                 vacant(status, current.dateFrom().getValue());
                 break;
             case available:
@@ -190,7 +190,7 @@ public class AvailabilityReportManager {
 
         while (segment != null) {
             switch (segment.status().getValue()) {
-            case vacant:
+            case pending:
                 status.scoping().setValue(Scoping.Unscoped);
                 // implicit status.rentReadinessStatus().setValue(null);
                 break;

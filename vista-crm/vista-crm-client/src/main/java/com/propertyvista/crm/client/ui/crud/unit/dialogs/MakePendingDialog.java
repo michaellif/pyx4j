@@ -31,28 +31,28 @@ import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.crm.client.ui.crud.unit.UnitViewerView;
 import com.propertyvista.crm.client.ui.crud.unit.UnitViewerView.Presenter;
 
-public class MakeVacantDialog extends OkCancelDialog {
+public class MakePendingDialog extends OkCancelDialog {
 
-    private final static I18n i18n = I18n.get(MakeVacantDialog.class);
+    private final static I18n i18n = I18n.get(MakePendingDialog.class);
 
     private CDatePicker startDate;
 
     private final Presenter presenter;
 
-    private CEntityDecoratableForm<MakeVacantDTO> form;
+    private CEntityDecoratableForm<MakePendingDTO> form;
 
-    public MakeVacantDialog(UnitViewerView.Presenter presenter, final LogicalDate minMakeVacantStartDay, final LogicalDate maxMakeVacantStartDay) {
-        super(i18n.tr("Make Vacant..."));
+    public MakePendingDialog(UnitViewerView.Presenter presenter, final LogicalDate minMakeVacantStartDay, final LogicalDate maxMakeVacantStartDay) {
+        super(i18n.tr("Make Pending..."));
         this.presenter = presenter;
-        this.form = new CEntityDecoratableForm<MakeVacantDTO>(MakeVacantDTO.class) {
+        this.form = new CEntityDecoratableForm<MakePendingDTO>(MakePendingDTO.class) {
 
             @Override
             public IsWidget createContent() {
                 FormFlexPanel content = new FormFlexPanel();
-                content.setWidget(0, 0, new DecoratorBuilder(inject(proto().vacantStartDay()), 9).build());
+                content.setWidget(0, 0, new DecoratorBuilder(inject(proto().pendingStartDay()), 9).build());
 
                 if (minMakeVacantStartDay.equals(maxMakeVacantStartDay)) {
-                    get(proto().vacantStartDay()).setViewable(true);
+                    get(proto().pendingStartDay()).setViewable(true);
                 } else {
                     EditableValueValidator<Date> validator = null;
                     if (maxMakeVacantStartDay == null) {
@@ -79,15 +79,15 @@ public class MakeVacantDialog extends OkCancelDialog {
                             }
                         };
                     }
-                    get(proto().vacantStartDay()).addValueValidator(validator);
+                    get(proto().pendingStartDay()).addValueValidator(validator);
                 }
 
                 return content;
             }
         };
         form.initContent();
-        MakeVacantDTO defaultValue = EntityFactory.create(MakeVacantDTO.class);
-        defaultValue.vacantStartDay().setValue(minMakeVacantStartDay);
+        MakePendingDTO defaultValue = EntityFactory.create(MakePendingDTO.class);
+        defaultValue.pendingStartDay().setValue(minMakeVacantStartDay);
         form.populate(defaultValue);
 
         setBody(form);
@@ -100,7 +100,7 @@ public class MakeVacantDialog extends OkCancelDialog {
     @Override
     public boolean onClickOk() {
         if (form.isValid()) {
-            presenter.makeVacant(form.getValue().vacantStartDay().getValue());
+            presenter.makeVacant(form.getValue().pendingStartDay().getValue());
             return true;
         } else {
             return false;

@@ -36,7 +36,7 @@ public class AvailabilityReportManagerTest extends AvailabilityReportManagerTest
 
     @Test
     public void testVacant() {
-        setup().fromTheBeginning().toTheEndOfTime().status(Status.vacant).x();
+        setup().fromTheBeginning().toTheEndOfTime().status(Status.pending).x();
 
         computeAvailabilityOn("2012-02-17");
 
@@ -84,7 +84,7 @@ public class AvailabilityReportManagerTest extends AvailabilityReportManagerTest
         Lease lease = createLease("2012-02-20", "2012-02-21", "2013-03-01");
         setup().fromTheBeginning().to("2012-02-17").status(Status.available).x();
         setup().from("2012-02-20").to("2013-03-01").status(Status.leased).withLease(lease).x();
-        setup().from("2013-03-02").toTheEndOfTime().status(Status.vacant).x();
+        setup().from("2013-03-02").toTheEndOfTime().status(Status.pending).x();
 
         computeAvailabilityOn("2013-02-01");
 
@@ -171,7 +171,7 @@ public class AvailabilityReportManagerTest extends AvailabilityReportManagerTest
     @Test
     public void testMakeVacant() {
         setup().from("2013-03-02").to("2013-03-15").status(Status.offMarket).withOffMarketType(OffMarketType.down).x();
-        setup().from("2013-03-16").toTheEndOfTime().status(Status.vacant).x();
+        setup().from("2013-03-16").toTheEndOfTime().status(Status.pending).x();
 
         computeAvailabilityOn("2013-03-14");
 

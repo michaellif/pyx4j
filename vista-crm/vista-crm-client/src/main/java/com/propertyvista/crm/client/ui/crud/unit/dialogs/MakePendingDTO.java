@@ -20,8 +20,8 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 @Transient
-public interface MakeVacantDTO extends IEntity {
+public interface MakePendingDTO extends IEntity {
 
-    @Caption(name = "Vacant Since")
-    IPrimitive<LogicalDate> vacantStartDay();
+    @Caption(name = "Pending Since")
+    IPrimitive<LogicalDate> pendingStartDay();
 }
