@@ -223,6 +223,16 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().creationDate()), 9).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().approvalDate()), 9).build());
 
+// TODO link to application:        
+//        main.setBR(++row, 0, 1);
+//        if (!isEditable()) {
+//            main.setWidget(
+//                    ++row,
+//                    0,
+//                    new DecoratorBuilder(inject(proto().leaseApplication(),
+//                            new CEntityCrudHyperlink<Building>(AppPlaceEntityMapper.resolvePlace(LeaseApplication.class))), 20).build());
+//        }
+
         get(proto().creationDate()).setViewable(true);
         get(proto().approvalDate()).setViewable(true);
 
