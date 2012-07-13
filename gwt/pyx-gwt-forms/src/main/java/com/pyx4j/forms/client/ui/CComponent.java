@@ -536,6 +536,7 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
         if (!isValuesEquals(getValue(), value)) {
             this.value = value;
             revalidate();
+            //Overwrite native value with the value that has been formatted by getNativeValue()
             if (isValid()) {
                 setNativeValue(value);
             }
