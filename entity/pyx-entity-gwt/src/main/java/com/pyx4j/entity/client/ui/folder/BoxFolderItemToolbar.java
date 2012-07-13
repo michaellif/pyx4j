@@ -53,8 +53,6 @@ public class BoxFolderItemToolbar extends HorizontalPanel {
 
     private final Image warnImage;
 
-    private String warnMessage;
-
     private final Image titleIcon;
 
     public BoxFolderItemToolbar(final BoxFolderItemDecorator<?> decorator) {
@@ -128,9 +126,6 @@ public class BoxFolderItemToolbar extends HorizontalPanel {
 
     private void setExpended(boolean expended) {
         decorator.setExpended(expended);
-
-        showWarning();
-
     }
 
     protected void update(boolean expanded) {
@@ -163,19 +158,13 @@ public class BoxFolderItemToolbar extends HorizontalPanel {
     }
 
     public void setWarningMessage(String message) {
-        warnMessage = message;
-        showWarning();
-    }
-
-    private void showWarning() {
-        if (warnMessage != null) {
-            warnImage.setTitle(warnMessage);
-            if (!decorator.isExpended()) {
-                warnImage.setVisible(true);
-            }
+        if (message != null) {
+            warnImage.setTitle(message);
+            warnImage.setVisible(true);
         } else {
             warnImage.setTitle(null);
             warnImage.setVisible(false);
         }
     }
+
 }

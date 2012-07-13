@@ -23,6 +23,8 @@ package com.pyx4j.entity.client.ui.folder;
 import static com.pyx4j.entity.client.ui.folder.DefaultEntityFolderTheme.StyleName.EntityFolderBoxItem;
 import static com.pyx4j.entity.client.ui.folder.DefaultEntityFolderTheme.StyleName.EntityFolderBoxItemDecorator;
 
+import java.util.ArrayList;
+
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
@@ -40,6 +42,9 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
+import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.validators.ValidationError;
+import com.pyx4j.forms.client.validators.ValidationResults;
 import com.pyx4j.gwt.commons.BrowserType;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -100,14 +105,25 @@ public class BoxFolderItemDecorator<E extends IEntity> extends BaseFolderItemDec
         folderItem.addPropertyChangeHandler(new PropertyChangeHandler() {
             @Override
             public void onPropertyChange(PropertyChangeEvent event) {
-                if (event.getPropertyName() == PropertyName.repopulated) {
+                if (event.isEventOfType(PropertyName.repopulated)) {
                     toolbar.update(expended);
-                } else if (event.getPropertyName() == PropertyName.valid) {
-                    if (folderItem.isValid()) {
-                        toolbar.setWarningMessage(null);
+                }
+                if (event.isEventOfType(PropertyName.valid, PropertyName.repopulated, PropertyName.showErrorsUnconditional)) {
+                    String message = null;
+                    if (folderItem.isUnconditionalValidationErrorRendering()) {
+                        message = getMessagesText(folderItem.getValidationResults());
                     } else {
-                        toolbar.setWarningMessage(i18n.tr("Some fields are not valid or mandatory but not set."));
+                        ArrayList<ValidationError> errors = folderItem.getValidationResults().getValidationErrors();
+                        ValidationResults results = new ValidationResults();
+                        for (ValidationError validationError : errors) {
+                            CComponent<?, ?> originator = validationError.getOriginator();
+                            if ((originator.isUnconditionalValidationErrorRendering() || originator.isVisited()) && !originator.isValid()) {
+                                results.appendValidationError(validationError);
+                            }
+                        }
+                        message = getMessagesText(results);
                     }
+                    toolbar.setWarningMessage(message.isEmpty() ? null : message);
                 }
             }
         });
@@ -117,6 +133,21 @@ public class BoxFolderItemDecorator<E extends IEntity> extends BaseFolderItemDec
                 toolbar.update(expended);
             }
         });
+    }
+
+    public static String getMessagesText(ValidationResults validationResults) {
+        StringBuilder messagesBuffer = new StringBuilder();
+        ArrayList<ValidationError> validationErrors = validationResults.getValidationErrors();
+
+        if (validationErrors.size() > 1) {
+            messagesBuffer.append(i18n.tr("error 1 of {0}", (validationErrors.size()))).append(" - ");
+        }
+
+        if (validationErrors.size() > 0) {
+            messagesBuffer.append(validationErrors.get(0).getMessageString(false));
+        }
+
+        return messagesBuffer.toString();
     }
 
     public void setExpended(boolean expended) {
