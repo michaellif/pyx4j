@@ -29,7 +29,7 @@ import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.security.shared.SecurityViolationException;
 
 import com.propertyvista.biz.policy.PolicyFacade;
-import com.propertyvista.domain.policy.policies.MiscPolicy;
+import com.propertyvista.domain.policy.policies.RestrictionsPolicy;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
@@ -137,14 +137,14 @@ public class TenantServiceImpl extends ApplicationEntityServiceImpl implements T
             tenants.tenants().add(new TenantConverter.TenantEditorConverter().createDTO(tenantInLease));
         }
 
-        MiscPolicy miscPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(lease.unit(), MiscPolicy.class);
-        if (miscPolicy == null) {
-            throw new Error("There is no MiscPolicy for the Unit!?.");
+        RestrictionsPolicy restrictionsPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(lease.unit(), RestrictionsPolicy.class);
+        if (restrictionsPolicy == null) {
+            throw new Error("There is no RestrictionsPolicy for the Unit!?.");
         }
 
         // calculate allowed number of occupants:
         Persistence.service().retrieve(lease.unit());
-        tenants.tenantsMaximum().setValue((int) (lease.unit().info()._bedrooms().getValue() * miscPolicy.occupantsPerBedRoom().getValue()));
+        tenants.tenantsMaximum().setValue((int) (lease.unit().info()._bedrooms().getValue() * restrictionsPolicy.occupantsPerBedRoom().getValue()));
 
         return tenants;
     }

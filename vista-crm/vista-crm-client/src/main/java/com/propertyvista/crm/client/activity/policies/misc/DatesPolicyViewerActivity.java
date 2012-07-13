@@ -14,26 +14,23 @@
 package com.propertyvista.crm.client.activity.policies.misc;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.place.shared.Place;
 
-import com.pyx4j.entity.rpc.AbstractListService;
-import com.pyx4j.site.client.activity.crud.ListerActivityBase;
+import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.site.rpc.CrudAppPlace;
 
-import com.propertyvista.crm.client.ui.crud.policies.misc.MiscPolicyListerView;
+import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
+import com.propertyvista.crm.client.ui.crud.policies.misc.DatesPolicyViewerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.PolicyViewFactory;
-import com.propertyvista.crm.rpc.services.policies.policy.MiscPolicyCrudService;
-import com.propertyvista.domain.policy.dto.MiscPolicyDTO;
+import com.propertyvista.crm.rpc.services.policies.policy.DatesPolicyCrudService;
+import com.propertyvista.domain.policy.dto.DatesPolicyDTO;
 
-public class MiscPolicyListerActivity extends ListerActivityBase<MiscPolicyDTO> {
+public class DatesPolicyViewerActivity extends CrmViewerActivity<DatesPolicyDTO> {
 
-    public MiscPolicyListerActivity(Place place) {
+    public DatesPolicyViewerActivity(CrudAppPlace place) {
         super(place,
 
-        PolicyViewFactory.instance(MiscPolicyListerView.class),
+        PolicyViewFactory.instance(DatesPolicyViewerView.class),
 
-        GWT.<AbstractListService<MiscPolicyDTO>> create(MiscPolicyCrudService.class),
-
-        MiscPolicyDTO.class);
+        GWT.<AbstractCrudService<DatesPolicyDTO>> create(DatesPolicyCrudService.class));
     }
-
 }

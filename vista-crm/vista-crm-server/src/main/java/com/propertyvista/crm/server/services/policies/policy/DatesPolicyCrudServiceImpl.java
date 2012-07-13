@@ -13,15 +13,15 @@
  */
 package com.propertyvista.crm.server.services.policies.policy;
 
-import com.propertyvista.crm.rpc.services.policies.policy.MiscPolicyCrudService;
+import com.propertyvista.crm.rpc.services.policies.policy.DatesPolicyCrudService;
 import com.propertyvista.crm.server.services.policies.GenericPolicyCrudService;
-import com.propertyvista.domain.policy.dto.MiscPolicyDTO;
-import com.propertyvista.domain.policy.policies.MiscPolicy;
+import com.propertyvista.domain.policy.dto.DatesPolicyDTO;
+import com.propertyvista.domain.policy.policies.DatesPolicy;
 
-public class MiscPolicyCrudServiceImpl extends GenericPolicyCrudService<MiscPolicy, MiscPolicyDTO> implements MiscPolicyCrudService {
+public class DatesPolicyCrudServiceImpl extends GenericPolicyCrudService<DatesPolicy, DatesPolicyDTO> implements DatesPolicyCrudService {
 
-    public MiscPolicyCrudServiceImpl() {
-        super(MiscPolicy.class, MiscPolicyDTO.class);
+    public DatesPolicyCrudServiceImpl() {
+        super(DatesPolicy.class, DatesPolicyDTO.class);
     }
 
 }

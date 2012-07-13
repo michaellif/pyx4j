@@ -30,7 +30,7 @@ import com.propertyvista.common.client.policy.ClientPolicyManager;
 import com.propertyvista.common.client.ui.components.MediaUtils;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.domain.financial.offering.Feature;
-import com.propertyvista.domain.policy.policies.MiscPolicy;
+import com.propertyvista.domain.policy.policies.RestrictionsPolicy;
 import com.propertyvista.domain.security.VistaCustomerBehavior;
 import com.propertyvista.portal.ptapp.client.PtAppSite;
 import com.propertyvista.portal.ptapp.client.resources.PortalResources;
@@ -174,9 +174,9 @@ public class ApartmentViewForm extends CEntityDecoratableForm<ApartmentInfoDTO> 
         // petFolder.setMaxCount(getValue().maxPets().getValue());
         //parkingFolder.setMaxCount(getValue().maxParkingSpots().getValue());
 
-        ClientPolicyManager.obtainEffectivePolicy(getValue().unit(), MiscPolicy.class, new DefaultAsyncCallback<MiscPolicy>() {
+        ClientPolicyManager.obtainEffectivePolicy(getValue().unit(), RestrictionsPolicy.class, new DefaultAsyncCallback<RestrictionsPolicy>() {
             @Override
-            public void onSuccess(MiscPolicy result) {
+            public void onSuccess(RestrictionsPolicy result) {
                 petFolder.setMaxCount(result.maxPets().getValue());
                 parkingFolder.setMaxCount(result.maxParkingSpots().getValue());
                 lockerFolder.setMaxCount(result.maxParkingSpots().getValue());

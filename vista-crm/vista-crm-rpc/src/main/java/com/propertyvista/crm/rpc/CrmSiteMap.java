@@ -363,9 +363,15 @@ public class CrmSiteMap implements SiteMap {
         @NavigationItem(navigLabel = "Policies")
         public static class Policies extends AppPlace {
 
-            @PlaceProperties(caption = "Misc")
-            @NavigationItem(navigLabel = "Misc")
-            public static class Misc extends CrmCrudAppPlace {
+            @PlaceProperties(caption = "Dates")
+            @NavigationItem(navigLabel = "Dates")
+            public static class Dates extends CrmCrudAppPlace {
+
+            }
+
+            @PlaceProperties(caption = "Restrictions")
+            @NavigationItem(navigLabel = "Restrictions")
+            public static class Restrictions extends CrmCrudAppPlace {
 
             }
 

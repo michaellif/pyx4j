@@ -25,24 +25,9 @@ import com.propertyvista.domain.policy.framework.LowestApplicableNode;
 import com.propertyvista.domain.policy.framework.Policy;
 import com.propertyvista.domain.property.asset.building.Building;
 
-@DiscriminatorValue("MiscPolicy")
+@DiscriminatorValue("DatesPolicy")
 @LowestApplicableNode(value = Building.class)
-public interface MiscPolicy extends Policy, TenantsAccessiblePolicy {
-
-    @Caption(name = "Occupants over 18 are Applicants", description = "Some landlords force all occupants over 18 to be on LEASE and therefore anyone OVER 18 MUST be Applicant/Co-Applicant and cannot be Dependent")
-    IPrimitive<Boolean> occupantsOver18areApplicants();
-
-    @Caption(name = "Occupants per Bedroom", description = "Number of Occupants (N) per Bedroom in formula: Bedrooms x N = OccupantsPerUnit")
-    IPrimitive<Double> occupantsPerBedRoom();
-
-    @Caption(description = "Maximum allowed parking spots")
-    IPrimitive<Integer> maxParkingSpots();
-
-    @Caption(description = "Maximum allowed lockers")
-    IPrimitive<Integer> maxLockers();
-
-    @Caption(description = "Maximum allowed pets quantity")
-    IPrimitive<Integer> maxPets();
+public interface DatesPolicy extends Policy, TenantsAccessiblePolicy {
 
     @Format("yyyy")
     @Editor(type = EditorType.yearpicker)

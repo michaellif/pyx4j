@@ -18,22 +18,22 @@ import com.google.gwt.core.client.GWT;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.activity.policies.common.PolicyEditorActivityBase;
-import com.propertyvista.crm.client.ui.crud.policies.misc.MiscPolicyEditorView;
+import com.propertyvista.crm.client.ui.crud.policies.misc.DatesPolicyEditorView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.PolicyViewFactory;
 import com.propertyvista.crm.rpc.services.policies.policy.AbstractPolicyCrudService;
-import com.propertyvista.crm.rpc.services.policies.policy.MiscPolicyCrudService;
-import com.propertyvista.domain.policy.dto.MiscPolicyDTO;
+import com.propertyvista.crm.rpc.services.policies.policy.DatesPolicyCrudService;
+import com.propertyvista.domain.policy.dto.DatesPolicyDTO;
 
-public class MiscPolicyEditorActivity extends PolicyEditorActivityBase<MiscPolicyDTO> {
+public class DatesPolicyEditorActivity extends PolicyEditorActivityBase<DatesPolicyDTO> {
 
-    public MiscPolicyEditorActivity(CrudAppPlace place) {
+    public DatesPolicyEditorActivity(CrudAppPlace place) {
         super(place,
 
-        PolicyViewFactory.instance(MiscPolicyEditorView.class),
+        PolicyViewFactory.instance(DatesPolicyEditorView.class),
 
-        GWT.<AbstractPolicyCrudService<MiscPolicyDTO>> create(MiscPolicyCrudService.class),
+        GWT.<AbstractPolicyCrudService<DatesPolicyDTO>> create(DatesPolicyCrudService.class),
 
-        MiscPolicyDTO.class);
+        DatesPolicyDTO.class);
     }
 
 }

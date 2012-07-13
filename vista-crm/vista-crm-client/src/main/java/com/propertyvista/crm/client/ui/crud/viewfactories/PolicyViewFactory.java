@@ -66,12 +66,12 @@ import com.propertyvista.crm.client.ui.crud.policies.leaseterms.LeaseTermsPolicy
 import com.propertyvista.crm.client.ui.crud.policies.leaseterms.LeaseTermsPolicyEditorViewImpl;
 import com.propertyvista.crm.client.ui.crud.policies.leaseterms.LeaseTermsPolicyListerView;
 import com.propertyvista.crm.client.ui.crud.policies.leaseterms.LeaseTermsPolicyListerViewImpl;
-import com.propertyvista.crm.client.ui.crud.policies.misc.MiscPolicyEditorView;
-import com.propertyvista.crm.client.ui.crud.policies.misc.MiscPolicyEditorViewImpl;
-import com.propertyvista.crm.client.ui.crud.policies.misc.MiscPolicyListerView;
-import com.propertyvista.crm.client.ui.crud.policies.misc.MiscPolicyListerViewImpl;
-import com.propertyvista.crm.client.ui.crud.policies.misc.MiscPolicyViewerView;
-import com.propertyvista.crm.client.ui.crud.policies.misc.MiscPolicyViewerViewImpl;
+import com.propertyvista.crm.client.ui.crud.policies.misc.DatesPolicyEditorView;
+import com.propertyvista.crm.client.ui.crud.policies.misc.DatesPolicyEditorViewImpl;
+import com.propertyvista.crm.client.ui.crud.policies.misc.DatesPolicyListerView;
+import com.propertyvista.crm.client.ui.crud.policies.misc.DatesPolicyListerViewImpl;
+import com.propertyvista.crm.client.ui.crud.policies.misc.DatesPolicyViewerView;
+import com.propertyvista.crm.client.ui.crud.policies.misc.DatesPolicyViewerViewImpl;
 import com.propertyvista.crm.client.ui.crud.policies.pet.PetPolicyEditorView;
 import com.propertyvista.crm.client.ui.crud.policies.pet.PetPolicyEditorViewImpl;
 import com.propertyvista.crm.client.ui.crud.policies.pet.PetPolicyListerView;
@@ -84,6 +84,12 @@ import com.propertyvista.crm.client.ui.crud.policies.producttaxes.ProductTaxPoli
 import com.propertyvista.crm.client.ui.crud.policies.producttaxes.ProductTaxPolicyListerViewImpl;
 import com.propertyvista.crm.client.ui.crud.policies.producttaxes.ProductTaxPolicyViewerView;
 import com.propertyvista.crm.client.ui.crud.policies.producttaxes.ProductTaxPolicyViewerViewImpl;
+import com.propertyvista.crm.client.ui.crud.policies.restrictions.RestrictionsPolicyEditorView;
+import com.propertyvista.crm.client.ui.crud.policies.restrictions.RestrictionsPolicyEditorViewImpl;
+import com.propertyvista.crm.client.ui.crud.policies.restrictions.RestrictionsPolicyListerView;
+import com.propertyvista.crm.client.ui.crud.policies.restrictions.RestrictionsPolicyListerViewImpl;
+import com.propertyvista.crm.client.ui.crud.policies.restrictions.RestrictionsPolicyViewerView;
+import com.propertyvista.crm.client.ui.crud.policies.restrictions.RestrictionsPolicyViewerViewImpl;
 
 public class PolicyViewFactory extends ViewFactoryBase {
     public static <E extends IEntity, T extends IView<E>> T instance(Class<T> type) {
@@ -112,12 +118,19 @@ public class PolicyViewFactory extends ViewFactoryBase {
             } else if (EmailTemplatesPolicyEditorView.class.equals(type)) {
                 map.put(EmailTemplatesPolicyEditorView.class, new EmailTemplatesPolicyEditorViewImpl());
 
-            } else if (MiscPolicyListerView.class.equals(type)) {
-                map.put(MiscPolicyListerView.class, new MiscPolicyListerViewImpl());
-            } else if (MiscPolicyEditorView.class.equals(type)) {
-                map.put(MiscPolicyEditorView.class, new MiscPolicyEditorViewImpl());
-            } else if (MiscPolicyViewerView.class.equals(type)) {
-                map.put(MiscPolicyViewerView.class, new MiscPolicyViewerViewImpl());
+            } else if (DatesPolicyListerView.class.equals(type)) {
+                map.put(DatesPolicyListerView.class, new DatesPolicyListerViewImpl());
+            } else if (DatesPolicyEditorView.class.equals(type)) {
+                map.put(DatesPolicyEditorView.class, new DatesPolicyEditorViewImpl());
+            } else if (DatesPolicyViewerView.class.equals(type)) {
+                map.put(DatesPolicyViewerView.class, new DatesPolicyViewerViewImpl());
+
+            } else if (RestrictionsPolicyListerView.class.equals(type)) {
+                map.put(RestrictionsPolicyListerView.class, new RestrictionsPolicyListerViewImpl());
+            } else if (RestrictionsPolicyViewerView.class.equals(type)) {
+                map.put(RestrictionsPolicyViewerView.class, new RestrictionsPolicyViewerViewImpl());
+            } else if (RestrictionsPolicyEditorView.class.equals(type)) {
+                map.put(RestrictionsPolicyEditorView.class, new RestrictionsPolicyEditorViewImpl());
 
             } else if (ProductTaxPolicyListerView.class.equals(type)) {
                 map.put(ProductTaxPolicyListerView.class, new ProductTaxPolicyListerViewImpl());

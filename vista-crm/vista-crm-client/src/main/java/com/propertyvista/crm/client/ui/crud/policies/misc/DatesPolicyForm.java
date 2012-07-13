@@ -25,18 +25,18 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedForm;
-import com.propertyvista.domain.policy.dto.MiscPolicyDTO;
+import com.propertyvista.domain.policy.dto.DatesPolicyDTO;
 
-public class MiscPolicyForm extends PolicyDTOTabPanelBasedForm<MiscPolicyDTO> {
+public class DatesPolicyForm extends PolicyDTOTabPanelBasedForm<DatesPolicyDTO> {
 
-    private static final I18n i18n = I18n.get(MiscPolicyForm.class);
+    private static final I18n i18n = I18n.get(DatesPolicyForm.class);
 
-    public MiscPolicyForm() {
+    public DatesPolicyForm() {
         this(false);
     }
 
-    public MiscPolicyForm(boolean viewMode) {
-        super(MiscPolicyDTO.class, viewMode);
+    public DatesPolicyForm(boolean viewMode) {
+        super(DatesPolicyDTO.class, viewMode);
     }
 
     @Override
@@ -47,16 +47,6 @@ public class MiscPolicyForm extends PolicyDTOTabPanelBasedForm<MiscPolicyDTO> {
     private FormFlexPanel createMiscPoliciesTab() {
         FormFlexPanel content = new FormFlexPanel(i18n.tr("Misc Settings"));
         int row = -1;
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().maxParkingSpots())).labelWidth(20).componentWidth(3).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().maxLockers())).labelWidth(20).componentWidth(3).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().maxPets())).labelWidth(20).componentWidth(3).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().occupantsPerBedRoom())).labelWidth(20).componentWidth(3).build());
-
-        content.setBR(++row, 0, 1);
-
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().occupantsOver18areApplicants())).labelWidth(20).componentWidth(2).build());
-
-        content.setBR(++row, 0, 1);
 
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().yearRangeStart())).labelWidth(20).componentWidth(5).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().yearRangeFutureSpan())).labelWidth(20).componentWidth(3).build());

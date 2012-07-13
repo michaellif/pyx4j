@@ -11,12 +11,10 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.policies.misc;
+package com.propertyvista.crm.rpc.services.policies.policy;
 
-import com.pyx4j.site.client.ui.crud.form.IEditorView;
+import com.propertyvista.domain.policy.dto.DatesPolicyDTO;
 
-import com.propertyvista.domain.policy.dto.MiscPolicyDTO;
-
-public interface MiscPolicyEditorView extends IEditorView<MiscPolicyDTO> {
+public interface DatesPolicyCrudService extends AbstractPolicyCrudService<DatesPolicyDTO> {
 
 }

@@ -174,15 +174,18 @@ import com.propertyvista.crm.client.activity.policies.leasebilling.LeaseBillingP
 import com.propertyvista.crm.client.activity.policies.leaseterms.LeaseTermsPolicyEditorActivity;
 import com.propertyvista.crm.client.activity.policies.leaseterms.LeaseTermsPolicyListerActivicty;
 import com.propertyvista.crm.client.activity.policies.leaseterms.LeaseTermsPolicyViewerActivity;
-import com.propertyvista.crm.client.activity.policies.misc.MiscPolicyEditorActivity;
-import com.propertyvista.crm.client.activity.policies.misc.MiscPolicyListerActivity;
-import com.propertyvista.crm.client.activity.policies.misc.MiscPolicyViewerActivity;
+import com.propertyvista.crm.client.activity.policies.misc.DatesPolicyEditorActivity;
+import com.propertyvista.crm.client.activity.policies.misc.DatesPolicyListerActivity;
+import com.propertyvista.crm.client.activity.policies.misc.DatesPolicyViewerActivity;
 import com.propertyvista.crm.client.activity.policies.pet.PetPolicyEditorActivity;
 import com.propertyvista.crm.client.activity.policies.pet.PetPolicyListerActivity;
 import com.propertyvista.crm.client.activity.policies.pet.PetPolicyViewerActivity;
 import com.propertyvista.crm.client.activity.policies.producttax.ProductTaxPolicyEditorActivity;
 import com.propertyvista.crm.client.activity.policies.producttax.ProductTaxPolicyListerActivity;
 import com.propertyvista.crm.client.activity.policies.producttax.ProductTaxPolicyViewerActivity;
+import com.propertyvista.crm.client.activity.policies.restrictions.RestrictionsPolicyEditorActivity;
+import com.propertyvista.crm.client.activity.policies.restrictions.RestrictionsPolicyListerActivity;
+import com.propertyvista.crm.client.activity.policies.restrictions.RestrictionsPolicyViewerActivity;
 import com.propertyvista.crm.client.activity.report.ReportEditorActivity;
 import com.propertyvista.crm.client.activity.report.ReportManagementActivity;
 import com.propertyvista.crm.client.activity.report.ReportViewActivity;
@@ -827,18 +830,32 @@ public class MainActivityMapper implements AppActivityMapper {
                             break;
                         }
 
-                    } else if (place instanceof CrmSiteMap.Settings.Policies.Misc) {
+                    } else if (place instanceof CrmSiteMap.Settings.Policies.Dates) {
                         switch (crudPlace.getType()) {
                         case lister:
-                            activity = new MiscPolicyListerActivity(crudPlace);
+                            activity = new DatesPolicyListerActivity(crudPlace);
                             break;
                         case editor:
-                            activity = new MiscPolicyEditorActivity(crudPlace);
+                            activity = new DatesPolicyEditorActivity(crudPlace);
                             break;
                         case viewer:
-                            activity = new MiscPolicyViewerActivity(crudPlace);
+                            activity = new DatesPolicyViewerActivity(crudPlace);
                             break;
                         }
+
+                    } else if (place instanceof CrmSiteMap.Settings.Policies.Restrictions) {
+                        switch (crudPlace.getType()) {
+                        case lister:
+                            activity = new RestrictionsPolicyListerActivity(crudPlace);
+                            break;
+                        case editor:
+                            activity = new RestrictionsPolicyEditorActivity(crudPlace);
+                            break;
+                        case viewer:
+                            activity = new RestrictionsPolicyViewerActivity(crudPlace);
+                            break;
+                        }
+
                     } else if (place instanceof CrmSiteMap.Settings.Policies.ProductTax) {
                         switch (crudPlace.getType()) {
                         case lister:

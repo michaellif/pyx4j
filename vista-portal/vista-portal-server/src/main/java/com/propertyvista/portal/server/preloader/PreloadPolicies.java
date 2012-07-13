@@ -20,12 +20,13 @@ import com.propertyvista.portal.server.preloader.policy.subpreloaders.EmailTempl
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.IdAssignmentPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.LeaseBillingPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.LeaseTermsPolicyPreloader;
-import com.propertyvista.portal.server.preloader.policy.subpreloaders.MiscPolicyPreloader;
+import com.propertyvista.portal.server.preloader.policy.subpreloaders.DatesPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.MockupDepositPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.MockupLeaseAdjustmentPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.MockupLeaseBillingPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.MockupProductTaxPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.ProductTaxPolicyPreloader;
+import com.propertyvista.portal.server.preloader.policy.subpreloaders.RestrictionsPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.util.SimplePoliciesPreloader;
 
 public class PreloadPolicies extends SimplePoliciesPreloader {
@@ -36,7 +37,8 @@ public class PreloadPolicies extends SimplePoliciesPreloader {
         add(new EmailTemplatesPolicyPreloader());
         add(new IdAssignmentPolicyPreloader());
         add(new LeaseTermsPolicyPreloader());
-        add(new MiscPolicyPreloader());
+        add(new RestrictionsPolicyPreloader());
+        add(new DatesPolicyPreloader());
 
         if (isProduction) {
             add(new ProductTaxPolicyPreloader());

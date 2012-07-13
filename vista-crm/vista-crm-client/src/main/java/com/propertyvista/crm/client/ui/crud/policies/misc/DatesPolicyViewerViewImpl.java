@@ -13,15 +13,15 @@
  */
 package com.propertyvista.crm.client.ui.crud.policies.misc;
 
-import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
+import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.domain.policy.dto.MiscPolicyDTO;
+import com.propertyvista.domain.policy.dto.DatesPolicyDTO;
 
-public class MiscPolicyEditorViewImpl extends CrmEditorViewImplBase<MiscPolicyDTO> implements MiscPolicyEditorView {
+public class DatesPolicyViewerViewImpl extends CrmViewerViewImplBase<DatesPolicyDTO> implements DatesPolicyViewerView {
 
-    public MiscPolicyEditorViewImpl() {
-        super(CrmSiteMap.Settings.Policies.Misc.class);
-        setForm(new MiscPolicyForm());
+    public DatesPolicyViewerViewImpl() {
+        super(CrmSiteMap.Settings.Policies.Dates.class);
+        setForm(new DatesPolicyForm(true));
     }
 
 }
