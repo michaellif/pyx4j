@@ -175,15 +175,25 @@ public class BillingLifecycleManager {
                 throw new BillingException(i18n.tr("Can't find version of lease"));
             }
 
-            if (Status.Created == lease.version().status().getValue()) {//zeroCycle bill should be issued
+            if (Status.Created == lease.version().status().getValue()) {//zeroCycle bill should be issued; preview only
+                if (!preview) {
+                    throw new BillingException(i18n.tr("Billing can only run in PREVIEW mode until Lease is Approved."));
+                }
                 manager = new ZeroCycleBillingManager(bill);
-            } else if (Status.Application == lease.version().status().getValue()) {
+            } else if (Status.Application == lease.version().status().getValue()) {// preview only
+                if (!preview) {
+                    throw new BillingException(i18n.tr("Billing can only run in PREVIEW mode until Lease is Approved."));
+                }
                 manager = new FirstBillingManager(bill);
             } else if (Status.Approved == lease.version().status().getValue()) {// first bill should be issued
-                if (lease.billingAccount().carryforwardBalance().isNull()) {
-                    manager = new FirstBillingManager(bill);
+                if (getLatestConfirmedBill(lease) != null) {
+                    manager = new RegularBillingManager(bill);
                 } else {
-                    manager = new ZeroCycleBillingManager(bill);
+                    if (lease.billingAccount().carryforwardBalance().isNull()) {
+                        manager = new FirstBillingManager(bill);
+                    } else {
+                        manager = new ZeroCycleBillingManager(bill);
+                    }
                 }
             } else if (Status.Active == lease.version().status().getValue()) {
                 manager = new RegularBillingManager(bill);
