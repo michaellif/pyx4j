@@ -19,7 +19,6 @@ import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
-import com.pyx4j.widgets.client.dialog.OkCancelOption;
 
 import com.propertyvista.common.client.ui.components.VersionedLister;
 import com.propertyvista.domain.financial.offering.Feature;
@@ -43,28 +42,15 @@ public class FeatureLister extends VersionedLister<Feature> {
 
     @Override
     protected void onItemNew() {
-        new CreateNewFeatureDialog().show();
-    }
-
-    private class CreateNewFeatureDialog extends SelectEnumDialog<Feature.Type> implements OkCancelOption {
-
-        public CreateNewFeatureDialog() {
-            super(i18n.tr("Select Feature Type"), EnumSet.allOf(Feature.Type.class));
-        }
-
-        @Override
-        public boolean onClickOk() {
-            Feature feature = EntityFactory.create(Feature.class);
-            feature.version().type().setValue(getSelectedType());
-            feature.catalog().setPrimaryKey(getPresenter().getParent());
-            getPresenter().editNew(getItemOpenPlaceClass(), feature);
-            return true;
-        }
-
-        @Override
-        public boolean onClickCancel() {
-            return true;
-        }
-
+        new SelectEnumDialog<Feature.Type>(i18n.tr("Select Feature Type"), EnumSet.allOf(Feature.Type.class)) {
+            @Override
+            public boolean onClickOk() {
+                Feature feature = EntityFactory.create(Feature.class);
+                feature.version().type().setValue(getSelectedType());
+                feature.catalog().setPrimaryKey(getPresenter().getParent());
+                getPresenter().editNew(getItemOpenPlaceClass(), feature);
+                return true;
+            }
+        }.show();
     }
 }

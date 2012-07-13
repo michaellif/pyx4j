@@ -27,7 +27,6 @@ import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
-import com.pyx4j.widgets.client.dialog.OkCancelOption;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedForm;
@@ -136,7 +135,7 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
                     values.remove(item.paymentType().getValue());
                 }
             }
-            new SelectNsfFeeTypeDialog(values) {
+            new SelectEnumDialog<PaymentType>(i18n.tr("Select Payment Type"), values) {
                 @Override
                 public boolean onClickOk() {
                     NsfFeeItem item = EntityFactory.create(NsfFeeItem.class);
@@ -145,18 +144,6 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
                     return true;
                 }
             }.show();
-        }
-
-        private abstract class SelectNsfFeeTypeDialog extends SelectEnumDialog<PaymentType> implements OkCancelOption {
-
-            public SelectNsfFeeTypeDialog(EnumSet<PaymentType> values) {
-                super(i18n.tr("Select Payment Type"), values);
-            }
-
-            @Override
-            public boolean onClickCancel() {
-                return true;
-            };
         }
     }
 }

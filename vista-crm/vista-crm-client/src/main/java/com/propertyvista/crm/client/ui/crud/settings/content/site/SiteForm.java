@@ -32,7 +32,6 @@ import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
 import com.pyx4j.widgets.client.Anchor;
-import com.pyx4j.widgets.client.dialog.OkCancelOption;
 
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.site.SiteDescriptor;
@@ -107,7 +106,7 @@ public class SiteForm extends CrmEntityForm<SiteDescriptorDTO> {
 
     }
 
-    class GadgetSelectorDialog extends SelectEnumDialog<HomePageGadget.GadgetType> implements OkCancelOption {
+    class GadgetSelectorDialog extends SelectEnumDialog<HomePageGadget.GadgetType> {
         public GadgetSelectorDialog() {
             super(i18n.tr("Select Gadget Type"), EnumSet.allOf(HomePageGadget.GadgetType.class));
         }
@@ -122,11 +121,6 @@ public class SiteForm extends CrmEntityForm<SiteDescriptorDTO> {
             HomePageGadget newItem = EntityFactory.create(HomePageGadget.class);
             newItem.type().setValue(type);
             AppSite.getPlaceController().goTo(AppPlaceEntityMapper.resolvePlace(HomePageGadget.class).formNewItemPlace(newItem));
-            return true;
-        }
-
-        @Override
-        public boolean onClickCancel() {
             return true;
         }
     }

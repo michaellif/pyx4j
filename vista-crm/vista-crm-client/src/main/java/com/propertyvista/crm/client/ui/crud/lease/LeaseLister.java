@@ -33,7 +33,6 @@ import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
-import com.pyx4j.widgets.client.dialog.OkCancelOption;
 
 import com.propertyvista.common.client.ui.components.VersionedLister;
 import com.propertyvista.domain.financial.offering.Service;
@@ -104,7 +103,7 @@ public class LeaseLister extends VersionedLister<LeaseDTO> {
         return newLease;
     }
 
-    private class ExistingLeaseDataDialog extends SelectEnumDialog<Service.ServiceType> implements OkCancelOption {
+    private class ExistingLeaseDataDialog extends SelectEnumDialog<Service.ServiceType> {
 
         private CMoneyField balance;
 
@@ -149,10 +148,5 @@ public class LeaseLister extends VersionedLister<LeaseDTO> {
             }
             return false;
         }
-
-        @Override
-        public boolean onClickCancel() {
-            return true;
-        };
     }
 }

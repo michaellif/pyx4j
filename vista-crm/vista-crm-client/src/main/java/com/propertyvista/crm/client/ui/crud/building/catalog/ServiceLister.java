@@ -19,7 +19,6 @@ import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
-import com.pyx4j.widgets.client.dialog.OkCancelOption;
 
 import com.propertyvista.common.client.ui.components.VersionedLister;
 import com.propertyvista.domain.financial.offering.Service;
@@ -41,28 +40,15 @@ public class ServiceLister extends VersionedLister<Service> {
 
     @Override
     protected void onItemNew() {
-        new CreateNewServiceDialog().show();
+        new SelectEnumDialog<Service.ServiceType>(i18n.tr("Select Service Type"), EnumSet.allOf(Service.ServiceType.class)) {
+            @Override
+            public boolean onClickOk() {
+                Service newService = EntityFactory.create(Service.class);
+                newService.version().type().setValue(getSelectedType());
+                newService.catalog().setPrimaryKey(getPresenter().getParent());
+                getPresenter().editNew(getItemOpenPlaceClass(), newService);
+                return true;
+            }
+        }.show();
     }
-
-    private class CreateNewServiceDialog extends SelectEnumDialog<Service.ServiceType> implements OkCancelOption {
-
-        public CreateNewServiceDialog() {
-            super(i18n.tr("Select Service Type"), EnumSet.allOf(Service.ServiceType.class));
-        }
-
-        @Override
-        public boolean onClickOk() {
-            Service newService = EntityFactory.create(Service.class);
-            newService.version().type().setValue(getSelectedType());
-            newService.catalog().setPrimaryKey(getPresenter().getParent());
-            getPresenter().editNew(getItemOpenPlaceClass(), newService);
-            return true;
-        }
-
-        @Override
-        public String defineWidth() {
-            return "20em";
-        }
-    }
-
 }

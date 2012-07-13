@@ -457,6 +457,11 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
                             }
                             return true;
                         }
+
+                        @Override
+                        public String defineWidth() {
+                            return "30em";
+                        }
                     }.show();
                 }
             }, EntityListCriteria.create(Utility.class));
