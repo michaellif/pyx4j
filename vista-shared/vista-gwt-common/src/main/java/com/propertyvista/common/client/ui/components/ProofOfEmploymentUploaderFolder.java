@@ -30,7 +30,7 @@ public class ProofOfEmploymentUploaderFolder extends VistaBoxFolder<ProofOfEmplo
 
     public ProofOfEmploymentUploaderFolder() {
         super(ProofOfEmploymentDocument.class);
-        asWidget().setSize("35em", "100%");
+        asWidget().setSize("50em", "100%");
     }
 
     @Override
@@ -51,14 +51,13 @@ public class ProofOfEmploymentUploaderFolder extends VistaBoxFolder<ProofOfEmplo
         @Override
         public IsWidget createContent() {
             FormFlexPanel content = new FormFlexPanel();
-            content.setSize("100%", "100%");
+
             int row = -1;
-            content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().description())).labelWidth(8).componentWidth(20).build());
+            content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().description())).labelWidth(8).componentWidth(35).build());
             content.setH3(++row, 0, 1, i18n.tr("Files"));
             content.setWidget(++row, 0, inject(proto().documentPages(), new ApplicationDocumentFileUploaderFolder()));
 
             return content;
         }
-
     }
 }

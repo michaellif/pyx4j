@@ -73,8 +73,7 @@ public class PersonalIncomeEditor extends CEntityDecoratableForm<PersonalIncome>
         main.setWidget(++row, 0, inject(proto().studentIncome(), createStudentIncomeEditor()));
         main.setWidget(++row, 0, inject(proto().socialServices(), createSocialServicesEditor()));
         main.setWidget(++row, 0, inject(proto().otherIncomeInformation(), createOtherIncomeInfoEditor()));
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().documents(), fileUpload = new ProofOfEmploymentUploaderFolder())).componentWidth(30)
-                .build());
+        main.setWidget(++row, 0, inject(proto().documents(), fileUpload = new ProofOfEmploymentUploaderFolder()));
 
         return main;
     }
