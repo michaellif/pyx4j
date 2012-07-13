@@ -142,6 +142,9 @@ UPDATE pangroup_copy.id_assignment_sequence SET target = 'customer' WHERE target
 INSERT INTO pangroup_copy.id_assignment_sequence(id,target,number)
 (SELECT nextval('public.id_assignment_sequence_seq'),'tenant',COALESCE(MAX(participant_id::int),0) FROM pangroup_copy.tenant);
 
+-- Changes to apt_unit_occupancy_segment tatus reserved is now migrated
+UPDATE pangroup_copy.apt_unit_occupancy_segment SET status = 'migrated' WHERE status = 'reserved';
+
 COMMIT;
 
 -- Update tuples information - cannot run in transaction block
