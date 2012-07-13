@@ -152,19 +152,19 @@ public class BasicLister<E extends IEntity> extends VerticalPanel {
                     }
                 }
             });
-
-            // new item stuff:
-            if (allowAddNew) {
-                dataTablePanel.setAddActionHandler(new ClickHandler() {
-                    @Override
-                    public void onClick(ClickEvent event) {
-                        onItemNew();
-                    }
-                });
-            }
             dataTablePanel.getDataTable().setHasDetailsNavigation(true);
         } else {
             dataTablePanel.getDataTable().setHasDetailsNavigation(false);
+        }
+
+        // new item stuff:
+        if (allowAddNew) {
+            dataTablePanel.setAddActionHandler(new ClickHandler() {
+                @Override
+                public void onClick(ClickEvent event) {
+                    onItemNew();
+                }
+            });
         }
     }
 

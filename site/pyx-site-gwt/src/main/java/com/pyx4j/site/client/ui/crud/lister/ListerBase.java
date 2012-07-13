@@ -46,6 +46,10 @@ public abstract class ListerBase<E extends IEntity> extends BasicLister<E> imple
         this.itemOpenPlaceClass = AppPlaceEntityMapper.resolvePlaceClass(clazz);
     }
 
+    public ListerBase(Class<E> clazz, boolean allowZoomIn, boolean allowAddNew) {
+        super(clazz, allowZoomIn, allowAddNew);
+    }
+
     public boolean isOpenEditor() {
         return openEditor;
     }
