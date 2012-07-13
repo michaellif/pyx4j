@@ -126,7 +126,7 @@ class ImportPersister {
         for (int i = 0; i < buildingIO.phones().size(); i++) {
             // building phones are added to PropertyContacts, so there must be at least as many PropertyCOntacts as phones
             PropertyPhone phone = buildingIO.phones().get(i);
-            if (!phone.designation().isNull() && phone.designation().getValue().equals(PropertyPhone.DesignationType.office)) {
+            if (phone.designation().isNull() || phone.designation().getValue().equals(PropertyPhone.DesignationType.office)) {
                 PropertyContact contact = building.contacts().propertyContacts().get(i);
                 contact.type().setValue(PropertyContactType.mainOffice);
             }
