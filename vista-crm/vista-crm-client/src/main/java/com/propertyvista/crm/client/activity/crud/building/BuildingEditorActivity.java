@@ -15,7 +15,6 @@ package com.propertyvista.crm.client.activity.crud.building;
 
 import com.google.gwt.core.client.GWT;
 
-import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
@@ -28,8 +27,6 @@ public class BuildingEditorActivity extends EditorActivityBase<BuildingDTO> impl
 
     @SuppressWarnings("unchecked")
     public BuildingEditorActivity(CrudAppPlace place) {
-        super(place, BuildingViewFactory.instance(BuildingEditorView.class), (AbstractCrudService<BuildingDTO>) GWT.create(BuildingCrudService.class),
-                BuildingDTO.class);
-
+        super(place, BuildingViewFactory.instance(BuildingEditorView.class), GWT.<BuildingCrudService> create(BuildingCrudService.class), BuildingDTO.class);
     }
 }

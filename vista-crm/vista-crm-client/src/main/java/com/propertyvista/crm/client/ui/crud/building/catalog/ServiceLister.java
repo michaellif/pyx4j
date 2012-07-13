@@ -60,11 +60,6 @@ public class ServiceLister extends VersionedLister<Service> {
         }
 
         @Override
-        public boolean onClickCancel() {
-            return true;
-        }
-
-        @Override
         public String defineWidth() {
             return "20em";
         }
