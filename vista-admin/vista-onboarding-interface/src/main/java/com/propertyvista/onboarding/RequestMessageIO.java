@@ -13,7 +13,10 @@
  */
 package com.propertyvista.onboarding;
 
+import java.util.Date;
+
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
@@ -41,6 +44,9 @@ public interface RequestMessageIO extends IEntity {
      * Optional unique identifier for the XML message debug
      */
     IPrimitive<String> messageId();
+
+    @XmlTransient
+    IPrimitive<Date> receivedDate();
 
     IList<RequestIO> requests();
 

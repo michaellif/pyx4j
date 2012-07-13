@@ -87,6 +87,7 @@ public class OnboardingServiceServlet extends HttpServlet {
         } finally {
             IOUtils.closeQuietly(is);
         }
+        message.receivedDate().setValue(new Date(start));
         EntityFileLogger.log("onboarding", "request" + requestInfo(message), message);
 
         NamespaceManager.setNamespace(VistaNamespace.adminNamespace);
