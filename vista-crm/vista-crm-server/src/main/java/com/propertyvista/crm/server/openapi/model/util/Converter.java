@@ -12,6 +12,7 @@
  */
 package com.propertyvista.crm.server.openapi.model.util;
 
+import java.util.EnumSet;
 import java.util.List;
 
 import com.pyx4j.commons.CommonsStringUtils;
@@ -37,6 +38,7 @@ import com.propertyvista.domain.marketing.Marketing;
 import com.propertyvista.domain.marketing.PublicVisibilityType;
 import com.propertyvista.domain.media.Media;
 import com.propertyvista.domain.property.PropertyContact;
+import com.propertyvista.domain.property.PropertyContact.PropertyContactType;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.FloorplanAmenity;
 import com.propertyvista.domain.property.asset.Parking;
@@ -78,6 +80,12 @@ public class Converter {
         for (PropertyContact contact : from.contacts().propertyContacts()) {
             if (PublicVisibilityType.global.equals(contact.visibility().getValue()) && !contact.phone().isNull()) {
                 to.marketing.phones.add(convertPropertyContact(contact));
+                if (EnumSet.of(PropertyContactType.mainOffice, PropertyContactType.pointOfSale).contains(contact.type().getValue())) {
+                    to.contactPhones.add(contact.phone().getValue());
+                    if ((to.contactEmail == null) && (!contact.email().isNull())) {
+                        to.contactEmail = contact.email().getStringView();
+                    }
+                }
             }
 
         }
