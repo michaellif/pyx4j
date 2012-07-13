@@ -20,16 +20,16 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 
 import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
-import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
-import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.entity.client.ui.folder.IFolderDecorator;
-import com.pyx4j.entity.rpc.AbstractListService;
+import com.pyx4j.entity.client.ui.folder.TableFolderDecorator;
+import com.pyx4j.entity.rpc.EntitySearchResult;
+import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
-import com.propertyvista.common.client.ui.decorations.VistaTableFolderDecorator;
 import com.propertyvista.crm.client.activity.crud.settings.role.CrmRoleBehaviorDTOListServiceImpl;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.security.CrmRole;
@@ -112,49 +112,28 @@ public class CrmRoleForm extends CrmEntityForm<CrmRole> {
 
         @Override
         protected IFolderDecorator<VistaCrmBehaviorDTO> createDecorator() {
-            return new VistaTableFolderDecorator<VistaCrmBehaviorDTO>(this, this.isEditable()) {
-                {
-                    setShowHeader(false);
-                }
-            };
+            TableFolderDecorator<VistaCrmBehaviorDTO> folderDecorator = (TableFolderDecorator<VistaCrmBehaviorDTO>) super.createDecorator();
+            folderDecorator.setShowHeader(false);
+            return folderDecorator;
         }
 
         @Override
         protected void addItem() {
-            new CrmBehaviorDTOSelectorDialog(getValue()) {
-
+            new CrmRoleBehaviorDTOListServiceImpl().list(new DefaultAsyncCallback<EntitySearchResult<VistaCrmBehaviorDTO>>() {
                 @Override
-                public boolean onClickOk() {
-                    if (getSelectedItems().isEmpty()) {
-                        return false;
-                    } else {
-                        for (VistaCrmBehaviorDTO selected : getSelectedItems()) {
-                            addItem(selected);
+                public void onSuccess(EntitySearchResult<VistaCrmBehaviorDTO> result) {
+                    result.getData().removeAll(getValue());
+                    new EntitySelectorListDialog<VistaCrmBehaviorDTO>(i18n.tr("Select Permissions"), true, result.getData()) {
+                        @Override
+                        public boolean onClickOk() {
+                            for (VistaCrmBehaviorDTO item : getSelectedItems()) {
+                                addItem(item);
+                            }
+                            return true;
                         }
-                        return true;
-                    }
-
+                    }.show();
                 }
-            }.show();
+            }, EntityListCriteria.create(VistaCrmBehaviorDTO.class));
         }
     }
-
-    private abstract static class CrmBehaviorDTOSelectorDialog extends EntitySelectorTableDialog<VistaCrmBehaviorDTO> {
-
-        public CrmBehaviorDTOSelectorDialog(List<VistaCrmBehaviorDTO> alreadySelected) {
-            super(VistaCrmBehaviorDTO.class, true, alreadySelected, i18n.tr("Select Permissions"));
-            setWidth("500px");
-        }
-
-        @Override
-        protected List<ColumnDescriptor> defineColumnDescriptors() {
-            return Arrays.asList(new MemberColumnDescriptor.Builder(proto().permission()).build());
-        }
-
-        @Override
-        protected AbstractListService<VistaCrmBehaviorDTO> getSelectService() {
-            return new CrmRoleBehaviorDTOListServiceImpl();
-        }
-    }
-
 }

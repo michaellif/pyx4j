@@ -14,6 +14,7 @@
 package com.propertyvista.crm.client.ui.crud.building;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.EnumSet;
@@ -355,15 +356,15 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
 
         @Override
         public List<EntityFolderColumnDescriptor> columns() {
-            List<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
-            columns.add(new EntityFolderColumnDescriptor(proto().type(), "7em"));
-            columns.add(new EntityFolderColumnDescriptor(proto().number(), "11em"));
-            columns.add(new EntityFolderColumnDescriptor(proto().extension(), "5em"));
-            columns.add(new EntityFolderColumnDescriptor(proto().description(), "20em"));
-            columns.add(new EntityFolderColumnDescriptor(proto().designation(), "10em"));
-            columns.add(new EntityFolderColumnDescriptor(proto().provider(), "10em"));
-            columns.add(new EntityFolderColumnDescriptor(proto().visibility(), "7em"));
-            return columns;
+            return Arrays.asList( //@formatter:off
+                new EntityFolderColumnDescriptor(proto().type(), "7em"),
+                new EntityFolderColumnDescriptor(proto().number(), "11em"),
+                new EntityFolderColumnDescriptor(proto().extension(), "5em"),
+                new EntityFolderColumnDescriptor(proto().description(), "20em"),
+                new EntityFolderColumnDescriptor(proto().designation(), "10em"),
+                new EntityFolderColumnDescriptor(proto().provider(), "10em"),
+                new EntityFolderColumnDescriptor(proto().visibility(), "7em")
+            );//@formatter:on
         }
     }
 
@@ -375,14 +376,14 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
 
         @Override
         public List<EntityFolderColumnDescriptor> columns() {
-            List<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
-            columns.add(new EntityFolderColumnDescriptor(proto().type(), "9em"));
-            columns.add(new EntityFolderColumnDescriptor(proto().name(), "10em"));
-            columns.add(new EntityFolderColumnDescriptor(proto().description(), "20em"));
-            columns.add(new EntityFolderColumnDescriptor(proto().phone(), "10em"));
-            columns.add(new EntityFolderColumnDescriptor(proto().email(), "15em"));
-            columns.add(new EntityFolderColumnDescriptor(proto().visibility(), "7em"));
-            return columns;
+            return Arrays.asList( //@formatter:off
+                new EntityFolderColumnDescriptor(proto().type(), "9em"),
+                new EntityFolderColumnDescriptor(proto().name(), "10em"),
+                new EntityFolderColumnDescriptor(proto().description(), "20em"),
+                new EntityFolderColumnDescriptor(proto().phone(), "10em"),
+                new EntityFolderColumnDescriptor(proto().email(), "15em"),
+                new EntityFolderColumnDescriptor(proto().visibility(), "7em")
+            );//@formatter:on
         }
     }
 
@@ -394,11 +395,11 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
 
         @Override
         public List<EntityFolderColumnDescriptor> columns() {
-            List<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
-            columns.add(new EntityFolderColumnDescriptor(proto().type(), "15em", true));
-            columns.add(new EntityFolderColumnDescriptor(proto().name(), "15em"));
-            columns.add(new EntityFolderColumnDescriptor(proto().description(), "25em"));
-            return columns;
+            return Arrays.asList( //@formatter:off
+                    new EntityFolderColumnDescriptor(proto().type(), "15em", true), 
+                    new EntityFolderColumnDescriptor(proto().name(), "15em"),
+                    new EntityFolderColumnDescriptor(proto().description(), "25em")
+               );//@formatter:on
         }
 
         private EnumSet<BuildingAmenity.Type> getTypesToSelect() {
@@ -431,9 +432,7 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
 
         @Override
         public List<EntityFolderColumnDescriptor> columns() {
-            List<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
-            columns.add(new EntityFolderColumnDescriptor(proto().name(), "56em", true));
-            return columns;
+            return Arrays.asList(new EntityFolderColumnDescriptor(proto().name(), "56em", true));
         }
 
         @Override

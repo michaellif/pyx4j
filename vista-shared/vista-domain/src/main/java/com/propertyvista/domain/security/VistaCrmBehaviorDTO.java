@@ -13,6 +13,7 @@
  */
 package com.propertyvista.domain.security;
 
+import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -28,6 +29,6 @@ public interface VistaCrmBehaviorDTO extends IEntity {
 
     IPrimitive<VistaCrmBehavior> behavior();
 
+    @ToString
     IPrimitive<String> permission();
-
 }
