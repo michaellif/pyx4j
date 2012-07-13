@@ -23,7 +23,6 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.propertyvista.domain.charges.ChargeLine;
 import com.propertyvista.domain.charges.ChargeLine.ChargeType;
 import com.propertyvista.domain.financial.Currency;
-import com.propertyvista.domain.financial.Money;
 import com.propertyvista.domain.property.asset.AreaMeasurementUnit;
 import com.propertyvista.domain.tenant.lease.extradata.Pet.WeightUnit;
 
@@ -37,20 +36,6 @@ public class DomainUtil {
 
     public static BigDecimal roundMoney(BigDecimal value) {
         return value.setScale(2, RoundingMode.HALF_UP);
-    }
-
-    public static Money createMoney(BigDecimal value) {
-        Money money = EntityFactory.create(Money.class);
-        money.amount().setValue(value);
-        money.currency().set(createCurrency());
-        return money;
-    }
-
-    public static Money createMoney(BigDecimal value, String currency) {
-        Money money = EntityFactory.create(Money.class);
-        money.amount().setValue(value);
-        money.currency().name().setValue(currency);
-        return money;
     }
 
     public static ChargeLine createChargeLine(String label, BigDecimal money) {

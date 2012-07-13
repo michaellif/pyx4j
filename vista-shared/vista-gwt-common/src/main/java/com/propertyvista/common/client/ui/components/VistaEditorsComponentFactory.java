@@ -21,14 +21,8 @@ import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.IFormat;
 
-import com.propertyvista.common.client.ui.components.c.CEmail;
-import com.propertyvista.common.client.ui.components.c.CMoney;
-import com.propertyvista.common.client.ui.components.c.CPhone;
 import com.propertyvista.common.client.ui.components.editors.GeoLocationEditor;
 import com.propertyvista.domain.GeoLocation;
-import com.propertyvista.domain.contact.Email;
-import com.propertyvista.domain.contact.Phone;
-import com.propertyvista.domain.financial.Money;
 import com.propertyvista.domain.ref.Country;
 
 public class VistaEditorsComponentFactory extends EntityFormComponentFactory {
@@ -57,12 +51,6 @@ public class VistaEditorsComponentFactory extends EntityFormComponentFactory {
                 }
             });
             return c;
-        } else if (member.getValueClass().equals(Money.class)) {
-            return new CMoney();
-        } else if (member.getValueClass().equals(Phone.class)) {
-            return new CPhone();
-        } else if (member.getValueClass().equals(Email.class)) {
-            return new CEmail();
         } else if (member.getValueClass().equals(GeoLocation.class)) {
             return new GeoLocationEditor();
             //return new CGeoLocation();

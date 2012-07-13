@@ -35,14 +35,6 @@ public class CGeoLocation extends CComponent<GeoLocation, NativeGeoLocation> {
         return new NativeGeoLocation(this);
     }
 
-    @Override
-    public void onEditingStop() {
-        super.onEditingStop();
-        if (isValid()) {
-            setNativeValue(getValue());
-        }
-    }
-
     // ==========================================================================
 
     public class GeoLocationValidator implements EditableValueValidator<GeoLocation> {
