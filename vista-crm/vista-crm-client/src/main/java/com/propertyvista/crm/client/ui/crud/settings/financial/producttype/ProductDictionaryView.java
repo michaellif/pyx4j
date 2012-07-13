@@ -19,6 +19,7 @@ import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.propertyvista.domain.financial.offering.FeatureItemType;
 import com.propertyvista.domain.financial.offering.ProductItemType;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
+import com.propertyvista.domain.property.asset.Utility;
 
 public interface ProductDictionaryView extends IViewerView<ProductItemType> {
 
@@ -28,4 +29,6 @@ public interface ProductDictionaryView extends IViewerView<ProductItemType> {
     IListerView<ServiceItemType> getServiceListerView();
 
     IListerView<FeatureItemType> getFeatureListerView();
+
+    IListerView<Utility> getUtilityListerView();
 }

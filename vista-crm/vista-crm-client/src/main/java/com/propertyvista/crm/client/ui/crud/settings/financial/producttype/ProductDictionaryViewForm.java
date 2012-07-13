@@ -42,6 +42,9 @@ public class ProductDictionaryViewForm extends CrmEntityForm<ProductItemType> {
         content.setH1(++row, 0, 1, i18n.tr("Feature Item Types"));
         content.setWidget(++row, 0, ((ProductDictionaryView) getParentView()).getFeatureListerView().asWidget());
 
+        content.setH1(++row, 0, 1, i18n.tr("Utilities"));
+        content.setWidget(++row, 0, ((ProductDictionaryView) getParentView()).getUtilityListerView().asWidget());
+
         selectTab(addTab(content));
     }
 }

@@ -20,7 +20,6 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.site.client.activity.crud.ListerActivityBase;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 
@@ -28,26 +27,30 @@ import com.propertyvista.crm.client.ui.crud.settings.financial.producttype.Produ
 import com.propertyvista.crm.client.ui.crud.viewfactories.SettingsViewFactory;
 import com.propertyvista.crm.rpc.services.building.catalog.FeatureItemTypeCrudService;
 import com.propertyvista.crm.rpc.services.building.catalog.ServiceItemTypeCrudService;
+import com.propertyvista.crm.rpc.services.building.catalog.UtilityCrudService;
 import com.propertyvista.domain.financial.offering.FeatureItemType;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
+import com.propertyvista.domain.property.asset.Utility;
 
 public class ProductDictionaryViewActivity extends AbstractActivity implements ProductDictionaryView.Presenter {
 
     protected final ProductDictionaryView view;
 
-    IListerView.Presenter serviceLister;
+    IListerView.Presenter<ServiceItemType> serviceLister;
 
-    IListerView.Presenter featureLister;
+    IListerView.Presenter<FeatureItemType> featureLister;
 
-    @SuppressWarnings("unchecked")
+    IListerView.Presenter<Utility> utilityLister;
+
     public ProductDictionaryViewActivity(Place place) {
         this.view = SettingsViewFactory.instance(ProductDictionaryView.class);
 
         serviceLister = new ListerActivityBase<ServiceItemType>(place, view.getServiceListerView(),
-                (AbstractCrudService<ServiceItemType>) GWT.create(ServiceItemTypeCrudService.class), ServiceItemType.class);
+                GWT.<ServiceItemTypeCrudService> create(ServiceItemTypeCrudService.class), ServiceItemType.class);
         featureLister = new ListerActivityBase<FeatureItemType>(place, view.getFeatureListerView(),
-                (AbstractCrudService<FeatureItemType>) GWT.create(FeatureItemTypeCrudService.class), FeatureItemType.class);
-
+                GWT.<FeatureItemTypeCrudService> create(FeatureItemTypeCrudService.class), FeatureItemType.class);
+        utilityLister = new ListerActivityBase<Utility>(place, view.getUtilityListerView(), GWT.<UtilityCrudService> create(UtilityCrudService.class),
+                Utility.class);
     }
 
     @Override
@@ -60,6 +63,7 @@ public class ProductDictionaryViewActivity extends AbstractActivity implements P
     public void onStop() {
         ((AbstractActivity) serviceLister).onStop();
         ((AbstractActivity) featureLister).onStop();
+        ((AbstractActivity) utilityLister).onStop();
         super.onStop();
     }
 
@@ -67,6 +71,7 @@ public class ProductDictionaryViewActivity extends AbstractActivity implements P
     public void populate() {
         serviceLister.populate();
         featureLister.populate();
+        utilityLister.populate();
     }
 
     @Override
@@ -87,7 +92,6 @@ public class ProductDictionaryViewActivity extends AbstractActivity implements P
     @Override
     public void view(Key entityId) {
         // TODO Auto-generated method stub
-
     }
 
     @Override

@@ -151,6 +151,11 @@ public class CrmSiteMap implements SiteMap {
         @NavigationItem(navigLabel = "Concessions")
         public static class Concession extends CrmCrudAppPlace {
         }
+
+        @PlaceProperties(caption = "Utility")
+        @NavigationItem(navigLabel = "Utilities")
+        public static class Utility extends CrmCrudAppPlace {
+        }
     }
 
     public static class Tenants extends AppPlace {

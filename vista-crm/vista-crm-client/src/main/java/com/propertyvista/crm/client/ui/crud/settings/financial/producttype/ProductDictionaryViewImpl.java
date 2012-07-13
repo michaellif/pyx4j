@@ -21,6 +21,7 @@ import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.financial.offering.FeatureItemType;
 import com.propertyvista.domain.financial.offering.ProductItemType;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
+import com.propertyvista.domain.property.asset.Utility;
 
 public class ProductDictionaryViewImpl extends CrmViewerViewImplBase<ProductItemType> implements ProductDictionaryView {
 
@@ -28,11 +29,14 @@ public class ProductDictionaryViewImpl extends CrmViewerViewImplBase<ProductItem
 
     private final IListerView<FeatureItemType> featureLister;
 
+    private final IListerView<Utility> utilityLister;
+
     public ProductDictionaryViewImpl() {
         super(CrmSiteMap.Settings.ProductDictionary.class, true);
 
         serviceLister = new ListerInternalViewImplBase<ServiceItemType>(new ServiceTypeLister());
         featureLister = new ListerInternalViewImplBase<FeatureItemType>(new FeatureTypeLister());
+        utilityLister = new ListerInternalViewImplBase<Utility>(new UtilityLister());
 
         // set main form here: 
         setForm(new ProductDictionaryViewForm());
@@ -46,5 +50,10 @@ public class ProductDictionaryViewImpl extends CrmViewerViewImplBase<ProductItem
     @Override
     public IListerView<FeatureItemType> getFeatureListerView() {
         return featureLister;
+    }
+
+    @Override
+    public IListerView<Utility> getUtilityListerView() {
+        return utilityLister;
     }
 }

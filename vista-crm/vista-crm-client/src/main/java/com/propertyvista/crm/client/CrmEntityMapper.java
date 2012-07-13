@@ -60,6 +60,7 @@ import com.propertyvista.domain.property.asset.LockerArea;
 import com.propertyvista.domain.property.asset.Parking;
 import com.propertyvista.domain.property.asset.ParkingSpot;
 import com.propertyvista.domain.property.asset.Roof;
+import com.propertyvista.domain.property.asset.Utility;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.AptUnitItem;
@@ -90,35 +91,41 @@ public class CrmEntityMapper {
         AppPlaceEntityMapper.register(LeaseApplicationDTO.class, CrmSiteMap.Tenants.LeaseApplication.class, defaultImage);
 
         // DBO mappings:
+        AppPlaceEntityMapper.register(Feature.class, CrmSiteMap.Properties.Feature.class, defaultImage);
+        AppPlaceEntityMapper.register(Service.class, CrmSiteMap.Properties.Service.class, defaultImage);
+        AppPlaceEntityMapper.register(Concession.class, CrmSiteMap.Properties.Concession.class, defaultImage);
+        AppPlaceEntityMapper.register(Utility.class, CrmSiteMap.Properties.Utility.class, defaultImage);
+
+        AppPlaceEntityMapper.register(Complex.class, CrmSiteMap.Properties.Complex.class, defaultImage);
+        AppPlaceEntityMapper.register(Building.class, CrmSiteMap.Properties.Building.class, CrmImages.INSTANCE.propertiesNormal());
         AppPlaceEntityMapper.register(AptUnit.class, CrmSiteMap.Properties.Unit.class, CrmImages.INSTANCE.unitsNormal());
         AppPlaceEntityMapper.register(AptUnitItem.class, CrmSiteMap.Properties.UnitItem.class, CrmImages.INSTANCE.unitsNormal());
+
+        AppPlaceEntityMapper.register(ProductItem.class, CrmSiteMap.Properties.Service.class, defaultImage);
+        AppPlaceEntityMapper.register(ServiceItemType.class, CrmSiteMap.Settings.ServiceItemType.class, defaultImage);
+        AppPlaceEntityMapper.register(FeatureItemType.class, CrmSiteMap.Settings.FeatureItemType.class, defaultImage);
+        AppPlaceEntityMapper.register(MaintenanceRequest.class, CrmSiteMap.Tenants.MaintenanceRequest.class, defaultImage);
+
+        AppPlaceEntityMapper.register(Roof.class, CrmSiteMap.Properties.Roof.class, defaultImage);
         AppPlaceEntityMapper.register(Boiler.class, CrmSiteMap.Properties.Boiler.class, defaultImage);
-        AppPlaceEntityMapper.register(Building.class, CrmSiteMap.Properties.Building.class, CrmImages.INSTANCE.propertiesNormal());
-        AppPlaceEntityMapper.register(Complex.class, CrmSiteMap.Properties.Complex.class, defaultImage);
         AppPlaceEntityMapper.register(Elevator.class, CrmSiteMap.Properties.Elevator.class, defaultImage);
         AppPlaceEntityMapper.register(Floorplan.class, CrmSiteMap.Properties.Floorplan.class, defaultImage);
-        AppPlaceEntityMapper.register(Feature.class, CrmSiteMap.Properties.Feature.class, defaultImage);
-
-        AppPlaceEntityMapper.register(Concession.class, CrmSiteMap.Properties.Concession.class, defaultImage);
         AppPlaceEntityMapper.register(LockerArea.class, CrmSiteMap.Properties.LockerArea.class, defaultImage);
+        AppPlaceEntityMapper.register(Locker.class, CrmSiteMap.Properties.Locker.class, defaultImage);
         AppPlaceEntityMapper.register(Parking.class, CrmSiteMap.Properties.Parking.class, defaultImage);
         AppPlaceEntityMapper.register(ParkingSpot.class, CrmSiteMap.Properties.ParkingSpot.class, defaultImage);
-        AppPlaceEntityMapper.register(ProductItem.class, CrmSiteMap.Properties.Service.class, defaultImage);
-        AppPlaceEntityMapper.register(Roof.class, CrmSiteMap.Properties.Roof.class, defaultImage);
-        AppPlaceEntityMapper.register(Service.class, CrmSiteMap.Properties.Service.class, defaultImage);
 
-        AppPlaceEntityMapper.register(EquifaxResult.class, CrmSiteMap.Tenants.EquifaxResult.class, defaultImage);
-        AppPlaceEntityMapper.register(Guarantor.class, CrmSiteMap.Tenants.Guarantor.class, CrmImages.INSTANCE.tenant());
-        AppPlaceEntityMapper.register(Lease.class, CrmSiteMap.Tenants.Lease.class, defaultImage);
-        AppPlaceEntityMapper.register(Locker.class, CrmSiteMap.Properties.Locker.class, defaultImage);
-        AppPlaceEntityMapper.register(MaintenanceRequest.class, CrmSiteMap.Tenants.MaintenanceRequest.class, defaultImage);
-        AppPlaceEntityMapper.register(PersonScreening.class, CrmSiteMap.Tenants.Screening.class, defaultImage);
         AppPlaceEntityMapper.register(Customer.class, CrmSiteMap.Tenants.Tenant.class, defaultImage);
         AppPlaceEntityMapper.register(Tenant.class, CrmSiteMap.Tenants.Tenant.class, CrmImages.INSTANCE.tenant());
+        AppPlaceEntityMapper.register(Guarantor.class, CrmSiteMap.Tenants.Guarantor.class, CrmImages.INSTANCE.tenant());
+        AppPlaceEntityMapper.register(EquifaxResult.class, CrmSiteMap.Tenants.EquifaxResult.class, defaultImage);
+        AppPlaceEntityMapper.register(PersonScreening.class, CrmSiteMap.Tenants.Screening.class, defaultImage);
 
-        AppPlaceEntityMapper.register(Appointment.class, Marketing.Appointment.class, defaultImage);
         AppPlaceEntityMapper.register(Lead.class, Marketing.Lead.class, defaultImage);
+        AppPlaceEntityMapper.register(Appointment.class, Marketing.Appointment.class, defaultImage);
         AppPlaceEntityMapper.register(ShowingDTO.class, Marketing.Showing.class, defaultImage);
+
+        AppPlaceEntityMapper.register(Lease.class, CrmSiteMap.Tenants.Lease.class, defaultImage);
 
         AppPlaceEntityMapper.register(BillingCycle.class, CrmSiteMap.Finance.BillingCycle.class, defaultImage);
         AppPlaceEntityMapper.register(Bill.class, CrmSiteMap.Finance.Bill.class, defaultImage);
@@ -127,18 +134,16 @@ public class CrmEntityMapper {
         AppPlaceEntityMapper.register(Deposit.class, CrmSiteMap.Finance.LeaseDeposit.class, defaultImage);
         AppPlaceEntityMapper.register(LeaseAdjustment.class, CrmSiteMap.Finance.LeaseAdjustment.class, defaultImage);
 
-        AppPlaceEntityMapper.register(Employee.class, CrmSiteMap.Organization.Employee.class, defaultImage);
-        AppPlaceEntityMapper.register(Portfolio.class, CrmSiteMap.Organization.Portfolio.class, defaultImage);
-        AppPlaceEntityMapper.register(Vendor.class, CrmSiteMap.Organization.Vendor.class, defaultImage);
-
-        AppPlaceEntityMapper.register(CrmRole.class, CrmSiteMap.Settings.UserRole.class, defaultImage);
         AppPlaceEntityMapper.register(MerchantAccount.class, CrmSiteMap.Settings.MerchantAccount.class, defaultImage);
-        AppPlaceEntityMapper.register(FeatureItemType.class, CrmSiteMap.Settings.FeatureItemType.class, defaultImage);
         AppPlaceEntityMapper.register(GlCode.class, CrmSiteMap.Settings.GlCodeCategory.class, defaultImage);
         AppPlaceEntityMapper.register(GlCodeCategory.class, CrmSiteMap.Settings.GlCodeCategory.class, defaultImage);
         AppPlaceEntityMapper.register(LeaseAdjustmentReason.class, CrmSiteMap.Settings.LeaseAdjustmentReason.class, defaultImage);
-        AppPlaceEntityMapper.register(ServiceItemType.class, CrmSiteMap.Settings.ServiceItemType.class, defaultImage);
         AppPlaceEntityMapper.register(Tax.class, CrmSiteMap.Settings.Tax.class, defaultImage);
+
+        AppPlaceEntityMapper.register(CrmRole.class, CrmSiteMap.Settings.UserRole.class, defaultImage);
+        AppPlaceEntityMapper.register(Employee.class, CrmSiteMap.Organization.Employee.class, defaultImage);
+        AppPlaceEntityMapper.register(Portfolio.class, CrmSiteMap.Organization.Portfolio.class, defaultImage);
+        AppPlaceEntityMapper.register(Vendor.class, CrmSiteMap.Organization.Vendor.class, defaultImage);
 
         AppPlaceEntityMapper.register(HomePageGadget.class, CrmSiteMap.Settings.HomePageGadgets.class, defaultImage);
 
