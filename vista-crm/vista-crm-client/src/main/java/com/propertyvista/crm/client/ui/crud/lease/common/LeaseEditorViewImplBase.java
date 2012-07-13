@@ -40,8 +40,9 @@ public class LeaseEditorViewImplBase<DTO extends LeaseDTO> extends CrmEditorView
     public void updateServiceValue(DTO value) {
         LeaseFormBase<DTO> form = (LeaseFormBase<DTO>) getForm();
 
-        form.get(form.proto().version().leaseProducts().serviceItem()).setValue(value.version().leaseProducts().serviceItem());
+        @SuppressWarnings("unchecked")
         CEntityForm<BillableItem> billableItemForm = (CEntityForm<BillableItem>) form.get(form.proto().version().leaseProducts().serviceItem());
+        billableItemForm.setValue(value.version().leaseProducts().serviceItem());
         billableItemForm.get(billableItemForm.proto().item()).refresh(true);
 
         form.get(form.proto().version().leaseProducts().featureItems()).setValue(value.version().leaseProducts().featureItems());

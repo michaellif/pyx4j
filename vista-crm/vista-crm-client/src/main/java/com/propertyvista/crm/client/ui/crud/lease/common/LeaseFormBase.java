@@ -80,13 +80,14 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
         setTabEnabled(tab, !isEditable());
 
         chargesTab = addTab(createChargesTab(i18n.tr("Charges")));
+        setTabEnabled(chargesTab, !isEditable());
     }
 
     @Override
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
 
-        setTabVisible(chargesTab, !isEditable() && getValue().version().status().getValue().isDraft());
+        setTabVisible(chargesTab, getValue().version().status().getValue().isDraft());
 
         get(proto().version().completion()).setVisible(!getValue().version().completion().isNull());
 
