@@ -14,13 +14,9 @@
 package com.propertyvista.crm.client.ui.crud.building;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.Date;
-import java.util.EnumSet;
 import java.util.List;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Command;
@@ -31,11 +27,6 @@ import com.google.gwt.view.client.Range;
 
 import com.pyx4j.commons.ValidationUtils;
 import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
-import com.pyx4j.entity.client.ui.folder.IFolderDecorator;
-import com.pyx4j.entity.client.ui.folder.TableFolderDecorator;
-import com.pyx4j.entity.rpc.EntitySearchResult;
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.forms.client.ui.CMonthYearPicker;
@@ -46,8 +37,6 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;
-import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
-import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
 import com.propertyvista.common.client.policy.ClientPolicyManager;
@@ -58,13 +47,11 @@ import com.propertyvista.common.client.ui.validators.PastDateValidation;
 import com.propertyvista.crm.client.ui.components.media.CrmMediaFolder;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.notesandattachments.NotesAndAttachmentsForm;
-import com.propertyvista.crm.rpc.services.selections.SelectUtilityListService;
-import com.propertyvista.domain.policy.policies.MiscPolicy;
+import com.propertyvista.domain.policy.policies.DatesPolicy;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
 import com.propertyvista.domain.property.PropertyContact;
 import com.propertyvista.domain.property.PropertyPhone;
 import com.propertyvista.domain.property.asset.Complex;
-import com.propertyvista.domain.property.asset.Utility;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
 import com.propertyvista.dto.BuildingDTO;
 import com.propertyvista.portal.rpc.portal.ImageConsts.ImageTarget;
@@ -152,10 +139,10 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         if (isEditable()) {
             ClientPolicyManager.setIdComponentEditabilityByPolicy(IdTarget.propertyCode, get(proto().propertyCode()), getValue().getPrimaryKey());
 
-            ClientPolicyManager.obtainEffectivePolicy(ClientPolicyManager.getOrganizationPoliciesNode(), MiscPolicy.class,
-                    new DefaultAsyncCallback<MiscPolicy>() {
+            ClientPolicyManager.obtainEffectivePolicy(ClientPolicyManager.getOrganizationPoliciesNode(), DatesPolicy.class,
+                    new DefaultAsyncCallback<DatesPolicy>() {
                         @Override
-                        public void onSuccess(MiscPolicy result) {
+                        public void onSuccess(DatesPolicy result) {
                             // set build year date picker range: 
                             CComponent<?, ?> comp = get(proto().info().structureBuildYear());
                             if (comp instanceof CMonthYearPicker) {
@@ -217,7 +204,11 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         main.getFlexCellFormatter().setColSpan(row++, 0, 2);
 
         main.setH1(row++, 0, 2, proto().geoLocation().getMeta().getCaption());
+//        if (isEditable()) {
         main.setWidget(row, 0, inject(proto().geoLocation()));
+//        } else {
+//            main.setWidget(row, 0, new DecoratorBuilder(inject(proto().geoLocation())).customLabel("").useLabelSemicolon(false).build());
+//        }
         main.getFlexCellFormatter().setColSpan(row++, 0, 2);
 
         main.getColumnFormatter().setWidth(0, "50%");
@@ -282,14 +273,6 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         main.setWidget(row, 0, inject(proto().amenities(), new BuildingAmenityFolder()));
         main.getFlexCellFormatter().setColSpan(row++, 0, 2);
 
-        main.setH1(row++, 0, 2, proto().includedUtilities().getMeta().getCaption());
-        main.setWidget(row, 0, inject(proto().includedUtilities(), new UtilityFolder()));
-        main.getFlexCellFormatter().setColSpan(row++, 0, 2);
-
-        main.setH1(row++, 0, 2, proto().externalUtilities().getMeta().getCaption());
-        main.setWidget(row, 0, inject(proto().externalUtilities(), new UtilityFolder()));
-        main.getFlexCellFormatter().setColSpan(row++, 0, 2);
-
         main.getColumnFormatter().setWidth(0, "50%");
         main.getColumnFormatter().setWidth(1, "50%");
 
@@ -341,13 +324,6 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         return main;
     }
 
-    private FormFlexPanel createNotesAndAttachmentsTab(String title) {
-        FormFlexPanel main = new FormFlexPanel(title);
-        int row = -1;
-        main.setWidget(++row, 0, inject(proto().notesAndAttachments(), new NotesAndAttachmentsForm()));
-        return main;
-    }
-
     private class PropertyPhoneFolder extends VistaTableFolder<PropertyPhone> {
 
         public PropertyPhoneFolder() {
@@ -356,15 +332,15 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
 
         @Override
         public List<EntityFolderColumnDescriptor> columns() {
-            return Arrays.asList( //@formatter:off
-                new EntityFolderColumnDescriptor(proto().type(), "7em"),
-                new EntityFolderColumnDescriptor(proto().number(), "11em"),
-                new EntityFolderColumnDescriptor(proto().extension(), "5em"),
-                new EntityFolderColumnDescriptor(proto().description(), "20em"),
-                new EntityFolderColumnDescriptor(proto().designation(), "10em"),
-                new EntityFolderColumnDescriptor(proto().provider(), "10em"),
-                new EntityFolderColumnDescriptor(proto().visibility(), "7em")
-            );//@formatter:on
+            List<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
+            columns.add(new EntityFolderColumnDescriptor(proto().type(), "7em"));
+            columns.add(new EntityFolderColumnDescriptor(proto().number(), "11em"));
+            columns.add(new EntityFolderColumnDescriptor(proto().extension(), "5em"));
+            columns.add(new EntityFolderColumnDescriptor(proto().description(), "20em"));
+            columns.add(new EntityFolderColumnDescriptor(proto().designation(), "10em"));
+            columns.add(new EntityFolderColumnDescriptor(proto().provider(), "10em"));
+            columns.add(new EntityFolderColumnDescriptor(proto().visibility(), "7em"));
+            return columns;
         }
     }
 
@@ -376,14 +352,14 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
 
         @Override
         public List<EntityFolderColumnDescriptor> columns() {
-            return Arrays.asList( //@formatter:off
-                new EntityFolderColumnDescriptor(proto().type(), "9em"),
-                new EntityFolderColumnDescriptor(proto().name(), "10em"),
-                new EntityFolderColumnDescriptor(proto().description(), "20em"),
-                new EntityFolderColumnDescriptor(proto().phone(), "10em"),
-                new EntityFolderColumnDescriptor(proto().email(), "15em"),
-                new EntityFolderColumnDescriptor(proto().visibility(), "7em")
-            );//@formatter:on
+            List<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
+            columns.add(new EntityFolderColumnDescriptor(proto().type(), "9em"));
+            columns.add(new EntityFolderColumnDescriptor(proto().name(), "10em"));
+            columns.add(new EntityFolderColumnDescriptor(proto().description(), "20em"));
+            columns.add(new EntityFolderColumnDescriptor(proto().phone(), "10em"));
+            columns.add(new EntityFolderColumnDescriptor(proto().email(), "15em"));
+            columns.add(new EntityFolderColumnDescriptor(proto().visibility(), "7em"));
+            return columns;
         }
     }
 
@@ -395,75 +371,19 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
 
         @Override
         public List<EntityFolderColumnDescriptor> columns() {
-            return Arrays.asList( //@formatter:off
-                    new EntityFolderColumnDescriptor(proto().type(), "15em", true), 
-                    new EntityFolderColumnDescriptor(proto().name(), "15em"),
-                    new EntityFolderColumnDescriptor(proto().description(), "25em")
-               );//@formatter:on
-        }
-
-        private EnumSet<BuildingAmenity.Type> getTypesToSelect() {
-            Collection<BuildingAmenity.Type> used = new ArrayList<BuildingAmenity.Type>();
-            for (BuildingAmenity item : getValue()) {
-                used.add(item.type().getValue());
-            }
-            return EnumSet.complementOf(EnumSet.copyOf(used));
-        }
-
-        @Override
-        protected void addItem() {
-            new SelectEnumDialog<BuildingAmenity.Type>(i18n.tr("Select Type"), getTypesToSelect()) {
-                @Override
-                public boolean onClickOk() {
-                    BuildingAmenity item = EntityFactory.create(BuildingAmenity.class);
-                    item.type().setValue(getSelectedType());
-                    addItem(item);
-                    return true;
-                }
-            }.show();
+            List<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
+            columns.add(new EntityFolderColumnDescriptor(proto().type(), "15em"));
+            columns.add(new EntityFolderColumnDescriptor(proto().name(), "15em"));
+            columns.add(new EntityFolderColumnDescriptor(proto().description(), "25em"));
+            return columns;
         }
     }
 
-    private class UtilityFolder extends VistaTableFolder<Utility> {
-
-        public UtilityFolder() {
-            super(Utility.class, BuildingForm.this.isEditable());
-        }
-
-        @Override
-        public List<EntityFolderColumnDescriptor> columns() {
-            return Arrays.asList(new EntityFolderColumnDescriptor(proto().name(), "56em", true));
-        }
-
-        @Override
-        protected IFolderDecorator<Utility> createDecorator() {
-            TableFolderDecorator<Utility> folderDecorator = (TableFolderDecorator<Utility>) super.createDecorator();
-            folderDecorator.setShowHeader(false);
-            return folderDecorator;
-        }
-
-        @Override
-        protected void addItem() {
-            GWT.<SelectUtilityListService> create(SelectUtilityListService.class).list(new DefaultAsyncCallback<EntitySearchResult<Utility>>() {
-                @Override
-                public void onSuccess(EntitySearchResult<Utility> result) {
-                    result.getData().removeAll(getValue());
-                    new EntitySelectorListDialog<Utility>(i18n.tr("Select Utility"), true, result.getData()) {
-                        @Override
-                        public boolean onClickOk() {
-                            for (Utility item : getSelectedItems()) {
-                                addItem(item);
-                            }
-                            return true;
-                        }
-
-                        @Override
-                        public String defineWidth() {
-                            return "30em";
-                        }
-                    }.show();
-                }
-            }, EntityListCriteria.create(Utility.class));
-        }
+    private FormFlexPanel createNotesAndAttachmentsTab(String title) {
+        FormFlexPanel main = new FormFlexPanel(title);
+        int row = -1;
+        main.setWidget(++row, 0, inject(proto().notesAndAttachments(), new NotesAndAttachmentsForm()));
+        return main;
     }
+
 }
