@@ -32,6 +32,7 @@ import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.server.IEntityPersistenceService;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
@@ -164,7 +165,9 @@ public class BuildingsResource {
                     }
 
                     {
-                        Persistence.service().retrieveMember(building.includedUtilities());
+                        if (building.includedUtilities().getAttachLevel() == AttachLevel.Detached) {
+                            Persistence.service().retrieveMember(building.includedUtilities());
+                        }
                         for (Utility utility : building.includedUtilities()) {
                             buildingRS.includedUtilities.add(Converter.convertBuildingIncludedUtility(utility));
                         }
