@@ -20,6 +20,8 @@
  */
 package com.propertyvista.biz.financial.billing;
 
+import org.junit.Ignore;
+
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
 
