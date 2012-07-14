@@ -176,6 +176,7 @@ public class BuildingsResource {
 
                 EntityQueryCriteria<Floorplan> floorplanCriteria = EntityQueryCriteria.create(Floorplan.class);
                 floorplanCriteria.add(PropertyCriterion.eq(floorplanCriteria.proto().building(), building));
+                floorplanCriteria.asc(floorplanCriteria.proto().bedrooms());
                 floorplanCriteria.asc(floorplanCriteria.proto().id());
                 List<Floorplan> floorplans = service.query(floorplanCriteria);
                 nextFloorplan: for (Floorplan floorplan : floorplans) {
