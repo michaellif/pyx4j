@@ -166,7 +166,7 @@ public class BillingFeatureEagerScenarioTest extends FinancialTestBase {
         serviceCharge("90.03").
         recurringFeatureCharges("13.36").
         oneTimeFeatureCharges("0.00").
-        taxes("12.40");
+        taxes("12.41");
         // @formatter:on
 
         //==================== RUN final ======================//

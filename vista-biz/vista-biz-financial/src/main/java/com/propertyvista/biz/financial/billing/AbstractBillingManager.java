@@ -29,6 +29,7 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.biz.financial.TaxUtils;
 import com.propertyvista.domain.financial.billing.Bill;
 
 abstract class AbstractBillingManager {
@@ -123,6 +124,12 @@ abstract class AbstractBillingManager {
                 add(nextPeriodBill.latePaymentFees().getValue()).
                 add(nextPeriodBill.depositAmount().getValue()).
                 add(nextPeriodBill.carryForwardCredit().getValue()));
+        
+        BigDecimal taxCombinedAmount = TaxUtils.calculateCombinedTax(nextPeriodBill.lineItems());
+        if (taxCombinedAmount.subtract(nextPeriodBill.taxes().getValue()).abs().compareTo(BigDecimal.ZERO) >= 0.01) {
+            TaxUtils.pennyFix(taxCombinedAmount.subtract(nextPeriodBill.taxes().getValue()), nextPeriodBill.lineItems());
+            nextPeriodBill.taxes().setValue(taxCombinedAmount);            
+        }
 
         nextPeriodBill.totalDueAmount().setValue(nextPeriodBill.pastDueAmount().getValue().add(nextPeriodBill.currentAmount().getValue().add(nextPeriodBill.taxes().getValue())));
         

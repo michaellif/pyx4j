@@ -253,8 +253,8 @@ public class BillingSunnyDayScenarioTest extends FinancialTestBase {
         recurringFeatureCharges("18.19").
         oneTimeFeatureCharges("0.00").
         depositRefundAmount("-968.07").
-        taxes("12.69").
-        totalDueAmount("-849.58");
+        taxes("12.70").
+        totalDueAmount("-849.57");
         // @formatter:on
 
         //==================== RUN final ======================//

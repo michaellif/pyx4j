@@ -20,6 +20,7 @@ import java.util.List;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
@@ -27,6 +28,7 @@ import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.domain.financial.billing.InvoiceAccountCharge;
 import com.propertyvista.domain.financial.billing.InvoiceChargeTax;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
+import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.domain.financial.billing.InvoiceProductCharge;
 import com.propertyvista.domain.financial.offering.ProductItemType;
 import com.propertyvista.domain.financial.tax.Tax;
@@ -35,20 +37,57 @@ import com.propertyvista.domain.policy.policies.ProductTaxPolicy;
 import com.propertyvista.domain.policy.policies.domain.LeaseAdjustmentPolicyItem;
 import com.propertyvista.domain.policy.policies.domain.ProductTaxPolicyItem;
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustmentReason;
 
 public class TaxUtils {
 
-    public static BigDecimal calculateCombinedTax(List<InvoiceDebit> debits, Building building) {
-        //TODO
-        // 1. calc tax on the combined totals of the given list of debits; note following:
-        //    a) composite tax (T1 + T2 + ...) - tax of each type is calculated on the total amount of charges the tax
-        //       is applicable for;
-        //    b) compound tax (T1 * (T2 * (...))) - for now only 1 level possible (see Tax.compound()); compound tax
-        //       applied after all non-compound taxes;
-        // 2. compare to the sum of taxes for each debit; balance the diff by adjusting the biggest taxTotal (pennyFix)
-        // 3. return tax amount
-        return null;
+    public static BigDecimal calculateCombinedTax(IList<InvoiceLineItem> items) {
+        BigDecimal taxCombinedAmount = BigDecimal.ZERO;
+        ArrayList<Tax> taxes = new ArrayList<Tax>();
+
+        for (InvoiceLineItem item : items) {
+            if (item.isInstanceOf(InvoiceAccountCharge.class)) {
+                InvoiceAccountCharge accountCharge = item.cast();
+                if (LeaseAdjustment.Status.submited == accountCharge.adjustment().status().getValue()
+                        && LeaseAdjustment.ExecutionType.immediate == accountCharge.adjustment().executionType().getValue()) {
+                    continue;
+                }
+            }
+
+            if (item.isInstanceOf(InvoiceDebit.class)) {
+                InvoiceDebit debit = item.cast();
+                for (InvoiceChargeTax tax : debit.taxes()) {
+                    if (!taxes.contains(tax.tax())) {
+                        taxes.add(tax.tax());
+                    }
+                }
+            }
+        }
+
+        for (Tax tax : taxes) {
+            BigDecimal amountPerTax = BigDecimal.ZERO;
+            for (InvoiceLineItem item : items) {
+                if (item.isInstanceOf(InvoiceAccountCharge.class)) {
+                    InvoiceAccountCharge accountCharge = item.cast();
+                    if (LeaseAdjustment.Status.submited == accountCharge.adjustment().status().getValue()
+                            && LeaseAdjustment.ExecutionType.immediate == accountCharge.adjustment().executionType().getValue()) {
+                        continue;
+                    }
+                }
+                if (item.isInstanceOf(InvoiceDebit.class)) {
+                    InvoiceDebit debit = item.cast();
+                    for (InvoiceChargeTax invoiceTax : debit.taxes()) {
+                        if (tax.equals(invoiceTax.tax())) {
+                            amountPerTax = amountPerTax.add(debit.amount().getValue());
+                        }
+                    }
+                }
+            }
+            taxCombinedAmount = taxCombinedAmount.add(MoneyUtils.round(amountPerTax.multiply(tax.rate().getValue())));
+        }
+
+        return taxCombinedAmount;
     }
 
     public static void calculateProductChargeTaxes(InvoiceProductCharge charge, Building building) {
@@ -137,4 +176,27 @@ public class TaxUtils {
         return leaseAdjustmentPolicyItem == null ? new ArrayList<Tax>() : leaseAdjustmentPolicyItem.taxes();
     }
 
+    public static void pennyFix(BigDecimal difference, IList<InvoiceLineItem> items) {
+        if (items != null && difference.abs().compareTo(BigDecimal.ZERO) >= 0.01) {
+            InvoiceDebit fatTaxDebit = null;
+            InvoiceChargeTax fatChargeTax = null;
+            for (InvoiceLineItem item : items) {
+                if (item.isInstanceOf(InvoiceDebit.class)) {
+                    InvoiceDebit debit = item.cast();
+                    for (InvoiceChargeTax tax : debit.taxes()) {
+                        if (fatChargeTax == null) {
+                            fatChargeTax = tax;
+                            fatTaxDebit = debit;
+                        } else if (fatChargeTax.amount().getValue().compareTo(tax.amount().getValue()) < 0) {
+                            fatChargeTax = tax;
+                            fatTaxDebit = debit;
+                        }
+                    }
+                }
+            }
+
+            fatChargeTax.amount().setValue(fatChargeTax.amount().getValue().add(difference));
+            fatTaxDebit.taxTotal().setValue(fatTaxDebit.taxTotal().getValue().add(difference));
+        }
+    }
 }
