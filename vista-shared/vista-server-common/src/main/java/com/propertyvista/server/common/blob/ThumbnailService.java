@@ -71,11 +71,11 @@ public class ThumbnailService {
         switch (imageTarget) {
         case Building:
             ThumbnailService.persist(key, fileName, originalContent, getDefaultResampleParams(imageTarget), ImageConsts.BUILDING_XSMALL,
-                    ImageConsts.BUILDING_SMALL, ImageConsts.BUILDING_MEDIUM, ImageConsts.BUILDING_LARGE);
+                    ImageConsts.BUILDING_SMALL, ImageConsts.BUILDING_MEDIUM, ImageConsts.BUILDING_LARGE, null);
             break;
         case Floorplan:
             ThumbnailService.persist(key, fileName, originalContent, getDefaultResampleParams(imageTarget), null, ImageConsts.FLOORPLAN_SMALL,
-                    ImageConsts.FLOORPLAN_MEDIUM, ImageConsts.FLOORPLAN_LARGE);
+                    ImageConsts.FLOORPLAN_MEDIUM, ImageConsts.FLOORPLAN_LARGE, ImageConsts.FLOORPLAN_XLARGE);
             break;
         default:
             throw new IllegalArgumentException();
@@ -86,17 +86,17 @@ public class ThumbnailService {
         switch (imageTarget) {
         case Building:
             return createThumbnailBlob(fileName, originalContent, getDefaultResampleParams(imageTarget), ImageConsts.BUILDING_XSMALL,
-                    ImageConsts.BUILDING_SMALL, ImageConsts.BUILDING_MEDIUM, ImageConsts.BUILDING_LARGE);
+                    ImageConsts.BUILDING_SMALL, ImageConsts.BUILDING_MEDIUM, ImageConsts.BUILDING_LARGE, null);
         case Floorplan:
             return createThumbnailBlob(fileName, originalContent, getDefaultResampleParams(imageTarget), null, ImageConsts.FLOORPLAN_SMALL,
-                    ImageConsts.FLOORPLAN_MEDIUM, ImageConsts.FLOORPLAN_LARGE);
+                    ImageConsts.FLOORPLAN_MEDIUM, ImageConsts.FLOORPLAN_LARGE, ImageConsts.FLOORPLAN_XLARGE);
         default:
             throw new IllegalArgumentException();
         }
     }
 
     public static ThumbnailBlob createThumbnailBlob(String fileName, byte[] originalContent, ResampleParams params, Dimension xsmall, Dimension small,
-            Dimension medum, Dimension large) {
+            Dimension medum, Dimension large, Dimension xlarge) {
         ThumbnailBlob blob = EntityFactory.create(ThumbnailBlob.class);
         InputStream stream = null;
         try {
@@ -108,6 +108,7 @@ public class ThumbnailService {
             blob.small().setValue(resample(fileName, inputImage, params, small));
             blob.medium().setValue(resample(fileName, inputImage, params, medum));
             blob.large().setValue(resample(fileName, inputImage, params, large));
+            blob.xlarge().setValue(resample(fileName, inputImage, params, xlarge));
         } catch (IOException e) {
             log.error("Error", e);
             throw new UserRuntimeException(i18n.tr("Unable To Resample The Image ''{0}''", fileName));
@@ -118,8 +119,8 @@ public class ThumbnailService {
     }
 
     public static void persist(Key key, String fileName, byte[] originalContent, ResampleParams params, Dimension xsmall, Dimension small, Dimension medum,
-            Dimension large) {
-        ThumbnailBlob blob = createThumbnailBlob(fileName, originalContent, params, xsmall, small, medum, large);
+            Dimension large, Dimension xlarge) {
+        ThumbnailBlob blob = createThumbnailBlob(fileName, originalContent, params, xsmall, small, medum, large, xlarge);
         blob.setPrimaryKey(key);
         Persistence.service().persist(blob);
     }
@@ -273,6 +274,11 @@ public class ThumbnailService {
                 data = blob.medium().getValue();
                 break;
             case large:
+                data = blob.large().getValue();
+                break;
+            case xlarge:
+                data = blob.xlarge().getValue();
+                break;
             default:
                 data = blob.large().getValue();
                 break;

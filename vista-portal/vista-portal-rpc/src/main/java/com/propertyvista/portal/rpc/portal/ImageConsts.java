@@ -21,7 +21,7 @@ import com.pyx4j.site.shared.Dimension;
 public interface ImageConsts {
 
     public static enum ThumbnailSize implements Serializable {
-        xsmall, small, medium, large
+        xsmall, small, medium, large, xlarge
     }
 
     public static enum ThumbnailType {
@@ -50,5 +50,8 @@ public interface ImageConsts {
     public static final Dimension FLOORPLAN_MEDIUM = new Dimension(80, 80);
 
     public static final Dimension FLOORPLAN_LARGE = new Dimension(318, 321);
+
+    // Used by rentstarlight.com
+    public static final Dimension FLOORPLAN_XLARGE = new Dimension(500, 505);
 
 }

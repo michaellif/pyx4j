@@ -46,6 +46,9 @@ public interface ThumbnailBlob extends IEntity {
     @Length(256 * 1024)
     IPrimitive<byte[]> large();
 
+    @Length(256 * 1024)
+    IPrimitive<byte[]> xlarge();
+
     @Timestamp(Timestamp.Update.Updated)
     IPrimitive<Date> updated();
 
