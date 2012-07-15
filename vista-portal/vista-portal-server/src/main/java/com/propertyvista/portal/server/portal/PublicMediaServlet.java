@@ -151,7 +151,7 @@ public class PublicMediaServlet extends HttpServlet {
                 return;
             }
             blob = ThumbnailService.createThumbnailBlob(filename, raw, ThumbnailService.getDefaultResampleParams(ImageTarget.Building),
-                    ImageConsts.BUILDING_XSMALL, ImageConsts.BUILDING_SMALL, ImageConsts.BUILDING_MEDIUM, ImageConsts.BUILDING_LARGE);
+                    ImageConsts.BUILDING_XSMALL, ImageConsts.BUILDING_SMALL, ImageConsts.BUILDING_MEDIUM, ImageConsts.BUILDING_LARGE, null);
             CacheService.put(PublicMediaServlet.class.getName() + filename, blob);
         }
         ThumbnailService.serve(blob, thumbnailSize, response);
