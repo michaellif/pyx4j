@@ -3,7 +3,9 @@
 	<property name="ireport.zoom" value="1.2100000000000029"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
-	<parameter name="TAX_INCLUDED" class="java.lang.Boolean"/>
+	<parameter name="TAX_INCLUDED" class="java.lang.Boolean">
+		<defaultValueExpression><![CDATA[false]]></defaultValueExpression>
+	</parameter>
 	<field name="amount" class="java.math.BigDecimal"/>
 	<field name="description" class="java.lang.String"/>
 	<field name="_THIS" class="com.propertyvista.domain.financial.billing.InvoiceLineItem"/>

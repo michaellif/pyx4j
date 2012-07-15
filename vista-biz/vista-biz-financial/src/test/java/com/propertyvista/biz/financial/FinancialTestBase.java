@@ -462,31 +462,29 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
     }
 
     protected LeaseAdjustment addGoodWillCredit(String amount) {
-        return addGoodWillCredit(amount, null);
+        return addGoodWillCredit(amount, true);
     }
 
-    protected LeaseAdjustment addGoodWillCredit(String amount, String effectiveDate) {
-        return addLeaseAdjustment(amount, leaseAdjustmentReasonDataModel.getReason(LeaseAdjustmentReasonDataModel.Reason.goodWill),
-                FinancialTestsUtils.getDate(effectiveDate));
+    protected LeaseAdjustment addGoodWillCredit(String amount, boolean immediate) {
+        return addLeaseAdjustment(amount, leaseAdjustmentReasonDataModel.getReason(LeaseAdjustmentReasonDataModel.Reason.goodWill), immediate);
     }
 
     protected LeaseAdjustment addAccountCharge(String amount) {
-        return addAccountCharge(amount, null);
+        return addAccountCharge(amount, true);
     }
 
-    protected LeaseAdjustment addAccountCharge(String amount, String effectiveDate) {
-        return addLeaseAdjustment(amount, leaseAdjustmentReasonDataModel.getReason(LeaseAdjustmentReasonDataModel.Reason.accountCharge),
-                FinancialTestsUtils.getDate(effectiveDate));
+    protected LeaseAdjustment addAccountCharge(String amount, boolean immediate) {
+        return addLeaseAdjustment(amount, leaseAdjustmentReasonDataModel.getReason(LeaseAdjustmentReasonDataModel.Reason.accountCharge), immediate);
     }
 
-    private LeaseAdjustment addLeaseAdjustment(String amount, LeaseAdjustmentReason reason, LogicalDate targetDate) {
+    private LeaseAdjustment addLeaseAdjustment(String amount, LeaseAdjustmentReason reason, boolean immediate) {
 
         Lease lease = retrieveLease();
 
         LeaseAdjustment adjustment = EntityFactory.create(LeaseAdjustment.class);
         adjustment.status().setValue(Status.submited);
         adjustment.amount().setValue(new BigDecimal(amount));
-        adjustment.executionType().setValue(targetDate == null ? LeaseAdjustment.ExecutionType.immediate : LeaseAdjustment.ExecutionType.pending);
+        adjustment.executionType().setValue(immediate ? LeaseAdjustment.ExecutionType.immediate : LeaseAdjustment.ExecutionType.pending);
         adjustment.targetDate().setValue(new LogicalDate(SysDateManager.getSysDate()));
         adjustment.description().setValue(reason.name().getValue());
         adjustment.reason().setValue(reason.getValue());
@@ -495,7 +493,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         Persistence.service().persist(adjustment);
         Persistence.service().commit();
 
-        if (targetDate == null) {
+        if (immediate) {
             ServerSideFactory.create(ARFacade.class).postImmediateAdjustment(adjustment);
         }
         return adjustment;

@@ -179,12 +179,12 @@ public class BillingSunnyDayScenarioTest extends FinancialTestBase {
 
         addBooking("28-Apr-2011", SaveAction.saveAsFinal);
 
-        addGoodWillCredit("20.00", "19-Apr-2011");
+        addGoodWillCredit("20.00", false);
         addGoodWillCredit("30.00");
 
         advanceDate("18-May-2011");
 
-        addGoodWillCredit("120.00", "18-May-2011");
+        addGoodWillCredit("120.00", false);
         addGoodWillCredit("130.00");
 
         bill = runBilling(true, true);
@@ -211,7 +211,7 @@ public class BillingSunnyDayScenarioTest extends FinancialTestBase {
 
         advanceDate("18-Jun-2011");
 
-        addGoodWillCredit("30.00", "1-Jul-2011");
+        addGoodWillCredit("30.00", false);
         addGoodWillCredit("40.00");
 
         bill = runBilling(true, true);

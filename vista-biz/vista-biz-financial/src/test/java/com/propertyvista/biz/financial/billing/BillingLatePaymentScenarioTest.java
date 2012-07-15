@@ -172,7 +172,7 @@ public class BillingLatePaymentScenarioTest extends FinancialTestBase {
         SysDateManager.setSysDate("30-Jul-2011");
         receiveAndPostPayment("30-Jul-2011", "1103.94");
         // add non-immediate charge (taxable) - should not generate late fee
-        addAccountCharge("200.00", "02-Aug-2011");
+        addAccountCharge("200.00", false);
 
         // run bill
         SysDateManager.setSysDate("17-Aug-2011");

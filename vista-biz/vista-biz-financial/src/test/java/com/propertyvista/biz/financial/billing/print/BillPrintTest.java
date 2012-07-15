@@ -73,6 +73,7 @@ public class BillPrintTest extends FinancialTestBase {
             InvoiceAccountCharge accountCharge = EntityFactory.create(InvoiceAccountCharge.class);
             accountCharge.adjustment().executionType().setValue(ExecutionType.immediate);
             accountCharge.amount().setValue(new BigDecimal("250.00"));
+            accountCharge.taxTotal().setValue(new BigDecimal("25.00"));
             accountCharge.description().setValue("Account Charge");
             accountCharge.targetDate().setValue(FinancialTestsUtils.getDate("1-Mar-2011"));
             bill.lineItems().add(accountCharge);
