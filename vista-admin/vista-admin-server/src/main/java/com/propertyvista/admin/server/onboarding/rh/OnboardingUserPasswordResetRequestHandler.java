@@ -20,6 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -28,17 +29,23 @@ import com.pyx4j.essentials.server.AbstractAntiBot;
 import com.pyx4j.essentials.server.EssentialsServerSideConfiguration;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UserRuntimeException;
+import com.pyx4j.security.rpc.PasswordChangeRequest;
+import com.pyx4j.server.contexts.NamespaceManager;
 
+import com.propertyvista.admin.domain.pmc.Pmc;
+import com.propertyvista.admin.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.admin.domain.security.OnboardingUserCredential;
 import com.propertyvista.admin.server.onboarding.OnboardingXMLUtils;
 import com.propertyvista.admin.server.onboarding.rhf.AbstractRequestHandler;
+import com.propertyvista.biz.system.UserManagementFacade;
 import com.propertyvista.domain.security.OnboardingUser;
-import com.propertyvista.misc.VistaTODO;
+import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.onboarding.OnboardingUserAuthenticationResponseIO;
 import com.propertyvista.onboarding.OnboardingUserPasswordResetRequestIO;
 import com.propertyvista.onboarding.ResponseIO;
 import com.propertyvista.server.common.security.AccessKey;
 import com.propertyvista.server.common.security.PasswordEncryptor;
+import com.propertyvista.server.domain.security.CrmUserCredential;
 
 public class OnboardingUserPasswordResetRequestHandler extends AbstractRequestHandler<OnboardingUserPasswordResetRequestIO> {
 
@@ -85,10 +92,6 @@ public class OnboardingUserPasswordResetRequestHandler extends AbstractRequestHa
             response.status().setValue(OnboardingUserAuthenticationResponseIO.AuthenticationStatusCode.PermissionDenied);
             return response;
         }
-        // TODO verify CRM user enabled if 
-        if (VistaTODO.VISTA_1588) {
-            log.warn("TODO - implement CRM User/OnboardingUser synchronization");
-        }
 
         if (!token.accessKey.equals(cr.accessKey().getValue())) {
             AbstractAntiBot.authenticationFailed(token.email);
@@ -104,20 +107,51 @@ public class OnboardingUserPasswordResetRequestHandler extends AbstractRequestHa
         // TODO verify securityAnswer
         request.securityAnswer();
 
-        // TODO change CRM user if one exists
-        if (VistaTODO.VISTA_1588) {
-            log.warn("TODO - implement CRM User/OnboardingUser syncronization");
+        boolean checkAgainsOnboarding = true;
+
+        if (cr.pmc().getPrimaryKey() != null) {
+            Pmc pmc = Persistence.service().retrieve(Pmc.class, cr.pmc().getPrimaryKey());
+
+            if (pmc.status().getValue() != PmcStatus.Created) {
+                String curNameSpace = NamespaceManager.getNamespace();
+
+                try {
+                    NamespaceManager.setNamespace(pmc.namespace().getValue());
+
+                    EntityQueryCriteria<CrmUserCredential> crmUCrt = EntityQueryCriteria.create(CrmUserCredential.class);
+                    crmUCrt.add(PropertyCriterion.eq(crmUCrt.proto().roles().$().behaviors(), VistaCrmBehavior.PropertyVistaAccountOwner));
+                    crmUCrt.add(PropertyCriterion.eq(crmUCrt.proto().onboardingUser(), cr.getPrimaryKey()));
+                    CrmUserCredential crmCredential = Persistence.service().retrieve(crmUCrt);
+
+                    if (crmCredential == null) {
+                        throw new UserRuntimeException(i18n.tr("Invalid User Account. Please Contact Support"));
+                    }
+
+                    if (!crmCredential.enabled().isBooleanTrue()) {
+                        response.status().setValue(OnboardingUserAuthenticationResponseIO.AuthenticationStatusCode.PermissionDenied);
+                        return response;
+                    }
+
+                    if (PasswordEncryptor.checkPassword(request.newPassword().getValue(), crmCredential.credential().getValue())) {
+                        throw new UserRuntimeException(i18n.tr("Your password cannot repeat your previous password"));
+                    }
+
+                    checkAgainsOnboarding = false;
+
+                } finally {
+                    NamespaceManager.setNamespace(curNameSpace);
+                }
+            }
         }
-        if (PasswordEncryptor.checkPassword(request.newPassword().getValue(), cr.credential().getValue())) {
+
+        if (checkAgainsOnboarding && PasswordEncryptor.checkPassword(request.newPassword().getValue(), cr.credential().getValue())) {
             throw new UserRuntimeException(i18n.tr("Your password cannot repeat your previous password"));
         }
 
-        cr.accessKey().setValue(null);
-        cr.credential().setValue(PasswordEncryptor.encryptPassword(request.newPassword().getValue()));
-        cr.credentialUpdated().setValue(new Date());
-        cr.requiredPasswordChangeOnNextLogIn().setValue(Boolean.FALSE);
-        Persistence.service().persist(cr);
-        Persistence.service().commit();
+        PasswordChangeRequest pchRequest = EntityFactory.create(PasswordChangeRequest.class);
+        pchRequest.newPassword().setValue(request.newPassword().getValue());
+        pchRequest.userPk().setValue(user.getPrimaryKey());
+        ServerSideFactory.create(UserManagementFacade.class).selfChangePassword(OnboardingUserCredential.class, pchRequest);
 
         response.role().setValue(OnboardingXMLUtils.convertRole(cr.behavior().getValue()));
         response.onboardingAccountId().set(cr.onboardingAccountId());
