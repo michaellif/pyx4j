@@ -40,7 +40,6 @@ import com.propertyvista.portal.rpc.ptapp.services.steps.ApartmentService;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
 import com.propertyvista.portal.server.ptapp.services.util.ApplicationProgressMgr;
 import com.propertyvista.portal.server.ptapp.services.util.DigitalSignatureMgr;
-import com.propertyvista.server.common.charges.PriceCalculationHelpers;
 import com.propertyvista.server.common.util.AddressConverter;
 
 public class ApartmentServiceImpl implements ApartmentService {
@@ -228,7 +227,6 @@ public class ApartmentServiceImpl implements ApartmentService {
         // fill agreed items:
         for (BillableItem item : lease.version().leaseProducts().featureItems()) {
             if (item.item().type().isInstanceOf(FeatureItemType.class)) {
-                PriceCalculationHelpers.calculateChargeItemAdjustments(item);
                 switch (item.item().type().<FeatureItemType> cast().featureType().getValue()) {
                 case utility:
                     entity.agreedUtilities().add(item);

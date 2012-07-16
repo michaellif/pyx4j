@@ -13,16 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.lease.common;
 
-import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.client.CEntityForm;
 import com.pyx4j.entity.client.ui.folder.BoxFolderItemDecorator;
-import com.pyx4j.entity.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.entity.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.forms.client.events.PropertyChangeEvent;
-import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
-import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
@@ -47,6 +41,14 @@ public class BillableItemFolder extends VistaBoxFolder<BillableItem> {
         super(BillableItem.class, modifyable);
         this.lease = lease;
         this.leaseEditorView = leaseEditorView;
+    }
+
+    @Override
+    public CComponent<?, ?> create(IObject<?> member) {
+        if (member instanceof BillableItem) {
+            return new BillableItemEditor(lease, leaseEditorView);
+        }
+        return super.create(member);
     }
 
     @Override
@@ -76,41 +78,5 @@ public class BillableItemFolder extends VistaBoxFolder<BillableItem> {
                 }
             }.show();
         }
-    }
-
-    @Override
-    protected CEntityFolderItem<BillableItem> createItem(boolean first) {
-        final CEntityFolderItem<BillableItem> item = super.createItem(first);
-        item.addPropertyChangeHandler(new PropertyChangeHandler() {
-            @Override
-            public void onPropertyChange(PropertyChangeEvent event) {
-                if (event.getPropertyName() == PropertyName.repopulated) {
-                    if (isAddable() && !lease.getValue().approvalDate().isNull()) {
-                        LogicalDate value = item.getValue().expirationDate().getValue();
-                        if ((value != null) && !value.after(TimeUtils.today())) {
-                            item.setViewable(true);
-                            item.inheritViewable(false);
-
-                            item.setMovable(false);
-                            item.setRemovable(false);
-
-                            // compensate the fact that item.setViewable DOESN'T call kids' setViewable!?
-                            for (CComponent<?, ?> comp : item.getComponents()) {
-                                comp.setViewable(true);
-                            }
-                        }
-                    }
-                }
-            }
-        });
-        return item;
-    }
-
-    @Override
-    public CComponent<?, ?> create(IObject<?> member) {
-        if (member instanceof BillableItem) {
-            return new BillableItemEditor(lease, leaseEditorView);
-        }
-        return super.create(member);
     }
 }

@@ -153,7 +153,7 @@ public class AvailabilityReportManager {
                 status.rentedStatus().setValue(RentedStatus.Rented);
                 status.rentedFromDay().setValue(segment.lease().leaseFrom().getValue());
                 status.moveInDay().setValue(segment.lease().version().expectedMoveIn().getValue());
-                status.unitRent().setValue(segment.lease().version().leaseProducts().serviceItem()._currentPrice().getValue());
+                status.unitRent().setValue(segment.lease().version().leaseProducts().serviceItem().agreedPrice().getValue());
                 break;
             }
         }
@@ -170,7 +170,7 @@ public class AvailabilityReportManager {
         status.rentedStatus().setValue(RentedStatus.Rented);
         status.rentedFromDay().setValue(current.lease().leaseFrom().getValue());
         status.moveInDay().setValue(current.lease().version().expectedMoveIn().getValue());
-        status.unitRent().setValue(current.lease().version().leaseProducts().serviceItem()._currentPrice().getValue());
+        status.unitRent().setValue(current.lease().version().leaseProducts().serviceItem().agreedPrice().getValue());
     }
 
     private void leased(UnitAvailabilityStatus status, AptUnitOccupancySegment current, List<AptUnitOccupancySegment> future) {
@@ -222,7 +222,7 @@ public class AvailabilityReportManager {
                     status.rentedStatus().setValue(RentedStatus.Rented);
                     status.rentedFromDay().setValue(segment.lease().leaseFrom().getValue());
                     status.moveInDay().setValue(segment.lease().version().expectedMoveIn().getValue());
-                    status.unitRent().setValue(segment.lease().version().leaseProducts().serviceItem()._currentPrice().getValue());
+                    status.unitRent().setValue(segment.lease().version().leaseProducts().serviceItem().agreedPrice().getValue());
                 }
                 break;
             default:
@@ -248,7 +248,7 @@ public class AvailabilityReportManager {
                 status.rentedStatus().setValue(RentedStatus.Rented);
                 status.rentedFromDay().setValue(segment.lease().leaseFrom().getValue());
                 status.moveInDay().setValue(segment.lease().version().expectedMoveIn().getValue());
-                status.unitRent().setValue(segment.lease().version().leaseProducts().serviceItem()._currentPrice().getValue());
+                status.unitRent().setValue(segment.lease().version().leaseProducts().serviceItem().agreedPrice().getValue());
                 break;
             }
         }

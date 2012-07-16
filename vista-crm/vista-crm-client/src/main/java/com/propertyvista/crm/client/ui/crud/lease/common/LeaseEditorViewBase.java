@@ -13,8 +13,6 @@
  */
 package com.propertyvista.crm.client.ui.crud.lease.common;
 
-import java.math.BigDecimal;
-
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.site.client.ui.crud.form.IEditorView;
@@ -37,8 +35,6 @@ public interface LeaseEditorViewBase<DTO extends LeaseDTO> extends IEditorView<D
         void createBillableItem(AsyncCallback<BillableItem> callback, ProductItem item);
 
         void createDeposit(AsyncCallback<Deposit> callback, DepositType depositType, BillableItem item);
-
-        void calculateChargeItemAdjustments(AsyncCallback<BigDecimal> callback, BillableItem item);
     }
 
     void updateUnitValue(DTO value);

@@ -32,7 +32,6 @@ import com.propertyvista.biz.financial.preload.PreloadConfig;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.AdjustmentType;
-import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.ExecutionType;
 
 @Ignore
 public class BillingProrationServicePercentageDiscountTest extends FinancialTestBase {
@@ -48,16 +47,16 @@ public class BillingProrationServicePercentageDiscountTest extends FinancialTest
     public void testScenario1VISTA1715() {
 
         setLeaseTerms("05-Feb-2012", "14-Feb-2013");
-        addServiceAdjustment("-55.55", AdjustmentType.monetary, ExecutionType.inLease);
-        addServiceAdjustment("-0.15", AdjustmentType.percentage, ExecutionType.inLease);
+        addServiceAdjustment("-55.55", AdjustmentType.monetary);
+        addServiceAdjustment("-0.15", AdjustmentType.percentage);
         BillableItem parking1 = addParking(SaveAction.saveAsDraft);
-        addFeatureAdjustment(parking1.uid().getValue(), "-3.03", AdjustmentType.monetary, ExecutionType.inLease);
+        addFeatureAdjustment(parking1.uid().getValue(), "-3.03", AdjustmentType.monetary);
         BillableItem parking2 = addParking(SaveAction.saveAsDraft);
-        addFeatureAdjustment(parking2.uid().getValue(), "-17.99", AdjustmentType.monetary, ExecutionType.inLease);
+        addFeatureAdjustment(parking2.uid().getValue(), "-17.99", AdjustmentType.monetary);
         BillableItem locker1 = addLocker(SaveAction.saveAsDraft);
-        addFeatureAdjustment(locker1.uid().getValue(), "-0.17", AdjustmentType.percentage, ExecutionType.inLease);
+        addFeatureAdjustment(locker1.uid().getValue(), "-0.17", AdjustmentType.percentage);
         BillableItem pet1 = addPet(SaveAction.saveAsDraft);
-        addFeatureAdjustment(pet1.uid().getValue(), "-1", AdjustmentType.percentage, ExecutionType.inLease);
+        addFeatureAdjustment(pet1.uid().getValue(), "-1", AdjustmentType.percentage);
 
         //==================== RUN 1 ======================
 

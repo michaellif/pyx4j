@@ -221,7 +221,6 @@ public class LeaseFacadeImpl implements LeaseFacade {
         BillableItem newItem = EntityFactory.create(BillableItem.class);
         newItem.item().set(item);
         newItem.agreedPrice().setValue(item.price().getValue());
-        newItem._currentPrice().setValue(item.price().getValue());
 
         return newItem;
     }

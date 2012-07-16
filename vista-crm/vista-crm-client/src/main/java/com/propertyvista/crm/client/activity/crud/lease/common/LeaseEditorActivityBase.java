@@ -13,8 +13,6 @@
  */
 package com.propertyvista.crm.client.activity.crud.lease.common;
 
-import java.math.BigDecimal;
-
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.shared.EntityFactory;
@@ -72,10 +70,5 @@ public abstract class LeaseEditorActivityBase<DTO extends LeaseDTO> extends Edit
     @Override
     public void createDeposit(AsyncCallback<Deposit> callback, DepositType depositType, BillableItem item) {
         ((LeaseEditorCrudServiceBase<DTO>) getService()).createDeposit(callback, depositType, item, getView().getValue());
-    }
-
-    @Override
-    public void calculateChargeItemAdjustments(AsyncCallback<BigDecimal> callback, BillableItem item) {
-        ((LeaseEditorCrudServiceBase<DTO>) getService()).calculateChargeItemAdjustments(callback, item);
     }
 }

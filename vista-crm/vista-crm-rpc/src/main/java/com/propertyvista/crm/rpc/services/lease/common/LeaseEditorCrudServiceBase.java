@@ -13,8 +13,6 @@
  */
 package com.propertyvista.crm.rpc.services.lease.common;
 
-import java.math.BigDecimal;
-
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.rpc.AbstractVersionedCrudService;
@@ -35,6 +33,4 @@ public interface LeaseEditorCrudServiceBase<DTO extends LeaseDTO> extends Abstra
     void createBillableItem(AsyncCallback<BillableItem> callback, ProductItem productItemId, DTO currentValue);
 
     void createDeposit(AsyncCallback<Deposit> callback, DepositType depositType, BillableItem item, DTO currentValue);
-
-    void calculateChargeItemAdjustments(AsyncCallback<BigDecimal> callback, BillableItem item);
 }

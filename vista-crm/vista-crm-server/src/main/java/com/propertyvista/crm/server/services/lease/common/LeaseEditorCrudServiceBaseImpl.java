@@ -13,8 +13,6 @@
  */
 package com.propertyvista.crm.server.services.lease.common;
 
-import java.math.BigDecimal;
-
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.config.server.ServerSideFactory;
@@ -35,12 +33,10 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
-import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.ExecutionType;
 import com.propertyvista.domain.tenant.lease.Deposit;
 import com.propertyvista.domain.tenant.lease.Deposit.DepositType;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.dto.LeaseDTO;
-import com.propertyvista.server.common.charges.PriceCalculationHelpers;
 
 public abstract class LeaseEditorCrudServiceBaseImpl<DTO extends LeaseDTO> extends LeaseCrudServiceBaseImpl<DTO> implements LeaseEditorCrudServiceBase<DTO> {
 
@@ -89,16 +85,13 @@ public abstract class LeaseEditorCrudServiceBaseImpl<DTO extends LeaseDTO> exten
             if (adj.createdWhen().isNull()) {
                 adj.createdBy().set(CrmAppContext.getCurrentUserEmployee());
             }
-            // correct adjustment expiration date:
-            if (ExecutionType.oneTime == adj.executionType().getValue()) {
-                adj.expirationDate().setValue(null);
-            }
         }
     }
 
     @Override
     public void setSelectedUnit(AsyncCallback<DTO> callback, AptUnit unitId, DTO currentValue) {
         ServerSideFactory.create(LeaseFacade.class).setUnit(currentValue, unitId);
+        loadDetachedProducts(currentValue);
         fillServiceEligibilityData(currentValue);
         fillserviceItems(currentValue);
         callback.onSuccess(currentValue);
@@ -107,6 +100,7 @@ public abstract class LeaseEditorCrudServiceBaseImpl<DTO extends LeaseDTO> exten
     @Override
     public void setSelectedService(AsyncCallback<DTO> callback, ProductItem serviceId, DTO currentValue) {
         ServerSideFactory.create(LeaseFacade.class).setService(currentValue, serviceId);
+        loadDetachedProducts(currentValue);
         fillServiceEligibilityData(currentValue);
         callback.onSuccess(currentValue);
     }
@@ -120,11 +114,6 @@ public abstract class LeaseEditorCrudServiceBaseImpl<DTO extends LeaseDTO> exten
     public void createDeposit(AsyncCallback<Deposit> callback, DepositType depositType, BillableItem item, DTO currentValue) {
         assert !currentValue.unit().isNull();
         callback.onSuccess(ServerSideFactory.create(DepositFacade.class).createDeposit(depositType, item, currentValue.unit().building()));
-    }
-
-    @Override
-    public void calculateChargeItemAdjustments(AsyncCallback<BigDecimal> callback, BillableItem item) {
-        callback.onSuccess(PriceCalculationHelpers.calculateChargeItemAdjustments(item));
     }
 
     // Internals:
@@ -160,6 +149,7 @@ public abstract class LeaseEditorCrudServiceBaseImpl<DTO extends LeaseDTO> exten
                 Persistence.service().retrieve(feature.version().items());
                 for (ProductItem item : feature.version().items()) {
                     if (!item.isDefault().isBooleanTrue()) {
+                        Persistence.service().retrieve(item.product());
                         currentValue.selectedFeatureItems().add(item);
                     }
                 }

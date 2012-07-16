@@ -65,7 +65,7 @@ public class FeatureFolder extends VistaTableFolder<BillableItem> {
     public List<EntityFolderColumnDescriptor> columns() {
         ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
         columns.add(new EntityFolderColumnDescriptor(proto().item().type(), "13em"));
-        columns.add(new EntityFolderColumnDescriptor(proto()._currentPrice(), "7em"));
+        columns.add(new EntityFolderColumnDescriptor(proto().agreedPrice(), "7em"));
         columns.add(new EntityFolderColumnDescriptor(proto().item().description(), "50em"));
         return columns;
 
@@ -83,7 +83,6 @@ public class FeatureFolder extends VistaTableFolder<BillableItem> {
                                 BillableItem newItem = EntityFactory.create(BillableItem.class);
                                 newItem.item().set(item);
                                 newItem.agreedPrice().setValue(item.price().getValue());
-                                newItem._currentPrice().setValue(item.price().getValue());
                                 addItem(newItem);
                             }
                         }

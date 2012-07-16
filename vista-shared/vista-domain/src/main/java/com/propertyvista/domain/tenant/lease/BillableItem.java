@@ -66,14 +66,4 @@ public interface BillableItem extends IEntity {
     @Format("MM/dd/yyyy")
     @Caption(description = "Empty value assumes Lease end date")
     IPrimitive<LogicalDate> expirationDate();
-
-    /**
-     * Current price: contractual price value (agreed price + adjustments),
-     * should be recalculated (@link
-     * PriceCalculationHelpers.calculateBillableItemAdjustments()) before use!..
-     */
-    @ToString(index = 2)
-    @Format("#0.00")
-    @Caption(name = "Price")
-    IPrimitive<BigDecimal> _currentPrice();
 }

@@ -13,12 +13,11 @@
  */
 package com.propertyvista.crm.client.ui.crud.lease.common;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import com.google.gwt.event.logical.shared.ValueChangeEvent;
-import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 
@@ -35,6 +34,7 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.ui.crud.form.IEditorView;
 import com.pyx4j.site.client.ui.crud.misc.CEntitySelectorHyperlink;
@@ -54,7 +54,6 @@ import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
-import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.ExecutionType;
 import com.propertyvista.domain.tenant.lease.BillableItemExtraData;
 import com.propertyvista.domain.tenant.lease.extradata.Pet;
 import com.propertyvista.domain.tenant.lease.extradata.Vehicle;
@@ -165,11 +164,24 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
                 get(proto().expirationDate()).setVisible(isEditable() || !getValue().expirationDate().isNull());
 
                 get(proto().item()).setEditable(false);
-                if (isMandatoryFeature(getValue().item().product())) {
-                    // correct folder item:
-                    if (getParent() instanceof CEntityFolderItem) {
-                        CEntityFolderItem<BillableItem> item = (CEntityFolderItem<BillableItem>) getParent();
-                        item.setRemovable(false);
+
+                // correct folder item:
+                if (getParent() instanceof CEntityFolderItem) {
+                    CEntityFolderItem<BillableItem> item = (CEntityFolderItem<BillableItem>) getParent();
+
+                    item.setRemovable(!isMandatoryFeature(getValue().item().product()));
+
+                    if (!lease.getValue().approvalDate().isNull()) {
+                        LogicalDate expirationDate = item.getValue().expirationDate().getValue();
+                        if ((expirationDate != null) && expirationDate.before(ClientContext.getServerDate())) {
+                            item.setViewable(true);
+                            item.inheritViewable(false);
+
+                            // compensate the fact that item.setViewable DOESN'T call kids' setViewable!?
+                            for (CComponent<?, ?> comp : item.getComponents()) {
+                                comp.setViewable(true);
+                            }
+                        }
                     }
                 }
             }
@@ -250,7 +262,6 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
         public List<EntityFolderColumnDescriptor> columns() {
             ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
             columns.add(new EntityFolderColumnDescriptor(proto().adjustmentType(), "8em"));
-            columns.add(new EntityFolderColumnDescriptor(proto().executionType(), "8em"));
             columns.add(new EntityFolderColumnDescriptor(proto().value(), "5em"));
             columns.add(new EntityFolderColumnDescriptor(proto().effectiveDate(), "9em"));
             columns.add(new EntityFolderColumnDescriptor(proto().expirationDate(), "9em"));
@@ -269,6 +280,18 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
         protected void addItem(BillableItemAdjustment newEntity) {
             if (newEntity.isEmpty()) {
                 newEntity.effectiveDate().setValue(new LogicalDate());
+
+                if (itemEffectiveDateEditor.getValue() != null) { // if Item Effective Date is set:
+                    if (new LogicalDate().before(itemEffectiveDateEditor.getValue())) {
+                        newEntity.effectiveDate().setValue(itemEffectiveDateEditor.getValue());
+                    }
+                } else { // otherwise Item Effective Date synch with Lease Start Date: 
+                    if (lease.getValue().leaseTo().getValue() != null) {
+                        if (new LogicalDate().before(lease.getValue().leaseTo().getValue())) {
+                            newEntity.effectiveDate().setValue(lease.getValue().leaseTo().getValue());
+                        }
+                    }
+                }
             }
             super.addItem(newEntity);
         }
@@ -327,13 +350,17 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
                     }
                 });
 
-                get(proto().executionType()).addValueChangeHandler(new ValueChangeHandler<BillableItemAdjustment.ExecutionType>() {
+                get(proto().value()).addValueValidator(new EditableValueValidator<BigDecimal>() {
                     @Override
-                    public void onValueChange(ValueChangeEvent<ExecutionType> event) {
-                        get(proto().expirationDate()).setEnabled(event.getValue() != ExecutionType.oneTime);
-                        if (event.getValue() == ExecutionType.oneTime) {
-                            get(proto().expirationDate()).setValue(null);
+                    public ValidationError isValid(CComponent<BigDecimal, ?> component, BigDecimal value) {
+                        if (value != null) {
+                            if (value.signum() < 0) {
+
+                            } else {
+
+                            }
                         }
+                        return null;
                     }
                 });
             }
@@ -362,7 +389,6 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
                 }
                 return null;
             }
-
         });
 
         get(proto().expirationDate()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().effectiveDate())));

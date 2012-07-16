@@ -52,21 +52,6 @@ public interface BillableItemAdjustment extends IEntity {
         }
     }
 
-    /**
-     * postLease - applied during renewal
-     * 
-     */
-    @I18n
-    @XmlType(name = "BillableItemAdjustmentExecutionType")
-    enum ExecutionType {
-        postLease, inLease, oneTime;
-
-        @Override
-        public String toString() {
-            return I18nEnum.toString(this);
-        }
-    }
-
     @GeneratedValue(type = GeneratedValue.GenerationType.randomUUID)
     IPrimitive<String> uid();
 
@@ -91,9 +76,6 @@ public interface BillableItemAdjustment extends IEntity {
     @ToString(index = 0)
     IPrimitive<AdjustmentType> adjustmentType();
 
-    @NotNull
-    IPrimitive<ExecutionType> executionType();
-
     IPrimitive<String> description();
 
     /*
@@ -107,9 +89,11 @@ public interface BillableItemAdjustment extends IEntity {
     IPrimitive<BigDecimal> value();
 
     @Format("MM/dd/yyyy")
+    @Caption(description = "Empty value assumes Billable Item effective date")
     IPrimitive<LogicalDate> effectiveDate();
 
     @Format("MM/dd/yyyy")
+    @Caption(description = "Empty value assumes Billable Item expiration date")
     IPrimitive<LogicalDate> expirationDate();
 
     @Timestamp(Update.Created)

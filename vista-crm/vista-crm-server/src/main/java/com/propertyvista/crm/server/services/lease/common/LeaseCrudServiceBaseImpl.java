@@ -24,7 +24,6 @@ import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.dto.LeaseDTO;
-import com.propertyvista.server.common.charges.PriceCalculationHelpers;
 
 public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends AbstractVersionedCrudServiceDtoImpl<Lease, DTO> {
 
@@ -51,14 +50,7 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
             Persistence.service().retrieve(dto.unit().building(), AttachLevel.ToStringMembers);
         }
 
-        // calculate price adjustments:
-        PriceCalculationHelpers.calculateChargeItemAdjustments(dto.version().leaseProducts().serviceItem());
-        for (BillableItem item : dto.version().leaseProducts().featureItems()) {
-            PriceCalculationHelpers.calculateChargeItemAdjustments(item);
-
-            // Need this for navigation
-            Persistence.service().retrieve(item.item().product());
-        }
+        loadDetachedProducts(dto);
 
         for (Tenant item : dto.version().tenants()) {
             Persistence.service().retrieve(item.screening(), AttachLevel.ToStringMembers);
@@ -67,9 +59,6 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
         for (Guarantor item : dto.version().guarantors()) {
             Persistence.service().retrieve(item.screening(), AttachLevel.ToStringMembers);
         }
-
-        // Need this for navigation
-        Persistence.service().retrieve(dto.version().leaseProducts().serviceItem().item().product());
     }
 
     @Override
@@ -96,5 +85,13 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
     @Override
     protected void saveAsFinal(Lease entity) {
         ServerSideFactory.create(LeaseFacade.class).saveAsFinal(entity);
+    }
+
+    protected void loadDetachedProducts(DTO dto) {
+        Persistence.service().retrieve(dto.version().leaseProducts().serviceItem().item().product());
+
+        for (BillableItem item : dto.version().leaseProducts().featureItems()) {
+            Persistence.service().retrieve(item.item().product());
+        }
     }
 }

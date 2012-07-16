@@ -37,7 +37,6 @@ import com.propertyvista.portal.server.ptapp.PtAppContext;
 import com.propertyvista.portal.server.ptapp.services.ApplicationEntityServiceImpl;
 import com.propertyvista.portal.server.ptapp.services.util.DigitalSignatureMgr;
 import com.propertyvista.portal.server.ptapp.util.ChargesServerCalculation;
-import com.propertyvista.server.common.charges.PriceCalculationHelpers;
 
 public class ChargesServiceImpl extends ApplicationEntityServiceImpl implements ChargesService {
 
@@ -85,13 +84,12 @@ public class ChargesServiceImpl extends ApplicationEntityServiceImpl implements 
         if (serviceItem != null && !serviceItem.isNull()) {
             charges.monthlyCharges().charges().clear();
 
-            PriceCalculationHelpers.calculateChargeItemAdjustments(serviceItem);
             charges.monthlyCharges().charges()
-                    .add(DomainUtil.createChargeLine(serviceItem.item().type().getStringView(), serviceItem._currentPrice().getValue()));
+                    .add(DomainUtil.createChargeLine(serviceItem.item().type().getStringView(), serviceItem.agreedPrice().getValue()));
 
             // create/update deposits:
             charges.applicationCharges().charges().clear();
-            charges.applicationCharges().charges().add(DomainUtil.createChargeLine(ChargeLine.ChargeType.deposit, serviceItem._currentPrice().getValue()));
+            charges.applicationCharges().charges().add(DomainUtil.createChargeLine(ChargeLine.ChargeType.deposit, serviceItem.agreedPrice().getValue()));
 
             // TODO: find where get/put this info (application/equifax check fee)!
             charges.applicationCharges().charges().add(DomainUtil.createChargeLine(ChargeLine.ChargeType.oneTimePayment, new BigDecimal("24.99"))); // get value from policy ! 
@@ -99,20 +97,17 @@ public class ChargesServiceImpl extends ApplicationEntityServiceImpl implements 
             // fill agreed items:
             for (BillableItem item : lease.version().leaseProducts().featureItems()) {
                 if (item.item().type().isInstanceOf(FeatureItemType.class)) {
-                    PriceCalculationHelpers.calculateChargeItemAdjustments(item);
 
                     switch (item.item().type().<FeatureItemType> cast().featureType().getValue()) {
                     case utility:
                     case pet:
                     case parking:
                     case locker:
-                        charges.monthlyCharges().charges()
-                                .add(DomainUtil.createChargeLine(item.item().type().getStringView(), item._currentPrice().getValue()));
+                        charges.monthlyCharges().charges().add(DomainUtil.createChargeLine(item.item().type().getStringView(), item.agreedPrice().getValue()));
                         break;
 
                     default:
-                        charges.oneTimeCharges().charges()
-                                .add(DomainUtil.createChargeLine(item.item().type().getStringView(), item._currentPrice().getValue()));
+                        charges.oneTimeCharges().charges().add(DomainUtil.createChargeLine(item.item().type().getStringView(), item.agreedPrice().getValue()));
                     }
                 }
             }
