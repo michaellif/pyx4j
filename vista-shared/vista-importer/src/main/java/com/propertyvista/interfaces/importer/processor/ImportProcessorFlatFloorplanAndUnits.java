@@ -66,28 +66,30 @@ public class ImportProcessorFlatFloorplanAndUnits implements ImportProcessor {
                 buildingIO._import().message().setValue(i18n.tr("Building Property Code is null."));
                 result = false;
             }
-            for (FloorplanIO floorplanIO : buildingIO.floorplans()) {
-                if (floorplanIO.name().isNull()) {
-                    floorplanIO._import().invalid().setValue(true);
-                    floorplanIO._import().message().setValue(i18n.tr("Floorplan Name is null."));
-                    result = false;
-                }
-                for (AptUnitIO aptUnitIO : floorplanIO.units()) {
-                    if (aptUnitIO.number().isNull()) {
-                        aptUnitIO._import().invalid().setValue(true);
-                        aptUnitIO._import().message().setValue(i18n.tr("Unit Number is null."));
-                        result = false;
-                    }
-                }
-            }
 
             // Check if building is already created
             EntityQueryCriteria<Building> buildingCriteria = EntityQueryCriteria.create(Building.class);
             buildingCriteria.add(PropertyCriterion.eq(buildingCriteria.proto().propertyCode(), buildingIO.propertyCode().getValue()));
             List<Building> buildings = Persistence.service().query(buildingCriteria);
             if (buildings.size() == 0) {
+                buildingIO._import().invalid().setValue(true);
                 buildingIO._import().message().setValue(i18n.tr("Building ''{0}'' is not found in the database.", buildingIO.propertyCode().getValue()));
                 result = false;
+            } else {
+                for (FloorplanIO floorplanIO : buildingIO.floorplans()) {
+                    if (floorplanIO.name().isNull()) {
+                        floorplanIO._import().invalid().setValue(true);
+                        floorplanIO._import().message().setValue(i18n.tr("Floorplan Name is null."));
+                        result = false;
+                    }
+                    for (AptUnitIO aptUnitIO : floorplanIO.units()) {
+                        if (aptUnitIO.number().isNull()) {
+                            aptUnitIO._import().invalid().setValue(true);
+                            aptUnitIO._import().message().setValue(i18n.tr("Unit Number is null."));
+                            result = false;
+                        }
+                    }
+                }
             }
 
             count++;
