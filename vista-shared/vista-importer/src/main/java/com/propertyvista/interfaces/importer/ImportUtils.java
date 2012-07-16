@@ -97,7 +97,7 @@ public class ImportUtils {
                 response.message = i18n.tr("There are validation {0} errors in uploaded file", report.getMessagesCount());
             }
             response.data.success().setValue(Boolean.FALSE);
-            String fileName = "validationError.csv";
+            String fileName = "validationError.xlsx";
             response.data.resultUrl().setValue(fileName);
             report.createDownloadable(fileName);
             return true;
@@ -120,7 +120,7 @@ public class ImportUtils {
 
         if (report.getMessagesCount() > 0) {
             response.data = EntityFactory.create(ImportUploadResponseDTO.class);
-            String fileName = "processingResults.csv";
+            String fileName = "processingResults.xlsx";
             response.data.resultUrl().setValue(fileName);
             report.createDownloadable(fileName);
         }
