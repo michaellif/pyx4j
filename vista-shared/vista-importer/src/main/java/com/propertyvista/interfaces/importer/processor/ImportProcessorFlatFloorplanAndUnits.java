@@ -57,9 +57,6 @@ public class ImportProcessorFlatFloorplanAndUnits implements ImportProcessor {
         int count = 0;
         boolean result = true;
         for (BuildingIO buildingIO : data.buildings()) {
-            if (buildingIO.type().isNull()) {
-                buildingIO.type().setValue(BuildingInfo.Type.residential);
-            }
 
             if (buildingIO.propertyCode().isNull()) {
                 buildingIO._import().invalid().setValue(true);
@@ -111,6 +108,9 @@ public class ImportProcessorFlatFloorplanAndUnits implements ImportProcessor {
         int count = 0;
         try {
             for (BuildingIO building : data.buildings()) {
+                if (building.type().isNull()) {
+                    building.type().setValue(BuildingInfo.Type.residential);
+                }
                 log.debug("processing building {} {}", count + "/" + data.buildings().size(), building.getStringView());
                 counters.add(saveInDB(building));
                 count++;
@@ -152,8 +152,8 @@ public class ImportProcessorFlatFloorplanAndUnits implements ImportProcessor {
                         floorplan = (floorplans.get(0));
                     } else {
                         floorplan = new FloorplanConverter().createDBO(floorplanIO);
+                        floorplan.building().set(building);
                     }
-                    floorplan.building().set(building);
                     Persistence.service().persist(floorplan);
 
                 }
