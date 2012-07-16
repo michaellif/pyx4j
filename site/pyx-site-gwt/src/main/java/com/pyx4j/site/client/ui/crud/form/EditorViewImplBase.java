@@ -21,8 +21,14 @@
 package com.pyx4j.site.client.ui.crud.form;
 
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.dialog.Dialog.Type;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
+import com.pyx4j.widgets.client.dialog.OkOption;
 
 public class EditorViewImplBase<E extends IEntity> extends FormViewImplBase<E> implements IEditorView<E> {
+
+    private static final I18n i18n = I18n.get(EditorViewImplBase.class);
 
     private IEditorView.Presenter presenter;
 
@@ -57,5 +63,15 @@ public class EditorViewImplBase<E extends IEntity> extends FormViewImplBase<E> i
     @Override
     public boolean isDirty() {
         return getForm().isDirty();
+    }
+
+    protected void showValidationDialog() {
+        MessageDialog.show(i18n.tr("Error"), getForm().getValidationResults().getMessagesText(true, true), Type.Error, new OkOption() {
+
+            @Override
+            public boolean onClickOk() {
+                return true;
+            }
+        });
     }
 }
