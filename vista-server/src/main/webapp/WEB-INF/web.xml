@@ -108,7 +108,7 @@
         </init-param>
         <init-param>
             <param-name>ignoreUrls</param-name>
-            <param-value>/o/*,/public/*,/static/*,/static-errors/*,/media/site-resource/*,/admin/*,/crm/*,/portal/*,/ptapp/*,/rest/*,/demo/*,*.siteimgrc</param-value>
+            <param-value>/o/*,/public/*,/static/*,/static-errors/*,/media/site-resource/*,*.siteimgrc,/admin/*,/crm/*,/portal/*,/ptapp/*,/interfaces/*,/demo/*</param-value>
         </init-param>
     </filter>
 
@@ -119,17 +119,6 @@
 
 
     <!-- Servlets -->
-<!--
-    <servlet>
-        <servlet-name>CronServlet</servlet-name>
-        <servlet-class>com.propertyvista.server.admin.VistaCronServlet</servlet-class>
-    </servlet>
-
-    <servlet-mapping>
-        <servlet-name>CronServlet</servlet-name>
-        <url-pattern>/internal/cron/*</url-pattern>
-    </servlet-mapping>
--->
 
     <servlet>
         <servlet-name>OpenIdServlet</servlet-name>
@@ -230,16 +219,6 @@
     <servlet-mapping>
         <servlet-name>VistaDevSessionServlet</servlet-name>
         <url-pattern>/o/sim-sim-otkroisa</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
-        <servlet-name>DeferredProcessTaskWorkerServlet</servlet-name>
-        <servlet-class>com.pyx4j.essentials.server.deferred.DeferredProcessTaskWorkerServlet</servlet-class>
-    </servlet>
-
-    <servlet-mapping>
-        <servlet-name>DeferredProcessTaskWorkerServlet</servlet-name>
-        <url-pattern>/internal/worker/*</url-pattern>
     </servlet-mapping>
 
     <servlet>
@@ -451,7 +430,7 @@
 
     <servlet-mapping>
         <servlet-name>JerseyRESTService</servlet-name>
-        <url-pattern>/public/rest/*</url-pattern>
+        <url-pattern>/interfaces/rest/*</url-pattern>
     </servlet-mapping>
 
     <servlet>
@@ -461,7 +440,7 @@
 
     <servlet-mapping>
         <servlet-name>OnboardingSchemaServlet</servlet-name>
-        <url-pattern>/public/schema/onboarding/*</url-pattern>
+        <url-pattern>/interfaces/schema/onboarding/*</url-pattern>
     </servlet-mapping>
 
     <servlet>
@@ -471,7 +450,7 @@
 
     <servlet-mapping>
         <servlet-name>OnboardingServiceServlet</servlet-name>
-        <url-pattern>/public/onboarding/*</url-pattern>
+        <url-pattern>/interfaces/onboarding/*</url-pattern>
     </servlet-mapping>
 
 
