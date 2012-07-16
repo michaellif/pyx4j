@@ -294,6 +294,9 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
                     @Override
                     public ValidationError isValid(CComponent<Date, ?> component, Date value) {
                         if (value != null) {
+                            if ((itemEffectiveDateEditor.getValue() != null) && value.before(new LogicalDate())) {
+                                return new ValidationError(component, "The date should not precede the today's date");
+                            }
                             if ((itemEffectiveDateEditor.getValue() != null) && value.before(itemEffectiveDateEditor.getValue())) {
                                 return new ValidationError(component, "The date should not precede the Item Effective date");
                             }
@@ -303,7 +306,6 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
                         }
                         return null;
                     }
-
                 });
 
                 get(proto().expirationDate()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(itemExpirationDateEditor));
