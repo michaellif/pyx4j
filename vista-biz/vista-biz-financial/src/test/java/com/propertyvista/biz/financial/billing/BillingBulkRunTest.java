@@ -19,7 +19,7 @@ import com.propertyvista.biz.financial.FinancialTestBase;
 import com.propertyvista.biz.financial.SysDateManager;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.tenant.lease.BillableItem;
-import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.AdjustmentType;
+import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.Type;
 
 public class BillingBulkRunTest extends FinancialTestBase {
 
@@ -34,19 +34,19 @@ public class BillingBulkRunTest extends FinancialTestBase {
         SysDateManager.setSysDate("17-Mar-2011");
 
         setLeaseTerms("23-Mar-2011", "03-Aug-2011");
-        addServiceAdjustment("-25", AdjustmentType.monetary);
+        addServiceAdjustment("-25", Type.monetary);
 
         BillableItem parking1 = addParking(SaveAction.saveAsDraft);
-        addFeatureAdjustment(parking1.uid().getValue(), "-10", AdjustmentType.monetary);
+        addFeatureAdjustment(parking1.uid().getValue(), "-10", Type.monetary);
 
         BillableItem parking2 = addParking("23-Apr-2011", "03-Aug-2011", SaveAction.saveAsDraft);
-        addFeatureAdjustment(parking2.uid().getValue(), "-10", AdjustmentType.monetary);
+        addFeatureAdjustment(parking2.uid().getValue(), "-10", Type.monetary);
 
         BillableItem locker1 = addLocker(SaveAction.saveAsDraft);
-        addFeatureAdjustment(locker1.uid().getValue(), "-0.2", AdjustmentType.percentage);
+        addFeatureAdjustment(locker1.uid().getValue(), "-0.2", Type.percentage);
 
         BillableItem pet1 = addPet(SaveAction.saveAsDraft);
-        addFeatureAdjustment(pet1.uid().getValue(), "-1", AdjustmentType.percentage);
+        addFeatureAdjustment(pet1.uid().getValue(), "-1", Type.percentage);
 
         //==================== RUN 1 ======================//
 

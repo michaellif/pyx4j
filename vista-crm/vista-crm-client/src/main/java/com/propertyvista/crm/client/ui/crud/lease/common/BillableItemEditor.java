@@ -261,10 +261,10 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
         @Override
         public List<EntityFolderColumnDescriptor> columns() {
             ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
-            columns.add(new EntityFolderColumnDescriptor(proto().adjustmentType(), "8em"));
+            columns.add(new EntityFolderColumnDescriptor(proto().type(), "8em"));
             columns.add(new EntityFolderColumnDescriptor(proto().value(), "5em"));
             columns.add(new EntityFolderColumnDescriptor(proto().effectiveDate(), "9em"));
-            columns.add(new EntityFolderColumnDescriptor(proto().expirationDate(), "9em"));
+            columns.add(new EntityFolderColumnDescriptor(proto().expirationDate(), "10em"));
             return columns;
         }
 
@@ -278,21 +278,21 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
 
         @Override
         protected void addItem(BillableItemAdjustment newEntity) {
-            if (newEntity.isEmpty()) {
-                newEntity.effectiveDate().setValue(new LogicalDate());
-
-                if (itemEffectiveDateEditor.getValue() != null) { // if Item Effective Date is set:
-                    if (new LogicalDate().before(itemEffectiveDateEditor.getValue())) {
-                        newEntity.effectiveDate().setValue(itemEffectiveDateEditor.getValue());
-                    }
-                } else { // otherwise Item Effective Date synch with Lease Start Date: 
-                    if (lease.getValue().leaseTo().getValue() != null) {
-                        if (new LogicalDate().before(lease.getValue().leaseTo().getValue())) {
-                            newEntity.effectiveDate().setValue(lease.getValue().leaseTo().getValue());
-                        }
-                    }
-                }
-            }
+//            if (newEntity.isEmpty()) {
+//                newEntity.effectiveDate().setValue(new LogicalDate());
+//
+//                if (itemEffectiveDateEditor.getValue() != null) { // if Item Effective Date is set:
+//                    if (new LogicalDate().before(itemEffectiveDateEditor.getValue())) {
+//                        newEntity.effectiveDate().setValue(itemEffectiveDateEditor.getValue());
+//                    }
+//                } else { // otherwise Item Effective Date synch with Lease Start Date: 
+//                    if (lease.getValue().leaseTo().getValue() != null) {
+//                        if (new LogicalDate().before(lease.getValue().leaseTo().getValue())) {
+//                            newEntity.effectiveDate().setValue(lease.getValue().leaseTo().getValue());
+//                        }
+//                    }
+//                }
+//            }
             super.addItem(newEntity);
         }
 

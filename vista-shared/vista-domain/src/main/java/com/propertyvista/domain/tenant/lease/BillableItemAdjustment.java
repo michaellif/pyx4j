@@ -43,7 +43,7 @@ public interface BillableItemAdjustment extends IEntity {
 
     @I18n
     @XmlType(name = "AdjustmentType")
-    enum AdjustmentType {
+    enum Type {
         percentage, monetary;
 
         @Override
@@ -74,7 +74,7 @@ public interface BillableItemAdjustment extends IEntity {
 
     @NotNull
     @ToString(index = 0)
-    IPrimitive<AdjustmentType> adjustmentType();
+    IPrimitive<Type> type();
 
     IPrimitive<String> description();
 

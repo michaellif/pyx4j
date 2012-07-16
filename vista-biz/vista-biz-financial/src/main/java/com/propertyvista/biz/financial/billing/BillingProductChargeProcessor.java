@@ -250,9 +250,9 @@ public class BillingProductChargeProcessor extends AbstractBillingProcessor {
 
         BigDecimal amount = null;
 
-        if (BillableItemAdjustment.AdjustmentType.percentage.equals(billableItemAdjustment.adjustmentType().getValue())) {
+        if (BillableItemAdjustment.Type.percentage.equals(billableItemAdjustment.type().getValue())) {
             amount = billableItemAdjustment.billableItem().agreedPrice().getValue().multiply(billableItemAdjustment.value().getValue());
-        } else if (BillableItemAdjustment.AdjustmentType.monetary.equals(billableItemAdjustment.adjustmentType().getValue())) {
+        } else if (BillableItemAdjustment.Type.monetary.equals(billableItemAdjustment.type().getValue())) {
             amount = billableItemAdjustment.value().getValue();
         }
 

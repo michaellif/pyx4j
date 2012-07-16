@@ -73,7 +73,6 @@ import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.policy.framework.PolicyNode;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
-import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.AdjustmentType;
 import com.propertyvista.domain.tenant.lease.Deposit;
 import com.propertyvista.domain.tenant.lease.Deposit.DepositType;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -416,26 +415,26 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         Persistence.service().commit();
     }
 
-    protected BillableItemAdjustment addServiceAdjustment(String value, AdjustmentType adjustmentType) {
+    protected BillableItemAdjustment addServiceAdjustment(String value, BillableItemAdjustment.Type adjustmentType) {
         Lease lease = retrieveLeaseForEdit();
         return addBillableItemAdjustment(lease.version().leaseProducts().serviceItem().uid().getValue(), value, adjustmentType, lease.leaseFrom().getValue(),
                 lease.leaseTo().getValue());
     }
 
-    protected BillableItemAdjustment addFeatureAdjustment(String billableItemId, String value, AdjustmentType adjustmentType) {
+    protected BillableItemAdjustment addFeatureAdjustment(String billableItemId, String value, BillableItemAdjustment.Type adjustmentType) {
         Lease lease = Persistence.service().retrieve(Lease.class, leaseDataModel.getLeaseKey());
         return addBillableItemAdjustment(billableItemId, value, adjustmentType, lease.leaseFrom().getValue(), lease.leaseTo().getValue());
 
     }
 
-    protected BillableItemAdjustment addFeatureAdjustment(String billableItemId, String value, AdjustmentType adjustmentType, String effectiveDate,
-            String expirationDate) {
+    protected BillableItemAdjustment addFeatureAdjustment(String billableItemId, String value, BillableItemAdjustment.Type adjustmentType,
+            String effectiveDate, String expirationDate) {
         return addBillableItemAdjustment(billableItemId, value, adjustmentType, FinancialTestsUtils.getDate(effectiveDate),
                 FinancialTestsUtils.getDate(expirationDate));
     }
 
-    private BillableItemAdjustment addBillableItemAdjustment(String billableItemId, String value, AdjustmentType adjustmentType, LogicalDate effectiveDate,
-            LogicalDate expirationDate) {
+    private BillableItemAdjustment addBillableItemAdjustment(String billableItemId, String value, BillableItemAdjustment.Type adjustmentType,
+            LogicalDate effectiveDate, LogicalDate expirationDate) {
 
         Lease lease = retrieveLeaseForEdit();
         BillableItem actualBillableItem = findBillableItem(billableItemId, lease);
@@ -447,7 +446,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         } else {
             adjustment.value().setValue(new BigDecimal(value));
         }
-        adjustment.adjustmentType().setValue(adjustmentType);
+        adjustment.type().setValue(adjustmentType);
         adjustment.effectiveDate().setValue(effectiveDate);
         adjustment.expirationDate().setValue(expirationDate);
         adjustment.billableItem().set(actualBillableItem);
