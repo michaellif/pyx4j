@@ -86,12 +86,12 @@ public class XLSLoad {
         return wb.getSheetAt(sheetNumber).getSheetName();
     }
 
-    public void loadSheet(int sheetNumber, CSVReciver reciver) {
+    public boolean loadSheet(int sheetNumber, CSVReciver reciver) {
         Sheet sheet = wb.getSheetAt(sheetNumber);
-        loadSheet(sheet, reciver);
+        return loadSheet(sheet, reciver);
     }
 
-    public void loadSheet(Sheet sheet, CSVReciver reciver) {
+    public boolean loadSheet(Sheet sheet, CSVReciver reciver) {
         int lineNumber = 0;
         try {
             boolean header = true;
@@ -111,6 +111,7 @@ public class XLSLoad {
                     reciver.onRow(values.toArray(new String[values.size()]));
                 }
             }
+            return !header;
         } catch (UserRuntimeException e) {
             throw e;
         } catch (Throwable e) {
