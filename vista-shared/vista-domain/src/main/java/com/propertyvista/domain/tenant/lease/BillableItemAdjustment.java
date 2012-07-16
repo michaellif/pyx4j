@@ -74,6 +74,7 @@ public interface BillableItemAdjustment extends IEntity {
 
     @NotNull
     @ToString(index = 0)
+    @MemberColumn(name = "adjustmentType")
     IPrimitive<Type> type();
 
     IPrimitive<String> description();
