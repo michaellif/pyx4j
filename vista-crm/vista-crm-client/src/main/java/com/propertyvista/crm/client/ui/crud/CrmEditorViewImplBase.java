@@ -25,9 +25,6 @@ import com.pyx4j.site.client.ui.crud.CrudEntityForm;
 import com.pyx4j.site.client.ui.crud.form.EditorViewImplBase;
 import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.widgets.client.Button;
-import com.pyx4j.widgets.client.dialog.Dialog.Type;
-import com.pyx4j.widgets.client.dialog.MessageDialog;
-import com.pyx4j.widgets.client.dialog.OkOption;
 
 import com.propertyvista.crm.client.ui.components.AnchorButton;
 
@@ -84,16 +81,6 @@ public class CrmEditorViewImplBase<E extends IEntity> extends EditorViewImplBase
         addFooterToolbarItem(btnSave);
 
         enableButtons(false);
-    }
-
-    private void showValidationDialog() {
-        MessageDialog.show(i18n.tr("Error"), getForm().getValidationResults().getMessagesText(true, true), Type.Error, new OkOption() {
-
-            @Override
-            public boolean onClickOk() {
-                return true;
-            }
-        });
     }
 
     public CrmEditorViewImplBase(Class<? extends CrudAppPlace> placeClass, CrmEntityForm<E> form) {
