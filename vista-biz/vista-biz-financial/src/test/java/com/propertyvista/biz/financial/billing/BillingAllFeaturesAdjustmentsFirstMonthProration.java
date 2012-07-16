@@ -20,8 +20,6 @@
  */
 package com.propertyvista.biz.financial.billing;
 
-import org.junit.Ignore;
-
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
 
@@ -34,7 +32,6 @@ import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.AdjustmentType;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.ExecutionType;
 
-@Ignore
 public class BillingAllFeaturesAdjustmentsFirstMonthProration extends FinancialTestBase {
 
     @Override
@@ -132,7 +129,7 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProration extends FinancialT
 
     }
 
-    public void testScenario3VISTA1704() {
+    public void testScenario3() {
 
         setLeaseTerms("17-Jan-2012", "14-Feb-2013");
         addServiceAdjustment("-55.55", AdjustmentType.monetary, ExecutionType.inLease);
@@ -255,7 +252,7 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProration extends FinancialT
 
     }
 
-    public void testScenario6VISTA1704() {
+    public void testScenario6() {
 
         setLeaseTerms("20-Jan-2012", "14-Feb-2013");
         addServiceAdjustment("-55.55", AdjustmentType.monetary, ExecutionType.inLease);
@@ -419,7 +416,7 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProration extends FinancialT
 
     }
 
-    public void testScenario10VISTA1704() {
+    public void testScenario10() {
 
         setLeaseTerms("24-Jan-2012", "14-Feb-2013");
         addServiceAdjustment("-55.55", AdjustmentType.monetary, ExecutionType.inLease);
@@ -501,7 +498,7 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProration extends FinancialT
 
     }
 
-    public void testScenario12VISTA1704() {
+    public void testScenario12() {
 
         setLeaseTerms("26-Jan-2012", "14-Feb-2013");
         addServiceAdjustment("-55.55", AdjustmentType.monetary, ExecutionType.inLease);
@@ -624,7 +621,7 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProration extends FinancialT
 
     }
 
-    public void testScenario15VISTA1704() {
+    public void testScenario15() {
 
         setLeaseTerms("29-Jan-2012", "14-Feb-2013");
         addServiceAdjustment("-55.55", AdjustmentType.monetary, ExecutionType.inLease);
@@ -665,7 +662,7 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProration extends FinancialT
 
     }
 
-    public void testScenario16VISTA1704() {
+    public void testScenario16() {
 
         setLeaseTerms("30-Jan-2012", "14-Feb-2013");
         addServiceAdjustment("-55.55", AdjustmentType.monetary, ExecutionType.inLease);
@@ -870,7 +867,7 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProration extends FinancialT
 
     }
 
-    public void testScenario21VISTA1704() {
+    public void testScenario21() {
 
         setLeaseTerms("04-Feb-2012", "14-Feb-2013");
         addServiceAdjustment("-55.55", AdjustmentType.monetary, ExecutionType.inLease);
@@ -994,7 +991,7 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProration extends FinancialT
 
     }
 
-    public void testScenario24VISTA1704() {
+    public void testScenario24() {
 
         setLeaseTerms("07-Feb-2012", "14-Feb-2013");
         addServiceAdjustment("-55.55", AdjustmentType.monetary, ExecutionType.inLease);
@@ -1076,7 +1073,7 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProration extends FinancialT
 
     }
 
-    public void testScenario26VISTA1704() {
+    public void testScenario26() {
 
         setLeaseTerms("09-Feb-2012", "14-Feb-2013");
         addServiceAdjustment("-55.55", AdjustmentType.monetary, ExecutionType.inLease);
@@ -1158,7 +1155,7 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProration extends FinancialT
 
     }
 
-    public void testScenario28VISTA1704() {
+    public void testScenario28() {
 
         setLeaseTerms("11-Feb-2012", "14-Feb-2013");
         addServiceAdjustment("-55.55", AdjustmentType.monetary, ExecutionType.inLease);
@@ -1240,7 +1237,7 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProration extends FinancialT
 
     }
 
-    public void testScenario30VISTA1704() {
+    public void testScenario30() {
 
         setLeaseTerms("13-Feb-2012", "14-Feb-2013");
         addServiceAdjustment("-55.55", AdjustmentType.monetary, ExecutionType.inLease);
