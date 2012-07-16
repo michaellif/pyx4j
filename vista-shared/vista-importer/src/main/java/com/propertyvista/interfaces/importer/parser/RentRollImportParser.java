@@ -50,6 +50,7 @@ import com.pyx4j.essentials.server.csv.EntityCSVReciver;
 import com.pyx4j.essentials.server.csv.XLSLoad;
 import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.rpc.shared.UserRuntimeException;
 
 import com.propertyvista.interfaces.importer.model.AptUnitIO;
 import com.propertyvista.interfaces.importer.model.BuildingIO;
@@ -185,7 +186,7 @@ public class RentRollImportParser implements ImportParser {
         try {
             return new BigDecimal(nf.parse(money).doubleValue());
         } catch (ParseException e) {
-            throw new Error(i18n.tr("Please make sure all your Rent Roll values are in proper numeric format"));
+            throw new UserRuntimeException(i18n.tr("Please make sure all your Rent Roll values are in proper numeric format"));
         }
 
     }

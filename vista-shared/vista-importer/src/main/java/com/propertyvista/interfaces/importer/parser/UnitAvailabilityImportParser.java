@@ -26,10 +26,12 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.rpc.report.DownloadFormat;
 import com.pyx4j.essentials.server.csv.EntityCSVReciver;
 import com.pyx4j.essentials.server.csv.XLSLoad;
+import com.pyx4j.gwt.server.DateUtils;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 
@@ -105,14 +107,27 @@ public class UnitAvailabilityImportParser implements ImportParser {
             if (building == null) {
                 building = EntityFactory.create(BuildingIO.class);
                 building.propertyCode().setValue(unitModel.property().getValue());
+                building._import().row().setValue(unitModel._import().row().getValue());
+                building._import().sheet().setValue(unitModel._import().sheet().getValue());
                 buildings.put(unitModel.property().getValue(), building);
             }
 
             AptUnitIO unit = EntityFactory.create(AptUnitIO.class);
             unit.number().setValue(unitModel.unit().getValue());
-
             unit.marketRent().setValue(parseMoney(unitModel.marketRent().getValue(), unitModel));
-            building = insertUnit(unit, unitModel.unitType().getValue(), building);
+            if (!unitModel.newMarketRent().isNull()) {
+                unit.marketRent().setValue(parseMoney(unitModel.newMarketRent().getValue(), unitModel));
+            }
+            if (!unitModel.status().isNull() && unitModel.status().getValue().toLowerCase().equals("move in")) {
+                unit.availableForRent().set(null);
+            }
+            if (!unitModel.status().isNull() && unitModel.status().getValue().toLowerCase().equals("move out")) {
+                unit.availableForRent().setValue(new LogicalDate(DateUtils.detectDateformat(unitModel.date().getValue())));
+            }
+            if (!unitModel.status().isNull() && unitModel.status().getValue().toLowerCase().equals("vacant")) {
+                unit.availableForRent().setValue(new LogicalDate());
+            }
+            building = insertUnit(unit, unitModel, building);
         }
         importIO.buildings().addAll(buildings.values());
     }
@@ -128,23 +143,25 @@ public class UnitAvailabilityImportParser implements ImportParser {
 
     }
 
-    private BuildingIO insertUnit(AptUnitIO unit, String unitType, BuildingIO building) {
+    private BuildingIO insertUnit(AptUnitIO unit, UnitModel unitModel, BuildingIO building) {
         int floorplansSize = building.floorplans().size();
         if (floorplansSize == 0) {
             FloorplanIO newFloorplan = EntityFactory.create(FloorplanIO.class);
-            newFloorplan.name().setValue(unitType);
+            newFloorplan.name().setValue(unitModel.unitType().getValue());
+            newFloorplan._import().row().setValue(unitModel._import().row().getValue());
+            newFloorplan._import().sheet().setValue(unitModel._import().sheet().getValue());
             newFloorplan.units().add(unit);
             building.floorplans().add(newFloorplan);
         } else {
             for (int i = 0; i < floorplansSize; i++) {
                 FloorplanIO floorplan = building.floorplans().get(i);
-                if (floorplan.name().getValue().equals(unitType)) {
+                if (floorplan.name().getValue().equals(unitModel.unitType().getValue())) {
                     floorplan.units().add(unit);
                     break;
                 }
                 if (i == floorplansSize - 1) {
                     FloorplanIO newFloorplan = EntityFactory.create(FloorplanIO.class);
-                    newFloorplan.name().setValue(unitType);
+                    newFloorplan.name().setValue(unitModel.unitType().getValue());
                     newFloorplan.units().add(unit);
                     building.floorplans().add(newFloorplan);
                 }
