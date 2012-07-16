@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.essentials.rpc.deferred.DeferredProcessProgressResponse;
@@ -141,7 +142,7 @@ public class ImportProcessorFlatFloorplanAndUnits implements ImportProcessor {
         //Floorplan
         {
             for (FloorplanIO floorplanIO : buildingIO.floorplans()) {
-                Floorplan floorplan;
+                Floorplan floorplan = EntityFactory.create(Floorplan.class);
                 {
                     EntityQueryCriteria<Floorplan> criteria = EntityQueryCriteria.create(Floorplan.class);
                     criteria.add(PropertyCriterion.eq(criteria.proto().building(), building));
