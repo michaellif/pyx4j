@@ -16,6 +16,7 @@ package com.propertyvista.interfaces.importer;
 import org.apache.commons.io.FilenameUtils;
 
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.rpc.report.DownloadFormat;
 import com.pyx4j.essentials.rpc.upload.UploadResponse;
 import com.pyx4j.essentials.server.upload.UploadData;
@@ -42,6 +43,8 @@ public class ImportUploadDeferredProcess extends UploadDeferredProcess<ImportUpl
     public void onUploadRecived(final UploadData data, final UploadResponse<ImportUploadResponseDTO> response) {
         binaryData = data.data;
         this.response = response;
+        this.response.data = EntityFactory.create(ImportUploadResponseDTO.class);
+        this.response.data.success().setValue(Boolean.FALSE);
     }
 
     @Override
@@ -67,9 +70,18 @@ public class ImportUploadDeferredProcess extends UploadDeferredProcess<ImportUpl
     private void executeImport() {
         ImportIO importIO = ImportUtils.parse(getData().dataFormat().getValue(), binaryData,
                 DownloadFormat.valueByExtension(FilenameUtils.getExtension(response.fileName)));
+        if (ImportUtils.createValidationErrorResponse(importIO, status(), response)) {
+            return;
+        }
         ImportProcessor importProcessor = ImportUtils.createImportProcessor(getData(), importIO);
-        if (importProcessor.validate(importIO, status(), getData(), response)) {
+        boolean valid = importProcessor.validate(importIO, status(), getData(), response);
+        if (ImportUtils.createValidationErrorResponse(importIO, status(), response)) {
+            return;
+        }
+        if (valid) {
             importProcessor.persist(importIO, status(), getData(), response);
+            ImportUtils.createProcessingResponse(importIO, status(), response);
+            this.response.data.success().setValue(Boolean.TRUE);
         }
         status().setCompleted();
     }

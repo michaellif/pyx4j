@@ -23,13 +23,20 @@ import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.utils.EntityGraph;
+import com.pyx4j.essentials.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.essentials.rpc.report.DownloadFormat;
+import com.pyx4j.essentials.rpc.upload.UploadResponse;
 import com.pyx4j.essentials.server.xml.XMLEntityParser;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.crm.rpc.dto.ImportUploadDTO;
+import com.propertyvista.crm.rpc.dto.ImportUploadResponseDTO;
 import com.propertyvista.dto.ImportDataFormatType;
 import com.propertyvista.interfaces.importer.model.ImportIO;
+import com.propertyvista.interfaces.importer.model.ImportInformation;
 import com.propertyvista.interfaces.importer.parser.RentRollImportParser;
 import com.propertyvista.interfaces.importer.parser.UnitAvailabilityImportParser;
 import com.propertyvista.interfaces.importer.parser.VistaXMLImportParser;
@@ -41,6 +48,8 @@ import com.propertyvista.interfaces.importer.processor.ImportProcessorUpdateUnit
 import com.propertyvista.interfaces.importer.xml.ImportXMLEntityFactory;
 
 public class ImportUtils {
+
+    private static final I18n i18n = I18n.get(ImportUtils.class);
 
     public static ImportIO parse(ImportDataFormatType importAdapterType, byte[] data, DownloadFormat format) {
         switch (importAdapterType) {
@@ -68,6 +77,52 @@ public class ImportUtils {
             return new ImportProcessorFlatFloorplanAndUnits();
         default:
             throw new Error("Unsupported import type");
+        }
+    }
+
+    public static boolean createValidationErrorResponse(IEntity entity, DeferredProcessProgressResponse status, UploadResponse<ImportUploadResponseDTO> response) {
+        final ProcessingResponseReport report = new ProcessingResponseReport();
+        EntityGraph.applyRecursivelyAllObjects(entity, new EntityGraph.ApplyMethod() {
+            @Override
+            public boolean apply(IEntity entity) {
+                if ((entity instanceof ImportInformation) && (((ImportInformation) entity).invalid().getValue(Boolean.FALSE))) {
+                    report.addMessage((ImportInformation) entity);
+                }
+                return true;
+            }
+        });
+
+        if (report.getMessagesCount() > 0) {
+            if (response.message == null) {
+                response.message = i18n.tr("There are validation {0} errors in uploaded file", report.getMessagesCount());
+            }
+            response.data.success().setValue(Boolean.FALSE);
+            String fileName = "validationError.csv";
+            response.data.resultUrl().setValue(fileName);
+            report.createDownloadable(fileName);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public static void createProcessingResponse(IEntity entity, DeferredProcessProgressResponse status, UploadResponse<ImportUploadResponseDTO> response) {
+        final ProcessingResponseReport report = new ProcessingResponseReport();
+        EntityGraph.applyRecursivelyAllObjects(entity, new EntityGraph.ApplyMethod() {
+            @Override
+            public boolean apply(IEntity entity) {
+                if ((entity instanceof ImportInformation) && (!((ImportInformation) entity).message().isNull())) {
+                    report.addMessage((ImportInformation) entity);
+                }
+                return true;
+            }
+        });
+
+        if (report.getMessagesCount() > 0) {
+            response.data = EntityFactory.create(ImportUploadResponseDTO.class);
+            String fileName = "processingResults.csv";
+            response.data.resultUrl().setValue(fileName);
+            report.createDownloadable(fileName);
         }
     }
 

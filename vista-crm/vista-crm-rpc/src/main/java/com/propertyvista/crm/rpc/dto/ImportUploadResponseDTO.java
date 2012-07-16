@@ -20,6 +20,8 @@ import com.pyx4j.entity.shared.IPrimitive;
 @Transient
 public interface ImportUploadResponseDTO extends IEntity {
 
+    IPrimitive<Boolean> success();
+
     IPrimitive<String> resultUrl();
 
 }
