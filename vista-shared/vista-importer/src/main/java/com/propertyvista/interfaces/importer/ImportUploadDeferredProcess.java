@@ -71,11 +71,13 @@ public class ImportUploadDeferredProcess extends UploadDeferredProcess<ImportUpl
         ImportIO importIO = ImportUtils.parse(getData().dataFormat().getValue(), binaryData,
                 DownloadFormat.valueByExtension(FilenameUtils.getExtension(response.fileName)));
         if (ImportUtils.createValidationErrorResponse(importIO, status(), response)) {
+            status().setCompleted();
             return;
         }
         ImportProcessor importProcessor = ImportUtils.createImportProcessor(getData(), importIO);
         boolean valid = importProcessor.validate(importIO, status(), getData(), response);
         if (ImportUtils.createValidationErrorResponse(importIO, status(), response)) {
+            status().setCompleted();
             return;
         }
         if (valid) {

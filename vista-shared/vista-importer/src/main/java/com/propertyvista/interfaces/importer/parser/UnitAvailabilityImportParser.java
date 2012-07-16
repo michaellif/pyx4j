@@ -65,7 +65,9 @@ public class UnitAvailabilityImportParser implements ImportParser {
         for (int sheetNumber = 0; sheetNumber < sheets; sheetNumber++) {
             EntityCSVReciver<UnitModel> reciver = new UnitModelCSVReciver(loader.getSheetName(sheetNumber));
             try {
-                loader.loadSheet(sheetNumber, reciver);
+                if (!loader.loadSheet(sheetNumber, reciver)) {
+                    new UserRuntimeException(i18n.tr("Column heder decalarion not found"));
+                }
             } catch (UserRuntimeException e) {
                 throw new UserRuntimeException(i18n.tr("{0} on sheet ''{1}''", e.getMessage(), loader.getSheetName(sheetNumber)));
             }
