@@ -35,14 +35,14 @@ import com.pyx4j.security.shared.SecurityController;
 
 import com.propertyvista.domain.marketing.PublicVisibilityType;
 import com.propertyvista.domain.media.Media;
+import com.propertyvista.domain.media.ThumbnailSize;
 import com.propertyvista.domain.security.VistaBasicBehavior;
 import com.propertyvista.portal.rpc.portal.ImageConsts;
 import com.propertyvista.portal.rpc.portal.ImageConsts.ImageTarget;
-import com.propertyvista.portal.rpc.portal.ImageConsts.ThumbnailSize;
 import com.propertyvista.server.common.blob.BlobService;
 import com.propertyvista.server.common.blob.ETag;
 import com.propertyvista.server.common.blob.ThumbnailService;
-import com.propertyvista.server.domain.ThumbnailBlob;
+import com.propertyvista.server.domain.FileImageThumbnailBlobDTO;
 
 /**
  * This service does extra read from DB to read BlobKey, We may decide in future not to do this.
@@ -144,7 +144,7 @@ public class PublicMediaServlet extends HttpServlet {
     }
 
     private void serveResourceImage(String filename, ThumbnailSize thumbnailSize, HttpServletResponse response) throws IOException {
-        ThumbnailBlob blob = (ThumbnailBlob) CacheService.get(PublicMediaServlet.class.getName() + filename);
+        FileImageThumbnailBlobDTO blob = (FileImageThumbnailBlobDTO) CacheService.get(PublicMediaServlet.class.getName() + filename);
         if (blob == null) {
             byte raw[] = IOUtils.getBinaryResource(filename, PublicMediaServlet.class);
             if (raw == null) {

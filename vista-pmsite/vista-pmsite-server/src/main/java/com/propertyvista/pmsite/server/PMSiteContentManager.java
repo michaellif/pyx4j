@@ -35,6 +35,7 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.marketing.PublicVisibilityType;
 import com.propertyvista.domain.media.Media;
+import com.propertyvista.domain.media.ThumbnailSize;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.ref.City;
 import com.propertyvista.domain.site.AvailableLocale;
@@ -55,7 +56,6 @@ import com.propertyvista.pmsite.server.model.PromoDataModel;
 import com.propertyvista.pmsite.server.panels.NavigationItem;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.portal.rpc.portal.ImageConsts;
-import com.propertyvista.portal.rpc.portal.ImageConsts.ThumbnailSize;
 import com.propertyvista.portal.rpc.shared.SiteWasNotSetUpUserRuntimeException;
 import com.propertyvista.shared.CompiledLocale;
 

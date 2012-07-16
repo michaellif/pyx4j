@@ -41,6 +41,7 @@ import com.pyx4j.gwt.geo.MapUtils;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.MediaUtils;
+import com.propertyvista.domain.media.ThumbnailSize;
 import com.propertyvista.portal.client.resources.PortalImages;
 import com.propertyvista.portal.client.ui.maps.PropertiesMapWidget.MarkerType;
 import com.propertyvista.portal.client.ui.maps.PropertiesMapWidget.StyleSuffix;
@@ -48,7 +49,6 @@ import com.propertyvista.portal.client.ui.util.Formatter;
 import com.propertyvista.portal.domain.dto.FloorplanPropertyDTO;
 import com.propertyvista.portal.domain.dto.PropertyDTO;
 import com.propertyvista.portal.rpc.portal.ImageConsts;
-import com.propertyvista.portal.rpc.portal.ImageConsts.ThumbnailSize;
 
 public class PropertyMarker extends Marker {
 

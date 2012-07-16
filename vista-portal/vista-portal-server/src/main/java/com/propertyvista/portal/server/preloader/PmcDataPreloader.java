@@ -57,7 +57,7 @@ import com.propertyvista.interfaces.importer.model.ImportIO;
 import com.propertyvista.portal.server.preloader.util.BaseVistaDevDataPreloader;
 import com.propertyvista.server.common.reference.geo.SharedGeoLocator;
 import com.propertyvista.server.domain.FileBlob;
-import com.propertyvista.server.domain.ThumbnailBlob;
+import com.propertyvista.server.domain.FileImageThumbnailBlobDTO;
 
 public class PmcDataPreloader extends BaseVistaDevDataPreloader {
 
@@ -78,7 +78,7 @@ public class PmcDataPreloader extends BaseVistaDevDataPreloader {
     public String delete() {
         if (ApplicationMode.isDevelopment()) {
             return deleteAll(Complex.class, Building.class, AptUnit.class, AptUnitItem.class, Floorplan.class, Vendor.class, Elevator.class, Boiler.class,
-                    Roof.class, Parking.class, ParkingSpot.class, LockerArea.class, Locker.class, Media.class, ThumbnailBlob.class, FileBlob.class,
+                    Roof.class, Parking.class, ParkingSpot.class, LockerArea.class, Locker.class, Media.class, FileImageThumbnailBlobDTO.class, FileBlob.class,
                     Feature.class, PropertyManager.class, ProductCatalog.class);
         } else {
             return "This is production";

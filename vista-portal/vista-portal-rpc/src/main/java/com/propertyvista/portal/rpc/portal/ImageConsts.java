@@ -20,10 +20,6 @@ import com.pyx4j.site.shared.Dimension;
 //Note: In future we may decide to move this to configurations of  each property management company....
 public interface ImageConsts {
 
-    public static enum ThumbnailSize implements Serializable {
-        xsmall, small, medium, large, xlarge
-    }
-
     public static enum ThumbnailType {
         jpg, png
     }

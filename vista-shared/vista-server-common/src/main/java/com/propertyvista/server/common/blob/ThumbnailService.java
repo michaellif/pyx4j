@@ -34,15 +34,18 @@ import com.mortennobel.imagescaling.ThumpnailRescaleOp;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.site.shared.Dimension;
 
+import com.propertyvista.domain.media.ThumbnailSize;
 import com.propertyvista.portal.rpc.portal.ImageConsts;
 import com.propertyvista.portal.rpc.portal.ImageConsts.ImageTarget;
-import com.propertyvista.portal.rpc.portal.ImageConsts.ThumbnailSize;
-import com.propertyvista.server.domain.ThumbnailBlob;
+import com.propertyvista.server.domain.FileImageThumbnailBlob;
+import com.propertyvista.server.domain.FileImageThumbnailBlobDTO;
 
 /**
  * Simple DB base Blob storage abstraction for future refactoring.
@@ -82,7 +85,7 @@ public class ThumbnailService {
         }
     }
 
-    public static ThumbnailBlob createThumbnailBlob(String fileName, byte[] originalContent, ImageTarget imageTarget) {
+    public static FileImageThumbnailBlobDTO createThumbnailBlob(String fileName, byte[] originalContent, ImageTarget imageTarget) {
         switch (imageTarget) {
         case Building:
             return createThumbnailBlob(fileName, originalContent, getDefaultResampleParams(imageTarget), ImageConsts.BUILDING_XSMALL,
@@ -95,9 +98,9 @@ public class ThumbnailService {
         }
     }
 
-    public static ThumbnailBlob createThumbnailBlob(String fileName, byte[] originalContent, ResampleParams params, Dimension xsmall, Dimension small,
+    public static FileImageThumbnailBlobDTO createThumbnailBlob(String fileName, byte[] originalContent, ResampleParams params, Dimension xsmall, Dimension small,
             Dimension medum, Dimension large, Dimension xlarge) {
-        ThumbnailBlob blob = EntityFactory.create(ThumbnailBlob.class);
+        FileImageThumbnailBlobDTO blob = EntityFactory.create(FileImageThumbnailBlobDTO.class);
         InputStream stream = null;
         try {
             BufferedImage inputImage = ImageIO.read(stream = new ByteArrayInputStream(originalContent));
@@ -120,9 +123,9 @@ public class ThumbnailService {
 
     public static void persist(Key key, String fileName, byte[] originalContent, ResampleParams params, Dimension xsmall, Dimension small, Dimension medum,
             Dimension large, Dimension xlarge) {
-        ThumbnailBlob blob = createThumbnailBlob(fileName, originalContent, params, xsmall, small, medum, large, xlarge);
+        FileImageThumbnailBlobDTO blob = createThumbnailBlob(fileName, originalContent, params, xsmall, small, medum, large, xlarge);
         blob.setPrimaryKey(key);
-        Persistence.service().persist(blob);
+        ThumbnailService.persist(blob);
     }
 
     private static byte[] resample(String fileName, BufferedImage image, ResampleParams params, Dimension dimension) {
@@ -253,18 +256,61 @@ public class ThumbnailService {
     }
 
     public static void delete(Key key) {
-        Persistence.service().delete(ThumbnailBlob.class, key);
+        Persistence.service().delete(FileImageThumbnailBlobDTO.class, key);
     }
 
-    public static void persist(ThumbnailBlob blob) {
-        Persistence.service().persist(blob);
+    public static void persist(FileImageThumbnailBlobDTO blob) {
+        for (ThumbnailSize size : ThumbnailSize.values()) {
+            persistImageThumbnail(blob, size);
+        }
+    }
+
+    private static void persistImageThumbnail(FileImageThumbnailBlobDTO blob, ThumbnailSize size) {
+        FileImageThumbnailBlob imageThumbnailBlob = EntityFactory.create(FileImageThumbnailBlob.class);
+        byte[] data = null;
+        switch (size) {
+        case xsmall:
+            data = blob.xsmall().getValue();
+            break;
+        case small:
+            data = blob.small().getValue();
+            break;
+        case medium:
+            data = blob.medium().getValue();
+            break;
+        case large:
+            data = blob.large().getValue();
+            break;
+        case xlarge:
+            data = blob.xlarge().getValue();
+            break;
+        default:
+            data = blob.large().getValue();
+            break;
+        }
+        if (data == null) {
+            return;
+        }
+        imageThumbnailBlob.content().setValue(data);
+        imageThumbnailBlob.thumbnailSize().setValue(size);
+        imageThumbnailBlob.blobKey().setValue(blob.getPrimaryKey());
+        Persistence.service().persist(imageThumbnailBlob);
     }
 
     public static boolean serve(Key key, ThumbnailSize size, HttpServletResponse response) throws IOException {
-        return serve(Persistence.service().retrieve(ThumbnailBlob.class, key), size, response);
+        EntityQueryCriteria<FileImageThumbnailBlob> criteria = EntityQueryCriteria.create(FileImageThumbnailBlob.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().blobKey(), key));
+        criteria.add(PropertyCriterion.eq(criteria.proto().thumbnailSize(), size));
+        FileImageThumbnailBlob blob = Persistence.service().retrieve(criteria);
+        if (blob == null) {
+            return false;
+        } else {
+            serve(blob.content().getValue(), response);
+            return true;
+        }
     }
 
-    public static boolean serve(ThumbnailBlob blob, ThumbnailSize size, HttpServletResponse response) throws IOException {
+    public static boolean serve(FileImageThumbnailBlobDTO blob, ThumbnailSize size, HttpServletResponse response) throws IOException {
         if (blob != null) {
             byte[] data = null;
             switch (size) {
@@ -289,25 +335,30 @@ public class ThumbnailService {
             }
             if (data == null) {
                 return false;
+            } else {
+                serve(data, response);
+                return true;
             }
-            switch (ImageConsts.THUMBNAIL_TYPE) {
-            case jpg:
-                response.setContentType("image/jpeg");
-                break;
-            case png:
-                response.setContentType("image/png");
-                break;
-            }
-            response.setContentLength(data.length);
-            ServletOutputStream out = response.getOutputStream();
-            try {
-                out.write(data);
-            } finally {
-                IOUtils.closeQuietly(out);
-            }
-            return true;
         } else {
             return false;
+        }
+    }
+
+    private static void serve(byte[] data, HttpServletResponse response) throws IOException {
+        switch (ImageConsts.THUMBNAIL_TYPE) {
+        case jpg:
+            response.setContentType("image/jpeg");
+            break;
+        case png:
+            response.setContentType("image/png");
+            break;
+        }
+        response.setContentLength(data.length);
+        ServletOutputStream out = response.getOutputStream();
+        try {
+            out.write(data);
+        } finally {
+            IOUtils.closeQuietly(out);
         }
     }
 }

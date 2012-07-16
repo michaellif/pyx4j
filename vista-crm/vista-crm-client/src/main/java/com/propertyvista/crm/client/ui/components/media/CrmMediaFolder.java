@@ -44,10 +44,10 @@ import com.propertyvista.common.client.ui.validators.YouTubeVideoIdFormat;
 import com.propertyvista.common.client.ui.validators.YouTubeVideoIdValidator;
 import com.propertyvista.crm.client.ui.components.cms.FileUploadHyperlink;
 import com.propertyvista.domain.media.Media;
+import com.propertyvista.domain.media.ThumbnailSize;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.portal.rpc.portal.ImageConsts;
 import com.propertyvista.portal.rpc.portal.ImageConsts.ImageTarget;
-import com.propertyvista.portal.rpc.portal.ImageConsts.ThumbnailSize;
 
 public class CrmMediaFolder extends VistaBoxFolder<Media> {
 

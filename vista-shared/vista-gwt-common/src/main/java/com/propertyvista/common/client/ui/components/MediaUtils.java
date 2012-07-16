@@ -19,10 +19,10 @@ import com.pyx4j.commons.Key;
 
 import com.propertyvista.common.client.ClentNavigUtils;
 import com.propertyvista.domain.File;
+import com.propertyvista.domain.media.ThumbnailSize;
 import com.propertyvista.domain.site.SiteImageResource;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.portal.rpc.portal.ImageConsts;
-import com.propertyvista.portal.rpc.portal.ImageConsts.ThumbnailSize;
 
 public class MediaUtils {
 

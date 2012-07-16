@@ -31,6 +31,7 @@ import com.pyx4j.commons.SimpleMessageFormat;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.marketing.PublicVisibilityType;
 import com.propertyvista.domain.media.Media;
+import com.propertyvista.domain.media.ThumbnailSize;
 import com.propertyvista.domain.property.PropertyContact;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -39,7 +40,6 @@ import com.propertyvista.pmsite.server.PMSiteContentManager;
 import com.propertyvista.pmsite.server.PMSiteWebRequest;
 import com.propertyvista.pmsite.server.model.WicketUtils.SimpleImage;
 import com.propertyvista.pmsite.server.model.WicketUtils.VolatileTemplateResourceReference;
-import com.propertyvista.portal.rpc.portal.ImageConsts.ThumbnailSize;
 import com.propertyvista.portal.server.portal.PropertyFinder;
 
 public class FloorplanInfoPanel extends Panel {

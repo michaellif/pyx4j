@@ -21,9 +21,9 @@ import com.pyx4j.widgets.client.dialog.Dialog;
 import com.pyx4j.widgets.client.dialog.OkOption;
 
 import com.propertyvista.common.client.ClentNavigUtils;
+import com.propertyvista.domain.media.ThumbnailSize;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.portal.rpc.portal.ImageConsts;
-import com.propertyvista.portal.rpc.portal.ImageConsts.ThumbnailSize;
 
 public class MediaFileViewDialog extends VerticalPanel implements OkOption {
 

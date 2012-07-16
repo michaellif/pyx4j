@@ -43,7 +43,7 @@ import com.propertyvista.interfaces.importer.model.MediaIO;
 import com.propertyvista.portal.rpc.portal.ImageConsts.ImageTarget;
 import com.propertyvista.server.common.blob.BlobService;
 import com.propertyvista.server.common.blob.ThumbnailService;
-import com.propertyvista.server.domain.ThumbnailBlob;
+import com.propertyvista.server.domain.FileImageThumbnailBlobDTO;
 
 public class MediaConverter extends EntityDtoBinder<Media, MediaIO> {
 
@@ -122,7 +122,7 @@ public class MediaConverter extends EntityDtoBinder<Media, MediaIO> {
     }
 
     //This is shared between created PMCs
-    private static Map<String, ThumbnailBlob> resized = new HashMap<String, ThumbnailBlob>();
+    private static Map<String, FileImageThumbnailBlobDTO> resized = new HashMap<String, FileImageThumbnailBlobDTO>();
 
     @Override
     public void copyDTOtoDBO(MediaIO dto, Media dbo) {
@@ -175,13 +175,13 @@ public class MediaConverter extends EntityDtoBinder<Media, MediaIO> {
                     byte raw[] = getBinary(file);
                     blobKey = BlobService.persist(raw, dbo.file().fileName().getValue(), dbo.file().contentMimeType().getValue());
                     CacheService.put(uniqueName, blobKey);
-                    ThumbnailBlob thumbnailBlob = resized.get(uniqueName);
+                    FileImageThumbnailBlobDTO thumbnailBlob = resized.get(uniqueName);
                     if (thumbnailBlob == null) {
                         thumbnailBlob = ThumbnailService.createThumbnailBlob(dbo.file().fileName().getValue(), raw, imageTarget);
                         resized.put(uniqueName, thumbnailBlob);
                         log.info("ThumbnailBlob not cashed {}; cash size {}", dbo.file().fileName().getValue(), resized.size());
                     }
-                    thumbnailBlob = (ThumbnailBlob) thumbnailBlob.duplicate();
+                    thumbnailBlob = (FileImageThumbnailBlobDTO) thumbnailBlob.duplicate();
                     thumbnailBlob.setPrimaryKey(blobKey);
                     ThumbnailService.persist(thumbnailBlob);
                 }

@@ -32,6 +32,7 @@ import templates.TemplateResources;
 import com.pyx4j.commons.MinMaxPair;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.domain.media.ThumbnailSize;
 import com.propertyvista.domain.property.asset.AreaMeasurementUnit;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -44,7 +45,6 @@ import com.propertyvista.pmsite.server.PMSiteWebRequest;
 import com.propertyvista.pmsite.server.model.WicketUtils.SimpleImage;
 import com.propertyvista.pmsite.server.model.WicketUtils.VolatileTemplateResourceReference;
 import com.propertyvista.pmsite.server.panels.BuildingInfoPanel;
-import com.propertyvista.portal.rpc.portal.ImageConsts.ThumbnailSize;
 import com.propertyvista.portal.server.portal.PropertyFinder;
 
 public class AptDetailsPage extends BasePage {
