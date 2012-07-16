@@ -519,4 +519,7 @@ public class CrmSiteMap implements SiteMap {
     public static class Message extends AppPlace {
     }
 
+    @NavigationItem(navigLabel = "Runtime Errors")
+    public static class RuntimeError extends AppPlace {
+    }
 }

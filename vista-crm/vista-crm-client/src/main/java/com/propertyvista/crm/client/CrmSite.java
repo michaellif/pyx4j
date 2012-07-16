@@ -21,8 +21,8 @@ import com.google.gwt.user.client.ui.RootPanel;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.css.StyleManger;
-import com.pyx4j.essentials.client.DefaultErrorHandlerDialog;
 import com.pyx4j.essentials.client.SessionInactiveDialog;
+import com.pyx4j.gwt.commons.UncaughtHandler;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
@@ -36,7 +36,10 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.propertyvista.common.client.ClentNavigUtils;
 import com.propertyvista.common.client.Message;
 import com.propertyvista.common.client.VistaSite;
+import com.propertyvista.common.client.VistaUnrecoverableErrorHandler;
 import com.propertyvista.common.client.config.VistaFeaturesCustomizationClient;
+import com.propertyvista.common.client.events.UserMessageEvent;
+import com.propertyvista.common.client.events.UserMessageHandler;
 import com.propertyvista.common.client.policy.ClientPolicyManager;
 import com.propertyvista.common.client.theme.VistaPalette;
 import com.propertyvista.crm.client.themes.CrmTheme;
@@ -45,7 +48,6 @@ import com.propertyvista.crm.client.ui.LogoViewImpl;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.policies.CrmPolicyRetrieveService;
 import com.propertyvista.crm.rpc.services.pub.CrmAuthenticationService;
-import com.propertyvista.domain.DemoData;
 import com.propertyvista.portal.rpc.portal.SiteDefinitionsDTO;
 import com.propertyvista.portal.rpc.portal.services.SiteThemeServices;
 import com.propertyvista.portal.rpc.shared.services.PolicyRetrieveService;
@@ -62,7 +64,7 @@ public class CrmSite extends VistaSite {
     public void onSiteLoad() {
         super.onSiteLoad();
 
-        DefaultErrorHandlerDialog.register(!DemoData.vistaDemo);
+        UncaughtHandler.setUnrecoverableErrorHandler(new VistaUnrecoverableErrorHandler());
 
         getHistoryHandler().register(getPlaceController(), getEventBus(), AppPlace.NOWHERE);
 
@@ -77,6 +79,15 @@ public class CrmSite extends VistaSite {
             @Override
             public void onSessionInactive(SessionInactiveEvent event) {
                 ClientContext.logout((AuthenticationService) GWT.create(CrmAuthenticationService.class), null);
+            }
+        });
+
+        // subscribe to UserMessageEvent fired from VistaUnrecoverableErrorHandler
+        getEventBus().addHandler(UserMessageEvent.getType(), new UserMessageHandler() {
+            @Override
+            public void onUserMessage(UserMessageEvent event) {
+                setUserMessage(event.getUserMessage());
+                getPlaceController().goToUserMessagePlace();
             }
         });
 

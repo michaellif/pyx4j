@@ -34,7 +34,7 @@ import com.propertyvista.common.client.resources.VistaImages;
 
 public abstract class VistaSite extends AppSite {
 
-    private Message message;
+    private UserMessage message;
 
     public VistaSite(String appId, Class<? extends SiteMap> siteMapClass) {
         super(appId, siteMapClass);
@@ -63,11 +63,21 @@ public abstract class VistaSite extends AppSite {
         return (VistaSite) AppSite.instance();
     }
 
+    @Deprecated
     public void setMessage(Message message) {
+        this.message = new UserMessage(message);
+    }
+
+    @Deprecated
+    public Message getMessage() {
+        return message;
+    }
+
+    protected void setUserMessage(UserMessage message) {
         this.message = message;
     }
 
-    public Message getMessage() {
+    public UserMessage getUserMessage() {
         return message;
     }
 

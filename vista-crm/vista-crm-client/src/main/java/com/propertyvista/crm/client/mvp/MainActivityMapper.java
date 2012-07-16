@@ -25,6 +25,7 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.activity.AlertActivity;
 import com.propertyvista.crm.client.activity.MessageActivity;
+import com.propertyvista.crm.client.activity.RuntimeErrorActivity;
 import com.propertyvista.crm.client.activity.crud.account.AccountEditorActivity;
 import com.propertyvista.crm.client.activity.crud.account.AccountRecoveryOptionsEditorActivity;
 import com.propertyvista.crm.client.activity.crud.account.AccountRecoveryOptionsViewerActivity;
@@ -977,6 +978,8 @@ public class MainActivityMapper implements AppActivityMapper {
                     activity = new AlertActivity(place);
                 } else if (place instanceof CrmSiteMap.Message) {
                     activity = new MessageActivity(place);
+                } else if (place instanceof CrmSiteMap.RuntimeError) {
+                    activity = new RuntimeErrorActivity(place);
                 }
 
                 callback.onSuccess(activity);

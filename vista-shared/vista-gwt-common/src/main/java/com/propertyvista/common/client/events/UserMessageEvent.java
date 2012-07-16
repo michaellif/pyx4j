@@ -17,6 +17,8 @@ import com.google.gwt.event.shared.GwtEvent;
 
 import com.pyx4j.commons.IDebugId;
 
+import com.propertyvista.common.client.UserMessage;
+
 public class UserMessageEvent extends GwtEvent<UserMessageHandler> {
 
     public enum UserMessageType implements IDebugId {
@@ -31,16 +33,11 @@ public class UserMessageEvent extends GwtEvent<UserMessageHandler> {
 
     private static Type<UserMessageHandler> TYPE;
 
-    private final String userMessage;
+    private final UserMessage userMessage;
 
-    private final String debugMessage;
-
-    private final UserMessageType messageType;
-
-    public UserMessageEvent(String userMessage, String debugMessage, UserMessageType messageType) {
-        this.userMessage = userMessage;
-        this.debugMessage = debugMessage;
-        this.messageType = messageType;
+    public UserMessageEvent(String message, String debugMessage, UserMessageType messageType) {
+        userMessage = new UserMessage(message, messageType, null, null, null);
+        userMessage.setDebugMessage(debugMessage);
     }
 
     public static Type<UserMessageHandler> getType() {
@@ -60,16 +57,20 @@ public class UserMessageEvent extends GwtEvent<UserMessageHandler> {
         handler.onUserMessage(this);
     }
 
-    public String getUserMessage() {
+    public UserMessage getUserMessage() {
         return userMessage;
     }
 
+    public String getMessage() {
+        return userMessage.getMessage();
+    }
+
     public String getDebugMessage() {
-        return debugMessage;
+        return userMessage.getDebugMessage();
     }
 
     public UserMessageType getMessageType() {
-        return messageType;
+        return userMessage.getMessageType();
     }
 
 }

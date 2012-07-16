@@ -88,8 +88,8 @@ public class UserMessagePanel extends HorizontalPanel implements UserMessageHand
 
     @Override
     public void onUserMessage(UserMessageEvent event) {
-        if (event.getUserMessage() != null) {
-            setMessage(event.getUserMessage(), event.getMessageType());
+        if (event.getMessage() != null) {
+            setMessage(event.getMessage(), event.getMessageType());
         }
     }
 }

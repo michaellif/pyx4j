@@ -28,7 +28,7 @@ public class UserMessageActivity extends AbstractActivity implements UserMessage
     private final UserMessageView view;
 
     public UserMessageActivity(Place place) {
-        view = (UserMessageView) PtAppViewFactory.instance(UserMessageView.class);
+        view = PtAppViewFactory.instance(UserMessageView.class);
         assert (view != null);
         view.setPresenter(this);
         withPlace(place);
@@ -49,7 +49,7 @@ public class UserMessageActivity extends AbstractActivity implements UserMessage
     public void onUserMessage(UserMessageEvent event) {
         view.hideAll();
         if (event.getMessageType() != null) {
-            view.show(event.getUserMessage(), event.getDebugMessage(), event.getMessageType());
+            view.show(event.getMessage(), event.getDebugMessage(), event.getMessageType());
         }
     }
 
