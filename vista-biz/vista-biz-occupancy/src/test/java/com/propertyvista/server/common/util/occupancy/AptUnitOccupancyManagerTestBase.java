@@ -16,10 +16,12 @@ package com.propertyvista.server.common.util.occupancy;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -311,6 +313,12 @@ public class AptUnitOccupancyManagerTestBase {
             assertVaildSegment();
             expectedTimeline.add(segment);
 
+            EntityQueryCriteria<AptUnitOccupancySegment> actualOccupancyCriteria = new EntityQueryCriteria<AptUnitOccupancySegment>(
+                    AptUnitOccupancySegment.class);
+            actualOccupancyCriteria.add(PropertyCriterion.eq(actualOccupancyCriteria.proto().unit(), unit));
+            List<AptUnitOccupancySegment> actualSegments = Persistence.service().query(actualOccupancyCriteria);
+            String actualSegmentsView = createSegmentsView(actualSegments);
+
             EntityQueryCriteria<AptUnitOccupancySegment> criteria = new EntityQueryCriteria<AptUnitOccupancySegment>(AptUnitOccupancySegment.class);
 
             criteria.add(PropertyCriterion.eq(criteria.proto().dateFrom(), segment.dateFrom().getValue()));
@@ -320,9 +328,25 @@ public class AptUnitOccupancyManagerTestBase {
             criteria.add(PropertyCriterion.eq(criteria.proto().lease(), segment.lease().isNull() ? null : segment.lease()));
 
             AptUnitOccupancySegment actual = Persistence.service().retrieve(criteria);
-            Assert.assertNotNull(SimpleMessageFormat.format("the expected occupancy segment was not found in the DB:\n[{0}, {1}] : {2}", segment.dateFrom()
-                    .getValue(), segment.dateTo().getValue(), segment.status().getValue() == Status.offMarket ? "" + Status.offMarket + " - "
-                    + segment.offMarket().getValue() : segment.status().getValue()), actual);
+            Assert.assertNotNull(SimpleMessageFormat.format("the expected occupancy segment was not found in the DB:\n {0}\n the actual DB occupancy is:\n{1}",
+                    createSegmentView(segment), actualSegmentsView), actual);
+        }
+
+        private String createSegmentsView(List<AptUnitOccupancySegment> actualSegments) {
+            List<String> segmentViews = new ArrayList<String>();
+            for (AptUnitOccupancySegment segment : actualSegments) {
+                segmentViews.add(createSegmentView(segment));
+            }
+            return StringUtils.join(segmentViews, "\n");
+        }
+
+        private String createSegmentView(AptUnitOccupancySegment segment) {
+            String date = "[" + segment.dateFrom().getValue() + ", " + segment.dateTo().getValue() + "] ";
+            String status = segment.status().getValue().toString();
+            if (segment.status().getValue() == Status.offMarket) {
+                status += " - " + segment.offMarket().getValue().toString();
+            }
+            return date + status;
         }
 
         @Override

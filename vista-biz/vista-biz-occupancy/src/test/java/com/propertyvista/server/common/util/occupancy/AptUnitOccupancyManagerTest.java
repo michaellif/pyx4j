@@ -156,6 +156,19 @@ public class AptUnitOccupancyManagerTest extends AptUnitOccupancyManagerTestBase
     }
 
     @Test
+    public void testScopeAvailableMergeSegments() {
+
+        setup().fromTheBeginning().to("2011-02-02").status(Status.available).x();
+        setup().from("2011-02-03").toTheEndOfTime().status(Status.pending).x();
+
+        now("2011-02-03");
+        getUOM().scopeAvailable(unitId);
+
+        expect().fromTheBeginning().toTheEndOfTime().status(Status.available).x();
+        assertExpectedTimeline();
+    }
+
+    @Test
     public void testScopeRenovationWhenLeased() {
         Lease lease = createLease("2011-02-15", "2011-10-25");
 
@@ -193,6 +206,22 @@ public class AptUnitOccupancyManagerTest extends AptUnitOccupancyManagerTestBase
         expect().from("2011-10-26").to("2011-11-04").status(Status.pending).x();
         expect().from("2011-11-05").to("2011-11-10").status(Status.renovation).x();
         expect().from("2011-11-11").toTheEndOfTime().status(Status.available).x();
+        assertExpectedTimeline();
+    }
+
+    @Test
+    public void testScopeRenovationSegmentMerging() {
+
+        setup().fromTheBeginning().to("2011-02-02").status(Status.available).x();
+        setup().from("2011-01-03").to("2011-02-14").status(Status.renovation).x();
+        setup().from("2011-02-15").toTheEndOfTime().status(Status.pending).x();
+
+        now("2011-02-05");
+        getUOM().scopeRenovation(unitId, asDate("2011-02-20"));
+
+        expect().fromTheBeginning().to("2011-02-02").status(Status.available).x();
+        expect().from("2011-01-03").to("2011-02-20").status(Status.renovation).x();
+        expect().from("2011-02-21").toTheEndOfTime().status(Status.available).x();
         assertExpectedTimeline();
     }
 

@@ -19,11 +19,9 @@ import static com.propertyvista.biz.occupancy.AptUnitOccupancyManagerHelper.merg
 import static com.propertyvista.biz.occupancy.AptUnitOccupancyManagerHelper.retrieveOccupancy;
 import static com.propertyvista.biz.occupancy.AptUnitOccupancyManagerHelper.retrieveOccupancySegment;
 import static com.propertyvista.biz.occupancy.AptUnitOccupancyManagerHelper.split;
-import static com.propertyvista.biz.occupancy.AptUnitOccupancyManagerHelper.substractDay;
 
 import java.util.Arrays;
 import java.util.GregorianCalendar;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
@@ -81,38 +79,61 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
             return; // newly created unit case!..
         }
 
+        if (!isScopeAvailableAvailable(unitPk)) {
+            throw new UserRuntimeException(i18n.tr("operation 'scope available' is not possible in current unit state"));
+        }
+
         List<AptUnitOccupancySegment> occupancy = AptUnitOccupancyManagerHelper.retrieveOccupancy(unitPk, now);
-        Iterator<AptUnitOccupancySegment> i = occupancy.iterator();
-        boolean isSucceeded = false;
 
-        while (i.hasNext()) {
-            AptUnitOccupancySegment segment = i.next();
+        // Find the first pending segment and convert it
+        AptUnitOccupancySegment firstPendingSegment = null;
+        LogicalDate splittingDay = null;
+        for (AptUnitOccupancySegment segment : occupancy) {
             if (segment.status().getValue() == Status.pending) {
-
-                // if we got segment that starts in the past then split it
-                if (segment.dateFrom().getValue().before(now)) {
-                    AptUnitOccupancySegment newSegment = segment.duplicate();
-                    newSegment.id().set(null);
-                    newSegment.dateFrom().setValue(now);
-                    segment.dateTo().setValue(substractDay(now));
-                    Persistence.service().merge(segment);
-                    segment = newSegment;
-                }
-
-                segment.status().setValue(Status.available);
-                segment.lease().setValue(null);
-                updateUnitAvailableFrom(unitPk, segment.dateFrom().getValue());
-
-                Persistence.service().merge(segment);
-                isSucceeded = true;
+                firstPendingSegment = segment;
+                splittingDay = firstPendingSegment.dateFrom().getValue().after(now) ? firstPendingSegment.dateFrom().getValue() : now;
                 break;
             }
         }
-        if (isSucceeded) {
-            new AvailabilityReportManager(unitPk).generateUnitAvailablity(now);
-        } else {
-            throw new IllegalStateException("" + Status.pending + " segment was not found 'scope available' operation is impossible!!!!");
+        if (splittingDay == null) {
+            throw new IllegalStateException("pending segment was not found");
         }
+
+        AptUnitOccupancyManagerHelper.split(firstPendingSegment, splittingDay, new SplittingHandler() {
+
+            @Override
+            public void updateBeforeSplitPointSegment(AptUnitOccupancySegment segment) throws IllegalStateException {
+
+            }
+
+            @Override
+            public void updateAfterSplitPointSegment(AptUnitOccupancySegment segment) {
+                segment.status().setValue(Status.available);
+            }
+        });
+
+        GregorianCalendar cal = new GregorianCalendar();
+        cal.setTime(now);
+        cal.add(GregorianCalendar.DAY_OF_YEAR, -1);
+
+        // merge if previous was available
+        AptUnitOccupancySegment prevSegment = AptUnitOccupancyManagerHelper.retrieveOccupancySegment(unitPk, new LogicalDate(cal.getTime()));
+        if (prevSegment != null && (prevSegment.status().getValue() == Status.available)) {
+
+            // remove the segment we have just created:
+            // TODO (i know that this is very stupid stupid and has to refactored)
+            EntityQueryCriteria<AptUnitOccupancySegment> criteria = EntityQueryCriteria.create(AptUnitOccupancySegment.class);
+            criteria.add(PropertyCriterion.ne(criteria.proto().id(), prevSegment.getPrimaryKey()));
+            criteria.add(PropertyCriterion.eq(criteria.proto().status(), Status.available));
+            criteria.add(PropertyCriterion.ge(criteria.proto().dateTo(), now));
+            Persistence.service().delete(criteria);
+
+            prevSegment.dateTo().setValue(OccupancyFacade.MAX_DATE);
+            Persistence.service().persist(prevSegment);
+        }
+        updateUnitAvailableFrom(unitPk, splittingDay);
+
+        new AvailabilityReportManager(unitPk).generateUnitAvailablity(now);
     }
 
     @Override
@@ -199,6 +220,22 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
                         segment.status().setValue(Status.available);
                     }
                 });
+                // join segments if needed
+                GregorianCalendar cal = new GregorianCalendar();
+                cal.setTime(renoStartDay);
+                cal.add(GregorianCalendar.DAY_OF_YEAR, -1);
+
+                AptUnitOccupancySegment prevSegment = AptUnitOccupancyManagerHelper.retrieveOccupancySegment(unitPk, new LogicalDate(cal.getTime()));
+
+                if (prevSegment != null && (prevSegment.status().getValue() == Status.renovation)) {
+                    EntityQueryCriteria<AptUnitOccupancySegment> deleteRenovatioSegmentCriteria = EntityQueryCriteria.create(AptUnitOccupancySegment.class);
+                    deleteRenovatioSegmentCriteria.add(PropertyCriterion.eq(deleteRenovatioSegmentCriteria.proto().dateFrom(), renoStartDay));
+                    deleteRenovatioSegmentCriteria.add(PropertyCriterion.eq(deleteRenovatioSegmentCriteria.proto().unit(), unitPk));
+                    Persistence.service().delete(deleteRenovatioSegmentCriteria);
+
+                    prevSegment.dateTo().setValue(renovationEndDate);
+                    Persistence.service().persist(prevSegment);
+                }
                 updateUnitAvailableFrom(unitPk, addDay(renovationEndDate));
                 new AvailabilityReportManager(unitPk).generateUnitAvailablity(now);
                 return;
