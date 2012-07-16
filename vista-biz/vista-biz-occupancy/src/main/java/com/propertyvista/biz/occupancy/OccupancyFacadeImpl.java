@@ -263,20 +263,25 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
         GregorianCalendar cal = new GregorianCalendar();
         cal.setTime(vacantFrom);
         cal.add(GregorianCalendar.DAY_OF_YEAR, -1);
-
-        AptUnitOccupancySegment vacantSegment = null;
-
         AptUnitOccupancySegment preMakeVacantDateSegment = retrieveOccupancySegment(unitPk, new LogicalDate(cal.getTime()));
+
         if (preMakeVacantDateSegment.status().getValue() == Status.pending) {
-            vacantSegment = preMakeVacantDateSegment;
-            vacantSegment.dateTo().setValue(OccupancyFacade.MAX_DATE);
-            Persistence.service().merge(vacantSegment);
+
+            EntityQueryCriteria<AptUnitOccupancySegment> deleteCriteria = EntityQueryCriteria.create(AptUnitOccupancySegment.class);
+
+            deleteCriteria.add(PropertyCriterion.eq(deleteCriteria.proto().unit(), unitPk));
+            deleteCriteria.add(PropertyCriterion.ge(deleteCriteria.proto().dateTo(), vacantFrom));
+            deleteCriteria.add(PropertyCriterion.ne(deleteCriteria.proto().id(), preMakeVacantDateSegment));
+
+            Persistence.service().delete(deleteCriteria);
+
+            preMakeVacantDateSegment.dateTo().setValue(OccupancyFacade.MAX_DATE);
+            Persistence.service().merge(preMakeVacantDateSegment);
         } else {
             AptUnitOccupancySegment makeVacantStartSegment = retrieveOccupancySegment(unitPk, vacantFrom);
-            vacantSegment = split(makeVacantStartSegment, vacantFrom, new SplittingHandler() {
+            split(makeVacantStartSegment, vacantFrom, new SplittingHandler() {
                 @Override
                 public void updateBeforeSplitPointSegment(AptUnitOccupancySegment segment) throws IllegalStateException {
-
                 }
 
                 @Override
@@ -286,17 +291,13 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
                     segment.dateTo().setValue(OccupancyFacade.MAX_DATE);
                 }
             });
-            if (vacantSegment == null) {
-                vacantSegment = makeVacantStartSegment;
-            }
-        }
 
-        // now remove the rest
-        EntityQueryCriteria<AptUnitOccupancySegment> deleteCriteria = EntityQueryCriteria.create(AptUnitOccupancySegment.class);
-        deleteCriteria.add(PropertyCriterion.eq(deleteCriteria.proto().unit(), unitPk));
-        deleteCriteria.add(PropertyCriterion.ge(deleteCriteria.proto().dateTo(), vacantFrom));
-        deleteCriteria.add(PropertyCriterion.ne(deleteCriteria.proto().id(), vacantSegment.getPrimaryKey()));
-        Persistence.service().delete(deleteCriteria);
+            EntityQueryCriteria<AptUnitOccupancySegment> deleteCriteria = EntityQueryCriteria.create(AptUnitOccupancySegment.class);
+            deleteCriteria.add(PropertyCriterion.eq(deleteCriteria.proto().unit(), unitPk));
+            deleteCriteria.add(PropertyCriterion.ge(deleteCriteria.proto().dateTo(), vacantFrom));
+            deleteCriteria.add(PropertyCriterion.ne(deleteCriteria.proto().status(), Status.pending));
+            Persistence.service().delete(deleteCriteria);
+        }
 
         updateUnitAvailableFrom(unitPk, null);
         new AvailabilityReportManager(unitPk).generateUnitAvailablity(now);
