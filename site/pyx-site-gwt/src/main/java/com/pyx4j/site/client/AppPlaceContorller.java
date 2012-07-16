@@ -74,6 +74,10 @@ public final class AppPlaceContorller extends PlaceController {
         return forwardedFrom;
     }
 
+    public void goToUserMessagePlace() {
+        sureGoTo(dispatcher.getUserMessagePlace());
+    }
+
     public void goTo(final AppPlace newPlace) {
         maybeGoTo(newPlace);
     }

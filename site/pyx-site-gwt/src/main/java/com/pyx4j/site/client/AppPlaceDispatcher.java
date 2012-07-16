@@ -27,8 +27,10 @@ import com.pyx4j.widgets.client.dialog.ConfirmDecline;
 
 public interface AppPlaceDispatcher {
 
-    public abstract void forwardTo(AppPlace newPlace, AsyncCallback<AppPlace> callback);
+    void forwardTo(AppPlace newPlace, AsyncCallback<AppPlace> callback);
 
-    public void confirm(String message, ConfirmDecline confirmDecline);
+    void confirm(String message, ConfirmDecline confirmDecline);
+
+    AppPlace getUserMessagePlace();
 
 }

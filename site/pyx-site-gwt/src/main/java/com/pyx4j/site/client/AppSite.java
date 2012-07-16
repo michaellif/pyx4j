@@ -94,6 +94,11 @@ public abstract class AppSite implements EntryPoint {
                 }
             }
 
+            @Override
+            public AppPlace getUserMessagePlace() {
+                return null;
+            }
+
         });
     }
 

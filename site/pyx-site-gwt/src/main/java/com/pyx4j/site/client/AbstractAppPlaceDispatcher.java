@@ -91,6 +91,11 @@ public abstract class AbstractAppPlaceDispatcher implements AppPlaceDispatcher {
     protected abstract AppPlace specialForward(AppPlace newPlace);
 
     @Override
+    public AppPlace getUserMessagePlace() {
+        return null;
+    }
+
+    @Override
     public final void forwardTo(AppPlace newPlace, final AsyncCallback<AppPlace> callback) {
         if ((newPlace instanceof PublicPlace) || (newPlace instanceof SigningOutPlace)) {
             callback.onSuccess(newPlace);
