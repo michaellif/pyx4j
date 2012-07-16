@@ -27,7 +27,6 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.essentials.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.essentials.rpc.upload.UploadResponse;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.rpc.shared.UserRuntimeException;
 
 import com.propertyvista.crm.rpc.dto.ImportUploadDTO;
 import com.propertyvista.crm.rpc.dto.ImportUploadResponseDTO;
@@ -37,7 +36,7 @@ import com.propertyvista.domain.property.asset.building.BuildingInfo;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.interfaces.importer.ImportCounters;
 import com.propertyvista.interfaces.importer.converter.AptUnitConverter;
-import com.propertyvista.interfaces.importer.converter.MediaConfig;
+import com.propertyvista.interfaces.importer.converter.FloorplanConverter;
 import com.propertyvista.interfaces.importer.model.AptUnitIO;
 import com.propertyvista.interfaces.importer.model.BuildingIO;
 import com.propertyvista.interfaces.importer.model.FloorplanIO;
@@ -107,12 +106,11 @@ public class ImportProcessorFlatFloorplanAndUnits implements ImportProcessor {
         SharedGeoLocator.setMode(Mode.updateCache);
         status.setProgressMaximum(data.buildings().size() * 2);
         ImportCounters counters = new ImportCounters();
-        MediaConfig mediaConfig = MediaConfig.create(uploadRequestInfo);
         int count = 0;
         try {
             for (BuildingIO building : data.buildings()) {
                 log.debug("processing building {} {}", count + "/" + data.buildings().size(), building.getStringView());
-                counters.add(persist(building, mediaConfig));
+                counters.add(saveInDB(building));
                 count++;
                 status.setProgress(data.buildings().size() + count);
                 log.info("building {} updated", building.getStringView());
@@ -127,7 +125,7 @@ public class ImportProcessorFlatFloorplanAndUnits implements ImportProcessor {
         }
     }
 
-    private ImportCounters persist(BuildingIO buildingIO, MediaConfig mediaConfig) {
+    private ImportCounters saveInDB(BuildingIO buildingIO) {
 
         ImportCounters counters = new ImportCounters();
         counters.buildings++;
@@ -150,8 +148,11 @@ public class ImportProcessorFlatFloorplanAndUnits implements ImportProcessor {
                     List<Floorplan> floorplans = Persistence.service().query(criteria);
                     if (floorplans.size() == 1) {
                         floorplan = (floorplans.get(0));
-                        Persistence.service().persist(floorplan);
+                    } else {
+                        floorplan = new FloorplanConverter().createDBO(floorplanIO);
                     }
+                    floorplan.building().set(building);
+                    Persistence.service().persist(floorplan);
 
                 }
 
@@ -161,10 +162,6 @@ public class ImportProcessorFlatFloorplanAndUnits implements ImportProcessor {
                 {
                     List<AptUnit> items = new Vector<AptUnit>();
                     for (AptUnitIO aptUnitIO : floorplanIO.units()) {
-                        if (aptUnitIO.number().isNull()) {
-                            throw new UserRuntimeException("AptUnit number in '" + floorplanIO.name().getValue() + "' in building '"
-                                    + buildingIO.propertyCode().getValue() + "' can't be empty");
-                        }
                         aptUnitIO.number().setValue(AptUnitConverter.trimUnitNumber(aptUnitIO.number().getValue()));
                         {
                             EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
