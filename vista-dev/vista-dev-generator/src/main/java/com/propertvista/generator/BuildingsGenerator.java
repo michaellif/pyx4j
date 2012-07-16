@@ -511,8 +511,14 @@ public class BuildingsGenerator {
         occupancySegment.unit().set(unit);
         occupancySegment.dateFrom().setValue(RandomUtil.randomLogicalDate(2010, 2012));
         occupancySegment.dateTo().setValue(OccupancyFacade.MAX_DATE);
-        occupancySegment.status().setValue(AptUnitOccupancySegment.Status.pending);
-        unit._availableForRent().setValue(null);
+        if (building.propertyCode().getValue().equals("B0")) {
+            occupancySegment.status().setValue(AptUnitOccupancySegment.Status.available);
+            unit._availableForRent().setValue(occupancySegment.dateFrom().getValue());
+        } else {
+            occupancySegment.status().setValue(AptUnitOccupancySegment.Status.pending);
+            unit._availableForRent().setValue(null);
+        }
+
         occupancySegment.description().setValue(RandomUtil.randomLetters(25).toLowerCase());
         unit.unitOccupancySegments().add(occupancySegment);
 

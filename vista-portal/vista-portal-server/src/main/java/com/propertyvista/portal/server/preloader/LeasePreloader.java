@@ -23,6 +23,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.biz.tenant.LeaseFacade;
@@ -175,17 +176,22 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
         return b.toString();
     }
 
-    private AptUnit makeAvailable(AptUnit unit) {
-        Persistence.service().setTransactionSystemTime(getVacantFromDate(unit));
-        ServerSideFactory.create(OccupancyFacade.class).scopeAvailable(unit.getPrimaryKey());
-        Persistence.service().setTransactionSystemTime(null);
+    private AptUnit makeAvailable(final AptUnit unit) {
+        if (unit._availableForRent().isNull()) {
+            Persistence.service().setTransactionSystemTime(getStatusFromDate(unit));
+            ServerSideFactory.create(OccupancyFacade.class).scopeAvailable(unit.getPrimaryKey());
+            Persistence.service().setTransactionSystemTime(null);
+        }
         return Persistence.service().retrieve(AptUnit.class, unit.getPrimaryKey());
     }
 
-    private LogicalDate getVacantFromDate(AptUnit unit) {
-        AptUnitOccupancySegment segment = Persistence.service().retrieve(EntityQueryCriteria.create(AptUnitOccupancySegment.class));
+    private LogicalDate getStatusFromDate(AptUnit unit) {
+        EntityQueryCriteria<AptUnitOccupancySegment> criteria = EntityQueryCriteria.create(AptUnitOccupancySegment.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().unit(), unit));
+        AptUnitOccupancySegment segment = Persistence.service().retrieve(criteria);
+
         if (segment == null || segment.status().getValue() != AptUnitOccupancySegment.Status.pending) {
-            throw new IllegalStateException("the unit must be vacant");
+            throw new IllegalStateException("the unit must be pending");
         } else {
             return new LogicalDate(segment.dateFrom().getValue());
         }
