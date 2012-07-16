@@ -60,7 +60,7 @@ public class StarlightSitePreloader extends AbstractSitePreloader {
 
     @Override
     protected String copyright() {
-        return "© Starlight Apartments 2011";
+        return "© Starlight Apartments 2011-212";
     }
 
 }

@@ -67,7 +67,11 @@ public class VistaDataPreloaders extends DataPreloaderCollection {
             demoPmc = null;
         }
         if (demoPmc == null) {
-            add(new ProdSitePreloader());
+            if (NamespaceManager.getNamespace().equals("starlight")) {
+                add(new StarlightSitePreloader());
+            } else {
+                add(new ProdSitePreloader());
+            }
         } else {
             switch (demoPmc) {
             case vista:
