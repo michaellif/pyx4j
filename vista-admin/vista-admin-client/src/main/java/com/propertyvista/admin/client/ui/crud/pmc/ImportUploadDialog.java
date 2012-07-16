@@ -49,8 +49,10 @@ public class ImportUploadDialog extends VerticalPanel implements OkCancelOption,
 
     private final Dialog dialog;
 
+    private String downloadServletPath;
+
     @SuppressWarnings("unchecked")
-    private ImportUploadDialog(PmcDTO pmc) {
+    public ImportUploadDialog(PmcDTO pmc) {
         dialog = new Dialog(i18n.tr("Upload Import"), this, null);
 
         uploadPanel = new UploadPanel<ImportUploadDTO, ImportUploadResponseDTO>(
@@ -83,11 +85,17 @@ public class ImportUploadDialog extends VerticalPanel implements OkCancelOption,
                     }
                 } else {
                     if (serverUploadResponse.data.success().getValue()) {
-                        new DownloadLinkDialog(i18n.tr("Import Completeated"), serverUploadResponse.message, i18n.tr("Download processing results"),
-                                serverUploadResponse.data.resultUrl().getValue()).show();
+                        DownloadLinkDialog d = new DownloadLinkDialog(i18n.tr("Import Completeated"));
+                        if (downloadServletPath != null) {
+                            d.setDownloadServletPath(downloadServletPath);
+                        }
+                        d.show(serverUploadResponse.message, i18n.tr("Download processing results"), serverUploadResponse.data.resultUrl().getValue());
                     } else {
-                        new DownloadLinkDialog(i18n.tr("Import Error"), serverUploadResponse.message, i18n.tr("Download messages"), serverUploadResponse.data
-                                .resultUrl().getValue()).show();
+                        DownloadLinkDialog d = new DownloadLinkDialog(i18n.tr("Import Error"));
+                        if (downloadServletPath != null) {
+                            d.setDownloadServletPath(downloadServletPath);
+                        }
+                        d.show(serverUploadResponse.message, i18n.tr("Download messages"), serverUploadResponse.data.resultUrl().getValue());
                     }
                 }
             }
@@ -124,8 +132,12 @@ public class ImportUploadDialog extends VerticalPanel implements OkCancelOption,
         dialog.setPixelSize(460, 150);
     }
 
-    public static void show(PmcDTO pmc) {
-        new ImportUploadDialog(pmc).dialog.show();
+    public void show() {
+        dialog.show();
+    }
+
+    public void setDownloadServletPath(String path) {
+        downloadServletPath = path;
     }
 
     @Override

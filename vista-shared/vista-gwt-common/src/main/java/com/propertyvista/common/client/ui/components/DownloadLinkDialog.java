@@ -26,18 +26,25 @@ import com.propertyvista.portal.rpc.DeploymentConsts;
 
 public class DownloadLinkDialog extends Dialog implements CancelOption {
 
-    private final String downloadUrl;
+    private String downloadServletPath;
 
-    public DownloadLinkDialog(String caption, String message, String dowloadLinkCaption, String downloadUrl) {
+    private String downloadUrl;
+
+    public DownloadLinkDialog(String caption) {
         super(caption);
         setDialogOptions(this);
+        downloadServletPath = NavigationUri.getDeploymentBaseURL() + DeploymentConsts.downloadServletMapping;
+    }
 
+    public void setDownloadServletPath(String path) {
+        downloadServletPath = path;
+    }
+
+    public void show(String message, String dowloadLinkCaption, String downloadUrl) {
         this.downloadUrl = downloadUrl;
-
         VerticalPanel vp = new VerticalPanel();
         setBody(vp);
         vp.add(new HTML(message));
-        String downloadServletPath = NavigationUri.getDeploymentBaseURL() + DeploymentConsts.downloadServletMapping;
         HTML downloadLink = new HTML("<a href=\"" + downloadServletPath + downloadUrl + "\" target=\"_blank\">" + dowloadLinkCaption + "</a>");
         downloadLink.ensureDebugId("reportDownloadLink");
         vp.add(downloadLink);
@@ -48,6 +55,8 @@ public class DownloadLinkDialog extends Dialog implements CancelOption {
                 DownloadLinkDialog.this.hide();
             }
         });
+
+        this.show();
     }
 
     @Override

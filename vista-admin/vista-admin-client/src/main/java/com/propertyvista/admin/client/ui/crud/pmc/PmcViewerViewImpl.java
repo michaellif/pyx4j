@@ -25,6 +25,7 @@ import com.propertyvista.admin.client.ui.crud.AdminViewerViewImplBase;
 import com.propertyvista.admin.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.admin.rpc.AdminSiteMap;
 import com.propertyvista.admin.rpc.PmcDTO;
+import com.propertyvista.portal.rpc.DeploymentConsts;
 
 public class PmcViewerViewImpl extends AdminViewerViewImplBase<PmcDTO> implements PmcViewerView {
 
@@ -38,7 +39,9 @@ public class PmcViewerViewImpl extends AdminViewerViewImplBase<PmcDTO> implement
         Button upload = new Button("Upload import", new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                ImportUploadDialog.show(getForm().getValue());
+                ImportUploadDialog d = new ImportUploadDialog(getForm().getValue());
+                d.setDownloadServletPath(GWT.getModuleBaseURL() + DeploymentConsts.downloadServletMapping);
+                d.show();
             }
         });
         addHeaderToolbarTwoItem(upload.asWidget());
