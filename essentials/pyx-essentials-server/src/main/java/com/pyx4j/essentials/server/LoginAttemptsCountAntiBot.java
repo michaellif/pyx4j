@@ -35,13 +35,28 @@ public abstract class LoginAttemptsCountAntiBot extends AbstractAntiBot {
         return 3 * Consts.MIN2MSEC;
     }
 
+    protected int loginFailureCountByEmail(LoginType loginType) {
+        switch (loginType) {
+        case accessToken:
+            return 6;
+        case userLogin:
+            return 3;
+        default:
+            throw new IllegalArgumentException();
+        }
+    }
+
+    protected int loginFailureCountByIp(LoginType loginType) {
+        return loginFailureCountByEmail(loginType) * 3;
+    }
+
     static class InvalidLoginAttempts implements Serializable {
 
         private static final long serialVersionUID = 4031499302195853296L;
 
         Vector<Long> when = new Vector<Long>();
 
-        boolean isCaptchaRequired(long loginFailureCountInterval) {
+        boolean isCaptchaRequired(int loginFailureCount, long loginFailureCountInterval) {
             long now = System.currentTimeMillis();
             Iterator<Long> it = when.iterator();
             int active = 0;
@@ -52,7 +67,7 @@ public abstract class LoginAttemptsCountAntiBot extends AbstractAntiBot {
                     active++;
                 }
             }
-            return (active >= 3);
+            return (active >= loginFailureCount);
         }
     }
 
@@ -84,14 +99,15 @@ public abstract class LoginAttemptsCountAntiBot extends AbstractAntiBot {
         }
         la2.when.add(System.currentTimeMillis());
 
-        return la1.isCaptchaRequired(loginFailureCountInterval()) || la2.isCaptchaRequired(loginFailureCountInterval());
+        return la1.isCaptchaRequired(loginFailureCountByEmail(LoginType.userLogin), loginFailureCountInterval())
+                || la2.isCaptchaRequired(loginFailureCountByIp(LoginType.userLogin), loginFailureCountInterval());
     }
 
     @Override
-    protected boolean isCaptchaRequired(String email) {
+    protected boolean isCaptchaRequired(LoginType loginType, String email) {
         {
             InvalidLoginAttempts la = cacheByIp.get(getRequestRemoteAddr());
-            if ((la != null) && la.isCaptchaRequired(loginFailureCountInterval())) {
+            if ((la != null) && la.isCaptchaRequired(loginFailureCountByIp(loginType), loginFailureCountInterval())) {
                 return true;
             }
         }
@@ -101,7 +117,7 @@ public abstract class LoginAttemptsCountAntiBot extends AbstractAntiBot {
             if (la == null) {
                 return false;
             } else {
-                return la.isCaptchaRequired(loginFailureCountInterval());
+                return la.isCaptchaRequired(loginFailureCountByEmail(loginType), loginFailureCountInterval());
             }
         }
     }

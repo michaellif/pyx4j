@@ -37,6 +37,7 @@ import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.essentials.server.AbstractAntiBot;
+import com.pyx4j.essentials.server.AbstractAntiBot.LoginType;
 import com.pyx4j.essentials.server.EssentialsServerSideConfiguration;
 import com.pyx4j.examples.domain.User;
 import com.pyx4j.examples.domain.UserCredential;
@@ -61,7 +62,7 @@ public class ExamplesAuthenticationServicesImpl extends AuthenticationServiceImp
             throw new RuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
         }
 
-        AbstractAntiBot.assertLogin(request.email().getValue(), request.captcha().getValue());
+        AbstractAntiBot.assertLogin(LoginType.userLogin, request.email().getValue(), request.captcha().getValue());
 
         EntityQueryCriteria<User> criteria = EntityQueryCriteria.create(User.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().email(), request.email().getValue()));

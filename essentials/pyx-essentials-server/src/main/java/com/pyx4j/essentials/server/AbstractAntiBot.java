@@ -36,9 +36,16 @@ public abstract class AbstractAntiBot {
 
     private static final I18n i18n = I18n.get(AbstractAntiBot.class);
 
+    public static enum LoginType {
+
+        userLogin,
+
+        accessToken
+    }
+
     public abstract void assertCaptcha(String challenge, String response);
 
-    protected abstract boolean isCaptchaRequired(String email);
+    protected abstract boolean isCaptchaRequired(LoginType loginType, String email);
 
     protected abstract boolean onAuthenticationFailed(String email);
 
@@ -49,12 +56,12 @@ public abstract class AbstractAntiBot {
      * @param challengeResponse
      *            is optional
      */
-    public static void assertLogin(String email, Pair<String, String> challengeResponse) {
+    public static void assertLogin(LoginType loginType, String email, Pair<String, String> challengeResponse) {
         AbstractAntiBot ab = ((EssentialsServerSideConfiguration) ServerSideConfiguration.instance()).getAntiBot();
         if (ab == null) {
             throw new UserRuntimeException(GENERIC_LOGIN_FAILED_MESSAGE);
         }
-        if (ab.isCaptchaRequired(email)) {
+        if (ab.isCaptchaRequired(loginType, email)) {
             if ((challengeResponse == null) || CommonsStringUtils.isEmpty(challengeResponse.getA()) || CommonsStringUtils.isEmpty(challengeResponse.getB())) {
                 throw new ChallengeVerificationRequired(i18n.tr("Human Verification Is Required"));
             }
