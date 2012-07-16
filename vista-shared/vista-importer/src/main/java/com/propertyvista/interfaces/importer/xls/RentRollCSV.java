@@ -13,9 +13,11 @@
  */
 package com.propertyvista.interfaces.importer.xls;
 
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
+@Transient
 public interface RentRollCSV extends IEntity {
 
     IPrimitive<String> unit();
