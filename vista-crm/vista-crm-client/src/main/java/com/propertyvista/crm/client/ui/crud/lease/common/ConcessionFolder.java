@@ -13,17 +13,20 @@
  */
 package com.propertyvista.crm.client.ui.crud.lease.common;
 
+import com.google.gwt.user.client.ui.IsWidget;
+
 import com.pyx4j.entity.client.CEntityForm;
 import com.pyx4j.entity.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.entity.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
+import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
-import com.propertyvista.crm.client.ui.crud.building.catalog.concession.ConcessionForm;
 import com.propertyvista.domain.financial.offering.Concession;
 import com.propertyvista.dto.LeaseDTO;
 
@@ -41,9 +44,44 @@ public class ConcessionFolder extends VistaBoxFolder<Concession> {
     @Override
     public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof Concession) {
-            return new ConcessionForm(true);
+            return new ConcessionEditor();
         }
         return super.create(member);
+
+    }
+
+    private class ConcessionEditor extends CEntityDecoratableForm<Concession> {
+
+        public ConcessionEditor() {
+            super(Concession.class);
+            setEditable(false);
+//            setViewable(true);
+        }
+
+        @Override
+        public IsWidget createContent() {
+            FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));
+
+            int row = -1;
+            content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().version().type()), 12).build());
+            content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().version().value()), 7).build());
+            content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().version().term()), 12).build());
+            content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().version().condition()), 10).build());
+            content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().version().mixable()), 5).build());
+
+            content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().version().description()), 60).build());
+            content.getFlexCellFormatter().setColSpan(row, 0, 2);
+
+            row = -1;
+            content.setWidget(++row, 1, new DecoratorBuilder(inject(proto().version().effectiveDate()), 9).build());
+            content.setWidget(++row, 1, new DecoratorBuilder(inject(proto().version().expirationDate()), 9).build());
+            content.setWidget(++row, 1, new DecoratorBuilder(inject(proto().updated()), 9).build());
+
+            content.getColumnFormatter().setWidth(0, "50%");
+            content.getColumnFormatter().setWidth(1, "50%");
+
+            return content;
+        }
     }
 
     @Override
