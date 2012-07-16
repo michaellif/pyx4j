@@ -22,6 +22,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.essentials.server.AbstractAntiBot;
+import com.pyx4j.essentials.server.AbstractAntiBot.LoginType;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.rpc.shared.VoidSerializable;
@@ -55,7 +56,7 @@ public abstract class VistaUserSelfPasswordChangeServiceImpl<E extends AbstractU
             throw new UserRuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
         }
         Persistence.service().retrieve(credential.user());
-        AbstractAntiBot.assertLogin(credential.user().email().getValue(), null);
+        AbstractAntiBot.assertLogin(LoginType.userLogin, credential.user().email().getValue(), null);
         if (!PasswordEncryptor.checkPassword(request.currentPassword().getValue(), credential.credential().getValue())) {
             log.info("Invalid password for user {}", Context.getVisit().getUserVisit().getEmail());
             if (AbstractAntiBot.authenticationFailed(Context.getVisit().getUserVisit().getEmail())) {

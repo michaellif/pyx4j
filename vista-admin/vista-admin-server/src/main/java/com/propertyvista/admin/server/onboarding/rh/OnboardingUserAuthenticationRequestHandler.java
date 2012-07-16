@@ -25,6 +25,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.essentials.server.AbstractAntiBot;
+import com.pyx4j.essentials.server.AbstractAntiBot.LoginType;
 import com.pyx4j.essentials.server.EssentialsServerSideConfiguration;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.server.contexts.NamespaceManager;
@@ -58,7 +59,8 @@ public class OnboardingUserAuthenticationRequestHandler extends AbstractRequestH
         response.success().setValue(Boolean.TRUE);
 
         String email = PasswordEncryptor.normalizeEmailAddress(request.email().getValue());
-        AbstractAntiBot.assertLogin(email, new Pair<String, String>(request.captcha().challenge().getValue(), request.captcha().response().getValue()));
+        AbstractAntiBot.assertLogin(LoginType.userLogin, email, new Pair<String, String>(request.captcha().challenge().getValue(), request.captcha().response()
+                .getValue()));
 
         EntityQueryCriteria<OnboardingUser> criteria = EntityQueryCriteria.create(OnboardingUser.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().email(), email));

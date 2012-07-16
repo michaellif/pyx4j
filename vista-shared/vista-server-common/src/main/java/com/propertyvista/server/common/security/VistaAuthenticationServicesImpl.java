@@ -35,6 +35,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.essentials.server.AbstractAntiBot;
+import com.pyx4j.essentials.server.AbstractAntiBot.LoginType;
 import com.pyx4j.essentials.server.EssentialsServerSideConfiguration;
 import com.pyx4j.essentials.server.admin.SystemMaintenance;
 import com.pyx4j.gwt.server.ServletUtils;
@@ -141,7 +142,7 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
             throw new UserRuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
         }
         String email = PasswordEncryptor.normalizeEmailAddress(token.email);
-        AbstractAntiBot.assertLogin(email, null);
+        AbstractAntiBot.assertLogin(LoginType.accessToken, email, null);
 
         EntityQueryCriteria<U> criteria = new EntityQueryCriteria<U>(userClass);
         criteria.add(PropertyCriterion.eq(criteria.proto().email(), email));
@@ -206,7 +207,7 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
             throw new UserRuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
         }
         String email = PasswordEncryptor.normalizeEmailAddress(request.email().getValue());
-        AbstractAntiBot.assertLogin(email, request.captcha().getValue());
+        AbstractAntiBot.assertLogin(LoginType.userLogin, email, request.captcha().getValue());
 
         EntityQueryCriteria<U> criteria = new EntityQueryCriteria<U>(userClass);
         criteria.add(PropertyCriterion.eq(criteria.proto().email(), email));

@@ -30,6 +30,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.essentials.server.AbstractAntiBot;
+import com.pyx4j.essentials.server.AbstractAntiBot.LoginType;
 import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.interfaces.payment.RequestMessage;
@@ -43,7 +44,7 @@ public class PaymentSecurity {
 
     public static boolean enter(RequestMessage requestMessage) {
         try {
-            AbstractAntiBot.assertLogin(requestMessage.getInterfaceEntity(), null);
+            AbstractAntiBot.assertLogin(LoginType.userLogin, requestMessage.getInterfaceEntity(), null);
         } catch (Throwable e) {
             return false;
         }

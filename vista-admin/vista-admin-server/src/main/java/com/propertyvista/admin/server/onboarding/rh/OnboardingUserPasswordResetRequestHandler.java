@@ -26,6 +26,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.essentials.server.AbstractAntiBot;
+import com.pyx4j.essentials.server.AbstractAntiBot.LoginType;
 import com.pyx4j.essentials.server.EssentialsServerSideConfiguration;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UserRuntimeException;
@@ -66,7 +67,7 @@ public class OnboardingUserPasswordResetRequestHandler extends AbstractRequestHa
 
         AccessKey.TokenParser token = new AccessKey.TokenParser(request.token().getValue());
         String email = PasswordEncryptor.normalizeEmailAddress(token.email);
-        AbstractAntiBot.assertLogin(email, null);
+        AbstractAntiBot.assertLogin(LoginType.accessToken, email, null);
 
         EntityQueryCriteria<OnboardingUser> criteria = EntityQueryCriteria.create(OnboardingUser.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().email(), email));
