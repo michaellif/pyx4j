@@ -27,7 +27,6 @@ import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.essentials.j2se.util.FileIOUtils;
 import com.pyx4j.essentials.j2se.util.MarshallUtil;
-import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.config.tests.VistaTestsNamespaceResolver;
 import com.propertyvista.config.tests.VistaTestsServerSideConfiguration;
@@ -41,9 +40,8 @@ public class OpenApiModelExample {
         long start = System.currentTimeMillis();
 
         ServerSideConfiguration.setInstance(new VistaTestsServerSideConfiguration(true));
-        NamespaceManager.setNamespace(VistaTestsNamespaceResolver.demoNamespace);
 
-        BuildingsRS buildingsRS = new BuildingsResource().listBuildings(null);
+        BuildingsRS buildingsRS = new BuildingsResource().listBuildings(VistaTestsNamespaceResolver.demoNamespace, null);
 
         log.info("buildings {} ", buildingsRS.buildings.size());
         log.info("Retrive time {} msec", TimeUtils.since(start));

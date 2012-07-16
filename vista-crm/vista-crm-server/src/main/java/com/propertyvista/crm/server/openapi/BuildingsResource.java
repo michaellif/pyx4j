@@ -35,11 +35,15 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.server.contexts.NamespaceManager;
 
+import com.propertyvista.admin.domain.pmc.Pmc;
+import com.propertyvista.admin.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.crm.server.openapi.model.BuildingRS;
 import com.propertyvista.crm.server.openapi.model.BuildingsRS;
 import com.propertyvista.crm.server.openapi.model.FloorplanRS;
 import com.propertyvista.crm.server.openapi.model.util.Converter;
+import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.domain.marketing.PublicVisibilityType;
 import com.propertyvista.domain.media.Media;
 import com.propertyvista.domain.property.PropertyManager;
@@ -67,7 +71,19 @@ public class BuildingsResource {
 
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public BuildingsRS listBuildings(@QueryParam("pm") String propertyManagerName) {
+    public BuildingsRS listBuildings(@QueryParam("pmc") String pmcDnsName, @QueryParam("pm") String propertyManagerName) {
+
+        if (VistaNamespace.adminNamespace.equals(NamespaceManager.getNamespace()) || CommonsStringUtils.isStringSet(pmcDnsName)) {
+            NamespaceManager.setNamespace(VistaNamespace.adminNamespace);
+            EntityQueryCriteria<Pmc> criteria = EntityQueryCriteria.create(Pmc.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().dnsName(), pmcDnsName));
+            Pmc pmc = Persistence.service().retrieve(criteria);
+            if ((pmc == null) || (pmc.status().getValue() != PmcStatus.Active)) {
+                throw new Error("PMC '" + pmcDnsName + "' not found");
+            }
+            NamespaceManager.setNamespace(pmc.namespace().getValue());
+        }
+
         if (!VistaFeatures.instance().xmlSiteExport()) {
             return new BuildingsRS();
         }
