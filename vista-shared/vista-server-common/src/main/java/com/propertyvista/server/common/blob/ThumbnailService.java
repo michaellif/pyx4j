@@ -256,6 +256,10 @@ public class ThumbnailService {
         Persistence.service().delete(ThumbnailBlob.class, key);
     }
 
+    public static void persist(ThumbnailBlob blob) {
+        Persistence.service().persist(blob);
+    }
+
     public static boolean serve(Key key, ThumbnailSize size, HttpServletResponse response) throws IOException {
         return serve(Persistence.service().retrieve(ThumbnailBlob.class, key), size, response);
     }

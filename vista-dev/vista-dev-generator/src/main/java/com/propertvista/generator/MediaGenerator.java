@@ -21,7 +21,6 @@ import com.propertvista.generator.util.PictureUtil;
 import com.propertvista.generator.util.RandomUtil;
 
 import com.pyx4j.entity.cache.CacheService;
-import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.rpc.report.DownloadFormat;
 import com.pyx4j.essentials.server.csv.CSVLoad;
@@ -108,7 +107,7 @@ public class MediaGenerator {
                 }
                 thumbnailBlob = (ThumbnailBlob) thumbnailBlob.duplicate();
                 thumbnailBlob.setPrimaryKey(m.file().blobKey().getValue());
-                Persistence.service().persist(thumbnailBlob);
+                ThumbnailService.persist(thumbnailBlob);
                 newData = true;
             }
             if (blob_mimize_Preload_Data_Size) {
@@ -145,7 +144,7 @@ public class MediaGenerator {
                 }
                 thumbnailBlob = (ThumbnailBlob) thumbnailBlob.duplicate();
                 thumbnailBlob.setPrimaryKey(m.file().blobKey().getValue());
-                Persistence.service().persist(thumbnailBlob);
+                ThumbnailService.persist(thumbnailBlob);
 
                 newData = true;
             }

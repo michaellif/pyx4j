@@ -29,7 +29,6 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.cache.CacheService;
-import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.utils.EntityDtoBinder;
 import com.pyx4j.essentials.j2se.util.FileIOUtils;
 import com.pyx4j.essentials.rpc.report.DownloadFormat;
@@ -184,7 +183,7 @@ public class MediaConverter extends EntityDtoBinder<Media, MediaIO> {
                     }
                     thumbnailBlob = (ThumbnailBlob) thumbnailBlob.duplicate();
                     thumbnailBlob.setPrimaryKey(blobKey);
-                    Persistence.service().persist(thumbnailBlob);
+                    ThumbnailService.persist(thumbnailBlob);
                 }
                 dbo.file().blobKey().setValue(blobKey);
             }
