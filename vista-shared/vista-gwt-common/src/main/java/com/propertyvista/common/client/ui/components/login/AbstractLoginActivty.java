@@ -20,7 +20,9 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.rpc.AuthenticationRequest;
 import com.pyx4j.security.rpc.AuthenticationService;
@@ -29,8 +31,11 @@ import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.webstorage.client.HTML5Storage;
 import com.pyx4j.widgets.client.CaptchaComposite;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 public abstract class AbstractLoginActivty extends AbstractActivity implements LoginView.Presenter {
+
+    private static final I18n i18n = I18n.get(AbstractLoginActivty.class);
 
     private static String HTML5_KEY = AppSite.instance().getAppId() + ".userid";
 
@@ -92,6 +97,8 @@ public abstract class AbstractLoginActivty extends AbstractActivity implements L
             public void onFailure(Throwable caught) {
                 if (caught instanceof ChallengeVerificationRequired) {
                     enableHumanVerification();
+                } else if (caught instanceof UserRuntimeException) {
+                    MessageDialog.error(i18n.tr("Login Failed"), caught);
                 } else {
                     super.onFailure(caught);
                 }
