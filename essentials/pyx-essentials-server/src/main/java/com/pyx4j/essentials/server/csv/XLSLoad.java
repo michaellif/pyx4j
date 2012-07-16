@@ -22,11 +22,11 @@ package com.pyx4j.essentials.server.csv;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Vector;
 
-import org.apache.poi.hssf.usermodel.HSSFDataFormatter;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.apache.poi.ss.usermodel.Cell;
@@ -60,11 +60,10 @@ public class XLSLoad {
 
     public XLSLoad(InputStream is, boolean xlsx) throws IOException {
         try {
+            formatter = new DataFormatter();
             if (xlsx) {
-                formatter = new HSSFDataFormatter();
                 wb = new XSSFWorkbook(is);
             } else {
-                formatter = new HSSFDataFormatter();
                 POIFSFileSystem fs = new POIFSFileSystem(is);
                 wb = new HSSFWorkbook(fs);
             }
@@ -132,7 +131,13 @@ public class XLSLoad {
             if (DateUtil.isCellDateFormatted(cell)) {
                 return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(cell.getDateCellValue());
             } else {
-                return formatter.formatCellValue(cell);
+                String format = cell.getCellStyle().getDataFormatString();
+                // MS Excel 2010 accounting
+                if (format.equals("_(* #,##0.00_);_(* \\(#,##0.00\\);_(* \"-\"??_);_(@_)")) {
+                    return new DecimalFormat("0.00").format(cell.getNumericCellValue());
+                } else {
+                    return formatter.formatCellValue(cell);
+                }
             }
         case Cell.CELL_TYPE_BOOLEAN:
             return Boolean.toString(cell.getBooleanCellValue());
