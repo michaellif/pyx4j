@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -13,12 +13,20 @@
  */
 package com.propertyvista.interfaces.importer.xls;
 
+import javax.xml.bind.annotation.XmlTransient;
+
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.essentials.rpc.ImportColumn;
 
+import com.propertyvista.interfaces.importer.model.ImportInformation;
+
 public interface UnitModel extends IEntity {
+
+    @ImportColumn(ignore = true)
+    @XmlTransient
+    ImportInformation _import();
 
     @ImportColumn(names = { "Property", "Property Code" })
     @NotNull

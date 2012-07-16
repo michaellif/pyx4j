@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -15,6 +15,10 @@ package com.propertyvista.interfaces.importer.parser;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.text.ParseException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,6 +35,7 @@ import com.pyx4j.rpc.shared.UserRuntimeException;
 
 import com.propertyvista.interfaces.importer.model.AptUnitIO;
 import com.propertyvista.interfaces.importer.model.BuildingIO;
+import com.propertyvista.interfaces.importer.model.FloorplanIO;
 import com.propertyvista.interfaces.importer.model.ImportIO;
 import com.propertyvista.interfaces.importer.xls.UnitModel;
 
@@ -58,7 +63,7 @@ public class UnitAvailabilityImportParser implements ImportParser {
 
         int sheets = loader.getNumberOfSheets();
         for (int sheetNumber = 0; sheetNumber < sheets; sheetNumber++) {
-            EntityCSVReciver<UnitModel> reciver = new UnitModelCSVReciver();
+            EntityCSVReciver<UnitModel> reciver = new UnitModelCSVReciver(loader.getSheetName(sheetNumber));
             try {
                 loader.loadSheet(sheetNumber, reciver);
             } catch (UserRuntimeException e) {
@@ -71,14 +76,24 @@ public class UnitAvailabilityImportParser implements ImportParser {
     }
 
     private static class UnitModelCSVReciver extends EntityCSVReciver<UnitModel> {
+        String sheetNumber;
 
-        public UnitModelCSVReciver() {
+        public UnitModelCSVReciver(String sheetName) {
             super(UnitModel.class);
+            this.sheetNumber = sheetName;
             this.setHeaderLinesCount(2);
             this.setHeadersMatchMinimum(3);
             this.setVerifyRequiredHeaders(true);
             this.setVerifyRequiredValues(true);
         }
+
+        @Override
+        public void onRow(UnitModel entity) {
+            entity._import().row().setValue(getCurrentRow());
+            entity._import().sheet().setValue(sheetNumber);
+            super.onRow(entity);
+        }
+
     }
 
     private void convertUnits(List<UnitModel> entities) {
@@ -90,13 +105,50 @@ public class UnitAvailabilityImportParser implements ImportParser {
                 building.propertyCode().setValue(unitModel.property().getValue());
                 buildings.put(unitModel.property().getValue(), building);
             }
-            AptUnitIO unit = EntityFactory.create(AptUnitIO.class);
-            //TODO convert unit.
 
-            building.units().add(unit);
+            AptUnitIO unit = EntityFactory.create(AptUnitIO.class);
+            unit.number().setValue(unitModel.unit().getValue());
+
+            unit.marketRent().setValue(parseMoney(unitModel.marketRent().getValue(), unitModel));
+            building = insertUnit(unit, unitModel.unitType().getValue(), building);
+        }
+        importIO.buildings().addAll(buildings.values());
+    }
+
+    private BigDecimal parseMoney(String money, UnitModel unitModel) {
+        NumberFormat nf = new DecimalFormat("#,###.##");
+        try {
+            return new BigDecimal(nf.parse(money).doubleValue());
+        } catch (ParseException e) {
+            throw new UserRuntimeException(i18n.tr("You have an erroneous Market Rent value of ''{0}'' for unit #{1} in building ''{2}''.", unitModel
+                    .marketRent().getStringView(), unitModel.unit().getStringView(), unitModel.property().getStringView()));
         }
 
-        importIO.buildings().addAll(buildings.values());
+    }
+
+    private BuildingIO insertUnit(AptUnitIO unit, String unitType, BuildingIO building) {
+        int floorplansSize = building.floorplans().size();
+        if (floorplansSize == 0) {
+            FloorplanIO newFloorplan = EntityFactory.create(FloorplanIO.class);
+            newFloorplan.name().setValue(unitType);
+            newFloorplan.units().add(unit);
+            building.floorplans().add(newFloorplan);
+        } else {
+            for (int i = 0; i < floorplansSize; i++) {
+                FloorplanIO floorplan = building.floorplans().get(i);
+                if (floorplan.name().getValue().equals(unitType)) {
+                    floorplan.units().add(unit);
+                    break;
+                }
+                if (i == floorplansSize - 1) {
+                    FloorplanIO newFloorplan = EntityFactory.create(FloorplanIO.class);
+                    newFloorplan.name().setValue(unitType);
+                    newFloorplan.units().add(unit);
+                    building.floorplans().add(newFloorplan);
+                }
+            }
+        }
+        return building;
     }
 
 }
