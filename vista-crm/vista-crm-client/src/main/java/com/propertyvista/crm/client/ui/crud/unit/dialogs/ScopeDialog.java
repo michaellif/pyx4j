@@ -102,6 +102,7 @@ public class ScopeDialog extends OkCancelDialog {
 
     @Override
     public boolean onClickOk() {
+        form.setUnconditionalValidationErrorRendering(true);
         if (!form.isValid()) {
             return false;
         } else {
