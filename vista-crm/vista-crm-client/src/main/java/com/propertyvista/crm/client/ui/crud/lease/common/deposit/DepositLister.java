@@ -35,6 +35,7 @@ public class DepositLister extends ListerBase<Deposit> {
         super(Deposit.class, true);
 
         setColumnDescriptors(//@formatter:off
+            new MemberColumnDescriptor.Builder(proto().billableItem()).columnTitle(i18n.tr("Service/Feature")).build(),
             new MemberColumnDescriptor.Builder(proto().type()).build(),
             new MemberColumnDescriptor.Builder(proto().status()).build(),
             new MemberColumnDescriptor.Builder(proto().depositDate(), false).build(),

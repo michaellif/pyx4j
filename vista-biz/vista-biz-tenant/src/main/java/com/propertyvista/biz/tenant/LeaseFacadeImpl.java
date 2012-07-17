@@ -171,6 +171,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
         // set selected service:
         BillableItem billableItem = createBillableItem(serviceItem);
         lease.version().leaseProducts().serviceItem().set(billableItem);
+        lease.billingAccount().deposits().clear();
         List<Deposit> deposits = ServerSideFactory.create(DepositFacade.class).createRequiredDeposits(billableItem, node);
         if (deposits != null) {
             lease.billingAccount().deposits().addAll(deposits);
