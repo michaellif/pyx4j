@@ -76,7 +76,6 @@ public abstract class LeaseEditorCrudServiceBaseImpl<DTO extends LeaseDTO> exten
         for (BillableItem ci : lease.version().leaseProducts().featureItems()) {
             updateAdjustments(ci);
         }
-
     }
 
     private void updateAdjustments(BillableItem item) {
