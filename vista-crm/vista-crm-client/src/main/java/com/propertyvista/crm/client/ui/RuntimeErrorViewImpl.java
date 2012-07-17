@@ -16,6 +16,7 @@ package com.propertyvista.crm.client.ui;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
@@ -36,24 +37,43 @@ public class RuntimeErrorViewImpl extends VerticalPanel implements RuntimeErrorV
         setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
         setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
 
-        VerticalPanel content = new VerticalPanel();
-        content.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+        FlexTable content = new FlexTable();
+        int row = -1;
+
+        HTML title = new HTML("Error");
+        Style titleStyle = title.getElement().getStyle();
+        titleStyle.setProperty("fontSize", "14px");
+        titleStyle.setProperty("color", "red");
+
+        content.setWidget(++row, 0, title);
+        Style titleBar = content.getCellFormatter().getElement(row, 0).getStyle();
+        titleBar.setProperty("padding", "10px 30px");
+        titleBar.setProperty("borderBottom", "1px solid #ddd");
+
         Style style = content.getElement().getStyle();
-        style.setProperty("border", "1px solid grey");
-        style.setProperty("padding", "20px");
+        style.setProperty("border", "2px solid #ddd");
+        style.setProperty("borderSpacing", "0");
         style.setProperty("margin", "10%");
         style.setProperty("marginBottom", "20%");
-        content.add(label);
 
-        Button back = new Button("Back");
-        back.getElement().getStyle().setProperty("marginTop", "20px");
+        Style msgStyle = label.getElement().getStyle();
+
+        content.setWidget(++row, 0, label);
+        Style msgBar = content.getCellFormatter().getElement(row, 0).getStyle();
+        msgBar.setProperty("padding", "30px");
+
+        Button back = new Button("OK");
         back.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 presenter.backToOrigin();
             }
         });
-        content.add(back);
+        content.setWidget(++row, 0, back);
+        content.getCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_RIGHT);
+        Style bottomBar = content.getCellFormatter().getElement(row, 0).getStyle();
+        bottomBar.setProperty("background", "#f0f0f0");
+        bottomBar.setProperty("padding", "10px 30px");
 
         add(content);
     }
