@@ -121,6 +121,15 @@ public class AbstractAccountRecoveryOptionsViewerActivity extends AbstractActivi
         throw new IllegalStateException("ehm");
     }
 
+    @Override
+    public void onStop() {
+        if (cancelationTimer != null) {
+            cancelationTimer.cancel();
+            cancelationTimer = null;
+        }
+        super.onStop();
+    }
+
     private String getCurrentPassword() {
         return place.getFirstArg("password");
     }
