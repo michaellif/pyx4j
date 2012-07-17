@@ -366,7 +366,7 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
         UnitAvailabilityStatusSummaryLineDTO summaryRecord = EntityFactory.create(UnitAvailabilityStatusSummaryLineDTO.class);
         summaryRecord.category().setValue(category);
         summaryRecord.units().setValue(units);
-        summaryRecord.percentile().setValue(percentile);
+        summaryRecord.percentage().setValue(percentile);
         return summaryRecord;
     }
 

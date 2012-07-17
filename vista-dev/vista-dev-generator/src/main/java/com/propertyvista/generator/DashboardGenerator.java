@@ -225,7 +225,7 @@ public class DashboardGenerator extends Dashboards {
         return Arrays.asList(//@formatter:off
                 defColumn(proto.category()).title("").sortable(false).build(),
                 defColumn(proto.units()).sortable(false).build(),
-                defColumn(proto.percentile()).sortable(false).build()
+                defColumn(proto.percentage()).sortable(false).build()
         );//@formatter:on
     }
 

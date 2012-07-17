@@ -94,7 +94,7 @@ public class UnitAvailabilitySummaryGadgetFactory extends AbstractGadget<UnitAva
             settings.columnDescriptors().addAll(ColumnDescriptorConverter.asColumnDesciptorEntityList(Arrays.asList(//@formatter:off
                     new MemberColumnDescriptor.Builder(proto.category()).title("").sortable(false).build(),
                     new MemberColumnDescriptor.Builder(proto.units()).sortable(false).build(),
-                    new MemberColumnDescriptor.Builder(proto.percentile()).sortable(false).build()
+                    new MemberColumnDescriptor.Builder(proto.percentage()).sortable(false).build()
             )));//@formatter:on
             return settings;
         }

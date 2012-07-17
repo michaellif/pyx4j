@@ -41,5 +41,5 @@ public interface UnitAvailabilityStatusSummaryLineDTO extends IEntity {
     IPrimitive<Integer> units();
 
     @Format("#0.00%")
-    IPrimitive<Double> percentile();
+    IPrimitive<Double> percentage();
 }
