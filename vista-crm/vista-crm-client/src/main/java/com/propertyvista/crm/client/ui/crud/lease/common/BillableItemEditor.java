@@ -261,7 +261,7 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
         @Override
         public List<EntityFolderColumnDescriptor> columns() {
             ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
-            columns.add(new EntityFolderColumnDescriptor(proto().type(), "8em"));
+            columns.add(new EntityFolderColumnDescriptor(proto().type(), "9em"));
             columns.add(new EntityFolderColumnDescriptor(proto().value(), "5em"));
             columns.add(new EntityFolderColumnDescriptor(proto().effectiveDate(), "9em"));
             columns.add(new EntityFolderColumnDescriptor(proto().expirationDate(), "10em"));
@@ -276,31 +276,20 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
             return super.create(member);
         }
 
-        @Override
-        protected void addItem(BillableItemAdjustment newEntity) {
-//            if (newEntity.isEmpty()) {
-//                newEntity.effectiveDate().setValue(new LogicalDate());
-//
-//                if (itemEffectiveDateEditor.getValue() != null) { // if Item Effective Date is set:
-//                    if (new LogicalDate().before(itemEffectiveDateEditor.getValue())) {
-//                        newEntity.effectiveDate().setValue(itemEffectiveDateEditor.getValue());
-//                    }
-//                } else { // otherwise Item Effective Date synch with Lease Start Date: 
-//                    if (lease.getValue().leaseTo().getValue() != null) {
-//                        if (new LogicalDate().before(lease.getValue().leaseTo().getValue())) {
-//                            newEntity.effectiveDate().setValue(lease.getValue().leaseTo().getValue());
-//                        }
-//                    }
-//                }
-//            }
-            super.addItem(newEntity);
-        }
-
         private class BillableItemAdjustmentEditor extends CEntityFolderRowEditor<BillableItemAdjustment> {
 
             public BillableItemAdjustmentEditor() {
                 super(BillableItemAdjustment.class, columns());
                 setViewable(false);
+            }
+
+            @Override
+            protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
+                if (column.getObject() == proto().value()) {
+                    // TODO : inject value place holeder here:
+                    return super.createCell(column);
+                }
+                return super.createCell(column);
             }
 
             @Override
