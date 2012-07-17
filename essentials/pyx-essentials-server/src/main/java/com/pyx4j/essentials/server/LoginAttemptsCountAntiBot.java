@@ -38,7 +38,7 @@ public abstract class LoginAttemptsCountAntiBot extends AbstractAntiBot {
     protected int loginFailureCountByEmail(LoginType loginType) {
         switch (loginType) {
         case accessToken:
-            return 6;
+            return 2;
         case userLogin:
             return 3;
         default:
@@ -71,9 +71,15 @@ public abstract class LoginAttemptsCountAntiBot extends AbstractAntiBot {
         }
     }
 
-    private static Map<String, InvalidLoginAttempts> cacheByEmail = new Hashtable<String, InvalidLoginAttempts>();
+    public static enum CountParamType {
 
-    private static Map<String, InvalidLoginAttempts> cacheByIp = new Hashtable<String, InvalidLoginAttempts>();
+        email,
+
+        ipAddress
+
+    }
+
+    private static Map<String, InvalidLoginAttempts> cacheByParam = new Hashtable<String, InvalidLoginAttempts>();
 
     /**
      * Allow to change IP address of request when accessing system via API
@@ -82,38 +88,42 @@ public abstract class LoginAttemptsCountAntiBot extends AbstractAntiBot {
         return Context.getRequestRemoteAddr();
     }
 
+    protected InvalidLoginAttempts getCounter(boolean create, LoginType loginType, CountParamType paramType, String param) {
+        String key = loginType.name() + paramType.name() + param;
+        InvalidLoginAttempts la = cacheByParam.get(key);
+        if (create && (la == null)) {
+            la = new InvalidLoginAttempts();
+            cacheByParam.put(key, la);
+        }
+        return la;
+    }
+
+    protected InvalidLoginAttempts addCounter(LoginType loginType, CountParamType paramType, String param) {
+        InvalidLoginAttempts la = getCounter(true, loginType, paramType, param);
+        la.when.add(System.currentTimeMillis());
+        return la;
+    }
+
     @Override
-    protected boolean onAuthenticationFailed(String email) {
-        InvalidLoginAttempts la1 = cacheByEmail.get(email);
-        if (la1 == null) {
-            la1 = new InvalidLoginAttempts();
-            cacheByEmail.put(email, la1);
-        }
-        la1.when.add(System.currentTimeMillis());
+    protected boolean onAuthenticationFailed(LoginType loginType, String email) {
+        InvalidLoginAttempts la1 = addCounter(loginType, CountParamType.email, email);
+        InvalidLoginAttempts la2 = addCounter(loginType, CountParamType.ipAddress, getRequestRemoteAddr());
 
-        String ip = getRequestRemoteAddr();
-        InvalidLoginAttempts la2 = cacheByIp.get(ip);
-        if (la2 == null) {
-            la2 = new InvalidLoginAttempts();
-            cacheByIp.put(ip, la2);
-        }
-        la2.when.add(System.currentTimeMillis());
-
-        return la1.isCaptchaRequired(loginFailureCountByEmail(LoginType.userLogin), loginFailureCountInterval())
-                || la2.isCaptchaRequired(loginFailureCountByIp(LoginType.userLogin), loginFailureCountInterval());
+        return la1.isCaptchaRequired(loginFailureCountByEmail(loginType), loginFailureCountInterval())
+                || la2.isCaptchaRequired(loginFailureCountByIp(loginType), loginFailureCountInterval());
     }
 
     @Override
     protected boolean isCaptchaRequired(LoginType loginType, String email) {
         {
-            InvalidLoginAttempts la = cacheByIp.get(getRequestRemoteAddr());
+            InvalidLoginAttempts la = getCounter(false, loginType, CountParamType.ipAddress, getRequestRemoteAddr());
             if ((la != null) && la.isCaptchaRequired(loginFailureCountByIp(loginType), loginFailureCountInterval())) {
                 return true;
             }
         }
 
         {
-            InvalidLoginAttempts la = cacheByEmail.get(email);
+            InvalidLoginAttempts la = getCounter(false, loginType, CountParamType.email, email);
             if (la == null) {
                 return false;
             } else {

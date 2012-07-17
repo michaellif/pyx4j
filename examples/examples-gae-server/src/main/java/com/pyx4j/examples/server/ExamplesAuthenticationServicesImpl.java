@@ -68,7 +68,7 @@ public class ExamplesAuthenticationServicesImpl extends AuthenticationServiceImp
         criteria.add(PropertyCriterion.eq(criteria.proto().email(), request.email().getValue()));
         List<User> users = PersistenceServicesFactory.getPersistenceService().query(criteria);
         if (users.size() != 1) {
-            if (AbstractAntiBot.authenticationFailed(request.email().getValue())) {
+            if (AbstractAntiBot.authenticationFailed(LoginType.userLogin, request.email().getValue())) {
                 throw new ChallengeVerificationRequired("Too many failed log-in attempts");
             } else {
                 throw new RuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
@@ -84,7 +84,7 @@ public class ExamplesAuthenticationServicesImpl extends AuthenticationServiceImp
         }
         if (!request.password().getValue().equals(userCredential.credential().getValue())) {
             log.info("Invalid password for user {}", request.email().getValue());
-            if (AbstractAntiBot.authenticationFailed(request.email().getValue())) {
+            if (AbstractAntiBot.authenticationFailed(LoginType.userLogin, request.email().getValue())) {
                 throw new ChallengeVerificationRequired("Too many failed log-in attempts");
             } else {
                 throw new RuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);

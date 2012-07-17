@@ -47,7 +47,7 @@ public abstract class AbstractAntiBot {
 
     protected abstract boolean isCaptchaRequired(LoginType loginType, String email);
 
-    protected abstract boolean onAuthenticationFailed(String email);
+    protected abstract boolean onAuthenticationFailed(LoginType loginType, String email);
 
     /**
      * Verify if there are may login attempts with this email
@@ -81,10 +81,10 @@ public abstract class AbstractAntiBot {
      * @param email
      * @return true is there was too many failed log-in attempts for given E-mail
      */
-    public static boolean authenticationFailed(String email) {
+    public static boolean authenticationFailed(LoginType loginType, String email) {
         AbstractAntiBot ab = ((EssentialsServerSideConfiguration) ServerSideConfiguration.instance()).getAntiBot();
         if (ab != null) {
-            return ab.onAuthenticationFailed(email);
+            return ab.onAuthenticationFailed(loginType, email);
         } else {
             return false;
         }
