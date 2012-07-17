@@ -149,7 +149,7 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
         List<U> users = Persistence.service().query(criteria);
         if (users.size() != 1) {
             log.debug("Invalid log-in attempt {} rs {}", email, users.size());
-            if (AbstractAntiBot.authenticationFailed(email)) {
+            if (AbstractAntiBot.authenticationFailed(LoginType.accessToken, email)) {
                 throw new ChallengeVerificationRequired(i18n.tr("Too Many Failed Log In Attempts"));
             } else {
                 throw new UserRuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
@@ -169,7 +169,7 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
             }
 
             if (!token.accessKey.equals(cr.accessKey().getValue())) {
-                AbstractAntiBot.authenticationFailed(token.email);
+                AbstractAntiBot.authenticationFailed(LoginType.accessToken, token.email);
                 throw new UserRuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
             }
 
@@ -214,7 +214,7 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
         List<U> users = Persistence.service().query(criteria);
         if (users.size() != 1) {
             log.debug("Invalid log-in attempt {} rs {}", email, users.size());
-            if (AbstractAntiBot.authenticationFailed(email)) {
+            if (AbstractAntiBot.authenticationFailed(LoginType.userLogin, email)) {
                 throw new ChallengeVerificationRequired(i18n.tr("Too Many Failed Log In Attempts"));
             } else {
                 throw new UserRuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
@@ -234,7 +234,7 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
             }
             if (!PasswordEncryptor.checkPassword(request.password().getValue(), cr.credential().getValue())) {
                 log.info("Invalid password for user {}", email);
-                if (AbstractAntiBot.authenticationFailed(email)) {
+                if (AbstractAntiBot.authenticationFailed(LoginType.userLogin, email)) {
                     throw new ChallengeVerificationRequired(i18n.tr("Too Many Failed Log In Attempts"));
                 } else {
                     throw new UserRuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);

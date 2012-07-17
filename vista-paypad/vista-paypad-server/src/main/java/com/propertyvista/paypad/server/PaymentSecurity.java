@@ -57,7 +57,7 @@ public class PaymentSecurity {
             List<InterfaceEntity> users = Persistence.service().query(criteria);
             if (users.size() != 1) {
                 log.debug("Invalid log-in attempt {} rs {}", requestMessage.getInterfaceEntity(), users.size());
-                AbstractAntiBot.authenticationFailed(requestMessage.getInterfaceEntity());
+                AbstractAntiBot.authenticationFailed(LoginType.userLogin, requestMessage.getInterfaceEntity());
                 return false;
             }
 
@@ -67,7 +67,7 @@ public class PaymentSecurity {
             }
             if (!checkPassword(requestMessage.getInterfaceEntityPassword(), user.credential().getValue())) {
                 log.info("Invalid password for user {}", requestMessage.getInterfaceEntity());
-                AbstractAntiBot.authenticationFailed(requestMessage.getInterfaceEntity());
+                AbstractAntiBot.authenticationFailed(LoginType.userLogin, requestMessage.getInterfaceEntity());
                 return false;
             }
         } finally {

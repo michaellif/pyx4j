@@ -25,6 +25,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.essentials.server.AbstractAntiBot;
+import com.pyx4j.essentials.server.AbstractAntiBot.LoginType;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 
 import com.propertyvista.admin.domain.security.OnboardingUserCredential;
@@ -59,7 +60,7 @@ public class OnboardingUserSendPasswordResetTokenRequestHandler extends Abstract
         List<OnboardingUser> users = Persistence.service().query(criteria);
         if (users.size() != 1) {
             log.debug("Invalid log-in attempt {} rs {}", email, users.size());
-            if (AbstractAntiBot.authenticationFailed(email)) {
+            if (AbstractAntiBot.authenticationFailed(LoginType.userLogin, email)) {
                 response.success().setValue(Boolean.FALSE);
                 return response;
             }

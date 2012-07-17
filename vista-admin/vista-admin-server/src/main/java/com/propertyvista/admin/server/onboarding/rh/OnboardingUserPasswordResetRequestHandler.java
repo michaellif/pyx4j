@@ -74,7 +74,7 @@ public class OnboardingUserPasswordResetRequestHandler extends AbstractRequestHa
         List<OnboardingUser> users = Persistence.service().query(criteria);
         if (users.size() != 1) {
             log.debug("Invalid log-in attempt {} rs {}", email, users.size());
-            if (AbstractAntiBot.authenticationFailed(email)) {
+            if (AbstractAntiBot.authenticationFailed(LoginType.userLogin, email)) {
                 response.status().setValue(OnboardingUserAuthenticationResponseIO.AuthenticationStatusCode.ChallengeVerificationRequired);
                 response.reCaptchaPublicKey().setValue(((EssentialsServerSideConfiguration) ServerSideConfiguration.instance()).getReCaptchaPublicKey());
                 return response;
@@ -95,7 +95,7 @@ public class OnboardingUserPasswordResetRequestHandler extends AbstractRequestHa
         }
 
         if (!token.accessKey.equals(cr.accessKey().getValue())) {
-            AbstractAntiBot.authenticationFailed(token.email);
+            AbstractAntiBot.authenticationFailed(LoginType.accessToken, token.email);
             response.status().setValue(OnboardingUserAuthenticationResponseIO.AuthenticationStatusCode.TokenExpired);
             return response;
         }

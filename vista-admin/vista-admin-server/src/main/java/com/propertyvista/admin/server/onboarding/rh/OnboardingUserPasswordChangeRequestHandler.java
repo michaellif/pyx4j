@@ -64,7 +64,7 @@ public class OnboardingUserPasswordChangeRequestHandler extends AbstractRequestH
         List<OnboardingUser> users = Persistence.service().query(criteria);
         if (users.size() != 1) {
             log.debug("Invalid log-in attempt {} rs {}", email, users.size());
-            AbstractAntiBot.authenticationFailed(email);
+            AbstractAntiBot.authenticationFailed(LoginType.userLogin, email);
             response.success().setValue(Boolean.FALSE);
             return response;
         }
@@ -97,7 +97,7 @@ public class OnboardingUserPasswordChangeRequestHandler extends AbstractRequestH
 
                     if (credential != null) {
                         if (!PasswordEncryptor.checkPassword(request.currentPassword().getValue(), credential.credential().getValue())) {
-                            AbstractAntiBot.authenticationFailed(email);
+                            AbstractAntiBot.authenticationFailed(LoginType.userLogin, email);
                             log.info("Invalid password for user {}", email);
                             response.success().setValue(Boolean.FALSE);
 
@@ -128,7 +128,7 @@ public class OnboardingUserPasswordChangeRequestHandler extends AbstractRequestH
 
         if (validateAgainstOnboarding) {
             if (!PasswordEncryptor.checkPassword(request.currentPassword().getValue(), cr.credential().getValue())) {
-                AbstractAntiBot.authenticationFailed(email);
+                AbstractAntiBot.authenticationFailed(LoginType.userLogin, email);
                 log.info("Invalid password for user {}", email);
                 response.success().setValue(Boolean.FALSE);
 

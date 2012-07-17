@@ -59,7 +59,7 @@ public abstract class VistaUserSelfPasswordChangeServiceImpl<E extends AbstractU
         AbstractAntiBot.assertLogin(LoginType.userLogin, credential.user().email().getValue(), null);
         if (!PasswordEncryptor.checkPassword(request.currentPassword().getValue(), credential.credential().getValue())) {
             log.info("Invalid password for user {}", Context.getVisit().getUserVisit().getEmail());
-            if (AbstractAntiBot.authenticationFailed(Context.getVisit().getUserVisit().getEmail())) {
+            if (AbstractAntiBot.authenticationFailed(LoginType.userLogin, Context.getVisit().getUserVisit().getEmail())) {
                 throw new ChallengeVerificationRequired(i18n.tr("Too Many Failed Log In Attempts"));
             } else {
                 throw new UserRuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);

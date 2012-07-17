@@ -75,7 +75,7 @@ public class OnboardingUserTokenValidationRequestHandler extends AbstractRequest
         }
 
         if (!token.accessKey.equals(cr.accessKey().getValue())) {
-            AbstractAntiBot.authenticationFailed(token.email);
+            AbstractAntiBot.authenticationFailed(LoginType.accessToken, token.email);
             response.success().setValue(Boolean.FALSE);
             return response;
         }

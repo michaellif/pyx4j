@@ -32,6 +32,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.essentials.server.AbstractAntiBot;
+import com.pyx4j.essentials.server.AbstractAntiBot.LoginType;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.rpc.AuthenticationResponse;
@@ -112,7 +113,7 @@ public class ActivationServiceImpl extends ApplicationEntityServiceImpl implemen
             throw new RuntimeExceptionSerializable(i18n.tr("Your Account Is Suspended"));
         }
         if (!token.accessKey.equals(cr.accessKey().getValue())) {
-            AbstractAntiBot.authenticationFailed(token.email);
+            AbstractAntiBot.authenticationFailed(LoginType.userLogin, token.email);
             throw new RuntimeException(i18n.tr("Invalid Request"));
         }
         if ((new Date().after(cr.accessKeyExpire().getValue()))) {

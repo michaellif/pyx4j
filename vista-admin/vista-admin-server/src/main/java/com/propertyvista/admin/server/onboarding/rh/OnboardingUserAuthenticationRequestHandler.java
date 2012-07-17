@@ -67,7 +67,7 @@ public class OnboardingUserAuthenticationRequestHandler extends AbstractRequestH
         List<OnboardingUser> users = Persistence.service().query(criteria);
         if (users.size() != 1) {
             log.debug("Invalid log-in attempt {} rs {}", email, users.size());
-            if (AbstractAntiBot.authenticationFailed(email)) {
+            if (AbstractAntiBot.authenticationFailed(LoginType.userLogin, email)) {
                 response.status().setValue(OnboardingUserAuthenticationResponseIO.AuthenticationStatusCode.ChallengeVerificationRequired);
                 response.reCaptchaPublicKey().setValue(((EssentialsServerSideConfiguration) ServerSideConfiguration.instance()).getReCaptchaPublicKey());
                 return response;
@@ -109,7 +109,7 @@ public class OnboardingUserAuthenticationRequestHandler extends AbstractRequestH
                     }
 
                     if (!PasswordEncryptor.checkPassword(request.password().getValue(), crmCred.credential().getValue())) {
-                        if (AbstractAntiBot.authenticationFailed(email)) {
+                        if (AbstractAntiBot.authenticationFailed(LoginType.userLogin, email)) {
                             response.status().setValue(OnboardingUserAuthenticationResponseIO.AuthenticationStatusCode.ChallengeVerificationRequired);
                             response.reCaptchaPublicKey().setValue(
                                     ((EssentialsServerSideConfiguration) ServerSideConfiguration.instance()).getReCaptchaPublicKey());
@@ -130,7 +130,7 @@ public class OnboardingUserAuthenticationRequestHandler extends AbstractRequestH
             } else {
                 if (!PasswordEncryptor.checkPassword(request.password().getValue(), cr.credential().getValue())) {
                     log.info("Invalid password for user {}", email);
-                    if (AbstractAntiBot.authenticationFailed(email)) {
+                    if (AbstractAntiBot.authenticationFailed(LoginType.userLogin, email)) {
                         response.status().setValue(OnboardingUserAuthenticationResponseIO.AuthenticationStatusCode.ChallengeVerificationRequired);
                         response.reCaptchaPublicKey()
                                 .setValue(((EssentialsServerSideConfiguration) ServerSideConfiguration.instance()).getReCaptchaPublicKey());
@@ -160,7 +160,7 @@ public class OnboardingUserAuthenticationRequestHandler extends AbstractRequestH
         } else {
             if (!PasswordEncryptor.checkPassword(request.password().getValue(), cr.credential().getValue())) {
                 log.info("Invalid password for user {}", email);
-                if (AbstractAntiBot.authenticationFailed(email)) {
+                if (AbstractAntiBot.authenticationFailed(LoginType.userLogin, email)) {
                     response.status().setValue(OnboardingUserAuthenticationResponseIO.AuthenticationStatusCode.ChallengeVerificationRequired);
                     response.reCaptchaPublicKey().setValue(((EssentialsServerSideConfiguration) ServerSideConfiguration.instance()).getReCaptchaPublicKey());
                     return response;
