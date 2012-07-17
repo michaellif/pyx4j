@@ -60,7 +60,7 @@ public class UserManagementFacadeImpl implements UserManagementFacade {
             OnboardingUserCredential cr = (OnboardingUserCredential) credential;
 
             if (cr.pmc().getPrimaryKey() != null) {
-                Pmc pmc = Persistence.service().retrieve(Pmc.class, cr.pmc().getPrimaryKey());
+                Pmc pmc = cr.pmc();
 
                 if (pmc.status().getValue() != PmcStatus.Created) {
                     String curNameSpace = NamespaceManager.getNamespace();
@@ -113,7 +113,7 @@ public class UserManagementFacadeImpl implements UserManagementFacade {
             OnboardingUserCredential cr = (OnboardingUserCredential) credential;
 
             if (cr.pmc().getPrimaryKey() != null) {
-                Pmc pmc = Persistence.service().retrieve(Pmc.class, cr.pmc().getPrimaryKey());
+                Pmc pmc = cr.pmc();
 
                 if (pmc.status().getValue() != PmcStatus.Created) {
                     String curNameSpace = NamespaceManager.getNamespace();

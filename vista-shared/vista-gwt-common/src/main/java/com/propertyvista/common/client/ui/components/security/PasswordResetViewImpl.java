@@ -21,6 +21,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.essentials.client.crud.CrudDebugId;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.security.rpc.PasswordResetQuestion;
 
 import com.propertyvista.common.client.ui.components.login.PasswordResetForm;
 
@@ -62,7 +63,17 @@ public class PasswordResetViewImpl extends VerticalPanel implements PasswordRese
     }
 
     @Override
+    public void setQuestion(PasswordResetQuestion question) {
+        if (!question.securityQuestion().isNull()) {
+            form.get(form.proto().securityQuestion()).setVisible(true);
+            form.get(form.proto().securityQuestion()).setValue(question.securityQuestion().getValue());
+            form.get(form.proto().securityAnswer()).setVisible(true);
+        }
+    }
+
+    @Override
     public void reset() {
         form.reset();
     }
+
 }

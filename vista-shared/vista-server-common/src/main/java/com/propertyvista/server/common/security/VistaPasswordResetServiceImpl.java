@@ -21,12 +21,14 @@ import org.slf4j.LoggerFactory;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.server.AbstractAntiBot;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.security.rpc.AbstractPasswordResetService;
 import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.security.rpc.PasswordChangeRequest;
+import com.pyx4j.security.rpc.PasswordResetQuestion;
 import com.pyx4j.server.contexts.Context;
 
 import com.propertyvista.domain.security.AbstractUser;
@@ -47,6 +49,17 @@ public abstract class VistaPasswordResetServiceImpl<E extends AbstractUserCreden
     protected abstract AuthenticationResponse authenticate(E credentials);
 
     @Override
+    public void obtainPasswordResetQuestion(AsyncCallback<PasswordResetQuestion> callback) {
+        PasswordResetQuestion response = EntityFactory.create(PasswordResetQuestion.class);
+        E credentials = Persistence.service().retrieve(credentialClass, VistaContext.getCurrentUserPrimaryKey());
+        if (credentials == null) {
+            throw new UserRuntimeException(i18n.tr("Invalid User Account. Please Contact Support"));
+        }
+        response.securityQuestion().setValue(credentials.securityQuestion().getValue());
+        callback.onSuccess(response);
+    }
+
+    @Override
     public void resetPassword(AsyncCallback<AuthenticationResponse> callback, PasswordChangeRequest request) {
         E credentials = Persistence.service().retrieve(credentialClass, VistaContext.getCurrentUserPrimaryKey());
         if (credentials == null) {
@@ -54,6 +67,10 @@ public abstract class VistaPasswordResetServiceImpl<E extends AbstractUserCreden
         }
         if (!credentials.enabled().isBooleanTrue()) {
             throw new UserRuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
+        }
+
+        if ((!credentials.securityQuestion().isNull()) && (!credentials.securityAnswer().equals(request.securityAnswer()))) {
+            throw new UserRuntimeException(i18n.tr("The answer to security question is incorrect"));
         }
 
         credentials.accessKey().setValue(null);

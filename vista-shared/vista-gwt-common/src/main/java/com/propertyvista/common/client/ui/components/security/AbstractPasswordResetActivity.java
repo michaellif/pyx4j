@@ -22,9 +22,10 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
+import com.pyx4j.security.rpc.AbstractPasswordResetService;
 import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.security.rpc.PasswordChangeRequest;
-import com.pyx4j.security.rpc.AbstractPasswordResetService;
+import com.pyx4j.security.rpc.PasswordResetQuestion;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
@@ -51,6 +52,13 @@ public class AbstractPasswordResetActivity extends AbstractActivity implements P
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         panel.setWidget(view);
+        service.obtainPasswordResetQuestion(new DefaultAsyncCallback<PasswordResetQuestion>() {
+
+            @Override
+            public void onSuccess(PasswordResetQuestion result) {
+                view.setQuestion(result);
+            }
+        });
     }
 
     @Override

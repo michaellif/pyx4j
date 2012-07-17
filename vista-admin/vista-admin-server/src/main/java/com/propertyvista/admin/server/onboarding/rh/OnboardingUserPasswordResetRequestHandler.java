@@ -105,9 +105,6 @@ public class OnboardingUserPasswordResetRequestHandler extends AbstractRequestHa
             return response;
         }
 
-        // TODO verify securityAnswer
-        request.securityAnswer();
-
         boolean checkAgainsOnboarding = true;
 
         if (cr.pmc().getPrimaryKey() != null) {
@@ -131,6 +128,11 @@ public class OnboardingUserPasswordResetRequestHandler extends AbstractRequestHa
                     if (!crmCredential.enabled().isBooleanTrue()) {
                         response.status().setValue(OnboardingUserAuthenticationResponseIO.AuthenticationStatusCode.PermissionDenied);
                         return response;
+                    }
+
+                    // Verify securityAnswer
+                    if ((!crmCredential.securityQuestion().isNull()) && (!crmCredential.securityAnswer().equals(request.securityAnswer()))) {
+                        throw new UserRuntimeException(i18n.tr("The answer to security question is incorrect"));
                     }
 
                     if (PasswordEncryptor.checkPassword(request.newPassword().getValue(), crmCredential.credential().getValue())) {

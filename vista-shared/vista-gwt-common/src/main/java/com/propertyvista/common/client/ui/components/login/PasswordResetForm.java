@@ -66,6 +66,9 @@ public class PasswordResetForm extends CEntityDecoratableForm<PasswordChangeRequ
 
         int row = -1;
 
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().securityQuestion())).readOnlyMode(true).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().securityAnswer())).build());
+
         passwordStrengthWidget = new PasswordStrengthWidget(passwordStrengthRule);
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().newPassword())).componentWidth(15).labelWidth(15).assistantWidget(passwordStrengthWidget)
                 .build());

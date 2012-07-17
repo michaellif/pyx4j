@@ -15,6 +15,7 @@ package com.propertyvista.admin.server.onboarding.rh;
 
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,6 +28,7 @@ import com.pyx4j.essentials.server.AbstractAntiBot;
 import com.pyx4j.essentials.server.AbstractAntiBot.LoginType;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 
+import com.propertyvista.admin.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.admin.domain.security.OnboardingUserCredential;
 import com.propertyvista.admin.server.onboarding.rhf.AbstractRequestHandler;
 import com.propertyvista.domain.security.OnboardingUser;
@@ -35,6 +37,8 @@ import com.propertyvista.onboarding.OnboardingUserTokenValidationRequestIO;
 import com.propertyvista.onboarding.ResponseIO;
 import com.propertyvista.server.common.security.AccessKey;
 import com.propertyvista.server.common.security.PasswordEncryptor;
+import com.propertyvista.server.domain.security.CrmUserCredential;
+import com.propertyvista.server.jobs.TaskRunner;
 
 public class OnboardingUserTokenValidationRequestHandler extends AbstractRequestHandler<OnboardingUserTokenValidationRequestIO> {
 
@@ -48,7 +52,7 @@ public class OnboardingUserTokenValidationRequestHandler extends AbstractRequest
     public ResponseIO execute(OnboardingUserTokenValidationRequestIO request) {
         log.info("API requested {}", new Object[] { "OnboardingUserTokenValidation" });
 
-        OnboardingUserPasswordResetQuestionResponseIO response = EntityFactory.create(OnboardingUserPasswordResetQuestionResponseIO.class);
+        final OnboardingUserPasswordResetQuestionResponseIO response = EntityFactory.create(OnboardingUserPasswordResetQuestionResponseIO.class);
 
         AccessKey.TokenParser token = new AccessKey.TokenParser(request.token().getValue());
         String email = PasswordEncryptor.normalizeEmailAddress(token.email);
@@ -65,30 +69,40 @@ public class OnboardingUserTokenValidationRequestHandler extends AbstractRequest
         }
         OnboardingUser user = users.get(0);
 
-        OnboardingUserCredential cr = Persistence.service().retrieve(OnboardingUserCredential.class, user.getPrimaryKey());
-        if (cr == null) {
+        final OnboardingUserCredential credential = Persistence.service().retrieve(OnboardingUserCredential.class, user.getPrimaryKey());
+        if (credential == null) {
             throw new UserRuntimeException("Invalid User Account. Please Contact Support");
         }
-        if (!cr.enabled().isBooleanTrue()) {
+        if (!credential.enabled().isBooleanTrue()) {
             response.success().setValue(Boolean.FALSE);
             return response;
         }
 
-        if (!token.accessKey.equals(cr.accessKey().getValue())) {
+        if (!token.accessKey.equals(credential.accessKey().getValue())) {
             AbstractAntiBot.authenticationFailed(LoginType.accessToken, token.email);
             response.success().setValue(Boolean.FALSE);
             return response;
         }
 
-        if ((new Date().after(cr.accessKeyExpire().getValue()))) {
+        if ((new Date().after(credential.accessKeyExpire().getValue()))) {
             response.success().setValue(Boolean.FALSE);
             return response;
         }
 
         response.success().setValue(Boolean.TRUE);
 
-        // TODO If CRM user exists send the question
-        response.securityQuestion().setValue(null);
+        //  If CRM user exists send the question
+        if (!credential.pmc().isNull() && (credential.pmc().status().getValue() != PmcStatus.Created)) {
+            TaskRunner.runInTargetNamespace(credential.pmc().namespace().getValue(), new Callable<Void>() {
+                @Override
+                public Void call() {
+                    CrmUserCredential crmCredential = Persistence.service().retrieve(CrmUserCredential.class, credential.crmUser().getValue());
+                    response.securityQuestion().setValue(crmCredential.securityQuestion().getValue());
+                    return null;
+                }
+            });
+
+        }
 
         return response;
 
