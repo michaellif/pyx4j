@@ -136,9 +136,10 @@ public class UnitAvailabilityImportParser implements ImportParser {
     private BuildingIO insertUnit(BuildingIO building, AptUnitIO unit) {
         for (AptUnitIO aptUnitIO : building.units()) {
             if (aptUnitIO.number().getValue().equals(unit.number().getValue())) {
-//TODO what's going on with duplicate units with different status here?
+                // TODO what's going on with duplicate units with different status here?
             }
         }
+        building.units().add(unit);
         return building;
     }
 
