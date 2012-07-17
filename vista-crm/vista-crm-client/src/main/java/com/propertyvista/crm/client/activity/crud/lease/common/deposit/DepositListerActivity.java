@@ -33,11 +33,22 @@ import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Deposit;
 import com.propertyvista.domain.tenant.lease.Deposit.DepositStatus;
 import com.propertyvista.domain.tenant.lease.Deposit.DepositType;
+import com.propertyvista.domain.tenant.lease.Lease;
 
 public class DepositListerActivity extends ListerActivityBase<Deposit> implements DepositListerPresenter {
 
+    private Lease leaseId;
+
     public DepositListerActivity(Place place, IListerView<Deposit> view) {
         super(place, view, GWT.<DepositCrudService> create(DepositCrudService.class), Deposit.class);
+    }
+
+    public Lease getLeaseId() {
+        return leaseId;
+    }
+
+    public void setLeaseId(Lease leaseId) {
+        this.leaseId = leaseId;
     }
 
     @Override
@@ -47,7 +58,7 @@ public class DepositListerActivity extends ListerActivityBase<Deposit> implement
             public void onSuccess(Vector<BillableItem> result) {
                 callback.onSuccess(result);
             }
-        }, EntityFactory.createIdentityStub(BillingAccount.class, getParent()));
+        }, getLeaseId());
     }
 
     @Override
@@ -64,6 +75,6 @@ public class DepositListerActivity extends ListerActivityBase<Deposit> implement
                 }
                 callback.onSuccess(result);
             }
-        }, depositType, itemId, EntityFactory.createIdentityStub(BillingAccount.class, getParent()));
+        }, depositType, itemId, getLeaseId());
     }
 }

@@ -19,15 +19,15 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
 
-import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Deposit;
 import com.propertyvista.domain.tenant.lease.Deposit.DepositType;
+import com.propertyvista.domain.tenant.lease.Lease;
 
 public interface DepositCrudService extends AbstractCrudService<Deposit> {
 
-    void getLeaseBillableItems(AsyncCallback<Vector<BillableItem>> callback, BillingAccount billingAccountId);
+    void getLeaseBillableItems(AsyncCallback<Vector<BillableItem>> callback, Lease leaseId);
 
-    void createDeposit(AsyncCallback<Deposit> callback, DepositType depositType, BillableItem itemId, BillingAccount billingAccountId);
+    void createDeposit(AsyncCallback<Deposit> callback, DepositType depositType, BillableItem itemId, Lease leaseId);
 
 }
