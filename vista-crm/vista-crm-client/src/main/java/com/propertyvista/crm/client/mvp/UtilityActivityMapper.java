@@ -17,15 +17,16 @@ import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.place.shared.Place;
 
+import com.propertyvista.crm.client.activity.RuntimeErrorActivity;
 import com.propertyvista.crm.client.activity.login.LoginActivity;
 import com.propertyvista.crm.client.activity.login.LoginWithTokenActivity;
 import com.propertyvista.crm.client.activity.security.PasswordResetActivity;
 import com.propertyvista.crm.client.activity.security.PasswordResetRequestActivity;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 
-public class LoginActivityMapper implements ActivityMapper {
+public class UtilityActivityMapper implements ActivityMapper {
 
-    public LoginActivityMapper() {
+    public UtilityActivityMapper() {
     }
 
     @Override
@@ -38,6 +39,8 @@ public class LoginActivityMapper implements ActivityMapper {
             return new PasswordResetActivity(place);
         } else if (place instanceof CrmSiteMap.LoginWithToken) {
             return new LoginWithTokenActivity(place);
+        } else if (place instanceof CrmSiteMap.RuntimeError) {
+            return new RuntimeErrorActivity(place);
         }
 
         return null;

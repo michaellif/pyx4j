@@ -41,7 +41,7 @@ import com.pyx4j.site.client.activity.AppActivityMapper;
 
 import com.propertyvista.common.client.theme.CrmSitePanelTheme;
 import com.propertyvista.crm.client.mvp.FooterActivityMapper;
-import com.propertyvista.crm.client.mvp.LoginActivityMapper;
+import com.propertyvista.crm.client.mvp.UtilityActivityMapper;
 import com.propertyvista.crm.client.mvp.LogoActivityMapper;
 import com.propertyvista.crm.client.mvp.MainActivityMapper;
 import com.propertyvista.crm.client.mvp.NavigActivityMapper;
@@ -147,7 +147,7 @@ public class CrmPanel extends LayoutPanel {
         splitPanel.add(mainDisplay);
 
         // Activity <-> Display bindings:
-        bind(new LoginActivityMapper(), utilityDisplay, eventBus);
+        bind(new UtilityActivityMapper(), utilityDisplay, eventBus);
         bind(new LogoActivityMapper(), logoDisplay, eventBus);
         bind(new TopRightActionsActivityMapper(), actionsDisplay, eventBus);
         bind(new FooterActivityMapper(), footerDisplay, eventBus);
