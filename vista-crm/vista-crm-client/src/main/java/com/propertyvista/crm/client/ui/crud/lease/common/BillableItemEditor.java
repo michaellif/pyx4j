@@ -81,6 +81,7 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
         this.leaseEditorView = leaseEditorView;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public IsWidget createContent() {
         FormFlexPanel main = new FormFlexPanel();
@@ -286,7 +287,7 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
             @Override
             protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
                 if (column.getObject() == proto().value()) {
-                    // TODO : inject value place holeder here:
+                    // TODO : inject value place holder here:
                     return super.createCell(column);
                 }
                 return super.createCell(column);
