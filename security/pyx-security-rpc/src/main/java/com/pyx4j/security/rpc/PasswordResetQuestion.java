@@ -1,6 +1,6 @@
 /*
  * Pyx4j framework
- * Copyright (C) 2008-2011 pyx4j.com.
+ * Copyright (C) 2008-2012 pyx4j.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,22 +14,20 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Jan 23, 2012
- * @author ArtyomB
+ * Created on 2012-07-17
+ * @author vlads
  * @version $Id$
  */
 package com.pyx4j.security.rpc;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.annotations.I18n;
 
-import com.pyx4j.rpc.shared.IService;
+@Transient
+@I18n(strategy = I18n.I18nStrategy.IgnoreThis)
+public interface PasswordResetQuestion extends IEntity {
 
-public interface AbstractPasswordResetService extends IService {
-
-    public void obtainPasswordResetQuestion(AsyncCallback<PasswordResetQuestion> callback);
-
-    /**
-     * Expects new password for current user.
-     */
-    public void resetPassword(AsyncCallback<AuthenticationResponse> callback, PasswordChangeRequest request);
+    IPrimitive<String> securityQuestion();
 }
