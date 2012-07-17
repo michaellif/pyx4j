@@ -59,6 +59,7 @@ public abstract class AbstractLoginViewImpl extends FormFlexPanel implements Log
     @Override
     public void setPresenter(Presenter presenter) {
         this.presenter = presenter;
+        form.reset();
         form.populateNew();
         form.disableCaptcha();
 
