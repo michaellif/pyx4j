@@ -14,6 +14,8 @@
 package com.propertyvista.domain.tenant.lease;
 
 import java.io.Serializable;
+import java.util.Collection;
+import java.util.EnumSet;
 
 import javax.xml.bind.annotation.XmlType;
 
@@ -59,6 +61,10 @@ public interface LeaseParticipant extends IEntity {
         @Override
         public String toString() {
             return I18nEnum.toString(this);
+        }
+
+        public static Collection<Role> tenantRelated() {
+            return EnumSet.of(Applicant, CoApplicant, Dependent);
         }
     }
 

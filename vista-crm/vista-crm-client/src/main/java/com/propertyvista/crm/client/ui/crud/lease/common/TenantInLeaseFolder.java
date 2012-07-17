@@ -15,7 +15,6 @@ package com.propertyvista.crm.client.ui.crud.lease.common;
 
 import java.math.BigDecimal;
 import java.util.Collection;
-import java.util.EnumSet;
 import java.util.List;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
@@ -23,6 +22,7 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.client.CEntityForm;
 import com.pyx4j.entity.client.ui.CEntityComboBox;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -189,10 +189,30 @@ public class TenantInLeaseFolder extends LeaseParticipantFolder<Tenant> {
             right.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().workPhone()), 15).build());
 
             if (isEditable()) {
-                ((CComboBox<LeaseParticipant.Role>) get(proto().role())).addValueChangeHandler(new ValueChangeHandler<LeaseParticipant.Role>() {
+                get(proto().role()).addValueChangeHandler(new ValueChangeHandler<LeaseParticipant.Role>() {
                     @Override
                     public void onValueChange(ValueChangeEvent<LeaseParticipant.Role> event) {
                         get(proto().relationship()).setVisible(event.getValue() != LeaseParticipant.Role.Applicant);
+                        if (event.getValue() == LeaseParticipant.Role.Dependent) {
+                            get(proto().percentage()).setValue(BigDecimal.ZERO);
+                        }
+                        get(proto().percentage()).setEditable(event.getValue() != LeaseParticipant.Role.Dependent);
+                    }
+                });
+
+                get(proto().customer().person().birthDate()).addValueChangeHandler(new ValueChangeHandler<LogicalDate>() {
+                    @Override
+                    public void onValueChange(ValueChangeEvent<LogicalDate> event) {
+                        if (event.getValue() != null) {
+                            boolean mature = ValidationUtils.isOlderThen18(event.getValue());
+
+                            if (!mature) {
+                                get(proto().role()).setValue(LeaseParticipant.Role.Dependent);
+                                get(proto().percentage()).setValue(BigDecimal.ZERO);
+                            }
+                            get(proto().role()).setEditable(mature);
+                            get(proto().percentage()).setEditable(mature);
+                        }
                     }
                 });
             }
@@ -223,16 +243,18 @@ public class TenantInLeaseFolder extends LeaseParticipantFolder<Tenant> {
                 get(proto().role()).setViewable(true);
                 get(proto().relationship()).setVisible(false);
             } else if (isEditable()) {
-                Collection<LeaseParticipant.Role> roles = EnumSet.allOf(LeaseParticipant.Role.class);
+                Collection<LeaseParticipant.Role> roles = LeaseParticipant.Role.tenantRelated();
                 if (getValue().role().getValue() != null) { // if not new entity creation...
                     roles.remove(LeaseParticipant.Role.Applicant);
                 }
                 ((CComboBox<LeaseParticipant.Role>) get(proto().role())).setOptions(roles);
-            }
 
-            if (!applicant && !getValue().customer().person().birthDate().isNull()) {
-                if (!ValidationUtils.isOlderThen18(getValue().customer().person().birthDate().getValue())) {
-                    setMandatoryDependant();
+                get(proto().percentage()).setEditable(getValue().role().getValue() != LeaseParticipant.Role.Dependent);
+
+                if (!getValue().customer().person().birthDate().isNull()) {
+                    if (!ValidationUtils.isOlderThen18(getValue().customer().person().birthDate().getValue())) {
+                        get(proto().role()).setEditable(false);
+                    }
                 }
             }
 
@@ -253,10 +275,5 @@ public class TenantInLeaseFolder extends LeaseParticipantFolder<Tenant> {
 //                get(proto().percentage()).setViewable(true);
 //            }
 //        }
-
-        private void setMandatoryDependant() {
-            get(proto().role()).setValue(LeaseParticipant.Role.Dependent);
-            get(proto().role()).setEditable(false);
-        }
     }
 }
