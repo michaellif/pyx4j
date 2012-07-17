@@ -32,7 +32,7 @@ import com.propertyvista.portal.rpc.shared.services.AbstractAccountRecoveryOptio
 // TODO create a special place class
 public class AbstractAccountRecoveryOptionsViewerActivity extends AbstractActivity implements AccountRecoveryOptionsViewerView.Presenter {
 
-    private final int CANCEL_TIMEOUT = 5 * 1000 * 60;
+    private final int CANCEL_TIMEOUT = 5 * 60 * 1000;
 
     private final AbstractAccountRecoveryOptionsService service;
 

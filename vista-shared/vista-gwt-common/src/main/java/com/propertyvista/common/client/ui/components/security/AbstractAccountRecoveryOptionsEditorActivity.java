@@ -35,7 +35,7 @@ public class AbstractAccountRecoveryOptionsEditorActivity extends AbstractActivi
 
     private static final I18n i18n = I18n.get(AbstractAccountRecoveryOptionsEditorActivity.class);
 
-    private final int CANCEL_TIMEOUT = 5 * 1000 * 60;
+    private final int CANCEL_TIMEOUT = 5 * 60 * 1000;
 
     private final CrudAppPlace place;
 
