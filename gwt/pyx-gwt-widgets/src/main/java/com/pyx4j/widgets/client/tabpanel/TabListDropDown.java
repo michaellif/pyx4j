@@ -78,7 +78,7 @@ public class TabListDropDown extends DropDownPanel {
             if (tab.isTabSelected()) {
                 item.getElement().getStyle().setFontWeight(FontWeight.BOLD);
             }
-            if (!tab.getTabBarItem().isTabExposed()) {
+            if (!tab.getTabBarItem().isTabExposed() || tab.getTabBarItem().isTabMasked()) {
                 item.getElement().getStyle().setFontStyle(FontStyle.ITALIC);
             }
             if (tab.isTabEnabled()) {
