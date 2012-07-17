@@ -57,12 +57,7 @@ public class ImportProcessorUpdateUnitAvailability implements ImportProcessor {
 
             if (buildingIO.propertyCode().isNull()) {
                 buildingIO._import().invalid().setValue(true);
-                buildingIO
-                        ._import()
-                        .message()
-                        .setValue(
-                                i18n.tr("Building Property Code is null at row {0} on sheet {1}.", buildingIO._import().row().getStringView(), buildingIO
-                                        ._import().sheet().getStringView()));
+                buildingIO._import().message().setValue(i18n.tr("Building Property Code is null."));
                 result = false;
             }
 
@@ -72,7 +67,7 @@ public class ImportProcessorUpdateUnitAvailability implements ImportProcessor {
                 buildingCriteria.add(PropertyCriterion.eq(buildingCriteria.proto().propertyCode(), buildingIO.propertyCode().getValue()));
                 List<Building> buildings = Persistence.service().query(buildingCriteria);
                 if (buildings.size() == 0) {
-                    buildingIO._import().message().setValue(i18n.tr("Building {0} not found in the database.", buildingIO.propertyCode().getStringView()));
+                    buildingIO._import().message().setValue(i18n.tr("Building is not found in the database."));
                     result = false;
                 }
             }
@@ -80,12 +75,7 @@ public class ImportProcessorUpdateUnitAvailability implements ImportProcessor {
             for (AptUnitIO aptUnitIO : buildingIO.units()) {
                 if (aptUnitIO.number().isNull()) {
                     aptUnitIO._import().invalid().setValue(true);
-                    aptUnitIO
-                            ._import()
-                            .message()
-                            .setValue(
-                                    i18n.tr("Unit Number is null at row {0} on sheet {1}.", aptUnitIO._import().row().getStringView(), aptUnitIO._import()
-                                            .sheet().getStringView()));
+                    aptUnitIO._import().message().setValue(i18n.tr("Unit Number is null."));
                     result = false;
                 }
 
@@ -95,7 +85,7 @@ public class ImportProcessorUpdateUnitAvailability implements ImportProcessor {
                     unitCriteria.add(PropertyCriterion.eq(unitCriteria.proto().info().number(), aptUnitIO.number().getValue()));
                     List<AptUnit> units = Persistence.service().query(unitCriteria);
                     if (units.size() == 0) {
-                        aptUnitIO._import().message().setValue(i18n.tr("Unit {0} not found in the database.", aptUnitIO.number().getStringView()));
+                        aptUnitIO._import().message().setValue(i18n.tr("Unit is not found in the database."));
                         result = false;
                     }
                 }

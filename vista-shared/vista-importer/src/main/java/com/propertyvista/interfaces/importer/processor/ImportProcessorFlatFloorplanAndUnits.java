@@ -60,13 +60,15 @@ public class ImportProcessorFlatFloorplanAndUnits implements ImportProcessor {
 
             if (buildingIO.propertyCode().isNull()) {
                 buildingIO._import().invalid().setValue(true);
-                buildingIO
-                        ._import()
-                        .message()
-                        .setValue(
-                                i18n.tr("Building Property Code is null at row {0} on sheet {1}.", buildingIO._import().row().getStringView(), buildingIO
-                                        ._import().sheet().getStringView()));
+                buildingIO._import().message().setValue(i18n.tr("Building Property Code is null"));
                 result = false;
+            }
+
+            if (!buildingIO.propertyCode().isNull() && buildingIO.propertyCode().getValue().length() > 10) {
+                buildingIO._import().invalid().setValue(true);
+                buildingIO._import().message().setValue("Property code must be 10 characters or less");
+                result = false;
+                continue;
             }
 
             // Check if building is already created
@@ -75,29 +77,19 @@ public class ImportProcessorFlatFloorplanAndUnits implements ImportProcessor {
             List<Building> buildings = Persistence.service().query(buildingCriteria);
             if (buildings.size() == 0) {
                 buildingIO._import().invalid().setValue(true);
-                buildingIO._import().message().setValue(i18n.tr("Building ''{0}'' is not found in the database.", buildingIO.propertyCode().getValue()));
+                buildingIO._import().message().setValue(i18n.tr("Building is not found in the database."));
                 result = false;
             } else {
                 for (FloorplanIO floorplanIO : buildingIO.floorplans()) {
                     if (floorplanIO.name().isNull()) {
                         floorplanIO._import().invalid().setValue(true);
-                        floorplanIO
-                                ._import()
-                                .message()
-                                .setValue(
-                                        i18n.tr("Floorplan Name is null at row {0} on sheet {1}.", floorplanIO._import().row().getStringView(), floorplanIO
-                                                ._import().sheet().getStringView()));
+                        floorplanIO._import().message().setValue(i18n.tr("Floorplan Name is null"));
                         result = false;
                     }
                     for (AptUnitIO aptUnitIO : floorplanIO.units()) {
                         if (aptUnitIO.number().isNull()) {
                             aptUnitIO._import().invalid().setValue(true);
-                            aptUnitIO
-                                    ._import()
-                                    .message()
-                                    .setValue(
-                                            i18n.tr("Unit Number is null at row {0} on sheet {1}.", aptUnitIO._import().row().getStringView(), aptUnitIO
-                                                    ._import().sheet().getStringView()));
+                            aptUnitIO._import().message().setValue(i18n.tr("Unit Number is null"));
                             result = false;
                         }
                     }
