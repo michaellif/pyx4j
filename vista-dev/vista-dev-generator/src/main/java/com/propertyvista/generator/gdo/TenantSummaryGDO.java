@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertvista.generator.gdo;
+package com.propertyvista.generator.gdo;
 
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;

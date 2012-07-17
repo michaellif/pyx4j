@@ -17,7 +17,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-import com.propertvista.generator.LeaseGenerator;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
@@ -35,6 +34,7 @@ import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.Status;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
+import com.propertyvista.generator.LeaseGenerator;
 import com.propertyvista.portal.server.preloader.util.AptUnitSource;
 import com.propertyvista.portal.server.preloader.util.BaseVistaDevDataPreloader;
 import com.propertyvista.portal.server.preloader.util.LeaseLifecycleSimulator;

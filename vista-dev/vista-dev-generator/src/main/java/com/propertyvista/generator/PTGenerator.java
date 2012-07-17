@@ -11,11 +11,10 @@
  * @author dmitry
  * @version $Id$
  */
-package com.propertvista.generator;
+package com.propertyvista.generator;
 
 import java.util.Random;
 
-import com.propertvista.generator.util.RandomUtil;
 
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.server.preloader.DataGenerator;
@@ -24,6 +23,7 @@ import com.propertyvista.domain.tenant.PersonScreening;
 import com.propertyvista.domain.tenant.lease.extradata.Pet;
 import com.propertyvista.domain.tenant.lease.extradata.Pet.WeightUnit;
 import com.propertyvista.domain.tenant.lease.extradata.Vehicle;
+import com.propertyvista.generator.util.RandomUtil;
 import com.propertyvista.misc.EquifaxApproval.Decision;
 import com.propertyvista.misc.EquifaxResult;
 import com.propertyvista.misc.VistaDevPreloadConfig;

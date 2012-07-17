@@ -11,15 +11,13 @@
  * @author dmitry
  * @version $Id$
  */
-package com.propertvista.generator;
+package com.propertyvista.generator;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Vector;
 
-import com.propertvista.generator.util.CommonsGenerator;
-import com.propertvista.generator.util.RandomUtil;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.LogicalDate;
@@ -38,6 +36,8 @@ import com.propertyvista.domain.tenant.lead.Appointment;
 import com.propertyvista.domain.tenant.lead.Guest;
 import com.propertyvista.domain.tenant.lead.Lead;
 import com.propertyvista.domain.tenant.lead.Showing;
+import com.propertyvista.generator.util.CommonsGenerator;
+import com.propertyvista.generator.util.RandomUtil;
 
 public class TenantsGenerator {
 

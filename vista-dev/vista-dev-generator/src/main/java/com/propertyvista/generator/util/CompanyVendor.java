@@ -11,11 +11,10 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertvista.generator.util;
+package com.propertyvista.generator.util;
 
 import java.math.BigDecimal;
 
-import com.propertvista.generator.PreloadData;
 
 import com.pyx4j.entity.shared.EntityFactory;
 
@@ -30,6 +29,7 @@ import com.propertyvista.domain.property.vendor.Maintenance;
 import com.propertyvista.domain.property.vendor.Vendor;
 import com.propertyvista.domain.property.vendor.Warranty;
 import com.propertyvista.domain.property.vendor.WarrantyItem;
+import com.propertyvista.generator.PreloadData;
 
 public class CompanyVendor {
 

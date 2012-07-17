@@ -16,7 +16,6 @@ package com.propertyvista.portal.server.preloader;
 import java.math.BigDecimal;
 import java.util.List;
 
-import com.propertvista.generator.ProductItemTypesGenerator;
 
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.Persistence;
@@ -34,6 +33,7 @@ import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.domain.financial.tax.Tax;
 import com.propertyvista.domain.ref.Province;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustmentReason;
+import com.propertyvista.generator.ProductItemTypesGenerator;
 
 public class ProductCatalogPreloader extends AbstractDataPreloader {
 

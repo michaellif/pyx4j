@@ -11,20 +11,20 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertvista.generator;
+package com.propertyvista.generator;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import com.propertvista.generator.util.CommonsGenerator;
-import com.propertvista.generator.util.RandomUtil;
 
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.person.Person;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.EmergencyContact;
+import com.propertyvista.generator.util.CommonsGenerator;
+import com.propertyvista.generator.util.RandomUtil;
 
 public class CustomerGenerator {
 

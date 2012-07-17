@@ -22,8 +22,6 @@ import java.util.GregorianCalendar;
 import java.util.PriorityQueue;
 import java.util.Random;
 
-import com.propertvista.generator.util.CommonsGenerator;
-import com.propertvista.generator.util.RandomUtil;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.LogicalDate;
@@ -47,6 +45,8 @@ import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.CompletionType;
 import com.propertyvista.domain.tenant.lease.Lease.Status;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
+import com.propertyvista.generator.util.CommonsGenerator;
+import com.propertyvista.generator.util.RandomUtil;
 import com.propertyvista.misc.VistaTODO;
 
 public class LeaseLifecycleSimulator {

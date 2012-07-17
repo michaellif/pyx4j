@@ -7,20 +7,20 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Oct 13, 2011
- * @author Vlad
+ * Created on Apr 3, 2011
+ * @author dmitry
  * @version $Id$
  */
-package com.propertvista.generator;
+package com.propertyvista.generator;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.pyx4j.essentials.server.preloader.DataGenerator;
 
-import com.propertyvista.domain.dashboard.DashboardMetadata;
+import com.propertyvista.domain.DemoData;
 
-public class Dashboards {
+public class BusinessDataGenerator {
 
-    public final List<DashboardMetadata> systemDashboards = new ArrayList<DashboardMetadata>();
-
-    public final List<DashboardMetadata> buildingDashboards = new ArrayList<DashboardMetadata>();
+    public static String createEmail() {
+        String email = DataGenerator.randomLastName().toLowerCase() + DataGenerator.randomInt(Integer.MAX_VALUE) + DemoData.USERS_DOMAIN;
+        return email;
+    }
 }

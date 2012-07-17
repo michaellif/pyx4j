@@ -11,11 +11,10 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertvista.generator;
+package com.propertyvista.generator;
 
 import java.util.List;
 
-import com.propertvista.generator.gdo.ProductItemTypesGDO;
 
 import com.pyx4j.entity.shared.EntityFactory;
 
@@ -23,6 +22,7 @@ import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.FeatureItemType;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
+import com.propertyvista.generator.gdo.ProductItemTypesGDO;
 
 public class ProductItemTypesGenerator {
 

@@ -11,7 +11,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertvista.generator;
+package com.propertyvista.generator;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;

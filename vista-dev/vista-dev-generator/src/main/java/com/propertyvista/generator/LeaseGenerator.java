@@ -11,12 +11,10 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertvista.generator;
+package com.propertyvista.generator;
 
 import java.util.EnumSet;
 
-import com.propertvista.generator.util.CommonsGenerator;
-import com.propertvista.generator.util.RandomUtil;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.server.Persistence;
@@ -41,6 +39,8 @@ import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
+import com.propertyvista.generator.util.CommonsGenerator;
+import com.propertyvista.generator.util.RandomUtil;
 import com.propertyvista.misc.VistaDevPreloadConfig;
 
 public class LeaseGenerator extends DataGenerator {

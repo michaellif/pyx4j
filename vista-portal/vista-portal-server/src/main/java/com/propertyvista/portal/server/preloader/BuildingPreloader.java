@@ -19,13 +19,6 @@ import java.util.concurrent.Callable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.propertvista.generator.BuildingsGenerator;
-import com.propertvista.generator.Dashboards;
-import com.propertvista.generator.MediaGenerator;
-import com.propertvista.generator.PreloadData;
-import com.propertvista.generator.ProductCatalogGenerator;
-import com.propertvista.generator.gdo.ProductItemTypesGDO;
-import com.propertvista.generator.util.RandomUtil;
 
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.Persistence;
@@ -65,6 +58,13 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.AptUnitItem;
 import com.propertyvista.domain.property.vendor.Vendor;
+import com.propertyvista.generator.BuildingsGenerator;
+import com.propertyvista.generator.Dashboards;
+import com.propertyvista.generator.MediaGenerator;
+import com.propertyvista.generator.PreloadData;
+import com.propertyvista.generator.ProductCatalogGenerator;
+import com.propertyvista.generator.gdo.ProductItemTypesGDO;
+import com.propertyvista.generator.util.RandomUtil;
 import com.propertyvista.misc.VistaDataPreloaderParameter;
 import com.propertyvista.portal.server.preloader.util.BaseVistaDevDataPreloader;
 import com.propertyvista.server.common.reference.PublicDataUpdater;

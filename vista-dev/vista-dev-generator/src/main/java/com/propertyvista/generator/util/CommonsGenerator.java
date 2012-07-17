@@ -11,11 +11,10 @@
  * @author dmitry
  * @version $Id$
  */
-package com.propertvista.generator.util;
+package com.propertyvista.generator.util;
 
 import java.util.List;
 
-import com.propertvista.generator.PreloadData;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -33,6 +32,7 @@ import com.propertyvista.domain.person.Name;
 import com.propertyvista.domain.person.Person;
 import com.propertyvista.domain.property.PropertyContact;
 import com.propertyvista.domain.property.PropertyPhone;
+import com.propertyvista.generator.PreloadData;
 
 public class CommonsGenerator {
 

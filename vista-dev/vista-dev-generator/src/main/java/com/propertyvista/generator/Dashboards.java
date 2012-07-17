@@ -7,22 +7,20 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Aug 20, 2011
- * @author vlads
+ * Created on Oct 13, 2011
+ * @author Vlad
  * @version $Id$
  */
-package com.propertvista.generator.gdo;
+package com.propertyvista.generator;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.propertyvista.domain.financial.offering.FeatureItemType;
-import com.propertyvista.domain.financial.offering.ServiceItemType;
+import com.propertyvista.domain.dashboard.DashboardMetadata;
 
-public class ProductItemTypesGDO {
+public class Dashboards {
 
-    public final List<ServiceItemType> serviceItemTypes = new ArrayList<ServiceItemType>();
+    public final List<DashboardMetadata> systemDashboards = new ArrayList<DashboardMetadata>();
 
-    public final List<FeatureItemType> featureItemTypes = new ArrayList<FeatureItemType>();
-
+    public final List<DashboardMetadata> buildingDashboards = new ArrayList<DashboardMetadata>();
 }

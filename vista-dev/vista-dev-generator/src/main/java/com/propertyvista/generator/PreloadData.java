@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertvista.generator;
+package com.propertyvista.generator;
 
 public class PreloadData {
 

@@ -11,14 +11,11 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertvista.generator;
+package com.propertyvista.generator;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import com.propertvista.generator.util.CommonsGenerator;
-import com.propertvista.generator.util.PictureUtil;
-import com.propertvista.generator.util.RandomUtil;
 
 import com.pyx4j.entity.cache.CacheService;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -33,6 +30,9 @@ import com.propertyvista.domain.marketing.PublicVisibilityType;
 import com.propertyvista.domain.media.Media;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.generator.util.CommonsGenerator;
+import com.propertyvista.generator.util.PictureUtil;
+import com.propertyvista.generator.util.RandomUtil;
 import com.propertyvista.portal.rpc.portal.ImageConsts.ImageTarget;
 import com.propertyvista.server.common.blob.BlobService;
 import com.propertyvista.server.common.blob.ThumbnailService;

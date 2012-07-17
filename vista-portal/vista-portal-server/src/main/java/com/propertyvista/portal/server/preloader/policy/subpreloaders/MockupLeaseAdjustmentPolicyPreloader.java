@@ -13,7 +13,6 @@
  */
 package com.propertyvista.portal.server.preloader.policy.subpreloaders;
 
-import com.propertvista.generator.util.RandomUtil;
 
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -24,6 +23,7 @@ import com.propertyvista.domain.financial.tax.Tax;
 import com.propertyvista.domain.policy.policies.LeaseAdjustmentPolicy;
 import com.propertyvista.domain.policy.policies.domain.LeaseAdjustmentPolicyItem;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustmentReason;
+import com.propertyvista.generator.util.RandomUtil;
 import com.propertyvista.portal.server.preloader.policy.util.AbstractPolicyPreloader;
 
 public class MockupLeaseAdjustmentPolicyPreloader extends AbstractPolicyPreloader<LeaseAdjustmentPolicy> {

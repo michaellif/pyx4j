@@ -14,6 +14,7 @@
 package com.propertyvista.preloader;
 
 import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -21,6 +22,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.propertyvista.admin.domain.security.OnboardingUserCredential;
 import com.propertyvista.domain.security.OnboardingUser;
 import com.propertyvista.domain.security.VistaOnboardingBehavior;
+import com.propertyvista.generator.SecurityGenerator;
 import com.propertyvista.server.common.security.PasswordEncryptor;
 
 public class OnboardingUserPreloader extends AbstractDataPreloader {
@@ -45,6 +47,10 @@ public class OnboardingUserPreloader extends AbstractDataPreloader {
         credential.onboardingAccountId().setValue(onboardingAccountId);
 
         credential.interfaceUid().setValue("o" + user.getPrimaryKey().toString());
+
+        if (ApplicationMode.isDevelopment()) {
+            SecurityGenerator.assignSecurityQuestion(credential);
+        }
 
         Persistence.service().persist(credential);
 

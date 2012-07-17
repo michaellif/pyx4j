@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertvista.generator;
+package com.propertyvista.generator;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -22,8 +22,6 @@ import java.util.List;
 
 import org.apache.commons.io.FilenameUtils;
 
-import com.propertvista.generator.util.CommonsGenerator;
-import com.propertvista.generator.util.RandomUtil;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.server.Persistence;
@@ -48,6 +46,8 @@ import com.propertyvista.domain.tenant.income.IncomeSource;
 import com.propertyvista.domain.tenant.income.PersonalAsset;
 import com.propertyvista.domain.tenant.income.PersonalAsset.AssetType;
 import com.propertyvista.domain.tenant.income.PersonalIncome;
+import com.propertyvista.generator.util.CommonsGenerator;
+import com.propertyvista.generator.util.RandomUtil;
 import com.propertyvista.server.domain.ApplicationDocumentBlob;
 
 public class ScreeningGenerator {

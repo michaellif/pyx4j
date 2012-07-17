@@ -11,7 +11,7 @@
  * @author dmitry
  * @version $Id$
  */
-package com.propertvista.generator;
+package com.propertyvista.generator;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -19,9 +19,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.propertvista.generator.util.CommonsGenerator;
-import com.propertvista.generator.util.CompanyVendor;
-import com.propertvista.generator.util.RandomUtil;
 
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.server.preloader.DataGenerator;
@@ -53,6 +50,9 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.AptUnitInfo;
 import com.propertyvista.domain.property.asset.unit.AptUnitItem;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
+import com.propertyvista.generator.util.CommonsGenerator;
+import com.propertyvista.generator.util.CompanyVendor;
+import com.propertyvista.generator.util.RandomUtil;
 
 public class BuildingsGenerator {
 

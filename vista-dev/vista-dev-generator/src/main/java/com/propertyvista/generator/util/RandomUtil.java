@@ -11,7 +11,7 @@
  * @author dmitry
  * @version $Id$
  */
-package com.propertvista.generator.util;
+package com.propertyvista.generator.util;
 
 import java.sql.Time;
 import java.util.ArrayList;
@@ -20,7 +20,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
-import com.propertvista.generator.PreloadData;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
@@ -30,6 +29,7 @@ import com.pyx4j.essentials.server.preloader.DataGenerator;
 import com.pyx4j.gwt.server.DateUtils;
 
 import com.propertyvista.domain.person.Name;
+import com.propertyvista.generator.PreloadData;
 
 public class RandomUtil extends DataGenerator {
 

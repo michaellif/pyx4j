@@ -15,7 +15,6 @@ package com.propertyvista.portal.server.preloader.policy.subpreloaders;
 
 import java.io.IOException;
 
-import com.propertvista.generator.BuildingsGenerator;
 
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -28,6 +27,7 @@ import com.propertyvista.domain.policy.policies.LeaseTermsPolicy;
 import com.propertyvista.domain.policy.policies.domain.LegalTermsContent;
 import com.propertyvista.domain.policy.policies.domain.LegalTermsDescriptor;
 import com.propertyvista.domain.site.AvailableLocale;
+import com.propertyvista.generator.BuildingsGenerator;
 import com.propertyvista.portal.server.preloader.policy.util.AbstractPolicyPreloader;
 import com.propertyvista.shared.CompiledLocale;
 

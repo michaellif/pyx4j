@@ -20,8 +20,6 @@ import java.util.concurrent.Callable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.propertvista.generator.util.CommonsGenerator;
-
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -38,6 +36,8 @@ import com.propertyvista.domain.security.CrmRole;
 import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.security.CustomerUser;
 import com.propertyvista.domain.security.VistaOnboardingBehavior;
+import com.propertyvista.generator.SecurityGenerator;
+import com.propertyvista.generator.util.CommonsGenerator;
 import com.propertyvista.portal.server.preloader.util.BaseVistaDevDataPreloader;
 import com.propertyvista.preloader.OnboardingUserPreloader;
 import com.propertyvista.server.common.security.PasswordEncryptor;
@@ -103,6 +103,10 @@ public class UserPreloader extends BaseVistaDevDataPreloader {
         credential.enabled().setValue(Boolean.TRUE);
         credential.accessAllBuildings().setValue(Boolean.TRUE);
         credential.roles().addAll(Arrays.asList(roles));
+
+        if (ApplicationMode.isDevelopment()) {
+            SecurityGenerator.assignSecurityQuestion(credential);
+        }
 
         if (onbUserCred != null) {
             credential.onboardingUser().setValue(onbUserCred.user().getPrimaryKey());

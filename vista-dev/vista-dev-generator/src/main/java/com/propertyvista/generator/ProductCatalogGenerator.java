@@ -11,15 +11,13 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertvista.generator;
+package com.propertyvista.generator;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 
-import com.propertvista.generator.gdo.ProductItemTypesGDO;
-import com.propertvista.generator.util.RandomUtil;
 
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
@@ -37,6 +35,8 @@ import com.propertyvista.domain.financial.offering.Service.ServiceType;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.domain.property.asset.BuildingElement;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.generator.gdo.ProductItemTypesGDO;
+import com.propertyvista.generator.util.RandomUtil;
 
 public class ProductCatalogGenerator {
 

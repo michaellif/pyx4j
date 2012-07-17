@@ -7,20 +7,22 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Apr 3, 2011
- * @author dmitry
+ * Created on Aug 20, 2011
+ * @author vlads
  * @version $Id$
  */
-package com.propertvista.generator;
+package com.propertyvista.generator.gdo;
 
-import com.pyx4j.essentials.server.preloader.DataGenerator;
+import java.util.ArrayList;
+import java.util.List;
 
-import com.propertyvista.domain.DemoData;
+import com.propertyvista.domain.financial.offering.FeatureItemType;
+import com.propertyvista.domain.financial.offering.ServiceItemType;
 
-public class BusinessDataGenerator {
+public class ProductItemTypesGDO {
 
-    public static String createEmail() {
-        String email = DataGenerator.randomLastName().toLowerCase() + DataGenerator.randomInt(Integer.MAX_VALUE) + DemoData.USERS_DOMAIN;
-        return email;
-    }
+    public final List<ServiceItemType> serviceItemTypes = new ArrayList<ServiceItemType>();
+
+    public final List<FeatureItemType> featureItemTypes = new ArrayList<FeatureItemType>();
+
 }

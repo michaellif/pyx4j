@@ -11,9 +11,9 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertvista.generator;
+package com.propertyvista.generator;
 
-import static com.propertvista.generator.util.ColumnDescriptorEntityBuilder.defColumn;
+import static com.propertyvista.generator.util.ColumnDescriptorEntityBuilder.defColumn;
 
 import java.util.Arrays;
 import java.util.Collection;

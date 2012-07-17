@@ -13,12 +13,12 @@
  */
 package com.propertyvista.portal.server.preloader;
 
-import com.propertvista.generator.DashboardGenerator;
 
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
 
 import com.propertyvista.domain.dashboard.DashboardMetadata;
+import com.propertyvista.generator.DashboardGenerator;
 
 public class DashboardPreloader extends AbstractDataPreloader {
 

@@ -15,8 +15,6 @@ package com.propertyvista.portal.server.preloader;
 
 import java.util.List;
 
-import com.propertvista.generator.TenantsGenerator;
-import com.propertvista.generator.util.RandomUtil;
 
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.shared.ApplicationMode;
@@ -35,6 +33,8 @@ import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lead.Appointment;
 import com.propertyvista.domain.tenant.lead.Lead;
 import com.propertyvista.domain.tenant.lead.Showing;
+import com.propertyvista.generator.TenantsGenerator;
+import com.propertyvista.generator.util.RandomUtil;
 import com.propertyvista.portal.server.preloader.util.BaseVistaDevDataPreloader;
 
 public class PreloadNewTenantsAndLeads extends BaseVistaDevDataPreloader {
