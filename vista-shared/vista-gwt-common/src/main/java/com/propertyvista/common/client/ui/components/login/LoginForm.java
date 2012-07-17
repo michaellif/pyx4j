@@ -29,9 +29,10 @@ import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Event.NativePreviewEvent;
 import com.google.gwt.user.client.Event.NativePreviewHandler;
 import com.google.gwt.user.client.ui.Anchor;
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HasVerticalAlignment;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -44,6 +45,7 @@ import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.rpc.AuthenticationRequest;
 import com.pyx4j.security.rpc.SystemWallMessage;
+import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.common.client.theme.HorizontalAlignCenterMixin;
 import com.propertyvista.common.client.ui.components.login.AbstractLoginViewImpl.DevLoginData;
@@ -108,6 +110,9 @@ public class LoginForm extends CEntityForm<AuthenticationRequest> {
         main.add(new LoginPanelWidgetDecorator(inject(proto().captcha())));
         main.add(new LoginPanelWidgetDecorator(inject(proto().rememberID())));
 
+        HorizontalPanel buttonPanel = new HorizontalPanel();
+        buttonPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+        buttonPanel.getElement().getStyle().setMarginTop(10, Unit.PX);
         Button loginButton = new Button(i18n.tr("Login"));
         loginButton.ensureDebugId(CrudDebugId.Criteria_Submit.toString());
         loginButton.addClickHandler(new ClickHandler() {
@@ -120,14 +125,14 @@ public class LoginForm extends CEntityForm<AuthenticationRequest> {
 
         loginButton.getElement().getStyle().setMarginLeft(9, Unit.EM);
         loginButton.getElement().getStyle().setMarginRight(1, Unit.EM);
-        loginButton.getElement().getStyle().setMarginTop(0.5, Unit.EM);
-        main.add(loginButton);
+        buttonPanel.add(loginButton);
 
         if (resetPasswordCommand != null) {
             CHyperlink forgotPassword = new CHyperlink(null, resetPasswordCommand);
             forgotPassword.setValue(i18n.tr("Reset Password"));
-            main.add(forgotPassword);
+            buttonPanel.add(forgotPassword);
         }
+        main.add(buttonPanel);
 
         wallMessagePanel = new FlowPanel();
         main.add(wallMessagePanel);
