@@ -17,8 +17,6 @@ import com.google.gwt.activity.shared.ActivityManager;
 import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.place.shared.Place;
-import com.google.gwt.place.shared.PlaceChangeEvent;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -33,21 +31,18 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.web.bindery.event.shared.EventBus;
 
-import com.pyx4j.commons.Key;
-import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.activity.AppActivityManager;
 import com.pyx4j.site.client.activity.AppActivityMapper;
 
 import com.propertyvista.common.client.theme.CrmSitePanelTheme;
 import com.propertyvista.crm.client.mvp.FooterActivityMapper;
-import com.propertyvista.crm.client.mvp.UtilityActivityMapper;
 import com.propertyvista.crm.client.mvp.LogoActivityMapper;
 import com.propertyvista.crm.client.mvp.MainActivityMapper;
 import com.propertyvista.crm.client.mvp.NavigActivityMapper;
 import com.propertyvista.crm.client.mvp.ShortCutsActivityMapper;
 import com.propertyvista.crm.client.mvp.TopRightActionsActivityMapper;
-import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.crm.client.mvp.UtilityActivityMapper;
 
 public class CrmPanel extends LayoutPanel {
 
@@ -151,60 +146,15 @@ public class CrmPanel extends LayoutPanel {
         bind(new LogoActivityMapper(), logoDisplay, eventBus);
         bind(new TopRightActionsActivityMapper(), actionsDisplay, eventBus);
         bind(new FooterActivityMapper(), footerDisplay, eventBus);
-        bind(new NavigActivityMapper(), navigDisplay, eventBus, new PlaceChangeEventFilter() {
-
-            private Place previousPlace = null;
-
-            private Key previousUser = null;
-
-            
-            @Override
-            public boolean isHandlable(PlaceChangeEvent event) {
-                if (//@formatter:off
-                    (previousPlace == null | previousUser == null )
-                        || !previousUser.equals(ClientContext.getUserVisit() != null ? ClientContext.getUserVisit().getPrincipalPrimaryKey() : null) 
-                        | (isSettingsPlace(previousPlace) & !isSettingsPlace(event.getNewPlace()))
-                        | (!isSettingsPlace(previousPlace) & isSettingsPlace(event.getNewPlace()))
-                   )//@formatter:on
-                {
-                    previousPlace = event.getNewPlace();
-                    previousUser = ClientContext.getUserVisit() != null ? ClientContext.getUserVisit().getPrincipalPrimaryKey() : null;
-                    return true;
-                } else {
-                    previousPlace = event.getNewPlace();
-                    previousUser = ClientContext.getUserVisit().getPrincipalPrimaryKey();
-                    return false;
-                }
-            }
-
-            private boolean isSettingsPlace(Place place) {
-                return place.getClass().getName().contains(CrmSiteMap.Settings.class.getName());
-            }
-        });
+        bind(new NavigActivityMapper(), navigDisplay, eventBus);
         bind(new ShortCutsActivityMapper(), shortcutsDisplay, eventBus);
 
         bind(new MainActivityMapper(), mainDisplay, eventBus);
     }
 
-    private static void bind(ActivityMapper mapper, AcceptsOneWidget widget, EventBus eventBus, final PlaceChangeEventFilter filter) {
-        ActivityManager activityManager;
-        if (filter == null) {
-            activityManager = new ActivityManager(mapper, eventBus);
-        } else {
-            activityManager = new ActivityManager(mapper, eventBus) {
-                @Override
-                public void onPlaceChange(PlaceChangeEvent event) {
-                    if (filter.isHandlable(event)) {
-                        super.onPlaceChange(event);
-                    }
-                }
-            };
-        }
-        activityManager.setDisplay(widget);
-    }
-
     private static void bind(ActivityMapper mapper, AcceptsOneWidget widget, EventBus eventBus) {
-        bind(mapper, widget, eventBus, null);
+        ActivityManager activityManager = new ActivityManager(mapper, eventBus);
+        activityManager.setDisplay(widget);
     }
 
     private static void bind(AppActivityMapper mapper, AcceptsOneWidget widget, EventBus eventBus) {
@@ -230,12 +180,6 @@ public class CrmPanel extends LayoutPanel {
             super.setWidget(w);
             centerAreaContent.setVisible(true);
         }
-    }
-
-    interface PlaceChangeEventFilter {
-
-        boolean isHandlable(PlaceChangeEvent event);
-
     }
 
     class UtilityDisplayPanel extends DisplayPanel {

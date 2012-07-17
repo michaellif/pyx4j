@@ -25,8 +25,10 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.security.client.ClientContext;
 
 import com.propertyvista.crm.client.event.BoardUpdateEvent;
 import com.propertyvista.crm.client.event.BoardUpdateHandler;
@@ -53,12 +55,19 @@ public class NavigActivity extends AbstractActivity implements NavigView.MainNav
 
     private final DashboardMetadataService dashboardMetadataService;
 
-    private boolean isDashboardFolderUpdateRequired = true;
+    private boolean isDashboardFolderUpdateRequired;
 
-    private NavigFolder dashboardFolder;
+    private static NavigFolder dashboardFolder;
+
+    private static Key previousUserPk;
 
     public NavigActivity(Place place) {
+        Key currentUserPk = ClientContext.getUserVisit() != null ? ClientContext.getUserVisit().getPrincipalPrimaryKey() : null;
+        isDashboardFolderUpdateRequired = previousUserPk == null || currentUserPk == null || !previousUserPk.equals(currentUserPk);
+        previousUserPk = currentUserPk;
+
         dashboardMetadataService = GWT.<DashboardMetadataService> create(DashboardMetadataService.class);
+
         view = CrmVeiwFactory.instance(NavigView.class);
         view.setPresenter(this);
     }
@@ -155,17 +164,17 @@ public class NavigActivity extends AbstractActivity implements NavigView.MainNav
 
                         list.add(dashboardFolder);
 
-                        onCreateNavigFoldersFinished(list);
+                        endCreateNavigFolders(list);
                     }
                 });
             } else {
                 list.add(dashboardFolder);
-                onCreateNavigFoldersFinished(list);
+                endCreateNavigFolders(list);
             }
         }
     }
 
-    private void onCreateNavigFoldersFinished(List<NavigFolder> navigFolders) {
+    private void endCreateNavigFolders(List<NavigFolder> navigFolders) {
         view.setNavigFolders(navigFolders);
     }
 
