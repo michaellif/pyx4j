@@ -13,6 +13,8 @@
  */
 package com.propertyvista.biz.communication;
 
+import java.util.concurrent.Callable;
+
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UserRuntimeException;
@@ -20,6 +22,7 @@ import com.pyx4j.server.mail.Mail;
 import com.pyx4j.server.mail.MailDeliveryStatus;
 import com.pyx4j.server.mail.MailMessage;
 
+import com.propertyvista.admin.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.admin.domain.security.AdminUserCredential;
 import com.propertyvista.admin.domain.security.OnboardingUserCredential;
 import com.propertyvista.domain.communication.EmailTemplateType;
@@ -34,6 +37,7 @@ import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.server.common.security.AccessKey;
 import com.propertyvista.server.domain.security.CrmUserCredential;
 import com.propertyvista.server.domain.security.CustomerUserCredential;
+import com.propertyvista.server.jobs.TaskRunner;
 
 public class CommunicationFacadeImpl implements CommunicationFacade {
 
@@ -184,7 +188,23 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
         if (token == null) {
             throw new UserRuntimeException(GENERIC_FAILED_MESSAGE);
         }
-        MailMessage m = MessageTemplates.createOnboardingUserPasswordResetEmail(user, token, onboardingSystemBaseUrl);
+        final MailMessage m = MessageTemplates.createOnboardingUserPasswordResetEmail(user, token, onboardingSystemBaseUrl);
+
+        final OnboardingUserCredential credential = Persistence.service().retrieve(OnboardingUserCredential.class, user.getPrimaryKey());
+        if (!credential.pmc().isNull() && (credential.pmc().status().getValue() != PmcStatus.Created)) {
+            TaskRunner.runInTargetNamespace(credential.pmc().namespace().getValue(), new Callable<Void>() {
+                @Override
+                public Void call() {
+                    CrmUserCredential crmCredential = Persistence.service().retrieve(CrmUserCredential.class, credential.crmUser().getValue());
+                    if (!crmCredential.recoveryEmail().isNull()) {
+                        m.setTo(crmCredential.recoveryEmail().getValue());
+                    }
+                    return null;
+                }
+            });
+
+        }
+
         if (MailDeliveryStatus.Success != Mail.send(m)) {
             throw new UserRuntimeException(i18n.tr("Mail Service Is Temporary Unavailable. Please Try Again Later"));
         }
@@ -200,6 +220,12 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
             throw new UserRuntimeException(GENERIC_FAILED_MESSAGE);
         }
         MailMessage m = MessageTemplates.createCrmPasswordResetEmail(user, token);
+
+        CrmUserCredential credential = Persistence.service().retrieve(CrmUserCredential.class, user.getPrimaryKey());
+        if (!credential.recoveryEmail().isNull()) {
+            m.setTo(credential.recoveryEmail().getValue());
+        }
+
         if (MailDeliveryStatus.Success != Mail.send(m)) {
             throw new UserRuntimeException(i18n.tr("Mail Service Is Temporary Unavailable. Please Try Again Later"));
         }

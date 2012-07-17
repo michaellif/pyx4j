@@ -89,7 +89,7 @@ public class OnboardingUserAuthenticationRequestHandler extends AbstractRequestH
         }
 
         if (cr.pmc().getPrimaryKey() != null) {
-            Pmc pmc = Persistence.service().retrieve(Pmc.class, cr.pmc().getPrimaryKey());
+            Pmc pmc = cr.pmc();
             response.onboardingAccountId().set(pmc.onboardingAccountId());
 
             if (pmc.status().getValue() != PmcStatus.Created) {

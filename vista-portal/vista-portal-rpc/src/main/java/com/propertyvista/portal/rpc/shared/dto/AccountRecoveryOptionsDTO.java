@@ -14,6 +14,8 @@
 package com.propertyvista.portal.rpc.shared.dto;
 
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
@@ -33,6 +35,7 @@ public interface AccountRecoveryOptionsDTO extends IEntity {
 
     @Caption(name = "Password Recovery email address")
     @NotNull
+    @Editor(type = EditorType.email)
     IPrimitive<String> recoveryEmail();
 
     IPrimitive<String> mobilePhone();

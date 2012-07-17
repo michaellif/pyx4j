@@ -23,6 +23,8 @@ public interface AuditFacade {
 
     public void loginFailed(AbstractUser user);
 
+    public void credentialsUpdated(AbstractUser user);
+
     public void created(IEntity entity);
 
     public void updated(IEntity entity);

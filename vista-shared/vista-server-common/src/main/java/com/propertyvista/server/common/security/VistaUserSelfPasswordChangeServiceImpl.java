@@ -20,6 +20,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.essentials.server.AbstractAntiBot;
 import com.pyx4j.essentials.server.AbstractAntiBot.LoginType;
@@ -31,6 +32,7 @@ import com.pyx4j.security.rpc.ChallengeVerificationRequired;
 import com.pyx4j.security.rpc.PasswordChangeRequest;
 import com.pyx4j.server.contexts.Context;
 
+import com.propertyvista.biz.system.AuditFacade;
 import com.propertyvista.domain.security.AbstractUser;
 import com.propertyvista.domain.security.AbstractUserCredential;
 
@@ -72,6 +74,9 @@ public abstract class VistaUserSelfPasswordChangeServiceImpl<E extends AbstractU
         credential.credential().setValue(PasswordEncryptor.encryptPassword(request.newPassword().getValue()));
         credential.credentialUpdated().setValue(new Date());
         credential.requiredPasswordChangeOnNextLogIn().setValue(Boolean.FALSE);
+
+        ServerSideFactory.create(AuditFacade.class).credentialsUpdated(credential.user());
+
         Persistence.service().persist(credential);
         Persistence.service().commit();
         log.info("password changed by user {} {}", Context.getVisit().getUserVisit().getEmail(), VistaContext.getCurrentUserPrimaryKey());

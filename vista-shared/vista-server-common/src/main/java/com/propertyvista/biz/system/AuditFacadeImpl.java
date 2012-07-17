@@ -60,6 +60,11 @@ public class AuditFacadeImpl implements AuditFacade {
     }
 
     @Override
+    public void credentialsUpdated(AbstractUser user) {
+        record(AuditRecordEventType.CredentialUpdate, user);
+    }
+
+    @Override
     public void created(IEntity entity) {
         record(AuditRecordEventType.Create, entity);
     }

@@ -111,7 +111,7 @@ public class OnboardingUserPasswordResetRequestHandler extends AbstractRequestHa
         boolean checkAgainsOnboarding = true;
 
         if (cr.pmc().getPrimaryKey() != null) {
-            Pmc pmc = Persistence.service().retrieve(Pmc.class, cr.pmc().getPrimaryKey());
+            Pmc pmc = cr.pmc();
 
             if (pmc.status().getValue() != PmcStatus.Created) {
                 String curNameSpace = NamespaceManager.getNamespace();

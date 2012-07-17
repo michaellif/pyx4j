@@ -19,6 +19,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -33,6 +34,7 @@ import com.propertyvista.admin.domain.pmc.Pmc;
 import com.propertyvista.admin.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.admin.domain.security.OnboardingUserCredential;
 import com.propertyvista.admin.server.onboarding.rhf.AbstractRequestHandler;
+import com.propertyvista.biz.system.AuditFacade;
 import com.propertyvista.domain.security.OnboardingUser;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.onboarding.OnboardingUserPasswordChangeRequestIO;
@@ -82,7 +84,7 @@ public class OnboardingUserPasswordChangeRequestHandler extends AbstractRequestH
         boolean validateAgainstOnboarding = true;
 
         if (cr.pmc().getPrimaryKey() != null) {
-            Pmc pmc = Persistence.service().retrieve(Pmc.class, cr.pmc().getPrimaryKey());
+            Pmc pmc = cr.pmc();
 
             if (pmc.status().getValue() != PmcStatus.Created) {
                 String curNameSpace = NamespaceManager.getNamespace();
@@ -114,6 +116,7 @@ public class OnboardingUserPasswordChangeRequestHandler extends AbstractRequestH
 
                         credential.credential().setValue(PasswordEncryptor.encryptPassword(request.newPassword().getValue()));
                         credential.requiredPasswordChangeOnNextLogIn().setValue(Boolean.FALSE);
+                        ServerSideFactory.create(AuditFacade.class).credentialsUpdated(credential.user());
                         Persistence.service().persist(credential);
                         Persistence.service().commit();
 

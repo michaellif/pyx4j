@@ -62,6 +62,8 @@ public class AccountRecoveryOptionsForm extends CrudEntityForm<AccountRecoveryOp
         for (SecurityQuestion q : getValue().securityQuestionsSuggestions()) {
             suggestedSecurityQuestions.add(q.question().getValue());
         }
+
+        get(proto().mobilePhone()).setEditable(false);
     }
 
     // decoration stuff:

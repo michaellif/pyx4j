@@ -15,6 +15,7 @@ package com.propertyvista.crm.server.services.organization;
 
 import java.util.concurrent.Callable;
 
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -26,6 +27,7 @@ import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.admin.domain.pmc.Pmc;
 import com.propertyvista.admin.domain.security.OnboardingUserCredential;
+import com.propertyvista.biz.system.AuditFacade;
 import com.propertyvista.crm.rpc.dto.company.EmployeeDTO;
 import com.propertyvista.crm.rpc.services.organization.EmployeeCrudService;
 import com.propertyvista.domain.company.Employee;
@@ -125,6 +127,7 @@ public class EmployeeCrudServiceImpl extends AbstractCrudServiceDtoImpl<Employee
             credential.roles().addAll(in.roles());
             credential.accessAllBuildings().set(in.accessAllBuildings());
             credential.requiredPasswordChangeOnNextLogIn().setValue(in.requireChangePasswordOnNextLogIn().getValue());
+            ServerSideFactory.create(AuditFacade.class).credentialsUpdated(credential.user());
             Persistence.service().persist(credential);
             credential.interfaceUid().setValue(UserAccessUtils.getCrmUserInterfaceUid(credential));
             Persistence.service().persist(credential);
