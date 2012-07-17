@@ -13,9 +13,13 @@
  */
 package com.propertyvista.domain.tenant;
 
+import java.math.BigDecimal;
+
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
@@ -45,7 +49,8 @@ public interface Tenant extends LeaseParticipant {
     /**
      * Tenant's payment share:
      */
-    IPrimitive<Integer> percentage();
+    @Editor(type = EditorType.percentage)
+    IPrimitive<BigDecimal> percentage();
 
     PaymentMethod preauthorizedPayment();
 

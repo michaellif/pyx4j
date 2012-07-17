@@ -13,8 +13,8 @@
  */
 package com.propertyvista.generator;
 
+import java.math.BigDecimal;
 import java.util.EnumSet;
-
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.server.Persistence;
@@ -99,7 +99,7 @@ public class LeaseGenerator extends DataGenerator {
         mainTenant.customer()._PersonScreenings().add(screeningGenerator.createScreening());
         mainTenant.screening().set(mainTenant.customer()._PersonScreenings().iterator().next());
         mainTenant.role().setValue(LeaseParticipant.Role.Applicant);
-        mainTenant.percentage().setValue(100);
+        mainTenant.percentage().setValue(new BigDecimal(1));
         lease.version().tenants().add(mainTenant);
 
         addPreathorisedPaymentMethod(mainTenant);
@@ -121,7 +121,7 @@ public class LeaseGenerator extends DataGenerator {
             tenant.customer()._PersonScreenings().add(tenant.screening());
 
             tenant.role().setValue(RandomUtil.random(EnumSet.of(LeaseParticipant.Role.CoApplicant, LeaseParticipant.Role.Dependent)));
-            tenant.percentage().setValue(100);
+            tenant.percentage().setValue(BigDecimal.ZERO);
             tenant.relationship().setValue(RandomUtil.randomEnum(PersonRelationship.class));
             tenant.takeOwnership().setValue(RandomUtil.randomBoolean());
 

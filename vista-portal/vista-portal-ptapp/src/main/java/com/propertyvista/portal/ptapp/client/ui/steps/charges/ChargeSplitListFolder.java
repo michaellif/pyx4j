@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.ptapp.client.ui.steps.charges;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,7 +24,6 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CNumberField;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
@@ -72,17 +72,17 @@ public class ChargeSplitListFolder extends VistaTableFolder<TenantCharge> {
 
             @Override
             public ValidationError isValid(CComponent<IList<TenantCharge>, ?> component, IList<TenantCharge> value) {
-                int totalPrc = 0;
+                BigDecimal totalPrc = BigDecimal.ZERO;
                 for (TenantCharge charge : value) {
                     if (charge.tenant().role().getValue() == LeaseParticipant.Role.Applicant) {
                         continue; // Ignore main applicant, since it is read-only!
                     }
-                    Integer p = charge.tenant().percentage().getValue();
-                    if (p != null) {
-                        totalPrc += p.intValue();
+                    if (charge.tenant().percentage().getValue() != null) {
+                        totalPrc = totalPrc.add(charge.tenant().percentage().getValue());
                     }
                 }
-                return totalPrc <= 100 ? null : new ValidationError(component, i18n.tr("Sum Of All Percentages Cannot Exceed 100%"));
+                return (totalPrc.compareTo(new BigDecimal(1)) == 0 ? null : new ValidationError(component, i18n
+                        .tr("Sum of all percentages should be equal to 100%!")));
             }
         });
     }
@@ -128,15 +128,6 @@ public class ChargeSplitListFolder extends VistaTableFolder<TenantCharge> {
             if ((getValue().tenant().role().getValue() == LeaseParticipant.Role.Applicant)) {
                 get(proto().tenant().percentage()).setEditable(false);
                 get(proto().tenant().percentage()).setViewable(true);
-            }
-        }
-
-        @SuppressWarnings("unchecked")
-        @Override
-        public void addValidations() {
-            CComponent<Integer, ?> prc = get(proto().tenant().percentage());
-            if (prc instanceof CNumberField) {
-                ((CNumberField<Integer>) prc).setRange(0, 100);
             }
         }
     }

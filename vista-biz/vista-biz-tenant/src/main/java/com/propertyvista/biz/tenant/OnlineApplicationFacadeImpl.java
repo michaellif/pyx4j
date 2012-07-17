@@ -391,6 +391,6 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
     }
 
     private static boolean isTenantInSplitCharge(Tenant tenant) {
-        return !(tenant.percentage().isNull() || tenant.percentage().getValue() == 0);
+        return !(tenant.percentage().isNull() || tenant.percentage().getValue().signum() > 0);
     }
 }

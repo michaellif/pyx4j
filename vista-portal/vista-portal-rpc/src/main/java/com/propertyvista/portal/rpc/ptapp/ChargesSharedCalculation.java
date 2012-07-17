@@ -24,6 +24,7 @@ import com.propertyvista.domain.charges.ChargeLine;
 import com.propertyvista.domain.charges.ChargeLine.ChargeType;
 import com.propertyvista.domain.charges.ChargeLineList;
 import com.propertyvista.domain.charges.Charge_OLD;
+import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.util.DomainUtil;
 import com.propertyvista.portal.domain.ptapp.Charges;
 import com.propertyvista.portal.domain.ptapp.TenantCharge;
@@ -97,42 +98,40 @@ public class ChargesSharedCalculation {
      * (rent and upgrades).
      */
     public static boolean calculatePaymentSplitCharges(Charges charges) {
-        int totalSplitPrc = -1; // sum %, paid by co-applicants
+        BigDecimal totalSplitPrc = BigDecimal.ZERO; // sum %, paid by co-applicants
 
         // check % correctness:
         for (TenantCharge charge : charges.paymentSplitCharges().charges()) {
-            if (totalSplitPrc == -1) { // first (main) applicant
-                totalSplitPrc = 0; // reset first (main) applicant flag
-            } else {
-                totalSplitPrc += charge.tenant().percentage().getValue();
+            if (charge.tenant().role().getValue() == Tenant.Role.CoApplicant) {
+                totalSplitPrc = totalSplitPrc.add(charge.tenant().percentage().getValue());
             }
         }
-
-        if (totalSplitPrc > 100) {
+        if (totalSplitPrc.compareTo(new BigDecimal(1)) > 0) {
             return false; // something incorrect here!..
         }
 
-        totalSplitPrc = 0; // perform actual calculation:
+        totalSplitPrc = BigDecimal.ZERO; // perform actual calculation:
         BigDecimal totalSplitVal = BigDecimal.ZERO; // sum value, paid by co-applicants
         TenantCharge mainApplicantCharge = null;
         for (TenantCharge charge : charges.paymentSplitCharges().charges()) {
-            // !N.B. charge.tenant().status()  is not available here.  charge.tenant() never loaded to GWT!
-            // Consider the first is Applicant
-            if (mainApplicantCharge == null) {
+            switch (charge.tenant().role().getValue()) {
+            case Applicant:
                 mainApplicantCharge = charge;
-            } else {
-                charge.amount().setValue(
-                        DomainUtil.roundMoney(charges.monthlyCharges().total().getValue()
-                                .multiply(new BigDecimal(charge.tenant().percentage().getValue() / 100d))));
+                break;
+            case CoApplicant:
+                charge.amount().setValue(DomainUtil.roundMoney(charges.monthlyCharges().total().getValue().multiply(charge.tenant().percentage().getValue())));
 
-                totalSplitPrc += charge.tenant().percentage().getValue();
+                totalSplitPrc = totalSplitPrc.add(charge.tenant().percentage().getValue());
                 totalSplitVal = totalSplitVal.add(charge.amount().getValue());
+                break;
+            default:
+                break;
             }
         }
 
         if (mainApplicantCharge != null) {
             mainApplicantCharge.amount().setValue(charges.monthlyCharges().total().getValue().subtract(totalSplitVal));
-            mainApplicantCharge.tenant().percentage().setValue(100 - totalSplitPrc);
+            mainApplicantCharge.tenant().percentage().setValue(new BigDecimal(1).subtract(totalSplitPrc));
         }
 
         calculateTotal(charges.paymentSplitCharges());

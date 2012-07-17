@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.lease.common;
 
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.List;
@@ -30,7 +31,6 @@ import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CNumberField;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
@@ -93,12 +93,12 @@ public class TenantInLeaseFolder extends LeaseParticipantFolder<Tenant> {
         return false;
     }
 
-    private Integer calcPercentage() {
-        Integer prc = 100;
+    private BigDecimal calcPercentage() {
+        BigDecimal prc = new BigDecimal(1);
         for (Tenant til : getValue()) {
-            prc -= (til.percentage().isNull() ? 0 : til.percentage().getValue());
+            prc = prc.subtract(til.percentage().isNull() ? BigDecimal.ZERO : til.percentage().getValue());
         }
-        return (prc > 0 ? prc : 0);
+        return (prc.signum() > 0 ? prc : BigDecimal.ZERO);
     }
 
     @Override
@@ -136,14 +136,14 @@ public class TenantInLeaseFolder extends LeaseParticipantFolder<Tenant> {
             public ValidationError isValid(CComponent<IList<Tenant>, ?> component, IList<Tenant> value) {
                 if (value != null) {
                     if (!value.isEmpty()) {
-                        int totalPrc = 0;
+                        BigDecimal totalPrc = BigDecimal.ZERO;
                         for (Tenant item : value) {
-                            Integer p = item.percentage().getValue();
-                            if (p != null) {
-                                totalPrc += p.intValue();
+                            if (item.percentage().getValue() != null) {
+                                totalPrc = totalPrc.add(item.percentage().getValue());
                             }
                         }
-                        return (totalPrc == 100 ? null : new ValidationError(component, i18n.tr("Sum Of all Percentages should be equal to 100%!")));
+                        return (totalPrc.compareTo(new BigDecimal(1)) == 0 ? null : new ValidationError(component, i18n
+                                .tr("Sum of all percentages should be equal to 100%!")));
                     } else {
                         return new ValidationError(component, i18n.tr("At least one Applicant should be present!"));
                     }
@@ -253,15 +253,6 @@ public class TenantInLeaseFolder extends LeaseParticipantFolder<Tenant> {
 //                get(proto().percentage()).setViewable(true);
 //            }
 //        }
-
-        @SuppressWarnings("unchecked")
-        @Override
-        public void addValidations() {
-            CComponent<Integer, ?> prc = get(proto().percentage());
-            if (prc instanceof CNumberField) {
-                ((CNumberField<Integer>) prc).setRange(0, 100);
-            }
-        }
 
         private void setMandatoryDependant() {
             get(proto().role()).setValue(LeaseParticipant.Role.Dependent);

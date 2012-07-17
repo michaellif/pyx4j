@@ -120,7 +120,7 @@ public class ChargesServerCalculation extends ChargesSharedCalculation {
     private static void resetPaymentSplitCharges(Charges charges, List<Tenant> tenants) {
         charges.paymentSplitCharges().charges().clear();
         for (Tenant tenant : tenants) {
-            LeaseParticipant.Role status = tenant.role().getValue();
+            LeaseParticipant.Role role = tenant.role().getValue();
             log.debug("Going to reset payment splits for tenant {} of age {}", tenant.relationship().getValue(), tenant.customer().person().birthDate()
                     .getValue());
 
@@ -129,11 +129,11 @@ public class ChargesServerCalculation extends ChargesSharedCalculation {
                 continue;
             }
 
-            int percentage = 0;
-            if (status == LeaseParticipant.Role.Applicant) {
-                percentage = 100;
+            BigDecimal percentage = BigDecimal.ZERO;
+            if (role == LeaseParticipant.Role.Applicant) {
+                percentage = new BigDecimal(1);
             }
-            TenantCharge tenantCharge = com.propertyvista.portal.domain.util.DomainUtil.createTenantCharge(percentage, BigDecimal.ZERO);
+            TenantCharge tenantCharge = com.propertyvista.portal.domain.util.DomainUtil.createTenantCharge(role, percentage, BigDecimal.ZERO);
             tenantCharge.tenant().set(tenant);
             //            Persistence.service().persist(tenant);
             charges.paymentSplitCharges().charges().add(tenantCharge);
