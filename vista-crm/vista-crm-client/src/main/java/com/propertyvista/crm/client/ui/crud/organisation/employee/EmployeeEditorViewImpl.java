@@ -23,4 +23,10 @@ public class EmployeeEditorViewImpl extends CrmEditorViewImplBase<EmployeeDTO> i
 
         super(CrmSiteMap.Organization.Employee.class, new EmployeeForm());
     }
+
+    @Override
+    public void restrictSecuritySensitiveControls(boolean isManager, boolean isSelfEditor) {
+        ((EmployeeForm) getForm()).restrictSecurityRelatedControls(isManager, isSelfEditor);
+
+    }
 }

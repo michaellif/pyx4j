@@ -16,6 +16,8 @@ package com.propertyvista.crm.client.activity.crud.organisation;
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.security.client.ClientContext;
+import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
@@ -23,6 +25,7 @@ import com.propertyvista.crm.client.ui.crud.organisation.employee.EmployeeEditor
 import com.propertyvista.crm.client.ui.crud.viewfactories.OrganizationViewFactory;
 import com.propertyvista.crm.rpc.dto.company.EmployeeDTO;
 import com.propertyvista.crm.rpc.services.organization.EmployeeCrudService;
+import com.propertyvista.domain.security.VistaCrmBehavior;
 
 public class EmployeeEditorActivity extends EditorActivityBase<EmployeeDTO> implements EmployeeEditorView.Presenter {
 
@@ -30,5 +33,12 @@ public class EmployeeEditorActivity extends EditorActivityBase<EmployeeDTO> impl
     public EmployeeEditorActivity(CrudAppPlace place) {
         super(place, OrganizationViewFactory.instance(EmployeeEditorView.class), (AbstractCrudService<EmployeeDTO>) GWT.create(EmployeeCrudService.class),
                 EmployeeDTO.class);
+    }
+
+    @Override
+    public void onPopulateSuccess(EmployeeDTO result) {
+        ((EmployeeEditorView) getView()).restrictSecuritySensitiveControls(SecurityController.checkBehavior(VistaCrmBehavior.Organization), ClientContext
+                .getUserVisit().getPrincipalPrimaryKey().equals(result.user().getPrimaryKey()));
+        super.onPopulateSuccess(result);
     }
 }

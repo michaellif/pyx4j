@@ -13,15 +13,12 @@
  */
 package com.propertyvista.crm.client.ui.crud.organisation.employee;
 
-import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.commons.Key;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.security.client.ClientContext;
-import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
 import com.propertyvista.common.client.ui.components.editors.NameEditor;
@@ -30,7 +27,6 @@ import com.propertyvista.common.client.ui.validators.PastDateValidation;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.crud.organisation.employee.EmployeeFolder.ParentEmployeeGetter;
 import com.propertyvista.crm.rpc.dto.company.EmployeeDTO;
-import com.propertyvista.domain.security.VistaCrmBehavior;
 
 public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
 
@@ -76,8 +72,24 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
 
         get(proto().password()).setVisible(isNewEmployee());
         get(proto().passwordConfirm()).setVisible(isNewEmployee());
+    }
 
-        enforceBehaviour();
+    public void restrictSecurityRelatedControls(boolean isManager, boolean isSelfEditor) {
+        get(proto().enabled()).setVisible(isManager);
+        get(proto().requireChangePasswordOnNextLogIn()).setVisible(isManager);
+
+        get(proto().roles()).setEditable(!isSelfEditor);
+
+        boolean permitPortfoliosEditing = isManager & !isSelfEditor;
+
+        get(proto().accessAllBuildings()).setViewable(!permitPortfoliosEditing);
+        get(proto().portfolios()).setViewable(!permitPortfoliosEditing);
+        get(proto().portfolios()).setEditable(permitPortfoliosEditing);
+
+        get(proto().employees()).setViewable(!isManager);
+        get(proto().employees()).setEditable(isManager);
+
+        get(proto().userAuditingConfiguration()).setEnabled(isSelfEditor | isManager);
     }
 
     private FormFlexPanel createInfoTab(String title) {
@@ -147,34 +159,6 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
 
     private boolean isNewEmployee() {
         return getValue().id().isNull();
-    }
-
-    /**
-     * @return <code>true</code> if the current user is editing his own information
-     */
-    private boolean isSelfEditor() {
-        return (getValue() != null) && !isNewEmployee() && !getValue().user().isNull()
-                && EqualsHelper.equals(getValue().user().getPrimaryKey(), ClientContext.getUserVisit().getPrincipalPrimaryKey());
-    }
-
-    private void enforceBehaviour() {
-        boolean isManager = SecurityController.checkBehavior(VistaCrmBehavior.Organization);
-        boolean isSelfManged = ClientContext.getUserVisit().getPrincipalPrimaryKey().equals(getValue().user().getPrimaryKey());
-
-        get(proto().enabled()).setVisible(isManager);
-        get(proto().requireChangePasswordOnNextLogIn()).setVisible(isManager);
-
-        get(proto().accessAllBuildings()).setViewable(!isManager);
-        get(proto().roles()).setEditable(!isSelfManged);
-
-        get(proto().portfolios()).setViewable(!isManager);
-        get(proto().portfolios()).setEditable(isManager);
-
-        get(proto().employees()).setViewable(!isManager);
-        get(proto().employees()).setEditable(isManager);
-
-        get(proto().userAuditingConfiguration()).setEnabled(isSelfEditor() | isManager);
-
     }
 
 }

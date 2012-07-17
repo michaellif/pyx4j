@@ -17,6 +17,7 @@ import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
@@ -57,6 +58,13 @@ public class EmployeeViewerActivity extends CrmViewerActivity<EmployeeDTO> imple
     @Override
     public boolean canEdit() {
         return super.canEdit() & SecurityController.checkBehavior(VistaCrmBehavior.Organization);
+    }
+
+    @Override
+    protected void onPopulateSuccess(EmployeeDTO result) {
+        ((EmployeeViewerView) getView()).restrictSecuritySensitiveControls(SecurityController.checkBehavior(VistaCrmBehavior.Organization), ClientContext
+                .getUserVisit().getPrincipalPrimaryKey().equals(result.user().getPrimaryKey()));
+        super.onPopulateSuccess(result);
     }
 
     @Override

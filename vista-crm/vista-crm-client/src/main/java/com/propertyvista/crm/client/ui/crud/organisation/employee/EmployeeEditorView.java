@@ -21,4 +21,6 @@ public interface EmployeeEditorView extends IEditorView<EmployeeDTO> {
 
     interface Presenter extends IEditorView.Presenter {
     }
+
+    void restrictSecuritySensitiveControls(boolean isManager, boolean isSelfEditor);
 }

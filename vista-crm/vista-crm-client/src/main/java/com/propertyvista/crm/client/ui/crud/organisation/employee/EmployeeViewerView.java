@@ -33,4 +33,5 @@ public interface EmployeeViewerView extends IViewerView<EmployeeDTO> {
 
     }
 
+    void restrictSecuritySensitiveControls(boolean isManager, boolean isSelfEditor);
 }

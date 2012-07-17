@@ -98,4 +98,9 @@ public class EmployeeViewerViewImpl extends CrmViewerViewImplBase<EmployeeDTO> i
         }
 
     }
+
+    @Override
+    public void restrictSecuritySensitiveControls(boolean isManager, boolean isSelfEdit) {
+        ((EmployeeForm) getForm()).restrictSecurityRelatedControls(isManager, isSelfEdit);
+    }
 }

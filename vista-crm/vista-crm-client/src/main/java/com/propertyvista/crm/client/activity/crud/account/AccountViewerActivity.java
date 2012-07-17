@@ -17,6 +17,7 @@ import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.CrudAppPlace;
@@ -29,6 +30,7 @@ import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.dto.company.EmployeeDTO;
 import com.propertyvista.crm.rpc.services.organization.CrmUserService;
 import com.propertyvista.domain.security.CrmUser;
+import com.propertyvista.domain.security.VistaCrmBehavior;
 
 /**
  * This one should use separate service (just for self management)
@@ -64,6 +66,12 @@ public class AccountViewerActivity extends CrmViewerActivity<EmployeeDTO> implem
     @Override
     public boolean canGoToAccountRecoveryOptions() {
         return true;
+    }
+
+    @Override
+    protected void onPopulateSuccess(EmployeeDTO result) {
+        ((EmployeeViewerView) getView()).restrictSecuritySensitiveControls(SecurityController.checkBehavior(VistaCrmBehavior.Organization), true);
+        super.onPopulateSuccess(result);
     }
 
 }
