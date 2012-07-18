@@ -55,6 +55,7 @@ import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
 import com.propertyvista.domain.tenant.lease.BillableItemExtraData;
+import com.propertyvista.domain.tenant.lease.Lease.Status;
 import com.propertyvista.domain.tenant.lease.extradata.Pet;
 import com.propertyvista.domain.tenant.lease.extradata.Vehicle;
 import com.propertyvista.dto.LeaseDTO;
@@ -307,7 +308,8 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
                     @Override
                     public ValidationError isValid(CComponent<Date, ?> component, Date value) {
                         if (value != null) {
-                            if ((itemEffectiveDateEditor.getValue() != null) && value.before(new LogicalDate())) {
+                            if (lease.getValue().version().status().getValue() != Status.Created && (itemEffectiveDateEditor.getValue() != null)
+                                    && value.before(new LogicalDate())) {
                                 return new ValidationError(component, "The date should not precede the today's date");
                             }
                             if ((itemEffectiveDateEditor.getValue() != null) && value.before(itemEffectiveDateEditor.getValue())) {
