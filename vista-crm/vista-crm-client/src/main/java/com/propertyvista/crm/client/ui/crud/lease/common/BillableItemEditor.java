@@ -345,9 +345,9 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
                     public ValidationError isValid(CComponent<BigDecimal, ?> component, BigDecimal value) {
                         if (value != null) {
                             if (value.signum() < 0) {
-
+                                // TODO : some validation here...
                             } else {
-
+                                // TODO : some validation here...
                             }
                         }
                         return null;
