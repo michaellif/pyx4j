@@ -28,12 +28,12 @@ public class VistaServerSideConfigurationDemoProd extends VistaServerSideConfigu
 
     @Override
     public boolean openDBReset() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isDevelopmentBehavior() {
-        return true;
+        return false;
     }
 
     @Override
