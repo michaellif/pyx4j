@@ -21,6 +21,7 @@
 package com.pyx4j.entity.client.ui.datatable.filter;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -288,6 +289,8 @@ public class DataTableFilterItem<E extends IEntity> extends HorizontalPanel {
             options = EnumSet.of(Operator.is, Operator.isNot);
         } else if (isDate(valueClass)) {
             options = EnumSet.of(Operator.is, Operator.isNot, Operator.earlierThan, Operator.laterThan, Operator.earlierOrEqualThan, Operator.laterOrEqualThan);
+        } else if (valueClass.equals(BigDecimal.class)) {
+            options = EnumSet.of(Operator.is, Operator.greaterThan, Operator.greaterOrEqualThan, Operator.lessThan, Operator.lessOrEqualThan);
         } else {
             options = EnumSet.allOf(Operator.class);
             // remove duplicate entries:
