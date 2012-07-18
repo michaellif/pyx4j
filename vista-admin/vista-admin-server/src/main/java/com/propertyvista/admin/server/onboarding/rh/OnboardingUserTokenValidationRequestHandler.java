@@ -20,6 +20,7 @@ import java.util.concurrent.Callable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -31,6 +32,7 @@ import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.propertyvista.admin.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.admin.domain.security.OnboardingUserCredential;
 import com.propertyvista.admin.server.onboarding.rhf.AbstractRequestHandler;
+import com.propertyvista.biz.system.PmcFacade;
 import com.propertyvista.domain.security.OnboardingUser;
 import com.propertyvista.onboarding.OnboardingUserPasswordResetQuestionResponseIO;
 import com.propertyvista.onboarding.OnboardingUserTokenValidationRequestIO;
@@ -87,6 +89,13 @@ public class OnboardingUserTokenValidationRequestHandler extends AbstractRequest
         if ((new Date().after(credential.accessKeyExpire().getValue()))) {
             response.success().setValue(Boolean.FALSE);
             return response;
+        }
+
+        if (!credential.pmc().isNull()) {
+            if (!ServerSideFactory.create(PmcFacade.class).isOnboardingEnabled(credential.pmc())) {
+                response.success().setValue(Boolean.FALSE);
+                return response;
+            }
         }
 
         response.success().setValue(Boolean.TRUE);

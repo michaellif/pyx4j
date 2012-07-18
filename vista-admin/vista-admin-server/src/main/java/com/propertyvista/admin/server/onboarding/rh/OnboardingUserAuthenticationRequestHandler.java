@@ -20,6 +20,7 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.Pair;
 import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -35,6 +36,7 @@ import com.propertyvista.admin.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.admin.domain.security.OnboardingUserCredential;
 import com.propertyvista.admin.server.onboarding.OnboardingXMLUtils;
 import com.propertyvista.admin.server.onboarding.rhf.AbstractRequestHandler;
+import com.propertyvista.biz.system.PmcFacade;
 import com.propertyvista.domain.security.OnboardingUser;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.onboarding.OnboardingUserAuthenticationRequestIO;
@@ -78,18 +80,23 @@ public class OnboardingUserAuthenticationRequestHandler extends AbstractRequestH
         }
         OnboardingUser user = users.get(0);
 
-        OnboardingUserCredential cr = Persistence.service().retrieve(OnboardingUserCredential.class, user.getPrimaryKey());
-        if (cr == null) {
+        OnboardingUserCredential credential = Persistence.service().retrieve(OnboardingUserCredential.class, user.getPrimaryKey());
+        if (credential == null) {
             throw new UserRuntimeException("Invalid User Account. Please Contact Support");
         }
 
-        if (!cr.enabled().isBooleanTrue()) {
+        if (!credential.enabled().isBooleanTrue()) {
             response.status().setValue(OnboardingUserAuthenticationResponseIO.AuthenticationStatusCode.PermissionDenied);
             return response;
         }
 
-        if (cr.pmc().getPrimaryKey() != null) {
-            Pmc pmc = cr.pmc();
+        if (!credential.pmc().isNull()) {
+            Pmc pmc = credential.pmc();
+            if (!ServerSideFactory.create(PmcFacade.class).isOnboardingEnabled(pmc)) {
+                response.status().setValue(OnboardingUserAuthenticationResponseIO.AuthenticationStatusCode.PermissionDenied);
+                return response;
+            }
+
             response.onboardingAccountId().set(pmc.onboardingAccountId());
 
             if (pmc.status().getValue() != PmcStatus.Created) {
@@ -120,7 +127,7 @@ public class OnboardingUserAuthenticationRequestHandler extends AbstractRequestH
                         }
                     }
 
-                    response.role().setValue(OnboardingXMLUtils.convertRole(cr.behavior().getValue()));
+                    response.role().setValue(OnboardingXMLUtils.convertRole(credential.behavior().getValue()));
                     response.status().setValue(OnboardingUserAuthenticationResponseIO.AuthenticationStatusCode.OK);
 
                     return response;
@@ -128,7 +135,7 @@ public class OnboardingUserAuthenticationRequestHandler extends AbstractRequestH
                     NamespaceManager.setNamespace(curNameSpace);
                 }
             } else {
-                if (!PasswordEncryptor.checkPassword(request.password().getValue(), cr.credential().getValue())) {
+                if (!PasswordEncryptor.checkPassword(request.password().getValue(), credential.credential().getValue())) {
                     log.info("Invalid password for user {}", email);
                     if (AbstractAntiBot.authenticationFailed(LoginType.userLogin, email)) {
                         response.status().setValue(OnboardingUserAuthenticationResponseIO.AuthenticationStatusCode.ChallengeVerificationRequired);
@@ -140,16 +147,16 @@ public class OnboardingUserAuthenticationRequestHandler extends AbstractRequestH
                         return response;
                     }
                 }
-                if (!cr.accessKey().isNull()) {
-                    cr.accessKey().setValue(null);
-                    Persistence.service().persist(cr);
+                if (!credential.accessKey().isNull()) {
+                    credential.accessKey().setValue(null);
+                    Persistence.service().persist(credential);
                     Persistence.service().commit();
                 }
-                if (cr.requiredPasswordChangeOnNextLogIn().isBooleanTrue()) {
+                if (credential.requiredPasswordChangeOnNextLogIn().isBooleanTrue()) {
                     response.status().setValue(OnboardingUserAuthenticationResponseIO.AuthenticationStatusCode.OK_PasswordChangeRequired);
                     return response;
                 } else {
-                    response.role().setValue(OnboardingXMLUtils.convertRole(cr.behavior().getValue()));
+                    response.role().setValue(OnboardingXMLUtils.convertRole(credential.behavior().getValue()));
                     response.onboardingAccountId().set(pmc.onboardingAccountId());
                     response.email().setValue(user.email().getValue());
                     response.status().setValue(OnboardingUserAuthenticationResponseIO.AuthenticationStatusCode.OK);
@@ -158,7 +165,7 @@ public class OnboardingUserAuthenticationRequestHandler extends AbstractRequestH
             }
 
         } else {
-            if (!PasswordEncryptor.checkPassword(request.password().getValue(), cr.credential().getValue())) {
+            if (!PasswordEncryptor.checkPassword(request.password().getValue(), credential.credential().getValue())) {
                 log.info("Invalid password for user {}", email);
                 if (AbstractAntiBot.authenticationFailed(LoginType.userLogin, email)) {
                     response.status().setValue(OnboardingUserAuthenticationResponseIO.AuthenticationStatusCode.ChallengeVerificationRequired);
@@ -169,18 +176,18 @@ public class OnboardingUserAuthenticationRequestHandler extends AbstractRequestH
                     return response;
                 }
             }
-            if (!cr.accessKey().isNull()) {
-                cr.accessKey().setValue(null);
-                Persistence.service().persist(cr);
+            if (!credential.accessKey().isNull()) {
+                credential.accessKey().setValue(null);
+                Persistence.service().persist(credential);
                 Persistence.service().commit();
             }
-            if (cr.requiredPasswordChangeOnNextLogIn().isBooleanTrue()) {
+            if (credential.requiredPasswordChangeOnNextLogIn().isBooleanTrue()) {
                 response.status().setValue(OnboardingUserAuthenticationResponseIO.AuthenticationStatusCode.OK_PasswordChangeRequired);
                 response.email().setValue(user.email().getValue());
                 return response;
             } else {
-                response.role().setValue(OnboardingXMLUtils.convertRole(cr.behavior().getValue()));
-                response.onboardingAccountId().set(cr.onboardingAccountId());
+                response.role().setValue(OnboardingXMLUtils.convertRole(credential.behavior().getValue()));
+                response.onboardingAccountId().set(credential.onboardingAccountId());
                 response.email().setValue(user.email().getValue());
                 response.status().setValue(OnboardingUserAuthenticationResponseIO.AuthenticationStatusCode.OK);
                 return response;

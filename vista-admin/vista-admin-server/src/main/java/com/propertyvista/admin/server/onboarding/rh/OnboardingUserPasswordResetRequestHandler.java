@@ -38,6 +38,7 @@ import com.propertyvista.admin.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.admin.domain.security.OnboardingUserCredential;
 import com.propertyvista.admin.server.onboarding.OnboardingXMLUtils;
 import com.propertyvista.admin.server.onboarding.rhf.AbstractRequestHandler;
+import com.propertyvista.biz.system.PmcFacade;
 import com.propertyvista.biz.system.UserManagementFacade;
 import com.propertyvista.domain.security.OnboardingUser;
 import com.propertyvista.domain.security.VistaCrmBehavior;
@@ -85,31 +86,34 @@ public class OnboardingUserPasswordResetRequestHandler extends AbstractRequestHa
         }
         OnboardingUser user = users.get(0);
 
-        OnboardingUserCredential cr = Persistence.service().retrieve(OnboardingUserCredential.class, user.getPrimaryKey());
-        if (cr == null) {
+        OnboardingUserCredential credential = Persistence.service().retrieve(OnboardingUserCredential.class, user.getPrimaryKey());
+        if (credential == null) {
             throw new UserRuntimeException("Invalid User Account. Please Contact Support");
         }
-        if (!cr.enabled().isBooleanTrue()) {
+        if (!credential.enabled().isBooleanTrue()) {
             response.status().setValue(OnboardingUserAuthenticationResponseIO.AuthenticationStatusCode.PermissionDenied);
             return response;
         }
 
-        if (!token.accessKey.equals(cr.accessKey().getValue())) {
+        if (!token.accessKey.equals(credential.accessKey().getValue())) {
             AbstractAntiBot.authenticationFailed(LoginType.accessToken, token.email);
             response.status().setValue(OnboardingUserAuthenticationResponseIO.AuthenticationStatusCode.TokenExpired);
             return response;
         }
 
-        if ((new Date().after(cr.accessKeyExpire().getValue()))) {
+        if ((new Date().after(credential.accessKeyExpire().getValue()))) {
             response.status().setValue(OnboardingUserAuthenticationResponseIO.AuthenticationStatusCode.TokenExpired);
             return response;
         }
 
         boolean checkAgainsOnboarding = true;
 
-        if (cr.pmc().getPrimaryKey() != null) {
-            Pmc pmc = cr.pmc();
-
+        if (!credential.pmc().isNull()) {
+            Pmc pmc = credential.pmc();
+            if (!ServerSideFactory.create(PmcFacade.class).isOnboardingEnabled(pmc)) {
+                response.status().setValue(OnboardingUserAuthenticationResponseIO.AuthenticationStatusCode.PermissionDenied);
+                return response;
+            }
             if (pmc.status().getValue() != PmcStatus.Created) {
                 String curNameSpace = NamespaceManager.getNamespace();
 
@@ -118,7 +122,7 @@ public class OnboardingUserPasswordResetRequestHandler extends AbstractRequestHa
 
                     EntityQueryCriteria<CrmUserCredential> crmUCrt = EntityQueryCriteria.create(CrmUserCredential.class);
                     crmUCrt.add(PropertyCriterion.eq(crmUCrt.proto().roles().$().behaviors(), VistaCrmBehavior.PropertyVistaAccountOwner));
-                    crmUCrt.add(PropertyCriterion.eq(crmUCrt.proto().onboardingUser(), cr.getPrimaryKey()));
+                    crmUCrt.add(PropertyCriterion.eq(crmUCrt.proto().onboardingUser(), credential.getPrimaryKey()));
                     CrmUserCredential crmCredential = Persistence.service().retrieve(crmUCrt);
 
                     if (crmCredential == null) {
@@ -147,7 +151,7 @@ public class OnboardingUserPasswordResetRequestHandler extends AbstractRequestHa
             }
         }
 
-        if (checkAgainsOnboarding && PasswordEncryptor.checkPassword(request.newPassword().getValue(), cr.credential().getValue())) {
+        if (checkAgainsOnboarding && PasswordEncryptor.checkPassword(request.newPassword().getValue(), credential.credential().getValue())) {
             throw new UserRuntimeException(i18n.tr("Your password cannot repeat your previous password"));
         }
 
@@ -156,8 +160,8 @@ public class OnboardingUserPasswordResetRequestHandler extends AbstractRequestHa
         pchRequest.userPk().setValue(user.getPrimaryKey());
         ServerSideFactory.create(UserManagementFacade.class).selfChangePassword(OnboardingUserCredential.class, pchRequest);
 
-        response.role().setValue(OnboardingXMLUtils.convertRole(cr.behavior().getValue()));
-        response.onboardingAccountId().set(cr.onboardingAccountId());
+        response.role().setValue(OnboardingXMLUtils.convertRole(credential.behavior().getValue()));
+        response.onboardingAccountId().set(credential.onboardingAccountId());
         response.email().setValue(user.email().getValue());
         response.status().setValue(OnboardingUserAuthenticationResponseIO.AuthenticationStatusCode.OK);
         return response;

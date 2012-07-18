@@ -35,6 +35,7 @@ import com.propertyvista.admin.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.admin.domain.security.OnboardingUserCredential;
 import com.propertyvista.admin.server.onboarding.rhf.AbstractRequestHandler;
 import com.propertyvista.biz.system.AuditFacade;
+import com.propertyvista.biz.system.PmcFacade;
 import com.propertyvista.domain.security.OnboardingUser;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.onboarding.OnboardingUserPasswordChangeRequestIO;
@@ -83,8 +84,13 @@ public class OnboardingUserPasswordChangeRequestHandler extends AbstractRequestH
 
         boolean validateAgainstOnboarding = true;
 
-        if (cr.pmc().getPrimaryKey() != null) {
+        if (!cr.pmc().isNull()) {
             Pmc pmc = cr.pmc();
+
+            if (!ServerSideFactory.create(PmcFacade.class).isOnboardingEnabled(pmc)) {
+                response.success().setValue(Boolean.FALSE);
+                return response;
+            }
 
             if (pmc.status().getValue() != PmcStatus.Created) {
                 String curNameSpace = NamespaceManager.getNamespace();

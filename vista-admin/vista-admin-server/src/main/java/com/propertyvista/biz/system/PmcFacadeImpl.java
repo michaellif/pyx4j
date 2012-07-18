@@ -13,6 +13,8 @@
  */
 package com.propertyvista.biz.system;
 
+import java.util.EnumSet;
+
 import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.admin.domain.pmc.OnboardingMerchantAccount;
@@ -22,14 +24,21 @@ import com.propertyvista.admin.domain.pmc.Pmc.PmcStatus;
 public class PmcFacadeImpl implements PmcFacade {
 
     @Override
+    public boolean isOnboardingEnabled(Pmc pmc) {
+        return EnumSet.of(PmcStatus.Created, PmcStatus.Active, PmcStatus.Suspended).contains(pmc.status().getValue());
+    }
+
+    @Override
     public void terminateCancelledPmc(Pmc pmcId) {
         Pmc pmc = Persistence.service().retrieve(Pmc.class, pmcId.getPrimaryKey());
 
         pmc.status().setValue(PmcStatus.Terminated);
 
-        // unreserve names
-        pmc.namespace().setValue("__" + pmc.getPrimaryKey());
-        pmc.dnsName().setValue("__" + pmc.getPrimaryKey());
+        //TODO unreserve names
+        if (false) {
+            pmc.namespace().setValue("__" + pmc.getPrimaryKey());
+            pmc.dnsName().setValue("__" + pmc.getPrimaryKey());
+        }
 
         //remove all values
         pmc.name().setValue(null);
@@ -52,4 +61,5 @@ public class PmcFacadeImpl implements PmcFacade {
 
         Persistence.service().commit();
     }
+
 }

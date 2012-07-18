@@ -31,6 +31,7 @@ import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.propertyvista.admin.domain.security.OnboardingUserCredential;
 import com.propertyvista.admin.server.onboarding.rhf.AbstractRequestHandler;
 import com.propertyvista.biz.communication.CommunicationFacade;
+import com.propertyvista.biz.system.PmcFacade;
 import com.propertyvista.domain.security.OnboardingUser;
 import com.propertyvista.onboarding.OnboardingUserSendPasswordResetTokenRequestIO;
 import com.propertyvista.onboarding.ResponseIO;
@@ -67,13 +68,20 @@ public class OnboardingUserSendPasswordResetTokenRequestHandler extends Abstract
         }
         OnboardingUser user = users.get(0);
 
-        OnboardingUserCredential cr = Persistence.service().retrieve(OnboardingUserCredential.class, user.getPrimaryKey());
-        if (cr == null) {
+        OnboardingUserCredential credential = Persistence.service().retrieve(OnboardingUserCredential.class, user.getPrimaryKey());
+        if (credential == null) {
             throw new UserRuntimeException("Invalid User Account. Please Contact Support");
         }
-        if (!cr.enabled().isBooleanTrue()) {
+        if (!credential.enabled().isBooleanTrue()) {
             response.success().setValue(Boolean.FALSE);
             return response;
+        }
+
+        if (!credential.pmc().isNull()) {
+            if (!ServerSideFactory.create(PmcFacade.class).isOnboardingEnabled(credential.pmc())) {
+                response.success().setValue(Boolean.FALSE);
+                return response;
+            }
         }
 
         ServerSideFactory.create(CommunicationFacade.class).sendOnboardingPasswordRetrievalToken(user, request.onboardingSystemBaseUrl().getValue());
