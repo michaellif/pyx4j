@@ -208,15 +208,15 @@ public class DashboardGenerator extends Dashboards {
                 defColumn(proto.rentedStatus()).visible(true).build(),
                 defColumn(proto.scoping()).visible(true).build(),
                 defColumn(proto.rentReadinessStatus()).visible(true).build(),
-//                column(proto.unitRent()).build(),
-//                column(proto.marketRent()).build(),
-//                column(proto.rentDeltaAbsolute()).visible(true).build(),
-//                column(proto.rentDeltaRelative()).visible(false).build(),
+                defColumn(proto.unitRent()).build(),
+                defColumn(proto.marketRent()).build(),
+                defColumn(proto.rentDeltaAbsolute()).visible(true).build(),
+                defColumn(proto.rentDeltaRelative()).visible(false).build(),
                 defColumn(proto.rentEndDay()).visible(true).build(),
                 defColumn(proto.moveInDay()).visible(true).build(),
                 defColumn(proto.rentedFromDay()).visible(true).build(),
-                defColumn(proto.daysVacant()).build()
-//                column(proto.revenueLost()).build()
+                defColumn(proto.daysVacant()).build(),
+                defColumn(proto.revenueLost()).build()
         );//@formatter:on
     }
 

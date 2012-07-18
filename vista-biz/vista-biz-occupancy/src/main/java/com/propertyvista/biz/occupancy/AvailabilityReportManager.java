@@ -15,10 +15,11 @@ package com.propertyvista.biz.occupancy;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
-import java.math.RoundingMode;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Vector;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
@@ -32,6 +33,9 @@ import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityS
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus.RentedStatus;
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus.Scoping;
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus.Vacancy;
+import com.propertyvista.domain.financial.offering.ProductItem;
+import com.propertyvista.domain.financial.offering.Service;
+import com.propertyvista.domain.financial.offering.Service.ServiceType;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.Status;
@@ -269,11 +273,10 @@ public class AvailabilityReportManager {
         status.building().set(unit.building());
         status.floorplan().set(unit.floorplan());
 
-        // TODO market rent (market rent should be fetched from building catalog
-        BigDecimal marketRent = null;
+        BigDecimal marketRent = getMarketRent();
         BigDecimal unitRent = status.unitRent().getValue();
 
-        MathContext ctx = new MathContext(2, RoundingMode.UP);
+        MathContext ctx = MathContext.DECIMAL128;
         status.unitRent().setValue(unitRent);
         status.marketRent().setValue(marketRent);
 
@@ -306,4 +309,28 @@ public class AvailabilityReportManager {
         Persistence.service().delete(criteria);
     }
 
+    private BigDecimal getMarketRent() {
+        BigDecimal residentialUnitMarketRent = null;
+
+        EntityQueryCriteria<Service> criteria = EntityQueryCriteria.create(Service.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().catalog().building(), unit.building()));
+        criteria.add(PropertyCriterion.in(criteria.proto().version().type(),
+                new Vector<Service.ServiceType>(Arrays.asList(Service.ServiceType.residentialUnit, Service.ServiceType.commercialUnit))));
+
+        List<Service> services = Persistence.secureQuery(criteria);
+
+        for (Service service : services) {
+            Persistence.service().retrieve(service.version().items());
+            for (ProductItem item : service.version().items()) {
+                if (item.element().getInstanceValueClass().equals(AptUnit.class) & item.element().getPrimaryKey().equals(unit.getPrimaryKey())) {
+                    if (service.version().type().getValue() == ServiceType.residentialUnit) {
+                        residentialUnitMarketRent = item.price().getValue();
+                        break;
+                    }
+                }
+            }
+        }
+
+        return residentialUnitMarketRent;
+    }
 }

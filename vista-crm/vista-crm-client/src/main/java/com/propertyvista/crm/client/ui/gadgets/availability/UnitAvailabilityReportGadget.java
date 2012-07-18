@@ -103,15 +103,15 @@ public class UnitAvailabilityReportGadget extends AbstractGadget<UnitAvailabilit
                     new MemberColumnDescriptor.Builder(proto.rentedStatus()).visible(true).build(),
                     new MemberColumnDescriptor.Builder(proto.scoping()).visible(true).build(),
                     new MemberColumnDescriptor.Builder(proto.rentReadinessStatus()).visible(true).build(),
-//                    new MemberColumnDescriptor.Builder(proto.unitRent()).build(),
-//                    new MemberColumnDescriptor.Builder(proto.marketRent()).build(),
-//                    new MemberColumnDescriptor.Builder(proto.rentDeltaAbsolute()).visible(true).build(),
-//                    new MemberColumnDescriptor.Builder(proto.rentDeltaRelative()).visible(false).build(),
+                    new MemberColumnDescriptor.Builder(proto.unitRent()).build(),
+                    new MemberColumnDescriptor.Builder(proto.marketRent()).build(),
+                    new MemberColumnDescriptor.Builder(proto.rentDeltaAbsolute()).visible(true).build(),
+                    new MemberColumnDescriptor.Builder(proto.rentDeltaRelative()).visible(false).build(),
                     new MemberColumnDescriptor.Builder(proto.rentEndDay()).visible(true).build(),
                     new MemberColumnDescriptor.Builder(proto.moveInDay()).visible(true).build(),
                     new MemberColumnDescriptor.Builder(proto.rentedFromDay()).visible(true).build(),
-                    new MemberColumnDescriptor.Builder(proto.daysVacant()).build()
-//                    new MemberColumnDescriptor.Builder(proto.revenueLost()).build()
+                    new MemberColumnDescriptor.Builder(proto.daysVacant()).build(),
+                    new MemberColumnDescriptor.Builder(proto.revenueLost()).build()
             )));//@formatter:on
             return settings;
         }
