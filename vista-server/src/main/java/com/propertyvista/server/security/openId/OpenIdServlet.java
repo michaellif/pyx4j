@@ -31,6 +31,7 @@ import com.pyx4j.essentials.server.dev.DevSession;
 import com.pyx4j.gwt.server.IOUtils;
 
 import com.propertyvista.server.common.security.DevelopmentSecurity;
+import com.propertyvista.shared.config.VistaDemo;
 
 @SuppressWarnings("serial")
 public class OpenIdServlet extends HttpServlet {
@@ -57,7 +58,7 @@ public class OpenIdServlet extends HttpServlet {
         OpenIdResponse openIdResponse = OpenId.readResponse(request, DOMAIN);
         if (openIdResponse == null) {
             log.debug("Can't find authentication information in OpenId URL");
-            createResponsePage(response, true, "Login via Google Apps",
+            createResponsePage(response, true, VistaDemo.isDemo() ? "Login using your PropertyVista account" : "Login via Google Apps",
                     OpenId.getDestinationUrl(OpenIdServlet.DOMAIN, ServerSideConfiguration.instance().getMainApplicationURL()));
         } else {
             log.info("openIdResponse.email [{}]", openIdResponse.email);
@@ -86,16 +87,23 @@ public class OpenIdServlet extends HttpServlet {
         response.setDateHeader("X-StatusDate", System.currentTimeMillis());
         response.setContentType("text/html");
         PrintWriter out = response.getWriter();
-        out.println("<html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />");
-        out.println("<title>Access " + (signIn ? " Restricted" : " Granted") + " </title></head><body>");
-        out.println("<a id=\"" + (signIn ? "googleSignIn" : "continue") + "\" href=\"" + location + "\">" + message + "</A>");
+
+        String body = IOUtils.getTextResource("body.html", OpenIdServlet.class);
+        body = body.replace("${title}", "Access " + (signIn ? " Restricted" : " Granted"));
+
+        body = body.replace("${name}", VistaDemo.isDemo() ? "PropertyVista Demo " : "" + "Access " + (signIn ? " Restricted" : " Granted"));
+
+        body = body.replace("${text}", "<a id=\"" + (signIn ? "googleSignIn" : "continue") + "\" href=\"" + location + "\">" + message + "</a>");
+
+        String rc_message;
         if (signIn) {
-            out.print(IOUtils.getTextResource("signin-wellcome.html", OpenIdServlet.class));
+            rc_message = IOUtils.getTextResource("signin-wellcome.html", OpenIdServlet.class);
         } else {
-            out.print(IOUtils.getTextResource("login-successful.html", OpenIdServlet.class));
+            rc_message = IOUtils.getTextResource("login-successful.html", OpenIdServlet.class);
         }
-        out.print("</body></html>");
+        body = body.replace("${rc_message}", rc_message);
+
+        out.print(body);
         out.flush();
     }
-
 }
