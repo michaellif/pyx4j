@@ -65,6 +65,7 @@ import com.propertyvista.misc.VistaDataPreloaderParameter;
 import com.propertyvista.misc.VistaDevPreloadConfig;
 import com.propertyvista.portal.server.preloader.PmcCreatorDev;
 import com.propertyvista.server.config.VistaServerSideConfiguration;
+import com.propertyvista.shared.config.VistaDemo;
 
 @SuppressWarnings("serial")
 public class DBResetServlet extends HttpServlet {
@@ -202,8 +203,12 @@ public class DBResetServlet extends HttpServlet {
                             case allWithMockup:
                             case allAddMockup:
                             case allMini:
-                                for (DemoPmc demoPmc : EnumSet.allOf(DemoPmc.class)) {
-                                    preloadPmc(req, buf, prodPmcNameCorrections(demoPmc.name()), type);
+                                if (VistaDemo.isDemo()) {
+                                    preloadPmc(req, buf, prodPmcNameCorrections("demo"), type);
+                                } else {
+                                    for (DemoPmc demoPmc : EnumSet.allOf(DemoPmc.class)) {
+                                        preloadPmc(req, buf, prodPmcNameCorrections(demoPmc.name()), type);
+                                    }
                                 }
                                 break;
                             case addPmcMockup:
