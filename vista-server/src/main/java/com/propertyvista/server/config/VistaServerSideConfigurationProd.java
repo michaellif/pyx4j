@@ -120,7 +120,7 @@ public class VistaServerSideConfigurationProd extends VistaServerSideConfigurati
 
     @Override
     public String getApplicationEmailSender() {
-        return "\"Property Vista\" <no-reply@propertyvista>";
+        return "\"Property Vista\" <no-reply@propertyvista.com>";
     }
 
     @Override
