@@ -42,7 +42,7 @@ public class GadgetCategoryWrapper {
      *            must not be <code>null</code>, and contain at least one gadget.
      */
     public GadgetCategoryWrapper(String category, List<IGadgetFactory> gadgets) {
-        this(category, new LinkedList<String>(), gadgets);
+        this(category, Collections.<String> emptyList(), gadgets);
     }
 
     private GadgetCategoryWrapper(String category, List<String> history, List<IGadgetFactory> gadgets) {

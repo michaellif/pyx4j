@@ -13,8 +13,8 @@
  */
 package com.propertyvista.crm.client.ui.crud.customer.lead;
 
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
@@ -174,7 +174,7 @@ public class LeadForm extends CrmEntityForm<Lead> {
     private class FloorplanSelectorDialogDialog extends EntitySelectorTableDialog<Floorplan> {
 
         public FloorplanSelectorDialogDialog() {
-            super(Floorplan.class, false, new ArrayList<Floorplan>(1), i18n.tr("Building/Floorplan Selection"));
+            super(Floorplan.class, false, Collections.<Floorplan> emptyList(), i18n.tr("Building/Floorplan Selection"));
             setWidth("600px");
         }
 

@@ -14,7 +14,7 @@
 package com.propertyvista.crm.client.ui.crud.unit;
 
 import java.util.Arrays;
-import java.util.LinkedList;
+import java.util.Collections;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
@@ -189,7 +189,7 @@ public class UnitForm extends CrmEntityForm<AptUnitDTO> {
         private final AsyncCallback<Floorplan> onSelectedCallback;
 
         public BuildingBoundFloorplanSelectorDialog(Key ownerBuildingPk, AsyncCallback<Floorplan> onSelectedCallback) {
-            super(Floorplan.class, false, new LinkedList<Floorplan>(), i18n.tr("Select Floorplan"));
+            super(Floorplan.class, false, Collections.<Floorplan> emptyList(), i18n.tr("Select Floorplan"));
             setParentFiltering(ownerBuildingPk);
             this.onSelectedCallback = onSelectedCallback;
         }
