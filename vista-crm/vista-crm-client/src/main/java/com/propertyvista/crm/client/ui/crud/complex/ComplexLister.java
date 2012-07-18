@@ -25,10 +25,10 @@ public class ComplexLister extends ListerBase<ComplexDTO> {
 
         setColumnDescriptors(//@formatter:off
             new MemberColumnDescriptor.Builder(proto().name()).build(), 
-            new MemberColumnDescriptor.Builder(proto().address().city()).sortable(false).build(),
-            new MemberColumnDescriptor.Builder(proto().address().province()).sortable(false).build(),
-            new MemberColumnDescriptor.Builder(proto().address().country()).sortable(false).build(),
-            new MemberColumnDescriptor.Builder(proto().primaryBuilding()).sortable(false).build()
+            new MemberColumnDescriptor.Builder(proto().address().city()).sortable(false).searchable(false).build(),
+            new MemberColumnDescriptor.Builder(proto().address().province()).sortable(false).searchable(false).build(),
+            new MemberColumnDescriptor.Builder(proto().address().country()).sortable(false).searchable(false).build(),
+            new MemberColumnDescriptor.Builder(proto().primaryBuilding()).sortable(false).searchable(false).build()
         );//@formatter:on
     }
 }
