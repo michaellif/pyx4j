@@ -19,6 +19,7 @@ import com.pyx4j.server.contexts.NamespaceManager;
 import com.propertyvista.domain.DemoData.DemoPmc;
 import com.propertyvista.misc.VistaDataPreloaderParameter;
 import com.propertyvista.misc.VistaDevPreloadConfig;
+import com.propertyvista.portal.server.preloader.site.demo.DemoSitePreloader;
 import com.propertyvista.portal.server.preloader.site.prod.ProdSitePreloader;
 import com.propertyvista.portal.server.preloader.site.redridge.RedridgeSitePreloader;
 import com.propertyvista.portal.server.preloader.site.rockville.RockvilleSitePreloader;
@@ -69,6 +70,8 @@ public class VistaDataPreloaders extends DataPreloaderCollection {
         if (demoPmc == null) {
             if (NamespaceManager.getNamespace().equals("starlight")) {
                 add(new StarlightSitePreloader());
+            } else if (NamespaceManager.getNamespace().equals("demo")) {
+                add(new DemoSitePreloader());
             } else {
                 add(new ProdSitePreloader());
             }
