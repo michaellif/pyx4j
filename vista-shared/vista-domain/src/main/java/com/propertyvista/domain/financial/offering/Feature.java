@@ -13,7 +13,9 @@
  */
 package com.propertyvista.domain.financial.offering;
 
+import java.util.Collection;
 import java.util.Date;
+import java.util.EnumSet;
 
 import javax.xml.bind.annotation.XmlType;
 
@@ -65,6 +67,14 @@ public interface Feature extends Product, IVersionedEntity<FeatureV> {
         @Override
         public String toString() {
             return I18nEnum.toString(this);
+        }
+
+        public static Collection<Type> nonMandatory() {
+            return EnumSet.of(pet);
+        }
+
+        public static Collection<Type> nonReccuring() {
+            return EnumSet.of(booking);
         }
     }
 

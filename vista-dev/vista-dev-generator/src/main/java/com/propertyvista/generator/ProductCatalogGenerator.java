@@ -18,7 +18,6 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 
-
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
 import com.pyx4j.essentials.server.preloader.DataGenerator;
@@ -176,8 +175,8 @@ public class ProductCatalogGenerator {
         item.version().name().setValue(RandomUtil.randomLetters(6));
         item.version().description().setValue("Feature description");
 
-        item.version().recurring().setValue(RandomUtil.randomBoolean());
-        item.version().mandatory().setValue(RandomUtil.randomBoolean());
+        item.version().recurring().setValue(RandomUtil.randomBoolean() && !Feature.Type.nonReccuring().contains(type));
+        item.version().mandatory().setValue(RandomUtil.randomBoolean() && !Feature.Type.nonMandatory().contains(type));
 
         item.version().items().addAll(createFeatureItems(type));
         if (item.version().mandatory().isBooleanTrue()) {

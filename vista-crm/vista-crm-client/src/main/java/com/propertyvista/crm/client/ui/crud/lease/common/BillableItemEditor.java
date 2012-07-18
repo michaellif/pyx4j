@@ -200,8 +200,8 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
 
     @Override
     protected void onValuePropagation(BillableItem value, boolean fireEvent, boolean populate) {
-        super.onValuePropagation(value, fireEvent, populate);
         setExtraDataEditor(value, populate);
+        super.onValuePropagation(value, fireEvent, populate);
     }
 
     @Override
