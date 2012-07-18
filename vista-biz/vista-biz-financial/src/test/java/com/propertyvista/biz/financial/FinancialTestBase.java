@@ -388,14 +388,12 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
 
                 List<Deposit> deposits = leaseFacade.createBillableItemDeposits(billableItem, draftLease.unit().building());
                 if (deposits != null) {
+                    Persistence.service().retrieve(draftLease.billingAccount().deposits());
                     draftLease.billingAccount().deposits().addAll(deposits);
                 }
 
                 draftLease.saveAction().setValue(saveAction);
                 leaseFacade.persist(draftLease);
-//                Persistence.service().persist(draftLease);
-//                Persistence.service().merge(draftLease.billingAccount().deposits());
-                Persistence.service().commit();
 
                 return billableItem;
             }
@@ -410,9 +408,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         Persistence.service().retrieve(lease.billingAccount().deposits());
         lease.billingAccount().deposits().add(deposit);
         lease.saveAction().setValue(saveAction);
-        Persistence.service().persist(lease);
-        Persistence.service().merge(lease.billingAccount().deposits());
-        Persistence.service().commit();
+        ServerSideFactory.create(LeaseFacade.class).persist(lease);
     }
 
     protected BillableItemAdjustment addServiceAdjustment(String value, BillableItemAdjustment.Type adjustmentType) {
