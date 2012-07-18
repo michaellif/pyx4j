@@ -256,7 +256,7 @@ public class PaymentForm extends CEntityDecoratableForm<PaymentRecordDTO> {
 
     private void setProfiledPaymentMethodsVisible(boolean visible) {
         profiledPaymentMethodsCombo.setVisible(visible && !isViewable());
-        get(proto().addThisPaymentMethodToProfile()).setVisible(!visible && !isViewable());
+        get(proto().addThisPaymentMethodToProfile()).setVisible(!visible && !isViewable() && !getValue().paymentMethod().type().isNull());
         setupAddThisPaymentMethodToProfile(getValue().paymentMethod().type().getValue());
     }
 

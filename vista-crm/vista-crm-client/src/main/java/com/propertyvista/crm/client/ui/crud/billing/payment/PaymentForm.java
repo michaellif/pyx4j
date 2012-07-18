@@ -182,6 +182,8 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
         get(proto().receivedDate()).setViewable(true);
         get(proto().lastStatusChangeDate()).setViewable(true);
 
+        get(proto().addThisPaymentMethodToProfile()).setVisible(false);
+
         get(proto().leaseParticipant()).addValueChangeHandler(new ValueChangeHandler<LeaseParticipant>() {
             @Override
             public void onValueChange(ValueChangeEvent<LeaseParticipant> event) {
@@ -326,7 +328,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
 
     private void setProfiledPaymentMethodsVisible(boolean visible) {
         profiledPaymentMethodsCombo.setVisible(visible && !isViewable());
-        get(proto().addThisPaymentMethodToProfile()).setVisible(!visible && !isViewable());
+        get(proto().addThisPaymentMethodToProfile()).setVisible(!visible && !isViewable() && !getValue().paymentMethod().type().isNull());
         setupAddThisPaymentMethodToProfile(getValue().paymentMethod().type().getValue());
     }
 
