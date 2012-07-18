@@ -102,6 +102,11 @@ public class VistaTestsServerSideConfiguration extends AbstractVistaServerSideCo
     }
 
     @Override
+    public boolean isVistaDemo() {
+        return false;
+    }
+
+    @Override
     public String getMainApplicationURL() {
         return "http://www.propertyvista.com/";
     }
@@ -135,4 +140,5 @@ public class VistaTestsServerSideConfiguration extends AbstractVistaServerSideCo
     public String getCaledonCompanyId() {
         return "vista_test";
     }
+
 }

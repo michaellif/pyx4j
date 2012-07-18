@@ -15,9 +15,11 @@ package com.propertyvista.domain;
 
 import com.pyx4j.commons.CommonsStringUtils;
 
+import com.propertyvista.shared.config.VistaDemo;
+
 public class DemoData {
 
-    public static final boolean vistaDemo = false;
+    public static final boolean vistaDemo = VistaDemo.isDemo();
 
     public static enum DemoPmc {
         vista, redridge, rockville, star;

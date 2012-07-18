@@ -50,6 +50,7 @@ import com.pyx4j.widgets.client.Button;
 import com.propertyvista.common.client.theme.HorizontalAlignCenterMixin;
 import com.propertyvista.common.client.ui.components.login.AbstractLoginViewImpl.DevLoginData;
 import com.propertyvista.domain.DemoData;
+import com.propertyvista.shared.config.VistaDemo;
 
 public class LoginForm extends CEntityForm<AuthenticationRequest> {
 
@@ -78,7 +79,7 @@ public class LoginForm extends CEntityForm<AuthenticationRequest> {
         this.caption = caption;
         this.loginCommand = loginCommand;
         this.resetPasswordCommand = resetPasswordCommand;
-        if (ApplicationMode.isDevelopment()) {
+        if (ApplicationMode.isDevelopment() || VistaDemo.isDemo()) {
             resetDevLoginHistory();
             this.devLoginValues = devLoginValues;
         } else {
@@ -137,7 +138,7 @@ public class LoginForm extends CEntityForm<AuthenticationRequest> {
         wallMessagePanel = new FlowPanel();
         main.add(wallMessagePanel);
 
-        if (ApplicationMode.isDevelopment() & devLoginValues != null) {
+        if ((ApplicationMode.isDevelopment() || VistaDemo.isDemo()) && devLoginValues != null) {
             main.add(createDevMessagePanel());
         }
 
@@ -150,7 +151,8 @@ public class LoginForm extends CEntityForm<AuthenticationRequest> {
                     handlerRegistration = Event.addNativePreviewHandler(new NativePreviewHandler() {
                         @Override
                         public void onPreviewNativeEvent(NativePreviewEvent event) {
-                            if ((ApplicationMode.isDevelopment()) && (event.getTypeInt() == Event.ONKEYDOWN && event.getNativeEvent().getCtrlKey())) {
+                            if ((ApplicationMode.isDevelopment() || VistaDemo.isDemo())
+                                    && (event.getTypeInt() == Event.ONKEYDOWN && event.getNativeEvent().getCtrlKey())) {
                                 if (onDevLoginRequest(event.getNativeEvent().getKeyCode())) {
                                     event.getNativeEvent().preventDefault();
                                 }

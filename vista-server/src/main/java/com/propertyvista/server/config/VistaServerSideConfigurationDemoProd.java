@@ -22,6 +22,11 @@ import com.propertyvista.portal.rpc.DeploymentConsts;
 public class VistaServerSideConfigurationDemoProd extends VistaServerSideConfiguration {
 
     @Override
+    public boolean isVistaDemo() {
+        return true;
+    }
+
+    @Override
     public boolean openDBReset() {
         return false;
     }

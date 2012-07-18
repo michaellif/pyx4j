@@ -30,6 +30,8 @@ public abstract class AbstractVistaServerSideConfiguration extends EssentialsSer
         return rc;
     }
 
+    public abstract boolean isVistaDemo();
+
     public abstract boolean openDBReset();
 
     public abstract boolean openIdrequired();

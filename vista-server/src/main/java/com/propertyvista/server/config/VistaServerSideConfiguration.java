@@ -195,6 +195,11 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
     }
 
     @Override
+    public boolean isVistaDemo() {
+        return false;
+    }
+
+    @Override
     public boolean isProductionBackend() {
         return VistaDeployment.isVistaProduction();
     }
