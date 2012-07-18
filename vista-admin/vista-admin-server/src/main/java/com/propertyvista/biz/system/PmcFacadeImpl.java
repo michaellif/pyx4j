@@ -13,9 +13,11 @@
  */
 package com.propertyvista.biz.system;
 
+import java.util.Date;
 import java.util.EnumSet;
 
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.gwt.server.DateUtils;
 
 import com.propertyvista.admin.domain.pmc.OnboardingMerchantAccount;
 import com.propertyvista.admin.domain.pmc.Pmc;
@@ -26,6 +28,14 @@ public class PmcFacadeImpl implements PmcFacade {
     @Override
     public boolean isOnboardingEnabled(Pmc pmc) {
         return EnumSet.of(PmcStatus.Created, PmcStatus.Active, PmcStatus.Suspended).contains(pmc.status().getValue());
+    }
+
+    @Override
+    public void cancelPmc(Pmc pmc) {
+        pmc.status().setValue(PmcStatus.Cancelled);
+        pmc.termination().setValue(DateUtils.monthAdd(new Date(), 1));
+        Persistence.service().persist(pmc);
+        Persistence.service().commit();
     }
 
     @Override

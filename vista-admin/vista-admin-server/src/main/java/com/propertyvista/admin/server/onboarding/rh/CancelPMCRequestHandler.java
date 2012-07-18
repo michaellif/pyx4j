@@ -13,8 +13,6 @@
  */
 package com.propertyvista.admin.server.onboarding.rh;
 
-import java.util.Date;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,12 +21,11 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
-import com.pyx4j.gwt.server.DateUtils;
 
 import com.propertyvista.admin.domain.pmc.Pmc;
-import com.propertyvista.admin.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.admin.server.onboarding.rhf.AbstractRequestHandler;
 import com.propertyvista.biz.system.AuditFacade;
+import com.propertyvista.biz.system.PmcFacade;
 import com.propertyvista.onboarding.CancelPMCRequestIO;
 import com.propertyvista.onboarding.ResponseIO;
 
@@ -55,10 +52,7 @@ public class CancelPMCRequestHandler extends AbstractRequestHandler<CancelPMCReq
             return response;
         } else {
 
-            pmc.status().setValue(PmcStatus.Cancelled);
-            pmc.termination().setValue(DateUtils.monthAdd(new Date(), 1));
-            Persistence.service().persist(pmc);
-            Persistence.service().commit();
+            ServerSideFactory.create(PmcFacade.class).cancelPmc(pmc);
 
             ServerSideFactory.create(AuditFacade.class).info("PMC {0} Cancelled by {1} account {2}", pmc.namespace().getValue(), request.email().getValue(),
                     request.onboardingAccountId().getValue());

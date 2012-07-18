@@ -22,6 +22,8 @@ public interface PmcFacade {
 
     public boolean isOnboardingEnabled(Pmc pmc);
 
+    public void cancelPmc(Pmc pmc);
+
     public void terminateCancelledPmc(Pmc pmcId);
 
 }
