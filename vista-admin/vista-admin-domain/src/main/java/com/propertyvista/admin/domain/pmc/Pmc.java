@@ -41,7 +41,7 @@ import com.propertyvista.domain.settings.PmcVistaFeatures;
 public interface Pmc extends IEntity {
 
     public enum PmcStatus {
-        Created, Active, Suspended
+        Created, Active, Suspended, Cancelled, Terminated
     }
 
     @NotNull
@@ -94,4 +94,5 @@ public interface Pmc extends IEntity {
     @Timestamp(Timestamp.Update.Updated)
     IPrimitive<Date> updated();
 
+    IPrimitive<Date> termination();
 }

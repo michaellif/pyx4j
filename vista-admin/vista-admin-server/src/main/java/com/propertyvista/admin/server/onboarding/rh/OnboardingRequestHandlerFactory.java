@@ -23,6 +23,7 @@ public class OnboardingRequestHandlerFactory extends RequestHandlerFactory {
         bind(OnboardingUserAuthenticationRequestHandler.class);
         bind(CheckAvailabilityRequestHandler.class);
         bind(CreatePmcRequestHandler.class);
+        bind(CancelPMCRequestHandler.class);
         bind(GetReCaptchaPublicKeyRequestHandler.class);
         bind(GetSatisfactionFastpassUrlHandler.class);
         bind(OnboardingUserPasswordChangeRequestHandler.class);
