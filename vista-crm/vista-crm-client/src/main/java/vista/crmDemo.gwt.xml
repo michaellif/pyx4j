@@ -7,7 +7,7 @@
         <when-type-is class="com.pyx4j.config.shared.ApplicationMode.Mode"/>
     </replace-with>
 	<replace-with class="com.propertyvista.common.client.config.VistaDemoConfigurationDemo">
-         <when-type-is class="com.propertyvista.shared.config.VistaFeatures.VistaDemoConfiguration"/>
+         <when-type-is class="com.propertyvista.shared.config.VistaDemo.VistaDemoConfiguration"/>
     </replace-with>
     <set-configuration-property name="pyx.ElideServiceNamesFromRPC" value="obfuscated" />
 </module>

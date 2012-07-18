@@ -14,7 +14,7 @@
     </replace-with>
 
     <replace-with class="com.propertyvista.common.client.config.VistaDemoConfigurationDefault">
-         <when-type-is class="com.propertyvista.shared.config.VistaFeatures.VistaDemoConfiguration"/>
+         <when-type-is class="com.propertyvista.shared.config.VistaDemo.VistaDemoConfiguration"/>
     </replace-with>
     
     <extend-configuration-property name="rpc.blacklist" value="com.propertyvista.domain.security.AbstractUserCredential" />
