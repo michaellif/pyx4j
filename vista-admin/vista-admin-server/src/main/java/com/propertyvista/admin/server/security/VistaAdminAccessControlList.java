@@ -42,6 +42,7 @@ import com.propertyvista.admin.rpc.services.PmcDataReportService;
 import com.propertyvista.admin.rpc.services.SimulationService;
 import com.propertyvista.admin.rpc.services.scheduler.RunCrudService;
 import com.propertyvista.admin.rpc.services.scheduler.RunDataCrudService;
+import com.propertyvista.admin.rpc.services.scheduler.SelectPmcListService;
 import com.propertyvista.admin.rpc.services.scheduler.TriggerCrudService;
 import com.propertyvista.admin.rpc.services.sim.PadSimBatchCrudService;
 import com.propertyvista.admin.rpc.services.sim.PadSimFileCrudService;
@@ -78,6 +79,7 @@ public class VistaAdminAccessControlList extends ServletContainerAclBuilder {
         grant(VistaAdminBehavior.SystemAdmin, new IServiceExecutePermission(TriggerCrudService.class));
         grant(VistaAdminBehavior.SystemAdmin, new IServiceExecutePermission(RunCrudService.class));
         grant(VistaAdminBehavior.SystemAdmin, new IServiceExecutePermission(RunDataCrudService.class));
+        grant(VistaAdminBehavior.SystemAdmin, new IServiceExecutePermission(SelectPmcListService.class));
 
         grant(VistaAdminBehavior.SystemAdmin, new EntityPermission(Trigger.class, EntityPermission.ALL));
         grant(VistaAdminBehavior.SystemAdmin, new EntityPermission(Run.class, EntityPermission.ALL));
