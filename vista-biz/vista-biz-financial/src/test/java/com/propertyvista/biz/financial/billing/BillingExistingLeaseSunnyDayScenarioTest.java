@@ -22,30 +22,29 @@ package com.propertyvista.biz.financial.billing;
 
 import java.math.BigDecimal;
 
-import org.junit.Ignore;
-
 import com.pyx4j.config.server.ServerSideFactory;
 
 import com.propertyvista.biz.financial.FinancialTestBase;
 import com.propertyvista.biz.financial.SysDateManager;
 import com.propertyvista.biz.financial.ar.ARFacade;
+import com.propertyvista.biz.financial.preload.PreloadConfig;
 import com.propertyvista.domain.financial.billing.Bill;
 
-@Ignore
 public class BillingExistingLeaseSunnyDayScenarioTest extends FinancialTestBase {
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        SysDateManager.setSysDate("17-May-2011");
-        preloadData();
+        PreloadConfig config = new PreloadConfig();
+        config.existingLease = true;
+        preloadData(config);
     }
 
     public void testScenario() {
 
         SysDateManager.setSysDate("17-May-2011");
 
-        setLeaseTerms("1-Mar-2011", "31-Aug-2011", null, new BigDecimal("300.00"));
+        setLeaseTerms("1-Mar-2009", "31-Aug-2011", null, new BigDecimal("300.00"));
 
         Bill bill = approveExistingLease();
 

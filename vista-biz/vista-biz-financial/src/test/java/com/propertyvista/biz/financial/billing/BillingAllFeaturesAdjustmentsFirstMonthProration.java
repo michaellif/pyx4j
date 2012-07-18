@@ -20,8 +20,6 @@
  */
 package com.propertyvista.biz.financial.billing;
 
-import org.junit.Ignore;
-
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
 
@@ -33,7 +31,6 @@ import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.Type;
 
-@Ignore
 public class BillingAllFeaturesAdjustmentsFirstMonthProration extends FinancialTestBase {
 
     @Override
@@ -942,11 +939,11 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProration extends FinancialT
         billingPeriodStartDate("05-Feb-2012").
         billingPeriodEndDate("14-Feb-2012").
         numOfProductCharges(5).
-        serviceCharge("237.16").
+        serviceCharge("237.17").
         recurringFeatureCharges("60.90").
         depositAmount("1350.30").
         taxes("35.77").
-        totalDueAmount("1684.13");
+        totalDueAmount("1684.14");
         
         // @formatter:on
 

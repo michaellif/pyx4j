@@ -22,23 +22,23 @@ package com.propertyvista.biz.financial.billing;
 
 import java.math.BigDecimal;
 
-import org.junit.Ignore;
-
 import com.pyx4j.config.server.ServerSideFactory;
 
 import com.propertyvista.biz.financial.FinancialTestBase;
 import com.propertyvista.biz.financial.SysDateManager;
 import com.propertyvista.biz.financial.ar.ARFacade;
+import com.propertyvista.biz.financial.preload.PreloadConfig;
 import com.propertyvista.domain.financial.billing.Bill;
 
-@Ignore
 public class BillingZeroCycleScenarioTest extends FinancialTestBase {
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        SysDateManager.setSysDate("17-Mar-2011"); // create existing lease
-        preloadData();
+        PreloadConfig config = new PreloadConfig();
+        config.existingLease = true;
+        preloadData(config);
+
     }
 
     public void testCarryForwardOwingScenario() {
@@ -46,7 +46,7 @@ public class BillingZeroCycleScenarioTest extends FinancialTestBase {
         SysDateManager.setSysDate("17-Mar-2011"); // create existing lease
 
         // When we create Existing Lease, the tenant is already living in the building
-        setLeaseTerms("1-Jan-2011", "31-Dec-2011", new BigDecimal("900.00"), new BigDecimal("300.00"));
+        setLeaseTerms("1-Mar-2009", "31-Dec-2011", new BigDecimal("900.00"), new BigDecimal("300.00"));
 
         //==================== RUN 1 ======================//
 
@@ -103,7 +103,7 @@ public class BillingZeroCycleScenarioTest extends FinancialTestBase {
         SysDateManager.setSysDate("17-Mar-2011"); // create existing lease
 
         // When we create Existing Lease, the tenant is already living in the building
-        setLeaseTerms("1-Jan-2011", "31-Dec-2011", new BigDecimal("900.00"), new BigDecimal("-100.00"));
+        setLeaseTerms("1-Mar-2009", "31-Dec-2011", new BigDecimal("900.00"), new BigDecimal("-100.00"));
 
         //==================== RUN 1 ======================//
 

@@ -152,6 +152,8 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
     }
 
     protected void preloadData(PreloadConfig config) {
+        setDate("01-Jan-2010");
+
         LocationsDataModel locationsDataModel = new LocationsDataModel(config);
         locationsDataModel.generate();
 
@@ -264,10 +266,9 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         lease.leaseTo().setValue(FinancialTestsUtils.getDate(leaseDateTo));
 
         lease.billingAccount().carryforwardBalance().setValue(carryforwardBalance);
-        if (carryforwardBalance == null) {
-            lease.version().status().setValue(Lease.Status.Application);
-        } else {
-            lease.version().status().setValue(Lease.Status.Created);
+
+        if (carryforwardBalance != null) {
+            lease.creationDate().setValue(new LogicalDate(SysDateManager.getSysDate()));
         }
 
         if (agreedPrice != null) {

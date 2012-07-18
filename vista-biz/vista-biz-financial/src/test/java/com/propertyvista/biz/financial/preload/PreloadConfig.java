@@ -21,4 +21,6 @@ public class PreloadConfig {
 
     public LeaseBillingPolicy.BillConfirmationMethod billConfirmationMethod = LeaseBillingPolicy.BillConfirmationMethod.manual;
 
+    public boolean existingLease = false;
+
 }

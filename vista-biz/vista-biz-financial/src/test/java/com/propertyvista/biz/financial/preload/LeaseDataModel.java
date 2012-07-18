@@ -21,6 +21,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.shared.EntityFactory;
 
+import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.biz.policy.IdAssignmentFacade;
 import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.domain.financial.offering.ProductItem;
@@ -34,6 +35,8 @@ import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 
 public class LeaseDataModel {
 
+    private final PreloadConfig config;
+
     private Lease lease;
 
     private ProductItem serviceItem;
@@ -43,6 +46,7 @@ public class LeaseDataModel {
     private final BuildingDataModel buildingDataModel;
 
     public LeaseDataModel(PreloadConfig config, BuildingDataModel buildingDataModel, TenantDataModel tenantDataModel) {
+        this.config = config;
         this.buildingDataModel = buildingDataModel;
         this.tenantDataModel = tenantDataModel;
 
@@ -70,7 +74,12 @@ public class LeaseDataModel {
 
         addTenants();
 
-        lease.version().status().setValue(Status.Application);
+        if (config.existingLease) {
+            lease.version().status().setValue(Status.Created);
+        } else {
+            lease.version().status().setValue(Status.Application);
+            ServerSideFactory.create(OccupancyFacade.class).scopeAvailable(serviceItem.element().cast().getPrimaryKey());
+        }
         lease = ServerSideFactory.create(LeaseFacade.class).init(lease);
         lease = ServerSideFactory.create(LeaseFacade.class).setUnit(lease, (AptUnit) serviceItem.element().cast());
         lease = ServerSideFactory.create(LeaseFacade.class).persist(lease);

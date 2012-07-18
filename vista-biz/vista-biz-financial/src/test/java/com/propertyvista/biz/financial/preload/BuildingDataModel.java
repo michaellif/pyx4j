@@ -25,6 +25,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
 
+import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.FeatureItemType;
 import com.propertyvista.domain.financial.offering.ProductItem;
@@ -35,6 +36,7 @@ import com.propertyvista.domain.property.asset.LockerArea;
 import com.propertyvista.domain.property.asset.Parking;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 
 public class BuildingDataModel {
 
@@ -64,6 +66,11 @@ public class BuildingDataModel {
     public AptUnit generateResidentialUnit() {
         AptUnit unit = EntityFactory.create(AptUnit.class);
         unit.building().set(building);
+        AptUnitOccupancySegment segment = EntityFactory.create(AptUnitOccupancySegment.class);
+        segment.dateFrom().setValue(OccupancyFacade.MIN_DATE);
+        segment.dateTo().setValue(OccupancyFacade.MAX_DATE);
+        segment.status().setValue(AptUnitOccupancySegment.Status.pending);
+        unit.unitOccupancySegments().add(segment);
         Persistence.service().persist(unit);
         return unit;
     }
