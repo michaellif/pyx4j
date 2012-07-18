@@ -20,6 +20,7 @@ import java.util.Locale;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.cache.CacheService;
 import com.pyx4j.entity.security.EntityPermission;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
@@ -29,6 +30,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.shared.SecurityController;
+import com.pyx4j.server.contexts.Context;
 import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.admin.domain.pmc.OnboardingMerchantAccount;
@@ -39,6 +41,8 @@ import com.propertyvista.admin.domain.security.OnboardingUserCredential;
 import com.propertyvista.admin.rpc.PmcDTO;
 import com.propertyvista.admin.rpc.services.PmcCrudService;
 import com.propertyvista.admin.server.onboarding.PmcNameValidator;
+import com.propertyvista.biz.system.AuditFacade;
+import com.propertyvista.biz.system.PmcFacade;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.security.OnboardingUser;
 import com.propertyvista.domain.security.VistaBasicBehavior;
@@ -63,6 +67,15 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
         bind(dtoProto.features(), dboProto.features());
         bind(dtoProto.created(), dboProto.created());
         bind(dtoProto.updated(), dboProto.updated());
+    }
+
+    @Override
+    protected void enhanceRetrieved(Pmc entity, PmcDTO dto) {
+        super.enhanceRetrieved(entity, dto);
+
+        dto.vistaCrmUrl().setValue(VistaDeployment.getBaseApplicationURL(entity, VistaBasicBehavior.CRM, true));
+        dto.residentPortalUrl().setValue(VistaDeployment.getBaseApplicationURL(entity, VistaBasicBehavior.TenantPortal, false));
+        dto.prospectPortalUrl().setValue(VistaDeployment.getBaseApplicationURL(entity, VistaBasicBehavior.ProspectiveApp, true));
     }
 
     @Override
@@ -182,11 +195,26 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
     }
 
     @Override
-    protected void enhanceRetrieved(Pmc entity, PmcDTO dto) {
-        super.enhanceRetrieved(entity, dto);
+    public void cancelPmc(AsyncCallback<PmcDTO> callback, Key entityId) {
+        SecurityController.assertPermission(EntityPermission.permissionUpdate(Pmc.class));
 
-        dto.vistaCrmUrl().setValue(VistaDeployment.getBaseApplicationURL(entity, VistaBasicBehavior.CRM, true));
-        dto.residentPortalUrl().setValue(VistaDeployment.getBaseApplicationURL(entity, VistaBasicBehavior.TenantPortal, false));
-        dto.prospectPortalUrl().setValue(VistaDeployment.getBaseApplicationURL(entity, VistaBasicBehavior.ProspectiveApp, true));
+        Pmc pmc = Persistence.service().retrieve(entityClass, entityId);
+
+        ServerSideFactory.create(PmcFacade.class).cancelPmc(pmc);
+
+        ServerSideFactory.create(AuditFacade.class).info("PMC {0} Cancelled by {1} ", pmc.namespace().getValue(), Context.getVisit().getUserVisit().getEmail());
+
+        Persistence.service().commit();
+        CacheService.reset();
+
+        pmc = Persistence.service().retrieve(entityClass, entityId);
+
+        if (pmc != null) {
+            PmcDTO dto = createDTO(pmc);
+            enhanceRetrieved(pmc, dto);
+            callback.onSuccess(dto);
+        } else {
+            callback.onSuccess(null);
+        }
     }
 }

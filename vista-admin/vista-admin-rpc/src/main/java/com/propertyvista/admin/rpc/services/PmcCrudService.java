@@ -28,4 +28,6 @@ public interface PmcCrudService extends AbstractCrudService<PmcDTO> {
     public void activate(AsyncCallback<PmcDTO> callback, Key entityId);
 
     public void suspend(AsyncCallback<PmcDTO> callback, Key entityId);
+
+    public void cancelPmc(AsyncCallback<PmcDTO> callback, Key entityId);
 }

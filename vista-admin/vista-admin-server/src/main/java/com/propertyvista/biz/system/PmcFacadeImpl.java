@@ -17,11 +17,14 @@ import java.util.Date;
 import java.util.EnumSet;
 
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.gwt.server.DateUtils;
 
 import com.propertyvista.admin.domain.pmc.OnboardingMerchantAccount;
 import com.propertyvista.admin.domain.pmc.Pmc;
 import com.propertyvista.admin.domain.pmc.Pmc.PmcStatus;
+import com.propertyvista.admin.domain.security.OnboardingUserCredential;
 
 public class PmcFacadeImpl implements PmcFacade {
 
@@ -32,10 +35,25 @@ public class PmcFacadeImpl implements PmcFacade {
 
     @Override
     public void cancelPmc(Pmc pmc) {
-        pmc.status().setValue(PmcStatus.Cancelled);
-        pmc.termination().setValue(DateUtils.monthAdd(new Date(), 1));
-        Persistence.service().persist(pmc);
+        if (pmc.status().getValue() == PmcStatus.Created) {
+            remove(pmc);
+        } else {
+            pmc.status().setValue(PmcStatus.Cancelled);
+            pmc.termination().setValue(DateUtils.monthAdd(new Date(), 1));
+            Persistence.service().persist(pmc);
+        }
         Persistence.service().commit();
+    }
+
+    private void remove(Pmc pmc) {
+        EntityQueryCriteria<OnboardingUserCredential> criteria = EntityQueryCriteria.create(OnboardingUserCredential.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().pmc(), pmc));
+        for (OnboardingUserCredential credential : Persistence.service().query(criteria)) {
+            Persistence.service().delete(credential);
+            Persistence.service().delete(credential.user());
+        }
+
+        Persistence.service().delete(pmc);
     }
 
     @Override

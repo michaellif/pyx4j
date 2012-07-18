@@ -68,4 +68,20 @@ public class PmcViewerActivity extends AdminViewerActivity<PmcDTO> implements Pm
             }
         }, getEntityId());
     }
+
+    @Override
+    public void cancelPmc() {
+        ((PmcCrudService) getService()).cancelPmc(new DefaultAsyncCallback<PmcDTO>() {
+
+            @Override
+            public void onSuccess(PmcDTO result) {
+                if (result == null) {
+                    cancel();
+                } else {
+                    populateView(result);
+                }
+            }
+        }, getEntityId());
+    }
+
 }

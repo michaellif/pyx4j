@@ -26,6 +26,8 @@ public interface PmcViewerView extends IViewerView<PmcDTO> {
         void activate();
 
         void suspend();
+
+        void cancelPmc();
     }
 
 }

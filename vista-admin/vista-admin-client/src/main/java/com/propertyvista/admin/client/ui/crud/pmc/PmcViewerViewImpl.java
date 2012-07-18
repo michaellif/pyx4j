@@ -20,7 +20,6 @@ import com.google.gwt.user.client.Window;
 
 import com.pyx4j.widgets.client.Button;
 
-import com.propertyvista.admin.client.activity.crud.pmc.PmcViewerActivity;
 import com.propertyvista.admin.client.ui.crud.AdminViewerViewImplBase;
 import com.propertyvista.admin.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.admin.rpc.AdminSiteMap;
@@ -32,6 +31,8 @@ public class PmcViewerViewImpl extends AdminViewerViewImplBase<PmcDTO> implement
     private final Button suspendBtn;
 
     private final Button activateBtn;
+
+    private final Button cancelBtn;
 
     public PmcViewerViewImpl() {
         super(AdminSiteMap.Management.PMC.class, new PmcForm(true));
@@ -66,16 +67,26 @@ public class PmcViewerViewImpl extends AdminViewerViewImplBase<PmcDTO> implement
 
             @Override
             public void onClick(ClickEvent event) {
-                ((PmcViewerActivity) getPresenter()).resetCache();
+                ((PmcViewerView.Presenter) getPresenter()).resetCache();
             }
         });
         addHeaderToolbarTwoItem(resetCache);
+
+        cancelBtn = new Button("Cancel PMC", new ClickHandler() {
+
+            @Override
+            public void onClick(ClickEvent event) {
+                ((PmcViewerView.Presenter) getPresenter()).cancelPmc();
+
+            }
+        });
+        addHeaderToolbarTwoItem(cancelBtn);
 
         suspendBtn = new Button("Suspend", new ClickHandler() {
 
             @Override
             public void onClick(ClickEvent event) {
-                ((PmcViewerActivity) getPresenter()).suspend();
+                ((PmcViewerView.Presenter) getPresenter()).suspend();
             }
         });
         addHeaderToolbarTwoItem(suspendBtn);
@@ -84,11 +95,12 @@ public class PmcViewerViewImpl extends AdminViewerViewImplBase<PmcDTO> implement
 
             @Override
             public void onClick(ClickEvent event) {
-                ((PmcViewerActivity) getPresenter()).activate();
+                ((PmcViewerView.Presenter) getPresenter()).activate();
 
             }
         });
         addHeaderToolbarTwoItem(activateBtn);
+
     }
 
     @Override
@@ -97,6 +109,7 @@ public class PmcViewerViewImpl extends AdminViewerViewImplBase<PmcDTO> implement
 
         suspendBtn.setVisible(value.status().getValue() == PmcStatus.Active);
         activateBtn.setVisible(value.status().getValue() != PmcStatus.Active);
+        cancelBtn.setVisible(value.status().getValue() != PmcStatus.Cancelled);
     }
 
 }
