@@ -25,6 +25,8 @@ public enum VistaOnboardingBehavior implements Behavior {
 
     ProspectiveClient,
 
-    Client
+    Client,
+
+    VistaDemo,
 
 }
