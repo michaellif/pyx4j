@@ -32,6 +32,7 @@ import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.security.VistaBasicBehavior;
 import com.propertyvista.onboarding.AccountInfoResponseIO;
 import com.propertyvista.onboarding.CreatePMCRequestIO;
+import com.propertyvista.onboarding.OnboardingPmcAccountStatus;
 import com.propertyvista.onboarding.ResponseIO;
 import com.propertyvista.server.common.security.UserAccessUtils;
 
@@ -99,6 +100,7 @@ public class CreatePmcRequestHandler extends AbstractRequestHandler<CreatePMCReq
 
         Persistence.service().commit();
 
+        response.accountStatus().setValue(OnboardingPmcAccountStatus.Application);
         response.vistaCrmUrl().setValue(VistaDeployment.getBaseApplicationURL(pmc, VistaBasicBehavior.CRM, true));
         response.residentPortalUrl().setValue(VistaDeployment.getBaseApplicationURL(pmc, VistaBasicBehavior.TenantPortal, false));
         response.prospectPortalUrl().setValue(VistaDeployment.getBaseApplicationURL(pmc, VistaBasicBehavior.ProspectiveApp, true));

@@ -29,6 +29,7 @@ import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.security.VistaBasicBehavior;
 import com.propertyvista.onboarding.AccountInfoResponseIO;
 import com.propertyvista.onboarding.GetAccountInfoRequestIO;
+import com.propertyvista.onboarding.OnboardingPmcAccountStatus;
 import com.propertyvista.onboarding.ResponseIO;
 
 public class GetAccountInfoRequestHandler extends AbstractRequestHandler<GetAccountInfoRequestIO> {
@@ -60,6 +61,21 @@ public class GetAccountInfoRequestHandler extends AbstractRequestHandler<GetAcco
         if (pmc == null) {
             response.success().setValue(Boolean.FALSE);
             log.info("Error occured.  User {}, action {}", new Object[] { request.onboardingAccountId(), "GetAccountInfo" });
+            return response;
+        }
+
+        switch (pmc.status().getValue()) {
+        case Created:
+            response.accountStatus().setValue(OnboardingPmcAccountStatus.Application);
+            break;
+        case Active:
+            response.accountStatus().setValue(OnboardingPmcAccountStatus.Active);
+            break;
+        case Suspended:
+            response.accountStatus().setValue(OnboardingPmcAccountStatus.Suspended);
+            break;
+        default:
+            response.success().setValue(Boolean.FALSE);
             return response;
         }
 
