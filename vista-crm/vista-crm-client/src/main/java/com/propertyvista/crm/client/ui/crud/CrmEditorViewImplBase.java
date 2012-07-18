@@ -60,8 +60,9 @@ public class CrmEditorViewImplBase<E extends IEntity> extends EditorViewImplBase
                 if (!getForm().isValid()) {
                     getForm().setUnconditionalValidationErrorRendering(true);
                     showValidationDialog();
+                } else {
+                    getPresenter().apply();
                 }
-                getPresenter().apply();
             }
         });
 
