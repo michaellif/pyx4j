@@ -48,7 +48,8 @@ public class ApplicationDocumentationPolicyForm extends PolicyDTOTabPanelBasedFo
     private FormFlexPanel createEdtorFormTab() {
         FormFlexPanel content = new FormFlexPanel(i18n.tr("Settings"));
         int row = -1;
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().allowedIDs(), new IdentificationDocumentFolder())).componentWidth(30).build());
+        content.setH3(++row, 0, 1, proto().allowedIDs().getMeta().getCaption());
+        content.setWidget(++row, 0, inject(proto().allowedIDs(), new IdentificationDocumentFolder()));
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().numberOfRequiredIDs())).componentWidth(3).build());
         return content;
     }
