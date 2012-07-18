@@ -411,6 +411,12 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         ServerSideFactory.create(LeaseFacade.class).persist(lease);
     }
 
+    protected BillableItemAdjustment addServiceAdjustment(String value, BillableItemAdjustment.Type adjustmentType, String effectiveDate, String expirationDate) {
+        Lease lease = retrieveLeaseForEdit();
+        return addBillableItemAdjustment(lease.version().leaseProducts().serviceItem().uid().getValue(), value, adjustmentType,
+                FinancialTestsUtils.getDate(effectiveDate), FinancialTestsUtils.getDate(expirationDate));
+    }
+
     protected BillableItemAdjustment addServiceAdjustment(String value, BillableItemAdjustment.Type adjustmentType) {
         Lease lease = retrieveLeaseForEdit();
         return addBillableItemAdjustment(lease.version().leaseProducts().serviceItem().uid().getValue(), value, adjustmentType, lease.leaseFrom().getValue(),
@@ -451,6 +457,19 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         Persistence.service().commit();
 
         return adjustment;
+    }
+
+    protected void changeBillableItemAdjustment(String billableItemAdjustmentId, String effectiveDate, String expirationDate, SaveAction saveAction) {
+        Lease lease = retrieveLeaseForEdit();
+
+        BillableItemAdjustment billableItemAdjustment = findBillableItemAdjustment(billableItemAdjustmentId, lease);
+
+        billableItemAdjustment.effectiveDate().setValue(FinancialTestsUtils.getDate(effectiveDate));
+        billableItemAdjustment.expirationDate().setValue(FinancialTestsUtils.getDate(expirationDate));
+
+        lease.saveAction().setValue(saveAction);
+        Persistence.service().persist(lease);
+        Persistence.service().commit();
     }
 
     protected LeaseAdjustment addGoodWillCredit(String amount) {
@@ -543,18 +562,32 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
     }
 
     private BillableItem findBillableItem(String billableItemId, Lease lease) {
-        BillableItem billableItem = null;
         if (lease.version().leaseProducts().serviceItem().uid().getValue().equals(billableItemId)) {
-            billableItem = lease.version().leaseProducts().serviceItem();
+            return lease.version().leaseProducts().serviceItem();
         } else {
             for (BillableItem item : lease.version().leaseProducts().featureItems()) {
                 if (item.uid().getValue().equals(billableItemId)) {
-                    billableItem = item;
-                    break;
+                    return item;
                 }
             }
         }
-        return billableItem;
+        return null;
+    }
+
+    private BillableItemAdjustment findBillableItemAdjustment(String billableItemAdjustmentId, Lease lease) {
+        for (BillableItemAdjustment itemAdjustment : lease.version().leaseProducts().serviceItem().adjustments()) {
+            if (itemAdjustment.uid().getValue().equals(billableItemAdjustmentId)) {
+                return itemAdjustment;
+            }
+        }
+        for (BillableItem item : lease.version().leaseProducts().featureItems()) {
+            for (BillableItemAdjustment itemAdjustment : item.adjustments()) {
+                if (itemAdjustment.uid().getValue().equals(billableItemAdjustmentId)) {
+                    return itemAdjustment;
+                }
+            }
+        }
+        return null;
     }
 
     protected static String billFileName(Bill bill, String prefix) {
