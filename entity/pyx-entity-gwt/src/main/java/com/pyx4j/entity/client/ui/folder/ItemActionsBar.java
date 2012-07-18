@@ -26,6 +26,9 @@ import static com.pyx4j.entity.client.ui.folder.DefaultEntityFolderTheme.StyleNa
 import static com.pyx4j.entity.client.ui.folder.DefaultEntityFolderTheme.StyleName.EntityFolderRemoveButton;
 import static com.pyx4j.entity.client.ui.folder.DefaultEntityFolderTheme.StyleName.EntityFolderUpButton;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -59,6 +62,8 @@ public class ItemActionsBar extends HorizontalPanel {
 
     private final IconButton downCommand;
 
+    private final List<IconButton> customControls = new ArrayList<IconButton>();
+
     boolean boxDecorator = false;
 
     public ItemActionsBar(boolean removable) {
@@ -78,7 +83,7 @@ public class ItemActionsBar extends HorizontalPanel {
         upCommand.setStyleName(EntityFolderUpButton.name());
     }
 
-    public void init(IFolderItemDecorator decorator) {
+    public void init(IFolderItemDecorator<?> decorator) {
         EntityFolderImages images = decorator.getImages();
         removeCommand.setImages(images.delButton());
         upCommand.setImages(images.moveUpButton());
@@ -86,6 +91,9 @@ public class ItemActionsBar extends HorizontalPanel {
 
         clear();
         if (decorator instanceof BoxFolderItemDecorator) {
+            for (IconButton btn : customControls) {
+                add(btn);
+            }
             add(upCommand);
             add(downCommand);
             add(removeCommand);
@@ -93,6 +101,9 @@ public class ItemActionsBar extends HorizontalPanel {
             add(removeCommand);
             add(upCommand);
             add(downCommand);
+            for (IconButton btn : customControls) {
+                add(btn);
+            }
         }
     }
 
@@ -152,16 +163,11 @@ public class ItemActionsBar extends HorizontalPanel {
 
     public void addCustomButton(IconButton button) {
         button.setStyleName(EntityFolderCustomButton.name());
-        add(button);
-        if (boxDecorator) {
-            insert(button, 0);
-        } else {
-            add(button);
-        }
+        customControls.add(button);
     }
 
     public void removeCustomButton(IconButton button) {
-        remove(button);
+        customControls.remove(button);
     }
 
     @Override
