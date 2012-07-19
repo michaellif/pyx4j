@@ -53,49 +53,54 @@ public class ImportProcessorUpdateUnitAvailability implements ImportProcessor {
         status.setProgressMaximum(data.buildings().size() * 2);
         int count = 0;
         boolean result = true;
-        for (BuildingIO buildingIO : data.buildings()) {
+        buildings: for (BuildingIO buildingIO : data.buildings()) {
+            count++;
+            status.setProgress(count);
+            if (status.isCanceled()) {
+                break;
+            }
 
             if (buildingIO.propertyCode().isNull()) {
                 buildingIO._import().invalid().setValue(true);
-                buildingIO._import().message().setValue(i18n.tr("Building Property Code is null."));
+                buildingIO._import().message().setValue(i18n.tr("Building Property Code is empty."));
                 result = false;
+                continue buildings;
             }
 
+            Building building;
             // Check if building exists
             {
                 EntityQueryCriteria<Building> buildingCriteria = EntityQueryCriteria.create(Building.class);
                 buildingCriteria.add(PropertyCriterion.eq(buildingCriteria.proto().propertyCode(), buildingIO.propertyCode().getValue()));
                 List<Building> buildings = Persistence.service().query(buildingCriteria);
-                if (buildings.size() == 0) {
-                    buildingIO._import().message().setValue(i18n.tr("Building is not found in the database."));
+                if (buildings.size() != 1) {
+                    buildingIO._import().invalid().setValue(true);
+                    buildingIO._import().message().setValue(i18n.tr("Building ''{0}'' is not found in the database.", buildingIO.propertyCode().getValue()));
                     result = false;
+                    continue buildings;
+                } else {
+                    building = buildings.get(0);
                 }
             }
 
             for (AptUnitIO aptUnitIO : buildingIO.units()) {
                 if (aptUnitIO.number().isNull()) {
                     aptUnitIO._import().invalid().setValue(true);
-                    aptUnitIO._import().message().setValue(i18n.tr("Unit Number is null."));
+                    aptUnitIO._import().message().setValue(i18n.tr("Unit Number is empty."));
                     result = false;
-                }
-
-                // Check if unit exists
-                {
+                } else {
+                    // Check if unit exists
                     EntityQueryCriteria<AptUnit> unitCriteria = EntityQueryCriteria.create(AptUnit.class);
+                    unitCriteria.add(PropertyCriterion.eq(unitCriteria.proto().building(), building));
                     unitCriteria.add(PropertyCriterion.eq(unitCriteria.proto().info().number(), aptUnitIO.number().getValue()));
                     List<AptUnit> units = Persistence.service().query(unitCriteria);
                     if (units.size() == 0) {
-                        aptUnitIO._import().message().setValue(i18n.tr("Unit is not found in the database."));
+                        aptUnitIO._import().invalid().setValue(true);
+                        aptUnitIO._import().message().setValue(i18n.tr("Unit ''{0}''  is not found in the database.", aptUnitIO.number().getValue()));
                         result = false;
                     }
                 }
 
-            }
-
-            count++;
-            status.setProgress(count);
-            if (status.isCanceled()) {
-                break;
             }
         }
         status.setProgress(0);
@@ -143,7 +148,7 @@ public class ImportProcessorUpdateUnitAvailability implements ImportProcessor {
             if (buildings.size() == 1) {
                 building = buildings.get(0);
             } else {
-                throw new UserRuntimeException(i18n.tr("Building {0} not found in the database.", buildingIO.propertyCode()));
+                throw new UserRuntimeException(i18n.tr("Building ''{0}'' not found in the database.", buildingIO.propertyCode().getValue()));
             }
         }
 

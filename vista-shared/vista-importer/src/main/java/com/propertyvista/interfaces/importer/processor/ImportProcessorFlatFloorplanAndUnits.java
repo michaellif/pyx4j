@@ -56,19 +56,25 @@ public class ImportProcessorFlatFloorplanAndUnits implements ImportProcessor {
         status.setProgressMaximum(data.buildings().size() * 2);
         int count = 0;
         boolean result = true;
-        for (BuildingIO buildingIO : data.buildings()) {
+        buildings: for (BuildingIO buildingIO : data.buildings()) {
+            count++;
+            status.setProgress(count);
+            if (status.isCanceled()) {
+                break;
+            }
 
             if (buildingIO.propertyCode().isNull()) {
                 buildingIO._import().invalid().setValue(true);
-                buildingIO._import().message().setValue(i18n.tr("Building Property Code is null"));
+                buildingIO._import().message().setValue(i18n.tr("Building Property Code is empty"));
                 result = false;
+                continue buildings;
             }
 
             if (!buildingIO.propertyCode().isNull() && buildingIO.propertyCode().getValue().length() > 10) {
                 buildingIO._import().invalid().setValue(true);
                 buildingIO._import().message().setValue("Property code must be 10 characters or less");
                 result = false;
-                continue;
+                continue buildings;
             }
 
             // Check if building is already created
@@ -77,29 +83,24 @@ public class ImportProcessorFlatFloorplanAndUnits implements ImportProcessor {
             List<Building> buildings = Persistence.service().query(buildingCriteria);
             if (buildings.size() == 0) {
                 buildingIO._import().invalid().setValue(true);
-                buildingIO._import().message().setValue(i18n.tr("Building is not found in the database."));
+                buildingIO._import().message().setValue(i18n.tr("Building ''{0}'' is not found in the database.", buildingIO.propertyCode().getValue()));
                 result = false;
+                continue buildings;
             } else {
                 for (FloorplanIO floorplanIO : buildingIO.floorplans()) {
                     if (floorplanIO.name().isNull()) {
                         floorplanIO._import().invalid().setValue(true);
-                        floorplanIO._import().message().setValue(i18n.tr("Floorplan Name is null"));
+                        floorplanIO._import().message().setValue(i18n.tr("Floorplan Name is empty"));
                         result = false;
                     }
                     for (AptUnitIO aptUnitIO : floorplanIO.units()) {
                         if (aptUnitIO.number().isNull()) {
                             aptUnitIO._import().invalid().setValue(true);
-                            aptUnitIO._import().message().setValue(i18n.tr("Unit Number is null"));
+                            aptUnitIO._import().message().setValue(i18n.tr("Unit Number is empty"));
                             result = false;
                         }
                     }
                 }
-            }
-
-            count++;
-            status.setProgress(count);
-            if (status.isCanceled()) {
-                break;
             }
         }
         status.setProgress(0);
