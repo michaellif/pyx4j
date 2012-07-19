@@ -22,16 +22,16 @@ import com.pyx4j.entity.server.AbstractCrudServiceImpl;
 import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.biz.financial.deposit.DepositFacade;
-import com.propertyvista.crm.rpc.services.lease.common.DepositCrudService;
+import com.propertyvista.crm.rpc.services.lease.common.DepositLifecycleCrudService;
 import com.propertyvista.domain.tenant.lease.BillableItem;
-import com.propertyvista.domain.tenant.lease.Deposit;
-import com.propertyvista.domain.tenant.lease.Deposit.DepositType;
+import com.propertyvista.domain.tenant.lease.DepositLifecycle;
+import com.propertyvista.domain.tenant.lease.DepositLifecycle.DepositType;
 import com.propertyvista.domain.tenant.lease.Lease;
 
-public class DepositCrudServiceImpl extends AbstractCrudServiceImpl<Deposit> implements DepositCrudService {
+public class DepositLifecycleCrudServiceImpl extends AbstractCrudServiceImpl<DepositLifecycle> implements DepositLifecycleCrudService {
 
-    public DepositCrudServiceImpl() {
-        super(Deposit.class);
+    public DepositLifecycleCrudServiceImpl() {
+        super(DepositLifecycle.class);
     }
 
     @Override
@@ -40,7 +40,7 @@ public class DepositCrudServiceImpl extends AbstractCrudServiceImpl<Deposit> imp
     }
 
     @Override
-    protected void enhanceRetrieved(Deposit entity, Deposit dto) {
+    protected void enhanceRetrieved(DepositLifecycle entity, DepositLifecycle dto) {
         super.enhanceRetrieved(entity, dto);
 
         // load detached:
@@ -49,7 +49,7 @@ public class DepositCrudServiceImpl extends AbstractCrudServiceImpl<Deposit> imp
     }
 
     @Override
-    protected void enhanceListRetrieved(Deposit entity, Deposit dto) {
+    protected void enhanceListRetrieved(DepositLifecycle entity, DepositLifecycle dto) {
         super.enhanceListRetrieved(entity, dto);
 
         // load detached:
@@ -70,7 +70,7 @@ public class DepositCrudServiceImpl extends AbstractCrudServiceImpl<Deposit> imp
     }
 
     @Override
-    public void createDeposit(AsyncCallback<Deposit> callback, DepositType depositType, BillableItem itemId, Lease leaseId) {
+    public void createDeposit(AsyncCallback<DepositLifecycle> callback, DepositType depositType, BillableItem itemId, Lease leaseId) {
         Persistence.service().retrieve(leaseId);
         callback.onSuccess(ServerSideFactory.create(DepositFacade.class).createDeposit(depositType, itemId, leaseId.unit().building()));
     }

@@ -20,8 +20,8 @@ import com.pyx4j.site.client.ui.crud.form.IEditorView;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.BillableItem;
-import com.propertyvista.domain.tenant.lease.Deposit;
-import com.propertyvista.domain.tenant.lease.Deposit.DepositType;
+import com.propertyvista.domain.tenant.lease.DepositLifecycle;
+import com.propertyvista.domain.tenant.lease.DepositLifecycle.DepositType;
 import com.propertyvista.dto.LeaseDTO;
 
 public interface LeaseEditorViewBase<DTO extends LeaseDTO> extends IEditorView<DTO> {
@@ -34,7 +34,7 @@ public interface LeaseEditorViewBase<DTO extends LeaseDTO> extends IEditorView<D
 
         void createBillableItem(AsyncCallback<BillableItem> callback, ProductItem item);
 
-        void createDeposit(AsyncCallback<Deposit> callback, DepositType depositType, BillableItem item);
+        void createDeposit(AsyncCallback<DepositLifecycle> callback, DepositType depositType, BillableItem item);
     }
 
     void updateUnitValue(DTO value);

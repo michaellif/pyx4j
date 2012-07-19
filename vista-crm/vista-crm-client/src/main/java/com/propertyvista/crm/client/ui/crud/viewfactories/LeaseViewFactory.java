@@ -34,10 +34,10 @@ import com.propertyvista.crm.client.ui.crud.lease.application.LeaseApplicationLi
 import com.propertyvista.crm.client.ui.crud.lease.application.LeaseApplicationListerViewImpl;
 import com.propertyvista.crm.client.ui.crud.lease.application.LeaseApplicationViewerView;
 import com.propertyvista.crm.client.ui.crud.lease.application.LeaseApplicationViewerViewImpl;
-import com.propertyvista.crm.client.ui.crud.lease.common.deposit.DepositEditorView;
-import com.propertyvista.crm.client.ui.crud.lease.common.deposit.DepositEditorViewImpl;
-import com.propertyvista.crm.client.ui.crud.lease.common.deposit.DepositViewerView;
-import com.propertyvista.crm.client.ui.crud.lease.common.deposit.DepositViewerViewImpl;
+import com.propertyvista.crm.client.ui.crud.lease.common.deposit.DepositLifecycleEditorView;
+import com.propertyvista.crm.client.ui.crud.lease.common.deposit.DepositLifecycleEditorViewImpl;
+import com.propertyvista.crm.client.ui.crud.lease.common.deposit.DepositLifecycleViewerView;
+import com.propertyvista.crm.client.ui.crud.lease.common.deposit.DepositLifecycleViewerViewImpl;
 
 public class LeaseViewFactory extends ViewFactoryBase {
 
@@ -65,10 +65,10 @@ public class LeaseViewFactory extends ViewFactoryBase {
             } else if (LeaseAdjustmentEditorView.class.equals(type)) {
                 map.put(type, new LeaseAdjustmentEditorViewImpl());
 
-            } else if (DepositViewerView.class.equals(type)) {
-                map.put(type, new DepositViewerViewImpl());
-            } else if (DepositEditorView.class.equals(type)) {
-                map.put(type, new DepositEditorViewImpl());
+            } else if (DepositLifecycleViewerView.class.equals(type)) {
+                map.put(type, new DepositLifecycleViewerViewImpl());
+            } else if (DepositLifecycleEditorView.class.equals(type)) {
+                map.put(type, new DepositLifecycleEditorViewImpl());
             }
         }
         @SuppressWarnings("unchecked")

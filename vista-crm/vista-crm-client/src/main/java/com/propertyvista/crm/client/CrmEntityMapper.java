@@ -74,7 +74,7 @@ import com.propertyvista.domain.tenant.PersonScreening;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lead.Appointment;
 import com.propertyvista.domain.tenant.lead.Lead;
-import com.propertyvista.domain.tenant.lease.Deposit;
+import com.propertyvista.domain.tenant.lease.DepositLifecycle;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustmentReason;
@@ -130,7 +130,7 @@ public class CrmEntityMapper {
         AppPlaceEntityMapper.register(Bill.class, CrmSiteMap.Finance.Bill.class, defaultImage);
         AppPlaceEntityMapper.register(PaymentRecord.class, CrmSiteMap.Finance.Payment.class, defaultImage);
         AppPlaceEntityMapper.register(AggregatedTransfer.class, CrmSiteMap.Finance.AggregatedTransfer.class, defaultImage);
-        AppPlaceEntityMapper.register(Deposit.class, CrmSiteMap.Finance.LeaseDeposit.class, defaultImage);
+        AppPlaceEntityMapper.register(DepositLifecycle.class, CrmSiteMap.Finance.LeaseDeposit.class, defaultImage);
         AppPlaceEntityMapper.register(LeaseAdjustment.class, CrmSiteMap.Finance.LeaseAdjustment.class, defaultImage);
 
         AppPlaceEntityMapper.register(MerchantAccount.class, CrmSiteMap.Settings.MerchantAccount.class, defaultImage);

@@ -20,12 +20,12 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 
 import com.propertyvista.domain.tenant.lease.BillableItem;
-import com.propertyvista.domain.tenant.lease.Deposit;
-import com.propertyvista.domain.tenant.lease.Deposit.DepositType;
+import com.propertyvista.domain.tenant.lease.DepositLifecycle;
+import com.propertyvista.domain.tenant.lease.DepositLifecycle.DepositType;
 
-public interface DepositListerPresenter extends IListerView.Presenter<Deposit> {
+public interface DepositListerPresenter extends IListerView.Presenter<DepositLifecycle> {
 
     void getLeaseBillableItems(AsyncCallback<List<BillableItem>> callback);
 
-    void createDeposit(AsyncCallback<Deposit> callback, DepositType depositType, BillableItem itemId);
+    void createDeposit(AsyncCallback<DepositLifecycle> callback, DepositType depositType, BillableItem itemId);
 }

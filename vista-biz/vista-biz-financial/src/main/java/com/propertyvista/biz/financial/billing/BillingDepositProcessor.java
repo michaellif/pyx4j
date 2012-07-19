@@ -31,9 +31,9 @@ import com.propertyvista.domain.financial.billing.InvoiceDepositRefund;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.domain.financial.billing.InvoiceProductCharge;
 import com.propertyvista.domain.tenant.lease.BillableItem;
-import com.propertyvista.domain.tenant.lease.Deposit;
-import com.propertyvista.domain.tenant.lease.Deposit.DepositStatus;
-import com.propertyvista.domain.tenant.lease.Deposit.DepositType;
+import com.propertyvista.domain.tenant.lease.DepositLifecycle;
+import com.propertyvista.domain.tenant.lease.DepositLifecycle.DepositStatus;
+import com.propertyvista.domain.tenant.lease.DepositLifecycle.DepositType;
 
 public class BillingDepositProcessor extends AbstractBillingProcessor {
 
@@ -52,17 +52,17 @@ public class BillingDepositProcessor extends AbstractBillingProcessor {
 
     private void createInvoiceDeposits() {
 
-        EntityQueryCriteria<Deposit> depositCriteria = EntityQueryCriteria.create(Deposit.class);
+        EntityQueryCriteria<DepositLifecycle> depositCriteria = EntityQueryCriteria.create(DepositLifecycle.class);
         depositCriteria.add(PropertyCriterion.eq(depositCriteria.proto().billingAccount(), getBillingManager().getNextPeriodBill().billingAccount()));
         depositCriteria.add(PropertyCriterion.eq(depositCriteria.proto().status(), DepositStatus.Created));
 
-        for (Deposit deposit : Persistence.service().query(depositCriteria)) {
+        for (DepositLifecycle deposit : Persistence.service().query(depositCriteria)) {
             createInvoiceDeposit(deposit);
         }
     }
 
     //Deposit should be taken on a first billing period of the BillableItem
-    private void createInvoiceDeposit(Deposit deposit) {
+    private void createInvoiceDeposit(DepositLifecycle deposit) {
         BillableItem billableItem = deposit.billableItem();
         Persistence.service().retrieve(billableItem);
         InvoiceProductCharge nextCharge = null;
@@ -116,7 +116,7 @@ public class BillingDepositProcessor extends AbstractBillingProcessor {
         Bill nextBill = getBillingManager().getNextPeriodBill();
         if (!nextBill.billingPeriodEndDate().getValue().before(nextBill.billingAccount().lease().leaseTo().getValue())) {
             Persistence.service().retrieve(nextBill.billingAccount().deposits());
-            for (Deposit deposit : nextBill.billingAccount().deposits()) {
+            for (DepositLifecycle deposit : nextBill.billingAccount().deposits()) {
                 if (DepositType.LastMonthDeposit.equals(deposit.type().getValue())) {
                     ServerSideFactory.create(ARFacade.class).postDepositRefund(deposit);
                 }

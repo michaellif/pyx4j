@@ -23,8 +23,8 @@ import com.propertyvista.domain.financial.offering.ProductItemType;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.domain.policy.policies.DepositPolicy;
 import com.propertyvista.domain.policy.policies.domain.DepositPolicyItem;
-import com.propertyvista.domain.tenant.lease.Deposit.DepositType;
-import com.propertyvista.domain.tenant.lease.Deposit.ValueType;
+import com.propertyvista.domain.tenant.lease.DepositLifecycle.DepositType;
+import com.propertyvista.domain.tenant.lease.DepositLifecycle.ValueType;
 
 public class DepositPolicyDataModel {
 

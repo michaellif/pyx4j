@@ -24,15 +24,15 @@ import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
 import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
 
 import com.propertyvista.domain.tenant.lease.BillableItem;
-import com.propertyvista.domain.tenant.lease.Deposit;
-import com.propertyvista.domain.tenant.lease.Deposit.DepositType;
+import com.propertyvista.domain.tenant.lease.DepositLifecycle;
+import com.propertyvista.domain.tenant.lease.DepositLifecycle.DepositType;
 
-public class DepositLister extends ListerBase<Deposit> {
+public class DepositLifecycleLister extends ListerBase<DepositLifecycle> {
 
-    private final static I18n i18n = I18n.get(DepositLister.class);
+    private final static I18n i18n = I18n.get(DepositLifecycleLister.class);
 
-    public DepositLister() {
-        super(Deposit.class, true);
+    public DepositLifecycleLister() {
+        super(DepositLifecycle.class, true);
 
         setColumnDescriptors(//@formatter:off
             new MemberColumnDescriptor.Builder(proto().billableItem()).columnTitle(i18n.tr("Service/Feature")).build(),
@@ -57,9 +57,9 @@ public class DepositLister extends ListerBase<Deposit> {
                             new SelectEnumDialog<DepositType>(i18n.tr("Select Deposit Type"), EnumSet.allOf(DepositType.class)) {
                                 @Override
                                 public boolean onClickOk() {
-                                    ((DepositListerPresenter) getPresenter()).createDeposit(new DefaultAsyncCallback<Deposit>() {
+                                    ((DepositListerPresenter) getPresenter()).createDeposit(new DefaultAsyncCallback<DepositLifecycle>() {
                                         @Override
-                                        public void onSuccess(Deposit result) {
+                                        public void onSuccess(DepositLifecycle result) {
                                             getPresenter().editNew(getItemOpenPlaceClass(), result);
                                         }
                                     }, getSelectedType(), getSelectedItems().get(0));

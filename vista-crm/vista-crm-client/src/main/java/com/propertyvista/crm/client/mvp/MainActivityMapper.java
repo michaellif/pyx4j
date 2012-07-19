@@ -96,8 +96,8 @@ import com.propertyvista.crm.client.activity.crud.lease.PastLeaseListerActivity;
 import com.propertyvista.crm.client.activity.crud.lease.application.LeaseApplicationEditorActivity;
 import com.propertyvista.crm.client.activity.crud.lease.application.LeaseApplicationListerActivity;
 import com.propertyvista.crm.client.activity.crud.lease.application.LeaseApplicationViewerActivity;
-import com.propertyvista.crm.client.activity.crud.lease.common.deposit.DepositEditorActivity;
-import com.propertyvista.crm.client.activity.crud.lease.common.deposit.DepositViewerActivity;
+import com.propertyvista.crm.client.activity.crud.lease.common.deposit.DepositLifecycleEditorActivity;
+import com.propertyvista.crm.client.activity.crud.lease.common.deposit.DepositLifecycleViewerActivity;
 import com.propertyvista.crm.client.activity.crud.maintenance.MaintenanceRequestEditorActivity;
 import com.propertyvista.crm.client.activity.crud.maintenance.MaintenanceRequestListerActivity;
 import com.propertyvista.crm.client.activity.crud.maintenance.MaintenanceRequestViewerActivity;
@@ -565,10 +565,10 @@ public class MainActivityMapper implements AppActivityMapper {
                     } else if (place instanceof CrmSiteMap.Finance.LeaseDeposit) {
                         switch (crudPlace.getType()) {
                         case editor:
-                            activity = new DepositEditorActivity(crudPlace);
+                            activity = new DepositLifecycleEditorActivity(crudPlace);
                             break;
                         case viewer:
-                            activity = new DepositViewerActivity(crudPlace);
+                            activity = new DepositLifecycleViewerActivity(crudPlace);
                             break;
                         }
 

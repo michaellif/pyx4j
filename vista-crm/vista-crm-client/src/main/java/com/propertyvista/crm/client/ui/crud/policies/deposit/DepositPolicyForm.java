@@ -48,8 +48,8 @@ import com.propertyvista.domain.financial.offering.ProductItemType;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.domain.policy.dto.DepositPolicyDTO;
 import com.propertyvista.domain.policy.policies.domain.DepositPolicyItem;
-import com.propertyvista.domain.tenant.lease.Deposit;
-import com.propertyvista.domain.tenant.lease.Deposit.DepositType;
+import com.propertyvista.domain.tenant.lease.DepositLifecycle;
+import com.propertyvista.domain.tenant.lease.DepositLifecycle.DepositType;
 
 public class DepositPolicyForm extends PolicyDTOTabPanelBasedForm<DepositPolicyDTO> {
 
@@ -117,9 +117,9 @@ public class DepositPolicyForm extends PolicyDTOTabPanelBasedForm<DepositPolicyD
                 row = -1;
                 content.setWidget(++row, 1, new DecoratorBuilder(inject(proto().description()), 20).build());
 
-                get(proto().valueType()).addValueChangeHandler(new ValueChangeHandler<Deposit.ValueType>() {
+                get(proto().valueType()).addValueChangeHandler(new ValueChangeHandler<DepositLifecycle.ValueType>() {
                     @Override
-                    public void onValueChange(ValueChangeEvent<Deposit.ValueType> event) {
+                    public void onValueChange(ValueChangeEvent<DepositLifecycle.ValueType> event) {
                         bindValueEditor(event.getValue(), false);
                     }
                 });
@@ -137,7 +137,7 @@ public class DepositPolicyForm extends PolicyDTOTabPanelBasedForm<DepositPolicyD
                 bindValueEditor(getValue().valueType().getValue(), true);
             }
 
-            private void bindValueEditor(Deposit.ValueType valueType, boolean repopulatevalue) {
+            private void bindValueEditor(DepositLifecycle.ValueType valueType, boolean repopulatevalue) {
                 if (valueType == null)
                     return; // New item
 

@@ -18,8 +18,8 @@ import java.util.List;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.policy.framework.PolicyNode;
 import com.propertyvista.domain.tenant.lease.BillableItem;
-import com.propertyvista.domain.tenant.lease.Deposit;
-import com.propertyvista.domain.tenant.lease.Deposit.DepositType;
+import com.propertyvista.domain.tenant.lease.DepositLifecycle;
+import com.propertyvista.domain.tenant.lease.DepositLifecycle.DepositType;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 
 public interface DepositFacade {
@@ -27,12 +27,12 @@ public interface DepositFacade {
      * Creates deposit instance based on the corresponding policy. DepositType may limit acceptable target
      * products, for example, LastMonthDeposit may only accept ServiceType products.
      */
-    public Deposit createDeposit(DepositType depositType, BillableItem billableItem, PolicyNode node);
+    public DepositLifecycle createDeposit(DepositType depositType, BillableItem billableItem, PolicyNode node);
 
     /*
      * Create all deposits required by the policy
      */
-    public List<Deposit> createRequiredDeposits(BillableItem billableItem, PolicyNode node);
+    public List<DepositLifecycle> createRequiredDeposits(BillableItem billableItem, PolicyNode node);
 
     /*
      * Every deposit must collect interest based on the corresponding policy rules and interest rates
@@ -42,14 +42,14 @@ public interface DepositFacade {
     /*
      * Request to cover expenses may be rejected based on the expense type, so the boolean is returned
      */
-    boolean coverAccountExpense(Deposit deposit, LeaseAdjustment expense);
+    boolean coverAccountExpense(DepositLifecycle deposit, LeaseAdjustment expense);
 
-    boolean coverProductExpense(Deposit deposit, BillableItem expense);
+    boolean coverProductExpense(DepositLifecycle deposit, BillableItem expense);
 
     /*
      * Update deposit if target product terms have changed
      */
-    void onTargetProductChange(Deposit deposit);
+    void onTargetProductChange(DepositLifecycle deposit);
 
     /*
      * SecurityDeposit - return with delay of N(policy) days;

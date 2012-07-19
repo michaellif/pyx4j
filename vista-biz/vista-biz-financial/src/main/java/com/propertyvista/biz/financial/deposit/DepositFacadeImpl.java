@@ -43,10 +43,10 @@ import com.propertyvista.domain.policy.framework.PolicyNode;
 import com.propertyvista.domain.policy.policies.DepositPolicy;
 import com.propertyvista.domain.policy.policies.domain.DepositPolicyItem;
 import com.propertyvista.domain.tenant.lease.BillableItem;
-import com.propertyvista.domain.tenant.lease.Deposit;
-import com.propertyvista.domain.tenant.lease.Deposit.DepositStatus;
-import com.propertyvista.domain.tenant.lease.Deposit.DepositType;
-import com.propertyvista.domain.tenant.lease.Deposit.ValueType;
+import com.propertyvista.domain.tenant.lease.DepositLifecycle;
+import com.propertyvista.domain.tenant.lease.DepositLifecycle.DepositStatus;
+import com.propertyvista.domain.tenant.lease.DepositLifecycle.DepositType;
+import com.propertyvista.domain.tenant.lease.DepositLifecycle.ValueType;
 import com.propertyvista.domain.tenant.lease.DepositInterestAdjustment;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 
@@ -85,16 +85,16 @@ public class DepositFacadeImpl implements DepositFacade {
     }
 
     @Override
-    public Deposit createDeposit(DepositType depositType, BillableItem billableItem, PolicyNode node) {
+    public DepositLifecycle createDeposit(DepositType depositType, BillableItem billableItem, PolicyNode node) {
         DepositPolicyItem policyItem = getPolicyItem(depositType, billableItem.item().type(), node);
         return (policyItem == null ? null : makeDeposit(policyItem, billableItem));
     }
 
     @Override
-    public List<Deposit> createRequiredDeposits(BillableItem billableItem, PolicyNode node) {
+    public List<DepositLifecycle> createRequiredDeposits(BillableItem billableItem, PolicyNode node) {
         // get policy
         DepositPolicy depositPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(node, DepositPolicy.class);
-        List<Deposit> deposits = new ArrayList<Deposit>();
+        List<DepositLifecycle> deposits = new ArrayList<DepositLifecycle>();
         for (DepositPolicyItem policyItem : depositPolicy.policyItems()) {
             if (!policyItem.productType().equals(billableItem.item().type())) {
                 continue;
@@ -109,10 +109,10 @@ public class DepositFacadeImpl implements DepositFacade {
     public void collectInterest(PolicyNode node) {
         Map<DepositPolicyKey, DepositPolicyItem> policyMatrix = getDepositPolicyMatrix(node);
 
-        EntityQueryCriteria<Deposit> depositCriteria = EntityQueryCriteria.create(Deposit.class);
+        EntityQueryCriteria<DepositLifecycle> depositCriteria = EntityQueryCriteria.create(DepositLifecycle.class);
         depositCriteria.add(PropertyCriterion.eq(depositCriteria.proto().status(), DepositStatus.Billed));
         // TODO - do we want to check for last adjustment date?
-        for (Deposit deposit : Persistence.service().query(depositCriteria)) {
+        for (DepositLifecycle deposit : Persistence.service().query(depositCriteria)) {
             Persistence.service().retrieve(deposit.billableItem());
             DepositPolicyItem policyItem = policyMatrix.get(new DepositPolicyKey(deposit.type().getValue(), deposit.billableItem().item().type()));
             if (policyItem == null) {
@@ -133,25 +133,25 @@ public class DepositFacadeImpl implements DepositFacade {
     }
 
     @Override
-    public boolean coverAccountExpense(Deposit deposit, LeaseAdjustment expense) {
+    public boolean coverAccountExpense(DepositLifecycle deposit, LeaseAdjustment expense) {
         // TODO Auto-generated method stub
         return false;
     }
 
     @Override
-    public boolean coverProductExpense(Deposit deposit, BillableItem expense) {
+    public boolean coverProductExpense(DepositLifecycle deposit, BillableItem expense) {
         // TODO Auto-generated method stub
         return false;
     }
 
     @Override
-    public void onTargetProductChange(Deposit deposit) {
+    public void onTargetProductChange(DepositLifecycle deposit) {
         // TODO Auto-generated method stub
     }
 
     @Override
     public void issueDepositRefunds(PolicyNode node) {
-        EntityQueryCriteria<Deposit> depositCriteria = EntityQueryCriteria.create(Deposit.class);
+        EntityQueryCriteria<DepositLifecycle> depositCriteria = EntityQueryCriteria.create(DepositLifecycle.class);
         depositCriteria.add(PropertyCriterion.eq(depositCriteria.proto().status(), DepositStatus.Billed));
         // MoveInDeposit - refund right away (first bill)
         OrCriterion orCrit = new OrCriterion();
@@ -167,14 +167,14 @@ public class DepositFacadeImpl implements DepositFacade {
         orCrit.right(PropertyCriterion.eq(depositCriteria.proto().type(), DepositType.SecurityDeposit));
         orCrit.right(PropertyCriterion.le(depositCriteria.proto().billableItem().expirationDate(), Persistence.service().getTransactionSystemTime()));
 
-        List<Deposit> depositsDue = Persistence.service().query(depositCriteria);
+        List<DepositLifecycle> depositsDue = Persistence.service().query(depositCriteria);
         if (depositsDue == null || depositsDue.size() == 0) {
             return;
         }
 
         ARFacade arFacade = ServerSideFactory.create(ARFacade.class);
         Map<DepositPolicyKey, DepositPolicyItem> policyMatrix = getDepositPolicyMatrix(node);
-        for (Deposit deposit : depositsDue) {
+        for (DepositLifecycle deposit : depositsDue) {
             Persistence.service().retrieve(deposit.billableItem());
             switch (deposit.type().getValue()) {
             case MoveInDeposit:
@@ -226,8 +226,8 @@ public class DepositFacadeImpl implements DepositFacade {
         return policyMatrix;
     }
 
-    private Deposit makeDeposit(DepositPolicyItem policyItem, BillableItem billableItem) {
-        Deposit deposit = EntityFactory.create(Deposit.class);
+    private DepositLifecycle makeDeposit(DepositPolicyItem policyItem, BillableItem billableItem) {
+        DepositLifecycle deposit = EntityFactory.create(DepositLifecycle.class);
         deposit.type().set(policyItem.depositType());
         if (ValueType.Amount == policyItem.valueType().getValue()) {
             deposit.initialAmount().setValue(policyItem.value().getValue());

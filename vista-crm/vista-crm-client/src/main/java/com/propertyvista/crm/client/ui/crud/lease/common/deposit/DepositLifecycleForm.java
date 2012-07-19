@@ -17,18 +17,18 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
-import com.propertyvista.domain.tenant.lease.Deposit;
+import com.propertyvista.domain.tenant.lease.DepositLifecycle;
 
-public class DepositForm extends CrmEntityForm<Deposit> {
+public class DepositLifecycleForm extends CrmEntityForm<DepositLifecycle> {
 
-    private static final I18n i18n = I18n.get(DepositForm.class);
+    private static final I18n i18n = I18n.get(DepositLifecycleForm.class);
 
-    public DepositForm() {
+    public DepositLifecycleForm() {
         this(false);
     }
 
-    public DepositForm(boolean viewMode) {
-        super(Deposit.class, viewMode);
+    public DepositLifecycleForm(boolean viewMode) {
+        super(DepositLifecycle.class, viewMode);
     }
 
     @Override

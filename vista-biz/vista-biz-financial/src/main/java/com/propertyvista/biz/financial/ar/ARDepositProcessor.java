@@ -18,14 +18,14 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.financial.billing.InvoiceDepositRefund;
-import com.propertyvista.domain.tenant.lease.Deposit;
-import com.propertyvista.domain.tenant.lease.Deposit.DepositStatus;
+import com.propertyvista.domain.tenant.lease.DepositLifecycle;
+import com.propertyvista.domain.tenant.lease.DepositLifecycle.DepositStatus;
 
 public class ARDepositProcessor extends AbstractARProcessor {
 
     private static final I18n i18n = I18n.get(ARDepositProcessor.class);
 
-    void postDepositRefund(Deposit deposit) {
+    void postDepositRefund(DepositLifecycle deposit) {
 
         InvoiceDepositRefund refund = EntityFactory.create(InvoiceDepositRefund.class);
         refund.deposit().set(deposit);

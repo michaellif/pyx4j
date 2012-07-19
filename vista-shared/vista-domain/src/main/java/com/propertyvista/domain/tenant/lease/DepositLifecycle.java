@@ -41,7 +41,7 @@ import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.financial.BillingAccount;
 
-public interface Deposit extends IEntity {
+public interface DepositLifecycle extends IEntity {
 
     /*
      * Policy type defines various aspects of policy processing including

@@ -19,15 +19,16 @@ import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
-import com.propertyvista.crm.client.ui.crud.lease.common.deposit.DepositEditorView;
+import com.propertyvista.crm.client.ui.crud.lease.common.deposit.DepositLifecycleEditorView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.LeaseViewFactory;
-import com.propertyvista.crm.rpc.services.lease.common.DepositCrudService;
-import com.propertyvista.domain.tenant.lease.Deposit;
+import com.propertyvista.crm.rpc.services.lease.common.DepositLifecycleCrudService;
+import com.propertyvista.domain.tenant.lease.DepositLifecycle;
 
-public class DepositEditorActivity extends EditorActivityBase<Deposit> implements DepositEditorView.Presenter {
+public class DepositLifecycleEditorActivity extends EditorActivityBase<DepositLifecycle> implements DepositLifecycleEditorView.Presenter {
 
-    public DepositEditorActivity(CrudAppPlace place) {
-        super(place, LeaseViewFactory.instance(DepositEditorView.class), GWT.<AbstractCrudService<Deposit>> create(DepositCrudService.class), Deposit.class);
+    public DepositLifecycleEditorActivity(CrudAppPlace place) {
+        super(place, LeaseViewFactory.instance(DepositLifecycleEditorView.class), GWT
+                .<AbstractCrudService<DepositLifecycle>> create(DepositLifecycleCrudService.class), DepositLifecycle.class);
     }
 
 }

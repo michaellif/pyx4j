@@ -27,20 +27,20 @@ import com.pyx4j.site.client.activity.crud.ListerActivityBase;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 
 import com.propertyvista.crm.client.ui.crud.lease.common.deposit.DepositListerPresenter;
-import com.propertyvista.crm.rpc.services.lease.common.DepositCrudService;
+import com.propertyvista.crm.rpc.services.lease.common.DepositLifecycleCrudService;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.tenant.lease.BillableItem;
-import com.propertyvista.domain.tenant.lease.Deposit;
-import com.propertyvista.domain.tenant.lease.Deposit.DepositStatus;
-import com.propertyvista.domain.tenant.lease.Deposit.DepositType;
+import com.propertyvista.domain.tenant.lease.DepositLifecycle;
+import com.propertyvista.domain.tenant.lease.DepositLifecycle.DepositStatus;
+import com.propertyvista.domain.tenant.lease.DepositLifecycle.DepositType;
 import com.propertyvista.domain.tenant.lease.Lease;
 
-public class DepositListerActivity extends ListerActivityBase<Deposit> implements DepositListerPresenter {
+public class DepositLifecycleListerActivity extends ListerActivityBase<DepositLifecycle> implements DepositListerPresenter {
 
     private Lease leaseId;
 
-    public DepositListerActivity(Place place, IListerView<Deposit> view) {
-        super(place, view, GWT.<DepositCrudService> create(DepositCrudService.class), Deposit.class);
+    public DepositLifecycleListerActivity(Place place, IListerView<DepositLifecycle> view) {
+        super(place, view, GWT.<DepositLifecycleCrudService> create(DepositLifecycleCrudService.class), DepositLifecycle.class);
     }
 
     public Lease getLeaseId() {
@@ -53,7 +53,7 @@ public class DepositListerActivity extends ListerActivityBase<Deposit> implement
 
     @Override
     public void getLeaseBillableItems(final AsyncCallback<List<BillableItem>> callback) {
-        ((DepositCrudService) getService()).getLeaseBillableItems(new DefaultAsyncCallback<Vector<BillableItem>>() {
+        ((DepositLifecycleCrudService) getService()).getLeaseBillableItems(new DefaultAsyncCallback<Vector<BillableItem>>() {
             @Override
             public void onSuccess(Vector<BillableItem> result) {
                 callback.onSuccess(result);
@@ -62,12 +62,12 @@ public class DepositListerActivity extends ListerActivityBase<Deposit> implement
     }
 
     @Override
-    public void createDeposit(final AsyncCallback<Deposit> callback, final DepositType depositType, BillableItem itemId) {
-        ((DepositCrudService) getService()).createDeposit(new DefaultAsyncCallback<Deposit>() {
+    public void createDeposit(final AsyncCallback<DepositLifecycle> callback, final DepositType depositType, BillableItem itemId) {
+        ((DepositLifecycleCrudService) getService()).createDeposit(new DefaultAsyncCallback<DepositLifecycle>() {
             @Override
-            public void onSuccess(Deposit result) {
+            public void onSuccess(DepositLifecycle result) {
                 if (result == null) { // if there is no deposits of such type - create it 'on the fly':
-                    result = EntityFactory.create(Deposit.class);
+                    result = EntityFactory.create(DepositLifecycle.class);
                     result.type().setValue(depositType);
                     result.status().setValue(DepositStatus.Created);
                     result.depositDate().setValue(new LogicalDate());

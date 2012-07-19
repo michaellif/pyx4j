@@ -20,14 +20,14 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 
 import com.propertyvista.domain.tenant.lease.BillableItem;
-import com.propertyvista.domain.tenant.lease.Deposit;
-import com.propertyvista.domain.tenant.lease.Deposit.DepositType;
+import com.propertyvista.domain.tenant.lease.DepositLifecycle;
+import com.propertyvista.domain.tenant.lease.DepositLifecycle.DepositType;
 import com.propertyvista.domain.tenant.lease.Lease;
 
-public interface DepositCrudService extends AbstractCrudService<Deposit> {
+public interface DepositLifecycleCrudService extends AbstractCrudService<DepositLifecycle> {
 
     void getLeaseBillableItems(AsyncCallback<Vector<BillableItem>> callback, Lease leaseId);
 
-    void createDeposit(AsyncCallback<Deposit> callback, DepositType depositType, BillableItem itemId, Lease leaseId);
+    void createDeposit(AsyncCallback<DepositLifecycle> callback, DepositType depositType, BillableItem itemId, Lease leaseId);
 
 }

@@ -54,7 +54,7 @@ import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lead.Lead;
 import com.propertyvista.domain.tenant.lease.BillableItem;
-import com.propertyvista.domain.tenant.lease.Deposit;
+import com.propertyvista.domain.tenant.lease.DepositLifecycle;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.CompletionType;
 import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
@@ -172,7 +172,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
         lease.version().leaseProducts().serviceItem().set(billableItem);
         Persistence.service().retrieve(lease.billingAccount().deposits());
         lease.billingAccount().deposits().clear();
-        List<Deposit> deposits = createBillableItemDeposits(billableItem, node);
+        List<DepositLifecycle> deposits = createBillableItemDeposits(billableItem, node);
         if (deposits != null) {
             lease.billingAccount().deposits().addAll(deposits);
         }
@@ -227,7 +227,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
     }
 
     @Override
-    public List<Deposit> createBillableItemDeposits(BillableItem item, PolicyNode node) {
+    public List<DepositLifecycle> createBillableItemDeposits(BillableItem item, PolicyNode node) {
         return null; // ServerSideFactory.create(DepositFacade.class).createRequiredDeposits(item, node);
     }
 

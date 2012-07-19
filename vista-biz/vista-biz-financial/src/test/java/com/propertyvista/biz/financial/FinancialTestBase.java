@@ -73,8 +73,8 @@ import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.policy.framework.PolicyNode;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
-import com.propertyvista.domain.tenant.lease.Deposit;
-import com.propertyvista.domain.tenant.lease.Deposit.DepositType;
+import com.propertyvista.domain.tenant.lease.DepositLifecycle;
+import com.propertyvista.domain.tenant.lease.DepositLifecycle.DepositType;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment.Status;
@@ -387,7 +387,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
                 billableItem.expirationDate().setValue(expirationDate);
                 draftLease.version().leaseProducts().featureItems().add(billableItem);
 
-                List<Deposit> deposits = leaseFacade.createBillableItemDeposits(billableItem, draftLease.unit().building());
+                List<DepositLifecycle> deposits = leaseFacade.createBillableItemDeposits(billableItem, draftLease.unit().building());
                 if (deposits != null) {
                     Persistence.service().retrieve(draftLease.billingAccount().deposits());
                     draftLease.billingAccount().deposits().addAll(deposits);
@@ -405,7 +405,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
     protected void setDeposit(String billableItemId, DepositType depositType, SaveAction saveAction) {
         Lease lease = retrieveLeaseForEdit();
         BillableItem billableItem = findBillableItem(billableItemId, lease);
-        Deposit deposit = ServerSideFactory.create(DepositFacade.class).createDeposit(depositType, billableItem, lease.unit().building());
+        DepositLifecycle deposit = ServerSideFactory.create(DepositFacade.class).createDeposit(depositType, billableItem, lease.unit().building());
         Persistence.service().retrieve(lease.billingAccount().deposits());
         lease.billingAccount().deposits().add(deposit);
         lease.saveAction().setValue(saveAction);
