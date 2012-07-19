@@ -186,7 +186,7 @@ public class EntityCSVReciver<E extends IEntity> implements CSVReciver {
             return matchHeader(headers, true);
         } else {
             headersStack.push(headers);
-            for (int headerLinesCount = headerLinesCountMin; headerLinesCount <= headerLinesCountMax; headerLinesCount++) {
+            for (int headerLinesCount = headerLinesCountMax; headerLinesCount >= headerLinesCountMin; headerLinesCount--) {
                 String[] headersCombined = combineHeader(headers, headerLinesCount);
                 if ((headersCombined != null) && (matchHeader(headersCombined, headerLinesCount == headerLinesCountMax))) {
                     return true;
