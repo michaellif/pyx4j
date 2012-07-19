@@ -182,14 +182,18 @@ public class EntityCSVReciver<E extends IEntity> implements CSVReciver {
         currentRow++;
         log.debug("headers {}", (Object) headers);
 
-        headersStack.push(headers);
-        for (int headerLinesCount = headerLinesCountMin; headerLinesCount <= headerLinesCountMax; headerLinesCount++) {
-            String[] headersCombined = combineHeader(headers, headerLinesCount);
-            if ((headersCombined != null) && (matchHeader(headersCombined, headerLinesCount == headerLinesCountMax))) {
-                return true;
+        if (headersStack == null) {
+            return matchHeader(headers, true);
+        } else {
+            headersStack.push(headers);
+            for (int headerLinesCount = headerLinesCountMin; headerLinesCount <= headerLinesCountMax; headerLinesCount++) {
+                String[] headersCombined = combineHeader(headers, headerLinesCount);
+                if ((headersCombined != null) && (matchHeader(headersCombined, headerLinesCount == headerLinesCountMax))) {
+                    return true;
+                }
             }
+            return false;
         }
-        return false;
     }
 
     protected boolean matchHeader(String[] headers, boolean throwError) {
