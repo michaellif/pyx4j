@@ -103,6 +103,9 @@ public class EntityReflectionTest extends InitializerTestBase {
         assertFalse("isNull()", address.isNull());
         assertFalse("isEmpty()", address.isEmpty());
 
+        address.streetName().setValue(null);
+        assertTrue("isNull()", address.isNull());
+        assertTrue("isEmpty()", address.isEmpty());
     }
 
     public void testEntityToString() {
