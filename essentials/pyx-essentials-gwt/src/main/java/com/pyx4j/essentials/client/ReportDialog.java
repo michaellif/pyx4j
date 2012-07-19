@@ -26,6 +26,7 @@ import java.util.HashMap;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
@@ -37,11 +38,14 @@ import com.pyx4j.essentials.rpc.report.ReportRequest;
 import com.pyx4j.essentials.rpc.report.ReportService;
 import com.pyx4j.gwt.commons.BrowserType;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.BlockingAsyncCallback;
 import com.pyx4j.site.client.NavigationUri;
 
 //TODO find name for that - it is used not only for reports
 public class ReportDialog extends DeferredProcessDialog {
+
+    private static final I18n i18n = I18n.get(ReportDialog.class);
 
     private ReportService<?> reportService;
 
@@ -107,8 +111,9 @@ public class ReportDialog extends DeferredProcessDialog {
             } else {
                 VerticalPanel vp = new VerticalPanel();
                 this.setWidget(vp);
-                vp.add(new HTML("Report creation completed"));
-                HTML downloadLink = new HTML("<a href=\"" + downloadServletPath + downloadUrl + "\" target=\"_blank\">Download</a>");
+                vp.add(new HTML(i18n.tr("Report creation completed")));
+                Anchor downloadLink = new Anchor(i18n.tr("Download"), downloadServletPath + downloadUrl, "_blank");
+                downloadLink.ensureDebugId("reportDownloadLink");
                 downloadLink.addClickHandler(new ClickHandler() {
 
                     @Override
@@ -116,7 +121,6 @@ public class ReportDialog extends DeferredProcessDialog {
                         dialog.hide();
                     }
                 });
-                downloadLink.ensureDebugId("reportDownloadLink");
                 vp.add(downloadLink);
             }
         }
