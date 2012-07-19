@@ -114,7 +114,7 @@ public class RentRollImportParser implements ImportParser {
     private void readTenantRoster(byte[] fileName, DownloadFormat format) throws IOException {
 
         EntityCSVReciver<RentRollCSV> csv = EntityCSVReciver.create(RentRollCSV.class);
-        csv.setHeaderLinesCount(2);
+        csv.setHeaderLinesCount(1, 2);
         csv.setHeadersMatchMinimum(EntityFactory.getEntityMeta(RentRollCSV.class).getMemberNames().size());
         InputStream is = new ByteArrayInputStream(fileName);
 

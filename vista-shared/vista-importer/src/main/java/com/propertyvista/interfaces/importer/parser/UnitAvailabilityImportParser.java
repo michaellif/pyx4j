@@ -84,7 +84,7 @@ public class UnitAvailabilityImportParser implements ImportParser {
         public UnitModelCSVReciver(String sheetName) {
             super(UnitModel.class);
             this.sheetNumber = sheetName;
-            this.setHeaderLinesCount(2);
+            this.setHeaderLinesCount(1, 2);
             this.setHeadersMatchMinimum(3);
             this.setVerifyRequiredHeaders(true);
             this.setVerifyRequiredValues(true);
