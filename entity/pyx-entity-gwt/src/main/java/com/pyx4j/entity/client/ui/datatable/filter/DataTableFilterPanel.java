@@ -25,7 +25,13 @@ import java.util.List;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.event.logical.shared.AttachEvent;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.Event.NativePreviewEvent;
+import com.google.gwt.user.client.Event.NativePreviewHandler;
 import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
@@ -100,10 +106,7 @@ public class DataTableFilterPanel<E extends IEntity> extends DockPanel {
         btnApply.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                filters = grid.getFilters();
-                if (filterActionCommand != null) {
-                    filterActionCommand.execute();
-                }
+                apply();
             }
         });
 
@@ -115,13 +118,34 @@ public class DataTableFilterPanel<E extends IEntity> extends DockPanel {
             @Override
             public void onClick(ClickEvent event) {
                 resetFilters();
-                btnApply.click();
+                apply();
             }
         });
 
         setVisible(false);
 
         add(addButtonWidget, DockPanel.SOUTH);
+
+        this.addAttachHandler(new AttachEvent.Handler() {
+
+            private HandlerRegistration handlerRegistration;
+
+            @Override
+            public void onAttachOrDetach(AttachEvent event) {
+                if (event.isAttached()) {
+                    handlerRegistration = Event.addNativePreviewHandler(new NativePreviewHandler() {
+                        @Override
+                        public void onPreviewNativeEvent(NativePreviewEvent event) {
+                            if (event.getTypeInt() == Event.ONKEYUP && (event.getNativeEvent().getKeyCode() == KeyCodes.KEY_ENTER)) {
+                                apply();
+                            }
+                        }
+                    });
+                } else {
+                    handlerRegistration.removeHandler();
+                }
+            }
+        });
     }
 
     private Widget createAddButton() {
@@ -163,6 +187,13 @@ public class DataTableFilterPanel<E extends IEntity> extends DockPanel {
         dataTablePanel.getFilterButton().setEnabled(false);
         if (filters == null || filters.size() == 0) {
             grid.addFilter(new DataTableFilterItem<E>(grid));
+        }
+    }
+
+    protected void apply() {
+        filters = grid.getFilters();
+        if (filterActionCommand != null) {
+            filterActionCommand.execute();
         }
     }
 
