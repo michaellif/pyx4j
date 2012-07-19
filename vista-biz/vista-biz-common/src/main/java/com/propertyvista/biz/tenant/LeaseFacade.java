@@ -42,7 +42,7 @@ public interface LeaseFacade {
 
     Lease persist(Lease lease);
 
-    Lease saveAsFinal(Lease lease);
+    Lease finalize(Lease lease);
 
     // DB-data Lease object state interfaces:
 

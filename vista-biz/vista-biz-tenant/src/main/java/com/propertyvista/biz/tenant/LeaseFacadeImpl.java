@@ -258,7 +258,6 @@ public class LeaseFacadeImpl implements LeaseFacade {
         // actual persist:
         persistCustomers(lease);
         Persistence.secureSave(lease);
-        persistDeposits(lease);
 
         // update reservation if necessary:
         if (doUnreserve) {
@@ -293,9 +292,12 @@ public class LeaseFacadeImpl implements LeaseFacade {
     }
 
     @Override
-    public Lease saveAsFinal(Lease lease) {
+    public Lease finalize(Lease lease) {
         lease.saveAction().setValue(SaveAction.saveAsFinal);
         lease = persist(lease);
+
+        // update deposit mechanics:
+        persistDeposits(lease);
 
         // update unit rent price here:
         ServerSideFactory.create(ProductCatalogFacade.class).updateUnitRentPrice(lease);
@@ -401,9 +403,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
         lease.leaseApplication().decisionReason().setValue(decisionReason);
         lease.leaseApplication().decisionDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
 
-        // finalize approved leases while saving:
-        lease.saveAction().setValue(SaveAction.saveAsFinal);
-        Persistence.secureSave(lease);
+        finalize(lease);
 
         updateApplicationReferencesToFinalVersionOfLease(lease);
 
@@ -474,8 +474,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
         ServerSideFactory.create(OccupancyFacade.class).migratedApprove(lease.unit().<AptUnit> createIdentityStub());
         ServerSideFactory.create(ProductCatalogFacade.class).updateUnitRentPrice(lease);
 
-        lease.saveAction().setValue(SaveAction.saveAsFinal);
-        Persistence.secureSave(lease);
+        finalize(lease);
 
         ServerSideFactory.create(BillingFacade.class).runBilling(lease);
     }

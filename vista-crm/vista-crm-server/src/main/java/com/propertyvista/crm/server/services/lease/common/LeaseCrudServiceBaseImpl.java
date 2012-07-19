@@ -84,7 +84,7 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
 
     @Override
     protected void saveAsFinal(Lease entity) {
-        ServerSideFactory.create(LeaseFacade.class).saveAsFinal(entity);
+        ServerSideFactory.create(LeaseFacade.class).finalize(entity);
     }
 
     protected void loadDetachedProducts(DTO dto) {
