@@ -201,11 +201,10 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
         Pmc pmc = Persistence.service().retrieve(entityClass, entityId);
 
         ServerSideFactory.create(PmcFacade.class).cancelPmc(pmc);
-
-        ServerSideFactory.create(AuditFacade.class).info("PMC {0} Cancelled by {1} ", pmc.namespace().getValue(), Context.getVisit().getUserVisit().getEmail());
-
         Persistence.service().commit();
         CacheService.reset();
+
+        ServerSideFactory.create(AuditFacade.class).info("PMC {0} Cancelled by {1} ", pmc.namespace().getValue(), Context.getVisit().getUserVisit().getEmail());
 
         pmc = Persistence.service().retrieve(entityClass, entityId);
 

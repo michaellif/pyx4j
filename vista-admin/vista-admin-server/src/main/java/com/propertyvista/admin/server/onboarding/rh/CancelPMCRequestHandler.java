@@ -17,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.cache.CacheService;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -53,6 +54,8 @@ public class CancelPMCRequestHandler extends AbstractRequestHandler<CancelPMCReq
         } else {
 
             ServerSideFactory.create(PmcFacade.class).cancelPmc(pmc);
+            Persistence.service().commit();
+            CacheService.reset();
 
             ServerSideFactory.create(AuditFacade.class).info("PMC {0} Cancelled by {1} account {2}", pmc.namespace().getValue(), request.email().getValue(),
                     request.onboardingAccountId().getValue());

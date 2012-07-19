@@ -42,7 +42,6 @@ public class PmcFacadeImpl implements PmcFacade {
             pmc.termination().setValue(DateUtils.monthAdd(new Date(), 1));
             Persistence.service().persist(pmc);
         }
-        Persistence.service().commit();
     }
 
     private void remove(Pmc pmc) {
