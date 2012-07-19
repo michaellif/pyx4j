@@ -155,7 +155,7 @@ public class OnboardingUserPasswordChangeRequestHandler extends AbstractRequestH
 
         cr.accessKey().setValue(null);
         cr.credential().setValue(PasswordEncryptor.encryptPassword(request.newPassword().getValue()));
-        cr.credentialUpdated().setValue(new Date());
+        cr.passwordUpdated().setValue(new Date());
         cr.requiredPasswordChangeOnNextLogIn().setValue(Boolean.FALSE);
         Persistence.service().persist(cr);
         Persistence.service().commit();

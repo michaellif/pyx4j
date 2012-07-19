@@ -66,6 +66,7 @@ public class EmployeeCrudServiceImpl extends AbstractCrudServiceDtoImpl<Employee
             dto.accessAllBuildings().set(crs.accessAllBuildings());
             dto.requireChangePasswordOnNextLogIn().setValue(crs.requiredPasswordChangeOnNextLogIn().getValue());
             dto.roles().addAll(crs.roles());
+            dto.credentialUpdated().setValue(crs.credentialUpdated().getValue());
 
             dto.userAuditingConfiguration().set(EntityFactory.create(UserAuditingConfigurationDTO.class));
         }

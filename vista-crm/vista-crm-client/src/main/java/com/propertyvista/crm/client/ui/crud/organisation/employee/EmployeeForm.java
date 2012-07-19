@@ -138,6 +138,7 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
         content.setBR(++row, 0, 1);
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().enabled()), 5).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().requireChangePasswordOnNextLogIn()), 5).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().credentialUpdated()), 5).build());
 
         content.setH1(++row, 0, 2, i18n.tr("Roles"));
         content.setWidget(++row, 0, inject(proto().roles(), new CrmRoleFolder(isEditable())));

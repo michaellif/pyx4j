@@ -13,9 +13,12 @@
  */
 package com.propertyvista.domain.security;
 
+import java.util.Date;
+
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
+import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
@@ -43,4 +46,9 @@ public interface UserCredentialEditDTO extends IEntity {
     @Caption(name = "Require to change password on next sign in")
     IPrimitive<Boolean> requireChangePasswordOnNextLogIn();
 
+    @ReadOnly
+    IPrimitive<Date> passwordUpdated();
+
+    @ReadOnly
+    IPrimitive<Date> credentialUpdated();
 }

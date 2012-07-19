@@ -72,7 +72,7 @@ public abstract class VistaUserSelfPasswordChangeServiceImpl<E extends AbstractU
         }
         credential.accessKey().setValue(null);
         credential.credential().setValue(PasswordEncryptor.encryptPassword(request.newPassword().getValue()));
-        credential.credentialUpdated().setValue(new Date());
+        credential.passwordUpdated().setValue(new Date());
         credential.requiredPasswordChangeOnNextLogIn().setValue(Boolean.FALSE);
 
         ServerSideFactory.create(AuditFacade.class).credentialsUpdated(credential.user());

@@ -47,10 +47,10 @@ public interface AbstractUserCredential<E extends AbstractUser> extends IEntity 
     @RpcTransient
     IPrimitive<String> credential();
 
-    IPrimitive<Date> credentialUpdated();
+    IPrimitive<Date> passwordUpdated();
 
     @Timestamp(Timestamp.Update.Updated)
-    IPrimitive<Date> updated();
+    IPrimitive<Date> credentialUpdated();
 
     @RpcTransient
     IPrimitive<String> accessKey();

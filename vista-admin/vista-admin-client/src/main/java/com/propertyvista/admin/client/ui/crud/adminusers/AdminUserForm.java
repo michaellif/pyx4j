@@ -76,6 +76,8 @@ public class AdminUserForm extends AdminEntityForm<AdminUserDTO> {
         content.setWidget(++row, 0,
                 new DecoratorBuilder(addVisibilityCondition(inject(proto().requireChangePasswordOnNextLogIn()), isSelfManagedUserCondition)).build());
 
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().credentialUpdated())).build());
+
         selectTab(addTab(content));
     }
 

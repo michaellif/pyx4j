@@ -58,6 +58,7 @@ public class CrmUserServiceImpl extends AbstractCrudServiceDtoImpl<Employee, Emp
         dto.accessAllBuildings().set(crs.accessAllBuildings());
         dto.requireChangePasswordOnNextLogIn().setValue(crs.requiredPasswordChangeOnNextLogIn().getValue());
         dto.roles().addAll(crs.roles());
+        dto.credentialUpdated().setValue(crs.credentialUpdated().getValue());
 
         // TODO put auditing configuration here
         dto.userAuditingConfiguration().set(EntityFactory.create(UserAuditingConfigurationDTO.class));

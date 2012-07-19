@@ -82,7 +82,7 @@ public class UserManagementFacadeImpl implements UserManagementFacade {
 
                         crmCredential.accessKey().setValue(null);
                         crmCredential.credential().setValue(PasswordEncryptor.encryptPassword(request.newPassword().getValue()));
-                        crmCredential.credentialUpdated().setValue(new Date());
+                        crmCredential.passwordUpdated().setValue(new Date());
                         crmCredential.requiredPasswordChangeOnNextLogIn().setValue(Boolean.FALSE);
                         Persistence.service().persist(crmCredential);
                         Persistence.service().commit();
@@ -96,7 +96,7 @@ public class UserManagementFacadeImpl implements UserManagementFacade {
 
         credential.accessKey().setValue(null);
         credential.credential().setValue(PasswordEncryptor.encryptPassword(request.newPassword().getValue()));
-        credential.credentialUpdated().setValue(new Date());
+        credential.passwordUpdated().setValue(new Date());
         credential.requiredPasswordChangeOnNextLogIn().setValue(Boolean.FALSE);
         Persistence.service().persist(credential);
         Persistence.service().commit();
