@@ -164,7 +164,7 @@ public class SimpleMessageFormat {
             if (arg == null) {
                 formatedArg = "";
             } else {
-                formatedArg = arg;
+                formatedArg = toString(arg);
             }
         } else {
             if (formatType.equals("number")) {
@@ -277,10 +277,18 @@ public class SimpleMessageFormat {
                     }
                 }
             } else {
-                formatedArg = arg;
+                formatedArg = toString(arg);
             }
         }
         return formatedArg.toString();
+    }
+
+    private static String toString(Object arg) {
+        if (arg instanceof IStringView) {
+            return ((IStringView) arg).getStringView();
+        } else {
+            return arg.toString();
+        }
     }
 
     private static boolean isNull(Object arg) {

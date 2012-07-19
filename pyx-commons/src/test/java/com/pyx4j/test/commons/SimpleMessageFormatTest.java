@@ -25,6 +25,7 @@ import java.util.Date;
 import junit.framework.TestCase;
 
 import com.pyx4j.commons.Consts;
+import com.pyx4j.commons.IStringView;
 import com.pyx4j.commons.SimpleMessageFormat;
 
 public class SimpleMessageFormatTest extends TestCase {
@@ -36,8 +37,28 @@ public class SimpleMessageFormatTest extends TestCase {
         @Override
         public String toString() {
             // this is to ensure the implementation doesn't compare enums the wrong way 
-            return "FU";
+            return "The " + this.name().toLowerCase();
         };
+
+    }
+
+    private class FormatedObject implements IStringView {
+
+        private final String value;
+
+        FormatedObject(String value) {
+            this.value = value;
+        }
+
+        @Override
+        public String getStringView() {
+            return "The " + value;
+        }
+
+        @Override
+        public String toString() {
+            return "@X " + value;
+        }
 
     }
 
@@ -95,6 +116,10 @@ public class SimpleMessageFormatTest extends TestCase {
         assertMessageFormat("2000.21", "{0,number,#.##}", 2000.21);
     }
 
+    public void testFormatObjects() {
+        assertMessageFormat("The mouse", "{0}", new FormatedObject("mouse"));
+    }
+
     public void testChoiceFormat() {
         assertMessageFormat("One", "{0,choice,0#Zero|1#One}", 1);
         assertMessageFormat("1st", "{0,choice,1#{0}st|2#{0}nd}", 1);
@@ -128,7 +153,13 @@ public class SimpleMessageFormatTest extends TestCase {
         assertMessageFormat("is two", pattern, 2.1);
         assertMessageFormat("is two", pattern, 3);
         assertMessageFormat("is more than 3", pattern, 3.1);
+    }
 
+    public void testFormatEnums() {
+        assertMessageFormat("The mouse", "{0}", FormatTestEnum.mouse);
+    }
+
+    public void testChoiceFormatEnums() {
         // Enums
         assertMessageFormat("Mickey", "{0,choice,mouse#Mickey|chimp#Caesar|rabbit#Wabbit}", FormatTestEnum.mouse);
         assertMessageFormat("Caesar", "{0,choice,mouse#Mickey|chimp#Caesar|rabbit#Wabbit}", FormatTestEnum.chimp);
