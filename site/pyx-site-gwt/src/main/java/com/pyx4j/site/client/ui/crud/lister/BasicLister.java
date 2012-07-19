@@ -105,7 +105,7 @@ public class BasicLister<E extends IEntity> extends VerticalPanel {
         dataTablePanel.setLastActionHandler(new Command() {
             @Override
             public void execute() {
-                obtain(dataTablePanel.getDataTableModel().getTotalRows() / dataTablePanel.getDataTableModel().getPageSize());
+                obtain(dataTablePanel.getDataTableModel().getTotalRows() / dataTablePanel.getDataTableModel().getPageSize() - 1);
             }
         });
 
