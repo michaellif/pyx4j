@@ -20,9 +20,10 @@
  */
 package com.pyx4j.entity.shared;
 
+import com.pyx4j.commons.IStringView;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 
-public interface IObject<VALUE_TYPE> {
+public interface IObject<VALUE_TYPE> extends IStringView {
 
     /**
      * @return true if Value object is Null
