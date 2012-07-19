@@ -79,13 +79,13 @@ public class ImportUploadDialog extends VerticalPanel implements OkCancelOption,
                 dialog.hide();
                 if (serverUploadResponse.data.resultUrl().isNull()) {
                     if (serverUploadResponse.data.success().getValue()) {
-                        MessageDialog.info(i18n.tr("Import Completeated"), serverUploadResponse.message);
+                        MessageDialog.info(i18n.tr("Import Complete"), serverUploadResponse.message);
                     } else {
                         MessageDialog.error(i18n.tr("Import Error"), serverUploadResponse.message);
                     }
                 } else {
                     if (serverUploadResponse.data.success().getValue()) {
-                        DownloadLinkDialog d = new DownloadLinkDialog(i18n.tr("Import Completeated"));
+                        DownloadLinkDialog d = new DownloadLinkDialog(i18n.tr("Import Complete"));
                         if (downloadServletPath != null) {
                             d.setDownloadServletPath(downloadServletPath);
                         }

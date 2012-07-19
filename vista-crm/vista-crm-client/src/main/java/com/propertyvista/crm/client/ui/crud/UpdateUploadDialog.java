@@ -74,22 +74,15 @@ public class UpdateUploadDialog extends VerticalPanel implements OkCancelOption,
             @Override
             protected void onUploadComplete(UploadResponse<ImportUploadResponseDTO> serverUploadResponse) {
                 dialog.hide();
-                if (serverUploadResponse.data == null || serverUploadResponse.data.resultUrl().isNull()) {
-                    MessageDialog.info(i18n.tr("Upload Complete"), serverUploadResponse.message);
-                } else {
-                    DownloadLinkDialog d = new DownloadLinkDialog(i18n.tr("Upload Complete"));
-                    d.show(serverUploadResponse.message, i18n.tr("Download processing results"), serverUploadResponse.data.resultUrl().getValue());
-                }
-
                 if (serverUploadResponse.data.resultUrl().isNull()) {
                     if (serverUploadResponse.data.success().getValue()) {
-                        MessageDialog.info(i18n.tr("Update Completeated"), serverUploadResponse.message);
+                        MessageDialog.info(i18n.tr("Update Complete"), serverUploadResponse.message);
                     } else {
                         MessageDialog.error(i18n.tr("Update Error"), serverUploadResponse.message);
                     }
                 } else {
                     if (serverUploadResponse.data.success().getValue()) {
-                        DownloadLinkDialog d = new DownloadLinkDialog(i18n.tr("Update Completeated"));
+                        DownloadLinkDialog d = new DownloadLinkDialog(i18n.tr("Update Complete"));
                         d.show(serverUploadResponse.message, i18n.tr("Download processing results"), serverUploadResponse.data.resultUrl().getValue());
                     } else {
                         DownloadLinkDialog d = new DownloadLinkDialog(i18n.tr("Update Error"));
