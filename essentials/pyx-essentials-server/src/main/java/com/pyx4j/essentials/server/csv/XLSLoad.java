@@ -36,6 +36,8 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UserRuntimeException;
@@ -43,6 +45,8 @@ import com.pyx4j.rpc.shared.UserRuntimeException;
 public class XLSLoad {
 
     private static final I18n i18n = I18n.get(XLSLoad.class);
+
+    private final static Logger log = LoggerFactory.getLogger(XLSLoad.class);
 
     private final Workbook wb;
 
@@ -115,6 +119,7 @@ public class XLSLoad {
         } catch (UserRuntimeException e) {
             throw e;
         } catch (Throwable e) {
+            log.error("XLSLoad error", e);
             throw new UserRuntimeException(i18n.tr("Load file error ''{0}'', row # {1}", e.getMessage(), lineNumber));
         }
     }

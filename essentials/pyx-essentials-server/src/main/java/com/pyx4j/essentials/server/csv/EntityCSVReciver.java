@@ -316,16 +316,18 @@ public class EntityCSVReciver<E extends IEntity> implements CSVReciver {
         //log.debug("value line {}", (Object) value);
         E entity = EntityFactory.create(entityClass);
 
-        int i = 0;
-        for (Path path : headersPath) {
-            if (path != null) {
-                @SuppressWarnings("rawtypes")
-                IPrimitive primitive = (IPrimitive<?>) entity.getMember(path);
-                primitive.setValue(parsValue(primitive, value[i]));
-            }
-            i++;
-            if (i >= value.length) {
-                break;
+        if (value.length != 0) {
+            int i = 0;
+            for (Path path : headersPath) {
+                if (path != null) {
+                    @SuppressWarnings("rawtypes")
+                    IPrimitive primitive = (IPrimitive<?>) entity.getMember(path);
+                    primitive.setValue(parsValue(primitive, value[i]));
+                }
+                i++;
+                if (i >= value.length) {
+                    break;
+                }
             }
         }
 
