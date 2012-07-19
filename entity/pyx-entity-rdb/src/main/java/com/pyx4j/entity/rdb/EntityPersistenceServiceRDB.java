@@ -602,7 +602,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                 }
             }
             for (IEntity ce : cascadeRemove) {
-                cascadeDelete(ce.getEntityMeta(), ce.getPrimaryKey());
+                cascadeDelete(ce.cast().getEntityMeta(), ce.getPrimaryKey());
             }
             for (MemberOperationsMeta member : tm.operationsMeta().getCascadePersistMembersSecondPass()) {
                 IEntity childEntity = (IEntity) member.getMember(entity);
@@ -1554,7 +1554,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                         if (trace) {
                             log.info(Trace.id() + "cascadeDelete member {}", member.getMemberName());
                         }
-                        cascadeDelete(childEntity.getEntityMeta(), childEntity.getPrimaryKey());
+                        cascadeDelete(childEntity.cast().getEntityMeta(), childEntity.getPrimaryKey());
                     }
                 }
             }
@@ -1584,7 +1584,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                         @SuppressWarnings("unchecked")
                         ICollection<IEntity, ?> collectionMember = (ICollection<IEntity, ?>) member.getMember(cascadedeleteDataEntity);
                         for (IEntity childEntity : collectionMember) {
-                            cascadeDelete(childEntity.getEntityMeta(), childEntity.getPrimaryKey());
+                            cascadeDelete(childEntity.cast().getEntityMeta(), childEntity.getPrimaryKey());
                         }
                     }
 
@@ -1603,7 +1603,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                         if (trace) {
                             log.info(Trace.id() + "cascadeDelete member {}", member.getMemberName());
                         }
-                        cascadeDelete(childEntity.getEntityMeta(), childEntity.getPrimaryKey());
+                        cascadeDelete(childEntity.cast().getEntityMeta(), childEntity.getPrimaryKey());
                     }
                 }
             }
