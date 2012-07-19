@@ -18,6 +18,7 @@ import java.util.Date;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
@@ -47,8 +48,12 @@ public interface UserCredentialEditDTO extends IEntity {
     IPrimitive<Boolean> requireChangePasswordOnNextLogIn();
 
     @ReadOnly
+    @Editor(type = Editor.EditorType.label)
+    @Format("MM/dd/yyyy HH:mm")
     IPrimitive<Date> passwordUpdated();
 
     @ReadOnly
+    @Editor(type = Editor.EditorType.label)
+    @Format("MM/dd/yyyy HH:mm")
     IPrimitive<Date> credentialUpdated();
 }
