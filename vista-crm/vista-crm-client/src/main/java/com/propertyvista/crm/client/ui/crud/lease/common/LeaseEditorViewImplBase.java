@@ -45,11 +45,8 @@ public class LeaseEditorViewImplBase<DTO extends LeaseDTO> extends CrmEditorView
         billableItemForm.setValue(value.version().leaseProducts().serviceItem());
         billableItemForm.get(billableItemForm.proto().item()).refresh(true);
 
-        form.get(form.proto().version().leaseProducts().featureItems()).reset();
-        form.get(form.proto().version().leaseProducts().featureItems()).populate(value.version().leaseProducts().featureItems());
-
-        form.get(form.proto().version().leaseProducts().concessions()).reset();
-        form.get(form.proto().version().leaseProducts().concessions()).populate(value.version().leaseProducts().concessions());
+        form.get(form.proto().version().leaseProducts().featureItems()).setValue(value.version().leaseProducts().featureItems());
+        form.get(form.proto().version().leaseProducts().concessions()).setValue(value.version().leaseProducts().concessions());
 
         // update runtime non-editable data:
         form.getValue().billingAccount().deposits().clear();
