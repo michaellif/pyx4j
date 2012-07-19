@@ -92,9 +92,11 @@ public class UnitAvailabilityImportParser implements ImportParser {
 
         @Override
         public void onRow(UnitModel entity) {
-            entity._import().row().setValue(getCurrentRow());
-            entity._import().sheet().setValue(sheetNumber);
-            super.onRow(entity);
+            if (!entity.isNull()) {
+                entity._import().row().setValue(getCurrentRow());
+                entity._import().sheet().setValue(sheetNumber);
+                super.onRow(entity);
+            }
         }
 
     }
