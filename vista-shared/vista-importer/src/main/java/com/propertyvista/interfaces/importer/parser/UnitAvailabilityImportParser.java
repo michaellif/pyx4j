@@ -111,6 +111,7 @@ public class UnitAvailabilityImportParser implements ImportParser {
                 building._import().row().setValue(unitModel._import().row().getValue());
                 building._import().sheet().setValue(unitModel._import().sheet().getValue());
                 buildings.put(unitModel.property().getValue(), building);
+                importIO.buildings().add(building);
             }
 
             AptUnitIO unit = EntityFactory.create(AptUnitIO.class);
@@ -132,7 +133,6 @@ public class UnitAvailabilityImportParser implements ImportParser {
             }
             building = insertUnit(building, unit);
         }
-        importIO.buildings().addAll(buildings.values());
     }
 
     private BuildingIO insertUnit(BuildingIO building, AptUnitIO unit) {
