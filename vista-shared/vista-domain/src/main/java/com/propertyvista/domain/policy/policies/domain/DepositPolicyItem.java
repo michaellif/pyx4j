@@ -33,7 +33,7 @@ import com.propertyvista.domain.policy.policies.DepositPolicy;
 import com.propertyvista.domain.tenant.lease.DepositLifecycle.DepositType;
 import com.propertyvista.domain.tenant.lease.DepositLifecycle.ValueType;
 
-@ToStringFormat("{2}, {1}, {0}, {3}")
+@ToStringFormat("{2}, {1,choice,Percentage#{0,number,percent}|Amount#${0,number,#.##}}, {3}")
 public interface DepositPolicyItem extends IEntity {
 
     @Owner
