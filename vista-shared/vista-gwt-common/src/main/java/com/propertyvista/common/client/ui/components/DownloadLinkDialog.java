@@ -15,6 +15,7 @@ package com.propertyvista.common.client.ui.components;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
@@ -45,7 +46,7 @@ public class DownloadLinkDialog extends Dialog implements CancelOption {
         VerticalPanel vp = new VerticalPanel();
         setBody(vp);
         vp.add(new HTML(message));
-        HTML downloadLink = new HTML("<a href=\"" + downloadServletPath + downloadUrl + "\" target=\"_blank\">" + dowloadLinkCaption + "</a>");
+        Anchor downloadLink = new Anchor(dowloadLinkCaption, downloadServletPath + downloadUrl, "_blank");
         downloadLink.ensureDebugId("reportDownloadLink");
         vp.add(downloadLink);
         downloadLink.addClickHandler(new ClickHandler() {
