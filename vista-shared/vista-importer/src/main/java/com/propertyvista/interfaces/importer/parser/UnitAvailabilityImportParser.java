@@ -70,6 +70,7 @@ public class UnitAvailabilityImportParser implements ImportParser {
                     new UserRuntimeException(i18n.tr("Column heder decalarion not found"));
                 }
             } catch (UserRuntimeException e) {
+                log.error("XLSLoad error", e);
                 throw new UserRuntimeException(i18n.tr("{0} on sheet ''{1}''", e.getMessage(), loader.getSheetName(sheetNumber)));
             }
             convertUnits(reciver.getEntities());
