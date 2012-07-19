@@ -171,10 +171,13 @@ public class SimpleMessageFormat {
                 if (arg == null) {
                     formatedArg = "";
                 } else {
+                    Double number = toDouble(arg);
                     if ("integer".equals(formatStyle)) {
                         formatStyle = "#,###";
+                    } else if ("percent".equals(formatStyle)) {
+                        formatStyle = "#.##%";
                     }
-                    formatedArg = SimpleNumberFormatImpl.format(formatStyle, toDouble(arg));
+                    formatedArg = SimpleNumberFormatImpl.format(formatStyle, number);
                 }
             } else if (formatType.equals("size")) {
                 if (arg == null) {
@@ -228,6 +231,15 @@ public class SimpleMessageFormat {
                                 prevResult = choiceResult;
                                 continue;
                             }
+                        } else if (!choiceValueText.matches("^-?\\d.*")) {
+                            // handle enum
+                            if (isEnumEquals(arg, choiceValueText)) {
+                                formatedArg = choiceResult;
+                                break;
+                            } else {
+                                prevResult = choiceResult;
+                                continue;
+                            }
                         }
 
                         double choiceValue = Double.valueOf(choiceValueText).doubleValue();
@@ -273,6 +285,21 @@ public class SimpleMessageFormat {
 
     private static boolean isNull(Object arg) {
         return (arg == null) || (arg == "");
+    }
+
+    private static boolean isEnumEquals(Object arg, String value) {
+        if (arg == null) {
+            return "null".equals(value);
+        }
+
+        Enum<?> enumArg = null;
+        try {
+            enumArg = (Enum<?>) arg;
+        } catch (ClassCastException ex) {
+            throw new IllegalStateException("Argument " + arg + " is not Enum: " + arg.getClass().getName());
+        }
+        return enumArg.name().equals(value);
+
     }
 
     private static double toDouble(Object value) {

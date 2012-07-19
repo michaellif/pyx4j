@@ -717,6 +717,8 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Obje
                 } else {
                     return Integer.valueOf(0);
                 }
+            } else if (forMessageFormatFormat && mm.getValueClass().isEnum()) {
+                return member.getValue();
             } else {
                 return member.getStringView();
             }

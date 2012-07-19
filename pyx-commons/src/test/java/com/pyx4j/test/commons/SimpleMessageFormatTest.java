@@ -29,6 +29,18 @@ import com.pyx4j.commons.SimpleMessageFormat;
 
 public class SimpleMessageFormatTest extends TestCase {
 
+    private enum FormatTestEnum {
+
+        mouse, rat, rabbit, chimp;
+
+        @Override
+        public String toString() {
+            // this is to ensure the implementation doesn't compare enums the wrong way 
+            return "FU";
+        };
+
+    }
+
     private void assertMessageFormat(String expected, String pattern, Object... arguments) {
         String result = SimpleMessageFormat.format(pattern, arguments);
         assertEquals(pattern, expected, result);
@@ -73,6 +85,9 @@ public class SimpleMessageFormatTest extends TestCase {
         assertMessageFormat("2,000", "{0,number,integer}", 2000);
         assertMessageFormat("2000", "{0,number,#}", 2000);
 
+        assertMessageFormat("12.3%", "{0,number,percent}", 0.123);
+        assertMessageFormat("12%", "{0,number,percent}", 0.12);
+
         //Java default MessageFormat
         //assertMessageFormat("null", "{0,number,#}", (Object) null);
         assertMessageFormat("", "{0,number,#}", (Object) null);
@@ -113,6 +128,12 @@ public class SimpleMessageFormatTest extends TestCase {
         assertMessageFormat("is two", pattern, 2.1);
         assertMessageFormat("is two", pattern, 3);
         assertMessageFormat("is more than 3", pattern, 3.1);
+
+        // Enums
+        assertMessageFormat("Mickey", "{0,choice,mouse#Mickey|chimp#Caesar|rabbit#Wabbit}", FormatTestEnum.mouse);
+        assertMessageFormat("Caesar", "{0,choice,mouse#Mickey|chimp#Caesar|rabbit#Wabbit}", FormatTestEnum.chimp);
+        assertMessageFormat("Wabbit", "{0,choice,mouse#Mickey|chimp#Caesar|rabbit#Wabbit}", FormatTestEnum.rabbit);
+        assertMessageFormat("hole", "{0,choice,mouse#Mickey|chimp#Caesar|rabbit#{1}}", FormatTestEnum.rabbit, "hole");
     }
 
     public void testChoiceFormatNulls() {
