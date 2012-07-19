@@ -36,6 +36,7 @@ import com.pyx4j.rpc.shared.UserRuntimeException;
 
 import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.biz.financial.billing.BillingFacade;
+import com.propertyvista.biz.financial.deposit.DepositFacade;
 import com.propertyvista.biz.financial.productcatalog.ProductCatalogFacade;
 import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.biz.occupancy.UnitTurnoverAnalysisFacade;
@@ -228,7 +229,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
 
     @Override
     public List<DepositLifecycle> createBillableItemDeposits(BillableItem item, PolicyNode node) {
-        return null; // ServerSideFactory.create(DepositFacade.class).createRequiredDeposits(item, node);
+        return ServerSideFactory.create(DepositFacade.class).createRequiredDeposits(item, node);
     }
 
     @Override
