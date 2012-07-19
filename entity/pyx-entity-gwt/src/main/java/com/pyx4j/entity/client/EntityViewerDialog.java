@@ -21,7 +21,6 @@
 package com.pyx4j.entity.client;
 
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 
@@ -35,8 +34,9 @@ public class EntityViewerDialog extends OkDialog {
 
         FlowPanel panel = new FlowPanel();
 
-        Label entityLabel = new Label(entity.toString());
-        panel.add(entityLabel);
+        EntityViewerCellTree tree = new EntityViewerCellTree(entity);
+        tree.setSize("100%", "100%");
+        panel.add(tree);
 
         ScrollPanel scroll = new ScrollPanel(panel);
         LayoutPanel content = new LayoutPanel();
