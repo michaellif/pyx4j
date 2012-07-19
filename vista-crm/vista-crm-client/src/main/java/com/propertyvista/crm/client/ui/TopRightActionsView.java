@@ -42,4 +42,6 @@ public interface TopRightActionsView extends IsWidget {
     void setAvailableLocales(List<CompiledLocale> locales);
 
     void setDisplayThisIsProductionWarning(boolean displayThisIsProductionWarning);
+
+    void setDisplayThisIsDemoWarning(boolean displayThisIsDemoWarning);
 }

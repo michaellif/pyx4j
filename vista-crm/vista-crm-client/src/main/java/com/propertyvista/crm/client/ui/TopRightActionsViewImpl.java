@@ -45,6 +45,8 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
 
     private final HTML thisIsProduction;
 
+    private final HTML thisIsDemo;
+
     private final HorizontalPanel locales;
 
     private CompiledLocale language;
@@ -80,6 +82,14 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
         thisIsProduction.getElement().getStyle().setMarginLeft(1, Unit.EM);
         thisIsProduction.getElement().getStyle().setMarginRight(1, Unit.EM);
         thisIsProduction.setVisible(false);
+
+        thisIsDemo = new HTML("This is Demo");
+        thisIsDemo.getElement().getStyle().setColor("green");
+        thisIsDemo.getElement().getStyle().setFontWeight(FontWeight.BOLD);
+        thisIsDemo.getElement().getStyle().setFontSize(30, Unit.PX);
+        thisIsDemo.getElement().getStyle().setMarginLeft(1, Unit.EM);
+        thisIsDemo.getElement().getStyle().setMarginRight(1, Unit.EM);
+        thisIsDemo.setVisible(false);
 
         greetings = new HTML("");
         greetings.getElement().getStyle().setDisplay(Display.INLINE);
@@ -188,6 +198,7 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
 //        alertwr.add(alert);
 
         container.add(thisIsProduction);
+        container.add(thisIsDemo);
         container.add(greetings);
         container.add(account);
         container.add(settings);
@@ -260,4 +271,10 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
     public void setDisplayThisIsProductionWarning(boolean displayThisIsProductionWarning) {
         thisIsProduction.setVisible(displayThisIsProductionWarning);
     }
+
+    @Override
+    public void setDisplayThisIsDemoWarning(boolean displayThisIsDemoWarning) {
+        thisIsDemo.setVisible(displayThisIsDemoWarning);
+    }
+
 }

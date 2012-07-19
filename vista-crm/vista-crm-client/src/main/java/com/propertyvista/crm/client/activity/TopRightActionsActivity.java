@@ -36,6 +36,7 @@ import com.propertyvista.crm.client.ui.TopRightActionsView;
 import com.propertyvista.crm.client.ui.viewfactories.CrmVeiwFactory;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.shared.CompiledLocale;
+import com.propertyvista.shared.config.VistaDemo;
 
 public class TopRightActionsActivity extends AbstractActivity implements TopRightActionsView.Presenter {
 
@@ -53,6 +54,7 @@ public class TopRightActionsActivity extends AbstractActivity implements TopRigh
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         panel.setWidget(view);
+        view.setDisplayThisIsDemoWarning(VistaDemo.isDemo());
         updateAuthenticatedView();
         eventBus.addHandler(SecurityControllerEvent.getType(), new SecurityControllerHandler() {
             @Override
