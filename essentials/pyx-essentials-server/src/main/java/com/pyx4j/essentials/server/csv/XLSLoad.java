@@ -90,6 +90,10 @@ public class XLSLoad {
         return wb.getSheetAt(sheetNumber).getSheetName();
     }
 
+    public boolean isSheetHidden(int sheetNumber) {
+        return wb.isSheetHidden(sheetNumber);
+    }
+
     public boolean loadSheet(int sheetNumber, CSVReciver reciver) {
         Sheet sheet = wb.getSheetAt(sheetNumber);
         return loadSheet(sheet, reciver);
