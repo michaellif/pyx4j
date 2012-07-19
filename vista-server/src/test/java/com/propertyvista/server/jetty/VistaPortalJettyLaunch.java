@@ -40,6 +40,11 @@ public class VistaPortalJettyLaunch extends JettyLaunch {
     }
 
     @Override
+    protected int getSessionMaxAge() {
+        return 240 * 60;
+    }
+
+    @Override
     public String getContextPath() {
         return "/vista";
     }
