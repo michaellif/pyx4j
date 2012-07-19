@@ -137,7 +137,7 @@ public class MemberMetaImpl implements MemberMeta {
                     .resolveType(((ParameterizedType) method.getGenericReturnType()).getActualTypeArguments()[0], interfaceClass);
             objectClassType = ObjectClassType.PrimitiveSet;
         } else {
-            throw new RuntimeException("Unknown member type" + methodReturnType);
+            throw new RuntimeException("Unknown member type " + methodReturnType);
         }
         objectClass = methodReturnType;
         fieldName = method.getName();
