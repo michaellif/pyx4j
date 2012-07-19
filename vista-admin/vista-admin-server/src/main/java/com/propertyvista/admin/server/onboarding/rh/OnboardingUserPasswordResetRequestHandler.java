@@ -33,7 +33,6 @@ import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.security.rpc.PasswordChangeRequest;
 import com.pyx4j.server.contexts.NamespaceManager;
 
-import com.propertyvista.admin.domain.pmc.Pmc;
 import com.propertyvista.admin.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.admin.domain.security.OnboardingUserCredential;
 import com.propertyvista.admin.server.onboarding.OnboardingXMLUtils;
@@ -108,17 +107,16 @@ public class OnboardingUserPasswordResetRequestHandler extends AbstractRequestHa
 
         boolean checkAgainsOnboarding = true;
 
-        if (!credential.pmc().isNull()) {
-            Pmc pmc = credential.pmc();
-            if (!ServerSideFactory.create(PmcFacade.class).isOnboardingEnabled(pmc)) {
-                response.status().setValue(OnboardingUserAuthenticationResponseIO.AuthenticationStatusCode.PermissionDenied);
-                return response;
-            }
-            if (pmc.status().getValue() != PmcStatus.Created) {
-                String curNameSpace = NamespaceManager.getNamespace();
+        if ((!credential.pmc().isNull()) && (!ServerSideFactory.create(PmcFacade.class).isOnboardingEnabled(credential.pmc()))) {
+            response.status().setValue(OnboardingUserAuthenticationResponseIO.AuthenticationStatusCode.PermissionDenied);
+            return response;
+        }
 
+        if (!credential.pmc().isNull() && (credential.pmc().status().getValue() != PmcStatus.Created)) {
+            if (credential.pmc().status().getValue() != PmcStatus.Created) {
+                String curNameSpace = NamespaceManager.getNamespace();
                 try {
-                    NamespaceManager.setNamespace(pmc.namespace().getValue());
+                    NamespaceManager.setNamespace(credential.pmc().namespace().getValue());
 
                     EntityQueryCriteria<CrmUserCredential> crmUCrt = EntityQueryCriteria.create(CrmUserCredential.class);
                     crmUCrt.add(PropertyCriterion.eq(crmUCrt.proto().roles().$().behaviors(), VistaCrmBehavior.PropertyVistaAccountOwner));
@@ -151,8 +149,14 @@ public class OnboardingUserPasswordResetRequestHandler extends AbstractRequestHa
             }
         }
 
-        if (checkAgainsOnboarding && PasswordEncryptor.checkPassword(request.newPassword().getValue(), credential.credential().getValue())) {
-            throw new UserRuntimeException(i18n.tr("Your password cannot repeat your previous password"));
+        if (checkAgainsOnboarding) {
+            // Verify securityAnswer
+            if ((!credential.securityQuestion().isNull()) && (!credential.securityAnswer().equals(request.securityAnswer()))) {
+                throw new UserRuntimeException(i18n.tr("The answer to security question is incorrect"));
+            }
+            if (PasswordEncryptor.checkPassword(request.newPassword().getValue(), credential.credential().getValue())) {
+                throw new UserRuntimeException(i18n.tr("Your password cannot repeat your previous password"));
+            }
         }
 
         PasswordChangeRequest pchRequest = EntityFactory.create(PasswordChangeRequest.class);

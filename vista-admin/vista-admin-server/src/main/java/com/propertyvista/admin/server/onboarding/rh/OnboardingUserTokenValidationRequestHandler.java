@@ -111,6 +111,8 @@ public class OnboardingUserTokenValidationRequestHandler extends AbstractRequest
                 }
             });
 
+        } else {
+            response.securityQuestion().setValue(credential.securityQuestion().getValue());
         }
 
         return response;
