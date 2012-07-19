@@ -123,6 +123,7 @@ public class CEntityComboBox<E extends IEntity> extends CComboBox<E> implements 
         setOptions(getOptions());
     }
 
+    /** the expected functionality is not implemented */
     public void setOptionsDataSource(EntityDataSource<E> optionsDataSource) {
         this.optionsDataSource = optionsDataSource;
     }
