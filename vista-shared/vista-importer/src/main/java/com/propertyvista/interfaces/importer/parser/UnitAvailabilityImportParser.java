@@ -64,6 +64,9 @@ public class UnitAvailabilityImportParser implements ImportParser {
 
         int sheets = loader.getNumberOfSheets();
         for (int sheetNumber = 0; sheetNumber < sheets; sheetNumber++) {
+            if (loader.isSheetHidden(sheetNumber)) {
+                continue;
+            }
             EntityCSVReciver<UnitModel> reciver = new UnitModelCSVReciver(loader.getSheetName(sheetNumber));
             try {
                 if (!loader.loadSheet(sheetNumber, reciver)) {
