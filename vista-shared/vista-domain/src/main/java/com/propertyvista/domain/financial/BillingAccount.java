@@ -87,7 +87,6 @@ public interface BillingAccount extends IEntity {
 
     @Owned(cascade = {})
     @Detached
-    @OrderBy(DepositLifecycle.OrderId.class)
     IList<DepositLifecycle> deposits();
 
     IPrimitive<ProrationMethod> prorationMethod();

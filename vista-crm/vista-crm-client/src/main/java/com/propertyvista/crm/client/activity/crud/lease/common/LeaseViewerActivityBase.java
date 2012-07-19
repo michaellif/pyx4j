@@ -20,7 +20,6 @@ import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.ui.crud.form.IViewerView;
 import com.pyx4j.site.rpc.CrudAppPlace;
@@ -29,7 +28,6 @@ import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.activity.crud.lease.common.deposit.DepositLifecycleListerActivity;
 import com.propertyvista.crm.client.ui.crud.lease.common.LeaseViewerViewBase;
 import com.propertyvista.crm.rpc.services.lease.common.LeaseViewerCrudServiceBase;
-import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.dto.LeaseDTO;
 
@@ -63,7 +61,6 @@ public abstract class LeaseViewerActivityBase<DTO extends LeaseDTO> extends CrmV
     protected void onPopulateSuccess(DTO result) {
         super.onPopulateSuccess(result);
 
-        depositLister.setLeaseId(EntityFactory.createIdentityStub(Lease.class, result.getPrimaryKey()));
         depositLister.setParent(result.billingAccount().getPrimaryKey());
         depositLister.populate();
     }

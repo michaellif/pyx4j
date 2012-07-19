@@ -17,15 +17,12 @@ import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.AbstractCrudServiceImpl;
 import com.pyx4j.entity.server.Persistence;
 
-import com.propertyvista.biz.financial.deposit.DepositFacade;
 import com.propertyvista.crm.rpc.services.lease.common.DepositLifecycleCrudService;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.DepositLifecycle;
-import com.propertyvista.domain.tenant.lease.DepositLifecycle.DepositType;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 public class DepositLifecycleCrudServiceImpl extends AbstractCrudServiceImpl<DepositLifecycle> implements DepositLifecycleCrudService {
@@ -44,7 +41,8 @@ public class DepositLifecycleCrudServiceImpl extends AbstractCrudServiceImpl<Dep
         super.enhanceRetrieved(entity, dto);
 
         // load detached:
-        Persistence.service().retrieve(dto.billableItem());
+        Persistence.service().retrieve(dto.deposit());
+        Persistence.service().retrieve(dto.deposit().billableItem());
         Persistence.service().retrieve(dto.interestAdjustments());
     }
 
@@ -53,7 +51,8 @@ public class DepositLifecycleCrudServiceImpl extends AbstractCrudServiceImpl<Dep
         super.enhanceListRetrieved(entity, dto);
 
         // load detached:
-        Persistence.service().retrieve(dto.billableItem());
+        Persistence.service().retrieve(dto.deposit());
+        Persistence.service().retrieve(dto.deposit().billableItem());
     }
 
     @Override
@@ -67,11 +66,5 @@ public class DepositLifecycleCrudServiceImpl extends AbstractCrudServiceImpl<Dep
         }
 
         callback.onSuccess(items);
-    }
-
-    @Override
-    public void createDeposit(AsyncCallback<DepositLifecycle> callback, DepositType depositType, BillableItem itemId, Lease leaseId) {
-        Persistence.service().retrieve(leaseId);
-        callback.onSuccess(ServerSideFactory.create(DepositFacade.class).createDeposit(depositType, itemId, leaseId.unit().building()));
     }
 }

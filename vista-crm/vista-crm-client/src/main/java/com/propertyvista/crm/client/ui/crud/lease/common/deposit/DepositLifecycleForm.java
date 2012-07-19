@@ -36,26 +36,29 @@ public class DepositLifecycleForm extends CrmEntityForm<DepositLifecycle> {
         FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));
 
         int row = -1;
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billableItem()), 30).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().deposit().billableItem()), 30).build());
         content.getFlexCellFormatter().setColSpan(row, 0, 2);
 
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().type()), 12).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().deposit().depositType()), 12).build());
         content.setWidget(row, 1, new DecoratorBuilder(inject(proto().status()), 9).build());
 
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().depositDate()), 9).build());
         content.setWidget(row, 1, new DecoratorBuilder(inject(proto().refundDate()), 9).build());
 
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().initialAmount()), 7).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().deposit().amount()), 7).build());
         content.setWidget(row, 1, new DecoratorBuilder(inject(proto().currentAmount()), 7).build());
 
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().description()), 25).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().deposit().description()), 25).build());
 
         content.setH2(++row, 0, 2, proto().interestAdjustments().getMeta().getCaption());
         content.setWidget(++row, 0, inject(proto().interestAdjustments(), new DepositInterestAdjustmentFolder(isEditable())));
         content.getFlexCellFormatter().setColSpan(row, 0, 2);
 
         // tweaking:
-        get(proto().type()).setEditable(false);
+        get(proto().deposit().depositType()).setEditable(false);
+        get(proto().deposit().amount()).setEditable(false);
+        get(proto().deposit().description()).setEditable(false);
+
         get(proto().status()).setEditable(false);
         get(proto().depositDate()).setEditable(false);
         get(proto().refundDate()).setEditable(false);

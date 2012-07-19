@@ -23,8 +23,8 @@ import com.propertyvista.domain.financial.offering.ProductItemType;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.domain.policy.policies.DepositPolicy;
 import com.propertyvista.domain.policy.policies.domain.DepositPolicyItem;
-import com.propertyvista.domain.tenant.lease.DepositLifecycle.DepositType;
-import com.propertyvista.domain.tenant.lease.DepositLifecycle.ValueType;
+import com.propertyvista.domain.policy.policies.domain.DepositPolicyItem.ValueType;
+import com.propertyvista.domain.tenant.lease.Deposit.DepositType;
 
 public class DepositPolicyDataModel {
 
@@ -79,7 +79,7 @@ public class DepositPolicyDataModel {
                 case pet:
                     item = EntityFactory.create(DepositPolicyItem.class);
                     item.depositType().setValue(DepositType.SecurityDeposit);
-                    item.valueType().setValue(ValueType.Amount);
+                    item.valueType().setValue(ValueType.Monetary);
                     item.value().setValue(new BigDecimal("200.00"));
                     break;
                 }

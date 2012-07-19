@@ -15,11 +15,13 @@ package com.propertyvista.biz.financial.deposit;
 
 import java.util.List;
 
+import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.policy.framework.PolicyNode;
 import com.propertyvista.domain.tenant.lease.BillableItem;
+import com.propertyvista.domain.tenant.lease.Deposit;
+import com.propertyvista.domain.tenant.lease.Deposit.DepositType;
 import com.propertyvista.domain.tenant.lease.DepositLifecycle;
-import com.propertyvista.domain.tenant.lease.DepositLifecycle.DepositType;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 
 public interface DepositFacade {
@@ -27,12 +29,17 @@ public interface DepositFacade {
      * Creates deposit instance based on the corresponding policy. DepositType may limit acceptable target
      * products, for example, LastMonthDeposit may only accept ServiceType products.
      */
-    public DepositLifecycle createDeposit(DepositType depositType, BillableItem billableItem, PolicyNode node);
+    public Deposit createDeposit(DepositType depositType, BillableItem billableItem, PolicyNode node);
 
     /*
      * Create all deposits required by the policy
      */
-    public List<DepositLifecycle> createRequiredDeposits(BillableItem billableItem, PolicyNode node);
+    public List<Deposit> createRequiredDeposits(BillableItem billableItem, PolicyNode node);
+
+    /*
+     * Create DepositLifecycle wrapper on supplied Deposit
+     */
+    public DepositLifecycle createDepositLifecycle(Deposit deposit, BillingAccount billingAccount);
 
     /*
      * Every deposit must collect interest based on the corresponding policy rules and interest rates
@@ -62,5 +69,4 @@ public interface DepositFacade {
      * Update related deposits to Billed status
      */
     void onValidateBill(Bill bill);
-
 }

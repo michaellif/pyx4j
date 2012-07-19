@@ -14,7 +14,7 @@
 package com.propertyvista.crm.client.ui.crud.lease.common;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -55,6 +55,7 @@ import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
 import com.propertyvista.domain.tenant.lease.BillableItemExtraData;
+import com.propertyvista.domain.tenant.lease.Deposit;
 import com.propertyvista.domain.tenant.lease.Lease.Status;
 import com.propertyvista.domain.tenant.lease.extradata.Pet;
 import com.propertyvista.domain.tenant.lease.extradata.Vehicle;
@@ -67,6 +68,8 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
     private final SimplePanel extraDataPanel = new SimplePanel();
 
     private final FormFlexPanel adjustmentPanel = new FormFlexPanel();
+
+    private final FormFlexPanel depositPanel = new FormFlexPanel();
 
     private final CEntityForm<? extends LeaseDTO> lease;
 
@@ -130,11 +133,17 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
         main.setWidget(++row, 0, adjustmentPanel);
         main.getFlexCellFormatter().setColSpan(row, 0, 2);
 
+        main.setWidget(++row, 0, depositPanel);
+        main.getFlexCellFormatter().setColSpan(row, 0, 2);
+
         main.getColumnFormatter().setWidth(0, "50%");
         main.getColumnFormatter().setWidth(1, "50%");
 
-        adjustmentPanel.setH3(0, 0, 1, i18n.tr("Adjustments"));
+        adjustmentPanel.setH3(0, 0, 1, proto().adjustments().getMeta().getCaption());
         adjustmentPanel.setWidget(1, 0, inject(proto().adjustments(), new AdjustmentFolder()));
+
+        depositPanel.setH3(0, 0, 1, proto().deposits().getMeta().getCaption());
+        depositPanel.setWidget(1, 0, inject(proto().deposits(), new DepositFolder()));
 
         get(proto().effectiveDate()).setVisible(false);
         get(proto().expirationDate()).setVisible(false);
@@ -262,12 +271,12 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
 
         @Override
         public List<EntityFolderColumnDescriptor> columns() {
-            ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
-            columns.add(new EntityFolderColumnDescriptor(proto().type(), "9em"));
-            columns.add(new EntityFolderColumnDescriptor(proto().value(), "5em"));
-            columns.add(new EntityFolderColumnDescriptor(proto().effectiveDate(), "9em"));
-            columns.add(new EntityFolderColumnDescriptor(proto().expirationDate(), "10em"));
-            return columns;
+            return Arrays.asList(//@formatter:off
+                new EntityFolderColumnDescriptor(proto().type(), "9em"),
+                new EntityFolderColumnDescriptor(proto().value(), "5em"),
+                new EntityFolderColumnDescriptor(proto().effectiveDate(), "9em"),
+                new EntityFolderColumnDescriptor(proto().expirationDate(), "10em"));
+            //@formatter:on
         }
 
         @Override
@@ -400,5 +409,21 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
                 return null;
             }
         });
+    }
+
+    private class DepositFolder extends VistaTableFolder<Deposit> {
+
+        public DepositFolder() {
+            super(Deposit.class, i18n.tr("Deposit"), !BillableItemEditor.this.isViewable());
+        }
+
+        @Override
+        public List<EntityFolderColumnDescriptor> columns() {
+            return Arrays.asList(//@formatter:off
+                new EntityFolderColumnDescriptor(proto().depositType(), "15em"),
+                new EntityFolderColumnDescriptor(proto().amount(), "6em"),
+                new EntityFolderColumnDescriptor(proto().description(), "25em"));
+            //@formatter:on
+        }
     }
 }

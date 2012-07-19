@@ -21,7 +21,6 @@ import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.GeneratedValue;
-import com.pyx4j.entity.annotations.OrderBy;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.ToString;
@@ -53,8 +52,10 @@ public interface BillableItem extends IEntity {
     IPrimitive<LogicalDate> updated();
 
     @Owned
-    @OrderBy(BillableItemAdjustment.OrderId.class)
     IList<BillableItemAdjustment> adjustments();
+
+    @Owned
+    IList<Deposit> deposits();
 
     @Owned
     BillableItemExtraData extraData();

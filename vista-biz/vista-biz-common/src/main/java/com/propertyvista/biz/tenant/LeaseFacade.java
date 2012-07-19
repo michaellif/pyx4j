@@ -23,7 +23,7 @@ import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.policy.framework.PolicyNode;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.BillableItem;
-import com.propertyvista.domain.tenant.lease.DepositLifecycle;
+import com.propertyvista.domain.tenant.lease.Deposit;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 public interface LeaseFacade {
@@ -38,7 +38,7 @@ public interface LeaseFacade {
 
     BillableItem createBillableItem(ProductItem itemId);
 
-    List<DepositLifecycle> createBillableItemDeposits(BillableItem item, PolicyNode node);
+    List<Deposit> createBillableItemDeposits(BillableItem item, PolicyNode node);
 
     Lease persist(Lease lease);
 

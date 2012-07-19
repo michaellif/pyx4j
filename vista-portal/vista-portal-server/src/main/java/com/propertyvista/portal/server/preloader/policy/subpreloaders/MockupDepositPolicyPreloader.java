@@ -16,7 +16,6 @@ package com.propertyvista.portal.server.preloader.policy.subpreloaders;
 import java.math.BigDecimal;
 import java.util.List;
 
-
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -29,8 +28,8 @@ import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.domain.policy.policies.DepositPolicy;
 import com.propertyvista.domain.policy.policies.domain.DepositPolicyItem;
-import com.propertyvista.domain.tenant.lease.DepositLifecycle.DepositType;
-import com.propertyvista.domain.tenant.lease.DepositLifecycle.ValueType;
+import com.propertyvista.domain.policy.policies.domain.DepositPolicyItem.ValueType;
+import com.propertyvista.domain.tenant.lease.Deposit.DepositType;
 import com.propertyvista.generator.util.RandomUtil;
 import com.propertyvista.portal.server.preloader.policy.util.AbstractPolicyPreloader;
 
@@ -56,7 +55,7 @@ public class MockupDepositPolicyPreloader extends AbstractPolicyPreloader<Deposi
             item.depositType().setValue(DepositType.SecurityDeposit);
             item.description().setValue(i18n.tr("Security Deposit"));
             item.value().setValue(new BigDecimal(RandomUtil.randomDouble(500.0)));
-            item.valueType().setValue(ValueType.Amount);
+            item.valueType().setValue(ValueType.Monetary);
             item.productType().set(pit);
             item.annualInterestRate().setValue(new BigDecimal(0.01 + RandomUtil.randomDouble(0.03)));
 

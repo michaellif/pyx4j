@@ -15,6 +15,7 @@ package com.propertyvista.biz.tenant;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -55,6 +56,7 @@ import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lead.Lead;
 import com.propertyvista.domain.tenant.lease.BillableItem;
+import com.propertyvista.domain.tenant.lease.Deposit;
 import com.propertyvista.domain.tenant.lease.DepositLifecycle;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.CompletionType;
@@ -173,9 +175,9 @@ public class LeaseFacadeImpl implements LeaseFacade {
         lease.version().leaseProducts().serviceItem().set(billableItem);
         Persistence.service().retrieve(lease.billingAccount().deposits());
         lease.billingAccount().deposits().clear();
-        List<DepositLifecycle> deposits = createBillableItemDeposits(billableItem, node);
+        List<Deposit> deposits = createBillableItemDeposits(billableItem, node);
         if (deposits != null) {
-            lease.billingAccount().deposits().addAll(deposits);
+            billableItem.deposits().addAll(deposits);
         }
 
         if (bugNo1549) {
@@ -205,7 +207,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
                         lease.version().leaseProducts().featureItems().add(billableItem);
                         deposits = createBillableItemDeposits(billableItem, node);
                         if (deposits != null) {
-                            lease.billingAccount().deposits().addAll(deposits);
+                            billableItem.deposits().addAll(deposits);
                         }
                     }
                 }
@@ -228,7 +230,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
     }
 
     @Override
-    public List<DepositLifecycle> createBillableItemDeposits(BillableItem item, PolicyNode node) {
+    public List<Deposit> createBillableItemDeposits(BillableItem item, PolicyNode node) {
         return ServerSideFactory.create(DepositFacade.class).createRequiredDeposits(item, node);
     }
 
@@ -256,10 +258,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
         // actual persist:
         persistCustomers(lease);
         Persistence.secureSave(lease);
-
-        // TODO need to explicitly save deposits when lease is persisted; pending better solution
-        Persistence.service().retrieve(lease.billingAccount().deposits());
-        Persistence.service().merge(lease.billingAccount().deposits());
+        persistDeposits(lease);
 
         // update reservation if necessary:
         if (doUnreserve) {
@@ -323,6 +322,36 @@ public class LeaseFacadeImpl implements LeaseFacade {
             if (!guarantor.customer().isValueDetached()) {
                 ServerSideFactory.create(CustomerFacade.class).persistCustomer(guarantor.customer());
             }
+        }
+    }
+
+    private void persistDeposits(Lease lease) {
+        List<Deposit> currentDeposits = new ArrayList<Deposit>();
+        currentDeposits.addAll(lease.version().leaseProducts().serviceItem().deposits());
+        for (BillableItem item : lease.version().leaseProducts().featureItems()) {
+            currentDeposits.addAll(item.deposits());
+        }
+
+        List<Deposit> wrappedDeposits = new ArrayList<Deposit>();
+        Persistence.service().retrieve(lease.billingAccount().deposits());
+        for (DepositLifecycle dlc : lease.billingAccount().deposits()) {
+            wrappedDeposits.add(dlc.deposit());
+        }
+
+        // clean current deposits from already wrapped ones:
+        Iterator<Deposit> it = currentDeposits.iterator();
+        while (it.hasNext()) {
+            Deposit current = it.next();
+            for (Deposit wrrapped : wrappedDeposits) {
+                if (current.uid().equals(wrrapped.uid())) {
+                    it.remove();
+                }
+            }
+        }
+
+        // wrap newly added deposits in DepositLifecycle:
+        for (Deposit deposit : currentDeposits) {
+            Persistence.service().persist(ServerSideFactory.create(DepositFacade.class).createDepositLifecycle(deposit, lease.billingAccount()));
         }
     }
 

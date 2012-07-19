@@ -26,8 +26,8 @@ import com.propertyvista.crm.rpc.services.lease.common.LeaseEditorCrudServiceBas
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.BillableItem;
-import com.propertyvista.domain.tenant.lease.DepositLifecycle;
-import com.propertyvista.domain.tenant.lease.DepositLifecycle.DepositType;
+import com.propertyvista.domain.tenant.lease.Deposit;
+import com.propertyvista.domain.tenant.lease.Deposit.DepositType;
 import com.propertyvista.dto.LeaseDTO;
 
 public abstract class LeaseEditorActivityBase<DTO extends LeaseDTO> extends EditorActivityBase<DTO> implements LeaseEditorViewBase.Presenter {
@@ -68,7 +68,7 @@ public abstract class LeaseEditorActivityBase<DTO extends LeaseDTO> extends Edit
     }
 
     @Override
-    public void createDeposit(AsyncCallback<DepositLifecycle> callback, DepositType depositType, BillableItem item) {
+    public void createDeposit(AsyncCallback<Deposit> callback, DepositType depositType, BillableItem item) {
         ((LeaseEditorCrudServiceBase<DTO>) getService()).createDeposit(callback, depositType, item, getView().getValue());
     }
 }

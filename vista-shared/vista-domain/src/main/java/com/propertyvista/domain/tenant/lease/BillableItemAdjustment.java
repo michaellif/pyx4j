@@ -19,7 +19,6 @@ import javax.xml.bind.annotation.XmlType;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
-import com.pyx4j.entity.annotations.ColumnId;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.GeneratedValue;
@@ -66,10 +65,7 @@ public interface BillableItemAdjustment extends IEntity {
     @JoinColumn
     BillableItem billableItem();
 
-    interface OrderId extends ColumnId {
-    }
-
-    @OrderColumn(OrderId.class)
+    @OrderColumn
     IPrimitive<Integer> orderInParent();
 
     @NotNull

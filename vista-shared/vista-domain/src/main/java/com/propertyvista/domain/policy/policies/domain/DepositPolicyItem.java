@@ -15,6 +15,8 @@ package com.propertyvista.domain.policy.policies.domain;
 
 import java.math.BigDecimal;
 
+import javax.xml.bind.annotation.XmlType;
+
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Length;
@@ -27,14 +29,26 @@ import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.annotations.I18n;
+import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.financial.offering.ProductItemType;
 import com.propertyvista.domain.policy.policies.DepositPolicy;
-import com.propertyvista.domain.tenant.lease.DepositLifecycle.DepositType;
-import com.propertyvista.domain.tenant.lease.DepositLifecycle.ValueType;
+import com.propertyvista.domain.tenant.lease.Deposit;
 
 @ToStringFormat("{2}, {1,choice,Percentage#{0,number,percent}|Amount#${0,number,#.##}}, {3}")
 public interface DepositPolicyItem extends IEntity {
+
+    @I18n
+    @XmlType(name = "ValueType")
+    public enum ValueType {
+        Monetary, Percentage;
+
+        @Override
+        public String toString() {
+            return I18nEnum.toString(this);
+        }
+    }
 
     @Owner
     @NotNull
@@ -67,7 +81,7 @@ public interface DepositPolicyItem extends IEntity {
 
     @NotNull
     @ToString(index = 3)
-    IPrimitive<DepositType> depositType();
+    IPrimitive<Deposit.DepositType> depositType();
 
     @NotNull
     IPrimitive<BigDecimal> annualInterestRate();

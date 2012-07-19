@@ -31,9 +31,9 @@ import com.propertyvista.domain.financial.billing.InvoiceDepositRefund;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.domain.financial.billing.InvoiceProductCharge;
 import com.propertyvista.domain.tenant.lease.BillableItem;
+import com.propertyvista.domain.tenant.lease.Deposit.DepositType;
 import com.propertyvista.domain.tenant.lease.DepositLifecycle;
 import com.propertyvista.domain.tenant.lease.DepositLifecycle.DepositStatus;
-import com.propertyvista.domain.tenant.lease.DepositLifecycle.DepositType;
 
 public class BillingDepositProcessor extends AbstractBillingProcessor {
 
@@ -63,7 +63,7 @@ public class BillingDepositProcessor extends AbstractBillingProcessor {
 
     //Deposit should be taken on a first billing period of the BillableItem
     private void createInvoiceDeposit(DepositLifecycle deposit) {
-        BillableItem billableItem = deposit.billableItem();
+        BillableItem billableItem = deposit.deposit().billableItem();
         Persistence.service().retrieve(billableItem);
         InvoiceProductCharge nextCharge = null;
         InvoiceProductCharge currentCharge = null;
@@ -91,8 +91,8 @@ public class BillingDepositProcessor extends AbstractBillingProcessor {
             invoiceDeposit.billingAccount().set(getBillingManager().getNextPeriodBill().billingAccount());
             invoiceDeposit.dueDate().setValue(getBillingManager().getNextPeriodBill().dueDate().getValue());
             invoiceDeposit.debitType().setValue(DebitType.deposit);
-            invoiceDeposit.description().setValue(deposit.description().getStringView());
-            invoiceDeposit.amount().setValue(deposit.initialAmount().getValue());
+            invoiceDeposit.description().setValue(deposit.deposit().description().getStringView());
+            invoiceDeposit.amount().setValue(deposit.deposit().amount().getValue());
             invoiceDeposit.taxTotal().setValue(BigDecimal.ZERO);
             invoiceDeposit.deposit().set(deposit);
 
@@ -117,7 +117,7 @@ public class BillingDepositProcessor extends AbstractBillingProcessor {
         if (!nextBill.billingPeriodEndDate().getValue().before(nextBill.billingAccount().lease().leaseTo().getValue())) {
             Persistence.service().retrieve(nextBill.billingAccount().deposits());
             for (DepositLifecycle deposit : nextBill.billingAccount().deposits()) {
-                if (DepositType.LastMonthDeposit.equals(deposit.type().getValue())) {
+                if (DepositType.LastMonthDeposit.equals(deposit.deposit().depositType().getValue())) {
                     ServerSideFactory.create(ARFacade.class).postDepositRefund(deposit);
                 }
             }
