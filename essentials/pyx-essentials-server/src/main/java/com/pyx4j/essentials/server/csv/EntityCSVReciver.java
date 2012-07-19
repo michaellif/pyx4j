@@ -65,7 +65,9 @@ public class EntityCSVReciver<E extends IEntity> implements CSVReciver {
 
     private boolean verifyRequiredValues = false;
 
-    private int headerLinesCount = 1;
+    private int headerLinesCountMin = 1;
+
+    private int headerLinesCountMax = 1;
 
     private int headersMatchMinimum = 1;
 
@@ -81,14 +83,19 @@ public class EntityCSVReciver<E extends IEntity> implements CSVReciver {
         return new EntityCSVReciver<T>(entityClass);
     }
 
-    public int getHeaderLinesCount() {
-        return headerLinesCount;
+    public int getHeaderLinesCountMin() {
+        return headerLinesCountMin;
     }
 
-    public void setHeaderLinesCount(int headerLinesCount) {
-        this.headerLinesCount = headerLinesCount;
-        if (this.headerLinesCount > 1) {
-            headersStack = new FIFO<String[]>(this.headerLinesCount);
+    public int getHeaderLinesCountMax() {
+        return headerLinesCountMax;
+    }
+
+    public void setHeaderLinesCount(int headerLinesCountMin, int headerLinesCountMax) {
+        this.headerLinesCountMin = headerLinesCountMin;
+        this.headerLinesCountMax = headerLinesCountMax;
+        if (this.headerLinesCountMax > 1) {
+            headersStack = new FIFO<String[]>(this.headerLinesCountMax);
         }
     }
 
@@ -128,12 +135,11 @@ public class EntityCSVReciver<E extends IEntity> implements CSVReciver {
         return currentRow;
     }
 
-    private String[] combineHeader(String[] headers) {
-        if (this.headerLinesCount == 1) {
+    private String[] combineHeader(String[] headers, int headerLinesCount) {
+        if (headerLinesCount == 1) {
             return headers;
         } else {
-            headersStack.push(headers);
-            if (headersStack.size() < this.headerLinesCount) {
+            if (headersStack.size() < headerLinesCount) {
                 return null;
             } else {
                 Vector<String> headersCombined = new Vector<String>();
@@ -147,11 +153,15 @@ public class EntityCSVReciver<E extends IEntity> implements CSVReciver {
                 for (int i = 0; i < maxLen; i++) {
                     headersCombined.add("");
                 }
+                int line = 0;
                 for (String[] headerLine : headersStack) {
-                    int col = 0;
-                    for (String header : headerLine) {
-                        headersCombined.set(col, combineHeader(headersCombined.get(col), header));
-                        col++;
+                    line++;
+                    if (line > (headersStack.size() - headerLinesCount)) {
+                        int col = 0;
+                        for (String header : headerLine) {
+                            headersCombined.set(col, combineHeader(headersCombined.get(col), header));
+                            col++;
+                        }
                     }
                 }
                 return headersCombined.toArray(new String[headersCombined.size()]);
@@ -172,11 +182,17 @@ public class EntityCSVReciver<E extends IEntity> implements CSVReciver {
         currentRow++;
         log.debug("headers {}", (Object) headers);
 
-        String[] headersCombined = combineHeader(headers);
-        if (headersCombined == null) {
-            return false;
+        headersStack.push(headers);
+        for (int headerLinesCount = headerLinesCountMin; headerLinesCount <= headerLinesCountMax; headerLinesCount++) {
+            String[] headersCombined = combineHeader(headers, headerLinesCount);
+            if ((headersCombined != null) && (matchHeader(headersCombined, headerLinesCount == headerLinesCountMax))) {
+                return true;
+            }
         }
+        return false;
+    }
 
+    protected boolean matchHeader(String[] headers, boolean throwError) {
         E entity = EntityFactory.create(entityClass);
         EntityMeta em = entity.getEntityMeta();
         Map<String, Path> membersNames = new HashMap<String, Path>();
@@ -196,7 +212,7 @@ public class EntityCSVReciver<E extends IEntity> implements CSVReciver {
         }
         int headersFound = 0;
         headersPath.clear();
-        nextHeader: for (String header : headersCombined) {
+        nextHeader: for (String header : headers) {
             String name = header;
             if (isHeaderIgnoreCase()) {
                 name = name.toLowerCase(Locale.ENGLISH);
@@ -233,15 +249,18 @@ public class EntityCSVReciver<E extends IEntity> implements CSVReciver {
                 headersPath.add(member.getPath());
                 headersFound++;
             } else {
-                log.warn("Unknown header [{}]", header);
+                if (!"".equals(header)) {
+                    log.warn("Unknown header [{}]", header);
+                }
                 headersPath.add(null);
             }
         }
         if (getHeadersMatchMinimum() <= headersFound) {
             if (isVerifyRequiredHeaders()) {
-                verifyRequiredHeaders();
+                return verifyRequiredHeaders(throwError);
+            } else {
+                return true;
             }
-            return true;
         } else {
             return false;
         }
@@ -258,7 +277,7 @@ public class EntityCSVReciver<E extends IEntity> implements CSVReciver {
         }
     }
 
-    private void verifyRequiredHeaders() {
+    protected boolean verifyRequiredHeaders(boolean throwError) {
         E entity = EntityFactory.create(entityClass);
         EntityMeta em = entity.getEntityMeta();
         for (String memberName : em.getMemberNames()) {
@@ -270,10 +289,15 @@ public class EntityCSVReciver<E extends IEntity> implements CSVReciver {
                     continue;
                 }
                 if (!headersPath.contains(member.getPath())) {
-                    throw new UserRuntimeException(i18n.tr("Missing required column ''{0}''", memberMeta.getCaption()));
+                    if (throwError) {
+                        throw new UserRuntimeException(i18n.tr("Missing required column ''{0}''", memberMeta.getCaption()));
+                    } else {
+                        return false;
+                    }
                 }
             }
         }
+        return true;
     }
 
     @Override
