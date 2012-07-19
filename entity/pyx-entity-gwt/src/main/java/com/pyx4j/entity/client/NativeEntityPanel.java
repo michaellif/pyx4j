@@ -20,6 +20,13 @@
  */
 package com.pyx4j.entity.client;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ProvidesResize;
 import com.google.gwt.user.client.ui.RequiresResize;
 import com.google.gwt.user.client.ui.SimplePanel;
@@ -29,13 +36,38 @@ import com.pyx4j.entity.client.ui.folder.DefaultEntityFolderTheme;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.INativeComponent;
+import com.pyx4j.widgets.client.Button;
 
-public class NativeEntityPanel<E extends IObject<?>> extends SimplePanel implements INativeComponent<E>, RequiresResize, ProvidesResize {
+public class NativeEntityPanel<E extends IObject<?>> extends FlowPanel implements INativeComponent<E>, RequiresResize, ProvidesResize {
+
+    private static final Logger log = LoggerFactory.getLogger(NativeEntityPanel.class);
 
     private final CEntityContainer<?> container;
 
-    public NativeEntityPanel(CEntityContainer<?> container) {
+    private final SimplePanel contentHolder;
+
+    public NativeEntityPanel(final CEntityContainer<E> container) {
         this.container = container;
+
+        if (false) {
+            Button debugButton = new Button("Debug", new ClickHandler() {
+
+                @Override
+                public void onClick(ClickEvent event) {
+                    log.info(container.getValue().toString());
+                    new EntityViewerDialog(container.getValue()).show();
+                }
+            });
+            debugButton.getElement().getStyle().setProperty("display", "inline-block");
+            add(debugButton);
+
+            getElement().getStyle().setProperty("border", "red solid 1px");
+        }
+
+        contentHolder = new SimplePanel();
+        contentHolder.getElement().getStyle().setProperty("display", "inline");
+        add(contentHolder);
+
     }
 
     @Override
@@ -48,10 +80,14 @@ public class NativeEntityPanel<E extends IObject<?>> extends SimplePanel impleme
         return container;
     }
 
+    public void setWidget(IsWidget widget) {
+        contentHolder.setWidget(widget);
+    }
+
     @Override
     public void onResize() {
-        if (getWidget() instanceof RequiresResize) {
-            ((RequiresResize) getWidget()).onResize();
+        if (contentHolder.getWidget() instanceof RequiresResize) {
+            ((RequiresResize) contentHolder.getWidget()).onResize();
         }
     }
 
