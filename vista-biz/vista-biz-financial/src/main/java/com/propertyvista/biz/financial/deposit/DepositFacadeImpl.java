@@ -85,13 +85,19 @@ public class DepositFacadeImpl implements DepositFacade {
 
     @Override
     public Deposit createDeposit(DepositType depositType, BillableItem billableItem, PolicyNode node) {
-        DepositPolicyItem policyItem = getPolicyItem(depositType, billableItem.item().type(), node);
+        DepositPolicyItem policyItem = null;
+        DepositPolicy depositPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(node, DepositPolicy.class);
+        for (DepositPolicyItem pi : depositPolicy.policyItems()) {
+            if (pi.depositType().getValue().equals(depositType) && pi.productType().equals(billableItem.item().type())) {
+                policyItem = pi;
+                break;
+            }
+        }
         return (policyItem == null ? null : makeDeposit(policyItem, billableItem));
     }
 
     @Override
     public List<Deposit> createRequiredDeposits(BillableItem billableItem, PolicyNode node) {
-        // get policy
         DepositPolicy depositPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(node, DepositPolicy.class);
         List<Deposit> deposits = new ArrayList<Deposit>();
         for (DepositPolicyItem policyItem : depositPolicy.policyItems()) {
@@ -100,7 +106,6 @@ public class DepositFacadeImpl implements DepositFacade {
             }
             deposits.add(makeDeposit(policyItem, billableItem));
         }
-
         return deposits;
     }
 
@@ -283,17 +288,5 @@ public class DepositFacadeImpl implements DepositFacade {
         deposit.billableItem().set(billableItem);
 
         return deposit;
-    }
-
-    private DepositPolicyItem getPolicyItem(DepositType depositType, ProductItemType productType, PolicyNode node) {
-        DepositPolicyItem policyItem = null;
-        DepositPolicy depositPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(node, DepositPolicy.class);
-        for (DepositPolicyItem pi : depositPolicy.policyItems()) {
-            if (pi.depositType().getValue().equals(depositType) && pi.productType().equals(productType)) {
-                policyItem = pi;
-                break;
-            }
-        }
-        return policyItem;
     }
 }

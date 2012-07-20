@@ -111,7 +111,8 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
                     @Override
                     public boolean onClickOk() {
                         List<ProductItem> selectedItems = getSelectedItems();
-                        if (!selectedItems.isEmpty() && leaseEditorView != null) {
+                        if (!selectedItems.isEmpty()) {
+                            assert (leaseEditorView != null);
                             ((LeaseEditorViewBase.Presenter) leaseEditorView.getPresenter()).setSelectedService(selectedItems.get(0));
                             return true;
                         } else {
