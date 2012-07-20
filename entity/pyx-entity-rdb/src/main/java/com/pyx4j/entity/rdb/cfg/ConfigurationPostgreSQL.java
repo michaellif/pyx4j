@@ -96,6 +96,11 @@ public abstract class ConfigurationPostgreSQL implements Configuration {
     }
 
     @Override
+    public int initialPoolSize() {
+        return 1;
+    }
+
+    @Override
     public int minPoolSize() {
         return 3;
     }
@@ -103,6 +108,16 @@ public abstract class ConfigurationPostgreSQL implements Configuration {
     @Override
     public int maxPoolSize() {
         return 15;
+    }
+
+    @Override
+    public int initialBackgroundProcessPoolSize() {
+        return 1;
+    }
+
+    @Override
+    public int minBackgroundProcessPoolSize() {
+        return 2;
     }
 
     @Override

@@ -91,9 +91,15 @@ public interface Configuration extends IPersistenceConfiguration {
 
     public ConnectionPoolProvider connectionPool();
 
+    public int initialPoolSize();
+
     public int minPoolSize();
 
     public int maxPoolSize();
+
+    public int initialBackgroundProcessPoolSize();
+
+    public int minBackgroundProcessPoolSize();
 
     public int maxBackgroundProcessPoolSize();
 

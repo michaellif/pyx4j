@@ -55,6 +55,7 @@ public class ConnectionPoolC3P0 implements ConnectionPool {
             dataSource.setDataSourceName("default");
 
             // the settings below are optional -- c3p0 can work with defaults
+            dataSource.setInitialPoolSize(cfg.initialPoolSize());
             dataSource.setMinPoolSize(cfg.minPoolSize()); // default is 3
             dataSource.setMaxPoolSize(cfg.maxPoolSize()); // default is 15, we may need more for the server
 
@@ -71,7 +72,8 @@ public class ConnectionPoolC3P0 implements ConnectionPool {
             dataSourceBackgroundProcess.setDataSourceName("backgroundProcess");
 
             // the settings below are optional -- c3p0 can work with defaults
-            dataSourceBackgroundProcess.setMinPoolSize(cfg.minPoolSize()); // default is 3
+            dataSourceBackgroundProcess.setInitialPoolSize(cfg.initialBackgroundProcessPoolSize());
+            dataSourceBackgroundProcess.setMinPoolSize(cfg.minBackgroundProcessPoolSize()); // default is 3
             dataSourceBackgroundProcess.setMaxPoolSize(cfg.maxBackgroundProcessPoolSize());
 
             dataSourceBackgroundProcess.setUnreturnedConnectionTimeout(cfg.unreturnedConnectionBackgroundProcessTimeout());

@@ -46,9 +46,15 @@ public class ConfigurationPostgreSQLProperties extends ConfigurationPostgreSQL {
 
     private boolean createForeignKeys = true;
 
+    protected int initialPoolSize = 1;
+
     protected int minPoolSize = 3;
 
     protected int maxPoolSize = 15;
+
+    protected int initialBackgroundProcessPoolSize = 1;
+
+    protected int minBackgroundProcessPoolSize = 2;
 
     protected int maxBackgroundProcessPoolSize = 40;
 
@@ -113,6 +119,11 @@ public class ConfigurationPostgreSQLProperties extends ConfigurationPostgreSQL {
     }
 
     @Override
+    public int initialPoolSize() {
+        return initialPoolSize;
+    }
+
+    @Override
     public int minPoolSize() {
         return minPoolSize;
     }
@@ -120,6 +131,16 @@ public class ConfigurationPostgreSQLProperties extends ConfigurationPostgreSQL {
     @Override
     public int maxPoolSize() {
         return maxPoolSize;
+    }
+
+    @Override
+    public int initialBackgroundProcessPoolSize() {
+        return initialBackgroundProcessPoolSize;
+    }
+
+    @Override
+    public int minBackgroundProcessPoolSize() {
+        return minBackgroundProcessPoolSize;
     }
 
     @Override
@@ -168,11 +189,14 @@ public class ConfigurationPostgreSQLProperties extends ConfigurationPostgreSQL {
         this.sharedSequencesSchema = c.getValue("sharedSequencesSchema", this.sharedSequencesSchema);
         this.createForeignKeys = c.getBooleanValue("createForeignKeys", this.createForeignKeys);
 
+        this.initialPoolSize = c.getIntegerValue("initialPoolSize", this.initialPoolSize);
         this.minPoolSize = c.getIntegerValue("minPoolSize", this.minPoolSize);
         this.maxPoolSize = c.getIntegerValue("maxPoolSize", this.maxPoolSize);
         this.maxPoolPreparedStatements = c.getIntegerValue("maxPoolPreparedStatements", this.maxPoolPreparedStatements);
         this.unreturnedConnectionTimeout = c.getIntegerValue("unreturnedConnectionTimeout", this.unreturnedConnectionTimeout);
 
+        this.initialBackgroundProcessPoolSize = c.getIntegerValue("initialBackgroundProcessPoolSize", this.initialBackgroundProcessPoolSize);
+        this.minBackgroundProcessPoolSize = c.getIntegerValue("minBackgroundProcessPoolSize", this.minBackgroundProcessPoolSize);
         this.maxBackgroundProcessPoolSize = c.getIntegerValue("maxBackgroundProcessPoolSize", this.maxBackgroundProcessPoolSize);
         this.unreturnedConnectionBackgroundProcessTimeout = c.getIntegerValue("unreturnedConnectionBackgroundProcessTimeout",
                 this.unreturnedConnectionBackgroundProcessTimeout);
