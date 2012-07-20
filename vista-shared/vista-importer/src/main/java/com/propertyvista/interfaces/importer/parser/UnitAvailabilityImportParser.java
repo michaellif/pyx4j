@@ -70,7 +70,7 @@ public class UnitAvailabilityImportParser implements ImportParser {
             EntityCSVReciver<UnitModel> reciver = new UnitModelCSVReciver(loader.getSheetName(sheetNumber));
             try {
                 if (!loader.loadSheet(sheetNumber, reciver)) {
-                    new UserRuntimeException(i18n.tr("Column heder decalarion not found"));
+                    new UserRuntimeException(i18n.tr("Column header declaration not found"));
                 }
             } catch (UserRuntimeException e) {
                 log.error("XLSLoad error", e);
