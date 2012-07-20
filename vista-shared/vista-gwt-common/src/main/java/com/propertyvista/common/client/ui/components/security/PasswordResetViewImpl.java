@@ -65,9 +65,13 @@ public class PasswordResetViewImpl extends VerticalPanel implements PasswordRese
     @Override
     public void setQuestion(PasswordResetQuestion question) {
         if (!question.securityQuestion().isNull()) {
-            form.get(form.proto().securityQuestion()).setVisible(true);
             form.get(form.proto().securityQuestion()).setValue(question.securityQuestion().getValue());
+            form.get(form.proto().securityQuestion()).setVisible(true);
             form.get(form.proto().securityAnswer()).setVisible(true);
+        } else {
+            form.get(form.proto().securityQuestion()).setValue("");
+            form.get(form.proto().securityQuestion()).setVisible(false);
+            form.get(form.proto().securityAnswer()).setVisible(false);
         }
     }
 
