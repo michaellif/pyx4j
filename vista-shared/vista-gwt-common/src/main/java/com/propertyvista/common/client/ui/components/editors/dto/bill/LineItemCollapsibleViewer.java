@@ -59,6 +59,7 @@ public class LineItemCollapsibleViewer extends CEntityCollapsableViewer<InvoiceL
 
     @Override
     public IsWidget createExpandedContent(InvoiceLineItemGroupDTO value) {
+
         FlexTable content = new FlexTable();
 
         content.getColumnFormatter().setWidth(0, "40%"); //overrides FlexTable's width auto-management for cells
@@ -84,7 +85,7 @@ public class LineItemCollapsibleViewer extends CEntityCollapsableViewer<InvoiceL
                             for (InvoiceSubLineItem adjustment : productCharge.adjustmentSubLineItems()) {
                                 addDetailRecord(content, row++, "", adjustment.description().getValue(), adjustment.amount().getStringView());
                             }
-                            for (InvoiceSubLineItem concession : productCharge.adjustmentSubLineItems()) {
+                            for (InvoiceSubLineItem concession : productCharge.concessionSubLineItems()) {
                                 addDetailRecord(content, row++, "", concession.description().getValue(), concession.amount().getStringView());
                             }
                         } else {
