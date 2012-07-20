@@ -67,6 +67,8 @@ public abstract class LeaseViewerCrudServiceBaseImpl<DTO extends LeaseDTO> exten
             case Applicant:
             case CoApplicant:
                 users.add(tenant);
+            default:
+                break;
             }
         }
 

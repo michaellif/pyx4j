@@ -45,11 +45,6 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
         Persistence.service().retrieve(dto.billingAccount().deposits());
 //      Persistence.service().retrieve(dto.documents());
 
-        if (!dto.unit().isNull()) {
-            // fill selected building by unit:
-            Persistence.service().retrieve(dto.unit().building(), AttachLevel.ToStringMembers);
-        }
-
         loadDetachedProducts(dto);
 
         for (Tenant item : dto.version().tenants()) {
