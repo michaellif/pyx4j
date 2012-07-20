@@ -39,6 +39,11 @@ public class VistaTestsDBConfigurationHSQLMemory extends ConfigurationHSQL {
     }
 
     @Override
+    public int maxBackgroundProcessPoolSize() {
+        return 1;
+    }
+
+    @Override
     public int maxPoolPreparedStatements() {
         return 2000;
     }

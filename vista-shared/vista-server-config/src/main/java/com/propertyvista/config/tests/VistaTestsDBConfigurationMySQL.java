@@ -69,6 +69,11 @@ public class VistaTestsDBConfigurationMySQL extends com.pyx4j.entity.rdb.cfg.Con
     }
 
     @Override
+    public int maxBackgroundProcessPoolSize() {
+        return 1;
+    }
+
+    @Override
     public NamingConvention namingConvention() {
         return new NamingConventionOracle(63, null, false, false, '$');
     }
