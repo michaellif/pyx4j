@@ -66,7 +66,7 @@ public interface DepositLifecycle extends IEntity {
     @OrderColumn()
     IPrimitive<Integer> orderInParent();
 
-    Deposit deposit();
+    // -----------------------------------------------------------------
 
     @NotNull
     IPrimitive<DepositStatus> status();

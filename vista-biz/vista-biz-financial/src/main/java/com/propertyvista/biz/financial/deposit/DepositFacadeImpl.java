@@ -13,7 +13,6 @@
  */
 package com.propertyvista.biz.financial.deposit;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -22,12 +21,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.OrCriterion;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UserRuntimeException;
@@ -46,7 +43,6 @@ import com.propertyvista.domain.policy.policies.domain.DepositPolicyItem;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Deposit;
 import com.propertyvista.domain.tenant.lease.Deposit.DepositType;
-import com.propertyvista.domain.tenant.lease.DepositInterestAdjustment;
 import com.propertyvista.domain.tenant.lease.DepositLifecycle;
 import com.propertyvista.domain.tenant.lease.DepositLifecycle.DepositStatus;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
@@ -110,12 +106,13 @@ public class DepositFacadeImpl implements DepositFacade {
     public DepositLifecycle createDepositLifecycle(Deposit deposit, BillingAccount billingAccount) {
         DepositLifecycle depositLifecycle = EntityFactory.create(DepositLifecycle.class);
 
-        depositLifecycle.deposit().set(deposit);
         depositLifecycle.currentAmount().setValue(deposit.amount().getValue());
         depositLifecycle.depositDate().set(deposit.billableItem().effectiveDate());
 
         depositLifecycle.billingAccount().set(billingAccount);
         depositLifecycle.status().setValue(DepositStatus.Created);
+
+        deposit.lifecycle().set(depositLifecycle);
 
         return depositLifecycle;
     }
@@ -126,26 +123,29 @@ public class DepositFacadeImpl implements DepositFacade {
 
         EntityQueryCriteria<DepositLifecycle> depositCriteria = EntityQueryCriteria.create(DepositLifecycle.class);
         depositCriteria.add(PropertyCriterion.eq(depositCriteria.proto().status(), DepositStatus.Billed));
-        // TODO - do we want to check for last adjustment date?
-        for (DepositLifecycle deposit : Persistence.service().query(depositCriteria)) {
-            Persistence.service().retrieve(deposit.deposit().billableItem());
-            DepositPolicyItem policyItem = policyMatrix.get(new DepositPolicyKey(deposit.deposit().depositType().getValue(), deposit.deposit().billableItem()
-                    .item().type()));
-            if (policyItem == null) {
-                throw new UserRuntimeException(i18n.tr("Could not find Policy Item for deposit {0}", deposit.getStringView()));
-            } else {
-                DepositInterestAdjustment adjustment = EntityFactory.create(DepositInterestAdjustment.class);
-                adjustment.date().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
-                adjustment.interestRate().set(policyItem.annualInterestRate());
-                adjustment.amount().setValue(
-                        MoneyUtils.round(deposit.currentAmount().getValue().multiply(policyItem.annualInterestRate().getValue().divide(new BigDecimal(12)))));
 
-                deposit.interestAdjustments().add(adjustment);
-                deposit.currentAmount().setValue(deposit.currentAmount().getValue().add(adjustment.amount().getValue()));
+// TODO: Stan, there is no deposit() field in DepositLifecycle now. There reference is opposite : Deposit.lifecycle() ;( 
 
-                Persistence.service().persist(deposit);
-            }
-        }
+//        // TODO - do we want to check for last adjustment date?
+//        for (DepositLifecycle deposit : Persistence.service().query(depositCriteria)) {
+//            Persistence.service().retrieve(deposit.deposit().billableItem());
+//            DepositPolicyItem policyItem = policyMatrix.get(new DepositPolicyKey(deposit.deposit().depositType().getValue(), deposit.deposit().billableItem()
+//                    .item().type()));
+//            if (policyItem == null) {
+//                throw new UserRuntimeException(i18n.tr("Could not find Policy Item for deposit {0}", deposit.getStringView()));
+//            } else {
+//                DepositInterestAdjustment adjustment = EntityFactory.create(DepositInterestAdjustment.class);
+//                adjustment.date().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
+//                adjustment.interestRate().set(policyItem.annualInterestRate());
+//                adjustment.amount().setValue(
+//                        MoneyUtils.round(deposit.currentAmount().getValue().multiply(policyItem.annualInterestRate().getValue().divide(new BigDecimal(12)))));
+//
+//                deposit.interestAdjustments().add(adjustment);
+//                deposit.currentAmount().setValue(deposit.currentAmount().getValue().add(adjustment.amount().getValue()));
+//
+//                Persistence.service().persist(deposit);
+//            }
+//        }
     }
 
     @Override
@@ -167,41 +167,43 @@ public class DepositFacadeImpl implements DepositFacade {
 
     @Override
     public void issueDepositRefunds(PolicyNode node) {
-        EntityQueryCriteria<DepositLifecycle> depositCriteria = EntityQueryCriteria.create(DepositLifecycle.class);
-        depositCriteria.add(PropertyCriterion.eq(depositCriteria.proto().status(), DepositStatus.Billed));
-        // MoveInDeposit - refund right away (first bill)
-        OrCriterion orCrit = new OrCriterion();
-        depositCriteria.or(PropertyCriterion.eq(depositCriteria.proto().deposit().depositType(), DepositType.MoveInDeposit), orCrit);
+        EntityQueryCriteria<Deposit> depositCriteria = EntityQueryCriteria.create(Deposit.class);
 
-        // LastMonthDeposit - refund must appear on the last month bill so normally deposits will be issued by
-        // the BillingDepositProcessor. However, if for some reason that did not happen we will pick up those
-        // deposits here to ensure they get into the final bill.
-        orCrit.left(PropertyCriterion.eq(depositCriteria.proto().deposit().depositType(), DepositType.LastMonthDeposit));
-        orCrit.left(PropertyCriterion.le(depositCriteria.proto().deposit().billableItem().expirationDate(), Persistence.service().getTransactionSystemTime()));
+// TODO: Stan, there is no deposit() field in DepositLifecycle now. There reference is opposite : Deposit.lifecycle() ;( 
 
-        // SecurityDeposit - return after product expiration - check policy for refund window
-        orCrit.right(PropertyCriterion.eq(depositCriteria.proto().deposit().depositType(), DepositType.SecurityDeposit));
-        orCrit.right(PropertyCriterion.le(depositCriteria.proto().deposit().billableItem().expirationDate(), Persistence.service().getTransactionSystemTime()));
+//        depositCriteria.add(PropertyCriterion.eq(depositCriteria.proto().status(), DepositStatus.Billed));
+//        // MoveInDeposit - refund right away (first bill)
+//        OrCriterion orCrit = new OrCriterion();
+//        depositCriteria.or(PropertyCriterion.eq(depositCriteria.proto().deposit().depositType(), DepositType.MoveInDeposit), orCrit);
+//
+//        // LastMonthDeposit - refund must appear on the last month bill so normally deposits will be issued by
+//        // the BillingDepositProcessor. However, if for some reason that did not happen we will pick up those
+//        // deposits here to ensure they get into the final bill.
+//        orCrit.left(PropertyCriterion.eq(depositCriteria.proto().deposit().depositType(), DepositType.LastMonthDeposit));
+//        orCrit.left(PropertyCriterion.le(depositCriteria.proto().deposit().billableItem().expirationDate(), Persistence.service().getTransactionSystemTime()));
+//
+//        // SecurityDeposit - return after product expiration - check policy for refund window
+//        orCrit.right(PropertyCriterion.eq(depositCriteria.proto().deposit().depositType(), DepositType.SecurityDeposit));
+//        orCrit.right(PropertyCriterion.le(depositCriteria.proto().deposit().billableItem().expirationDate(), Persistence.service().getTransactionSystemTime()));
 
-        List<DepositLifecycle> depositsDue = Persistence.service().query(depositCriteria);
+        List<Deposit> depositsDue = Persistence.service().query(depositCriteria);
         if (depositsDue == null || depositsDue.size() == 0) {
             return;
         }
 
         ARFacade arFacade = ServerSideFactory.create(ARFacade.class);
         Map<DepositPolicyKey, DepositPolicyItem> policyMatrix = getDepositPolicyMatrix(node);
-        for (DepositLifecycle deposit : depositsDue) {
-            Persistence.service().retrieve(deposit.deposit().billableItem());
-            switch (deposit.deposit().depositType().getValue()) {
+        for (Deposit deposit : depositsDue) {
+            Persistence.service().retrieve(deposit.billableItem());
+            switch (deposit.depositType().getValue()) {
             case MoveInDeposit:
             case LastMonthDeposit:
                 // refund now
                 arFacade.postDepositRefund(deposit);
                 break;
             case SecurityDeposit:
-                Persistence.service().retrieve(deposit.deposit().billableItem());
-                DepositPolicyItem policyItem = policyMatrix.get(new DepositPolicyKey(deposit.deposit().depositType().getValue(), deposit.deposit()
-                        .billableItem().item().type()));
+                Persistence.service().retrieve(deposit.billableItem());
+                DepositPolicyItem policyItem = policyMatrix.get(new DepositPolicyKey(deposit.depositType().getValue(), deposit.billableItem().item().type()));
                 if (policyItem == null) {
                     throw new UserRuntimeException(i18n.tr("Could not find Policy Item for deposit {0}", deposit.getStringView()));
                 } else {
@@ -212,7 +214,7 @@ public class DepositFacadeImpl implements DepositFacade {
                         calendar.add(Calendar.DAY_OF_MONTH, -policyItem.securityDepositRefundWindow().getValue());
                     }
                     Date dueDate = calendar.getTime();
-                    if (!deposit.deposit().billableItem().expirationDate().getValue().after(dueDate)) {
+                    if (!deposit.billableItem().expirationDate().getValue().after(dueDate)) {
                         arFacade.postDepositRefund(deposit);
                     }
                 }
@@ -227,9 +229,9 @@ public class DepositFacadeImpl implements DepositFacade {
     public void onValidateBill(Bill bill) {
         // update status of newly created deposits to Billed
         for (InvoiceDeposit invoiceDeposit : BillingUtils.getLineItemsForType(bill, InvoiceDeposit.class)) {
-            if (DepositStatus.Created.equals(invoiceDeposit.deposit().status().getValue())) {
-                invoiceDeposit.deposit().status().setValue(DepositStatus.Billed);
-                Persistence.service().persist(invoiceDeposit.deposit());
+            if (!invoiceDeposit.deposit().isProcessed().isBooleanTrue()) {
+                invoiceDeposit.deposit().isProcessed().setValue(true);
+                Persistence.service().merge(invoiceDeposit.deposit());
             }
         }
     }
@@ -257,6 +259,7 @@ public class DepositFacadeImpl implements DepositFacade {
         default:
             throw new Error("Unsupported ValueType");
         }
+        deposit.isProcessed().setValue(false);
         deposit.description().set(policyItem.description());
         deposit.billableItem().set(billableItem);
 

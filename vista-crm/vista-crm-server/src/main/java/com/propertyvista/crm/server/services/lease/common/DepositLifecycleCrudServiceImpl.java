@@ -41,8 +41,6 @@ public class DepositLifecycleCrudServiceImpl extends AbstractCrudServiceImpl<Dep
         super.enhanceRetrieved(entity, dto);
 
         // load detached:
-        Persistence.service().retrieve(dto.deposit());
-        Persistence.service().retrieve(dto.deposit().billableItem());
         Persistence.service().retrieve(dto.interestAdjustments());
     }
 
@@ -51,8 +49,6 @@ public class DepositLifecycleCrudServiceImpl extends AbstractCrudServiceImpl<Dep
         super.enhanceListRetrieved(entity, dto);
 
         // load detached:
-        Persistence.service().retrieve(dto.deposit());
-        Persistence.service().retrieve(dto.deposit().billableItem());
     }
 
     @Override

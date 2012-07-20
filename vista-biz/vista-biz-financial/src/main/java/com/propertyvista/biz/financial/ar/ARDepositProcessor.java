@@ -18,26 +18,27 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.financial.billing.InvoiceDepositRefund;
-import com.propertyvista.domain.tenant.lease.DepositLifecycle;
+import com.propertyvista.domain.tenant.lease.Deposit;
 import com.propertyvista.domain.tenant.lease.DepositLifecycle.DepositStatus;
 
 public class ARDepositProcessor extends AbstractARProcessor {
 
     private static final I18n i18n = I18n.get(ARDepositProcessor.class);
 
-    void postDepositRefund(DepositLifecycle deposit) {
+    void postDepositRefund(Deposit deposit) {
+        assert (deposit.lifecycle().isNull());
 
         InvoiceDepositRefund refund = EntityFactory.create(InvoiceDepositRefund.class);
-        refund.deposit().set(deposit);
-        refund.amount().setValue(deposit.currentAmount().getValue().negate());
-        refund.billingAccount().set(deposit.billingAccount());
+        refund.deposit().set(deposit.lifecycle());
+        refund.amount().setValue(deposit.lifecycle().currentAmount().getValue().negate());
+        refund.billingAccount().set(deposit.lifecycle().billingAccount());
         refund.description().setValue(i18n.tr("Deposit Refund"));
         refund.claimed().setValue(false);
         Persistence.service().persist(refund);
 
         ARTransactionManager.postInvoiceLineItem(refund);
 
-        deposit.status().setValue(DepositStatus.Returned);
+        deposit.lifecycle().status().setValue(DepositStatus.Returned);
         Persistence.service().persist(deposit);
     }
 

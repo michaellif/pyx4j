@@ -16,11 +16,11 @@ package com.propertyvista.domain.financial.billing;
 
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 
-import com.propertyvista.domain.tenant.lease.DepositLifecycle;
+import com.propertyvista.domain.tenant.lease.Deposit;
 
 @DiscriminatorValue("Deposit")
 public interface InvoiceDeposit extends InvoiceDebit {
 
-    DepositLifecycle deposit();
+    Deposit deposit();
 
 }

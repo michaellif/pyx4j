@@ -15,7 +15,6 @@ package com.propertyvista.biz.tenant;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -57,7 +56,6 @@ import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lead.Lead;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Deposit;
-import com.propertyvista.domain.tenant.lease.DepositLifecycle;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.CompletionType;
 import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
@@ -297,7 +295,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
         lease = persist(lease);
 
         // update deposit mechanics:
-        persistDeposits(lease);
+        finalizeDeposits(lease);
 
         // update unit rent price here:
         ServerSideFactory.create(ProductCatalogFacade.class).updateUnitRentPrice(lease);
@@ -327,33 +325,18 @@ public class LeaseFacadeImpl implements LeaseFacade {
         }
     }
 
-    private void persistDeposits(Lease lease) {
+    private void finalizeDeposits(Lease lease) {
         List<Deposit> currentDeposits = new ArrayList<Deposit>();
         currentDeposits.addAll(lease.version().leaseProducts().serviceItem().deposits());
         for (BillableItem item : lease.version().leaseProducts().featureItems()) {
             currentDeposits.addAll(item.deposits());
         }
 
-        List<Deposit> wrappedDeposits = new ArrayList<Deposit>();
-        Persistence.service().retrieve(lease.billingAccount().deposits());
-        for (DepositLifecycle dlc : lease.billingAccount().deposits()) {
-            wrappedDeposits.add(dlc.deposit());
-        }
-
-        // clean current deposits from already wrapped ones:
-        Iterator<Deposit> it = currentDeposits.iterator();
-        while (it.hasNext()) {
-            Deposit current = it.next();
-            for (Deposit wrrapped : wrappedDeposits) {
-                if (current.uid().equals(wrrapped.uid())) {
-                    it.remove();
-                }
-            }
-        }
-
         // wrap newly added deposits in DepositLifecycle:
         for (Deposit deposit : currentDeposits) {
-            Persistence.service().persist(ServerSideFactory.create(DepositFacade.class).createDepositLifecycle(deposit, lease.billingAccount()));
+            if (deposit.lifecycle().isNull()) {
+                Persistence.service().persist(ServerSideFactory.create(DepositFacade.class).createDepositLifecycle(deposit, lease.billingAccount()));
+            }
         }
     }
 

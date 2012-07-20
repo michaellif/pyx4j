@@ -81,6 +81,8 @@ public interface Deposit extends IEntity {
     @GeneratedValue(type = GeneratedValue.GenerationType.randomUUID)
     IPrimitive<String> uid();
 
+    DepositLifecycle lifecycle();
+
     // -----------------------------------------------------------------
 
     @NotNull
@@ -96,4 +98,7 @@ public interface Deposit extends IEntity {
     @NotNull
     @Length(40)
     IPrimitive<String> description();
+
+    @NotNull
+    IPrimitive<Boolean> isProcessed();
 }

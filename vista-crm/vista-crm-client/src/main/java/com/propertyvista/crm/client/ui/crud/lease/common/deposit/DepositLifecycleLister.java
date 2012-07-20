@@ -27,9 +27,9 @@ public class DepositLifecycleLister extends ListerBase<DepositLifecycle> {
         super(DepositLifecycle.class, false);
 
         setColumnDescriptors(//@formatter:off
-            new MemberColumnDescriptor.Builder(proto().deposit().billableItem()).columnTitle(i18n.tr("Service/Feature")).build(),
-            new MemberColumnDescriptor.Builder(proto().deposit().depositType()).build(),
-            new MemberColumnDescriptor.Builder(proto().deposit().amount()).build(),
+//            new MemberColumnDescriptor.Builder(proto().deposit().billableItem()).columnTitle(i18n.tr("Service/Feature")).build(),
+//            new MemberColumnDescriptor.Builder(proto().deposit().depositType()).build(),
+//            new MemberColumnDescriptor.Builder(proto().deposit().amount()).build(),
             new MemberColumnDescriptor.Builder(proto().status()).build(),
             new MemberColumnDescriptor.Builder(proto().depositDate(), false).build(),
             new MemberColumnDescriptor.Builder(proto().refundDate()).build(),

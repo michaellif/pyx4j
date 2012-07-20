@@ -16,24 +16,17 @@ package com.propertyvista.biz.financial.billing;
 import java.math.BigDecimal;
 import java.util.List;
 
-import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.InvoiceDebit.DebitType;
 import com.propertyvista.domain.financial.billing.InvoiceDeposit;
 import com.propertyvista.domain.financial.billing.InvoiceDepositRefund;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
-import com.propertyvista.domain.financial.billing.InvoiceProductCharge;
 import com.propertyvista.domain.tenant.lease.BillableItem;
-import com.propertyvista.domain.tenant.lease.Deposit.DepositType;
-import com.propertyvista.domain.tenant.lease.DepositLifecycle;
-import com.propertyvista.domain.tenant.lease.DepositLifecycle.DepositStatus;
+import com.propertyvista.domain.tenant.lease.Deposit;
 
 public class BillingDepositProcessor extends AbstractBillingProcessor {
 
@@ -51,53 +44,29 @@ public class BillingDepositProcessor extends AbstractBillingProcessor {
     }
 
     private void createInvoiceDeposits() {
-
-        EntityQueryCriteria<DepositLifecycle> depositCriteria = EntityQueryCriteria.create(DepositLifecycle.class);
-        depositCriteria.add(PropertyCriterion.eq(depositCriteria.proto().billingAccount(), getBillingManager().getNextPeriodBill().billingAccount()));
-        depositCriteria.add(PropertyCriterion.eq(depositCriteria.proto().status(), DepositStatus.Created));
-
-        for (DepositLifecycle deposit : Persistence.service().query(depositCriteria)) {
-            createInvoiceDeposit(deposit);
+        createInvoiceDeposit(getBillingManager().getNextPeriodBill().billingAccount().lease().version().leaseProducts().serviceItem());
+        for (BillableItem billableItem : getBillingManager().getNextPeriodBill().billingAccount().lease().version().leaseProducts().featureItems()) {
+            createInvoiceDeposit(billableItem);
         }
     }
 
     //Deposit should be taken on a first billing period of the BillableItem
-    private void createInvoiceDeposit(DepositLifecycle deposit) {
-        BillableItem billableItem = deposit.deposit().billableItem();
-        Persistence.service().retrieve(billableItem);
-        InvoiceProductCharge nextCharge = null;
-        InvoiceProductCharge currentCharge = null;
-        for (InvoiceProductCharge charge : BillingUtils.getLineItemsForType(getBillingManager().getNextPeriodBill(), InvoiceProductCharge.class)) {
-            if (sameBillableItem(billableItem, charge.chargeSubLineItem().billableItem())
-                    && InvoiceProductCharge.Period.next.equals(charge.period().getValue())) {
-                nextCharge = charge;
-                break;
-            }
-        }
-
-        if (getBillingManager().getCurrentPeriodBill() != null) {
-            for (InvoiceProductCharge charge : BillingUtils.getLineItemsForType(getBillingManager().getCurrentPeriodBill(), InvoiceProductCharge.class)) {
-                if (sameBillableItem(billableItem, charge.chargeSubLineItem().billableItem())
-                        && InvoiceProductCharge.Period.next.equals(charge.period().getValue())) {
-                    currentCharge = charge;
-                    break;
-                }
-            }
-        }
-
+    private void createInvoiceDeposit(BillableItem billableItem) {
         //This is first time charge have been issued - add deposit
-        if (nextCharge != null && currentCharge == null) {
-            InvoiceDeposit invoiceDeposit = EntityFactory.create(InvoiceDeposit.class);
-            invoiceDeposit.billingAccount().set(getBillingManager().getNextPeriodBill().billingAccount());
-            invoiceDeposit.dueDate().setValue(getBillingManager().getNextPeriodBill().dueDate().getValue());
-            invoiceDeposit.debitType().setValue(DebitType.deposit);
-            invoiceDeposit.description().setValue(deposit.deposit().description().getStringView());
-            invoiceDeposit.amount().setValue(deposit.deposit().amount().getValue());
-            invoiceDeposit.taxTotal().setValue(BigDecimal.ZERO);
-            invoiceDeposit.deposit().set(deposit);
-
-            addInvoiceDeposit(invoiceDeposit);
+        for (Deposit deposit : billableItem.deposits()) {
+            if (!deposit.isProcessed().isBooleanTrue()) {
+                InvoiceDeposit invoiceDeposit = EntityFactory.create(InvoiceDeposit.class);
+                invoiceDeposit.billingAccount().set(getBillingManager().getNextPeriodBill().billingAccount());
+                invoiceDeposit.dueDate().setValue(getBillingManager().getNextPeriodBill().dueDate().getValue());
+                invoiceDeposit.debitType().setValue(DebitType.deposit);
+                invoiceDeposit.description().setValue(deposit.description().getStringView());
+                invoiceDeposit.amount().setValue(deposit.amount().getValue());
+                invoiceDeposit.taxTotal().setValue(BigDecimal.ZERO);
+                invoiceDeposit.deposit().set(deposit);
+                addInvoiceDeposit(invoiceDeposit);
+            }
         }
+
     }
 
     private void addInvoiceDeposit(InvoiceDeposit invoiceDeposit) {
@@ -116,11 +85,14 @@ public class BillingDepositProcessor extends AbstractBillingProcessor {
         Bill nextBill = getBillingManager().getNextPeriodBill();
         if (!nextBill.billingPeriodEndDate().getValue().before(nextBill.billingAccount().lease().leaseTo().getValue())) {
             Persistence.service().retrieve(nextBill.billingAccount().deposits());
-            for (DepositLifecycle deposit : nextBill.billingAccount().deposits()) {
-                if (DepositType.LastMonthDeposit.equals(deposit.deposit().depositType().getValue())) {
-                    ServerSideFactory.create(ARFacade.class).postDepositRefund(deposit);
-                }
-            }
+
+// TODO: Stan, there is no deposit() field in DepositLifecycle now. There reference is opposite : Deposit.lifecycle() ;( 
+
+//            for (DepositLifecycle deposit : nextBill.billingAccount().deposits()) {
+//                if (DepositType.LastMonthDeposit.equals(deposit.depositType().getValue())) {
+//                    ServerSideFactory.create(ARFacade.class).postDepositRefund(deposit);
+//                }
+//            }
         }
     }
 
