@@ -19,6 +19,9 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.pyx4j.config.server.NamespaceResolver;
 import com.pyx4j.entity.cache.CacheService;
 import com.pyx4j.entity.server.Persistence;
@@ -36,6 +39,8 @@ import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.portal.rpc.shared.SiteWasNotActivatedUserRuntimeException;
 
 public class VistaNamespaceResolver implements NamespaceResolver {
+
+    private final static Logger log = LoggerFactory.getLogger(VistaNamespaceResolver.class);
 
     private static final I18n i18n = I18n.get(VistaNamespaceResolver.class);
 
@@ -129,6 +134,7 @@ public class VistaNamespaceResolver implements NamespaceResolver {
                     return VistaNamespace.demoNamespace;
                 }
             }
+            log.warn("accessing host {}, path {}", host, httprequest.getServletPath());
             throw new SiteWasNotActivatedUserRuntimeException(i18n.tr("This property management site was not activated yet"));
         } else {
             return pmcNamespace;
