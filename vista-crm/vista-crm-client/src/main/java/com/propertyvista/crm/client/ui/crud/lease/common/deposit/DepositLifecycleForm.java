@@ -42,27 +42,29 @@ public class DepositLifecycleForm extends CrmEntityForm<DepositLifecycleDTO> {
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().deposit().depositType()), 12).build());
         content.setWidget(row, 1, new DecoratorBuilder(inject(proto().status()), 9).build());
 
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().depositDate()), 9).build());
-        content.setWidget(row, 1, new DecoratorBuilder(inject(proto().refundDate()), 9).build());
-
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().deposit().amount()), 7).build());
         content.setWidget(row, 1, new DecoratorBuilder(inject(proto().currentAmount()), 7).build());
 
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().deposit().description()), 25).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().depositDate()), 9).build());
+        content.setWidget(row, 1, new DecoratorBuilder(inject(proto().refundDate()), 9).build());
+
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().deposit().description()), 30).build());
+        content.getFlexCellFormatter().setColSpan(row, 0, 2);
 
         content.setH2(++row, 0, 2, proto().interestAdjustments().getMeta().getCaption());
         content.setWidget(++row, 0, inject(proto().interestAdjustments(), new DepositInterestAdjustmentFolder(isEditable())));
         content.getFlexCellFormatter().setColSpan(row, 0, 2);
 
         // tweaking:
-        get(proto().deposit().depositType()).setEditable(false);
-        get(proto().deposit().amount()).setEditable(false);
-        get(proto().deposit().description()).setEditable(false);
+        get(proto().deposit().billableItem()).setViewable(true);
+        get(proto().deposit().depositType()).setViewable(true);
+        get(proto().deposit().amount()).setViewable(true);
+        get(proto().deposit().description()).setViewable(true);
 
-        get(proto().status()).setEditable(false);
-        get(proto().depositDate()).setEditable(false);
-        get(proto().refundDate()).setEditable(false);
-        get(proto().currentAmount()).setEditable(false);
+        get(proto().status()).setViewable(true);
+        get(proto().depositDate()).setViewable(true);
+        get(proto().refundDate()).setViewable(true);
+        get(proto().currentAmount()).setViewable(true);
 
         content.getColumnFormatter().setWidth(0, "50%");
         content.getColumnFormatter().setWidth(1, "50%");
