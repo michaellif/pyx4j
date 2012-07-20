@@ -26,7 +26,7 @@ public class ARDepositProcessor extends AbstractARProcessor {
     private static final I18n i18n = I18n.get(ARDepositProcessor.class);
 
     void postDepositRefund(Deposit deposit) {
-        assert (deposit.lifecycle().isNull());
+        assert (!deposit.lifecycle().isNull());
 
         InvoiceDepositRefund refund = EntityFactory.create(InvoiceDepositRefund.class);
         refund.deposit().set(deposit.lifecycle());
@@ -41,5 +41,4 @@ public class ARDepositProcessor extends AbstractARProcessor {
         deposit.lifecycle().status().setValue(DepositStatus.Returned);
         Persistence.service().persist(deposit);
     }
-
 }
