@@ -67,4 +67,6 @@ public interface BillableItem extends IEntity {
     @Format("MM/dd/yyyy")
     @Caption(description = "Empty value assumes Lease end date")
     IPrimitive<LogicalDate> expirationDate();
+
+    IPrimitive<Boolean> finalized();
 }

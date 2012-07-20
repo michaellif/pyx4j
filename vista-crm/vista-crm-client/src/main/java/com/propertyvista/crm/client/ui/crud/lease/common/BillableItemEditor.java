@@ -165,10 +165,10 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
                 get(proto().expirationDate()).setVisible(false);
 
                 if (isEditable()) {
-                    // set editable just for non-agreed leases (and multiple service items):
+                    // set editable for non-agreed leases (and multiple service items):
                     boolean isAgreed = !lease.getValue().approvalDate().isNull();
+                    get(proto().agreedPrice()).setEditable(!isAgreed);
                     get(proto().item()).setEditable(!isAgreed && !lease.getValue().selectedServiceItems().isEmpty());
-                    get(proto().agreedPrice()).setEditable(!isAgreed && lease.getValue().approvalDate().isNull());
                 }
             } else if (getValue().item().type().isInstanceOf(FeatureItemType.class)) {
                 // show/hide effective dates (hide always for non-recurring; show in editor, hide in viewer if empty):
@@ -176,7 +176,10 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
                 get(proto().effectiveDate()).setVisible(recurring && (isEditable() || !getValue().effectiveDate().isNull()));
                 get(proto().expirationDate()).setVisible(recurring && (isEditable() || !getValue().expirationDate().isNull()));
 
-                get(proto().item()).setEditable(false);
+                if (isEditable()) {
+                    get(proto().agreedPrice()).setEditable(!getValue().finalized().isBooleanTrue());
+                    get(proto().item()).setEditable(false);
+                }
 
                 // correct folder item:
                 if (getParent() instanceof CEntityFolderItem) {

@@ -291,6 +291,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
 
     @Override
     public Lease finalize(Lease lease) {
+        finalizeBillableItems(lease);
         lease.saveAction().setValue(SaveAction.saveAsFinal);
         lease = persist(lease);
 
@@ -322,6 +323,13 @@ public class LeaseFacadeImpl implements LeaseFacade {
             if (!guarantor.customer().isValueDetached()) {
                 ServerSideFactory.create(CustomerFacade.class).persistCustomer(guarantor.customer());
             }
+        }
+    }
+
+    private void finalizeBillableItems(Lease lease) {
+        lease.version().leaseProducts().serviceItem().finalized().setValue(Boolean.TRUE);
+        for (BillableItem item : lease.version().leaseProducts().featureItems()) {
+            item.finalized().setValue(Boolean.TRUE);
         }
     }
 
