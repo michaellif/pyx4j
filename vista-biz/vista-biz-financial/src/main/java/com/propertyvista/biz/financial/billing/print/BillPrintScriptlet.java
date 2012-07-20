@@ -21,11 +21,9 @@ import net.sf.jasperreports.engine.JRScriptletException;
 
 import com.pyx4j.commons.LogicalDate;
 
-import com.propertyvista.domain.financial.billing.InvoiceAccountCharge;
-import com.propertyvista.domain.financial.billing.InvoiceAccountCredit;
+import com.propertyvista.biz.financial.billing.BillDateUtils;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
-import com.propertyvista.domain.financial.billing.InvoiceProductCharge;
 
 public class BillPrintScriptlet extends JRDefaultScriptlet {
 
@@ -35,31 +33,7 @@ public class BillPrintScriptlet extends JRDefaultScriptlet {
     }
 
     public String formatDays(InvoiceLineItem lineItem) throws JRScriptletException {
-        if (lineItem instanceof InvoiceProductCharge) {
-            return formatDays(((InvoiceProductCharge) lineItem).fromDate().getValue(), ((InvoiceProductCharge) lineItem).toDate().getValue());
-        } else if (lineItem instanceof InvoiceAccountCredit) {
-            return formatDays(((InvoiceAccountCredit) lineItem).targetDate().getValue(), null);
-        } else if (lineItem instanceof InvoiceAccountCharge) {
-            return formatDays(((InvoiceAccountCharge) lineItem).targetDate().getValue(), null);
-        } else {
-            return formatDays(lineItem.postDate().getValue(), null);
-        }
-    }
-
-    public String formatDays(LogicalDate fromDate, LogicalDate toDate) throws JRScriptletException {
-        SimpleDateFormat formatter = new SimpleDateFormat("MMM dd");
-        if (fromDate != null) {
-            if (toDate != null) {
-                if (fromDate.equals(toDate)) {
-                    return formatter.format(fromDate);
-                } else {
-                    return formatter.format(fromDate) + " - " + formatter.format(toDate);
-                }
-            } else {
-                return formatter.format(fromDate);
-            }
-        }
-        return "";
+        return BillDateUtils.formatDays(lineItem);
     }
 
     public BigDecimal getAmountWithTax(InvoiceLineItem lineItem) throws JRScriptletException {

@@ -13,6 +13,7 @@
  */
 package com.propertyvista.biz.financial.billing;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
@@ -22,6 +23,10 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.biz.financial.SysDateManager;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.BillingType;
+import com.propertyvista.domain.financial.billing.InvoiceAccountCharge;
+import com.propertyvista.domain.financial.billing.InvoiceAccountCredit;
+import com.propertyvista.domain.financial.billing.InvoiceLineItem;
+import com.propertyvista.domain.financial.billing.InvoiceProductCharge;
 import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
 import com.propertyvista.portal.rpc.shared.BillingException;
 
@@ -217,4 +222,31 @@ public class BillDateUtils {
         }
     }
 
+    public static String formatDays(InvoiceLineItem lineItem) {
+        if (lineItem instanceof InvoiceProductCharge) {
+            return formatDays(((InvoiceProductCharge) lineItem).fromDate().getValue(), ((InvoiceProductCharge) lineItem).toDate().getValue());
+        } else if (lineItem instanceof InvoiceAccountCredit) {
+            return formatDays(((InvoiceAccountCredit) lineItem).targetDate().getValue(), null);
+        } else if (lineItem instanceof InvoiceAccountCharge) {
+            return formatDays(((InvoiceAccountCharge) lineItem).targetDate().getValue(), null);
+        } else {
+            return formatDays(lineItem.postDate().getValue(), null);
+        }
+    }
+
+    public static String formatDays(LogicalDate fromDate, LogicalDate toDate) {
+        SimpleDateFormat formatter = new SimpleDateFormat("MMM dd");
+        if (fromDate != null) {
+            if (toDate != null) {
+                if (fromDate.equals(toDate)) {
+                    return formatter.format(fromDate);
+                } else {
+                    return formatter.format(fromDate) + " - " + formatter.format(toDate);
+                }
+            } else {
+                return formatter.format(fromDate);
+            }
+        }
+        return "";
+    }
 }

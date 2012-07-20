@@ -13,14 +13,18 @@
  */
 package com.propertyvista.common.client.ui.components.editors.dto.bill;
 
+import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.client.ui.CEntityCollapsableViewer;
 
 import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.common.client.theme.BillingTheme;
+import com.propertyvista.domain.financial.billing.InvoiceAccountCharge;
+import com.propertyvista.domain.financial.billing.InvoiceAccountCredit;
 import com.propertyvista.domain.financial.billing.InvoiceCredit;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
@@ -80,21 +84,18 @@ public class LineItemCollapsibleViewer extends CEntityCollapsableViewer<InvoiceL
                         if (item instanceof InvoiceProductCharge) {
                             InvoiceProductCharge productCharge = (InvoiceProductCharge) item;
                             InvoiceSubLineItem charge = productCharge.chargeSubLineItem();
-                            addDetailRecord(content, row++, ((InvoiceProductCharge) item).dueDate().getStringView(), charge.description().getValue(), charge
-                                    .amount().getStringView());
+                            addDetailRecord(content, row++, formatDays(item), charge.description().getValue(), charge.amount().getStringView());
                             for (InvoiceSubLineItem adjustment : productCharge.adjustmentSubLineItems()) {
-                                addDetailRecord(content, row++, "", adjustment.description().getValue(), adjustment.amount().getStringView());
+                                addDetailRecord(content, row++, formatDays(item), adjustment.description().getValue(), adjustment.amount().getStringView());
                             }
                             for (InvoiceSubLineItem concession : productCharge.concessionSubLineItems()) {
-                                addDetailRecord(content, row++, "", concession.description().getValue(), concession.amount().getStringView());
+                                addDetailRecord(content, row++, formatDays(item), concession.description().getValue(), concession.amount().getStringView());
                             }
                         } else {
-                            addDetailRecord(content, row++, ((InvoiceDebit) item).dueDate().getStringView(), item.description().getValue(), item.amount()
-                                    .getStringView());
+                            addDetailRecord(content, row++, formatDays(item), item.description().getValue(), item.amount().getStringView());
                         }
                     } else if (item instanceof InvoiceCredit) {
-                        addDetailRecord(content, row++, ((InvoiceCredit) item).postDate().getStringView(), item.description().getValue(), item.amount()
-                                .getStringView());
+                        addDetailRecord(content, row++, formatDays(item), item.description().getValue(), item.amount().getStringView());
                     }
                 }
             }
@@ -124,5 +125,33 @@ public class LineItemCollapsibleViewer extends CEntityCollapsableViewer<InvoiceL
         table.getFlexCellFormatter().setStyleName(row, 1, BillingTheme.StyleName.BillingDetailTotalTitle.name());
         table.getFlexCellFormatter().setStyleName(row, 2, BillingTheme.StyleName.BillingDetailTotalAmount.name());
 
+    }
+
+    public static String formatDays(InvoiceLineItem lineItem) {
+        if (lineItem instanceof InvoiceProductCharge) {
+            return formatDays(((InvoiceProductCharge) lineItem).fromDate().getValue(), ((InvoiceProductCharge) lineItem).toDate().getValue());
+        } else if (lineItem instanceof InvoiceAccountCredit) {
+            return formatDays(((InvoiceAccountCredit) lineItem).targetDate().getValue(), null);
+        } else if (lineItem instanceof InvoiceAccountCharge) {
+            return formatDays(((InvoiceAccountCharge) lineItem).targetDate().getValue(), null);
+        } else {
+            return formatDays(lineItem.postDate().getValue(), null);
+        }
+    }
+
+    public static String formatDays(LogicalDate fromDate, LogicalDate toDate) {
+        DateTimeFormat formatter = DateTimeFormat.getFormat("MMM dd");
+        if (fromDate != null) {
+            if (toDate != null) {
+                if (fromDate.equals(toDate)) {
+                    return formatter.format(fromDate);
+                } else {
+                    return formatter.format(fromDate) + " - " + formatter.format(toDate);
+                }
+            } else {
+                return formatter.format(fromDate);
+            }
+        }
+        return "";
     }
 }
