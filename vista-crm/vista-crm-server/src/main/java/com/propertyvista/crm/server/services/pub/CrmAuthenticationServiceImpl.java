@@ -70,6 +70,9 @@ public class CrmAuthenticationServiceImpl extends VistaAuthenticationServicesImp
                 behaviors.addAll(role.behaviors());
                 addAllBehaviors(behaviors, role.roles(), processed);
             }
+            if (role.requireSecurityQuestionForPasswordReset().isBooleanTrue()) {
+                behaviors.add(VistaBasicBehavior.CRMPasswordChangeRequiresSecurityQuestion);
+            }
         }
     }
 

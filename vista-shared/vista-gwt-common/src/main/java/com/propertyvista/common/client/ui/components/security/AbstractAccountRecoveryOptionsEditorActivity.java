@@ -25,9 +25,11 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.rpc.AuthenticationRequest;
+import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
+import com.propertyvista.domain.security.VistaBasicBehavior;
 import com.propertyvista.portal.rpc.shared.dto.AccountRecoveryOptionsDTO;
 import com.propertyvista.portal.rpc.shared.services.AbstractAccountRecoveryOptionsService;
 
@@ -53,16 +55,17 @@ public class AbstractAccountRecoveryOptionsEditorActivity extends AbstractActivi
         this.service = service;
     }
 
+    /** Warning: this method was made <code>final</code> because it works asynchronously */
     @Override
-    public void populate() {
+    public final void populate() {
         if (!isCancelled) {
             AuthenticationRequest authRequest = EntityFactory.create(AuthenticationRequest.class);
             authRequest.password().setValue(getCurrentPassword());
 
             service.obtainRecoveryOptions(new DefaultAsyncCallback<AccountRecoveryOptionsDTO>() {
-
                 @Override
                 public void onSuccess(AccountRecoveryOptionsDTO result) {
+                    view.setSecurityQuestionRequired(SecurityController.checkBehavior(VistaBasicBehavior.CRMPasswordChangeRequiresSecurityQuestion));
                     view.populate(result);
                 }
             }, authRequest);

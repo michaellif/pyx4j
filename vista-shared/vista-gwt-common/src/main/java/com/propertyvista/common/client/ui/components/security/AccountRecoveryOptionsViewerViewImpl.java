@@ -41,4 +41,8 @@ public class AccountRecoveryOptionsViewerViewImpl extends ViewerViewImplBase<Acc
         addHeaderToolbarTwoItem(btnEdit);
     }
 
+    @Override
+    public void setSecurityQuestionRequired(boolean isSecurityQuestionEntiryRequired) {
+        ((AccountRecoveryOptionsForm) getForm()).setSecurityQuestionRequired(isSecurityQuestionEntiryRequired);
+    }
 }

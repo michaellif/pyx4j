@@ -16,6 +16,10 @@ package com.propertyvista.common.client.ui.components.security;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
+
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CPasswordTextField;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
@@ -47,23 +51,54 @@ public class AccountRecoveryOptionsForm extends CrudEntityForm<AccountRecoveryOp
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().recoveryEmail())).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().mobilePhone())).build());
 
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().useSecurityQuestionChallengeForPasswordReset())).build());
+        get(proto().useSecurityQuestionChallengeForPasswordReset()).asWidget().getElement().getStyle().setPaddingTop(1, Unit.EM);
+        get(proto().useSecurityQuestionChallengeForPasswordReset()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+
+            @Override
+            public void onValueChange(ValueChangeEvent<Boolean> event) {
+                setUpSecurityQuestionControls();
+            }
+        });
+
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().securityQuestion())).build());
+        get(proto().securityQuestion()).setVisible(false);
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().securityAnswer(), new CPasswordTextField())).build());
+        get(proto().securityAnswer()).setVisible(false);
 
         selectTab(addTab(content));
 
+    }
+
+    public void setSecurityQuestionRequired(boolean isSecurityQuestionEntiryRequired) {
+        get(proto().useSecurityQuestionChallengeForPasswordReset()).setViewable(isSecurityQuestionEntiryRequired);
     }
 
     @Override
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
 
-        List<String> suggestedSecurityQuestions = new ArrayList<String>();
-        for (SecurityQuestion q : getValue().securityQuestionsSuggestions()) {
-            suggestedSecurityQuestions.add(q.question().getValue());
-        }
-
         get(proto().mobilePhone()).setEditable(false);
+
+        setUpSecurityQuestionControls();
+    }
+
+    private void setUpSecurityQuestionControls() {
+        if (getValue().useSecurityQuestionChallengeForPasswordReset().isBooleanTrue()) {
+            get(proto().securityQuestion()).setVisible(true);
+            List<String> suggestedSecurityQuestions = new ArrayList<String>();
+            for (SecurityQuestion q : getValue().securityQuestionsSuggestions()) {
+                suggestedSecurityQuestions.add(q.question().getValue());
+            }
+            // TODO in this very place set security question options component, with the suggested security questions (pending a component that can support this)
+            get(proto().securityAnswer()).setVisible(true);
+
+        } else {
+            get(proto().securityQuestion()).setVisible(false);
+            get(proto().securityQuestion()).setValue("");
+            get(proto().securityAnswer()).setVisible(false);
+            get(proto().securityAnswer()).setValue("");
+        }
     }
 
     // decoration stuff:

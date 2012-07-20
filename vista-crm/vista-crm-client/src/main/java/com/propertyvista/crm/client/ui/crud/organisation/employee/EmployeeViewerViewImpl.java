@@ -58,7 +58,6 @@ public class EmployeeViewerViewImpl extends CrmViewerViewImplBase<EmployeeDTO> i
             @Override
             public void onClick(ClickEvent event) {
                 new GetPasswordDialog().show();
-
             }
         });
 
@@ -93,7 +92,6 @@ public class EmployeeViewerViewImpl extends CrmViewerViewImplBase<EmployeeDTO> i
 
         @Override
         public boolean onClickCancel() {
-            getPresenter().cancel();
             return true;
         }
 

@@ -47,9 +47,14 @@ public class CrmRolesPreloader extends BaseVistaDevDataPreloader {
     private int rolesCount;
 
     private CrmRole createRole(String name, VistaCrmBehavior... behavior) {
+        return createRole(name, false, behavior);
+    }
+
+    private CrmRole createRole(String name, boolean requireSecurityQuestionForPasswordReset, VistaCrmBehavior... behavior) {
         CrmRole role = EntityFactory.create(CrmRole.class);
         role.name().setValue(name);
         role.behaviors().addAll(Arrays.asList(behavior));
+        role.requireSecurityQuestionForPasswordReset().setValue(requireSecurityQuestionForPasswordReset);
         Persistence.service().persist(role);
         rolesCount++;
         return role;
@@ -90,10 +95,10 @@ public class CrmRolesPreloader extends BaseVistaDevDataPreloader {
         createRole(DEFAULT_ACCESS_ALL_ROLE_NAME, allRoles.toArray(new VistaCrmBehavior[allRoles.size()]));
 
         createRole("Accountant", VistaCrmBehavior.ProductCatalog, VistaCrmBehavior.Billing, VistaCrmBehavior.Reports);
-        createRole("Accounting", VistaCrmBehavior.PropertyManagement, VistaCrmBehavior.Organization, VistaCrmBehavior.Contacts, VistaCrmBehavior.Reports);
-        createRole("Admin", VistaCrmBehavior.Organization, VistaCrmBehavior.Contacts, VistaCrmBehavior.Reports);
+        createRole("Accounting", true, VistaCrmBehavior.PropertyManagement, VistaCrmBehavior.Organization, VistaCrmBehavior.Contacts, VistaCrmBehavior.Reports);
+        createRole("Admin", true, VistaCrmBehavior.Organization, VistaCrmBehavior.Contacts, VistaCrmBehavior.Reports);
         createRole("AM", VistaCrmBehavior.Contacts, VistaCrmBehavior.Reports);
-        createRole("Asset Manager", VistaCrmBehavior.PropertyManagement, VistaCrmBehavior.BuildingFinancial, VistaCrmBehavior.Reports);
+        createRole("Asset Manager", true, VistaCrmBehavior.PropertyManagement, VistaCrmBehavior.BuildingFinancial, VistaCrmBehavior.Reports);
         createRole("BR", VistaCrmBehavior.Tenants, VistaCrmBehavior.Emergency, VistaCrmBehavior.ScreeningData, VistaCrmBehavior.Occupancy,
                 VistaCrmBehavior.Maintenance, VistaCrmBehavior.Contacts, VistaCrmBehavior.Reports);
         createRole("Executive", VistaCrmBehavior.Organization, VistaCrmBehavior.Contacts, VistaCrmBehavior.Reports);
@@ -102,11 +107,11 @@ public class CrmRolesPreloader extends BaseVistaDevDataPreloader {
         createRole("Maintenance", VistaCrmBehavior.Mechanicals, VistaCrmBehavior.Occupancy, VistaCrmBehavior.Maintenance, VistaCrmBehavior.Reports);
         createRole("Marketing and Leasing Specialist", VistaCrmBehavior.Marketing, VistaCrmBehavior.MarketingMedia, VistaCrmBehavior.Reports);
         createRole("Mechanical Engineer", VistaCrmBehavior.Mechanicals, VistaCrmBehavior.Reports);
-        createRole("Owner", VistaCrmBehavior.BuildingFinancial, VistaCrmBehavior.Reports);
+        createRole("Owner", true, VistaCrmBehavior.BuildingFinancial, VistaCrmBehavior.Reports);
         createRole("PM", VistaCrmBehavior.Tenants, VistaCrmBehavior.Emergency, VistaCrmBehavior.ScreeningData, VistaCrmBehavior.Occupancy,
                 VistaCrmBehavior.Contacts, VistaCrmBehavior.Reports);
 
-        createRole(VistaCrmBehavior.PropertyVistaAccountOwner.name(), VistaCrmBehavior.PropertyVistaAccountOwner);
+        createRole(VistaCrmBehavior.PropertyVistaAccountOwner.name(), true, VistaCrmBehavior.PropertyVistaAccountOwner);
         createRole(DEFAULT_SUPPORT_ROLE_NAME, VistaCrmBehavior.PropertyVistaSupport);
 
         if (ApplicationMode.isDevelopment()) {

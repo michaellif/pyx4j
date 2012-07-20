@@ -23,6 +23,11 @@ public enum VistaBasicBehavior implements Behavior {
 
     CRMPasswordChangeRequired,
 
+    /** CRM should force user with this behavior to change it's account recovery options, i.e. redirect to account recovery options place */
+    CRMSetupAccountRecoveryOptionsRequired,
+
+    CRMPasswordChangeRequiresSecurityQuestion,
+
     ProspectiveApp,
 
     ProspectiveAppPasswordChangeRequired,

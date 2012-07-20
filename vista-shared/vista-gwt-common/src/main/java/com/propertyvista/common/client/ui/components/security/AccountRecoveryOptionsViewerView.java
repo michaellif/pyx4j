@@ -19,4 +19,6 @@ import com.propertyvista.portal.rpc.shared.dto.AccountRecoveryOptionsDTO;
 
 public interface AccountRecoveryOptionsViewerView extends IViewerView<AccountRecoveryOptionsDTO> {
 
+    void setSecurityQuestionRequired(boolean isSecurityQuestionEntiryRequired);
+
 }

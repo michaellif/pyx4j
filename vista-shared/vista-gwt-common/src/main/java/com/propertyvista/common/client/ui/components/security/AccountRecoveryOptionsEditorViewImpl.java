@@ -35,9 +35,19 @@ public class AccountRecoveryOptionsEditorViewImpl extends EditorViewImplBase<Acc
 
             @Override
             public void onClick(ClickEvent event) {
-                getPresenter().save();
+                if (getForm().isValid()) {
+                    getPresenter().save();
+                } else {
+                    getForm().setUnconditionalValidationErrorRendering(true);
+                    showValidationDialog();
+                }
             }
         });
         addFooterToolbarItem(btnSave);
+    }
+
+    @Override
+    public void setSecurityQuestionRequired(boolean isSecurityQuestionEntiryRequired) {
+        ((AccountRecoveryOptionsForm) getForm()).setSecurityQuestionRequired(isSecurityQuestionEntiryRequired);
     }
 }

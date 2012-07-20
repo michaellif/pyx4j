@@ -57,6 +57,9 @@ public interface CrmRole extends IEntity {
     @Caption(description = "Require additional authentication challenge when a user logs in to the CRM, for users with Equifax premission this option is mandatory and cannot be overriden.")
     IPrimitive<Boolean> requireTwoStepVerificationOnLogin();
 
+    @Caption(description = "Require a security question / answer challenge when a user request to change his/her password.")
+    IPrimitive<Boolean> requireSecurityQuestionForPasswordReset();
+
     @Timestamp
     IPrimitive<Date> updated();
 

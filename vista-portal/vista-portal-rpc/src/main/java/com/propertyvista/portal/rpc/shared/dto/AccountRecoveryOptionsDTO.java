@@ -33,12 +33,14 @@ public interface AccountRecoveryOptionsDTO extends IEntity {
     /** the list of suggestions that appear on the form when user wants to change a security question, filled by the server when user retrieves its old data */
     IList<SecurityQuestion> securityQuestionsSuggestions();
 
-    @Caption(name = "Password Recovery email address")
-    @NotNull
     @Editor(type = EditorType.email)
+    @Caption(description = "The system will this address as destination for recovery emails")
     IPrimitive<String> recoveryEmail();
 
     IPrimitive<String> mobilePhone();
+
+    /** when is <code>true</code>: {@link #securityQuestion() and #securityAnswer() become mandatory} */
+    IPrimitive<Boolean> useSecurityQuestionChallengeForPasswordReset();
 
     @NotNull
     IPrimitive<String> securityQuestion();
