@@ -19,7 +19,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Locale;
 import java.util.Map;
 
@@ -28,6 +28,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.cache.CacheService;
 import com.pyx4j.entity.shared.utils.EntityDtoBinder;
 import com.pyx4j.essentials.j2se.util.FileIOUtils;
@@ -122,7 +123,7 @@ public class MediaConverter extends EntityDtoBinder<Media, MediaIO> {
     }
 
     //This is shared between created PMCs
-    private static Map<String, FileImageThumbnailBlobDTO> resized = new HashMap<String, FileImageThumbnailBlobDTO>();
+    private static Map<String, FileImageThumbnailBlobDTO> resized = new Hashtable<String, FileImageThumbnailBlobDTO>();
 
     @Override
     public void copyDTOtoDBO(MediaIO dto, Media dbo) {
@@ -178,8 +179,10 @@ public class MediaConverter extends EntityDtoBinder<Media, MediaIO> {
                     FileImageThumbnailBlobDTO thumbnailBlob = resized.get(uniqueName);
                     if (thumbnailBlob == null) {
                         thumbnailBlob = ThumbnailService.createThumbnailBlob(dbo.file().fileName().getValue(), raw, imageTarget);
-                        resized.put(uniqueName, thumbnailBlob);
-                        log.info("ThumbnailBlob not cashed {}; cash size {}", dbo.file().fileName().getValue(), resized.size());
+                        if (ApplicationMode.isDevelopment()) {
+                            resized.put(uniqueName, thumbnailBlob);
+                            log.info("ThumbnailBlob not cashed {}; cash size {}", dbo.file().fileName().getValue(), resized.size());
+                        }
                     }
                     thumbnailBlob = (FileImageThumbnailBlobDTO) thumbnailBlob.duplicate();
                     thumbnailBlob.setPrimaryKey(blobKey);
