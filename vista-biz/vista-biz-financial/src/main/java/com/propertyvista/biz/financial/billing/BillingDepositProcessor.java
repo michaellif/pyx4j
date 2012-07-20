@@ -16,6 +16,7 @@ package com.propertyvista.biz.financial.billing;
 import java.math.BigDecimal;
 import java.util.List;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
@@ -54,7 +55,9 @@ public class BillingDepositProcessor extends AbstractBillingProcessor {
     private void createInvoiceDeposit(BillableItem billableItem) {
         //This is first time charge have been issued - add deposit
         for (Deposit deposit : billableItem.deposits()) {
-            if (!deposit.isProcessed().isBooleanTrue()) {
+            LogicalDate effectiveDate = billableItem.effectiveDate().getValue();
+            if (!deposit.isProcessed().isBooleanTrue()
+                    && (effectiveDate == null || !effectiveDate.after(getBillingManager().getNextPeriodBill().billingPeriodEndDate().getValue()))) {
                 InvoiceDeposit invoiceDeposit = EntityFactory.create(InvoiceDeposit.class);
                 invoiceDeposit.billingAccount().set(getBillingManager().getNextPeriodBill().billingAccount());
                 invoiceDeposit.dueDate().setValue(getBillingManager().getNextPeriodBill().dueDate().getValue());
