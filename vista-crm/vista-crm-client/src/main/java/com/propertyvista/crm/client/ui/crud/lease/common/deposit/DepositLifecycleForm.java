@@ -51,6 +51,7 @@ public class DepositLifecycleForm extends CrmEntityForm<DepositLifecycleDTO> {
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().deposit().description()), 30).build());
         content.getFlexCellFormatter().setColSpan(row, 0, 2);
 
+        content.setBR(++row, 0, 2);
         content.setH2(++row, 0, 2, proto().interestAdjustments().getMeta().getCaption());
         content.setWidget(++row, 0, inject(proto().interestAdjustments(), new DepositInterestAdjustmentFolder(isEditable())));
         content.getFlexCellFormatter().setColSpan(row, 0, 2);
