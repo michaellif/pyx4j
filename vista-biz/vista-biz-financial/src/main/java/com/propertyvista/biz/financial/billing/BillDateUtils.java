@@ -189,7 +189,13 @@ public class BillDateUtils {
         LogicalDate date = null;
         if (Bill.BillType.First == bill.billType().getValue()) {
             date = bill.billingAccount().lease().leaseFrom().getValue();
-        } else if (Bill.BillType.Regular == bill.billType().getValue() || Bill.BillType.ZeroCycle == bill.billType().getValue()) {
+        } else if (Bill.BillType.ZeroCycle == bill.billType().getValue()) {
+            // start with lease if billing start date has passed
+            date = bill.billingCycle().billingCycleStartDate().getValue();
+            if (date.compareTo(bill.billingAccount().lease().leaseFrom().getValue()) < 0) {
+                date = bill.billingAccount().lease().leaseFrom().getValue();
+            }
+        } else if (Bill.BillType.Regular == bill.billType().getValue()) {
             date = bill.billingCycle().billingCycleStartDate().getValue();
         }
         return date;

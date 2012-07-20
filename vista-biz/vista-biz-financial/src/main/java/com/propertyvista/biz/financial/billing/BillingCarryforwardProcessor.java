@@ -43,6 +43,7 @@ public class BillingCarryforwardProcessor extends AbstractBillingProcessor {
         BigDecimal total = nextPeriodBill.serviceCharge().getValue()
 // @formatter:off
                 .add(nextPeriodBill.recurringFeatureCharges().getValue())
+                .add(nextPeriodBill.oneTimeFeatureCharges().getValue())
                 .add(nextPeriodBill.taxes().getValue());
         BigDecimal initialBalance = nextPeriodBill.billingAccount().carryforwardBalance().getValue().subtract(total);
         InvoiceLineItem zeroCycleBalance = null;

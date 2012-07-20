@@ -23,6 +23,7 @@ package com.propertyvista.biz.financial.billing;
 import java.math.BigDecimal;
 
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
 
 import com.propertyvista.biz.financial.FinancialTestBase;
 import com.propertyvista.biz.financial.SysDateManager;
@@ -46,7 +47,7 @@ public class BillingZeroCycleScenarioTest extends FinancialTestBase {
         SysDateManager.setSysDate("17-Mar-2011"); // create existing lease
 
         // When we create Existing Lease, the tenant is already living in the building
-        setLeaseTerms("1-Mar-2009", "31-Dec-2011", new BigDecimal("900.00"), new BigDecimal("300.00"));
+        setLeaseTerms("3-Mar-2009", "31-Dec-2011", new BigDecimal("900.00"), new BigDecimal("300.00"));
 
         //==================== RUN 1 ======================//
 
@@ -102,8 +103,9 @@ public class BillingZeroCycleScenarioTest extends FinancialTestBase {
 
         SysDateManager.setSysDate("17-Mar-2011"); // create existing lease
 
-        // When we create Existing Lease, the tenant is already living in the building
-        setLeaseTerms("1-Mar-2009", "31-Dec-2011", new BigDecimal("900.00"), new BigDecimal("-100.00"));
+        // try existing lease from just earlier this month
+        setLeaseTerms("3-Mar-2011", "31-Dec-2011", new BigDecimal("900.00"), new BigDecimal("-100.00"));
+        addBooking("3-Mar-2011", SaveAction.saveAsFinal);
 
         //==================== RUN 1 ======================//
 
@@ -116,15 +118,15 @@ public class BillingZeroCycleScenarioTest extends FinancialTestBase {
         billSequenceNumber(1).
         previousBillSequenceNumber(null).
         billType(Bill.BillType.ZeroCycle).
-        billingPeriodStartDate("1-Mar-2011").
+        billingPeriodStartDate("3-Mar-2011").
         billingPeriodEndDate("31-Mar-2011").
-        numOfProductCharges(1).
+        numOfProductCharges(2).
         paymentReceivedAmount("0.00").
-        serviceCharge("900.00").
+        serviceCharge("812.90"). // service prorated
         recurringFeatureCharges("0.00").
-        oneTimeFeatureCharges("0.00").
+        oneTimeFeatureCharges("100.00").
         depositAmount("0.00").
-        taxes("108.00").
+        taxes("109.55").
         totalDueAmount("-100.00");
         // @formatter:on
 
