@@ -13,7 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.crud.building.catalog;
 
+import com.pyx4j.commons.SimpleMessageFormat;
+import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
+import com.pyx4j.entity.shared.IEntity;
 
 import com.propertyvista.common.client.ui.components.VersionedLister;
 import com.propertyvista.domain.financial.offering.Concession;
@@ -29,7 +32,29 @@ public class ConcessionLister extends VersionedLister<Concession> {
             new MemberColumnDescriptor.Builder(proto().version().versionNumber()).build(),
             new MemberColumnDescriptor.Builder(proto().version().type()).build(),
             new MemberColumnDescriptor.Builder(proto().version().term()).build(),
-            new MemberColumnDescriptor.Builder(proto().version().value()).build(), 
+            new ColumnDescriptor(proto().version().value().getPath().toString(), proto().version().value().getMeta().getCaption()) {              
+                @Override
+                public String convert(IEntity entity) {
+                    if (entity != null) {
+                        Concession consssion = (Concession) entity;
+                        String format = null;
+                        switch(consssion.version().type().getValue()) {
+                        case percentageOff:
+                            format = "{0,number,percent}";
+                            break;
+                        case free:
+                        case monetaryOff:
+                        case promotionalItem:                           
+                        default:
+                            format = "${0,number,#.##}";
+                        }
+                        String formattedValue = SimpleMessageFormat.format(format, consssion.version().value().getValue());
+                        return formattedValue;
+                    } else {
+                        return super.convert(entity);
+                    }                        
+                }
+            },
             new MemberColumnDescriptor.Builder(proto().version().condition()).build(),
             new MemberColumnDescriptor.Builder(proto().version().effectiveDate()).build(),
             new MemberColumnDescriptor.Builder(proto().version().expirationDate()).build()
