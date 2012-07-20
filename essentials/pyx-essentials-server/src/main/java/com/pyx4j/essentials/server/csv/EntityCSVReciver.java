@@ -20,11 +20,13 @@
  */
 package com.pyx4j.essentials.server.csv;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.Vector;
 
 import org.slf4j.Logger;
@@ -55,11 +57,19 @@ public class EntityCSVReciver<E extends IEntity> implements CSVReciver {
 
     private final Class<E> entityClass;
 
+    private final E entityModel;
+
+    private final EntityMeta entityMeta;
+
     private final List<E> list = new Vector<E>();
 
-    private final List<Path> headersPath = new Vector<Path>();
+    protected List<Path> headersPath;
+
+    protected Map<String, Path> membersNames;
 
     private boolean headerIgnoreCase = false;
+
+    private boolean memberNamesAsHeaders = true;
 
     private boolean verifyRequiredHeaders = false;
 
@@ -75,12 +85,14 @@ public class EntityCSVReciver<E extends IEntity> implements CSVReciver {
 
     private int currentRow = 0;
 
-    public EntityCSVReciver(Class<E> entityClass) {
-        this.entityClass = entityClass;
-    }
-
     public static <T extends IEntity> EntityCSVReciver<T> create(Class<T> entityClass) {
         return new EntityCSVReciver<T>(entityClass);
+    }
+
+    public EntityCSVReciver(Class<E> entityClass) {
+        this.entityClass = entityClass;
+        this.entityModel = EntityFactory.create(entityClass);
+        this.entityMeta = entityModel.getEntityMeta();
     }
 
     public int getHeaderLinesCountMin() {
@@ -92,11 +104,19 @@ public class EntityCSVReciver<E extends IEntity> implements CSVReciver {
     }
 
     public void setHeaderLinesCount(int headerLinesCountMin, int headerLinesCountMax) {
+        if (headerLinesCountMin > headerLinesCountMax) {
+            throw new IllegalArgumentException();
+        }
         this.headerLinesCountMin = headerLinesCountMin;
         this.headerLinesCountMax = headerLinesCountMax;
         if (this.headerLinesCountMax > 1) {
             headersStack = new FIFO<String[]>(this.headerLinesCountMax);
         }
+    }
+
+    public EntityCSVReciver<E> headerLinesCount(int headerLinesCountMin, int headerLinesCountMax) {
+        setHeaderLinesCount(headerLinesCountMin, headerLinesCountMax);
+        return this;
     }
 
     public int getHeadersMatchMinimum() {
@@ -107,12 +127,35 @@ public class EntityCSVReciver<E extends IEntity> implements CSVReciver {
         this.headersMatchMinimum = headersMatchMinimum;
     }
 
+    public EntityCSVReciver<E> headersMatchMinimum(int headersMatchMinimum) {
+        setHeadersMatchMinimum(headersMatchMinimum);
+        return this;
+    }
+
     public boolean isHeaderIgnoreCase() {
         return headerIgnoreCase;
     }
 
     public void setHeaderIgnoreCase(boolean headerIgnoreCase) {
         this.headerIgnoreCase = headerIgnoreCase;
+    }
+
+    public EntityCSVReciver<E> headerIgnoreCase(boolean headerIgnoreCase) {
+        setHeaderIgnoreCase(headerIgnoreCase);
+        return this;
+    }
+
+    public boolean isMemberNamesAsHeaders() {
+        return memberNamesAsHeaders;
+    }
+
+    public void setMemberNamesAsHeaders(boolean memberNamesAsHeaders) {
+        this.memberNamesAsHeaders = memberNamesAsHeaders;
+    }
+
+    public EntityCSVReciver<E> memberNamesAsHeaders(boolean memberNamesAsHeaders) {
+        setMemberNamesAsHeaders(memberNamesAsHeaders);
+        return this;
     }
 
     public boolean isVerifyRequiredHeaders() {
@@ -123,6 +166,11 @@ public class EntityCSVReciver<E extends IEntity> implements CSVReciver {
         this.verifyRequiredHeaders = verifyRequiredHeaders;
     }
 
+    public EntityCSVReciver<E> verifyRequiredHeaders(boolean verifyRequiredHeaders) {
+        setVerifyRequiredHeaders(verifyRequiredHeaders);
+        return this;
+    }
+
     public boolean isVerifyRequiredValues() {
         return verifyRequiredValues;
     }
@@ -131,8 +179,45 @@ public class EntityCSVReciver<E extends IEntity> implements CSVReciver {
         this.verifyRequiredValues = verifyRequiredValues;
     }
 
+    public EntityCSVReciver<E> verifyRequiredValues(boolean verifyRequiredValues) {
+        setVerifyRequiredValues(verifyRequiredValues);
+        return this;
+    }
+
     public int getCurrentRow() {
         return currentRow;
+    }
+
+    protected void buildMembersNames() {
+        if (membersNames != null) {
+            return;
+        }
+        membersNames = new HashMap<String, Path>();
+        for (String memberName : entityMeta.getMemberNames()) {
+            IObject<?> member = entityModel.getMember(memberName);
+            if (member instanceof IPrimitive<?>) {
+                String names[] = columnNames(member);
+                if (names != null) {
+                    for (String name : names) {
+                        if (isHeaderIgnoreCase()) {
+                            name = name.toLowerCase(Locale.ENGLISH);
+                        }
+                        membersNames.put(name, member.getPath());
+                    }
+                }
+            }
+        }
+    }
+
+    protected String[] columnNames(IObject<?> member) {
+        ImportColumn importColumn = member.getMeta().getAnnotation(ImportColumn.class);
+        if (importColumn == null) {
+            return new String[] { member.getMeta().getCaption() };
+        } else if (importColumn.ignore()) {
+            return null;
+        } else {
+            return importColumn.names();
+        }
     }
 
     private String[] combineHeader(String[] headers, int headerLinesCount) {
@@ -142,7 +227,7 @@ public class EntityCSVReciver<E extends IEntity> implements CSVReciver {
             if (headersStack.size() < headerLinesCount) {
                 return null;
             } else {
-                Vector<String> headersCombined = new Vector<String>();
+                List<String> headersCombined = new ArrayList<String>();
                 int maxLen = headers.length;
                 for (String[] headerLine : headersStack) {
                     if (maxLen < headerLine.length) {
@@ -169,53 +254,85 @@ public class EntityCSVReciver<E extends IEntity> implements CSVReciver {
         }
     }
 
-    protected String trimHeader(String headerfragmet) {
-        return headerfragmet.replace((char) 0xA0, ' ').trim();
+    protected String combineHeader(String headerfragmet1, String headerfragmet2) {
+        return CommonsStringUtils.nvl_concat(headerfragmet1, headerfragmet2, " ");
     }
 
-    protected String combineHeader(String headerfragmet1, String headerfragmet2) {
-        return CommonsStringUtils.nvl_concat(trimHeader(headerfragmet1), trimHeader(headerfragmet2), " ");
+    protected String trimHeader(String header) {
+        return header.replace((char) 0xA0, ' ').trim();
+    }
+
+    private String[] trimHeaders(String[] headers) {
+        List<String> headersTrimmed = new ArrayList<String>();
+        for (String header : headers) {
+            headersTrimmed.add(trimHeader(header));
+        }
+        return headersTrimmed.toArray(new String[headersTrimmed.size()]);
     }
 
     @Override
     public boolean onHeader(String[] headers) {
         currentRow++;
         log.debug("headers {}", (Object) headers);
-
+        headers = trimHeaders(headers);
         if (headersStack == null) {
-            return matchHeader(headers, true);
+            List<Path> paths = matchHeader(headers);
+            if (matchAcceptable(headers, paths, true) > 0) {
+                headersPath = paths;
+                return true;
+            }
         } else {
             headersStack.push(headers);
-            for (int headerLinesCount = headerLinesCountMax; headerLinesCount >= headerLinesCountMin; headerLinesCount--) {
+            // Find the longest header match
+            TreeMap<Integer, List<Path>> matches = new TreeMap<Integer, List<Path>>();
+            for (int headerLinesCount = headerLinesCountMin; headerLinesCount <= headerLinesCountMax; headerLinesCount++) {
                 String[] headersCombined = combineHeader(headers, headerLinesCount);
-                if ((headersCombined != null) && (matchHeader(headersCombined, headerLinesCount == headerLinesCountMax))) {
-                    return true;
-                }
-            }
-            return false;
-        }
-    }
-
-    protected boolean matchHeader(String[] headers, boolean throwError) {
-        E entity = EntityFactory.create(entityClass);
-        EntityMeta em = entity.getEntityMeta();
-        Map<String, Path> membersNames = new HashMap<String, Path>();
-        for (String memberName : em.getMemberNames()) {
-            IObject<?> member = entity.getMember(memberName);
-            if (member instanceof IPrimitive<?>) {
-                String names[] = columnNames(member);
-                if (names != null) {
-                    for (String name : names) {
-                        if (isHeaderIgnoreCase()) {
-                            name = name.toLowerCase(Locale.ENGLISH);
-                        }
-                        membersNames.put(name, member.getPath());
+                if (headersCombined != null) {
+                    List<Path> paths = matchHeader(headersCombined);
+                    int headersFound = matchAcceptable(headers, paths, false);
+                    if (headersFound > 0) {
+                        matches.put(headersFound, paths);
                     }
                 }
             }
+            if (matches.size() > 0) {
+                List<Path> paths = matches.lastEntry().getValue();
+                if (matchAcceptable(headers, paths, true) > 0) {
+                    headersPath = paths;
+                    return true;
+                }
+            }
         }
+        return false;
+    }
+
+    protected int matchAcceptable(String[] headers, List<Path> paths, boolean throwError) {
         int headersFound = 0;
-        headersPath.clear();
+        for (Path path : paths) {
+            if (path != null) {
+                headersFound++;
+            }
+        }
+        if (getHeadersMatchMinimum() <= headersFound) {
+            if (isVerifyRequiredHeaders()) {
+                if (verifyHeaders(paths, throwError)) {
+                    return headersFound;
+                } else {
+                    return 0;
+                }
+            } else {
+                return headersFound;
+            }
+        } else {
+            return 0;
+        }
+    }
+
+    protected List<Path> matchHeader(String[] headers) {
+        buildMembersNames();
+
+        List<Path> paths = new ArrayList<Path>();
+        paths.clear();
         nextHeader: for (String header : headers) {
             String name = header;
             if (isHeaderIgnoreCase()) {
@@ -223,78 +340,63 @@ public class EntityCSVReciver<E extends IEntity> implements CSVReciver {
             }
             Path path = membersNames.get(name);
             if (path != null) {
-                headersPath.add(path);
-                headersFound++;
-                continue nextHeader;
-            }
-            try {
-                headersPath.add(entity.getMember(header).getPath());
-                headersFound++;
-                continue nextHeader;
-            } catch (RuntimeException e) {
-                // Unknown member
-            }
-            if (header.contains(".")) {
-                IEntity ent = entity;
-                IObject<?> member = null;
-                for (String headerPart : header.split("\\.")) {
-                    try {
-                        member = ent.getMember(headerPart);
-                    } catch (RuntimeException e) {
-                        // Unknown member
-                        continue nextHeader;
-                    }
-                    if (member instanceof IEntity) {
-                        ent = (IEntity) member;
-                    } else {
-                        ent = null;
-                    }
+                if (paths.contains(path)) {
+                    paths.add(null);
+                } else {
+                    paths.add(path);
                 }
-                headersPath.add(member.getPath());
-                headersFound++;
+                continue nextHeader;
+            }
+            if (isMemberNamesAsHeaders()) {
+                if (entityMeta.getMemberNames().contains(name)) {
+                    paths.add(entityModel.getMember(header).getPath());
+                    continue nextHeader;
+                }
+                if (header.contains(".")) {
+                    IEntity ent = entityModel;
+                    IObject<?> member = null;
+                    for (String headerPart : header.split("\\.")) {
+                        try {
+                            member = ent.getMember(headerPart);
+                        } catch (RuntimeException e) {
+                            // Unknown member
+                            continue nextHeader;
+                        }
+                        if (member instanceof IEntity) {
+                            ent = (IEntity) member;
+                        } else {
+                            ent = null;
+                        }
+                    }
+                    paths.add(member.getPath());
+                } else {
+                    if (!"".equals(header)) {
+                        log.debug("Unknown header [{}]", header);
+                    }
+                    paths.add(null);
+                }
             } else {
                 if (!"".equals(header)) {
-                    log.warn("Unknown header [{}]", header);
+                    log.debug("Unknown header [{}]", header);
                 }
-                headersPath.add(null);
+                paths.add(null);
             }
         }
-        if (getHeadersMatchMinimum() <= headersFound) {
-            if (isVerifyRequiredHeaders()) {
-                return verifyRequiredHeaders(throwError);
-            } else {
-                return true;
-            }
-        } else {
-            return false;
-        }
+        return paths;
     }
 
-    protected String[] columnNames(IObject<?> member) {
-        ImportColumn importColumn = member.getMeta().getAnnotation(ImportColumn.class);
-        if (importColumn == null) {
-            return new String[] { member.getMeta().getCaption() };
-        } else if (importColumn.ignore()) {
-            return null;
-        } else {
-            return importColumn.names();
-        }
-    }
-
-    protected boolean verifyRequiredHeaders(boolean throwError) {
-        E entity = EntityFactory.create(entityClass);
-        EntityMeta em = entity.getEntityMeta();
-        for (String memberName : em.getMemberNames()) {
-            IObject<?> member = entity.getMember(memberName);
+    protected boolean verifyHeaders(List<Path> paths, boolean throwError) {
+        for (String memberName : entityMeta.getMemberNames()) {
+            IObject<?> member = entityModel.getMember(memberName);
             MemberMeta memberMeta = member.getMeta();
             if ((memberMeta.getObjectClassType() == ObjectClassType.Primitive) && (memberMeta.getAnnotation(NotNull.class) != null)) {
                 ImportColumn importColumn = member.getMeta().getAnnotation(ImportColumn.class);
                 if ((importColumn != null) && (importColumn.ignore())) {
                     continue;
                 }
-                if (!headersPath.contains(member.getPath())) {
+                if (!paths.contains(member.getPath())) {
                     if (throwError) {
-                        throw new UserRuntimeException(i18n.tr("Missing required column ''{0}''", memberMeta.getCaption()));
+                        throw new UserRuntimeException(i18n.tr("Missing required column header ''{0}'', row # {1}", memberMeta.getCaption(), getCurrentRow()));
                     } else {
                         return false;
                     }
