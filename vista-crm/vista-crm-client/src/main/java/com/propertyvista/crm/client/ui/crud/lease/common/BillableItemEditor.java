@@ -170,9 +170,10 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
                     get(proto().agreedPrice()).setEditable(!isAgreed && lease.getValue().approvalDate().isNull());
                 }
             } else if (getValue().item().type().isInstanceOf(FeatureItemType.class)) {
-                // show/hide(empty) effective dates:
-                get(proto().effectiveDate()).setVisible(isEditable() || !getValue().effectiveDate().isNull());
-                get(proto().expirationDate()).setVisible(isEditable() || !getValue().expirationDate().isNull());
+                // show/hide effective dates (hide always for non-recurring; show in editor, hide in viewer if empty):
+                boolean recurring = isRecurringFeature(getValue().item().product());
+                get(proto().effectiveDate()).setVisible(recurring && (isEditable() || !getValue().effectiveDate().isNull()));
+                get(proto().expirationDate()).setVisible(recurring && (isEditable() || !getValue().expirationDate().isNull()));
 
                 get(proto().item()).setEditable(false);
 
@@ -263,6 +264,10 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
         return product.isInstanceOf(Feature.FeatureV.class) && ((Feature.FeatureV) product.cast()).mandatory().isBooleanTrue();
     }
 
+    private boolean isRecurringFeature(Product.ProductV product) {
+        return product.isInstanceOf(Feature.FeatureV.class) && ((Feature.FeatureV) product.cast()).recurring().isBooleanTrue();
+    }
+
     private class AdjustmentFolder extends VistaTableFolder<BillableItemAdjustment> {
 
         public AdjustmentFolder() {
@@ -291,7 +296,6 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
 
             public BillableItemAdjustmentEditor() {
                 super(BillableItemAdjustment.class, columns());
-                setViewable(false);
             }
 
             @Override
@@ -424,6 +428,28 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
                 new EntityFolderColumnDescriptor(proto().amount(), "6em"),
                 new EntityFolderColumnDescriptor(proto().description(), "25em"));
             //@formatter:on
+        }
+
+        @Override
+        public CComponent<?, ?> create(IObject<?> member) {
+            if (member instanceof Deposit) {
+                return new DepositEditor();
+            }
+            return super.create(member);
+        }
+
+        private class DepositEditor extends CEntityFolderRowEditor<Deposit> {
+
+            public DepositEditor() {
+                super(Deposit.class, columns());
+            }
+
+            @Override
+            protected void onValueSet(boolean populate) {
+                super.onValueSet(populate);
+                // disable editing of finalized deposits:
+                setEditable(getValue().lifecycle().isNull());
+            }
         }
     }
 }
