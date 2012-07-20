@@ -131,7 +131,7 @@ public class DepositFacadeImpl implements DepositFacade {
                     return (int) (o1.getPrimaryKey().asLong() - o2.getPrimaryKey().asLong());
                 }
             });
-            return deposits.get(0);
+            return deposits.get(0); // get the very first version of the deposit 
         }
         throw new IllegalArgumentException();
     }
