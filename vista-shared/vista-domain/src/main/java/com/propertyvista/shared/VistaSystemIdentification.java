@@ -17,6 +17,8 @@ public enum VistaSystemIdentification {
 
     development,
 
+    demo,
+
     staging,
 
     production

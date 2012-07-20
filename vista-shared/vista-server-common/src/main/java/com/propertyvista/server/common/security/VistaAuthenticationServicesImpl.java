@@ -366,6 +366,9 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
                 systemWallMessage = new SystemWallMessage(i18n.tr("Repairs in Progress"), true);
             }
             break;
+        case demo:
+            systemWallMessage = new SystemWallMessage("This is Demo System", true);
+            break;
         default:
             if (ApplicationMode.isDevelopment()) {
                 systemWallMessage = new SystemWallMessage("This is development and tests System", true);
