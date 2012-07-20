@@ -103,7 +103,11 @@ public class PropertiesConfiguration {
         }
         Map<String, String> m = new HashMap<String, String>();
         for (String key : p.stringPropertyNames()) {
-            m.put(key, p.getProperty(key));
+            if (key.startsWith("include.")) {
+                m.putAll(loadProperties(new File(file.getParentFile(), p.getProperty(key))));
+            } else {
+                m.put(key, p.getProperty(key));
+            }
         }
         return m;
     }
