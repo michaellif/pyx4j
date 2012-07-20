@@ -15,6 +15,8 @@ package com.propertyvista.biz.financial.deposit;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
@@ -115,6 +117,23 @@ public class DepositFacadeImpl implements DepositFacade {
         deposit.lifecycle().set(depositLifecycle);
 
         return depositLifecycle;
+    }
+
+    @Override
+    public Deposit getDeposit(DepositLifecycle depositLifecycle) {
+        EntityQueryCriteria<Deposit> criteria = new EntityQueryCriteria<Deposit>(Deposit.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().lifecycle(), depositLifecycle));
+        List<Deposit> deposits = Persistence.service().query(criteria);
+        if (!deposits.isEmpty()) {
+            Collections.sort(deposits, new Comparator<Deposit>() {
+                @Override
+                public int compare(Deposit o1, Deposit o2) {
+                    return (int) (o1.getPrimaryKey().asLong() - o2.getPrimaryKey().asLong());
+                }
+            });
+            return deposits.get(0);
+        }
+        throw new IllegalArgumentException();
     }
 
     @Override

@@ -42,6 +42,11 @@ public interface DepositFacade {
     public DepositLifecycle createDepositLifecycle(Deposit deposit, BillingAccount billingAccount);
 
     /*
+     * Retrieves corresponding Deposit for DepositLifecycle wrapper
+     */
+    public Deposit getDeposit(DepositLifecycle depositLifecycle);
+
+    /*
      * Every deposit must collect interest based on the corresponding policy rules and interest rates
      */
     void collectInterest(PolicyNode node);
