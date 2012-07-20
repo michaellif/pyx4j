@@ -7,16 +7,21 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2012-06-29
+ * Created on 2012-07-20
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.lease.common.deposit;
+package com.propertyvista.dto;
 
-import com.pyx4j.site.client.ui.crud.lister.IListerView;
+import com.pyx4j.entity.annotations.ExtendsDBO;
+import com.pyx4j.entity.annotations.Transient;
 
-import com.propertyvista.dto.DepositLifecycleDTO;
+import com.propertyvista.domain.tenant.lease.Deposit;
+import com.propertyvista.domain.tenant.lease.DepositLifecycle;
 
-public interface DepositListerPresenter extends IListerView.Presenter<DepositLifecycleDTO> {
+@Transient
+@ExtendsDBO
+public interface DepositLifecycleDTO extends DepositLifecycle {
 
+    Deposit deposit();
 }

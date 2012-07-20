@@ -22,11 +22,12 @@ import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.lease.common.deposit.DepositLifecycleViewerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.LeaseViewFactory;
 import com.propertyvista.crm.rpc.services.lease.common.DepositLifecycleCrudService;
-import com.propertyvista.domain.tenant.lease.DepositLifecycle;
+import com.propertyvista.dto.DepositLifecycleDTO;
 
-public class DepositLifecycleViewerActivity extends CrmViewerActivity<DepositLifecycle> implements DepositLifecycleViewerView.Presenter {
+public class DepositLifecycleViewerActivity extends CrmViewerActivity<DepositLifecycleDTO> implements DepositLifecycleViewerView.Presenter {
 
     public DepositLifecycleViewerActivity(CrudAppPlace place) {
-        super(place, LeaseViewFactory.instance(DepositLifecycleViewerView.class), GWT.<AbstractCrudService<DepositLifecycle>> create(DepositLifecycleCrudService.class));
+        super(place, LeaseViewFactory.instance(DepositLifecycleViewerView.class), GWT
+                .<AbstractCrudService<DepositLifecycleDTO>> create(DepositLifecycleCrudService.class));
     }
 }

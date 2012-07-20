@@ -20,8 +20,8 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.site.client.ui.crud.form.IViewerView;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 
-import com.propertyvista.domain.tenant.lease.DepositLifecycle;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
+import com.propertyvista.dto.DepositLifecycleDTO;
 import com.propertyvista.dto.LeaseDTO;
 
 public interface LeaseViewerViewBase<DTO extends LeaseDTO> extends IViewerView<DTO> {
@@ -31,5 +31,5 @@ public interface LeaseViewerViewBase<DTO extends LeaseDTO> extends IViewerView<D
         void retrieveUsers(AsyncCallback<List<LeaseParticipant>> callback);
     }
 
-    IListerView<DepositLifecycle> getDepositListerView();
+    IListerView<DepositLifecycleDTO> getDepositListerView();
 }

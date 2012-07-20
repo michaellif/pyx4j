@@ -19,21 +19,21 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.client.ui.crud.lease.common.deposit.DepositLifecycleLister;
-import com.propertyvista.domain.tenant.lease.DepositLifecycle;
+import com.propertyvista.dto.DepositLifecycleDTO;
 import com.propertyvista.dto.LeaseDTO;
 
 public class LeaseViewerViewImplBase<DTO extends LeaseDTO> extends CrmViewerViewImplBase<DTO> implements LeaseViewerViewBase<DTO> {
 
-    protected final IListerView<DepositLifecycle> depositLister;
+    protected final IListerView<DepositLifecycleDTO> depositLister;
 
     public LeaseViewerViewImplBase(Class<? extends CrudAppPlace> placeClass) {
         super(placeClass);
 
-        depositLister = new ListerInternalViewImplBase<DepositLifecycle>(new DepositLifecycleLister());
+        depositLister = new ListerInternalViewImplBase<DepositLifecycleDTO>(new DepositLifecycleLister());
     }
 
     @Override
-    public IListerView<DepositLifecycle> getDepositListerView() {
+    public IListerView<DepositLifecycleDTO> getDepositListerView() {
         return depositLister;
     }
 }

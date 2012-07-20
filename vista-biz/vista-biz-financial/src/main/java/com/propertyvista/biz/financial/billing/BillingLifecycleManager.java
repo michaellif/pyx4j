@@ -209,9 +209,7 @@ public class BillingLifecycleManager {
 
             if (!preview) {
                 updateBillingCycleStats(bill, true);
-                System.out.println("- lineItems" + bill.lineItems().toString());
                 Persistence.service().persist(bill.lineItems());
-
                 Persistence.service().persist(bill);
 
                 LeaseBillingPolicy leaseBillingPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(lease.unit().building(),

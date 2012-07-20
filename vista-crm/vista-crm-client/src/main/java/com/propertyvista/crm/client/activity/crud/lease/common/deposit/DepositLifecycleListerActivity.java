@@ -21,11 +21,11 @@ import com.pyx4j.site.client.ui.crud.lister.IListerView;
 
 import com.propertyvista.crm.client.ui.crud.lease.common.deposit.DepositListerPresenter;
 import com.propertyvista.crm.rpc.services.lease.common.DepositLifecycleCrudService;
-import com.propertyvista.domain.tenant.lease.DepositLifecycle;
+import com.propertyvista.dto.DepositLifecycleDTO;
 
-public class DepositLifecycleListerActivity extends ListerActivityBase<DepositLifecycle> implements DepositListerPresenter {
+public class DepositLifecycleListerActivity extends ListerActivityBase<DepositLifecycleDTO> implements DepositListerPresenter {
 
-    public DepositLifecycleListerActivity(Place place, IListerView<DepositLifecycle> view) {
-        super(place, view, GWT.<DepositLifecycleCrudService> create(DepositLifecycleCrudService.class), DepositLifecycle.class);
+    public DepositLifecycleListerActivity(Place place, IListerView<DepositLifecycleDTO> view) {
+        super(place, view, GWT.<DepositLifecycleCrudService> create(DepositLifecycleCrudService.class), DepositLifecycleDTO.class);
     }
 }

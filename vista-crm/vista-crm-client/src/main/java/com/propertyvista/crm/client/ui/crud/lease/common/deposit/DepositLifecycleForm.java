@@ -17,9 +17,9 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
-import com.propertyvista.domain.tenant.lease.DepositLifecycle;
+import com.propertyvista.dto.DepositLifecycleDTO;
 
-public class DepositLifecycleForm extends CrmEntityForm<DepositLifecycle> {
+public class DepositLifecycleForm extends CrmEntityForm<DepositLifecycleDTO> {
 
     private static final I18n i18n = I18n.get(DepositLifecycleForm.class);
 
@@ -28,7 +28,7 @@ public class DepositLifecycleForm extends CrmEntityForm<DepositLifecycle> {
     }
 
     public DepositLifecycleForm(boolean viewMode) {
-        super(DepositLifecycle.class, viewMode);
+        super(DepositLifecycleDTO.class, viewMode);
     }
 
     @Override
@@ -36,28 +36,28 @@ public class DepositLifecycleForm extends CrmEntityForm<DepositLifecycle> {
         FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));
 
         int row = -1;
-//        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().deposit().billableItem()), 30).build());
-//        content.getFlexCellFormatter().setColSpan(row, 0, 2);
-//
-//        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().deposit().depositType()), 12).build());
-//        content.setWidget(row, 1, new DecoratorBuilder(inject(proto().status()), 9).build());
-//
-//        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().depositDate()), 9).build());
-//        content.setWidget(row, 1, new DecoratorBuilder(inject(proto().refundDate()), 9).build());
-//
-//        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().deposit().amount()), 7).build());
-//        content.setWidget(row, 1, new DecoratorBuilder(inject(proto().currentAmount()), 7).build());
-//
-//        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().deposit().description()), 25).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().deposit().billableItem()), 30).build());
+        content.getFlexCellFormatter().setColSpan(row, 0, 2);
+
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().deposit().depositType()), 12).build());
+        content.setWidget(row, 1, new DecoratorBuilder(inject(proto().status()), 9).build());
+
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().depositDate()), 9).build());
+        content.setWidget(row, 1, new DecoratorBuilder(inject(proto().refundDate()), 9).build());
+
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().deposit().amount()), 7).build());
+        content.setWidget(row, 1, new DecoratorBuilder(inject(proto().currentAmount()), 7).build());
+
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().deposit().description()), 25).build());
 
         content.setH2(++row, 0, 2, proto().interestAdjustments().getMeta().getCaption());
         content.setWidget(++row, 0, inject(proto().interestAdjustments(), new DepositInterestAdjustmentFolder(isEditable())));
         content.getFlexCellFormatter().setColSpan(row, 0, 2);
 
         // tweaking:
-//        get(proto().deposit().depositType()).setEditable(false);
-//        get(proto().deposit().amount()).setEditable(false);
-//        get(proto().deposit().description()).setEditable(false);
+        get(proto().deposit().depositType()).setEditable(false);
+        get(proto().deposit().amount()).setEditable(false);
+        get(proto().deposit().description()).setEditable(false);
 
         get(proto().status()).setEditable(false);
         get(proto().depositDate()).setEditable(false);

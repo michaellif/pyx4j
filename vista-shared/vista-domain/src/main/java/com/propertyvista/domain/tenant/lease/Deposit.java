@@ -21,7 +21,6 @@ import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
-import com.pyx4j.entity.annotations.GeneratedValue;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.OrderColumn;
@@ -77,9 +76,6 @@ public interface Deposit extends IEntity {
 
     @OrderColumn
     IPrimitive<Integer> orderInParent();
-
-    @GeneratedValue(type = GeneratedValue.GenerationType.randomUUID)
-    IPrimitive<String> uid();
 
     DepositLifecycle lifecycle();
 

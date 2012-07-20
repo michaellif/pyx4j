@@ -336,6 +336,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
         for (Deposit deposit : currentDeposits) {
             if (deposit.lifecycle().isNull()) {
                 Persistence.service().persist(ServerSideFactory.create(DepositFacade.class).createDepositLifecycle(deposit, lease.billingAccount()));
+                Persistence.service().merge(deposit);
             }
         }
     }

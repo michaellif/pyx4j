@@ -22,13 +22,13 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 import com.propertyvista.crm.client.ui.crud.lease.common.deposit.DepositLifecycleEditorView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.LeaseViewFactory;
 import com.propertyvista.crm.rpc.services.lease.common.DepositLifecycleCrudService;
-import com.propertyvista.domain.tenant.lease.DepositLifecycle;
+import com.propertyvista.dto.DepositLifecycleDTO;
 
-public class DepositLifecycleEditorActivity extends EditorActivityBase<DepositLifecycle> implements DepositLifecycleEditorView.Presenter {
+public class DepositLifecycleEditorActivity extends EditorActivityBase<DepositLifecycleDTO> implements DepositLifecycleEditorView.Presenter {
 
     public DepositLifecycleEditorActivity(CrudAppPlace place) {
         super(place, LeaseViewFactory.instance(DepositLifecycleEditorView.class), GWT
-                .<AbstractCrudService<DepositLifecycle>> create(DepositLifecycleCrudService.class), DepositLifecycle.class);
+                .<AbstractCrudService<DepositLifecycleDTO>> create(DepositLifecycleCrudService.class), DepositLifecycleDTO.class);
     }
 
 }

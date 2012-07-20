@@ -15,9 +15,9 @@ package com.propertyvista.crm.client.ui.crud.lease.common.deposit;
 
 import com.pyx4j.site.client.ui.crud.form.IViewerView;
 
-import com.propertyvista.domain.tenant.lease.DepositLifecycle;
+import com.propertyvista.dto.DepositLifecycleDTO;
 
-public interface DepositLifecycleViewerView extends IViewerView<DepositLifecycle> {
+public interface DepositLifecycleViewerView extends IViewerView<DepositLifecycleDTO> {
 
     interface Presenter extends IViewerView.Presenter {
 
