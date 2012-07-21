@@ -38,7 +38,7 @@ public class VistaServerSideConfigurationDemoProd extends VistaServerSideConfigu
 
     @Override
     public boolean openIdrequired() {
-        return true;
+        return false;
     }
 
     @Override

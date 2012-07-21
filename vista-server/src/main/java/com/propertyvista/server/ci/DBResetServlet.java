@@ -285,7 +285,7 @@ public class DBResetServlet extends HttpServlet {
     }
 
     private String prodPmcNameCorrections(String name) {
-        if (ApplicationMode.isDevelopment()) {
+        if (ApplicationMode.isDevelopment() || VistaDemo.isDemo()) {
             return name;
         } else {
             return "test-" + name;
