@@ -13,8 +13,6 @@
  */
 package com.propertyvista.biz.financial.billing;
 
-import org.junit.Ignore;
-
 import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
 
 import com.propertyvista.biz.financial.FinancialTestBase;
@@ -23,7 +21,6 @@ import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.Type;
 
-@Ignore
 public class BillingBulkRunTest extends FinancialTestBase {
 
     @Override

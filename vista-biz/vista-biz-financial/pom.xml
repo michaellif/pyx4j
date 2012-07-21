@@ -133,9 +133,34 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
                     <forkMode>always</forkMode>
+                    <includes>
+                        <include>**/*Test.java</include>
+                        <include>**/*Tests.java</include>
+                    </includes>
                 </configuration>
             </plugin>
         </plugins>
     </build>
+    
+    <profiles>
+        <profile>
+            <id>developer-env</id>
+               <build>
+                    <plugins>
+                        <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+                    <forkMode>always</forkMode>
+                    <includes>
+                        <include>**/RegressionSuite.java</include>
+                    </includes>
+                </configuration>
+                      </plugin>
+                  </plugins>
+             </build>
+                
+        </profile>
+    </profiles>
 
 </project>
