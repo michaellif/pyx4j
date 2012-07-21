@@ -44,7 +44,7 @@ public interface DepositLifecycle extends IEntity {
     @I18n
     @XmlType(name = "DepositStatus")
     public enum DepositStatus {
-        Created, Billed, Returned;
+        Created, Processed, Paid, Refunded;
 
         @Override
         public String toString() {

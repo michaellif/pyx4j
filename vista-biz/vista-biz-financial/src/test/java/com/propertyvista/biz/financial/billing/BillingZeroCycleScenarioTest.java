@@ -67,7 +67,7 @@ public class BillingZeroCycleScenarioTest extends FinancialTestBase {
         serviceCharge("900.00").
         recurringFeatureCharges("0.00").
         oneTimeFeatureCharges("0.00").
-        depositAmount("0.00").
+        depositAmount("930.30").
         taxes("108.00").
         totalDueAmount("300.00");
         // @formatter:on
@@ -92,6 +92,7 @@ public class BillingZeroCycleScenarioTest extends FinancialTestBase {
         paymentReceivedAmount("-300.00").
         latePaymentFees("50.00"). // fined for 300.00 carry-forward owing
         serviceCharge("900.00").
+        depositAmount("0.00").
         taxes("108.00").
         totalDueAmount("1058.00");
         // @formatter:on
@@ -125,7 +126,7 @@ public class BillingZeroCycleScenarioTest extends FinancialTestBase {
         serviceCharge("812.90"). // service prorated
         recurringFeatureCharges("0.00").
         oneTimeFeatureCharges("100.00").
-        depositAmount("0.00").
+        depositAmount("930.30").
         taxes("109.55").
         totalDueAmount("-100.00");
         // @formatter:on

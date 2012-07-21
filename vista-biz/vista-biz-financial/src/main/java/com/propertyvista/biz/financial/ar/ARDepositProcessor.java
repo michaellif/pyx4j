@@ -38,7 +38,7 @@ public class ARDepositProcessor extends AbstractARProcessor {
 
         ARTransactionManager.postInvoiceLineItem(refund);
 
-        deposit.lifecycle().status().setValue(DepositStatus.Returned);
+        deposit.lifecycle().status().setValue(DepositStatus.Refunded);
         Persistence.service().persist(deposit);
     }
 }

@@ -17,10 +17,13 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.biz.financial.ar.ARFacade;
+import com.propertyvista.biz.financial.deposit.DepositFacade;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.InvoiceDebit.DebitType;
 import com.propertyvista.domain.financial.billing.InvoiceDeposit;
@@ -28,6 +31,7 @@ import com.propertyvista.domain.financial.billing.InvoiceDepositRefund;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Deposit;
+import com.propertyvista.domain.tenant.lease.Deposit.DepositType;
 
 public class BillingDepositProcessor extends AbstractBillingProcessor {
 
@@ -89,13 +93,11 @@ public class BillingDepositProcessor extends AbstractBillingProcessor {
         if (!nextBill.billingPeriodEndDate().getValue().before(nextBill.billingAccount().lease().leaseTo().getValue())) {
             Persistence.service().retrieve(nextBill.billingAccount().deposits());
 
-// TODO: Stan, there is no deposit() field in DepositLifecycle now. There reference is opposite : Deposit.lifecycle() ;( 
-
-//            for (DepositLifecycle deposit : nextBill.billingAccount().deposits()) {
-//                if (DepositType.LastMonthDeposit.equals(deposit.depositType().getValue())) {
-//                    ServerSideFactory.create(ARFacade.class).postDepositRefund(deposit);
-//                }
-//            }
+            for (Deposit deposit : ServerSideFactory.create(DepositFacade.class).getCurrentDeposits(nextBill.billingAccount().lease())) {
+                if (DepositType.LastMonthDeposit.equals(deposit.depositType().getValue())) {
+                    ServerSideFactory.create(ARFacade.class).postDepositRefund(deposit);
+                }
+            }
         }
     }
 

@@ -90,7 +90,7 @@ public class BillingRejectedPaymentScenarioTest extends FinancialTestBase {
 
         // Add Payment for May
         SysDateManager.setSysDate("01-May-2011");
-        receiveAndPostPayment("30-Apr-2011", "1000.00", PaymentType.Cash);
+        receiveAndPostPayment("30-Apr-2011", "1000.00", PaymentType.Echeck);
         PaymentRecord payment = receiveAndPostPayment("30-Apr-2011", "41.94", PaymentType.Check);
 
         // reject payments
@@ -117,7 +117,7 @@ public class BillingRejectedPaymentScenarioTest extends FinancialTestBase {
 
         // Add Payment for June
         SysDateManager.setSysDate("01-Jun-2011");
-        payment = receiveAndPostPayment("30-May-2011", "950.00", PaymentType.Cash);
+        payment = receiveAndPostPayment("30-May-2011", "950.00", PaymentType.Echeck);
         receiveAndPostPayment("31-May-2011", "163.88", PaymentType.Check);
 
         // reject payments
@@ -145,7 +145,7 @@ public class BillingRejectedPaymentScenarioTest extends FinancialTestBase {
         // Add Payment for July
         SysDateManager.setSysDate("01-Jul-2011");
         payment = receiveAndPostPayment("29-Jun-2011", "900.00", PaymentType.Check);
-        PaymentRecord payment2 = receiveAndPostPayment("30-Jun-2011", "1191.94", PaymentType.Cash);
+        PaymentRecord payment2 = receiveAndPostPayment("30-Jun-2011", "1191.94", PaymentType.Echeck);
 
         // reject payments
         SysDateManager.setSysDate("05-Jul-2011");

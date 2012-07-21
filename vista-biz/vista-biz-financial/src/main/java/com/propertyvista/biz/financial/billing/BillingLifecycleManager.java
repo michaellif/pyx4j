@@ -278,13 +278,12 @@ public class BillingLifecycleManager {
                 Persistence.service().retrieve(bill.lineItems());
                 claimExistingLineItems(bill.lineItems());
                 postNewLineItems(bill.lineItems());
+                ServerSideFactory.create(DepositFacade.class).onConfirmedBill(bill);
             }
 
             Persistence.service().persist(bill);
 
             updateBillingCycleStats(bill, false);
-
-            ServerSideFactory.create(DepositFacade.class).onValidateBill(bill);
 
         } else {
             throw new BillingException("Bill is in status '" + bill.billStatus().getValue() + "'. Bill should be in 'Finished' state in order to verify it.");

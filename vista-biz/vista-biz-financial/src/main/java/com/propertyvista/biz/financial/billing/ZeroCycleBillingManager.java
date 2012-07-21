@@ -41,6 +41,8 @@ class ZeroCycleBillingManager extends AbstractBillingManager {
         return Arrays.asList(new AbstractBillingProcessor[] {
                 // create current bill charges/adjustments etc..
                 new BillingProductChargeProcessor(this),
+                // deposits for zero-cycle must be accounted for in the carry-forward balance
+                new BillingDepositProcessor(this),
                 // create initial debit/credit so initial debit/credit + charges = initial balance
                 new BillingCarryforwardProcessor(this)
                 

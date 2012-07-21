@@ -64,7 +64,7 @@ public class BillingExistingLeaseSunnyDayScenarioTest extends FinancialTestBase 
         serviceCharge("930.30").
         recurringFeatureCharges("0.00").
         oneTimeFeatureCharges("0.00").
-        depositAmount("0.00").
+        depositAmount("930.30").
         taxes("111.64").
         totalDueAmount("300.00");
         // @formatter:on

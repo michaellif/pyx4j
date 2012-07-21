@@ -263,8 +263,10 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
     protected void setLeaseTerms(String leaseDateFrom, String leaseDateTo, BigDecimal agreedPrice, BigDecimal carryforwardBalance) {
         Lease lease = retrieveLeaseForEdit();
 
+        // TODO - this must be done via facade
         lease.leaseFrom().setValue(FinancialTestsUtils.getDate(leaseDateFrom));
         lease.leaseTo().setValue(FinancialTestsUtils.getDate(leaseDateTo));
+        lease.version().leaseProducts().serviceItem().expirationDate().set(lease.leaseTo());
 
         lease.billingAccount().carryforwardBalance().setValue(carryforwardBalance);
 

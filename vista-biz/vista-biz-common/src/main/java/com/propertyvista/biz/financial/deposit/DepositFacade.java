@@ -22,6 +22,7 @@ import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Deposit;
 import com.propertyvista.domain.tenant.lease.Deposit.DepositType;
 import com.propertyvista.domain.tenant.lease.DepositLifecycle;
+import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 
 public interface DepositFacade {
@@ -45,6 +46,11 @@ public interface DepositFacade {
      * Retrieves corresponding Deposit for DepositLifecycle wrapper
      */
     public Deposit getDeposit(DepositLifecycle depositLifecycle);
+
+    /*
+     * Finds all deposit from the current version of lease (looks through all leases if lease = null)
+     */
+    public List<Deposit> getCurrentDeposits(Lease lease);
 
     /*
      * Every deposit must collect interest based on the corresponding policy rules and interest rates
@@ -73,5 +79,5 @@ public interface DepositFacade {
     /*
      * Update related deposits to Billed status
      */
-    void onValidateBill(Bill bill);
+    void onConfirmedBill(Bill bill);
 }

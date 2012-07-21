@@ -171,6 +171,9 @@ public class LeaseFacadeImpl implements LeaseFacade {
         // set selected service:
         BillableItem billableItem = createBillableItem(serviceItem);
         lease.version().leaseProducts().serviceItem().set(billableItem);
+        // TODO : vladl - need expiration date, but please fix per business
+        // This date should also be updated when lease end changes
+        lease.version().leaseProducts().serviceItem().expirationDate().set(lease.leaseTo());
         Persistence.service().retrieve(lease.billingAccount().deposits());
         lease.billingAccount().deposits().clear();
         List<Deposit> deposits = createBillableItemDeposits(billableItem, node);
