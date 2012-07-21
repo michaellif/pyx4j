@@ -26,6 +26,7 @@ import com.propertyvista.domain.DemoData;
 import com.propertyvista.domain.security.AdminUser;
 import com.propertyvista.domain.security.VistaAdminBehavior;
 import com.propertyvista.server.common.security.PasswordEncryptor;
+import com.propertyvista.shared.config.VistaDemo;
 
 class AdminUsersPreloader extends AbstractDataPreloader {
 
@@ -52,7 +53,7 @@ class AdminUsersPreloader extends AbstractDataPreloader {
     public String create() {
 
         int cnt = 0;
-        if (ApplicationMode.isDevelopment()) {
+        if (ApplicationMode.isDevelopment() || VistaDemo.isDemo()) {
             for (int i = 1; i <= DemoData.UserType.ADMIN.getDefaultMax(); i++) {
                 String email = DemoData.UserType.ADMIN.getEmail(i);
                 createAdminUser(email, email, email, VistaAdminBehavior.SystemAdmin);
