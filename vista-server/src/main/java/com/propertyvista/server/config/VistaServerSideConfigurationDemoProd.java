@@ -14,12 +14,11 @@
 package com.propertyvista.server.config;
 
 import com.pyx4j.config.server.IMailServiceConfigConfiguration;
-import com.pyx4j.config.server.IPersistenceConfiguration;
 import com.pyx4j.log4j.LoggerConfig;
 
 import com.propertyvista.portal.rpc.DeploymentConsts;
 
-public class VistaServerSideConfigurationDemoProd extends VistaServerSideConfiguration {
+public class VistaServerSideConfigurationDemoProd extends VistaServerSideConfigurationDevCustom {
 
     @Override
     public boolean isVistaDemo() {
@@ -29,16 +28,6 @@ public class VistaServerSideConfigurationDemoProd extends VistaServerSideConfigu
     @Override
     public boolean openDBReset() {
         return true;
-    }
-
-    @Override
-    public boolean isDevelopmentBehavior() {
-        return false;
-    }
-
-    @Override
-    public boolean openIdrequired() {
-        return false;
     }
 
     @Override
@@ -68,11 +57,6 @@ public class VistaServerSideConfigurationDemoProd extends VistaServerSideConfigu
     }
 
     @Override
-    public String getApplicationURLNamespace() {
-        return ".demo.birchwoodsoftwaregroup.com/";
-    }
-
-    @Override
     public String getApplicationEmailSender() {
         return "\"Property Vista\" <no-reply@propertyvista.com>";
     }
@@ -80,15 +64,6 @@ public class VistaServerSideConfigurationDemoProd extends VistaServerSideConfigu
     @Override
     public IMailServiceConfigConfiguration getMailServiceConfigConfiguration() {
         return VistaSMTPMailServiceConfig.getGmailConfig("demo-prod-");
-    }
-
-    @Override
-    public IPersistenceConfiguration getPersistenceConfiguration() {
-        if (getConfigProperties().getValue("db.type").equals("PostgreSQL")) {
-            return new VistaConfigurationPostgreSQLProperties(getConfigDirectory(), getConfigProperties().getProperties());
-        } else {
-            return new VistaConfigurationMySQLProperties(getConfigDirectory(), getConfigProperties().getProperties());
-        }
     }
 
 }

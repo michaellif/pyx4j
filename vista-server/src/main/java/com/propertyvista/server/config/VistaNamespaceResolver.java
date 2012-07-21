@@ -58,11 +58,12 @@ public class VistaNamespaceResolver implements NamespaceResolver {
     @Override
     public String getNamespace(HttpServletRequest httprequest) {
         if (httprequest.getServletPath() != null) {
-            if ((httprequest.getServletPath().startsWith("/" + DeploymentConsts.ADMIN_URL) || httprequest.getServletPath().startsWith("/interfaces"))) {
+            String servletPath = httprequest.getServletPath();
+            if ((servletPath.startsWith("/" + DeploymentConsts.ADMIN_URL) || servletPath.startsWith("/interfaces"))) {
                 return VistaNamespace.adminNamespace;
             }
-            if (httprequest.getServletPath().startsWith("/public/schema") || httprequest.getServletPath().startsWith("/static/")
-                    || httprequest.getServletPath().startsWith("/public/status")) {
+            if (servletPath.startsWith("/public/schema") || servletPath.startsWith("/static/") || servletPath.startsWith("/public/status")
+                    || servletPath.endsWith("/o/openid")) {
                 return "_";
             }
         }
