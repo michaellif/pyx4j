@@ -135,6 +135,8 @@ public class BillingUtils {
             // *** Current Bill list values ***
             if (lineItem.isInstanceOf(InvoiceProductCharge.class)) {
                 InvoiceProductCharge charge = (InvoiceProductCharge) lineItem;
+                Persistence.service().retrieve(charge.adjustmentSubLineItems());
+                Persistence.service().retrieve(charge.concessionSubLineItems());
                 ProductType prodType = charge.productType().getValue();
                 if (ProductType.service.equals(prodType)) {
                     dto.serviceChargeLineItems().lineItems().add(charge);
