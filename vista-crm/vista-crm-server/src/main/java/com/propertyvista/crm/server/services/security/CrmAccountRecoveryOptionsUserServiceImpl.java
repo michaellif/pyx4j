@@ -23,18 +23,23 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.essentials.server.AbstractAntiBot;
+import com.pyx4j.essentials.server.AbstractAntiBot.LoginType;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UserRuntimeException;
-import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.rpc.AuthenticationRequest;
+import com.pyx4j.security.rpc.AuthenticationResponse;
+import com.pyx4j.security.rpc.ChallengeVerificationRequired;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.server.contexts.Context;
 
 import com.propertyvista.biz.system.AuditFacade;
 import com.propertyvista.crm.rpc.services.security.CrmAccountRecoveryOptionsUserService;
+import com.propertyvista.crm.server.services.pub.CrmAuthenticationServiceImpl;
 import com.propertyvista.domain.security.SecurityQuestion;
 import com.propertyvista.domain.security.VistaBasicBehavior;
 import com.propertyvista.portal.rpc.shared.dto.AccountRecoveryOptionsDTO;
+import com.propertyvista.server.common.security.PasswordEncryptor;
 import com.propertyvista.server.common.security.VistaContext;
 import com.propertyvista.server.domain.security.CrmUserCredential;
 
@@ -51,8 +56,22 @@ public class CrmAccountRecoveryOptionsUserServiceImpl implements CrmAccountRecov
 
         CrmUserCredential credential = Persistence.service().retrieve(CrmUserCredential.class, VistaContext.getCurrentUserPrimaryKey());
 
+        if (!SecurityController.checkBehavior(VistaBasicBehavior.CRMSetupAccountRecoveryOptionsRequired)) {
+            // Verify password
+            Persistence.service().retrieve(credential.user());
+            AbstractAntiBot.assertLogin(LoginType.userLogin, credential.user().email().getValue(), null);
+            if (!PasswordEncryptor.checkPassword(request.password().getValue(), credential.credential().getValue())) {
+                log.info("Invalid password for user {}", Context.getVisit().getUserVisit().getEmail());
+                if (AbstractAntiBot.authenticationFailed(LoginType.userLogin, Context.getVisit().getUserVisit().getEmail())) {
+                    throw new ChallengeVerificationRequired(i18n.tr("Too Many Failed Log In Attempts"));
+                } else {
+                    throw new UserRuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
+                }
+            }
+        }
+
         result.useSecurityQuestionChallengeForPasswordReset().setValue(
-                !isEmpty(credential.securityQuestion()) | SecurityController.checkBehavior(VistaBasicBehavior.CRMPasswordChangeRequiresSecurityQuestion));
+                !isEmpty(credential.securityQuestion()) || SecurityController.checkBehavior(VistaBasicBehavior.CRMPasswordChangeRequiresSecurityQuestion));
 
         result.securityQuestion().setValue(credential.securityQuestion().getValue());
         result.securityAnswer().setValue(credential.securityAnswer().getValue());
@@ -62,25 +81,43 @@ public class CrmAccountRecoveryOptionsUserServiceImpl implements CrmAccountRecov
     }
 
     @Override
-    public void updateRecoveryOptions(AsyncCallback<VoidSerializable> callback, AccountRecoveryOptionsDTO request) {
-        CrmUserCredential credential = Persistence.service().retrieve(CrmUserCredential.class, VistaContext.getCurrentUserPrimaryKey());
+    public void updateRecoveryOptions(AsyncCallback<AuthenticationResponse> callback, AccountRecoveryOptionsDTO request) {
+        CrmUserCredential credentials = Persistence.service().retrieve(CrmUserCredential.class, VistaContext.getCurrentUserPrimaryKey());
+
+        if (!SecurityController.checkBehavior(VistaBasicBehavior.CRMSetupAccountRecoveryOptionsRequired)) {
+            // Verify password
+            Persistence.service().retrieve(credentials.user());
+            AbstractAntiBot.assertLogin(LoginType.userLogin, credentials.user().email().getValue(), null);
+            if (!PasswordEncryptor.checkPassword(request.password().getValue(), credentials.credential().getValue())) {
+                log.info("Invalid password for user {}", Context.getVisit().getUserVisit().getEmail());
+                if (AbstractAntiBot.authenticationFailed(LoginType.userLogin, Context.getVisit().getUserVisit().getEmail())) {
+                    throw new ChallengeVerificationRequired(i18n.tr("Too Many Failed Log In Attempts"));
+                } else {
+                    throw new UserRuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
+                }
+            }
+        }
 
         if (request.useSecurityQuestionChallengeForPasswordReset().isBooleanTrue()
-                | SecurityController.checkBehavior(VistaBasicBehavior.CRMPasswordChangeRequiresSecurityQuestion)) {
+                || SecurityController.checkBehavior(VistaBasicBehavior.CRMPasswordChangeRequiresSecurityQuestion)) {
             assertIsDefined(request.securityQuestion());
             assertIsDefined(request.securityAnswer());
         }
 
-        credential.securityQuestion().setValue(request.securityQuestion().getValue());
-        credential.securityAnswer().setValue(request.securityAnswer().getValue());
-        credential.recoveryEmail().setValue(request.recoveryEmail().getValue());
+        credentials.securityQuestion().setValue(request.securityQuestion().getValue());
+        credentials.securityAnswer().setValue(request.securityAnswer().getValue());
+        credentials.recoveryEmail().setValue(request.recoveryEmail().getValue());
 
-        ServerSideFactory.create(AuditFacade.class).credentialsUpdated(credential.user());
-        Persistence.service().persist(credential);
+        ServerSideFactory.create(AuditFacade.class).credentialsUpdated(credentials.user());
+        Persistence.service().persist(credentials);
         Persistence.service().commit();
         log.info("AccountRecoveryOptions changed by user {} {}", Context.getVisit().getUserVisit().getEmail(), VistaContext.getCurrentUserPrimaryKey());
 
-        callback.onSuccess(null);
+        if (SecurityController.checkBehavior(VistaBasicBehavior.CRMSetupAccountRecoveryOptionsRequired)) {
+            callback.onSuccess(new CrmAuthenticationServiceImpl().authenticate(credentials, null));
+        } else {
+            callback.onSuccess(null);
+        }
     }
 
     private void assertIsDefined(IPrimitive<String> str) {

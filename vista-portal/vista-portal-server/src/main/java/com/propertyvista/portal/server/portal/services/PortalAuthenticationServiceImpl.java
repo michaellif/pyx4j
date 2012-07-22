@@ -70,7 +70,7 @@ public class PortalAuthenticationServiceImpl extends VistaAuthenticationServices
     }
 
     @Override
-    public String beginSession(CustomerUser user, Set<Behavior> behaviors, IEntity additionalConditions) {
+    public String beginSession(CustomerUser user, CustomerUserCredential credentials, Set<Behavior> behaviors, IEntity additionalConditions) {
         Set<Behavior> actualBehaviors = new HashSet<Behavior>();
 
         // See if active Lease exists
@@ -98,7 +98,7 @@ public class PortalAuthenticationServiceImpl extends VistaAuthenticationServices
             actualBehaviors.add(VistaCustomerBehavior.LeaseSelectionRequired);
         }
 
-        String sessionToken = super.beginSession(user, actualBehaviors, additionalConditions);
+        String sessionToken = super.beginSession(user, credentials, actualBehaviors, additionalConditions);
 
         if (selectedLease != null) {
             VistaCustomerContext.setCurrentUserLease(selectedLease);

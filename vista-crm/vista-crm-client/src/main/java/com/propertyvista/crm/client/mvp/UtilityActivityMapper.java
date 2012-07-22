@@ -17,7 +17,10 @@ import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.place.shared.Place;
 
+import com.pyx4j.site.rpc.CrudAppPlace;
+
 import com.propertyvista.crm.client.activity.RuntimeErrorActivity;
+import com.propertyvista.crm.client.activity.crud.account.AccountRecoveryOptionsEditorActivity;
 import com.propertyvista.crm.client.activity.login.LoginActivity;
 import com.propertyvista.crm.client.activity.login.LoginWithTokenActivity;
 import com.propertyvista.crm.client.activity.security.PasswordResetActivity;
@@ -37,6 +40,8 @@ public class UtilityActivityMapper implements ActivityMapper {
             return new PasswordResetRequestActivity(place);
         } else if (place instanceof CrmSiteMap.PasswordReset) {
             return new PasswordResetActivity(place);
+        } else if (place instanceof CrmSiteMap.Account.AccountRecoveryOptionsRequired) {
+            return new AccountRecoveryOptionsEditorActivity((CrudAppPlace) place);
         } else if (place instanceof CrmSiteMap.LoginWithToken) {
             return new LoginWithTokenActivity(place);
         } else if (place instanceof CrmSiteMap.RuntimeError) {

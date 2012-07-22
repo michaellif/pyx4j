@@ -102,9 +102,8 @@ public class AbstractAccountRecoveryOptionsViewerActivity extends AbstractActivi
     @Override
     public void edit() {
         if (!isCancelled) {
-            String password = getCurrentPassword();
             place.formEditorPlace(new Key(-1));
-            place.placeArg("password", password);
+            place.placeArg(AccountRecoveryOptionsViewerView.ARG_PASSWORD, getCurrentPassword());
             AppSite.getPlaceController().goTo(place);
         }
     }
@@ -135,7 +134,7 @@ public class AbstractAccountRecoveryOptionsViewerActivity extends AbstractActivi
     }
 
     private String getCurrentPassword() {
-        return place.getFirstArg("password");
+        return place.getFirstArg(AccountRecoveryOptionsViewerView.ARG_PASSWORD);
     }
 
 }

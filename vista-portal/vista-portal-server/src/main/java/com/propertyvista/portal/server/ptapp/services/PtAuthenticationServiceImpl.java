@@ -68,7 +68,7 @@ public class PtAuthenticationServiceImpl extends VistaAuthenticationServicesImpl
     }
 
     @Override
-    public String beginSession(CustomerUser user, Set<Behavior> behaviors, IEntity additionalConditions) {
+    public String beginSession(CustomerUser user, CustomerUserCredential credentials, Set<Behavior> behaviors, IEntity additionalConditions) {
         Set<Behavior> actualBehaviors = new HashSet<Behavior>();
 
         // See if active Application exists
@@ -106,7 +106,7 @@ public class PtAuthenticationServiceImpl extends VistaAuthenticationServicesImpl
             actualBehaviors.add(VistaCustomerBehavior.ApplicationSelectionRequired);
         }
 
-        String sessionToken = super.beginSession(user, actualBehaviors, additionalConditions);
+        String sessionToken = super.beginSession(user, credentials, actualBehaviors, additionalConditions);
 
         // set application in context here:
         if (selectedApplication != null) {

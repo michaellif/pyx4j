@@ -54,6 +54,8 @@ public class CrmSiteAppPlaceDispatcher extends AbstractAppPlaceDispatcher {
     protected AppPlace specialForward(AppPlace newPlace) {
         if (SecurityController.checkBehavior(VistaBasicBehavior.CRMPasswordChangeRequired)) {
             return new CrmSiteMap.PasswordReset();
+        } else if (SecurityController.checkBehavior(VistaBasicBehavior.CRMSetupAccountRecoveryOptionsRequired)) {
+            return new CrmSiteMap.Account.AccountRecoveryOptionsRequired();
         } else {
             return null;
         }

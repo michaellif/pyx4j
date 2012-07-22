@@ -199,6 +199,8 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
             switch (SystemMaintenance.getState()) {
             case Unavailable:
                 throw new UserRuntimeException(SystemMaintenance.getApplicationMaintenanceMessage());
+            default:
+                break;
             }
         }
 
@@ -264,7 +266,7 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
             Set<Behavior> behaviors = new HashSet<Behavior>();
             behaviors.addAll(getBehaviors(cr));
             behaviors.add(getApplicationBehavior());
-            return beginSession(user, behaviors, null);
+            return beginSession(user, cr, behaviors, null);
         }
     }
 
@@ -288,7 +290,7 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
         Set<Behavior> behaviors = new HashSet<Behavior>();
         behaviors.addAll(getBehaviors(credentials));
         behaviors.add(getApplicationBehavior());
-        String sessionToken = beginSession(user, behaviors, additionalConditions);
+        String sessionToken = beginSession(user, credentials, behaviors, additionalConditions);
         if (!isSessionValid()) {
             Lifecycle.endSession();
             throw new UserRuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
@@ -301,7 +303,7 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
         return authenticate(credentials, additionalConditions);
     }
 
-    protected String beginSession(U user, Set<Behavior> behaviors, IEntity additionalConditions) {
+    protected String beginSession(U user, E credentials, Set<Behavior> behaviors, IEntity additionalConditions) {
         // Only default ApplicationBehavior assigned is error. User have no roles
         if (behaviors.isEmpty() || ((behaviors.size() == 1) && (behaviors.contains(getApplicationBehavior())))) {
             throw new UserRuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);

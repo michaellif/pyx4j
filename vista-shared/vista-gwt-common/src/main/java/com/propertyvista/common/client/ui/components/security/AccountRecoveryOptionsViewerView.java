@@ -19,6 +19,8 @@ import com.propertyvista.portal.rpc.shared.dto.AccountRecoveryOptionsDTO;
 
 public interface AccountRecoveryOptionsViewerView extends IViewerView<AccountRecoveryOptionsDTO> {
 
+    public static final String ARG_PASSWORD = "password";
+
     void setSecurityQuestionRequired(boolean isSecurityQuestionEntiryRequired);
 
 }

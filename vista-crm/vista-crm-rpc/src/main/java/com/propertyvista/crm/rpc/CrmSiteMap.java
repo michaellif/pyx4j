@@ -347,12 +347,13 @@ public class CrmSiteMap implements SiteMap {
     @NavigationItem(navigLabel = "User Account")
     public static class Account extends CrmCrudAppPlace {
 
-        public static class AccountRecoveryOptions extends CrmCrudAppPlace {
+        public static class AccountRecoveryOptionsRequired extends CrmCrudAppPlace {
+        }
 
+        public static class AccountRecoveryOptions extends CrmCrudAppPlace {
         }
 
         public static class LoginAttemptsLog extends CrmCrudAppPlace {
-
         }
 
     }

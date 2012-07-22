@@ -22,6 +22,7 @@ import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
+import com.propertyvista.common.client.ui.components.security.AccountRecoveryOptionsViewerView;
 import com.propertyvista.common.client.ui.components.security.PasswordChangeView;
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.organisation.employee.EmployeeViewerView;
@@ -59,7 +60,7 @@ public class AccountViewerActivity extends CrmViewerActivity<EmployeeDTO> implem
     @Override
     public void goToAccountRecoveryOptions(String password) {
         CrudAppPlace place = new CrmSiteMap.Account.AccountRecoveryOptions().formViewerPlace(new Key(-1));
-        place.placeArg("password", password);
+        place.placeArg(AccountRecoveryOptionsViewerView.ARG_PASSWORD, password);
         AppSite.getPlaceController().goTo(place);
     }
 

@@ -17,15 +17,17 @@ import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Timer;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.rpc.shared.VoidSerializable;
+import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.rpc.AuthenticationRequest;
+import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.security.shared.SecurityController;
+import com.pyx4j.site.client.AppSite;
+import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
@@ -100,19 +102,24 @@ public class AbstractAccountRecoveryOptionsEditorActivity extends AbstractActivi
     public void save() {
         if (!isCancelled) {
             if (!isCancelled) {
-                service.updateRecoveryOptions(new AsyncCallback<VoidSerializable>() {
+                AccountRecoveryOptionsDTO dto = view.getValue().duplicate();
+                dto.password().setValue(getCurrentPassword());
+                service.updateRecoveryOptions(new DefaultAsyncCallback<AuthenticationResponse>() {
                     @Override
-                    public void onSuccess(VoidSerializable result) {
+                    public void onSuccess(AuthenticationResponse result) {
                         view.reset();
+                        if (result != null) {
+                            ClientContext.authenticated(result);
+                        }
                         MessageDialog.info(i18n.tr("Account recovery options were updated successfully"));
-                        History.back();
+                        if (result != null) {
+                            AppSite.getPlaceController().goTo(AppPlace.NOWHERE);
+                        } else {
+                            History.back();
+                        }
                     }
 
-                    @Override
-                    public void onFailure(Throwable caught) {
-                        throw new Error(caught);
-                    }
-                }, view.getValue());
+                }, dto);
             }
         }
     }
@@ -138,7 +145,7 @@ public class AbstractAccountRecoveryOptionsEditorActivity extends AbstractActivi
     }
 
     private String getCurrentPassword() {
-        return place.getFirstArg("password");
+        return place.getFirstArg(AccountRecoveryOptionsViewerView.ARG_PASSWORD);
     }
 
 }

@@ -92,7 +92,7 @@ public class CrmRolesPreloader extends BaseVistaDevDataPreloader {
         if (!ServerSideConfiguration.isStartedUnderEclipse()) {
             allRoles.remove(VistaCrmBehavior.PropertyVistaSupport);
         }
-        createRole(DEFAULT_ACCESS_ALL_ROLE_NAME, allRoles.toArray(new VistaCrmBehavior[allRoles.size()]));
+        createRole(DEFAULT_ACCESS_ALL_ROLE_NAME, true, allRoles.toArray(new VistaCrmBehavior[allRoles.size()]));
 
         createRole("Accountant", VistaCrmBehavior.ProductCatalog, VistaCrmBehavior.Billing, VistaCrmBehavior.Reports);
         createRole("Accounting", true, VistaCrmBehavior.PropertyManagement, VistaCrmBehavior.Organization, VistaCrmBehavior.Contacts, VistaCrmBehavior.Reports);

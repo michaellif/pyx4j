@@ -19,7 +19,9 @@ import java.util.Set;
 
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.security.shared.Behavior;
+import com.pyx4j.security.shared.SecurityController;
 
 import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.crm.rpc.services.pub.CrmAuthenticationService;
@@ -45,6 +47,29 @@ public class CrmAuthenticationServiceImpl extends VistaAuthenticationServicesImp
     @Override
     protected Behavior getPasswordChangeRequiredBehavior() {
         return VistaBasicBehavior.CRMPasswordChangeRequired;
+    }
+
+    @Override
+    protected boolean isSessionValid() {
+        return SecurityController.checkAnyBehavior(getApplicationBehavior(), getPasswordChangeRequiredBehavior(),
+                VistaBasicBehavior.CRMSetupAccountRecoveryOptionsRequired);
+    }
+
+    private boolean isAccountRecoveryOptionsConfigured(CrmUserCredential userCredential) {
+        return (!userCredential.securityQuestion().isNull()) && (!userCredential.securityAnswer().isNull());
+    }
+
+    @Override
+    public String beginSession(CrmUser user, CrmUserCredential userCredential, Set<Behavior> behaviors, IEntity additionalConditions) {
+        Set<Behavior> actualBehaviors;
+        if (behaviors.contains(VistaBasicBehavior.CRMPasswordChangeRequiresSecurityQuestion) && (!isAccountRecoveryOptionsConfigured(userCredential))) {
+            actualBehaviors = new HashSet<Behavior>();
+            actualBehaviors.add(VistaBasicBehavior.CRMPasswordChangeRequiresSecurityQuestion);
+            actualBehaviors.add(VistaBasicBehavior.CRMSetupAccountRecoveryOptionsRequired);
+        } else {
+            actualBehaviors = behaviors;
+        }
+        return super.beginSession(user, userCredential, actualBehaviors, additionalConditions);
     }
 
     @Override
