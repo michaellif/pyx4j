@@ -23,8 +23,8 @@ package com.pyx4j.essentials.server.deferred;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideConfiguration;
-import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.server.contexts.Context;
 import com.pyx4j.server.contexts.InheritableUserContext;
 import com.pyx4j.server.contexts.Lifecycle;

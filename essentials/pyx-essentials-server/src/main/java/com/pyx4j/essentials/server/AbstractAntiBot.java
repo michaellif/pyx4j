@@ -22,9 +22,9 @@ package com.pyx4j.essentials.server;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Pair;
+import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.security.rpc.ChallengeVerificationRequired;
 
 /**

@@ -20,7 +20,7 @@
  */
 package com.pyx4j.gwt.commons;
 
-import com.pyx4j.rpc.shared.IsWarningException;
+import com.pyx4j.commons.IsWarningException;
 
 @SuppressWarnings("serial")
 public class UnrecoverableClientWarning extends Error implements IsWarningException {

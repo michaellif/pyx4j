@@ -18,14 +18,12 @@
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.rpc.shared;
-
-import com.pyx4j.commons.RuntimeExceptionSerializable;
+package com.pyx4j.commons;
 
 /**
  * Exception that are safe to shown to user.
  */
-public class UserRuntimeException extends RuntimeExceptionSerializable implements IsWarningException {
+public class UserRuntimeException extends RuntimeExceptionSerializable {
 
     private static final long serialVersionUID = 1L;
 

@@ -26,8 +26,8 @@ import com.google.gwt.http.client.Response;
 import com.google.gwt.user.client.rpc.IncompatibleRemoteServiceException;
 import com.google.gwt.user.client.rpc.StatusCodeException;
 
+import com.pyx4j.commons.IsWarningException;
 import com.pyx4j.config.shared.ClientVersionMismatchError;
-import com.pyx4j.rpc.shared.IsWarningException;
 
 public abstract class DefaultUnrecoverableErrorHandler implements UnrecoverableErrorHandler {
 

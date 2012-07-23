@@ -37,6 +37,7 @@ import javax.sql.DataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.rdb.cfg.Configuration;
 import com.pyx4j.entity.rdb.cfg.Configuration.ConnectionPoolProvider;
@@ -47,7 +48,6 @@ import com.pyx4j.entity.rdb.dialect.NamingConvention;
 import com.pyx4j.entity.rdb.dialect.NamingConventionOracle;
 import com.pyx4j.entity.rdb.dialect.OracleDialect;
 import com.pyx4j.entity.rdb.dialect.PostgreSQLDialect;
-import com.pyx4j.rpc.shared.UserRuntimeException;
 
 public class ConnectionProvider {
 

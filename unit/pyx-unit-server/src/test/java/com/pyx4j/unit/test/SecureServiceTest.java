@@ -28,9 +28,9 @@ import junit.framework.TestCase;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.rpc.server.LocalService;
-import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.security.shared.AclCreator;
 import com.pyx4j.security.shared.CoreBehavior;
 import com.pyx4j.security.shared.SecurityViolationException;

@@ -35,6 +35,7 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.LocaleResolver;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.shared.ApplicationMode;
@@ -43,7 +44,6 @@ import com.pyx4j.i18n.server.I18nManager;
 import com.pyx4j.log4j.LoggerConfig;
 import com.pyx4j.rpc.shared.ContainerHandledUserRuntimeException;
 import com.pyx4j.rpc.shared.StatusCodeUserRuntimeException;
-import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.server.contexts.AntiDoS.AccessCounter;
 
 /**

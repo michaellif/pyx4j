@@ -20,7 +20,7 @@
  */
 package com.pyx4j.security.rpc;
 
-import com.pyx4j.rpc.shared.UserRuntimeException;
+import com.pyx4j.commons.UserRuntimeException;
 
 @SuppressWarnings("serial")
 public class ChallengeVerificationRequired extends UserRuntimeException {

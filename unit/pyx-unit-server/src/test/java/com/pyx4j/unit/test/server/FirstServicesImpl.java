@@ -22,7 +22,7 @@ package com.pyx4j.unit.test.server;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.rpc.shared.UserRuntimeException;
+import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.unit.test.rpc.FirstServices;
 
 public class FirstServicesImpl implements FirstServices {

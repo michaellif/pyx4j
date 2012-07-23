@@ -25,8 +25,8 @@ import junit.framework.TestCase;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.rpc.shared.UnRecoverableRuntimeException;
-import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.unit.server.TestServiceFactory;
 import com.pyx4j.unit.server.mock.TestLifecycle;
 import com.pyx4j.unit.test.rpc.FirstServices;

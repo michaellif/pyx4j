@@ -18,7 +18,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.rpc.shared;
+package com.pyx4j.commons;
 
 public interface IsWarningException {
 

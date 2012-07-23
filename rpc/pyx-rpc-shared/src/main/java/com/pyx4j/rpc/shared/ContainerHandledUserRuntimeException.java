@@ -20,6 +20,8 @@
  */
 package com.pyx4j.rpc.shared;
 
+import com.pyx4j.commons.UserRuntimeException;
+
 public class ContainerHandledUserRuntimeException extends UserRuntimeException {
 
     private static final long serialVersionUID = 1L;
