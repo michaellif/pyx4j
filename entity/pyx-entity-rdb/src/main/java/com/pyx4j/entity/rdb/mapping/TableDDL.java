@@ -182,6 +182,9 @@ class TableDDL {
                     for (IndexDef other : indexes) {
                         if (group.equals(other.group)) {
                             other.columns.put(sqlName, position);
+                            if (indexedAnnotation.uniqueConstraint()) {
+                                other.uniqueConstraint = true;
+                            }
                             continue nextGroup;
                         }
                     }
