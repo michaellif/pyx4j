@@ -13,6 +13,8 @@
  */
 package com.propertyvista.crm.server.services.security;
 
+import static com.pyx4j.commons.CommonsStringUtils.isEmpty;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -71,7 +73,8 @@ public class CrmAccountRecoveryOptionsUserServiceImpl implements CrmAccountRecov
         }
 
         result.useSecurityQuestionChallengeForPasswordReset().setValue(
-                !isEmpty(credential.securityQuestion()) || SecurityController.checkBehavior(VistaBasicBehavior.CRMPasswordChangeRequiresSecurityQuestion));
+                !isEmpty(credential.securityQuestion().getValue())
+                        || SecurityController.checkBehavior(VistaBasicBehavior.CRMPasswordChangeRequiresSecurityQuestion));
 
         result.securityQuestion().setValue(credential.securityQuestion().getValue());
         result.securityAnswer().setValue(credential.securityAnswer().getValue());
@@ -121,13 +124,9 @@ public class CrmAccountRecoveryOptionsUserServiceImpl implements CrmAccountRecov
     }
 
     private void assertIsDefined(IPrimitive<String> str) {
-        if (isEmpty(str)) {
+        if (isEmpty(str.getValue())) {
             throw new UserRuntimeException(i18n.tr("\"{0}\" is required", str.getMeta().getCaption()));
         }
-    }
-
-    private boolean isEmpty(IPrimitive<String> str) {
-        return str.isNull() || str.getValue().isEmpty();
     }
 
 }

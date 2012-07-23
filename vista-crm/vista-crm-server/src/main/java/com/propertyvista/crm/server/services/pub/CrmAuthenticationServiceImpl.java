@@ -20,7 +20,6 @@ import java.util.Set;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.security.shared.Behavior;
 import com.pyx4j.security.shared.SecurityController;
 
@@ -57,7 +56,7 @@ public class CrmAuthenticationServiceImpl extends VistaAuthenticationServicesImp
     }
 
     private boolean isAccountRecoveryOptionsConfigured(CrmUserCredential userCredential) {
-        return !(isEmptyString(userCredential.securityQuestion()) | isEmptyString(userCredential.securityAnswer()));
+        return !userCredential.securityQuestion().isNull() & !userCredential.securityAnswer().isNull();
     }
 
     @Override
@@ -107,7 +106,4 @@ public class CrmAuthenticationServiceImpl extends VistaAuthenticationServicesImp
         ServerSideFactory.create(CommunicationFacade.class).sendCrmPasswordRetrievalToken(user);
     }
 
-    private boolean isEmptyString(IPrimitive<String> str) {
-        return str.isNull() || str.getValue().isEmpty();
-    }
 }
