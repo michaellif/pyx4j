@@ -368,6 +368,8 @@ public class EntityPersistenceServiceGAE implements IEntityPersistenceService {
         } else if (value instanceof String) {
             if (meta.getLength() > ORDINARY_STRING_LENGTH_MAX) {
                 return new Text((String) value);
+            } else if (((String) value).length() == 0) {
+                return null;
             } else {
                 return value;
             }

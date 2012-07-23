@@ -80,7 +80,7 @@ class ValueAdapterString extends ValueAdapterPrimitive {
     @Override
     public Object retrieveValue(ResultSet rs, String memberSqlName) throws SQLException {
         String value = rs.getString(memberSqlName);
-        if (rs.wasNull()) {
+        if (rs.wasNull() || (value.length() == 0)) {
             return null;
         } else {
             return value;

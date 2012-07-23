@@ -49,9 +49,23 @@ public abstract class PrimitivePersistenceTestCase extends DatastoreTestBase {
 
         srv.persist(emp);
         Employee emp2 = srv.retrieve(Employee.class, emp.getPrimaryKey());
-        Assert.assertNotNull("retrieve by PK " + emp.getPrimaryKey(), emp2);
+        Assert.assertNotNull("retrieve by PK " + emp2.getPrimaryKey(), emp2);
         Assert.assertEquals("Class of Value", String.class, emp2.firstName().getValue().getClass());
         Assert.assertEquals("Value", "Bob", emp2.firstName().getValue());
+    }
+
+    public void testStringIsNull() {
+        Employee emp = EntityFactory.create(Employee.class);
+        Assert.assertNull("Initial value", emp.firstName().getValue());
+        Assert.assertEquals("Class of Value", String.class, emp.firstName().getValueClass());
+        emp.firstName().setValue("");
+        emp.reliable().setValue(Boolean.TRUE);
+
+        srv.persist(emp);
+        Employee emp2 = srv.retrieve(Employee.class, emp.getPrimaryKey());
+        Assert.assertNotNull("retrieve by PK " + emp2.getPrimaryKey(), emp2);
+        Assert.assertTrue("Retrieved value isNull", emp2.firstName().isNull());
+        Assert.assertNull("Retrieved value", emp2.firstName().getValue());
     }
 
     public void testDate() {
@@ -68,7 +82,7 @@ public abstract class PrimitivePersistenceTestCase extends DatastoreTestBase {
 
         srv.persist(emp);
         Employee emp2 = srv.retrieve(Employee.class, emp.getPrimaryKey());
-        Assert.assertNotNull("retrieve by PK " + emp.getPrimaryKey(), emp2);
+        Assert.assertNotNull("retrieve by PK " + emp2.getPrimaryKey(), emp2);
         Assert.assertEquals("Class of Value", Date.class, emp2.from().getValue().getClass());
         Assert.assertEquals("Value", day, emp2.from().getValue());
     }
@@ -190,7 +204,7 @@ public abstract class PrimitivePersistenceTestCase extends DatastoreTestBase {
 
         srv.persist(emp);
         Employee emp2 = srv.retrieve(Employee.class, emp.getPrimaryKey());
-        Assert.assertNotNull("retrieve by PK " + emp.getPrimaryKey(), emp2);
+        Assert.assertNotNull("retrieve by PK " + emp2.getPrimaryKey(), emp2);
         Assert.assertEquals("Class of Value", Long.class, emp2.holidays().getValue().getClass());
         Assert.assertEquals("Value", Long.valueOf(7), emp2.holidays().getValue());
     }
@@ -203,7 +217,7 @@ public abstract class PrimitivePersistenceTestCase extends DatastoreTestBase {
 
         srv.persist(emp);
         Employee emp2 = srv.retrieve(Employee.class, emp.getPrimaryKey());
-        Assert.assertNotNull("retrieve by PK " + emp.getPrimaryKey(), emp2);
+        Assert.assertNotNull("retrieve by PK " + emp2.getPrimaryKey(), emp2);
         Assert.assertEquals("Class of Value", Integer.class, emp2.rating().getValue().getClass());
         Assert.assertEquals("Value", Integer.valueOf(5), emp2.rating().getValue());
     }
