@@ -24,6 +24,8 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,6 +65,14 @@ public class PersistenceContext {
 
     private long transactionStart = -1;
 
+    public static final boolean traceOpenSession = false;
+
+    private static Object openSessionLock = new Object();
+
+    private static long openSessionCount = 0;
+
+    private static Set<PersistenceContext> openSessions = new HashSet<PersistenceContext>();
+
     public static enum TransactionType {
 
         BackgroundProcess,
@@ -75,7 +85,9 @@ public class PersistenceContext {
     PersistenceContext(ConnectionProvider connectionProvider, TransactionType transactionType) {
         this.connectionProvider = connectionProvider;
         this.transactionType = transactionType;
-        if (ServerSideConfiguration.isStartedUnderJvmDebugMode()) {
+        if (traceOpenSession) {
+            this.contextOpenFrom = Trace.getStackTrace(new Throwable());
+        } else if (ServerSideConfiguration.isStartedUnderJvmDebugMode()) {
             this.contextOpenFrom = Trace.getCallOrigin(EntityPersistenceServiceRDB.class);
         } else {
             this.contextOpenFrom = "n/a";
@@ -131,6 +143,14 @@ public class PersistenceContext {
                     throw new RuntimeException(e);
                 }
             }
+
+            if (traceOpenSession) {
+                synchronized (openSessionLock) {
+                    openSessionCount++;
+                    openSessions.add(this);
+                }
+            }
+
             if (connectionProvider.getDialect().isMultitenantSeparateSchemas()) {
                 setConnectionNamespace(NamespaceManager.getNamespace());
             }
@@ -154,6 +174,12 @@ public class PersistenceContext {
             connectionNamespace = namespace;
         } catch (SQLException e) {
             SQLUtils.closeQuietly(connection);
+            if (traceOpenSession) {
+                synchronized (openSessionLock) {
+                    openSessionCount--;
+                    openSessions.remove(this);
+                }
+            }
             connection = null;
             if (e.getMessage() != null && e.getMessage().contains("does not exist")) {
                 throw new NamespaceNotFoundException(namespace);
@@ -241,6 +267,12 @@ public class PersistenceContext {
                 log.error("Error reseting connection namespace", e);
             }
             SQLUtils.closeQuietly(connection);
+            if (traceOpenSession) {
+                synchronized (openSessionLock) {
+                    openSessionCount--;
+                    openSessions.remove(this);
+                }
+            }
             connection = null;
             if (isExplicitTransaction() && uncommittedChanges) {
                 throw new Error("There are uncommitted changes in Database");
@@ -251,7 +283,24 @@ public class PersistenceContext {
     public void terminate() {
         if (connection != null) {
             SQLUtils.closeQuietly(connection);
+            if (traceOpenSession) {
+                synchronized (openSessionLock) {
+                    openSessionCount--;
+                    openSessions.remove(this);
+                }
+            }
             connection = null;
+        }
+    }
+
+    public static void debugOpenSessions() {
+        if (traceOpenSession) {
+            log.info("*** OpenSessions {}", openSessionCount);
+            for (PersistenceContext persistenceContext : openSessions) {
+                log.info("*** Context open from {}", persistenceContext.getContextOpenFrom());
+            }
+        } else {
+            log.info("*** traceOpenSession compiled out");
         }
     }
 

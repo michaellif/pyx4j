@@ -20,6 +20,9 @@
  */
 package com.pyx4j.config.server;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+
 public class Trace {
 
     private static class TraceId {
@@ -67,6 +70,12 @@ public class Trace {
             }
         }
         return "";
+    }
+
+    public static String getStackTrace(Throwable throwable) {
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        throwable.printStackTrace(new PrintStream(bos));
+        return bos.toString();
     }
 
     /**
