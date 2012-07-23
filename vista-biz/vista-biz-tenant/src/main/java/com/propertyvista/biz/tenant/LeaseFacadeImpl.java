@@ -45,6 +45,7 @@ import com.propertyvista.biz.validation.framework.ValidationFailure;
 import com.propertyvista.biz.validation.validators.lease.LeaseApprovalValidator;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.financial.billing.Bill;
+import com.propertyvista.domain.financial.billing.Bill.BillStatus;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.Service;
@@ -404,6 +405,12 @@ public class LeaseFacadeImpl implements LeaseFacade {
         ServerSideFactory.create(OccupancyFacade.class).approveLease(lease.unit().getPrimaryKey());
         ServerSideFactory.create(ProductCatalogFacade.class).updateUnitRentPrice(lease);
         ServerSideFactory.create(BillingFacade.class).runBilling(lease);
+        Bill bill = ServerSideFactory.create(BillingFacade.class).runBilling(lease);
+        if (bill.billStatus().getValue() != BillStatus.Failed) {
+            ServerSideFactory.create(BillingFacade.class).confirmBill(bill);
+        } else {
+            throw new UserRuntimeException(i18n.tr("This lease cannot be approved due to failed first time bill"));
+        }
 
         if (!lease.leaseApplication().onlineApplication().isNull()) {
             for (Tenant tenant : lease.version().tenants()) {
@@ -470,7 +477,12 @@ public class LeaseFacadeImpl implements LeaseFacade {
 
         finalize(lease);
 
-        ServerSideFactory.create(BillingFacade.class).runBilling(lease);
+        Bill bill = ServerSideFactory.create(BillingFacade.class).runBilling(lease);
+        if (bill.billStatus().getValue() != BillStatus.Failed) {
+            ServerSideFactory.create(BillingFacade.class).confirmBill(bill);
+        } else {
+            throw new UserRuntimeException(i18n.tr("This lease cannot be approved due to failed first time bill"));
+        }
     }
 
     // TODO review code here
