@@ -5,6 +5,7 @@ import java.util.List;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.FontWeight;
+import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -87,8 +88,8 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
         thisIsDemo.getElement().getStyle().setColor("green");
         thisIsDemo.getElement().getStyle().setFontWeight(FontWeight.BOLD);
         thisIsDemo.getElement().getStyle().setFontSize(30, Unit.PX);
-        thisIsDemo.getElement().getStyle().setMarginLeft(1, Unit.EM);
-        thisIsDemo.getElement().getStyle().setMarginRight(1, Unit.EM);
+        thisIsDemo.getElement().getStyle().setProperty("textAlign", "center");
+
         thisIsDemo.setVisible(false);
 
         greetings = new HTML("");
@@ -237,6 +238,11 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
         login.setVisible(true);
         getSatisfaction.setVisible(false);
         greetings.setHTML("");
+        thisIsDemo.getElement().getStyle().setPosition(Position.ABSOLUTE);
+        thisIsDemo.getElement().getStyle().setProperty("marginLeft", "auto");
+        thisIsDemo.getElement().getStyle().setProperty("marginRight", "auto");
+        thisIsDemo.getElement().getStyle().setProperty("left", "0px");
+        thisIsDemo.getElement().getStyle().setProperty("width", "100%");
     }
 
     @Override
@@ -250,6 +256,12 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
         settings.setVisible(true);
         getSatisfaction.setVisible(true);
         greetings.setHTML(i18n.tr("Welcome &nbsp;{0}", userName));
+
+        thisIsDemo.getElement().getStyle().setPosition(Position.RELATIVE);
+        thisIsDemo.getElement().getStyle().setProperty("marginLeft", "1em");
+        thisIsDemo.getElement().getStyle().setProperty("marginRight", "1em");
+        thisIsDemo.getElement().getStyle().setProperty("left", "0px");
+        thisIsDemo.getElement().getStyle().setProperty("width", null);
     }
 
     @Override
