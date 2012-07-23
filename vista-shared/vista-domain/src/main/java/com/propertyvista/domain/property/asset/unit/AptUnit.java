@@ -15,6 +15,8 @@ package com.propertyvista.domain.property.asset.unit;
 
 import java.util.Date;
 
+import javax.xml.bind.annotation.XmlTransient;
+
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
@@ -26,6 +28,8 @@ import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.JoinTable;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.Owner;
+import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
@@ -38,12 +42,24 @@ import com.propertyvista.domain.note.NotesAndAttachmentsNode;
 import com.propertyvista.domain.policy.framework.PolicyNode;
 import com.propertyvista.domain.property.asset.BuildingElement;
 import com.propertyvista.domain.property.asset.Floorplan;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.shared.adapters.FloorplanCountersUpdateAdapter;
 
 @DiscriminatorValue("Unit_BuildingElement")
 public interface AptUnit extends BuildingElement, PolicyNode, NotesAndAttachmentsNode {
+
+    @Override
+    @Owner
+    @NotNull
+    @ReadOnly
+    @Detached
+    @Caption(name = "Building")
+    @XmlTransient
+    @JoinColumn
+    @Indexed(group = { "b,10", "BuildingUnitNumber,10" })
+    Building building();
 
     @Detached
     @NotNull
