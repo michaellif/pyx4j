@@ -19,6 +19,8 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.commons.Key;
@@ -65,6 +67,8 @@ import com.propertyvista.domain.tenant.lease.Lease.Term;
 import com.propertyvista.domain.tenant.lease.LeaseApplication;
 
 public class LeaseFacadeImpl implements LeaseFacade {
+
+    private static final Logger log = LoggerFactory.getLogger(LeaseFacadeImpl.class);
 
     private static final I18n i18n = I18n.get(LeaseFacadeImpl.class);
 
@@ -407,6 +411,12 @@ public class LeaseFacadeImpl implements LeaseFacade {
         Bill bill = ServerSideFactory.create(BillingFacade.class).runBilling(lease);
         if (bill.billStatus().getValue() != BillStatus.Failed) {
             ServerSideFactory.create(BillingFacade.class).confirmBill(bill);
+
+            /// TODO remove this commit this is Hack
+            log.warn("TODO remove this commit this is Hack");
+            if (true) {
+                Persistence.service().commit();
+            }
         } else {
             throw new UserRuntimeException(i18n.tr("This lease cannot be approved due to failed first time bill"));
         }
