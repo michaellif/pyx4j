@@ -21,10 +21,9 @@
 package com.pyx4j.site.client.ui.crud.form;
 
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.UniqueConstraintUserRuntimeException;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.widgets.client.dialog.Dialog.Type;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
-import com.pyx4j.widgets.client.dialog.OkOption;
 
 public class EditorViewImplBase<E extends IEntity> extends FormViewImplBase<E> implements IEditorView<E> {
 
@@ -57,7 +56,12 @@ public class EditorViewImplBase<E extends IEntity> extends FormViewImplBase<E> i
 
     @Override
     public boolean onSaveFail(Throwable caught) {
-        return false;
+        if (caught instanceof UniqueConstraintUserRuntimeException) {
+            showErrorDialog(caught.getMessage());
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override
@@ -65,13 +69,11 @@ public class EditorViewImplBase<E extends IEntity> extends FormViewImplBase<E> i
         return getForm().isDirty();
     }
 
-    protected void showValidationDialog() {
-        MessageDialog.show(i18n.tr("Error"), getForm().getValidationResults().getMessagesText(true, true), Type.Error, new OkOption() {
+    protected void showErrorDialog(String message) {
+        MessageDialog.error(i18n.tr("Error"), message);
+    }
 
-            @Override
-            public boolean onClickOk() {
-                return true;
-            }
-        });
+    protected void showValidationDialog() {
+        MessageDialog.error(i18n.tr("Error"), getForm().getValidationResults().getMessagesText(true, true));
     }
 }
