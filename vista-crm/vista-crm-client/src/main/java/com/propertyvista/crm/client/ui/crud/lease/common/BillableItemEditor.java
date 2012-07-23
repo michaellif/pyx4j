@@ -171,9 +171,9 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
                     get(proto().item()).setEditable(!isAgreed && !lease.getValue().selectedServiceItems().isEmpty());
                 }
             } else if (getValue().item().type().isInstanceOf(FeatureItemType.class)) {
-                // show/hide effective dates (hide always for non-recurring; show in editor, hide in viewer if empty):
+                // show/hide effective dates (hide expiration for non-recurring; show in editor, hide in viewer if empty):
                 boolean recurring = isRecurringFeature(getValue().item().product());
-                get(proto().effectiveDate()).setVisible(recurring && (isEditable() || !getValue().effectiveDate().isNull()));
+                get(proto().effectiveDate()).setVisible((isEditable() || !getValue().effectiveDate().isNull()));
                 get(proto().expirationDate()).setVisible(recurring && (isEditable() || !getValue().expirationDate().isNull()));
 
                 if (isEditable()) {
