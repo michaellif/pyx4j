@@ -21,11 +21,11 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 
+import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.entity.client.CEntityForm;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.essentials.client.crud.CrudDebugId;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.common.client.events.UserMessageEvent;

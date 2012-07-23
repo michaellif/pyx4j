@@ -28,12 +28,12 @@ import java.util.Vector;
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.SimpleMessageFormat;
+import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.rpc.shared.UserRuntimeException;
 
 import com.propertyvista.biz.occupancy.AptUnitOccupancyManagerHelper.MergeHandler;
 import com.propertyvista.domain.financial.offering.ProductItem;

@@ -28,6 +28,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.cache.CacheService;
 import com.pyx4j.entity.shared.utils.EntityDtoBinder;
@@ -36,7 +37,6 @@ import com.pyx4j.essentials.rpc.report.DownloadFormat;
 import com.pyx4j.essentials.server.download.MimeMap;
 import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.rpc.shared.UserRuntimeException;
 
 import com.propertyvista.crm.rpc.services.MediaUploadService;
 import com.propertyvista.domain.media.Media;

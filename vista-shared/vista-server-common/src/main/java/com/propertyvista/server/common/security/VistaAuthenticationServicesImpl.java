@@ -26,6 +26,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Key;
+import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.shared.ApplicationMode;
@@ -41,7 +42,6 @@ import com.pyx4j.essentials.server.admin.SystemMaintenance;
 import com.pyx4j.gwt.server.ServletUtils;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.IgnoreSessionToken;
-import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.rpc.AuthenticationRequest;
 import com.pyx4j.security.rpc.AuthenticationResponse;

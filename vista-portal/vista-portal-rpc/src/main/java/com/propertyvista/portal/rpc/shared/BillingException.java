@@ -13,7 +13,7 @@
  */
 package com.propertyvista.portal.rpc.shared;
 
-import com.pyx4j.rpc.shared.UserRuntimeException;
+import com.pyx4j.commons.UserRuntimeException;
 
 public class BillingException extends UserRuntimeException {
 

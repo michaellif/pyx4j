@@ -17,10 +17,10 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.rpc.shared.UserRuntimeException;
 
 import com.propertyvista.admin.domain.pmc.Pmc;
 import com.propertyvista.admin.domain.security.OnboardingUserCredential;

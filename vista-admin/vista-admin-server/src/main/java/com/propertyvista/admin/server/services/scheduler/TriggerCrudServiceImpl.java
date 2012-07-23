@@ -21,11 +21,11 @@ import org.slf4j.LoggerFactory;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Consts;
+import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.entity.server.AbstractCrudServiceImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
-import com.pyx4j.rpc.shared.UserRuntimeException;
 
 import com.propertyvista.admin.domain.scheduler.Run;
 import com.propertyvista.admin.domain.scheduler.RunStatus;

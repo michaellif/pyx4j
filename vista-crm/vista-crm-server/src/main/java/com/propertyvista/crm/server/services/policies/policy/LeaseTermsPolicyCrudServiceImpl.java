@@ -13,7 +13,7 @@
  */
 package com.propertyvista.crm.server.services.policies.policy;
 
-import com.pyx4j.rpc.shared.UserRuntimeException;
+import com.pyx4j.commons.UserRuntimeException;
 
 import com.propertyvista.crm.server.services.policies.GenericPolicyCrudService;
 import com.propertyvista.domain.policy.dto.LeaseTermsPolicyDTO;

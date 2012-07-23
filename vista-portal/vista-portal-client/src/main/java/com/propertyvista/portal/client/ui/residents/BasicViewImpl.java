@@ -22,11 +22,11 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 
+import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.entity.client.CEntityForm;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.rpc.shared.UserRuntimeException;
 
 import com.propertyvista.common.client.events.UserMessageEvent.UserMessageType;
 import com.propertyvista.common.client.ui.decorations.DecorationUtils;

@@ -33,10 +33,10 @@ import org.slf4j.LoggerFactory;
 import com.mortennobel.imagescaling.AdvancedResizeOp;
 import com.mortennobel.imagescaling.ThumpnailRescaleOp;
 
+import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.essentials.rpc.report.DownloadFormat;
 import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.site.shared.Dimension;
 
 import com.propertyvista.crm.rpc.services.MediaUploadService;

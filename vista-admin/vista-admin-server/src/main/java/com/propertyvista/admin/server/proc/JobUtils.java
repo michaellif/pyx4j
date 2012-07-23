@@ -29,10 +29,10 @@ import org.quartz.TriggerKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.gwt.server.DateUtils;
 import com.pyx4j.quartz.SchedulerHelper;
-import com.pyx4j.rpc.shared.UserRuntimeException;
 
 import com.propertyvista.admin.domain.scheduler.ScheduleType;
 import com.propertyvista.admin.domain.scheduler.TriggerSchedule;

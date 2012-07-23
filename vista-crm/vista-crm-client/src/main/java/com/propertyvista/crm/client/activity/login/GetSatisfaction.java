@@ -19,10 +19,10 @@ import org.slf4j.LoggerFactory;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.gwt.commons.AjaxJSLoader;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.rpc.shared.UserRuntimeException;
 
 import com.propertyvista.crm.rpc.services.FeedbackService;
 

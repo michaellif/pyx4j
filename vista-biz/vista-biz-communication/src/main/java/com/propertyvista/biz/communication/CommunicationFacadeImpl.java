@@ -15,9 +15,9 @@ package com.propertyvista.biz.communication;
 
 import java.util.concurrent.Callable;
 
+import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.server.mail.Mail;
 import com.pyx4j.server.mail.MailDeliveryStatus;
 import com.pyx4j.server.mail.MailMessage;

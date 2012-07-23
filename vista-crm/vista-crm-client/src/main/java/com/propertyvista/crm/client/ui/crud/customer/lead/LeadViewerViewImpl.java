@@ -19,9 +19,9 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Command;
 
+import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog.Formatter;
 import com.pyx4j.widgets.client.Button;

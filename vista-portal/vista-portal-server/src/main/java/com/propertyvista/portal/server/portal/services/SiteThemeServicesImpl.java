@@ -16,6 +16,7 @@ package com.propertyvista.portal.server.portal.services;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.entity.cache.CacheService;
 import com.pyx4j.entity.server.NamespaceNotFoundException;
 import com.pyx4j.entity.server.Persistence;
@@ -25,7 +26,6 @@ import com.pyx4j.essentials.rpc.SystemState;
 import com.pyx4j.essentials.server.admin.SystemMaintenance;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.IgnoreSessionToken;
-import com.pyx4j.rpc.shared.UserRuntimeException;
 
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.site.SiteDescriptor;

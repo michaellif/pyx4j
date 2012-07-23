@@ -24,6 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.GWTJava5Helper;
+import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
@@ -32,7 +33,6 @@ import com.pyx4j.entity.shared.ObjectClassType;
 import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.entity.shared.meta.MemberMeta;
-import com.pyx4j.rpc.shared.UserRuntimeException;
 
 import com.propertyvista.biz.communication.mail.template.model.ApplicationT;
 import com.propertyvista.biz.communication.mail.template.model.BuildingT;

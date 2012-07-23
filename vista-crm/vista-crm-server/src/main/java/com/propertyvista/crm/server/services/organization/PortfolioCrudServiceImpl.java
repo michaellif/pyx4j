@@ -15,9 +15,9 @@ package com.propertyvista.crm.server.services.organization;
 
 import java.util.HashSet;
 
+import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.entity.server.AbstractCrudServiceImpl;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.rpc.shared.UserRuntimeException;
 
 import com.propertyvista.crm.rpc.services.organization.PortfolioCrudService;
 import com.propertyvista.domain.company.Portfolio;

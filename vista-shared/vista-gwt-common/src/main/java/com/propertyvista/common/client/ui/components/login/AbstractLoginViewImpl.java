@@ -17,8 +17,8 @@ import java.util.List;
 
 import com.google.gwt.user.client.Command;
 
+import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
-import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.security.rpc.SystemWallMessage;
 
 import com.propertyvista.domain.DemoData;

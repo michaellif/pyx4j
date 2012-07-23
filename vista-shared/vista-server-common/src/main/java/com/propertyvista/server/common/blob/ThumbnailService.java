@@ -32,13 +32,13 @@ import com.mortennobel.imagescaling.AdvancedResizeOp.UnsharpenMask;
 import com.mortennobel.imagescaling.ThumpnailRescaleOp;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.site.shared.Dimension;
 
 import com.propertyvista.domain.media.ThumbnailSize;

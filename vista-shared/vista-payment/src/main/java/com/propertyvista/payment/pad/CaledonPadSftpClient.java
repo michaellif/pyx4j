@@ -28,9 +28,9 @@ import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
 import com.jcraft.jsch.SftpException;
 
+import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.essentials.j2se.J2SEServiceConnector;
 import com.pyx4j.essentials.j2se.J2SEServiceConnector.Credentials;
-import com.pyx4j.rpc.shared.UserRuntimeException;
 
 import com.propertyvista.admin.domain.payment.pad.PadReconciliationFile;
 import com.propertyvista.config.VistaDeployment;

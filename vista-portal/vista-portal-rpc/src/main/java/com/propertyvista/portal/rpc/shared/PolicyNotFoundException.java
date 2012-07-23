@@ -14,8 +14,8 @@
 package com.propertyvista.portal.rpc.shared;
 
 import com.pyx4j.commons.GWTJava5Helper;
+import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.rpc.shared.UserRuntimeException;
 
 import com.propertyvista.domain.policy.framework.Policy;
 

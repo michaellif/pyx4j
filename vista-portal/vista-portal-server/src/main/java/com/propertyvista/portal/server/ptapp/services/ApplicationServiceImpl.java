@@ -18,10 +18,10 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.security.rpc.AuthorizationChangedSystemNotification;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.server.contexts.Context;

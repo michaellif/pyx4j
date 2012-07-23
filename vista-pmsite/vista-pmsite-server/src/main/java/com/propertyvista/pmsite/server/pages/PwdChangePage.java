@@ -40,13 +40,13 @@ import templates.TemplateResources;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Pair;
+import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.server.EssentialsServerSideConfiguration;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.server.LocalService;
-import com.pyx4j.rpc.shared.UserRuntimeException;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.security.rpc.ChallengeVerificationRequired;
