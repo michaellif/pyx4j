@@ -130,6 +130,8 @@ public class UnitAvailabilityImportParser implements ImportParser {
                     continue;
                 }
             }
+            unit._import().row().setValue(unitModel._import().row().getValue());
+            unit._import().sheet().setValue(unitModel._import().sheet().getValue());
             unit.number().setValue(unitModel.unit().getValue());
             if (!unitModel.marketRent().isNull()) {
                 unit.marketRent().setValue(parseMoney(unitModel.marketRent().getValue(), unitModel));
