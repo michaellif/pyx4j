@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -25,6 +25,7 @@ import com.pyx4j.site.client.ui.crud.DefaultSiteCrudPanelsTheme;
 import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 import com.pyx4j.widgets.client.datepicker.DefaultDatePickerTheme;
 import com.pyx4j.widgets.client.dialog.DefaultDialogTheme;
+import com.pyx4j.widgets.client.tabpanel.DefaultTabTheme;
 
 import com.propertyvista.admin.client.ui.NavigViewImpl;
 import com.propertyvista.admin.client.ui.SearchBox;
@@ -73,6 +74,8 @@ public class AdminTheme extends VistaTheme {
         addTheme(new DefaultDataTableTheme());
         addTheme(new DefaultDialogTheme());
         addTheme(new DefaultCComponentsTheme());
+
+        addTheme(new DefaultTabTheme());
 
         addTheme(new CrmSitePanelTheme());
         addTheme(new DraggerMixin());
@@ -299,7 +302,7 @@ public class AdminTheme extends VistaTheme {
         addStyle(style);
 
         //
-        // default AnchorButton: 
+        // default AnchorButton:
         buttonEx = Selector.valueOf(AnchorButton.DEFAULT_STYLE_PREFIX);
         style = new Style(buttonEx);
         style.addProperty("color", ThemeColors.object1, 0.95);
