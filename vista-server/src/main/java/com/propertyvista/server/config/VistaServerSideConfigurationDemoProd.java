@@ -43,7 +43,7 @@ public class VistaServerSideConfigurationDemoProd extends VistaServerSideConfigu
         } else {
             protocol = "http://";
         }
-        return protocol + pmcDnsName + "demo.residentportalsite.com/";
+        return protocol + "demo.residentportalsite.com/";
     }
 
     @Override
