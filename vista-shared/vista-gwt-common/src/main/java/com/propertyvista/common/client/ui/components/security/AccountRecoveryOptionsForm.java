@@ -49,7 +49,6 @@ public class AccountRecoveryOptionsForm extends CrudEntityForm<AccountRecoveryOp
         int row = -1;
 
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().recoveryEmail())).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().mobilePhone())).build());
 
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().useSecurityQuestionChallengeForPasswordReset())).build());
         get(proto().useSecurityQuestionChallengeForPasswordReset()).asWidget().getElement().getStyle().setPaddingTop(1, Unit.EM);
@@ -77,8 +76,6 @@ public class AccountRecoveryOptionsForm extends CrudEntityForm<AccountRecoveryOp
     @Override
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
-
-        get(proto().mobilePhone()).setEditable(false);
 
         setUpSecurityQuestionControls();
     }

@@ -70,6 +70,12 @@ public class AbstractAccountRecoveryOptionsEditorActivity extends AbstractActivi
                     view.setSecurityQuestionRequired(SecurityController.checkBehavior(VistaBasicBehavior.CRMPasswordChangeRequiresSecurityQuestion));
                     view.populate(result);
                 }
+
+                @Override
+                public void onFailure(Throwable caught) {
+                    MessageDialog.error(i18n.tr("Error"), caught.getMessage());
+                    AppSite.getPlaceController().goTo(AppPlace.NOWHERE);
+                }
             }, authRequest);
         }
 

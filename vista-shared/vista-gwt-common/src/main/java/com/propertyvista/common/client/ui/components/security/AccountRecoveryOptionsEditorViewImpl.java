@@ -28,11 +28,12 @@ public class AccountRecoveryOptionsEditorViewImpl extends EditorViewImplBase<Acc
 
     private final Button btnSave;
 
+    private final Button btnCancel;
+
     public AccountRecoveryOptionsEditorViewImpl() {
         setForm(new AccountRecoveryOptionsForm());
         setCaption(i18n.tr("Account Recovery Options"));
         btnSave = new Button(i18n.tr("Save"), new ClickHandler() {
-
             @Override
             public void onClick(ClickEvent event) {
                 if (getForm().isValid()) {
@@ -44,6 +45,14 @@ public class AccountRecoveryOptionsEditorViewImpl extends EditorViewImplBase<Acc
             }
         });
         addFooterToolbarItem(btnSave);
+
+        btnCancel = new Button(i18n.tr("Cancel"), new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                getPresenter().cancel();
+            }
+        });
+        addFooterToolbarItem(btnCancel);
     }
 
     @Override
