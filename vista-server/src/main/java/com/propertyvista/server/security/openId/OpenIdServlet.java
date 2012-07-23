@@ -29,6 +29,7 @@ import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.essentials.server.dev.DevSession;
 import com.pyx4j.gwt.server.IOUtils;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.server.common.security.DevelopmentSecurity;
 import com.propertyvista.shared.config.VistaDemo;
@@ -37,6 +38,8 @@ import com.propertyvista.shared.config.VistaDemo;
 public class OpenIdServlet extends HttpServlet {
 
     private final static Logger log = LoggerFactory.getLogger(OpenIdServlet.class);
+
+    private static final I18n i18n = I18n.get(OpenIdServlet.class);
 
     public static String MAPPING = "/o/openid";
 
@@ -58,8 +61,7 @@ public class OpenIdServlet extends HttpServlet {
         OpenIdResponse openIdResponse = OpenId.readResponse(request, DOMAIN);
         if (openIdResponse == null) {
             log.debug("Can't find authentication information in OpenId URL");
-            createResponsePage(response, true, VistaDemo.isDemo() ? "Login using your PropertyVista account" : "Login via Google Apps",
-                    OpenId.getDestinationUrl(OpenIdServlet.DOMAIN, ServerSideConfiguration.instance().getMainApplicationURL()));
+            createResponsePage(response, true, OpenId.getDestinationUrl(OpenIdServlet.DOMAIN, ServerSideConfiguration.instance().getMainApplicationURL()));
         } else {
             log.info("openIdResponse.email [{}]", openIdResponse.email);
             DevSession devSession = DevSession.getSession();
@@ -73,13 +75,17 @@ public class OpenIdServlet extends HttpServlet {
             if (openIdResponse.email != null) {
                 devSession.setAttribute(OpenIdServlet.USER_EMAIL_ATTRIBUTE, openIdResponse.email.toLowerCase(Locale.ENGLISH));
             }
-            createResponsePage(response, false, "Login successful Continue to application", receivingURL);
+            createResponsePage(response, false, receivingURL);
         }
     }
 
-    static void createResponsePage(HttpServletResponse response, boolean signIn, String message, String location) throws IOException {
+    static void createResponsePage(HttpServletResponse response, boolean signIn, String location) throws IOException {
+        String message;
         if (signIn) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            message = VistaDemo.isDemo() ? i18n.tr("Login using your PropertyVista account") : i18n.tr("Login via Google Apps");
+        } else {
+            message = i18n.tr("Login successful Continue to application");
         }
         response.setHeader("Cache-Control", "no-store");
         response.setHeader("Pragma", "no-cache");
