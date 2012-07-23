@@ -37,6 +37,7 @@ import com.propertyvista.interfaces.importer.ImportCounters;
 import com.propertyvista.interfaces.importer.converter.AptUnitConverter;
 import com.propertyvista.interfaces.importer.model.AptUnitIO;
 import com.propertyvista.interfaces.importer.model.BuildingIO;
+import com.propertyvista.interfaces.importer.model.FloorplanIO;
 import com.propertyvista.interfaces.importer.model.ImportIO;
 import com.propertyvista.server.common.reference.geo.GeoLocator.Mode;
 import com.propertyvista.server.common.reference.geo.SharedGeoLocator;
@@ -63,6 +64,13 @@ public class ImportProcessorUpdateUnitAvailability implements ImportProcessor {
             if (buildingIO.propertyCode().isNull()) {
                 buildingIO._import().invalid().setValue(true);
                 buildingIO._import().message().setValue(i18n.tr("Building Property Code is empty."));
+                result = false;
+                continue buildings;
+            }
+
+            if (!buildingIO.propertyCode().isNull() && buildingIO.propertyCode().getValue().length() > 10) {
+                buildingIO._import().invalid().setValue(true);
+                buildingIO._import().message().setValue("Property code must be 10 characters or less");
                 result = false;
                 continue buildings;
             }
@@ -155,7 +163,15 @@ public class ImportProcessorUpdateUnitAvailability implements ImportProcessor {
         //Units
         {
             List<AptUnit> items = new Vector<AptUnit>();
-            for (AptUnitIO aptUnitIO : buildingIO.units()) {
+            List<AptUnitIO> changedUnits = new Vector<AptUnitIO>(); // Units may be in floorplans or just in building, if Unit Type is not present in xls
+            if (buildingIO.floorplans().size() > 0) {
+                for (FloorplanIO floorplans : buildingIO.floorplans()) {
+                    changedUnits.addAll(floorplans.units());
+                }
+            } else {
+                changedUnits.addAll(buildingIO.units());
+            }
+            for (AptUnitIO aptUnitIO : changedUnits) {
                 aptUnitIO.number().setValue(AptUnitConverter.trimUnitNumber(aptUnitIO.number().getValue()));
                 {
                     EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
@@ -164,11 +180,18 @@ public class ImportProcessorUpdateUnitAvailability implements ImportProcessor {
                     List<AptUnit> units = Persistence.service().query(criteria);
                     if (units.size() == 1) {
                         AptUnit unit = (units.get(0));
-                        unit.financial()._marketRent().setValue(aptUnitIO.marketRent().getValue());
-                        unit._availableForRent().setValue(aptUnitIO.availableForRent().getValue());
+                        if (!aptUnitIO.marketRent().isNull()) {
+                            unit.financial()._marketRent().setValue(aptUnitIO.marketRent().getValue());
+                        }
+                        if (aptUnitIO.containsMemberValue(aptUnitIO.availableForRent().getFieldName())) { //if the field was manually set to null
+                            unit._availableForRent().setValue(aptUnitIO.availableForRent().getValue());
+                        }
+                        if (items.contains(unit)) {
+                            throw new Error(unit.toString());
+                        }
                         items.add(unit);
                     } else {
-                        throw new UserRuntimeException(i18n.tr("Unit ''{0}'' not found.", aptUnitIO.number()));
+                        throw new UserRuntimeException(i18n.tr("Unit ''{0}'' not found in the database.", aptUnitIO.number()));
                     }
                 }
             }

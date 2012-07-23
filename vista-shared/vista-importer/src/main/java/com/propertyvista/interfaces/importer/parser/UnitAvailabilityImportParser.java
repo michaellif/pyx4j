@@ -37,6 +37,7 @@ import com.pyx4j.rpc.shared.UserRuntimeException;
 
 import com.propertyvista.interfaces.importer.model.AptUnitIO;
 import com.propertyvista.interfaces.importer.model.BuildingIO;
+import com.propertyvista.interfaces.importer.model.FloorplanIO;
 import com.propertyvista.interfaces.importer.model.ImportIO;
 import com.propertyvista.interfaces.importer.xls.UnitModel;
 
@@ -108,6 +109,7 @@ public class UnitAvailabilityImportParser implements ImportParser {
 
     private void convertUnits(List<UnitModel> entities) {
         Map<String, BuildingIO> buildings = new HashMap<String, BuildingIO>();
+        Map<String, AptUnitIO> aptUnits = new HashMap<String, AptUnitIO>();
         for (UnitModel unitModel : entities) {
             BuildingIO building = buildings.get(unitModel.property().getValue());
             if (building == null) {
@@ -119,7 +121,15 @@ public class UnitAvailabilityImportParser implements ImportParser {
                 importIO.buildings().add(building);
             }
 
-            AptUnitIO unit = EntityFactory.create(AptUnitIO.class);
+            AptUnitIO unit = aptUnits.get(unitModel.property().getValue() + "!" + unitModel.unit().getValue());
+            if (unit == null) {
+                unit = EntityFactory.create(AptUnitIO.class);
+                building = insertUnit(unit, unitModel, building);
+            } else {
+                if (unit.availableForRent().isNull()) {
+                    continue;
+                }
+            }
             unit.number().setValue(unitModel.unit().getValue());
             if (!unitModel.marketRent().isNull()) {
                 unit.marketRent().setValue(parseMoney(unitModel.marketRent().getValue(), unitModel));
@@ -127,27 +137,19 @@ public class UnitAvailabilityImportParser implements ImportParser {
             if (!unitModel.newMarketRent().isNull()) {
                 unit.marketRent().setValue(parseMoney(unitModel.newMarketRent().getValue(), unitModel));
             }
-            if (!unitModel.status().isNull() && unitModel.status().getValue().toLowerCase().equals("move in")) {
-                unit.availableForRent().set(null);
-            }
-            if (!unitModel.status().isNull() && unitModel.status().getValue().toLowerCase().equals("move out")) {
-                unit.availableForRent().setValue(new LogicalDate(DateUtils.detectDateformat(unitModel.date().getValue())));
-            }
-            if (!unitModel.status().isNull() && unitModel.status().getValue().toLowerCase().equals("vacant")) {
-                unit.availableForRent().setValue(new LogicalDate());
-            }
-            building = insertUnit(building, unit);
-        }
-    }
 
-    private BuildingIO insertUnit(BuildingIO building, AptUnitIO unit) {
-        for (AptUnitIO aptUnitIO : building.units()) {
-            if (aptUnitIO.number().getValue().equals(unit.number().getValue())) {
-                // TODO what's going on with duplicate units with different status here?
+            if (!unitModel.status().isNull()) {
+                if (unitModel.status().getValue().toLowerCase().equals("move in")) {
+                    unit.availableForRent().set(null);
+                } else if (unitModel.status().getValue().toLowerCase().equals("move out")) {
+                    unit.availableForRent().setValue(new LogicalDate(DateUtils.detectDateformat(unitModel.date().getValue())));
+                } else if (unitModel.status().getValue().toLowerCase().equals("vacant")) {
+                    unit.availableForRent().setValue(new LogicalDate());
+                }
             }
+
+            aptUnits.put(unitModel.property().getValue() + "!" + unit.number().getValue(), unit);
         }
-        building.units().add(unit);
-        return building;
     }
 
     private BigDecimal parseMoney(String money, UnitModel unitModel) {
@@ -158,5 +160,36 @@ public class UnitAvailabilityImportParser implements ImportParser {
             throw new UserRuntimeException(i18n.tr("You have an erroneous Market Rent value of ''{0}'' for unit #{1} in building ''{2}''.", unitModel
                     .marketRent().getStringView(), unitModel.unit().getStringView(), unitModel.property().getStringView()));
         }
+    }
+
+    private BuildingIO insertUnit(AptUnitIO unit, UnitModel unitModel, BuildingIO building) {
+        if (unitModel.unitType().isNull()) { // if there's not floorplan in the file, just add units to building
+            building.units().add(unit);
+        } else {
+            int floorplansSize = building.floorplans().size();
+            if (floorplansSize == 0) {
+                FloorplanIO newFloorplan = EntityFactory.create(FloorplanIO.class);
+                newFloorplan.name().setValue(unitModel.unitType().getValue());
+                newFloorplan._import().row().setValue(unitModel._import().row().getValue());
+                newFloorplan._import().sheet().setValue(unitModel._import().sheet().getValue());
+                newFloorplan.units().add(unit);
+                building.floorplans().add(newFloorplan);
+            } else {
+                for (int i = 0; i < floorplansSize; i++) {
+                    FloorplanIO floorplan = building.floorplans().get(i);
+                    if (floorplan.name().getValue().equals(unitModel.unitType().getValue())) {
+                        floorplan.units().add(unit);
+                        break;
+                    }
+                    if (i == floorplansSize - 1) {
+                        FloorplanIO newFloorplan = EntityFactory.create(FloorplanIO.class);
+                        newFloorplan.name().setValue(unitModel.unitType().getValue());
+                        newFloorplan.units().add(unit);
+                        building.floorplans().add(newFloorplan);
+                    }
+                }
+            }
+        }
+        return building;
     }
 }

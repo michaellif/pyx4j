@@ -166,7 +166,7 @@ public class ImportProcessorFlatFloorplanAndUnits implements ImportProcessor {
 
                 }
 
-                counters.floorplans += 1;
+                counters.floorplans++;
 
                 //Units
                 {
