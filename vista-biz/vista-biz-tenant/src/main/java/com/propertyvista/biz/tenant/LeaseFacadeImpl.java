@@ -404,7 +404,6 @@ public class LeaseFacadeImpl implements LeaseFacade {
 
         ServerSideFactory.create(OccupancyFacade.class).approveLease(lease.unit().getPrimaryKey());
         ServerSideFactory.create(ProductCatalogFacade.class).updateUnitRentPrice(lease);
-        ServerSideFactory.create(BillingFacade.class).runBilling(lease);
         Bill bill = ServerSideFactory.create(BillingFacade.class).runBilling(lease);
         if (bill.billStatus().getValue() != BillStatus.Failed) {
             ServerSideFactory.create(BillingFacade.class).confirmBill(bill);
