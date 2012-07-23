@@ -67,4 +67,9 @@ public class VistaServerSideConfiguration11 extends VistaServerSideConfiguration
     public IMailServiceConfigConfiguration getMailServiceConfigConfiguration() {
         return VistaSMTPMailServiceConfig.getGmailConfig("www22-");
     }
+
+    @Override
+    public String openIdProviderDomain() {
+        return "11.birchwoodsoftwaregroup.com";
+    }
 }

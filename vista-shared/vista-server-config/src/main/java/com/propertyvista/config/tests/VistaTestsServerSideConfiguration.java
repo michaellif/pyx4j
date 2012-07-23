@@ -141,4 +141,19 @@ public class VistaTestsServerSideConfiguration extends AbstractVistaServerSideCo
         return "vista_test";
     }
 
+    @Override
+    public String openIdDomain() {
+        return null;
+    }
+
+    @Override
+    public String openIdDomainIdentifier(String userDomain) {
+        return null;
+    }
+
+    @Override
+    public String openIdProviderDomain() {
+        return null;
+    }
+
 }

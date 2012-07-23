@@ -36,6 +36,12 @@ public abstract class AbstractVistaServerSideConfiguration extends EssentialsSer
 
     public abstract boolean openIdrequired();
 
+    public abstract String openIdDomain();
+
+    public abstract String openIdDomainIdentifier(String userDomain);
+
+    public abstract String openIdProviderDomain();
+
     /**
      * This method should not be used directly since PMC may have custom DNS configuration
      * Use @see VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.TenantPortal, true);

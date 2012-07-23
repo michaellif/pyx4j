@@ -137,4 +137,8 @@ public class VistaServerSideConfigurationProd extends VistaServerSideConfigurati
         }
     }
 
+    @Override
+    public String openIdProviderDomain() {
+        return "static.propertyvista.com";
+    }
 }

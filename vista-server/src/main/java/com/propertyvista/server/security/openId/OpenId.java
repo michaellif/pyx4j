@@ -75,8 +75,12 @@ public class OpenId {
             String identifier;
 
             if (CommonsStringUtils.isStringSet(userDomain)) {
-                log.info("authenticate using user domain {}", userDomain);
-                identifier = "https://www.google.com/accounts/o8/site-xrds?hd=" + userDomain;
+                if (userDomain.equals("static.propertyvista.com")) {
+                    identifier = "https://static.propertyvista.com/accounts/o8/id";
+                } else {
+                    log.info("authenticate using user domain {}", userDomain);
+                    identifier = "https://www.google.com/accounts/o8/site-xrds?hd=" + userDomain;
+                }
             } else {
                 identifier = "https://www.google.com/accounts/o8/id";
             }

@@ -17,6 +17,7 @@ import java.io.File;
 
 import javax.servlet.ServletContext;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Consts;
 import com.pyx4j.config.server.IMailServiceConfigConfiguration;
 import com.pyx4j.config.server.IPersistenceConfiguration;
@@ -232,6 +233,39 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
     @Override
     public String getCaledonCompanyId() {
         return "BIRCHWOODTEST";
+    }
+
+    @Override
+    public String openIdProviderDomain() {
+        return "dev.birchwoodsoftwaregroup.com";
+    }
+
+    @Override
+    public String openIdDomain() {
+        String configDomain = System.getProperty("com.propertyvista.dev.domain");
+        if (CommonsStringUtils.isStringSet(configDomain)) {
+            return configDomain;
+        } else {
+            //return "propertyvista.com";
+            return "dev.birchwoodsoftwaregroup.com";
+        }
+    }
+
+    @Override
+    public String openIdDomainIdentifier(String userDomain) {
+        if (CommonsStringUtils.isStringSet(userDomain)) {
+            if (userDomain.equals("dev.birchwoodsoftwaregroup.com")) {
+                return "http://static.dev.birchwoodsoftwaregroup.com:8888/vista/static/accounts/idp";
+            } else if (userDomain.equals("static.propertyvista.com")) {
+                return "https://static.propertyvista.com/accounts/idp";
+            } else if (userDomain.equals("11.birchwoodsoftwaregroup.com")) {
+                return "http://static.11.birchwoodsoftwaregroup.com/static/accounts/idp";
+            } else {
+                return "https://www.google.com/accounts/o8/site-xrds?hd=" + userDomain;
+            }
+        } else {
+            return "https://www.google.com/accounts/o8/id";
+        }
     }
 
 }
