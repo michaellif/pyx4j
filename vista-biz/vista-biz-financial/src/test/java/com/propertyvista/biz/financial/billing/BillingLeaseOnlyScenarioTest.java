@@ -44,9 +44,7 @@ public class BillingLeaseOnlyScenarioTest extends FinancialTestBase {
         //==================== RUN 1 ======================//
 
         SysDateManager.setSysDate("17-Feb-2011");
-        Bill bill = approveApplication();
-
-        bill = confirmBill(bill, true, true);
+        Bill bill = approveApplication(true);
 
         // @formatter:off
         new BillTester(bill).

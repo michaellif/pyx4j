@@ -70,9 +70,7 @@ public class BillableItemAdjustmentTest extends FinancialTestBase {
         totalDueAmount("2074.30"); // 1010.30 + 900.00 + 50.00 + 114.00
         // @formatter:on
 
-        Bill bill = approveApplication();
-
-        bill = confirmBill(bill, true, true);
+        Bill bill = approveApplication(true);
 
         receiveAndPostPayment("01-Mar-2011", "2074.30");
 

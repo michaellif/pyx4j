@@ -58,9 +58,7 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProration extends FinancialT
         //==================== RUN 1 ======================//
 
         SysDateManager.setSysDate("01-Jan-2012");
-        Bill bill = approveApplication();
-
-        bill = confirmBill(bill, true, true);
+        Bill bill = approveApplication(true);
 
         // @formatter:off
         ///debug mode:
@@ -103,9 +101,7 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProration extends FinancialT
         //==================== RUN 1 ======================//
 
         SysDateManager.setSysDate("02-Jan-2013");
-        Bill bill = approveApplication();
-
-        bill = confirmBill(bill, true, true);
+        Bill bill = approveApplication(true);
 
         // @formatter:off
         ///debug mode:
@@ -145,9 +141,7 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProration extends FinancialT
         //==================== RUN 1 ======================//
 
         SysDateManager.setSysDate("03-Jan-2012");
-        Bill bill = approveApplication();
-
-        bill = confirmBill(bill, true, true);
+        Bill bill = approveApplication(true);
 
         // @formatter:off
         ///debug mode:
@@ -186,9 +180,7 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProration extends FinancialT
         //==================== RUN 1 ======================//
 
         SysDateManager.setSysDate("03-Jan-2012");
-        Bill bill = approveApplication();
-
-        bill = confirmBill(bill, true, true);
+        Bill bill = approveApplication(true);
 
         // @formatter:off
         ///debug mode:
@@ -227,9 +219,7 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProration extends FinancialT
         //==================== RUN 1 ======================//
 
         SysDateManager.setSysDate("03-Jan-2012");
-        Bill bill = approveApplication();
-
-        bill = confirmBill(bill, true, true);
+        Bill bill = approveApplication(true);
 
         // @formatter:off
         ///debug mode:
@@ -268,9 +258,7 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProration extends FinancialT
         //==================== RUN 1 ======================//
 
         SysDateManager.setSysDate("03-Jan-2012");
-        Bill bill = approveApplication();
-
-        bill = confirmBill(bill, true, true);
+        Bill bill = approveApplication(true);
 
         // @formatter:off
         ///debug mode:
@@ -309,9 +297,7 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProration extends FinancialT
         //==================== RUN 1 ======================//
 
         SysDateManager.setSysDate("03-Jan-2012");
-        Bill bill = approveApplication();
-
-        bill = confirmBill(bill, true, true);
+        Bill bill = approveApplication(true);
 
         // @formatter:off
         ///debug mode:
@@ -350,9 +336,7 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProration extends FinancialT
         //==================== RUN 1 ======================//
 
         SysDateManager.setSysDate("03-Jan-2012");
-        Bill bill = approveApplication();
-
-        bill = confirmBill(bill, true, true);
+        Bill bill = approveApplication(true);
 
         // @formatter:off
         ///debug mode:
@@ -391,9 +375,7 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProration extends FinancialT
         //==================== RUN 1 ======================//
 
         SysDateManager.setSysDate("03-Jan-2012");
-        Bill bill = approveApplication();
-
-        bill = confirmBill(bill, true, true);
+        Bill bill = approveApplication(true);
 
         // @formatter:off
         ///debug mode:
@@ -432,9 +414,7 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProration extends FinancialT
         //==================== RUN 1 ======================//
 
         SysDateManager.setSysDate("03-Jan-2012");
-        Bill bill = approveApplication();
-
-        bill = confirmBill(bill, true, true);
+        Bill bill = approveApplication(true);
 
         // @formatter:off
         ///debug mode:
@@ -473,9 +453,7 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProration extends FinancialT
         //==================== RUN 1 ======================//
 
         SysDateManager.setSysDate("03-Jan-2012");
-        Bill bill = approveApplication();
-
-        bill = confirmBill(bill, true, true);
+        Bill bill = approveApplication(true);
 
         // @formatter:off
         ///debug mode:
@@ -514,9 +492,7 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProration extends FinancialT
         //==================== RUN 1 ======================//
 
         SysDateManager.setSysDate("03-Jan-2012");
-        Bill bill = approveApplication();
-
-        bill = confirmBill(bill, true, true);
+        Bill bill = approveApplication(true);
 
         // @formatter:off
         ///debug mode:
@@ -555,9 +531,7 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProration extends FinancialT
         //==================== RUN 1 ======================//
 
         SysDateManager.setSysDate("03-Jan-2012");
-        Bill bill = approveApplication();
-
-        bill = confirmBill(bill, true, true);
+        Bill bill = approveApplication(true);
 
         // @formatter:off
         ///debug mode:
@@ -596,9 +570,7 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProration extends FinancialT
         //==================== RUN 1 ======================//
 
         SysDateManager.setSysDate("03-Jan-2012");
-        Bill bill = approveApplication();
-
-        bill = confirmBill(bill, true, true);
+        Bill bill = approveApplication(true);
 
         // @formatter:off
         ///debug mode:
@@ -637,9 +609,7 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProration extends FinancialT
         //==================== RUN 1 ======================//
 
         SysDateManager.setSysDate("03-Jan-2012");
-        Bill bill = approveApplication();
-
-        bill = confirmBill(bill, true, true);
+        Bill bill = approveApplication(true);
 
         // @formatter:off
         ///debug mode:
@@ -678,9 +648,7 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProration extends FinancialT
         //==================== RUN 1 ======================//
 
         SysDateManager.setSysDate("03-Jan-2012");
-        Bill bill = approveApplication();
-
-        bill = confirmBill(bill, true, true);
+        Bill bill = approveApplication(true);
 
         // @formatter:off
         ///debug mode:
@@ -719,9 +687,7 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProration extends FinancialT
         //==================== RUN 1 ======================//
 
         SysDateManager.setSysDate("03-Jan-2012");
-        Bill bill = approveApplication();
-
-        bill = confirmBill(bill, true, true);
+        Bill bill = approveApplication(true);
 
         // @formatter:off
         ///debug mode:
@@ -760,9 +726,7 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProration extends FinancialT
         //==================== RUN 1 ======================//
 
         SysDateManager.setSysDate("03-Jan-2012");
-        Bill bill = approveApplication();
-
-        bill = confirmBill(bill, true, true);
+        Bill bill = approveApplication(true);
 
         // @formatter:off
         ///debug mode:
@@ -801,9 +765,7 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProration extends FinancialT
         //==================== RUN 1 ======================//
 
         SysDateManager.setSysDate("03-Jan-2012");
-        Bill bill = approveApplication();
-
-        bill = confirmBill(bill, true, true);
+        Bill bill = approveApplication(true);
 
         // @formatter:off
         ///debug mode:
@@ -842,9 +804,7 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProration extends FinancialT
         //==================== RUN 1 ======================//
 
         SysDateManager.setSysDate("03-Jan-2012");
-        Bill bill = approveApplication();
-
-        bill = confirmBill(bill, true, true);
+        Bill bill = approveApplication(true);
 
         // @formatter:off
         ///debug mode:
@@ -883,9 +843,7 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProration extends FinancialT
         //==================== RUN 1 ======================//
 
         SysDateManager.setSysDate("03-Jan-2012");
-        Bill bill = approveApplication();
-
-        bill = confirmBill(bill, true, true);
+        Bill bill = approveApplication(true);
 
         // @formatter:off
         ///debug mode:
@@ -924,9 +882,7 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProration extends FinancialT
         //==================== RUN 1 ======================//
 
         SysDateManager.setSysDate("03-Jan-2012");
-        Bill bill = approveApplication();
-
-        bill = confirmBill(bill, true, true);
+        Bill bill = approveApplication(true);
 
         // @formatter:off
         ///debug mode:
@@ -966,9 +922,7 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProration extends FinancialT
         //==================== RUN 1 ======================//
 
         SysDateManager.setSysDate("03-Jan-2012");
-        Bill bill = approveApplication();
-
-        bill = confirmBill(bill, true, true);
+        Bill bill = approveApplication(true);
 
         // @formatter:off
         ///debug mode:
@@ -1007,9 +961,7 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProration extends FinancialT
         //==================== RUN 1 ======================//
 
         SysDateManager.setSysDate("03-Jan-2012");
-        Bill bill = approveApplication();
-
-        bill = confirmBill(bill, true, true);
+        Bill bill = approveApplication(true);
 
         // @formatter:off
         ///debug mode:
@@ -1048,9 +1000,7 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProration extends FinancialT
         //==================== RUN 1 ======================//
 
         SysDateManager.setSysDate("03-Jan-2012");
-        Bill bill = approveApplication();
-
-        bill = confirmBill(bill, true, true);
+        Bill bill = approveApplication(true);
 
         // @formatter:off
         ///debug mode:
@@ -1089,9 +1039,7 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProration extends FinancialT
         //==================== RUN 1 ======================//
 
         SysDateManager.setSysDate("03-Jan-2012");
-        Bill bill = approveApplication();
-
-        bill = confirmBill(bill, true, true);
+        Bill bill = approveApplication(true);
 
         // @formatter:off
         ///debug mode:
@@ -1130,9 +1078,7 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProration extends FinancialT
         //==================== RUN 1 ======================//
 
         SysDateManager.setSysDate("03-Jan-2012");
-        Bill bill = approveApplication();
-
-        bill = confirmBill(bill, true, true);
+        Bill bill = approveApplication(true);
 
         // @formatter:off
         ///debug mode:
@@ -1171,9 +1117,7 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProration extends FinancialT
         //==================== RUN 1 ======================//
 
         SysDateManager.setSysDate("03-Jan-2012");
-        Bill bill = approveApplication();
-
-        bill = confirmBill(bill, true, true);
+        Bill bill = approveApplication(true);
 
         // @formatter:off
         ///debug mode:
@@ -1212,9 +1156,7 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProration extends FinancialT
         //==================== RUN 1 ======================//
 
         SysDateManager.setSysDate("03-Jan-2012");
-        Bill bill = approveApplication();
-
-        bill = confirmBill(bill, true, true);
+        Bill bill = approveApplication(true);
 
         // @formatter:off
         ///debug mode:
@@ -1253,9 +1195,7 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProration extends FinancialT
         //==================== RUN 1 ======================//
 
         SysDateManager.setSysDate("03-Jan-2012");
-        Bill bill = approveApplication();
-
-        bill = confirmBill(bill, true, true);
+        Bill bill = approveApplication(true);
 
         // @formatter:off
         ///debug mode:
@@ -1294,9 +1234,7 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProration extends FinancialT
         //==================== RUN 1 ======================//
 
         SysDateManager.setSysDate("03-Jan-2012");
-        Bill bill = approveApplication();
-
-        bill = confirmBill(bill, true, true);
+        Bill bill = approveApplication(true);
 
         // @formatter:off
         ///debug mode:

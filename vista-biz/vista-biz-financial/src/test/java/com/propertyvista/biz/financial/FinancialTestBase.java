@@ -241,15 +241,20 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         Persistence.service().commit();
 
         if (printBill) {
-            try {
-                BillPrint.printBill(BillingUtils.createBillDto(bill), new FileOutputStream(billFileName(bill, getClass().getSimpleName())));
-                DataDump.dump("bill", bill);
-                DataDump.dump("lease", bill.billingAccount().lease());
-            } catch (FileNotFoundException e) {
-                throw new Error(e);
-            }
+            printBill(bill);
         }
         return bill;
+    }
+
+    protected void printBill(Bill bill) {
+        try {
+            BillPrint.printBill(BillingUtils.createBillDto(bill), new FileOutputStream(billFileName(bill, getClass().getSimpleName())));
+            DataDump.dump("bill", bill);
+            DataDump.dump("lease", bill.billingAccount().lease());
+        } catch (FileNotFoundException e) {
+            throw new Error(e);
+        }
+
     }
 
     protected void printTransactionHistory(TransactionHistoryDTO transactionHistory) {
@@ -290,14 +295,22 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
 
     }
 
-    protected Bill approveApplication() {
+    protected Bill approveApplication(boolean printBill) {
         ServerSideFactory.create(LeaseFacade.class).approveApplication(retrieveLease(), null, null);
-        return ServerSideFactory.create(BillingFacade.class).getLatestBill(retrieveLease());
+        Bill bill = ServerSideFactory.create(BillingFacade.class).getLatestBill(retrieveLease());
+        if (printBill) {
+            printBill(bill);
+        }
+        return bill;
     }
 
-    protected Bill approveExistingLease() {
+    protected Bill approveExistingLease(boolean printBill) {
         ServerSideFactory.create(LeaseFacade.class).approveExistingLease(retrieveLease());
-        return ServerSideFactory.create(BillingFacade.class).getLatestBill(retrieveLease());
+        Bill bill = ServerSideFactory.create(BillingFacade.class).getLatestBill(retrieveLease());
+        if (printBill) {
+            printBill(bill);
+        }
+        return bill;
     }
 
     protected void activateLease() {

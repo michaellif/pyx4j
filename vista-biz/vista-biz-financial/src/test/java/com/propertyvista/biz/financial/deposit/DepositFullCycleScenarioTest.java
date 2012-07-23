@@ -44,9 +44,7 @@ public class DepositFullCycleScenarioTest extends FinancialTestBase {
         //==================== RUN 1 - SERVICE AND FEATURE DEPOSITS TAKEN ======================//
 
         advanceDate("18-Feb-2012");
-        Bill bill = approveApplication();
-
-        bill = confirmBill(bill, true, true);
+        Bill bill = approveApplication(true);
 
         // @formatter:off
         new BillTester(bill, true).

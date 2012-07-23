@@ -31,9 +31,7 @@ public class ArrearsSnapshotTest extends ArrearsSnapshotTestBase {
         // BILLING RUN 1
         setSysDate("18-Mar-2011");
 
-        Bill bill = approveApplication();
-
-        bill = confirmBill(bill, true, true);
+        Bill bill = approveApplication(true);
 
         updateArrearsHistory();
         assertArrearsSnapshotStart("18-Mar-2011");

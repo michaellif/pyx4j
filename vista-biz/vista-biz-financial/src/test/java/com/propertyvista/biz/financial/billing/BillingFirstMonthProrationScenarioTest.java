@@ -44,9 +44,7 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
         //==================== RUN 1 ======================//
 
         SysDateManager.setSysDate("01-Jan-2012");
-        Bill bill = approveApplication();
-
-        bill = confirmBill(bill, true, true);
+        Bill bill = approveApplication(true);
 
         // @formatter:off
         ///debug mode:
@@ -76,9 +74,7 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
         addServiceAdjustment("-55.55", Type.monetary);
 
         SysDateManager.setSysDate("01-Jan-2012");
-        Bill bill = approveApplication();
-
-        bill = confirmBill(bill, true, true);
+        Bill bill = approveApplication(true);
 
         // @formatter:off
         new BillTester(bill).
@@ -106,9 +102,7 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
         addServiceAdjustment("-55.55", Type.monetary);
 
         SysDateManager.setSysDate("01-Jan-2012");
-        Bill bill = approveApplication();
-
-        bill = confirmBill(bill, true, true);
+        Bill bill = approveApplication(true);
 
         // @formatter:off
         new BillTester(bill).
@@ -135,9 +129,7 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
         addServiceAdjustment("-55.55", Type.monetary);
 
         SysDateManager.setSysDate("01-Jan-2012");
-        Bill bill = approveApplication();
-
-        bill = confirmBill(bill, true, true);
+        Bill bill = approveApplication(true);
 
         // @formatter:off
         new BillTester(bill).billSequenceNumber(1).
@@ -163,9 +155,7 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
         addServiceAdjustment("-55.55", Type.monetary);
 
         SysDateManager.setSysDate("01-Jan-2012");
-        Bill bill = approveApplication();
-
-        bill = confirmBill(bill, true, true);
+        Bill bill = approveApplication(true);
 
         // @formatter:off
         new BillTester(bill).
@@ -194,9 +184,7 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
         addServiceAdjustment("-55.55", Type.monetary);
 
         SysDateManager.setSysDate("01-Jan-2012");
-        Bill bill = approveApplication();
-
-        bill = confirmBill(bill, true, true);
+        Bill bill = approveApplication(true);
 
         // @formatter:off
         new BillTester(bill).
@@ -225,9 +213,7 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
         addServiceAdjustment("-55.55", Type.monetary);
 
         SysDateManager.setSysDate("01-Jan-2012");
-        Bill bill = approveApplication();
-
-        bill = confirmBill(bill, true, true);
+        Bill bill = approveApplication(true);
 
         // @formatter:off
         new BillTester(bill).
@@ -256,9 +242,7 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
         addServiceAdjustment("-55.55", Type.monetary);
 
         SysDateManager.setSysDate("01-Jan-2012");
-        Bill bill = approveApplication();
-
-        bill = confirmBill(bill, true, true);
+        Bill bill = approveApplication(true);
 
         // @formatter:off
         new BillTester(bill).billSequenceNumber(1).
@@ -286,9 +270,7 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
         addServiceAdjustment("-55.55", Type.monetary);
 
         SysDateManager.setSysDate("01-Jan-2012");
-        Bill bill = approveApplication();
-
-        bill = confirmBill(bill, true, true);
+        Bill bill = approveApplication(true);
 
         // @formatter:off
         new BillTester(bill).billSequenceNumber(1).
@@ -316,9 +298,7 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
         addServiceAdjustment("-55.55", Type.monetary);
 
         SysDateManager.setSysDate("01-Jan-2012");
-        Bill bill = approveApplication();
-
-        bill = confirmBill(bill, true, true);
+        Bill bill = approveApplication(true);
 
         // @formatter:off
         new BillTester(bill).billSequenceNumber(1).
@@ -346,9 +326,7 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
         addServiceAdjustment("-55.55", Type.monetary);
 
         SysDateManager.setSysDate("01-Jan-2012");
-        Bill bill = approveApplication();
-
-        bill = confirmBill(bill, true, true);
+        Bill bill = approveApplication(true);
 
         // @formatter:off
         new BillTester(bill).billSequenceNumber(1).
@@ -376,9 +354,7 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
         addServiceAdjustment("-55.55", Type.monetary);
 
         SysDateManager.setSysDate("01-Jan-2012");
-        Bill bill = approveApplication();
-
-        bill = confirmBill(bill, true, true);
+        Bill bill = approveApplication(true);
 
         // @formatter:off
         new BillTester(bill).billSequenceNumber(1).
@@ -406,9 +382,7 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
         addServiceAdjustment("-55.55", Type.monetary);
 
         SysDateManager.setSysDate("01-Jan-2012");
-        Bill bill = approveApplication();
-
-        bill = confirmBill(bill, true, true);
+        Bill bill = approveApplication(true);
 
         // @formatter:off
         new BillTester(bill).billSequenceNumber(1).
@@ -436,9 +410,7 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
         addServiceAdjustment("-55.55", Type.monetary);
 
         SysDateManager.setSysDate("01-Jan-2012");
-        Bill bill = approveApplication();
-
-        bill = confirmBill(bill, true, true);
+        Bill bill = approveApplication(true);
 
         // @formatter:off
         new BillTester(bill).billSequenceNumber(1).
@@ -466,9 +438,7 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
         addServiceAdjustment("-55.55", Type.monetary);
 
         SysDateManager.setSysDate("01-Jan-2012");
-        Bill bill = approveApplication();
-
-        bill = confirmBill(bill, true, true);
+        Bill bill = approveApplication(true);
 
         // @formatter:off
         new BillTester(bill).billSequenceNumber(1).
@@ -496,9 +466,7 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
         addServiceAdjustment("-55.55", Type.monetary);
 
         SysDateManager.setSysDate("01-Jan-2012");
-        Bill bill = approveApplication();
-
-        bill = confirmBill(bill, true, true);
+        Bill bill = approveApplication(true);
 
         // @formatter:off
         new BillTester(bill).billSequenceNumber(1).
@@ -526,9 +494,7 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
         addServiceAdjustment("-55.55", Type.monetary);
 
         SysDateManager.setSysDate("01-Jan-2012");
-        Bill bill = approveApplication();
-
-        bill = confirmBill(bill, true, true);
+        Bill bill = approveApplication(true);
 
         // @formatter:off
         new BillTester(bill).billSequenceNumber(1).
@@ -556,9 +522,7 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
         addServiceAdjustment("-55.55", Type.monetary);
 
         SysDateManager.setSysDate("01-Jan-2012");
-        Bill bill = approveApplication();
-
-        bill = confirmBill(bill, true, true);
+        Bill bill = approveApplication(true);
 
         // @formatter:off
         new BillTester(bill).billSequenceNumber(1).
@@ -586,9 +550,7 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
         addServiceAdjustment("-55.55", Type.monetary);
 
         SysDateManager.setSysDate("01-Jan-2012");
-        Bill bill = approveApplication();
-
-        bill = confirmBill(bill, true, true);
+        Bill bill = approveApplication(true);
 
         // @formatter:off
         new BillTester(bill).billSequenceNumber(1).
@@ -616,9 +578,7 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
         addServiceAdjustment("-55.55", Type.monetary);
 
         SysDateManager.setSysDate("01-Jan-2012");
-        Bill bill = approveApplication();
-
-        bill = confirmBill(bill, true, true);
+        Bill bill = approveApplication(true);
 
         // @formatter:off
         new BillTester(bill).billSequenceNumber(1).
@@ -646,9 +606,7 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
         addServiceAdjustment("-55.55", Type.monetary);
 
         SysDateManager.setSysDate("01-Jan-2012");
-        Bill bill = approveApplication();
-
-        bill = confirmBill(bill, true, true);
+        Bill bill = approveApplication(true);
 
         // @formatter:off
         new BillTester(bill).billSequenceNumber(1).
@@ -676,9 +634,7 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
         addServiceAdjustment("-55.55", Type.monetary);
 
         SysDateManager.setSysDate("01-Jan-2012");
-        Bill bill = approveApplication();
-
-        bill = confirmBill(bill, true, true);
+        Bill bill = approveApplication(true);
 
         // @formatter:off
         new BillTester(bill).billSequenceNumber(1).
@@ -706,9 +662,7 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
         addServiceAdjustment("-55.55", Type.monetary);
 
         SysDateManager.setSysDate("01-Jan-2012");
-        Bill bill = approveApplication();
-
-        bill = confirmBill(bill, true, true);
+        Bill bill = approveApplication(true);
 
         // @formatter:off
     new BillTester(bill).billSequenceNumber(1).
@@ -736,9 +690,7 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
         addServiceAdjustment("-55.55", Type.monetary);
 
         SysDateManager.setSysDate("01-Jan-2012");
-        Bill bill = approveApplication();
-
-        bill = confirmBill(bill, true, true);
+        Bill bill = approveApplication(true);
 
         // @formatter:off
     new BillTester(bill).billSequenceNumber(1).
@@ -766,9 +718,7 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
         addServiceAdjustment("-55.55", Type.monetary);
 
         SysDateManager.setSysDate("01-Jan-2012");
-        Bill bill = approveApplication();
-
-        bill = confirmBill(bill, true, true);
+        Bill bill = approveApplication(true);
 
         // @formatter:off
     new BillTester(bill).billSequenceNumber(1).
@@ -796,9 +746,7 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
         addServiceAdjustment("-55.55", Type.monetary);
 
         SysDateManager.setSysDate("01-Jan-2012");
-        Bill bill = approveApplication();
-
-        bill = confirmBill(bill, true, true);
+        Bill bill = approveApplication(true);
 
         // @formatter:off
     new BillTester(bill).billSequenceNumber(1).
@@ -826,9 +774,7 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
         addServiceAdjustment("-55.55", Type.monetary);
 
         SysDateManager.setSysDate("01-Jan-2012");
-        Bill bill = approveApplication();
-
-        bill = confirmBill(bill, true, true);
+        Bill bill = approveApplication(true);
 
         // @formatter:off
     new BillTester(bill).billSequenceNumber(1).
@@ -856,9 +802,7 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
         addServiceAdjustment("-55.55", Type.monetary);
 
         SysDateManager.setSysDate("01-Jan-2012");
-        Bill bill = approveApplication();
-
-        bill = confirmBill(bill, true, true);
+        Bill bill = approveApplication(true);
 
         // @formatter:off
     new BillTester(bill).billSequenceNumber(1).
@@ -886,9 +830,7 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
         addServiceAdjustment("-55.55", Type.monetary);
 
         SysDateManager.setSysDate("01-Jan-2012");
-        Bill bill = approveApplication();
-
-        bill = confirmBill(bill, true, true);
+        Bill bill = approveApplication(true);
 
         // @formatter:off
     new BillTester(bill).billSequenceNumber(1).
@@ -916,9 +858,7 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
         addServiceAdjustment("-55.55", Type.monetary);
 
         SysDateManager.setSysDate("01-Jan-2012");
-        Bill bill = approveApplication();
-
-        bill = confirmBill(bill, true, true);
+        Bill bill = approveApplication(true);
 
         // @formatter:off
     new BillTester(bill).billSequenceNumber(1).
@@ -946,9 +886,7 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
         addServiceAdjustment("-55.55", Type.monetary);
 
         SysDateManager.setSysDate("01-Jan-2012");
-        Bill bill = approveApplication();
-
-        bill = confirmBill(bill, true, true);
+        Bill bill = approveApplication(true);
 
         // @formatter:off
     new BillTester(bill).billSequenceNumber(1).
@@ -976,9 +914,7 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
         addServiceAdjustment("-55.55", Type.monetary);
 
         SysDateManager.setSysDate("01-Jan-2012");
-        Bill bill = approveApplication();
-
-        bill = confirmBill(bill, true, true);
+        Bill bill = approveApplication(true);
 
         // @formatter:off
         new BillTester(bill).billSequenceNumber(1).

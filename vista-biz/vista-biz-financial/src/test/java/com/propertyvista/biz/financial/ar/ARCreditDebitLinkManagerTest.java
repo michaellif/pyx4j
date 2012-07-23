@@ -49,9 +49,7 @@ public class ARCreditDebitLinkManagerTest extends FinancialTestBase {
         //==================== RUN 1 ======================//
 
         SysDateManager.setSysDate("22-Feb-2011");
-        Bill bill = approveApplication();
-
-        bill = confirmBill(bill, true, true);
+        Bill bill = approveApplication(true);
 
         InvoiceDebit invoiceDebit = null;
         InvoiceDebit invoiceDebitParking = null;
@@ -96,7 +94,7 @@ public class ARCreditDebitLinkManagerTest extends FinancialTestBase {
         activateLease();
 
         SysDateManager.setSysDate("18-Mar-2011");
-        bill = runBilling(true, false);
+        runBilling(true, false);
 
         printTransactionHistory(ARTransactionManager.getTransactionHistory(retrieveLease().billingAccount()));
 

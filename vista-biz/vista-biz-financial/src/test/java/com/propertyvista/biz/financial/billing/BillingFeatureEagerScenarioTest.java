@@ -50,9 +50,7 @@ public class BillingFeatureEagerScenarioTest extends FinancialTestBase {
 
         SysDateManager.setSysDate("18-Mar-2011");
 
-        Bill bill = approveApplication();
-
-        bill = confirmBill(bill, true, true);
+        Bill bill = approveApplication(true);
 
         // @formatter:off
         new BillTester(bill).

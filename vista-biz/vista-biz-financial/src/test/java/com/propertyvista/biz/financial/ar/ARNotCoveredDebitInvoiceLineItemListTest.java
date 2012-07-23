@@ -27,7 +27,6 @@ import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
 
 import com.propertyvista.biz.financial.FinancialTestBase;
 import com.propertyvista.biz.financial.SysDateManager;
-import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
 import com.propertyvista.domain.policy.policies.ARPolicy;
 import com.propertyvista.domain.policy.policies.ARPolicy.CreditDebitRule;
@@ -53,9 +52,7 @@ public class ARNotCoveredDebitInvoiceLineItemListTest extends FinancialTestBase 
         //==================== RUN 1 ======================//
 
         SysDateManager.setSysDate("22-Feb-2011");
-        Bill bill = approveApplication();
-
-        bill = confirmBill(bill, true, true);
+        approveApplication(true);
 
         //==================== RUN 2 ======================//
 

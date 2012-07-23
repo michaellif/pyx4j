@@ -47,9 +47,7 @@ public class BillingFullCycleServAdjMonScenarioTest extends FinancialTestBase {
         //==================== RUN 1 ======================//
 
         SysDateManager.setSysDate("13-Jan-2012");
-        Bill bill = approveApplication();
-
-        bill = confirmBill(bill, true, true);
+        Bill bill = approveApplication(true);
 
         // @formatter:off
         ///debug mode:

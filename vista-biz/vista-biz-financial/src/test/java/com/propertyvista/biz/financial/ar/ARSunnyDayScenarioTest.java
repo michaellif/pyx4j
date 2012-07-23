@@ -26,7 +26,6 @@ import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
 
 import com.propertyvista.biz.financial.FinancialTestBase;
 import com.propertyvista.biz.financial.SysDateManager;
-import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.InvoiceDebit.DebitType;
 
 public class ARSunnyDayScenarioTest extends FinancialTestBase {
@@ -46,9 +45,7 @@ public class ARSunnyDayScenarioTest extends FinancialTestBase {
         //==================== RUN 1 ======================//
 
         SysDateManager.setSysDate("18-Mar-2011");
-        Bill bill = approveApplication();
-
-        bill = confirmBill(bill, true, true);
+        approveApplication(true);
 
         printTransactionHistory(ARTransactionManager.getTransactionHistory(retrieveLease().billingAccount()));
 

@@ -51,9 +51,7 @@ public class BillingZeroCycleScenarioTest extends FinancialTestBase {
 
         //==================== RUN 1 ======================//
 
-        Bill bill = approveExistingLease();
-
-        bill = confirmBill(bill, true, true);
+        Bill bill = approveExistingLease(true);
 
         // @formatter:off
         new BillTester(bill).
@@ -110,9 +108,7 @@ public class BillingZeroCycleScenarioTest extends FinancialTestBase {
 
         //==================== RUN 1 ======================//
 
-        Bill bill = approveExistingLease();
-
-        bill = confirmBill(bill, true, true);
+        Bill bill = approveExistingLease(true);
 
         // @formatter:off
         new BillTester(bill).

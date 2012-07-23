@@ -38,17 +38,7 @@ public class BillingPeriodsTest extends FinancialTestBase {
 
         //==================== RUN 1 ======================//
 
-        Bill bill = approveApplication();
-
-        // @formatter:off
-        new BillingCycleTester(bill.billingCycle()).
-        notConfirmedBills(1L).
-        failedBills(0L).
-        rejectedBills(0L).
-        confirmedBills(0L);
-        // @formatter:on
-
-        bill = confirmBill(bill, true, true);
+        Bill bill = approveApplication(true);
 
         // @formatter:off
         new BillingCycleTester(bill.billingCycle()).
@@ -264,9 +254,7 @@ public class BillingPeriodsTest extends FinancialTestBase {
 
         //==================== RUN 1 ======================//
 
-        Bill bill = approveApplication();
-
-        bill = confirmBill(bill, true, true);
+        Bill bill = approveApplication(true);
 
         // @formatter:off
         new BillTester(bill).
@@ -428,9 +416,7 @@ public class BillingPeriodsTest extends FinancialTestBase {
 
         //==================== RUN 1 ======================//
 
-        Bill bill = approveApplication();
-
-        bill = confirmBill(bill, true, true);
+        Bill bill = approveApplication(true);
 
         // @formatter:off
         new BillTester(bill).

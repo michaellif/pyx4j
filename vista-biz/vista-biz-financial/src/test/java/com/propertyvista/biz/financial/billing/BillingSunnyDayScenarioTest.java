@@ -97,9 +97,7 @@ public class BillingSunnyDayScenarioTest extends FinancialTestBase {
         totalDueAmount("1603.05");
         // @formatter:on
 
-        Bill bill = approveApplication();
-
-        bill = confirmBill(bill, true, true);
+        Bill bill = approveApplication(true);
 
         // @formatter:off
         new BillTester(bill).
