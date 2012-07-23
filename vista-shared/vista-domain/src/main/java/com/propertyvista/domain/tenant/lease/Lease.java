@@ -139,9 +139,9 @@ public interface Lease extends IVersionedEntity<LeaseV> {
 
         Fixed,
 
-        Periodic,
+        FixedEx,
 
-        Indefinite;
+        Periodic;
 
         @Override
         public String toString() {
@@ -189,6 +189,11 @@ public interface Lease extends IVersionedEntity<LeaseV> {
     @ToString(index = 1)
     @MemberColumn(name = "leaseType")
     IPrimitive<Service.ServiceType> type();
+
+    @NotNull
+    @ReadOnly
+    @MemberColumn(name = "leaseTerm")
+    IPrimitive<Term> term();
 
     @NotNull
     @ToString(index = 2)

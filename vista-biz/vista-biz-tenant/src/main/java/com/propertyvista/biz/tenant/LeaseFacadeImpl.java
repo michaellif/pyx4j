@@ -60,6 +60,7 @@ import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.CompletionType;
 import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
 import com.propertyvista.domain.tenant.lease.Lease.Status;
+import com.propertyvista.domain.tenant.lease.Lease.Term;
 import com.propertyvista.domain.tenant.lease.LeaseApplication;
 
 public class LeaseFacadeImpl implements LeaseFacade {
@@ -84,6 +85,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
         }
 
         // TODO could be more variants in the future:
+        lease.term().setValue(Term.FixedEx);
         lease.paymentFrequency().setValue(PaymentFrequency.Monthly);
 
         // Create Application by default
@@ -171,9 +173,6 @@ public class LeaseFacadeImpl implements LeaseFacade {
         // set selected service:
         BillableItem billableItem = createBillableItem(serviceItem);
         lease.version().leaseProducts().serviceItem().set(billableItem);
-        // TODO : vladl - need expiration date, but please fix per business
-        // This date should also be updated when lease end changes
-        lease.version().leaseProducts().serviceItem().expirationDate().set(lease.leaseTo());
         Persistence.service().retrieve(lease.billingAccount().deposits());
         lease.billingAccount().deposits().clear();
         List<Deposit> deposits = createBillableItemDeposits(billableItem, node);
