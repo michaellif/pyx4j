@@ -43,6 +43,7 @@ import com.pyx4j.essentials.j2se.HostConfig.ProxyConfig;
 import com.pyx4j.essentials.server.dev.DevSession;
 import com.pyx4j.gwt.server.ServletUtils;
 
+import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.config.SystemConfig;
 
 public class OpenId {
@@ -72,18 +73,7 @@ public class OpenId {
                 manager = new ConsumerManager();
             }
 
-            String identifier;
-
-            if (CommonsStringUtils.isStringSet(userDomain)) {
-                if (userDomain.equals("static.propertyvista.com")) {
-                    identifier = "https://static.propertyvista.com/accounts/o8/id";
-                } else {
-                    log.info("authenticate using user domain {}", userDomain);
-                    identifier = "https://www.google.com/accounts/o8/site-xrds?hd=" + userDomain;
-                }
-            } else {
-                identifier = "https://www.google.com/accounts/o8/id";
-            }
+            String identifier = ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance()).openIdDomainIdentifier(userDomain);
 
             // obtain a AuthRequest message to be sent to the OpenID provider
             List<?> discoveries = manager.discover(identifier);

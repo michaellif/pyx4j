@@ -142,15 +142,25 @@
     </servlet-mapping>
 
     <servlet>
-        <servlet-name>IdpXrds</servlet-name>
-        <servlet-class>com.propertyvista.server.security.idp.IdpXrds</servlet-class>
+        <servlet-name>IdpXrdsServlet</servlet-name>
+        <servlet-class>com.propertyvista.server.security.idp.IdpXrdsServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>
-        <servlet-name>IdpXrds</servlet-name>
+        <servlet-name>IdpXrdsServlet</servlet-name>
         <url-pattern>/static/accounts/idp</url-pattern>
     </servlet-mapping>
-    
+
+    <servlet>
+        <servlet-name>IdpEndpointServlet</servlet-name>
+        <servlet-class>com.propertyvista.server.security.idp.IdpEndpointServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>IdpEndpointServlet</servlet-name>
+        <url-pattern>/static/accounts/endpoint</url-pattern>
+    </servlet-mapping>
+        
     <servlet>
         <servlet-name>StatusServlet</servlet-name>
         <servlet-class>com.propertyvista.server.ci.VistaStatusServlet</servlet-class>

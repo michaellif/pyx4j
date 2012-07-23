@@ -25,12 +25,12 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.essentials.server.dev.DevSession;
 import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.server.common.security.DevelopmentSecurity;
 import com.propertyvista.shared.config.VistaDemo;
 
@@ -48,12 +48,7 @@ public class OpenIdServlet extends HttpServlet {
     public static String USER_EMAIL_ATTRIBUTE = DevelopmentSecurity.OPENID_USER_EMAIL_ATTRIBUTE;
 
     private static final String getDevelopmentSecurityGoogleAppsDomain() {
-        String configDomain = System.getProperty("com.propertyvista.dev.domain");
-        if (CommonsStringUtils.isStringSet(configDomain)) {
-            return configDomain;
-        } else {
-            return "propertyvista.com";
-        }
+        return ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance()).openIdDomain();
     }
 
     @Override

@@ -246,8 +246,8 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
         if (CommonsStringUtils.isStringSet(configDomain)) {
             return configDomain;
         } else {
-            //return "propertyvista.com";
-            return "dev.birchwoodsoftwaregroup.com";
+            return "propertyvista.com";
+            //return "dev.birchwoodsoftwaregroup.com";
         }
     }
 

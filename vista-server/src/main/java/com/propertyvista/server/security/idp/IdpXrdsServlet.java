@@ -27,20 +27,24 @@ import com.pyx4j.gwt.server.IOUtils;
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 
 @SuppressWarnings("serial")
-public class IdpXrds extends HttpServlet {
+public class IdpXrdsServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("application/xrds+xml");
         PrintWriter out = response.getWriter();
 
-        String body = IOUtils.getTextResource("xrds.xml", IdpXrds.class);
+        String body = IOUtils.getTextResource("xrds.xml", IdpXrdsServlet.class);
 
-        String domain = ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance()).openIdProviderDomain();
-        String endpoint = ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance()).openIdDomainIdentifier(domain);
-        body = body.replace("${endpoint_uri}", endpoint);
+        body = body.replace("${endpoint_uri}", getOPEndpointUrl());
         response.setContentLength(body.length());
         out.print(body);
         out.flush();
+    }
+
+    static String getOPEndpointUrl() {
+        String domain = ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance()).openIdProviderDomain();
+        String endpoint = ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance()).openIdDomainIdentifier(domain);
+        return endpoint.replace("/idp", "/endpoint");
     }
 }
