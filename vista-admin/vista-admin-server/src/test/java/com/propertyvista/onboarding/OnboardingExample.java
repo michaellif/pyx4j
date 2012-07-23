@@ -43,7 +43,6 @@ import com.pyx4j.gwt.server.DateUtils;
 import com.pyx4j.gwt.server.IOUtils;
 
 import com.propertyvista.interfaces.importer.xml.ImportXMLEntityNamingConvention;
-import com.propertyvista.onboarding.GetUsageRequestIO.UsageReportFormatType;
 import com.propertyvista.onboarding.ProvisionPMCRequestIO.VistaFeature;
 import com.propertyvista.onboarding.ProvisionPMCRequestIO.VistaLicense;
 import com.propertyvista.onboarding.payment.CreditCardPaymentInstrumentIO;

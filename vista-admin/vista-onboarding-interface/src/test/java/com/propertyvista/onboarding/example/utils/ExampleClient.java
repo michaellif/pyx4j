@@ -46,7 +46,7 @@ public class ExampleClient {
 
     public static ResponseMessage execute(RequestMessage requestMessage) throws Exception {
 
-        System.out.println("--sending:");
+        System.out.println("--sending to :" + serverUrl);
         MarshallUtil.marshal(requestMessage, System.out);
 
         HttpURLConnection conn = null;

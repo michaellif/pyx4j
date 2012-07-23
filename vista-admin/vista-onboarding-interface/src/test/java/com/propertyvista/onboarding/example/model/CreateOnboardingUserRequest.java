@@ -16,8 +16,6 @@ package com.propertyvista.onboarding.example.model;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlElement;
 
-import com.propertyvista.onboarding.CreateOnboardingUserRequestIO;
-
 /**
  * @see CreateOnboardingUserRequestIO
  */

@@ -23,20 +23,6 @@ import com.pyx4j.i18n.annotations.I18n;
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 public interface GetUsageRequestIO extends RequestIO {
 
-    public enum UsageReportFormatType {
-
-        /**
-         * Returns result as one Record with totals for given period
-         */
-        Short,
-
-        /**
-         * Returns every usage record for given period
-         */
-        Detailed
-
-    }
-
     IPrimitive<UsageType> usageType();
 
     IPrimitive<Date> from();
