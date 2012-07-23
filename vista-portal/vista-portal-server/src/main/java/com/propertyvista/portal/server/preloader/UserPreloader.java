@@ -44,6 +44,7 @@ import com.propertyvista.server.common.security.PasswordEncryptor;
 import com.propertyvista.server.domain.security.CrmUserCredential;
 import com.propertyvista.server.domain.security.CustomerUserCredential;
 import com.propertyvista.server.jobs.TaskRunner;
+import com.propertyvista.shared.config.VistaDemo;
 
 public class UserPreloader extends BaseVistaDevDataPreloader {
 
@@ -104,7 +105,7 @@ public class UserPreloader extends BaseVistaDevDataPreloader {
         credential.accessAllBuildings().setValue(Boolean.TRUE);
         credential.roles().addAll(Arrays.asList(roles));
 
-        if (ApplicationMode.isDevelopment()) {
+        if (ApplicationMode.isDevelopment() || VistaDemo.isDemo()) {
             SecurityGenerator.assignSecurityQuestion(credential);
         }
 
