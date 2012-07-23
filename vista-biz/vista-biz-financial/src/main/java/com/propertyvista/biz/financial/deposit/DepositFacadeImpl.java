@@ -185,7 +185,7 @@ public class DepositFacadeImpl implements DepositFacade {
                 continue;
             }
             Persistence.service().retrieve(deposit.billableItem());
-            DepositPolicyItem policyItem = policyMatrix.get(new DepositPolicyKey(deposit.depositType().getValue(), deposit.billableItem().item().type()));
+            DepositPolicyItem policyItem = policyMatrix.get(new DepositPolicyKey(deposit.type().getValue(), deposit.billableItem().item().type()));
             if (policyItem == null) {
                 throw new UserRuntimeException(i18n.tr("Could not find Policy Item for deposit {0}", deposit.getStringView()));
             } else {
@@ -234,7 +234,7 @@ public class DepositFacadeImpl implements DepositFacade {
                 continue;
             }
 
-            switch (deposit.depositType().getValue()) {
+            switch (deposit.type().getValue()) {
             case MoveInDeposit:
                 // MoveInDeposit - refund on first bill
                 arFacade.postDepositRefund(deposit);
@@ -256,7 +256,7 @@ public class DepositFacadeImpl implements DepositFacade {
                 if (expirationDate == null) {
                     break;
                 }
-                DepositPolicyItem policyItem = policyMatrix.get(new DepositPolicyKey(deposit.depositType().getValue(), deposit.billableItem().item().type()));
+                DepositPolicyItem policyItem = policyMatrix.get(new DepositPolicyKey(deposit.type().getValue(), deposit.billableItem().item().type()));
                 if (policyItem == null) {
                     throw new UserRuntimeException(i18n.tr("Could not find Policy Item for deposit {0}", deposit.getStringView()));
                 } else {
@@ -305,7 +305,7 @@ public class DepositFacadeImpl implements DepositFacade {
     private Deposit makeDeposit(DepositPolicyItem policyItem, BillableItem billableItem) {
         Deposit deposit = EntityFactory.create(Deposit.class);
 
-        deposit.depositType().set(policyItem.depositType());
+        deposit.type().set(policyItem.depositType());
         switch (policyItem.valueType().getValue()) {
         case Monetary:
             deposit.amount().setValue(policyItem.value().getValue());

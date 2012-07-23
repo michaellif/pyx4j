@@ -23,6 +23,7 @@ import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Length;
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
@@ -83,7 +84,8 @@ public interface Deposit extends IEntity {
 
     @NotNull
     @ToString(index = 0)
-    IPrimitive<DepositType> depositType();
+    @MemberColumn(name = "depositType")
+    IPrimitive<DepositType> type();
 
     @NotNull
     @Format("#0.00")

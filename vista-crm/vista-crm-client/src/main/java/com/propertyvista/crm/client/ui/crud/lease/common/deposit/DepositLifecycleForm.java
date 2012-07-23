@@ -39,7 +39,7 @@ public class DepositLifecycleForm extends CrmEntityForm<DepositLifecycleDTO> {
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().deposit().billableItem()), 30).build());
         content.getFlexCellFormatter().setColSpan(row, 0, 2);
 
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().deposit().depositType()), 12).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().deposit().type()), 12).build());
         content.setWidget(row, 1, new DecoratorBuilder(inject(proto().status()), 9).build());
 
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().deposit().amount()), 7).build());
@@ -58,7 +58,7 @@ public class DepositLifecycleForm extends CrmEntityForm<DepositLifecycleDTO> {
 
         // tweaking:
         get(proto().deposit().billableItem()).setViewable(true);
-        get(proto().deposit().depositType()).setViewable(true);
+        get(proto().deposit().type()).setViewable(true);
         get(proto().deposit().amount()).setViewable(true);
         get(proto().deposit().description()).setViewable(true);
 

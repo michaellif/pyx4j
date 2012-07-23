@@ -94,7 +94,7 @@ public class BillingDepositProcessor extends AbstractBillingProcessor {
             Persistence.service().retrieve(nextBill.billingAccount().deposits());
 
             for (Deposit deposit : ServerSideFactory.create(DepositFacade.class).getCurrentDeposits(nextBill.billingAccount().lease())) {
-                if (DepositType.LastMonthDeposit.equals(deposit.depositType().getValue())) {
+                if (DepositType.LastMonthDeposit.equals(deposit.type().getValue())) {
                     ServerSideFactory.create(ARFacade.class).postDepositRefund(deposit);
                 }
             }

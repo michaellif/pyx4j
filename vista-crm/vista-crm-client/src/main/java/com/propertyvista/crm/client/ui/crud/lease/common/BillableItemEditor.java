@@ -204,8 +204,10 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
 
             if (isViewable()) {
                 adjustmentPanel.setVisible(!getValue().adjustments().isEmpty());
+                depositPanel.setVisible(!getValue().deposits().isEmpty());
             } else {
                 adjustmentPanel.setVisible(true);
+                depositPanel.setVisible(true);
             }
         } else {// tweak UI for empty ProductItem:
             adjustmentPanel.setVisible(false);
@@ -428,7 +430,7 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
         @Override
         public List<EntityFolderColumnDescriptor> columns() {
             return Arrays.asList(//@formatter:off
-                new EntityFolderColumnDescriptor(proto().depositType(), "15em"),
+                new EntityFolderColumnDescriptor(proto().type(), "15em"),
                 new EntityFolderColumnDescriptor(proto().amount(), "6em"),
                 new EntityFolderColumnDescriptor(proto().description(), "25em"));
             //@formatter:on
