@@ -16,8 +16,12 @@ package com.propertyvista.domain.note;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.shared.IPrimitive;
 
 public interface NotesAndAttachments extends IEntity {
+
+    @Deprecated
+    IPrimitive<String> x();
 
     @Owned
     IList<Note> notes();
