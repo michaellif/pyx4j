@@ -56,6 +56,7 @@ import com.pyx4j.entity.shared.ICollection;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.ObjectClassType;
 import com.pyx4j.entity.shared.Path;
+import com.pyx4j.entity.shared.UniqueConstraintUserRuntimeException;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.VersionedCriteria;
@@ -559,8 +560,8 @@ public class TableModel {
             log.error("{} SQL {}", tableName, sql);
             log.error("{} SQL insert error", tableName, e);
             if (dialect.isUniqueConstraintException(e)) {
-                throw new UserRuntimeException(i18n.tr("Unable to create \"{0}\", duplicate \"{1}\" exists", entityMeta().getCaption(),
-                        getUniqueConstraintFieldName()));
+                throw new UniqueConstraintUserRuntimeException(i18n.tr("Unable to create \"{0}\", duplicate \"{1}\" exists", entityMeta().getCaption(),
+                        getUniqueConstraintFieldName()), EntityFactory.getEntityPrototype(entity.getValueClass()));
             } else {
                 throw new RuntimeException(e);
             }
@@ -605,8 +606,8 @@ public class TableModel {
             log.error("{} SQL {}", tableName, sql);
             log.error("{} SQL update error", tableName, e);
             if (dialect.isUniqueConstraintException(e)) {
-                throw new UserRuntimeException(i18n.tr("Unable to update \"{0}\", duplicate \"{1}\" exists", entityMeta().getCaption(),
-                        getUniqueConstraintFieldName()));
+                throw new UniqueConstraintUserRuntimeException(i18n.tr("Unable to update \"{0}\", duplicate \"{1}\" exists", entityMeta().getCaption(),
+                        getUniqueConstraintFieldName()), EntityFactory.getEntityPrototype(entity.getValueClass()));
             } else {
                 throw new RuntimeException(e);
             }
