@@ -42,7 +42,11 @@ public class LeaseEditorViewImplBase<DTO extends LeaseDTO> extends CrmEditorView
 
         @SuppressWarnings("unchecked")
         CEntityForm<BillableItem> billableItemForm = (CEntityForm<BillableItem>) form.get(form.proto().version().leaseProducts().serviceItem());
-        billableItemForm.setValue(value.version().leaseProducts().serviceItem());
+
+//TODO     revert after investigation:    
+//        billableItemForm.setValue(value.version().leaseProducts().serviceItem());
+        billableItemForm.populate(value.version().leaseProducts().serviceItem());
+
         billableItemForm.get(billableItemForm.proto().item()).refresh(true);
 
         form.get(form.proto().version().leaseProducts().featureItems()).setValue(value.version().leaseProducts().featureItems());
