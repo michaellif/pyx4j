@@ -25,17 +25,15 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.rpc.AuthenticationRequest;
 import com.pyx4j.security.rpc.AuthenticationResponse;
-import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
-import com.propertyvista.domain.security.VistaBasicBehavior;
 import com.propertyvista.portal.rpc.shared.dto.AccountRecoveryOptionsDTO;
 import com.propertyvista.portal.rpc.shared.services.AbstractAccountRecoveryOptionsService;
 
-public class AbstractAccountRecoveryOptionsEditorActivity extends AbstractActivity implements AccountRecoveryOptionsEditorView.Presenter {
+public abstract class AbstractAccountRecoveryOptionsEditorActivity extends AbstractActivity implements AccountRecoveryOptionsEditorView.Presenter {
 
     private static final I18n i18n = I18n.get(AbstractAccountRecoveryOptionsEditorActivity.class);
 
@@ -67,8 +65,11 @@ public class AbstractAccountRecoveryOptionsEditorActivity extends AbstractActivi
             service.obtainRecoveryOptions(new DefaultAsyncCallback<AccountRecoveryOptionsDTO>() {
                 @Override
                 public void onSuccess(AccountRecoveryOptionsDTO result) {
-                    view.setSecurityQuestionRequired(SecurityController.checkBehavior(VistaBasicBehavior.CRMPasswordChangeRequiresSecurityQuestion));
+                    view.setSecurityQuestionRequired(isPasswordChangeRequiresSecurityQuestion());
                     view.populate(result);
+                    if (isSetupAccountRecoveryOptionsRequired()) {
+                        view.displaySetupOfAccountRecoveryOptionsIsRequiredMessage();
+                    }
                 }
 
                 @Override
@@ -97,7 +98,6 @@ public class AbstractAccountRecoveryOptionsEditorActivity extends AbstractActivi
             public void run() {
                 AbstractAccountRecoveryOptionsEditorActivity.this.cancel();
             }
-
         };
         cancelationTimer.schedule(CANCEL_TIMEOUT);
 
@@ -149,6 +149,10 @@ public class AbstractAccountRecoveryOptionsEditorActivity extends AbstractActivi
         }
         super.onStop();
     }
+
+    protected abstract boolean isPasswordChangeRequiresSecurityQuestion();
+
+    protected abstract boolean isSetupAccountRecoveryOptionsRequired();
 
     private String getCurrentPassword() {
         return place.getFirstArg(AccountRecoveryOptionsViewerView.ARG_PASSWORD);

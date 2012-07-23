@@ -24,18 +24,16 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.rpc.AuthenticationRequest;
-import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
-import com.propertyvista.domain.security.VistaBasicBehavior;
 import com.propertyvista.portal.rpc.shared.dto.AccountRecoveryOptionsDTO;
 import com.propertyvista.portal.rpc.shared.services.AbstractAccountRecoveryOptionsService;
 
 // TODO create a special place class
-public class AbstractAccountRecoveryOptionsViewerActivity extends AbstractActivity implements AccountRecoveryOptionsViewerView.Presenter {
+public abstract class AbstractAccountRecoveryOptionsViewerActivity extends AbstractActivity implements AccountRecoveryOptionsViewerView.Presenter {
 
     private static final I18n i18n = I18n.get(AbstractAccountRecoveryOptionsViewerActivity.class);
 
@@ -87,7 +85,7 @@ public class AbstractAccountRecoveryOptionsViewerActivity extends AbstractActivi
 
                 @Override
                 public void onSuccess(AccountRecoveryOptionsDTO result) {
-                    view.setSecurityQuestionRequired(SecurityController.checkBehavior(VistaBasicBehavior.CRMPasswordChangeRequiresSecurityQuestion));
+                    view.setSecurityQuestionRequired(isSecurityQuestionRequried());
                     view.populate(result);
                 }
 
@@ -144,6 +142,8 @@ public class AbstractAccountRecoveryOptionsViewerActivity extends AbstractActivi
         }
         super.onStop();
     }
+
+    protected abstract boolean isSecurityQuestionRequried();
 
     private String getCurrentPassword() {
         return place.getFirstArg(AccountRecoveryOptionsViewerView.ARG_PASSWORD);

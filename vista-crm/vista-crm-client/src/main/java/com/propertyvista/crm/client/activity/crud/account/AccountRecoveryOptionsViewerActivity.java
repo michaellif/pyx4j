@@ -15,18 +15,25 @@ package com.propertyvista.crm.client.activity.crud.account;
 
 import com.google.gwt.core.client.GWT;
 
+import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.common.client.ui.components.security.AbstractAccountRecoveryOptionsViewerActivity;
 import com.propertyvista.common.client.ui.components.security.AccountRecoveryOptionsViewerView;
 import com.propertyvista.crm.client.ui.viewfactories.SecurityViewFactory;
 import com.propertyvista.crm.rpc.services.security.CrmAccountRecoveryOptionsUserService;
+import com.propertyvista.domain.security.VistaBasicBehavior;
 
 public class AccountRecoveryOptionsViewerActivity extends AbstractAccountRecoveryOptionsViewerActivity {
 
     public AccountRecoveryOptionsViewerActivity(CrudAppPlace place) {
         super(place, SecurityViewFactory.instance(AccountRecoveryOptionsViewerView.class), GWT
                 .<CrmAccountRecoveryOptionsUserService> create(CrmAccountRecoveryOptionsUserService.class));
+    }
+
+    @Override
+    protected boolean isSecurityQuestionRequried() {
+        return SecurityController.checkBehavior(VistaBasicBehavior.CRMPasswordChangeRequiresSecurityQuestion);
     }
 
 }

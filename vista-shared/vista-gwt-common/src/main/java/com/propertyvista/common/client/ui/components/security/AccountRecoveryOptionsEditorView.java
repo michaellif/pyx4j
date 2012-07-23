@@ -21,4 +21,6 @@ public interface AccountRecoveryOptionsEditorView extends IEditorView<AccountRec
 
     void setSecurityQuestionRequired(boolean isSecurityQuestionEntiryRequired);
 
+    void displaySetupOfAccountRecoveryOptionsIsRequiredMessage();
+
 }

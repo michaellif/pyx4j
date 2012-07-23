@@ -19,6 +19,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.form.EditorViewImplBase;
 import com.pyx4j.widgets.client.Button;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.portal.rpc.shared.dto.AccountRecoveryOptionsDTO;
 
@@ -33,6 +34,15 @@ public class AccountRecoveryOptionsEditorViewImpl extends EditorViewImplBase<Acc
     public AccountRecoveryOptionsEditorViewImpl() {
         setForm(new AccountRecoveryOptionsForm());
         setCaption(i18n.tr("Account Recovery Options"));
+
+        btnCancel = new Button(i18n.tr("Cancel"), new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                getPresenter().cancel();
+            }
+        });
+        addFooterToolbarItem(btnCancel);
+
         btnSave = new Button(i18n.tr("Save"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
@@ -46,17 +56,16 @@ public class AccountRecoveryOptionsEditorViewImpl extends EditorViewImplBase<Acc
         });
         addFooterToolbarItem(btnSave);
 
-        btnCancel = new Button(i18n.tr("Cancel"), new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                getPresenter().cancel();
-            }
-        });
-        addFooterToolbarItem(btnCancel);
     }
 
     @Override
     public void setSecurityQuestionRequired(boolean isSecurityQuestionEntiryRequired) {
         ((AccountRecoveryOptionsForm) getForm()).setSecurityQuestionRequired(isSecurityQuestionEntiryRequired);
     }
+
+    @Override
+    public void displaySetupOfAccountRecoveryOptionsIsRequiredMessage() {
+        MessageDialog.info(i18n.tr("Because of the privileges associated with your account, you must setup password recovery options."));
+    }
+
 }
