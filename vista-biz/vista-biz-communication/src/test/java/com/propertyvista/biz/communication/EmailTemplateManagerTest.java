@@ -77,7 +77,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
 
     private SiteDescriptor siteDescriptor;
 
-    private final String copyright = "� Property Vista Software Inc. 2012";
+    private final String copyright = "\u00a9 Property Vista Software Inc. 2012";
 
     private final String company = "Property Vista";
 
@@ -284,6 +284,19 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
     }
 
     public String getTemplateContent(EmailTemplateType type, boolean asString) {
+        String content = getTemplateContentBody(type, asString);
+        if (asString) {
+            return SimpleMessageFormat.format(MessageTemplates.getEmailHTMLBody(),//@formatter:off
+                    getHeader(true),
+                    content,
+                    getFooter(true)
+                );//@formatter:on
+        } else {
+            return content;
+        }
+    }
+
+    public String getTemplateContentBody(EmailTemplateType type, boolean asString) {
         String fmt = getTemplateFormat(type);
         Object[] fmtArgs = null;
         switch (type) {//@formatter:off
@@ -476,6 +489,45 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
         return SimpleMessageFormat.format(fmt, fmtArgs);
     }
 
+    private Object[] getHeaderFooterArgs(boolean asString) {
+        if (asString) {
+            //@formatter:off
+            String[] args = { 
+                portalHomeUrl, 
+                portalHomeUrl + "/logo.png/vista.siteimgrc",
+                company, 
+                copyright };
+            //@formatter:on
+            return args;
+        } else {
+            // PortalLinksT are present on all template
+            PortalLinksT portalT = EmailTemplateManager.getProto(EmailTemplateType.PasswordRetrievalCrm, PortalLinksT.class);
+            //@formatter:off
+            String[] args = { 
+                EmailTemplateManager.getVarname(portalT.PortalHomeUrl()), 
+                EmailTemplateManager.getVarname(portalT.CompanyLogo()),
+                EmailTemplateManager.getVarname(portalT.CompanyName()), 
+                EmailTemplateManager.getVarname(portalT.CopyrightNotice()) };
+            //@formatter:on
+            return args;
+        }
+    }
+
+    private String getHeader(boolean asString) {
+        return SimpleMessageFormat.format(//@formatter:off
+                "<a href=\"{0}\"><img src=\"{1}\" alt=\"{2}\"></a>",
+                getHeaderFooterArgs(asString)
+            );//@formatter:on
+
+    }
+
+    private String getFooter(boolean asString) {
+        return SimpleMessageFormat.format(//@formatter:off
+                "<a href=\"{0}\">{3}</a>. All rights reserved.",
+                getHeaderFooterArgs(asString)
+            );//@formatter:on
+    }
+
     public void loadDomain() {
         // user,crmUser/tenant/tenantInLease:applicant,co-applicants,guarantor
         // application
@@ -610,11 +662,15 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
         EmailTemplatesPolicy policy = EntityFactory.create(EmailTemplatesPolicy.class);
         for (EmailTemplateType type : EmailTemplateType.values()) {
             EmailTemplate template = EntityFactory.create(EmailTemplate.class);
+            template.useHeader().setValue(Boolean.TRUE);
+            template.useFooter().setValue(Boolean.TRUE);
             template.type().setValue(type);
             template.subject().setValue(type.toString());
             template.content().setValue(getTemplateContent(type, false));
             policy.templates().add(template);
         }
+        policy.header().setValue(getHeader(false));
+        policy.footer().setValue(getFooter(false));
         policy.node().set(orgNode);
         Persistence.service().persist(policy);
     }

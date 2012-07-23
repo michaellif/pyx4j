@@ -15,10 +15,12 @@ package com.propertyvista.biz.communication;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
@@ -69,7 +71,6 @@ public class MessageTemplates {
      * @param building
      * @return
      */
-
     private static EmailTemplate getEmailTemplate(EmailTemplateType type, PolicyNode policyNode) {
         EmailTemplatesPolicy policy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(policyNode, EmailTemplatesPolicy.class).duplicate();
         return fetchEmailTemplate(type, policy);
@@ -108,9 +109,7 @@ public class MessageTemplates {
         email.setTo(user.email().getValue());
         email.setSender(getSender());
         // set email subject and body from the template
-        email.setSubject(emailTemplate.subject().getValue());
-        // parse template and set email body
-        email.setHtmlBody(EmailTemplateManager.parseTemplate(emailTemplate.content().getValue(), data));
+        buildEmail(email, emailTemplate, data);
 
         return email;
     }
@@ -142,8 +141,7 @@ public class MessageTemplates {
         email.setTo(user.email().getValue());
         email.setSender(getSender());
         // set email subject and body from the template
-        email.setSubject(emailTemplate.subject().getValue());
-        email.setHtmlBody(EmailTemplateManager.parseTemplate(emailTemplate.content().getValue(), data));
+        buildEmail(email, emailTemplate, data);
         return email;
     }
 
@@ -184,8 +182,7 @@ public class MessageTemplates {
         email.setTo(user.email().getValue());
         email.setSender(getSender());
         // set email subject and body from the template
-        email.setSubject(emailTemplate.subject().getValue());
-        email.setHtmlBody(EmailTemplateManager.parseTemplate(emailTemplate.content().getValue(), data));
+        buildEmail(email, emailTemplate, data);
 
         return email;
     }
@@ -209,8 +206,7 @@ public class MessageTemplates {
         email.setTo(user.email().getValue());
         email.setSender(getSender());
         // set email subject and body from the template
-        email.setSubject(emailTemplate.subject().getValue());
-        email.setHtmlBody(EmailTemplateManager.parseTemplate(emailTemplate.content().getValue(), data));
+        buildEmail(email, emailTemplate, data);
 
         return email;
     }
@@ -234,8 +230,7 @@ public class MessageTemplates {
         email.setTo(user.email().getValue());
         email.setSender(getSender());
         // set email subject and body from the template
-        email.setSubject(emailTemplate.subject().getValue());
-        email.setHtmlBody(EmailTemplateManager.parseTemplate(emailTemplate.content().getValue(), data));
+        buildEmail(email, emailTemplate, data);
 
         return email;
     }
@@ -257,10 +252,48 @@ public class MessageTemplates {
         email.setTo(user.email().getValue());
         email.setSender(getSender());
         // set email subject and body from the template
-        email.setSubject(emailTemplate.subject().getValue());
-        email.setHtmlBody(EmailTemplateManager.parseTemplate(emailTemplate.content().getValue(), data));
-
+        buildEmail(email, emailTemplate, data);
         return email;
+    }
+
+    private static String bodyRaw;
+
+    public static String getEmailHTMLBody() {
+        if (bodyRaw == null) {
+            try {
+                bodyRaw = IOUtils.getTextResource("email/template-basic-body.html");
+            } catch (IOException e) {
+                throw new Error("Unable to load template html wrapper resource", e);
+            }
+        }
+        return bodyRaw;
+    }
+
+    private static void buildEmail(MailMessage email, EmailTemplate emailTemplate, Collection<IEntity> data) {
+        email.setSubject(emailTemplate.subject().getValue());
+
+        Object contentHtml = EmailTemplateManager.parseTemplate(emailTemplate.content().getValue(), data);
+
+        Object headerHtml;
+        Object footerHtml;
+
+        if (emailTemplate.useHeader().isBooleanTrue()) {
+            headerHtml = EmailTemplateManager.parseTemplate(emailTemplate.policy().header().getValue(), data);
+        } else {
+            headerHtml = "";
+        }
+
+        if (emailTemplate.useHeader().isBooleanTrue()) {
+            footerHtml = EmailTemplateManager.parseTemplate(emailTemplate.policy().footer().getValue(), data);
+        } else {
+            footerHtml = "";
+        }
+
+        email.setHtmlBody(SimpleMessageFormat.format(getEmailHTMLBody(),//@formatter:off
+                headerHtml,
+                contentHtml,
+                footerHtml
+            ));//@formatter:on
     }
 
     private static String wrapAdminHtml(String text) {

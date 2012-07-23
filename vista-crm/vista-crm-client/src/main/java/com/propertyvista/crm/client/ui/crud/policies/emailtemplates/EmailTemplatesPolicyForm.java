@@ -70,7 +70,18 @@ public class EmailTemplatesPolicyForm extends PolicyDTOTabPanelBasedForm<EmailTe
 
     @Override
     protected List<FormFlexPanel> createCustomTabPanels() {
-        return Arrays.asList(createEmailTemplatesPanel());
+        return Arrays.asList(createEmailTemplatesPanel(), createEmailTemplatesHeaderFooterPanel());
+    }
+
+    private FormFlexPanel createEmailTemplatesHeaderFooterPanel() {
+        FormFlexPanel panel = new FormFlexPanel(i18n.tr("Header and Footer"));
+        int row = -1;
+
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().header())).build());
+
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().footer())).build());
+
+        return panel;
     }
 
     private FormFlexPanel createEmailTemplatesPanel() {
@@ -128,6 +139,8 @@ public class EmailTemplatesPolicyForm extends PolicyDTOTabPanelBasedForm<EmailTe
                 //content.setH1(++row, 0, 1, proto().type().getMeta().getCaption());
                 content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().type())).build());
                 content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().subject())).build());
+                content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().useHeader())).build());
+                content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().useFooter())).build());
                 if (isEditable()) {
                     CRichTextArea editor = new CRichTextArea();
                     editor.setImageProvider(new SiteImageResourceProvider());

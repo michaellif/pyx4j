@@ -45,11 +45,14 @@ public interface EmailTemplate extends IEntity {
     @NotNull
     IPrimitive<String> subject();
 
+    IPrimitive<Boolean> useHeader();
+
+    IPrimitive<Boolean> useFooter();
+
     @NotNull
     @Owned
     @Length(20845)
     @Editor(type = Editor.EditorType.richtextarea)
-    //TODO Blob
     IPrimitive<String> content();
 
     @MemberColumn(name = "templateType")

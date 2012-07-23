@@ -42,8 +42,6 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
 
     private final static Logger log = LoggerFactory.getLogger(EmailTemplatesPolicyPreloader.class);
 
-    private static String htmlFmt = null;
-
     public EmailTemplatesPolicyPreloader() {
         super(EmailTemplatesPolicy.class);
     }
@@ -55,6 +53,8 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
 
     private EmailTemplatesPolicy createDefaultEmailTemplatesPolicy() {
         EmailTemplatesPolicy policy = EntityFactory.create(EmailTemplatesPolicy.class);
+
+        loadHeaderAndFooter(policy);
 
         policy.templates().add(defaultEmailTemplatePasswordRetrievalCrm());
         policy.templates().add(defaultEmailTemplatePasswordRetrievalProspect());
@@ -69,21 +69,39 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
         return policy;
     }
 
-    public static String wrapHtml(String text, PortalLinksT portalT) {
-        if (htmlFmt == null) {
-            try {
-                htmlFmt = IOUtils.getTextResource("email/template-basic.html");
-            } catch (IOException e) {
-                throw new Error("Unable to load template html wrapper resource", e);
-            }
+    private void loadHeaderAndFooter(EmailTemplatesPolicy policy) {
+        String headerRaw;
+        String footerRaw;
+        try {
+            headerRaw = IOUtils.getTextResource("email/template-basic-header.html");
+            footerRaw = IOUtils.getTextResource("email/template-basic-footer.html");
+        } catch (IOException e) {
+            throw new Error("Unable to load template html wrapper resource", e);
         }
-        return SimpleMessageFormat.format(//@formatter:off
-            htmlFmt, text,
-            EmailTemplateManager.getVarname(portalT.PortalHomeUrl()),
-            EmailTemplateManager.getVarname(portalT.CompanyLogo()),
-            EmailTemplateManager.getVarname(portalT.CompanyName()),
-            EmailTemplateManager.getVarname(portalT.CopyrightNotice())
-        );//@formatter:on
+
+        // PortalLinksT are present on all template
+        PortalLinksT portalT = EmailTemplateManager.getProto(EmailTemplateType.PasswordRetrievalCrm, PortalLinksT.class);
+
+        policy.header().setValue( SimpleMessageFormat.format(//@formatter:off
+                headerRaw,
+                EmailTemplateManager.getVarname(portalT.PortalHomeUrl()),
+                EmailTemplateManager.getVarname(portalT.CompanyLogo()),
+                EmailTemplateManager.getVarname(portalT.CompanyName()),
+                EmailTemplateManager.getVarname(portalT.CopyrightNotice())
+            ));//@formatter:on
+
+        policy.footer().setValue( SimpleMessageFormat.format(//@formatter:off
+                footerRaw,
+                EmailTemplateManager.getVarname(portalT.PortalHomeUrl()),
+                EmailTemplateManager.getVarname(portalT.CompanyLogo()),
+                EmailTemplateManager.getVarname(portalT.CompanyName()),
+                EmailTemplateManager.getVarname(portalT.CopyrightNotice())
+            ));//@formatter:on
+
+    }
+
+    public static String wrapHtml(String text, PortalLinksT portalT) {
+        return text;
     }
 
     private EmailTemplate defaultEmailTemplatePasswordRetrievalCrm() {
@@ -93,6 +111,8 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
         PortalLinksT portalT = EmailTemplateManager.getProto(type, PortalLinksT.class);
 
         EmailTemplate template = EntityFactory.create(EmailTemplate.class);
+        template.useHeader().setValue(Boolean.TRUE);
+        template.useFooter().setValue(Boolean.TRUE);
         template.type().setValue(type);
         template.subject().setValue(i18n.tr("New Password Retrieval"));
         template.content().setValue(wrapHtml(i18n.tr(//@formatter:off
@@ -114,6 +134,8 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
         PortalLinksT portalT = EmailTemplateManager.getProto(type, PortalLinksT.class);
 
         EmailTemplate template = EntityFactory.create(EmailTemplate.class);
+        template.useHeader().setValue(Boolean.TRUE);
+        template.useFooter().setValue(Boolean.TRUE);
         template.type().setValue(type);
         template.subject().setValue(i18n.tr("New Password Retrieval"));
         template.content().setValue(wrapHtml(i18n.tr(//@formatter:off
@@ -135,6 +157,8 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
         PortalLinksT portalT = EmailTemplateManager.getProto(type, PortalLinksT.class);
 
         EmailTemplate template = EntityFactory.create(EmailTemplate.class);
+        template.useHeader().setValue(Boolean.TRUE);
+        template.useFooter().setValue(Boolean.TRUE);
         template.type().setValue(type);
         template.subject().setValue(i18n.tr("New Password Retrieval"));
         template.content().setValue(wrapHtml(i18n.tr(//@formatter:off
@@ -157,6 +181,8 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
         BuildingT bldT = EmailTemplateManager.getProto(type, BuildingT.class);
 
         EmailTemplate template = EntityFactory.create(EmailTemplate.class);
+        template.useHeader().setValue(Boolean.TRUE);
+        template.useFooter().setValue(Boolean.TRUE);
         template.type().setValue(type);
         template.subject().setValue(i18n.tr("Your Lease Application Created"));
         template.content().setValue(wrapHtml(i18n.tr(//@formatter:off
@@ -187,6 +213,8 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
         BuildingT bldT = EmailTemplateManager.getProto(type, BuildingT.class);
 
         EmailTemplate template = EntityFactory.create(EmailTemplate.class);
+        template.useHeader().setValue(Boolean.TRUE);
+        template.useFooter().setValue(Boolean.TRUE);
         template.type().setValue(type);
         template.subject().setValue(i18n.tr("Your Lease Application Created"));
         template.content().setValue(wrapHtml(i18n.tr(//@formatter:off
@@ -217,6 +245,8 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
         BuildingT bldT = EmailTemplateManager.getProto(type, BuildingT.class);
 
         EmailTemplate template = EntityFactory.create(EmailTemplate.class);
+        template.useHeader().setValue(Boolean.TRUE);
+        template.useFooter().setValue(Boolean.TRUE);
         template.type().setValue(type);
         template.subject().setValue(i18n.tr("Your Guarantor Application Created"));
         template.content().setValue(wrapHtml(i18n.tr(//@formatter:off
@@ -248,6 +278,8 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
         LeaseT leaseT = EmailTemplateManager.getProto(type, LeaseT.class);
 
         EmailTemplate template = EntityFactory.create(EmailTemplate.class);
+        template.useHeader().setValue(Boolean.TRUE);
+        template.useFooter().setValue(Boolean.TRUE);
         template.type().setValue(type);
         template.subject().setValue(i18n.tr("Your Application To Lease has been approved"));
         template.content().setValue(wrapHtml(i18n.tr(//@formatter:off
@@ -282,6 +314,8 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
         BuildingT bldT = EmailTemplateManager.getProto(type, BuildingT.class);
 
         EmailTemplate template = EntityFactory.create(EmailTemplate.class);
+        template.useHeader().setValue(Boolean.TRUE);
+        template.useFooter().setValue(Boolean.TRUE);
         template.type().setValue(type);
         template.subject().setValue(i18n.tr("Your Application has been declined"));
         template.content().setValue(wrapHtml(i18n.tr(//@formatter:off
@@ -314,6 +348,8 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
         PasswordRequestTenantT pwdReqT = EmailTemplateManager.getProto(type, PasswordRequestTenantT.class);
 
         EmailTemplate template = EntityFactory.create(EmailTemplate.class);
+        template.useHeader().setValue(Boolean.TRUE);
+        template.useFooter().setValue(Boolean.TRUE);
         template.type().setValue(type);
         template.subject().setValue(i18n.tr("Visit our new site"));
         template.content().setValue(wrapHtml(i18n.tr(//@formatter:off

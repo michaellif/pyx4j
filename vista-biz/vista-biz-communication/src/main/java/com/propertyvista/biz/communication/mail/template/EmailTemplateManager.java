@@ -99,6 +99,11 @@ public class EmailTemplateManager {
     }
 
     public static String parseTemplate(String htmlTemplate, Collection<IEntity> data) {
+        // Simple two pass parsing to support header and footer
+        return parseTemplateImpl(parseTemplateImpl(htmlTemplate, data), data);
+    }
+
+    private static String parseTemplateImpl(String htmlTemplate, Collection<IEntity> data) {
         final StringBuilder buffer = new StringBuilder();
 
         int start, pos = 0;

@@ -33,4 +33,5 @@ public interface PortalLinksT extends IEntity {
     IPrimitive<String> ProspectPortalUrl();
 
     IPrimitive<String> CopyrightNotice();
+
 }
