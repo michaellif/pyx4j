@@ -199,19 +199,19 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
 
             for (PadReconciliationDebitRecord debitRecord : summary.records()) {
                 switch (debitRecord.reconciliationStatus().getValue()) {
-                case PROCESSED:
+                case Processed:
                     processed++;
                     StatisticsUtils.addProcessed(dynamicStatisticsRecord, 1, debitRecord.amount().getValue());
                     break;
-                case REJECTED:
+                case Rejected:
                     rejected++;
                     StatisticsUtils.addFailed(dynamicStatisticsRecord, 1, debitRecord.amount().getValue());
                     break;
-                case RETURNED:
+                case Returned:
                     returned++;
                     StatisticsUtils.addFailed(dynamicStatisticsRecord, 1, debitRecord.amount().getValue());
                     break;
-                case DUPLICATE:
+                case Duplicate:
                     duplicate++;
                     StatisticsUtils.addFailed(dynamicStatisticsRecord, 1, debitRecord.amount().getValue());
                     break;

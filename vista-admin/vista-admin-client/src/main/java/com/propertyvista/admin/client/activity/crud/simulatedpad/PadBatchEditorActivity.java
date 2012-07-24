@@ -59,7 +59,7 @@ public class PadBatchEditorActivity extends EditorActivityBase<PadSimBatch> impl
 
     private void updateReconciliation(PadSimBatch padBatch) {
         if (padBatch.reconciliationStatus().isNull()) {
-            padBatch.reconciliationStatus().setValue(MerchantReconciliationStatus.PAID);
+            padBatch.reconciliationStatus().setValue(MerchantReconciliationStatus.Paid);
         }
         SummaryTotal total = new SummaryTotal();
         SummaryTotal gross = new SummaryTotal();
@@ -72,16 +72,16 @@ public class PadBatchEditorActivity extends EditorActivityBase<PadSimBatch> impl
                     record.paymentDate().setValue(PadSimUtils.formatDate(ClientContext.getServerDate()));
                 }
                 if (record.reconciliationStatus().isNull()) {
-                    record.reconciliationStatus().setValue(TransactionReconciliationStatus.PROCESSED);
+                    record.reconciliationStatus().setValue(TransactionReconciliationStatus.Processed);
                 }
                 switch (record.reconciliationStatus().getValue()) {
-                case PROCESSED:
+                case Processed:
                     gross.add(record.amount().getValue());
                     break;
-                case REJECTED:
+                case Rejected:
                     rejects.add(record.amount().getValue());
                     break;
-                case RETURNED:
+                case Returned:
                     returns.add(record.amount().getValue());
                     break;
                 }

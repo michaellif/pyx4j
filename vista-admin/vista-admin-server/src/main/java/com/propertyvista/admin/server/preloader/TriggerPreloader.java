@@ -32,7 +32,7 @@ public class TriggerPreloader extends AbstractDataPreloader {
             Trigger trigger = EntityFactory.create(Trigger.class);
             trigger.triggerType().setValue(pmcProcessType);
             trigger.name().setValue(pmcProcessType.getDescription());
-            trigger.populationType().setValue(TriggerPmcSelectionType.allPmc);
+            trigger.populationType().setValue(TriggerPmcSelectionType.AllPmc);
             Persistence.service().persist(trigger);
         }
 
