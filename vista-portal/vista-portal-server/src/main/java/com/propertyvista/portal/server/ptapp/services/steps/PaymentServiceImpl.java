@@ -88,7 +88,7 @@ public class PaymentServiceImpl extends ApplicationEntityServiceImpl implements 
         if (callFireDemo) {
             EntityQueryCriteria<TenantInLeaseListDTO> criteria = EntityQueryCriteria.create(TenantInLeaseListDTO.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().application(), PtAppContext.retrieveCurrentUserApplication()));
-            CampaignManager.fireEvent(CampaignTrigger.ApplicationCompleated, Persistence.secureRetrieve(criteria));
+            CampaignManager.fireEvent(CampaignTrigger.ApplicationCompleted, Persistence.secureRetrieve(criteria));
         }
 
         if ((PaymentType.CreditCard == payment.paymentMethod().type().getValue())

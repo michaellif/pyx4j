@@ -30,7 +30,7 @@ public class CampaignPreloader extends BaseVistaDevDataPreloader {
         //campaign.triger().setValue(CampaignTriger.Registration);
         //campaign.message().setValue("Hello ${b}, thank you for registering as Potential Tenant. Property Vista will call you later.");
 
-        campaign.trigger().setValue(CampaignTrigger.ApplicationCompleated);
+        campaign.trigger().setValue(CampaignTrigger.ApplicationCompleted);
         campaign.message().setValue("Hello ${b}, at this point our presentation is concluded. Thank you very much for your time.");
 
         Persistence.service().persist(campaign);

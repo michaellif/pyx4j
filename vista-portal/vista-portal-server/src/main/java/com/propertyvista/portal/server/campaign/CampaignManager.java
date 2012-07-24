@@ -43,7 +43,7 @@ public class CampaignManager {
             LeaseParticipant.Role status = tenantInfo.role().getValue();
 
             switch (trigger) {
-            case ApplicationCompleated:
+            case ApplicationCompleted:
                 if (LeaseParticipant.Role.Applicant.equals(status)) {
                     fireEvent(trigger, tenantInfo);
                 }

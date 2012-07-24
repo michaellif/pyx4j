@@ -21,6 +21,6 @@ public enum CampaignTrigger {
 
     Registration,
 
-    ApplicationCompleated
+    ApplicationCompleted
 
 }
