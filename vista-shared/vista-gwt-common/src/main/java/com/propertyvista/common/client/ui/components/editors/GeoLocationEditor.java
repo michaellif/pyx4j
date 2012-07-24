@@ -61,8 +61,9 @@ public class GeoLocationEditor extends CEntityDecoratableForm<GeoLocation> {
 
             @Override
             public ValidationError isValid(CComponent<Double, ?> component, Double value) {
-                return (value == null) || (value >= 0 && value <= 90) ? null
-                        : new ValidationError(component, i18n.tr("Latitude may be in range [0-90] degree"));
+                CComponent<LatitudeType, ?> latitudeType = get(proto().latitudeType());
+                return ((value == null && latitudeType.getValue() == null) || (value != null && (value >= 0 && value <= 90))) ? null : new ValidationError(
+                        component, i18n.tr("Latitude may be in range [0-90] degree"));
             }
         });
 
@@ -70,8 +71,9 @@ public class GeoLocationEditor extends CEntityDecoratableForm<GeoLocation> {
 
             @Override
             public ValidationError isValid(CComponent<Double, ?> component, Double value) {
-                return (value == null) || (value >= 0 && value <= 180) ? null : new ValidationError(component, i18n
-                        .tr("Longitude may be in range [0-180] degree"));
+                CComponent<LongitudeType, ?> longitudeType = get(proto().longitudeType());
+                return ((value == null && longitudeType.getValue() == null) || (value != null && (value >= 0 && value <= 180))) ? null : new ValidationError(
+                        component, i18n.tr("Longitude may be in range [0-180] degree"));
             }
         });
 
