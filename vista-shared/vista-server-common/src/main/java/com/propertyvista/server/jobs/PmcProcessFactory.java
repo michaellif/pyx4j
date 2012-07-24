@@ -20,31 +20,31 @@ public class PmcProcessFactory {
 
     public static PmcProcess createPmcProcess(PmcProcessType triggerType) {
         switch (triggerType) {
-        case Test:
+        case test:
             return new TestPmcProcess();
-        case Billing:
+        case billing:
             return new BillingProcess();
-        case PaymentsIssue:
+        case paymentsIssue:
             return new PaymentsIssueProcess();
-        case PaymentsScheduledCreditCards:
+        case paymentsScheduledCreditCards:
             return new PaymentsScheduledProcess(PaymentType.CreditCard);
-        case PaymentsScheduledEcheck:
+        case paymentsScheduledEcheck:
             return new PaymentsScheduledProcess(PaymentType.Echeck);
-        case PaymentsPadSend:
+        case paymentsPadSend:
             return new PadSendProcess();
-        case PaymentsPadReciveAcknowledgment:
+        case paymentsPadReciveAcknowledgment:
             return new PadReciveAcknowledgmentProcess();
-        case PaymentsPadReciveReconciliation:
+        case paymentsPadReciveReconciliation:
             return new PadReciveReconciliationProcess();
-        case Cleanup:
+        case cleanup:
             return new CleanupPmcProcess();
-        case UpdateArrears:
+        case updateArrears:
             return new UpdateArrearsProcess();
-        case LeaseActivation:
+        case leaseActivation:
             return new LeaseActivationProcess();
-        case InitializeFutureBillingCycles:
+        case initializeFutureBillingCycles:
             return new FutureBillingCycleInitializationProcess();
-        case UpdatePaymentsSummary:
+        case updatePaymentsSummary:
             // TODO: not sure if it should happen: return new PaymentsSummarySnapshotProcess();
         default:
             throw new IllegalArgumentException("Not implemented");

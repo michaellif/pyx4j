@@ -107,7 +107,7 @@ class OnboardingProcessor {
             rm.messageId().set(message.messageId());
         }
 
-        VistaAntiBot.setApiRequestDnsNameTarget(DnsNameTarget.VistaCrm);
+        VistaAntiBot.setApiRequestDnsNameTarget(DnsNameTarget.vistaCrm);
 
         for (RequestIO request : message.requests()) {
             try {

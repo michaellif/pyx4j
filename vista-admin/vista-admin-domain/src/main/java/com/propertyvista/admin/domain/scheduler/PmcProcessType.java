@@ -22,38 +22,38 @@ import com.pyx4j.i18n.shared.I18nEnum;
 @I18n
 public enum PmcProcessType implements Serializable {
 
-    Billing(true),
+    billing(true),
 
     @Translate("Issue PreAuthorized Payments")
-    PaymentsIssue(true),
+    paymentsIssue(true),
 
     @Translate("Process Scheduled CreditCards Payments")
-    PaymentsScheduledCreditCards,
+    paymentsScheduledCreditCards,
 
     @Translate("Process Scheduled eCheque Payments")
-    PaymentsScheduledEcheck,
+    paymentsScheduledEcheck,
 
-    PaymentsBmoRecive,
+    paymentsBmoRecive,
 
     @Translate("Send eCheque Payments to Caledon")
-    PaymentsPadSend,
+    paymentsPadSend,
 
-    PaymentsPadReciveAcknowledgment,
+    paymentsPadReciveAcknowledgment,
 
-    PaymentsPadReciveReconciliation,
+    paymentsPadReciveReconciliation,
 
-    LeaseActivation,
+    leaseActivation,
 
-    InitializeFutureBillingCycles,
+    initializeFutureBillingCycles,
 
-    Cleanup,
+    cleanup,
 
-    UpdateArrears,
+    updateArrears,
 
-    UpdatePaymentsSummary,
+    updatePaymentsSummary,
 
     // Used for scheduler testing
-    Test;
+    test;
 
     private final boolean dailyExecutions;
 

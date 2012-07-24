@@ -82,13 +82,13 @@ public class VistaDeployment {
         case Admin:
             return ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance()).getDefaultBaseURLvistaAdmin();
         case CRM:
-            target = DnsNameTarget.VistaCrm;
+            target = DnsNameTarget.vistaCrm;
             break;
         case ProspectiveApp:
-            target = DnsNameTarget.ProspectPortal;
+            target = DnsNameTarget.prospectPortal;
             break;
         case TenantPortal:
-            target = DnsNameTarget.ResidentPortal;
+            target = DnsNameTarget.residentPortal;
             break;
         default:
             throw new IllegalArgumentException();
@@ -107,12 +107,12 @@ public class VistaDeployment {
             }
         }
         switch (target) {
-        case ProspectPortal:
+        case prospectPortal:
             return ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance()).getDefaultBaseURLprospectPortal(pmc.dnsName().getValue());
-        case ResidentPortal:
+        case residentPortal:
             return ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance())
                     .getDefaultBaseURLresidentPortal(pmc.dnsName().getValue(), secure);
-        case VistaCrm:
+        case vistaCrm:
             return ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance()).getDefaultBaseURLvistaCrm(pmc.dnsName().getValue());
         default:
             throw new IllegalArgumentException();
@@ -122,7 +122,7 @@ public class VistaDeployment {
     public static String getPortalGoogleAPIKey() {
         Pmc pmc = getCurrentPmc();
         for (PmcDnsName alias : pmc.dnsNameAliases()) {
-            if (alias.target().getValue() == DnsNameTarget.ResidentPortal) {
+            if (alias.target().getValue() == DnsNameTarget.residentPortal) {
                 if (!alias.googleAPIKey().isNull()) {
                     return alias.googleAPIKey().getValue();
                 } else {

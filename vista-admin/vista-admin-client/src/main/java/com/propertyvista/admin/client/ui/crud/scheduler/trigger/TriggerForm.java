@@ -72,11 +72,11 @@ public class TriggerForm extends AdminEntityForm<Trigger> {
         get(proto().populationType()).addValueChangeHandler(new ValueChangeHandler<TriggerPmcSelectionType>() {
             @Override
             public void onValueChange(ValueChangeEvent<TriggerPmcSelectionType> event) {
-                get(proto().population()).setVisible(event.getValue() != TriggerPmcSelectionType.AllPmc);
+                get(proto().population()).setVisible(event.getValue() != TriggerPmcSelectionType.allPmc);
                 switch (event.getValue()) {
-                case AllPmc:
+                case allPmc:
                     break;
-                case Manual:
+                case manual:
                     break;
                 }
             }
@@ -89,6 +89,6 @@ public class TriggerForm extends AdminEntityForm<Trigger> {
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
 
-        get(proto().population()).setVisible(!getValue().populationType().isNull() && getValue().populationType().getValue() != TriggerPmcSelectionType.AllPmc);
+        get(proto().population()).setVisible(!getValue().populationType().isNull() && getValue().populationType().getValue() != TriggerPmcSelectionType.allPmc);
     }
 }

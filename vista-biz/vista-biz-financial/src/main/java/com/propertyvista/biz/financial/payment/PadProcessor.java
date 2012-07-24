@@ -233,10 +233,10 @@ public class PadProcessor {
         AggregatedTransfer at = EntityFactory.create(AggregatedTransfer.class);
         at.padReconciliationSummaryKey().setValue(summary.getPrimaryKey());
         switch (summary.reconciliationStatus().getValue()) {
-        case Hold:
+        case HOLD:
             at.status().setValue(AggregatedTransferStatus.Hold);
             break;
-        case Paid:
+        case PAID:
             at.status().setValue(AggregatedTransferStatus.Paid);
             break;
         }
@@ -296,16 +296,16 @@ public class PadProcessor {
             }
 
             switch (debitRecord.reconciliationStatus().getValue()) {
-            case Processed:
+            case PROCESSED:
                 reconciliationClearedPayment(at, debitRecord, paymentRecord);
                 break;
-            case Rejected:
+            case REJECTED:
                 reconciliationRejectPayment(at, debitRecord, paymentRecord);
                 break;
-            case Returned:
+            case RETURNED:
                 reconciliationReturnedPayment(at, debitRecord, paymentRecord);
                 break;
-            case Duplicate:
+            case DUPLICATE:
                 // TODO What todo ?
             default:
                 throw new IllegalArgumentException("reconciliationStatus:" + debitRecord.reconciliationStatus().getValue());

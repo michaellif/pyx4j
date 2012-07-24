@@ -145,7 +145,7 @@ public class PmcProcessDispatcherJob implements Job {
         allPmcCriteria.add(PropertyCriterion.eq(allPmcCriteria.proto().status(), PmcStatus.Active));
 
         switch (run.trigger().populationType().getValue()) {
-        case AllPmc:
+        case allPmc:
             for (Key pmcKey : Persistence.service().queryKeys(allPmcCriteria)) {
                 RunData runData = EntityFactory.create(RunData.class);
                 runData.execution().set(run);
@@ -154,7 +154,7 @@ public class PmcProcessDispatcherJob implements Job {
                 Persistence.service().persist(runData);
             }
             break;
-        case Except:
+        case except:
             HashSet<Key> except = new HashSet<Key>();
             for (TriggerPmc triggerPmc : run.trigger().population()) {
                 except.add(triggerPmc.pmc().getPrimaryKey());
@@ -169,7 +169,7 @@ public class PmcProcessDispatcherJob implements Job {
                 }
             }
             break;
-        case Manual:
+        case manual:
             for (TriggerPmc triggerPmc : run.trigger().population()) {
                 RunData runData = EntityFactory.create(RunData.class);
                 runData.execution().set(run);

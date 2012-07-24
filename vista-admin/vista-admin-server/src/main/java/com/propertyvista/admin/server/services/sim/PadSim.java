@@ -159,7 +159,7 @@ public class PadSim {
     private void updateReconciliation(PadSimFile padFile) {
         for (PadSimBatch padBatch : padFile.batches()) {
             if (padBatch.reconciliationStatus().isNull()) {
-                padBatch.reconciliationStatus().setValue(MerchantReconciliationStatus.Paid);
+                padBatch.reconciliationStatus().setValue(MerchantReconciliationStatus.PAID);
             }
             SummaryTotal gross = new SummaryTotal();
             SummaryTotal rejects = new SummaryTotal();
@@ -171,16 +171,16 @@ public class PadSim {
                         record.paymentDate().setValue(CaledonPadUtils.formatDate(Persistence.service().getTransactionSystemTime()));
                     }
                     if (record.reconciliationStatus().isNull()) {
-                        record.reconciliationStatus().setValue(TransactionReconciliationStatus.Processed);
+                        record.reconciliationStatus().setValue(TransactionReconciliationStatus.PROCESSED);
                     }
                     switch (record.reconciliationStatus().getValue()) {
-                    case Processed:
+                    case PROCESSED:
                         gross.add(record.amount().getValue());
                         break;
-                    case Rejected:
+                    case REJECTED:
                         rejects.add(record.amount().getValue());
                         break;
-                    case Returned:
+                    case RETURNED:
                         returns.add(record.amount().getValue());
                         break;
                     }

@@ -69,11 +69,11 @@ public class VistaAntiBot extends ReCaptchaAntiBot {
                 return "birchwoodsoftwaregroup.com";
             } else {
                 switch (target) {
-                case VistaCrm:
+                case vistaCrm:
                     return "propertyvista.com";
-                case ProspectPortal:
+                case prospectPortal:
                     return "prospectportalsite.com";
-                case ResidentPortal:
+                case residentPortal:
                     return "residentportalsite.com";
                 default:
                     return "propertyvista.com";
