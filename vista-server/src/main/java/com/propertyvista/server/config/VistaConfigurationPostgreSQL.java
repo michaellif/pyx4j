@@ -14,7 +14,8 @@
 package com.propertyvista.server.config;
 
 import com.pyx4j.entity.rdb.dialect.NamingConvention;
-import com.pyx4j.entity.rdb.dialect.NamingConventionOracle;
+
+import com.propertyvista.config.VistaDBNamingConvention;
 
 public class VistaConfigurationPostgreSQL extends com.pyx4j.entity.rdb.cfg.ConfigurationPostgreSQL {
 
@@ -65,6 +66,6 @@ public class VistaConfigurationPostgreSQL extends com.pyx4j.entity.rdb.cfg.Confi
 
     @Override
     public NamingConvention namingConvention() {
-        return new NamingConventionOracle(63, null, false, false, '$');
+        return new VistaDBNamingConvention();
     }
 }

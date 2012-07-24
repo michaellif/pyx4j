@@ -19,6 +19,9 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.server.contexts.Context;
 import com.pyx4j.server.contexts.InheritableUserContext;
@@ -28,6 +31,8 @@ import com.pyx4j.server.contexts.NamespaceManager;
 import com.propertyvista.domain.VistaNamespace;
 
 public class TaskRunner {
+
+    private static final Logger log = LoggerFactory.getLogger(TaskRunner.class);
 
     public static <T> T runInAdminNamespace(final Callable<T> task) {
         return runInTargetNamespace(VistaNamespace.adminNamespace, task);
@@ -59,7 +64,6 @@ public class TaskRunner {
         final InheritableUserContext inheritableUserContext = Context.getInheritableUserContext();
         ExecutorService executorService = Executors.newSingleThreadExecutor();
         try {
-
             Future<T> futureResult = executorService.submit(new Callable<T>() {
                 @Override
                 public T call() throws Exception {
@@ -70,14 +74,21 @@ public class TaskRunner {
                             NamespaceManager.setNamespace(targetNamespace);
                         }
                         Persistence.service().startTransaction();
-                        T rv = task.call();
-                        success = true;
-                        return rv;
+                        try {
+                            T rv = task.call();
+                            success = true;
+                            return rv;
+                        } finally {
+                            if (!success) {
+                                try {
+                                    Persistence.service().rollback();
+                                } catch (Throwable e) {
+                                    log.error("error during task {} rollback", task, e);
+                                }
+                            }
+                        }
                     } finally {
                         try {
-                            if (!success) {
-                                Persistence.service().rollback();
-                            }
                             Persistence.service().endTransaction();
                         } finally {
                             Lifecycle.endContext();

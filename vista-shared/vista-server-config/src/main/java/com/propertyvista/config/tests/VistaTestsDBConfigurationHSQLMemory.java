@@ -15,6 +15,9 @@ package com.propertyvista.config.tests;
 
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.rdb.cfg.ConfigurationHSQL;
+import com.pyx4j.entity.rdb.dialect.NamingConvention;
+
+import com.propertyvista.config.VistaDBNamingConvention;
 
 public class VistaTestsDBConfigurationHSQLMemory extends ConfigurationHSQL {
 
@@ -26,6 +29,11 @@ public class VistaTestsDBConfigurationHSQLMemory extends ConfigurationHSQL {
     @Override
     public MultitenancyType getMultitenancyType() {
         return MultitenancyType.SharedSchema;
+    }
+
+    @Override
+    public int initialPoolSize() {
+        return 1;
     }
 
     @Override
@@ -69,5 +77,10 @@ public class VistaTestsDBConfigurationHSQLMemory extends ConfigurationHSQL {
         } else {
             return super.unreturnedConnectionBackgroundProcessTimeout();
         }
+    }
+
+    @Override
+    public NamingConvention namingConvention() {
+        return new VistaDBNamingConvention(true);
     }
 }

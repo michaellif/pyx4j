@@ -1,0 +1,35 @@
+/*
+ * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
+ *
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * you entered into with Property Vista Software Inc.
+ *
+ * This notice and attribution to Property Vista Software Inc. may not be removed.
+ *
+ * Created on 2012-07-23
+ * @author vlads
+ * @version $Id$
+ */
+package com.propertyvista.config;
+
+import com.pyx4j.entity.rdb.dialect.NamingConventionOracle;
+import com.pyx4j.entity.rdb.dialect.ShortWords;
+
+public class VistaDBNamingConvention extends NamingConventionOracle {
+
+    public VistaDBNamingConvention() {
+        this(false);
+    }
+
+    public VistaDBNamingConvention(boolean hsql) {
+        super(63, shortWords(), false, true, hsql ? '_' : '$');
+    }
+
+    private static ShortWords shortWords() {
+        ShortWords shortWords = new ShortWords();
+        shortWords.add("billing_billing_cycle_billing_cycle_start_date_building_billing_type_idx", "billing_cycle_start_date_building_type_idx");
+        return shortWords;
+    }
+
+}

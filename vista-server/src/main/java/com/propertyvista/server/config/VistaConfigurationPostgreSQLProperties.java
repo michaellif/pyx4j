@@ -18,9 +18,10 @@ import java.util.Map;
 
 import com.pyx4j.entity.rdb.cfg.ConfigurationPostgreSQLProperties;
 import com.pyx4j.entity.rdb.dialect.NamingConvention;
-import com.pyx4j.entity.rdb.dialect.NamingConventionOracle;
 import com.pyx4j.essentials.j2se.J2SEServiceConnector;
 import com.pyx4j.essentials.j2se.J2SEServiceConnector.Credentials;
+
+import com.propertyvista.config.VistaDBNamingConvention;
 
 public class VistaConfigurationPostgreSQLProperties extends ConfigurationPostgreSQLProperties {
 
@@ -36,6 +37,6 @@ public class VistaConfigurationPostgreSQLProperties extends ConfigurationPostgre
 
     @Override
     public NamingConvention namingConvention() {
-        return new NamingConventionOracle(63, null, false, false, '$');
+        return new VistaDBNamingConvention();
     }
 }

@@ -15,7 +15,8 @@ package com.propertyvista.server.config;
 
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.rdb.dialect.NamingConvention;
-import com.pyx4j.entity.rdb.dialect.NamingConventionOracle;
+
+import com.propertyvista.config.VistaDBNamingConvention;
 
 public class VistaConfigurationMySQL extends com.pyx4j.entity.rdb.cfg.ConfigurationMySQL {
 
@@ -76,7 +77,7 @@ public class VistaConfigurationMySQL extends com.pyx4j.entity.rdb.cfg.Configurat
 
     @Override
     public NamingConvention namingConvention() {
-        return new NamingConventionOracle(63, null, false, false, '$');
+        return new VistaDBNamingConvention();
     }
 
     @Override

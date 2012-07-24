@@ -17,6 +17,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Format;
+import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
@@ -37,13 +38,16 @@ public interface BillingCycle extends IEntity {
     @Owner
     @Detached
     @JoinColumn
+    @Indexed(group = "DBT,2", uniqueConstraint = true)
     Building building();
 
     @ReadOnly
     @ToString(index = 1)
+    @Indexed(group = "DBT,3")
     BillingType billingType();
 
     @ReadOnly
+    @Indexed(group = "DBT,1")
     IPrimitive<LogicalDate> billingCycleStartDate();
 
     @ReadOnly

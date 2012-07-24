@@ -15,6 +15,9 @@ package com.propertyvista.config.tests;
 
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.rdb.cfg.ConfigurationHSQL;
+import com.pyx4j.entity.rdb.dialect.NamingConvention;
+
+import com.propertyvista.config.VistaDBNamingConvention;
 
 public class VistaTestsDBConfigurationHSQLFile extends ConfigurationHSQL {
 
@@ -69,5 +72,10 @@ public class VistaTestsDBConfigurationHSQLFile extends ConfigurationHSQL {
         } else {
             return super.unreturnedConnectionBackgroundProcessTimeout();
         }
+    }
+
+    @Override
+    public NamingConvention namingConvention() {
+        return new VistaDBNamingConvention(true);
     }
 }
