@@ -176,14 +176,10 @@ public class LeaseFacadeImpl implements LeaseFacade {
         PolicyNode node = lease.unit().building();
 
         // set selected service:
-        BillableItem billableItem = createBillableItem(serviceItem);
+        BillableItem billableItem = createBillableItem(serviceItem, node);
         lease.version().leaseProducts().serviceItem().set(billableItem);
         Persistence.service().retrieve(lease.billingAccount().deposits());
         lease.billingAccount().deposits().clear();
-        List<Deposit> deposits = createBillableItemDeposits(billableItem, node);
-        if (deposits != null) {
-            billableItem.deposits().addAll(deposits);
-        }
 
         if (bugNo1549) {
             DataDump.dumpToDirectory("lease-bug", "serviceItem", lease);
@@ -208,12 +204,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
                 Persistence.service().retrieve(feature.version().items());
                 for (ProductItem item : feature.version().items()) {
                     if (item.isDefault().isBooleanTrue()) {
-                        billableItem = createBillableItem(item);
-                        lease.version().leaseProducts().featureItems().add(billableItem);
-                        deposits = createBillableItemDeposits(billableItem, node);
-                        if (deposits != null) {
-                            billableItem.deposits().addAll(deposits);
-                        }
+                        lease.version().leaseProducts().featureItems().add(createBillableItem(item, node));
                     }
                 }
             }
@@ -223,7 +214,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
     }
 
     @Override
-    public BillableItem createBillableItem(ProductItem itemId) {
+    public BillableItem createBillableItem(ProductItem itemId, PolicyNode node) {
         ProductItem item = Persistence.secureRetrieve(ProductItem.class, itemId.getPrimaryKey());
         assert item != null;
 
@@ -231,12 +222,13 @@ public class LeaseFacadeImpl implements LeaseFacade {
         newItem.item().set(item);
         newItem.agreedPrice().setValue(item.price().getValue());
 
-        return newItem;
-    }
+        // set policed deposits:
+        List<Deposit> deposits = ServerSideFactory.create(DepositFacade.class).createRequiredDeposits(newItem, node);
+        if (deposits != null) {
+            newItem.deposits().addAll(deposits);
+        }
 
-    @Override
-    public List<Deposit> createBillableItemDeposits(BillableItem item, PolicyNode node) {
-        return ServerSideFactory.create(DepositFacade.class).createRequiredDeposits(item, node);
+        return newItem;
     }
 
     @Override

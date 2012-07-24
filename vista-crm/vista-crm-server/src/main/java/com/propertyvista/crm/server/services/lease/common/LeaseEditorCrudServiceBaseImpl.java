@@ -106,7 +106,7 @@ public abstract class LeaseEditorCrudServiceBaseImpl<DTO extends LeaseDTO> exten
 
     @Override
     public void createBillableItem(AsyncCallback<BillableItem> callback, ProductItem productItemId, DTO currentValue) {
-        callback.onSuccess(ServerSideFactory.create(LeaseFacade.class).createBillableItem(productItemId));
+        callback.onSuccess(ServerSideFactory.create(LeaseFacade.class).createBillableItem(productItemId, currentValue.unit().building()));
     }
 
     @Override

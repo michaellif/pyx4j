@@ -28,7 +28,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
-import java.util.List;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
@@ -399,17 +398,11 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         for (Feature feature : service.features()) {
             if (featureType.equals(feature.version().type().getValue()) && feature.version().items().size() != 0) {
                 LeaseFacade leaseFacade = ServerSideFactory.create(LeaseFacade.class);
-                BillableItem billableItem = leaseFacade.createBillableItem(feature.version().items().get(0));
+                BillableItem billableItem = leaseFacade.createBillableItem(feature.version().items().get(0), draftLease.unit().building());
 
                 billableItem.effectiveDate().setValue(effectiveDate);
                 billableItem.expirationDate().setValue(expirationDate);
                 draftLease.version().leaseProducts().featureItems().add(billableItem);
-
-                List<Deposit> deposits = leaseFacade.createBillableItemDeposits(billableItem, draftLease.unit().building());
-                if (deposits != null) {
-                    Persistence.service().retrieve(draftLease.billingAccount().deposits());
-                    billableItem.deposits().addAll(deposits);
-                }
 
                 draftLease.saveAction().setValue(saveAction);
                 leaseFacade.persist(draftLease);
