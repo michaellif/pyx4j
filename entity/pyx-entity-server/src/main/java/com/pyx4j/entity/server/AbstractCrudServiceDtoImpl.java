@@ -86,13 +86,11 @@ public abstract class AbstractCrudServiceDtoImpl<E extends IEntity, DTO extends 
     }
 
     @Override
-    public void create(AsyncCallback<DTO> callback, DTO dto) {
+    public void create(AsyncCallback<Key> callback, DTO dto) {
         E entity = createDBO(dto);
         create(entity, dto);
         Persistence.service().commit();
-        DTO dtoReturn = createDTO(entity);
-        enhanceRetrieved(entity, dtoReturn);
-        callback.onSuccess(dtoReturn);
+        callback.onSuccess(entity.getPrimaryKey());
     }
 
     protected E retrieveForSave(DTO dto) {
@@ -104,15 +102,13 @@ public abstract class AbstractCrudServiceDtoImpl<E extends IEntity, DTO extends 
     }
 
     @Override
-    public void save(AsyncCallback<DTO> callback, DTO dto) {
+    public void save(AsyncCallback<Key> callback, DTO dto) {
         E entity = retrieveForSave(dto);
         retrievedSingle(entity, null);
         copyDTOtoDBO(dto, entity);
         save(entity, dto);
         Persistence.service().commit();
-        DTO dtoReturn = createDTO(entity);
-        enhanceRetrieved(entity, dtoReturn);
-        callback.onSuccess(dtoReturn);
+        callback.onSuccess(entity.getPrimaryKey());
     }
 
 }

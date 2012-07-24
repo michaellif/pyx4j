@@ -251,10 +251,10 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
     public void trySave(final boolean apply) {
 
         if (isNewEntity()) {
-            service.create(new AsyncCallback<E>() {
+            service.create(new AsyncCallback<Key>() {
                 @Override
-                public void onSuccess(E result) {
-                    ReferenceDataManager.created(result);
+                public void onSuccess(Key result) {
+                    ReferenceDataManager.invalidate(entityClass);
                     onSaved(result);
                     if (apply) {
                         onApplySuccess(result);
@@ -269,10 +269,10 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
                 }
             }, view.getValue());
         } else {
-            service.save(new AsyncCallback<E>() {
+            service.save(new AsyncCallback<Key>() {
                 @Override
-                public void onSuccess(E result) {
-                    ReferenceDataManager.update(result);
+                public void onSuccess(Key result) {
+                    ReferenceDataManager.invalidate(entityClass);
                     onSaved(result);
                     if (apply) {
                         onApplySuccess(result);
@@ -289,21 +289,18 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
         }
     }
 
-    protected void onSaved(E result) {
+    protected void onSaved(Key result) {
     }
 
-    protected void onApplySuccess(E result) {
+    protected void onApplySuccess(Key result) {
         view.reset();
-        if (isNewEntity()) { // switch new item to regular editing after successful apply!..
-            goToEditor(result.getPrimaryKey());
-        } else {
-            onPopulateSuccess(result);
-        }
+        // switch new item to regular editing after successful apply!..
+        goToEditor(result);
     }
 
-    protected void onSaveSuccess(E result) {
+    protected void onSaveSuccess(Key result) {
         view.reset();
-        goToViewer(result.getPrimaryKey());
+        goToViewer(result);
     }
 
     protected void onSaveFail(Throwable caught) {

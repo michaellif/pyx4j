@@ -36,10 +36,10 @@ public interface AbstractCrudService<E extends IEntity> extends AbstractListServ
 
     }
 
-    public void create(AsyncCallback<E> callback, E editableEntity);
-
     public void retrieve(AsyncCallback<E> callback, Key entityId, RetrieveTraget retrieveTraget);
 
+    public void create(AsyncCallback<Key> callback, E editableEntity);
+
     @ServiceExecution(waitCaption = "Saving...")
-    public void save(AsyncCallback<E> callback, E editableEntity);
+    public void save(AsyncCallback<Key> callback, E editableEntity);
 }
