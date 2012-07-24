@@ -182,7 +182,7 @@ public class PaymentForm extends CEntityDecoratableForm<PaymentRecordDTO> {
                 paymentMethodEditor.setVisible(event.getValue() != null);
                 paymentMethodEditorSeparator.setVisible(event.getValue() != null);
                 if (event.getValue() != null) {
-                    paymentMethodEditor.setValue(event.getValue(), false);
+                    paymentMethodEditor.populate(event.getValue());
                 }
             }
         });
