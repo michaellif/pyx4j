@@ -14,9 +14,13 @@
 package com.propertyvista.config.tests;
 
 import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.entity.rdb.RDBUtils;
 import com.pyx4j.entity.rdb.cfg.Configuration.DatabaseType;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.server.contexts.NamespaceManager;
 import com.pyx4j.server.mail.Mail;
+
+import com.propertyvista.domain.VistaNamespace;
 
 public class VistaTestDBSetup {
 
@@ -35,6 +39,13 @@ public class VistaTestDBSetup {
             initOnce = new VistaTestsServerSideConfiguration(databaseType);
             ServerSideConfiguration.setInstance(initOnce);
             Mail.getMailService().setDisabled(true);
+            if (databaseType == DatabaseType.PostgreSQL) {
+                Persistence.service();
+                NamespaceManager.setNamespace(VistaNamespace.adminNamespace);
+                RDBUtils.ensureNamespace();
+                NamespaceManager.setNamespace(VistaTestsNamespaceResolver.demoNamespace);
+                RDBUtils.ensureNamespace();
+            }
         }
         NamespaceManager.setNamespace(VistaTestsNamespaceResolver.demoNamespace);
     }
