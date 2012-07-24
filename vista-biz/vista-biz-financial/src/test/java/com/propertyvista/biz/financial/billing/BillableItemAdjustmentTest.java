@@ -20,8 +20,6 @@
  */
 package com.propertyvista.biz.financial.billing;
 
-import org.junit.Ignore;
-
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
 
@@ -32,7 +30,6 @@ import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.Type;
 
-@Ignore
 public class BillableItemAdjustmentTest extends FinancialTestBase {
 
     @Override
