@@ -79,7 +79,7 @@ public abstract class AddressStructuredEditorImpl<A extends AddressStructured> e
         row = 0;
 
         if (showUnit) {
-            right.setWidget(row++, 0, new DecoratorBuilder(inject(proto().suiteNumber()), 10).build());
+            right.setWidget(row++, 0, new DecoratorBuilder(inject(proto().suiteNumber()), 5).build());
         }
 
         right.setWidget(row++, 0, new DecoratorBuilder(inject(proto().streetNumber()), 5).build());
