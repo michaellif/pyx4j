@@ -38,6 +38,7 @@ import com.propertyvista.common.client.ui.components.VersionedLister;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
+import com.propertyvista.domain.tenant.lease.Lease.Term;
 import com.propertyvista.dto.LeaseDTO;
 
 public class LeaseLister extends VersionedLister<LeaseDTO> {
@@ -97,6 +98,7 @@ public class LeaseLister extends VersionedLister<LeaseDTO> {
     private LeaseDTO createNewLease(Service.ServiceType leaseType, BigDecimal balance) {
         LeaseDTO newLease = EntityFactory.create(LeaseDTO.class);
         newLease.type().setValue(leaseType);
+        newLease.term().setValue(Term.FixedEx);
         newLease.paymentFrequency().setValue(PaymentFrequency.Monthly);
         newLease.version().status().setValue(Lease.Status.Created);
         newLease.billingAccount().carryforwardBalance().setValue(balance);

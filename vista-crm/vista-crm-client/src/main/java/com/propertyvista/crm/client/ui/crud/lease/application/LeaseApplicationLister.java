@@ -28,6 +28,7 @@ import com.pyx4j.widgets.client.dialog.OkCancelOption;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
+import com.propertyvista.domain.tenant.lease.Lease.Term;
 import com.propertyvista.dto.LeaseApplicationDTO;
 import com.propertyvista.misc.VistaTODO;
 
@@ -88,6 +89,7 @@ public class LeaseApplicationLister extends ListerBase<LeaseApplicationDTO> {
     private LeaseApplicationDTO createNewLease(Service.ServiceType leaseType) {
         LeaseApplicationDTO newLease = EntityFactory.create(LeaseApplicationDTO.class);
         newLease.type().setValue(leaseType);
+        newLease.term().setValue(Term.FixedEx);
         newLease.paymentFrequency().setValue(PaymentFrequency.Monthly);
         newLease.version().status().setValue(Lease.Status.Application);
         return newLease;
