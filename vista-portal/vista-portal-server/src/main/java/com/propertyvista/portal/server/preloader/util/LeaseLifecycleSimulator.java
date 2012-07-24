@@ -22,7 +22,6 @@ import java.util.GregorianCalendar;
 import java.util.PriorityQueue;
 import java.util.Random;
 
-
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
@@ -216,11 +215,6 @@ public class LeaseLifecycleSimulator {
                 System.out.println("" + now() + " approved lease: " + lease.leaseId().getValue() + " " + lease.leaseFrom().getValue() + " - "
                         + lease.leaseTo().getValue());
                 System.out.println("***");
-            }
-
-            if (!VistaTODO.removedForProduction) {
-                BillingFacade billingFacade = ServerSideFactory.create(BillingFacade.class);
-                billingFacade.confirmBill(billingFacade.getLatestBill(lease));
             }
 
             queueEvent(lease.leaseFrom().getValue(), new Activate(lease));

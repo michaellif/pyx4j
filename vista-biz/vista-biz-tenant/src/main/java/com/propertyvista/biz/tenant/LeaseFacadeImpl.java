@@ -411,12 +411,6 @@ public class LeaseFacadeImpl implements LeaseFacade {
         Bill bill = ServerSideFactory.create(BillingFacade.class).runBilling(lease);
         if (bill.billStatus().getValue() != BillStatus.Failed) {
             ServerSideFactory.create(BillingFacade.class).confirmBill(bill);
-
-            /// TODO remove this commit this is Hack
-            log.warn("TODO remove this commit this is Hack");
-            if (true) {
-                Persistence.service().commit();
-            }
         } else {
             throw new UserRuntimeException(i18n.tr("This lease cannot be approved due to failed first time bill"));
         }
