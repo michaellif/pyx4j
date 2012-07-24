@@ -174,11 +174,9 @@ msgstr "60- 90 Días"
 #: com/propertyvista/pmsite/server/panels/InquiryPanel.java:143
 #, java-format
 msgid ""
-"<b>{0}</b> - {1} Bed, {2} Bath, {3,choice,null#price not "
-"available|!null#from ${3}}"
+"<b>{0}</b> - {1} Bed, {2} Bath, {3,choice,null#price not available|!null#from ${3}}"
 msgstr ""
-"<b>{0}</b> - {1} Cama, {2} Baño, {3,opción,nula#precio no "
-"disponible|!nulo#de ${3}}"
+"<b>{0}</b> - {1} Cama, {2} Baño, {3,choice,null#precio no disponible|!null#de ${3}}"
 
 #: com/propertyvista/portal/server/preloader/policy/subpreloaders/EmailTemplatesPolicyPreloader.java:98
 #: com/propertyvista/portal/server/preloader/policy/util/PolicyPreloader.java:204
@@ -9671,20 +9669,16 @@ msgstr "aaaa"
 #: com/propertyvista/portal/rpc/portal/PropertySearchCriteria.java:73
 #, java-format
 msgid ""
-"{0,choice,null#Any|0#Less than ${1}|0<{1,choice,null#Over ${0}|0<${0} - "
-"${1}}}"
+"{0,choice,null#Any|0#Less than ${1}|0<{1,choice,null#Over ${0}|0<${0} - ${1}}}"
 msgstr ""
-"{0, elección, null # Todo | 0 # Menos de $ {1} | 0 &lt;{1, elección, null # "
-"Más de $ {0} | 0 &lt;$ {0} - $ {1}}}"
+"{0,choice,null#Todo|0#Menos de ${1}|0<{1,choice,null#Más de ${0}|0<${0} - ${1}}}"
 
 #. Number Of Bedrooms
 #. java-format
 #: com/propertyvista/portal/rpc/portal/PropertySearchCriteria.java:106
 #, java-format
 msgid "{0,choice,null#Any|0#Less than {1}|0<{0}{1,choice,null# and more|0<}}"
-msgstr ""
-"{0, elección, null # Todo | 0 # menos de {1} | 0 &lt;{0} {1, elección, null "
-"# y más | 0 &lt;}}"
+msgstr "{0,choice,null#Todo|0#Menos de {1}|0<{0}{1,choice,null# y más|0<}}"
 
 #. java-format
 #: com/propertyvista/domain/policy/policies/domain/IdentificationDocument.java:0
@@ -9703,10 +9697,8 @@ msgstr ""
 #. java-format
 #: com/propertyvista/pmsite/server/panels/AptListPanel.java:121
 #, java-format
-msgid ""
-"{0} Bed, {1} Bath, {2,choice,null#price not available|!null#from $ {2}}"
-msgstr ""
-"{0} Cama, {1} Baño, {2,opción, nula,l#precio no disponible|!nulol#de $ {2}}"
+msgid "{0} Bed, {1} Bath, {2,choice,null#price not available|!null#from $ {2}}"
+msgstr "{0} Cama, {1} Baño, {2,choice,null#precio no disponible|!nulll#de $ {2}}"
 
 #. java-format
 #: com/propertyvista/crm/server/openapi/model/util/Converter.java:219
@@ -9791,7 +9783,7 @@ msgstr "{0}; Subir nuevo archivo"
 #: com/propertyvista/domain/property/PropertyPhone.java:0
 #, java-format
 msgid "{0}{1,choice,null#|!null# ex.{1}}"
-msgstr "{0} {1, elección, null # | ¡. Null # ex {1}}"
+msgstr "{0}{1,choice,null#|!null# ex.{1}}"
 
 #. java-format
 #: com/pyx4j/essentials/server/preloader/AddressInfo.java:0
