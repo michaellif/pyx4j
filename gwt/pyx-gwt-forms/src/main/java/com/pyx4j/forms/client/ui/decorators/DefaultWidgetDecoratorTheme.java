@@ -88,6 +88,7 @@ public class DefaultWidgetDecoratorTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", StyleName.WidgetDecoratorComponentHolder);
+        style.addProperty("overflow", "hidden");
         addStyle(style);
 
         style = new Style(".", StyleName.WidgetDecoratorComponent);
