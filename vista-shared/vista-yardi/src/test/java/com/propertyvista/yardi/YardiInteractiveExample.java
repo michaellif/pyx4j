@@ -24,6 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.entity.rdb.cfg.Configuration.DatabaseType;
 
 import com.propertyvista.config.tests.VistaTestsServerSideConfiguration;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -46,7 +47,7 @@ public class YardiInteractiveExample {
         yp.setYardiPropertyId(YardiConstants.YARDI_PROPERTY_ID);
 
         // init db
-        VistaTestsServerSideConfiguration conf = new VistaTestsServerSideConfiguration(true);
+        VistaTestsServerSideConfiguration conf = new VistaTestsServerSideConfiguration(DatabaseType.MySQL);
         ServerSideConfiguration.setInstance(conf);
 
         // execute different actions

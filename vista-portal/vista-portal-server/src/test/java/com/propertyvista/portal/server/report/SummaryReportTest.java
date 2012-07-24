@@ -19,6 +19,7 @@ import org.junit.After;
 import org.junit.Test;
 
 import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.entity.rdb.cfg.Configuration.DatabaseType;
 import com.pyx4j.entity.report.test.ReportsTestBase;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -49,7 +50,7 @@ public class SummaryReportTest extends ReportsTestBase {
 
         boolean realTimeDevelopment = ServerSideConfiguration.isStartedUnderEclipse();
         if (realTimeDevelopment) {
-            ServerSideConfiguration.setInstance(new VistaTestsServerSideConfiguration(true));
+            ServerSideConfiguration.setInstance(new VistaTestsServerSideConfiguration(DatabaseType.MySQL));
         } else {
             VistaTestDBSetup.init();
             new VistaDataPreloaders(VistaDevPreloadConfig.createTest()).preloadAll();

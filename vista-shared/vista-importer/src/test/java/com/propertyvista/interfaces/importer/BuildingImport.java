@@ -22,6 +22,7 @@ import org.xml.sax.InputSource;
 
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.entity.rdb.cfg.Configuration.DatabaseType;
 import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.config.tests.VistaTestsServerSideConfiguration;
@@ -36,7 +37,7 @@ public class BuildingImport {
     public static void main(String[] args) throws Exception {
         long start = System.currentTimeMillis();
 
-        ServerSideConfiguration.setInstance(new VistaTestsServerSideConfiguration(true));
+        ServerSideConfiguration.setInstance(new VistaTestsServerSideConfiguration(DatabaseType.MySQL));
         NamespaceManager.setNamespace("star");
 
         String fileName;

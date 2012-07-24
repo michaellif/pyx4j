@@ -14,6 +14,7 @@
 package com.propertyvista.config.tests;
 
 import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.entity.rdb.cfg.Configuration.DatabaseType;
 import com.pyx4j.server.contexts.NamespaceManager;
 import com.pyx4j.server.mail.Mail;
 
@@ -23,13 +24,15 @@ public class VistaTestDBSetup {
 
     public static synchronized void init() {
         if (initOnce == null) {
-            boolean testOnMySQL = false;
+            DatabaseType databaseType = DatabaseType.HSQLDB;
+            //databaseType = DatabaseType.MySQL;
+            //databaseType = DatabaseType.PostgreSQL;
 
             // Fail safe if somebody committed the file by mistake 
             if (System.getProperty("bamboo.buildNumber") != null) {
-                testOnMySQL = false;
+                databaseType = DatabaseType.HSQLDB;
             }
-            initOnce = new VistaTestsServerSideConfiguration(testOnMySQL);
+            initOnce = new VistaTestsServerSideConfiguration(databaseType);
             ServerSideConfiguration.setInstance(initOnce);
             Mail.getMailService().setDisabled(true);
         }

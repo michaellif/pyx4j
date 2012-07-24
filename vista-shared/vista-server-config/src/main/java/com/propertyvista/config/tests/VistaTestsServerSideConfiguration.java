@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.config.server.IPersistenceConfiguration;
 import com.pyx4j.config.server.NamespaceResolver;
 import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.entity.rdb.cfg.Configuration.DatabaseType;
 import com.pyx4j.essentials.server.AbstractAntiBot;
 import com.pyx4j.essentials.server.ReCaptchaAntiBot;
 import com.pyx4j.log4j.LoggerConfig;
@@ -34,10 +35,10 @@ public class VistaTestsServerSideConfiguration extends AbstractVistaServerSideCo
 
     private final static Logger log = LoggerFactory.getLogger(VistaTestsServerSideConfiguration.class);
 
-    private final boolean testOnMySQL;
+    private final DatabaseType databaseType;
 
-    public VistaTestsServerSideConfiguration(boolean testOnMySQL) {
-        this.testOnMySQL = testOnMySQL;
+    public VistaTestsServerSideConfiguration(DatabaseType databaseType) {
+        this.databaseType = databaseType;
     }
 
     @Override
@@ -47,8 +48,10 @@ public class VistaTestsServerSideConfiguration extends AbstractVistaServerSideCo
 
     @Override
     public IPersistenceConfiguration getPersistenceConfiguration() {
-        if (testOnMySQL) {
+        if (databaseType == DatabaseType.MySQL) {
             return new VistaTestsDBConfigurationMySQL();
+        } else if (databaseType == DatabaseType.PostgreSQL) {
+            return new VistaTestsDBConfigurationPostgreSQL();
         } else {
             boolean hsqlFiles = false;
             if (hsqlFiles) {
