@@ -307,6 +307,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
 
     protected Bill approveExistingLease(boolean printBill) {
         ServerSideFactory.create(LeaseFacade.class).approveExistingLease(retrieveLease());
+        Persistence.service().commit();
         Bill bill = ServerSideFactory.create(BillingFacade.class).getLatestBill(retrieveLease());
         if (printBill) {
             printBill(bill);
