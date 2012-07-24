@@ -64,7 +64,6 @@ public class GeoLocationEditor extends CEntityDecoratableForm<GeoLocation> {
                 return (value == null) || (value >= 0 && value <= 90) ? null
                         : new ValidationError(component, i18n.tr("Latitude may be in range [0-90] degree"));
             }
-
         });
 
         get(proto().longitude()).addValueValidator(new EditableValueValidator<Double>() {
@@ -74,7 +73,6 @@ public class GeoLocationEditor extends CEntityDecoratableForm<GeoLocation> {
                 return (value == null) || (value >= 0 && value <= 180) ? null : new ValidationError(component, i18n
                         .tr("Longitude may be in range [0-180] degree"));
             }
-
         });
 
         get(proto().latitudeType()).addValueValidator(new EditableValueValidator<LatitudeType>() {
@@ -84,7 +82,6 @@ public class GeoLocationEditor extends CEntityDecoratableForm<GeoLocation> {
                 CComponent<Double, ?> latitude = get(proto().latitude());
                 return (value != null || latitude.getValue() == null) ? null : new ValidationError(component, i18n.tr("This field is Mandatory"));
             }
-
         });
 
         get(proto().longitudeType()).addValueValidator(new EditableValueValidator<LongitudeType>() {
@@ -94,7 +91,6 @@ public class GeoLocationEditor extends CEntityDecoratableForm<GeoLocation> {
                 CComponent<Double, ?> longitude = get(proto().longitude());
                 return (value != null || longitude.getValue() == null) ? null : new ValidationError(component, i18n.tr("This field is Mandatory"));
             }
-
         });
 
         get(proto().longitude()).addValueChangeHandler(new RevalidationTrigger<Double>(get(proto().longitudeType())));
@@ -102,7 +98,6 @@ public class GeoLocationEditor extends CEntityDecoratableForm<GeoLocation> {
 
         ((CTextFieldBase) get(proto().latitude())).setFormat(new GeoNumberFormat());
         ((CTextFieldBase) get(proto().longitude())).setFormat(new GeoNumberFormat());
-
     }
 
     public static class GeoNumberFormat implements IFormat<Double> {
