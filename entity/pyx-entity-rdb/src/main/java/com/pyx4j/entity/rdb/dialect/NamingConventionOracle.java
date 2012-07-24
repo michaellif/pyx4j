@@ -71,6 +71,12 @@ public class NamingConventionOracle implements NamingConvention {
     }
 
     protected String makeName(String word, boolean useShortForms) {
+        if (useShortForms) {
+            String shortVersion = shortForm(word);
+            if (!shortVersion.equals(word)) {
+                return shortVersion;
+            }
+        }
         StringBuilder b = new StringBuilder();
         StringBuilder currentWord = new StringBuilder();
         boolean wordStart = true;
