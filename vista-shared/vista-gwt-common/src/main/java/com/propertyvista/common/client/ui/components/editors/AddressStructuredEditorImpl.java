@@ -15,6 +15,7 @@ package com.propertyvista.common.client.ui.components.editors;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.commons.EqualsHelper;
@@ -56,49 +57,55 @@ public abstract class AddressStructuredEditorImpl<A extends AddressStructured> e
 
     @SuppressWarnings("unchecked")
     protected FormFlexPanel internalCreateContent() {
-        FormFlexPanel main = new FormFlexPanel();
-        final VerticalPanel county = new VerticalPanel();
-
+        FormFlexPanel left = new FormFlexPanel();
         int row = 0;
-        int column = 0;
+
         final CComponent<Country, ?> country = (CComponent<Country, ?>) inject(proto().country());
-        main.setWidget(row++, column, new DecoratorBuilder(country, 15).build());
+        left.setWidget(row++, 0, new DecoratorBuilder(country, 20).build());
 
         final CComponent<Province, ?> province = (CComponent<Province, ?>) inject(proto().province());
-        main.setWidget(row++, column, new DecoratorBuilder(province, 17).build());
-        main.setWidget(row++, column, new DecoratorBuilder(inject(proto().city()), 15).build());
+        left.setWidget(row++, 0, new DecoratorBuilder(province, 20).build());
 
-        // Need local variables to avoid extended casting that make the code unreadable
+        final VerticalPanel county = new VerticalPanel();
+        county.add(new DecoratorBuilder(inject(proto().county()), 20).build());
+        left.setWidget(row++, 0, county);
+
+        left.setWidget(row++, 0, new DecoratorBuilder(inject(proto().city()), 20).build());
 
         final CComponent<String, ?> postalCode = (CComponent<String, ?>) inject(proto().postalCode());
-        main.setWidget(row++, column, new DecoratorBuilder(postalCode, 7).build());
-        county.add(new DecoratorBuilder(inject(proto().county()), 15).build());
-        main.setWidget(row++, column, county);
+        left.setWidget(row++, 0, new DecoratorBuilder(postalCode, 7).build());
 
-        if (twoColumns) {
-            row = 0;
-            column = 1;
-        }
+        FormFlexPanel right = new FormFlexPanel();
+        row = 0;
+
         if (showUnit) {
-            main.setWidget(row++, column, new DecoratorBuilder(inject(proto().suiteNumber()), 12).build());
+            right.setWidget(row++, 0, new DecoratorBuilder(inject(proto().suiteNumber()), 10).build());
         }
 
-        main.setWidget(row++, column, new DecoratorBuilder(inject(proto().streetNumber()), 5).build());
-        main.setWidget(row++, column, new DecoratorBuilder(inject(proto().streetNumberSuffix()), 5).build());
-        main.setWidget(row++, column, new DecoratorBuilder(inject(proto().streetName()), 15).build());
-        main.setWidget(row++, column, new DecoratorBuilder(inject(proto().streetType()), 10).build());
-        main.setWidget(row++, column, new DecoratorBuilder(inject(proto().streetDirection()), 10).build());
+        right.setWidget(row++, 0, new DecoratorBuilder(inject(proto().streetNumber()), 5).build());
+        right.setWidget(row++, 0, new DecoratorBuilder(inject(proto().streetNumberSuffix()), 5).build());
+        right.setWidget(row++, 0, new DecoratorBuilder(inject(proto().streetName()), 20).build());
+        right.setWidget(row++, 0, new DecoratorBuilder(inject(proto().streetType()), 10).build());
+        right.setWidget(row++, 0, new DecoratorBuilder(inject(proto().streetDirection()), 10).build());
 
         attachFilters(proto(), province, country, postalCode);
 
         get(proto().country()).addValueChangeHandler(new ValueChangeHandler<Country>() {
-
             @Override
             public void onValueChange(ValueChangeEvent<Country> event) {
                 checkCountry();
             }
         });
 
+        FormFlexPanel main = new FormFlexPanel();
+        main.setWidget(0, 0, left);
+        if (twoColumns) {
+            main.setWidget(0, 1, right);
+            main.getCellFormatter().setVerticalAlignment(0, 0, HasVerticalAlignment.ALIGN_TOP);
+            main.getCellFormatter().setVerticalAlignment(0, 1, HasVerticalAlignment.ALIGN_TOP);
+        } else {
+            main.setWidget(1, 0, right);
+        }
         return main;
     }
 
