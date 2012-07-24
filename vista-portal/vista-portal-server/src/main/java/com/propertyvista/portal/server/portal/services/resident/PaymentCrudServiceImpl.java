@@ -91,6 +91,7 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
             entity.paymentMethod().isOneTimePayment().setValue(Boolean.FALSE);
         }
         ServerSideFactory.create(PaymentFacade.class).persistPayment(entity);
+        ServerSideFactory.create(PaymentFacade.class).processPayment(entity);
     }
 
     @Override
