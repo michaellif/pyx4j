@@ -55,10 +55,12 @@ public class GeoLocationEditor extends CEntityDecoratableForm<GeoLocation> {
         return main;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public void addValidations() {
-        get(proto().latitude()).addValueValidator(new EditableValueValidator<Double>() {
+        ((CTextFieldBase) get(proto().latitude())).setFormat(new GeoNumberFormat());
 
+        get(proto().latitude()).addValueValidator(new EditableValueValidator<Double>() {
             @Override
             public ValidationError isValid(CComponent<Double, ?> component, Double value) {
                 CComponent<LatitudeType, ?> latitudeType = get(proto().latitudeType());
@@ -66,9 +68,20 @@ public class GeoLocationEditor extends CEntityDecoratableForm<GeoLocation> {
                         component, i18n.tr("Latitude may be in range [0-90] degree"));
             }
         });
+        get(proto().latitude()).addValueChangeHandler(new RevalidationTrigger<Double>(get(proto().latitudeType())));
+
+        get(proto().latitudeType()).addValueValidator(new EditableValueValidator<LatitudeType>() {
+            @Override
+            public ValidationError isValid(CComponent<LatitudeType, ?> component, LatitudeType value) {
+                CComponent<Double, ?> latitude = get(proto().latitude());
+                return (value != null || latitude.getValue() == null) ? null : new ValidationError(component, i18n.tr("This field is Mandatory"));
+            }
+        });
+        get(proto().latitudeType()).addValueChangeHandler(new RevalidationTrigger<LatitudeType>(get(proto().latitude())));
+
+        ((CTextFieldBase) get(proto().longitude())).setFormat(new GeoNumberFormat());
 
         get(proto().longitude()).addValueValidator(new EditableValueValidator<Double>() {
-
             @Override
             public ValidationError isValid(CComponent<Double, ?> component, Double value) {
                 CComponent<LongitudeType, ?> longitudeType = get(proto().longitudeType());
@@ -76,30 +89,17 @@ public class GeoLocationEditor extends CEntityDecoratableForm<GeoLocation> {
                         component, i18n.tr("Longitude may be in range [0-180] degree"));
             }
         });
-
-        get(proto().latitudeType()).addValueValidator(new EditableValueValidator<LatitudeType>() {
-
-            @Override
-            public ValidationError isValid(CComponent<LatitudeType, ?> component, LatitudeType value) {
-                CComponent<Double, ?> latitude = get(proto().latitude());
-                return (value != null || latitude.getValue() == null) ? null : new ValidationError(component, i18n.tr("This field is Mandatory"));
-            }
-        });
+        get(proto().longitude()).addValueChangeHandler(new RevalidationTrigger<Double>(get(proto().longitudeType())));
 
         get(proto().longitudeType()).addValueValidator(new EditableValueValidator<LongitudeType>() {
-
             @Override
             public ValidationError isValid(CComponent<LongitudeType, ?> component, LongitudeType value) {
                 CComponent<Double, ?> longitude = get(proto().longitude());
                 return (value != null || longitude.getValue() == null) ? null : new ValidationError(component, i18n.tr("This field is Mandatory"));
             }
         });
+        get(proto().longitudeType()).addValueChangeHandler(new RevalidationTrigger<LongitudeType>(get(proto().longitude())));
 
-        get(proto().longitude()).addValueChangeHandler(new RevalidationTrigger<Double>(get(proto().longitudeType())));
-        get(proto().latitude()).addValueChangeHandler(new RevalidationTrigger<Double>(get(proto().latitudeType())));
-
-        ((CTextFieldBase) get(proto().latitude())).setFormat(new GeoNumberFormat());
-        ((CTextFieldBase) get(proto().longitude())).setFormat(new GeoNumberFormat());
     }
 
     public static class GeoNumberFormat implements IFormat<Double> {
