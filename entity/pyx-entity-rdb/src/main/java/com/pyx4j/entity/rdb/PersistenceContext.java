@@ -145,6 +145,7 @@ public class PersistenceContext {
             }
 
             if (traceOpenSession) {
+                log.info("*** connection open  {} {}", Integer.toHexString(System.identityHashCode(this)), transactionType);
                 synchronized (openSessionLock) {
                     openSessionCount++;
                     openSessions.add(this);
@@ -268,6 +269,7 @@ public class PersistenceContext {
             }
             SQLUtils.closeQuietly(connection);
             if (traceOpenSession) {
+                log.info("*** connection close {} {}", Integer.toHexString(System.identityHashCode(this)), transactionType);
                 synchronized (openSessionLock) {
                     openSessionCount--;
                     openSessions.remove(this);
@@ -284,6 +286,7 @@ public class PersistenceContext {
         if (connection != null) {
             SQLUtils.closeQuietly(connection);
             if (traceOpenSession) {
+                log.info("*** connection close {} {}", Integer.toHexString(System.identityHashCode(this)), transactionType);
                 synchronized (openSessionLock) {
                     openSessionCount--;
                     openSessions.remove(this);
@@ -297,7 +300,8 @@ public class PersistenceContext {
         if (traceOpenSession) {
             log.info("*** OpenSessions {}", openSessionCount);
             for (PersistenceContext persistenceContext : openSessions) {
-                log.info("*** Context open from {}", persistenceContext.getContextOpenFrom());
+                log.info("*** {} {}, context open from {}", new Object[] { Integer.toHexString(System.identityHashCode(persistenceContext)),
+                        persistenceContext.transactionType, persistenceContext.getContextOpenFrom() });
             }
         } else {
             log.info("*** traceOpenSession compiled out");

@@ -146,7 +146,7 @@ public abstract class ConfigurationHSQL implements Configuration {
 
     @Override
     public int unreturnedConnectionBackgroundProcessTimeout() {
-        return 60;
+        return 80;
     }
 
     @Override
