@@ -56,9 +56,7 @@ public class ImportProcessorInitialImport implements ImportProcessor {
         }
         if (messages.size() > 0) {
             log.error("validation failed {}; {}", messages.size(), ConverterUtils.convertStringCollection(messages, "\n"));
-            if (!uploadRequestInfo.ignoreMissingMedia().isBooleanTrue()) {
-                throw new Error("Validation error count:" + messages.size() + "; messages:" + ConverterUtils.convertStringCollection(messages, "\n"));
-            }
+            throw new Error("Validation error count:" + messages.size() + "; messages:" + ConverterUtils.convertStringCollection(messages, "\n"));
         }
         status.setProgress(0);
         return true;

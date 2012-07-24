@@ -15,6 +15,9 @@ package com.propertyvista.portal.server.preloader;
 
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Vector;
 
@@ -52,7 +55,9 @@ import com.propertyvista.interfaces.importer.BuildingImporter;
 import com.propertyvista.interfaces.importer.ImportCounters;
 import com.propertyvista.interfaces.importer.ImportUtils;
 import com.propertyvista.interfaces.importer.converter.MediaConfig;
+import com.propertyvista.interfaces.importer.model.AptUnitIO;
 import com.propertyvista.interfaces.importer.model.BuildingIO;
+import com.propertyvista.interfaces.importer.model.FloorplanIO;
 import com.propertyvista.interfaces.importer.model.ImportIO;
 import com.propertyvista.portal.server.preloader.util.BaseVistaDevDataPreloader;
 import com.propertyvista.server.common.reference.geo.SharedGeoLocator;
@@ -112,6 +117,7 @@ public class PmcDataPreloader extends BaseVistaDevDataPreloader {
             ImportIO importIO = ImportUtils.parse(ImportIO.class, new InputSource(new StringReader(data)));
             ImportCounters counters = new ImportCounters();
             for (BuildingIO building : importIO.buildings()) {
+                makeUniqueUnits(building);
                 counters.add(new BuildingImporter().persist(building, mediaConfig));
                 if ((config().minimizePreloadTime) && (counters.buildings > config().numResidentialBuildings)) {
                     break;
@@ -125,4 +131,23 @@ public class PmcDataPreloader extends BaseVistaDevDataPreloader {
         }
     }
 
+    private void makeUniqueUnits(BuildingIO building) {
+        List<AptUnitIO> units = new ArrayList<AptUnitIO>();
+        for (FloorplanIO floorplanIO : building.floorplans()) {
+            for (AptUnitIO unit : floorplanIO.units()) {
+                units.add(unit);
+            }
+        }
+        Collections.sort(units, new Comparator<AptUnitIO>() {
+            @Override
+            public int compare(AptUnitIO u1, AptUnitIO u2) {
+                return u1.number().getValue().compareTo(u2.number().getValue());
+            }
+        });
+        int cnt = 1;
+        for (AptUnitIO unit : units) {
+            unit.number().setValue(String.valueOf(cnt));
+            cnt++;
+        }
+    }
 }

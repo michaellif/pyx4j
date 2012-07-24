@@ -15,7 +15,9 @@ package com.propertyvista.interfaces.importer;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.Vector;
 
 import org.slf4j.Logger;
@@ -25,6 +27,7 @@ import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.shared.UniqueConstraintUserRuntimeException;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
@@ -69,7 +72,7 @@ public class BuildingImporter extends ImportPersister {
         }
 
         // Media
-        {
+        if (!mediaConfig.ignoreMissingMedia) {
             for (MediaIO iIO : buildingIO.medias()) {
                 String m = new MediaConverter(mediaConfig, ImageTarget.Building).verify(iIO);
                 if (m != null) {
@@ -77,6 +80,8 @@ public class BuildingImporter extends ImportPersister {
                 }
             }
         }
+
+        Set<String> duplicates = new HashSet<String>();
 
         //    Floorplan
         {
@@ -86,7 +91,7 @@ public class BuildingImporter extends ImportPersister {
                 }
 
                 // Media
-                {
+                if (!mediaConfig.ignoreMissingMedia) {
                     for (MediaIO iIO : floorplanIO.medias()) {
                         String m = new MediaConverter(mediaConfig, ImageTarget.Floorplan).verify(iIO);
                         if (m != null) {
@@ -100,6 +105,14 @@ public class BuildingImporter extends ImportPersister {
                         if (iIO.number().isNull()) {
                             messages.add("AptUnit number in '" + floorplanIO.name().getValue() + "' in building '" + buildingIO.propertyCode().getValue()
                                     + "' can't be empty");
+                        } else {
+                            String number = AptUnitConverter.trimUnitNumber(iIO.number().getValue());
+                            if (duplicates.contains(number)) {
+                                messages.add("AptUnit number " + number + " in '" + floorplanIO.name().getValue() + "' in building '"
+                                        + buildingIO.propertyCode().getValue() + "' alredy exists");
+                            } else {
+                                duplicates.add(number);
+                            }
                         }
                     }
                 }
@@ -222,10 +235,14 @@ public class BuildingImporter extends ImportPersister {
                                 occupancySegment.unit().set(i);
                             }
                         }
-
+                        try {
+                            Persistence.service().merge(i);
+                        } catch (UniqueConstraintUserRuntimeException e) {
+                            throw new UniqueConstraintUserRuntimeException(i18n.tr("{0}, Unit# {1} in {2}", e.getMessage(), aptUnitIO.number(), building),
+                                    e.getEntityPrototype());
+                        }
                     }
 
-                    Persistence.service().merge(items);
                     counters.units += items.size();
 
                     if (VistaFeatures.instance().productCatalog()) {
