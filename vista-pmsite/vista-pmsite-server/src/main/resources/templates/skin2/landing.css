@@ -84,6 +84,8 @@
 	position: relative;
 	float: left;
 	display:inline-block;
+	min-width:300px;
+	min-height:380px;
 }
 
 .vista-pmsite-main {
