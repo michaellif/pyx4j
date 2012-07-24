@@ -15,6 +15,7 @@ package com.propertyvista.admin.server.services;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
@@ -48,7 +49,7 @@ public class AdminUserServiceImpl extends AbstractCrudServiceDtoImpl<AdminUserCr
     }
 
     @Override
-    public void create(AsyncCallback<AdminUserDTO> callback, AdminUserDTO dto) {
+    public void create(AsyncCallback<Key> callback, AdminUserDTO dto) {
         throw new IllegalStateException("this operation is not supported for this service");
     }
 

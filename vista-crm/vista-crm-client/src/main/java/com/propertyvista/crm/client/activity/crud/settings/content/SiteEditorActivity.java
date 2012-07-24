@@ -15,6 +15,7 @@ package com.propertyvista.crm.client.activity.crud.settings.content;
 
 import com.google.gwt.core.client.GWT;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.client.ReferenceDataManager;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.site.client.activity.crud.EditorActivityBase;
@@ -35,7 +36,7 @@ public class SiteEditorActivity extends EditorActivityBase<SiteDescriptorDTO> im
     }
 
     @Override
-    protected void onSaved(SiteDescriptorDTO result) {
+    protected void onSaved(Key result) {
         ReferenceDataManager.invalidate(AvailableLocale.class);
     }
 }

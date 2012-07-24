@@ -18,6 +18,7 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
@@ -70,9 +71,9 @@ public class PaymentMethodsActivity extends SecurityAwareActivity implements Pay
 
     @Override
     public void savePaymentMethod(PaymentMethod paymentMethod) {
-        srv.save(new DefaultAsyncCallback<PaymentMethod>() {
+        srv.save(new DefaultAsyncCallback<Key>() {
             @Override
-            public void onSuccess(PaymentMethod result) {
+            public void onSuccess(Key result) {
             }
         }, paymentMethod);
     }

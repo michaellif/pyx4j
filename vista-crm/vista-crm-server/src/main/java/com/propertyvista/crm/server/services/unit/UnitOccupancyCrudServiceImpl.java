@@ -17,6 +17,7 @@ import javax.naming.OperationNotSupportedException;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.AbstractCrudServiceImpl;
 
 import com.propertyvista.biz.occupancy.OccupancyFacade;
@@ -50,12 +51,12 @@ public class UnitOccupancyCrudServiceImpl extends AbstractCrudServiceImpl<AptUni
     }
 
     @Override
-    public void save(AsyncCallback<AptUnitOccupancySegment> callback, AptUnitOccupancySegment entity) {
+    public void save(AsyncCallback<Key> callback, AptUnitOccupancySegment entity) {
         callback.onFailure(new OperationNotSupportedException());
     }
 
     @Override
-    public void create(AsyncCallback<AptUnitOccupancySegment> callback, AptUnitOccupancySegment entity) {
+    public void create(AsyncCallback<Key> callback, AptUnitOccupancySegment entity) {
         callback.onFailure(new OperationNotSupportedException());
     }
 }

@@ -50,7 +50,7 @@ public class SimulationServiceImpl extends AdminServiceImpl implements Simulatio
     }
 
     @Override
-    public void save(AsyncCallback<SimulationDTO> callback, SimulationDTO entity) {
+    public void save(AsyncCallback<Key> callback, SimulationDTO entity) {
 
         CacheService.setDisabled(!entity.generalCacheEnabled().isBooleanTrue());
 
@@ -61,11 +61,11 @@ public class SimulationServiceImpl extends AdminServiceImpl implements Simulatio
 
         CaledonPadSftpClient.setUsePadSimulator(entity.usePadSimulator().getValue());
 
-        retrieve(callback, entity.getPrimaryKey(), null);
+        callback.onSuccess(entity.getPrimaryKey());
     }
 
     @Override
-    public void create(AsyncCallback<SimulationDTO> callback, SimulationDTO editableEntity) {
+    public void create(AsyncCallback<Key> callback, SimulationDTO editableEntity) {
         throwSorryForPoorDesignError();
     }
 

@@ -19,6 +19,7 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 
@@ -62,11 +63,17 @@ public class PersonalInfoActivity extends SecurityAwareActivity implements Perso
 
     @Override
     public void save(ResidentDTO info) {
-        srv.save(new DefaultAsyncCallback<ResidentDTO>() {
+        srv.save(new DefaultAsyncCallback<Key>() {
             @Override
-            public void onSuccess(ResidentDTO result) {
-                view.populate(result);
-                view.showNote("Operation completed successfully.");
+            public void onSuccess(Key result) {
+                srv.retrieve(new DefaultAsyncCallback<ResidentDTO>() {
+                    @Override
+                    public void onSuccess(ResidentDTO result) {
+                        view.populate(result);
+                        view.showNote("Operation completed successfully.");
+                    }
+
+                }, null, AbstractCrudService.RetrieveTraget.View);
             }
 
         }, info);

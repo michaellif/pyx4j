@@ -51,14 +51,14 @@ public class ReportEditorActivity extends EditorActivityBase<DashboardMetadata> 
     }
 
     @Override
-    protected void onApplySuccess(DashboardMetadata result) {
+    protected void onApplySuccess(Key result) {
         super.onApplySuccess(result);
         AppSite.instance();
         AppSite.getEventBus().fireEvent(new BoardUpdateEvent());
     }
 
     @Override
-    protected void onSaveSuccess(DashboardMetadata result) {
+    protected void onSaveSuccess(Key result) {
         super.onSaveSuccess(result);
         AppSite.instance();
         AppSite.getEventBus().fireEvent(new BoardUpdateEvent());

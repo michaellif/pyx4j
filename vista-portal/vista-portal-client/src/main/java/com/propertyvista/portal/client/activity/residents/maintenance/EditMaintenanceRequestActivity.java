@@ -72,9 +72,9 @@ public class EditMaintenanceRequestActivity extends SecurityAwareActivity implem
 
     @Override
     public void save(MaintenanceRequestDTO entity) {
-        srv.create(new DefaultAsyncCallback<MaintenanceRequestDTO>() {
+        srv.create(new DefaultAsyncCallback<Key>() {
             @Override
-            public void onSuccess(MaintenanceRequestDTO result) {
+            public void onSuccess(Key result) {
                 AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.Maintenance());
             }
         }, entity);

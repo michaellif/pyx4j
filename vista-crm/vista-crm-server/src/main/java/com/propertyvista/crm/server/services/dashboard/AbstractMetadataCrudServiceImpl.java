@@ -15,6 +15,7 @@ package com.propertyvista.crm.server.services.dashboard;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.AbstractCrudServiceImpl;
 import com.pyx4j.entity.server.Persistence;
@@ -44,7 +45,7 @@ abstract class AbstractMetadataCrudServiceImpl extends AbstractCrudServiceImpl<D
     }
 
     @Override
-    public void create(AsyncCallback<DashboardMetadata> callback, DashboardMetadata entity) {
+    public void create(AsyncCallback<Key> callback, DashboardMetadata entity) {
         entity.setPrimaryKey(null);
 
         if (entity.isShared().isBooleanTrue()) {
@@ -56,7 +57,7 @@ abstract class AbstractMetadataCrudServiceImpl extends AbstractCrudServiceImpl<D
     }
 
     @Override
-    public void save(AsyncCallback<DashboardMetadata> callback, DashboardMetadata entity) {
+    public void save(AsyncCallback<Key> callback, DashboardMetadata entity) {
         //Assert Permission
         Persistence.secureRetrieve(DashboardMetadata.class, entity.getPrimaryKey());
 

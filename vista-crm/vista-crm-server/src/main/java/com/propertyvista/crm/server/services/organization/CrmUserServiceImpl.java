@@ -71,7 +71,7 @@ public class CrmUserServiceImpl extends AbstractCrudServiceDtoImpl<Employee, Emp
     }
 
     @Override
-    public void save(AsyncCallback<EmployeeDTO> callback, EmployeeDTO dto) {
+    public void save(AsyncCallback<Key> callback, EmployeeDTO dto) {
         assertSamePortfolios(dto);
 
         // Enforce access only to current user
@@ -91,7 +91,7 @@ public class CrmUserServiceImpl extends AbstractCrudServiceDtoImpl<Employee, Emp
     }
 
     @Override
-    public void create(AsyncCallback<EmployeeDTO> callback, EmployeeDTO dto) {
+    public void create(AsyncCallback<Key> callback, EmployeeDTO dto) {
         throw new IllegalArgumentException();
     }
 

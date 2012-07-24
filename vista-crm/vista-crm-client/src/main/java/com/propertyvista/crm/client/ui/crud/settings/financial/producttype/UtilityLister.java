@@ -20,6 +20,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.ui.CTextField;
@@ -74,9 +75,9 @@ public class UtilityLister extends ListerBase<Utility> {
             public boolean onClickOk() {
                 Utility entity = EntityFactory.create(Utility.class);
                 entity.name().setValue(getName());
-                GWT.<UtilityCrudService> create(UtilityCrudService.class).save(new DefaultAsyncCallback<Utility>() {
+                GWT.<UtilityCrudService> create(UtilityCrudService.class).save(new DefaultAsyncCallback<Key>() {
                     @Override
-                    public void onSuccess(Utility result) {
+                    public void onSuccess(Key result) {
                         getLister().restoreState();
                     }
                 }, entity);

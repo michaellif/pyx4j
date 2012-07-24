@@ -75,9 +75,9 @@ public class PaymentActivity extends SecurityAwareActivity implements PaymentVie
 
     @Override
     public void save(PaymentRecordDTO paymentmethod) {
-        srv.save(new DefaultAsyncCallback<PaymentRecordDTO>() {
+        srv.save(new DefaultAsyncCallback<Key>() {
             @Override
-            public void onSuccess(PaymentRecordDTO result) {
+            public void onSuccess(Key result) {
                 History.back();
             }
         }, paymentmethod);

@@ -73,9 +73,9 @@ public class EditPaymentMethodActivity extends SecurityAwareActivity implements 
 
     @Override
     public void save(PaymentMethod paymentmethod) {
-        srv.create(new DefaultAsyncCallback<PaymentMethod>() {
+        srv.create(new DefaultAsyncCallback<Key>() {
             @Override
-            public void onSuccess(PaymentMethod result) {
+            public void onSuccess(Key result) {
                 History.back();
             }
         }, paymentmethod);

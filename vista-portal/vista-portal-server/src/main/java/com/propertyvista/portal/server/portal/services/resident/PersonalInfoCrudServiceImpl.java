@@ -26,8 +26,8 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.domain.security.CustomerUser;
-import com.propertyvista.domain.tenant.PersonScreening;
 import com.propertyvista.domain.tenant.Customer;
+import com.propertyvista.domain.tenant.PersonScreening;
 import com.propertyvista.portal.domain.dto.ResidentDTO;
 import com.propertyvista.portal.rpc.portal.services.resident.PersonalInfoCrudService;
 import com.propertyvista.portal.server.portal.TenantAppContext;
@@ -61,7 +61,7 @@ public class PersonalInfoCrudServiceImpl implements PersonalInfoCrudService {
     }
 
     @Override
-    public void save(AsyncCallback<ResidentDTO> callback, ResidentDTO dto) {
+    public void save(AsyncCallback<Key> callback, ResidentDTO dto) {
         try {
             CustomerUser currentUser = TenantAppContext.getCurrentUser();
             EntityQueryCriteria<Customer> criteria = EntityQueryCriteria.create(Customer.class);
@@ -71,14 +71,13 @@ public class PersonalInfoCrudServiceImpl implements PersonalInfoCrudService {
             tenant.emergencyContacts().set(dto.emergencyContacts());
             Persistence.service().persist(tenant);
             Persistence.service().commit();
-            callback.onSuccess(dto);
         } catch (Exception e) {
             callback.onFailure(new Throwable("Operation failed. No data found."));
         }
     }
 
     @Override
-    public void create(AsyncCallback<ResidentDTO> callback, ResidentDTO editableEntity) {
+    public void create(AsyncCallback<Key> callback, ResidentDTO editableEntity) {
         throw new UnsupportedOperationException();
     }
 

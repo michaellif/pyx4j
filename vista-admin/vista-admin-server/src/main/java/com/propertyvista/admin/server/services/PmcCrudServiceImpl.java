@@ -90,28 +90,19 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
     }
 
     @Override
-    public void create(AsyncCallback<PmcDTO> callback, PmcDTO editableEntity) {
-        editableEntity.dnsName().setValue(editableEntity.dnsName().getValue().toLowerCase(Locale.ENGLISH));
-        editableEntity.namespace().setValue(editableEntity.dnsName().getValue().replace('-', '_'));
-        editableEntity.status().setValue(PmcStatus.Created);
-        if (!PmcNameValidator.canCreatePmcName(editableEntity.dnsName().getValue(), null)) {
+    protected void create(Pmc entity, PmcDTO dto) {
+        entity.dnsName().setValue(entity.dnsName().getValue().toLowerCase(Locale.ENGLISH));
+        entity.namespace().setValue(entity.dnsName().getValue().replace('-', '_'));
+        entity.status().setValue(PmcStatus.Created);
+        if (!PmcNameValidator.canCreatePmcName(entity.dnsName().getValue(), null)) {
             throw new UserRuntimeException("PMC DNS name is reserved of forbidden");
         }
+        super.create(entity, dto);
+        OnboardingUserCredential cred = OnboardingUserPreloader.createOnboardingUser(dto.person().name().firstName().getValue(), dto.person().name().lastName()
+                .getValue(), dto.email().getValue(), dto.password().getValue(), VistaOnboardingBehavior.ProspectiveClient, null);
 
-        super.create(callback, editableEntity);
-
-        EntityQueryCriteria<Pmc> criteria = EntityQueryCriteria.create(Pmc.class);
-        criteria.or(PropertyCriterion.eq(criteria.proto().dnsName(), editableEntity.dnsName().getValue()),
-                PropertyCriterion.eq(criteria.proto().namespace(), editableEntity.namespace().getValue()));
-        Pmc pmc = Persistence.service().retrieve(criteria);
-
-        OnboardingUserCredential cred = OnboardingUserPreloader.createOnboardingUser(editableEntity.person().name().firstName().getValue(), editableEntity
-                .person().name().lastName().getValue(), editableEntity.email().getValue(), editableEntity.password().getValue(),
-                VistaOnboardingBehavior.ProspectiveClient, null);
-
-        cred.pmc().set(pmc);
+        cred.pmc().set(entity);
         Persistence.service().persist(cred);
-        Persistence.service().commit();
     }
 
     @Override

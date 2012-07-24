@@ -70,7 +70,7 @@ public class CrmLoginAttemptsListerServiceImpl extends AbstractCrudServiceDtoImp
     }
 
     @Override
-    public void save(AsyncCallback<LoginAttemptDTO> callback, LoginAttemptDTO dto) {
+    public void save(AsyncCallback<Key> callback, LoginAttemptDTO dto) {
         throw new Error("save is not implemented");
     }
 

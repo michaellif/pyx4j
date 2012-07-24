@@ -46,7 +46,7 @@ public class MaintenanceCrudServiceImpl extends AdminServiceImpl implements Main
     // Crud service interface implementation:
 
     @Override
-    public void create(AsyncCallback<SystemMaintenanceState> callback, SystemMaintenanceState editableEntity) {
+    public void create(AsyncCallback<Key> callback, SystemMaintenanceState editableEntity) {
         throw new Error();
     }
 
@@ -58,8 +58,9 @@ public class MaintenanceCrudServiceImpl extends AdminServiceImpl implements Main
     }
 
     @Override
-    public void save(AsyncCallback<SystemMaintenanceState> callback, SystemMaintenanceState editableEntity) {
-        super.setSystemMaintenanceState(callback, editableEntity);
+    public void save(AsyncCallback<Key> callback, SystemMaintenanceState state) {
+        SystemMaintenance.setSystemMaintenanceInfo(state);
+        callback.onSuccess(state.getPrimaryKey());
     }
 
     @Override
