@@ -2413,7 +2413,7 @@ input.blue_btn,input.orange_btn {
 	float: left;
 	font-family: 'HelveticaNeueW01-77BdCn 692722', Helvetica, sans-serif;
 	border: none;
-	background: url(https://static.propertyvista.com/errors/images/admin/a_blue_btn.png) no-repeat;
+	background: url(https://static.propertyvista.com/errors/images/a_blue_btn.png) no-repeat;
 	width: 109px;
 	height: 41px;
 	margin: 0 20px 0 0;
@@ -2430,12 +2430,12 @@ input.orange_btn {
 }
 
 input.blue_btn_pointer {
-	background: url(https://static.propertyvista.com/errors/images/admin/a_blue_btn_pointer.png) no-repeat;
+	background: url(https://static.propertyvista.com/errors/images/a_blue_btn_pointer.png) no-repeat;
 	width: 125px;
 }
 
 input.orange_btn {
-	background: url(https://static.propertyvista.com/errors/images/admin/a_orange_btn.png) no-repeat;
+	background: url(https://static.propertyvista.com/errors/images/a_orange_btn.png) no-repeat;
 }
 
 a.orange_btn,a.blue_btn {
@@ -2443,7 +2443,7 @@ a.orange_btn,a.blue_btn {
 	color: #fff;
 	font-size: 16px;
 	font-family: 'HelveticaNeueW01-77BdCn 692722', Helvetica, sans-serif;
-	background: url(https://static.propertyvista.com/errors/images/admin/a_orange_btn.png) no-repeat;
+	background: url(https://static.propertyvista.com/errors/images/a_orange_btn.png) no-repeat;
 	width: 107px;
 	height: 38px;
 	color: #fff;
@@ -2454,7 +2454,7 @@ a.orange_btn,a.blue_btn {
 }
 
 a.blue_btn {
-	background: url(https://static.propertyvista.com/errors/images/admin/a_blue_btn.png) no-repeat;
+	background: url(https://static.propertyvista.com/errors/images/a_blue_btn.png) no-repeat;
 	width: 109px;
 	height: 41px;
 }

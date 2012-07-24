@@ -74,6 +74,11 @@ public class VistaServerSideConfigurationDev extends VistaServerSideConfiguratio
     }
 
     @Override
+    public String openIdDomain() {
+        return "dev.birchwoodsoftwaregroup.com";
+    }
+
+    @Override
     public String getApplicationURLNamespace() {
         return ".dev.birchwoodsoftwaregroup.com:8888/vista/";
     }

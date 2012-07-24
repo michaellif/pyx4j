@@ -21,10 +21,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.gwt.server.IOUtils;
-
-import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 
 @SuppressWarnings("serial")
 public class IdpXrdsServlet extends HttpServlet {
@@ -36,15 +33,10 @@ public class IdpXrdsServlet extends HttpServlet {
 
         String body = IOUtils.getTextResource("xrds.xml", IdpXrdsServlet.class);
 
-        body = body.replace("${endpoint_uri}", getOPEndpointUrl());
+        body = body.replace("${endpoint_uri}", OpenIDProviderServer.getOPEndpointUrl());
         response.setContentLength(body.length());
         out.print(body);
         out.flush();
     }
 
-    static String getOPEndpointUrl() {
-        String domain = ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance()).openIdProviderDomain();
-        String endpoint = ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance()).openIdDomainIdentifier(domain);
-        return endpoint.replace("/idp", "/endpoint");
-    }
 }

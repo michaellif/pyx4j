@@ -94,7 +94,8 @@ public class OpenIdServlet extends HttpServlet {
 
         body = body.replace("${name}", VistaDemo.isDemo() ? "PropertyVista Demo " : "" + "Access " + (signIn ? " Restricted" : " Granted"));
 
-        body = body.replace("${text}", "<a id=\"" + (signIn ? "googleSignIn" : "continue") + "\" href=\"" + location + "\">" + message + "</a>");
+        body = body.replace("${text}", "<a id=\"" + (signIn ? "googleSignIn" : "continue") + "\" tabindex=\"1\" autofocus=\"autofocus\" href=\"" + location
+                + "\">" + message + "</a>");
 
         String rc_message;
         if (signIn) {

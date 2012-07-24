@@ -13,9 +13,49 @@
  */
 package com.propertyvista.server.security.idp;
 
+import java.io.IOException;
+
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.openid4java.OpenIDException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @SuppressWarnings("serial")
 public class IdpEndpointServlet extends HttpServlet {
+
+    private static final Logger log = LoggerFactory.getLogger(IdpEndpointServlet.class);
+
+    private OpenIDProviderServer server;
+
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
+        server = new OpenIDProviderServer();
+    }
+
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        try {
+            server.processRequest(req, resp);
+        } catch (OpenIDException e) {
+            log.error("Error", e);
+            throw new Error(e);
+        }
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        try {
+            server.processRequest(req, resp);
+        } catch (OpenIDException e) {
+            log.error("Error", e);
+            throw new Error(e);
+        }
+    }
 
 }

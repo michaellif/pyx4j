@@ -97,6 +97,10 @@ public class VistaNamespaceResolver implements NamespaceResolver {
             }
         }
 
+        if ("static".equals(namespaceProposal)) {
+            return "_";
+        }
+
         String pmcNamespace;
         try {
             NamespaceManager.setNamespace(VistaNamespace.adminNamespace);
