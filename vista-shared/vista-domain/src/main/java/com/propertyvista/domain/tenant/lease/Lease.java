@@ -86,6 +86,10 @@ public interface Lease extends IVersionedEntity<LeaseV> {
             return EnumSet.of(Created, Application);
         }
 
+        public static Collection<Status> active() {
+            return EnumSet.of(Approved, Active);
+        }
+
         public static Collection<Status> current() {
             return EnumSet.of(Approved, Active, Completed, FinalBillIssued);
         }
@@ -104,6 +108,10 @@ public interface Lease extends IVersionedEntity<LeaseV> {
 
         public boolean isDraft() {
             return draft().contains(this);
+        }
+
+        public boolean isActive() {
+            return active().contains(this);
         }
 
         public boolean isCurrent() {

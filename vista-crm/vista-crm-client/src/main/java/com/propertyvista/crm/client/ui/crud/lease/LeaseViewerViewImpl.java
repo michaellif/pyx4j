@@ -201,7 +201,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
 
             if (VersionedEntityUtils.isCurrent(value)) {
                 sendMail.setVisible(true);
-                runBill.setVisible(status.isCurrent());
+                runBill.setVisible(status.isActive());
                 notice.setVisible(status == Status.Active && completion == null);
                 cancelNotice.setVisible(completion == CompletionType.Notice && status != Status.Closed);
                 evict.setVisible(status == Status.Active && completion == null);
