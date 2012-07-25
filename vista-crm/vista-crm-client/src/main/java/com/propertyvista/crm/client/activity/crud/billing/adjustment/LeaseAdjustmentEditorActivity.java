@@ -38,9 +38,11 @@ public class LeaseAdjustmentEditorActivity extends EditorActivityBase<LeaseAdjus
     @Override
     protected void createNewEntity(AsyncCallback<LeaseAdjustment> callback) {
         LeaseAdjustment entity = EntityFactory.create(LeaseAdjustment.class);
+
         entity.receivedDate().setValue(new LogicalDate());
         entity.targetDate().setValue(new LogicalDate());
         entity.status().setValue(Status.draft);
+
         callback.onSuccess(entity);
     }
 }

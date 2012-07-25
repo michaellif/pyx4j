@@ -23,6 +23,7 @@ import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.ISet;
@@ -30,6 +31,7 @@ import com.pyx4j.entity.shared.ISet;
 @DiscriminatorValue("LockerArea_BuildingElement")
 public interface LockerArea extends BuildingElement {
 
+    @NotNull
     @ToString(index = 0)
     IPrimitive<String> name();
 

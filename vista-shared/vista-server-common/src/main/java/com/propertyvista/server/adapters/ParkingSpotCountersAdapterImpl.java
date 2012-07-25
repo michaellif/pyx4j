@@ -30,7 +30,7 @@ public class ParkingSpotCountersAdapterImpl implements ParkingSpotCountersAdapte
         if (valueNew != null && valueOrig != valueNew) {
             if (valueOrig != null) {
                 ParkingSpot.Type typeOrig = (Type) valueOrig;
-                int i = 0;
+                Integer i = 0;
                 switch (typeOrig) {
                 case disabled:
                     i = parking.disabledSpaces().getValue();
@@ -53,7 +53,7 @@ public class ParkingSpotCountersAdapterImpl implements ParkingSpotCountersAdapte
 
             if (valueNew != null) {
                 ParkingSpot.Type typeNew = (Type) valueNew;
-                int i = 0;
+                Integer i = 0;
                 switch (typeNew) {
                 case disabled:
                     i = parking.disabledSpaces().getValue();

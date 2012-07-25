@@ -53,10 +53,12 @@ public interface Locker extends IEntity {
     @JoinColumn
     LockerArea lockerArea();
 
+    @NotNull
     @ToString(index = 1)
     @MemberColumn(name = "spotType")
     IPrimitive<Type> type();
 
+    @NotNull
     @ToString(index = 0)
     IPrimitive<String> name();
 }

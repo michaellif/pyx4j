@@ -50,8 +50,10 @@ public class LeadEditorActivity extends EditorActivityBase<Lead> implements Lead
     @Override
     protected void createNewEntity(AsyncCallback<Lead> callback) {
         Lead entity = EntityFactory.create(getEntityClass());
+
         entity.createDate().setValue(new LogicalDate());
         entity.status().setValue(Status.active);
+
         callback.onSuccess(entity);
     }
 }

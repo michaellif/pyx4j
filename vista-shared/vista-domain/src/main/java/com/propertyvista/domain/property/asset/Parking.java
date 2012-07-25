@@ -26,6 +26,7 @@ import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.ISet;
@@ -57,12 +58,14 @@ public interface Parking extends BuildingElement {
         }
     }
 
+    @NotNull
     @ToString(index = 0)
     IPrimitive<String> name();
 
     @Editor(type = Editor.EditorType.textarea)
     IPrimitive<String> description();
 
+    @NotNull
     @ToString(index = 1)
     @MemberColumn(name = "parkingType")
     IPrimitive<Type> type();

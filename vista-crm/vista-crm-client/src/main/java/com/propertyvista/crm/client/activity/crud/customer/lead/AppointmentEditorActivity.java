@@ -37,7 +37,9 @@ public class AppointmentEditorActivity extends EditorActivityBase<Appointment> {
     @Override
     protected void createNewEntity(AsyncCallback<Appointment> callback) {
         Appointment entity = EntityFactory.create(getEntityClass());
+
         entity.status().setValue(Appointment.Status.planned);
+
         callback.onSuccess(entity);
     }
 }

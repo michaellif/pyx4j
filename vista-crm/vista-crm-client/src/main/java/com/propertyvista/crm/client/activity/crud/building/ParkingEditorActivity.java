@@ -14,8 +14,10 @@
 package com.propertyvista.crm.client.activity.crud.building;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
@@ -30,5 +32,19 @@ public class ParkingEditorActivity extends EditorActivityBase<ParkingDTO> implem
     public ParkingEditorActivity(CrudAppPlace place) {
         super(place, BuildingViewFactory.instance(ParkingEditorView.class), (AbstractCrudService<ParkingDTO>) GWT.create(ParkingCrudService.class),
                 ParkingDTO.class);
+    }
+
+    @Override
+    protected void createNewEntity(AsyncCallback<ParkingDTO> callback) {
+        ParkingDTO parking = EntityFactory.create(getEntityClass());
+
+        // do not allow null members!
+        parking.totalSpaces().setValue(0);
+        parking.disabledSpaces().setValue(0);
+        parking.regularSpaces().setValue(0);
+        parking.wideSpaces().setValue(0);
+        parking.narrowSpaces().setValue(0);
+
+        callback.onSuccess(parking);
     }
 }

@@ -22,6 +22,7 @@ import com.pyx4j.widgets.client.tabpanel.Tab;
 
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.dto.ParkingDTO;
+import com.propertyvista.misc.VistaTODO;
 
 public class ParkingForm extends CrmEntityForm<ParkingDTO> {
 
@@ -44,9 +45,10 @@ public class ParkingForm extends CrmEntityForm<ParkingDTO> {
         tab = addTab(isEditable() ? new HTML() : ((ParkingViewerView) getParentView()).getSpotView().asWidget(), i18n.tr("Spots"));
         setTabEnabled(tab, !isEditable());
 
-        tab = addTab(new Label("Notes and attachments goes here... "), i18n.tr("Notes & Attachments"));
-        setTabEnabled(tab, !isEditable());
-
+        if (!VistaTODO.removedForProduction) {
+            tab = addTab(new Label("Notes and attachments goes here... "), i18n.tr("Notes & Attachments"));
+            setTabEnabled(tab, !isEditable());
+        }
     }
 
     private FormFlexPanel createDetailsTab(String title) {

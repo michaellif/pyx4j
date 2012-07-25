@@ -45,8 +45,10 @@ public class ReportEditorActivity extends EditorActivityBase<DashboardMetadata> 
     @Override
     protected void createNewEntity(AsyncCallback<DashboardMetadata> callback) {
         DashboardMetadata entity = EntityFactory.create(getEntityClass());
+
         entity.type().setValue(DashboardType.system);
         entity.layoutType().setValue(LayoutType.Report);
+
         callback.onSuccess(entity);
     }
 

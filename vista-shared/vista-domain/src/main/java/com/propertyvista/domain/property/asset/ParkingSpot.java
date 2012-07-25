@@ -56,10 +56,12 @@ public interface ParkingSpot extends IEntity {
     @JoinColumn
     Parking parking();
 
+    @NotNull
     @ToString(index = 1)
     @MemberColumn(name = "spotType", modificationAdapters = { ParkingSpotCountersAdapter.class })
     IPrimitive<Type> type();
 
+    @NotNull
     @ToString(index = 0)
     IPrimitive<String> name();
 }
