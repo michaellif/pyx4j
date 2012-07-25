@@ -207,7 +207,7 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
         if (place.getNewItem() != null) {
             callback.onSuccess((E) place.getNewItem());
         } else {
-            callback.onSuccess(EntityFactory.create(entityClass));
+            callback.onSuccess(EntityFactory.create(getEntityClass()));
         }
     }
 
