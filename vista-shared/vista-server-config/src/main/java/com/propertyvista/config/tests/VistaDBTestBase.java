@@ -21,10 +21,16 @@ public abstract class VistaDBTestBase extends TestCase {
 
     private static int uniqueCount = 0;
 
+    private static int runningTestsCount = 0;
+
     @Override
     protected void setUp() throws Exception {
         super.setUp();
         VistaTestDBSetup.init();
+        if (runningTestsCount > 0) {
+            VistaTestDBSetup.resetDatabase();
+        }
+        runningTestsCount++;
     }
 
     public synchronized String uniqueString() {

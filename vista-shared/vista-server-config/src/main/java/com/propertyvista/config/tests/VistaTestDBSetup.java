@@ -15,6 +15,7 @@ package com.propertyvista.config.tests;
 
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.rdb.RDBUtils;
+import com.pyx4j.entity.rdb.cfg.Configuration;
 import com.pyx4j.entity.rdb.cfg.Configuration.DatabaseType;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.server.contexts.NamespaceManager;
@@ -50,4 +51,17 @@ public class VistaTestDBSetup {
         NamespaceManager.setNamespace(VistaTestsNamespaceResolver.demoNamespace);
     }
 
+    public static void resetDatabase() {
+        RDBUtils.resetDatabase();
+        switch (((Configuration) initOnce.getPersistenceConfiguration()).databaseType()) {
+        case PostgreSQL:
+            NamespaceManager.setNamespace(VistaNamespace.adminNamespace);
+            RDBUtils.ensureNamespace();
+            NamespaceManager.setNamespace(VistaTestsNamespaceResolver.demoNamespace);
+            RDBUtils.ensureNamespace();
+            break;
+        default:
+            break;
+        }
+    }
 }
