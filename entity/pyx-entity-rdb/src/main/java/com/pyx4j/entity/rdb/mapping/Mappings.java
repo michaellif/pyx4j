@@ -55,6 +55,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.ObjectClassType;
 import com.pyx4j.entity.shared.meta.EntityMeta;
+import com.pyx4j.server.contexts.NamespaceManager;
 
 public class Mappings {
 
@@ -126,7 +127,7 @@ public class Mappings {
 
     public TableModel ensureTable(PersistenceContext persistenceContext, EntityMeta entityMeta) {
         assert EntityPersistenceServiceRDB.allowNamespaceUse(entityMeta.getEntityClass()) : "Name space restriction is broken for "
-                + entityMeta.getEntityClass();
+                + entityMeta.getEntityClass() + "; access from " + NamespaceManager.getNamespace();
         TableModel model = tables.get(entityMeta.getEntityClass());
         if (model != null) {
             return model;
