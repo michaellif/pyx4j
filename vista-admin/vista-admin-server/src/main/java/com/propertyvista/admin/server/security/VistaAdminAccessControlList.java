@@ -47,6 +47,7 @@ import com.propertyvista.admin.rpc.services.scheduler.TriggerCrudService;
 import com.propertyvista.admin.rpc.services.sim.PadSimBatchCrudService;
 import com.propertyvista.admin.rpc.services.sim.PadSimFileCrudService;
 import com.propertyvista.admin.rpc.services.sim.SimulatedDataPreloadService;
+import com.propertyvista.domain.security.AdminUser;
 import com.propertyvista.domain.security.VistaAdminBehavior;
 import com.propertyvista.domain.security.VistaBasicBehavior;
 
@@ -84,6 +85,7 @@ public class VistaAdminAccessControlList extends ServletContainerAclBuilder {
         grant(VistaAdminBehavior.SystemAdmin, new EntityPermission(Trigger.class, EntityPermission.ALL));
         grant(VistaAdminBehavior.SystemAdmin, new EntityPermission(Run.class, EntityPermission.ALL));
         grant(VistaAdminBehavior.SystemAdmin, new EntityPermission(RunData.class, EntityPermission.ALL));
+        grant(VistaAdminBehavior.SystemAdmin, new EntityPermission(AdminUser.class, EntityPermission.READ));
 
         grant(VistaAdminBehavior.SystemAdmin, new IServiceExecutePermission(PadSimFileCrudService.class));
         grant(VistaAdminBehavior.SystemAdmin, new IServiceExecutePermission(PadSimBatchCrudService.class));
