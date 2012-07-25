@@ -30,9 +30,9 @@ import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.dto.LegalTermsDescriptorDTO;
 
-public class LeaseTermsFolder extends VistaBoxFolder<LegalTermsDescriptorDTO> {
+public class LegalTermsFolder extends VistaBoxFolder<LegalTermsDescriptorDTO> {
 
-    private static final I18n i18n = I18n.get(LeaseTermsFolder.class);
+    private static final I18n i18n = I18n.get(LegalTermsFolder.class);
 
     public final static String DEFAULT_STYLE_PREFIX = "LeaseTemsFolder";
 
@@ -46,7 +46,7 @@ public class LeaseTermsFolder extends VistaBoxFolder<LegalTermsDescriptorDTO> {
 
     private final boolean editable;
 
-    public LeaseTermsFolder(boolean modifiable) {
+    public LegalTermsFolder(boolean modifiable) {
         super(LegalTermsDescriptorDTO.class, false);
         this.editable = modifiable;
     }
@@ -61,16 +61,16 @@ public class LeaseTermsFolder extends VistaBoxFolder<LegalTermsDescriptorDTO> {
     @Override
     public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof LegalTermsDescriptorDTO) {
-            return new LeaseTermsEditor();
+            return new LegalTermsEditor();
         }
         return super.create(member);
     }
 
-    private class LeaseTermsEditor extends CEntityDecoratableForm<LegalTermsDescriptorDTO> {
+    private class LegalTermsEditor extends CEntityDecoratableForm<LegalTermsDescriptorDTO> {
 
         private FormFlexPanel main;
 
-        public LeaseTermsEditor() {
+        public LegalTermsEditor() {
             super(LegalTermsDescriptorDTO.class);
         }
 

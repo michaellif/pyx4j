@@ -29,7 +29,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.CreditCardInfo;
 import com.propertyvista.domain.payment.PaymentType;
-import com.propertyvista.domain.policy.policies.LeaseTermsPolicy;
+import com.propertyvista.domain.policy.policies.LegalDocumentation;
 import com.propertyvista.portal.domain.ptapp.Charges;
 import com.propertyvista.portal.domain.ptapp.PaymentInformation;
 import com.propertyvista.portal.rpc.ptapp.ChargesSharedCalculation;
@@ -71,9 +71,16 @@ public class PaymentServiceImpl extends ApplicationEntityServiceImpl implements 
         }
 
         // Legal stuff:
-        LeaseTermsPolicy termsPolicy = LegalStuffUtils.retrieveLegalTermsPolicy();
-        payment.oneTimePaymentTerms().set(LegalStuffUtils.formLegalTerms(termsPolicy.oneTimePaymentTerms()));
-        payment.recurrentPaymentTerms().set(LegalStuffUtils.formLegalTerms(termsPolicy.recurrentPaymentTerms()));
+        LegalDocumentation termsPolicy = LegalStuffUtils.retrieveLegalTermsPolicy();
+
+        // TODO somehow distinguish appropriate terms in the array: 
+
+        if (termsPolicy.paymentAuthorization().size() > 0) {
+            payment.oneTimePaymentTerms().set(LegalStuffUtils.formLegalTerms(termsPolicy.paymentAuthorization().get(0)));
+        }
+        if (termsPolicy.paymentAuthorization().size() > 1) {
+            payment.recurrentPaymentTerms().set(LegalStuffUtils.formLegalTerms(termsPolicy.paymentAuthorization().get(1)));
+        }
 
         callback.onSuccess(payment);
     }

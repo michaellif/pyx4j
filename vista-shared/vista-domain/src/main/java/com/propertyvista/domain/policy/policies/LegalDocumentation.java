@@ -22,20 +22,22 @@ import com.propertyvista.domain.policy.framework.Policy;
 import com.propertyvista.domain.policy.policies.domain.LegalTermsDescriptor;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 
-@DiscriminatorValue("LeaseTermsPolicy")
+@DiscriminatorValue("LegalDocumentationPolicy")
 @LowestApplicableNode(value = AptUnit.class)
-public interface LeaseTermsPolicy extends Policy, TenantsAccessiblePolicy {
+public interface LegalDocumentation extends Policy, TenantsAccessiblePolicy {
 
     @Owned
-    IList<LegalTermsDescriptor> tenantSummaryTerms();
+    IList<LegalTermsDescriptor> mainApplication();
 
     @Owned
-    IList<LegalTermsDescriptor> guarantorSummaryTerms();
+    IList<LegalTermsDescriptor> coApplication();
 
     @Owned
-    LegalTermsDescriptor oneTimePaymentTerms();
+    IList<LegalTermsDescriptor> guarantorApplication();
 
     @Owned
-    LegalTermsDescriptor recurrentPaymentTerms();
+    IList<LegalTermsDescriptor> lease();
 
+    @Owned
+    IList<LegalTermsDescriptor> paymentAuthorization();
 }

@@ -388,9 +388,9 @@ public class CrmSiteMap implements SiteMap {
 
             }
 
-            @PlaceProperties(caption = "Lease Terms")
-            @NavigationItem(navigLabel = "Lease Terms")
-            public static class LeaseTerms extends CrmCrudAppPlace {
+            @PlaceProperties(caption = "Legal Documentation - Terms and Conditions")
+            @NavigationItem(navigLabel = "Legal Documentation")
+            public static class LegalDocumentation extends CrmCrudAppPlace {
 
             }
 
@@ -447,12 +447,6 @@ public class CrmSiteMap implements SiteMap {
             public static class AR extends CrmCrudAppPlace {
 
             }
-        }
-
-        @PlaceProperties(caption = "Lease Terms")
-        @NavigationItem(navigLabel = "Lease Terms")
-        public static class LeaseTerms extends CrmCrudAppPlace {
-
         }
 
         @PlaceProperties(caption = "User Role")

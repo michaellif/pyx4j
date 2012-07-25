@@ -219,8 +219,7 @@ public class SummaryViewForm extends CEntityDecoratableForm<SummaryDTO> {
 
         @Override
         public List<EntityFolderColumnDescriptor> columns() {
-            //@formatter:off
-          return Arrays.asList(
+            return Arrays.asList( //@formatter:off
                   new EntityFolderColumnDescriptor(proto().floorplan(), "10em"),
                   new EntityFolderColumnDescriptor(proto().address(), "30em"),
                   new EntityFolderColumnDescriptor(proto().bedrooms(), "10em"),

@@ -19,7 +19,7 @@ import com.propertyvista.portal.server.preloader.policy.subpreloaders.DepositPol
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.EmailTemplatesPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.IdAssignmentPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.LeaseBillingPolicyPreloader;
-import com.propertyvista.portal.server.preloader.policy.subpreloaders.LeaseTermsPolicyPreloader;
+import com.propertyvista.portal.server.preloader.policy.subpreloaders.LegalDocumentationPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.DatesPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.MockupDepositPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.MockupLeaseAdjustmentPolicyPreloader;
@@ -36,7 +36,7 @@ public class PreloadPolicies extends SimplePoliciesPreloader {
         add(new ApplicationDocumentationPolicyPreloader());
         add(new EmailTemplatesPolicyPreloader());
         add(new IdAssignmentPolicyPreloader());
-        add(new LeaseTermsPolicyPreloader());
+        add(new LegalDocumentationPolicyPreloader());
         add(new RestrictionsPolicyPreloader());
         add(new DatesPolicyPreloader());
 

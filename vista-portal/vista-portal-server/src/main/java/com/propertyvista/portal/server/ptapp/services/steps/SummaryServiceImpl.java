@@ -159,9 +159,9 @@ public class SummaryServiceImpl extends ApplicationEntityServiceImpl implements 
         // fill Lease Terms:
         IList<LegalTermsDescriptor> legalTerms;
         if (SecurityController.checkBehavior(VistaCustomerBehavior.Guarantor)) {
-            legalTerms = LegalStuffUtils.retrieveLegalTermsPolicy().guarantorSummaryTerms();
+            legalTerms = LegalStuffUtils.retrieveLegalTermsPolicy().guarantorApplication();
         } else {
-            legalTerms = LegalStuffUtils.retrieveLegalTermsPolicy().tenantSummaryTerms();
+            legalTerms = LegalStuffUtils.retrieveLegalTermsPolicy().mainApplication();
         }
 
         for (LegalTermsDescriptor terms : legalTerms) {

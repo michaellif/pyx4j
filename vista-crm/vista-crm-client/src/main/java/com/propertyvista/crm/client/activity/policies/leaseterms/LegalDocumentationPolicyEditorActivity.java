@@ -21,32 +21,35 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.activity.policies.common.PolicyEditorActivityBase;
-import com.propertyvista.crm.client.ui.crud.policies.leaseterms.LeaseTermsPolicyEditorView;
+import com.propertyvista.crm.client.ui.crud.policies.leaseterms.LegalDocumentationPolicyEditorView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.PolicyViewFactory;
 import com.propertyvista.crm.rpc.services.policies.policy.AbstractPolicyCrudService;
-import com.propertyvista.crm.rpc.services.policies.policy.LeaseTermsPolicyCrudService;
-import com.propertyvista.domain.policy.dto.LeaseTermsPolicyDTO;
+import com.propertyvista.crm.rpc.services.policies.policy.LegalDocumentationPolicyCrudService;
+import com.propertyvista.domain.policy.dto.LegalDocumentationPolicyDTO;
 import com.propertyvista.domain.policy.policies.domain.LegalTermsContent;
 import com.propertyvista.domain.policy.policies.domain.LegalTermsDescriptor;
 
-public class LeaseTermsPolicyEditorActivity extends PolicyEditorActivityBase<LeaseTermsPolicyDTO> implements LeaseTermsPolicyEditorView.Presenter {
+public class LegalDocumentationPolicyEditorActivity extends PolicyEditorActivityBase<LegalDocumentationPolicyDTO> implements
+        LegalDocumentationPolicyEditorView.Presenter {
 
     @SuppressWarnings("unchecked")
-    public LeaseTermsPolicyEditorActivity(CrudAppPlace place) {
-        super(place, PolicyViewFactory.instance(LeaseTermsPolicyEditorView.class), (AbstractPolicyCrudService<LeaseTermsPolicyDTO>) GWT
-                .create(LeaseTermsPolicyCrudService.class), LeaseTermsPolicyDTO.class);
+    public LegalDocumentationPolicyEditorActivity(CrudAppPlace place) {
+        super(place, PolicyViewFactory.instance(LegalDocumentationPolicyEditorView.class), (AbstractPolicyCrudService<LegalDocumentationPolicyDTO>) GWT
+                .create(LegalDocumentationPolicyCrudService.class), LegalDocumentationPolicyDTO.class);
     }
 
     @Override
-    protected void createNewEntity(final AsyncCallback<LeaseTermsPolicyDTO> callback) {
-        super.createNewEntity(new DefaultAsyncCallback<LeaseTermsPolicyDTO>() {
+    protected void createNewEntity(final AsyncCallback<LegalDocumentationPolicyDTO> callback) {
+        super.createNewEntity(new DefaultAsyncCallback<LegalDocumentationPolicyDTO>() {
 
             @Override
-            public void onSuccess(LeaseTermsPolicyDTO policy) {
+            public void onSuccess(LegalDocumentationPolicyDTO policy) {
                 try {
-                    policy.tenantSummaryTerms().add(createNewLegalTerms());
-                    policy.oneTimePaymentTerms().set(createNewLegalTerms());
-                    policy.recurrentPaymentTerms().set(createNewLegalTerms());
+                    policy.mainApplication().add(createNewLegalTerms());
+                    policy.coApplication().add(createNewLegalTerms());
+                    policy.guarantorApplication().add(createNewLegalTerms());
+                    policy.lease().add(createNewLegalTerms());
+                    policy.paymentAuthorization().add(createNewLegalTerms());
                     callback.onSuccess(policy);
                 } catch (Throwable caught) {
                     callback.onFailure(caught);

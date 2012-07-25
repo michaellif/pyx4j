@@ -11,16 +11,10 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.domain.policy.dto;
+package com.propertyvista.crm.rpc.services.policies.policy;
 
-import com.pyx4j.entity.annotations.ExtendsDBO;
-import com.pyx4j.entity.annotations.Transient;
+import com.propertyvista.domain.policy.dto.LegalDocumentationPolicyDTO;
 
-import com.propertyvista.domain.policy.framework.PolicyDTOBase;
-import com.propertyvista.domain.policy.policies.LeaseTermsPolicy;
-
-@Transient
-@ExtendsDBO(LeaseTermsPolicy.class)
-public interface LeaseTermsPolicyDTO extends PolicyDTOBase, LeaseTermsPolicy {
+public interface LegalDocumentationPolicyCrudService extends AbstractPolicyCrudService<LegalDocumentationPolicyDTO> {
 
 }

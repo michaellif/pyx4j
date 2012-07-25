@@ -62,10 +62,10 @@ import com.propertyvista.crm.client.ui.crud.policies.leasebilling.LeaseBillingPo
 import com.propertyvista.crm.client.ui.crud.policies.leasebilling.LeaseBillingPolicyListerViewImpl;
 import com.propertyvista.crm.client.ui.crud.policies.leasebilling.LeaseBillingPolicyViewerView;
 import com.propertyvista.crm.client.ui.crud.policies.leasebilling.LeaseBillingPolicyViewerViewImpl;
-import com.propertyvista.crm.client.ui.crud.policies.leaseterms.LeaseTermsPolicyEditorView;
-import com.propertyvista.crm.client.ui.crud.policies.leaseterms.LeaseTermsPolicyEditorViewImpl;
-import com.propertyvista.crm.client.ui.crud.policies.leaseterms.LeaseTermsPolicyListerView;
-import com.propertyvista.crm.client.ui.crud.policies.leaseterms.LeaseTermsPolicyListerViewImpl;
+import com.propertyvista.crm.client.ui.crud.policies.leaseterms.LegalDocumentationPolicyEditorView;
+import com.propertyvista.crm.client.ui.crud.policies.leaseterms.LegalDocumentationPolicyEditorViewImpl;
+import com.propertyvista.crm.client.ui.crud.policies.leaseterms.LegalDocumentationPolicyListerView;
+import com.propertyvista.crm.client.ui.crud.policies.leaseterms.LegalDocumentationPolicyListerViewImpl;
 import com.propertyvista.crm.client.ui.crud.policies.misc.DatesPolicyEditorView;
 import com.propertyvista.crm.client.ui.crud.policies.misc.DatesPolicyEditorViewImpl;
 import com.propertyvista.crm.client.ui.crud.policies.misc.DatesPolicyListerView;
@@ -99,10 +99,10 @@ public class PolicyViewFactory extends ViewFactoryBase {
             } else if (ApplicationDocumentationPolicyEdtiorView.class.equals(type)) {
                 map.put(ApplicationDocumentationPolicyEdtiorView.class, new ApplicationDocumentationPolicyEditorViewImpl());
 
-            } else if (LeaseTermsPolicyListerView.class.equals(type)) {
-                map.put(LeaseTermsPolicyListerView.class, new LeaseTermsPolicyListerViewImpl());
-            } else if (LeaseTermsPolicyEditorView.class.equals(type)) {
-                map.put(LeaseTermsPolicyEditorView.class, new LeaseTermsPolicyEditorViewImpl());
+            } else if (LegalDocumentationPolicyListerView.class.equals(type)) {
+                map.put(LegalDocumentationPolicyListerView.class, new LegalDocumentationPolicyListerViewImpl());
+            } else if (LegalDocumentationPolicyEditorView.class.equals(type)) {
+                map.put(LegalDocumentationPolicyEditorView.class, new LegalDocumentationPolicyEditorViewImpl());
 
             } else if (PetPolicyListerView.class.equals(type)) {
                 map.put(PetPolicyListerView.class, new PetPolicyListerViewImpl());

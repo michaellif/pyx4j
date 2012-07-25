@@ -40,7 +40,7 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.moveinwizardmockup.components.FormattableCombo;
-import com.propertyvista.common.client.moveinwizardmockup.components.LeaseTermsFolder;
+import com.propertyvista.common.client.moveinwizardmockup.components.LegalTermsFolder;
 import com.propertyvista.common.client.moveinwizardmockup.components.MoneyLabeledCombo;
 import com.propertyvista.common.client.moveinwizardmockup.components.MultiDisclosurePanel;
 import com.propertyvista.common.client.moveinwizardmockup.components.SignatureFolder;
@@ -116,9 +116,9 @@ public class InsurancePurchaseForm extends CEntityDecoratableForm<PurchaseInsura
         MultiDisclosurePanel sections = new MultiDisclosurePanel();
 
         sections.add(createConverageTermsPanel(), i18n.tr("Coverage Terms"));
-        sections.add(inject(proto().personalDisclaimerTerms(), new LeaseTermsFolder(true)), i18n.tr("Disclaimer"));
+        sections.add(inject(proto().personalDisclaimerTerms(), new LegalTermsFolder(true)), i18n.tr("Disclaimer"));
         sections.add(inject(proto().paymentMethod(), new InsurancePaymentMethodForm()), i18n.tr("Payment"));
-        sections.add(inject(proto().agreementLegalBlurbAndPreAuthorizationAgreeement(), new LeaseTermsFolder(true)), i18n.tr("Agreement"),
+        sections.add(inject(proto().agreementLegalBlurbAndPreAuthorizationAgreeement(), new LegalTermsFolder(true)), i18n.tr("Agreement"),
                 i18n.tr("Pay and Continue"), onPurchaseConfirmed);
         int row = -1;
         content.setWidget(++row, 0, sections);

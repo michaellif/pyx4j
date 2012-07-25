@@ -15,7 +15,6 @@ package com.propertyvista.portal.server.preloader.policy.subpreloaders;
 
 import java.io.IOException;
 
-
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -23,7 +22,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.domain.policy.policies.LeaseTermsPolicy;
+import com.propertyvista.domain.policy.policies.LegalDocumentation;
 import com.propertyvista.domain.policy.policies.domain.LegalTermsContent;
 import com.propertyvista.domain.policy.policies.domain.LegalTermsDescriptor;
 import com.propertyvista.domain.site.AvailableLocale;
@@ -31,16 +30,16 @@ import com.propertyvista.generator.BuildingsGenerator;
 import com.propertyvista.portal.server.preloader.policy.util.AbstractPolicyPreloader;
 import com.propertyvista.shared.CompiledLocale;
 
-public class LeaseTermsPolicyPreloader extends AbstractPolicyPreloader<LeaseTermsPolicy> {
+public class LegalDocumentationPolicyPreloader extends AbstractPolicyPreloader<LegalDocumentation> {
 
-    private final static I18n i18n = I18n.get(LeaseTermsPolicyPreloader.class);
+    private final static I18n i18n = I18n.get(LegalDocumentationPolicyPreloader.class);
 
-    public LeaseTermsPolicyPreloader() {
-        super(LeaseTermsPolicy.class);
+    public LegalDocumentationPolicyPreloader() {
+        super(LegalDocumentation.class);
     }
 
-    private LeaseTermsPolicy createDefaultLeaseTermsPolicy() {
-        LeaseTermsPolicy policy = EntityFactory.create(LeaseTermsPolicy.class);
+    private LegalDocumentation createDefaultLeaseTermsPolicy() {
+        LegalDocumentation policy = EntityFactory.create(LegalDocumentation.class);
 
         String termsContentText = "failed to get lease terms during the preload phase";
         try {
@@ -79,18 +78,26 @@ public class LeaseTermsPolicyPreloader extends AbstractPolicyPreloader<LeaseTerm
             Persistence.service().persist(en);
         }
 
-        String caption = i18n.tr("Mockup Tenant Terms");
-        policy.tenantSummaryTerms().add(createLegalTermsDescriptor(caption, "Main Tenant Policy", createLegalTermsContent(caption, en, termsContentText)));
+        String caption = i18n.tr("Mockup Main Application");
+        policy.mainApplication().add(createLegalTermsDescriptor(caption, "Main Application", createLegalTermsContent(caption, en, termsContentText)));
 
-        caption = i18n.tr("Mockup Guarantor Terms");
-        policy.guarantorSummaryTerms().add(
-                createLegalTermsDescriptor(caption, "Main Guarantor Policy", createLegalTermsContent(caption, en, guarantorTermsContentText)));
+        caption = i18n.tr("Mockup Co-Application");
+        policy.coApplication().add(createLegalTermsDescriptor(caption, "Co-Application", createLegalTermsContent(caption, en, termsContentText)));
 
-        caption = i18n.tr("Mockup One Time Payment Terms");
-        policy.oneTimePaymentTerms().set(createLegalTermsDescriptor(caption, "", createLegalTermsContent(caption, en, termsContentText)));
+        caption = i18n.tr("Mockup Guarantor Application");
+        policy.guarantorApplication().add(
+                createLegalTermsDescriptor(caption, "Guarantor Application", createLegalTermsContent(caption, en, guarantorTermsContentText)));
 
-        caption = i18n.tr("Mockup Recurrent Time Payment Terms");
-        policy.recurrentPaymentTerms().set(createLegalTermsDescriptor(caption, "", createLegalTermsContent(caption, en, prepaidTermsContentText)));
+        caption = i18n.tr("Mockup Lease Terms");
+        policy.lease().add(createLegalTermsDescriptor(caption, "Lease Terms", createLegalTermsContent(caption, en, prepaidTermsContentText)));
+
+        caption = i18n.tr("Mockup One-Time Payment Authorization");
+        policy.paymentAuthorization().add(
+                createLegalTermsDescriptor(caption, "One-Time Payment Authorization", createLegalTermsContent(caption, en, termsContentText)));
+
+        caption = i18n.tr("Mockup Pre-Authorization Authorization");
+        policy.paymentAuthorization().add(
+                createLegalTermsDescriptor(caption, "Pre-Authorization Payment Authorization", createLegalTermsContent(caption, en, termsContentText)));
 
         return policy;
     }
@@ -114,7 +121,7 @@ public class LeaseTermsPolicyPreloader extends AbstractPolicyPreloader<LeaseTerm
     }
 
     @Override
-    protected LeaseTermsPolicy createPolicy(StringBuilder log) {
+    protected LegalDocumentation createPolicy(StringBuilder log) {
         return createDefaultLeaseTermsPolicy();
     }
 

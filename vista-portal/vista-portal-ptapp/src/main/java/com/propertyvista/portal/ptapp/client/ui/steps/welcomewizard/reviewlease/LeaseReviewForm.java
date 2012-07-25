@@ -32,7 +32,7 @@ public class LeaseReviewForm extends CEntityDecoratableForm<LeaseReviewDTO> {
 
         int row = -1;
 
-        main.setWidget(++row, 0, inject(proto().leaseAgreementTerms(), new LeaseTermsFolder(true)));
+        main.setWidget(++row, 0, inject(proto().leaseAgreementTerms(), new LegalTermsFolder(true)));
 
         return main;
     }

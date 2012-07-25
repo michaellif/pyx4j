@@ -16,18 +16,18 @@ package com.propertyvista.crm.server.services.policies.policy;
 import com.pyx4j.commons.UserRuntimeException;
 
 import com.propertyvista.crm.server.services.policies.GenericPolicyCrudService;
-import com.propertyvista.domain.policy.dto.LeaseTermsPolicyDTO;
-import com.propertyvista.domain.policy.policies.LeaseTermsPolicy;
+import com.propertyvista.domain.policy.dto.LegalDocumentationPolicyDTO;
+import com.propertyvista.domain.policy.policies.LegalDocumentation;
 import com.propertyvista.domain.policy.policies.domain.LegalTermsDescriptor;
 
-public class LeaseTermsPolicyCrudServiceImpl extends GenericPolicyCrudService<LeaseTermsPolicy, LeaseTermsPolicyDTO> {
+public class LegalDocumentationPolicyCrudServiceImpl extends GenericPolicyCrudService<LegalDocumentation, LegalDocumentationPolicyDTO> {
 
-    public LeaseTermsPolicyCrudServiceImpl() {
-        super(LeaseTermsPolicy.class, LeaseTermsPolicyDTO.class);
+    public LegalDocumentationPolicyCrudServiceImpl() {
+        super(LegalDocumentation.class, LegalDocumentationPolicyDTO.class);
     }
 
     @Override
-    protected void persist(LeaseTermsPolicy dbo, LeaseTermsPolicyDTO in) {
+    protected void persist(LegalDocumentation dbo, LegalDocumentationPolicyDTO in) {
         StringBuffer errors = new StringBuffer();
         if (!isValid(in, errors)) {
             throw new UserRuntimeException(errors.toString());
@@ -35,12 +35,12 @@ public class LeaseTermsPolicyCrudServiceImpl extends GenericPolicyCrudService<Le
         super.persist(dbo, in);
     }
 
-    private static boolean isValid(LeaseTermsPolicyDTO in, StringBuffer errors) {
+    private static boolean isValid(LegalDocumentationPolicyDTO in, StringBuffer errors) {
         boolean isValid = true;
-        if (!(isValid &= !in.tenantSummaryTerms().isEmpty())) {
+        if (!(isValid &= !in.mainApplication().isEmpty())) {
             errors.append("Summary terms list must not be empty; ");
         } else {
-            for (LegalTermsDescriptor terms : in.tenantSummaryTerms()) {
+            for (LegalTermsDescriptor terms : in.mainApplication()) {
                 if (!(isValid &= isValid(terms))) {
                     // TODO add message
                 }

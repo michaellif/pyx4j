@@ -16,19 +16,19 @@ package com.propertyvista.crm.client.ui.crud.policies.leaseterms;
 import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyListerBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.domain.policy.dto.LeaseTermsPolicyDTO;
+import com.propertyvista.domain.policy.dto.LegalDocumentationPolicyDTO;
 
-public class LeaseTermsPolicyListerViewImpl extends CrmListerViewImplBase<LeaseTermsPolicyDTO> implements LeaseTermsPolicyListerView {
+public class LegalDocumentationPolicyListerViewImpl extends CrmListerViewImplBase<LegalDocumentationPolicyDTO> implements LegalDocumentationPolicyListerView {
 
-    public LeaseTermsPolicyListerViewImpl() {
-        super(CrmSiteMap.Settings.Policies.LeaseTerms.class);
-        setLister(new LeaseTermsPolicyLister());
+    public LegalDocumentationPolicyListerViewImpl() {
+        super(CrmSiteMap.Settings.Policies.LegalDocumentation.class);
+        setLister(new LegalDocumentationPolicyLister());
     }
 
-    private static class LeaseTermsPolicyLister extends PolicyListerBase<LeaseTermsPolicyDTO> {
+    private static class LegalDocumentationPolicyLister extends PolicyListerBase<LegalDocumentationPolicyDTO> {
 
-        public LeaseTermsPolicyLister() {
-            super(LeaseTermsPolicyDTO.class);
+        public LegalDocumentationPolicyLister() {
+            super(LegalDocumentationPolicyDTO.class);
         }
     }
 }

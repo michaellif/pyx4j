@@ -171,9 +171,9 @@ import com.propertyvista.crm.client.activity.policies.leaseadjustment.LeaseAdjus
 import com.propertyvista.crm.client.activity.policies.leasebilling.LeaseBillingPolicyEditorActivity;
 import com.propertyvista.crm.client.activity.policies.leasebilling.LeaseBillingPolicyListerActivity;
 import com.propertyvista.crm.client.activity.policies.leasebilling.LeaseBillingPolicyViewerActivity;
-import com.propertyvista.crm.client.activity.policies.leaseterms.LeaseTermsPolicyEditorActivity;
-import com.propertyvista.crm.client.activity.policies.leaseterms.LeaseTermsPolicyListerActivicty;
-import com.propertyvista.crm.client.activity.policies.leaseterms.LeaseTermsPolicyViewerActivity;
+import com.propertyvista.crm.client.activity.policies.leaseterms.LegalDocumentationPolicyEditorActivity;
+import com.propertyvista.crm.client.activity.policies.leaseterms.LegalDocumentationPolicyListerActivicty;
+import com.propertyvista.crm.client.activity.policies.leaseterms.LegalDocumentationPolicyViewerActivity;
 import com.propertyvista.crm.client.activity.policies.misc.DatesPolicyEditorActivity;
 import com.propertyvista.crm.client.activity.policies.misc.DatesPolicyListerActivity;
 import com.propertyvista.crm.client.activity.policies.misc.DatesPolicyViewerActivity;
@@ -791,16 +791,16 @@ public class MainActivityMapper implements AppActivityMapper {
                             break;
                         }
 
-                    } else if (place instanceof CrmSiteMap.Settings.Policies.LeaseTerms) {
+                    } else if (place instanceof CrmSiteMap.Settings.Policies.LegalDocumentation) {
                         switch (crudPlace.getType()) {
                         case lister:
-                            activity = new LeaseTermsPolicyListerActivicty(crudPlace);
+                            activity = new LegalDocumentationPolicyListerActivicty(crudPlace);
                             break;
                         case editor:
-                            activity = new LeaseTermsPolicyEditorActivity(crudPlace);
+                            activity = new LegalDocumentationPolicyEditorActivity(crudPlace);
                             break;
                         case viewer:
-                            activity = new LeaseTermsPolicyViewerActivity(crudPlace);
+                            activity = new LegalDocumentationPolicyViewerActivity(crudPlace);
                             break;
                         }
 
