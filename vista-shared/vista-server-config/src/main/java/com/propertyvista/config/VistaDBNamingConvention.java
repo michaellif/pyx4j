@@ -23,7 +23,7 @@ public class VistaDBNamingConvention extends NamingConventionOracle {
     }
 
     public VistaDBNamingConvention(boolean hsql) {
-        super(63, shortWords(), false, true, hsql ? '_' : '$');
+        super(63, shortWords(), false, hsql ? true : false, hsql ? '_' : '$');
     }
 
     private static ShortWords shortWords() {
