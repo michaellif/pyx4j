@@ -40,9 +40,11 @@ import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.security.CrmRole;
 import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.security.OnboardingUser;
+import com.propertyvista.generator.SecurityGenerator;
 import com.propertyvista.misc.VistaDataPreloaderParameter;
 import com.propertyvista.server.common.security.PasswordEncryptor;
 import com.propertyvista.server.domain.security.CrmUserCredential;
+import com.propertyvista.shared.config.VistaDemo;
 
 public class PmcCreator {
 
@@ -152,6 +154,9 @@ public class PmcCreator {
             credential.interfaceUid().setValue(onbUserCred.interfaceUid().getValue());
         } else {
             credential.credential().setValue(PasswordEncryptor.encryptPassword(password));
+        }
+        if (ApplicationMode.isDevelopment() || VistaDemo.isDemo()) {
+            SecurityGenerator.assignSecurityQuestion(credential);
         }
         credential.enabled().setValue(Boolean.TRUE);
         credential.accessAllBuildings().setValue(Boolean.TRUE);
