@@ -84,6 +84,12 @@ import com.propertyvista.dto.TransactionHistoryDTO;
 
 public abstract class FinancialTestBase extends VistaDBTestBase {
 
+    public interface FunctionalTests {
+    }
+
+    public interface RegressionTests extends FunctionalTests {
+    }
+
     private long startTime;
 
     protected LeaseDataModel leaseDataModel;

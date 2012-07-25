@@ -22,12 +22,16 @@ package com.propertyvista.biz.financial.ar;
 
 import java.math.BigDecimal;
 
+import org.junit.experimental.categories.Category;
+
 import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
 
 import com.propertyvista.biz.financial.FinancialTestBase;
+import com.propertyvista.biz.financial.FinancialTestBase.RegressionTests;
 import com.propertyvista.biz.financial.SysDateManager;
 import com.propertyvista.domain.financial.billing.InvoiceDebit.DebitType;
 
+@Category(RegressionTests.class)
 public class ARSunnyDayScenarioTest extends FinancialTestBase {
 
     @Override

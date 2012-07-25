@@ -22,15 +22,19 @@ package com.propertyvista.biz.financial.ar;
 
 import java.util.List;
 
+import org.junit.experimental.categories.Category;
+
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
 
 import com.propertyvista.biz.financial.FinancialTestBase;
+import com.propertyvista.biz.financial.FinancialTestBase.FunctionalTests;
 import com.propertyvista.biz.financial.SysDateManager;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
 import com.propertyvista.domain.policy.policies.ARPolicy;
 import com.propertyvista.domain.policy.policies.ARPolicy.CreditDebitRule;
 
+@Category(FunctionalTests.class)
 public class ARNotCoveredDebitInvoiceLineItemListTest extends FinancialTestBase {
 
     @Override

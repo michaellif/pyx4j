@@ -20,15 +20,19 @@
  */
 package com.propertyvista.biz.financial.billing;
 
+import org.junit.experimental.categories.Category;
+
 import com.pyx4j.config.server.ServerSideFactory;
 
 import com.propertyvista.biz.financial.FinancialTestBase;
+import com.propertyvista.biz.financial.FinancialTestBase.FunctionalTests;
 import com.propertyvista.biz.financial.SysDateManager;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.payment.PaymentType;
 
+@Category(FunctionalTests.class)
 public class BillingRejectedPaymentScenarioTest extends FinancialTestBase {
 
     @Override

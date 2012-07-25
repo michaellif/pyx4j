@@ -17,9 +17,12 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.math.BigDecimal;
 
+import org.junit.experimental.categories.Category;
+
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.biz.financial.FinancialTestBase;
+import com.propertyvista.biz.financial.FinancialTestBase.FunctionalTests;
 import com.propertyvista.biz.financial.FinancialTestsUtils;
 import com.propertyvista.biz.financial.billing.BillingUtils;
 import com.propertyvista.domain.financial.billing.Bill;
@@ -38,6 +41,7 @@ import com.propertyvista.domain.financial.billing.InvoiceProductCredit;
 import com.propertyvista.domain.financial.billing.InvoiceWithdrawal;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment.ExecutionType;
 
+@Category(FunctionalTests.class)
 public class BillPrintTest extends FinancialTestBase {
 
     public void testBillPrint() throws FileNotFoundException {

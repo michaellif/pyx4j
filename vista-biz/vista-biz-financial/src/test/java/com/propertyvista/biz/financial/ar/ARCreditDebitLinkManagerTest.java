@@ -22,10 +22,13 @@ package com.propertyvista.biz.financial.ar;
 
 import java.math.BigDecimal;
 
+import org.junit.experimental.categories.Category;
+
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
 
 import com.propertyvista.biz.financial.FinancialTestBase;
+import com.propertyvista.biz.financial.FinancialTestBase.FunctionalTests;
 import com.propertyvista.biz.financial.SysDateManager;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.Bill;
@@ -33,6 +36,7 @@ import com.propertyvista.domain.financial.billing.DebitCreditLink;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 
+@Category(FunctionalTests.class)
 public class ARCreditDebitLinkManagerTest extends FinancialTestBase {
 
     @Override

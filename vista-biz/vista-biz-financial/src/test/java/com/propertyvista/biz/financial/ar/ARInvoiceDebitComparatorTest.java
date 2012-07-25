@@ -20,14 +20,18 @@
  */
 package com.propertyvista.biz.financial.ar;
 
+import org.junit.experimental.categories.Category;
+
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.biz.financial.FinancialTestBase;
+import com.propertyvista.biz.financial.FinancialTestBase.FunctionalTests;
 import com.propertyvista.biz.financial.FinancialTestsUtils;
 import com.propertyvista.biz.financial.SysDateManager;
 import com.propertyvista.domain.financial.billing.InvoiceAccountCharge;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
 
+@Category(FunctionalTests.class)
 public class ARInvoiceDebitComparatorTest extends FinancialTestBase {
 
     @Override

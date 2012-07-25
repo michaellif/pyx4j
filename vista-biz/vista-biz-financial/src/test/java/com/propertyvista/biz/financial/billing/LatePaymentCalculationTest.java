@@ -15,13 +15,17 @@ package com.propertyvista.biz.financial.billing;
 
 import java.math.BigDecimal;
 
+import org.junit.experimental.categories.Category;
+
 import com.pyx4j.entity.shared.EntityFactory;
 
+import com.propertyvista.biz.financial.FinancialTestBase.FunctionalTests;
 import com.propertyvista.config.tests.VistaDBTestBase;
 import com.propertyvista.domain.policy.policies.LeaseBillingPolicy;
 import com.propertyvista.domain.policy.policies.domain.LateFeeItem.BaseFeeType;
 import com.propertyvista.domain.policy.policies.domain.LateFeeItem.MaxTotalFeeType;
 
+@Category(FunctionalTests.class)
 public class LatePaymentCalculationTest extends VistaDBTestBase {
 
     public void testZeroAmountOwning() {

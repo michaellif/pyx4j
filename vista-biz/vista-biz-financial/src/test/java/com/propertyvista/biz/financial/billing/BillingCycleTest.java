@@ -15,16 +15,20 @@ package com.propertyvista.biz.financial.billing;
 
 import java.text.ParseException;
 
+import org.junit.experimental.categories.Category;
+
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 
+import com.propertyvista.biz.financial.FinancialTestBase.FunctionalTests;
 import com.propertyvista.biz.financial.FinancialTestsUtils;
 import com.propertyvista.config.tests.VistaDBTestBase;
 import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.financial.billing.BillingType;
 import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
 
+@Category(FunctionalTests.class)
 public class BillingCycleTest extends VistaDBTestBase {
 
     public void testFirstBillingCycle() throws ParseException {

@@ -13,16 +13,18 @@
  */
 package com.propertyvista.biz.financial;
 
-import org.junit.experimental.categories.Categories;
-import org.junit.experimental.categories.Categories.IncludeCategory;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
-import com.propertyvista.biz.financial.FinancialTestBase.RegressionTests;
+import com.propertyvista.biz.financial.ar.ARCreditDebitLinkManagerTest;
+import com.propertyvista.biz.financial.ar.ARInvoiceDebitComparatorTest;
+import com.propertyvista.biz.financial.ar.ARNotCoveredDebitInvoiceLineItemListTest;
+import com.propertyvista.biz.financial.ar.ARSunnyDayScenarioTest;
+import com.propertyvista.biz.financial.ar.ARArrearsSnapshotTest;
 
-@RunWith(Categories.class)
-@IncludeCategory(RegressionTests.class)
-@Suite.SuiteClasses({ ARSuite.class, BillingSuite.class })
-public class RegressionSuite {
+@RunWith(Suite.class)
+@Suite.SuiteClasses({ ARCreditDebitLinkManagerTest.class, ARInvoiceDebitComparatorTest.class, ARNotCoveredDebitInvoiceLineItemListTest.class,
+        ARArrearsSnapshotTest.class, ARSunnyDayScenarioTest.class, })
+public class ARSuite {
 
 }

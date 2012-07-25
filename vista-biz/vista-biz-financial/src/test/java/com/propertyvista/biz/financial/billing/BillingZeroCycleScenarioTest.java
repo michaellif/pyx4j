@@ -22,15 +22,19 @@ package com.propertyvista.biz.financial.billing;
 
 import java.math.BigDecimal;
 
+import org.junit.experimental.categories.Category;
+
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
 
 import com.propertyvista.biz.financial.FinancialTestBase;
+import com.propertyvista.biz.financial.FinancialTestBase.FunctionalTests;
 import com.propertyvista.biz.financial.SysDateManager;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.preload.PreloadConfig;
 import com.propertyvista.domain.financial.billing.Bill;
 
+@Category(FunctionalTests.class)
 public class BillingZeroCycleScenarioTest extends FinancialTestBase {
 
     @Override

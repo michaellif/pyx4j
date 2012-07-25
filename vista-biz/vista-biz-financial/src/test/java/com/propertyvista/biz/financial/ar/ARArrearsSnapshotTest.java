@@ -15,12 +15,16 @@ package com.propertyvista.biz.financial.ar;
 
 import static com.propertyvista.biz.financial.SysDateManager.setSysDate;
 
+import org.junit.experimental.categories.Category;
+
 import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
 
+import com.propertyvista.biz.financial.FinancialTestBase.FunctionalTests;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.InvoiceDebit.DebitType;
 
-public class ArrearsSnapshotTest extends ArrearsSnapshotTestBase {
+@Category(FunctionalTests.class)
+public class ARArrearsSnapshotTest extends ArrearsSnapshotTestBase {
 
     public void testLeaseScenario() {
         // SET UP

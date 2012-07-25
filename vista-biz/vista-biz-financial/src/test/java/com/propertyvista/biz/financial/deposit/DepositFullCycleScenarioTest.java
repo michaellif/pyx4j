@@ -13,14 +13,18 @@
  */
 package com.propertyvista.biz.financial.deposit;
 
+import org.junit.experimental.categories.Category;
+
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
 
 import com.propertyvista.biz.financial.FinancialTestBase;
+import com.propertyvista.biz.financial.FinancialTestBase.FunctionalTests;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.billing.BillTester;
 import com.propertyvista.domain.financial.billing.Bill;
 
+@Category(FunctionalTests.class)
 public class DepositFullCycleScenarioTest extends FinancialTestBase {
 
     @Override

@@ -17,12 +17,16 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 
+import org.junit.experimental.categories.Category;
+
 import com.pyx4j.essentials.server.xml.XMLEntitySchemaWriter;
 
+import com.propertyvista.biz.financial.FinancialTestBase.FunctionalTests;
 import com.propertyvista.config.tests.VistaDBTestBase;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.tenant.lease.Lease;
 
+@Category(FunctionalTests.class)
 public class BillingModelTest extends VistaDBTestBase {
 
     public void testCreateBillingModel() throws FileNotFoundException {

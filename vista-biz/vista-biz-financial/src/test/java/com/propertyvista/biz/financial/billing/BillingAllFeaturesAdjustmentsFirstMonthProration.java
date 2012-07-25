@@ -20,10 +20,13 @@
  */
 package com.propertyvista.biz.financial.billing;
 
+import org.junit.experimental.categories.Category;
+
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
 
 import com.propertyvista.biz.financial.FinancialTestBase;
+import com.propertyvista.biz.financial.FinancialTestBase.FunctionalTests;
 import com.propertyvista.biz.financial.SysDateManager;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.preload.PreloadConfig;
@@ -31,6 +34,7 @@ import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.Type;
 
+@Category(FunctionalTests.class)
 public class BillingAllFeaturesAdjustmentsFirstMonthProration extends FinancialTestBase {
 
     @Override
@@ -64,7 +68,7 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProration extends FinancialT
         ///debug mode:
         /// new BillTester(bill, true).
          
-        new BillTester(bill, true).
+        new BillTester(bill).
         billSequenceNumber(1).
         previousBillSequenceNumber(null).
         billType(Bill.BillType.First).
@@ -865,7 +869,7 @@ public class BillingAllFeaturesAdjustmentsFirstMonthProration extends FinancialT
 
     }
 
-    public void testScenario22VISTA1715() {
+    public void testScenario22() {
 
         setLeaseTerms("05-Feb-2012", "14-Feb-2013");
         addServiceAdjustment("-55.55", Type.monetary);

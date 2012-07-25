@@ -20,16 +20,20 @@
  */
 package com.propertyvista.biz.financial.billing;
 
+import org.junit.experimental.categories.Category;
+
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
 
 import com.propertyvista.biz.financial.FinancialTestBase;
+import com.propertyvista.biz.financial.FinancialTestBase.FunctionalTests;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.Type;
 
+@Category(FunctionalTests.class)
 public class BillableItemAdjustmentTest extends FinancialTestBase {
 
     @Override

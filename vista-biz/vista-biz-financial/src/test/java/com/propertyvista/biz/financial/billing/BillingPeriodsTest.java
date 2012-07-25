@@ -23,12 +23,16 @@ package com.propertyvista.biz.financial.billing;
 import java.text.ParseException;
 import java.util.Date;
 
+import org.junit.experimental.categories.Category;
+
 import com.propertyvista.biz.financial.FinancialTestBase;
+import com.propertyvista.biz.financial.FinancialTestBase.FunctionalTests;
 import com.propertyvista.biz.financial.SysDateManager;
 import com.propertyvista.biz.financial.preload.PreloadConfig;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.portal.rpc.shared.BillingException;
 
+@Category(FunctionalTests.class)
 public class BillingPeriodsTest extends FinancialTestBase {
 
     public void testSequentialBillingCycleWithGlobalBillingPeriodStartDate() throws ParseException {
