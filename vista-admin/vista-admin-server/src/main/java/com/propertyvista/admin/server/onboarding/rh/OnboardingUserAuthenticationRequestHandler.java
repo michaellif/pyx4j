@@ -56,7 +56,10 @@ public class OnboardingUserAuthenticationRequestHandler extends AbstractRequestH
     @Override
     public ResponseIO execute(OnboardingUserAuthenticationRequestIO request) {
         log.info("User {} performed {} for email {}", new Object[] { request.email().getValue(), "OnboardingUserAuthentication", request.email().getValue() });
+        return processOnboardingUserLogin(request);
+    }
 
+    public static OnboardingUserAuthenticationResponseIO processOnboardingUserLogin(OnboardingUserAuthenticationRequestIO request) {
         OnboardingUserAuthenticationResponseIO response = EntityFactory.create(OnboardingUserAuthenticationResponseIO.class);
         response.success().setValue(Boolean.TRUE);
 
@@ -194,4 +197,5 @@ public class OnboardingUserAuthenticationRequestHandler extends AbstractRequestH
             }
         }
     }
+
 }

@@ -17,7 +17,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
@@ -43,27 +42,18 @@ import org.openid4java.server.ServerManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
-
-import com.pyx4j.commons.Pair;
-import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideConfiguration;
-import com.pyx4j.config.shared.ApplicationMode;
-import com.pyx4j.config.shared.ClientSystemInfo;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.rpc.server.LocalService;
-import com.pyx4j.security.rpc.AuthenticationRequest;
-import com.pyx4j.security.rpc.AuthenticationResponse;
-import com.pyx4j.security.rpc.ChallengeVerificationRequired;
-import com.pyx4j.server.contexts.Context;
-import com.pyx4j.server.contexts.Lifecycle;
 import com.pyx4j.server.contexts.NamespaceManager;
 
-import com.propertyvista.admin.rpc.services.AdminAuthenticationService;
+import com.propertyvista.admin.server.onboarding.rh.OnboardingUserAuthenticationRequestHandler;
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.domain.VistaNamespace;
+import com.propertyvista.onboarding.OnboardingUserAuthenticationRequestIO;
+import com.propertyvista.onboarding.OnboardingUserAuthenticationResponseIO;
+import com.propertyvista.onboarding.OnboardingUserAuthenticationResponseIO.AuthenticationStatusCode;
 
 public class OpenIDProviderServer {
 
@@ -241,57 +231,40 @@ public class OpenIDProviderServer {
 
     protected UserData userInteraction(HttpServletRequest httpReq, ParameterList request) throws OpenIDException {
         httpReq.setAttribute("message", "");
+        if (!httpReq.getMethod().equals("POST")) {
+            return null;
 
-        if (httpReq.getMethod().equals("POST") && (httpReq.getParameter("j_username") != null)) {
-            if (!login(httpReq, httpReq.getParameter("j_username"), httpReq.getParameter("j_password"), null)) {
-                return null;
-            }
         }
 
-        if ((Context.getVisit() != null) && (Context.getVisit().isUserLoggedIn())) {
-            UserData userData = new UserData();
-            userData.authenticatedAndApproved = true;
-            userData.email = Context.getVisit().getUserVisit().getEmail();
-            //userData.userSelectedClaimedId = getOPEndpointUrl();
-            Lifecycle.endSession();
-            return userData;
-        } else {
-            return null;
+        UserData userData = new UserData();
+        try {
+            NamespaceManager.setNamespace(VistaNamespace.adminNamespace);
+
+            OnboardingUserAuthenticationResponseIO authResponse = OnboardingUserAuthenticationRequestHandler
+                    .processOnboardingUserLogin(asOnboardingAuthRequest(httpReq.getParameter("j_username"), httpReq.getParameter("j_password"), null, null));
+
+            if ((authResponse.status().getValue() == AuthenticationStatusCode.OK)
+                    | (authResponse.status().getValue() == AuthenticationStatusCode.OK_PasswordChangeRequired)) {
+                userData.authenticatedAndApproved = true;
+                userData.email = authResponse.email().getValue();
+                return userData;
+            } else {
+                return null;
+            }
+        } finally {
+            NamespaceManager.setNamespace("_");
         }
     }
 
-    private boolean login(final HttpServletRequest httpReq, final String username, final String password, Pair<String, String> captcha) {
-        AuthenticationRequest request = EntityFactory.create(AuthenticationRequest.class);
-        request.email().setValue(username);
+    private OnboardingUserAuthenticationRequestIO asOnboardingAuthRequest(String email, String password, String captchaChallenge, String captchaResponse) {
+        OnboardingUserAuthenticationRequestIO request = EntityFactory.create(OnboardingUserAuthenticationRequestIO.class);
+        request.email().setValue(email);
         request.password().setValue(password);
-        request.captcha().setValue(captcha);
-
-        NamespaceManager.setNamespace(VistaNamespace.adminNamespace);
-
-        final AtomicBoolean rc = new AtomicBoolean(false);
-        // This does the actual authentication; will throw an exception in case of failure
-        LocalService.create(AdminAuthenticationService.class).authenticate(new AsyncCallback<AuthenticationResponse>() {
-            @Override
-            public void onFailure(Throwable caught) {
-                if (caught instanceof ChallengeVerificationRequired) {
-                    httpReq.setAttribute("captchaRequired", Boolean.TRUE);
-                } else if (caught instanceof UserRuntimeException) {
-                    httpReq.setAttribute("message", caught.getMessage());
-                } else if (ApplicationMode.isDevelopment()) {
-                    httpReq.setAttribute("message", caught.getMessage());
-                } else {
-                    httpReq.setAttribute("message", i18n.tr("Action failed. Please try again later."));
-                }
-                rc.set(false);
-            }
-
-            @Override
-            public void onSuccess(AuthenticationResponse result) {
-                rc.set(true);
-            }
-        }, new ClientSystemInfo(), request);
-        NamespaceManager.setNamespace("_");
-        return rc.get();
+        if (captchaChallenge != null & captchaResponse != null) {
+            request.captcha().challenge().setValue(captchaChallenge);
+            request.captcha().response().setValue(captchaResponse);
+        }
+        return request;
     }
 
     private String directResponse(HttpServletResponse httpResp, String response) throws IOException {
