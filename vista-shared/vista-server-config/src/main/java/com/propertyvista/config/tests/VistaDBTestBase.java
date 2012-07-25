@@ -29,7 +29,8 @@ public abstract class VistaDBTestBase extends TestCase {
     protected void setUp() throws Exception {
         super.setUp();
         VistaTestDBSetup.init();
-        if (runningTestsCount > 0) {
+        //TODO investigate memory problem
+        if ((runningTestsCount > 0) && (false)) {
             PersistenceServicesFactory.dispose();
             VistaTestDBSetup.resetDatabase();
         }
