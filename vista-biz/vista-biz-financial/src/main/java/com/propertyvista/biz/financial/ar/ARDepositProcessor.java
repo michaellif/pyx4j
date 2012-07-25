@@ -28,6 +28,11 @@ public class ARDepositProcessor extends AbstractARProcessor {
     void postDepositRefund(Deposit deposit) {
         assert (!deposit.lifecycle().isNull());
 
+        // must be in Paid status
+        if (!DepositStatus.Paid.equals(deposit.lifecycle().status().getValue())) {
+            return;
+        }
+
         InvoiceDepositRefund refund = EntityFactory.create(InvoiceDepositRefund.class);
         refund.deposit().set(deposit);
         refund.amount().setValue(deposit.lifecycle().currentAmount().getValue().negate());
@@ -39,6 +44,7 @@ public class ARDepositProcessor extends AbstractARProcessor {
         ARTransactionManager.postInvoiceLineItem(refund);
 
         deposit.lifecycle().status().setValue(DepositStatus.Refunded);
-        Persistence.service().persist(deposit);
+
+        Persistence.service().persist(deposit.lifecycle());
     }
 }

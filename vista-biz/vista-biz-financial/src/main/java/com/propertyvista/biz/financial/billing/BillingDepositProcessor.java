@@ -15,6 +15,7 @@ package com.propertyvista.biz.financial.billing;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
@@ -24,6 +25,7 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.deposit.DepositFacade;
+import com.propertyvista.biz.financial.deposit.DepositFacade.ProductTerm;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.InvoiceDebit.DebitType;
 import com.propertyvista.domain.financial.billing.InvoiceDeposit;
@@ -32,6 +34,7 @@ import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Deposit;
 import com.propertyvista.domain.tenant.lease.Deposit.DepositType;
+import com.propertyvista.domain.tenant.lease.DepositLifecycle.DepositStatus;
 
 public class BillingDepositProcessor extends AbstractBillingProcessor {
 
@@ -93,8 +96,9 @@ public class BillingDepositProcessor extends AbstractBillingProcessor {
         if (!nextBill.billingPeriodEndDate().getValue().before(nextBill.billingAccount().lease().leaseTo().getValue())) {
             Persistence.service().retrieve(nextBill.billingAccount().deposits());
 
-            for (Deposit deposit : ServerSideFactory.create(DepositFacade.class).getCurrentDeposits(nextBill.billingAccount().lease())) {
-                if (DepositType.LastMonthDeposit.equals(deposit.type().getValue())) {
+            Map<Deposit, ProductTerm> deposits = ServerSideFactory.create(DepositFacade.class).getCurrentDeposits(nextBill.billingAccount().lease());
+            for (Deposit deposit : deposits.keySet()) {
+                if (DepositType.LastMonthDeposit.equals(deposit.type().getValue()) && DepositStatus.Paid.equals(deposit.lifecycle().status().getValue())) {
                     ServerSideFactory.create(ARFacade.class).postDepositRefund(deposit);
                 }
             }

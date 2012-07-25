@@ -63,9 +63,8 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
         numOfProductCharges(1).
         serviceCharge("874.75").
         depositAmount("930.30").
-        depositRefundAmount("-930.30").
         taxes("104.97").
-        totalDueAmount("979.72");
+        totalDueAmount("1910.02");
         // @formatter:on
 
         // printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
@@ -90,9 +89,8 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
         numOfProductCharges(1).
         serviceCharge("846.53").
         depositAmount("930.30").
-        depositRefundAmount("-930.30").
         taxes("101.58").
-        totalDueAmount("948.11");
+        totalDueAmount("1878.41");
         // @formatter:on
 
         // printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
@@ -118,9 +116,8 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
         numOfProductCharges(1).
         serviceCharge("818.31").
         depositAmount("930.30").
-        depositRefundAmount("-930.30").
         taxes("98.20").
-        totalDueAmount("916.51");
+        totalDueAmount("1846.81");
         // @formatter:on
 
         // printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
@@ -145,9 +142,8 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
         numOfProductCharges(1).
         serviceCharge("790.10").
         depositAmount("930.30").
-        depositRefundAmount("-930.30").
         taxes("94.81").
-        totalDueAmount("884.91");
+        totalDueAmount("1815.21");
         // @formatter:on
 
         // printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
@@ -172,9 +168,8 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
         numOfProductCharges(1).
         serviceCharge("761.88").
         depositAmount("930.30").
-        depositRefundAmount("-930.30").
         taxes("91.43").
-        totalDueAmount("853.31");
+        totalDueAmount("1783.61");
         // @formatter:on
 
         // printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
@@ -201,9 +196,8 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
         numOfProductCharges(1).
         serviceCharge("733.66").
         depositAmount("930.30").
-        depositRefundAmount("-930.30").
         taxes("88.04").
-        totalDueAmount("821.70");
+        totalDueAmount("1752.00");
         // @formatter:on
 
         // printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
@@ -230,9 +224,8 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
         numOfProductCharges(1).
         serviceCharge("705.44").
         depositAmount("930.30").
-        depositRefundAmount("-930.30").
         taxes("84.65").
-        totalDueAmount("790.09");
+        totalDueAmount("1720.39");
         // @formatter:on
 
         // printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
@@ -258,9 +251,8 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
         numOfProductCharges(1).
         serviceCharge("677.22").
         depositAmount("930.30").
-        depositRefundAmount("-930.30").
         taxes("81.27").
-        totalDueAmount("758.49");
+        totalDueAmount("1688.79");
         // @formatter:on
 
         // printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
@@ -286,9 +278,8 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
         numOfProductCharges(1).
         serviceCharge("649.01").
         depositAmount("930.30").
-        depositRefundAmount("-930.30").
         taxes("77.88").
-        totalDueAmount("726.89");
+        totalDueAmount("1657.19");
         // @formatter:on
 
         // printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
@@ -314,9 +305,8 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
         numOfProductCharges(1).
         serviceCharge("620.79").
         depositAmount("930.30").
-        depositRefundAmount("-930.30").
         taxes("74.49").
-        totalDueAmount("695.28");
+        totalDueAmount("1625.58");
         // @formatter:on
 
         // printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
@@ -342,9 +332,8 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
         numOfProductCharges(1).
         serviceCharge("592.57").
         depositAmount("930.30").
-        depositRefundAmount("-930.30").
         taxes("71.11").
-        totalDueAmount("663.68");
+        totalDueAmount("1593.98");
         // @formatter:on
 
         // printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
@@ -370,9 +359,8 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
         numOfProductCharges(1).
         serviceCharge("564.35").
         depositAmount("930.30").
-        depositRefundAmount("-930.30").
         taxes("67.72").
-        totalDueAmount("632.07");
+        totalDueAmount("1562.37");
         // @formatter:on
 
         // printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
@@ -398,9 +386,8 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
         numOfProductCharges(1).
         serviceCharge("536.13").
         depositAmount("930.30").
-        depositRefundAmount("-930.30").
         taxes("64.34").
-        totalDueAmount("600.47");
+        totalDueAmount("1530.77");
         // @formatter:on
 
         // printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
@@ -426,9 +413,8 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
         numOfProductCharges(1).
         serviceCharge("507.92").
         depositAmount("930.30").
-        depositRefundAmount("-930.30").
         taxes("60.95").
-        totalDueAmount("568.87");
+        totalDueAmount("1499.17");
         // @formatter:on
 
         // printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
@@ -454,9 +440,8 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
         numOfProductCharges(1).
         serviceCharge("479.70").
         depositAmount("930.30").
-        depositRefundAmount("-930.30").
         taxes("57.56").
-        totalDueAmount("537.26");
+        totalDueAmount("1467.56");
         // @formatter:on
 
         // printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
@@ -482,9 +467,8 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
         numOfProductCharges(1).
         serviceCharge("451.48").
         depositAmount("930.30").
-        depositRefundAmount("-930.30").
         taxes("54.18").
-        totalDueAmount("505.66");
+        totalDueAmount("1435.96");
         // @formatter:on
 
         // printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
@@ -510,9 +494,8 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
         numOfProductCharges(1).
         serviceCharge("423.27").
         depositAmount("930.30").
-        depositRefundAmount("-930.30").
         taxes("50.79").
-        totalDueAmount("474.06");
+        totalDueAmount("1404.36");
         // @formatter:on
 
         // printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
@@ -538,9 +521,8 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
         numOfProductCharges(1).
         serviceCharge("395.05").
         depositAmount("930.30").
-        depositRefundAmount("-930.30").
         taxes("47.41").
-        totalDueAmount("442.46");
+        totalDueAmount("1372.76");
         // @formatter:on
 
         // printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
@@ -566,9 +548,8 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
         numOfProductCharges(1).
         serviceCharge("366.83").
         depositAmount("930.30").
-        depositRefundAmount("-930.30").
         taxes("44.02").
-        totalDueAmount("410.85");
+        totalDueAmount("1341.15");
         // @formatter:on
 
         // printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
@@ -594,9 +575,8 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
         numOfProductCharges(1).
         serviceCharge("366.83").
         depositAmount("930.30").
-        depositRefundAmount("-930.30").
         taxes("44.02").
-        totalDueAmount("410.85");
+        totalDueAmount("1341.15");
         // @formatter:on
 
         // printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
@@ -622,9 +602,8 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
         numOfProductCharges(1).
         serviceCharge("338.62").
         depositAmount("930.30").
-        depositRefundAmount("-930.30").
         taxes("40.63").
-        totalDueAmount("379.25");
+        totalDueAmount("1309.55");
         // @formatter:on
 
         // printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
@@ -650,9 +629,8 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
         numOfProductCharges(1).
         serviceCharge("310.40").
         depositAmount("930.30").
-        depositRefundAmount("-930.30").
         taxes("37.25").
-        totalDueAmount("347.65");
+        totalDueAmount("1277.95");
         // @formatter:on
 
         // printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
@@ -678,9 +656,8 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
     numOfProductCharges(1).
     serviceCharge("282.18").
     depositAmount("930.30").
-    depositRefundAmount("-930.30").
     taxes("33.86").
-    totalDueAmount("316.04");
+    totalDueAmount("1246.34");
     // @formatter:on
 
         // printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
@@ -706,9 +683,8 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
     numOfProductCharges(1).
     serviceCharge("253.96").
     depositAmount("930.30").
-    depositRefundAmount("-930.30").
     taxes("30.48").
-    totalDueAmount("284.44");
+    totalDueAmount("1214.74");
     // @formatter:on
 
         // printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
@@ -734,9 +710,8 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
     numOfProductCharges(1).
     serviceCharge("225.74").
     depositAmount("930.30").
-    depositRefundAmount("-930.30").
     taxes("27.09").
-    totalDueAmount("252.83");
+    totalDueAmount("1183.13");
     // @formatter:on
 
         // printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
@@ -762,9 +737,8 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
     numOfProductCharges(1).
     serviceCharge("197.53").
     depositAmount("930.30").
-    depositRefundAmount("-930.30").
     taxes("23.70").
-    totalDueAmount("221.23");
+    totalDueAmount("1151.53");
     // @formatter:on
 
         // printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
@@ -790,9 +764,8 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
     numOfProductCharges(1).
     serviceCharge("169.31").
     depositAmount("930.30").
-    depositRefundAmount("-930.30").
     taxes("20.32").
-    totalDueAmount("189.63");
+    totalDueAmount("1119.93");
     // @formatter:on
 
         // printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
@@ -818,9 +791,8 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
     numOfProductCharges(1).
     serviceCharge("141.09").
     depositAmount("930.30").
-    depositRefundAmount("-930.30").
     taxes("16.93").
-    totalDueAmount("158.02");
+    totalDueAmount("1088.32");
     // @formatter:on
 
         // printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
@@ -846,9 +818,8 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
     numOfProductCharges(1).
     serviceCharge("112.87").
     depositAmount("930.30").
-    depositRefundAmount("-930.30").
     taxes("13.54").
-    totalDueAmount("126.41");
+    totalDueAmount("1056.71");
     // @formatter:on
 
         // printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
@@ -874,9 +845,8 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
     numOfProductCharges(1).
     serviceCharge("84.65").
     depositAmount("930.30").
-    depositRefundAmount("-930.30").
     taxes("10.16").
-    totalDueAmount("94.81");
+    totalDueAmount("1025.11");
     // @formatter:on
 
         // printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
@@ -902,9 +872,8 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
     numOfProductCharges(1).
     serviceCharge("56.44").
     depositAmount("930.30").
-    depositRefundAmount("-930.30").
     taxes("6.77").
-    totalDueAmount("63.21");
+    totalDueAmount("993.51");
     // @formatter:on
 
         // printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
@@ -930,9 +899,8 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
         numOfProductCharges(1).
         serviceCharge("28.22").
         depositAmount("930.30").
-        depositRefundAmount("-930.30").
         taxes("3.39").
-        totalDueAmount("31.61");
+        totalDueAmount("961.91");
         // @formatter:on
 
         // printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));

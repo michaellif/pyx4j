@@ -147,8 +147,8 @@ public class DepositFacadeImpl implements DepositFacade {
     }
 
     @Override
-    public List<Deposit> getCurrentDeposits(Lease lease) {
-        List<Deposit> deposits = new ArrayList<Deposit>();
+    public Map<Deposit, ProductTerm> getCurrentDeposits(Lease lease) {
+        Map<Deposit, ProductTerm> deposits = new HashMap<Deposit, ProductTerm>();
 
         List<Lease> leases = null;
         if (lease == null) {
@@ -163,12 +163,18 @@ public class DepositFacadeImpl implements DepositFacade {
         for (Lease l : leases) {
             addList = l.version().leaseProducts().serviceItem().deposits();
             if (addList != null) {
-                deposits.addAll(addList);
+                ProductTerm term = new ProductTerm(l.version().leaseProducts().serviceItem(), l);
+                for (Deposit deposit : addList) {
+                    deposits.put(deposit, term);
+                }
             }
             for (BillableItem feature : l.version().leaseProducts().featureItems()) {
                 addList = feature.deposits();
                 if (addList != null) {
-                    deposits.addAll(addList);
+                    ProductTerm term = new ProductTerm(feature, l);
+                    for (Deposit deposit : addList) {
+                        deposits.put(deposit, term);
+                    }
                 }
             }
         }
@@ -180,12 +186,13 @@ public class DepositFacadeImpl implements DepositFacade {
         Map<DepositPolicyKey, DepositPolicyItem> policyMatrix = getDepositPolicyMatrix(node);
 
         // TODO - do we want to check for last adjustment date?
-        for (Deposit deposit : getCurrentDeposits(null)) {
+        Map<Deposit, ProductTerm> deposits = getCurrentDeposits(null);
+        for (Deposit deposit : deposits.keySet()) {
             if (!DepositStatus.Paid.equals(deposit.lifecycle().status().getValue())) {
                 continue;
             }
-            Persistence.service().retrieve(deposit.billableItem());
-            DepositPolicyItem policyItem = policyMatrix.get(new DepositPolicyKey(deposit.type().getValue(), deposit.billableItem().item().type()));
+            ProductTerm term = deposits.get(deposit);
+            DepositPolicyItem policyItem = policyMatrix.get(new DepositPolicyKey(deposit.type().getValue(), term.type));
             if (policyItem == null) {
                 throw new UserRuntimeException(i18n.tr("Could not find Policy Item for deposit {0}", deposit.getStringView()));
             } else {
@@ -229,11 +236,13 @@ public class DepositFacadeImpl implements DepositFacade {
 
         Date now = Persistence.service().getTransactionSystemTime();
 
-        for (Deposit deposit : getCurrentDeposits(null)) {
+        Map<Deposit, ProductTerm> deposits = getCurrentDeposits(null);
+        for (Deposit deposit : deposits.keySet()) {
             if (!DepositStatus.Paid.equals(deposit.lifecycle().status().getValue())) {
                 continue;
             }
 
+            ProductTerm term = deposits.get(deposit);
             switch (deposit.type().getValue()) {
             case MoveInDeposit:
                 // MoveInDeposit - refund on first bill
@@ -243,20 +252,16 @@ public class DepositFacadeImpl implements DepositFacade {
                 // LastMonthDeposit - refund must appear on the last month bill so normally deposits will be issued by
                 // the BillingDepositProcessor. However, if for some reason that did not happen we will pick up those
                 // deposits here to ensure they get into the final bill.
-                Persistence.service().retrieve(deposit.billableItem());
-                LogicalDate expirationDate = deposit.billableItem().expirationDate().getValue();
-                if (expirationDate != null && expirationDate.before(now)) {
+                if (term.to != null && term.to.before(now)) {
                     arFacade.postDepositRefund(deposit);
                 }
                 break;
             case SecurityDeposit:
                 // SecurityDeposit - return after product expiration - check policy for refund window
-                Persistence.service().retrieve(deposit.billableItem());
-                expirationDate = deposit.billableItem().expirationDate().getValue();
-                if (expirationDate == null) {
+                if (term.to == null) {
                     break;
                 }
-                DepositPolicyItem policyItem = policyMatrix.get(new DepositPolicyKey(deposit.type().getValue(), deposit.billableItem().item().type()));
+                DepositPolicyItem policyItem = policyMatrix.get(new DepositPolicyKey(deposit.type().getValue(), term.type));
                 if (policyItem == null) {
                     throw new UserRuntimeException(i18n.tr("Could not find Policy Item for deposit {0}", deposit.getStringView()));
                 } else {
@@ -267,7 +272,7 @@ public class DepositFacadeImpl implements DepositFacade {
                         calendar.add(Calendar.DAY_OF_MONTH, -policyItem.securityDepositRefundWindow().getValue());
                     }
                     Date dueDate = calendar.getTime();
-                    if (!deposit.billableItem().expirationDate().getValue().after(dueDate)) {
+                    if (!term.to.after(dueDate)) {
                         arFacade.postDepositRefund(deposit);
                     }
                 }
@@ -287,8 +292,8 @@ public class DepositFacadeImpl implements DepositFacade {
                 invoiceDeposit.deposit().lifecycle().status().setValue(DepositStatus.Processed);
                 // TODO - remove next line when Paid status update implemented....
                 invoiceDeposit.deposit().lifecycle().status().setValue(DepositStatus.Paid);
-                Persistence.service().merge(invoiceDeposit.deposit().lifecycle());
-                Persistence.service().merge(invoiceDeposit.deposit());
+                Persistence.service().persist(invoiceDeposit.deposit().lifecycle());
+                Persistence.service().persist(invoiceDeposit.deposit());
             }
         }
     }

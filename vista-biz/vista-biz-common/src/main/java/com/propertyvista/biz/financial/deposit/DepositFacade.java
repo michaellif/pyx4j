@@ -14,9 +14,13 @@
 package com.propertyvista.biz.financial.deposit;
 
 import java.util.List;
+import java.util.Map;
+
+import com.pyx4j.commons.LogicalDate;
 
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.billing.Bill;
+import com.propertyvista.domain.financial.offering.ProductItemType;
 import com.propertyvista.domain.policy.framework.PolicyNode;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Deposit;
@@ -26,6 +30,21 @@ import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 
 public interface DepositFacade {
+
+    public class ProductTerm {
+        public final LogicalDate from;
+
+        public final LogicalDate to;
+
+        public final ProductItemType type;
+
+        public ProductTerm(BillableItem product, Lease lease) {
+            from = product.effectiveDate().isNull() ? lease.leaseFrom().getValue() : product.effectiveDate().getValue();
+            to = product.expirationDate().isNull() ? lease.leaseTo().getValue() : product.expirationDate().getValue();
+            type = product.item().type();
+        }
+    }
+
     /*
      * Creates deposit instance based on the corresponding policy. DepositType may limit acceptable target
      * products, for example, LastMonthDeposit may only accept ServiceType products.
@@ -50,7 +69,7 @@ public interface DepositFacade {
     /*
      * Finds all deposit from the current version of lease (looks through all leases if lease = null)
      */
-    public List<Deposit> getCurrentDeposits(Lease lease);
+    public Map<Deposit, ProductTerm> getCurrentDeposits(Lease lease);
 
     /*
      * Every deposit must collect interest based on the corresponding policy rules and interest rates
