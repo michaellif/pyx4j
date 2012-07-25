@@ -15,12 +15,12 @@ package com.propertyvista.portal.server.preloader;
 
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.ARPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.ApplicationDocumentationPolicyPreloader;
+import com.propertyvista.portal.server.preloader.policy.subpreloaders.DatesPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.DepositPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.EmailTemplatesPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.IdAssignmentPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.LeaseBillingPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.LegalDocumentationPolicyPreloader;
-import com.propertyvista.portal.server.preloader.policy.subpreloaders.DatesPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.MockupDepositPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.MockupLeaseAdjustmentPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.MockupLeaseBillingPolicyPreloader;
@@ -36,7 +36,6 @@ public class PreloadPolicies extends SimplePoliciesPreloader {
         add(new ApplicationDocumentationPolicyPreloader());
         add(new EmailTemplatesPolicyPreloader());
         add(new IdAssignmentPolicyPreloader());
-        add(new LegalDocumentationPolicyPreloader());
         add(new RestrictionsPolicyPreloader());
         add(new DatesPolicyPreloader());
 
@@ -46,6 +45,7 @@ public class PreloadPolicies extends SimplePoliciesPreloader {
             add(new LeaseAdjustmentPolicyPreloader());
             add(new LeaseBillingPolicyPreloader());
         } else {
+            add(new LegalDocumentationPolicyPreloader());
             add(new MockupProductTaxPolicyPreloader());
             add(new MockupDepositPolicyPreloader());
             add(new MockupLeaseAdjustmentPolicyPreloader());
