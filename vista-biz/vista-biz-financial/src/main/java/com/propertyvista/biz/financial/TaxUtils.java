@@ -15,6 +15,7 @@ package com.propertyvista.biz.financial;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import com.pyx4j.config.server.ServerSideFactory;
@@ -65,6 +66,13 @@ public class TaxUtils {
             }
         }
 
+        java.util.Collections.sort(taxes, new Comparator<Tax>() {
+            @Override
+            public int compare(Tax t1, Tax t2) {
+                return (t1.compound().getValue() ^ t2.compound().getValue()) ? ((t1.compound().getValue() == true) ? 1 : -1) : 0;
+            }
+        });
+
         for (Tax tax : taxes) {
             BigDecimal amountPerTax = BigDecimal.ZERO;
             for (InvoiceLineItem item : items) {
@@ -84,7 +92,13 @@ public class TaxUtils {
                     }
                 }
             }
-            taxCombinedAmount = taxCombinedAmount.add(MoneyUtils.round(amountPerTax.multiply(tax.rate().getValue())));
+            if (tax.compound().isBooleanTrue()) {
+                amountPerTax = amountPerTax.add(taxCombinedAmount);
+                taxCombinedAmount = taxCombinedAmount.add(MoneyUtils.round(amountPerTax.multiply(tax.rate().getValue())));
+                break;
+            } else {
+                taxCombinedAmount = taxCombinedAmount.add(MoneyUtils.round(amountPerTax.multiply(tax.rate().getValue())));
+            }
         }
 
         return taxCombinedAmount;
