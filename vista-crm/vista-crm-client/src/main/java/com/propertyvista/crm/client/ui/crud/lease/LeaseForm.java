@@ -23,7 +23,6 @@ import com.propertyvista.crm.client.ui.crud.lease.common.LeaseFormBase;
 import com.propertyvista.crm.client.ui.crud.lease.invoice.TransactionHistoryViewer;
 import com.propertyvista.domain.tenant.lease.Lease.Status;
 import com.propertyvista.dto.LeaseDTO;
-import com.propertyvista.misc.VistaTODO;
 
 public class LeaseForm extends LeaseFormBase<LeaseDTO> {
 
@@ -42,20 +41,18 @@ public class LeaseForm extends LeaseFormBase<LeaseDTO> {
 
         createCommonContent();
 
-        if (!VistaTODO.removedForProduction) {
-            adjustmentsTab = addTab(isEditable() ? new HTML() : ((LeaseViewerView) getParentView()).getLeaseAdjustmentListerView().asWidget(),
-                    i18n.tr("Adjustments"));
-            setTabEnabled(adjustmentsTab, !isEditable());
+        adjustmentsTab = addTab(isEditable() ? new HTML() : ((LeaseViewerView) getParentView()).getLeaseAdjustmentListerView().asWidget(),
+                i18n.tr("Adjustments"));
+        setTabEnabled(adjustmentsTab, !isEditable());
 
-            billsTab = addTab(isEditable() ? new HTML() : ((LeaseViewerView) getParentView()).getBillListerView().asWidget(), i18n.tr("Bills"));
-            setTabEnabled(billsTab, !isEditable());
+        billsTab = addTab(isEditable() ? new HTML() : ((LeaseViewerView) getParentView()).getBillListerView().asWidget(), i18n.tr("Bills"));
+        setTabEnabled(billsTab, !isEditable());
 
-            paymentsTab = addTab(isEditable() ? new HTML() : ((LeaseViewerView) getParentView()).getPaymentListerView().asWidget(), i18n.tr("Payments"));
-            setTabEnabled(paymentsTab, !isEditable());
+        paymentsTab = addTab(isEditable() ? new HTML() : ((LeaseViewerView) getParentView()).getPaymentListerView().asWidget(), i18n.tr("Payments"));
+        setTabEnabled(paymentsTab, !isEditable());
 
-            financialTab = addTab(isEditable() ? new HTML() : createFinancialTransactionHistoryTab().asWidget(), i18n.tr("Financial Summary"));
-            setTabEnabled(financialTab, !isEditable());
-        }
+        financialTab = addTab(isEditable() ? new HTML() : createFinancialTransactionHistoryTab().asWidget(), i18n.tr("Financial Summary"));
+        setTabEnabled(financialTab, !isEditable());
     }
 
     @Override

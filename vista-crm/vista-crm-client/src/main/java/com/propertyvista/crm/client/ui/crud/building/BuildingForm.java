@@ -118,8 +118,10 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         combinedtab.setWidget(row++, 0, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getServiceListerView().asWidget());
         combinedtab.setH4(row++, 0, 2, i18n.tr("Features"));
         combinedtab.setWidget(row++, 0, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getFeatureListerView().asWidget());
-        combinedtab.setH4(row++, 0, 2, i18n.tr("Concessions"));
-        combinedtab.setWidget(row++, 0, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getConcessionListerView().asWidget());
+        if (!VistaTODO.removedForProduction) {
+            combinedtab.setH4(row++, 0, 2, i18n.tr("Concessions"));
+            combinedtab.setWidget(row++, 0, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getConcessionListerView().asWidget());
+        }
 
         tab = addTab(combinedtab, i18n.tr("Product Catalog"));
         setTabEnabled(tab, !isEditable());

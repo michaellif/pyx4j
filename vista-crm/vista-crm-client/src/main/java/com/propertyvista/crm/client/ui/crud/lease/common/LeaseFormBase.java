@@ -52,6 +52,7 @@ import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySe
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.dto.LeaseDTO;
+import com.propertyvista.misc.VistaTODO;
 
 public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<DTO> {
 
@@ -270,8 +271,10 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
         main.setH1(++row, 0, 2, proto().version().leaseProducts().featureItems().getMeta().getCaption());
         main.setWidget(++row, 0, inject(proto().version().leaseProducts().featureItems(), new BillableItemFolder(isEditable(), this, leaseEditorView)));
 
-        main.setH1(++row, 0, 2, proto().version().leaseProducts().concessions().getMeta().getCaption());
-        main.setWidget(++row, 0, inject(proto().version().leaseProducts().concessions(), new ConcessionFolder(isEditable(), this)));
+        if (!VistaTODO.removedForProduction) {
+            main.setH1(++row, 0, 2, proto().version().leaseProducts().concessions().getMeta().getCaption());
+            main.setWidget(++row, 0, inject(proto().version().leaseProducts().concessions(), new ConcessionFolder(isEditable(), this)));
+        }
 
         return main;
     }
