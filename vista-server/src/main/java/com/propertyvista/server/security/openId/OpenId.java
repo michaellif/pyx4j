@@ -210,6 +210,7 @@ public class OpenId {
                     return new OpenIdResponse();
                 }
             } else {
+                log.warn("** verification failed");
                 return null;
             }
         } catch (OpenIDException e) {

@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -27,6 +28,7 @@ import org.openid4java.OpenIDException;
 import org.openid4java.message.AuthRequest;
 import org.openid4java.message.AuthSuccess;
 import org.openid4java.message.DirectError;
+import org.openid4java.message.IndirectError;
 import org.openid4java.message.Message;
 import org.openid4java.message.MessageExtension;
 import org.openid4java.message.ParameterList;
@@ -55,6 +57,7 @@ import com.pyx4j.security.rpc.AuthenticationRequest;
 import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.security.rpc.ChallengeVerificationRequired;
 import com.pyx4j.server.contexts.Context;
+import com.pyx4j.server.contexts.Lifecycle;
 import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.admin.rpc.services.AdminAuthenticationService;
@@ -74,36 +77,43 @@ public class OpenIDProviderServer {
     // instantiate a ServerManager object
     private final ServerManager manager = new ServerManager();
 
-    static String getOPEndpointUrl() {
+    static String getLocalId() {
         String domain = ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance()).openIdProviderDomain();
-        String endpoint = ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance()).openIdDomainIdentifier(domain);
-        return endpoint.replace("/idp", "/endpoint");
+        return ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance()).openIdDomainIdentifier(domain);
+    }
+
+    static String getOPEndpointUrl() {
+        return getLocalId().replace("/idp", "/endpoint");
     }
 
     public OpenIDProviderServer() {
         manager.setOPEndpointUrl(getOPEndpointUrl());
         // for a working demo, not enforcing RP realm discovery
         // since this new feature is not deployed
-        manager.getRealmVerifier().setEnforceRpId(true);
+        manager.getRealmVerifier().setEnforceRpId(false);
     }
 
-    public String processRequest(HttpServletRequest httpReq, HttpServletResponse httpResp) throws IOException, OpenIDException {
+    public String processRequest(HttpServletRequest httpReq, HttpServletResponse httpResp) throws IOException, OpenIDException, ServletException {
         // extract the parameters from the request
         ParameterList request = new ParameterList(httpReq.getParameterMap());
 
         String modeStr = request.hasParameter("openid.mode") ? request.getParameterValue("openid.mode") : null;
 
-        OpenIDMode mode;
+        if (modeStr == null) {
+            new IdpXrdsServlet().doGet(httpReq, httpResp);
+            return null;
+        }
+
+        OpenIDMode mode = OpenIDMode.unknown;
         try {
             mode = OpenIDMode.valueOf(modeStr);
         } catch (IllegalArgumentException e) {
-            mode = OpenIDMode.unknown;
         }
 
         log.info("** IDP requested [{}]", mode);
 
         Message response;
-        String responseText;
+        String responseText = null;
 
         switch (mode) {
         case associate:
@@ -117,6 +127,7 @@ public class OpenIDProviderServer {
             // interact with the user and obtain data needed to continue
             UserData userData = userInteraction(httpReq, request);
             if (userData == null) {
+                log.info("** IDP show login");
                 showLoginForm(httpReq, httpResp);
                 return null;
             }
@@ -125,15 +136,36 @@ public class OpenIDProviderServer {
             AuthRequest authReq = AuthRequest.createAuthRequest(request, manager.getRealmVerifier());
 
             String opLocalId = null;
+            String userSelectedClaimedId = null;
+
+            //userSelectedClaimedId = AuthRequest.SELECT_ID;
+
+            //opLocalId = getLocalId();
+            opLocalId = getOPEndpointUrl();
+
+            //userData.userSelectedClaimedId = authReq.getClaimed();
+            //userData.userSelectedClaimedId = getOPEndpointUrl();
+            //userData.userSelectedClaimedId = "dsf";
+            //userData.userSelectedClaimedId = getLocalId() + "?openid.mode=check_authentication&id=dsds";
+            //userData.userSelectedClaimedId = getLocalId();
+
+            //userData.userSelectedClaimedId = getOPEndpointUrl() + "?id=dsds" + System.currentTimeMillis();
+            //userData.userSelectedClaimedId = getOPEndpointUrl() + "?openid.mode=check_authentication&id=dsds";
+
             // if the user chose a different claimed_id than the one in request
             if (userData.userSelectedClaimedId != null && userData.userSelectedClaimedId.equals(authReq.getClaimed())) {
-                //opLocalId = lookupLocalId(userSelectedClaimedId);
+                //opLocalId = getLocalId();
+                //opLocalId = getOPEndpointUrl();
             }
 
-            response = manager.authResponse(request, opLocalId, userData.userSelectedClaimedId, userData.authenticatedAndApproved, false); // Sign after we added extensions.
+            response = manager.authResponse(request, opLocalId, userSelectedClaimedId, userData.authenticatedAndApproved, false); // Sign after we added extensions.
 
             if (response instanceof DirectError) {
+                log.info("** IDP return error [{}]", ((DirectError) response).getErrorMsg());
                 return directResponse(httpResp, response.keyValueFormEncoding());
+            } else if (response instanceof IndirectError) {
+                log.info("** IDP send error redirect [{}]", response.getDestinationUrl(true));
+                httpResp.sendRedirect(response.getDestinationUrl(true));
             } else {
                 if (authReq.hasExtension(AxMessage.OPENID_NS_AX)) {
                     MessageExtension ext = authReq.getExtension(AxMessage.OPENID_NS_AX);
@@ -185,6 +217,7 @@ public class OpenIDProviderServer {
                 // option1: GET HTTP-redirect to the return_to URL
                 //return response.getDestinationUrl(true);
 
+                log.info("** IDP sendRedirect [{}]", response.getDestinationUrl(true));
                 httpResp.sendRedirect(response.getDestinationUrl(true));
 
                 // option2: HTML FORM Redirection
@@ -195,15 +228,18 @@ public class OpenIDProviderServer {
                 //dispatcher.forward(request, response);
                 //return null;
             }
+            break;
         case check_authentication:
             // --- processing a verification request ---
             response = manager.verify(request);
-            responseText = response.keyValueFormEncoding();
+            //responseText = response.keyValueFormEncoding();
+            directResponse(httpResp, response.keyValueFormEncoding());
             break;
         default:
             // --- error response ---
             response = DirectError.createDirectError("Unknown request");
-            responseText = response.keyValueFormEncoding();
+            //responseText = response.keyValueFormEncoding();
+            directResponse(httpResp, response.keyValueFormEncoding());
         }
 
         // return the result to the user
@@ -233,6 +269,8 @@ public class OpenIDProviderServer {
             UserData userData = new UserData();
             userData.authenticatedAndApproved = true;
             userData.email = Context.getVisit().getUserVisit().getEmail();
+            //userData.userSelectedClaimedId = getOPEndpointUrl();
+            Lifecycle.endSession();
             return userData;
         } else {
             return null;
@@ -267,10 +305,9 @@ public class OpenIDProviderServer {
             @Override
             public void onSuccess(AuthenticationResponse result) {
                 rc.set(true);
-                Context.getSession().setAttribute("namespace", "_");
             }
         }, new ClientSystemInfo(), request);
-
+        NamespaceManager.setNamespace("_");
         return rc.get();
     }
 

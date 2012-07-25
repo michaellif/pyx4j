@@ -27,7 +27,7 @@ import com.pyx4j.gwt.server.IOUtils;
 public class IdpXrdsServlet extends HttpServlet {
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("application/xrds+xml");
         PrintWriter out = response.getWriter();
 
