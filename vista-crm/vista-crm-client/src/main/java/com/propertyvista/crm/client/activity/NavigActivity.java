@@ -38,6 +38,7 @@ import com.propertyvista.crm.client.ui.viewfactories.CrmVeiwFactory;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.dashboard.DashboardMetadataService;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
+import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.shared.config.VistaFeatures;
 
 public class NavigActivity extends AbstractActivity implements NavigView.MainNavigPresenter, BoardUpdateHandler {
@@ -142,9 +143,12 @@ public class NavigActivity extends AbstractActivity implements NavigView.MainNav
         list.add(folder);
 
         //Reports
-        folder = new NavigFolder(i18n.tr("Reports"), CrmImages.INSTANCE.reportsNormal(), CrmImages.INSTANCE.reportsHover(), CrmImages.INSTANCE.reportsActive());
-        folder.addNavigItem(new CrmSiteMap.Report.Management());
-        list.add(folder);
+        if (VistaTODO.isAfterBeta04Version) {
+            folder = new NavigFolder(i18n.tr("Reports"), CrmImages.INSTANCE.reportsNormal(), CrmImages.INSTANCE.reportsHover(),
+                    CrmImages.INSTANCE.reportsActive());
+            folder.addNavigItem(new CrmSiteMap.Report.Management());
+            list.add(folder);
+        }
 
         {
             //Dashboards

@@ -25,6 +25,8 @@ public interface VistaTODO {
      */
     public static final boolean checkLeaseDatesOnUnitReservation = false;
 
+    public static final boolean isAfterBeta04Version = false;
+
     public static boolean removedForProduction = false;
 
     public static boolean operationDataRemovedForProduction = false;
