@@ -54,6 +54,7 @@ import com.propertyvista.domain.property.PropertyPhone;
 import com.propertyvista.domain.property.asset.Complex;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
 import com.propertyvista.dto.BuildingDTO;
+import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.portal.rpc.portal.ImageConsts.ImageTarget;
 
 public class BuildingForm extends CrmEntityForm<BuildingDTO> {
@@ -128,7 +129,9 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         tab = addTab(isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getBillingCycleListerView().asWidget(), i18n.tr("Billing Cycles"));
         setTabEnabled(tab, !isEditable());
 
-        tab = addTab(createNotesAndAttachmentsTab(i18n.tr("Notes & Attachments")));
+        if (!VistaTODO.removedForProduction) {
+            tab = addTab(createNotesAndAttachmentsTab(i18n.tr("Notes & Attachments")));
+        }
     }
 
     @Override

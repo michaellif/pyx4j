@@ -27,7 +27,7 @@ public interface VistaTODO {
 
     public static final boolean isAfterBeta04Version = false;
 
-    public static boolean removedForProduction = false;
+    public static boolean removedForProduction = true;
 
     public static boolean operationDataRemovedForProduction = false;
 

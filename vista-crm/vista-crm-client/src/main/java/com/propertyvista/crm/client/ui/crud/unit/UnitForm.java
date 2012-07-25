@@ -48,6 +48,7 @@ import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.dto.AptUnitDTO;
+import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.shared.config.VistaFeatures;
 
 public class UnitForm extends CrmEntityForm<AptUnitDTO> {
@@ -79,7 +80,9 @@ public class UnitForm extends CrmEntityForm<AptUnitDTO> {
 // TODO Hided till further investigation:
 //        addTab(createMarketingTab(), i18n.tr("Marketing"));
 
-        tab = addTab(createNotesAndAttachmentsTab(i18n.tr("Notes & Attachments")));
+        if (!VistaTODO.removedForProduction) {
+            tab = addTab(createNotesAndAttachmentsTab(i18n.tr("Notes & Attachments")));
+        }
     }
 
     @Override

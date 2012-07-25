@@ -56,7 +56,6 @@ public class LeaseForm extends LeaseFormBase<LeaseDTO> {
             financialTab = addTab(isEditable() ? new HTML() : createFinancialTransactionHistoryTab().asWidget(), i18n.tr("Financial Summary"));
             setTabEnabled(financialTab, !isEditable());
         }
-
     }
 
     @Override
