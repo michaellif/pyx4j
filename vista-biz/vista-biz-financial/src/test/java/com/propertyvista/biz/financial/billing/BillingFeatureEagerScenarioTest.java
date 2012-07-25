@@ -34,8 +34,16 @@ import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.Type;
 @Category(FunctionalTests.class)
 public class BillingFeatureEagerScenarioTest extends FinancialTestBase {
 
-    public void testSequentialBillingCycle() {
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
         preloadData();
+    }
+
+    public void testSequentialBillingCycle() {
+
+        setDate("17-Mar-2011");
+
         setLeaseTerms("23-Mar-2011", "3-Aug-2011");
 
         BillableItem parking1 = addParking(SaveAction.saveAsDraft);
