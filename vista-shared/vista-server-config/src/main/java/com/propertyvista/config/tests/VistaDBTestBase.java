@@ -15,6 +15,8 @@ package com.propertyvista.config.tests;
 
 import junit.framework.TestCase;
 
+import com.pyx4j.entity.server.PersistenceServicesFactory;
+
 public abstract class VistaDBTestBase extends TestCase {
 
     private static long initializationTime = System.currentTimeMillis();
@@ -28,6 +30,7 @@ public abstract class VistaDBTestBase extends TestCase {
         super.setUp();
         VistaTestDBSetup.init();
         if (runningTestsCount > 0) {
+            PersistenceServicesFactory.dispose();
             VistaTestDBSetup.resetDatabase();
         }
         runningTestsCount++;
