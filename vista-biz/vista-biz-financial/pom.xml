@@ -41,7 +41,7 @@
             <artifactId>vista-server-common</artifactId>
             <version>${project.version}</version>
         </dependency>
-                
+
 	    <dependency>
             <groupId>com.propertyvista</groupId>
             <artifactId>vista-payment</artifactId>
@@ -71,21 +71,21 @@
             <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
-     
+
         <dependency>
             <groupId>com.propertyvista</groupId>
             <artifactId>vista-biz-tenant</artifactId>
             <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
-           
+
         <dependency>
             <groupId>com.propertyvista</groupId>
             <artifactId>vista-biz-occupancy</artifactId>
             <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
-           
+
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
@@ -130,7 +130,7 @@
             <scope>test</scope>
             <optional>true</optional>
         </dependency>
-        
+
     </dependencies>
 
     <build>
@@ -141,7 +141,8 @@
                 <configuration>
                     <forkMode>always</forkMode>
                     <includes>
-                        <include>**/FunctionalSuite.java</include>
+                        <include>**/*Test.java</include>
+                        <!--include>**/FunctionalSuite.java</include-->
                     </includes>
                 </configuration>
             </plugin>
