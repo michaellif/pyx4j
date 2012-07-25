@@ -27,6 +27,8 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
+import com.propertyvista.shared.adapters.LockerCountersAdapter;
+
 //TODO - replace inheritance on IEntity!!
 public interface Locker extends IEntity {
 
@@ -55,7 +57,7 @@ public interface Locker extends IEntity {
 
     @NotNull
     @ToString(index = 1)
-    @MemberColumn(name = "spotType")
+    @MemberColumn(name = "spotType", modificationAdapters = { LockerCountersAdapter.class })
     IPrimitive<Type> type();
 
     @NotNull

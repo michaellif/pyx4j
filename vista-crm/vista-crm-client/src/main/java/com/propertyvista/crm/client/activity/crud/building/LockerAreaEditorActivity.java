@@ -14,8 +14,10 @@
 package com.propertyvista.crm.client.activity.crud.building;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
@@ -30,5 +32,18 @@ public class LockerAreaEditorActivity extends EditorActivityBase<LockerAreaDTO> 
     public LockerAreaEditorActivity(CrudAppPlace place) {
         super(place, BuildingViewFactory.instance(LockerAreaEditorView.class), (AbstractCrudService<LockerAreaDTO>) GWT.create(LockerAreaCrudService.class),
                 LockerAreaDTO.class);
+    }
+
+    @Override
+    protected void createNewEntity(AsyncCallback<LockerAreaDTO> callback) {
+        LockerAreaDTO lockerArea = EntityFactory.create(getEntityClass());
+
+        // do not allow null members!
+        lockerArea.totalLockers().setValue(0);
+        lockerArea.largeLockers().setValue(0);
+        lockerArea.regularLockers().setValue(0);
+        lockerArea.smallLockers().setValue(0);
+
+        callback.onSuccess(lockerArea);
     }
 }

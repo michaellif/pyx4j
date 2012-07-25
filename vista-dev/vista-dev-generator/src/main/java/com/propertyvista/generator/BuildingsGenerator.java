@@ -19,7 +19,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.server.preloader.DataGenerator;
 import com.pyx4j.i18n.annotations.I18n;
@@ -261,6 +260,7 @@ public class BuildingsGenerator {
         int large = (int) (total * 0.1);
         int regular = (int) (total * 0.07);
         int small = total - (large + regular);
+
         lockerArea.totalLockers().setValue(total);
         lockerArea.largeLockers().setValue(large);
         lockerArea.regularLockers().setValue(regular);
