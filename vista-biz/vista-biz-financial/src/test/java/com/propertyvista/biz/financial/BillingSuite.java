@@ -68,9 +68,6 @@ import com.propertyvista.biz.financial.deposit.DepositFullCycleScenarioTest;
         ProrationTest.class, 
         BillPrintTest.class, 
         DepositFullCycleScenarioTest.class,
-        
-        BillPrintTest.class,
-        DepositFullCycleScenarioTest.class,
       //@formatter:on
 
 })
