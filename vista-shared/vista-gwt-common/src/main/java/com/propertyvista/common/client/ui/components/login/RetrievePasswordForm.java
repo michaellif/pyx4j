@@ -65,7 +65,7 @@ public class RetrievePasswordForm extends CEntityForm<PasswordRetrievalRequest> 
         main.add(header);
         main.add(new LoginPanelWidgetDecorator(inject(proto().email())));
         main.add(new HTML());
-        main.add(new LoginPanelWidgetDecorator(inject(proto().captcha())));
+        main.add(new LoginPanelWidgetDecorator(inject(proto().captcha()), 30));
         main.add(passwordResetFailedMessage);
         passwordResetFailedMessage.getElement().getStyle().setMarginTop(1, Unit.EM);
         passwordResetFailedMessage.setVisible(false);

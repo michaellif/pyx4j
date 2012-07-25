@@ -20,9 +20,11 @@ import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
 public class LoginPanelWidgetDecorator extends WidgetDecorator {
 
     public LoginPanelWidgetDecorator(CComponent<?, ?> component) {
-        super(new Builder(component).labelWidth(9).componentWidth(16).labelAlignment(Builder.Alignment.left));
-        addStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.noMandatoryStar.name());
-
+        this(component, 16);
     }
 
+    public LoginPanelWidgetDecorator(CComponent<?, ?> component, double componentWidth) {
+        super(new Builder(component).labelWidth(9).componentWidth(componentWidth).labelAlignment(Builder.Alignment.left));
+        addStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.noMandatoryStar.name());
+    }
 }
