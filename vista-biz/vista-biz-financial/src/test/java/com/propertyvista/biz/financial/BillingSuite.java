@@ -16,7 +16,6 @@ package com.propertyvista.biz.financial;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
-import com.propertyvista.biz.financial.billing.BillTester;
 import com.propertyvista.biz.financial.billing.BillableItemAdjustmentTest;
 import com.propertyvista.biz.financial.billing.BillingAllFeaturesAdjustmentsFirstMonthProrationTest;
 import com.propertyvista.biz.financial.billing.BillingBulkRunTest;
@@ -60,7 +59,6 @@ import com.propertyvista.biz.financial.deposit.DepositFullCycleScenarioTest;
         BillingRejectedPaymentScenarioTest.class, 
         BillingSunnyDayScenarioTest.class, 
         BillingZeroCycleScenarioTest.class,
-        BillTester.class, 
         DateUtilsTest.class, 
         LatePaymentCalculationTest.class, 
         ProrationTest.class, 
