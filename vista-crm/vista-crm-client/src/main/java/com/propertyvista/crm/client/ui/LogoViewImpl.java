@@ -19,6 +19,7 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
+import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.SimplePanel;
@@ -52,7 +53,7 @@ public class LogoViewImpl extends SimplePanel implements LogoView {
             logoElement = logoImage;
             setWidget(logoImage);
         } else {
-            HTML logo = new HTML("<h1>" + brandedHeader + "</h1>");
+            HTML logo = new HTML("<h1>" + (brandedHeader != null ? new SafeHtmlBuilder().appendEscaped(brandedHeader).toSafeHtml().asString() : "") + "</h1>");
             logo.getElement().getStyle().setCursor(Cursor.POINTER);
             logoElement = logo;
             setWidget(logo);
