@@ -161,7 +161,7 @@ public class CaptchaComposite extends SimplePanel {
 
         response.setName("recaptcha_response_field");
         response.getElement().getStyle().setMarginTop(5, Unit.PX);
-        response.getElement().getStyle().setWidth(100, Unit.PCT);
+        response.getElement().getStyle().setWidth(300, Unit.PX);
         divHolder.add(response);
 
         this.add(divHolder);
