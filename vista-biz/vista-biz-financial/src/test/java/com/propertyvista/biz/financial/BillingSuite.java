@@ -18,10 +18,9 @@ import org.junit.runners.Suite;
 
 import com.propertyvista.biz.financial.billing.BillTester;
 import com.propertyvista.biz.financial.billing.BillableItemAdjustmentTest;
-import com.propertyvista.biz.financial.billing.BillingAllFeaturesAdjustmentsFirstMonthProration;
+import com.propertyvista.biz.financial.billing.BillingAllFeaturesAdjustmentsFirstMonthProrationTest;
 import com.propertyvista.biz.financial.billing.BillingBulkRunTest;
 import com.propertyvista.biz.financial.billing.BillingCycleTest;
-import com.propertyvista.biz.financial.billing.BillingCycleTester;
 import com.propertyvista.biz.financial.billing.BillingExistingLeaseSunnyDayScenarioTest;
 import com.propertyvista.biz.financial.billing.BillingFeatureEagerScenarioTest;
 import com.propertyvista.biz.financial.billing.BillingFirstMonthProrationScenarioTest;
@@ -43,12 +42,11 @@ import com.propertyvista.biz.financial.deposit.DepositFullCycleScenarioTest;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-  //@formatter:off
+//@formatter:off
         BillableItemAdjustmentTest.class, 
-        BillingAllFeaturesAdjustmentsFirstMonthProration.class, 
+        BillingAllFeaturesAdjustmentsFirstMonthProrationTest.class, 
         BillingBulkRunTest.class, 
         BillingCycleTest.class,
-        BillingCycleTester.class, 
         BillingExistingLeaseSunnyDayScenarioTest.class, 
         BillingFeatureEagerScenarioTest.class,
         BillingFirstMonthProrationScenarioTest.class, 

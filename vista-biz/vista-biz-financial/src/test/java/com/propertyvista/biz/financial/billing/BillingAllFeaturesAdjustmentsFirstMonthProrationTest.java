@@ -35,7 +35,7 @@ import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.Type;
 
 @Category(FunctionalTests.class)
-public class BillingAllFeaturesAdjustmentsFirstMonthProration extends FinancialTestBase {
+public class BillingAllFeaturesAdjustmentsFirstMonthProrationTest extends FinancialTestBase {
 
     @Override
     protected void setUp() throws Exception {

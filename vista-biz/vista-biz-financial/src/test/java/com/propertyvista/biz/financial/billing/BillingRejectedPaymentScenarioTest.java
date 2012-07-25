@@ -104,7 +104,7 @@ public class BillingRejectedPaymentScenarioTest extends FinancialTestBase {
         bill = runBilling(true, true);
 
         // @formatter:off
-        new BillTester(bill, true).
+        new BillTester(bill).
         billingPeriodStartDate("1-Jun-2011").
         billingPeriodEndDate("30-Jun-2011").
         paymentReceivedAmount("-1041.94").

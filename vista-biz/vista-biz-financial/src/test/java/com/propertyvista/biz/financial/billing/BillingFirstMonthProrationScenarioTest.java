@@ -136,7 +136,8 @@ public class BillingFirstMonthProrationScenarioTest extends FinancialTestBase {
         Bill bill = approveApplication(true);
 
         // @formatter:off
-        new BillTester(bill).billSequenceNumber(1).
+        new BillTester(bill).
+        billSequenceNumber(1).
         previousBillSequenceNumber(null).
         billType(Bill.BillType.First).
         billingPeriodStartDate("18-Jan-2012").

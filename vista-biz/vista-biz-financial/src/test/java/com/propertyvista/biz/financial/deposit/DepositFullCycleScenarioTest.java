@@ -51,7 +51,7 @@ public class DepositFullCycleScenarioTest extends FinancialTestBase {
         Bill bill = approveApplication(true);
 
         // @formatter:off
-        new BillTester(bill, true).
+        new BillTester(bill).
         billSequenceNumber(1).
         previousBillSequenceNumber(null).
         billType(Bill.BillType.First).
