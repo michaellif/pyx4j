@@ -191,13 +191,7 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
         log.info("authenticated {} as {}", user.email().getValue(), behaviors);
 
         String sessionToken = Lifecycle.beginSession(visit, behaviors);
-        try {
-            ServerSideFactory.create(AuditFacade.class).login();
-        } catch (DatastoreReadOnlyRuntimeException readOnly) {
-            if (honorSystemState()) {
-                throw readOnly;
-            }
-        }
+        ServerSideFactory.create(AuditFacade.class).login();
         callback.onSuccess(createAuthenticationResponse(sessionToken));
     }
 
@@ -319,7 +313,13 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
         visit.setEmail(user.email().getValue());
         log.info("authenticated {} as {}", user.email().getValue(), behaviors);
         String token = Lifecycle.beginSession(visit, behaviors);
-        ServerSideFactory.create(AuditFacade.class).login();
+        try {
+            ServerSideFactory.create(AuditFacade.class).login();
+        } catch (DatastoreReadOnlyRuntimeException readOnly) {
+            if (honorSystemState()) {
+                throw readOnly;
+            }
+        }
         return token;
     }
 
