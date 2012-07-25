@@ -187,6 +187,9 @@ public class RDBUtils implements Closeable {
                 utils.execute("DROP DATABASE " + dbName);
                 utils.execute("CREATE DATABASE " + dbName + "  DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci");
                 break;
+            case HSQLDB:
+                utils.execute("DROP SCHEMA PUBLIC CASCADE");
+                break;
             default:
                 throw new Error("Unsupported dialect");
             }
