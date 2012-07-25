@@ -25,6 +25,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.openid4java.OpenIDException;
+import org.openid4java.discovery.DiscoveryInformation;
 import org.openid4java.message.AuthRequest;
 import org.openid4java.message.AuthSuccess;
 import org.openid4java.message.DirectError;
@@ -100,7 +101,9 @@ public class OpenIDProviderServer {
         String modeStr = request.hasParameter("openid.mode") ? request.getParameterValue("openid.mode") : null;
 
         if (modeStr == null) {
-            new IdpXrdsServlet().doGet(httpReq, httpResp);
+            httpResp.setContentType("application/xrds+xml");
+            String id = request.getParameterValue("id");
+            directResponse(httpResp, IdpXrdsServlet.xrdsXml(DiscoveryInformation.OPENID2, OpenIDProviderServer.getOPEndpointUrl()));
             return null;
         }
 
@@ -135,28 +138,8 @@ public class OpenIDProviderServer {
             // --- process an authentication request ---
             AuthRequest authReq = AuthRequest.createAuthRequest(request, manager.getRealmVerifier());
 
-            String opLocalId = null;
-            String userSelectedClaimedId = null;
-
-            //userSelectedClaimedId = AuthRequest.SELECT_ID;
-
-            //opLocalId = getLocalId();
-            opLocalId = getOPEndpointUrl();
-
-            //userData.userSelectedClaimedId = authReq.getClaimed();
-            //userData.userSelectedClaimedId = getOPEndpointUrl();
-            //userData.userSelectedClaimedId = "dsf";
-            //userData.userSelectedClaimedId = getLocalId() + "?openid.mode=check_authentication&id=dsds";
-            //userData.userSelectedClaimedId = getLocalId();
-
-            //userData.userSelectedClaimedId = getOPEndpointUrl() + "?id=dsds" + System.currentTimeMillis();
-            //userData.userSelectedClaimedId = getOPEndpointUrl() + "?openid.mode=check_authentication&id=dsds";
-
-            // if the user chose a different claimed_id than the one in request
-            if (userData.userSelectedClaimedId != null && userData.userSelectedClaimedId.equals(authReq.getClaimed())) {
-                //opLocalId = getLocalId();
-                //opLocalId = getOPEndpointUrl();
-            }
+            String opLocalId = getOPEndpointUrl();
+            String userSelectedClaimedId = getOPEndpointUrl();
 
             response = manager.authResponse(request, opLocalId, userSelectedClaimedId, userData.authenticatedAndApproved, false); // Sign after we added extensions.
 

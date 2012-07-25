@@ -21,6 +21,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.openid4java.discovery.DiscoveryInformation;
+
 import com.pyx4j.gwt.server.IOUtils;
 
 @SuppressWarnings("serial")
@@ -30,13 +32,18 @@ public class IdpXrdsServlet extends HttpServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("application/xrds+xml");
         PrintWriter out = response.getWriter();
-
-        String body = IOUtils.getTextResource("xrds.xml", IdpXrdsServlet.class);
-
-        body = body.replace("${endpoint_uri}", OpenIDProviderServer.getOPEndpointUrl());
+        String body = xrdsXml(DiscoveryInformation.OPENID2_OP, OpenIDProviderServer.getOPEndpointUrl());
         response.setContentLength(body.length());
         out.print(body);
         out.flush();
+    }
+
+    public static String xrdsXml(String type, String url) throws IOException {
+        String body = IOUtils.getTextResource("xrds.xml", IdpXrdsServlet.class);
+        body = body.replace("${type}", type);
+        body = body.replace("${endpoint_uri}", url);
+        return body;
+
     }
 
 }
