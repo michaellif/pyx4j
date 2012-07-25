@@ -22,6 +22,7 @@ import com.pyx4j.widgets.client.tabpanel.Tab;
 
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.dto.LockerAreaDTO;
+import com.propertyvista.misc.VistaTODO;
 
 public class LockerAreaForm extends CrmEntityForm<LockerAreaDTO> {
 
@@ -45,9 +46,10 @@ public class LockerAreaForm extends CrmEntityForm<LockerAreaDTO> {
         tab = addTab(isEditable() ? new HTML() : ((LockerAreaViewerView) getParentView()).getLockerView().asWidget(), i18n.tr("Lockers"));
         setTabEnabled(tab, !isEditable());
 
-        tab = addTab(new Label("Notes and attachments goes here... "), i18n.tr("Notes & Attachments"));
-        setTabEnabled(tab, !isEditable());
-
+        if (!VistaTODO.removedForProduction) {
+            tab = addTab(new Label("Notes and attachments goes here... "), i18n.tr("Notes & Attachments"));
+            setTabEnabled(tab, !isEditable());
+        }
     }
 
     private FormFlexPanel createDetailsTab(String title) {

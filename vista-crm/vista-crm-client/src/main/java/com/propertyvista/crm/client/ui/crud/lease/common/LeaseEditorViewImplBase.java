@@ -19,6 +19,7 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.dto.LeaseDTO;
+import com.propertyvista.misc.VistaTODO;
 
 public class LeaseEditorViewImplBase<DTO extends LeaseDTO> extends CrmEditorViewImplBase<DTO> implements LeaseEditorViewBase<DTO> {
 
@@ -50,7 +51,9 @@ public class LeaseEditorViewImplBase<DTO extends LeaseDTO> extends CrmEditorView
         billableItemForm.get(billableItemForm.proto().item()).refresh(true);
 
         form.get(form.proto().version().leaseProducts().featureItems()).setValue(value.version().leaseProducts().featureItems());
-        form.get(form.proto().version().leaseProducts().concessions()).setValue(value.version().leaseProducts().concessions());
+        if (!VistaTODO.removedForProduction) {
+            form.get(form.proto().version().leaseProducts().concessions()).setValue(value.version().leaseProducts().concessions());
+        }
 
         // update runtime non-editable data:
         form.getValue().billingAccount().deposits().clear();
