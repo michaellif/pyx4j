@@ -24,7 +24,6 @@ import java.util.List;
 import java.util.Vector;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.rpc.EntityCriteriaByPK;
 import com.pyx4j.entity.rpc.EntitySearchResult;
@@ -32,6 +31,7 @@ import com.pyx4j.entity.security.DatasetAccessRule;
 import com.pyx4j.entity.security.EntityPermission;
 import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.shared.AttachLevel;
+import com.pyx4j.entity.shared.DatastoreReadOnlyRuntimeException;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IVersionedEntity;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
@@ -128,7 +128,7 @@ public class Persistence {
 
     public static <T extends IEntity> void secureSave(T entity) {
         if (ServerSideConfiguration.instance().datastoreReadOnly()) {
-            throw new UserRuntimeException(ServerSideConfiguration.instance().getApplicationMaintenanceMessage());
+            throw new DatastoreReadOnlyRuntimeException(ServerSideConfiguration.instance().getApplicationMaintenanceMessage());
         }
         if (entity.getPrimaryKey() == null) {
             SecurityController.assertPermission(EntityPermission.permissionCreate(entity));

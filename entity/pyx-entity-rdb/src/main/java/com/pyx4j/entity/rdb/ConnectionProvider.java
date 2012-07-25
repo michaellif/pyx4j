@@ -37,7 +37,6 @@ import javax.sql.DataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.rdb.cfg.Configuration;
 import com.pyx4j.entity.rdb.cfg.Configuration.ConnectionPoolProvider;
@@ -48,6 +47,7 @@ import com.pyx4j.entity.rdb.dialect.NamingConvention;
 import com.pyx4j.entity.rdb.dialect.NamingConventionOracle;
 import com.pyx4j.entity.rdb.dialect.OracleDialect;
 import com.pyx4j.entity.rdb.dialect.PostgreSQLDialect;
+import com.pyx4j.entity.shared.DatastoreReadOnlyRuntimeException;
 
 public class ConnectionProvider {
 
@@ -190,7 +190,7 @@ public class ConnectionProvider {
     public Connection getConnection(ConnectionTarget reason) {
         try {
             if ((reason == ConnectionTarget.forUpdate) && ServerSideConfiguration.instance().datastoreReadOnly()) {
-                throw new UserRuntimeException(ServerSideConfiguration.instance().getApplicationMaintenanceMessage());
+                throw new DatastoreReadOnlyRuntimeException(ServerSideConfiguration.instance().getApplicationMaintenanceMessage());
             }
             if (reason == ConnectionTarget.forDDL) {
                 return connectionPool.getAministrationDataSource().getConnection();

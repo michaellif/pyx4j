@@ -37,7 +37,6 @@ import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.RuntimeExceptionSerializable;
-import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.IPersistenceConfiguration;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.server.Trace;
@@ -75,6 +74,7 @@ import com.pyx4j.entity.server.IEntityPersistenceServiceExt;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.ConcurrentUpdateException;
+import com.pyx4j.entity.shared.DatastoreReadOnlyRuntimeException;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.ICollection;
 import com.pyx4j.entity.shared.IEntity;
@@ -169,7 +169,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
 
     private void startContext(ConnectionTarget reason) {
         if ((reason == ConnectionTarget.forUpdate) && ServerSideConfiguration.instance().datastoreReadOnly()) {
-            throw new UserRuntimeException(ServerSideConfiguration.instance().getApplicationMaintenanceMessage());
+            throw new DatastoreReadOnlyRuntimeException(ServerSideConfiguration.instance().getApplicationMaintenanceMessage());
         }
         PersistenceContext persistenceContext = threadSessions.get();
         if (persistenceContext == null) {
