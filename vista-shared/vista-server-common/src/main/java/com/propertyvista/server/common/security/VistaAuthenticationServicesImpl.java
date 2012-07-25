@@ -32,6 +32,7 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.config.shared.ClientSystemInfo;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.DatastoreReadOnlyRuntimeException;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
@@ -190,7 +191,13 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
         log.info("authenticated {} as {}", user.email().getValue(), behaviors);
 
         String sessionToken = Lifecycle.beginSession(visit, behaviors);
-        ServerSideFactory.create(AuditFacade.class).login();
+        try {
+            ServerSideFactory.create(AuditFacade.class).login();
+        } catch (DatastoreReadOnlyRuntimeException readOnly) {
+            if (honorSystemState()) {
+                throw readOnly;
+            }
+        }
         callback.onSuccess(createAuthenticationResponse(sessionToken));
     }
 
