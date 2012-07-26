@@ -43,7 +43,7 @@ html,body {
 body {
 	font: 13px Arial, Helvetica, sans-serif;
 	
-	background: no-repeat  -moz-linear-gradient(top, ${object1_60} 0, #000 400px); /* FF3.6+ */
+	background: no-repeat  -moz-linear-gradient(top, ${object1_60} 0, #fff 400px); /* FF3.6+ */
 	background: no-repeat  -webkit-gradient(linear, left top, left bottom, color-stop(0,${object1_60}), color-stop(400px,#ffffff))); /* Chrome,Safari4+ */
 	background: no-repeat  -webkit-linear-gradient(top, ${object1_60} 0,#ffffff 400px); /* Chrome10+,Safari5.1+ */
 	background: no-repeat  -o-linear-gradient(top, ${object1_60} 0,#ffffff 400px); /* Opera 11.10+ */
