@@ -63,46 +63,10 @@ class BillProducer {
 
     BillProducer(BillingCycle billingCycle, Lease lease, boolean preview) {
 
-        if (lease.version().isNull()) {
-            throw new BillingException(i18n.tr("Can't find version of lease"));
-        }
-
         this.billingCycle = billingCycle;
         this.preview = preview;
         this.lease = lease;
 
-    }
-
-    private Bill.BillType getBillType(LeaseV leaseV) {
-        switch (leaseV.status().getValue()) {
-        case Created: //zeroCycle bill should be issued; preview only
-            if (!preview) {
-                throw new BillingException(i18n.tr("Billing can only run in PREVIEW mode until Lease is Approved."));
-            }
-            return Bill.BillType.ZeroCycle;
-        case Application: // preview only
-            if (!preview) {
-                throw new BillingException(i18n.tr("Billing can only run in PREVIEW mode until Lease is Approved."));
-            }
-            return Bill.BillType.First;
-        case Approved: // first bill should be issued
-            if (BillingRunner.getLatestConfirmedBill(lease) != null) {
-                return Bill.BillType.Regular;
-            } else {
-                if (lease.billingAccount().carryforwardBalance().isNull()) {
-                    return Bill.BillType.First;
-                } else {
-                    return Bill.BillType.ZeroCycle;
-                }
-            }
-
-        case Active:
-            return Bill.BillType.Regular;
-        case Completed: // final bill should be issued
-            return Bill.BillType.Final;
-        default:
-            throw new BillingException(i18n.tr("Billing can't run when lease is in status ''{0}''", lease.version().status().getValue()));
-        }
     }
 
     Bill produceBill() {
@@ -130,6 +94,10 @@ class BillProducer {
             bill.previousCycleBill().set(previousCycleBill);
 
             bill.executionDate().setValue(new LogicalDate(SysDateManager.getSysDate()));
+
+            if (lease.version().isNull()) {
+                throw new BillingException(i18n.tr("Can't find version of lease"));
+            }
 
             Bill.BillType billType = getBillType(lease.version());
             bill.billType().setValue(billType);
@@ -311,6 +279,38 @@ class BillProducer {
         nextPeriodBill.totalDueAmount().setValue(nextPeriodBill.pastDueAmount().getValue().add(nextPeriodBill.currentAmount().getValue().add(nextPeriodBill.taxes().getValue())));
         
         // @formatter:on
+    }
+
+    private Bill.BillType getBillType(LeaseV leaseV) {
+        switch (leaseV.status().getValue()) {
+        case Created: //zeroCycle bill should be issued; preview only
+            if (!preview) {
+                throw new BillingException(i18n.tr("Billing can only run in PREVIEW mode until Lease is Approved."));
+            }
+            return Bill.BillType.ZeroCycle;
+        case Application: // preview only
+            if (!preview) {
+                throw new BillingException(i18n.tr("Billing can only run in PREVIEW mode until Lease is Approved."));
+            }
+            return Bill.BillType.First;
+        case Approved: // first bill should be issued
+            if (BillingRunner.getLatestConfirmedBill(lease) != null) {
+                return Bill.BillType.Regular;
+            } else {
+                if (lease.billingAccount().carryforwardBalance().isNull()) {
+                    return Bill.BillType.First;
+                } else {
+                    return Bill.BillType.ZeroCycle;
+                }
+            }
+
+        case Active:
+            return Bill.BillType.Regular;
+        case Completed: // final bill should be issued
+            return Bill.BillType.Final;
+        default:
+            throw new BillingException(i18n.tr("Billing can't run when lease is in status ''{0}''", lease.version().status().getValue()));
+        }
     }
 
     public Bill getNextPeriodBill() {

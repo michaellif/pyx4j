@@ -76,7 +76,7 @@ public class BillingRunner {
         }
 
         lease = ensureInitBillingAccount(lease);
-        BillingCycle billingCycle = getNextBillBillingCycle(lease);
+        BillingCycle billingCycle = getNextBillingCycle(lease);
         validateBillingRunPreconditions(billingCycle, lease);
         return produceBill(billingCycle, lease, preview);
     }
@@ -98,6 +98,25 @@ public class BillingRunner {
             }
         });
         runBilling(billingCycle, filteredLeaseIterator, dynamicStatisticsRecord);
+    }
+
+    private static void validateBillingRunPreconditions(BillingCycle billingCycle, Lease lease) {
+
+        if (!getNextBillingCycle(lease).equals(billingCycle)) {
+            throw new BillingException(i18n.tr("Bill can't be created for a given billing cycle"));
+        }
+
+        if (lease.version().status().getValue() == Lease.Status.Closed) {
+            throw new BillingException("Lease is closed");
+        }
+
+        Bill previousBill = BillingRunner.getLatestBill(lease);
+        if (previousBill != null) {
+            if (BillStatus.notConfirmed(previousBill.billStatus().getValue())) {
+                throw new BillingException(i18n.tr("Can't run billing on Account with non-confirmed bills"));
+            }
+        }
+
     }
 
     static void runBilling(LogicalDate date, StatisticsRecord dynamicStatisticsRecord) {
@@ -144,25 +163,6 @@ public class BillingRunner {
     private static Bill produceBill(BillingCycle billingCycle, Lease lease, boolean preview) {
         BillProducer producer = new BillProducer(billingCycle, lease, preview);
         return producer.produceBill();
-    }
-
-    private static void validateBillingRunPreconditions(BillingCycle billingCycle, Lease lease) {
-
-        if (!getNextBillBillingCycle(lease).equals(billingCycle)) {
-            throw new BillingException(i18n.tr("Bill can't be created for a given billing cycle"));
-        }
-
-        if (lease.version().status().getValue() == Lease.Status.Closed) {
-            throw new BillingException("Lease is closed");
-        }
-
-        Bill previousBill = BillingRunner.getLatestBill(lease);
-        if (previousBill != null) {
-            if (BillStatus.notConfirmed(previousBill.billStatus().getValue())) {
-                throw new BillingException(i18n.tr("Can't run billing on Account with non-confirmed bills"));
-            }
-        }
-
     }
 
     static Bill confirmBill(Bill billStub) {
@@ -215,7 +215,7 @@ public class BillingRunner {
         }
     }
 
-    static BillingCycle getNextBillBillingCycle(Lease lease) {
+    static BillingCycle getNextBillingCycle(Lease lease) {
         Bill previousBill = getLatestConfirmedBill(lease);
         BillingAccount billingAccount = Persistence.service().retrieve(BillingAccount.class, lease.billingAccount().getPrimaryKey());
         Persistence.service().retrieve(lease.unit());
