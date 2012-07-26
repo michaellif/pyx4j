@@ -60,11 +60,11 @@ import com.propertyvista.portal.rpc.shared.BillingException;
 import com.propertyvista.server.jobs.StatisticsUtils;
 import com.propertyvista.server.jobs.TaskRunner;
 
-public class BillingRunner {
+public class BillingManager {
 
-    private static final I18n i18n = I18n.get(BillingRunner.class);
+    private static final I18n i18n = I18n.get(BillingManager.class);
 
-    private final static Logger log = LoggerFactory.getLogger(BillingRunner.class);
+    private final static Logger log = LoggerFactory.getLogger(BillingManager.class);
 
     static Bill runBilling(Lease leaseId, boolean preview) {
         Lease lease = Persistence.service().retrieve(Lease.class, leaseId.getPrimaryKey().asCurrentKey());
@@ -79,6 +79,21 @@ public class BillingRunner {
         BillingCycle billingCycle = getNextBillingCycle(lease);
         validateBillingRunPreconditions(billingCycle, lease);
         return produceBill(billingCycle, lease, preview);
+    }
+
+    static void runBilling(LogicalDate date, StatisticsRecord dynamicStatisticsRecord) {
+        for (BillingType billingType : Persistence.service().query(EntityQueryCriteria.create(BillingType.class))) {
+
+            EntityQueryCriteria<BillingCycle> criteria = EntityQueryCriteria.create(BillingCycle.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().billingType(), billingType));
+            criteria.add(PropertyCriterion.eq(criteria.proto().executionTargetDate(), date));
+
+            ICursorIterator<BillingCycle> billingCycleIterator = Persistence.service().query(null, criteria, AttachLevel.IdOnly);
+            while (billingCycleIterator.hasNext()) {
+                BillingCycle billingCycle = billingCycleIterator.next();
+                runBilling(billingCycle, dynamicStatisticsRecord);
+            }
+        }
     }
 
     static void runBilling(final BillingCycle billingCycle, StatisticsRecord dynamicStatisticsRecord) {
@@ -110,28 +125,13 @@ public class BillingRunner {
             throw new BillingException("Lease is closed");
         }
 
-        Bill previousBill = BillingRunner.getLatestBill(lease);
+        Bill previousBill = BillingManager.getLatestBill(lease);
         if (previousBill != null) {
             if (BillStatus.notConfirmed(previousBill.billStatus().getValue())) {
                 throw new BillingException(i18n.tr("Can't run billing on Account with non-confirmed bills"));
             }
         }
 
-    }
-
-    static void runBilling(LogicalDate date, StatisticsRecord dynamicStatisticsRecord) {
-        for (BillingType billingType : Persistence.service().query(EntityQueryCriteria.create(BillingType.class))) {
-
-            EntityQueryCriteria<BillingCycle> criteria = EntityQueryCriteria.create(BillingCycle.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().billingType(), billingType));
-            criteria.add(PropertyCriterion.eq(criteria.proto().executionTargetDate(), date));
-
-            ICursorIterator<BillingCycle> billingCycleIterator = Persistence.service().query(null, criteria, AttachLevel.IdOnly);
-            while (billingCycleIterator.hasNext()) {
-                BillingCycle billingCycle = billingCycleIterator.next();
-                runBilling(billingCycle, dynamicStatisticsRecord);
-            }
-        }
     }
 
     private static void runBilling(BillingCycle billingCycle, Iterator<Lease> leasesIterator, StatisticsRecord dynamicStatisticsRecord) {

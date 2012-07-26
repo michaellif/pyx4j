@@ -90,7 +90,7 @@ class BillProducer {
 
             bill.billingCycle().set(billingCycle);
 
-            Bill previousCycleBill = BillingRunner.getLatestConfirmedBill(lease);
+            Bill previousCycleBill = BillingManager.getLatestConfirmedBill(lease);
             bill.previousCycleBill().set(previousCycleBill);
 
             bill.executionDate().setValue(new LogicalDate(SysDateManager.getSysDate()));
@@ -123,7 +123,7 @@ class BillProducer {
 
             prepareAccumulators();
 
-            Bill lastBill = BillingRunner.getLatestConfirmedBill(nextPeriodBill.billingAccount().lease());
+            Bill lastBill = BillingManager.getLatestConfirmedBill(nextPeriodBill.billingAccount().lease());
             if (lastBill != null) {
                 nextPeriodBill.balanceForwardAmount().setValue(lastBill.totalDueAmount().getValue());
             } else {
@@ -140,7 +140,7 @@ class BillProducer {
             bill.billStatus().setValue(Bill.BillStatus.Finished);
 
             if (!preview) {
-                BillingRunner.updateBillingCycleStats(bill, true);
+                BillingManager.updateBillingCycleStats(bill, true);
                 Persistence.service().persist(bill.lineItems());
                 Persistence.service().persist(bill);
 
@@ -148,7 +148,7 @@ class BillProducer {
                         LeaseBillingPolicy.class);
 
                 if (leaseBillingPolicy.confirmationMethod().getValue() == LeaseBillingPolicy.BillConfirmationMethod.automatic) {
-                    BillingRunner.confirmBill(bill);
+                    BillingManager.confirmBill(bill);
                 }
             }
 
@@ -163,7 +163,7 @@ class BillProducer {
             bill.lineItems().clear();
 
             if (!preview) {
-                BillingRunner.updateBillingCycleStats(bill, true);
+                BillingManager.updateBillingCycleStats(bill, true);
                 Persistence.service().persist(bill);
             }
         }
@@ -294,7 +294,7 @@ class BillProducer {
             }
             return Bill.BillType.First;
         case Approved: // first bill should be issued
-            if (BillingRunner.getLatestConfirmedBill(lease) != null) {
+            if (BillingManager.getLatestConfirmedBill(lease) != null) {
                 return Bill.BillType.Regular;
             } else {
                 if (lease.billingAccount().carryforwardBalance().isNull()) {

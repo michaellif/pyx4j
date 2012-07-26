@@ -105,7 +105,7 @@ public class BillingCycleTest extends VistaDBTestBase {
         billingType.billingCycleStartDay().setValue(billingPeriodStartDay);
         Persistence.service().persist(billingType);
 
-        BillingCycle billingCycle = BillingRunner.getNewLeaseInitialBillingCycle(billingType, null, leaseStartDate, useCycleLeaseDay);
+        BillingCycle billingCycle = BillingManager.getNewLeaseInitialBillingCycle(billingType, null, leaseStartDate, useCycleLeaseDay);
         return billingCycle;
     }
 
@@ -116,13 +116,13 @@ public class BillingCycleTest extends VistaDBTestBase {
         billingType.billingCycleStartDay().setValue(billingPeriodStartDay);
         Persistence.service().persist(billingType);
 
-        BillingCycle billingCycle = BillingRunner.getExistingLeaseInitialBillingCycle(billingType, null, leaseStartDate, leaseCreationDate,
+        BillingCycle billingCycle = BillingManager.getExistingLeaseInitialBillingCycle(billingType, null, leaseStartDate, leaseCreationDate,
                 useCycleLeaseDay);
         return billingCycle;
     }
 
     private BillingCycle createSubsiquentBillingCycle(BillingCycle previousBillingCycle) {
-        BillingCycle billingCycle = BillingRunner.getSubsiquentBillingCycle(previousBillingCycle);
+        BillingCycle billingCycle = BillingManager.getSubsiquentBillingCycle(previousBillingCycle);
         return billingCycle;
     }
 
