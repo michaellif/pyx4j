@@ -42,7 +42,6 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.biz.financial.SysDateManager;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.deposit.DepositFacade;
 import com.propertyvista.biz.policy.PolicyFacade;
@@ -143,67 +142,8 @@ public class BillingRunner {
     }
 
     private static Bill produceBill(BillingCycle billingCycle, Lease lease, boolean preview) {
-
-        Persistence.service().retrieve(lease.billingAccount().adjustments());
-
-        Bill bill = EntityFactory.create(Bill.class);
-        try {
-            bill.billStatus().setValue(Bill.BillStatus.Running);
-            bill.billingAccount().set(lease.billingAccount());
-
-            if (preview) {
-                bill.billSequenceNumber().setValue(0);
-            } else {
-                lease.billingAccount().billCounter().setValue(lease.billingAccount().billCounter().getValue() + 1);
-                Persistence.service().persist(lease.billingAccount());
-
-                bill.billSequenceNumber().setValue(lease.billingAccount().billCounter().getValue());
-                bill.latestBillInCycle().setValue(true);
-            }
-
-            bill.billingCycle().set(billingCycle);
-
-            Bill previousCycleBill = getLatestConfirmedBill(lease);
-            bill.previousCycleBill().set(previousCycleBill);
-
-            bill.executionDate().setValue(new LogicalDate(SysDateManager.getSysDate()));
-
-            BillProducer manager = new BillProducer(bill, lease, preview);
-
-            manager.produceBill();
-
-            bill.billStatus().setValue(Bill.BillStatus.Finished);
-
-            if (!preview) {
-                updateBillingCycleStats(bill, true);
-                Persistence.service().persist(bill.lineItems());
-                Persistence.service().persist(bill);
-
-                LeaseBillingPolicy leaseBillingPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(lease.unit().building(),
-                        LeaseBillingPolicy.class);
-
-                if (leaseBillingPolicy.confirmationMethod().getValue() == LeaseBillingPolicy.BillConfirmationMethod.automatic) {
-                    confirmBill(bill);
-                }
-            }
-
-        } catch (Throwable e) {
-            log.error("Bill run error", e);
-            bill.billStatus().setValue(Bill.BillStatus.Failed);
-            String billCreationError = i18n.tr("Bill run error");
-            if (BillingException.class.isAssignableFrom(e.getClass())) {
-                billCreationError = e.getMessage();
-            }
-            bill.billCreationError().setValue(billCreationError);
-            bill.lineItems().clear();
-
-            if (!preview) {
-                updateBillingCycleStats(bill, true);
-                Persistence.service().persist(bill);
-            }
-        }
-
-        return bill;
+        BillProducer producer = new BillProducer(billingCycle, lease, preview);
+        return producer.produceBill();
     }
 
     private static void validateBillingRunPreconditions(BillingCycle billingCycle, Lease lease) {
@@ -467,7 +407,7 @@ public class BillingRunner {
         }
     }
 
-    private static void updateBillingCycleStats(Bill bill, boolean newlyCreated) {
+    static void updateBillingCycleStats(Bill bill, boolean newlyCreated) {
 
         switch (bill.billStatus().getValue()) {
         case Failed:
