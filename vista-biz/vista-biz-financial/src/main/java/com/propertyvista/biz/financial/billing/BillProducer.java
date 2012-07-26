@@ -89,16 +89,19 @@ class BillProducer {
 
             bill.billingCycle().set(billingCycle);
 
-            Bill previousCycleBill = BillingManager.getLatestConfirmedBill(lease);
-            bill.previousCycleBill().set(previousCycleBill);
+            currentPeriodBill = BillingManager.getLatestConfirmedBill(lease);
+            bill.previousCycleBill().set(currentPeriodBill);
+            if (currentPeriodBill != null) {
+                Persistence.service().retrieve(currentPeriodBill.lineItems());
+                if (!currentPeriodBill.previousCycleBill().isNull()) {
+                    previousPeriodBill = currentPeriodBill.previousCycleBill();
+                    Persistence.service().retrieve(previousPeriodBill.lineItems());
+                }
+            }
 
             bill.executionDate().setValue(new LogicalDate(SysDateManager.getSysDate()));
 
-            if (lease.version().isNull()) {
-                throw new BillingException(i18n.tr("Can't find version of lease"));
-            }
-
-            Bill.BillType billType = getBillType(lease);
+            Bill.BillType billType = findBillType();
             bill.billType().setValue(billType);
 
             bill.billingPeriodStartDate().setValue(BillDateUtils.calculateBillingPeriodStartDate(bill));
@@ -106,19 +109,6 @@ class BillProducer {
             bill.dueDate().setValue(BillDateUtils.calculateBillDueDate(bill));
 
             nextPeriodBill = bill;
-
-            if (!bill.previousCycleBill().isNull()) {
-                currentPeriodBill = bill.previousCycleBill();
-                Persistence.service().retrieve(currentPeriodBill.lineItems());
-            }
-            if (currentPeriodBill != null && !currentPeriodBill.previousCycleBill().isNull()) {
-                previousPeriodBill = currentPeriodBill.previousCycleBill();
-                Persistence.service().retrieve(previousPeriodBill.lineItems());
-            }
-
-            if (billType == Bill.BillType.Regular && SysDateManager.getSysDate().compareTo(bill.billingCycle().executionTargetDate().getValue()) < 0) {
-                throw new BillingException(i18n.tr("Regular billing can't run before target execution date"));
-            }
 
             prepareAccumulators();
 
@@ -280,8 +270,9 @@ class BillProducer {
         // @formatter:on
     }
 
-    private Bill.BillType getBillType(Lease leaseToCheck) {
-        switch (leaseToCheck.status().getValue()) {
+    private Bill.BillType findBillType() {
+
+        switch (lease.status().getValue()) {
         case Created: //zeroCycle bill should be issued; preview only
             if (!preview) {
                 throw new BillingException(i18n.tr("Billing can only run in PREVIEW mode until Lease is Approved."));
@@ -302,9 +293,16 @@ class BillProducer {
                     return Bill.BillType.ZeroCycle;
                 }
             }
-
         case Active:
-            return Bill.BillType.Regular;
+            if (currentPeriodBill != null) {
+                //check if previous confirmed Bill is the last cycle bill and only final bill should run after
+                if (currentPeriodBill.billingPeriodEndDate().getValue().compareTo(lease.leaseTo().getValue()) == 0) {
+                    return Bill.BillType.Final;
+                } else {
+                    return Bill.BillType.Regular;
+
+                }
+            }
         case Completed: // final bill should be issued
             return Bill.BillType.Final;
         default:

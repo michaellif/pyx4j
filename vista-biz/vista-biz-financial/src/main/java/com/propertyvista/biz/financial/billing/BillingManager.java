@@ -42,6 +42,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.biz.financial.SysDateManager;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.deposit.DepositFacade;
 import com.propertyvista.biz.policy.PolicyFacade;
@@ -69,15 +70,12 @@ public class BillingManager {
     static Bill runBilling(Lease leaseId, boolean preview) {
         Lease lease = Persistence.service().retrieve(Lease.class, leaseId.getPrimaryKey().asCurrentKey());
         if (lease.version().isNull()) {
-            if (!preview) {
-                throw new BillingException(i18n.tr("Lease is in draft state. Billing can run only in preview mode."));
-            }
             lease = Persistence.service().retrieve(Lease.class, leaseId.getPrimaryKey().asDraftKey());
         }
 
         lease = ensureInitBillingAccount(lease);
         BillingCycle billingCycle = getNextBillingCycle(lease);
-        validateBillingRunPreconditions(billingCycle, lease);
+        validateBillingRunPreconditions(billingCycle, lease, preview);
         return produceBill(billingCycle, lease, preview);
     }
 
@@ -100,12 +98,14 @@ public class BillingManager {
         EntityQueryCriteria<Lease> leaseCriteria = EntityQueryCriteria.create(Lease.class);
         leaseCriteria.add(PropertyCriterion.eq(leaseCriteria.proto().unit().building(), billingCycle.building()));
         leaseCriteria.add(PropertyCriterion.eq(leaseCriteria.proto().billingAccount().billingType(), billingCycle.billingType()));
+        leaseCriteria.add(PropertyCriterion.in(leaseCriteria.proto().status(), Lease.Status.Active));
+
         ICursorIterator<Lease> leaseIterator = Persistence.service().query(null, leaseCriteria, AttachLevel.Attached);
         FilterIterator<Lease> filteredLeaseIterator = new FilterIterator<Lease>(leaseIterator, new Filter<Lease>() {
             @Override
             public boolean accept(Lease lease) {
                 try {
-                    validateBillingRunPreconditions(billingCycle, lease);
+                    validateBillingRunPreconditions(billingCycle, lease, false);
                     return true;
                 } catch (BillingException e) {
                     return false;
@@ -115,10 +115,14 @@ public class BillingManager {
         runBilling(billingCycle, filteredLeaseIterator, dynamicStatisticsRecord);
     }
 
-    private static void validateBillingRunPreconditions(BillingCycle billingCycle, Lease lease) {
+    private static void validateBillingRunPreconditions(BillingCycle billingCycle, Lease lease, boolean preview) {
 
         if (!getNextBillingCycle(lease).equals(billingCycle)) {
             throw new BillingException(i18n.tr("Bill can't be created for a given billing cycle"));
+        }
+
+        if (lease.getPrimaryKey().isDraft() && !preview) {
+            throw new BillingException(i18n.tr("Lease is in draft state. Billing can run only in preview mode."));
         }
 
         if (lease.status().getValue() == Lease.Status.Closed) {
@@ -132,6 +136,25 @@ public class BillingManager {
             }
         }
 
+        Bill previousConfirmedBill = getLatestConfirmedBill(lease);
+        if (previousConfirmedBill != null) {
+
+            Persistence.service().retrieve(previousConfirmedBill.billingAccount());
+
+            //check if previous confirmed Bill is the last cycle bill and only final bill should run after
+            boolean isPreviousConfirmedBillTheLast = previousConfirmedBill.billingPeriodEndDate().getValue().compareTo(lease.leaseTo().getValue()) == 0;
+
+            //previous bill wasn't the last one so we are dealing here with the regular bill which can't run before executionTargetDate
+            if (!isPreviousConfirmedBillTheLast && SysDateManager.getSysDate().compareTo(billingCycle.executionTargetDate().getValue()) < 0) {
+                throw new BillingException(i18n.tr("Regular billing can't run before target execution date"));
+            }
+
+            //previous bill was the last one so we have to run a final bill but not before lease end date or lease move-out date whatever is first
+            if (isPreviousConfirmedBillTheLast && (SysDateManager.getSysDate().compareTo(lease.leaseTo().getValue()) < 0)
+                    && (SysDateManager.getSysDate().compareTo(lease.expectedMoveOut().getValue()) < 0)) {
+                throw new BillingException(i18n.tr("Final billing can't run before both lease end date and move-out date"));
+            }
+        }
     }
 
     private static void runBilling(BillingCycle billingCycle, Iterator<Lease> leasesIterator, StatisticsRecord dynamicStatisticsRecord) {
