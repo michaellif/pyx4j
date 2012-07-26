@@ -108,7 +108,7 @@ public class LoginForm extends CEntityForm<AuthenticationRequest> {
 
         main.add(new LoginPanelWidgetDecorator(inject(proto().email())));
         main.add(new LoginPanelWidgetDecorator(inject(proto().password())));
-        main.add(new LoginPanelWidgetDecorator(inject(proto().captcha())));
+        main.add(new LoginPanelWidgetDecorator(inject(proto().captcha()), 30));
         main.add(new LoginPanelWidgetDecorator(inject(proto().rememberID())));
 
         HorizontalPanel buttonPanel = new HorizontalPanel();
