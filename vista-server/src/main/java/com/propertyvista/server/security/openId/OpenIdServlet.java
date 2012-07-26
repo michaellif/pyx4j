@@ -92,6 +92,13 @@ public class OpenIdServlet extends HttpServlet {
         String body = IOUtils.getTextResource("body.html", OpenIdServlet.class);
         body = body.replace("${title}", "Access " + (signIn ? " Restricted" : " Granted"));
 
+        String meta = "";
+        if ((!signIn) && (!VistaDemo.isDemo() && isOurDeveloper())) {
+            //meta = "<meta http-equiv=\"refresh\" content=\"2;url=\"" + location + "\">";
+        }
+
+        body = body.replace("${head}", meta);
+
         body = body.replace("${name}", VistaDemo.isDemo() ? "PropertyVista Demo " : "" + "Access " + (signIn ? " Restricted" : " Granted"));
 
         body = body.replace("${text}", "<a id=\"" + (signIn ? "googleSignIn" : "continue") + "\" tabindex=\"1\" autofocus=\"autofocus\" href=\"" + location
@@ -107,5 +114,10 @@ public class OpenIdServlet extends HttpServlet {
 
         out.print(body);
         out.flush();
+    }
+
+    private static boolean isOurDeveloper() {
+        Object email = DevSession.getSession().getAttribute(OpenIdServlet.USER_EMAIL_ATTRIBUTE);
+        return !"tester@propertyvista.com".equals(email);
     }
 }

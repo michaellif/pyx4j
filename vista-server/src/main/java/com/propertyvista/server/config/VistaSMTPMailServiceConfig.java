@@ -17,12 +17,14 @@ import java.io.File;
 import java.util.Map;
 
 import com.pyx4j.config.server.PropertiesConfiguration;
+import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.essentials.j2se.J2SEServiceConnector;
 import com.pyx4j.essentials.j2se.J2SEServiceConnector.Credentials;
 import com.pyx4j.server.mail.SMTPMailServiceConfig;
 
 import com.propertyvista.admin.domain.dev.DevelopmentUser;
 import com.propertyvista.server.common.security.DevelopmentSecurity;
+import com.propertyvista.shared.config.VistaDemo;
 
 public class VistaSMTPMailServiceConfig extends SMTPMailServiceConfig {
 
@@ -43,10 +45,12 @@ public class VistaSMTPMailServiceConfig extends SMTPMailServiceConfig {
         config.user = credentials.email;
         config.password = credentials.password;
 
-        DevelopmentUser developmentUser = DevelopmentSecurity.findDevelopmentUser();
-        if (developmentUser != null) {
-            if (developmentUser.forwardAll().isBooleanTrue()) {
-                config.forwardAllTo = developmentUser.email().getValue();
+        if (VistaDemo.isDemo() || ApplicationMode.isDevelopment()) {
+            DevelopmentUser developmentUser = DevelopmentSecurity.findDevelopmentUser();
+            if (developmentUser != null) {
+                if (developmentUser.forwardAll().isBooleanTrue()) {
+                    config.forwardAllTo = developmentUser.email().getValue();
+                }
             }
         }
 

@@ -14,7 +14,9 @@
 package com.propertyvista.server.common.security;
 
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.OrCriterion;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.essentials.server.dev.DevSession;
 import com.pyx4j.server.contexts.NamespaceManager;
@@ -22,6 +24,7 @@ import com.pyx4j.server.contexts.NamespaceManager;
 import com.propertyvista.admin.domain.dev.DevelopmentUser;
 import com.propertyvista.config.SystemConfig;
 import com.propertyvista.domain.VistaNamespace;
+import com.propertyvista.shared.config.VistaDemo;
 
 public class DevelopmentSecurity {
 
@@ -60,11 +63,11 @@ public class DevelopmentSecurity {
         final String requestNamespace = NamespaceManager.getNamespace();
         try {
             NamespaceManager.setNamespace(VistaNamespace.adminNamespace);
-            DevelopmentUser developmentUser = findByHost();
+            DevelopmentUser developmentUser = findByOpenId();
             if (developmentUser != null) {
                 return developmentUser;
             }
-            return findByOpenId();
+            return findByHost();
         } finally {
             NamespaceManager.setNamespace(requestNamespace);
         }
@@ -78,28 +81,15 @@ public class DevelopmentSecurity {
         String host = SystemConfig.getLocalHostName();
         EntityQueryCriteria<DevelopmentUser> criteria = EntityQueryCriteria.create(DevelopmentUser.class);
 
-        criteria.add(PropertyCriterion.eq(criteria.proto().host1(), host));
+        criteria.or(PropertyCriterion.eq(criteria.proto().host1(), host), new OrCriterion(PropertyCriterion.eq(criteria.proto().host2(), host),
+                PropertyCriterion.eq(criteria.proto().host3(), host)));
+
         developmentUserHostBased = Persistence.service().retrieve(criteria);
         if (developmentUserHostBased != null) {
             return developmentUserHostBased;
+        } else {
+            return null;
         }
-
-        // TODO add OR to MySQL criteria
-        criteria.getFilters().clear();
-        criteria.add(PropertyCriterion.eq(criteria.proto().host2(), host));
-        developmentUserHostBased = Persistence.service().retrieve(criteria);
-        if (developmentUserHostBased != null) {
-            return developmentUserHostBased;
-        }
-
-        criteria.getFilters().clear();
-        criteria.add(PropertyCriterion.eq(criteria.proto().host3(), host));
-        developmentUserHostBased = Persistence.service().retrieve(criteria);
-        if (developmentUserHostBased != null) {
-            return developmentUserHostBased;
-        }
-
-        return null;
     }
 
     private static DevelopmentUser findByOpenId() {
@@ -109,6 +99,12 @@ public class DevelopmentSecurity {
         }
         EntityQueryCriteria<DevelopmentUser> criteria = EntityQueryCriteria.create(DevelopmentUser.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().email(), email));
-        return Persistence.service().retrieve(criteria);
+        DevelopmentUser developmentUser = Persistence.service().retrieve(criteria);
+        if (VistaDemo.isDemo() && (developmentUser == null)) {
+            developmentUser = EntityFactory.create(DevelopmentUser.class);
+            developmentUser.email().setValue(email);
+            developmentUser.forwardAll().setValue(Boolean.TRUE);
+        }
+        return developmentUser;
     }
 }
