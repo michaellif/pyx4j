@@ -191,6 +191,9 @@ public class BuildingImporter extends ImportPersister {
                     for (FloorplanAmenityIO iIO : floorplanIO.amenities()) {
                         FloorplanAmenity i = new FloorplanAmenityConverter().createDBO(iIO);
                         i.floorplan().set(floorplan);
+                        if (i.type().isNull()) {
+                            i.type().setValue(FloorplanAmenity.Type.other);
+                        }
                         items.add(i);
                     }
                     Persistence.service().persist(items);

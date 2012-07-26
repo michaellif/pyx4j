@@ -165,6 +165,9 @@ class ImportPersister {
             List<BuildingAmenity> items = new Vector<BuildingAmenity>();
             for (BuildingAmenityIO iIO : buildingIO.amenities()) {
                 BuildingAmenity i = new BuildingAmenityConverter().createDBO(iIO);
+                if (i.type().isNull()) {
+                    i.type().setValue(BuildingAmenity.Type.other);
+                }
                 i.building().set(building);
                 i.orderInBuilding().setValue(items.size());
                 items.add(i);
