@@ -125,7 +125,7 @@ public class DepositFullCycleScenarioTest extends FinancialTestBase {
         advanceDate("01-May-2012");
         receiveAndPostPayment("01-May-2012", "127.74");
 
-        advanceDate("18-May-2012");
+        advanceDate("01-Jun-2012");
 
         completeLease();
 

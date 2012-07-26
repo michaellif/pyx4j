@@ -151,7 +151,7 @@ public class BillingManager {
 
             //previous bill was the last one so we have to run a final bill but not before lease end date or lease move-out date whatever is first
             if (isPreviousConfirmedBillTheLast && (SysDateManager.getSysDate().compareTo(lease.leaseTo().getValue()) < 0)
-                    && (SysDateManager.getSysDate().compareTo(lease.expectedMoveOut().getValue()) < 0)) {
+                    && (lease.expectedMoveOut().isNull() || (SysDateManager.getSysDate().compareTo(lease.expectedMoveOut().getValue()) < 0))) {
                 throw new BillingException(i18n.tr("Final billing can't run before both lease end date and move-out date"));
             }
         }
