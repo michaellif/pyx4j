@@ -57,7 +57,6 @@ import com.propertyvista.domain.policy.policies.LeaseBillingPolicy;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
-import com.propertyvista.domain.tenant.lease.Lease.Status;
 import com.propertyvista.portal.rpc.shared.BillingException;
 import com.propertyvista.server.jobs.StatisticsUtils;
 import com.propertyvista.server.jobs.TaskRunner;
@@ -175,17 +174,20 @@ public class BillingLifecycleManager {
                 throw new BillingException(i18n.tr("Can't find version of lease"));
             }
 
-            if (Status.Created == lease.version().status().getValue()) {//zeroCycle bill should be issued; preview only
+            switch (lease.version().status().getValue()) {
+            case Created: //zeroCycle bill should be issued; preview only
                 if (!preview) {
                     throw new BillingException(i18n.tr("Billing can only run in PREVIEW mode until Lease is Approved."));
                 }
                 manager = new ZeroCycleBillingManager(bill);
-            } else if (Status.Application == lease.version().status().getValue()) {// preview only
+                break;
+            case Application: // preview only
                 if (!preview) {
                     throw new BillingException(i18n.tr("Billing can only run in PREVIEW mode until Lease is Approved."));
                 }
                 manager = new FirstBillingManager(bill);
-            } else if (Status.Approved == lease.version().status().getValue()) {// first bill should be issued
+                break;
+            case Approved: // first bill should be issued
                 if (getLatestConfirmedBill(lease) != null) {
                     manager = new RegularBillingManager(bill);
                 } else {
@@ -195,11 +197,14 @@ public class BillingLifecycleManager {
                         manager = new ZeroCycleBillingManager(bill);
                     }
                 }
-            } else if (Status.Active == lease.version().status().getValue()) {
+                break;
+            case Active:
                 manager = new RegularBillingManager(bill);
-            } else if (Status.Completed == lease.version().status().getValue()) {// final bill should be issued
+                break;
+            case Completed: // final bill should be issued
                 manager = new FinalBillingManager(bill);
-            } else {
+                break;
+            default:
                 throw new BillingException(i18n.tr("Billing can't run when lease is in status ''{0}''", lease.version().status().getValue()));
             }
 

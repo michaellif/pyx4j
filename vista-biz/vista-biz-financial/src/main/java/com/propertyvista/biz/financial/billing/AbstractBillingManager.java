@@ -52,13 +52,13 @@ abstract class AbstractBillingManager {
         bill.billingPeriodEndDate().setValue(BillDateUtils.calculateBillingPeriodEndDate(bill));
         bill.dueDate().setValue(BillDateUtils.calculateBillDueDate(bill));
 
-        this.nextPeriodBill = bill;
+        nextPeriodBill = bill;
         if (!bill.previousCycleBill().isNull()) {
-            this.currentPeriodBill = bill.previousCycleBill();
+            currentPeriodBill = bill.previousCycleBill();
             Persistence.service().retrieve(currentPeriodBill.lineItems());
         }
         if (currentPeriodBill != null && !currentPeriodBill.previousCycleBill().isNull()) {
-            this.previousPeriodBill = currentPeriodBill.previousCycleBill();
+            previousPeriodBill = currentPeriodBill.previousCycleBill();
             Persistence.service().retrieve(previousPeriodBill.lineItems());
         }
     }

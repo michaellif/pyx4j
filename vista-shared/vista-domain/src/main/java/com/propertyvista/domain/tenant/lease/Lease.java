@@ -71,8 +71,6 @@ public interface Lease extends IVersionedEntity<LeaseV> {
 
         Completed, // Lease end date is passed
 
-        FinalBillIssued, // Final bill is issued
-
         Closed; // All the transactions completed and lease closed
 
         @Override
@@ -91,7 +89,7 @@ public interface Lease extends IVersionedEntity<LeaseV> {
         }
 
         public static Collection<Status> current() {
-            return EnumSet.of(Approved, Active, Completed, FinalBillIssued);
+            return EnumSet.of(Approved, Active, Completed);
         }
 
         public static Collection<Status> currentNew() {
