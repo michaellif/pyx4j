@@ -164,7 +164,7 @@ public class OnboardingUserPasswordResetRequestHandler extends AbstractRequestHa
         pchRequest.userPk().setValue(user.getPrimaryKey());
         ServerSideFactory.create(UserManagementFacade.class).selfChangePassword(OnboardingUserCredential.class, pchRequest);
 
-        response.role().setValue(OnboardingXMLUtils.convertRole(credential.behavior().getValue()));
+        response.role().setValue(OnboardingXMLUtils.convertRole(credential.behavior().getValue(), true));
         response.onboardingAccountId().set(credential.onboardingAccountId());
         response.email().setValue(user.email().getValue());
         response.status().setValue(OnboardingUserAuthenticationResponseIO.AuthenticationStatusCode.OK);

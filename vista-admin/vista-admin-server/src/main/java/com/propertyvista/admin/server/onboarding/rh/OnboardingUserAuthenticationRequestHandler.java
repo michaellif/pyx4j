@@ -56,10 +56,10 @@ public class OnboardingUserAuthenticationRequestHandler extends AbstractRequestH
     @Override
     public ResponseIO execute(OnboardingUserAuthenticationRequestIO request) {
         log.info("User {} performed {} for email {}", new Object[] { request.email().getValue(), "OnboardingUserAuthentication", request.email().getValue() });
-        return processOnboardingUserLogin(request);
+        return processOnboardingUserLogin(request, true);
     }
 
-    public static OnboardingUserAuthenticationResponseIO processOnboardingUserLogin(OnboardingUserAuthenticationRequestIO request) {
+    public static OnboardingUserAuthenticationResponseIO processOnboardingUserLogin(OnboardingUserAuthenticationRequestIO request, boolean onboradingOnly) {
         OnboardingUserAuthenticationResponseIO response = EntityFactory.create(OnboardingUserAuthenticationResponseIO.class);
         response.success().setValue(Boolean.TRUE);
 
@@ -130,7 +130,7 @@ public class OnboardingUserAuthenticationRequestHandler extends AbstractRequestH
                         }
                     }
 
-                    response.role().setValue(OnboardingXMLUtils.convertRole(credential.behavior().getValue()));
+                    response.role().setValue(OnboardingXMLUtils.convertRole(credential.behavior().getValue(), onboradingOnly));
                     response.status().setValue(OnboardingUserAuthenticationResponseIO.AuthenticationStatusCode.OK);
 
                     return response;
@@ -159,7 +159,7 @@ public class OnboardingUserAuthenticationRequestHandler extends AbstractRequestH
                     response.status().setValue(OnboardingUserAuthenticationResponseIO.AuthenticationStatusCode.OK_PasswordChangeRequired);
                     return response;
                 } else {
-                    response.role().setValue(OnboardingXMLUtils.convertRole(credential.behavior().getValue()));
+                    response.role().setValue(OnboardingXMLUtils.convertRole(credential.behavior().getValue(), onboradingOnly));
                     response.onboardingAccountId().set(pmc.onboardingAccountId());
                     response.email().setValue(user.email().getValue());
                     response.status().setValue(OnboardingUserAuthenticationResponseIO.AuthenticationStatusCode.OK);
@@ -189,7 +189,7 @@ public class OnboardingUserAuthenticationRequestHandler extends AbstractRequestH
                 response.email().setValue(user.email().getValue());
                 return response;
             } else {
-                response.role().setValue(OnboardingXMLUtils.convertRole(credential.behavior().getValue()));
+                response.role().setValue(OnboardingXMLUtils.convertRole(credential.behavior().getValue(), onboradingOnly));
                 response.onboardingAccountId().set(credential.onboardingAccountId());
                 response.email().setValue(user.email().getValue());
                 response.status().setValue(OnboardingUserAuthenticationResponseIO.AuthenticationStatusCode.OK);

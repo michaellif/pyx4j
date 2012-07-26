@@ -243,11 +243,11 @@ public class OpenIDProviderServer {
         try {
             NamespaceManager.setNamespace(VistaNamespace.adminNamespace);
 
-            OnboardingUserAuthenticationResponseIO authResponse = OnboardingUserAuthenticationRequestHandler
-                    .processOnboardingUserLogin(asOnboardingAuthRequest(httpReq.getParameter("j_username"), httpReq.getParameter("j_password"), null, null));
+            OnboardingUserAuthenticationResponseIO authResponse = OnboardingUserAuthenticationRequestHandler.processOnboardingUserLogin(
+                    asOnboardingAuthRequest(httpReq.getParameter("j_username"), httpReq.getParameter("j_password"), null, null), false);
 
             if ((authResponse.status().getValue() == AuthenticationStatusCode.OK)
-                    | (authResponse.status().getValue() == AuthenticationStatusCode.OK_PasswordChangeRequired)) {
+                    || (authResponse.status().getValue() == AuthenticationStatusCode.OK_PasswordChangeRequired)) {
                 userData.authenticatedAndApproved = true;
                 userData.email = authResponse.email().getValue();
                 return userData;

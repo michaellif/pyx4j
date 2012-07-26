@@ -56,7 +56,7 @@ public class OnboardingXMLUtils {
         }
     }
 
-    public static OnboardingRole convertRole(VistaOnboardingBehavior behavior) {
+    public static OnboardingRole convertRole(VistaOnboardingBehavior behavior, boolean onboradingOnly) {
         if (behavior == null) {
             return null;
         }
@@ -72,7 +72,11 @@ public class OnboardingXMLUtils {
         case ProspectiveClient:
             return OnboardingRole.ProspectiveClient;
         default:
-            throw new IllegalArgumentException();
+            if (onboradingOnly) {
+                throw new IllegalArgumentException();
+            } else {
+                return null;
+            }
         }
     }
 }
