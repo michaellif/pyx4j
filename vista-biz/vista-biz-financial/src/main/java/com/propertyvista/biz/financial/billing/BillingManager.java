@@ -125,7 +125,7 @@ public class BillingManager {
             throw new BillingException("Lease is closed");
         }
 
-        Bill previousBill = BillingManager.getLatestBill(lease);
+        Bill previousBill = getLatestBill(lease);
         if (previousBill != null) {
             if (BillStatus.notConfirmed(previousBill.billStatus().getValue())) {
                 throw new BillingException(i18n.tr("Can't run billing on Account with non-confirmed bills"));
