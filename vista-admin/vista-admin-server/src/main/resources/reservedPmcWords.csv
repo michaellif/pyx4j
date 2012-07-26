@@ -13,5 +13,6 @@ interfaces
 secure-interfaces
 admin
 _admin_
+demo
 _dba*
 pg_*

@@ -28,6 +28,11 @@ public class VistaServerSideConfigurationDevCustom extends VistaServerSideConfig
     }
 
     @Override
+    public String openIdDomain() {
+        return getConfigProperties().getValue("openIdDomain");
+    }
+
+    @Override
     public String getApplicationURLNamespace() {
         return getConfigProperties().getValue("ApplicationURLNamespace");
     }
