@@ -224,6 +224,9 @@ public class OpenIDProviderServer {
 
         body = body.replace("${message}", (String) httpReq.getAttribute("message"));
 
+        response.setContentType("application/text/html");
+        response.setContentLength(body.length());
+
         ServletOutputStream os = response.getOutputStream();
         os.write(body.getBytes());
         os.close();
