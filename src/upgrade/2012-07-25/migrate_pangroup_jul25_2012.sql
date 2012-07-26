@@ -46,6 +46,7 @@ DROP TABLE pangroup_copy.lease_terms_policy$tenant_summary_terms;
 DROP TABLE pangroup_copy.legal_terms_content;
 DROP TABLE pangroup_copy.legal_terms_descriptor;
 DROP TABLE pangroup_copy.legal_terms_descriptor$content;
+DROP TABLE pangroup_copy.misc_policy;
 DROP TABLE pangroup_copy.page_caption;
 DROP TABLE pangroup_copy.page_content;
 DROP TABLE pangroup_copy.page_descriptor;
@@ -73,6 +74,7 @@ DROP TABLE pangroup_copy.unit_availability$column_descriptors;
 
 ALTER TABLE pangroup_copy.apt_unit RENAME COLUMN belongs_to TO building;
 ALTER TABLE pangroup_copy.apt_unit ADD COLUMN notes_and_attachments BIGINT;
+ALTER TABLE pangroup_copy.apt_unit ALTER COLUMN info_unit_number TYPE VARCHAR(20);
 
 ALTER TABLE pangroup_copy.billing_account ALTER COLUMN account_number TYPE VARCHAR(14);
 ALTER TABLE pangroup_copy.billing_account RENAME COLUMN billing_cycle TO billing_type;
@@ -82,6 +84,9 @@ ALTER TABLE pangroup_copy.billing_account DROP COLUMN total;
 ALTER TABLE pangroup_copy.billing_account DROP COLUMN billing_period_start_date;
 
 ALTER TABLE pangroup_copy.building_amenity RENAME COLUMN belongs_to TO building;
+
+ALTER TABLE pangroup_copy.crm_user_credential RENAME COLUMN updated TO password_updated;
+ALTER TABLE pangroup_copy.customer_user_credential RENAME COLUMN updated TO password_updated;
 
 -- Table product_catalog$included_utilities is deprecated, building_amenity is used instead
 -- For the insert statement to work, sequences must be reset 
@@ -116,6 +121,7 @@ ALTER TABLE pangroup_copy.lease ADD COLUMN activation_date DATE;
 ALTER TABLE pangroup_copy.tenant RENAME COLUMN tenant_role TO participant_role;
 ALTER TABLE pangroup_copy.tenant ADD COLUMN participant_id VARCHAR(500);
 ALTER TABLE pangroup_copy.tenant ADD COLUMN preauthorized_payment BIGINT;
+ALTER TABLE pangroup_copy.tenant ALTER COLUMN percentage TYPE NUMERIC(18,2);
 
 -- ALTER TABLE pangroup_copy.unit_availability RENAME TO unit_availability_gadget_meta;
 -- ALTER TABLE pangroup_copy.unit_availability_gadget_meta DROP COLUMN page_number;
@@ -167,7 +173,9 @@ SELECT _dba_.reset_schema_sequences('empty_copy');
 ALTER SCHEMA empty_copy RENAME TO pangroup;
 ALTER SCHEMA pangroup OWNER TO vista;
 GRANT USAGE ON SCHEMA pangroup TO vista;
+SELECT _dba_.change_schema_tables_ownership('pangroup','vista');
+-- GRANT SELECT,UPDATE,INSERT,DELETE ON ALL TABLES IN SCHEMA pangroup TO vista;
 
-SELECT _dba_.grant_schema_tables_privs('pangroup','vista');
+-- SELECT _dba_.grant_schema_tables_privs('pangroup','vista');
 
 COMMIT;

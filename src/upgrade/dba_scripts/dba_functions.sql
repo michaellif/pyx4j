@@ -5,15 +5,6 @@ WHERE 	schemaname = $1;
 $$
 LANGUAGE SQL;
 
-CREATE OR REPLACE FUNCTION _dba_.generate_dump_script() RETURNS record AS
-$$
-SELECT 	'pg_dump -b -n '||nspname||' vista33 > '||nspname||'.sql'
-FROM 	pg_namespace 
-WHERE 	nspname NOT IN ('information_schema','pg_catalog','pg_toast','_dba_','pg_temp_1','pg_toast_temp_1');
-$$
-LANGUAGE SQL;
-
-
 CREATE OR REPLACE FUNCTION _dba_.table_depends_on(text,text) RETURNS name[] AS
 $$
 SELECT array(SELECT a.relname FROM pg_class a JOIN pg_constraint b ON (a.oid = b.confrelid)
@@ -362,4 +353,19 @@ END;
 $$
 LANGUAGE plpgsql VOLATILE;
 
+CREATE OR REPLACE FUNCTION _dba_.change_schema_tables_ownership(v_schema_name TEXT, v_user TEXT) RETURNS VOID AS
+$$
+DECLARE
+        v_table         VARCHAR(64);
+BEGIN
+        FOR v_table IN
+        SELECT relname FROM pg_class a JOIN pg_namespace b ON (a.relnamespace = b.oid)
+        WHERE b.nspname = v_schema_name
+        AND a.relkind = 'r'
+        LOOP
+                EXECUTE 'ALTER TABLE '||v_schema_name||'.'||v_table||' OWNER TO '||v_user;
 
+	END LOOP;
+END;
+$$
+LANGUAGE plpgsql VOLATILE;
