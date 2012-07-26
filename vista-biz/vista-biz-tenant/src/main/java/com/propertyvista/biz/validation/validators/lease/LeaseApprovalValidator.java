@@ -29,7 +29,7 @@ public class LeaseApprovalValidator extends CompositeEntityValidator<Lease> {
 
     @Override
     protected void init() {
-        bind(proto().version().status(), new ValueConstraintValidator<Lease.Status>(Lease.Status.Application, Lease.Status.Created));
+        bind(proto().status(), new ValueConstraintValidator<Lease.Status>(Lease.Status.Application, Lease.Status.Created));
 
         bind(proto().type(), new NotNullValidator());
         bind(proto().unit(), new NotNullValidator());

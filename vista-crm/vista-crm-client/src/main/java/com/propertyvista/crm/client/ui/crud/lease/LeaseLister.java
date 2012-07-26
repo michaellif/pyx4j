@@ -56,19 +56,19 @@ public class LeaseLister extends VersionedLister<LeaseDTO> {
             new Builder(proto().unit().building().propertyCode()).build(),
             new Builder(proto().unit()).build(),
             
-            new Builder(proto().version().status()).build(),
-            new Builder(proto().version().completion()).build(),
+            new Builder(proto().status()).build(),
+            new Builder(proto().completion()).build(),
 
             new Builder(proto().billingAccount().accountNumber()).build(),
             
             new Builder(proto().leaseFrom()).build(),
             new Builder(proto().leaseTo()).build(),
             
-            new Builder(proto().version().expectedMoveIn()).build(),
-            new Builder(proto().version().expectedMoveOut(), false).build(),
-            new Builder(proto().version().actualMoveIn(), false).build(),
-            new Builder(proto().version().actualMoveOut(), false).build(),
-            new Builder(proto().version().moveOutNotice(), false).build(),
+            new Builder(proto().expectedMoveIn()).build(),
+            new Builder(proto().expectedMoveOut(), false).build(),
+            new Builder(proto().actualMoveIn(), false).build(),
+            new Builder(proto().actualMoveOut(), false).build(),
+            new Builder(proto().moveOutNotice(), false).build(),
             
             new Builder(proto().approvalDate(), false).build(),
             new Builder(proto().creationDate(), false).build(),
@@ -81,10 +81,10 @@ public class LeaseLister extends VersionedLister<LeaseDTO> {
     protected EntityListCriteria<LeaseDTO> updateCriteria(EntityListCriteria<LeaseDTO> criteria) {
         switch (getVersionDisplayMode()) {
         case displayDraft:
-            criteria.add(PropertyCriterion.in(criteria.proto().version().status(), Lease.Status.currentNew()));
+            criteria.add(PropertyCriterion.in(criteria.proto().status(), Lease.Status.currentNew()));
             break;
         case displayFinal:
-            criteria.add(PropertyCriterion.in(criteria.proto().version().status(), Lease.Status.current()));
+            criteria.add(PropertyCriterion.in(criteria.proto().status(), Lease.Status.current()));
             break;
         }
         return super.updateCriteria(criteria);
@@ -100,7 +100,7 @@ public class LeaseLister extends VersionedLister<LeaseDTO> {
         newLease.type().setValue(leaseType);
         newLease.term().setValue(Term.FixedEx);
         newLease.paymentFrequency().setValue(PaymentFrequency.Monthly);
-        newLease.version().status().setValue(Lease.Status.Created);
+        newLease.status().setValue(Lease.Status.Created);
         newLease.billingAccount().carryforwardBalance().setValue(balance);
         return newLease;
     }

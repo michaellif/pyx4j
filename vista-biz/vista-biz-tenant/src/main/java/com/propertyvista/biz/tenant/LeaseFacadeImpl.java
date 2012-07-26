@@ -77,10 +77,10 @@ public class LeaseFacadeImpl implements LeaseFacade {
     @Override
     public Lease init(Lease lease) {
         // check client supplied initial status value:
-        if (lease.version().status().isNull()) {
+        if (lease.status().isNull()) {
             throw new IllegalStateException(i18n.tr("Invalid Lease State"));
         } else {
-            switch (lease.version().status().getValue()) {
+            switch (lease.status().getValue()) {
             case Created:
             case Application:
                 break; // ok, allowed values...
@@ -108,7 +108,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
     @Override
     public Lease setUnit(Lease lease, AptUnit unitId) {
         assert !lease.isValueDetached();
-        if (!Lease.Status.draft().contains(lease.version().status().getValue())) {
+        if (!Lease.Status.draft().contains(lease.status().getValue())) {
             throw new UserRuntimeException(i18n.tr("Invalid Lease State"));
         }
 
@@ -149,7 +149,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
     @Override
     public Lease setService(Lease lease, ProductItem serviceId) {
         assert !lease.isValueDetached();
-        if (!Lease.Status.draft().contains(lease.version().status().getValue())) {
+        if (!Lease.Status.draft().contains(lease.status().getValue())) {
             throw new UserRuntimeException(i18n.tr("Invalid Lease State"));
         }
 
@@ -239,7 +239,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
         boolean doReserve = false;
         boolean doUnreserve = false;
 
-        if (lease.version().status().getValue() == Status.Application | lease.version().status().getValue() == Status.Created) {
+        if (lease.status().getValue() == Status.Application | lease.status().getValue() == Status.Created) {
             if (isNewLease) {
                 doReserve = !lease.unit().isNull();
             } else {
@@ -258,7 +258,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
 
         // update reservation if necessary:
         if (doUnreserve) {
-            switch (lease.version().status().getValue()) {
+            switch (lease.status().getValue()) {
             case Application:
                 ServerSideFactory.create(OccupancyFacade.class).unreserve(previousLeaseEdition.unit().getPrimaryKey());
                 break;
@@ -266,13 +266,13 @@ public class LeaseFacadeImpl implements LeaseFacade {
                 ServerSideFactory.create(OccupancyFacade.class).migratedCancel(previousLeaseEdition.unit().<AptUnit> createIdentityStub());
                 break;
             default:
-                throw new IllegalStateException(SimpleMessageFormat.format("it's not allowed to unset unit while lease's state is \"{0}\"", lease.version()
-                        .status().getValue()));
+                throw new IllegalStateException(SimpleMessageFormat.format("it's not allowed to unset unit while lease's state is \"{0}\"", lease.status()
+                        .getValue()));
             }
 
         }
         if (doReserve) {
-            switch (lease.version().status().getValue()) {
+            switch (lease.status().getValue()) {
             case Application:
                 ServerSideFactory.create(OccupancyFacade.class).reserve(lease.unit().getPrimaryKey(), lease);
                 break;
@@ -280,8 +280,8 @@ public class LeaseFacadeImpl implements LeaseFacade {
                 ServerSideFactory.create(OccupancyFacade.class).migrateStart(lease.unit().<AptUnit> createIdentityStub(), lease);
                 break;
             default:
-                throw new IllegalStateException(SimpleMessageFormat.format("it's not allowed to set unit while lease's state is \"{0}\"", lease.version()
-                        .status().getValue()));
+                throw new IllegalStateException(SimpleMessageFormat.format("it's not allowed to set unit while lease's state is \"{0}\"", lease.status()
+                        .getValue()));
             }
         }
 
@@ -358,7 +358,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
         Lease lease = Persistence.retrieveDraftForEdit(Lease.class, leaseId.asDraftKey());
 
         // Verify the status
-        if (!Lease.Status.draft().contains(lease.version().status().getValue())) {
+        if (!Lease.Status.draft().contains(lease.status().getValue())) {
             throw new UserRuntimeException(i18n.tr("Invalid Lease State"));
         }
         if (LeaseApplication.Status.Created != lease.leaseApplication().status().getValue()) {
@@ -368,7 +368,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
         ServerSideFactory.create(OnlineApplicationFacade.class).createMasterOnlineApplication(lease.leaseApplication().onlineApplication());
 
         lease.leaseApplication().status().setValue(LeaseApplication.Status.OnlineApplication);
-        lease.version().status().setValue(Lease.Status.Application);
+        lease.status().setValue(Lease.Status.Application);
         Persistence.service().persist(lease);
     }
 
@@ -387,7 +387,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
             throw new UserRuntimeException(i18n.tr("This lease cannot be approved due to following validation errors:\n{0}", errorsRoster));
         }
 
-        lease.version().status().setValue(Lease.Status.Approved);
+        lease.status().setValue(Lease.Status.Approved);
         lease.leaseApplication().status().setValue(LeaseApplication.Status.Approved);
         lease.approvalDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
         lease.leaseApplication().decidedBy().set(decidedBy);
@@ -421,7 +421,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
     public void declineApplication(Lease leaseId, Employee decidedBy, String decisionReason) {
         Lease lease = Persistence.secureRetrieveDraft(Lease.class, leaseId.getPrimaryKey());
         // TODO Review the status
-        lease.version().status().setValue(Lease.Status.Closed);
+        lease.status().setValue(Lease.Status.Closed);
         lease.leaseApplication().status().setValue(LeaseApplication.Status.Declined);
         lease.leaseApplication().decidedBy().set(decidedBy);
         lease.leaseApplication().decisionReason().setValue(decisionReason);
@@ -448,7 +448,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
     public void cancelApplication(Lease leaseId, Employee decidedBy, String decisionReason) {
         Lease lease = Persistence.secureRetrieveDraft(Lease.class, leaseId.getPrimaryKey());
         // TODO Review the status
-        lease.version().status().setValue(Lease.Status.Closed);
+        lease.status().setValue(Lease.Status.Closed);
         lease.leaseApplication().status().setValue(LeaseApplication.Status.Cancelled);
         lease.leaseApplication().decidedBy().set(decidedBy);
         lease.leaseApplication().decisionReason().setValue(decisionReason);
@@ -465,7 +465,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
     @Override
     public void approveExistingLease(Lease leaseId) {
         Lease lease = Persistence.secureRetrieveDraft(Lease.class, leaseId.getPrimaryKey());
-        lease.version().status().setValue(Lease.Status.Approved);
+        lease.status().setValue(Lease.Status.Approved);
 
         ServerSideFactory.create(OccupancyFacade.class).migratedApprove(lease.unit().<AptUnit> createIdentityStub());
         ServerSideFactory.create(ProductCatalogFacade.class).updateUnitRentPrice(lease);
@@ -491,11 +491,11 @@ public class LeaseFacadeImpl implements LeaseFacade {
                 && ServerSideFactory.create(BillingFacade.class).getLatestBill(lease).billStatus().getValue() != Bill.BillStatus.Confirmed) {
             throw new UserRuntimeException(i18n.tr("Please run and confirm first bill in order to activate the lease."));
         }
-        if (!EnumSet.of(Lease.Status.Created, Lease.Status.Approved).contains(lease.version().status().getValue())) {
-            throw new UserRuntimeException(i18n.tr("Impossible to activate lease with status: {0}", lease.version().status().getStringView()));
+        if (!EnumSet.of(Lease.Status.Created, Lease.Status.Approved).contains(lease.status().getValue())) {
+            throw new UserRuntimeException(i18n.tr("Impossible to activate lease with status: {0}", lease.status().getStringView()));
         }
 
-        lease.version().status().setValue(Status.Active);
+        lease.status().setValue(Status.Active);
         lease.saveAction().setValue(SaveAction.saveAsFinal);
         lease.activationDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
         Persistence.secureSave(lease);
@@ -519,13 +519,13 @@ public class LeaseFacadeImpl implements LeaseFacade {
         if (lease == null) {
             throw new IllegalStateException("lease " + leaseId + " was not found");
         }
-        if (lease.version().status().getValue() != Status.Active) {
+        if (lease.status().getValue() != Status.Active) {
             throw new IllegalStateException("lease " + leaseId + " must be " + Status.Active + " in order to perform Completion");
         }
 
-        lease.version().completion().setValue(completionType);
-        lease.version().moveOutNotice().setValue(noticeDay);
-        lease.version().expectedMoveOut().setValue(moveOutDay);
+        lease.completion().setValue(completionType);
+        lease.moveOutNotice().setValue(noticeDay);
+        lease.expectedMoveOut().setValue(moveOutDay);
 
         lease.saveAction().setValue(SaveAction.saveAsFinal);
         Persistence.secureSave(lease);
@@ -540,12 +540,12 @@ public class LeaseFacadeImpl implements LeaseFacade {
         if (lease == null) {
             throw new IllegalStateException("lease " + leaseId + " was not found");
         }
-        if (lease.version().completion().isNull()) {
+        if (lease.completion().isNull()) {
             throw new IllegalStateException("lease " + leaseId + " must have notice in order to perform 'cancelNotice'");
         }
-        lease.version().completion().setValue(null);
-        lease.version().moveOutNotice().setValue(null);
-        lease.version().expectedMoveOut().setValue(null);
+        lease.completion().setValue(null);
+        lease.moveOutNotice().setValue(null);
+        lease.expectedMoveOut().setValue(null);
 
         lease.saveAction().setValue(SaveAction.saveAsFinal);
         Persistence.secureSave(lease);
@@ -556,8 +556,8 @@ public class LeaseFacadeImpl implements LeaseFacade {
     @Override
     public void complete(Key leaseId) {
         Lease lease = Persistence.secureRetrieveDraft(Lease.class, leaseId);
-        lease.version().actualLeaseTo().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
-        lease.version().status().setValue(Status.Completed);
+        lease.actualLeaseTo().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
+        lease.status().setValue(Status.Completed);
 
         lease.saveAction().setValue(SaveAction.saveAsFinal);
         Persistence.secureSave(lease);
@@ -566,7 +566,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
     @Override
     public void close(Key leaseId) {
         Lease lease = Persistence.secureRetrieveDraft(Lease.class, leaseId);
-        lease.version().status().setValue(Status.Closed);
+        lease.status().setValue(Status.Closed);
 
         lease.saveAction().setValue(SaveAction.saveAsFinal);
         Persistence.secureSave(lease);

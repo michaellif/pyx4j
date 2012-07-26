@@ -154,7 +154,7 @@ public class DepositFacadeImpl implements DepositFacade {
         if (lease == null) {
             // find active leases
             EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
-            criteria.add(PropertyCriterion.in(criteria.proto().version().status(), Lease.Status.current()));
+            criteria.add(PropertyCriterion.in(criteria.proto().status(), Lease.Status.current()));
             leases = Persistence.service().query(criteria);
         } else {
             leases = Arrays.asList(lease);

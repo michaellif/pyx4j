@@ -40,7 +40,6 @@ import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.policy.policies.LeaseBillingPolicy;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.domain.tenant.lease.Lease.LeaseV;
 import com.propertyvista.portal.rpc.shared.BillingException;
 
 class BillProducer {
@@ -99,7 +98,7 @@ class BillProducer {
                 throw new BillingException(i18n.tr("Can't find version of lease"));
             }
 
-            Bill.BillType billType = getBillType(lease.version());
+            Bill.BillType billType = getBillType(lease);
             bill.billType().setValue(billType);
 
             bill.billingPeriodStartDate().setValue(BillDateUtils.calculateBillingPeriodStartDate(bill));
@@ -281,8 +280,8 @@ class BillProducer {
         // @formatter:on
     }
 
-    private Bill.BillType getBillType(LeaseV leaseV) {
-        switch (leaseV.status().getValue()) {
+    private Bill.BillType getBillType(Lease leaseToCheck) {
+        switch (leaseToCheck.status().getValue()) {
         case Created: //zeroCycle bill should be issued; preview only
             if (!preview) {
                 throw new BillingException(i18n.tr("Billing can only run in PREVIEW mode until Lease is Approved."));
@@ -309,7 +308,7 @@ class BillProducer {
         case Completed: // final bill should be issued
             return Bill.BillType.Final;
         default:
-            throw new BillingException(i18n.tr("Billing can't run when lease is in status ''{0}''", lease.version().status().getValue()));
+            throw new BillingException(i18n.tr("Billing can't run when lease is in status ''{0}''", lease.status().getValue()));
         }
     }
 

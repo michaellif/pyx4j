@@ -42,7 +42,7 @@ public class SelectTenantListServiceImpl extends AbstractListServiceImpl<Tenant>
 
         // filter out just current tenants:
         Tenant proto = EntityFactory.getEntityPrototype(Tenant.class);
-        dbCriteria.add(PropertyCriterion.in(proto.leaseV().status(), Lease.Status.current()));
+        dbCriteria.add(PropertyCriterion.in(proto.leaseV().holder().status(), Lease.Status.current()));
         // and current lease version only:
         dbCriteria.add(PropertyCriterion.isNotNull(proto.leaseV().fromDate()));
         dbCriteria.add(PropertyCriterion.isNull(proto.leaseV().toDate()));

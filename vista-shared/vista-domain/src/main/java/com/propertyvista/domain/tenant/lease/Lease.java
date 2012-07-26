@@ -206,6 +206,8 @@ public interface Lease extends IVersionedEntity<LeaseV> {
     @Caption(name = "Selected Unit")
     AptUnit unit();
 
+    // lease begin/end: 
+
     @NotNull
     @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> leaseFrom();
@@ -213,6 +215,26 @@ public interface Lease extends IVersionedEntity<LeaseV> {
     @NotNull
     @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> leaseTo();
+
+    // other dates:
+
+    @Format("MM/dd/yyyy")
+    IPrimitive<LogicalDate> actualLeaseTo();
+
+    @Format("MM/dd/yyyy")
+    IPrimitive<LogicalDate> expectedMoveIn();
+
+    @Format("MM/dd/yyyy")
+    IPrimitive<LogicalDate> expectedMoveOut();
+
+    @Format("MM/dd/yyyy")
+    IPrimitive<LogicalDate> actualMoveIn();
+
+    @Format("MM/dd/yyyy")
+    IPrimitive<LogicalDate> actualMoveOut();
+
+    @Format("MM/dd/yyyy")
+    IPrimitive<LogicalDate> moveOutNotice();
 
     @NotNull
     IPrimitive<PaymentFrequency> paymentFrequency();
@@ -226,6 +248,11 @@ public interface Lease extends IVersionedEntity<LeaseV> {
     IList<Document> documents();
 
     // internals:
+
+    @ToString(index = 3)
+    IPrimitive<Status> status();
+
+    IPrimitive<CompletionType> completion();
 
     @ReadOnly
     @Timestamp(Update.Created)
@@ -247,31 +274,6 @@ public interface Lease extends IVersionedEntity<LeaseV> {
     // Versioned part:
 
     public interface LeaseV extends IVersionData<Lease> {
-
-        @ToString(index = 3)
-        IPrimitive<Status> status();
-
-        IPrimitive<CompletionType> completion();
-
-        // various dates:
-
-        @Format("MM/dd/yyyy")
-        IPrimitive<LogicalDate> actualLeaseTo();
-
-        @Format("MM/dd/yyyy")
-        IPrimitive<LogicalDate> expectedMoveIn();
-
-        @Format("MM/dd/yyyy")
-        IPrimitive<LogicalDate> expectedMoveOut();
-
-        @Format("MM/dd/yyyy")
-        IPrimitive<LogicalDate> actualMoveIn();
-
-        @Format("MM/dd/yyyy")
-        IPrimitive<LogicalDate> actualMoveOut();
-
-        @Format("MM/dd/yyyy")
-        IPrimitive<LogicalDate> moveOutNotice();
 
         @Owned
         @Detached

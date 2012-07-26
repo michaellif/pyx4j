@@ -327,7 +327,7 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
                     @Override
                     public ValidationError isValid(CComponent<Date, ?> component, Date value) {
                         if (value != null) {
-                            if (lease.getValue().version().status().getValue() != Status.Created && (itemEffectiveDateEditor.getValue() != null)
+                            if (lease.getValue().status().getValue() != Status.Created && (itemEffectiveDateEditor.getValue() != null)
                                     && value.before(new LogicalDate())) {
                                 return new ValidationError(component, "The date should not precede the today's date");
                             }

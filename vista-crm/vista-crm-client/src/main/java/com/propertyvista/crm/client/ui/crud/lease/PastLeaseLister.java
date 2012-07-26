@@ -33,17 +33,17 @@ public class PastLeaseLister extends ListerBase<LeaseDTO> {
             new Builder(proto().leaseId()).build(),
             new Builder(proto().type()).build(),
             
-            new Builder(proto().version().status()).build(),
-            new Builder(proto().version().completion()).build(),
+            new Builder(proto().status()).build(),
+            new Builder(proto().completion()).build(),
             
             new Builder(proto().leaseFrom()).build(),
             new Builder(proto().leaseTo()).build(),
             
-            new Builder(proto().version().expectedMoveIn()).build(),
-            new Builder(proto().version().expectedMoveOut(), false).build(),
-            new Builder(proto().version().actualMoveIn(), false).build(),
-            new Builder(proto().version().actualMoveOut(), false).build(),
-            new Builder(proto().version().moveOutNotice(), false).build(),
+            new Builder(proto().expectedMoveIn()).build(),
+            new Builder(proto().expectedMoveOut(), false).build(),
+            new Builder(proto().actualMoveIn(), false).build(),
+            new Builder(proto().actualMoveOut(), false).build(),
+            new Builder(proto().moveOutNotice(), false).build(),
             
             new Builder(proto().approvalDate(), false).build(),
             new Builder(proto().creationDate(), false).build(),

@@ -69,7 +69,7 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
         Persistence.service().retrieve(dto.billingAccount().lease().unit().building());
 
         dto.leaseId().set(dto.billingAccount().lease().leaseId());
-        dto.leaseStatus().set(dto.billingAccount().lease().version().status());
+        dto.leaseStatus().set(dto.billingAccount().lease().status());
         dto.propertyCode().set(dto.billingAccount().lease().unit().building().propertyCode());
         dto.unitNumber().set(dto.billingAccount().lease().unit().info().number());
 
@@ -109,7 +109,7 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
         dto.leaseParticipant().set(tenant);
         dto.billingAccount().set(lease.billingAccount());
         dto.leaseId().set(lease.leaseId());
-        dto.leaseStatus().set(lease.version().status());
+        dto.leaseStatus().set(lease.status());
         dto.propertyCode().set(lease.unit().building().propertyCode());
         dto.unitNumber().set(lease.unit().info().number());
 

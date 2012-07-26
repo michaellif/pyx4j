@@ -50,7 +50,7 @@ public class UpdateArrearsProcess implements PmcProcess {
         log.info("Arrears Update for billing accounts started");
 
         EntityQueryCriteria<BillingAccount> criteria = EntityQueryCriteria.create(BillingAccount.class);
-        criteria.add(PropertyCriterion.ne(criteria.proto().lease().version().status(), Lease.Status.Closed));
+        criteria.add(PropertyCriterion.ne(criteria.proto().lease().status(), Lease.Status.Closed));
         Iterator<BillingAccount> billingAccounts = Persistence.service().query(null, criteria, AttachLevel.IdOnly);
         ARFacade facade = ServerSideFactory.create(ARFacade.class);
 

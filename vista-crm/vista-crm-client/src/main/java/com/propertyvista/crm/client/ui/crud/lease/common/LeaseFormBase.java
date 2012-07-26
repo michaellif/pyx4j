@@ -88,12 +88,12 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
 
-        setTabVisible(chargesTab, getValue().version().status().getValue().isDraft());
+        setTabVisible(chargesTab, getValue().status().getValue().isDraft());
 
-        get(proto().version().completion()).setVisible(!getValue().version().completion().isNull());
+        get(proto().completion()).setVisible(!getValue().completion().isNull());
 
-        get(proto().version().moveOutNotice()).setVisible(!getValue().version().moveOutNotice().isNull());
-        get(proto().version().expectedMoveOut()).setVisible(!getValue().version().expectedMoveOut().isNull());
+        get(proto().moveOutNotice()).setVisible(!getValue().moveOutNotice().isNull());
+        get(proto().expectedMoveOut()).setVisible(!getValue().expectedMoveOut().isNull());
 
         get(proto().approvalDate()).setVisible(!getValue().approvalDate().isNull());
 
@@ -108,11 +108,11 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
 
             get(proto().unit()).setEditable(!isLeaseSigned);
 
-            get(proto().version().actualMoveOut()).setVisible(!getValue().version().expectedMoveOut().isNull());
+            get(proto().actualMoveOut()).setVisible(!getValue().expectedMoveOut().isNull());
         } else {
-            get(proto().version().actualLeaseTo()).setVisible(!getValue().version().actualLeaseTo().isNull());
-            get(proto().version().actualMoveIn()).setVisible(!getValue().version().actualMoveIn().isNull());
-            get(proto().version().actualMoveOut()).setVisible(!getValue().version().actualMoveOut().isNull());
+            get(proto().actualLeaseTo()).setVisible(!getValue().actualLeaseTo().isNull());
+            get(proto().actualMoveIn()).setVisible(!getValue().actualMoveIn().isNull());
+            get(proto().actualMoveOut()).setVisible(!getValue().actualMoveOut().isNull());
         }
     }
 
@@ -123,8 +123,8 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseId()), 15).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().type(), new CEnumLabel())).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().term(), new CEnumLabel())).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().version().status(), new CEnumLabel())).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().version().completion(), new CEnumLabel())).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().status(), new CEnumLabel())).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().completion(), new CEnumLabel())).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingAccount().accountNumber())).build());
         get(proto().billingAccount().accountNumber()).setViewable(true);
 
@@ -138,7 +138,7 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
 
         datesRow = -1; // second column:
         datesPanel.setBR(++datesRow, 1, 1);
-        datesPanel.setWidget(++datesRow, 1, new DecoratorBuilder(inject(proto().version().actualLeaseTo()), 9).build());
+        datesPanel.setWidget(++datesRow, 1, new DecoratorBuilder(inject(proto().actualLeaseTo()), 9).build());
 
         datesPanel.getColumnFormatter().setWidth(0, "40%");
         datesPanel.getColumnFormatter().setWidth(1, "60%");
@@ -168,13 +168,13 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
                         assert (filters != null);
 
                         DTO currentValue = LeaseFormBase.this.getValue();
-                        if (currentValue.version().status().getValue() == Lease.Status.Created) { // existing lease:
+                        if (currentValue.status().getValue() == Lease.Status.Created) { // existing lease:
 
                             filters.add(PropertyCriterion.eq(proto().unitOccupancySegments().$().status(), AptUnitOccupancySegment.Status.pending));
                             filters.add(PropertyCriterion.eq(proto().unitOccupancySegments().$().dateTo(), new LogicalDate(1100, 0, 1)));
                             filters.add(PropertyCriterion.le(proto().unitOccupancySegments().$().dateFrom(), ClientContext.getServerDate()));
 
-                        } else if (currentValue.version().status().getValue() == Lease.Status.Application) { // lease application:
+                        } else if (currentValue.status().getValue() == Lease.Status.Application) { // lease application:
 
                             filters.add(PropertyCriterion.eq(proto().unitOccupancySegments().$().status(), AptUnitOccupancySegment.Status.available));
                             filters.add(PropertyCriterion.eq(proto().unitOccupancySegments().$().dateTo(), new LogicalDate(1100, 0, 1)));
@@ -205,17 +205,17 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
         datesPanel = new FormFlexPanel();
 
         datesRow = -1; // first column:
-        datesPanel.setWidget(++datesRow, 0, new DecoratorBuilder(inject(proto().version().expectedMoveIn()), 9).build());
-        datesPanel.setWidget(++datesRow, 0, new DecoratorBuilder(inject(proto().version().moveOutNotice()), 9).build());
-        datesPanel.setWidget(++datesRow, 0, new DecoratorBuilder(inject(proto().version().expectedMoveOut()), 9).build());
+        datesPanel.setWidget(++datesRow, 0, new DecoratorBuilder(inject(proto().expectedMoveIn()), 9).build());
+        datesPanel.setWidget(++datesRow, 0, new DecoratorBuilder(inject(proto().moveOutNotice()), 9).build());
+        datesPanel.setWidget(++datesRow, 0, new DecoratorBuilder(inject(proto().expectedMoveOut()), 9).build());
 
         datesRow = -1; // second column:
-        datesPanel.setWidget(++datesRow, 1, new DecoratorBuilder(inject(proto().version().actualMoveIn()), 9).build());
+        datesPanel.setWidget(++datesRow, 1, new DecoratorBuilder(inject(proto().actualMoveIn()), 9).build());
         datesPanel.setBR(++datesRow, 1, 1);
-        datesPanel.setWidget(++datesRow, 1, new DecoratorBuilder(inject(proto().version().actualMoveOut()), 9).build());
+        datesPanel.setWidget(++datesRow, 1, new DecoratorBuilder(inject(proto().actualMoveOut()), 9).build());
 
-        get(proto().version().moveOutNotice()).setViewable(true);
-        get(proto().version().expectedMoveOut()).setViewable(true);
+        get(proto().moveOutNotice()).setViewable(true);
+        get(proto().expectedMoveOut()).setViewable(true);
 
         datesPanel.getColumnFormatter().setWidth(0, "40%");
         datesPanel.getColumnFormatter().setWidth(1, "60%");
@@ -292,8 +292,8 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
         super.addValidations();
 
         crossValidate(get(proto().leaseFrom()), get(proto().leaseTo()), null);
-        crossValidate(get(proto().leaseFrom()), get(proto().version().actualLeaseTo()), null);
-        crossValidate(get(proto().version().actualMoveIn()), get(proto().version().actualMoveOut()), null);
+        crossValidate(get(proto().leaseFrom()), get(proto().actualLeaseTo()), null);
+        crossValidate(get(proto().actualMoveIn()), get(proto().actualMoveOut()), null);
 //        DatesWithinMonth(get(proto().version().actualLeaseTo()), get(proto().leaseTo()), "Actual Lease To Date Should Be Within 30 Days Of Lease To Date");
 //        DatesWithinMonth(get(proto().version().actualMoveIn()), get(proto().version().expectedMoveIn()),
 //                "Actual Move In Date Should Be Within 30 Days Of Expected Move In Date");
@@ -304,9 +304,9 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
             @Override
             public ValidationError isValid(CComponent<Date, ?> component, Date value) {
                 if (value != null) {
-                    if (getValue().version().status().getValue() == Lease.Status.Created) { // existing lease:
+                    if (getValue().status().getValue() == Lease.Status.Created) { // existing lease:
                         return value.before(TimeUtils.today()) ? null : new ValidationError(component, i18n.tr("The Date Must Be Earlier Than Today's Date"));
-                    } else if (getValue().version().status().getValue() == Lease.Status.Application) { // lease application:
+                    } else if (getValue().status().getValue() == Lease.Status.Application) { // lease application:
                         Date dateToCompare = getValue().creationDate().isNull() ? TimeUtils.today() : getValue().creationDate().getValue();
                         return !value.before(dateToCompare) ? null : new ValidationError(component, i18n
                                 .tr("The Date Must Be Later Than Or Equal To Application Creaion Date"));
@@ -316,14 +316,14 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
             }
         });
 
-        new DateInPeriodValidation(get(proto().leaseFrom()), get(proto().version().expectedMoveIn()), get(proto().leaseTo()),
+        new DateInPeriodValidation(get(proto().leaseFrom()), get(proto().expectedMoveIn()), get(proto().leaseTo()),
                 i18n.tr("The Date Should Be Within The Lease Period"));
 
-        get(proto().leaseFrom()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().version().expectedMoveIn())));
+        get(proto().leaseFrom()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().expectedMoveIn())));
         get(proto().leaseFrom()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().version().leaseProducts().serviceItem())));
         get(proto().leaseFrom()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().version().leaseProducts().featureItems())));
 
-        get(proto().leaseTo()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().version().expectedMoveIn())));
+        get(proto().leaseTo()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().expectedMoveIn())));
         get(proto().leaseTo()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().version().leaseProducts().serviceItem())));
         get(proto().leaseTo()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().version().leaseProducts().featureItems())));
 

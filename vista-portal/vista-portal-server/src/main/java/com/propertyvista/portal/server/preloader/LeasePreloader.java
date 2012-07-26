@@ -17,7 +17,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
@@ -82,7 +81,7 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
             if (i <= DemoData.UserType.TENANT.getDefaultMax()) {
 
                 LeaseFacade leaseFacade = ServerSideFactory.create(LeaseFacade.class);
-                lease.version().status().setValue(Status.Application);
+                lease.status().setValue(Status.Application);
                 lease = leaseFacade.init(lease);
                 lease = leaseFacade.setUnit(lease, lease.unit());
                 lease = leaseFacade.persist(lease);

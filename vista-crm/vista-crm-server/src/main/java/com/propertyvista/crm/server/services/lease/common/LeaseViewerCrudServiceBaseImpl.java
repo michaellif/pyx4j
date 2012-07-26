@@ -46,7 +46,7 @@ public abstract class LeaseViewerCrudServiceBaseImpl<DTO extends LeaseDTO> exten
         super.enhanceRetrieved(in, dto);
 
         // create bill preview for draft leases/applications:
-        if (in.version().status().getValue().isDraft()) {
+        if (in.status().getValue().isDraft()) {
             dto.billingPreview().set(BillingUtils.createBillPreviewDto(ServerSideFactory.create(BillingFacade.class).runBillingPreview(in)));
         }
     }

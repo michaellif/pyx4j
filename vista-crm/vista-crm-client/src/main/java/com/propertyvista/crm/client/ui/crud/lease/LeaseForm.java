@@ -59,16 +59,16 @@ public class LeaseForm extends LeaseFormBase<LeaseDTO> {
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
 
-        setTabVisible(adjustmentsTab, !getValue().version().status().getValue().isDraft());
-        setTabVisible(billsTab, !getValue().version().status().getValue().isDraft());
-        setTabVisible(paymentsTab, !getValue().version().status().getValue().isDraft());
-        setTabVisible(financialTab, !getValue().version().status().getValue().isDraft());
+        setTabVisible(adjustmentsTab, !getValue().status().getValue().isDraft());
+        setTabVisible(billsTab, !getValue().status().getValue().isDraft());
+        setTabVisible(paymentsTab, !getValue().status().getValue().isDraft());
+        setTabVisible(financialTab, !getValue().status().getValue().isDraft());
 
         if (!isEditable()) {
             ((LeaseViewerView) getParentView()).getLeaseAdjustmentListerView().getLister().getDataTablePanel().getAddButton()
-                    .setEnabled(getValue().version().status().getValue() == Status.Closed);
+                    .setEnabled(getValue().status().getValue() == Status.Closed);
             ((LeaseViewerView) getParentView()).getPaymentListerView().getLister().getDataTablePanel().getAddButton()
-                    .setEnabled(getValue().version().status().getValue() == Status.Closed);
+                    .setEnabled(getValue().status().getValue() == Status.Closed);
         }
     }
 

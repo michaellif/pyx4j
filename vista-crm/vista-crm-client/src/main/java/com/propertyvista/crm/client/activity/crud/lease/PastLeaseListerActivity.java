@@ -31,10 +31,11 @@ public class PastLeaseListerActivity extends ListerActivityBase<LeaseDTO> {
 
     @SuppressWarnings("unchecked")
     public PastLeaseListerActivity(Place place) {
-        super(place, LeaseViewFactory.instance(PastLeaseListerView.class), (AbstractCrudService<LeaseDTO>) GWT.create(LeaseViewerCrudService.class), LeaseDTO.class);
+        super(place, LeaseViewFactory.instance(PastLeaseListerView.class), (AbstractCrudService<LeaseDTO>) GWT.create(LeaseViewerCrudService.class),
+                LeaseDTO.class);
 
         LeaseDTO proto = EntityFactory.getEntityPrototype(LeaseDTO.class);
-        addPreDefinedFilter(PropertyCriterion.in(proto.version().status(), Lease.Status.former()));
+        addPreDefinedFilter(PropertyCriterion.in(proto.status(), Lease.Status.former()));
         // and current lease version only:
         addPreDefinedFilter(PropertyCriterion.isNotNull(proto.version().fromDate()));
         addPreDefinedFilter(PropertyCriterion.isNull(proto.version().toDate()));

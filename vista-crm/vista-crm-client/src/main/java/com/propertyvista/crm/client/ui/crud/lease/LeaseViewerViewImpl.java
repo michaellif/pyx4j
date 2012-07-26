@@ -128,8 +128,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
                 new TermLeaseBox(CompletionType.Notice) {
                     @Override
                     public boolean onClickOk() {
-                        ((LeaseViewerView.Presenter) getPresenter()).notice(getValue().version().moveOutNotice().getValue(), getValue().version()
-                                .expectedMoveOut().getValue());
+                        ((LeaseViewerView.Presenter) getPresenter()).notice(getValue().moveOutNotice().getValue(), getValue().expectedMoveOut().getValue());
                         return true;
                     }
                 }.show();
@@ -151,8 +150,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
                 new TermLeaseBox(CompletionType.Eviction) {
                     @Override
                     public boolean onClickOk() {
-                        ((LeaseViewerView.Presenter) getPresenter()).evict(getValue().version().moveOutNotice().getValue(), getValue().version()
-                                .expectedMoveOut().getValue());
+                        ((LeaseViewerView.Presenter) getPresenter()).evict(getValue().moveOutNotice().getValue(), getValue().expectedMoveOut().getValue());
                         return true;
                     }
                 }.show();
@@ -193,11 +191,11 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
     public void populate(LeaseDTO value) {
         super.populate(value);
 
-        Status status = value.version().status().getValue();
+        Status status = value.status().getValue();
 
         // set buttons state:
         if (!value.unit().isNull()) {
-            CompletionType completion = value.version().completion().getValue();
+            CompletionType completion = value.completion().getValue();
 
             if (VersionedEntityUtils.isCurrent(value)) {
                 sendMail.setVisible(true);
@@ -255,13 +253,19 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
                     FormFlexPanel main = new FormFlexPanel();
                     switch (action) {
                     case Notice:
-                        main.setWidget(0, 0, new DecoratorBuilder(inject(proto().version().moveOutNotice()), 9).customLabel(i18n.tr("Notice Date")).build());
+                        main.setWidget(0, 0, new DecoratorBuilder(inject(proto().moveOutNotice()), 9).customLabel(i18n.tr("Notice Date")).build());
                         break;
                     case Eviction:
-                        main.setWidget(0, 0, new DecoratorBuilder(inject(proto().version().moveOutNotice()), 9).customLabel(i18n.tr("Evict Date")).build());
+                        main.setWidget(0, 0, new DecoratorBuilder(inject(proto().moveOutNotice()), 9).customLabel(i18n.tr("Evict Date")).build());
+                        break;
+                    case LegalVacate:
+                        break;
+                    case Skip:
+                        break;
+                    default:
                         break;
                     }
-                    main.setWidget(1, 0, new DecoratorBuilder(inject(proto().version().expectedMoveOut()), 9).build());
+                    main.setWidget(1, 0, new DecoratorBuilder(inject(proto().expectedMoveOut()), 9).build());
 
                     // just for validation purpose:
                     inject(proto().leaseFrom());
@@ -274,12 +278,12 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
                 protected void onValueSet(boolean populate) {
                     super.onValueSet(populate);
 
-                    if (getValue().version().moveOutNotice().isNull()) {
-                        get(proto().version().moveOutNotice()).setValue(new LogicalDate());
+                    if (getValue().moveOutNotice().isNull()) {
+                        get(proto().moveOutNotice()).setValue(new LogicalDate());
                     }
 
-                    if (getValue().version().expectedMoveOut().isNull()) {
-                        get(proto().version().expectedMoveOut()).setValue(new LogicalDate());
+                    if (getValue().expectedMoveOut().isNull()) {
+                        get(proto().expectedMoveOut()).setValue(new LogicalDate());
                     }
                 }
 
@@ -287,17 +291,15 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
                 public void addValidations() {
                     super.addValidations();
 
-                    new DateInPeriodValidation(get(proto().leaseFrom()), get(proto().version().moveOutNotice()), get(proto().leaseTo()),
+                    new DateInPeriodValidation(get(proto().leaseFrom()), get(proto().moveOutNotice()), get(proto().leaseTo()),
                             i18n.tr("The Date Should Be Within The Lease Period"));
-                    new DateInPeriodValidation(get(proto().leaseFrom()), get(proto().version().expectedMoveOut()), get(proto().leaseTo()),
+                    new DateInPeriodValidation(get(proto().leaseFrom()), get(proto().expectedMoveOut()), get(proto().leaseTo()),
                             i18n.tr("The Date Should Be Within The Lease Period"));
 
-                    new StartEndDateValidation(get(proto().version().moveOutNotice()), get(proto().version().expectedMoveOut()),
+                    new StartEndDateValidation(get(proto().moveOutNotice()), get(proto().expectedMoveOut()),
                             i18n.tr("The Notice Date Must Be Earlier Than The Expected Move Out date"));
-                    get(proto().version().moveOutNotice())
-                            .addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().version().expectedMoveOut())));
-                    get(proto().version().expectedMoveOut())
-                            .addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().version().moveOutNotice())));
+                    get(proto().moveOutNotice()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().expectedMoveOut())));
+                    get(proto().expectedMoveOut()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().moveOutNotice())));
                 }
             };
 

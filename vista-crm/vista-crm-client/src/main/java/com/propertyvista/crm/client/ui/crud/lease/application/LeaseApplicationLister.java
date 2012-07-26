@@ -51,11 +51,11 @@ public class LeaseApplicationLister extends ListerBase<LeaseApplicationDTO> {
             new Builder(proto().leaseFrom()).build(),
             new Builder(proto().leaseTo()).build(),
             
-            new Builder(proto().version().expectedMoveIn()).build(),
-            new Builder(proto().version().expectedMoveOut(), false).build(),
-            new Builder(proto().version().actualMoveIn(), false).build(),
-            new Builder(proto().version().actualMoveOut(), false).build(),
-            new Builder(proto().version().moveOutNotice(), false).build(),
+            new Builder(proto().expectedMoveIn()).build(),
+            new Builder(proto().expectedMoveOut(), false).build(),
+            new Builder(proto().actualMoveIn(), false).build(),
+            new Builder(proto().actualMoveOut(), false).build(),
+            new Builder(proto().moveOutNotice(), false).build(),
             
             new Builder(proto().creationDate(), false).build(),
             
@@ -77,7 +77,7 @@ public class LeaseApplicationLister extends ListerBase<LeaseApplicationDTO> {
     protected EntityListCriteria<LeaseApplicationDTO> updateCriteria(EntityListCriteria<LeaseApplicationDTO> criteria) {
         // TODO : set all that stuff in CRUD service:
         criteria.setVersionedCriteria(VersionedCriteria.onlyDraft);
-        criteria.add(PropertyCriterion.eq(criteria.proto().version().status(), Lease.Status.Application));
+        criteria.add(PropertyCriterion.eq(criteria.proto().status(), Lease.Status.Application));
         return super.updateCriteria(criteria);
     }
 
@@ -91,7 +91,7 @@ public class LeaseApplicationLister extends ListerBase<LeaseApplicationDTO> {
         newLease.type().setValue(leaseType);
         newLease.term().setValue(Term.FixedEx);
         newLease.paymentFrequency().setValue(PaymentFrequency.Monthly);
-        newLease.version().status().setValue(Lease.Status.Application);
+        newLease.status().setValue(Lease.Status.Application);
         return newLease;
     }
 

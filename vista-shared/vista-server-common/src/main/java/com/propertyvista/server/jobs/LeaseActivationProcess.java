@@ -40,7 +40,7 @@ public class LeaseActivationProcess implements PmcProcess {
     @Override
     public void executePmcJob(PmcProcessContext context) {
         EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().version().status(), Lease.Status.Approved));
+        criteria.add(PropertyCriterion.eq(criteria.proto().status(), Lease.Status.Approved));
         criteria.add(PropertyCriterion.le(criteria.proto().leaseFrom(), Persistence.service().getTransactionSystemTime()));
 
         long total = 0;

@@ -121,7 +121,7 @@ public class BillingManager {
             throw new BillingException(i18n.tr("Bill can't be created for a given billing cycle"));
         }
 
-        if (lease.version().status().getValue() == Lease.Status.Closed) {
+        if (lease.status().getValue() == Lease.Status.Closed) {
             throw new BillingException("Lease is closed");
         }
 

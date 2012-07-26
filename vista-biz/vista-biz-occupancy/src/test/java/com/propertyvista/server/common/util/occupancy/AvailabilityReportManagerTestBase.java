@@ -103,7 +103,7 @@ public class AvailabilityReportManagerTestBase {
             lease.paymentFrequency().setValue(PaymentFrequency.Monthly);
             lease.unit().set(unit);
             lease.leaseFrom().setValue(asDate(leaseFrom));
-            lease.version().expectedMoveIn().setValue(asDate(moveIn));
+            lease.expectedMoveIn().setValue(asDate(moveIn));
             lease.leaseTo().setValue(asDate(leaseTo));
             lease.saveAction().setValue(SaveAction.saveAsFinal);
             Persistence.service().persist(lease);

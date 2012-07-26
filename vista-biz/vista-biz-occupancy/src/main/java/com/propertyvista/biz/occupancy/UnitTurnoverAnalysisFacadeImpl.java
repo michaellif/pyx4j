@@ -20,7 +20,6 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
-import com.propertyvista.biz.occupancy.UnitTurnoverAnalysisFacade;
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitTurnoverStats;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
@@ -50,7 +49,7 @@ public class UnitTurnoverAnalysisFacadeImpl implements UnitTurnoverAnalysisFacad
 
     @Override
     public void propagateLeaseActivationToTurnoverReport(Lease lease) {
-        if (lease.version().status().getValue() != Lease.Status.Active) {
+        if (lease.status().getValue() != Lease.Status.Active) {
             throw new IllegalStateException("this function is only applicable to ACTIVE leases");
         }
 

@@ -75,9 +75,9 @@ public class LeaseDataModel {
         addTenants();
 
         if (config.existingLease) {
-            lease.version().status().setValue(Status.Created);
+            lease.status().setValue(Status.Created);
         } else {
-            lease.version().status().setValue(Status.Application);
+            lease.status().setValue(Status.Application);
             ServerSideFactory.create(OccupancyFacade.class).scopeAvailable(serviceItem.element().cast().getPrimaryKey());
         }
         lease = ServerSideFactory.create(LeaseFacade.class).init(lease);

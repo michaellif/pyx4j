@@ -128,8 +128,8 @@ public class LeaseLifecycleSimulator {
 
         lease.leaseFrom().setValue(leaseFrom);
         lease.leaseTo().setValue(leaseTo);
-        lease.version().expectedMoveIn().setValue(leaseFrom);
-        lease.version().expectedMoveOut().setValue(leaseTo);
+        lease.expectedMoveIn().setValue(leaseFrom);
+        lease.expectedMoveOut().setValue(leaseTo);
 
         setUpBillableItemsEffectiveTime(lease);
 
@@ -186,7 +186,7 @@ public class LeaseLifecycleSimulator {
 
         @Override
         public void exec() {
-            lease.version().status().setValue(Status.Application);
+            lease.status().setValue(Status.Application);
             lease = leaseFacade().init(lease);
             lease = leaseFacade().setUnit(lease, lease.unit());
             lease = leaseFacade().persist(lease);
@@ -363,7 +363,7 @@ public class LeaseLifecycleSimulator {
         @Override
         public void exec() {
             if (!VistaTODO.removedForProduction) {
-                if (now().before(lease.leaseTo().getValue()) & lease.version().status().getValue() != Lease.Status.Completed) {
+                if (now().before(lease.leaseTo().getValue()) & lease.status().getValue() != Lease.Status.Completed) {
 
                     // TODO THIS is REALLY CREEPY part, talk to Michael about adding API to the facade that lets check when billing is allowed to run **********
                     // the following code is copies the calculations inside the billing facade privates 

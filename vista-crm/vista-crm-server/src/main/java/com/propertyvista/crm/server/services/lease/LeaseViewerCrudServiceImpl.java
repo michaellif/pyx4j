@@ -99,7 +99,7 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
         if ((lease == null) || (lease.isNull())) {
             throw new RuntimeException("Entity '" + EntityFactory.getEntityMeta(dboClass).getCaption() + "' " + entityId + " NotFound");
         }
-        if (!Lease.Status.current().contains(lease.version().status().getValue())) {
+        if (!Lease.Status.current().contains(lease.status().getValue())) {
             throw new UserRuntimeException(i18n.tr("Can't send tenant email for inactive Lease"));
         }
         if (users.isEmpty()) {

@@ -36,7 +36,7 @@ public class PastGuarantorListerActivity extends ListerActivityBase<GuarantorDTO
 
         // filter out just current tenants:
         GuarantorDTO proto = EntityFactory.getEntityPrototype(GuarantorDTO.class);
-        addPreDefinedFilter(PropertyCriterion.in(proto.leaseV().status(), Lease.Status.former()));
+        addPreDefinedFilter(PropertyCriterion.in(proto.leaseV().holder().status(), Lease.Status.former()));
         // and finalize lease only:
         addPreDefinedFilter(PropertyCriterion.isNotNull(proto.leaseV().fromDate()));
         addPreDefinedFilter(PropertyCriterion.isNull(proto.leaseV().toDate()));

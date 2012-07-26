@@ -62,7 +62,7 @@ public class UnitCrudServiceImpl extends AbstractCrudServiceDtoImpl<AptUnit, Apt
         // find corresponding lease:
         EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().unit(), in));
-        criteria.add(PropertyCriterion.in(criteria.proto().version().status(), Lease.Status.current()));
+        criteria.add(PropertyCriterion.in(criteria.proto().status(), Lease.Status.current()));
         dto.lease().set(Persistence.service().retrieve(criteria));
 
         Persistence.service().retrieve(dto.floorplan());
