@@ -32,7 +32,7 @@ public class BillingLatePaymentFeeProcessor extends AbstractBillingProcessor {
 
     private static final I18n i18n = I18n.get(BillingLatePaymentFeeProcessor.class);
 
-    BillingLatePaymentFeeProcessor(AbstractBillingManager billingManager) {
+    BillingLatePaymentFeeProcessor(BillProducer billingManager) {
         super(billingManager);
     }
 

@@ -23,7 +23,7 @@ import com.propertyvista.domain.financial.billing.InvoicePaymentBackOut;
 
 public class BillingPaymentProcessor extends AbstractBillingProcessor {
 
-    BillingPaymentProcessor(AbstractBillingManager billingManager) {
+    BillingPaymentProcessor(BillProducer billingManager) {
         super(billingManager);
     }
 

@@ -21,6 +21,7 @@
 package com.propertyvista.biz.financial.billing;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -29,14 +30,18 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.biz.financial.SysDateManager;
 import com.propertyvista.biz.financial.TaxUtils;
 import com.propertyvista.domain.financial.billing.Bill;
+import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.Lease.LeaseV;
+import com.propertyvista.portal.rpc.shared.BillingException;
 
-abstract class AbstractBillingManager {
+class BillProducer {
 
-    private final static Logger log = LoggerFactory.getLogger(AbstractBillingManager.class);
+    private final static Logger log = LoggerFactory.getLogger(BillProducer.class);
 
-    private static final I18n i18n = I18n.get(AbstractBillingManager.class);
+    private static final I18n i18n = I18n.get(BillProducer.class);
 
     private final Bill nextPeriodBill;
 
@@ -44,8 +49,23 @@ abstract class AbstractBillingManager {
 
     private Bill previousPeriodBill;
 
-    AbstractBillingManager(Bill bill, Bill.BillType billType) {
+    private final Bill bill;
 
+    private final boolean preview;
+
+    private final Lease lease;
+
+    BillProducer(Bill bill, Lease lease, boolean preview) {
+
+        if (lease.version().isNull()) {
+            throw new BillingException(i18n.tr("Can't find version of lease"));
+        }
+
+        this.bill = bill;
+        this.preview = preview;
+        this.lease = lease;
+
+        Bill.BillType billType = getBillType(lease.version());
         bill.billType().setValue(billType);
 
         bill.billingPeriodStartDate().setValue(BillDateUtils.calculateBillingPeriodStartDate(bill));
@@ -61,9 +81,46 @@ abstract class AbstractBillingManager {
             previousPeriodBill = currentPeriodBill.previousCycleBill();
             Persistence.service().retrieve(previousPeriodBill.lineItems());
         }
+
+        if (billType == Bill.BillType.Regular && SysDateManager.getSysDate().compareTo(bill.billingCycle().executionTargetDate().getValue()) < 0) {
+            throw new BillingException(i18n.tr("Regular billing can't run before target execution date"));
+        }
+
     }
 
-    void processBill() {
+    private Bill.BillType getBillType(LeaseV leaseV) {
+        switch (leaseV.status().getValue()) {
+        case Created: //zeroCycle bill should be issued; preview only
+            if (!preview) {
+                throw new BillingException(i18n.tr("Billing can only run in PREVIEW mode until Lease is Approved."));
+            }
+            return Bill.BillType.ZeroCycle;
+        case Application: // preview only
+            if (!preview) {
+                throw new BillingException(i18n.tr("Billing can only run in PREVIEW mode until Lease is Approved."));
+            }
+            return Bill.BillType.First;
+        case Approved: // first bill should be issued
+            if (BillingRunner.getLatestConfirmedBill(lease) != null) {
+                return Bill.BillType.Regular;
+            } else {
+                if (lease.billingAccount().carryforwardBalance().isNull()) {
+                    return Bill.BillType.First;
+                } else {
+                    return Bill.BillType.ZeroCycle;
+                }
+            }
+
+        case Active:
+            return Bill.BillType.Regular;
+        case Completed: // final bill should be issued
+            return Bill.BillType.Final;
+        default:
+            throw new BillingException(i18n.tr("Billing can't run when lease is in status ''{0}''", lease.version().status().getValue()));
+        }
+    }
+
+    void produceBill() {
 
         //Set accumulating fields to 0 value
         nextPeriodBill.serviceCharge().setValue(new BigDecimal("0.00"));
@@ -85,14 +142,14 @@ abstract class AbstractBillingManager {
 
         nextPeriodBill.taxes().setValue(new BigDecimal("0.00"));
 
-        Bill lastBill = BillingLifecycleManager.getLatestConfirmedBill(nextPeriodBill.billingAccount().lease());
+        Bill lastBill = BillingRunner.getLatestConfirmedBill(nextPeriodBill.billingAccount().lease());
         if (lastBill != null) {
             nextPeriodBill.balanceForwardAmount().setValue(lastBill.totalDueAmount().getValue());
         } else {
             nextPeriodBill.balanceForwardAmount().setValue(new BigDecimal("0.00"));
         }
 
-        List<AbstractBillingProcessor> processors = initProcessors();
+        List<AbstractBillingProcessor> processors = getExecutionPlan(nextPeriodBill.billType().getValue());
         for (AbstractBillingProcessor processor : processors) {
             processor.execute();
         }
@@ -101,7 +158,61 @@ abstract class AbstractBillingManager {
 
     }
 
-    abstract protected List<AbstractBillingProcessor> initProcessors();
+    protected List<AbstractBillingProcessor> getExecutionPlan(Bill.BillType billType) {
+        switch (billType) {
+        case First:
+            // @formatter:off
+            return Arrays.asList(new AbstractBillingProcessor[] {
+                    
+                    new BillingProductChargeProcessor(this),
+                    new BillingDepositProcessor(this),
+                    new BillingLeaseAdjustmentProcessor(this), 
+                    new BillingPaymentProcessor(this)
+                    
+            });
+            // @formatter:on
+
+        case ZeroCycle:
+            // @formatter:off
+            return Arrays.asList(new AbstractBillingProcessor[] {
+                    // create current bill charges/adjustments etc..
+                    new BillingProductChargeProcessor(this),
+                    // deposits for zero-cycle must be accounted for in the carry-forward balance
+                    new BillingDepositProcessor(this),
+                    // create initial debit/credit so initial debit/credit + charges = initial balance
+                    new BillingCarryforwardProcessor(this)
+                    
+            });
+            // @formatter:on
+
+        case Regular:
+            // @formatter:off
+            return Arrays.asList(new AbstractBillingProcessor[] {
+                    
+                    new BillingProductChargeProcessor(this),
+                    new BillingDepositProcessor(this),
+                    new BillingLeaseAdjustmentProcessor(this), 
+                    new BillingPaymentProcessor(this), 
+                    /** Should run last **/
+                    new BillingLatePaymentFeeProcessor(this) 
+                    
+            });
+            // @formatter:on
+
+        case Final:
+            // @formatter:off
+            return Arrays.asList(new AbstractBillingProcessor[] { 
+                    new BillingProductChargeProcessor(this), 
+                    new BillingLeaseAdjustmentProcessor(this),
+                    new BillingPaymentProcessor(this),
+                    /** Should run last **/
+                    new BillingLatePaymentFeeProcessor(this) });
+            // @formatter:on
+
+        default:
+            throw new Error("Can't find execution plan for billType " + billType);
+        }
+    }
 
     private void calculateTotals() {
 

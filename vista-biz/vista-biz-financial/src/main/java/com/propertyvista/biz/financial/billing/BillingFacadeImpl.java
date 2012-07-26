@@ -25,57 +25,57 @@ public class BillingFacadeImpl implements BillingFacade {
 
     @Override
     public Bill runBilling(Lease leaseId) {
-        return BillingLifecycleManager.runBilling(leaseId, false);
+        return BillingRunner.runBilling(leaseId, false);
     }
 
     @Override
     public Bill runBillingPreview(Lease leaseId) {
-        return BillingLifecycleManager.runBilling(leaseId, true);
+        return BillingRunner.runBilling(leaseId, true);
     }
 
     @Override
     public void runBilling(LogicalDate date, StatisticsRecord dynamicStatisticsRecord) {
-        BillingLifecycleManager.runBilling(date, dynamicStatisticsRecord);
+        BillingRunner.runBilling(date, dynamicStatisticsRecord);
     }
 
     @Override
     public void runBilling(BillingCycle billingCycle, StatisticsRecord dynamicStatisticsRecord) {
-        BillingLifecycleManager.runBilling(billingCycle, dynamicStatisticsRecord);
+        BillingRunner.runBilling(billingCycle, dynamicStatisticsRecord);
     }
 
     @Override
     public Bill getLatestConfirmedBill(Lease lease) {
-        return BillingLifecycleManager.getLatestConfirmedBill(lease);
+        return BillingRunner.getLatestConfirmedBill(lease);
     }
 
     @Override
     public Bill getLatestBill(Lease lease) {
-        return BillingLifecycleManager.getLatestBill(lease);
+        return BillingRunner.getLatestBill(lease);
     }
 
     @Override
     public boolean isLatestBill(Bill bill) {
-        return BillingLifecycleManager.isLatestBill(bill);
+        return BillingRunner.isLatestBill(bill);
     }
 
     @Override
     public Bill confirmBill(Bill bill) {
-        return BillingLifecycleManager.confirmBill(bill);
+        return BillingRunner.confirmBill(bill);
     }
 
     @Override
     public Bill rejectBill(Bill bill, String reason) {
-        return BillingLifecycleManager.rejectBill(bill, reason);
+        return BillingRunner.rejectBill(bill, reason);
     }
 
     @Override
     public void initializeFutureBillingCycles() {
-        BillingLifecycleManager.initializeFutureBillingCycles();
+        BillingRunner.initializeFutureBillingCycles();
     }
 
     @Override
     public BillingType ensureBillingType(Lease lease) {
-        return BillingLifecycleManager.ensureBillingType(lease);
+        return BillingRunner.ensureBillingType(lease);
     }
 
 }

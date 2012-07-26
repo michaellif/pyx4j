@@ -38,7 +38,7 @@ public class BillingProductChargeProcessor extends AbstractBillingProcessor {
 
     private static final I18n i18n = I18n.get(BillingProductChargeProcessor.class);
 
-    BillingProductChargeProcessor(AbstractBillingManager billingManager) {
+    BillingProductChargeProcessor(BillProducer billingManager) {
         super(billingManager);
     }
 

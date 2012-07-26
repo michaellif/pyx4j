@@ -17,15 +17,15 @@ import com.propertyvista.biz.financial.AbstractProcessor;
 
 public abstract class AbstractBillingProcessor extends AbstractProcessor {
 
-    private final AbstractBillingManager billingManager;
+    private final BillProducer billingManager;
 
-    AbstractBillingProcessor(AbstractBillingManager billingManager) {
+    AbstractBillingProcessor(BillProducer billingManager) {
         this.billingManager = billingManager;
     }
 
     protected abstract void execute();
 
-    public AbstractBillingManager getBillingManager() {
+    public BillProducer getBillingManager() {
         return billingManager;
     }
 }

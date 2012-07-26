@@ -26,7 +26,7 @@ import com.propertyvista.domain.tenant.lease.LeaseAdjustmentReason;
 
 public class BillingLeaseAdjustmentProcessor extends AbstractBillingProcessor {
 
-    BillingLeaseAdjustmentProcessor(AbstractBillingManager billingManager) {
+    BillingLeaseAdjustmentProcessor(BillProducer billingManager) {
         super(billingManager);
     }
 

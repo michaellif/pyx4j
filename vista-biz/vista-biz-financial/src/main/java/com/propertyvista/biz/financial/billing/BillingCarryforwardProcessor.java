@@ -28,7 +28,7 @@ public class BillingCarryforwardProcessor extends AbstractBillingProcessor {
 
     private static final I18n i18n = I18n.get(BillingCarryforwardProcessor.class);
 
-    BillingCarryforwardProcessor(AbstractBillingManager billingManager) {
+    BillingCarryforwardProcessor(BillProducer billingManager) {
         super(billingManager);
     }
 

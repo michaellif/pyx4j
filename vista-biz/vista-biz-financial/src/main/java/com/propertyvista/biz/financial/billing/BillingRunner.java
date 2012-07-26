@@ -61,11 +61,11 @@ import com.propertyvista.portal.rpc.shared.BillingException;
 import com.propertyvista.server.jobs.StatisticsUtils;
 import com.propertyvista.server.jobs.TaskRunner;
 
-public class BillingLifecycleManager {
+public class BillingRunner {
 
-    private static final I18n i18n = I18n.get(BillingLifecycleManager.class);
+    private static final I18n i18n = I18n.get(BillingRunner.class);
 
-    private final static Logger log = LoggerFactory.getLogger(BillingLifecycleManager.class);
+    private final static Logger log = LoggerFactory.getLogger(BillingRunner.class);
 
     static Bill runBilling(Lease leaseId, boolean preview) {
         Lease lease = Persistence.service().retrieve(Lease.class, leaseId.getPrimaryKey().asCurrentKey());
@@ -79,7 +79,7 @@ public class BillingLifecycleManager {
         lease = ensureInitBillingAccount(lease);
         BillingCycle billingCycle = getNextBillBillingCycle(lease);
         validateBillingRunPreconditions(billingCycle, lease);
-        return createBill(billingCycle, lease, preview);
+        return produceBill(billingCycle, lease, preview);
     }
 
     static void runBilling(final BillingCycle billingCycle, StatisticsRecord dynamicStatisticsRecord) {
@@ -120,7 +120,7 @@ public class BillingLifecycleManager {
         Persistence.service().commit();
         try {
             while (leasesIterator.hasNext()) {
-                BillCreationResult result = new BillCreationResult(createBill(billingCycle, leasesIterator.next(), false));
+                BillCreationResult result = new BillCreationResult(produceBill(billingCycle, leasesIterator.next(), false));
                 appendStats(dynamicStatisticsRecord, result);
                 Persistence.service().commit();
             }
@@ -142,7 +142,7 @@ public class BillingLifecycleManager {
         }
     }
 
-    private static Bill createBill(BillingCycle billingCycle, Lease lease, boolean preview) {
+    private static Bill produceBill(BillingCycle billingCycle, Lease lease, boolean preview) {
 
         Persistence.service().retrieve(lease.billingAccount().adjustments());
 
@@ -163,52 +163,14 @@ public class BillingLifecycleManager {
 
             bill.billingCycle().set(billingCycle);
 
-            Bill previousCycleBill = BillingLifecycleManager.getLatestConfirmedBill(lease);
+            Bill previousCycleBill = getLatestConfirmedBill(lease);
             bill.previousCycleBill().set(previousCycleBill);
 
             bill.executionDate().setValue(new LogicalDate(SysDateManager.getSysDate()));
 
-            AbstractBillingManager manager = null;
+            BillProducer manager = new BillProducer(bill, lease, preview);
 
-            if (lease.version().isNull()) {
-                throw new BillingException(i18n.tr("Can't find version of lease"));
-            }
-
-            switch (lease.version().status().getValue()) {
-            case Created: //zeroCycle bill should be issued; preview only
-                if (!preview) {
-                    throw new BillingException(i18n.tr("Billing can only run in PREVIEW mode until Lease is Approved."));
-                }
-                manager = new ZeroCycleBillingManager(bill);
-                break;
-            case Application: // preview only
-                if (!preview) {
-                    throw new BillingException(i18n.tr("Billing can only run in PREVIEW mode until Lease is Approved."));
-                }
-                manager = new FirstBillingManager(bill);
-                break;
-            case Approved: // first bill should be issued
-                if (getLatestConfirmedBill(lease) != null) {
-                    manager = new RegularBillingManager(bill);
-                } else {
-                    if (lease.billingAccount().carryforwardBalance().isNull()) {
-                        manager = new FirstBillingManager(bill);
-                    } else {
-                        manager = new ZeroCycleBillingManager(bill);
-                    }
-                }
-                break;
-            case Active:
-                manager = new RegularBillingManager(bill);
-                break;
-            case Completed: // final bill should be issued
-                manager = new FinalBillingManager(bill);
-                break;
-            default:
-                throw new BillingException(i18n.tr("Billing can't run when lease is in status ''{0}''", lease.version().status().getValue()));
-            }
-
-            manager.processBill();
+            manager.produceBill();
 
             bill.billStatus().setValue(Bill.BillStatus.Finished);
 
@@ -254,7 +216,7 @@ public class BillingLifecycleManager {
             throw new BillingException("Lease is closed");
         }
 
-        Bill previousBill = BillingLifecycleManager.getLatestBill(lease);
+        Bill previousBill = BillingRunner.getLatestBill(lease);
         if (previousBill != null) {
             if (BillStatus.notConfirmed(previousBill.billStatus().getValue())) {
                 throw new BillingException(i18n.tr("Can't run billing on Account with non-confirmed bills"));

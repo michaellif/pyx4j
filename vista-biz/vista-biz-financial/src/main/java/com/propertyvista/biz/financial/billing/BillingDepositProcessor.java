@@ -40,7 +40,7 @@ public class BillingDepositProcessor extends AbstractBillingProcessor {
 
     private static final I18n i18n = I18n.get(BillingDepositProcessor.class);
 
-    BillingDepositProcessor(AbstractBillingManager billingManager) {
+    BillingDepositProcessor(BillProducer billingManager) {
         super(billingManager);
     }
 
