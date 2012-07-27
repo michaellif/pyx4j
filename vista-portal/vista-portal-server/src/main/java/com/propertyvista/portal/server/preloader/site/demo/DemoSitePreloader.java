@@ -27,17 +27,17 @@ public class DemoSitePreloader extends AbstractSitePreloader {
 
     @Override
     protected Skin skin() {
-        return Skin.skin2;
+        return Skin.skin3;
     }
 
     @Override
     protected Integer object1() {
-        return 211;
+        return 205;
     }
 
     @Override
     protected Integer object2() {
-        return 38;
+        return 205;
     }
 
     @Override
