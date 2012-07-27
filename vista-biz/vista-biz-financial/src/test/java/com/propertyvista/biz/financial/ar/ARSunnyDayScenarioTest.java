@@ -24,8 +24,6 @@ import java.math.BigDecimal;
 
 import org.junit.experimental.categories.Category;
 
-import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
-
 import com.propertyvista.biz.financial.FinancialTestBase;
 import com.propertyvista.biz.financial.FinancialTestBase.RegressionTests;
 import com.propertyvista.biz.financial.SysDateManager;
@@ -43,8 +41,8 @@ public class ARSunnyDayScenarioTest extends FinancialTestBase {
     public void testScenario() {
 
         setLeaseTerms("23-Mar-2011", "03-Aug-2011");
-        addParking(SaveAction.saveAsDraft);
-        addParking("23-Apr-2011", "03-Aug-2011", SaveAction.saveAsDraft);
+        addParking();
+        addParking("23-Apr-2011", "03-Aug-2011");
 
         //==================== RUN 1 ======================//
 
@@ -91,8 +89,9 @@ public class ARSunnyDayScenarioTest extends FinancialTestBase {
 
         SysDateManager.setSysDate("18-Apr-2011");
 
-        addBooking("25-Apr-2011", SaveAction.saveAsFinal);
-        addBooking("5-May-2011", SaveAction.saveAsFinal);
+        addBooking("25-Apr-2011");
+        addBooking("5-May-2011");
+        finalizeLeaseAdendum(retrieveLease());
 
         runBilling(true, false);
 
@@ -100,7 +99,8 @@ public class ARSunnyDayScenarioTest extends FinancialTestBase {
 
         //==================== RUN 4 ======================//
 
-        addBooking("28-Apr-2011", SaveAction.saveAsFinal);
+        addBooking("28-Apr-2011");
+        finalizeLeaseAdendum(retrieveLease());
 
         SysDateManager.setSysDate("18-May-2011");
 

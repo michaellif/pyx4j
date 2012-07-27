@@ -15,8 +15,6 @@ package com.propertyvista.biz.financial.billing;
 
 import org.junit.experimental.categories.Category;
 
-import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
-
 import com.propertyvista.biz.financial.FinancialTestBase;
 import com.propertyvista.biz.financial.FinancialTestBase.FunctionalTests;
 import com.propertyvista.biz.financial.SysDateManager;
@@ -40,16 +38,16 @@ public class BillingBulkRunTest extends FinancialTestBase {
         setLeaseTerms("23-Mar-2011", "03-Aug-2011");
         addServiceAdjustment("-25", Type.monetary);
 
-        BillableItem parking1 = addParking(SaveAction.saveAsDraft);
+        BillableItem parking1 = addParking();
         addFeatureAdjustment(parking1.uid().getValue(), "-10", Type.monetary);
 
-        BillableItem parking2 = addParking("23-Apr-2011", "03-Aug-2011", SaveAction.saveAsDraft);
+        BillableItem parking2 = addParking("23-Apr-2011", "03-Aug-2011");
         addFeatureAdjustment(parking2.uid().getValue(), "-10", Type.monetary);
 
-        BillableItem locker1 = addLocker(SaveAction.saveAsDraft);
+        BillableItem locker1 = addLocker();
         addFeatureAdjustment(locker1.uid().getValue(), "-0.2", Type.percentage);
 
-        BillableItem pet1 = addPet(SaveAction.saveAsDraft);
+        BillableItem pet1 = addPet();
         addFeatureAdjustment(pet1.uid().getValue(), "-1", Type.percentage);
 
         //==================== RUN 1 ======================//

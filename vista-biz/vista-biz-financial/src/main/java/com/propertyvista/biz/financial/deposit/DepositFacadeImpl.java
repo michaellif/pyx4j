@@ -116,6 +116,7 @@ public class DepositFacadeImpl implements DepositFacade {
 
     @Override
     public DepositLifecycle createDepositLifecycle(Deposit deposit, BillingAccount billingAccount) {
+
         DepositLifecycle depositLifecycle = EntityFactory.create(DepositLifecycle.class);
 
         depositLifecycle.currentAmount().setValue(deposit.amount().getValue());
@@ -188,6 +189,7 @@ public class DepositFacadeImpl implements DepositFacade {
         // TODO - do we want to check for last adjustment date?
         Map<Deposit, ProductTerm> deposits = getCurrentDeposits(null);
         for (Deposit deposit : deposits.keySet()) {
+
             if (!DepositStatus.Paid.equals(deposit.lifecycle().status().getValue())) {
                 continue;
             }

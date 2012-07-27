@@ -17,8 +17,6 @@ import static com.propertyvista.biz.financial.SysDateManager.setSysDate;
 
 import org.junit.experimental.categories.Category;
 
-import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
-
 import com.propertyvista.biz.financial.FinancialTestBase.FunctionalTests;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.InvoiceDebit.DebitType;
@@ -30,7 +28,7 @@ public class ARArrearsSnapshotTest extends ArrearsSnapshotTestBase {
         // SET UP
         // tax is 12%
         setLeaseTerms("23-Mar-2011", "03-Aug-2011"); // lease $930 
-        addParking(SaveAction.saveAsDraft); // parking $80
+        addParking(); // parking $80
 
         // BILLING RUN 1
         setSysDate("18-Mar-2011");

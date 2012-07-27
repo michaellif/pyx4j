@@ -16,7 +16,6 @@ package com.propertyvista.biz.financial.deposit;
 import org.junit.experimental.categories.Category;
 
 import com.pyx4j.config.server.ServerSideFactory;
-import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
 
 import com.propertyvista.biz.financial.FinancialTestBase;
 import com.propertyvista.biz.financial.FinancialTestBase.FunctionalTests;
@@ -38,10 +37,10 @@ public class DepositFullCycleScenarioTest extends FinancialTestBase {
         setDate("17-Feb-2012");
 
         setLeaseTerms("01-Mar-2012", "31-May-2012");
-        addParking(SaveAction.saveAsDraft);
-        addParking("01-Apr-2012", "30-Apr-2012", SaveAction.saveAsDraft);
-        addLocker(SaveAction.saveAsDraft);
-        addPet("01-Mar-2012", "31-Mar-2012", SaveAction.saveAsDraft);
+        addParking();
+        addParking("01-Apr-2012", "30-Apr-2012");
+        addLocker();
+        addPet("01-Mar-2012", "31-Mar-2012");
 
         setDepositBatchProcess(retrieveLease().unit().building());
 

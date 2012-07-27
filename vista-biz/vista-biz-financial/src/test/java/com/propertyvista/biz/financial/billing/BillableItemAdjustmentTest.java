@@ -51,7 +51,7 @@ public class BillableItemAdjustmentTest extends FinancialTestBase {
         BillableItemAdjustment svcAdj_2 = addServiceAdjustment("-100", Type.monetary, "01-Apr-2011", "30-Apr-2011");
         BillableItemAdjustment svcAdj_3 = addServiceAdjustment("-31", Type.monetary, "15-May-2011", "14-Jun-2011");
 
-        BillableItem park = addParking(SaveAction.saveAsDraft);
+        BillableItem park = addParking();
         BillableItemAdjustment parkAdj_1 = addFeatureAdjustment(park.uid().getValue(), "-30", Type.monetary);
 
         //==================== RUN 1 ======================//

@@ -25,7 +25,6 @@ import java.math.BigDecimal;
 import org.junit.experimental.categories.Category;
 
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
 
 import com.propertyvista.biz.financial.FinancialTestBase;
 import com.propertyvista.biz.financial.FinancialTestBase.FunctionalTests;
@@ -48,7 +47,7 @@ public class ARCreditDebitLinkManagerTest extends FinancialTestBase {
     public void testScenario() {
 
         setLeaseTerms("01-Mar-2011", "31-Aug-2011");
-        addParking(SaveAction.saveAsDraft);
+        addParking();
 
         //==================== RUN 1 ======================//
 

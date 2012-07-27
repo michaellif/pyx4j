@@ -22,8 +22,6 @@ package com.propertyvista.biz.financial.billing;
 
 import org.junit.experimental.categories.Category;
 
-import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
-
 import com.propertyvista.biz.financial.FinancialTestBase;
 import com.propertyvista.biz.financial.FinancialTestBase.FunctionalTests;
 import com.propertyvista.biz.financial.SysDateManager;
@@ -46,16 +44,16 @@ public class BillingFeatureEagerScenarioTest extends FinancialTestBase {
 
         setLeaseTerms("23-Mar-2011", "3-Aug-2011");
 
-        BillableItem parking1 = addParking(SaveAction.saveAsDraft);
+        BillableItem parking1 = addParking();
         addFeatureAdjustment(parking1.uid().getValue(), "-10", Type.monetary);
 
-        BillableItem parking2 = addParking("23-Apr-2011", null, SaveAction.saveAsDraft);
+        BillableItem parking2 = addParking("23-Apr-2011", null);
         addFeatureAdjustment(parking2.uid().getValue(), "-10", Type.monetary);
 
-        BillableItem locker1 = addLocker(SaveAction.saveAsDraft);
+        BillableItem locker1 = addLocker();
         addFeatureAdjustment(locker1.uid().getValue(), "-0.2", Type.percentage);
 
-        BillableItem pet1 = addPet(SaveAction.saveAsDraft);
+        BillableItem pet1 = addPet();
         addFeatureAdjustment(pet1.uid().getValue(), "-1", Type.percentage);
 
         //==================== RUN 1 ======================//
@@ -100,8 +98,9 @@ public class BillingFeatureEagerScenarioTest extends FinancialTestBase {
         //==================== RUN 3 ======================//
 
         SysDateManager.setSysDate("18-Apr-2011");
-        addPet("10-Apr-2011", null, SaveAction.saveAsFinal);
-        changeBillableItem(parking1.uid().getValue(), null, "20-May-2011", SaveAction.saveAsFinal);
+        addPet("10-Apr-2011", null);
+        changeBillableItem(parking1.uid().getValue(), null, "20-May-2011");
+        finalizeLeaseAdendum(retrieveLease());
 
         bill = runBilling(true, true);
 
@@ -122,7 +121,8 @@ public class BillingFeatureEagerScenarioTest extends FinancialTestBase {
 
         SysDateManager.setSysDate("18-May-2011");
         //TODO calculate arrears
-        changeBillableItem(parking1.uid().getValue(), null, "10-May-2011", SaveAction.saveAsFinal);
+        changeBillableItem(parking1.uid().getValue(), null, "10-May-2011");
+        finalizeLeaseAdendum(retrieveLease());
 
         bill = runBilling(true, true);
 
@@ -195,5 +195,4 @@ public class BillingFeatureEagerScenarioTest extends FinancialTestBase {
         billingPeriodEndDate(null);
         // @formatter:on
     }
-
 }

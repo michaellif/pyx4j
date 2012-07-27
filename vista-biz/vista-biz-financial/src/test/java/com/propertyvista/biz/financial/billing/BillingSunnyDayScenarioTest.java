@@ -23,7 +23,6 @@ package com.propertyvista.biz.financial.billing;
 import org.junit.experimental.categories.Category;
 
 import com.pyx4j.config.server.ServerSideFactory;
-import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
 
 import com.propertyvista.biz.financial.FinancialTestBase;
 import com.propertyvista.biz.financial.FinancialTestBase.RegressionTests;
@@ -48,16 +47,16 @@ public class BillingSunnyDayScenarioTest extends FinancialTestBase {
         setLeaseTerms("22-Mar-2011", "03-Aug-2011");
         addServiceAdjustment("-25", Type.monetary);
 
-        BillableItem parking1 = addParking(SaveAction.saveAsDraft);
+        BillableItem parking1 = addParking();
         addFeatureAdjustment(parking1.uid().getValue(), "-10", Type.monetary);
 
-        BillableItem parking2 = addParking("23-Apr-2011", "03-Aug-2011", SaveAction.saveAsDraft);
+        BillableItem parking2 = addParking("23-Apr-2011", "03-Aug-2011");
         addFeatureAdjustment(parking2.uid().getValue(), "-10", Type.monetary);
 
-        BillableItem locker1 = addLocker(SaveAction.saveAsDraft);
+        BillableItem locker1 = addLocker();
         addFeatureAdjustment(locker1.uid().getValue(), "-0.2", Type.percentage);
 
-        BillableItem pet1 = addPet(SaveAction.saveAsDraft);
+        BillableItem pet1 = addPet();
         addFeatureAdjustment(pet1.uid().getValue(), "-1", Type.percentage);
 
         setDepositBatchProcess(retrieveLease().unit().building());
@@ -153,8 +152,9 @@ public class BillingSunnyDayScenarioTest extends FinancialTestBase {
 
         advanceDate("18-Apr-2011");
 
-        addBooking("25-Apr-2011", SaveAction.saveAsFinal);
-        addBooking("5-May-2011", SaveAction.saveAsFinal);
+        addBooking("25-Apr-2011");
+        addBooking("5-May-2011");
+        finalizeLeaseAdendum(retrieveLease());
 
         bill = runBilling(true, true);
 
@@ -178,7 +178,8 @@ public class BillingSunnyDayScenarioTest extends FinancialTestBase {
 
         //==================== RUN 4 ======================//
 
-        addBooking("28-Apr-2011", SaveAction.saveAsFinal);
+        addBooking("28-Apr-2011");
+        finalizeLeaseAdendum(retrieveLease());
 
         addGoodWillCredit("20.00", false);
         addGoodWillCredit("30.00");
@@ -281,5 +282,4 @@ public class BillingSunnyDayScenarioTest extends FinancialTestBase {
         printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
 
     }
-
 }

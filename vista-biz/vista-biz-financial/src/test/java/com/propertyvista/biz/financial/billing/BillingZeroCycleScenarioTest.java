@@ -25,7 +25,6 @@ import java.math.BigDecimal;
 import org.junit.experimental.categories.Category;
 
 import com.pyx4j.config.server.ServerSideFactory;
-import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
 
 import com.propertyvista.biz.financial.FinancialTestBase;
 import com.propertyvista.biz.financial.FinancialTestBase.FunctionalTests;
@@ -108,7 +107,8 @@ public class BillingZeroCycleScenarioTest extends FinancialTestBase {
 
         // try existing lease from just earlier this month
         setLeaseTerms("3-Mar-2011", "31-Dec-2011", new BigDecimal("900.00"), new BigDecimal("-100.00"));
-        addBooking("3-Mar-2011", SaveAction.saveAsFinal);
+        addBooking("3-Mar-2011");
+        finalizeLeaseAdendum(retrieveLease());
 
         //==================== RUN 1 ======================//
 

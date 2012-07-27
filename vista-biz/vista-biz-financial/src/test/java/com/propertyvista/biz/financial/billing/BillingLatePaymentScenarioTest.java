@@ -23,7 +23,6 @@ package com.propertyvista.biz.financial.billing;
 import org.junit.experimental.categories.Category;
 
 import com.pyx4j.config.server.ServerSideFactory;
-import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
 
 import com.propertyvista.biz.financial.FinancialTestBase;
 import com.propertyvista.biz.financial.FinancialTestBase.FunctionalTests;
@@ -95,7 +94,9 @@ public class BillingLatePaymentScenarioTest extends FinancialTestBase {
         SysDateManager.setSysDate("30-Apr-2011");
         receiveAndPostPayment("30-Apr-2011", "1041.94");
         // add some immediate charges (taxable) - should see late payment fee
-        addBooking("28-Apr-2011", SaveAction.saveAsFinal);
+        addBooking("28-Apr-2011");
+        finalizeLeaseAdendum(retrieveLease());
+
         addAccountCharge("100.00");
         // post credit after due date - too late to avoid late charges
         SysDateManager.setSysDate("02-May-2011");
