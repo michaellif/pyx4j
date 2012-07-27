@@ -61,6 +61,8 @@ public class ExportDownloadServlet extends HttpServlet {
 
         SecurityController.assertBehavior(VistaAdminBehavior.SystemAdmin);
 
+        Persistence.service().startBackgroundProcessTransaction();
+
         long pmcId = Long.valueOf(request.getParameter("pmc"));
         Pmc pmc = Persistence.service().retrieve(Pmc.class, new Key(pmcId));
         NamespaceManager.setNamespace(pmc.namespace().getValue());
