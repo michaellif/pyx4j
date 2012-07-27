@@ -141,8 +141,7 @@
                 <configuration>
                     <forkMode>always</forkMode>
                     <includes>
-                        <include>**/*Test.java</include>
-                        <!--include>**/FunctionalSuite.java</include-->
+                        <include>**/FunctionalSuite.java</include>
                     </includes>
                 </configuration>
             </plugin>
