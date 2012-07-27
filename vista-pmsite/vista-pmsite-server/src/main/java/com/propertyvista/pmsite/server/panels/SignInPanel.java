@@ -63,6 +63,7 @@ import com.propertyvista.pmsite.server.model.WicketUtils.JSActionLink;
 import com.propertyvista.pmsite.server.model.WicketUtils.PageLink;
 import com.propertyvista.pmsite.server.pages.PwdResetPage;
 import com.propertyvista.portal.rpc.portal.services.PortalAuthenticationService;
+import com.propertyvista.shared.config.VistaDemo;
 
 public class SignInPanel extends Panel {
 
@@ -211,7 +212,7 @@ public class SignInPanel extends Panel {
             add(new PageLink("pwdreset", PwdResetPage.class).setText("Forgot Password"));
             add(new Button("signIn").add(AttributeModifier.replace("value", i18n.tr("Sign In"))));
 
-            if (ApplicationMode.isDevelopment()) {
+            if (ApplicationMode.isDevelopment() || VistaDemo.isDemo()) {
                 Label devNotes = new Label("signInHint", "This application is running in <b>" + DemoData.applicationModeName()
                         + "</b> mode.<br/><i>Username and password are both<br/>");
                 add(devNotes.setEscapeModelStrings(false));
