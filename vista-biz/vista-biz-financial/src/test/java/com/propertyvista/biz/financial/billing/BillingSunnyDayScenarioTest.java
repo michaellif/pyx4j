@@ -154,7 +154,7 @@ public class BillingSunnyDayScenarioTest extends FinancialTestBase {
 
         addBooking("25-Apr-2011");
         addBooking("5-May-2011");
-        finalizeLeaseAdendum(retrieveLease());
+        finalizeLeaseAdendum();
 
         bill = runBilling(true, true);
 
@@ -179,7 +179,7 @@ public class BillingSunnyDayScenarioTest extends FinancialTestBase {
         //==================== RUN 4 ======================//
 
         addBooking("28-Apr-2011");
-        finalizeLeaseAdendum(retrieveLease());
+        finalizeLeaseAdendum();
 
         addGoodWillCredit("20.00", false);
         addGoodWillCredit("30.00");

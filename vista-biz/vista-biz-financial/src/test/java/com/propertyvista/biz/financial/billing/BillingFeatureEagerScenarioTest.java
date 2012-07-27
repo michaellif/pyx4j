@@ -100,7 +100,7 @@ public class BillingFeatureEagerScenarioTest extends FinancialTestBase {
         SysDateManager.setSysDate("18-Apr-2011");
         addPet("10-Apr-2011", null);
         changeBillableItem(parking1.uid().getValue(), null, "20-May-2011");
-        finalizeLeaseAdendum(retrieveLease());
+        finalizeLeaseAdendum();
 
         bill = runBilling(true, true);
 
@@ -122,7 +122,7 @@ public class BillingFeatureEagerScenarioTest extends FinancialTestBase {
         SysDateManager.setSysDate("18-May-2011");
         //TODO calculate arrears
         changeBillableItem(parking1.uid().getValue(), null, "10-May-2011");
-        finalizeLeaseAdendum(retrieveLease());
+        finalizeLeaseAdendum();
 
         bill = runBilling(true, true);
 

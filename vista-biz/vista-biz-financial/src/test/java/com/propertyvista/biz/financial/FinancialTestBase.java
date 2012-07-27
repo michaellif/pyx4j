@@ -419,8 +419,8 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         return null;
     }
 
-    protected Lease finalizeLeaseAdendum(Lease lease) {
-        return ServerSideFactory.create(LeaseFacade.class).finalize(lease);
+    protected Lease finalizeLeaseAdendum() {
+        return ServerSideFactory.create(LeaseFacade.class).finalize(retrieveLeaseDraft());
     }
 
     protected void setDeposit(String billableItemId, DepositType depositType) {
