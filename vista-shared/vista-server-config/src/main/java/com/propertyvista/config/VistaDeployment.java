@@ -29,6 +29,7 @@ import com.propertyvista.domain.security.VistaBasicBehavior;
 import com.propertyvista.domain.settings.PmcVistaFeatures;
 import com.propertyvista.server.config.VistaFeatures;
 import com.propertyvista.shared.VistaSystemIdentification;
+import com.propertyvista.shared.config.VistaDemo;
 
 public class VistaDeployment {
 
@@ -41,7 +42,8 @@ public class VistaDeployment {
     }
 
     public static boolean isVistaProduction() {
-        return ((!ApplicationMode.isDevelopment()) && (VistaSystemIdentification.production == VistaDeployment.getSystemIdentification()));
+        return ((!ApplicationMode.isDevelopment()) && (!VistaDemo.isDemo()) && (VistaSystemIdentification.production == VistaDeployment
+                .getSystemIdentification()));
     }
 
     public static Pmc getCurrentPmc() {

@@ -30,6 +30,7 @@ import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.domain.DemoData;
 import com.propertyvista.domain.DemoData.DemoPmc;
 import com.propertyvista.portal.server.preloader.ido.OnboardingMerchantAccountImport;
+import com.propertyvista.shared.config.VistaDemo;
 
 public class PmcCreatorDev {
 
@@ -63,6 +64,9 @@ public class PmcCreatorDev {
                 DemoPmc pmcId = DemoData.DemoPmc.valueOf(pmcName);
                 ordinal = pmcId.ordinal();
             } catch (IllegalArgumentException ignore) {
+                if (VistaDemo.isDemo()) {
+                    ordinal = 0;
+                }
             }
             if (ordinal >= 0) {
                 PmcPaymentTypeInfo fees = EntityFactory.create(PmcPaymentTypeInfo.class);

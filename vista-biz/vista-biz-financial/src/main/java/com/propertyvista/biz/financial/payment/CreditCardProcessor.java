@@ -23,7 +23,6 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideFactory;
-import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 
@@ -42,7 +41,6 @@ import com.propertyvista.payment.PaymentResponse;
 import com.propertyvista.payment.Token;
 import com.propertyvista.payment.caledon.CaledonPaymentProcessor;
 import com.propertyvista.server.jobs.TaskRunner;
-import com.propertyvista.shared.VistaSystemIdentification;
 
 class CreditCardProcessor {
 
@@ -126,7 +124,7 @@ class CreditCardProcessor {
             //Create Unique token using PMC Id
             Pmc pmc = VistaDeployment.getCurrentPmc();
             String prefix;
-            if ((!ApplicationMode.isDevelopment()) && (VistaSystemIdentification.production == VistaDeployment.getSystemIdentification())) {
+            if (VistaDeployment.isVistaProduction()) {
                 prefix = "";
             } else {
                 prefix = "TEST" + new SimpleDateFormat("MMddHH").format(new Date());

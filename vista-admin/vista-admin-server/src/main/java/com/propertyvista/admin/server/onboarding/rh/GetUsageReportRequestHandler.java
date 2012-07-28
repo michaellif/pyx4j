@@ -70,10 +70,11 @@ public class GetUsageReportRequestHandler extends AbstractRequestHandler<GetUsag
         record.to().setValue(request.to().getValue());
         record.usageType().setValue(request.usageType().getValue());
 
-        if (ApplicationMode.isDevelopment())
+        if (ApplicationMode.isDevelopment()) {
             record.value().setValue(55);
-        else
+        } else {
             record.value().setValue(0);
+        }
 
         response.records().add(record);
 
