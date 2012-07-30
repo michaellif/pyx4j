@@ -74,7 +74,7 @@ public interface DepositFacade {
     /*
      * Every deposit must collect interest based on the corresponding policy rules and interest rates
      */
-    void collectInterest(PolicyNode node);
+    void collectInterest(Lease lease);
 
     /*
      * Request to cover expenses may be rejected based on the expense type, so the boolean is returned
@@ -93,7 +93,7 @@ public interface DepositFacade {
      * LastMonthDeposit - return 1 month before lease end;
      * MoveInDeposit - return on first day of lease, we need to verify it doesn't create late payment fee;
      */
-    void issueDepositRefunds(PolicyNode node);
+    void issueDepositRefunds(Lease lease);
 
     /*
      * Update related deposits to Billed status

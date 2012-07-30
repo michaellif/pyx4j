@@ -59,7 +59,8 @@ public class BillingSunnyDayScenarioTest extends FinancialTestBase {
         BillableItem pet1 = addPet();
         addFeatureAdjustment(pet1.uid().getValue(), "-1", Type.percentage);
 
-        setDepositBatchProcess(retrieveLease().unit().building());
+        setLeaseBatchProcess();
+        setDepositBatchProcess();
         //==================== RUN 1 ======================//
 
         Bill billPreview = runBillingPreview();
@@ -125,7 +126,7 @@ public class BillingSunnyDayScenarioTest extends FinancialTestBase {
 
         receiveAndPostPayment("18-Mar-2011", "1603.05");
 
-        activateLease();
+//-->        activateLease();
 
         bill = runBilling(true, true);
 
@@ -263,7 +264,7 @@ public class BillingSunnyDayScenarioTest extends FinancialTestBase {
 
         advanceDate("05-Aug-2011");
 
-        completeLease();
+//-->        completeLease();
 
         addAccountCharge("140.00");
 

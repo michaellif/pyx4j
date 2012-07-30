@@ -42,8 +42,8 @@ public class DepositFullCycleScenarioTest extends FinancialTestBase {
         addLocker();
         addPet("01-Mar-2012", "31-Mar-2012");
 
-        setDepositBatchProcess(retrieveLease().unit().building());
-
+        setLeaseBatchProcess();
+        setDepositBatchProcess();
         //==================== RUN 1 - SERVICE AND FEATURE DEPOSITS TAKEN ======================//
 
         advanceDate("18-Feb-2012");
@@ -70,7 +70,7 @@ public class DepositFullCycleScenarioTest extends FinancialTestBase {
 
         //==================== RUN 2 - SECOND PARKING DEPOSIT TAKEN ======================//
 
-        activateLease();
+//-->        activateLease();
 
         advanceDate("01-Mar-2012");
         receiveAndPostPayment("01-Mar-2012", "2491.44");
@@ -126,7 +126,7 @@ public class DepositFullCycleScenarioTest extends FinancialTestBase {
 
         advanceDate("01-Jun-2012");
 
-        completeLease();
+//-->        completeLease();
 
         bill = runBilling(true, true);
 

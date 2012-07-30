@@ -183,11 +183,11 @@ public class DepositFacadeImpl implements DepositFacade {
     }
 
     @Override
-    public void collectInterest(PolicyNode node) {
-        Map<DepositPolicyKey, DepositPolicyItem> policyMatrix = getDepositPolicyMatrix(node);
+    public void collectInterest(Lease lease) {
+        Map<DepositPolicyKey, DepositPolicyItem> policyMatrix = getDepositPolicyMatrix(lease.unit().building());
 
         // TODO - do we want to check for last adjustment date?
-        Map<Deposit, ProductTerm> deposits = getCurrentDeposits(null);
+        Map<Deposit, ProductTerm> deposits = getCurrentDeposits(lease);
         for (Deposit deposit : deposits.keySet()) {
 
             if (!DepositStatus.Paid.equals(deposit.lifecycle().status().getValue())) {
@@ -231,14 +231,14 @@ public class DepositFacadeImpl implements DepositFacade {
     }
 
     @Override
-    public void issueDepositRefunds(PolicyNode node) {
-        Map<DepositPolicyKey, DepositPolicyItem> policyMatrix = getDepositPolicyMatrix(node);
+    public void issueDepositRefunds(Lease lease) {
+        Map<DepositPolicyKey, DepositPolicyItem> policyMatrix = getDepositPolicyMatrix(lease.unit().building());
 
         ARFacade arFacade = ServerSideFactory.create(ARFacade.class);
 
         Date now = Persistence.service().getTransactionSystemTime();
 
-        Map<Deposit, ProductTerm> deposits = getCurrentDeposits(null);
+        Map<Deposit, ProductTerm> deposits = getCurrentDeposits(lease);
         for (Deposit deposit : deposits.keySet()) {
             if (!DepositStatus.Paid.equals(deposit.lifecycle().status().getValue())) {
                 continue;

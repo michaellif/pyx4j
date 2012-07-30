@@ -37,6 +37,7 @@ import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
 import com.pyx4j.essentials.server.dev.DataDump;
 import com.pyx4j.gwt.server.DateUtils;
 
+import com.propertyvista.admin.domain.scheduler.RunStats;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.billing.BillingFacade;
 import com.propertyvista.biz.financial.billing.BillingUtils;
@@ -69,7 +70,6 @@ import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
-import com.propertyvista.domain.policy.framework.PolicyNode;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
 import com.propertyvista.domain.tenant.lease.Deposit;
@@ -81,6 +81,12 @@ import com.propertyvista.domain.tenant.lease.LeaseAdjustment.Status;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustmentReason;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.dto.TransactionHistoryDTO;
+import com.propertyvista.server.jobs.DepositInterestAdjustmentProcess;
+import com.propertyvista.server.jobs.DepositRefundProcess;
+import com.propertyvista.server.jobs.LeaseActivationProcess;
+import com.propertyvista.server.jobs.LeaseCompletionProcess;
+import com.propertyvista.server.jobs.PmcProcess;
+import com.propertyvista.server.jobs.PmcProcessContext;
 
 public abstract class FinancialTestBase extends VistaDBTestBase {
 
@@ -662,6 +668,23 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         taskSchedule.put(entry, task);
     }
 
+    protected void schedulePmcProcess(final PmcProcess pmcProcess, Schedule entry) {
+        taskSchedule.put(entry, new Task() {
+            @Override
+            public void execute() {
+                RunStats runStats = EntityFactory.create(RunStats.class);
+                Date runDate = SysDateManager.getSysDate();
+                PmcProcessContext sharedContext = new PmcProcessContext(runStats, runDate);
+                if (pmcProcess.start(sharedContext)) {
+                    PmcProcessContext pmcContext = new PmcProcessContext(runStats, runDate);
+                    pmcProcess.executePmcJob(pmcContext);
+                    Persistence.service().commit();
+                    pmcProcess.complete(sharedContext);
+                }
+            }
+        });
+    }
+
     protected void setDate(String dateStr) {
         SysDateManager.setSysDate(dateStr);
     }
@@ -693,21 +716,16 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         SysDateManager.setSysDate(setDate);
     }
 
-    protected void setDepositBatchProcess(final PolicyNode node) {
-        final DepositFacade facade = ServerSideFactory.create(DepositFacade.class);
+    protected void setDepositBatchProcess() {
         // schedule deposit interest adjustment batch process to run on 1st of each month
-        scheduleTask(new Task() {
-            @Override
-            public void execute() {
-                facade.collectInterest(node);
-            }
-        }, new Schedule().set(Calendar.DAY_OF_MONTH, 1));
+        schedulePmcProcess(new DepositInterestAdjustmentProcess(), new Schedule().set(Calendar.DAY_OF_MONTH, 1));
         // schedule deposit refund batch process to run every day
-        scheduleTask(new Task() {
-            @Override
-            public void execute() {
-                facade.issueDepositRefunds(node);
-            }
-        }, new Schedule());
+        schedulePmcProcess(new DepositRefundProcess(), new Schedule());
+    }
+
+    protected void setLeaseBatchProcess() {
+        // schedule lease activation and completion process to run daily
+        schedulePmcProcess(new LeaseActivationProcess(), new Schedule());
+        schedulePmcProcess(new LeaseCompletionProcess(), new Schedule());
     }
 }
