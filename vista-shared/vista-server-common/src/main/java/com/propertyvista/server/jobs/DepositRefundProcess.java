@@ -30,7 +30,7 @@ public class DepositRefundProcess implements PmcProcess {
 
     @Override
     public boolean start(PmcProcessContext context) {
-        log.info("Complete Lease batch job started");
+        log.info("Deposit Refund batch job started");
         return true;
     }
 
@@ -52,18 +52,18 @@ public class DepositRefundProcess implements PmcProcess {
 
                 StatisticsUtils.addProcessed(context.getRunStats(), 1);
             } catch (Throwable error) {
-                log.error("failed to complete lease id = {}:  {}", lease.getPrimaryKey(), error.getMessage());
+                log.error("failed to issue refunds for lease id = {}:  {}", lease.getPrimaryKey(), error.getMessage());
                 Persistence.service().rollback();
                 ++failed;
                 StatisticsUtils.addFailed(context.getRunStats(), 1);
             }
         }
-        log.info("{} out of {} leases were completed successfully", total - failed, total);
+        log.info("{} out of {} leases were processed successfully", total - failed, total);
     }
 
     @Override
     public void complete(PmcProcessContext context) {
-        log.info("Complete Lease batch job finished");
+        log.info("Deposit Refund batch job finished");
     }
 
 }
