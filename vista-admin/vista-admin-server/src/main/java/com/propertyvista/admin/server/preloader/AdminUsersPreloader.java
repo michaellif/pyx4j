@@ -61,11 +61,14 @@ class AdminUsersPreloader extends AbstractDataPreloader {
             }
         }
         cnt += 4;
-        createAdminUser("PropertyVista Support", "support@propertyvista.com", rnd4prod("support@propertyvista.com"), VistaAdminBehavior.SystemAdmin);
-//        createAdminUser("VladS", "vlads@propertyvista.com", rnd4prod("vlads@propertyvista.com"), VistaAdminBehavior.SystemAdmin);
-//        createAdminUser("VictorV", "vvassiliev@propertyvista.com", rnd4prod("vvassiliev@propertyvista.com"), VistaAdminBehavior.SystemAdmin);
-//        createAdminUser("AlexK", "akinareevski@propertyvista.com", rnd4prod("akinareevski@propertyvista.com"), VistaAdminBehavior.SystemAdmin);
-//        createAdminUser("Onboarding API", "romans@rossul.com", "secret", VistaAdminBehavior.OnboardingApi);
+        if (!VistaDemo.isDemo()) {
+            createAdminUser("PropertyVista Support", "support@propertyvista.com", rnd4prod("support@propertyvista.com"), VistaAdminBehavior.SystemAdmin);
+            createAdminUser("VladS", "vlads@propertyvista.com", rnd4prod("vlads@propertyvista.com"), VistaAdminBehavior.SystemAdmin);
+            createAdminUser("VictorV", "vvassiliev@propertyvista.com", rnd4prod("vvassiliev@propertyvista.com"), VistaAdminBehavior.SystemAdmin);
+            createAdminUser("AlexK", "akinareevski@propertyvista.com", rnd4prod("akinareevski@propertyvista.com"), VistaAdminBehavior.SystemAdmin);
+            createAdminUser("YuriyL", "yuriyl@propertyvista.com", rnd4prod("yuriyl@propertyvista.com"), VistaAdminBehavior.SystemAdmin);
+            createAdminUser("Onboarding API", "romans@rossul.com", "secret", VistaAdminBehavior.OnboardingApi);
+        }
 
         return "Created " + cnt + " Admin Users";
     }
