@@ -133,6 +133,7 @@ public interface Lease_2 extends IEntity {
         }
     }
 
+    //TODO _2 rename to leaseType
     @I18n(context = "Lease Term")
     @XmlType(name = "LeaseTerm")
     public enum Term {
