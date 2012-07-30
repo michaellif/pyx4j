@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -32,6 +32,7 @@ import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.server.common.security.PasswordEncryptor;
 import com.propertyvista.server.domain.security.CustomerUserCredential;
+import com.propertyvista.shared.config.VistaDemo;
 
 public class CustomerFacadeImpl implements CustomerFacade {
 
@@ -57,7 +58,7 @@ public class CustomerFacadeImpl implements CustomerFacade {
                 CustomerUserCredential credential = EntityFactory.create(CustomerUserCredential.class);
                 credential.setPrimaryKey(customer.user().getPrimaryKey());
                 credential.user().set(customer.user());
-                if (ApplicationMode.isDevelopment()) {
+                if (ApplicationMode.isDevelopment() || VistaDemo.isDemo()) {
                     credential.credential().setValue(PasswordEncryptor.encryptPassword(customer.user().email().getValue()));
                 }
                 credential.enabled().setValue(Boolean.TRUE);
