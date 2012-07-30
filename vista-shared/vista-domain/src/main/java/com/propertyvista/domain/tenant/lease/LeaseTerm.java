@@ -33,9 +33,9 @@ import com.propertyvista.domain.media.Document;
 import com.propertyvista.domain.tenant.Guarantor_2;
 import com.propertyvista.domain.tenant.Tenant_2;
 import com.propertyvista.domain.tenant.lease.Lease.Term;
-import com.propertyvista.domain.tenant.lease.LeaseAgreement.LeaseAgreementV;
+import com.propertyvista.domain.tenant.lease.LeaseTerm.LeaseAgreementV;
 
-public interface LeaseAgreement extends IVersionedEntity<LeaseAgreementV> {
+public interface LeaseTerm extends IVersionedEntity<LeaseAgreementV> {
 
     @Owner
     @NotNull
@@ -70,7 +70,7 @@ public interface LeaseAgreement extends IVersionedEntity<LeaseAgreementV> {
     @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> approvalDate();
 
-    public interface LeaseAgreementV extends IVersionData<LeaseAgreement> {
+    public interface LeaseAgreementV extends IVersionData<LeaseTerm> {
 
         @Owned
         @Detached

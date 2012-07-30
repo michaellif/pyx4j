@@ -20,7 +20,7 @@ import com.pyx4j.entity.shared.IList;
 import com.propertyvista.domain.financial.offering.Concession;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.domain.tenant.lease.LeaseAgreement;
+import com.propertyvista.domain.tenant.lease.LeaseTerm;
 
 @Transient
 @ExtendsDBO
@@ -37,7 +37,7 @@ public interface LeaseDTO extends Lease {
 
     IList<Concession> selectedConcessions();
 
-    LeaseAgreement currentLeaseAgreement();
+    LeaseTerm currentLeaseAgreement();
 
     BillDTO billingPreview();
 }
