@@ -24,6 +24,11 @@ import com.propertyvista.crm.client.ui.gadgets.arrears.ArrearsYOYAnalysisChartGa
 import com.propertyvista.crm.client.ui.gadgets.availability.TurnoverAnalysisGraphGadget;
 import com.propertyvista.crm.client.ui.gadgets.availability.UnitAvailabilityReportGadget;
 import com.propertyvista.crm.client.ui.gadgets.availability.UnitAvailabilitySummaryGadgetFactory;
+import com.propertyvista.crm.client.ui.gadgets.demo.BarChart2DGadget;
+import com.propertyvista.crm.client.ui.gadgets.demo.DemoGadget;
+import com.propertyvista.crm.client.ui.gadgets.demo.GaugeGadget;
+import com.propertyvista.crm.client.ui.gadgets.demo.LineChartGadget;
+import com.propertyvista.crm.client.ui.gadgets.demo.PieChart2DGadget;
 import com.propertyvista.crm.client.ui.gadgets.other.BuildingListerGadget;
 import com.propertyvista.crm.client.ui.gadgets.payments.PaymentRecordsGadgetFactory;
 import com.propertyvista.crm.client.ui.gadgets.payments.PaymentsSummaryGadgetFactory;
@@ -55,13 +60,13 @@ public class Directory {
         new TurnoverAnalysisGraphGadget(),
         
         new PaymentRecordsGadgetFactory(),
-        new PaymentsSummaryGadgetFactory()
+        new PaymentsSummaryGadgetFactory(),
         
-//        new BarChart2DGadget(),
-//        new DemoGadget(),
-//        new GaugeGadget(),
-//        new LineChartGadget(),
-//        new PieChart2DGadget()
+        new BarChart2DGadget(),
+        new DemoGadget(),
+        new GaugeGadget(),
+        new LineChartGadget(),
+        new PieChart2DGadget()
     );//@formatter:on
 
     public static IGadgetInstance createGadget(GadgetMetadata gadgetMetadata) {
