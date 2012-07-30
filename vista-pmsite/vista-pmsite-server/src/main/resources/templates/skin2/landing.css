@@ -25,6 +25,7 @@
 
 .quickSearchPanel {
 	width: 300px;
+	background-color:${object2_10};	
 }
 
 .quickSearchPanel h3 {
