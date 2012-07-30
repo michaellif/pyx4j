@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -62,10 +62,10 @@ class AdminUsersPreloader extends AbstractDataPreloader {
         }
         cnt += 4;
         createAdminUser("PropertyVista Support", "support@propertyvista.com", rnd4prod("support@propertyvista.com"), VistaAdminBehavior.SystemAdmin);
-        createAdminUser("VladS", "vlads@propertyvista.com", rnd4prod("vlads@propertyvista.com"), VistaAdminBehavior.SystemAdmin);
-        createAdminUser("VictorV", "vvassiliev@propertyvista.com", rnd4prod("vvassiliev@propertyvista.com"), VistaAdminBehavior.SystemAdmin);
-        createAdminUser("AlexK", "akinareevski@propertyvista.com", rnd4prod("akinareevski@propertyvista.com"), VistaAdminBehavior.SystemAdmin);
-        createAdminUser("Onboarding API", "romans@rossul.com", "secret", VistaAdminBehavior.OnboardingApi);
+//        createAdminUser("VladS", "vlads@propertyvista.com", rnd4prod("vlads@propertyvista.com"), VistaAdminBehavior.SystemAdmin);
+//        createAdminUser("VictorV", "vvassiliev@propertyvista.com", rnd4prod("vvassiliev@propertyvista.com"), VistaAdminBehavior.SystemAdmin);
+//        createAdminUser("AlexK", "akinareevski@propertyvista.com", rnd4prod("akinareevski@propertyvista.com"), VistaAdminBehavior.SystemAdmin);
+//        createAdminUser("Onboarding API", "romans@rossul.com", "secret", VistaAdminBehavior.OnboardingApi);
 
         return "Created " + cnt + " Admin Users";
     }
