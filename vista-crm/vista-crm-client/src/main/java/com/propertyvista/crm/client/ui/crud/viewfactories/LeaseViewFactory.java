@@ -38,6 +38,8 @@ import com.propertyvista.crm.client.ui.crud.lease.common.deposit.DepositLifecycl
 import com.propertyvista.crm.client.ui.crud.lease.common.deposit.DepositLifecycleEditorViewImpl;
 import com.propertyvista.crm.client.ui.crud.lease.common.deposit.DepositLifecycleViewerView;
 import com.propertyvista.crm.client.ui.crud.lease.common.deposit.DepositLifecycleViewerViewImpl;
+import com.propertyvista.crm.client.ui.crud.lease2.LeaseTermEditorView;
+import com.propertyvista.crm.client.ui.crud.lease2.LeaseTermEditorViewImpl;
 
 public class LeaseViewFactory extends ViewFactoryBase {
 
@@ -59,6 +61,14 @@ public class LeaseViewFactory extends ViewFactoryBase {
                 map.put(type, new LeaseApplicationViewerViewImpl());
             } else if (LeaseApplicationEditorView.class.equals(type)) {
                 map.put(type, new LeaseApplicationEditorViewImpl());
+
+// TODO not used till now:                
+//            } else if (LeaseTermListerView.class.equals(type)) {
+//                map.put(type, new LeaseTermListerViewImpl());
+//            } else if (LeaseTermViewerView.class.equals(type)) {
+//                map.put(type, new LeaseTermViewerViewImpl());
+            } else if (LeaseTermEditorView.class.equals(type)) {
+                map.put(type, new LeaseTermEditorViewImpl());
 
             } else if (LeaseAdjustmentViewerView.class.equals(type)) {
                 map.put(type, new LeaseAdjustmentViewerViewImpl());

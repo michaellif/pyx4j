@@ -39,7 +39,7 @@ import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.PersonScreening;
-import com.propertyvista.domain.tenant.lease.LeaseTerm.LeaseAgreementV;
+import com.propertyvista.domain.tenant.lease.LeaseTerm.LeaseTermV;
 import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
 
 @Inheritance
@@ -91,7 +91,7 @@ public interface LeaseParticipant_2 extends IEntity {
     @Indexed
     @JoinColumn
     @Caption(name = "Lease Agreement")
-    LeaseAgreementV leaseAgreementV();
+    LeaseTermV leaseTermV();
 
     @OrderColumn
     IPrimitive<Integer> orderInLease();

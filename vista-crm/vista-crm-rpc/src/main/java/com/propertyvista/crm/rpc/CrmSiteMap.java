@@ -190,6 +190,10 @@ public class CrmSiteMap implements SiteMap {
         public static class LeaseApplication extends CrmCrudAppPlace {
         }
 
+        @PlaceProperties(caption = "Lease Term")
+        public static class LeaseTerm extends CrmCrudAppPlace {
+        }
+
         public static class EquifaxResult extends CrmCrudAppPlace {
         }
 

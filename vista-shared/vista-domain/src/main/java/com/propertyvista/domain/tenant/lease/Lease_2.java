@@ -133,23 +133,6 @@ public interface Lease_2 extends IEntity {
         }
     }
 
-    //TODO _2 rename to leaseType
-    @I18n(context = "Lease Term")
-    @XmlType(name = "LeaseTerm")
-    public enum Term {
-
-        Fixed,
-
-        FixedEx,
-
-        Periodic;
-
-        @Override
-        public String toString() {
-            return I18nEnum.toString(this);
-        }
-    }
-
     @I18n(context = "Payment Frequency")
     @XmlType(name = "PaymentFrequency")
     public enum PaymentFrequency {
@@ -190,11 +173,6 @@ public interface Lease_2 extends IEntity {
     @ToString(index = 1)
     @MemberColumn(name = "leaseType")
     IPrimitive<Service.ServiceType> type();
-
-    @NotNull
-    @ReadOnly
-    @MemberColumn(name = "leaseTerm")
-    IPrimitive<Term> term();
 
     @NotNull
     @ToString(index = 2)

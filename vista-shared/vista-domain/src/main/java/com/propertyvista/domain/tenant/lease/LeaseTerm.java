@@ -13,6 +13,8 @@
  */
 package com.propertyvista.domain.tenant.lease;
 
+import javax.xml.bind.annotation.XmlType;
+
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
@@ -28,29 +30,39 @@ import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.IVersionData;
 import com.pyx4j.entity.shared.IVersionedEntity;
+import com.pyx4j.i18n.annotations.I18n;
+import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.media.Document;
 import com.propertyvista.domain.tenant.Guarantor_2;
 import com.propertyvista.domain.tenant.Tenant_2;
-import com.propertyvista.domain.tenant.lease.Lease.Term;
-import com.propertyvista.domain.tenant.lease.LeaseTerm.LeaseAgreementV;
+import com.propertyvista.domain.tenant.lease.LeaseTerm.LeaseTermV;
 
-public interface LeaseTerm extends IVersionedEntity<LeaseAgreementV> {
+public interface LeaseTerm extends IVersionedEntity<LeaseTermV> {
 
-    @Owner
+    //TODO _2 rename to leaseType
+    @I18n(context = "Lease Term Type")
+    @XmlType(name = "LeaseTermType")
+    public enum Type {
+
+        Fixed,
+
+        FixedEx,
+
+        Periodic;
+
+        @Override
+        public String toString() {
+            return I18nEnum.toString(this);
+        }
+    }
+
+    // ------------------------------------------------------------
+
     @NotNull
     @ReadOnly
-    @Detached
-    @JoinColumn
-    Lease_2 lease();
-
-    @OrderColumn
-    IPrimitive<Integer> orderInOwner();
-
-    @NotNull
-    @ReadOnly
-    @MemberColumn(name = "leaseTerm")
-    IPrimitive<Term> term();
+    @MemberColumn(name = "leaseTermType")
+    IPrimitive<Type> type();
 
     @NotNull
     @Format("MM/dd/yyyy")
@@ -60,9 +72,6 @@ public interface LeaseTerm extends IVersionedEntity<LeaseAgreementV> {
     @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> leaseTo();
 
-    @Format("MM/dd/yyyy")
-    IPrimitive<LogicalDate> actualLeaseTo();
-
     @Detached
     // should be loaded in service when necessary!..
     IList<Document> documents();
@@ -70,7 +79,7 @@ public interface LeaseTerm extends IVersionedEntity<LeaseAgreementV> {
     @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> approvalDate();
 
-    public interface LeaseAgreementV extends IVersionData<LeaseTerm> {
+    public interface LeaseTermV extends IVersionData<LeaseTerm> {
 
         @Owned
         @Detached
@@ -83,4 +92,16 @@ public interface LeaseTerm extends IVersionedEntity<LeaseAgreementV> {
         @EmbeddedEntity
         LeaseProducts leaseProducts();
     }
+
+    // internals:   -----------------------------------------------
+
+    @Owner
+    @NotNull
+    @ReadOnly
+    @Detached
+    @JoinColumn
+    Lease_2 lease();
+
+    @OrderColumn
+    IPrimitive<Integer> orderInOwner();
 }

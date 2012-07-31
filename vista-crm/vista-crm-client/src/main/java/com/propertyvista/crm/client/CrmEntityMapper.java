@@ -79,6 +79,7 @@ import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustmentReason;
 import com.propertyvista.domain.tenant.lease.LeaseApplication;
+import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.dto.LeaseApplicationDTO;
 import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.misc.EquifaxResult;
@@ -125,6 +126,7 @@ public class CrmEntityMapper {
 
         AppPlaceEntityMapper.register(Lease.class, CrmSiteMap.Tenants.Lease.class, defaultImage);
         AppPlaceEntityMapper.register(LeaseApplication.class, CrmSiteMap.Tenants.LeaseApplication.class, defaultImage);
+        AppPlaceEntityMapper.register(LeaseTerm.class, CrmSiteMap.Tenants.LeaseTerm.class, defaultImage);
 
         AppPlaceEntityMapper.register(BillingCycle.class, CrmSiteMap.Finance.BillingCycle.class, defaultImage);
         AppPlaceEntityMapper.register(Bill.class, CrmSiteMap.Finance.Bill.class, defaultImage);
