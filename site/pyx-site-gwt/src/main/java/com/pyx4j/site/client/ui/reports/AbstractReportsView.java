@@ -25,55 +25,76 @@ import java.util.Map;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
-
-import com.pyx4j.site.client.ui.reports.IReportSettingsForm.ApplyCallback;
 
 public abstract class AbstractReportsView implements IReportsView {
 
     private Presenter presenter;
 
-    private final DockLayoutPanel panel;
+    private final DockLayoutPanel viewPanel;
 
     private final Map<Class<? extends ReportSettings>, ReportFactory> reportFactoryMap;
 
     private IReportSettingsForm<ReportSettings> settingsForm;
 
+    private final ScrollPanel settingsFormPanel;
+
+    private final ScrollPanel reportViewPanel;
+
+    private final ReportSettingsFormControlPanel reportSettingsControls;
+
     public AbstractReportsView(Map<Class<? extends ReportSettings>, ReportFactory> reportFactoryMap) {
         this.reportFactoryMap = reportFactoryMap;
-        panel = new DockLayoutPanel(Unit.EM);
-        panel.addNorth(new HTML(), 1);
-        panel.setSize("100%", "100%");
+        viewPanel = new DockLayoutPanel(Unit.EM);
+        viewPanel.addNorth(new HTML(), 1);
+        viewPanel.setSize("100%", "100%");
+
+        settingsFormPanel = new ScrollPanel();
+        viewPanel.addNorth(settingsFormPanel, 13);
+
+        reportSettingsControls = new ReportSettingsFormControlPanel();
+        reportSettingsControls.setApplyCallback(new ApplyCallback<ReportSettings>() {
+            @Override
+            public void apply(ReportSettings reportSettings) {
+                if (presenter != null) {
+                    presenter.apply(reportSettings);
+                }
+            }
+        });
+        reportSettingsControls.getElement().getStyle().setProperty("borderTopStyle", "solid");
+        reportSettingsControls.getElement().getStyle().setProperty("borderBottomStyle", "solid");
+        reportSettingsControls.getElement().getStyle().setProperty("borderTopWidth", "1px");
+        reportSettingsControls.getElement().getStyle().setProperty("borderBottomWidth", "1px");
+
+        viewPanel.addNorth(reportSettingsControls, 2.5);
+
+        reportViewPanel = new ScrollPanel();
+        reportViewPanel.getElement().getStyle().setPadding(1, Unit.EM);
+        viewPanel.add(reportViewPanel);
+
         settingsForm = null;
         presenter = null;
     }
 
     @Override
     public void setReportSettings(ReportSettings reportSettings) {
-        if (settingsForm != null) {
-            panel.remove(settingsForm);
-        }
-        if (reportSettings == null) {
-            return;
-        }
+        if (reportSettings == null | settingsForm != null) {
+            settingsFormPanel.setWidget(null);
+            reportViewPanel.setWidget(null);
+            reportSettingsControls.attachSettingsForm(null);
+        } else {
+            ReportFactory factory = reportFactoryMap.get(reportSettings.getInstanceValueClass());
+            if (factory == null) {
+                throw new Error("factory not found for report: " + reportSettings.getInstanceValueClass().getName());
+            }
+            settingsForm = (IReportSettingsForm<ReportSettings>) factory.getReportSettingsForm(reportSettings);
+            settingsFormPanel.setWidget(settingsForm);
+            reportSettingsControls.attachSettingsForm(settingsForm);
+            reportViewPanel.setWidget(factory.getReport());
 
-        ReportFactory factory = reportFactoryMap.get(reportSettings.getInstanceValueClass());
-        if (factory == null) {
-            throw new Error("factory not found for report: " + reportSettings.getInstanceValueClass().getName());
-        }
-        settingsForm = (IReportSettingsForm<ReportSettings>) factory.getReportSettingsForm(reportSettings);
-
-        if (settingsForm != null) {
-            panel.addNorth(settingsForm, 15);
-            settingsForm.setOnApplySettingsCallback(new ApplyCallback<ReportSettings>() {
-                @Override
-                public void apply(ReportSettings reportSettings) {
-                    presenter.apply(reportSettings);
-                }
-            });
             settingsForm.populate(reportSettings);
         }
-
     }
 
     @Override
@@ -83,7 +104,7 @@ public abstract class AbstractReportsView implements IReportsView {
 
     @Override
     public Widget asWidget() {
-        return panel;
+        return viewPanel;
     }
 
 }

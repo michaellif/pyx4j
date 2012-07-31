@@ -34,4 +34,6 @@ public interface IReportsView extends IsWidget {
 
     <E extends ReportSettings> void setReportSettings(E reportSettings);
 
+    void setReportData(Object data);
+
 }

@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Jul 30, 2012
+ * Created on Jul 31, 2012
  * @author ArtyomB
  * @version $Id$
  */
@@ -22,10 +22,8 @@ package com.pyx4j.site.client.ui.reports;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-public interface IReportSettingsForm<E extends ReportSettings> extends IsWidget {
+public interface Report extends IsWidget {
 
-    void populate(E reportSettings);
-
-    E getValue();
+    void setData(Object data);
 
 }

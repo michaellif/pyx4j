@@ -20,22 +20,12 @@
  */
 package com.pyx4j.site.client.ui.reports;
 
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.client.CEntityForm;
-import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.widgets.client.Button;
 
 public abstract class SimpleReportSettingsForm<E extends ReportSettings> extends CEntityForm<E> implements IReportSettingsForm<E> {
-
-    private static final I18n i18n = I18n.get(SimpleReportSettingsForm.class);
-
-    private ApplyCallback<E> applyCallback;
-
-    private IsWidget simpleSettingsPanel;
 
     public SimpleReportSettingsForm(Class<E> clazz, boolean hasAdvancedSettings) {
         super(clazz);
@@ -44,23 +34,10 @@ public abstract class SimpleReportSettingsForm<E extends ReportSettings> extends
     @Override
     public final IsWidget createContent() {
         FlowPanel contentPanel = new FlowPanel();
-        contentPanel.add(simpleSettingsPanel = createSimpleSettingsPanel());
-        contentPanel.add(new Button(i18n.tr("Apply", new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                if (applyCallback != null) {
-                    applyCallback.apply(getValue());
-                }
-            }
-        })));
+        contentPanel.add(createSimpleSettingsPanel());
         return contentPanel;
     }
 
     public abstract IsWidget createSimpleSettingsPanel();
-
-    @Override
-    public void setOnApplySettingsCallback(ApplyCallback<E> applyCallback) {
-        this.applyCallback = applyCallback;
-    }
 
 }

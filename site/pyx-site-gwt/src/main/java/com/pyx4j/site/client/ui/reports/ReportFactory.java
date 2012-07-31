@@ -20,12 +20,10 @@
  */
 package com.pyx4j.site.client.ui.reports;
 
-import com.google.gwt.user.client.ui.Widget;
-
 public interface ReportFactory {
 
     IReportSettingsForm<? extends ReportSettings> getReportSettingsForm(ReportSettings reportSettings);
 
-    Widget getReport();
+    Report getReport();
 
 }
