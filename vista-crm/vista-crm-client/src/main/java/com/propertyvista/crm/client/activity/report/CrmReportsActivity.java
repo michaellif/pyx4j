@@ -18,7 +18,10 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.site.client.ui.reports.AbstractReportsActivity;
+import com.pyx4j.site.client.ui.reports.HasAdvancedSettings;
+import com.pyx4j.site.client.ui.reports.ReportSettings;
 import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.crm.client.ui.reports.CrmReportsView;
 import com.propertyvista.crm.client.ui.reports.MockupReportSettings;
@@ -43,6 +46,13 @@ public class CrmReportsActivity extends AbstractReportsActivity {
         mockup.advancedValueZ().setValue("adv Z");
 
         view.setReportSettings(mockup);
+    }
+
+    @Override
+    public void apply(ReportSettings settings) {
+        String mode = (settings instanceof HasAdvancedSettings) ? (((HasAdvancedSettings) settings).isInAdvancedMode().isBooleanTrue() ? "advanced" : "simple")
+                : "simple";
+        MessageDialog.info("you have selected " + settings.getInstanceValueClass().getName() + ", mode " + mode);
     }
 
 }
