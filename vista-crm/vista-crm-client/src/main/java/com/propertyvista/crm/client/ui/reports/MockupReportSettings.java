@@ -33,4 +33,14 @@ public interface MockupReportSettings extends ReportSettings, HasAdvancedSetting
 
     IPrimitive<String> advancedValueZ();
 
+    IPrimitive<String> advancedValue1();
+
+    IPrimitive<String> advancedValue2();
+
+    IPrimitive<String> advancedValue3();
+
+    IPrimitive<String> advancedValue4();
+
+    IPrimitive<String> advancedValue5();
+
 }

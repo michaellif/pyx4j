@@ -16,6 +16,8 @@ package com.propertyvista.crm.client.ui.reports;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
@@ -23,6 +25,7 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.site.client.ui.reports.AbstractReportsView;
 import com.pyx4j.site.client.ui.reports.AdvancedReportSettingsForm;
 import com.pyx4j.site.client.ui.reports.IReportSettingsForm;
+import com.pyx4j.site.client.ui.reports.Report;
 import com.pyx4j.site.client.ui.reports.ReportFactory;
 import com.pyx4j.site.client.ui.reports.ReportSettings;
 
@@ -54,6 +57,11 @@ public class CrmReportsViewImpl extends AbstractReportsView implements CrmReport
                         advanced.setWidget(++row, 0, new WidgetDecorator.Builder(inject(proto().advancedValueX())).build());
                         advanced.setWidget(++row, 0, new WidgetDecorator.Builder(inject(proto().advancedValueY())).build());
                         advanced.setWidget(++row, 0, new WidgetDecorator.Builder(inject(proto().advancedValueZ())).build());
+                        advanced.setWidget(++row, 0, new WidgetDecorator.Builder(inject(proto().advancedValue1())).build());
+                        advanced.setWidget(++row, 0, new WidgetDecorator.Builder(inject(proto().advancedValue2())).build());
+                        advanced.setWidget(++row, 0, new WidgetDecorator.Builder(inject(proto().advancedValue3())).build());
+                        advanced.setWidget(++row, 0, new WidgetDecorator.Builder(inject(proto().advancedValue4())).build());
+                        advanced.setWidget(++row, 0, new WidgetDecorator.Builder(inject(proto().advancedValue5())).build());
                         return advanced;
                     }
                 };
@@ -62,8 +70,34 @@ public class CrmReportsViewImpl extends AbstractReportsView implements CrmReport
             }
 
             @Override
-            public Widget getReport() {
-                return new FormFlexPanel();
+            public Report getReport() {
+
+                return new Report() {
+
+                    private HTML reportHTML;
+
+                    {
+                        reportHTML = new HTML();
+                        reportHTML.setSize("100%", "300em");
+                        SafeHtmlBuilder mockupReport = new SafeHtmlBuilder();
+                        mockupReport.appendHtmlConstant("<div>");
+                        for (int i = 0; i < 1000; ++i) {
+                            mockupReport.appendHtmlConstant("<div>this is SPARTA!!!</div>");
+                        }
+                        mockupReport.appendHtmlConstant("</div>");
+                        reportHTML.setHTML(mockupReport.toSafeHtml());
+                    }
+
+                    @Override
+                    public Widget asWidget() {
+                        return reportHTML;
+                    }
+
+                    @Override
+                    public void setData(Object data) {
+                        // TODO ignore
+                    }
+                };
             }
         });
 
@@ -71,6 +105,12 @@ public class CrmReportsViewImpl extends AbstractReportsView implements CrmReport
 
     public CrmReportsViewImpl() {
         super(factoryMap);
+    }
+
+    @Override
+    public void setReportData(Object data) {
+        // TODO Auto-generated method stub
+
     }
 
 }

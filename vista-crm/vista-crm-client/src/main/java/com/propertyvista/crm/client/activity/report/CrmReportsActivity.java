@@ -41,9 +41,9 @@ public class CrmReportsActivity extends AbstractReportsActivity {
         mockup.valueY().setValue("Y");
         mockup.valueZ().setValue("Z");
 
-        mockup.advancedValueX().setValue("adv X");
-        mockup.advancedValueY().setValue("adv Y");
-        mockup.advancedValueZ().setValue("adv Z");
+        mockup.advancedValueX().setValue("What!?!");
+        mockup.advancedValueY().setValue("No soup for you!!!");
+        mockup.advancedValueZ().setValue("Come back, ONE YEAR!");
 
         view.setReportSettings(mockup);
     }
