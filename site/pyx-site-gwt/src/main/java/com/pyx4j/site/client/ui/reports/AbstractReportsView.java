@@ -27,6 +27,8 @@ import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.site.client.ui.reports.IReportSettingsForm.ApplyCallback;
+
 public abstract class AbstractReportsView implements IReportsView {
 
     private Presenter presenter;
@@ -63,6 +65,12 @@ public abstract class AbstractReportsView implements IReportsView {
 
         if (settingsForm != null) {
             panel.addNorth(settingsForm, 15);
+            settingsForm.setOnApplySettingsCallback(new ApplyCallback<ReportSettings>() {
+                @Override
+                public void apply(ReportSettings reportSettings) {
+                    presenter.apply(reportSettings);
+                }
+            });
             settingsForm.populate(reportSettings);
         }
 

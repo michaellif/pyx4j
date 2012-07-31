@@ -68,14 +68,16 @@ public abstract class AdvancedReportSettingsForm<E extends ReportSettings & HasA
         VerticalPanel controlPanel = new VerticalPanel();
         controlPanel.getElement().getStyle().setMarginLeft(2, Unit.EM);
         controlPanel.getElement().getStyle().setMarginRight(2, Unit.EM);
-        controlPanel.add(applyButton = new Button(i18n.tr("Apply", new ClickHandler() {
+
+        controlPanel.add(applyButton = new Button(i18n.tr("Apply"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 if (applyCallback != null) {
                     applyCallback.apply(getValue());
                 }
             }
-        })));
+        }));
+
         contentPanel.setCellHorizontalAlignment(applyButton, HasHorizontalAlignment.ALIGN_CENTER);
 
         applyButton.getElement().getStyle().setPaddingTop(0.5, Unit.EM);

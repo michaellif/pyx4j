@@ -26,7 +26,7 @@ public interface IReportsView extends IsWidget {
 
     public interface Presenter {
 
-        void apply();
+        void apply(ReportSettings settings);
 
     }
 

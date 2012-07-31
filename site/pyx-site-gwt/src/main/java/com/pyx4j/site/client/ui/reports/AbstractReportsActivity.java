@@ -26,7 +26,7 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.site.rpc.AppPlace;
 
-public class AbstractReportsActivity extends AbstractActivity implements IReportsView.Presenter {
+public abstract class AbstractReportsActivity extends AbstractActivity implements IReportsView.Presenter {
 
     protected final IReportsView view;
 
@@ -39,11 +39,6 @@ public class AbstractReportsActivity extends AbstractActivity implements IReport
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         panel.setWidget(view);
         view.setReportSettings(null);
-    }
-
-    @Override
-    public void apply() {
-        // TODO 
     }
 
 }
