@@ -21,6 +21,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.site.client.activity.AppActivityMapper;
+import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.activity.AlertActivity;
@@ -186,9 +187,9 @@ import com.propertyvista.crm.client.activity.policies.producttax.ProductTaxPolic
 import com.propertyvista.crm.client.activity.policies.restrictions.RestrictionsPolicyEditorActivity;
 import com.propertyvista.crm.client.activity.policies.restrictions.RestrictionsPolicyListerActivity;
 import com.propertyvista.crm.client.activity.policies.restrictions.RestrictionsPolicyViewerActivity;
+import com.propertyvista.crm.client.activity.report.CrmReportsActivity;
 import com.propertyvista.crm.client.activity.report.ReportEditorActivity;
 import com.propertyvista.crm.client.activity.report.ReportManagementActivity;
-import com.propertyvista.crm.client.activity.report.ReportViewActivity;
 import com.propertyvista.crm.client.activity.security.PasswordChangeActivity;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.CrmSiteMap.Marketing;
@@ -964,8 +965,9 @@ public class MainActivityMapper implements AppActivityMapper {
 
                     } // CRUD APP PLACE IF ENDS HERE
 
-                } else if (place instanceof CrmSiteMap.Report) {
-                    activity = new ReportViewActivity(place);
+                } else if (place instanceof CrmSiteMap.Reports) {
+                    activity = new CrmReportsActivity((AppPlace) place);
+
                 } else if (place instanceof CrmSiteMap.Dashboard) {
                     activity = new DashboardViewActivity(place);
 

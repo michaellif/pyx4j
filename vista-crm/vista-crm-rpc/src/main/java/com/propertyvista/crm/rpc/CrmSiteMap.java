@@ -315,6 +315,7 @@ public class CrmSiteMap implements SiteMap {
         }
     }
 
+    @Deprecated
     @PlaceProperties(caption = "Report")
     public static class Report extends AppPlace {
 
@@ -327,6 +328,10 @@ public class CrmSiteMap implements SiteMap {
         @NavigationItem(navigLabel = "Edit")
         public static class Edit extends CrmCrudAppPlace {
         }
+    }
+
+    public static class Reports extends AppPlace {
+
     }
 
     @PlaceProperties(caption = "Dashboard")
