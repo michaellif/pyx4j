@@ -4,6 +4,8 @@
 .vista-pmsite-content {
     margin: 0 auto;
 	width: 960px;
+	/* anti-space trick */
+	font-size:0;
 }
 
 .infobox_body {
@@ -14,6 +16,7 @@
 	position: absolute;
 	vertical-align:top;
 	z-index: 100;
+	font-size:13px;
 }
 
 .banner_img {
@@ -70,6 +73,7 @@
 
 .vista-pmsite-mainWrap {
 	display:inline-block;
+	font-size:13px;
 	background: ${object2_10};
 }
 
