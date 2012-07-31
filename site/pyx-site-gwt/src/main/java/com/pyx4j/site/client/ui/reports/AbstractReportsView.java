@@ -20,36 +20,49 @@
  */
 package com.pyx4j.site.client.ui.reports;
 
-import com.google.gwt.user.client.ui.Widget;
+import java.util.Map;
 
-import com.pyx4j.entity.client.CEntityForm;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.user.client.ui.DockLayoutPanel;
+import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.Widget;
 
 public abstract class AbstractReportsView implements IReportsView {
 
     private Presenter presenter;
 
-    private final FormFlexPanel panel;
+    private final DockLayoutPanel panel;
 
-    private CEntityForm<ReportSettings> settingsForm;
+    private final Map<Class<? extends ReportSettings>, ReportFactory> reportFactoryMap;
 
-    public AbstractReportsView() {
-        panel = new FormFlexPanel();
+    private IReportSettingsForm<ReportSettings> settingsForm;
+
+    public AbstractReportsView(Map<Class<? extends ReportSettings>, ReportFactory> reportFactoryMap) {
+        this.reportFactoryMap = reportFactoryMap;
+        panel = new DockLayoutPanel(Unit.EM);
+        panel.addNorth(new HTML(), 1);
         panel.setSize("100%", "100%");
         settingsForm = null;
         presenter = null;
-
     }
 
     @Override
-    public <E extends ReportSettings> void setReportSettings(E reportSettings) {
+    public void setReportSettings(ReportSettings reportSettings) {
         if (settingsForm != null) {
             panel.remove(settingsForm);
         }
-        settingsForm = (CEntityForm<ReportSettings>) getReportSettingsForm(reportSettings);
+        if (reportSettings == null) {
+            return;
+        }
+
+        ReportFactory factory = reportFactoryMap.get(reportSettings.getInstanceValueClass());
+        if (factory == null) {
+            throw new Error("factory not found for report: " + reportSettings.getInstanceValueClass().getName());
+        }
+        settingsForm = (IReportSettingsForm<ReportSettings>) factory.getReportSettingsForm(reportSettings);
+
         if (settingsForm != null) {
-            settingsForm.initContent();
-            panel.setWidget(1, 0, settingsForm);
+            panel.addNorth(settingsForm, 15);
             settingsForm.populate(reportSettings);
         }
 
@@ -64,7 +77,5 @@ public abstract class AbstractReportsView implements IReportsView {
     public Widget asWidget() {
         return panel;
     }
-
-    public abstract CEntityForm<? extends ReportSettings> getReportSettingsForm(ReportSettings reportSettings);
 
 }

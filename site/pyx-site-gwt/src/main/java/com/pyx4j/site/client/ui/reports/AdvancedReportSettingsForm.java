@@ -49,20 +49,25 @@ public abstract class AdvancedReportSettingsForm<E extends ReportSettings & HasA
 
     private Button applyButton;
 
+    private HorizontalPanel contentPanel;
+
     public AdvancedReportSettingsForm(Class<E> clazz) {
         super(clazz);
     }
 
     @Override
     public final IsWidget createContent() {
-        HorizontalPanel contentPanel = new HorizontalPanel();
+        contentPanel = new HorizontalPanel();
 
         contentPanel.add(simpleSettingsPanel = createSimpleSettingsPanel());
         contentPanel.add(advancedSettingsPanel = createAdvancedSettingsPanel());
+        contentPanel.setCellWidth(simpleSettingsPanel, "100%");
+        contentPanel.setCellWidth(advancedSettingsPanel, "1%");
         advancedSettingsPanel.setVisible(false);
 
         VerticalPanel controlPanel = new VerticalPanel();
         controlPanel.getElement().getStyle().setMarginLeft(2, Unit.EM);
+        controlPanel.getElement().getStyle().setMarginRight(2, Unit.EM);
         controlPanel.add(applyButton = new Button(i18n.tr("Apply", new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
@@ -72,14 +77,13 @@ public abstract class AdvancedReportSettingsForm<E extends ReportSettings & HasA
             }
         })));
         contentPanel.setCellHorizontalAlignment(applyButton, HasHorizontalAlignment.ALIGN_CENTER);
-//        applyButton.getElement().getStyle().setProperty("marginLeft", "auto");
-//        applyButton.getElement().getStyle().setProperty("marginRight", "auto");
 
         applyButton.getElement().getStyle().setPaddingTop(0.5, Unit.EM);
         applyButton.getElement().getStyle().setPaddingBottom(0.5, Unit.EM);
         applyButton.getElement().getStyle().setPaddingLeft(4, Unit.EM);
         applyButton.getElement().getStyle().setPaddingRight(4, Unit.EM);
 
+        applyButton.getElement().getStyle().setMarginTop(0.5, Unit.EM);
         applyButton.getElement().getStyle().setMarginBottom(0.5, Unit.EM);
 
         controlPanel.add(advancedModeToggle = new Anchor(i18n.tr("advanced..."), new ClickHandler() {
@@ -117,6 +121,10 @@ public abstract class AdvancedReportSettingsForm<E extends ReportSettings & HasA
         advancedModeToggle.setHTML(new SafeHtmlBuilder().appendEscaped(
                 getValue().isInAdvancedMode().isBooleanTrue() ? i18n.tr("hide...") : i18n.tr("advanced...")).toSafeHtml());
         advancedSettingsPanel.setVisible(getValue().isInAdvancedMode().isBooleanTrue());
+        contentPanel.setCellWidth(advancedSettingsPanel, getValue().isInAdvancedMode().isBooleanTrue() ? "100%" : "0%");
+
         simpleSettingsPanel.setVisible(!getValue().isInAdvancedMode().isBooleanTrue());
+        contentPanel.setCellWidth(simpleSettingsPanel, !getValue().isInAdvancedMode().isBooleanTrue() ? "100%" : "0%");
+
     }
 }

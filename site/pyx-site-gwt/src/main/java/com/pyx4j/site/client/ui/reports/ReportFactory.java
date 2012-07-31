@@ -14,24 +14,18 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Jul 30, 2012
+ * Created on Jul 31, 2012
  * @author ArtyomB
  * @version $Id$
  */
 package com.pyx4j.site.client.ui.reports;
 
-import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.Widget;
 
-public interface IReportSettingsForm<E extends ReportSettings> extends IsWidget {
+public interface ReportFactory {
 
-    interface ApplyCallback<E extends ReportSettings> {
+    IReportSettingsForm<? extends ReportSettings> getReportSettingsForm(ReportSettings reportSettings);
 
-        void apply(E reportSettings);
-
-    }
-
-    void setOnApplySettingsCallback(ApplyCallback<E> applyCallback);
-
-    void populate(E reportSettings);
+    Widget getReport();
 
 }
