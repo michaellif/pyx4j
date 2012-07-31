@@ -20,14 +20,19 @@
  */
 package com.pyx4j.site.client.ui.reports;
 
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.CEntityForm;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
 
 public abstract class AdvancedReportSettingsForm<E extends ReportSettings & HasAdvancedSettings> extends CEntityForm<E> implements IReportSettingsForm<E> {
@@ -40,18 +45,25 @@ public abstract class AdvancedReportSettingsForm<E extends ReportSettings & HasA
 
     private Widget advancedSettingsPanel;
 
+    private Anchor advancedModeToggle;
+
+    private Button applyButton;
+
     public AdvancedReportSettingsForm(Class<E> clazz) {
         super(clazz);
     }
 
     @Override
-    public IsWidget createContent() {
-        FlowPanel contentPanel = new FlowPanel();
+    public final IsWidget createContent() {
+        HorizontalPanel contentPanel = new HorizontalPanel();
 
         contentPanel.add(simpleSettingsPanel = createSimpleSettingsPanel());
         contentPanel.add(advancedSettingsPanel = createAdvancedSettingsPanel());
+        advancedSettingsPanel.setVisible(false);
 
-        contentPanel.add(new Button(i18n.tr("Apply", new ClickHandler() {
+        VerticalPanel controlPanel = new VerticalPanel();
+        controlPanel.getElement().getStyle().setMarginLeft(2, Unit.EM);
+        controlPanel.add(applyButton = new Button(i18n.tr("Apply", new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 if (applyCallback != null) {
@@ -59,6 +71,30 @@ public abstract class AdvancedReportSettingsForm<E extends ReportSettings & HasA
                 }
             }
         })));
+        contentPanel.setCellHorizontalAlignment(applyButton, HasHorizontalAlignment.ALIGN_CENTER);
+//        applyButton.getElement().getStyle().setProperty("marginLeft", "auto");
+//        applyButton.getElement().getStyle().setProperty("marginRight", "auto");
+
+        applyButton.getElement().getStyle().setPaddingTop(0.5, Unit.EM);
+        applyButton.getElement().getStyle().setPaddingBottom(0.5, Unit.EM);
+        applyButton.getElement().getStyle().setPaddingLeft(4, Unit.EM);
+        applyButton.getElement().getStyle().setPaddingRight(4, Unit.EM);
+
+        applyButton.getElement().getStyle().setMarginBottom(0.5, Unit.EM);
+
+        controlPanel.add(advancedModeToggle = new Anchor(i18n.tr("advanced..."), new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                if (getValue() != null) {
+                    getValue().isInAdvancedMode().setValue(!getValue().isInAdvancedMode().isBooleanTrue());
+                    updateView();
+                }
+            }
+        }));
+        controlPanel.setCellHorizontalAlignment(advancedModeToggle, HasHorizontalAlignment.ALIGN_CENTER);
+
+        contentPanel.add(controlPanel);
+
         return contentPanel;
     }
 
@@ -71,4 +107,16 @@ public abstract class AdvancedReportSettingsForm<E extends ReportSettings & HasA
 
     public abstract Widget createAdvancedSettingsPanel();
 
+    @Override
+    protected void onValueSet(boolean populate) {
+        super.onValueSet(populate);
+        updateView();
+    }
+
+    private void updateView() {
+        advancedModeToggle.setHTML(new SafeHtmlBuilder().appendEscaped(
+                getValue().isInAdvancedMode().isBooleanTrue() ? i18n.tr("hide...") : i18n.tr("advanced...")).toSafeHtml());
+        advancedSettingsPanel.setVisible(getValue().isInAdvancedMode().isBooleanTrue());
+        simpleSettingsPanel.setVisible(!getValue().isInAdvancedMode().isBooleanTrue());
+    }
 }

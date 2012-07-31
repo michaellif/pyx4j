@@ -20,16 +20,30 @@
  */
 package com.pyx4j.site.client.ui.reports;
 
-import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.activity.shared.AbstractActivity;
+import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-public interface IReportSettingsForm<E extends ReportSettings> extends IsWidget {
+import com.pyx4j.site.rpc.AppPlace;
 
-    interface ApplyCallback<E extends ReportSettings> {
+public class AbstractReportsActivity extends AbstractActivity implements IReportsView.Presenter {
 
-        void apply(E reportSettings);
+    protected final IReportsView view;
 
+    public AbstractReportsActivity(IReportsView view, AppPlace place) {
+        this.view = view;
+        this.view.setPresenter(this);
     }
 
-    void setOnApplySettingsCallback(ApplyCallback<E> applyCallback);
+    @Override
+    public void start(AcceptsOneWidget panel, EventBus eventBus) {
+        panel.setWidget(view);
+        view.setReportSettings(null);
+    }
+
+    @Override
+    public void apply() {
+        // TODO 
+    }
 
 }

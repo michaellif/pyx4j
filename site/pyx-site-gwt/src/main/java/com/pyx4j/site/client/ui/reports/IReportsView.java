@@ -22,14 +22,16 @@ package com.pyx4j.site.client.ui.reports;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-public interface IReportSettingsForm<E extends ReportSettings> extends IsWidget {
+public interface IReportsView extends IsWidget {
 
-    interface ApplyCallback<E extends ReportSettings> {
+    public interface Presenter {
 
-        void apply(E reportSettings);
+        void apply();
 
     }
 
-    void setOnApplySettingsCallback(ApplyCallback<E> applyCallback);
+    void setPresenter(Presenter presenter);
+
+    <E extends ReportSettings> void setReportSettings(E reportSettings);
 
 }
