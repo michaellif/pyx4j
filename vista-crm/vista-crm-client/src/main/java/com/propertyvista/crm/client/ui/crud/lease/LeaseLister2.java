@@ -87,6 +87,7 @@ public class LeaseLister2 extends ListerBase<LeaseDTO2> {
         newLease.type().setValue(leaseType);
         newLease.paymentFrequency().setValue(PaymentFrequency.Monthly);
         newLease.status().setValue(Lease2.Status.Created);
+// TODO 2 uncomment then
 //        newLease.billingAccount().carryforwardBalance().setValue(balance);
 
         return newLease;
