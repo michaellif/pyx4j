@@ -24,7 +24,7 @@ import com.propertyvista.domain.tenant.lease.Deposit;
 import com.propertyvista.domain.tenant.lease.Deposit.DepositType;
 import com.propertyvista.dto.LeaseTermDTO;
 
-public interface LeaseTermEditorCrudService extends AbstractVersionedCrudService<LeaseTermDTO> {
+public interface LeaseTermCrudService extends AbstractVersionedCrudService<LeaseTermDTO> {
 
     void setSelectedUnit(AsyncCallback<LeaseTermDTO> callback, AptUnit unitId, LeaseTermDTO currentValue);
 

@@ -32,7 +32,7 @@ import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.Notes;
 import com.propertyvista.domain.company.Employee;
-import com.propertyvista.domain.tenant.ptapp.MasterOnlineApplication_2;
+import com.propertyvista.domain.tenant.ptapp.MasterOnlineApplication2;
 import com.propertyvista.misc.EquifaxApproval;
 
 public interface LeaseApplication2 extends IEntity {
@@ -97,7 +97,7 @@ public interface LeaseApplication2 extends IEntity {
 
     @Owned(cascade = {})
     @Detached
-    MasterOnlineApplication_2 onlineApplication();
+    MasterOnlineApplication2 onlineApplication();
 
     @ToString(index = 0)
     IPrimitive<Status> status();

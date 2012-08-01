@@ -33,7 +33,7 @@ import com.pyx4j.i18n.shared.I18nEnum;
 import com.propertyvista.domain.tenant.lease.LeaseApplication2;
 import com.propertyvista.misc.EquifaxApproval;
 
-public interface MasterOnlineApplication_2 extends IEntity {
+public interface MasterOnlineApplication2 extends IEntity {
 
     @I18n(context = "MasterOnlineApplication")
     @XmlType(name = "MasterOnlineApplicationStatus")

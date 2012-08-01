@@ -24,7 +24,7 @@ import com.propertyvista.domain.tenant.lease.LeaseTerm;
 public interface LeaseTermDTO extends LeaseTerm {
 
     // parent
-    LeaseDTO2 parentLease();
+    LeaseDTO2 newParentLease();
 
     // -----------------------------------------------------
     // temporary runtime data:

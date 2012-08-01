@@ -36,9 +36,9 @@ import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
 
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.financial.offering.Service;
-import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.Lease2;
 import com.propertyvista.domain.tenant.lease.Lease2.PaymentFrequency;
+import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.dto.LeaseDTO2;
 import com.propertyvista.dto.LeaseTermDTO;
 
@@ -134,8 +134,9 @@ public class LeaseLister2 extends ListerBase<LeaseDTO2> {
             if (balance.isValid()) {
                 // prepare LeaseTermDTO:
                 LeaseTermDTO termDto = EntityFactory.create(LeaseTermDTO.class);
-                termDto.parentLease().set(createNewLease(getSelectedType(), balance.getValue()));
+                termDto.newParentLease().set(createNewLease(getSelectedType(), balance.getValue()));
                 termDto.type().setValue(LeaseTerm.Type.FixedEx);
+                termDto.lease().set(termDto.newParentLease());
 
                 AppSite.getPlaceController().goTo(new CrmSiteMap.Tenants.LeaseTerm().formNewItemPlace(termDto));
                 return true;

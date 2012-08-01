@@ -25,7 +25,7 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.ui.crud.lease.common.term.LeaseTermEditorView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.LeaseViewFactory;
-import com.propertyvista.crm.rpc.services.lease.LeaseTermEditorCrudService;
+import com.propertyvista.crm.rpc.services.lease.LeaseTermCrudService;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.BillableItem;
@@ -36,7 +36,7 @@ import com.propertyvista.dto.LeaseTermDTO;
 public abstract class LeaseTermEditorActivity extends EditorActivityBase<LeaseTermDTO> implements LeaseTermEditorView.Presenter {
 
     public LeaseTermEditorActivity(CrudAppPlace place) {
-        super(place, LeaseViewFactory.instance(LeaseTermEditorView.class), GWT.<LeaseTermEditorCrudService> create(LeaseTermEditorCrudService.class),
+        super(place, LeaseViewFactory.instance(LeaseTermEditorView.class), GWT.<LeaseTermCrudService> create(LeaseTermCrudService.class),
                 LeaseTermDTO.class);
     }
 
@@ -47,7 +47,7 @@ public abstract class LeaseTermEditorActivity extends EditorActivityBase<LeaseTe
 
     @Override
     public void setSelectedUnit(AptUnit item) {
-        ((LeaseTermEditorCrudService) getService()).setSelectedUnit(new DefaultAsyncCallback<LeaseTermDTO>() {
+        ((LeaseTermCrudService) getService()).setSelectedUnit(new DefaultAsyncCallback<LeaseTermDTO>() {
             @Override
             public void onSuccess(LeaseTermDTO result) {
                 ((LeaseTermEditorView) getView()).updateUnitValue(result);
@@ -57,7 +57,7 @@ public abstract class LeaseTermEditorActivity extends EditorActivityBase<LeaseTe
 
     @Override
     public void setSelectedService(ProductItem item) {
-        ((LeaseTermEditorCrudService) getService()).setSelectedService(new DefaultAsyncCallback<LeaseTermDTO>() {
+        ((LeaseTermCrudService) getService()).setSelectedService(new DefaultAsyncCallback<LeaseTermDTO>() {
             @Override
             public void onSuccess(LeaseTermDTO result) {
                 ((LeaseTermEditorView) getView()).updateServiceValue(result);
@@ -67,13 +67,13 @@ public abstract class LeaseTermEditorActivity extends EditorActivityBase<LeaseTe
 
     @Override
     public void createBillableItem(AsyncCallback<BillableItem> callback, ProductItem item) {
-        ((LeaseTermEditorCrudService) getService()).createBillableItem(callback, EntityFactory.createIdentityStub(ProductItem.class, item.getPrimaryKey()),
+        ((LeaseTermCrudService) getService()).createBillableItem(callback, EntityFactory.createIdentityStub(ProductItem.class, item.getPrimaryKey()),
                 getView().getValue());
     }
 
     @Override
     public void createDeposit(AsyncCallback<Deposit> callback, DepositType depositType, BillableItem item) {
-        ((LeaseTermEditorCrudService) getService()).createDeposit(callback, depositType, item, getView().getValue());
+        ((LeaseTermCrudService) getService()).createDeposit(callback, depositType, item, getView().getValue());
     }
 
     @Override

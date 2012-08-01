@@ -16,7 +16,6 @@ package com.propertyvista.dto;
 import com.pyx4j.entity.annotations.ExtendsDBO;
 import com.pyx4j.entity.annotations.Transient;
 
-import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.Lease2;
 
 @Transient
@@ -27,8 +26,6 @@ public interface LeaseDTO2 extends Lease2 {
 
     // -----------------------------------------------------
     // temporary runtime data:
-
-    LeaseTerm currentLeaseTerm();
 
     BillDTO billingPreview();
 }

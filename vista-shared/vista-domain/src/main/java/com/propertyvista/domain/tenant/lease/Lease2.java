@@ -249,4 +249,5 @@ public interface Lease2 extends IEntity {
     @Detached(level = AttachLevel.Detached)
     IList<LeaseTerm> leaseTerms();
 
+    LeaseTerm currentLeaseTerm();
 }
