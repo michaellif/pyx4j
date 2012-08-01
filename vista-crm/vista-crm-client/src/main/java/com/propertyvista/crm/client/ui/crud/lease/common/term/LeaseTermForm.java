@@ -11,7 +11,7 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.lease2;
+package com.propertyvista.crm.client.ui.crud.lease.common.term;
 
 import java.util.Date;
 import java.util.List;
@@ -46,8 +46,8 @@ import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
-import com.propertyvista.domain.tenant.Tenant_2;
-import com.propertyvista.domain.tenant.lease.Lease_2;
+import com.propertyvista.domain.tenant.Tenant2;
+import com.propertyvista.domain.tenant.lease.Lease2;
 import com.propertyvista.dto.LeaseTermDTO;
 import com.propertyvista.misc.VistaTODO;
 
@@ -157,13 +157,13 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
                         assert (filters != null);
 
                         LeaseTermDTO currentValue = LeaseTermForm.this.getValue();
-                        if (currentValue.lease().status().getValue() == Lease_2.Status.Created) { // existing lease:
+                        if (currentValue.lease().status().getValue() == Lease2.Status.Created) { // existing lease:
 
                             filters.add(PropertyCriterion.eq(proto().unitOccupancySegments().$().status(), AptUnitOccupancySegment.Status.pending));
                             filters.add(PropertyCriterion.eq(proto().unitOccupancySegments().$().dateTo(), new LogicalDate(1100, 0, 1)));
                             filters.add(PropertyCriterion.le(proto().unitOccupancySegments().$().dateFrom(), ClientContext.getServerDate()));
 
-                        } else if (currentValue.lease().status().getValue() == Lease_2.Status.Application) { // lease application:
+                        } else if (currentValue.lease().status().getValue() == Lease2.Status.Application) { // lease application:
 
                             filters.add(PropertyCriterion.eq(proto().unitOccupancySegments().$().status(), AptUnitOccupancySegment.Status.available));
                             filters.add(PropertyCriterion.eq(proto().unitOccupancySegments().$().dateTo(), new LogicalDate(1100, 0, 1)));
@@ -272,9 +272,9 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
             @Override
             public ValidationError isValid(CComponent<Date, ?> component, Date value) {
                 if (value != null) {
-                    if (getValue().lease().status().getValue() == Lease_2.Status.Created) { // existing lease:
+                    if (getValue().lease().status().getValue() == Lease2.Status.Created) { // existing lease:
                         return value.before(TimeUtils.today()) ? null : new ValidationError(component, i18n.tr("The Date Must Be Earlier Than Today's Date"));
-                    } else if (getValue().lease().status().getValue() == Lease_2.Status.Application) { // lease application:
+                    } else if (getValue().lease().status().getValue() == Lease2.Status.Application) { // lease application:
                         Date dateToCompare = getValue().lease().creationDate().isNull() ? TimeUtils.today() : getValue().lease().creationDate().getValue();
                         return !value.before(dateToCompare) ? null : new ValidationError(component, i18n
                                 .tr("The Date Must Be Later Than Or Equal To Application Creaion Date"));
@@ -297,9 +297,9 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
         get(proto().leaseTo()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().version().leaseProducts().serviceItem())));
         get(proto().leaseTo()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().version().leaseProducts().featureItems())));
 
-        get(proto().version().tenants()).addValueValidator(new EditableValueValidator<List<Tenant_2>>() {
+        get(proto().version().tenants()).addValueValidator(new EditableValueValidator<List<Tenant2>>() {
             @Override
-            public ValidationError isValid(CComponent<List<Tenant_2>, ?> component, List<Tenant_2> value) {
+            public ValidationError isValid(CComponent<List<Tenant2>, ?> component, List<Tenant2> value) {
                 if (value != null) {
                     return (value.isEmpty() ? new ValidationError(component, i18n.tr("At least one tenant should be selected!")) : null);
                 }

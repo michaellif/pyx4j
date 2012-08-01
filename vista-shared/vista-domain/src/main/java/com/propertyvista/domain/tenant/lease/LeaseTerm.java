@@ -34,8 +34,8 @@ import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.media.Document;
-import com.propertyvista.domain.tenant.Guarantor_2;
-import com.propertyvista.domain.tenant.Tenant_2;
+import com.propertyvista.domain.tenant.Guarantor2;
+import com.propertyvista.domain.tenant.Tenant2;
 import com.propertyvista.domain.tenant.lease.LeaseTerm.LeaseTermV;
 
 public interface LeaseTerm extends IVersionedEntity<LeaseTermV> {
@@ -83,11 +83,11 @@ public interface LeaseTerm extends IVersionedEntity<LeaseTermV> {
 
         @Owned
         @Detached
-        IList<Tenant_2> tenants();
+        IList<Tenant2> tenants();
 
         @Owned
         @Detached
-        IList<Guarantor_2> guarantors();
+        IList<Guarantor2> guarantors();
 
         @EmbeddedEntity
         LeaseProducts leaseProducts();
@@ -100,7 +100,7 @@ public interface LeaseTerm extends IVersionedEntity<LeaseTermV> {
     @ReadOnly
     @Detached
     @JoinColumn
-    Lease_2 lease();
+    Lease2 lease();
 
     @OrderColumn
     IPrimitive<Integer> orderInOwner();

@@ -11,34 +11,27 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.lease2;
+package com.propertyvista.crm.client.ui.crud.lease.common;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.entity.client.CEntityForm;
 import com.pyx4j.entity.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.entity.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
-import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.domain.financial.offering.Concession;
-import com.propertyvista.dto.LeaseTermDTO;
 
-public class ConcessionFolder extends VistaBoxFolder<Concession> {
+public class ConcessionFolder2 extends VistaBoxFolder<Concession> {
 
-    private static final I18n i18n = I18n.get(ConcessionFolder.class);
+    private static final I18n i18n = I18n.get(ConcessionFolder2.class);
 
-    private final CEntityForm<LeaseTermDTO> leaseTerm;
-
-    public ConcessionFolder(boolean modifyable, CEntityForm<LeaseTermDTO> parent) {
-        super(Concession.class, modifyable);
-        this.leaseTerm = parent;
+    public ConcessionFolder2() {
+        super(Concession.class, false);
     }
 
     @Override
@@ -55,7 +48,7 @@ public class ConcessionFolder extends VistaBoxFolder<Concession> {
         public ConcessionEditor() {
             super(Concession.class);
             setEditable(false);
-//            setViewable(true);
+            setViewable(true);
         }
 
         @Override
@@ -89,24 +82,5 @@ public class ConcessionFolder extends VistaBoxFolder<Concession> {
         BoxFolderItemDecorator<Concession> decor = (BoxFolderItemDecorator<Concession>) super.createItemDecorator();
         decor.setExpended(false);
         return decor;
-    }
-
-    @Override
-    protected void addItem() {
-        if (leaseTerm.getValue().version().leaseProducts().serviceItem().isNull()) {
-            MessageDialog.warn(i18n.tr("Warning"), i18n.tr("You Must Select A Service Item First"));
-        } else {
-
-            new EntitySelectorListDialog<Concession>(i18n.tr("Select Concessions"), true, leaseTerm.getValue().selectedConcessions()) {
-                @Override
-                public boolean onClickOk() {
-                    for (Concession item : getSelectedItems()) {
-                        addItem(item);
-                    }
-                    return true;
-                }
-            }.show();
-        }
-
     }
 }

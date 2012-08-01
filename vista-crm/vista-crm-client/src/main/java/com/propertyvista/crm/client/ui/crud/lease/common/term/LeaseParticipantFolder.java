@@ -11,7 +11,7 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.lease2;
+package com.propertyvista.crm.client.ui.crud.lease.common.term;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,9 +22,9 @@ import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.crm.client.ui.components.boxes.CustomerSelectorDialog;
 import com.propertyvista.crm.client.ui.crud.lease.common.YesNoCancelDialog;
 import com.propertyvista.domain.tenant.Customer;
-import com.propertyvista.domain.tenant.lease.LeaseParticipant_2;
+import com.propertyvista.domain.tenant.lease.LeaseParticipant2;
 
-public abstract class LeaseParticipantFolder<E extends LeaseParticipant_2> extends VistaBoxFolder<E> {
+public abstract class LeaseParticipantFolder<E extends LeaseParticipant2> extends VistaBoxFolder<E> {
 
     static final I18n i18n = I18n.get(LeaseParticipantFolder.class);
 
@@ -68,7 +68,7 @@ public abstract class LeaseParticipantFolder<E extends LeaseParticipant_2> exten
 
     private List<Customer> retrieveExistingCustomers() {
         List<Customer> customers = new ArrayList<Customer>(getValue().size());
-        for (LeaseParticipant_2 wrapper : getValue()) {
+        for (LeaseParticipant2 wrapper : getValue()) {
             customers.add(wrapper.customer());
         }
         return customers;

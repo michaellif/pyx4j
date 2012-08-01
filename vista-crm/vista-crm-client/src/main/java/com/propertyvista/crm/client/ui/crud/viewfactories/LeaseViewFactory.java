@@ -23,9 +23,13 @@ import com.propertyvista.crm.client.ui.crud.billing.adjustments.LeaseAdjustmentV
 import com.propertyvista.crm.client.ui.crud.lease.LeaseEditorView;
 import com.propertyvista.crm.client.ui.crud.lease.LeaseEditorViewImpl;
 import com.propertyvista.crm.client.ui.crud.lease.LeaseListerView;
+import com.propertyvista.crm.client.ui.crud.lease.LeaseListerView2;
+import com.propertyvista.crm.client.ui.crud.lease.LeaseListerViewImpl2;
 import com.propertyvista.crm.client.ui.crud.lease.LeaseListerViewImpl;
 import com.propertyvista.crm.client.ui.crud.lease.LeaseViewerView;
+import com.propertyvista.crm.client.ui.crud.lease.LeaseViewerView2;
 import com.propertyvista.crm.client.ui.crud.lease.LeaseViewerViewImpl;
+import com.propertyvista.crm.client.ui.crud.lease.LeaseViewerViewImpl2;
 import com.propertyvista.crm.client.ui.crud.lease.PastLeaseListerView;
 import com.propertyvista.crm.client.ui.crud.lease.PastLeaseListerViewImpl;
 import com.propertyvista.crm.client.ui.crud.lease.application.LeaseApplicationEditorView;
@@ -38,8 +42,8 @@ import com.propertyvista.crm.client.ui.crud.lease.common.deposit.DepositLifecycl
 import com.propertyvista.crm.client.ui.crud.lease.common.deposit.DepositLifecycleEditorViewImpl;
 import com.propertyvista.crm.client.ui.crud.lease.common.deposit.DepositLifecycleViewerView;
 import com.propertyvista.crm.client.ui.crud.lease.common.deposit.DepositLifecycleViewerViewImpl;
-import com.propertyvista.crm.client.ui.crud.lease2.LeaseTermEditorView;
-import com.propertyvista.crm.client.ui.crud.lease2.LeaseTermEditorViewImpl;
+import com.propertyvista.crm.client.ui.crud.lease.common.term.LeaseTermEditorView;
+import com.propertyvista.crm.client.ui.crud.lease.common.term.LeaseTermEditorViewImpl;
 
 public class LeaseViewFactory extends ViewFactoryBase {
 
@@ -51,6 +55,11 @@ public class LeaseViewFactory extends ViewFactoryBase {
                 map.put(type, new LeaseViewerViewImpl());
             } else if (LeaseEditorView.class.equals(type)) {
                 map.put(type, new LeaseEditorViewImpl());
+
+            } else if (LeaseListerView2.class.equals(type)) {
+                map.put(type, new LeaseListerViewImpl2());
+            } else if (LeaseViewerView2.class.equals(type)) {
+                map.put(type, new LeaseViewerViewImpl2());
 
             } else if (PastLeaseListerView.class.equals(type)) {
                 map.put(type, new PastLeaseListerViewImpl());

@@ -44,7 +44,7 @@ import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
 
 @Inheritance
 @AbstractEntity
-public interface LeaseParticipant_2 extends IEntity {
+public interface LeaseParticipant2 extends IEntity {
 
     @I18n
     @XmlType(name = "TenantRole")

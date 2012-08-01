@@ -11,7 +11,7 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.lease2;
+package com.propertyvista.crm.client.ui.crud.lease.common.term;
 
 import java.util.List;
 
@@ -33,22 +33,22 @@ import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.editors.NameEditor;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
 import com.propertyvista.domain.tenant.Customer;
-import com.propertyvista.domain.tenant.Guarantor_2;
+import com.propertyvista.domain.tenant.Guarantor2;
 import com.propertyvista.domain.tenant.PersonRelationship;
 import com.propertyvista.domain.tenant.PersonScreening;
 import com.propertyvista.domain.tenant.Tenant;
-import com.propertyvista.domain.tenant.Tenant_2;
-import com.propertyvista.domain.tenant.lease.LeaseParticipant_2;
+import com.propertyvista.domain.tenant.Tenant2;
+import com.propertyvista.domain.tenant.lease.LeaseParticipant2;
 import com.propertyvista.dto.LeaseTermDTO;
 
-public class GuarantorInLeaseFolder extends LeaseParticipantFolder<Guarantor_2> {
+public class GuarantorInLeaseFolder extends LeaseParticipantFolder<Guarantor2> {
 
     static final I18n i18n = I18n.get(GuarantorInLeaseFolder.class);
 
     private final CEntityForm<LeaseTermDTO> leaseTerm;
 
     public GuarantorInLeaseFolder(CEntityForm<LeaseTermDTO> parent, boolean modifiable) {
-        super(Guarantor_2.class, modifiable);
+        super(Guarantor2.class, modifiable);
         this.leaseTerm = parent;
     }
 
@@ -65,10 +65,10 @@ public class GuarantorInLeaseFolder extends LeaseParticipantFolder<Guarantor_2> 
     @Override
     protected void addParticipants(List<Customer> customers) {
         for (Customer customer : customers) {
-            Guarantor_2 newGuarantorInLease = EntityFactory.create(Guarantor_2.class);
+            Guarantor2 newGuarantorInLease = EntityFactory.create(Guarantor2.class);
             newGuarantorInLease.leaseTermV().setPrimaryKey(leaseTerm.getValue().version().getPrimaryKey());
             newGuarantorInLease.customer().set(customer);
-            newGuarantorInLease.role().setValue(LeaseParticipant_2.Role.Guarantor);
+            newGuarantorInLease.role().setValue(LeaseParticipant2.Role.Guarantor);
             newGuarantorInLease.relationship().setValue(PersonRelationship.Other); // just not leave it empty - it's mandatory field!
             addItem(newGuarantorInLease);
         }
@@ -76,16 +76,16 @@ public class GuarantorInLeaseFolder extends LeaseParticipantFolder<Guarantor_2> 
 
     @Override
     public CComponent<?, ?> create(IObject<?> member) {
-        if (member instanceof Guarantor_2) {
+        if (member instanceof Guarantor2) {
             return new GuarantorInLeaseEditor();
         }
         return super.create(member);
     }
 
-    private class GuarantorInLeaseEditor extends CEntityDecoratableForm<Guarantor_2> {
+    private class GuarantorInLeaseEditor extends CEntityDecoratableForm<Guarantor2> {
 
         public GuarantorInLeaseEditor() {
-            super(Guarantor_2.class);
+            super(Guarantor2.class);
         }
 
         @Override
@@ -95,7 +95,7 @@ public class GuarantorInLeaseFolder extends LeaseParticipantFolder<Guarantor_2> 
             FormFlexPanel left = new FormFlexPanel();
             int row = -1;
             left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().participantId()), 7).build());
-            left.setWidget(++row, 0, inject(proto().customer().person().name(), new NameEditor(i18n.tr("Guarantor"), Guarantor_2.class) {
+            left.setWidget(++row, 0, inject(proto().customer().person().name(), new NameEditor(i18n.tr("Guarantor"), Guarantor2.class) {
                 @Override
                 public Key getLinkKey() {
                     return GuarantorInLeaseEditor.this.getValue().getPrimaryKey();
@@ -153,7 +153,7 @@ public class GuarantorInLeaseFolder extends LeaseParticipantFolder<Guarantor_2> 
 
             if (get(proto().tenant()) instanceof CComboBox<?>) {
                 @SuppressWarnings("unchecked")
-                CComboBox<Tenant_2> combo = (CComboBox<Tenant_2>) get(proto().tenant());
+                CComboBox<Tenant2> combo = (CComboBox<Tenant2>) get(proto().tenant());
                 combo.setOptions(leaseTerm.getValue().version().tenants());
                 combo.getOptions();
             }

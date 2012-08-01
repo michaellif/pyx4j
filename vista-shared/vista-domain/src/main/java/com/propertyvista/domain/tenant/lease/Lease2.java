@@ -44,7 +44,7 @@ import com.propertyvista.domain.media.Document;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 
 @ToStringFormat("{0}, {1}, {2}, {3}")
-public interface Lease_2 extends IEntity {
+public interface Lease2 extends IEntity {
 
     @I18n(context = "Lease Status")
     @XmlType(name = "LeaseStatus")
@@ -175,6 +175,9 @@ public interface Lease_2 extends IEntity {
     IPrimitive<Service.ServiceType> type();
 
     @NotNull
+    IPrimitive<PaymentFrequency> paymentFrequency();
+
+    @NotNull
     @ToString(index = 2)
     @Caption(name = "Selected Unit")
     AptUnit unit();
@@ -209,9 +212,6 @@ public interface Lease_2 extends IEntity {
     @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> moveOutNotice();
 
-    @NotNull
-    IPrimitive<PaymentFrequency> paymentFrequency();
-
 //TODO _2
     //    @JoinColumn
 //    @Owned(forceCreation = true, cascade = {})
@@ -243,10 +243,10 @@ public interface Lease_2 extends IEntity {
     IPrimitive<LogicalDate> activationDate();
 
     @Owned
-    LeaseApplication_2 leaseApplication();
+    LeaseApplication2 leaseApplication();
 
     @Owned
     @Detached(level = AttachLevel.Detached)
-    IList<LeaseTerm> leaseAgreements();
+    IList<LeaseTerm> leaseTerms();
 
 }

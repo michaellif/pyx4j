@@ -92,7 +92,9 @@ import com.propertyvista.crm.client.activity.crud.floorplan.FloorplanEditorActiv
 import com.propertyvista.crm.client.activity.crud.floorplan.FloorplanViewerActivity;
 import com.propertyvista.crm.client.activity.crud.lease.LeaseEditorActivity;
 import com.propertyvista.crm.client.activity.crud.lease.LeaseListerActivity;
+import com.propertyvista.crm.client.activity.crud.lease.LeaseListerActivity2;
 import com.propertyvista.crm.client.activity.crud.lease.LeaseViewerActivity;
+import com.propertyvista.crm.client.activity.crud.lease.LeaseViewerActivity2;
 import com.propertyvista.crm.client.activity.crud.lease.PastLeaseListerActivity;
 import com.propertyvista.crm.client.activity.crud.lease.application.LeaseApplicationEditorActivity;
 import com.propertyvista.crm.client.activity.crud.lease.application.LeaseApplicationListerActivity;
@@ -482,6 +484,16 @@ public class MainActivityMapper implements AppActivityMapper {
                             break;
                         case lister:
                             activity = new LeaseListerActivity(crudPlace);
+                            break;
+                        }
+
+                    } else if (place instanceof CrmSiteMap.Tenants.Lease2) {
+                        switch (crudPlace.getType()) {
+                        case viewer:
+                            activity = new LeaseViewerActivity2(crudPlace);
+                            break;
+                        case lister:
+                            activity = new LeaseListerActivity2(crudPlace);
                             break;
                         }
 

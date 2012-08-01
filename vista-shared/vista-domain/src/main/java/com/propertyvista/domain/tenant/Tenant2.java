@@ -26,12 +26,12 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.payment.PaymentMethod;
-import com.propertyvista.domain.tenant.lease.LeaseParticipant_2;
+import com.propertyvista.domain.tenant.lease.LeaseParticipant2;
 
 @ToStringFormat("{0}, {1} - {2}{3,choice,null#|!null#, {3}}")
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
 @DiscriminatorValue("Tenant")
-public interface Tenant_2 extends LeaseParticipant_2 {
+public interface Tenant2 extends LeaseParticipant2 {
 
     @NotNull
     @ToString(index = 3)

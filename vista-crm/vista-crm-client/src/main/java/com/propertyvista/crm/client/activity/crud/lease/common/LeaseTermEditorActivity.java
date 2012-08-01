@@ -11,17 +11,19 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.activity.crud.lease2;
+package com.propertyvista.crm.client.activity.crud.lease.common;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
-import com.propertyvista.crm.client.ui.crud.lease2.LeaseTermEditorView;
+import com.propertyvista.crm.client.ui.crud.lease.common.term.LeaseTermEditorView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.LeaseViewFactory;
 import com.propertyvista.crm.rpc.services.lease.LeaseTermEditorCrudService;
 import com.propertyvista.domain.financial.offering.ProductItem;
@@ -72,5 +74,10 @@ public abstract class LeaseTermEditorActivity extends EditorActivityBase<LeaseTe
     @Override
     public void createDeposit(AsyncCallback<Deposit> callback, DepositType depositType, BillableItem item) {
         ((LeaseTermEditorCrudService) getService()).createDeposit(callback, depositType, item, getView().getValue());
+    }
+
+    @Override
+    protected void goToViewer(Key entityID) {
+        AppSite.getPlaceController().goTo(AppSite.getPlaceController().getForwardedFrom());
     }
 }

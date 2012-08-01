@@ -11,7 +11,7 @@
  * @author vladlouk
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.lease2;
+package com.propertyvista.crm.client.ui.crud.lease.common.term;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -55,7 +55,7 @@ import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
 import com.propertyvista.domain.tenant.lease.BillableItemExtraData;
 import com.propertyvista.domain.tenant.lease.Deposit;
-import com.propertyvista.domain.tenant.lease.Lease_2;
+import com.propertyvista.domain.tenant.lease.Lease2;
 import com.propertyvista.domain.tenant.lease.extradata.Pet;
 import com.propertyvista.domain.tenant.lease.extradata.Vehicle;
 import com.propertyvista.dto.LeaseTermDTO;
@@ -326,7 +326,7 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
                     @Override
                     public ValidationError isValid(CComponent<Date, ?> component, Date value) {
                         if (value != null) {
-                            if (leaseTerm.getValue().lease().status().getValue() != Lease_2.Status.Created && (itemEffectiveDateEditor.getValue() != null)
+                            if (leaseTerm.getValue().lease().status().getValue() != Lease2.Status.Created && (itemEffectiveDateEditor.getValue() != null)
                                     && value.before(new LogicalDate())) {
                                 return new ValidationError(component, "The date should not precede the today's date");
                             }

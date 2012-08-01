@@ -15,26 +15,20 @@ package com.propertyvista.dto;
 
 import com.pyx4j.entity.annotations.ExtendsDBO;
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.IList;
 
-import com.propertyvista.domain.financial.offering.Concession;
-import com.propertyvista.domain.financial.offering.ProductItem;
-import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.LeaseTerm;
+import com.propertyvista.domain.tenant.lease.Lease2;
 
 @Transient
 @ExtendsDBO
-public interface LeaseDTO extends Lease {
+public interface LeaseDTO2 extends Lease2 {
 
     TransactionHistoryDTO transactionHistory();
 
     // -----------------------------------------------------
     // temporary runtime data:
 
-    IList<ProductItem> selectedServiceItems();
-
-    IList<ProductItem> selectedFeatureItems();
-
-    IList<Concession> selectedConcessions();
+    LeaseTerm currentLeaseTerm();
 
     BillDTO billingPreview();
 }

@@ -20,12 +20,12 @@ import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
-import com.propertyvista.domain.tenant.lease.LeaseParticipant_2;
+import com.propertyvista.domain.tenant.lease.LeaseParticipant2;
 
 @ToStringFormat("{0}, {1} - {2}")
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
 @DiscriminatorValue("Guarantor")
-public interface Guarantor_2 extends LeaseParticipant_2 {
+public interface Guarantor2 extends LeaseParticipant2 {
 
     @NotNull
     @Caption(description = "Relation to the Tenant")
@@ -35,5 +35,5 @@ public interface Guarantor_2 extends LeaseParticipant_2 {
      * Who invited this Guarantor to lease
      */
     @Caption(name = "Referred by Tenant")
-    Tenant_2 tenant();
+    Tenant2 tenant();
 }

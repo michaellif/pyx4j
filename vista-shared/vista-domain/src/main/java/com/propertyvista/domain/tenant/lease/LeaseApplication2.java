@@ -35,7 +35,7 @@ import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.tenant.ptapp.MasterOnlineApplication_2;
 import com.propertyvista.misc.EquifaxApproval;
 
-public interface LeaseApplication_2 extends IEntity {
+public interface LeaseApplication2 extends IEntity {
 
     @I18n(context = "Lease Application")
     @XmlType(name = "LeaseApplicationStatus")
@@ -89,11 +89,11 @@ public interface LeaseApplication_2 extends IEntity {
 
     @Owner
     @JoinColumn
-    Lease_2 lease();
+    Lease2 lease();
 
     @Detached
     @Versioned
-    Lease_2 leaseOnApplication();
+    Lease2 leaseOnApplication();
 
     @Owned(cascade = {})
     @Detached

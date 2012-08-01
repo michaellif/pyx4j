@@ -30,7 +30,7 @@ import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
-import com.propertyvista.domain.tenant.lease.LeaseApplication_2;
+import com.propertyvista.domain.tenant.lease.LeaseApplication2;
 import com.propertyvista.misc.EquifaxApproval;
 
 public interface MasterOnlineApplication_2 extends IEntity {
@@ -54,7 +54,7 @@ public interface MasterOnlineApplication_2 extends IEntity {
     }
 
     @Owner
-    LeaseApplication_2 leaseApplication();
+    LeaseApplication2 leaseApplication();
 
     @NotNull
     @ReadOnly
