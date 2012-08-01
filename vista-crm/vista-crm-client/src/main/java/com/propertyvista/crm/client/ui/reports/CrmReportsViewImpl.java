@@ -18,16 +18,19 @@ import java.util.Map;
 
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.entity.client.CEntityForm;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.site.client.ui.reports.AbstractReportsView;
-import com.pyx4j.site.client.ui.reports.AdvancedReportSettingsForm;
-import com.pyx4j.site.client.ui.reports.IReportSettingsForm;
+import com.pyx4j.site.client.ui.reports.HasAdvancedModeReportFactory;
 import com.pyx4j.site.client.ui.reports.Report;
 import com.pyx4j.site.client.ui.reports.ReportFactory;
 import com.pyx4j.site.client.ui.reports.ReportSettings;
+
+import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 
 public class CrmReportsViewImpl extends AbstractReportsView implements CrmReportsView {
 
@@ -36,22 +39,29 @@ public class CrmReportsViewImpl extends AbstractReportsView implements CrmReport
     static {
         factoryMap = new HashMap<Class<? extends ReportSettings>, ReportFactory>();
 
-        factoryMap.put(MockupReportSettings.class, new ReportFactory() {
+        factoryMap.put(MockupReportSettings.class, new HasAdvancedModeReportFactory() {
             @Override
-            public IReportSettingsForm<? extends ReportSettings> getReportSettingsForm(ReportSettings reportSettings) {
+            public CEntityForm<MockupReportSettings> getReportSettingsForm() {
+                CEntityForm<MockupReportSettings> form = new CEntityDecoratableForm<MockupReportSettings>(MockupReportSettings.class) {
 
-                AdvancedReportSettingsForm<MockupReportSettings> form = new AdvancedReportSettingsForm<MockupReportSettings>(MockupReportSettings.class) {
                     @Override
-                    public Widget createSimpleSettingsPanel() {
+                    public IsWidget createContent() {
                         FormFlexPanel simple = new FormFlexPanel();
                         int row = -1;
                         simple.setWidget(++row, 0, new WidgetDecorator.Builder(inject(proto().valueX())).build());
                         simple.setWidget(++row, 0, new WidgetDecorator.Builder(inject(proto().valueY())).build());
                         return simple;
                     }
+                };
+                form.initContent();
+                return form;
+            }
 
+            @Override
+            public CEntityForm<MockupReportSettings> getAdvancedReportSettingsForm() {
+                CEntityForm<MockupReportSettings> form = new CEntityForm<MockupReportSettings>(MockupReportSettings.class) {
                     @Override
-                    public Widget createAdvancedSettingsPanel() {
+                    public IsWidget createContent() {
                         FormFlexPanel advanced = new FormFlexPanel();
                         int row = -1;
                         advanced.setWidget(++row, 0, new WidgetDecorator.Builder(inject(proto().advancedValueX())).build());
@@ -99,6 +109,7 @@ public class CrmReportsViewImpl extends AbstractReportsView implements CrmReport
                     }
                 };
             }
+
         });
 
     }
