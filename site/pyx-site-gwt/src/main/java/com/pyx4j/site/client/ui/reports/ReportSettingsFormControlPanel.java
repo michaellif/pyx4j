@@ -31,17 +31,15 @@ import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.actionbar.Toolbar;
 
-public class ReportSettingsFormControlPanel extends Composite {
+public abstract class ReportSettingsFormControlPanel extends Composite {
 
     private static final I18n i18n = I18n.get(ReportSettingsFormControlPanel.class);
 
     private Button apply;
 
-    private Anchor advancedModeToggle;
+    private Anchor modeToggle;
 
-    private ApplyCallback<ReportSettings> applyCallback;
-
-    private IReportSettingsForm<ReportSettings> settingsForm;
+    private final Toolbar controlPanel;
 
     private boolean isAdvanced;
 
@@ -49,43 +47,43 @@ public class ReportSettingsFormControlPanel extends Composite {
 
         isAdvanced = false;
 
-        Toolbar controlPanel = new Toolbar();
+        controlPanel = new Toolbar();
         controlPanel.setStyleName(DefaultSiteCrudPanelsTheme.StyleName.FooterToolbar.name());
 
-        controlPanel.addItem(advancedModeToggle = new Anchor(i18n.tr("advanced"), new ClickHandler() {
+        controlPanel.addItem(modeToggle = new Anchor(i18n.tr("advanced"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                setAdvanced(!isAdvanced);
+                isAdvanced = !isAdvanced;
+                updateModeToggleButtonLabel();
+                onSettingsModeToggled(isAdvanced);
             }
         }), true);
 
         controlPanel.addItem(apply = new Button(i18n.tr("Apply"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                if (applyCallback != null & settingsForm != null) {
-                    applyCallback.apply(settingsForm.getValue());
-                }
+                onApply();
             }
         }), true);
 
         initWidget(controlPanel);
     }
 
-    public final void setApplyCallback(ApplyCallback<ReportSettings> applyCallback) {
-        this.applyCallback = applyCallback;
-    }
-
-    public final void attachSettingsForm(IReportSettingsForm<ReportSettings> settingsForm) {
-        this.settingsForm = settingsForm;
-        this.advancedModeToggle.setVisible(settingsForm != null && settingsForm instanceof IAdvancedReportSettingsForm);
-        setAdvanced(false);
-    }
-
-    private void setAdvanced(boolean isAdvanced) {
+    public final void enableSettingsModeToggle(boolean isAdvanced) {
         this.isAdvanced = isAdvanced;
-        advancedModeToggle.setHTML(new SafeHtmlBuilder().appendEscaped(isAdvanced ? i18n.tr("hide") : i18n.tr("advanced")).toSafeHtml());
-        if (settingsForm != null) {
-            ((IAdvancedReportSettingsForm<?>) settingsForm).setAdvancedMode(isAdvanced);
-        }
+        modeToggle.setVisible(true);
+        updateModeToggleButtonLabel();
+    }
+
+    public void disableModeToggle() {
+        modeToggle.setVisible(false);
+    }
+
+    public abstract void onApply();
+
+    public abstract void onSettingsModeToggled(boolean isAdvanced);
+
+    private void updateModeToggleButtonLabel() {
+        modeToggle.setHTML(new SafeHtmlBuilder().appendEscaped(isAdvanced ? i18n.tr("hide") : i18n.tr("advanced")).toSafeHtml());
     }
 }

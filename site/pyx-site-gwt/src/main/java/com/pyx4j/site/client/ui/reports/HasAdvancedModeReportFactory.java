@@ -14,30 +14,16 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Jul 27, 2012
+ * Created on Aug 1, 2012
  * @author ArtyomB
  * @version $Id$
  */
 package com.pyx4j.site.client.ui.reports;
 
-import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.IsWidget;
-
 import com.pyx4j.entity.client.CEntityForm;
 
-public abstract class SimpleReportSettingsForm<E extends ReportSettings> extends CEntityForm<E> implements IReportSettingsForm<E> {
+public interface HasAdvancedModeReportFactory<S extends ReportSettings & HasAdvancedSettings> extends ReportFactory<S> {
 
-    public SimpleReportSettingsForm(Class<E> clazz, boolean hasAdvancedSettings) {
-        super(clazz);
-    }
-
-    @Override
-    public final IsWidget createContent() {
-        FlowPanel contentPanel = new FlowPanel();
-        contentPanel.add(createSimpleSettingsPanel());
-        return contentPanel;
-    }
-
-    public abstract IsWidget createSimpleSettingsPanel();
+    CEntityForm<S> getAdvancedReportSettingsForm();
 
 }

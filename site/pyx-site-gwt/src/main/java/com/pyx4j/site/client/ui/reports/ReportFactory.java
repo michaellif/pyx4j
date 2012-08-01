@@ -20,9 +20,11 @@
  */
 package com.pyx4j.site.client.ui.reports;
 
-public interface ReportFactory {
+import com.pyx4j.entity.client.CEntityForm;
 
-    IReportSettingsForm<? extends ReportSettings> getReportSettingsForm(ReportSettings reportSettings);
+public interface ReportFactory<S extends ReportSettings> {
+
+    CEntityForm<S> getReportSettingsForm();
 
     Report getReport();
 
