@@ -123,6 +123,7 @@ public class LeaseFacadeImpl2 implements LeaseFacade2 {
             serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().element(), lease.unit()));
             ProductItem serviceItem = Persistence.service().retrieve(serviceCriteria);
             if (serviceItem != null) {
+                assert (!lease.currentLeaseTerm().isNull());
                 setService(lease.currentLeaseTerm(), serviceItem);
                 succeeded = true;
                 break servicesLoop;
@@ -371,8 +372,19 @@ public class LeaseFacadeImpl2 implements LeaseFacade2 {
     }
 
     @Override
+    public void setCurrentTerm(Lease2 leaseId, LeaseTerm leaseTermId) {
+        Lease2 lease = Persistence.secureRetrieve(Lease2.class, leaseId.getPrimaryKey());
+        if (lease.leaseTerms().contains(leaseTermId)) {
+            lease.currentLeaseTerm().set(leaseTermId);
+            Persistence.secureSave(lease);
+        } else {
+            throw new UserRuntimeException(i18n.tr("Invalid LeaseTerm supplied"));
+        }
+    }
+
+    @Override
     public void createMasterOnlineApplication(Key leaseId) {
-        Lease2 lease = Persistence.secureRetrieve(Lease2.class, leaseId.asDraftKey());
+        Lease2 lease = Persistence.secureRetrieve(Lease2.class, leaseId);
 
         // Verify the status
         if (!Lease2.Status.draft().contains(lease.status().getValue())) {

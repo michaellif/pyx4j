@@ -46,6 +46,8 @@ public interface LeaseFacade2 {
 
     // DB-data Lease2 object state interfaces:
 
+    void setCurrentTerm(Lease2 leaseId, LeaseTerm leaseTermId);
+
     void createMasterOnlineApplication(Key leaseId);
 
     void approveApplication(Lease2 leaseId, Employee decidedBy, String decisionReason);
