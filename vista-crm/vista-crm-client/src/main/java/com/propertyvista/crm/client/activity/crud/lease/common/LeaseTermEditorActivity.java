@@ -82,10 +82,14 @@ public class LeaseTermEditorActivity extends EditorActivityBase<LeaseTermDTO> im
 
     @Override
     protected void goToViewer(Key entityID) {
-        if (currentValue.lease().status().getValue() == Lease2.Status.Application) {
-            AppSite.getPlaceController().goTo(new CrmSiteMap.Tenants.LeaseApplication().formViewerPlace(currentValue.lease().getPrimaryKey()));
+        if (currentValue.lease().getPrimaryKey() == null) {
+            AppSite.getPlaceController().goTo(AppSite.getPlaceController().getForwardedFrom());
         } else {
-            AppSite.getPlaceController().goTo(new CrmSiteMap.Tenants.Lease2().formViewerPlace(currentValue.lease().getPrimaryKey()));
+            if (currentValue.lease().status().getValue() == Lease2.Status.Application) {
+                AppSite.getPlaceController().goTo(new CrmSiteMap.Tenants.LeaseApplication().formViewerPlace(currentValue.lease().getPrimaryKey()));
+            } else {
+                AppSite.getPlaceController().goTo(new CrmSiteMap.Tenants.Lease2().formViewerPlace(currentValue.lease().getPrimaryKey()));
+            }
         }
     }
 }
