@@ -14,19 +14,22 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Jul 30, 2012
+ * Created on Aug 2, 2012
  * @author ArtyomB
  * @version $Id$
  */
-package com.pyx4j.site.client.ui.reports;
+package com.pyx4j.site.rpc.services.reports;
 
-import com.pyx4j.entity.annotations.AbstractEntity;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
+import java.io.Serializable;
 
-@AbstractEntity
-public interface HasAdvancedSettings extends IEntity {
+import com.google.gwt.user.client.rpc.AsyncCallback;
 
-    IPrimitive<Boolean> isInAdvancedMode();
+import com.pyx4j.entity.shared.reports.ReportMetadata;
+import com.pyx4j.rpc.shared.IService;
+
+public interface IReportsService extends IService {
+
+    /** prepares and returns a report for the provided report metadata */
+    void generateReport(AsyncCallback<Serializable> callback, ReportMetadata reportMetadata);
 
 }

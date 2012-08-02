@@ -29,6 +29,8 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.CEntityForm;
+import com.pyx4j.entity.shared.reports.HasAdvancedSettings;
+import com.pyx4j.entity.shared.reports.ReportMetadata;
 
 public abstract class AbstractReportsView implements IReportsView {
 
@@ -36,9 +38,9 @@ public abstract class AbstractReportsView implements IReportsView {
 
     private final DockLayoutPanel viewPanel;
 
-    private final Map<Class<? extends ReportSettings>, ReportFactory> reportFactoryMap;
+    private final Map<Class<? extends ReportMetadata>, ReportFactory> reportFactoryMap;
 
-    private CEntityForm<ReportSettings> settingsForm;
+    private CEntityForm<ReportMetadata> settingsForm;
 
     private final ScrollPanel settingsFormPanel;
 
@@ -46,7 +48,7 @@ public abstract class AbstractReportsView implements IReportsView {
 
     private final ReportSettingsFormControlPanel reportSettingsControls;
 
-    public AbstractReportsView(Map<Class<? extends ReportSettings>, ReportFactory> reportFactoryMap) {
+    public AbstractReportsView(Map<Class<? extends ReportMetadata>, ReportFactory> reportFactoryMap) {
         this.reportFactoryMap = reportFactoryMap;
         viewPanel = new DockLayoutPanel(Unit.EM);
         viewPanel.addNorth(new HTML(), 1);
@@ -95,7 +97,7 @@ public abstract class AbstractReportsView implements IReportsView {
     }
 
     @Override
-    public void setReportSettings(ReportSettings reportSettings) {
+    public void setReportSettings(ReportMetadata reportSettings) {
         settingsFormPanel.setWidget(null);
         reportViewPanel.setWidget(null);
 

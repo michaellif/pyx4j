@@ -14,14 +14,16 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Jul 31, 2012
+ * Created on Jul 27, 2012
  * @author ArtyomB
  * @version $Id$
  */
-package com.pyx4j.site.client.ui.reports;
+package com.pyx4j.entity.shared.reports;
 
-public interface ApplyCallback<E extends ReportSettings> {
+import com.pyx4j.entity.annotations.AbstractEntity;
+import com.pyx4j.entity.shared.IEntity;
 
-    void apply(E reportSettings);
+@AbstractEntity
+public interface ReportMetadata extends IEntity {
 
 }

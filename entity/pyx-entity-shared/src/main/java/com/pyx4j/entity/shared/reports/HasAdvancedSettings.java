@@ -14,16 +14,19 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Jul 27, 2012
+ * Created on Jul 30, 2012
  * @author ArtyomB
  * @version $Id$
  */
-package com.pyx4j.site.client.ui.reports;
+package com.pyx4j.entity.shared.reports;
 
 import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
 
 @AbstractEntity
-public interface ReportSettings extends IEntity {
+public interface HasAdvancedSettings extends IEntity {
+
+    IPrimitive<Boolean> isInAdvancedMode();
 
 }

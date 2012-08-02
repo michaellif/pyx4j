@@ -20,17 +20,25 @@
  */
 package com.pyx4j.site.client.ui.reports;
 
+import java.io.Serializable;
+
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
+import com.pyx4j.entity.shared.reports.ReportMetadata;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.site.rpc.services.reports.IReportsService;
 
 public abstract class AbstractReportsActivity extends AbstractActivity implements IReportsView.Presenter {
 
-    protected final IReportsView view;
+    private final IReportsView view;
 
-    public AbstractReportsActivity(IReportsView view, AppPlace place) {
+    private final IReportsService reportsService;
+
+    public AbstractReportsActivity(IReportsService reportsService, IReportsView view, AppPlace place) {
+        this.reportsService = reportsService;
         this.view = view;
         this.view.setPresenter(this);
     }
@@ -39,6 +47,18 @@ public abstract class AbstractReportsActivity extends AbstractActivity implement
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         panel.setWidget(view);
         view.setReportSettings(null);
+    }
+
+    @Override
+    public void apply(ReportMetadata settings) {
+        reportsService.generateReport(new DefaultAsyncCallback<Serializable>() {
+
+            @Override
+            public void onSuccess(Serializable result) {
+                view.setReportData(result);
+            }
+
+        }, settings);
     }
 
 }

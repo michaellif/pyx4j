@@ -22,17 +22,19 @@ package com.pyx4j.site.client.ui.reports;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.entity.shared.reports.ReportMetadata;
+
 public interface IReportsView extends IsWidget {
 
     public interface Presenter {
 
-        void apply(ReportSettings settings);
+        void apply(ReportMetadata settings);
 
     }
 
     void setPresenter(Presenter presenter);
 
-    <E extends ReportSettings> void setReportSettings(E reportSettings);
+    <E extends ReportMetadata> void setReportSettings(E reportSettings);
 
     void setReportData(Object data);
 

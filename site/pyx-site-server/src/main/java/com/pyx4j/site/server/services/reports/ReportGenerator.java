@@ -14,18 +14,18 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Aug 1, 2012
+ * Created on Aug 2, 2012
  * @author ArtyomB
  * @version $Id$
  */
-package com.pyx4j.site.client.ui.reports;
+package com.pyx4j.site.server.services.reports;
 
-import com.pyx4j.entity.client.CEntityForm;
-import com.pyx4j.entity.shared.reports.HasAdvancedSettings;
+import java.io.Serializable;
+
 import com.pyx4j.entity.shared.reports.ReportMetadata;
 
-public interface HasAdvancedModeReportFactory<S extends ReportMetadata & HasAdvancedSettings> extends ReportFactory<S> {
+public interface ReportGenerator {
 
-    CEntityForm<S> getAdvancedReportSettingsForm();
+    Serializable generateReport(ReportMetadata reportMetadata);
 
 }
