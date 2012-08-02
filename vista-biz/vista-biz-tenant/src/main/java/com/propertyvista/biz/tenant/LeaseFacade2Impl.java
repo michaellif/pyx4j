@@ -298,6 +298,7 @@ public class LeaseFacade2Impl implements LeaseFacade2 {
     @Override
     public LeaseTerm persist(LeaseTerm leaseTerm) {
         persistCustomers(leaseTerm);
+        Persistence.secureSave(leaseTerm);
 
         return leaseTerm;
     }

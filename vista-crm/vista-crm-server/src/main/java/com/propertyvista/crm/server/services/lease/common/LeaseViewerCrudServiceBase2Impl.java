@@ -26,7 +26,6 @@ import com.propertyvista.domain.tenant.Guarantor2;
 import com.propertyvista.domain.tenant.Tenant2;
 import com.propertyvista.domain.tenant.lease.Lease2;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant2;
-import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.dto.LeaseApplicationDTO;
 import com.propertyvista.dto.LeaseDTO2;
 
@@ -56,12 +55,11 @@ public abstract class LeaseViewerCrudServiceBase2Impl<DTO extends LeaseDTO2> ext
             throw new RuntimeException("Entity '" + EntityFactory.getEntityMeta(dboClass).getCaption() + "' " + entityId + " NotFound");
         }
 
-        LeaseTerm currentLeaseTerm = getCurrentLeaseTerm(lease);
-
         Vector<LeaseParticipant2> users = new Vector<LeaseParticipant2>();
 
-        Persistence.service().retrieve(currentLeaseTerm.version().tenants());
-        for (Tenant2 tenant : currentLeaseTerm.version().tenants()) {
+        assert (!lease.currentLeaseTerm().isNull());
+        Persistence.service().retrieve(lease.currentLeaseTerm().version().tenants());
+        for (Tenant2 tenant : lease.currentLeaseTerm().version().tenants()) {
             Persistence.service().retrieve(tenant);
             switch (tenant.role().getValue()) {
             case Applicant:
@@ -72,8 +70,8 @@ public abstract class LeaseViewerCrudServiceBase2Impl<DTO extends LeaseDTO2> ext
             }
         }
 
-        Persistence.service().retrieve(currentLeaseTerm.version().guarantors());
-        for (Guarantor2 guarantor : currentLeaseTerm.version().guarantors()) {
+        Persistence.service().retrieve(lease.currentLeaseTerm().version().guarantors());
+        for (Guarantor2 guarantor : lease.currentLeaseTerm().version().guarantors()) {
             users.add(guarantor);
         }
 

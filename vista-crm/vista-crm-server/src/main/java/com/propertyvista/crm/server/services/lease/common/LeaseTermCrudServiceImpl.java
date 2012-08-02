@@ -63,7 +63,8 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
 
         updateAdjustments(dbo);
         ServerSideFactory.create(LeaseFacade2.class).persist(dbo);
-        ServerSideFactory.create(LeaseFacade2.class).persist(dbo.lease());
+        ServerSideFactory.create(LeaseFacade2.class).init(dbo.lease());
+//        ServerSideFactory.create(LeaseFacade2.class).persist(dbo.lease());
     }
 
     @Override
@@ -75,6 +76,11 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
     @Override
     protected void persist(LeaseTerm dbo, LeaseTermDTO in) {
         throw new Error("Facade should be used");
+    }
+
+    @Override
+    protected void saveAsFinal(LeaseTerm entity) {
+        ServerSideFactory.create(LeaseFacade2.class).finalize(entity);
     }
 
     @Override
@@ -192,12 +198,12 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
         }
     }
 
-    private void updateAdjustments(LeaseTerm lease) {
+    private void updateAdjustments(LeaseTerm leaseTerm) {
         // ServiceItem Adjustments:
-        updateAdjustments(lease.version().leaseProducts().serviceItem());
+        updateAdjustments(leaseTerm.version().leaseProducts().serviceItem());
 
         // BillableItem Adjustments:
-        for (BillableItem ci : lease.version().leaseProducts().featureItems()) {
+        for (BillableItem ci : leaseTerm.version().leaseProducts().featureItems()) {
             updateAdjustments(ci);
         }
     }

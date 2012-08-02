@@ -40,11 +40,6 @@ public class LeaseTermEditorActivity extends EditorActivityBase<LeaseTermDTO> im
     }
 
     @Override
-    public void onPopulateSuccess(LeaseTermDTO result) {
-        super.onPopulateSuccess(result);
-    }
-
-    @Override
     public void setSelectedUnit(AptUnit item) {
         ((LeaseTermCrudService) getService()).setSelectedUnit(new DefaultAsyncCallback<LeaseTermDTO>() {
             @Override

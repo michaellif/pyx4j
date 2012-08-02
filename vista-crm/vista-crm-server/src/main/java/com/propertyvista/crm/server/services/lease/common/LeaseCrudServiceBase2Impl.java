@@ -21,7 +21,6 @@ import com.propertyvista.domain.tenant.Guarantor2;
 import com.propertyvista.domain.tenant.Tenant2;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease2;
-import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.dto.LeaseDTO2;
 
 public abstract class LeaseCrudServiceBase2Impl<DTO extends LeaseDTO2> extends AbstractCrudServiceDtoImpl<Lease2, DTO> {
@@ -65,8 +64,6 @@ public abstract class LeaseCrudServiceBase2Impl<DTO extends LeaseDTO2> extends A
         Persistence.service().retrieve(dto.unit());
         Persistence.service().retrieve(dto.unit().building());
 
-        dto.currentLeaseTerm().set(getCurrentLeaseTerm(in));
-
         Persistence.service().retrieve(dto.currentLeaseTerm().version().tenants());
         Persistence.service().retrieve(dto.currentLeaseTerm().version().guarantors());
 
@@ -84,10 +81,5 @@ public abstract class LeaseCrudServiceBase2Impl<DTO extends LeaseDTO2> extends A
         for (BillableItem item : dto.currentLeaseTerm().version().leaseProducts().featureItems()) {
             Persistence.service().retrieve(item.item().product());
         }
-    }
-
-    protected LeaseTerm getCurrentLeaseTerm(Lease2 in) {
-        assert (!in.leaseTerms().isEmpty());
-        return in.leaseTerms().get(in.leaseTerms().size() - 1);
     }
 }
