@@ -30,9 +30,9 @@ import com.pyx4j.site.rpc.services.reports.IReportsService;
 
 public class AbstractReportsService implements IReportsService {
 
-    private final Map<Class<ReportMetadata>, ReportGenerator> reportGenerators;
+    private final Map<Class<? extends ReportMetadata>, ReportGenerator> reportGenerators;
 
-    public AbstractReportsService(Map<Class<ReportMetadata>, ReportGenerator> reportGenerators) {
+    public AbstractReportsService(Map<Class<? extends ReportMetadata>, ReportGenerator> reportGenerators) {
         this.reportGenerators = reportGenerators;
     }
 

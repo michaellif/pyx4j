@@ -48,6 +48,8 @@ public abstract class AbstractReportsView implements IReportsView {
 
     private final ReportSettingsFormControlPanel reportSettingsControls;
 
+    private Report report;
+
     public AbstractReportsView(Map<Class<? extends ReportMetadata>, ReportFactory> reportFactoryMap) {
         this.reportFactoryMap = reportFactoryMap;
         viewPanel = new DockLayoutPanel(Unit.EM);
@@ -60,7 +62,7 @@ public abstract class AbstractReportsView implements IReportsView {
         reportSettingsControls = new ReportSettingsFormControlPanel() {
             @Override
             public void onApply() {
-                if (presenter != null) {
+                if (presenter != null & settingsForm != null) {
                     presenter.apply(settingsForm.getValue());
                 }
             }
@@ -117,13 +119,22 @@ public abstract class AbstractReportsView implements IReportsView {
             settingsFormPanel.setWidget(settingsForm);
             settingsForm.populate(reportSettings);
 
-            reportViewPanel.setWidget(factory.getReport());
+            reportViewPanel.setWidget(report = factory.getReport());
+        }
+    }
+
+    @Override
+    public void setReportData(Object data) {
+        if (report != null) {
+            report.setData(data);
         }
     }
 
     private void updateSettingsMode(boolean isAdvanced) {
-        ((HasAdvancedSettings) settingsForm.getValue()).isInAdvancedMode().setValue(isAdvanced);
-        setReportSettings(settingsForm.getValue());
+        if (settingsForm != null) {
+            ((HasAdvancedSettings) settingsForm.getValue()).isInAdvancedMode().setValue(isAdvanced);
+            setReportSettings(settingsForm.getValue());
+        }
     }
 
 }

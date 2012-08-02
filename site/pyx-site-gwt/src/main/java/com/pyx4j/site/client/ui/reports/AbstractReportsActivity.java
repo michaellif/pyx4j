@@ -33,20 +33,23 @@ import com.pyx4j.site.rpc.services.reports.IReportsService;
 
 public abstract class AbstractReportsActivity extends AbstractActivity implements IReportsView.Presenter {
 
-    private final IReportsView view;
+    protected final IReportsView view;
 
     private final IReportsService reportsService;
+
+    private final AppPlace place;
 
     public AbstractReportsActivity(IReportsService reportsService, IReportsView view, AppPlace place) {
         this.reportsService = reportsService;
         this.view = view;
         this.view.setPresenter(this);
+        this.place = place;
     }
 
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         panel.setWidget(view);
-        view.setReportSettings(null);
+        view.setReportSettings(retrieveReportSettings(place));
     }
 
     @Override
@@ -61,4 +64,9 @@ public abstract class AbstractReportsActivity extends AbstractActivity implement
         }, settings);
     }
 
+    private ReportMetadata retrieveReportSettings(AppPlace place) {
+        String encodedReportSettings = place.getFirstArg("metadata");
+        // TODO decode
+        return null;
+    }
 }
