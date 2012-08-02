@@ -24,9 +24,9 @@ import com.propertyvista.domain.tenant.lease.Lease2;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.dto.LeaseDTO2;
 
-public abstract class LeaseCrudServiceBaseImpl2<DTO extends LeaseDTO2> extends AbstractCrudServiceDtoImpl<Lease2, DTO> {
+public abstract class LeaseCrudServiceBase2Impl<DTO extends LeaseDTO2> extends AbstractCrudServiceDtoImpl<Lease2, DTO> {
 
-    protected LeaseCrudServiceBaseImpl2(Class<DTO> dtoClass) {
+    protected LeaseCrudServiceBase2Impl(Class<DTO> dtoClass) {
         super(Lease2.class, dtoClass);
     }
 

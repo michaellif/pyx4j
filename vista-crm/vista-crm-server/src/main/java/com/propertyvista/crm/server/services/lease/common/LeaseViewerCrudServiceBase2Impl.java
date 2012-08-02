@@ -30,11 +30,11 @@ import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.dto.LeaseApplicationDTO;
 import com.propertyvista.dto.LeaseDTO2;
 
-public abstract class LeaseViewerCrudServiceBaseImpl2<DTO extends LeaseDTO2> extends LeaseCrudServiceBaseImpl2<DTO> implements LeaseViewerCrudServiceBase2<DTO> {
+public abstract class LeaseViewerCrudServiceBase2Impl<DTO extends LeaseDTO2> extends LeaseCrudServiceBase2Impl<DTO> implements LeaseViewerCrudServiceBase2<DTO> {
 
     private final boolean isApplication;
 
-    protected LeaseViewerCrudServiceBaseImpl2(Class<DTO> dtoClass) {
+    protected LeaseViewerCrudServiceBase2Impl(Class<DTO> dtoClass) {
         super(dtoClass);
         isApplication = dtoClass.equals(LeaseApplicationDTO.class);
     }

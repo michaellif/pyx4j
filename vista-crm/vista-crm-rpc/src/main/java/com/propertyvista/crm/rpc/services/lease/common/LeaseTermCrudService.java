@@ -11,7 +11,7 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.rpc.services.lease;
+package com.propertyvista.crm.rpc.services.lease.common;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 

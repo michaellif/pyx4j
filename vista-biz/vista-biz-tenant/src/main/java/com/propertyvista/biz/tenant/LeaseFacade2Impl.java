@@ -55,11 +55,11 @@ import com.propertyvista.domain.tenant.lease.Lease2.Status;
 import com.propertyvista.domain.tenant.lease.LeaseApplication2;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 
-public class LeaseFacadeImpl2 implements LeaseFacade2 {
+public class LeaseFacade2Impl implements LeaseFacade2 {
 
-    private static final Logger log = LoggerFactory.getLogger(LeaseFacadeImpl2.class);
+    private static final Logger log = LoggerFactory.getLogger(LeaseFacade2Impl.class);
 
-    private static final I18n i18n = I18n.get(LeaseFacadeImpl2.class);
+    private static final I18n i18n = I18n.get(LeaseFacade2Impl.class);
 
     final boolean bugNo1549 = true;
 

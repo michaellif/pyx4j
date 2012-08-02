@@ -23,7 +23,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.biz.financial.deposit.DepositFacade;
 import com.propertyvista.biz.tenant.LeaseFacade2;
-import com.propertyvista.crm.rpc.services.lease.LeaseTermCrudService;
+import com.propertyvista.crm.rpc.services.lease.common.LeaseTermCrudService;
 import com.propertyvista.crm.server.util.CrmAppContext;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ProductCatalog;
@@ -41,7 +41,7 @@ import com.propertyvista.dto.LeaseTermDTO;
 
 public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImpl<LeaseTerm, LeaseTermDTO> implements LeaseTermCrudService {
 
-    protected LeaseTermCrudServiceImpl() {
+    public LeaseTermCrudServiceImpl() {
         super(LeaseTerm.class, LeaseTermDTO.class);
     }
 
@@ -55,6 +55,7 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
         if (!dto.newParentLease().isNull()) {
             // persist newly created lease first:
             dbo.lease().set(dto.newParentLease());
+            dbo.lease().currentLeaseTerm().set(null);
             Persistence.secureSave(dbo.lease());
             // set this term as current for the lease:
             dbo.lease().currentLeaseTerm().set(dbo);

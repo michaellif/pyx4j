@@ -186,7 +186,7 @@ public class CrmSiteMap implements SiteMap {
         }
 
         @PlaceProperties(caption = "Lease2")
-        @NavigationItem(navigLabel = "Leases2")
+        @NavigationItem(navigLabel = "Leases 2")
         public static class Lease2 extends CrmCrudAppPlace {
         }
 

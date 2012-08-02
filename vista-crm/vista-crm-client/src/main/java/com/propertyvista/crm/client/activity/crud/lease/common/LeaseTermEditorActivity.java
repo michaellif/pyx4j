@@ -25,7 +25,7 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.ui.crud.lease.common.term.LeaseTermEditorView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.LeaseViewFactory;
-import com.propertyvista.crm.rpc.services.lease.LeaseTermCrudService;
+import com.propertyvista.crm.rpc.services.lease.common.LeaseTermCrudService;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.BillableItem;
@@ -33,11 +33,10 @@ import com.propertyvista.domain.tenant.lease.Deposit;
 import com.propertyvista.domain.tenant.lease.Deposit.DepositType;
 import com.propertyvista.dto.LeaseTermDTO;
 
-public abstract class LeaseTermEditorActivity extends EditorActivityBase<LeaseTermDTO> implements LeaseTermEditorView.Presenter {
+public class LeaseTermEditorActivity extends EditorActivityBase<LeaseTermDTO> implements LeaseTermEditorView.Presenter {
 
     public LeaseTermEditorActivity(CrudAppPlace place) {
-        super(place, LeaseViewFactory.instance(LeaseTermEditorView.class), GWT.<LeaseTermCrudService> create(LeaseTermCrudService.class),
-                LeaseTermDTO.class);
+        super(place, LeaseViewFactory.instance(LeaseTermEditorView.class), GWT.<LeaseTermCrudService> create(LeaseTermCrudService.class), LeaseTermDTO.class);
     }
 
     @Override
@@ -67,8 +66,8 @@ public abstract class LeaseTermEditorActivity extends EditorActivityBase<LeaseTe
 
     @Override
     public void createBillableItem(AsyncCallback<BillableItem> callback, ProductItem item) {
-        ((LeaseTermCrudService) getService()).createBillableItem(callback, EntityFactory.createIdentityStub(ProductItem.class, item.getPrimaryKey()),
-                getView().getValue());
+        ((LeaseTermCrudService) getService()).createBillableItem(callback, EntityFactory.createIdentityStub(ProductItem.class, item.getPrimaryKey()), getView()
+                .getValue());
     }
 
     @Override

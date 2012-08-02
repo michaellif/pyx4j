@@ -81,8 +81,8 @@ public class LeaseLister2 extends ListerBase<LeaseDTO2> {
         new ExistingLeaseDataDialog().show();
     }
 
-    private LeaseDTO2 createNewLease(Service.ServiceType leaseType, BigDecimal balance) {
-        LeaseDTO2 newLease = EntityFactory.create(LeaseDTO2.class);
+    private Lease2 createNewLease(Service.ServiceType leaseType, BigDecimal balance) {
+        Lease2 newLease = EntityFactory.create(LeaseDTO2.class);
 
         newLease.type().setValue(leaseType);
         newLease.paymentFrequency().setValue(PaymentFrequency.Monthly);
@@ -135,7 +135,10 @@ public class LeaseLister2 extends ListerBase<LeaseDTO2> {
             if (balance.isValid()) {
                 // prepare LeaseTermDTO:
                 LeaseTermDTO termDto = EntityFactory.create(LeaseTermDTO.class);
+
                 termDto.newParentLease().set(createNewLease(getSelectedType(), balance.getValue()));
+                termDto.newParentLease().currentLeaseTerm().set(termDto);
+
                 termDto.type().setValue(LeaseTerm.Type.FixedEx);
                 termDto.lease().set(termDto.newParentLease());
 

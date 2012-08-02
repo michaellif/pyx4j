@@ -99,6 +99,7 @@ import com.propertyvista.crm.client.activity.crud.lease.PastLeaseListerActivity;
 import com.propertyvista.crm.client.activity.crud.lease.application.LeaseApplicationEditorActivity;
 import com.propertyvista.crm.client.activity.crud.lease.application.LeaseApplicationListerActivity;
 import com.propertyvista.crm.client.activity.crud.lease.application.LeaseApplicationViewerActivity;
+import com.propertyvista.crm.client.activity.crud.lease.common.LeaseTermEditorActivity;
 import com.propertyvista.crm.client.activity.crud.lease.common.deposit.DepositLifecycleEditorActivity;
 import com.propertyvista.crm.client.activity.crud.lease.common.deposit.DepositLifecycleViewerActivity;
 import com.propertyvista.crm.client.activity.crud.maintenance.MaintenanceRequestEditorActivity;
@@ -494,6 +495,13 @@ public class MainActivityMapper implements AppActivityMapper {
                             break;
                         case lister:
                             activity = new LeaseListerActivity2(crudPlace);
+                            break;
+                        }
+
+                    } else if (place instanceof CrmSiteMap.Tenants.LeaseTerm) {
+                        switch (crudPlace.getType()) {
+                        case editor:
+                            activity = new LeaseTermEditorActivity(crudPlace);
                             break;
                         }
 

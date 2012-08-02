@@ -30,7 +30,7 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.biz.tenant.LeaseFacade2;
 import com.propertyvista.crm.rpc.services.lease.LeaseViewerCrudService2;
-import com.propertyvista.crm.server.services.lease.common.LeaseViewerCrudServiceBaseImpl2;
+import com.propertyvista.crm.server.services.lease.common.LeaseViewerCrudServiceBase2Impl;
 import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.Tenant;
@@ -40,11 +40,11 @@ import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.domain.tenant.ptapp.MasterOnlineApplication2;
 import com.propertyvista.dto.LeaseDTO2;
 
-public class LeaseViewerCrudServiceImpl2 extends LeaseViewerCrudServiceBaseImpl2<LeaseDTO2> implements LeaseViewerCrudService2 {
+public class LeaseViewerCrudService2Impl extends LeaseViewerCrudServiceBase2Impl<LeaseDTO2> implements LeaseViewerCrudService2 {
 
-    private final static I18n i18n = I18n.get(LeaseViewerCrudServiceImpl2.class);
+    private final static I18n i18n = I18n.get(LeaseViewerCrudService2Impl.class);
 
-    public LeaseViewerCrudServiceImpl2() {
+    public LeaseViewerCrudService2Impl() {
         super(LeaseDTO2.class);
     }
 
