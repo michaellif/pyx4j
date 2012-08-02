@@ -13,26 +13,43 @@
  */
 package com.propertyvista.crm.client.activity.report;
 
-import com.pyx4j.entity.shared.reports.HasAdvancedSettings;
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.user.client.ui.AcceptsOneWidget;
+
+import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.reports.ReportMetadata;
 import com.pyx4j.site.client.ui.reports.AbstractReportsActivity;
 import com.pyx4j.site.rpc.AppPlace;
-import com.pyx4j.widgets.client.dialog.MessageDialog;
+import com.pyx4j.site.rpc.services.reports.IReportsService;
 
 import com.propertyvista.crm.client.ui.reports.CrmReportsView;
 import com.propertyvista.crm.client.ui.viewfactories.DashboardViewFactory;
+import com.propertyvista.crm.rpc.services.reports.CrmReportsService;
+import com.propertyvista.domain.reports.AvailabilityReportMetadata;
 
 public class CrmReportsActivity extends AbstractReportsActivity {
 
     public CrmReportsActivity(AppPlace place) {
-        super(null, DashboardViewFactory.instance(CrmReportsView.class), place);
+        super(GWT.<IReportsService> create(CrmReportsService.class), DashboardViewFactory.instance(CrmReportsView.class), place);
     }
 
     @Override
     public void apply(ReportMetadata settings) {
-        String mode = (settings instanceof HasAdvancedSettings) ? (((HasAdvancedSettings) settings).isInAdvancedMode().isBooleanTrue() ? "advanced" : "simple")
-                : "simple";
-        MessageDialog.info("you have selected " + settings.getInstanceValueClass().getName() + ", mode " + mode);
+        super.apply(settings);
+//        String mode = (settings instanceof HasAdvancedSettings) ? (((HasAdvancedSettings) settings).isInAdvancedMode().isBooleanTrue() ? "advanced" : "simple")
+//                : "simple";
+//        MessageDialog.info("you have selected " + settings.getInstanceValueClass().getName() + ", mode " + mode);
+    }
+
+    @Override
+    public void start(AcceptsOneWidget panel, EventBus eventBus) {
+        super.start(panel, eventBus);
+        // TODO this is just for now
+        AvailabilityReportMetadata meta = EntityFactory.create(AvailabilityReportMetadata.class);
+        meta.asOf().setValue(new LogicalDate());
+        view.setReportSettings(meta);
     }
 
 }

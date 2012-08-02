@@ -99,7 +99,9 @@ public interface UnitAvailabilityStatus extends IEntity {
     Complex complex();
 
     // STATUS DATA    
-    IPrimitive<LogicalDate> statusDate();
+    IPrimitive<LogicalDate> statusFrom();
+
+    IPrimitive<LogicalDate> statusUntil();
 
     @Caption(name = "Vacant/Notice")
     IPrimitive<Vacancy> vacancyStatus();

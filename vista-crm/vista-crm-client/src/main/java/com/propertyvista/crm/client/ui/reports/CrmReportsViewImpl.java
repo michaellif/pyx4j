@@ -31,6 +31,9 @@ import com.pyx4j.site.client.ui.reports.Report;
 import com.pyx4j.site.client.ui.reports.ReportFactory;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
+import com.propertyvista.crm.rpc.dto.reports.AvailabilityReportDataDTO;
+import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus;
+import com.propertyvista.domain.reports.AvailabilityReportMetadata;
 
 public class CrmReportsViewImpl extends AbstractReportsView implements CrmReportsView {
 
@@ -112,16 +115,69 @@ public class CrmReportsViewImpl extends AbstractReportsView implements CrmReport
 
         });
 
+        factoryMap.put(AvailabilityReportMetadata.class, new ReportFactory<AvailabilityReportMetadata>() {
+
+            @Override
+            public CEntityForm<AvailabilityReportMetadata> getReportSettingsForm() {
+                CEntityDecoratableForm<AvailabilityReportMetadata> form = new CEntityDecoratableForm<AvailabilityReportMetadata>(
+                        AvailabilityReportMetadata.class) {
+
+                    @Override
+                    public IsWidget createContent() {
+                        int row = -1;
+                        FormFlexPanel panel = new FormFlexPanel();
+                        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().asOf())).build());
+                        return panel;
+                    }
+                };
+                form.initContent();
+                return form;
+            }
+
+            @Override
+            public Report getReport() {
+                // TODO Auto-generated method stub
+                return new Report() {
+                    HTML reportHtml = new HTML();
+
+                    @Override
+                    public Widget asWidget() {
+                        return reportHtml;
+                    }
+
+                    @Override
+                    public void setData(Object data) {
+                        AvailabilityReportDataDTO reportData = (AvailabilityReportDataDTO) data;
+                        SafeHtmlBuilder bb = new SafeHtmlBuilder();
+                        bb.appendHtmlConstant("<table>");
+                        for (UnitAvailabilityStatus status : reportData.unitStatuses) {
+                            bb.appendHtmlConstant("<tr>");
+
+                            cell(bb, status.building().propertyCode().getValue());
+                            cell(bb, status.unit().info().number().getValue());
+                            cell(bb, status.vacancyStatus().getValue().toString());
+
+                            bb.appendHtmlConstant("</tr>");
+                        }
+                        bb.appendHtmlConstant("</table>");
+
+                        reportHtml.setHTML(bb.toSafeHtml());
+                    }
+
+                    private void cell(SafeHtmlBuilder bb, String data) {
+                        bb.appendHtmlConstant("<td>");
+                        bb.appendEscaped(data);
+                        bb.appendHtmlConstant("</td>");
+                    }
+
+                };
+            }
+        });
+
     }
 
     public CrmReportsViewImpl() {
         super(factoryMap);
-    }
-
-    @Override
-    public void setReportData(Object data) {
-        // TODO Auto-generated method stub
-
     }
 
 }

@@ -95,7 +95,8 @@ public class AvailabilityReportManager {
             List<AptUnitOccupancySegment> future = rest(occupancy);
 
             UnitAvailabilityStatus status = EntityFactory.create(UnitAvailabilityStatus.class);
-            status.statusDate().setValue(current.dateFrom().getValue());
+            status.statusFrom().setValue(current.dateFrom().getValue());
+            status.statusUntil().setValue(current.dateTo().getValue());
 
             switch (current.status().getValue()) {
             case pending:
@@ -305,7 +306,7 @@ public class AvailabilityReportManager {
     private void removeStatuses(LogicalDate startingOn) {
         EntityQueryCriteria<UnitAvailabilityStatus> criteria = new EntityQueryCriteria<UnitAvailabilityStatus>(UnitAvailabilityStatus.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().unit(), unit));
-        criteria.add(PropertyCriterion.ge(criteria.proto().statusDate(), startingOn));
+        criteria.add(PropertyCriterion.ge(criteria.proto().statusFrom(), startingOn));
         Persistence.service().delete(criteria);
     }
 

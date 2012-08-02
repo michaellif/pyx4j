@@ -73,11 +73,11 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
         if (on == null) {
             throw new IllegalArgumentException("the report date cannot be null");
         }
-        criteria.add(PropertyCriterion.le(criteria.proto().statusDate(), on));
+        criteria.add(PropertyCriterion.le(criteria.proto().statusFrom(), on));
 
         // use descending order of the status date in order to select the most recent statuses first
         // use unit pk sorting in order to make tacking of already added unit statuses
-        criteria.setSorts(Arrays.asList(new Sort(criteria.proto().unit().getPath().toString(), true), new Sort(criteria.proto().statusDate().getPath()
+        criteria.setSorts(Arrays.asList(new Sort(criteria.proto().unit().getPath().toString(), true), new Sort(criteria.proto().statusFrom().getPath()
                 .toString(), true), new Sort(criteria.proto().id().getPath().toString(), true)));
         List<UnitAvailabilityStatus> unfiltered = Persistence.service().query(criteria);
 
@@ -222,9 +222,9 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
         if (toDate == null) {
             toDate = new LogicalDate(SysDateManager.getSysDate());
         }
-        criteria.add(PropertyCriterion.le(criteria.proto().statusDate(), toDate));
+        criteria.add(PropertyCriterion.le(criteria.proto().statusFrom(), toDate));
         // use descending order of the status date in order to select the most recent statuses first
-        criteria.setSorts(Arrays.asList(new Sort(criteria.proto().unit().getPath().toString(), true), new Sort(criteria.proto().statusDate().getPath()
+        criteria.setSorts(Arrays.asList(new Sort(criteria.proto().unit().getPath().toString(), true), new Sort(criteria.proto().statusFrom().getPath()
                 .toString(), true), new Sort(criteria.proto().id().getPath().toString(), true)));
 
         List<UnitAvailabilityStatus> unitStatuses = Persistence.service().query(criteria);
@@ -302,9 +302,9 @@ public class AvailabilityReportServiceImpl implements AvailabilityReportService 
         if (!buildings.isEmpty()) {
             criteria.add(PropertyCriterion.in(criteria.proto().building(), buildings));
         }
-        criteria.add(PropertyCriterion.le(criteria.proto().statusDate(), asOf));
+        criteria.add(PropertyCriterion.le(criteria.proto().statusFrom(), asOf));
         // use descending order of the status date in order to select the most recent statuses first
-        criteria.setSorts(Arrays.asList(new Sort(criteria.proto().unit().getPath().toString(), true), new Sort(criteria.proto().statusDate().getPath()
+        criteria.setSorts(Arrays.asList(new Sort(criteria.proto().unit().getPath().toString(), true), new Sort(criteria.proto().statusFrom().getPath()
                 .toString(), true), new Sort(criteria.proto().id().getPath().toString(), true)));
 
         List<UnitAvailabilityStatus> unitStatuses = Persistence.service().query(criteria);

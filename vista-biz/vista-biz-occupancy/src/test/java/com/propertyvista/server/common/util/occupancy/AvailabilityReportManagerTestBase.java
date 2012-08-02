@@ -300,7 +300,7 @@ public class AvailabilityReportManagerTestBase {
             assertValid();
 
             UnitAvailabilityStatus expected = EntityFactory.create(UnitAvailabilityStatus.class);
-            expected.statusDate().setValue(statusDate);
+            expected.statusFrom().setValue(statusDate);
             expected.vacancyStatus().setValue(vacancy);
             expected.vacantSince().setValue(vacantSince);
             expected.rentEndDay().setValue(rentEndsOn);
@@ -311,7 +311,7 @@ public class AvailabilityReportManagerTestBase {
             expected.rentedFromDay().setValue(rentStartsOn);
 
             EntityQueryCriteria<UnitAvailabilityStatus> criteria = new EntityQueryCriteria<UnitAvailabilityStatus>(UnitAvailabilityStatus.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().statusDate(), statusDate));
+            criteria.add(PropertyCriterion.eq(criteria.proto().statusFrom(), statusDate));
             criteria.add(PropertyCriterion.eq(criteria.proto().vacancyStatus(), vacancy));
             criteria.add(PropertyCriterion.eq(criteria.proto().vacantSince(), vacantSince));
             criteria.add(PropertyCriterion.eq(criteria.proto().rentEndDay(), rentEndsOn));
