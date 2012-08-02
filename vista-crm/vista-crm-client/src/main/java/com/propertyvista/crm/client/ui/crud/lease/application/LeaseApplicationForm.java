@@ -71,7 +71,7 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
         super.onValueSet(populate);
 
         if (VistaFeatures.instance().onlineApplication()) {
-            setTabVisible(onlineStatusTab, !getValue().leaseApplication().onlineApplication().isNull());
+            setTabVisible(onlineStatusTab, !isEditable() && !getValue().leaseApplication().onlineApplication().isNull());
         }
     }
 
