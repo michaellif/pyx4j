@@ -245,7 +245,7 @@ public interface Lease2 extends IEntity {
     @Owned
     LeaseApplication2 leaseApplication();
 
-    @Owned
+    @Owned(cascade = {})
     @Detached(level = AttachLevel.Detached)
     IList<LeaseTerm> leaseTerms();
 

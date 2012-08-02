@@ -23,7 +23,7 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.crm.rpc.services.lease.common.LeaseViewerCrudServiceBase2;
 import com.propertyvista.domain.communication.EmailTemplateType;
-import com.propertyvista.domain.tenant.lease.LeaseParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseParticipant2;
 import com.propertyvista.dto.LeaseDTO2;
 
 public interface LeaseViewerCrudService2 extends LeaseViewerCrudServiceBase2<LeaseDTO2> {
@@ -41,7 +41,7 @@ public interface LeaseViewerCrudService2 extends LeaseViewerCrudServiceBase2<Lea
     /**
      * <code>callback</code> returns a message that should be display to the users (i.e. e-mails were send successfully);
      */
-    void sendMail(AsyncCallback<String> callback, Key entityId, Vector<LeaseParticipant> users, EmailTemplateType emailType);
+    void sendMail(AsyncCallback<String> callback, Key entityId, Vector<LeaseParticipant2> users, EmailTemplateType emailType);
 
     void activate(AsyncCallback<VoidSerializable> callback, Key entityId);
 }

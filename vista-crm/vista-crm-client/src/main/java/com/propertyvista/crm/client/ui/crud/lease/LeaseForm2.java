@@ -35,9 +35,9 @@ public class LeaseForm2 extends LeaseFormBase2<LeaseDTO2> {
 
         createCommonContent();
 
-        adjustmentsTab = addTab(((LeaseViewerView) getParentView()).getLeaseAdjustmentListerView().asWidget(), i18n.tr("Adjustments"));
-        billsTab = addTab(((LeaseViewerView) getParentView()).getBillListerView().asWidget(), i18n.tr("Bills"));
-        paymentsTab = addTab(((LeaseViewerView) getParentView()).getPaymentListerView().asWidget(), i18n.tr("Payments"));
+        adjustmentsTab = addTab(((LeaseViewerView2) getParentView()).getLeaseAdjustmentListerView().asWidget(), i18n.tr("Adjustments"));
+        billsTab = addTab(((LeaseViewerView2) getParentView()).getBillListerView().asWidget(), i18n.tr("Bills"));
+        paymentsTab = addTab(((LeaseViewerView2) getParentView()).getPaymentListerView().asWidget(), i18n.tr("Payments"));
         financialTab = addTab(createFinancialTransactionHistoryTab().asWidget(), i18n.tr("Financial Summary"));
     }
 

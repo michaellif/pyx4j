@@ -32,6 +32,8 @@ import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.domain.tenant.Guarantor2;
+import com.propertyvista.domain.tenant.Tenant2;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
 import com.propertyvista.domain.tenant.lease.Deposit;
@@ -64,7 +66,7 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
         updateAdjustments(dbo);
         ServerSideFactory.create(LeaseFacade2.class).persist(dbo);
         ServerSideFactory.create(LeaseFacade2.class).init(dbo.lease());
-//        ServerSideFactory.create(LeaseFacade2.class).persist(dbo.lease());
+        ServerSideFactory.create(LeaseFacade2.class).persist(dbo.lease());
     }
 
     @Override
@@ -86,6 +88,22 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
     @Override
     protected void enhanceRetrieved(LeaseTerm in, LeaseTermDTO dto) {
         super.enhanceRetrieved(in, dto);
+
+        Persistence.service().retrieve(dto.version().leaseProducts().serviceItem().item().product());
+
+        for (BillableItem item : dto.version().leaseProducts().featureItems()) {
+            Persistence.service().retrieve(item.item().product());
+        }
+
+        Persistence.service().retrieve(dto.version().tenants());
+        for (Tenant2 item : dto.version().tenants()) {
+            Persistence.service().retrieve(item.screening());
+        }
+
+        Persistence.service().retrieve(dto.version().guarantors());
+        for (Guarantor2 item : dto.version().guarantors()) {
+            Persistence.service().retrieve(item.screening());
+        }
 
         Persistence.service().retrieve(dto.lease());
         if (!dto.lease().unit().isNull()) {

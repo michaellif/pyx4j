@@ -36,7 +36,7 @@ import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.Lease2;
 import com.propertyvista.domain.tenant.lease.Lease2.CompletionType;
-import com.propertyvista.domain.tenant.lease.LeaseParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseParticipant2;
 import com.propertyvista.domain.tenant.ptapp.MasterOnlineApplication2;
 import com.propertyvista.dto.LeaseDTO2;
 
@@ -93,7 +93,7 @@ public class LeaseViewerCrudService2Impl extends LeaseViewerCrudServiceBase2Impl
     }
 
     @Override
-    public void sendMail(AsyncCallback<String> callback, Key entityId, Vector<LeaseParticipant> users, EmailTemplateType emailType) {
+    public void sendMail(AsyncCallback<String> callback, Key entityId, Vector<LeaseParticipant2> users, EmailTemplateType emailType) {
         Lease2 lease = Persistence.service().retrieve(dboClass, entityId.asCurrentKey());
         if ((lease == null) || (lease.isNull())) {
             throw new RuntimeException("Entity '" + EntityFactory.getEntityMeta(dboClass).getCaption() + "' " + entityId + " NotFound");
@@ -109,7 +109,7 @@ public class LeaseViewerCrudService2Impl extends LeaseViewerCrudServiceBase2Impl
         Persistence.service().retrieve(app);
 
         // check that all lease participants have an associated user entity (email)
-        for (LeaseParticipant user : users) {
+        for (LeaseParticipant2 user : users) {
             if (user.customer().user().isNull()) {
                 throw new UserRuntimeException(i18n.tr("''Send Email'' operation failed, email of lease participant {0} was not found", user.customer()
                         .person().name().getStringView()));
@@ -118,7 +118,7 @@ public class LeaseViewerCrudService2Impl extends LeaseViewerCrudServiceBase2Impl
 
         if (emailType == EmailTemplateType.TenantInvitation) {
             // check that selected users can be used for this template
-            for (LeaseParticipant user : users) {
+            for (LeaseParticipant2 user : users) {
                 if (user.isInstanceOf(Guarantor.class)) {
                     throw new UserRuntimeException(i18n.tr(
                             "''Send Mail'' operation failed: can''t send \"{0}\" for Guarantor. Please re-send e-mail for all valid recipients.",
@@ -128,7 +128,7 @@ public class LeaseViewerCrudService2Impl extends LeaseViewerCrudServiceBase2Impl
 
             // send e-mails
             CommunicationFacade commFacade = ServerSideFactory.create(CommunicationFacade.class);
-            for (LeaseParticipant user : users) {
+            for (LeaseParticipant2 user : users) {
                 if (user.isInstanceOf(Tenant.class)) {
                     Tenant tenant = user.duplicate(Tenant.class);
                     commFacade.sendTenantInvitation(tenant);

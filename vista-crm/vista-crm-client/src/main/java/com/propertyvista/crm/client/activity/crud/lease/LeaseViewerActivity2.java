@@ -28,6 +28,7 @@ import com.pyx4j.essentials.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
+import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.activity.crud.ListerActivityBase;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.pyx4j.site.rpc.CrudAppPlace;
@@ -35,6 +36,7 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 import com.propertyvista.crm.client.activity.crud.lease.common.LeaseViewerActivityBase2;
 import com.propertyvista.crm.client.ui.crud.lease.LeaseViewerView2;
 import com.propertyvista.crm.client.ui.crud.viewfactories.LeaseViewFactory;
+import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.dto.billing.BillDataDTO;
 import com.propertyvista.crm.rpc.services.billing.BillCrudService;
 import com.propertyvista.crm.rpc.services.billing.BillingExecutionService;
@@ -45,7 +47,7 @@ import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease2;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
-import com.propertyvista.domain.tenant.lease.LeaseParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseParticipant2;
 import com.propertyvista.dto.LeaseDTO2;
 import com.propertyvista.dto.PaymentRecordDTO;
 
@@ -184,13 +186,18 @@ public class LeaseViewerActivity2 extends LeaseViewerActivityBase2<LeaseDTO2> im
     }
 
     @Override
-    public void sendMail(List<LeaseParticipant> users, EmailTemplateType emailType) {
+    public void sendMail(List<LeaseParticipant2> users, EmailTemplateType emailType) {
         ((LeaseViewerCrudService2) getService()).sendMail(new DefaultAsyncCallback<String>() {
             @Override
             public void onSuccess(String message) {
                 populate();
                 ((LeaseViewerView2) getView()).reportSendMailActionResult(message);
             }
-        }, getEntityId(), new Vector<LeaseParticipant>(users), emailType);
+        }, getEntityId(), new Vector<LeaseParticipant2>(users), emailType);
+    }
+
+    @Override
+    public void editCurrentTerm() {
+        AppSite.getPlaceController().goTo(new CrmSiteMap.Tenants.LeaseTerm().formNewItemPlace(((LeaseViewerView2) getView()).getCurrentTerm().getPrimaryKey()));
     }
 }

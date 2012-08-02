@@ -22,7 +22,8 @@ import com.propertyvista.crm.client.ui.crud.lease.common.LeaseViewerViewBase2;
 import com.propertyvista.crm.rpc.dto.billing.BillDataDTO;
 import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
-import com.propertyvista.domain.tenant.lease.LeaseParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseParticipant2;
+import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.dto.LeaseDTO2;
 import com.propertyvista.dto.PaymentRecordDTO;
 
@@ -42,8 +43,9 @@ public interface LeaseViewerView2 extends LeaseViewerViewBase2<LeaseDTO2> {
 
         void activate();
 
-        void sendMail(List<LeaseParticipant> users, EmailTemplateType emailType);
+        void sendMail(List<LeaseParticipant2> users, EmailTemplateType emailType);
 
+        void editCurrentTerm();
     }
 
     IListerView<BillDataDTO> getBillListerView();
@@ -51,6 +53,8 @@ public interface LeaseViewerView2 extends LeaseViewerViewBase2<LeaseDTO2> {
     IListerView<PaymentRecordDTO> getPaymentListerView();
 
     IListerView<LeaseAdjustment> getLeaseAdjustmentListerView();
+
+    LeaseTerm getCurrentTerm();
 
     void reportSendMailActionResult(String message);
 }

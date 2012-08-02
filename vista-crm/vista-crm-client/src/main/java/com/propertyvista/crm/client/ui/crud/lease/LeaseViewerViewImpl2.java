@@ -49,7 +49,8 @@ import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.tenant.lease.Lease2.CompletionType;
 import com.propertyvista.domain.tenant.lease.Lease2.Status;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
-import com.propertyvista.domain.tenant.lease.LeaseParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseParticipant2;
+import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.dto.LeaseDTO2;
 import com.propertyvista.dto.PaymentRecordDTO;
 
@@ -93,13 +94,13 @@ public class LeaseViewerViewImpl2 extends LeaseViewerViewImplBase2<LeaseDTO2> im
         sendMail = new Button(i18n.tr("Send Mail..."), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                ((LeaseViewerView.Presenter) getPresenter()).retrieveUsers(new DefaultAsyncCallback<List<LeaseParticipant>>() {
+                ((LeaseViewerView2.Presenter) getPresenter()).retrieveUsers(new DefaultAsyncCallback<List<LeaseParticipant2>>() {
                     @Override
-                    public void onSuccess(List<LeaseParticipant> result) {
+                    public void onSuccess(List<LeaseParticipant2> result) {
                         new SendMailBox(result) {
                             @Override
                             public boolean onClickOk() {
-                                ((LeaseViewerView.Presenter) getPresenter()).sendMail(getSelectedItems(), getEmailType());
+                                ((LeaseViewerView2.Presenter) getPresenter()).sendMail(getSelectedItems(), getEmailType());
                                 return true;
                             }
                         }.show();
@@ -112,7 +113,7 @@ public class LeaseViewerViewImpl2 extends LeaseViewerViewImplBase2<LeaseDTO2> im
         runBill = new Button(i18n.tr("Run Bill"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                ((LeaseViewerView.Presenter) getPresenter()).startBilling();
+                ((LeaseViewerView2.Presenter) getPresenter()).startBilling();
             }
         });
         addHeaderToolbarTwoItem(runBill.asWidget());
@@ -123,7 +124,7 @@ public class LeaseViewerViewImpl2 extends LeaseViewerViewImplBase2<LeaseDTO2> im
                 new TermLeaseBox(CompletionType.Notice) {
                     @Override
                     public boolean onClickOk() {
-                        ((LeaseViewerView.Presenter) getPresenter()).notice(getValue().moveOutNotice().getValue(), getValue().expectedMoveOut().getValue());
+                        ((LeaseViewerView2.Presenter) getPresenter()).notice(getValue().moveOutNotice().getValue(), getValue().expectedMoveOut().getValue());
                         return true;
                     }
                 }.show();
@@ -134,7 +135,7 @@ public class LeaseViewerViewImpl2 extends LeaseViewerViewImplBase2<LeaseDTO2> im
         cancelNotice = new Button(i18n.tr("Cancel Notice"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                ((LeaseViewerView.Presenter) getPresenter()).cancelNotice();
+                ((LeaseViewerView2.Presenter) getPresenter()).cancelNotice();
             }
         });
         addHeaderToolbarTwoItem(cancelNotice.asWidget());
@@ -145,7 +146,7 @@ public class LeaseViewerViewImpl2 extends LeaseViewerViewImplBase2<LeaseDTO2> im
                 new TermLeaseBox(CompletionType.Eviction) {
                     @Override
                     public boolean onClickOk() {
-                        ((LeaseViewerView.Presenter) getPresenter()).evict(getValue().moveOutNotice().getValue(), getValue().expectedMoveOut().getValue());
+                        ((LeaseViewerView2.Presenter) getPresenter()).evict(getValue().moveOutNotice().getValue(), getValue().expectedMoveOut().getValue());
                         return true;
                     }
                 }.show();
@@ -156,7 +157,7 @@ public class LeaseViewerViewImpl2 extends LeaseViewerViewImplBase2<LeaseDTO2> im
         cancelEvict = new Button(i18n.tr("Cancel Evict"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                ((LeaseViewerView.Presenter) getPresenter()).cancelEvict();
+                ((LeaseViewerView2.Presenter) getPresenter()).cancelEvict();
             }
         });
         addHeaderToolbarTwoItem(cancelEvict.asWidget());
@@ -164,7 +165,7 @@ public class LeaseViewerViewImpl2 extends LeaseViewerViewImplBase2<LeaseDTO2> im
         activate = new Button(i18n.tr("Activate"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                ((LeaseViewerView.Presenter) getPresenter()).activate();
+                ((LeaseViewerView2.Presenter) getPresenter()).activate();
             }
         });
         addHeaderToolbarTwoItem(activate.asWidget());
@@ -200,14 +201,6 @@ public class LeaseViewerViewImpl2 extends LeaseViewerViewImplBase2<LeaseDTO2> im
             cancelEvict.setVisible(completion == CompletionType.Eviction && status != Status.Closed);
             activate.setVisible(status == Status.Created);
         }
-
-        // disable editing for completed/closed leases:
-        getEditButton().setVisible(!status.isFormer());
-
-        // tweak finalizing availability:
-        if (getFinalizeButton().isVisible()) {
-            getFinalizeButton().setVisible(!value.unit().isNull() && status.isCurrent());
-        }
     }
 
     @Override
@@ -223,6 +216,11 @@ public class LeaseViewerViewImpl2 extends LeaseViewerViewImplBase2<LeaseDTO2> im
     @Override
     public IListerView<LeaseAdjustment> getLeaseAdjustmentListerView() {
         return adjustmentLister;
+    }
+
+    @Override
+    public LeaseTerm getCurrentTerm() {
+        return getForm().getValue().currentLeaseTerm();
     }
 
     private abstract class TermLeaseBox extends OkCancelDialog {
@@ -306,17 +304,17 @@ public class LeaseViewerViewImpl2 extends LeaseViewerViewImplBase2<LeaseDTO2> im
         }
     }
 
-    private abstract class SendMailBox extends EntitySelectorListDialog<LeaseParticipant> {
+    private abstract class SendMailBox extends EntitySelectorListDialog<LeaseParticipant2> {
 
         private CComboBox<EmailTemplateType> emailType;
 
-        public SendMailBox(List<LeaseParticipant> applicationUsers) {
+        public SendMailBox(List<LeaseParticipant2> applicationUsers) {
             super(i18n.tr("Send Mail"), true, applicationUsers);
             getOkButton().setText(i18n.tr("Send"));
         }
 
         @Override
-        protected Widget initBody(boolean isMultiselectAllowed, List<LeaseParticipant> data) {
+        protected Widget initBody(boolean isMultiselectAllowed, List<LeaseParticipant2> data) {
             VerticalPanel body = new VerticalPanel();
             body.add(new HTML(i18n.tr("Select Tenants:")));
             body.add(super.initBody(isMultiselectAllowed, data));
