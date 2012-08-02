@@ -82,7 +82,7 @@ public class LeaseLister2 extends ListerBase<LeaseDTO2> {
     }
 
     private Lease2 createNewLease(Service.ServiceType leaseType, BigDecimal balance) {
-        Lease2 newLease = EntityFactory.create(LeaseDTO2.class);
+        Lease2 newLease = EntityFactory.create(Lease2.class);
 
         newLease.type().setValue(leaseType);
         newLease.paymentFrequency().setValue(PaymentFrequency.Monthly);
