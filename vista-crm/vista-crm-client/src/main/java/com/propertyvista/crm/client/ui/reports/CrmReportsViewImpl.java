@@ -22,22 +22,22 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.CEntityForm;
+import com.pyx4j.entity.shared.reports.ReportMetadata;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.site.client.ui.reports.AbstractReportsView;
 import com.pyx4j.site.client.ui.reports.HasAdvancedModeReportFactory;
 import com.pyx4j.site.client.ui.reports.Report;
 import com.pyx4j.site.client.ui.reports.ReportFactory;
-import com.pyx4j.site.client.ui.reports.ReportSettings;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 
 public class CrmReportsViewImpl extends AbstractReportsView implements CrmReportsView {
 
-    private static Map<Class<? extends ReportSettings>, ReportFactory> factoryMap;
+    private static Map<Class<? extends ReportMetadata>, ReportFactory> factoryMap;
 
     static {
-        factoryMap = new HashMap<Class<? extends ReportSettings>, ReportFactory>();
+        factoryMap = new HashMap<Class<? extends ReportMetadata>, ReportFactory>();
 
         factoryMap.put(MockupReportSettings.class, new HasAdvancedModeReportFactory() {
             @Override

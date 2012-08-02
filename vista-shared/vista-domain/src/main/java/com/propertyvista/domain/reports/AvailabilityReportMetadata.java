@@ -7,40 +7,33 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jul 31, 2012
+ * Created on Aug 2, 2012
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.reports;
+package com.propertyvista.domain.reports;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.shared.IPrimitiveSet;
 import com.pyx4j.entity.shared.reports.HasAdvancedSettings;
 import com.pyx4j.entity.shared.reports.ReportMetadata;
 
+import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus;
+
 @Transient
-public interface MockupReportSettings extends ReportMetadata, HasAdvancedSettings {
+public interface AvailabilityReportMetadata extends ReportMetadata, HasAdvancedSettings {
 
-    IPrimitive<String> valueX();
+    /** is null when current */
+    IPrimitive<LogicalDate> asOf();
 
-    IPrimitive<String> valueY();
+    IPrimitiveSet<UnitAvailabilityStatus.Vacancy> vacancyStatus();
 
-    IPrimitive<String> valueZ();
+    IPrimitiveSet<UnitAvailabilityStatus.RentedStatus> rentedStatus();
 
-    IPrimitive<String> advancedValueX();
+    IPrimitiveSet<UnitAvailabilityStatus.RentReadiness> rentReadinessStatus();
 
-    IPrimitive<String> advancedValueY();
-
-    IPrimitive<String> advancedValueZ();
-
-    IPrimitive<String> advancedValue1();
-
-    IPrimitive<String> advancedValue2();
-
-    IPrimitive<String> advancedValue3();
-
-    IPrimitive<String> advancedValue4();
-
-    IPrimitive<String> advancedValue5();
+    IPrimitiveSet<UnitAvailabilityStatus.Scoping> scopingStatus();
 
 }
