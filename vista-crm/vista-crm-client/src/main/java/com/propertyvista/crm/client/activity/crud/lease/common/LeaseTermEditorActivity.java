@@ -25,15 +25,19 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.ui.crud.lease.common.term.LeaseTermEditorView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.LeaseViewFactory;
+import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.lease.common.LeaseTermCrudService;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Deposit;
 import com.propertyvista.domain.tenant.lease.Deposit.DepositType;
+import com.propertyvista.domain.tenant.lease.Lease2;
 import com.propertyvista.dto.LeaseTermDTO;
 
 public class LeaseTermEditorActivity extends EditorActivityBase<LeaseTermDTO> implements LeaseTermEditorView.Presenter {
+
+    private LeaseTermDTO currentValue;
 
     public LeaseTermEditorActivity(CrudAppPlace place) {
         super(place, LeaseViewFactory.instance(LeaseTermEditorView.class), GWT.<LeaseTermCrudService> create(LeaseTermCrudService.class), LeaseTermDTO.class);
@@ -71,7 +75,17 @@ public class LeaseTermEditorActivity extends EditorActivityBase<LeaseTermDTO> im
     }
 
     @Override
+    public void onPopulateSuccess(LeaseTermDTO result) {
+        currentValue = result;
+        super.onPopulateSuccess(result);
+    }
+
+    @Override
     protected void goToViewer(Key entityID) {
-        AppSite.getPlaceController().goTo(AppSite.getPlaceController().getForwardedFrom());
+        if (currentValue.lease().status().getValue() == Lease2.Status.Application) {
+            AppSite.getPlaceController().goTo(new CrmSiteMap.Tenants.LeaseApplication().formViewerPlace(currentValue.lease().getPrimaryKey()));
+        } else {
+            AppSite.getPlaceController().goTo(new CrmSiteMap.Tenants.Lease2().formViewerPlace(currentValue.lease().getPrimaryKey()));
+        }
     }
 }

@@ -21,6 +21,7 @@ import com.propertyvista.domain.tenant.Guarantor2;
 import com.propertyvista.domain.tenant.Tenant2;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease2;
+import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.dto.LeaseDTO2;
 
 public abstract class LeaseCrudServiceBase2Impl<DTO extends LeaseDTO2> extends AbstractCrudServiceDtoImpl<Lease2, DTO> {
@@ -63,6 +64,16 @@ public abstract class LeaseCrudServiceBase2Impl<DTO extends LeaseDTO2> extends A
         // load detached entities:
         Persistence.service().retrieve(dto.unit());
         Persistence.service().retrieve(dto.unit().building());
+
+        if (dto.currentLeaseTerm().version().isNull()) {
+            dto.currentLeaseTerm().set(Persistence.secureRetrieveDraft(LeaseTerm.class, dto.currentLeaseTerm().getPrimaryKey()));
+        }
+
+        Persistence.service().retrieve(dto.leaseTerms());
+        if (!dto.leaseTerms().isEmpty()) {
+            dto.leaseFrom().set(dto.leaseTerms().get(0).leaseFrom());
+            dto.leaseTo().set(dto.leaseTerms().get(dto.leaseTerms().size() - 1).leaseTo());
+        }
 
         Persistence.service().retrieve(dto.currentLeaseTerm().version().tenants());
         Persistence.service().retrieve(dto.currentLeaseTerm().version().guarantors());

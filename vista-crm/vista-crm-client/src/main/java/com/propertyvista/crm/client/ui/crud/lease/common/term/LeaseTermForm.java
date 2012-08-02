@@ -77,15 +77,15 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
 //        tab = addTab(isEditable() ? new HTML() : ((LeaseViewerViewBase<DTO>) getParentView()).getDepositListerView().asWidget(), i18n.tr("Deposits"));
 //        setTabEnabled(tab, !isEditable());
 
-        chargesTab = addTab(createChargesTab(i18n.tr("Charges")));
-        setTabEnabled(chargesTab, !isEditable());
+//        chargesTab = addTab(createChargesTab(i18n.tr("Charges")));
+//        setTabEnabled(chargesTab, !isEditable());
     }
 
     @Override
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
 
-        setTabVisible(chargesTab, getValue().lease().status().getValue().isDraft());
+//        setTabVisible(chargesTab, getValue().lease().status().getValue().isDraft());
 
         get(proto().lease().completion()).setVisible(!getValue().lease().completion().isNull());
         get(proto().approvalDate()).setVisible(!getValue().approvalDate().isNull());
