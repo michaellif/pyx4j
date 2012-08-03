@@ -38,8 +38,8 @@ public class BoardViewImpl extends ViewImplBase implements BoardView {
      */
     protected void setBoard(BoardBase board) {
 
-        if (getCenter() == null) { // finalise UI here:
-            add(new LayoutPanel());
+        if (getContentPane() == null) { // finalise UI here:
+            setContentPane(new LayoutPanel());
             setSize("100%", "100%");
         }
 
@@ -49,7 +49,7 @@ public class BoardViewImpl extends ViewImplBase implements BoardView {
 
         this.board = board;
 
-        LayoutPanel center = (LayoutPanel) getCenter();
+        LayoutPanel center = (LayoutPanel) getContentPane();
         center.clear(); // remove current board...
         center.add(board.asWidget());
     }

@@ -18,9 +18,12 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.EnumSet;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.LogicalDate;
@@ -33,6 +36,7 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.pyx4j.site.client.ui.crud.lister.ListerInternalViewImplBase;
+import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
@@ -115,6 +119,20 @@ public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> i
 
         // set main form here:
         setForm(new BuildingForm(true));
+
+        addHeaderToolbarTwoItem(new Button(i18n.tr("Notes & Attachments"), new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                showVisor(new Label("Notes & Attachments Widget"), "Notes&Attachments");
+            }
+        }).asWidget());
+
+        addHeaderToolbarTwoItem(new Button(i18n.tr("Dashboard"), new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                showVisor(new Label("Dashboard Widget"), "Dashboard");
+            }
+        }).asWidget());
     }
 
     @Override
