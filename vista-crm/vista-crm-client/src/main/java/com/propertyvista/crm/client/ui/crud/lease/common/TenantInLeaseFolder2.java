@@ -16,15 +16,19 @@ package com.propertyvista.crm.client.ui.crud.lease.common;
 import java.util.Arrays;
 import java.util.List;
 
-import com.pyx4j.commons.Key;
+import com.google.gwt.user.client.Command;
+
 import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
+import com.pyx4j.entity.client.ui.CEntityHyperlink;
 import com.pyx4j.entity.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.AppPlaceEntityMapper;
+import com.pyx4j.site.client.AppSite;
 
-import com.propertyvista.common.client.ui.components.editors.NameEditor;
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
+import com.propertyvista.domain.person.Name;
 import com.propertyvista.domain.tenant.Tenant2;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant2;
 
@@ -40,8 +44,8 @@ public class TenantInLeaseFolder2 extends VistaTableFolder<Tenant2> {
     public List<EntityFolderColumnDescriptor> columns() {
         return Arrays.asList(//@formatter:off
                 new EntityFolderColumnDescriptor(proto().participantId(), "7em"),
-                new EntityFolderColumnDescriptor(proto().customer().person().name(), "30em"),
-                new EntityFolderColumnDescriptor(proto().role(), "15em"),
+                new EntityFolderColumnDescriptor(proto().customer().person().name(), "25em"),
+                new EntityFolderColumnDescriptor(proto().role(), "10em"),
                 new EntityFolderColumnDescriptor(proto().relationship(), "15em"),
                 new EntityFolderColumnDescriptor(proto().percentage(), "5em"));
           //@formatter:on
@@ -66,12 +70,13 @@ public class TenantInLeaseFolder2 extends VistaTableFolder<Tenant2> {
         @Override
         protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
             if (proto().customer().person().name() == column.getObject()) {
-                return inject(proto().customer().person().name(), new NameEditor(i18n.tr("Tenant"), Tenant2.class) {
+                return inject(proto().customer().person().name(), new CEntityHyperlink<Name>(new Command() {
                     @Override
-                    public Key getLinkKey() {
-                        return TenantInLeaseViewer.this.getValue().getPrimaryKey();
+                    public void execute() {
+                        AppSite.getPlaceController().goTo(
+                                AppPlaceEntityMapper.resolvePlace(Tenant2.class).formViewerPlace(TenantInLeaseViewer.this.getValue().getPrimaryKey()));
                     }
-                });
+                }));
             }
             return super.createCell(column);
         }

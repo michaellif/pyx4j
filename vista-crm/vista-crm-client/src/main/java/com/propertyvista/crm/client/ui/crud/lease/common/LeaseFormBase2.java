@@ -65,16 +65,37 @@ public abstract class LeaseFormBase2<DTO extends LeaseDTO2> extends CrmEntityFor
 
     private FormFlexPanel createDetailsTab(String title) {
         FormFlexPanel main = new FormFlexPanel(title);
-
         int row = -1;
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseId()), 15).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().type(), new CEnumLabel())).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().paymentFrequency(), new CEnumLabel())).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().status(), new CEnumLabel())).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().completion(), new CEnumLabel())).build());
-//        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingAccount().accountNumber())).build());
 
-        // Lease dates:
+        // Lease details: ---------------------------------------------------------------------------------------------------------------------------
+        FormFlexPanel detailsPanel = new FormFlexPanel();
+
+        int detailsRow = -1; // first column:
+        detailsPanel.setWidget(++detailsRow, 0, new DecoratorBuilder(inject(proto().leaseId()), 15).build());
+        detailsPanel.setWidget(++detailsRow, 0, new DecoratorBuilder(inject(proto().type(), new CEnumLabel())).build());
+        detailsPanel.setWidget(++detailsRow, 0, new DecoratorBuilder(inject(proto().paymentFrequency(), new CEnumLabel())).build());
+        detailsPanel.setWidget(++detailsRow, 0, new DecoratorBuilder(inject(proto().status(), new CEnumLabel())).build());
+        detailsPanel.setWidget(++detailsRow, 0, new DecoratorBuilder(inject(proto().completion(), new CEnumLabel())).build());
+//        detailPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingAccount().accountNumber())).build());
+
+        detailsRow = -1; // second column:
+        detailsPanel.setBR(++detailsRow, 1, 1);
+        detailsPanel.setWidget(++detailsRow, 1,
+                new DecoratorBuilder(inject(proto().unit().building(), new CEntityCrudHyperlink<Building>(AppPlaceEntityMapper.resolvePlace(Building.class))),
+                        20).build());
+        detailsPanel.setWidget(++detailsRow, 1,
+                new DecoratorBuilder(inject(proto().unit(), new CEntityCrudHyperlink<AptUnit>(AppPlaceEntityMapper.resolvePlace(AptUnit.class))), 20).build());
+
+        detailsPanel.setWidget(++detailsRow, 1,
+                new DecoratorBuilder(
+                        inject(proto().currentLeaseTerm(), new CEntityCrudHyperlink<LeaseTerm>(AppPlaceEntityMapper.resolvePlace(LeaseTerm.class))), 20)
+                        .build());
+
+        detailsPanel.getColumnFormatter().setWidth(0, "40%");
+        detailsPanel.getColumnFormatter().setWidth(1, "60%");
+        main.setWidget(++row, 0, detailsPanel);
+
+        // Lease dates: -----------------------------------------------------------------------------------------------------------------------------
         main.setBR(++row, 0, 1);
         FormFlexPanel datesPanel = new FormFlexPanel();
 
@@ -90,20 +111,7 @@ public abstract class LeaseFormBase2<DTO extends LeaseDTO2> extends CrmEntityFor
         datesPanel.getColumnFormatter().setWidth(1, "60%");
         main.setWidget(++row, 0, datesPanel);
 
-        // Building/Unit/Term:
-        main.setBR(++row, 0, 1);
-        main.setWidget(++row, 0,
-                new DecoratorBuilder(inject(proto().unit().building(), new CEntityCrudHyperlink<Building>(AppPlaceEntityMapper.resolvePlace(Building.class))),
-                        20).build());
-        main.setWidget(++row, 0,
-                new DecoratorBuilder(inject(proto().unit(), new CEntityCrudHyperlink<AptUnit>(AppPlaceEntityMapper.resolvePlace(AptUnit.class))), 20).build());
-
-        main.setWidget(++row, 0,
-                new DecoratorBuilder(
-                        inject(proto().currentLeaseTerm(), new CEntityCrudHyperlink<LeaseTerm>(AppPlaceEntityMapper.resolvePlace(LeaseTerm.class))), 20)
-                        .build());
-
-        // Move dates:
+        // Move dates: ------------------------------------------------------------------------------------------------------------------------------
         main.setBR(++row, 0, 1);
         datesPanel = new FormFlexPanel();
 
@@ -124,22 +132,28 @@ public abstract class LeaseFormBase2<DTO extends LeaseDTO2> extends CrmEntityFor
         datesPanel.getColumnFormatter().setWidth(1, "60%");
         main.setWidget(++row, 0, datesPanel);
 
-        // other dates:
+        // Other dates: -----------------------------------------------------------------------------------------------------------------------------
         main.setBR(++row, 0, 1);
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().creationDate()), 9).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().approvalDate()), 9).build());
+        datesPanel = new FormFlexPanel();
+
+        datesPanel.setWidget(0, 0, new DecoratorBuilder(inject(proto().creationDate()), 9).build());
+        datesPanel.setWidget(0, 1, new DecoratorBuilder(inject(proto().approvalDate()), 9).build());
 
         get(proto().creationDate()).setViewable(true);
         get(proto().approvalDate()).setViewable(true);
 
-        // tenants/guarantors:
+        datesPanel.getColumnFormatter().setWidth(0, "40%");
+        datesPanel.getColumnFormatter().setWidth(1, "60%");
+        main.setWidget(++row, 0, datesPanel);
+
+        // Tenants/Guarantors: ----------------------------------------------------------------------------------------------------------------------
         main.setH1(++row, 0, 2, proto().currentLeaseTerm().version().tenants().getMeta().getCaption());
         main.setWidget(++row, 0, inject(proto().currentLeaseTerm().version().tenants(), new TenantInLeaseFolder2()));
 
         main.setH1(++row, 0, 2, proto().currentLeaseTerm().version().guarantors().getMeta().getCaption());
         main.setWidget(++row, 0, inject(proto().currentLeaseTerm().version().guarantors(), new GuarantorInLeaseFolder2()));
 
-        // Products:
+        // Products: --------------------------------------------------------------------------------------------------------------------------------
         main.setH1(++row, 0, 2, i18n.tr("Service"));
         main.setWidget(++row, 0, inject(proto().currentLeaseTerm().version().leaseProducts().serviceItem(), new BillableItemViewer()));
 
