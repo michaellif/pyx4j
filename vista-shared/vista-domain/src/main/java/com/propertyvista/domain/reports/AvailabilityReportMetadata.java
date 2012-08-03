@@ -15,6 +15,7 @@ package com.propertyvista.domain.reports;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.IPrimitiveSet;
 import com.pyx4j.entity.shared.reports.HasAdvancedSettings;
@@ -26,6 +27,7 @@ import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityS
 public interface AvailabilityReportMetadata extends ReportMetadata, HasAdvancedSettings {
 
     /** is null when current */
+    @NotNull
     IPrimitive<LogicalDate> asOf();
 
     IPrimitiveSet<UnitAvailabilityStatus.Vacancy> vacancyStatus();

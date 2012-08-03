@@ -16,6 +16,8 @@ package com.propertyvista.crm.rpc.dto.reports;
 import java.io.Serializable;
 import java.util.Vector;
 
+import com.pyx4j.commons.LogicalDate;
+
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus;
 
 public class AvailabilityReportDataDTO implements Serializable {
@@ -23,5 +25,7 @@ public class AvailabilityReportDataDTO implements Serializable {
     private static final long serialVersionUID = -4635623219109285728L;
 
     public Vector<UnitAvailabilityStatus> unitStatuses;
+
+    public LogicalDate asOf;
 
 }

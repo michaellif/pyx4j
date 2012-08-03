@@ -41,21 +41,18 @@ public class AvailabilityReportsGenerator implements ReportGenerator {
             meta.asOf().setValue(new LogicalDate());
         }
 
-        EntityQueryCriteria<UnitAvailabilityStatus> criteria = EntityQueryCriteria.create(UnitAvailabilityStatus.class);
-        criteria.add(PropertyCriterion.le(criteria.proto().statusFrom(), meta.asOf()));
-        criteria.add(PropertyCriterion.ge(criteria.proto().statusUntil(), meta.asOf()));
-        criteria.add(PropertyCriterion.ne(criteria.proto().vacancyStatus(), null));
-
-        List<UnitAvailabilityStatus> statuses = Persistence.secureQuery(criteria);
+        List<UnitAvailabilityStatus> statuses = Persistence.secureQuery(createAvailabilityCriteria(meta));
+        clearUnrequiredData(statuses);
 
         AvailabilityReportDataDTO reportData = new AvailabilityReportDataDTO();
         reportData.unitStatuses = new Vector<UnitAvailabilityStatus>(statuses);
-        clearUnrequiredData(reportData.unitStatuses);
+        reportData.asOf = meta.asOf().getValue();
+
         return reportData;
     }
 
-    private void clearUnrequiredData(Vector<UnitAvailabilityStatus> unitsStatusPage) {
-        for (UnitAvailabilityStatus status : unitsStatusPage) {
+    private void clearUnrequiredData(List<UnitAvailabilityStatus> statuses) {
+        for (UnitAvailabilityStatus status : statuses) {
             Building building = EntityFactory.create(Building.class);
             building.id().setValue(status.building().id().getValue());
             building.propertyCode().setValue(status.building().propertyCode().getValue());
@@ -77,6 +74,34 @@ public class AvailabilityReportsGenerator implements ReportGenerator {
             floorplan.marketingName().setValue(status.floorplan().marketingName().getValue());
             status.floorplan().set(floorplan);
         }
+    }
+
+    private EntityQueryCriteria<UnitAvailabilityStatus> createAvailabilityCriteria(AvailabilityReportMetadata metadata) {
+        EntityQueryCriteria<UnitAvailabilityStatus> criteria = EntityQueryCriteria.create(UnitAvailabilityStatus.class);
+        criteria.add(PropertyCriterion.le(criteria.proto().statusFrom(), metadata.asOf()));
+        criteria.add(PropertyCriterion.ge(criteria.proto().statusUntil(), metadata.asOf()));
+        criteria.add(PropertyCriterion.ne(criteria.proto().vacancyStatus(), null));
+        if (metadata.isInAdvancedMode().isBooleanTrue()) {
+
+        } else {
+            if (!metadata.vacancyStatus().isEmpty()) {
+                criteria.add(PropertyCriterion.in(criteria.proto().vacancyStatus(), metadata.vacancyStatus()));
+            } else {
+                criteria.add(PropertyCriterion.eq(criteria.proto().vacancyStatus(), (Serializable) null));
+            }
+            if (!metadata.rentedStatus().isEmpty()) {
+                criteria.add(PropertyCriterion.in(criteria.proto().rentedStatus(), metadata.rentedStatus()));
+            } else {
+                criteria.add(PropertyCriterion.eq(criteria.proto().rentedStatus(), (Serializable) null));
+            }
+            if (!metadata.rentReadinessStatus().isEmpty()) {
+                criteria.add(PropertyCriterion.in(criteria.proto().rentReadinessStatus(), metadata.rentReadinessStatus()));
+            } else {
+                criteria.add(PropertyCriterion.eq(criteria.proto().rentReadinessStatus(), (Serializable) null));
+            }
+
+        }
+        return criteria;
     }
 
 }

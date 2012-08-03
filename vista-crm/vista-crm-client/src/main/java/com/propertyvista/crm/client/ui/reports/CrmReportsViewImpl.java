@@ -15,6 +15,7 @@ package com.propertyvista.crm.client.ui.reports;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.client.ui.HTML;
@@ -22,20 +23,32 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.CEntityForm;
+import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
+import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
+import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.reports.ReportMetadata;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.ValidationError;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.reports.AbstractReportsView;
 import com.pyx4j.site.client.ui.reports.HasAdvancedModeReportFactory;
 import com.pyx4j.site.client.ui.reports.Report;
 import com.pyx4j.site.client.ui.reports.ReportFactory;
 
+import com.propertyvista.common.client.ui.components.SubsetSelector.Layout;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
+import com.propertyvista.common.client.ui.components.c.CEnumSubsetSelector;
 import com.propertyvista.crm.rpc.dto.reports.AvailabilityReportDataDTO;
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus;
 import com.propertyvista.domain.reports.AvailabilityReportMetadata;
 
 public class CrmReportsViewImpl extends AbstractReportsView implements CrmReportsView {
+
+    private static final I18n i18n = I18n.get(CrmReportsViewImpl.class);
 
     private static Map<Class<? extends ReportMetadata>, ReportFactory> factoryMap;
 
@@ -115,18 +128,37 @@ public class CrmReportsViewImpl extends AbstractReportsView implements CrmReport
 
         });
 
-        factoryMap.put(AvailabilityReportMetadata.class, new ReportFactory<AvailabilityReportMetadata>() {
+        factoryMap.put(AvailabilityReportMetadata.class, new HasAdvancedModeReportFactory<AvailabilityReportMetadata>() {
 
             @Override
             public CEntityForm<AvailabilityReportMetadata> getReportSettingsForm() {
                 CEntityDecoratableForm<AvailabilityReportMetadata> form = new CEntityDecoratableForm<AvailabilityReportMetadata>(
                         AvailabilityReportMetadata.class) {
 
+                    @SuppressWarnings("unchecked")
                     @Override
                     public IsWidget createContent() {
                         int row = -1;
                         FormFlexPanel panel = new FormFlexPanel();
-                        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().asOf())).build());
+                        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().asOf())).labelWidth(10).componentWidth(10).build());
+                        panel.setWidget(
+                                ++row,
+                                0,
+                                new DecoratorBuilder(inject(proto().vacancyStatus(), new CEnumSubsetSelector<UnitAvailabilityStatus.Vacancy>(
+                                        UnitAvailabilityStatus.Vacancy.class, Layout.Horizontal))).labelWidth(10).componentWidth(10).build());
+                        get(proto().vacancyStatus()).addValueValidator(new NotEmptySetValidator());
+                        panel.setWidget(
+                                ++row,
+                                0,
+                                new DecoratorBuilder(inject(proto().rentedStatus(), new CEnumSubsetSelector<UnitAvailabilityStatus.RentedStatus>(
+                                        UnitAvailabilityStatus.RentedStatus.class, Layout.Vertical))).labelWidth(10).componentWidth(10).build());
+                        get(proto().rentedStatus()).addValueValidator(new NotEmptySetValidator());
+                        panel.setWidget(
+                                row,
+                                1,
+                                new DecoratorBuilder(inject(proto().rentReadinessStatus(), new CEnumSubsetSelector<UnitAvailabilityStatus.RentReadiness>(
+                                        UnitAvailabilityStatus.RentReadiness.class, Layout.Vertical))).labelWidth(10).componentWidth(15).build());
+                        get(proto().rentReadinessStatus()).addValueValidator(new NotEmptySetValidator());
                         return panel;
                     }
                 };
@@ -135,8 +167,27 @@ public class CrmReportsViewImpl extends AbstractReportsView implements CrmReport
             }
 
             @Override
+            public CEntityForm<AvailabilityReportMetadata> getAdvancedReportSettingsForm() {
+                CEntityDecoratableForm<AvailabilityReportMetadata> form = new CEntityDecoratableForm<AvailabilityReportMetadata>(
+                        AvailabilityReportMetadata.class) {
+
+                    @Override
+                    public IsWidget createContent() {
+                        int row = -1;
+                        FormFlexPanel panel = new FormFlexPanel();
+                        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().asOf())).labelWidth(10).componentWidth(10).build());
+                        panel.setWidget(++row, 0, new HTML("imagine there is a column criteria widget"));
+                        return panel;
+                    }
+                };
+
+                form.initContent();
+                return form;
+            }
+
+            @Override
             public Report getReport() {
-                // TODO Auto-generated method stub
+
                 return new Report() {
                     HTML reportHtml = new HTML();
 
@@ -149,19 +200,65 @@ public class CrmReportsViewImpl extends AbstractReportsView implements CrmReport
                     public void setData(Object data) {
                         AvailabilityReportDataDTO reportData = (AvailabilityReportDataDTO) data;
                         SafeHtmlBuilder bb = new SafeHtmlBuilder();
-                        bb.appendHtmlConstant("<table>");
+                        bb.appendHtmlConstant("<div style=\"text-align: center; font-size: 22pt\">");
+                        bb.appendEscaped(i18n.tr("Unit Availability Report"));
+                        bb.appendHtmlConstant("</div>");
+                        bb.appendHtmlConstant("<div>");
+                        bb.appendEscaped(i18n.tr("As of Date: {0}", reportData.asOf));
+                        bb.appendHtmlConstant("</div>");
+
+                        bb.appendHtmlConstant("<table style=\"white-space: nowrap; border-collapse: separate; border-spacing: 15pt;\">");
+                        bb.appendHtmlConstant("<tr>");
+                        UnitAvailabilityStatus proto = EntityFactory.getEntityPrototype(UnitAvailabilityStatus.class);
+                        ColumnDescriptor[] columns = {//@formatter:off
+                                defColumn(proto.building().propertyCode()).build(),
+                                defColumn(proto.building().externalId()).build(),
+                                defColumn(proto.building().info().name()).title(i18n.tr("Building Name")).build(),
+                                defColumn(proto.building().info().address()).build(),
+                                defColumn(proto.building().propertyManager().name()).title(i18n.tr("Property Manager")).build(),                    
+                                defColumn(proto.building().complex().name()).visible(false).title(i18n.tr("Complex")).build(),
+                                defColumn(proto.unit().info().number()).title(i18n.tr("Unit Name")).build(),
+                                defColumn(proto.floorplan().name()).visible(false).title(i18n.tr("Floorplan Name")).build(),
+                                defColumn(proto.floorplan().marketingName()).visible(false).title(i18n.tr("Floorplan Marketing Name")).build(),
+                                
+                                // status
+                                defColumn(proto.vacancyStatus()).build(),
+                                defColumn(proto.rentedStatus()).visible(true).build(),
+                                defColumn(proto.scoping()).visible(true).build(),
+                                defColumn(proto.rentReadinessStatus()).visible(true).build(),
+                                defColumn(proto.unitRent()).build(),
+                                defColumn(proto.marketRent()).build(),
+                                defColumn(proto.rentDeltaAbsolute()).visible(true).build(),
+                                defColumn(proto.rentDeltaRelative()).visible(false).build(),
+                                defColumn(proto.rentEndDay()).visible(true).build(),
+                                defColumn(proto.moveInDay()).visible(true).build(),
+                                defColumn(proto.rentedFromDay()).visible(true).build(),
+                                defColumn(proto.daysVacant()).build(),
+                                defColumn(proto.revenueLost()).build()
+                        };//@formatter:on
+
+                        for (ColumnDescriptor desc : columns) {
+                            bb.appendHtmlConstant("<th style=\"text-align: left\">");
+                            bb.appendEscaped(desc.getColumnTitle());
+                            bb.appendHtmlConstant("</th>");
+                        }
+
+                        bb.appendHtmlConstant("</tr>");
+
                         for (UnitAvailabilityStatus status : reportData.unitStatuses) {
                             bb.appendHtmlConstant("<tr>");
-
-                            cell(bb, status.building().propertyCode().getValue());
-                            cell(bb, status.unit().info().number().getValue());
-                            cell(bb, status.vacancyStatus().getValue().toString());
-
+                            for (ColumnDescriptor desc : columns) {
+                                cell(bb, desc.convert(status));
+                            }
                             bb.appendHtmlConstant("</tr>");
                         }
                         bb.appendHtmlConstant("</table>");
 
                         reportHtml.setHTML(bb.toSafeHtml());
+                    }
+
+                    private MemberColumnDescriptor.Builder defColumn(IObject<?> object) {
+                        return new MemberColumnDescriptor.Builder(object);
                     }
 
                     private void cell(SafeHtmlBuilder bb, String data) {
@@ -172,6 +269,7 @@ public class CrmReportsViewImpl extends AbstractReportsView implements CrmReport
 
                 };
             }
+
         });
 
     }
@@ -180,4 +278,20 @@ public class CrmReportsViewImpl extends AbstractReportsView implements CrmReport
         super(factoryMap);
     }
 
+    public static class NotEmptySetValidator implements EditableValueValidator {
+
+        @Override
+        public ValidationError isValid(CComponent component, Object value) {
+            boolean isEmpty = value == null;
+            if (value != null) {
+                isEmpty = ((Set<?>) value).isEmpty();
+            }
+            if (isEmpty) {
+                return new ValidationError(component, i18n.tr("at least one status is required"));
+            } else {
+                return null;
+            }
+        }
+
+    }
 }
