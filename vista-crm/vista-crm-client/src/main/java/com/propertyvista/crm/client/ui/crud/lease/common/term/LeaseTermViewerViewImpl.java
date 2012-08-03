@@ -13,13 +13,18 @@
  */
 package com.propertyvista.crm.client.ui.crud.lease.common.term;
 
+import com.google.gwt.core.client.GWT;
+
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.crm.rpc.services.selections.version.LeaseTermVersionService;
+import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.dto.LeaseTermDTO;
 
 public class LeaseTermViewerViewImpl extends CrmViewerViewImplBase<LeaseTermDTO> implements LeaseTermViewerView {
 
     public LeaseTermViewerViewImpl() {
         super(CrmSiteMap.Tenants.LeaseTerm.class, new LeaseTermForm(true));
+        enableVersioning(LeaseTerm.LeaseTermV.class, GWT.<LeaseTermVersionService> create(LeaseTermVersionService.class));
     }
 }

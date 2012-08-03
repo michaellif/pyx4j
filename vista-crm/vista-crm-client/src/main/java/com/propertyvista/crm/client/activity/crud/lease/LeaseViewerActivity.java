@@ -21,7 +21,6 @@ import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
@@ -62,9 +61,8 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
 
     private LeaseDTO currentValue;
 
-    @SuppressWarnings("unchecked")
     public LeaseViewerActivity(CrudAppPlace place) {
-        super(place, LeaseViewFactory.instance(LeaseViewerView.class), (AbstractCrudService<LeaseDTO>) GWT.create(LeaseViewerCrudService.class));
+        super(place, LeaseViewFactory.instance(LeaseViewerView.class), GWT.<LeaseViewerCrudService> create(LeaseViewerCrudService.class));
 
         billLister = new ListerActivityBase<BillDataDTO>(place, ((LeaseViewerView) getView()).getBillListerView(),
                 GWT.<BillCrudService> create(BillCrudService.class), BillDataDTO.class);
