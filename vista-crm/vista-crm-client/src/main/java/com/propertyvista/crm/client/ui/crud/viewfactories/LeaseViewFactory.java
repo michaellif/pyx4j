@@ -21,11 +21,13 @@ import com.propertyvista.crm.client.ui.crud.billing.adjustments.LeaseAdjustmentE
 import com.propertyvista.crm.client.ui.crud.billing.adjustments.LeaseAdjustmentViewerView;
 import com.propertyvista.crm.client.ui.crud.billing.adjustments.LeaseAdjustmentViewerViewImpl;
 import com.propertyvista.crm.client.ui.crud.lease.LeaseEditorView;
+import com.propertyvista.crm.client.ui.crud.lease.LeaseEditorView2;
 import com.propertyvista.crm.client.ui.crud.lease.LeaseEditorViewImpl;
+import com.propertyvista.crm.client.ui.crud.lease.LeaseEditorViewImpl2;
 import com.propertyvista.crm.client.ui.crud.lease.LeaseListerView;
 import com.propertyvista.crm.client.ui.crud.lease.LeaseListerView2;
-import com.propertyvista.crm.client.ui.crud.lease.LeaseListerViewImpl2;
 import com.propertyvista.crm.client.ui.crud.lease.LeaseListerViewImpl;
+import com.propertyvista.crm.client.ui.crud.lease.LeaseListerViewImpl2;
 import com.propertyvista.crm.client.ui.crud.lease.LeaseViewerView;
 import com.propertyvista.crm.client.ui.crud.lease.LeaseViewerView2;
 import com.propertyvista.crm.client.ui.crud.lease.LeaseViewerViewImpl;
@@ -44,6 +46,8 @@ import com.propertyvista.crm.client.ui.crud.lease.common.deposit.DepositLifecycl
 import com.propertyvista.crm.client.ui.crud.lease.common.deposit.DepositLifecycleViewerViewImpl;
 import com.propertyvista.crm.client.ui.crud.lease.common.term.LeaseTermEditorView;
 import com.propertyvista.crm.client.ui.crud.lease.common.term.LeaseTermEditorViewImpl;
+import com.propertyvista.crm.client.ui.crud.lease.common.term.LeaseTermViewerView;
+import com.propertyvista.crm.client.ui.crud.lease.common.term.LeaseTermViewerViewImpl;
 
 public class LeaseViewFactory extends ViewFactoryBase {
 
@@ -60,6 +64,8 @@ public class LeaseViewFactory extends ViewFactoryBase {
                 map.put(type, new LeaseListerViewImpl2());
             } else if (LeaseViewerView2.class.equals(type)) {
                 map.put(type, new LeaseViewerViewImpl2());
+            } else if (LeaseEditorView2.class.equals(type)) {
+                map.put(type, new LeaseEditorViewImpl2());
 
             } else if (PastLeaseListerView.class.equals(type)) {
                 map.put(type, new PastLeaseListerViewImpl());
@@ -74,8 +80,8 @@ public class LeaseViewFactory extends ViewFactoryBase {
 // TODO not used till now:                
 //            } else if (LeaseTermListerView.class.equals(type)) {
 //                map.put(type, new LeaseTermListerViewImpl());
-//            } else if (LeaseTermViewerView.class.equals(type)) {
-//                map.put(type, new LeaseTermViewerViewImpl());
+            } else if (LeaseTermViewerView.class.equals(type)) {
+                map.put(type, new LeaseTermViewerViewImpl());
             } else if (LeaseTermEditorView.class.equals(type)) {
                 map.put(type, new LeaseTermEditorViewImpl());
 

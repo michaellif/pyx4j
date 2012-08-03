@@ -28,7 +28,6 @@ import com.pyx4j.essentials.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
-import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.activity.crud.ListerActivityBase;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.pyx4j.site.rpc.CrudAppPlace;
@@ -36,7 +35,6 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 import com.propertyvista.crm.client.activity.crud.lease.common.LeaseViewerActivityBase2;
 import com.propertyvista.crm.client.ui.crud.lease.LeaseViewerView2;
 import com.propertyvista.crm.client.ui.crud.viewfactories.LeaseViewFactory;
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.dto.billing.BillDataDTO;
 import com.propertyvista.crm.rpc.services.billing.BillCrudService;
 import com.propertyvista.crm.rpc.services.billing.BillingExecutionService;
@@ -194,10 +192,5 @@ public class LeaseViewerActivity2 extends LeaseViewerActivityBase2<LeaseDTO2> im
                 ((LeaseViewerView2) getView()).reportSendMailActionResult(message);
             }
         }, getEntityId(), new Vector<LeaseParticipant2>(users), emailType);
-    }
-
-    @Override
-    public void editCurrentTerm() {
-        AppSite.getPlaceController().goTo(new CrmSiteMap.Tenants.LeaseTerm().formEditorPlace(((LeaseViewerView2) getView()).getCurrentTerm().getPrimaryKey()));
     }
 }

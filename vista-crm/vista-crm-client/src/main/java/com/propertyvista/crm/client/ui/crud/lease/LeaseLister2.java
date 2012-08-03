@@ -30,17 +30,14 @@ import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
 
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.tenant.lease.Lease2;
 import com.propertyvista.domain.tenant.lease.Lease2.PaymentFrequency;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.dto.LeaseDTO2;
-import com.propertyvista.dto.LeaseTermDTO;
 
 public class LeaseLister2 extends ListerBase<LeaseDTO2> {
 
@@ -81,14 +78,17 @@ public class LeaseLister2 extends ListerBase<LeaseDTO2> {
         new ExistingLeaseDataDialog().show();
     }
 
-    private Lease2 createNewLease(Service.ServiceType leaseType, BigDecimal balance) {
-        Lease2 newLease = EntityFactory.create(Lease2.class);
+    private LeaseDTO2 createNewLease(Service.ServiceType leaseType, BigDecimal balance) {
+        LeaseDTO2 newLease = EntityFactory.create(LeaseDTO2.class);
 
         newLease.type().setValue(leaseType);
         newLease.paymentFrequency().setValue(PaymentFrequency.Monthly);
         newLease.status().setValue(Lease2.Status.Created);
 // TODO 2 uncomment then
 //        newLease.billingAccount().carryforwardBalance().setValue(balance);
+
+        newLease.currentLeaseTerm().lease().set(newLease);
+        newLease.currentLeaseTerm().type().setValue(LeaseTerm.Type.FixedEx);
 
         return newLease;
     }
@@ -133,16 +133,7 @@ public class LeaseLister2 extends ListerBase<LeaseDTO2> {
         public boolean onClickOk() {
             balance.setVisited(true);
             if (balance.isValid()) {
-                // prepare LeaseTermDTO:
-                LeaseTermDTO termDto = EntityFactory.create(LeaseTermDTO.class);
-
-                termDto.newParentLease().set(createNewLease(getSelectedType(), balance.getValue()));
-                termDto.newParentLease().currentLeaseTerm().set(termDto);
-
-                termDto.type().setValue(LeaseTerm.Type.FixedEx);
-                termDto.lease().set(termDto.newParentLease());
-
-                AppSite.getPlaceController().goTo(new CrmSiteMap.Tenants.LeaseTerm().formNewItemPlace(termDto));
+                getPresenter().editNew(getItemOpenPlaceClass(), createNewLease(getSelectedType(), balance.getValue()));
                 return true;
             }
             return false;

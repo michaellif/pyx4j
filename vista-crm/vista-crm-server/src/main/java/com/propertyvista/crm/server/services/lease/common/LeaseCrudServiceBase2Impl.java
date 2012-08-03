@@ -65,8 +65,14 @@ public abstract class LeaseCrudServiceBase2Impl<DTO extends LeaseDTO2> extends A
         Persistence.service().retrieve(dto.unit());
         Persistence.service().retrieve(dto.unit().building());
 
-        if (dto.currentLeaseTerm().version().isNull()) {
-            dto.currentLeaseTerm().set(Persistence.secureRetrieveDraft(LeaseTerm.class, dto.currentLeaseTerm().getPrimaryKey()));
+        if (!dto.currentLeaseTerm().isNull()) {
+            Persistence.service().retrieve(dto.currentLeaseTerm());
+            if (dto.currentLeaseTerm().version().isNull()) {
+                dto.currentLeaseTerm().set(Persistence.secureRetrieveDraft(LeaseTerm.class, dto.currentLeaseTerm().getPrimaryKey()));
+            }
+
+            Persistence.service().retrieve(dto.currentLeaseTerm().version().tenants());
+            Persistence.service().retrieve(dto.currentLeaseTerm().version().guarantors());
         }
 
         Persistence.service().retrieve(dto.leaseTerms());
@@ -74,9 +80,6 @@ public abstract class LeaseCrudServiceBase2Impl<DTO extends LeaseDTO2> extends A
             dto.leaseFrom().set(dto.leaseTerms().get(0).leaseFrom());
             dto.leaseTo().set(dto.leaseTerms().get(dto.leaseTerms().size() - 1).leaseTo());
         }
-
-        Persistence.service().retrieve(dto.currentLeaseTerm().version().tenants());
-        Persistence.service().retrieve(dto.currentLeaseTerm().version().guarantors());
 
 //        Persistence.service().retrieve(dto.billingAccount());
     }

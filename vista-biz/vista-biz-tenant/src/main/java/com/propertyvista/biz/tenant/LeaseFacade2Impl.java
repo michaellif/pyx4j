@@ -84,8 +84,8 @@ public class LeaseFacade2Impl implements LeaseFacade2 {
         if (lease.currentLeaseTerm().isEmpty()) {
             lease.currentLeaseTerm().set(EntityFactory.create(LeaseTerm.class));
             lease.currentLeaseTerm().type().setValue(LeaseTerm.Type.FixedEx);
-            lease.currentLeaseTerm().lease().set(lease);
         }
+        lease.currentLeaseTerm().lease().set(lease);
 
         // Create Application by default
         lease.leaseApplication().status().setValue(LeaseApplication2.Status.Created);
@@ -164,6 +164,16 @@ public class LeaseFacade2Impl implements LeaseFacade2 {
         }
 
         // actual persist:
+        if (lease.currentLeaseTerm().getPrimaryKey() == null) {
+            LeaseTerm term = lease.currentLeaseTerm().duplicate();
+
+            lease.currentLeaseTerm().set(null);
+            Persistence.secureSave(lease);
+            lease.currentLeaseTerm().set(term);
+
+            lease.currentLeaseTerm().lease().set(lease);
+            persist(lease.currentLeaseTerm());
+        }
         Persistence.secureSave(lease);
 
         // update reservation if necessary:

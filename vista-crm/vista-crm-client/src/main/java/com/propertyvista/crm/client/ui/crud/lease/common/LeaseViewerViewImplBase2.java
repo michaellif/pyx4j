@@ -13,17 +13,12 @@
  */
 package com.propertyvista.crm.client.ui.crud.lease.common;
 
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.pyx4j.site.client.ui.crud.lister.ListerInternalViewImplBase;
 import com.pyx4j.site.rpc.CrudAppPlace;
-import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
-import com.propertyvista.crm.client.ui.crud.lease.LeaseViewerView2;
 import com.propertyvista.crm.client.ui.crud.lease.LeaseViewerViewImpl2;
 import com.propertyvista.crm.client.ui.crud.lease.common.deposit.DepositLifecycleLister;
 import com.propertyvista.dto.DepositLifecycleDTO;
@@ -35,40 +30,14 @@ public class LeaseViewerViewImplBase2<DTO extends LeaseDTO2> extends CrmViewerVi
 
     protected final IListerView<DepositLifecycleDTO> depositLister;
 
-    private final Button editCurrentTerm;
-
     public LeaseViewerViewImplBase2(Class<? extends CrudAppPlace> placeClass) {
         super(placeClass, true);
 
         depositLister = new ListerInternalViewImplBase<DepositLifecycleDTO>(new DepositLifecycleLister());
-
-        editCurrentTerm = new Button(i18n.tr("Edit Current Term"), new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                ((LeaseViewerView2.Presenter) getPresenter()).editCurrentTerm();
-            }
-        });
-        addHeaderToolbarTwoItem(editCurrentTerm.asWidget());
-
-    }
-
-    @Override
-    public void reset() {
-        editCurrentTerm.setVisible(false);
-        super.reset();
-    }
-
-    @Override
-    public void populate(DTO value) {
-        super.populate(value);
-
-        // disable editing for completed/closed leases:
-        editCurrentTerm.setVisible(!value.status().getValue().isFormer());
     }
 
     @Override
     public IListerView<DepositLifecycleDTO> getDepositListerView() {
         return depositLister;
     }
-
 }

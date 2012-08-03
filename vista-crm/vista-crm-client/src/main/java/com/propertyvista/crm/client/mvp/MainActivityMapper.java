@@ -91,6 +91,7 @@ import com.propertyvista.crm.client.activity.crud.customer.tenant.TenantViewerAc
 import com.propertyvista.crm.client.activity.crud.floorplan.FloorplanEditorActivity;
 import com.propertyvista.crm.client.activity.crud.floorplan.FloorplanViewerActivity;
 import com.propertyvista.crm.client.activity.crud.lease.LeaseEditorActivity;
+import com.propertyvista.crm.client.activity.crud.lease.LeaseEditorActivity2;
 import com.propertyvista.crm.client.activity.crud.lease.LeaseListerActivity;
 import com.propertyvista.crm.client.activity.crud.lease.LeaseListerActivity2;
 import com.propertyvista.crm.client.activity.crud.lease.LeaseViewerActivity;
@@ -100,6 +101,7 @@ import com.propertyvista.crm.client.activity.crud.lease.application.LeaseApplica
 import com.propertyvista.crm.client.activity.crud.lease.application.LeaseApplicationListerActivity;
 import com.propertyvista.crm.client.activity.crud.lease.application.LeaseApplicationViewerActivity;
 import com.propertyvista.crm.client.activity.crud.lease.common.LeaseTermEditorActivity;
+import com.propertyvista.crm.client.activity.crud.lease.common.LeaseTermViewerActivity;
 import com.propertyvista.crm.client.activity.crud.lease.common.deposit.DepositLifecycleEditorActivity;
 import com.propertyvista.crm.client.activity.crud.lease.common.deposit.DepositLifecycleViewerActivity;
 import com.propertyvista.crm.client.activity.crud.maintenance.MaintenanceRequestEditorActivity;
@@ -490,16 +492,22 @@ public class MainActivityMapper implements AppActivityMapper {
 
                     } else if (place instanceof CrmSiteMap.Tenants.Lease2) {
                         switch (crudPlace.getType()) {
+                        case lister:
+                            activity = new LeaseListerActivity2(crudPlace);
+                            break;
                         case viewer:
                             activity = new LeaseViewerActivity2(crudPlace);
                             break;
-                        case lister:
-                            activity = new LeaseListerActivity2(crudPlace);
+                        case editor:
+                            activity = new LeaseEditorActivity2(crudPlace);
                             break;
                         }
 
                     } else if (place instanceof CrmSiteMap.Tenants.LeaseTerm) {
                         switch (crudPlace.getType()) {
+                        case viewer:
+                            activity = new LeaseTermViewerActivity(crudPlace);
+                            break;
                         case editor:
                             activity = new LeaseTermEditorActivity(crudPlace);
                             break;

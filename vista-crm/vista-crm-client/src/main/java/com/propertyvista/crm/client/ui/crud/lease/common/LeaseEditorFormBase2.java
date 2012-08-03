@@ -13,43 +13,47 @@
  */
 package com.propertyvista.crm.client.ui.crud.lease.common;
 
+import java.util.List;
+
+import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.client.ui.CEntityLabel;
+import com.pyx4j.entity.shared.criterion.Criterion;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
-import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;
-import com.pyx4j.widgets.client.tabpanel.Tab;
+import com.pyx4j.site.client.ui.crud.form.IEditorView;
+import com.pyx4j.site.client.ui.crud.misc.CEntitySelectorHyperlink;
+import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
+import com.pyx4j.site.rpc.AppPlace;
 
-import com.propertyvista.common.client.ui.components.editors.dto.bill.BillForm;
+import com.propertyvista.common.client.policy.ClientPolicyManager;
+import com.propertyvista.crm.client.ui.components.boxes.UnitSelectorDialog;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
+import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
-import com.propertyvista.domain.tenant.lease.LeaseTerm;
+import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
+import com.propertyvista.domain.tenant.lease.Lease2;
 import com.propertyvista.dto.LeaseDTO2;
-import com.propertyvista.misc.VistaTODO;
 
-public abstract class LeaseFormBase2<DTO extends LeaseDTO2> extends CrmEntityForm<DTO> {
+public abstract class LeaseEditorFormBase2<DTO extends LeaseDTO2> extends CrmEntityForm<DTO> {
 
-    protected static final I18n i18n = I18n.get(LeaseFormBase2.class);
+    protected static final I18n i18n = I18n.get(LeaseEditorFormBase2.class);
 
-    private Tab chargesTab;
-
-    protected LeaseFormBase2(Class<DTO> clazz) {
-        super(clazz, true);
+    protected LeaseEditorFormBase2(Class<DTO> clazz) {
+        super(clazz, false);
     }
 
-    @SuppressWarnings("unchecked")
     protected void createCommonContent() {
         selectTab(addTab(createDetailsTab(i18n.tr("Details"))));
-        addTab(((LeaseViewerViewBase2<DTO>) getParentView()).getDepositListerView().asWidget(), i18n.tr("Deposits"));
-        chargesTab = addTab(createChargesTab(i18n.tr("Charges")));
     }
 
     @Override
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
-
-        setTabVisible(chargesTab, getValue().status().getValue().isDraft());
 
         get(proto().completion()).setVisible(!getValue().completion().isNull());
 
@@ -61,6 +65,18 @@ public abstract class LeaseFormBase2<DTO extends LeaseDTO2> extends CrmEntityFor
         get(proto().actualLeaseTo()).setVisible(!getValue().actualLeaseTo().isNull());
         get(proto().actualMoveIn()).setVisible(!getValue().actualMoveIn().isNull());
         get(proto().actualMoveOut()).setVisible(!getValue().actualMoveOut().isNull());
+
+        if (isEditable()) {
+            // disable some editing on signed lease:
+            boolean isLeaseSigned = !getValue().approvalDate().isNull();
+
+            ClientPolicyManager.setIdComponentEditabilityByPolicy(IdTarget.lease, get(proto().leaseId()), getValue().getPrimaryKey());
+
+            get(proto().leaseFrom()).setViewable(isLeaseSigned);
+            get(proto().leaseTo()).setViewable(isLeaseSigned);
+
+            get(proto().unit()).setEditable(!isLeaseSigned);
+        }
     }
 
     private FormFlexPanel createDetailsTab(String title) {
@@ -92,16 +108,52 @@ public abstract class LeaseFormBase2<DTO extends LeaseDTO2> extends CrmEntityFor
 
         // Building/Unit/Term:
         main.setBR(++row, 0, 1);
-        main.setWidget(++row, 0,
-                new DecoratorBuilder(inject(proto().unit().building(), new CEntityCrudHyperlink<Building>(AppPlaceEntityMapper.resolvePlace(Building.class))),
-                        20).build());
-        main.setWidget(++row, 0,
-                new DecoratorBuilder(inject(proto().unit(), new CEntityCrudHyperlink<AptUnit>(AppPlaceEntityMapper.resolvePlace(AptUnit.class))), 20).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().unit().building(), new CEntityLabel<Building>()), 20).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().unit(), new CEntitySelectorHyperlink<AptUnit>() {
+            @Override
+            protected AppPlace getTargetPlace() {
+                return AppPlaceEntityMapper.resolvePlace(AptUnit.class, getValue().getPrimaryKey());
+            }
 
-        main.setWidget(++row, 0,
-                new DecoratorBuilder(
-                        inject(proto().currentLeaseTerm(), new CEntityCrudHyperlink<LeaseTerm>(AppPlaceEntityMapper.resolvePlace(LeaseTerm.class))), 20)
-                        .build());
+            @Override
+            protected EntitySelectorTableDialog<AptUnit> getSelectorDialog() {
+                return new UnitSelectorDialog() {
+                    @Override
+                    protected void setFilters(List<Criterion> filters) {
+                        assert (filters != null);
+
+                        DTO currentValue = LeaseEditorFormBase2.this.getValue();
+                        if (currentValue.status().getValue() == Lease2.Status.Created) { // existing lease:
+
+                            filters.add(PropertyCriterion.eq(proto().unitOccupancySegments().$().status(), AptUnitOccupancySegment.Status.pending));
+                            filters.add(PropertyCriterion.eq(proto().unitOccupancySegments().$().dateTo(), new LogicalDate(1100, 0, 1)));
+                            filters.add(PropertyCriterion.le(proto().unitOccupancySegments().$().dateFrom(), ClientContext.getServerDate()));
+
+                        } else if (currentValue.status().getValue() == Lease2.Status.Application) { // lease application:
+
+                            filters.add(PropertyCriterion.eq(proto().unitOccupancySegments().$().status(), AptUnitOccupancySegment.Status.available));
+                            filters.add(PropertyCriterion.eq(proto().unitOccupancySegments().$().dateTo(), new LogicalDate(1100, 0, 1)));
+                            if (!currentValue.leaseFrom().isNull()) {
+                                filters.add(PropertyCriterion.le(proto().unitOccupancySegments().$().dateFrom(), currentValue.leaseFrom().getValue()));
+                            } else {
+                                filters.add(PropertyCriterion.le(proto().unitOccupancySegments().$().dateFrom(), ClientContext.getServerDate()));
+                            }
+                        }
+
+                        super.setFilters(filters);
+                    };
+
+                    @SuppressWarnings("unchecked")
+                    @Override
+                    public boolean onClickOk() {
+                        if (!getSelectedItems().isEmpty()) {
+                            ((LeaseEditorViewBase2.Presenter) ((IEditorView<DTO>) getParentView()).getPresenter()).setSelectedUnit(getSelectedItems().get(0));
+                        }
+                        return !getSelectedItems().isEmpty();
+                    }
+                };
+            }
+        }), 20).build());
 
         // Move dates:
         main.setBR(++row, 0, 1);
@@ -131,33 +183,6 @@ public abstract class LeaseFormBase2<DTO extends LeaseDTO2> extends CrmEntityFor
 
         get(proto().creationDate()).setViewable(true);
         get(proto().approvalDate()).setViewable(true);
-
-        // tenants/guarantors:
-        main.setH1(++row, 0, 2, proto().currentLeaseTerm().version().tenants().getMeta().getCaption());
-        main.setWidget(++row, 0, inject(proto().currentLeaseTerm().version().tenants(), new TenantInLeaseFolder2()));
-
-        main.setH1(++row, 0, 2, proto().currentLeaseTerm().version().guarantors().getMeta().getCaption());
-        main.setWidget(++row, 0, inject(proto().currentLeaseTerm().version().guarantors(), new GuarantorInLeaseFolder2()));
-
-        // Products:
-        main.setH1(++row, 0, 2, i18n.tr("Service"));
-        main.setWidget(++row, 0, inject(proto().currentLeaseTerm().version().leaseProducts().serviceItem(), new BillableItemViewer()));
-
-        main.setH1(++row, 0, 2, proto().currentLeaseTerm().version().leaseProducts().featureItems().getMeta().getCaption());
-        main.setWidget(++row, 0, inject(proto().currentLeaseTerm().version().leaseProducts().featureItems(), new BillableItemFolder2()));
-
-        if (!VistaTODO.removedForProduction) {
-            main.setH1(++row, 0, 2, proto().currentLeaseTerm().version().leaseProducts().concessions().getMeta().getCaption());
-            main.setWidget(++row, 0, inject(proto().currentLeaseTerm().version().leaseProducts().concessions(), new ConcessionFolder2()));
-        }
-
-        return main;
-    }
-
-    private FormFlexPanel createChargesTab(String title) {
-        FormFlexPanel main = new FormFlexPanel(title);
-
-        main.setWidget(0, 0, inject(proto().billingPreview(), new BillForm(true)));
 
         return main;
     }

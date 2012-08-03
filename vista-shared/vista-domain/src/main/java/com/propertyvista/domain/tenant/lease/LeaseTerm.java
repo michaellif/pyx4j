@@ -25,6 +25,8 @@ import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
+import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -38,9 +40,9 @@ import com.propertyvista.domain.tenant.Guarantor2;
 import com.propertyvista.domain.tenant.Tenant2;
 import com.propertyvista.domain.tenant.lease.LeaseTerm.LeaseTermV;
 
+@ToStringFormat("{0} - {1}, {2}")
 public interface LeaseTerm extends IVersionedEntity<LeaseTermV> {
 
-    //TODO _2 rename to leaseType
     @I18n(context = "Lease Term Type")
     @XmlType(name = "LeaseTermType")
     public enum Type {
@@ -61,15 +63,18 @@ public interface LeaseTerm extends IVersionedEntity<LeaseTermV> {
 
     @NotNull
     @ReadOnly
+    @ToString(index = 2)
     @MemberColumn(name = "leaseTermType")
     IPrimitive<Type> type();
 
     @NotNull
     @Format("MM/dd/yyyy")
+    @ToString(index = 0)
     IPrimitive<LogicalDate> leaseFrom();
 
     @NotNull
     @Format("MM/dd/yyyy")
+    @ToString(index = 1)
     IPrimitive<LogicalDate> leaseTo();
 
     @Detached

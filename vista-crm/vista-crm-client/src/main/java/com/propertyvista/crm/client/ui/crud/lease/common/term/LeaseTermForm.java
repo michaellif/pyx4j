@@ -100,8 +100,6 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
             get(proto().leaseTo()).setViewable(isLeaseSigned);
 
             get(proto().lease().unit()).setEditable(!isLeaseSigned);
-
-        } else {
         }
     }
 

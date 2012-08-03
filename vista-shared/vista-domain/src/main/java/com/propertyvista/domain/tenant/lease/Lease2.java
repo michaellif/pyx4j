@@ -31,6 +31,7 @@ import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.Timestamp.Update;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
@@ -184,10 +185,12 @@ public interface Lease2 extends IEntity {
     // lease begin/end: 
 
     @NotNull
+    @Transient
     @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> leaseFrom();
 
     @NotNull
+    @Transient
     @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> leaseTo();
 
