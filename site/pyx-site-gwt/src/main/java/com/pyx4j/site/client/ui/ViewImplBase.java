@@ -21,17 +21,24 @@
 package com.pyx4j.site.client.ui;
 
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
+import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.site.client.ui.crud.DefaultSiteCrudPanelsTheme;
+import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.actionbar.Toolbar;
 
 public class ViewImplBase extends DockLayoutPanel {
 
     private static final int TOOLBAR_DEFAULT_HEIGHT = 35;
+
+    private final VisorLayoutPanel visorPane;
 
     private final Label captionLabel;
 
@@ -80,6 +87,41 @@ public class ViewImplBase extends DockLayoutPanel {
         footerToolbarHolder.setWidget(footerToolbar);
         addSouth(footerToolbarHolder, 0);
 
+        visorPane = new VisorLayoutPanel();
+        visorPane.setAnimationDuration(500);
+    }
+
+    protected IsWidget getContentPane() {
+        if (visorPane.getWidgetCount() == 0) {
+            return null;
+        }
+        return visorPane.getWidget(0);
+    }
+
+    protected void setContentPane(IsWidget widget) {
+        assert visorPane.getWidgetCount() == 0 : "Content Pane is already set";
+        visorPane.setContentPane(widget);
+        add(visorPane);
+    }
+
+    protected void showVisor(IsWidget widget, String caption) {
+        FlowPanel visorHolder = new FlowPanel();
+        visorHolder.add(new Label(caption));
+        visorHolder.add(new Button("Close", new ClickHandler() {
+
+            @Override
+            public void onClick(ClickEvent event) {
+                hideVisor();
+            }
+        }));
+        visorHolder.add(widget.asWidget());
+        visorHolder.setStyleName(DefaultSiteCrudPanelsTheme.StyleName.Visor.name());
+
+        visorPane.showVisorPane(visorHolder);
+    }
+
+    protected void hideVisor() {
+        visorPane.hideVisorPane();
     }
 
     public void setCaption(String caption) {

@@ -30,7 +30,7 @@ import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 public class DefaultSiteCrudPanelsTheme extends Theme {
 
     public static enum StyleName implements IStyleName {
-        HeaderToolbarOne, HeaderToolbarTwo, Lister, ListerFiltersPanel, ListerListPanel, Header, FooterToolbar, BreadcrumbsBar, BreadcrumbAnchor, HighlightedButton
+        HeaderToolbarOne, HeaderToolbarTwo, Lister, ListerFiltersPanel, ListerListPanel, Header, FooterToolbar, BreadcrumbsBar, BreadcrumbAnchor, HighlightedButton, Visor
     }
 
     public DefaultSiteCrudPanelsTheme() {
@@ -93,6 +93,13 @@ public class DefaultSiteCrudPanelsTheme extends Theme {
 
         style = new Style(".", StyleName.BreadcrumbAnchor, ":hover");
         style.addProperty("text-decoration", "underline");
+        addStyle(style);
+
+        style = new Style(".", StyleName.Visor);
+        style.addGradient(ThemeColors.object1, 0.05, ThemeColors.object1, 0.15);
+        style.addProperty("border", "2px solid");
+        style.addProperty("border-color", ThemeColors.object1, 0.6);
+        style.addProperty("padding", "2px");
         addStyle(style);
 
     }

@@ -44,8 +44,8 @@ public class ListerViewImplBase<E extends IEntity> extends ViewImplBase implemen
      * Should be called by descendant upon initialisation.
      */
     protected void setLister(ListerBase<E> lister) {
-        if (getCenter() == null) { // finalise UI here:
-            add(new ScrollPanel());
+        if (getContentPane() == null) { // finalise UI here:
+            setContentPane(new ScrollPanel());
             setSize("100%", "100%");
         }
 
@@ -53,7 +53,7 @@ public class ListerViewImplBase<E extends IEntity> extends ViewImplBase implemen
             return; // already!?.
         }
 
-        ((ScrollPanel) getCenter()).setWidget(this.lister = lister);
+        ((ScrollPanel) getContentPane()).setWidget(this.lister = lister);
     }
 
     @Override

@@ -46,8 +46,8 @@ public class FormViewImplBase<E extends IEntity> extends ViewImplBase implements
     @SuppressWarnings("unchecked")
     protected void setForm(CrudEntityForm<? extends E> form) {
 
-        if (getCenter() == null) { // finalise UI here:
-            add(new LayoutPanel());
+        if (getContentPane() == null) { // finalise UI here:
+            setContentPane(new LayoutPanel());
             setSize("100%", "100%");
         }
 
@@ -59,7 +59,7 @@ public class FormViewImplBase<E extends IEntity> extends ViewImplBase implements
         this.form.setParentView(this);
         this.form.initContent();
 
-        LayoutPanel center = (LayoutPanel) getCenter();
+        LayoutPanel center = (LayoutPanel) getContentPane();
         center.clear(); // remove current form...
 
         center.add(this.form);
