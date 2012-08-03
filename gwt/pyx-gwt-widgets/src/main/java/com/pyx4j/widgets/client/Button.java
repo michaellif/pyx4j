@@ -46,11 +46,16 @@ public class Button extends FocusPanel implements IFocusWidget {
     private final ButtonFacesHandler buttonFacesHandler;
 
     public Button(Image image) {
-        this(image, null);
+        this(image, (String) null);
     }
 
     public Button(String text) {
         this((Image) null, text);
+    }
+
+    public Button(Image image, ClickHandler handler) {
+        this(image);
+        addClickHandler(handler);
     }
 
     public Button(String text, ClickHandler handler) {

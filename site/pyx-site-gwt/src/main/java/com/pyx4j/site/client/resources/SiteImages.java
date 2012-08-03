@@ -21,11 +21,15 @@
 package com.pyx4j.site.client.resources;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.resources.client.ImageResource;
 
 import com.pyx4j.widgets.client.images.WidgetsImages;
 
 public interface SiteImages extends WidgetsImages {
 
     SiteImages INSTANCE = GWT.create(SiteImages.class);
+
+    @Source("back.png")
+    ImageResource backButton();
 
 }

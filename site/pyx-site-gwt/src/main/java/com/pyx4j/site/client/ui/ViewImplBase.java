@@ -25,16 +25,21 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.resources.SiteImages;
 import com.pyx4j.site.client.ui.crud.DefaultSiteCrudPanelsTheme;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.actionbar.Toolbar;
 
 public class ViewImplBase extends DockLayoutPanel {
+
+    private static final I18n i18n = I18n.get(ViewImplBase.class);
 
     private static final int TOOLBAR_DEFAULT_HEIGHT = 35;
 
@@ -106,16 +111,23 @@ public class ViewImplBase extends DockLayoutPanel {
 
     protected void showVisor(IsWidget widget, String caption) {
         FlowPanel visorHolder = new FlowPanel();
-        visorHolder.add(new Label(caption));
-        visorHolder.add(new Button("Close", new ClickHandler() {
+        visorHolder.setStyleName(DefaultSiteCrudPanelsTheme.StyleName.Visor.name());
+
+        Button backButton = new Button(new Image(SiteImages.INSTANCE.backButton()), i18n.tr("Back"), new ClickHandler() {
 
             @Override
             public void onClick(ClickEvent event) {
                 hideVisor();
             }
-        }));
+        });
+        backButton.addStyleName(DefaultSiteCrudPanelsTheme.StyleName.VisorBackButton.name());
+        visorHolder.add(backButton);
+
+        Label captionLabel = new Label(caption);
+        captionLabel.addStyleName(DefaultSiteCrudPanelsTheme.StyleName.VisorCaption.name());
+        visorHolder.add(captionLabel);
+
         visorHolder.add(widget.asWidget());
-        visorHolder.setStyleName(DefaultSiteCrudPanelsTheme.StyleName.Visor.name());
 
         visorPane.showVisorPane(visorHolder);
     }

@@ -30,7 +30,7 @@ import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 public class DefaultSiteCrudPanelsTheme extends Theme {
 
     public static enum StyleName implements IStyleName {
-        HeaderToolbarOne, HeaderToolbarTwo, Lister, ListerFiltersPanel, ListerListPanel, Header, FooterToolbar, BreadcrumbsBar, BreadcrumbAnchor, HighlightedButton, Visor
+        HeaderToolbarOne, HeaderToolbarTwo, Lister, ListerFiltersPanel, ListerListPanel, Header, FooterToolbar, BreadcrumbsBar, BreadcrumbAnchor, HighlightedButton, Visor, VisorBackButton, VisorCaption
     }
 
     public DefaultSiteCrudPanelsTheme() {
@@ -96,10 +96,23 @@ public class DefaultSiteCrudPanelsTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", StyleName.Visor);
-        style.addGradient(ThemeColors.object1, 0.05, ThemeColors.object1, 0.15);
+        style.addGradient(ThemeColors.object1, 0, ThemeColors.object1, 0.15);
         style.addProperty("border", "2px solid");
         style.addProperty("border-color", ThemeColors.object1, 0.6);
         style.addProperty("padding", "2px");
+        addStyle(style);
+
+        style = new Style(".", StyleName.VisorBackButton);
+        style.addProperty("height", "17px");
+        style.addProperty("float", "left");
+        addStyle(style);
+
+        style = new Style(".", StyleName.VisorCaption);
+        style.addProperty("font-size", "21px");
+        style.addProperty("font-weight", "bold");
+        style.addProperty("margin-left", "40%");
+        style.addProperty("padding-bottom", "20px");
+        style.addProperty("clear", "right");
         addStyle(style);
 
     }
