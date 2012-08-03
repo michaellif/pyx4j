@@ -17,10 +17,12 @@ import java.util.List;
 
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.LayoutPanel;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.site.client.ui.ViewImplBase;
+import com.pyx4j.site.client.ui.crud.misc.IMemento;
 
 import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEventHandler;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
@@ -55,7 +57,7 @@ public class BoardViewImpl extends ViewImplBase implements BoardView {
     }
 
     @Override
-    public void setPresenter(Presenter presenter) {
+    public void setPresenter(BoardView.Presenter presenter) {
         assert (board != null);
         board.setPresenter(presenter);
     }
@@ -115,6 +117,24 @@ public class BoardViewImpl extends ViewImplBase implements BoardView {
     @Override
     public EventBus getEventBus() {
         return board.getEventBus();
+    }
+
+    @Override
+    public IMemento getMemento() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public void storeState(Place place) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void restoreState() {
+        // TODO Auto-generated method stub
+
     }
 
 }

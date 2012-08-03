@@ -25,7 +25,7 @@ import com.propertyvista.crm.client.ui.crud.maintenance.MaintenanceRequestViewer
 
 public class MaintenanceViewFactory extends ViewFactoryBase {
 
-    public static <E extends IEntity, T extends IView<E>> T instance(Class<T> type) {
+    public static <E extends IEntity, T extends IView> T instance(Class<T> type) {
         if (!map.containsKey(type)) {
             if (MaintenanceRequestListerView.class.equals(type)) {
                 map.put(type, new MaintenanceRequestListerViewImpl());

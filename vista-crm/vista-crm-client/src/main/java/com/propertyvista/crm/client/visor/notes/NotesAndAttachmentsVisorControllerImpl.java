@@ -11,14 +11,11 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.crm.client.visor;
-
-import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.Label;
+package com.propertyvista.crm.client.visor.notes;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.site.client.ui.crud.IView;
 
 public class NotesAndAttachmentsVisorControllerImpl implements INotesAndAttachmentsVisorController {
 
@@ -27,14 +24,7 @@ public class NotesAndAttachmentsVisorControllerImpl implements INotesAndAttachme
     }
 
     @Override
-    public void populate(DefaultAsyncCallback asyncCallback) {
-        asyncCallback.onSuccess(null);
+    public void show(IView viewImpl) {
+        viewImpl.showVisor(new NotesAndAttachmentsVisorView(this), "Notes & Attachments");
     }
-
-    @Override
-    public IsWidget createView() {
-        // TODO Auto-generated method stub
-        return new Label("Notes And Attachments Visor");
-    }
-
 }

@@ -17,6 +17,7 @@ import java.util.List;
 
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.DockPanel;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.Key;
@@ -135,5 +136,17 @@ public class ListerViewImplBasePanel<E extends IEntity> extends DockPanel implem
     @Override
     public void discard() {
         getLister().discard();
+    }
+
+    @Override
+    public void showVisor(IsWidget widget, String caption) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void hideVisor() {
+        // TODO Auto-generated method stub
+
     }
 }

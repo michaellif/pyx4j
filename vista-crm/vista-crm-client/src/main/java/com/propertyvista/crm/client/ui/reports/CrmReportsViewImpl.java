@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import com.google.gwt.place.shared.Place;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -34,6 +35,7 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.ui.crud.misc.IMemento;
 import com.pyx4j.site.client.ui.reports.AbstractReportsView;
 import com.pyx4j.site.client.ui.reports.HasAdvancedModeReportFactory;
 import com.pyx4j.site.client.ui.reports.Report;
@@ -292,6 +294,24 @@ public class CrmReportsViewImpl extends AbstractReportsView implements CrmReport
                 return null;
             }
         }
+
+    }
+
+    @Override
+    public IMemento getMemento() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public void storeState(Place place) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void restoreState() {
+        // TODO Auto-generated method stub
 
     }
 }

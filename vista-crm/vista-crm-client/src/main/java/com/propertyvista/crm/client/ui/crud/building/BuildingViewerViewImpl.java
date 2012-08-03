@@ -34,7 +34,6 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.pyx4j.site.client.ui.crud.lister.ListerInternalViewImplBase;
 import com.pyx4j.widgets.client.Button;
@@ -55,7 +54,7 @@ import com.propertyvista.crm.client.ui.crud.building.mech.RoofLister;
 import com.propertyvista.crm.client.ui.crud.building.parking.ParkingLister;
 import com.propertyvista.crm.client.ui.crud.floorplan.FloorplanLister;
 import com.propertyvista.crm.client.ui.crud.unit.UnitLister;
-import com.propertyvista.crm.client.visor.INotesAndAttachmentsVisorController;
+import com.propertyvista.crm.client.visor.notes.INotesAndAttachmentsVisorController;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.dto.billing.BillingCycleDTO;
 import com.propertyvista.domain.financial.offering.Concession;
@@ -128,16 +127,7 @@ public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> i
 
                 INotesAndAttachmentsVisorController controller = ((BuildingViewerView.Presenter) getPresenter()).getNotesAndAttachmentsController();
 
-                final IsWidget visorView = controller.createView();
-
-                controller.populate(new DefaultAsyncCallback() {
-
-                    @Override
-                    public void onSuccess(Object result) {
-                        showVisor(visorView, "Notes&Attachments");
-                    }
-
-                });
+                controller.show(BuildingViewerViewImpl.this);
 
             }
         }).asWidget());

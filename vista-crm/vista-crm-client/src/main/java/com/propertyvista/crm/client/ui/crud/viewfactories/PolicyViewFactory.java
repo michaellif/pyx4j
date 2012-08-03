@@ -92,7 +92,7 @@ import com.propertyvista.crm.client.ui.crud.policies.restrictions.RestrictionsPo
 import com.propertyvista.crm.client.ui.crud.policies.restrictions.RestrictionsPolicyViewerViewImpl;
 
 public class PolicyViewFactory extends ViewFactoryBase {
-    public static <E extends IEntity, T extends IView<E>> T instance(Class<T> type) {
+    public static <E extends IEntity, T extends IView> T instance(Class<T> type) {
         if (!map.containsKey(type)) {
             if (ApplicationDocumentationPolicyListerView.class.equals(type)) {
                 map.put(ApplicationDocumentationPolicyListerView.class, new ApplicationDocumentationPolicyListerViewImpl());

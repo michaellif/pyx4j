@@ -43,7 +43,7 @@ import com.propertyvista.admin.client.ui.crud.simulation.SimulationViewerViewImp
 
 public class AdministrationVeiwFactory extends ViewFactoryBase {
 
-    public static <E extends IEntity, T extends IView<E>> T instance(Class<T> type) {
+    public static <E extends IEntity, T extends IView> T instance(Class<T> type) {
         if (!map.containsKey(type)) {
             if (MaintenanceViewerView.class.equals(type)) {
                 map.put(type, new MaintenanceViewerViewImpl());

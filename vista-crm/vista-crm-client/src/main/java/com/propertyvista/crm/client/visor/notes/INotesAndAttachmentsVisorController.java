@@ -11,16 +11,14 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.crm.client.visor;
+package com.propertyvista.crm.client.visor.notes;
 
-import com.google.gwt.user.client.ui.IsWidget;
+import com.pyx4j.site.client.ui.crud.IView;
 
-import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.propertyvista.crm.client.visor.IVisorController;
 
 public interface INotesAndAttachmentsVisorController extends IVisorController {
 
-    void populate(DefaultAsyncCallback asyncCallback);
-
-    IsWidget createView();
+    void show(IView view);
 
 }

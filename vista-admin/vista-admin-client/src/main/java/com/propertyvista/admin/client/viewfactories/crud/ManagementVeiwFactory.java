@@ -41,7 +41,7 @@ import com.propertyvista.admin.client.ui.crud.scheduler.trigger.TriggerViewerVie
 
 public class ManagementVeiwFactory extends ViewFactoryBase {
 
-    public static <E extends IEntity, T extends IView<E>> T instance(Class<T> type) {
+    public static <E extends IEntity, T extends IView> T instance(Class<T> type) {
         if (!map.containsKey(type)) {
             if (PmcListerView.class.equals(type)) {
                 map.put(type, new PmcListerViewImpl());
