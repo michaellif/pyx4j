@@ -20,6 +20,7 @@
  */
 package com.pyx4j.site.client.ui.reports;
 
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
@@ -58,6 +59,7 @@ public abstract class ReportSettingsFormControlPanel extends Composite {
                 onSettingsModeToggled(isAdvanced);
             }
         }), true);
+        modeToggle.getElement().getStyle().setMarginRight(2, Unit.EM);
 
         controlPanel.addItem(apply = new Button(i18n.tr("Apply"), new ClickHandler() {
             @Override
@@ -65,6 +67,10 @@ public abstract class ReportSettingsFormControlPanel extends Composite {
                 onApply();
             }
         }), true);
+
+        controlPanel.getElement().getStyle().setProperty("borderStyle", "outset");
+        controlPanel.getElement().getStyle().setProperty("borderTopWidth", "1px");
+        controlPanel.getElement().getStyle().setProperty("borderBottomWidth", "1px");
 
         initWidget(controlPanel);
     }

@@ -23,16 +23,23 @@ package com.pyx4j.site.client.ui.reports;
 import java.util.Map;
 
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
-import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.CEntityForm;
 import com.pyx4j.entity.shared.reports.HasAdvancedSettings;
 import com.pyx4j.entity.shared.reports.ReportMetadata;
+import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.ui.ViewImplBase;
+import com.pyx4j.widgets.client.Button;
 
-public abstract class AbstractReportsView implements IReportsView {
+public abstract class AbstractReportsView extends ViewImplBase implements IReportsView {
+
+    private static final I18n i18n = I18n.get(AbstractReportsView.class);
 
     private Presenter presenter;
 
@@ -51,19 +58,28 @@ public abstract class AbstractReportsView implements IReportsView {
     private Report report;
 
     public AbstractReportsView(Map<Class<? extends ReportMetadata>, ReportFactory> reportFactoryMap) {
+        setSize("100%", "100%");
         this.reportFactoryMap = reportFactoryMap;
+        this.settingsForm = null;
+        this.presenter = null;
+
         viewPanel = new DockLayoutPanel(Unit.EM);
-        viewPanel.addNorth(new HTML(), 1);
         viewPanel.setSize("100%", "100%");
 
         settingsFormPanel = new ScrollPanel();
+        settingsFormPanel.getElement().getStyle().setProperty("borderStyle", "outset");
+        settingsFormPanel.getElement().getStyle().setBorderWidth(1, Unit.PX);
         viewPanel.addNorth(settingsFormPanel, 13);
 
         reportSettingsControls = new ReportSettingsFormControlPanel() {
             @Override
             public void onApply() {
                 if (presenter != null & settingsForm != null) {
-                    presenter.apply(settingsForm.getValue());
+                    if (settingsForm.isValid()) {
+                        presenter.apply(settingsForm.getValue());
+                    } else {
+                        settingsForm.setUnconditionalValidationErrorRendering(true);
+                    }
                 }
             }
 
@@ -73,10 +89,6 @@ public abstract class AbstractReportsView implements IReportsView {
             }
 
         };
-        reportSettingsControls.getElement().getStyle().setProperty("borderTopStyle", "solid");
-        reportSettingsControls.getElement().getStyle().setProperty("borderBottomStyle", "solid");
-        reportSettingsControls.getElement().getStyle().setProperty("borderTopWidth", "1px");
-        reportSettingsControls.getElement().getStyle().setProperty("borderBottomWidth", "1px");
 
         viewPanel.addNorth(reportSettingsControls, 2.5);
 
@@ -84,8 +96,26 @@ public abstract class AbstractReportsView implements IReportsView {
         reportViewPanel.getElement().getStyle().setPadding(1, Unit.EM);
         viewPanel.add(reportViewPanel);
 
-        settingsForm = null;
-        presenter = null;
+        addHeaderToolbarTwoItem(new Button(i18n.tr("Export")));
+
+        addHeaderToolbarTwoItem(new Button(i18n.tr("Print")));
+
+        addHeaderToolbarTwoItem(new Button(i18n.tr("Save As...")));
+        addHeaderToolbarTwoItem(new Button(i18n.tr("Save")));
+
+        addHeaderToolbarTwoItem(new Button(i18n.tr("Load..."), new ClickHandler() {
+
+            @Override
+            public void onClick(ClickEvent event) {
+                showVisor(createLoadPanel(), i18n.tr(""));
+
+            }
+        }));
+
+        addHeaderToolbarTwoItem(new Button(i18n.tr("Refresh")));
+
+        setCaption(i18n.tr("Reports"));
+        setContentPane(viewPanel);
     }
 
     @Override
@@ -94,31 +124,16 @@ public abstract class AbstractReportsView implements IReportsView {
     }
 
     @Override
-    public Widget asWidget() {
-        return viewPanel;
-    }
-
-    @Override
     public void setReportSettings(ReportMetadata reportSettings) {
         settingsFormPanel.setWidget(null);
-        reportViewPanel.setWidget(null);
 
         if (reportSettings == null) {
+            reportViewPanel.setWidget(null);
         } else {
-            ReportFactory factory = reportFactoryMap.get(reportSettings.getInstanceValueClass());
-            if (factory == null) {
-                throw new Error("factory not found for report: " + reportSettings.getInstanceValueClass().getName());
-            } else if (factory instanceof HasAdvancedModeReportFactory) {
-                boolean isAdvancedMode = ((HasAdvancedSettings) reportSettings).isInAdvancedMode().isBooleanTrue();
-                settingsForm = isAdvancedMode ? ((HasAdvancedModeReportFactory) factory).getAdvancedReportSettingsForm() : factory.getReportSettingsForm();
-                reportSettingsControls.enableSettingsModeToggle(isAdvancedMode);
-            } else {
-                settingsForm = factory.getReportSettingsForm();
-                reportSettingsControls.disableModeToggle();
-            }
-            settingsFormPanel.setWidget(settingsForm);
-            settingsForm.populate(reportSettings);
+            updateSettingsForm(reportSettings);
+            setCaption(reportSettings.getEntityMeta().getCaption());
 
+            ReportFactory<?> factory = reportFactoryMap.get(reportSettings.getInstanceValueClass());
             reportViewPanel.setWidget(report = factory.getReport());
         }
     }
@@ -133,8 +148,34 @@ public abstract class AbstractReportsView implements IReportsView {
     private void updateSettingsMode(boolean isAdvanced) {
         if (settingsForm != null) {
             ((HasAdvancedSettings) settingsForm.getValue()).isInAdvancedMode().setValue(isAdvanced);
-            setReportSettings(settingsForm.getValue());
+            updateSettingsForm(settingsForm.getValue());
         }
     }
 
+    private void updateSettingsForm(ReportMetadata reportSettings) {
+        ReportFactory<?> factory = reportFactoryMap.get(reportSettings.getInstanceValueClass());
+        if (factory == null) {
+            throw new Error("factory not found for report: " + reportSettings.getInstanceValueClass().getName());
+        } else if (factory instanceof HasAdvancedModeReportFactory) {
+            boolean isAdvancedMode = ((HasAdvancedSettings) reportSettings).isInAdvancedMode().isBooleanTrue();
+            settingsForm = isAdvancedMode ? ((HasAdvancedModeReportFactory) factory).getAdvancedReportSettingsForm() : factory.getReportSettingsForm();
+            reportSettingsControls.enableSettingsModeToggle(isAdvancedMode);
+        } else {
+            settingsForm = (CEntityForm<ReportMetadata>) factory.getReportSettingsForm();
+            reportSettingsControls.disableModeToggle();
+        }
+        settingsFormPanel.setWidget(settingsForm);
+        settingsForm.populate(reportSettings);
+    }
+
+    private Widget createLoadPanel() {
+        LayoutPanel panel = new LayoutPanel();
+        panel.setSize("100%", "100%");
+
+        Button loadButton;
+        panel.add(loadButton = new Button(i18n.tr("Load")));
+        panel.setWidgetTopHeight(loadButton, 80, Unit.PCT, 1.5, Unit.EM);
+        panel.setWidgetLeftWidth(loadButton, 10, Unit.PCT, 5, Unit.EM);
+        return panel;
+    }
 }
