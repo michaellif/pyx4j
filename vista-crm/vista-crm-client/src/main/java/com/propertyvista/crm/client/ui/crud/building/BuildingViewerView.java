@@ -18,6 +18,8 @@ import com.pyx4j.site.client.ui.crud.lister.IListerView;
 
 import com.propertyvista.crm.client.ui.crud.building.dashboard.BuildingDashboardView;
 import com.propertyvista.crm.client.ui.dashboard.DashboardView;
+import com.propertyvista.crm.client.visor.IDashboardVisorController;
+import com.propertyvista.crm.client.visor.INotesAndAttachmentsVisorController;
 import com.propertyvista.crm.rpc.dto.billing.BillingCycleDTO;
 import com.propertyvista.domain.financial.offering.Concession;
 import com.propertyvista.domain.financial.offering.Feature;
@@ -36,6 +38,10 @@ public interface BuildingViewerView extends IViewerView<BuildingDTO> {
     interface Presenter extends IViewerView.Presenter {
 
         DashboardView.Presenter getDashboardPresenter();
+
+        INotesAndAttachmentsVisorController getNotesAndAttachmentsController();
+
+        IDashboardVisorController getDashboardController();
     }
 
     BuildingDashboardView getDashboardView();

@@ -32,6 +32,9 @@ import com.propertyvista.crm.client.activity.dashboard.DashboardViewActivity;
 import com.propertyvista.crm.client.ui.crud.building.BuildingViewerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.BuildingViewFactory;
 import com.propertyvista.crm.client.ui.dashboard.DashboardView;
+import com.propertyvista.crm.client.visor.IDashboardVisorController;
+import com.propertyvista.crm.client.visor.INotesAndAttachmentsVisorController;
+import com.propertyvista.crm.client.visor.NotesAndAttachmentsVisorControllerImpl;
 import com.propertyvista.crm.rpc.dto.billing.BillingCycleDTO;
 import com.propertyvista.crm.rpc.services.billing.BillingCycleCrudService;
 import com.propertyvista.crm.rpc.services.building.BuildingCrudService;
@@ -198,5 +201,16 @@ public class BuildingViewerActivity extends CrmViewerActivity<BuildingDTO> imple
         ((AbstractActivity) concessionLister).onStop();
         ((AbstractActivity) billingCycleLister).onStop();
         super.onStop();
+    }
+
+    @Override
+    public INotesAndAttachmentsVisorController getNotesAndAttachmentsController() {
+        return new NotesAndAttachmentsVisorControllerImpl(Building.class, getEntityId());
+    }
+
+    @Override
+    public IDashboardVisorController getDashboardController() {
+        // TODO Auto-generated method stub
+        return null;
     }
 }

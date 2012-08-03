@@ -34,6 +34,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.pyx4j.site.client.ui.crud.lister.ListerInternalViewImplBase;
 import com.pyx4j.widgets.client.Button;
@@ -54,6 +55,7 @@ import com.propertyvista.crm.client.ui.crud.building.mech.RoofLister;
 import com.propertyvista.crm.client.ui.crud.building.parking.ParkingLister;
 import com.propertyvista.crm.client.ui.crud.floorplan.FloorplanLister;
 import com.propertyvista.crm.client.ui.crud.unit.UnitLister;
+import com.propertyvista.crm.client.visor.INotesAndAttachmentsVisorController;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.dto.billing.BillingCycleDTO;
 import com.propertyvista.domain.financial.offering.Concession;
@@ -123,7 +125,20 @@ public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> i
         addHeaderToolbarTwoItem(new Button(i18n.tr("Notes & Attachments"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                showVisor(new Label("Notes & Attachments Widget"), "Notes&Attachments");
+
+                INotesAndAttachmentsVisorController controller = ((BuildingViewerView.Presenter) getPresenter()).getNotesAndAttachmentsController();
+
+                final IsWidget visorView = controller.createView();
+
+                controller.populate(new DefaultAsyncCallback() {
+
+                    @Override
+                    public void onSuccess(Object result) {
+                        showVisor(visorView, "Notes&Attachments");
+                    }
+
+                });
+
             }
         }).asWidget());
 
@@ -264,4 +279,11 @@ public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> i
             return content.getValue();
         }
     }
+
+    @Override
+    public void populate(BuildingDTO value) {
+        value.getPrimaryKey();
+        super.populate(value);
+    }
+
 }
