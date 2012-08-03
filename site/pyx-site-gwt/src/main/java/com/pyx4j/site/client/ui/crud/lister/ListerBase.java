@@ -20,6 +20,8 @@
  */
 package com.pyx4j.site.client.ui.crud.lister;
 
+import com.google.gwt.user.client.ui.IsWidget;
+
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
@@ -111,5 +113,17 @@ public abstract class ListerBase<E extends IEntity> extends BasicLister<E> imple
 
     public Class<? extends CrudAppPlace> getItemOpenPlaceClass() {
         return itemOpenPlaceClass;
+    }
+
+    @Override
+    public void showVisor(IsWidget widget, String caption) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void hideVisor() {
+        // TODO Auto-generated method stub
+
     }
 }

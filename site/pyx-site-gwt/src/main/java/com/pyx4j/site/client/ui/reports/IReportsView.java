@@ -20,11 +20,10 @@
  */
 package com.pyx4j.site.client.ui.reports;
 
-import com.google.gwt.user.client.ui.IsWidget;
-
 import com.pyx4j.entity.shared.reports.ReportMetadata;
+import com.pyx4j.site.client.ui.crud.IView;
 
-public interface IReportsView extends IsWidget {
+public interface IReportsView extends IView {
 
     public interface Presenter {
 

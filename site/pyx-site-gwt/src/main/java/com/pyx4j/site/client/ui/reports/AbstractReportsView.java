@@ -41,7 +41,7 @@ public abstract class AbstractReportsView extends ViewImplBase implements IRepor
 
     private static final I18n i18n = I18n.get(AbstractReportsView.class);
 
-    private Presenter presenter;
+    private IReportsView.Presenter presenter;
 
     private final DockLayoutPanel viewPanel;
 
@@ -119,7 +119,7 @@ public abstract class AbstractReportsView extends ViewImplBase implements IRepor
     }
 
     @Override
-    public void setPresenter(Presenter presenter) {
+    public void setPresenter(IReportsView.Presenter presenter) {
         this.presenter = presenter;
     }
 

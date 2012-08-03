@@ -29,7 +29,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.site.client.ui.crud.IView;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
-public interface IListerView<E extends IEntity> extends IView<E> {
+public interface IListerView<E extends IEntity> extends IView {
 
     public interface Presenter<E extends IEntity> extends IView.Presenter {
 
@@ -70,6 +70,7 @@ public interface IListerView<E extends IEntity> extends IView<E> {
 
         void delete(Key itemID);
 
+        @Override
         void refresh();
 
     }

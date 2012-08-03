@@ -63,12 +63,12 @@ public class ListerViewImplBase<E extends IEntity> extends ViewImplBase implemen
     }
 
     @Override
-    public void setPresenter(Presenter<E> presenter) {
+    public void setPresenter(IListerView.Presenter<E> presenter) {
         getLister().setPresenter(presenter);
     }
 
     @Override
-    public Presenter<E> getPresenter() {
+    public IListerView.Presenter<E> getPresenter() {
         return getLister().getPresenter();
     }
 

@@ -23,10 +23,9 @@ package com.pyx4j.site.client.ui.crud;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.site.client.ui.crud.misc.IMemento;
 
-public interface IView<E extends IEntity> extends IsWidget {
+public interface IView extends IsWidget {
 
     public interface Presenter {
 
@@ -42,4 +41,9 @@ public interface IView<E extends IEntity> extends IsWidget {
     void storeState(Place place);
 
     void restoreState();
+
+    void showVisor(IsWidget widget, String caption);
+
+    void hideVisor();
+
 }

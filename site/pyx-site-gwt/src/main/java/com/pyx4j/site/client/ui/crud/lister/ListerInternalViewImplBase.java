@@ -23,6 +23,7 @@ package com.pyx4j.site.client.ui.crud.lister;
 import java.util.List;
 
 import com.google.gwt.place.shared.Place;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.Key;
@@ -124,6 +125,18 @@ public class ListerInternalViewImplBase<E extends IEntity> extends SimplePanel i
     @Override
     public void discard() {
         getLister().discard();
+    }
+
+    @Override
+    public void showVisor(IsWidget widget, String caption) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void hideVisor() {
+        // TODO Auto-generated method stub
+
     }
 
 }

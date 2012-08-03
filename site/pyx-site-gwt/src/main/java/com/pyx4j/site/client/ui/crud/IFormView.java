@@ -22,7 +22,7 @@ package com.pyx4j.site.client.ui.crud;
 
 import com.pyx4j.entity.shared.IEntity;
 
-public interface IFormView<E extends IEntity> extends IView<E> {
+public interface IFormView<E extends IEntity> extends IView {
 
     void populate(E value);
 

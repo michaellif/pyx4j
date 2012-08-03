@@ -34,10 +34,11 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.resources.SiteImages;
 import com.pyx4j.site.client.ui.crud.DefaultSiteCrudPanelsTheme;
+import com.pyx4j.site.client.ui.crud.IView;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.actionbar.Toolbar;
 
-public class ViewImplBase extends DockLayoutPanel {
+public abstract class ViewImplBase extends DockLayoutPanel implements IView {
 
     private static final I18n i18n = I18n.get(ViewImplBase.class);
 
@@ -109,7 +110,8 @@ public class ViewImplBase extends DockLayoutPanel {
         add(visorPane);
     }
 
-    protected void showVisor(IsWidget widget, String caption) {
+    @Override
+    public void showVisor(IsWidget widget, String caption) {
         FlowPanel visorHolder = new FlowPanel();
         visorHolder.setStyleName(DefaultSiteCrudPanelsTheme.StyleName.Visor.name());
 
@@ -132,7 +134,8 @@ public class ViewImplBase extends DockLayoutPanel {
         visorPane.showVisorPane(visorHolder);
     }
 
-    protected void hideVisor() {
+    @Override
+    public void hideVisor() {
         visorPane.hideVisorPane();
     }
 
