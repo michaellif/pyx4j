@@ -13,12 +13,12 @@
  */
 package com.propertyvista.crm.client.ui.crud.lease;
 
-import com.propertyvista.crm.client.ui.crud.lease.common.LeaseEditorFormBase2;
+import com.propertyvista.crm.client.ui.crud.lease.common.LeaseNewFormBase;
 import com.propertyvista.dto.LeaseDTO2;
 
-public class LeaseEditorForm2 extends LeaseEditorFormBase2<LeaseDTO2> {
+public class LeaseNewForm extends LeaseNewFormBase<LeaseDTO2> {
 
-    public LeaseEditorForm2() {
+    public LeaseNewForm() {
         super(LeaseDTO2.class);
     }
 

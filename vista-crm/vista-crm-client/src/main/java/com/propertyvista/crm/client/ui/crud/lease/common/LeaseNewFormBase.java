@@ -13,14 +13,20 @@
  */
 package com.propertyvista.crm.client.ui.crud.lease.common;
 
+import java.util.Date;
 import java.util.List;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.client.ui.CEntityLabel;
 import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEnumLabel;
+import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
@@ -30,6 +36,8 @@ import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.common.client.policy.ClientPolicyManager;
+import com.propertyvista.common.client.ui.validators.DateInPeriodValidation;
+import com.propertyvista.common.client.ui.validators.StartEndDateValidation;
 import com.propertyvista.crm.client.ui.components.boxes.UnitSelectorDialog;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
@@ -39,11 +47,11 @@ import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySe
 import com.propertyvista.domain.tenant.lease.Lease2;
 import com.propertyvista.dto.LeaseDTO2;
 
-public abstract class LeaseEditorFormBase2<DTO extends LeaseDTO2> extends CrmEntityForm<DTO> {
+public abstract class LeaseNewFormBase<DTO extends LeaseDTO2> extends CrmEntityForm<DTO> {
 
-    protected static final I18n i18n = I18n.get(LeaseEditorFormBase2.class);
+    protected static final I18n i18n = I18n.get(LeaseNewFormBase.class);
 
-    protected LeaseEditorFormBase2(Class<DTO> clazz) {
+    protected LeaseNewFormBase(Class<DTO> clazz) {
         super(clazz, false);
     }
 
@@ -60,6 +68,7 @@ public abstract class LeaseEditorFormBase2<DTO extends LeaseDTO2> extends CrmEnt
         get(proto().moveOutNotice()).setVisible(!getValue().moveOutNotice().isNull());
         get(proto().expectedMoveOut()).setVisible(!getValue().expectedMoveOut().isNull());
 
+        get(proto().creationDate()).setVisible(!getValue().creationDate().isNull());
         get(proto().approvalDate()).setVisible(!getValue().approvalDate().isNull());
 
         get(proto().actualLeaseTo()).setVisible(!getValue().actualLeaseTo().isNull());
@@ -122,7 +131,7 @@ public abstract class LeaseEditorFormBase2<DTO extends LeaseDTO2> extends CrmEnt
                     protected void setFilters(List<Criterion> filters) {
                         assert (filters != null);
 
-                        DTO currentValue = LeaseEditorFormBase2.this.getValue();
+                        DTO currentValue = LeaseNewFormBase.this.getValue();
                         if (currentValue.status().getValue() == Lease2.Status.Created) { // existing lease:
 
                             filters.add(PropertyCriterion.eq(proto().unitOccupancySegments().$().status(), AptUnitOccupancySegment.Status.pending));
@@ -185,5 +194,49 @@ public abstract class LeaseEditorFormBase2<DTO extends LeaseDTO2> extends CrmEnt
         get(proto().approvalDate()).setViewable(true);
 
         return main;
+    }
+
+    @Override
+    public void addValidations() {
+        super.addValidations();
+
+        crossValidate(get(proto().leaseFrom()), get(proto().leaseTo()), null);
+        crossValidate(get(proto().leaseFrom()), get(proto().actualLeaseTo()), null);
+        crossValidate(get(proto().actualMoveIn()), get(proto().actualMoveOut()), null);
+
+//        DatesWithinMonth(get(proto().version().actualLeaseTo()), get(proto().leaseTo()), "Actual Lease To Date Should Be Within 30 Days Of Lease To Date");
+//        DatesWithinMonth(get(proto().version().actualMoveIn()), get(proto().version().expectedMoveIn()),
+//                "Actual Move In Date Should Be Within 30 Days Of Expected Move In Date");
+//        DatesWithinMonth(get(proto().version().actualMoveOut()), get(proto().version().expectedMoveOut()),
+//                "Actual Move Out Date Should Be Within 30 Days Of Expected Move Out Date");
+
+        get(proto().leaseFrom()).addValueValidator(new EditableValueValidator<Date>() {
+            @Override
+            public ValidationError isValid(CComponent<Date, ?> component, Date value) {
+                if (value != null) {
+                    if (getValue().status().getValue() == Lease2.Status.Created) { // existing lease:
+                        return value.before(TimeUtils.today()) ? null : new ValidationError(component, i18n.tr("The Date Must Be Earlier Than Today's Date"));
+                    } else if (getValue().status().getValue() == Lease2.Status.Application) { // lease application:
+                        Date dateToCompare = getValue().creationDate().isNull() ? TimeUtils.today() : getValue().creationDate().getValue();
+                        return !value.before(dateToCompare) ? null : new ValidationError(component, i18n
+                                .tr("The Date Must Be Later Than Or Equal To Application Creaion Date"));
+                    }
+                }
+                return null;
+            }
+        });
+
+        new DateInPeriodValidation(get(proto().leaseFrom()), get(proto().expectedMoveIn()), get(proto().leaseTo()),
+                i18n.tr("The Date Should Be Within The Lease Period"));
+
+        get(proto().leaseFrom()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().expectedMoveIn())));
+
+        get(proto().leaseTo()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().expectedMoveIn())));
+    }
+
+    private void crossValidate(CComponent<LogicalDate, ?> date1, CComponent<LogicalDate, ?> date2, String message) {
+        new StartEndDateValidation(date1, date2, message);
+        date1.addValueChangeHandler(new RevalidationTrigger<LogicalDate>(date2));
+        date2.addValueChangeHandler(new RevalidationTrigger<LogicalDate>(date1));
     }
 }

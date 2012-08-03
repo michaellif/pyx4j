@@ -26,7 +26,7 @@ public class LeaseEditorViewImplBase2<DTO extends LeaseDTO2> extends CrmEditorVi
 
     @Override
     public void updateUnitValue(DTO value) {
-        LeaseEditorFormBase2<DTO> form = (LeaseEditorFormBase2<DTO>) getForm();
+        LeaseNewFormBase<DTO> form = (LeaseNewFormBase<DTO>) getForm();
 
         form.get(form.proto().unit()).setValue(value.unit());
         form.get(form.proto().unit().building()).setValue(value.unit().building());
