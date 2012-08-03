@@ -36,7 +36,6 @@ import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.Guarantor2;
 import com.propertyvista.domain.tenant.PersonRelationship;
 import com.propertyvista.domain.tenant.PersonScreening;
-import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.Tenant2;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant2;
 import com.propertyvista.dto.LeaseTermDTO;
@@ -104,9 +103,9 @@ public class GuarantorInLeaseFolder extends LeaseParticipantFolder<Guarantor2> {
             left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().sex()), 7).build());
             left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().birthDate()), 9).build());
             left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().screening()), 9).customLabel(i18n.tr("Use Screening From")).build());
-            left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().tenant(), new CComboBox<Tenant>() {
+            left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().tenant(), new CComboBox<Tenant2>() {
                 @Override
-                public String getItemName(Tenant o) {
+                public String getItemName(Tenant2 o) {
                     if (o == null) {
                         return getNoSelectionText();
                     } else {

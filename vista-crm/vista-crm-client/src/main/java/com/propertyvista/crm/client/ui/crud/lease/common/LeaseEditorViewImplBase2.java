@@ -30,5 +30,8 @@ public class LeaseEditorViewImplBase2<DTO extends LeaseDTO2> extends CrmEditorVi
 
         form.get(form.proto().unit()).setValue(value.unit());
         form.get(form.proto().unit().building()).setValue(value.unit().building());
+
+        // update non-editable runtime data:
+        form.getValue().currentLeaseTerm().set(value.currentLeaseTerm());
     }
 }

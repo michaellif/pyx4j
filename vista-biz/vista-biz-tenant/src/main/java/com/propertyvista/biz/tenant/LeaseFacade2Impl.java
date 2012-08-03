@@ -189,7 +189,6 @@ public class LeaseFacade2Impl implements LeaseFacade2 {
                 throw new IllegalStateException(SimpleMessageFormat.format("it's not allowed to unset unit while lease's state is \"{0}\"", lease.status()
                         .getValue()));
             }
-
         }
         if (doReserve) {
             switch (lease.status().getValue()) {

@@ -55,7 +55,7 @@ public class LeaseTermEditorViewImpl extends CrmEditorViewImplBase<LeaseTermDTO>
             form.get(form.proto().version().leaseProducts().concessions()).setValue(value.version().leaseProducts().concessions());
         }
 
-        // update runtime non-editable data:
+        // update non-editable runtime data:
 // TODO : _2 uncomment then        
 //        form.getValue().billingAccount().deposits().clear();
 //        form.getValue().billingAccount().deposits().addAll(value.billingAccount().deposits());
