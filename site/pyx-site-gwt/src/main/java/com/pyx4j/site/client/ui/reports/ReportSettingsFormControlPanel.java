@@ -25,6 +25,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.DefaultSiteCrudPanelsTheme;
@@ -51,8 +52,6 @@ public abstract class ReportSettingsFormControlPanel extends Composite {
         controlPanel = new Toolbar();
         controlPanel.setSize("100%", "100%");
 
-        controlPanel.setStyleName(DefaultSiteCrudPanelsTheme.StyleName.FooterToolbar.name());
-
         controlPanel.addItem(modeToggle = new Anchor(i18n.tr("advanced"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
@@ -70,7 +69,10 @@ public abstract class ReportSettingsFormControlPanel extends Composite {
             }
         }), true);
 
-        initWidget(controlPanel);
+        SimplePanel p = new SimplePanel();
+        p.setStyleName(DefaultSiteCrudPanelsTheme.StyleName.FooterToolbar.name());
+        p.setWidget(controlPanel);
+        initWidget(p);
     }
 
     public final void enableSettingsModeToggle(boolean isAdvanced) {
