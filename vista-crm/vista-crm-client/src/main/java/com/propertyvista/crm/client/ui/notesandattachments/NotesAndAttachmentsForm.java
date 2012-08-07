@@ -149,10 +149,17 @@ public class NotesAndAttachmentsForm extends CrmEntityForm<NotesAndAttachmentsDT
                 btnSave = new Button(i18n.tr("Save"), new ClickHandler() {
                     @Override
                     public void onClick(ClickEvent event) {
-                        if (getValue().created().getValue() == null)
+                        if (getValue().created().getValue() == null) {
                             getValue().created().setValue(new LogicalDate());
-
+                        } else {
+                            getValue().updated().setValue(new LogicalDate());
+                        }
+                        if (getValue().user().isNull()) {
+                            // TODO
+//                            getValue().user().set(currentUser);
+                        }
                         setViewableMode(true);
+                        refresh(false);
                     }
                 });
 
