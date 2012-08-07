@@ -102,6 +102,24 @@ public class LeaseFacade2Impl implements LeaseFacade2 {
 
     @Override
     public Lease2 setUnit(Lease2 lease, AptUnit unitId) {
+        assert !lease.currentLeaseTerm().isNull();
+        if (lease.currentLeaseTerm().isValueDetached()) {
+            Persistence.service().retrieve(lease.currentLeaseTerm());
+        }
+        return setUnit(lease, lease.currentLeaseTerm(), unitId);
+    }
+
+    @Override
+    public Lease2 setService(Lease2 lease, ProductItem serviceId) {
+        assert !lease.currentLeaseTerm().isNull();
+        if (lease.currentLeaseTerm().isValueDetached()) {
+            Persistence.service().retrieve(lease.currentLeaseTerm());
+        }
+        setService(lease, lease.currentLeaseTerm(), serviceId);
+        return lease;
+    }
+
+    private Lease2 setUnit(Lease2 lease, LeaseTerm leaseTerm, AptUnit unitId) {
         assert !lease.isValueDetached();
         if (!Lease2.Status.draft().contains(lease.status().getValue())) {
             throw new UserRuntimeException(i18n.tr("Invalid Lease2 State"));
@@ -123,9 +141,8 @@ public class LeaseFacade2Impl implements LeaseFacade2 {
             serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().element(), lease.unit()));
             ProductItem serviceItem = Persistence.service().retrieve(serviceCriteria);
             if (serviceItem != null) {
-                assert (!lease.currentLeaseTerm().isNull());
-                lease.currentLeaseTerm().lease().set(lease);
-                setService(lease.currentLeaseTerm(), serviceItem);
+                assert (!leaseTerm.isNull());
+                setService(leaseTerm, serviceItem);
                 succeeded = true;
                 break servicesLoop;
             }
@@ -211,15 +228,27 @@ public class LeaseFacade2Impl implements LeaseFacade2 {
     }
 
     @Override
-    public LeaseTerm setService(LeaseTerm leaseTerm, ProductItem serviceId) {
-        assert !leaseTerm.isValueDetached();
-
+    public LeaseTerm setUnit(LeaseTerm leaseTerm, AptUnit unitId) {
         assert !leaseTerm.lease().isNull();
         if (leaseTerm.lease().isValueDetached()) {
             Persistence.service().retrieve(leaseTerm.lease());
         }
+        setUnit(leaseTerm.lease(), leaseTerm, unitId);
+        return leaseTerm;
+    }
 
-        Lease2 lease = leaseTerm.lease();
+    @Override
+    public LeaseTerm setService(LeaseTerm leaseTerm, ProductItem serviceId) {
+        assert !leaseTerm.lease().isNull();
+        if (leaseTerm.lease().isValueDetached()) {
+            Persistence.service().retrieve(leaseTerm.lease());
+        }
+        return setService(leaseTerm.lease(), leaseTerm, serviceId);
+    }
+
+    private LeaseTerm setService(Lease2 lease, LeaseTerm leaseTerm, ProductItem serviceId) {
+        assert !leaseTerm.isValueDetached();
+
         if (!Lease2.Status.draft().contains(lease.status().getValue())) {
             throw new UserRuntimeException(i18n.tr("Invalid Lease State"));
         }

@@ -61,6 +61,8 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
     protected void save(LeaseTerm dbo, LeaseTermDTO in) {
         updateAdjustments(dbo);
         ServerSideFactory.create(LeaseFacade2.class).persist(dbo);
+//        // TODO: call this persist if lease has been changed only!
+//        ServerSideFactory.create(LeaseFacade2.class).persist(dbo.lease());
     }
 
     @Override
@@ -103,7 +105,7 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
 
     @Override
     public void setSelectedUnit(AsyncCallback<LeaseTermDTO> callback, AptUnit unitId, LeaseTermDTO currentValue) {
-        ServerSideFactory.create(LeaseFacade2.class).setUnit(currentValue.lease(), unitId);
+        ServerSideFactory.create(LeaseFacade2.class).setUnit(currentValue, unitId);
         loadDetachedProducts(currentValue);
         fillServiceEligibilityData(currentValue);
         fillserviceItems(currentValue);

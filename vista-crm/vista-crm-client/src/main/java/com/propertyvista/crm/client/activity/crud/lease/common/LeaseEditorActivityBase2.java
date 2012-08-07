@@ -28,6 +28,18 @@ public abstract class LeaseEditorActivityBase2<DTO extends LeaseDTO2> extends Ed
 
     public LeaseEditorActivityBase2(CrudAppPlace place, IEditorView<DTO> view, LeaseEditorCrudServiceBase2<DTO> service, Class<DTO> entityClass) {
         super(place, view, service, entityClass);
+
+//        getService().create(new DefaultAsyncCallback<Key>() {
+//            @Override
+//            public void onSuccess(Key result) {
+//                getService().retrieve(new DefaultAsyncCallback<DTO>() {
+//                    @Override
+//                    public void onSuccess(DTO result) {
+//                        AppSite.getPlaceController().goTo(new CrmSiteMap.Tenants.LeaseTerm().formEditorPlace(result.currentLeaseTerm().getPrimaryKey()));
+//                    }
+//                }, result, RetrieveTraget.Edit);
+//            }
+//        }, (DTO) place.getNewItem());
     }
 
     @Override

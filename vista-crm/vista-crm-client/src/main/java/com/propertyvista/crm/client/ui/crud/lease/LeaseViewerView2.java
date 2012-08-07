@@ -44,6 +44,8 @@ public interface LeaseViewerView2 extends LeaseViewerViewBase2<LeaseDTO2> {
         void activate();
 
         void sendMail(List<LeaseParticipant2> users, EmailTemplateType emailType);
+
+        void editCurrentTerm();
     }
 
     IListerView<BillDataDTO> getBillListerView();

@@ -32,9 +32,13 @@ public interface LeaseFacade2 {
 
     Lease2 setUnit(Lease2 lease, AptUnit unitId);
 
+    Lease2 setService(Lease2 lease, ProductItem serviceId);
+
     Lease2 persist(Lease2 lease);
 
     // Lease term operations:
+
+    LeaseTerm setUnit(LeaseTerm leaseTerm, AptUnit unitId);
 
     LeaseTerm setService(LeaseTerm leaseTerm, ProductItem serviceId);
 
