@@ -46,7 +46,6 @@ import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.common.client.ui.validators.PastDateValidation;
 import com.propertyvista.crm.client.ui.components.media.CrmMediaFolder;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
-import com.propertyvista.crm.client.ui.notesandattachments.NotesAndAttachmentsForm;
 import com.propertyvista.domain.policy.policies.DatesPolicy;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
 import com.propertyvista.domain.property.PropertyContact;
@@ -387,7 +386,6 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
     private FormFlexPanel createNotesAndAttachmentsTab(String title) {
         FormFlexPanel main = new FormFlexPanel(title);
         int row = -1;
-        main.setWidget(++row, 0, inject(proto().notesAndAttachments(), new NotesAndAttachmentsForm()));
         return main;
     }
 

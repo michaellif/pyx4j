@@ -19,7 +19,6 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.client.CEntityForm;
 import com.pyx4j.entity.client.ui.folder.BoxFolderDecorator;
 import com.pyx4j.entity.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.entity.client.ui.folder.CEntityFolderItem;
@@ -38,57 +37,54 @@ import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.client.ui.components.AnchorButton;
-import com.propertyvista.domain.note.Note;
+import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.note.NoteAttachment;
 import com.propertyvista.domain.note.NotesAndAttachments;
+import com.propertyvista.domain.note.NotesAndAttachmentsDTO;
 
-public class NotesAndAttachmentsForm extends CEntityForm<NotesAndAttachments> {
+public class NotesAndAttachmentsForm extends CrmEntityForm<NotesAndAttachmentsDTO> {
+
+    private static final I18n i18n = I18n.get(NotesAndAttachmentsForm.class);
 
     public NotesAndAttachmentsForm() {
-        super(NotesAndAttachments.class);
+        super(NotesAndAttachmentsDTO.class);
     }
 
     @Override
     public IsWidget createContent() {
-        FormFlexPanel main = new FormFlexPanel();
-        int row = -1;
-
-        main.setWidget(++row, 0, inject(proto().notes(), new NoteAndAttachmentsEditorFolder()));
-
-        return main;
+        return inject(proto().notes(), new NotesAndAttachmentsFolder());
     }
 
-    private static class NoteAndAttachmentsEditorFolder extends VistaBoxFolder<Note> {
-
-        private static final I18n i18n = I18n.get(NoteAndAttachmentsEditorFolder.class);
+    public static class NotesAndAttachmentsFolder extends VistaBoxFolder<NotesAndAttachments> {
 
         protected boolean newItemAdded = false;
 
-        public NoteAndAttachmentsEditorFolder() {
-            super(Note.class);
-
+        public NotesAndAttachmentsFolder() {
+            super(NotesAndAttachments.class);
+            setEditable(true);
+            inheritEditable(false);
         }
 
         @Override
         public CComponent<?, ?> create(IObject<?> member) {
-            if (member instanceof Note) {
-                return new NoteEditor(!newItemAdded);
+            if (member instanceof NotesAndAttachments) {
+                return new NoteEditor(false);
             } else {
                 return super.create(member);
             }
         }
 
         @Override
-        public IFolderItemDecorator<Note> createItemDecorator() {
-            BoxFolderItemDecorator<Note> decorator = (BoxFolderItemDecorator<Note>) super.createItemDecorator();
+        public IFolderItemDecorator<NotesAndAttachments> createItemDecorator() {
+            BoxFolderItemDecorator<NotesAndAttachments> decorator = (BoxFolderItemDecorator<NotesAndAttachments>) super.createItemDecorator();
             decorator.setTitle(i18n.tr("Add Note"));
 
             return decorator;
         }
 
         @Override
-        protected CEntityFolderItem<Note> createItem(boolean first) {
-            final CEntityFolderItem<Note> item = super.createItem(first);
+        protected CEntityFolderItem<NotesAndAttachments> createItem(boolean first) {
+            final CEntityFolderItem<NotesAndAttachments> item = super.createItem(first);
             IconButton button = new IconButton(i18n.tr("Edit Note"), CrmImages.INSTANCE.editButton());
             button.addClickHandler(new ClickHandler() {
                 @Override
@@ -104,15 +100,13 @@ public class NotesAndAttachmentsForm extends CEntityForm<NotesAndAttachments> {
         }
 
         @Override
-        protected void addItem(Note newEntity) {
+        protected void addItem(NotesAndAttachments newEntity) {
             newItemAdded = newEntity.isEmpty();
 
             super.addItem(newEntity);
         }
 
-        private static class NoteEditor extends CEntityDecoratableForm<Note> {
-
-            private static final I18n i18n = I18n.get(NoteEditor.class);
+        private class NoteEditor extends CEntityDecoratableForm<NotesAndAttachments> {
 
             private Button btnSave;
 
@@ -121,9 +115,11 @@ public class NotesAndAttachmentsForm extends CEntityForm<NotesAndAttachments> {
             private AnchorButton btnCancel;
 
             public NoteEditor(boolean viewable) {
-                super(Note.class);
+                super(NotesAndAttachments.class);
 
                 this.viewable = viewable;
+                setViewable(viewable);
+                inheritViewable(false);
             }
 
             @Override
@@ -132,8 +128,18 @@ public class NotesAndAttachmentsForm extends CEntityForm<NotesAndAttachments> {
                 FormFlexPanel content = new FormFlexPanel();
                 int row = -1;
 
-                content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().description())).build());
+                content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().subject())).build());
                 content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().note())).build());
+
+                CComponent<?, ?> comp = inject(proto().created());
+                comp.setViewable(true);
+                content.setWidget(++row, 0, new DecoratorBuilder(comp).build());
+                comp = inject(proto().updated());
+                comp.setViewable(true);
+                content.setWidget(++row, 0, new DecoratorBuilder(comp).build());
+                comp = inject(proto().user().name());
+                comp.setViewable(true);
+                content.setWidget(++row, 0, new DecoratorBuilder(comp).build());
 
                 content.setH3(++row, 0, 1, i18n.tr("Attachments"));
                 content.setWidget(++row, 0, inject(proto().attachments(), new AttachmentsEditorFolder()));
@@ -146,8 +152,7 @@ public class NotesAndAttachmentsForm extends CEntityForm<NotesAndAttachments> {
                         if (getValue().created().getValue() == null)
                             getValue().created().setValue(new LogicalDate());
 
-                        setViewable(true);
-                        setButtonsVisible(false);
+                        setViewableMode(true);
                     }
                 });
 
@@ -160,7 +165,7 @@ public class NotesAndAttachmentsForm extends CEntityForm<NotesAndAttachments> {
 //                        getPresenter().cancel();
 
                         if (getValue().isEmpty())
-                            ((NoteAndAttachmentsEditorFolder) getParent().getParent()).removeItem((CEntityFolderItem<Note>) getParent());
+                            ((NotesAndAttachmentsFolder) getParent().getParent()).removeItem((CEntityFolderItem<NotesAndAttachments>) getParent());
                         else {
                             MessageDialog.confirm(i18n.tr("Confirm"),
                                     i18n.tr("Are you sure you want to cancel your changes?\n\nPress Yes to continue, or No to stay on the current page."),
@@ -197,7 +202,7 @@ public class NotesAndAttachmentsForm extends CEntityForm<NotesAndAttachments> {
 
         }
 
-        private static class AttachmentsEditorFolder extends VistaBoxFolder<NoteAttachment> {
+        private class AttachmentsEditorFolder extends VistaBoxFolder<NoteAttachment> {
 
             public AttachmentsEditorFolder() {
                 super(NoteAttachment.class);
@@ -222,9 +227,7 @@ public class NotesAndAttachmentsForm extends CEntityForm<NotesAndAttachments> {
 
             }
 
-            private static class AttachmentEditor extends CEntityDecoratableForm<NoteAttachment> {
-
-                private static final I18n i18n = I18n.get(NoteAttachment.class);
+            private class AttachmentEditor extends CEntityDecoratableForm<NoteAttachment> {
 
                 public AttachmentEditor() {
                     super(NoteAttachment.class);
@@ -245,4 +248,8 @@ public class NotesAndAttachmentsForm extends CEntityForm<NotesAndAttachments> {
         }
     }
 
+    @Override
+    protected void createTabs() {
+        // TODO Auto-generated method stub
+    }
 }

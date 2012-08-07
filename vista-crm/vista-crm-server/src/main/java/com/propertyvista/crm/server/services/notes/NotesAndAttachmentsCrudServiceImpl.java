@@ -7,14 +7,26 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Aug 3, 2012
- * @author michaellif
+ * Created on Aug 2, 2012
+ * @author dev_vista
  * @version $Id$
  */
-package com.propertyvista.crm.client.visor.notes;
+package com.propertyvista.crm.server.services.notes;
 
-import com.propertyvista.crm.client.visor.IVisorController;
+import com.pyx4j.entity.server.AbstractCrudServiceImpl;
+
+import com.propertyvista.crm.rpc.services.notes.NotesAndAttachmentsCrudService;
 import com.propertyvista.domain.note.NotesAndAttachments;
 
-public interface INotesAndAttachmentsVisorController extends IVisorController<NotesAndAttachments> {
+public class NotesAndAttachmentsCrudServiceImpl extends AbstractCrudServiceImpl<NotesAndAttachments> implements NotesAndAttachmentsCrudService {
+
+    public NotesAndAttachmentsCrudServiceImpl() {
+        super(NotesAndAttachments.class);
+    }
+
+    @Override
+    protected void bind() {
+        bindCompleateDBO();
+    }
+
 }

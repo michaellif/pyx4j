@@ -13,18 +13,45 @@
  */
 package com.propertyvista.crm.client.visor.notes;
 
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.ui.IsWidget;
+
 import com.pyx4j.commons.Key;
+import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.site.client.ui.crud.IView;
 
-public class NotesAndAttachmentsVisorControllerImpl implements INotesAndAttachmentsVisorController {
+import com.propertyvista.crm.rpc.services.notes.NotesAndAttachmentsCrudService;
+import com.propertyvista.domain.note.NotesAndAttachments;
 
-    public NotesAndAttachmentsVisorControllerImpl(Class<? extends IEntity> entityClass, Key entityId) {
+public class NotesAndAttachmentsVisorControllerImpl extends VisorControllerBase<NotesAndAttachments> implements INotesAndAttachmentsVisorController {
 
+    private final NotesAndAttachmentsVisorView view;
+
+    public NotesAndAttachmentsVisorControllerImpl(Class<? extends IEntity> parentClass, Key parentId) {
+        super(NotesAndAttachments.class, parentClass, parentId);
+
+        view = new NotesAndAttachmentsVisorView(this);
+        view.setTitle("Notes & Attachments");
     }
 
     @Override
-    public void show(IView viewImpl) {
-        viewImpl.showVisor(new NotesAndAttachmentsVisorView(this), "Notes & Attachments");
+    public IsWidget getView() {
+        return view;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public AbstractCrudService<NotesAndAttachments> getService() {
+        return (AbstractCrudService<NotesAndAttachments>) GWT.create(NotesAndAttachmentsCrudService.class);
+    }
+
+    @Override
+    protected NotesAndAttachments getNewItem() {
+        assert (getParentId() != null) : "Notes owner cannot be null";
+
+        NotesAndAttachments item = EntityFactory.create(NotesAndAttachments.class);
+        item.parent().setPrimaryKey(getParentId());
+        return item;
     }
 }

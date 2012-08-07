@@ -167,7 +167,7 @@ public class UnitForm extends CrmEntityForm<AptUnitDTO> {
     private FormFlexPanel createNotesAndAttachmentsTab(String title) {
         FormFlexPanel main = new FormFlexPanel(title);
         int row = -1;
-        main.setWidget(++row, 0, inject(proto().notesAndAttachments(), new NotesAndAttachmentsForm()));
+        main.setWidget(++row, 0, new NotesAndAttachmentsForm());
         return main;
     }
 

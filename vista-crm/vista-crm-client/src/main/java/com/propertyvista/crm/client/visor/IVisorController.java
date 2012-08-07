@@ -13,6 +13,20 @@
  */
 package com.propertyvista.crm.client.visor;
 
-public interface IVisorController {
+import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.site.client.ui.crud.IView;
+
+public interface IVisorController<E extends IEntity> {
+
+    IsWidget getView();
+
+    AbstractCrudService<E> getService();
+
+    void populate(DefaultAsyncCallback<E> callback);
+
+    void show(IView view);
 }

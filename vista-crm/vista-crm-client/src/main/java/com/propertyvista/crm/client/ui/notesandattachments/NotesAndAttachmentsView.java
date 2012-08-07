@@ -13,9 +13,12 @@
  */
 package com.propertyvista.crm.client.ui.notesandattachments;
 
-import com.google.gwt.user.client.ui.IsWidget;
+import com.pyx4j.site.client.ui.crud.form.IEditorView;
 
-public interface NotesAndAttachmentsView extends IsWidget {
-    public interface Presenter {
+import com.propertyvista.domain.note.NotesAndAttachmentsDTO;
+
+public interface NotesAndAttachmentsView extends IEditorView<NotesAndAttachmentsDTO> {
+
+    interface Presenter extends IEditorView.Presenter {
     }
 }
