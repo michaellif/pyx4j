@@ -28,6 +28,8 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.client.CEntityForm;
@@ -39,17 +41,22 @@ import com.pyx4j.widgets.client.Button;
 
 public abstract class AbstractReportsView extends ViewImplBase implements IReportsView {
 
+    public enum Styles {
+
+        SettingsFormPanel;
+    }
+
     private static final I18n i18n = I18n.get(AbstractReportsView.class);
 
     private IReportsView.Presenter presenter;
 
-    private final DockLayoutPanel viewPanel;
+    private final VerticalPanel viewPanel;
 
     private final Map<Class<? extends ReportMetadata>, ReportFactory> reportFactoryMap;
 
     private CEntityForm<ReportMetadata> settingsForm;
 
-    private final ScrollPanel settingsFormPanel;
+    private final SimplePanel settingsFormPanel;
 
     private final ScrollPanel reportViewPanel;
 
@@ -63,13 +70,15 @@ public abstract class AbstractReportsView extends ViewImplBase implements IRepor
         this.settingsForm = null;
         this.presenter = null;
 
-        viewPanel = new DockLayoutPanel(Unit.EM);
-        viewPanel.setSize("100%", "100%");
+        viewPanel = new VerticalPanel();
+        viewPanel.setWidth("100%");
+        viewPanel.setHeight("100%");
 
-        settingsFormPanel = new ScrollPanel();
-        settingsFormPanel.getElement().getStyle().setProperty("borderStyle", "outset");
-        settingsFormPanel.getElement().getStyle().setBorderWidth(1, Unit.PX);
-        viewPanel.addNorth(settingsFormPanel, 13);
+        settingsFormPanel = new SimplePanel();
+        settingsFormPanel.setStylePrimaryName(Styles.SettingsFormPanel.name());
+        viewPanel.add(settingsFormPanel);
+//        viewPanel.setWidgetLeftRight(settingsFormPanel, 0, Unit.PCT, 100, Unit.PCT);
+//        viewPanel.setWidgetTopHeight(settingsFormPanel, 0
 
         reportSettingsControls = new ReportSettingsFormControlPanel() {
             @Override
@@ -89,12 +98,14 @@ public abstract class AbstractReportsView extends ViewImplBase implements IRepor
             }
 
         };
-
-        viewPanel.addNorth(reportSettingsControls, 2.5);
+        viewPanel.add(reportSettingsControls);
 
         reportViewPanel = new ScrollPanel();
         reportViewPanel.getElement().getStyle().setPadding(1, Unit.EM);
-        viewPanel.add(reportViewPanel);
+        reportViewPanel.setSize("100%", "100%");
+        DockLayoutPanel dlp = new DockLayoutPanel(Unit.EM);
+        dlp.add(reportViewPanel);
+        viewPanel.add(dlp);
 
         addHeaderToolbarTwoItem(new Button(i18n.tr("Export")));
 
@@ -115,7 +126,9 @@ public abstract class AbstractReportsView extends ViewImplBase implements IRepor
         addHeaderToolbarTwoItem(new Button(i18n.tr("Refresh")));
 
         setCaption(i18n.tr("Reports"));
-        setContentPane(viewPanel);
+        DockLayoutPanel p = new DockLayoutPanel(Unit.EM);
+        p.add(new ScrollPanel(viewPanel));
+        setContentPane(p);
     }
 
     @Override
@@ -128,13 +141,14 @@ public abstract class AbstractReportsView extends ViewImplBase implements IRepor
         settingsFormPanel.setWidget(null);
 
         if (reportSettings == null) {
-            reportViewPanel.setWidget(null);
+            reportViewPanel.add(null);
         } else {
             updateSettingsForm(reportSettings);
             setCaption(reportSettings.getEntityMeta().getCaption());
 
             ReportFactory<?> factory = reportFactoryMap.get(reportSettings.getInstanceValueClass());
-            reportViewPanel.setWidget(report = factory.getReport());
+            report = factory.getReport();
+            reportViewPanel.add(report);
         }
     }
 

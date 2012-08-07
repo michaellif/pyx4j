@@ -49,6 +49,8 @@ public abstract class ReportSettingsFormControlPanel extends Composite {
         isAdvanced = false;
 
         controlPanel = new Toolbar();
+        controlPanel.setSize("100%", "100%");
+
         controlPanel.setStyleName(DefaultSiteCrudPanelsTheme.StyleName.FooterToolbar.name());
 
         controlPanel.addItem(modeToggle = new Anchor(i18n.tr("advanced"), new ClickHandler() {
@@ -67,10 +69,6 @@ public abstract class ReportSettingsFormControlPanel extends Composite {
                 onApply();
             }
         }), true);
-
-        controlPanel.getElement().getStyle().setProperty("borderStyle", "outset");
-        controlPanel.getElement().getStyle().setProperty("borderTopWidth", "1px");
-        controlPanel.getElement().getStyle().setProperty("borderBottomWidth", "1px");
 
         initWidget(controlPanel);
     }
