@@ -124,6 +124,7 @@ public class LeaseFacade2Impl implements LeaseFacade2 {
             ProductItem serviceItem = Persistence.service().retrieve(serviceCriteria);
             if (serviceItem != null) {
                 assert (!lease.currentLeaseTerm().isNull());
+                lease.currentLeaseTerm().lease().set(lease);
                 setService(lease.currentLeaseTerm(), serviceItem);
                 succeeded = true;
                 break servicesLoop;
@@ -219,18 +220,11 @@ public class LeaseFacade2Impl implements LeaseFacade2 {
         }
 
         Lease2 lease = leaseTerm.lease();
-
         if (!Lease2.Status.draft().contains(lease.status().getValue())) {
             throw new UserRuntimeException(i18n.tr("Invalid Lease State"));
         }
 
         // find/load all necessary ingredients:
-        ProductItem serviceItem = Persistence.secureRetrieve(ProductItem.class, serviceId.getPrimaryKey());
-        assert serviceItem != null;
-        if (serviceItem.element().isValueDetached()) {
-            Persistence.service().retrieve(serviceItem.element());
-        }
-
         assert !lease.unit().isNull();
         if (lease.unit().isValueDetached()) {
             Persistence.service().retrieve(lease.unit());
@@ -238,6 +232,12 @@ public class LeaseFacade2Impl implements LeaseFacade2 {
         assert !lease.unit().building().isNull();
         if (lease.unit().building().isValueDetached()) {
             Persistence.service().retrieve(lease.unit().building());
+        }
+
+        ProductItem serviceItem = Persistence.secureRetrieve(ProductItem.class, serviceId.getPrimaryKey());
+        assert serviceItem != null;
+        if (serviceItem.element().isValueDetached()) {
+            Persistence.service().retrieve(serviceItem.element());
         }
 
         // double check:
@@ -250,9 +250,10 @@ public class LeaseFacade2Impl implements LeaseFacade2 {
         // set selected service:
         BillableItem billableItem = createBillableItem(serviceItem, node);
         leaseTerm.version().leaseProducts().serviceItem().set(billableItem);
+
 // TODO 2 uncomment then
-//        Persistence.service().retrieve(leaseTerm.billingAccount().deposits());
-//        leaseTerm.billingAccount().deposits().clear();
+//        Persistence.service().retrieve(lease.billingAccount().deposits());
+//        lease.billingAccount().deposits().clear();
 
         if (bugNo1549) {
             DataDump.dumpToDirectory("lease-bug", "serviceItem", leaseTerm);
