@@ -89,6 +89,11 @@ public class LeaseTermEditorActivity extends EditorActivityBase<LeaseTermDTO> im
     }
 
     @Override
+    public ReturnBehaviour getReturnBehaviour() {
+        return returnBehaviour;
+    }
+
+    @Override
     protected void goToViewer(final Key entityID) {
         if (returnBehaviour != ReturnBehaviour.Default) {
             getService().retrieve(new DefaultAsyncCallback<LeaseTermDTO>() {

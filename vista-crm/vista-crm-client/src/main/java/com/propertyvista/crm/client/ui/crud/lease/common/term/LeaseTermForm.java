@@ -170,6 +170,8 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
                             } else {
                                 filters.add(PropertyCriterion.le(proto().unitOccupancySegments().$().dateFrom(), ClientContext.getServerDate()));
                             }
+                        } else {
+                            assert false : "Incorrect situation! Value shouln'd be edited in other lease statuses!";
                         }
 
                         super.setFilters(filters);
@@ -191,17 +193,6 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
         // other dates:
         main.setBR(++row, 0, 1);
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().approvalDate()), 9).build());
-
-// TODO link to application:        
-//        main.setBR(++row, 0, 1);
-//        if (!isEditable()) {
-//            main.setWidget(
-//                    ++row,
-//                    0,
-//                    new DecoratorBuilder(inject(proto().leaseApplication(),
-//                            new CEntityCrudHyperlink<Building>(AppPlaceEntityMapper.resolvePlace(LeaseApplication.class))), 20).build());
-//        }
-
         get(proto().approvalDate()).setViewable(true);
 
         return main;
@@ -276,6 +267,8 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
                         Date dateToCompare = getValue().lease().creationDate().isNull() ? TimeUtils.today() : getValue().lease().creationDate().getValue();
                         return !value.before(dateToCompare) ? null : new ValidationError(component, i18n
                                 .tr("The Date Must Be Later Than Or Equal To Application Creaion Date"));
+                    } else {
+                        assert false : "Incorrect situation! Value shouln'd be edited/validated in other lease statuses!";
                     }
                 }
                 return null;

@@ -17,6 +17,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.site.client.ui.crud.form.IEditorView;
 
+import com.propertyvista.crm.client.activity.crud.lease.common.LeaseTermEditorActivity.ReturnBehaviour;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.BillableItem;
@@ -35,6 +36,8 @@ public interface LeaseTermEditorView extends IEditorView<LeaseTermDTO> {
         void createBillableItem(AsyncCallback<BillableItem> callback, ProductItem item);
 
         void createDeposit(AsyncCallback<Deposit> callback, DepositType depositType, BillableItem item);
+
+        ReturnBehaviour getReturnBehaviour();
     }
 
     void updateUnitValue(LeaseTermDTO value);
