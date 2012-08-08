@@ -175,21 +175,6 @@ public abstract class CEntityForm<E extends IEntity> extends CEntityContainer<E>
         super.adopt(component);
     }
 
-    /**
-     * Should not replace the Entity assigned to this component by parent.
-     */
-    @Override
-    protected E preprocessValue(E value, boolean fireEvent, boolean populate) {
-        if (populate || !isAttached()) {
-            return value;
-        } else {
-            E modelValue = getValue();
-            assert modelValue != null : "Null model value for: " + proto().getValueClass();
-            modelValue.set(value);
-            return modelValue;
-        }
-    }
-
     @Override
     @SuppressWarnings("unchecked")
     protected void onValuePropagation(E value, boolean fireEvent, boolean populate) {
