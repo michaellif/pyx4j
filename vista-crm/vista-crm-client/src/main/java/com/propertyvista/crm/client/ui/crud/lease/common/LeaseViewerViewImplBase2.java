@@ -58,7 +58,7 @@ public class LeaseViewerViewImplBase2<DTO extends LeaseDTO2> extends CrmViewerVi
             public void onClick(ClickEvent event) {
                 new LeaseTermSelectorDialog() {
                     {
-//                        setParentFiltering(getForm().getValue().getPrimaryKey());
+                        setParentFiltering(getForm().getValue().getPrimaryKey());
                     }
 
                     @Override
