@@ -91,7 +91,6 @@ import com.propertyvista.crm.client.activity.crud.customer.tenant.TenantViewerAc
 import com.propertyvista.crm.client.activity.crud.floorplan.FloorplanEditorActivity;
 import com.propertyvista.crm.client.activity.crud.floorplan.FloorplanViewerActivity;
 import com.propertyvista.crm.client.activity.crud.lease.LeaseEditorActivity;
-import com.propertyvista.crm.client.activity.crud.lease.LeaseEditorActivity2;
 import com.propertyvista.crm.client.activity.crud.lease.LeaseListerActivity;
 import com.propertyvista.crm.client.activity.crud.lease.LeaseListerActivity2;
 import com.propertyvista.crm.client.activity.crud.lease.LeaseViewerActivity;
@@ -497,9 +496,6 @@ public class MainActivityMapper implements AppActivityMapper {
                             break;
                         case viewer:
                             activity = new LeaseViewerActivity2(crudPlace);
-                            break;
-                        case editor:
-                            activity = new LeaseEditorActivity2(crudPlace);
                             break;
                         }
 

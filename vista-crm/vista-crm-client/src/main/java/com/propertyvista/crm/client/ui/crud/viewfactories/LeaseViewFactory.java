@@ -21,9 +21,7 @@ import com.propertyvista.crm.client.ui.crud.billing.adjustments.LeaseAdjustmentE
 import com.propertyvista.crm.client.ui.crud.billing.adjustments.LeaseAdjustmentViewerView;
 import com.propertyvista.crm.client.ui.crud.billing.adjustments.LeaseAdjustmentViewerViewImpl;
 import com.propertyvista.crm.client.ui.crud.lease.LeaseEditorView;
-import com.propertyvista.crm.client.ui.crud.lease.LeaseEditorView2;
 import com.propertyvista.crm.client.ui.crud.lease.LeaseEditorViewImpl;
-import com.propertyvista.crm.client.ui.crud.lease.LeaseEditorViewImpl2;
 import com.propertyvista.crm.client.ui.crud.lease.LeaseListerView;
 import com.propertyvista.crm.client.ui.crud.lease.LeaseListerView2;
 import com.propertyvista.crm.client.ui.crud.lease.LeaseListerViewImpl;
@@ -64,9 +62,6 @@ public class LeaseViewFactory extends ViewFactoryBase {
                 map.put(type, new LeaseListerViewImpl2());
             } else if (LeaseViewerView2.class.equals(type)) {
                 map.put(type, new LeaseViewerViewImpl2());
-            } else if (LeaseEditorView2.class.equals(type)) {
-                map.put(type, new LeaseEditorViewImpl2());
-
             } else if (PastLeaseListerView.class.equals(type)) {
                 map.put(type, new PastLeaseListerViewImpl());
 
