@@ -54,7 +54,7 @@ public abstract class LeaseEditorCrudServiceBase2Impl<DTO extends LeaseDTO2> ext
     }
 
     private void updateCurrentTermDates(Lease2 lease) {
-        lease.currentLeaseTerm().leaseFrom().set(lease.leaseFrom());
-        lease.currentLeaseTerm().leaseTo().set(lease.leaseTo());
+        lease.currentLeaseTerm().termFrom().set(lease.leaseFrom());
+        lease.currentLeaseTerm().termTo().set(lease.leaseTo());
     }
 }

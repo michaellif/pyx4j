@@ -35,25 +35,25 @@ public class LeaseViewerViewImplBase2<DTO extends LeaseDTO2> extends CrmViewerVi
 
     protected final IListerView<DepositLifecycleDTO> depositLister;
 
-    private final Button editCurrentTerm;
+    private final Button viewCurrentTerm;
 
     public LeaseViewerViewImplBase2(Class<? extends CrudAppPlace> placeClass) {
         super(placeClass, true);
 
         depositLister = new ListerInternalViewImplBase<DepositLifecycleDTO>(new DepositLifecycleLister());
 
-        editCurrentTerm = new Button(i18n.tr("Edit Current Term"), new ClickHandler() {
+        viewCurrentTerm = new Button(i18n.tr("View Current Term"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                ((LeaseViewerView2.Presenter) getPresenter()).editCurrentTerm();
+                ((LeaseViewerView2.Presenter) getPresenter()).viewCurrentTerm();
             }
         });
-        addHeaderToolbarTwoItem(editCurrentTerm.asWidget());
+        addHeaderToolbarTwoItem(viewCurrentTerm.asWidget());
     }
 
     @Override
     public void reset() {
-        editCurrentTerm.setVisible(false);
+        viewCurrentTerm.setVisible(false);
         super.reset();
     }
 
@@ -62,12 +62,11 @@ public class LeaseViewerViewImplBase2<DTO extends LeaseDTO2> extends CrmViewerVi
         super.populate(value);
 
         // disable editing for completed/closed leases:
-        editCurrentTerm.setVisible(!value.status().getValue().isFormer());
+        viewCurrentTerm.setVisible(!value.status().getValue().isFormer());
     }
 
     @Override
     public IListerView<DepositLifecycleDTO> getDepositListerView() {
         return depositLister;
     }
-
 }

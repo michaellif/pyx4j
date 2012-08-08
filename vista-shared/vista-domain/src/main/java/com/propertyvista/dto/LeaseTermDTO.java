@@ -19,11 +19,15 @@ import com.pyx4j.entity.shared.IList;
 
 import com.propertyvista.domain.financial.offering.Concession;
 import com.propertyvista.domain.financial.offering.ProductItem;
+import com.propertyvista.domain.tenant.lease.Lease2;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 
 @Transient
 @ExtendsDBO
 public interface LeaseTermDTO extends LeaseTerm {
+
+    // newly created parent:
+    Lease2 newParentLease();
 
     // -----------------------------------------------------
     // temporary runtime data:

@@ -54,7 +54,19 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
 
     @Override
     protected void create(LeaseTerm dbo, LeaseTermDTO dto) {
-        save(dbo, dto);
+        if (!dto.newParentLease().isNull()) {
+            // persist newly created lease first:
+            dbo.lease().set(dto.newParentLease());
+            dbo.lease().currentLeaseTerm().set(null);
+            Persistence.secureSave(dbo.lease());
+            // set this term as current for the lease:
+            dbo.lease().currentLeaseTerm().set(dbo);
+        }
+
+        updateAdjustments(dbo);
+        ServerSideFactory.create(LeaseFacade2.class).persist(dbo);
+        ServerSideFactory.create(LeaseFacade2.class).init(dbo.lease());
+        ServerSideFactory.create(LeaseFacade2.class).persist(dbo.lease());
     }
 
     @Override

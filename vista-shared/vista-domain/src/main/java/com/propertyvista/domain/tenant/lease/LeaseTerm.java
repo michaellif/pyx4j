@@ -70,12 +70,12 @@ public interface LeaseTerm extends IVersionedEntity<LeaseTermV> {
     @NotNull
     @Format("MM/dd/yyyy")
     @ToString(index = 0)
-    IPrimitive<LogicalDate> leaseFrom();
+    IPrimitive<LogicalDate> termFrom();
 
     @NotNull
     @Format("MM/dd/yyyy")
     @ToString(index = 1)
-    IPrimitive<LogicalDate> leaseTo();
+    IPrimitive<LogicalDate> termTo();
 
     @Detached
     // should be loaded in service when necessary!..

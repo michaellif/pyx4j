@@ -77,8 +77,8 @@ public abstract class LeaseCrudServiceBase2Impl<DTO extends LeaseDTO2> extends A
 
         Persistence.service().retrieve(dto.leaseTerms());
         if (!dto.leaseTerms().isEmpty()) {
-            dto.leaseFrom().set(dto.leaseTerms().get(0).leaseFrom());
-            dto.leaseTo().set(dto.leaseTerms().get(dto.leaseTerms().size() - 1).leaseTo());
+            dto.leaseFrom().set(dto.leaseTerms().get(0).termFrom());
+            dto.leaseTo().set(dto.leaseTerms().get(dto.leaseTerms().size() - 1).termTo());
         }
 
 //        Persistence.service().retrieve(dto.billingAccount());

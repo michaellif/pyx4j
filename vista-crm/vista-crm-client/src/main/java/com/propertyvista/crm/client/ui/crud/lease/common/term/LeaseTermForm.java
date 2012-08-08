@@ -96,8 +96,8 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
 
             ClientPolicyManager.setIdComponentEditabilityByPolicy(IdTarget.lease, get(proto().lease().leaseId()), getValue().getPrimaryKey());
 
-            get(proto().leaseFrom()).setViewable(isLeaseSigned);
-            get(proto().leaseTo()).setViewable(isLeaseSigned);
+            get(proto().termFrom()).setViewable(isLeaseSigned);
+            get(proto().termTo()).setViewable(isLeaseSigned);
 
             get(proto().lease().unit()).setEditable(!isLeaseSigned);
         }
@@ -121,8 +121,8 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
         FormFlexPanel datesPanel = new FormFlexPanel();
 
         int datesRow = -1; // first column:
-        datesPanel.setWidget(++datesRow, 0, new DecoratorBuilder(inject(proto().leaseFrom()), 9).build());
-        datesPanel.setWidget(++datesRow, 0, new DecoratorBuilder(inject(proto().leaseTo()), 9).build());
+        datesPanel.setWidget(++datesRow, 0, new DecoratorBuilder(inject(proto().termFrom()), 9).build());
+        datesPanel.setWidget(++datesRow, 0, new DecoratorBuilder(inject(proto().termTo()), 9).build());
 
         datesRow = -1; // second column:
         datesPanel.setBR(++datesRow, 1, 1);
@@ -165,8 +165,8 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
 
                             filters.add(PropertyCriterion.eq(proto().unitOccupancySegments().$().status(), AptUnitOccupancySegment.Status.available));
                             filters.add(PropertyCriterion.eq(proto().unitOccupancySegments().$().dateTo(), new LogicalDate(1100, 0, 1)));
-                            if (!currentValue.leaseFrom().isNull()) {
-                                filters.add(PropertyCriterion.le(proto().unitOccupancySegments().$().dateFrom(), currentValue.leaseFrom().getValue()));
+                            if (!currentValue.termFrom().isNull()) {
+                                filters.add(PropertyCriterion.le(proto().unitOccupancySegments().$().dateFrom(), currentValue.termFrom().getValue()));
                             } else {
                                 filters.add(PropertyCriterion.le(proto().unitOccupancySegments().$().dateFrom(), ClientContext.getServerDate()));
                             }
@@ -255,7 +255,7 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
     public void addValidations() {
         super.addValidations();
 
-        crossValidate(get(proto().leaseFrom()), get(proto().leaseTo()), null);
+        crossValidate(get(proto().termFrom()), get(proto().termTo()), null);
 // TODO _2 incomment then:        
 //        crossValidate(get(proto().leaseFrom()), get(proto().actualLeaseTo()), null);
 //        crossValidate(get(proto().actualMoveIn()), get(proto().actualMoveOut()), null);
@@ -266,7 +266,7 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
 //        DatesWithinMonth(get(proto().version().actualMoveOut()), get(proto().version().expectedMoveOut()),
 //                "Actual Move Out Date Should Be Within 30 Days Of Expected Move Out Date");
 
-        get(proto().leaseFrom()).addValueValidator(new EditableValueValidator<Date>() {
+        get(proto().termFrom()).addValueValidator(new EditableValueValidator<Date>() {
             @Override
             public ValidationError isValid(CComponent<Date, ?> component, Date value) {
                 if (value != null) {
@@ -287,13 +287,13 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
 //                i18n.tr("The Date Should Be Within The Lease Period"));
 //
 //        get(proto().leaseFrom()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().expectedMoveIn())));
-        get(proto().leaseFrom()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().version().leaseProducts().serviceItem())));
-        get(proto().leaseFrom()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().version().leaseProducts().featureItems())));
+        get(proto().termFrom()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().version().leaseProducts().serviceItem())));
+        get(proto().termFrom()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().version().leaseProducts().featureItems())));
 
 // TODO _2 incomment then:        
 //        get(proto().leaseTo()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().expectedMoveIn())));
-        get(proto().leaseTo()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().version().leaseProducts().serviceItem())));
-        get(proto().leaseTo()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().version().leaseProducts().featureItems())));
+        get(proto().termTo()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().version().leaseProducts().serviceItem())));
+        get(proto().termTo()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().version().leaseProducts().featureItems())));
 
         get(proto().version().tenants()).addValueValidator(new EditableValueValidator<List<Tenant2>>() {
             @Override

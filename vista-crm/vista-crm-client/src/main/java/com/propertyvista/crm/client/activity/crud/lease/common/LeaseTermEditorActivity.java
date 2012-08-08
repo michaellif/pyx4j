@@ -16,13 +16,17 @@ package com.propertyvista.crm.client.activity.crud.lease.common;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.commons.Key;
+import com.pyx4j.entity.rpc.AbstractCrudService.RetrieveTraget;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.activity.crud.EditorActivityBase;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.ui.crud.lease.common.term.LeaseTermEditorView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.LeaseViewFactory;
+import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.lease.common.LeaseTermCrudService;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
@@ -33,8 +37,24 @@ import com.propertyvista.dto.LeaseTermDTO;
 
 public class LeaseTermEditorActivity extends EditorActivityBase<LeaseTermDTO> implements LeaseTermEditorView.Presenter {
 
+    public static final String ARG_NAME_RETURN_BH = "rbh";
+
+    public static enum ReturnBehaviour {
+
+        Default, Application, Lease;
+    }
+
+    private final ReturnBehaviour returnBehaviour;
+
     public LeaseTermEditorActivity(CrudAppPlace place) {
         super(place, LeaseViewFactory.instance(LeaseTermEditorView.class), GWT.<LeaseTermCrudService> create(LeaseTermCrudService.class), LeaseTermDTO.class);
+
+        String val;
+        if ((val = place.getFirstArg(ARG_NAME_RETURN_BH)) != null) {
+            returnBehaviour = ReturnBehaviour.valueOf(val);
+        } else {
+            returnBehaviour = ReturnBehaviour.Default;
+        }
     }
 
     @Override
@@ -66,5 +86,39 @@ public class LeaseTermEditorActivity extends EditorActivityBase<LeaseTermDTO> im
     @Override
     public void createDeposit(AsyncCallback<Deposit> callback, DepositType depositType, BillableItem item) {
         ((LeaseTermCrudService) getService()).createDeposit(callback, depositType, item, getView().getValue());
+    }
+
+    @Override
+    protected void goToViewer(final Key entityID) {
+        if (returnBehaviour != ReturnBehaviour.Default) {
+            getService().retrieve(new DefaultAsyncCallback<LeaseTermDTO>() {
+                @Override
+                public void onSuccess(LeaseTermDTO result) {
+                    switch (returnBehaviour) {
+                    case Application:
+                        AppSite.getPlaceController().goTo(new CrmSiteMap.Tenants.LeaseApplication().formViewerPlace(result.lease().getPrimaryKey()));
+                        break;
+                    case Lease:
+                        AppSite.getPlaceController().goTo(new CrmSiteMap.Tenants.Lease2().formViewerPlace(result.lease().getPrimaryKey()));
+                        break;
+                    case Default:
+                        LeaseTermEditorActivity.super.goToViewer(entityID);
+                        break;
+                    }
+                }
+            }, entityID, RetrieveTraget.View);
+        } else {
+            super.goToViewer(entityID);
+        }
+    }
+
+    @Override
+    protected void goToEditor(Key entityID) {
+        if (returnBehaviour != ReturnBehaviour.Default) {
+            AppSite.getPlaceController().goTo(
+                    new CrmSiteMap.Tenants.LeaseTerm().formEditorPlace(entityID).queryArg(LeaseTermEditorActivity.ARG_NAME_RETURN_BH, returnBehaviour.name()));
+        } else {
+            super.goToViewer(entityID);
+        }
     }
 }

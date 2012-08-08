@@ -197,7 +197,7 @@ public class LeaseViewerActivity2 extends LeaseViewerActivityBase2<LeaseDTO2> im
     }
 
     @Override
-    public void editCurrentTerm() {
-        AppSite.getPlaceController().goTo(new CrmSiteMap.Tenants.LeaseTerm().formEditorPlace(((LeaseViewerView2) getView()).getCurrentTerm().getPrimaryKey()));
+    public void viewCurrentTerm() {
+        AppSite.getPlaceController().goTo(new CrmSiteMap.Tenants.LeaseTerm().formViewerPlace(((LeaseViewerView2) getView()).getCurrentTerm().getPrimaryKey()));
     }
 }
