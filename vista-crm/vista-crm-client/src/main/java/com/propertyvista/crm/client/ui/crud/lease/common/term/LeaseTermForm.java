@@ -92,14 +92,15 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
 
         // disable some editing on signed lease:
         if (isEditable()) {
-            boolean isLeaseSigned = !getValue().approvalDate().isNull();
+            boolean isSigned = !getValue().approvalDate().isNull();
 
-            ClientPolicyManager.setIdComponentEditabilityByPolicy(IdTarget.lease, get(proto().lease().leaseId()), getValue().getPrimaryKey());
+            ClientPolicyManager.setIdComponentEditabilityByPolicy(IdTarget.lease, get(proto().lease().leaseId()), getValue().lease().getPrimaryKey());
 
-            get(proto().termFrom()).setViewable(isLeaseSigned);
-            get(proto().termTo()).setViewable(isLeaseSigned);
+            get(proto().lease().unit()).setEditable(!isSigned);
 
-            get(proto().lease().unit()).setEditable(!isLeaseSigned);
+            boolean isCurrent = getValue().lease().equals(getValue().lease().currentLeaseTerm());
+            get(proto().termFrom()).setViewable(isSigned && isCurrent);
+            get(proto().termTo()).setViewable(isSigned && isCurrent);
         }
     }
 
@@ -170,6 +171,7 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
                             } else {
                                 filters.add(PropertyCriterion.le(proto().unitOccupancySegments().$().dateFrom(), ClientContext.getServerDate()));
                             }
+
                         } else {
                             assert false : "Incorrect situation! Value shouln'd be edited in other lease statuses!";
                         }

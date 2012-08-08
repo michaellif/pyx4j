@@ -45,7 +45,7 @@ public interface LeaseViewerView2 extends LeaseViewerViewBase2<LeaseDTO2> {
 
         void sendMail(List<LeaseParticipant2> users, EmailTemplateType emailType);
 
-        void viewCurrentTerm();
+        void viewTerm(LeaseTerm leaseTermId);
     }
 
     IListerView<BillDataDTO> getBillListerView();
@@ -53,8 +53,6 @@ public interface LeaseViewerView2 extends LeaseViewerViewBase2<LeaseDTO2> {
     IListerView<PaymentRecordDTO> getPaymentListerView();
 
     IListerView<LeaseAdjustment> getLeaseAdjustmentListerView();
-
-    LeaseTerm getCurrentTerm();
 
     void reportSendMailActionResult(String message);
 }

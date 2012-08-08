@@ -22,6 +22,7 @@ import com.pyx4j.site.client.ui.crud.lister.ListerInternalViewImplBase;
 import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.widgets.client.Button;
 
+import com.propertyvista.crm.client.ui.components.boxes.LeaseTermSelectorDialog;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.client.ui.crud.lease.LeaseViewerView2;
 import com.propertyvista.crm.client.ui.crud.lease.LeaseViewerViewImpl2;
@@ -37,6 +38,8 @@ public class LeaseViewerViewImplBase2<DTO extends LeaseDTO2> extends CrmViewerVi
 
     private final Button viewCurrentTerm;
 
+    private final Button viewHistoricTerm;
+
     public LeaseViewerViewImplBase2(Class<? extends CrudAppPlace> placeClass) {
         super(placeClass, true);
 
@@ -45,24 +48,40 @@ public class LeaseViewerViewImplBase2<DTO extends LeaseDTO2> extends CrmViewerVi
         viewCurrentTerm = new Button(i18n.tr("View Current Term"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                ((LeaseViewerView2.Presenter) getPresenter()).viewCurrentTerm();
+                ((LeaseViewerView2.Presenter) getPresenter()).viewTerm(getForm().getValue().currentLeaseTerm());
             }
         });
         addHeaderToolbarTwoItem(viewCurrentTerm.asWidget());
+
+        viewHistoricTerm = new Button(i18n.tr("View Historic Term"), new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                new LeaseTermSelectorDialog() {
+                    {
+//                        setParentFiltering(getForm().getValue().getPrimaryKey());
+                    }
+
+                    @Override
+                    public boolean onClickOk() {
+                        if (!getSelectedItems().isEmpty()) {
+                            ((LeaseViewerView2.Presenter) getPresenter()).viewTerm(getSelectedItems().get(0));
+                        }
+                        return !getSelectedItems().isEmpty();
+                    }
+                }.show();
+            }
+        });
+        addHeaderToolbarTwoItem(viewHistoricTerm.asWidget());
     }
 
     @Override
     public void reset() {
-        viewCurrentTerm.setVisible(false);
         super.reset();
     }
 
     @Override
     public void populate(DTO value) {
         super.populate(value);
-
-        // disable editing for completed/closed leases:
-        viewCurrentTerm.setVisible(!value.status().getValue().isFormer());
     }
 
     @Override

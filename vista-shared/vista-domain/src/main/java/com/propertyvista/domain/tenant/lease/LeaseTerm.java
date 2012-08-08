@@ -59,6 +59,22 @@ public interface LeaseTerm extends IVersionedEntity<LeaseTermV> {
         }
     }
 
+    @I18n(context = "Lease Term Status")
+    @XmlType(name = "LeaseTermStatus")
+    public enum Status {
+
+        Offer,
+
+        FixedEx,
+
+        Periodic;
+
+        @Override
+        public String toString() {
+            return I18nEnum.toString(this);
+        }
+    }
+
     // ------------------------------------------------------------
 
     @NotNull

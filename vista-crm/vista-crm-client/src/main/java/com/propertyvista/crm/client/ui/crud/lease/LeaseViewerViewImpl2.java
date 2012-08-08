@@ -50,7 +50,6 @@ import com.propertyvista.domain.tenant.lease.Lease2.CompletionType;
 import com.propertyvista.domain.tenant.lease.Lease2.Status;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant2;
-import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.dto.LeaseDTO2;
 import com.propertyvista.dto.PaymentRecordDTO;
 
@@ -216,11 +215,6 @@ public class LeaseViewerViewImpl2 extends LeaseViewerViewImplBase2<LeaseDTO2> im
     @Override
     public IListerView<LeaseAdjustment> getLeaseAdjustmentListerView() {
         return adjustmentLister;
-    }
-
-    @Override
-    public LeaseTerm getCurrentTerm() {
-        return getForm().getValue().currentLeaseTerm();
     }
 
     private abstract class TermLeaseBox extends OkCancelDialog {

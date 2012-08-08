@@ -48,6 +48,7 @@ import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease2;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant2;
+import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.dto.LeaseDTO2;
 import com.propertyvista.dto.PaymentRecordDTO;
 
@@ -197,7 +198,7 @@ public class LeaseViewerActivity2 extends LeaseViewerActivityBase2<LeaseDTO2> im
     }
 
     @Override
-    public void viewCurrentTerm() {
-        AppSite.getPlaceController().goTo(new CrmSiteMap.Tenants.LeaseTerm().formViewerPlace(((LeaseViewerView2) getView()).getCurrentTerm().getPrimaryKey()));
+    public void viewTerm(LeaseTerm leaseTermId) {
+        AppSite.getPlaceController().goTo(new CrmSiteMap.Tenants.LeaseTerm().formViewerPlace(leaseTermId.getPrimaryKey()));
     }
 }
