@@ -32,9 +32,8 @@ import com.propertyvista.crm.client.activity.dashboard.DashboardViewActivity;
 import com.propertyvista.crm.client.ui.crud.building.BuildingViewerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.BuildingViewFactory;
 import com.propertyvista.crm.client.ui.dashboard.DashboardView;
-import com.propertyvista.crm.client.visor.IDashboardVisorController;
-import com.propertyvista.crm.client.visor.notes.INotesAndAttachmentsVisorController;
-import com.propertyvista.crm.client.visor.notes.NotesAndAttachmentsVisorControllerImpl;
+import com.propertyvista.crm.client.visor.dashboard.IDashboardVisorController;
+import com.propertyvista.crm.client.visor.notes.NotesAndAttachmentsVisorController;
 import com.propertyvista.crm.rpc.dto.billing.BillingCycleDTO;
 import com.propertyvista.crm.rpc.services.billing.BillingCycleCrudService;
 import com.propertyvista.crm.rpc.services.building.BuildingCrudService;
@@ -88,7 +87,7 @@ public class BuildingViewerActivity extends CrmViewerActivity<BuildingDTO> imple
 
     private final Presenter<BillingCycleDTO> billingCycleLister;
 
-    private INotesAndAttachmentsVisorController notesAndAttachmentsController;
+    private NotesAndAttachmentsVisorController notesAndAttachmentsController;
 
     @SuppressWarnings("unchecked")
     public BuildingViewerActivity(CrudAppPlace place) {
@@ -206,9 +205,9 @@ public class BuildingViewerActivity extends CrmViewerActivity<BuildingDTO> imple
     }
 
     @Override
-    public INotesAndAttachmentsVisorController getNotesAndAttachmentsController() {
+    public NotesAndAttachmentsVisorController getNotesAndAttachmentsController() {
         if (notesAndAttachmentsController == null) {
-            notesAndAttachmentsController = new NotesAndAttachmentsVisorControllerImpl(Building.class, getEntityId());
+            notesAndAttachmentsController = new NotesAndAttachmentsVisorController(Building.class, getEntityId());
         }
         return notesAndAttachmentsController;
     }

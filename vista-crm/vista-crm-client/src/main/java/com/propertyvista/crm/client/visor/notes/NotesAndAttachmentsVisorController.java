@@ -7,12 +7,13 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Aug 5, 2012
- * @author dev_vista
+ * Created on Aug 3, 2012
+ * @author michaellif
  * @version $Id$
  */
 package com.propertyvista.crm.client.visor.notes;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.IsWidget;
 
@@ -26,34 +27,22 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.ui.crud.IView;
 
 import com.propertyvista.crm.client.visor.IVisorController;
+import com.propertyvista.crm.rpc.services.notes.NotesAndAttachmentsCrudService;
+import com.propertyvista.domain.note.NotesAndAttachments;
 
-public abstract class VisorControllerBase<E extends IEntity> implements IVisorController<E> {
+public class NotesAndAttachmentsVisorController implements IVisorController {
 
-    private final Key entityId;
-
-    private final Class<E> entityClass;
+    private final NotesAndAttachmentsVisorView view;
 
     private final Key parentId;
 
     private final Class<? extends IEntity> parentClass;
 
-    public VisorControllerBase(Class<E> entityClass, Class<? extends IEntity> parentClass, Key parentId) {
-        this(entityClass, null, parentClass, parentId);
-    }
-
-    public VisorControllerBase(Class<E> entityClass, Key entityId, Class<? extends IEntity> parentClass, Key parentId) {
-        this.entityClass = entityClass;
-        this.entityId = entityId;
+    public NotesAndAttachmentsVisorController(Class<? extends IEntity> parentClass, Key parentId) {
         this.parentClass = parentClass;
         this.parentId = parentId;
-    }
-
-    public Class<? extends IEntity> getParentClass() {
-        return parentClass;
-    }
-
-    public Key getParentId() {
-        return parentId;
+        view = new NotesAndAttachmentsVisorView(this);
+        view.setTitle("Notes & Attachments");
     }
 
     @Override
@@ -62,40 +51,39 @@ public abstract class VisorControllerBase<E extends IEntity> implements IVisorCo
         parentView.showVisor(visor, visor.asWidget().getTitle());
     }
 
-    protected E getNewItem() {
-        return null;
-    }
-
     /*
      * the methods below have been mainly copied from com.pyx4j.site.client.activity.crud.EditorActivityBase
      */
-    public void populate(EntityListCriteria<E> criteria, DefaultAsyncCallback<EntitySearchResult<E>> callback) {
+    public void populate(EntityListCriteria<NotesAndAttachments> criteria, DefaultAsyncCallback<EntitySearchResult<NotesAndAttachments>> callback) {
         getService().list(callback, criteria);
     }
 
+    protected void createNewEntity(AsyncCallback<NotesAndAttachments> callback) {
+        assert (parentId != null) : "Notes owner cannot be null";
+
+        NotesAndAttachments item = EntityFactory.create(NotesAndAttachments.class);
+        item.parent().setPrimaryKey(parentId);
+
+        callback.onSuccess(item);
+
+    }
+
     @Override
-    public void populate(DefaultAsyncCallback<E> callback) {
-        if (isNewEntity()) {
-            createNewEntity(callback);
-        } else {
-            getService().retrieve(callback, entityId, AbstractCrudService.RetrieveTraget.Edit);
-        }
+    public IsWidget getView() {
+        return view;
     }
 
-    protected void createNewEntity(AsyncCallback<E> callback) {
-        if (getNewItem() != null) {
-            callback.onSuccess(getNewItem());
-        } else {
-            callback.onSuccess(EntityFactory.create(getEntityClass()));
-        }
+    @SuppressWarnings("unchecked")
+    public AbstractCrudService<NotesAndAttachments> getService() {
+        return (AbstractCrudService<NotesAndAttachments>) GWT.create(NotesAndAttachmentsCrudService.class);
     }
 
-    protected boolean isNewEntity() {
-        return (entityId == null);
-    }
+    protected NotesAndAttachments getNewItem() {
+        assert (parentId != null) : "Notes owner cannot be null";
 
-    public Class<E> getEntityClass() {
-        return entityClass;
+        NotesAndAttachments item = EntityFactory.create(NotesAndAttachments.class);
+        item.parent().setPrimaryKey(parentId);
+        return item;
     }
 
 }

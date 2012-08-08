@@ -11,7 +11,7 @@
  * @author igor
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.notesandattachments;
+package com.propertyvista.crm.client.visor.notes;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;

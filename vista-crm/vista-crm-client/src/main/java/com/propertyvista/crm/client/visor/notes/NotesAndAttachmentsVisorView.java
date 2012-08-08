@@ -20,13 +20,12 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 
-import com.propertyvista.crm.client.ui.notesandattachments.NotesAndAttachmentsForm;
 import com.propertyvista.domain.note.NotesAndAttachments;
 import com.propertyvista.domain.note.NotesAndAttachmentsDTO;
 
 public class NotesAndAttachmentsVisorView extends SimplePanel {
 
-    public NotesAndAttachmentsVisorView(NotesAndAttachmentsVisorControllerImpl controller) {
+    public NotesAndAttachmentsVisorView(NotesAndAttachmentsVisorController controller) {
         super();
         final NotesAndAttachmentsForm form = new NotesAndAttachmentsForm();
         form.initContent();

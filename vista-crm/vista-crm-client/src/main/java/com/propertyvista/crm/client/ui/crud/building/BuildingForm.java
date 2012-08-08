@@ -130,9 +130,6 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         tab = addTab(isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getBillingCycleListerView().asWidget(), i18n.tr("Billing Cycles"));
         setTabEnabled(tab, !isEditable());
 
-        if (!VistaTODO.removedForProduction) {
-            tab = addTab(createNotesAndAttachmentsTab(i18n.tr("Notes & Attachments")));
-        }
     }
 
     @Override
@@ -381,12 +378,6 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
             columns.add(new EntityFolderColumnDescriptor(proto().description(), "25em"));
             return columns;
         }
-    }
-
-    private FormFlexPanel createNotesAndAttachmentsTab(String title) {
-        FormFlexPanel main = new FormFlexPanel(title);
-        int row = -1;
-        return main;
     }
 
 }

@@ -11,7 +11,9 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.crm.client.visor;
+package com.propertyvista.crm.client.visor.dashboard;
+
+import com.propertyvista.crm.client.visor.IVisorController;
 
 public interface IDashboardVisorController extends IVisorController {
 

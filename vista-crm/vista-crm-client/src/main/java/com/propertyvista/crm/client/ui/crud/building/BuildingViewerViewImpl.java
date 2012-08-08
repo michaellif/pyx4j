@@ -54,7 +54,7 @@ import com.propertyvista.crm.client.ui.crud.building.mech.RoofLister;
 import com.propertyvista.crm.client.ui.crud.building.parking.ParkingLister;
 import com.propertyvista.crm.client.ui.crud.floorplan.FloorplanLister;
 import com.propertyvista.crm.client.ui.crud.unit.UnitLister;
-import com.propertyvista.crm.client.visor.notes.INotesAndAttachmentsVisorController;
+import com.propertyvista.crm.client.visor.notes.NotesAndAttachmentsVisorController;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.dto.billing.BillingCycleDTO;
 import com.propertyvista.domain.financial.offering.Concession;
@@ -125,7 +125,7 @@ public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> i
             @Override
             public void onClick(ClickEvent event) {
 
-                INotesAndAttachmentsVisorController controller = ((BuildingViewerView.Presenter) getPresenter()).getNotesAndAttachmentsController();
+                NotesAndAttachmentsVisorController controller = ((BuildingViewerView.Presenter) getPresenter()).getNotesAndAttachmentsController();
 
                 controller.show(BuildingViewerViewImpl.this);
 
