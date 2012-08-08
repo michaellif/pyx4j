@@ -71,6 +71,7 @@ import com.propertyvista.domain.site.gadgets.HomePageGadget;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.PersonScreening;
+import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lead.Appointment;
 import com.propertyvista.domain.tenant.lead.Lead;
 import com.propertyvista.domain.tenant.lease.DepositLifecycle;
@@ -116,6 +117,7 @@ public class CrmEntityMapper {
         AppPlaceEntityMapper.register(MaintenanceRequest.class, CrmSiteMap.Tenants.MaintenanceRequest.class, defaultImage);
 
         AppPlaceEntityMapper.register(Customer.class, CrmSiteMap.Tenants.Tenant.class, defaultImage);
+        AppPlaceEntityMapper.register(Tenant.class, CrmSiteMap.Tenants.Tenant.class, defaultImage);
         AppPlaceEntityMapper.register(Guarantor.class, CrmSiteMap.Tenants.Guarantor.class, CrmImages.INSTANCE.tenant());
         AppPlaceEntityMapper.register(EquifaxResult.class, CrmSiteMap.Tenants.EquifaxResult.class, defaultImage);
         AppPlaceEntityMapper.register(PersonScreening.class, CrmSiteMap.Tenants.Screening.class, defaultImage);
