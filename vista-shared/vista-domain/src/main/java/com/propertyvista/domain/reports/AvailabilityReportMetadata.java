@@ -16,9 +16,11 @@ package com.propertyvista.domain.reports;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.IPrimitiveSet;
 import com.pyx4j.entity.shared.reports.HasAdvancedSettings;
+import com.pyx4j.entity.shared.reports.PropertyCriterionEntity;
 import com.pyx4j.entity.shared.reports.ReportMetadata;
 
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus;
@@ -38,4 +40,5 @@ public interface AvailabilityReportMetadata extends ReportMetadata, HasAdvancedS
 
     IPrimitiveSet<UnitAvailabilityStatus.Scoping> scopingStatus();
 
+    IList<PropertyCriterionEntity> availbilityTableCriteria();
 }

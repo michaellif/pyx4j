@@ -38,9 +38,11 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.misc.IMemento;
 import com.pyx4j.site.client.ui.reports.AbstractReportsView;
 import com.pyx4j.site.client.ui.reports.HasAdvancedModeReportFactory;
+import com.pyx4j.site.client.ui.reports.PropertyCriteriaFolder;
 import com.pyx4j.site.client.ui.reports.Report;
 import com.pyx4j.site.client.ui.reports.ReportFactory;
 
+import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.common.client.ui.components.SubsetSelector.Layout;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.c.CEnumSubsetSelector;
@@ -178,7 +180,7 @@ public class CrmReportsViewImpl extends AbstractReportsView implements CrmReport
                         int row = -1;
                         FormFlexPanel panel = new FormFlexPanel();
                         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().asOf())).labelWidth(10).componentWidth(10).build());
-                        panel.setWidget(++row, 0, new HTML("imagine there is a column criteria widget"));
+                        panel.setWidget(++row, 0, inject(proto().availbilityTableCriteria(), new PropertyCriteriaFolder(VistaImages.INSTANCE)));
                         return panel;
                     }
                 };
