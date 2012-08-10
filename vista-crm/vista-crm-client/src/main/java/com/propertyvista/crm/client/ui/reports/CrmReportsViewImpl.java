@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.reports;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -56,7 +57,37 @@ public class CrmReportsViewImpl extends AbstractReportsView implements CrmReport
 
     private static Map<Class<? extends ReportMetadata>, ReportFactory> factoryMap;
 
+    private static ColumnDescriptor[] AVAILABILITY_TABLE_COLUMNS;
+
     static {
+        UnitAvailabilityStatus proto = EntityFactory.getEntityPrototype(UnitAvailabilityStatus.class);
+        AVAILABILITY_TABLE_COLUMNS = new ColumnDescriptor[] {//@formatter:off
+                defColumn(proto.building().propertyCode()).build(),
+                defColumn(proto.building().externalId()).build(),
+                defColumn(proto.building().info().name()).title(i18n.tr("Building Name")).build(),
+                defColumn(proto.building().info().address()).build(),
+                defColumn(proto.building().propertyManager().name()).title(i18n.tr("Property Manager")).build(),
+                defColumn(proto.building().complex().name()).visible(false).title(i18n.tr("Complex")).build(),
+                defColumn(proto.unit().info().number()).title(i18n.tr("Unit Name")).build(),
+                defColumn(proto.floorplan().name()).visible(false).title(i18n.tr("Floorplan Name")).build(),
+                defColumn(proto.floorplan().marketingName()).visible(false).title(i18n.tr("Floorplan Marketing Name")).build(),
+                
+                // status
+                defColumn(proto.vacancyStatus()).build(),
+                defColumn(proto.rentedStatus()).visible(true).build(),
+                defColumn(proto.scoping()).visible(true).build(),
+                defColumn(proto.rentReadinessStatus()).visible(true).build(),
+                defColumn(proto.unitRent()).build(),
+                defColumn(proto.marketRent()).build(),
+                defColumn(proto.rentDeltaAbsolute()).visible(true).build(),
+                defColumn(proto.rentDeltaRelative()).visible(false).build(),
+                defColumn(proto.rentEndDay()).visible(true).build(),
+                defColumn(proto.moveInDay()).visible(true).build(),
+                defColumn(proto.rentedFromDay()).visible(true).build(),
+                defColumn(proto.daysVacant()).build(),
+                defColumn(proto.revenueLost()).build()
+        };//@formatter:on
+
         factoryMap = new HashMap<Class<? extends ReportMetadata>, ReportFactory>();
 
         factoryMap.put(MockupReportSettings.class, new HasAdvancedModeReportFactory() {
@@ -180,7 +211,11 @@ public class CrmReportsViewImpl extends AbstractReportsView implements CrmReport
                         int row = -1;
                         FormFlexPanel panel = new FormFlexPanel();
                         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().asOf())).labelWidth(10).componentWidth(10).build());
-                        panel.setWidget(++row, 0, inject(proto().availbilityTableCriteria(), new PropertyCriteriaFolder(VistaImages.INSTANCE)));
+                        panel.setWidget(
+                                ++row,
+                                0,
+                                inject(proto().availbilityTableCriteria(),
+                                        new PropertyCriteriaFolder(VistaImages.INSTANCE, Arrays.asList(AVAILABILITY_TABLE_COLUMNS))));
                         return panel;
                     }
                 };
@@ -214,34 +249,8 @@ public class CrmReportsViewImpl extends AbstractReportsView implements CrmReport
                         bb.appendHtmlConstant("<table style=\"white-space: nowrap; border-collapse: separate; border-spacing: 15pt;\">");
                         bb.appendHtmlConstant("<tr>");
                         UnitAvailabilityStatus proto = EntityFactory.getEntityPrototype(UnitAvailabilityStatus.class);
-                        ColumnDescriptor[] columns = {//@formatter:off
-                                defColumn(proto.building().propertyCode()).build(),
-                                defColumn(proto.building().externalId()).build(),
-                                defColumn(proto.building().info().name()).title(i18n.tr("Building Name")).build(),
-                                defColumn(proto.building().info().address()).build(),
-                                defColumn(proto.building().propertyManager().name()).title(i18n.tr("Property Manager")).build(),                    
-                                defColumn(proto.building().complex().name()).visible(false).title(i18n.tr("Complex")).build(),
-                                defColumn(proto.unit().info().number()).title(i18n.tr("Unit Name")).build(),
-                                defColumn(proto.floorplan().name()).visible(false).title(i18n.tr("Floorplan Name")).build(),
-                                defColumn(proto.floorplan().marketingName()).visible(false).title(i18n.tr("Floorplan Marketing Name")).build(),
-                                
-                                // status
-                                defColumn(proto.vacancyStatus()).build(),
-                                defColumn(proto.rentedStatus()).visible(true).build(),
-                                defColumn(proto.scoping()).visible(true).build(),
-                                defColumn(proto.rentReadinessStatus()).visible(true).build(),
-                                defColumn(proto.unitRent()).build(),
-                                defColumn(proto.marketRent()).build(),
-                                defColumn(proto.rentDeltaAbsolute()).visible(true).build(),
-                                defColumn(proto.rentDeltaRelative()).visible(false).build(),
-                                defColumn(proto.rentEndDay()).visible(true).build(),
-                                defColumn(proto.moveInDay()).visible(true).build(),
-                                defColumn(proto.rentedFromDay()).visible(true).build(),
-                                defColumn(proto.daysVacant()).build(),
-                                defColumn(proto.revenueLost()).build()
-                        };//@formatter:on
 
-                        for (ColumnDescriptor desc : columns) {
+                        for (ColumnDescriptor desc : AVAILABILITY_TABLE_COLUMNS) {
                             bb.appendHtmlConstant("<th style=\"text-align: left\">");
                             bb.appendEscaped(desc.getColumnTitle());
                             bb.appendHtmlConstant("</th>");
@@ -251,7 +260,7 @@ public class CrmReportsViewImpl extends AbstractReportsView implements CrmReport
 
                         for (UnitAvailabilityStatus status : reportData.unitStatuses) {
                             bb.appendHtmlConstant("<tr>");
-                            for (ColumnDescriptor desc : columns) {
+                            for (ColumnDescriptor desc : AVAILABILITY_TABLE_COLUMNS) {
                                 cell(bb, desc.convert(status));
                             }
                             bb.appendHtmlConstant("</tr>");
@@ -259,10 +268,6 @@ public class CrmReportsViewImpl extends AbstractReportsView implements CrmReport
                         bb.appendHtmlConstant("</table>");
 
                         reportHtml.setHTML(bb.toSafeHtml());
-                    }
-
-                    private MemberColumnDescriptor.Builder defColumn(IObject<?> object) {
-                        return new MemberColumnDescriptor.Builder(object);
                     }
 
                     private void cell(SafeHtmlBuilder bb, String data) {
@@ -315,5 +320,9 @@ public class CrmReportsViewImpl extends AbstractReportsView implements CrmReport
     public void restoreState() {
         // TODO Auto-generated method stub
 
+    }
+
+    private static MemberColumnDescriptor.Builder defColumn(IObject<?> object) {
+        return new MemberColumnDescriptor.Builder(object);
     }
 }

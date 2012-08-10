@@ -23,6 +23,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.reports.ReportMetadata;
+import com.pyx4j.site.server.services.reports.ReportCriteriaBuilder;
 import com.pyx4j.site.server.services.reports.ReportGenerator;
 
 import com.propertyvista.crm.rpc.dto.reports.AvailabilityReportDataDTO;
@@ -77,13 +78,12 @@ public class AvailabilityReportsGenerator implements ReportGenerator {
     }
 
     private EntityQueryCriteria<UnitAvailabilityStatus> createAvailabilityCriteria(AvailabilityReportMetadata metadata) {
-        EntityQueryCriteria<UnitAvailabilityStatus> criteria = EntityQueryCriteria.create(UnitAvailabilityStatus.class);
-        criteria.add(PropertyCriterion.le(criteria.proto().statusFrom(), metadata.asOf()));
-        criteria.add(PropertyCriterion.ge(criteria.proto().statusUntil(), metadata.asOf()));
-        criteria.add(PropertyCriterion.ne(criteria.proto().vacancyStatus(), null));
+        EntityQueryCriteria<UnitAvailabilityStatus> criteria = null;
         if (metadata.isInAdvancedMode().isBooleanTrue()) {
-
+            criteria = ReportCriteriaBuilder.build(UnitAvailabilityStatus.class, metadata.availbilityTableCriteria());
         } else {
+            criteria = EntityQueryCriteria.create(UnitAvailabilityStatus.class);
+            ;
             if (!metadata.vacancyStatus().isEmpty()) {
                 criteria.add(PropertyCriterion.in(criteria.proto().vacancyStatus(), metadata.vacancyStatus()));
             } else {
@@ -101,6 +101,11 @@ public class AvailabilityReportsGenerator implements ReportGenerator {
             }
 
         }
+
+        criteria.add(PropertyCriterion.le(criteria.proto().statusFrom(), metadata.asOf()));
+        criteria.add(PropertyCriterion.ge(criteria.proto().statusUntil(), metadata.asOf()));
+        criteria.add(PropertyCriterion.ne(criteria.proto().vacancyStatus(), null));
+
         return criteria;
     }
 
