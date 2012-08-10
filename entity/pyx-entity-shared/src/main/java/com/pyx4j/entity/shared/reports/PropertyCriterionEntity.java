@@ -28,6 +28,9 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 @Transient
 public interface PropertyCriterionEntity extends IEntity {
 
+    @Transient
+    IPrimitive<String> criterionName();
+
     IPrimitive<String> path();
 
     IPrimitive<PropertyCriterion.Restriction> restriction();

@@ -20,29 +20,40 @@
  */
 package com.pyx4j.site.client.ui.reports;
 
-import com.google.gwt.user.client.ui.IsWidget;
+import java.util.ArrayList;
+import java.util.List;
 
-import com.pyx4j.entity.client.CEntityForm;
+import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
+import com.pyx4j.entity.client.ui.folder.CEntityFolderRowEditor;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.reports.PropertyCriterionEntity;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.CComponent;
 
-public class PropertyCriterionEditor extends CEntityForm<PropertyCriterionEntity> {
+public class PropertyCriterionEditor extends CEntityFolderRowEditor<PropertyCriterionEntity> {
+
+    private static List<EntityFolderColumnDescriptor> columnDesciptors;
+    static {
+        columnDesciptors = new ArrayList<EntityFolderColumnDescriptor>();
+        PropertyCriterionEntity proto = EntityFactory.getEntityPrototype(PropertyCriterionEntity.class);
+        columnDesciptors.add(new EntityFolderColumnDescriptor(proto.criterionName(), "15em", true));
+        columnDesciptors.add(new EntityFolderColumnDescriptor(proto.restriction(), "20em"));
+        columnDesciptors.add(new EntityFolderColumnDescriptor(proto.value(), "20em"));
+    }
 
     public PropertyCriterionEditor() {
-        super(PropertyCriterionEntity.class);
+        super(PropertyCriterionEntity.class, columnDesciptors);
     }
 
     @Override
-    public IsWidget createContent() {
-        FormFlexPanel panel = new FormFlexPanel();
-        panel.setCellPadding(5);
-        panel.getColumnFormatter().setWidth(0, "20%");
-        panel.setWidget(0, 0, inject(proto().path()));
-        get(proto().path()).setViewable(true);
-        panel.setWidget(0, 1, inject(proto().restriction()));
-        panel.setWidget(0, 2, inject(proto().value()));
+    protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
 
-        return panel;
+        if (column == proto().path()) {
+            CComponent<?, ?> comp = super.createCell(column);
+            comp.setViewable(true);
+            return comp;
+        } else {
+            return super.createCell(column);
+        }
     }
 
 }

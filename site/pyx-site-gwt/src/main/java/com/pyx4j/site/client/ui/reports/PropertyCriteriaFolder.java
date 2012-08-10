@@ -20,16 +20,23 @@
  */
 package com.pyx4j.site.client.ui.reports;
 
+import java.util.List;
+
+import com.google.gwt.user.client.ui.ListBox;
+
 import com.pyx4j.entity.client.images.EntityFolderImages;
+import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.folder.BoxFolderDecorator;
 import com.pyx4j.entity.client.ui.folder.CEntityFolder;
 import com.pyx4j.entity.client.ui.folder.IFolderDecorator;
 import com.pyx4j.entity.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.entity.client.ui.folder.TableFolderItemDecorator;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.reports.PropertyCriterionEntity;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 public class PropertyCriteriaFolder extends CEntityFolder<PropertyCriterionEntity> {
 
@@ -37,10 +44,12 @@ public class PropertyCriteriaFolder extends CEntityFolder<PropertyCriterionEntit
 
     private final EntityFolderImages images;
 
-    public PropertyCriteriaFolder(EntityFolderImages images) {
+    private final List<ColumnDescriptor> availableCriteriaColumns;
+
+    public PropertyCriteriaFolder(EntityFolderImages images, List<ColumnDescriptor> availableCriteriaColumns) {
         super(PropertyCriterionEntity.class);
         this.images = images;
-
+        this.availableCriteriaColumns = availableCriteriaColumns;
     }
 
     @Override
@@ -64,7 +73,51 @@ public class PropertyCriteriaFolder extends CEntityFolder<PropertyCriterionEntit
 
     @Override
     protected void addItem() {
-        super.addItem();
+        new PropertyClassChoserDialog(availableCriteriaColumns) {
+            @Override
+            public boolean onClickOk() {
+                String selectedColumnPath = getSelectedColumnPath();
+                if (selectedColumnPath != null) {
+                    PropertyCriterionEntity propertyCriterionEntity = EntityFactory.create(PropertyCriterionEntity.class);
+                    propertyCriterionEntity.criterionName().setValue(getSelectedColumnTitle());
+                    propertyCriterionEntity.path().setValue(selectedColumnPath);
+                    addItem(propertyCriterionEntity);
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        }.show();
     }
 
+    private static abstract class PropertyClassChoserDialog extends OkCancelDialog {
+
+        private final ListBox comboBox;
+
+        public PropertyClassChoserDialog(List<ColumnDescriptor> columnDescriptors) {
+            super(i18n.tr("Choose criteria"));
+            comboBox = new ListBox();
+            for (ColumnDescriptor descriptor : columnDescriptors) {
+                comboBox.addItem(descriptor.getColumnTitle(), descriptor.getColumnName());
+            }
+            setBody(comboBox);
+        }
+
+        protected String getSelectedColumnPath() {
+            if (comboBox.getSelectedIndex() != -1) {
+                return comboBox.getValue(comboBox.getSelectedIndex());
+            } else {
+                return null;
+            }
+        }
+
+        protected String getSelectedColumnTitle() {
+            if (comboBox.getSelectedIndex() != -1) {
+                return comboBox.getItemText(comboBox.getSelectedIndex());
+            } else {
+                return null;
+            }
+        }
+
+    }
 }
