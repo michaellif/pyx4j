@@ -33,7 +33,6 @@ import com.pyx4j.unit.server.mock.TestLifecycle;
 
 import com.propertyvista.biz.occupancy.AvailabilityReportManager;
 import com.propertyvista.biz.occupancy.OccupancyFacade;
-import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.config.tests.VistaTestDBSetup;
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus;
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus.RentReadiness;
@@ -48,7 +47,7 @@ import com.propertyvista.domain.security.VistaBasicBehavior;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.domain.tenant.lease.Lease;
 
-public class AvailabilityReportManagerTestBase {
+public class AvailabilityReportManagerTestBase extends LightWeightLeaseManagement {
 
     private AptUnit unit = null;
 
@@ -98,14 +97,14 @@ public class AvailabilityReportManagerTestBase {
 
     protected Lease createLease(String leaseFrom, String moveIn, String leaseTo) {
         if (unit != null) {
-            Lease lease = ServerSideFactory.create(LeaseFacade.class).create(Lease.Status.Application);
+            Lease lease = createLightWeightLease(Lease.Status.Application);
 
             lease.unit().set(unit);
             lease.currentTerm().termFrom().setValue(asDate(leaseFrom));
             lease.expectedMoveIn().setValue(asDate(moveIn));
             lease.currentTerm().termTo().setValue(asDate(leaseTo));
 
-            ServerSideFactory.create(LeaseFacade.class).persist(lease);
+            persistLightWeightLease(lease, false);
             return lease;
         } else {
             throw new IllegalStateException("can't create a lease without a unit");

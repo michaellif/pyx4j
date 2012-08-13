@@ -13,12 +13,10 @@
  */
 package com.propertyvista.server.common.util.occupancy;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.propertyvista.biz.occupancy.UnitTurnoverAnalysisFacadeImpl;
 
-@Ignore
 public class UnitTurnoverAnalysisManagerTest extends UnitTurnoverAnalysisManagerTestBase {
 
     public UnitTurnoverAnalysisManagerTest() {

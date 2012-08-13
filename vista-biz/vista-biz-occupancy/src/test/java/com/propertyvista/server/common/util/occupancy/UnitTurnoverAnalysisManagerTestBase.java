@@ -19,7 +19,6 @@ import org.junit.Before;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -32,12 +31,10 @@ import com.propertyvista.biz.occupancy.AptUnitOccupancyManagerHelper;
 import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.biz.occupancy.SplittingHandler;
 import com.propertyvista.biz.occupancy.UnitTurnoverAnalysisFacade;
-import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.config.tests.VistaTestDBSetup;
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus;
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitTurnoverStats;
 import com.propertyvista.domain.financial.offering.ProductCatalog;
-import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
@@ -49,11 +46,10 @@ import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 
 // TODO enhance the test base to allow test cases with multiple buildings
-public class UnitTurnoverAnalysisManagerTestBase {
+public class UnitTurnoverAnalysisManagerTestBase extends LightWeightLeaseManagement {
 
     private Building building;
 
@@ -129,17 +125,15 @@ public class UnitTurnoverAnalysisManagerTestBase {
         tenant.user().set(user);
         Persistence.service().merge(tenant);
 
-        final Lease lease = ServerSideFactory.create(LeaseFacade.class).create(Lease.Status.Application);
+        final Lease lease = createLightWeightLease(Lease.Status.Application);
 
         lease.status().setValue(Lease.Status.Active);
         lease.leaseId().setValue("lease: " + dateFrom + " " + dateTo);
         lease.unit().set(unit);
-        lease.type().setValue(Service.ServiceType.residentialUnit);
         lease.creationDate().setValue(asDate(dateFrom));
         lease.currentTerm().termFrom().setValue(asDate(dateFrom));
         lease.currentTerm().termTo().setValue(asDate(dateTo));
         lease.expectedMoveIn().setValue(asDate(dateFrom));
-        lease.paymentFrequency().setValue(PaymentFrequency.Monthly);
 
         Tenant tenantInLease = EntityFactory.create(Tenant.class);
         tenantInLease.customer().set(tenant);
@@ -147,7 +141,7 @@ public class UnitTurnoverAnalysisManagerTestBase {
         tenantInLease.role().setValue(LeaseParticipant.Role.Applicant);
         lease.currentTerm().version().tenants().add(tenantInLease);
 
-        ServerSideFactory.create(LeaseFacade.class).persist(lease);
+        persistLightWeightLease(lease, false);
 
         AptUnitOccupancySegment leased = AptUnitOccupancyManagerHelper.split(unit, asDate(dateFrom), new SplittingHandler() {
             @Override

@@ -15,17 +15,14 @@ package com.propertyvista.server.common.util.occupancy;
 
 import static java.util.Arrays.asList;
 
-import org.junit.Ignore;
-
 import com.propertyvista.biz.occupancy.AptUnitOccupancyManagerHelper;
-import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.biz.occupancy.AptUnitOccupancyManagerHelper.MergeHandler;
+import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.OffMarketType;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.Status;
 
-@Ignore
 public class AptUnitOccupancyManagerHelperTest extends AptUnitOccupancyManagerTestBase {
 
     private AptUnit getUnit() {
