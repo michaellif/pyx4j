@@ -65,7 +65,7 @@ public class AccessRulesTest extends VistaDBTestBase {
             t2.person().name().firstName().setValue(setId);
             Persistence.service().persist(t2);
 
-            Lease lease = generateLightWeightLease();
+            Lease lease = createLightWeightLease();
 
             Tenant tl2 = EntityFactory.create(Tenant.class);
             tl2.leaseTermV().set(lease.currentTerm().version());
@@ -99,7 +99,7 @@ public class AccessRulesTest extends VistaDBTestBase {
         t1.person().name().firstName().setValue(setId);
         Persistence.service().persist(t1);
 
-        Lease lease = generateLightWeightLease();
+        Lease lease = createLightWeightLease();
 
         Building building = lease.unit().building();
         Persistence.service().persist(building);
@@ -129,7 +129,7 @@ public class AccessRulesTest extends VistaDBTestBase {
         Assert.assertEquals("should find building", 1, r.size());
     }
 
-    protected Lease generateLightWeightLease() {
+    protected Lease createLightWeightLease() {
         Lease lease = EntityFactory.create(Lease.class);
         lease.currentTerm().set(EntityFactory.create(LeaseTerm.class));
         return lease;
