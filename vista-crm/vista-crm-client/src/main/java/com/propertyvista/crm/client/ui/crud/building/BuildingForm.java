@@ -22,7 +22,6 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.Range;
 
 import com.pyx4j.commons.ValidationUtils;
@@ -71,11 +70,10 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
     @Override
     public void createTabs() {
 
-        Tab tab = addTab(isEditable() ? new HTML() : createDashboardTab(), i18n.tr("Dashboard"), false);
-        setTabEnabled(tab, !isEditable());
-        selectTab(tab);
+        Tab tab = null;
 
-        addTab(createGeneralTab(i18n.tr("General")));
+        tab = addTab(createGeneralTab(i18n.tr("General")));
+        selectTab(tab);
 
         addTab(createDetailsTab(i18n.tr("Details")));
 
@@ -167,10 +165,6 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
                 get(proto().complexPrimary()).setEditable(!get(proto().complex()).isValueEmpty());
             }
         });
-    }
-
-    private Widget createDashboardTab() {
-        return ((BuildingViewerView) getParentView()).getDashboardView().asWidget();
     }
 
     private FormFlexPanel createGeneralTab(String title) {

@@ -13,7 +13,6 @@
  */
 package com.propertyvista.crm.client.activity.crud.building;
 
-import java.util.Arrays;
 import java.util.List;
 
 import com.google.gwt.activity.shared.AbstractActivity;
@@ -29,10 +28,8 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.activity.ListerActivityFactory;
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
-import com.propertyvista.crm.client.activity.dashboard.DashboardViewActivity;
 import com.propertyvista.crm.client.ui.crud.building.BuildingViewerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.BuildingViewFactory;
-import com.propertyvista.crm.client.ui.dashboard.DashboardView;
 import com.propertyvista.crm.client.visor.dashboard.DashboardVisorController;
 import com.propertyvista.crm.client.visor.dashboard.IDashboardVisorController;
 import com.propertyvista.crm.client.visor.notes.NotesAndAttachmentsVisorController;
@@ -66,8 +63,6 @@ import com.propertyvista.dto.RoofDTO;
 
 public class BuildingViewerActivity extends CrmViewerActivity<BuildingDTO> implements BuildingViewerView.Presenter {
 
-    private final DashboardView.Presenter dashboardPresenter;
-
     private final Presenter<FloorplanDTO> floorplanLister;
 
     private final Presenter<AptUnitDTO> unitLister;
@@ -95,8 +90,6 @@ public class BuildingViewerActivity extends CrmViewerActivity<BuildingDTO> imple
     @SuppressWarnings("unchecked")
     public BuildingViewerActivity(CrudAppPlace place) {
         super(place, BuildingViewFactory.instance(BuildingViewerView.class), (AbstractCrudService<BuildingDTO>) GWT.create(BuildingCrudService.class));
-
-        dashboardPresenter = new DashboardViewActivity(((BuildingViewerView) getView()).getDashboardView());
 
         floorplanLister = ListerActivityFactory.create(place, ((BuildingViewerView) getView()).getFloorplanListerView(),
                 (AbstractCrudService<FloorplanDTO>) GWT.create(FloorplanCrudService.class), FloorplanDTO.class, VistaCrmBehavior.PropertyManagement);
@@ -136,16 +129,8 @@ public class BuildingViewerActivity extends CrmViewerActivity<BuildingDTO> imple
     }
 
     @Override
-    public DashboardView.Presenter getDashboardPresenter() {
-        return dashboardPresenter;
-    }
-
-    @Override
     public void onPopulateSuccess(BuildingDTO result) {
         super.onPopulateSuccess(result);
-
-        ((BuildingViewerView) getView()).getDashboardView().setBuildings(Arrays.asList(result.<Building> duplicate(Building.class)), false);
-        dashboardPresenter.populate(result.dashboard().getPrimaryKey());
 
         // -------------------------------------------------------
 
@@ -192,7 +177,6 @@ public class BuildingViewerActivity extends CrmViewerActivity<BuildingDTO> imple
 
     @Override
     public void onStop() {
-        ((AbstractActivity) dashboardPresenter).onStop();
         ((AbstractActivity) floorplanLister).onStop();
         ((AbstractActivity) unitLister).onStop();
         ((AbstractActivity) elevatorLister).onStop();

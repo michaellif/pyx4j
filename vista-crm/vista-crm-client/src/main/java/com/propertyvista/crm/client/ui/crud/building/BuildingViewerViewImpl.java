@@ -164,11 +164,6 @@ public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> i
     }
 
     @Override
-    public BuildingDashboardView getDashboardView() {
-        return dashboardView;
-    }
-
-    @Override
     public IListerView<FloorplanDTO> getFloorplanListerView() {
         return floorplanLister;
     }
