@@ -887,8 +887,11 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
         String createdTs = tm.entityMeta().getCreatedTimestampMember();
         if (createdTs != null) {
             if (!EqualsHelper.equals(entity.getMemberValue(createdTs), baseEntity.getMemberValue(createdTs))) {
-                log.debug("Timestamp '" + createdTs + "' change {} -> {}", baseEntity.getMemberValue(createdTs), entity.getMemberValue(createdTs));
-                throw new SecurityViolationException("Permission Denied");
+                log.debug(
+                        "Timestamp {} '{}' change {} -> {}",
+                        new Object[] { baseEntity.getDebugExceptionInfoString(), createdTs, baseEntity.getMemberValue(createdTs),
+                                entity.getMemberValue(createdTs) });
+                throw new SecurityViolationException("Timestamp field update denied");
             }
         }
         return applyModifications(tm, baseEntity, entity);
