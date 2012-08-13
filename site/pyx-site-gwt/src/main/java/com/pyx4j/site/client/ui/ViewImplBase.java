@@ -112,8 +112,12 @@ public abstract class ViewImplBase extends DockLayoutPanel implements IView {
 
     @Override
     public void showVisor(IsWidget widget, String caption) {
-        FlowPanel visorHolder = new FlowPanel();
+        DockLayoutPanel visorHolder = new DockLayoutPanel(Unit.EM);
         visorHolder.setStyleName(DefaultSiteCrudPanelsTheme.StyleName.Visor.name());
+
+        FlowPanel header = new FlowPanel();
+        header.addStyleName(DefaultSiteCrudPanelsTheme.StyleName.VisorHeader.name());
+        visorHolder.addNorth(header, 3);
 
         Button backButton = new Button(new Image(SiteImages.INSTANCE.backButton()), i18n.tr("Back"), new ClickHandler() {
 
@@ -123,11 +127,11 @@ public abstract class ViewImplBase extends DockLayoutPanel implements IView {
             }
         });
         backButton.addStyleName(DefaultSiteCrudPanelsTheme.StyleName.VisorBackButton.name());
-        visorHolder.add(backButton);
+        header.add(backButton);
 
         Label captionLabel = new Label(caption);
         captionLabel.addStyleName(DefaultSiteCrudPanelsTheme.StyleName.VisorCaption.name());
-        visorHolder.add(captionLabel);
+        header.add(captionLabel);
 
         visorHolder.add(widget.asWidget());
 
