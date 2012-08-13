@@ -17,7 +17,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.ScrollPanel;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
@@ -47,7 +47,7 @@ import com.propertyvista.domain.note.NoteAttachment;
 import com.propertyvista.domain.note.NotesAndAttachments;
 import com.propertyvista.domain.note.NotesAndAttachmentsDTO;
 
-public class NotesAndAttachmentsVisorView extends SimplePanel {
+public class NotesAndAttachmentsVisorView extends ScrollPanel {
 
     private static final I18n i18n = I18n.get(NotesAndAttachmentsVisorView.class);
 
