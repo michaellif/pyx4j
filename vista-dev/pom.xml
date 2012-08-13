@@ -20,6 +20,7 @@
     <modules>
         <module>vista-dev-generator</module>
         <module>vista-dev-preloader</module>
+        <module>vista-unit-preloader</module>
     </modules>
 
 </project>
