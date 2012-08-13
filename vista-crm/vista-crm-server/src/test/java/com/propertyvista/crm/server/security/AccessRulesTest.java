@@ -17,10 +17,7 @@ import java.util.List;
 
 import junit.framework.Assert;
 
-import org.junit.Ignore;
-
 import com.pyx4j.commons.Key;
-import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
@@ -29,13 +26,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.security.shared.UserVisit;
 import com.pyx4j.unit.server.mock.TestLifecycle;
 
-import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.config.tests.VistaDBTestBase;
-import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
-import com.propertyvista.domain.policy.policies.IdAssignmentPolicy;
-import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem;
-import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdAssignmentType;
-import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.security.CrmUserBuildings;
@@ -43,8 +34,8 @@ import com.propertyvista.domain.security.VistaBasicBehavior;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.LeaseTerm;
 
-@Ignore
 public class AccessRulesTest extends VistaDBTestBase {
 
     @Override
@@ -64,8 +55,6 @@ public class AccessRulesTest extends VistaDBTestBase {
         TestLifecycle.testSession(new UserVisit(new Key(-101), "bob"), VistaBasicBehavior.CRM);
         TestLifecycle.beginRequest();
 
-        generateIdAssignmentPolicy();
-
         Customer t1 = EntityFactory.create(Customer.class);
         t1.person().name().firstName().setValue(setId);
         Persistence.service().persist(t1);
@@ -76,14 +65,14 @@ public class AccessRulesTest extends VistaDBTestBase {
             t2.person().name().firstName().setValue(setId);
             Persistence.service().persist(t2);
 
-            Lease lease = ServerSideFactory.create(LeaseFacade.class).create(Lease.Status.Application);
+            Lease lease = generateLightWeightLease();
 
             Tenant tl2 = EntityFactory.create(Tenant.class);
             tl2.leaseTermV().set(lease.currentTerm().version());
             tl2.customer().set(t2);
             lease.currentTerm().version().tenants().add(tl2);
 
-            ServerSideFactory.create(LeaseFacade.class).finalize(lease);
+            persistLightWeightLease(lease, true);
         }
 
         EntityQueryCriteria<Customer> criteria = EntityQueryCriteria.create(Customer.class);
@@ -99,8 +88,6 @@ public class AccessRulesTest extends VistaDBTestBase {
 
         TestLifecycle.setNamespace();
 
-        generateIdAssignmentPolicy();
-
         CrmUser user = EntityFactory.create(CrmUser.class);
         user.name().setValue(uniqueString());
         Persistence.service().persist(user);
@@ -112,17 +99,15 @@ public class AccessRulesTest extends VistaDBTestBase {
         t1.person().name().firstName().setValue(setId);
         Persistence.service().persist(t1);
 
-        Lease lease = ServerSideFactory.create(LeaseFacade.class).create(Lease.Status.Application);
+        Lease lease = generateLightWeightLease();
 
         Building building = lease.unit().building();
         Persistence.service().persist(building);
         Persistence.service().persist(lease.unit());
 
-        lease.currentTerm().saveAction().setValue(SaveAction.saveAsFinal);
-        ServerSideFactory.create(LeaseFacade.class).persist(lease);
+        persistLightWeightLease(lease, true);
 
         Tenant tl1 = EntityFactory.create(Tenant.class);
-
         tl1.leaseTermV().set(lease.currentTerm().version());
         tl1.customer().set(t1);
         Persistence.service().persist(tl1);
@@ -144,18 +129,28 @@ public class AccessRulesTest extends VistaDBTestBase {
         Assert.assertEquals("should find building", 1, r.size());
     }
 
-    protected void generateIdAssignmentPolicy() {
-        OrganizationPoliciesNode orgNode = EntityFactory.create(OrganizationPoliciesNode.class);
-        Persistence.service().persist(orgNode);
+    protected Lease generateLightWeightLease() {
+        Lease lease = EntityFactory.create(Lease.class);
+        lease.currentTerm().set(EntityFactory.create(LeaseTerm.class));
+        return lease;
+    }
 
-        IdAssignmentPolicy policy = EntityFactory.create(IdAssignmentPolicy.class);
-        policy.node().set(orgNode);
+    protected Lease persistLightWeightLease(Lease lease, boolean finalize) {
+        if (lease.currentTerm().getPrimaryKey() == null) {
+            LeaseTerm term = lease.currentTerm().detach();
 
-        IdAssignmentItem item = EntityFactory.create(IdAssignmentItem.class);
-        item.target().setValue(IdTarget.lease);
-        item.type().setValue(IdAssignmentType.generatedNumber);
+            lease.currentTerm().set(null);
+            Persistence.secureSave(lease);
+            lease.currentTerm().set(term);
 
-        policy.itmes().add(item);
-        Persistence.service().persist(policy);
+            lease.currentTerm().lease().set(lease);
+        }
+        if (finalize) {
+            lease.currentTerm().saveAction().setValue(SaveAction.saveAsFinal);
+        }
+        Persistence.service().persist(lease.currentTerm());
+        Persistence.service().persist(lease);
+
+        return lease;
     }
 }
