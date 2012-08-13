@@ -68,24 +68,12 @@
         </dependency>
 
         <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-log4j12</artifactId>
+            <groupId>com.propertyvista</groupId>
+            <artifactId>vista-unit-preloader</artifactId>
+            <version>${project.version}</version>
+            <classifier>tests</classifier>
             <scope>test</scope>
             <optional>true</optional>
-        </dependency>
-
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <scope>test</scope>
-            <optional>true</optional>
-        </dependency>
-
-        <dependency>
-        	<groupId>mysql</groupId>
-        	<artifactId>mysql-connector-java</artifactId>
-        	<scope>test</scope>
-        	<optional>true</optional>
         </dependency>
 
     </dependencies>
