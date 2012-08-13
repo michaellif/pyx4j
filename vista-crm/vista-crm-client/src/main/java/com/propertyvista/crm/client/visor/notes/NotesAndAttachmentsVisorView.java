@@ -97,8 +97,9 @@ public class NotesAndAttachmentsVisorView extends SimplePanel {
 
             public NotesAndAttachmentsFolder() {
                 super(NotesAndAttachments.class);
-                setEditable(true);
+                setOrderable(false);
                 inheritEditable(false);
+                setEditable(true);
             }
 
             @Override
@@ -239,6 +240,14 @@ public class NotesAndAttachmentsVisorView extends SimplePanel {
                     setViewableMode(viewable);
 
                     return content;
+                }
+
+                @Override
+                protected void onValueSet(boolean populate) {
+                    super.onValueSet(populate);
+                    if (getValue().isEmpty()) {
+                        setViewableMode(false);
+                    }
                 }
 
                 public void setButtonsVisible(boolean visible) {
