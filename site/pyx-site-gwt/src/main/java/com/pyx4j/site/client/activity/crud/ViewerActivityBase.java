@@ -105,6 +105,7 @@ public class ViewerActivityBase<E extends IEntity> extends AbstractActivity impl
         view.storeState(view.getMemento().getCurrentPlace());
         view.reset();
         view.setPresenter(null);
+        view.hideVisor();
         super.onStop();
     }
 
