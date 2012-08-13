@@ -13,8 +13,9 @@
  */
 package com.propertyvista.crm.client.visor.dashboard;
 
+import com.propertyvista.crm.client.ui.board.BoardView;
 import com.propertyvista.crm.client.visor.IVisorController;
 
-public interface IDashboardVisorController extends IVisorController {
+public interface IDashboardVisorController extends IVisorController, BoardView.Presenter {
 
 }

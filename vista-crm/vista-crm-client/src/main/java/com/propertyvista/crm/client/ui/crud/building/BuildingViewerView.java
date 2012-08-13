@@ -13,6 +13,8 @@
  */
 package com.propertyvista.crm.client.ui.crud.building;
 
+import java.util.List;
+
 import com.pyx4j.site.client.ui.crud.form.IViewerView;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 
@@ -21,9 +23,11 @@ import com.propertyvista.crm.client.ui.dashboard.DashboardView;
 import com.propertyvista.crm.client.visor.dashboard.IDashboardVisorController;
 import com.propertyvista.crm.client.visor.notes.NotesAndAttachmentsVisorController;
 import com.propertyvista.crm.rpc.dto.billing.BillingCycleDTO;
+import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.financial.offering.Concession;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.Service;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.dto.AptUnitDTO;
 import com.propertyvista.dto.BoilerDTO;
 import com.propertyvista.dto.BuildingDTO;
@@ -41,7 +45,7 @@ public interface BuildingViewerView extends IViewerView<BuildingDTO> {
 
         NotesAndAttachmentsVisorController getNotesAndAttachmentsController();
 
-        IDashboardVisorController getDashboardController();
+        IDashboardVisorController getDashboardController(DashboardMetadata dashboardMetadata, List<Building> buildings);
     }
 
     BuildingDashboardView getDashboardView();

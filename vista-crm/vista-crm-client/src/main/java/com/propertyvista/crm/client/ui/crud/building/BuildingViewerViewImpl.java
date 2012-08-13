@@ -17,13 +17,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.EnumSet;
+import java.util.List;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.LogicalDate;
@@ -54,12 +54,16 @@ import com.propertyvista.crm.client.ui.crud.building.mech.RoofLister;
 import com.propertyvista.crm.client.ui.crud.building.parking.ParkingLister;
 import com.propertyvista.crm.client.ui.crud.floorplan.FloorplanLister;
 import com.propertyvista.crm.client.ui.crud.unit.UnitLister;
+import com.propertyvista.crm.client.visor.dashboard.DashboardSelectorDialog;
+import com.propertyvista.crm.client.visor.dashboard.IDashboardVisorController;
 import com.propertyvista.crm.client.visor.notes.NotesAndAttachmentsVisorController;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.dto.billing.BillingCycleDTO;
+import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.financial.offering.Concession;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.Service;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
 import com.propertyvista.dto.AptUnitDTO;
 import com.propertyvista.dto.BoilerDTO;
@@ -135,7 +139,26 @@ public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> i
         addHeaderToolbarTwoItem(new Button(i18n.tr("Dashboard"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                showVisor(new Label("Dashboard Widget"), "Dashboard");
+                new DashboardSelectorDialog() {
+
+                    @Override
+                    public boolean onClickOk() {
+
+                        List<DashboardMetadata> metadata = getSelectedItems();
+                        if (!metadata.isEmpty()) {
+                            List<Building> buildings = new ArrayList<Building>();
+                            buildings.add(BuildingViewerViewImpl.this.getForm().getValue());
+                            IDashboardVisorController controller = ((BuildingViewerView.Presenter) getPresenter()).getDashboardController(metadata.get(0),
+                                    buildings);
+                            controller.show(BuildingViewerViewImpl.this);
+                            return true;
+                        } else {
+                            return false;
+                        }
+
+                    }
+
+                }.show();
             }
         }).asWidget());
     }

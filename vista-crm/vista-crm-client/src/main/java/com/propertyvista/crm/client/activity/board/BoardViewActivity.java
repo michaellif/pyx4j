@@ -37,7 +37,6 @@ import com.propertyvista.crm.client.ui.board.BoardView;
 import com.propertyvista.crm.rpc.services.dashboard.BoardMetadataServiceBase;
 import com.propertyvista.crm.rpc.services.reports.DashboardReportService;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
-import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
 import com.propertyvista.domain.property.asset.building.Building;
 
 public abstract class BoardViewActivity<V extends BoardView> extends AbstractActivity implements BoardView.Presenter {
@@ -144,29 +143,6 @@ public abstract class BoardViewActivity<V extends BoardView> extends AbstractAct
         }
         parameters.put(DashboardReportService.PARAM_SELECTED_BUILDINGS, buildingsPks);
         new ReportDialog("Report", "Creating report...").start(GWT.<DashboardReportService> create(DashboardReportService.class), criteria, parameters);
-    }
-
-// GadgetPresenter:
-
-    @Override
-    public void save(final GadgetMetadata gadgetMetadata) {
-        getService().saveGadgetMetadata(new AsyncCallback<GadgetMetadata>() {
-            @Override
-            public void onSuccess(GadgetMetadata result) {
-                gadgetMetadata.set(result);
-                view.onSaveSuccess();
-            }
-
-            @Override
-            public void onFailure(Throwable caught) {
-                onSaveFail(caught);
-            }
-        }, gadgetMetadata);
-    }
-
-    @Override
-    public void retrieve(Key gadgetId, AsyncCallback<GadgetMetadata> callback) {
-        getService().retrieveGadgetMetadata(callback, gadgetId);
     }
 
     protected boolean isTypedDashboard() {

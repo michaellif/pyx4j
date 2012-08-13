@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.dom.client.Style.Unit;
@@ -25,6 +26,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.event.shared.SimpleEventBus;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
@@ -33,6 +35,7 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.IDebugId;
+import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.forms.client.ui.CDatePicker;
@@ -49,6 +52,9 @@ import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEven
 import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEventHandler;
 import com.propertyvista.crm.client.ui.gadgets.common.Directory;
 import com.propertyvista.crm.client.ui.gadgets.common.IGadgetInstance;
+import com.propertyvista.crm.client.ui.gadgets.common.IGadgetInstancePresenter;
+import com.propertyvista.crm.rpc.services.dashboard.BoardMetadataServiceBase;
+import com.propertyvista.crm.rpc.services.dashboard.DashboardMetadataService;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.dashboard.DashboardMetadata.DashboardType;
 import com.propertyvista.domain.dashboard.DashboardMetadata.LayoutType;
@@ -224,7 +230,31 @@ public abstract class BoardBase extends DockLayoutPanel implements BoardView {
     }
 
     private void bindGadget(IGadgetInstance gadget) {
-        gadget.setPresenter(presenter);
+        gadget.setPresenter(new IGadgetInstancePresenter() {
+
+            private final BoardMetadataServiceBase service = GWT.create(DashboardMetadataService.class);
+
+            @Override
+            public void save(final GadgetMetadata gadgetMetadata) {
+                service.saveGadgetMetadata(new AsyncCallback<GadgetMetadata>() {
+                    @Override
+                    public void onSuccess(GadgetMetadata result) {
+                        gadgetMetadata.set(result);
+                        onSaveSuccess();
+                    }
+
+                    @Override
+                    public void onFailure(Throwable caught) {
+                        onSaveFail(caught);
+                    }
+                }, gadgetMetadata);
+            }
+
+            @Override
+            public void retrieve(Key gadgetId, AsyncCallback<GadgetMetadata> callback) {
+                service.retrieveGadgetMetadata(callback, gadgetId);
+            }
+        });
         gadget.setContainerBoard(this);
     }
 

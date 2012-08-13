@@ -14,6 +14,7 @@
 package com.propertyvista.crm.client.activity.crud.building;
 
 import java.util.Arrays;
+import java.util.List;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
@@ -32,6 +33,7 @@ import com.propertyvista.crm.client.activity.dashboard.DashboardViewActivity;
 import com.propertyvista.crm.client.ui.crud.building.BuildingViewerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.BuildingViewFactory;
 import com.propertyvista.crm.client.ui.dashboard.DashboardView;
+import com.propertyvista.crm.client.visor.dashboard.DashboardVisorController;
 import com.propertyvista.crm.client.visor.dashboard.IDashboardVisorController;
 import com.propertyvista.crm.client.visor.notes.NotesAndAttachmentsVisorController;
 import com.propertyvista.crm.rpc.dto.billing.BillingCycleDTO;
@@ -47,6 +49,7 @@ import com.propertyvista.crm.rpc.services.building.mech.BoilerCrudService;
 import com.propertyvista.crm.rpc.services.building.mech.ElevatorCrudService;
 import com.propertyvista.crm.rpc.services.building.mech.RoofCrudService;
 import com.propertyvista.crm.rpc.services.unit.UnitCrudService;
+import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.financial.offering.Concession;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.Service;
@@ -213,8 +216,8 @@ public class BuildingViewerActivity extends CrmViewerActivity<BuildingDTO> imple
     }
 
     @Override
-    public IDashboardVisorController getDashboardController() {
-        // TODO Auto-generated method stub
-        return null;
+    public IDashboardVisorController getDashboardController(DashboardMetadata dashboardMetadata, List<Building> buildings) {
+        return new DashboardVisorController(dashboardMetadata, buildings);
     }
+
 }
