@@ -13,7 +13,8 @@
  */
 package com.propertyvista.crm.client.activity.crud.complex;
 
-import com.google.gwt.activity.shared.AbstractActivity;
+import java.util.List;
+
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
@@ -21,39 +22,41 @@ import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
-import com.propertyvista.crm.client.activity.dashboard.DashboardViewActivity;
 import com.propertyvista.crm.client.ui.crud.complex.ComplexViewerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.BuildingViewFactory;
+import com.propertyvista.crm.client.visor.dashboard.DashboardVisorController;
+import com.propertyvista.crm.client.visor.dashboard.IDashboardVisorController;
 import com.propertyvista.crm.rpc.services.building.ComplexCrudService;
+import com.propertyvista.domain.dashboard.DashboardMetadata;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.dto.ComplexDTO;
 
 public class ComplexViewerActivity extends CrmViewerActivity<ComplexDTO> implements ComplexViewerView.Presenter {
 
-    private final DashboardViewActivity dashboardViewActivity;
-
     @SuppressWarnings("unchecked")
     public ComplexViewerActivity(CrudAppPlace place) {
         super(place, BuildingViewFactory.instance(ComplexViewerView.class), (AbstractCrudService<ComplexDTO>) GWT.create(ComplexCrudService.class));
 
-        dashboardViewActivity = new DashboardViewActivity(((ComplexViewerView) getView()).getDashboardView());
     }
 
     @Override
     public void onStop() {
-        ((AbstractActivity) dashboardViewActivity).onStop();
         super.onStop();
     }
 
     @Override
     protected void onPopulateSuccess(ComplexDTO result) {
         super.onPopulateSuccess(result);
-        ((ComplexViewerView) getView()).getDashboardView().setBuildings(result.buildings(), false);
-        dashboardViewActivity.populate(result.dashboard().getPrimaryKey());
     }
 
     @Override
     public boolean canEdit() {
         return SecurityController.checkBehavior(VistaCrmBehavior.PropertyManagement);
+    }
+
+    @Override
+    public IDashboardVisorController getDashboardController(DashboardMetadata dashboardMetadata, List<Building> buildings) {
+        return new DashboardVisorController(dashboardMetadata, buildings);
     }
 }

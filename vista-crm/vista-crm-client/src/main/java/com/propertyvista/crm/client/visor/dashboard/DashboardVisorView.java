@@ -48,7 +48,7 @@ public class DashboardVisorView extends Composite {
     }
 
     public void setBuildings(List<Building> selectedBuildings) {
-        this.dashboard.setBuildings(selectedBuildings, false);
+        this.dashboard.setBuildings(selectedBuildings, true);
     }
 
 }

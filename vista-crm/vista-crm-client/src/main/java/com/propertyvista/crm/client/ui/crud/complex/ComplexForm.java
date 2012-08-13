@@ -15,7 +15,6 @@ package com.propertyvista.crm.client.ui.crud.complex;
 
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.HTML;
 
 import com.pyx4j.commons.ValidationUtils;
 import com.pyx4j.forms.client.ui.CComponent;
@@ -24,7 +23,6 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.widgets.client.tabpanel.Tab;
 
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.dto.ComplexDTO;
@@ -43,10 +41,6 @@ public class ComplexForm extends CrmEntityForm<ComplexDTO> {
 
     @Override
     public void createTabs() {
-        Tab tab = addTab(isEditable() ? new HTML() : getParentComplexViewerView().getDashboardView().asWidget(), i18n.tr("Dashboard"));
-        setTabEnabled(tab, !isEditable());
-        selectTab(tab);
-
         addTab(createGeneralPanel(i18n.tr("General")));
         addTab(createBuildingsPanel(i18n.tr("Buildings")));
 

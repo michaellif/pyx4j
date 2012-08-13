@@ -61,9 +61,8 @@ public class DashboardVisorController implements IDashboardVisorController {
 
     @Override
     public void show(IView parentView) {
-        parentView.showVisor(getView(), dashboardStub.name().getValue());
         populate(dashboardStub.getPrimaryKey());
-        view.setBuildings(buildings);
+        parentView.showVisor(getView(), dashboardStub.name().getValue());
     }
 
     @Override
@@ -80,6 +79,7 @@ public class DashboardVisorController implements IDashboardVisorController {
             @Override
             public void onSuccess(DashboardMetadata result) {
                 view.populate(result);
+                view.setBuildings(buildings);
             }
 
             @Override
