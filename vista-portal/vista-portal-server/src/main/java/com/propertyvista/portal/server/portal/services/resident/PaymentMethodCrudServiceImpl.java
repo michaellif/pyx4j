@@ -62,11 +62,11 @@ public class PaymentMethodCrudServiceImpl extends AbstractCrudServiceImpl<Paymen
     @Override
     protected void persist(PaymentMethod entity, PaymentMethod dto) {
         Tenant tenantInLease = TenantAppContext.getCurrentUserTenantInLease();
-        Persistence.service().retrieve(tenantInLease.leaseV());
-        Persistence.service().retrieve(tenantInLease.leaseV().holder().unit());
+        Persistence.service().retrieve(tenantInLease.leaseTermV());
+        Persistence.service().retrieve(tenantInLease.leaseTermV().holder().lease().unit());
 
         entity.customer().set(tenantInLease.customer());
-        ServerSideFactory.create(PaymentFacade.class).persistPaymentMethod(tenantInLease.leaseV().holder().unit().building(), entity);
+        ServerSideFactory.create(PaymentFacade.class).persistPaymentMethod(tenantInLease.leaseTermV().holder().lease().unit().building(), entity);
         if (dto.isPreauthorized().isBooleanTrue()) {
             tenantInLease.preauthorizedPayment().set(entity);
             Persistence.service().merge(tenantInLease);
@@ -84,11 +84,11 @@ public class PaymentMethodCrudServiceImpl extends AbstractCrudServiceImpl<Paymen
     @Override
     public void getCurrentAddress(AsyncCallback<AddressStructured> callback) {
         Tenant tenantInLease = TenantAppContext.getCurrentUserTenantInLease();
-        Persistence.service().retrieve(tenantInLease.leaseV());
-        Persistence.service().retrieve(tenantInLease.leaseV().holder().unit());
-        Persistence.service().retrieve(tenantInLease.leaseV().holder().unit().building());
-        AddressStructured address = tenantInLease.leaseV().holder().unit().building().info().address().duplicate();
-        address.suiteNumber().set(tenantInLease.leaseV().holder().unit().info().number());
+        Persistence.service().retrieve(tenantInLease.leaseTermV());
+        Persistence.service().retrieve(tenantInLease.leaseTermV().holder().lease().unit());
+        Persistence.service().retrieve(tenantInLease.leaseTermV().holder().lease().unit().building());
+        AddressStructured address = tenantInLease.leaseTermV().holder().lease().unit().building().info().address().duplicate();
+        address.suiteNumber().set(tenantInLease.leaseTermV().holder().lease().unit().info().number());
         callback.onSuccess(address);
     }
 }

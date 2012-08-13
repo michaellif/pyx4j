@@ -19,7 +19,7 @@ import com.pyx4j.entity.shared.IList;
 
 import com.propertyvista.domain.financial.offering.Concession;
 import com.propertyvista.domain.financial.offering.ProductItem;
-import com.propertyvista.domain.tenant.lease.Lease2;
+import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 
 @Transient
@@ -27,7 +27,7 @@ import com.propertyvista.domain.tenant.lease.LeaseTerm;
 public interface LeaseTermDTO extends LeaseTerm {
 
     // newly created parent:
-    Lease2 newParentLease();
+    Lease newParentLease();
 
     // -----------------------------------------------------
     // temporary runtime data:

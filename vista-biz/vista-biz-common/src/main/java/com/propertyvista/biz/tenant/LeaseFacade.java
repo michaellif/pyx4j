@@ -22,10 +22,14 @@ import com.propertyvista.domain.policy.framework.PolicyNode;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.Lease.Status;
+import com.propertyvista.domain.tenant.lease.LeaseTerm;
 
 public interface LeaseFacade {
 
-    // in-memory Lease object state interfaces:
+    // in-memory Lease state interfaces:
+
+    Lease create(Status status);
 
     Lease init(Lease lease);
 
@@ -33,15 +37,27 @@ public interface LeaseFacade {
 
     Lease setService(Lease lease, ProductItem serviceId);
 
-    BillableItem createBillableItem(ProductItem itemId, PolicyNode node);
-
     Lease persist(Lease lease);
 
     Lease finalize(Lease lease);
 
-    // DB-data Lease object state interfaces:
+    // in-memory Lease Term operations:
 
-    void createMasterOnlineApplication(Key leaseId);
+    LeaseTerm setUnit(LeaseTerm leaseTerm, AptUnit unitId);
+
+    LeaseTerm setService(LeaseTerm leaseTerm, ProductItem serviceId);
+
+    BillableItem createBillableItem(ProductItem itemId, PolicyNode node);
+
+    LeaseTerm persist(LeaseTerm leaseTerm);
+
+    LeaseTerm finalize(LeaseTerm leaseTerm);
+
+    // DB-data Lease state interfaces:
+
+    void setCurrentTerm(Lease leaseId, LeaseTerm leaseTermId);
+
+    void createMasterOnlineApplication(Lease leaseId);
 
     void approveApplication(Lease leaseId, Employee decidedBy, String decisionReason);
 
@@ -51,11 +67,10 @@ public interface LeaseFacade {
 
     void approveExistingLease(Lease leaseId);
 
-    void activate(Key leaseId);
+    void activate(Lease leaseId);
 
-    /**
-     * Start notice/evict...
-     */
+    // Start notice/evict...
+
     void createCompletionEvent(Key leaseId, Lease.CompletionType completionType, LogicalDate noticeDay, LogicalDate moveOutDay);
 
     void cancelCompletionEvent(Key leaseId);
@@ -63,4 +78,8 @@ public interface LeaseFacade {
     void complete(Key leaseId);
 
     void close(Key leaseId);
+
+    // General:
+
+    Lease load(Lease lease, boolean forEdit);
 }

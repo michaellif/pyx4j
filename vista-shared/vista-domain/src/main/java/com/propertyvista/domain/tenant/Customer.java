@@ -64,7 +64,7 @@ public interface Customer extends IEntity {
     // parent <-> child relationship:
     @Owned
     @Detached(level = AttachLevel.Detached)
-    ISet<PersonScreening> _PersonScreenings();
+    ISet<PersonScreening> personScreenings();
 
     @Owned
     @Detached(level = AttachLevel.Detached)

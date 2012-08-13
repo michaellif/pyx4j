@@ -23,7 +23,6 @@ package com.propertyvista.biz.financial.billing;
 import org.junit.experimental.categories.Category;
 
 import com.pyx4j.config.server.ServerSideFactory;
-import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
 
 import com.propertyvista.biz.financial.FinancialTestBase;
 import com.propertyvista.biz.financial.FinancialTestBase.FunctionalTests;
@@ -80,7 +79,7 @@ public class BillableItemAdjustmentTest extends FinancialTestBase {
 
         activateLease();
 
-        changeBillableItemAdjustment(parkAdj_1.uid().getValue(), "01-Mar-2011", "31-Mar-2011", SaveAction.saveAsFinal);
+        changeBillableItemAdjustment(parkAdj_1.uid().getValue(), "01-Mar-2011", "31-Mar-2011");
 
         advanceDate("18-Mar-2011");
 
@@ -122,7 +121,7 @@ public class BillableItemAdjustmentTest extends FinancialTestBase {
         //==================== RUN 4 ======================//
         // Service = $869.00 after $30.30 + $31.00 adjustment (changed till EOM)
 
-        changeBillableItemAdjustment(svcAdj_3.uid().getValue(), "01-Jun-2011", "30-Jun-2011", SaveAction.saveAsFinal);
+        changeBillableItemAdjustment(svcAdj_3.uid().getValue(), "01-Jun-2011", "30-Jun-2011");
 
         advanceDate("18-May-2011");
 

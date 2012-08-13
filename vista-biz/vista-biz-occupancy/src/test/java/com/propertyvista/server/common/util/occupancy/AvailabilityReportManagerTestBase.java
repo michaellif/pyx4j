@@ -26,7 +26,6 @@ import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.security.shared.UserVisit;
@@ -34,6 +33,7 @@ import com.pyx4j.unit.server.mock.TestLifecycle;
 
 import com.propertyvista.biz.occupancy.AvailabilityReportManager;
 import com.propertyvista.biz.occupancy.OccupancyFacade;
+import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.config.tests.VistaTestDBSetup;
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus;
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus.RentReadiness;
@@ -47,7 +47,6 @@ import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySe
 import com.propertyvista.domain.security.VistaBasicBehavior;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
 
 public class AvailabilityReportManagerTestBase {
 
@@ -99,14 +98,14 @@ public class AvailabilityReportManagerTestBase {
 
     protected Lease createLease(String leaseFrom, String moveIn, String leaseTo) {
         if (unit != null) {
-            Lease lease = EntityFactory.create(Lease.class);
-            lease.paymentFrequency().setValue(PaymentFrequency.Monthly);
+            Lease lease = ServerSideFactory.create(LeaseFacade.class).create(Lease.Status.Application);
+
             lease.unit().set(unit);
-            lease.leaseFrom().setValue(asDate(leaseFrom));
+            lease.currentTerm().termFrom().setValue(asDate(leaseFrom));
             lease.expectedMoveIn().setValue(asDate(moveIn));
-            lease.leaseTo().setValue(asDate(leaseTo));
-            lease.saveAction().setValue(SaveAction.saveAsFinal);
-            Persistence.service().persist(lease);
+            lease.currentTerm().termTo().setValue(asDate(leaseTo));
+
+            ServerSideFactory.create(LeaseFacade.class).persist(lease);
             return lease;
         } else {
             throw new IllegalStateException("can't create a lease without a unit");

@@ -188,12 +188,12 @@ public class BillDateUtils {
     public static LogicalDate calculateBillingPeriodStartDate(Bill bill) {
         LogicalDate date = null;
         if (Bill.BillType.First == bill.billType().getValue()) {
-            date = bill.billingAccount().lease().leaseFrom().getValue();
+            date = bill.billingAccount().lease().currentTerm().termFrom().getValue();
         } else if (Bill.BillType.ZeroCycle == bill.billType().getValue()) {
             // start with lease if billing start date has passed
             date = bill.billingCycle().billingCycleStartDate().getValue();
-            if (date.compareTo(bill.billingAccount().lease().leaseFrom().getValue()) < 0) {
-                date = bill.billingAccount().lease().leaseFrom().getValue();
+            if (date.compareTo(bill.billingAccount().lease().currentTerm().termFrom().getValue()) < 0) {
+                date = bill.billingAccount().lease().currentTerm().termFrom().getValue();
             }
         } else if (Bill.BillType.Regular == bill.billType().getValue()) {
             date = bill.billingCycle().billingCycleStartDate().getValue();
@@ -204,11 +204,11 @@ public class BillDateUtils {
     public static LogicalDate calculateBillingPeriodEndDate(Bill bill) {
         LogicalDate date = null;
         if (Bill.BillType.Final != bill.billType().getValue()) {
-            if (bill.billingAccount().lease().leaseTo().isNull()
-                    || (bill.billingAccount().lease().leaseTo().getValue().compareTo(bill.billingCycle().billingCycleEndDate().getValue()) >= 0)) {
+            if (bill.billingAccount().lease().currentTerm().termTo().isNull()
+                    || (bill.billingAccount().lease().currentTerm().termTo().getValue().compareTo(bill.billingCycle().billingCycleEndDate().getValue()) >= 0)) {
                 date = bill.billingCycle().billingCycleEndDate().getValue();
-            } else if (bill.billingAccount().lease().leaseTo().getValue().compareTo(bill.billingCycle().billingCycleStartDate().getValue()) >= 0) {
-                date = bill.billingAccount().lease().leaseTo().getValue();
+            } else if (bill.billingAccount().lease().currentTerm().termTo().getValue().compareTo(bill.billingCycle().billingCycleStartDate().getValue()) >= 0) {
+                date = bill.billingAccount().lease().currentTerm().termTo().getValue();
             } else {
                 throw new BillingException(i18n.tr("Lease already ended"));
             }

@@ -36,8 +36,5 @@ public class PastLeaseListerActivity extends ListerActivityBase<LeaseDTO> {
 
         LeaseDTO proto = EntityFactory.getEntityPrototype(LeaseDTO.class);
         addPreDefinedFilter(PropertyCriterion.in(proto.status(), Lease.Status.former()));
-        // and current lease version only:
-        addPreDefinedFilter(PropertyCriterion.isNotNull(proto.version().fromDate()));
-        addPreDefinedFilter(PropertyCriterion.isNull(proto.version().toDate()));
     }
 }

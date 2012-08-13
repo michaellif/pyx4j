@@ -41,8 +41,8 @@ public class TenantLister extends ListerBase<TenantDTO> {
             new Builder(proto().customer().person().workPhone(), false).build(),
             new Builder(proto().customer().person().email()).build(),
             
-            new Builder(proto().leaseV().holder()).columnTitle(i18n.tr("Lease")).searchable(false).build(),
-            new Builder(proto().leaseV().holder().leaseId()).searchableOnly().build()
+            new Builder(proto().leaseTermV().holder()).columnTitle(i18n.tr("Lease Term")).searchable(false).build(),
+            new Builder(proto().leaseTermV().holder().lease().leaseId()).searchableOnly().build()
         ); // @formatter:on
     }
 }

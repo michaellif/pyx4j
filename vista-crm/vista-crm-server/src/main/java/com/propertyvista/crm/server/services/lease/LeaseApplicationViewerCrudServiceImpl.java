@@ -22,6 +22,7 @@ import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
@@ -55,7 +56,7 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
         super.enhanceRetrieved(in, dto);
         enhanceRetrievedCommon(in, dto);
 
-        for (Tenant tenant : dto.version().tenants()) {
+        for (Tenant tenant : dto.currentTerm().version().tenants()) {
             TenantRetriever tr = new TenantRetriever(tenant.getPrimaryKey(), true);
             dto.tenantInfo().add(createTenantInfoDTO(tr));
             dto.tenantFinancials().add(createTenantFinancialDTO(tr));
@@ -72,11 +73,11 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
     }
 
     private void enhanceRetrievedCommon(Lease in, LeaseApplicationDTO dto) {
-        dto.numberOfOccupants().setValue(dto.version().tenants().size());
-        dto.numberOfGuarantors().setValue(dto.version().guarantors().size());
+        dto.numberOfOccupants().setValue(dto.currentTerm().version().tenants().size());
+        dto.numberOfGuarantors().setValue(dto.currentTerm().version().guarantors().size());
         dto.numberOfApplicants().setValue(0);
 
-        for (Tenant tenant : dto.version().tenants()) {
+        for (Tenant tenant : dto.currentTerm().version().tenants()) {
             Persistence.service().retrieve(tenant);
             Persistence.service().retrieve(tenant.screening(), AttachLevel.ToStringMembers);
 
@@ -91,7 +92,7 @@ public class LeaseApplicationViewerCrudServiceImpl extends LeaseViewerCrudServic
 
     @Override
     public void startOnlineApplication(AsyncCallback<VoidSerializable> callback, Key entityId) {
-        ServerSideFactory.create(LeaseFacade.class).createMasterOnlineApplication(entityId);
+        ServerSideFactory.create(LeaseFacade.class).createMasterOnlineApplication(EntityFactory.createIdentityStub(Lease.class, entityId));
         Persistence.service().commit();
         callback.onSuccess(null);
     }

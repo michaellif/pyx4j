@@ -23,6 +23,14 @@
             <artifactId>vista-biz-common</artifactId>
             <version>${project.version}</version>
         </dependency>
+        
+
+        <dependency>
+            <groupId>com.propertyvista</groupId>
+            <artifactId>vista-biz-tenant</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+        </dependency>        
 
         <dependency>
             <groupId>com.propertyvista</groupId>

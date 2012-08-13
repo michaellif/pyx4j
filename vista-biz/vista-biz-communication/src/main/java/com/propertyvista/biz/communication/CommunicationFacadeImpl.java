@@ -92,9 +92,10 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
             return;
         }
         Tenant tenant = Persistence.service().retrieve(Tenant.class, tenantId.getPrimaryKey());
-        Persistence.service().retrieve(tenant.leaseV());
+        Persistence.service().retrieve(tenant.leaseTermV());
+        Persistence.service().retrieve(tenant.leaseTermV().holder().lease());
         EmailTemplateType emailType;
-        switch (tenant.leaseV().holder().leaseApplication().status().getValue()) {
+        switch (tenant.leaseTermV().holder().lease().leaseApplication().status().getValue()) {
         case Approved:
             emailType = EmailTemplateType.ApplicationApproved;
             break;

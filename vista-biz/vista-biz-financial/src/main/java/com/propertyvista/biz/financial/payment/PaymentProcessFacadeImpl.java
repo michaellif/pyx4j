@@ -280,9 +280,9 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
             }
 
             Lease lease = bill.billingAccount().lease();
-            Persistence.service().retrieve(lease.version().tenants());
+            Persistence.service().retrieve(lease.currentTerm().version().tenants());
 
-            tanantLoop: for (Tenant tenant : lease.version().tenants()) {
+            tanantLoop: for (Tenant tenant : lease.currentTerm().version().tenants()) {
                 // do pre-authorized payments for main applicant for now
                 switch (tenant.role().getValue()) {
                 case Applicant:

@@ -156,9 +156,9 @@ public class AvailabilityReportManager {
         for (AptUnitOccupancySegment segment : future) {
             if (segment.status().getValue() == Status.leased | segment.status().getValue() == Status.reserved) {
                 status.rentedStatus().setValue(RentedStatus.Rented);
-                status.rentedFromDay().setValue(segment.lease().leaseFrom().getValue());
+                status.rentedFromDay().setValue(segment.lease().currentTerm().termFrom().getValue());
                 status.moveInDay().setValue(segment.lease().expectedMoveIn().getValue());
-                status.unitRent().setValue(segment.lease().version().leaseProducts().serviceItem().agreedPrice().getValue());
+                status.unitRent().setValue(segment.lease().currentTerm().version().leaseProducts().serviceItem().agreedPrice().getValue());
                 break;
             }
         }
@@ -173,9 +173,9 @@ public class AvailabilityReportManager {
         status.rentReadinessStatus().setValue(RentReadiness.RentReady);
 
         status.rentedStatus().setValue(RentedStatus.Rented);
-        status.rentedFromDay().setValue(current.lease().leaseFrom().getValue());
+        status.rentedFromDay().setValue(current.lease().currentTerm().termFrom().getValue());
         status.moveInDay().setValue(current.lease().expectedMoveIn().getValue());
-        status.unitRent().setValue(current.lease().version().leaseProducts().serviceItem().agreedPrice().getValue());
+        status.unitRent().setValue(current.lease().currentTerm().version().leaseProducts().serviceItem().agreedPrice().getValue());
     }
 
     private void leased(UnitAvailabilityStatus status, AptUnitOccupancySegment current, List<AptUnitOccupancySegment> future) {
@@ -225,9 +225,9 @@ public class AvailabilityReportManager {
                         status.rentReadinessStatus().setValue(RentReadiness.RentReady);
                     }
                     status.rentedStatus().setValue(RentedStatus.Rented);
-                    status.rentedFromDay().setValue(segment.lease().leaseFrom().getValue());
+                    status.rentedFromDay().setValue(segment.lease().currentTerm().termFrom().getValue());
                     status.moveInDay().setValue(segment.lease().expectedMoveIn().getValue());
-                    status.unitRent().setValue(segment.lease().version().leaseProducts().serviceItem().agreedPrice().getValue());
+                    status.unitRent().setValue(segment.lease().currentTerm().version().leaseProducts().serviceItem().agreedPrice().getValue());
                 }
                 break;
             default:
@@ -251,9 +251,9 @@ public class AvailabilityReportManager {
         for (AptUnitOccupancySegment segment : future) {
             if (segment.status().getValue() == Status.leased | segment.status().getValue() == Status.reserved) {
                 status.rentedStatus().setValue(RentedStatus.Rented);
-                status.rentedFromDay().setValue(segment.lease().leaseFrom().getValue());
+                status.rentedFromDay().setValue(segment.lease().currentTerm().termFrom().getValue());
                 status.moveInDay().setValue(segment.lease().expectedMoveIn().getValue());
-                status.unitRent().setValue(segment.lease().version().leaseProducts().serviceItem().agreedPrice().getValue());
+                status.unitRent().setValue(segment.lease().currentTerm().version().leaseProducts().serviceItem().agreedPrice().getValue());
                 break;
             }
         }

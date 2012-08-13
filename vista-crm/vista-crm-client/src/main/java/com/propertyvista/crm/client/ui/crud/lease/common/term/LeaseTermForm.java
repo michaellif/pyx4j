@@ -46,8 +46,8 @@ import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
-import com.propertyvista.domain.tenant.Tenant2;
-import com.propertyvista.domain.tenant.lease.Lease2;
+import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.dto.LeaseTermDTO;
 import com.propertyvista.misc.VistaTODO;
 
@@ -67,18 +67,14 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
 
     @Override
     protected void createTabs() {
-        Tab tab = addTab(createDetailsTab(i18n.tr("Details")));
-        selectTab(tab);
+        selectTab(addTab(createDetailsTab(i18n.tr("Details"))));
 
         addTab(createTenantsTab(i18n.tr("Tenants")));
         addTab(createGuarantorsTab(i18n.tr("Guarantors")));
         addTab(createProductsTab(i18n.tr("Products")));
-// TODO _2 uncomment then:        
-//        tab = addTab(isEditable() ? new HTML() : ((LeaseViewerViewBase<DTO>) getParentView()).getDepositListerView().asWidget(), i18n.tr("Deposits"));
-//        setTabEnabled(tab, !isEditable());
 
-//        chargesTab = addTab(createChargesTab(i18n.tr("Charges")));
-//        setTabEnabled(chargesTab, !isEditable());
+        chargesTab = addTab(createChargesTab(i18n.tr("Charges")));
+        setTabEnabled(chargesTab, !isEditable());
     }
 
     @Override
@@ -92,15 +88,15 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
 
         // disable some editing on signed lease:
         if (isEditable()) {
-            boolean isSigned = !getValue().approvalDate().isNull();
+            boolean isDraft = getValue().lease().status().getValue().isDraft();
 
             ClientPolicyManager.setIdComponentEditabilityByPolicy(IdTarget.lease, get(proto().lease().leaseId()), getValue().lease().getPrimaryKey());
 
-            get(proto().lease().unit()).setEditable(!isSigned);
+            get(proto().lease().unit()).setEditable(isDraft);
 
-            boolean isCurrent = getValue().lease().equals(getValue().lease().currentLeaseTerm());
-            get(proto().termFrom()).setViewable(isSigned && isCurrent);
-            get(proto().termTo()).setViewable(isSigned && isCurrent);
+            boolean isCurrent = getValue().equals(getValue().lease().currentTerm());
+            get(proto().termFrom()).setEditable(isDraft || !isCurrent);
+            get(proto().termTo()).setEditable(isDraft || !isCurrent);
         }
     }
 
@@ -108,17 +104,14 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
         FormFlexPanel main = new FormFlexPanel(title);
 
         int row = -1;
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().lease().leaseId()), 15).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().lease().type(), new CEnumLabel())).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().type(), new CEnumLabel())).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().lease().status(), new CEnumLabel())).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().lease().completion(), new CEnumLabel())).build());
-// TODO _2 uncomment then:        
-//        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingAccount().accountNumber())).build());
-//        get(proto().billingAccount().accountNumber()).setViewable(true);
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().lease().leaseId()), 15).customLabel(i18n.tr("Lease Id")).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().lease().type(), new CEnumLabel())).customLabel(i18n.tr("Lease Type")).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().lease().status(), new CEnumLabel())).customLabel(i18n.tr("Lease Status")).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().lease().completion(), new CEnumLabel())).customLabel(i18n.tr("Lease Completion")).build());
+        main.setBR(++row, 0, 1);
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().type(), new CEnumLabel())).customLabel(i18n.tr("Term Type")).build());
 
         // Lease dates:
-        main.setBR(++row, 0, 1);
         FormFlexPanel datesPanel = new FormFlexPanel();
 
         int datesRow = -1; // first column:
@@ -156,13 +149,13 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
                         assert (filters != null);
 
                         LeaseTermDTO currentValue = LeaseTermForm.this.getValue();
-                        if (currentValue.lease().status().getValue() == Lease2.Status.Created) { // existing lease:
+                        if (currentValue.lease().status().getValue() == Lease.Status.ExistingLease) { // existing lease:
 
                             filters.add(PropertyCriterion.eq(proto().unitOccupancySegments().$().status(), AptUnitOccupancySegment.Status.pending));
                             filters.add(PropertyCriterion.eq(proto().unitOccupancySegments().$().dateTo(), new LogicalDate(1100, 0, 1)));
                             filters.add(PropertyCriterion.le(proto().unitOccupancySegments().$().dateFrom(), ClientContext.getServerDate()));
 
-                        } else if (currentValue.lease().status().getValue() == Lease2.Status.Application) { // lease application:
+                        } else if (currentValue.lease().status().getValue() == Lease.Status.Application) { // lease application:
 
                             filters.add(PropertyCriterion.eq(proto().unitOccupancySegments().$().status(), AptUnitOccupancySegment.Status.available));
                             filters.add(PropertyCriterion.eq(proto().unitOccupancySegments().$().dateTo(), new LogicalDate(1100, 0, 1)));
@@ -173,7 +166,7 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
                             }
 
                         } else {
-                            assert false : "Incorrect situation! Value shouln'd be edited in other lease statuses!";
+                            assert false : "Incorrect situation! Value shouln'd be edited in this lease status!";
                         }
 
                         super.setFilters(filters);
@@ -263,14 +256,12 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
             @Override
             public ValidationError isValid(CComponent<Date, ?> component, Date value) {
                 if (value != null) {
-                    if (getValue().lease().status().getValue() == Lease2.Status.Created) { // existing lease:
+                    if (getValue().lease().status().getValue() == Lease.Status.ExistingLease) { // existing lease:
                         return value.before(TimeUtils.today()) ? null : new ValidationError(component, i18n.tr("The Date Must Be Earlier Than Today's Date"));
-                    } else if (getValue().lease().status().getValue() == Lease2.Status.Application) { // lease application:
+                    } else if (getValue().lease().status().getValue() == Lease.Status.Application) { // lease application:
                         Date dateToCompare = getValue().lease().creationDate().isNull() ? TimeUtils.today() : getValue().lease().creationDate().getValue();
                         return !value.before(dateToCompare) ? null : new ValidationError(component, i18n
                                 .tr("The Date Must Be Later Than Or Equal To Application Creaion Date"));
-                    } else {
-                        assert false : "Incorrect situation! Value shouln'd be edited/validated in other lease statuses!";
                     }
                 }
                 return null;
@@ -290,9 +281,9 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
         get(proto().termTo()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().version().leaseProducts().serviceItem())));
         get(proto().termTo()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().version().leaseProducts().featureItems())));
 
-        get(proto().version().tenants()).addValueValidator(new EditableValueValidator<List<Tenant2>>() {
+        get(proto().version().tenants()).addValueValidator(new EditableValueValidator<List<Tenant>>() {
             @Override
-            public ValidationError isValid(CComponent<List<Tenant2>, ?> component, List<Tenant2> value) {
+            public ValidationError isValid(CComponent<List<Tenant>, ?> component, List<Tenant> value) {
                 if (value != null) {
                     return (value.isEmpty() ? new ValidationError(component, i18n.tr("At least one tenant should be selected!")) : null);
                 }

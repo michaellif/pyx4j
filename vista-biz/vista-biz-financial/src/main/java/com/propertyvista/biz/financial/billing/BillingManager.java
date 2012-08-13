@@ -57,6 +57,7 @@ import com.propertyvista.domain.policy.policies.LeaseBillingPolicy;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
+import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.portal.rpc.shared.BillingException;
 import com.propertyvista.server.jobs.StatisticsUtils;
 import com.propertyvista.server.jobs.TaskRunner;
@@ -68,9 +69,10 @@ public class BillingManager {
     private final static Logger log = LoggerFactory.getLogger(BillingManager.class);
 
     static Bill runBilling(Lease leaseId, boolean preview) {
-        Lease lease = Persistence.service().retrieve(Lease.class, leaseId.getPrimaryKey().asCurrentKey());
-        if (lease.version().isNull()) {
-            lease = Persistence.service().retrieve(Lease.class, leaseId.getPrimaryKey().asDraftKey());
+        Lease lease = Persistence.service().retrieve(Lease.class, leaseId.getPrimaryKey());
+        lease.currentTerm().set(Persistence.service().retrieve(LeaseTerm.class, lease.currentTerm().getPrimaryKey().asCurrentKey()));
+        if (lease.currentTerm().version().isNull()) {
+            lease.currentTerm().set(Persistence.service().retrieve(LeaseTerm.class, lease.currentTerm().getPrimaryKey().asDraftKey()));
         }
 
         lease = ensureInitBillingAccount(lease);
@@ -121,8 +123,8 @@ public class BillingManager {
             throw new BillingException(i18n.tr("Bill can't be created for a given billing cycle"));
         }
 
-        if (lease.getPrimaryKey().isDraft() && !preview) {
-            throw new BillingException(i18n.tr("Lease is in draft state. Billing can run only in preview mode."));
+        if (lease.currentTerm().getPrimaryKey().isDraft() && !preview) {
+            throw new BillingException(i18n.tr("Lease Term is in draft state. Billing can run only in preview mode."));
         }
 
         if (lease.status().getValue() == Lease.Status.Closed) {
@@ -142,7 +144,7 @@ public class BillingManager {
             Persistence.service().retrieve(previousConfirmedBill.billingAccount());
 
             //check if previous confirmed Bill is the last cycle bill and only final bill should run after
-            boolean isPreviousConfirmedBillTheLast = previousConfirmedBill.billingPeriodEndDate().getValue().compareTo(lease.leaseTo().getValue()) == 0;
+            boolean isPreviousConfirmedBillTheLast = previousConfirmedBill.billingPeriodEndDate().getValue().compareTo(lease.currentTerm().termTo().getValue()) == 0;
 
             //previous bill wasn't the last one so we are dealing here with the regular bill which can't run before executionTargetDate
             if (!isPreviousConfirmedBillTheLast && SysDateManager.getSysDate().compareTo(billingCycle.executionTargetDate().getValue()) < 0) {
@@ -150,7 +152,7 @@ public class BillingManager {
             }
 
             //previous bill was the last one so we have to run a final bill but not before lease end date or lease move-out date whatever is first
-            if (isPreviousConfirmedBillTheLast && (SysDateManager.getSysDate().compareTo(lease.leaseTo().getValue()) < 0)
+            if (isPreviousConfirmedBillTheLast && (SysDateManager.getSysDate().compareTo(lease.currentTerm().termTo().getValue()) < 0)
                     && (lease.expectedMoveOut().isNull() || (SysDateManager.getSysDate().compareTo(lease.expectedMoveOut().getValue()) < 0))) {
                 throw new BillingException(i18n.tr("Final billing can't run before both lease end date and move-out date"));
             }
@@ -245,12 +247,12 @@ public class BillingManager {
 
         if (previousBill == null) {
             if (billingAccount.carryforwardBalance().isNull()) {
-                return getNewLeaseInitialBillingCycle(billingAccount.billingType(), lease.unit().building(), lease.leaseFrom().getValue(), !billingAccount
-                        .billingType().billingCycleStartDay().isNull());
+                return getNewLeaseInitialBillingCycle(billingAccount.billingType(), lease.unit().building(), lease.currentTerm().termFrom().getValue(),
+                        !billingAccount.billingType().billingCycleStartDay().isNull());
 
             } else {
-                return getExistingLeaseInitialBillingCycle(billingAccount.billingType(), lease.unit().building(), lease.leaseFrom().getValue(), lease
-                        .creationDate().getValue(), !billingAccount.billingType().billingCycleStartDay().isNull());
+                return getExistingLeaseInitialBillingCycle(billingAccount.billingType(), lease.unit().building(), lease.currentTerm().termFrom().getValue(),
+                        lease.creationDate().getValue(), !billingAccount.billingType().billingCycleStartDay().isNull());
             }
         } else {
             return getSubsiquentBillingCycle(previousBill.billingCycle());
@@ -261,7 +263,7 @@ public class BillingManager {
      * Set appropriate billingType if needed
      */
     static Lease ensureInitBillingAccount(Lease lease) {
-        if (lease.leaseFrom().isNull()) {
+        if (lease.currentTerm().termFrom().isNull()) {
             throw new BillingException("'Lease from' date is not set");
         }
 
@@ -312,7 +314,8 @@ public class BillingManager {
                     LeaseBillingPolicy.class);
             Integer billingCycleStartDay = leaseBillingPolicy.defaultBillingCycleSartDay().getValue();
             if (billingCycleStartDay == null) {
-                billingCycleStartDay = BillDateUtils.calculateBillingTypeStartDay(lease.paymentFrequency().getValue(), lease.leaseFrom().getValue());
+                billingCycleStartDay = BillDateUtils.calculateBillingTypeStartDay(lease.paymentFrequency().getValue(), lease.currentTerm().termFrom()
+                        .getValue());
             }
 
             //try to find existing billing cycle    

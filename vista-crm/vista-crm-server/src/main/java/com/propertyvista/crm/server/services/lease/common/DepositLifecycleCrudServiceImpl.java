@@ -13,19 +13,13 @@
  */
 package com.propertyvista.crm.server.services.lease.common;
 
-import java.util.Vector;
-
-import com.google.gwt.user.client.rpc.AsyncCallback;
-
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.biz.financial.deposit.DepositFacade;
 import com.propertyvista.crm.rpc.services.lease.common.DepositLifecycleCrudService;
-import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.DepositLifecycle;
-import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.dto.DepositLifecycleDTO;
 
 public class DepositLifecycleCrudServiceImpl extends AbstractCrudServiceDtoImpl<DepositLifecycle, DepositLifecycleDTO> implements DepositLifecycleCrudService {
@@ -58,18 +52,5 @@ public class DepositLifecycleCrudServiceImpl extends AbstractCrudServiceDtoImpl<
         // load detached:
         Persistence.service().retrieve(dto.deposit());
         Persistence.service().retrieve(dto.deposit().billableItem());
-    }
-
-    @Override
-    public void getLeaseBillableItems(AsyncCallback<Vector<BillableItem>> callback, Lease leaseId) {
-        Vector<BillableItem> items = new Vector<BillableItem>();
-
-        Persistence.service().retrieve(leaseId);
-        items.add((BillableItem) leaseId.version().leaseProducts().serviceItem().detach());
-        for (BillableItem item : leaseId.version().leaseProducts().featureItems()) {
-            items.add((BillableItem) item.detach());
-        }
-
-        callback.onSuccess(items);
     }
 }

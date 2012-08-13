@@ -50,7 +50,7 @@ public class TenantFinancialServiceImpl extends ApplicationEntityServiceImpl imp
         // TODO: check new/deleted PersonalGuarantor and correct Guarantors accordingly!..
 
         Lease lease = PtAppContext.retrieveCurrentUserLease();
-        List<Guarantor> currentGuarantors = lease.version().guarantors();
+        List<Guarantor> currentGuarantors = lease.currentTerm().version().guarantors();
 
         TenantRetriever tr = new TenantRetriever(entity.getPrimaryKey(), true);
         new TenantConverter.TenantFinancialEditorConverter().copyDTOtoDBO(entity, tr.getScreening());
@@ -62,7 +62,7 @@ public class TenantFinancialServiceImpl extends ApplicationEntityServiceImpl imp
             } else {
                 // new item - perform initialization:
                 pg.tenant().set(tr.getTenant());
-                pg.leaseV().set(lease.version());
+                pg.leaseTermV().set(lease.currentTerm().version());
                 Persistence.service().merge(pg);
             }
         }

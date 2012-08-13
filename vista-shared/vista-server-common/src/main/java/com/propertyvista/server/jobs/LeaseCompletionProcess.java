@@ -41,7 +41,7 @@ public class LeaseCompletionProcess implements PmcProcess {
     public void executePmcJob(PmcProcessContext context) {
         EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().status(), Lease.Status.Active));
-        criteria.add(PropertyCriterion.lt(criteria.proto().leaseTo(), context.getForDate()));
+        criteria.add(PropertyCriterion.lt(criteria.proto().currentTerm().termTo(), context.getForDate()));
 
         long total = 0;
         long failed = 0;

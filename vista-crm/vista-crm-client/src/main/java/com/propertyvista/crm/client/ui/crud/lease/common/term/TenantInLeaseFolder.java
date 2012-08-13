@@ -43,19 +43,19 @@ import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.PersonRelationship;
 import com.propertyvista.domain.tenant.PersonScreening;
-import com.propertyvista.domain.tenant.Tenant2;
-import com.propertyvista.domain.tenant.lease.LeaseParticipant2;
+import com.propertyvista.domain.tenant.Tenant;
+import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.domain.util.ValidationUtils;
 import com.propertyvista.dto.LeaseTermDTO;
 
-public class TenantInLeaseFolder extends LeaseParticipantFolder<Tenant2> {
+public class TenantInLeaseFolder extends LeaseParticipantFolder<Tenant> {
 
     static final I18n i18n = I18n.get(TenantInLeaseFolder.class);
 
     private final CEntityForm<LeaseTermDTO> leaseTerm;
 
     public TenantInLeaseFolder(CEntityForm<LeaseTermDTO> parent, boolean modifiable) {
-        super(Tenant2.class, modifiable);
+        super(Tenant.class, modifiable);
         this.leaseTerm = parent;
     }
 
@@ -72,11 +72,11 @@ public class TenantInLeaseFolder extends LeaseParticipantFolder<Tenant2> {
     @Override
     protected void addParticipants(List<Customer> customers) {
         for (Customer customer : customers) {
-            Tenant2 newTenantInLease = EntityFactory.create(Tenant2.class);
+            Tenant newTenantInLease = EntityFactory.create(Tenant.class);
             newTenantInLease.leaseTermV().setPrimaryKey(leaseTerm.getValue().version().getPrimaryKey());
             newTenantInLease.customer().set(customer);
             if (!isApplicantPresent()) {
-                newTenantInLease.role().setValue(LeaseParticipant2.Role.Applicant);
+                newTenantInLease.role().setValue(LeaseParticipant.Role.Applicant);
                 newTenantInLease.relationship().setValue(PersonRelationship.Other); // just not leave it empty - it's mandatory field!
             }
             newTenantInLease.percentage().setValue(calcPercentage());
@@ -85,8 +85,8 @@ public class TenantInLeaseFolder extends LeaseParticipantFolder<Tenant2> {
     }
 
     private boolean isApplicantPresent() {
-        for (Tenant2 til : getValue()) {
-            if (til.role().getValue() == LeaseParticipant2.Role.Applicant) {
+        for (Tenant til : getValue()) {
+            if (til.role().getValue() == LeaseParticipant.Role.Applicant) {
                 return true;
             }
         }
@@ -95,7 +95,7 @@ public class TenantInLeaseFolder extends LeaseParticipantFolder<Tenant2> {
 
     private BigDecimal calcPercentage() {
         BigDecimal prc = new BigDecimal(1);
-        for (Tenant2 til : getValue()) {
+        for (Tenant til : getValue()) {
             prc = prc.subtract(til.percentage().isNull() ? BigDecimal.ZERO : til.percentage().getValue());
         }
         return (prc.signum() > 0 ? prc : BigDecimal.ZERO);
@@ -103,7 +103,7 @@ public class TenantInLeaseFolder extends LeaseParticipantFolder<Tenant2> {
 
     @Override
     public CComponent<?, ?> create(IObject<?> member) {
-        if (member instanceof Tenant2) {
+        if (member instanceof Tenant) {
             return new TenantInLeaseEditor();
         }
         return super.create(member);
@@ -112,18 +112,18 @@ public class TenantInLeaseFolder extends LeaseParticipantFolder<Tenant2> {
     @Override
     public void addValidations() {
 
-        this.addValueValidator(new EditableValueValidator<List<Tenant2>>() {
+        this.addValueValidator(new EditableValueValidator<List<Tenant>>() {
             @Override
-            public ValidationError isValid(CComponent<List<Tenant2>, ?> component, List<Tenant2> value) {
+            public ValidationError isValid(CComponent<List<Tenant>, ?> component, List<Tenant> value) {
                 if (value != null) {
                     boolean applicant = false;
-                    for (Tenant2 item : value) {
+                    for (Tenant item : value) {
                         if (applicant) {
-                            if (item.role().getValue() == LeaseParticipant2.Role.Applicant) {
+                            if (item.role().getValue() == LeaseParticipant.Role.Applicant) {
                                 return new ValidationError(component, i18n.tr("Just one applicant could be selected!"));
                             }
                         } else {
-                            applicant = (item.role().getValue() == LeaseParticipant2.Role.Applicant);
+                            applicant = (item.role().getValue() == LeaseParticipant.Role.Applicant);
                         }
                     }
                 }
@@ -131,13 +131,13 @@ public class TenantInLeaseFolder extends LeaseParticipantFolder<Tenant2> {
             }
         });
 
-        this.addValueValidator(new EditableValueValidator<IList<Tenant2>>() {
+        this.addValueValidator(new EditableValueValidator<IList<Tenant>>() {
             @Override
-            public ValidationError isValid(CComponent<IList<Tenant2>, ?> component, IList<Tenant2> value) {
+            public ValidationError isValid(CComponent<IList<Tenant>, ?> component, IList<Tenant> value) {
                 if (value != null) {
                     if (!value.isEmpty()) {
                         BigDecimal totalPrc = BigDecimal.ZERO;
-                        for (Tenant2 item : value) {
+                        for (Tenant item : value) {
                             if (item.percentage().getValue() != null) {
                                 totalPrc = totalPrc.add(item.percentage().getValue());
                             }
@@ -153,10 +153,10 @@ public class TenantInLeaseFolder extends LeaseParticipantFolder<Tenant2> {
         });
     }
 
-    private class TenantInLeaseEditor extends CEntityDecoratableForm<Tenant2> {
+    private class TenantInLeaseEditor extends CEntityDecoratableForm<Tenant> {
 
         public TenantInLeaseEditor() {
-            super(Tenant2.class);
+            super(Tenant.class);
         }
 
         @SuppressWarnings("unchecked")
@@ -167,7 +167,7 @@ public class TenantInLeaseFolder extends LeaseParticipantFolder<Tenant2> {
             FormFlexPanel left = new FormFlexPanel();
             int row = -1;
             left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().participantId()), 7).build());
-            left.setWidget(++row, 0, inject(proto().customer().person().name(), new NameEditor(i18n.tr("Tenant"), Tenant2.class) {
+            left.setWidget(++row, 0, inject(proto().customer().person().name(), new NameEditor(i18n.tr("Tenant"), Tenant.class) {
                 @Override
                 public Key getLinkKey() {
                     return TenantInLeaseEditor.this.getValue().getPrimaryKey();
@@ -176,7 +176,7 @@ public class TenantInLeaseFolder extends LeaseParticipantFolder<Tenant2> {
             left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().sex()), 7).build());
             left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().birthDate()), 9).build());
 
-            left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().role(), new CComboBox<LeaseParticipant2.Role>()), 15).build());
+            left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().role(), new CComboBox<LeaseParticipant.Role>()), 15).build());
             left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().relationship()), 15).build());
             left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().percentage()), 5).build());
             left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().screening()), 9).customLabel(i18n.tr("Use Screening From")).build());
@@ -189,14 +189,14 @@ public class TenantInLeaseFolder extends LeaseParticipantFolder<Tenant2> {
             right.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().workPhone()), 15).build());
 
             if (isEditable()) {
-                get(proto().role()).addValueChangeHandler(new ValueChangeHandler<LeaseParticipant2.Role>() {
+                get(proto().role()).addValueChangeHandler(new ValueChangeHandler<LeaseParticipant.Role>() {
                     @Override
-                    public void onValueChange(ValueChangeEvent<LeaseParticipant2.Role> event) {
-                        get(proto().relationship()).setVisible(event.getValue() != LeaseParticipant2.Role.Applicant);
-                        if (event.getValue() == LeaseParticipant2.Role.Dependent) {
+                    public void onValueChange(ValueChangeEvent<LeaseParticipant.Role> event) {
+                        get(proto().relationship()).setVisible(event.getValue() != LeaseParticipant.Role.Applicant);
+                        if (event.getValue() == LeaseParticipant.Role.Dependent) {
                             get(proto().percentage()).setValue(BigDecimal.ZERO);
                         }
-                        get(proto().percentage()).setEditable(event.getValue() != LeaseParticipant2.Role.Dependent);
+                        get(proto().percentage()).setEditable(event.getValue() != LeaseParticipant.Role.Dependent);
                     }
                 });
 
@@ -207,7 +207,7 @@ public class TenantInLeaseFolder extends LeaseParticipantFolder<Tenant2> {
                             boolean mature = ValidationUtils.isOlderThen18(event.getValue());
 
                             if (!mature) {
-                                get(proto().role()).setValue(LeaseParticipant2.Role.Dependent);
+                                get(proto().role()).setValue(LeaseParticipant.Role.Dependent);
                                 get(proto().percentage()).setValue(BigDecimal.ZERO);
                             }
                             get(proto().role()).setEditable(mature);
@@ -238,18 +238,18 @@ public class TenantInLeaseFolder extends LeaseParticipantFolder<Tenant2> {
                 ClientPolicyManager.setIdComponentEditabilityByPolicy(IdTarget.tenant, get(proto().participantId()), getValue().getPrimaryKey());
             }
 
-            boolean applicant = (getValue().role().getValue() == LeaseParticipant2.Role.Applicant);
+            boolean applicant = (getValue().role().getValue() == LeaseParticipant.Role.Applicant);
             if (applicant) {
                 get(proto().role()).setViewable(true);
                 get(proto().relationship()).setVisible(false);
             } else if (isEditable()) {
-                Collection<LeaseParticipant2.Role> roles = LeaseParticipant2.Role.tenantRelated();
+                Collection<LeaseParticipant.Role> roles = LeaseParticipant.Role.tenantRelated();
                 if (getValue().role().getValue() != null) { // if not new entity creation...
-                    roles.remove(LeaseParticipant2.Role.Applicant);
+                    roles.remove(LeaseParticipant.Role.Applicant);
                 }
-                ((CComboBox<LeaseParticipant2.Role>) get(proto().role())).setOptions(roles);
+                ((CComboBox<LeaseParticipant.Role>) get(proto().role())).setOptions(roles);
 
-                get(proto().percentage()).setEditable(getValue().role().getValue() != LeaseParticipant2.Role.Dependent);
+                get(proto().percentage()).setEditable(getValue().role().getValue() != LeaseParticipant.Role.Dependent);
 
                 if (!getValue().customer().person().birthDate().isNull()) {
                     if (!ValidationUtils.isOlderThen18(getValue().customer().person().birthDate().getValue())) {

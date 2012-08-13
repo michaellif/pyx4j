@@ -23,7 +23,6 @@ import javax.xml.bind.annotation.XmlType;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
-import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.MemberColumn;
@@ -33,11 +32,11 @@ import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.Timestamp.Update;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.entity.shared.IVersionData;
-import com.pyx4j.entity.shared.IVersionedEntity;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
@@ -45,23 +44,17 @@ import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.media.Document;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
-import com.propertyvista.domain.tenant.Guarantor;
-import com.propertyvista.domain.tenant.Tenant;
-import com.propertyvista.domain.tenant.lease.Lease.LeaseV;
 
 @ToStringFormat("{0}, {1}, {2}, {3}")
-public interface Lease extends IVersionedEntity<LeaseV> {
+public interface Lease extends IEntity {
 
     @I18n(context = "Lease Status")
     @XmlType(name = "LeaseStatus")
     public enum Status {
 
-        /**
-         * Existing (imported) lease that is in was just created but pending approval to become 'Active' and participate in billing.
-         */
-        Created,
+        ExistingLease, // Existing/Imported lease which is created but pending approval to become 'Active' and participate in billing.
 
-        Application,
+        Application, // Typical flow lease start point
 
         Approved, // Application
 
@@ -81,7 +74,7 @@ public interface Lease extends IVersionedEntity<LeaseV> {
         // state sets:
 
         public static Collection<Status> draft() {
-            return EnumSet.of(Created, Application);
+            return EnumSet.of(ExistingLease, Application);
         }
 
         public static Collection<Status> active() {
@@ -94,7 +87,7 @@ public interface Lease extends IVersionedEntity<LeaseV> {
 
         public static Collection<Status> currentNew() {
             Vector<Status> set = new Vector<Status>(current());
-            set.add(Created);
+            set.add(ExistingLease);
             return set;
         }
 
@@ -132,22 +125,6 @@ public interface Lease extends IVersionedEntity<LeaseV> {
         Skip,
 
         Eviction;
-
-        @Override
-        public String toString() {
-            return I18nEnum.toString(this);
-        }
-    }
-
-    @I18n(context = "Lease Term")
-    @XmlType(name = "LeaseTerm")
-    public enum Term {
-
-        Fixed,
-
-        FixedEx,
-
-        Periodic;
 
         @Override
         public String toString() {
@@ -197,9 +174,7 @@ public interface Lease extends IVersionedEntity<LeaseV> {
     IPrimitive<Service.ServiceType> type();
 
     @NotNull
-    @ReadOnly
-    @MemberColumn(name = "leaseTerm")
-    IPrimitive<Term> term();
+    IPrimitive<PaymentFrequency> paymentFrequency();
 
     @NotNull
     @ToString(index = 2)
@@ -209,10 +184,12 @@ public interface Lease extends IVersionedEntity<LeaseV> {
     // lease begin/end: 
 
     @NotNull
+    @Transient
     @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> leaseFrom();
 
     @NotNull
+    @Transient
     @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> leaseTo();
 
@@ -235,9 +212,6 @@ public interface Lease extends IVersionedEntity<LeaseV> {
 
     @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> moveOutNotice();
-
-    @NotNull
-    IPrimitive<PaymentFrequency> paymentFrequency();
 
     @JoinColumn
     @Owned(forceCreation = true, cascade = {})
@@ -271,19 +245,8 @@ public interface Lease extends IVersionedEntity<LeaseV> {
     @Owned
     LeaseApplication leaseApplication();
 
-    // Versioned part:
+    @Owned(cascade = {})
+    IList<LeaseTerm> leaseTerms();
 
-    public interface LeaseV extends IVersionData<Lease> {
-
-        @Owned
-        @Detached
-        IList<Tenant> tenants();
-
-        @Owned
-        @Detached
-        IList<Guarantor> guarantors();
-
-        @EmbeddedEntity
-        LeaseProducts leaseProducts();
-    }
+    LeaseTerm currentTerm();
 }

@@ -23,7 +23,6 @@ import com.google.gwt.core.client.GWT;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.Criterion;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.essentials.client.DeferredProcessDialog;
 import com.pyx4j.essentials.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.i18n.shared.I18n;
@@ -93,19 +92,19 @@ public class LeaseViewerActivity extends LeaseViewerActivityBase<LeaseDTO> imple
 
     protected void populateBills(Lease result) {
         List<Criterion> preDefinedFilters = new ArrayList<Criterion>();
-        preDefinedFilters.add(PropertyCriterion.eq(EntityFactory.getEntityPrototype(BillDataDTO.class).bill().billingAccount().id(), result.billingAccount()
-                .getPrimaryKey()));
+//        preDefinedFilters.add(PropertyCriterion.eq(EntityFactory.getEntityPrototype(BillDataDTO.class).bill().billingAccount().id(), result.billingAccount()
+//                .getPrimaryKey()));
         billLister.setPreDefinedFilters(preDefinedFilters);
         billLister.populate();
     }
 
     protected void populatePayments(Lease result) {
-        paymentLister.setParent(result.billingAccount().getPrimaryKey());
+//        paymentLister.setParent(result.billingAccount().getPrimaryKey());
         paymentLister.populate();
     }
 
     protected void populateLeaseAdjustments(Lease result) {
-        leaseAdjustmentLister.setParent(result.billingAccount().getPrimaryKey());
+//        leaseAdjustmentLister.setParent(result.billingAccount().getPrimaryKey());
         leaseAdjustmentLister.populate();
     }
 

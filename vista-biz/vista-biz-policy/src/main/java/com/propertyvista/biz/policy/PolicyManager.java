@@ -52,13 +52,13 @@ public class PolicyManager {
      */
     public static <POLICY extends Policy> POLICY obtainEffectivePolicy(PolicyNode node, final Class<POLICY> policyClass) {
         POLICY policy = null;
-        if ((node != null) && node.isInstanceOf(OrganizationPoliciesNode.class) && node.isNull()) {
+        if (node != null && node.isInstanceOf(OrganizationPoliciesNode.class) && node.isNull()) {
             node = Persistence.service().retrieve(EntityQueryCriteria.create(OrganizationPoliciesNode.class));
         }
-
         if (node == null || node.isNull()) {
-            throw new IllegalArgumentException("node must not be null");
+            throw new IllegalArgumentException("PolicyNode must not be null");
         }
+
         PolicyNode currentNode = node.duplicate();
         if (currentNode.isValueDetached()) {
             Persistence.service().retrieve(currentNode);

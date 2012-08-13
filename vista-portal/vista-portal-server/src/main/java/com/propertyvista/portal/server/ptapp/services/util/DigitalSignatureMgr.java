@@ -35,8 +35,8 @@ public class DigitalSignatureMgr {
 
     static public void update(OnlineApplication application) {
         Persistence.service().retrieve(application.masterOnlineApplication().leaseApplication().leaseOnApplication());
-        Persistence.service().retrieve(application.masterOnlineApplication().leaseApplication().leaseOnApplication().version().tenants());
-        update(application, application.masterOnlineApplication().leaseApplication().leaseOnApplication().version().tenants());
+        Persistence.service().retrieve(application.masterOnlineApplication().leaseApplication().leaseOnApplication().currentTerm().version().tenants());
+        update(application, application.masterOnlineApplication().leaseApplication().leaseOnApplication().currentTerm().version().tenants());
     }
 
     static public void update(OnlineApplication application, IList<Tenant> tenants) {

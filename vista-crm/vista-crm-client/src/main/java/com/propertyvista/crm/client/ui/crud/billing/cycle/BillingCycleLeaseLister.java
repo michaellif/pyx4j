@@ -50,7 +50,7 @@ public class BillingCycleLeaseLister extends ListerBase<LeaseDTO> {
             new Builder(proto().approvalDate(), false).build(),
             new Builder(proto().creationDate(), false).build(),
             
-            new Builder(proto().version().tenants()).build()
+            new Builder(proto().currentTerm().version().tenants()).build()
         );//@formatter:on
     }
 

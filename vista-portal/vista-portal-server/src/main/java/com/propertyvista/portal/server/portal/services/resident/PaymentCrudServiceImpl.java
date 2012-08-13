@@ -97,10 +97,10 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
     @Override
     public void initNew(AsyncCallback<PaymentRecordDTO> callback) {
         Tenant tenant = TenantAppContext.getCurrentUserTenantInLease();
-        Persistence.service().retrieve(tenant.leaseV());
-        Persistence.service().retrieve(tenant.leaseV().holder());
+        Persistence.service().retrieve(tenant.leaseTermV());
+        Persistence.service().retrieve(tenant.leaseTermV().holder());
 
-        Lease lease = tenant.leaseV().holder();
+        Lease lease = tenant.leaseTermV().holder().lease();
         Persistence.service().retrieve(lease.unit());
         Persistence.service().retrieve(lease.unit().building());
 

@@ -33,9 +33,9 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
 import com.pyx4j.essentials.server.dev.DataDump;
 import com.pyx4j.gwt.server.DateUtils;
+import com.pyx4j.unit.server.mock.TestLifecycle;
 
 import com.propertyvista.admin.domain.scheduler.RunStats;
 import com.propertyvista.biz.financial.ar.ARFacade;
@@ -70,6 +70,7 @@ import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
+import com.propertyvista.domain.security.VistaBasicBehavior;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
 import com.propertyvista.domain.tenant.lease.Deposit;
@@ -80,6 +81,7 @@ import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment.Status;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustmentReason;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.dto.TransactionHistoryDTO;
 import com.propertyvista.server.jobs.DepositInterestAdjustmentProcess;
 import com.propertyvista.server.jobs.DepositRefundProcess;
@@ -139,6 +141,9 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         Persistence.service().startBackgroundProcessTransaction();
         SysDateManager.setSysDate("01-Jan-2000");
         startTime = System.currentTimeMillis();
+
+        TestLifecycle.testSession(null, VistaBasicBehavior.CRM);
+        TestLifecycle.beginRequest();
     }
 
     @Override
@@ -146,6 +151,8 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         Persistence.service().commit();
         Persistence.service().endTransaction();
         System.out.println("Execution Time - " + (System.currentTimeMillis() - startTime) + "ms");
+
+        TestLifecycle.tearDown();
         super.tearDown();
     }
 
@@ -229,10 +236,6 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
     protected Bill runBillingPreview() {
         Lease lease = retrieveLease();
 
-        if (lease.version().isNull()) {
-            lease = retrieveLeaseDraft();
-        }
-
         DataDump.dump("leaseT", lease);
 
         Bill bill = ServerSideFactory.create(BillingFacade.class).runBillingPreview(lease);
@@ -265,7 +268,6 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         } catch (FileNotFoundException e) {
             throw new Error(e);
         }
-
     }
 
     protected void printTransactionHistory(TransactionHistoryDTO transactionHistory) {
@@ -280,9 +282,9 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         Lease lease = retrieveLeaseForEdit();
 
         // TODO - this must be done via facade
-        lease.leaseFrom().setValue(FinancialTestsUtils.getDate(leaseDateFrom));
-        lease.leaseTo().setValue(FinancialTestsUtils.getDate(leaseDateTo));
-        lease.version().leaseProducts().serviceItem().expirationDate().set(lease.leaseTo());
+        lease.currentTerm().termFrom().setValue(FinancialTestsUtils.getDate(leaseDateFrom));
+        lease.currentTerm().termTo().setValue(FinancialTestsUtils.getDate(leaseDateTo));
+        lease.currentTerm().version().leaseProducts().serviceItem().expirationDate().set(lease.currentTerm().termTo());
 
         lease.billingAccount().carryforwardBalance().setValue(carryforwardBalance);
 
@@ -291,19 +293,15 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         }
 
         if (agreedPrice != null) {
-            lease.version().leaseProducts().serviceItem().agreedPrice().setValue(agreedPrice);
+            lease.currentTerm().version().leaseProducts().serviceItem().agreedPrice().setValue(agreedPrice);
         }
 
-        Persistence.service().persist(lease);
+        ServerSideFactory.create(LeaseFacade.class).persist(lease);
 
         BillingType billingType = ServerSideFactory.create(BillingFacade.class).ensureBillingType(lease);
-
         lease.billingAccount().billingType().set(billingType);
-
         Persistence.service().persist(lease.billingAccount());
-
         Persistence.service().commit();
-
     }
 
     protected Bill approveApplication(boolean printBill) {
@@ -327,7 +325,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
     }
 
     protected void activateLease() {
-        ServerSideFactory.create(LeaseFacade.class).activate(retrieveLease().getPrimaryKey());
+        ServerSideFactory.create(LeaseFacade.class).activate(retrieveLease());
     }
 
     protected void completeLease() {
@@ -339,15 +337,15 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
     }
 
     protected Lease retrieveLease() {
-        return Persistence.service().retrieve(Lease.class, leaseDataModel.getLeaseKey().asCurrentKey());
+        return ServerSideFactory.create(LeaseFacade.class).load(leaseDataModel.getLeaseId(), false);
     }
 
     protected Lease retrieveLeaseDraft() {
-        return Persistence.service().retrieve(Lease.class, leaseDataModel.getLeaseKey().asDraftKey());
+        return ServerSideFactory.create(LeaseFacade.class).load(leaseDataModel.getLeaseId(), true);
     }
 
     protected Lease retrieveLeaseForEdit() {
-        return Persistence.retrieveDraftForEdit(Lease.class, leaseDataModel.getLeaseKey());
+        return ServerSideFactory.create(LeaseFacade.class).load(leaseDataModel.getLeaseId(), true);
     }
 
     protected BillableItem addParking(String effectiveDate, String expirationDate) {
@@ -383,18 +381,18 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         Lease lease = retrieveLeaseForEdit();
 
         BillableItem billableItem = findBillableItem(billableItemId, lease);
+        assert (billableItem != null);
 
         billableItem.effectiveDate().setValue(FinancialTestsUtils.getDate(effectiveDate));
         billableItem.expirationDate().setValue(FinancialTestsUtils.getDate(expirationDate));
 
-        lease.saveAction().setValue(SaveAction.saveAsDraft);
-        Persistence.service().persist(lease);
+        ServerSideFactory.create(LeaseFacade.class).persist(lease.currentTerm());
         Persistence.service().commit();
     }
 
     private BillableItem addBillableItem(Feature.Type featureType) {
-        Lease lease = Persistence.service().retrieve(Lease.class, leaseDataModel.getLeaseKey());
-        return addBillableItem(featureType, lease.leaseFrom().getValue(), lease.leaseTo().getValue());
+        Lease lease = retrieveLease();
+        return addBillableItem(featureType, lease.currentTerm().termFrom().getValue(), lease.currentTerm().termTo().getValue());
     }
 
     private BillableItem addBillableItem(Feature.Type featureType, String effectiveDate, String expirationDate) {
@@ -402,7 +400,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
     }
 
     private BillableItem addBillableItem(Feature.Type featureType, LogicalDate effectiveDate, LogicalDate expirationDate) {
-        Lease draftLease = retrieveLeaseForEdit();
+        Lease lease = retrieveLeaseForEdit();
 
         ProductItem serviceItem = leaseDataModel.getServiceItem();
         Service.ServiceV service = serviceItem.product().cast();
@@ -410,51 +408,63 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         for (Feature feature : service.features()) {
             if (featureType.equals(feature.version().type().getValue()) && feature.version().items().size() != 0) {
                 LeaseFacade leaseFacade = ServerSideFactory.create(LeaseFacade.class);
-                BillableItem billableItem = leaseFacade.createBillableItem(feature.version().items().get(0), draftLease.unit().building());
+                BillableItem billableItem = leaseFacade.createBillableItem(feature.version().items().get(0), lease.unit().building());
 
                 billableItem.effectiveDate().setValue(effectiveDate);
                 billableItem.expirationDate().setValue(expirationDate);
-                draftLease.version().leaseProducts().featureItems().add(billableItem);
 
-                draftLease.saveAction().setValue(SaveAction.saveAsDraft);
-                leaseFacade.persist(draftLease);
+                lease.currentTerm().version().leaseProducts().featureItems().add(billableItem);
 
+                leaseFacade.persist(lease.currentTerm());
                 return billableItem;
             }
         }
         return null;
     }
 
-    protected Lease finalizeLeaseAdendum() {
-        return ServerSideFactory.create(LeaseFacade.class).finalize(retrieveLeaseDraft());
+    protected Lease finalizeLeaseAdendum2() {
+        Lease lease = ServerSideFactory.create(LeaseFacade.class).finalize(retrieveLeaseDraft());
+        Persistence.service().commit();
+        return lease;
+    }
+
+    protected LeaseTerm finalizeLeaseAdendum() {
+        LeaseTerm leaseTerm = ServerSideFactory.create(LeaseFacade.class).finalize(retrieveLeaseDraft().currentTerm());
+        Persistence.service().commit();
+        return leaseTerm;
     }
 
     protected void setDeposit(String billableItemId, DepositType depositType) {
         Lease lease = retrieveLeaseForEdit();
         BillableItem billableItem = findBillableItem(billableItemId, lease);
+        assert (billableItem != null);
 
         Deposit deposit = ServerSideFactory.create(DepositFacade.class).createDeposit(depositType, billableItem, lease.unit().building());
         DepositLifecycle depositLifecycle = ServerSideFactory.create(DepositFacade.class).createDepositLifecycle(deposit, lease.billingAccount());
 
-        Persistence.service().persist(deposit);
+        billableItem.deposits().add(deposit);
+        ServerSideFactory.create(LeaseFacade.class).persist(lease.currentTerm());
+
         Persistence.service().persist(depositLifecycle);
+        Persistence.service().commit();
     }
 
     protected BillableItemAdjustment addServiceAdjustment(String value, BillableItemAdjustment.Type adjustmentType, String effectiveDate, String expirationDate) {
-        Lease lease = retrieveLeaseForEdit();
-        return addBillableItemAdjustment(lease.version().leaseProducts().serviceItem().uid().getValue(), value, adjustmentType,
+        Lease lease = retrieveLease();
+        return addBillableItemAdjustment(lease.currentTerm().version().leaseProducts().serviceItem().uid().getValue(), value, adjustmentType,
                 FinancialTestsUtils.getDate(effectiveDate), FinancialTestsUtils.getDate(expirationDate));
     }
 
     protected BillableItemAdjustment addServiceAdjustment(String value, BillableItemAdjustment.Type adjustmentType) {
-        Lease lease = retrieveLeaseForEdit();
-        return addBillableItemAdjustment(lease.version().leaseProducts().serviceItem().uid().getValue(), value, adjustmentType, lease.leaseFrom().getValue(),
-                lease.leaseTo().getValue());
+        Lease lease = retrieveLease();
+        return addBillableItemAdjustment(lease.currentTerm().version().leaseProducts().serviceItem().uid().getValue(), value, adjustmentType, lease
+                .currentTerm().termFrom().getValue(), lease.currentTerm().termTo().getValue());
     }
 
     protected BillableItemAdjustment addFeatureAdjustment(String billableItemId, String value, BillableItemAdjustment.Type adjustmentType) {
-        Lease lease = Persistence.service().retrieve(Lease.class, leaseDataModel.getLeaseKey());
-        return addBillableItemAdjustment(billableItemId, value, adjustmentType, lease.leaseFrom().getValue(), lease.leaseTo().getValue());
+        Lease lease = retrieveLease();
+        return addBillableItemAdjustment(billableItemId, value, adjustmentType, lease.currentTerm().termFrom().getValue(), lease.currentTerm().termTo()
+                .getValue());
 
     }
 
@@ -469,9 +479,9 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
 
         Lease lease = retrieveLeaseForEdit();
         BillableItem actualBillableItem = findBillableItem(billableItemId, lease);
+        assert (actualBillableItem != null);
 
         BillableItemAdjustment adjustment = EntityFactory.create(BillableItemAdjustment.class);
-        adjustment.effectiveDate().setValue(new LogicalDate(lease.leaseFrom().getValue()));
         if (value == null) {
             adjustment.value().setValue(null);
         } else {
@@ -480,15 +490,16 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         adjustment.type().setValue(adjustmentType);
         adjustment.effectiveDate().setValue(effectiveDate);
         adjustment.expirationDate().setValue(expirationDate);
-        adjustment.billableItem().set(actualBillableItem);
 
-        Persistence.service().persist(adjustment);
+        actualBillableItem.adjustments().add(adjustment);
+
+        ServerSideFactory.create(LeaseFacade.class).persist(lease.currentTerm());
         Persistence.service().commit();
 
         return adjustment;
     }
 
-    protected void changeBillableItemAdjustment(String billableItemAdjustmentId, String effectiveDate, String expirationDate, SaveAction saveAction) {
+    protected void changeBillableItemAdjustment(String billableItemAdjustmentId, String effectiveDate, String expirationDate) {
         Lease lease = retrieveLeaseForEdit();
 
         BillableItemAdjustment billableItemAdjustment = findBillableItemAdjustment(billableItemAdjustmentId, lease);
@@ -496,8 +507,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         billableItemAdjustment.effectiveDate().setValue(FinancialTestsUtils.getDate(effectiveDate));
         billableItemAdjustment.expirationDate().setValue(FinancialTestsUtils.getDate(expirationDate));
 
-        lease.saveAction().setValue(saveAction);
-        Persistence.service().persist(lease);
+        ServerSideFactory.create(LeaseFacade.class).finalize(lease.currentTerm());
         Persistence.service().commit();
     }
 
@@ -518,7 +528,6 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
     }
 
     private LeaseAdjustment addLeaseAdjustment(String amount, LeaseAdjustmentReason reason, boolean immediate) {
-
         Lease lease = retrieveLease();
 
         LeaseAdjustment adjustment = EntityFactory.create(LeaseAdjustment.class);
@@ -540,7 +549,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
     }
 
     protected PaymentRecord receivePayment(String receivedDate, LeaseParticipant leaseParticipant, String amount, PaymentType type) {
-        Lease lease = Persistence.service().retrieve(Lease.class, leaseDataModel.getLeaseKey());
+        Lease lease = retrieveLease();
 
         PaymentRecord paymentRecord = EntityFactory.create(PaymentRecord.class);
         paymentRecord.createdDate().setValue(FinancialTestsUtils.getDate(receivedDate));
@@ -591,10 +600,10 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
     }
 
     private BillableItem findBillableItem(String billableItemId, Lease lease) {
-        if (lease.version().leaseProducts().serviceItem().uid().getValue().equals(billableItemId)) {
-            return lease.version().leaseProducts().serviceItem();
+        if (lease.currentTerm().version().leaseProducts().serviceItem().uid().getValue().equals(billableItemId)) {
+            return lease.currentTerm().version().leaseProducts().serviceItem();
         } else {
-            for (BillableItem item : lease.version().leaseProducts().featureItems()) {
+            for (BillableItem item : lease.currentTerm().version().leaseProducts().featureItems()) {
                 if (item.uid().getValue().equals(billableItemId)) {
                     return item;
                 }
@@ -604,12 +613,12 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
     }
 
     private BillableItemAdjustment findBillableItemAdjustment(String billableItemAdjustmentId, Lease lease) {
-        for (BillableItemAdjustment itemAdjustment : lease.version().leaseProducts().serviceItem().adjustments()) {
+        for (BillableItemAdjustment itemAdjustment : lease.currentTerm().version().leaseProducts().serviceItem().adjustments()) {
             if (itemAdjustment.uid().getValue().equals(billableItemAdjustmentId)) {
                 return itemAdjustment;
             }
         }
-        for (BillableItem item : lease.version().leaseProducts().featureItems()) {
+        for (BillableItem item : lease.currentTerm().version().leaseProducts().featureItems()) {
             for (BillableItemAdjustment itemAdjustment : item.adjustments()) {
                 if (itemAdjustment.uid().getValue().equals(billableItemAdjustmentId)) {
                     return itemAdjustment;

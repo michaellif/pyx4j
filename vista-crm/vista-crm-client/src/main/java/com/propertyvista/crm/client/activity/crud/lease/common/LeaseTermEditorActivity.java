@@ -104,7 +104,7 @@ public class LeaseTermEditorActivity extends EditorActivityBase<LeaseTermDTO> im
                         AppSite.getPlaceController().goTo(new CrmSiteMap.Tenants.LeaseApplication().formViewerPlace(result.lease().getPrimaryKey()));
                         break;
                     case Lease:
-                        AppSite.getPlaceController().goTo(new CrmSiteMap.Tenants.Lease2().formViewerPlace(result.lease().getPrimaryKey()));
+                        AppSite.getPlaceController().goTo(new CrmSiteMap.Tenants.Lease().formViewerPlace(result.lease().getPrimaryKey()));
                         break;
                     case Default:
                         LeaseTermEditorActivity.super.goToViewer(entityID);

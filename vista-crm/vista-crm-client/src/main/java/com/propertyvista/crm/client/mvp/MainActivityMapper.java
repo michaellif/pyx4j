@@ -90,13 +90,9 @@ import com.propertyvista.crm.client.activity.crud.customer.tenant.TenantListerAc
 import com.propertyvista.crm.client.activity.crud.customer.tenant.TenantViewerActivity;
 import com.propertyvista.crm.client.activity.crud.floorplan.FloorplanEditorActivity;
 import com.propertyvista.crm.client.activity.crud.floorplan.FloorplanViewerActivity;
-import com.propertyvista.crm.client.activity.crud.lease.LeaseEditorActivity;
 import com.propertyvista.crm.client.activity.crud.lease.LeaseListerActivity;
-import com.propertyvista.crm.client.activity.crud.lease.LeaseListerActivity2;
 import com.propertyvista.crm.client.activity.crud.lease.LeaseViewerActivity;
-import com.propertyvista.crm.client.activity.crud.lease.LeaseViewerActivity2;
 import com.propertyvista.crm.client.activity.crud.lease.PastLeaseListerActivity;
-import com.propertyvista.crm.client.activity.crud.lease.application.LeaseApplicationEditorActivity;
 import com.propertyvista.crm.client.activity.crud.lease.application.LeaseApplicationListerActivity;
 import com.propertyvista.crm.client.activity.crud.lease.application.LeaseApplicationViewerActivity;
 import com.propertyvista.crm.client.activity.crud.lease.common.LeaseTermEditorActivity;
@@ -478,24 +474,11 @@ public class MainActivityMapper implements AppActivityMapper {
 
                     } else if (place instanceof CrmSiteMap.Tenants.Lease) {
                         switch (crudPlace.getType()) {
-                        case editor:
-                            activity = new LeaseEditorActivity(crudPlace);
-                            break;
-                        case viewer:
-                            activity = new LeaseViewerActivity(crudPlace);
-                            break;
                         case lister:
                             activity = new LeaseListerActivity(crudPlace);
                             break;
-                        }
-
-                    } else if (place instanceof CrmSiteMap.Tenants.Lease2) {
-                        switch (crudPlace.getType()) {
-                        case lister:
-                            activity = new LeaseListerActivity2(crudPlace);
-                            break;
                         case viewer:
-                            activity = new LeaseViewerActivity2(crudPlace);
+                            activity = new LeaseViewerActivity(crudPlace);
                             break;
                         }
 
@@ -511,14 +494,11 @@ public class MainActivityMapper implements AppActivityMapper {
 
                     } else if (place instanceof CrmSiteMap.Tenants.LeaseApplication) {
                         switch (crudPlace.getType()) {
-                        case editor:
-                            activity = new LeaseApplicationEditorActivity(crudPlace);
+                        case lister:
+                            activity = new LeaseApplicationListerActivity(crudPlace);
                             break;
                         case viewer:
                             activity = new LeaseApplicationViewerActivity(crudPlace);
-                            break;
-                        case lister:
-                            activity = new LeaseApplicationListerActivity(crudPlace);
                             break;
                         }
 

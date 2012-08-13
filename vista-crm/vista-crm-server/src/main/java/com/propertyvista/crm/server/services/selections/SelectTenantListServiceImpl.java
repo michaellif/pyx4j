@@ -42,15 +42,15 @@ public class SelectTenantListServiceImpl extends AbstractListServiceImpl<Tenant>
 
         // filter out just current tenants:
         Tenant proto = EntityFactory.getEntityPrototype(Tenant.class);
-        dbCriteria.add(PropertyCriterion.in(proto.leaseV().holder().status(), Lease.Status.current()));
+        dbCriteria.add(PropertyCriterion.in(proto.leaseTermV().holder().lease().status(), Lease.Status.current()));
         // and current lease version only:
-        dbCriteria.add(PropertyCriterion.isNotNull(proto.leaseV().fromDate()));
-        dbCriteria.add(PropertyCriterion.isNull(proto.leaseV().toDate()));
+        dbCriteria.add(PropertyCriterion.isNotNull(proto.leaseTermV().fromDate()));
+        dbCriteria.add(PropertyCriterion.isNull(proto.leaseTermV().toDate()));
     }
 
     @Override
     protected void enhanceListRetrieved(Tenant entity, Tenant dto) {
-        Persistence.service().retrieve(dto.leaseV());
-        Persistence.service().retrieve(dto.leaseV().holder(), AttachLevel.ToStringMembers);
+        Persistence.service().retrieve(dto.leaseTermV());
+        Persistence.service().retrieve(dto.leaseTermV().holder(), AttachLevel.ToStringMembers);
     }
 }

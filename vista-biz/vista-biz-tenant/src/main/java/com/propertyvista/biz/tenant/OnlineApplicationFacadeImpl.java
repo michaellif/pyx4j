@@ -39,6 +39,7 @@ import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseApplication;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.ptapp.ApplicationWizardStep;
 import com.propertyvista.domain.tenant.ptapp.MasterOnlineApplication;
 import com.propertyvista.domain.tenant.ptapp.OnlineApplication;
@@ -58,7 +59,7 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
         ServerSideFactory.create(IdAssignmentFacade.class).assignId(masterOnlineApplication);
         Persistence.service().persist(masterOnlineApplication);
 
-        for (Tenant tenant : masterOnlineApplication.leaseApplication().lease().version().tenants()) {
+        for (Tenant tenant : masterOnlineApplication.leaseApplication().lease().currentTerm().version().tenants()) {
             Persistence.service().retrieve(tenant);
             if (LeaseParticipant.Role.Applicant == tenant.role().getValue()) {
                 if (tenant.customer().user().isNull()) {
@@ -98,8 +99,9 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
         MasterOnlineApplication masterOnlineApplication = Persistence.service().retrieve(MasterOnlineApplication.class,
                 application.masterOnlineApplication().getPrimaryKey());
 
-        Lease lease = Persistence.retrieveDraftForEdit(Lease.class, masterOnlineApplication.leaseApplication().lease().getPrimaryKey());
-        for (Tenant tenant : lease.version().tenants()) {
+        LeaseTerm leaseTerm = Persistence.retrieveDraftForEdit(LeaseTerm.class, masterOnlineApplication.leaseApplication().lease().currentTerm()
+                .getPrimaryKey());
+        for (Tenant tenant : leaseTerm.version().tenants()) {
             Persistence.service().retrieve(tenant);
             if (application.customer().equals(tenant.customer())) {
 
@@ -121,7 +123,7 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
                 }
             }
         }
-        for (Guarantor guarantor : lease.version().guarantors()) {
+        for (Guarantor guarantor : leaseTerm.version().guarantors()) {
             Persistence.service().retrieve(guarantor);
             if (application.customer().equals(guarantor.customer())) {
                 if (application.status().getValue() == OnlineApplication.Status.Submitted) {
@@ -260,8 +262,8 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
     // implementation internals
 
     private void inviteCoApplicants(Lease lease) {
-        Persistence.service().retrieve(lease.version().tenants());
-        for (Tenant tenant : lease.version().tenants()) {
+        Persistence.service().retrieve(lease.currentTerm().version().tenants());
+        for (Tenant tenant : lease.currentTerm().version().tenants()) {
             if ((tenant.role().getValue() == LeaseParticipant.Role.CoApplicant && (!tenant.takeOwnership().isBooleanTrue()))) {
                 if (tenant.customer().user().isNull()) {
                     throw new UserRuntimeException(i18n.tr("Co-Applicant must have an e-mail to start Online Application."));
@@ -274,8 +276,8 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
     }
 
     private void inviteGuarantors(Lease lease, Customer tenant) {
-        Persistence.service().retrieve(lease.version().tenants());
-        for (Guarantor guarantor : lease.version().guarantors()) {
+        Persistence.service().retrieve(lease.currentTerm().version().tenants());
+        for (Guarantor guarantor : lease.currentTerm().version().guarantors()) {
             if (guarantor.tenant().customer().equals(tenant)) {
                 if (guarantor.customer().user().isNull()) {
                     throw new UserRuntimeException(i18n.tr("Guarantor must have an e-mail to start Online Application."));

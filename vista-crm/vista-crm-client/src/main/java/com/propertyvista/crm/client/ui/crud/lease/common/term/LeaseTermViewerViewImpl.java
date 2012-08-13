@@ -27,4 +27,10 @@ public class LeaseTermViewerViewImpl extends CrmViewerViewImplBase<LeaseTermDTO>
         super(CrmSiteMap.Tenants.LeaseTerm.class, new LeaseTermForm(true));
         enableVersioning(LeaseTerm.LeaseTermV.class, GWT.<LeaseTermVersionService> create(LeaseTermVersionService.class));
     }
+
+    @Override
+    public void populate(LeaseTermDTO value) {
+        super.populate(value);
+        getEditButton().setVisible(!value.lease().status().getValue().isFormer());
+    }
 }

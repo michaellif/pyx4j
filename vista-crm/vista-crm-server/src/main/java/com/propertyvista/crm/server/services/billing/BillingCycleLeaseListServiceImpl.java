@@ -37,8 +37,8 @@ public class BillingCycleLeaseListServiceImpl extends AbstractListServiceDtoImpl
         Persistence.service().retrieve(dto.unit());
         Persistence.service().retrieve(dto.unit().building());
 
-        Persistence.service().retrieve(dto.version().tenants());
-        Persistence.service().retrieve(dto.version().guarantors());
+        Persistence.service().retrieve(dto.currentTerm().version().tenants());
+        Persistence.service().retrieve(dto.currentTerm().version().guarantors());
 
         Persistence.service().retrieve(dto.billingAccount());
     }

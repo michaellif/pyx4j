@@ -29,7 +29,6 @@ import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
-import com.pyx4j.entity.annotations.Versioned;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
@@ -97,7 +96,6 @@ public interface Bill extends IEntity {
     BillingAccount billingAccount();
 
     @Detached
-    @Versioned
     Lease lease();
 
     IPrimitive<Integer> billSequenceNumber();

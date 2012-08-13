@@ -13,149 +13,75 @@
  */
 package com.propertyvista.crm.client.ui.crud.lease.common;
 
+import java.util.Arrays;
 import java.util.List;
 
-import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.Command;
 
-import com.pyx4j.commons.Key;
-import com.pyx4j.entity.client.CEntityForm;
-import com.pyx4j.entity.client.ui.CEntityComboBox;
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.client.EntityFolderColumnDescriptor;
+import com.pyx4j.entity.client.ui.CEntityHyperlink;
+import com.pyx4j.entity.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
-import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.AppPlaceEntityMapper;
+import com.pyx4j.site.client.AppSite;
+import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;
 
-import com.propertyvista.common.client.policy.ClientPolicyManager;
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
-import com.propertyvista.common.client.ui.components.editors.NameEditor;
-import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
-import com.propertyvista.domain.tenant.Customer;
+import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
+import com.propertyvista.domain.person.Name;
 import com.propertyvista.domain.tenant.Guarantor;
-import com.propertyvista.domain.tenant.PersonRelationship;
-import com.propertyvista.domain.tenant.PersonScreening;
 import com.propertyvista.domain.tenant.Tenant;
-import com.propertyvista.domain.tenant.lease.LeaseParticipant;
-import com.propertyvista.dto.LeaseDTO;
 
-public class GuarantorInLeaseFolder extends LeaseParticipantFolder<Guarantor> {
+public class GuarantorInLeaseFolder extends VistaTableFolder<Guarantor> {
 
     static final I18n i18n = I18n.get(GuarantorInLeaseFolder.class);
 
-    private final CEntityForm<? extends LeaseDTO> lease;
-
-    public GuarantorInLeaseFolder(CEntityForm<? extends LeaseDTO> parent, boolean modifiable) {
-        super(Guarantor.class, modifiable);
-        this.lease = parent;
+    public GuarantorInLeaseFolder() {
+        super(Guarantor.class, false);
     }
 
     @Override
-    protected String getAddItemDialogCaption() {
-        return i18n.tr("Add New Guarantor");
-    }
-
-    @Override
-    protected String getAddItemDialogBody() {
-        return i18n.tr("Do you want to select existing Guarantor?");
-    }
-
-    @Override
-    protected void addParticipants(List<Customer> customers) {
-        for (Customer customer : customers) {
-            Guarantor newGuarantorInLease = EntityFactory.create(Guarantor.class);
-            newGuarantorInLease.leaseV().setPrimaryKey(lease.getValue().version().getPrimaryKey());
-            newGuarantorInLease.customer().set(customer);
-            newGuarantorInLease.role().setValue(LeaseParticipant.Role.Guarantor);
-            newGuarantorInLease.relationship().setValue(PersonRelationship.Other); // just not leave it empty - it's mandatory field!
-            addItem(newGuarantorInLease);
-        }
+    public List<EntityFolderColumnDescriptor> columns() {
+        return Arrays.asList(//@formatter:off
+                new EntityFolderColumnDescriptor(proto().participantId(), "7em"),
+                new EntityFolderColumnDescriptor(proto().customer().person().name(), "25em"),
+                new EntityFolderColumnDescriptor(proto().role(), "10em"),
+                new EntityFolderColumnDescriptor(proto().tenant(), "25em"),
+                new EntityFolderColumnDescriptor(proto().relationship(), "15em"));
+          //@formatter:on
     }
 
     @Override
     public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof Guarantor) {
-            return new GuarantorInLeaseEditor();
+            return new GuarantorInLeaseViewer();
         }
         return super.create(member);
     }
 
-    private class GuarantorInLeaseEditor extends CEntityDecoratableForm<Guarantor> {
+    private class GuarantorInLeaseViewer extends CEntityFolderRowEditor<Guarantor> {
 
-        public GuarantorInLeaseEditor() {
-            super(Guarantor.class);
+        public GuarantorInLeaseViewer() {
+            super(Guarantor.class, columns());
+            setEditable(false);
+            setViewable(true);
         }
 
         @Override
-        public IsWidget createContent() {
-            FormFlexPanel main = new FormFlexPanel();
-
-            FormFlexPanel left = new FormFlexPanel();
-            int row = -1;
-            left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().participantId()), 7).build());
-            left.setWidget(++row, 0, inject(proto().customer().person().name(), new NameEditor(i18n.tr("Guarantor"), Guarantor.class) {
-                @Override
-                public Key getLinkKey() {
-                    return GuarantorInLeaseEditor.this.getValue().getPrimaryKey();
-                }
-            }));
-            left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().sex()), 7).build());
-            left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().birthDate()), 9).build());
-            left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().screening()), 9).customLabel(i18n.tr("Use Screening From")).build());
-            left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().tenant(), new CComboBox<Tenant>() {
-                @Override
-                public String getItemName(Tenant o) {
-                    if (o == null) {
-                        return getNoSelectionText();
-                    } else {
-                        return o.getStringView();
+        protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
+            if (proto().customer().person().name() == column.getObject()) {
+                return inject(proto().customer().person().name(), new CEntityHyperlink<Name>(new Command() {
+                    @Override
+                    public void execute() {
+                        AppSite.getPlaceController().goTo(
+                                AppPlaceEntityMapper.resolvePlace(Guarantor.class).formViewerPlace(GuarantorInLeaseViewer.this.getValue().getPrimaryKey()));
                     }
-                }
-            }), 25).build());
-            left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().relationship()), 15).build());
-
-            FormFlexPanel right = new FormFlexPanel();
-            row = -1;
-            right.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().email()), 25).build());
-            right.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().homePhone()), 15).build());
-            right.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().mobilePhone()), 15).build());
-            right.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().workPhone()), 15).build());
-
-            // assemble main panel:
-            main.setWidget(0, 0, left);
-            main.setWidget(0, 1, right);
-
-            main.getColumnFormatter().setWidth(0, "60%");
-            main.getColumnFormatter().setWidth(1, "40%");
-
-            return main;
-        }
-
-        @Override
-        protected void onValueSet(boolean populate) {
-            super.onValueSet(populate);
-
-            get(proto().customer().person().email()).setMandatory(!getValue().customer().user().isNull());
-
-            if (isEditable()) {
-                ClientPolicyManager.setIdComponentEditabilityByPolicy(IdTarget.guarantor, get(proto().participantId()), getValue().getPrimaryKey());
+                }));
+            } else if (proto().tenant() == column.getObject()) {
+                return inject(proto().tenant(), new CEntityCrudHyperlink<Tenant>(AppPlaceEntityMapper.resolvePlace(Tenant.class)));
             }
-
-            if (get(proto().screening()) instanceof CEntityComboBox<?>) {
-                @SuppressWarnings("unchecked")
-                CEntityComboBox<PersonScreening> combo = (CEntityComboBox<PersonScreening>) get(proto().screening());
-                combo.resetCriteria();
-                combo.addCriterion(PropertyCriterion.eq(combo.proto().screene(), getValue().customer()));
-                combo.refreshOptions();
-            }
-
-            if (get(proto().tenant()) instanceof CComboBox<?>) {
-                @SuppressWarnings("unchecked")
-                CComboBox<Tenant> combo = (CComboBox<Tenant>) get(proto().tenant());
-                combo.setOptions(lease.getValue().version().tenants());
-                combo.getOptions();
-            }
+            return super.createCell(column);
         }
     }
 }

@@ -32,15 +32,15 @@ public class DashboardServiceImpl implements DashboardService {
         TenantDashboardDTO dashboard = EntityFactory.create(TenantDashboardDTO.class);
 
         Tenant tenantInLease = TenantAppContext.getCurrentUserTenantInLease();
-        Persistence.service().retrieve(tenantInLease.leaseV());
-        Persistence.service().retrieve(tenantInLease.leaseV().holder().unit());
-        Persistence.service().retrieve(tenantInLease.leaseV().holder().unit().floorplan());
-        Persistence.service().retrieve(tenantInLease.leaseV().holder().unit().building());
+        Persistence.service().retrieve(tenantInLease.leaseTermV());
+        Persistence.service().retrieve(tenantInLease.leaseTermV().holder().lease().unit());
+        Persistence.service().retrieve(tenantInLease.leaseTermV().holder().lease().unit().floorplan());
+        Persistence.service().retrieve(tenantInLease.leaseTermV().holder().lease().unit().building());
 
         dashboard.general().tenantName().setValue(tenantInLease.customer().person().name().getStringView());
-        dashboard.general().floorplanName().set(tenantInLease.leaseV().holder().unit().floorplan().marketingName());
-        AddressStructured address = tenantInLease.leaseV().holder().unit().building().info().address().duplicate();
-        address.suiteNumber().set(tenantInLease.leaseV().holder().unit().info().number());
+        dashboard.general().floorplanName().set(tenantInLease.leaseTermV().holder().lease().unit().floorplan().marketingName());
+        AddressStructured address = tenantInLease.leaseTermV().holder().lease().unit().building().info().address().duplicate();
+        address.suiteNumber().set(tenantInLease.leaseTermV().holder().lease().unit().info().number());
         dashboard.general().tenantAddress().setValue(address.getStringView());
 
         dashboard.billSummary().set(BillSummaryServiceImpl.retrieve());

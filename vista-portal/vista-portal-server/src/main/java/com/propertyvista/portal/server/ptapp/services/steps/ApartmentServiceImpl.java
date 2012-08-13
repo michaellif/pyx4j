@@ -59,7 +59,7 @@ public class ApartmentServiceImpl implements ApartmentService {
     public void save(AsyncCallback<ApartmentInfoDTO> callback, ApartmentInfoDTO entity) {
         // update agreed items:
         Lease lease = PtAppContext.retrieveCurrentUserLease();
-        for (Iterator<BillableItem> iter = lease.version().leaseProducts().featureItems().iterator(); iter.hasNext();) {
+        for (Iterator<BillableItem> iter = lease.currentTerm().version().leaseProducts().featureItems().iterator(); iter.hasNext();) {
             BillableItem item = iter.next();
             if (item.item().type().isInstanceOf(FeatureItemType.class)) {
                 switch (item.item().type().<FeatureItemType> cast().featureType().getValue()) {
@@ -75,13 +75,13 @@ public class ApartmentServiceImpl implements ApartmentService {
         }
 
         // add user-selected ones:
-        lease.version().leaseProducts().featureItems().addAll(entity.agreedPets());
-        lease.version().leaseProducts().featureItems().addAll(entity.agreedParking());
-        lease.version().leaseProducts().featureItems().addAll(entity.agreedStorage());
-        lease.version().leaseProducts().featureItems().addAll(entity.agreedOther());
+        lease.currentTerm().version().leaseProducts().featureItems().addAll(entity.agreedPets());
+        lease.currentTerm().version().leaseProducts().featureItems().addAll(entity.agreedParking());
+        lease.currentTerm().version().leaseProducts().featureItems().addAll(entity.agreedStorage());
+        lease.currentTerm().version().leaseProducts().featureItems().addAll(entity.agreedOther());
 
         // save items data:
-        for (BillableItem item : lease.version().leaseProducts().featureItems()) {
+        for (BillableItem item : lease.currentTerm().version().leaseProducts().featureItems()) {
             if (!item.extraData().isNull()) {
                 Persistence.service().merge(item.extraData());
             }
@@ -160,9 +160,9 @@ public class ApartmentServiceImpl implements ApartmentService {
         fillServiceItems(aptInfo, lease.unit().building(), lease);
 
         // Lease data:
-        aptInfo.leaseFrom().setValue(lease.leaseFrom().getValue());
-        aptInfo.leaseTo().setValue(lease.leaseTo().getValue());
-        aptInfo.unitRent().setValue(lease.version().leaseProducts().serviceItem().agreedPrice().getValue());
+        aptInfo.leaseFrom().setValue(lease.currentTerm().termFrom().getValue());
+        aptInfo.leaseTo().setValue(lease.currentTerm().termTo().getValue());
+        aptInfo.unitRent().setValue(lease.currentTerm().version().leaseProducts().serviceItem().agreedPrice().getValue());
         aptInfo.unit().set(lease.unit());
 
         return aptInfo;
@@ -225,7 +225,7 @@ public class ApartmentServiceImpl implements ApartmentService {
         syncBuildingProductCatalog(lease.unit().building());
 
         // fill agreed items:
-        for (BillableItem item : lease.version().leaseProducts().featureItems()) {
+        for (BillableItem item : lease.currentTerm().version().leaseProducts().featureItems()) {
             if (item.item().type().isInstanceOf(FeatureItemType.class)) {
                 switch (item.item().type().<FeatureItemType> cast().featureType().getValue()) {
                 case utility:
@@ -274,6 +274,6 @@ public class ApartmentServiceImpl implements ApartmentService {
         }
 
         // fill concessions:
-        entity.concessions().addAll(lease.version().leaseProducts().concessions());
+        entity.concessions().addAll(lease.currentTerm().version().leaseProducts().concessions());
     }
 }

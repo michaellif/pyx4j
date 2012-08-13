@@ -126,8 +126,8 @@ public class LeaseLifecycleSimulator {
         LogicalDate leaseFrom = add(reservedOn, rndBetween(minReserveTerm, maxReserveTerm));
         LogicalDate leaseTo = add(leaseFrom, rndBetween(MIN_LEASE_TERM, MAX_LEASE_TERM));
 
-        lease.leaseFrom().setValue(leaseFrom);
-        lease.leaseTo().setValue(leaseTo);
+        lease.currentTerm().termFrom().setValue(leaseFrom);
+        lease.currentTerm().termTo().setValue(leaseTo);
         lease.expectedMoveIn().setValue(leaseFrom);
         lease.expectedMoveOut().setValue(leaseTo);
 
@@ -151,10 +151,10 @@ public class LeaseLifecycleSimulator {
     private void setUpBillableItemsEffectiveTime(Lease lease) {
         // TODO something more sophisticated is probably required here
 
-        lease.version().leaseProducts().serviceItem().effectiveDate().setValue(lease.leaseFrom().getValue());
+        lease.currentTerm().version().leaseProducts().serviceItem().effectiveDate().setValue(lease.currentTerm().termFrom().getValue());
 
-        for (BillableItem item : lease.version().leaseProducts().featureItems()) {
-            item.effectiveDate().setValue(lease.leaseFrom().getValue());
+        for (BillableItem item : lease.currentTerm().version().leaseProducts().featureItems()) {
+            item.effectiveDate().setValue(lease.currentTerm().termFrom().getValue());
         }
     }
 
@@ -191,13 +191,13 @@ public class LeaseLifecycleSimulator {
             lease = leaseFacade().setUnit(lease, lease.unit());
             lease = leaseFacade().persist(lease);
             if (isDebugged) {
-                System.out.println("" + now() + " created lease: " + lease.leaseId().getValue() + " " + lease.leaseFrom().getValue() + " - "
-                        + lease.leaseTo().getValue());
+                System.out.println("" + now() + " created lease: " + lease.leaseId().getValue() + " " + lease.currentTerm().termFrom().getValue() + " - "
+                        + lease.currentTerm().termTo().getValue());
                 System.out.println(lease.toString());
                 System.out.println("***");
             }
             // TODO change that to Employee Agent Decision
-            queueEvent(hasImmideateApproval ? now() : rndBetween(now(), lease.leaseFrom().getValue()), new ApproveApplication(lease));
+            queueEvent(hasImmideateApproval ? now() : rndBetween(now(), lease.currentTerm().termFrom().getValue()), new ApproveApplication(lease));
         }
     }
 
@@ -212,12 +212,12 @@ public class LeaseLifecycleSimulator {
             leaseFacade().approveApplication(lease, null, "simulation");
 
             if (isDebugged) {
-                System.out.println("" + now() + " approved lease: " + lease.leaseId().getValue() + " " + lease.leaseFrom().getValue() + " - "
-                        + lease.leaseTo().getValue());
+                System.out.println("" + now() + " approved lease: " + lease.leaseId().getValue() + " " + lease.currentTerm().termFrom().getValue() + " - "
+                        + lease.currentTerm().termTo().getValue());
                 System.out.println("***");
             }
 
-            queueEvent(lease.leaseFrom().getValue(), new Activate(lease));
+            queueEvent(lease.currentTerm().termFrom().getValue(), new Activate(lease));
         }
     }
 
@@ -229,10 +229,10 @@ public class LeaseLifecycleSimulator {
 
         @Override
         public void exec() {
-            leaseFacade().activate(lease.getPrimaryKey());
+            leaseFacade().activate(lease);
             if (isDebugged) {
-                System.out.println("" + now() + " activated lease: " + lease.leaseId().getValue() + " " + lease.leaseFrom().getValue() + " - "
-                        + lease.leaseTo().getValue());
+                System.out.println("" + now() + " activated lease: " + lease.leaseId().getValue() + " " + lease.currentTerm().termFrom().getValue()
+                        + " - " + lease.currentTerm().termTo().getValue());
                 System.out.println("***");
             }
 
@@ -287,7 +287,7 @@ public class LeaseLifecycleSimulator {
             Calendar cal = GregorianCalendar.getInstance();
             cal.setTime(now());
             cal.add(Calendar.MONTH, 1);
-            if (!cal.getTime().after(lease.leaseTo().getValue())) {
+            if (!cal.getTime().after(lease.currentTerm().termTo().getValue())) {
                 queueEvent(new LogicalDate(cal.getTime()), new TenantsAction(lease));
             }
         }
@@ -321,8 +321,8 @@ public class LeaseLifecycleSimulator {
                 paymentRecord.amount().setValue(amount);
                 paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Received);
                 paymentRecord.billingAccount().set(lease.billingAccount());
-                paymentRecord.paymentMethod().set(createPaymentMethod(lease.version().tenants().get(0)));
-                paymentRecord.leaseParticipant().set(lease.version().tenants().get(0));
+                paymentRecord.paymentMethod().set(createPaymentMethod(lease.currentTerm().version().tenants().get(0)));
+                paymentRecord.leaseParticipant().set(lease.currentTerm().version().tenants().get(0));
 
                 Persistence.service().persist(paymentRecord.paymentMethod());
                 Persistence.service().persist(paymentRecord);
@@ -363,7 +363,7 @@ public class LeaseLifecycleSimulator {
         @Override
         public void exec() {
             if (!VistaTODO.removedForProduction) {
-                if (now().before(lease.leaseTo().getValue()) & lease.status().getValue() != Lease.Status.Completed) {
+                if (now().before(lease.currentTerm().termTo().getValue()) & lease.status().getValue() != Lease.Status.Completed) {
 
                     // TODO THIS is REALLY CREEPY part, talk to Michael about adding API to the facade that lets check when billing is allowed to run **********
                     // the following code is copies the calculations inside the billing facade privates 
@@ -373,7 +373,7 @@ public class LeaseLifecycleSimulator {
                     Calendar billingPeriodStartDate = new GregorianCalendar();
                     billingPeriodStartDate.setTime(lastBill.billingPeriodStartDate().getValue());
                     billingPeriodStartDate.add(Calendar.MONTH, 1);
-                    if (billingPeriodStartDate.getTime().after(lease.leaseTo().getValue())) {
+                    if (billingPeriodStartDate.getTime().after(lease.currentTerm().termTo().getValue())) {
                         // lease ended
                         return;
                     }
@@ -387,8 +387,8 @@ public class LeaseLifecycleSimulator {
                         billing.confirmBill(billing.getLatestBill(lease));
 
                         if (isDebugged) {
-                            System.out.println("" + now() + " executed run billing lease: " + lease.leaseId().getValue() + " " + lease.leaseFrom().getValue()
-                                    + " - " + lease.leaseTo().getValue());
+                            System.out.println("" + now() + " executed run billing lease: " + lease.leaseId().getValue() + " "
+                                    + lease.currentTerm().termFrom().getValue() + " - " + lease.currentTerm().termTo().getValue());
                             System.out.println("***");
                         }
 
@@ -415,7 +415,7 @@ public class LeaseLifecycleSimulator {
 
         @Override
         public void exec() {
-            leaseFacade().createCompletionEvent(lease.getPrimaryKey(), CompletionType.Notice, now(), lease.leaseTo().getValue());
+            leaseFacade().createCompletionEvent(lease.getPrimaryKey(), CompletionType.Notice, now(), lease.currentTerm().termTo().getValue());
         }
     }
 

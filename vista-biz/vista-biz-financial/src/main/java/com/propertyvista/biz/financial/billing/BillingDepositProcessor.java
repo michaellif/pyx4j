@@ -52,8 +52,9 @@ public class BillingDepositProcessor extends AbstractBillingProcessor {
     }
 
     private void createInvoiceDeposits() {
-        createInvoiceDeposit(getBillingManager().getNextPeriodBill().billingAccount().lease().version().leaseProducts().serviceItem());
-        for (BillableItem billableItem : getBillingManager().getNextPeriodBill().billingAccount().lease().version().leaseProducts().featureItems()) {
+        createInvoiceDeposit(getBillingManager().getNextPeriodBill().billingAccount().lease().currentTerm().version().leaseProducts().serviceItem());
+        for (BillableItem billableItem : getBillingManager().getNextPeriodBill().billingAccount().lease().currentTerm().version().leaseProducts()
+                .featureItems()) {
             createInvoiceDeposit(billableItem);
         }
     }
@@ -93,7 +94,7 @@ public class BillingDepositProcessor extends AbstractBillingProcessor {
     private void crateDepositRefunds() {
         // LastMonthDeposit - if this is the last month bill, post the refund
         Bill nextBill = getBillingManager().getNextPeriodBill();
-        if (!nextBill.billingPeriodEndDate().getValue().before(nextBill.billingAccount().lease().leaseTo().getValue())) {
+        if (!nextBill.billingPeriodEndDate().getValue().before(nextBill.billingAccount().lease().currentTerm().termTo().getValue())) {
             Persistence.service().retrieve(nextBill.billingAccount().deposits());
 
             Map<Deposit, ProductTerm> deposits = ServerSideFactory.create(DepositFacade.class).getCurrentDeposits(nextBill.billingAccount().lease());

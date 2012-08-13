@@ -40,8 +40,8 @@ public class GuarantorLister extends ListerBase<GuarantorDTO> {
             new Builder(proto().customer().person().workPhone()).build(),
             new Builder(proto().customer().person().email()).title("E-mail address").build(),
             
-            new Builder(proto().leaseV().holder()).columnTitle(i18n.tr("Lease")).searchable(false).build(),
-            new Builder(proto().leaseV().holder().leaseId()).searchableOnly().build()
+            new Builder(proto().leaseTermV().holder()).columnTitle(i18n.tr("Lease Term")).searchable(false).build(),
+            new Builder(proto().leaseTermV().holder().lease().leaseId()).searchableOnly().build()
         );//@formatter:on
     }
 }

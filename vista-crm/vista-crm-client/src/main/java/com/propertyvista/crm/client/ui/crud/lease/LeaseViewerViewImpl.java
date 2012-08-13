@@ -16,7 +16,6 @@ package com.propertyvista.crm.client.ui.crud.lease;
 import java.util.Arrays;
 import java.util.List;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.HTML;
@@ -25,7 +24,6 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.shared.utils.VersionedEntityUtils;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
@@ -47,9 +45,7 @@ import com.propertyvista.crm.client.ui.crud.billing.payment.PaymentLister;
 import com.propertyvista.crm.client.ui.crud.lease.common.LeaseViewerViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.dto.billing.BillDataDTO;
-import com.propertyvista.crm.rpc.services.selections.version.LeaseVersionService;
 import com.propertyvista.domain.communication.EmailTemplateType;
-import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.CompletionType;
 import com.propertyvista.domain.tenant.lease.Lease.Status;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
@@ -83,7 +79,6 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
 
     public LeaseViewerViewImpl() {
         super(CrmSiteMap.Tenants.Lease.class);
-        enableVersioning(Lease.LeaseV.class, GWT.<LeaseVersionService> create(LeaseVersionService.class));
 
         billLister = new ListerInternalViewImplBase<BillDataDTO>(new BillLister());
 
@@ -91,8 +86,8 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
 
         adjustmentLister = new ListerInternalViewImplBase<LeaseAdjustment>(new LeaseAdjustmentLister());
 
-        //set main form here:
-        setForm(new LeaseForm(true));
+        // set main form here:
+        setForm(new LeaseForm());
 
         // Add actions:
         sendMail = new Button(i18n.tr("Send Mail..."), new ClickHandler() {
@@ -197,23 +192,13 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         if (!value.unit().isNull()) {
             CompletionType completion = value.completion().getValue();
 
-            if (VersionedEntityUtils.isCurrent(value)) {
-                sendMail.setVisible(true);
-                runBill.setVisible(status.isActive());
-                notice.setVisible(status == Status.Active && completion == null);
-                cancelNotice.setVisible(completion == CompletionType.Notice && status != Status.Closed);
-                evict.setVisible(status == Status.Active && completion == null);
-                cancelEvict.setVisible(completion == CompletionType.Eviction && status != Status.Closed);
-            }
-            activate.setVisible(status == Status.Created);
-        }
-
-        // disable editing for completed/closed leases:
-        getEditButton().setVisible(!status.isFormer());
-
-        // tweak finalizing availability:
-        if (getFinalizeButton().isVisible()) {
-            getFinalizeButton().setVisible(!value.unit().isNull() && status.isCurrent());
+            sendMail.setVisible(true);
+            runBill.setVisible(status.isActive());
+            notice.setVisible(status == Status.Active && completion == null);
+            cancelNotice.setVisible(completion == CompletionType.Notice && status != Status.Closed);
+            evict.setVisible(status == Status.Active && completion == null);
+            cancelEvict.setVisible(completion == CompletionType.Eviction && status != Status.Closed);
+            activate.setVisible(status == Status.ExistingLease);
         }
     }
 
@@ -268,8 +253,8 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
                     main.setWidget(1, 0, new DecoratorBuilder(inject(proto().expectedMoveOut()), 9).build());
 
                     // just for validation purpose:
-                    inject(proto().leaseFrom());
-                    inject(proto().leaseTo());
+                    inject(proto().currentTerm().termFrom());
+                    inject(proto().currentTerm().termTo());
 
                     return main;
                 }
@@ -291,10 +276,10 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
                 public void addValidations() {
                     super.addValidations();
 
-                    new DateInPeriodValidation(get(proto().leaseFrom()), get(proto().moveOutNotice()), get(proto().leaseTo()),
-                            i18n.tr("The Date Should Be Within The Lease Period"));
-                    new DateInPeriodValidation(get(proto().leaseFrom()), get(proto().expectedMoveOut()), get(proto().leaseTo()),
-                            i18n.tr("The Date Should Be Within The Lease Period"));
+                    new DateInPeriodValidation(get(proto().currentTerm().termFrom()), get(proto().moveOutNotice()), get(proto().currentTerm()
+                            .termTo()), i18n.tr("The Date Should Be Within The Lease Period"));
+                    new DateInPeriodValidation(get(proto().currentTerm().termFrom()), get(proto().expectedMoveOut()), get(proto().currentTerm()
+                            .termTo()), i18n.tr("The Date Should Be Within The Lease Period"));
 
                     new StartEndDateValidation(get(proto().moveOutNotice()), get(proto().expectedMoveOut()),
                             i18n.tr("The Notice Date Must Be Earlier Than The Expected Move Out date"));
@@ -351,5 +336,4 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
     public void reportSendMailActionResult(String message) {
         MessageDialog.info(message);
     }
-
 }

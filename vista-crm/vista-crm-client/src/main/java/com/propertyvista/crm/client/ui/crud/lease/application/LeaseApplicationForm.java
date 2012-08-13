@@ -37,24 +37,15 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
     private Tab onlineStatusTab;
 
     public LeaseApplicationForm() {
-        this(false);
-    }
-
-    public LeaseApplicationForm(boolean viewMode) {
-        super(LeaseApplicationDTO.class, viewMode);
+        super(LeaseApplicationDTO.class);
     }
 
     @Override
     public void createTabs() {
-
         createCommonContent();
 
-        //TODO hided becouse of the validation problem
-        Tab tab = addTab(createInfoTab());
-        setTabEnabled(tab, !isEditable());
-
-        tab = addTab(createFinancialTab());
-        setTabEnabled(tab, !isEditable());
+        addTab(createInfoTab());
+        addTab(createFinancialTab());
 
 // TODO : credit check (Equifax) isn't implemented yet (see LeaseApplicationViewerViewImpl)!        
 //      tabPanel.add(createApprovalTab(), i18n.tr("Approval"));
@@ -62,7 +53,6 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
 
         if (VistaFeatures.instance().onlineApplication()) {
             onlineStatusTab = addTab(createOnlineStatusTab());
-            setTabEnabled(onlineStatusTab, !isEditable());
         }
     }
 
@@ -71,7 +61,7 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
         super.onValueSet(populate);
 
         if (VistaFeatures.instance().onlineApplication()) {
-            setTabVisible(onlineStatusTab, !isEditable() && !getValue().leaseApplication().onlineApplication().isNull());
+            setTabVisible(onlineStatusTab, !getValue().leaseApplication().onlineApplication().isNull());
         }
     }
 
@@ -134,7 +124,7 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseApplication().equifaxApproval().suggestedDecision()), 25).build());
 
         main.setBR(++row, 0, 1);
-        main.setWidget(++row, 0, inject(proto().tenantFinancials(), new TenantApprovalFolder(isEditable())));
+        main.setWidget(++row, 0, inject(proto().tenantFinancials(), new TenantApprovalFolder(false)));
 
         return main;
     }

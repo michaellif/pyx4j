@@ -162,14 +162,14 @@ public class DepositFacadeImpl implements DepositFacade {
         }
         List<Deposit> addList;
         for (Lease l : leases) {
-            addList = l.version().leaseProducts().serviceItem().deposits();
+            addList = l.currentTerm().version().leaseProducts().serviceItem().deposits();
             if (addList != null) {
-                ProductTerm term = new ProductTerm(l.version().leaseProducts().serviceItem(), l);
+                ProductTerm term = new ProductTerm(l.currentTerm().version().leaseProducts().serviceItem(), l);
                 for (Deposit deposit : addList) {
                     deposits.put(deposit, term);
                 }
             }
-            for (BillableItem feature : l.version().leaseProducts().featureItems()) {
+            for (BillableItem feature : l.currentTerm().version().leaseProducts().featureItems()) {
                 addList = feature.deposits();
                 if (addList != null) {
                     ProductTerm term = new ProductTerm(feature, l);

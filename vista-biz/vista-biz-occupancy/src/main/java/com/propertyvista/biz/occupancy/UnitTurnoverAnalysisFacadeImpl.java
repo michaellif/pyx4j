@@ -54,12 +54,12 @@ public class UnitTurnoverAnalysisFacadeImpl implements UnitTurnoverAnalysisFacad
         }
 
         if (hasTurnover(lease)) {
-            addTurnover(lease.unit().getPrimaryKey(), lease.leaseFrom().getValue());
+            addTurnover(lease.unit().getPrimaryKey(), lease.currentTerm().termFrom().getValue());
         }
     }
 
     public boolean hasTurnover(Lease lease) {
-        LogicalDate leaseFrom = lease.leaseFrom().getValue();
+        LogicalDate leaseFrom = lease.currentTerm().termFrom().getValue();
         LogicalDate beginningOfTheMonth = new LogicalDate(leaseFrom.getYear(), leaseFrom.getMonth(), 1);
 
         // check if we have lease that ended on the same month

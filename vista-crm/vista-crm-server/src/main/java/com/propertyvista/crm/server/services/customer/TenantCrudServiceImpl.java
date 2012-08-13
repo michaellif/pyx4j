@@ -48,8 +48,8 @@ public class TenantCrudServiceImpl extends AbstractCrudServiceDtoImpl<Tenant, Te
     protected void enhanceRetrieved(Tenant entity, TenantDTO dto) {
         // load detached data:
         Persistence.service().retrieve(dto.customer().emergencyContacts());
-        Persistence.service().retrieve(dto.leaseV());
-        Persistence.service().retrieve(dto.leaseV().holder(), AttachLevel.ToStringMembers);
+        Persistence.service().retrieve(dto.leaseTermV());
+        Persistence.service().retrieve(dto.leaseTermV().holder(), AttachLevel.ToStringMembers);
 
         // fill/update payment methods: 
         dto.paymentMethods().clear();
@@ -65,8 +65,8 @@ public class TenantCrudServiceImpl extends AbstractCrudServiceDtoImpl<Tenant, Te
 
     @Override
     protected void enhanceListRetrieved(Tenant entity, TenantDTO dto) {
-        Persistence.service().retrieve(dto.leaseV());
-        Persistence.service().retrieve(dto.leaseV().holder(), AttachLevel.ToStringMembers);
+        Persistence.service().retrieve(dto.leaseTermV());
+        Persistence.service().retrieve(dto.leaseTermV().holder(), AttachLevel.ToStringMembers);
     }
 
     @Override
@@ -75,7 +75,7 @@ public class TenantCrudServiceImpl extends AbstractCrudServiceDtoImpl<Tenant, Te
 
         // persist payment methods:
         EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto()._Units().$()._Leases().$().versions(), entity.leaseV()));
+        criteria.add(PropertyCriterion.eq(criteria.proto()._Units().$()._Leases().$().currentTerm().versions(), entity.leaseTermV()));
         Building building = Persistence.service().retrieve(criteria);
 
         // delete removed in UI:

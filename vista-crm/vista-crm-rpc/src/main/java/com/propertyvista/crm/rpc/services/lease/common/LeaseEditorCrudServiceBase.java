@@ -15,22 +15,12 @@ package com.propertyvista.crm.rpc.services.lease.common;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.entity.rpc.AbstractVersionedCrudService;
+import com.pyx4j.entity.rpc.AbstractCrudService;
 
-import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
-import com.propertyvista.domain.tenant.lease.BillableItem;
-import com.propertyvista.domain.tenant.lease.Deposit;
-import com.propertyvista.domain.tenant.lease.Deposit.DepositType;
 import com.propertyvista.dto.LeaseDTO;
 
-public interface LeaseEditorCrudServiceBase<DTO extends LeaseDTO> extends AbstractVersionedCrudService<DTO> {
+public interface LeaseEditorCrudServiceBase<DTO extends LeaseDTO> extends AbstractCrudService<DTO> {
 
     void setSelectedUnit(AsyncCallback<DTO> callback, AptUnit unitId, DTO currentValue);
-
-    void setSelectedService(AsyncCallback<DTO> callback, ProductItem serviceId, DTO currentValue);
-
-    void createBillableItem(AsyncCallback<BillableItem> callback, ProductItem productItemId, DTO currentValue);
-
-    void createDeposit(AsyncCallback<Deposit> callback, DepositType depositType, BillableItem item, DTO currentValue);
 }

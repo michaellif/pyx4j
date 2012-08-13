@@ -33,7 +33,7 @@ import com.propertyvista.common.client.ui.components.folders.EmergencyContactFol
 import com.propertyvista.common.client.ui.validators.PastDateValidation;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.crud.customer.common.PaymentMethodFolder;
-import com.propertyvista.crm.client.ui.crud.lease.common.CLeaseVHyperlink;
+import com.propertyvista.crm.client.ui.crud.lease.common.CLeaseTermVHyperlink;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
 import com.propertyvista.domain.tenant.EmergencyContact;
@@ -96,7 +96,8 @@ public class TenantForm extends CrmEntityForm<TenantDTO> {
         if (!isEditable()) {
             main.setBR(++row, 0, 1);
 
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseV(), new CLeaseVHyperlink()), 35).customLabel(i18n.tr("Lease")).build());
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseTermV(), new CLeaseTermVHyperlink()), 35).customLabel(i18n.tr("Lease Term"))
+                    .build());
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().role()), 10).build());
         }
 

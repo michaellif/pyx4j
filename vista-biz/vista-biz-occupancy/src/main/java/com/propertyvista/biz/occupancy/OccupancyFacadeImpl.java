@@ -305,7 +305,7 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
 
     @Override
     public void reserve(Key unitPk, final Lease lease) {
-        LogicalDate leaseFrom = lease.leaseFrom().getValue();
+        LogicalDate leaseFrom = lease.currentTerm().termFrom().getValue();
         LogicalDate now = new LogicalDate(Persistence.service().getTransactionSystemTime());
 
         if (VistaTODO.checkLeaseDatesOnUnitReservation & leaseFrom.before(now)) {
@@ -381,7 +381,7 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
         List<AptUnitOccupancySegment> occupancy = retrieveOccupancy(unitPk, now);
         for (AptUnitOccupancySegment segment : occupancy) {
             if (segment.status().getValue() == Status.reserved) {
-                split(segment, segment.lease().leaseFrom().getValue(), new SplittingHandler() {
+                split(segment, segment.lease().currentTerm().termFrom().getValue(), new SplittingHandler() {
                     @Override
                     public void updateBeforeSplitPointSegment(AptUnitOccupancySegment segment) throws IllegalStateException {
                         // already checked that we are in 'reserved'
@@ -404,7 +404,7 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
         LogicalDate now = new LogicalDate(Persistence.service().getTransactionSystemTime());
         AptUnitOccupancySegment segment = retrieveOccupancySegment(unitPk, now);
         assertStatus(segment, Status.leased);
-        split(unitPk, addDay(segment.lease().leaseTo().getValue()), new SplittingHandler() {
+        split(unitPk, addDay(segment.lease().currentTerm().termTo().getValue()), new SplittingHandler() {
 
             @Override
             public void updateBeforeSplitPointSegment(AptUnitOccupancySegment segment) throws IllegalStateException {

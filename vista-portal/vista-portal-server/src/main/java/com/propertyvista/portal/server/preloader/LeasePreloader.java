@@ -31,7 +31,6 @@ import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySe
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.domain.tenant.lease.Lease.Status;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.generator.LeaseGenerator;
 import com.propertyvista.portal.server.preloader.util.AptUnitSource;
@@ -54,7 +53,6 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
 
         Customer dualTenantCustomer = null;
         for (int i = 0; i < config().numTenants; i++) {
-
             AptUnit unit = makeAvailable(aptUnitSource.next());
             Persistence.service().commit();
             Lease lease = generator.createLease(unit);
@@ -62,7 +60,7 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
             LeaseGenerator.assigneLeaseProducts(lease);
 
             if (i < DemoData.UserType.TENANT.getDefaultMax()) {
-                Tenant mainTenant = lease.version().tenants().get(0);
+                Tenant mainTenant = lease.currentTerm().version().tenants().get(0);
                 String email = DemoData.UserType.TENANT.getEmail(i + 1);
                 mainTenant.customer().person().email().setValue(email);
                 // Make one (Third) Customer with Two Leases
@@ -70,26 +68,20 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
                     dualTenantCustomer = mainTenant.customer();
                 }
             } else if (i == DemoData.UserType.TENANT.getDefaultMax()) {
-                Tenant mainTenant = lease.version().tenants().get(0);
+                Tenant mainTenant = lease.currentTerm().version().tenants().get(0);
                 mainTenant.customer().set(dualTenantCustomer);
                 // Trick to share the same already saved data
-                mainTenant.screening().set(mainTenant.customer()._PersonScreenings().iterator().next());
+                mainTenant.screening().set(mainTenant.customer().personScreenings().iterator().next());
                 mainTenant.preauthorizedPayment().set(mainTenant.customer().paymentMethods().iterator().next());
             }
 
             // Create normal Active Lease first for Shortcut users
             if (i <= DemoData.UserType.TENANT.getDefaultMax()) {
-
                 LeaseFacade leaseFacade = ServerSideFactory.create(LeaseFacade.class);
-                lease.status().setValue(Status.Application);
-                lease = leaseFacade.init(lease);
-                lease = leaseFacade.setUnit(lease, lease.unit());
                 lease = leaseFacade.persist(lease);
-
-                ServerSideFactory.create(LeaseFacade.class).approveApplication(lease, null, null);
+                leaseFacade.approveApplication(lease, null, null);
                 //TODO
-                // ServerSideFactory.create(LeaseFacade.class).activate(lease.getPrimaryKey()
-
+                // leaseFacade.activate(lease.getPrimaryKey());
             } else {
                 LeaseLifecycleSimulatorBuilder simBuilder = LeaseLifecycleSimulator.sim();
 
@@ -118,8 +110,8 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
                     simBuilder.reservedTermConstraints(0l, 0l);
                     simBuilder.approveImmidately();
                 }
-                simBuilder.create().generateRandomLifeCycle(lease);
 
+                simBuilder.create().generateRandomLifeCycle(lease);
             }
 
             numCreated++;
@@ -136,7 +128,7 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
 
             //Set users that can login using UI
             if (i < DemoData.UserType.PTENANT.getDefaultMax()) {
-                Tenant mainTenant = lease.version().tenants().get(0);
+                Tenant mainTenant = lease.currentTerm().version().tenants().get(0);
                 String email = DemoData.UserType.PTENANT.getEmail(i + 1);
                 mainTenant.customer().person().email().setValue(email);
 
@@ -146,8 +138,8 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
                 }
 
                 //Set PCOAPPLICANT users that can login using UI
-                if (lease.version().tenants().size() > 1) {
-                    Tenant tenant = lease.version().tenants().get(1);
+                if (lease.currentTerm().version().tenants().size() > 1) {
+                    Tenant tenant = lease.currentTerm().version().tenants().get(1);
                     String email2 = DemoData.UserType.PCOAPPLICANT.getEmail(i + 1);
                     tenant.customer().person().email().setValue(email2);
 
@@ -155,18 +147,16 @@ public class LeasePreloader extends BaseVistaDevDataPreloader {
                     tenant.takeOwnership().setValue(false);
                 }
             } else if (i == DemoData.UserType.PTENANT.getDefaultMax()) {
-                Tenant mainTenant = lease.version().tenants().get(0);
+                Tenant mainTenant = lease.currentTerm().version().tenants().get(0);
                 mainTenant.customer().set(dualPotentialCustomer);
                 // Trick to share the same already saved data 
-                mainTenant.screening().set(mainTenant.customer()._PersonScreenings().iterator().next());
+                mainTenant.screening().set(mainTenant.customer().personScreenings().iterator().next());
                 mainTenant.preauthorizedPayment().set(mainTenant.customer().paymentMethods().iterator().next());
             }
 
-            Persistence.service().setTransactionSystemTime(lease.leaseFrom().getValue());
-            ServerSideFactory.create(LeaseFacade.class).init(lease);
-            ServerSideFactory.create(LeaseFacade.class).setUnit(lease, lease.unit());
+            Persistence.service().setTransactionSystemTime(lease.currentTerm().termFrom().getValue());
             ServerSideFactory.create(LeaseFacade.class).persist(lease);
-            ServerSideFactory.create(LeaseFacade.class).createMasterOnlineApplication(lease.getPrimaryKey());
+            ServerSideFactory.create(LeaseFacade.class).createMasterOnlineApplication(lease);
             Persistence.service().setTransactionSystemTime(null);
         }
 

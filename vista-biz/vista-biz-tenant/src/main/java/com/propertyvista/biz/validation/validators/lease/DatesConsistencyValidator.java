@@ -30,10 +30,11 @@ public class DatesConsistencyValidator implements EntityValidator<Lease> {
 
     @Override
     public Set<ValidationFailure> validate(Lease lease) {
-        if (lease.leaseTo().isNull() || lease.leaseFrom().isNull() || lease.leaseFrom().getValue().after(lease.leaseTo().getValue())) {
+        if (lease.currentTerm().termTo().isNull() || lease.currentTerm().termFrom().isNull()
+                || lease.currentTerm().termFrom().getValue().after(lease.currentTerm().termTo().getValue())) {
             Set<ValidationFailure> validationFailure = new HashSet<ValidationFailure>();
-            validationFailure.add(new SimpleValidationFailure(lease, i18n.tr("\"{0}\" date must be before \"{1}\" date", lease.leaseFrom().getMeta()
-                    .getCaption(), lease.leaseTo().getMeta().getCaption())));
+            validationFailure.add(new SimpleValidationFailure(lease, i18n.tr("\"{0}\" date must be before \"{1}\" date", lease.currentTerm().termFrom()
+                    .getMeta().getCaption(), lease.currentTerm().termTo().getMeta().getCaption())));
             return validationFailure;
         } else {
             return Collections.emptySet();

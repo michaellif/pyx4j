@@ -32,7 +32,7 @@ public class CLeaseHyperlink extends CEntityHyperlink<Lease> {
         setCommand(new Command() {
             @Override
             public void execute() {
-                if (!getValue().isNull() && !getValue().version().isNull()) {
+                if (!getValue().isNull()) {
                     CrudAppPlace place;
                     if (getValue().status().getValue().isDraft()) {
                         place = AppPlaceEntityMapper.resolvePlace(LeaseApplicationDTO.class);

@@ -18,12 +18,12 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.server.contexts.Context;
 
-import com.propertyvista.domain.tenant.lease.Lease2;
+import com.propertyvista.domain.tenant.lease.Lease;
 
-public class Lease2DatasetAccessRule implements DatasetAccessRule<Lease2> {
+public class Lease2DatasetAccessRule implements DatasetAccessRule<Lease> {
 
     @Override
-    public void applyRule(EntityQueryCriteria<Lease2> criteria) {
+    public void applyRule(EntityQueryCriteria<Lease> criteria) {
         criteria.add(PropertyCriterion.eq(criteria.proto().unit().building().userAccess(), Context.getVisit().getUserVisit().getPrincipalPrimaryKey()));
     }
 

@@ -50,10 +50,11 @@ public class BillingProductChargeProcessor extends AbstractBillingProcessor {
     private void createCharges() {
 
         if (!Bill.BillType.Final.equals(getBillingManager().getNextPeriodBill().billType().getValue())) {
-            createCharge(getBillingManager().getNextPeriodBill().billingAccount().lease().version().leaseProducts().serviceItem());
+            createCharge(getBillingManager().getNextPeriodBill().billingAccount().lease().currentTerm().version().leaseProducts().serviceItem());
         }
 
-        for (BillableItem billableItem : getBillingManager().getNextPeriodBill().billingAccount().lease().version().leaseProducts().featureItems()) {
+        for (BillableItem billableItem : getBillingManager().getNextPeriodBill().billingAccount().lease().currentTerm().version().leaseProducts()
+                .featureItems()) {
             if (billableItem.isNull()) {
                 throw new BillingException("Service Item is mandatory in lease");
             }

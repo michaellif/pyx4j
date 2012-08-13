@@ -214,8 +214,8 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
     private List<LeaseParticipant> retrieveUsers(Lease lease) {
         List<LeaseParticipant> users = new LinkedList<LeaseParticipant>();
 
-        Persistence.service().retrieve(lease.version().tenants());
-        for (Tenant tenant : lease.version().tenants()) {
+        Persistence.service().retrieve(lease.currentTerm().version().tenants());
+        for (Tenant tenant : lease.currentTerm().version().tenants()) {
             switch (tenant.role().getValue()) {
             case Applicant:
             case CoApplicant:

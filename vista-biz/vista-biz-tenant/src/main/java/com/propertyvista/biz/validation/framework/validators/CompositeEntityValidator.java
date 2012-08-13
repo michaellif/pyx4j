@@ -64,6 +64,8 @@ public abstract class CompositeEntityValidator<E extends IEntity> implements Ent
     public final Set<ValidationFailure> validate(E obj) {
         Set<ValidationFailure> failures = new HashSet<ValidationFailure>();
 
+        prepare(obj); // allow custom validator to somehow prepare object...
+
         for (Entry<Path, Collection<MemberValidator>> entry : memberValidators.entrySet()) {
             for (MemberValidator validator : entry.getValue()) {
                 Set<ValidationFailure> subFailures = validator.validate(obj.getMember(entry.getKey()));
@@ -100,6 +102,12 @@ public abstract class CompositeEntityValidator<E extends IEntity> implements Ent
      * Override this method to create validator bindings using <code>bind()</code>
      */
     protected abstract void init();
+
+    /**
+     * Override this method to prepare Entity for validation (load detached members, etc.)
+     */
+    protected void prepare(E obj) {
+    }
 
     protected final void bind(IObject<?> member, MemberValidator validator) {
         bind(memberValidators, member, validator);

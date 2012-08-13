@@ -13,17 +13,9 @@
  */
 package com.propertyvista.crm.rpc.services.lease.common;
 
-import java.util.Vector;
-
-import com.google.gwt.user.client.rpc.AsyncCallback;
-
 import com.pyx4j.entity.rpc.AbstractCrudService;
 
-import com.propertyvista.domain.tenant.lease.BillableItem;
-import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.dto.DepositLifecycleDTO;
 
 public interface DepositLifecycleCrudService extends AbstractCrudService<DepositLifecycleDTO> {
-
-    void getLeaseBillableItems(AsyncCallback<Vector<BillableItem>> callback, Lease leaseId);
 }

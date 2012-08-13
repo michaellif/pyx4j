@@ -64,8 +64,8 @@ public abstract class TenantSelectorDialog extends EntitySelectorTableDialog<Ten
                 new MemberColumnDescriptor.Builder(proto().customer().person().email(), false).build(),
                 new MemberColumnDescriptor.Builder(proto().customer().person().homePhone()).build(),
                 
-                new MemberColumnDescriptor.Builder(proto().leaseV().holder()).columnTitle(i18n.tr("Lease")).searchable(false).build(),
-                new MemberColumnDescriptor.Builder(proto().leaseV().holder().leaseId()).searchableOnly().build()
+                new MemberColumnDescriptor.Builder(proto().leaseTermV().holder()).columnTitle(i18n.tr("Lease Term")).searchable(false).build(),
+                new MemberColumnDescriptor.Builder(proto().leaseTermV().holder().lease().leaseId()).searchableOnly().build()
         );//@formatter:on
     }
 

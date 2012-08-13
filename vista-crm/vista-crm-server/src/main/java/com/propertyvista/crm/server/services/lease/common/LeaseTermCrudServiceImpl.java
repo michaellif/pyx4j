@@ -22,7 +22,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.biz.financial.deposit.DepositFacade;
-import com.propertyvista.biz.tenant.LeaseFacade2;
+import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.crm.rpc.services.lease.common.LeaseTermCrudService;
 import com.propertyvista.crm.server.util.CrmAppContext;
 import com.propertyvista.domain.financial.offering.Feature;
@@ -32,8 +32,8 @@ import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
-import com.propertyvista.domain.tenant.Guarantor2;
-import com.propertyvista.domain.tenant.Tenant2;
+import com.propertyvista.domain.tenant.Guarantor;
+import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
 import com.propertyvista.domain.tenant.lease.Deposit;
@@ -57,24 +57,21 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
         if (!dto.newParentLease().isNull()) {
             // persist newly created lease first:
             dbo.lease().set(dto.newParentLease());
-            dbo.lease().currentLeaseTerm().set(null);
+            dbo.lease().currentTerm().set(null);
             Persistence.secureSave(dbo.lease());
             // set this term as current for the lease:
-            dbo.lease().currentLeaseTerm().set(dbo);
+            dbo.lease().currentTerm().set(dbo);
         }
 
         updateAdjustments(dbo);
-        ServerSideFactory.create(LeaseFacade2.class).persist(dbo);
-        ServerSideFactory.create(LeaseFacade2.class).init(dbo.lease());
-        ServerSideFactory.create(LeaseFacade2.class).persist(dbo.lease());
+        ServerSideFactory.create(LeaseFacade.class).init(dbo.lease());
+        ServerSideFactory.create(LeaseFacade.class).persist(dbo.lease());
     }
 
     @Override
     protected void save(LeaseTerm dbo, LeaseTermDTO in) {
         updateAdjustments(dbo);
-        ServerSideFactory.create(LeaseFacade2.class).persist(dbo);
-//        // TODO: call this persist if lease has been changed only!
-//        ServerSideFactory.create(LeaseFacade2.class).persist(dbo.lease());
+        ServerSideFactory.create(LeaseFacade.class).persist(dbo.lease());
     }
 
     @Override
@@ -84,7 +81,7 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
 
     @Override
     protected void saveAsFinal(LeaseTerm entity) {
-        ServerSideFactory.create(LeaseFacade2.class).finalize(entity);
+        ServerSideFactory.create(LeaseFacade.class).finalize(entity);
     }
 
     @Override
@@ -98,12 +95,12 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
         }
 
         Persistence.service().retrieve(dto.version().tenants());
-        for (Tenant2 item : dto.version().tenants()) {
+        for (Tenant item : dto.version().tenants()) {
             Persistence.service().retrieve(item.screening());
         }
 
         Persistence.service().retrieve(dto.version().guarantors());
-        for (Guarantor2 item : dto.version().guarantors()) {
+        for (Guarantor item : dto.version().guarantors()) {
             Persistence.service().retrieve(item.screening());
         }
 
@@ -117,7 +114,7 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
 
     @Override
     public void setSelectedUnit(AsyncCallback<LeaseTermDTO> callback, AptUnit unitId, LeaseTermDTO currentValue) {
-        ServerSideFactory.create(LeaseFacade2.class).setUnit(currentValue, unitId);
+        ServerSideFactory.create(LeaseFacade.class).setUnit(currentValue, unitId);
         loadDetachedProducts(currentValue);
         fillServiceEligibilityData(currentValue);
         fillserviceItems(currentValue);
@@ -126,7 +123,7 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
 
     @Override
     public void setSelectedService(AsyncCallback<LeaseTermDTO> callback, ProductItem serviceId, LeaseTermDTO currentValue) {
-        ServerSideFactory.create(LeaseFacade2.class).setService(currentValue, serviceId);
+        ServerSideFactory.create(LeaseFacade.class).setService(currentValue, serviceId);
         loadDetachedProducts(currentValue);
         fillServiceEligibilityData(currentValue);
         callback.onSuccess(currentValue);
@@ -134,7 +131,7 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
 
     @Override
     public void createBillableItem(AsyncCallback<BillableItem> callback, ProductItem productItemId, LeaseTermDTO currentValue) {
-        callback.onSuccess(ServerSideFactory.create(LeaseFacade2.class).createBillableItem(productItemId, currentValue.lease().unit().building()));
+        callback.onSuccess(ServerSideFactory.create(LeaseFacade.class).createBillableItem(productItemId, currentValue.lease().unit().building()));
     }
 
     @Override

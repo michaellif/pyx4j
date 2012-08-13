@@ -24,24 +24,26 @@ import com.google.gwt.view.client.SelectionModel;
 
 import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor.Builder;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.criterion.EntityListCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CMoneyField;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.AppSite;
+import com.pyx4j.site.client.ui.crud.lister.ListerBase;
 import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
 
-import com.propertyvista.common.client.ui.components.VersionedLister;
+import com.propertyvista.crm.client.activity.crud.lease.common.LeaseTermEditorActivity;
+import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
-import com.propertyvista.domain.tenant.lease.Lease.Term;
+import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.dto.LeaseDTO;
+import com.propertyvista.dto.LeaseTermDTO;
 
-public class LeaseLister extends VersionedLister<LeaseDTO> {
+public class LeaseLister extends ListerBase<LeaseDTO> {
 
     private final static I18n i18n = I18n.get(LeaseLister.class);
 
@@ -58,7 +60,6 @@ public class LeaseLister extends VersionedLister<LeaseDTO> {
             
             new Builder(proto().status()).build(),
             new Builder(proto().completion()).build(),
-
             new Builder(proto().billingAccount().accountNumber()).build(),
             
             new Builder(proto().leaseFrom()).build(),
@@ -71,23 +72,8 @@ public class LeaseLister extends VersionedLister<LeaseDTO> {
             new Builder(proto().moveOutNotice(), false).build(),
             
             new Builder(proto().approvalDate(), false).build(),
-            new Builder(proto().creationDate(), false).build(),
-            
-            new Builder(proto().version().tenants()).build()
+            new Builder(proto().creationDate(), false).build()
         );//@formatter:on
-    }
-
-    @Override
-    protected EntityListCriteria<LeaseDTO> updateCriteria(EntityListCriteria<LeaseDTO> criteria) {
-        switch (getVersionDisplayMode()) {
-        case displayDraft:
-            criteria.add(PropertyCriterion.in(criteria.proto().status(), Lease.Status.currentNew()));
-            break;
-        case displayFinal:
-            criteria.add(PropertyCriterion.in(criteria.proto().status(), Lease.Status.current()));
-            break;
-        }
-        return super.updateCriteria(criteria);
     }
 
     @Override
@@ -95,13 +81,15 @@ public class LeaseLister extends VersionedLister<LeaseDTO> {
         new ExistingLeaseDataDialog().show();
     }
 
-    private LeaseDTO createNewLease(Service.ServiceType leaseType, BigDecimal balance) {
-        LeaseDTO newLease = EntityFactory.create(LeaseDTO.class);
+    private Lease createNewLease(Service.ServiceType leaseType, BigDecimal balance) {
+        Lease newLease = EntityFactory.create(Lease.class);
+
         newLease.type().setValue(leaseType);
-        newLease.term().setValue(Term.FixedEx);
         newLease.paymentFrequency().setValue(PaymentFrequency.Monthly);
-        newLease.status().setValue(Lease.Status.Created);
+        newLease.status().setValue(Lease.Status.ExistingLease);
+
         newLease.billingAccount().carryforwardBalance().setValue(balance);
+
         return newLease;
     }
 
@@ -125,7 +113,7 @@ public class LeaseLister extends VersionedLister<LeaseDTO> {
             balance.addValueValidator(new EditableValueValidator<BigDecimal>() {
                 @Override
                 public ValidationError isValid(CComponent<BigDecimal, ?> component, BigDecimal value) {
-                    return (value == null ? new ValidationError(component, i18n.tr("Initial balance value shoud be entered!")) : null);
+                    return (value == null ? new ValidationError(component, i18n.tr("Initial balance value shoud be set!")) : null);
                 }
             });
             Widget w;
@@ -145,7 +133,18 @@ public class LeaseLister extends VersionedLister<LeaseDTO> {
         public boolean onClickOk() {
             balance.setVisited(true);
             if (balance.isValid()) {
-                getPresenter().editNew(getItemOpenPlaceClass(), createNewLease(getSelectedType(), balance.getValue()));
+                // prepare LeaseTermDTO:
+                LeaseTermDTO termDto = EntityFactory.create(LeaseTermDTO.class);
+
+                termDto.newParentLease().set(createNewLease(getSelectedType(), balance.getValue()));
+                termDto.newParentLease().currentTerm().set(termDto);
+
+                termDto.type().setValue(LeaseTerm.Type.FixedEx);
+                termDto.lease().set(termDto.newParentLease());
+
+                AppSite.getPlaceController().goTo(
+                        new CrmSiteMap.Tenants.LeaseTerm().formNewItemPlace(termDto).queryArg(LeaseTermEditorActivity.ARG_NAME_RETURN_BH,
+                                LeaseTermEditorActivity.ReturnBehaviour.Lease.name()));
                 return true;
             }
             return false;

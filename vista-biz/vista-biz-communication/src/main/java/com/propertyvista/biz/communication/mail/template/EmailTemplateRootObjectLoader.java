@@ -160,8 +160,8 @@ public class EmailTemplateRootObjectLoader {
                 context.lease().set(getLease(context.leaseParticipant()));
             }
             t.ApplicantName().setValue(context.leaseParticipant().customer().person().name().getStringView());
-            t.StartDate().setValue(context.lease().leaseFrom().getStringView());
-            t.StartDateWeekDay().setValue(new SimpleDateFormat("EEEE").format(context.lease().leaseFrom().getValue()));
+            t.StartDate().setValue(context.lease().currentTerm().termFrom().getStringView());
+            t.StartDateWeekDay().setValue(new SimpleDateFormat("EEEE").format(context.lease().currentTerm().termFrom().getValue()));
         }
         return tObj;
     }
@@ -217,11 +217,13 @@ public class EmailTemplateRootObjectLoader {
             throw new Error("Context cannot be null");
         }
 
-        if (tenantInLease.leaseV().isValueDetached()) {
-            Persistence.service().retrieve(tenantInLease.leaseV());
-            Persistence.service().retrieve(tenantInLease.leaseV().holder());
+        if (tenantInLease.leaseTermV().isValueDetached()) {
+            Persistence.service().retrieve(tenantInLease.leaseTermV());
+            Persistence.service().retrieve(tenantInLease.leaseTermV().holder());
         }
-        Lease lease = tenantInLease.leaseV().holder();
+        Persistence.service().retrieve(tenantInLease.leaseTermV().holder().lease());
+
+        Lease lease = tenantInLease.leaseTermV().holder().lease();
         if (lease == null || lease.isNull()) {
             throw new Error("Invalid context. No lease found.");
         }
@@ -234,13 +236,12 @@ public class EmailTemplateRootObjectLoader {
         }
         if (lease.unit().isValueDetached()) {
             Persistence.service().retrieve(lease.unit());
+        }
+        if (lease.unit().building().isValueDetached()) {
             Persistence.service().retrieve(lease.unit().building());
         }
-        Building bld = lease.unit().building();
-        if (bld == null || bld.isNull()) {
-            throw new Error("Invalid context. No building found.");
-        }
-        Persistence.service().retrieve(bld.contacts().propertyContacts());
-        return bld;
+
+        Persistence.service().retrieve(lease.unit().building().contacts().propertyContacts());
+        return lease.unit().building();
     }
 }

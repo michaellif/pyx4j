@@ -27,7 +27,6 @@ import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.Timestamp.Update;
 import com.pyx4j.entity.annotations.ToString;
-import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
@@ -37,7 +36,6 @@ import com.propertyvista.domain.LegalQuestions;
 import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.domain.media.ApplicationDocumentHolder;
 import com.propertyvista.domain.media.IdentificationDocument;
-import com.propertyvista.domain.tenant.income.IIncomeInfo;
 import com.propertyvista.domain.tenant.income.PersonalAsset;
 import com.propertyvista.domain.tenant.income.PersonalIncome;
 import com.propertyvista.misc.EquifaxApproval;
@@ -82,12 +80,6 @@ public interface PersonScreening extends IEntity, ApplicationDocumentHolder<Iden
     @Length(3)
     @Caption(name = "Income")
     IList<PersonalIncome> incomes();
-
-    @Owned
-    @Length(3)
-    @Transient
-    @Caption(name = "Income (Other)")
-    IList<IIncomeInfo> incomes2();
 
     @Owned
     @Detached

@@ -36,10 +36,10 @@ public class BillSummaryServiceImpl implements BillSummaryService {
 
     static BillSummaryDTO retrieve() {
         Tenant tenant = TenantAppContext.getCurrentUserTenantInLease();
-        Persistence.service().retrieve(tenant.leaseV());
-        Persistence.service().retrieve(tenant.leaseV().holder());
+        Persistence.service().retrieve(tenant.leaseTermV());
+        Persistence.service().retrieve(tenant.leaseTermV().holder());
 
-        Lease lease = tenant.leaseV().holder();
+        Lease lease = tenant.leaseTermV().holder().lease();
         ARFacade arFacade = ServerSideFactory.create(ARFacade.class);
 
         BillSummaryDTO entity = EntityFactory.create(BillSummaryDTO.class);

@@ -21,6 +21,7 @@ import com.pyx4j.site.client.ui.crud.form.IViewerView;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.dto.DepositLifecycleDTO;
 import com.propertyvista.dto.LeaseDTO;
 
@@ -29,6 +30,8 @@ public interface LeaseViewerViewBase<DTO extends LeaseDTO> extends IViewerView<D
     interface Presenter extends IViewerView.Presenter {
 
         void retrieveUsers(AsyncCallback<List<LeaseParticipant>> callback);
+
+        void viewTerm(LeaseTerm leaseTermId);
     }
 
     IListerView<DepositLifecycleDTO> getDepositListerView();

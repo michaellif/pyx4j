@@ -70,17 +70,17 @@ public class ChargesServiceImpl extends ApplicationEntityServiceImpl implements 
 
     public Charges retrieveData() {
         Lease lease = PtAppContext.retrieveCurrentUserLease();
-        Persistence.service().retrieve(lease.version().tenants());
+        Persistence.service().retrieve(lease.currentTerm().version().tenants());
 
         Charges charges = retrieveApplicationEntity(Charges.class);
         if (charges == null) {
             log.debug("Creating new charges");
             charges = EntityFactory.create(Charges.class);
             charges.application().set(PtAppContext.retrieveCurrentUserApplication());
-            ChargesServerCalculation.updatePaymentSplitCharges(charges, lease.version().tenants());
+            ChargesServerCalculation.updatePaymentSplitCharges(charges, lease.currentTerm().version().tenants());
         }
 
-        BillableItem serviceItem = lease.version().leaseProducts().serviceItem();
+        BillableItem serviceItem = lease.currentTerm().version().leaseProducts().serviceItem();
         if (serviceItem != null && !serviceItem.isNull()) {
             charges.monthlyCharges().charges().clear();
 
@@ -95,7 +95,7 @@ public class ChargesServiceImpl extends ApplicationEntityServiceImpl implements 
             charges.applicationCharges().charges().add(DomainUtil.createChargeLine(ChargeLine.ChargeType.oneTimePayment, new BigDecimal("24.99"))); // get value from policy ! 
 
             // fill agreed items:
-            for (BillableItem item : lease.version().leaseProducts().featureItems()) {
+            for (BillableItem item : lease.currentTerm().version().leaseProducts().featureItems()) {
                 if (item.item().type().isInstanceOf(FeatureItemType.class)) {
 
                     switch (item.item().type().<FeatureItemType> cast().featureType().getValue()) {

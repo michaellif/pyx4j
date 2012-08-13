@@ -36,7 +36,6 @@ import com.pyx4j.widgets.client.tabpanel.Tab;
 
 import com.propertyvista.common.client.policy.ClientPolicyManager;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
-import com.propertyvista.crm.client.ui.crud.lease.common.CLeaseHyperlink;
 import com.propertyvista.crm.rpc.services.selections.SelectFloorplanListService;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
 import com.propertyvista.domain.property.asset.Floorplan;
@@ -132,7 +131,8 @@ public class LeadForm extends CrmEntityForm<Lead> {
         if (isEditable()) {
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().lease(), new CEntityLabel<Lease>()), 40).build());
         } else {
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().lease(), new CLeaseHyperlink()), 40).build());
+            main.setWidget(++row, 0,
+                    new DecoratorBuilder(inject(proto().lease(), new CEntityCrudHyperlink<Lease>(AppPlaceEntityMapper.resolvePlace(Lease.class))), 40).build());
             main.getFlexCellFormatter().setColSpan(row, 0, 2);
         }
 

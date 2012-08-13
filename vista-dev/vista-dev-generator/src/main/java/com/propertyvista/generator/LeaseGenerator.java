@@ -17,12 +17,14 @@ import java.math.BigDecimal;
 import java.util.EnumSet;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.essentials.server.preloader.DataGenerator;
 
+import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.Service;
@@ -67,10 +69,6 @@ public class LeaseGenerator extends DataGenerator {
     }
 
     public Lease createLease(AptUnit unit) {
-        Lease lease = EntityFactory.create(Lease.class);
-        lease.status().setValue(Lease.Status.Application);
-        lease.unit().set(unit);
-
         LogicalDate effectiveAvailableForRent = new LogicalDate(Math.max(unit._availableForRent().getValue().getTime(), RandomUtil
                 .randomLogicalDate(2012, 2012).getTime()));
         LogicalDate createdDate = new LogicalDate(effectiveAvailableForRent.getTime() + Math.abs(random().nextLong()) % MAX_CREATE_WAIT);
@@ -80,14 +78,16 @@ public class LeaseGenerator extends DataGenerator {
                 % (MAX_LEASE_DURATION - MIN_LEASE_DURATION));
         LogicalDate expectedMoveIn = leaseFrom; // for simplicity's sake
 
-        lease.type().setValue(Service.ServiceType.residentialUnit);
-        lease.leaseFrom().setValue(leaseFrom);
-        lease.leaseTo().setValue(leaseTo);
+        Lease lease = ServerSideFactory.create(LeaseFacade.class).create(Lease.Status.Application);
 
-        lease.creationDate().setValue(createdDate);
+        lease.currentTerm().termFrom().setValue(leaseFrom);
+        lease.currentTerm().termTo().setValue(leaseTo);
         lease.expectedMoveIn().setValue(expectedMoveIn);
 
+        ServerSideFactory.create(LeaseFacade.class).setUnit(lease, unit);
         addTenants(lease);
+
+        lease.creationDate().setValue(createdDate);
 
         return lease;
     }
@@ -96,21 +96,21 @@ public class LeaseGenerator extends DataGenerator {
         Tenant mainTenant = EntityFactory.create(Tenant.class);
         mainTenant.customer().set(customerGenerator.createCustomer());
         mainTenant.customer().emergencyContacts().addAll(customerGenerator.createEmergencyContacts());
-        mainTenant.customer()._PersonScreenings().add(screeningGenerator.createScreening());
-        mainTenant.screening().set(mainTenant.customer()._PersonScreenings().iterator().next());
+        mainTenant.customer().personScreenings().add(screeningGenerator.createScreening());
+        mainTenant.screening().set(mainTenant.customer().personScreenings().iterator().next());
         mainTenant.role().setValue(LeaseParticipant.Role.Applicant);
         mainTenant.percentage().setValue(new BigDecimal(1));
-        lease.version().tenants().add(mainTenant);
+        lease.currentTerm().version().tenants().add(mainTenant);
 
         addPreathorisedPaymentMethod(mainTenant);
         Guarantor guarantor = EntityFactory.create(Guarantor.class);
         guarantor.customer().set(customerGenerator.createCustomer());
         guarantor.screening().set(screeningGenerator.createScreening());
-        guarantor.customer()._PersonScreenings().add(guarantor.screening());
+        guarantor.customer().personScreenings().add(guarantor.screening());
         guarantor.role().setValue(LeaseParticipant.Role.Guarantor);
         guarantor.relationship().setValue(RandomUtil.randomEnum(PersonRelationship.class));
         guarantor.tenant().set(mainTenant);
-        lease.version().guarantors().add(guarantor);
+        lease.currentTerm().version().guarantors().add(guarantor);
 
         int maxTenants = RandomUtil.randomInt(config.numTenantsInLease);
         for (int t = 0; t < maxTenants; t++) {
@@ -118,19 +118,18 @@ public class LeaseGenerator extends DataGenerator {
             tenant.customer().set(customerGenerator.createCustomer());
             tenant.customer().emergencyContacts().addAll(customerGenerator.createEmergencyContacts());
             tenant.screening().set(screeningGenerator.createScreening());
-            tenant.customer()._PersonScreenings().add(tenant.screening());
+            tenant.customer().personScreenings().add(tenant.screening());
 
             tenant.role().setValue(RandomUtil.random(EnumSet.of(LeaseParticipant.Role.CoApplicant, LeaseParticipant.Role.Dependent)));
             tenant.percentage().setValue(BigDecimal.ZERO);
             tenant.relationship().setValue(RandomUtil.randomEnum(PersonRelationship.class));
             tenant.takeOwnership().setValue(RandomUtil.randomBoolean());
 
-            lease.version().tenants().add(tenant);
+            lease.currentTerm().version().tenants().add(tenant);
         }
     }
 
     private void addPreathorisedPaymentMethod(Tenant tenant) {
-
         PaymentMethod m = EntityFactory.create(PaymentMethod.class);
         m.type().setValue(PaymentType.Echeck);
         m.isOneTimePayment().setValue(Boolean.FALSE);
@@ -150,26 +149,24 @@ public class LeaseGenerator extends DataGenerator {
         m.phone().setValue(CommonsGenerator.createPhone());
 
         tenant.preauthorizedPayment().set(m);
-
         tenant.customer().paymentMethods().add(tenant.preauthorizedPayment());
     }
 
     public static void attachDocumentData(Lease lease) {
-        for (Tenant tenant : lease.version().tenants()) {
-            for (PersonScreening screening : tenant.customer()._PersonScreenings()) {
+        for (Tenant tenant : lease.currentTerm().version().tenants()) {
+            for (PersonScreening screening : tenant.customer().personScreenings()) {
                 ScreeningGenerator.attachDocumentData(screening);
             }
         }
     }
 
     public static void assigneLeaseProducts(Lease lease) {
-
         EntityQueryCriteria<ProductItem> serviceCriteria = EntityQueryCriteria.create(ProductItem.class);
         serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().type(), ServiceItemType.class));
         serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().element(), lease.unit()));
         ProductItem serviceItem = Persistence.service().retrieve(serviceCriteria);
         if (serviceItem != null) {
-            lease.version().leaseProducts().serviceItem().set(createBillableItem(serviceItem, lease.leaseFrom().getValue()));
+            lease.currentTerm().version().leaseProducts().serviceItem().set(createBillableItem(serviceItem, lease.currentTerm().termFrom().getValue()));
 
             Persistence.service().retrieve(serviceItem.product());
             Service selectedService = ((Service.ServiceV) serviceItem.product().cast()).holder();
@@ -185,7 +182,8 @@ public class LeaseGenerator extends DataGenerator {
                     Persistence.service().retrieve(feature.version().items());
                     for (ProductItem item : feature.version().items()) {
                         if (item.isDefault().isBooleanTrue()) {
-                            lease.version().leaseProducts().featureItems().add(createBillableItem(item, lease.leaseFrom().getValue()));
+                            lease.currentTerm().version().leaseProducts().featureItems()
+                                    .add(createBillableItem(item, lease.currentTerm().termFrom().getValue()));
                         }
                     }
                 }
@@ -194,7 +192,7 @@ public class LeaseGenerator extends DataGenerator {
             // pre-populate concessions for the new service:
             Persistence.service().retrieve(selectedService.version().concessions());
             if (!selectedService.version().concessions().isEmpty()) {
-                lease.version().leaseProducts().concessions().add(RandomUtil.random(selectedService.version().concessions()));
+                lease.currentTerm().version().leaseProducts().concessions().add(RandomUtil.random(selectedService.version().concessions()));
             }
         }
     }

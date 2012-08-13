@@ -19,6 +19,7 @@ import org.junit.Before;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -31,6 +32,7 @@ import com.propertyvista.biz.occupancy.AptUnitOccupancyManagerHelper;
 import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.biz.occupancy.SplittingHandler;
 import com.propertyvista.biz.occupancy.UnitTurnoverAnalysisFacade;
+import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.config.tests.VistaTestDBSetup;
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus;
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitTurnoverStats;
@@ -127,24 +129,25 @@ public class UnitTurnoverAnalysisManagerTestBase {
         tenant.user().set(user);
         Persistence.service().merge(tenant);
 
-        final Lease lease = EntityFactory.create(Lease.class);
+        final Lease lease = ServerSideFactory.create(LeaseFacade.class).create(Lease.Status.Application);
+
         lease.status().setValue(Lease.Status.Active);
         lease.leaseId().setValue("lease: " + dateFrom + " " + dateTo);
         lease.unit().set(unit);
         lease.type().setValue(Service.ServiceType.residentialUnit);
         lease.creationDate().setValue(asDate(dateFrom));
-        lease.leaseFrom().setValue(asDate(dateFrom));
-        lease.leaseTo().setValue(asDate(dateTo));
+        lease.currentTerm().termFrom().setValue(asDate(dateFrom));
+        lease.currentTerm().termTo().setValue(asDate(dateTo));
         lease.expectedMoveIn().setValue(asDate(dateFrom));
         lease.paymentFrequency().setValue(PaymentFrequency.Monthly);
 
         Tenant tenantInLease = EntityFactory.create(Tenant.class);
-        tenantInLease.leaseV().set(lease.version());
         tenantInLease.customer().set(tenant);
         tenantInLease.orderInLease().setValue(1);
         tenantInLease.role().setValue(LeaseParticipant.Role.Applicant);
-        lease.version().tenants().add(tenantInLease);
-        Persistence.secureSave(lease);
+        lease.currentTerm().version().tenants().add(tenantInLease);
+
+        ServerSideFactory.create(LeaseFacade.class).persist(lease);
 
         AptUnitOccupancySegment leased = AptUnitOccupancyManagerHelper.split(unit, asDate(dateFrom), new SplittingHandler() {
             @Override

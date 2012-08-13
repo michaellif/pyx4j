@@ -13,7 +13,6 @@
  */
 package com.propertyvista.crm.client.ui.crud.lease;
 
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
@@ -21,7 +20,6 @@ import com.pyx4j.widgets.client.tabpanel.Tab;
 
 import com.propertyvista.crm.client.ui.crud.lease.common.LeaseFormBase;
 import com.propertyvista.crm.client.ui.crud.lease.invoice.TransactionHistoryViewer;
-import com.propertyvista.domain.tenant.lease.Lease.Status;
 import com.propertyvista.dto.LeaseDTO;
 
 public class LeaseForm extends LeaseFormBase<LeaseDTO> {
@@ -29,30 +27,17 @@ public class LeaseForm extends LeaseFormBase<LeaseDTO> {
     private Tab adjustmentsTab, billsTab, paymentsTab, financialTab;
 
     public LeaseForm() {
-        this(false);
-    }
-
-    public LeaseForm(boolean viewMode) {
-        super(LeaseDTO.class, viewMode);
+        super(LeaseDTO.class);
     }
 
     @Override
     public void createTabs() {
-
         createCommonContent();
 
-        adjustmentsTab = addTab(isEditable() ? new HTML() : ((LeaseViewerView) getParentView()).getLeaseAdjustmentListerView().asWidget(),
-                i18n.tr("Adjustments"));
-        setTabEnabled(adjustmentsTab, !isEditable());
-
-        billsTab = addTab(isEditable() ? new HTML() : ((LeaseViewerView) getParentView()).getBillListerView().asWidget(), i18n.tr("Bills"));
-        setTabEnabled(billsTab, !isEditable());
-
-        paymentsTab = addTab(isEditable() ? new HTML() : ((LeaseViewerView) getParentView()).getPaymentListerView().asWidget(), i18n.tr("Payments"));
-        setTabEnabled(paymentsTab, !isEditable());
-
-        financialTab = addTab(isEditable() ? new HTML() : createFinancialTransactionHistoryTab().asWidget(), i18n.tr("Financial Summary"));
-        setTabEnabled(financialTab, !isEditable());
+        adjustmentsTab = addTab(((LeaseViewerView) getParentView()).getLeaseAdjustmentListerView().asWidget(), i18n.tr("Adjustments"));
+        billsTab = addTab(((LeaseViewerView) getParentView()).getBillListerView().asWidget(), i18n.tr("Bills"));
+        paymentsTab = addTab(((LeaseViewerView) getParentView()).getPaymentListerView().asWidget(), i18n.tr("Payments"));
+        financialTab = addTab(createFinancialTransactionHistoryTab().asWidget(), i18n.tr("Financial Summary"));
     }
 
     @Override
@@ -63,13 +48,6 @@ public class LeaseForm extends LeaseFormBase<LeaseDTO> {
         setTabVisible(billsTab, !getValue().status().getValue().isDraft());
         setTabVisible(paymentsTab, !getValue().status().getValue().isDraft());
         setTabVisible(financialTab, !getValue().status().getValue().isDraft());
-
-        if (!isEditable()) {
-            ((LeaseViewerView) getParentView()).getLeaseAdjustmentListerView().getLister().getDataTablePanel().getAddButton()
-                    .setEnabled(getValue().status().getValue() == Status.Closed);
-            ((LeaseViewerView) getParentView()).getPaymentListerView().getLister().getDataTablePanel().getAddButton()
-                    .setEnabled(getValue().status().getValue() == Status.Closed);
-        }
     }
 
     private IsWidget createFinancialTransactionHistoryTab() {

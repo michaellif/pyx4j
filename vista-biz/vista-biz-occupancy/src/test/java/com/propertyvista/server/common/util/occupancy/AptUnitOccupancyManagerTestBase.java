@@ -40,12 +40,18 @@ import com.pyx4j.security.shared.UserVisit;
 import com.pyx4j.unit.server.mock.TestLifecycle;
 
 import com.propertyvista.biz.occupancy.OccupancyFacade;
+import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.config.tests.VistaTestDBSetup;
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.financial.offering.Service.ServiceType;
 import com.propertyvista.domain.financial.offering.ServiceItemType;
+import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
+import com.propertyvista.domain.policy.policies.IdAssignmentPolicy;
+import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem;
+import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdAssignmentType;
+import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.OffMarketType;
@@ -53,7 +59,6 @@ import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySe
 import com.propertyvista.domain.security.VistaBasicBehavior;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
 
 public class AptUnitOccupancyManagerTestBase {
 
@@ -87,6 +92,8 @@ public class AptUnitOccupancyManagerTestBase {
         Persistence.service().delete(new EntityQueryCriteria<AptUnit>(AptUnit.class));
 //        Persistence.service().delete(new EntityQueryCriteria<Building>(Building.class));
         Persistence.service().setTransactionSystemTime(asDate("1900-01-01"));
+
+        generateIdAssignmentPolicy();
 
         ServiceItemType type = EntityFactory.create(ServiceItemType.class);
         type.serviceType().setValue(ServiceType.residentialUnit);
@@ -123,6 +130,21 @@ public class AptUnitOccupancyManagerTestBase {
         Persistence.service().setTransactionSystemTime(null);
     }
 
+    protected void generateIdAssignmentPolicy() {
+        OrganizationPoliciesNode orgNode = EntityFactory.create(OrganizationPoliciesNode.class);
+        Persistence.service().persist(orgNode);
+
+        IdAssignmentPolicy policy = EntityFactory.create(IdAssignmentPolicy.class);
+        policy.node().set(orgNode);
+
+        IdAssignmentItem item = EntityFactory.create(IdAssignmentItem.class);
+        item.target().setValue(IdTarget.lease);
+        item.type().setValue(IdAssignmentType.generatedNumber);
+
+        policy.itmes().add(item);
+        Persistence.service().persist(policy);
+    }
+
     @After
     public void tearDown() {
         TestLifecycle.tearDown();
@@ -144,12 +166,11 @@ public class AptUnitOccupancyManagerTestBase {
 
     protected Lease createLease(String leaseFrom, String leaseTo) {
         if (unit != null) {
-            Lease lease = EntityFactory.create(Lease.class);
-            lease.paymentFrequency().setValue(PaymentFrequency.Monthly);
+            Lease lease = ServerSideFactory.create(LeaseFacade.class).create(Lease.Status.Application);
             lease.unit().set(unit);
-            lease.leaseFrom().setValue(asDate(leaseFrom));
-            lease.leaseTo().setValue(asDate(leaseTo));
-            Persistence.service().merge(lease);
+            lease.currentTerm().termFrom().setValue(asDate(leaseFrom));
+            lease.currentTerm().termTo().setValue(asDate(leaseTo));
+            ServerSideFactory.create(LeaseFacade.class).persist(lease);
             return lease;
         } else {
             throw new IllegalStateException("can't create a lease without a unit");
@@ -157,7 +178,7 @@ public class AptUnitOccupancyManagerTestBase {
     }
 
     protected void updateLease(Lease lease) {
-        Persistence.service().merge(lease);
+        ServerSideFactory.create(LeaseFacade.class).persist(lease);
     }
 
     protected ExpectBuilder expect() {

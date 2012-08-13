@@ -13,44 +13,18 @@
  */
 package com.propertyvista.crm.client.ui.crud.lease.common;
 
-import java.util.Date;
-import java.util.List;
-
-import com.google.gwt.user.client.ui.HTML;
-
-import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.commons.TimeUtils;
-import com.pyx4j.entity.client.ui.CEntityLabel;
-import com.pyx4j.entity.shared.criterion.Criterion;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEnumLabel;
-import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
-import com.pyx4j.forms.client.validators.EditableValueValidator;
-import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
-import com.pyx4j.site.client.ui.crud.form.IEditorView;
 import com.pyx4j.site.client.ui.crud.misc.CEntityCrudHyperlink;
-import com.pyx4j.site.client.ui.crud.misc.CEntitySelectorHyperlink;
-import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
-import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
-import com.propertyvista.common.client.policy.ClientPolicyManager;
 import com.propertyvista.common.client.ui.components.editors.dto.bill.BillForm;
-import com.propertyvista.common.client.ui.validators.DateInPeriodValidation;
-import com.propertyvista.common.client.ui.validators.StartEndDateValidation;
-import com.propertyvista.crm.client.ui.components.boxes.UnitSelectorDialog;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
-import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
-import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
-import com.propertyvista.domain.tenant.Tenant;
-import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.misc.VistaTODO;
 
@@ -58,30 +32,17 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
 
     protected static final I18n i18n = I18n.get(LeaseFormBase.class);
 
-    private Tab chargesTab;
+    private Tab chargesTab, depositsTab;
 
     protected LeaseFormBase(Class<DTO> clazz) {
-        this(clazz, false);
-    }
-
-    protected LeaseFormBase(Class<DTO> clazz, boolean viewMode) {
-        super(clazz, viewMode);
+        super(clazz, true);
     }
 
     @SuppressWarnings("unchecked")
     protected void createCommonContent() {
-
-        Tab tab = addTab(createDetailsTab(i18n.tr("Details")));
-        selectTab(tab);
-
-        addTab(createTenantsTab(i18n.tr("Tenants")));
-        addTab(createGuarantorsTab(i18n.tr("Guarantors")));
-        addTab(createProductsTab(i18n.tr("Products")));
-        tab = addTab(isEditable() ? new HTML() : ((LeaseViewerViewBase<DTO>) getParentView()).getDepositListerView().asWidget(), i18n.tr("Deposits"));
-        setTabEnabled(tab, !isEditable());
-
+        selectTab(addTab(createDetailsTab(i18n.tr("Details"))));
+        depositsTab = addTab(((LeaseViewerViewBase<DTO>) getParentView()).getDepositListerView().asWidget(), i18n.tr("Deposits"));
         chargesTab = addTab(createChargesTab(i18n.tr("Charges")));
-        setTabEnabled(chargesTab, !isEditable());
     }
 
     @Override
@@ -89,6 +50,7 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
         super.onValueSet(populate);
 
         setTabVisible(chargesTab, getValue().status().getValue().isDraft());
+        setTabVisible(depositsTab, !getValue().status().getValue().isDraft());
 
         get(proto().completion()).setVisible(!getValue().completion().isNull());
 
@@ -97,38 +59,47 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
 
         get(proto().approvalDate()).setVisible(!getValue().approvalDate().isNull());
 
-        // disable some editing on signed lease:
-        if (isEditable()) {
-            boolean isLeaseSigned = !getValue().approvalDate().isNull();
-
-            ClientPolicyManager.setIdComponentEditabilityByPolicy(IdTarget.lease, get(proto().leaseId()), getValue().getPrimaryKey());
-
-            get(proto().leaseFrom()).setViewable(isLeaseSigned);
-            get(proto().leaseTo()).setViewable(isLeaseSigned);
-
-            get(proto().unit()).setEditable(!isLeaseSigned);
-
-            get(proto().actualMoveOut()).setVisible(!getValue().expectedMoveOut().isNull());
-        } else {
-            get(proto().actualLeaseTo()).setVisible(!getValue().actualLeaseTo().isNull());
-            get(proto().actualMoveIn()).setVisible(!getValue().actualMoveIn().isNull());
-            get(proto().actualMoveOut()).setVisible(!getValue().actualMoveOut().isNull());
-        }
+        get(proto().actualLeaseTo()).setVisible(!getValue().actualLeaseTo().isNull());
+        get(proto().actualMoveIn()).setVisible(!getValue().actualMoveIn().isNull());
+        get(proto().actualMoveOut()).setVisible(!getValue().actualMoveOut().isNull());
     }
 
     private FormFlexPanel createDetailsTab(String title) {
+        // Lease details: ---------------------------------------------------------------------------------------------------------------------------
+        FormFlexPanel detailsPanel = new FormFlexPanel();
+
+        int detailsRow = -1; // first column:
+        detailsPanel.setWidget(++detailsRow, 0, new DecoratorBuilder(inject(proto().leaseId()), 15).build());
+        detailsPanel.setWidget(++detailsRow, 0, new DecoratorBuilder(inject(proto().type(), new CEnumLabel())).build());
+        detailsPanel.setWidget(++detailsRow, 0, new DecoratorBuilder(inject(proto().paymentFrequency(), new CEnumLabel())).build());
+        detailsPanel.setWidget(++detailsRow, 0, new DecoratorBuilder(inject(proto().status(), new CEnumLabel())).build());
+        detailsPanel.setWidget(++detailsRow, 0, new DecoratorBuilder(inject(proto().completion(), new CEnumLabel())).build());
+        detailsPanel.setWidget(++detailsRow, 0, new DecoratorBuilder(inject(proto().billingAccount().accountNumber())).build());
+
+        detailsRow = -1; // second column:
+        detailsPanel.setBR(++detailsRow, 1, 1);
+        detailsPanel.setWidget(++detailsRow, 1,
+                new DecoratorBuilder(inject(proto().unit().building(), new CEntityCrudHyperlink<Building>(AppPlaceEntityMapper.resolvePlace(Building.class))),
+                        20).build());
+        detailsPanel.setWidget(++detailsRow, 1,
+                new DecoratorBuilder(inject(proto().unit(), new CEntityCrudHyperlink<AptUnit>(AppPlaceEntityMapper.resolvePlace(AptUnit.class))), 20).build());
+
+        detailsPanel
+                .setWidget(
+                        ++detailsRow,
+                        1,
+                        new DecoratorBuilder(inject(proto().currentTerm(),
+                                new CEntityCrudHyperlink<LeaseTerm>(AppPlaceEntityMapper.resolvePlace(LeaseTerm.class))), 20).build());
+
+        detailsPanel.getColumnFormatter().setWidth(0, "40%");
+        detailsPanel.getColumnFormatter().setWidth(1, "60%");
+
         FormFlexPanel main = new FormFlexPanel(title);
-
         int row = -1;
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseId()), 15).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().type(), new CEnumLabel())).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().term(), new CEnumLabel())).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().status(), new CEnumLabel())).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().completion(), new CEnumLabel())).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingAccount().accountNumber())).build());
-        get(proto().billingAccount().accountNumber()).setViewable(true);
 
-        // Lease dates:
+        main.setWidget(++row, 0, detailsPanel);
+
+        // Lease dates: -----------------------------------------------------------------------------------------------------------------------------
         main.setBR(++row, 0, 1);
         FormFlexPanel datesPanel = new FormFlexPanel();
 
@@ -144,136 +115,52 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
         datesPanel.getColumnFormatter().setWidth(1, "60%");
         main.setWidget(++row, 0, datesPanel);
 
-        main.setBR(++row, 0, 1);
-        if (isEditable()) {
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().unit().building(), new CEntityLabel<Building>()), 20).build());
-        } else {
-            main.setWidget(
-                    ++row,
-                    0,
-                    new DecoratorBuilder(inject(proto().unit().building(),
-                            new CEntityCrudHyperlink<Building>(AppPlaceEntityMapper.resolvePlace(Building.class))), 20).build());
-        }
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().unit(), new CEntitySelectorHyperlink<AptUnit>() {
-            @Override
-            protected AppPlace getTargetPlace() {
-                return AppPlaceEntityMapper.resolvePlace(AptUnit.class, getValue().getPrimaryKey());
-            }
-
-            @Override
-            protected EntitySelectorTableDialog<AptUnit> getSelectorDialog() {
-                return new UnitSelectorDialog() {
-                    @Override
-                    protected void setFilters(List<Criterion> filters) {
-                        assert (filters != null);
-
-                        DTO currentValue = LeaseFormBase.this.getValue();
-                        if (currentValue.status().getValue() == Lease.Status.Created) { // existing lease:
-
-                            filters.add(PropertyCriterion.eq(proto().unitOccupancySegments().$().status(), AptUnitOccupancySegment.Status.pending));
-                            filters.add(PropertyCriterion.eq(proto().unitOccupancySegments().$().dateTo(), new LogicalDate(1100, 0, 1)));
-                            filters.add(PropertyCriterion.le(proto().unitOccupancySegments().$().dateFrom(), ClientContext.getServerDate()));
-
-                        } else if (currentValue.status().getValue() == Lease.Status.Application) { // lease application:
-
-                            filters.add(PropertyCriterion.eq(proto().unitOccupancySegments().$().status(), AptUnitOccupancySegment.Status.available));
-                            filters.add(PropertyCriterion.eq(proto().unitOccupancySegments().$().dateTo(), new LogicalDate(1100, 0, 1)));
-                            if (!currentValue.leaseFrom().isNull()) {
-                                filters.add(PropertyCriterion.le(proto().unitOccupancySegments().$().dateFrom(), currentValue.leaseFrom().getValue()));
-                            } else {
-                                filters.add(PropertyCriterion.le(proto().unitOccupancySegments().$().dateFrom(), ClientContext.getServerDate()));
-                            }
-                        }
-
-                        super.setFilters(filters);
-                    };
-
-                    @SuppressWarnings("unchecked")
-                    @Override
-                    public boolean onClickOk() {
-                        if (!getSelectedItems().isEmpty()) {
-                            ((LeaseEditorViewBase.Presenter) ((IEditorView<DTO>) getParentView()).getPresenter()).setSelectedUnit(getSelectedItems().get(0));
-                        }
-                        return !getSelectedItems().isEmpty();
-                    }
-                };
-            }
-        }), 20).build());
-
-        // Move dates:
+        // Move dates: ------------------------------------------------------------------------------------------------------------------------------
         main.setBR(++row, 0, 1);
         datesPanel = new FormFlexPanel();
 
         datesRow = -1; // first column:
         datesPanel.setWidget(++datesRow, 0, new DecoratorBuilder(inject(proto().expectedMoveIn()), 9).build());
-        datesPanel.setWidget(++datesRow, 0, new DecoratorBuilder(inject(proto().moveOutNotice()), 9).build());
         datesPanel.setWidget(++datesRow, 0, new DecoratorBuilder(inject(proto().expectedMoveOut()), 9).build());
+        datesPanel.setWidget(++datesRow, 0, new DecoratorBuilder(inject(proto().moveOutNotice()), 9).build());
 
         datesRow = -1; // second column:
-        datesPanel.setWidget(++datesRow, 1, new DecoratorBuilder(inject(proto().actualMoveIn()), 9).build());
         datesPanel.setBR(++datesRow, 1, 1);
+        datesPanel.setWidget(++datesRow, 1, new DecoratorBuilder(inject(proto().actualMoveIn()), 9).build());
         datesPanel.setWidget(++datesRow, 1, new DecoratorBuilder(inject(proto().actualMoveOut()), 9).build());
-
-        get(proto().moveOutNotice()).setViewable(true);
-        get(proto().expectedMoveOut()).setViewable(true);
 
         datesPanel.getColumnFormatter().setWidth(0, "40%");
         datesPanel.getColumnFormatter().setWidth(1, "60%");
         main.setWidget(++row, 0, datesPanel);
 
-        // other dates:
+        // Other dates: -----------------------------------------------------------------------------------------------------------------------------
         main.setBR(++row, 0, 1);
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().creationDate()), 9).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().approvalDate()), 9).build());
+        datesPanel = new FormFlexPanel();
 
-// TODO link to application:        
-//        main.setBR(++row, 0, 1);
-//        if (!isEditable()) {
-//            main.setWidget(
-//                    ++row,
-//                    0,
-//                    new DecoratorBuilder(inject(proto().leaseApplication(),
-//                            new CEntityCrudHyperlink<Building>(AppPlaceEntityMapper.resolvePlace(LeaseApplication.class))), 20).build());
-//        }
+        datesPanel.setWidget(0, 0, new DecoratorBuilder(inject(proto().creationDate()), 9).build());
+        datesPanel.setWidget(0, 1, new DecoratorBuilder(inject(proto().approvalDate()), 9).build());
 
-        get(proto().creationDate()).setViewable(true);
-        get(proto().approvalDate()).setViewable(true);
+        datesPanel.getColumnFormatter().setWidth(0, "40%");
+        datesPanel.getColumnFormatter().setWidth(1, "60%");
+        main.setWidget(++row, 0, datesPanel);
 
-        return main;
-    }
+        // Tenants/Guarantors: ----------------------------------------------------------------------------------------------------------------------
+        main.setH1(++row, 0, 2, proto().currentTerm().version().tenants().getMeta().getCaption());
+        main.setWidget(++row, 0, inject(proto().currentTerm().version().tenants(), new TenantInLeaseFolder()));
 
-    private FormFlexPanel createTenantsTab(String title) {
-        FormFlexPanel main = new FormFlexPanel(title);
+        main.setH1(++row, 0, 2, proto().currentTerm().version().guarantors().getMeta().getCaption());
+        main.setWidget(++row, 0, inject(proto().currentTerm().version().guarantors(), new GuarantorInLeaseFolder()));
 
-        main.setWidget(0, 0, inject(proto().version().tenants(), new TenantInLeaseFolder(this, isEditable())));
-
-        return main;
-    }
-
-    private FormFlexPanel createGuarantorsTab(String title) {
-        FormFlexPanel main = new FormFlexPanel(title);
-
-        main.setWidget(0, 0, inject(proto().version().guarantors(), new GuarantorInLeaseFolder(this, isEditable())));
-
-        return main;
-    }
-
-    private FormFlexPanel createProductsTab(String title) {
-        FormFlexPanel main = new FormFlexPanel(title);
-
-        @SuppressWarnings("unchecked")
-        IEditorView<DTO> leaseEditorView = (isEditable() ? (IEditorView<DTO>) getParentView() : null);
-
-        int row = -1;
+        // Products: --------------------------------------------------------------------------------------------------------------------------------
         main.setH1(++row, 0, 2, i18n.tr("Service"));
-        main.setWidget(++row, 0, inject(proto().version().leaseProducts().serviceItem(), new BillableItemEditor(this, leaseEditorView)));
+        main.setWidget(++row, 0, inject(proto().currentTerm().version().leaseProducts().serviceItem(), new BillableItemViewer()));
 
-        main.setH1(++row, 0, 2, proto().version().leaseProducts().featureItems().getMeta().getCaption());
-        main.setWidget(++row, 0, inject(proto().version().leaseProducts().featureItems(), new BillableItemFolder(isEditable(), this, leaseEditorView)));
+        main.setH1(++row, 0, 2, proto().currentTerm().version().leaseProducts().featureItems().getMeta().getCaption());
+        main.setWidget(++row, 0, inject(proto().currentTerm().version().leaseProducts().featureItems(), new BillableItemFolder()));
 
         if (!VistaTODO.removedForProduction) {
-            main.setH1(++row, 0, 2, proto().version().leaseProducts().concessions().getMeta().getCaption());
-            main.setWidget(++row, 0, inject(proto().version().leaseProducts().concessions(), new ConcessionFolder(isEditable(), this)));
+            main.setH1(++row, 0, 2, proto().currentTerm().version().leaseProducts().concessions().getMeta().getCaption());
+            main.setWidget(++row, 0, inject(proto().currentTerm().version().leaseProducts().concessions(), new ConcessionFolder()));
         }
 
         return main;
@@ -285,62 +172,5 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
         main.setWidget(0, 0, inject(proto().billingPreview(), new BillForm(true)));
 
         return main;
-    }
-
-    @Override
-    public void addValidations() {
-        super.addValidations();
-
-        crossValidate(get(proto().leaseFrom()), get(proto().leaseTo()), null);
-        crossValidate(get(proto().leaseFrom()), get(proto().actualLeaseTo()), null);
-        crossValidate(get(proto().actualMoveIn()), get(proto().actualMoveOut()), null);
-//        DatesWithinMonth(get(proto().version().actualLeaseTo()), get(proto().leaseTo()), "Actual Lease To Date Should Be Within 30 Days Of Lease To Date");
-//        DatesWithinMonth(get(proto().version().actualMoveIn()), get(proto().version().expectedMoveIn()),
-//                "Actual Move In Date Should Be Within 30 Days Of Expected Move In Date");
-//        DatesWithinMonth(get(proto().version().actualMoveOut()), get(proto().version().expectedMoveOut()),
-//                "Actual Move Out Date Should Be Within 30 Days Of Expected Move Out Date");
-
-        get(proto().leaseFrom()).addValueValidator(new EditableValueValidator<Date>() {
-            @Override
-            public ValidationError isValid(CComponent<Date, ?> component, Date value) {
-                if (value != null) {
-                    if (getValue().status().getValue() == Lease.Status.Created) { // existing lease:
-                        return value.before(TimeUtils.today()) ? null : new ValidationError(component, i18n.tr("The Date Must Be Earlier Than Today's Date"));
-                    } else if (getValue().status().getValue() == Lease.Status.Application) { // lease application:
-                        Date dateToCompare = getValue().creationDate().isNull() ? TimeUtils.today() : getValue().creationDate().getValue();
-                        return !value.before(dateToCompare) ? null : new ValidationError(component, i18n
-                                .tr("The Date Must Be Later Than Or Equal To Application Creaion Date"));
-                    }
-                }
-                return null;
-            }
-        });
-
-        new DateInPeriodValidation(get(proto().leaseFrom()), get(proto().expectedMoveIn()), get(proto().leaseTo()),
-                i18n.tr("The Date Should Be Within The Lease Period"));
-
-        get(proto().leaseFrom()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().expectedMoveIn())));
-        get(proto().leaseFrom()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().version().leaseProducts().serviceItem())));
-        get(proto().leaseFrom()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().version().leaseProducts().featureItems())));
-
-        get(proto().leaseTo()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().expectedMoveIn())));
-        get(proto().leaseTo()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().version().leaseProducts().serviceItem())));
-        get(proto().leaseTo()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().version().leaseProducts().featureItems())));
-
-        get(proto().version().tenants()).addValueValidator(new EditableValueValidator<List<Tenant>>() {
-            @Override
-            public ValidationError isValid(CComponent<List<Tenant>, ?> component, List<Tenant> value) {
-                if (value != null) {
-                    return (value.isEmpty() ? new ValidationError(component, i18n.tr("At least one tenant should be selected!")) : null);
-                }
-                return null;
-            }
-        });
-    }
-
-    private void crossValidate(CComponent<LogicalDate, ?> date1, CComponent<LogicalDate, ?> date2, String message) {
-        new StartEndDateValidation(date1, date2, message);
-        date1.addValueChangeHandler(new RevalidationTrigger<LogicalDate>(date2));
-        date2.addValueChangeHandler(new RevalidationTrigger<LogicalDate>(date1));
     }
 }

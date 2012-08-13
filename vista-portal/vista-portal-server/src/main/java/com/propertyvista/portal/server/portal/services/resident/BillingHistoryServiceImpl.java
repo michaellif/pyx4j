@@ -36,10 +36,10 @@ public class BillingHistoryServiceImpl implements BillingHistoryService {
         EntityQueryCriteria<Bill> criteria = EntityQueryCriteria.create(Bill.class);
 
         Tenant tenant = TenantAppContext.getCurrentUserTenantInLease();
-        Persistence.service().retrieve(tenant.leaseV());
-        Persistence.service().retrieve(tenant.leaseV().holder());
+        Persistence.service().retrieve(tenant.leaseTermV());
+        Persistence.service().retrieve(tenant.leaseTermV().holder());
 
-        criteria.add(PropertyCriterion.eq(criteria.proto().billingAccount(), tenant.leaseV().holder().billingAccount()));
+        criteria.add(PropertyCriterion.eq(criteria.proto().billingAccount(), tenant.leaseTermV().holder().lease().billingAccount()));
         for (Bill bill : Persistence.service().query(criteria)) {
             BillDataDTO dto = EntityFactory.create(BillDataDTO.class);
             dto.setPrimaryKey(bill.getPrimaryKey());

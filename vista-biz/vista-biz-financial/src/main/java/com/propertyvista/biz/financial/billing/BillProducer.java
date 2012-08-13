@@ -273,7 +273,7 @@ class BillProducer {
     private Bill.BillType findBillType() {
 
         switch (lease.status().getValue()) {
-        case Created: //zeroCycle bill should be issued; preview only
+        case ExistingLease: //zeroCycle bill should be issued; preview only
             if (!preview) {
                 throw new BillingException(i18n.tr("Billing can only run in PREVIEW mode until Lease is Approved."));
             }
@@ -296,7 +296,7 @@ class BillProducer {
         case Active:
             if (currentPeriodBill != null) {
                 //check if previous confirmed Bill is the last cycle bill and only final bill should run after
-                if (currentPeriodBill.billingPeriodEndDate().getValue().compareTo(lease.leaseTo().getValue()) == 0) {
+                if (currentPeriodBill.billingPeriodEndDate().getValue().compareTo(lease.currentTerm().termTo().getValue()) == 0) {
                     return Bill.BillType.Final;
                 } else {
                     return Bill.BillType.Regular;

@@ -76,9 +76,10 @@ public class ProductCatalogFacadeImpl implements ProductCatalogFacade {
         EntityQueryCriteria<Lease> leaseCriteria = new EntityQueryCriteria<Lease>(Lease.class);
         leaseCriteria.add(PropertyCriterion.eq(leaseCriteria.proto().unit(), unit));
         Lease lease = Persistence.service().retrieve(leaseCriteria);
-        if (lease != null && !lease.version().leaseProducts().isNull() && !lease.version().leaseProducts().serviceItem().isNull()) {
+        if (lease != null && !lease.currentTerm().version().leaseProducts().isNull()
+                && !lease.currentTerm().version().leaseProducts().serviceItem().isNull()) {
             //TODO add concessions and adjustments
-            return lease.version().leaseProducts().serviceItem().agreedPrice().getValue();
+            return lease.currentTerm().version().leaseProducts().serviceItem().agreedPrice().getValue();
         }
         return null;
     }

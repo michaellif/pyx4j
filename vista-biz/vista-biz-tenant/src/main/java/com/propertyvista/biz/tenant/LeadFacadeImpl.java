@@ -91,14 +91,15 @@ public class LeadFacadeImpl implements LeadFacade {
             break;
         }
 
-        Lease lease = EntityFactory.create(Lease.class);
+        LeaseFacade leaseFacade = ServerSideFactory.create(LeaseFacade.class);
+        Lease lease = leaseFacade.create(Lease.Status.Application);
+
         lease.type().set(lead.leaseType());
 
-        lease.leaseFrom().setValue(lead.moveInDate().getValue());
-        lease.leaseTo().setValue(new LogicalDate(leaseEnd));
+        lease.currentTerm().termFrom().setValue(lead.moveInDate().getValue());
+        lease.currentTerm().termTo().setValue(new LogicalDate(leaseEnd));
 
         lease.expectedMoveIn().setValue(lead.moveInDate().getValue());
-        lease.status().setValue(Lease.Status.Application);
 
         boolean asApplicant = true;
         for (Guest guest : lead.guests()) {
@@ -109,10 +110,9 @@ public class LeadFacadeImpl implements LeadFacade {
             ServerSideFactory.create(IdAssignmentFacade.class).assignId(tenantInLease);
             tenantInLease.customer().set(customer);
             tenantInLease.role().setValue(asApplicant ? LeaseParticipant.Role.Applicant : LeaseParticipant.Role.CoApplicant);
-            lease.version().tenants().add(tenantInLease);
+            lease.currentTerm().version().tenants().add(tenantInLease);
             asApplicant = false;
         }
-        LeaseFacade leaseFacade = ServerSideFactory.create(LeaseFacade.class);
         lease = leaseFacade.init(lease);
         if (unitId.getPrimaryKey() != null) {
             leaseFacade.setUnit(lease, unitId);

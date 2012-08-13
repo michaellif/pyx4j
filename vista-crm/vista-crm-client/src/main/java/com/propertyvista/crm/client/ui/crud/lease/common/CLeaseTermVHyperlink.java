@@ -19,35 +19,27 @@ import com.pyx4j.entity.client.ui.CEntityHyperlink;
 import com.pyx4j.forms.client.ui.IFormat;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.rpc.CrudAppPlace;
 
-import com.propertyvista.domain.tenant.lease.Lease.LeaseV;
-import com.propertyvista.dto.LeaseApplicationDTO;
-import com.propertyvista.dto.LeaseDTO;
+import com.propertyvista.domain.tenant.lease.LeaseTerm;
+import com.propertyvista.domain.tenant.lease.LeaseTerm.LeaseTermV;
 
-public class CLeaseVHyperlink extends CEntityHyperlink<LeaseV> {
+public class CLeaseTermVHyperlink extends CEntityHyperlink<LeaseTermV> {
 
-    public CLeaseVHyperlink() {
+    public CLeaseTermVHyperlink() {
         super(null);
 
         setCommand(new Command() {
             @Override
             public void execute() {
                 if (!getValue().isNull()) {
-                    CrudAppPlace place;
-                    if (getValue().holder().status().getValue().isDraft()) {
-                        place = AppPlaceEntityMapper.resolvePlace(LeaseApplicationDTO.class);
-                    } else {
-                        place = AppPlaceEntityMapper.resolvePlace(LeaseDTO.class);
-                    }
-                    AppSite.getPlaceController().goTo(place.formViewerPlace(getValue().holder().getPrimaryKey()));
+                    AppSite.getPlaceController().goTo(AppPlaceEntityMapper.resolvePlace(LeaseTerm.class).formViewerPlace(getValue().holder().getPrimaryKey()));
                 }
             }
         });
 
-        setFormat(new IFormat<LeaseV>() {
+        setFormat(new IFormat<LeaseTermV>() {
             @Override
-            public String format(LeaseV value) {
+            public String format(LeaseTermV value) {
                 if (value != null) {
                     return value.holder().getStringView();
                 } else {
@@ -56,7 +48,7 @@ public class CLeaseVHyperlink extends CEntityHyperlink<LeaseV> {
             }
 
             @Override
-            public LeaseV parse(String string) {
+            public LeaseTermV parse(String string) {
                 return null;
             }
         });

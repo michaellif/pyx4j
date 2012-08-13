@@ -28,7 +28,6 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.biz.communication.CommunicationFacade;
-import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.crm.rpc.services.lease.LeaseViewerCrudService;
 import com.propertyvista.crm.server.services.lease.common.LeaseViewerCrudServiceBaseImpl;
@@ -53,7 +52,7 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
     protected void enhanceRetrieved(Lease in, LeaseDTO dto) {
         super.enhanceRetrieved(in, dto);
 
-        dto.transactionHistory().set(ServerSideFactory.create(ARFacade.class).getTransactionHistory(dto.billingAccount()));
+//        dto.transactionHistory().set(ServerSideFactory.create(ARFacade.class).getTransactionHistory(dto.billingAccount()));
     }
 
     @Override
@@ -87,8 +86,9 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
 
     @Override
     public void activate(AsyncCallback<VoidSerializable> callback, Key entityId) {
-        ServerSideFactory.create(LeaseFacade.class).approveExistingLease(EntityFactory.createIdentityStub(Lease.class, entityId));
-        ServerSideFactory.create(LeaseFacade.class).activate(entityId);
+        Lease leaseId = EntityFactory.createIdentityStub(Lease.class, entityId);
+        ServerSideFactory.create(LeaseFacade.class).approveExistingLease(leaseId);
+        ServerSideFactory.create(LeaseFacade.class).activate(leaseId);
         Persistence.service().commit();
         callback.onSuccess(null);
     }
@@ -100,7 +100,7 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
             throw new RuntimeException("Entity '" + EntityFactory.getEntityMeta(dboClass).getCaption() + "' " + entityId + " NotFound");
         }
         if (!Lease.Status.current().contains(lease.status().getValue())) {
-            throw new UserRuntimeException(i18n.tr("Can't send tenant email for inactive Lease"));
+            throw new UserRuntimeException(i18n.tr("Can't send tenant email for inactive Lease2"));
         }
         if (users.isEmpty()) {
             throw new UserRuntimeException(i18n.tr("No customer was selected to send email"));

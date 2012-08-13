@@ -16,7 +16,6 @@ package com.propertyvista.biz.financial.preload;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
-import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -25,11 +24,9 @@ import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.biz.policy.IdAssignmentFacade;
 import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.domain.financial.offering.ProductItem;
-import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.domain.tenant.lease.Lease.PaymentFrequency;
 import com.propertyvista.domain.tenant.lease.Lease.Status;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 
@@ -53,35 +50,28 @@ public class LeaseDataModel {
     }
 
     public void generate() {
-
         serviceItem = buildingDataModel.generateResidentialUnitServiceItem();
 
-        lease = EntityFactory.create(Lease.class);
+        if (config.existingLease) {
+            lease = ServerSideFactory.create(LeaseFacade.class).create(Status.ExistingLease);
+        } else {
+            lease = ServerSideFactory.create(LeaseFacade.class).create(Status.Application);
+            ServerSideFactory.create(OccupancyFacade.class).scopeAvailable(serviceItem.element().cast().getPrimaryKey());
+        }
 
-        lease.type().setValue(Service.ServiceType.residentialUnit);
-
-        lease.version().leaseProducts().serviceItem().agreedPrice().setValue(serviceItem.price().getValue());
-        lease.leaseFrom().setValue(new LogicalDate(111, 1, 25));
-        lease.approvalDate().setValue(lease.leaseFrom().getValue());
-
+        lease = ServerSideFactory.create(LeaseFacade.class).setUnit(lease, (AptUnit) serviceItem.element().cast());
+        lease.currentTerm().version().leaseProducts().serviceItem().agreedPrice().setValue(serviceItem.price().getValue());
+        lease.currentTerm().termFrom().setValue(new LogicalDate(111, 1, 25));
         Calendar calendar = new GregorianCalendar();
-        calendar.setTime(lease.leaseFrom().getValue());
+        calendar.setTime(lease.currentTerm().termFrom().getValue());
         calendar.add(Calendar.MONTH, 6);
         calendar.add(Calendar.DATE, -1);
-        lease.leaseTo().setValue(new LogicalDate(calendar.getTime()));
-
-        lease.paymentFrequency().setValue(PaymentFrequency.Monthly);
+        lease.currentTerm().termTo().setValue(new LogicalDate(calendar.getTime()));
 
         addTenants();
 
-        if (config.existingLease) {
-            lease.status().setValue(Status.Created);
-        } else {
-            lease.status().setValue(Status.Application);
-            ServerSideFactory.create(OccupancyFacade.class).scopeAvailable(serviceItem.element().cast().getPrimaryKey());
-        }
-        lease = ServerSideFactory.create(LeaseFacade.class).init(lease);
-        lease = ServerSideFactory.create(LeaseFacade.class).setUnit(lease, (AptUnit) serviceItem.element().cast());
+        lease.approvalDate().setValue(lease.currentTerm().termFrom().getValue());
+
         lease = ServerSideFactory.create(LeaseFacade.class).persist(lease);
     }
 
@@ -90,15 +80,15 @@ public class LeaseDataModel {
         ServerSideFactory.create(IdAssignmentFacade.class).assignId(tenantInLease);
         tenantInLease.customer().set(tenantDataModel.getTenant());
         tenantInLease.role().setValue(LeaseParticipant.Role.Applicant);
-        lease.version().tenants().add(tenantInLease);
+        lease.currentTerm().version().tenants().add(tenantInLease);
     }
 
     public ProductItem getServiceItem() {
         return serviceItem;
     }
 
-    public Key getLeaseKey() {
-        return lease.id().getValue();
+    public Lease getLeaseId() {
+        return lease;
     }
 
 }

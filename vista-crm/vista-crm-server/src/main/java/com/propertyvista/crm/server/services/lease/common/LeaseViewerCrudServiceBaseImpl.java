@@ -22,8 +22,7 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 
-import com.propertyvista.biz.financial.billing.BillingFacade;
-import com.propertyvista.biz.financial.billing.BillingUtils;
+import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.crm.rpc.services.lease.common.LeaseViewerCrudServiceBase;
 import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.Tenant;
@@ -47,21 +46,19 @@ public abstract class LeaseViewerCrudServiceBaseImpl<DTO extends LeaseDTO> exten
 
         // create bill preview for draft leases/applications:
         if (in.status().getValue().isDraft()) {
-            dto.billingPreview().set(BillingUtils.createBillPreviewDto(ServerSideFactory.create(BillingFacade.class).runBillingPreview(in)));
+//            dto.billingPreview().set(BillingUtils.createBillPreviewDto(ServerSideFactory.create(BillingFacade.class).runBillingPreview(in)));
         }
     }
 
     @Override
     public void retrieveUsers(AsyncCallback<Vector<LeaseParticipant>> callback, Key entityId) {
-        Lease lease = Persistence.service().retrieve(dboClass, (isApplication ? entityId.asDraftKey() : entityId));
-        if ((lease == null) || (lease.isNull())) {
-            throw new RuntimeException("Entity '" + EntityFactory.getEntityMeta(dboClass).getCaption() + "' " + entityId + " NotFound");
-        }
+        Lease lease = ServerSideFactory.create(LeaseFacade.class).load(EntityFactory.createIdentityStub(Lease.class, entityId), false);
 
         Vector<LeaseParticipant> users = new Vector<LeaseParticipant>();
 
-        Persistence.service().retrieve(lease.version().tenants());
-        for (Tenant tenant : lease.version().tenants()) {
+        assert (!lease.currentTerm().isNull());
+        Persistence.service().retrieve(lease.currentTerm().version().tenants());
+        for (Tenant tenant : lease.currentTerm().version().tenants()) {
             Persistence.service().retrieve(tenant);
             switch (tenant.role().getValue()) {
             case Applicant:
@@ -72,8 +69,8 @@ public abstract class LeaseViewerCrudServiceBaseImpl<DTO extends LeaseDTO> exten
             }
         }
 
-        Persistence.service().retrieve(lease.version().guarantors());
-        for (Guarantor guarantor : lease.version().guarantors()) {
+        Persistence.service().retrieve(lease.currentTerm().version().guarantors());
+        for (Guarantor guarantor : lease.currentTerm().version().guarantors()) {
             users.add(guarantor);
         }
 

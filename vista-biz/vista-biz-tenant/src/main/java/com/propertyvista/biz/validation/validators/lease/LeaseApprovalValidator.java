@@ -13,6 +13,8 @@
  */
 package com.propertyvista.biz.validation.validators.lease;
 
+import com.pyx4j.entity.server.Persistence;
+
 import com.propertyvista.biz.validation.framework.validators.CompositeEntityValidator;
 import com.propertyvista.biz.validation.framework.validators.NotNullValidator;
 import com.propertyvista.biz.validation.framework.validators.ValueConstraintValidator;
@@ -29,20 +31,31 @@ public class LeaseApprovalValidator extends CompositeEntityValidator<Lease> {
 
     @Override
     protected void init() {
-        bind(proto().status(), new ValueConstraintValidator<Lease.Status>(Lease.Status.Application, Lease.Status.Created));
+        bind(proto().status(), new ValueConstraintValidator<Lease.Status>(Lease.Status.Application, Lease.Status.ExistingLease));
 
         bind(proto().type(), new NotNullValidator());
         bind(proto().unit(), new NotNullValidator());
         bind(proto().paymentFrequency(), new NotNullValidator());
 
-        bind(proto().leaseFrom(), new NotNullValidator());
-        bind(proto().leaseTo(), new NotNullValidator());
+        bind(proto().currentTerm(), new NotNullValidator());
 
-        bind(proto().version().tenants(), new HasAtLeastOneApplicantValidator());
-        bind(proto().version().tenants(), new TenantInApprovedLeaseValidator());
+        bind(proto().currentTerm().termFrom(), new NotNullValidator());
+        bind(proto().currentTerm().termTo(), new NotNullValidator());
 
-        bind(proto().version().leaseProducts().serviceItem(), new NotNullValidator());
+        bind(proto().currentTerm().version().tenants(), new HasAtLeastOneApplicantValidator());
+        bind(proto().currentTerm().version().tenants(), new TenantInApprovedLeaseValidator());
+
+        bind(proto().currentTerm().version().leaseProducts().serviceItem(), new NotNullValidator());
 
         bind(proto(), new DatesConsistencyValidator());
+    }
+
+    @Override
+    protected void prepare(Lease obj) {
+        // load detached members:
+        if (obj.getPrimaryKey() != null) {
+            Persistence.service().retrieve(obj.currentTerm().version().tenants());
+            Persistence.service().retrieve(obj.currentTerm().version().guarantors());
+        }
     }
 }

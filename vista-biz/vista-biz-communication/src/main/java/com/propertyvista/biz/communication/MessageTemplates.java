@@ -86,11 +86,12 @@ public class MessageTemplates {
 
     public static MailMessage createApplicationStatusEmail(Tenant tenantInLease, EmailTemplateType type) {
         // get building policy node
-        Persistence.service().retrieve(tenantInLease.leaseV());
-        Persistence.service().retrieve(tenantInLease.leaseV().holder());
-        Persistence.service().retrieve(tenantInLease.leaseV().holder().unit());
-        Persistence.service().retrieve(tenantInLease.leaseV().holder().unit().building());
-        EmailTemplate emailTemplate = getEmailTemplate(type, tenantInLease.leaseV().holder().unit().building());
+        Persistence.service().retrieve(tenantInLease.leaseTermV());
+        Persistence.service().retrieve(tenantInLease.leaseTermV().holder());
+        Persistence.service().retrieve(tenantInLease.leaseTermV().holder().lease());
+        Persistence.service().retrieve(tenantInLease.leaseTermV().holder().lease().unit());
+        Persistence.service().retrieve(tenantInLease.leaseTermV().holder().lease().unit().building());
+        EmailTemplate emailTemplate = getEmailTemplate(type, tenantInLease.leaseTermV().holder().lease().unit().building());
 
         EmailTemplateContext context = EntityFactory.create(EmailTemplateContext.class);
         // populate context properties required by template type
@@ -115,7 +116,10 @@ public class MessageTemplates {
     }
 
     public static MailMessage createTenantInvitationEmail(LeaseParticipant leaseParticipant, EmailTemplateType emailType, String token) {
-        Lease lease = Persistence.retrieveDraftForEdit(Lease.class, leaseParticipant.leaseV().holder().getPrimaryKey());
+        Persistence.service().retrieve(leaseParticipant.leaseTermV());
+        Persistence.service().retrieve(leaseParticipant.leaseTermV().holder());
+        Persistence.service().retrieve(leaseParticipant.leaseTermV().holder().lease());
+        Lease lease = Persistence.secureRetrieve(Lease.class, leaseParticipant.leaseTermV().holder().lease().getPrimaryKey());
         CustomerUser user = Persistence.service().retrieve(CustomerUser.class, leaseParticipant.customer().user().getPrimaryKey());
 
         // get building policy node
@@ -163,11 +167,12 @@ public class MessageTemplates {
         // TODO Fix this!
         Tenant til = Persistence.service().retrieve(tilCrit);
         if (til != null) {
-            Persistence.service().retrieve(til.leaseV());
-            Persistence.service().retrieve(til.leaseV().holder());
-            Persistence.service().retrieve(til.leaseV().holder().unit());
-            Persistence.service().retrieve(til.leaseV().holder().unit().building());
-            Building bldNode = til.leaseV().holder().unit().building();
+            Persistence.service().retrieve(til.leaseTermV());
+            Persistence.service().retrieve(til.leaseTermV().holder());
+            Persistence.service().retrieve(til.leaseTermV().holder().lease());
+            Persistence.service().retrieve(til.leaseTermV().holder().lease().unit());
+            Persistence.service().retrieve(til.leaseTermV().holder().lease().unit().building());
+            Building bldNode = til.leaseTermV().holder().lease().unit().building();
             if (bldNode != null && !bldNode.isNull()) {
                 policyNode = bldNode;
             }

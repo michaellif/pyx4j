@@ -93,8 +93,8 @@ public class BreadcrumbsHelper {
                 criteria.add(PropertyCriterion.eq(criteria.proto().screening(), startFromTarget));
                 Tenant tenant = Persistence.service().retrieve(criteria);
                 if (tenant != null) {
-                    Persistence.service().retrieve(tenant.leaseV());
-                    startFromTarget = tenant.leaseV().holder();
+                    Persistence.service().retrieve(tenant.leaseTermV());
+                    startFromTarget = tenant.leaseTermV().holder();
                     trail.add(toStringDuplicate(tenant));
                     trail.add(toStringDuplicate(startFromTarget));
                 }
@@ -104,8 +104,8 @@ public class BreadcrumbsHelper {
                 criteria.add(PropertyCriterion.eq(criteria.proto().screening(), startFromTarget));
                 Guarantor guarantor = Persistence.service().retrieve(criteria);
                 if (guarantor != null) {
-                    Persistence.service().retrieve(guarantor.leaseV());
-                    startFromTarget = guarantor.leaseV().holder();
+                    Persistence.service().retrieve(guarantor.leaseTermV());
+                    startFromTarget = guarantor.leaseTermV().holder();
                     trail.add(toStringDuplicate(guarantor));
                     trail.add(toStringDuplicate(startFromTarget));
                 }

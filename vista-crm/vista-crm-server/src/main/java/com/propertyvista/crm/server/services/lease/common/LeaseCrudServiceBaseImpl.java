@@ -13,19 +13,18 @@
  */
 package com.propertyvista.crm.server.services.lease.common;
 
-import com.pyx4j.config.server.ServerSideFactory;
-import com.pyx4j.entity.server.AbstractVersionedCrudServiceDtoImpl;
+import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
 
-import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.domain.tenant.Guarantor;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.dto.LeaseDTO;
 
-public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends AbstractVersionedCrudServiceDtoImpl<Lease, DTO> {
+public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends AbstractCrudServiceDtoImpl<Lease, DTO> {
 
     protected LeaseCrudServiceBaseImpl(Class<DTO> dtoClass) {
         super(Lease.class, dtoClass);
@@ -43,15 +42,15 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
         // load detached entities:
         Persistence.service().retrieve(dto.billingAccount().adjustments());
         Persistence.service().retrieve(dto.billingAccount().deposits());
-//      Persistence.service().retrieve(dto.documents());
+        Persistence.service().retrieve(dto.documents());
 
         loadDetachedProducts(dto);
 
-        for (Tenant item : dto.version().tenants()) {
+        for (Tenant item : dto.currentTerm().version().tenants()) {
             Persistence.service().retrieve(item.screening(), AttachLevel.ToStringMembers);
         }
 
-        for (Guarantor item : dto.version().guarantors()) {
+        for (Guarantor item : dto.currentTerm().version().guarantors()) {
             Persistence.service().retrieve(item.screening(), AttachLevel.ToStringMembers);
         }
     }
@@ -66,8 +65,21 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
         Persistence.service().retrieve(dto.unit());
         Persistence.service().retrieve(dto.unit().building());
 
-        Persistence.service().retrieve(dto.version().tenants());
-        Persistence.service().retrieve(dto.version().guarantors());
+        if (!dto.currentTerm().isNull()) {
+            Persistence.service().retrieve(dto.currentTerm());
+            if (dto.currentTerm().version().isNull()) {
+                dto.currentTerm().set(Persistence.secureRetrieveDraft(LeaseTerm.class, dto.currentTerm().getPrimaryKey()));
+            }
+
+            Persistence.service().retrieve(dto.currentTerm().version().tenants());
+            Persistence.service().retrieve(dto.currentTerm().version().guarantors());
+        }
+
+        if (!dto.leaseTerms().isEmpty()) {
+            Persistence.service().retrieve(dto.leaseTerms());
+            dto.leaseFrom().set(dto.leaseTerms().get(0).termFrom());
+            dto.leaseTo().set(dto.leaseTerms().get(dto.leaseTerms().size() - 1).termTo());
+        }
 
         Persistence.service().retrieve(dto.billingAccount());
     }
@@ -77,16 +89,11 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
         throw new Error("Facade should be used");
     }
 
-    @Override
-    protected void saveAsFinal(Lease entity) {
-        ServerSideFactory.create(LeaseFacade.class).finalize(entity);
-    }
-
     protected void loadDetachedProducts(DTO dto) {
-        Persistence.service().retrieve(dto.version().leaseProducts().serviceItem().item().product());
+        Persistence.service().retrieve(dto.currentTerm().version().leaseProducts().serviceItem().item().product());
 
-        for (BillableItem item : dto.version().leaseProducts().featureItems()) {
-            Persistence.service().retrieve(item.item().product());
+        for (BillableItem item : dto.currentTerm().version().leaseProducts().featureItems()) {
+            Persistence.service().retrieve(item.item().product(), AttachLevel.ToStringMembers);
         }
     }
 }

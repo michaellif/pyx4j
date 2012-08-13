@@ -72,7 +72,7 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
         super(CrmSiteMap.Tenants.LeaseApplication.class);
 
         //set main form here:
-        setForm(new LeaseApplicationForm(true));
+        setForm(new LeaseApplicationForm());
 
         // Actions:
 
@@ -224,9 +224,6 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
             declineAction.setVisible(status.isDraft());
             cancelAction.setVisible(status != Status.Cancelled);
         }
-
-        // disable editing for approved/closed leases:
-        getEditButton().setVisible(status.isDraft());
     }
 
     private abstract class ActionBox extends OkCancelDialog {

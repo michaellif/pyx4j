@@ -80,13 +80,13 @@ public class PaymentsSummaryHelperTestBase extends VistaDBTestBase {
 
         Persistence.service().persist(idAssignmentPolicy);
 
-        lease = EntityFactory.create(Lease.class);
+        lease = ServerSideFactory.create(LeaseFacade.class).create(Lease.Status.Application);
 
-        Tenant tenant = lease.version().tenants().$();
+        Tenant tenant = lease.currentTerm().version().tenants().$();
         tenant.customer().person().name().firstName().setValue("Foo");
         tenant.customer().person().name().lastName().setValue("Foo");
-        lease.version().tenants().add(tenant);
-        lease.status().setValue(Lease.Status.Created);
+        lease.currentTerm().version().tenants().add(tenant);
+        lease.status().setValue(Lease.Status.ExistingLease);
         lease = ServerSideFactory.create(LeaseFacade.class).init(lease);
         if (lease.unit().getPrimaryKey() != null) {
             ServerSideFactory.create(LeaseFacade.class).setUnit(lease, lease.unit());
@@ -115,7 +115,7 @@ public class PaymentsSummaryHelperTestBase extends VistaDBTestBase {
             PaymentRecord.PaymentStatus paymentStatus) {
         PaymentMethod paymentMethod = EntityFactory.create(PaymentMethod.class);
         paymentMethod.type().setValue(paymentType);
-        Tenant tenant = lease.version().tenants().get(0);
+        Tenant tenant = lease.currentTerm().version().tenants().get(0);
         if (tenant.isValueDetached()) {
             Persistence.service().retrieve(tenant);
         }
@@ -129,7 +129,7 @@ public class PaymentsSummaryHelperTestBase extends VistaDBTestBase {
         paymentRecord.paymentStatus().setValue(paymentStatus);
         paymentRecord.billingAccount().set(lease.billingAccount());
         paymentRecord.merchantAccount().set(merchantAccount);
-        paymentRecord.leaseParticipant().set(lease.version().tenants().get(0));
+        paymentRecord.leaseParticipant().set(lease.currentTerm().version().tenants().get(0));
 
         Persistence.service().persist(paymentRecord);
 

@@ -13,6 +13,7 @@
  */
 package com.propertyvista.server.common.util.occupancy;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus.RentReadiness;
@@ -20,6 +21,7 @@ import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySe
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment.Status;
 import com.propertyvista.domain.tenant.lease.Lease;
 
+@Ignore
 // TODO market rent, unit rent (and the deltas)
 // TODO add tenant's name and contact information to the status
 // TODO test if 'future' availability statuses get replaced by other 'future' statuses on status recalculation, ie. that expected are the only statuses that exist

@@ -110,8 +110,8 @@ public class SummaryServiceImpl extends ApplicationEntityServiceImpl implements 
         TenantFinancialServiceImpl tfs = new TenantFinancialServiceImpl();
 
         Lease lease = PtAppContext.retrieveCurrentUserLease();
-        Persistence.service().retrieve(lease.version().tenants());
-        for (Tenant tenantInLease : lease.version().tenants()) {
+        Persistence.service().retrieve(lease.currentTerm().version().tenants());
+        for (Tenant tenantInLease : lease.currentTerm().version().tenants()) {
             Persistence.service().retrieve(tenantInLease);
             TenantRetriever tr = new TenantRetriever(tenantInLease.getPrimaryKey(), true);
 

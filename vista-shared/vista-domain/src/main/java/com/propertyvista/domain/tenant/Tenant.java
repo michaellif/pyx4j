@@ -20,7 +20,6 @@ import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
-import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.validator.NotNull;
@@ -56,8 +55,8 @@ public interface Tenant extends LeaseParticipant {
 
     // ----------------------------------------------------
     // parent <-> child relationship:
-    @Owned
+
+    //    @Owned
     @Detached(level = AttachLevel.Detached)
     ISet<MaintenanceRequest> _MaintenanceRequests();
-
 }
