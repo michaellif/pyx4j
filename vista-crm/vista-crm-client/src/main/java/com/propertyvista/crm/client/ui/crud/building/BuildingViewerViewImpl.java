@@ -45,8 +45,6 @@ import com.propertyvista.crm.client.ui.crud.billing.cycle.BillingCycleLister;
 import com.propertyvista.crm.client.ui.crud.building.catalog.ConcessionLister;
 import com.propertyvista.crm.client.ui.crud.building.catalog.FeatureLister;
 import com.propertyvista.crm.client.ui.crud.building.catalog.ServiceLister;
-import com.propertyvista.crm.client.ui.crud.building.dashboard.BuildingDashboardView;
-import com.propertyvista.crm.client.ui.crud.building.dashboard.BuildingDashboardViewImpl;
 import com.propertyvista.crm.client.ui.crud.building.lockers.LockerAreaLister;
 import com.propertyvista.crm.client.ui.crud.building.mech.BoilerLister;
 import com.propertyvista.crm.client.ui.crud.building.mech.ElevatorLister;
@@ -99,8 +97,6 @@ public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> i
     private final IListerView<Concession> concessionLister;
 
     private final IListerView<BillingCycleDTO> billingCycleLister;
-
-    private final BuildingDashboardView dashboardView = new BuildingDashboardViewImpl();
 
     public BuildingViewerViewImpl() {
         super(CrmSiteMap.Properties.Building.class);

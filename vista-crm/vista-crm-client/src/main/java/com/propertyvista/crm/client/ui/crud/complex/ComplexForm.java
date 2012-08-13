@@ -23,6 +23,7 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.tabpanel.Tab;
 
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.dto.ComplexDTO;
@@ -41,7 +42,9 @@ public class ComplexForm extends CrmEntityForm<ComplexDTO> {
 
     @Override
     public void createTabs() {
-        addTab(createGeneralPanel(i18n.tr("General")));
+        Tab tab = addTab(createGeneralPanel(i18n.tr("General")));
+        selectTab(tab);
+
         addTab(createBuildingsPanel(i18n.tr("Buildings")));
 
     }
