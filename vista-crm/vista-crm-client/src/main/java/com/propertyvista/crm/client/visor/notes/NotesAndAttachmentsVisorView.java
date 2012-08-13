@@ -28,10 +28,7 @@ import com.pyx4j.entity.client.ui.folder.IFolderDecorator;
 import com.pyx4j.entity.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.entity.shared.criterion.EntityListCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -67,11 +64,7 @@ public class NotesAndAttachmentsVisorView extends SimplePanel {
     }
 
     public void populate() {
-        EntityListCriteria<NotesAndAttachments> crit = new EntityListCriteria<NotesAndAttachments>(NotesAndAttachments.class);
-        IEntity parent = EntityFactory.create(controller.getParentClass());
-        parent.setPrimaryKey(controller.getParentId());
-        crit.add(PropertyCriterion.eq(crit.proto().parent(), parent));
-        controller.populate(crit, new DefaultAsyncCallback<EntitySearchResult<NotesAndAttachments>>() {
+        controller.populate(new DefaultAsyncCallback<EntitySearchResult<NotesAndAttachments>>() {
             @Override
             public void onSuccess(EntitySearchResult<NotesAndAttachments> result) {
                 NotesAndAttachmentsDTO dto = EntityFactory.create(NotesAndAttachmentsDTO.class);

@@ -22,6 +22,7 @@ import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.ui.crud.IView;
 
@@ -62,8 +63,13 @@ public class NotesAndAttachmentsVisorController implements IVisorController {
     /*
      * the methods below have been mainly copied from com.pyx4j.site.client.activity.crud.EditorActivityBase
      */
-    public void populate(EntityListCriteria<NotesAndAttachments> criteria, DefaultAsyncCallback<EntitySearchResult<NotesAndAttachments>> callback) {
-        getService().list(callback, criteria);
+    public void populate(DefaultAsyncCallback<EntitySearchResult<NotesAndAttachments>> callback) {
+        EntityListCriteria<NotesAndAttachments> crit = new EntityListCriteria<NotesAndAttachments>(NotesAndAttachments.class);
+        IEntity parent = EntityFactory.create(getParentClass());
+        parent.setPrimaryKey(getParentId());
+        crit.add(PropertyCriterion.eq(crit.proto().parent(), parent));
+
+        getService().list(callback, crit);
     }
 
     @Override
