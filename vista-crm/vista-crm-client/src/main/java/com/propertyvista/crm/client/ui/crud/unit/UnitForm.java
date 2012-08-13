@@ -42,7 +42,6 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
-import com.propertyvista.crm.client.visor.notes.NotesAndAttachmentsForm;
 import com.propertyvista.crm.rpc.services.selections.SelectFloorplanListService;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -167,7 +166,7 @@ public class UnitForm extends CrmEntityForm<AptUnitDTO> {
     private FormFlexPanel createNotesAndAttachmentsTab(String title) {
         FormFlexPanel main = new FormFlexPanel(title);
         int row = -1;
-        main.setWidget(++row, 0, new NotesAndAttachmentsForm());
+//        main.setWidget(++row, 0, new NotesAndAttachmentsForm());
         return main;
     }
 

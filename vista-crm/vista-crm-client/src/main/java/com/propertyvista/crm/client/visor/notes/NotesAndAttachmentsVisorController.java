@@ -14,7 +14,6 @@
 package com.propertyvista.crm.client.visor.notes;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.Key;
@@ -47,8 +46,17 @@ public class NotesAndAttachmentsVisorController implements IVisorController {
 
     @Override
     public void show(IView parentView) {
+        view.populate();
         IsWidget visor = getView();
         parentView.showVisor(visor, visor.asWidget().getTitle());
+    }
+
+    public Key getParentId() {
+        return parentId;
+    }
+
+    public Class<? extends IEntity> getParentClass() {
+        return parentClass;
     }
 
     /*
@@ -56,16 +64,6 @@ public class NotesAndAttachmentsVisorController implements IVisorController {
      */
     public void populate(EntityListCriteria<NotesAndAttachments> criteria, DefaultAsyncCallback<EntitySearchResult<NotesAndAttachments>> callback) {
         getService().list(callback, criteria);
-    }
-
-    protected void createNewEntity(AsyncCallback<NotesAndAttachments> callback) {
-        assert (parentId != null) : "Notes owner cannot be null";
-
-        NotesAndAttachments item = EntityFactory.create(NotesAndAttachments.class);
-        item.parent().setPrimaryKey(parentId);
-
-        callback.onSuccess(item);
-
     }
 
     @Override
@@ -78,12 +76,17 @@ public class NotesAndAttachmentsVisorController implements IVisorController {
         return (AbstractCrudService<NotesAndAttachments>) GWT.create(NotesAndAttachmentsCrudService.class);
     }
 
-    protected NotesAndAttachments getNewItem() {
-        assert (parentId != null) : "Notes owner cannot be null";
-
-        NotesAndAttachments item = EntityFactory.create(NotesAndAttachments.class);
+    public void save(NotesAndAttachments item, DefaultAsyncCallback<Key> callback) {
+        if (item.parent().isNull()) {
+            IEntity parent = EntityFactory.create(parentClass);
+            parent.setPrimaryKey(parentId);
+            item.parent().set(parent);
+        }
         item.parent().setPrimaryKey(parentId);
-        return item;
+        if (item.getPrimaryKey() == null) {
+            getService().create(callback, item);
+        } else {
+            getService().save(callback, item);
+        }
     }
-
 }
