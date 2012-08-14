@@ -23,7 +23,6 @@ package com.propertyvista.biz.financial.billing;
 import java.text.ParseException;
 import java.util.Date;
 
-import org.junit.Ignore;
 import org.junit.experimental.categories.Category;
 
 import com.propertyvista.biz.financial.FinancialTestBase;
@@ -33,7 +32,6 @@ import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.portal.rpc.shared.BillingException;
 import com.propertyvista.test.preloader.PreloadConfig;
 
-@Ignore
 @Category(FunctionalTests.class)
 public class BillingPeriodsTest extends FinancialTestBase {
 
@@ -44,6 +42,7 @@ public class BillingPeriodsTest extends FinancialTestBase {
 
         createLease("23-Mar-2012", "3-Aug-2012");
 
+        setLeaseBatchProcess();
         //==================== RUN 1 ======================//
 
         Bill bill = approveApplication(true);
@@ -62,7 +61,7 @@ public class BillingPeriodsTest extends FinancialTestBase {
         billingTypePeriodTargetDay(14).
         billingCyclePeriodStartDate("01-Mar-2012").
         billingCyclePeriodEndDate("31-Mar-2012").
-        billingCycleExecutionTargetDate("14-Feb-2012").
+        billingCycleExecutionTargetDate("15-Feb-2012").
         billType(Bill.BillType.First).
         billingPeriodStartDate("23-Mar-2012").
         billingPeriodEndDate("31-Mar-2012");
@@ -72,9 +71,9 @@ public class BillingPeriodsTest extends FinancialTestBase {
 
         //==================== RUN 2 ======================//
 
-        activateLease();
+//-->        activateLease();
 
-        SysDateManager.setSysDate("19-Mar-2012");
+        advanceDate("19-Mar-2012");
 
         bill = runBilling(true);
 
@@ -96,7 +95,7 @@ public class BillingPeriodsTest extends FinancialTestBase {
 
         //==================== RUN 3 ======================//
 
-        SysDateManager.setSysDate("16-Apr-2012");
+        advanceDate("16-Apr-2012");
 
         bill = runBilling(false);
 
@@ -150,7 +149,7 @@ public class BillingPeriodsTest extends FinancialTestBase {
 
         //==================== RUN 4 ======================//
 
-        SysDateManager.setSysDate("18-May-2012");
+        advanceDate("18-May-2012");
 
         bill = runBilling(true);
 
@@ -172,7 +171,7 @@ public class BillingPeriodsTest extends FinancialTestBase {
 
         //==================== RUN 5 ======================//
 
-        SysDateManager.setSysDate("18-Jun-2012");
+        advanceDate("18-Jun-2012");
 
         bill = runBilling(true);
 
@@ -194,7 +193,7 @@ public class BillingPeriodsTest extends FinancialTestBase {
 
         //==================== RUN 6 ======================//
 
-        SysDateManager.setSysDate("18-Jul-2012");
+        advanceDate("18-Jul-2012");
 
         bill = runBilling(true);
 
@@ -216,9 +215,9 @@ public class BillingPeriodsTest extends FinancialTestBase {
 
         //==================== RUN final ======================//
 
-        SysDateManager.setSysDate("05-Aug-2012");
+        advanceDate("05-Aug-2012");
 
-        completeLease();
+//-->        completeLease();
 
         bill = runBilling(true);
 
@@ -260,6 +259,8 @@ public class BillingPeriodsTest extends FinancialTestBase {
 
         createLease("23-Mar-2012", "3-Aug-2012");
 
+        setLeaseBatchProcess();
+        setDepositBatchProcess();
         //==================== RUN 1 ======================//
 
         Bill bill = approveApplication(true);
@@ -280,9 +281,9 @@ public class BillingPeriodsTest extends FinancialTestBase {
 
         //==================== RUN 2 ======================//
 
-        activateLease();
+//-->        activateLease();
 
-        setDate("01-Jan-2012");
+        advanceDate("10-Apr-2012");
 
         bill = runBilling(true);
 
@@ -301,6 +302,8 @@ public class BillingPeriodsTest extends FinancialTestBase {
         // @formatter:on
 
         //==================== RUN 3 ======================//
+
+        advanceDate("10-May-2012");
 
         bill = runBilling(false);
 
@@ -336,6 +339,8 @@ public class BillingPeriodsTest extends FinancialTestBase {
 
         //==================== RUN 4 ======================//
 
+        advanceDate("10-Jun-2012");
+
         bill = runBilling(true);
 
         // @formatter:off
@@ -353,6 +358,8 @@ public class BillingPeriodsTest extends FinancialTestBase {
         // @formatter:on
 
         //==================== RUN 5 ======================//
+
+        advanceDate("10-Jul-2012");
 
         bill = runBilling(true);
 
@@ -372,7 +379,8 @@ public class BillingPeriodsTest extends FinancialTestBase {
 
         //==================== RUN Final ======================//
 
-        completeLease();
+        advanceDate("10-Aug-2012");
+//-->        completeLease();
 
         bill = runBilling(true);
 
@@ -424,6 +432,8 @@ public class BillingPeriodsTest extends FinancialTestBase {
 
         createLease(day + "-Mar-2012", "3-Aug-2012");
 
+        setLeaseBatchProcess();
+        setDepositBatchProcess();
         //==================== RUN 1 ======================//
 
         Bill bill = approveApplication(true);
@@ -436,7 +446,7 @@ public class BillingPeriodsTest extends FinancialTestBase {
         billingTypePeriodTargetDay(14).
         billingCyclePeriodStartDate("1-Mar-2012").
         billingCyclePeriodEndDate("31-Mar-2012").
-        billingCycleExecutionTargetDate("14-Feb-2012").
+        billingCycleExecutionTargetDate("15-Feb-2012").
         billType(Bill.BillType.First).
         billingPeriodStartDate(day + "-Mar-2012").
         billingPeriodEndDate("31-Mar-2012");
@@ -446,7 +456,9 @@ public class BillingPeriodsTest extends FinancialTestBase {
 
         //==================== RUN 2 ======================//
 
-        activateLease();
+//-->        activateLease();
+
+        advanceDate("18-Mar-2012");
 
         bill = runBilling(true);
 
@@ -468,14 +480,17 @@ public class BillingPeriodsTest extends FinancialTestBase {
 
         //==================== RUN 3 ======================//
 
+        advanceDate("18-Apr-2012");
         bill = runBilling(true);
 
         //==================== RUN 4 ======================//
 
+        advanceDate("18-May-2012");
         bill = runBilling(true);
 
         //==================== RUN 5 ======================//
 
+        advanceDate("18-Jun-2012");
         bill = runBilling(true);
 
         // @formatter:off
@@ -496,6 +511,7 @@ public class BillingPeriodsTest extends FinancialTestBase {
 
         //==================== RUN 6 ======================//
 
+        advanceDate("18-Jul-2012");
         bill = runBilling(true);
 
         // @formatter:off
@@ -516,7 +532,8 @@ public class BillingPeriodsTest extends FinancialTestBase {
 
         //==================== RUN final ======================//
 
-        completeLease();
+        advanceDate("18-Aug-2012");
+//-->        completeLease();
 
         bill = runBilling(true);
 
