@@ -44,7 +44,7 @@ public class BillingSunnyDayScenarioTest extends FinancialTestBase {
 
         setDate("17-Mar-2011");
 
-        setLeaseTerms("22-Mar-2011", "03-Aug-2011");
+        createLease("23-Mar-2011", "03-Aug-2011");
         addServiceAdjustment("-25", Type.monetary);
 
         BillableItem parking1 = addParking();
@@ -56,9 +56,6 @@ public class BillingSunnyDayScenarioTest extends FinancialTestBase {
         BillableItem locker1 = addLocker();
         addFeatureAdjustment(locker1.uid().getValue(), "-0.2", Type.percentage);
 
-        BillableItem pet1 = addPet();
-        addFeatureAdjustment(pet1.uid().getValue(), "-1", Type.percentage);
-
         setLeaseBatchProcess();
         setDepositBatchProcess();
         //==================== RUN 1 ======================//
@@ -69,19 +66,20 @@ public class BillingSunnyDayScenarioTest extends FinancialTestBase {
         billSequenceNumber(0).
         previousBillSequenceNumber(null).
         billType(Bill.BillType.First).
-        billingPeriodStartDate("22-Mar-2011").
+        billingPeriodStartDate("23-Mar-2011").
         billingPeriodEndDate("31-Mar-2011").
-        numOfProductCharges(4).
+        numOfProductCharges(3).
         paymentReceivedAmount("0.00").
-        serviceCharge("292.04").
-        recurringFeatureCharges("38.06").
+        serviceCharge("262.83").
+        recurringFeatureCharges("34.27").
         oneTimeFeatureCharges("0.00").
-        depositAmount("1270.30").
-        taxes("39.61").
-        totalDueAmount("1640.01");
+        depositAmount("1070.30").
+        taxes("35.65").
+        totalDueAmount("1403.05");
         // @formatter:on
 
-        setLeaseTerms("23-Mar-2011", "03-Aug-2011");
+        BillableItem pet1 = addPet();
+        addFeatureAdjustment(pet1.uid().getValue(), "-1", Type.percentage);
 
         billPreview = runBillingPreview();
         // @formatter:off

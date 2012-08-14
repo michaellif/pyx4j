@@ -22,7 +22,6 @@ package com.propertyvista.biz.financial.billing;
 
 import java.math.BigDecimal;
 
-import org.junit.Ignore;
 import org.junit.experimental.categories.Category;
 
 import com.pyx4j.config.server.ServerSideFactory;
@@ -31,10 +30,9 @@ import com.propertyvista.biz.financial.FinancialTestBase;
 import com.propertyvista.biz.financial.FinancialTestBase.FunctionalTests;
 import com.propertyvista.biz.financial.SysDateManager;
 import com.propertyvista.biz.financial.ar.ARFacade;
-import com.propertyvista.biz.financial.preload.PreloadConfig;
 import com.propertyvista.domain.financial.billing.Bill;
+import com.propertyvista.test.preloader.PreloadConfig;
 
-@Ignore
 @Category(FunctionalTests.class)
 public class BillingZeroCycleScenarioTest extends FinancialTestBase {
 
@@ -42,7 +40,6 @@ public class BillingZeroCycleScenarioTest extends FinancialTestBase {
     protected void setUp() throws Exception {
         super.setUp();
         PreloadConfig config = new PreloadConfig();
-        config.existingLease = true;
         preloadData(config);
 
     }
@@ -52,7 +49,7 @@ public class BillingZeroCycleScenarioTest extends FinancialTestBase {
         SysDateManager.setSysDate("17-Mar-2011"); // create existing lease
 
         // When we create Existing Lease, the tenant is already living in the building
-        setLeaseTerms("3-Mar-2009", "31-Dec-2011", new BigDecimal("900.00"), new BigDecimal("300.00"));
+        createLease("3-Mar-2009", "31-Dec-2011", new BigDecimal("900.00"), new BigDecimal("300.00"));
 
         //==================== RUN 1 ======================//
 
@@ -108,7 +105,7 @@ public class BillingZeroCycleScenarioTest extends FinancialTestBase {
         SysDateManager.setSysDate("17-Mar-2011"); // create existing lease
 
         // try existing lease from just earlier this month
-        setLeaseTerms("3-Mar-2011", "31-Dec-2011", new BigDecimal("900.00"), new BigDecimal("-100.00"));
+        createLease("3-Mar-2011", "31-Dec-2011", new BigDecimal("900.00"), new BigDecimal("-100.00"));
         addBooking("3-Mar-2011");
         finalizeLeaseAdendum();
 

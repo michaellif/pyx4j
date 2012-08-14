@@ -35,7 +35,7 @@ public class BillingBulkRunTest extends FinancialTestBase {
 
         SysDateManager.setSysDate("17-Mar-2011");
 
-        setLeaseTerms("23-Mar-2011", "03-Aug-2011");
+        createLease("23-Mar-2011", "03-Aug-2011");
         addServiceAdjustment("-25", Type.monetary);
 
         BillableItem parking1 = addParking();

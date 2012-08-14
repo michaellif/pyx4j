@@ -42,7 +42,7 @@ public class BillingFeatureEagerScenarioTest extends FinancialTestBase {
 
         setDate("17-Mar-2011");
 
-        setLeaseTerms("23-Mar-2011", "3-Aug-2011");
+        createLease("23-Mar-2011", "3-Aug-2011");
 
         BillableItem parking1 = addParking();
         addFeatureAdjustment(parking1.uid().getValue(), "-10", Type.monetary);

@@ -45,7 +45,7 @@ public class BillableItemAdjustmentTest extends FinancialTestBase {
 
         setDate("17-Feb-2011");
 
-        setLeaseTerms("01-Mar-2011", "31-Jul-2011");
+        createLease("01-Mar-2011", "31-Jul-2011");
         BillableItemAdjustment svcAdj_1 = addServiceAdjustment("-30.30", Type.monetary);
         BillableItemAdjustment svcAdj_2 = addServiceAdjustment("-100", Type.monetary, "01-Apr-2011", "30-Apr-2011");
         BillableItemAdjustment svcAdj_3 = addServiceAdjustment("-31", Type.monetary, "15-May-2011", "14-Jun-2011");

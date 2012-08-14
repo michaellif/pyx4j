@@ -43,20 +43,8 @@ import com.propertyvista.biz.financial.billing.BillingFacade;
 import com.propertyvista.biz.financial.billing.BillingUtils;
 import com.propertyvista.biz.financial.billing.print.BillPrint;
 import com.propertyvista.biz.financial.deposit.DepositFacade;
-import com.propertyvista.biz.financial.preload.ARPolicyDataModel;
-import com.propertyvista.biz.financial.preload.BuildingDataModel;
-import com.propertyvista.biz.financial.preload.DepositPolicyDataModel;
-import com.propertyvista.biz.financial.preload.IdAssignmentPolicyDataModel;
-import com.propertyvista.biz.financial.preload.LeaseAdjustmentPolicyDataModel;
-import com.propertyvista.biz.financial.preload.LeaseAdjustmentReasonDataModel;
-import com.propertyvista.biz.financial.preload.LeaseBillingPolicyDataModel;
-import com.propertyvista.biz.financial.preload.LeaseDataModel;
-import com.propertyvista.biz.financial.preload.LocationsDataModel;
-import com.propertyvista.biz.financial.preload.PreloadConfig;
-import com.propertyvista.biz.financial.preload.ProductItemTypesDataModel;
-import com.propertyvista.biz.financial.preload.ProductTaxPolicyDataModel;
-import com.propertyvista.biz.financial.preload.TaxesDataModel;
-import com.propertyvista.biz.financial.preload.TenantDataModel;
+import com.propertyvista.biz.occupancy.OccupancyFacade;
+import com.propertyvista.biz.policy.IdAssignmentFacade;
 import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.config.tests.VistaDBTestBase;
 import com.propertyvista.domain.financial.PaymentRecord;
@@ -70,7 +58,9 @@ import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
+import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.security.VistaBasicBehavior;
+import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
 import com.propertyvista.domain.tenant.lease.Deposit;
@@ -89,6 +79,19 @@ import com.propertyvista.server.jobs.LeaseActivationProcess;
 import com.propertyvista.server.jobs.LeaseCompletionProcess;
 import com.propertyvista.server.jobs.PmcProcess;
 import com.propertyvista.server.jobs.PmcProcessContext;
+import com.propertyvista.test.preloader.ARPolicyDataModel;
+import com.propertyvista.test.preloader.BuildingDataModel;
+import com.propertyvista.test.preloader.DepositPolicyDataModel;
+import com.propertyvista.test.preloader.IdAssignmentPolicyDataModel;
+import com.propertyvista.test.preloader.LeaseAdjustmentPolicyDataModel;
+import com.propertyvista.test.preloader.LeaseAdjustmentReasonDataModel;
+import com.propertyvista.test.preloader.LeaseBillingPolicyDataModel;
+import com.propertyvista.test.preloader.LocationsDataModel;
+import com.propertyvista.test.preloader.PreloadConfig;
+import com.propertyvista.test.preloader.ProductItemTypesDataModel;
+import com.propertyvista.test.preloader.ProductTaxPolicyDataModel;
+import com.propertyvista.test.preloader.TaxesDataModel;
+import com.propertyvista.test.preloader.TenantDataModel;
 
 public abstract class FinancialTestBase extends VistaDBTestBase {
 
@@ -100,11 +103,17 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
 
     private long startTime;
 
-    protected LeaseDataModel leaseDataModel;
+    protected BuildingDataModel buildingDataModel;
 
     protected LeaseAdjustmentReasonDataModel leaseAdjustmentReasonDataModel;
 
     protected ARPolicyDataModel arPolicyDataModel;
+
+    protected TenantDataModel tenantDataModel;
+
+    protected PreloadConfig config;
+
+    protected Lease lease;
 
     public interface Task {
         void execute();
@@ -171,6 +180,8 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
     }
 
     protected void preloadData(PreloadConfig config) {
+        this.config = config;
+
         setDate("01-Jan-2010");
 
         LocationsDataModel locationsDataModel = new LocationsDataModel(config);
@@ -185,7 +196,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         leaseAdjustmentReasonDataModel = new LeaseAdjustmentReasonDataModel(config);
         leaseAdjustmentReasonDataModel.generate();
 
-        BuildingDataModel buildingDataModel = new BuildingDataModel(config, productItemTypesDataModel);
+        buildingDataModel = new BuildingDataModel(config, productItemTypesDataModel);
         buildingDataModel.generate();
 
         IdAssignmentPolicyDataModel idAssignmentPolicyDataModel = new IdAssignmentPolicyDataModel(config);
@@ -202,11 +213,8 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
                 taxesDataModel, buildingDataModel);
         leaseAdjustmentPolicyDataModel.generate();
 
-        TenantDataModel tenantDataModel = new TenantDataModel(config);
+        tenantDataModel = new TenantDataModel(config);
         tenantDataModel.generate();
-
-        leaseDataModel = new LeaseDataModel(config, buildingDataModel, tenantDataModel);
-        leaseDataModel.generate();
 
         //TODO if commented - check exception
         LeaseBillingPolicyDataModel leaseBillingPolicyDataModel = new LeaseBillingPolicyDataModel(config, buildingDataModel);
@@ -274,12 +282,30 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         TransactionHistoryPrinter.printTransactionHistory(transactionHistory, transactionHistoryFileName(transactionHistory, getClass().getSimpleName()));
     }
 
-    protected void setLeaseTerms(String leaseDateFrom, String leaseDateTo) {
-        setLeaseTerms(leaseDateFrom, leaseDateTo, null, null);
+    protected void createLease(String leaseDateFrom, String leaseDateTo) {
+        createLease(leaseDateFrom, leaseDateTo, null, null);
     }
 
-    protected void setLeaseTerms(String leaseDateFrom, String leaseDateTo, BigDecimal agreedPrice, BigDecimal carryforwardBalance) {
-        Lease lease = retrieveLeaseForEdit();
+    protected void createLease(String leaseDateFrom, String leaseDateTo, BigDecimal agreedPrice, BigDecimal carryforwardBalance) {
+        ProductItem serviceItem = buildingDataModel.generateResidentialUnitServiceItem();
+
+        if (carryforwardBalance != null) {
+            lease = ServerSideFactory.create(LeaseFacade.class).create(Lease.Status.ExistingLease);
+        } else {
+            lease = ServerSideFactory.create(LeaseFacade.class).create(Lease.Status.Application);
+            ServerSideFactory.create(OccupancyFacade.class).scopeAvailable(serviceItem.element().cast().getPrimaryKey());
+        }
+
+        lease = ServerSideFactory.create(LeaseFacade.class).setUnit(lease, (AptUnit) serviceItem.element().cast());
+        lease.currentTerm().version().leaseProducts().serviceItem().agreedPrice().setValue(serviceItem.price().getValue());
+
+        Tenant tenantInLease = EntityFactory.create(Tenant.class);
+        ServerSideFactory.create(IdAssignmentFacade.class).assignId(tenantInLease);
+        tenantInLease.customer().set(tenantDataModel.getTenant());
+        tenantInLease.role().setValue(LeaseParticipant.Role.Applicant);
+        lease.currentTerm().version().tenants().add(tenantInLease);
+
+        lease.approvalDate().setValue(lease.currentTerm().termFrom().getValue());
 
         // TODO - this must be done via facade
         lease.currentTerm().termFrom().setValue(FinancialTestsUtils.getDate(leaseDateFrom));
@@ -337,15 +363,15 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
     }
 
     protected Lease retrieveLease() {
-        return ServerSideFactory.create(LeaseFacade.class).load(leaseDataModel.getLeaseId(), false);
+        return ServerSideFactory.create(LeaseFacade.class).load(lease, false);
     }
 
     protected Lease retrieveLeaseDraft() {
-        return ServerSideFactory.create(LeaseFacade.class).load(leaseDataModel.getLeaseId(), true);
+        return ServerSideFactory.create(LeaseFacade.class).load(lease, true);
     }
 
     protected Lease retrieveLeaseForEdit() {
-        return ServerSideFactory.create(LeaseFacade.class).load(leaseDataModel.getLeaseId(), true);
+        return ServerSideFactory.create(LeaseFacade.class).load(lease, true);
     }
 
     protected BillableItem addParking(String effectiveDate, String expirationDate) {
@@ -402,7 +428,8 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
     private BillableItem addBillableItem(Feature.Type featureType, LogicalDate effectiveDate, LogicalDate expirationDate) {
         Lease lease = retrieveLeaseForEdit();
 
-        ProductItem serviceItem = leaseDataModel.getServiceItem();
+        ProductItem serviceItem = lease.currentTerm().version().leaseProducts().serviceItem().item();
+        Persistence.service().retrieve(serviceItem.product());
         Service.ServiceV service = serviceItem.product().cast();
         Persistence.service().retrieve(service.features());
         for (Feature feature : service.features()) {
@@ -420,12 +447,6 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
             }
         }
         return null;
-    }
-
-    protected Lease finalizeLeaseAdendum2() {
-        Lease lease = ServerSideFactory.create(LeaseFacade.class).finalize(retrieveLeaseDraft());
-        Persistence.service().commit();
-        return lease;
     }
 
     protected LeaseTerm finalizeLeaseAdendum() {

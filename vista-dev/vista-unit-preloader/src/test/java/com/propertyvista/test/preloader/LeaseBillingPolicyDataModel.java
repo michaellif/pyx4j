@@ -11,7 +11,7 @@
  * @author igor
  * @version $Id$
  */
-package com.propertyvista.biz.financial.preload;
+package com.propertyvista.test.preloader;
 
 import java.math.BigDecimal;
 

@@ -36,7 +36,7 @@ public class DepositFullCycleScenarioTest extends FinancialTestBase {
 
         setDate("17-Feb-2012");
 
-        setLeaseTerms("01-Mar-2012", "31-May-2012");
+        createLease("01-Mar-2012", "31-May-2012");
         addParking();
         addParking("01-Apr-2012", "30-Apr-2012");
         addLocker();
@@ -80,7 +80,7 @@ public class DepositFullCycleScenarioTest extends FinancialTestBase {
         bill = runBilling(true, true);
 
         // @formatter:off
-        new BillTester(bill, true).
+        new BillTester(bill).
         billSequenceNumber(2).
         previousBillSequenceNumber(1).
         billType(Bill.BillType.Regular).
@@ -105,7 +105,7 @@ public class DepositFullCycleScenarioTest extends FinancialTestBase {
         bill = runBilling(true, true);
 
         // @formatter:off
-        new BillTester(bill, true).
+        new BillTester(bill).
         billSequenceNumber(3).
         billType(Bill.BillType.Regular).
         billingPeriodStartDate("01-May-2012").
@@ -131,7 +131,7 @@ public class DepositFullCycleScenarioTest extends FinancialTestBase {
         bill = runBilling(true, true);
 
         // @formatter:off
-        new BillTester(bill, true).
+        new BillTester(bill).
         billSequenceNumber(4).
         billType(Bill.BillType.Final).
         billingPeriodStartDate(null).

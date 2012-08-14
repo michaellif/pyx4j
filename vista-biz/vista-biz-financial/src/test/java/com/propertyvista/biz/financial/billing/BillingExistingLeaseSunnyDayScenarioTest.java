@@ -22,7 +22,6 @@ package com.propertyvista.biz.financial.billing;
 
 import java.math.BigDecimal;
 
-import org.junit.Ignore;
 import org.junit.experimental.categories.Category;
 
 import com.pyx4j.config.server.ServerSideFactory;
@@ -31,10 +30,9 @@ import com.propertyvista.biz.financial.FinancialTestBase;
 import com.propertyvista.biz.financial.FinancialTestBase.FunctionalTests;
 import com.propertyvista.biz.financial.SysDateManager;
 import com.propertyvista.biz.financial.ar.ARFacade;
-import com.propertyvista.biz.financial.preload.PreloadConfig;
 import com.propertyvista.domain.financial.billing.Bill;
+import com.propertyvista.test.preloader.PreloadConfig;
 
-@Ignore
 @Category(FunctionalTests.class)
 public class BillingExistingLeaseSunnyDayScenarioTest extends FinancialTestBase {
 
@@ -42,7 +40,6 @@ public class BillingExistingLeaseSunnyDayScenarioTest extends FinancialTestBase 
     protected void setUp() throws Exception {
         super.setUp();
         PreloadConfig config = new PreloadConfig();
-        config.existingLease = true;
         preloadData(config);
     }
 
@@ -50,7 +47,7 @@ public class BillingExistingLeaseSunnyDayScenarioTest extends FinancialTestBase 
 
         SysDateManager.setSysDate("17-May-2011");
 
-        setLeaseTerms("1-Mar-2009", "31-Aug-2011", null, new BigDecimal("300.00"));
+        createLease("1-Mar-2009", "31-Aug-2011", null, new BigDecimal("300.00"));
 
         Bill bill = approveExistingLease(true);
 

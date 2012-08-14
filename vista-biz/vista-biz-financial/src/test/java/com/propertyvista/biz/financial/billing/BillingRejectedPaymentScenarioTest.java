@@ -42,7 +42,7 @@ public class BillingRejectedPaymentScenarioTest extends FinancialTestBase {
     }
 
     public void testScenario() {
-        setLeaseTerms("01-Apr-2011", "31-Dec-2011");
+        createLease("01-Apr-2011", "31-Dec-2011");
 
         //==================== First Bill ======================//
 
@@ -131,7 +131,7 @@ public class BillingRejectedPaymentScenarioTest extends FinancialTestBase {
         bill = runBilling(true, true);
 
         // @formatter:off
-        new BillTester(bill, true).
+        new BillTester(bill).
         billingPeriodStartDate("1-Jul-2011").
         billingPeriodEndDate("31-Jul-2011").
         paymentReceivedAmount("-1113.88").
@@ -160,7 +160,7 @@ public class BillingRejectedPaymentScenarioTest extends FinancialTestBase {
         bill = runBilling(true, true);
 
         // @formatter:off
-        new BillTester(bill, true).
+        new BillTester(bill).
         billingPeriodStartDate("1-Aug-2011").
         billingPeriodEndDate("31-Aug-2011").
         paymentReceivedAmount("-2091.94").

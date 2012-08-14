@@ -43,7 +43,7 @@ public class BillingLeaseOnlyScenarioTest extends FinancialTestBase {
 
         SysDateManager.setSysDate("15-Feb-2011");
 
-        setLeaseTerms("1-Mar-2011", "31-Aug-2011");
+        createLease("1-Mar-2011", "31-Aug-2011");
 
         //==================== RUN 1 ======================//
 

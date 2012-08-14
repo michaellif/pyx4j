@@ -41,7 +41,7 @@ public class BillingLatePaymentScenarioTest extends FinancialTestBase {
 
     public void testScenario() {
 
-        setLeaseTerms("01-Apr-2011", "31-Oct-2011");
+        createLease("01-Apr-2011", "31-Oct-2011");
 
         //==================== First Bill ======================//
 

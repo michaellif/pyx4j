@@ -11,7 +11,7 @@
  * @author dmitry
  * @version $Id$
  */
-package com.propertyvista.biz.financial.preload;
+package com.propertyvista.test.preloader;
 
 import java.util.HashMap;
 import java.util.List;

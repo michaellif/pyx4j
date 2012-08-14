@@ -28,9 +28,9 @@ import com.propertyvista.biz.financial.FinancialTestBase;
 import com.propertyvista.biz.financial.FinancialTestBase.FunctionalTests;
 import com.propertyvista.biz.financial.SysDateManager;
 import com.propertyvista.biz.financial.ar.ARFacade;
-import com.propertyvista.biz.financial.preload.PreloadConfig;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.Type;
+import com.propertyvista.test.preloader.PreloadConfig;
 
 @Category(FunctionalTests.class)
 public class BillingFullCycleServAdjMonScenarioTest extends FinancialTestBase {
@@ -45,7 +45,7 @@ public class BillingFullCycleServAdjMonScenarioTest extends FinancialTestBase {
 
     public void testScenario() {
 
-        setLeaseTerms("28-Jan-2012", "16-Feb-2013");
+        createLease("28-Jan-2012", "16-Feb-2013");
         addServiceAdjustment("-55.55", Type.monetary);
 
         //==================== RUN 1 ======================//
