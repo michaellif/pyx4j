@@ -19,6 +19,7 @@ import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
@@ -43,6 +44,7 @@ public interface NotesAndAttachments extends IEntity {
     IList<NoteAttachment> attachments();
 
     @MemberColumn(name = "crmuser")
+    @ReadOnly
     CrmUser user();
 
     @Caption(name = "Last Updated")

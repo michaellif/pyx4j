@@ -14,6 +14,7 @@
 package com.propertyvista.crm.client.visor.notes;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.Key;
@@ -46,10 +47,14 @@ public class NotesAndAttachmentsVisorController implements IVisorController {
     }
 
     @Override
-    public void show(IView parentView) {
-        view.populate();
-        IsWidget visor = getView();
-        parentView.showVisor(visor, visor.asWidget().getTitle());
+    public void show(final IView parentView) {
+        view.populate(new Command() {
+            @Override
+            public void execute() {
+                IsWidget visor = getView();
+                parentView.showVisor(visor, visor.asWidget().getTitle());
+            }
+        });
     }
 
     public Key getParentId() {
@@ -94,5 +99,9 @@ public class NotesAndAttachmentsVisorController implements IVisorController {
         } else {
             getService().save(callback, item);
         }
+    }
+
+    public void remove(NotesAndAttachments item, DefaultAsyncCallback<Boolean> callback) {
+        getService().delete(callback, item.getPrimaryKey());
     }
 }

@@ -33,6 +33,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.IconButton;
 import com.pyx4j.widgets.client.actionbar.Toolbar;
@@ -46,6 +47,7 @@ import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.note.NoteAttachment;
 import com.propertyvista.domain.note.NotesAndAttachments;
 import com.propertyvista.domain.note.NotesAndAttachmentsDTO;
+import com.propertyvista.domain.security.CrmUser;
 
 public class NotesAndAttachmentsVisorView extends ScrollPanel {
 
@@ -63,7 +65,7 @@ public class NotesAndAttachmentsVisorView extends ScrollPanel {
         setWidget(form.asWidget());
     }
 
-    public void populate() {
+    public void populate(final Command onPopulate) {
         controller.populate(new DefaultAsyncCallback<EntitySearchResult<NotesAndAttachments>>() {
             @Override
             public void onSuccess(EntitySearchResult<NotesAndAttachments> result) {
@@ -72,6 +74,7 @@ public class NotesAndAttachmentsVisorView extends ScrollPanel {
                     dto.notes().add(na);
                 }
                 form.populate(dto);
+                onPopulate.execute();
             }
         });
     }
@@ -92,8 +95,6 @@ public class NotesAndAttachmentsVisorView extends ScrollPanel {
         }
 
         public class NotesAndAttachmentsFolder extends VistaBoxFolder<NotesAndAttachments> {
-
-            protected boolean newItemAdded = false;
 
             public NotesAndAttachmentsFolder() {
                 super(NotesAndAttachments.class);
@@ -137,10 +138,13 @@ public class NotesAndAttachmentsVisorView extends ScrollPanel {
             }
 
             @Override
-            protected void addItem(NotesAndAttachments newEntity) {
-                newItemAdded = newEntity.isEmpty();
-
-                super.addItem(newEntity);
+            protected void removeItem(final CEntityFolderItem<NotesAndAttachments> item) {
+                controller.remove(item.getValue(), new DefaultAsyncCallback<Boolean>() {
+                    @Override
+                    public void onSuccess(Boolean result) {
+                        NotesAndAttachmentsFolder.super.removeItem(item);
+                    }
+                });
             }
 
             private class NoteEditor extends CEntityDecoratableForm<NotesAndAttachments> {
@@ -190,6 +194,10 @@ public class NotesAndAttachmentsVisorView extends ScrollPanel {
                         @Override
                         public void onClick(ClickEvent event) {
                             if (getValue().created().getValue() == null) {
+                                CrmUser user = EntityFactory.create(CrmUser.class);
+                                user.setPrimaryKey(ClientContext.getUserVisit().getPrincipalPrimaryKey());
+                                user.name().setValue(ClientContext.getUserVisit().getName());
+                                getValue().user().set(user);
                                 getValue().created().setValue(new LogicalDate());
                             } else {
                                 getValue().updated().setValue(new LogicalDate());
@@ -250,12 +258,21 @@ public class NotesAndAttachmentsVisorView extends ScrollPanel {
                     }
                 }
 
-                public void setButtonsVisible(boolean visible) {
+                private void setButtonsVisible(boolean visible) {
                     btnSave.setVisible(visible);
                     btnCancel.setVisible(visible);
                 }
 
+                public boolean isOwner() {
+                    Key ownerKey = (getValue().user() != null ? getValue().user().getPrimaryKey() : null);
+                    return (ownerKey == null || ownerKey.equals(ClientContext.getUserVisit().getPrincipalPrimaryKey()));
+                }
+
                 public void setViewableMode(boolean isViewable) {
+                    // to allow editing first check ownership
+                    if (!isViewable && !isOwner()) {
+                        isViewable = true;
+                    }
                     setButtonsVisible(!isViewable);
                     setViewable(isViewable);
                 }
