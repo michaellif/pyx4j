@@ -256,6 +256,11 @@ public class NotesAndAttachmentsVisorView extends ScrollPanel {
                     if (getValue().isEmpty()) {
                         setViewableMode(false);
                     }
+                    if (!isOwner()) {
+                        @SuppressWarnings("unchecked")
+                        CEntityFolderItem<NotesAndAttachments> item = (CEntityFolderItem<NotesAndAttachments>) getParent();
+                        item.setRemovable(false);
+                    }
                 }
 
                 private void setButtonsVisible(boolean visible) {
