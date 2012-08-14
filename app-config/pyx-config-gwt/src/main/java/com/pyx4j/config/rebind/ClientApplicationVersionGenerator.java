@@ -118,6 +118,9 @@ public class ClientApplicationVersionGenerator extends Generator {
                 }
             }
             pyxScmRevision = properties.getProperty("scm.revision", "");
+            if ("${scm.revision}".equals(pyxScmRevision)) {
+                pyxScmRevision = "";
+            }
         }
 
         String implName = interfaceType.getName();
