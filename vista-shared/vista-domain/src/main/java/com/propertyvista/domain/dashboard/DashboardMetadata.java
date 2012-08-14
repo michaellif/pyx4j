@@ -89,4 +89,9 @@ public interface DashboardMetadata extends ISharedUserEntity {
 
     @Owned
     IList<GadgetMetadata> gadgets();
+
+    /**
+     * Holds the docking position of the gadgets
+     */
+    IPrimitive<String> encodedLayout();
 }
