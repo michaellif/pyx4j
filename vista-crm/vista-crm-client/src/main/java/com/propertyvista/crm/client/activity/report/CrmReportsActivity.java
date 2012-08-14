@@ -14,8 +14,6 @@
 package com.propertyvista.crm.client.activity.report;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -36,20 +34,10 @@ public class CrmReportsActivity extends AbstractReportsActivity {
     }
 
     @Override
-    public void apply(ReportMetadata settings) {
-        super.apply(settings);
-//        String mode = (settings instanceof HasAdvancedSettings) ? (((HasAdvancedSettings) settings).isInAdvancedMode().isBooleanTrue() ? "advanced" : "simple")
-//                : "simple";
-//        MessageDialog.info("you have selected " + settings.getInstanceValueClass().getName() + ", mode " + mode);
-    }
-
-    @Override
-    public void start(AcceptsOneWidget panel, EventBus eventBus) {
-        super.start(panel, eventBus);
-        // TODO this is just for now
-        AvailabilityReportMetadata meta = EntityFactory.create(AvailabilityReportMetadata.class);
-        meta.asOf().setValue(new LogicalDate());
-        view.setReportSettings(meta);
+    protected ReportMetadata retrieveReportSettings(AppPlace place) {
+        AvailabilityReportMetadata metadata = EntityFactory.create(AvailabilityReportMetadata.class);
+        metadata.asOf().setValue(new LogicalDate());
+        return metadata;
     }
 
 }

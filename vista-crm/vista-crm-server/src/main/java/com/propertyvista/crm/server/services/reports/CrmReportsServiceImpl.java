@@ -22,6 +22,7 @@ import com.pyx4j.site.server.services.reports.AbstractReportsService;
 import com.pyx4j.site.server.services.reports.ReportGenerator;
 
 import com.propertyvista.crm.rpc.services.reports.CrmReportsService;
+import com.propertyvista.crm.server.services.reports.generators.AvailabilityReportsGenerator;
 import com.propertyvista.domain.reports.AvailabilityReportMetadata;
 
 public class CrmReportsServiceImpl extends AbstractReportsService implements CrmReportsService {

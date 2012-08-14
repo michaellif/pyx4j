@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.server.services.reports;
+package com.propertyvista.crm.server.services.reports.generators;
 
 import java.io.Serializable;
 import java.util.List;
