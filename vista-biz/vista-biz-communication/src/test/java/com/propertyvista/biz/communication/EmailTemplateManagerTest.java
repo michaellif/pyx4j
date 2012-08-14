@@ -16,7 +16,6 @@ package com.propertyvista.biz.communication;
 import java.text.SimpleDateFormat;
 import java.util.concurrent.Callable;
 
-import org.junit.Ignore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,6 +28,7 @@ import com.pyx4j.security.rpc.AuthenticationService;
 import com.pyx4j.server.contexts.NamespaceManager;
 import com.pyx4j.server.mail.MailMessage;
 import com.pyx4j.site.rpc.AppPlaceInfo;
+import com.pyx4j.unit.server.mock.TestLifecycle;
 
 import com.propertyvista.admin.domain.pmc.Pmc;
 import com.propertyvista.biz.communication.mail.template.EmailTemplateManager;
@@ -42,7 +42,6 @@ import com.propertyvista.biz.communication.mail.template.model.PortalLinksT;
 import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.config.tests.VistaDBTestBase;
-import com.propertyvista.config.tests.VistaTestDBSetup;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.contact.AddressStructured.StreetType;
@@ -59,7 +58,6 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.ref.Country;
 import com.propertyvista.domain.ref.Province;
 import com.propertyvista.domain.security.CrmUser;
-import com.propertyvista.domain.security.CustomerUser;
 import com.propertyvista.domain.security.VistaBasicBehavior;
 import com.propertyvista.domain.site.SiteDescriptor;
 import com.propertyvista.domain.site.SiteTitles;
@@ -74,7 +72,6 @@ import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 import com.propertyvista.server.jobs.TaskRunner;
 
-@Ignore
 public class EmailTemplateManagerTest extends VistaDBTestBase {
 
     private final static Logger log = LoggerFactory.getLogger(EmailTemplateManagerTest.class);
@@ -132,10 +129,8 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
     public void setUp() throws Exception {
         super.setUp();
 
-        VistaTestDBSetup.init();
-//        TestLifecycle.testSession(new UserVisit(new Key(-101), "Neo"), VistaCrmBehavior.Occupancy, VistaBasicBehavior.CRM);
-//        TestLifecycle.beginRequest();
-        generateIdAssignmentPolicy();
+        TestLifecycle.testSession(null, VistaBasicBehavior.CRM);
+        TestLifecycle.beginRequest();
 
         createPmc();
 
@@ -145,6 +140,11 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
 
         appUrl = AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.ProspectiveApp, true), PtSiteMap.LoginWithToken.class,
                 AuthenticationService.AUTH_TOKEN_ARG, token);
+    }
+
+    @Override
+    public void tearDown() {
+        TestLifecycle.tearDown();
     }
 
     public void testTemplates() {
@@ -531,7 +531,6 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
                 "<a href=\"{0}\"><img src=\"{1}\" alt=\"{2}\"></a>",
                 getHeaderFooterArgs(asString)
             );//@formatter:on
-
     }
 
     private String getFooter(boolean asString) {
@@ -547,6 +546,8 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
         // lease
         // policyNodes:unit/floorplan/building/complex/organization
         // emailTemplatesPolicy
+
+        generateIdAssignmentPolicy();
 
         // site descriptor
         siteDescriptor = EntityFactory.create(SiteDescriptor.class);
@@ -585,7 +586,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
             building.info().address().streetType().getValue().toString()
         ));//@formatter:on
         building.contacts().website().setValue("www.property-" + building.propertyCode().getValue() + ".com");
-        // creaate admin contact
+        // create admin contact
         PropertyContact admin = EntityFactory.create(PropertyContact.class);
         admin.type().setValue(PropertyContact.PropertyContactType.administrator);
         admin.name().setValue(TestLoaderRandomGen.getFirstName() + " " + TestLoaderRandomGen.getLastName());
@@ -593,7 +594,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
         admin.email().setValue(admin.name().getValue().toLowerCase().replace(" ", ".") + "@propertyvista.com");
         building.contacts().propertyContacts().add(admin);
         adminName = admin.name().getValue();
-        // creaate office contact
+        // create office contact
         PropertyContact office = EntityFactory.create(PropertyContact.class);
         office.type().setValue(PropertyContact.PropertyContactType.mainOffice);
         office.name().setValue(TestLoaderRandomGen.getFirstName() + " " + TestLoaderRandomGen.getLastName());
@@ -617,37 +618,34 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
         lease = ServerSideFactory.create(LeaseFacade.class).create(Status.Application);
         lease.unit().set(unit);
         lease.currentTerm().termFrom().setValue(new LogicalDate());
-        ServerSideFactory.create(LeaseFacade.class).persist(lease);
 
-        // load main applicant
-        CustomerUser user = EntityFactory.create(CustomerUser.class);
-        user.name().setValue(TestLoaderRandomGen.getFirstName() + " " + TestLoaderRandomGen.getLastName());
-        Persistence.service().persist(user);
-        Customer tenant = EntityFactory.create(Customer.class);
-        tenant.user().set(user);
-        Persistence.service().persist(tenant);
+        // main applicant
+        Customer customer = EntityFactory.create(Customer.class);
+        customer.person().name().firstName().setValue(TestLoaderRandomGen.getFirstName());
+        customer.person().name().lastName().setValue(TestLoaderRandomGen.getLastName());
+        customer.person().email().setValue(customer.person().name().firstName() + "@test.com");
+
         mainAplt = EntityFactory.create(Tenant.class);
-        mainAplt.customer().set(tenant);
+        mainAplt.customer().set(customer);
         mainAplt.role().setValue(LeaseParticipant.Role.Applicant);
-        mainAplt.leaseTermV().set(lease.currentTerm().version());
-        Persistence.service().persist(mainAplt);
+        lease.currentTerm().version().tenants().add(mainAplt);
 
-        // load main co-applicant
-        user = EntityFactory.create(CustomerUser.class);
-        user.name().setValue(TestLoaderRandomGen.getFirstName() + " " + TestLoaderRandomGen.getLastName());
-        Persistence.service().persist(user);
-        tenant = EntityFactory.create(Customer.class);
-        tenant.user().set(user);
-        Persistence.service().persist(tenant);
+        // co-applicant
+        customer = EntityFactory.create(Customer.class);
+        customer.person().name().firstName().setValue(TestLoaderRandomGen.getFirstName());
+        customer.person().name().lastName().setValue(TestLoaderRandomGen.getLastName());
+        customer.person().email().setValue(customer.person().name().firstName() + "@test.com");
+
         coAplt = EntityFactory.create(Tenant.class);
-        coAplt.customer().set(tenant);
+        coAplt.customer().set(customer);
         coAplt.role().setValue(LeaseParticipant.Role.CoApplicant);
         coAplt.application().set(mainApp);
-        coAplt.leaseTermV().set(lease.currentTerm().version());
-        Persistence.service().persist(coAplt);
+        lease.currentTerm().version().tenants().add(coAplt);
 
-        // TODO load guarantor
+        // TODO load guarantors
         // ...
+
+        ServerSideFactory.create(LeaseFacade.class).finalize(lease);
 
         // create applications
         MasterOnlineApplication mApp = EntityFactory.create(MasterOnlineApplication.class);
@@ -666,11 +664,38 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
         coAplt.application().set(coApp);
         Persistence.service().merge(coAplt);
 
-        // load email policy
-        orgNode = EntityFactory.create(OrganizationPoliciesNode.class);
-        Persistence.service().persist(orgNode);
+        generateEmailPolicy();
+    }
 
+    protected OrganizationPoliciesNode getOrganizationPoliciesNode() {
+        if (orgNode == null) {
+            orgNode = EntityFactory.create(OrganizationPoliciesNode.class);
+            Persistence.service().persist(orgNode);
+        }
+        return orgNode;
+    }
+
+    protected void generateIdAssignmentPolicy() {
+        IdAssignmentPolicy policy = EntityFactory.create(IdAssignmentPolicy.class);
+        policy.node().set(getOrganizationPoliciesNode());
+
+        IdAssignmentItem item = null;
+        for (IdTarget target : IdTarget.values()) {
+            item = EntityFactory.create(IdAssignmentItem.class);
+
+            item.target().setValue(target);
+            item.type().setValue(IdAssignmentType.generatedNumber);
+
+            policy.itmes().add(item);
+        }
+
+        Persistence.service().persist(policy);
+    }
+
+    protected void generateEmailPolicy() {
         EmailTemplatesPolicy policy = EntityFactory.create(EmailTemplatesPolicy.class);
+        policy.node().set(getOrganizationPoliciesNode());
+
         for (EmailTemplateType type : EmailTemplateType.values()) {
             EmailTemplate template = EntityFactory.create(EmailTemplate.class);
             template.useHeader().setValue(Boolean.TRUE);
@@ -682,22 +707,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
         }
         policy.header().setValue(getHeader(false));
         policy.footer().setValue(getFooter(false));
-        policy.node().set(orgNode);
-        Persistence.service().persist(policy);
-    }
 
-    protected void generateIdAssignmentPolicy() {
-        OrganizationPoliciesNode orgNode = EntityFactory.create(OrganizationPoliciesNode.class);
-        Persistence.service().persist(orgNode);
-
-        IdAssignmentPolicy policy = EntityFactory.create(IdAssignmentPolicy.class);
-        policy.node().set(orgNode);
-
-        IdAssignmentItem item = EntityFactory.create(IdAssignmentItem.class);
-        item.target().setValue(IdTarget.lease);
-        item.type().setValue(IdAssignmentType.generatedNumber);
-
-        policy.itmes().add(item);
         Persistence.service().persist(policy);
     }
 }
