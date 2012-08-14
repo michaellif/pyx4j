@@ -142,7 +142,7 @@ public abstract class ListerGadgetInstanceBase<E extends IEntity, GADGET_TYPE ex
         dataTablePanel.setLastActionHandler(new Command() {
             @Override
             public void execute() {
-                pageNumber = dataTablePanel.getDataTableModel().getTotalRows() / getMetadata().pageSize().getValue() - 1;
+                pageNumber = (dataTablePanel.getDataTableModel().getTotalRows() - 1) / getMetadata().pageSize().getValue();
                 populate(false);
             }
         });
