@@ -23,6 +23,7 @@ package com.propertyvista.biz.financial.billing;
 import java.text.ParseException;
 import java.util.Date;
 
+import org.junit.Ignore;
 import org.junit.experimental.categories.Category;
 
 import com.propertyvista.biz.financial.FinancialTestBase;
@@ -32,6 +33,7 @@ import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.portal.rpc.shared.BillingException;
 import com.propertyvista.test.preloader.PreloadConfig;
 
+@Ignore
 @Category(FunctionalTests.class)
 public class BillingPeriodsTest extends FinancialTestBase {
 
