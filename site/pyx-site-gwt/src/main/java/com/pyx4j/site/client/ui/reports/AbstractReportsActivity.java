@@ -64,9 +64,6 @@ public abstract class AbstractReportsActivity extends AbstractActivity implement
         }, settings);
     }
 
-    private ReportMetadata retrieveReportSettings(AppPlace place) {
-        String encodedReportSettings = place.getFirstArg("metadata");
-        // TODO decode
-        return null;
-    }
+    protected abstract ReportMetadata retrieveReportSettings(AppPlace place);
+
 }

@@ -51,7 +51,7 @@ public abstract class AbstractReportsView extends ViewImplBase implements IRepor
 
     private final FlowPanel viewPanel;
 
-    private final Map<Class<? extends ReportMetadata>, ReportFactory> reportFactoryMap;
+    private final Map<Class<? extends ReportMetadata>, ReportFactory<?>> reportFactoryMap;
 
     private CEntityForm<ReportMetadata> settingsForm;
 
@@ -63,7 +63,7 @@ public abstract class AbstractReportsView extends ViewImplBase implements IRepor
 
     private Report report;
 
-    public AbstractReportsView(Map<Class<? extends ReportMetadata>, ReportFactory> reportFactoryMap) {
+    public AbstractReportsView(Map<Class<? extends ReportMetadata>, ReportFactory<?>> reportFactoryMap) {
         setSize("100%", "100%");
         this.reportFactoryMap = reportFactoryMap;
         this.settingsForm = null;
