@@ -17,11 +17,8 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.domain.contact.AddressStructured;
-import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 
 public class AddressRetriever {
@@ -33,14 +30,15 @@ public class AddressRetriever {
                     + " NotFound");
         }
 
-        EntityQueryCriteria<AptUnit> criteria = new EntityQueryCriteria<AptUnit>(AptUnit.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto(), participant.leaseTermV().holder().lease().unit()));
-        AptUnit unit = Persistence.service().retrieve(criteria);
-        Persistence.service().retrieve(unit.building());
+        Persistence.service().retrieve(participant.leaseTermV());
+        Persistence.service().retrieve(participant.leaseTermV().holder());
+        Persistence.service().retrieve(participant.leaseTermV().holder().lease());
+        Persistence.service().retrieve(participant.leaseTermV().holder().lease().unit());
+        Persistence.service().retrieve(participant.leaseTermV().holder().lease().unit().building());
 
         AddressStructured address = EntityFactory.create(AddressStructured.class);
-        address.set(unit.building().info().address());
-        address.suiteNumber().set(unit.info().number());
+        address.set(participant.leaseTermV().holder().lease().unit().building().info().address());
+        address.suiteNumber().set(participant.leaseTermV().holder().lease().unit().info().number());
 
         callback.onSuccess(address);
     }

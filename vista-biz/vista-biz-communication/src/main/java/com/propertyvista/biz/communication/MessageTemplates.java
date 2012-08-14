@@ -46,12 +46,10 @@ import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
 import com.propertyvista.domain.policy.framework.PolicyNode;
 import com.propertyvista.domain.policy.policies.EmailTemplatesPolicy;
 import com.propertyvista.domain.policy.policies.domain.EmailTemplate;
-import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.security.AbstractUser;
 import com.propertyvista.domain.security.CustomerUser;
 import com.propertyvista.domain.security.VistaBasicBehavior;
 import com.propertyvista.domain.tenant.Tenant;
-import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 
 public class MessageTemplates {
@@ -119,21 +117,17 @@ public class MessageTemplates {
         Persistence.service().retrieve(leaseParticipant.leaseTermV());
         Persistence.service().retrieve(leaseParticipant.leaseTermV().holder());
         Persistence.service().retrieve(leaseParticipant.leaseTermV().holder().lease());
-        Lease lease = Persistence.secureRetrieve(Lease.class, leaseParticipant.leaseTermV().holder().lease().getPrimaryKey());
-        CustomerUser user = Persistence.service().retrieve(CustomerUser.class, leaseParticipant.customer().user().getPrimaryKey());
+        Persistence.service().retrieve(leaseParticipant.leaseTermV().holder().lease().unit());
+        Persistence.service().retrieve(leaseParticipant.leaseTermV().holder().lease().unit().building());
 
-        // get building policy node
-        Persistence.service().retrieve(lease.unit());
-        Persistence.service().retrieve(lease.unit().building());
-        Building building = lease.unit().building();
-        if (building == null || building.isNull()) {
-            throw new Error("No building found");
-        }
-        EmailTemplate emailTemplate = getEmailTemplate(emailType, building);
+        Persistence.service().retrieve(leaseParticipant.customer().user());
+
+        EmailTemplate emailTemplate = getEmailTemplate(emailType, leaseParticipant.leaseTermV().holder().lease().unit().building());
+
         // create required data context
         EmailTemplateContext context = EntityFactory.create(EmailTemplateContext.class);
-        context.user().set(user);
-        context.lease().set(lease);
+        context.user().set(leaseParticipant.customer().user());
+        context.lease().set(leaseParticipant.leaseTermV().holder().lease());
         context.leaseParticipant().set(leaseParticipant);
         context.accessToken().setValue(token);
         // load data objects for template variable lookup
@@ -142,7 +136,7 @@ public class MessageTemplates {
             data.add(EmailTemplateRootObjectLoader.loadRootObject(tObj, context));
         }
         MailMessage email = new MailMessage();
-        email.setTo(user.email().getValue());
+        email.setTo(leaseParticipant.customer().user().email().getValue());
         email.setSender(getSender());
         // set email subject and body from the template
         buildEmail(email, emailTemplate, data);
@@ -172,9 +166,8 @@ public class MessageTemplates {
             Persistence.service().retrieve(til.leaseTermV().holder().lease());
             Persistence.service().retrieve(til.leaseTermV().holder().lease().unit());
             Persistence.service().retrieve(til.leaseTermV().holder().lease().unit().building());
-            Building bldNode = til.leaseTermV().holder().lease().unit().building();
-            if (bldNode != null && !bldNode.isNull()) {
-                policyNode = bldNode;
+            if (!til.leaseTermV().holder().lease().unit().building().isNull()) {
+                policyNode = til.leaseTermV().holder().lease().unit().building();
             }
         }
 
