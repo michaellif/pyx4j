@@ -24,6 +24,7 @@ import java.util.Date;
 
 import com.google.gwt.core.client.GWT;
 
+import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.config.shared.ApplicationMode;
 
 public abstract class ClientApplicationVersion {
@@ -47,7 +48,8 @@ public abstract class ClientApplicationVersion {
         if (ApplicationMode.isDevelopment()) {
             version = "Dev Mode ";
         }
-        version += getBuildLabel() + " " + getBuildDate() + " svn:" + getScmRevision() + " pyx.svn:" + getPyxScmRevision();
+        version += getBuildLabel() + " " + TimeUtils.simpleFormat(getBuildDate(), "yyyy-MM-dd HH:mm") + " svn:" + getScmRevision() + " pyx.svn:"
+                + getPyxScmRevision();
         return version;
     }
 }
