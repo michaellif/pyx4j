@@ -62,6 +62,8 @@ public class OnboardingUserPreloader extends AbstractDataPreloader {
     @Override
     public String create() {
         createOnboardingUser("PV Admin", "", "pvtestadm1n@gmail.com", "12345", VistaOnboardingBehavior.OnboardingAdministrator, null);
+        createOnboardingUser("Leonard", "Drimmer", "leonard@propertyvista.com", "leonard@propertyvista.com", VistaOnboardingBehavior.OnboardingAdministrator,
+                null);
         createOnboardingUser("Equifax Admin", "", "pvtestequifax@gmail.com", "12345", VistaOnboardingBehavior.Equifax, null);
         createOnboardingUser("Caledon Admin", "", "pvtestcaledon@gmail.com", "12345", VistaOnboardingBehavior.Caledon, null);
 
