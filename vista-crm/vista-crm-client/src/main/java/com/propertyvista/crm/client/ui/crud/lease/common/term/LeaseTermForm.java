@@ -94,7 +94,7 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
 
             get(proto().lease().unit()).setEditable(isDraft);
 
-            boolean isCurrent = getValue().equals(getValue().lease().currentTerm());
+            boolean isCurrent = getValue().getPrimaryKey().asCurrentKey().equals(getValue().lease().currentTerm().getPrimaryKey());
             get(proto().termFrom()).setEditable(isDraft || !isCurrent);
             get(proto().termTo()).setEditable(isDraft || !isCurrent);
         }

@@ -181,8 +181,10 @@ public interface Lease extends IEntity {
     @Caption(name = "Selected Unit")
     AptUnit unit();
 
-    // lease begin/end: 
-
+    /**
+     * lease begin/end:
+     * Note: the dates are Transient and has being re-calculated in {@link LeaseFacade#load(Lease lease, boolean forEdit)} method
+     */
     @NotNull
     @Transient
     @Format("MM/dd/yyyy")
@@ -232,15 +234,14 @@ public interface Lease extends IEntity {
     @Timestamp(Update.Created)
     IPrimitive<LogicalDate> creationDate();
 
-    @Timestamp(Update.Updated)
-    IPrimitive<Date> updated();
-
     @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> approvalDate();
 
-    @NotNull
     @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> activationDate();
+
+    @Timestamp(Update.Updated)
+    IPrimitive<Date> updated();
 
     @Owned
     LeaseApplication leaseApplication();

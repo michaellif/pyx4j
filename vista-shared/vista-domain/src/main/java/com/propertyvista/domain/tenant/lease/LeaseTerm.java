@@ -25,6 +25,8 @@ import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
+import com.pyx4j.entity.annotations.Timestamp;
+import com.pyx4j.entity.annotations.Timestamp.Update;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.validator.NotNull;
@@ -97,8 +99,15 @@ public interface LeaseTerm extends IVersionedEntity<LeaseTermV> {
     // should be loaded in service when necessary!..
     IList<Document> documents();
 
+    @ReadOnly
+    @Timestamp(Update.Created)
+    IPrimitive<LogicalDate> creationDate();
+
     @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> approvalDate();
+
+    @Format("MM/dd/yyyy")
+    IPrimitive<LogicalDate> activationDate();
 
     public interface LeaseTermV extends IVersionData<LeaseTerm> {
 
