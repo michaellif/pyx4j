@@ -17,6 +17,7 @@ import com.pyx4j.config.server.ServerSideFactory;
 
 import com.propertyvista.admin.domain.payment.pad.PadReconciliationFile;
 import com.propertyvista.biz.financial.payment.PaymentProcessFacade;
+import com.propertyvista.config.VistaDeployment;
 
 public class PadReciveReconciliationProcess implements PmcProcess {
 
@@ -24,6 +25,9 @@ public class PadReciveReconciliationProcess implements PmcProcess {
 
     @Override
     public boolean start(PmcProcessContext context) {
+        if (VistaDeployment.isVistaStaging()) {
+            return false;
+        }
         reconciliationFile = ServerSideFactory.create(PaymentProcessFacade.class).recivePadReconciliation();
         return (reconciliationFile != null);
     }
