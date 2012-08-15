@@ -13,6 +13,19 @@
  */
 package com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard;
 
+import java.util.Iterator;
+
+import com.pyx4j.widgets.client.dashboard.IBoard;
+
+import com.propertyvista.crm.client.ui.gadgets.common.IGadgetInstance;
+import com.propertyvista.domain.dashboard.DashboardMetadata;
+
 public interface ILayoutManager {
+
+    /** saves board layout to dashboard metadata */
+    void saveLayout(DashboardMetadata dashboardMetadata, IBoard board);
+
+    /** places gadgets in the board */
+    void restoreLayout(DashboardMetadata dasboardMetadata, Iterator<IGadgetInstance> gadget, IBoard board);
 
 }

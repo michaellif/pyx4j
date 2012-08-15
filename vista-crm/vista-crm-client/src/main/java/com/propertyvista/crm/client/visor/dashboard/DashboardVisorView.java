@@ -26,6 +26,7 @@ import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEven
 import com.propertyvista.crm.client.ui.gadgets.common.Directory;
 import com.propertyvista.crm.client.ui.gadgets.common.IGadgetInstance;
 import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.AbstractDashboard;
+import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.DashboardLayoutManager;
 import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.IBuildingFilterContainer;
 import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.ICommonGadgetSettingsContainer;
 import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.IGadgetDirectory;
@@ -50,6 +51,7 @@ public class DashboardVisorView extends Composite {
 
         this.eventBus = new SimpleEventBus();
         this.dashboard = new AbstractDashboard(new ICommonGadgetSettingsContainer() {
+
             @Override
             public void bindGadget(IGadgetInstance gadget) {
                 gadget.setContainerBoard(new IBuildingFilterContainer() {
@@ -72,7 +74,7 @@ public class DashboardVisorView extends Composite {
             public IGadgetInstance createGadgetInstance(GadgetMetadata gmd) {
                 return Directory.createGadget(gmd);
             }
-        }) {
+        }, new DashboardLayoutManager()) {
 
             @Override
             protected void onDashboardMetadataChanged() {
