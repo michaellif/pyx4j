@@ -22,10 +22,11 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 
 import com.propertyvista.crm.client.ui.board.events.HasBuildingSelectionChangedEventHandlers;
+import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.IBuildingFilterContainer;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.property.asset.building.Building;
 
-public interface BoardView extends IsWidget, HasBuildingSelectionChangedEventHandlers {
+public interface BoardView extends IsWidget, HasBuildingSelectionChangedEventHandlers, IBuildingFilterContainer {
 
     public interface Presenter {
 
@@ -51,13 +52,6 @@ public interface BoardView extends IsWidget, HasBuildingSelectionChangedEventHan
      * @return date that this view was set up to display, can't be <code>null</code>
      */
     LogicalDate getDashboardDate();
-
-    /**
-     * @return the stubs of the buildings that this view was set up to display, can't be <code>null</code>, empty list denotes all buildings.
-     */
-    List<Building> getSelectedBuildingsStubs();
-
-    List<Building> getSelectedBuildings();
 
     DashboardMetadata getDashboardMetadata();
 

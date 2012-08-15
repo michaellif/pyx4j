@@ -37,13 +37,13 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
 
-import com.propertyvista.crm.client.ui.board.BoardView;
 import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEvent;
 import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEventHandler;
 import com.propertyvista.crm.client.ui.gadgets.common.AbstractGadget;
 import com.propertyvista.crm.client.ui.gadgets.common.Directory;
 import com.propertyvista.crm.client.ui.gadgets.common.GadgetInstanceBase;
 import com.propertyvista.crm.client.ui.gadgets.common.ListerGadgetInstanceBase;
+import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.IBuildingFilterContainer;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.PaymentReportService;
 import com.propertyvista.domain.dashboard.gadgets.payments.PaymentRecordForReportDTO;
 import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
@@ -69,7 +69,7 @@ public class PaymentRecordsGadgetFactory extends AbstractGadget<PaymentRecordsGa
         }
 
         @Override
-        public void setContainerBoard(final BoardView board) {
+        public void setContainerBoard(IBuildingFilterContainer board) {
             super.setContainerBoard(board);
             board.addBuildingSelectionChangedEventHandler(new BuildingSelectionChangedEventHandler() {
                 @Override

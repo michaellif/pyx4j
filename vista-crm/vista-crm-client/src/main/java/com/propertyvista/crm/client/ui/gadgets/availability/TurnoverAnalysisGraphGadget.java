@@ -42,12 +42,12 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.svg.gwt.SvgFactoryForGwt;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
-import com.propertyvista.crm.client.ui.board.BoardView;
 import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEvent;
 import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEventHandler;
 import com.propertyvista.crm.client.ui.gadgets.common.AbstractGadget;
 import com.propertyvista.crm.client.ui.gadgets.common.GadgetInstanceBase;
 import com.propertyvista.crm.client.ui.gadgets.common.IBuildingBoardGadgetInstance;
+import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.IBuildingFilterContainer;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.AvailabilityReportService;
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitTurnoversPerIntervalDTO;
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitTurnoversPerIntervalDTO.AnalysisResolution;
@@ -113,7 +113,7 @@ public class TurnoverAnalysisGraphGadget extends AbstractGadget<TurnoverAnalysis
         }
 
         @Override
-        public void setContainerBoard(BoardView board) {
+        public void setContainerBoard(IBuildingFilterContainer board) {
             super.setContainerBoard(board);
             board.addBuildingSelectionChangedEventHandler(new BuildingSelectionChangedEventHandler() {
                 @Override

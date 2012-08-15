@@ -15,15 +15,13 @@ package com.propertyvista.crm.client.ui.gadgets.common;
 
 import com.pyx4j.widgets.client.dashboard.IGadget;
 
-import com.propertyvista.crm.client.ui.board.BoardView;
+import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.IBuildingFilterContainer;
 import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
 
 public interface IGadgetInstance extends IGadget {
 
 // in:    
-    void setPresenter(IGadgetInstancePresenter presenter);
-
-    void setContainerBoard(BoardView board);
+    void setContainerBoard(IBuildingFilterContainer board);
 
 // out:    
     GadgetMetadata getMetadata();

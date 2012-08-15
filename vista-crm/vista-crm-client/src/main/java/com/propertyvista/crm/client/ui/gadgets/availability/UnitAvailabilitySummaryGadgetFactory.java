@@ -33,12 +33,12 @@ import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.crm.client.ui.board.BoardView;
 import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEvent;
 import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEventHandler;
 import com.propertyvista.crm.client.ui.gadgets.common.AbstractGadget;
 import com.propertyvista.crm.client.ui.gadgets.common.Directory;
 import com.propertyvista.crm.client.ui.gadgets.common.GadgetInstanceBase;
+import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.IBuildingFilterContainer;
 import com.propertyvista.crm.client.ui.gadgets.util.ColumnDescriptorConverter;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.AvailabilityReportService;
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatusSummaryLineDTO;
@@ -76,7 +76,7 @@ public class UnitAvailabilitySummaryGadgetFactory extends AbstractGadget<UnitAva
         }
 
         @Override
-        public void setContainerBoard(BoardView board) {
+        public void setContainerBoard(IBuildingFilterContainer board) {
             super.setContainerBoard(board);
             board.addBuildingSelectionChangedEventHandler(new BuildingSelectionChangedEventHandler() {
                 @Override

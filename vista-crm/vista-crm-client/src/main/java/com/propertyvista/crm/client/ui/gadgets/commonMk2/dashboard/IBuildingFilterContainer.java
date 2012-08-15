@@ -7,17 +7,24 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Aug 7, 2012
+ * Created on Aug 15, 2012
  * @author ArtyomB
  * @version $Id$
  */
 package com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard;
 
-import com.propertyvista.crm.client.ui.gadgets.common.IGadgetInstance;
-import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
+import java.util.List;
 
-public interface IGadgetDirectory {
+import com.propertyvista.crm.client.ui.board.events.HasBuildingSelectionChangedEventHandlers;
+import com.propertyvista.domain.property.asset.building.Building;
 
-    IGadgetInstance createGadgetInstance(GadgetMetadata gmd);
+public interface IBuildingFilterContainer extends HasBuildingSelectionChangedEventHandlers {
+
+    /**
+     * @return the stubs of the buildings that this view was set up to display, can't be <code>null</code>, empty list denotes all buildings.
+     */
+    List<Building> getSelectedBuildingsStubs();
+
+    List<Building> getSelectedBuildings();
 
 }

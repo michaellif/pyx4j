@@ -34,15 +34,20 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.client.CEntityContainer;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.widgets.client.Button;
 
-import com.propertyvista.crm.client.ui.board.BoardView;
+import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.IBuildingFilterContainer;
+import com.propertyvista.crm.rpc.services.dashboard.DashboardMetadataService;
 import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata.RefreshInterval;
 
 public abstract class GadgetInstanceBase<T extends GadgetMetadata> implements IGadgetInstance {
 
     private static final I18n i18n = I18n.get(GadgetInstanceBase.class);
+
+    // TODO change to special service for gadget metadata
+    private static final DashboardMetadataService dashboardMetadataService = GWT.create(DashboardMetadataService.class);
 
     private boolean isRunning;
 
@@ -64,7 +69,7 @@ public abstract class GadgetInstanceBase<T extends GadgetMetadata> implements IG
 
     private final T metadata;
 
-    protected BoardView containerBoard;
+    protected IBuildingFilterContainer containerBoard;
 
     private CEntityContainer<T> setupForm;
 
@@ -124,43 +129,20 @@ public abstract class GadgetInstanceBase<T extends GadgetMetadata> implements IG
     };
 
     @Override
-    public void setPresenter(IGadgetInstancePresenter presenter) {
-        this.presenter = presenter;
-    }
-
-    @Override
-    public void setContainerBoard(BoardView board) {
+    public void setContainerBoard(IBuildingFilterContainer board) {
         this.containerBoard = board;
     }
 
-    /**
-     * Persisting helper - can be used from within derived class in order to load gadget settings,
-     * stored in GadgetMetadata separately. Can be called within/after setPresenter invoked!
-     */
     protected void saveMetadata() {
-        assert (presenter != null) : "Failed to to save settings: no presenter was available";
-        presenter.save(getMetadata());
-    }
+        dashboardMetadataService.saveGadgetMetadata(new DefaultAsyncCallback<GadgetMetadata>() {
 
-    /**
-     * Persisting helper - can be used from within derived class in order to load gadget settings,
-     * stored in GadgetMetadata separately. Can be called within/after setPresenter invoked!
-     */
-    protected void loadSettings() {
+            @Override
+            public void onSuccess(GadgetMetadata result) {
+                getMetadata().set(result);
 
-        // FIXME review Gadget Metadata saving and loading: currently this function is not used anywhere
-//        assert (presenter != null);
-//        presenter.retrieve(gadgetMetadata.getPrimaryKey(), new AsyncCallback<GadgetSettings>() {
-//            @Override
-//            public void onSuccess(GadgetSettings result) {
-//                gadgetMetadata.settings().set(result);
-//            }
-//
-//            @Override
-//            public void onFailure(Throwable caught) {
-//                throw new UnrecoverableClientError(caught);
-//            }
-//        });
+            }
+
+        }, getMetadata());
     }
 
     /**

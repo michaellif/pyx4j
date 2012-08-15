@@ -34,7 +34,6 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.CDatePicker;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.crm.client.ui.board.BoardView;
 import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEvent;
 import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEventHandler;
 import com.propertyvista.crm.client.ui.gadgets.common.AbstractGadget;
@@ -42,6 +41,7 @@ import com.propertyvista.crm.client.ui.gadgets.common.Directory;
 import com.propertyvista.crm.client.ui.gadgets.common.GadgetInstanceBase;
 import com.propertyvista.crm.client.ui.gadgets.common.IBuildingBoardGadgetInstance;
 import com.propertyvista.crm.client.ui.gadgets.common.ListerGadgetInstanceBase;
+import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.IBuildingFilterContainer;
 import com.propertyvista.crm.client.ui.gadgets.util.ColumnDescriptorConverter;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.AvailabilityReportService;
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus;
@@ -71,7 +71,7 @@ public class UnitAvailabilityReportGadget extends AbstractGadget<UnitAvailabilit
         }
 
         @Override
-        public void setContainerBoard(final BoardView board) {
+        public void setContainerBoard(IBuildingFilterContainer board) {
             super.setContainerBoard(board);
             board.addBuildingSelectionChangedEventHandler(new BuildingSelectionChangedEventHandler() {
                 @Override

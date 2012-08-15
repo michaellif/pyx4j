@@ -48,8 +48,6 @@ public abstract class ListerGadgetInstanceBase<E extends IEntity, GADGET_TYPE ex
 
     private int pageNumber;
 
-    private boolean needToSaveColumns;
-
     /**
      * @param gadgetMetadata
      *            instance of gadget metadata that defines gadget type and holds the state of the gadget (can be <code>null</code>), it's type is
@@ -68,8 +66,6 @@ public abstract class ListerGadgetInstanceBase<E extends IEntity, GADGET_TYPE ex
             Class<E> listedEntityClass, boolean isSearchFilterEnabled) {
         super(gadgetMetadata, gadgetTypeClass, setupForm);
 
-        this.needToSaveColumns = false;
-
         this.pageNumber = 0;
 
         this.isSearchFilterEnabled = isSearchFilterEnabled;
@@ -81,18 +77,6 @@ public abstract class ListerGadgetInstanceBase<E extends IEntity, GADGET_TYPE ex
                 populatePage(pageNumber);
             }
         });
-    }
-
-    @Override
-    public void setPresenter(IGadgetInstancePresenter presenter) {
-        super.setPresenter(presenter);
-        // TODO this is a hack to save preloaded lister gadgets (that do not have columns in metadata):
-        // i think this has to be fixed but not letting null gagdet metadata to be passed to the constructor, and creating default settings on server side
-        // one of the advantages of server side creation of gadget metadata, is that it allows to select different settings based on user context
-        if (needToSaveColumns) {
-            saveMetadata();
-            needToSaveColumns = false;
-        }
     }
 
     /**
@@ -268,7 +252,6 @@ public abstract class ListerGadgetInstanceBase<E extends IEntity, GADGET_TYPE ex
             // normally this should happen only once in gadget's lifetime
             // we do it here because of the following reason:
             //      preloaded gadgets need this
-            needToSaveColumns = true; // to save it when we get the presenter.
         }
         for (ColumnDescriptorEntity columnDescriptorEntity : getMetadata().columnDescriptors()) {
             columnDescriptors.add(ColumnDescriptorConverter.columnDescriptorFromEntity(listedEntityClass, columnDescriptorEntity));

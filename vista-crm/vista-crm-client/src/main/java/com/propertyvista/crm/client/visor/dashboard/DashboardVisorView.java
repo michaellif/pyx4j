@@ -13,42 +13,60 @@
  */
 package com.propertyvista.crm.client.visor.dashboard;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gwt.user.client.ui.Composite;
 
-import com.propertyvista.crm.client.ui.dashboard.DashboardPanel;
+import com.propertyvista.crm.client.ui.gadgets.common.Directory;
+import com.propertyvista.crm.client.ui.gadgets.common.IGadgetInstance;
+import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.AbstractDashboard;
+import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.IGadgetDirectory;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
+import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
 import com.propertyvista.domain.property.asset.building.Building;
 
 public class DashboardVisorView extends Composite {
 
-    private final DashboardPanel dashboard;
+//    private final DashboardPanel dashboard;
 
     private final IDashboardVisorController controller;
 
+    private final AbstractDashboard bb;
+
     public DashboardVisorView(IDashboardVisorController controller) {
         this.controller = controller;
-        this.dashboard = new DashboardPanel();
-        this.dashboard.setPresenter(this.controller);
+        this.bb = new AbstractDashboard(new IGadgetDirectory() {
 
-        initWidget(this.dashboard.asWidget());
+            @Override
+            public IGadgetInstance createGadgetInstance(GadgetMetadata gmd) {
+                return Directory.createGadget(gmd);
+            }
+        }) {
+
+            @Override
+            protected void onDashboardMetadataChanged() {
+                DashboardVisorView.this.controller.save();
+            }
+        };
+
+        initWidget(this.bb);
     }
 
     public List<Building> getSelectedBuildingsStubs() {
-        return this.dashboard.getSelectedBuildingsStubs();
+        return new ArrayList<Building>();
     }
 
     public void populate(DashboardMetadata result) {
-        this.dashboard.populate(result);
+        this.bb.setDashboardMetatdata(result);
     }
 
     public DashboardMetadata getDashboardMetadata() {
-        return this.dashboard.getDashboardMetadata();
+        return this.bb.getDashboardMetadata();
     }
 
     public void setBuildings(List<Building> selectedBuildings) {
-        this.dashboard.setBuildings(selectedBuildings, true);
+        //this.bb.setBuildings(selectedBuildings, true);
     }
 
 }

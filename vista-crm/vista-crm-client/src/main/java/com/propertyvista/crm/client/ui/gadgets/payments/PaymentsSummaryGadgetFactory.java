@@ -40,13 +40,13 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.crm.client.ui.board.BoardView;
 import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEvent;
 import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEventHandler;
 import com.propertyvista.crm.client.ui.gadgets.common.AbstractGadget;
 import com.propertyvista.crm.client.ui.gadgets.common.Directory;
 import com.propertyvista.crm.client.ui.gadgets.common.GadgetInstanceBase;
 import com.propertyvista.crm.client.ui.gadgets.common.ListerGadgetInstanceBase;
+import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.IBuildingFilterContainer;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.PaymentReportService;
 import com.propertyvista.domain.dashboard.gadgets.payments.PaymentFeesDTO;
 import com.propertyvista.domain.dashboard.gadgets.payments.PaymentsSummary;
@@ -74,7 +74,7 @@ public class PaymentsSummaryGadgetFactory extends AbstractGadget<PaymentsSummary
         }
 
         @Override
-        public void setContainerBoard(BoardView board) {
+        public void setContainerBoard(IBuildingFilterContainer board) {
             super.setContainerBoard(board);
             board.addBuildingSelectionChangedEventHandler(new BuildingSelectionChangedEventHandler() {
                 @Override

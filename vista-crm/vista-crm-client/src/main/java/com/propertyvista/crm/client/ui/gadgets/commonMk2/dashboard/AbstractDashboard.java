@@ -19,6 +19,9 @@ import java.util.List;
 
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
+import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.event.shared.SimpleEventBus;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.ScrollPanel;
 
@@ -30,24 +33,29 @@ import com.pyx4j.widgets.client.dashboard.IBoard;
 import com.pyx4j.widgets.client.dashboard.IGadget;
 import com.pyx4j.widgets.client.dashboard.IGadgetIterator;
 
-import com.propertyvista.crm.client.ui.gadgets.common.Directory;
+import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEvent;
+import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEventHandler;
 import com.propertyvista.crm.client.ui.gadgets.common.IGadgetInstance;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.dashboard.DashboardMetadata.LayoutType;
 import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
+import com.propertyvista.domain.property.asset.building.Building;
 
 public abstract class AbstractDashboard extends Composite {
 
-    private IBoard board;
-
     private final ScrollPanel dashboardPanel;
+
+    private final IGadgetDirectory gadgetDirectory;
+
+    private IBoard board;
 
     private DashboardMetadata dashboardMetadata;
 
     public AbstractDashboard(IGadgetDirectory gadgetDirectory) {
-        dashboardPanel = new ScrollPanel();
-
-        initWidget(dashboardPanel);
+        this.dashboardPanel = new ScrollPanel();
+        this.dashboardPanel.setSize("100%", "100%");
+        this.gadgetDirectory = gadgetDirectory;
+        initWidget(this.dashboardPanel);
     }
 
     public void setDashboardMetatdata(DashboardMetadata dashboardMetadata) {
@@ -63,10 +71,30 @@ public abstract class AbstractDashboard extends Composite {
 
             while (gadgetsIterator.hasNext()) {
                 GadgetMetadata gadgetMetadata = gadgetsIterator.next();
-                IGadget gadget = Directory.createGadget(gadgetMetadata);
+                IGadgetInstance gadget = gadgetDirectory.createGadgetInstance(gadgetMetadata);
 
                 if (gadget != null) {
                     board.addGadget(gadget, columnsIterator.next());
+                    // TODO change this dummy container for something real
+                    gadget.setContainerBoard(new IBuildingFilterContainer() {
+
+                        EventBus bus = new SimpleEventBus();
+
+                        @Override
+                        public HandlerRegistration addBuildingSelectionChangedEventHandler(BuildingSelectionChangedEventHandler handler) {
+                            return bus.addHandler(BuildingSelectionChangedEvent.TYPE, handler);
+                        }
+
+                        @Override
+                        public List<Building> getSelectedBuildingsStubs() {
+                            return new ArrayList<Building>();
+                        }
+
+                        @Override
+                        public List<Building> getSelectedBuildings() {
+                            return new ArrayList<Building>();
+                        }
+                    });
                 } else {
                     throw new Error("Gadget defined by " + gadgetMetadata.getEntityMeta().getCaption() + " is not defined in factory");
                 }
@@ -103,7 +131,8 @@ public abstract class AbstractDashboard extends Composite {
     protected abstract void onDashboardMetadataChanged();
 
     private Iterator<Integer> getColumnsIterator() {
-        final String[] columns = dashboardMetadata.encodedLayout().getValue().split(" ");
+//        final String[] columns = dashboardMetadata.encodedLayout().getValue().split(" ");
+        final String[] columns = "0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0".split(" ");
         return new Iterator<Integer>() {
 
             private int i = 0;
@@ -140,15 +169,15 @@ public abstract class AbstractDashboard extends Composite {
             // gadget settings were changed: IMHO not supposed to affect the dashboard metadata and be managed internally by the gadget
             break;
         }
-        synchronizeLayout();
+        updateEncodedLayout();
 
         onDashboardMetadataChanged();
     }
 
     /**
-     * Synchronizes the encoded layout stored in metadata, with the actual layout
+     * Synchronizes the encoded layout stored in dashboard metadata, with the actual layout
      */
-    private void synchronizeLayout() {
+    private void updateEncodedLayout() {
         if (dashboardMetadata != null) {
             dashboardMetadata.layoutType().setValue(asDashboardLayoutType(board.getLayout()));
             dashboardMetadata.gadgets().clear();

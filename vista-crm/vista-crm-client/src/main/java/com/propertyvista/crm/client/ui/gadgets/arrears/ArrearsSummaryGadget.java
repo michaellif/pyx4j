@@ -26,13 +26,13 @@ import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.shared.EntityFactory;
 
-import com.propertyvista.crm.client.ui.board.BoardView;
 import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEvent;
 import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEventHandler;
 import com.propertyvista.crm.client.ui.gadgets.common.AbstractGadget;
 import com.propertyvista.crm.client.ui.gadgets.common.Directory;
 import com.propertyvista.crm.client.ui.gadgets.common.GadgetInstanceBase;
 import com.propertyvista.crm.client.ui.gadgets.common.ListerGadgetInstanceBase;
+import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.IBuildingFilterContainer;
 import com.propertyvista.crm.client.ui.gadgets.util.ColumnDescriptorConverter;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.ArrearsReportService;
 import com.propertyvista.domain.dashboard.gadgets.type.ArrearsSummaryGadgetMetadata;
@@ -52,7 +52,7 @@ public class ArrearsSummaryGadget extends AbstractGadget<ArrearsSummaryGadgetMet
         }
 
         @Override
-        public void setContainerBoard(BoardView board) {
+        public void setContainerBoard(IBuildingFilterContainer board) {
             super.setContainerBoard(board);
             board.addBuildingSelectionChangedEventHandler(new BuildingSelectionChangedEventHandler() {
                 @Override

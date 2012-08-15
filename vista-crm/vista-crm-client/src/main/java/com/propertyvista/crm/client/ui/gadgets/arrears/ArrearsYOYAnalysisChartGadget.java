@@ -28,13 +28,13 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.svg.gwt.SvgFactoryForGwt;
 
-import com.propertyvista.crm.client.ui.board.BoardView;
 import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEvent;
 import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEventHandler;
 import com.propertyvista.crm.client.ui.gadgets.common.AbstractGadget;
 import com.propertyvista.crm.client.ui.gadgets.common.Directory;
 import com.propertyvista.crm.client.ui.gadgets.common.GadgetInstanceBase;
 import com.propertyvista.crm.client.ui.gadgets.common.IBuildingBoardGadgetInstance;
+import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.IBuildingFilterContainer;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.ArrearsReportService;
 import com.propertyvista.domain.dashboard.gadgets.arrears.ArrearsYOYComparisonDataDTO;
 import com.propertyvista.domain.dashboard.gadgets.type.ArrearsYOYAnalysisChartMetadata;
@@ -103,7 +103,7 @@ public class ArrearsYOYAnalysisChartGadget extends AbstractGadget<ArrearsYOYAnal
         }
 
         @Override
-        public void setContainerBoard(BoardView board) {
+        public void setContainerBoard(IBuildingFilterContainer board) {
             super.setContainerBoard(board);
             board.addBuildingSelectionChangedEventHandler(new BuildingSelectionChangedEventHandler() {
                 @Override
