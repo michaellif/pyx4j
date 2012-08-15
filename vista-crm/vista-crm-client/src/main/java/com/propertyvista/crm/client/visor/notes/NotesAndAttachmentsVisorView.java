@@ -16,6 +16,7 @@ package com.propertyvista.crm.client.visor.notes;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ScrollPanel;
 
@@ -37,7 +38,9 @@ import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.IconButton;
 import com.pyx4j.widgets.client.actionbar.Toolbar;
+import com.pyx4j.widgets.client.dialog.Dialog;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
+import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
@@ -139,12 +142,24 @@ public class NotesAndAttachmentsVisorView extends ScrollPanel {
 
             @Override
             protected void removeItem(final CEntityFolderItem<NotesAndAttachments> item) {
-                controller.remove(item.getValue(), new DefaultAsyncCallback<Boolean>() {
+                Dialog confirm = new OkCancelDialog(i18n.tr("Delete Note")) {
                     @Override
-                    public void onSuccess(Boolean result) {
-                        NotesAndAttachmentsFolder.super.removeItem(item);
+                    public boolean onClickOk() {
+                        if (item.getValue().isNull() || item.getValue().getPrimaryKey() == null) {
+                            NotesAndAttachmentsFolder.super.removeItem(item);
+                        } else {
+                            controller.remove(item.getValue(), new DefaultAsyncCallback<Boolean>() {
+                                @Override
+                                public void onSuccess(Boolean result) {
+                                    NotesAndAttachmentsFolder.super.removeItem(item);
+                                }
+                            });
+                        }
+                        return true;
                     }
-                });
+                };
+                confirm.setBody(new HTML(i18n.tr("This Note will be permanently deleted!")));
+                confirm.show();
             }
 
             private class NoteEditor extends CEntityDecoratableForm<NotesAndAttachments> {
@@ -209,6 +224,7 @@ public class NotesAndAttachmentsVisorView extends ScrollPanel {
                             getController().save(getValue(), new DefaultAsyncCallback<Key>() {
                                 @Override
                                 public void onSuccess(Key result) {
+                                    getValue().setPrimaryKey(result);
                                     setViewableMode(true);
                                     refresh(false);
                                 }
