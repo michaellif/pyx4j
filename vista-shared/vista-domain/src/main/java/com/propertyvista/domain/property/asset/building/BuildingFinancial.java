@@ -41,7 +41,6 @@ public interface BuildingFinancial extends IEntity {
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> marketPrice();
 
-    @NotNull
     @Format("MM/dd/yyyy")
     IPrimitive<LogicalDate> lastAppraisalDate();
 
