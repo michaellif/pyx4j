@@ -43,7 +43,6 @@ public class NotesAndAttachmentsVisorController implements IVisorController {
         this.parentClass = parentClass;
         this.parentId = parentId;
         view = new NotesAndAttachmentsVisorView(this);
-        view.setTitle("Notes & Attachments");
     }
 
     @Override
@@ -52,7 +51,7 @@ public class NotesAndAttachmentsVisorController implements IVisorController {
             @Override
             public void execute() {
                 IsWidget visor = getView();
-                parentView.showVisor(visor, visor.asWidget().getTitle());
+                parentView.showVisor(visor, "Notes & Attachments");
             }
         });
     }

@@ -23,13 +23,15 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.client.ui.folder.BoxFolderDecorator;
-import com.pyx4j.entity.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.entity.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.entity.client.ui.folder.IFolderDecorator;
 import com.pyx4j.entity.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.forms.client.events.PropertyChangeEvent;
+import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
+import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -44,6 +46,7 @@ import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
+import com.propertyvista.common.client.ui.decorations.VistaBoxFolderItemDecorator;
 import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.client.ui.components.AnchorButton;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
@@ -66,6 +69,7 @@ public class NotesAndAttachmentsVisorView extends ScrollPanel {
         form = new NotesAndAttachmentsForm();
         form.initContent();
         setWidget(form.asWidget());
+        getElement().getStyle().setProperty("padding", "6px");
     }
 
     public void populate(final Command onPopulate) {
@@ -90,6 +94,7 @@ public class NotesAndAttachmentsVisorView extends ScrollPanel {
 
         public NotesAndAttachmentsForm() {
             super(NotesAndAttachmentsDTO.class);
+
         }
 
         @Override
@@ -104,6 +109,7 @@ public class NotesAndAttachmentsVisorView extends ScrollPanel {
                 setOrderable(false);
                 inheritEditable(false);
                 setEditable(true);
+
             }
 
             @Override
@@ -117,10 +123,22 @@ public class NotesAndAttachmentsVisorView extends ScrollPanel {
 
             @Override
             public IFolderItemDecorator<NotesAndAttachments> createItemDecorator() {
-                BoxFolderItemDecorator<NotesAndAttachments> decorator = (BoxFolderItemDecorator<NotesAndAttachments>) super.createItemDecorator();
-                decorator.setTitle(i18n.tr("Add Note"));
+                return new VistaBoxFolderItemDecorator<NotesAndAttachments>(this) {
+                    @Override
+                    public void setComponent(final CEntityFolderItem<NotesAndAttachments> folderItem) {
+                        super.setComponent(folderItem);
+                        final NoteEditor editor = (NoteEditor) getContent();
+                        editor.addPropertyChangeHandler(new PropertyChangeHandler() {
 
-                return decorator;
+                            @Override
+                            public void onPropertyChange(PropertyChangeEvent event) {
+                                if (event.getPropertyName() == PropertyName.viewable) {
+                                    folderItem.getItemActionsBar().setVisible(editor.isViewable());
+                                }
+                            }
+                        });
+                    }
+                };
             }
 
             @Override
@@ -217,15 +235,12 @@ public class NotesAndAttachmentsVisorView extends ScrollPanel {
                             } else {
                                 getValue().updated().setValue(new LogicalDate());
                             }
-                            if (getValue().user().isNull()) {
-                                // TODO
-//                                getValue().user().set(currentUser);
-                            }
                             getController().save(getValue(), new DefaultAsyncCallback<Key>() {
                                 @Override
                                 public void onSuccess(Key result) {
                                     getValue().setPrimaryKey(result);
                                     setViewableMode(true);
+                                    //TODO do we really need that?
                                     refresh(false);
                                 }
                             });
@@ -350,6 +365,7 @@ public class NotesAndAttachmentsVisorView extends ScrollPanel {
         protected void createTabs() {
             // TODO Auto-generated method stub
         }
+
     }
 
 }
