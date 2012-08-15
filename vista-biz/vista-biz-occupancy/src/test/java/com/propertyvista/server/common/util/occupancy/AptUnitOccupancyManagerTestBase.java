@@ -58,8 +58,9 @@ import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySe
 import com.propertyvista.domain.security.VistaBasicBehavior;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.test.helper.LightWeightLeaseManagement;
 
-public class AptUnitOccupancyManagerTestBase extends LightWeightLeaseManagement {
+public class AptUnitOccupancyManagerTestBase {
 
     protected static final String MAX_DATE = "MAX_DATE";
 
@@ -165,11 +166,11 @@ public class AptUnitOccupancyManagerTestBase extends LightWeightLeaseManagement 
 
     protected Lease createLease(String leaseFrom, String leaseTo) {
         if (unit != null) {
-            Lease lease = createLightWeightLease(Lease.Status.Application);
+            Lease lease = LightWeightLeaseManagement.create(Lease.Status.Application);
             lease.unit().set(unit);
             lease.currentTerm().termFrom().setValue(asDate(leaseFrom));
             lease.currentTerm().termTo().setValue(asDate(leaseTo));
-            persistLightWeightLease(lease, false);
+            LightWeightLeaseManagement.persist(lease, false);
             return lease;
         } else {
             throw new IllegalStateException("can't create a lease without a unit");
@@ -177,7 +178,7 @@ public class AptUnitOccupancyManagerTestBase extends LightWeightLeaseManagement 
     }
 
     protected void updateLease(Lease lease) {
-        persistLightWeightLease(lease, false);
+        LightWeightLeaseManagement.persist(lease, false);
     }
 
     protected ExpectBuilder expect() {

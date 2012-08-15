@@ -20,7 +20,6 @@ import junit.framework.Assert;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.security.shared.UserVisit;
@@ -34,7 +33,7 @@ import com.propertyvista.domain.security.VistaBasicBehavior;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.domain.tenant.lease.LeaseTerm;
+import com.propertyvista.test.helper.LightWeightLeaseManagement;
 
 public class AccessRulesTest extends VistaDBTestBase {
 
@@ -65,14 +64,14 @@ public class AccessRulesTest extends VistaDBTestBase {
             t2.person().name().firstName().setValue(setId);
             Persistence.service().persist(t2);
 
-            Lease lease = createLightWeightLease();
+            Lease lease = LightWeightLeaseManagement.create(Lease.Status.Application);
 
             Tenant tl2 = EntityFactory.create(Tenant.class);
             tl2.leaseTermV().set(lease.currentTerm().version());
             tl2.customer().set(t2);
             lease.currentTerm().version().tenants().add(tl2);
 
-            persistLightWeightLease(lease, true);
+            LightWeightLeaseManagement.persist(lease, true);
         }
 
         EntityQueryCriteria<Customer> criteria = EntityQueryCriteria.create(Customer.class);
@@ -99,13 +98,13 @@ public class AccessRulesTest extends VistaDBTestBase {
         t1.person().name().firstName().setValue(setId);
         Persistence.service().persist(t1);
 
-        Lease lease = createLightWeightLease();
+        Lease lease = LightWeightLeaseManagement.create(Lease.Status.Application);
 
         Building building = lease.unit().building();
         Persistence.service().persist(building);
         Persistence.service().persist(lease.unit());
 
-        persistLightWeightLease(lease, true);
+        LightWeightLeaseManagement.persist(lease, true);
 
         Tenant tl1 = EntityFactory.create(Tenant.class);
         tl1.leaseTermV().set(lease.currentTerm().version());
@@ -127,30 +126,5 @@ public class AccessRulesTest extends VistaDBTestBase {
 
         r = Persistence.service().query(criteria);
         Assert.assertEquals("should find building", 1, r.size());
-    }
-
-    protected Lease createLightWeightLease() {
-        Lease lease = EntityFactory.create(Lease.class);
-        lease.currentTerm().set(EntityFactory.create(LeaseTerm.class));
-        return lease;
-    }
-
-    protected Lease persistLightWeightLease(Lease lease, boolean finalize) {
-        if (lease.currentTerm().getPrimaryKey() == null) {
-            LeaseTerm term = lease.currentTerm().detach();
-
-            lease.currentTerm().set(null);
-            Persistence.secureSave(lease);
-            lease.currentTerm().set(term);
-
-            lease.currentTerm().lease().set(lease);
-        }
-        if (finalize) {
-            lease.currentTerm().saveAction().setValue(SaveAction.saveAsFinal);
-        }
-        Persistence.service().persist(lease.currentTerm());
-        Persistence.service().persist(lease);
-
-        return lease;
     }
 }

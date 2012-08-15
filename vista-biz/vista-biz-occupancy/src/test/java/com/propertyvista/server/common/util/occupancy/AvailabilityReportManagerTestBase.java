@@ -46,8 +46,9 @@ import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySe
 import com.propertyvista.domain.security.VistaBasicBehavior;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.test.helper.LightWeightLeaseManagement;
 
-public class AvailabilityReportManagerTestBase extends LightWeightLeaseManagement {
+public class AvailabilityReportManagerTestBase {
 
     private AptUnit unit = null;
 
@@ -97,14 +98,14 @@ public class AvailabilityReportManagerTestBase extends LightWeightLeaseManagemen
 
     protected Lease createLease(String leaseFrom, String moveIn, String leaseTo) {
         if (unit != null) {
-            Lease lease = createLightWeightLease(Lease.Status.Application);
+            Lease lease = LightWeightLeaseManagement.create(Lease.Status.Application);
 
             lease.unit().set(unit);
             lease.currentTerm().termFrom().setValue(asDate(leaseFrom));
             lease.expectedMoveIn().setValue(asDate(moveIn));
             lease.currentTerm().termTo().setValue(asDate(leaseTo));
 
-            persistLightWeightLease(lease, false);
+            LightWeightLeaseManagement.persist(lease, false);
             return lease;
         } else {
             throw new IllegalStateException("can't create a lease without a unit");

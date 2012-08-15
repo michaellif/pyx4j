@@ -11,7 +11,7 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.server.common.util.occupancy;
+package com.propertyvista.test.helper;
 
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -25,18 +25,21 @@ import com.propertyvista.domain.tenant.lease.LeaseTerm;
 
 public class LightWeightLeaseManagement {
 
-    protected Lease createLightWeightLease(Status status) {
+    public static Lease create(Status status) {
         Lease lease = EntityFactory.create(Lease.class);
+
+        lease.status().setValue(status);
+
         lease.paymentFrequency().setValue(PaymentFrequency.Monthly);
         lease.type().setValue(Service.ServiceType.residentialUnit);
-        lease.status().setValue(status);
 
         lease.currentTerm().set(EntityFactory.create(LeaseTerm.class));
         lease.currentTerm().type().setValue(LeaseTerm.Type.FixedEx);
+
         return lease;
     }
 
-    protected Lease persistLightWeightLease(Lease lease, boolean finalize) {
+    public static Lease persist(Lease lease, boolean finalize) {
         if (lease.currentTerm().getPrimaryKey() == null) {
             LeaseTerm term = lease.currentTerm().detach();
 
@@ -49,6 +52,7 @@ public class LightWeightLeaseManagement {
         if (finalize) {
             lease.currentTerm().saveAction().setValue(SaveAction.saveAsFinal);
         }
+
         Persistence.service().persist(lease.currentTerm());
         Persistence.service().persist(lease);
 

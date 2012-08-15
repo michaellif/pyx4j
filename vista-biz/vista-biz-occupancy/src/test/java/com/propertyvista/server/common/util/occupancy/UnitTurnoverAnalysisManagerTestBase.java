@@ -47,9 +47,10 @@ import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
+import com.propertyvista.test.helper.LightWeightLeaseManagement;
 
 // TODO enhance the test base to allow test cases with multiple buildings
-public class UnitTurnoverAnalysisManagerTestBase extends LightWeightLeaseManagement {
+public class UnitTurnoverAnalysisManagerTestBase {
 
     private Building building;
 
@@ -125,7 +126,7 @@ public class UnitTurnoverAnalysisManagerTestBase extends LightWeightLeaseManagem
         tenant.user().set(user);
         Persistence.service().merge(tenant);
 
-        final Lease lease = createLightWeightLease(Lease.Status.Application);
+        final Lease lease = LightWeightLeaseManagement.create(Lease.Status.Application);
 
         lease.status().setValue(Lease.Status.Active);
         lease.leaseId().setValue("lease: " + dateFrom + " " + dateTo);
@@ -141,7 +142,7 @@ public class UnitTurnoverAnalysisManagerTestBase extends LightWeightLeaseManagem
         tenantInLease.role().setValue(LeaseParticipant.Role.Applicant);
         lease.currentTerm().version().tenants().add(tenantInLease);
 
-        persistLightWeightLease(lease, false);
+        LightWeightLeaseManagement.persist(lease, false);
 
         AptUnitOccupancySegment leased = AptUnitOccupancyManagerHelper.split(unit, asDate(dateFrom), new SplittingHandler() {
             @Override
