@@ -33,9 +33,7 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.IDebugId;
-import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.css.IStyleName;
-import com.pyx4j.forms.client.ui.CDatePicker;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dashboard.BoardEvent;
@@ -86,8 +84,6 @@ public abstract class BoardBase extends DockLayoutPanel implements BoardView {
     private IBoard board;
 
     protected Presenter presenter;
-
-    private CDatePicker datePicker;
 
     private DashboardMetadata dashboardMetadata;
 
@@ -255,11 +251,6 @@ public abstract class BoardBase extends DockLayoutPanel implements BoardView {
     @Override
     public List<Building> getSelectedBuildings() {
         return selectedBuildings;
-    }
-
-    @Override
-    public LogicalDate getDashboardDate() {
-        return new LogicalDate();
     }
 
     @Override

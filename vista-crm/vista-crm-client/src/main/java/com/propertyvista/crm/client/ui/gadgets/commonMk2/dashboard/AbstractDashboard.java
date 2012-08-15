@@ -19,9 +19,6 @@ import java.util.List;
 
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
-import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.event.shared.SimpleEventBus;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.ScrollPanel;
 
@@ -33,13 +30,10 @@ import com.pyx4j.widgets.client.dashboard.IBoard;
 import com.pyx4j.widgets.client.dashboard.IGadget;
 import com.pyx4j.widgets.client.dashboard.IGadgetIterator;
 
-import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEvent;
-import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEventHandler;
 import com.propertyvista.crm.client.ui.gadgets.common.IGadgetInstance;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.dashboard.DashboardMetadata.LayoutType;
 import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
-import com.propertyvista.domain.property.asset.building.Building;
 
 public abstract class AbstractDashboard extends Composite {
 
@@ -47,20 +41,35 @@ public abstract class AbstractDashboard extends Composite {
 
     private final IGadgetDirectory gadgetDirectory;
 
+    private final ICommonGadgetSettingsContainer commandGadgetSettingsContainer;
+
     private IBoard board;
 
     private DashboardMetadata dashboardMetadata;
 
-    public AbstractDashboard(IGadgetDirectory gadgetDirectory) {
-        this.dashboardPanel = new ScrollPanel();
-        this.dashboardPanel.setSize("100%", "100%");
+    public AbstractDashboard(ICommonGadgetSettingsContainer container, IGadgetDirectory gadgetDirectory) {
+        this.commandGadgetSettingsContainer = container;
         this.gadgetDirectory = gadgetDirectory;
+
+        this.dashboardPanel = new ScrollPanel();
         initWidget(this.dashboardPanel);
     }
 
     public void setDashboardMetatdata(DashboardMetadata dashboardMetadata) {
         this.dashboardMetadata = dashboardMetadata;
 
+        fillGadgets();
+        startGadgets();
+
+    }
+
+    public DashboardMetadata getDashboardMetadata() {
+        return this.dashboardMetadata;
+    }
+
+    protected abstract void onDashboardMetadataChanged();
+
+    private void fillGadgets() {
         board = new Dashboard();
 
         if (dashboardMetadata != null) {
@@ -75,26 +84,7 @@ public abstract class AbstractDashboard extends Composite {
 
                 if (gadget != null) {
                     board.addGadget(gadget, columnsIterator.next());
-                    // TODO change this dummy container for something real
-                    gadget.setContainerBoard(new IBuildingFilterContainer() {
-
-                        EventBus bus = new SimpleEventBus();
-
-                        @Override
-                        public HandlerRegistration addBuildingSelectionChangedEventHandler(BuildingSelectionChangedEventHandler handler) {
-                            return bus.addHandler(BuildingSelectionChangedEvent.TYPE, handler);
-                        }
-
-                        @Override
-                        public List<Building> getSelectedBuildingsStubs() {
-                            return new ArrayList<Building>();
-                        }
-
-                        @Override
-                        public List<Building> getSelectedBuildings() {
-                            return new ArrayList<Building>();
-                        }
-                    });
+                    commandGadgetSettingsContainer.bindGadget(gadget);
                 } else {
                     throw new Error("Gadget defined by " + gadgetMetadata.getEntityMeta().getCaption() + " is not defined in factory");
                 }
@@ -117,18 +107,14 @@ public abstract class AbstractDashboard extends Composite {
         });
 
         dashboardPanel.setWidget(board);
+    }
 
+    private void startGadgets() {
         IGadgetIterator it = board.getGadgetIterator();
         while (it.hasNext()) {
             it.next().start();
         }
     }
-
-    public DashboardMetadata getDashboardMetadata() {
-        return null;
-    }
-
-    protected abstract void onDashboardMetadataChanged();
 
     private Iterator<Integer> getColumnsIterator() {
 //        final String[] columns = dashboardMetadata.encodedLayout().getValue().split(" ");

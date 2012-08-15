@@ -20,7 +20,6 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.LayoutPanel;
 
-import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.site.client.ui.ViewImplBase;
 import com.pyx4j.site.client.ui.crud.misc.IMemento;
 
@@ -97,11 +96,6 @@ public class BoardViewImpl extends ViewImplBase implements BoardView {
     @Override
     public void setBuildings(List<Building> buildings, boolean fireEvent) {
         board.setBuildings(buildings, fireEvent);
-    }
-
-    @Override
-    public LogicalDate getDashboardDate() {
-        return board.getDashboardDate();
     }
 
     @Override

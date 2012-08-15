@@ -19,7 +19,6 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.commons.LogicalDate;
 
 import com.propertyvista.crm.client.ui.board.events.HasBuildingSelectionChangedEventHandlers;
 import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.IBuildingFilterContainer;
@@ -48,10 +47,7 @@ public interface BoardView extends IsWidget, HasBuildingSelectionChangedEventHan
 
     void setBuildings(List<Building> buildings, boolean fireEvent);
 
-    /**
-     * @return date that this view was set up to display, can't be <code>null</code>
-     */
-    LogicalDate getDashboardDate();
+    List<Building> getSelectedBuildings();
 
     DashboardMetadata getDashboardMetadata();
 

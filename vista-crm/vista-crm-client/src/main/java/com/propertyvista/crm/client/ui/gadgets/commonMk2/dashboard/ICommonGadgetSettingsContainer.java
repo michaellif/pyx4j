@@ -13,16 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard;
 
-import java.util.List;
+import com.propertyvista.crm.client.ui.gadgets.common.IGadgetInstance;
 
-import com.propertyvista.crm.client.ui.board.events.HasBuildingSelectionChangedEventHandlers;
-import com.propertyvista.domain.property.asset.building.Building;
+public interface ICommonGadgetSettingsContainer {
 
-public interface IBuildingFilterContainer extends HasBuildingSelectionChangedEventHandlers {
-
-    /**
-     * @return the stubs of the buildings that this view was set up to display, can't be <code>null</code>, empty list denotes all buildings.
-     */
-    List<Building> getSelectedBuildingsStubs();
+    void bindGadget(IGadgetInstance gadget);
 
 }
