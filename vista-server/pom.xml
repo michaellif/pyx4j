@@ -171,7 +171,7 @@
             <scope>test</scope>
             <optional>true</optional>
         </dependency>
-        
+
     </dependencies>
 
     <properties>
@@ -449,6 +449,7 @@
             <id>deploy-target-www33</id>
             <properties>
                 <deployContext>vista33</deployContext>
+                <vista-tomcat-url>http://qa.birchwoodsoftwaregroup.com</vista-tomcat-url>
                 <vista-app-ping-url>http://www33.birchwoodsoftwaregroup.com</vista-app-ping-url>
             </properties>
         </profile>
