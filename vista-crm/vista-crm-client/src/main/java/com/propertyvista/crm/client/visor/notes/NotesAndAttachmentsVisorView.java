@@ -240,8 +240,6 @@ public class NotesAndAttachmentsVisorView extends ScrollPanel {
                                 public void onSuccess(Key result) {
                                     getValue().setPrimaryKey(result);
                                     setViewableMode(true);
-                                    //TODO do we really need that?
-                                    refresh(false);
                                 }
                             });
                         }
