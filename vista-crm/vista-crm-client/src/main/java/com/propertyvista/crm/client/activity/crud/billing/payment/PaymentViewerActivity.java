@@ -32,6 +32,16 @@ public class PaymentViewerActivity extends CrmViewerActivity<PaymentRecordDTO> i
     }
 
     @Override
+    public void schedulePayment() {
+        ((PaymentCrudService) getService()).schedulePayment(new DefaultAsyncCallback<PaymentRecordDTO>() {
+            @Override
+            public void onSuccess(PaymentRecordDTO result) {
+                populateView(result);
+            }
+        }, getEntityId());
+    }
+
+    @Override
     public void processPayment() {
         ((PaymentCrudService) getService()).processPayment(new DefaultAsyncCallback<PaymentRecordDTO>() {
             @Override

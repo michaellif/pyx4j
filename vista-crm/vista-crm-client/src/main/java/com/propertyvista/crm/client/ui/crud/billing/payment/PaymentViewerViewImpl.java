@@ -29,6 +29,8 @@ public class PaymentViewerViewImpl extends CrmViewerViewImplBase<PaymentRecordDT
 
     private static final I18n i18n = I18n.get(PaymentViewerViewImpl.class);
 
+    private final Button scheduleAction;
+
     private final Button processAction;
 
     private final Button clearAction;
@@ -73,10 +75,19 @@ public class PaymentViewerViewImpl extends CrmViewerViewImplBase<PaymentRecordDT
         processAction.addStyleName(DefaultSiteCrudPanelsTheme.StyleName.HighlightedButton.name());
         addHeaderToolbarTwoItem(processAction.asWidget());
 
+        scheduleAction = new Button(i18n.tr("Schedule"), new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                ((PaymentViewerView.Presenter) getPresenter()).schedulePayment();
+            }
+        });
+        scheduleAction.addStyleName(DefaultSiteCrudPanelsTheme.StyleName.HighlightedButton.name());
+        addHeaderToolbarTwoItem(scheduleAction.asWidget());
     }
 
     @Override
     public void reset() {
+        scheduleAction.setVisible(false);
         processAction.setVisible(false);
         clearAction.setVisible(false);
         rejectAction.setVisible(false);
@@ -88,7 +99,11 @@ public class PaymentViewerViewImpl extends CrmViewerViewImplBase<PaymentRecordDT
     public void populate(PaymentRecordDTO value) {
         super.populate(value);
 
-        processAction.setVisible(value.paymentStatus().getValue() == PaymentStatus.Submitted);
+        if (!value.targetDate().isNull()) {
+            scheduleAction.setVisible(value.paymentStatus().getValue() == PaymentStatus.Submitted);
+        } else {
+            processAction.setVisible(value.paymentStatus().getValue() == PaymentStatus.Submitted);
+        }
         clearAction.setVisible(value.paymentStatus().getValue() == PaymentStatus.Processing);
         rejectAction.setVisible(value.paymentStatus().getValue() == PaymentStatus.Processing);
         cancelAction.setVisible(value.paymentStatus().getValue() == PaymentStatus.Submitted);

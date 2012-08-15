@@ -21,6 +21,8 @@ public interface PaymentViewerView extends IViewerView<PaymentRecordDTO> {
 
     interface Presenter extends IViewerView.Presenter {
 
+        void schedulePayment();
+
         void processPayment();
 
         void clearPayment();
