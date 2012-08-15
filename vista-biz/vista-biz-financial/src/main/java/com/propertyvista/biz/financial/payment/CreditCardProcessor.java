@@ -102,8 +102,6 @@ class CreditCardProcessor {
             paymentRecord.transactionErrorMessage().setValue(response.message().getValue());
             Persistence.service().merge(paymentRecord);
             Persistence.service().commit();
-            ServerSideFactory.create(ARFacade.class).postPayment(paymentRecord);
-            Persistence.service().commit();
         }
     }
 
