@@ -69,8 +69,6 @@ public class BoxFolderItemDecorator<E extends IEntity> extends BaseFolderItemDec
 
     private SimplePanel contentHolder;
 
-    private ItemActionsBar actionsPanel;
-
     private IDebugId parentDebugId;
 
     public BoxFolderItemDecorator(EntityFolderImages images) {
@@ -100,7 +98,7 @@ public class BoxFolderItemDecorator<E extends IEntity> extends BaseFolderItemDec
     @Override
     public void setComponent(final CEntityFolderItem<E> folderItem) {
         super.setComponent(folderItem);
-        contentHolder.setWidget(folderItem.createContent());
+        contentHolder.setWidget(getContent());
         toolbar.setTitleIcon(folderItem.getIcon());
         folderItem.addPropertyChangeHandler(new PropertyChangeHandler() {
             @Override
@@ -174,7 +172,7 @@ public class BoxFolderItemDecorator<E extends IEntity> extends BaseFolderItemDec
 
     @Override
     public void setActionsState(boolean removable, boolean up, boolean down) {
-        actionsPanel.setActionsState(removable, up, down);
+        getFolderItem().getItemActionsBar().setActionsState(removable, up, down);
     }
 
     @Override
@@ -184,20 +182,19 @@ public class BoxFolderItemDecorator<E extends IEntity> extends BaseFolderItemDec
     }
 
     @Override
-    public void setItemActionsBar(final ItemActionsBar actionsPanel) {
-        this.actionsPanel = actionsPanel;
-
-        actionsPanel.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.RIGHT);
+    public void adoptItemActionsBar() {
+        ItemActionsBar actionsBar = getFolderItem().getItemActionsBar();
+        actionsBar.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.RIGHT);
         if (BrowserType.isIE7()) {
-            actionsPanel.getElement().getStyle().setMarginRight(40, Unit.PX);
+            actionsBar.getElement().getStyle().setMarginRight(40, Unit.PX);
         }
-        actionsPanel.ensureDebugId(new CompositeDebugId(parentDebugId, new CompositeDebugId(IFolderDecorator.DecoratorsIds.BoxFolderItemToolbar,
+        actionsBar.ensureDebugId(new CompositeDebugId(parentDebugId, new CompositeDebugId(IFolderDecorator.DecoratorsIds.BoxFolderItemToolbar,
                 IFolderDecorator.DecoratorsIds.ActionPanel)).debugId());
 
         addDomHandler(new MouseOverHandler() {
             @Override
             public void onMouseOver(MouseOverEvent event) {
-                actionsPanel.setHover(true);
+                getFolderItem().getItemActionsBar().setHover(true);
             }
         }, MouseOverEvent.getType());
 
@@ -205,10 +202,10 @@ public class BoxFolderItemDecorator<E extends IEntity> extends BaseFolderItemDec
 
             @Override
             public void onMouseOut(MouseOutEvent event) {
-                actionsPanel.setHover(false);
+                getFolderItem().getItemActionsBar().setHover(false);
             }
         }, MouseOutEvent.getType());
 
-        toolbar.setActionsBar(actionsPanel);
+        toolbar.setActionsBar(actionsBar);
     }
 }

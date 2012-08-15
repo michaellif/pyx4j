@@ -31,7 +31,7 @@ public interface IFolderItemDecorator<E extends IEntity> extends IDecorator<CEnt
 
     void setActionsState(boolean remove, boolean up, boolean down);
 
-    void setItemActionsBar(ItemActionsBar actionsPanel);
+    void adoptItemActionsBar();
 
     EntityFolderImages getImages();
 

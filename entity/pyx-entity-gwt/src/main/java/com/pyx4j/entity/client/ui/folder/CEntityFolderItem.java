@@ -62,7 +62,7 @@ public abstract class CEntityFolderItem<E extends IEntity> extends CEntityContai
 
     private final Class<E> clazz;
 
-    private ItemActionsBar actionsPanel;
+    private ItemActionsBar actionsBar;
 
     private boolean initiated = false;
 
@@ -78,7 +78,7 @@ public abstract class CEntityFolderItem<E extends IEntity> extends CEntityContai
         this.removable = removable;
 
         handlerRegistrations = new ArrayList<HandlerRegistration>();
-        actionsPanel = new ItemActionsBar(removable);
+        actionsBar = new ItemActionsBar(removable);
 
     }
 
@@ -91,8 +91,8 @@ public abstract class CEntityFolderItem<E extends IEntity> extends CEntityContai
         if (!initiated) {
             IDecorator decorator = getDecorator();
             if (decorator instanceof IFolderItemDecorator) {
-                actionsPanel.init((IFolderItemDecorator) decorator);
-                ((IFolderItemDecorator) decorator).setItemActionsBar(actionsPanel);
+                actionsBar.init((IFolderItemDecorator) decorator);
+                ((IFolderItemDecorator) decorator).adoptItemActionsBar();
             } else {
                 throw new Error("Correct decorator is missing");
             }
@@ -151,29 +151,33 @@ public abstract class CEntityFolderItem<E extends IEntity> extends CEntityContai
     }
 
     private HandlerRegistration addItemRemoveClickHandler(ClickHandler handler) {
-        HandlerRegistration handlerRegistration = actionsPanel.addItemRemoveClickHandler(handler);
+        HandlerRegistration handlerRegistration = actionsBar.addItemRemoveClickHandler(handler);
         handlerRegistrations.add(handlerRegistration);
         return handlerRegistration;
     }
 
     private HandlerRegistration addRowUpClickHandler(ClickHandler handler) {
-        HandlerRegistration handlerRegistration = actionsPanel.addRowUpClickHandler(handler);
+        HandlerRegistration handlerRegistration = actionsBar.addRowUpClickHandler(handler);
         handlerRegistrations.add(handlerRegistration);
         return handlerRegistration;
     }
 
     private HandlerRegistration addRowDownClickHandler(ClickHandler handler) {
-        HandlerRegistration handlerRegistration = actionsPanel.addRowDownClickHandler(handler);
+        HandlerRegistration handlerRegistration = actionsBar.addRowDownClickHandler(handler);
         handlerRegistrations.add(handlerRegistration);
         return handlerRegistration;
     }
 
     public void addCustomButton(IconButton button) {
-        actionsPanel.addCustomButton(button);
+        actionsBar.addCustomButton(button);
     }
 
     public void removeCustomButton(IconButton button) {
-        actionsPanel.removeCustomButton(button);
+        actionsBar.removeCustomButton(button);
+    }
+
+    public ItemActionsBar getItemActionsBar() {
+        return actionsBar;
     }
 
     @Override
@@ -229,7 +233,7 @@ public abstract class CEntityFolderItem<E extends IEntity> extends CEntityContai
     protected void calculateActionsState() {
         boolean enabled = isEnabled() && isEditable();
         if (!enabled) {
-            actionsPanel.setActionsState(false, false, false);
+            actionsBar.setActionsState(false, false, false);
         } else {
 
             CEntityFolder<E> parent = ((CEntityFolder<E>) getParent());
@@ -241,7 +245,7 @@ public abstract class CEntityFolderItem<E extends IEntity> extends CEntityContai
             CEntityFolderItem<?> previousSibling = parent.getItem(index - 1);
             CEntityFolderItem<?> nextSibling = parent.getItem(index + 1);
 
-            actionsPanel.setActionsState(removable, movable && !first && previousSibling.isMovable(), movable && !last && nextSibling.isMovable());
+            actionsBar.setActionsState(removable, movable && !first && previousSibling.isMovable(), movable && !last && nextSibling.isMovable());
         }
 
     }

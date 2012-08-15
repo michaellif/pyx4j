@@ -46,6 +46,8 @@ public class NativeEntityPanel<E extends IObject<?>> extends FlowPanel implement
 
     private final SimplePanel contentHolder;
 
+    private boolean viewable;
+
     public NativeEntityPanel(final CEntityContainer<E> container) {
         this.container = container;
 
@@ -116,15 +118,13 @@ public class NativeEntityPanel<E extends IObject<?>> extends FlowPanel implement
     }
 
     @Override
-    public void setViewable(boolean editable) {
-        // TODO Auto-generated method stub
-
+    public void setViewable(boolean viewable) {
+        this.viewable = viewable;
     }
 
     @Override
     public boolean isViewable() {
-        // TODO Auto-generated method stub
-        return false;
+        return viewable;
     }
 
     @Override

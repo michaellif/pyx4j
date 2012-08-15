@@ -40,17 +40,14 @@ import com.pyx4j.widgets.client.images.IconButtonImages;
  */
 public class IconButton extends Image {
 
-    private IconButtonImages images;
+    private final String title;
 
     public IconButton(String title) {
         this(title, null);
     }
 
     public IconButton(String title, final IconButtonImages images) {
-        this.images = images;
-        setTitle(title);
-        getElement().getStyle().setCursor(Cursor.POINTER);
-
+        this.title = title;
         setImages(images);
 
         addMouseOverHandler(new MouseOverHandler() {
@@ -92,8 +89,10 @@ public class IconButton extends Image {
 
     public void setImages(IconButtonImages images) {
         if (images != null) {
-            this.images = images;
             setResource(images.regular());
+            getElement().getStyle().setCursor(Cursor.POINTER);
+            setTitle(title);
+
         }
     }
 

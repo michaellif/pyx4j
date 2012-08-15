@@ -57,8 +57,6 @@ public class TableFolderItemDecorator<E extends IEntity> extends BaseFolderItemD
 
     private final HTML validationMessageHolder;
 
-    private ItemActionsBar actionsPanel;
-
     private SimplePanel actionsPanelHolder;
 
     private SimplePanel contentHolder;
@@ -93,7 +91,7 @@ public class TableFolderItemDecorator<E extends IEntity> extends BaseFolderItemD
     @Override
     public void setComponent(final CEntityFolderItem<E> folderItem) {
         super.setComponent(folderItem);
-        contentHolder.setWidget(folderItem.createContent());
+        contentHolder.setWidget(getContent());
         folderItem.addPropertyChangeHandler(new PropertyChangeHandler() {
             @Override
             public void onPropertyChange(PropertyChangeEvent event) {
@@ -119,6 +117,7 @@ public class TableFolderItemDecorator<E extends IEntity> extends BaseFolderItemD
 
     @Override
     public void setActionsState(boolean removable, boolean up, boolean down) {
+        ItemActionsBar actionsPanel = getFolderItem().getItemActionsBar();
         if (actionsPanel != null) {
             actionsPanel.setActionsState(removable, up, down);
         }
@@ -132,15 +131,15 @@ public class TableFolderItemDecorator<E extends IEntity> extends BaseFolderItemD
     }
 
     @Override
-    public void setItemActionsBar(final ItemActionsBar actionsPanel) {
-        this.actionsPanel = actionsPanel;
-        actionsPanelHolder.setWidget(actionsPanel);
-        actionsPanel.ensureDebugId(new CompositeDebugId(parentDebugId, new CompositeDebugId(IFolderDecorator.DecoratorsIds.TableFolderItemDecorator,
+    public void adoptItemActionsBar() {
+        ItemActionsBar actionsBar = getFolderItem().getItemActionsBar();
+        actionsPanelHolder.setWidget(actionsBar);
+        actionsBar.ensureDebugId(new CompositeDebugId(parentDebugId, new CompositeDebugId(IFolderDecorator.DecoratorsIds.TableFolderItemDecorator,
                 IFolderDecorator.DecoratorsIds.ActionPanel)).debugId());
         addDomHandler(new MouseOverHandler() {
             @Override
             public void onMouseOver(MouseOverEvent event) {
-                actionsPanel.setHover(true);
+                getFolderItem().getItemActionsBar().setHover(true);
             }
         }, MouseOverEvent.getType());
 
@@ -148,7 +147,7 @@ public class TableFolderItemDecorator<E extends IEntity> extends BaseFolderItemD
 
             @Override
             public void onMouseOut(MouseOutEvent event) {
-                actionsPanel.setHover(false);
+                getFolderItem().getItemActionsBar().setHover(false);
             }
         }, MouseOutEvent.getType());
     }

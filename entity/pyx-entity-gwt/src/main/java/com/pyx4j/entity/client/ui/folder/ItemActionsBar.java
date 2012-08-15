@@ -71,15 +71,12 @@ public class ItemActionsBar extends HorizontalPanel {
 
         removeCommand = new IconButton(i18n.tr("Delete Item"));
         removeCommand.setVisible(removable);
-        removeCommand.getElement().getStyle().setCursor(com.google.gwt.dom.client.Style.Cursor.POINTER);
         removeCommand.setStyleName(EntityFolderRemoveButton.name());
 
         downCommand = new IconButton(i18n.tr("Move down"));
-        downCommand.getElement().getStyle().setCursor(com.google.gwt.dom.client.Style.Cursor.POINTER);
         downCommand.setStyleName(EntityFolderDownButton.name());
 
         upCommand = new IconButton(i18n.tr("Move up"));
-        upCommand.getElement().getStyle().setCursor(com.google.gwt.dom.client.Style.Cursor.POINTER);
         upCommand.setStyleName(EntityFolderUpButton.name());
     }
 
@@ -162,7 +159,7 @@ public class ItemActionsBar extends HorizontalPanel {
     }
 
     public void addCustomButton(IconButton button) {
-        button.setStyleName(EntityFolderCustomButton.name());
+        button.addStyleName(EntityFolderCustomButton.name());
         customControls.add(button);
     }
 

@@ -20,6 +20,7 @@
  */
 package com.pyx4j.entity.client.ui.folder;
 
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.entity.client.images.EntityFolderImages;
@@ -34,6 +35,8 @@ public abstract class BaseFolderItemDecorator<E extends IEntity> extends SimpleP
 
     private CEntityFolderItem<E> folderItem;
 
+    private IsWidget content;
+
     public BaseFolderItemDecorator(EntityFolderImages images) {
         this.images = images;
     }
@@ -41,6 +44,7 @@ public abstract class BaseFolderItemDecorator<E extends IEntity> extends SimpleP
     @Override
     public void setComponent(final CEntityFolderItem<E> folderItem) {
         this.folderItem = folderItem;
+        content = folderItem.createContent();
 
         folderItem.addPropertyChangeHandler(new PropertyChangeHandler() {
             @Override
@@ -56,6 +60,10 @@ public abstract class BaseFolderItemDecorator<E extends IEntity> extends SimpleP
 
     public CEntityFolderItem<E> getFolderItem() {
         return folderItem;
+    }
+
+    public IsWidget getContent() {
+        return content;
     }
 
     @Override
