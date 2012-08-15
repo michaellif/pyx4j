@@ -310,15 +310,14 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
         paymentRecord.amount().setValue(amount);
         paymentRecord.paymentMethod().set(method);
 
-        ServerSideFactory.create(PaymentFacade.class).persistPayment(paymentRecord);
-
         switch (method.type().getValue()) {
         case Echeck:
+            ServerSideFactory.create(PaymentFacade.class).persistPayment(paymentRecord);
             ServerSideFactory.create(PaymentFacade.class).processPayment(paymentRecord);
             break;
         case CreditCard:
             paymentRecord.targetDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
-            paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Scheduled);
+            ServerSideFactory.create(PaymentFacade.class).persistPayment(paymentRecord);
             ServerSideFactory.create(PaymentFacade.class).schedulePayment(paymentRecord);
             break;
         default:
