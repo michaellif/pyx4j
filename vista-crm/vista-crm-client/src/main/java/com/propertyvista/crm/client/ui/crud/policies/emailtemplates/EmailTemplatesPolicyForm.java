@@ -77,9 +77,8 @@ public class EmailTemplatesPolicyForm extends PolicyDTOTabPanelBasedForm<EmailTe
         FormFlexPanel panel = new FormFlexPanel(i18n.tr("Header and Footer"));
         int row = -1;
 
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().header())).build());
-
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().footer())).build());
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().header()), 30).build());
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().footer()), 30).build());
 
         return panel;
     }
@@ -144,7 +143,7 @@ public class EmailTemplatesPolicyForm extends PolicyDTOTabPanelBasedForm<EmailTe
                 if (isEditable()) {
                     CRichTextArea editor = new CRichTextArea();
                     editor.setImageProvider(new SiteImageResourceProvider());
-                    content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().content(), editor)).build());
+                    content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().content(), editor), 60).build());
                     // create variable selection button
                     final PushButton pb = editor.getWidget().getEditor().getCustomButton();
                     pb.setText(i18n.tr("MERGE"));
