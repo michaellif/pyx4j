@@ -27,7 +27,6 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.essentials.client.ReportDialog;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
-import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.IView;
 
 import com.propertyvista.crm.rpc.services.dashboard.DashboardMetadataService;
@@ -36,8 +35,6 @@ import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.property.asset.building.Building;
 
 public class DashboardVisorController implements IDashboardVisorController {
-
-    private static final I18n i18n = I18n.get(DashboardVisorController.class);
 
     private final DashboardVisorView view;
 
@@ -61,36 +58,11 @@ public class DashboardVisorController implements IDashboardVisorController {
 
     @Override
     public void show(IView parentView) {
-        populate(dashboardStub.getPrimaryKey());
-        parentView.showVisor(getView(), dashboardStub.name().getValue());
+        populate(parentView);
     }
 
     @Override
-    public void populate() {
-        if (dashboardStub != null) {
-            populate(dashboardStub.getPrimaryKey());
-        }
-    }
-
-    @Override
-    public void populate(Key boardId) {
-        // TODO this is not supposed to be called
-        service.retrieveMetadata(new AsyncCallback<DashboardMetadata>() {
-            @Override
-            public void onSuccess(DashboardMetadata result) {
-                view.populate(result);
-                view.setBuildings(buildings);
-            }
-
-            @Override
-            public void onFailure(Throwable caught) {
-                throw new UnrecoverableClientError(caught);
-            }
-        }, boardId);
-    }
-
-    @Override
-    public void save() {
+    public void saveDashboardMetadata() {
         service.saveDashboardMetadata(new AsyncCallback<DashboardMetadata>() {
             @Override
             public void onSuccess(DashboardMetadata result) {
@@ -118,4 +90,20 @@ public class DashboardVisorController implements IDashboardVisorController {
         new ReportDialog("Report", "Creating report...").start(GWT.<DashboardReportService> create(DashboardReportService.class), criteria, parameters);
     }
 
+    private void populate(final IView parentView) {
+        service.retrieveMetadata(new AsyncCallback<DashboardMetadata>() {
+            @Override
+            public void onSuccess(DashboardMetadata result) {
+                view.setBuildings(buildings);
+                view.populate(result);
+
+                parentView.showVisor(getView(), dashboardStub.name().getValue());
+            }
+
+            @Override
+            public void onFailure(Throwable caught) {
+                throw new UnrecoverableClientError(caught);
+            }
+        }, dashboardStub.getPrimaryKey());
+    }
 }

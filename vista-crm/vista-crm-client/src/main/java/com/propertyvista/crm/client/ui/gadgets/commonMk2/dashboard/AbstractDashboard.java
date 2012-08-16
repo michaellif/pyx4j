@@ -58,7 +58,6 @@ public abstract class AbstractDashboard extends Composite {
 
         placeGadgets();
         startGadgets();
-
     }
 
     public DashboardMetadata getDashboardMetadata() {
@@ -104,10 +103,15 @@ public abstract class AbstractDashboard extends Composite {
     }
 
     private void startGadgets() {
-        IGadgetIterator it = board.getGadgetIterator();
-        while (it.hasNext()) {
-            it.next().start();
-        }
+        Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+            @Override
+            public void execute() {
+                IGadgetIterator it = board.getGadgetIterator();
+                while (it.hasNext()) {
+                    it.next().start();
+                }
+            }
+        });
     }
 
     private void proccessDashboardEvent(BoardEvent.Reason reason) {

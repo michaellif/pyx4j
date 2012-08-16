@@ -69,7 +69,6 @@ public class DashboardVisorView extends Composite {
                 });
             }
         }, new IGadgetDirectory() {
-
             @Override
             public IGadgetInstance createGadgetInstance(GadgetMetadata gmd) {
                 return Directory.createGadget(gmd);
@@ -78,7 +77,7 @@ public class DashboardVisorView extends Composite {
 
             @Override
             protected void onDashboardMetadataChanged() {
-                DashboardVisorView.this.controller.save();
+                DashboardVisorView.this.controller.saveDashboardMetadata();
             }
         };
         initWidget(this.dashboard);
