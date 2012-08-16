@@ -131,6 +131,7 @@ public class OnboardingUserAuthenticationRequestHandler extends AbstractRequestH
                     }
 
                     response.role().setValue(OnboardingXMLUtils.convertRole(credential.behavior().getValue(), onboradingOnly));
+                    response.email().setValue(user.email().getValue());
                     response.status().setValue(OnboardingUserAuthenticationResponseIO.AuthenticationStatusCode.OK);
 
                     return response;
