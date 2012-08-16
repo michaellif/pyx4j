@@ -18,21 +18,46 @@ import java.util.List;
 
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
+import com.google.gwt.dom.client.Style.Cursor;
+import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseOutHandler;
+import com.google.gwt.event.dom.client.MouseOverEvent;
+import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.DockLayoutPanel;
+import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dashboard.BoardEvent;
 import com.pyx4j.widgets.client.dashboard.Dashboard;
 import com.pyx4j.widgets.client.dashboard.IBoard;
 import com.pyx4j.widgets.client.dashboard.IGadgetIterator;
 
+import com.propertyvista.crm.client.resources.CrmImages;
+import com.propertyvista.crm.client.ui.board.BoardBase.StyleSuffix;
 import com.propertyvista.crm.client.ui.gadgets.common.IGadgetInstance;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
 
 public abstract class AbstractDashboard extends Composite {
 
-    private final ScrollPanel dashboardPanel;
+    public static String DEFAULT_STYLE_PREFIX = "vista_DashboardView";
+
+    private static final I18n i18n = I18n.get(AbstractDashboard.class);
+
+    private final ScrollPanel scrollPanel;
+
+    private final DockLayoutPanel dashboardPanel;
+
+    private final HorizontalPanel actionsPanel;
 
     private final IGadgetDirectory gadgetDirectory;
 
@@ -49,7 +74,21 @@ public abstract class AbstractDashboard extends Composite {
         this.gadgetDirectory = gadgetDirectory;
         this.layoutManager = layoutManager;
 
-        this.dashboardPanel = new ScrollPanel();
+        this.dashboardPanel = new DockLayoutPanel(Unit.EM);
+        this.dashboardPanel.setSize("100%", "100%");
+        this.actionsPanel = new HorizontalPanel();
+        this.actionsPanel.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.actionsPanel);
+        this.actionsPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
+        this.actionsPanel.setWidth("100%");
+        this.actionsPanel.add(new HTML()); // just for %-tage cells alignment...        
+        this.actionsPanel.add(createActionsWidget());
+
+        this.dashboardPanel.addNorth(actionsPanel, 2);
+
+        this.scrollPanel = new ScrollPanel();
+        this.scrollPanel.setSize("100%", "100%");
+        this.dashboardPanel.add(scrollPanel);
+
         initWidget(this.dashboardPanel);
     }
 
@@ -66,9 +105,10 @@ public abstract class AbstractDashboard extends Composite {
 
     protected abstract void onDashboardMetadataChanged();
 
+    protected abstract void onPrintRequested();
+
     private void placeGadgets() {
         board = new Dashboard();
-
         if (dashboardMetadata != null) {
             List<IGadgetInstance> gadgets = new ArrayList<IGadgetInstance>();
             for (GadgetMetadata metadata : dashboardMetadata.gadgets()) {
@@ -99,7 +139,7 @@ public abstract class AbstractDashboard extends Composite {
             }
         });
 
-        dashboardPanel.setWidget(board);
+        scrollPanel.setWidget(board);
     }
 
     private void startGadgets() {
@@ -133,4 +173,60 @@ public abstract class AbstractDashboard extends Composite {
 
         onDashboardMetadataChanged();
     }
+
+    private Widget createActionsWidget() {
+        HorizontalPanel actionsWidget = new HorizontalPanel();
+
+        final Image addGadget = new Image(CrmImages.INSTANCE.dashboardAddGadget());
+        addGadget.getElement().getStyle().setCursor(Cursor.POINTER);
+        addGadget.addMouseOverHandler(new MouseOverHandler() {
+            @Override
+            public void onMouseOver(MouseOverEvent event) {
+                addGadget.setResource(CrmImages.INSTANCE.dashboardAddGadgetHover());
+            }
+        });
+        addGadget.addMouseOutHandler(new MouseOutHandler() {
+            @Override
+            public void onMouseOut(MouseOutEvent event) {
+                addGadget.setResource(CrmImages.INSTANCE.dashboardAddGadget());
+            }
+        });
+        addGadget.setTitle(i18n.tr("Add Gadget..."));
+        addGadget.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                // TODO add adding gadgets using IGadgetFactory
+            }
+        });
+
+        final Image print = new Image(CrmImages.INSTANCE.dashboardPrint());
+        print.addMouseOverHandler(new MouseOverHandler() {
+            @Override
+            public void onMouseOver(MouseOverEvent event) {
+                print.setResource(CrmImages.INSTANCE.dashboardPrintHover());
+            }
+        });
+        print.addMouseOutHandler(new MouseOutHandler() {
+            @Override
+            public void onMouseOut(MouseOutEvent event) {
+                print.setResource(CrmImages.INSTANCE.dashboardPrint());
+            }
+        });
+        print.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                onPrintRequested();
+            }
+        });
+        print.getElement().getStyle().setCursor(Cursor.POINTER);
+
+        actionsWidget.add(new HTML("&nbsp;&nbsp;&nbsp;&nbsp;"));
+        actionsWidget.add(addGadget);
+
+        actionsWidget.add(print);
+        actionsWidget.setSpacing(4);
+
+        return actionsWidget;
+    }
+
 }
