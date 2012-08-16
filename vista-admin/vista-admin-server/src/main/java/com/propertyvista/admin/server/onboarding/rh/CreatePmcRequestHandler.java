@@ -25,6 +25,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.admin.domain.pmc.Pmc;
 import com.propertyvista.admin.domain.pmc.Pmc.PmcStatus;
+import com.propertyvista.admin.domain.pmc.ReservedPmcNames;
 import com.propertyvista.admin.domain.security.OnboardingUserCredential;
 import com.propertyvista.admin.server.onboarding.PmcNameValidator;
 import com.propertyvista.admin.server.onboarding.rhf.AbstractRequestHandler;
@@ -91,6 +92,16 @@ public class CreatePmcRequestHandler extends AbstractRequestHandler<CreatePMCReq
         pmc.interfaceUidBase().setValue(UserAccessUtils.getPmcInterfaceUidBase(firstUser));
 
         Persistence.service().persist(pmc);
+
+        // Remove name reservation
+        {
+            EntityQueryCriteria<ReservedPmcNames> criteria = EntityQueryCriteria.create(ReservedPmcNames.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().onboardingAccountId(), request.onboardingAccountId().getValue()));
+            ReservedPmcNames prevReservation = Persistence.service().retrieve(criteria);
+            if (prevReservation != null) {
+                Persistence.service().delete(prevReservation);
+            }
+        }
 
         for (OnboardingUserCredential cred : creds) {
             cred.pmc().set(pmc);
