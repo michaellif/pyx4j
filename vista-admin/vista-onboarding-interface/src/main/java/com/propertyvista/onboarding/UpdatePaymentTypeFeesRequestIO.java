@@ -23,9 +23,23 @@ import com.pyx4j.i18n.annotations.I18n;
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 public interface UpdatePaymentTypeFeesRequestIO extends RequestIO {
 
-    IPrimitive<Boolean> ccPaymentAvailable();
+    IPrimitive<Boolean> ccVisaPaymentAvailable();
 
-    IPrimitive<BigDecimal> ccFee();
+    IPrimitive<BigDecimal> ccVisaFee();
+
+    IPrimitive<Boolean> ccMasterCardPaymentAvailable();
+
+    IPrimitive<BigDecimal> ccMasterCardFee();
+
+    IPrimitive<Boolean> ccDiscoverPaymentAvailable();
+
+    IPrimitive<BigDecimal> ccDiscoverFee();
+
+    IPrimitive<Boolean> ccAmexPaymentAvailable();
+
+    IPrimitive<BigDecimal> ccAmexFee();
+
+    // ---
 
     IPrimitive<Boolean> echeckPaymentAvailable();
 

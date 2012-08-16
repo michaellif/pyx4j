@@ -36,7 +36,7 @@ public class PaymentFeesHelper {
             break;
 
         case relative:
-            fees.cc().setValue(typeInfo.ccFee().getValue());
+            fees.cc().setValue(typeInfo.ccVisaFee().getValue());
             break;
         }
 

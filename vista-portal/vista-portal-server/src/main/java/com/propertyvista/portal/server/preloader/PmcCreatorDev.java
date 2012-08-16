@@ -71,8 +71,8 @@ public class PmcCreatorDev {
             if (ordinal >= 0) {
                 PmcPaymentTypeInfo fees = EntityFactory.create(PmcPaymentTypeInfo.class);
                 fees.pmc().set(pmc);
-                fees.ccPaymentAvailable().setValue(Boolean.TRUE);
-                fees.ccFee().setValue(new BigDecimal("2.50"));
+                fees.ccVisaPaymentAvailable().setValue(Boolean.TRUE);
+                fees.ccVisaFee().setValue(new BigDecimal("2.50"));
 
                 fees.eCheckPaymentAvailable().setValue(Boolean.TRUE);
                 fees.eChequeFee().setValue(new BigDecimal("0.20"));
@@ -131,8 +131,8 @@ public class PmcCreatorDev {
             } else {
                 PmcPaymentTypeInfo fees = EntityFactory.create(PmcPaymentTypeInfo.class);
                 fees.pmc().set(pmc);
-                fees.ccPaymentAvailable().setValue(Boolean.FALSE);
-                fees.ccFee().setValue(new BigDecimal("2.50"));
+                fees.ccVisaPaymentAvailable().setValue(Boolean.FALSE);
+                fees.ccVisaFee().setValue(new BigDecimal("2.50"));
 
                 fees.eCheckPaymentAvailable().setValue(Boolean.FALSE);
                 fees.eChequeFee().setValue(new BigDecimal("0.20"));

@@ -51,8 +51,17 @@ public class UpdatePaymentTypeFeesRequestHandler extends AbstractRequestHandler<
             return response;
         }
 
-        pmc.paymentTypeInfo().ccPaymentAvailable().setValue(request.ccPaymentAvailable().getValue());
-        pmc.paymentTypeInfo().ccFee().setValue(request.ccFee().getValue());
+        pmc.paymentTypeInfo().ccVisaPaymentAvailable().setValue(request.ccVisaPaymentAvailable().getValue());
+        pmc.paymentTypeInfo().ccVisaFee().setValue(request.ccVisaFee().getValue());
+
+        pmc.paymentTypeInfo().ccMasterCardPaymentAvailable().setValue(request.ccMasterCardPaymentAvailable().getValue());
+        pmc.paymentTypeInfo().ccMasterCardFee().setValue(request.ccMasterCardFee().getValue());
+
+        pmc.paymentTypeInfo().ccDiscoverPaymentAvailable().setValue(request.ccDiscoverPaymentAvailable().getValue());
+        pmc.paymentTypeInfo().ccDiscoverFee().setValue(request.ccDiscoverFee().getValue());
+
+        pmc.paymentTypeInfo().ccAmexPaymentAvailable().setValue(request.ccAmexPaymentAvailable().getValue());
+        pmc.paymentTypeInfo().ccAmexFee().setValue(request.ccAmexFee().getValue());
 
         pmc.paymentTypeInfo().eCheckPaymentAvailable().setValue(request.echeckPaymentAvailable().getValue());
         pmc.paymentTypeInfo().eChequeFee().setValue(request.echeckFee().getValue());

@@ -36,12 +36,26 @@ public interface PmcPaymentTypeInfo extends IEntity {
     @JoinColumn
     Pmc pmc();
 
-    IPrimitive<Boolean> ccPaymentAvailable();
+    IPrimitive<Boolean> ccVisaPaymentAvailable();
 
     /**
      * this fee is percent of a transaction
      */
-    IPrimitive<BigDecimal> ccFee();
+    IPrimitive<BigDecimal> ccVisaFee();
+
+    IPrimitive<Boolean> ccMasterCardPaymentAvailable();
+
+    IPrimitive<BigDecimal> ccMasterCardFee();
+
+    IPrimitive<Boolean> ccDiscoverPaymentAvailable();
+
+    IPrimitive<BigDecimal> ccDiscoverFee();
+
+    IPrimitive<Boolean> ccAmexPaymentAvailable();
+
+    IPrimitive<BigDecimal> ccAmexFee();
+
+    //--
 
     IPrimitive<Boolean> eCheckPaymentAvailable();
 
