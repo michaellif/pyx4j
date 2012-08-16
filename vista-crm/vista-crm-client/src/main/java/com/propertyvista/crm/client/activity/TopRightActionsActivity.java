@@ -27,6 +27,7 @@ import com.pyx4j.security.client.ContextChangeEvent;
 import com.pyx4j.security.client.ContextChangeHandler;
 import com.pyx4j.security.client.SecurityControllerEvent;
 import com.pyx4j.security.client.SecurityControllerHandler;
+import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.common.client.ClentNavigUtils;
@@ -35,6 +36,7 @@ import com.propertyvista.crm.client.activity.login.GetSatisfaction;
 import com.propertyvista.crm.client.ui.TopRightActionsView;
 import com.propertyvista.crm.client.ui.viewfactories.CrmVeiwFactory;
 import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.shared.CompiledLocale;
 import com.propertyvista.shared.config.VistaDemo;
 
@@ -77,7 +79,9 @@ public class TopRightActionsActivity extends AbstractActivity implements TopRigh
     private void updateAuthenticatedView() {
         if (ClientContext.isAuthenticated()) {
             view.onLogedIn(ClientContext.getUserVisit().getName());
-            view.setDisplayThisIsProductionWarning(ApplicationBackend.isProductionBackend());
+            if (SecurityController.checkBehavior(VistaCrmBehavior.PropertyVistaSupport)) {
+                view.setDisplayThisIsProductionWarning(ApplicationBackend.isProductionBackend());
+            }
         } else {
             view.onLogedOut();
         }
