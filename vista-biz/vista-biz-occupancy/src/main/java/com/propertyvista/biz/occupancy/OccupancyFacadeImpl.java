@@ -265,7 +265,7 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
         cal.add(GregorianCalendar.DAY_OF_YEAR, -1);
         AptUnitOccupancySegment preMakeVacantDateSegment = retrieveOccupancySegment(unitPk, new LogicalDate(cal.getTime()));
 
-        if (preMakeVacantDateSegment.status().getValue() == Status.pending) {
+        if (preMakeVacantDateSegment != null && preMakeVacantDateSegment.status().getValue() == Status.pending) {
 
             EntityQueryCriteria<AptUnitOccupancySegment> deleteCriteria = EntityQueryCriteria.create(AptUnitOccupancySegment.class);
 
