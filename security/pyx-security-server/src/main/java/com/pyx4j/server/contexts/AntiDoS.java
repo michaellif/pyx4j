@@ -71,7 +71,8 @@ public class AntiDoS {
             return new AccessCounter();
         }
         AccessCounter counter;
-        if (requestStart > nextIntervalResetTime) {
+        // Allow for system date change
+        if ((requestStart > nextIntervalResetTime) || (nextIntervalResetTime > requestStart + throttleConfig.getInterval())) {
             accessByIP.clear();
             nextIntervalResetTime = requestStart + throttleConfig.getInterval();
         }
