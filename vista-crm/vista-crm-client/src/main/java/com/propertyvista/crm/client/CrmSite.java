@@ -13,6 +13,9 @@
  */
 package com.propertyvista.crm.client;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
@@ -22,6 +25,7 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.css.StyleManger;
 import com.pyx4j.essentials.client.SessionInactiveDialog;
+import com.pyx4j.gwt.commons.BrowserType;
 import com.pyx4j.gwt.commons.UncaughtHandler;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
@@ -53,6 +57,8 @@ import com.propertyvista.portal.rpc.portal.services.SiteThemeServices;
 import com.propertyvista.portal.rpc.shared.services.PolicyRetrieveService;
 
 public class CrmSite extends VistaSite {
+
+    private static final Logger log = LoggerFactory.getLogger(CrmSite.class);
 
     private static final I18n i18n = I18n.get(CrmSite.class);
 
@@ -91,8 +97,10 @@ public class CrmSite extends VistaSite {
             }
         });
 
-        initSiteTheme();
-        ClientPolicyManager.initialize(GWT.<PolicyRetrieveService> create(CrmPolicyRetrieveService.class));
+        if (verifyBrowserCompatibility()) {
+            initSiteTheme();
+            ClientPolicyManager.initialize(GWT.<PolicyRetrieveService> create(CrmPolicyRetrieveService.class));
+        }
     }
 
     @Override
@@ -141,5 +149,37 @@ public class CrmSite extends VistaSite {
 
     static public AppPlace getSystemDashboardPlace() {
         return new CrmSiteMap.Dashboard().formPlace(new Key(-1));
+    }
+
+    private boolean isBrowserCompatible() {
+        if (BrowserType.isIE()) {
+            return BrowserType.isIENative() && isIEVersion9Native() && (BrowserType.isIE8Native());
+        } else if (BrowserType.isFirefox() || BrowserType.isSafari()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private boolean verifyBrowserCompatibility() {
+        if (!isBrowserCompatible()) {
+            hideLoadingIndicator();
+            log.warn("Unsupported Browser UserAgent [{}]", BrowserType.getUserAgent());
+            Window.alert(i18n.tr("Unsupported Browser")
+                    + "\n"
+                    + i18n.tr("Your current Browser Version will restrict the functionality of this application.\n"
+                            + "Please use an updated version of Internet Explorer.\n"
+                            + "This application will also work with current versions of Mozilla Firefox, Google Chrome or Apple Safari"));
+            return false;
+        } else if (BrowserType.isIE() && BrowserType.isIENative() && !isIEDocumentModeComatible(9)) {
+            hideLoadingIndicator();
+            Window.alert(i18n.tr("Unsupported Browser Compatibility Mode")
+                    + "\n"
+                    + i18n.tr("Your current Browser Compatibility Mode settings will restrict the functionality of this application.\n"
+                            + "Please change setting 'Document Mode' to IE9 standards.\n"
+                            + "This application will also work with current versions of Mozilla Firefox, Google Chrome or Apple Safari"));
+            return false;
+        }
+        return true;
     }
 }

@@ -82,4 +82,22 @@ public abstract class VistaSite extends AppSite {
     }
 
     public abstract void showMessageDialog(String message, String title, String buttonText, Command command);
+
+    public native static boolean isIEVersion9Native()
+    /*-{ return $wnd.ieVersion9 === true; }-*/;
+
+    public native static boolean isIEVersion8Native()
+    /*-{ return $wnd.ieVersion8 === true; }-*/;
+
+    public static boolean isIEDocumentModeComatible(int expectedMode) {
+        try {
+            int mode = getIEDocumentModeNative();
+            return mode >= expectedMode;
+        } catch (Throwable e) {
+            return false;
+        }
+    }
+
+    public native static int getIEDocumentModeNative()
+    /*-{  return $doc.documentMode; }-*/;
 }
