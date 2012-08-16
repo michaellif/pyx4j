@@ -16,12 +16,12 @@ package com.propertyvista.admin.server.onboarding.rh;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 
-import com.propertyvista.admin.domain.pmc.ReservedPmcNames;
-import com.propertyvista.admin.server.onboarding.PmcNameValidator;
 import com.propertyvista.admin.server.onboarding.rhf.AbstractRequestHandler;
+import com.propertyvista.biz.system.PmcFacade;
 import com.propertyvista.onboarding.ReserveDnsNameRequestIO;
 import com.propertyvista.onboarding.ResponseIO;
 
@@ -39,20 +39,13 @@ public class ReserveDnsNameRequestHandler extends AbstractRequestHandler<Reserve
                 request.dnsName().getValue() });
 
         ResponseIO response = EntityFactory.create(ResponseIO.class);
-        response.success().setValue(Boolean.TRUE);
 
-        String dnsName = request.dnsName().getValue();
-
-        if (!PmcNameValidator.canCreatePmcName(dnsName, null)) {
+        if (ServerSideFactory.create(PmcFacade.class).reservedDnsName(request.dnsName().getValue(), request.onboardingAccountId().getValue())) {
+            response.success().setValue(Boolean.TRUE);
+            Persistence.service().commit();
+        } else {
             response.success().setValue(Boolean.FALSE);
-            return response;
         }
-
-        ReservedPmcNames resDnsName = EntityFactory.create(ReservedPmcNames.class);
-        resDnsName.dnsName().setValue(dnsName);
-        resDnsName.onboardingAccountId().setValue(request.onboardingAccountId().getValue());
-        Persistence.service().persist(resDnsName);
-        Persistence.service().commit();
 
         return response;
 

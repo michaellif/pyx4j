@@ -26,4 +26,6 @@ public interface PmcFacade {
 
     public void terminateCancelledPmc(Pmc pmcId);
 
+    public boolean reservedDnsName(String dnsName, String onboardingAccountId);
+
 }

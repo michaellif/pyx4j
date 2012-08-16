@@ -97,12 +97,13 @@ public class PmcNameValidator {
 
         ReservedPmcNames resPmc = Persistence.service().retrieve(criteria);
 
-        if (resPmc == null)
+        if (resPmc == null) {
             return false; // Never reserved
-        else if ((resPmc.onboardingAccountId().getValue() == null) || (onboardingAccountId == null))
+        } else if ((resPmc.onboardingAccountId().getValue() == null) || (onboardingAccountId == null)) {
             return true; // Reserved through Admin app or called through admin app
-        else
+        } else {
             return !resPmc.onboardingAccountId().getValue().equals(onboardingAccountId); // reserved by another onboarding account
+        }
     }
 
     public static boolean isDnsTaken(String dnsName) {

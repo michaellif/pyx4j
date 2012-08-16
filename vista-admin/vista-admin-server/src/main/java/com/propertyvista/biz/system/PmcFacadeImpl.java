@@ -17,6 +17,7 @@ import java.util.Date;
 import java.util.EnumSet;
 
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.gwt.server.DateUtils;
@@ -24,7 +25,9 @@ import com.pyx4j.gwt.server.DateUtils;
 import com.propertyvista.admin.domain.pmc.OnboardingMerchantAccount;
 import com.propertyvista.admin.domain.pmc.Pmc;
 import com.propertyvista.admin.domain.pmc.Pmc.PmcStatus;
+import com.propertyvista.admin.domain.pmc.ReservedPmcNames;
 import com.propertyvista.admin.domain.security.OnboardingUserCredential;
+import com.propertyvista.admin.server.onboarding.PmcNameValidator;
 
 public class PmcFacadeImpl implements PmcFacade {
 
@@ -89,4 +92,23 @@ public class PmcFacadeImpl implements PmcFacade {
         Persistence.service().commit();
     }
 
+    @Override
+    public boolean reservedDnsName(String dnsName, String onboardingAccountId) {
+        if (!PmcNameValidator.canCreatePmcName(dnsName, onboardingAccountId)) {
+            return false;
+        } else {
+            EntityQueryCriteria<ReservedPmcNames> criteria = EntityQueryCriteria.create(ReservedPmcNames.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().onboardingAccountId(), onboardingAccountId));
+            ReservedPmcNames prevReservation = Persistence.service().retrieve(criteria);
+            if (prevReservation != null) {
+                Persistence.service().delete(prevReservation);
+            }
+
+            ReservedPmcNames resDnsName = EntityFactory.create(ReservedPmcNames.class);
+            resDnsName.dnsName().setValue(dnsName);
+            resDnsName.onboardingAccountId().setValue(onboardingAccountId);
+            Persistence.service().persist(resDnsName);
+            return true;
+        }
+    }
 }
