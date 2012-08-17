@@ -304,6 +304,7 @@ public class NotesAndAttachmentsVisorView extends ScrollPanel {
                         @SuppressWarnings("unchecked")
                         CEntityFolderItem<NotesAndAttachments> item = (CEntityFolderItem<NotesAndAttachments>) getParent();
                         item.setRemovable(false);
+                        item.getItemActionsBar().setButtonVisible(ActionType.Cust1, false);
                     }
                 }
 
