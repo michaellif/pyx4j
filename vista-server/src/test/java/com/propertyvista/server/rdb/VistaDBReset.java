@@ -70,8 +70,6 @@ public class VistaDBReset {
 
             if (((EntityPersistenceServiceRDB) Persistence.service()).getMultitenancyType() == MultitenancyType.SeparateSchemas) {
                 RDBUtils.ensureNamespace();
-                // TODO Hack for non implemented SeparateSchemas DML 
-                ((EntityPersistenceServiceRDB) Persistence.service()).resetMapping();
                 RDBUtils.dropAllEntityTables();
             }
 

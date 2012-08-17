@@ -60,8 +60,6 @@ public class PmcCreator {
             RDBUtils.ensureNamespace();
 
             if (((EntityPersistenceServiceRDB) Persistence.service()).getMultitenancyType() == MultitenancyType.SeparateSchemas) {
-                // TODO Hack for non implemented SeparateSchemas DML 
-                ((EntityPersistenceServiceRDB) Persistence.service()).resetMapping();
                 RDBUtils.initAllEntityTables();
             }
 

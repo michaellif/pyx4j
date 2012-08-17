@@ -182,7 +182,6 @@ public class DBResetServlet extends HttpServlet {
                                     RDBUtils.ensureNamespace();
                                     SchedulerHelper.dbReset();
                                     Thread.sleep(150);
-                                    ((EntityPersistenceServiceRDB) Persistence.service()).resetMapping();
                                     SchedulerHelper.init();
                                     if (((EntityPersistenceServiceRDB) Persistence.service()).getMultitenancyType() == MultitenancyType.SeparateSchemas) {
                                         RDBUtils.initNameSpaceSpecificEntityTables();
@@ -308,8 +307,6 @@ public class DBResetServlet extends HttpServlet {
         buf.append("\n--- Preload  " + pmcDnsName + " ---\n");
         if (((EntityPersistenceServiceRDB) Persistence.service()).getMultitenancyType() == MultitenancyType.SeparateSchemas) {
             RDBUtils.ensureNamespace();
-            // TODO Hack for non implemented SeparateSchemas DML 
-            ((EntityPersistenceServiceRDB) Persistence.service()).resetMapping();
             RDBUtils.initAllEntityTables();
         }
 
