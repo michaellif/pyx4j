@@ -372,7 +372,11 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
     }
 
     TableModel tableModel(EntityMeta entityMeta) {
-        return mappings.ensureTable(getPersistenceContext(), entityMeta);
+        return mappings.ensureTable(getPersistenceContext(), entityMeta.getEntityClass(), false);
+    }
+
+    public void ensureSchemaModel(Iterable<Class<? extends IEntity>> classes) {
+        mappings.ensureSchemaModel(getPersistenceContext(), classes);
     }
 
     public TableMetadata getTableMetadata(EntityMeta entityMeta) throws SQLException {

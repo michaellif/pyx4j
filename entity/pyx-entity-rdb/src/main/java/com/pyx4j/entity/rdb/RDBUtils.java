@@ -25,6 +25,7 @@ import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Vector;
@@ -242,11 +243,10 @@ public class RDBUtils implements Closeable {
     }
 
     public static void initAllEntityTables() {
-        int countTotal = 0;
         long start = System.currentTimeMillis();
         EntityPersistenceServiceRDB srv = (EntityPersistenceServiceRDB) Persistence.service();
-        List<String> allClasses = EntityClassFinder.getEntityClassesNames();
-        for (String className : allClasses) {
+        List<Class<? extends IEntity>> allClasses = new ArrayList<Class<? extends IEntity>>();
+        for (String className : EntityClassFinder.getEntityClassesNames()) {
             if (className.toLowerCase().contains(".gae")) {
                 continue;
             }
@@ -258,18 +258,17 @@ public class RDBUtils implements Closeable {
             if (!EntityPersistenceServiceRDB.allowNamespaceUse(entityClass)) {
                 continue;
             }
-            srv.count(EntityQueryCriteria.create(entityClass));
-            countTotal++;
+            allClasses.add(entityClass);
         }
-        log.info("Total of {} tables created in {}", countTotal, TimeUtils.secSince(start));
+        srv.ensureSchemaModel(allClasses);
+        log.info("Total of {} tables created in {}", allClasses.size(), TimeUtils.secSince(start));
     }
 
     public static void initNameSpaceSpecificEntityTables() {
-        int countTotal = 0;
         long start = System.currentTimeMillis();
         EntityPersistenceServiceRDB srv = (EntityPersistenceServiceRDB) Persistence.service();
-        List<String> allClasses = EntityClassFinder.getEntityClassesNames();
-        for (String className : allClasses) {
+        List<Class<? extends IEntity>> allClasses = new ArrayList<Class<? extends IEntity>>();
+        for (String className : EntityClassFinder.getEntityClassesNames()) {
             if (className.toLowerCase().contains(".gae")) {
                 continue;
             }
@@ -282,10 +281,10 @@ public class RDBUtils implements Closeable {
             if ((table == null) || !NamespaceManager.getNamespace().equals(table.namespace())) {
                 continue;
             }
-            srv.count(EntityQueryCriteria.create(entityClass));
-            countTotal++;
+            allClasses.add(entityClass);
         }
-        log.info("Total of {} tables created in {}", countTotal, TimeUtils.secSince(start));
+        srv.ensureSchemaModel(allClasses);
+        log.info("Total of {} tables created in {}", allClasses.size(), TimeUtils.secSince(start));
     }
 
     public static void deleteFromAllEntityTables() {
