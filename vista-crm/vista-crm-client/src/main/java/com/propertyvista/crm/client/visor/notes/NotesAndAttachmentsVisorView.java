@@ -27,6 +27,7 @@ import com.pyx4j.entity.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.entity.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.entity.client.ui.folder.IFolderDecorator;
 import com.pyx4j.entity.client.ui.folder.IFolderItemDecorator;
+import com.pyx4j.entity.client.ui.folder.ItemActionsBar.ActionType;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
@@ -39,7 +40,6 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.widgets.client.Button;
-import com.pyx4j.widgets.client.IconButton;
 import com.pyx4j.widgets.client.actionbar.Toolbar;
 import com.pyx4j.widgets.client.dialog.Dialog;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
@@ -156,18 +156,16 @@ public class NotesAndAttachmentsVisorView extends ScrollPanel {
             @Override
             protected CEntityFolderItem<NotesAndAttachments> createItem(boolean first) {
                 final CEntityFolderItem<NotesAndAttachments> item = super.createItem(first);
-                IconButton button = new IconButton(i18n.tr("Edit Note"), CrmImages.INSTANCE.editButton());
-                button.addClickHandler(new ClickHandler() {
-                    @SuppressWarnings("unchecked")
+                item.addAction(ActionType.Cust1, i18n.tr("Edit Note"), CrmImages.INSTANCE.editButton(), new Command() {
+
+                    @SuppressWarnings("rawtypes")
                     @Override
-                    public void onClick(ClickEvent event) {
+                    public void execute() {
                         item.setViewable(false);
-                        ((BoxFolderItemDecorator<NotesAndAttachments>) item.getDecorator()).setExpended(true);
+                        ((BoxFolderItemDecorator) item.getDecorator()).setExpended(true);
                         ((NoteEditor) item.getComponents().toArray()[0]).setViewableMode(false);
                     }
                 });
-
-                item.addCustomButton(button);
 
                 return item;
             }
