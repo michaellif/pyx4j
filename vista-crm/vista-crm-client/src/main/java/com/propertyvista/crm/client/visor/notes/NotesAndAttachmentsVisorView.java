@@ -69,7 +69,12 @@ public class NotesAndAttachmentsVisorView extends ScrollPanel {
         this.controller = controller;
         form = new NotesAndAttachmentsForm();
         form.initContent();
-        setWidget(form.asWidget());
+        FormFlexPanel contentPanel = new FormFlexPanel();
+
+        setWidget(contentPanel);
+
+        contentPanel.setWidget(0, 0, form.asWidget());
+
         getElement().getStyle().setProperty("padding", "6px");
     }
 
