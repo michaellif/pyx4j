@@ -98,9 +98,20 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
             throw new UserRuntimeException("PMC DNS name is reserved of forbidden");
         }
         super.create(entity, dto);
-        OnboardingUserCredential cred = OnboardingUserPreloader.createOnboardingUser(dto.person().name().firstName().getValue(), dto.person().name().lastName()
-                .getValue(), dto.email().getValue(), dto.password().getValue(), VistaOnboardingBehavior.ProspectiveClient, null);
-
+        
+        OnboardingUserCredential cred;
+        if (dto.createPmcForExistingOnboardingUserRequest().isNull()) {
+	        cred = OnboardingUserPreloader.createOnboardingUser(dto.person().name().firstName().getValue(), dto.person().name().lastName()
+	                .getValue(), dto.email().getValue(), dto.password().getValue(), VistaOnboardingBehavior.ProspectiveClient, null);
+	                	        
+        } else {
+        	EntityQueryCriteria<OnboardingUserCredential> criteria = EntityQueryCriteria.create(OnboardingUserCredential.class);
+        	criteria.add(PropertyCriterion.eq(criteria.proto().user(), dto.createPmcForExistingOnboardingUserRequest()));        	
+        	cred = Persistence.service().retrieve(criteria);
+        	if (cred == null) {
+        		throw new UserRuntimeException("failed to create PMC because existing onboarding user with key = '" + dto.createPmcForExistingOnboardingUserRequest().getPrimaryKey() + "' was not found");        		
+        	}
+        }
         cred.pmc().set(entity);
         Persistence.service().persist(cred);
     }

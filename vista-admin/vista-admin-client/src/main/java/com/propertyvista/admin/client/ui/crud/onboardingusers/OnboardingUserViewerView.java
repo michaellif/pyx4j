@@ -24,5 +24,9 @@ public interface OnboardingUserViewerView extends IViewerView<OnboardingUserDTO>
 
         void goToChangePassword(Key userId, String userName);
 
+
+		void createPmc(OnboardingUserDTO pmcUser);
+
     }
+    
 }

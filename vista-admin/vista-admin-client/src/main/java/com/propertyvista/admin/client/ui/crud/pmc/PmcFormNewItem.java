@@ -53,5 +53,15 @@ public class PmcFormNewItem extends AdminEntityForm<PmcDTO> {
         selectTab(addTab(content));
 
     }
+    
+    @Override
+    protected void onValueSet(boolean populate) {
+    	super.onValueSet(populate);
+    	boolean existingOnboardingUser = !getValue().createPmcForExistingOnboardingUserRequest().isNull();
+    	get(proto().person().name().firstName()).setViewable(existingOnboardingUser);
+    	get(proto().person().name().lastName()).setViewable(existingOnboardingUser);
+    	get(proto().email()).setViewable(existingOnboardingUser);
+    	get(proto().password()).setVisible(!existingOnboardingUser);
+    }
 
 }

@@ -14,6 +14,7 @@
 package com.propertyvista.admin.client.activity.crud.pmc;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
@@ -28,22 +29,30 @@ import com.propertyvista.admin.rpc.services.PmcCrudService;
 
 public class PmcEditorActivity extends EditorActivityBase<PmcDTO> {
 
-    @SuppressWarnings("unchecked")
+    private PmcDTO newItem;
+
+	@SuppressWarnings("unchecked")
     public PmcEditorActivity(CrudAppPlace place) {
         super(place, ManagementVeiwFactory.instance(PmcEditorView.class), (AbstractCrudService<PmcDTO>) GWT.create(PmcCrudService.class), PmcDTO.class);
-
+        newItem = (PmcDTO) place.getNewItem();
     }
 
     @Override
     protected void createNewEntity(AsyncCallback<PmcDTO> callback) {
-        PmcDTO entity = EntityFactory.create(getEntityClass());
+    	PmcDTO entity;    
+    	if (newItem == null) {
+	       entity = EntityFactory.create(getEntityClass());
+    	} else {
+    		entity = newItem;
+    	}
+	        
+	    entity.features().occupancyModel().setValue(Boolean.TRUE);
+	    entity.features().productCatalog().setValue(Boolean.TRUE);
+	    entity.features().leases().setValue(Boolean.TRUE);
+	    entity.features().onlineApplication().setValue(Boolean.FALSE);
+	    entity.features().xmlSiteExport().setValue(Boolean.FALSE);
+	
+	    callback.onSuccess(entity);
 
-        entity.features().occupancyModel().setValue(Boolean.TRUE);
-        entity.features().productCatalog().setValue(Boolean.TRUE);
-        entity.features().leases().setValue(Boolean.TRUE);
-        entity.features().onlineApplication().setValue(Boolean.FALSE);
-        entity.features().xmlSiteExport().setValue(Boolean.FALSE);
-
-        callback.onSuccess(entity);
     }
 }

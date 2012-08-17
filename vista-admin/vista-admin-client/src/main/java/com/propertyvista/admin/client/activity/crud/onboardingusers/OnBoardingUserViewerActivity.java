@@ -16,6 +16,7 @@ package com.propertyvista.admin.client.activity.crud.onboardingusers;
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.CrudAppPlace;
@@ -25,6 +26,7 @@ import com.propertyvista.admin.client.ui.crud.onboardingusers.OnboardingUserView
 import com.propertyvista.admin.client.viewfactories.crud.ManagementVeiwFactory;
 import com.propertyvista.admin.rpc.AdminSiteMap;
 import com.propertyvista.admin.rpc.OnboardingUserDTO;
+import com.propertyvista.admin.rpc.PmcDTO;
 import com.propertyvista.admin.rpc.services.OnboardingUserCrudService;
 import com.propertyvista.common.client.ui.components.security.PasswordChangeView;
 
@@ -42,5 +44,16 @@ public class OnBoardingUserViewerActivity extends AdminViewerActivity<Onboarding
         passwordChangePlace.placeArg(PasswordChangeView.Presenter.PRINCIPAL_CLASS, PasswordChangeView.Presenter.PrincipalClass.ONBOARDING_PMC.toString());
         AppSite.getPlaceController().goTo(passwordChangePlace);
     }
+
+	@Override
+	public void createPmc(OnboardingUserDTO onboardingUser) {
+		PmcDTO newPmc = EntityFactory.create(PmcDTO.class);
+		newPmc.person().name().firstName().setValue(onboardingUser.firstName().getValue());
+		newPmc.person().name().lastName().setValue(onboardingUser.lastName().getValue());
+		newPmc.email().setValue(onboardingUser.email().getValue());
+		newPmc.createPmcForExistingOnboardingUserRequest().set(onboardingUser.createIdentityStub());
+		AppSite.getPlaceController().goTo(new AdminSiteMap.Management.PMC().formNewItemPlace(newPmc));
+		
+	}
 
 }
