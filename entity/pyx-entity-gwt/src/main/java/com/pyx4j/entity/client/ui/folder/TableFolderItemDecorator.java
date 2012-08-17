@@ -119,7 +119,7 @@ public class TableFolderItemDecorator<E extends IEntity> extends BaseFolderItemD
     public void setActionsState(boolean removable, boolean up, boolean down) {
         ItemActionsBar actionsPanel = getFolderItem().getItemActionsBar();
         if (actionsPanel != null) {
-            actionsPanel.setActionsState(removable, up, down);
+            actionsPanel.setDefaultActionsState(removable, up, down);
         }
     }
 

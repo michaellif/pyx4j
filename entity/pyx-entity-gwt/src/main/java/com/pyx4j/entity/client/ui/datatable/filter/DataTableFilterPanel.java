@@ -152,14 +152,14 @@ public class DataTableFilterPanel<E extends IEntity> extends DockPanel {
 
     private Widget createAddButton() {
 
-        IconButton btnAdd = new IconButton(i18n.tr("Add filter..."), EntityFolderImages.INSTANCE.addButton());
-        btnAdd.addClickHandler(new ClickHandler() {
+        IconButton btnAdd = new IconButton(i18n.tr("Add filter..."), EntityFolderImages.INSTANCE.addButton(), new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 grid.addFilter(new DataTableFilterItem<E>(grid));
                 btnApply.setEnabled(grid.getFilterCount() > 0);
             }
         });
+
         HTML lblAdd = new HTML(i18n.tr("Add filter..."));
 
         HorizontalPanel panel = new HorizontalPanel();

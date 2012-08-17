@@ -21,119 +21,94 @@
 package com.pyx4j.entity.client.ui.folder;
 
 import static com.pyx4j.entity.client.ui.folder.DefaultEntityFolderTheme.StyleName.EntityFolderActionsBar;
-import static com.pyx4j.entity.client.ui.folder.DefaultEntityFolderTheme.StyleName.EntityFolderDownButton;
-import static com.pyx4j.entity.client.ui.folder.DefaultEntityFolderTheme.StyleName.EntityFolderRemoveButton;
-import static com.pyx4j.entity.client.ui.folder.DefaultEntityFolderTheme.StyleName.EntityFolderUpButton;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 
 import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.commons.IDebugId;
-import com.pyx4j.entity.client.images.EntityFolderImages;
-import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.IconButton;
+import com.pyx4j.widgets.client.images.IconButtonImages;
 
 public class ItemActionsBar extends HorizontalPanel {
-
-    private static final I18n i18n = I18n.get(ItemActionsBar.class);
 
     public static enum SortingState {
         First, Last, Only, Inner
     }
 
-    public static enum Action {
-        Remove, Up, Down, Cust1, Cust2, Cust3
-    }
-
-    public static enum DebugIds implements IDebugId {
-        RemoveButton, UpButton, DownButton;
+    public static enum ActionType implements IDebugId {
+        Remove, Up, Down, Cust1, Cust2, Cust3;
 
         @Override
         public String debugId() {
-            return name();
+            return name() + "Button";
         }
     }
 
-    private final Map<Action, IconButton> actions = new HashMap<Action, IconButton>();
+    private final Map<ActionType, IconButton> actions = new HashMap<ActionType, IconButton>();
 
     boolean boxDecorator = false;
 
     public ItemActionsBar(boolean removable) {
         setStyleName(EntityFolderActionsBar.name());
 
-        IconButton action = new IconButton(i18n.tr("Delete Item"));
-        action.setVisible(removable);
-        action.setStyleName(EntityFolderRemoveButton.name());
-        actions.put(Action.Remove, action);
-
-        action = new IconButton(i18n.tr("Move down"));
-        action.setStyleName(EntityFolderDownButton.name());
-        actions.put(Action.Down, action);
-
-        action = new IconButton(i18n.tr("Move up"));
-        action.setStyleName(EntityFolderUpButton.name());
-        actions.put(Action.Up, action);
     }
 
     public void init(IFolderItemDecorator<?> decorator) {
-        EntityFolderImages images = decorator.getImages();
-        actions.get(Action.Remove).setImages(images.delButton());
-        actions.get(Action.Up).setImages(images.moveUpButton());
-        actions.get(Action.Down).setImages(images.moveDownButton());
-
         clear();
         if (decorator instanceof BoxFolderItemDecorator) {
-            for (int i = Action.values().length - 1; i >= 0; --i) {
-                addAction(Action.values()[i]);
+            for (int i = ActionType.values().length - 1; i >= 0; --i) {
+                placeAction(ActionType.values()[i]);
             }
         } else {
-            for (Action action : Action.values()) {
-                addAction(action);
+            for (ActionType action : ActionType.values()) {
+                placeAction(action);
             }
         }
     }
 
-    private void addAction(Action action) {
+    private void placeAction(ActionType action) {
         IconButton button = actions.get(action);
         if (button != null) {
             add(button);
         }
     }
 
-    public HandlerRegistration addItemRemoveClickHandler(final ClickHandler handler) {
-        return actions.get(Action.Remove).addClickHandler(handler);
+    public void addAction(ActionType action, String title, IconButtonImages images, Command command) {
+        IconButton button = new IconButton(title, images, command);
+        actions.put(action, button);
     }
 
-    public HandlerRegistration addRowUpClickHandler(final ClickHandler handler) {
-        return actions.get(Action.Up).addClickHandler(handler);
+    public void setActionCommand(ActionType type, Command command) {
+        assert actions.containsKey(type) : "Command is not added";
+        actions.get(type).setCommand(command);
     }
 
-    public HandlerRegistration addRowDownClickHandler(final ClickHandler handler) {
-        return actions.get(Action.Down).addClickHandler(handler);
+    public void setActionImage(ActionType type, IconButtonImages images) {
+        assert actions.containsKey(type) : "Command is not added";
+        actions.get(type).setImages(images);
     }
 
     public void setSortingState(SortingState state) {
         switch (state) {
         case First:
-            actions.get(Action.Up).setVisible(false);
-            actions.get(Action.Down).setVisible(true);
+            actions.get(ActionType.Up).setVisible(false);
+            actions.get(ActionType.Down).setVisible(true);
             break;
         case Last:
-            actions.get(Action.Up).setVisible(true);
-            actions.get(Action.Down).setVisible(false);
+            actions.get(ActionType.Up).setVisible(true);
+            actions.get(ActionType.Down).setVisible(false);
             break;
         case Only:
-            actions.get(Action.Up).setVisible(false);
-            actions.get(Action.Down).setVisible(false);
+            actions.get(ActionType.Up).setVisible(false);
+            actions.get(ActionType.Down).setVisible(false);
             break;
         case Inner:
-            actions.get(Action.Up).setVisible(true);
-            actions.get(Action.Down).setVisible(true);
+            actions.get(ActionType.Up).setVisible(true);
+            actions.get(ActionType.Down).setVisible(true);
             break;
         default:
             break;
@@ -149,31 +124,27 @@ public class ItemActionsBar extends HorizontalPanel {
 
     }
 
-    public void setActionsState(boolean removable, boolean up, boolean down) {
-        actions.get(Action.Remove).setVisible(removable);
-        actions.get(Action.Up).setVisible(up);
-        actions.get(Action.Down).setVisible(down);
+    public void setDefaultActionsState(boolean removable, boolean up, boolean down) {
+        actions.get(ActionType.Remove).setVisible(removable);
+        actions.get(ActionType.Up).setVisible(up);
+        actions.get(ActionType.Down).setVisible(down);
     }
 
-    public void setRemoveButtonVisible(boolean show) {
-        actions.get(Action.Remove).setVisible(show);
-    }
-
-    public void addCustomButton(IconButton button) {
-//        button.addStyleName(EntityFolderCustomButton.name());
-//        customControls.add(button);
-    }
-
-    public void removeCustomButton(IconButton button) {
-//        customControls.remove(button);
+    public void setButtonVisible(ActionType type, boolean show) {
+        if (actions.containsValue(type)) {
+            actions.get(type).setVisible(show);
+        }
     }
 
     @Override
     protected void onEnsureDebugId(String baseID) {
         super.onEnsureDebugId(baseID);
-
-        actions.get(Action.Remove).ensureDebugId(new CompositeDebugId(baseID, DebugIds.RemoveButton).debugId());
-        actions.get(Action.Up).ensureDebugId(new CompositeDebugId(baseID, DebugIds.UpButton).debugId());
-        actions.get(Action.Down).ensureDebugId(new CompositeDebugId(baseID, DebugIds.DownButton).debugId());
+        for (ActionType type : ActionType.values()) {
+            IconButton button = actions.get(type);
+            if (button != null) {
+                button.ensureDebugId(new CompositeDebugId(baseID, type).debugId());
+            }
+        }
     }
+
 }

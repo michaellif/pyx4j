@@ -25,26 +25,29 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.entity.client.CEntityContainer;
 import com.pyx4j.entity.client.CEntityForm;
+import com.pyx4j.entity.client.images.EntityFolderImages;
+import com.pyx4j.entity.client.ui.folder.ItemActionsBar.ActionType;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CContainer;
-import com.pyx4j.forms.client.ui.decorators.IDecorator;
-import com.pyx4j.widgets.client.IconButton;
+import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.images.IconButtonImages;
 
 public abstract class CEntityFolderItem<E extends IEntity> extends CEntityContainer<E> {
+
+    private static final I18n i18n = I18n.get(CEntityFolderItem.class);
 
     private final SimplePanel container;
 
@@ -66,6 +69,8 @@ public abstract class CEntityFolderItem<E extends IEntity> extends CEntityContai
 
     private boolean initiated = false;
 
+    private IFolderItemDecorator decorator;
+
     public CEntityFolderItem(Class<E> clazz) {
         this(clazz, true, true);
     }
@@ -80,6 +85,10 @@ public abstract class CEntityFolderItem<E extends IEntity> extends CEntityContai
         handlerRegistrations = new ArrayList<HandlerRegistration>();
         actionsBar = new ItemActionsBar(removable);
 
+        addAction(ActionType.Remove, i18n.tr("Delete Item"), null, null);
+        addAction(ActionType.Up, i18n.tr("Move up"), null, null);
+        addAction(ActionType.Down, i18n.tr("Move down"), null, null);
+
     }
 
     @Override
@@ -89,10 +98,16 @@ public abstract class CEntityFolderItem<E extends IEntity> extends CEntityContai
     public void initContent() {
         super.initContent();
         if (!initiated) {
-            IDecorator decorator = getDecorator();
-            if (decorator instanceof IFolderItemDecorator) {
-                actionsBar.init((IFolderItemDecorator) decorator);
-                ((IFolderItemDecorator) decorator).adoptItemActionsBar();
+            if (getDecorator() instanceof IFolderItemDecorator) {
+                decorator = (IFolderItemDecorator) getDecorator();
+                EntityFolderImages images = decorator.getImages();
+
+                setActionImage(ActionType.Remove, images.delButton());
+                setActionImage(ActionType.Up, images.moveUpButton());
+                setActionImage(ActionType.Down, images.moveDownButton());
+
+                actionsBar.init(decorator);
+                decorator.adoptItemActionsBar();
             } else {
                 throw new Error("Correct decorator is missing");
             }
@@ -150,30 +165,16 @@ public abstract class CEntityFolderItem<E extends IEntity> extends CEntityContai
         return handlerRegistration;
     }
 
-    private HandlerRegistration addItemRemoveClickHandler(ClickHandler handler) {
-        HandlerRegistration handlerRegistration = actionsBar.addItemRemoveClickHandler(handler);
-        handlerRegistrations.add(handlerRegistration);
-        return handlerRegistration;
+    public void addAction(ActionType action, String title, IconButtonImages images, Command command) {
+        actionsBar.addAction(action, title, images, command);
     }
 
-    private HandlerRegistration addRowUpClickHandler(ClickHandler handler) {
-        HandlerRegistration handlerRegistration = actionsBar.addRowUpClickHandler(handler);
-        handlerRegistrations.add(handlerRegistration);
-        return handlerRegistration;
+    private void setActionCommand(ActionType type, Command command) {
+        actionsBar.setActionCommand(type, command);
     }
 
-    private HandlerRegistration addRowDownClickHandler(ClickHandler handler) {
-        HandlerRegistration handlerRegistration = actionsBar.addRowDownClickHandler(handler);
-        handlerRegistrations.add(handlerRegistration);
-        return handlerRegistration;
-    }
-
-    public void addCustomButton(IconButton button) {
-        actionsBar.addCustomButton(button);
-    }
-
-    public void removeCustomButton(IconButton button) {
-        actionsBar.removeCustomButton(button);
+    private void setActionImage(ActionType type, IconButtonImages images) {
+        actionsBar.setActionImage(type, images);
     }
 
     public ItemActionsBar getItemActionsBar() {
@@ -206,26 +207,26 @@ public abstract class CEntityFolderItem<E extends IEntity> extends CEntityContai
         });
         handlerRegistrations.add(handlerRegistration);
 
-        calculateActionsState();
-
-        addItemRemoveClickHandler(new ClickHandler() {
+        setActionCommand(ActionType.Remove, new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 folder.removeItem(CEntityFolderItem.this);
             }
         });
-        addRowUpClickHandler(new ClickHandler() {
+        setActionCommand(ActionType.Up, new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 folder.moveUpItem(CEntityFolderItem.this);
             }
         });
-        addRowDownClickHandler(new ClickHandler() {
+        setActionCommand(ActionType.Down, new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 folder.moveDownItem(CEntityFolderItem.this);
             }
         });
+
+        calculateActionsState();
 
     }
 
@@ -233,7 +234,7 @@ public abstract class CEntityFolderItem<E extends IEntity> extends CEntityContai
     protected void calculateActionsState() {
         boolean enabled = isEnabled() && isEditable();
         if (!enabled) {
-            actionsBar.setActionsState(false, false, false);
+            actionsBar.setDefaultActionsState(false, false, false);
         } else {
 
             CEntityFolder<E> parent = ((CEntityFolder<E>) getParent());
@@ -245,7 +246,7 @@ public abstract class CEntityFolderItem<E extends IEntity> extends CEntityContai
             CEntityFolderItem<?> previousSibling = parent.getItem(index - 1);
             CEntityFolderItem<?> nextSibling = parent.getItem(index + 1);
 
-            actionsBar.setActionsState(removable, movable && !first && previousSibling.isMovable(), movable && !last && nextSibling.isMovable());
+            actionsBar.setDefaultActionsState(removable, movable && !first && previousSibling.isMovable(), movable && !last && nextSibling.isMovable());
         }
 
     }

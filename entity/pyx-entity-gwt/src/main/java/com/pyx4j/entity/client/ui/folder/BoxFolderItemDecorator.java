@@ -172,7 +172,7 @@ public class BoxFolderItemDecorator<E extends IEntity> extends BaseFolderItemDec
 
     @Override
     public void setActionsState(boolean removable, boolean up, boolean down) {
-        getFolderItem().getItemActionsBar().setActionsState(removable, up, down);
+        getFolderItem().getItemActionsBar().setDefaultActionsState(removable, up, down);
     }
 
     @Override

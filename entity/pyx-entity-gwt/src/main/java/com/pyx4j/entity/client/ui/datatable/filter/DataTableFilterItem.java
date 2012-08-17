@@ -28,10 +28,9 @@ import java.util.Date;
 import java.util.EnumSet;
 import java.util.Iterator;
 
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.SimplePanel;
@@ -163,10 +162,10 @@ public class DataTableFilterItem<E extends IEntity> extends HorizontalPanel {
 
         setStyleName(DefaultDataTableTheme.StyleName.DataTableFilterItem.name());
 
-        Image btnDel = new IconButton(i18n.tr("Remove Filter"), EntityFolderImages.INSTANCE.delButton());
-        btnDel.addClickHandler(new ClickHandler() {
+        Image btnDel = new IconButton(i18n.tr("Remove Filter"), EntityFolderImages.INSTANCE.delButton(), new Command() {
+
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 parent.removeFilter(DataTableFilterItem.this);
             }
         });

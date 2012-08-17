@@ -21,6 +21,8 @@
 package com.pyx4j.widgets.client;
 
 import com.google.gwt.dom.client.Style.Cursor;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
 import com.google.gwt.event.dom.client.MouseOutEvent;
@@ -29,6 +31,8 @@ import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.event.dom.client.MouseUpEvent;
 import com.google.gwt.event.dom.client.MouseUpHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.Image;
 
 import com.pyx4j.widgets.client.images.IconButtonImages;
@@ -42,13 +46,20 @@ public class IconButton extends Image {
 
     private final String title;
 
+    private HandlerRegistration registration;
+
     public IconButton(String title) {
         this(title, null);
     }
 
     public IconButton(String title, final IconButtonImages images) {
+        this(title, images, null);
+    }
+
+    public IconButton(String title, final IconButtonImages images, final Command command) {
         this.title = title;
         setImages(images);
+        setCommand(command);
 
         addMouseOverHandler(new MouseOverHandler() {
             @Override
@@ -96,4 +107,17 @@ public class IconButton extends Image {
         }
     }
 
+    public void setCommand(final Command command) {
+        if (command != null) {
+            if (registration != null) {
+                registration.removeHandler();
+            }
+            registration = addClickHandler(new ClickHandler() {
+                @Override
+                public void onClick(ClickEvent event) {
+                    command.execute();
+                }
+            });
+        }
+    }
 }
