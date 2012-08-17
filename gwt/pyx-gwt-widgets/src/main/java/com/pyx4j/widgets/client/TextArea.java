@@ -26,6 +26,7 @@ public class TextArea extends com.google.gwt.user.client.ui.TextArea implements 
 
     public TextArea() {
         setStyleName(DefaultWidgetsTheme.StyleName.TextBox.name());
+        getElement().getStyle().setProperty("resize", "vertical");
     }
 
     @Override
