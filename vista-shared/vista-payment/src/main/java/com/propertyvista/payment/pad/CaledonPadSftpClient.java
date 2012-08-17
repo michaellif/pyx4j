@@ -15,6 +15,7 @@ package com.propertyvista.payment.pad;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Vector;
 
@@ -61,7 +62,7 @@ public class CaledonPadSftpClient {
     }
 
     private static boolean defaultUsePadSimulator() {
-        return (VistaSystemIdentification.production != VistaDeployment.getSystemIdentification());
+        return !EnumSet.of(VistaSystemIdentification.production, VistaSystemIdentification.staging).contains(VistaDeployment.getSystemIdentification());
     }
 
     public static boolean usePadSimulator() {
