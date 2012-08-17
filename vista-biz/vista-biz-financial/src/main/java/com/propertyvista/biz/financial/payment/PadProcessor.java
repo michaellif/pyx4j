@@ -253,6 +253,7 @@ public class PadProcessor {
         at.returnItemsCount().setValue(summary.returnItemsCount().getValue());
         at.netAmount().setValue(summary.netAmount().getValue());
         at.adjustments().setValue(summary.adjustments().getValue());
+        at.previousBalance().setValue(summary.previousBalance().getValue());
         at.merchantBalance().setValue(summary.merchantBalance().getValue());
         at.fundsReleased().setValue(summary.fundsReleased().getValue());
 

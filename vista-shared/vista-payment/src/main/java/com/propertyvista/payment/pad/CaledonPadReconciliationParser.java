@@ -102,6 +102,7 @@ public class CaledonPadReconciliationParser {
                 summary.returnItemsFee().setValue(CaledonPadUtils.parsAmount(values[v++]));
                 summary.netAmount().setValue(CaledonPadUtils.parsAmount(values[v++]));
                 summary.adjustments().setValue(CaledonPadUtils.parsAmount(values[v++]));
+                summary.previousBalance().setValue(CaledonPadUtils.parsAmount(values[v++]));
                 summary.merchantBalance().setValue(CaledonPadUtils.parsAmount(values[v++]));
                 summary.fundsReleased().setValue(CaledonPadUtils.parsAmount(values[v++]));
                 summary.reconciliationStatus().setValue(summary.reconciliationStatus().parse(values[v++]));

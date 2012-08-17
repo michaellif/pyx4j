@@ -85,6 +85,9 @@ public interface PadReconciliationSummary extends IEntity {
     IPrimitive<BigDecimal> adjustments();
 
     @Format("#0.00")
+    IPrimitive<BigDecimal> previousBalance();
+
+    @Format("#0.00")
     IPrimitive<BigDecimal> merchantBalance();
 
     @Format("#0.00")
