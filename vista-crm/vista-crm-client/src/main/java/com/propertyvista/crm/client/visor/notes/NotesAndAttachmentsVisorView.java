@@ -239,23 +239,28 @@ public class NotesAndAttachmentsVisorView extends ScrollPanel {
                     btnSave = new Button(i18n.tr("Save"), new ClickHandler() {
                         @Override
                         public void onClick(ClickEvent event) {
-                            if (getValue().created().getValue() == null) {
-                                CrmUser user = EntityFactory.create(CrmUser.class);
-                                user.setPrimaryKey(ClientContext.getUserVisit().getPrincipalPrimaryKey());
-                                user.name().setValue(ClientContext.getUserVisit().getName());
-                                getValue().user().set(user);
-                                getValue().created().setValue(new LogicalDate());
+                            if (!isValid()) {
+                                setUnconditionalValidationErrorRendering(true);
+                                MessageDialog.error(i18n.tr("Error"), getValidationResults().getMessagesText(true, true));
                             } else {
-                                getValue().updated().setValue(new LogicalDate());
-                            }
-                            getController().save(getValue(), new DefaultAsyncCallback<Key>() {
-                                @Override
-                                public void onSuccess(Key result) {
-                                    getValue().setPrimaryKey(result);
-                                    setViewableMode(true);
-                                    refresh(false);
+                                if (getValue().created().getValue() == null) {
+                                    CrmUser user = EntityFactory.create(CrmUser.class);
+                                    user.setPrimaryKey(ClientContext.getUserVisit().getPrincipalPrimaryKey());
+                                    user.name().setValue(ClientContext.getUserVisit().getName());
+                                    getValue().user().set(user);
+                                    getValue().created().setValue(new LogicalDate());
+                                } else {
+                                    getValue().updated().setValue(new LogicalDate());
                                 }
-                            });
+                                getController().save(getValue(), new DefaultAsyncCallback<Key>() {
+                                    @Override
+                                    public void onSuccess(Key result) {
+                                        getValue().setPrimaryKey(result);
+                                        setViewableMode(true);
+                                        refresh(false);
+                                    }
+                                });
+                            }
                         }
                     });
 
@@ -265,11 +270,9 @@ public class NotesAndAttachmentsVisorView extends ScrollPanel {
                     btnCancel = new AnchorButton(i18n.tr("Cancel"), new ClickHandler() {
                         @Override
                         public void onClick(ClickEvent event) {
-//                            getPresenter().cancel();
-
-                            if (getValue().isEmpty())
+                            if (getValue().getPrimaryKey() == null) {
                                 ((NotesAndAttachmentsFolder) getParent().getParent()).removeItem((CEntityFolderItem<NotesAndAttachments>) getParent());
-                            else {
+                            } else {
                                 MessageDialog.confirm(i18n.tr("Confirm"),
                                         i18n.tr("Are you sure you want to cancel your changes?\n\nPress Yes to continue, or No to stay on the current page."),
                                         new Command() {
