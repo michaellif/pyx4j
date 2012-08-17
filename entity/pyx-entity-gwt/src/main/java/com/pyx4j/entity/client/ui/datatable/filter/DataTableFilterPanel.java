@@ -44,6 +44,7 @@ import com.pyx4j.entity.client.ui.datatable.DataTablePanel;
 import com.pyx4j.entity.client.ui.datatable.DefaultDataTableTheme;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.Criterion;
+import com.pyx4j.gwt.commons.FocusUtil;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.IconButton;
@@ -136,7 +137,8 @@ public class DataTableFilterPanel<E extends IEntity> extends DockPanel {
                     handlerRegistration = Event.addNativePreviewHandler(new NativePreviewHandler() {
                         @Override
                         public void onPreviewNativeEvent(NativePreviewEvent event) {
-                            if (event.getTypeInt() == Event.ONKEYUP && (event.getNativeEvent().getKeyCode() == KeyCodes.KEY_ENTER)) {
+                            if (event.getTypeInt() == Event.ONKEYUP && (event.getNativeEvent().getKeyCode() == KeyCodes.KEY_ENTER)
+                                    && FocusUtil.hasActiveElement(DataTableFilterPanel.this.getElement())) {
                                 apply();
                             }
                         }
