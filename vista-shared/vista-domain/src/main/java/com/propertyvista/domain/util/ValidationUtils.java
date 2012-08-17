@@ -46,4 +46,31 @@ public class ValidationUtils extends com.pyx4j.commons.ValidationUtils {
         return num.matches("^\\d{13,19}$") && isLuhnValid(num);
     }
 
+    public static boolean isCreditCardNumberIinValid(String[] iinPatterns, String ccNumber) {
+        if (ccNumber == null | iinPatterns == null) {
+            return false;
+        } else {
+            ccNumber = ccNumber.trim().replaceAll("\\s", "");
+            for (String pattern : iinPatterns) {
+                int prefixStart;
+                int prefixEnd;
+                if (pattern.contains("-")) {
+                    String[] startAndEnd = pattern.split("-");
+                    prefixStart = Integer.parseInt(startAndEnd[0]);
+                    prefixEnd = Integer.parseInt(startAndEnd[1]);
+                } else {
+                    prefixStart = Integer.parseInt(pattern);
+                    prefixEnd = prefixStart;
+                }
+
+                for (int prefix = prefixStart; prefix <= prefixEnd; ++prefix) {
+                    if (ccNumber.startsWith(String.valueOf(prefix))) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+    }
+
 }

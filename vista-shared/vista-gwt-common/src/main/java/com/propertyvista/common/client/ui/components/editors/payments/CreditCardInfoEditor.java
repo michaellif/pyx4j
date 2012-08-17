@@ -26,13 +26,16 @@ import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CMonthYearPicker;
 import com.pyx4j.forms.client.ui.CTextComponent;
+import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
+import com.propertyvista.common.client.ui.components.editors.payments.CreditCardNumberTypeValidator.CreditCardTypeProvider;
 import com.propertyvista.common.client.ui.validators.CreditCardNumberValidator;
 import com.propertyvista.common.client.ui.validators.FutureDateValidator;
 import com.propertyvista.domain.payment.CreditCardInfo;
+import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 
 public class CreditCardInfoEditor extends CEntityDecoratableForm<CreditCardInfo> {
 
@@ -108,6 +111,15 @@ public class CreditCardInfoEditor extends CEntityDecoratableForm<CreditCardInfo>
         });
 
         get(proto().number()).addValueValidator(new CreditCardNumberValidator());
+        get(proto().number()).addValueValidator(new CreditCardNumberTypeValidator(new CreditCardTypeProvider() {
+            @Override
+            public CreditCardType getCreditCardType() {
+                return CreditCardInfoEditor.this.getValue().cardType().getValue();
+            }
+        }));
+        get(proto().cardType()).addValueChangeHandler(new RevalidationTrigger<CreditCardType>(get(proto().number())));
+
         get(proto().expiryDate()).addValueValidator(new FutureDateValidator());
+
     }
 }

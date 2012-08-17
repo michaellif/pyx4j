@@ -35,20 +35,28 @@ public interface CreditCardInfo extends PaymentDetails {
 
     public enum CreditCardType {
 
-        Visa,
+        Visa("4"),
 
         @Translate("MasterCard")
-        MasterCard,
+        MasterCard("51", "52", "53", "54", "55"),
 
-        Discover;
+        Discover("6011", "622126-622925", "644-649", "65");
 
-//        @Translate("American Express")
-//        Amex;
+//      @Translate("American Express")
+//      Amex;
+
+        /** pattern of prefix (IIN - Issuer Identification Number), can be either number or range i.e. "55-689" */
+        public final String[] iinsPatterns;
+
+        CreditCardType(String... iinsPatterns) {
+            this.iinsPatterns = iinsPatterns;
+        }
 
         @Override
         public String toString() {
             return I18nEnum.toString(this);
         }
+
     }
 
     @NotNull
