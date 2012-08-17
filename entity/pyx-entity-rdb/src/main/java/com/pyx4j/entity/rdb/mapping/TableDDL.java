@@ -166,7 +166,7 @@ class TableDDL {
             sql.append(dialect.getNamingConvention().sqlNameSpaceColumnName());
         }
         sql.append(") REFERENCES ");
-        sql.append(tableTo);
+        sql.append(getFullTableName(dialect, tableTo));
         sql.append("(").append(dialect.getNamingConvention().sqlIdColumnName());
         if (dialect.isMultitenantSharedSchema() && NS_PART_OF_PK) {
             sql.append(", ");
