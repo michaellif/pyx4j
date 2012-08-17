@@ -131,7 +131,7 @@ public class ItemActionsBar extends HorizontalPanel {
     }
 
     public void setButtonVisible(ActionType type, boolean show) {
-        if (actions.containsValue(type)) {
+        if (actions.containsKey(type)) {
             actions.get(type).setVisible(show);
         }
     }
