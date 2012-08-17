@@ -101,6 +101,10 @@ public class NotesAndAttachmentsVisorController implements IVisorController {
     }
 
     public void remove(NotesAndAttachments item, DefaultAsyncCallback<Boolean> callback) {
-        getService().delete(callback, item.getPrimaryKey());
+        if (item.isNull() || item.getPrimaryKey() == null) {
+            callback.onSuccess(true);
+        } else {
+            getService().delete(callback, item.getPrimaryKey());
+        }
     }
 }

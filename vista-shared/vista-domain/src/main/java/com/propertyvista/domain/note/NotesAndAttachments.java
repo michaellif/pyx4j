@@ -21,6 +21,8 @@ import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Timestamp;
+import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
@@ -28,12 +30,14 @@ import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.security.CrmUser;
 
+@ToStringFormat("\"{0}\", by {1}; last modified {2}")
 public interface NotesAndAttachments extends IEntity {
 
     NotesAndAttachmentsNode parent();
 
     @NotNull
     @Length(128)
+    @ToString(index = 0)
     IPrimitive<String> subject();
 
     @Length(20845)
@@ -43,10 +47,12 @@ public interface NotesAndAttachments extends IEntity {
     @Owned
     IList<NoteAttachment> attachments();
 
+    @ToString(index = 1)
     @MemberColumn(name = "crmuser")
     @ReadOnly
     CrmUser user();
 
+    @ToString(index = 2)
     @Caption(name = "Last Updated")
     @Timestamp
     IPrimitive<LogicalDate> updated();

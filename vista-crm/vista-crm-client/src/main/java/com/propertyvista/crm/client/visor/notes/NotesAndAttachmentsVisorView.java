@@ -23,6 +23,7 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.client.ui.folder.BoxFolderDecorator;
+import com.pyx4j.entity.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.entity.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.entity.client.ui.folder.IFolderDecorator;
 import com.pyx4j.entity.client.ui.folder.IFolderItemDecorator;
@@ -134,6 +135,12 @@ public class NotesAndAttachmentsVisorView extends ScrollPanel {
                             public void onPropertyChange(PropertyChangeEvent event) {
                                 if (event.getPropertyName() == PropertyName.viewable) {
                                     folderItem.getItemActionsBar().setVisible(editor.isViewable());
+                                    if (editor.isViewable()) {
+                                        CComponent<?, ?> text = editor.get(editor.proto().note());
+                                        if (text != null) {
+                                            text.asWidget().getElement().getStyle().setProperty("whiteSpace", "pre");
+                                        }
+                                    }
                                 }
                             }
                         });
@@ -146,9 +153,11 @@ public class NotesAndAttachmentsVisorView extends ScrollPanel {
                 final CEntityFolderItem<NotesAndAttachments> item = super.createItem(first);
                 IconButton button = new IconButton(i18n.tr("Edit Note"), CrmImages.INSTANCE.editButton());
                 button.addClickHandler(new ClickHandler() {
+                    @SuppressWarnings("unchecked")
                     @Override
                     public void onClick(ClickEvent event) {
                         item.setViewable(false);
+                        ((BoxFolderItemDecorator<NotesAndAttachments>) item.getDecorator()).setExpended(true);
                         ((NoteEditor) item.getComponents().toArray()[0]).setViewableMode(false);
                     }
                 });
@@ -163,16 +172,12 @@ public class NotesAndAttachmentsVisorView extends ScrollPanel {
                 Dialog confirm = new OkCancelDialog(i18n.tr("Delete Note")) {
                     @Override
                     public boolean onClickOk() {
-                        if (item.getValue().isNull() || item.getValue().getPrimaryKey() == null) {
-                            NotesAndAttachmentsFolder.super.removeItem(item);
-                        } else {
-                            controller.remove(item.getValue(), new DefaultAsyncCallback<Boolean>() {
-                                @Override
-                                public void onSuccess(Boolean result) {
-                                    NotesAndAttachmentsFolder.super.removeItem(item);
-                                }
-                            });
-                        }
+                        controller.remove(item.getValue(), new DefaultAsyncCallback<Boolean>() {
+                            @Override
+                            public void onSuccess(Boolean result) {
+                                NotesAndAttachmentsFolder.super.removeItem(item);
+                            }
+                        });
                         return true;
                     }
                 };
@@ -202,8 +207,11 @@ public class NotesAndAttachmentsVisorView extends ScrollPanel {
                     FormFlexPanel content = new FormFlexPanel();
                     int row = -1;
 
-                    content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().subject())).build());
-                    content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().note())).build());
+                    content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().subject())).componentWidth(40).build());
+                    content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().note())).componentWidth(40).build());
+                    if (isViewable()) {
+                        get(proto().note()).asWidget().getElement().getStyle().setProperty("whiteSpace", "pre");
+                    }
 
                     CComponent<?, ?> comp = inject(proto().created());
                     comp.inheritViewable(false);
@@ -240,6 +248,7 @@ public class NotesAndAttachmentsVisorView extends ScrollPanel {
                                 public void onSuccess(Key result) {
                                     getValue().setPrimaryKey(result);
                                     setViewableMode(true);
+                                    refresh(false);
                                 }
                             });
                         }
