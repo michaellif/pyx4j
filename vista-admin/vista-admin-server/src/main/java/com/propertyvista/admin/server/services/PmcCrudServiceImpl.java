@@ -13,8 +13,6 @@
  */
 package com.propertyvista.admin.server.services;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -26,14 +24,15 @@ import com.pyx4j.entity.cache.CacheService;
 import com.pyx4j.entity.security.EntityPermission;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.essentials.server.deferred.DeferredProcessRegistry;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.server.contexts.Context;
 import com.pyx4j.server.contexts.NamespaceManager;
 
-import com.propertyvista.admin.domain.pmc.OnboardingMerchantAccount;
 import com.propertyvista.admin.domain.pmc.Pmc;
 import com.propertyvista.admin.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.admin.domain.pmc.PmcDnsName;
@@ -42,12 +41,12 @@ import com.propertyvista.admin.rpc.PmcDTO;
 import com.propertyvista.admin.rpc.services.PmcCrudService;
 import com.propertyvista.admin.server.onboarding.PmcNameValidator;
 import com.propertyvista.biz.system.AuditFacade;
+import com.propertyvista.biz.system.PmcActivationDeferredProcess;
 import com.propertyvista.biz.system.PmcFacade;
+import com.propertyvista.config.ThreadPoolNames;
 import com.propertyvista.config.VistaDeployment;
-import com.propertyvista.domain.security.OnboardingUser;
 import com.propertyvista.domain.security.VistaBasicBehavior;
 import com.propertyvista.domain.security.VistaOnboardingBehavior;
-import com.propertyvista.portal.server.preloader.PmcCreator;
 import com.propertyvista.preloader.OnboardingUserPreloader;
 
 public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> implements PmcCrudService {
@@ -98,18 +97,19 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
             throw new UserRuntimeException("PMC DNS name is reserved of forbidden");
         }
         super.create(entity, dto);
-        
+
         OnboardingUserCredential cred;
         if (dto.createPmcForExistingOnboardingUserRequest().isNull()) {
-	        cred = OnboardingUserPreloader.createOnboardingUser(dto.person().name().firstName().getValue(), dto.person().name().lastName()
-	                .getValue(), dto.email().getValue(), dto.password().getValue(), VistaOnboardingBehavior.ProspectiveClient, null);
-	                	        
+            cred = OnboardingUserPreloader.createOnboardingUser(dto.person().name().firstName().getValue(), dto.person().name().lastName().getValue(), dto
+                    .email().getValue(), dto.password().getValue(), VistaOnboardingBehavior.ProspectiveClient, null);
+
         } else {
         	EntityQueryCriteria<OnboardingUserCredential> criteria = EntityQueryCriteria.create(OnboardingUserCredential.class);
-        	criteria.add(PropertyCriterion.eq(criteria.proto().user(), dto.createPmcForExistingOnboardingUserRequest()));        	
+            criteria.add(PropertyCriterion.eq(criteria.proto().user(), dto.createPmcForExistingOnboardingUserRequest()));
         	cred = Persistence.service().retrieve(criteria);
         	if (cred == null) {
-        		throw new UserRuntimeException("failed to create PMC because existing onboarding user with key = '" + dto.createPmcForExistingOnboardingUserRequest().getPrimaryKey() + "' was not found");        		
+                throw new UserRuntimeException("failed to create PMC because existing onboarding user with key = '"
+                        + dto.createPmcForExistingOnboardingUserRequest().getPrimaryKey() + "' was not found");
         	}
         }
         cred.pmc().set(entity);
@@ -130,54 +130,11 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
     }
 
     @Override
-    public void activate(AsyncCallback<PmcDTO> callback, Key entityId) {
+    public void activate(AsyncCallback<String> callback, Key entityId) {
         SecurityController.assertPermission(EntityPermission.permissionUpdate(Pmc.class));
-        Pmc pmc = Persistence.service().retrieve(entityClass, entityId);
-
-        if (pmc.status().getValue() == PmcStatus.Created) // First time create preload
-        {
-            EntityQueryCriteria<OnboardingUserCredential> credentialCrt = EntityQueryCriteria.create(OnboardingUserCredential.class);
-            credentialCrt.add(PropertyCriterion.eq(credentialCrt.proto().pmc(), pmc));
-            List<OnboardingUserCredential> creds = Persistence.service().query(credentialCrt);
-
-            if (creds.size() == 0) {
-                throw new UserRuntimeException("No users for PMC " + pmc.name().getValue());
+        callback.onSuccess(DeferredProcessRegistry.fork(new PmcActivationDeferredProcess(EntityFactory.createIdentityStub(Pmc.class, entityId)),
+                ThreadPoolNames.IMPORTS));
             }
-
-            OnboardingUserCredential onbUserCred = creds.get(0);
-
-            OnboardingUser onbUser = Persistence.service().retrieve(OnboardingUser.class, onbUserCred.user().getPrimaryKey());
-
-            List<OnboardingMerchantAccount> onbMrchAccs;
-            if (pmc.onboardingAccountId().getValue() != null) {
-                EntityQueryCriteria<OnboardingMerchantAccount> onbMrchAccCrt = EntityQueryCriteria.create(OnboardingMerchantAccount.class);
-                onbMrchAccCrt.add(PropertyCriterion.eq(onbMrchAccCrt.proto().onboardingAccountId(), pmc.onboardingAccountId().getValue()));
-                onbMrchAccs = Persistence.service().query(onbMrchAccCrt);
-            } else {
-                onbMrchAccs = new ArrayList<OnboardingMerchantAccount>();
-            }
-
-            try {
-                Persistence.service().startBackgroundProcessTransaction();
-                PmcCreator.preloadPmc(pmc, onbUser, onbUserCred, onbMrchAccs);
-                pmc.status().setValue(PmcStatus.Active);
-                Persistence.service().persist(pmc);
-                onbUserCred.behavior().setValue(VistaOnboardingBehavior.Client);
-                Persistence.service().persist(onbUserCred);
-                Persistence.service().persist(onbMrchAccs);
-
-                Persistence.service().commit();
-            } finally {
-                Persistence.service().endTransaction();
-            }
-        } else {
-            pmc.status().setValue(PmcStatus.Active);
-            Persistence.service().persist(pmc);
-            Persistence.service().commit();
-        }
-        CacheService.reset();
-        super.retrieve(callback, entityId, RetrieveTraget.View);
-    }
 
     @Override
     public void suspend(AsyncCallback<PmcDTO> callback, Key entityId) {

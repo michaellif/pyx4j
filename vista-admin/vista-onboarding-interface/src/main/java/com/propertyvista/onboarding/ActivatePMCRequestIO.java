@@ -14,17 +14,10 @@
 package com.propertyvista.onboarding;
 
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.annotations.validator.NotNull;
-import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
 @Transient
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
-// This is not implemented
-@Deprecated
-public interface ActivatePMCRequestIO extends ProvisionPMCRequestIO {
-
-    @NotNull
-    IPrimitive<String> country();
+public interface ActivatePMCRequestIO extends RequestIO {
 
 }

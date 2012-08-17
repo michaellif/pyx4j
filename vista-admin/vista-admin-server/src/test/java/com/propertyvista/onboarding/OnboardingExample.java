@@ -43,8 +43,6 @@ import com.pyx4j.gwt.server.DateUtils;
 import com.pyx4j.gwt.server.IOUtils;
 
 import com.propertyvista.interfaces.importer.xml.ImportXMLEntityNamingConvention;
-import com.propertyvista.onboarding.ProvisionPMCRequestIO.VistaFeature;
-import com.propertyvista.onboarding.ProvisionPMCRequestIO.VistaLicense;
 import com.propertyvista.onboarding.payment.CreditCardPaymentInstrumentIO;
 import com.propertyvista.onboarding.payment.PaymentRequestIO;
 
@@ -114,9 +112,6 @@ public class OnboardingExample {
             cnt++;
             ActivatePMCRequestIO r = EntityFactory.create(ActivatePMCRequestIO.class);
             r.onboardingAccountId().setValue("star");
-            r.country().setValue("Canada");
-            r.license().setValue(VistaLicense.Unlimited);
-            r.feature().setValue(VistaFeature.tbd1);
             writeXML(createExampleRequest(r), cnt + "-request-Activate.xml");
             writeXML(createExampleResponse(), cnt + "-response-Activate.xml");
         }

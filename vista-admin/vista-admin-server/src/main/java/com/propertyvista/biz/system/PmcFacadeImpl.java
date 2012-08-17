@@ -13,9 +13,13 @@
  */
 package com.propertyvista.biz.system;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.EnumSet;
+import java.util.List;
 
+import com.pyx4j.commons.UserRuntimeException;
+import com.pyx4j.entity.cache.CacheService;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -28,6 +32,9 @@ import com.propertyvista.admin.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.admin.domain.pmc.ReservedPmcNames;
 import com.propertyvista.admin.domain.security.OnboardingUserCredential;
 import com.propertyvista.admin.server.onboarding.PmcNameValidator;
+import com.propertyvista.domain.security.OnboardingUser;
+import com.propertyvista.domain.security.VistaOnboardingBehavior;
+import com.propertyvista.portal.server.preloader.PmcCreator;
 
 public class PmcFacadeImpl implements PmcFacade {
 
@@ -111,4 +118,50 @@ public class PmcFacadeImpl implements PmcFacade {
             return true;
         }
     }
+    @Override
+    public void activatePmc(Pmc pmcId) {
+        Pmc pmc = Persistence.service().retrieve(Pmc.class, pmcId.getPrimaryKey());
+        // First time create preload
+        if (pmc.status().getValue() == PmcStatus.Created) {
+            EntityQueryCriteria<OnboardingUserCredential> credentialCrt = EntityQueryCriteria.create(OnboardingUserCredential.class);
+            credentialCrt.add(PropertyCriterion.eq(credentialCrt.proto().pmc(), pmc));
+            List<OnboardingUserCredential> creds = Persistence.service().query(credentialCrt);
+
+            if (creds.size() == 0) {
+                throw new UserRuntimeException("No users for PMC " + pmc.name().getValue());
+            }
+
+            OnboardingUserCredential onbUserCred = creds.get(0);
+
+            OnboardingUser onbUser = Persistence.service().retrieve(OnboardingUser.class, onbUserCred.user().getPrimaryKey());
+
+            List<OnboardingMerchantAccount> onbMrchAccs;
+            if (pmc.onboardingAccountId().getValue() != null) {
+                EntityQueryCriteria<OnboardingMerchantAccount> onbMrchAccCrt = EntityQueryCriteria.create(OnboardingMerchantAccount.class);
+                onbMrchAccCrt.add(PropertyCriterion.eq(onbMrchAccCrt.proto().onboardingAccountId(), pmc.onboardingAccountId().getValue()));
+                onbMrchAccs = Persistence.service().query(onbMrchAccCrt);
+            } else {
+                onbMrchAccs = new ArrayList<OnboardingMerchantAccount>();
+            }
+            try {
+                Persistence.service().startBackgroundProcessTransaction();
+                PmcCreator.preloadPmc(pmc, onbUser, onbUserCred, onbMrchAccs);
+                pmc.status().setValue(PmcStatus.Active);
+                Persistence.service().persist(pmc);
+                onbUserCred.behavior().setValue(VistaOnboardingBehavior.Client);
+                Persistence.service().persist(onbUserCred);
+                Persistence.service().persist(onbMrchAccs);
+
+                Persistence.service().commit();
+            } finally {
+                Persistence.service().endTransaction();
+            }
+        } else {
+            pmc.status().setValue(PmcStatus.Active);
+            Persistence.service().persist(pmc);
+            Persistence.service().commit();
+        }
+        CacheService.reset();
+    }
+
 }

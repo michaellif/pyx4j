@@ -17,6 +17,9 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Window;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.essentials.client.DeferredProcessDialog;
+import com.pyx4j.essentials.rpc.deferred.DeferredProcessProgressResponse;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.rpc.CrudAppPlace;
@@ -28,6 +31,8 @@ import com.propertyvista.admin.rpc.PmcDTO;
 import com.propertyvista.admin.rpc.services.PmcCrudService;
 
 public class PmcViewerActivity extends AdminViewerActivity<PmcDTO> implements PmcViewerView.Presenter {
+
+    private static final I18n i18n = I18n.get(PmcViewerActivity.class);
 
     @SuppressWarnings("unchecked")
     public PmcViewerActivity(CrudAppPlace place) {
@@ -48,11 +53,19 @@ public class PmcViewerActivity extends AdminViewerActivity<PmcDTO> implements Pm
 
     @Override
     public void activate() {
-        ((PmcCrudService) getService()).activate(new DefaultAsyncCallback<PmcDTO>() {
+        ((PmcCrudService) getService()).activate(new DefaultAsyncCallback<String>() {
 
             @Override
-            public void onSuccess(PmcDTO result) {
-                populateView(result);
+            public void onSuccess(String deferredCorrelationId) {
+                DeferredProcessDialog d = new DeferredProcessDialog(i18n.tr("PMC Activation"), i18n.tr("Activating PMC ..."), false) {
+                    @Override
+                    public void onDeferredSuccess(DeferredProcessProgressResponse result) {
+                        super.onDeferredSuccess(result);
+                        PmcViewerActivity.this.refresh();
+            }
+                };
+                d.show();
+                d.startProgress(deferredCorrelationId);
             }
         }, getEntityId());
 
