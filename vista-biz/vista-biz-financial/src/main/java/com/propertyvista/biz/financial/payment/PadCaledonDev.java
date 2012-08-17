@@ -33,7 +33,7 @@ public class PadCaledonDev {
         return new File(".", "caledon_file_creation_number.properties");
     }
 
-    static Properties getProperties(File file) {
+    private static Properties getProperties(File file) {
         Properties props = new Properties();
         FileInputStream is = null;
         try {

@@ -19,7 +19,6 @@ import java.util.concurrent.Callable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
@@ -108,14 +107,15 @@ public class PadProcessor {
         padRecord.branchTransitNumber().setValue(echeckInfo.branchTransitNumber().getValue());
         padRecord.accountNumber().setValue(echeckInfo.accountNo().getValue());
 
-        padRecord.transactionId().setValue(paymentRecord.id().getStringView());
+        padRecord.transactionId().setValue(PadTransactionUtils.toCaldeonTransactionId(paymentRecord.id()));
 
         Persistence.service().persist(padRecord);
 
     }
 
     public void acknowledgmentReject(final PadDebitRecord debitRecord) {
-        PaymentRecord paymentRecord = Persistence.service().retrieve(PaymentRecord.class, new Key(debitRecord.transactionId().getValue()));
+        PaymentRecord paymentRecord = Persistence.service().retrieve(PaymentRecord.class,
+                PadTransactionUtils.toVistaPaymentRecordId(debitRecord.transactionId()));
         if (!EnumSet.of(PaymentRecord.PaymentStatus.Processing, PaymentRecord.PaymentStatus.Received).contains(paymentRecord.paymentStatus().getValue())) {
             throw new Error("Processed payment can't be rejected");
         }
@@ -198,7 +198,8 @@ public class PadProcessor {
         Persistence.service().persist(at);
 
         for (PadDebitRecord debitRecord : padBatch.records()) {
-            PaymentRecord paymentRecord = Persistence.service().retrieve(PaymentRecord.class, new Key(debitRecord.transactionId().getValue()));
+            PaymentRecord paymentRecord = Persistence.service().retrieve(PaymentRecord.class,
+                    PadTransactionUtils.toVistaPaymentRecordId(debitRecord.transactionId()));
             if (paymentRecord == null) {
                 throw new Error("Payment transaction '" + debitRecord.transactionId().getValue() + "' not found");
             }
@@ -268,7 +269,8 @@ public class PadProcessor {
         Persistence.service().persist(at);
 
         for (final PadReconciliationDebitRecord debitRecord : summary.records()) {
-            PaymentRecord paymentRecord = Persistence.service().retrieve(PaymentRecord.class, new Key(debitRecord.transactionId().getValue()));
+            PaymentRecord paymentRecord = Persistence.service().retrieve(PaymentRecord.class,
+                    PadTransactionUtils.toVistaPaymentRecordId(debitRecord.transactionId()));
             if (paymentRecord == null) {
                 throw new Error("Payment transaction '" + debitRecord.transactionId().getValue() + "' not found");
             }
@@ -287,7 +289,6 @@ public class PadProcessor {
                     EntityQueryCriteria<PadDebitRecord> criteria = EntityQueryCriteria.create(PadDebitRecord.class);
                     criteria.add(PropertyCriterion.eq(criteria.proto().transactionId(), debitRecord.transactionId()));
                     criteria.add(PropertyCriterion.eq(criteria.proto().padBatch().pmcNamespace(), namespace));
-                    criteria.add(PropertyCriterion.eq(criteria.proto().processed(), Boolean.FALSE));
                     return Persistence.service().retrieve(criteria);
                 }
             });
@@ -297,9 +298,15 @@ public class PadProcessor {
 
             switch (debitRecord.reconciliationStatus().getValue()) {
             case PROCESSED:
+                if (padDebitRecord.processed().getValue(Boolean.FALSE)) {
+                    throw new Error("Payment PAD transaction '" + debitRecord.transactionId().getValue() + "' already received");
+                }
                 reconciliationClearedPayment(at, debitRecord, paymentRecord);
                 break;
             case REJECTED:
+                if (padDebitRecord.processed().getValue(Boolean.FALSE)) {
+                    throw new Error("Payment PAD transaction '" + debitRecord.transactionId().getValue() + "' already received");
+                }
                 reconciliationRejectPayment(at, debitRecord, paymentRecord);
                 break;
             case RETURNED:
