@@ -14,7 +14,9 @@
 package com.propertyvista.crm.client.activity.crud.lease.common;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.AbstractCrudService.RetrieveTraget;
@@ -58,39 +60,16 @@ public class LeaseTermEditorActivity extends EditorActivityBase<LeaseTermDTO> im
     }
 
     @Override
-    public void setSelectedUnit(AptUnit item) {
-        ((LeaseTermCrudService) getService()).setSelectedUnit(new DefaultAsyncCallback<LeaseTermDTO>() {
-            @Override
-            public void onSuccess(LeaseTermDTO result) {
-                ((LeaseTermEditorView) getView()).updateUnitValue(result);
+    public void start(AcceptsOneWidget panel, EventBus eventBus) {
+        super.start(panel, eventBus);
+
+        // if new Entity - set pre-selected unit if supplied: 
+        if (isNewEntity() && getPlace().getNewItem() != null) {
+            AptUnit unit = ((LeaseTermDTO) getPlace().getNewItem()).lease().unit();
+            if (!unit.isNull()) {
+                setSelectedUnit(unit);
             }
-        }, EntityFactory.createIdentityStub(AptUnit.class, item.getPrimaryKey()), getView().getValue());
-    }
-
-    @Override
-    public void setSelectedService(ProductItem item) {
-        ((LeaseTermCrudService) getService()).setSelectedService(new DefaultAsyncCallback<LeaseTermDTO>() {
-            @Override
-            public void onSuccess(LeaseTermDTO result) {
-                ((LeaseTermEditorView) getView()).updateServiceValue(result);
-            }
-        }, EntityFactory.createIdentityStub(ProductItem.class, item.getPrimaryKey()), getView().getValue());
-    }
-
-    @Override
-    public void createBillableItem(AsyncCallback<BillableItem> callback, ProductItem item) {
-        ((LeaseTermCrudService) getService()).createBillableItem(callback, EntityFactory.createIdentityStub(ProductItem.class, item.getPrimaryKey()), getView()
-                .getValue());
-    }
-
-    @Override
-    public void createDeposit(AsyncCallback<Deposit> callback, DepositType depositType, BillableItem item) {
-        ((LeaseTermCrudService) getService()).createDeposit(callback, depositType, item, getView().getValue());
-    }
-
-    @Override
-    public ReturnBehaviour getReturnBehaviour() {
-        return returnBehaviour;
+        }
     }
 
     @Override
@@ -125,5 +104,41 @@ public class LeaseTermEditorActivity extends EditorActivityBase<LeaseTermDTO> im
         } else {
             super.goToViewer(entityID);
         }
+    }
+
+    @Override
+    public void setSelectedUnit(AptUnit item) {
+        ((LeaseTermCrudService) getService()).setSelectedUnit(new DefaultAsyncCallback<LeaseTermDTO>() {
+            @Override
+            public void onSuccess(LeaseTermDTO result) {
+                ((LeaseTermEditorView) getView()).updateUnitValue(result);
+            }
+        }, EntityFactory.createIdentityStub(AptUnit.class, item.getPrimaryKey()), getView().getValue());
+    }
+
+    @Override
+    public void setSelectedService(ProductItem item) {
+        ((LeaseTermCrudService) getService()).setSelectedService(new DefaultAsyncCallback<LeaseTermDTO>() {
+            @Override
+            public void onSuccess(LeaseTermDTO result) {
+                ((LeaseTermEditorView) getView()).updateServiceValue(result);
+            }
+        }, EntityFactory.createIdentityStub(ProductItem.class, item.getPrimaryKey()), getView().getValue());
+    }
+
+    @Override
+    public void createBillableItem(AsyncCallback<BillableItem> callback, ProductItem item) {
+        ((LeaseTermCrudService) getService()).createBillableItem(callback, EntityFactory.createIdentityStub(ProductItem.class, item.getPrimaryKey()), getView()
+                .getValue());
+    }
+
+    @Override
+    public void createDeposit(AsyncCallback<Deposit> callback, DepositType depositType, BillableItem item) {
+        ((LeaseTermCrudService) getService()).createDeposit(callback, depositType, item, getView().getValue());
+    }
+
+    @Override
+    public ReturnBehaviour getReturnBehaviour() {
+        return returnBehaviour;
     }
 }

@@ -67,7 +67,7 @@ public interface OccupancyFacade {
 
     /**
      * Converts {@link Status#pending} to {@link Status#available} from now to the future (the past part of the vacant segment stays vacant). At most one
-     * vacant/availble segment can be present in the present to future timeline.
+     * vacant/available segment can be present in the present to future timeline.
      */
     void scopeAvailable(Key unitId);
 

@@ -34,7 +34,6 @@ public interface UnitViewerView extends IViewerView<AptUnitDTO> {
         void scopeAvailable();
 
         void makeVacant(LogicalDate vacantFrom);
-
     }
 
     IListerView<AptUnitItem> getUnitItemsListerView();
@@ -48,5 +47,4 @@ public interface UnitViewerView extends IViewerView<AptUnitDTO> {
     void setMinRenovationEndDate(LogicalDate minRenovationEndDate);
 
     void setMakeVacantConstraints(MakeVacantConstraintsDTO minMakeVacantStartDay);
-
 }

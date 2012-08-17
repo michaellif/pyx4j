@@ -42,7 +42,7 @@ public class ScopeDialog extends OkCancelDialog {
     private final Presenter presenter;
 
     public ScopeDialog(Presenter presenter, final boolean canScopeAvailable, final boolean canScopeOffMarket, final LogicalDate minRenoEndDay) {
-        super(i18n.tr("Scoping Result"));
+        super(i18n.tr("Scoping"));
         this.presenter = presenter;
 
         form = new CEntityDecoratableForm<ScopingResultDTO>(ScopingResultDTO.class) {
