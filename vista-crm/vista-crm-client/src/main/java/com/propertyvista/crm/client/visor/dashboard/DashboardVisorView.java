@@ -23,15 +23,13 @@ import com.google.gwt.user.client.ui.Composite;
 
 import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEvent;
 import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEventHandler;
-import com.propertyvista.crm.client.ui.gadgets.common.Directory;
 import com.propertyvista.crm.client.ui.gadgets.common.IGadgetInstance;
 import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.AbstractDashboard;
+import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.BuildingGadgetDirectory;
 import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.DashboardLayoutManager;
 import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.IBuildingFilterContainer;
 import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.ICommonGadgetSettingsContainer;
-import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.IGadgetDirectory;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
-import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
 import com.propertyvista.domain.property.asset.building.Building;
 
 public class DashboardVisorView extends Composite {
@@ -68,12 +66,7 @@ public class DashboardVisorView extends Composite {
 
                 });
             }
-        }, new IGadgetDirectory() {
-            @Override
-            public IGadgetInstance createGadgetInstance(GadgetMetadata gmd) {
-                return Directory.createGadget(gmd);
-            }
-        }, new DashboardLayoutManager()) {
+        }, new BuildingGadgetDirectory(), new DashboardLayoutManager()) {
 
             @Override
             protected void onDashboardMetadataChanged() {

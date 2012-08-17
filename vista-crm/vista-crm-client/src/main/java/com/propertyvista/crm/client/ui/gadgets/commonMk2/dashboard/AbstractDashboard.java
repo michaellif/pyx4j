@@ -43,6 +43,7 @@ import com.pyx4j.widgets.client.dashboard.IGadgetIterator;
 
 import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.client.ui.board.BoardBase.StyleSuffix;
+import com.propertyvista.crm.client.ui.gadgets.addgadgetdialog.GadgetDirectoryDialog;
 import com.propertyvista.crm.client.ui.gadgets.common.IGadgetInstance;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
@@ -76,6 +77,7 @@ public abstract class AbstractDashboard extends Composite {
 
         this.dashboardPanel = new DockLayoutPanel(Unit.EM);
         this.dashboardPanel.setSize("100%", "100%");
+
         this.actionsPanel = new HorizontalPanel();
         this.actionsPanel.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.actionsPanel);
         this.actionsPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
@@ -168,7 +170,6 @@ public abstract class AbstractDashboard extends Composite {
             // gadget settings were changed: IMHO not supposed to affect the dashboard metadata and be managed internally by the gadget
             break;
         }
-
         layoutManager.saveLayout(dashboardMetadata, board);
 
         onDashboardMetadataChanged();
@@ -195,7 +196,12 @@ public abstract class AbstractDashboard extends Composite {
         addGadget.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                // TODO add adding gadgets using IGadgetFactory
+                new GadgetDirectoryDialog(gadgetDirectory) {
+                    @Override
+                    protected void addGadget(IGadgetInstance gadget) {
+                        board.addGadget(gadget);
+                    }
+                }.show();
             }
         });
 
@@ -228,5 +234,4 @@ public abstract class AbstractDashboard extends Composite {
 
         return actionsWidget;
     }
-
 }

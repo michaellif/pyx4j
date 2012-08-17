@@ -22,22 +22,19 @@ import com.google.gwt.view.client.TreeViewModel;
 
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.crm.client.ui.gadgets.common.Directory;
 import com.propertyvista.crm.client.ui.gadgets.common.IGadgetFactory;
-import com.propertyvista.crm.client.ui.gadgets.util.Collections2;
-import com.propertyvista.crm.client.ui.gadgets.util.Predicate;
+import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.IGadgetDirectory;
 
 class GadgetCategoryTreeViewModel implements TreeViewModel {
     private static final I18n i18n = I18n.get(GadgetCategoryTreeViewModel.class);
 
-    private final Predicate<IGadgetFactory> predicate;
+    private final IGadgetDirectory directory;
 
     private final SingleSelectionModel<GadgetCategoryWrapper> selectionModel;
 
-    public GadgetCategoryTreeViewModel(SingleSelectionModel<GadgetCategoryWrapper> selectionModel, Predicate<IGadgetFactory> predicate) {
-        assert predicate != null : "cannot use null predicate";
+    public GadgetCategoryTreeViewModel(SingleSelectionModel<GadgetCategoryWrapper> selectionModel, IGadgetDirectory directory) {
         assert selectionModel != null : "no selection model provided";
-        this.predicate = predicate;
+        this.directory = directory;
         this.selectionModel = selectionModel;
     }
 
@@ -46,7 +43,7 @@ class GadgetCategoryTreeViewModel implements TreeViewModel {
         GadgetCategoryProvider provider = null;
         if (value == null) {
             // Root node                
-            List<IGadgetFactory> supportedGadgets = new ArrayList<IGadgetFactory>(Collections2.filter(Directory.DIRECTORY, predicate));
+            List<IGadgetFactory> supportedGadgets = new ArrayList<IGadgetFactory>(directory.getAvailableGadgets());
             provider = new GadgetCategoryProvider(Arrays.asList(new GadgetCategoryWrapper(i18n.tr("All"), supportedGadgets)));
         } else {
             provider = new GadgetCategoryProvider(((GadgetCategoryWrapper) value).partition());

@@ -13,11 +13,16 @@
  */
 package com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard;
 
+import java.util.Collection;
+
+import com.propertyvista.crm.client.ui.gadgets.common.IGadgetFactory;
 import com.propertyvista.crm.client.ui.gadgets.common.IGadgetInstance;
 import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
 
 public interface IGadgetDirectory {
 
     IGadgetInstance createGadgetInstance(GadgetMetadata gmd);
+
+    Collection<? extends IGadgetFactory> getAvailableGadgets();
 
 }

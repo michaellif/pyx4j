@@ -32,6 +32,11 @@ import com.pyx4j.widgets.client.dashboard.Reportboard;
 import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.client.ui.board.BoardBase;
 import com.propertyvista.crm.client.ui.gadgets.addgadgetdialog.GadgetDirectoryDialog;
+import com.propertyvista.crm.client.ui.gadgets.common.IGadgetInstance;
+import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.BuildingGadgetDirectory;
+import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.IGadgetDirectory;
+import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.SystemGadgetDirectory;
+import com.propertyvista.domain.dashboard.DashboardMetadata.DashboardType;
 import com.propertyvista.domain.dashboard.DashboardMetadata.LayoutType;
 
 public class ReportPanel extends BoardBase implements ReportView {
@@ -84,7 +89,16 @@ public class ReportPanel extends BoardBase implements ReportView {
             addGadget.addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
-                    new GadgetDirectoryDialog(ReportPanel.this).show();
+                    IGadgetDirectory directory = getDashboardMetadata().type().getValue() == DashboardType.building ? new BuildingGadgetDirectory()
+                            : new SystemGadgetDirectory();
+                    new GadgetDirectoryDialog(directory) {
+
+                        @Override
+                        protected void addGadget(IGadgetInstance gadget) {
+                            ReportPanel.this.addGadget(gadget);
+                        }
+
+                    }.show();
                 }
             });
 

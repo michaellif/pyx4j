@@ -30,15 +30,22 @@ import com.propertyvista.domain.dashboard.gadgets.type.GadgetMetadata;
 
 public class DashboardLayoutManager implements ILayoutManager {
 
+    private final boolean TODO_PENDING_LAYOUT_STORAGE_IN_GADGET_METADATA = false;
+
     @Override
     public void restoreLayout(DashboardMetadata dashboardMetadata, Iterator<IGadgetInstance> gadgetsIterator, IBoard board) {
         board.setLayout(asBoardLayout(dashboardMetadata.layoutType().getValue()));
 
-        Iterator<Integer> columnsIterator = getColumnsIterator();
+        Iterator<Integer> columnsIterator = getColumnsIterator(dashboardMetadata);
         while (gadgetsIterator.hasNext()) {
+            if (TODO_PENDING_LAYOUT_STORAGE_IN_GADGET_METADATA) {
+                Integer column = 0;
+                if (columnsIterator.hasNext()) {
+                    column = columnsIterator.next();
+                }
+            }
             IGadgetInstance gadget = gadgetsIterator.next();
-            Integer column = columnsIterator.next();
-            board.addGadget(gadget, column);
+            board.addGadget(gadget, gadget.getMetadata().docking().column().getValue());
         }
     }
 
@@ -52,7 +59,10 @@ public class DashboardLayoutManager implements ILayoutManager {
             List<String> columns = new ArrayList<String>();
             while (it.hasNext()) {
                 IGadget gadget = it.next();
-                columns.add(String.valueOf(it.getColumn()));
+                ((IGadgetInstance) gadget).getMetadata().docking().column().setValue(it.getColumn());
+                if (TODO_PENDING_LAYOUT_STORAGE_IN_GADGET_METADATA) {
+                    columns.add(String.valueOf(it.getColumn()));
+                }
                 if (gadget instanceof IGadgetInstance) {
                     GadgetMetadata gadgetMetadata = ((IGadgetInstance) gadget).getMetadata();
                     dashboardMetadata.gadgets().add(gadgetMetadata);
@@ -114,9 +124,9 @@ public class DashboardLayoutManager implements ILayoutManager {
         return layoutType;
     }
 
-    private Iterator<Integer> getColumnsIterator() {
-//      final String[] columns = dashboardMetadata.encodedLayout().getValue().split(" ");
-        final String[] columns = "0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0".split(" ");
+    private Iterator<Integer> getColumnsIterator(DashboardMetadata dashboardMetadata) {
+        final String[] columns = (dashboardMetadata.encodedLayout().isNull() ? "" : dashboardMetadata.encodedLayout().getValue()).split(" ");
+
         return new Iterator<Integer>() {
 
             private int i = 0;

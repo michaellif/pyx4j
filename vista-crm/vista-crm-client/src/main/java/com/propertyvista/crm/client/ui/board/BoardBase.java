@@ -81,7 +81,7 @@ public abstract class BoardBase extends DockLayoutPanel implements BoardView {
 
     private final ScrollPanel scroll = new ScrollPanel();
 
-    private IBoard board;
+    public IBoard board;
 
     protected Presenter presenter;
 
@@ -166,7 +166,12 @@ public abstract class BoardBase extends DockLayoutPanel implements BoardView {
             for (GadgetMetadata gmd : dashboardMetadata.gadgets()) {
                 IGadgetInstance gadget = Directory.createGadget(gmd);
                 if (gadget != null) {
-                    addGadget(gadget, gmd.docking().column().getValue());
+                    // TODO a workaround
+                    if (gmd.docking().column().getValue() == null) {
+                        addGadget(gadget, 0);
+                    } else {
+                        addGadget(gadget, gmd.docking().column().getValue());
+                    }
                 }
             }
         }
