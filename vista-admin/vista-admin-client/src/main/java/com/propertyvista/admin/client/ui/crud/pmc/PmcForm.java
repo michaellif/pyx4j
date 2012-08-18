@@ -60,7 +60,7 @@ public class PmcForm extends AdminEntityForm<PmcDTO> {
                     throw new Error(i18n.tr("The URL is not in proper format"));
                 }
 
-                Window.open(url, i18n.tr("CRM"), "status=1,toolbar=1,location=1,resizable=1,scrollbars=1");
+                Window.open(url, "new", null);
             }
 
         })), 50).build());
@@ -76,7 +76,7 @@ public class PmcForm extends AdminEntityForm<PmcDTO> {
                     throw new Error(i18n.tr("The URL is not in proper format"));
                 }
 
-                Window.open(url, i18n.tr("Resident Portal"), "status=1,toolbar=1,location=1,resizable=1,scrollbars=1");
+                Window.open(url, "new", null);
             }
 
         })), 50).build());
@@ -92,7 +92,7 @@ public class PmcForm extends AdminEntityForm<PmcDTO> {
                     throw new Error(i18n.tr("The URL is not in proper format"));
                 }
 
-                Window.open(url, i18n.tr("Prospect Portal"), "status=1,toolbar=1,location=1,resizable=1,scrollbars=1");
+                Window.open(url, "new", null);
             }
 
         })), 50).build());

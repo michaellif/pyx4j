@@ -22,6 +22,8 @@ import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.rdb.EntityPersistenceServiceRDB;
+import com.pyx4j.entity.rdb.RDBUtils;
+import com.pyx4j.entity.rdb.cfg.Configuration.MultitenancyType;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.ServerEntityFactory;
 import com.pyx4j.entity.server.impl.EntityClassFinder;
@@ -80,6 +82,7 @@ public class DBIntegrityCheckDeferredProcess extends SearchReportDeferredProcess
     protected void reportEntity(Pmc entity) {
         try {
             NamespaceManager.setNamespace(entity.namespace().getValue());
+            RDBUtils.initAllEntityTables();
             commonNamespaceIntegrityCheck();
         } finally {
             NamespaceManager.setNamespace(VistaNamespace.adminNamespace);
@@ -100,6 +103,11 @@ public class DBIntegrityCheckDeferredProcess extends SearchReportDeferredProcess
     private void specificNamespaceIntegrityCheck(String namespace) {
         try {
             NamespaceManager.setNamespace(namespace);
+
+            if (((EntityPersistenceServiceRDB) Persistence.service()).getMultitenancyType() == MultitenancyType.SeparateSchemas) {
+                RDBUtils.initNameSpaceSpecificEntityTables();
+            }
+
             exportTablesInfo(new Filter<Class<? extends IEntity>>() {
                 @Override
                 public boolean accept(Class<? extends IEntity> entityClass) {
@@ -114,7 +122,6 @@ public class DBIntegrityCheckDeferredProcess extends SearchReportDeferredProcess
 
     private void exportTablesInfo(Filter<Class<? extends IEntity>> filter) {
         ((EntityPersistenceServiceRDB) Persistence.service()).resetMapping();
-        EntityPersistenceServiceRDB srv = (EntityPersistenceServiceRDB) Persistence.service();
         List<String> allClasses = EntityClassFinder.getEntityClassesNames();
         TreeMap<String, Integer> tablesMap = new TreeMap<String, Integer>();
         for (String className : allClasses) {
@@ -130,7 +137,7 @@ public class DBIntegrityCheckDeferredProcess extends SearchReportDeferredProcess
                 if (!EntityPersistenceServiceRDB.allowNamespaceUse(entityClass)) {
                     continue;
                 }
-                int keys = srv.count(EntityQueryCriteria.create(entityClass));
+                int keys = Persistence.service().count(EntityQueryCriteria.create(entityClass));
                 tablesMap.put(meta.getEntityClass().getSimpleName(), keys);
             }
         }
