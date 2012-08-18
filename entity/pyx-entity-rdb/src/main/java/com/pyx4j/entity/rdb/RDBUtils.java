@@ -244,7 +244,6 @@ public class RDBUtils implements Closeable {
 
     public static void initAllEntityTables() {
         long start = System.currentTimeMillis();
-        EntityPersistenceServiceRDB srv = (EntityPersistenceServiceRDB) Persistence.service();
         List<Class<? extends IEntity>> allClasses = new ArrayList<Class<? extends IEntity>>();
         for (String className : EntityClassFinder.getEntityClassesNames()) {
             if (className.toLowerCase().contains(".gae")) {
@@ -260,13 +259,12 @@ public class RDBUtils implements Closeable {
             }
             allClasses.add(entityClass);
         }
-        srv.ensureSchemaModel(allClasses);
-        log.info("Total of {} tables created in {}", allClasses.size(), TimeUtils.secSince(start));
+        ((EntityPersistenceServiceRDB) Persistence.service()).ensureSchemaModel(allClasses);
+        log.info("Total of {} tables created/verified in {}", allClasses.size(), TimeUtils.secSince(start));
     }
 
     public static void initNameSpaceSpecificEntityTables() {
         long start = System.currentTimeMillis();
-        EntityPersistenceServiceRDB srv = (EntityPersistenceServiceRDB) Persistence.service();
         List<Class<? extends IEntity>> allClasses = new ArrayList<Class<? extends IEntity>>();
         for (String className : EntityClassFinder.getEntityClassesNames()) {
             if (className.toLowerCase().contains(".gae")) {
@@ -283,8 +281,8 @@ public class RDBUtils implements Closeable {
             }
             allClasses.add(entityClass);
         }
-        srv.ensureSchemaModel(allClasses);
-        log.info("Total of {} tables created in {}", allClasses.size(), TimeUtils.secSince(start));
+        ((EntityPersistenceServiceRDB) Persistence.service()).ensureSchemaModel(allClasses);
+        log.info("Total of {} tables created/verified in {}", allClasses.size(), TimeUtils.secSince(start));
     }
 
     public static void deleteFromAllEntityTables() {

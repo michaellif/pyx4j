@@ -352,7 +352,7 @@ public class Mappings {
         }
     }
 
-    private void initSequences(PersistenceContext persistenceContext) {
+    private synchronized void initSequences(PersistenceContext persistenceContext) {
         if (sequences != null) {
             return;
         }
