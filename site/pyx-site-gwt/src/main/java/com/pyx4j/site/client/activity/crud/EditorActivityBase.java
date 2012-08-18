@@ -48,8 +48,6 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
 
     private final AbstractCrudService<E> service;
 
-    private final Class<? extends CrudAppPlace> placeClass;
-
     private final CrudAppPlace place;
 
     private final Class<E> entityClass;
@@ -79,8 +77,6 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
         tabIndex = -1;
 
         view.getMemento().setCurrentPlace(place);
-
-        placeClass = place.getClass();
 
         String val;
         if ((val = place.getFirstArg(CrudAppPlace.ARG_NAME_ID)) != null) {
@@ -119,8 +115,8 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
         return service;
     }
 
-    public Class<? extends CrudAppPlace> getPlaceClass() {
-        return placeClass;
+    public CrudAppPlace getPlace() {
+        return place;
     }
 
     public Class<E> getEntityClass() {
@@ -310,11 +306,11 @@ public class EditorActivityBase<E extends IEntity> extends AbstractActivity impl
     }
 
     protected void goToViewer(Key entityID) {
-        AppSite.getPlaceController().goTo(AppSite.getHistoryMapper().createPlace(placeClass).formViewerPlace(entityID, view.getActiveTab()));
+        AppSite.getPlaceController().goTo(AppSite.getHistoryMapper().createPlace(place.getClass()).formViewerPlace(entityID, view.getActiveTab()));
     }
 
     protected void goToEditor(Key entityID) {
-        AppSite.getPlaceController().goTo(AppSite.getHistoryMapper().createPlace(placeClass).formEditorPlace(entityID, view.getActiveTab()));
+        AppSite.getPlaceController().goTo(AppSite.getHistoryMapper().createPlace(place.getClass()).formEditorPlace(entityID, view.getActiveTab()));
     }
 
     @Override
