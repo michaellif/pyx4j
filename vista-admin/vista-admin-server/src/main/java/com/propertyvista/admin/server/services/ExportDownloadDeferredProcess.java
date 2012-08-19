@@ -99,7 +99,6 @@ public class ExportDownloadDeferredProcess extends AbstractDeferredProcess {
                 while (buildings.hasNext()) {
                     Building building = buildings.next();
                     try {
-                        mediaConfig.baseFolder = "data/export/images/" + NamespaceManager.getNamespace() + "/";
                         importIO.buildings().add(new BuildingRetriever().getModel(building, mediaConfig));
                     } catch (Throwable t) {
                         log.error("Error converting building {}", building, t);
