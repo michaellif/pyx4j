@@ -24,7 +24,6 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.geo.GeoPoint;
 import com.pyx4j.i18n.annotations.I18n;
 
-import com.propertyvista.domain.property.PropertyPhone;
 import com.propertyvista.domain.property.asset.Boiler;
 import com.propertyvista.domain.property.asset.Elevator;
 import com.propertyvista.domain.property.asset.LockerArea;
@@ -56,7 +55,7 @@ public interface BuildingIO extends IEntity {
 
     IPrimitive<String> email();
 
-    IList<PropertyPhone> phones();
+    IList<PropertyPhoneIO> phones();
 
     IPrimitive<GeoPoint> addressCoordinates();
 

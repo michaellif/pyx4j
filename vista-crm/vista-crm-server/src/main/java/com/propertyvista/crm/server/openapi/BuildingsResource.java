@@ -71,7 +71,8 @@ public class BuildingsResource {
 
     @GET
     @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-    public BuildingsRS listBuildings(@QueryParam("pmc") String pmcDnsName, @QueryParam("pm") String propertyManagerName) {
+    public BuildingsRS listBuildings(@QueryParam("pmc") String pmcDnsName, @QueryParam("pm") String propertyManagerName,
+            @QueryParam("buildingAmenitiesOnFloorplansFixed") Boolean buildingAmenitiesOnFloorplansFixed) {
 
         if (VistaNamespace.adminNamespace.equals(NamespaceManager.getNamespace()) || CommonsStringUtils.isStringSet(pmcDnsName)) {
             NamespaceManager.setNamespace(VistaNamespace.adminNamespace);
@@ -243,9 +244,8 @@ public class BuildingsResource {
 
                     //Get Amenity
                     {
-                        EntityQueryCriteria<FloorplanAmenity> criteria = EntityQueryCriteria.create(FloorplanAmenity.class);
-                        criteria.add(PropertyCriterion.eq(criteria.proto().floorplan(), floorplan));
-                        for (FloorplanAmenity amenity : Persistence.service().query(criteria)) {
+                        Persistence.service().retrieveMember(floorplan.amenities());
+                        for (FloorplanAmenity amenity : floorplan.amenities()) {
                             floorplanRS.amenities.add(Converter.convertFloorplanAmenity(amenity));
                         }
                     }
@@ -261,7 +261,8 @@ public class BuildingsResource {
                 }
 
                 // There is a bug in PHP site: it do not show Building Amenities in on building details page, It just show aggregated from floorplans
-                if (true) {
+                // The variable use only to compar the data wth prod01
+                if ((buildingAmenitiesOnFloorplansFixed == null) || (buildingAmenitiesOnFloorplansFixed == Boolean.FALSE)) {
                     if (!buildingRS.floorplans.isEmpty()) {
                         FloorplanRS firstFloorplan = buildingRS.floorplans.get(0);
                         firstFloorplan.amenities.addAll(buildingRS.amenities);

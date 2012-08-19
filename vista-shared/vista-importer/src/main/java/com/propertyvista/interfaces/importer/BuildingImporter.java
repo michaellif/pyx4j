@@ -194,6 +194,7 @@ public class BuildingImporter extends ImportPersister {
                         if (i.type().isNull()) {
                             i.type().setValue(FloorplanAmenity.Type.other);
                         }
+                        i.orderInParent().setValue(items.size());
                         items.add(i);
                     }
                     Persistence.service().persist(items);

@@ -21,6 +21,7 @@
 package com.propertyvista.preloader;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.Callable;
 
 import org.slf4j.Logger;
@@ -53,8 +54,8 @@ public class OnboardingPmcPreloader extends AbstractDataPreloader {
         }
 
         Pmc pmc = EntityFactory.create(Pmc.class);
-        pmc.dnsName().setValue(dnsName);
-        pmc.namespace().setValue(dnsName.replace('-', '_'));
+        pmc.dnsName().setValue(dnsName.toLowerCase(Locale.ENGLISH));
+        pmc.namespace().setValue(pmc.dnsName().getValue().replace('-', '_'));
         pmc.name().setValue(name);
         pmc.onboardingAccountId().setValue(onboardingAccountId);
         pmc.interfaceUidBase().setValue(UserAccessUtils.getPmcInterfaceUidBase(creds.get(0)));

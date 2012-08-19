@@ -51,6 +51,7 @@ import com.propertyvista.interfaces.importer.model.BuildingIO;
 import com.propertyvista.interfaces.importer.model.FloorplanIO;
 import com.propertyvista.interfaces.importer.model.MediaIO;
 import com.propertyvista.interfaces.importer.model.ParkingIO;
+import com.propertyvista.interfaces.importer.model.PropertyPhoneIO;
 import com.propertyvista.interfaces.importer.model.UtilityIO;
 import com.propertyvista.portal.rpc.portal.ImageConsts.ImageTarget;
 import com.propertyvista.server.common.reference.PublicDataUpdater;
@@ -124,10 +125,10 @@ class ImportPersister {
         }
 
         for (int i = 0; i < buildingIO.phones().size(); i++) {
-            // building phones are added to PropertyContacts, so there must be at least as many PropertyCOntacts as phones
-            PropertyPhone phone = buildingIO.phones().get(i);
+            // building phones are added to PropertyContacts, so there must be at least as many PropertyContacts as phones
+            PropertyPhoneIO phone = buildingIO.phones().get(i);
             PropertyContact contact = building.contacts().propertyContacts().get(i);
-            if (phone.designation().isNull() || phone.designation().getValue().equals(PropertyPhone.DesignationType.office)) {
+            if (contact.type().isNull() && (phone.designation().isNull() || phone.designation().getValue().equals(PropertyPhone.DesignationType.office.name()))) {
                 contact.type().setValue(PropertyContactType.mainOffice);
             }
             if (contact.visibility().isNull()) {

@@ -77,10 +77,8 @@ public class BuildingRetriever {
 
         //Get Amenity
         {
-            EntityQueryCriteria<BuildingAmenity> criteria = EntityQueryCriteria.create(BuildingAmenity.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().building(), building));
-            criteria.asc(criteria.proto().id());
-            for (BuildingAmenity amenity : Persistence.service().query(criteria)) {
+            Persistence.service().retrieveMember(building.amenities());
+            for (BuildingAmenity amenity : building.amenities()) {
                 buildingIO.amenities().add(new BuildingAmenityConverter().createDTO(amenity));
             }
         }
@@ -106,6 +104,7 @@ public class BuildingRetriever {
 
         EntityQueryCriteria<Floorplan> floorplanCriteria = EntityQueryCriteria.create(Floorplan.class);
         floorplanCriteria.add(PropertyCriterion.eq(floorplanCriteria.proto().building(), building));
+        floorplanCriteria.asc(floorplanCriteria.proto().id());
         List<Floorplan> floorplans = Persistence.service().query(floorplanCriteria);
         for (Floorplan floorplan : floorplans) {
             FloorplanIO floorplanIO = new FloorplanConverter().createDTO(floorplan);
@@ -113,10 +112,8 @@ public class BuildingRetriever {
 
             //Get Amenity
             {
-                EntityQueryCriteria<FloorplanAmenity> criteria = EntityQueryCriteria.create(FloorplanAmenity.class);
-                criteria.add(PropertyCriterion.eq(criteria.proto().floorplan(), floorplan));
-                criteria.asc(criteria.proto().id());
-                for (FloorplanAmenity amenity : Persistence.service().query(criteria)) {
+                Persistence.service().retrieveMember(floorplan.amenities());
+                for (FloorplanAmenity amenity : floorplan.amenities()) {
                     floorplanIO.amenities().add(new FloorplanAmenityConverter().createDTO(amenity));
                 }
             }
@@ -125,6 +122,7 @@ public class BuildingRetriever {
             {
                 EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
                 criteria.add(PropertyCriterion.eq(criteria.proto().floorplan(), floorplan));
+                criteria.asc(criteria.proto().info().number());
                 for (AptUnit unit : Persistence.service().query(criteria)) {
                     AptUnitIO aptUnitIO = new AptUnitConverter().createDTO(unit);
                     floorplanIO.units().add(aptUnitIO);

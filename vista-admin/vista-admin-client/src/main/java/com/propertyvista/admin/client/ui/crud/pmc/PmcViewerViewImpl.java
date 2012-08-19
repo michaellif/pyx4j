@@ -13,17 +13,24 @@
  */
 package com.propertyvista.admin.client.ui.crud.pmc;
 
+import java.io.Serializable;
+import java.util.HashMap;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.Window;
 
+import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.essentials.client.ReportDialog;
+import com.pyx4j.essentials.rpc.report.ReportService;
 import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.admin.client.ui.crud.AdminViewerViewImplBase;
 import com.propertyvista.admin.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.admin.rpc.AdminSiteMap;
 import com.propertyvista.admin.rpc.PmcDTO;
+import com.propertyvista.admin.rpc.PmcExportDownloadDTO;
+import com.propertyvista.admin.rpc.services.ExportDownloadService;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 
 public class PmcViewerViewImpl extends AdminViewerViewImplBase<PmcDTO> implements PmcViewerView {
@@ -50,7 +57,15 @@ public class PmcViewerViewImpl extends AdminViewerViewImplBase<PmcDTO> implement
         Button downloadFull = new Button("Download export.xml", new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                Window.open(GWT.getModuleBaseURL() + "export.xml?pmc=" + getForm().getValue().getPrimaryKey(), null, null);
+                PmcExportDownloadDTO request = EntityFactory.create(PmcExportDownloadDTO.class);
+                request.pmcId().setValue(getForm().getValue().getPrimaryKey());
+                request.exportImages().setValue(true);
+
+                HashMap<String, Serializable> params = new HashMap<String, Serializable>();
+                params.put(ExportDownloadService.pmcExportDownloadDTOParameter, request);
+                ReportDialog d = new ReportDialog("Export", "Creating export with images...");
+                d.setDownloadServletPath(GWT.getModuleBaseURL() + DeploymentConsts.downloadServletMapping);
+                d.start(GWT.<ReportService<?>> create(ExportDownloadService.class), null, params);
             }
         });
         addHeaderToolbarTwoItem(downloadFull.asWidget());
@@ -58,7 +73,15 @@ public class PmcViewerViewImpl extends AdminViewerViewImplBase<PmcDTO> implement
         Button downloadNoImages = new Button("Download export.xml (no images)", new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                Window.open(GWT.getModuleBaseURL() + "export.xml?pmc=" + getForm().getValue().getPrimaryKey() + "&images=false", null, null);
+                PmcExportDownloadDTO request = EntityFactory.create(PmcExportDownloadDTO.class);
+                request.pmcId().setValue(getForm().getValue().getPrimaryKey());
+                request.exportImages().setValue(false);
+
+                HashMap<String, Serializable> params = new HashMap<String, Serializable>();
+                params.put(ExportDownloadService.pmcExportDownloadDTOParameter, request);
+                ReportDialog d = new ReportDialog("Export", "Creating export...");
+                d.setDownloadServletPath(GWT.getModuleBaseURL() + DeploymentConsts.downloadServletMapping);
+                d.start(GWT.<ReportService<?>> create(ExportDownloadService.class), null, params);
             }
         });
         addHeaderToolbarTwoItem(downloadNoImages.asWidget());

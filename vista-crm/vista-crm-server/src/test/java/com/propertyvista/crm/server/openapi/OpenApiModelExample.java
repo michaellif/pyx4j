@@ -42,7 +42,7 @@ public class OpenApiModelExample {
 
         ServerSideConfiguration.setInstance(new VistaTestsServerSideConfiguration(DatabaseType.MySQL));
 
-        BuildingsRS buildingsRS = new BuildingsResource().listBuildings(VistaTestsNamespaceResolver.demoNamespace, null);
+        BuildingsRS buildingsRS = new BuildingsResource().listBuildings(VistaTestsNamespaceResolver.demoNamespace, null, null);
 
         log.info("buildings {} ", buildingsRS.buildings.size());
         log.info("Retrive time {} msec", TimeUtils.since(start));

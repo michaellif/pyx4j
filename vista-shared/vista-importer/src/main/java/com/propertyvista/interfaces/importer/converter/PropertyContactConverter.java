@@ -16,18 +16,47 @@ package com.propertyvista.interfaces.importer.converter;
 import com.pyx4j.entity.shared.utils.EntityDtoBinder;
 
 import com.propertyvista.domain.property.PropertyContact;
-import com.propertyvista.domain.property.PropertyPhone;
+import com.propertyvista.domain.property.PropertyContact.PropertyContactType;
+import com.propertyvista.interfaces.importer.model.PropertyPhoneIO;
 
-public class PropertyContactConverter extends EntityDtoBinder<PropertyContact, PropertyPhone> {
+public class PropertyContactConverter extends EntityDtoBinder<PropertyContact, PropertyPhoneIO> {
 
     public PropertyContactConverter() {
-        super(PropertyContact.class, PropertyPhone.class, false);
+        super(PropertyContact.class, PropertyPhoneIO.class, false);
     }
 
     @Override
     protected void bind() {
+        // TODO PrimitiveConvertor
+        //bind(dtoProto.type(), dboProto.type(), new TODOPrimitiveConvertor());
+        bind(dtoProto.name(), dboProto.name());
+        bind(dtoProto.description(), dboProto.description());
         bind(dtoProto.number(), dboProto.phone());
+        bind(dtoProto.email(), dboProto.email());
         bind(dtoProto.visibility(), dboProto.visibility());
         bind(dtoProto.description(), dboProto.description());
+    }
+
+    @Override
+    public void copyDBOtoDTO(PropertyContact dbo, PropertyPhoneIO dto) {
+        super.copyDBOtoDTO(dbo, dto);
+
+        // TODO PrimitiveConvertor
+        if (!dbo.type().isNull()) {
+            dto.type().setValue(dbo.type().getValue().name());
+        }
+    }
+
+    @Override
+    public void copyDTOtoDBO(PropertyPhoneIO dto, PropertyContact dbo) {
+        super.copyDTOtoDBO(dto, dbo);
+
+        // TODO PrimitiveConvertor
+        if (!dto.type().isNull()) {
+            try {
+                dbo.type().setValue(PropertyContactType.valueOf(dto.type().getValue()));
+            } catch (IllegalArgumentException ignore) {
+            }
+        }
     }
 }

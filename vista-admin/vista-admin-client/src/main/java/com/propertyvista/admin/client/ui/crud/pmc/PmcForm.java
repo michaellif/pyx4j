@@ -60,7 +60,7 @@ public class PmcForm extends AdminEntityForm<PmcDTO> {
                     throw new Error(i18n.tr("The URL is not in proper format"));
                 }
 
-                Window.open(url, "new", null);
+                Window.open(url, getValue().dnsName().getStringView() + "_Crm", null);
             }
 
         })), 50).build());
@@ -76,7 +76,7 @@ public class PmcForm extends AdminEntityForm<PmcDTO> {
                     throw new Error(i18n.tr("The URL is not in proper format"));
                 }
 
-                Window.open(url, "new", null);
+                Window.open(url, getValue().dnsName().getStringView() + "_Portal", null);
             }
 
         })), 50).build());
@@ -92,7 +92,7 @@ public class PmcForm extends AdminEntityForm<PmcDTO> {
                     throw new Error(i18n.tr("The URL is not in proper format"));
                 }
 
-                Window.open(url, "new", null);
+                Window.open(url, getValue().dnsName().getStringView() + "_Ptapp", null);
             }
 
         })), 50).build());

@@ -409,16 +409,6 @@
     </servlet-mapping>
 
     <servlet>
-        <servlet-name>ExportDownloadServlet</servlet-name>
-        <servlet-class>com.propertyvista.admin.server.services.ExportDownloadServlet</servlet-class>
-    </servlet>
-
-    <servlet-mapping>
-        <servlet-name>ExportDownloadServlet</servlet-name>
-        <url-pattern>/admin/export.xml</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
         <servlet-name>VistaConfigInfoServlet</servlet-name>
         <servlet-class>com.propertyvista.admin.server.services.VistaConfigInfoServlet</servlet-class>
     </servlet>
