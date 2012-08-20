@@ -140,12 +140,6 @@ public class NotesAndAttachmentsVisorView extends ScrollPanel {
                             public void onPropertyChange(PropertyChangeEvent event) {
                                 if (event.getPropertyName() == PropertyName.viewable) {
                                     folderItem.getItemActionsBar().setVisible(editor.isViewable());
-                                    if (editor.isViewable()) {
-                                        CComponent<?, ?> text = editor.get(editor.proto().note());
-                                        if (text != null) {
-                                            text.asWidget().getElement().getStyle().setProperty("whiteSpace", "pre");
-                                        }
-                                    }
                                 }
                             }
                         });
@@ -212,9 +206,6 @@ public class NotesAndAttachmentsVisorView extends ScrollPanel {
 
                     content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().subject())).componentWidth(40).build());
                     content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().note())).componentWidth(40).build());
-                    if (isViewable()) {
-                        get(proto().note()).asWidget().getElement().getStyle().setProperty("whiteSpace", "pre");
-                    }
 
                     CComponent<?, ?> comp = inject(proto().created());
                     comp.inheritViewable(false);
