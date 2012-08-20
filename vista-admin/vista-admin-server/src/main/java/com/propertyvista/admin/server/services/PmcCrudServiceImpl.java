@@ -79,6 +79,12 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
 
     @Override
     protected void persist(Pmc entity, PmcDTO dto) {
+        if (!PmcNameValidator.isDnsNameValid(entity.dnsName().getValue())) {
+            throw new UserRuntimeException("PMC DNS name is not valid");
+        }
+        if (!PmcNameValidator.isDnsNameValid(entity.namespace().getValue())) {
+            throw new UserRuntimeException("PMC namespace is not valid");
+        }
         entity.dnsName().setValue(entity.dnsName().getValue().toLowerCase(Locale.ENGLISH));
         entity.namespace().setValue(entity.namespace().getValue().toLowerCase(Locale.ENGLISH).replace('-', '_'));
         for (PmcDnsName alias : entity.dnsNameAliases()) {

@@ -45,15 +45,16 @@ public class OnBoardingUserViewerActivity extends AdminViewerActivity<Onboarding
         AppSite.getPlaceController().goTo(passwordChangePlace);
     }
 
-	@Override
-	public void createPmc(OnboardingUserDTO onboardingUser) {
-		PmcDTO newPmc = EntityFactory.create(PmcDTO.class);
-		newPmc.person().name().firstName().setValue(onboardingUser.firstName().getValue());
-		newPmc.person().name().lastName().setValue(onboardingUser.lastName().getValue());
-		newPmc.email().setValue(onboardingUser.email().getValue());
-		newPmc.createPmcForExistingOnboardingUserRequest().set(onboardingUser.createIdentityStub());
-		AppSite.getPlaceController().goTo(new AdminSiteMap.Management.PMC().formNewItemPlace(newPmc));
-		
-	}
+    @Override
+    public void createPmc(OnboardingUserDTO onboardingUser) {
+        PmcDTO newPmc = EntityFactory.create(PmcDTO.class);
+        newPmc.person().name().firstName().setValue(onboardingUser.firstName().getValue());
+        newPmc.person().name().lastName().setValue(onboardingUser.lastName().getValue());
+        newPmc.email().setValue(onboardingUser.email().getValue());
+        newPmc.onboardingAccountId().setValue(onboardingUser.onboardingAccountId().getValue());
+        newPmc.createPmcForExistingOnboardingUserRequest().set(onboardingUser.createIdentityStub());
+        AppSite.getPlaceController().goTo(new AdminSiteMap.Management.PMC().formNewItemPlace(newPmc));
+
+    }
 
 }

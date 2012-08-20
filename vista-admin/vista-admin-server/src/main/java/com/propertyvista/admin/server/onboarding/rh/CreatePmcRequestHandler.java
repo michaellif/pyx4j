@@ -14,6 +14,7 @@
 package com.propertyvista.admin.server.onboarding.rh;
 
 import java.util.List;
+import java.util.Locale;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -62,7 +63,7 @@ public class CreatePmcRequestHandler extends AbstractRequestHandler<CreatePMCReq
             return response;
         }
 
-        final String dnsName = request.dnsName().getValue();
+        final String dnsName = request.dnsName().getValue().toLowerCase(Locale.ENGLISH);
         if (!PmcNameValidator.canCreatePmcName(dnsName, request.onboardingAccountId().getValue())) {
             response.success().setValue(Boolean.FALSE);
             log.info("Error occured.  User {}, action {}", new Object[] { request.onboardingAccountId(), "CreatePmc" });
@@ -105,7 +106,6 @@ public class CreatePmcRequestHandler extends AbstractRequestHandler<CreatePMCReq
 
         for (OnboardingUserCredential cred : creds) {
             cred.pmc().set(pmc);
-            cred.onboardingAccountId().setValue(null); // We will lookup by pmc
             Persistence.service().persist(cred);
         }
 

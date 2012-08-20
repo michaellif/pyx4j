@@ -38,6 +38,7 @@ public class PmcFormNewItem extends AdminEntityForm<PmcDTO> {
         int row = -1;
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 15).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().dnsName()), 15).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().onboardingAccountId()), 15).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().name().firstName()), 15).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().name().lastName()), 15).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().email()), 15).build());
@@ -53,15 +54,15 @@ public class PmcFormNewItem extends AdminEntityForm<PmcDTO> {
         selectTab(addTab(content));
 
     }
-    
+
     @Override
     protected void onValueSet(boolean populate) {
-    	super.onValueSet(populate);
-    	boolean existingOnboardingUser = !getValue().createPmcForExistingOnboardingUserRequest().isNull();
-    	get(proto().person().name().firstName()).setViewable(existingOnboardingUser);
-    	get(proto().person().name().lastName()).setViewable(existingOnboardingUser);
-    	get(proto().email()).setViewable(existingOnboardingUser);
-    	get(proto().password()).setVisible(!existingOnboardingUser);
+        super.onValueSet(populate);
+        boolean existingOnboardingUser = !getValue().createPmcForExistingOnboardingUserRequest().isNull();
+        get(proto().person().name().firstName()).setViewable(existingOnboardingUser);
+        get(proto().person().name().lastName()).setViewable(existingOnboardingUser);
+        get(proto().email()).setViewable(existingOnboardingUser);
+        get(proto().password()).setVisible(!existingOnboardingUser);
     }
 
 }
