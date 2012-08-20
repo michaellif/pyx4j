@@ -56,7 +56,7 @@ public class BillViewerViewImpl extends CrmViewerViewImplBase<BillDataDTO> imple
                 ((BillViewerView.Presenter) getPresenter()).print();
             }
         });
-        addHeaderToolbarTwoItem(printAction.asWidget());
+        addHeaderToolbarItem(printAction.asWidget());
 
         approveAction = new Button(APPROVE, new ClickHandler() {
 
@@ -65,7 +65,7 @@ public class BillViewerViewImpl extends CrmViewerViewImplBase<BillDataDTO> imple
                 ((BillViewerView.Presenter) getPresenter()).confirm();
             }
         });
-        addHeaderToolbarTwoItem(approveAction.asWidget());
+        addHeaderToolbarItem(approveAction.asWidget());
 
         rejectAction = new Button(DECLINE, new ClickHandler() {
             @Override
@@ -79,7 +79,7 @@ public class BillViewerViewImpl extends CrmViewerViewImplBase<BillDataDTO> imple
                 }.show();
             }
         });
-        addHeaderToolbarTwoItem(rejectAction.asWidget());
+        addHeaderToolbarItem(rejectAction.asWidget());
 
     }
 

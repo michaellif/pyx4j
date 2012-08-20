@@ -36,6 +36,6 @@ public class PadBatchEditorViewImpl extends AdminEditorViewImplBase<PadSimBatch>
                 ((PadBatchEditorView.Presenter) getPresenter()).calculate();
             }
         });
-        addHeaderToolbarTwoItem(calculateAction.asWidget());
+        addHeaderToolbarItem(calculateAction.asWidget());
     }
 }

@@ -52,7 +52,7 @@ public class PmcListerViewImpl extends AdminListerViewImplBase<PmcDTO> implement
                     d.start(GWT.<ReportService<?>> create(PmcDataReportService.class), criteria, params);
                 }
             });
-            addHeaderToolbarTwoItem(downloadFull);
+            addHeaderToolbarItem(downloadFull);
         }
 
         {
@@ -66,7 +66,7 @@ public class PmcListerViewImpl extends AdminListerViewImplBase<PmcDTO> implement
                     d.start(GWT.<ReportService<?>> create(PmcDataReportService.class), criteria);
                 }
             });
-            addHeaderToolbarTwoItem(downloadFull);
+            addHeaderToolbarItem(downloadFull);
         }
 
         {
@@ -80,7 +80,7 @@ public class PmcListerViewImpl extends AdminListerViewImplBase<PmcDTO> implement
                     d.start(GWT.<ReportService<?>> create(DBIntegrityCheckService.class), criteria);
                 }
             });
-            addHeaderToolbarTwoItem(downloadFull);
+            addHeaderToolbarItem(downloadFull);
         }
 
     }

@@ -68,13 +68,13 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
                     getPresenter().edit();
                 }
             });
-            addHeaderToolbarTwoItem(editButton);
+            addHeaderToolbarItem(editButton);
         }
 
         this.breadcumbsService = GWT.<BreadcrumbsService> create(BreadcrumbsService.class);
 
         breadcrumbsBar = new BreadcrumbsBar();
-        addHeaderToolbarOneItem(breadcrumbsBar);
+        setBreadcrumbsBar(breadcrumbsBar);
     }
 
     public CrmViewerViewImplBase(Class<? extends CrudAppPlace> placeClass, CrmEntityForm<E> form) {
@@ -168,7 +168,7 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
                 }.show();
             }
         });
-        addHeaderToolbarTwoItem(selectVersion.asWidget());
+        addHeaderToolbarItem(selectVersion.asWidget());
 
         finalizeButton = new Button(i18n.tr("Finalize"), new ClickHandler() {
             @Override
@@ -176,7 +176,7 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
                 getPresenter().approveFinal();
             }
         });
-        addHeaderToolbarTwoItem(finalizeButton.asWidget());
+        addHeaderToolbarItem(finalizeButton.asWidget());
 
         if (editButton != null) {
             editButton.setCaption(i18n.tr("Edit Draft"));

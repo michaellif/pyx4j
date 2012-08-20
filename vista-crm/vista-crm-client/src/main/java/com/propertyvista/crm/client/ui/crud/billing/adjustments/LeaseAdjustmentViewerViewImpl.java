@@ -39,7 +39,7 @@ public class LeaseAdjustmentViewerViewImpl extends CrmViewerViewImplBase<LeaseAd
                 ((LeaseAdjustmentViewerView.Presenter) getPresenter()).submitAdjustment();
             }
         });
-        addHeaderToolbarTwoItem(submitAction.asWidget());
+        addHeaderToolbarItem(submitAction.asWidget());
     }
 
     @Override

@@ -46,7 +46,7 @@ public class BuildingListerViewImpl extends CrmListerViewImplBase<BuildingDTO> i
                     UpdateUploadDialog.show();
                 }
             });
-            addHeaderToolbarTwoItem(upload);
+            addHeaderToolbarItem(upload);
         }
 
     }

@@ -83,7 +83,7 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
             }
         });
         if (VistaFeatures.instance().onlineApplication()) {
-            addHeaderToolbarTwoItem(onlineApplication.asWidget());
+            addHeaderToolbarItem(onlineApplication.asWidget());
         }
 
         inviteAction = new Button(INVITE, new ClickHandler() {
@@ -105,7 +105,7 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
             }
         });
         if (VistaFeatures.instance().onlineApplication()) {
-            addHeaderToolbarTwoItem(inviteAction.asWidget());
+            addHeaderToolbarItem(inviteAction.asWidget());
         }
 
         checkAction = new Button(i18n.tr("Credit Check"), new ClickHandler() {
@@ -127,7 +127,7 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
             }
         });
 // TODO : credit check (Equifax) isn't implemented yet (see LeaseApplicationForm)!          
-//        addHeaderToolbarTwoItem(checkAction.asWidget());
+//        addHeaderToolbarItem(checkAction.asWidget());
 
         // TODO Move Lease
         {
@@ -144,7 +144,7 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
                     }.show();
                 }
             });
-            addHeaderToolbarTwoItem(approveAction.asWidget());
+            addHeaderToolbarItem(approveAction.asWidget());
 
             moreInfoAction = new Button(MORE_INFO, new ClickHandler() {
                 @Override
@@ -164,7 +164,7 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
                     });
                 }
             });
-            addHeaderToolbarTwoItem(moreInfoAction.asWidget());
+            addHeaderToolbarItem(moreInfoAction.asWidget());
 
             declineAction = new Button(DECLINE, new ClickHandler() {
                 @Override
@@ -178,7 +178,7 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
                     }.show();
                 }
             });
-            addHeaderToolbarTwoItem(declineAction.asWidget());
+            addHeaderToolbarItem(declineAction.asWidget());
         }
 
         cancelAction = new Button(CANCEL, new ClickHandler() {
@@ -193,7 +193,7 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
                 }.show();
             }
         });
-        addHeaderToolbarTwoItem(cancelAction.asWidget());
+        addHeaderToolbarItem(cancelAction.asWidget());
     }
 
     @Override

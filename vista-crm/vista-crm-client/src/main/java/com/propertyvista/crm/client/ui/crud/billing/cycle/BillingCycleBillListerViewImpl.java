@@ -52,7 +52,7 @@ public class BillingCycleBillListerViewImpl extends CrmListerViewImplBase<BillDa
                 }
             }
         });
-        addHeaderToolbarTwoItem(approveAction.asWidget());
+        addHeaderToolbarItem(approveAction.asWidget());
 
         rejectAction = new Button(i18n.tr("Reject Selected"), new ClickHandler() {
             @Override
@@ -69,7 +69,7 @@ public class BillingCycleBillListerViewImpl extends CrmListerViewImplBase<BillDa
                 }
             }
         });
-        addHeaderToolbarTwoItem(rejectAction.asWidget());
+        addHeaderToolbarItem(rejectAction.asWidget());
 
         print = new Button(i18n.tr("Print Selected"), new ClickHandler() {
             @Override
@@ -79,7 +79,7 @@ public class BillingCycleBillListerViewImpl extends CrmListerViewImplBase<BillDa
                 }
             }
         });
-        addHeaderToolbarTwoItem(print.asWidget());
+        addHeaderToolbarItem(print.asWidget());
 
     }
 

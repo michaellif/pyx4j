@@ -40,7 +40,7 @@ public class AdminUserViewerViewImpl extends AdminViewerViewImplBase<AdminUserDT
                         .getStringView());
             }
         });
-        addHeaderToolbarTwoItem(passwordAction.asWidget());
+        addHeaderToolbarItem(passwordAction.asWidget());
     }
 
     @Override

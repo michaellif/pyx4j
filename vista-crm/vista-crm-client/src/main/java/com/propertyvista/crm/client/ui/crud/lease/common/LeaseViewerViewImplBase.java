@@ -50,7 +50,7 @@ public class LeaseViewerViewImplBase<DTO extends LeaseDTO> extends CrmViewerView
                 ((LeaseViewerViewBase.Presenter) getPresenter()).viewTerm(getForm().getValue().currentTerm());
             }
         });
-        addHeaderToolbarTwoItem(viewCurrentTerm.asWidget());
+        addHeaderToolbarItem(viewCurrentTerm.asWidget());
 
         viewHistoricTerm = new Button(i18n.tr("View Historic Term"), new ClickHandler() {
             @Override
@@ -70,7 +70,7 @@ public class LeaseViewerViewImplBase<DTO extends LeaseDTO> extends CrmViewerView
                 }.show();
             }
         });
-        addHeaderToolbarTwoItem(viewHistoricTerm.asWidget());
+        addHeaderToolbarItem(viewHistoricTerm.asWidget());
     }
 
     @Override

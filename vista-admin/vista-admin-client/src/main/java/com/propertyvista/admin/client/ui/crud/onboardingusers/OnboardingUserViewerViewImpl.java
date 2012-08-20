@@ -30,7 +30,7 @@ public class OnboardingUserViewerViewImpl extends AdminViewerViewImplBase<Onboar
 
     private final Button passwordAction;
 
-	private final Button createPmcAction;
+    private final Button createPmcAction;
 
     public OnboardingUserViewerViewImpl() {
         super(AdminSiteMap.Management.OnboardingUsers.class);
@@ -43,19 +43,18 @@ public class OnboardingUserViewerViewImpl extends AdminViewerViewImplBase<Onboar
                         .getStringView());
             }
         });
-        addHeaderToolbarTwoItem(passwordAction.asWidget());
-        
+        addHeaderToolbarItem(passwordAction.asWidget());
 
         createPmcAction = new Button(i18n.tr("Create PMC"), new ClickHandler() {
-        	
-			@Override
-			public void onClick(ClickEvent event) {
-				((OnboardingUserViewerView.Presenter) getPresenter()).createPmc(getForm().getValue());
-			}
-        	
+
+            @Override
+            public void onClick(ClickEvent event) {
+                ((OnboardingUserViewerView.Presenter) getPresenter()).createPmc(getForm().getValue());
+            }
+
         });
-        addHeaderToolbarTwoItem(createPmcAction.asWidget());
-        
+        addHeaderToolbarItem(createPmcAction.asWidget());
+
     }
 
     @Override
@@ -65,5 +64,4 @@ public class OnboardingUserViewerViewImpl extends AdminViewerViewImplBase<Onboar
         createPmcAction.setVisible(value.pmc().isNull() & (value.role().getValue() == VistaOnboardingBehavior.ProspectiveClient));
     }
 
-	
 }

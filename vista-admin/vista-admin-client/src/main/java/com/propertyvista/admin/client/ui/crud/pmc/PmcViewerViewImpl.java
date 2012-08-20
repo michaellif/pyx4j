@@ -52,7 +52,7 @@ public class PmcViewerViewImpl extends AdminViewerViewImplBase<PmcDTO> implement
                 d.show();
             }
         });
-        addHeaderToolbarTwoItem(upload.asWidget());
+        addHeaderToolbarItem(upload.asWidget());
 
         Button downloadFull = new Button("Download export.xml", new ClickHandler() {
             @Override
@@ -68,7 +68,7 @@ public class PmcViewerViewImpl extends AdminViewerViewImplBase<PmcDTO> implement
                 d.start(GWT.<ReportService<?>> create(ExportDownloadService.class), null, params);
             }
         });
-        addHeaderToolbarTwoItem(downloadFull.asWidget());
+        addHeaderToolbarItem(downloadFull.asWidget());
 
         Button downloadNoImages = new Button("Download export.xml (no images)", new ClickHandler() {
             @Override
@@ -84,7 +84,7 @@ public class PmcViewerViewImpl extends AdminViewerViewImplBase<PmcDTO> implement
                 d.start(GWT.<ReportService<?>> create(ExportDownloadService.class), null, params);
             }
         });
-        addHeaderToolbarTwoItem(downloadNoImages.asWidget());
+        addHeaderToolbarItem(downloadNoImages.asWidget());
 
         Button resetCache = new Button("Reset Cache", new ClickHandler() {
 
@@ -93,7 +93,7 @@ public class PmcViewerViewImpl extends AdminViewerViewImplBase<PmcDTO> implement
                 ((PmcViewerView.Presenter) getPresenter()).resetCache();
             }
         });
-        addHeaderToolbarTwoItem(resetCache);
+        addHeaderToolbarItem(resetCache);
 
         cancelBtn = new Button("Cancel PMC", new ClickHandler() {
 
@@ -103,7 +103,7 @@ public class PmcViewerViewImpl extends AdminViewerViewImplBase<PmcDTO> implement
 
             }
         });
-        addHeaderToolbarTwoItem(cancelBtn);
+        addHeaderToolbarItem(cancelBtn);
 
         suspendBtn = new Button("Suspend", new ClickHandler() {
 
@@ -112,7 +112,7 @@ public class PmcViewerViewImpl extends AdminViewerViewImplBase<PmcDTO> implement
                 ((PmcViewerView.Presenter) getPresenter()).suspend();
             }
         });
-        addHeaderToolbarTwoItem(suspendBtn);
+        addHeaderToolbarItem(suspendBtn);
 
         activateBtn = new Button("Activate", new ClickHandler() {
 
@@ -122,7 +122,7 @@ public class PmcViewerViewImpl extends AdminViewerViewImplBase<PmcDTO> implement
 
             }
         });
-        addHeaderToolbarTwoItem(activateBtn);
+        addHeaderToolbarItem(activateBtn);
 
     }
 

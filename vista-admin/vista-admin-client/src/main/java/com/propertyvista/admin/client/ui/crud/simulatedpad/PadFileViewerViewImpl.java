@@ -46,7 +46,7 @@ public class PadFileViewerViewImpl extends AdminViewerViewImplBase<PadSimFile> i
                 ((PadFileViewerView.Presenter) getPresenter()).replyReconciliation();
             }
         });
-        addHeaderToolbarTwoItem(replyReconciliation.asWidget());
+        addHeaderToolbarItem(replyReconciliation.asWidget());
 
         Button replyAcknowledgment = new Button(i18n.tr("Reply Acknowledgment"), new ClickHandler() {
             @Override
@@ -54,7 +54,7 @@ public class PadFileViewerViewImpl extends AdminViewerViewImplBase<PadSimFile> i
                 ((PadFileViewerView.Presenter) getPresenter()).replyAcknowledgment();
             }
         });
-        addHeaderToolbarTwoItem(replyAcknowledgment.asWidget());
+        addHeaderToolbarItem(replyAcknowledgment.asWidget());
 
     }
 

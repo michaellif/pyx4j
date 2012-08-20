@@ -61,9 +61,9 @@ public class EmployeeViewerViewImpl extends CrmViewerViewImplBase<EmployeeDTO> i
             }
         });
 
-        addHeaderToolbarTwoItem(passwordAction.asWidget());
-        addHeaderToolbarTwoItem(accountRecoveryOptionsAction.asWidget());
-        addHeaderToolbarTwoItem(viewLoginLogAction.asWidget());
+        addHeaderToolbarItem(passwordAction.asWidget());
+        addHeaderToolbarItem(accountRecoveryOptionsAction.asWidget());
+        addHeaderToolbarItem(viewLoginLogAction.asWidget());
     }
 
     @Override

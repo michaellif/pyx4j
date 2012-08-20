@@ -38,7 +38,7 @@ public class AccountRecoveryOptionsViewerViewImpl extends ViewerViewImplBase<Acc
                 getPresenter().edit();
             }
         });
-        addHeaderToolbarTwoItem(btnEdit);
+        addHeaderToolbarItem(btnEdit);
     }
 
     @Override

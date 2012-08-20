@@ -48,7 +48,7 @@ public class PaymentViewerViewImpl extends CrmViewerViewImplBase<PaymentRecordDT
                 ((PaymentViewerView.Presenter) getPresenter()).cancelPayment();
             }
         });
-        addHeaderToolbarTwoItem(cancelAction.asWidget());
+        addHeaderToolbarItem(cancelAction.asWidget());
 
         rejectAction = new Button(i18n.tr("Reject"), new ClickHandler() {
             @Override
@@ -56,7 +56,7 @@ public class PaymentViewerViewImpl extends CrmViewerViewImplBase<PaymentRecordDT
                 ((PaymentViewerView.Presenter) getPresenter()).rejectPayment();
             }
         });
-        addHeaderToolbarTwoItem(rejectAction.asWidget());
+        addHeaderToolbarItem(rejectAction.asWidget());
 
         clearAction = new Button(i18n.tr("Clear"), new ClickHandler() {
             @Override
@@ -64,7 +64,7 @@ public class PaymentViewerViewImpl extends CrmViewerViewImplBase<PaymentRecordDT
                 ((PaymentViewerView.Presenter) getPresenter()).clearPayment();
             }
         });
-        addHeaderToolbarTwoItem(clearAction.asWidget());
+        addHeaderToolbarItem(clearAction.asWidget());
 
         processAction = new Button(i18n.tr("Process"), new ClickHandler() {
             @Override
@@ -73,7 +73,7 @@ public class PaymentViewerViewImpl extends CrmViewerViewImplBase<PaymentRecordDT
             }
         });
         processAction.addStyleName(DefaultSiteCrudPanelsTheme.StyleName.HighlightedButton.name());
-        addHeaderToolbarTwoItem(processAction.asWidget());
+        addHeaderToolbarItem(processAction.asWidget());
 
         scheduleAction = new Button(i18n.tr("Schedule"), new ClickHandler() {
             @Override
@@ -82,7 +82,7 @@ public class PaymentViewerViewImpl extends CrmViewerViewImplBase<PaymentRecordDT
             }
         });
         scheduleAction.addStyleName(DefaultSiteCrudPanelsTheme.StyleName.HighlightedButton.name());
-        addHeaderToolbarTwoItem(scheduleAction.asWidget());
+        addHeaderToolbarItem(scheduleAction.asWidget());
     }
 
     @Override

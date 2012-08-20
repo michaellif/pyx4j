@@ -35,7 +35,7 @@ public class ComplexViewerViewImpl extends CrmViewerViewImplBase<ComplexDTO> imp
     public ComplexViewerViewImpl() {
         super(CrmSiteMap.Properties.Complex.class);
 
-        addHeaderToolbarTwoItem(new Button(i18n.tr("Dashboard"), new ClickHandler() {
+        addHeaderToolbarItem(new Button(i18n.tr("Dashboard"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 new DashboardSelectorDialog() {

@@ -62,7 +62,7 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
                 }.show();
             }
         });
-        addHeaderToolbarTwoItem(scheduleAction.asWidget());
+        addHeaderToolbarItem(scheduleAction.asWidget());
 
         resolveAction = new Button(i18n.tr("Resolve"), new ClickHandler() {
             @Override
@@ -70,7 +70,7 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
                 ((MaintenanceRequestViewerView.Presenter) getPresenter()).resolveAction();
             }
         });
-        addHeaderToolbarTwoItem(resolveAction.asWidget());
+        addHeaderToolbarItem(resolveAction.asWidget());
 
         rateAction = new Button(i18n.tr("Rate..."), new ClickHandler() {
             @Override
@@ -84,7 +84,7 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
                 }.show();
             }
         });
-        addHeaderToolbarTwoItem(rateAction.asWidget());
+        addHeaderToolbarItem(rateAction.asWidget());
 
         cancelAction = new Button(i18n.tr("Cancel"), new ClickHandler() {
             @Override
@@ -97,7 +97,7 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
                 });
             }
         });
-        addHeaderToolbarTwoItem(cancelAction.asWidget());
+        addHeaderToolbarItem(cancelAction.asWidget());
     }
 
     @Override

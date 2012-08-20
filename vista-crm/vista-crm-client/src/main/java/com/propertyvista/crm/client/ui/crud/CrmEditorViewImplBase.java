@@ -43,31 +43,6 @@ public class CrmEditorViewImplBase<E extends IEntity> extends EditorViewImplBase
     public CrmEditorViewImplBase(Class<? extends CrudAppPlace> placeClass) {
         super();
 
-        defaultCaption = (placeClass != null ? AppSite.getHistoryMapper().getPlaceInfo(placeClass).getCaption() : "");
-        setCaption(defaultCaption);
-
-        AnchorButton btnCancel = new AnchorButton(i18n.tr("Cancel"), new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                getPresenter().cancel();
-            }
-        });
-        addFooterToolbarItem(btnCancel);
-
-        btnApply = new Button(i18n.tr("Apply"), new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                if (!getForm().isValid()) {
-                    getForm().setUnconditionalValidationErrorRendering(true);
-                    showValidationDialog();
-                } else {
-                    getPresenter().apply();
-                }
-            }
-        });
-
-        addFooterToolbarItem(btnApply);
-
         btnSave = new Button(i18n.tr("Save"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
@@ -80,6 +55,30 @@ public class CrmEditorViewImplBase<E extends IEntity> extends EditorViewImplBase
             }
         });
         addFooterToolbarItem(btnSave);
+
+        btnApply = new Button(i18n.tr("Apply"), new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                if (!getForm().isValid()) {
+                    getForm().setUnconditionalValidationErrorRendering(true);
+                    showValidationDialog();
+                } else {
+                    getPresenter().apply();
+                }
+            }
+        });
+        addFooterToolbarItem(btnApply);
+
+        defaultCaption = (placeClass != null ? AppSite.getHistoryMapper().getPlaceInfo(placeClass).getCaption() : "");
+        setCaption(defaultCaption);
+
+        AnchorButton btnCancel = new AnchorButton(i18n.tr("Cancel"), new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                getPresenter().cancel();
+            }
+        });
+        addFooterToolbarItem(btnCancel);
 
         enableButtons(false);
     }

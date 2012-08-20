@@ -32,7 +32,7 @@ public class SiteViewerImpl extends CrmViewerViewImplBase<SiteDescriptorDTO> imp
         super(CrmSiteMap.Settings.Content.class, new SiteForm(true));
 
         // Add actions:
-        addHeaderToolbarTwoItem(new Button(i18n.tr("Add Child Page"), new ClickHandler() {
+        addHeaderToolbarItem(new Button(i18n.tr("Add Child Page"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 Key valueKey = getForm().getValue().getPrimaryKey();

@@ -47,7 +47,7 @@ public class AdminViewerViewImplBase<E extends IEntity> extends ViewerViewImplBa
                 }
             });
 
-            addHeaderToolbarTwoItem(btnEdit);
+            addHeaderToolbarItem(btnEdit);
         }
 
     }

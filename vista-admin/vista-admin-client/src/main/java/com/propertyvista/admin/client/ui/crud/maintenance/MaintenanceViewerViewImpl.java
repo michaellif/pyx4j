@@ -40,6 +40,6 @@ public class MaintenanceViewerViewImpl extends AdminViewerViewImplBase<SystemMai
                 ((MaintenanceViewerActivity) getPresenter()).resetGlobalCache();
             }
         });
-        addHeaderToolbarTwoItem(btnResetCache.asWidget());
+        addHeaderToolbarItem(btnResetCache.asWidget());
     }
 }

@@ -50,7 +50,7 @@ public class GuarantorViewerViewImpl extends CrmViewerViewImplBase<GuarantorDTO>
                         .getValue().customer().person().getStringView());
             }
         });
-        addHeaderToolbarTwoItem(passwordAction.asWidget());
+        addHeaderToolbarItem(passwordAction.asWidget());
     }
 
     @Override

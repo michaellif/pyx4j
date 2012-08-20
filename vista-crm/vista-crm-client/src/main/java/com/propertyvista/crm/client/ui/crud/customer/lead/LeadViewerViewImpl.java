@@ -78,7 +78,7 @@ public class LeadViewerViewImpl extends CrmViewerViewImplBase<Lead> implements L
 
             }
         });
-        addHeaderToolbarTwoItem(convertAction);
+        addHeaderToolbarItem(convertAction);
 
         closeAction = new Button(i18n.tr("Close"), new ClickHandler() {
             @Override
@@ -91,7 +91,7 @@ public class LeadViewerViewImpl extends CrmViewerViewImplBase<Lead> implements L
                 });
             }
         });
-        addHeaderToolbarTwoItem(closeAction.asWidget());
+        addHeaderToolbarItem(closeAction.asWidget());
 
         // set main form here:
         setForm(new LeadForm(true));

@@ -107,7 +107,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
                 });
             }
         });
-        addHeaderToolbarTwoItem(sendMail.asWidget());
+        addHeaderToolbarItem(sendMail.asWidget());
 
         runBill = new Button(i18n.tr("Run Bill"), new ClickHandler() {
             @Override
@@ -115,7 +115,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
                 ((LeaseViewerView.Presenter) getPresenter()).startBilling();
             }
         });
-        addHeaderToolbarTwoItem(runBill.asWidget());
+        addHeaderToolbarItem(runBill.asWidget());
 
         notice = new Button(i18n.tr("Notice..."), new ClickHandler() {
             @Override
@@ -129,7 +129,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
                 }.show();
             }
         });
-        addHeaderToolbarTwoItem(notice.asWidget());
+        addHeaderToolbarItem(notice.asWidget());
 
         cancelNotice = new Button(i18n.tr("Cancel Notice"), new ClickHandler() {
             @Override
@@ -137,7 +137,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
                 ((LeaseViewerView.Presenter) getPresenter()).cancelNotice();
             }
         });
-        addHeaderToolbarTwoItem(cancelNotice.asWidget());
+        addHeaderToolbarItem(cancelNotice.asWidget());
 
         evict = new Button(i18n.tr("Evict..."), new ClickHandler() {
             @Override
@@ -151,7 +151,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
                 }.show();
             }
         });
-        addHeaderToolbarTwoItem(evict.asWidget());
+        addHeaderToolbarItem(evict.asWidget());
 
         cancelEvict = new Button(i18n.tr("Cancel Evict"), new ClickHandler() {
             @Override
@@ -159,7 +159,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
                 ((LeaseViewerView.Presenter) getPresenter()).cancelEvict();
             }
         });
-        addHeaderToolbarTwoItem(cancelEvict.asWidget());
+        addHeaderToolbarItem(cancelEvict.asWidget());
 
         activate = new Button(i18n.tr("Activate"), new ClickHandler() {
             @Override
@@ -167,7 +167,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
                 ((LeaseViewerView.Presenter) getPresenter()).activate();
             }
         });
-        addHeaderToolbarTwoItem(activate.asWidget());
+        addHeaderToolbarItem(activate.asWidget());
     }
 
     @Override
@@ -276,10 +276,10 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
                 public void addValidations() {
                     super.addValidations();
 
-                    new DateInPeriodValidation(get(proto().currentTerm().termFrom()), get(proto().moveOutNotice()), get(proto().currentTerm()
-                            .termTo()), i18n.tr("The Date Should Be Within The Lease Period"));
-                    new DateInPeriodValidation(get(proto().currentTerm().termFrom()), get(proto().expectedMoveOut()), get(proto().currentTerm()
-                            .termTo()), i18n.tr("The Date Should Be Within The Lease Period"));
+                    new DateInPeriodValidation(get(proto().currentTerm().termFrom()), get(proto().moveOutNotice()), get(proto().currentTerm().termTo()),
+                            i18n.tr("The Date Should Be Within The Lease Period"));
+                    new DateInPeriodValidation(get(proto().currentTerm().termFrom()), get(proto().expectedMoveOut()), get(proto().currentTerm().termTo()),
+                            i18n.tr("The Date Should Be Within The Lease Period"));
 
                     new StartEndDateValidation(get(proto().moveOutNotice()), get(proto().expectedMoveOut()),
                             i18n.tr("The Notice Date Must Be Earlier Than The Expected Move Out date"));

@@ -56,7 +56,7 @@ public class AppointmentViewerViewImpl extends CrmViewerViewImplBase<Appointment
                 }.show();
             }
         });
-        addHeaderToolbarTwoItem(closeAction.asWidget());
+        addHeaderToolbarItem(closeAction.asWidget());
 
         // set main form here:
         setForm(new AppointmentForm(true));

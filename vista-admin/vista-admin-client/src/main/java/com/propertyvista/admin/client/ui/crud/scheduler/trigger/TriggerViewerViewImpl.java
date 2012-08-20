@@ -58,7 +58,7 @@ public class TriggerViewerViewImpl extends AdminViewerViewImplBase<Trigger> impl
                 ((TriggerViewerView.Presenter) getPresenter()).refresh();
             }
         });
-        addHeaderToolbarTwoItem(refresh.asWidget());
+        addHeaderToolbarItem(refresh.asWidget());
 
         runImmediately = new Button(i18n.tr("Run Immediatly"), new ClickHandler() {
             @Override
@@ -66,7 +66,7 @@ public class TriggerViewerViewImpl extends AdminViewerViewImplBase<Trigger> impl
                 ((TriggerViewerView.Presenter) getPresenter()).runImmediately();
             }
         });
-        addHeaderToolbarTwoItem(runImmediately.asWidget());
+        addHeaderToolbarItem(runImmediately.asWidget());
 
         runForDate = new Button(i18n.tr("Run for Date..."), new ClickHandler() {
             @Override
@@ -81,7 +81,7 @@ public class TriggerViewerViewImpl extends AdminViewerViewImplBase<Trigger> impl
 
             }
         });
-        addHeaderToolbarTwoItem(runForDate.asWidget());
+        addHeaderToolbarItem(runForDate.asWidget());
     }
 
     @Override

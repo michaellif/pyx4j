@@ -87,7 +87,7 @@ public class UnitViewerViewImpl extends CrmViewerViewImplBase<AptUnitDTO> implem
                 new ExistingLeaseDataDialog(getForm().getValue()).show();
             }
         });
-        addHeaderToolbarTwoItem(leaseAction);
+        addHeaderToolbarItem(leaseAction);
 
         initOccupancyActions();
     }
@@ -144,7 +144,7 @@ public class UnitViewerViewImpl extends CrmViewerViewImplBase<AptUnitDTO> implem
             }
         });
         scopeAction.ensureDebugId(DebugIds.unitViewerViewScopeAction.debugId());
-        addHeaderToolbarTwoItem(scopeAction);
+        addHeaderToolbarItem(scopeAction);
 
         makePendingAction = new Button(i18n.tr("Make Pending..."), new ClickHandler() {
             @Override
@@ -155,6 +155,6 @@ public class UnitViewerViewImpl extends CrmViewerViewImplBase<AptUnitDTO> implem
             }
         });
         makePendingAction.ensureDebugId(DebugIds.unitViewerViewMakeVacantAction.debugId());
-        addHeaderToolbarTwoItem(makePendingAction);
+        addHeaderToolbarItem(makePendingAction);
     }
 }
