@@ -647,6 +647,8 @@ public class MainActivityMapper implements AppActivityMapper {
                         activity = new ReportEditorActivity(crudPlace);
                     } else if (place instanceof CrmSiteMap.Dashboard.Edit) {
                         activity = new DashboardEditorActivity(crudPlace);
+
+// - Settings:
                     } else if (place instanceof CrmSiteMap.Account) {
                         // the service that the Account related activities use doesn't care about the 'id' arg,
                         // but nevertheless the base "Activity" classes need it, so we just add a value let them be happy
@@ -661,7 +663,7 @@ public class MainActivityMapper implements AppActivityMapper {
                             activity = new AccountViewerActivity(crudPlace);
                             break;
                         }
-// - Settings:
+
                     } else if (place instanceof CrmSiteMap.Settings.ProductDictionary) {
                         activity = new ProductDictionaryViewActivity(place);
 
