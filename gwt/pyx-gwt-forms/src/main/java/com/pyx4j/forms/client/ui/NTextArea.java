@@ -23,6 +23,7 @@ package com.pyx4j.forms.client.ui;
 import java.text.ParseException;
 
 import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.ui.HTML;
 
 import com.pyx4j.widgets.client.TextArea;
 
@@ -37,6 +38,13 @@ public class NTextArea extends NTextComponent<String, TextArea, CTextComponent<S
     @Override
     protected TextArea createEditor() {
         return new TextArea();
+    }
+
+    @Override
+    protected HTML createViewer() {
+        HTML viewer = super.createViewer();
+        viewer.getElement().getStyle().setProperty("whiteSpace", "pre");
+        return viewer;
     }
 
     @Override
