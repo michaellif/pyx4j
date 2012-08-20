@@ -48,21 +48,19 @@ public abstract class ViewImplBase extends DockLayoutPanel implements IView {
 
     private final Label captionLabel;
 
-    private final Toolbar headerToolbarOne;
-
-    private final Toolbar headerToolbarTwo;
+    private final Toolbar headerToolbar;
 
     private final Toolbar footerToolbar;
 
-    private final SimplePanel headerToolbarOneHolder;
+    private final FlowPanel headerContainer;
 
-    private final SimplePanel headerToolbarTwoHolder;
+    private final SimplePanel headerBreadcrumbHolder;
+
+    private final SimplePanel headerToolbarHolder;
 
     private final SimplePanel footerToolbarHolder;
 
-    private int headerToolbarOneHeight = TOOLBAR_DEFAULT_HEIGHT;
-
-    private int headerToolbarTwoHeight = TOOLBAR_DEFAULT_HEIGHT;
+    private final int headerToolbarHeight = TOOLBAR_DEFAULT_HEIGHT;
 
     private int footerToolbarHeight = TOOLBAR_DEFAULT_HEIGHT;
 
@@ -75,17 +73,20 @@ public abstract class ViewImplBase extends DockLayoutPanel implements IView {
         headerHolder.setStyleName(DefaultSiteCrudPanelsTheme.StyleName.Header.name());
         addNorth(headerHolder, TOOLBAR_DEFAULT_HEIGHT);
 
-        headerToolbarOneHolder = new SimplePanel();
-        headerToolbarOneHolder.setStyleName(DefaultSiteCrudPanelsTheme.StyleName.HeaderToolbarOne.name());
-        headerToolbarOne = new Toolbar();
-        headerToolbarOneHolder.setWidget(headerToolbarOne);
-        addNorth(headerToolbarOneHolder, 0);
+        headerContainer = new FlowPanel();
+        headerContainer.setStyleName(DefaultSiteCrudPanelsTheme.StyleName.HeaderContainer.name());
+        addNorth(headerContainer, 0);
 
-        headerToolbarTwoHolder = new SimplePanel();
-        headerToolbarTwoHolder.setStyleName(DefaultSiteCrudPanelsTheme.StyleName.HeaderToolbarTwo.name());
-        headerToolbarTwo = new Toolbar();
-        headerToolbarTwoHolder.setWidget(headerToolbarTwo);
-        addNorth(headerToolbarTwoHolder, 0);
+        headerToolbarHolder = new SimplePanel();
+        headerToolbarHolder.setStyleName(DefaultSiteCrudPanelsTheme.StyleName.HeaderToolbar.name());
+        headerToolbar = new Toolbar();
+        headerToolbarHolder.setWidget(headerToolbar);
+
+        headerContainer.add(headerToolbarHolder);
+
+        headerBreadcrumbHolder = new SimplePanel();
+        headerBreadcrumbHolder.setStyleName(DefaultSiteCrudPanelsTheme.StyleName.HeaderBreadcrumbs.name());
+        headerContainer.add(headerBreadcrumbHolder);
 
         footerToolbarHolder = new SimplePanel();
         footerToolbarHolder.setStyleName(DefaultSiteCrudPanelsTheme.StyleName.FooterToolbar.name());
@@ -147,39 +148,19 @@ public abstract class ViewImplBase extends DockLayoutPanel implements IView {
         captionLabel.setText(caption);
     }
 
-    public void addHeaderToolbarOneItem(Widget widget) {
-        if (headerToolbarOne.getWidgetCount() == 0) {
-            setWidgetSize(headerToolbarOneHolder, headerToolbarOneHeight);
-        }
-        headerToolbarOne.addItem(widget);
+    public void setBreadcrumbsBar(BreadcrumbsBar breadcrumbsBar) {
+        setWidgetSize(headerContainer, headerToolbarHeight);
+        headerBreadcrumbHolder.setWidget(breadcrumbsBar);
     }
 
-    public void addHeaderToolbarTwoItem(Widget widget) {
-        if (headerToolbarTwo.getWidgetCount() == 0) {
-            setWidgetSize(headerToolbarTwoHolder, headerToolbarTwoHeight);
-        }
-        headerToolbarTwo.addItem(widget, true);
+    public void addHeaderToolbarItem(Widget widget) {
+        setWidgetSize(headerContainer, headerToolbarHeight);
+        headerToolbar.addItem(widget);
     }
 
     public void addFooterToolbarItem(Widget widget) {
-        if (footerToolbar.getWidgetCount() == 0) {
-            setWidgetSize(footerToolbarHolder, footerToolbarHeight);
-        }
-        footerToolbar.addItem(widget, true);
-    }
-
-    public void setHeaderToolbarOneHeight(int headerToolbarOneHeight) {
-        this.headerToolbarOneHeight = headerToolbarOneHeight;
-        if (headerToolbarOne.getWidgetCount() == 0) {
-            setWidgetSize(headerToolbarOneHolder, headerToolbarOneHeight);
-        }
-    }
-
-    public void setHeaderToolbarTwoHeight(int headerToolbarTwoHeight) {
-        this.headerToolbarTwoHeight = headerToolbarTwoHeight;
-        if (headerToolbarTwo.getWidgetCount() == 0) {
-            setWidgetSize(headerToolbarTwoHolder, headerToolbarTwoHeight);
-        }
+        setWidgetSize(footerToolbarHolder, footerToolbarHeight);
+        footerToolbar.addItem(widget);
     }
 
     public void setFooterToolbarHeight(int footerToolbarHeight) {

@@ -102,11 +102,12 @@ public class DefaultDataTableTheme extends Theme {
         style = new Style(".", StyleName.DataTableActionsBar);
         style.addProperty("border", "1px solid");
         style.addProperty("border-color", ThemeColors.foreground, 0.3);
-        style.addProperty("padding", "6px");
+        style.addProperty("padding-top", "6px");
         style.addProperty("background-color", ThemeColors.foreground, 0.05);
         addStyle(style);
 
         style = new Style(".", StyleName.DataTableActionsBar, " .", DefaultWidgetsTheme.StyleName.Button);
+        style.addProperty("vertical-align", "middle");
         style.addProperty("border-color", ThemeColors.foreground, 0.4);
         style.addProperty("color", ThemeColors.foreground, 0.9);
         style.addProperty("height", "20px");

@@ -28,7 +28,6 @@ public class ViewerViewImplBase<E extends IEntity> extends FormViewImplBase<E> i
 
     public ViewerViewImplBase() {
         super();
-        setHeaderToolbarOneHeight(29);
     }
 
     @Override

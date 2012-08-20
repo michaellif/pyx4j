@@ -30,7 +30,7 @@ import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 public class DefaultSiteCrudPanelsTheme extends Theme {
 
     public static enum StyleName implements IStyleName {
-        HeaderToolbarOne, HeaderToolbarTwo, Lister, ListerFiltersPanel, ListerListPanel, Header, FooterToolbar, BreadcrumbsBar, BreadcrumbAnchor, HighlightedButton, Visor, VisorHeader, VisorBackButton, VisorCaption
+        HeaderContainer, HeaderToolbar, HeaderBreadcrumbs, Lister, ListerFiltersPanel, ListerListPanel, Header, FooterToolbar, BreadcrumbsBar, BreadcrumbAnchor, HighlightedButton, Visor, VisorHeader, VisorBackButton, VisorCaption
     }
 
     public DefaultSiteCrudPanelsTheme() {
@@ -44,25 +44,35 @@ public class DefaultSiteCrudPanelsTheme extends Theme {
 
     private void initGeneralStyles() {
 
-        initButtonStyles("." + StyleName.HeaderToolbarOne);
-
-        initButtonStyles("." + StyleName.HeaderToolbarTwo);
+        initButtonStyles("." + StyleName.HeaderToolbar);
 
         initButtonStyles("." + StyleName.FooterToolbar);
 
-        initHighlightedButtonStyles("." + StyleName.HeaderToolbarTwo);
+        initHighlightedButtonStyles("." + StyleName.HeaderToolbar);
 
-        Style style = new Style(".", StyleName.HeaderToolbarOne);
+        Style style = new Style(".", StyleName.HeaderContainer);
         style.addProperty("background-color", ThemeColors.object1, 0.3);
-        style.addProperty("font-weight", "bold");
+        style.addProperty("padding-top", "6px");
+        style.addProperty("width", "100%");
+        style.addProperty("height", "100%");
         addStyle(style);
 
-        style = new Style(".", StyleName.HeaderToolbarTwo);
-        style.addProperty("padding", "6px");
+        style = new Style(".", StyleName.HeaderToolbar);
+        style.addProperty("background-color", ThemeColors.object1, 0.3);
+        style.addProperty("height", "100%");
+        style.addProperty("font-weight", "bold");
+        style.addProperty("float", "right");
+        style.addProperty("padding-right", "6px");
+        addStyle(style);
+
+        style = new Style(".", StyleName.HeaderBreadcrumbs);
+        style.addProperty("overflow", "hidden");
         addStyle(style);
 
         style = new Style(".", StyleName.FooterToolbar);
         style.addProperty("padding", "2px 0px");
+        style.addProperty("border-top", "4px solid");
+        style.addProperty("border-color", ThemeColors.foreground, 0.3);
         addStyle(style);
 
         style = new Style(".", StyleName.Header);
@@ -77,9 +87,8 @@ public class DefaultSiteCrudPanelsTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", StyleName.FooterToolbar, " .", DefaultWidgetsTheme.StyleName.Toolbar);
-        style.addProperty("border-top", "4px solid");
-        style.addProperty("border-color", ThemeColors.foreground, 0.3);
         style.addProperty("padding", "2px");
+        style.addProperty("float", "right");
         addStyle(style);
 
         style = new Style(".", StyleName.BreadcrumbsBar);
@@ -89,6 +98,7 @@ public class DefaultSiteCrudPanelsTheme extends Theme {
         style = new Style(".", StyleName.BreadcrumbAnchor);
         style.addProperty("cursor", "pointer");
         style.addProperty("height", "100%");
+        style.addProperty("white-space", "nowrap");
         addStyle(style);
 
         style = new Style(".", StyleName.BreadcrumbAnchor, ":hover");

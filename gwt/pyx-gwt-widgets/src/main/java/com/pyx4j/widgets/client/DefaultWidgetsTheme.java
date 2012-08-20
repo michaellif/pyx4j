@@ -30,7 +30,7 @@ import com.pyx4j.gwt.commons.BrowserType;
 public class DefaultWidgetsTheme extends Theme {
 
     public static enum StyleName implements IStyleName {
-        TextBox, ListBox, Toolbar, ToolbarSeparator,
+        TextBox, ListBox, Toolbar, ToolbarItem, ToolbarSeparator,
 
         Button, ButtonContent, ButtonText,
 
@@ -139,7 +139,18 @@ public class DefaultWidgetsTheme extends Theme {
     }
 
     protected void initToolbarStyle() {
-        Style style = new Style(".", StyleName.ToolbarSeparator);
+
+        Style style = new Style(".", StyleName.Toolbar);
+        style.addProperty("white-space", "nowrap");
+        addStyle(style);
+
+        style = new Style(".", StyleName.ToolbarItem);
+        style.addProperty("display", "inline-block");
+        style.addProperty("padding-left", "4px");
+        style.addProperty("vertical-align", "middle");
+        addStyle(style);
+
+        style = new Style(".", StyleName.ToolbarSeparator);
         style.addProperty("border-left", "1px solid");
         style.addProperty("border-left-color", ThemeColors.foreground, 0.5);
         style.addProperty("margin-left", "8px");

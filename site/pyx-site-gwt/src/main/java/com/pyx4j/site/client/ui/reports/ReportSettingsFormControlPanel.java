@@ -59,7 +59,7 @@ public abstract class ReportSettingsFormControlPanel extends Composite {
                 updateModeToggleButtonLabel();
                 onSettingsModeToggled(isAdvanced);
             }
-        }), true);
+        }));
         modeToggle.getElement().getStyle().setMarginRight(2, Unit.EM);
 
         controlPanel.addItem(apply = new Button(i18n.tr("Apply"), new ClickHandler() {
@@ -67,7 +67,7 @@ public abstract class ReportSettingsFormControlPanel extends Composite {
             public void onClick(ClickEvent event) {
                 onApply();
             }
-        }), true);
+        }));
 
         SimplePanel p = new SimplePanel();
         p.setStyleName(DefaultSiteCrudPanelsTheme.StyleName.FooterToolbar.name());

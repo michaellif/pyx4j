@@ -20,9 +20,8 @@
  */
 package com.pyx4j.widgets.client.actionbar;
 
-import com.google.gwt.dom.client.Style.Float;
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.widgets.client.DefaultWidgetsTheme;
@@ -38,21 +37,15 @@ public class Toolbar extends FlowPanel {
     }
 
     public void addItem(Widget widget) {
-        insertItem(widget, getWidgetCount(), false);
+        insertItem(widget, getWidgetCount());
     }
 
-    public void addItem(Widget widget, boolean floatRight) {
-        insertItem(widget, getWidgetCount(), floatRight);
-    }
+    public void insertItem(Widget widget, int beforeIndex) {
+        SimplePanel itemHolder = new SimplePanel();
+        itemHolder.setStyleName(DefaultWidgetsTheme.StyleName.ToolbarItem.name());
 
-    public void insertItem(Widget widget, int beforeIndex, boolean floatRight) {
-        insert(widget, beforeIndex);
-        widget.getElement().getStyle().setMarginLeft(6, Unit.PX);
-        if (floatRight) {
-            widget.getElement().getStyle().setFloat(Float.RIGHT);
-        } else {
-            widget.getElement().getStyle().setFloat(Float.LEFT);
-        }
+        itemHolder.setWidget(widget);
+        insert(itemHolder, beforeIndex);
     }
 
     public BarSeparator insertSeparator(int beforeIndex) {
