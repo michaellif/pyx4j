@@ -39,6 +39,11 @@ public class VistaServerSideConfiguration44 extends VistaServerSideConfiguration
     }
 
     @Override
+    public boolean isVistaDemo() {
+        return true;
+    }
+
+    @Override
     public String getApplicationURLNamespace() {
         return ".44.birchwoodsoftwaregroup.com/";
     }
