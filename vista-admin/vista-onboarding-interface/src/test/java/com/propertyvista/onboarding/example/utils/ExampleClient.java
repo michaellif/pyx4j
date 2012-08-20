@@ -36,7 +36,7 @@ public class ExampleClient {
     // env22
     //public static String serverUrl = "http://vista.22.birchwoodsoftwaregroup.com/public/onboarding";
 
-    public static String serverUrl = "http://localhost:8888/vista/public/onboarding";
+    public static String serverUrl = "http://localhost:8888/vista/interfaces/onboarding";
 
     //public static String serverUrl = "http://vista.33.birchwoodsoftwaregroup.com/public/onboarding";
 

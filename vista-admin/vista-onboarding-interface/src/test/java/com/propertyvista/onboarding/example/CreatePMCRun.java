@@ -15,9 +15,13 @@ package com.propertyvista.onboarding.example;
 
 import java.util.Date;
 
+import junit.framework.Assert;
+
+import com.propertyvista.onboarding.example.model.AccountInfo;
 import com.propertyvista.onboarding.example.model.AccountInfoResponse;
 import com.propertyvista.onboarding.example.model.CreateOnboardingUserRequest;
 import com.propertyvista.onboarding.example.model.CreatePMCRequest;
+import com.propertyvista.onboarding.example.model.GetAccountInfoRequest;
 import com.propertyvista.onboarding.example.model.GetSatisfactionFastpassUrlRequest;
 import com.propertyvista.onboarding.example.model.GetSatisfactionFastpassUrlResponse;
 import com.propertyvista.onboarding.example.model.OnboardingUserAuthenticationRequest;
@@ -87,40 +91,92 @@ public class CreatePMCRun {
             }
         }
 
-        CreatePMCRequest r = new CreatePMCRequest();
-        r.requestId = "TestCreatePMCRun";
-        r.dnsName = resDnsNamereq.dnsName;
-        //r.dnsNameAliases = Arrays.asList(new String[] { "www.rossul.com", "www.rossul.ca" });
-        r.name = "Apartments & Co " + String.valueOf(System.currentTimeMillis());
-        r.onboardingAccountId = resDnsNamereq.onboardingAccountId;
+        {
+            CreatePMCRequest r = new CreatePMCRequest();
+            r.requestId = "TestCreatePMCRun";
+            r.dnsName = resDnsNamereq.dnsName;
+            //r.dnsNameAliases = Arrays.asList(new String[] { "www.rossul.com", "www.rossul.ca" });
+            r.name = "Apartments & Co " + String.valueOf(System.currentTimeMillis());
+            r.onboardingAccountId = resDnsNamereq.onboardingAccountId;
 //resDnsNamereq.onboardingAccountId;
-        r.requestId = "CreatePMCRequest";
-        r.requestRemoteAddr = "1.1.1.1";
+            r.requestId = "CreatePMCRequest";
+            r.requestRemoteAddr = "1.1.1.1";
+
+            {
+                RequestMessage rm = new RequestMessage();
+                rm.interfaceEntity = ExampleClient.interfaceEntity;
+                rm.interfaceEntityPassword = ExampleClient.interfaceEntityPassword;
+                rm.addRequest(r);
+
+                ResponseMessage response = ExampleClient.execute(rm);
+
+                System.out.println("response Status   : " + response.status);
+                System.out.println("response Message  : " + response.errorMessage);
+
+                if (response.status == ResponseMessage.StatusCode.OK) {
+                    System.out.println("echo requestId    : " + response.responses.get(0).requestId);
+                    System.out.println("response Code     : " + response.responses.get(0).success);
+                    System.out.println("response Message  : " + response.responses.get(0).errorMessage);
+
+                    if (response.responses.get(0) instanceof AccountInfoResponse) {
+                        AccountInfoResponse resp = (AccountInfoResponse) response.responses.get(0);
+                        System.out.println("vistaCrmUrl : " + resp.vistaCrmUrl);
+                        System.out.println("residentPortalUrl : " + resp.residentPortalUrl);
+                        System.out.println("prospectPortalUrl : " + resp.prospectPortalUrl);
+
+                        Assert.assertEquals("Account not returned", 1, resp.accounts.size());
+                        AccountInfo account = resp.accounts.get(0);
+                        Assert.assertEquals(user.email, account.email);
+                        Assert.assertEquals(user.firstName, account.firstName);
+                        Assert.assertEquals(user.lastName, account.lastName);
+
+                    } else {
+                        throw new AssertionError();
+                    }
+                } else {
+                    throw new AssertionError(response.status);
+                }
+            }
+        }
 
         {
-            RequestMessage rm = new RequestMessage();
-            rm.interfaceEntity = ExampleClient.interfaceEntity;
-            rm.interfaceEntityPassword = ExampleClient.interfaceEntityPassword;
-            rm.addRequest(r);
+            GetAccountInfoRequest r = new GetAccountInfoRequest();
+            r.requestId = "GetAccountInfo";
+            r.onboardingAccountId = resDnsNamereq.onboardingAccountId;
+            r.requestRemoteAddr = "1.1.1.1";
+            {
+                RequestMessage rm = new RequestMessage();
+                rm.interfaceEntity = ExampleClient.interfaceEntity;
+                rm.interfaceEntityPassword = ExampleClient.interfaceEntityPassword;
+                rm.addRequest(r);
 
-            ResponseMessage response = ExampleClient.execute(rm);
+                ResponseMessage response = ExampleClient.execute(rm);
 
-            System.out.println("response Status   : " + response.status);
-            System.out.println("response Message  : " + response.errorMessage);
+                System.out.println("response Status   : " + response.status);
+                System.out.println("response Message  : " + response.errorMessage);
 
-            if (response.status == ResponseMessage.StatusCode.OK) {
-                System.out.println("echo requestId    : " + response.responses.get(0).requestId);
-                System.out.println("response Code     : " + response.responses.get(0).success);
-                System.out.println("response Message  : " + response.responses.get(0).errorMessage);
+                if (response.status == ResponseMessage.StatusCode.OK) {
+                    System.out.println("echo requestId    : " + response.responses.get(0).requestId);
+                    System.out.println("response Code     : " + response.responses.get(0).success);
+                    System.out.println("response Message  : " + response.responses.get(0).errorMessage);
 
-                if (response.responses.get(0) instanceof AccountInfoResponse) {
-                    AccountInfoResponse resp = (AccountInfoResponse) response.responses.get(0);
-                    System.out.println("vistaCrmUrl : " + resp.vistaCrmUrl);
-                    System.out.println("residentPortalUrl : " + resp.residentPortalUrl);
-                    System.out.println("prospectPortalUrl : " + resp.prospectPortalUrl);
+                    if (response.responses.get(0) instanceof AccountInfoResponse) {
+                        AccountInfoResponse resp = (AccountInfoResponse) response.responses.get(0);
+                        System.out.println("vistaCrmUrl : " + resp.vistaCrmUrl);
+                        System.out.println("residentPortalUrl : " + resp.residentPortalUrl);
+                        System.out.println("prospectPortalUrl : " + resp.prospectPortalUrl);
+
+                        Assert.assertEquals("Account not returned", 1, resp.accounts.size());
+                        AccountInfo account = resp.accounts.get(0);
+                        Assert.assertEquals(user.email, account.email);
+                        Assert.assertEquals(user.firstName, account.firstName);
+                        Assert.assertEquals(user.lastName, account.lastName);
+                    } else {
+                        throw new AssertionError();
+                    }
+                } else {
+                    throw new AssertionError(response.status);
                 }
-            } else {
-                throw new AssertionError(response.status);
             }
         }
 

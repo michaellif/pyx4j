@@ -86,19 +86,6 @@ public class OnboardingExample {
 
         {
             cnt++;
-            UpdateAccountInfoRequestIO r = EntityFactory.create(UpdateAccountInfoRequestIO.class);
-            r.onboardingAccountId().setValue("star");
-            createAccountInfoIO(r.accountInfo());
-
-            writeXML(createExampleRequest(r), cnt + "-request-UpdateAccountInfo.xml");
-            AccountInfoResponseIO rs = EntityFactory.create(AccountInfoResponseIO.class);
-            rs.success().setValue(Boolean.TRUE);
-            createAccountInfoIO(rs.accountInfo());
-            writeXML(createExampleResponse(rs), cnt + "-response-UpdateAccountInfo.xml");
-        }
-
-        {
-            cnt++;
             CreatePMCRequestIO r = EntityFactory.create(CreatePMCRequestIO.class);
             r.onboardingAccountId().setValue("star");
             r.name().setValue("Star Starlight");
@@ -122,7 +109,7 @@ public class OnboardingExample {
             r.onboardingAccountId().setValue("star");
             writeXML(createExampleRequest(r), cnt + "-request-GetAccountInfo.xml");
             AccountInfoResponseIO rs = EntityFactory.create(AccountInfoResponseIO.class);
-            createAccountInfoIO(rs.accountInfo());
+            rs.accounts().add(createAccountInfoIO("bob"));
             rs.success().setValue(Boolean.TRUE);
             writeXML(createExampleResponse(rs), cnt + "-response-GetAccountInfo.xml");
         }
@@ -173,16 +160,12 @@ public class OnboardingExample {
         return r;
     }
 
-    private static void createAccountInfoIO(AccountInfoIO accountInfo) {
-        accountInfo.firstName().setValue("Bob");
+    private static AccountInfoIO createAccountInfoIO(String name) {
+        AccountInfoIO accountInfo = EntityFactory.create(AccountInfoIO.class);
+        accountInfo.firstName().setValue(name);
         accountInfo.lastName().setValue("Doe");
-        accountInfo.phone().setValue("416-994-4590");
-        accountInfo.address().streetNumber().setValue("10");
-        accountInfo.address().streetName().setValue("Lake");
-        accountInfo.address().streetType().setValue(StreetTypeIO.square);
-        accountInfo.address().city().setValue("Toronto");
-        accountInfo.address().countryName().setValue("Canada");
-        accountInfo.address().postalCode().setValue("ON");
+        accountInfo.email().setValue(name + "@bob.com");
+        return accountInfo;
     }
 
     private static ResponseMessageIO createExampleResponse() {

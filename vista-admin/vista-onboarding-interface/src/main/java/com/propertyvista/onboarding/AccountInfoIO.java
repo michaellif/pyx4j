@@ -23,32 +23,11 @@ import com.pyx4j.i18n.annotations.I18n;
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 public interface AccountInfoIO extends IEntity {
 
-    public enum NamePrefix {
-
-        Mr,
-
-        Mrs,
-
-        Ms,
-
-        Miss,
-
-        Dr;
-
-    }
-
-    IPrimitive<NamePrefix> namePrefix();
-
     @NotNull
+    IPrimitive<String> email();
+
     IPrimitive<String> firstName();
 
-    IPrimitive<String> middleName();
-
-    @NotNull
     IPrimitive<String> lastName();
-
-    IPrimitive<String> phone();
-
-    AddressIO address();
 
 }

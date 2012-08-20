@@ -16,7 +16,7 @@ package com.propertyvista.onboarding.example.model;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
 
-@XmlSeeAlso({ CheckAvailabilityRequest.class, CreatePMCRequest.class })
+@XmlSeeAlso({ CheckAvailabilityRequest.class, CreatePMCRequest.class, GetAccountInfoRequest.class })
 public abstract class Request {
 
     /**

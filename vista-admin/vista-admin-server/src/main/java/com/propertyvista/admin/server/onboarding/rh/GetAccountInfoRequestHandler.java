@@ -22,15 +22,21 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.admin.domain.pmc.Pmc;
+import com.propertyvista.admin.domain.pmc.Pmc.PmcStatus;
+import com.propertyvista.admin.domain.security.OnboardingUserCredential;
 import com.propertyvista.admin.server.onboarding.rhf.AbstractRequestHandler;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.security.VistaBasicBehavior;
+import com.propertyvista.domain.security.VistaCrmBehavior;
+import com.propertyvista.onboarding.AccountInfoIO;
 import com.propertyvista.onboarding.AccountInfoResponseIO;
 import com.propertyvista.onboarding.GetAccountInfoRequestIO;
 import com.propertyvista.onboarding.OnboardingPmcAccountStatus;
 import com.propertyvista.onboarding.ResponseIO;
+import com.propertyvista.server.domain.security.CrmUserCredential;
 
 public class GetAccountInfoRequestHandler extends AbstractRequestHandler<GetAccountInfoRequestIO> {
 
@@ -83,6 +89,41 @@ public class GetAccountInfoRequestHandler extends AbstractRequestHandler<GetAcco
         response.residentPortalUrl().setValue(VistaDeployment.getBaseApplicationURL(pmc, VistaBasicBehavior.TenantPortal, false));
         response.prospectPortalUrl().setValue(VistaDeployment.getBaseApplicationURL(pmc, VistaBasicBehavior.ProspectiveApp, true));
 
+        EntityQueryCriteria<OnboardingUserCredential> credentialCrt = EntityQueryCriteria.create(OnboardingUserCredential.class);
+        credentialCrt.add(PropertyCriterion.eq(credentialCrt.proto().pmc(), pmc));
+        for (OnboardingUserCredential credential : Persistence.service().query(credentialCrt)) {
+            Persistence.service().retrieve(credential.user());
+
+            if (credential.enabled().isBooleanTrue()) {
+                if (pmc.status().getValue() != PmcStatus.Created) {
+                    String curNameSpace = NamespaceManager.getNamespace();
+                    try {
+                        NamespaceManager.setNamespace(pmc.namespace().getValue());
+                        EntityQueryCriteria<CrmUserCredential> crmUCrt = EntityQueryCriteria.create(CrmUserCredential.class);
+                        crmUCrt.add(PropertyCriterion.eq(crmUCrt.proto().roles().$().behaviors(), VistaCrmBehavior.PropertyVistaAccountOwner));
+                        crmUCrt.add(PropertyCriterion.eq(crmUCrt.proto().onboardingUser(), credential.user().getPrimaryKey()));
+
+                        CrmUserCredential crmCred = Persistence.service().retrieve(crmUCrt);
+                        if (crmCred == null) {
+                            continue;
+                        }
+
+                        if (!crmCred.enabled().isBooleanTrue()) {
+                            continue;
+                        }
+                    } finally {
+                        NamespaceManager.setNamespace(curNameSpace);
+                    }
+                }
+                AccountInfoIO accountInfo = EntityFactory.create(AccountInfoIO.class);
+                accountInfo.firstName().setValue(credential.user().firstName().getValue());
+                accountInfo.lastName().setValue(credential.user().lastName().getValue());
+                accountInfo.email().setValue(credential.user().email().getValue());
+
+                response.accounts().add(accountInfo);
+            }
+
+        }
         return response;
     }
 }

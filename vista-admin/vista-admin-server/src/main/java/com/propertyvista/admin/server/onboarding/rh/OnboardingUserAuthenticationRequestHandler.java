@@ -118,6 +118,11 @@ public class OnboardingUserAuthenticationRequestHandler extends AbstractRequestH
                         return response;
                     }
 
+                    if (!crmCred.enabled().isBooleanTrue()) {
+                        response.status().setValue(OnboardingUserAuthenticationResponseIO.AuthenticationStatusCode.PermissionDenied);
+                        return response;
+                    }
+
                     if (!PasswordEncryptor.checkPassword(request.password().getValue(), crmCred.credential().getValue())) {
                         if (AbstractAntiBot.authenticationFailed(LoginType.userLogin, email)) {
                             response.status().setValue(OnboardingUserAuthenticationResponseIO.AuthenticationStatusCode.ChallengeVerificationRequired);

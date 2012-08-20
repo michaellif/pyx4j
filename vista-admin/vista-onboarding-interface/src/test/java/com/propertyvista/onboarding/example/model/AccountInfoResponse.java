@@ -13,13 +13,22 @@
  */
 package com.propertyvista.onboarding.example.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlElements;
 
 public class AccountInfoResponse extends Response {
 
     @XmlElement
-    public String accountStatus_TBD;
+    public String accountStatus;
+
+    @XmlElementWrapper
+    @XmlElements({ @XmlElement(name = "accountInfo", type = AccountInfo.class) })
+    public List<AccountInfo> accounts = new ArrayList<AccountInfo>();
 
     @XmlElement(required = true)
     @NotNull
@@ -32,4 +41,5 @@ public class AccountInfoResponse extends Response {
     @XmlElement(required = true)
     @NotNull
     public String prospectPortalUrl;
+
 }

@@ -53,6 +53,7 @@ public class RequestMessage {
         @XmlElement(name = "createOnboardingUserRequest", type = CreateOnboardingUserRequest.class),
         @XmlElement(name = "checkAvailabilityRequest", type = CheckAvailabilityRequest.class), 
         @XmlElement(name = "createPMCRequest", type = CreatePMCRequest.class),
+        @XmlElement(name = "getAccountInfoRequest", type = GetAccountInfoRequest.class),
         @XmlElement(name = "onboardingUserSendPasswordResetTokenRequest", type = OnboardingUserSendPasswordResetTokenRequest.class),
         @XmlElement(name = "getUsageRequest", type = GetUsageRequest.class),
         @XmlElement(name = "getSatisfactionFastpassUrlRequest", type = GetSatisfactionFastpassUrlRequest.class),

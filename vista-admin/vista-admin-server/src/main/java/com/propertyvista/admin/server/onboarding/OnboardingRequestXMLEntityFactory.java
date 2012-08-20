@@ -40,7 +40,6 @@ import com.propertyvista.onboarding.ProvisionPMCRequestIO;
 import com.propertyvista.onboarding.RequestIO;
 import com.propertyvista.onboarding.RequestMessageIO;
 import com.propertyvista.onboarding.ReserveDnsNameRequestIO;
-import com.propertyvista.onboarding.UpdateAccountInfoRequestIO;
 import com.propertyvista.onboarding.UpdateBankAccountInfoRequestIO;
 import com.propertyvista.onboarding.UpdatePaymentTypeFeesRequestIO;
 import com.propertyvista.onboarding.UpdatePmcEquifaxInfoRequestIO;
@@ -70,7 +69,6 @@ public class OnboardingRequestXMLEntityFactory extends XMLEntityFactoryStrict {
         bind(CancelPMCRequestIO.class);
         bind(RequestIO.class);
         bind(RequestMessageIO.class);
-        bind(UpdateAccountInfoRequestIO.class);
         bind(GetReCaptchaPublicKeyRequestIO.class);
         bind(OnboardingUserPasswordResetRequestIO.class);
         bind(OnboardingUserTokenValidationRequestIO.class);

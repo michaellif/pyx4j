@@ -30,11 +30,9 @@ import com.propertyvista.admin.domain.pmc.ReservedPmcNames;
 import com.propertyvista.admin.domain.security.OnboardingUserCredential;
 import com.propertyvista.admin.server.onboarding.PmcNameValidator;
 import com.propertyvista.admin.server.onboarding.rhf.AbstractRequestHandler;
-import com.propertyvista.config.VistaDeployment;
-import com.propertyvista.domain.security.VistaBasicBehavior;
 import com.propertyvista.onboarding.AccountInfoResponseIO;
 import com.propertyvista.onboarding.CreatePMCRequestIO;
-import com.propertyvista.onboarding.OnboardingPmcAccountStatus;
+import com.propertyvista.onboarding.GetAccountInfoRequestIO;
 import com.propertyvista.onboarding.ResponseIO;
 import com.propertyvista.server.common.security.UserAccessUtils;
 
@@ -111,11 +109,8 @@ public class CreatePmcRequestHandler extends AbstractRequestHandler<CreatePMCReq
 
         Persistence.service().commit();
 
-        response.accountStatus().setValue(OnboardingPmcAccountStatus.Application);
-        response.vistaCrmUrl().setValue(VistaDeployment.getBaseApplicationURL(pmc, VistaBasicBehavior.CRM, true));
-        response.residentPortalUrl().setValue(VistaDeployment.getBaseApplicationURL(pmc, VistaBasicBehavior.TenantPortal, false));
-        response.prospectPortalUrl().setValue(VistaDeployment.getBaseApplicationURL(pmc, VistaBasicBehavior.ProspectiveApp, true));
-
-        return response;
+        GetAccountInfoRequestIO r = EntityFactory.create(GetAccountInfoRequestIO.class);
+        r.onboardingAccountId().setValue(request.onboardingAccountId().getValue());
+        return new GetAccountInfoRequestHandler().execute(r);
     }
 }
