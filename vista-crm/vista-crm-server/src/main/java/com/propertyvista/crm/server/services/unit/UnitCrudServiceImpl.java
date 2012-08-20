@@ -28,6 +28,7 @@ import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.crm.rpc.services.unit.UnitCrudService;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.Service;
+import com.propertyvista.domain.financial.offering.ServiceItemType;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -76,7 +77,7 @@ public class UnitCrudServiceImpl extends AbstractCrudServiceDtoImpl<AptUnit, Apt
         // check unit catalog/lease readiness:
         {
             EntityQueryCriteria<ProductItem> criteria = EntityQueryCriteria.create(ProductItem.class);
-//            criteria.add(PropertyCriterion.eq(criteria.proto().type(), ProductItemType.Type.Service));
+            criteria.add(PropertyCriterion.eq(criteria.proto().type(), ServiceItemType.class));
             criteria.add(PropertyCriterion.eq(criteria.proto().element(), in));
             dto.isPresentInCatalog().setValue(Persistence.service().exists(criteria));
         }
