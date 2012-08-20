@@ -759,4 +759,10 @@ public class OccupancyFacadeImpl implements OccupancyFacade {
         Persistence.service().merge(segment);
     }
 
+    @Override
+    public boolean isAvailableForExistingLease(Key unitId) {
+        LogicalDate now = new LogicalDate(Persistence.service().getTransactionSystemTime());
+        AptUnitOccupancySegment segment = retrieveOccupancySegment(unitId, now);
+        return segment != null && segment.status().getValue() == Status.pending && segment.dateTo().getValue().equals(OccupancyFacade.MAX_DATE);
+    }
 }

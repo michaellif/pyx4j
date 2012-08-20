@@ -118,4 +118,8 @@ public interface OccupancyFacade {
 
     boolean isCancelEndLeaseAvaialble(Key unitId);
 
+    /**
+     * Lease availability.
+     */
+    boolean isAvailableForExistingLease(Key unitId);
 }

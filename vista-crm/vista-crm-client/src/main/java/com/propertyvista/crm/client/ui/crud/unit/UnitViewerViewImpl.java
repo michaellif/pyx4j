@@ -22,6 +22,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.crud.lister.IListerView;
 import com.pyx4j.site.client.ui.crud.lister.ListerInternalViewImplBase;
 import com.pyx4j.widgets.client.Button;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.client.ui.crud.lease.common.dialogs.ExistingLeaseDataDialog;
@@ -81,10 +82,14 @@ public class UnitViewerViewImpl extends CrmViewerViewImplBase<AptUnitDTO> implem
         canScopeOffMarket = false;
         minRenovationEndDate = null;
 
-        leaseAction = new Button(i18n.tr("Lease..."), new ClickHandler() {
+        leaseAction = new Button(i18n.tr("Existing Lease..."), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                new ExistingLeaseDataDialog(getForm().getValue()).show();
+                if (getForm().getValue().isPresentInCatalog().isBooleanTrue()) {
+                    new ExistingLeaseDataDialog(getForm().getValue()).show();
+                } else {
+                    MessageDialog.error(i18n.tr("Product Catalog"), i18n.tr("The unit should be added to the building Product Catalog!"));
+                }
             }
         });
         addHeaderToolbarItem(leaseAction);
@@ -96,7 +101,7 @@ public class UnitViewerViewImpl extends CrmViewerViewImplBase<AptUnitDTO> implem
     public void populate(AptUnitDTO value) {
         super.populate(value);
 
-        leaseAction.setVisible(value.lease().isNull());
+        leaseAction.setVisible(value.isAvailableForExistingLease().isBooleanTrue());
     }
 
     @Override

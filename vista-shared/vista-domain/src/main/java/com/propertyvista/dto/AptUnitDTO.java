@@ -30,4 +30,8 @@ public interface AptUnitDTO extends AptUnit {
     IList<AptUnitServicePriceDTO> marketPrices();
 
     Lease lease();
+
+    IPrimitive<Boolean> isPresentInCatalog();
+
+    IPrimitive<Boolean> isAvailableForExistingLease();
 }

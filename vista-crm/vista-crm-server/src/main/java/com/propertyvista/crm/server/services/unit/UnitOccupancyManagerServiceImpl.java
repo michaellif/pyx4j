@@ -101,5 +101,4 @@ public class UnitOccupancyManagerServiceImpl implements UnitOccupancyManagerServ
     public void canApproveLease(AsyncCallback<Boolean> callback, Key unitPk) {
         callback.onSuccess(ServerSideFactory.create(OccupancyFacade.class).isApproveLeaseAvaialble(unitPk));
     }
-
 }

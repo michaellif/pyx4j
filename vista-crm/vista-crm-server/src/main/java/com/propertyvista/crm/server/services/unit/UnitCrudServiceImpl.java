@@ -60,16 +60,28 @@ public class UnitCrudServiceImpl extends AbstractCrudServiceDtoImpl<AptUnit, Apt
         }
 
         // find corresponding lease:
-        EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().unit(), in));
-        criteria.add(PropertyCriterion.in(criteria.proto().status(), Lease.Status.current()));
-        dto.lease().set(Persistence.service().retrieve(criteria));
+        {
+            EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().unit(), in));
+            criteria.add(PropertyCriterion.in(criteria.proto().status(), Lease.Status.current()));
+            dto.lease().set(Persistence.service().retrieve(criteria));
+        }
 
         Persistence.service().retrieve(dto.floorplan());
         Persistence.service().retrieve(dto.building());
 
         // retrieve market rent prices
         retrieveServicePrices(dto);
+
+        // check unit catalog/lease readiness:
+        {
+            EntityQueryCriteria<ProductItem> criteria = EntityQueryCriteria.create(ProductItem.class);
+//            criteria.add(PropertyCriterion.eq(criteria.proto().type(), ProductItemType.Type.Service));
+            criteria.add(PropertyCriterion.eq(criteria.proto().element(), in));
+            dto.isPresentInCatalog().setValue(Persistence.service().exists(criteria));
+        }
+
+        dto.isAvailableForExistingLease().setValue(ServerSideFactory.create(OccupancyFacade.class).isAvailableForExistingLease(in.getPrimaryKey()));
     }
 
     @Override
