@@ -57,18 +57,6 @@ public enum PropertyMapController {
 
         criteria = EntityArgsConverter.createFromArgs(PropertySearchCriteria.class, Window.Location.getParameterMap());
 
-        if (allProperties == null) {
-            PortalSite.getPortalSiteServices().retrievePropertyList(new DefaultAsyncCallback<PropertyListDTO>() {
-                @Override
-                public void onSuccess(PropertyListDTO properties) {
-                    allProperties = properties;
-                    obtainGeopoint();
-                }
-            }, criteria);
-        } else {
-            obtainGeopoint();
-        }
-
         map = new PropertiesMapWidget();
 
         publishJs();
@@ -80,11 +68,26 @@ public enum PropertyMapController {
 
     public static void loadMap() {
         instance.map.loadMap();
+        instance.loadProperties();
     }
 
     private native void publishJs() /*-{
 		$wnd.loadMap = @com.propertyvista.portal.client.ui.maps.PropertyMapController::loadMap();
     }-*/;
+
+    private void loadProperties() {
+        if (allProperties == null) {
+            PortalSite.getPortalSiteServices().retrievePropertyList(new DefaultAsyncCallback<PropertyListDTO>() {
+                @Override
+                public void onSuccess(PropertyListDTO properties) {
+                    allProperties = properties;
+                    obtainGeopoint();
+                }
+            }, criteria);
+        } else {
+            obtainGeopoint();
+        }
+    }
 
     private void obtainGeopoint() {
         if (PropertySearchCriteria.SearchType.proximity.equals(criteria.searchType().getValue())) {
