@@ -139,6 +139,9 @@ public class UnitAvailabilityImportParser implements ImportParser {
             if (!unitModel.newMarketRent().isNull()) {
                 unit.marketRent().setValue(parseMoney(unitModel.newMarketRent().getValue(), unitModel));
             }
+            if (!unitModel.unitSqFt().isNull()) {
+                unit.area().setValue(parseArea(unitModel.unitSqFt().getValue(), unitModel));
+            }
 
             if (!unitModel.status().isNull()) {
                 if (unitModel.status().getValue().toLowerCase().equals("move in")) {
@@ -159,8 +162,17 @@ public class UnitAvailabilityImportParser implements ImportParser {
         try {
             return new BigDecimal(nf.parse(money).doubleValue());
         } catch (ParseException e) {
-            throw new UserRuntimeException(i18n.tr("You have an erroneous Market Rent value of ''{0}'' for unit #{1} in building ''{2}''.", unitModel
-                    .marketRent().getStringView(), unitModel.unit().getStringView(), unitModel.property().getStringView()));
+            throw new UserRuntimeException(i18n.tr("You have an erroneous Market Rent or New Market Rent value of for unit #{0} in building ''{1}''.",
+                    unitModel.unit().getStringView(), unitModel.property().getStringView()));
+        }
+    }
+
+    private Double parseArea(String area, UnitModel unitModel) {
+        try {
+            return Double.valueOf(area);
+        } catch (NumberFormatException e) {
+            throw new UserRuntimeException(i18n.tr("You have an erroneous Unit Sq Ft value for unit #{0} in building ''{1}''.", unitModel.unit()
+                    .getStringView(), unitModel.property().getStringView()));
         }
     }
 
