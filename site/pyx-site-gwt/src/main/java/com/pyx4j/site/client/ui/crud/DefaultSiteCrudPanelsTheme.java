@@ -58,11 +58,14 @@ public class DefaultSiteCrudPanelsTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", StyleName.HeaderToolbar);
-        style.addProperty("background-color", ThemeColors.object1, 0.3);
         style.addProperty("height", "100%");
         style.addProperty("font-weight", "bold");
-        style.addProperty("float", "right");
         style.addProperty("padding-right", "6px");
+        addStyle(style);
+
+        style = new Style(".", StyleName.HeaderContainer, " .", StyleName.HeaderToolbar);
+        style.addProperty("background-color", ThemeColors.object1, 0.3);
+        style.addProperty("float", "right");
         addStyle(style);
 
         style = new Style(".", StyleName.HeaderBreadcrumbs);
