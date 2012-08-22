@@ -17,6 +17,9 @@ import java.util.List;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.ui.MenuBar;
+import com.google.gwt.user.client.ui.MenuItem;
 
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
@@ -34,6 +37,38 @@ public class ComplexViewerViewImpl extends CrmViewerViewImplBase<ComplexDTO> imp
 
     public ComplexViewerViewImpl() {
         super(CrmSiteMap.Properties.Complex.class);
+
+        Button button = new Button(i18n.tr("Test"));
+        Button.ButtonMenuBar menu = button.createMenu();
+        menu.addItem("aaa sdfgsdfg dsfgsdfgsdfg", new Command() {
+
+            @Override
+            public void execute() {
+                System.out.println("+++++++++++++++++aaa");
+            }
+        });
+        MenuItem aaa = menu.addItem("bbb", new Command() {
+
+            @Override
+            public void execute() {
+                System.out.println("+++++++++++++++++bbb");
+            }
+        });
+        aaa.setEnabled(false);
+
+        MenuBar secondaryMenu = button.createMenu();
+        secondaryMenu.addItem("ddd dfgsdfg fsdgsdf ", new Command() {
+
+            @Override
+            public void execute() {
+                System.out.println("+++++++++++++++++ddd");
+            }
+        });
+
+        menu.addItem("ccc", secondaryMenu);
+
+        button.setMenu(menu);
+        addHeaderToolbarItem(button);
 
         addHeaderToolbarItem(new Button(i18n.tr("Dashboard"), new ClickHandler() {
             @Override
