@@ -39,16 +39,12 @@ public class DropDownPanel extends PopupPanel {
         @Override
         public void onResize(ResizeEvent event) {
             if (openPanels != null) {
-                ArrayList<DropDownPanel> old = openPanels;
-                openPanels = null;
-                for (DropDownPanel panel : old) {
+                for (DropDownPanel panel : openPanels) {
                     assert (panel.isShowing());
                     if (panel.currentAnchor != null) {
                         panel.showRelativeTo(panel.currentAnchor);
                     }
                 }
-                old.clear();
-                openPanels = old;
             }
         }
     };

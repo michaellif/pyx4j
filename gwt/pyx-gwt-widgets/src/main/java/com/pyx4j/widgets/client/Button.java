@@ -21,6 +21,7 @@
 package com.pyx4j.widgets.client;
 
 import com.google.gwt.dom.client.Document;
+import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.DomEvent;
 import com.google.gwt.event.dom.client.MouseDownEvent;
@@ -31,19 +32,27 @@ import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.event.dom.client.MouseUpEvent;
 import com.google.gwt.event.dom.client.MouseUpHandler;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.MenuBar;
+import com.google.gwt.user.client.ui.MenuItem;
+import com.google.gwt.user.client.ui.SimplePanel;
 
 public class Button extends FocusPanel implements IFocusWidget {
 
     private final HTML textLabel;
 
+    private final SimplePanel imageHolder;
+
     private final Image image;
 
     private final ButtonFacesHandler buttonFacesHandler;
+
+    private DropDownPanel popup;
 
     public Button(Image image) {
         this(image, (String) null);
@@ -87,12 +96,42 @@ public class Button extends FocusPanel implements IFocusWidget {
 
         textLabel.setStyleName(DefaultWidgetsTheme.StyleName.ButtonText.name());
 
+        imageHolder = new SimplePanel();
+        imageHolder.getElement().getStyle().setProperty("display", "inline");
+
+        imageHolder.setWidget(textLabel);
+
+        setWidget(imageHolder);
+
         if (image != null) {
             setImageVisible(true);
         }
 
-        setWidget(textLabel);
+    }
 
+    public ButtonMenuBar createMenu() {
+        ButtonMenuBar menu = new ButtonMenuBar();
+        return menu;
+    }
+
+    public void setMenu(ButtonMenuBar menu) {
+        Image menuIndicator = new Image(ImageFactory.getImages().viewMenu());
+        textLabel.getElement().getStyle().setProperty("paddingRight", (menuIndicator.getWidth() + 5) + "px");
+        textLabel.getElement().getStyle().setProperty("background", "url('" + menuIndicator.getUrl() + "') no-repeat scroll right 90%");
+
+        popup = new DropDownPanel();
+        popup.setWidget(menu);
+
+        addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                if (popup.isShowing()) {
+                    popup.hide();
+                } else {
+                    popup.showRelativeTo(Button.this);
+                }
+            }
+        });
     }
 
     public void setTextLabel(String label) {
@@ -122,12 +161,13 @@ public class Button extends FocusPanel implements IFocusWidget {
     public void setImageVisible(boolean visible) {
         if (image != null) {
             if (visible) {
-                textLabel.getElement().getStyle().setProperty("paddingLeft", image.getWidth() + "px");
-                textLabel.getElement().getStyle().setProperty("background", "url('" + image.getUrl() + "') no-repeat scroll left center");
+                imageHolder.getElement().getStyle().setProperty("paddingLeft", image.getWidth() + "px");
+                imageHolder.getElement().getStyle().setProperty("background", "url('" + image.getUrl() + "') no-repeat scroll left center");
             } else {
-                textLabel.getElement().getStyle().setProperty("paddingLeft", "0px");
-                textLabel.getElement().getStyle().setProperty("background", "none");
+                imageHolder.getElement().getStyle().setProperty("paddingLeft", "0px");
+                imageHolder.getElement().getStyle().setProperty("background", "none");
             }
+
         }
     }
 
@@ -244,6 +284,32 @@ public class Button extends FocusPanel implements IFocusWidget {
     @Override
     public boolean isEditable() {
         return false;
+    }
+
+    public class ButtonMenuBar extends MenuBar {
+
+        public ButtonMenuBar() {
+            super(true);
+            setAutoOpen(true);
+            setAnimationEnabled(true);
+        }
+
+        @Override
+        public MenuItem insertItem(MenuItem item, int beforeIndex) {
+            if (item.getCommand() != null) {
+                final Command origCommand = item.getCommand();
+                item.setCommand(new Command() {
+
+                    @Override
+                    public void execute() {
+                        popup.hide();
+                        origCommand.execute();
+
+                    }
+                });
+            }
+            return super.insertItem(item, beforeIndex);
+        }
     }
 
 }
