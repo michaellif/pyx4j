@@ -18,6 +18,9 @@ import com.pyx4j.essentials.rpc.deferred.DeferredProcessService;
 import com.pyx4j.rpc.shared.IServiceExecutePermission;
 import com.pyx4j.security.server.ServletContainerAclBuilder;
 
+import com.propertyvista.admin.domain.legal.LegalDocument;
+import com.propertyvista.admin.domain.legal.LegalLocale;
+import com.propertyvista.admin.domain.legal.TermsAndConditions;
 import com.propertyvista.admin.domain.payment.pad.sim.PadSimBatch;
 import com.propertyvista.admin.domain.payment.pad.sim.PadSimFile;
 import com.propertyvista.admin.domain.pmc.Pmc;
@@ -41,6 +44,7 @@ import com.propertyvista.admin.rpc.services.OnboardingUserPasswordChangeManagedS
 import com.propertyvista.admin.rpc.services.PmcCrudService;
 import com.propertyvista.admin.rpc.services.PmcDataReportService;
 import com.propertyvista.admin.rpc.services.SimulationService;
+import com.propertyvista.admin.rpc.services.TermsAndConditionsCrudService;
 import com.propertyvista.admin.rpc.services.scheduler.RunCrudService;
 import com.propertyvista.admin.rpc.services.scheduler.RunDataCrudService;
 import com.propertyvista.admin.rpc.services.scheduler.SelectPmcListService;
@@ -94,6 +98,11 @@ public class VistaAdminAccessControlList extends ServletContainerAclBuilder {
 
         grant(VistaAdminBehavior.SystemAdmin, new EntityPermission(PadSimFile.class, EntityPermission.ALL));
         grant(VistaAdminBehavior.SystemAdmin, new EntityPermission(PadSimBatch.class, EntityPermission.ALL));
+
+        grant(VistaAdminBehavior.SystemAdmin, new IServiceExecutePermission(TermsAndConditionsCrudService.class));
+        grant(VistaAdminBehavior.SystemAdmin, new EntityPermission(LegalLocale.class, EntityPermission.ALL));
+        grant(VistaAdminBehavior.SystemAdmin, new EntityPermission(LegalDocument.class, EntityPermission.ALL));
+        grant(VistaAdminBehavior.SystemAdmin, new EntityPermission(TermsAndConditions.class, EntityPermission.ALL));
 
         if (com.pyx4j.config.shared.ApplicationMode.isDevelopment()) {
             grant(VistaAdminBehavior.SystemAdmin, new IServiceExecutePermission(SimulatedDataPreloadService.class));

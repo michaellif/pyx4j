@@ -22,6 +22,10 @@ import com.propertyvista.admin.client.ui.crud.adminusers.AdminUserListerView;
 import com.propertyvista.admin.client.ui.crud.adminusers.AdminUserListerViewImpl;
 import com.propertyvista.admin.client.ui.crud.adminusers.AdminUserViewerView;
 import com.propertyvista.admin.client.ui.crud.adminusers.AdminUserViewerViewImpl;
+import com.propertyvista.admin.client.ui.crud.legal.TermsAndConditionsEditorView;
+import com.propertyvista.admin.client.ui.crud.legal.TermsAndConditionsEditorViewImpl;
+import com.propertyvista.admin.client.ui.crud.legal.TermsAndConditionsViewerView;
+import com.propertyvista.admin.client.ui.crud.legal.TermsAndConditionsViewerViewImpl;
 import com.propertyvista.admin.client.ui.crud.maintenance.MaintenanceEditorView;
 import com.propertyvista.admin.client.ui.crud.maintenance.MaintenanceEditorViewImpl;
 import com.propertyvista.admin.client.ui.crud.maintenance.MaintenanceViewerView;
@@ -73,6 +77,11 @@ public class AdministrationVeiwFactory extends ViewFactoryBase {
                 map.put(type, new AdminUserEditorViewImpl());
             } else if (AdminUserListerView.class.equals(type)) {
                 map.put(type, new AdminUserListerViewImpl());
+
+            } else if (TermsAndConditionsViewerView.class.equals(type)) {
+                map.put(type, new TermsAndConditionsViewerViewImpl());
+            } else if (TermsAndConditionsEditorView.class.equals(type)) {
+                map.put(type, new TermsAndConditionsEditorViewImpl());
             }
         }
 

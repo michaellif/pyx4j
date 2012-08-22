@@ -30,6 +30,9 @@ import com.propertyvista.admin.client.activity.crud.account.AccountViewerActivit
 import com.propertyvista.admin.client.activity.crud.adminusers.AdminUserEditorActivity;
 import com.propertyvista.admin.client.activity.crud.adminusers.AdminUserListerActivity;
 import com.propertyvista.admin.client.activity.crud.adminusers.AdminUserViewerActivity;
+import com.propertyvista.admin.client.activity.crud.legal.TermsAndConditionsDefaultActivity;
+import com.propertyvista.admin.client.activity.crud.legal.TermsAndConditionsEditorActivity;
+import com.propertyvista.admin.client.activity.crud.legal.TermsAndConditionsViewerActivity;
 import com.propertyvista.admin.client.activity.crud.maintenance.MaintenanceEditorActivity;
 import com.propertyvista.admin.client.activity.crud.maintenance.MaintenanceViewerActivity;
 import com.propertyvista.admin.client.activity.crud.onboardingusers.OnBoardingUserViewerActivity;
@@ -182,6 +185,18 @@ public class MainActivityMapper implements AppActivityMapper {
                             break;
                         case viewer:
                             activity = new AccountViewerActivity(crudPlace);
+                            break;
+                        }
+                    } else if (place instanceof AdminSiteMap.Legal.Terms) {
+                        switch (crudPlace.getType()) {
+                        case lister:
+                            activity = new TermsAndConditionsDefaultActivity(crudPlace);
+                            break;
+                        case editor:
+                            activity = new TermsAndConditionsEditorActivity(crudPlace);
+                            break;
+                        case viewer:
+                            activity = new TermsAndConditionsViewerActivity(crudPlace);
                             break;
                         }
                     }
