@@ -13,12 +13,13 @@
  */
 package com.propertyvista.admin.client.ui.crud.legal;
 
-import com.pyx4j.entity.client.ui.CEntityComboBox;
+import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CLabel;
+import com.pyx4j.forms.client.ui.CRichTextArea;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.admin.client.ui.crud.AdminEntityForm;
-import com.propertyvista.admin.domain.legal.LegalLocale;
 import com.propertyvista.admin.domain.legal.TermsAndConditions;
 
 public class TermsAndConditionsForm extends AdminEntityForm<TermsAndConditions> {
@@ -30,14 +31,22 @@ public class TermsAndConditionsForm extends AdminEntityForm<TermsAndConditions> 
 
     @Override
     protected void createTabs() {
-        FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));
+        FormFlexPanel main = new FormFlexPanel(i18n.tr("General"));
 
         int row = -1;
-        CEntityComboBox<LegalLocale> locale = new CEntityComboBox<LegalLocale>(LegalLocale.class);
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().document().locale(), locale), 10).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().document().content()), 60).build());
+        // locale
+//        CEntityComboBox<LegalLocale> locale = new CEntityComboBox<LegalLocale>(LegalLocale.class);
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().document().locale()), 10).build());
+        // content
+        CComponent<?, ?> editor = null;
+        if (isEditable()) {
+            editor = new CRichTextArea();
+        } else {
+            editor = new CLabel();
+            ((CLabel) editor).setAllowHtml(true);
+        }
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().document().content(), editor), 60).build());
 
-        selectTab(addTab(content));
+        selectTab(addTab(main));
     }
-
 }

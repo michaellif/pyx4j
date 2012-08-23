@@ -42,4 +42,10 @@ public class TermsAndConditionsCrudServiceImpl extends AbstractCrudServiceImpl<T
         List<Key> list = Persistence.service().queryKeys(criteria);
         callback.onSuccess(list.isEmpty() ? null : list.get(0));
     }
+
+    @Override
+    protected void save(TermsAndConditions entity, TermsAndConditions dto) {
+        Persistence.service().persist(entity.document());
+        super.save(entity, dto);
+    }
 }

@@ -18,9 +18,11 @@ import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
+import com.propertyvista.shared.CompiledLocale;
+
 public interface LegalDocument extends IEntity {
     @NotNull
-    LegalLocale locale();
+    IPrimitive<CompiledLocale> locale();
 
     @Editor(type = Editor.EditorType.richtextarea)
     IPrimitive<String> content();

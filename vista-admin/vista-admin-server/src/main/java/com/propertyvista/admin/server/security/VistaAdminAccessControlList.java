@@ -19,7 +19,6 @@ import com.pyx4j.rpc.shared.IServiceExecutePermission;
 import com.pyx4j.security.server.ServletContainerAclBuilder;
 
 import com.propertyvista.admin.domain.legal.LegalDocument;
-import com.propertyvista.admin.domain.legal.LegalLocale;
 import com.propertyvista.admin.domain.legal.TermsAndConditions;
 import com.propertyvista.admin.domain.payment.pad.sim.PadSimBatch;
 import com.propertyvista.admin.domain.payment.pad.sim.PadSimFile;
@@ -100,7 +99,6 @@ public class VistaAdminAccessControlList extends ServletContainerAclBuilder {
         grant(VistaAdminBehavior.SystemAdmin, new EntityPermission(PadSimBatch.class, EntityPermission.ALL));
 
         grant(VistaAdminBehavior.SystemAdmin, new IServiceExecutePermission(TermsAndConditionsCrudService.class));
-        grant(VistaAdminBehavior.SystemAdmin, new EntityPermission(LegalLocale.class, EntityPermission.ALL));
         grant(VistaAdminBehavior.SystemAdmin, new EntityPermission(LegalDocument.class, EntityPermission.ALL));
         grant(VistaAdminBehavior.SystemAdmin, new EntityPermission(TermsAndConditions.class, EntityPermission.ALL));
 

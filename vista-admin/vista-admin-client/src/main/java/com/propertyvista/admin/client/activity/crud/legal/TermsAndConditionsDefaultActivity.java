@@ -27,6 +27,7 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.admin.domain.legal.TermsAndConditions;
 import com.propertyvista.admin.rpc.services.TermsAndConditionsCrudService;
+import com.propertyvista.shared.CompiledLocale;
 
 public class TermsAndConditionsDefaultActivity extends AbstractActivity {
     private final CrudAppPlace place;
@@ -44,8 +45,9 @@ public class TermsAndConditionsDefaultActivity extends AbstractActivity {
             public void onSuccess(Key result) {
                 CrudAppPlace dst = AppSite.getHistoryMapper().createPlace(place.getClass());
                 if (result == null) {
-                    TermsAndConditions doc = EntityFactory.create(TermsAndConditions.class);
-                    dst.formNewItemPlace(doc);
+                    TermsAndConditions terms = EntityFactory.create(TermsAndConditions.class);
+                    terms.document().locale().setValue(CompiledLocale.en);
+                    dst.formNewItemPlace(terms);
                 } else {
                     dst.formViewerPlace(result);
                 }

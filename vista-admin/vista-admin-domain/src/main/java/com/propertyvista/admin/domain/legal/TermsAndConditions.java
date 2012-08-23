@@ -14,10 +14,12 @@
 package com.propertyvista.admin.domain.legal;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 public interface TermsAndConditions extends IEntity {
+    @Owned
     LegalDocument document();
 
     IPrimitive<LogicalDate> effectiveDate();
