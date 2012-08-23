@@ -55,17 +55,28 @@ public class NRichTextArea extends NTextComponent<String, ExtendedRichTextArea, 
 
     @Override
     public void setNativeValue(String value) {
-        if (getEditor() != null) {
-            getEditor().setText(value);
+        if (isViewable()) {
+            if (getViewer() != null) {
+                getViewer().setHTML(value);
+            }
+        } else {
+            if (getEditor() != null) {
+                getEditor().setText(value);
+            }
         }
     }
 
     @Override
     public String getNativeValue() {
-        if (getEditor() != null) {
-            return getEditor().getText();
+        if (!isViewable()) {
+            if (getEditor() != null) {
+                return getEditor().getText();
+            } else {
+                return "";
+            }
         } else {
-            return "";
+            assert false : "getNativeValue() shouldn't be called in viewable mode";
+            return null;
         }
     }
 
