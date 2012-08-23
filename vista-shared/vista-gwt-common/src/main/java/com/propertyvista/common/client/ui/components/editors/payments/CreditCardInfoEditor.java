@@ -56,10 +56,10 @@ public class CreditCardInfoEditor extends CEntityDecoratableForm<CreditCardInfo>
         int row = -1;
         CMonthYearPicker monthYearPicker = new CMonthYearPicker(false);
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().nameOn()), 20).build());
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().cardType()), 20).build());
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().number()), 20).build());
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().expiryDate(), monthYearPicker), 20).build());
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().securityCode()), 5).build());
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().cardType()), 15).build());
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().number()), 15).build());
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().expiryDate(), monthYearPicker), 15).build());
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().securityCode()), 3).build());
 
         // tweak:
         monthYearPicker.setYearRange(new Range(1900 + new Date().getYear(), 10));
@@ -81,6 +81,8 @@ public class CreditCardInfoEditor extends CEntityDecoratableForm<CreditCardInfo>
             get(proto().securityCode()).setMandatory(false);
             if (value.numberRefference().isNull()) {
                 ((CTextComponent<?, ?>) get(proto().number())).setWatermark("XXXX XXXX XXXX XXXX");
+            } else {
+                ((CTextComponent<?, ?>) get(proto().number())).setWatermark(i18n.tr("XXXX XXXX XXXX {0}", value.numberRefference().getValue()));
             }
             ((CTextComponent<?, ?>) get(proto().securityCode())).setWatermark("XXX");
         }
@@ -109,12 +111,11 @@ public class CreditCardInfoEditor extends CEntityDecoratableForm<CreditCardInfo>
         get(proto().number()).addValueValidator(new CreditCardNumberTypeValidator(new CreditCardTypeProvider() {
             @Override
             public CreditCardType getCreditCardType() {
-                return CreditCardInfoEditor.this.getValue().cardType().getValue();
+                return (CreditCardInfoEditor.this.getValue() == null ? null : CreditCardInfoEditor.this.getValue().cardType().getValue());
             }
         }));
         get(proto().cardType()).addValueChangeHandler(new RevalidationTrigger<CreditCardType>(get(proto().number())));
 
         get(proto().expiryDate()).addValueValidator(new FutureDateValidator());
-
     }
 }

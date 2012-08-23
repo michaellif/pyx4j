@@ -18,6 +18,7 @@ import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
@@ -28,7 +29,7 @@ import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.shared.I18nEnum;
 
-@ToStringFormat("{0}, {1}")
+@ToStringFormat("{0}: {1}, {2}")
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
 @DiscriminatorValue("CreditCard")
 public interface CreditCardInfo extends PaymentDetails {
@@ -40,7 +41,8 @@ public interface CreditCardInfo extends PaymentDetails {
         @Translate("MasterCard")
         MasterCard("51", "52", "53", "54", "55"),
 
-        Discover("6011", "622126-622925", "644-649", "65");
+        // TODO Use PmcPaymentTypeInfo
+//        Discover("6011", "622126-622925", "644-649", "65");
 
 //      @Translate("American Express")
 //      Amex;
@@ -64,6 +66,7 @@ public interface CreditCardInfo extends PaymentDetails {
     IPrimitive<CreditCardType> cardType();
 
     @NotNull
+    @ToString(index = 1)
     @Caption(name = "Card Number")
     @MemberColumn(name = "cardNumber")
     @Transient(logTransient = true)
@@ -76,7 +79,8 @@ public interface CreditCardInfo extends PaymentDetails {
     IPrimitive<String> token();
 
     @NotNull
-    @ToString(index = 1)
+    @ToString(index = 2)
+    @Format("MM/yyyy")
     @Caption(name = "Expiry Date")
     @Editor(type = EditorType.monthyearpicker)
     IPrimitive<LogicalDate> expiryDate();
