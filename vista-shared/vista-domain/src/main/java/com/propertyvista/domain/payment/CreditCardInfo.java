@@ -39,7 +39,7 @@ public interface CreditCardInfo extends PaymentDetails {
         Visa("4"),
 
         @Translate("MasterCard")
-        MasterCard("51", "52", "53", "54", "55"),
+        MasterCard("51", "52", "53", "54", "55");
 
         // TODO Use PmcPaymentTypeInfo
 //        Discover("6011", "622126-622925", "644-649", "65");
