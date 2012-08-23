@@ -30,8 +30,6 @@ public interface PaymentEditorView extends IEditorView<PaymentRecordDTO> {
 
         void getCurrentAddress(AsyncCallback<AddressStructured> callback, LeaseParticipant payer);
 
-        void getDefaultPaymentMethod(AsyncCallback<PaymentMethod> callback, LeaseParticipant payer);
-
         void getProfiledPaymentMethods(AsyncCallback<List<PaymentMethod>> callback, LeaseParticipant payer);
     }
 }

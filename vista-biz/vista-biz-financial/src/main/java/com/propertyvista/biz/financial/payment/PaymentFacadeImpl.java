@@ -31,6 +31,7 @@ import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
 import com.propertyvista.domain.payment.CreditCardInfo;
+import com.propertyvista.domain.payment.EcheckInfo;
 import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -87,7 +88,40 @@ public class PaymentFacadeImpl implements PaymentFacade {
         criteria.add(PropertyCriterion.eq(criteria.proto().isOneTimePayment(), Boolean.FALSE));
         criteria.add(PropertyCriterion.eq(criteria.proto().isDeleted(), Boolean.FALSE));
 
-        return Persistence.service().query(criteria);
+        List<PaymentMethod> methods = Persistence.service().query(criteria);
+        for (PaymentMethod method : methods) {
+            hidePaymentMethodDetails(method);
+        }
+        return methods;
+    }
+
+    @Override
+    public PaymentMethod hidePaymentMethodDetails(PaymentMethod method) {
+        if (method.isValueDetached()) {
+            Persistence.service().retrieve(method);
+        }
+
+        switch (method.type().getValue()) {
+        case CreditCard:
+            CreditCardInfo cci = method.details().cast();
+            if (!cci.numberRefference().isNull()) {
+                cci.number().setValue(i18n.tr("XXXX XXXX XXXX {0}", cci.numberRefference().getValue()));
+                cci.securityCode().setValue("XXX");
+            }
+            break;
+
+        case Echeck:
+            EcheckInfo eci = method.details().cast();
+            if (!eci.accountNo().isNull()) {
+                eci.accountNo().setValue(i18n.tr("XXXX XXXX {0}", last4Numbers(eci.accountNo().getValue())));
+            }
+            break;
+
+        default:
+            break;
+        }
+
+        return method;
     }
 
     private String last4Numbers(String value) {

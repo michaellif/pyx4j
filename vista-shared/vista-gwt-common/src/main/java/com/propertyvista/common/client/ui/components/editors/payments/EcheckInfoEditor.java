@@ -16,6 +16,7 @@ package com.propertyvista.common.client.ui.components.editors.payments;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
+import com.pyx4j.forms.client.ui.CTextComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -45,5 +46,20 @@ public class EcheckInfoEditor extends CEntityDecoratableForm<EcheckInfo> {
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().accountNo()), 20).build());
 
         return panel;
+    }
+
+    @Override
+    protected void onValueSet(boolean populate) {
+        super.onValueSet(populate);
+
+        updateVisibility(getValue());
+    }
+
+    private void updateVisibility(EcheckInfo value) {
+        if (isEditable()) {
+            if (value.accountNo().isNull()) {
+                ((CTextComponent<?, ?>) get(proto().accountNo())).setWatermark("XXXX XXXX XXXX");
+            }
+        }
     }
 }

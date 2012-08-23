@@ -79,15 +79,10 @@ public class CreditCardInfoEditor extends CEntityDecoratableForm<CreditCardInfo>
         if (isEditable()) {
             get(proto().number()).setMandatory(false);
             get(proto().securityCode()).setMandatory(false);
-            if (!value.numberRefference().isNull()) {
-                ((CTextComponent<?, ?>) get(proto().number())).setWatermark(i18n.tr("XXXX-XXXX-{0}", value.numberRefference().getValue()));
-            } else {
+            if (value.numberRefference().isNull()) {
                 ((CTextComponent<?, ?>) get(proto().number())).setWatermark("XXXX XXXX XXXX XXXX");
             }
             ((CTextComponent<?, ?>) get(proto().securityCode())).setWatermark("XXX");
-        } else {
-            get(proto().number()).setValue(i18n.tr("XXXX-XXXX-{0}", value.numberRefference().getValue()));
-            get(proto().securityCode()).setValue("XXX");
         }
     }
 

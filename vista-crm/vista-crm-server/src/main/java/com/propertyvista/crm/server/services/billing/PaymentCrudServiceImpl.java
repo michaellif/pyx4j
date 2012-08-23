@@ -52,6 +52,8 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
 
     private static final I18n i18n = I18n.get(PaymentCrudServiceImpl.class);
 
+    private RetrieveTraget retrieveTraget;
+
     public PaymentCrudServiceImpl() {
         super(PaymentRecord.class, PaymentRecordDTO.class);
     }
@@ -59,6 +61,12 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
     @Override
     protected void bind() {
         bindCompleateDBO();
+    }
+
+    @Override
+    public void retrieve(AsyncCallback<PaymentRecordDTO> callback, Key entityId, RetrieveTraget retrieveTraget) {
+        this.retrieveTraget = retrieveTraget;
+        super.retrieve(callback, entityId, retrieveTraget);
     }
 
     @Override
@@ -80,6 +88,9 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
         Persistence.service().retrieve(dto.billingAccount().lease().unit().building());
         Persistence.service().retrieve(dto.leaseParticipant());
         Persistence.service().retrieve(dto.paymentMethod());
+        if (retrieveTraget != RetrieveTraget.Edit) {
+            ServerSideFactory.create(PaymentFacade.class).hidePaymentMethodDetails(dto.paymentMethod());
+        }
 
         dto.leaseId().set(dto.billingAccount().lease().leaseId());
         dto.leaseStatus().set(dto.billingAccount().lease().status());
@@ -148,28 +159,12 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
     }
 
     @Override
-    public void getDefaultPaymentMethod(AsyncCallback<PaymentMethod> callback, LeaseParticipant payer) {
-        Persistence.service().retrieve(payer);
-        if ((payer == null) || (payer.isNull())) {
-            throw new RuntimeException("Entity '" + EntityFactory.getEntityMeta(LeaseParticipant.class).getCaption() + "' " + payer.getPrimaryKey()
-                    + " NotFound");
-        }
-
-        PaymentMethod method = null;
-        if (payer.isInstanceOf(Tenant.class)) {
-            method = ((Tenant) payer).preauthorizedPayment();
-        }
-        callback.onSuccess(method); // null - means there is no default one!..
-    }
-
-    @Override
     public void getProfiledPaymentMethods(AsyncCallback<Vector<PaymentMethod>> callback, LeaseParticipant payer) {
         Persistence.service().retrieve(payer);
         if ((payer == null) || (payer.isNull())) {
             throw new RuntimeException("Entity '" + EntityFactory.getEntityMeta(LeaseParticipant.class).getCaption() + "' " + payer.getPrimaryKey()
                     + " NotFound");
         }
-
         callback.onSuccess(new Vector<PaymentMethod>(ServerSideFactory.create(PaymentFacade.class).retrievePaymentMethods(payer)));
     }
 

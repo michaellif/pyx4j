@@ -18,6 +18,7 @@ import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
@@ -44,6 +45,8 @@ import com.propertyvista.server.common.util.AddressRetriever;
 
 public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRecord, PaymentRecordDTO> implements PaymentCrudService {
 
+    private RetrieveTraget retrieveTraget;
+
     public PaymentCrudServiceImpl() {
         super(PaymentRecord.class, PaymentRecordDTO.class);
     }
@@ -51,6 +54,12 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
     @Override
     protected void bind() {
         bindCompleateDBO();
+    }
+
+    @Override
+    public void retrieve(AsyncCallback<PaymentRecordDTO> callback, Key entityId, RetrieveTraget retrieveTraget) {
+        this.retrieveTraget = retrieveTraget;
+        super.retrieve(callback, entityId, retrieveTraget);
     }
 
     @Override
@@ -74,6 +83,10 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
         dto.unitNumber().set(dto.billingAccount().lease().unit().info().number());
 
         Persistence.service().retrieve(dto.paymentMethod());
+        if (retrieveTraget != RetrieveTraget.Edit) {
+            ServerSideFactory.create(PaymentFacade.class).hidePaymentMethodDetails(dto.paymentMethod());
+        }
+
         Persistence.service().retrieve(dto.paymentMethod().customer());
         Persistence.service().retrieve(dto.leaseParticipant());
     }
@@ -87,10 +100,13 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
             criteria.add(PropertyCriterion.eq(criteria.proto()._Units().$()._Leases().$().billingAccount(), entity.billingAccount()));
             ServerSideFactory.create(PaymentFacade.class).persistPaymentMethod(Persistence.service().retrieve(criteria), entity.paymentMethod());
         }
+
         if (dto.paymentMethod().type().getValue() == PaymentType.Echeck) {
             entity.paymentMethod().isOneTimePayment().setValue(Boolean.FALSE);
         }
+
         ServerSideFactory.create(PaymentFacade.class).persistPayment(entity);
+        Persistence.service().commit(); // necessary to call before next processing!!! 
         ServerSideFactory.create(PaymentFacade.class).processPayment(entity);
     }
 
@@ -129,11 +145,6 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
     @Override
     public void getCurrentAddress(AsyncCallback<AddressStructured> callback) {
         AddressRetriever.getLeaseParticipantCurrentAddress(callback, TenantAppContext.getCurrentUserTenantInLease());
-    }
-
-    @Override
-    public void getDefaultPaymentMethod(AsyncCallback<PaymentMethod> callback) {
-        callback.onSuccess(TenantAppContext.getCurrentUserTenantInLease().preauthorizedPayment()); // null - means there is no default one!..
     }
 
     @Override

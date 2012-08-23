@@ -29,7 +29,5 @@ public interface PaymentCrudService extends AbstractCrudService<PaymentRecordDTO
 
     void getCurrentAddress(AsyncCallback<AddressStructured> callback);
 
-    void getDefaultPaymentMethod(AsyncCallback<PaymentMethod> callback);
-
     void getProfiledPaymentMethods(AsyncCallback<Vector<PaymentMethod>> callback);
 }

@@ -31,8 +31,6 @@ public interface PaymentCrudService extends AbstractCrudService<PaymentRecordDTO
 
     void getCurrentAddress(AsyncCallback<AddressStructured> callback, LeaseParticipant payer);
 
-    void getDefaultPaymentMethod(AsyncCallback<PaymentMethod> callback, LeaseParticipant payer);
-
     void getProfiledPaymentMethods(AsyncCallback<Vector<PaymentMethod>> callback, LeaseParticipant payer);
 
     // Payment operations:

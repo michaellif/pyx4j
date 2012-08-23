@@ -50,6 +50,7 @@ public class PaymentMethodCrudServiceImpl extends AbstractCrudServiceImpl<Paymen
     @Override
     protected void enhanceListRetrieved(PaymentMethod entity, PaymentMethod dto) {
         dto.isPreauthorized().setValue(entity.equals(TenantAppContext.getCurrentUserTenantInLease().preauthorizedPayment()));
+        ServerSideFactory.create(PaymentFacade.class).hidePaymentMethodDetails(dto);
         super.enhanceListRetrieved(entity, dto);
     }
 

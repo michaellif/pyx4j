@@ -35,6 +35,8 @@ import com.propertyvista.server.common.util.AddressRetriever;
 
 public class TenantCrudServiceImpl extends AbstractCrudServiceDtoImpl<Tenant, TenantDTO> implements TenantCrudService {
 
+    private RetrieveTraget retrieveTraget;
+
     public TenantCrudServiceImpl() {
         super(Tenant.class, TenantDTO.class);
     }
@@ -42,6 +44,12 @@ public class TenantCrudServiceImpl extends AbstractCrudServiceDtoImpl<Tenant, Te
     @Override
     protected void bind() {
         bindCompleateDBO();
+    }
+
+    @Override
+    public void retrieve(AsyncCallback<TenantDTO> callback, Key entityId, RetrieveTraget retrieveTraget) {
+        this.retrieveTraget = retrieveTraget;
+        super.retrieve(callback, entityId, retrieveTraget);
     }
 
     @Override
@@ -54,6 +62,12 @@ public class TenantCrudServiceImpl extends AbstractCrudServiceDtoImpl<Tenant, Te
         // fill/update payment methods: 
         dto.paymentMethods().clear();
         dto.paymentMethods().addAll(ServerSideFactory.create(PaymentFacade.class).retrievePaymentMethods(entity));
+        if (retrieveTraget == RetrieveTraget.Edit) {
+            for (PaymentMethod method : dto.paymentMethods()) {
+                Persistence.service().retrieve(method.details());
+            }
+        }
+
         // mark pre-authorized one:
         for (PaymentMethod paymentMethod : dto.paymentMethods()) {
             if (paymentMethod.equals(entity.preauthorizedPayment())) {

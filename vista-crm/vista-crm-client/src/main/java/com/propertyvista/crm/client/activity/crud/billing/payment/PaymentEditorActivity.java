@@ -60,16 +60,6 @@ public class PaymentEditorActivity extends EditorActivityBase<PaymentRecordDTO> 
     }
 
     @Override
-    public void getDefaultPaymentMethod(final AsyncCallback<PaymentMethod> callback, LeaseParticipant payer) {
-        ((PaymentCrudService) getService()).getDefaultPaymentMethod(new DefaultAsyncCallback<PaymentMethod>() {
-            @Override
-            public void onSuccess(PaymentMethod result) {
-                callback.onSuccess(result);
-            }
-        }, (LeaseParticipant) payer.createIdentityStub());
-    }
-
-    @Override
     public void getProfiledPaymentMethods(final AsyncCallback<List<PaymentMethod>> callback, LeaseParticipant payer) {
         ((PaymentCrudService) getService()).getProfiledPaymentMethods(new DefaultAsyncCallback<Vector<PaymentMethod>>() {
             @Override
