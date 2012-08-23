@@ -24,27 +24,24 @@ import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget
 
 public class IdAssignmentPolicyDataModel {
 
-    private IdAssignmentPolicy policy;
+    final private IdAssignmentPolicy policy;
 
     public IdAssignmentPolicyDataModel(PreloadConfig config) {
+        policy = EntityFactory.create(IdAssignmentPolicy.class);
     }
 
     public void generate() {
-        policy = EntityFactory.create(IdAssignmentPolicy.class);
-
-        IdAssignmentItem item = null;
-
+        policy.itmes().clear();
         for (IdTarget target : IdTarget.values()) {
             if (target == IdTarget.accountNumber) {
                 continue;
             }
-            item = EntityFactory.create(IdAssignmentItem.class);
 
+            IdAssignmentItem item = EntityFactory.create(IdAssignmentItem.class);
             item.target().setValue(target);
-            item.type().setValue(target == IdTarget.propertyCode ? IdAssignmentType.userAssigned : IdAssignmentType.generatedNumber);
+            item.type().setValue(IdAssignmentType.generatedNumber);
 
             policy.itmes().add(item);
-
         }
 
         OrganizationPoliciesNode orgNode = EntityFactory.create(OrganizationPoliciesNode.class);

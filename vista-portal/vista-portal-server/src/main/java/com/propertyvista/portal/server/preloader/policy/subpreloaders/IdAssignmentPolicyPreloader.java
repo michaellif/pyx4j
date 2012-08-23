@@ -30,20 +30,16 @@ public class IdAssignmentPolicyPreloader extends AbstractPolicyPreloader<IdAssig
     @Override
     protected IdAssignmentPolicy createPolicy(StringBuilder log) {
         IdAssignmentPolicy policy = EntityFactory.create(IdAssignmentPolicy.class);
-
-        IdAssignmentItem item = null;
-
         for (IdTarget target : IdTarget.values()) {
             if (target == IdTarget.accountNumber) {
                 continue;
             }
-            item = EntityFactory.create(IdAssignmentItem.class);
 
+            IdAssignmentItem item = EntityFactory.create(IdAssignmentItem.class);
             item.target().setValue(target);
-            item.type().setValue(target == IdTarget.propertyCode ? IdAssignmentType.userAssigned : IdAssignmentType.generatedNumber);
+            item.type().setValue(IdAssignmentType.generatedNumber);
 
             policy.itmes().add(item);
-
         }
 
         log.append(policy.getStringView());
