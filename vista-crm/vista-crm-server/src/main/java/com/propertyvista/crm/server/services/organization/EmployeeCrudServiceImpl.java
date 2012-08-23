@@ -27,6 +27,7 @@ import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.admin.domain.pmc.Pmc;
 import com.propertyvista.admin.domain.security.OnboardingUserCredential;
+import com.propertyvista.biz.policy.IdAssignmentFacade;
 import com.propertyvista.biz.system.AuditFacade;
 import com.propertyvista.crm.rpc.dto.company.EmployeeDTO;
 import com.propertyvista.crm.rpc.services.organization.EmployeeCrudService;
@@ -75,7 +76,12 @@ public class EmployeeCrudServiceImpl extends AbstractCrudServiceDtoImpl<Employee
 
     @Override
     protected void persist(Employee dbo, EmployeeDTO in) {
+        if (dbo.id().isNull()) {
+            ServerSideFactory.create(IdAssignmentFacade.class).assignId(dbo);
+        }
+
         super.persist(dbo, in);
+
         if (SecurityController.checkBehavior(VistaCrmBehavior.Organization)) {
             CrmUser user;
             boolean isNew = false;

@@ -21,12 +21,14 @@ import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
+import com.propertyvista.common.client.policy.ClientPolicyManager;
 import com.propertyvista.common.client.ui.components.editors.NameEditor;
 import com.propertyvista.common.client.ui.components.security.UserAuditingConfigurationForm;
 import com.propertyvista.common.client.ui.validators.PastDateValidation;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.crud.organisation.employee.EmployeeFolder.ParentEmployeeGetter;
 import com.propertyvista.crm.rpc.dto.company.EmployeeDTO;
+import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
 
 public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
 
@@ -70,6 +72,10 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
 
+        if (isEditable()) {
+            ClientPolicyManager.setIdComponentEditabilityByPolicy(IdTarget.employee, get(proto().employeeId()), getValue().getPrimaryKey());
+        }
+
         get(proto().password()).setVisible(isNewEmployee());
         get(proto().passwordConfirm()).setVisible(isNewEmployee());
     }
@@ -96,6 +102,7 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
         FormFlexPanel main = new FormFlexPanel(title);
 
         int row = -1;
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().employeeId()), 10).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().title()), 20).build());
 
         main.setBR(++row, 0, 1);
@@ -138,7 +145,7 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
         content.setBR(++row, 0, 1);
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().enabled()), 5).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().requireChangePasswordOnNextLogIn()), 5).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().credentialUpdated()), 5).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().credentialUpdated()), 15).build());
 
         content.setH1(++row, 0, 2, i18n.tr("Roles"));
         content.setWidget(++row, 0, inject(proto().roles(), new CrmRoleFolder(isEditable())));

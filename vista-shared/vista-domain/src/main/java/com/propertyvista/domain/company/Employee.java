@@ -15,6 +15,7 @@ package com.propertyvista.domain.company;
 
 import java.util.Date;
 
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Length;
@@ -32,6 +33,11 @@ import com.propertyvista.domain.security.CrmUser;
 
 @ToStringFormat("{0}, {1}")
 public interface Employee extends Person {
+
+    @NotNull
+    @ToString(index = 63)
+    @Caption(name = "Id")
+    IPrimitive<String> employeeId();
 
     @ToString(index = 64)
     IPrimitive<String> title();

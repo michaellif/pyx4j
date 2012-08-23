@@ -20,6 +20,7 @@ import java.util.concurrent.Callable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -29,6 +30,7 @@ import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.admin.domain.pmc.Pmc;
 import com.propertyvista.admin.domain.security.OnboardingUserCredential;
+import com.propertyvista.biz.policy.IdAssignmentFacade;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.DemoData;
 import com.propertyvista.domain.company.Employee;
@@ -129,6 +131,7 @@ public class UserPreloader extends BaseVistaDevDataPreloader {
             String email = DemoData.UserType.PM.getEmail(i);
 
             Employee emp = CommonsGenerator.createEmployee().duplicate(Employee.class);
+            ServerSideFactory.create(IdAssignmentFacade.class).assignId(emp);
             emp.title().setValue("Executive");
             emp.email().setValue(email);
 
@@ -143,6 +146,7 @@ public class UserPreloader extends BaseVistaDevDataPreloader {
             String email = DemoData.UserType.EMP.getEmail(i);
 
             Employee emp = CommonsGenerator.createEmployee().duplicate(Employee.class);
+            ServerSideFactory.create(IdAssignmentFacade.class).assignId(emp);
             emp.title().setValue(CommonsGenerator.randomEmployeeTitle());
             emp.email().setValue(email);
 
@@ -159,6 +163,7 @@ public class UserPreloader extends BaseVistaDevDataPreloader {
                 final String email = DemoData.UserType.ONB.getEmail(i, namespace);
 
                 final Employee emp = CommonsGenerator.createEmployee().duplicate(Employee.class);
+                ServerSideFactory.create(IdAssignmentFacade.class).assignId(emp);
                 emp.title().setValue(CommonsGenerator.randomEmployeeTitle());
                 emp.email().setValue(email);
 

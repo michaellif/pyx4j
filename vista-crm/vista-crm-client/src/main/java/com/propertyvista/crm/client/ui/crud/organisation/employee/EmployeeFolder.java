@@ -58,6 +58,7 @@ public class EmployeeFolder extends VistaTableFolder<Employee> {
     @Override
     public List<EntityFolderColumnDescriptor> columns() {
         ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
+        columns.add(new EntityFolderColumnDescriptor(proto().employeeId(), "5em"));
         columns.add(new EntityFolderColumnDescriptor(proto().name(), "20em"));
         columns.add(new EntityFolderColumnDescriptor(proto().title(), "20em"));
         return columns;
@@ -132,6 +133,7 @@ public class EmployeeFolder extends VistaTableFolder<Employee> {
         @Override
         protected List<ColumnDescriptor> defineColumnDescriptors() {
             return Arrays.asList(//@formatter:off                    
+                    new MemberColumnDescriptor.Builder(proto().employeeId()).build(),
                     new MemberColumnDescriptor.Builder(proto().title()).build(),
                     new MemberColumnDescriptor.Builder(proto().name().namePrefix()).build(),
                     new MemberColumnDescriptor.Builder(proto().name().firstName()).build(),

@@ -48,6 +48,8 @@ public interface IdAssignmentItem extends IEntity {
 
         lead,
 
+        employee,
+
         accountNumber;
 
         @Override

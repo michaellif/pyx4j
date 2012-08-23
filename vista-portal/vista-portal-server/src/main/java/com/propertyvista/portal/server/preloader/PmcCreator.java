@@ -20,6 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.rdb.EntityPersistenceServiceRDB;
 import com.pyx4j.entity.rdb.RDBUtils;
@@ -34,6 +35,7 @@ import com.pyx4j.server.contexts.NamespaceManager;
 import com.propertyvista.admin.domain.pmc.OnboardingMerchantAccount;
 import com.propertyvista.admin.domain.pmc.Pmc;
 import com.propertyvista.admin.domain.security.OnboardingUserCredential;
+import com.propertyvista.biz.policy.IdAssignmentFacade;
 import com.propertyvista.domain.DemoData;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.financial.MerchantAccount;
@@ -132,6 +134,7 @@ public class PmcCreator {
         Persistence.service().persist(user);
 
         Employee employee = EntityFactory.create(Employee.class); //creates employee in crm
+        ServerSideFactory.create(IdAssignmentFacade.class).assignId(employee);
         employee.user().set(user);
         employee.name().firstName().setValue(firstName);
         employee.name().lastName().setValue(lastName);

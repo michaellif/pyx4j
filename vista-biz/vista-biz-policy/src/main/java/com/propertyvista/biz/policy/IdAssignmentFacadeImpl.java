@@ -22,6 +22,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
+import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
 import com.propertyvista.domain.policy.policies.IdAssignmentPolicy;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem;
@@ -88,6 +89,13 @@ public class IdAssignmentFacadeImpl implements IdAssignmentFacade {
     public void assignId(Guarantor guarantor) {
         if (needsGeneratedId(IdTarget.guarantor)) {
             guarantor.participantId().setValue(getId(IdTarget.guarantor));
+        }
+    }
+
+    @Override
+    public void assignId(Employee employee) {
+        if (needsGeneratedId(IdTarget.employee)) {
+            employee.employeeId().setValue(getId(IdTarget.employee));
         }
     }
 
@@ -177,5 +185,4 @@ public class IdAssignmentFacadeImpl implements IdAssignmentFacade {
             res.append(codes[(int) mod - 1]);
         }
     }
-
 }

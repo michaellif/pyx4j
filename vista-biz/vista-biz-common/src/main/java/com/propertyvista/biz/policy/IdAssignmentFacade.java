@@ -13,6 +13,7 @@
  */
 package com.propertyvista.biz.policy;
 
+import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.Guarantor;
@@ -36,6 +37,8 @@ public interface IdAssignmentFacade {
     void assignId(Tenant tenant);
 
     void assignId(Guarantor guarantor);
+
+    void assignId(Employee employee);
 
     String createAccountNumber();
 
