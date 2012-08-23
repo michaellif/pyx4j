@@ -179,7 +179,7 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
         });
 
         getSatisfaction.setDebugIdSuffix(new StringDebugId("getSatisfaction"));
-        getSatisfaction.setValue(i18n.tr("Feedback"));
+        getSatisfaction.setValue(i18n.tr("Help"));
         getSatisfaction.asWidget().getElement().getStyle().setMarginRight(1, Unit.EM);
 
         /**
