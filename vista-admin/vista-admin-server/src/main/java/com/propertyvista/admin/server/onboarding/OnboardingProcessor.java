@@ -30,8 +30,10 @@ import com.pyx4j.entity.shared.validator.EntityValidator;
 import com.pyx4j.server.contexts.Context;
 
 import com.propertyvista.admin.domain.pmc.PmcDnsName.DnsNameTarget;
+import com.propertyvista.admin.dto.OnboardingSimpulationsErrorsDTO.SimpulationType;
 import com.propertyvista.admin.server.onboarding.rh.OnboardingRequestHandlerFactory;
 import com.propertyvista.admin.server.onboarding.rhf.RequestHandler;
+import com.propertyvista.config.VistaSystemsSimulationConfig;
 import com.propertyvista.onboarding.RequestIO;
 import com.propertyvista.onboarding.RequestMessageIO;
 import com.propertyvista.onboarding.ResponseIO;
@@ -48,7 +50,11 @@ class OnboardingProcessor {
     public Throwable isValid(RequestMessageIO message) {
         for (RequestIO request : message.requests()) {
             RequestIO entity = request.cast();
-            EntityValidator.validate(entity);
+            try {
+                EntityValidator.validate(entity);
+            } catch (RuntimeException e) {
+                return e;
+            }
             EntityMeta em = entity.getEntityMeta();
             for (String memberName : em.getMemberNames()) {
                 IObject<?> member = entity.getMember(memberName);
@@ -81,11 +87,28 @@ class OnboardingProcessor {
         return null;
     }
 
+    public static SimpulationType getSimpulationType() {
+        if (VistaSystemsSimulationConfig.getConfiguration().onboarding().enabled().getValue(Boolean.FALSE)) {
+            return VistaSystemsSimulationConfig.getConfiguration().onboarding().simpulationType().getValue();
+        } else {
+            return null;
+        }
+    }
+
     private ResponseIO execute(RequestIO request) {
         Context.getRequest().setAttribute(VistaAntiBot.REQUEST_IP_REQUEST_ATR, request.requestRemoteAddr().getValue());
         RequestHandler<RequestIO> requestHandler = new OnboardingRequestHandlerFactory().createRequestHandler(request);
         if (requestHandler != null) {
-            ResponseIO response = requestHandler.execute(request);
+
+            ResponseIO response;
+            if (SimpulationType.RespondSuccessFalse == OnboardingProcessor.getSimpulationType()) {
+                response = EntityFactory.create(ResponseIO.class);
+                response.success().setValue(false);
+                response.errorMessage().setValue("Simulated Error");
+            } else {
+                response = requestHandler.execute(request);
+            }
+
             if (!request.requestId().isNull()) {
                 response.requestId().set(request.requestId());
             }

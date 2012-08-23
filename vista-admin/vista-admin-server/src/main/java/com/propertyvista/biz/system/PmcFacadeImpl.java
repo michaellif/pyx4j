@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.EnumSet;
 import java.util.List;
+import java.util.Locale;
 
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.entity.cache.CacheService;
@@ -112,7 +113,7 @@ public class PmcFacadeImpl implements PmcFacade {
             }
 
             ReservedPmcNames resDnsName = EntityFactory.create(ReservedPmcNames.class);
-            resDnsName.dnsName().setValue(dnsName);
+            resDnsName.dnsName().setValue(dnsName.toLowerCase(Locale.ENGLISH));
             resDnsName.onboardingAccountId().setValue(onboardingAccountId);
             Persistence.service().persist(resDnsName);
             return true;

@@ -57,14 +57,14 @@ public class CreatePmcRequestHandler extends AbstractRequestHandler<CreatePMCReq
 
         if (creds.size() == 0) {
             response.success().setValue(Boolean.FALSE);
-            log.info("Error occured.  User {}, action {}", new Object[] { request.onboardingAccountId(), "CreatePmc" });
+            log.info("Error occurred.  User {}, action {}", new Object[] { request.onboardingAccountId(), "CreatePmc" });
             return response;
         }
 
         final String dnsName = request.dnsName().getValue().toLowerCase(Locale.ENGLISH);
         if (!PmcNameValidator.canCreatePmcName(dnsName, request.onboardingAccountId().getValue())) {
             response.success().setValue(Boolean.FALSE);
-            log.info("Error occured.  User {}, action {}", new Object[] { request.onboardingAccountId(), "CreatePmc" });
+            log.info("Error occurred.  User {}, action {}", new Object[] { request.onboardingAccountId(), "CreatePmc" });
             return response;
         }
 

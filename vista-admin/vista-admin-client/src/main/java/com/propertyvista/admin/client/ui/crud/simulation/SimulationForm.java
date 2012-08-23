@@ -36,14 +36,19 @@ public class SimulationForm extends AdminEntityForm<SimulationDTO> {
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().generalCacheEnabled())).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().entityCacheServiceEnabled())).build());
 
-        content.setH1(++row, 0, 1, i18n.tr("Network"));
+        content.setH1(++row, 0, 1, i18n.tr("Network Simulation"));
 
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().networkSimulation().enabled())).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().networkSimulation().delay())).build());
 
-        content.setH1(++row, 0, 1, i18n.tr("External Systems"));
+        content.setH1(++row, 0, 1, i18n.tr("External System PAD"));
 
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().usePadSimulator())).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().systems().usePadSimulator())).build());
+
+        content.setH1(++row, 0, 1, i18n.tr("External System On-Boarding"));
+
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().systems().onboarding().enabled())).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().systems().onboarding().simpulationType())).build());
 
         selectTab(addTab(content));
 

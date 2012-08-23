@@ -28,6 +28,7 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.admin.rpc.SimulationDTO;
 import com.propertyvista.admin.rpc.services.SimulationService;
+import com.propertyvista.config.VistaSystemsSimulationConfig;
 import com.propertyvista.payment.pad.CaledonPadSftpClient;
 
 public class SimulationServiceImpl extends AdminServiceImpl implements SimulationService {
@@ -44,7 +45,8 @@ public class SimulationServiceImpl extends AdminServiceImpl implements Simulatio
 
         result.networkSimulation().set(NetworkSimulationServiceFilter.getNetworkSimulationConfig());
 
-        result.usePadSimulator().setValue(CaledonPadSftpClient.usePadSimulator());
+        result.systems().set(VistaSystemsSimulationConfig.getConfiguration());
+        result.systems().usePadSimulator().setValue(CaledonPadSftpClient.usePadSimulator());
 
         callback.onSuccess(result);
     }
@@ -59,7 +61,8 @@ public class SimulationServiceImpl extends AdminServiceImpl implements Simulatio
 
         NetworkSimulationServiceFilter.setNetworkSimulationConfig(entity.networkSimulation());
 
-        CaledonPadSftpClient.setUsePadSimulator(entity.usePadSimulator().getValue());
+        CaledonPadSftpClient.setUsePadSimulator(entity.systems().usePadSimulator().getValue());
+        VistaSystemsSimulationConfig.setConfiguration(entity.systems());
 
         callback.onSuccess(entity.getPrimaryKey());
     }

@@ -19,6 +19,8 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.essentials.rpc.admin.NetworkSimulation;
 
+import com.propertyvista.admin.dto.VistaSystemsSimulationConfigDTO;
+
 @Transient
 public interface SimulationDTO extends IEntity {
 
@@ -26,10 +28,10 @@ public interface SimulationDTO extends IEntity {
 
     IPrimitive<Boolean> entityCacheServiceEnabled();
 
-    IPrimitive<Boolean> usePadSimulator();
-
     @ReadOnly
     IPrimitive<String> memcacheStatistics();
 
     NetworkSimulation networkSimulation();
+
+    VistaSystemsSimulationConfigDTO systems();
 }

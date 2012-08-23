@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.charset.Charset;
 import java.util.Date;
+import java.util.EnumSet;
 
 import javax.servlet.ServletException;
 import javax.servlet.ServletInputStream;
@@ -33,12 +34,15 @@ import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.essentials.rpc.SystemState;
+import com.pyx4j.essentials.server.admin.SystemMaintenance;
 import com.pyx4j.essentials.server.dev.EntityFileLogger;
 import com.pyx4j.essentials.server.xml.XMLEntityWriter;
 import com.pyx4j.essentials.server.xml.XMLStringWriter;
 import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.server.contexts.NamespaceManager;
 
+import com.propertyvista.admin.dto.OnboardingSimpulationsErrorsDTO.SimpulationType;
 import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.interfaces.importer.xml.ImportXMLEntityNamingConvention;
 import com.propertyvista.onboarding.RequestIO;
@@ -74,6 +78,11 @@ public class OnboardingServiceServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         long start = System.currentTimeMillis();
+
+        if (SimpulationType.DropConnection == OnboardingProcessor.getSimpulationType()) {
+            return;
+        }
+
         ServletInputStream is = null;
         RequestMessageIO message;
         try {
@@ -90,14 +99,30 @@ public class OnboardingServiceServlet extends HttpServlet {
         message.receivedDate().setValue(new Date(start));
         EntityFileLogger.log("onboarding", "request" + requestInfo(message), message);
 
+        if (EnumSet.of(SimpulationType.MessageFormatError, SimpulationType.SystemError).contains(OnboardingProcessor.getSimpulationType())) {
+            replyWithStatusCode(response, ResponseMessageIO.StatusCode.ReadOnly, null);
+            return;
+        }
+
         NamespaceManager.setNamespace(VistaNamespace.adminNamespace);
         OnboardingProcessor pp;
 
         pp = new OnboardingProcessor();
         log.info("processing messageId {}", message.messageId().getValue());
-        Throwable validationResults = pp.isValid(message);
-        if (validationResults != null) {
-            replyWithStatusCode(response, ResponseMessageIO.StatusCode.MessageFormatError, validationResults);
+        try {
+            Throwable validationResults = pp.isValid(message);
+            if (validationResults != null) {
+                replyWithStatusCode(response, ResponseMessageIO.StatusCode.MessageFormatError, validationResults);
+                return;
+            }
+        } catch (Throwable e) {
+            log.error("Error", e);
+            replyWithStatusCode(response, ResponseMessageIO.StatusCode.SystemError, e);
+            return;
+        }
+
+        if (SystemMaintenance.getExternalConnectionsState() != SystemState.Online) {
+            replyWithStatusCode(response, ResponseMessageIO.StatusCode.ReadOnly, null);
             return;
         }
 

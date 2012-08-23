@@ -5,6 +5,7 @@
     <inherits name='com.propertyvista.Domain' />
     
     <source path="domain"/>
+    <source path="dto"/>
     
     <extend-configuration-property name="rpc.blacklist" value="com.propertyvista.admin.domain.security.AdminUserCredential*" />
     <extend-configuration-property name="rpc.blacklist" value="com.propertyvista.admin.domain.security.OnboardingUserCredential*" />
