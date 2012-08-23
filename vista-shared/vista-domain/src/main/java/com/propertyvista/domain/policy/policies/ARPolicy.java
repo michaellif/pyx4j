@@ -32,13 +32,13 @@ public interface ARPolicy extends Policy {
 
     @I18n
     enum CreditDebitRule {
-        @Translate("By due date")
+        @Translate("Oldest Debt First")
         byDueDate,
 
-        @Translate("By debit type")
+        @Translate("Rent Debt Last")
         byDebitType,
 
-        @Translate("By aging bucket and debit")
+        @Translate("Oldest Debt First With Non Rent Priority")
         byAgingBucketAndDebitType;
 
         @Override
@@ -50,5 +50,4 @@ public interface ARPolicy extends Policy {
     @Caption(description = "The rule by which the automatic credit-debit links will be created.")
     @NotNull
     IPrimitive<CreditDebitRule> creditDebitRule();
-
 }
