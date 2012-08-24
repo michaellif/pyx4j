@@ -24,7 +24,7 @@ import com.pyx4j.commons.css.IStyleDependent;
 import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.Theme;
-import com.pyx4j.commons.css.ThemeColors;
+import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 
 public class DefaultWidgetDecoratorTheme extends Theme {
@@ -51,7 +51,7 @@ public class DefaultWidgetDecoratorTheme extends Theme {
 
         style = new Style(".", StyleName.WidgetDecorator, "-", StyleDependent.readOnly);
         style.addProperty("font-weight", "bold");
-        style.addProperty("color", ThemeColors.foreground, 1);
+        style.addProperty("color", ThemeColor.foreground, 1);
         addStyle(style);
 
         style = new Style(".", StyleName.WidgetDecoratorLabelHolder);
@@ -59,13 +59,13 @@ public class DefaultWidgetDecoratorTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", StyleName.WidgetDecoratorLabel);
-        style.addProperty("color", ThemeColors.foreground, 1);
+        style.addProperty("color", ThemeColor.foreground, 1);
         style.addProperty("font-weight", "bold");
         style.addProperty("display", "inline");
         addStyle(style);
 
         style = new Style(".", StyleName.WidgetDecorator, "-", StyleDependent.readOnly, " .", StyleName.WidgetDecoratorLabel);
-        style.addProperty("color", ThemeColors.foreground, 0.5);
+        style.addProperty("color", ThemeColor.foreground, 0.5);
         addStyle(style);
 
         style = new Style(".", StyleName.WidgetDecoratorInfoImage);

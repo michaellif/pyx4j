@@ -24,7 +24,7 @@ import com.pyx4j.commons.css.IStyleDependent;
 import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.Theme;
-import com.pyx4j.commons.css.ThemeColors;
+import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 
 public class DefaultCComponentsTheme extends Theme {
@@ -51,15 +51,15 @@ public class DefaultCComponentsTheme extends Theme {
     protected void initTextBoxStyle() {
 
         Style style = new Style(".", DefaultWidgetsTheme.StyleName.TextBox, "-", StyleDependent.disabled);
-        style.addProperty("background-color", ThemeColors.foreground, 0.1);
-        style.addProperty("color", ThemeColors.foreground, 0.6);
+        style.addProperty("background-color", ThemeColor.foreground, 0.1);
+        style.addProperty("color", ThemeColor.foreground, 0.6);
         addStyle(style);
 
         style = new Style(".", DefaultWidgetsTheme.StyleName.TextBox, "-", StyleDependent.readonly);
         style.addProperty("border-width", "1px");
         style.addProperty("border-style", "solid");
-        style.addProperty("border-color", ThemeColors.foreground, 0.1);
-        style.addProperty("background-color", ThemeColors.foreground, 0);
+        style.addProperty("border-color", ThemeColor.foreground, 0.1);
+        style.addProperty("background-color", ThemeColor.foreground, 0);
         addStyle(style);
 
     }
@@ -69,12 +69,12 @@ public class DefaultCComponentsTheme extends Theme {
         Style style = new Style(".", DefaultWidgetsTheme.StyleName.ListBox, "-", StyleDependent.readonly);
         style.addProperty("border-width", "1px");
         style.addProperty("border-style", "solid");
-        style.addProperty("border-color", ThemeColors.foreground, 0.1);
-        style.addProperty("background-color", ThemeColors.foreground, 0);
+        style.addProperty("border-color", ThemeColor.foreground, 0.1);
+        style.addProperty("background-color", ThemeColor.foreground, 0);
         addStyle(style);
 
         style = new Style(".", DefaultWidgetsTheme.StyleName.ListBox, "-", StyleDependent.disabled);
-        style.addProperty("background-color", ThemeColors.foreground, 0.3);
+        style.addProperty("background-color", ThemeColor.foreground, 0.3);
         addStyle(style);
 
     }

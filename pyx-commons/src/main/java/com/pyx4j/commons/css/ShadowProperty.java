@@ -22,13 +22,13 @@ package com.pyx4j.commons.css;
 
 public class ShadowProperty extends Property {
 
-    private final ThemeColors color;
+    private final ThemeColor color;
 
     private final double vibrance;
 
     private final String value;
 
-    public ShadowProperty(ThemeColors color, double vibrance, String value) {
+    public ShadowProperty(ThemeColor color, double vibrance, String value) {
         super("text-shadow");
         this.color = color;
         this.vibrance = vibrance;

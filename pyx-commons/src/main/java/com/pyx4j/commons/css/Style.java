@@ -67,27 +67,27 @@ public class Style {
         properties.add(new StringProperty(name, value));
     }
 
-    public void addProperty(String name, ThemeColors color, double vibrance) {
+    public void addProperty(String name, ThemeColor color, double vibrance) {
         properties.add(new ColorProperty(name, color, vibrance));
     }
 
-    public void addProperty(String name, ThemeColors color) {
+    public void addProperty(String name, ThemeColor color) {
         properties.add(new ColorProperty(name, color, 1));
     }
 
-    public void addGradient(ThemeColors startColor, double startVibrance, ThemeColors endColor, double endVibrance) {
+    public void addGradient(ThemeColor startColor, double startVibrance, ThemeColor endColor, double endVibrance) {
         properties.add(new GradientProperty(startColor, startVibrance, endColor, endVibrance));
     }
 
-    public void addGradient(ThemeColors startColor, ThemeColors endColor) {
+    public void addGradient(ThemeColor startColor, ThemeColor endColor) {
         properties.add(new GradientProperty(startColor, 1, endColor, 1));
     }
 
-    public void addShadow(ThemeColors color, String value) {
+    public void addShadow(ThemeColor color, String value) {
         properties.add(new ShadowProperty(color, 1, value));
     }
 
-    public void addShadow(ThemeColors color, double vibrance, String value) {
+    public void addShadow(ThemeColor color, double vibrance, String value) {
         properties.add(new ShadowProperty(color, vibrance, value));
     }
 

@@ -24,7 +24,7 @@ import com.pyx4j.commons.css.IStyleDependent;
 import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.Theme;
-import com.pyx4j.commons.css.ThemeColors;
+import com.pyx4j.commons.css.ThemeColor;
 
 public class DefaultTabTheme extends Theme {
 
@@ -64,28 +64,28 @@ public class DefaultTabTheme extends Theme {
         style.addProperty("margin-left", "1px");
         style.addProperty("margin-top", "3px");
         style.addProperty("border-right", "1px solid");
-        style.addProperty("border-right-color", ThemeColors.foreground, 0.6);
+        style.addProperty("border-right-color", ThemeColor.foreground, 0.6);
         style.addProperty("border-left", "1px solid");
-        style.addProperty("border-left-color", ThemeColors.foreground, 0.6);
+        style.addProperty("border-left-color", ThemeColor.foreground, 0.6);
         style.addProperty("border-top", "1px solid");
-        style.addProperty("border-top-color", ThemeColors.foreground, 0.6);
-        style.addProperty("background", ThemeColors.object1, 1);
-        style.addProperty("color", ThemeColors.foreground, 0);
+        style.addProperty("border-top-color", ThemeColor.foreground, 0.6);
+        style.addProperty("background", ThemeColor.object1, 1);
+        style.addProperty("color", ThemeColor.foreground, 0);
         addStyle(style);
 
         style = new Style(StyleName.TabBarItem, StyleDependent.hover);
-        style.addProperty("background", ThemeColors.object1, 0.9);
+        style.addProperty("background", ThemeColor.object1, 0.9);
         addStyle(style);
 
         style = new Style(".", StyleName.TabBarItem, "-", StyleDependent.selected);
         style.addProperty("cursor", "default");
-        style.addGradient(ThemeColors.foreground, 0.1, ThemeColors.foreground, 0.30);
+        style.addGradient(ThemeColor.foreground, 0.1, ThemeColor.foreground, 0.30);
         style.addProperty("color", "#333");
         addStyle(style);
 
         style = new Style(".", StyleName.TabBarItem, "-", StyleDependent.disabled);
-        style.addProperty("background", ThemeColors.object1, 0.6);
-        style.addProperty("color", ThemeColors.foreground, 0.2);
+        style.addProperty("background", ThemeColor.object1, 0.6);
+        style.addProperty("color", ThemeColor.foreground, 0.2);
         style.addProperty("cursor", "default");
         addStyle(style);
 
@@ -109,18 +109,18 @@ public class DefaultTabTheme extends Theme {
         style.addProperty("margin-left", "1px");
         style.addProperty("margin-top", "3px");
         style.addProperty("border-right", "1px solid");
-        style.addProperty("border-right-color", ThemeColors.foreground, 0.6);
+        style.addProperty("border-right-color", ThemeColor.foreground, 0.6);
         style.addProperty("border-left", "1px solid");
-        style.addProperty("border-left-color", ThemeColors.foreground, 0.6);
+        style.addProperty("border-left-color", ThemeColor.foreground, 0.6);
         style.addProperty("border-top", "1px solid");
-        style.addProperty("border-top-color", ThemeColors.foreground, 0.6);
-        style.addProperty("background", ThemeColors.object1, 1);
-        style.addProperty("color", ThemeColors.foreground, 0);
+        style.addProperty("border-top-color", ThemeColor.foreground, 0.6);
+        style.addProperty("background", ThemeColor.object1, 1);
+        style.addProperty("color", ThemeColor.foreground, 0);
         addStyle(style);
 
         style = new Style(".", StyleName.TabBarAction, "-", StyleDependent.disabled);
-        style.addProperty("background", ThemeColors.object1, 0.6);
-        style.addProperty("color", ThemeColors.foreground, 0.2);
+        style.addProperty("background", ThemeColor.object1, 0.6);
+        style.addProperty("color", ThemeColor.foreground, 0.2);
         style.addProperty("cursor", "default");
         addStyle(style);
 
@@ -131,7 +131,7 @@ public class DefaultTabTheme extends Theme {
         style = new Style((IStyleName) StyleName.TabList);
         style.addProperty("background-color", "white");
         style.addProperty("border", "1px solid");
-        style.addProperty("border-color", ThemeColors.foreground, 0.6);
+        style.addProperty("border-color", ThemeColor.foreground, 0.6);
         addStyle(style);
 
         style = new Style((IStyleName) StyleName.TabListItem);
@@ -140,8 +140,8 @@ public class DefaultTabTheme extends Theme {
         addStyle(style);
 
         style = new Style(StyleName.TabListItem, StyleDependent.hover);
-        style.addProperty("background", ThemeColors.foreground, 0.5);
-        style.addProperty("color", ThemeColors.foreground, 0);
+        style.addProperty("background", ThemeColor.foreground, 0.5);
+        style.addProperty("color", ThemeColor.foreground, 0);
         addStyle(style);
     }
 }

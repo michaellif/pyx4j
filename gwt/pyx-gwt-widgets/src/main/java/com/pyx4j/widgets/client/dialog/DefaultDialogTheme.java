@@ -24,7 +24,7 @@ import com.pyx4j.commons.css.IStyleDependent;
 import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.Theme;
-import com.pyx4j.commons.css.ThemeColors;
+import com.pyx4j.commons.css.ThemeColor;
 
 public class DefaultDialogTheme extends Theme {
 
@@ -42,25 +42,25 @@ public class DefaultDialogTheme extends Theme {
 
     protected void initStyles() {
         Style style = new Style(".", StyleName.Dialog);
-        style.addProperty("background-color", ThemeColors.object1, 1);
+        style.addProperty("background-color", ThemeColor.object1, 1);
         addStyle(style);
 
         style = new Style(".", StyleName.DialogCaption);
-        style.addProperty("background", ThemeColors.object1, 0.8);
+        style.addProperty("background", ThemeColor.object1, 0.8);
         style.addProperty("filter", "alpha(opacity=95)");
         style.addProperty("opacity", "0.95");
-        style.addProperty("color", ThemeColors.object1, 0.2);
+        style.addProperty("color", ThemeColor.object1, 0.2);
         style.addProperty("font-weight", "bold");
         addStyle(style);
 
         style = new Style(".", StyleName.DialogResizer);
-        style.addProperty("background", ThemeColors.object1, 0.8);
+        style.addProperty("background", ThemeColor.object1, 0.8);
         style.addProperty("filter", "alpha(opacity=95)");
         style.addProperty("opacity", "0.95");
         addStyle(style);
 
         style = new Style(".", StyleName.DialogContentHolder);
-        style.addProperty("background-color", ThemeColors.background);
+        style.addProperty("background-color", ThemeColor.background);
         style.addProperty("width", "100%");
         style.addProperty("height", "100%");
         addStyle(style);

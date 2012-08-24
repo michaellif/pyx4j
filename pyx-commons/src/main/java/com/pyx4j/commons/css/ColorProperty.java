@@ -22,17 +22,17 @@ package com.pyx4j.commons.css;
 
 public class ColorProperty extends Property {
 
-    private final ThemeColors color;
+    private final ThemeColor color;
 
     private final double vibrance;
 
-    public ColorProperty(String name, ThemeColors color, double vibrance) {
+    public ColorProperty(String name, ThemeColor color, double vibrance) {
         super(name);
         this.color = color;
         this.vibrance = vibrance;
     }
 
-    public ThemeColors getColor() {
+    public ThemeColor getColor() {
         return color;
     }
 

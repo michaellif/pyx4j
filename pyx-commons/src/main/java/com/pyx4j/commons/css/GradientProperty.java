@@ -22,15 +22,15 @@ package com.pyx4j.commons.css;
 
 public class GradientProperty extends Property {
 
-    private final ThemeColors startColor;
+    private final ThemeColor startColor;
 
     private final double startVibrance;
 
-    private final ThemeColors endColor;
+    private final ThemeColor endColor;
 
     private final double endVibrance;
 
-    public GradientProperty(ThemeColors startColor, double startVibrance, ThemeColors endColor, double endVibrance) {
+    public GradientProperty(ThemeColor startColor, double startVibrance, ThemeColor endColor, double endVibrance) {
         super(null);
         this.startColor = startColor;
         this.startVibrance = startVibrance;

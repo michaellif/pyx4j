@@ -24,7 +24,7 @@ import com.pyx4j.commons.css.CSSClass;
 import com.pyx4j.commons.css.Selector;
 import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.Theme;
-import com.pyx4j.commons.css.ThemeColors;
+import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.entity.client.ui.folder.DefaultEntityFolderTheme;
 import com.pyx4j.forms.client.ui.DefaultCComponentsTheme;
 import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
@@ -45,8 +45,8 @@ public class TesterTheme extends Theme {
         addTheme(new DefaultEntityFolderTheme() {
 
             @Override
-            protected ThemeColors getBackgroundColor() {
-                return ThemeColors.object1;
+            protected ThemeColor getBackgroundColor() {
+                return ThemeColor.object1;
             }
         });
 
@@ -57,8 +57,8 @@ public class TesterTheme extends Theme {
         addTheme(new DefaultFormFlexPanelTheme() {
 
             @Override
-            protected ThemeColors getBackgroundColor() {
-                return ThemeColors.object1;
+            protected ThemeColor getBackgroundColor() {
+                return ThemeColor.object1;
             }
         });
 
@@ -152,12 +152,12 @@ public class TesterTheme extends Theme {
         addStyle(style);
 
         style = new Style(".gwt-SplitLayoutPanel-HDragger");
-        style.addProperty("background", ThemeColors.object2);
+        style.addProperty("background", ThemeColor.object2);
         style.addProperty("cursor", "col-resize");
         addStyle(style);
 
         style = new Style(".gwt-SplitLayoutPanel-VDragger");
-        style.addProperty("background", ThemeColors.object2);
+        style.addProperty("background", ThemeColor.object2);
         style.addProperty("cursor", "row-resize");
         addStyle(style);
 
@@ -165,8 +165,8 @@ public class TesterTheme extends Theme {
 
     protected void initBodyStyles() {
         Style style = new Style("body");
-        style.addProperty("background-color", ThemeColors.background, 1);
-        style.addProperty("color", ThemeColors.foreground);
+        style.addProperty("background-color", ThemeColor.background, 1);
+        style.addProperty("color", ThemeColor.foreground);
         style.addProperty("margin", "0");
         style.addProperty("border", "none");
         style.addProperty("font", "12px/1.5em Arial, Helvetica, sans-serif");
@@ -176,19 +176,19 @@ public class TesterTheme extends Theme {
 
     protected void initSectionStyles() {
         Style style = new Style(Selector.valueOf(CSSClass.pyx4j_Section_Border));
-        style.addProperty("background-color", ThemeColors.foreground, 0.4);
+        style.addProperty("background-color", ThemeColor.foreground, 0.4);
         addStyle(style);
 
         style = new Style(Selector.valueOf(CSSClass.pyx4j_Section_SelectionBorder));
-        style.addProperty("background-color", ThemeColors.contrast1);
+        style.addProperty("background-color", ThemeColor.contrast1);
         addStyle(style);
 
         style = new Style(Selector.valueOf(CSSClass.pyx4j_Section_Background));
-        style.addProperty("background-color", ThemeColors.object1, 0.2);
+        style.addProperty("background-color", ThemeColor.object1, 0.2);
         addStyle(style);
 
         style = new Style(Selector.valueOf(CSSClass.pyx4j_Section_Content));
-        style.addProperty("background-color", ThemeColors.foreground, 0.1);
+        style.addProperty("background-color", ThemeColor.foreground, 0.1);
         addStyle(style);
     }
 
@@ -199,14 +199,14 @@ public class TesterTheme extends Theme {
 
         //style.addProperty("background-color", ThemeColor.OBJECT_TONE1);
 
-        style.addGradient(ThemeColors.object1, 0.20, ThemeColors.object1, 0.5);
+        style.addGradient(ThemeColor.object1, 0.20, ThemeColor.object1, 0.5);
 
         addStyle(style);
     }
 
     protected void initStatusBarStyle() {
         Style style = new Style(Selector.valueOf(CSSClass.pyx4j_StatusBar));
-        style.addProperty("background-color", ThemeColors.object1, 0.2);
+        style.addProperty("background-color", ThemeColor.object1, 0.2);
         style.addProperty("padding", "2 2 2 8");
         addStyle(style);
     }
@@ -214,7 +214,7 @@ public class TesterTheme extends Theme {
     protected void initBarSeparatorStyle() {
         Style style = new Style(Selector.valueOf(CSSClass.pyx4j_BarSeparator));
         style.addProperty("border-left", "2px ridge");
-        style.addProperty("border-left-color", ThemeColors.object1, 0.2);
+        style.addProperty("border-left-color", ThemeColor.object1, 0.2);
 
         style.addProperty("margin-left", "3px");
         addStyle(style);
@@ -222,15 +222,15 @@ public class TesterTheme extends Theme {
 
     protected void initProgressBarStyles() {
         Style style = new Style(".gwt-ProgressBar-shell");
-        style.addProperty("background-color", ThemeColors.foreground, 0.4);
+        style.addProperty("background-color", ThemeColor.foreground, 0.4);
         addStyle(style);
 
         style = new Style(".gwt-ProgressBar-bar");
-        style.addProperty("background-color", ThemeColors.contrast1);
+        style.addProperty("background-color", ThemeColor.contrast1);
         addStyle(style);
 
         style = new Style(".gwt-ProgressBar-text");
-        style.addProperty("color", ThemeColors.contrast1, 0.1);
+        style.addProperty("color", ThemeColor.contrast1, 0.1);
         addStyle(style);
     }
 
@@ -244,16 +244,16 @@ public class TesterTheme extends Theme {
         addStyle(style);
 
         style = new Style(".gwt-MenuBar .gwt-MenuItem-selected");
-        style.addProperty("background", ThemeColors.contrast1);
-        style.addProperty("color", ThemeColors.contrast1, 0.1);
+        style.addProperty("background", ThemeColor.contrast1);
+        style.addProperty("color", ThemeColor.contrast1, 0.1);
         addStyle(style);
 
         style = new Style(".gwt-MenuBar-vertical");
         style.addProperty("margin-top", "0px");
         style.addProperty("margin-left", "0px");
-        style.addProperty("background", ThemeColors.foreground, 0.1);
+        style.addProperty("background", ThemeColor.foreground, 0.1);
         style.addProperty("border", "1px solid");
-        style.addProperty("border-color", ThemeColors.contrast1);
+        style.addProperty("border-color", ThemeColor.contrast1);
         addStyle(style);
 
         style = new Style(".gwt-MenuBar-vertical .gwt-MenuItem");
@@ -273,12 +273,12 @@ public class TesterTheme extends Theme {
 
         Style style = new Style(".gwt-DialogBox");
         style.addProperty("border", "2px outset");
-        style.addProperty("border-color", ThemeColors.object1, 0.6);
-        style.addProperty("background-color", ThemeColors.object1, 0.4);
+        style.addProperty("border-color", ThemeColor.object1, 0.6);
+        style.addProperty("background-color", ThemeColor.object1, 0.4);
         addStyle(style);
 
         style = new Style(".gwt-DialogBox .Caption");
-        style.addProperty("background-color", ThemeColors.contrast1);
+        style.addProperty("background-color", ThemeColor.contrast1);
         addStyle(style);
 
         style = new Style(".gwt-PopupPanelGlass");
@@ -297,7 +297,7 @@ public class TesterTheme extends Theme {
         style.addProperty("padding-top", "0.5em");
         style.addProperty("padding-left", "0.5em");
         style.addProperty("border-bottom", "4px solid");
-        style.addProperty("border-bottom-color", ThemeColors.object1, 0.3);
+        style.addProperty("border-bottom-color", ThemeColor.object1, 0.3);
         addStyle(style);
 
         style = new Style(".gwt-TabLayoutPanelTab");
@@ -311,12 +311,12 @@ public class TesterTheme extends Theme {
         style.addProperty("padding-right", "10px");
         style.addProperty("padding-left", "10px");
         style.addProperty("border-right", "1px solid");
-        style.addProperty("border-right-color", ThemeColors.contrast1);
+        style.addProperty("border-right-color", ThemeColor.contrast1);
         style.addProperty("border-left", "1px solid");
-        style.addProperty("border-left-color", ThemeColors.contrast1);
+        style.addProperty("border-left-color", ThemeColor.contrast1);
         style.addProperty("border-top", "1px solid");
-        style.addProperty("border-top-color", ThemeColors.contrast1);
-        style.addProperty("background", ThemeColors.contrast1);
+        style.addProperty("border-top-color", ThemeColor.contrast1);
+        style.addProperty("background", ThemeColor.contrast1);
         style.addProperty("color", "white");
         style.addProperty("display", "inline-block");
         style.addProperty("position", "relative");
@@ -324,7 +324,7 @@ public class TesterTheme extends Theme {
 
         style = new Style(".gwt-TabLayoutPanelTab-selected");
         style.addProperty("cursor", "default");
-        style.addGradient(ThemeColors.object1, 0.1, ThemeColors.object1, 0.3);
+        style.addGradient(ThemeColor.object1, 0.1, ThemeColor.object1, 0.3);
         style.addProperty("color", "#333");
         addStyle(style);
 
@@ -350,7 +350,7 @@ public class TesterTheme extends Theme {
         addStyle(style);
 
         style = new Style("." + CSSClass.pyx4j_PickerPanel);
-        style.addProperty("border-color", ThemeColors.foreground, 0.4);
+        style.addProperty("border-color", ThemeColor.foreground, 0.4);
         style.addProperty("border-style", "solid");
         style.addProperty("border-width", "1px");
         style.addProperty("background-color", "#fff");
@@ -384,11 +384,11 @@ public class TesterTheme extends Theme {
         style.addProperty("padding-right", "2px");
         style.addProperty("border-width", "1px");
         style.addProperty("border-style", "outset");
-        style.addProperty("border-color", ThemeColors.object1, 0.5);
+        style.addProperty("border-color", ThemeColor.object1, 0.5);
         style.addProperty("cursor", "pointer");
         style.addProperty("cursor", "hand");
         style.addProperty("outline", "none");
-        style.addProperty("background-color", ThemeColors.object1, 0.1);
+        style.addProperty("background-color", ThemeColor.object1, 0.1);
         addStyle(style);
 
         style = new Style(CSSClass.pyx4j_ButtonImage);
@@ -396,7 +396,7 @@ public class TesterTheme extends Theme {
         addStyle(style);
 
         style = new Style("." + CSSClass.pyx4j_Button + "-hover" + " ." + CSSClass.pyx4j_ButtonContent);
-        style.addProperty("background-color", ThemeColors.object1, 0.4);
+        style.addProperty("background-color", ThemeColor.object1, 0.4);
         addStyle(style);
 
         style = new Style("." + CSSClass.pyx4j_Button + "-pushed" + " ." + CSSClass.pyx4j_ButtonContent);
@@ -404,7 +404,7 @@ public class TesterTheme extends Theme {
         addStyle(style);
 
         style = new Style("." + CSSClass.pyx4j_Button + "-checked" + " ." + CSSClass.pyx4j_ButtonContent);
-        style.addProperty("background", ThemeColors.object1, 0.3);
+        style.addProperty("background", ThemeColor.object1, 0.3);
         style.addProperty("border-style", "inset");
         addStyle(style);
     }
@@ -453,7 +453,7 @@ public class TesterTheme extends Theme {
         // Toggle Button
         gwtButton = ".gwt-ToggleButton";
         style = new Style(gwtButton);
-        style.addProperty("color", ThemeColors.foreground);
+        style.addProperty("color", ThemeColor.foreground);
         style.addProperty("border-width", "1px");
         style.addProperty("border-style", "solid");
         style.addProperty("border-color", "black");
@@ -464,23 +464,23 @@ public class TesterTheme extends Theme {
         addStyle(style);
 
         style = new Style(gwtButton + "-up");
-        style.addGradient(ThemeColors.foreground, 0.1, ThemeColors.foreground, 0.3);
+        style.addGradient(ThemeColor.foreground, 0.1, ThemeColor.foreground, 0.3);
         style.addProperty("border-style", "outset");
         addStyle(style);
 
         style = new Style(gwtButton + "-up-hovering");
-        style.addGradient(ThemeColors.foreground, 0.0, ThemeColors.foreground, 0.2);
+        style.addGradient(ThemeColor.foreground, 0.0, ThemeColor.foreground, 0.2);
         style.addProperty("border-style", "outset");
         style.addProperty("cursor", "pointer");
         addStyle(style);
 
         style = new Style(gwtButton + "-down");
-        style.addGradient(ThemeColors.foreground, 0.3, ThemeColors.foreground, 0.1);
+        style.addGradient(ThemeColor.foreground, 0.3, ThemeColor.foreground, 0.1);
         style.addProperty("border-style", "inset");
         addStyle(style);
 
         style = new Style(gwtButton + "-down-hovering");
-        style.addGradient(ThemeColors.foreground, 0.2, ThemeColors.foreground, 0.1);
+        style.addGradient(ThemeColor.foreground, 0.2, ThemeColor.foreground, 0.1);
         style.addProperty("cursor", "pointer");
         style.addProperty("border-style", "inset");
         addStyle(style);
@@ -488,10 +488,10 @@ public class TesterTheme extends Theme {
         // Push Button
         gwtButton = ".gwt-PushButton";
         style = new Style(gwtButton);
-        style.addProperty("color", ThemeColors.background);
+        style.addProperty("color", ThemeColor.background);
         style.addProperty("border-width", "1px");
         style.addProperty("border-style", "solid");
-        style.addProperty("border-color", ThemeColors.background);
+        style.addProperty("border-color", ThemeColor.background);
         style.addProperty("margin", "0.2em 0.2em");
         style.addProperty("padding", "0.2em 0.5em");
         style.addProperty("text-align", "center");
@@ -499,17 +499,17 @@ public class TesterTheme extends Theme {
         addStyle(style);
 
         style = new Style(gwtButton + "-up-hovering");
-        style.addProperty("border-color", ThemeColors.foreground);
+        style.addProperty("border-color", ThemeColor.foreground);
         style.addProperty("cursor", "pointer");
         addStyle(style);
 
         style = new Style(gwtButton + "-down");
-        style.addProperty("border-color", ThemeColors.foreground);
+        style.addProperty("border-color", ThemeColor.foreground);
         style.addProperty("cursor", "pointer");
         addStyle(style);
 
         style = new Style(gwtButton + "-down-hovering");
-        style.addProperty("border-color", ThemeColors.foreground);
+        style.addProperty("border-color", ThemeColor.foreground);
         style.addProperty("cursor", "pointer");
         addStyle(style);
     }
@@ -539,7 +539,7 @@ public class TesterTheme extends Theme {
         addStyle(style);
 
         style = new Style(".gwt-TreeItem-selected");
-        style.addProperty("background", ThemeColors.contrast1);
+        style.addProperty("background", ThemeColor.contrast1);
         addStyle(style);
     }
 
@@ -587,19 +587,19 @@ public class TesterTheme extends Theme {
 
         style = new Style(CSSClass.pyx4j_GroupBox, "-expanded");
         style.addProperty("border", "1px solid");
-        style.addProperty("border-color", ThemeColors.object1, 0.5);
+        style.addProperty("border-color", ThemeColor.object1, 0.5);
         addStyle(style);
 
         style = new Style(CSSClass.pyx4j_GroupBox, "-collapsed");
         style.addProperty("border", "none");
         style.addProperty("border-top", "1px solid");
-        style.addProperty("border-color", ThemeColors.object1, 0.5);
+        style.addProperty("border-color", ThemeColor.object1, 0.5);
         addStyle(style);
 
         style = new Style(CSSClass.pyx4j_GroupBox_Caption);
         style.addProperty("padding", "5px 2px 2px 2px");
         style.addProperty("verticalAlign", "top");
-        style.addProperty("color", ThemeColors.object1, 0.5);
+        style.addProperty("color", ThemeColor.object1, 0.5);
         addStyle(style);
     }
 
@@ -688,7 +688,7 @@ public class TesterTheme extends Theme {
         Style style = new Style(".gwt-SuggestBoxPopup");
         style.addProperty("background-color", "white");
         style.addProperty("padding", "2px");
-        style.addProperty("border-color", ThemeColors.foreground, 0.4);
+        style.addProperty("border-color", ThemeColor.foreground, 0.4);
         style.addProperty("border-style", "solid");
         style.addProperty("border-width", "1px");
         style.addProperty("cursor", "pointer");

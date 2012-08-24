@@ -24,7 +24,7 @@ import com.pyx4j.commons.css.IStyleDependent;
 import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.Theme;
-import com.pyx4j.commons.css.ThemeColors;
+import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.gwt.commons.BrowserType;
 
 public class DefaultWidgetsTheme extends Theme {
@@ -67,11 +67,11 @@ public class DefaultWidgetsTheme extends Theme {
 //        style.addProperty("font", "12px/1.4em Arial, Helvetica, sans-serif");
 
         style.addProperty("font", "12px Arial, Helvetica, sans-serif");
-        style.addProperty("color", ThemeColors.foreground);
-        style.addProperty("background-color", ThemeColors.background);
+        style.addProperty("color", ThemeColor.foreground);
+        style.addProperty("background-color", ThemeColor.background);
         style.addProperty("border-width", "1px");
         style.addProperty("border-style", "solid");
-        style.addProperty("border-color", ThemeColors.foreground, 0.4);
+        style.addProperty("border-color", ThemeColor.foreground, 0.4);
         if (!BrowserType.isIE7()) {
             style.addProperty("padding", "2px 5px");
         }
@@ -85,17 +85,17 @@ public class DefaultWidgetsTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", StyleName.TextBox, "-", StyleDependent.watermark);
-        style.addProperty("color", ThemeColors.foreground, 0.3);
+        style.addProperty("color", ThemeColor.foreground, 0.3);
         addStyle(style);
 
     }
 
     protected void initListBoxStyle() {
         Style style = new Style(".", StyleName.ListBox);
-        style.addProperty("color", ThemeColors.foreground);
+        style.addProperty("color", ThemeColor.foreground);
         style.addProperty("border-width", "1px");
         style.addProperty("border-style", "solid");
-        style.addProperty("border-color", ThemeColors.foreground, 0.4);
+        style.addProperty("border-color", ThemeColor.foreground, 0.4);
         addStyle(style);
 
     }
@@ -104,10 +104,10 @@ public class DefaultWidgetsTheme extends Theme {
         Style style = new Style(".", StyleName.Button);
         style.addProperty("border-width", "1px");
         style.addProperty("border-style", "solid");
-        style.addProperty("border-color", ThemeColors.foreground, 0.4);
+        style.addProperty("border-color", ThemeColor.foreground, 0.4);
         style.addProperty("padding", "0 3px");
         style.addProperty("display", "inline-block");
-        style.addGradient(ThemeColors.foreground, 0, ThemeColors.foreground, 0.2);
+        style.addGradient(ThemeColor.foreground, 0, ThemeColor.foreground, 0.2);
         style.addProperty("cursor", "pointer");
         addStyle(style);
 
@@ -129,11 +129,11 @@ public class DefaultWidgetsTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", StyleName.Button, "-", DefaultWidgetsTheme.StyleDependent.hover);
-        style.addGradient(ThemeColors.foreground, 0.2, ThemeColors.foreground, 0);
+        style.addGradient(ThemeColor.foreground, 0.2, ThemeColor.foreground, 0);
         addStyle(style);
 
         style = new Style(".", StyleName.Button, "-", DefaultWidgetsTheme.StyleDependent.disabled);
-        style.addGradient(ThemeColors.foreground, 0.1, ThemeColors.foreground, 0.1);
+        style.addGradient(ThemeColor.foreground, 0.1, ThemeColor.foreground, 0.1);
         addStyle(style);
 
     }
@@ -152,7 +152,7 @@ public class DefaultWidgetsTheme extends Theme {
 
         style = new Style(".", StyleName.ToolbarSeparator);
         style.addProperty("border-left", "1px solid");
-        style.addProperty("border-left-color", ThemeColors.foreground, 0.5);
+        style.addProperty("border-left-color", ThemeColor.foreground, 0.5);
         style.addProperty("margin-left", "8px");
         style.addProperty("height", "20px");
         style.addProperty("display", "inline-block");

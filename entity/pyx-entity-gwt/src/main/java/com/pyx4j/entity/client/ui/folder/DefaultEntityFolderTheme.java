@@ -24,7 +24,7 @@ import com.pyx4j.commons.css.IStyleDependent;
 import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.Theme;
-import com.pyx4j.commons.css.ThemeColors;
+import com.pyx4j.commons.css.ThemeColor;
 
 public abstract class DefaultEntityFolderTheme extends Theme {
 
@@ -55,7 +55,7 @@ public abstract class DefaultEntityFolderTheme extends Theme {
 
         style = new Style(".", StyleName.EntityFolder, "-", StyleDependent.readOnly);
         style.addProperty("font-weight", "bold");
-        style.addProperty("color", ThemeColors.foreground, 1);
+        style.addProperty("color", ThemeColor.foreground, 1);
         addStyle(style);
 
         style = new Style(".", StyleName.EntityFolder, " img");
@@ -109,7 +109,7 @@ public abstract class DefaultEntityFolderTheme extends Theme {
         style = new Style(".", StyleName.EntityFolderAddButton);
         style.addProperty("display", "inline-block");
         style.addProperty("margin", "6px");
-        style.addProperty("color", ThemeColors.object1, 0.8);
+        style.addProperty("color", ThemeColor.object1, 0.8);
         style.addProperty("font-weight", "normal");
         style.addProperty("font-style", "italic");
         style.addProperty("cursor", "pointer");
@@ -145,7 +145,7 @@ public abstract class DefaultEntityFolderTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", StyleName.EntityFolderTableHeaderLabel);
-        style.addProperty("color", ThemeColors.foreground);
+        style.addProperty("color", ThemeColor.foreground);
         style.addProperty("font-weight", "bold");
         style.addProperty("margin-left", "3px");
         style.addProperty("margin-right", "3px");
@@ -153,10 +153,10 @@ public abstract class DefaultEntityFolderTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", StyleName.EntityFolder, "-", StyleDependent.readOnly, " .", StyleName.EntityFolderTableHeaderLabel);
-        style.addProperty("color", ThemeColors.foreground, 0.5);
+        style.addProperty("color", ThemeColor.foreground, 0.5);
         addStyle(style);
 
     }
 
-    protected abstract ThemeColors getBackgroundColor();
+    protected abstract ThemeColor getBackgroundColor();
 }

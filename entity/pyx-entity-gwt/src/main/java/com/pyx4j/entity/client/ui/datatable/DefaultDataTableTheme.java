@@ -24,7 +24,7 @@ import com.pyx4j.commons.css.IStyleDependent;
 import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.Theme;
-import com.pyx4j.commons.css.ThemeColors;
+import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 
 public class DefaultDataTableTheme extends Theme {
@@ -49,33 +49,33 @@ public class DefaultDataTableTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", StyleName.DataTableHeader);
-        style.addProperty("background-color", ThemeColors.foreground, 0.4);
-        style.addProperty("color", ThemeColors.foreground, 0);
+        style.addProperty("background-color", ThemeColor.foreground, 0.4);
+        style.addProperty("color", ThemeColor.foreground, 0);
         style.addProperty("font-weight", "bold");
         style.addProperty("cursor", "pointer");
         addStyle(style);
 
         style = new Style(".", StyleName.DataTableColumnSelector);
-        style.addProperty("background-color", ThemeColors.foreground, 0.6);
-        style.addProperty("color", ThemeColors.foreground, 0.1);
+        style.addProperty("background-color", ThemeColor.foreground, 0.6);
+        style.addProperty("color", ThemeColor.foreground, 0.1);
         style.addProperty("font-weight", "bold");
         addStyle(style);
 
         String selectorPrefix = "." + StyleName.DataTableColumnSelector.name();
         style = new Style(selectorPrefix + " a:link, " + selectorPrefix + " a:visited, " + selectorPrefix + " a:active");
-        style.addProperty("color", ThemeColors.foreground, 0.1);
+        style.addProperty("color", ThemeColor.foreground, 0.1);
         addStyle(style);
 
         style = new Style(selectorPrefix + ":hover");
-        style.addProperty("background-color", ThemeColors.foreground, 0.8);
-        style.addProperty("color", ThemeColors.foreground, 0.1);
+        style.addProperty("background-color", ThemeColor.foreground, 0.8);
+        style.addProperty("color", ThemeColor.foreground, 0.1);
         addStyle(style);
 
         style = new Style(".", StyleName.DataTableColumnMenu);
-        style.addProperty("background-color", ThemeColors.foreground, 0.1);
-        style.addProperty("color", ThemeColors.foreground, 0.9);
+        style.addProperty("background-color", ThemeColor.foreground, 0.1);
+        style.addProperty("color", ThemeColor.foreground, 0.9);
         style.addProperty("border", "1px solid");
-        style.addProperty("border-color", ThemeColors.foreground, 0.9);
+        style.addProperty("border-color", ThemeColor.foreground, 0.9);
         style.addProperty("padding", "5px 7px");
         addStyle(style);
 
@@ -84,7 +84,7 @@ public class DefaultDataTableTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", StyleName.DataTableRow, "-", StyleDependent.even);
-        style.addProperty("background-color", ThemeColors.foreground, 0.05);
+        style.addProperty("background-color", ThemeColor.foreground, 0.05);
         addStyle(style);
 
         style = new Style(".", StyleName.DataTableRow, "-", StyleDependent.odd);
@@ -96,22 +96,22 @@ public class DefaultDataTableTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", StyleName.DataTableRow, "-", StyleDependent.selected);
-        style.addProperty("background-color", ThemeColors.foreground, 0.3);
+        style.addProperty("background-color", ThemeColor.foreground, 0.3);
         addStyle(style);
 
         style = new Style(".", StyleName.DataTableActionsBar);
         style.addProperty("border", "1px solid");
-        style.addProperty("border-color", ThemeColors.foreground, 0.3);
+        style.addProperty("border-color", ThemeColor.foreground, 0.3);
         style.addProperty("padding-top", "6px");
-        style.addProperty("background-color", ThemeColors.foreground, 0.05);
+        style.addProperty("background-color", ThemeColor.foreground, 0.05);
         addStyle(style);
 
         style = new Style(".", StyleName.DataTableActionsBar, " .", DefaultWidgetsTheme.StyleName.Button);
         style.addProperty("vertical-align", "middle");
-        style.addProperty("border-color", ThemeColors.foreground, 0.4);
-        style.addProperty("color", ThemeColors.foreground, 0.9);
+        style.addProperty("border-color", ThemeColor.foreground, 0.4);
+        style.addProperty("color", ThemeColor.foreground, 0.9);
         style.addProperty("height", "20px");
-        style.addGradient(ThemeColors.foreground, 0, ThemeColors.foreground, 0.2);
+        style.addGradient(ThemeColor.foreground, 0, ThemeColor.foreground, 0.2);
         addStyle(style);
 
         style = new Style(".", StyleName.DataTableActionsBar, " .", DefaultWidgetsTheme.StyleName.ButtonText);
@@ -119,11 +119,11 @@ public class DefaultDataTableTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", StyleName.DataTableActionsBar, " .", DefaultWidgetsTheme.StyleName.Button, "-", DefaultWidgetsTheme.StyleDependent.hover);
-        style.addGradient(ThemeColors.foreground, 0.2, ThemeColors.foreground, 0);
+        style.addGradient(ThemeColor.foreground, 0.2, ThemeColor.foreground, 0);
         addStyle(style);
 
         style = new Style(".", StyleName.DataTableActionsBar, " .", DefaultWidgetsTheme.StyleName.Button, "-", DefaultWidgetsTheme.StyleDependent.disabled);
-        style.addGradient(ThemeColors.foreground, 0.2, ThemeColors.foreground, 0.2);
+        style.addGradient(ThemeColor.foreground, 0.2, ThemeColor.foreground, 0.2);
         addStyle(style);
 
         style = new Style(".", StyleName.DataTableActionsBarContent);
@@ -140,21 +140,21 @@ public class DefaultDataTableTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", StyleName.DataTablePageNavigBar, " .", DefaultWidgetsTheme.StyleName.Anchor);
-        style.addProperty("color", ThemeColors.foreground, 0.9);
+        style.addProperty("color", ThemeColor.foreground, 0.9);
         addStyle(style);
 
         style = new Style(".", StyleName.DataTablePageNavigBar, " .", DefaultWidgetsTheme.StyleName.Anchor, "-", DefaultWidgetsTheme.StyleDependent.disabled);
-        style.addProperty("color", ThemeColors.foreground, 0.5);
+        style.addProperty("color", ThemeColor.foreground, 0.5);
         style.addProperty("cursor", "default");
         addStyle(style);
 
         style = new Style(".", StyleName.DataTableFilter);
-        style.addProperty("background-color", ThemeColors.object1, 0.2);
+        style.addProperty("background-color", ThemeColor.object1, 0.2);
         style.addProperty("width", "100%");
         addStyle(style);
 
         style = new Style(".", StyleName.DataTableFilterHeader, ", ", " .", StyleName.DataTableFilterFooter);
-        style.addProperty("background-color", ThemeColors.object1, 0.4);
+        style.addProperty("background-color", ThemeColor.object1, 0.4);
         style.addProperty("width", "100%");
         addStyle(style);
 

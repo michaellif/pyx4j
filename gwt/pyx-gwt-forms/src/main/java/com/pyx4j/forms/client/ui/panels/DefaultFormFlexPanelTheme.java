@@ -24,7 +24,7 @@ import com.pyx4j.commons.css.IStyleDependent;
 import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.Theme;
-import com.pyx4j.commons.css.ThemeColors;
+import com.pyx4j.commons.css.ThemeColor;
 
 public abstract class DefaultFormFlexPanelTheme extends Theme {
 
@@ -123,5 +123,5 @@ public abstract class DefaultFormFlexPanelTheme extends Theme {
         addStyle(style);
     }
 
-    protected abstract ThemeColors getBackgroundColor();
+    protected abstract ThemeColor getBackgroundColor();
 }

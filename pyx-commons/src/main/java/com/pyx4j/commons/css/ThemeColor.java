@@ -22,7 +22,7 @@ package com.pyx4j.commons.css;
 
 //See http://jqueryui.com/themeroller/ for example of style manager
 
-public enum ThemeColors {
+public enum ThemeColor {
 
     object1("#5B6E90"),
 
@@ -38,11 +38,11 @@ public enum ThemeColors {
 
     private String defaultColor;
 
-    private ThemeColors() {
+    private ThemeColor() {
         this("ffffff");
     }
 
-    private ThemeColors(String defaultColor) {
+    private ThemeColor(String defaultColor) {
         this.defaultColor = defaultColor;
     }
 

@@ -23,7 +23,7 @@ package com.pyx4j.site.client.ui.crud;
 import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.Theme;
-import com.pyx4j.commons.css.ThemeColors;
+import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.entity.client.ui.datatable.DefaultDataTableTheme;
 import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 
@@ -51,7 +51,7 @@ public class DefaultSiteCrudPanelsTheme extends Theme {
         initHighlightedButtonStyles("." + StyleName.HeaderToolbar);
 
         Style style = new Style(".", StyleName.HeaderContainer);
-        style.addProperty("background-color", ThemeColors.object1, 0.3);
+        style.addProperty("background-color", ThemeColor.object1, 0.3);
         style.addProperty("padding-top", "6px");
         style.addProperty("width", "100%");
         style.addProperty("height", "100%");
@@ -64,7 +64,7 @@ public class DefaultSiteCrudPanelsTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", StyleName.HeaderContainer, " .", StyleName.HeaderToolbar);
-        style.addProperty("background-color", ThemeColors.object1, 0.3);
+        style.addProperty("background-color", ThemeColor.object1, 0.3);
         style.addProperty("float", "right");
         addStyle(style);
 
@@ -75,12 +75,12 @@ public class DefaultSiteCrudPanelsTheme extends Theme {
         style = new Style(".", StyleName.FooterToolbar);
         style.addProperty("padding", "2px 0px");
         style.addProperty("border-top", "4px solid");
-        style.addProperty("border-color", ThemeColors.foreground, 0.3);
+        style.addProperty("border-color", ThemeColor.foreground, 0.3);
         addStyle(style);
 
         style = new Style(".", StyleName.Header);
-        style.addProperty("background-color", ThemeColors.object1, 1);
-        style.addProperty("color", ThemeColors.foreground, 0);
+        style.addProperty("background-color", ThemeColor.object1, 1);
+        style.addProperty("color", ThemeColor.foreground, 0);
         style.addProperty("width", "100%");
         style.addProperty("padding", "0 1em");
         style.addProperty("white-space", "nowrap");
@@ -109,15 +109,15 @@ public class DefaultSiteCrudPanelsTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", StyleName.Visor);
-        style.addGradient(ThemeColors.object1, 0, ThemeColors.object1, 0.15);
+        style.addGradient(ThemeColor.object1, 0, ThemeColor.object1, 0.15);
         style.addProperty("border", "2px solid");
-        style.addProperty("border-color", ThemeColors.object1, 0.6);
+        style.addProperty("border-color", ThemeColor.object1, 0.6);
         style.addProperty("padding", "2px");
         addStyle(style);
 
         style = new Style(".", StyleName.VisorHeader);
         style.addProperty("border-bottom", "1px solid");
-        style.addProperty("border-color", ThemeColors.object1, 0.6);
+        style.addProperty("border-color", ThemeColor.object1, 0.6);
         addStyle(style);
 
         style = new Style(".", StyleName.VisorBackButton);
@@ -138,10 +138,10 @@ public class DefaultSiteCrudPanelsTheme extends Theme {
     private void initHighlightedButtonStyles(String selector) {
         Style style = new Style(selector, " .", StyleName.HighlightedButton);
         style.addProperty("border", "1px solid");
-        style.addProperty("border-color", ThemeColors.foreground, 0.05);
-        style.addProperty("color", ThemeColors.foreground, 0);
+        style.addProperty("border-color", ThemeColor.foreground, 0.05);
+        style.addProperty("color", ThemeColor.foreground, 0);
         style.addProperty("padding", "2px 12px");
-        style.addGradient(ThemeColors.object1, 1, ThemeColors.object1, 1.6);
+        style.addGradient(ThemeColor.object1, 1, ThemeColor.object1, 1.6);
         style.addProperty("font-size", "11px");
         style.addProperty("font-weight", "bold");
         style.addProperty("border-radius", "5px");
@@ -149,22 +149,22 @@ public class DefaultSiteCrudPanelsTheme extends Theme {
         addStyle(style);
 
         style = new Style(selector, " .", StyleName.HighlightedButton, "-", DefaultWidgetsTheme.StyleDependent.hover);
-        style.addProperty("border-color", ThemeColors.foreground, 0.3);
+        style.addProperty("border-color", ThemeColor.foreground, 0.3);
         addStyle(style);
 
         style = new Style(selector, " .", StyleName.HighlightedButton, "-", DefaultWidgetsTheme.StyleDependent.disabled);
-        style.addProperty("color", ThemeColors.foreground, 0);
-        style.addGradient(ThemeColors.foreground, 0.4, ThemeColors.foreground, 0.4);
+        style.addProperty("color", ThemeColor.foreground, 0);
+        style.addGradient(ThemeColor.foreground, 0.4, ThemeColor.foreground, 0.4);
         addStyle(style);
     }
 
     private void initButtonStyles(String selector) {
         Style style = new Style(selector, " .", DefaultWidgetsTheme.StyleName.Button);
         style.addProperty("border", "1px solid");
-        style.addProperty("border-color", ThemeColors.foreground, 0.05);
-        style.addProperty("color", ThemeColors.foreground, 0);
+        style.addProperty("border-color", ThemeColor.foreground, 0.05);
+        style.addProperty("color", ThemeColor.foreground, 0);
         style.addProperty("padding", "2px 12px");
-        style.addGradient(ThemeColors.foreground, 1, ThemeColors.foreground, 2);
+        style.addGradient(ThemeColor.foreground, 1, ThemeColor.foreground, 2);
         style.addProperty("font-size", "11px");
         style.addProperty("font-weight", "bold");
         style.addProperty("border-radius", "5px");
@@ -172,12 +172,12 @@ public class DefaultSiteCrudPanelsTheme extends Theme {
         addStyle(style);
 
         style = new Style(selector, " .", DefaultWidgetsTheme.StyleName.Button, "-", DefaultWidgetsTheme.StyleDependent.hover);
-        style.addProperty("border-color", ThemeColors.foreground, 0.3);
+        style.addProperty("border-color", ThemeColor.foreground, 0.3);
         addStyle(style);
 
         style = new Style(selector, " .", DefaultWidgetsTheme.StyleName.Button, "-", DefaultWidgetsTheme.StyleDependent.disabled);
-        style.addProperty("color", ThemeColors.foreground, 0);
-        style.addGradient(ThemeColors.foreground, 0.4, ThemeColors.foreground, 0.4);
+        style.addProperty("color", ThemeColor.foreground, 0);
+        style.addGradient(ThemeColor.foreground, 0.4, ThemeColor.foreground, 0.4);
         addStyle(style);
 
     }
@@ -190,7 +190,7 @@ public class DefaultSiteCrudPanelsTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", StyleName.ListerFiltersPanel);
-        style.addProperty("background-color", ThemeColors.foreground, 0.05);
+        style.addProperty("background-color", ThemeColor.foreground, 0.05);
         style.addProperty("padding-top", "0.5em");
         addStyle(style);
 
@@ -200,8 +200,8 @@ public class DefaultSiteCrudPanelsTheme extends Theme {
         style = new Style(".", StyleName.ListerListPanel, " .", DefaultDataTableTheme.StyleName.DataTable);
         style.addProperty("border-left", "1px solid");
         style.addProperty("border-right", "1px solid");
-        style.addProperty("border-left-color", ThemeColors.foreground, 0.4);
-        style.addProperty("border-right-color", ThemeColors.foreground, 0.4);
+        style.addProperty("border-left-color", ThemeColor.foreground, 0.4);
+        style.addProperty("border-right-color", ThemeColor.foreground, 0.4);
         addStyle(style);
 
     }

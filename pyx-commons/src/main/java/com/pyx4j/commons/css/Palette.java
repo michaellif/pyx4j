@@ -30,13 +30,13 @@ public class Palette {
 
     private static final Logger log = LoggerFactory.getLogger(Palette.class);
 
-    private final Map<ThemeColors, String> themeColors;
+    private final Map<ThemeColor, String> themeColors;
 
     public Palette() {
-        themeColors = new HashMap<ThemeColors, String>();
+        themeColors = new HashMap<ThemeColor, String>();
     }
 
-    public String getThemeColor(ThemeColors themeColor, double vibrance) {
+    public String getThemeColor(ThemeColor themeColor, double vibrance) {
         String color = themeColors.get(themeColor);
         Integer rgb = ColorUtil.parseToRgb(color);
         if (rgb == null) {
@@ -51,11 +51,11 @@ public class Palette {
 
     // ColorFactory.HSBVtoRGB(hue, saturation, brightness, (float) 0.08)
 
-    public void putThemeColor(ThemeColors color, Integer rgb) {
+    public void putThemeColor(ThemeColor color, Integer rgb) {
         themeColors.put(color, ColorUtil.rgbToHex(rgb));
     }
 
-    public void putThemeColor(ThemeColors color, String value) {
+    public void putThemeColor(ThemeColor color, String value) {
         themeColors.put(color, value);
     }
 }

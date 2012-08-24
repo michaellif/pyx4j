@@ -24,7 +24,7 @@ import com.pyx4j.commons.css.IStyleDependent;
 import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.Theme;
-import com.pyx4j.commons.css.ThemeColors;
+import com.pyx4j.commons.css.ThemeColor;
 
 public class DefaultDatePickerTheme extends Theme {
 
@@ -53,14 +53,14 @@ public class DefaultDatePickerTheme extends Theme {
         Style style = new Style(".gwt-DatePicker");
         style.addProperty("margin", "2px 4px");
         style.addProperty("border", "1px solid");
-        style.addProperty("border-color", ThemeColors.object1, 1.1);
-        style.addProperty("color", ThemeColors.foreground);
+        style.addProperty("border-color", ThemeColor.object1, 1.1);
+        style.addProperty("color", ThemeColor.foreground);
         style.addProperty("width", "250px");
         addStyle(style);
 
         style = new Style(".", StyleName.DatePickerMonthSelector);
-        style.addProperty("background-color", ThemeColors.object1);
-        style.addProperty("color", ThemeColors.object1, 0.1);
+        style.addProperty("background-color", ThemeColor.object1);
+        style.addProperty("color", ThemeColor.object1, 0.1);
         style.addProperty("line-height", "12px");
         style.addProperty("border-collapse", "collapse");
         style.addProperty("width", "100%");
@@ -128,7 +128,7 @@ public class DefaultDatePickerTheme extends Theme {
 
         style = new Style(".", StyleName.DatePickerDay, " .", StyleName.DatePickerWeekdayLabel, " .", StyleName.DatePickerWeekendLabel);
         style.addProperty("font-size", "75%");
-        style.addProperty("outline-color", ThemeColors.foreground);
+        style.addProperty("outline-color", ThemeColor.foreground);
         style.addProperty("outline-style", "none");
         style.addProperty("outline-width", "medium");
         style.addProperty("padding", "4px");
@@ -136,7 +136,7 @@ public class DefaultDatePickerTheme extends Theme {
         addStyle(style);
 
         style = new Style(" .", StyleName.DatePickerWeekdayLabel, " .", StyleName.DatePickerWeekendLabel);
-        style.addProperty("background-color", ThemeColors.object1);
+        style.addProperty("background-color", ThemeColor.object1);
         style.addProperty("cursor", "default");
         style.addProperty("padding", "0 4px 2px");
         addStyle(style);
@@ -152,7 +152,7 @@ public class DefaultDatePickerTheme extends Theme {
         //addStyle(style);
 
         style = new Style(".", StyleName.DatePickerWeekendDayLabel);
-        style.addProperty("color", ThemeColors.object1);
+        style.addProperty("color", ThemeColor.object1);
         style.addProperty("font-weight", "bold");
         addStyle(style);
 
@@ -202,43 +202,43 @@ public class DefaultDatePickerTheme extends Theme {
 
         style = new Style(".", StyleName.DatePickerGrid);
         style.addProperty("width", "100%");
-        style.addProperty("background-color", ThemeColors.foreground, 0.1);
+        style.addProperty("background-color", ThemeColor.foreground, 0.1);
         style.addProperty("padding", "10px");
         addStyle(style);
 
         style = new Style(" .", StyleName.DatePickerGrid, " .gwt-Label");
         style.addProperty("border", "1px solid");
-        style.addProperty("border-color", ThemeColors.foreground, 0.1);
+        style.addProperty("border-color", ThemeColor.foreground, 0.1);
         addStyle(style);
 
         style = new Style(" .", StyleName.DatePickerGrid, " .gwt-Label-disabled");
-        style.addProperty("color", ThemeColors.foreground, 0.4);
-        style.addProperty("background-color", ThemeColors.foreground, 0.2);
+        style.addProperty("color", ThemeColor.foreground, 0.4);
+        style.addProperty("background-color", ThemeColor.foreground, 0.2);
         style.addProperty("cursor", "default");
         addStyle(style);
 
         style = new Style(" .", StyleName.DatePickerGrid, " .gwt-Label-outofmonth");
-        style.addProperty("color", ThemeColors.foreground, 0.5);
+        style.addProperty("color", ThemeColor.foreground, 0.5);
         addStyle(style);
 
         style = new Style(" .", StyleName.DatePickerGrid, " .gwt-Label-empty");
-        style.addProperty("color", ThemeColors.foreground, 0.1);
+        style.addProperty("color", ThemeColor.foreground, 0.1);
         style.addProperty("cursor", "default");
         addStyle(style);
 
         style = new Style(" .", StyleName.DatePickerGrid, " .gwt-Label-heighlighted");
-        style.addProperty("background-color", ThemeColors.object1, 0.2);
+        style.addProperty("background-color", ThemeColor.object1, 0.2);
         addStyle(style);
 
         style = new Style(" .", StyleName.DatePickerGrid, " .gwt-Label-selected");
         style.addProperty("border", "1px solid");
-        style.addProperty("border-color", ThemeColors.object1);
-        style.addProperty("background-color", ThemeColors.object1, 0.2);
+        style.addProperty("border-color", ThemeColor.object1);
+        style.addProperty("background-color", ThemeColor.object1, 0.2);
         addStyle(style);
 
         style = new Style(" .", StyleName.DatePickerGrid, " .gwt-Label-todayday");
-        style.addProperty("color", ThemeColors.object1, 0.0);
-        style.addProperty("background-color", ThemeColors.object1, 0.7);
+        style.addProperty("color", ThemeColor.object1, 0.0);
+        style.addProperty("background-color", ThemeColor.object1, 0.7);
         addStyle(style);
 
         style = new Style(" .", StyleName.DatePickerGrid, " tr.DatePickerGridDaysRow");
@@ -247,7 +247,7 @@ public class DefaultDatePickerTheme extends Theme {
 
         style = new Style(" .", StyleName.DatePickerGrid, " .", StyleName.DatePickerGridDaysRow, " td");
         style.addProperty("border-bottom", "1px solid");
-        style.addProperty("border-color", ThemeColors.foreground, 1.5);
+        style.addProperty("border-color", ThemeColor.foreground, 1.5);
         style.addProperty("margin-bottom", "5px");
         addStyle(style);
 
