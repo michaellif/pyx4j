@@ -265,6 +265,7 @@ public class PaymentFacadeImpl implements PaymentFacade {
         case Interac:
             throw new IllegalArgumentException("Electronic PaymentMethod:" + paymentRecord.paymentMethod().type().getStringView());
         case Cash:
+            throw new IllegalArgumentException("Cash is automactialy cleard");
         case Check:
             break;
         }

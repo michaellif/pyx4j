@@ -99,17 +99,27 @@ public class PaymentViewerViewImpl extends CrmViewerViewImplBase<PaymentRecordDT
     public void populate(PaymentRecordDTO value) {
         super.populate(value);
 
-        if (!value.targetDate().isNull()) {
-            scheduleAction.setVisible(value.paymentStatus().getValue() == PaymentStatus.Submitted);
-        } else {
-            processAction.setVisible(value.paymentStatus().getValue() == PaymentStatus.Submitted);
-        }
-        clearAction.setVisible(value.paymentStatus().getValue() == PaymentStatus.Processing);
-        rejectAction.setVisible(value.paymentStatus().getValue() == PaymentStatus.Processing);
-        cancelAction.setVisible(value.paymentStatus().getValue() == PaymentStatus.Submitted);
-
         // enable editing for submitted payments only:
         getEditButton().setVisible(value.paymentStatus().getValue() == PaymentStatus.Submitted);
+        cancelAction.setVisible(value.paymentStatus().getValue() == PaymentStatus.Submitted);
+
+        switch (value.paymentMethod().type().getValue()) {
+        case Check:
+            clearAction.setVisible(value.paymentStatus().getValue() == PaymentStatus.Received);
+            rejectAction.setVisible(value.paymentStatus().getValue() == PaymentStatus.Received);
+            break;
+        case EFT:
+        case CreditCard:
+            if (!value.targetDate().isNull()) {
+                scheduleAction.setVisible(value.paymentStatus().getValue() == PaymentStatus.Submitted);
+            } else {
+                processAction.setVisible(value.paymentStatus().getValue() == PaymentStatus.Submitted);
+            }
+            break;
+        default:
+            // No other special handling for payment types
+        }
+
     }
 
 }

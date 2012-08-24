@@ -86,7 +86,7 @@ class CreditCardProcessor {
         PaymentResponse response = proc.realTimeSale(merchant, request);
         if (response.code().getValue().equals("0000")) {
             log.debug("ccTransaction accepted {}", response);
-            paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Received);
+            paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Cleared);
             paymentRecord.lastStatusChangeDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
             paymentRecord.receivedDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
             paymentRecord.transactionAuthorizationNumber().setValue(response.authorizationNumber().getValue());
