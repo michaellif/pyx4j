@@ -31,6 +31,7 @@ import org.xml.sax.InputSource;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.TimeUtils;
+import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
@@ -190,8 +191,10 @@ public class OnboardingServiceServlet extends HttpServlet {
     private void replyWithStatusCode(HttpServletResponse response, ResponseMessageIO.StatusCode statusCode, Throwable e) {
         ResponseMessageIO rm = EntityFactory.create(ResponseMessageIO.class);
         rm.status().setValue(statusCode);
-        if ((e != null) && (ApplicationMode.isDevelopment())) {
+        if (e instanceof UserRuntimeException) {
             rm.errorMessage().setValue(e.getMessage());
+        } else if ((e != null) && (ApplicationMode.isDevelopment())) {
+            rm.errorMessage().setValue(ApplicationMode.DEV + e.getMessage());
         }
         EntityFileLogger.log("onboarding", "response-" + statusCode, rm);
         replyWith(response, rm);

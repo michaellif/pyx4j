@@ -18,6 +18,7 @@ import java.util.Iterator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.server.Persistence;
@@ -140,8 +141,10 @@ class OnboardingProcessor {
                 log.error("Error", e);
                 ResponseIO response = EntityFactory.create(ResponseIO.class);
                 response.success().setValue(Boolean.FALSE);
-                if (ApplicationMode.isDevelopment()) {
+                if (e instanceof UserRuntimeException) {
                     response.errorMessage().setValue(e.getMessage());
+                } else if (ApplicationMode.isDevelopment()) {
+                    response.errorMessage().setValue(ApplicationMode.DEV + e.getMessage());
                 }
                 rm.responses().add(response);
             }
