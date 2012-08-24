@@ -14,18 +14,18 @@
 package com.propertyvista.admin.client.themes;
 
 import com.pyx4j.commons.css.Palette;
-import com.pyx4j.commons.css.ThemeColors;
+import com.pyx4j.commons.css.ThemeColor;
 
 public class AdminPalette extends Palette {
 
     public AdminPalette() {
 
-        putThemeColor(ThemeColors.object1, "#906b5b");
-        putThemeColor(ThemeColors.object2, "#666666");
-        putThemeColor(ThemeColors.contrast1, "#666666");
-        putThemeColor(ThemeColors.contrast2, "#666666");
-        putThemeColor(ThemeColors.foreground, "#666666");
-        putThemeColor(ThemeColors.background, "#ffffff");
+        putThemeColor(ThemeColor.object1, "#906b5b");
+        putThemeColor(ThemeColor.object2, "#666666");
+        putThemeColor(ThemeColor.contrast1, "#666666");
+        putThemeColor(ThemeColor.contrast2, "#666666");
+        putThemeColor(ThemeColor.foreground, "#666666");
+        putThemeColor(ThemeColor.background, "#ffffff");
 
     }
 }

@@ -17,7 +17,7 @@ import java.util.List;
 
 import com.pyx4j.commons.css.Selector;
 import com.pyx4j.commons.css.Style;
-import com.pyx4j.commons.css.ThemeColors;
+import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.entity.client.ui.datatable.DefaultDataTableTheme;
 import com.pyx4j.entity.client.ui.folder.DefaultEntityFolderTheme;
 import com.pyx4j.forms.client.ui.DefaultCComponentsTheme;
@@ -66,8 +66,8 @@ public class PortalTheme extends VistaTheme {
 
         addTheme(new DefaultFormFlexPanelTheme() {
             @Override
-            protected ThemeColors getBackgroundColor() {
-                return ThemeColors.foreground;
+            protected ThemeColor getBackgroundColor() {
+                return ThemeColor.foreground;
             }
 
             @Override
@@ -97,13 +97,13 @@ public class PortalTheme extends VistaTheme {
                     style = new Style(".", StyleName.FormFlexPanelH1);
                     style.addProperty("border-top", "solid 1px");
                     style.addProperty("border-bottom", "solid 1px");
-                    style.addProperty("border-top-color", ThemeColors.foreground, 0.3);
-                    style.addProperty("border-bottom-color", ThemeColors.foreground, 0.5);
-                    style.addGradient(ThemeColors.foreground, 0.1, ThemeColors.foreground, 0.4);
+                    style.addProperty("border-top-color", ThemeColor.foreground, 0.3);
+                    style.addProperty("border-bottom-color", ThemeColor.foreground, 0.5);
+                    style.addGradient(ThemeColor.foreground, 0.1, ThemeColor.foreground, 0.4);
                     addStyle(style);
                 } else if (Skin.skin2.equals(skin) || Skin.skin3.equals(skin)) {
                     style = new Style(".", StyleName.FormFlexPanelH1);
-                    style.addGradient(ThemeColors.foreground, 0.2, ThemeColors.foreground, 0.2);
+                    style.addGradient(ThemeColor.foreground, 0.2, ThemeColor.foreground, 0.2);
                     addStyle(style);
                 }
             }
@@ -122,8 +122,8 @@ public class PortalTheme extends VistaTheme {
 
         addTheme(new DefaultEntityFolderTheme() {
             @Override
-            protected ThemeColors getBackgroundColor() {
-                return ThemeColors.foreground;
+            protected ThemeColor getBackgroundColor() {
+                return ThemeColor.foreground;
             }
 
             @Override
@@ -131,16 +131,16 @@ public class PortalTheme extends VistaTheme {
                 super.initStyles();
                 Style style = new Style(".", StyleName.EntityFolderTableHeader);
                 style.addProperty("width", "100%");
-                style.addProperty("background-color", ThemeColors.foreground, 0.1);
+                style.addProperty("background-color", ThemeColor.foreground, 0.1);
                 style.addProperty("line-height", "35px");
-                style.addProperty("color", ThemeColors.foreground, 0.7);
+                style.addProperty("color", ThemeColor.foreground, 0.7);
                 style.addProperty("border", "none");
                 addStyle(style);
 
                 style = new Style(".", StyleName.EntityFolderRowItemDecorator);
                 style.addProperty("height", "35px");
                 style.addProperty("border-bottom", "dotted 1px");
-                style.addProperty("border-bottom-color", ThemeColors.foreground, 0.7);
+                style.addProperty("border-bottom-color", ThemeColor.foreground, 0.7);
                 addStyle(style);
 
             }
@@ -190,7 +190,7 @@ public class PortalTheme extends VistaTheme {
                 if (st.getSelector().equals(gwtButton)) {
                     st.addProperty("border-radius", "5px");
                     st.addProperty("-moz-border-radius", "5px");
-                    st.addProperty("background-color", ThemeColors.object1, 0.5);
+                    st.addProperty("background-color", ThemeColor.object1, 0.5);
                     st.addProperty("border", "1px solid");
                     st.addProperty("border-color", "black");
                     st.addProperty("min-width", "100px");
@@ -228,7 +228,7 @@ public class PortalTheme extends VistaTheme {
 
         style = new Style(Selector.valueOf(prefix, PropertiesMapWidget.StyleSuffix.CardContentItem));
         style.addProperty("border-bottom", "1px solid");
-        style.addProperty("border-color", ThemeColors.object1, 0.4);
+        style.addProperty("border-color", ThemeColor.object1, 0.4);
         style.addProperty("margin-bottom", "5px");
         addStyle(style);
 
@@ -243,12 +243,12 @@ public class PortalTheme extends VistaTheme {
 
         style = new Style(Selector.valueOf(prefix, PropertiesMapWidget.StyleSuffix.CardMenuItem));
         style.addProperty("text-decoration", "none");
-        style.addProperty("color", ThemeColors.object1, 0.95);
+        style.addProperty("color", ThemeColor.object1, 0.95);
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, PropertiesMapWidget.StyleSuffix.CardMenuItem) + ":hover");
         style.addProperty("text-decoration", "underline");
-        style.addProperty("color", ThemeColors.object1, 0.95);
+        style.addProperty("color", ThemeColor.object1, 0.95);
         addStyle(style);
 
     }
@@ -272,16 +272,16 @@ public class PortalTheme extends VistaTheme {
                 style.addProperty("margin-bottom", "5px");
                 style.addProperty("margin-left", "10px");
                 style.addProperty("margin-right", "10px");
-                style.addProperty("background", ThemeColors.background);
+                style.addProperty("background", ThemeColor.background);
                 addStyle(style);
             }
             {
                 Style style = new Style(".gwt-DisclosurePanel .header");
-                style.addProperty("color", ThemeColors.object1);
+                style.addProperty("color", ThemeColor.object1);
                 style.addProperty("font-size", "18px");
                 style.addProperty("font-weight", "bold");
                 style.addProperty("font-style", "normal");
-                style.addProperty("background", ThemeColors.background);
+                style.addProperty("background", ThemeColor.background);
                 style.addProperty("text-decoration", "none");
                 addStyle(style);
             }

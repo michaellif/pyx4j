@@ -21,7 +21,7 @@ import org.apache.wicket.request.Request;
 
 import com.pyx4j.commons.css.ColorUtil;
 import com.pyx4j.commons.css.Palette;
-import com.pyx4j.commons.css.ThemeColors;
+import com.pyx4j.commons.css.ThemeColor;
 
 import com.propertyvista.domain.site.SiteDescriptor.Skin;
 import com.propertyvista.domain.site.SitePalette;
@@ -41,27 +41,27 @@ public class StylesheetTemplateModel extends LoadableDetachableModel<Map<String,
         Skin skin = ((PMSiteWebRequest) request).getContentManager().getSiteDescriptor().skin().getValue();
         palette = new Palette();
         palette.putThemeColor(
-                ThemeColors.object1,
+                ThemeColor.object1,
                 ColorUtil.hsbToRgb((float) sitePalette.object1().getValue() / 360, (float) skin.getColorProperties()[0] / 100,
                         (float) skin.getColorProperties()[1] / 100));
         palette.putThemeColor(
-                ThemeColors.object2,
+                ThemeColor.object2,
                 ColorUtil.hsbToRgb((float) sitePalette.object2().getValue() / 360, (float) skin.getColorProperties()[2] / 100,
                         (float) skin.getColorProperties()[3] / 100));
         palette.putThemeColor(
-                ThemeColors.contrast1,
+                ThemeColor.contrast1,
                 ColorUtil.hsbToRgb((float) sitePalette.contrast1().getValue() / 360, (float) skin.getColorProperties()[4] / 100,
                         (float) skin.getColorProperties()[5] / 100));
         palette.putThemeColor(
-                ThemeColors.contrast2,
+                ThemeColor.contrast2,
                 ColorUtil.hsbToRgb((float) sitePalette.contrast2().getValue() / 360, (float) skin.getColorProperties()[6] / 100,
                         (float) skin.getColorProperties()[7] / 100));
         palette.putThemeColor(
-                ThemeColors.foreground,
+                ThemeColor.foreground,
                 ColorUtil.hsbToRgb((float) sitePalette.background().getValue() / 360, (float) skin.getColorProperties()[8] / 100,
                         (float) skin.getColorProperties()[9] / 100));
         palette.putThemeColor(
-                ThemeColors.background,
+                ThemeColor.background,
                 ColorUtil.hsbToRgb((float) sitePalette.foreground().getValue() / 360, (float) skin.getColorProperties()[10] / 100,
                         (float) skin.getColorProperties()[11] / 100));
 
@@ -70,12 +70,12 @@ public class StylesheetTemplateModel extends LoadableDetachableModel<Map<String,
     @Override
     public Map<String, Object> load() {
         final Map<String, Object> varModel = new HashMap<String, Object>();
-        varModel.putAll(generateColorMap("object1", ThemeColors.object1));
-        varModel.putAll(generateColorMap("object2", ThemeColors.object2));
-        varModel.putAll(generateColorMap("contrast1", ThemeColors.contrast1));
-        varModel.putAll(generateColorMap("contrast2", ThemeColors.contrast2));
-        varModel.putAll(generateColorMap("background", ThemeColors.background));
-        varModel.putAll(generateColorMap("foreground", ThemeColors.foreground));
+        varModel.putAll(generateColorMap("object1", ThemeColor.object1));
+        varModel.putAll(generateColorMap("object2", ThemeColor.object2));
+        varModel.putAll(generateColorMap("contrast1", ThemeColor.contrast1));
+        varModel.putAll(generateColorMap("contrast2", ThemeColor.contrast2));
+        varModel.putAll(generateColorMap("background", ThemeColor.background));
+        varModel.putAll(generateColorMap("foreground", ThemeColor.foreground));
 
         varModel.put("image_building_xsmall_height", ImageConsts.BUILDING_XSMALL.height + "px");
         varModel.put("image_building_xsmall_width", ImageConsts.BUILDING_XSMALL.width + "px");
@@ -96,7 +96,7 @@ public class StylesheetTemplateModel extends LoadableDetachableModel<Map<String,
         return varModel;
     }
 
-    private Map<String, String> generateColorMap(String keyBase, ThemeColors color) {
+    private Map<String, String> generateColorMap(String keyBase, ThemeColor color) {
         final Map<String, String> colorMap = new HashMap<String, String>(VIBRANCE_CNT);
         for (int vib = 0; vib < VIBRANCE_CNT; vib++) {
             float vibrance = (float) (1.0 - (float) vib / VIBRANCE_CNT); // 1.0 -> 0.1

@@ -16,7 +16,7 @@ package com.propertyvista.crm.client.themes;
 import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.commons.css.Selector;
 import com.pyx4j.commons.css.Style;
-import com.pyx4j.commons.css.ThemeColors;
+import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.entity.client.ui.datatable.DefaultDataTableTheme;
 import com.pyx4j.entity.client.ui.folder.DefaultEntityFolderTheme;
 import com.pyx4j.forms.client.ui.DefaultCComponentsTheme;
@@ -76,14 +76,14 @@ public class CrmTheme extends VistaTheme {
         addTheme(new DefaultWidgetDecoratorTheme());
         addTheme(new DefaultFormFlexPanelTheme() {
             @Override
-            protected ThemeColors getBackgroundColor() {
-                return ThemeColors.foreground;
+            protected ThemeColor getBackgroundColor() {
+                return ThemeColor.foreground;
             }
         });
         addTheme(new DefaultEntityFolderTheme() {
             @Override
-            protected ThemeColors getBackgroundColor() {
-                return ThemeColors.foreground;
+            protected ThemeColor getBackgroundColor() {
+                return ThemeColor.foreground;
             }
         });
         addTheme(new DefaultRichTextEditorTheme());
@@ -168,21 +168,21 @@ public class CrmTheme extends VistaTheme {
 //        style.addProperty("padding-top", "0.2em");
         style.addProperty("padding-left", "0.5em");
         style.addProperty("cursor", "pointer");
-        style.addProperty("color", ThemeColors.object1, 0.1);
-        style.addGradient(ThemeColors.object1, 1, ThemeColors.object1, 0.6);
+        style.addProperty("color", ThemeColor.object1, 0.1);
+        style.addGradient(ThemeColor.object1, 1, ThemeColor.object1, 0.6);
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix + " .gwt-StackLayoutPanelHeader", null, NavigViewImpl.StyleDependent.selected));
         style.addProperty("font-weight", "bold");
-        style.addShadow(ThemeColors.foreground, "1px 1px 0");
-        style.addGradient(ThemeColors.object1, 1, ThemeColors.object1, 0.8);
+        style.addShadow(ThemeColor.foreground, "1px 1px 0");
+        style.addGradient(ThemeColor.object1, 1, ThemeColor.object1, 0.8);
         addStyle(style);
 
         // stack content
         style = new Style(Selector.valueOf(prefix + " .gwt-StackLayoutPanelContent"));
         style.addProperty("font-size", "1.1em");
         style.addProperty("padding-left", "1em");
-        style.addProperty("background-color", ThemeColors.foreground, 0.02);
+        style.addProperty("background-color", ThemeColor.foreground, 0.02);
         addStyle(style);
 
         // Item style defines anchor specific styling
@@ -225,10 +225,10 @@ public class CrmTheme extends VistaTheme {
         style.addProperty("font-weight", "bold");
         style.addProperty("padding-left", "1em");
 //        style.addProperty("cursor", "pointer");
-        style.addProperty("color", ThemeColors.foreground, 0.9);
-        style.addProperty("background-color", ThemeColors.foreground, 0.1);
+        style.addProperty("color", ThemeColor.foreground, 0.9);
+        style.addProperty("background-color", ThemeColor.foreground, 0.1);
         style.addProperty("border-top", "solid 4px");
-        style.addProperty("border-top-color", ThemeColors.object1);
+        style.addProperty("border-top-color", ThemeColor.object1);
         // NOTE: must correspond with the header size defined by stackpanel
         style.addProperty("line-height", "2.2em");
         addStyle(style);
@@ -236,7 +236,7 @@ public class CrmTheme extends VistaTheme {
         // stack content
         style = new Style(Selector.valueOf(prefix + " .gwt-StackLayoutPanelContent"));
         style.addProperty("font-size", "1.1em");
-        style.addProperty("background-color", ThemeColors.foreground, 0.1);
+        style.addProperty("background-color", ThemeColor.foreground, 0.1);
         addStyle(style);
 
         // Item style defines anchor specific styling
@@ -295,7 +295,7 @@ public class CrmTheme extends VistaTheme {
         //
         // Toggle Button
         Style style = new Style(".gwt-ToggleButton");
-        style.addProperty("color", ThemeColors.foreground);
+        style.addProperty("color", ThemeColor.foreground);
         style.addProperty("border-width", "1px");
         style.addProperty("border-style", "solid");
         style.addProperty("border-color", "black");
@@ -306,26 +306,26 @@ public class CrmTheme extends VistaTheme {
         addStyle(style);
 
         style = new Style(".gwt-ToggleButton-up");
-        style.addGradient(ThemeColors.foreground, 0.1, ThemeColors.foreground, 0.3);
+        style.addGradient(ThemeColor.foreground, 0.1, ThemeColor.foreground, 0.3);
         style.addProperty("border-style", "outset");
         addStyle(style);
 
         String buttonEx = Selector.valueOf("gwt-ToggleButton-up-hovering");
         style = new Style(buttonEx);
-        style.addGradient(ThemeColors.foreground, 0.0, ThemeColors.foreground, 0.2);
+        style.addGradient(ThemeColor.foreground, 0.0, ThemeColor.foreground, 0.2);
         style.addProperty("border-style", "outset");
         style.addProperty("cursor", "pointer");
         addStyle(style);
 
         buttonEx = Selector.valueOf("gwt-ToggleButton-down");
         style = new Style(buttonEx);
-        style.addGradient(ThemeColors.foreground, 0.3, ThemeColors.foreground, 0.1);
+        style.addGradient(ThemeColor.foreground, 0.3, ThemeColor.foreground, 0.1);
         style.addProperty("border-style", "inset");
         addStyle(style);
 
         buttonEx = Selector.valueOf("gwt-ToggleButton-down-hovering");
         style = new Style(buttonEx);
-        style.addGradient(ThemeColors.foreground, 0.2, ThemeColors.foreground, 0.1);
+        style.addGradient(ThemeColor.foreground, 0.2, ThemeColor.foreground, 0.1);
         style.addProperty("cursor", "pointer");
         style.addProperty("border-style", "inset");
         addStyle(style);
@@ -333,10 +333,10 @@ public class CrmTheme extends VistaTheme {
         // Push Button
         buttonEx = ".gwt-PushButton";
         style = new Style(buttonEx);
-        style.addProperty("color", ThemeColors.background);
+        style.addProperty("color", ThemeColor.background);
         style.addProperty("border-width", "1px");
         style.addProperty("border-style", "solid");
-        style.addProperty("border-color", ThemeColors.background);
+        style.addProperty("border-color", ThemeColor.background);
         style.addProperty("margin", "0.2em 0.2em");
         style.addProperty("padding", "0.2em 0.5em");
         style.addProperty("text-align", "center");
@@ -344,24 +344,24 @@ public class CrmTheme extends VistaTheme {
         addStyle(style);
 
         style = new Style(buttonEx + "-up-hovering");
-        style.addProperty("border-color", ThemeColors.foreground);
+        style.addProperty("border-color", ThemeColor.foreground);
         style.addProperty("cursor", "pointer");
         addStyle(style);
 
         style = new Style(buttonEx + "-down");
-        style.addProperty("border-color", ThemeColors.foreground);
+        style.addProperty("border-color", ThemeColor.foreground);
         style.addProperty("cursor", "pointer");
         addStyle(style);
 
         style = new Style(buttonEx + "-down-hovering");
-        style.addProperty("border-color", ThemeColors.foreground);
+        style.addProperty("border-color", ThemeColor.foreground);
         style.addProperty("cursor", "pointer");
         addStyle(style);
         //
         // default AnchorButton: 
         buttonEx = Selector.valueOf(AnchorButton.DEFAULT_STYLE_PREFIX);
         style = new Style(buttonEx);
-        style.addProperty("color", ThemeColors.object1, 0.95);
+        style.addProperty("color", ThemeColor.object1, 0.95);
         style.addProperty("font-size", "1.1em");
         style.addProperty("font-weight", "bolder");
         style.addProperty("padding", "3px 6px");
@@ -378,7 +378,7 @@ public class CrmTheme extends VistaTheme {
         style.addProperty("font-weight", "bolder");
         style.addProperty("padding-bottom", "0.2em");
         style.addProperty("border-bottom", "2px dotted");
-        style.addProperty("border-bottom-color", ThemeColors.object1, 0.15);
+        style.addProperty("border-bottom-color", ThemeColor.object1, 0.15);
         addStyle(style);
     }
 
@@ -389,20 +389,20 @@ public class CrmTheme extends VistaTheme {
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, BoardBase.StyleSuffix.filtersDescription));
-        style.addProperty("color", ThemeColors.foreground, 0.95);
+        style.addProperty("color", ThemeColor.foreground, 0.95);
         style.addProperty("font-weight", "bold");
         style.addProperty("font-size", "1.1em");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, BoardBase.StyleSuffix.filtersPanel));
-        style.addGradient(ThemeColors.foreground, 0.1, ThemeColors.foreground, 0.3);
-        style.addProperty("color", ThemeColors.foreground);
+        style.addGradient(ThemeColor.foreground, 0.1, ThemeColor.foreground, 0.3);
+        style.addProperty("color", ThemeColor.foreground);
         style.addProperty("border-bottom", "1px solid #ccc");
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, BoardBase.StyleSuffix.actionsPanel));
-        style.addGradient(ThemeColors.foreground, 0.1, ThemeColors.foreground, 0.3);
-        style.addProperty("color", ThemeColors.foreground);
+        style.addGradient(ThemeColor.foreground, 0.1, ThemeColor.foreground, 0.3);
+        style.addProperty("color", ThemeColor.foreground);
         style.addProperty("margin-bottom", "0.2em");
         addStyle(style);
     }
@@ -422,7 +422,7 @@ public class CrmTheme extends VistaTheme {
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, CSSNames.StyleSuffix.Holder));
-        style.addProperty("background-color", ThemeColors.background);
+        style.addProperty("background-color", ThemeColor.background);
         style.addProperty("border", "1px solid #ccc");
         style.addProperty("margin", "5px");
         addStyle(style);
@@ -432,12 +432,12 @@ public class CrmTheme extends VistaTheme {
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, CSSNames.StyleSuffix.HolderSetup));
-        style.addProperty("background-color", ThemeColors.contrast1, 0.1);
+        style.addProperty("background-color", ThemeColor.contrast1, 0.1);
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, CSSNames.StyleSuffix.HolderCaption));
-        style.addProperty("background-color", ThemeColors.foreground);
-        style.addProperty("color", ThemeColors.foreground, 0.1);
+        style.addProperty("background-color", ThemeColor.foreground);
+        style.addProperty("color", ThemeColor.foreground, 0.1);
         style.addProperty("font", "caption");
         style.addProperty("font-weight", "bold");
         style.addProperty("height", "20px");
@@ -453,7 +453,7 @@ public class CrmTheme extends VistaTheme {
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, CSSNames.StyleSuffix.HolderMenu));
-        style.addProperty("background-color", ThemeColors.foreground);
+        style.addProperty("background-color", ThemeColor.foreground);
         style.addProperty("border", "1px solid #aaa");
         style.addProperty("font", "menu");
         addStyle(style);
@@ -479,8 +479,8 @@ public class CrmTheme extends VistaTheme {
 
         // GADGETS LIST
         Style style = new Style("." + prefix + " .cellListOddItem");
-        style.addGradient(ThemeColors.object1, 0.1, ThemeColors.object1, 0.4);
-        style.addProperty("color", ThemeColors.foreground);
+        style.addGradient(ThemeColor.object1, 0.1, ThemeColor.object1, 0.4);
+        style.addProperty("color", ThemeColor.foreground);
         style.addProperty("border-width", "1px");
         style.addProperty("border-style", "outset");
         style.addProperty("margin", "0.2em");
@@ -488,8 +488,8 @@ public class CrmTheme extends VistaTheme {
         addStyle(style);
 
         style = new Style("." + prefix + " .cellListEvenItem");
-        style.addGradient(ThemeColors.object1, 0.1, ThemeColors.object1, 0.4);
-        style.addProperty("color", ThemeColors.foreground);
+        style.addGradient(ThemeColor.object1, 0.1, ThemeColor.object1, 0.4);
+        style.addProperty("color", ThemeColor.foreground);
         style.addProperty("border-width", "1px");
         style.addProperty("border-style", "outset");
         style.addProperty("margin", "0.2em");
@@ -498,17 +498,17 @@ public class CrmTheme extends VistaTheme {
 
         // CATEGORIES TREE
         style = new Style("." + prefix + " .cellTreeItem");
-        style.addProperty("color", ThemeColors.foreground);
+        style.addProperty("color", ThemeColor.foreground);
         addStyle(style);
 
         style = new Style("." + prefix + " .cellTreeSelectedItem");
-        style.addGradient(ThemeColors.object1, 0.1, ThemeColors.object1, 0.4);
+        style.addGradient(ThemeColor.object1, 0.1, ThemeColor.object1, 0.4);
         style.addProperty("border-width", "1px");
         style.addProperty("border-style", "outset");
         addStyle(style);
 
         style = new Style("." + prefix + " .cellTreeKeyboardSelectedItem");
-        style.addProperty("background-color", ThemeColors.object2);
+        style.addProperty("background-color", ThemeColor.object2);
         addStyle(style);
 
         style = new Style("." + prefix + " .cellTreeItemValue");
@@ -593,7 +593,7 @@ public class CrmTheme extends VistaTheme {
 
     private void initReportsStyles() {
         Style style = new Style("." + AbstractReportsView.Styles.SettingsFormPanel.name());
-        style.addProperty("background-color", ThemeColors.object1, 0.3);
+        style.addProperty("background-color", ThemeColor.object1, 0.3);
         addStyle(style);
     }
 

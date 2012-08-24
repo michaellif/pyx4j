@@ -16,7 +16,7 @@ package com.propertyvista.common.client.theme;
 import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.Theme;
-import com.pyx4j.commons.css.ThemeColors;
+import com.pyx4j.commons.css.ThemeColor;
 
 public class CrmSitePanelTheme extends Theme {
 
@@ -27,7 +27,7 @@ public class CrmSitePanelTheme extends Theme {
     public CrmSitePanelTheme() {
         // All viewable area:
         Style style = new Style(".", CrmSitePanelTheme.StyleName.SiteView.name());
-        style.addProperty("color", ThemeColors.foreground);
+        style.addProperty("color", ThemeColor.foreground);
         addStyle(style);
 
         // DockLayoutPanel:
@@ -38,7 +38,7 @@ public class CrmSitePanelTheme extends Theme {
 
         // Header:
         style = new Style(".", CrmSitePanelTheme.StyleName.SiteViewHeader.name());
-        style.addGradient(ThemeColors.object1, 1, ThemeColors.object1, 0.7);
+        style.addGradient(ThemeColor.object1, 1, ThemeColor.object1, 0.7);
         style.addProperty("color", "white");
         style.addProperty("font-size", "1.1em");
         style.addProperty("padding-left", "0.3em");
@@ -47,8 +47,8 @@ public class CrmSitePanelTheme extends Theme {
         // Footer:
         style = new Style(".", CrmSitePanelTheme.StyleName.SiteViewFooter.name());
 //        style.addProperty("background", "url('" + VistaImages.INSTANCE.logo().getSafeUri().asString() + "') no-repeat scroll left center transparent");
-        style.addProperty("background-color", ThemeColors.object1);
-        style.addProperty("background-color", ThemeColors.object1);
+        style.addProperty("background-color", ThemeColor.object1);
+        style.addProperty("background-color", ThemeColor.object1);
         addStyle(style);
 
         // NavigationContainer (Accordion menu):
@@ -59,7 +59,7 @@ public class CrmSitePanelTheme extends Theme {
         // Action (Header right side hyperlinks):
         style = new Style(".", CrmSitePanelTheme.StyleName.SiteViewAction.name());
         //style.addProperty("min-width", "700px");
-        style.addProperty("color", ThemeColors.object1, 0.1);
+        style.addProperty("color", ThemeColor.object1, 0.1);
         style.addProperty("font-size", "1em");
         addStyle(style);
 
@@ -72,7 +72,7 @@ public class CrmSitePanelTheme extends Theme {
         style = new Style(".", CrmSitePanelTheme.StyleName.SiteViewAction.name(), " a:link, .", CrmSitePanelTheme.StyleName.SiteViewAction.name(),
                 " a:visited, .", CrmSitePanelTheme.StyleName.SiteViewAction.name(), " a:active");
         style.addProperty("text-decoration", "none");
-        style.addProperty("color", ThemeColors.object1, 0.2);
+        style.addProperty("color", ThemeColor.object1, 0.2);
         addStyle(style);
 
         style = new Style(".", CrmSitePanelTheme.StyleName.SiteViewAction.name(), " a:hover");

@@ -15,18 +15,18 @@ package com.propertyvista.common.client.theme;
 
 import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.Theme;
-import com.pyx4j.commons.css.ThemeColors;
+import com.pyx4j.commons.css.ThemeColor;
 
 public class DraggerMixin extends Theme {
 
     public DraggerMixin() {
         Style style = new Style(".gwt-SplitLayoutPanel-HDragger");
-        style.addProperty("background", ThemeColors.object1, 1);
+        style.addProperty("background", ThemeColor.object1, 1);
         style.addProperty("cursor", "col-resize");
         addStyle(style);
 
         style = new Style(".gwt-SplitLayoutPanel-VDragger");
-        style.addProperty("background", ThemeColors.object1, 1);
+        style.addProperty("background", ThemeColor.object1, 1);
         style.addProperty("cursor", "row-resize");
         addStyle(style);
     }

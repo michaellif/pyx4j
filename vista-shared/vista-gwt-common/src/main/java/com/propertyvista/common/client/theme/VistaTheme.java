@@ -17,7 +17,7 @@ import com.pyx4j.commons.css.CSSClass;
 import com.pyx4j.commons.css.Selector;
 import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.Theme;
-import com.pyx4j.commons.css.ThemeColors;
+import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.entity.client.ui.folder.DefaultEntityFolderTheme;
 import com.pyx4j.widgets.client.ImageFactory;
 
@@ -92,8 +92,8 @@ public class VistaTheme extends Theme {
 
     protected void initBodyStyles() {
         Style style = new Style("body");
-        style.addProperty("background-color", ThemeColors.background);
-        style.addProperty("color", ThemeColors.foreground);
+        style.addProperty("background-color", ThemeColor.background);
+        style.addProperty("color", ThemeColor.foreground);
         style.addProperty("margin", "0");
         style.addProperty("border", "none");
         style.addProperty("font", "12px/1.5em Arial, Helvetica, sans-serif");
@@ -103,19 +103,19 @@ public class VistaTheme extends Theme {
 
     protected void initSectionStyles() {
         Style style = new Style(Selector.valueOf(CSSClass.pyx4j_Section_Border));
-        style.addProperty("background-color", ThemeColors.foreground, 0.6);
+        style.addProperty("background-color", ThemeColor.foreground, 0.6);
         addStyle(style);
 
         style = new Style(Selector.valueOf(CSSClass.pyx4j_Section_SelectionBorder));
-        style.addProperty("background-color", ThemeColors.foreground, 0.8);
+        style.addProperty("background-color", ThemeColor.foreground, 0.8);
         addStyle(style);
 
         style = new Style(Selector.valueOf(CSSClass.pyx4j_Section_Background));
-        style.addProperty("background-color", ThemeColors.foreground, 0.8);
+        style.addProperty("background-color", ThemeColor.foreground, 0.8);
         addStyle(style);
 
         style = new Style(Selector.valueOf(CSSClass.pyx4j_Section_Content));
-        style.addProperty("background-color", ThemeColors.background);
+        style.addProperty("background-color", ThemeColor.background);
         addStyle(style);
     }
 
@@ -126,14 +126,14 @@ public class VistaTheme extends Theme {
 
         //style.addProperty("background-color", ThemeColor.OBJECT_TONE1);
 
-        style.addGradient(ThemeColors.object1, 0.2, ThemeColors.object1, 0.5);
+        style.addGradient(ThemeColor.object1, 0.2, ThemeColor.object1, 0.5);
 
         addStyle(style);
     }
 
     protected void initStatusBarStyle() {
         Style style = new Style(Selector.valueOf(CSSClass.pyx4j_StatusBar));
-        style.addProperty("background-color", ThemeColors.object1, 0.8);
+        style.addProperty("background-color", ThemeColor.object1, 0.8);
         style.addProperty("padding", "2 2 2 8");
         addStyle(style);
     }
@@ -141,7 +141,7 @@ public class VistaTheme extends Theme {
     protected void initBarSeparatorStyle() {
         Style style = new Style(Selector.valueOf(CSSClass.pyx4j_BarSeparator));
         style.addProperty("border-left", "2px ridge");
-        style.addProperty("border-left-color", ThemeColors.object1, 0.8);
+        style.addProperty("border-left-color", ThemeColor.object1, 0.8);
 
         style.addProperty("margin-left", "3px");
         addStyle(style);
@@ -149,15 +149,15 @@ public class VistaTheme extends Theme {
 
     protected void initProgressBarStyles() {
         Style style = new Style(".gwt-ProgressBar-shell");
-        style.addProperty("background-color", ThemeColors.object1, 0.6);
+        style.addProperty("background-color", ThemeColor.object1, 0.6);
         addStyle(style);
 
         style = new Style(".gwt-ProgressBar-bar");
-        style.addProperty("background-color", ThemeColors.object1, 0.8);
+        style.addProperty("background-color", ThemeColor.object1, 0.8);
         addStyle(style);
 
         style = new Style(".gwt-ProgressBar-text");
-        style.addProperty("color", ThemeColors.object1, 0.2);
+        style.addProperty("color", ThemeColor.object1, 0.2);
         addStyle(style);
     }
 
@@ -165,20 +165,20 @@ public class VistaTheme extends Theme {
         Style style = new Style(".gwt-MenuBar");
         style.addProperty("cursor", "pointer");
         style.addProperty("cursor", "hand");
-        style.addProperty("color", ThemeColors.foreground, 0.2);
+        style.addProperty("color", ThemeColor.foreground, 0.2);
         addStyle(style);
 
         style = new Style(".gwt-MenuItem");
         style.addProperty("cursor", "pointer");
         style.addProperty("cursor", "hand");
-        style.addProperty("background-color", ThemeColors.foreground, 0.2);
+        style.addProperty("background-color", ThemeColor.foreground, 0.2);
         style.addProperty("background", "transparent");
         style.addProperty("color", "#E5F0E1");
         style.addProperty("border", "0");
         addStyle(style);
 
         style = new Style(".gwt-MenuItem-selected");
-        style.addProperty("background", ThemeColors.foreground, 0.8);
+        style.addProperty("background", ThemeColor.foreground, 0.8);
         style.addProperty("cursor", "pointer");
         style.addProperty("cursor", "hand");
         style.addProperty("text-decoration", "underline");
@@ -189,7 +189,7 @@ public class VistaTheme extends Theme {
         style.addProperty("margin-top", "0px");
         style.addProperty("margin-left", "0px");
         style.addProperty("border", "1px solid");
-        style.addProperty("border-color", ThemeColors.foreground, 0.2);
+        style.addProperty("border-color", ThemeColor.foreground, 0.2);
         style.addProperty("background", "#FFFFFF");
         addStyle(style);
 
@@ -211,12 +211,12 @@ public class VistaTheme extends Theme {
 
         Style style = new Style(".gwt-DialogBox");
         style.addProperty("border", "2px outset");
-        style.addProperty("border-color", ThemeColors.object1, 0.6);
-        style.addProperty("background-color", ThemeColors.object1, 0.6);
+        style.addProperty("border-color", ThemeColor.object1, 0.6);
+        style.addProperty("background-color", ThemeColor.object1, 0.6);
         addStyle(style);
 
         style = new Style(".gwt-DialogBox .Caption");
-        style.addProperty("background-color", ThemeColors.object1, 0.8);
+        style.addProperty("background-color", ThemeColor.object1, 0.8);
         addStyle(style);
 
         style = new Style(".gwt-PopupPanelGlass");
@@ -235,7 +235,7 @@ public class VistaTheme extends Theme {
         style.addProperty("padding-top", "0.5em");
         style.addProperty("padding-left", "0.5em");
         style.addProperty("border-bottom", "4px solid");
-        style.addProperty("border-bottom-color", ThemeColors.foreground, 0.3);
+        style.addProperty("border-bottom-color", ThemeColor.foreground, 0.3);
         addStyle(style);
 
         style = new Style(".gwt-TabLayoutPanelTab");
@@ -249,27 +249,27 @@ public class VistaTheme extends Theme {
         style.addProperty("padding-right", "10px");
         style.addProperty("padding-left", "10px");
         style.addProperty("border-right", "1px solid");
-        style.addProperty("border-right-color", ThemeColors.foreground, 0.6);
+        style.addProperty("border-right-color", ThemeColor.foreground, 0.6);
         style.addProperty("border-left", "1px solid");
-        style.addProperty("border-left-color", ThemeColors.foreground, 0.6);
+        style.addProperty("border-left-color", ThemeColor.foreground, 0.6);
         style.addProperty("border-top", "1px solid");
-        style.addProperty("border-top-color", ThemeColors.foreground, 0.6);
-        style.addProperty("background", ThemeColors.object1, 1);
-        style.addProperty("color", ThemeColors.foreground, 0);
+        style.addProperty("border-top-color", ThemeColor.foreground, 0.6);
+        style.addProperty("background", ThemeColor.object1, 1);
+        style.addProperty("color", ThemeColor.foreground, 0);
         style.addProperty("display", "inline-block");
         style.addProperty("position", "relative");
         addStyle(style);
 
         style = new Style(".gwt-TabLayoutPanelTab-selected");
         style.addProperty("cursor", "default");
-        style.addGradient(ThemeColors.foreground, 0.1, ThemeColors.foreground, 0.30);
+        style.addGradient(ThemeColor.foreground, 0.1, ThemeColor.foreground, 0.30);
         style.addProperty("color", "#333");
         addStyle(style);
 
         String prefix = VistaTabLayoutPanel.TAB_DIASBLED_STYLE;
         style = new Style(Selector.valueOf(prefix));
-        style.addProperty("background", ThemeColors.object1, 0.6);
-        style.addProperty("color", ThemeColors.foreground, 0.2);
+        style.addProperty("background", ThemeColor.object1, 0.6);
+        style.addProperty("color", ThemeColor.foreground, 0.2);
         style.addProperty("cursor", "default");
         addStyle(style);
     }
@@ -294,7 +294,7 @@ public class VistaTheme extends Theme {
         addStyle(style);
 
         style = new Style("." + CSSClass.pyx4j_PickerPanel);
-        style.addProperty("border-color", ThemeColors.object1, 0.6);
+        style.addProperty("border-color", ThemeColor.object1, 0.6);
         style.addProperty("border-style", "solid");
         style.addProperty("border-width", "1px");
         style.addProperty("background-color", "#fff");
@@ -328,11 +328,11 @@ public class VistaTheme extends Theme {
         style.addProperty("padding-right", "2px");
         style.addProperty("border-width", "1px");
         style.addProperty("border-style", "outset");
-        style.addProperty("border-color", ThemeColors.object1, 0.5);
+        style.addProperty("border-color", ThemeColor.object1, 0.5);
         style.addProperty("cursor", "pointer");
         style.addProperty("cursor", "hand");
         style.addProperty("outline", "none");
-        style.addProperty("background-color", ThemeColors.object1, 0.9);
+        style.addProperty("background-color", ThemeColor.object1, 0.9);
         addStyle(style);
 
         style = new Style(CSSClass.pyx4j_ButtonImage);
@@ -340,7 +340,7 @@ public class VistaTheme extends Theme {
         addStyle(style);
 
         style = new Style("." + CSSClass.pyx4j_Button + "-hover" + " ." + CSSClass.pyx4j_ButtonContent);
-        style.addProperty("background-color", ThemeColors.object1, 0.4);
+        style.addProperty("background-color", ThemeColor.object1, 0.4);
         addStyle(style);
 
         style = new Style("." + CSSClass.pyx4j_Button + "-pushed" + " ." + CSSClass.pyx4j_ButtonContent);
@@ -348,7 +348,7 @@ public class VistaTheme extends Theme {
         addStyle(style);
 
         style = new Style("." + CSSClass.pyx4j_Button + "-checked" + " ." + CSSClass.pyx4j_ButtonContent);
-        style.addProperty("background", ThemeColors.object1, 0.3);
+        style.addProperty("background", ThemeColor.object1, 0.3);
         style.addProperty("border-style", "inset");
         addStyle(style);
     }
@@ -420,7 +420,7 @@ public class VistaTheme extends Theme {
         addStyle(style);
 
         style = new Style(".gwt-TreeItem-selected");
-        style.addProperty("background", ThemeColors.object1, 0.8);
+        style.addProperty("background", ThemeColor.object1, 0.8);
         addStyle(style);
     }
 
@@ -468,19 +468,19 @@ public class VistaTheme extends Theme {
 
         style = new Style(CSSClass.pyx4j_GroupBox, "-expanded");
         style.addProperty("border", "1px solid");
-        style.addProperty("border-color", ThemeColors.object1, 0.5);
+        style.addProperty("border-color", ThemeColor.object1, 0.5);
         addStyle(style);
 
         style = new Style(CSSClass.pyx4j_GroupBox, "-collapsed");
         style.addProperty("border", "none");
         style.addProperty("border-top", "1px solid");
-        style.addProperty("border-color", ThemeColors.object1, 0.5);
+        style.addProperty("border-color", ThemeColor.object1, 0.5);
         addStyle(style);
 
         style = new Style(CSSClass.pyx4j_GroupBox_Caption);
         style.addProperty("padding", "5px 2px 2px 2px");
         style.addProperty("verticalAlign", "top");
-        style.addProperty("color", ThemeColors.object1, 0.5);
+        style.addProperty("color", ThemeColor.object1, 0.5);
         addStyle(style);
     }
 
@@ -550,7 +550,7 @@ public class VistaTheme extends Theme {
         Style style = new Style(".gwt-SuggestBoxPopup");
         style.addProperty("background-color", "white");
         style.addProperty("padding", "2px");
-        style.addProperty("border-color", ThemeColors.foreground, 0.6);
+        style.addProperty("border-color", ThemeColor.foreground, 0.6);
         style.addProperty("border-style", "solid");
         style.addProperty("border-width", "1px");
         style.addProperty("cursor", "pointer");
@@ -561,7 +561,7 @@ public class VistaTheme extends Theme {
         addStyle(style);
 
         style = new Style(".gwt-SuggestBoxPopup .item-selected");
-        style.addProperty("background-color", ThemeColors.foreground, 0.3);
+        style.addProperty("background-color", ThemeColor.foreground, 0.3);
         addStyle(style);
 
     }
@@ -590,7 +590,7 @@ public class VistaTheme extends Theme {
 
         style = new Style(".cellListSelectedItem");
         style.addProperty("background", "");
-        style.addGradient(ThemeColors.object1, 0.1, ThemeColors.object1, 1.0);
+        style.addGradient(ThemeColor.object1, 0.1, ThemeColor.object1, 1.0);
         addStyle(style);
 
     }

@@ -18,7 +18,7 @@ import java.util.List;
 import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.commons.css.Selector;
 import com.pyx4j.commons.css.Style;
-import com.pyx4j.commons.css.ThemeColors;
+import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.entity.client.ui.datatable.DefaultDataTableTheme;
 import com.pyx4j.entity.client.ui.folder.DefaultEntityFolderTheme;
 import com.pyx4j.forms.client.ui.DefaultCComponentsTheme;
@@ -54,8 +54,8 @@ public class PtAppTheme extends VistaTheme {
         addTheme(new DefaultWidgetDecoratorTheme());
         addTheme(new DefaultFormFlexPanelTheme() {
             @Override
-            protected ThemeColors getBackgroundColor() {
-                return ThemeColors.object1;
+            protected ThemeColor getBackgroundColor() {
+                return ThemeColor.object1;
             }
         });
         addTheme(new DefaultDatePickerTheme());
@@ -121,7 +121,7 @@ public class PtAppTheme extends VistaTheme {
             }
             {
                 Style style = new Style(".gwt-DisclosurePanel .header");
-                style.addProperty("color", ThemeColors.object1);
+                style.addProperty("color", ThemeColor.object1);
                 style.addProperty("font-size", "18px");
                 style.addProperty("font-weight", "bold");
                 style.addProperty("text-decoration", "none");
@@ -134,8 +134,8 @@ public class PtAppTheme extends VistaTheme {
     protected void initEntityFolderStyles() {
         addTheme(new DefaultEntityFolderTheme() {
             @Override
-            protected ThemeColors getBackgroundColor() {
-                return ThemeColors.object1;
+            protected ThemeColor getBackgroundColor() {
+                return ThemeColor.object1;
             }
         });
 
@@ -325,7 +325,7 @@ public class PtAppTheme extends VistaTheme {
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, SecondNavigViewImpl.StyleSuffix.Label, SecondNavigViewImpl.StyleDependent.current));
-        style.addProperty("color", ThemeColors.foreground);
+        style.addProperty("color", ThemeColor.foreground);
         addStyle(style);
     }
 
@@ -375,7 +375,7 @@ public class PtAppTheme extends VistaTheme {
         prefix = SignatureFolder.DEFAULT_STYLE_PREFIX;
 
         style = new Style(Selector.valueOf(prefix));
-        style.addProperty("color", ThemeColors.foreground);
+        style.addProperty("color", ThemeColor.foreground);
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix, SignatureFolder.StyleSuffix.Label));

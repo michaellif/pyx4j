@@ -11,7 +11,7 @@ package com.propertyvista.portal.ptapp.client.themes;
 import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.Theme;
-import com.pyx4j.commons.css.ThemeColors;
+import com.pyx4j.commons.css.ThemeColor;
 
 public class PtAppSitePanelTheme extends Theme {
 
@@ -31,11 +31,11 @@ public class PtAppSitePanelTheme extends Theme {
         style = new Style(".", PtAppSitePanelTheme.StyleName.SitePanelHeader.name());
         style.addProperty("height", "115px");
         style.addProperty("width", "100%");
-        style.addGradient(ThemeColors.object1, 1, ThemeColors.object1, 0.7);
+        style.addGradient(ThemeColor.object1, 1, ThemeColor.object1, 0.7);
         addStyle(style);
 
         style = new Style(".", PtAppSitePanelTheme.StyleName.SitePanelMainNavigation.name());
-        style.addProperty("background-color", ThemeColors.object1);
+        style.addProperty("background-color", ThemeColor.object1);
         addStyle(style);
 
         style = new Style(".", PtAppSitePanelTheme.StyleName.SitePanelMainNavigation.name(), " .", PtAppSitePanelTheme.StyleName.SitePanelDisplay.name());

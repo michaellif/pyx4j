@@ -15,7 +15,7 @@ package com.propertyvista.admin.client.themes;
 
 import com.pyx4j.commons.css.Selector;
 import com.pyx4j.commons.css.Style;
-import com.pyx4j.commons.css.ThemeColors;
+import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.entity.client.ui.datatable.DefaultDataTableTheme;
 import com.pyx4j.entity.client.ui.folder.DefaultEntityFolderTheme;
 import com.pyx4j.forms.client.ui.DefaultCComponentsTheme;
@@ -58,14 +58,14 @@ public class AdminTheme extends VistaTheme {
         addTheme(new DefaultWidgetDecoratorTheme());
         addTheme(new DefaultFormFlexPanelTheme() {
             @Override
-            protected ThemeColors getBackgroundColor() {
-                return ThemeColors.foreground;
+            protected ThemeColor getBackgroundColor() {
+                return ThemeColor.foreground;
             }
         });
         addTheme(new DefaultEntityFolderTheme() {
             @Override
-            protected ThemeColors getBackgroundColor() {
-                return ThemeColors.foreground;
+            protected ThemeColor getBackgroundColor() {
+                return ThemeColor.foreground;
             }
         });
 
@@ -130,21 +130,21 @@ public class AdminTheme extends VistaTheme {
 //        style.addProperty("padding-top", "0.2em");
         style.addProperty("padding-left", "0.5em");
         style.addProperty("cursor", "pointer");
-        style.addProperty("color", ThemeColors.object1, 0.1);
-        style.addGradient(ThemeColors.object1, 1, ThemeColors.object1, 0.6);
+        style.addProperty("color", ThemeColor.object1, 0.1);
+        style.addGradient(ThemeColor.object1, 1, ThemeColor.object1, 0.6);
         addStyle(style);
 
         style = new Style(Selector.valueOf(prefix + " .gwt-StackLayoutPanelHeader", null, NavigViewImpl.StyleDependent.selected));
         style.addProperty("font-weight", "bold");
-        style.addShadow(ThemeColors.foreground, "1px 1px 0");
-        style.addGradient(ThemeColors.object1, 1, ThemeColors.object1, 0.8);
+        style.addShadow(ThemeColor.foreground, "1px 1px 0");
+        style.addGradient(ThemeColor.object1, 1, ThemeColor.object1, 0.8);
         addStyle(style);
 
         // stack content
         style = new Style(Selector.valueOf(prefix + " .gwt-StackLayoutPanelContent"));
         style.addProperty("font-size", "1.1em");
         style.addProperty("padding-left", "1em");
-        style.addProperty("background-color", ThemeColors.foreground, 0.02);
+        style.addProperty("background-color", ThemeColor.foreground, 0.02);
         addStyle(style);
 
         // Item style defines anchor specific styling
@@ -187,10 +187,10 @@ public class AdminTheme extends VistaTheme {
         style.addProperty("font-weight", "bold");
         style.addProperty("padding-left", "1em");
 //        style.addProperty("cursor", "pointer");
-        style.addProperty("color", ThemeColors.foreground, 0.9);
-        style.addProperty("background-color", ThemeColors.foreground, 0.1);
+        style.addProperty("color", ThemeColor.foreground, 0.9);
+        style.addProperty("background-color", ThemeColor.foreground, 0.1);
         style.addProperty("border-top", "solid 4px");
-        style.addProperty("border-top-color", ThemeColors.object1);
+        style.addProperty("border-top-color", ThemeColor.object1);
         // NOTE: must correspond with the header size defined by stackpanel
         style.addProperty("line-height", "2.2em");
         addStyle(style);
@@ -198,7 +198,7 @@ public class AdminTheme extends VistaTheme {
         // stack content
         style = new Style(Selector.valueOf(prefix + " .gwt-StackLayoutPanelContent"));
         style.addProperty("font-size", "1.1em");
-        style.addProperty("background-color", ThemeColors.foreground, 0.1);
+        style.addProperty("background-color", ThemeColor.foreground, 0.1);
         addStyle(style);
 
         // Item style defines anchor specific styling
@@ -254,8 +254,8 @@ public class AdminTheme extends VistaTheme {
         // Toggle Button
         String buttonEx = Selector.valueOf("gwt-ToggleButton");
         Style style = new Style(buttonEx);
-        style.addProperty("color", ThemeColors.object1, 0.1);
-        style.addProperty("background-color", ThemeColors.object1, 0.8);
+        style.addProperty("color", ThemeColor.object1, 0.1);
+        style.addProperty("background-color", ThemeColor.object1, 0.8);
         style.addProperty("border-width", "0px");
         style.addProperty("border-style", "solid");
         style.addProperty("margin", "0.2em 0.2em");
@@ -265,47 +265,47 @@ public class AdminTheme extends VistaTheme {
 
         buttonEx = Selector.valueOf("gwt-ToggleButton-up");
         style = new Style(buttonEx);
-        style.addProperty("background-color", ThemeColors.object1, 0.4);
-        style.addProperty("border-left-color", ThemeColors.object1, 0.4);
-        style.addProperty("border-top-color", ThemeColors.object1, 0.4);
-        style.addProperty("border-right-color", ThemeColors.object1, 0.95);
-        style.addProperty("border-bottom-color", ThemeColors.object1, 0.95);
+        style.addProperty("background-color", ThemeColor.object1, 0.4);
+        style.addProperty("border-left-color", ThemeColor.object1, 0.4);
+        style.addProperty("border-top-color", ThemeColor.object1, 0.4);
+        style.addProperty("border-right-color", ThemeColor.object1, 0.95);
+        style.addProperty("border-bottom-color", ThemeColor.object1, 0.95);
         addStyle(style);
 
         buttonEx = Selector.valueOf("gwt-ToggleButton-up-hovering");
         style = new Style(buttonEx);
         style.addProperty("cursor", "hand");
-        style.addProperty("background-color", ThemeColors.object1, 0.4);
-        style.addProperty("border-left-color", ThemeColors.object1, 0.1);
-        style.addProperty("border-top-color", ThemeColors.object1, 0.1);
-        style.addProperty("border-right-color", ThemeColors.object1, 0.95);
-        style.addProperty("border-bottom-color", ThemeColors.object1, 0.95);
+        style.addProperty("background-color", ThemeColor.object1, 0.4);
+        style.addProperty("border-left-color", ThemeColor.object1, 0.1);
+        style.addProperty("border-top-color", ThemeColor.object1, 0.1);
+        style.addProperty("border-right-color", ThemeColor.object1, 0.95);
+        style.addProperty("border-bottom-color", ThemeColor.object1, 0.95);
         addStyle(style);
 
         buttonEx = Selector.valueOf("gwt-ToggleButton-down");
         style = new Style(buttonEx);
-        style.addProperty("background-color", ThemeColors.object1, 0.8);
-        style.addProperty("border-left-color", ThemeColors.object1, 0.95);
-        style.addProperty("border-top-color", ThemeColors.object1, 0.95);
-        style.addProperty("border-right-color", ThemeColors.object1, 0.1);
-        style.addProperty("border-bottom-color", ThemeColors.object1, 0.1);
+        style.addProperty("background-color", ThemeColor.object1, 0.8);
+        style.addProperty("border-left-color", ThemeColor.object1, 0.95);
+        style.addProperty("border-top-color", ThemeColor.object1, 0.95);
+        style.addProperty("border-right-color", ThemeColor.object1, 0.1);
+        style.addProperty("border-bottom-color", ThemeColor.object1, 0.1);
         addStyle(style);
 
         buttonEx = Selector.valueOf("gwt-ToggleButton-down-hovering");
         style = new Style(buttonEx);
         style.addProperty("cursor", "hand");
-        style.addProperty("background-color", ThemeColors.object1, 0.8);
-        style.addProperty("border-left-color", ThemeColors.object1, 0.95);
-        style.addProperty("border-top-color", ThemeColors.object1, 0.95);
-        style.addProperty("border-right-color", ThemeColors.object1, 0.1);
-        style.addProperty("border-bottom-color", ThemeColors.object1, 0.1);
+        style.addProperty("background-color", ThemeColor.object1, 0.8);
+        style.addProperty("border-left-color", ThemeColor.object1, 0.95);
+        style.addProperty("border-top-color", ThemeColor.object1, 0.95);
+        style.addProperty("border-right-color", ThemeColor.object1, 0.1);
+        style.addProperty("border-bottom-color", ThemeColor.object1, 0.1);
         addStyle(style);
 
         //
         // default AnchorButton:
         buttonEx = Selector.valueOf(AnchorButton.DEFAULT_STYLE_PREFIX);
         style = new Style(buttonEx);
-        style.addProperty("color", ThemeColors.object1, 0.95);
+        style.addProperty("color", ThemeColor.object1, 0.95);
         style.addProperty("font-size", "1.1em");
         style.addProperty("font-weight", "bolder");
         style.addProperty("padding", "3px 6px");

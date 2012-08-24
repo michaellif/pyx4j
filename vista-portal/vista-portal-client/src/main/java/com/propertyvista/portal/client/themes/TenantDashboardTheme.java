@@ -16,7 +16,7 @@ package com.propertyvista.portal.client.themes;
 import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.Theme;
-import com.pyx4j.commons.css.ThemeColors;
+import com.pyx4j.commons.css.ThemeColor;
 
 public class TenantDashboardTheme extends Theme {
 
@@ -38,7 +38,7 @@ public class TenantDashboardTheme extends Theme {
         style = new Style(".", StyleName.TenantDashboardLeft, " > div");
         style.addProperty("min-height", "500px");
         style.addProperty("border-right", "solid 1px");
-        style.addProperty("border-right-color", ThemeColors.foreground, 0.4);
+        style.addProperty("border-right-color", ThemeColor.foreground, 0.4);
         style.addProperty("height", "100%");
         addStyle(style);
 
@@ -48,15 +48,15 @@ public class TenantDashboardTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", StyleName.TenantDashboardTableHeader);
-        style.addProperty("background-color", ThemeColors.foreground, 0.1);
+        style.addProperty("background-color", ThemeColor.foreground, 0.1);
         style.addProperty("line-height", "35px");
-        style.addProperty("color", ThemeColors.foreground, 0.7);
+        style.addProperty("color", ThemeColor.foreground, 0.7);
         addStyle(style);
 
         style = new Style(".", StyleName.TenantDashboardTableRow);
         style.addProperty("height", "45px");
         style.addProperty("border-bottom", "dotted 1px");
-        style.addProperty("border-bottom-color", ThemeColors.foreground, 0.7);
+        style.addProperty("border-bottom-color", ThemeColor.foreground, 0.7);
         addStyle(style);
 
         style = new Style(".", StyleName.TenantDashboardTableRow, ":last-child");
