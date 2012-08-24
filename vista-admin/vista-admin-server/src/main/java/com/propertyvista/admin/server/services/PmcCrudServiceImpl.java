@@ -91,6 +91,17 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
             alias.dnsName().setValue(alias.dnsName().getValue().toLowerCase(Locale.ENGLISH));
         }
         super.persist(entity, dto);
+
+        // Ppopagate onboardingAccountId to accounts
+        EntityQueryCriteria<OnboardingUserCredential> criteria = EntityQueryCriteria.create(OnboardingUserCredential.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().pmc(), entity));
+        for (OnboardingUserCredential cred : Persistence.service().query(criteria)) {
+            if (!cred.onboardingAccountId().equals(entity.onboardingAccountId())) {
+                cred.onboardingAccountId().setValue(entity.onboardingAccountId().getValue());
+                Persistence.service().persist(cred);
+            }
+        }
+
         CacheService.reset();
     }
 

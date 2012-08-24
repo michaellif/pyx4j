@@ -87,7 +87,8 @@ public class OnboardingUserCrudServiceImpl extends AbstractCrudServiceDtoImpl<On
         }
         dbo.setPrimaryKey(dbo.user().getPrimaryKey());
         if (!dbo.pmc().isNull()) {
-            dbo.onboardingAccountId().setValue(null);
+            Persistence.service().retrieve(dbo.pmc());
+            dbo.onboardingAccountId().setValue(dbo.pmc().onboardingAccountId().getValue());
         }
         Persistence.service().merge(dbo);
 
