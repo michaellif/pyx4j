@@ -67,6 +67,11 @@ public class PostgreSQLDialect extends Dialect {
     }
 
     @Override
+    public String likeOperator() {
+        return "ILIKE";
+    }
+
+    @Override
     public boolean isSequencesBaseIdentity() {
         return true;
     }

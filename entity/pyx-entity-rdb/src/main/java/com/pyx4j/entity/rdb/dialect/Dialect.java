@@ -206,6 +206,11 @@ public abstract class Dialect {
         return '%';
     }
 
+    // case-insensitive search. TODO use lower(col) = lower(?)
+    public String likeOperator() {
+        return "LIKE";
+    }
+
     public boolean isSequencesBaseIdentity() {
         return false;
     }

@@ -291,7 +291,7 @@ public class QueryBuilder<T extends IEntity> {
                         bindHolder.bindValue = dialect.likeWildCards() + bindHolder.bindValue.toString() + dialect.likeWildCards();
                     }
                 }
-                sqlOperator = " LIKE ? ";
+                sqlOperator = " " + dialect.likeOperator() + " ? ";
                 break;
             default:
                 throw new RuntimeException("Unsupported Operator " + propertyCriterion.getRestriction());
