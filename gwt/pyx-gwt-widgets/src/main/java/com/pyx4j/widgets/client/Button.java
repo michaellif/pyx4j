@@ -97,7 +97,6 @@ public class Button extends FocusPanel implements IFocusWidget {
         textLabel.setStyleName(DefaultWidgetsTheme.StyleName.ButtonText.name());
 
         imageHolder = new SimplePanel();
-        imageHolder.getElement().getStyle().setProperty("display", "inline");
 
         imageHolder.setWidget(textLabel);
 
@@ -162,6 +161,7 @@ public class Button extends FocusPanel implements IFocusWidget {
         if (image != null) {
             if (visible) {
                 imageHolder.getElement().getStyle().setProperty("paddingLeft", image.getWidth() + "px");
+                imageHolder.getElement().getStyle().setProperty("height", "100%");
                 imageHolder.getElement().getStyle().setProperty("background", "url('" + image.getUrl() + "') no-repeat scroll left center");
             } else {
                 imageHolder.getElement().getStyle().setProperty("paddingLeft", "0px");
