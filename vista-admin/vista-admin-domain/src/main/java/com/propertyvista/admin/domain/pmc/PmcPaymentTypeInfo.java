@@ -69,6 +69,10 @@ public interface PmcPaymentTypeInfo extends IEntity {
 
     IPrimitive<BigDecimal> interacCaledonFee();
 
+    IPrimitive<Boolean> interacPaymentPadPaymentAvailable();
+
+    IPrimitive<BigDecimal> interacPaymentPadFee();
+
     IPrimitive<Boolean> interacVisaPaymentAvailable();
 
     IPrimitive<BigDecimal> interacVisaFee();

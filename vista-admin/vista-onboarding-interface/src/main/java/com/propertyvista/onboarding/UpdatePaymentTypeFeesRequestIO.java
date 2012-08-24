@@ -53,6 +53,10 @@ public interface UpdatePaymentTypeFeesRequestIO extends RequestIO {
 
     IPrimitive<BigDecimal> interacCaledonFee();
 
+    IPrimitive<Boolean> interacPaymentPadPaymentAvailable();
+
+    IPrimitive<BigDecimal> interacPaymentPadFee();
+
     IPrimitive<Boolean> interacVisaPaymentAvailable();
 
     IPrimitive<BigDecimal> interacVisaFee();

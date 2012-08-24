@@ -72,6 +72,9 @@ public class UpdatePaymentTypeFeesRequestHandler extends AbstractRequestHandler<
         pmc.paymentTypeInfo().interacCaledonFee().setValue(request.interacCaledonFee().getValue());
         pmc.paymentTypeInfo().interacCaledonPaymentAvailable().setValue(request.interacCaledonPaymentAvailable().getValue());
 
+        pmc.paymentTypeInfo().interacPaymentPadFee().setValue(request.interacPaymentPadFee().getValue());
+        pmc.paymentTypeInfo().interacPaymentPadPaymentAvailable().setValue(request.interacPaymentPadPaymentAvailable().getValue());
+
         pmc.paymentTypeInfo().interacVisaFee().setValue(request.interacVisaFee().getValue());
         pmc.paymentTypeInfo().interacVisaPaymentAvailable().setValue(request.interacVisaPaymentAvailable().getValue());
 
