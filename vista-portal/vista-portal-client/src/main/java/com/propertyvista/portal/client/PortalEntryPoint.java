@@ -16,6 +16,7 @@ package com.propertyvista.portal.client;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.user.client.ui.RootPanel;
 
+import com.pyx4j.gwt.commons.UncaughtHandler;
 import com.pyx4j.gwt.geo.GoogleAPI;
 
 import com.propertyvista.portal.client.ui.maps.PropertyMapController;
@@ -39,6 +40,7 @@ public class PortalEntryPoint implements EntryPoint {
         if (RootPanel.get(APTLIST_MAP_INSERTION_ID) != null) {
             RootPanel.get(APTLIST_MAP_INSERTION_ID).add(PropertyMapController.getMapWidget());
             if (RootPanel.get(APTINFO_MAP_INSERTION_ID) != null) {
+                UncaughtHandler.setUnrecoverableErrorHandler(new VistaPortalWicketFragmentUnrecoverableErrorHandler());
                 PropertyMapWidget map = PropertyMapWidget.get();
                 RootPanel.get(APTINFO_MAP_INSERTION_ID).add(map);
                 map.setSize("300px", "300px");
