@@ -18,6 +18,8 @@ import java.util.EnumSet;
 import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.shared.I18nEnum;
 
+import com.propertyvista.misc.VistaTODO;
+
 public enum PaymentType {
 
     Cash,
@@ -43,7 +45,11 @@ public enum PaymentType {
     // group sets:
 
     public static EnumSet<PaymentType> avalableInPortal() {
-        return EnumSet.of(Echeck, CreditCard, Interac);
+        if (VistaTODO.removedForProduction) {
+            return EnumSet.of(Echeck, CreditCard);
+        } else {
+            return EnumSet.of(Echeck, CreditCard, Interac);
+        }
     }
 
     public static EnumSet<PaymentType> avalableInCrm() {
