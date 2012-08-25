@@ -23,6 +23,9 @@ package com.pyx4j.gwt.commons;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.http.client.Response;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.Window.ClosingEvent;
+import com.google.gwt.user.client.Window.ClosingHandler;
 import com.google.gwt.user.client.rpc.IncompatibleRemoteServiceException;
 import com.google.gwt.user.client.rpc.StatusCodeException;
 
@@ -30,6 +33,22 @@ import com.pyx4j.commons.IsWarningException;
 import com.pyx4j.config.shared.ClientVersionMismatchError;
 
 public abstract class DefaultUnrecoverableErrorHandler implements UnrecoverableErrorHandler {
+
+    private ClosingEvent lastClosingEvent;
+
+    protected DefaultUnrecoverableErrorHandler() {
+        Window.addWindowClosingHandler(new ClosingHandler() {
+
+            @Override
+            public void onWindowClosing(ClosingEvent event) {
+                lastClosingEvent = event;
+            }
+        });
+    }
+
+    public boolean isWindowClosing() {
+        return (lastClosingEvent != null) && (lastClosingEvent.getMessage() == null);
+    }
 
     /**
      * Session aware applications can override this function.
@@ -75,6 +94,10 @@ public abstract class DefaultUnrecoverableErrorHandler implements UnrecoverableE
             showReloadApplication();
         } else if (cause instanceof StatusCodeException) {
             int statusCode = ((StatusCodeException) cause).getStatusCode();
+            if (isWindowClosing() && statusCode == 0) {
+                // Ignore RPC errors when page is Closing e.g. navigating to another page in browser
+                return;
+            }
             switch (statusCode) {
             case Response.SC_NOT_FOUND:
                 showReloadApplication();
