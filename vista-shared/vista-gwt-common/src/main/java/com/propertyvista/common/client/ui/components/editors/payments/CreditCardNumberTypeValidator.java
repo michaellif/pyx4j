@@ -39,12 +39,13 @@ public class CreditCardNumberTypeValidator implements EditableValueValidator<Str
 
     @Override
     public ValidationError isValid(CComponent<String, ?> component, String value) {
-        if (creditCardTypeProvider.getCreditCardType() == null
+        if (value == null) {
+            return null; // editing tokenized credit card.
+        } else if (creditCardTypeProvider.getCreditCardType() == null
                 || (!ValidationUtils.isCreditCardNumberIinValid(creditCardTypeProvider.getCreditCardType().iinsPatterns, value))) {
             return new ValidationError(component, i18n.tr("The credit card number doesn't match the credit card type"));
         } else {
             return null;
         }
     }
-
 }
