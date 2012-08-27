@@ -99,7 +99,7 @@ public class PaymentServiceImpl extends ApplicationEntityServiceImpl implements 
         }
 
         if ((PaymentType.CreditCard == payment.paymentMethod().type().getValue())
-                && ("2011".equals(((CreditCardInfo) payment.paymentMethod().details()).number().getValue()))) {
+                && ("2011".equals(((CreditCardInfo) payment.paymentMethod().details()).card().number().getValue()))) {
             // Ok
         } else if (PaymentType.Echeck == payment.paymentMethod().type().getValue()) {
             // Ok for now

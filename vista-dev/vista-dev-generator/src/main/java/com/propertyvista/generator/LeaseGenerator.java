@@ -41,6 +41,7 @@ import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
+import com.propertyvista.domain.util.DomainUtil;
 import com.propertyvista.generator.util.CommonsGenerator;
 import com.propertyvista.generator.util.RandomUtil;
 import com.propertyvista.misc.VistaDevPreloadConfig;
@@ -140,7 +141,8 @@ public class LeaseGenerator extends DataGenerator {
         details.nameOn().setValue(tenant.customer().person().name().getStringView());
         details.bankId().setValue(Integer.toString(RandomUtil.randomInt(999)));
         details.branchTransitNumber().setValue(Integer.toString(RandomUtil.randomInt(99999)));
-        details.accountNo().setValue("000000" + Integer.toString(RandomUtil.randomInt(999999)));
+        details.accountNo().number().setValue(Integer.toString(RandomUtil.randomInt(99999)) + Integer.toString(RandomUtil.randomInt(999999)));
+        details.accountNo().reference().setValue(DomainUtil.last4Numbers(details.accountNo().number().getValue()));
         m.details().set(details);
 
         m.customer().set(tenant.customer());

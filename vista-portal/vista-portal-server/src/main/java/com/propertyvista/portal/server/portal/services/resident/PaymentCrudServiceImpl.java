@@ -83,9 +83,6 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
         dto.unitNumber().set(dto.billingAccount().lease().unit().info().number());
 
         Persistence.service().retrieve(dto.paymentMethod());
-        if (retrieveTraget != RetrieveTraget.Edit) {
-            ServerSideFactory.create(PaymentFacade.class).hidePaymentMethodDetails(dto.paymentMethod());
-        }
 
         Persistence.service().retrieve(dto.paymentMethod().customer());
         Persistence.service().retrieve(dto.leaseParticipant());

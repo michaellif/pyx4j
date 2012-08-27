@@ -105,7 +105,7 @@ public class PadProcessor {
 
         padRecord.bankId().setValue(echeckInfo.bankId().getValue());
         padRecord.branchTransitNumber().setValue(echeckInfo.branchTransitNumber().getValue());
-        padRecord.accountNumber().setValue(echeckInfo.accountNo().getValue());
+        padRecord.accountNumber().setValue(echeckInfo.accountNo().number().getValue());
 
         padRecord.transactionId().setValue(PadTransactionUtils.toCaldeonTransactionId(paymentRecord.id()));
 

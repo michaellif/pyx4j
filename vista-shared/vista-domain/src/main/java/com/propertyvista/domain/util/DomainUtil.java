@@ -38,6 +38,14 @@ public class DomainUtil {
         return value.setScale(2, RoundingMode.HALF_UP);
     }
 
+    public static String last4Numbers(String value) {
+        if (value.length() < 4) {
+            return null;
+        } else {
+            return value.substring(value.length() - 4, value.length());
+        }
+    }
+
     public static ChargeLine createChargeLine(String label, BigDecimal money) {
         ChargeLine cl = EntityFactory.create(ChargeLine.class);
         cl.amount().setValue(money);

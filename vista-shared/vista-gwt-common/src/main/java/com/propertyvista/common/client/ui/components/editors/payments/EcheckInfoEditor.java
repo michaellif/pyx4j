@@ -15,13 +15,20 @@ package com.propertyvista.common.client.ui.components.editors.payments;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
-import com.pyx4j.forms.client.ui.CTextComponent;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
+import com.propertyvista.common.client.ui.components.c.CTokinazedNumberEditor;
+import com.propertyvista.common.client.ui.validators.EcheckAccountNumberValidator;
 import com.propertyvista.domain.payment.EcheckInfo;
+import com.propertyvista.domain.payment.TokenizedAccountNumber;
+import com.propertyvista.domain.util.ValidationUtils;
 
 public class EcheckInfoEditor extends CEntityDecoratableForm<EcheckInfo> {
 
@@ -43,23 +50,35 @@ public class EcheckInfoEditor extends CEntityDecoratableForm<EcheckInfo> {
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().nameOn()), 20).build());
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().bankId()), 3).build());
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().branchTransitNumber()), 5).build());
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().accountNo()), 10).build());
+        panel.setWidget(++row, 0,
+                new DecoratorBuilder(inject(proto().accountNo(), new CTokinazedNumberEditor<TokenizedAccountNumber>(TokenizedAccountNumber.class)), 10).build());
 
         return panel;
     }
 
     @Override
-    protected void onValueSet(boolean populate) {
-        super.onValueSet(populate);
-
-        updateVisibility(getValue());
-    }
-
-    private void updateVisibility(EcheckInfo value) {
-        if (isEditable()) {
-            if (value.accountNo().isNull()) {
-                ((CTextComponent<?, ?>) get(proto().accountNo())).setWatermark("XXXX XXXX XXXX");
+    public void addValidations() {
+        get(proto().accountNo()).addValueValidator(new EcheckAccountNumberValidator());
+        get(proto().branchTransitNumber()).addValueValidator(new EditableValueValidator<String>() {
+            @Override
+            public ValidationError isValid(CComponent<String, ?> component, String value) {
+                if (CommonsStringUtils.isStringSet(value)) {
+                    return ValidationUtils.isBranchTransitNumberValid(value) ? null : new ValidationError(component, i18n
+                            .tr("Number should consist of up to 5 digits"));
+                } else {
+                    return null;
+                }
             }
-        }
+        });
+        get(proto().bankId()).addValueValidator(new EditableValueValidator<String>() {
+            @Override
+            public ValidationError isValid(CComponent<String, ?> component, String value) {
+                if (CommonsStringUtils.isStringSet(value)) {
+                    return ValidationUtils.isBankIdNumberValid(value) ? null : new ValidationError(component, i18n.tr("Number should consist of 3 digits"));
+                } else {
+                    return null;
+                }
+            }
+        });
     }
 }

@@ -33,9 +33,9 @@ import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
 import com.propertyvista.domain.payment.CreditCardInfo;
 import com.propertyvista.domain.payment.EcheckInfo;
 import com.propertyvista.domain.payment.PaymentMethod;
-import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
+import com.propertyvista.domain.util.DomainUtil;
 
 public class PaymentFacadeImpl implements PaymentFacade {
 
@@ -53,21 +53,43 @@ public class PaymentFacadeImpl implements PaymentFacade {
 
     @Override
     public PaymentMethod persistPaymentMethod(Building building, PaymentMethod paymentMethod) {
-
         // if it saved - these flags should be lowered: 
         paymentMethod.isOneTimePayment().setValue(Boolean.FALSE);
         paymentMethod.isDeleted().setValue(Boolean.FALSE);
 
+        switch (paymentMethod.type().getValue()) {
+        case Echeck:
+            EcheckInfo eci = paymentMethod.details().cast();
+            if (!eci.accountNo().newNumberValue().isNull()) {
+                eci.accountNo().number().setValue(eci.accountNo().newNumberValue().getValue());
+            } else {
+                //TODO move to framework
+                // Do merge.                
+                if (paymentMethod.details().id().isNull()) {
+                    throw new Error("Account number is required");
+                }
+                EcheckInfo origValue = Persistence.service().retrieve(EcheckInfo.class, eci.getPrimaryKey());
+                eci.accountNo().number().setValue(origValue.accountNo().number().getValue());
+            }
+            eci.accountNo().reference().setValue(DomainUtil.last4Numbers(eci.accountNo().number().getValue()));
+            break;
+        default:
+            break;
+        }
+
         Persistence.service().merge(paymentMethod);
 
-        // store credit cards
-        if (PaymentType.CreditCard == paymentMethod.type().getValue()) {
+        switch (paymentMethod.type().getValue()) {
+        case CreditCard:
             CreditCardInfo cc = paymentMethod.details().cast();
-            if (!cc.number().isNull()) {
-                cc.numberRefference().setValue(last4Numbers(cc.number().getValue()));
+            if (!cc.card().number().isNull()) {
+                cc.card().reference().setValue(DomainUtil.last4Numbers(cc.card().number().getValue()));
                 CreditCardProcessor.persistToken(building, cc);
                 Persistence.service().merge(paymentMethod);
             }
+            break;
+        default:
+            break;
         }
 
         return paymentMethod;
@@ -89,47 +111,7 @@ public class PaymentFacadeImpl implements PaymentFacade {
         criteria.add(PropertyCriterion.eq(criteria.proto().isDeleted(), Boolean.FALSE));
 
         List<PaymentMethod> methods = Persistence.service().query(criteria);
-        for (PaymentMethod method : methods) {
-            hidePaymentMethodDetails(method);
-        }
         return methods;
-    }
-
-    @Override
-    public PaymentMethod hidePaymentMethodDetails(PaymentMethod method) {
-        if (method.isValueDetached()) {
-            Persistence.service().retrieve(method);
-        }
-
-        switch (method.type().getValue()) {
-        case CreditCard:
-            CreditCardInfo cci = method.details().cast();
-            if (!cci.numberRefference().isNull()) {
-                cci.number().setValue(i18n.tr("XXXX XXXX XXXX {0}", cci.numberRefference().getValue()));
-                cci.securityCode().setValue("XXX");
-            }
-            break;
-
-        case Echeck:
-            EcheckInfo eci = method.details().cast();
-            if (!eci.accountNo().isNull()) {
-                eci.accountNo().setValue(i18n.tr("XXXX XXXX {0}", last4Numbers(eci.accountNo().getValue())));
-            }
-            break;
-
-        default:
-            break;
-        }
-
-        return method;
-    }
-
-    private String last4Numbers(String value) {
-        if (value.length() < 4) {
-            return null;
-        } else {
-            return value.substring(value.length() - 4, value.length());
-        }
     }
 
     @Override

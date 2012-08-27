@@ -19,7 +19,6 @@ import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
-import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.Transient;
@@ -68,13 +67,7 @@ public interface CreditCardInfo extends PaymentDetails {
     @NotNull
     @ToString(index = 1)
     @Caption(name = "Card Number")
-    @MemberColumn(name = "cardNumber")
-    @Transient(logTransient = true)
-    IPrimitive<String> number();
-
-    // Card Number fragment presented to user
-    @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
-    IPrimitive<String> numberRefference();
+    TokenizedCreditCardNumber card();
 
     IPrimitive<String> token();
 

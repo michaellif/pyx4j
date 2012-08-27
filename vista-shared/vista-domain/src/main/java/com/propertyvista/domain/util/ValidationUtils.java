@@ -73,4 +73,19 @@ public class ValidationUtils extends com.pyx4j.commons.ValidationUtils {
         }
     }
 
+    // cheque/e-cheque validation:
+    public static boolean isAccountNumberValid(String num) {
+        num = num.trim().replaceAll("\\s", "");
+        return num.matches("^\\d{1,12}$");
+    }
+
+    public static boolean isBranchTransitNumberValid(String num) {
+        num = num.trim().replaceAll("\\s", "");
+        return num.matches("^\\d{1,5}$");
+    }
+
+    public static boolean isBankIdNumberValid(String num) {
+        num = num.trim().replaceAll("\\s", "");
+        return num.matches("^\\d{3}$");
+    }
 }

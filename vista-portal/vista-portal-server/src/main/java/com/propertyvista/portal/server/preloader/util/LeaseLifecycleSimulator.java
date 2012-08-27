@@ -338,7 +338,7 @@ public class LeaseLifecycleSimulator {
             // create new payment method details:
             CreditCardInfo details = EntityFactory.create(CreditCardInfo.class);
             details.cardType().setValue(CreditCardType.MasterCard);
-            details.numberRefference().setValue(CommonsStringUtils.d00(RandomUtil.randomInt(99)) + CommonsStringUtils.d00(RandomUtil.randomInt(99)));
+            details.card().reference().setValue(CommonsStringUtils.d00(RandomUtil.randomInt(99)) + CommonsStringUtils.d00(RandomUtil.randomInt(99)));
             details.nameOn().setValue(tenant.customer().person().name().getStringView());
             details.expiryDate().setValue(RandomUtil.randomLogicalDate(2012, 2015));
             m.details().set(details);

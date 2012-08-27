@@ -34,8 +34,6 @@ public interface PaymentFacade {
 
     List<PaymentMethod> retrievePaymentMethods(LeaseParticipant participant);
 
-    PaymentMethod hidePaymentMethodDetails(PaymentMethod method);
-
     PaymentRecord persistPayment(PaymentRecord paymentRecord);
 
     PaymentRecord schedulePayment(PaymentRecord paymentId);

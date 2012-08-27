@@ -19,9 +19,10 @@ import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
+import com.propertyvista.domain.payment.TokenizedCreditCardNumber;
 import com.propertyvista.domain.util.ValidationUtils;
 
-public class CreditCardNumberTypeValidator implements EditableValueValidator<String> {
+public class CreditCardNumberTypeValidator implements EditableValueValidator<TokenizedCreditCardNumber> {
 
     private static final I18n i18n = I18n.get(CreditCardNumberTypeValidator.class);
 
@@ -38,11 +39,11 @@ public class CreditCardNumberTypeValidator implements EditableValueValidator<Str
     }
 
     @Override
-    public ValidationError isValid(CComponent<String, ?> component, String value) {
+    public ValidationError isValid(CComponent<TokenizedCreditCardNumber, ?> component, TokenizedCreditCardNumber value) {
         if (value == null) {
             return null; // editing tokenized credit card.
         } else if (creditCardTypeProvider.getCreditCardType() == null
-                || (!ValidationUtils.isCreditCardNumberIinValid(creditCardTypeProvider.getCreditCardType().iinsPatterns, value))) {
+                || (!ValidationUtils.isCreditCardNumberIinValid(creditCardTypeProvider.getCreditCardType().iinsPatterns, value.newNumberValue().getValue()))) {
             return new ValidationError(component, i18n.tr("The credit card number doesn't match the credit card type"));
         } else {
             return null;

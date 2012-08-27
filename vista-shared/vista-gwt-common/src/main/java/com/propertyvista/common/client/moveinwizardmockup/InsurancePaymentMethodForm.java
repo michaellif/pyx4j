@@ -166,7 +166,7 @@ public class InsurancePaymentMethodForm extends CEntityDecoratableForm<Insurance
             @Override
             public IsWidget createContent() {
                 FlowPanel panel = new FlowPanel();
-                addNotMandatory(panel, proto().number());
+                addNotMandatory(panel, proto().card());
                 addNotMandatory(panel, proto().expiryDate());
                 addNotMandatory(panel, proto().nameOn());
                 addNotMandatory(panel, proto().securityCode());

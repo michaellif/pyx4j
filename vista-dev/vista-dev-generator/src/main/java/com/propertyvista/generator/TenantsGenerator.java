@@ -18,7 +18,6 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Vector;
 
-
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -69,7 +68,7 @@ public class TenantsGenerator {
             // create new payment method details:
             CreditCardInfo details = EntityFactory.create(CreditCardInfo.class);
             details.cardType().setValue(CreditCardType.Visa);
-            details.numberRefference().setValue(CommonsStringUtils.d00(RandomUtil.randomInt(99)) + CommonsStringUtils.d00(RandomUtil.randomInt(99)));
+            details.card().reference().setValue(CommonsStringUtils.d00(RandomUtil.randomInt(99)) + CommonsStringUtils.d00(RandomUtil.randomInt(99)));
             details.nameOn().setValue(customer.person().name().getStringView());
             details.expiryDate().setValue(RandomUtil.randomLogicalDate(2012, 2015));
             m.details().set(details);

@@ -31,11 +31,13 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
+import com.propertyvista.common.client.ui.components.c.CTokinazedNumberEditor;
 import com.propertyvista.common.client.ui.components.editors.payments.CreditCardNumberTypeValidator.CreditCardTypeProvider;
 import com.propertyvista.common.client.ui.validators.CreditCardNumberValidator;
 import com.propertyvista.common.client.ui.validators.FutureDateValidator;
 import com.propertyvista.domain.payment.CreditCardInfo;
 import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
+import com.propertyvista.domain.payment.TokenizedCreditCardNumber;
 
 public class CreditCardInfoEditor extends CEntityDecoratableForm<CreditCardInfo> {
 
@@ -57,7 +59,9 @@ public class CreditCardInfoEditor extends CEntityDecoratableForm<CreditCardInfo>
         CMonthYearPicker monthYearPicker = new CMonthYearPicker(false);
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().nameOn()), 20).build());
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().cardType()), 15).build());
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().number()), 15).build());
+        panel.setWidget(++row, 0,
+                new DecoratorBuilder(inject(proto().card(), new CTokinazedNumberEditor<TokenizedCreditCardNumber>(TokenizedCreditCardNumber.class)), 15)
+                        .build());
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().expiryDate(), monthYearPicker), 15).build());
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().securityCode()), 3).build());
 
@@ -77,13 +81,8 @@ public class CreditCardInfoEditor extends CEntityDecoratableForm<CreditCardInfo>
 
     private void updateVisibility(CreditCardInfo value) {
         if (isEditable()) {
-            get(proto().number()).setMandatory(false);
+            get(proto().card()).setMandatory(false);
             get(proto().securityCode()).setMandatory(false);
-            if (value.numberRefference().isNull()) {
-                ((CTextComponent<?, ?>) get(proto().number())).setWatermark("XXXX XXXX XXXX XXXX");
-            } else {
-                ((CTextComponent<?, ?>) get(proto().number())).setWatermark(i18n.tr("XXXX XXXX XXXX {0}", value.numberRefference().getValue()));
-            }
             ((CTextComponent<?, ?>) get(proto().securityCode())).setWatermark("XXX");
         }
     }
@@ -99,22 +98,22 @@ public class CreditCardInfoEditor extends CEntityDecoratableForm<CreditCardInfo>
             }
         });
 
-        get(proto().number()).addValueChangeHandler(new ValueChangeHandler<String>() {
+        get(proto().card()).addValueChangeHandler(new ValueChangeHandler<TokenizedCreditCardNumber>() {
             @Override
-            public void onValueChange(ValueChangeEvent<String> event) {
-                get(proto().number()).setMandatory(true);
+            public void onValueChange(ValueChangeEvent<TokenizedCreditCardNumber> event) {
+                get(proto().card()).setMandatory(true);
                 get(proto().securityCode()).setMandatory(true);
             }
         });
 
-        get(proto().number()).addValueValidator(new CreditCardNumberValidator());
-        get(proto().number()).addValueValidator(new CreditCardNumberTypeValidator(new CreditCardTypeProvider() {
+        get(proto().card()).addValueValidator(new CreditCardNumberValidator());
+        get(proto().card()).addValueValidator(new CreditCardNumberTypeValidator(new CreditCardTypeProvider() {
             @Override
             public CreditCardType getCreditCardType() {
                 return (CreditCardInfoEditor.this.getValue() == null ? null : CreditCardInfoEditor.this.getValue().cardType().getValue());
             }
         }));
-        get(proto().cardType()).addValueChangeHandler(new RevalidationTrigger<CreditCardType>(get(proto().number())));
+        get(proto().cardType()).addValueChangeHandler(new RevalidationTrigger<CreditCardType>(get(proto().card())));
 
         get(proto().expiryDate()).addValueValidator(new FutureDateValidator());
     }

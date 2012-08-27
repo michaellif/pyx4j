@@ -23,7 +23,7 @@ import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
-@ToStringFormat("{0}: {2}: {1}")
+@ToStringFormat("{1}-{0}: {2}")
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
 @Table(prefix = "payment")
 @DiscriminatorValue("EcheckInfo")
@@ -45,8 +45,7 @@ public interface EcheckInfo extends PaymentDetails {
     IPrimitive<String> branchTransitNumber();
 
     @NotNull
-    @Length(12)
     @ToString(index = 2)
     @Caption(name = "Account Number")
-    IPrimitive<String> accountNo();
+    TokenizedAccountNumber accountNo();
 }

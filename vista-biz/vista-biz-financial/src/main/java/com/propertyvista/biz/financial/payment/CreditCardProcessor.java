@@ -74,7 +74,7 @@ class CreditCardProcessor {
             request.paymentInstrument().set(token);
         } else {
             CCInformation ccInfo = EntityFactory.create(CCInformation.class);
-            ccInfo.creditCardNumber().setValue(cc.number().getValue());
+            ccInfo.creditCardNumber().setValue(cc.card().number().getValue());
             ccInfo.creditCardExpiryDate().setValue(cc.expiryDate().getValue());
             ccInfo.securityCode().setValue(cc.securityCode().getValue());
 
@@ -111,7 +111,7 @@ class CreditCardProcessor {
         merchant.terminalID().setValue(account.merchantTerminalId().getValue());
 
         CCInformation ccInfo = EntityFactory.create(CCInformation.class);
-        ccInfo.creditCardNumber().setValue(cc.number().getValue());
+        ccInfo.creditCardNumber().setValue(cc.card().number().getValue());
         ccInfo.creditCardExpiryDate().setValue(cc.expiryDate().getValue());
         ccInfo.securityCode().setValue(cc.securityCode().getValue());
 
