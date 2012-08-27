@@ -16,6 +16,7 @@ package com.propertyvista.domain.property.asset.unit;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
@@ -65,6 +66,7 @@ public interface AptUnitInfo extends IEntity {
 
     // ---- Physical: ----------------
 
+    @Format("#0.000")
     IPrimitive<Double> area();
 
     IPrimitive<AreaMeasurementUnit> areaUnits();

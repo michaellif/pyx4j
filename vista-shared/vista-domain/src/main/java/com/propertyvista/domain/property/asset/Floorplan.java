@@ -19,6 +19,7 @@ import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.OrderBy;
@@ -70,6 +71,11 @@ public interface Floorplan extends PolicyNode {
 
     // Separate WC
     IPrimitive<Integer> halfBath();
+
+    @Format("#0.000")
+    IPrimitive<Double> area();
+
+    IPrimitive<AreaMeasurementUnit> areaUnits();
 
     @Detached
     @Owned
