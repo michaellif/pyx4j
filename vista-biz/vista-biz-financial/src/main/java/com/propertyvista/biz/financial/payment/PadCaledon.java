@@ -203,8 +203,8 @@ public class PadCaledon {
                     fileCreationNumberFormat(useSimulator, sequence.number().getValue())));
             PadFile padFile = Persistence.service().retrieve(previousFileCriteria);
             if (padFile != null) {
-                if (!EnumSet.of(PadFile.PadFileStatus.Acknowledged, PadFile.PadFileStatus.Procesed, PadFile.PadFileStatus.Canceled).contains(
-                        padFile.status().getValue())) {
+                if (!EnumSet.of(PadFile.PadFileStatus.Acknowledged, PadFile.PadFileStatus.AcknowledgeProcesed, PadFile.PadFileStatus.Procesed,
+                        PadFile.PadFileStatus.Canceled).contains(padFile.status().getValue())) {
                     throw new Error("Can't send PAD file until previous file is processed");
                 }
 

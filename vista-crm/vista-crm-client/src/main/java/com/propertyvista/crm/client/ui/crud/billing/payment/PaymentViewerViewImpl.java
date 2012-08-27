@@ -108,7 +108,7 @@ public class PaymentViewerViewImpl extends CrmViewerViewImplBase<PaymentRecordDT
             clearAction.setVisible(value.paymentStatus().getValue() == PaymentStatus.Received);
             rejectAction.setVisible(value.paymentStatus().getValue() == PaymentStatus.Received);
             break;
-        case EFT:
+        case Echeck:
         case CreditCard:
             if (!value.targetDate().isNull()) {
                 scheduleAction.setVisible(value.paymentStatus().getValue() == PaymentStatus.Submitted);

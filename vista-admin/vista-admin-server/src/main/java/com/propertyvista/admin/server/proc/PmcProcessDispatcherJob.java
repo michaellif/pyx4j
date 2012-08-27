@@ -107,7 +107,6 @@ public class PmcProcessDispatcherJob implements Job {
         } else {
             run = EntityFactory.create(Run.class);
         }
-        boolean wasSleeping = RunStatus.Sleeping.equals(run.status().getValue());
         run.started().setValue(new Date());
         run.status().setValue(RunStatus.Running);
         run.trigger().set(trigger);
@@ -118,16 +117,20 @@ public class PmcProcessDispatcherJob implements Job {
 
         Persistence.service().persist(run);
         Persistence.service().commit();
-        if (!wasSleeping) {
-            createPopulation(run);
-        }
+
         run.runData().setAttachLevel(AttachLevel.Detached);
-        try {
-            executeRun(run);
-        } catch (Throwable e) {
-            log.error("job execution error", e);
-            run.status().setValue(RunStatus.Failed);
+
+        PmcProcess pmcProcess = startProcess(run);
+
+        if (pmcProcess != null) {
+            try {
+                executeRun(run, pmcProcess);
+            } catch (Throwable e) {
+                log.error("job execution error", e);
+                run.status().setValue(RunStatus.Failed);
+            }
         }
+
         Persistence.service().persist(run);
         Persistence.service().commit();
 
@@ -135,9 +138,26 @@ public class PmcProcessDispatcherJob implements Job {
             // Reschedule run automatically
             JobUtils.schedulSleepRetry(trigger, scheduledFireTime);
         }
-
         JobNotifications.notify(trigger, run);
+    }
 
+    private PmcProcess startProcess(Run run) {
+        PmcProcess pmcProcess = PmcProcessFactory.createPmcProcess(run.trigger().triggerType().getValue());
+        PmcProcessContext context = new PmcProcessContext(run.stats(), run.forDate().getValue());
+        try {
+            if (!pmcProcess.start(context)) {
+                run.status().setValue(RunStatus.Sleeping);
+                return null;
+            }
+        } catch (Throwable e) {
+            log.error("pmcProcess execution error", e);
+            run.errorMessage().setValue(e.getMessage());
+            run.status().setValue(RunStatus.Failed);
+            return null;
+        }
+        Persistence.service().persist(run.stats());
+        createPopulation(run);
+        return pmcProcess;
     }
 
     private void createPopulation(Run run) {
@@ -182,23 +202,9 @@ public class PmcProcessDispatcherJob implements Job {
         Persistence.service().commit();
     }
 
-    private void executeRun(Run run) {
-        PmcProcess pmcProcess = PmcProcessFactory.createPmcProcess(run.trigger().triggerType().getValue());
+    private void executeRun(Run run, PmcProcess pmcProcess) {
         long startTimeNano = System.nanoTime();
         PmcProcessContext context = new PmcProcessContext(run.stats(), run.forDate().getValue());
-        try {
-            if (!pmcProcess.start(context)) {
-                run.status().setValue(RunStatus.Sleeping);
-                return;
-            }
-        } catch (Throwable e) {
-            log.error("pmcProcess execution error", e);
-            run.errorMessage().setValue(e.getMessage());
-            run.status().setValue(RunStatus.Failed);
-            return;
-        }
-
-        Persistence.service().persist(run.stats());
         ExecutorService executorService = Executors.newSingleThreadExecutor();
 
         try {

@@ -39,7 +39,7 @@ public class PadReciveReconciliationProcess implements PmcProcess {
 
     @Override
     public void complete(PmcProcessContext context) {
-        ServerSideFactory.create(PaymentProcessFacade.class).updatePadFilesProcessingStatus();
+        ServerSideFactory.create(PaymentProcessFacade.class).updatePadFileReconciliationProcessingStatus();
     }
 
 }

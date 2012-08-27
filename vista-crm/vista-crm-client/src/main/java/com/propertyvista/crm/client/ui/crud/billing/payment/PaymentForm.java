@@ -180,6 +180,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
         get(proto().paymentStatus()).setViewable(true);
         get(proto().createdDate()).setViewable(true);
         get(proto().receivedDate()).setViewable(true);
+        get(proto().finalizeDate()).setViewable(true);
         get(proto().lastStatusChangeDate()).setViewable(true);
 
         get(proto().addThisPaymentMethodToProfile()).setVisible(false);

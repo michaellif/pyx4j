@@ -67,6 +67,7 @@ public class PadSimReconciliationFileWriter implements Closeable {
 
         writer.append(padBatch.netAmount().getStringView()).append(",");
         writer.append(padBatch.adjustments().getStringView()).append(",");
+        writer.append(padBatch.previousBalance().getStringView()).append(",");
         writer.append(padBatch.merchantBalance().getStringView()).append(",");
         writer.append(padBatch.fundsReleased().getStringView()).append(",");
 

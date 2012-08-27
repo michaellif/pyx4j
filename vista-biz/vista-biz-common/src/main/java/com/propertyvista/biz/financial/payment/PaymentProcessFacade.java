@@ -32,11 +32,13 @@ public interface PaymentProcessFacade {
 
     void processAcknowledgement(StatisticsRecord dynamicStatisticsRecord, PadFile padFile);
 
+    void updatePadFileAcknowledProcessingStatus(PadFile padFileId);
+
     PadReconciliationFile recivePadReconciliation();
 
     void processPadReconciliation(StatisticsRecord dynamicStatisticsRecord, PadReconciliationFile reconciliationFile);
 
-    void updatePadFilesProcessingStatus();
+    void updatePadFileReconciliationProcessingStatus();
 
     void createPreauthorisedPayments(StatisticsRecord dynamicStatisticsRecord, LogicalDate dueDate);
 

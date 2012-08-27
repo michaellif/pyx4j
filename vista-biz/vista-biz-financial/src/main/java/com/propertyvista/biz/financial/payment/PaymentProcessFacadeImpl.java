@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.concurrent.Callable;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.Persistence;
@@ -150,9 +151,27 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
     }
 
     @Override
-    public void updatePadFilesProcessingStatus() {
+    public void updatePadFileAcknowledProcessingStatus(PadFile padFileId) {
+        PadFile padFile = Persistence.service().retrieve(PadFile.class, padFileId.getPrimaryKey());
+        if (padFile.status().getValue() != PadFile.PadFileStatus.Acknowledged) {
+            throw new IllegalArgumentException(SimpleMessageFormat.format("Invalid PadFile {0} status {1}", padFile.id(), padFile.status()));
+        }
+        padFile.status().setValue(PadFile.PadFileStatus.AcknowledgeProcesed);
+
+        EntityQueryCriteria<PadDebitRecord> criteria = EntityQueryCriteria.create(PadDebitRecord.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().padBatch().padFile(), padFile));
+        criteria.add(PropertyCriterion.eq(criteria.proto().processed(), Boolean.FALSE));
+        int unprocessedRecords = Persistence.service().count(criteria);
+        if (unprocessedRecords == 0) {
+            padFile.status().setValue(PadFile.PadFileStatus.Procesed);
+        }
+        Persistence.service().persist(padFile);
+    }
+
+    @Override
+    public void updatePadFileReconciliationProcessingStatus() {
         EntityQueryCriteria<PadFile> filesCriteria = EntityQueryCriteria.create(PadFile.class);
-        filesCriteria.add(PropertyCriterion.eq(filesCriteria.proto().status(), PadFile.PadFileStatus.Acknowledged));
+        filesCriteria.add(PropertyCriterion.eq(filesCriteria.proto().status(), PadFile.PadFileStatus.AcknowledgeProcesed));
         for (PadFile padFile : Persistence.service().query(filesCriteria)) {
             EntityQueryCriteria<PadDebitRecord> criteria = EntityQueryCriteria.create(PadDebitRecord.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().padBatch().padFile(), padFile));

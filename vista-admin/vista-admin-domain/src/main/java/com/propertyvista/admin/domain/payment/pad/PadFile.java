@@ -56,6 +56,8 @@ public interface PadFile extends IEntity {
 
         Acknowledged,
 
+        AcknowledgeProcesed,
+
         Procesed;
 
     };

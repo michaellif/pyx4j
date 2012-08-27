@@ -82,6 +82,8 @@ public class PadBatchForm extends AdminEntityForm<PadSimBatch> {
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().netAmount()), 10).build());
         content.setWidget(row, 1, new DecoratorBuilder(inject(proto().adjustments()), 10).build());
 
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().previousBalance()), 10).build());
+
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().merchantBalance()), 10).build());
         content.setWidget(row, 1, new DecoratorBuilder(inject(proto().fundsReleased()), 10).build());
 

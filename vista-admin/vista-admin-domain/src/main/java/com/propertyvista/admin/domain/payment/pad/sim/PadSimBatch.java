@@ -109,6 +109,8 @@ public interface PadSimBatch extends IEntity {
 
     IPrimitive<String> adjustments();
 
+    IPrimitive<String> previousBalance();
+
     IPrimitive<String> merchantBalance();
 
     IPrimitive<String> fundsReleased();
