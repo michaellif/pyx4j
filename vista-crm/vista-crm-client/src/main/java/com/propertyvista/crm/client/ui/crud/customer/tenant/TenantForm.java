@@ -57,7 +57,7 @@ public class TenantForm extends CrmEntityForm<TenantDTO> {
         Tab tab = addTab(createDetailsTab(i18n.tr("Details")));
         selectTab(tab);
 
-        addTab(createContactsTab(i18n.tr("Contacts")));
+        addTab(createContactsTab(i18n.tr("Emergency Contacts")));
 
         tab = addTab(isEditable() ? new HTML() : ((TenantViewerView) getParentView()).getScreeningListerView().asWidget(), i18n.tr("Screening"));
         setTabEnabled(tab, !isEditable());
