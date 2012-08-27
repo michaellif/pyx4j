@@ -439,8 +439,8 @@ public class CrmSiteMap implements SiteMap {
 
             }
 
-            @PlaceProperties(caption = "Lease Billing")
-            @NavigationItem(navigLabel = "Lease Billing")
+            @PlaceProperties(caption = "Late/NSF Fee Setup")
+            @NavigationItem(navigLabel = "Late/NSF Fee Setup")
             public static class LeaseBilling extends CrmCrudAppPlace {
 
             }
