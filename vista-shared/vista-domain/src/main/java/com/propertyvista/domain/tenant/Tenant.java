@@ -48,6 +48,7 @@ public interface Tenant extends LeaseParticipant {
     /**
      * Tenant's payment share:
      */
+    @Caption(name = "Rent Percentage")
     @Editor(type = EditorType.percentage)
     IPrimitive<BigDecimal> percentage();
 

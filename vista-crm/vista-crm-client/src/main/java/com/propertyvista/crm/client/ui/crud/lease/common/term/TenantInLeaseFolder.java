@@ -265,15 +265,5 @@ public class TenantInLeaseFolder extends LeaseParticipantFolder<Tenant> {
                 combo.refreshOptions();
             }
         }
-
-// TODO : implement percent recalculation logic         
-//        @Override
-//        protected void propagateValue(Tenant_2 entity, boolean fireEvent, boolean populate) {
-//            super.propagateValue(entity, fireEvent, populate);
-//            if ((getValue().role().getValue() == Role.Applicant)) {
-//                get(proto().percentage()).setEditable(false);
-//                get(proto().percentage()).setViewable(true);
-//            }
-//        }
     }
 }

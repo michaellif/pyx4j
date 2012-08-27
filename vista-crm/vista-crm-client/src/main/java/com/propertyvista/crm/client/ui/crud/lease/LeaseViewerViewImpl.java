@@ -161,7 +161,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
         });
         addHeaderToolbarItem(cancelEvict.asWidget());
 
-        activate = new Button(i18n.tr("Activate"), new ClickHandler() {
+        activate = new Button(i18n.tr("Activate Lease"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 ((LeaseViewerView.Presenter) getPresenter()).activate();
