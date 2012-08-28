@@ -51,6 +51,7 @@ import com.propertyvista.admin.rpc.services.scheduler.TriggerCrudService;
 import com.propertyvista.admin.rpc.services.sim.PadSimBatchCrudService;
 import com.propertyvista.admin.rpc.services.sim.PadSimFileCrudService;
 import com.propertyvista.admin.rpc.services.sim.SimulatedDataPreloadService;
+import com.propertyvista.admin.rpc.services.version.VistaTermsVersionService;
 import com.propertyvista.domain.security.AdminUser;
 import com.propertyvista.domain.security.VistaAdminBehavior;
 import com.propertyvista.domain.security.VistaBasicBehavior;
@@ -99,8 +100,11 @@ public class VistaAdminAccessControlList extends ServletContainerAclBuilder {
         grant(VistaAdminBehavior.SystemAdmin, new EntityPermission(PadSimBatch.class, EntityPermission.ALL));
 
         grant(VistaAdminBehavior.SystemAdmin, new IServiceExecutePermission(VistaTermsCrudService.class));
-        grant(VistaAdminBehavior.SystemAdmin, new EntityPermission(LegalDocument.class, EntityPermission.ALL));
+        grant(VistaAdminBehavior.SystemAdmin, new IServiceExecutePermission(VistaTermsVersionService.class));
+
         grant(VistaAdminBehavior.SystemAdmin, new EntityPermission(VistaTerms.class, EntityPermission.ALL));
+        grant(VistaAdminBehavior.SystemAdmin, new EntityPermission(VistaTerms.VistaTermsV.class, EntityPermission.ALL));
+        grant(VistaAdminBehavior.SystemAdmin, new EntityPermission(LegalDocument.class, EntityPermission.ALL));
 
         if (com.pyx4j.config.shared.ApplicationMode.isDevelopment()) {
             grant(VistaAdminBehavior.SystemAdmin, new IServiceExecutePermission(SimulatedDataPreloadService.class));

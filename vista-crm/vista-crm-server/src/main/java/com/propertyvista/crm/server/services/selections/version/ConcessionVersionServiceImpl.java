@@ -15,6 +15,7 @@ package com.propertyvista.crm.server.services.selections.version;
 
 import com.propertyvista.crm.rpc.services.selections.version.ConcessionVersionService;
 import com.propertyvista.domain.financial.offering.Concession;
+import com.propertyvista.server.versioning.AbstractVistaVersionDataListServiceImpl;
 
 public class ConcessionVersionServiceImpl extends AbstractVistaVersionDataListServiceImpl<Concession.ConcessionV> implements ConcessionVersionService {
 

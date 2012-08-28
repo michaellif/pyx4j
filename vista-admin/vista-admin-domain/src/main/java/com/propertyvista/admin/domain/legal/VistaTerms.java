@@ -16,6 +16,7 @@ package com.propertyvista.admin.domain.legal;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.IVersionData;
 import com.pyx4j.entity.shared.IVersionedEntity;
 
@@ -25,6 +26,10 @@ import com.propertyvista.domain.VistaNamespace;
 @Table(namespace = VistaNamespace.adminNamespace)
 public interface VistaTerms extends IVersionedEntity<VistaTermsV> {
 
+    @Deprecated
+    IPrimitive<Integer> x(); // just workaround!!! 
+
+    @Table(namespace = VistaNamespace.adminNamespace)
     public interface VistaTermsV extends IVersionData<VistaTerms> {
         @Owned
         IList<LegalDocument> document();

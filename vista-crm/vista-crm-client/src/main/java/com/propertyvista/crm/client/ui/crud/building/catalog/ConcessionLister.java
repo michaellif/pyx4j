@@ -18,7 +18,7 @@ import com.pyx4j.entity.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.entity.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.entity.shared.IEntity;
 
-import com.propertyvista.common.client.ui.components.VersionedLister;
+import com.propertyvista.common.client.ui.components.versioning.VersionedLister;
 import com.propertyvista.domain.financial.offering.Concession;
 
 public class ConcessionLister extends VersionedLister<Concession> {

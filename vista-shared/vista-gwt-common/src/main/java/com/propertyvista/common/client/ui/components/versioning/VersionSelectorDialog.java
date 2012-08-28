@@ -11,7 +11,7 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.components.boxes;
+package com.propertyvista.common.client.ui.components.versioning;
 
 import java.util.Arrays;
 import java.util.Collections;

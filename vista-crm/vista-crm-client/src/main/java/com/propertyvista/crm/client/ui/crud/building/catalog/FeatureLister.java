@@ -20,7 +20,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
 
-import com.propertyvista.common.client.ui.components.VersionedLister;
+import com.propertyvista.common.client.ui.components.versioning.VersionedLister;
 import com.propertyvista.domain.financial.offering.Feature;
 
 public class FeatureLister extends VersionedLister<Feature> {

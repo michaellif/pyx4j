@@ -32,7 +32,7 @@ import com.pyx4j.site.client.ui.crud.form.ViewerViewImplBase;
 import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.widgets.client.Button;
 
-import com.propertyvista.crm.client.ui.components.boxes.VersionSelectorDialog;
+import com.propertyvista.common.client.ui.components.versioning.VersionSelectorDialog;
 import com.propertyvista.crm.rpc.services.breadcrumbs.BreadcrumbsService;
 
 public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase<E> {
@@ -110,12 +110,8 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
     @Override
     public void populate(E value) {
         super.populate(value);
+
         String caption = (defaultCaption + " " + value.getStringView());
-
-        if (editButton != null) {
-            editButton.setEnabled(super.getPresenter().canEdit());
-        }
-
         if (selectVersion != null) {
             if (((IVersionedEntity<?>) value).version().versionNumber().isNull()) {
                 caption = caption + " (" + ((IVersionedEntity<?>) value).version().versionNumber().getStringView() + ")";
@@ -123,6 +119,11 @@ public class CrmViewerViewImplBase<E extends IEntity> extends ViewerViewImplBase
                 caption = caption + ", " + i18n.tr("version") + " #" + ((IVersionedEntity<?>) value).version().versionNumber().getStringView() + " ("
                         + ((IVersionedEntity<?>) value).version().fromDate().getStringView() + ")";
             }
+        }
+        setCaption(caption);
+
+        if (editButton != null) {
+            editButton.setEnabled(super.getPresenter().canEdit());
         }
 
         if (finalizeButton != null) {

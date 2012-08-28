@@ -13,14 +13,18 @@
  */
 package com.propertyvista.admin.client.ui.crud.legal;
 
+import com.google.gwt.core.client.GWT;
+
 import com.propertyvista.admin.client.ui.crud.AdminViewerViewImplBase;
 import com.propertyvista.admin.domain.legal.VistaTerms;
 import com.propertyvista.admin.rpc.AdminSiteMap;
+import com.propertyvista.admin.rpc.services.version.VistaTermsVersionService;
 
 public class VistaTermsViewerViewImpl extends AdminViewerViewImplBase<VistaTerms> implements VistaTermsViewerView {
 
     public VistaTermsViewerViewImpl() {
         super(AdminSiteMap.Legal.Terms.class);
+        enableVersioning(VistaTerms.VistaTermsV.class, GWT.<VistaTermsVersionService> create(VistaTermsVersionService.class));
 
         setForm(new VistaTermsForm(true));
     }

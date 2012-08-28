@@ -1,5 +1,5 @@
 /*
- * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
+ * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
  * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
  * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
@@ -7,20 +7,20 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-05-21
- * @author vlads
+ * Created on 2012-08-28
+ * @author VladL
  * @version $Id$
  */
-package com.propertyvista.crm.server.services.selections.version;
+package com.propertyvista.admin.server.services.version;
 
-import com.propertyvista.crm.rpc.services.selections.version.LeaseTermVersionService;
-import com.propertyvista.domain.tenant.lease.LeaseTerm;
+import com.propertyvista.admin.domain.legal.VistaTerms;
+import com.propertyvista.admin.rpc.services.version.VistaTermsVersionService;
 import com.propertyvista.server.versioning.AbstractVistaVersionDataListServiceImpl;
 
-public class LeaseTermVersionServiceImpl extends AbstractVistaVersionDataListServiceImpl<LeaseTerm.LeaseTermV> implements LeaseTermVersionService {
+public class VistaTermsVersionServiceImpl extends AbstractVistaVersionDataListServiceImpl<VistaTerms.VistaTermsV> implements VistaTermsVersionService {
 
-    public LeaseTermVersionServiceImpl() {
-        super(LeaseTerm.LeaseTermV.class);
+    public VistaTermsVersionServiceImpl() {
+        super(VistaTerms.VistaTermsV.class);
     }
 
     @Override
