@@ -207,16 +207,20 @@ public class CComboBox<E> extends CFocusComponent<E, NComboBox<E>> implements Ha
     }
 
     @Override
-    public void setValueByString(final String name) {
+    public void setValueByString(String name) {
+        setValueByString(name, true, false);
+    }
+
+    public void setValueByString(final String name, final boolean fireEvent, final boolean populate) {
         if (name == null && !isMandatory()) {
-            setValue(null);
+            setValue(null, fireEvent, populate);
         } else {
             retriveOptions(new AsyncOptionsReadyCallback<E>() {
                 @Override
                 public void onOptionsReady(List<E> opt) {
                     for (E o : getOptions()) {
                         if (getItemName(o).equals(name)) {
-                            setValue(o);
+                            setValue(o, fireEvent, populate);
                             break;
                         }
                     }
@@ -224,5 +228,4 @@ public class CComboBox<E> extends CFocusComponent<E, NComboBox<E>> implements Ha
             });
         }
     }
-
 }
