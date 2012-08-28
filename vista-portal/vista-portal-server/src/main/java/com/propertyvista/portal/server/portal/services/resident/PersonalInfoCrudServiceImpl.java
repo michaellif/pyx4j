@@ -36,44 +36,42 @@ public class PersonalInfoCrudServiceImpl implements PersonalInfoCrudService {
 
     @Override
     public void retrieve(AsyncCallback<ResidentDTO> callback, Key entityId, RetrieveTraget retrieveTraget) {
-        try {
-            CustomerUser currentUser = TenantAppContext.getCurrentUser();
-            // find associated tenant entry
-            EntityQueryCriteria<Customer> criteria = EntityQueryCriteria.create(Customer.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().user(), currentUser));
-            Customer tenant = Persistence.service().retrieve(criteria);
-            Persistence.service().retrieve(tenant.emergencyContacts());
-            // build dto
-            ResidentDTO dto = EntityFactory.create(ResidentDTO.class);
-            dto.setValue(tenant.person().getValue());
-            dto.emergencyContacts().addAll(tenant.emergencyContacts());
-            // add current address if any
-            EntityQueryCriteria<PersonScreening> critAddr = EntityQueryCriteria.create(PersonScreening.class);
-            critAddr.add(PropertyCriterion.eq(critAddr.proto().screene(), tenant));
-            List<PersonScreening> result = Persistence.service().query(critAddr);
-            if (result.size() > 0) {
-                dto.currentAddress().set(result.get(0).currentAddress());
-            }
-            callback.onSuccess(dto);
-        } catch (Exception e) {
-            callback.onFailure(new Throwable("Operation failed. No data found."));
+        CustomerUser currentUser = TenantAppContext.getCurrentUser();
+        // find associated tenant entry
+        EntityQueryCriteria<Customer> criteria = EntityQueryCriteria.create(Customer.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().user(), currentUser));
+        Customer tenant = Persistence.service().retrieve(criteria);
+        Persistence.service().retrieve(tenant.emergencyContacts());
+        // build dto
+        ResidentDTO dto = EntityFactory.create(ResidentDTO.class);
+        dto.setValue(tenant.person().getValue());
+        dto.emergencyContacts().addAll(tenant.emergencyContacts());
+        // add current address if any
+        EntityQueryCriteria<PersonScreening> critAddr = EntityQueryCriteria.create(PersonScreening.class);
+        critAddr.add(PropertyCriterion.eq(critAddr.proto().screene(), tenant));
+        List<PersonScreening> result = Persistence.service().query(critAddr);
+        if (result.size() > 0) {
+            dto.currentAddress().set(result.get(0).currentAddress());
         }
+
+        callback.onSuccess(dto);
     }
 
     @Override
     public void save(AsyncCallback<Key> callback, ResidentDTO dto) {
-        try {
-            CustomerUser currentUser = TenantAppContext.getCurrentUser();
-            EntityQueryCriteria<Customer> criteria = EntityQueryCriteria.create(Customer.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().user(), currentUser));
-            Customer tenant = Persistence.service().retrieve(criteria);
-            tenant.person().set(dto);
-            tenant.emergencyContacts().set(dto.emergencyContacts());
-            Persistence.service().persist(tenant);
-            Persistence.service().commit();
-        } catch (Exception e) {
-            callback.onFailure(new Throwable("Operation failed. No data found."));
-        }
+        CustomerUser currentUser = TenantAppContext.getCurrentUser();
+        EntityQueryCriteria<Customer> criteria = EntityQueryCriteria.create(Customer.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().user(), currentUser));
+        Customer tenant = Persistence.service().retrieve(criteria);
+
+        tenant.person().set(dto.cast());
+        tenant.emergencyContacts().clear();
+        tenant.emergencyContacts().addAll(dto.emergencyContacts());
+
+        Persistence.service().persist(tenant);
+        Persistence.service().commit();
+
+        callback.onSuccess(tenant.getPrimaryKey());
     }
 
     @Override
@@ -90,5 +88,4 @@ public class PersonalInfoCrudServiceImpl implements PersonalInfoCrudService {
     public void delete(AsyncCallback<Boolean> callback, Key entityId) {
         throw new UnsupportedOperationException();
     }
-
 }
