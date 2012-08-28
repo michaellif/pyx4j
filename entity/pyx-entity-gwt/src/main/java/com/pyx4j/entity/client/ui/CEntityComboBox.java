@@ -284,9 +284,14 @@ public class CEntityComboBox<E extends IEntity> extends CComboBox<E> implements 
     }
 
     @Override
-    public void setValueByString(final String name) {
+    public void setValueByString(String name) {
+        setValueByString(name, true, false);
+    }
+
+    @Override
+    public void setValueByString(final String name, final boolean fireEvent, final boolean populate) {
         if (name == null && !isMandatory()) {
-            setValue(null);
+            setValue(null, fireEvent, populate);
         } else if (isOptionsLoaded()) {
             for (E o : getOptions()) {
                 if (getItemName(o).equals(name)) {
@@ -301,7 +306,7 @@ public class CEntityComboBox<E extends IEntity> extends CComboBox<E> implements 
                 public void onOptionsReady(List<E> opt) {
                     for (E o : opt) {
                         if (getItemName(o).equals(name)) {
-                            setValue(o);
+                            setValue(o, fireEvent, populate);
                             break;
                         }
                     }
