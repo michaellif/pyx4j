@@ -54,6 +54,7 @@ import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.pyx4j.geo.GeoPoint;
+import com.pyx4j.rpc.shared.DevInfoUnRecoverableRuntimeException;
 
 /**
  * Categorize member types for later use in the frequent update/select operations
@@ -172,13 +173,20 @@ public class EntityOperationsMeta {
             String memberPersistenceName = memberPersistenceName(memberMeta);
             String memberPathBase = path + Path.PATH_SEPARATOR + memberName;
             String memberPath = memberPathBase + Path.PATH_SEPARATOR;
-            if (membersByPath.containsKey(memberPath)) {
-                continue;
+
+            MemberOperationsMeta alreadyMapped = membersByPath.get(memberPath);
+            if (alreadyMapped != null) {
+                if (!memberMeta.isEmbedded()) {
+                    assertTypeCompativility(memberMeta, alreadyMapped.getMemberMeta());
+                    continue;
+                }
             }
 
             if (memberMeta.isEmbedded()) {
                 if (ICollection.class.isAssignableFrom(memberMeta.getObjectClass())) {
                     //TODO Embedded collections
+                    // new DevInfoUnRecoverableRuntimeException("Embedded collections not implemented {0} {1}", entityMeta.getEntityClass(), memberName));
+                    continue;
                 } else {
                     List<String> accessPathChild = new Vector<String>();
                     if (accessPath != null) {
@@ -362,6 +370,13 @@ public class EntityOperationsMeta {
                     }
                 }
             }
+        }
+    }
+
+    private void assertTypeCompativility(MemberMeta memberMeta1, MemberMeta memberMeta2) {
+        if (memberMeta1.getValueClass() != memberMeta2.getValueClass()) {
+            throw new DevInfoUnRecoverableRuntimeException("Incompatible mapping {0} {1} and {2} {3}", memberMeta1.getFieldName(), memberMeta1.getValueClass(),
+                    memberMeta2.getFieldName(), memberMeta2.getValueClass());
         }
     }
 
