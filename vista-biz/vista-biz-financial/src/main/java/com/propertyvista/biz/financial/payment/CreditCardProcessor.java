@@ -25,6 +25,7 @@ import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.admin.domain.pmc.Pmc;
 import com.propertyvista.biz.financial.ar.ARFacade;
@@ -33,6 +34,7 @@ import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.payment.CreditCardInfo;
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.util.ValidationUtils;
 import com.propertyvista.payment.CCInformation;
 import com.propertyvista.payment.IPaymentProcessor;
 import com.propertyvista.payment.Merchant;
@@ -45,6 +47,8 @@ import com.propertyvista.server.jobs.TaskRunner;
 class CreditCardProcessor {
 
     private final static Logger log = LoggerFactory.getLogger(CreditCardProcessor.class);
+
+    private static final I18n i18n = I18n.get(CreditCardProcessor.class);
 
     static PaymentRecord realTimeSale(final PaymentRecord paymentRecord) {
         return TaskRunner.runAutonomousTransation(new Callable<PaymentRecord>() {
@@ -73,6 +77,9 @@ class CreditCardProcessor {
             token.code().setValue(cc.token().getStringView());
             request.paymentInstrument().set(token);
         } else {
+            if (!ValidationUtils.isCreditCardNumberValid(cc.card().number().getValue())) {
+                throw new UserRuntimeException(i18n.tr("Invalid Credit Card Number"));
+            }
             CCInformation ccInfo = EntityFactory.create(CCInformation.class);
             ccInfo.creditCardNumber().setValue(cc.card().number().getValue());
             ccInfo.creditCardExpiryDate().setValue(cc.expiryDate().getValue());
@@ -109,6 +116,10 @@ class CreditCardProcessor {
         MerchantAccount account = PaymentUtils.retrieveMerchantAccount(building);
         Merchant merchant = EntityFactory.create(Merchant.class);
         merchant.terminalID().setValue(account.merchantTerminalId().getValue());
+
+        if (!ValidationUtils.isCreditCardNumberValid(cc.card().number().getValue())) {
+            throw new UserRuntimeException(i18n.tr("Invalid Credit Card Number"));
+        }
 
         CCInformation ccInfo = EntityFactory.create(CCInformation.class);
         ccInfo.creditCardNumber().setValue(cc.card().number().getValue());

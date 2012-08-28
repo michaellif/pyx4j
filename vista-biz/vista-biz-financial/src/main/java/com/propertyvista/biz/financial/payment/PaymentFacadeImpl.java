@@ -16,6 +16,8 @@ package com.propertyvista.biz.financial.payment;
 import java.util.EnumSet;
 import java.util.List;
 
+import org.apache.commons.lang.Validate;
+
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideFactory;
@@ -30,6 +32,8 @@ import com.propertyvista.domain.financial.AggregatedTransfer.AggregatedTransferS
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
+import com.propertyvista.domain.payment.CashInfo;
+import com.propertyvista.domain.payment.CheckInfo;
 import com.propertyvista.domain.payment.CreditCardInfo;
 import com.propertyvista.domain.payment.EcheckInfo;
 import com.propertyvista.domain.payment.PaymentMethod;
@@ -63,18 +67,34 @@ public class PaymentFacadeImpl implements PaymentFacade {
             if (!eci.accountNo().newNumberValue().isNull()) {
                 eci.accountNo().number().setValue(eci.accountNo().newNumberValue().getValue());
             } else {
+                Validate.isTrue(!paymentMethod.details().id().isNull(), "Account number is required");
                 //TODO move to framework
                 // Do merge.                
-                if (paymentMethod.details().id().isNull()) {
-                    throw new Error("Account number is required");
-                }
                 EcheckInfo origValue = Persistence.service().retrieve(EcheckInfo.class, eci.getPrimaryKey());
                 eci.accountNo().number().setValue(origValue.accountNo().number().getValue());
             }
             eci.accountNo().reference().setValue(DomainUtil.last4Numbers(eci.accountNo().number().getValue()));
             break;
-        default:
+        case CreditCard:
+            //Verify CC change
+            CreditCardInfo cc = paymentMethod.details().cast();
+            if (!paymentMethod.details().id().isNull()) {
+                CreditCardInfo ccOrigValue = Persistence.service().retrieve(CreditCardInfo.class, cc.getPrimaryKey());
+                if (cc.card().newNumberValue().isNull()) {
+                    Validate.isTrue(cc.card().reference().equals(ccOrigValue.card().reference()));
+                }
+            }
             break;
+        case Cash:
+            // Assert value type
+            Validate.isTrue(paymentMethod.details().isInstanceOf(CashInfo.class));
+            break;
+        case Check:
+            // Assert value type
+            Validate.isTrue(paymentMethod.details().isInstanceOf(CheckInfo.class));
+            break;
+        default:
+            throw new Error();
         }
 
         Persistence.service().merge(paymentMethod);
@@ -82,7 +102,8 @@ public class PaymentFacadeImpl implements PaymentFacade {
         switch (paymentMethod.type().getValue()) {
         case CreditCard:
             CreditCardInfo cc = paymentMethod.details().cast();
-            if (!cc.card().number().isNull()) {
+            if (!cc.card().newNumberValue().isNull()) {
+                cc.card().number().setValue(cc.card().newNumberValue().getValue());
                 cc.card().reference().setValue(DomainUtil.last4Numbers(cc.card().number().getValue()));
                 CreditCardProcessor.persistToken(building, cc);
                 Persistence.service().merge(paymentMethod);

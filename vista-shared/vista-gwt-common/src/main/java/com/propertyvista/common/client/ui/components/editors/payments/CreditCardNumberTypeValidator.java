@@ -40,7 +40,7 @@ public class CreditCardNumberTypeValidator implements EditableValueValidator<Tok
 
     @Override
     public ValidationError isValid(CComponent<TokenizedCreditCardNumber, ?> component, TokenizedCreditCardNumber value) {
-        if (value == null) {
+        if ((value == null) || value.newNumberValue().isNull()) {
             return null; // editing tokenized credit card.
         } else if (creditCardTypeProvider.getCreditCardType() == null
                 || (!ValidationUtils.isCreditCardNumberIinValid(creditCardTypeProvider.getCreditCardType().iinsPatterns, value.newNumberValue().getValue()))) {

@@ -28,7 +28,7 @@ public class CreditCardNumberValidator implements EditableValueValidator<Tokeniz
 
     @Override
     public ValidationError isValid(CComponent<TokenizedCreditCardNumber, ?> component, TokenizedCreditCardNumber value) {
-        if (CommonsStringUtils.isStringSet(value.newNumberValue().getValue())) {
+        if ((value != null) && CommonsStringUtils.isStringSet(value.newNumberValue().getValue())) {
             return ValidationUtils.isCreditCardNumberValid(value.newNumberValue().getValue()) ? null : new ValidationError(component,
                     i18n.tr("Invalid Credit Card Number"));
         } else {
