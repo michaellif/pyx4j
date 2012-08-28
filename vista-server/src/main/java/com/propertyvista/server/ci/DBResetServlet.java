@@ -37,6 +37,7 @@ import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.cache.CacheService;
 import com.pyx4j.entity.rdb.EntityPersistenceServiceRDB;
 import com.pyx4j.entity.rdb.RDBUtils;
+import com.pyx4j.entity.rdb.cfg.Configuration.DatabaseType;
 import com.pyx4j.entity.rdb.cfg.Configuration.MultitenancyType;
 import com.pyx4j.entity.rpc.DataPreloaderInfo;
 import com.pyx4j.entity.server.Persistence;
@@ -188,6 +189,10 @@ public class DBResetServlet extends HttpServlet {
                                     } else {
                                         RDBUtils.initAllEntityTables();
                                     }
+                                    if (((EntityPersistenceServiceRDB) Persistence.service()).getDatabaseType() == DatabaseType.PostgreSQL) {
+                                        Persistence.service().commit();
+                                    }
+
                                     CacheService.resetAll();
 
                                     new VistaAdminDataPreloaders().preloadAll();
@@ -308,6 +313,9 @@ public class DBResetServlet extends HttpServlet {
         if (((EntityPersistenceServiceRDB) Persistence.service()).getMultitenancyType() == MultitenancyType.SeparateSchemas) {
             RDBUtils.ensureNamespace();
             RDBUtils.initAllEntityTables();
+            if (((EntityPersistenceServiceRDB) Persistence.service()).getDatabaseType() == DatabaseType.PostgreSQL) {
+                Persistence.service().commit();
+            }
         }
 
         if (!EnumSet.of(ResetType.all, ResetType.allMini, ResetType.addPmcMockup, ResetType.allAddMockup, ResetType.addPmcMockupTest1).contains(type)) {
