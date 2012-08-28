@@ -25,31 +25,34 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
-import com.propertyvista.admin.domain.legal.TermsAndConditions;
-import com.propertyvista.admin.rpc.services.TermsAndConditionsCrudService;
+import com.propertyvista.admin.domain.legal.LegalDocument;
+import com.propertyvista.admin.domain.legal.VistaTerms;
+import com.propertyvista.admin.rpc.services.VistaTermsCrudService;
 import com.propertyvista.shared.CompiledLocale;
 
-public class TermsAndConditionsDefaultActivity extends AbstractActivity {
+public class VistaTermsDefaultActivity extends AbstractActivity {
     private final CrudAppPlace place;
 
-    public TermsAndConditionsDefaultActivity(Place place) {
+    public VistaTermsDefaultActivity(Place place) {
         assert (place instanceof CrudAppPlace);
         this.place = (CrudAppPlace) place;
     }
 
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
-        TermsAndConditionsCrudService srv = GWT.create(TermsAndConditionsCrudService.class);
-        srv.retrieveDocument(new DefaultAsyncCallback<Key>() {
+        VistaTermsCrudService srv = GWT.create(VistaTermsCrudService.class);
+        srv.retrieveTerms(new DefaultAsyncCallback<Key>() {
             @Override
             public void onSuccess(Key result) {
                 CrudAppPlace dst = AppSite.getHistoryMapper().createPlace(place.getClass());
-                if (result == null) {
-                    TermsAndConditions terms = EntityFactory.create(TermsAndConditions.class);
-                    terms.document().locale().setValue(CompiledLocale.en);
-                    dst.formNewItemPlace(terms);
-                } else {
+                if (result != null) {
                     dst.formViewerPlace(result);
+                } else {
+                    LegalDocument doc = EntityFactory.create(LegalDocument.class);
+                    doc.locale().setValue(CompiledLocale.en);
+                    VistaTerms terms = EntityFactory.create(VistaTerms.class);
+                    terms.version().document().add(doc);
+                    dst.formNewItemPlace(terms);
                 }
                 AppSite.getPlaceController().goTo(dst);
             }

@@ -15,7 +15,9 @@ package com.propertyvista.biz.tenant;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.Persistence;
@@ -25,13 +27,16 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UnRecoverableRuntimeException;
 
+import com.propertyvista.admin.domain.legal.VistaTerms.VistaTermsV;
 import com.propertyvista.biz.policy.IdAssignmentFacade;
 import com.propertyvista.domain.security.CustomerUser;
 import com.propertyvista.domain.security.VistaCustomerBehavior;
 import com.propertyvista.domain.tenant.Customer;
+import com.propertyvista.domain.tenant.CustomerAcceptedTerms;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.server.common.security.PasswordEncryptor;
 import com.propertyvista.server.domain.security.CustomerUserCredential;
+import com.propertyvista.server.jobs.TaskRunner;
 import com.propertyvista.shared.config.VistaDemo;
 
 public class CustomerFacadeImpl implements CustomerFacade {
@@ -96,6 +101,74 @@ public class CustomerFacadeImpl implements CustomerFacade {
             leases.addAll(Persistence.service().query(criteria));
         }
         return leases;
+    }
+
+    @Override
+    public boolean hasToAcceptTerms(Key customerUserKey) {
+        Customer customer;
+        {
+            EntityQueryCriteria<Customer> criteria = EntityQueryCriteria.create(Customer.class);
+            CustomerUser user = EntityFactory.create(CustomerUser.class);
+            user.setPrimaryKey(customerUserKey);
+            criteria.add(PropertyCriterion.eq(criteria.proto().user(), user));
+            customer = Persistence.service().retrieve(criteria);
+            if (customer == null) {
+                return false;
+            }
+        }
+        final CustomerAcceptedTerms acceptedTerms;
+        {
+            EntityQueryCriteria<CustomerAcceptedTerms> criteria = EntityQueryCriteria.create(CustomerAcceptedTerms.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().customer(), customer));
+            acceptedTerms = Persistence.service().retrieve(criteria);
+            if (acceptedTerms == null || acceptedTerms.vistaTerms().isNull()) {
+                return true;
+            }
+        }
+        Key versionKey = TaskRunner.runInAdminNamespace(new Callable<Key>() {
+            @Override
+            public Key call() {
+                VistaTermsV vistaTermsV = Persistence.service().retrieve(VistaTermsV.class, acceptedTerms.vistaTerms().getValue());
+                if (vistaTermsV == null) {
+                    return null;
+                } else {
+                    return vistaTermsV.holder().version().getPrimaryKey();
+                }
+            }
+        });
+        return !versionKey.equals(acceptedTerms.vistaTerms().getValue());
+    }
+
+    @Override
+    public void onVistaTermsAccepted(Key customerUserKey, boolean accepted, Key vistaTermsKey) {
+        Customer customer = null;
+        {
+            EntityQueryCriteria<Customer> criteria = EntityQueryCriteria.create(Customer.class);
+            CustomerUser user = EntityFactory.create(CustomerUser.class);
+            user.setPrimaryKey(customerUserKey);
+            criteria.add(PropertyCriterion.eq(criteria.proto().user(), user));
+            customer = Persistence.service().retrieve(criteria);
+            if (customer == null) {
+                return;
+            }
+        }
+
+        CustomerAcceptedTerms acceptedTerms = null;
+        {
+            EntityQueryCriteria<CustomerAcceptedTerms> criteria = EntityQueryCriteria.create(CustomerAcceptedTerms.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().customer(), customer));
+            acceptedTerms = Persistence.service().retrieve(criteria);
+            if (acceptedTerms == null) {
+                acceptedTerms = EntityFactory.create(CustomerAcceptedTerms.class);
+                acceptedTerms.customer().set(customer);
+            }
+        }
+
+        if (accepted) {
+            acceptedTerms.vistaTerms().setValue(vistaTermsKey);
+            Persistence.service().persist(acceptedTerms);
+            Persistence.service().commit();
+        }
     }
 
     @Override

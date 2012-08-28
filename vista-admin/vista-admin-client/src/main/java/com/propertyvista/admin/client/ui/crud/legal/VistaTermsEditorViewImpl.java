@@ -13,11 +13,14 @@
  */
 package com.propertyvista.admin.client.ui.crud.legal;
 
-import com.pyx4j.site.client.ui.crud.form.IViewerView;
+import com.propertyvista.admin.client.ui.crud.AdminEditorViewImplBase;
+import com.propertyvista.admin.domain.legal.VistaTerms;
+import com.propertyvista.admin.rpc.AdminSiteMap;
 
-import com.propertyvista.admin.domain.legal.TermsAndConditions;
+public class VistaTermsEditorViewImpl extends AdminEditorViewImplBase<VistaTerms> implements VistaTermsEditorView {
 
-public interface TermsAndConditionsViewerView extends IViewerView<TermsAndConditions> {
-    interface Presenter extends IViewerView.Presenter {
+    public VistaTermsEditorViewImpl() {
+        super(AdminSiteMap.Legal.Terms.class);
+        setForm(new VistaTermsForm(false));
     }
 }

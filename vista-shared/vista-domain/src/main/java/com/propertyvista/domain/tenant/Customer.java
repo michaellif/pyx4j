@@ -77,4 +77,8 @@ public interface Customer extends IEntity {
     @Detached(level = AttachLevel.Detached)
     @JoinTable(value = Tenant.class)
     ISet<Tenant> _tenantInLease();
+
+    @Owned
+    @Detached(level = AttachLevel.Detached)
+    CustomerAcceptedTerms signedTerms();
 }

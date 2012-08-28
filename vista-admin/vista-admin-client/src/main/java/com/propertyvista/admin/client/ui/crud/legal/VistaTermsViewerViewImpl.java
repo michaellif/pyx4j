@@ -14,14 +14,14 @@
 package com.propertyvista.admin.client.ui.crud.legal;
 
 import com.propertyvista.admin.client.ui.crud.AdminViewerViewImplBase;
-import com.propertyvista.admin.domain.legal.TermsAndConditions;
+import com.propertyvista.admin.domain.legal.VistaTerms;
 import com.propertyvista.admin.rpc.AdminSiteMap;
 
-public class TermsAndConditionsViewerViewImpl extends AdminViewerViewImplBase<TermsAndConditions> implements TermsAndConditionsViewerView {
+public class VistaTermsViewerViewImpl extends AdminViewerViewImplBase<VistaTerms> implements VistaTermsViewerView {
 
-    public TermsAndConditionsViewerViewImpl() {
+    public VistaTermsViewerViewImpl() {
         super(AdminSiteMap.Legal.Terms.class);
 
-        setForm(new TermsAndConditionsForm(true));
+        setForm(new VistaTermsForm(true));
     }
 }

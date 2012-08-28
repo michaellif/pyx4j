@@ -15,6 +15,8 @@ package com.propertyvista.biz.tenant;
 
 import java.util.List;
 
+import com.pyx4j.commons.Key;
+
 import com.propertyvista.domain.security.CustomerUser;
 import com.propertyvista.domain.security.VistaCustomerBehavior;
 import com.propertyvista.domain.tenant.Customer;
@@ -27,4 +29,8 @@ public interface CustomerFacade {
     List<Lease> getActiveLeases(CustomerUser customerUser);
 
     VistaCustomerBehavior getLeaseBehavior(CustomerUser customerUser, Lease lease);
+
+    boolean hasToAcceptTerms(Key userKey);
+
+    void onVistaTermsAccepted(Key userKey, boolean accepted, Key vistaTermsKey);
 }

@@ -29,5 +29,6 @@ public class VistaAdminDataPreloaders extends DataPreloaderCollection {
             add(new OnboardingPmcPreloader());
             add(new DevelopmentSecurityPreloader());
         }
+        add(new VistaTermsPreloader());
     }
 }

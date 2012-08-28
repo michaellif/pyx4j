@@ -71,6 +71,8 @@ import com.propertyvista.pmsite.server.pages.PwdResetPage;
 import com.propertyvista.pmsite.server.pages.ResidentsPage;
 import com.propertyvista.pmsite.server.pages.SignInPage;
 import com.propertyvista.pmsite.server.pages.StaticPage;
+import com.propertyvista.pmsite.server.pages.TermsAcceptancePage;
+import com.propertyvista.pmsite.server.pages.TermsDeclinedPage;
 import com.propertyvista.pmsite.server.pages.UnitDetailsPage;
 
 public class PMSiteApplication extends AuthenticatedWebApplication {
@@ -101,6 +103,8 @@ public class PMSiteApplication extends AuthenticatedWebApplication {
         MountMap.put("residents", ResidentsPage.class);
         MountMap.put("pwdreset", PwdResetPage.class);
         MountMap.put("pwdchange", PwdChangePage.class);
+        MountMap.put("termsaccept", TermsAcceptancePage.class);
+        MountMap.put("termsdecline", TermsDeclinedPage.class);
         MountMap.put("inquiry", InquiryPage.class);
         MountMap.put("inquiryok", InquirySuccessPage.class);
         MountMap.put("cnt" + PMSiteContentManager.PARAMETER_PATH, StaticPage.class);
@@ -304,6 +308,11 @@ public class PMSiteApplication extends AuthenticatedWebApplication {
             PageParameters pp = new PageParameters();
             pp.add(ParamNameTarget, getReturnToTargetUrl());
             throw new RestartResponseException(getPwdChangePage(), pp);
+        } else if (hasAnyRole(new Roles(PMSiteSession.VistaTermsAcceptanceRequiredRole))) {
+            // redirect to LegalAcceptancePage
+            PageParameters pp = new PageParameters();
+            pp.add(ParamNameTarget, getReturnToTargetUrl());
+            throw new RestartResponseException(TermsAcceptancePage.class, pp);
         } else {
             // redirect to home page
             throw new RestartResponseException(getHomePage());

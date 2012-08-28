@@ -16,10 +16,10 @@ package com.propertyvista.admin.rpc.services;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.entity.rpc.AbstractVersionedCrudService;
 
-import com.propertyvista.admin.domain.legal.TermsAndConditions;
+import com.propertyvista.admin.domain.legal.VistaTerms;
 
-public interface TermsAndConditionsCrudService extends AbstractCrudService<TermsAndConditions> {
-    public void retrieveDocument(AsyncCallback<Key> callback);
+public interface VistaTermsCrudService extends AbstractVersionedCrudService<VistaTerms> {
+    public void retrieveTerms(AsyncCallback<Key> callback);
 }

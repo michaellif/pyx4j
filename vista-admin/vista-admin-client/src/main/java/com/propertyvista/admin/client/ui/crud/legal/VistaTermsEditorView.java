@@ -11,16 +11,11 @@
  * @author stanp
  * @version $Id$
  */
-package com.propertyvista.admin.domain.legal;
+package com.propertyvista.admin.client.ui.crud.legal;
 
-import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.annotations.Owned;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.site.client.ui.crud.form.IEditorView;
 
-public interface TermsAndConditions extends IEntity {
-    @Owned
-    LegalDocument document();
+import com.propertyvista.admin.domain.legal.VistaTerms;
 
-    IPrimitive<LogicalDate> effectiveDate();
+public interface VistaTermsEditorView extends IEditorView<VistaTerms> {
 }

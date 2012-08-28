@@ -15,19 +15,19 @@ package com.propertyvista.admin.client.activity.crud.legal;
 
 import com.google.gwt.core.client.GWT;
 
-import com.pyx4j.site.client.activity.crud.EditorActivityBase;
+import com.pyx4j.site.client.activity.crud.ViewerActivityBase;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
-import com.propertyvista.admin.client.ui.crud.legal.TermsAndConditionsEditorView;
+import com.propertyvista.admin.client.ui.crud.legal.VistaTermsViewerView;
 import com.propertyvista.admin.client.viewfactories.crud.AdministrationVeiwFactory;
-import com.propertyvista.admin.domain.legal.TermsAndConditions;
-import com.propertyvista.admin.rpc.services.TermsAndConditionsCrudService;
+import com.propertyvista.admin.domain.legal.VistaTerms;
+import com.propertyvista.admin.rpc.services.VistaTermsCrudService;
 
-public class TermsAndConditionsEditorActivity extends EditorActivityBase<TermsAndConditions> {
+public class VistaTermsViewerActivity extends ViewerActivityBase<VistaTerms> implements VistaTermsViewerView.Presenter {
 
-    public TermsAndConditionsEditorActivity(CrudAppPlace place) {
-        super(place, AdministrationVeiwFactory.instance(TermsAndConditionsEditorView.class), GWT
-                .<TermsAndConditionsCrudService> create(TermsAndConditionsCrudService.class), TermsAndConditions.class);
+    public VistaTermsViewerActivity(CrudAppPlace place) {
+        super(place, AdministrationVeiwFactory.instance(VistaTermsViewerView.class), GWT
+                .<VistaTermsCrudService> create(VistaTermsCrudService.class));
     }
 
 }
