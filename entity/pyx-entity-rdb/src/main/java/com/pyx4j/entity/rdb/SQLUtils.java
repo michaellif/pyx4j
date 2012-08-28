@@ -100,7 +100,7 @@ public class SQLUtils {
                     continue;
                 }
                 boolean success = false;
-                log.trace("exec: {}", sql);
+                log.debug("exec: {}", sql);
                 try {
                     stmt.executeUpdate(sql);
                     success = true;
