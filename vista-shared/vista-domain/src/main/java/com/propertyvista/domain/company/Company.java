@@ -18,6 +18,7 @@ import javax.xml.bind.annotation.XmlTransient;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -31,6 +32,8 @@ public interface Company extends IEntity {
     @Length(128)
     IPrimitive<String> name();
 
+    //TODO Make it work in next version. For now we don't add this to DB structure
+    @Transient
     IList<AddressStructured> addresses();
 
     IList<CompanyPhone> phones();
