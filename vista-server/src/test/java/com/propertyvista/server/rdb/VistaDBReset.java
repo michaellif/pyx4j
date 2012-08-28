@@ -57,20 +57,18 @@ public class VistaDBReset {
         ServerSideConfiguration.setInstance(conf);
         Persistence.service().startBackgroundProcessTransaction();
         try {
-            RDBUtils.resetDatabase();
-            NamespaceManager.setNamespace(VistaNamespace.demoNamespace);
-            RDBUtils.ensureNamespace();
-            RDBUtils.dropAllEntityTables();
-            SchedulerHelper.dbReset();
-            RDBUtils.initAllEntityTables();
-            log.info("Generating new Data...");
             long start = System.currentTimeMillis();
+            RDBUtils.resetDatabase();
+            log.info("Generating new Data...");
 
             NamespaceManager.setNamespace(VistaNamespace.adminNamespace);
+            RDBUtils.ensureNamespace();
+            SchedulerHelper.dbReset();
 
             if (((EntityPersistenceServiceRDB) Persistence.service()).getMultitenancyType() == MultitenancyType.SeparateSchemas) {
-                RDBUtils.ensureNamespace();
-                RDBUtils.dropAllEntityTables();
+                RDBUtils.initNameSpaceSpecificEntityTables();
+            } else {
+                RDBUtils.initAllEntityTables();
             }
 
             Pmc pmc = PmcCreatorDev.createPmc(VistaNamespace.demoNamespace);
@@ -81,6 +79,10 @@ public class VistaDBReset {
 
             NamespaceManager.setNamespace(VistaNamespace.demoNamespace);
             RDBUtils.ensureNamespace();
+            if (((EntityPersistenceServiceRDB) Persistence.service()).getMultitenancyType() == MultitenancyType.SeparateSchemas) {
+                RDBUtils.initAllEntityTables();
+            }
+
             DataPreloaderCollection preloaders = ((VistaServerSideConfiguration) ServerSideConfiguration.instance()).getDataPreloaders();
             if ((args != null) && (args.length > 0)) {
                 VistaDevPreloadConfig cfg = VistaDevPreloadConfig.createDefault();
