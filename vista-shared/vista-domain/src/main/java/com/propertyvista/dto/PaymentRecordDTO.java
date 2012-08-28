@@ -55,14 +55,15 @@ public interface PaymentRecordDTO extends PaymentRecord {
 
     IPrimitive<Boolean> electronicPaymentsAllowed();
 
-    @NotNull
-    PaymentMethod profiledPaymentMethod();
-
     // UI-only (control organization) members:
 
     @NotNull
     @Transient
     IPrimitive<PaymentSelect> paymentSelect();
+
+    @NotNull
+    @Transient
+    PaymentMethod profiledPaymentMethod();
 
     @Transient
     IPrimitive<Boolean> addThisPaymentMethodToProfile();
