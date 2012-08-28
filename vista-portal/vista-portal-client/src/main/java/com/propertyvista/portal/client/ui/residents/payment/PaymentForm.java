@@ -198,7 +198,7 @@ public class PaymentForm extends CEntityDecoratableForm<PaymentRecordDTO> {
         get(proto().paymentSelect()).setVisible(!isViewable() && !getValue().leaseParticipant().isNull());
         setProfiledPaymentMethodsVisible(false);
 
-        checkProfiledPaymentMethods();
+        checkProfiledPaymentMethods(true);
 
         paymentMethodEditor.setVisible(!getValue().leaseParticipant().isNull());
         paymentMethodEditorSeparator.setVisible(!getValue().leaseParticipant().isNull());
@@ -216,7 +216,7 @@ public class PaymentForm extends CEntityDecoratableForm<PaymentRecordDTO> {
 //        }
     }
 
-    private void checkProfiledPaymentMethods() {
+    private void checkProfiledPaymentMethods(final boolean populate) {
         get(proto().paymentSelect()).setEnabled(false);
 
         profiledPaymentMethodsCombo.reset();
@@ -233,18 +233,18 @@ public class PaymentForm extends CEntityDecoratableForm<PaymentRecordDTO> {
                 profiledPaymentMethodsCombo.setMandatory(true);
 
                 if (result.isEmpty()) {
-                    get(proto().paymentSelect()).setValue(PaymentSelect.New, getValue().getPrimaryKey() == null);
+                    get(proto().paymentSelect()).setValue(PaymentSelect.New, getValue().getPrimaryKey() == null, populate);
                 } else {
                     if (getValue().getPrimaryKey() == null) {
-                        get(proto().paymentSelect()).setValue(PaymentSelect.Profiled, true);
+                        get(proto().paymentSelect()).setValue(PaymentSelect.Profiled, true, populate);
                     } else {
                         if (getValue().paymentMethod().customer().isNull()) {
-                            get(proto().paymentSelect()).setValue(PaymentSelect.New, false);
+                            get(proto().paymentSelect()).setValue(PaymentSelect.New, false, populate);
                         } else {
-                            get(proto().paymentSelect()).setValue(PaymentSelect.Profiled, false);
-//                            profiledPaymentMethodsCombo.setValueByString(getValue().paymentMethod().getStringView());
+                            get(proto().paymentSelect()).setValue(PaymentSelect.Profiled, false, populate);
+                            profiledPaymentMethodsCombo.setValueByString(getValue().paymentMethod().getStringView(), false, populate);
                             // TODO: find out why this setValue doen't work!?
-                            profiledPaymentMethodsCombo.setValue(getValue().paymentMethod(), false);
+//                            profiledPaymentMethodsCombo.setValue(getValue().paymentMethod(), false, populate);
                             setProfiledPaymentMethodsVisible(true);
                             paymentMethodEditor.setViewable(true);
                         }

@@ -53,13 +53,17 @@ public interface PaymentRecordDTO extends PaymentRecord {
 
     IList<LeaseParticipant> participants();
 
-    @NotNull
-    IPrimitive<PaymentSelect> paymentSelect();
-
     IPrimitive<Boolean> electronicPaymentsAllowed();
-
-    IPrimitive<Boolean> addThisPaymentMethodToProfile();
 
     @NotNull
     PaymentMethod profiledPaymentMethod();
+
+    // UI-only (control organization) members:
+
+    @NotNull
+    @Transient
+    IPrimitive<PaymentSelect> paymentSelect();
+
+    @Transient
+    IPrimitive<Boolean> addThisPaymentMethodToProfile();
 }
