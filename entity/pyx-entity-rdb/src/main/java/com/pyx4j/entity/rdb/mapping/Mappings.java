@@ -92,6 +92,10 @@ public class Mappings {
         return configuration.ddl();
     }
 
+    public String sharedSequencesSchema() {
+        return configuration.sharedSequencesSchema();
+    }
+
     public void reset() {
         tables.clear();
         usedTableNames.clear();

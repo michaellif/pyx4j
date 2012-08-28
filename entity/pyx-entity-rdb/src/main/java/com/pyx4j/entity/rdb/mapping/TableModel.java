@@ -443,7 +443,11 @@ public class TableModel {
                 if (numberOfParams != 0) {
                     sql.append(", ");
                 }
-                sql.append(dialect.getSequenceNextValSql(dialect.getNamingConvention().sqlTableSequenceName(entityMeta.getPersistenceName())));
+                String sequenceName = dialect.getNamingConvention().sqlTableSequenceName(entityMeta.getPersistenceName());
+                if (mappings.sharedSequencesSchema() != null) {
+                    sequenceName = mappings.sharedSequencesSchema() + "." + sequenceName;
+                }
+                sql.append(dialect.getSequenceNextValSql(sequenceName));
             }
             sql.append(")");
             sqlInsert = sql.toString();
