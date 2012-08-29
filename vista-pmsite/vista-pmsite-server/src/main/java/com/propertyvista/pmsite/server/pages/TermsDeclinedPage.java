@@ -13,6 +13,7 @@
  */
 package com.propertyvista.pmsite.server.pages;
 
+import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -25,6 +26,7 @@ import com.propertyvista.pmsite.server.PMSiteSession;
 import com.propertyvista.pmsite.server.PMSiteWebRequest;
 import com.propertyvista.pmsite.server.model.WicketUtils.VolatileTemplateResourceReference;
 
+@AuthorizeInstantiation(PMSiteSession.VistaTermsAcceptanceRequiredRole)
 public class TermsDeclinedPage extends BasePage {
     private static final long serialVersionUID = 1L;
 
@@ -37,9 +39,6 @@ public class TermsDeclinedPage extends BasePage {
     public TermsDeclinedPage(PageParameters pp) {
         super(pp);
 
-        if (!PMSiteSession.get().isSignedIn() || !PMSiteSession.get().getRoles().hasRole(PMSiteSession.VistaTermsAcceptanceRequiredRole)) {
-            setResponsePage(getApplication().getHomePage());
-        }
         getSession().invalidateNow();
 
         add(new Label("legalTitle", i18n.tr("Vista Terms and Conditions Declined")));

@@ -16,6 +16,7 @@ package com.propertyvista.pmsite.server.pages;
 import java.util.List;
 import java.util.concurrent.Callable;
 
+import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
@@ -37,11 +38,13 @@ import com.propertyvista.admin.domain.legal.LegalDocument;
 import com.propertyvista.admin.domain.legal.VistaTerms;
 import com.propertyvista.biz.tenant.CustomerFacade;
 import com.propertyvista.pmsite.server.PMSiteApplication;
+import com.propertyvista.pmsite.server.PMSiteSession;
 import com.propertyvista.pmsite.server.PMSiteWebRequest;
 import com.propertyvista.pmsite.server.model.WicketUtils.VolatileTemplateResourceReference;
 import com.propertyvista.server.jobs.TaskRunner;
 import com.propertyvista.shared.CompiledLocale;
 
+@AuthorizeInstantiation(PMSiteSession.VistaTermsAcceptanceRequiredRole)
 public class TermsAcceptancePage extends BasePage {
     private static final long serialVersionUID = 1L;
 
