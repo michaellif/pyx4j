@@ -61,6 +61,9 @@ public class PaymentFacadeImpl implements PaymentFacade {
         paymentMethod.isOneTimePayment().setValue(Boolean.FALSE);
         paymentMethod.isDeleted().setValue(Boolean.FALSE);
 
+        //TODO
+        //Validate.isTrue(!paymentMethod.customer().isNull(), "Owner (customer) is required for PaymentMethod");
+
         switch (paymentMethod.type().getValue()) {
         case Echeck:
             EcheckInfo eci = paymentMethod.details().cast();
@@ -105,9 +108,11 @@ public class PaymentFacadeImpl implements PaymentFacade {
             if (!cc.card().newNumberValue().isNull()) {
                 cc.card().number().setValue(cc.card().newNumberValue().getValue());
                 cc.card().reference().setValue(DomainUtil.last4Numbers(cc.card().number().getValue()));
-                CreditCardProcessor.persistToken(building, cc);
-                Persistence.service().merge(paymentMethod);
             }
+            // Allow to update expiryDate 
+            CreditCardProcessor.persistToken(building, cc);
+            Persistence.service().merge(paymentMethod);
+
             break;
         default:
             break;

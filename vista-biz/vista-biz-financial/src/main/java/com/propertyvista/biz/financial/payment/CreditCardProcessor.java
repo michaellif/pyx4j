@@ -17,6 +17,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.Callable;
 
+import org.apache.commons.lang.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -117,12 +118,13 @@ class CreditCardProcessor {
         Merchant merchant = EntityFactory.create(Merchant.class);
         merchant.terminalID().setValue(account.merchantTerminalId().getValue());
 
-        if (!ValidationUtils.isCreditCardNumberValid(cc.card().number().getValue())) {
-            throw new UserRuntimeException(i18n.tr("Invalid Credit Card Number"));
-        }
-
         CCInformation ccInfo = EntityFactory.create(CCInformation.class);
-        ccInfo.creditCardNumber().setValue(cc.card().number().getValue());
+        if (!cc.card().number().isNull()) {
+            if (!ValidationUtils.isCreditCardNumberValid(cc.card().number().getValue())) {
+                throw new UserRuntimeException(i18n.tr("Invalid Credit Card Number"));
+            }
+            ccInfo.creditCardNumber().setValue(cc.card().number().getValue());
+        }
         ccInfo.creditCardExpiryDate().setValue(cc.expiryDate().getValue());
         ccInfo.securityCode().setValue(cc.securityCode().getValue());
 
@@ -130,6 +132,7 @@ class CreditCardProcessor {
         if (!cc.token().isNull()) {
             token.code().setValue(cc.token().getValue());
         } else {
+            Validate.isTrue(!ccInfo.creditCardNumber().isNull());
             //Create Unique token using PMC Id
             Pmc pmc = VistaDeployment.getCurrentPmc();
             String prefix;
