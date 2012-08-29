@@ -17,6 +17,7 @@ import java.util.Date;
 
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
+import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinTable;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
@@ -39,6 +40,8 @@ import com.propertyvista.domain.security.CustomerUser;
 public interface Customer extends IEntity {
 
     @NotNull
+    @Length(14)
+    @Indexed(uniqueConstraint = true)
     IPrimitive<String> customerId();
 
     @NotNull

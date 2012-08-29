@@ -111,6 +111,12 @@ public class UnitTurnoverAnalysisManagerTestBase {
 
     }
 
+    static long uniqueId = 0;
+
+    synchronized static String uniqueId() {
+        return String.valueOf(uniqueId++);
+    }
+
     /**
      * Creates lease and relevant occupancy segments, and then invokes the turnover recalculation routine of the turnover manager
      * 
@@ -129,7 +135,7 @@ public class UnitTurnoverAnalysisManagerTestBase {
         final Lease lease = LightWeightLeaseManagement.create(Lease.Status.Application);
 
         lease.status().setValue(Lease.Status.Active);
-        lease.leaseId().setValue("lease: " + dateFrom + " " + dateTo);
+        lease.leaseId().setValue(uniqueId());
         lease.unit().set(unit);
         lease.creationDate().setValue(asDate(dateFrom));
         lease.currentTerm().termFrom().setValue(asDate(dateFrom));

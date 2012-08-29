@@ -18,6 +18,7 @@ import java.util.Date;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.ReadOnly;
@@ -37,6 +38,8 @@ public interface Employee extends Person {
     @NotNull
     @ToString(index = 63)
     @Caption(name = "Id")
+    @Length(14)
+    @Indexed(uniqueConstraint = true)
     IPrimitive<String> employeeId();
 
     @ToString(index = 64)

@@ -17,6 +17,8 @@ import javax.xml.bind.annotation.XmlType;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.Indexed;
+import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
@@ -59,6 +61,8 @@ public interface MasterOnlineApplication extends IEntity {
     @NotNull
     @ReadOnly
     @ToString
+    @Length(14)
+    @Indexed(uniqueConstraint = true)
     IPrimitive<String> onlineApplicationId();
 
     IPrimitive<Status> status();

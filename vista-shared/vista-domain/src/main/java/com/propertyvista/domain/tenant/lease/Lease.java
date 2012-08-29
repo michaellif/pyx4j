@@ -24,7 +24,9 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Format;
+import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
+import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.ReadOnly;
@@ -165,6 +167,8 @@ public interface Lease extends IEntity {
     @NotNull
     @ToString(index = 0)
     @Caption(name = "Id")
+    @Length(14)
+    @Indexed(uniqueConstraint = true)
     IPrimitive<String> leaseId();
 
     @NotNull
