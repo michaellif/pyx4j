@@ -54,7 +54,7 @@ public class NavigActivity extends AbstractActivity implements NavigView.NavigPr
         items.add(new Residents.PaymentMethods());
         items.add(new Residents.PersonalInformation());
 
-        if (VistaTODO.enableWelcomeWizardDemoMode) { // this is just mock-up!..
+        if (VistaTODO.enableWelcomeWizardDemoMode && !VistaTODO.removedForProduction) { // this is just mock-up!..
             items.add(new Residents.Insurance());
         }
 
