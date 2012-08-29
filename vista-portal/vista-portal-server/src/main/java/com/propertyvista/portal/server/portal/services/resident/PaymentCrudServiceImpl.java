@@ -24,8 +24,6 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.biz.financial.SysDateManager;
 import com.propertyvista.biz.financial.ar.ARFacade;
@@ -35,7 +33,6 @@ import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
 import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
-import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.dto.PaymentRecordDTO;
@@ -90,14 +87,15 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
 
     @Override
     protected void persist(PaymentRecord entity, PaymentRecordDTO dto) {
-        if (dto.addThisPaymentMethodToProfile().isBooleanTrue() && PaymentType.avalableInProfile().contains(dto.paymentMethod().type().getValue())) {
-            entity.paymentMethod().customer().set(dto.leaseParticipant().customer());
+        entity.paymentMethod().customer().set(dto.leaseParticipant().customer());
 
-            EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto()._Units().$()._Leases().$().billingAccount(), entity.billingAccount()));
-            ServerSideFactory.create(PaymentFacade.class).persistPaymentMethod(Persistence.service().retrieve(criteria), entity.paymentMethod());
+        if (dto.addThisPaymentMethodToProfile().isBooleanTrue() && PaymentType.avalableInProfile().contains(dto.paymentMethod().type().getValue())) {
+            entity.paymentMethod().isOneTimePayment().setValue(Boolean.FALSE);
+        } else {
+            entity.paymentMethod().isOneTimePayment().setValue(Boolean.TRUE);
         }
 
+        // some corrections for particular method types: 
         if (dto.paymentMethod().type().getValue() == PaymentType.Echeck) {
             entity.paymentMethod().isOneTimePayment().setValue(Boolean.FALSE);
         }

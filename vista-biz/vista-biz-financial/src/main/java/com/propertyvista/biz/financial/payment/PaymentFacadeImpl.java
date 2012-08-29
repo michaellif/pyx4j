@@ -149,14 +149,10 @@ public class PaymentFacadeImpl implements PaymentFacade {
             throw new IllegalArgumentException("paymentStatus:" + paymentRecord.paymentStatus().getValue());
         }
 
-        if (paymentRecord.paymentMethod().isOneTimePayment().isBooleanTrue()) {
-
-            EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto()._Units().$()._Leases().$().billingAccount(), paymentRecord.billingAccount()));
-            Building building = Persistence.service().retrieve(criteria);
-
-            persistPaymentMethod(building, paymentRecord.paymentMethod());
-        }
+        EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto()._Units().$()._Leases().$().billingAccount(), paymentRecord.billingAccount()));
+        Building building = Persistence.service().retrieve(criteria);
+        persistPaymentMethod(building, paymentRecord.paymentMethod());
 
         if (paymentRecord.id().isNull()) {
             paymentRecord.createdDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));
