@@ -20,14 +20,18 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.view.client.Range;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.client.ui.IEditableComponentFactory;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CMonthYearPicker;
 import com.pyx4j.forms.client.ui.CTextComponent;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
@@ -38,6 +42,7 @@ import com.propertyvista.common.client.ui.validators.FutureDateValidator;
 import com.propertyvista.domain.payment.CreditCardInfo;
 import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.domain.payment.TokenizedCreditCardNumber;
+import com.propertyvista.domain.util.ValidationUtils;
 
 public class CreditCardInfoEditor extends CEntityDecoratableForm<CreditCardInfo> {
 
@@ -116,5 +121,17 @@ public class CreditCardInfoEditor extends CEntityDecoratableForm<CreditCardInfo>
         get(proto().cardType()).addValueChangeHandler(new RevalidationTrigger<CreditCardType>(get(proto().card())));
 
         get(proto().expiryDate()).addValueValidator(new FutureDateValidator());
+
+        get(proto().securityCode()).addValueValidator(new EditableValueValidator<String>() {
+            @Override
+            public ValidationError isValid(CComponent<String, ?> component, String value) {
+                if (CommonsStringUtils.isStringSet(value)) {
+                    return ValidationUtils.isCreditCardCodeValid(value) ? null : new ValidationError(component, i18n
+                            .tr("Security Code should consist of 3 to 4 digits"));
+                } else {
+                    return null;
+                }
+            }
+        });
     }
 }

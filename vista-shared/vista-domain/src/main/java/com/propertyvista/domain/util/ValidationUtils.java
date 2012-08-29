@@ -73,6 +73,11 @@ public class ValidationUtils extends com.pyx4j.commons.ValidationUtils {
         }
     }
 
+    public static boolean isCreditCardCodeValid(String num) {
+        num = num.trim().replaceAll("\\s", "");
+        return num.matches("^\\d{3,4}$");
+    }
+
     // cheque/e-cheque validation:
     public static boolean isAccountNumberValid(String num) {
         num = num.trim().replaceAll("\\s", "");
