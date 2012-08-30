@@ -72,6 +72,11 @@ public class PostgreSQLDialect extends Dialect {
     }
 
     @Override
+    public boolean isFunctionIndexesSupported() {
+        return true;
+    }
+
+    @Override
     public boolean isSequencesBaseIdentity() {
         return true;
     }

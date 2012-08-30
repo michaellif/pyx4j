@@ -42,6 +42,21 @@ import com.pyx4j.server.contexts.NamespaceManager;
 
 class TableDDL {
 
+    private static class IndexColumnDef {
+
+        String position;
+
+        boolean ignoreCase;
+
+        MemberOperationsMeta member;
+
+        public IndexColumnDef(String position, boolean ignoreCase, MemberOperationsMeta member) {
+            this.position = position;
+            this.ignoreCase = ignoreCase;
+            this.member = member;
+        }
+    }
+
     private static class IndexDef {
 
         String name;
@@ -50,17 +65,15 @@ class TableDDL {
 
         boolean uniqueConstraint;
 
-        Map<String, String> columns = new HashMap<String, String>();
-
-        List<MemberOperationsMeta> members = new Vector<MemberOperationsMeta>();
+        Map<String, IndexColumnDef> columns = new HashMap<String, IndexColumnDef>();
 
         public String debugInfo() {
             StringBuilder b = new StringBuilder();
-            for (MemberOperationsMeta m : members) {
+            for (IndexColumnDef m : columns.values()) {
                 if (b.length() > 0) {
                     b.append(", ");
                 }
-                b.append('(').append(m.toString()).append(')');
+                b.append('(').append(m.member.toString()).append(')');
             }
             return b.toString();
         }
@@ -190,7 +203,7 @@ class TableDDL {
 
                     for (IndexDef other : indexes) {
                         if (group.equals(other.group)) {
-                            other.columns.put(sqlName, position);
+                            other.columns.put(sqlName, new IndexColumnDef(position, indexedAnnotation.ignoreCase(), member));
                             if (indexedAnnotation.uniqueConstraint()) {
                                 other.uniqueConstraint = true;
                             }
@@ -202,20 +215,14 @@ class TableDDL {
                 def.name = indexedAnnotation.name();
                 def.uniqueConstraint = indexedAnnotation.uniqueConstraint();
                 def.group = group;
-                def.columns.put(sqlName, position);
-                if (!def.members.contains(member)) {
-                    def.members.add(member);
-                }
+                def.columns.put(sqlName, new IndexColumnDef(position, indexedAnnotation.ignoreCase(), member));
                 indexes.add(def);
             }
         } else {
             IndexDef def = new IndexDef();
             def.name = indexedAnnotation.name();
             def.uniqueConstraint = indexedAnnotation.uniqueConstraint();
-            def.columns.put(sqlName, "");
-            if (!def.members.contains(member)) {
-                def.members.add(member);
-            }
+            def.columns.put(sqlName, new IndexColumnDef("", indexedAnnotation.ignoreCase(), member));
             indexes.add(def);
         }
 
@@ -228,7 +235,7 @@ class TableDDL {
 
             @Override
             public int compare(String o1, String o2) {
-                return indexDef.columns.get(o1).compareTo(indexDef.columns.get(o2));
+                return indexDef.columns.get(o1).position.compareTo(indexDef.columns.get(o2).position);
             }
         });
 
@@ -255,7 +262,11 @@ class TableDDL {
             } else {
                 sql.append(", ");
             }
-            sql.append(column);
+            if (dialect.isFunctionIndexesSupported() && indexDef.columns.get(column).ignoreCase) {
+                sql.append("LOWER(").append(column).append(')');
+            } else {
+                sql.append(column);
+            }
         }
         sql.append(")");
         return sql.toString();

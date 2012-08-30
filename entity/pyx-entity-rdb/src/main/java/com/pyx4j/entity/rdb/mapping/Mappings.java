@@ -212,7 +212,7 @@ public class Mappings {
                 }
                 if (schemaInitialization) {
                     try {
-                        model.ensureExists(persistenceContext, configuration.ddl());
+                        initReferencedTables = model.ensureExists(persistenceContext, configuration.ddl());
                     } catch (SQLException e) {
                         log.error("table creation error", e);
                         throw new RuntimeException(e);

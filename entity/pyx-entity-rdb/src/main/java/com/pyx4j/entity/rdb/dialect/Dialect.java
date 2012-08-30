@@ -211,6 +211,10 @@ public abstract class Dialect {
         return "LIKE";
     }
 
+    public boolean isFunctionIndexesSupported() {
+        return false;
+    }
+
     public boolean isSequencesBaseIdentity() {
         return false;
     }
