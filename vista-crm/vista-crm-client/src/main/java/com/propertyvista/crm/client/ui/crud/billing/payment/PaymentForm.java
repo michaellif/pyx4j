@@ -286,11 +286,15 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
                 get(proto().addThisPaymentMethodToProfile()).setVisible(PaymentType.avalableInProfile().contains(getValue().paymentMethod().type().getValue()));
                 get(proto().addThisPaymentMethodToProfile()).setEnabled(true);
             }
+
             paymentMethodEditor.setVisible(true);
             // Allow to Edit one time payment method
             paymentMethodEditor.setViewable(!getValue().paymentMethod().isOneTimePayment().isBooleanTrue());
             paymentMethodEditor.setTypeSelectionEnabled(false);
             paymentMethodEditorSeparator.setVisible(true);
+
+            // TODO : this is the HACK - check CComponent.setVisible implementation!!!
+            paymentMethodEditor.setBillingAddressVisible(getValue().paymentMethod().type().getValue() != PaymentType.Cash);
 
             verifyElectronicPayments();
         }
@@ -310,10 +314,12 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
     @Override
     public void onReset() {
         super.onReset();
+
         profiledPaymentMethodsCombo.setVisible(false);
         profiledPaymentMethodsCombo.setMandatory(false);
         profiledPaymentMethodsCombo.reset();
         profiledPaymentMethodsCombo.setOptions(null);
+
         paymentMethodEditor.reset();
         paymentMethodEditor.setVisible(false);
         paymentMethodEditor.setViewable(true);
