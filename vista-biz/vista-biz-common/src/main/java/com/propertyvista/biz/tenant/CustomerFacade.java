@@ -30,7 +30,7 @@ public interface CustomerFacade {
 
     VistaCustomerBehavior getLeaseBehavior(CustomerUser customerUser, Lease lease);
 
-    boolean hasToAcceptTerms(Key userKey);
+    boolean hasToAcceptTerms(CustomerUser customerUser);
 
-    void onVistaTermsAccepted(Key userKey, boolean accepted, Key vistaTermsKey);
+    void onVistaTermsAccepted(Key customerUserKey, Key vistaTermsKey, boolean accepted);
 }

@@ -51,6 +51,8 @@ public enum VistaCustomerBehavior implements Behavior {
 
     LeaseSelectionRequired,
 
+    VistaTermsAcceptanceRequired,
+
     HasMultipleLeases,
 
     ElectronicPaymentsAllowed,

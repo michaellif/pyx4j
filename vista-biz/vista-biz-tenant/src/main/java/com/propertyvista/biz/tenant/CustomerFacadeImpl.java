@@ -104,18 +104,17 @@ public class CustomerFacadeImpl implements CustomerFacade {
     }
 
     @Override
-    public boolean hasToAcceptTerms(Key customerUserKey) {
+    public boolean hasToAcceptTerms(CustomerUser customerUser) {
         Customer customer;
         {
             EntityQueryCriteria<Customer> criteria = EntityQueryCriteria.create(Customer.class);
-            CustomerUser user = EntityFactory.create(CustomerUser.class);
-            user.setPrimaryKey(customerUserKey);
-            criteria.add(PropertyCriterion.eq(criteria.proto().user(), user));
+            criteria.add(PropertyCriterion.eq(criteria.proto().user(), customerUser));
             customer = Persistence.service().retrieve(criteria);
             if (customer == null) {
-                return false;
+                return true;
             }
         }
+
         final CustomerAcceptedTerms acceptedTerms;
         {
             EntityQueryCriteria<CustomerAcceptedTerms> criteria = EntityQueryCriteria.create(CustomerAcceptedTerms.class);
@@ -140,7 +139,7 @@ public class CustomerFacadeImpl implements CustomerFacade {
     }
 
     @Override
-    public void onVistaTermsAccepted(Key customerUserKey, boolean accepted, Key vistaTermsKey) {
+    public void onVistaTermsAccepted(Key customerUserKey, Key vistaTermsKey, boolean accepted) {
         Customer customer = null;
         {
             EntityQueryCriteria<Customer> criteria = EntityQueryCriteria.create(Customer.class);

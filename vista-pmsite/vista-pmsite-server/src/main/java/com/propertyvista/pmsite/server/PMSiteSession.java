@@ -23,14 +23,13 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.security.rpc.AuthenticationService;
 import com.pyx4j.server.contexts.Context;
 import com.pyx4j.server.contexts.Lifecycle;
 
-import com.propertyvista.biz.tenant.CustomerFacade;
 import com.propertyvista.domain.security.VistaBasicBehavior;
+import com.propertyvista.domain.security.VistaCustomerBehavior;
 import com.propertyvista.portal.server.portal.services.PortalAuthenticationServiceImpl;
 
 public class PMSiteSession extends AuthenticatedWebSession {
@@ -89,7 +88,7 @@ public class PMSiteSession extends AuthenticatedWebSession {
             roles = new Roles();
             if (Context.getVisit().getAcl().checkBehavior(VistaBasicBehavior.TenantPortalPasswordChangeRequired)) {
                 roles.add(PasswordChangeRequiredRole);
-            } else if (ServerSideFactory.create(CustomerFacade.class).hasToAcceptTerms(Context.getVisit().getUserVisit().getPrincipalPrimaryKey())) {
+            } else if (Context.getVisit().getAcl().checkBehavior(VistaCustomerBehavior.VistaTermsAcceptanceRequired)) {
                 roles.add(VistaTermsAcceptanceRequiredRole);
             } else {
                 roles.add(Roles.USER);

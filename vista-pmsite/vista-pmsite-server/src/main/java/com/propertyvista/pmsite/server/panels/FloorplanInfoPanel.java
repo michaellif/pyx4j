@@ -33,6 +33,7 @@ import com.propertyvista.domain.marketing.PublicVisibilityType;
 import com.propertyvista.domain.media.Media;
 import com.propertyvista.domain.media.ThumbnailSize;
 import com.propertyvista.domain.property.PropertyContact;
+import com.propertyvista.domain.property.PropertyContact.PropertyContactType;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
@@ -85,13 +86,18 @@ public class FloorplanInfoPanel extends Panel {
         add(new Label("priceRange", priceFmt));
         // phone
         String phone = "Not Available";
+        String email = null;
         for (PropertyContact contact : bld.contacts().propertyContacts()) {
             if (contact.visibility().getValue() == PublicVisibilityType.global && !contact.phone().isNull()) {
                 phone = contact.phone().getValue();
-                break;
+                if (PropertyContactType.mainOffice.equals(contact.type().getValue())) {
+                    email = contact.email().getValue();
+                    break;
+                }
             }
         }
         add(new Label("phone", phone));
+        add(new Label("email", email).setVisible(email != null));
     }
 
     @Override

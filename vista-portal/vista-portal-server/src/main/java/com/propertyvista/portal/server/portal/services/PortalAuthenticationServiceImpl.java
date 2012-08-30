@@ -99,6 +99,11 @@ public class PortalAuthenticationServiceImpl extends VistaAuthenticationServices
             actualBehaviors.add(VistaCustomerBehavior.LeaseSelectionRequired);
         }
 
+        // check if terms have been signed
+        if (ServerSideFactory.create(CustomerFacade.class).hasToAcceptTerms(user)) {
+            actualBehaviors.add(VistaCustomerBehavior.VistaTermsAcceptanceRequired);
+        }
+
         String sessionToken = super.beginSession(user, credentials, actualBehaviors, additionalConditions);
 
         if (selectedLease != null) {

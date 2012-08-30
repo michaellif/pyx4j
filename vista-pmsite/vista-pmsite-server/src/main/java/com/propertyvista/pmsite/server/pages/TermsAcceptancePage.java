@@ -41,6 +41,7 @@ import com.propertyvista.pmsite.server.PMSiteApplication;
 import com.propertyvista.pmsite.server.PMSiteSession;
 import com.propertyvista.pmsite.server.PMSiteWebRequest;
 import com.propertyvista.pmsite.server.model.WicketUtils.VolatileTemplateResourceReference;
+import com.propertyvista.portal.server.portal.services.PortalAuthenticationServiceImpl;
 import com.propertyvista.server.jobs.TaskRunner;
 import com.propertyvista.shared.CompiledLocale;
 
@@ -101,8 +102,9 @@ public class TermsAcceptancePage extends BasePage {
 
                     @Override
                     public void onSubmit() {
-                        ServerSideFactory.create(CustomerFacade.class).onVistaTermsAccepted(Context.getVisit().getUserVisit().getPrincipalPrimaryKey(), true,
-                                getTermsKey());
+                        Key userKey = Context.getVisit().getUserVisit().getPrincipalPrimaryKey();
+                        ServerSideFactory.create(CustomerFacade.class).onVistaTermsAccepted(userKey, getTermsKey(), true);
+                        new PortalAuthenticationServiceImpl().reAuthenticate(null);
                     }
                 });
 
