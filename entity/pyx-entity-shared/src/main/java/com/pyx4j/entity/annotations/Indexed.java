@@ -38,6 +38,8 @@ public @interface Indexed {
 
     boolean uniqueConstraint() default false;
 
+    boolean ignoreCase() default false;
+
     boolean indexPrimaryValue() default true;
 
     Class<? extends IndexAdapter<?>>[] adapters() default {};

@@ -166,11 +166,12 @@ public class TableModel {
         }
     }
 
-    public void ensureExists(PersistenceContext persistenceContext, Ddl ddl) throws SQLException {
+    public boolean ensureExists(PersistenceContext persistenceContext, Ddl ddl) throws SQLException {
         if (ddl == Ddl.disabled) {
-            return;
+            return false;
         }
 
+        boolean tableCreated = false;
         {
             if (Mappings.traceInit) {
                 log.trace(Trace.id() + "getTableMetadata {}", tableName);
@@ -184,6 +185,7 @@ public class TableModel {
                     if (Mappings.traceInit) {
                         log.trace(Trace.id() + "table created {}", tableName);
                     }
+                    tableCreated = true;
                     break;
                 case disabled:
                     // ignore
@@ -213,6 +215,7 @@ public class TableModel {
                 switch (ddl) {
                 case auto:
                     SQLUtils.execute(persistenceContext.getConnection(), TableDDL.sqlCreateCollectionMember(dialect, member));
+                    tableCreated = true;
                     break;
                 case disabled:
                     // ignore
@@ -235,6 +238,7 @@ public class TableModel {
                 }
             }
         }
+        return tableCreated;
     }
 
     public void ensureForeignKeys(PersistenceContext persistenceContext) throws SQLException {
