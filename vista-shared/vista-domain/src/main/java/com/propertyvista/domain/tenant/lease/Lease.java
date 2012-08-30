@@ -168,7 +168,7 @@ public interface Lease extends IEntity {
     @ToString(index = 0)
     @Caption(name = "Id")
     @Length(14)
-    @Indexed(uniqueConstraint = true)
+    @Indexed(uniqueConstraint = true, ignoreCase = true)
     IPrimitive<String> leaseId();
 
     @NotNull

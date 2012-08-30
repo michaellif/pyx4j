@@ -41,7 +41,7 @@ public interface Customer extends IEntity {
 
     @NotNull
     @Length(14)
-    @Indexed(uniqueConstraint = true)
+    @Indexed(uniqueConstraint = true, ignoreCase = true)
     IPrimitive<String> customerId();
 
     @NotNull

@@ -59,7 +59,7 @@ public interface AptUnitInfo extends IEntity {
 
     @ToString(index = 0)
     @MemberColumn(name = "unitNumber")
-    @Indexed(group = "BuildingUnitNumber,11", uniqueConstraint = true)
+    @Indexed(group = "BuildingUnitNumber,11", uniqueConstraint = true, ignoreCase = true)
     @NotNull
     @Length(20)
     IPrimitive<String> number();

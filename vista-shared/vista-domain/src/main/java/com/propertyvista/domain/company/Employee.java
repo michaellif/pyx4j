@@ -39,7 +39,7 @@ public interface Employee extends Person {
     @ToString(index = 63)
     @Caption(name = "Id")
     @Length(14)
-    @Indexed(uniqueConstraint = true)
+    @Indexed(uniqueConstraint = true, ignoreCase = true)
     IPrimitive<String> employeeId();
 
     @ToString(index = 64)

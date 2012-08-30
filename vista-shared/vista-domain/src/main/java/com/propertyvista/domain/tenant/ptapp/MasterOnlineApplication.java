@@ -62,7 +62,7 @@ public interface MasterOnlineApplication extends IEntity {
     @ReadOnly
     @ToString
     @Length(14)
-    @Indexed(uniqueConstraint = true)
+    @Indexed(uniqueConstraint = true, ignoreCase = true)
     IPrimitive<String> onlineApplicationId();
 
     IPrimitive<Status> status();

@@ -31,7 +31,7 @@ import com.propertyvista.domain.VistaNamespace;
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 public interface ReservedPmcNames extends IEntity {
 
-    @Indexed(uniqueConstraint = true)
+    @Indexed(uniqueConstraint = true, ignoreCase = true)
     @NotNull
     @Length(63)
     IPrimitive<String> dnsName();

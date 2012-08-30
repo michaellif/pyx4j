@@ -58,7 +58,7 @@ public interface PmcDnsName extends IEntity {
     IPrimitive<Integer> odr();
 
     @Length(253)
-    @Indexed(uniqueConstraint = true)
+    @Indexed(uniqueConstraint = true, ignoreCase = true)
     @NotNull
     IPrimitive<String> dnsName();
 

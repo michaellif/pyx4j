@@ -103,7 +103,7 @@ public interface Lead extends IEntity {
     @NotNull
     @ToString(index = 0)
     @Length(14)
-    @Indexed(uniqueConstraint = true)
+    @Indexed(uniqueConstraint = true, ignoreCase = true)
     IPrimitive<String> leadId();
 
     @ToString(index = 1)

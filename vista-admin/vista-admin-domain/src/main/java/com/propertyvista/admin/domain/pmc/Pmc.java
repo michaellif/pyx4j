@@ -54,12 +54,12 @@ public interface Pmc extends IEntity {
     @NotNull
     @ReadOnly
     @Length(63)
-    @Indexed(uniqueConstraint = true)
+    @Indexed(uniqueConstraint = true, ignoreCase = true)
     IPrimitive<String> namespace();
 
     @NotNull
     @Length(63)
-    @Indexed(uniqueConstraint = true)
+    @Indexed(uniqueConstraint = true, ignoreCase = true)
     IPrimitive<String> dnsName();
 
     @Owned

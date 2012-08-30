@@ -83,7 +83,7 @@ public interface Building extends PolicyNode, NotesAndAttachmentsNode {
     @NotNull
     @ToString(index = 0)
     @Length(10)
-    @Indexed(uniqueConstraint = true)
+    @Indexed(uniqueConstraint = true, ignoreCase = true)
     IPrimitive<String> propertyCode();
 
     IPrimitive<String> externalId();
