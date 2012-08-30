@@ -75,6 +75,10 @@ public interface VistaImages extends FormsImageBundle, EntityFolderImages, Widge
     @Source("canadian-cheque-guide.jpg")
     ImageResource canadianChequeGuide();
 
+    @ImageOptions(repeatStyle = RepeatStyle.Both)
+    @Source("e_cheque-guide.png")
+    ImageResource eChequeGuide();
+
     @Source("logo_bmo.gif")
     ImageResource logoBMO();
 

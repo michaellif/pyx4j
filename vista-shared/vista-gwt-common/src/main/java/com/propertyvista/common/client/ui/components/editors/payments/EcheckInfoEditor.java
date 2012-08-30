@@ -13,6 +13,8 @@
  */
 package com.propertyvista.common.client.ui.components.editors.payments;
 
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.CommonsStringUtils;
@@ -23,6 +25,7 @@ import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.c.CTokinazedNumberEditor;
 import com.propertyvista.common.client.ui.validators.EcheckAccountNumberValidator;
@@ -48,10 +51,21 @@ public class EcheckInfoEditor extends CEntityDecoratableForm<EcheckInfo> {
 
         int row = -1;
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().nameOn()), 20).build());
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().bankId()), 3).build());
+        panel.getFlexCellFormatter().setColSpan(row, 0, 2);
+
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().branchTransitNumber()), 5).build());
+        panel.setWidget(row, 1, new DecoratorBuilder(inject(proto().bankId()), 3).labelWidth(11).build());
+
         panel.setWidget(++row, 0,
                 new DecoratorBuilder(inject(proto().accountNo(), new CTokinazedNumberEditor<TokenizedAccountNumber>(TokenizedAccountNumber.class)), 10).build());
+        panel.getFlexCellFormatter().setColSpan(row, 0, 2);
+
+        panel.setWidget(++row, 0, new Image(VistaImages.INSTANCE.eChequeGuide().getSafeUri()));
+        panel.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
+        panel.getFlexCellFormatter().setColSpan(row, 0, 2);
+
+        panel.getColumnFormatter().setWidth(0, "50%");
+        panel.getColumnFormatter().setWidth(1, "50%");
 
         return panel;
     }
