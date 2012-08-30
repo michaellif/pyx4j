@@ -222,6 +222,11 @@ public class UnitForm extends CrmEntityForm<AptUnitDTO> {
                     if (event.getValue() != null) {
                         get(UnitForm.this.proto().info()._bedrooms()).setValue(event.getValue().bedrooms().getValue());
                         get(UnitForm.this.proto().info()._bathrooms()).setValue(event.getValue().bathrooms().getValue());
+
+                        if (get(UnitForm.this.proto().info().area()).getValue() == null) {
+                            get(UnitForm.this.proto().info().area()).setValue(event.getValue().area().getValue());
+                            get(UnitForm.this.proto().info().areaUnits()).setValue(event.getValue().areaUnits().getValue());
+                        }
                     } else {
                         get(UnitForm.this.proto().info()._bedrooms()).setValue(null);
                         get(UnitForm.this.proto().info()._bathrooms()).setValue(null);
