@@ -28,7 +28,6 @@ public class DashboardViewImpl extends SimplePanel implements DashboardView {
         form = new DashboardForm();
         form.initContent();
         setWidget(form);
-
     }
 
     @Override
