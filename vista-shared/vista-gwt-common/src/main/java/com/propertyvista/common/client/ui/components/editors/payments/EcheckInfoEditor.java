@@ -54,19 +54,22 @@ public class EcheckInfoEditor extends CEntityDecoratableForm<EcheckInfo> {
         panel.getFlexCellFormatter().setColSpan(row, 0, 2);
 
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().branchTransitNumber()), 5).build());
-        panel.setWidget(row, 1, new DecoratorBuilder(inject(proto().bankId()), 3).labelWidth(11).build());
+        panel.setWidget(row, 1, new DecoratorBuilder(inject(proto().bankId()), 3).labelWidth(7).build());
 
         panel.setWidget(++row, 0,
                 new DecoratorBuilder(inject(proto().accountNo(), new CTokinazedNumberEditor<TokenizedAccountNumber>(TokenizedAccountNumber.class)), 10).build());
         panel.getFlexCellFormatter().setColSpan(row, 0, 2);
 
-        panel.setWidget(++row, 0, new Image(VistaImages.INSTANCE.eChequeGuide().getSafeUri()));
-        panel.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
-        panel.getFlexCellFormatter().setColSpan(row, 0, 2);
+        if (isEditable()) {
+            panel.setWidget(++row, 0, new Image(VistaImages.INSTANCE.eChequeGuide().getSafeUri()));
+            panel.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_RIGHT);
+            panel.getFlexCellFormatter().setColSpan(row, 0, 2);
+        }
 
-        panel.getColumnFormatter().setWidth(0, "50%");
-        panel.getColumnFormatter().setWidth(1, "50%");
+        panel.getColumnFormatter().setWidth(0, "70%");
+        panel.getColumnFormatter().setWidth(1, "30%");
 
+        panel.setWidth("36em");
         return panel;
     }
 
