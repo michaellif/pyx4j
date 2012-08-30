@@ -53,6 +53,8 @@ public enum VistaCustomerBehavior implements Behavior {
 
     HasMultipleLeases,
 
+    ElectronicPaymentsAllowed,
+
     @Translate(value = "Tenant")
     Tenant,
 

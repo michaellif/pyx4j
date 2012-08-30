@@ -21,9 +21,11 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
+import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
+import com.propertyvista.domain.security.VistaCustomerBehavior;
 import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.portal.client.ui.NavigView;
 import com.propertyvista.portal.client.ui.viewfactories.PortalViewFactory;
@@ -51,7 +53,9 @@ public class NavigActivity extends AbstractActivity implements NavigView.NavigPr
         items.add(new Residents.BillSummary());
         items.add(new Residents.BillingHistory());
         items.add(new Residents.Maintenance());
-        items.add(new Residents.PaymentMethods());
+        if (SecurityController.checkBehavior(VistaCustomerBehavior.ElectronicPaymentsAllowed)) {
+            items.add(new Residents.PaymentMethods());
+        }
         items.add(new Residents.PersonalInformation());
 
         if (VistaTODO.enableWelcomeWizardDemoMode && !VistaTODO.removedForProduction) { // this is just mock-up!..

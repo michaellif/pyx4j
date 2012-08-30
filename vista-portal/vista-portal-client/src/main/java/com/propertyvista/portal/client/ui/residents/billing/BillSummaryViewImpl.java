@@ -16,28 +16,31 @@ package com.propertyvista.portal.client.ui.residents.billing;
 import com.google.gwt.user.client.ui.FlowPanel;
 
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.security.shared.SecurityController;
 
+import com.propertyvista.domain.security.VistaCustomerBehavior;
 import com.propertyvista.portal.domain.dto.BillSummaryDTO;
 
 public class BillSummaryViewImpl extends FlowPanel implements BillSummaryView {
 
     private static final I18n i18n = I18n.get(BillSummaryViewImpl.class);
 
-    private final BillSummaryForm billForm;
+    private final BillSummaryForm form;
 
     public BillSummaryViewImpl() {
-        billForm = new BillSummaryForm();
-        billForm.initContent();
-        add(billForm);
+        form = new BillSummaryForm();
+        form.initContent();
+        add(form);
     }
 
     @Override
     public void setPresenter(Presenter presenter) {
-        billForm.setPresenter(presenter);
+        form.setPresenter(presenter);
     }
 
     @Override
     public void populate(BillSummaryDTO bill) {
-        billForm.populate(bill);
+        form.getPayButton().setVisible(SecurityController.checkBehavior(VistaCustomerBehavior.ElectronicPaymentsAllowed));
+        form.populate(bill);
     }
 }

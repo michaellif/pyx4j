@@ -55,6 +55,8 @@ public class DashboardForm extends CEntityDecoratableForm<TenantDashboardDTO> im
 
     private Presenter presenter;
 
+    private Button payButton;
+
     public DashboardForm() {
         super(TenantDashboardDTO.class, new VistaViewersComponentFactory());
     }
@@ -231,7 +233,7 @@ public class DashboardForm extends CEntityDecoratableForm<TenantDashboardDTO> im
             viewBill.getElement().getStyle().setPaddingRight(20, Unit.PX);
             actions.add(viewBill);
 
-            Button payButton = new Button(i18n.tr("Pay Now"));
+            payButton = new Button(i18n.tr("Pay Now"));
             payButton.addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
@@ -245,6 +247,10 @@ public class DashboardForm extends CEntityDecoratableForm<TenantDashboardDTO> im
             content.setWidth("100%");
             return content;
         }
+    }
+
+    public Button getPayButton() {
+        return payButton;
     }
 
     class MaintananceViewer extends CEntityViewer<IList<MaintenanceRequestDTO>> {

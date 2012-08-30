@@ -29,6 +29,7 @@ import com.pyx4j.security.shared.Behavior;
 import com.pyx4j.security.shared.SecurityController;
 
 import com.propertyvista.biz.communication.CommunicationFacade;
+import com.propertyvista.biz.financial.payment.PaymentFacade;
 import com.propertyvista.biz.tenant.CustomerFacade;
 import com.propertyvista.domain.security.CustomerUser;
 import com.propertyvista.domain.security.VistaBasicBehavior;
@@ -102,6 +103,9 @@ public class PortalAuthenticationServiceImpl extends VistaAuthenticationServices
 
         if (selectedLease != null) {
             VistaCustomerContext.setCurrentUserLease(selectedLease);
+            if (ServerSideFactory.create(PaymentFacade.class).isElectronicPaymentsAllowed(selectedLease.billingAccount())) {
+                actualBehaviors.add(VistaCustomerBehavior.ElectronicPaymentsAllowed);
+            }
         }
         return sessionToken;
     }

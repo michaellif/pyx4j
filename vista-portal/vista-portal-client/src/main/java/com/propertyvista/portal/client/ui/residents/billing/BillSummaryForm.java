@@ -39,6 +39,8 @@ public class BillSummaryForm extends CEntityDecoratableForm<BillSummaryDTO> {
 
     private Presenter presenter;
 
+    private Button payButton;
+
     public BillSummaryForm() {
         super(BillSummaryDTO.class, new VistaViewersComponentFactory());
         setViewable(true);
@@ -51,7 +53,7 @@ public class BillSummaryForm extends CEntityDecoratableForm<BillSummaryDTO> {
         int row = -1;
         content.setBR(++row, 0, 2);
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().currentBalance()), 10).build());
-        content.setWidget(row, 1, new Button(i18n.tr("Pay Now"), new ClickHandler() {
+        content.setWidget(row, 1, payButton = new Button(i18n.tr("Pay Now"), new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 presenter.payNow();
@@ -78,6 +80,10 @@ public class BillSummaryForm extends CEntityDecoratableForm<BillSummaryDTO> {
 
     public void setPresenter(Presenter presenter) {
         this.presenter = presenter;
+    }
+
+    public Button getPayButton() {
+        return payButton;
     }
 
     class InvoiceLineItemFolder extends VistaTableFolder<InvoiceLineItem> {

@@ -15,6 +15,9 @@ package com.propertyvista.portal.client.ui.residents.dashboard;
 
 import com.google.gwt.user.client.ui.SimplePanel;
 
+import com.pyx4j.security.shared.SecurityController;
+
+import com.propertyvista.domain.security.VistaCustomerBehavior;
 import com.propertyvista.portal.rpc.portal.dto.TenantDashboardDTO;
 
 public class DashboardViewImpl extends SimplePanel implements DashboardView {
@@ -30,6 +33,7 @@ public class DashboardViewImpl extends SimplePanel implements DashboardView {
 
     @Override
     public void populate(TenantDashboardDTO dashboard) {
+        form.getPayButton().setVisible(SecurityController.checkBehavior(VistaCustomerBehavior.ElectronicPaymentsAllowed));
         form.populate(dashboard);
     }
 
