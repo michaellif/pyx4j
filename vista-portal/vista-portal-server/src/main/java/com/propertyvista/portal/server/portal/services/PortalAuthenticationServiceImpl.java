@@ -104,13 +104,16 @@ public class PortalAuthenticationServiceImpl extends VistaAuthenticationServices
             actualBehaviors.add(VistaCustomerBehavior.VistaTermsAcceptanceRequired);
         }
 
+        if (selectedLease != null) {
+            if (ServerSideFactory.create(PaymentFacade.class).isElectronicPaymentsAllowed(selectedLease.billingAccount())) {
+                actualBehaviors.add(VistaCustomerBehavior.ElectronicPaymentsAllowed);
+            }
+        }
+
         String sessionToken = super.beginSession(user, credentials, actualBehaviors, additionalConditions);
 
         if (selectedLease != null) {
             VistaCustomerContext.setCurrentUserLease(selectedLease);
-            if (ServerSideFactory.create(PaymentFacade.class).isElectronicPaymentsAllowed(selectedLease.billingAccount())) {
-                actualBehaviors.add(VistaCustomerBehavior.ElectronicPaymentsAllowed);
-            }
         }
         return sessionToken;
     }
