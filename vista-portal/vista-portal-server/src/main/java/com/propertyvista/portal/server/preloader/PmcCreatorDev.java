@@ -29,6 +29,7 @@ import com.propertyvista.admin.domain.pmc.PmcPaymentTypeInfo;
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.domain.DemoData;
 import com.propertyvista.domain.DemoData.DemoPmc;
+import com.propertyvista.generator.PreloadData;
 import com.propertyvista.portal.server.preloader.ido.OnboardingMerchantAccountImport;
 import com.propertyvista.shared.config.VistaDemo;
 
@@ -113,13 +114,21 @@ public class PmcCreatorDev {
                     }
                 }
 
-                for (int n = 0; n <= 3; n++) {
+                int internalAccounts = 3;
+
+                for (int n = 0; n <= internalAccounts; n++) {
                     OnboardingMerchantAccount merchantAccount = EntityFactory.create(OnboardingMerchantAccount.class);
                     merchantAccount.pmc().set(pmc);
                     merchantAccount.merchantTerminalId().setValue("EBIRCH" + ordinal + n);
                     merchantAccount.bankId().setValue(ordinal + "00");
                     merchantAccount.branchTransitNumber().setValue("0100" + n);
-                    merchantAccount.accountNumber().setValue("01234567");
+
+                    // Make one ElectronicPaymentsAllowed FALSE 
+                    if (n == internalAccounts) {
+                        merchantAccount.accountNumber().setValue(PreloadData.ElectronicPaymentsNotAllowedAccountPrefix + "876543");
+                    } else {
+                        merchantAccount.accountNumber().setValue("01234567");
+                    }
 
                     merchantAccount.chargeDescription().setValue("Pay for " + pmcName + " " + n);
                     merchantAccount.onboardingAccountId().setValue(pmc.onboardingAccountId().getValue());

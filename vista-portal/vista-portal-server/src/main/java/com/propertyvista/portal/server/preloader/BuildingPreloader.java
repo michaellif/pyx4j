@@ -19,7 +19,6 @@ import java.util.concurrent.Callable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -350,7 +349,12 @@ public class BuildingPreloader extends BaseVistaDevDataPreloader {
             merchantAccount.accountNumber().setValue(acc.accountNumber().getValue());
             merchantAccount.chargeDescription().setValue(acc.chargeDescription().getValue());
             merchantAccount.merchantTerminalId().setValue(acc.merchantTerminalId().getValue());
-            merchantAccount.invalid().setValue(Boolean.FALSE);
+
+            if (merchantAccount.accountNumber().getValue().startsWith(PreloadData.ElectronicPaymentsNotAllowedAccountPrefix)) {
+                merchantAccount.invalid().setValue(Boolean.TRUE);
+            } else {
+                merchantAccount.invalid().setValue(Boolean.FALSE);
+            }
             Persistence.service().persist(merchantAccount);
             if (singleAccount == null) {
                 singleAccount = merchantAccount;
