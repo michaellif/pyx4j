@@ -133,7 +133,9 @@ public class RpcEntityServiceFilter implements IServiceFilter {
 
             MemberMeta memberMeta = em.getMemberMeta(memberName);
             if (memberMeta.isRpcTransient()) {
-                me.setValue(null);
+                if (me.getValue() != AttachLevel.Detached) {
+                    me.setValue(null);
+                }
             } else {
                 if (me.getValue() == AttachLevel.Detached) {
                     continue;
