@@ -37,6 +37,7 @@ import com.propertyvista.domain.payment.CheckInfo;
 import com.propertyvista.domain.payment.CreditCardInfo;
 import com.propertyvista.domain.payment.EcheckInfo;
 import com.propertyvista.domain.payment.PaymentMethod;
+import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.domain.util.DomainUtil;
@@ -57,12 +58,9 @@ public class PaymentFacadeImpl implements PaymentFacade {
 
     @Override
     public PaymentMethod persistPaymentMethod(Building building, PaymentMethod paymentMethod) {
-        // if it saved - these flags should be lowered: 
-        paymentMethod.isOneTimePayment().setValue(Boolean.FALSE);
         paymentMethod.isDeleted().setValue(Boolean.FALSE);
 
-        //TODO
-        //Validate.isTrue(!paymentMethod.customer().isNull(), "Owner (customer) is required for PaymentMethod");
+        Validate.isTrue(!paymentMethod.customer().isNull(), "Owner (customer) is required for PaymentMethod");
 
         switch (paymentMethod.type().getValue()) {
         case Echeck:
@@ -171,6 +169,8 @@ public class PaymentFacadeImpl implements PaymentFacade {
         if (paymentRecord.targetDate().isNull()) {
             throw new UserRuntimeException(i18n.tr("Payment target date should be present"));
         }
+        Validate.isTrue(PaymentType.schedulable().contains(paymentRecord.paymentMethod().type().getValue()));
+
         paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Scheduled);
         Persistence.service().merge(paymentRecord);
         return paymentRecord;
@@ -181,12 +181,6 @@ public class PaymentFacadeImpl implements PaymentFacade {
         PaymentRecord paymentRecord = Persistence.service().retrieve(PaymentRecord.class, paymentId.getPrimaryKey());
         if (!EnumSet.of(PaymentRecord.PaymentStatus.Submitted, PaymentRecord.PaymentStatus.Scheduled).contains(paymentRecord.paymentStatus().getValue())) {
             throw new IllegalArgumentException("paymentStatus:" + paymentRecord.paymentStatus().getValue());
-        }
-
-        if ((!paymentRecord.targetDate().isNull()) && Persistence.service().getTransactionSystemTime().before(paymentRecord.targetDate().getValue())) {
-            paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Scheduled);
-            Persistence.service().merge(paymentRecord);
-            return paymentRecord;
         }
 
         paymentRecord.lastStatusChangeDate().setValue(new LogicalDate(Persistence.service().getTransactionSystemTime()));

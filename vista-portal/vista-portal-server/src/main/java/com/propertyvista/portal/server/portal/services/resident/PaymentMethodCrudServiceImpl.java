@@ -13,6 +13,8 @@
  */
 package com.propertyvista.portal.server.portal.services.resident;
 
+import org.apache.commons.lang.Validate;
+
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
@@ -25,6 +27,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.propertyvista.biz.financial.payment.PaymentFacade;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.PaymentMethod;
+import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.tenant.Tenant;
 import com.propertyvista.portal.rpc.portal.services.resident.PaymentMethodCrudService;
 import com.propertyvista.portal.server.portal.TenantAppContext;
@@ -66,8 +69,13 @@ public class PaymentMethodCrudServiceImpl extends AbstractCrudServiceImpl<Paymen
         Persistence.service().retrieve(tenantInLease.leaseTermV().holder().lease().unit());
 
         entity.customer().set(tenantInLease.customer());
+
+        Validate.isTrue(PaymentType.avalableInPortal().contains(entity.type().getValue()));
+        entity.isOneTimePayment().setValue(Boolean.FALSE);
+
         ServerSideFactory.create(PaymentFacade.class).persistPaymentMethod(tenantInLease.leaseTermV().holder().lease().unit().building(), entity);
-        if (dto.isPreauthorized().isBooleanTrue()) {
+
+        if (dto.isPreauthorized().isBooleanTrue() || tenantInLease.preauthorizedPayment().isNull()) {
             tenantInLease.preauthorizedPayment().set(entity);
             Persistence.service().merge(tenantInLease);
         }

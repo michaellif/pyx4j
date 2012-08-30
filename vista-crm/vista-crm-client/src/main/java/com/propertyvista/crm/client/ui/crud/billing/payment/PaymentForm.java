@@ -23,6 +23,7 @@ import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
@@ -61,6 +62,15 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
                 return super.getItemName(o);
             } else {
                 return o.getStringView();
+            }
+        }
+
+        @Override
+        public boolean isValuesEquals(PaymentMethod value1, PaymentMethod value2) {
+            if (((value1 == null) || value1.isNull()) && ((value2 == null) || value2.isNull())) {
+                return true;
+            } else {
+                return EqualsHelper.equals(value1, value2);
             }
         }
     };
@@ -109,6 +119,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
             @Override
             public void onValueChange(ValueChangeEvent<PaymentType> event) {
                 setupAddThisPaymentMethodToProfile(event.getValue());
+                verifyElectronicPayments();
             }
         });
 
@@ -149,11 +160,10 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
         left.setWidget(
                 ++row,
                 0,
-                new DecoratorBuilder(inject(proto().paymentSelect(), new CRadioGroupEnum<PaymentSelect>(PaymentSelect.class, RadioGroup.Layout.HORISONTAL)), 20)
-                        .build());
+                new DecoratorBuilder(inject(proto().selectPaymentMethod(),
+                        new CRadioGroupEnum<PaymentSelect>(PaymentSelect.class, RadioGroup.Layout.HORISONTAL)), 20).build());
 
         left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().profiledPaymentMethod(), profiledPaymentMethodsCombo), 25).build());
-        profiledPaymentMethodsCombo.setMandatory(true);
 
         left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().addThisPaymentMethodToProfile()), 5).labelWidth(20).build());
 
@@ -188,18 +198,11 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
         get(proto().leaseParticipant()).addValueChangeHandler(new ValueChangeHandler<LeaseParticipant>() {
             @Override
             public void onValueChange(ValueChangeEvent<LeaseParticipant> event) {
-                paymentMethodEditor.reset();
-                paymentMethodEditor.setBillingAddressAsCurrentEnabled(!event.getValue().isNull());
-                checkProfiledPaymentMethods(new DefaultAsyncCallback<List<PaymentMethod>>() {
-                    @Override
-                    public void onSuccess(List<PaymentMethod> result) {
-                        get(proto().paymentSelect()).setValue(result.isEmpty() ? PaymentSelect.New : PaymentSelect.Profiled);
-                    }
-                }, false);
+                chageLeaseParticipant();
             }
         });
 
-        get(proto().paymentSelect()).addValueChangeHandler(new ValueChangeHandler<PaymentSelect>() {
+        get(proto().selectPaymentMethod()).addValueChangeHandler(new ValueChangeHandler<PaymentSelect>() {
             @Override
             public void onValueChange(ValueChangeEvent<PaymentSelect> event) {
                 paymentMethodEditor.reset();
@@ -222,9 +225,11 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
                         paymentMethodEditorSeparator.setVisible(false);
 
                         profiledPaymentMethodsCombo.reset();
+                        profiledPaymentMethodsCombo.setMandatory(true);
                         setProfiledPaymentMethodsVisible(true);
                         break;
                     }
+                    verifyElectronicPayments();
                 }
             }
         });
@@ -258,15 +263,37 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
 
-        get(proto().id()).setVisible(!getValue().id().isNull());
-        get(proto().paymentSelect()).setVisible(!isViewable() && !getValue().leaseParticipant().isNull());
-        setProfiledPaymentMethodsVisible(false);
+        get(proto().selectPaymentMethod()).setVisible(false);
 
-        checkProfiledPaymentMethods(null, populate);
+        boolean isNew = getValue().id().isNull();
+        get(proto().id()).setVisible(!isNew);
+        if (isNew) {
+            // Allow edit all values
+            get(proto().leaseParticipant()).setEditable(true);
+        } else {
+            // Disable most of modifications
+            get(proto().leaseParticipant()).setEditable(false);
 
-        paymentMethodEditor.setVisible(!getValue().leaseParticipant().isNull());
-        paymentMethodEditorSeparator.setVisible(!getValue().leaseParticipant().isNull());
-        paymentMethodEditor.setBillingAddressAsCurrentEnabled(!getValue().leaseParticipant().isNull());
+            // Allow to change profiled Method, but do not edit its values.
+            boolean allowtoChangeProfiledMethod = !isViewable() && (!getValue().paymentMethod().isOneTimePayment().isBooleanTrue());
+            profiledPaymentMethodsCombo.setVisible(allowtoChangeProfiledMethod);
+            if (allowtoChangeProfiledMethod) {
+                profiledPaymentMethodsCombo.setMandatory(true);
+                profiledPaymentMethodsCombo.setValue(getValue().paymentMethod());
+                loadProfiledPaymentMethods(null);
+            }
+            if (isEditable() && getValue().paymentMethod().isOneTimePayment().isBooleanTrue()) {
+                get(proto().addThisPaymentMethodToProfile()).setVisible(PaymentType.avalableInProfile().contains(getValue().paymentMethod().type().getValue()));
+                get(proto().addThisPaymentMethodToProfile()).setEnabled(true);
+            }
+            paymentMethodEditor.setVisible(true);
+            // Allow to Edit one time payment method
+            paymentMethodEditor.setViewable(!getValue().paymentMethod().isOneTimePayment().isBooleanTrue());
+            paymentMethodEditor.setTypeSelectionEnabled(false);
+            paymentMethodEditorSeparator.setVisible(true);
+
+            verifyElectronicPayments();
+        }
 
         if (isEditable()) {
             get(proto().transactionAuthorizationNumber()).setVisible(false);
@@ -280,50 +307,56 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
         }
     }
 
-    private void checkProfiledPaymentMethods(final AsyncCallback<List<PaymentMethod>> callback, final boolean populate) {
-        if (getParentView() instanceof PaymentEditorView) {
-            get(proto().paymentSelect()).setEnabled(false);
+    @Override
+    public void onReset() {
+        super.onReset();
+        profiledPaymentMethodsCombo.setVisible(false);
+        profiledPaymentMethodsCombo.setMandatory(false);
+        profiledPaymentMethodsCombo.reset();
+        profiledPaymentMethodsCombo.setOptions(null);
+        paymentMethodEditor.reset();
+        paymentMethodEditor.setVisible(false);
+        paymentMethodEditor.setViewable(true);
+        paymentMethodEditor.setTypeSelectionEnabled(true);
+        paymentMethodEditorSeparator.setVisible(false);
 
-            profiledPaymentMethodsCombo.reset();
-            profiledPaymentMethodsCombo.setOptions(null);
+        get(proto().addThisPaymentMethodToProfile()).setVisible(false);
+    }
 
-            if (!getValue().leaseParticipant().isNull()) {
-                ((PaymentEditorView.Presenter) ((PaymentEditorView) getParentView()).getPresenter()).getProfiledPaymentMethods(
-                        new DefaultAsyncCallback<List<PaymentMethod>>() {
-                            @Override
-                            public void onSuccess(List<PaymentMethod> result) {
-                                get(proto().paymentSelect()).setEnabled(!result.isEmpty());
-                                get(proto().paymentSelect()).setVisible(!result.isEmpty());
-                                get(proto().paymentSelect()).reset();
+    private void loadProfiledPaymentMethods(final AsyncCallback<Void> callback) {
+        profiledPaymentMethodsCombo.setOptions(null);
+        ((PaymentEditorView.Presenter) ((PaymentEditorView) getParentView()).getPresenter()).getProfiledPaymentMethods(
+                new DefaultAsyncCallback<List<PaymentMethod>>() {
+                    @Override
+                    public void onSuccess(List<PaymentMethod> result) {
+                        profiledPaymentMethodsCombo.setOptions(result);
+                        if (callback != null) {
+                            callback.onSuccess(null);
+                        }
+                    }
+                }, getValue().leaseParticipant());
+    }
 
-                                profiledPaymentMethodsCombo.setOptions(result);
-                                profiledPaymentMethodsCombo.setMandatory(true);
-
-                                if (callback != null) {
-                                    callback.onSuccess(result);
-                                } else {
-                                    if (result.isEmpty()) {
-                                        get(proto().paymentSelect()).setValue(PaymentSelect.New, getValue().getPrimaryKey() == null, populate);
-                                    } else {
-                                        if (getValue().getPrimaryKey() == null) {
-                                            get(proto().paymentSelect()).setValue(PaymentSelect.Profiled, true, populate);
-                                        } else {
-                                            if (getValue().paymentMethod().customer().isNull()) {
-                                                get(proto().paymentSelect()).setValue(PaymentSelect.New, false, populate);
-                                            } else {
-                                                get(proto().paymentSelect()).setValue(PaymentSelect.Profiled, false, populate);
-                                                profiledPaymentMethodsCombo.setValueByString(getValue().paymentMethod().getStringView(), false, populate);
-//                                              TODO: find out why this setValue doen't work!?
-//                                                profiledPaymentMethodsCombo.setValue(getValue().paymentMethod(), false, populate);
-                                                setProfiledPaymentMethodsVisible(true);
-                                                paymentMethodEditor.setViewable(true);
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }, getValue().leaseParticipant());
+    private void chageLeaseParticipant() {
+        paymentMethodEditor.reset();
+        paymentMethodEditor.setBillingAddressAsCurrentEnabled(true);
+        loadProfiledPaymentMethods(new DefaultAsyncCallback<Void>() {
+            @Override
+            public void onSuccess(Void result) {
+                boolean hasProfiledMethods = !profiledPaymentMethodsCombo.getOptions().isEmpty();
+                get(proto().selectPaymentMethod()).reset();
+                get(proto().selectPaymentMethod()).setValue(hasProfiledMethods ? PaymentSelect.Profiled : PaymentSelect.New);
+                get(proto().selectPaymentMethod()).setEnabled(hasProfiledMethods);
+                get(proto().selectPaymentMethod()).setVisible(hasProfiledMethods);
             }
+        });
+    }
+
+    private void setAddThisPaymentMethodToProfileVisibility() {
+        if (isViewable() || get(proto().selectPaymentMethod()).getValue() == PaymentSelect.Profiled) {
+            get(proto().addThisPaymentMethodToProfile()).setVisible(false);
+        } else if (get(proto().selectPaymentMethod()).getValue() == PaymentSelect.New) {
+            get(proto().addThisPaymentMethodToProfile()).setVisible(true);
         }
     }
 
@@ -334,24 +367,29 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
     }
 
     private void setupAddThisPaymentMethodToProfile(PaymentType paymentType) {
-        get(proto().addThisPaymentMethodToProfile()).setEnabled(PaymentType.avalableInProfile().contains(paymentType));
-        get(proto().addThisPaymentMethodToProfile()).setValue(Boolean.FALSE);
         if (paymentType != null) {
             switch (paymentType) {
-            case Cash:
-            case Check:
-            case EFT:
-            case Interac:
-                break;
             case CreditCard:
+                get(proto().addThisPaymentMethodToProfile()).setValue(true);
+                get(proto().addThisPaymentMethodToProfile()).setEnabled(true);
+                break;
             case Echeck:
-                get(proto().addThisPaymentMethodToProfile()).setValue(Boolean.TRUE);
-                if (!getValue().electronicPaymentsAllowed().getValue(Boolean.FALSE)) {
-                    MessageDialog.warn(i18n.tr("Warning"),
-                            i18n.tr("Merchant account is not setup to receive Electronic Payments\nThe payment would be processes once account is activated"));
-                }
+                get(proto().addThisPaymentMethodToProfile()).setValue(true);
+                get(proto().addThisPaymentMethodToProfile()).setEnabled(false);
+                break;
+            default:
+                get(proto().addThisPaymentMethodToProfile()).setValue(false);
+                get(proto().addThisPaymentMethodToProfile()).setEnabled(false);
                 break;
             }
+        }
+    }
+
+    private void verifyElectronicPayments() {
+        if (!getValue().electronicPaymentsAllowed().getValue(Boolean.FALSE)
+                && PaymentType.electronicPayments().contains(getValue().paymentMethod().type().getValue())) {
+            MessageDialog.warn(i18n.tr("Warning"),
+                    i18n.tr("Merchant account is not setup to receive Electronic Payments\nThe payment would be processes once account is activated"));
         }
     }
 }

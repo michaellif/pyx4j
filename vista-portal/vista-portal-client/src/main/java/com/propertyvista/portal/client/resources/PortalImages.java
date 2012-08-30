@@ -18,7 +18,6 @@ import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.resources.client.ImageResource.ImageOptions;
 import com.google.gwt.resources.client.ImageResource.RepeatStyle;
-import com.google.gwt.resources.client.TextResource;
 
 import com.pyx4j.entity.client.images.EntityFolderImages;
 
@@ -73,9 +72,6 @@ public interface PortalImages extends ClientBundle, EntityFolderImages {
     @ImageOptions(repeatStyle = RepeatStyle.Both)
     @Source("user_message_info.png")
     ImageResource userMessageInfo();
-
-    @Source("paymentPreauthorisedNotes.html")
-    TextResource paymentPreauthorisedNotes();
 
     @Source("communication-message.png")
     ImageResource communicationMessage();

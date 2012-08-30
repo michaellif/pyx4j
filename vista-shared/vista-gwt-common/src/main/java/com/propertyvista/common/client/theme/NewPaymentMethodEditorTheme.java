@@ -22,7 +22,7 @@ import com.pyx4j.widgets.client.RadioGroup;
 public class NewPaymentMethodEditorTheme extends Theme {
 
     public static enum StyleName implements IStyleName {
-        PaymentEditor, PaymentEditorButtons, PaymentEditorImages, PaymentEditorForm
+        PaymentEditor, PaymentEditorButtons, PaymentEditorImages, PaymentEditorLegalTerms, PaymentEditorForm
     }
 
     public static enum StyleDependent implements IStyleDependent {
@@ -84,6 +84,22 @@ public class NewPaymentMethodEditorTheme extends Theme {
         style = new Style(".", StyleName.PaymentEditorImages, " div img");
         style.addProperty("padding-left", "10px");
         style.addProperty("height", "30px");
+        addStyle(style);
+
+        style = new Style(".", StyleName.PaymentEditorLegalTerms);
+        style.addProperty("border-style", "solid");
+        style.addProperty("border-width", "1px");
+        style.addProperty("border-color", "#bbb");
+
+        style.addProperty("font-weight", "normal");
+
+        style.addProperty("background-color", "white");
+        style.addProperty("color", "black");
+
+        style.addProperty("padding-left", "0.5em");
+        style.addProperty("padding-right", "0.5em");
+
+        style.addProperty("height", "20em");
         addStyle(style);
 
     }

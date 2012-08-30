@@ -59,7 +59,7 @@ public interface PaymentRecordDTO extends PaymentRecord {
 
     @NotNull
     @Transient
-    IPrimitive<PaymentSelect> paymentSelect();
+    IPrimitive<PaymentSelect> selectPaymentMethod();
 
     @NotNull
     @Transient

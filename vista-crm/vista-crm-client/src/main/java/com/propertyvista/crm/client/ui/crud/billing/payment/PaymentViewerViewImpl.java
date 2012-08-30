@@ -23,6 +23,7 @@ import com.pyx4j.widgets.client.Button;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
+import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.dto.PaymentRecordDTO;
 
 public class PaymentViewerViewImpl extends CrmViewerViewImplBase<PaymentRecordDTO> implements PaymentViewerView {
@@ -103,18 +104,18 @@ public class PaymentViewerViewImpl extends CrmViewerViewImplBase<PaymentRecordDT
         getEditButton().setVisible(value.paymentStatus().getValue() == PaymentStatus.Submitted);
         cancelAction.setVisible(value.paymentStatus().getValue() == PaymentStatus.Submitted);
 
+        if (value.paymentStatus().getValue() == PaymentStatus.Submitted) {
+            if (!value.targetDate().isNull() && PaymentType.schedulable().contains(value.paymentMethod().type().getValue())) {
+                scheduleAction.setVisible(true);
+            } else {
+                processAction.setVisible(true);
+            }
+        }
+
         switch (value.paymentMethod().type().getValue()) {
         case Check:
             clearAction.setVisible(value.paymentStatus().getValue() == PaymentStatus.Received);
             rejectAction.setVisible(value.paymentStatus().getValue() == PaymentStatus.Received);
-            break;
-        case Echeck:
-        case CreditCard:
-            if (!value.targetDate().isNull()) {
-                scheduleAction.setVisible(value.paymentStatus().getValue() == PaymentStatus.Submitted);
-            } else {
-                processAction.setVisible(value.paymentStatus().getValue() == PaymentStatus.Submitted);
-            }
             break;
         default:
             // No other special handling for payment types

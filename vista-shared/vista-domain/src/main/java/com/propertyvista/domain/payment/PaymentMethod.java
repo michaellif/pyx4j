@@ -68,7 +68,7 @@ public interface PaymentMethod extends IEntity {
     IPrimitive<String> phone();
 
     /**
-     * Indicates if this method is one-time usage only and shouldn't be saved in DB.
+     * Indicates if this method is one-time usage only.
      */
     IPrimitive<Boolean> isOneTimePayment();
 

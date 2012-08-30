@@ -21,12 +21,17 @@ import com.google.gwt.user.client.ui.ComplexPanel;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.forms.client.ui.CCheckBox;
+import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CRadioGroupEnum;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.widgets.client.RadioGroup;
 
 import com.propertyvista.common.client.resources.VistaImages;
+import com.propertyvista.common.client.resources.VistaResources;
 import com.propertyvista.common.client.theme.NewPaymentMethodEditorTheme;
 import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
 import com.propertyvista.common.client.ui.components.editors.AddressStructuredEditor;
@@ -35,6 +40,10 @@ import com.propertyvista.domain.payment.PaymentType;
 public class PaymentMethodForm extends PaymentMethodEditor {
 
     private final FlowPanel paymentTypeImagesPanel = new FlowPanel();
+
+    private final CCheckBox iAgreeBox = new CCheckBox();
+
+    private final CLabel legalTerms = new CLabel();
 
     private final boolean twoColumns;
 
@@ -104,6 +113,10 @@ public class PaymentMethodForm extends PaymentMethodEditor {
         container.setWidget(++row, 0, new DecoratorBuilder(inject(proto().phone()), 15).build());
         container.getFlexCellFormatter().setColSpan(row, 0, 3);
 
+        container.setBR(++row, 0, 3);
+        container.setWidget(++row, 0, createLegalTermsPanel());
+        container.getFlexCellFormatter().setColSpan(row, 0, 3);
+
         container.setWidth("100%");
 
         // tweaks:
@@ -112,6 +125,7 @@ public class PaymentMethodForm extends PaymentMethodEditor {
             @Override
             public void onValueChange(ValueChangeEvent<PaymentType> event) {
                 selectPaymentDetailsEditor(event.getValue(), false);
+                loadLegalTerms(event.getValue());
             }
         });
 
@@ -124,5 +138,54 @@ public class PaymentMethodForm extends PaymentMethodEditor {
         });
 
         return container;
+    }
+
+    @Override
+    protected void onValueSet(boolean populate) {
+        super.onValueSet(populate);
+
+        if (!getValue().type().isNull()) {
+            loadLegalTerms(getValue().type().getValue());
+        }
+        iAgreeBox.setValue(false);
+    }
+
+    private Widget createLegalTermsPanel() {
+        FormFlexPanel panel = new FormFlexPanel();
+
+        panel.setH1(0, 0, 3, i18n.tr("Pre-Authorized Debit Agreement"));
+
+        panel.setWidget(1, 0, new ScrollPanel(legalTerms.asWidget()));
+        panel.getWidget(1, 0).setStyleName(NewPaymentMethodEditorTheme.StyleName.PaymentEditorLegalTerms.name());
+        legalTerms.setAllowHtml(true);
+        legalTerms.setWordWrap(true);
+
+        panel.setWidget(2, 0, new DecoratorBuilder(iAgreeBox, 5).customLabel(i18n.tr("I Agree")).build());
+        iAgreeBox.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<Boolean> event) {
+                onIAgree(event.getValue());
+            }
+        });
+
+        return panel;
+    }
+
+    protected void loadLegalTerms(PaymentType type) {
+        switch (type) {
+        case Echeck:
+            legalTerms.setValue(VistaResources.INSTANCE.paymentPreauthorisedPAD().getText());
+            break;
+        case CreditCard:
+            legalTerms.setValue(VistaResources.INSTANCE.paymentPreauthorisedCC().getText());
+            break;
+        default:
+            assert false : "Illegal payment method type!";
+            break;
+        }
+    }
+
+    protected void onIAgree(boolean set) {
+        // Implements meaningful in derived classes...
     }
 }

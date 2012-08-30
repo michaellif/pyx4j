@@ -20,7 +20,19 @@ import com.propertyvista.portal.client.ui.residents.View;
 public class PaymentViewImpl extends BasicViewImpl<PaymentRecordDTO> implements PaymentView {
 
     public PaymentViewImpl() {
-        super(new PaymentForm());
+        setForm(new PaymentForm() {
+            @Override
+            protected void onIAgree(boolean set) {
+                getSubmitButton().setEnabled(set);
+            }
+        });
+    }
+
+    @Override
+    public void populate(PaymentRecordDTO value) {
+        super.populate(value);
+
+        getSubmitButton().setEnabled(false);
     }
 
     @Override

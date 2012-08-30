@@ -69,7 +69,10 @@ public interface Customer extends IEntity {
     @Detached(level = AttachLevel.Detached)
     ISet<PersonScreening> personScreenings();
 
+    // TODO @Owned(cascade = {})
+    // Warning: cascade enabled only for tests/development preload to work! 
     @Owned
+    @RpcTransient
     @Detached(level = AttachLevel.Detached)
     IList<PaymentMethod> paymentMethods();
 

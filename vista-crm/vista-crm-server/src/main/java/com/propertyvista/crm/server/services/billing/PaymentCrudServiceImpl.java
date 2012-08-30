@@ -49,8 +49,6 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
 
     private static final I18n i18n = I18n.get(PaymentCrudServiceImpl.class);
 
-    private RetrieveTraget retrieveTraget;
-
     public PaymentCrudServiceImpl() {
         super(PaymentRecord.class, PaymentRecordDTO.class);
     }
@@ -58,12 +56,6 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
     @Override
     protected void bind() {
         bindCompleateDBO();
-    }
-
-    @Override
-    public void retrieve(AsyncCallback<PaymentRecordDTO> callback, Key entityId, RetrieveTraget retrieveTraget) {
-        this.retrieveTraget = retrieveTraget;
-        super.retrieve(callback, entityId, retrieveTraget);
     }
 
     @Override

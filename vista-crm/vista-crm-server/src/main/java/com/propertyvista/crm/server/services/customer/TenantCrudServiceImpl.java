@@ -103,6 +103,7 @@ public class TenantCrudServiceImpl extends AbstractCrudServiceDtoImpl<Tenant, Te
         entity.preauthorizedPayment().set(null);
         for (PaymentMethod paymentMethod : dto.paymentMethods()) {
             paymentMethod.customer().set(entity.customer());
+            paymentMethod.isOneTimePayment().setValue(false);
             ServerSideFactory.create(PaymentFacade.class).persistPaymentMethod(building, paymentMethod);
             if (paymentMethod.isPreauthorized().isBooleanTrue()) {
                 entity.preauthorizedPayment().set(paymentMethod);

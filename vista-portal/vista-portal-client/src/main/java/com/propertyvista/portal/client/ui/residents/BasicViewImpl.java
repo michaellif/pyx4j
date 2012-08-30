@@ -114,4 +114,8 @@ public class BasicViewImpl<E extends IEntity> extends FlowPanel implements View<
     public void showNote(String msg) {
         messagePanel.setMessage(msg, UserMessageType.INFO);
     }
+
+    protected Button getSubmitButton() {
+        return submitButton;
+    }
 }

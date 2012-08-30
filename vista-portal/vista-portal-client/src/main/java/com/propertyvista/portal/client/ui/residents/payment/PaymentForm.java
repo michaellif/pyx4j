@@ -81,6 +81,11 @@ public class PaymentForm extends CEntityDecoratableForm<PaymentRecordDTO> {
                 comp.setValue(EntityFactory.create(AddressStructured.class), false);
             }
         }
+
+        @Override
+        protected void onIAgree(boolean set) {
+            PaymentForm.this.onIAgree(set);
+        }
     };
 
     public PaymentForm() {
@@ -130,7 +135,7 @@ public class PaymentForm extends CEntityDecoratableForm<PaymentRecordDTO> {
         panel.setWidget(
                 ++row,
                 0,
-                new DecoratorBuilder(inject(proto().paymentSelect(), new CRadioGroupEnum<PaymentSelect>(PaymentSelect.class, RadioGroup.Layout.HORISONTAL)), 20)
+                new DecoratorBuilder(inject(proto().selectPaymentMethod(), new CRadioGroupEnum<PaymentSelect>(PaymentSelect.class, RadioGroup.Layout.HORISONTAL)), 20)
                         .build());
 
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().profiledPaymentMethod(), profiledPaymentMethodsCombo), 25).build());
@@ -146,7 +151,7 @@ public class PaymentForm extends CEntityDecoratableForm<PaymentRecordDTO> {
 //        get(proto().paymentStatus()).setViewable(true);
         get(proto().createdDate()).setViewable(true);
 
-        get(proto().paymentSelect()).addValueChangeHandler(new ValueChangeHandler<PaymentSelect>() {
+        get(proto().selectPaymentMethod()).addValueChangeHandler(new ValueChangeHandler<PaymentSelect>() {
             @Override
             public void onValueChange(ValueChangeEvent<PaymentSelect> event) {
                 paymentMethodEditor.reset();
@@ -195,7 +200,7 @@ public class PaymentForm extends CEntityDecoratableForm<PaymentRecordDTO> {
         super.onValueSet(populate);
 
         get(proto().id()).setVisible(!getValue().id().isNull());
-        get(proto().paymentSelect()).setVisible(!isViewable() && !getValue().leaseParticipant().isNull());
+        get(proto().selectPaymentMethod()).setVisible(!isViewable() && !getValue().leaseParticipant().isNull());
         setProfiledPaymentMethodsVisible(false);
 
         checkProfiledPaymentMethods(true);
@@ -217,7 +222,7 @@ public class PaymentForm extends CEntityDecoratableForm<PaymentRecordDTO> {
     }
 
     private void checkProfiledPaymentMethods(final boolean populate) {
-        get(proto().paymentSelect()).setEnabled(false);
+        get(proto().selectPaymentMethod()).setEnabled(false);
 
         profiledPaymentMethodsCombo.reset();
         profiledPaymentMethodsCombo.setOptions(null);
@@ -225,23 +230,23 @@ public class PaymentForm extends CEntityDecoratableForm<PaymentRecordDTO> {
         presenter.getProfiledPaymentMethods(new DefaultAsyncCallback<List<PaymentMethod>>() {
             @Override
             public void onSuccess(List<PaymentMethod> result) {
-                get(proto().paymentSelect()).setEnabled(!result.isEmpty());
-                get(proto().paymentSelect()).setVisible(!result.isEmpty());
-                get(proto().paymentSelect()).reset();
+                get(proto().selectPaymentMethod()).setEnabled(!result.isEmpty());
+                get(proto().selectPaymentMethod()).setVisible(!result.isEmpty());
+                get(proto().selectPaymentMethod()).reset();
 
                 profiledPaymentMethodsCombo.setOptions(result);
                 profiledPaymentMethodsCombo.setMandatory(true);
 
                 if (result.isEmpty()) {
-                    get(proto().paymentSelect()).setValue(PaymentSelect.New, getValue().getPrimaryKey() == null, populate);
+                    get(proto().selectPaymentMethod()).setValue(PaymentSelect.New, getValue().getPrimaryKey() == null, populate);
                 } else {
                     if (getValue().getPrimaryKey() == null) {
-                        get(proto().paymentSelect()).setValue(PaymentSelect.Profiled, true, populate);
+                        get(proto().selectPaymentMethod()).setValue(PaymentSelect.Profiled, true, populate);
                     } else {
                         if (getValue().paymentMethod().customer().isNull()) {
-                            get(proto().paymentSelect()).setValue(PaymentSelect.New, false, populate);
+                            get(proto().selectPaymentMethod()).setValue(PaymentSelect.New, false, populate);
                         } else {
-                            get(proto().paymentSelect()).setValue(PaymentSelect.Profiled, false, populate);
+                            get(proto().selectPaymentMethod()).setValue(PaymentSelect.Profiled, false, populate);
                             profiledPaymentMethodsCombo.setValueByString(getValue().paymentMethod().getStringView(), false, populate);
                             // TODO: find out why this setValue doen't work!?
 //                            profiledPaymentMethodsCombo.setValue(getValue().paymentMethod(), false, populate);
@@ -278,4 +283,7 @@ public class PaymentForm extends CEntityDecoratableForm<PaymentRecordDTO> {
         }
     }
 
+    protected void onIAgree(boolean set) {
+        // Implements meaningful in derived classes...
+    }
 }
